@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-block-layout
 tags:
   - iswc-block-layout
 category: isp
 status: public
-source: ./block-layout.js
+source: ./block-layout.ts
 style: ./block-layout.css
 preview: ./block-layout.json
 ---
 # `<iswc-block-layout>`
 
-## Propósito
+## PropÃ³sito
 
 Caja de bloque que mide su propio ancho con `ResizeObserver` y publica el
 breakpoint resultante para que el contenido reaccione al ancho del CONTENEDOR,
 no al del viewport. Port de `src/lib/layout/BlockLayout.svelte` de ISP.
 
-Este módulo registra `<iswc-block-layout>` y exporta la maquinaria de breakpoints
+Este mÃ³dulo registra `<iswc-block-layout>` y exporta la maquinaria de breakpoints
 (`BreakpointHost`, `sizewFor`, `flagsFor`, `lerpFor`, `BREAKPOINTS`,
 `BREAKPOINT_W`) que reutilizan `flex-layout.js` y `grid-layout.js`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Cuando un bloque debe adaptarse a su propio ancho (paneles redimensionables,
 celdas de grid, contenido dentro de un `<iswc-split-panel>`) y una media query de
 viewport no sirve.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No usar como caja decorativa ni como sustituto de un `<div>`: cada instancia
-paga un `ResizeObserver`. Tampoco para layout flex/grid — para eso están
-`<iswc-flex-layout>` y `<iswc-grid-layout>`, que ya heredan esta misma medición.
+paga un `ResizeObserver`. Tampoco para layout flex/grid â€” para eso estÃ¡n
+`<iswc-flex-layout>` y `<iswc-grid-layout>`, que ya heredan esta misma mediciÃ³n.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './block-layout.js';
@@ -40,7 +40,7 @@ import './block-layout.js';
 
 ## Cuerpo JSON (json2html / html2json)
 
-Mismo codec compacto que `<iswc-form>`: `[tag, attrs?, …hijos]`.
+Mismo codec compacto que `<iswc-form>`: `[tag, attrs?, â€¦hijos]`.
 
 ```js
 block.fromJSON({
@@ -52,13 +52,13 @@ block.fromJSON({
 block.html2json();
 ```
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `json2html(body)` / `html2json()` | Light DOM ↔ JSON |
+| `json2html(body)` / `html2json()` | Light DOM â†” JSON |
 | `toJSON()` / `fromJSON(json)` | `{ inline, cscroll, body }` |
-| `IswcBlockLayout.json2html` / `html2json` | Estáticos |
+| `IswcBlockLayout.json2html` / `html2json` | EstÃ¡ticos |
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-block-layout>
@@ -71,26 +71,26 @@ iswc-block-layout[data-szw-lg] .titulo { font-weight: 700; }
 .titulo { font-size: calc(1rem + var(--lerpw, 0) * 0.75rem); }
 ```
 
-## Mapeo Svelte → Web Component
+## Mapeo Svelte â†’ Web Component
 
 En Svelte el componente entregaba `{ sizew, boolszw, lerpw }` como **slot
-props**. Un Web Component no tiene slot props, así que lo mismo se publica por
+props**. Un Web Component no tiene slot props, asÃ­ que lo mismo se publica por
 cuatro canales equivalentes:
 
-| ISP (slot prop) | Aquí | Notas |
+| ISP (slot prop) | AquÃ­ | Notas |
 | --- | --- | --- |
 | `sizew` | atributo reflejado `data-sizew` + propiedad JS `sizew` | `xs \| sm \| md \| lg \| xl` |
-| `boolszw` | atributos reflejados `data-szw-xs` … `data-szw-xl` + propiedad JS `boolszw` | acumulativos: presentes si el breakpoint es `<=` al actual |
-| `lerpw(b0, b1)` | método JS `lerpw(b0, b1)` + custom property `--lerpw` (solo el caso por defecto `('sm','xl')`) | CSS no puede llamar funciones, por eso solo se publica la interpolación por defecto |
-| — | custom property `--clientw` | ancho en px, sin unidad; permite calcular otras interpolaciones con `calc()` |
-| — | evento `iswc-breakpoint` | entrega los tres valores, incluida la función `lerpw` completa |
+| `boolszw` | atributos reflejados `data-szw-xs` â€¦ `data-szw-xl` + propiedad JS `boolszw` | acumulativos: presentes si el breakpoint es `<=` al actual |
+| `lerpw(b0, b1)` | mÃ©todo JS `lerpw(b0, b1)` + custom property `--lerpw` (solo el caso por defecto `('sm','xl')`) | CSS no puede llamar funciones, por eso solo se publica la interpolaciÃ³n por defecto |
+| â€” | custom property `--clientw` | ancho en px, sin unidad; permite calcular otras interpolaciones con `calc()` |
+| â€” | evento `iswc-breakpoint` | entrega los tres valores, incluida la funciÃ³n `lerpw` completa |
 
-La prop `sizew` de ISP era además de ENTRADA (podía inicializarse a `"md"`);
-aquí es de salida únicamente, porque siempre se recalcula desde la medición.
+La prop `sizew` de ISP era ademÃ¡s de ENTRADA (podÃ­a inicializarse a `"md"`);
+aquÃ­ es de salida Ãºnicamente, porque siempre se recalcula desde la mediciÃ³n.
 
-Lo que **no** se portó: la detección por regex del `style` para decidir si
-añadir la clase `custom-scrollbar`. Aquí el scrollbar temizado se aplica
-siempre desde `_shared/scrollbars.css`, así que basta el atributo `cscroll`
+Lo que **no** se portÃ³: la detecciÃ³n por regex del `style` para decidir si
+aÃ±adir la clase `custom-scrollbar`. AquÃ­ el scrollbar temizado se aplica
+siempre desde `_shared/scrollbars.css`, asÃ­ que basta el atributo `cscroll`
 para el `overflow: auto`.
 
 ## API
@@ -112,9 +112,9 @@ para el `overflow: auto`.
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `data-sizew` | string | Breakpoint actual. |
-| `data-szw-xs` … `data-szw-xl` | boolean | Banderas acumulativas (`boolszw`). |
+| `data-szw-xs` â€¦ `data-szw-xl` | boolean | Banderas acumulativas (`boolszw`). |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -123,8 +123,8 @@ para el `overflow: auto`.
 | `rememberScroll` / `storageKey` / `scrollTtl` | lectura/escritura | Memoria de scroll. |
 | `sizew` | solo lectura | Breakpoint actual. |
 | `boolszw` | solo lectura | Objeto `{ xs, sm, md, lg, xl }` de booleanos. |
-| `clientWidthMeasured` | solo lectura | Último ancho medido. |
-| `clientHeightMeasured` | solo lectura | Último alto medido. |
+| `clientWidthMeasured` | solo lectura | Ãšltimo ancho medido. |
+| `clientHeightMeasured` | solo lectura | Ãšltimo alto medido. |
 
 ### Slots
 
@@ -135,13 +135,13 @@ para el `overflow: auto`.
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-breakpoint` | Evento personalizado del componente (breakpoint). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-breakpoint` | `{ width, height, sizew, boolszw, lerpw }` | sí | sí | no |
+| `iswc-breakpoint` | `{ width, height, sizew, boolszw, lerpw }` | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -156,15 +156,15 @@ el.addEventListener('iswc-breakpoint', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
 | `lerpw(b0 = 'sm', b1 = 'xl')` | Progreso lineal (sin recortar) del ancho entre dos anclas. |
-| `measureSize()` / `measureWidth()` | Fuerza una medición inmediata. |
+| `measureSize()` / `measureWidth()` | Fuerza una mediciÃ³n inmediata. |
 | `getWidth()` / `getHeight()` | Dimensiones medidas del host (px). |
 | `rect()` / `getRect()` | `{ x, y, width, height, top, left, right, bottom }` en viewport. |
-| `saveScroll()` / `restoreScroll()` / `clearRememberedScroll()` / `scrollToTop()` | Memoria de scroll (si está habilitada). |
+| `saveScroll()` / `restoreScroll()` / `clearRememberedScroll()` / `scrollToTop()` | Memoria de scroll (si estÃ¡ habilitada). |
 
 ### CSS parts
 
@@ -185,14 +185,14 @@ No expone custom states.
 | `--lerpw` | Escrita por el componente: `lerpw('sm','xl')`. |
 
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated.
+No declara integraciÃ³n form-associated.
 ## Comportamiento
 
-Anclas de breakpoint idénticas a ISP: `xs: 0`, `sm: 480`, `md: 600`, `lg: 800`,
-`xl: 1200`. La escalera de comparación también es la del original (`< 480` →
-`xs`, `<= 600` → `sm`, `<= 800` → `md`, `< 1200` → `lg`, resto `xl`).
+Anclas de breakpoint idÃ©nticas a ISP: `xs: 0`, `sm: 480`, `md: 600`, `lg: 800`,
+`xl: 1200`. La escalera de comparaciÃ³n tambiÃ©n es la del original (`< 480` â†’
+`xs`, `<= 600` â†’ `sm`, `<= 800` â†’ `md`, `< 1200` â†’ `lg`, resto `xl`).
 
 El `ResizeObserver` se crea en `connectedCallback` y se destruye en
 `disconnectedCallback`.
@@ -203,11 +203,11 @@ El `ResizeObserver` se crea en `connectedCallback` y se destruye en
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`flex-layout.md`](flex-layout.md), [`grid-layout.md`](grid-layout.md)
 
-Tags del módulo: `<iswc-block-layout>`.
+Tags del mÃ³dulo: `<iswc-block-layout>`.
 
 ## Accesibilidad
 
-Contenedor sin semántica propia: no altera el árbol de accesibilidad.
+Contenedor sin semÃ¡ntica propia: no altera el Ã¡rbol de accesibilidad.
 
 ## Ejemplo avanzado
 
@@ -222,19 +222,19 @@ Contenedor sin semántica propia: no altera el árbol de accesibilidad.
 
 ## Errores comunes
 
-- Esperar slot props como en Svelte: aquí se leen `data-sizew` / `--lerpw` / el evento.
+- Esperar slot props como en Svelte: aquÃ­ se leen `data-sizew` / `--lerpw` / el evento.
 - Estilar con `iswc-block-layout .foo` DESDE el CSS del componente: eso vive fuera del shadow.
 - Crear un `size` colors; usar font-size contextual y em.
 
 ## Reglas para LLM
 
-- Reusar `BreakpointHost` antes de reimplementar la medición.
+- Reusar `BreakpointHost` antes de reimplementar la mediciÃ³n.
 - Booleano se activa por presencia; no usar `attr="false"`.
-- No modificar API basándose solo en el preview.
+- No modificar API basÃ¡ndose solo en el preview.
 
 ## Fuentes
 
-- [JavaScript](./block-layout.js)
+- [JavaScript](./block-layout.ts)
 - [CSS](./block-layout.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./block-layout.json)

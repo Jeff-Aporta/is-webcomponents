@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-icon
 tags:
   - iswc-icon
 category: media
 status: public
-source: ./icon.js
+source: ./icon.ts
 style: ./icon.css
 preview: ./icon.json
 ---
 # `<iswc-icon>`
 
-## Propósito
+## PropÃ³sito
 
-API única de iconos del kit. Usa icon="grupo:nombre" (ids Iconify)
+API Ãºnica de iconos del kit. Usa icon="grupo:nombre" (ids Iconify)
 o src para un SVG/imagen. Escala con font-size.
 Iconify se carga solo como dependencia interna.
 
-Este módulo registra `<iswc-icon>`.
+Este mÃ³dulo registra `<iswc-icon>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Iconos, identidad visual y reproducción de video.
+Iconos, identidad visual y reproducciÃ³n de video.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear loader/reproductor paralelo antes de revisar existentes.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './icon.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-icon icon="mdi:home"></iswc-icon>
@@ -48,14 +48,14 @@ import './icon.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `icon` | string/según contrato | Fuente define default/restricción. |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `library` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `src` | string/según contrato | Fuente define default/restricción. |
-| `fallback` | string/según contrato | Fuente define default/restricción. |
+| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `library` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `src` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `fallback` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ No expone.
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 
 No expone.
@@ -89,11 +89,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -109,15 +109,15 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-icon> — Web Component (vanilla, zero dependencies).
+> <iswc-icon> â€” Web Component (vanilla, zero dependencies).
 > UNICA API de iconos del kit. No depende del web component <iconify-icon>
 > ni de ningun script externo: el SVG se trae por fetch del sistema de
 > iconos propio y se inyecta INLINE en el Shadow DOM, para que
@@ -130,9 +130,9 @@ Documentación de cabecera preservada desde fuente:
 > Estados: `data-loading` mientras resuelve, `data-missing` si el icono no
 > existe en ninguna base (hueco del tamano del icono, sin caja rota).
 > Atributos
->   icon    string  — "grupo:nombre" Iconify (ej. mdi:home). Preferido.
->   label   string  — a11y; si vacío → aria-hidden
->   src     string  — URL img/svg alternativa (gana sobre icon)
+>   icon    string  â€” "grupo:nombre" Iconify (ej. mdi:home). Preferido.
+>   label   string  â€” a11y; si vacÃ­o â†’ aria-hidden
+>   src     string  â€” URL img/svg alternativa (gana sobre icon)
 > Compat: name + library (default mdi) se combinan a icon si falta `icon`.
 
 ## Dependencias y componentes relacionados
@@ -140,11 +140,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 
-Tags del módulo: `<iswc-icon>`.
+Tags del mÃ³dulo: `<iswc-icon>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -156,7 +156,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -164,15 +164,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./icon.js)
+- [JavaScript](./icon.ts)
 - [CSS](./icon.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./icon.json)

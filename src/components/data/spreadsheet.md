@@ -1,52 +1,52 @@
----
+﻿---
 tag: iswc-spreadsheet
 tags:
   - iswc-spreadsheet
 category: data
 status: public
-source: ./spreadsheet.js
+source: ./spreadsheet.ts
 style: ./spreadsheet.css
 preview: ./spreadsheet.json
 ---
 # `<iswc-spreadsheet>`
 
-## Propósito
+## PropÃ³sito
 
-Hoja de cálculo mínima en un web component: rejilla de celdas editables con
-referencias estilo A1, fórmulas (`=SUM`, `=AVERAGE`, `=MIN`, `=MAX`, `=COUNT`,
-aritmética y paréntesis), navegación con flechas y atajos de Excel para
+Hoja de cÃ¡lculo mÃ­nima en un web component: rejilla de celdas editables con
+referencias estilo A1, fÃ³rmulas (`=SUM`, `=AVERAGE`, `=MIN`, `=MAX`, `=COUNT`,
+aritmÃ©tica y parÃ©ntesis), navegaciÃ³n con flechas y atajos de Excel para
 confirmar y moverse. Todo en cliente, sin dependencias externas.
 
-Este módulo registra `<iswc-spreadsheet>`.
+Este mÃ³dulo registra `<iswc-spreadsheet>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-- Capturas rápidas de datos tabulares donde el usuario espera comportarse como
+- Capturas rÃ¡pidas de datos tabulares donde el usuario espera comportarse como
   en Excel: escribir, tabular, sumar rangos.
 - Simuladores y calculadoras sencillas (presupuesto, prorrateo, cuadre) donde
-  la fórmula la escribe el propio usuario.
-- Rejillas pequeñas: decenas de filas y hasta 26 columnas.
+  la fÃ³rmula la escribe el propio usuario.
+- Rejillas pequeÃ±as: decenas de filas y hasta 26 columnas.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 - Cuando los datos vienen del servidor y solo hay que mostrarlos:
   [`<iswc-data-grid>`](./data-grid.md) o [`<iswc-ag-grid>`](./ag-grid.md).
 - Cuando necesitas cruzar dimensiones y totalizar:
   [`<iswc-pivot-table>`](./pivot-table.md).
-- Rejillas grandes: cada edición reconstruye el `innerHTML` completo de la
-  tabla y recalcula todas las celdas, así que el costo crece con filas × columnas.
-- Más de 26 columnas: la cabecera solo conoce las letras A–Z (ver
-  «Comportamiento»).
-- Cuando la fórmula debe ser confiable como cálculo contable definitivo: el
+- Rejillas grandes: cada ediciÃ³n reconstruye el `innerHTML` completo de la
+  tabla y recalcula todas las celdas, asÃ­ que el costo crece con filas Ã— columnas.
+- MÃ¡s de 26 columnas: la cabecera solo conoce las letras Aâ€“Z (ver
+  Â«ComportamientoÂ»).
+- Cuando la fÃ³rmula debe ser confiable como cÃ¡lculo contable definitivo: el
   motor es deliberadamente simple y no cubre el juego completo de Excel.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './spreadsheet.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-spreadsheet
@@ -62,20 +62,20 @@ import './spreadsheet.js';
 
 #### Atributos observados
 
-| Atributo | Tipo | Default | Descripción |
+| Atributo | Tipo | Default | DescripciÃ³n |
 | --- | --- | --- | --- |
-| `rows` | number | `20` | Número de filas de la rejilla. Un valor no numérico o `0` cae al default. |
-| `cols` | number | `26` | Número de columnas. Solo hay letras hasta la Z; valores mayores rompen la cabecera. |
-| `value` | string (JSON) | vacío | Matriz `[[celda, ...], ...]` con los valores crudos: número, texto o fórmula `"=..."`. JSON inválido se ignora y la hoja queda vacía. Las posiciones faltantes quedan como cadena vacía. |
-| `read-only` | boolean (presencia) | ausente | Bloquea la edición: ni clic, ni tecleo, ni `Delete` modifican celdas. |
+| `rows` | number | `20` | NÃºmero de filas de la rejilla. Un valor no numÃ©rico o `0` cae al default. |
+| `cols` | number | `26` | NÃºmero de columnas. Solo hay letras hasta la Z; valores mayores rompen la cabecera. |
+| `value` | string (JSON) | vacÃ­o | Matriz `[[celda, ...], ...]` con los valores crudos: nÃºmero, texto o fÃ³rmula `"=..."`. JSON invÃ¡lido se ignora y la hoja queda vacÃ­a. Las posiciones faltantes quedan como cadena vacÃ­a. |
+| `read-only` | boolean (presencia) | ausente | Bloquea la ediciÃ³n: ni clic, ni tecleo, ni `Delete` modifican celdas. |
 
-`readonly` (sin guion) también bloquea la edición porque el chequeo interno
-acepta ambos, pero **no** está en `observedAttributes`: ponerlo o quitarlo en
+`readonly` (sin guion) tambiÃ©n bloquea la ediciÃ³n porque el chequeo interno
+acepta ambos, pero **no** estÃ¡ en `observedAttributes`: ponerlo o quitarlo en
 caliente no provoca re-render. Usa siempre `read-only`.
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
-No expone. La clase no declara getters ni setters, así que `el.value` no lee ni
+No expone. La clase no declara getters ni setters, asÃ­ que `el.value` no lee ni
 escribe la hoja: asigna una propiedad plana sobre el elemento sin tocar el
 atributo. Para cargar datos usa `el.setAttribute('value', JSON.stringify(matriz))`.
 
@@ -87,20 +87,20 @@ contenido en light DOM se ignora.
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | `{ row, col, raw, value }` — índices base 0, `raw` es lo que quedó en la celda (texto o fórmula) y `value` el resultado calculado | sí | sí | no |
+| `iswc-change` | `{ row, col, raw, value }` â€” Ã­ndices base 0, `raw` es lo que quedÃ³ en la celda (texto o fÃ³rmula) y `value` el resultado calculado | sÃ­ | sÃ­ | no |
 
 `iswc-change` se emite en cada escritura de celda: al confirmar con `Enter` o
-`Tab`, al borrar con `Delete`/`Backspace` y también al cancelar con `Esc`
+`Tab`, al borrar con `Delete`/`Backspace` y tambiÃ©n al cancelar con `Esc`
 (en ese caso `raw` es el valor original restaurado).
 
-La cabecera del archivo fuente documenta además un evento `iswc-select` con
-`detail: { row, col, value }`, pero **no se emite en ninguna parte del código**.
+La cabecera del archivo fuente documenta ademÃ¡s un evento `iswc-select` con
+`detail: { row, col, value }`, pero **no se emite en ninguna parte del cÃ³digo**.
 No lo escuches.
 
 
@@ -116,26 +116,26 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-No expone métodos propios. Hereda de
+No expone mÃ©todos propios. Hereda de
 [`ElementBase`](../_shared/element-base.js) los accesores `shadow` y `mounted`
-y el helper `setBooleanAttr(name, value)`; este último sí sirve para el modo
+y el helper `setBooleanAttr(name, value)`; este Ãºltimo sÃ­ sirve para el modo
 solo lectura: `el.setBooleanAttr('read-only', true)`.
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
-| `root` | Contenedor con scroll, borde, radio y `max-height: 70vh`. Ajusta aquí el alto visible. |
+| `root` | Contenedor con scroll, borde, radio y `max-height: 70vh`. Ajusta aquÃ­ el alto visible. |
 | `grid` | El `<table>` de la rejilla. Sirve para cambiar `font-size` o `table-layout`. |
 
-Las celdas, la cabecera y el `input` de edición no exponen `part`.
+Las celdas, la cabecera y el `input` de ediciÃ³n no exponen `part`.
 
 ### Custom states
 
 No expone. No se usa `ElementInternals` ni `CustomStateSet`; el estado de
-edición vive en un campo privado y el foco se refleja con `:focus` nativo.
+ediciÃ³n vive en un campo privado y el foco se refleja con `:focus` nativo.
 
 ### CSS custom properties
 
@@ -144,121 +144,121 @@ heredados de [`_sticky.css`](./_sticky.css)).
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-text` | Color de texto del host; el `input` de edición lo hereda. |
+| `--iswc-text` | Color de texto del host; el `input` de ediciÃ³n lo hereda. |
 | `--iswc-bg-elev` | Fondo del contenedor y base del `color-mix` de la cabecera, la esquina y las cabeceras de fila. |
 | `--iswc-border` | Borde exterior del contenedor. |
-| `--iswc-border-soft` | Líneas internas de la rejilla. |
+| `--iswc-border-soft` | LÃ­neas internas de la rejilla. |
 | `--iswc-radius` | Radio de las esquinas del contenedor. |
-| `--iswc-accent` | Fondo de la celda enfocada (`color-mix` al 8%) y color de foco cuando `--iswc-focus` no está definido. |
+| `--iswc-accent` | Fondo de la celda enfocada (`color-mix` al 8%) y color de foco cuando `--iswc-focus` no estÃ¡ definido. |
 | `--iswc-focus` | Color del `outline` de la celda enfocada; si falta, se usa `--iswc-accent`. |
 | `--iswc-text-soft` | Color del texto de la cabecera de columna y de fila. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated. No declara `static formAssociated`, no llama a
 `attachInternals()` y no aporta valor al `FormData`. Para enviar la hoja,
-escucha `iswc-change`, mantén tu propia matriz y serialízala en un
+escucha `iswc-change`, mantÃ©n tu propia matriz y serialÃ­zala en un
 `<input type="hidden">` antes del submit.
 
 ## Comportamiento
 
-**Edición y atajos**
+**EdiciÃ³n y atajos**
 
-- Un clic en una celda abre el editor con el valor crudo (la fórmula, no el
+- Un clic en una celda abre el editor con el valor crudo (la fÃ³rmula, no el
   resultado) preseleccionado.
-- Con la celda enfocada: `Enter` abre el editor vacío; teclear una letra, un
-  dígito, `+` o `-` abre el editor con ese carácter; `Delete`/`Backspace`
-  vacía la celda; las flechas mueven el foco.
+- Con la celda enfocada: `Enter` abre el editor vacÃ­o; teclear una letra, un
+  dÃ­gito, `+` o `-` abre el editor con ese carÃ¡cter; `Delete`/`Backspace`
+  vacÃ­a la celda; las flechas mueven el foco.
 - Dentro del editor: `Enter` confirma y baja una fila, `Tab` confirma y avanza
-  a la derecha, `Shift+Tab` a la izquierda, `Esc` cancela. `Esc` también se
+  a la derecha, `Shift+Tab` a la izquierda, `Esc` cancela. `Esc` tambiÃ©n se
   captura en un listener a nivel de `document` que se registra en
   `onConnected()` y se retira en `onDisconnected()`.
 - Las flechas solo se limitan por abajo en `0`; si intentas salir por el borde
   derecho o inferior, no se encuentra celda destino y el foco simplemente no se
   mueve.
 
-**Fórmulas**
+**FÃ³rmulas**
 
-- Se considera fórmula cualquier valor de texto que, tras recortar espacios a
+- Se considera fÃ³rmula cualquier valor de texto que, tras recortar espacios a
   la izquierda, empiece por `=`.
-- Antes de evaluar, la expresión se pasa a mayúsculas y se filtra con una
+- Antes de evaluar, la expresiÃ³n se pasa a mayÃºsculas y se filtra con una
   lista blanca de caracteres (`A-Z 0-9 ( ) , : - + * / . ` y espacios). Todo lo
-  demás se elimina de forma silenciosa, así que una fórmula con comillas o
-  símbolos raros no falla: calcula otra cosa.
+  demÃ¡s se elimina de forma silenciosa, asÃ­ que una fÃ³rmula con comillas o
+  sÃ­mbolos raros no falla: calcula otra cosa.
 - Rangos: `=SUM(A1:C5)` y listas `=SUM(A1,B2,C3)`. La cabecera del fuente
-  menciona también la forma `=SUM(A1..C5)`, pero el reconocedor de rangos solo
+  menciona tambiÃ©n la forma `=SUM(A1..C5)`, pero el reconocedor de rangos solo
   entiende `:`; con `..` los puntos se descartan y el resultado no es el
   esperado.
-- Errores: cualquier excepción o resultado no numérico produce `#ERR` en la
-  celda. Las referencias circulares se marcan en caché como `#CYCLE`, valor que
-  al no ser numérico termina mostrándose como `#ERR`.
+- Errores: cualquier excepciÃ³n o resultado no numÃ©rico produce `#ERR` en la
+  celda. Las referencias circulares se marcan en cachÃ© como `#CYCLE`, valor que
+  al no ser numÃ©rico termina mostrÃ¡ndose como `#ERR`.
 - Una celda que referencia otra lee su valor **calculado**, de modo que las
-  fórmulas encadenadas funcionan, pero el orden de resolución depende del
-  recorrido: en cadenas largas puede hacer falta una segunda edición para que
+  fÃ³rmulas encadenadas funcionan, pero el orden de resoluciÃ³n depende del
+  recorrido: en cadenas largas puede hacer falta una segunda ediciÃ³n para que
   todo cuadre.
 
-**Render y recálculo**
+**Render y recÃ¡lculo**
 
-- Cada escritura de celda invalida la caché de fórmulas, recalcula la hoja
+- Cada escritura de celda invalida la cachÃ© de fÃ³rmulas, recalcula la hoja
   completa y reconstruye la tabla con `innerHTML`. Tras confirmar con `Enter` o
   `Tab` el componente devuelve el foco a la celda destino; tras `Delete` el
   foco se pierde porque el nodo enfocado deja de existir.
-- La ruta de recálculo incremental (`#recomputeFormula`) es código muerto en la
-  práctica: la caché siempre se anula justo antes de recalcular, así que
+- La ruta de recÃ¡lculo incremental (`#recomputeFormula`) es cÃ³digo muerto en la
+  prÃ¡ctica: la cachÃ© siempre se anula justo antes de recalcular, asÃ­ que
   siempre se recorre la hoja entera.
 - `onAttributeChanged` solo recarga los datos cuando cambia `value`. Cambiar
   `rows` o `cols` re-renderiza pero **no** redimensiona la matriz: el cuerpo
   conserva las filas de la matriz cargada mientras la cabecera y el `colgroup`
-  se dibujan con el nuevo número de columnas, lo que produce una rejilla
+  se dibujan con el nuevo nÃºmero de columnas, lo que produce una rejilla
   descuadrada. Cambia `rows`/`cols` y vuelve a fijar `value` en la misma
-  operación.
-- Más de 26 columnas: `cols="30"` deja las columnas 27 en adelante con
-  cabecera `undefined` y `data-id` inválido, porque el alfabeto interno solo
-  tiene A–Z. (El conversor de letra a índice sí soporta `AA`, `AB`…, pero
+  operaciÃ³n.
+- MÃ¡s de 26 columnas: `cols="30"` deja las columnas 27 en adelante con
+  cabecera `undefined` y `data-id` invÃ¡lido, porque el alfabeto interno solo
+  tiene Aâ€“Z. (El conversor de letra a Ã­ndice sÃ­ soporta `AA`, `AB`â€¦, pero
   nunca se generan esas cabeceras.)
 - El contenido de cada celda se escapa con `escapeHtml` antes de inyectarse, de
   modo que un valor con `<` o `&` se muestra literal.
 
-**Presentación**
+**PresentaciÃ³n**
 
-- La fila de cabeceras queda pegada arriba y la columna de números de fila
-  pegada a la izquierda, apoyándose en `_sticky.css`.
-- `table-layout: fixed`: la columna de números mide `3rem` y el resto se
+- La fila de cabeceras queda pegada arriba y la columna de nÃºmeros de fila
+  pegada a la izquierda, apoyÃ¡ndose en `_sticky.css`.
+- `table-layout: fixed`: la columna de nÃºmeros mide `3rem` y el resto se
   reparten por igual; el texto largo se recorta con elipsis.
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/adopt-css.js`](../_shared/adopt-css.js) — carga `spreadsheet.css`
+- [`../_shared/adopt-css.js`](../_shared/adopt-css.js) â€” carga `spreadsheet.css`
   en el shadow root.
-- [`../_shared/define.js`](../_shared/define.js) — registro idempotente del tag.
-- [`../_shared/element-base.js`](../_shared/element-base.js) — ciclo de vida y
+- [`../_shared/define.js`](../_shared/define.js) â€” registro idempotente del tag.
+- [`../_shared/element-base.js`](../_shared/element-base.js) â€” ciclo de vida y
   hooks `onConnected` / `onDisconnected` / `onAttributeChanged`.
-- [`../_shared/emit.js`](../_shared/emit.js) — emisión de `iswc-change`.
-- [`../_shared/dom-utils.js`](../_shared/dom-utils.js) — `escapeHtml` para el
+- [`../_shared/emit.js`](../_shared/emit.js) â€” emisiÃ³n de `iswc-change`.
+- [`../_shared/dom-utils.js`](../_shared/dom-utils.js) â€” `escapeHtml` para el
   contenido de las celdas.
-- [`./_sticky.css`](./_sticky.css) — cabeceras pegadas, compartido con
+- [`./_sticky.css`](./_sticky.css) â€” cabeceras pegadas, compartido con
   [`<iswc-pivot-table>`](./pivot-table.md).
 
 Relacionados: [`<iswc-pivot-table>`](./pivot-table.md) para agregar y cruzar,
 [`<iswc-data-grid>`](./data-grid.md) y [`<iswc-ag-grid>`](./ag-grid.md) para
 listados de solo lectura, [`<iswc-stat>`](./stat.md) para el KPI resultante.
 
-Tags del módulo: `<iswc-spreadsheet>`.
+Tags del mÃ³dulo: `<iswc-spreadsheet>`.
 
 ## Accesibilidad
 
 - La tabla lleva `role="grid"`, pero las celdas no declaran `role="gridcell"`
-  ni `aria-rowindex`/`aria-colindex`, así que el patrón ARIA de grid queda
+  ni `aria-rowindex`/`aria-colindex`, asÃ­ que el patrÃ³n ARIA de grid queda
   incompleto para lectores de pantalla.
 - Cada celda es focalizable (`tabindex="0"`), lo que hace la hoja recorrible
   con `Tab` y con flechas; en rejillas grandes eso significa muchas paradas de
-  tabulación, porque no se aplica el patrón de un único `tabindex="0"` móvil.
+  tabulaciÃ³n, porque no se aplica el patrÃ³n de un Ãºnico `tabindex="0"` mÃ³vil.
 - El foco es visible: `outline` de 2px con `--iswc-focus` (o `--iswc-accent`) y
   fondo tenue.
-- El `input` de edición no tiene etiqueta accesible propia; el contexto lo dan
-  las cabeceras de fila y columna, que sí son `<th>`.
+- El `input` de ediciÃ³n no tiene etiqueta accesible propia; el contexto lo dan
+  las cabeceras de fila y columna, que sÃ­ son `<th>`.
 - Tras borrar con `Delete` el foco se pierde por el re-render; si eso afecta a
-  tu flujo, devuélvelo tú desde el manejador de `iswc-change`.
+  tu flujo, devuÃ©lvelo tÃº desde el manejador de `iswc-change`.
 
 ## Ejemplo avanzado
 
@@ -273,23 +273,23 @@ Tags del módulo: `<iswc-spreadsheet>`.
   const matriz = [
     ['Concepto', 'Cantidad', 'Valor unitario', 'Subtotal'],
     ['Resmas',        10, 18500, '=B2*C2'],
-    ['Tóner',          2, 320000, '=B3*C3'],
+    ['TÃ³ner',          2, 320000, '=B3*C3'],
     ['Mantenimiento',  1, 450000, '=B4*C4'],
     ['', '', 'Total',  '=SUM(D2:D4)'],
     ['', '', 'IVA 19%', '=SUM(D2:D4)*0.19'],
   ];
 
-  // El único canal de carga es el atributo `value` (no hay propiedad).
+  // El Ãºnico canal de carga es el atributo `value` (no hay propiedad).
   hoja.setAttribute('value', JSON.stringify(matriz));
 
-  // Mantén tu copia sincronizada para poder enviarla.
+  // MantÃ©n tu copia sincronizada para poder enviarla.
   const estado = matriz.map((f) => [...f]);
 
   hoja.addEventListener('iswc-change', (e) => {
     const { row, col, raw, value } = e.detail;
     estado[row][col] = raw;
     if (value === '#ERR') {
-      console.warn(`Fórmula inválida en fila ${row + 1}, columna ${col + 1}`);
+      console.warn(`FÃ³rmula invÃ¡lida en fila ${row + 1}, columna ${col + 1}`);
     }
     document.getElementById('payload').value = JSON.stringify(estado);
   });
@@ -312,19 +312,19 @@ Tags del módulo: `<iswc-spreadsheet>`.
   propiedad; usa `setAttribute('value', JSON.stringify(matriz))` y reconstruye
   el estado desde `iswc-change`.
 - Pasar la matriz sin serializar en el HTML. `value` es un atributo de texto y
-  debe contener JSON válido; si falla el parseo, la hoja queda vacía sin aviso.
-- Escuchar `iswc-select`: aparece en la documentación del fuente pero nunca se
+  debe contener JSON vÃ¡lido; si falla el parseo, la hoja queda vacÃ­a sin aviso.
+- Escuchar `iswc-select`: aparece en la documentaciÃ³n del fuente pero nunca se
   emite.
 - Usar `readonly` en lugar de `read-only` y esperar que el cambio en caliente
   surta efecto.
 - Cambiar `rows` o `cols` sin volver a fijar `value` y terminar con la rejilla
   descuadrada.
-- Pedir más de 26 columnas.
-- Escribir `=SUM(A1..C5)` copiando la cabecera del fuente; la forma válida es
+- Pedir mÃ¡s de 26 columnas.
+- Escribir `=SUM(A1..C5)` copiando la cabecera del fuente; la forma vÃ¡lida es
   `=SUM(A1:C5)`.
 - Esperar funciones de Excel que no existen (`IF`, `VLOOKUP`, `ROUND`): solo hay
-  `SUM`, `AVERAGE`, `MIN`, `MAX` y `COUNT` más aritmética.
-- Dar por buenos los decimales: el componente no formatea números; muestra el
+  `SUM`, `AVERAGE`, `MIN`, `MAX` y `COUNT` mÃ¡s aritmÃ©tica.
+- Dar por buenos los decimales: el componente no formatea nÃºmeros; muestra el
   resultado tal cual lo calcula JavaScript. Si necesitas moneda colombiana
   formateada, formatea fuera o presenta el resultado en
   [`<iswc-stat>`](./stat.md).
@@ -332,26 +332,26 @@ Tags del módulo: `<iswc-spreadsheet>`.
 ## Reglas para LLM
 
 - El tag exacto es `<iswc-spreadsheet>` y se registra al importar `./spreadsheet.js`.
-- Atributos válidos: `rows`, `cols`, `value`, `read-only`. Nada más. No hay
+- Atributos vÃ¡lidos: `rows`, `cols`, `value`, `read-only`. Nada mÃ¡s. No hay
   `disabled`, `columns`, `data` ni `formulas`.
-- No hay slots, no hay propiedades públicas y el único evento emitido es
+- No hay slots, no hay propiedades pÃºblicas y el Ãºnico evento emitido es
   `iswc-change`.
 - `read-only` es booleano por presencia: se activa con `read-only`, no con
   `read-only="false"`.
 - Cualquier carga o recarga de datos pasa por el atributo `value` con JSON
   serializado.
 - Para estilizar usa `::part(root)` y `::part(grid)` o los tokens `--iswc-*` del
-  tema; no crees variantes de tamaño, escala con `font-size` contextual y
+  tema; no crees variantes de tamaÃ±o, escala con `font-size` contextual y
   unidades `em`.
-- Reusa los helpers de `../_shared/` antes de escribir lógica paralela, y lee
+- Reusa los helpers de `../_shared/` antes de escribir lÃ³gica paralela, y lee
   la fuente antes de cambiar la API: el JS y el CSS mandan sobre el preview.
 - Si el requisito es solo mostrar datos o totalizarlos, usa `<iswc-data-grid>` o
   `<iswc-pivot-table>` en vez de este componente.
 
 ## Fuentes
 
-- [JavaScript](./spreadsheet.js)
+- [JavaScript](./spreadsheet.ts)
 - [CSS](./spreadsheet.css)
 - [Partial de cabeceras pegadas](./_sticky.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./spreadsheet.json)

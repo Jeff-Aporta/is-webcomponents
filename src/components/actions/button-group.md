@@ -1,37 +1,37 @@
----
+﻿---
 tag: iswc-button-group
 tags:
   - iswc-button-group
 category: actions
 status: public
-source: ./button-group.js
+source: ./button-group.ts
 style: ./button-group.css
 preview: ./button-group.json
 ---
 # `<iswc-button-group>`
 
-## Propósito
+## PropÃ³sito
 
 Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona
-cuál está activo. Sirve para controles segmentados, toolbars y split buttons.
+cuÃ¡l estÃ¡ activo. Sirve para controles segmentados, toolbars y split buttons.
 
-Este módulo registra `<iswc-button-group>`.
+Este mÃ³dulo registra `<iswc-button-group>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Acciones, selección de comandos y menús interactivos.
+Acciones, selecciÃ³n de comandos y menÃºs interactivos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No usar como decoración ni reemplazar enlaces semánticos para navegación simple.
+No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './button-group.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-button-group label="Vista" variant="segmented" select="single" value="lista">
@@ -49,17 +49,17 @@ import './button-group.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `orientation` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
-| `select` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `pill` | boolean | Fuente define default/restricción. |
-| `stretch` | boolean | Fuente define default/restricción. |
-| `allow-empty` | boolean | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `select` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `pill` | boolean | Fuente define default/restricciÃ³n. |
+| `stretch` | boolean | Fuente define default/restricciÃ³n. |
+| `allow-empty` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -85,13 +85,13 @@ import './button-group.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -106,11 +106,11 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -126,46 +126,46 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-button-border-width` | Token leído o definido por componente. |
-| `--iswc-control-border-width` | Token leído o definido por componente. |
-| `--iswc-button-group-radius` | Token leído o definido por componente. |
-| `--iswc-button-border-radius` | Token leído o definido por componente. |
-| `--iswc-button-group-gap` | Token leído o definido por componente. |
-| `--iswc-button-group-pad` | Token leído o definido por componente. |
-| `--iswc-button-group-accent` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--_button-horizontal-indent` | Token leído o definido por componente. |
-| `--_button-horizontal-indent-outlined` | Token leído o definido por componente. |
-| `--_button-start-end-radius` | Token leído o definido por componente. |
-| `--_button-end-end-radius` | Token leído o definido por componente. |
-| `--_button-start-start-radius` | Token leído o definido por componente. |
-| `--_button-end-start-radius` | Token leído o definido por componente. |
-| `--_button-vertical-indent` | Token leído o definido por componente. |
-| `--_button-vertical-indent-outlined` | Token leído o definido por componente. |
-| `--iswc-bg-soft` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-border-soft` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-control-bg-active` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--_sel` | Token leído o definido por componente. |
-| `--iswc-button-selected-color` | Token leído o definido por componente. |
+| `--iswc-button-border-width` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border-width` | Token leÃ­do o definido por componente. |
+| `--iswc-button-group-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-button-border-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-button-group-gap` | Token leÃ­do o definido por componente. |
+| `--iswc-button-group-pad` | Token leÃ­do o definido por componente. |
+| `--iswc-button-group-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--_button-horizontal-indent` | Token leÃ­do o definido por componente. |
+| `--_button-horizontal-indent-outlined` | Token leÃ­do o definido por componente. |
+| `--_button-start-end-radius` | Token leÃ­do o definido por componente. |
+| `--_button-end-end-radius` | Token leÃ­do o definido por componente. |
+| `--_button-start-start-radius` | Token leÃ­do o definido por componente. |
+| `--_button-end-start-radius` | Token leÃ­do o definido por componente. |
+| `--_button-vertical-indent` | Token leÃ­do o definido por componente. |
+| `--_button-vertical-indent-outlined` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-border-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-active` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--_sel` | Token leÃ­do o definido por componente. |
+| `--iswc-button-selected-color` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-button-group> — Web Component (vanilla, zero dependencies).
+> <iswc-button-group> â€” Web Component (vanilla, zero dependencies).
 > Agrupa botones relacionados en una unidad visual y, opcionalmente, gestiona
-> qué botón está seleccionado (control segmentado / toggle group).
+> quÃ© botÃ³n estÃ¡ seleccionado (control segmentado / toggle group).
 > Atributos
 >   label         string   a11y, anunciado por AT; no se muestra
 >   orientation   horizontal | vertical            (default horizontal, reflected)
@@ -177,11 +177,11 @@ Documentación de cabecera preservada desde fuente:
 >   allow-empty   boolean  en `single`, permite deseleccionar el activo
 >   disabled      boolean  bloquea el grupo completo
 > Slots
->   (default)  uno o más <iswc-button> (o <button> nativos)
+>   (default)  uno o mÃ¡s <iswc-button> (o <button> nativos)
 > CSS Parts:  ::part(base)
 > Eventos:    iswc-change { value, values }
-> El valor de cada botón es su atributo `value`; si no lo tiene, se usa su
-> texto y, en último caso, su índice. El botón activo recibe el atributo
+> El valor de cada botÃ³n es su atributo `value`; si no lo tiene, se usa su
+> texto y, en Ãºltimo caso, su Ã­ndice. El botÃ³n activo recibe el atributo
 > `selected` y `aria-pressed`, que el CSS del grupo usa para pintarlo.
 > Las variables --_button-*-radius y --_button-*-indent se inyectan en los
 > hijos slotted; <iswc-button> las consume para fusionar bordes.
@@ -190,21 +190,21 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-button-group>`.
+Tags del mÃ³dulo: `<iswc-button-group>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-pressed`, `aria-disabled`, `aria-label`, `aria-orientation`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-pressed`, `aria-disabled`, `aria-label`, `aria-orientation`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-button-group variant="segmented" select="single">…</iswc-button-group>
+<iswc-button-group variant="segmented" select="single">â€¦</iswc-button-group>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -212,15 +212,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./button-group.js)
+- [JavaScript](./button-group.ts)
 - [CSS](./button-group.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./button-group.json)

@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-chart
 tags:
   - iswc-chart
 category: charts
 status: public
-source: ./chart.js
+source: ./chart.ts
 style: ./chart.css
 preview: ./chart.json
 ---
 # `<iswc-chart>`
 
-## Propósito
+## PropÃ³sito
 
-Motor de gráficos en SVG, sin dependencias externas. La configuración usa el
-mismo esquema de Chart.js, así que un config existente funciona
+Motor de grÃ¡ficos en SVG, sin dependencias externas. La configuraciÃ³n usa el
+mismo esquema de Chart.js, asÃ­ que un config existente funciona
 sin cambios.
 
-Este módulo registra `<iswc-chart>`.
+Este mÃ³dulo registra `<iswc-chart>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Series, distribuciones, relaciones o jerarquías de datos.
+Series, distribuciones, relaciones o jerarquÃ­as de datos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear otro engine si marks/engine existentes cubren caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './chart.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-chart></iswc-chart>
@@ -46,22 +46,22 @@ import './chart.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `type` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `legend-position` | string/según contrato | Fuente define default/restricción. |
-| `index-axis` | string/según contrato | Fuente define default/restricción. |
-| `min` | string/según contrato | Fuente define default/restricción. |
-| `max` | string/según contrato | Fuente define default/restricción. |
-| `grid` | string/según contrato | Fuente define default/restricción. |
-| `stacked` | string/según contrato | Fuente define default/restricción. |
-| `without-animation` | string/según contrato | Fuente define default/restricción. |
-| `without-legend` | string/según contrato | Fuente define default/restricción. |
-| `without-tooltip` | string/según contrato | Fuente define default/restricción. |
-| `x-label` | string/según contrato | Fuente define default/restricción. |
-| `y-label` | string/según contrato | Fuente define default/restricción. |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `type` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `legend-position` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `index-axis` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `grid` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `stacked` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-animation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-legend` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-tooltip` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `x-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `y-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -82,17 +82,17 @@ import './chart.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
-| `iswc-turtle-state` | Emitido al actualizarse el estado del módulo turtle (resize, datos, etc.). |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-turtle-state` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
 
 <details>
@@ -107,13 +107,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -133,60 +133,60 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--border-color-N` | Token leído o definido por componente. |
-| `--chart-text` | Token leído o definido por componente. |
-| `--grid-color` | Token leído o definido por componente. |
-| `--chart-surface` | Token leído o definido por componente. |
-| `--chart-bar-radius` | Token leído o definido por componente. |
-| `--chart-bar-gap` | Token leído o definido por componente. |
-| `--chart-line-width` | Token leído o definido por componente. |
-| `--chart-point-radius` | Token leído o definido por componente. |
-| `--chart-slice-gap` | Token leído o definido por componente. |
-| `--chart-doughnut-ratio` | Token leído o definido por componente. |
-| `--dash` | Token leído o definido por componente. |
-| `--square` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--chart-tick-size` | Token leído o definido por componente. |
-| `--chart-legend-size` | Token leído o definido por componente. |
-| `--chart-title-size` | Token leído o definido por componente. |
-| `--chart-tooltip-size` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--chart-muted` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--chart-axis-color` | Token leído o definido por componente. |
-| `--border-color-1` | Token leído o definido por componente. |
-| `--fill-color-1` | Token leído o definido por componente. |
-| `--border-color-2` | Token leído o definido por componente. |
-| `--border-color-3` | Token leído o definido por componente. |
-| `--border-color-4` | Token leído o definido por componente. |
-| `--border-color-5` | Token leído o definido por componente. |
-| `--border-color-6` | Token leído o definido por componente. |
-| `--border-color-7` | Token leído o definido por componente. |
-| `--border-color-8` | Token leído o definido por componente. |
-| `--fill-color-2` | Token leído o definido por componente. |
-| `--fill-color-3` | Token leído o definido por componente. |
-| `--fill-color-4` | Token leído o definido por componente. |
-| `--fill-color-5` | Token leído o definido por componente. |
-| `--fill-color-6` | Token leído o definido por componente. |
-| `--fill-color-7` | Token leído o definido por componente. |
-| `--fill-color-8` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
+| `--border-color-N` | Token leÃ­do o definido por componente. |
+| `--chart-text` | Token leÃ­do o definido por componente. |
+| `--grid-color` | Token leÃ­do o definido por componente. |
+| `--chart-surface` | Token leÃ­do o definido por componente. |
+| `--chart-bar-radius` | Token leÃ­do o definido por componente. |
+| `--chart-bar-gap` | Token leÃ­do o definido por componente. |
+| `--chart-line-width` | Token leÃ­do o definido por componente. |
+| `--chart-point-radius` | Token leÃ­do o definido por componente. |
+| `--chart-slice-gap` | Token leÃ­do o definido por componente. |
+| `--chart-doughnut-ratio` | Token leÃ­do o definido por componente. |
+| `--dash` | Token leÃ­do o definido por componente. |
+| `--square` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--chart-tick-size` | Token leÃ­do o definido por componente. |
+| `--chart-legend-size` | Token leÃ­do o definido por componente. |
+| `--chart-title-size` | Token leÃ­do o definido por componente. |
+| `--chart-tooltip-size` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--chart-muted` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--chart-axis-color` | Token leÃ­do o definido por componente. |
+| `--border-color-1` | Token leÃ­do o definido por componente. |
+| `--fill-color-1` | Token leÃ­do o definido por componente. |
+| `--border-color-2` | Token leÃ­do o definido por componente. |
+| `--border-color-3` | Token leÃ­do o definido por componente. |
+| `--border-color-4` | Token leÃ­do o definido por componente. |
+| `--border-color-5` | Token leÃ­do o definido por componente. |
+| `--border-color-6` | Token leÃ­do o definido por componente. |
+| `--border-color-7` | Token leÃ­do o definido por componente. |
+| `--border-color-8` | Token leÃ­do o definido por componente. |
+| `--fill-color-2` | Token leÃ­do o definido por componente. |
+| `--fill-color-3` | Token leÃ­do o definido por componente. |
+| `--fill-color-4` | Token leÃ­do o definido por componente. |
+| `--fill-color-5` | Token leÃ­do o definido por componente. |
+| `--fill-color-6` | Token leÃ­do o definido por componente. |
+| `--fill-color-7` | Token leÃ­do o definido por componente. |
+| `--fill-color-8` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-chart> — motor de charts en SVG, sin dependencias.
+> <iswc-chart> â€” motor de charts en SVG, sin dependencias.
 > Consumo compatible con Chart.js: `config` (propiedad) o <script type="application/json">
 > hijo, con la forma `{ type, data: { labels, datasets }, options }`.
-> Los atributos del elemento tienen precedencia sobre `options` cuando están presentes.
+> Los atributos del elemento tienen precedencia sobre `options` cuando estÃ¡n presentes.
 > Atributos: type, label, legend-position, index-axis, min, max, grid,
 >            stacked, without-animation, without-legend, without-tooltip, x-label, y-label
 > Propiedades: config, svg, chart (alias de svg)
@@ -200,11 +200,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/path-turtle.js`](../_shared/path-turtle.js)
 - [`../diagrams/diagram-kinds.js`](../diagrams/diagram-kinds.js)
 
-Tags del módulo: `<iswc-chart>`.
+Tags del mÃ³dulo: `<iswc-chart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-pressed`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-pressed`.
 
 ## Ejemplo avanzado
 
@@ -214,7 +214,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -222,15 +222,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-presse
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./chart.js)
+- [JavaScript](./chart.ts)
 - [CSS](./chart.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./chart.json)

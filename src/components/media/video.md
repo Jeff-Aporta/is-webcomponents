@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-video
 tags:
   - iswc-video
 category: media
 status: public
-source: ./video.js
+source: ./video.ts
 style: ./video.css
 preview: ./video.json
 ---
 # `<iswc-video>`
 
-## Propósito
+## PropÃ³sito
 
 Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y
 scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture
 y pantalla completa. Los controles se ocultan solos mientras reproduce.
 
-Este módulo registra `<iswc-video>`.
+Este mÃ³dulo registra `<iswc-video>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Iconos, identidad visual y reproducción de video.
+Iconos, identidad visual y reproducciÃ³n de video.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear loader/reproductor paralelo antes de revisar existentes.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './video.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-video
@@ -50,15 +50,15 @@ src="video.mp4"
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `src` | string/según contrato | Fuente define default/restricción. |
-| `poster` | string/según contrato | Fuente define default/restricción. |
+| `src` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `poster` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `without-controls` | boolean | Oculta la chrome propia. Por defecto se muestra. |
-| `muted` | boolean | Fuente define default/restricción. |
-| `loop` | boolean | Fuente define default/restricción. |
-| `autoplay` | boolean | Fuente define default/restricción. |
-| `playsinline` | boolean | Fuente define default/restricción. |
+| `muted` | boolean | Fuente define default/restricciÃ³n. |
+| `loop` | boolean | Fuente define default/restricciÃ³n. |
+| `autoplay` | boolean | Fuente define default/restricciÃ³n. |
+| `playsinline` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -81,10 +81,10 @@ src="video.mp4"
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-play` | Evento personalizado del componente (play). |
-| `iswc-pause` | Emitido al pausar la operación. |
+| `iswc-pause` | Emitido al pausar la operaciÃ³n. |
 | `iswc-ended` | Evento personalizado del componente (ended). |
 | `play` | Evento `play`. |
 | `pause` | Evento `pause`. |
@@ -92,12 +92,12 @@ src="video.mp4"
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-play` | no | sí | sí | no |
-| `iswc-pause` | no | sí | sí | no |
-| `iswc-ended` | no | sí | sí | no |
-| `play` | no | sí | sí | no |
-| `pause` | no | sí | sí | no |
-| `ended` | no | sí | sí | no |
+| `iswc-play` | no | sÃ­ | sÃ­ | no |
+| `iswc-pause` | no | sÃ­ | sÃ­ | no |
+| `iswc-ended` | no | sÃ­ | sÃ­ | no |
+| `play` | no | sÃ­ | sÃ­ | no |
+| `pause` | no | sÃ­ | sÃ­ | no |
+| `ended` | no | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -112,16 +112,16 @@ el.addEventListener('iswc-play', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `play()` | Método público declarado. |
-| `pause()` | Método público declarado. |
-| `toggleFullscreen()` | Método público declarado. |
-| `togglePictureInPicture()` | Método público declarado. |
+| `play()` | MÃ©todo pÃºblico declarado. |
+| `pause()` | MÃ©todo pÃºblico declarado. |
+| `toggleFullscreen()` | MÃ©todo pÃºblico declarado. |
+| `togglePictureInPicture()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -150,38 +150,38 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--played` | Token leído o definido por componente. |
-| `--buffered` | Token leído o definido por componente. |
-| `--vol` | Token leído o definido por componente. |
-| `--iswc-font-family` | Token leído o definido por componente. |
-| `--iswc-video-accent` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
+| `--played` | Token leÃ­do o definido por componente. |
+| `--buffered` | Token leÃ­do o definido por componente. |
+| `--vol` | Token leÃ­do o definido por componente. |
+| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--iswc-video-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-video> — Web Component (vanilla).
+> <iswc-video> â€” Web Component (vanilla).
 > Reproductor con chrome tipo YouTube: barra de progreso propia (con buffer y
 > scrubber) sobre la fila de botones, scrim inferior, overlay de play central,
 > auto-ocultado mientras reproduce, atajos de teclado, pantalla completa,
-> picture-in-picture y menú de velocidad.
+> picture-in-picture y menÃº de velocidad.
 > Atributos
 >   src, poster
->   without-controls  boolean — oculta la chrome propia (por defecto se muestra)
+>   without-controls  boolean â€” oculta la chrome propia (por defecto se muestra)
 >   muted, loop, autoplay, playsinline  boolean
-> Slots: default — tracks / sources
-> Métodos: play(), pause(), toggleFullscreen(), togglePictureInPicture()
+> Slots: default â€” tracks / sources
+> MÃ©todos: play(), pause(), toggleFullscreen(), togglePictureInPicture()
 > Eventos (bubbles, composed): iswc-play, iswc-pause, iswc-ended
-> También reenvía play/pause/ended nativos (bubbles, composed)
+> TambiÃ©n reenvÃ­a play/pause/ended nativos (bubbles, composed)
 > Teclado (con foco en el reproductor)
 >   espacio / k  play-pausa      m  silenciar        f  pantalla completa
->   ← →          ±5 s            j l  ±10 s          0-9  salto por decenas
->   ↑ ↓          ±5 % volumen
+>   â† â†’          Â±5 s            j l  Â±10 s          0-9  salto por decenas
+>   â†‘ â†“          Â±5 % volumen
 > CSS Parts: ::part(base) ::part(video) ::part(controls) ::part(play-button)
 >            ::part(mute-button) ::part(volume) ::part(volume-slider)
 >            ::part(time) ::part(seek) ::part(progress) ::part(big-play)
@@ -193,11 +193,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../actions/check-icon-button.js`](../actions/check-icon-button.js)
 - [`./icon.js`](./icon.js)
 
-Tags del módulo: `<iswc-video>`.
+Tags del mÃ³dulo: `<iswc-video>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`, `aria-haspopup`, `aria-expanded`, `aria-checked`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`, `aria-haspopup`, `aria-expanded`, `aria-checked`.
 
 ## Ejemplo avanzado
 
@@ -211,7 +211,7 @@ src="video.mp4"
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -219,15 +219,15 @@ src="video.mp4"
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./video.js)
+- [JavaScript](./video.ts)
 - [CSS](./video.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./video.json)

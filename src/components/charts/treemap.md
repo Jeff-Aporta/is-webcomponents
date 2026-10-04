@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-treemap
 tags:
   - iswc-treemap
 category: charts
 status: public
-source: ./treemap.js
+source: ./treemap.ts
 style: ./treemap.css
 preview: ./treemap.json
 ---
 # `<iswc-treemap>`
 
-## Propósito
+## PropÃ³sito
 
 Treemap anidado en SVG, con el algoritmo squarified (Bruls/Huizing/
-van Wijk): rectángulos con aspect-ratio cercano a 1, sin huecos ni
+van Wijk): rectÃ¡ngulos con aspect-ratio cercano a 1, sin huecos ni
 solapes.
 
-Este módulo registra `<iswc-treemap>`.
+Este mÃ³dulo registra `<iswc-treemap>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Series, distribuciones, relaciones o jerarquías de datos.
+Series, distribuciones, relaciones o jerarquÃ­as de datos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear otro engine si marks/engine existentes cubren caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './treemap.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-treemap></iswc-treemap>
@@ -46,9 +46,9 @@ import './treemap.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -66,15 +66,15 @@ import './treemap.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
 
 <details>
@@ -89,13 +89,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -113,21 +113,21 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--chart-surface` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--chart-surface` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.
+> <iswc-treemap> â€” treemap anidado en SVG (algoritmo squarified), sin librerÃ­as.
 >   <iswc-treemap>
 >     <script type="application/json">
 >       { "treemap": { "nodes": [{ "id":"inv", "label":"Inventario", "value":3200 }] } }
@@ -149,11 +149,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`../diagrams/diagram-kinds.js`](../diagrams/diagram-kinds.js)
 
-Tags del módulo: `<iswc-treemap>`.
+Tags del mÃ³dulo: `<iswc-treemap>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -163,7 +163,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -171,15 +171,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./treemap.js)
+- [JavaScript](./treemap.ts)
 - [CSS](./treemap.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./treemap.json)

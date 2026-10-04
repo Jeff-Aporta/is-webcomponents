@@ -1,39 +1,39 @@
----
+﻿---
 tag: iswc-full-calendar
 tags:
   - iswc-full-calendar
 category: forms
 status: public
-source: ./full-calendar.js
+source: ./full-calendar.ts
 style: ./full-calendar.css
 preview: ./full-calendar.json
 ---
 # `<iswc-full-calendar>`
 
-## Propósito
+## PropÃ³sito
 
-Calendario con vistas de mes, semana y día, con eventos posicionados por fecha
-y hora, barra de navegación propia y formateo por `Intl`.
+Calendario con vistas de mes, semana y dÃ­a, con eventos posicionados por fecha
+y hora, barra de navegaciÃ³n propia y formateo por `Intl`.
 
-Este módulo registra `<iswc-full-calendar>`.
+Este mÃ³dulo registra `<iswc-full-calendar>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Mostrar y navegar una agenda: reservas, vencimientos, programación de tareas.
+Mostrar y navegar una agenda: reservas, vencimientos, programaciÃ³n de tareas.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 Para elegir una fecha en un formulario usar `<iswc-date-input>` o
 `<iswc-date-picker>`; para un rango, `<iswc-date-range-input>`; para una sola
 rejilla mensual sin eventos, `<iswc-month-calendar>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './full-calendar.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-full-calendar>
@@ -53,16 +53,16 @@ import './full-calendar.js';
 | --- | --- | --- |
 | `view` | `month` \| `week` \| `day` | Default `month`. |
 | `date` | ISO `YYYY-MM-DD` | Fecha inicial; default hoy. |
-| `first-day` | `0` \| `1` | Primer día de la semana; `0` domingo, `1` lunes (default). |
-| `locale` | string | Tag `Intl` para nombres de mes y día, default `es`. |
+| `first-day` | `0` \| `1` | Primer dÃ­a de la semana; `0` domingo, `1` lunes (default). |
+| `locale` | string | Tag `Intl` para nombres de mes y dÃ­a, default `es`. |
 | `hours-start` | number | Primera hora visible en `week`/`day`, default `7`. |
-| `hours-end` | number | Última hora visible en `week`/`day`, default `20`. |
+| `hours-end` | number | Ãšltima hora visible en `week`/`day`, default `20`. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| `events` | lectura/escritura | Arreglo de eventos. Al escribirlo se repinta y sustituye lo leído del `<script>`. |
+| `events` | lectura/escritura | Arreglo de eventos. Al escribirlo se repinta y sustituye lo leÃ­do del `<script>`. |
 
 Forma de un evento: `{ id, title, date: 'YYYY-MM-DD', start: 'HH:MM', end?: 'HH:MM', color? }`.
 
@@ -75,7 +75,7 @@ Forma de un evento: `{ id, title, date: 'YYYY-MM-DD', start: 'HH:MM', end?: 'HH:
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-day-click` | Evento personalizado del componente (day click). |
 | `iswc-event-click` | Evento personalizado del componente (event click). |
@@ -83,12 +83,12 @@ Forma de un evento: `{ id, title, date: 'YYYY-MM-DD', start: 'HH:MM', end?: 'HH:
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-day-click` | `{ date }` | sí | sí | no |
-| `iswc-event-click` | `{ event, date }` | sí | sí | no |
-| `iswc-view-change` | `{ view, date }` | sí | sí | no |
+| `iswc-day-click` | `{ date }` | sÃ­ | sÃ­ | no |
+| `iswc-event-click` | `{ event, date }` | sÃ­ | sÃ­ | no |
+| `iswc-view-change` | `{ view, date }` | sÃ­ | sÃ­ | no |
 
 `iswc-view-change` se emite al usar los botones de vista de la toolbar, no al
-cambiar el atributo `view` por código.
+cambiar el atributo `view` por cÃ³digo.
 
 
 <details>
@@ -103,22 +103,22 @@ el.addEventListener('iswc-day-click', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
 | `setDate(iso)` | Fija el atributo `date`. |
 | `setView(view)` | Fija el atributo `view`. |
 | `prev()` | Retrocede una unidad de la vista actual. |
 | `next()` | Avanza una unidad de la vista actual. |
-| `today()` | Vuelve al día de hoy. |
+| `today()` | Vuelve al dÃ­a de hoy. |
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `root` | Contenedor. |
-| `toolbar` | Barra de navegación y selector de vista. |
+| `toolbar` | Barra de navegaciÃ³n y selector de vista. |
 | `grid` | Rejilla de la vista activa. |
 
 ### Custom states
@@ -131,17 +131,17 @@ No expone custom states.
 | --- | --- |
 | `--iswc-bg-elev` | Fondo del calendario. |
 | `--iswc-border` | Bordes de la rejilla. |
-| `--iswc-border-soft` | Líneas internas. |
+| `--iswc-border-soft` | LÃ­neas internas. |
 | `--iswc-radius` | Radio de bordes. |
 | `--iswc-text` | Color del texto. |
-| `--iswc-text-soft` | Días fuera del mes. |
+| `--iswc-text-soft` | DÃ­as fuera del mes. |
 | `--iswc-text-dim` | Etiquetas de hora. |
-| `--iswc-accent` | Día de hoy y vista activa. |
+| `--iswc-accent` | DÃ­a de hoy y vista activa. |
 | `--iswc-on-accent` | Contenido sobre el acento. |
 
 El `color` de cada evento se aplica por variables locales del propio evento.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated: es una vista de agenda, no un campo.
 
@@ -152,8 +152,8 @@ No es form-associated: es una vista de agenda, no un campo.
 - La vista `month` dibuja la rejilla completa del mes respetando `first-day`.
 - Las vistas `week` y `day` dibujan solo el rango `hours-start`..`hours-end`;
   un evento fuera de ese rango no se ve.
-- Los clics se resuelven por delegación en la rejilla: sobre un evento se emite
-  `iswc-event-click`, sobre el día `iswc-day-click`.
+- Los clics se resuelven por delegaciÃ³n en la rejilla: sobre un evento se emite
+  `iswc-event-click`, sobre el dÃ­a `iswc-day-click`.
 - Cambiar cualquier atributo observado repinta.
 
 ## Dependencias y componentes relacionados
@@ -163,14 +163,14 @@ No es form-associated: es una vista de agenda, no un campo.
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/dom-utils.js`](../_shared/dom-utils.js)
 
-Tags del módulo: `<iswc-full-calendar>`.
+Tags del mÃ³dulo: `<iswc-full-calendar>`.
 
 ## Accesibilidad
 
-Los controles de la toolbar son botones; los de navegación llevan
+Los controles de la toolbar son botones; los de navegaciÃ³n llevan
 `aria-label` (`Anterior`, `Siguiente`). La rejilla se opera con puntero: si el
 flujo debe ser navegable por teclado, exponer las mismas acciones (`prev()`,
-`next()`, selección de día) desde controles propios.
+`next()`, selecciÃ³n de dÃ­a) desde controles propios.
 
 ## Ejemplo avanzado
 
@@ -182,8 +182,8 @@ flujo debe ser navegable por teclado, exponer las mismas acciones (`prev()`,
 <script type="module">
   const agenda = document.getElementById('agenda');
   agenda.events = [
-    { id: 'a', title: 'Conciliación', date: '2026-08-10', start: '08:00', end: '09:30', color: '#7048e8' },
-    { id: 'b', title: 'Nómina', date: '2026-08-10', start: '14:00', end: '15:00' },
+    { id: 'a', title: 'ConciliaciÃ³n', date: '2026-08-10', start: '08:00', end: '09:30', color: '#7048e8' },
+    { id: 'b', title: 'NÃ³mina', date: '2026-08-10', start: '14:00', end: '15:00' },
   ];
   agenda.addEventListener('iswc-event-click', (e) => console.log(e.detail.event.title));
   agenda.addEventListener('iswc-day-click', (e) => agenda.setDate(e.detail.date));
@@ -193,23 +193,23 @@ flujo debe ser navegable por teclado, exponer las mismas acciones (`prev()`,
 ## Errores comunes
 
 - Cambiar el `<script type="application/json">` tras conectar: solo se lee al
-  conectar; después usar la propiedad `events`.
+  conectar; despuÃ©s usar la propiedad `events`.
 - Esperar `iswc-view-change` al hacer `setView()`: ese evento es de la toolbar.
 - Fijar horas fuera de `hours-start`..`hours-end` y no ver los eventos.
 - Pasar `date` en formato distinto de ISO.
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./full-calendar.js)
+- [JavaScript](./full-calendar.ts)
 - [CSS](./full-calendar.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./full-calendar.json)

@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-format-bytes
 tags:
   - iswc-format-bytes
 category: helpers
 status: public
-source: ./format-bytes.js
+source: ./format-bytes.ts
 style: ./format-bytes.css
 preview: ./format-bytes.json
 ---
 # `<iswc-format-bytes>`
 
-## Propósito
+## PropÃ³sito
 
-Tamaños de archivo legibles. value se interpreta según unit (default byte).
+TamaÃ±os de archivo legibles. value se interpreta segÃºn unit (default byte).
 
-Este módulo registra `<iswc-format-bytes>`.
+Este mÃ³dulo registra `<iswc-format-bytes>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Formato, observación y posicionamiento reutilizable sobre APIs nativas.
+Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './format-bytes.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-format-bytes value="2.5" unit="megabyte"></iswc-format-bytes>
@@ -45,13 +45,13 @@ import './format-bytes.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | number | Bytes (o según `unit` de entrada). |
-| `unit` | string | Unidad del `value`: `byte` (default), `kilobyte`, `megabyte`, … |
+| `value` | number | Bytes (o segÃºn `unit` de entrada). |
+| `unit` | string | Unidad del `value`: `byte` (default), `kilobyte`, `megabyte`, â€¦ |
 | `display` | `short` \| `long` | Forma corta (`KB`) o larga (`kilobytes`). |
 | `locale` | BCP 47 | Override; default = `lang` del documento. |
-| `autofit` | boolean | Unidad más alta cuyo valor sea **≥ 1** (p. ej. `200 KB`, no `0.2 MB`). |
+| `autofit` | boolean | Unidad mÃ¡s alta cuyo valor sea **â‰¥ 1** (p. ej. `200 KB`, no `0.2 MB`). |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ No expone.
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 
 No expone.
@@ -83,11 +83,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -103,32 +103,32 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-format-bytes> — Web Component (vanilla).
-> Formatea tamaños de archivo legibles.
+> <iswc-format-bytes> â€” Web Component (vanilla).
+> Formatea tamaÃ±os de archivo legibles.
 > Atributos
->   value    number — bytes (o según unit)
->   unit     byte | kilobyte | megabyte | … (default byte)
+>   value    number â€” bytes (o segÃºn unit)
+>   unit     byte | kilobyte | megabyte | â€¦ (default byte)
 >   display  short | long (default short)
 >   locale   override de locale (default document lang)
->   autofit  boolean — unidad más alta con valor ≥ 1 (200 KB, no 0.2 MB)
+>   autofit  boolean â€” unidad mÃ¡s alta con valor â‰¥ 1 (200 KB, no 0.2 MB)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-format-bytes>`.
+Tags del mÃ³dulo: `<iswc-format-bytes>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
 
 ## Ejemplo avanzado
 
@@ -140,7 +140,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -148,15 +148,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./format-bytes.js)
+- [JavaScript](./format-bytes.ts)
 - [CSS](./format-bytes.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./format-bytes.json)

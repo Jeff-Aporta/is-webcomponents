@@ -1,10 +1,10 @@
----
+﻿---
 tag: iswc-txt-view
 tags:
   - iswc-txt-view
 category: files
 status: public
-source: ./txt-view.js
+source: ./txt-view.ts
 style: ./txt-view.css
 preview: ./txt-view.json
 ---
@@ -28,7 +28,7 @@ Eventos: `iswc-load`, `iswc-error`; editores tambien `iswc-change`.
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 

@@ -1,17 +1,17 @@
----
-tag: —
+﻿---
+tag: â€”
 category: helpers
 status: module
-source: ./md-hydrate.js
+source: ./md-hydrate.ts
 ---
-# `md-hydrate` (módulo)
+# `md-hydrate` (mÃ³dulo)
 
-## Propósito
+## PropÃ³sito
 
 Tras pintar HTML de MD: carga lazy de tags `iswc-*` presentes y sustituye
 marcadores `.md-iswc-code` por `<iswc-code>` (inline = `brand-mono`, bloque = theme).
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import { hydrateMdEmbeds, ensureNeededTags, upgradeCodeMarkers, collectNeededTags } from
@@ -28,7 +28,7 @@ Requiere `globalThis.ISWebComponentsLoader` con `ensure` / `has` (el loader CDN)
 | --- | --- |
 | `collectNeededTags(root)` | Lista ordenada de tags `iswc-*` (+ `iswc-code` si hay marcadores). |
 | `ensureNeededTags(root)` | `L.ensure(tag)` solo para los que faltan. |
-| `upgradeCodeMarkers(root)` | `.md-iswc-code` → `<iswc-code readonly>`. |
+| `upgradeCodeMarkers(root)` | `.md-iswc-code` â†’ `<iswc-code readonly>`. |
 | `hydrateMdEmbeds(root)` | `ensureNeededTags` + `upgradeCodeMarkers`. |
 
 Usado por `<iswc-md-render>` y el preview de `<iswc-md-editor>`. No lo reimplementes.
@@ -36,7 +36,7 @@ Usado por `<iswc-md-render>` y el preview de `<iswc-md-editor>`. No lo reimpleme
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 

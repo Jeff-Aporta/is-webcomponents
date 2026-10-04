@@ -1,10 +1,10 @@
----
+﻿---
 tag: iswc-docx-view
 tags:
   - iswc-docx-view
 category: files
 status: public
-source: ./docx-view.js
+source: ./docx-view.ts
 style: ./docx-view.css
 preview: ./docx-view.json
 ---
@@ -28,7 +28,7 @@ Eventos: `iswc-load`, `iswc-error`; editores tambien `iswc-change`.
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 

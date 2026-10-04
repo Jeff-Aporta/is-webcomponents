@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-date-range-picker
 tags:
   - iswc-date-range-picker
 category: forms
 status: public
-source: ./date-range-picker.js
+source: ./date-range-picker.ts
 style: ./date-range-picker.css
 preview: ./date-range-picker.json
 ---
 # `<iswc-date-range-picker>`
 
-## Propósito
+## PropÃ³sito
 
 Rango de fechas con varios meses a la vista y panel de atajos (DateRangeCalendar de MUI X). El hover en un mes pinta la banda tentativa en todos.
 
-Este módulo registra `<iswc-date-range-picker>`.
+Este mÃ³dulo registra `<iswc-date-range-picker>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './date-range-picker.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-date-range-picker></iswc-date-range-picker>
@@ -44,26 +44,26 @@ import './date-range-picker.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `calendars` | string/según contrato | Fuente define default/restricción. |
-| `month` | string/según contrato | Fuente define default/restricción. |
-| `shortcuts` | string/según contrato | Fuente define default/restricción. |
-| `min` | string/según contrato | Fuente define default/restricción. |
-| `max` | string/según contrato | Fuente define default/restricción. |
-| `locale` | string/según contrato | Fuente define default/restricción. |
-| `first-day-of-week` | string/según contrato | Fuente define default/restricción. |
-| `weekday-width` | string/según contrato | Fuente define default/restricción. |
-| `show-outside-days` | string/según contrato | Fuente define default/restricción. |
-| `fixed-weeks` | string/según contrato | Fuente define default/restricción. |
-| `show-week-numbers` | string/según contrato | Fuente define default/restricción. |
-| `disable-past` | string/según contrato | Fuente define default/restricción. |
-| `disable-future` | string/según contrato | Fuente define default/restricción. |
-| `disabled-dates` | string/según contrato | Fuente define default/restricción. |
-| `disabled-days` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `readonly` | boolean | Fuente define default/restricción. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `calendars` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `month` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `shortcuts` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `locale` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `first-day-of-week` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `weekday-width` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `show-outside-days` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `fixed-weeks` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `show-week-numbers` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-past` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-future` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled-dates` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled-days` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `readonly` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -85,15 +85,15 @@ import './date-range-picker.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-month-change` | Evento personalizado del componente (month change). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-month-change` | sí | sí | sí | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-month-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -108,13 +108,13 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `clear()` | Método público declarado. |
+| `clear()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -132,35 +132,35 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-daterange-border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-daterange-bg` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-radius` | Token leído o definido por componente. |
-| `--iswc-shadow` | Token leído o definido por componente. |
+| `--iswc-daterange-border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-daterange-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-shadow` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-date-range-picker> — Rango de fechas con varios meses a la vista
+> <iswc-date-range-picker> â€” Rango de fechas con varios meses a la vista
 > (equivalente a DateRangeCalendar de MUI X) y panel de atajos.
-> Compone N <iswc-date-picker mode="range">: el rango vive aquí y se empuja a
-> todos, así que el segundo clic puede caer en cualquier mes y el rango
+> Compone N <iswc-date-picker mode="range">: el rango vive aquÃ­ y se empuja a
+> todos, asÃ­ que el segundo clic puede caer en cualquier mes y el rango
 > tentativo se pinta en todos a la vez.
 > Atributos: value ("inicio/fin"), calendars (1-3), month (ancla yyyy-mm),
->            shortcuts ("this-week last-7-days …" | "none"), min, max, locale,
+>            shortcuts ("this-week last-7-days â€¦" | "none"), min, max, locale,
 >            first-day-of-week, weekday-width, show-outside-days, fixed-weeks,
 >            show-week-numbers, disable-past, disable-future, disabled-dates,
 >            disabled-days, disabled, readonly
 > Slots: shortcut (atajos propios con data-range="inicio/fin")
-> Events: iswc-change { start, end } · iswc-month-change { month }
+> Events: iswc-change { start, end } Â· iswc-month-change { month }
 
 ## Dependencias y componentes relacionados
 
@@ -169,11 +169,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../actions/button.js`](../actions/button.js)
 - [`./date-picker.js`](./date-picker.js)
 
-Tags del módulo: `<iswc-date-range-picker>`.
+Tags del mÃ³dulo: `<iswc-date-range-picker>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -183,7 +183,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -191,15 +191,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./date-range-picker.js)
+- [JavaScript](./date-range-picker.ts)
 - [CSS](./date-range-picker.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./date-range-picker.json)

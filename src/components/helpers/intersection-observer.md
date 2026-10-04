@@ -1,42 +1,42 @@
----
+﻿---
 tag: iswc-intersection-observer
 tags:
   - iswc-intersection-observer
 category: helpers
 status: public
-source: ./intersection-observer.js
+source: ./intersection-observer.ts
 style: ./intersection-observer.css
 preview: ./intersection-observer.json
 ---
 # `<iswc-intersection-observer>`
 
-## Propósito
+## PropÃ³sito
 
-Responde a una pregunta simple: ¿este elemento está (parcialmente) visible
-dentro de un contenedor? Si sí, aplica una clase y/o dispara el evento
+Responde a una pregunta simple: Â¿este elemento estÃ¡ (parcialmente) visible
+dentro de un contenedor? Si sÃ­, aplica una clase y/o dispara el evento
 iswc-intersect.
 
-Este módulo registra `<iswc-intersection-observer>`.
+Este mÃ³dulo registra `<iswc-intersection-observer>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Formato, observación y posicionamiento reutilizable sobre APIs nativas.
+Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './intersection-observer.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-intersection-observer root="#scroller" intersect-class="iswc-in" threshold="0.4" once>
-<article class="io-card">…</article>
+<article class="io-card">â€¦</article>
 </iswc-intersection-observer>
 ```
 
@@ -48,14 +48,14 @@ import './intersection-observer.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `intersect-class` | string/según contrato | Fuente define default/restricción. |
-| `once` | boolean | Fuente define default/restricción. |
-| `root` | string/según contrato | Fuente define default/restricción. |
-| `root-margin` | string/según contrato | Fuente define default/restricción. |
-| `threshold` | string/según contrato | Fuente define default/restricción. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `intersect-class` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `once` | boolean | Fuente define default/restricciÃ³n. |
+| `root` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `root-margin` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `threshold` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -70,13 +70,13 @@ import './intersection-observer.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-intersect` | Emitido al entrar/salir de la zona observada. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-intersect` | sí | sí | sí | no |
+| `iswc-intersect` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -91,11 +91,11 @@ el.addEventListener('iswc-intersect', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -109,23 +109,23 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-intersection-observer> — Web Component (vanilla).
-> display:contents — observa hijos directos con IntersectionObserver.
+> <iswc-intersection-observer> â€” Web Component (vanilla).
+> display:contents â€” observa hijos directos con IntersectionObserver.
 > Atributos
 >   disabled         boolean
->   intersect-class  string — clase a togglear en el hijo
->   once             boolean — deja de observar tras primera intersección
->   root             string — selector del root (closest → shadow → document; default viewport)
+>   intersect-class  string â€” clase a togglear en el hijo
+>   once             boolean â€” deja de observar tras primera intersecciÃ³n
+>   root             string â€” selector del root (closest â†’ shadow â†’ document; default viewport)
 >   root-margin      string
->   threshold        number 0–1
+>   threshold        number 0â€“1
 > Eventos
 >   iswc-intersect  detail: { entry }
 
@@ -133,23 +133,23 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-intersection-observer>`.
+Tags del mÃ³dulo: `<iswc-intersection-observer>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-intersection-observer root="#scroller" intersect-class="iswc-in" threshold="0.4" once>
-<article class="io-card">…</article>
+<article class="io-card">â€¦</article>
 </iswc-intersection-observer>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -157,15 +157,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./intersection-observer.js)
+- [JavaScript](./intersection-observer.ts)
 - [CSS](./intersection-observer.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./intersection-observer.json)

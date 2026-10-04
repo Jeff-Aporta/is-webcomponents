@@ -1,42 +1,42 @@
----
+﻿---
 tag: iswc-main
 tags:
   - iswc-main
 category: layout
 status: public
-source: ./main.js
+source: ./main.ts
 style: ./main.css
 preview: ./main.json
 ---
 # `<iswc-main>`
 
-## Propósito
+## PropÃ³sito
 
 Contenedor scrollable equivalente a <main>.
 La persistencia de scroll es opt-in estricta: requiere
 remember-scroll y storage-key.
 
-Este módulo registra `<iswc-main>`.
+Este mÃ³dulo registra `<iswc-main>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Estructura, superficies, overlays y navegación por regiones de contenido.
+Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear size colors; escalar mediante font-size contextual y em.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './main.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-main class="main" remember-scroll storage-key="docs-mi-vista">
-…
+â€¦
 </iswc-main>
 ```
 
@@ -48,11 +48,11 @@ import './main.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `remember-scroll` | boolean | Fuente define default/restricción. |
-| `storage-key` | string/según contrato | Fuente define default/restricción. |
-| `scroll-ttl` | string/según contrato | Fuente define default/restricción. |
+| `remember-scroll` | boolean | Fuente define default/restricciÃ³n. |
+| `storage-key` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `scroll-ttl` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -67,7 +67,7 @@ No expone.
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 
 No expone.
@@ -85,15 +85,15 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `clearRememberedScroll()` | Método público declarado. |
-| `saveScroll()` | Método público declarado. |
-| `restoreScroll()` | Método público declarado. |
+| `clearRememberedScroll()` | MÃ©todo pÃºblico declarado. |
+| `saveScroll()` | MÃ©todo pÃºblico declarado. |
+| `restoreScroll()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -107,32 +107,32 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-main> — contenedor scrollable tipo <main>.
+> <iswc-main> â€” contenedor scrollable tipo <main>.
 > Remember-scroll es OPT-IN estricto: hace falta
->   remember-scroll  +  storage-key="…"
-> Sin ambos → no lee ni escribe localStorage.
+>   remember-scroll  +  storage-key="â€¦"
+> Sin ambos â†’ no lee ni escribe localStorage.
 > Attrs
->   remember-scroll   boolean — activa persistencia (default: off)
->   storage-key       string  — id único bajo is-components.iswc-main
->   scroll-ttl        number  — ms de validez (default: 3600000 = 1h)
+>   remember-scroll   boolean â€” activa persistencia (default: off)
+>   storage-key       string  â€” id Ãºnico bajo is-components.iswc-main
+>   scroll-ttl        number  â€” ms de validez (default: 3600000 = 1h)
 > Methods: scrollToTop(), clearRememberedScroll(), saveScroll(), restoreScroll()
-> Restore solo en reload / back_forward. Navegación fresca (p. ej. cambio
-> de componente en la galería vía iframe.src) arranca en top.
+> Restore solo en reload / back_forward. NavegaciÃ³n fresca (p. ej. cambio
+> de componente en la galerÃ­a vÃ­a iframe.src) arranca en top.
 > storage-key identifica el contenido: cambiarlo en caliente equivale a
-> cambiar de vista, así que resetea a top en vez de restaurar.
+> cambiar de vista, asÃ­ que resetea a top en vez de restaurar.
 
-Detalle de la restauración:
+Detalle de la restauraciÃ³n:
 
-- El contenido suele pintarse después de que llega `storage-key`, así que la
-  restauración reintenta durante 2,5 s hasta alcanzar el top guardado; un
+- El contenido suele pintarse despuÃ©s de que llega `storage-key`, asÃ­ que la
+  restauraciÃ³n reintenta durante 2,5 s hasta alcanzar el top guardado; un
   gesto del usuario (`wheel`, `touchstart`, `pointerdown`, `keydown`) la aborta.
 - Cambiar `storage-key` en caliente resetea a top y limpia la lectura
   recordada de la vista entrante, de modo que un F5 inmediato se queda arriba.
@@ -141,23 +141,23 @@ Detalle de la restauración:
 
 - [`../_shared/prefs.js`](../_shared/prefs.js)
 
-Tags del módulo: `<iswc-main>`.
+Tags del mÃ³dulo: `<iswc-main>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-main class="main" remember-scroll storage-key="docs-mi-vista">
-…
+â€¦
 </iswc-main>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -165,15 +165,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./main.js)
+- [JavaScript](./main.ts)
 - [CSS](./main.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./main.json)

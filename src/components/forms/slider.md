@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-slider
 tags:
   - iswc-slider
 category: forms
 status: public
-source: ./slider.js
+source: ./slider.ts
 style: ./slider.css
 preview: ./slider.json
 ---
 # `<iswc-slider>`
 
-## Propósito
+## PropÃ³sito
 
 Control de rango form-associated con paridad funcional con el
 Slider de MUI:
-rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido.
+rango de dos thumbs, marks, escala no lineal, orientaciÃ³n vertical y track invertido.
 
-Este módulo registra `<iswc-slider>`.
+Este mÃ³dulo registra `<iswc-slider>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './slider.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-slider label="Volumen" value="30"></iswc-slider>
@@ -47,28 +47,28 @@ import './slider.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `min` | string/según contrato | Fuente define default/restricción. |
-| `max` | string/según contrato | Fuente define default/restricción. |
-| `step` | string/según contrato | Fuente define default/restricción. |
-| `shift-step` | string/según contrato | Fuente define default/restricción. |
-| `marks` | boolean | Fuente define default/restricción. |
-| `orientation` | string/según contrato | Fuente define default/restricción. |
-| `track` | string/según contrato | Fuente define default/restricción. |
-| `value-label` | string/según contrato | Fuente define default/restricción. |
-| `with-tooltip` | string/según contrato | Fuente define default/restricción. |
-| `min-distance` | string/según contrato | Fuente define default/restricción. |
-| `disable-swap` | boolean | Fuente define default/restricción. |
-| `range` | string/según contrato | Fuente define default/restricción. |
-| `format` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `readonly` | boolean | Fuente define default/restricción. |
-| `required` | boolean | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `hint` | string/según contrato | Fuente define default/restricción. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `step` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `shift-step` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `marks` | boolean | Fuente define default/restricciÃ³n. |
+| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `track` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `with-tooltip` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `min-distance` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-swap` | boolean | Fuente define default/restricciÃ³n. |
+| `range` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `format` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `required` | boolean | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -109,15 +109,15 @@ import './slider.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-input` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
+| `iswc-input` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -132,19 +132,19 @@ el.addEventListener('iswc-input', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `focus()` | Método público declarado. |
-| `blur()` | Método público declarado. |
-| `stepUp()` | Método público declarado. |
-| `stepDown()` | Método público declarado. |
-| `checkValidity()` | Método público declarado. |
-| `reportValidity()` | Método público declarado. |
-| `setCustomValidity()` | Método público declarado. |
+| `focus()` | MÃ©todo pÃºblico declarado. |
+| `blur()` | MÃ©todo pÃºblico declarado. |
+| `stepUp()` | MÃ©todo pÃºblico declarado. |
+| `stepDown()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | MÃ©todo pÃºblico declarado. |
+| `reportValidity()` | MÃ©todo pÃºblico declarado. |
+| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -165,64 +165,64 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Estado | Uso |
 | --- | --- |
-| `:state(dragging)` | Estado usado por implementación/CSS. |
-| `:state(focused)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
-| `:state(readonly)` | Estado usado por implementación/CSS. |
+| `:state(dragging)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(focused)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(readonly)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--pos` | Token leído o definido por componente. |
-| `--iswc-slider-track-size` | Token leído o definido por componente. |
-| `--iswc-slider-thumb-size` | Token leído o definido por componente. |
-| `--iswc-slider-length` | Token leído o definido por componente. |
-| `--iswc-slider-rail` | Token leído o definido por componente. |
-| `--iswc-control-bg-active` | Token leído o definido por componente. |
-| `--iswc-slider-fill` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-slider-thumb-bg` | Token leído o definido por componente. |
-| `--iswc-slider-focus` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-color-success-500` | Token leído o definido por componente. |
-| `--iswc-color-warning-500` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-on-brand` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--pos` | Token leÃ­do o definido por componente. |
+| `--iswc-slider-track-size` | Token leÃ­do o definido por componente. |
+| `--iswc-slider-thumb-size` | Token leÃ­do o definido por componente. |
+| `--iswc-slider-length` | Token leÃ­do o definido por componente. |
+| `--iswc-slider-rail` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-active` | Token leÃ­do o definido por componente. |
+| `--iswc-slider-fill` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-slider-thumb-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-slider-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
+> <iswc-slider> â€” Control de rango form-associated (vanilla + Shadow DOM).
 > Atributos
 >   name, label, hint, color (brand|neutral|success|warning|danger)
->   value          number | "20,37" (rango con dos o más thumbs)
->   min (0), max (100), step (1)  — step="null" restringe a los marks
->   shift-step     salto con Shift+flechas y PageUp/PageDown (default step × 10)
->   marks          boolean (uno por step) | "0:0°C, 20:20°C" | "0,20,37"
+>   value          number | "20,37" (rango con dos o mÃ¡s thumbs)
+>   min (0), max (100), step (1)  â€” step="null" restringe a los marks
+>   shift-step     salto con Shift+flechas y PageUp/PageDown (default step Ã— 10)
+>   marks          boolean (uno por step) | "0:0Â°C, 20:20Â°C" | "0,20,37"
 >   orientation    horizontal (default) | vertical
 >   track          normal (default) | none | inverted
 >   value-label    off (default) | auto | on
->   min-distance   separación mínima entre thumbs de un rango
->   format         plantilla de la burbuja, ej. "{v}°C"
+>   min-distance   separaciÃ³n mÃ­nima entre thumbs de un rango
+>   format         plantilla de la burbuja, ej. "{v}Â°C"
 >   range, disable-swap, disabled, readonly, required   (boolean)
 > Propiedades
 >   value              number | number[]
 >   values             number[]
 >   marks              boolean | Array<{ value, label? }>
->   scale              (v) => any — valor mostrado (escala no lineal)
+>   scale              (v) => any â€” valor mostrado (escala no lineal)
 >   valueLabelFormat   (v, index) => string
 >   getAriaValueText   (v, index) => string
 > Slots: label, hint
@@ -236,11 +236,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<iswc-slider>`.
+Tags del mÃ³dulo: `<iswc-slider>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-disabled`, `aria-readonly`, `aria-orientation`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`, `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-disabled`, `aria-readonly`, `aria-orientation`, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -251,7 +251,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -259,15 +259,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./slider.js)
+- [JavaScript](./slider.ts)
 - [CSS](./slider.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./slider.json)

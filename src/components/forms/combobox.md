@@ -1,41 +1,41 @@
----
+﻿---
 tag: iswc-combobox
 tags:
   - iswc-combobox
 category: forms
 status: public
-source: ./combobox.js
+source: ./combobox.ts
 style: ./combobox.css
 preview: ./combobox.json
 ---
 # `<iswc-combobox>`
 
-## Propósito
+## PropÃ³sito
 
 Input + listbox filtrable con teclado y opciones iswc-option.
 
-Este módulo registra `<iswc-combobox>`.
+Este mÃ³dulo registra `<iswc-combobox>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './combobox.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-combobox label="Ciudad" clearable>
-<iswc-option value="bog">Bogotá</iswc-option>
-<iswc-option value="med">Medellín</iswc-option>
+<iswc-option value="bog">BogotÃ¡</iswc-option>
+<iswc-option value="med">MedellÃ­n</iswc-option>
 </iswc-combobox>
 ```
 
@@ -47,17 +47,17 @@ import './combobox.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `hint` | string/según contrato | Fuente define default/restricción. |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `placeholder` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `required` | boolean | Fuente define default/restricción. |
-| `open` | boolean | Fuente define default/restricción. |
-| `clearable` | boolean | Fuente define default/restricción. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `placeholder` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `required` | boolean | Fuente define default/restricciÃ³n. |
+| `open` | boolean | Fuente define default/restricciÃ³n. |
+| `clearable` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -77,7 +77,7 @@ import './combobox.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
@@ -86,10 +86,10 @@ import './combobox.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-show` | sí | sí | sí | no |
-| `iswc-hide` | sí | sí | sí | no |
-| `iswc-input` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
+| `iswc-show` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-hide` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-input` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -104,15 +104,15 @@ el.addEventListener('iswc-show', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `checkValidity()` | Método público declarado. |
-| `reportValidity()` | Método público declarado. |
-| `setCustomValidity()` | Método público declarado. |
+| `checkValidity()` | MÃ©todo pÃºblico declarado. |
+| `reportValidity()` | MÃ©todo pÃºblico declarado. |
+| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -127,56 +127,56 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `hint` | Personalizable con `::part(hint)`. |
 | `dialog` | Personalizable con `::part(dialog)`. |
 | `listbox` | Personalizable con `::part(listbox)`. |
-| `option` | Cada opción del listado. |
+| `option` | Cada opciÃ³n del listado. |
 
 ### Custom states
 
 | Estado | Uso |
 | --- | --- |
-| `:state(open)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
+| `:state(open)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-combobox-border-radius` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-combobox-border` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-combobox-bg` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-combobox-text` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--iswc-combobox-focus` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-radius` | Token leído o definido por componente. |
-| `--iswc-shadow` | Token leído o definido por componente. |
-| `--iswc-accent-bg` | Token leído o definido por componente. |
-| `--iswc-brand-text` | Token leído o definido por componente. |
-| `--iswc-color-brand-700` | Token leído o definido por componente. |
+| `--iswc-combobox-border-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-combobox-border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-combobox-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-combobox-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-combobox-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-shadow` | Token leÃ­do o definido por componente. |
+| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-brand-text` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-700` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-combobox> — Input + listbox filtrable.
+> <iswc-combobox> â€” Input + listbox filtrable.
 > El listbox vive en un <dialog modal> (top layer) para no perderse por
 > overflow/visibility de ancestros. Clic en el backdrop del dialog cierra.
 > Atributos: label, hint, name, value, placeholder, disabled, required, open, clearable
-> Slots: default — <iswc-option> o <option>
+> Slots: default â€” <iswc-option> o <option>
 > Events: iswc-change, iswc-input, iswc-show, iswc-hide
 
 ## Dependencias y componentes relacionados
@@ -184,24 +184,24 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./option.js`](./option.js)
 
-Tags del módulo: `<iswc-combobox>`.
+Tags del mÃ³dulo: `<iswc-combobox>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-autocomplete`, `aria-expanded`, `aria-controls`, `aria-label`, `aria-hidden`, `aria-selected`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-autocomplete`, `aria-expanded`, `aria-controls`, `aria-label`, `aria-hidden`, `aria-selected`.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-combobox label="Ciudad" clearable>
-<iswc-option value="bog">Bogotá</iswc-option>
-<iswc-option value="med">Medellín</iswc-option>
+<iswc-option value="bog">BogotÃ¡</iswc-option>
+<iswc-option value="med">MedellÃ­n</iswc-option>
 </iswc-combobox>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -209,15 +209,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-autoco
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./combobox.js)
+- [JavaScript](./combobox.ts)
 - [CSS](./combobox.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./combobox.json)

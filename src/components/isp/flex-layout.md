@@ -1,60 +1,60 @@
----
+﻿---
 tag: iswc-flex-layout
 tags:
   - iswc-flex-layout
 category: isp
 status: public
-source: ./flex-layout.js
+source: ./flex-layout.ts
 style: ./flex-layout.css
 preview: ./flex-layout.json
 ---
 # `<iswc-flex-layout>`
 
-## Propósito
+## PropÃ³sito
 
-Contenedor flex declarativo: dirección, gap, justificación, alineación,
-crecimiento y límites de tamaño por atributos. Port de
+Contenedor flex declarativo: direcciÃ³n, gap, justificaciÃ³n, alineaciÃ³n,
+crecimiento y lÃ­mites de tamaÃ±o por atributos. Port de
 `src/lib/layout/FlexLayout.svelte` de ISP.
 
-Este módulo registra `<iswc-flex-layout>`.
+Este mÃ³dulo registra `<iswc-flex-layout>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Para filas y columnas de UI donde se quiere el layout en el markup, sin
 escribir CSS por cada caso, y con un gap por defecto que se adapta al ancho del
 propio contenedor.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No usar cuando el layout ya está resuelto por el CSS de la página, ni para
-rejillas bidimensionales — para eso está `<iswc-grid-layout>`.
+No usar cuando el layout ya estÃ¡ resuelto por el CSS de la pÃ¡gina, ni para
+rejillas bidimensionales â€” para eso estÃ¡ `<iswc-grid-layout>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './flex-layout.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-flex-layout gap="0.5rem" justify="between" align="center">
   <span>Izquierda</span>
-  <iswc-button>Acción</iswc-button>
+  <iswc-button>AcciÃ³n</iswc-button>
 </iswc-flex-layout>
 ```
 
-## Mapeo Svelte → Web Component
+## Mapeo Svelte â†’ Web Component
 
-- Las props camelCase de ISP (`minWidth`, `maxHeight`…) son atributos
+- Las props camelCase de ISP (`minWidth`, `maxHeight`â€¦) son atributos
   kebab-case (`min-width`, `max-height`).
 - Los valores enumerados (`direction`, `justify`, `align`/`items`, `wrap`,
   `grow`, `inline`) se resuelven en CSS con `:host([attr])`, no construyendo un
-  `style` string como hacía ISP.
+  `style` string como hacÃ­a ISP.
 - Los valores libres (`gap`, `width`, `height`, `min-*`, `max-*`) los traduce el
-  JS a custom properties del host (`--gap`, `--width`, …), así el consumidor
-  puede pisarlos también desde CSS.
-- `sizew` / `boolszw` / `lerpw` eran slot props; aquí se heredan de
+  JS a custom properties del host (`--gap`, `--width`, â€¦), asÃ­ el consumidor
+  puede pisarlos tambiÃ©n desde CSS.
+- `sizew` / `boolszw` / `lerpw` eran slot props; aquÃ­ se heredan de
   `BreakpointHost` y se publican igual que en
   [`block-layout.md`](block-layout.md).
 
@@ -66,12 +66,12 @@ import './flex-layout.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `gap` | string | Valor CSS. Default responsive: 0.2 / 0.35 / 0.5rem según `data-sizew`. |
+| `gap` | string | Valor CSS. Default responsive: 0.2 / 0.35 / 0.5rem segÃºn `data-sizew`. |
 | `direction` | `row` \| `column` | Default `row`. |
 | `wrap` | boolean | `flex-wrap: wrap`. |
 | `justify` | string | `start`, `center`, `end`, `between`, `around`, `evenly`, `left`, `right`, `flex-start`, `flex-end`. |
 | `align` | string | `start`, `center`, `end`, `stretch`, `baseline`. |
-| `items` | string | Alias histórico de `align`; `align` gana. |
+| `items` | string | Alias histÃ³rico de `align`; `align` gana. |
 | `grow` | boolean | `flex: 1 1 auto`. |
 | `inline` | boolean | `display: inline-flex`. |
 | `width` | string | Valor CSS. |
@@ -81,9 +81,9 @@ import './flex-layout.js';
 | `max-width` | string | Valor CSS. Default `100%` (`none` si `inline`). |
 | `max-height` | string | Valor CSS. |
 
-También refleja `data-sizew` y `data-szw-*` (ver `block-layout.md`).
+TambiÃ©n refleja `data-sizew` y `data-szw-*` (ver `block-layout.md`).
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -96,18 +96,18 @@ También refleja `data-sizew` y `data-szw-*` (ver `block-layout.md`).
 
 | Slot | Uso |
 | --- | --- |
-| `default` | Ítems flex. |
+| `default` | Ãtems flex. |
 
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-breakpoint` | Evento personalizado del componente (breakpoint). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sí | sí | no |
+| `iswc-breakpoint` | `{ width, sizew, boolszw, lerpw }` | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -122,9 +122,9 @@ el.addEventListener('iswc-breakpoint', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
 | `lerpw(b0, b1)` | Heredado de `BreakpointHost`. |
 
@@ -132,7 +132,7 @@ el.addEventListener('iswc-breakpoint', (e) => {
 
 | Part | Uso |
 | --- | --- |
-| `content` | El `<slot>` de los ítems. |
+| `content` | El `<slot>` de los Ã­tems. |
 
 ### Custom states
 
@@ -143,17 +143,17 @@ No expone custom states.
 | Token | Uso |
 | --- | --- |
 | `--gap` | Gap efectivo. |
-| `--width`, `--height` | Tamaño. |
-| `--min-width`, `--min-height` | Mínimos. |
-| `--max-width`, `--max-height` | Máximos. |
+| `--width`, `--height` | TamaÃ±o. |
+| `--min-width`, `--min-height` | MÃ­nimos. |
+| `--max-width`, `--max-height` | MÃ¡ximos. |
 
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated.
+No declara integraciÃ³n form-associated.
 ## Comportamiento
 
-El gap por defecto sale de `data-sizew` (`xs` → 0.2rem, `sm` → 0.35rem, resto
+El gap por defecto sale de `data-sizew` (`xs` â†’ 0.2rem, `sm` â†’ 0.35rem, resto
 0.5rem), igual que en ISP. Si se pasa `gap`, el JS escribe `--gap` inline en el
 host y gana sobre esa escalera.
 
@@ -162,11 +162,11 @@ host y gana sobre esa escalera.
 - [`block-layout.js`](block-layout.js) (`BreakpointHost`)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-flex-layout>`.
+Tags del mÃ³dulo: `<iswc-flex-layout>`.
 
 ## Accesibilidad
 
-Contenedor sin semántica propia. El orden visual coincide con el orden del DOM
+Contenedor sin semÃ¡ntica propia. El orden visual coincide con el orden del DOM
 mientras no se usen `order`/`row-reverse` desde fuera.
 
 ## Ejemplo avanzado
@@ -193,11 +193,11 @@ mientras no se usen `order`/`row-reverse` desde fuera.
 
 - Mantener nombres exactos de atributos kebab-case.
 - Booleano se activa por presencia; no usar `attr="false"`.
-- No modificar API basándose solo en el preview.
+- No modificar API basÃ¡ndose solo en el preview.
 
 ## Fuentes
 
-- [JavaScript](./flex-layout.js)
+- [JavaScript](./flex-layout.ts)
 - [CSS](./flex-layout.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./flex-layout.json)

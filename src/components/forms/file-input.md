@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-file-input
 tags:
   - iswc-file-input
 category: forms
 status: public
-source: ./file-input.js
+source: ./file-input.ts
 style: ./file-input.css
 preview: ./file-input.json
 ---
 # `<iswc-file-input>`
 
-## Propósito
+## PropÃ³sito
 
 Dropzone con input nativo oculto, lista de archivos y estados blank / dragging.
 
-Este módulo registra `<iswc-file-input>`.
+Este mÃ³dulo registra `<iswc-file-input>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './file-input.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-file-input
@@ -49,16 +49,16 @@ name="attachments"
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `hint` | string/según contrato | Fuente define default/restricción. |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `accept` | string/según contrato | Fuente define default/restricción. |
-| `capture` | string/según contrato | Fuente define default/restricción. |
-| `multiple` | boolean | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `required` | boolean | Fuente define default/restricción. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `accept` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `capture` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `multiple` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `required` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -79,7 +79,7 @@ name="attachments"
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `input` | Evento nativo al cambiar el valor. |
@@ -87,9 +87,9 @@ name="attachments"
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
-| `input` | sí | sí | sí | no |
-| `change` | sí | sí | sí | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `input` | sÃ­ | sÃ­ | sÃ­ | no |
+| `change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -104,11 +104,11 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -121,45 +121,45 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `input` | Personalizable con `::part(input)`. |
 | `file-list` | Personalizable con `::part(file-list)`. |
 | `file` | Cada fila de la lista de archivos. |
-| `remove-button` | Botón para quitar un archivo de la lista. |
+| `remove-button` | BotÃ³n para quitar un archivo de la lista. |
 
 ### Custom states
 
 | Estado | Uso |
 | --- | --- |
-| `:state(dragging)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
-| `:state(blank)` | Estado usado por implementación/CSS. |
+| `:state(dragging)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(blank)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-font-family` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-surface` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-surface` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-file-input> — Web Component (vanilla).
+> <iswc-file-input> â€” Web Component (vanilla).
 > Dropzone + input file nativo oculto. Lista de archivos con quitar.
 > Atributos
 >   label, hint, name, accept, capture
 >   multiple, disabled, required  (boolean)
 > Propiedad
->   files  File[]  get/set — reasignar dispara update
+>   files  File[]  get/set â€” reasignar dispara update
 > Slots: label, hint, dropzone
 > Custom states: blank, dragging  (:state / data-state-*)
 > Eventos: change, input, iswc-change (bubbles, composed)
@@ -172,11 +172,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../media/icon.js`](../media/icon.js)
 - [`../helpers/format-bytes.js`](../helpers/format-bytes.js)
 
-Tags del módulo: `<iswc-file-input>`.
+Tags del mÃ³dulo: `<iswc-file-input>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labelledby`, `aria-describedby`, `aria-hidden`, `aria-disabled`, `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labelledby`, `aria-describedby`, `aria-hidden`, `aria-disabled`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -191,7 +191,7 @@ name="attachments"
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -199,15 +199,15 @@ name="attachments"
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./file-input.js)
+- [JavaScript](./file-input.ts)
 - [CSS](./file-input.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./file-input.json)

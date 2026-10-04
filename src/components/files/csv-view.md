@@ -1,10 +1,10 @@
----
+﻿---
 tag: iswc-csv-view
 tags:
   - iswc-csv-view
 category: files
 status: public
-source: ./csv-view.js
+source: ./csv-view.ts
 style: ./csv-view.css
 preview: ./csv-view.json
 ---
@@ -28,7 +28,7 @@ Eventos: `iswc-load`, `iswc-error`; editores tambien `iswc-change`.
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 

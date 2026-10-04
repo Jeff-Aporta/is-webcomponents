@@ -1,44 +1,44 @@
----
+﻿---
 tag: iswc-carousel
 tags:
   - iswc-carousel
   - iswc-carousel-item
 category: navigation
 status: public
-source: ./carousel.js
+source: ./carousel.ts
 style: ./carousel.css
 preview: ./carousel.json
 ---
 # `<iswc-carousel>` / `<iswc-carousel-item>`
 
-## Propósito
+## PropÃ³sito
 
-Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,
+Carrusel tipo slides con paginaciÃ³n, autoplay, loop, navegaciÃ³n prev/next,
 indicadores, scroll-snap y soporte para swipe en touch.
 
-Este módulo registra `<iswc-carousel>`, `<iswc-carousel-item>`.
+Este mÃ³dulo registra `<iswc-carousel>`, `<iswc-carousel-item>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Orientación, movimiento entre vistas y navegación jerárquica o secuencial.
+OrientaciÃ³n, movimiento entre vistas y navegaciÃ³n jerÃ¡rquica o secuencial.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No separar children multi-tag ni romper teclado/ARIA.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './carousel.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-carousel loop>
 <iswc-carousel-item>Slide 1</iswc-carousel-item>
 <iswc-carousel-item>Slide 2</iswc-carousel-item>
-…
+â€¦
 </iswc-carousel>
 ```
 
@@ -50,17 +50,17 @@ import './carousel.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `active` | string/según contrato | Fuente define default/restricción. |
-| `loop` | boolean | Fuente define default/restricción. |
-| `autoplay` | string/según contrato | Fuente define default/restricción. |
-| `without-controls` | boolean | Fuente define default/restricción. |
-| `without-indicators` | boolean | Fuente define default/restricción. |
-| `vertical` | boolean | Fuente define default/restricción. |
-| `slides-per-page` | string/según contrato | Fuente define default/restricción. |
-| `aspect-ratio` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
+| `active` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `loop` | boolean | Fuente define default/restricciÃ³n. |
+| `autoplay` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-controls` | boolean | Fuente define default/restricciÃ³n. |
+| `without-indicators` | boolean | Fuente define default/restricciÃ³n. |
+| `vertical` | boolean | Fuente define default/restricciÃ³n. |
+| `slides-per-page` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `aspect-ratio` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -81,7 +81,7 @@ import './carousel.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-carousel-slide-end` | Evento personalizado del componente (carousel slide end). |
 | `iswc-carousel-change` | Evento personalizado del componente (carousel change). |
@@ -90,10 +90,10 @@ import './carousel.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-carousel-slide-end` | no | sí | sí | no |
-| `iswc-carousel-change` | sí | sí | sí | no |
-| `iswc-carousel-play` | sí | sí | sí | no |
-| `iswc-carousel-pause` | sí | sí | sí | no |
+| `iswc-carousel-slide-end` | no | sÃ­ | sÃ­ | no |
+| `iswc-carousel-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-carousel-play` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-carousel-pause` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -108,16 +108,16 @@ el.addEventListener('iswc-carousel-slide-end', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `next()` | Método público declarado. |
-| `prev()` | Método público declarado. |
-| `pause()` | Método público declarado. |
-| `play()` | Método público declarado. |
+| `next()` | MÃ©todo pÃºblico declarado. |
+| `prev()` | MÃ©todo pÃºblico declarado. |
+| `pause()` | MÃ©todo pÃºblico declarado. |
+| `play()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -137,37 +137,37 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--aspect-ratio` | Token leído o definido por componente. |
-| `--ctrl-bg` | Token leído o definido por componente. |
-| `--iswc-bg-2` | Token leído o definido por componente. |
-| `--ctrl-fg` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--ctrl-border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--indicator-active` | Token leído o definido por componente. |
-| `--iswc-brand` | Token leído o definido por componente. |
-| `--indicator` | Token leído o definido por componente. |
+| `--aspect-ratio` | Token leÃ­do o definido por componente. |
+| `--ctrl-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-2` | Token leÃ­do o definido por componente. |
+| `--ctrl-fg` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--ctrl-border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--indicator-active` | Token leÃ­do o definido por componente. |
+| `--iswc-brand` | Token leÃ­do o definido por componente. |
+| `--indicator` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-carousel> + <iswc-carousel-item> — Web Components (vanilla, zero dependencies).
-> Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,
+> <iswc-carousel> + <iswc-carousel-item> â€” Web Components (vanilla, zero dependencies).
+> Carrusel tipo slides con paginaciÃ³n, autoplay, loop, navegaciÃ³n prev/next,
 > indicadores y soporte para swipe en touch.
 >   <iswc-carousel autoplay loop>
->     <iswc-carousel-item>…</iswc-carousel-item>
->     <iswc-carousel-item>…</iswc-carousel-item>
->     <iswc-carousel-item>…</iswc-carousel-item>
+>     <iswc-carousel-item>â€¦</iswc-carousel-item>
+>     <iswc-carousel-item>â€¦</iswc-carousel-item>
+>     <iswc-carousel-item>â€¦</iswc-carousel-item>
 >   </iswc-carousel>
 > Atributos <iswc-carousel>
 >   active             number (0-indexed)
 >   loop               boolean                  (default false)
->   autoplay           number (ms)              (default 0 — desactivado)
+>   autoplay           number (ms)              (default 0 â€” desactivado)
 >   without-controls   boolean                  (oculta prev/next)
 >   without-indicators boolean                  (oculta indicators)
 >   vertical           boolean                  (slides verticales)
@@ -196,11 +196,11 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-carousel>`, `<iswc-carousel-item>`.
+Tags del mÃ³dulo: `<iswc-carousel>`, `<iswc-carousel-item>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-selected`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-selected`.
 
 ## Ejemplo avanzado
 
@@ -208,13 +208,13 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 <iswc-carousel loop>
 <iswc-carousel-item>Slide 1</iswc-carousel-item>
 <iswc-carousel-item>Slide 2</iswc-carousel-item>
-…
+â€¦
 </iswc-carousel>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -222,15 +222,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./carousel.js)
+- [JavaScript](./carousel.ts)
 - [CSS](./carousel.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./carousel.json)

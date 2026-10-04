@@ -1,37 +1,37 @@
----
+﻿---
 tag: iswc-split-panel
 tags:
   - iswc-split-panel
 category: layout
 status: public
-source: ./split-panel.js
+source: ./split-panel.ts
 style: ./split-panel.css
 preview: ./split-panel.json
 ---
 # `<iswc-split-panel>`
 
-## Propósito
+## PropÃ³sito
 
 Dos paneles adyacentes separados por un divisor arrastrable.
 Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.
 
-Este módulo registra `<iswc-split-panel>`.
+Este mÃ³dulo registra `<iswc-split-panel>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Estructura, superficies, overlays y navegación por regiones de contenido.
+Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear size colors; escalar mediante font-size contextual y em.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './split-panel.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-split-panel>
@@ -48,15 +48,15 @@ import './split-panel.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `position` | string/según contrato | Fuente define default/restricción. |
-| `orientation` | string/según contrato | Fuente define default/restricción. |
-| `primary` | string/según contrato | Fuente define default/restricción. |
-| `collapse` | `start` · `end` | Oculta ese panel y el divisor; el otro toma todo el espacio. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `snap` | string/según contrato | Fuente define default/restricción. |
-| `snap-threshold` | string/según contrato | Fuente define default/restricción. |
+| `position` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `primary` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `collapse` | `start` Â· `end` | Oculta ese panel y el divisor; el otro toma todo el espacio. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `snap` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `snap-threshold` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -81,13 +81,13 @@ import './split-panel.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `reposition` | Evento `reposition`. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `reposition` | sí | sí | sí | no |
+| `reposition` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -102,11 +102,11 @@ el.addEventListener('reposition', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -125,43 +125,43 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--divider-width` | Token leído o definido por componente. |
-| `--divider-hit-area` | Token leído o definido por componente. |
-| `--min` | Token leído o definido por componente. |
-| `--max` | Token leído o definido por componente. |
-| `--_divider-width` | Token leído o definido por componente. |
-| `--_divider-hit-area` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
+| `--divider-width` | Token leÃ­do o definido por componente. |
+| `--divider-hit-area` | Token leÃ­do o definido por componente. |
+| `--min` | Token leÃ­do o definido por componente. |
+| `--max` | Token leÃ­do o definido por componente. |
+| `--_divider-width` | Token leÃ­do o definido por componente. |
+| `--_divider-hit-area` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-split-panel> — Web Component (vanilla, zero dependencies).
+> <iswc-split-panel> â€” Web Component (vanilla, zero dependencies).
 > Dos paneles adyacentes
 > separados por un divisor arrastrable. Usa Shadow DOM con CSS propio,
-> sin frameworks. Se define automáticamente al importarse.
+> sin frameworks. Se define automÃ¡ticamente al importarse.
 > Atributos
->   position            number 0-100  (default 50, reflect)  — % desde el borde del panel primario
->   position-in-pixels  number          (sin reflect)        — posición en px (sobrevive a resize)
+>   position            number 0-100  (default 50, reflect)  â€” % desde el borde del panel primario
+>   position-in-pixels  number          (sin reflect)        â€” posiciÃ³n en px (sobrevive a resize)
 >   orientation         'horizontal' | 'vertical'  (default horizontal, reflect)
 >   primary             'start' | 'end'   (reflect, opcional)
->   collapse            'start' | 'end'   (reflect, opcional) — oculta ese panel
+>   collapse            'start' | 'end'   (reflect, opcional) â€” oculta ese panel
 >                       y su divisor; el otro se queda con todo el espacio. No
->                       toca la posición persistida: al quitarlo vuelve el
->                       tamaño anterior. Pensado para layouts responsive que
+>                       toca la posiciÃ³n persistida: al quitarlo vuelve el
+>                       tamaÃ±o anterior. Pensado para layouts responsive que
 >                       mudan ese contenido a un <iswc-drawer>.
 >   disabled            boolean  (reflect)
 >   snap                string  (espacio-sep "100px 50%")
->   snap-threshold      number  (default 12)  — px ventana de snap
->   storage-key         string  — id único; persiste tamaño en localStorage (`is-components`)
+>   snap-threshold      number  (default 12)  â€” px ventana de snap
+>   storage-key         string  â€” id Ãºnico; persiste tamaÃ±o en localStorage (`is-components`)
 > Slots
 >   start     contenido del panel inicial
 >   end       contenido del panel final
@@ -174,7 +174,7 @@ Documentación de cabecera preservada desde fuente:
 >   --min              0
 >   --max              100%
 > Eventos
->   reposition  CustomEvent<number> bubbles+composed — detail = nueva posición (%)
+>   reposition  CustomEvent<number> bubbles+composed â€” detail = nueva posiciÃ³n (%)
 > Layout: paneles wrapper (.panel) en CSS grid.
 >   horizontal (lateral): grid-template-columns = primary | divider | secondary
 >   vertical (apilado):   grid-template-rows    = primary / divider / secondary
@@ -184,11 +184,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/prefs.js`](../_shared/prefs.js)
 
-Tags del módulo: `<iswc-split-panel>`.
+Tags del mÃ³dulo: `<iswc-split-panel>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-orientation`, `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-orientation`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -200,7 +200,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-valuen
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -208,15 +208,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-valuen
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./split-panel.js)
+- [JavaScript](./split-panel.ts)
 - [CSS](./split-panel.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./split-panel.json)

@@ -1,37 +1,37 @@
----
+﻿---
 tag: iswc-image-editor
 tags:
   - iswc-image-editor
 category: media
 status: public
-source: ./image-editor.js
+source: ./image-editor.ts
 style: ./image-editor.css
 preview: ./image-editor.json
 ---
 # `<iswc-image-editor>`
 
-## Propósito
+## PropÃ³sito
 
-Editor de imagen con recorte, zoom y rotación sobre `<canvas>`.
+Editor de imagen con recorte, zoom y rotaciÃ³n sobre `<canvas>`.
 
-Este módulo registra `<iswc-image-editor>`.
+Este mÃ³dulo registra `<iswc-image-editor>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Foto de perfil, logo de empresa, adjuntos que deban recortarse antes de
 subirse: cualquier caso donde el usuario ajusta la imagen en el navegador.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Para mostrar una imagen sin edición basta un `<img>` o `<iswc-avatar>`.
+Para mostrar una imagen sin ediciÃ³n basta un `<img>` o `<iswc-avatar>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './image-editor.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-image-editor src="/uploads/logo.png" aspect="1"></iswc-image-editor>
@@ -47,26 +47,26 @@ import './image-editor.js';
 | --- | --- | --- |
 | `src` | string | URL de la imagen a editar. Requerido. |
 | `zoom` | number | Factor de escala; `1` = 100%. Default `1`. |
-| `rotation` | number | Grados de rotación. Default `0`. |
-| `aspect` | string | Relación del recorte: `"1"`, `"4/3"`, `"16/9"` o `""` (libre). |
+| `rotation` | number | Grados de rotaciÃ³n. Default `0`. |
+| `aspect` | string | RelaciÃ³n del recorte: `"1"`, `"4/3"`, `"16/9"` o `""` (libre). |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `image` | lectura | `HTMLImageElement` ya cargado. |
-| `cropped` | lectura | dataURL actual, con zoom + rotación + recorte aplicados. |
+| `cropped` | lectura | dataURL actual, con zoom + rotaciÃ³n + recorte aplicados. |
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
-| `toolbar` | Botones con `data-action="zoom-in" \| "zoom-out" \| "rotate" \| "rotate-ccw" \| "reset" \| "crop"`. El editor delega la acción a partir de ese atributo. |
+| `toolbar` | Botones con `data-action="zoom-in" \| "zoom-out" \| "rotate" \| "rotate-ccw" \| "reset" \| "crop"`. El editor delega la acciÃ³n a partir de ese atributo. |
 
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-load` | Emitido cuando el recurso se ha cargado. |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
@@ -74,9 +74,9 @@ import './image-editor.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-load` | `{ image }` | sí | sí | no |
-| `iswc-change` | `{ crop }` | sí | sí | no |
-| `iswc-crop` | `{ dataURL, crop }` | sí | sí | no |
+| `iswc-load` | `{ image }` | sÃ­ | sÃ­ | no |
+| `iswc-change` | `{ crop }` | sÃ­ | sÃ­ | no |
+| `iswc-crop` | `{ dataURL, crop }` | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -91,22 +91,22 @@ el.addEventListener('iswc-load', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `crop({ x, y, width, height })` | Fija el recorte en coordenadas de píxel de la imagen. |
+| `crop({ x, y, width, height })` | Fija el recorte en coordenadas de pÃ­xel de la imagen. |
 | `applyZoom(delta)` | Suma `delta` al zoom actual. |
-| `applyRotation(deg)` | Suma `deg` a la rotación actual. |
+| `applyRotation(deg)` | Suma `deg` a la rotaciÃ³n actual. |
 
 ### CSS parts
 
 | Part | Uso |
 | --- | --- |
 | `root` | Personalizable con `::part(root)`. |
-| `viewport` | Área visible sobre la que se arrastra el recorte. |
+| `viewport` | Ãrea visible sobre la que se arrastra el recorte. |
 | `canvas` | Lienzo del editor. |
-| `selection` | Rectángulo de recorte con sus manejadores. |
+| `selection` | RectÃ¡ngulo de recorte con sus manejadores. |
 | `toolbar` | Barra que aloja el slot `toolbar`. |
 | `status` | `<output>` con el estado actual. |
 
@@ -116,46 +116,46 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--iswc-*`) según CSS del módulo.
+Tokens del tema (`--iswc-*`) segÃºn CSS del mÃ³dulo.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo. Para enviar el
+No declara integraciÃ³n form-associated propia en este mÃ³dulo. Para enviar el
 resultado, leer `cropped` (o escuchar `iswc-crop`) y volcarlo en un campo
 oculto o en un `FormData`.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> `<iswc-image-editor>` — Editor de imagen con crop, zoom y rotación. El slot
-> `toolbar` delega acciones vía `data-action`, de modo que los botones los
+> `<iswc-image-editor>` â€” Editor de imagen con crop, zoom y rotaciÃ³n. El slot
+> `toolbar` delega acciones vÃ­a `data-action`, de modo que los botones los
 > pone quien lo usa y el editor solo ejecuta.
 
-El recorte se arrastra desde el interior del rectángulo y se redimensiona
+El recorte se arrastra desde el interior del rectÃ¡ngulo y se redimensiona
 desde los cuatro manejadores de esquina. Con `aspect` fijo, el redimensionado
-conserva la relación.
+conserva la relaciÃ³n.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-image-editor>`.
+Tags del mÃ³dulo: `<iswc-image-editor>`.
 
 ## Accesibilidad
 
 El lienzo lleva `aria-label`. El estado va en un `<output>` (live region).
 Los botones de la toolbar los aporta quien integra: usar `<iswc-button>` con
-`aria-label` explícito.
+`aria-label` explÃ­cito.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-image-editor id="ed" src="/uploads/foto.jpg" aspect="1" zoom="1.2">
   <div slot="toolbar">
-    <iswc-button data-action="zoom-out" aria-label="Alejar">−</iswc-button>
+    <iswc-button data-action="zoom-out" aria-label="Alejar">âˆ’</iswc-button>
     <iswc-button data-action="zoom-in" aria-label="Acercar">+</iswc-button>
-    <iswc-button data-action="rotate" aria-label="Rotar">⟳</iswc-button>
+    <iswc-button data-action="rotate" aria-label="Rotar">âŸ³</iswc-button>
     <iswc-button data-action="crop">Recortar</iswc-button>
   </div>
 </iswc-image-editor>
@@ -169,7 +169,7 @@ Los botones de la toolbar los aporta quien integra: usar `<iswc-button>` con
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Leer `cropped` antes del evento `iswc-load`.
 - Servir `src` desde otro origen sin CORS: el `<canvas>` queda contaminado y
   `cropped` lanza.
@@ -178,14 +178,14 @@ Los botones de la toolbar los aporta quien integra: usar `<iswc-button>` con
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./image-editor.js)
+- [JavaScript](./image-editor.ts)
 - [CSS](./image-editor.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)

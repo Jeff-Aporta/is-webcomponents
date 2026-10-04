@@ -1,41 +1,41 @@
----
+﻿---
 tag: iswc-rating
 tags:
   - iswc-rating
 category: forms
 status: public
-source: ./rating.js
+source: ./rating.ts
 style: ./rating.css
 preview: ./rating.json
 ---
 # `<iswc-rating>`
 
-## Propósito
+## PropÃ³sito
 
-Valoración form-associated con paridad funcional con el
+ValoraciÃ³n form-associated con paridad funcional con el
 Rating de MUI:
-precisión arbitraria, iconos propios, textos de hover, colores de color y reset.
+precisiÃ³n arbitraria, iconos propios, textos de hover, colores de color y reset.
 
-Este módulo registra `<iswc-rating>`.
+Este mÃ³dulo registra `<iswc-rating>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './rating.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
-<iswc-rating label="Satisfacción" value="3" name="rating"></iswc-rating>
+<iswc-rating label="SatisfacciÃ³n" value="3" name="rating"></iswc-rating>
 ```
 
 ## API
@@ -46,24 +46,24 @@ import './rating.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `max` | string/según contrato | Fuente define default/restricción. |
-| `precision` | string/según contrato | Fuente define default/restricción. |
-| `allow-half` | boolean | Fuente define default/restricción. |
-| `icon` | string/según contrato | Fuente define default/restricción. |
-| `empty-icon` | string/según contrato | Fuente define default/restricción. |
-| `highlight-selected-only` | boolean | Fuente define default/restricción. |
-| `color` | string/según contrato | Fuente define default/restricción. |
-| `label-format` | string/según contrato | Fuente define default/restricción. |
-| `show-label` | boolean | Fuente define default/restricción. |
-| `clearable` | boolean | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `readonly` | boolean | Fuente define default/restricción. |
-| `required` | boolean | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `precision` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `allow-half` | boolean | Fuente define default/restricciÃ³n. |
+| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `empty-icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `highlight-selected-only` | boolean | Fuente define default/restricciÃ³n. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label-format` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `show-label` | boolean | Fuente define default/restricciÃ³n. |
+| `clearable` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `required` | boolean | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -98,15 +98,15 @@ import './rating.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 | `iswc-hover` | Evento personalizado del componente (hover). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-hover` | sí | sí | sí | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-hover` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -121,18 +121,18 @@ el.addEventListener('iswc-change', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `focus()` | Método público declarado. |
-| `blur()` | Método público declarado. |
-| `clear()` | Método público declarado. |
-| `checkValidity()` | Método público declarado. |
-| `reportValidity()` | Método público declarado. |
-| `setCustomValidity()` | Método público declarado. |
+| `focus()` | MÃ©todo pÃºblico declarado. |
+| `blur()` | MÃ©todo pÃºblico declarado. |
+| `clear()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | MÃ©todo pÃºblico declarado. |
+| `reportValidity()` | MÃ©todo pÃºblico declarado. |
+| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -150,60 +150,60 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Estado | Uso |
 | --- | --- |
-| `:state(readonly)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
-| `:state(blank)` | Estado usado por implementación/CSS. |
+| `:state(readonly)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(blank)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--fill` | Token leído o definido por componente. |
-| `--iswc-rating-size` | Token leído o definido por componente. |
-| `--iswc-rating-gap` | Token leído o definido por componente. |
-| `--iswc-rating-color` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-rating-empty` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-rating-focus` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--iswc-color-success-500` | Token leído o definido por componente. |
-| `--iswc-color-warning-500` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--fill` | Token leÃ­do o definido por componente. |
+| `--iswc-rating-size` | Token leÃ­do o definido por componente. |
+| `--iswc-rating-gap` | Token leÃ­do o definido por componente. |
+| `--iswc-rating-color` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-rating-empty` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-rating-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
+> <iswc-rating> â€” ValoraciÃ³n form-associated (vanilla + Shadow DOM).
 > Atributos
 >   name, label, color (brand|neutral|success|warning|danger)
 >   value        0..max (default 0)
->   max          número de iconos (default 5)
+>   max          nÃºmero de iconos (default 5)
 >   precision    granularidad del valor: 1 (default) | 0.5 | 0.25 | 0.1
 >   allow-half   alias de precision="0.5"
 >   icon         nombre iswc-icon del estado relleno (ej. tabler:heart-filled)
->   empty-icon   nombre iswc-icon del estado vacío
+>   empty-icon   nombre iswc-icon del estado vacÃ­o
 >   highlight-selected-only  resalta solo el icono del valor, no los anteriores
 >   label-format plantilla del texto del valor, ej. "{v} de {max}"
 >   show-label   muestra ese texto junto a los iconos (sigue al hover)
 >   clearable, disabled, readonly, required   (boolean)
 > Propiedades
->   labels        string[] — índice 0 = valor 1
->   getLabelText  (value) => string — gana sobre labels y label-format
+>   labels        string[] â€” Ã­ndice 0 = valor 1
+>   getLabelText  (value) => string â€” gana sobre labels y label-format
 > Slots: label
 > Parts: form-control, label, base, star, icon-empty, icon-filled, hover-label
 > Custom states: blank, disabled, readonly
-> Eventos: iswc-change (valor confirmado), iswc-hover (previsualización)
+> Eventos: iswc-change (valor confirmado), iswc-hover (previsualizaciÃ³n)
 
 ## Dependencias y componentes relacionados
 
@@ -211,11 +211,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<iswc-rating>`.
+Tags del mÃ³dulo: `<iswc-rating>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labelledby`, `aria-valuemin`, `aria-disabled`, `aria-readonly`, `aria-label`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labelledby`, `aria-valuemin`, `aria-disabled`, `aria-readonly`, `aria-label`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext`.
 
 ## Ejemplo avanzado
 
@@ -226,7 +226,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labell
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -234,15 +234,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labell
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./rating.js)
+- [JavaScript](./rating.ts)
 - [CSS](./rating.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./rating.json)

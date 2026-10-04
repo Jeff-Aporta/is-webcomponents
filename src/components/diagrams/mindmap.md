@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-mindmap
 tags:
   - iswc-mindmap
 category: diagrams
 status: public
-source: ./mindmap.js
+source: ./mindmap.ts
 style: ./mindmap.css
 preview: ./mindmap.json
 ---
 # `<iswc-mindmap>`
 
-## Propósito
+## PropÃ³sito
 
 Mapa mental en SVG, sin Mermaid. Declaras ideas con un `parent`
-opcional y el componente arma el árbol, reparte las ramas y las une
+opcional y el componente arma el Ã¡rbol, reparte las ramas y las une
 con curvas suaves coloreadas por rama.
 
-Este módulo registra `<iswc-mindmap>`.
+Este mÃ³dulo registra `<iswc-mindmap>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No inventar schemas ni usar specs/layout como custom elements.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './mindmap.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-mindmap></iswc-mindmap>
@@ -46,9 +46,9 @@ import './mindmap.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -66,15 +66,15 @@ import './mindmap.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
 
 <details>
@@ -89,13 +89,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -113,19 +113,19 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-mindmap> — mapa mental en SVG, sin Mermaid.
+> <iswc-mindmap> â€” mapa mental en SVG, sin Mermaid.
 >   <iswc-mindmap>
 >     <script type="application/json">
 >       { "mindmap": { "layout": "radial", "nodes": [...] } }
@@ -148,11 +148,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<iswc-mindmap>`.
+Tags del mÃ³dulo: `<iswc-mindmap>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -162,7 +162,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -170,17 +170,17 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./mindmap.js)
+- [JavaScript](./mindmap.ts)
 - [CSS](./mindmap.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./mindmap.json)
 
 ## App API
@@ -188,4 +188,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 Visor: `demos/diagramas/app/view.html?kind=mindmap&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=mindmap&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.

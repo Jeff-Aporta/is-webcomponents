@@ -1,44 +1,44 @@
----
+﻿---
 tag: iswc-scroller
 tags:
   - iswc-scroller
 category: navigation
 status: public
-source: ./scroller.js
+source: ./scroller.ts
 style: ./scroller.css
 preview: ./scroller.json
 ---
 # `<iswc-scroller>`
 
-## Propósito
+## PropÃ³sito
 
-Wrapper que añade scroll horizontal (o vertical) con botones prev/next
-automáticos cuando el contenido del slot desborda. Ideal para
+Wrapper que aÃ±ade scroll horizontal (o vertical) con botones prev/next
+automÃ¡ticos cuando el contenido del slot desborda. Ideal para
 listas de pills, carruseles de chips, drawers inline, etc.
 
-Este módulo registra `<iswc-scroller>`.
+Este mÃ³dulo registra `<iswc-scroller>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Orientación, movimiento entre vistas y navegación jerárquica o secuencial.
+OrientaciÃ³n, movimiento entre vistas y navegaciÃ³n jerÃ¡rquica o secuencial.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No separar children multi-tag ni romper teclado/ARIA.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './scroller.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-scroller>
 <iswc-button>Pills 1</iswc-button>
 <iswc-button>Pills 2</iswc-button>
-…
+â€¦
 </iswc-scroller>
 ```
 
@@ -50,10 +50,10 @@ import './scroller.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `orientation` | string/según contrato | Fuente define default/restricción. |
-| `without-scroll-buttons` | boolean | Fuente define default/restricción. |
+| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-scroll-buttons` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ import './scroller.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-scroll-overflow` | Evento personalizado del componente (scroll overflow). |
 | `iswc-scroll-position` | Evento personalizado del componente (scroll position). |
@@ -79,10 +79,10 @@ import './scroller.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-scroll-overflow` | sí | sí | sí | no |
-| `iswc-scroll-position` | sí | sí | sí | no |
-| `iswc-scroll-start` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `iswc-scroll-end` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-scroll-overflow` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-scroll-position` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-scroll-start` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
+| `iswc-scroll-end` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
 
 
 <details>
@@ -97,15 +97,15 @@ el.addEventListener('iswc-scroll-overflow', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `scrollTo()` | Método público declarado. |
-| `scrollBy()` | Método público declarado. |
-| `getViewport()` | Método público declarado. |
+| `scrollTo()` | MÃ©todo pÃºblico declarado. |
+| `scrollBy()` | MÃ©todo pÃºblico declarado. |
+| `getViewport()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -123,31 +123,31 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--btn-size` | Token leído o definido por componente. |
-| `--btn-bg` | Token leído o definido por componente. |
-| `--iswc-bg-2` | Token leído o definido por componente. |
-| `--btn-fg` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--btn-border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
+| `--btn-size` | Token leÃ­do o definido por componente. |
+| `--btn-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-2` | Token leÃ­do o definido por componente. |
+| `--btn-fg` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--btn-border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-scroller> — Web Component (vanilla, zero dependencies).
-> Añade scroll horizontal con botones cuando el contenido del slot desborda.
+> <iswc-scroller> â€” Web Component (vanilla, zero dependencies).
+> AÃ±ade scroll horizontal con botones cuando el contenido del slot desborda.
 > Atributos:
 >   orientation            horizontal | vertical | both  (default 'horizontal')
 >   without-scroll-buttons boolean                       (default false)
 > Slots:
 >   (default)               contenido a scrollear.
->   scroll-button-start     override del botón prev.
->   scroll-button-end       override del botón next.
+>   scroll-button-start     override del botÃ³n prev.
+>   scroll-button-end       override del botÃ³n next.
 > CSS Parts:
 >   ::part(base)            contenedor scroller.
 >   ::part(viewport)        viewport real (overflow:auto).
@@ -162,11 +162,11 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-scroller>`.
+Tags del mÃ³dulo: `<iswc-scroller>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -174,13 +174,13 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 <iswc-scroller>
 <iswc-button>Pills 1</iswc-button>
 <iswc-button>Pills 2</iswc-button>
-…
+â€¦
 </iswc-scroller>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -188,15 +188,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./scroller.js)
+- [JavaScript](./scroller.ts)
 - [CSS](./scroller.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./scroller.json)

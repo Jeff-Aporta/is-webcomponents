@@ -1,10 +1,10 @@
----
+﻿---
 tag: iswc-playground
 tags:
   - iswc-playground
 category: preview
 status: public
-source: ./playground.js
+source: ./playground.ts
 style: ./playground.css
 preview: ./playground.json
 ---
@@ -37,7 +37,7 @@ Evento: `iswc-controls-change` `{ def, valor }`.
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-controls-change` | Emitido al cambiar el valor de un control del playground. |
 
@@ -59,11 +59,11 @@ el.addEventListener('iswc-controls-change', (e) => {
 | Part | Uso |
 | --- | --- |
 | `body` | Cuerpo del componente. |
-| `config` | Panel de configuración. |
+| `config` | Panel de configuraciÃ³n. |
 | `controls` | Fila de controles. |
 | `head` | Cabecera. |
-| `lede` | Párrafo introductorio bajo el título. |
+| `lede` | PÃ¡rrafo introductorio bajo el tÃ­tulo. |
 | `root` | Personalizable con `::part(root)`. |
 | `stage` | Escenario donde se renderiza el contenido. |
 | `stage-wrap` | Contenedor del escenario. |
-| `title` | Título del playground. |
+| `title` | TÃ­tulo del playground. |

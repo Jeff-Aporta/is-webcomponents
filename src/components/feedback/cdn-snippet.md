@@ -1,44 +1,44 @@
----
+﻿---
 tag: iswc-cdn-snippet
 tags:
   - iswc-cdn-snippet
 category: feedback
 status: public
-source: ./cdn-snippet.js
+source: ./cdn-snippet.ts
 style: ./cdn-snippet.css
 preview: ./cdn-snippet.json
 ---
 # `<iswc-cdn-snippet>`
 
-## Propósito
+## PropÃ³sito
 
 Panel de **consumo por CDN** con una sola estrategia: `loader.min.js`.
 
 Muestra **un solo** bloque copy-paste:
 
-1. `<script type="module" src="…/loader.min.js">` — loader del kit.
-2. (opcional) deps — p. ej. `patyLoader.min.js` — **en el mismo snippet**, justo después.
-3. `<script type="module">` — `loadCSSBase` + `loadCSSPalettesDefault` + `load(…)`.
+1. `<script type="module" src="â€¦/loader.min.js">` â€” loader del kit.
+2. (opcional) deps â€” p. ej. `patyLoader.min.js` â€” **en el mismo snippet**, justo despuÃ©s.
+3. `<script type="module">` â€” `loadCSSBase` + `loadCSSPalettesDefault` + `load(â€¦)`.
 
-El snippet siempre hace `load('iswc-foo')` / `load('paty-…')`: un componente por llamada. No hay filas «Dependencia · …» sueltas: las deps se embeben.
+El snippet siempre hace `load('iswc-foo')` / `load('paty-â€¦')`: un componente por llamada. No hay filas Â«Dependencia Â· â€¦Â» sueltas: las deps se embeben.
 
-Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categoría / tag. Skill: módulo + kit (general).
+Sin tab de mirrors. Sin filas sueltas de `all.min.js` / categorÃ­a / tag. Skill: mÃ³dulo + kit (general).
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Documentar cómo pegar el kit en una app (galería, demos, README embebido).
+Documentar cÃ³mo pegar el kit en una app (galerÃ­a, demos, README embebido).
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No como selector de espejos ni como listado de URLs sueltas de cada `.min.js`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './cdn-snippet.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-cdn-snippet tag="iswc-button"></iswc-cdn-snippet>
@@ -50,17 +50,17 @@ import './cdn-snippet.js';
 
 | Atributo | Notas |
 | --- | --- |
-| `tag` | p. ej. `iswc-button` → `load('iswc-button')` |
+| `tag` | p. ej. `iswc-button` â†’ `load('iswc-button')` |
 | `base` | override del CDN base (opcional) |
-| `title` | título del panel |
+| `title` | tÃ­tulo del panel |
 | `dependencies` / slot `deps` | deps externas (link/script) |
 | `config` | JSON con `docs[]` para el prompt LLM |
 
-### Snippet generado (forma canónica)
+### Snippet generado (forma canÃ³nica)
 
 ```html
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js"></script>
-<!-- si hay deps (p. ej. patyLoader), van aquí en el mismo bloque -->
+<!-- si hay deps (p. ej. patyLoader), van aquÃ­ en el mismo bloque -->
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
@@ -72,7 +72,7 @@ import './cdn-snippet.js';
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 
@@ -90,20 +90,20 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-## Qué hacer
+## QuÃ© hacer
 
 - Preferir siempre `loader.min.js` + `load(tag)`.
 
-## Qué no hacer
+## QuÃ© no hacer
 
 - No reintroducir tab **Mirrors** ni boot multi-espejo en este panel.
-- No volver a filas separadas “CSS común / tag.min / category.min / all.min”.
+- No volver a filas separadas â€œCSS comÃºn / tag.min / category.min / all.minâ€.
 - No mezclar jsDelivr + Pages en el mismo documento (sigue valiendo en apps; el panel ya no lo configura).
 
-## Errores / prevención
+## Errores / prevenciÃ³n
 
 | Trampa | Fix |
 | --- | --- |
-| Panel enseña `all.min.js` | Solo `loader.min.js` + `L.load(tag)` |
+| Panel enseÃ±a `all.min.js` | Solo `loader.min.js` + `L.load(tag)` |
 
-Guardián: `tests/cdn-mirrors.test.ts` (contrato loader copy-paste) · `tests/url-nav.test.ts`.
+GuardiÃ¡n: `tests/cdn-mirrors.test.ts` (contrato loader copy-paste) Â· `tests/url-nav.test.ts`.

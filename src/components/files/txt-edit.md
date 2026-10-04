@@ -1,10 +1,10 @@
----
+﻿---
 tag: iswc-txt-edit
 tags:
   - iswc-txt-edit
 category: files
 status: public
-source: ./txt-edit.js
+source: ./txt-edit.ts
 style: ./txt-edit.css
 preview: ./txt-edit.json
 ---
@@ -28,7 +28,7 @@ Eventos: `iswc-load`, `iswc-error`; editores tambien `iswc-change`.
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 

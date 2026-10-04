@@ -1,18 +1,18 @@
----
-tag: —
+﻿---
+tag: â€”
 category: helpers
 status: module
-source: ./md-lite.js
+source: ./md-lite.ts
 ---
-# `md-lite` (módulo)
+# `md-lite` (mÃ³dulo)
 
-## Propósito
+## PropÃ³sito
 
-Markdown → HTML **sin npm**. Subconjunto para `<iswc-md-render>` / `<iswc-md-editor>`:
-ATX, listas, blockquote, hr, tablas GFM, negrita/cursiva, enlaces, imágenes,
-fences de código y fences `iswc-*` (diagramas). Conserva HTML crudo (`<iswc-*>`, `<div>`…).
+Markdown â†’ HTML **sin npm**. Subconjunto para `<iswc-md-render>` / `<iswc-md-editor>`:
+ATX, listas, blockquote, hr, tablas GFM, negrita/cursiva, enlaces, imÃ¡genes,
+fences de cÃ³digo y fences `iswc-*` (diagramas). Conserva HTML crudo (`<iswc-*>`, `<div>`â€¦).
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import { mdToHtml } from
@@ -25,12 +25,12 @@ const html = mdToHtml('# Hola\n\n```iswc-flowchart\n{"nodes":[]}\n```');
 
 | Export | Uso |
 | --- | --- |
-| `mdToHtml(src)` | String MD → HTML. Fences de código → `.md-iswc-code`. Fences `iswc-*` → tag diagrama + JSON en `<script type="application/json">`. |
+| `mdToHtml(src)` | String MD â†’ HTML. Fences de cÃ³digo â†’ `.md-iswc-code`. Fences `iswc-*` â†’ tag diagrama + JSON en `<script type="application/json">`. |
 
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 
@@ -53,4 +53,4 @@ el.addEventListener('click', (e) => {
 1. `mdToHtml` pinta marcadores / tags.
 2. `hydrateMdEmbeds` (ver `md-hydrate.md`) hace `L.ensure` + upgrade a `<iswc-code>`.
 
-No uses este módulo para reinventar un markdown completo; es el motor del kit.
+No uses este mÃ³dulo para reinventar un markdown completo; es el motor del kit.

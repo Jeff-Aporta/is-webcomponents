@@ -1,25 +1,25 @@
----
+﻿---
 tag: iswc-component-diagram
 tags:
   - iswc-component-diagram
 category: diagrams
 status: public
-source: ./component-diagram.js
+source: ./component-diagram.ts
 style: ./component-diagram.css
 preview: ./component-diagram.json
 ---
 # `<iswc-component-diagram>`
 
-## Propósito
+## PropÃ³sito
 
 Diagrama de **componentes UML** en SVG, sin Mermaid. A diferencia del
 flujo y del bloque, este modo tiene tres primitivas declaradas:
 
-- **packages**: carpetas con pestaña arriba a la izquierda (forma clásica
-  de UML para denotar un agrupamiento lógico / namespace).
-- **components**: rectángulos con un estereotipo `«name»` sobre la
-  etiqueta, igual que el componente UML clásico.
-- **interfaces (lollipop)**: círculo hueco `O` (`provided`) o arco `C`
+- **packages**: carpetas con pestaÃ±a arriba a la izquierda (forma clÃ¡sica
+  de UML para denotar un agrupamiento lÃ³gico / namespace).
+- **components**: rectÃ¡ngulos con un estereotipo `Â«nameÂ»` sobre la
+  etiqueta, igual que el componente UML clÃ¡sico.
+- **interfaces (lollipop)**: cÃ­rculo hueco `O` (`provided`) o arco `C`
   (`required`) sobre un palito perpendicular al lado del componente.
   Una arista entre componentes sin `interfaces` se completa sola a
   conector UML `-(O-`.
@@ -27,31 +27,31 @@ flujo y del bloque, este modo tiene tres primitivas declaradas:
 Las posiciones del payload son la **semilla**. En `pack` / `triptych` el
 motor reorganiza **paquetes con hijos** (y en `triptych`, los `sources`
 declarados); `min-gap` es el piso de esas separaciones. Los componentes
-**libres** (sin `package`) conservan su posición del payload: para rejilla
-automática mételos en paquetes, o usa `manual` y colócalos tú.
+**libres** (sin `package`) conservan su posiciÃ³n del payload: para rejilla
+automÃ¡tica mÃ©telos en paquetes, o usa `manual` y colÃ³calos tÃº.
 `manual` deja x/y tal cual.
 
-Este módulo registra `<iswc-component-diagram>`.
+Este mÃ³dulo registra `<iswc-component-diagram>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Cuando necesitas describir la arquitectura de un sistema (servicios,
-módulos, capas, proveedores externos) en estilo UML component, con sus
+mÃ³dulos, capas, proveedores externos) en estilo UML component, con sus
 interfaces provided/required y los paquetes que los agrupan.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Si lo que necesitas son clases UML con atributos y métodos → usa
+Si lo que necesitas son clases UML con atributos y mÃ©todos â†’ usa
 `<iswc-class-diagram>`. Si solo quieres nodos y conexiones simples sin la
-semántica UML → `<iswc-block-diagram>`.
+semÃ¡ntica UML â†’ `<iswc-block-diagram>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './component-diagram.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-component-diagram min-gap="64"></iswc-component-diagram>
@@ -64,13 +64,13 @@ import './component-diagram.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `color` | `"inline"` \| `"viewer"` | Default inline. |
-| `min-gap` | number (px) | Distancia mínima entre cajas al empacar. Default **64**. El consumidor la puede bajar o subir. Piso de `rowGap`, `colGutter`, `sourceGap` y `pkgCorridor`. |
+| `min-gap` | number (px) | Distancia mÃ­nima entre cajas al empacar. Default **64**. El consumidor la puede bajar o subir. Piso de `rowGap`, `colGutter`, `sourceGap` y `pkgCorridor`. |
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `payload` | lectura/escritura | `{ componentDiagram: { packages, components, interfaces, edges } }`. |
 | `spec` | solo lectura | Spec normalizada. |
-| `layout` | solo lectura | Geometría lista para pintar. |
+| `layout` | solo lectura | GeometrÃ­a lista para pintar. |
 | `isViewer` | solo lectura | True cuando el componente vive dentro de un lightbox. |
 | `minGap` | lectura/escritura | Refleja `min-gap`. |
 
@@ -83,15 +83,15 @@ import './component-diagram.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
 
 <details>
@@ -106,13 +106,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -130,13 +130,13 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Schema del payload
 
@@ -166,12 +166,12 @@ No declara integración form-associated propia en este módulo.
     components: Array<{
       id: string,
       name: string,
-      stereotype?: string,    // p.ej. "component", "BD MSSQL", "Función HTTP"
+      stereotype?: string,    // p.ej. "component", "BD MSSQL", "FunciÃ³n HTTP"
       package?: string,       // id del package que lo contiene
       hue?: number,
       x: number, y: number, w: number, h: number,
       items?: string[],       // inventario en el cuerpo (p.ej. endpoints HTTP)
-      provides?: string[],    // lollipops O; si hay nombre en común, arista
+      provides?: string[],    // lollipops O; si hay nombre en comÃºn, arista
       requires?: string[],    // sockets C
       connects?: string[]     // ids de componentes destino (alias: to, links)
     }>,
@@ -180,7 +180,7 @@ No declara integración form-associated propia en este módulo.
       component: string,      // id del componente al que pertenece
       name?: string,          // nombre UML de la interfaz
       side: "top" | "right" | "bottom" | "left",
-      offset: number,         // posición a lo largo del lado
+      offset: number,         // posiciÃ³n a lo largo del lado
       kind?: "provided" | "required"  // default "provided"
     }>,
     edges?: Array<{           // alias: links, connections, relations
@@ -197,44 +197,44 @@ No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-- Las aristas son polilíneas ortogonales simples (un quiebre). Suficiente
-  para diagramas en cuadrícula; no hay A*.
+- Las aristas son polilÃ­neas ortogonales simples (un quiebre). Suficiente
+  para diagramas en cuadrÃ­cula; no hay A*.
 - `items` / `endpoints` se pintan como burbujas apiladas; el verbo HTTP
-  (`GET`/`POST`/…) es un chip de color estilo Swagger. El alto de la caja
+  (`GET`/`POST`/â€¦) es un chip de color estilo Swagger. El alto de la caja
   se ajusta al contenido (`fit-h`).
 - Las aristas sintetizadas se reparteen por los **cuatro lados** (tope 2
   conectores por lateral) para no atascar un solo pasillo.
 - Las etiquetas de arista son actores rectangulares (`placeEdgeActors`): no
-  se pisan entre sí ni a las cajas. El PNG usa `labelX`/`labelW` del layout.
-- Sin `interfaces` en el payload, cada `edge`/`link` componente→componente
+  se pisan entre sÃ­ ni a las cajas. El PNG usa `labelX`/`labelW` del layout.
+- Sin `interfaces` en el payload, cada `edge`/`link` componenteâ†’componente
   sintetiza socket `C` en el origen y lollipop `O` en el destino.
-- `dependency` sin lollipops se dibuja discontinua con punta polígono
-  (PNG-safe, no `<marker>`). El conector `O–C` va en línea continua.
+- `dependency` sin lollipops se dibuja discontinua con punta polÃ­gono
+  (PNG-safe, no `<marker>`). El conector `Oâ€“C` va en lÃ­nea continua.
 - El empaque (`pack` / `triptych`) reorganiza paquetes con hijos (y en
   `triptych`, los `sources`): `min-gap` (attr) o `layout.minGap` es el piso
-  de separación (default 64). `rowGap` / `colGutter` / `pkgCorridor` /
+  de separaciÃ³n (default 64). `rowGap` / `colGutter` / `pkgCorridor` /
   `sourceGap` afinan un eje si son mayores que ese piso. Los componentes
-  libres conservan su posición semilla. `manual` no mueve x/y.
-- El título del paquete (`«estereotipo» nombre`) es una caja: las aristas
-  la rodean. Sin eso el rótulo queda ilegible.
-- El estilo (cajón translúcido, dashed `2 5`, Tahoma, cajas `chipFill`)
+  libres conservan su posiciÃ³n semilla. `manual` no mueve x/y.
+- El tÃ­tulo del paquete (`Â«estereotipoÂ» nombre`) es una caja: las aristas
+  la rodean. Sin eso el rÃ³tulo queda ilegible.
+- El estilo (cajÃ³n translÃºcido, dashed `2 5`, Tahoma, cajas `chipFill`)
   sigue al `<iswc-er-diagram>` para que ER y componentes convivan en la ficha.
 
 ## Dependencias y componentes relacionados
 
 - [`./component-spec.js`](./component-spec.js)
-- [`./sequence-spec.js`](./sequence-spec.js) — temas claro/oscuro
+- [`./sequence-spec.js`](./sequence-spec.js) â€” temas claro/oscuro
 - [`../_shared/diagram-element-base.js`](../_shared/diagram-element-base.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. `aria-label` se
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. `aria-label` se
 autogenera desde `title` o cae a "Diagrama de componentes".
 
 ## Ejemplo avanzado
 
-Ver el preview de la galería, que trae paquetes, estereotipos e interfaces
+Ver el preview de la galerÃ­a, que trae paquetes, estereotipos e interfaces
 provided/required:
 [`./component-diagram.json`](./component-diagram.json).
 
@@ -247,18 +247,18 @@ provided/required:
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./component-diagram.js)
+- [JavaScript](./component-diagram.ts)
 - [CSS](./component-diagram.css)
 - [Spec y layout](./component-spec.js)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./component-diagram.json)
 
 ## App API
@@ -266,4 +266,4 @@ provided/required:
 Visor: `demos/diagramas/app/view.html?kind=component&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=component&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.

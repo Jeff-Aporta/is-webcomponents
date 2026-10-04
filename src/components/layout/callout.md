@@ -1,42 +1,42 @@
----
+﻿---
 tag: iswc-callout
 tags:
   - iswc-callout
 category: layout
 status: public
-source: ./callout.js
+source: ./callout.ts
 style: ./callout.css
 preview: ./callout.json
 ---
 # `<iswc-callout>`
 
-## Propósito
+## PropÃ³sito
 
-Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y
+Mensaje en lÃ­nea con borde y fondo suaves. Pensado para tips, info, warnings y
 errores que el usuario no debe pasar por alto. Cinco colores y cinco apariencias,
-con icono automático según la colore (sobrescribible vía icon
+con icono automÃ¡tico segÃºn la colore (sobrescribible vÃ­a icon
 o slot icon).
 
-Este módulo registra `<iswc-callout>`.
+Este mÃ³dulo registra `<iswc-callout>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Estructura, superficies, overlays y navegación por regiones de contenido.
+Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear size colors; escalar mediante font-size contextual y em.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './callout.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
-<iswc-callout>Esto es un callout estándar.</iswc-callout>
+<iswc-callout>Esto es un callout estÃ¡ndar.</iswc-callout>
 ```
 
 ## API
@@ -47,11 +47,11 @@ import './callout.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
-| `icon` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -69,7 +69,7 @@ import './callout.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 
 No expone.
@@ -87,11 +87,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -109,49 +109,49 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--spacing` | Token leído o definido por componente. |
-| `--iswc-space-l` | Token leído o definido por componente. |
-| `--callout-bg` | Token leído o definido por componente. |
-| `--callout-border` | Token leído o definido por componente. |
-| `--callout-text` | Token leído o definido por componente. |
-| `--callout-accent` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--iswc-font-family` | Token leído o definido por componente. |
-| `--_pad-y` | Token leído o definido por componente. |
-| `--_pad-x` | Token leído o definido por componente. |
-| `--_icon-size` | Token leído o definido por componente. |
-| `--_gap` | Token leído o definido por componente. |
-| `--_radius` | Token leído o definido por componente. |
-| `--iswc-radius` | Token leído o definido por componente. |
-| `--iswc-color-brand-100` | Token leído o definido por componente. |
-| `--iswc-color-brand-700` | Token leído o definido por componente. |
-| `--iswc-text-muted` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-color-success-500` | Token leído o definido por componente. |
-| `--iswc-color-success-100` | Token leído o definido por componente. |
-| `--iswc-color-success-700` | Token leído o definido por componente. |
-| `--iswc-color-warning-500` | Token leído o definido por componente. |
-| `--iswc-color-warning-100` | Token leído o definido por componente. |
-| `--iswc-color-warning-700` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-color-danger-100` | Token leído o definido por componente. |
-| `--iswc-color-danger-700` | Token leído o definido por componente. |
-| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--spacing` | Token leÃ­do o definido por componente. |
+| `--iswc-space-l` | Token leÃ­do o definido por componente. |
+| `--callout-bg` | Token leÃ­do o definido por componente. |
+| `--callout-border` | Token leÃ­do o definido por componente. |
+| `--callout-text` | Token leÃ­do o definido por componente. |
+| `--callout-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--_pad-y` | Token leÃ­do o definido por componente. |
+| `--_pad-x` | Token leÃ­do o definido por componente. |
+| `--_icon-size` | Token leÃ­do o definido por componente. |
+| `--_gap` | Token leÃ­do o definido por componente. |
+| `--_radius` | Token leÃ­do o definido por componente. |
+| `--iswc-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-100` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-700` | Token leÃ­do o definido por componente. |
+| `--iswc-text-muted` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-100` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-100` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-100` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-700` | Token leÃ­do o definido por componente. |
+| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-callout> — Web Component (vanilla, zero dependencies).
-> Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings
+> <iswc-callout> â€” Web Component (vanilla, zero dependencies).
+> Mensaje en lÃ­nea con borde y fondo suaves. Pensado para tips, info, warnings
 > y errores que el usuario no debe pasar por alto.
 > Modelo equivalente a wa-callout (Web Awesome) / v-alert.
 > Atributos
@@ -171,28 +171,28 @@ Documentación de cabecera preservada desde fuente:
 >   --callout-border color del borde
 >   --callout-text   color del texto
 >   --callout-accent color del icono
-> Eventos: ninguno propio (customizable vía slotted buttons).
+> Eventos: ninguno propio (customizable vÃ­a slotted buttons).
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-callout>`.
+Tags del mÃ³dulo: `<iswc-callout>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-callout color="success">…</iswc-callout>
-<iswc-callout color="danger">…</iswc-callout>
+<iswc-callout color="success">â€¦</iswc-callout>
+<iswc-callout color="danger">â€¦</iswc-callout>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -200,15 +200,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./callout.js)
+- [JavaScript](./callout.ts)
 - [CSS](./callout.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./callout.json)

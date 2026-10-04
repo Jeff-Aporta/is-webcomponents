@@ -1,37 +1,37 @@
----
+﻿---
 tag: iswc-window
 tags:
   - iswc-window
 category: overlays
 status: public
-source: ./window.js
+source: ./window.ts
 style: ./window.css
 preview: ./window.json
 ---
 # `<iswc-window>`
 
-## Propósito
+## PropÃ³sito
 
 Ventana flotante (estilo escritorio): arrastre, resize, minimizar a pastilla, maximizar. `scope=local` vive en el wrapper; `scope=global` usa el viewport.
 
-Este módulo registra `<iswc-window>`.
+Este mÃ³dulo registra `<iswc-window>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Paleta de comandos, visor de documentos y ventanas flotantes.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Para diálogos/cajones genéricos usar `<iswc-dialog>` / `<iswc-drawer>` en layout.
-No reinventar overlays si este módulo cubre el caso.
+Para diÃ¡logos/cajones genÃ©ricos usar `<iswc-dialog>` / `<iswc-drawer>` en layout.
+No reinventar overlays si este mÃ³dulo cubre el caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './window.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-window title="Detalle" width="480" height="320" resizable closable>
@@ -48,10 +48,10 @@ import './window.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `title` | string | Encabezado. |
-| `x` | string/según contrato | Posición X (px). |
-| `y` | string/según contrato | Posición Y (px). |
-| `width` | string/según contrato | Ancho. |
-| `height` | string/según contrato | Alto. |
+| `x` | string/segÃºn contrato | PosiciÃ³n X (px). |
+| `y` | string/segÃºn contrato | PosiciÃ³n Y (px). |
+| `width` | string/segÃºn contrato | Ancho. |
+| `height` | string/segÃºn contrato | Alto. |
 | `maximizable` | boolean | Permite maximizar. |
 | `minimizable` | boolean | Permite minimizar. |
 | `closable` | boolean | Permite cerrar. |
@@ -60,43 +60,43 @@ import './window.js';
 | `scope` | string | `local` (default) queda en el wrapper. `global` usa el viewport. |
 | `position` | string | `absolute` o `fixed`. Local arranca en absolute; global en fixed si no se declara. |
 | `dock` | string | Ignorado. Minimizar deja una pastilla de max 100px abajo del contexto. |
-| `aria-modal` | string | Por defecto `"true"`. Pasar `"false"` para que conviva con la página como una ventana no modal. |
+| `aria-modal` | string | Por defecto `"true"`. Pasar `"false"` para que conviva con la pÃ¡gina como una ventana no modal. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| — | — | No expone propiedades adicionales documentadas. |
+| â€” | â€” | No expone propiedades adicionales documentadas. |
 
 ### Slots
 
 | Slot | Uso |
 | --- | --- |
 | `default` | Contenido proyectado. |
-| `footer` | Bloque inferior (si el módulo lo declara). |
+| `footer` | Bloque inferior (si el mÃ³dulo lo declara). |
 
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
-| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
 | `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
-| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
 | `iswc-minimize` | Evento personalizado del componente (minimize). |
 | `iswc-restore` | Evento personalizado del componente (restore). |
 | `iswc-maximize` | Evento personalizado del componente (maximize). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-show` | no | sí | sí | no |
-| `iswc-after-show` | no | sí | sí | no |
-| `iswc-hide` | no | sí | sí | no |
-| `iswc-after-hide` | no | sí | sí | no |
-| `iswc-minimize` | no | sí | sí | no |
-| `iswc-restore` | `{ was }` | sí | sí | no |
-| `iswc-maximize` | no | sí | sí | no |
+| `iswc-show` | no | sÃ­ | sÃ­ | no |
+| `iswc-after-show` | no | sÃ­ | sÃ­ | no |
+| `iswc-hide` | no | sÃ­ | sÃ­ | no |
+| `iswc-after-hide` | no | sÃ­ | sÃ­ | no |
+| `iswc-minimize` | no | sÃ­ | sÃ­ | no |
+| `iswc-restore` | `{ was }` | sÃ­ | sÃ­ | no |
+| `iswc-maximize` | no | sÃ­ | sÃ­ | no |
 
 Vocabulario unificado con `ModalBase` (`iswc-show` / `iswc-after-show` /
 `iswc-hide` / `iswc-after-hide`). Los antiguos `iswc-open` / `iswc-close` ya no se
@@ -115,17 +115,17 @@ el.addEventListener('iswc-show', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `minimize()` | Método público declarado. |
-| `restore()` | Método público declarado. |
-| `maximize()` | Método público declarado. |
-| `unmaximize()` | Método público declarado. |
-| `close()` | Método público declarado. |
+| `minimize()` | MÃ©todo pÃºblico declarado. |
+| `restore()` | MÃ©todo pÃºblico declarado. |
+| `maximize()` | MÃ©todo pÃºblico declarado. |
+| `unmaximize()` | MÃ©todo pÃºblico declarado. |
+| `close()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -142,55 +142,55 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--iswc-*`) según CSS del módulo.
+Tokens del tema (`--iswc-*`) segÃºn CSS del mÃ³dulo.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-window> — API minimize/restore/maximize/unmaximize/close. scope local|global. position absolute|fixed.
+> <iswc-window> â€” API minimize/restore/maximize/unmaximize/close. scope local|global. position absolute|fixed.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<iswc-window>`.
+Tags del mÃ³dulo: `<iswc-window>`.
 
 ## Accesibilidad
 
 El host lleva `role="dialog"` (por defecto; configurable) y `aria-label`
 sincronizado con `title`. El atributo `aria-modal="true"` se aplica por
-defecto — indica al lector de pantalla que el contenido fuera del dialog
-está inerte mientras está abierto.
+defecto â€” indica al lector de pantalla que el contenido fuera del dialog
+estÃ¡ inerte mientras estÃ¡ abierto.
 
 | Atributo / Rol | Notas |
 | --- | --- |
 | `role="dialog"` | Aplicado en `onConnected`. |
 | `aria-label="<title>"` | Sincronizado con el atributo `title`. |
-| `aria-modal="true"` | Por defecto. Pasar `"false"` explícito para deshabilitar el focus trap. |
+| `aria-modal="true"` | Por defecto. Pasar `"false"` explÃ­cito para deshabilitar el focus trap. |
 | Tabla `data-state="normal | maximized | minimized"` | Refleja el estado actual para estilos. |
 
 **Comportamiento de foco** (cuando `aria-modal="true"`):
 
 - `Escape` cierra la ventana si lleva el atributo `closable`.
 - `Tab` / `Shift+Tab` quedan contenidos dentro de la ventana cuando el foco
-  ya está dentro de ella. Si el foco está fuera y la ventana es la de
-  mayor `zIndex`, también se captura el `Tab`.
+  ya estÃ¡ dentro de ella. Si el foco estÃ¡ fuera y la ventana es la de
+  mayor `zIndex`, tambiÃ©n se captura el `Tab`.
 - Al abrir, el foco se mueve al `body` interno (tabindex=0) en el
   siguiente tick, para que el lector identifique correctamente el modal.
-- Al desconectar (porque se llamó a `close()`), el foco se restaura al
-  elemento que lo tenía antes de abrir la ventana.
+- Al desconectar (porque se llamÃ³ a `close()`), el foco se restaura al
+  elemento que lo tenÃ­a antes de abrir la ventana.
 
-Si se quiere el comportamiento "no modal" de antes —convivir con otras
-ventanas/elementos focuseables sin atrapar el Tab— basta con declarar
+Si se quiere el comportamiento "no modal" de antes â€”convivir con otras
+ventanas/elementos focuseables sin atrapar el Tabâ€” basta con declarar
 `aria-modal="false"` en el HTML.
 
-Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. Listeners globales solo en
 `connectedCallback` / `disconnectedCallback`.
 
 ## Ejemplo avanzado
@@ -203,7 +203,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Agregar listeners de `document`/`window` en el constructor.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -211,15 +211,15 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./window.js)
+- [JavaScript](./window.ts)
 - [CSS](./window.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./window.json)

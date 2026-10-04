@@ -1,46 +1,46 @@
----
+﻿---
 tag: iswc-video-playlist
 tags:
   - iswc-video-playlist
 category: media
 status: public
-source: ./video-playlist.js
+source: ./video-playlist.ts
 style: ./video-playlist.css
 preview: ./video-playlist.json
 ---
 # `<iswc-video-playlist>`
 
-## Propósito
+## PropÃ³sito
 
-Reproductor de playlist con look YouTube: cabecera con título y canal,
+Reproductor de playlist con look YouTube: cabecera con tÃ­tulo y canal,
 barra inferior overlay con play / seek / vol, lista colapsable debajo.
 Las herramientas adicionales (prev / next / autoplay) se proyectan
-automáticamente en los slots tools-left
+automÃ¡ticamente en los slots tools-left
 y tools-right del reproductor.
 
-Este módulo registra `<iswc-video-playlist>`.
+Este mÃ³dulo registra `<iswc-video-playlist>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Iconos, identidad visual y reproducción de video.
+Iconos, identidad visual y reproducciÃ³n de video.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear loader/reproductor paralelo antes de revisar existentes.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './video-playlist.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-video-playlist autoplay-next placement="bottom">
-<iswc-video title="Big Buck Bunny" channel="Blender" poster="…" src="01.mp4"></iswc-video>
-<iswc-video title="Sintel" poster="…" src="02.mp4"></iswc-video>
-<iswc-video title="Elephants Dream" poster="…" src="03.mp4"></iswc-video>
+<iswc-video title="Big Buck Bunny" channel="Blender" poster="â€¦" src="01.mp4"></iswc-video>
+<iswc-video title="Sintel" poster="â€¦" src="02.mp4"></iswc-video>
+<iswc-video title="Elephants Dream" poster="â€¦" src="03.mp4"></iswc-video>
 </iswc-video-playlist>
 ```
 
@@ -52,12 +52,12 @@ import './video-playlist.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `autoplay-next` | boolean | Fuente define default/restricción. |
-| `placement` | string/según contrato | Fuente define default/restricción. |
-| `channel` | string/según contrato | Fuente define default/restricción. |
-| `accordion` | string/según contrato | Fuente define default/restricción. |
+| `autoplay-next` | boolean | Fuente define default/restricciÃ³n. |
+| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `channel` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `accordion` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -80,15 +80,15 @@ import './video-playlist.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-video-change` | Evento personalizado del componente (video change). |
 | `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-video-change` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
+| `iswc-video-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -103,16 +103,16 @@ el.addEventListener('iswc-video-change', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `goTo()` | Método público declarado. |
-| `play()` | Método público declarado. |
-| `next()` | Método público declarado. |
-| `previous()` | Método público declarado. |
+| `goTo()` | MÃ©todo pÃºblico declarado. |
+| `play()` | MÃ©todo pÃºblico declarado. |
+| `next()` | MÃ©todo pÃºblico declarado. |
+| `previous()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -136,10 +136,10 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `status` | Personalizable con `::part(status)`. |
 | `playlist-toggle` | Personalizable con `::part(playlist-toggle)`. |
 | `playlist-items` | Personalizable con `::part(playlist-items)`. |
-| `playlist-duration` | Duración de cada vídeo en la lista. |
+| `playlist-duration` | DuraciÃ³n de cada vÃ­deo en la lista. |
 | `playlist-item` | Cada fila individual del listado. |
-| `playlist-thumbnail` | Miniatura de cada vídeo. |
-| `playlist-title` | Título de cada vídeo. |
+| `playlist-thumbnail` | Miniatura de cada vÃ­deo. |
+| `playlist-title` | TÃ­tulo de cada vÃ­deo. |
 
 ### Custom states
 
@@ -149,34 +149,34 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-video-playlist> — player + lista tipo YouTube.
+> <iswc-video-playlist> â€” player + lista tipo YouTube.
 > Cada clip es un <iswc-video> dentro del slot default. El componente
-> renderiza un reproductor con cabecera (título + canal) y una barra
+> renderiza un reproductor con cabecera (tÃ­tulo + canal) y una barra
 > inferior estilo YouTube con controles + herramientas inyectadas
 > (anterior / siguiente / autoplay) mediante slots.
 > Atributos
 >   placement      left | right | bottom (default: bottom)
->   autoplay-next  boolean — al terminar uno, reproduce el siguiente
->   accordion      auto | open | closed (default auto: cerrado en móvil)
->   channel        caption opcional que se muestra bajo el título
+>   autoplay-next  boolean â€” al terminar uno, reproduce el siguiente
+>   accordion      auto | open | closed (default auto: cerrado en mÃ³vil)
+>   channel        caption opcional que se muestra bajo el tÃ­tulo
 > Slots
 >   default        iswc-video (uno por clip)
 >   tools-left     botones / iconos que se muestran a la izquierda del play
->                  (el playlist inyecta prev/next aquí por defecto)
+>                  (el playlist inyecta prev/next aquÃ­ por defecto)
 >   tools-right    botones / iconos que se muestran a la derecha del vol
->                  (el playlist inyecta autoplay aquí por defecto)
->   config         botón / menú opcional en la cabecera YouTube
-> Métodos: goTo(index), next(), previous(), play(index)
+>                  (el playlist inyecta autoplay aquÃ­ por defecto)
+>   config         botÃ³n / menÃº opcional en la cabecera YouTube
+> MÃ©todos: goTo(index), next(), previous(), play(index)
 > Eventos: iswc-video-change, iswc-change
 > Parts: video-playlist, playlist-head, playlist-toggle, playlist-items,
 >        playlist-item, playlist-title, playlist-duration, channel,
@@ -189,21 +189,21 @@ Documentación de cabecera preservada desde fuente:
 - [`./video.js`](./video.js)
 - [`./icon.js`](./icon.js)
 
-Tags del módulo: `<iswc-video-playlist>`.
+Tags del mÃ³dulo: `<iswc-video-playlist>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-controls`, `aria-expanded`, `aria-labelledby`, `aria-pressed`, `aria-selected`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-controls`, `aria-expanded`, `aria-labelledby`, `aria-pressed`, `aria-selected`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-video-playlist placement="right">…</iswc-video-playlist>
+<iswc-video-playlist placement="right">â€¦</iswc-video-playlist>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -211,15 +211,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./video-playlist.js)
+- [JavaScript](./video-playlist.ts)
 - [CSS](./video-playlist.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./video-playlist.json)

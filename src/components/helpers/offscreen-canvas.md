@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-offscreen-canvas
 tags:
   - iswc-offscreen-canvas
 category: helpers
 status: public
-source: ./offscreen-canvas.js
+source: ./offscreen-canvas.ts
 style: ./offscreen-canvas.css
 preview: ./offscreen-canvas.json
 ---
 # `<iswc-offscreen-canvas>`
 
-## Propósito
+## PropÃ³sito
 
 Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).
 
-Este módulo registra `<iswc-offscreen-canvas>`.
+Este mÃ³dulo registra `<iswc-offscreen-canvas>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Pintar 2D/3D pesado sin congelar el hilo de UI.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Edición con puntero sobre el canvas visible: `iswc-image-editor` necesita el contexto en el hilo principal.
+EdiciÃ³n con puntero sobre el canvas visible: `iswc-image-editor` necesita el contexto en el hilo principal.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './offscreen-canvas.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-offscreen-canvas width="320" height="180"></iswc-offscreen-canvas>
@@ -48,7 +48,7 @@ import './offscreen-canvas.js';
 | `height` | number | Default 180 |
 | `worker-src` | string | URL del worker; postMessage transfiere el canvas |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -64,13 +64,13 @@ import './offscreen-canvas.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
-| `iswc-ready` | Emitido cuando el componente está listo. |
+| `iswc-ready` | Emitido cuando el componente estÃ¡ listo. |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-ready` | sí `{ offscreen, fallback }` | sí | sí | no |
+| `iswc-ready` | sÃ­ `{ offscreen, fallback }` | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -85,7 +85,7 @@ el.addEventListener('iswc-ready', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
@@ -103,7 +103,7 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated.
 
@@ -128,7 +128,7 @@ Canvas decorativo salvo que el consumidor ponga `aria-label`.
 
 ## Errores comunes
 
-- Llamar `getContext` en el canvas del DOM después de transferir.
+- Llamar `getContext` en el canvas del DOM despuÃ©s de transferir.
 - `worker-src` cross-origin sin CORS.
 
 ## Reglas para LLM
@@ -137,5 +137,5 @@ Canvas decorativo salvo que el consumidor ponga `aria-label`.
 
 ## Fuentes
 
-- `./offscreen-canvas.js` · `./offscreen-canvas.css`
+- `./offscreen-canvas.js` Â· `./offscreen-canvas.css`
 - Preview: `./offscreen-canvas.json`

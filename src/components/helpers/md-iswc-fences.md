@@ -1,18 +1,18 @@
----
-tag: —
+﻿---
+tag: â€”
 category: helpers
 status: module
-source: ./md-iswc-fences.js
+source: ./md-iswc-fences.ts
 ---
-# `md-iswc-fences` (módulo)
+# `md-iswc-fences` (mÃ³dulo)
 
-## Propósito
+## PropÃ³sito
 
-Resuelve fences Markdown ` ```iswc-<nombre> ` → tag de diagrama `iswc-*`
+Resuelve fences Markdown ` ```iswc-<nombre> ` â†’ tag de diagrama `iswc-*`
 (solo lectura). Acepta kind corto (`flowchart`, `er`) o nombre de tag
 (`er-diagram`, `sequence-diagram`).
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import { resolveIswcFenceTag, escapeJsonForScript } from
@@ -27,7 +27,7 @@ resolveIswcFenceTag('js');             // null
 
 | Export | Uso |
 | --- | --- |
-| `resolveIswcFenceTag(lang)` | Lang del fence → tag, o `null` si no empieza por `iswc-`. |
+| `resolveIswcFenceTag(lang)` | Lang del fence â†’ tag, o `null` si no empieza por `iswc-`. |
 | `escapeJsonForScript(text)` | Evita romper `</script>` al embeber JSON. |
 
 Kinds mapeados: flowchart, sequence, class, state, er, block, component, mindmap,
@@ -39,7 +39,7 @@ Consumido por `md-lite`. No inventar otro mapa de fences en la app.
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 

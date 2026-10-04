@@ -1,44 +1,44 @@
----
+﻿---
 tag: iswc-heatmap
 tags:
   - iswc-heatmap
 category: data-viz
 status: public
-source: ./heatmap.js
+source: ./heatmap.ts
 style: ./heatmap.css
 preview: ./heatmap.json
 ---
 # `<iswc-heatmap>`
 
-## Propósito
+## PropÃ³sito
 
-Mapa de calor en SVG: una matriz de celdas coloreadas según su valor
-numérico, con etiquetas de eje X/Y y una leyenda de gradiente vertical.
-Dibuja todo a mano (sin librería de gráficas) y se redimensiona solo con
+Mapa de calor en SVG: una matriz de celdas coloreadas segÃºn su valor
+numÃ©rico, con etiquetas de eje X/Y y una leyenda de gradiente vertical.
+Dibuja todo a mano (sin librerÃ­a de grÃ¡ficas) y se redimensiona solo con
 un `ResizeObserver`.
 
-Este módulo registra `<iswc-heatmap>`.
+Este mÃ³dulo registra `<iswc-heatmap>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Cuando hay que comparar una magnitud sobre dos dimensiones categóricas al
-mismo tiempo: ventas por mes y por línea de producto, cartera por edad y
-por vendedor, ocupación por día y por hora.
+Cuando hay que comparar una magnitud sobre dos dimensiones categÃ³ricas al
+mismo tiempo: ventas por mes y por lÃ­nea de producto, cartera por edad y
+por vendedor, ocupaciÃ³n por dÃ­a y por hora.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-- Una sola dimensión: usa `<iswc-bar-chart>` o `<iswc-sparkline>`.
+- Una sola dimensiÃ³n: usa `<iswc-bar-chart>` o `<iswc-sparkline>`.
 - Series temporales continuas donde importa la tendencia y no la
   intensidad: usa `<iswc-line-chart>`.
-- Pocos datos (3 o 4 números): una tabla o `<iswc-stat>` se lee mejor.
+- Pocos datos (3 o 4 nÃºmeros): una tabla o `<iswc-stat>` se lee mejor.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './heatmap.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-heatmap>
@@ -60,17 +60,17 @@ import './heatmap.js';
 
 | Atributo | Tipo | Default | Notas |
 | --- | --- | --- | --- |
-| `x-label` | string | sin título | Título del eje X, dibujado centrado al pie del SVG. Su presencia reserva 18 px de alto. |
-| `y-label` | string | sin título | Título del eje Y, rotado −90°. Su presencia reserva 14 px de ancho. |
-| `color` | `brand` \| `neutral` \| `success` \| `warning` \| `danger` \| `red-blue` | `brand` | Paleta de 6 pasos. `red-blue` es divergente (azul → rojo); un valor desconocido cae en `brand`. |
-| `cell-radius` | número (px) | `2` | Radio `rx`/`ry` de cada celda. `0` o texto no numérico también resuelven a `2` (`Number(...) || 2`). |
-| `show-values` | booleano (presencia) | ausente | Escribe el número dentro de la celda, formateado en `es-CO` (compacto desde 10.000). |
-| `legend-position` | `top` \| `bottom` \| `start` \| `end` \| `none` | `end` | Coloca la leyenda vía `data-legend` en el contenedor. `none` la oculta y libera los 70 px reservados. |
+| `x-label` | string | sin tÃ­tulo | TÃ­tulo del eje X, dibujado centrado al pie del SVG. Su presencia reserva 18 px de alto. |
+| `y-label` | string | sin tÃ­tulo | TÃ­tulo del eje Y, rotado âˆ’90Â°. Su presencia reserva 14 px de ancho. |
+| `color` | `brand` \| `neutral` \| `success` \| `warning` \| `danger` \| `red-blue` | `brand` | Paleta de 6 pasos. `red-blue` es divergente (azul â†’ rojo); un valor desconocido cae en `brand`. |
+| `cell-radius` | nÃºmero (px) | `2` | Radio `rx`/`ry` de cada celda. `0` o texto no numÃ©rico tambiÃ©n resuelven a `2` (`Number(...) || 2`). |
+| `show-values` | booleano (presencia) | ausente | Escribe el nÃºmero dentro de la celda, formateado en `es-CO` (compacto desde 10.000). |
+| `legend-position` | `top` \| `bottom` \| `start` \| `end` \| `none` | `end` | Coloca la leyenda vÃ­a `data-legend` en el contenedor. `none` la oculta y libera los 70 px reservados. |
 
 Cualquier cambio en un atributo observado dispara un re-render completo;
 `attributeChangedCallback` no discrimina por nombre.
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -90,22 +90,22 @@ celda no se dibuja.
 
 ### Slots
 
-No expone. El shadow root no contiene ningún `<slot>`, así que el contenido
+No expone. El shadow root no contiene ningÃºn `<slot>`, asÃ­ que el contenido
 en light DOM no se proyecta: el `<script type="application/json">` hijo se
 lee como dato (y se vigila con `MutationObserver`), no se renderiza.
 
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-cell-hover` | Evento personalizado del componente (cell hover). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | `{ svg }` — referencia al `<svg>` del shadow root | sí | sí | no |
-| `iswc-cell-hover` | `{ x, y, value }` — `x`/`y` son las etiquetas (string) e `value` es número | sí | sí | no |
+| `iswc-render` | `{ svg }` â€” referencia al `<svg>` del shadow root | sÃ­ | sÃ­ | no |
+| `iswc-cell-hover` | `{ x, y, value }` â€” `x`/`y` son las etiquetas (string) e `value` es nÃºmero | sÃ­ | sÃ­ | no |
 
 `iswc-cell-hover` se dispara en cada `pointermove` sobre una celda, no solo
 al entrar en ella: si el listener es costoso, conviene un throttle.
@@ -125,9 +125,9 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-No expone métodos. La única API pública es la propiedad `config` de la
+No expone mÃ©todos. La Ãºnica API pÃºblica es la propiedad `config` de la
 tabla anterior.
 
 ### CSS parts
@@ -150,41 +150,41 @@ No expone. El resaltado de celda usa la clase interna `.iswc-hover`, no
 | --- | --- |
 | `--iswc-text` | Color de texto del host y base de `--chart-text`, `--grid-color` y el borde de la leyenda. |
 | `--iswc-text-soft` | Color de las cifras de la leyenda. |
-| `--chart-text` | Definido en `:host` como alias de `--iswc-text`; el JS lo lee para pintar títulos y etiquetas de eje. |
-| `--grid-color` | Definido en `:host`; el JS lo lee, pero en la versión actual no se usa para dibujar nada. |
-| `--iswc-bg-elev` | Base del `color-mix` de la paleta y color del número dentro de celdas oscuras. |
+| `--chart-text` | Definido en `:host` como alias de `--iswc-text`; el JS lo lee para pintar tÃ­tulos y etiquetas de eje. |
+| `--grid-color` | Definido en `:host`; el JS lo lee, pero en la versiÃ³n actual no se usa para dibujar nada. |
+| `--iswc-bg-elev` | Base del `color-mix` de la paleta y color del nÃºmero dentro de celdas oscuras. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated: no usa `formAssociated`, no expone `value`/`name`
-ni participa en el envío de un `<form>`. Es un componente de solo
-visualización.
+ni participa en el envÃ­o de un `<form>`. Es un componente de solo
+visualizaciÃ³n.
 
 ## Comportamiento
 
 - **Carga de datos.** En `connectedCallback` busca el primer hijo `<script>`
-  con `type` que contenga `json` y lo parsea. Un JSON inválido se ignora en
-  silencio (queda la última configuración válida).
+  con `type` que contenga `json` y lo parsea. Un JSON invÃ¡lido se ignora en
+  silencio (queda la Ãºltima configuraciÃ³n vÃ¡lida).
 - **Reactividad.** Un `MutationObserver` con `childList`, `characterData` y
   `subtree` reprocesa el JSON al cambiar; un `ResizeObserver` redibuja al
-  cambiar el tamaño del host.
-- **Dominio de color.** Se toma el mínimo y máximo de los valores finitos y
+  cambiar el tamaÃ±o del host.
+- **Dominio de color.** Se toma el mÃ­nimo y mÃ¡ximo de los valores finitos y
   se redondea con `niceTicks(min, max, 5)`. Si todos los valores son
   iguales, todas las celdas usan el color central de la paleta.
-- **Corte temprano.** Si no hay ningún valor finito, `#render` sale antes de
-  dibujar y **no** emite `iswc-render`; el SVG queda vacío.
-- **Tamaño mínimo de matriz.** Cada columna reserva al menos 14 px de ancho
-  y cada fila 14 px de alto, así que una matriz grande puede desbordar el
+- **Corte temprano.** Si no hay ningÃºn valor finito, `#render` sale antes de
+  dibujar y **no** emite `iswc-render`; el SVG queda vacÃ­o.
+- **TamaÃ±o mÃ­nimo de matriz.** Cada columna reserva al menos 14 px de ancho
+  y cada fila 14 px de alto, asÃ­ que una matriz grande puede desbordar el
   `viewBox` en un host estrecho.
-- **Leyenda.** Se dibuja como gradiente CSS de arriba (máximo) a abajo
-  (mínimo) más 4 cifras de referencia. Si el ancho disponible es ≤ 12 px se
+- **Leyenda.** Se dibuja como gradiente CSS de arriba (mÃ¡ximo) a abajo
+  (mÃ­nimo) mÃ¡s 4 cifras de referencia. Si el ancho disponible es â‰¤ 12 px se
   oculta con `hidden`.
 
-Notas de la cabecera del módulo que no coinciden con el código:
+Notas de la cabecera del mÃ³dulo que no coinciden con el cÃ³digo:
 
-- La cabecera anuncia `legend-position` con default `right`; el código usa
+- La cabecera anuncia `legend-position` con default `right`; el cÃ³digo usa
   `end` y no reconoce `right` (cae en el grid por defecto).
-- El comentario de `intensitySteps` menciona opacidades 0.15–0.9; los
+- El comentario de `intensitySteps` menciona opacidades 0.15â€“0.9; los
   valores reales son 0.18, 0.36, 0.55, 0.75 y 0.95.
 - Las paletas no divergentes arrancan con un `#0f172a` fijo, que no sigue
   el tema claro/oscuro como el resto de pasos.
@@ -197,21 +197,21 @@ Notas de la cabecera del módulo que no coinciden con el código:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - Relacionados: [`../charts/bar-chart.md`](../charts/bar-chart.md), [`./maps.md`](./maps.md)
 
-Tags del módulo: `<iswc-heatmap>`.
+Tags del mÃ³dulo: `<iswc-heatmap>`.
 
 ## Accesibilidad
 
-El `<svg>` lleva `role="img"` y `aria-label="Mapa de calor"` fijo, así que
-para un lector de pantalla la matriz es una sola imagen sin descripción del
+El `<svg>` lleva `role="img"` y `aria-label="Mapa de calor"` fijo, asÃ­ que
+para un lector de pantalla la matriz es una sola imagen sin descripciÃ³n del
 contenido. Recomendaciones:
 
 - Poner `aria-label` o `aria-labelledby` en el propio `<iswc-heatmap>` con lo
   que representa la matriz.
-- Acompañar el mapa con una tabla equivalente (aunque sea visualmente
-  oculta) cuando el dato sea la información principal de la pantalla.
+- AcompaÃ±ar el mapa con una tabla equivalente (aunque sea visualmente
+  oculta) cuando el dato sea la informaciÃ³n principal de la pantalla.
 - El hover no tiene equivalente por teclado: las celdas no son focusables.
-  Si el detalle por celda es esencial, expónlo también fuera del SVG.
-- No comunicar información solo por color: activa `show-values` cuando haya
+  Si el detalle por celda es esencial, expÃ³nlo tambiÃ©n fuera del SVG.
+- No comunicar informaciÃ³n solo por color: activa `show-values` cuando haya
   espacio.
 
 ## Ejemplo avanzado
@@ -220,7 +220,7 @@ contenido. Recomendaciones:
 <iswc-heatmap
   id="ocupacion"
   x-label="Hora"
-  y-label="Día"
+  y-label="DÃ­a"
   color="red-blue"
   cell-radius="4"
   show-values
@@ -233,7 +233,7 @@ contenido. Recomendaciones:
   const el = document.getElementById('ocupacion');
   el.config = {
     xLabels: ['8', '10', '12', '14', '16'],
-    yLabels: ['Lun', 'Mar', 'Mié'],
+    yLabels: ['Lun', 'Mar', 'MiÃ©'],
     data: [
       [12, 28, 41, 33, 19],
       [15, 31, 47, 38, 22],
@@ -250,19 +250,19 @@ contenido. Recomendaciones:
 
 ## Errores comunes
 
-- Usar el tag sin importar el módulo primero.
+- Usar el tag sin importar el mÃ³dulo primero.
 - Esperar que el `<script type="application/json">` se vea: no hay `<slot>`,
   solo se lee como dato.
 - Pasar la matriz por atributo. Los datos van por `config` o por el JSON hijo.
 - Dar filas de `data` con menos columnas que `xLabels`: las celdas faltantes
   no se dibujan, sin aviso.
-- Usar `points` con etiquetas que no son idénticas a las de `xLabels`/`yLabels`
-  (tipo distinto o espacios de más): la celda queda vacía.
+- Usar `points` con etiquetas que no son idÃ©nticas a las de `xLabels`/`yLabels`
+  (tipo distinto o espacios de mÃ¡s): la celda queda vacÃ­a.
 - Usar `legend-position="right"` o `"left"`: no existen; son `end` y `start`.
-- Poner el host sin altura útil en un contenedor flex: el mínimo de 16rem
-  del CSS es lo único que evita un lienzo de 0 px.
+- Poner el host sin altura Ãºtil en un contenedor flex: el mÃ­nimo de 16rem
+  del CSS es lo Ãºnico que evita un lienzo de 0 px.
 - Copiar el preview contra la fuente actual; JS/CSS prevalecen.
-- Crear variantes de tamaño; usar `font-size` contextual y `em`.
+- Crear variantes de tamaÃ±o; usar `font-size` contextual y `em`.
 
 ## Reglas para LLM
 
@@ -272,12 +272,12 @@ contenido. Recomendaciones:
 - Los datos se entregan por `config` o por JSON hijo, nunca por atributo.
 - No documentar `iswc-cell-hover` como evento de entrada/salida: se repite en
   cada `pointermove`.
-- Leer callers y `_shared` antes de cambiar; corregir en la raíz común.
-- No modificar la API basándose solo en el preview.
+- Leer callers y `_shared` antes de cambiar; corregir en la raÃ­z comÃºn.
+- No modificar la API basÃ¡ndose solo en el preview.
 
 ## Fuentes
 
-- [JavaScript](./heatmap.js)
+- [JavaScript](./heatmap.ts)
 - [CSS](./heatmap.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./heatmap.json)

@@ -1,10 +1,10 @@
----
+﻿---
 tag: iswc-pptx-view
 tags:
   - iswc-pptx-view
 category: files
 status: public
-source: ./pptx-view.js
+source: ./pptx-view.ts
 style: ./pptx-view.css
 preview: ./pptx-view.json
 ---
@@ -28,7 +28,7 @@ Eventos: `iswc-load`, `iswc-error`; editores tambien `iswc-change`.
 
 ## Eventos
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | _(ninguno)_ | Este componente no emite eventos personalizados. |
 

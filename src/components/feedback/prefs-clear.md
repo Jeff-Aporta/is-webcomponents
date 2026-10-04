@@ -1,39 +1,39 @@
----
+﻿---
 tag: iswc-prefs-clear
 tags:
   - iswc-prefs-clear
 category: feedback
 status: public
-source: ./prefs-clear.js
+source: ./prefs-clear.ts
 style: ./prefs-clear.css
 preview: ./prefs-clear.json
 ---
 # `<iswc-prefs-clear>`
 
-## Propósito
+## PropÃ³sito
 
 Borra la memoria persistente de los componentes del kit
-(`localStorage['is-webcomponents']`: splits, scrolls, grids…).
-Útil para auditar la carga inicial sin prefs viejas que deformen el layout.
+(`localStorage['is-webcomponents']`: splits, scrolls, gridsâ€¦).
+Ãštil para auditar la carga inicial sin prefs viejas que deformen el layout.
 
-Este módulo registra `<iswc-prefs-clear>`.
+Este mÃ³dulo registra `<iswc-prefs-clear>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Auditoría UX/UI, demos, o un control de “restablecer paneles” en herramientas internas.
+AuditorÃ­a UX/UI, demos, o un control de â€œrestablecer panelesâ€ en herramientas internas.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No lo pongas como acción cotidiana del usuario final si no entiende que perderá
-tamaños de panel y posiciones de scroll.
+No lo pongas como acciÃ³n cotidiana del usuario final si no entiende que perderÃ¡
+tamaÃ±os de panel y posiciones de scroll.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './prefs-clear.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-prefs-clear></iswc-prefs-clear>
@@ -44,15 +44,15 @@ import './prefs-clear.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `confirm` | boolean | `false` = no pide confirmación (default true) |
+| `confirm` | boolean | `false` = no pide confirmaciÃ³n (default true) |
 | `reload` | boolean | `false` = no recarga tras limpiar (default true) |
-| `variant` / `color` / `shape` | string | Se reenvían al `iswc-button` interno |
-| `title` / `aria-label` | string | Tooltip y nombre accesible (default “Limpiar memoria UI”) |
+| `variant` / `color` / `shape` | string | Se reenvÃ­an al `iswc-button` interno |
+| `title` / `aria-label` | string | Tooltip y nombre accesible (default â€œLimpiar memoria UIâ€) |
 
 ## Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-prefs-clear` | Emitido al limpiar la memoria UI persistente. |
 
@@ -75,8 +75,8 @@ el.addEventListener('iswc-prefs-clear', (e) => {
 
 ## API
 
-- `clear()` — ejecuta la limpieza
-- `peek()` — lee el root de prefs sin borrar
+- `clear()` â€” ejecuta la limpieza
+- `peek()` â€” lee el root de prefs sin borrar
 
 
 ### CSS parts

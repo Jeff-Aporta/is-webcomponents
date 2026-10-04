@@ -1,40 +1,40 @@
----
+﻿---
 tag: iswc-bar-chart
 tags:
   - iswc-bar-chart
 category: charts
 status: public
-source: ./bar-chart.js
+source: ./bar-chart.ts
 style: ./bar-chart.css
 preview: ./bar-chart.json
 ---
 # `<iswc-bar-chart>`
 
-## Propósito
+## PropÃ³sito
 
 Wrapper tipado de `<iswc-chart>` con `type` fijo en `bar`. Misma API
-de configuración Chart.js (`config` / `<script type="application/json">`);
+de configuraciÃ³n Chart.js (`config` / `<script type="application/json">`);
 el atributo `type` no se cambia.
 
-Este módulo registra `<iswc-bar-chart>`.
+Este mÃ³dulo registra `<iswc-bar-chart>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Series, distribuciones, relaciones o jerarquías de datos — cuando el tipo
-de gráfica es siempre bar chart.
+Series, distribuciones, relaciones o jerarquÃ­as de datos â€” cuando el tipo
+de grÃ¡fica es siempre bar chart.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 Si el tipo puede cambiar en runtime, usar `<iswc-chart type="bar">`.
 No crear otro engine: hereda marks/engine de `chart.js`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './bar-chart.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-bar-chart>
@@ -60,21 +60,21 @@ en `bar` por la clase tipada.
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `legend-position` | string/según contrato | Fuente define default/restricción. |
-| `index-axis` | string/según contrato | Fuente define default/restricción. |
-| `min` | string/según contrato | Fuente define default/restricción. |
-| `max` | string/según contrato | Fuente define default/restricción. |
-| `grid` | string/según contrato | Fuente define default/restricción. |
-| `stacked` | string/según contrato | Fuente define default/restricción. |
-| `without-animation` | string/según contrato | Fuente define default/restricción. |
-| `without-legend` | string/según contrato | Fuente define default/restricción. |
-| `without-tooltip` | string/según contrato | Fuente define default/restricción. |
-| `x-label` | string/según contrato | Fuente define default/restricción. |
-| `y-label` | string/según contrato | Fuente define default/restricción. |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `legend-position` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `index-axis` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `grid` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `stacked` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-animation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-legend` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-tooltip` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `x-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `y-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -94,17 +94,17 @@ en `bar` por la clase tipada.
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
-| `iswc-turtle-state` | Emitido al actualizarse el estado del módulo turtle (resize, datos, etc.). |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-turtle-state` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
 
 <details>
@@ -119,13 +119,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -144,15 +144,15 @@ No expone.
 
 Misma familia de tokens que `<iswc-chart>` (ver [chart.md](./chart.md)).
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> `<iswc-bar-chart>` — wrapper tipado vía `defineTypedChart('iswc-bar-chart', 'bar', …)`.
+> `<iswc-bar-chart>` â€” wrapper tipado vÃ­a `defineTypedChart('iswc-bar-chart', 'bar', â€¦)`.
 > Importa `./chart.js` y registra marks del tipo fijo.
 > Consumo compatible con Chart.js: `config` o `<script type="application/json">`
 > hijo con forma `{ data: { labels, datasets }, options }` (`type` lo fija el tag).
@@ -163,13 +163,13 @@ Documentación de cabecera preservada desde fuente:
 - [`./chart.md`](./chart.md)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
-- [`../_shared/chart-palette.js`](../_shared/chart-palette.js) (transitiva vía `chart.js`)
+- [`../_shared/chart-palette.js`](../_shared/chart-palette.js) (transitiva vÃ­a `chart.js`)
 
-Tags del módulo: `<iswc-bar-chart>`.
+Tags del mÃ³dulo: `<iswc-bar-chart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-chart>`.
 
 ## Ejemplo avanzado
 
@@ -188,7 +188,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-ch
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -197,16 +197,16 @@ Preservar semántica, foco, teclado, labels y ARIA. Hereda contrato de `<iswc-ch
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 - API completa del motor: [chart.md](./chart.md).
 
 ## Fuentes
 
-- [JavaScript](./bar-chart.js)
+- [JavaScript](./bar-chart.ts)
 - [CSS](./bar-chart.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./bar-chart.json)

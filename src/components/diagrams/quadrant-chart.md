@@ -1,39 +1,39 @@
----
+﻿---
 tag: iswc-quadrant-chart
 tags:
   - iswc-quadrant-chart
 category: diagrams
 status: public
-source: ./quadrant-chart.js
+source: ./quadrant-chart.ts
 style: ./quadrant-chart.css
 preview: ./quadrant-chart.json
 ---
 # `<iswc-quadrant-chart>`
 
-## Propósito
+## PropÃ³sito
 
-Matriz **2×2** en SVG, sin Mermaid. Dos ejes continuos, cuatro cuadrantes
+Matriz **2Ã—2** en SVG, sin Mermaid. Dos ejes continuos, cuatro cuadrantes
 nombrados y puntos ubicados con coordenadas `x` / `y` entre 0 y 1.
 
-Este módulo registra `<iswc-quadrant-chart>`.
+Este mÃ³dulo registra `<iswc-quadrant-chart>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Priorización y comparación de opciones: impacto contra esfuerzo, costo
+PriorizaciÃ³n y comparaciÃ³n de opciones: impacto contra esfuerzo, costo
 contra calidad, riesgo contra valor.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Si necesitas ejes con escala numérica real y muchos puntos → usa un gráfico
-de dispersión. Si no hay dos dimensiones, no hay matriz.
+Si necesitas ejes con escala numÃ©rica real y muchos puntos â†’ usa un grÃ¡fico
+de dispersiÃ³n. Si no hay dos dimensiones, no hay matriz.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './quadrant-chart.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-quadrant-chart>
@@ -51,9 +51,9 @@ import './quadrant-chart.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ import './quadrant-chart.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-render` | Emitido al renderizar o redibujar el componente. |
 | `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
@@ -80,9 +80,9 @@ import './quadrant-chart.js';
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
-| `iswc-toggle-group` | sí | sí | sí | no |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -97,13 +97,13 @@ el.addEventListener('iswc-render', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -121,21 +121,21 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Las coordenadas se recortan a 0..1: un punto fuera de rango se pega al borde en vez de salirse del lienzo. Las etiquetas que caerían encimadas se apilan una línea más abajo.
+Las coordenadas se recortan a 0..1: un punto fuera de rango se pega al borde en vez de salirse del lienzo. Las etiquetas que caerÃ­an encimadas se apilan una lÃ­nea mÃ¡s abajo.
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
+> <iswc-quadrant-chart> â€” matriz 2Ã—2 en SVG, sin Mermaid.
 >   <iswc-quadrant-chart>
 >     <script type="application/json">
 >       { "quadrant": { "xAxis": { "left": "Bajo", "right": "Alto" }, "points": [...] } }
@@ -160,20 +160,20 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<iswc-quadrant-chart>`.
+Tags del mÃ³dulo: `<iswc-quadrant-chart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
-Ver el preview de la galería, que trae el payload completo con grupos y estilos:
+Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estilos:
 [`./quadrant-chart.json`](./quadrant-chart.json).
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -181,18 +181,18 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./quadrant-chart.js)
+- [JavaScript](./quadrant-chart.ts)
 - [CSS](./quadrant-chart.css)
 - [Spec y layout](./quadrant-spec.js)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./quadrant-chart.json)
 
 ## App API
@@ -200,4 +200,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 Visor: `demos/diagramas/app/view.html?kind=quadrant&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=quadrant&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.

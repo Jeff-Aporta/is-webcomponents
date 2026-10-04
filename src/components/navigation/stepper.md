@@ -1,39 +1,39 @@
----
+﻿---
 tag: iswc-stepper
 tags:
   - iswc-stepper
   - iswc-stepper-step
 category: navigation
 status: public
-source: ./stepper.js
+source: ./stepper.ts
 style: ./stepper.css
 preview: ./stepper.json
 ---
 # `<iswc-stepper>` / `<iswc-stepper-step>`
 
-## Propósito
+## PropÃ³sito
 
 Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.
-Soporta orientación horizontal y vertical, colores visualmente
-distintas, iconos por slot, descripción y manejo de errores.
+Soporta orientaciÃ³n horizontal y vertical, colores visualmente
+distintas, iconos por slot, descripciÃ³n y manejo de errores.
 
-Este módulo registra `<iswc-stepper>`, `<iswc-stepper-step>`.
+Este mÃ³dulo registra `<iswc-stepper>`, `<iswc-stepper-step>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Orientación, movimiento entre vistas y navegación jerárquica o secuencial.
+OrientaciÃ³n, movimiento entre vistas y navegaciÃ³n jerÃ¡rquica o secuencial.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No separar children multi-tag ni romper teclado/ARIA.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './stepper.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-stepper active="1">
@@ -51,17 +51,17 @@ import './stepper.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `active` | string/según contrato | Fuente define default/restricción. |
-| `orientation` | string/según contrato | Fuente define default/restricción. |
-| `without-line` | boolean | Fuente define default/restricción. |
-| `color` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `description` | string/según contrato | Fuente define default/restricción. |
-| `icon` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `error` | boolean | Fuente define default/restricción. |
+| `active` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `without-line` | boolean | Fuente define default/restricciÃ³n. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `description` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `error` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -79,15 +79,15 @@ import './stepper.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-stepper-complete` | Evento personalizado del componente (stepper complete). |
 | `iswc-stepper-change` | Evento personalizado del componente (stepper change). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-stepper-complete` | no | sí | sí | no |
-| `iswc-stepper-change` | sí | sí | sí | no |
+| `iswc-stepper-complete` | no | sÃ­ | sÃ­ | no |
+| `iswc-stepper-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -102,15 +102,15 @@ el.addEventListener('iswc-stepper-complete', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `next()` | Método público declarado. |
-| `prev()` | Método público declarado. |
-| `goTo()` | Método público declarado. |
+| `next()` | MÃ©todo pÃºblico declarado. |
+| `prev()` | MÃ©todo pÃºblico declarado. |
+| `goTo()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -130,40 +130,40 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--brand` | Token leído o definido por componente. |
-| `--iswc-brand` | Token leído o definido por componente. |
-| `--brand-fg` | Token leído o definido por componente. |
-| `--iswc-brand-fg` | Token leído o definido por componente. |
-| `--text` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--muted` | Token leído o definido por componente. |
-| `--border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--success` | Token leído o definido por componente. |
-| `--iswc-success` | Token leído o definido por componente. |
-| `--danger` | Token leído o definido por componente. |
-| `--iswc-danger` | Token leído o definido por componente. |
-| `--bg-pending` | Token leído o definido por componente. |
+| `--brand` | Token leÃ­do o definido por componente. |
+| `--iswc-brand` | Token leÃ­do o definido por componente. |
+| `--brand-fg` | Token leÃ­do o definido por componente. |
+| `--iswc-brand-fg` | Token leÃ­do o definido por componente. |
+| `--text` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--muted` | Token leÃ­do o definido por componente. |
+| `--border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--success` | Token leÃ­do o definido por componente. |
+| `--iswc-success` | Token leÃ­do o definido por componente. |
+| `--danger` | Token leÃ­do o definido por componente. |
+| `--iswc-danger` | Token leÃ­do o definido por componente. |
+| `--bg-pending` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-stepper> + <iswc-stepper-step> — Web Components (vanilla, zero dependencies).
+> <iswc-stepper> + <iswc-stepper-step> â€” Web Components (vanilla, zero dependencies).
 > Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.
 >   <iswc-stepper active="1">
->     <iswc-stepper-step label="Cuenta">…</iswc-stepper-step>
->     <iswc-stepper-step label="Perfil">…</iswc-stepper-step>
->     <iswc-stepper-step label="Confirmar">…</iswc-stepper-step>
+>     <iswc-stepper-step label="Cuenta">â€¦</iswc-stepper-step>
+>     <iswc-stepper-step label="Perfil">â€¦</iswc-stepper-step>
+>     <iswc-stepper-step label="Confirmar">â€¦</iswc-stepper-step>
 >   </iswc-stepper>
 > Atributos <iswc-stepper>
->   active       number  — paso activo (0-indexed).
+>   active       number  â€” paso activo (0-indexed).
 >   orientation  horizontal | vertical    (default horizontal)
->   without-line boolean  — oculta la línea conectora.
+>   without-line boolean  â€” oculta la lÃ­nea conectora.
 >   color      default | simple | numbered | glass (default 'default')
 > Atributos <iswc-stepper-step>
 >   label       string
@@ -181,7 +181,7 @@ Documentación de cabecera preservada desde fuente:
 >     description override del description.
 > Eventos
 >   iswc-stepper-change  detail: { from, to, step }
->   iswc-stepper-complete detail: { step } — cuando active >= total.
+>   iswc-stepper-complete detail: { step } â€” cuando active >= total.
 > CSS Parts
 >   iswc-stepper: ::part(base) ::part(steps)
 >   iswc-stepper-step: ::part(base) ::part(indicator) ::part(label) ::part(line)
@@ -190,11 +190,11 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-stepper>`, `<iswc-stepper-step>`.
+Tags del mÃ³dulo: `<iswc-stepper>`, `<iswc-stepper-step>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -208,7 +208,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -216,15 +216,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./stepper.js)
+- [JavaScript](./stepper.ts)
 - [CSS](./stepper.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./stepper.json)

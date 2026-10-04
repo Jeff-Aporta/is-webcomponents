@@ -1,46 +1,46 @@
----
+﻿---
 tag: iswc-transfer
 tags:
   - iswc-transfer
   - iswc-transfer-item
 category: data
 status: public
-source: ./transfer.js
+source: ./transfer.ts
 style: ./transfer.css
 preview: ./transfer.json
 ---
 # `<iswc-transfer>` / `<iswc-transfer-item>`
 
-## Propósito
+## PropÃ³sito
 
-Doble lista de selección tipo Material/Ant. Mueve elementos entre
-origen y destino con botones, click individual, filtro de búsqueda y
-límite máximo configurable.
+Doble lista de selecciÃ³n tipo Material/Ant. Mueve elementos entre
+origen y destino con botones, click individual, filtro de bÃºsqueda y
+lÃ­mite mÃ¡ximo configurable.
 
-Este módulo registra `<iswc-transfer>`, `<iswc-transfer-item>`.
+Este mÃ³dulo registra `<iswc-transfer>`, `<iswc-transfer-item>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Presentación, comparación, movimiento u organización de datos estructurados.
+PresentaciÃ³n, comparaciÃ³n, movimiento u organizaciÃ³n de datos estructurados.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No reemplazar HTML semántico cuando contenido es estático y simple.
+No reemplazar HTML semÃ¡ntico cuando contenido es estÃ¡tico y simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './transfer.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-transfer searchable>
 <iswc-transfer-item value="a">Alpha</iswc-transfer-item>
 <iswc-transfer-item value="b" selected>Beta</iswc-transfer-item>
 <iswc-transfer-item value="c">Gamma</iswc-transfer-item>
-…
+â€¦
 </iswc-transfer>
 ```
 
@@ -52,17 +52,17 @@ import './transfer.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `source-title` | string/según contrato | Fuente define default/restricción. |
-| `target-title` | string/según contrato | Fuente define default/restricción. |
-| `searchable` | boolean | Fuente define default/restricción. |
-| `without-buttons` | boolean | Fuente define default/restricción. |
-| `without-headings` | boolean | Fuente define default/restricción. |
-| `max-target` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `selected` | boolean | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
+| `source-title` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `target-title` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `searchable` | boolean | Fuente define default/restricciÃ³n. |
+| `without-buttons` | boolean | Fuente define default/restricciÃ³n. |
+| `without-headings` | boolean | Fuente define default/restricciÃ³n. |
+| `max-target` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `selected` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -77,13 +77,13 @@ import './transfer.js';
 ### Eventos
 
 
-| Evento | Descripción |
+| Evento | DescripciÃ³n |
 | --- | --- |
 | `iswc-transfer-change` | Evento personalizado del componente (transfer change). |
 
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-transfer-change` | sí | sí | sí | no |
+| `iswc-transfer-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
 
 <details>
@@ -98,11 +98,11 @@ el.addEventListener('iswc-transfer-change', (e) => {
 
 </details>
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -127,27 +127,27 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--bg` | Token leído o definido por componente. |
-| `--iswc-bg-2` | Token leído o definido por componente. |
-| `--fg` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--muted` | Token leído o definido por componente. |
-| `--border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--brand` | Token leído o definido por componente. |
-| `--iswc-brand` | Token leído o definido por componente. |
-| `--row-h` | Token leído o definido por componente. |
-| `--iswc-bg` | Token leído o definido por componente. |
+| `--bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-2` | Token leÃ­do o definido por componente. |
+| `--fg` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--muted` | Token leÃ­do o definido por componente. |
+| `--border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--brand` | Token leÃ­do o definido por componente. |
+| `--iswc-brand` | Token leÃ­do o definido por componente. |
+| `--row-h` | Token leÃ­do o definido por componente. |
+| `--iswc-bg` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-transfer> — Doble lista de selección (vanilla, zero dependencies).
+> <iswc-transfer> â€” Doble lista de selecciÃ³n (vanilla, zero dependencies).
 > Mueve elementos entre una lista de origen y una lista de destino.
 >   <iswc-transfer id="t1">
 >     <iswc-transfer-item value="a">Alpha</iswc-transfer-item>
@@ -157,9 +157,9 @@ Documentación de cabecera preservada desde fuente:
 >   source-title       string
 >   target-title       string
 >   searchable         boolean
->   without-buttons    boolean  — sin botones prev/next
+>   without-buttons    boolean  â€” sin botones prev/next
 >   without-headings   boolean
->   max-target         number   — máximo de items en target.
+>   max-target         number   â€” mÃ¡ximo de items en target.
 > Atributos <iswc-transfer-item>
 >   value        string
 >   disabled     boolean
@@ -173,11 +173,11 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-transfer>`, `<iswc-transfer-item>`.
+Tags del mÃ³dulo: `<iswc-transfer>`, `<iswc-transfer-item>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-multiselectable`, `aria-hidden`, `aria-disabled`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-multiselectable`, `aria-hidden`, `aria-disabled`.
 
 ## Ejemplo avanzado
 
@@ -186,13 +186,13 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 <iswc-transfer-item value="a">Alpha</iswc-transfer-item>
 <iswc-transfer-item value="b" selected>Beta</iswc-transfer-item>
 <iswc-transfer-item value="c">Gamma</iswc-transfer-item>
-…
+â€¦
 </iswc-transfer>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -200,15 +200,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./transfer.js)
+- [JavaScript](./transfer.ts)
 - [CSS](./transfer.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./transfer.json)
