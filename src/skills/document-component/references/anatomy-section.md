@@ -1,4 +1,4 @@
-# Anatomía de la ficha de un componente iswc
+﻿# Anatomía de la ficha de un componente iswc
 
 La sección de anatomía es la **primera** que aparece en
 `src/components/<carpeta>/<modulo>.md`. Cubre frontmatter, título y la
@@ -65,7 +65,7 @@ import './foo.js';
 ## Reglas duras del frontmatter
 
 - `tag` siempre en kebab-case, prefijo `iswc-`.
-- `category` debe existir en `manifest.js` (ver `tests/manifest-paths.test.mjs`).
+- `category` debe existir en `src/manifest.ts` (ver `tests/manifest-paths.test.mjs`).
 - `status: public` solo si la guía dice "API de producto". Lo demás es
   `internal` y no debe aparecer en el catálogo público.
 - `source`/`style`/`preview` deben apuntar a **archivos reales**. El
