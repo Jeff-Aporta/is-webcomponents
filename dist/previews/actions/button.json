@@ -212,7 +212,7 @@
         },
         {
           "kind": "html",
-          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" variant=\"filled\">Primario</iswc-button>\n          </div>"
+          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" variant=\"filled\">Primario</iswc-button>\n            <iswc-button color=\"success\" variant=\"filled\">Confirmar</iswc-button>\n            <iswc-button color=\"warning\" variant=\"filled\">Atención</iswc-button>\n            <iswc-button color=\"danger\"  variant=\"filled\">Eliminar</iswc-button>\n            <iswc-button color=\"info\"    variant=\"filled\">Detalles</iswc-button>\n            <iswc-button color=\"error\"   variant=\"filled\">Reintentar</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"filled\">Secundario</iswc-button>\n          </div>"
         },
         {
           "kind": "html",
