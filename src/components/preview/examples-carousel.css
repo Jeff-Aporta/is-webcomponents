@@ -1,3 +1,8 @@
+/* <iswc-examples-carousel> — W19: cada bloque de UI reusa un componente del
+   kit (<iswc-card>, <iswc-button>, <iswc-icon>, <iswc-tab-group>). Este CSS
+   solo maquilla la composicion y conecta los ::part expuestos por esos
+   componentes para que el carrusel se vea coherente. */
+
 :host {
   display: block;
   width: 100%;
@@ -7,7 +12,9 @@
   --ex-bg-elev: color-mix(in srgb, currentColor 4%, transparent);
   --ex-border: color-mix(in srgb, currentColor 16%, transparent);
   --ex-radius: 0.6em;
-  --ex-card-swatch: transparent;
+  --card-swatch: transparent;
+  --ex-card-size: 12.5em;
+  --ex-card-min-height: 9.5em;
 }
 
 .root {
@@ -37,6 +44,15 @@
   color: var(--iswc-text-soft, color-mix(in srgb, currentColor 70%, transparent));
 }
 
+.tabs {
+  display: block;
+}
+
+/* El <iswc-tab-group> reusado no debe inflar su tipografia ni sus borders. */
+.tabs__group {
+  font-size: 0.85em;
+}
+
 .viewport {
   position: relative;
 }
@@ -55,58 +71,81 @@
   height: 0.4em;
 }
 
+/* ----- W19 card (envoltorio <iswc-card>) -------------------------------- */
+
 .card {
   --card-swatch: var(--ex-card-swatch);
   position: relative;
   flex: 0 0 auto;
-  width: 12.5em;
-  min-height: 9em;
+  width: var(--ex-card-size);
+  min-height: var(--ex-card-min-height);
+  cursor: pointer;
+  scroll-snap-align: center;
+  /* Override del <iswc-card> via ::part para look coherente con el host. */
+  --iswc-card-spacing: 0.5em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  /* Permitir que el swatch se vea como un tinte suave detras del contenido. */
+  background-color: var(--card-swatch);
+  background-blend-mode: lighten;
+}
+
+.card[hidden] {
+  display: none;
+}
+
+.card::part(base) {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5em;
   padding: 0.65em 0.75em 0.75em;
-  border: 0.0625em solid var(--ex-border);
   border-radius: var(--ex-radius);
   background: var(--ex-bg-elev);
-  cursor: pointer;
-  scroll-snap-align: center;
-  text-align: left;
-  font: inherit;
-  color: inherit;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  border: 0.0625em solid var(--ex-border);
+  box-sizing: border-box;
   overflow: hidden;
 }
 
-.card::before {
+/* Swatch como overlay pseudo-elemental sobre el fondo del card. */
+.card::part(base)::before {
   content: "";
   position: absolute;
   inset: 0;
   background: var(--card-swatch, transparent);
   opacity: 0.18;
   pointer-events: none;
+  z-index: 0;
 }
 
-.card:hover {
+.card::part(body),
+.card::part(media) {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: 0;
+}
+
+.card:hover::part(base) {
   border-color: color-mix(in srgb, currentColor 30%, transparent);
   transform: translateY(-0.06em);
 }
 
-.card:focus-visible {
+.card:focus-visible::part(base) {
   outline: 0.125em solid var(--iswc-color-brand, #4f46e5);
   outline-offset: 0.1em;
 }
 
-.card[active] {
+.card[active]::part(base) {
   border-color: var(--iswc-color-brand, #4f46e5);
   box-shadow: 0 0 0 0.0625em var(--iswc-color-brand, #4f46e5) inset;
 }
 
-.card[active]::before {
-  opacity: 0.28;
-}
+.card[active]::part(base)::before { opacity: 0.28; }
 
-.card__stage {
-  position: relative;
+/* Media slot: stage donde se renderiza la instancia real escalada. */
+.card__media {
   display: grid;
   place-items: center;
   block-size: 5em;
@@ -118,7 +157,7 @@
 }
 
 /* Escalar el componente real para que quepa en la card. */
-.card__stage > * {
+.card__media > * {
   max-inline-size: 100%;
   max-block-size: 100%;
   font-size: 0.78em;
@@ -127,12 +166,13 @@
 }
 
 .card__meta {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 0.4em;
   font-size: 0.85em;
   font-weight: 600;
+  position: relative;
+  z-index: 1;
 }
 
 .card__icon {
@@ -149,39 +189,24 @@
   text-overflow: ellipsis;
 }
 
+/* ----- W19 nav (envoltorio <iswc-button>) ------------------------------- */
+
 .nav {
   position: absolute;
   inset-block: 0;
   inset-inline: auto 0;
-  inline-size: 2em;
   margin-block: auto;
-  display: grid;
-  place-items: center;
-  border: none;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
   z-index: 1;
   opacity: 0;
   transition: opacity 0.2s ease;
+  --iswc-button-bg: transparent;
 }
 
-.nav--prev {
-  inset-inline: 0 auto;
-}
+.nav--prev { inset-inline: 0 auto; }
 
 .viewport:hover .nav,
-.nav:focus-visible {
-  opacity: 0.85;
-}
-
-.nav::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--ex-bg-elev);
-  border-radius: 0.4em;
-  z-index: -1;
+.nav:focus-within {
+  opacity: 0.9;
 }
 
 .empty {

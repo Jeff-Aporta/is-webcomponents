@@ -1,11 +1,18 @@
 /**
- * <iswc-examples-carousel> — Helper W15: carrusel de ejemplos predefinidos.
+ * <iswc-examples-carousel> — Helper W19: carrusel de ejemplos predefinidos.
  *
- * Estandar W15 (2026-10-03-zod-migration): el playground de cada componente
+ * Estandar W15+W19 (2026-10-03-zod-migration): el playground de cada componente
  * incluye un carrusel de ejemplos predefinidos. Cada card contiene una
  * instancia REAL del componente target escalada via CSS para caber en la
  * card. Al hacer click, todos los props del ejemplo se aplican al host
  * target (CSS selector) en la misma pagina.
+ *
+ * Reuso (W19): todos los pedazos de UI se montan con componentes del kit.
+ *   - <iswc-card>     para cada card del carrusel (variante outlined, vertical)
+ *   - <iswc-button>   para la navegacion prev/next
+ *   - <iswc-icon>     para chevrons y meta de cada card
+ *   - <iswc-tab-group> + <iswc-tab> + <iswc-tab-panel> como filtro opcional
+ *                     por categoria cuando los ejemplos las declaran.
  *
  * Uso (data-driven, recomendado en JSON):
  *
@@ -14,9 +21,9 @@
  *     target="#btn-play"
  *     label="Ejemplos predefinidos"
  *     examples='[
- *       { "label": "Primario",   "props": { "color": "brand",  "variant": "filled"   } },
- *       { "label": "Peligro",    "props": { "color": "danger", "variant": "outlined" } },
- *       { "label": "Discreto",   "props": { "color": "neutral","variant": "plain"   } }
+ *       { "label": "Primario",  "props": { "color": "brand",  "variant": "filled"   } },
+ *       { "label": "Peligro",   "props": { "color": "danger", "variant": "outlined" } },
+ *       { "label": "Discreto",  "props": { "color": "neutral","variant": "plain"   } }
  *     ]'>
  *   </iswc-examples-carousel>
  *
@@ -28,9 +35,13 @@
  *   label          string  — titulo visible del header (default: "Ejemplos").
  *   lede           string  — subtitulo opcional del header.
  *   default-index  number  — indice del ejemplo a marcar como activo al inicio.
+ *   category-field string  — nombre de la prop de `ExampleSpec` usada para
+ *                            agrupar (default: "category"). Si los ejemplos
+ *                            no la usan, no se renderiza el filtro de tabs.
  *
  * Propiedades
- *   examples       ExampleSpec[]   — array de { label, props, text?, slot? }.
+ *   examples       ExampleSpec[]   — array de { label, props, text?, slot?,
+ *                                       category? }.
  *
  * Slots light DOM
  *   (default)      — opcional. Cada hijo con `data-label="..."` se considera
@@ -42,10 +53,18 @@
  *                                  Se emite al hacer click en una card.
  *                                  `applied` indica si se pudo aplicar al
  *                                  target (true/false).
+ *   iswc-examples-category   detail: { category }
+ *                                  Se emite al cambiar de tab de categoria.
  */
-import { adoptCss, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
+// W19 reuso: cada bloque de UI del carrusel se monta con un componente del kit.
+// Estos imports son side-effect: registran los CE si el bundle los necesita.
+import '../layout/card.js';
+import '../actions/button.js';
+import '../media/icon.js';
+import '../navigation/tab-group.js';
 
 type ExampleSpec = {
   /** Texto visible en la card. */
@@ -60,20 +79,26 @@ type ExampleSpec = {
   icon?: string;
   /** Color de fondo distintivo de la card. */
   swatch?: string;
+  /** Categoria opcional. Se usa para agrupar y para el filtro por tabs. */
+  category?: string;
   /** Descripcion accesible (title). */
   description?: string;
 };
 
-const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index'];
+const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index', 'category-field'];
 
 class IswcExamplesCarousel extends ElementBase {
   static get observedAttributes(): string[] { return OBSERVED; }
 
   #titleEl!: HTMLElement;
   #ledeEl!: HTMLElement;
+  #tabsHost!: HTMLElement;
   #trackEl!: HTMLElement;
+  #prevBtn!: HTMLElement;
+  #nextBtn!: HTMLElement;
   #examples: ExampleSpec[] = [];
   #activeIndex = -1;
+  #activeCategory = '';
 
   constructor() {
     super();
@@ -85,26 +110,46 @@ class IswcExamplesCarousel extends ElementBase {
           <h3 class="title" part="title"></h3>
           <p class="lede" part="lede" hidden></p>
         </header>
+        <div class="tabs" part="tabs" hidden>
+          <iswc-tab-group class="tabs__group" part="tabs-group" placement="top" activation="auto"></iswc-tab-group>
+        </div>
         <div class="viewport" part="viewport">
-          <button type="button" class="nav nav--prev" part="nav-prev"
-                  aria-label="Ejemplos anteriores">
-            <slot name="prev-icon"><iswc-icon icon="mdi:chevron-left" aria-hidden="true"></iswc-icon></slot>
-          </button>
+          <iswc-button class="nav nav--prev" part="nav-prev" type="button"
+                       variant="ghost" color="neutral" shape="round"
+                       aria-label="Ejemplos anteriores">
+            <iswc-icon slot="start" icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
+          </iswc-button>
           <div class="track" part="track" role="list" aria-label="Ejemplos predefinidos"></div>
-          <button type="button" class="nav nav--next" part="nav-next"
-                  aria-label="Ejemplos siguientes">
-            <slot name="next-icon"><iswc-icon icon="mdi:chevron-right" aria-hidden="true"></iswc-icon></slot>
-          </button>
+          <iswc-button class="nav nav--next" part="nav-next" type="button"
+                       variant="ghost" color="neutral" shape="round"
+                       aria-label="Ejemplos siguientes">
+            <iswc-icon slot="end" icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
+          </iswc-button>
         </div>
       </div>
     `;
     this.#titleEl = shadow.querySelector<HTMLElement>('.title')!;
     this.#ledeEl = shadow.querySelector<HTMLElement>('.lede')!;
+    this.#tabsHost = shadow.querySelector<HTMLElement>('.tabs')!;
     this.#trackEl = shadow.querySelector<HTMLElement>('.track')!;
-    shadow.querySelector<HTMLButtonElement>('.nav--prev')!
-      .addEventListener('click', () => this.scrollBy(-1));
-    shadow.querySelector<HTMLButtonElement>('.nav--next')!
-      .addEventListener('click', () => this.scrollBy(1));
+    this.#prevBtn = shadow.querySelector<HTMLElement>('.nav--prev')!;
+    this.#nextBtn = shadow.querySelector<HTMLElement>('.nav--next')!;
+    // El <iswc-tab-group> interno; escuchamos iswc-tab-show para cambiar
+    // de categoria.
+    const tabGroup = shadow.querySelector<HTMLElement>('.tabs__group')!;
+    tabGroup.addEventListener('iswc-tab-show', (ev) => {
+      const detail = (ev as CustomEvent<{ name?: string }>).detail;
+      if (!detail?.name || detail.name === '__all__') {
+        this.#activeCategory = '';
+      } else {
+        this.#activeCategory = detail.name;
+      }
+      this.#applyCategoryFilter();
+      emit(this, 'iswc-examples-category', { category: this.#activeCategory });
+    });
+    // Navegacion prev/next via los <iswc-button> reusados.
+    this.#prevBtn.addEventListener('click', () => this.scrollBy(-1));
+    this.#nextBtn.addEventListener('click', () => this.scrollBy(1));
   }
 
   onConnected(): void {
@@ -147,10 +192,26 @@ class IswcExamplesCarousel extends ElementBase {
     else this.setAttribute('default-index', String(v));
   }
 
+  get categoryField(): string {
+    return (this.getAttribute('category-field') || 'category').trim() || 'category';
+  }
+  set categoryField(v: string) { setStringAttr(this, 'category-field', v); }
+
   get examples(): ExampleSpec[] { return this.#examples.slice(); }
   set examples(v: ExampleSpec[]) {
     this.#examples = Array.isArray(v) ? v.slice() : [];
     if (this.isConnected) this.#render();
+  }
+
+  /** Categorias distintas presentes en los ejemplos. */
+  #categories(): string[] {
+    const set = new Set<string>();
+    const field = this.categoryField;
+    for (const ex of this.#examples) {
+      const raw = (ex as unknown as Record<string, unknown>)[field];
+      if (typeof raw === 'string' && raw.trim()) set.add(raw.trim());
+    }
+    return [...set];
   }
 
   /** Marca un ejemplo como activo (sin aplicar al target). */
@@ -226,6 +287,7 @@ class IswcExamplesCarousel extends ElementBase {
         html: ds.html,
         icon: ds.icon,
         swatch: ds.swatch,
+        category: ds.category,
         description: ds.description,
       };
     });
@@ -233,6 +295,7 @@ class IswcExamplesCarousel extends ElementBase {
 
   #render(): void {
     this.#trackEl.replaceChildren();
+    this.#renderTabs();
     if (!this.#examples.length) {
       const empty = document.createElement('p');
       empty.className = 'empty';
@@ -240,39 +303,105 @@ class IswcExamplesCarousel extends ElementBase {
       this.#trackEl.append(empty);
       return;
     }
-    this.#examples.forEach((ex, i) => {
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className = 'card';
-      card.dataset.index = String(i);
-      card.setAttribute('role', 'listitem');
-      card.setAttribute('aria-label', ex.label);
-      if (ex.description) card.title = ex.description;
-      card.style.setProperty('--card-swatch', ex.swatch || 'transparent');
+    this.#examples.forEach((ex, i) => this.#renderCard(ex, i));
+    this.#applyCategoryFilter();
+  }
 
-      const stage = document.createElement('div');
-      stage.className = 'card__stage';
-      const preview = this.#buildPreview(ex);
-      if (preview) stage.append(preview);
+  /**
+   * Renderiza el <iswc-tab-group> con un tab por cada categoria presente.
+   * Si solo hay cero o una categoria, el filtro queda oculto.
+   */
+  #renderTabs(): void {
+    const group = this.#tabsHost.querySelector<HTMLElement>('.tabs__group');
+    if (!group) return;
+    const cats = this.#categories();
+    if (cats.length < 2) {
+      this.#tabsHost.hidden = true;
+      group.replaceChildren();
+      return;
+    }
+    this.#tabsHost.hidden = false;
+    // (Re)poblar tabs: 1 panel "Todos" + uno por categoria. Solo el panel
+    // "Todos" lleva contenido visible (los demas quedan vacios y ocultos
+    // para mantener el contrato de iswc-tab-group).
+    group.replaceChildren();
+    const allTab = document.createElement('iswc-tab');
+    allTab.setAttribute('slot', 'nav');
+    allTab.setAttribute('panel', '__all__');
+    allTab.textContent = 'Todos';
+    group.append(allTab);
 
-      const meta = document.createElement('div');
-      meta.className = 'card__meta';
-      if (ex.icon) {
-        const icon = document.createElement('iswc-icon');
-        icon.className = 'card__icon';
-        icon.setAttribute('icon', ex.icon);
-        icon.setAttribute('aria-hidden', 'true');
-        meta.append(icon);
-      }
-      const label = document.createElement('span');
-      label.className = 'card__label';
-      label.textContent = ex.label;
-      meta.append(label);
+    const allPanel = document.createElement('iswc-tab-panel');
+    allPanel.setAttribute('name', '__all__');
+    allPanel.textContent = '';
+    group.append(allPanel);
 
-      card.append(stage, meta);
-      card.addEventListener('click', () => this.applyExample(i));
-      this.#trackEl.append(card);
-    });
+    for (const c of cats) {
+      const t = document.createElement('iswc-tab');
+      t.setAttribute('slot', 'nav');
+      t.setAttribute('panel', c);
+      t.textContent = c;
+      group.append(t);
+
+      const p = document.createElement('iswc-tab-panel');
+      p.setAttribute('name', c);
+      p.textContent = '';
+      group.append(p);
+    }
+    // Forzar el panel "Todos" como activo.
+    (group as unknown as { active?: string }).active = '__all__';
+  }
+
+  /**
+   * Construye una card con <iswc-card> (W19 reuso). El click se delega en
+   * el contenedor `.track` para no atar un listener por card.
+   */
+  #renderCard(ex: ExampleSpec, i: number): void {
+    const card = document.createElement('iswc-card');
+    card.className = 'card';
+    card.dataset.index = String(i);
+    card.dataset.category = ex.category ?? '';
+    card.setAttribute('variant', 'outlined');
+    card.setAttribute('orientation', 'vertical');
+    card.setAttribute('part', 'card');
+    card.setAttribute('role', 'listitem');
+    card.setAttribute('aria-label', ex.label);
+    card.setAttribute('aria-pressed', 'false');
+    if (ex.description) card.title = ex.description;
+    if (ex.swatch) {
+      card.style.setProperty('--card-swatch', ex.swatch);
+      card.setAttribute('data-swatch', ex.swatch);
+    }
+
+    // Media slot: la instancia real escalada del componente target.
+    const media = document.createElement('div');
+    media.setAttribute('slot', 'media');
+    media.className = 'card__media';
+    const preview = this.#buildPreview(ex);
+    if (preview) media.append(preview);
+    card.append(media);
+
+    // Body slot (default): texto de la card.
+    const meta = document.createElement('div');
+    meta.className = 'card__meta';
+    if (ex.icon) {
+      const icon = document.createElement('iswc-icon');
+      icon.className = 'card__icon';
+      icon.setAttribute('icon', ex.icon);
+      icon.setAttribute('aria-hidden', 'true');
+      meta.append(icon);
+    }
+    const label = document.createElement('span');
+    label.className = 'card__label';
+    label.textContent = ex.label;
+    meta.append(label);
+    card.append(meta);
+
+    // Click handler: aplica los props al target. Se hace por card para que
+    // el evento siga funcionando si el host se mueve dentro del track.
+    card.addEventListener('click', () => this.applyExample(i));
+
+    this.#trackEl.append(card);
   }
 
   /**
@@ -344,12 +473,30 @@ class IswcExamplesCarousel extends ElementBase {
     }
   }
 
+  /**
+   * Aplica la categoria activa como filtro: oculta las cards que no
+   * pertenezcan. Si la categoria activa es vacia, las muestra todas.
+   */
+  #applyCategoryFilter(): void {
+    const active = this.#activeCategory;
+    for (const card of this.#trackEl.querySelectorAll<HTMLElement>('.card')) {
+      const cat = card.dataset.category || '';
+      const visible = !active || cat === active;
+      card.hidden = !visible;
+      card.setAttribute('aria-hidden', String(!visible));
+    }
+  }
+
   #scrollBy(dir: -1 | 1): void {
-    const card = dir > 0
-      ? this.#trackEl.querySelector<HTMLElement>('.card[active] + .card')
-      : this.#trackEl.querySelector<HTMLElement>('.card:has(+ .card[active])');
-    const target = card ?? this.#trackEl.querySelector<HTMLElement>('.card');
-    target?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+    // Buscar la primera card visible en la direccion pedida.
+    const cards = [...this.#trackEl.querySelectorAll<HTMLElement>('.card')]
+      .filter((c) => !c.hidden);
+    if (!cards.length) return;
+    const activeIdx = cards.findIndex((c) => c.hasAttribute('active'));
+    const nextIdx = dir > 0
+      ? Math.min(cards.length - 1, Math.max(0, activeIdx) + 1)
+      : Math.max(0, (activeIdx < 0 ? cards.length - 1 : activeIdx) - 1);
+    cards[nextIdx]?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
   }
 }
 
@@ -360,7 +507,7 @@ export function defineExamplesCarousel(): void {
     _defined = true;
     return;
   }
-  customElements.define('iswc-examples-carousel', IswcExamplesCarousel);
+  defineElement('iswc-examples-carousel', IswcExamplesCarousel, 'IswcExamplesCarousel');
   _defined = true;
 }
 
