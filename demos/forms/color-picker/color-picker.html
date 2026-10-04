@@ -36,7 +36,7 @@
   const paletta = document.createElement('iswc-color-picker');
   paletta.setAttribute('label', 'Acento de la marca');
   paletta.setAttribute('name', 'accent');
-  paletta.swatches = ['#0ea5e9', '#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#fb923c', '#22c55e', '#14b8a6'];
+  paletta.setAttribute('swatches', '#0ea5e9,#6366f1,#a855f7,#ec4899,#f43f5e,#fb923c,#22c55e,#14b8a6');
   paletta.value = '#6366f1';
   paletta.setAttribute('hint', 'Paleta reducida (8 colores)');
   document.querySelector('#sec-swatches').appendChild(paletta);
