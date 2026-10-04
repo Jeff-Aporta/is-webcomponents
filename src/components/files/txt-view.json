@@ -39,5 +39,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Vista de texto plano con src/content."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
