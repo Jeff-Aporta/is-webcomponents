@@ -33,7 +33,7 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 | `src/assets/` | Iconos Iconify y favicon |
 | `src/skills/is-webcomponents/` | Guía para agentes IDE (CDN-first) — **solo fuente**, no en `dist/` |
 | `src/components/**/*.md` | Docs LLM por módulo / categoría — raw bajo `…/main/src/components/` |
-| `src/manifest.js` | Índice de la galería |
+| `src/manifest.ts` | Índice de la galería |
 | `AGENTS.md` | Carta de leyes + guía para agentes (único diario en raíz) |
 | `robots.txt` | Crawl de GitHub Pages (`Allow: /`) |
 | `scripts/` · `dist/cdn/` · `tests/` | Build, CDN, invariantes (`*.test.mjs` commiteados) |

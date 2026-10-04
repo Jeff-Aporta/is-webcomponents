@@ -1,7 +1,7 @@
-# iswc-audit · motor auditor del kit iswc
+# iswc-audit · motor auditor del kit is-webcomponents
 
 Plugin auditor disciplinado, especializado en testear y probar las
-**iswc apps** (galería de Web Components basada en JSON). Recorre
+**kit is-webcomponents** (galería de Web Components basada en JSON). Recorre
 **todos** los componentes del catálogo, ejecuta pruebas de
 **consistencia JSON ↔ componente**, valida **estructuras complejas** y
 verifica con **Stagehand** que cada demo se monta y reacciona en un
@@ -27,8 +27,8 @@ deno task audit:stagehand
 # Solo un tag puntual
 deno task audit:tag -- iswc-button
 
-# Solo la categoría data-viz
-deno task audit:category -- data-viz
+# Solo una categoría (data-viz es legacy alias, ver AGENTS.md §4.1)
+deno task audit:category -- charts
 
 # Generar reporte JSON y Markdown
 deno task audit:json -- --solo-json
@@ -248,7 +248,7 @@ Las pruebas son funciones puras. Para agregar una:
   migrar a `tsc --emitDeclarationOnly` o `@swc/core`.
 - Las pruebas E2E abren UN browser por corrida. Para 185 componentes
   eso son ~185 navegaciones. Si la suite se vuelve lenta, partir por
-  categoría (`--categoria data-viz`).
+  categoría (--categoria <name>). data-viz se acepta como alias pero charts es el nombre canónico.
 - El reporte Markdown es para revisión humana. Para CI, usar el JSON y
   un script que aplique reglas (`severidad == 'error' → fail`).
 
