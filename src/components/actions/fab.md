@@ -71,9 +71,27 @@ import './fab.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-fab-click` | Evento personalizado del componente (fab click). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-fab-click` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-fab');
+el.addEventListener('iswc-fab-click', (e) => {
+  console.log('iswc-fab-click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

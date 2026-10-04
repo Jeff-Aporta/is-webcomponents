@@ -81,9 +81,27 @@ import './dropdown-item.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-dropdown-item-select` | Evento personalizado del componente (dropdown item select). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-dropdown-item-select` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-dropdown-item');
+el.addEventListener('iswc-dropdown-item-select', (e) => {
+  console.log('iswc-dropdown-item-select', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -75,6 +75,15 @@ import './dropdown.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-select` | sí | sí | sí | sí |
@@ -82,6 +91,19 @@ import './dropdown.js';
 | `iswc-after-show` | no | sí | sí | sí |
 | `iswc-hide` | no | sí | sí | sí |
 | `iswc-after-hide` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-dropdown');
+el.addEventListener('iswc-select', (e) => {
+  console.log('iswc-select', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

@@ -66,10 +66,29 @@ import './share-button.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-share` | Evento personalizado del componente (share). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-share` | sí `{ how, url }` | sí | sí | no |
 | `iswc-error` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-share-button');
+el.addEventListener('iswc-share', (e) => {
+  console.log('iswc-share', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

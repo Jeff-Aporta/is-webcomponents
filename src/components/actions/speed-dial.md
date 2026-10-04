@@ -89,10 +89,29 @@ En `<iswc-speed-dial-action>`: slot `default` (etiqueta) y slot `icon`
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-toggle` | Emitido al alternar el estado abierto/cerrado. |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-toggle` | sí | sí | sí | no |
 | `iswc-select` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-speed-dial');
+el.addEventListener('iswc-toggle', (e) => {
+  console.log('iswc-toggle', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

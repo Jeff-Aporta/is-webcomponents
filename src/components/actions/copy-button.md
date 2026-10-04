@@ -79,10 +79,29 @@ import './copy-button.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-error` | Emitido cuando se produce un error. |
+| `iswc-copy` | Evento personalizado del componente (copy). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-error` | no | sí | sí | no |
 | `iswc-copy` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-copy-button');
+el.addEventListener('iswc-error', (e) => {
+  console.log('iswc-error', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

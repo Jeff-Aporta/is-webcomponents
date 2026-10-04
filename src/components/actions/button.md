@@ -89,12 +89,33 @@ import './button.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-focus` | Emitido cuando el componente recibe foco. |
+| `iswc-blur` | Emitido cuando el componente pierde foco. |
+| `iswc-click` | Emitido al hacer clic sobre el componente. |
+| `iswc-invalid` | Emitido cuando la validación de formulario falla. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-focus` | sí | sí | sí | no |
 | `iswc-blur` | sí | sí | sí | no |
 | `iswc-click` | sí | sí | sí | no |
 | `iswc-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-button');
+el.addEventListener('iswc-focus', (e) => {
+  console.log('iswc-focus', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 

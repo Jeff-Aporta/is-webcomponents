@@ -72,11 +72,31 @@ import './context-menu.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-open` | Evento personalizado del componente (open). |
+| `iswc-close` | Evento personalizado del componente (close). |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-open` | sí | sí | sí | no |
 | `iswc-close` | no | sí | sí | no |
 | `iswc-select` | sí | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-context-menu');
+el.addEventListener('iswc-open', (e) => {
+  console.log('iswc-open', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 
