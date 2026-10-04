@@ -130,5 +130,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Contenedor flex declarativo (port ISP). Arrastra la esquina ↘ del escenario\n          para redimensionar; los switches activan/desactivan props booleanas\n          (<code class=\"code\">wrap</code>, <code class=\"code\">grow</code>, <code class=\"code\">inline</code>)."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>gap</code>",
+            "type": "CSS · default responsive 0.2 / 0.35 / 0.5rem"
+          },
+          {
+            "name": "<code>direction</code>",
+            "type": "row (default) · column"
+          },
+          {
+            "name": "<code>wrap</code>",
+            "type": "boolean (switch en el playground)"
+          },
+          {
+            "name": "<code>justify</code>",
+            "type": "start · center · end · between · around · evenly · …"
+          },
+          {
+            "name": "<code>align</code> / <code>items</code>",
+            "type": "start · center · end · stretch · baseline"
+          },
+          {
+            "name": "<code>grow</code>",
+            "type": "boolean → <code>flex: 1 1 auto</code>"
+          },
+          {
+            "name": "<code>inline</code>",
+            "type": "boolean → <code>display: inline-flex</code>"
+          },
+          {
+            "name": "<code>width</code>, <code>height</code>, <code>min-*</code>, <code>max-*</code>",
+            "type": "valores CSS"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"fx-controls\" id=\"fxControls\">\n            <label class=\"fx-field\">direction\n              <select id=\"fxDirection\">\n                <option value=\"row\" selected>row</option>\n                <option value=\"column\">column</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">justify\n              <select id=\"fxJustify\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"between\">between</option>\n                <option value=\"around\">around</option>\n                <option value=\"evenly\">evenly</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">align\n              <select id=\"fxAlign\">\n                <option value=\"\">(default)</option>\n                <option value=\"start\">start</option>\n                <option value=\"center\" selected>center</option>\n                <option value=\"end\">end</option>\n                <option value=\"stretch\">stretch</option>\n                <option value=\"baseline\">baseline</option>\n              </select>\n            </label>\n            <label class=\"fx-field\">gap\n              <select id=\"fxGap\">\n                <option value=\"\">(responsive)</option>\n                <option value=\"0.25rem\">0.25rem</option>\n                <option value=\"0.5rem\" selected>0.5rem</option>\n                <option value=\"1rem\">1rem</option>\n              </select>\n            </label>\n            <div class=\"fx-bools\">\n              <iswc-switch id=\"fxWrap\">wrap</iswc-switch>\n              <iswc-switch id=\"fxGrow\">grow</iswc-switch>\n              <iswc-switch id=\"fxInline\">inline</iswc-switch>\n            </div>\n          </div>\n          <p class=\"fx-attr\" id=\"fxAttrSnippet\">&lt;iswc-flex-layout&gt;</p>\n          <div class=\"fx-stage\" id=\"fxStage\" title=\"Redimensionar ↘\">\n            <iswc-flex-layout id=\"fxPlay\" gap=\"0.5rem\" justify=\"center\" align=\"center\">\n              <span class=\"fx-chip fx-chip--sm\">🍎</span>\n              <span class=\"fx-chip fx-chip--md\">🧀 <span class=\"lbl\">Queso</span></span>\n              <span class=\"fx-chip fx-chip--lg\">🦒 <span class=\"lbl\">Jirafa alta</span></span>\n              <span class=\"fx-chip fx-chip--sm\">🥝 <span class=\"lbl\">Kiwi</span></span>\n              <span class=\"fx-chip fx-chip--xl\">🍕</span>\n              <span class=\"fx-chip fx-chip--md\">🌮 <span class=\"lbl\">Taco XL</span></span>\n            </iswc-flex-layout>\n          </div>\n          <p class=\"fx-hint\">Redimensiona el recuadro (↘). El contorno marca el área del flex.\n            <code class=\"code\">grow</code> llena el escenario; <code class=\"code\">wrap</code> salta de línea al estrechar;\n            <code class=\"code\">inline</code> encoge al contenido.</p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -25,5 +25,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Port de <code class=\"code\">FloatingComponent</code>. El slot <code class=\"code\">float</code> no se desmonta: <code class=\"code\">open</code> solo cambia opacidad. Pasá el mouse por la fila."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-float-card open horizontal=\"right\" vertical=\"center\">\n  <span>Fila</span>\n  <iswc-button slot=\"float\" variant=\"plain\">Acción</iswc-button>\n</iswc-float-card>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

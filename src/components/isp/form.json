@@ -86,5 +86,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Ficha con Aceptar / Cancelar. El cuerpo se define en JSON compacto\n          (<code class=\"code\">[tag, attrs?, …hijos]</code>) vía\n          <code class=\"code\">json2html</code> / <code class=\"code\">html2json</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>json2html(body)</code>",
+            "desc": "monta light DOM desde JSON compacto"
+          },
+          {
+            "metodo": "<code>html2json()</code>",
+            "desc": "serializa light DOM"
+          },
+          {
+            "metodo": "<code>toJSON()</code>",
+            "desc": "<code>{ mode, body, values, … }</code>"
+          },
+          {
+            "metodo": "<code>fromJSON(json)</code>",
+            "desc": "chrome + body + values"
+          },
+          {
+            "metodo": "<code>getValues</code> / <code>setValues</code>",
+            "desc": "mapa de controles con <code>name</code>"
+          },
+          {
+            "metodo": "<code>IswcForm.json2html</code> / <code>html2json</code>",
+            "desc": "estáticos (mismo codec global)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```js\nform.fromJSON({\n  mode: 'edit',\n  body: [\n    ['h3', { slot: 'header' }, 'Curso'],\n    ['div', { slot: 'content', style: 'display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem' },\n      ['iswc-input', { name: 'icurso', label: 'Código', required: true, 'full-width': true }],\n      ['iswc-input', { name: 'ncurso', label: 'Nombre', 'full-width': true }],\n      ['iswc-switch', { name: 'activo' }, 'Activo'],\n    ],\n  ],\n  values: { icurso: 'C001', ncurso: 'Nómina', activo: true },\n});\n\nform.html2json(); // solo el light DOM\nform.toJSON();    // chrome + body + values\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -61,5 +61,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo con selector modal (port <code class=\"code\">BtnRef</code>). El modal usa\n          <code class=\"code\">&lt;iswc-catalogo-gen select-mode&gt;</code> centrado. Controller vía\n          <code class=\"code\">createBtnRefController</code> — <strong>sin acciones CRUD</strong>, solo listado y selección."
+      },
+      "ejemplos": {
+        "content": "```js\nimport { createBtnRefController } from './isp/controller-from-config.min.js';\n\nel.controller = createBtnRefController({\n  entrie: 'Aplicación',\n  primaryKeys: ['app'],\n  ColumnsBtnRef: ['app'],\n  columns: [{ field: 'app', header: 'Aplicación' }],\n  mock: [{ app: 'ContaPyme' }, { app: 'AgroWin' }],\n});\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

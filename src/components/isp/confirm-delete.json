@@ -85,5 +85,24 @@
       "lede": "Para confirmaciones ordinarias siguen estando\r\n          <code class=\"code\">&lt;iswc-confirm-modal&gt;</code> y\r\n          <code class=\"code\">&lt;iswc-popconfirm&gt;</code>. La fricción de re-escribir la clave\r\n          solo se justifica si el dato no se puede recuperar.",
       "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Confirmación destructiva \"escribe para confirmar\": el botón Eliminar\r\n          sigue bloqueado hasta que el usuario re-escribe la clave del registro.\r\n          En la demo, el NIT es <code class=\"code\">900123456</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"del\" color=\"danger\">Eliminar</iswc-button>\n<iswc-confirm-delete for=\"del\" entity=\"tercero\"\n  pk-label=\"NIT\" confirm-value=\"900123456\"></iswc-confirm-delete>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

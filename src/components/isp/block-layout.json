@@ -124,5 +124,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Caja de bloque que mide su propio ancho y publica el breakpoint como\r\n          <code class=\"code\">data-sizew</code>, banderas <code class=\"code\">data-szw-*</code> y las custom properties\r\n          <code class=\"code\">--clientw</code> / <code class=\"code\">--lerpw</code>. Port del <code class=\"code\">BlockLayout.svelte</code> de ISP."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>inline</code>",
+            "desc": "boolean → <code>display:inline-block</code>"
+          },
+          {
+            "name": "<code>cscroll</code>",
+            "desc": "boolean → <code>overflow:auto</code>"
+          },
+          {
+            "name": "<code>json2html</code> / <code>html2json</code>",
+            "desc": "cuerpo light DOM ↔ JSON compacto"
+          },
+          {
+            "name": "<code>toJSON</code> / <code>fromJSON</code>",
+            "desc": "<code>{ inline, cscroll, body }</code>"
+          },
+          {
+            "name": "<code>data-sizew</code>",
+            "desc": "reflejado: xs · sm · md · lg · xl"
+          },
+          {
+            "name": "<code>data-szw-xs…xl</code>",
+            "desc": "reflejados; presentes si el breakpoint es &lt;= al actual"
+          },
+          {
+            "name": "<code>--clientw</code> / <code>--lerpw</code>",
+            "desc": "ancho px · progreso sm→xl"
+          },
+          {
+            "name": "<code>iswc-breakpoint</code>",
+            "desc": "detail <code>{ width, sizew, boolszw, lerpw(b0,b1) }</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-block-layout id=\"bl-intro\" style=\"border:1px solid var(--iswc-border);padding:1rem;resize:horizontal;overflow:auto;min-width:180px\">\r\n            <p>Redimensiona esta caja tirando de la esquina inferior derecha.</p>\r\n            <p>sizew actual: <strong id=\"bl-out\">—</strong></p>\r\n          </iswc-block-layout>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
