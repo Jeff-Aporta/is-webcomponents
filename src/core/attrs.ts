@@ -1,21 +1,14 @@
 /**
  * attrs.ts — Todo lo relativo a los ATRIBUTOS de un componente del kit.
  *
- * Consolida dos cosas que siempre se usan juntas y vivian separadas:
- *
- *   1. Los DECORADORES (`@attrBool`, `@attrStr`, `@attrEnum`, `@attrNum`), que
- *      convierten un atributo del DOM en una propiedad tipada y lo registran
- *      para `observedAttributes`.
- *   2. El mixin STYLE-ATTRS, que vuelca atributos a custom properties inline
- *      para poder personalizar sin escribir un `<style>` aparte.
- *
- * Los dos responden a la misma pregunta —«que atributos tiene este componente y
- * que hacen»— y separarlos obligaba a importar de dos sitios en cada fichero.
- *
- * Lo que hace a un elemento *ser* un elemento (registro, shadow, eventos) esta
- * en `element.ts`.
+ * Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado
+ * en `element-base.ts` y en `withStyleAttrs` por regla del usuario. Un
+ * componente NO debe setear `--iswc-*-X` desde props; el consumer define los
+ * tokens vía CSS class, inline style o las props semánticas. Las funciones
+ * `syncStyleAttr` / `syncPresentStyleAttrs` / `applyToneRamp` se conservan
+ * para uso explícito (p.ej. `<iswc-button>` usa `syncPresentStyleAttrs`
+ * para re-aplicar roles finos encima de la rampa).
  */
-
 /** Una entrada del mapa: la custom property, o la property con condicion. */
 export type StyleAttrDef = string | { prop: string; onlyColorValues?: boolean };
 export type StyleAttrMap = Record<string, StyleAttrDef>;
@@ -133,18 +126,20 @@ export function applyToneRamp(el: HTMLElement, color: string | null, opts: { pre
 
 /**
  * Mixin para componentes que NO extienden `ElementBase` (los que siguen
- * heredando de `HTMLElement` directamente). Da el mismo comportamiento que
- * `ElementBase`: volcar el mapa al conectar y mantenerlo al cambiar el
- * atributo, sin que cada componente repita el cableado.
+ * heredando de `HTMLElement` directamente).
  *
  *   class IsFoo extends withStyleAttrs(HTMLElement) {
  *     static styleAttrs = { radius: '--iswc-foo-radius' };
  *     static get observedAttributes() { return [...OBSERVED, ...IsFoo.styleAttrNames]; }
  *   }
  *
+ * Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado
+ * por regla del usuario (un componente NO debe setear `--iswc-*-X` desde
+ * props; el consumer define los tokens vía CSS class, inline style o props
+ * semánticas). El campo `static styleAttrs` se conserva como documentación
+ * histórica del contrato anterior, pero ya no se vuelca al host.
  * Encadena con los callbacks de la subclase: si la clase base ya definía
  * `connectedCallback` / `attributeChangedCallback`, se llaman igual.
- *
  */
 type Constructor<T = HTMLElement> = new (...args: any[]) => T;
 
@@ -159,14 +154,16 @@ export function withStyleAttrs<T extends Constructor>(Base: T) {
     // encadenado real, y ademas respeta la cadena aunque la base los anada
     // despues.
     connectedCallback(...args: unknown[]): void {
-      syncStyleAttrs(this, (this.constructor as typeof StyleAttrsElement).styleAttrs);
+      // Phase V5: deshabilitado el volcado automático del mapa styleAttrs.
+      // syncStyleAttrs(this, (this.constructor as typeof StyleAttrsElement).styleAttrs);
       const heredado = (Base.prototype as Record<string, unknown>)['connectedCallback'];
       if (typeof heredado === 'function') heredado.apply(this, args);
     }
 
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null, ...rest: unknown[]): void {
-      const map = (this.constructor as typeof StyleAttrsElement).styleAttrs;
-      if (map && name in map) syncStyleAttrs(this, { [name]: map[name]! });
+      // Phase V5: deshabilitado el volcado automático del mapa styleAttrs.
+      // const map = (this.constructor as typeof StyleAttrsElement).styleAttrs;
+      // if (map && name in map) syncStyleAttrs(this, { [name]: map[name]! });
       const heredado = (Base.prototype as Record<string, unknown>)['attributeChangedCallback'];
       if (typeof heredado === 'function') heredado.apply(this, [name, oldValue, newValue, ...rest]);
     }
