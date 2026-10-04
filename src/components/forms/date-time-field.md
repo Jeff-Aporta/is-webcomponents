@@ -1,36 +1,36 @@
-﻿---
+---
 tag: iswc-date-time-field
 tags:
   - iswc-date-time-field
 category: forms
 status: public
-source: ./date-time-field.ts
+source: ./date-time-field.js
 style: ./date-time-field.css
 preview: ./date-time-field.json
 ---
 # `<iswc-date-time-field>`
 
-## PropÃ³sito
+## Propósito
 
-Campo editable por secciones (DateField de MUI X). Cada secciÃ³n es un spinbutton: flechas, dÃ­gitos, izquierda/derecha, Retroceso. El orden lo decide el locale.
+Campo editable por secciones (DateField de MUI X). Cada sección es un spinbutton: flechas, dígitos, izquierda/derecha, Retroceso. El orden lo decide el locale.
 
-Este mÃ³dulo registra `<iswc-date-time-field>`.
+Este módulo registra `<iswc-date-time-field>`.
 
-## CuÃ¡ndo usarlo
+## Cuándo usarlo
 
-Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
+Captura, selección y validación de valores compatibles con formularios.
 
-## CuÃ¡ndo no usarlo
+## Cuándo no usarlo
 
-No duplicar validaciÃ³n, form association ni pickers shared.
+No duplicar validación, form association ni pickers shared.
 
-## ImportaciÃ³n
+## Importación
 
 ```js
 import './date-time-field.js';
 ```
 
-## Ejemplo mÃ­nimo
+## Ejemplo mínimo
 
 ```html
 <iswc-date-time-field></iswc-date-time-field>
@@ -46,7 +46,7 @@ Wrapper de factory: hereda contrato completo de [`defineDateField`](../_shared/d
 
 No expone.
 
-#### Propiedades pÃºblicas
+#### Propiedades públicas
 
 No expone.
 
@@ -57,7 +57,7 @@ No expone.
 ### Eventos
 
 
-| Evento | DescripciÃ³n |
+| Evento | Descripción |
 | --- | --- |
 
 No expone.
@@ -75,11 +75,11 @@ el.addEventListener('click', (e) => {
 
 </details>
 
-### MÃ©todos y propiedades pÃºblicas
+### Métodos y propiedades públicas
 
 No expone.
 
-Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -87,37 +87,32 @@ No expone.
 
 ### Custom states
 
-Hereda de la factory [`defineDateField`](../_shared/date-field-element.js), que aplica los siguientes states en el host:
-
-| Estado | Uso |
-| --- | --- |
-| `:state(disabled)` | Atributo `disabled` presente o `formDisabledCallback` recibido. |
-| `:state(invalid)` | ValidaciÃ³n falla (required+vacÃ­o, secciÃ³n incompleta, fuera de min/max o atributo `invalid`). |
+No expone.
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leÃ­do o definido por componente. |
-| `--iswc-text` | Token leÃ­do o definido por componente. |
-| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-border` | Token leÃ­do o definido por componente. |
-| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
-| `--iswc-accent` | Token leÃ­do o definido por componente. |
-| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
-| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
-| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leído o definido por componente. |
+| `--iswc-text` | Token leído o definido por componente. |
+| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--iswc-control-bg` | Token leído o definido por componente. |
+| `--iswc-border` | Token leído o definido por componente. |
+| `--iswc-radius-sm` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leído o definido por componente. |
+| `--iswc-accent-bg` | Token leído o definido por componente. |
+| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--iswc-control-bg-hover` | Token leído o definido por componente. |
 
-### IntegraciÃ³n con formularios
+### Integración con formularios
 
-No declara integraciÃ³n form-associated propia en este mÃ³dulo.
+No declara integración form-associated propia en este módulo.
 
 ## Comportamiento
 
-DocumentaciÃ³n de cabecera preservada desde fuente:
+Documentación de cabecera preservada desde fuente:
 
-> <iswc-date-time-field> â€” Campo de fecha y hora por secciones
+> <iswc-date-time-field> — Campo de fecha y hora por secciones
 > (MUI DateTimeField). El valor es `yyyy-mm-ddTHH:mm[:ss]`.
 > Atributos: label, hint, name, value, min, max, required, disabled, readonly,
 >            clearable, locale, ampm, hour24, seconds, invalid
@@ -128,11 +123,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/date-field-element.js`](../_shared/date-field-element.js)
 
-Tags del mÃ³dulo: `<iswc-date-time-field>`.
+Tags del módulo: `<iswc-date-time-field>`.
 
 ## Accesibilidad
 
-Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
+Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
 
 ## Ejemplo avanzado
 
@@ -142,7 +137,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Errores comunes
 
-- Usar tag sin importar mÃ³dulo primero.
+- Usar tag sin importar módulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -150,15 +145,15 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno ex
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementaciÃ³n paralela.
+- Reusar componente y dependencias antes de implementación paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
-- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
-- No modificar API basÃ¡ndose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
+- Leer callers/shared antes de cambiar; corregir raíz común.
+- No modificar API basándose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./date-time-field.ts)
+- [JavaScript](./date-time-field.js)
 - [CSS](./date-time-field.css)
-- [Ãndice de categorÃ­a](../../specs/componentes.md)
+- [Índice de categoría](./LLM.md)
 - [Preview](./date-time-field.json)
