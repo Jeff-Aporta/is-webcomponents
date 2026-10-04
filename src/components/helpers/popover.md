@@ -136,7 +136,9 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 ### Custom states
 
-No expone.
+| Estado | Uso |
+| --- | --- |
+| `:state(open)` | El popover está visible; sincronizado con `aria-expanded` en el ancla. |
 
 ### CSS custom properties
 
