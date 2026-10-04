@@ -26,7 +26,8 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *   iswc-select       detalle: { item, value }  — al elegir un item
  *   iswc-open, iswc-close
  *
- * Custom states: open, closed
+ * Estado abierto/cerrado: se refleja con el atributo `open` en el host
+ * (consultable con `[open]` y `aria-expanded`); no expone `:state()`.
  */
 (() => {
   const OBSERVED = ['for', 'placement', 'distance', 'disabled', 'scroll-lock'];
