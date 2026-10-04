@@ -34,5 +34,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Contenido asociado a una <code class=\"code\">&lt;iswc-tab&gt;</code>. Solo se muestra el panel cuyo <code class=\"code\">name</code> coincide con el <code class=\"code\">panel</code> de la pestaña activa."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tab-group>\n  <iswc-tab slot=\"nav\" panel=\"uno\">Uno</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"dos\">Dos</iswc-tab>\n  <iswc-tab-panel name=\"uno\">\n    <p>El panel es un contenedor normal: acepta cualquier contenido.</p>\n    <iswc-tag color=\"brand\">Contenido rico</iswc-tag>\n  </iswc-tab-panel>\n  <iswc-tab-panel name=\"dos\">Segundo panel.</iswc-tab-panel>\n</iswc-tab-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

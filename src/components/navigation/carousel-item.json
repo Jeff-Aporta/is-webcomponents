@@ -35,5 +35,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Cada diapositiva de un <code class=\"code\">&lt;iswc-carousel&gt;</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-carousel style=\"max-width:520px\">\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>\n</iswc-carousel>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

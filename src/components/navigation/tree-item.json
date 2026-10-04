@@ -41,5 +41,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Nodo de un <code class=\"code\">&lt;iswc-tree&gt;</code>. Anidando items se construye la jerarquía; <code class=\"code\">expanded</code> controla el pliegue."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tree>\n  <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\n  </iswc-tree-item>\n  <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\n</iswc-tree>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

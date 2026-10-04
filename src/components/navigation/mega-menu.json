@@ -60,5 +60,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Mega-menú con varias columnas y un bloque destacado opcional. Útil para e-commerce, portales masivos o headers corporativos."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

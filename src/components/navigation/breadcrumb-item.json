@@ -16,11 +16,11 @@
           "kind": "demo",
           "html": "<iswc-breadcrumb>\r\n            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>",
           "controls": [
-              {
-                "control": "text",
-                "prop": "attr:href",
-                "label": "href"
-              }
+            {
+              "control": "text",
+              "prop": "attr:href",
+              "label": "href"
+            }
           ],
           "equivNote": "Con href pinta enlace; vacío = current; sin href = span.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -44,5 +44,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Cada eslabón de un <code class=\"code\">&lt;iswc-breadcrumb&gt;</code>. Puede ser enlace (<code class=\"code\">href</code>) o texto plano cuando es la página actual."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-breadcrumb>\n  <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\n</iswc-breadcrumb>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

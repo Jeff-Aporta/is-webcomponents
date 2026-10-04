@@ -46,5 +46,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Paso de un <code class=\"code\">&lt;iswc-stepper&gt;</code>, con su título, descripción y estado."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-stepper current=\"1\">\n  <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\n</iswc-stepper>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

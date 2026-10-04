@@ -170,5 +170,73 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Wrapper que añade scroll horizontal (o vertical) con botones prev/next\r\n          automáticos cuando el contenido del slot desborda. Ideal para\r\n          listas de pills, carruseles de chips, drawers inline, etc."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>orientation</code>",
+            "type": "horizontal | vertical | both",
+            "default": "horizontal",
+            "desc": "Dirección del scroll."
+          },
+          {
+            "name": "<code>without-scroll-buttons</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta los botones prev/next."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-scroll-start</code>",
+            "cuando": "Click en botón prev."
+          },
+          {
+            "evento": "<code>iswc-scroll-end</code>",
+            "cuando": "Click en botón next."
+          },
+          {
+            "evento": "<code>iswc-scroll-overflow</code>",
+            "cuando": "Cambia el estado de overflow. <code>detail.overflowing</code>."
+          },
+          {
+            "evento": "<code>iswc-scroll-position</code>",
+            "cuando": "Al scrollear. <code>detail.scrollLeft, scrollTop</code>."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "(default)",
+            "desc": "Contenido a scrollear."
+          },
+          {
+            "slot": "scroll-button-start",
+            "desc": "Override del icono del botón prev."
+          },
+          {
+            "slot": "scroll-button-end",
+            "desc": "Override del icono del botón next."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-scroller>\n  <iswc-button>Pills 1</iswc-button>\n  <iswc-button>Pills 2</iswc-button>\n  …\n</iswc-scroller>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "states"
+    ]
+  }
 }
