@@ -87,7 +87,12 @@ No expone.
 
 ### Custom states
 
-No expone.
+Hereda de la factory [`defineDateField`](../_shared/date-field-element.js), que aplica los siguientes states en el host:
+
+| Estado | Uso |
+| --- | --- |
+| `:state(disabled)` | Atributo `disabled` presente o `formDisabledCallback` recibido. |
+| `:state(invalid)` | Validación falla (required+vacío, sección incompleta, fuera de min/max o atributo `invalid`). |
 
 ### CSS custom properties
 
