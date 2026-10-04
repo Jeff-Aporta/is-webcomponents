@@ -68,6 +68,50 @@ body {
     pointer-events: none;
   }
 
+  & .shell-brand {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    padding-block: 0.42em;
+    padding-inline: 0.7em 0.85em;
+    border: 1px solid transparent;
+    border-radius: 0.55em;
+    background: transparent;
+    color: var(--iswc-text);
+    font: inherit;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 120ms ease, border-color 120ms ease,
+                color 120ms ease, filter 120ms ease, transform 120ms ease;
+
+    &:hover {
+      background: var(--iswc-control-bg-hover);
+      border-color: var(--iswc-border);
+    }
+    &:active { transform: translateY(1px); }
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  & .shell-brand__icon {
+    flex: 0 0 auto;
+    font-size: 1.3em;
+    color: var(--iswc-accent);
+  }
+
+  & .shell-brand__text {
+    flex: 0 0 auto;
+    color: var(--iswc-text);
+  }
+
   & .brand-wrap {
     position: relative;
     flex: 0 0 auto;

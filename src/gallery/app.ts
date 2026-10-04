@@ -109,6 +109,8 @@ const shellNav = el<HTMLElement>('shellNav');
 const frame = el<FrameElement>('previewFrame');
 const previewHost = el<PreviewHostElement>('previewHost');
 const brandPalette = el<PaletteSelectorElement>('brandPalette');
+// Logo ISWC en top-left del header (Phase W7). Click -> home + URL limpia.
+const shellBrand = el<HTMLAnchorElement>('shellBrand');
 
 const params = new URLSearchParams(location.search);
 const themes = new Set<ThemeName>(['light', 'dark']);
@@ -541,6 +543,14 @@ document.addEventListener('iswc-palette-change', (e: Event) => {
 fullscreenBtn.addEventListener('click', () => {
   const url = controlledShellSrc(component.tag);
   window.open(url, '_blank', 'noopener');
+});
+// Logo ISWC del top-left (Phase W7). Click -> Inicio (home) y URL limpia
+// (updateUrl limpia la query cuando component === HOME; W6).
+shellBrand.addEventListener('click', (e: MouseEvent) => {
+  // El href='./' es la salida keyboard-only / middle-click; cancelamos el
+  // click izquierdo para usar el SPA routing (no recarga la página).
+  e.preventDefault();
+  selectComponent(HOME.tag);
 });
 
 showPreview();
