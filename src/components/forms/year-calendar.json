@@ -41,5 +41,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Vista de los 12 meses de un año para saltar rápido de periodo."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-year-calendar value=\"2026-08\"></iswc-year-calendar>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -131,5 +131,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Reloj analógico (TimeClock de MUI X). Arrastra la manecilla, haz clic o usa el teclado. Al soltar avanza de horas a minutos."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "default": "HH:mm[:ss]"
+          },
+          {
+            "name": "<code>ampm</code> / <code>hour24</code>",
+            "default": "según locale · fuerza 24 h"
+          },
+          {
+            "name": "<code>seconds</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>view</code> (reloj)",
+            "default": "hours · minutes · seconds"
+          },
+          {
+            "name": "<code>layout</code> (digital)",
+            "default": "list · sections"
+          },
+          {
+            "name": "<code>step</code> / <code>minutes-step</code>",
+            "default": "30 · 5"
+          },
+          {
+            "name": "<code>min-time</code> / <code>max-time</code>",
+            "default": "—"
+          },
+          {
+            "name": "<code>skip-disabled</code>",
+            "default": "off (solo digital)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-time-clock id=\"tc\" value=\"09:30\" ampm locale=\"en-US\"></iswc-time-clock>\r\n          <iswc-time-clock value=\"14:15\" hour24 locale=\"es\"></iswc-time-clock>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -44,5 +44,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Editor por bloques tipo Notion. Escribe <kbd class=\"ic\">/</kbd> al inicio de una línea para cambiar el tipo. <kbd class=\"ic\">Enter</kbd> crea otro bloque, <kbd class=\"ic\">Backspace</kbd> sobre texto vacío elimina."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

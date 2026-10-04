@@ -41,5 +41,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Agrupa varios <code class=\"code\">&lt;iswc-radio&gt;</code> bajo un mismo nombre y expone el valor seleccionado como un único control de formulario."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\n  <iswc-radio value=\"contado\">Contado</iswc-radio>\n  <iswc-radio value=\"credito\">Crédito</iswc-radio>\n  <iswc-radio value=\"mixto\">Mixto</iswc-radio>\n</iswc-radio-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

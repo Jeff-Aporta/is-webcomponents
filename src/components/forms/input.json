@@ -18,11 +18,36 @@
           "html": "<iswc-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></iswc-input>",
           "target": "#demo",
           "controls": [
-            { "control": "text", "prop": "attr:label", "label": "Label", "group": "Contenido" },
-            { "control": "text", "prop": "attr:placeholder", "label": "Placeholder", "group": "Contenido" },
-            { "control": "text", "prop": "attr:hint", "label": "Hint", "group": "Contenido" },
-            { "control": "boolean", "prop": "attr:clearable", "label": "Limpiable", "group": "Estado" },
-            { "control": "boolean", "prop": "attr:required", "label": "Requerido", "group": "Estado" }
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "Label",
+              "group": "Contenido"
+            },
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "Placeholder",
+              "group": "Contenido"
+            },
+            {
+              "control": "text",
+              "prop": "attr:hint",
+              "label": "Hint",
+              "group": "Contenido"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:clearable",
+              "label": "Limpiable",
+              "group": "Estado"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "Requerido",
+              "group": "Estado"
+            }
           ],
           "equivNote": "type especializa chrome (ojo, clear, steppers) sobre el FA base.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -351,5 +376,154 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo de texto form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField de MUI</a>:\r\n          tres <em>appearances</em>, estado de error ligado a la validación nativa, adornos, contador de\r\n          caracteres y ancho controlable. Participa en <code class=\"code\">&lt;form&gt;</code> vía\r\n          <code class=\"code\">ElementInternals</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>type</code>",
+            "desc": "<code>text</code> (default) · email · password · number · search · tel · url · date"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "desc": "<code>outlined</code> (default) · <code>filled</code> · <code>underlined</code>"
+          },
+          {
+            "name": "<code>label-placement</code>",
+            "desc": "<code>top</code> (default) · <code>start</code>"
+          },
+          {
+            "name": "<code>name</code> <code>value</code> <code>placeholder</code> <code>autocomplete</code>",
+            "desc": "string"
+          },
+          {
+            "name": "<code>label</code> <code>hint</code>",
+            "desc": "texto o slots homónimos"
+          },
+          {
+            "name": "<code>error-text</code>",
+            "desc": "mensaje que sustituye al <code>hint</code> cuando hay error"
+          },
+          {
+            "name": "<code>prefix</code> <code>suffix</code>",
+            "desc": "adorno de texto corto, atenuado y no interactivo"
+          },
+          {
+            "name": "<code>min</code> <code>max</code> <code>step</code> <code>maxlength</code>",
+            "desc": "pasan al input nativo interno"
+          },
+          {
+            "name": "<code>disabled</code> <code>required</code> <code>readonly</code>",
+            "desc": "boolean"
+          },
+          {
+            "name": "<code>clearable</code> <code>password-toggle</code>",
+            "desc": "boolean · botón de limpiar y ojo de contraseña"
+          },
+          {
+            "name": "<code>error</code>",
+            "desc": "boolean · fuerza el estado visual de peligro"
+          },
+          {
+            "name": "<code>show-count</code>",
+            "desc": "boolean · contador <code>n/maxlength</code> (o <code>n</code>)"
+          },
+          {
+            "name": "<code>full-width</code>",
+            "desc": "boolean · 100% del ancho disponible, ignora <code>--iswc-field-width</code>"
+          },
+          {
+            "name": "<code>--iswc-field-width</code>",
+            "desc": "ancho del control (default <code>auto</code>); heredable desde el contenedor"
+          },
+          {
+            "name": "<code>--iswc-field-label-width</code>",
+            "desc": "columna del label con <code>label-placement=\"start\"</code>"
+          },
+          {
+            "name": "<code>--iswc-input-bg</code> <code>--iswc-input-border</code> <code>--iswc-input-text</code>",
+            "desc": "caen en <code>--iswc-control-*</code>"
+          },
+          {
+            "name": "<code>--iswc-input-border-radius</code> <code>--iswc-input-focus</code>",
+            "desc": "caen en <code>--iswc-radius-sm</code> / <code>--iswc-focus</code>"
+          },
+          {
+            "name": "<code>--iswc-input-danger</code> <code>--iswc-input-danger-text</code>",
+            "desc": "borde y texto del estado de error"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>value</code> <code>defaultValue</code>",
+            "desc": "valor actual · valor del atributo <code>value</code> (el del reset)"
+          },
+          {
+            "metodo": "<code>type</code> <code>appearance</code> <code>labelPlacement</code>",
+            "desc": "sanitizan valores no válidos al default"
+          },
+          {
+            "metodo": "<code>prefixText</code> <code>suffixText</code>",
+            "desc": "reflejan <code>prefix</code> / <code>suffix</code> (<code>Element.prefix</code> ya existe)"
+          },
+          {
+            "metodo": "<code>error</code> <code>errorText</code> <code>showCount</code> <code>fullWidth</code>",
+            "desc": "reflejan sus atributos"
+          },
+          {
+            "metodo": "<code>clearable</code> <code>passwordToggle</code> <code>disabled</code> <code>required</code> <code>readonly</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "<code>input</code>",
+            "desc": "el <code>&lt;input&gt;</code> nativo interno, para casos avanzados"
+          },
+          {
+            "metodo": "<code>validity</code> <code>validationMessage</code> <code>willValidate</code>",
+            "desc": "espejo de <code>ElementInternals</code>"
+          },
+          {
+            "metodo": "<code>focus()</code> <code>blur()</code> <code>select()</code> <code>setSelectionRange()</code>",
+            "desc": "delegan en el input interno"
+          },
+          {
+            "metodo": "<code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>",
+            "desc": "<code>reportValidity()</code> además marca el campo como tocado"
+          },
+          {
+            "metodo": "slots",
+            "desc": "<code>label</code> <code>hint</code> <code>start</code> <code>end</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>form-control</code> <code>label</code> <code>base</code> <code>start</code> <code>prefix</code> <code>input</code> <code>clear</code> <code>toggle</code> <code>suffix</code> <code>end</code> <code>support</code> <code>hint</code> <code>error-text</code> <code>count</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>blank</code> <code>disabled</code> <code>readonly</code> <code>focused</code> <code>invalid</code> <code>password-visible</code>"
+          },
+          {
+            "metodo": "events",
+            "desc": "<code>iswc-input</code> <code>iswc-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></iswc-input>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

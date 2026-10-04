@@ -41,5 +41,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Calendario de un mes, suelto. Es la pieza que <code class=\"code\">&lt;iswc-date-picker&gt;</code> usa por dentro, y sirve por sí sola para vistas de agenda."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-month-calendar value=\"2026-08-12\"></iswc-month-calendar>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -402,5 +402,103 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Control de rango form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-slider/\" target=\"_blank\" rel=\"noreferrer\">Slider de MUI</a>:\r\n          rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>name</code>",
+            "desc": "clave en FormData (rango → una entrada por thumb)"
+          },
+          {
+            "metodo": "<code>value</code>",
+            "desc": "<code>40</code> o <code>\"20,37\"</code> para rango"
+          },
+          {
+            "metodo": "<code>min</code> <code>max</code> <code>step</code>",
+            "desc": "0 · 100 · 1; <code>step=\"null\"</code> restringe a los marks"
+          },
+          {
+            "metodo": "<code>shift-step</code>",
+            "desc": "salto de Shift + flechas y PageUp/PageDown (default step × 10)"
+          },
+          {
+            "metodo": "<code>marks</code>",
+            "desc": "boolean · <code>\"0:0°C, 20:20°C\"</code> · propiedad <code>[{ value, label }]</code>"
+          },
+          {
+            "metodo": "<code>orientation</code>",
+            "desc": "<code>horizontal</code> (default) · <code>vertical</code>"
+          },
+          {
+            "metodo": "<code>track</code>",
+            "desc": "<code>normal</code> (default) · <code>none</code> · <code>inverted</code>"
+          },
+          {
+            "metodo": "<code>value-label</code>",
+            "desc": "<code>off</code> (default) · <code>auto</code> · <code>on</code>"
+          },
+          {
+            "metodo": "<code>min-distance</code> <code>disable-swap</code>",
+            "desc": "separación mínima y bloqueo de cruce en rangos"
+          },
+          {
+            "metodo": "<code>format</code>",
+            "desc": "plantilla de la burbuja, ej. <code>\"{v}°C\"</code>"
+          },
+          {
+            "metodo": "<code>variant</code>",
+            "desc": "<code>brand</code> · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code>"
+          },
+          {
+            "metodo": "<code>label</code> <code>hint</code>",
+            "desc": "texto o slots homónimos"
+          },
+          {
+            "metodo": "<code>disabled</code> <code>readonly</code> <code>required</code> <code>range</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "propiedades JS",
+            "desc": "<code>value</code> <code>values</code> <code>marks</code> <code>scale</code> <code>valueLabelFormat</code> <code>getAriaValueText</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>form-control</code> <code>label</code> <code>base</code> <code>rail</code> <code>track</code> <code>mark</code> <code>mark-label</code> <code>thumb</code> <code>value-label</code> <code>hint</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>disabled</code> <code>readonly</code> <code>dragging</code> <code>focused</code>"
+          },
+          {
+            "metodo": "events",
+            "desc": "<code>iswc-input</code> (durante) · <code>iswc-change</code> (al soltar)"
+          },
+          {
+            "metodo": "métodos",
+            "desc": "<code>stepUp(i)</code> <code>stepDown(i)</code> <code>focus()</code> <code>checkValidity()</code>"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-slider-track-size</code> <code>--iswc-slider-thumb-size</code> <code>--iswc-slider-length</code> <code>--iswc-slider-rail</code> <code>--iswc-slider-fill</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-slider id=\"demo\" label=\"Volumen\" hint=\"Arrastra o usa las flechas\" value=\"40\" value-label=\"auto\" name=\"volumen\"></iswc-slider>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

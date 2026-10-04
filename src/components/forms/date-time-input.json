@@ -46,5 +46,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Entrada de fecha y hora con calendario y reloj en el mismo desplegable."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></iswc-date-time-input>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -208,5 +208,71 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Calendario inline (DateCalendar de <a href=\"https://mui.com/x/react-date-pickers/\" target=\"_blank\" rel=\"noopener\">MUI X</a>). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un <code>iswc-dropdown</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "default": "— · rango: <code>start/end</code>"
+          },
+          {
+            "name": "<code>mode</code>",
+            "default": "single · range"
+          },
+          {
+            "name": "<code>view</code> / <code>views</code> / <code>open-to</code>",
+            "default": "day · day month year · day"
+          },
+          {
+            "name": "<code>min</code> / <code>max</code>",
+            "default": "—"
+          },
+          {
+            "name": "<code>locale</code> / <code>first-day-of-week</code>",
+            "default": "document.lang · Intl"
+          },
+          {
+            "name": "<code>show-outside-days</code> / <code>fixed-weeks</code> / <code>show-week-numbers</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>disable-past</code> / <code>disable-future</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>disabled-dates</code> / <code>disabled-days</code>",
+            "default": "—"
+          },
+          {
+            "name": "<code>nav</code>",
+            "default": "both · prev · next · none"
+          },
+          {
+            "name": "<code>frameless</code>",
+            "default": "off (para meter varios en una tarjeta)"
+          },
+          {
+            "name": "<code>preview-to</code>",
+            "default": "— (rango tentativo impuesto desde fuera)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></iswc-date-picker>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

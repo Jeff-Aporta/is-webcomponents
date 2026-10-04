@@ -41,5 +41,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo de hora con máscara y validación, asociable a formularios."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></iswc-time-field>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

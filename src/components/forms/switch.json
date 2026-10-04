@@ -17,91 +17,91 @@
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-switch name=\"notificaciones\" checked>Notificaciones</iswc-switch>\r\n            <iswc-switch name=\"beta\">Funciones beta</iswc-switch>\r\n            <iswc-switch name=\"bloqueado\" checked disabled>Bloqueado por política</iswc-switch>\r\n          </div>",
           "controls": [
-              {
-                "control": "boolean",
-                "prop": "attr:checked",
-                "label": "checked"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              },
-              {
-                "control": "select",
-                "prop": "attr:color",
-                "label": "color",
-                "options": [
-                  "neutral",
-                  "success",
-                  "warning",
-                  "danger"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:label-placement",
-                "label": "label-placement",
-                "options": [
-                  "start",
-                  "top",
-                  "bottom"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:checked-icon",
-                "label": "checked-icon",
-                "options": [
-                  "mdi:white-balance-sunny",
-                  "mdi:check",
-                  "mdi:lock"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:on-label",
-                "label": "on-label",
-                "options": [
-                  "ON",
-                  "SÍ",
-                  "24h"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:off-label",
-                "label": "off-label",
-                "options": [
-                  "OFF",
-                  "NO",
-                  "12h"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:readonly",
-                "label": "readonly"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:error",
-                "label": "error"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:required",
-                "label": "required"
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "si",
-                  "semanal"
-                ]
-              }
+            {
+              "control": "boolean",
+              "prop": "attr:checked",
+              "label": "checked"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:label-placement",
+              "label": "label-placement",
+              "options": [
+                "start",
+                "top",
+                "bottom"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:checked-icon",
+              "label": "checked-icon",
+              "options": [
+                "mdi:white-balance-sunny",
+                "mdi:check",
+                "mdi:lock"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:on-label",
+              "label": "on-label",
+              "options": [
+                "ON",
+                "SÍ",
+                "24h"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:off-label",
+              "label": "off-label",
+              "options": [
+                "OFF",
+                "NO",
+                "12h"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:readonly",
+              "label": "readonly"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:error",
+              "label": "error"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "si",
+                "semanal"
+              ]
+            }
           ],
           "equivNote": "Como checkbox: solo el estado on aporta al FormData.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -351,5 +351,95 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Interruptor <em>form-associated</em> con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-switch/\" target=\"_blank\" rel=\"noreferrer\">Switch de MUI</a>:\r\n          mismo contrato de formulario que <code class=\"code\">iswc-checkbox</code>, con carril y perilla deslizante,\r\n          color por <code class=\"code\">variant</code>, iconos en la perilla y rótulos dentro del carril."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>name</code>",
+            "desc": "clave en FormData"
+          },
+          {
+            "metodo": "<code>value</code>",
+            "desc": "default <code>on</code>; solo se envía si está encendido"
+          },
+          {
+            "metodo": "<code>checked</code>",
+            "desc": "boolean, reflejado"
+          },
+          {
+            "metodo": "<code>disabled</code> <code>readonly</code> <code>required</code> <code>error</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "<code>variant</code>",
+            "desc": "<code>brand</code> (default) · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code>"
+          },
+          {
+            "metodo": "<code>label-placement</code>",
+            "desc": "<code>end</code> (default) · <code>start</code> · <code>top</code> · <code>bottom</code>"
+          },
+          {
+            "metodo": "<code>icon</code> <code>checked-icon</code>",
+            "desc": "iconos <code>iswc-icon</code> dentro de la perilla (apagado / encendido)"
+          },
+          {
+            "metodo": "<code>on-label</code> <code>off-label</code>",
+            "desc": "texto corto dentro del carril"
+          },
+          {
+            "metodo": "<code>hint</code>",
+            "desc": "texto de ayuda bajo el control; también slot <code>hint</code>"
+          },
+          {
+            "metodo": "propiedades JS",
+            "desc": "<code>checked</code> <code>value</code> <code>name</code> <code>variant</code> <code>labelPlacement</code> <code>icon</code> <code>checkedIcon</code> <code>onLabel</code> <code>offLabel</code> <code>hint</code> <code>error</code> <code>readonly</code> <code>disabled</code> <code>required</code>"
+          },
+          {
+            "metodo": "slots",
+            "desc": "default (etiqueta) · <code>hint</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>form-control</code> <code>base</code> <code>control</code> <code>track-label</code> <code>thumb</code> <code>mark</code> <code>label</code> <code>hint</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>:state(checked)</code> <code>:state(disabled)</code> <code>:state(readonly)</code> <code>:state(error)</code>"
+          },
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-change</code> · detail <code>{ checked, value }</code>"
+          },
+          {
+            "metodo": "métodos",
+            "desc": "<code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>"
+          },
+          {
+            "metodo": "rol",
+            "desc": "<code>switch</code> · Espacio y Enter alternan"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-switch-height</code> <code>--iswc-switch-width</code> <code>--iswc-switch-bg</code> <code>--iswc-switch-bg-hover</code> <code>--iswc-switch-border</code> <code>--iswc-switch-accent</code> <code>--iswc-switch-thumb</code> <code>--iswc-switch-icon</code> <code>--iswc-switch-icon-checked</code> <code>--iswc-switch-focus</code> <code>--iswc-switch-halo</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"stack\">\r\n            <iswc-switch name=\"notificaciones\" checked>Notificaciones</iswc-switch>\r\n            <iswc-switch name=\"beta\">Funciones beta</iswc-switch>\r\n            <iswc-switch name=\"bloqueado\" checked disabled>Bloqueado por política</iswc-switch>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

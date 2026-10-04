@@ -41,5 +41,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Reloj digital: muestra la hora en formato numérico y admite selección por teclado."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-digital-clock value=\"14:30\"></iswc-digital-clock>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
