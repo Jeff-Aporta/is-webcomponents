@@ -14,20 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper current=\"1\">\r\n            <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\r\n          </iswc-stepper>",
-          "controls": [
-            {
-              "control": "select",
-              "prop": "attr:description",
-              "label": "description",
-              "options": [
-                "Identificación",
-                "Líneas del comprobante",
-                "Confirmar y guardar"
-              ]
-            }
-          ]
-        },
+          "html": "<iswc-stepper current=\"1\">\r\n            <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\r\n          </iswc-stepper>"},
         {
           "kind": "code",
           "code": "<iswc-stepper current=\"1\">\n  <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\n</iswc-stepper>",

@@ -14,15 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-tree>\r\n            <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\r\n          </iswc-tree>",
-          "controls": [
-            {
-              "control": "boolean",
-              "prop": "attr:expanded",
-              "label": "expanded"
-            }
-          ]
-        },
+          "html": "<iswc-tree>\r\n            <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\r\n          </iswc-tree>"},
         {
           "kind": "code",
           "code": "<iswc-tree>\n  <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\n  </iswc-tree-item>\n  <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\n</iswc-tree>",

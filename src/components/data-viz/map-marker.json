@@ -14,36 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\r\n            <iswc-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></iswc-map-marker>\r\n          </iswc-maps>",
-          "controls": [
-            {
-              "control": "number",
-              "prop": "attr:lon",
-              "label": "lon",
-              "min": -76.53,
-              "max": 100,
-              "step": 1
-            },
-            {
-              "control": "number",
-              "prop": "attr:lat",
-              "label": "lat",
-              "min": 0,
-              "max": 100,
-              "step": 1
-            },
-            {
-              "control": "select",
-              "prop": "attr:label",
-              "label": "label",
-              "options": [
-                "Bogotá",
-                "Medellín",
-                "Cali"
-              ]
-            }
-          ]
-        },
+          "html": "<iswc-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\r\n            <iswc-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></iswc-map-marker>\r\n          </iswc-maps>"},
         {
           "kind": "code",
           "code": "<iswc-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\n  <iswc-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></iswc-map-marker>\n  <iswc-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></iswc-map-marker>\n  <iswc-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></iswc-map-marker>\n</iswc-maps>",

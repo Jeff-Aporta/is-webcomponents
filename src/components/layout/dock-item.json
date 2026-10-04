@@ -15,26 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"dock-stage\">\r\n            <iswc-dock>\r\n              <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>\r\n            </iswc-dock>\r\n          </div>",
-          "controls": [
-            {
-              "control": "select",
-              "prop": "attr:label",
-              "label": "label",
-              "options": [
-                "Inicio",
-                "Reportes",
-                "Ajustes"
-              ]
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:active",
-              "label": "active"
-            }
-          ],
-          "contain": true
-        },
+          "html": "<div class=\"dock-stage\">\r\n            <iswc-dock>\r\n              <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>\r\n              <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>\r\n            </iswc-dock>\r\n          </div>"},
         {
           "kind": "code",
           "code": "<div class=\"dock-stage\">\n  <iswc-dock>\n    <iswc-dock-item icon=\"mdi:home\" label=\"Inicio\" active></iswc-dock-item>\n    <iswc-dock-item icon=\"mdi:chart-box\" label=\"Reportes\"></iswc-dock-item>\n    <iswc-dock-item icon=\"mdi:cog\" label=\"Ajustes\"></iswc-dock-item>\n  </iswc-dock>\n</div>",

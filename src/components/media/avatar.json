@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <iswc-avatar initials=\"JD\" label=\"Juan Díaz\"></iswc-avatar>\r\n            <iswc-avatar image=\"https://i.pravatar.cc/80?u=1\" label=\"Usuario demo\"></iswc-avatar>\r\n            <iswc-avatar label=\"Sin foto\"></iswc-avatar>\r\n            <iswc-avatar image=\"https://invalid.example/no.jpg\" initials=\"FB\" label=\"Imagen rota → iniciales\"></iswc-avatar>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <iswc-avatar id=\"pgAvatar\" initials=\"JD\" label=\"Juan Díaz\"></iswc-avatar>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -267,7 +267,7 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <iswc-avatar initials=\"JD\" label=\"Juan Díaz\"></iswc-avatar>\r\n            <iswc-avatar image=\"https://i.pravatar.cc/80?u=1\" label=\"Usuario demo\"></iswc-avatar>\r\n            <iswc-avatar label=\"Sin foto\"></iswc-avatar>\r\n            <iswc-avatar image=\"https://invalid.example/no.jpg\" initials=\"FB\" label=\"Imagen rota → iniciales\"></iswc-avatar>\r\n          </div>\n```"
+        "content": "```html\n<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <iswc-avatar initials=\"JD\" label=\"Juan Díaz\"></iswc-avatar>\r\n          </div>\n```"
       }
     },
     "exclude": [

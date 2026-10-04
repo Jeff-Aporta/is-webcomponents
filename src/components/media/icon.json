@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon icon=\"mdi:home\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:check-circle\" style=\"color:var(--iswc-accent)\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:star\" label=\"Favorito\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:cog-outline\"></iswc-icon>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon id=\"pgIcon\" icon=\"mdi:home\"></iswc-icon>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -117,7 +117,7 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon icon=\"mdi:home\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:check-circle\" style=\"color:var(--iswc-accent)\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:star\" label=\"Favorito\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:cog-outline\"></iswc-icon>\r\n          </div>\n```"
+        "content": "```html\n<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon icon=\"mdi:home\"></iswc-icon>\r\n          </div>\n```"
       }
     },
     "exclude": [
