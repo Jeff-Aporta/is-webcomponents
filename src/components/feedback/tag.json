@@ -92,5 +92,43 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Etiqueta interactiva con variantes y botón de quitar opcional. Escala con <code class=\"code\">font-size</code> del contexto."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>variant</code>",
+            "default": "brand · neutral · info · success · warning · danger (default brand)"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "default": "filled-outlined"
+          },
+          {
+            "name": "<code>with-remove</code>",
+            "default": "false"
+          },
+          {
+            "name": "<code>pill</code>",
+            "default": "false"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-tag>General</iswc-tag>\r\n            <iswc-tag color=\"brand\">InSoft</iswc-tag>\r\n            <iswc-tag color=\"neutral\">Neutral</iswc-tag>\r\n            <iswc-tag color=\"info\">Info</iswc-tag>\r\n            <iswc-tag color=\"success\">Success</iswc-tag>\r\n            <iswc-tag color=\"warning\">Warning</iswc-tag>\r\n            <iswc-tag color=\"danger\">Danger</iswc-tag>\r\n            <iswc-tag with-remove id=\"rmTag\">Removible</iswc-tag>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

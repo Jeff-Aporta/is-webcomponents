@@ -74,5 +74,39 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "<code class=\"code\">&lt;iswc-skeleton&gt;</code>"
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>effect</code>",
+            "default": "sheen (none · pulse)"
+          },
+          {
+            "name": "<code>--color</code>",
+            "default": "control-bg"
+          },
+          {
+            "name": "<code>--sheen-color</code>",
+            "default": "highlight ghost (texto ~11% alpha)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:4rem;border-radius:8px\"></iswc-skeleton>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

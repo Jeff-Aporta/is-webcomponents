@@ -146,5 +146,76 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Cuadro de confirmación rápido anclado a un botón. Sin modal, sin tapar\r\n          la pantalla. Perfecto para \"¿Seguro que quieres borrar?\" en línea."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>for</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "id del trigger."
+          },
+          {
+            "name": "<code>message</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto del mensaje."
+          },
+          {
+            "name": "<code>placement</code>",
+            "type": "top | bottom | start | end | top-start | top-end | bottom-start | bottom-end",
+            "default": "top",
+            "desc": "Posición."
+          },
+          {
+            "name": "<code>hide-arrow</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta la flecha."
+          },
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado controlado."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-popconfirm-show</code>",
+            "cuando": "Popconfirm visible."
+          },
+          {
+            "evento": "<code>iswc-popconfirm-hide</code>",
+            "cuando": "Popconfirm se cierra."
+          },
+          {
+            "evento": "<code>iswc-popconfirm-confirm</code>",
+            "cuando": "Click en confirmar."
+          },
+          {
+            "evento": "<code>iswc-popconfirm-cancel</code>",
+            "cuando": "Click en cancelar."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"btnDelete\">Borrar</iswc-button>\n<iswc-popconfirm for=\"btnDelete\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, borrar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-popconfirm>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

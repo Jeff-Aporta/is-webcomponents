@@ -247,5 +247,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Panel copy-paste via <code>loader.min.js</code>: un script del loader y otro que hace <code>loadCSS*</code> y <code>load(tag)</code>. Cada componente se carga solo."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>tag</code>",
+            "desc": "string — p. ej. <code>\"iswc-button\"</code>. El snippet siempre hace load de ese tag."
+          },
+          {
+            "metodo": "<code>base</code>",
+            "desc": "string — override del CDN base (default <code>cdn.jsdelivr.net/.../dist/cdn</code>)"
+          },
+          {
+            "metodo": "<code>title</code>",
+            "desc": "string — título del panel (default \"Consumo por CDN\")"
+          },
+          {
+            "metodo": "<code>dependencies</code>",
+            "desc": "JSON string — array de deps externas (alternativa al slot)"
+          },
+          {
+            "metodo": "<code>slot=\"deps\"</code>",
+            "desc": "<code>&lt;script type=\"application/json\"&gt;</code> con array de deps"
+          },
+          {
+            "metodo": "Dep shape",
+            "desc": "<code>{name, version?, css?, js?, note?}</code> &mdash; css y js son opcionales independientes"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-cdn-snippet\n  tag=\"iswc-button\"\n  category=\"actions\"\n></iswc-cdn-snippet>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

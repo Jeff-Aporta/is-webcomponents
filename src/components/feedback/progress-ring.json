@@ -112,5 +112,47 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "<code class=\"code\">&lt;iswc-progress-ring&gt;</code>"
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "desc": "0–100"
+          },
+          {
+            "name": "<code>label</code>",
+            "desc": "Texto central + a11y (preferir corto: <code>75%</code>)"
+          },
+          {
+            "name": "<code>font-size</code>",
+            "desc": "Define el diámetro (1em)"
+          },
+          {
+            "name": "<code>--track-width</code> / <code>--indicator-width</code>",
+            "desc": "Grosor SVG"
+          },
+          {
+            "name": "<code>--indicator-color</code> / <code>--track-color</code>",
+            "desc": "Colores (default: accent / border)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"ring-row\">\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <iswc-progress-ring value=\"75\" label=\"75%\"></iswc-progress-ring>\r\n              <p class=\"ring-card__title\">Completado</p>\r\n              <p class=\"ring-card__cap\">value 75</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <iswc-progress-ring value=\"40\" label=\"40%\"></iswc-progress-ring>\r\n              <p class=\"ring-card__title\">En curso</p>\r\n              <p class=\"ring-card__cap\">value 40</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5rem\">\r\n              <iswc-progress-ring\r\n                value=\"100\"\r\n                label=\"100%\"\r\n                style=\"--indicator-color: var(--iswc-color-success)\"\r\n              ></iswc-progress-ring>\r\n              <p class=\"ring-card__title\">Completo</p>\r\n              <p class=\"ring-card__cap\">success</p>\r\n            </div>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -80,5 +80,43 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Indicador de carga animado. Sin atributos; personalizable vía CSS vars."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>--track-width</code>",
+            "default": "0.15em"
+          },
+          {
+            "name": "<code>--track-color</code>",
+            "default": "borde control"
+          },
+          {
+            "name": "<code>--indicator-color</code>",
+            "default": "brand-500"
+          },
+          {
+            "name": "<code>--speed</code>",
+            "default": "0.75s"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-spinner></iswc-spinner>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

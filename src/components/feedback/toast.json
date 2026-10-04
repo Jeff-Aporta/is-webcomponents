@@ -82,5 +82,39 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Contenedor fijo de notificaciones. Crea ítems con <code class=\"code\">create()</code> o declara <code class=\"code\">&lt;iswc-toast-item&gt;</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>placement</code>",
+            "desc": "top-start · top-center · top-end · bottom-start · bottom-center · bottom-end (default bottom-end)"
+          },
+          {
+            "metodo": "<code>create(msg, opts)</code>",
+            "desc": "variant, icon, duration, allowHtml → Promise&lt;iswc-toast-item&gt;"
+          },
+          {
+            "metodo": "<code>iswc-toast-item</code>",
+            "desc": "variant, duration, open · show()/hide() · iswc-after-show/hide"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```javascript\nconst toaster = document.getElementById('toaster');\n\ndocument.getElementById('btn-brand').addEventListener('click', () => {\n  toaster.create('Mensaje brand', { variant: 'brand' });\n});\ndocument.getElementById('btn-success').addEventListener('click', () => {\n  toaster.create('Operación correcta', { variant: 'success' });\n});\ndocument.getElementById('btn-warning').addEventListener('click', () => {\n  toaster.create('Revisa los datos', { variant: 'warning' });\n});\ndocument.getElementById('btn-danger').addEventListener('click', () => {\n  toaster.create('Error al guardar', { variant: 'danger' });\n});\ndocument.getElementById('btn-sticky').addEventListener('click', () => {\n  toaster.create('Quédate hasta cerrar', { variant: 'neutral', duration: 0 });\n});\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

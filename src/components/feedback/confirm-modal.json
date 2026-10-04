@@ -118,5 +118,70 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;iswc-popconfirm&gt;</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>for</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "id del trigger que abre el modal."
+          },
+          {
+            "name": "<code>heading</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título del modal."
+          },
+          {
+            "name": "<code>message</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto del mensaje."
+          },
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado controlado."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-confirm-show</code>",
+            "cuando": "Modal visible."
+          },
+          {
+            "evento": "<code>iswc-confirm-hide</code>",
+            "cuando": "Modal se cierra."
+          },
+          {
+            "evento": "<code>iswc-confirm-confirm</code>",
+            "cuando": "Click en confirmar."
+          },
+          {
+            "evento": "<code>iswc-confirm-cancel</code>",
+            "cuando": "Click en cancelar, backdrop o Escape."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"btnDelete\">Eliminar cuenta</iswc-button>\n<iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-confirm-modal>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

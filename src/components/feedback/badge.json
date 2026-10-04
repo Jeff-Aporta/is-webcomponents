@@ -104,5 +104,43 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Etiqueta compacta con variantes semánticas y apariencias."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>variant</code>",
+            "default": "brand"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "default": "accent"
+          },
+          {
+            "name": "<code>pill</code>",
+            "default": "false"
+          },
+          {
+            "name": "<code>attention</code>",
+            "default": "none · pulse · bounce"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"demo-row\">\r\n            <iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\r\n            <iswc-badge color=\"success\">Activo</iswc-badge>\r\n            <iswc-badge color=\"warning\" attention=\"pulse\">Pendiente</iswc-badge>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
