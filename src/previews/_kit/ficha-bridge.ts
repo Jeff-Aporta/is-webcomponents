@@ -37,6 +37,13 @@
  *   - Si el JSON no trae `ficha` ni `$schema: iswc-ficha/v1`, este módulo es
  *     un no-op y `loadFichaLikeDefinition` devuelve el input tal cual,
  *     dejando el comportamiento actual intacto.
+ *
+ * Phase V7 (zod-migration): el runtime hook que materializa los warnings
+ * es `emitFichaWarnings(tag, ficha)`. Se llama automáticamente desde
+ * `loadFichaLikeDefinition(...)` (modos A y B) tras validar con Zod, y
+ * produce UN solo `console.warn` por tag con la lista consolidada de
+ * secciones ausentes y excludes espurios. Aparece en el dev server y en
+ * el bundle de producción (visible en la consola del navegador).
  */
 import {
   FichaSchema,
@@ -243,15 +250,45 @@ function construirSeccionesFicha(
   return secciones.filter((s) => s.blocks.length > 0);
 }
 
-/** Valida una ficha y emite console.warn para secciones ausentes. */
-function validarFicha(tag: string, ficha: Ficha): void {
+/**
+ * Phase V7 hook (zod-migration): emite un único `console.warn` consolidado
+ * con la lista de secciones ausentes (y excludes espurios) de una ficha
+ * recién validada.
+ *
+ * - Se llama automáticamente desde `loadFichaLikeDefinition(...)` después
+ *   de `FichaSchema.parse(...)` en los modos A (iswc-ficha/v1) y B
+ *   (sub-objeto `ficha:`).
+ * - Se exporta para que callers externos (auditorías, scripts CLI,
+ *   harnesses de tests) puedan re-correr el hook sin re-parsear.
+ *
+ * La salida es UN solo `console.warn` por tag (no uno por sección), para
+ * que sea fácil de filtrar y agregar en logs de CI / dev server. Si la
+ * ficha no tiene issues, esta función es silenciosa (no emite nada).
+ *
+ * Visibilidad:
+ *   - **Dev server** (`deno task dev`): aparece en la consola del navegador
+ *     cada vez que se carga un preview controlado con secciones ausentes.
+ *   - **Build** (`deno task build`): el bundle minificado la incluye, así
+ *     que también sale si un usuario abre el preview desde la build.
+ *
+ * Salida (ejemplo):
+ *
+ *   [ficha] iswc-button: 2 advertencia(s) — missing: [parts, apiJs]; spurious-exclude: [slots]
+ */
+export function emitFichaWarnings(tag: string, ficha: Ficha): void {
   const warnings = inspectFicha(ficha);
-  for (const w of warnings.missing) {
-    console.warn(`[ficha] ${tag}: ${w.message}`);
+  const total = warnings.missing.length + warnings.spuriousExclude.length;
+  if (total === 0) return;
+  const parts: string[] = [];
+  if (warnings.missing.length > 0) {
+    const lista = warnings.missing.map((w) => w.section).join(', ');
+    parts.push(`missing: [${lista}]`);
   }
-  for (const w of warnings.spuriousExclude) {
-    console.warn(`[ficha] ${tag}: ${w.message}`);
+  if (warnings.spuriousExclude.length > 0) {
+    const lista = warnings.spuriousExclude.map((w) => w.section).join(', ');
+    parts.push(`spurious-exclude: [${lista}]`);
   }
+  console.warn(`[ficha] ${tag}: ${total} advertencia(s) — ${parts.join('; ')}`);
 }
 
 /**
@@ -281,7 +318,7 @@ export function loadFichaLikeDefinition(
       sections: (raw.sections as Record<string, unknown>) ?? {},
       exclude: Array.isArray(raw.exclude) ? (raw.exclude as string[]) : [],
     });
-    validarFicha(tag, parsed);
+    emitFichaWarnings(tag, parsed);
 
     const seccionesVisibles = construirSeccionesFicha({
       sections: raw.sections as Record<string, unknown>,
@@ -311,7 +348,7 @@ export function loadFichaLikeDefinition(
       sections: ficha.sections ?? {},
       exclude: Array.isArray(ficha.exclude) ? ficha.exclude : [],
     });
-    validarFicha(tag, parsed);
+    emitFichaWarnings(tag, parsed);
 
     // Si la ficha declara `playground`, prependerlo a la primera sección
     // del preview (no se renderiza como sección aparte).
