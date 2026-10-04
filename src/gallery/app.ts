@@ -395,6 +395,17 @@ function sendContext(): void {
 }
 
 function updateUrl(): void {
+  // Inicio: URL limpia, sin `?s=` ni otros params. La home es el destino
+  // por defecto y se restaura desde localStorage; dejar params encima solo
+  // añade ruido al refrescar o compartir el enlace.
+  if (component === HOME) {
+    if (location.search) {
+      const dest = new URL(location.href);
+      dest.search = '';
+      history.replaceState(null, '', dest);
+    }
+    return;
+  }
   // Gallery: `?s=` es el único state URL. theme/palette no van en la URL live;
   // sí se conservan otras keys de nav (docs, cdnTab, …) escritas por url-nav.
   const prev = readStateParam() || {};
