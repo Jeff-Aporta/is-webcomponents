@@ -29,8 +29,8 @@
   const basico = document.createElement('iswc-year-calendar');
   basico.id = 'basico';
   basico.value = '2026';
-  basico.min = '2020';
-  basico.max = '2032';
+  basico.setAttribute('min', '2020');
+  basico.setAttribute('max', '2032');
   basico.label = 'Año del evento';
   basico.hint = 'Click o flechas para navegar; Home/End saltan a los extremos';
   basico.addEventListener('iswc-change', (e) => {
@@ -41,8 +41,8 @@
   // (2) rango histórico
   const historico = document.createElement('iswc-year-calendar');
   historico.id = 'historico';
-  historico.min = '1990';
-  historico.max = '2010';
+  historico.setAttribute('min', '1990');
+  historico.setAttribute('max', '2010');
   historico.value = '2005';
   historico.label = 'Década del 2000';
   historico.hint = 'Años 1990–2010';
