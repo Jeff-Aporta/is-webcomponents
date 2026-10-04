@@ -60,9 +60,7 @@ import { MEDIA_SHAPE, type MediaShape } from '../_shared/media-shape.js';
   }
 
   class IswcThemeImg extends ElementBase {
-    static styleAttrs = {
-      fit: '--iswc-theme-img-fit',
-    };
+    
 
     static get observedAttributes(): string[] {
       return [...OBSERVED];

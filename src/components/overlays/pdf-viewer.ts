@@ -33,12 +33,7 @@ import {
 (() => {
   const OBSERVED = ['src', 'content', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
 
-  class IswcPdfViewer extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    shadow: '--iswc-popover-shadow',
-    'bar-gap': '--iswc-surface-bar-gap',
-    };
+  class IswcPdfViewer extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap']; }
 

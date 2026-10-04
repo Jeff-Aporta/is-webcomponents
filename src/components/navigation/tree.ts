@@ -55,17 +55,9 @@ import { ElementBase } from '../../core/element-base.js';
 
   const VALID_SELECTION = ['none', 'single', 'leaf', 'multiple'];
 
-  class IswcTree extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    indent: '--iswc-tree-indent',
-    'row-padding-y': '--iswc-tree-row-padding-y',
-    'row-padding-x': '--iswc-tree-row-padding-x',
-    'row-hover': { prop: '--iswc-tree-row-hover', onlyColorValues: true },
-    'row-selected-bg': { prop: '--iswc-tree-row-selected-bg', onlyColorValues: true },
-    };
+  class IswcTree extends ElementBase {
 
-    static get observedAttributes(): string[] { return [...TREE_OBSERVED, ...IswcTree.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TREE_OBSERVED]; }
 
     #syncObserver: MutationObserver | null = null;
 

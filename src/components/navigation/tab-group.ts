@@ -84,15 +84,9 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
   const VALID_PLACEMENT = ['top', 'bottom', 'start', 'end'];
   const VALID_ACTIVATION = ['auto', 'manual'];
 
-  class IswcTabGroup extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      'track-color': { prop: '--iswc-tab-group-track-color', onlyColorValues: true },
-      'track-width': '--iswc-tab-group-track-width',
-      'indicator-color': { prop: '--iswc-tab-group-indicator-color', onlyColorValues: true },
-    };
+  class IswcTabGroup extends withStyleAttrs(HTMLElement) {
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IswcTabGroup.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TG_OBSERVED]; }
     #mounted = false;
     #navSlot!: HTMLSlotElement;
     #tabsWrap!: HTMLElement;

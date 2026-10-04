@@ -149,11 +149,7 @@ interface IswcCheckIconButton extends HTMLElement {
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  class IswcVideo extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-video-accent', onlyColorValues: true },
-    };
+  class IswcVideo extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 

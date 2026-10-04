@@ -68,17 +68,9 @@ import { ElementBase } from '../../core/element-base.js';
 
   const TG_OBSERVED = ['active', 'loop', 'autoplay', 'without-controls', 'without-indicators', 'vertical', 'slides-per-page', 'aspect-ratio'];
 
-  class IswcCarousel extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'control-bg': { prop: '--iswc-carousel-control-bg', onlyColorValues: true },
-    'control-color': { prop: '--iswc-carousel-control-text', onlyColorValues: true },
-    'control-border': { prop: '--iswc-carousel-control-border', onlyColorValues: true },
-    'indicator-color': { prop: '--iswc-carousel-indicator', onlyColorValues: true },
-    'indicator-active': { prop: '--iswc-carousel-indicator-active', onlyColorValues: true },
-    };
+  class IswcCarousel extends ElementBase {
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IswcCarousel.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TG_OBSERVED]; }
 
     #scroller!: HTMLElement;
     #track!: HTMLElement;

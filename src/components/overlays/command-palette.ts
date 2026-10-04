@@ -59,13 +59,7 @@ import { ElementBase } from '../../core/element-base.js';
   /** Letras/numeros previos a la query (LIFO). Solo memoria de la sesion. */
   type History = string[];
 
-  class IswcCommandPalette extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-popover-radius',
-    shadow: '--iswc-popover-shadow',
-    'bar-gap': '--iswc-surface-bar-gap',
-    };
+  class IswcCommandPalette extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'shadow', 'bar-gap']; }
     #commands: Command[] = [];

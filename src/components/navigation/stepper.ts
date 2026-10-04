@@ -52,16 +52,9 @@ import { ElementBase } from '../../core/element-base.js';
 
   const TG_OBSERVED = ['active', 'orientation', 'without-line', 'color'];
 
-  class IswcStepper extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-stepper-accent', onlyColorValues: true },
-    'text-color': { prop: '--iswc-stepper-text', onlyColorValues: true },
-    'muted-color': { prop: '--iswc-stepper-muted', onlyColorValues: true },
-    'border-color': { prop: '--iswc-stepper-border', onlyColorValues: true },
-    };
+  class IswcStepper extends ElementBase {
 
-    static get observedAttributes(): string[] { return [...TG_OBSERVED, ...IswcStepper.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TG_OBSERVED]; }
 
 
     constructor() {

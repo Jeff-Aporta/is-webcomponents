@@ -50,13 +50,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
   interface DragState { x: number; y: number; rect: Rect; }
   interface ResizeState { x: number; y: number; rect: Rect; }
 
-  class IswcWindow extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    shadow: '--iswc-popover-shadow',
-    'bar-gap': '--iswc-surface-bar-gap',
-    'bar-padding': '--iswc-surface-bar-padding',
-    };
+  class IswcWindow extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap', 'bar-padding']; }
     #onWinMove!: (e: PointerEvent) => void;
