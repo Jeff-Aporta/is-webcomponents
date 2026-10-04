@@ -1,9 +1,17 @@
 // tests/docs-toc.test.ts
 //
-// Guardián de Phase O: el TOC de la derecha en los docs de componentes
-// lista las 7 secciones estándar de "Referencia completa" (Atributos,
-// Custom states, Eventos, Slots, CSS Parts, API JavaScript, Métodos) y
-// excluye Anatomía + Ejemplos + Intro.
+// Guardián de Phase O + W1: el TOC de la derecha en los docs de componentes
+// refleja la realidad del `.md`.
+//
+// Phase O: las 7 secciones estándar de "Referencia completa" (Atributos,
+// Custom states, Eventos, Slots, CSS Parts, API JavaScript, Métodos) se
+// detectan y muestran con etiqueta canónica. Anatomía + Ejemplos + Intro
+// se excluyen (viven en el main content).
+//
+// Phase W1: además, cualquier sección navegable del JSON que NO esté en
+// EXCLUDED_FROM_TOC se incluye con su `title` original. Esto arregla:
+//   - `iswc-button-group` (solo `api` → antes TOC vacío por umbral < 2).
+//   - `iswc-button` (sections con ids no estándar → antes faltaban items).
 //
 // Verifica:
 //   1. `standardTocSections(def)` filtra correctamente el array `sections`.
@@ -11,12 +19,13 @@
 //   3. Intro nunca llega al TOC.
 //   4. El orden canónico del estándar se mantiene aunque el `.md` los
 //      declare en otro orden (ej. Métodos antes que Estados).
-//   5. La etiqueta del enlace es la canónica (no la del .md), para que
-//      un componente que declare "Estados" siga mostrando "Custom states".
-//   6. Sin secciones estándar detectables, el resultado es `[]` y el
-//      generador de docs sabe que no debe pintar el TOC (defensa contra
-//      JSONs mal migrados que dejan un único bloque intro).
+//   5. La etiqueta del enlace estándar (section) es la canónica (no la
+//      del .md), para que un componente que declare "Estados" siga
+//      mostrando "Custom states".
+//   6. Las secciones no estándar se incluyen con su título original
+//      (Phase W1 — antes quedaban fuera del TOC).
 //   7. `EXCLUDED_FROM_TOC` contiene los ids de anatomía/ejemplos/intro.
+//   8. `renderDefinition` aborta el TOC si hay 0 secciones estándar.
 //
 // Uso: deno test -A --no-check src/utils/testing/meta/docs-toc.test.ts
 
@@ -136,7 +145,8 @@ assert.match(
 
 // Antes de Phase O, el bucle hacía `for (const section of def.sections)` y
 // generaba un `<a>` por sección. Ahora debe pasar por `standardTocSections`,
-// que excluye anatomía / ejemplos / intro.
+// que excluye anatomía / ejemplos / intro y (Phase W1) añade el resto con
+// su título original.
 assert.match(
   renderSrc,
   /const\s+toc\s*=\s*standardTocSections\(def\)/,
@@ -144,8 +154,24 @@ assert.match(
 );
 assert.match(
   renderSrc,
-  /if\s*\(\s*toc\.length\s*<\s*2\s*\)\s*return\s*;/,
-  'renderDefinition debe abortar el TOC si hay <2 secciones estándar',
+  /if\s*\(\s*toc\.length\s*<\s*1\s*\)\s*return\s*;/,
+  'renderDefinition debe abortar el TOC si hay 0 secciones (umbral Phase W1: antes era < 2)',
+);
+
+// ─── 6) standardTocSections añade secciones no estándar (Phase W1) ────
+
+// El algoritmo hace dos pasadas: primero estándar, luego cualquier sección
+// restante que no esté excluida. Esto lo verificamos buscando la "Pasada 2"
+// y el push con `section.title || section.id` como fallback.
+assert.match(
+  renderSrc,
+  /section\.title\s*\|\|\s*section\.id/,
+  'standardTocSections debe usar el título de la sección como fallback (Phase W1)',
+);
+assert.match(
+  renderSrc,
+  /Pasada 2/u,
+  'standardTocSections debe iterar las secciones restantes en una 2ª pasada (Phase W1)',
 );
 
 // ─── 6) El guardián cubre el contrato con el type PreviewSection ───────

@@ -264,7 +264,17 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
       }
       // Al cargar (scroll arriba) puede que ningún trigger haya cruzado el
       // umbral todavía: marca el primero para que siempre haya un activo.
-      this.#setActive(best ? best.el.id : (first ? first.el.id : null));
+      let chosen = best ?? first;
+      // Phase W1: si el id elegido no tiene enlace (p.ej. `intro`, `anatomy`,
+      // `ejemplos` — excluidos del TOC), cae al siguiente trigger CON enlace.
+      // Sin esto, `#setActive` setea `#activeId` pero `#paintActive` no puede
+      // pintar nada y el panel lateral queda sin highlight.
+      if (chosen && !this.#linkFor(chosen.el.id)) {
+        const sorted = Array.from(this.#triggerEntries.values())
+          .sort((a, b) => a.el.getBoundingClientRect().top - b.el.getBoundingClientRect().top);
+        chosen = sorted.find((t) => this.#linkFor(t.el.id)) ?? null;
+      }
+      this.#setActive(chosen ? chosen.el.id : null);
     }
 
     #setActive(id: string | null): void {

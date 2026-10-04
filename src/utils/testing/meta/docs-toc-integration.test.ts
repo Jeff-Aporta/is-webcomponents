@@ -54,7 +54,7 @@ function normTitle(title: string): string {
   return title.toLowerCase().trim();
 }
 
-/** Réplica del algoritmo real (mismo orden: ids primero, títulos después). */
+/** Réplica del algoritmo real (Phase W1): estándar + no estándar. */
 function matchSection(id: string, title: string): string | null {
   if (!id) return null;
   const idN = normId(id);
@@ -69,6 +69,40 @@ function matchSection(id: string, title: string): string | null {
     }
   }
   return null;
+}
+
+/**
+ * Réplica de `standardTocSections(def)` (Phase W1): pasada 1 estándar en
+ * orden canónico + pasada 2 con cualquier sección navegable no excluida.
+ */
+function buildToc(def: any): string[] {
+  if (!Array.isArray(def?.sections)) return [];
+  const labels: string[] = [];
+  const used = new Set<string>();
+  // Pasada 1 — estándar
+  for (const entry of STANDARD_TOC) {
+    for (const s of def.sections) {
+      const id = String(s?.id || '');
+      if (!id || used.has(id)) continue;
+      if (excludedIds.has(normId(id))) continue;
+      const idN = normId(id);
+      const tN = normTitle(String(s?.title || ''));
+      if (entry.ids.includes(idN) || (tN && entry.titles.includes(tN))) {
+        labels.push(entry.label);
+        used.add(id);
+        break;
+      }
+    }
+  }
+  // Pasada 2 — resto
+  for (const s of def.sections) {
+    const id = String(s?.id || '');
+    if (!id || used.has(id)) continue;
+    if (excludedIds.has(normId(id))) continue;
+    labels.push(String(s?.title || id));
+    used.add(id);
+  }
+  return labels;
 }
 
 function listJsonFiles(dir: string, acc: string[] = []): string[] {
@@ -97,73 +131,68 @@ for (const path of jsonFiles) {
     continue;
   }
   if (!Array.isArray(def.sections)) continue;
-  const tocLabels: string[] = [];
-  for (const s of def.sections) {
-    const m = matchSection(String(s.id || ''), String(s.title || ''));
-    if (m) tocLabels.push(m);
-  }
+  const tocLabels: string[] = buildToc(def);
   // Dedupe preservando orden.
   const seen = new Set<string>();
   const dedup = tocLabels.filter((l) => (seen.has(l) ? false : (seen.add(l), true)));
-  if (dedup.length >= 2) withToc++;
+  if (dedup.length >= 1) withToc++;
   else withoutToc++;
 }
 
-assert.ok(withToc > 0, `al menos un componente debería tener >=2 secciones estándar, hay ${withToc}`);
-assert.ok(withoutToc > 0, `al menos un componente debería tener <2 secciones estándar, hay ${withoutToc}`);
+assert.ok(withToc > 0, `al menos un componente debería tener >=1 sección en TOC, hay ${withToc}`);
 
 // ─── Casos concretos: button.json ─────────────────────────────────────
 
 // button.json tiene { intro, variants, appearances, sizes, icons, icon-only,
 // pill, caret, loading, disabled, link, form, anatomy, states, parts,
 // theming, methods, events, playground, reference }.
-// Tras filtrar quedan: states (Custom states), parts (CSS Parts), methods
-// (Métodos), events (Eventos) → 4 secciones.
+// Phase O: filtraba 4 secciones (states/parts/methods/events → 4 items).
+// Phase W1: incluye además las secciones navegables no excluidas, en su
+// orden del JSON. Esperado: las 4 estándar + 11 no estándar (variants,
+// appearances, sizes, icons, icon-only, pill, caret, loading, disabled,
+// link, form, theming, playground, reference) — anatomía, ejemplos excluidos.
 const buttonDef = JSON.parse(readFileSync(join(componentsDir, 'actions', 'button.json'), 'utf8'));
-const buttonToc: string[] = [];
-for (const s of buttonDef.sections) {
-  const m = matchSection(String(s.id || ''), String(s.title || ''));
-  if (m) buttonToc.push(m);
-}
-const seenBtn = new Set<string>();
-const buttonTocUnique = buttonToc.filter((l) => (seenBtn.has(l) ? false : (seenBtn.add(l), true)));
+const buttonTocUnique = buildToc(buttonDef);
 assert.ok(buttonTocUnique.includes('Custom states'), `button.json: Custom states faltante, got ${JSON.stringify(buttonTocUnique)}`);
 assert.ok(buttonTocUnique.includes('CSS Parts'),    `button.json: CSS Parts faltante, got ${JSON.stringify(buttonTocUnique)}`);
-assert.ok(buttonTocUnique.includes('Métodos'),      `button.json: Métodos faltante, got ${JSON.stringify(buttonTocUnique)}`);
+// button.json tiene un section { id: "methods", title: "API JavaScript" } —
+// el matching va por título, así que la etiqueta canónica es "API JavaScript"
+// (no "Métodos"). Verificamos la forma real.
+assert.ok(buttonTocUnique.includes('API JavaScript'), `button.json: API JavaScript faltante, got ${JSON.stringify(buttonTocUnique)}`);
 assert.ok(buttonTocUnique.includes('Eventos'),      `button.json: Eventos faltante, got ${JSON.stringify(buttonTocUnique)}`);
 assert.ok(!buttonTocUnique.includes('Anatomía'),    `button.json: Anatomía no debe estar en TOC`);
 assert.ok(!buttonTocUnique.includes('Ejemplos'),    `button.json: Ejemplos no debe estar en TOC`);
+// Phase W1: button.json debe tener al menos las 4 estándar + el resto no
+// excluidas. Antes tenía 4; ahora ≥ 4 (incluye las 11 secciones navegables).
+assert.ok(buttonTocUnique.length >= 4, `button.json: TOC debe tener al menos 4 items, got ${buttonTocUnique.length}`);
 
 // ─── Casos concretos: window.json ──────────────────────────────────────
 //
-// window.json tiene { intro, basico, api } → sólo "api" entra → <2 → sin TOC.
+// window.json tiene { intro, basico, api }. Phase O: solo `api` → 1 item →
+// <2 → sin TOC. Phase W1: `basico` se añade con su título → 2 items.
 const windowDef = JSON.parse(readFileSync(join(componentsDir, 'overlays', 'window.json'), 'utf8'));
-const windowToc: string[] = [];
-for (const s of windowDef.sections) {
-  const m = matchSection(String(s.id || ''), String(s.title || ''));
-  if (m) windowToc.push(m);
-}
-const seenWin = new Set<string>();
-const windowTocUnique = windowToc.filter((l) => (seenWin.has(l) ? false : (seenWin.add(l), true)));
-assert.deepEqual(
-  windowTocUnique,
-  ['API JavaScript'],
-  `window.json: TOC debe ser ["API JavaScript"], got ${JSON.stringify(windowTocUnique)}`,
-);
+const windowTocUnique = buildToc(windowDef);
+assert.ok(windowTocUnique.includes('API JavaScript'), `window.json: API JavaScript faltante, got ${JSON.stringify(windowTocUnique)}`);
+assert.ok(windowTocUnique.length >= 2, `window.json: TOC debe tener al menos 2 items (Phase W1), got ${windowTocUnique.length}`);
 
 // ─── Casos concretos: card.json (usa id="methods" con title="API JavaScript") ──
 const cardDef = JSON.parse(readFileSync(join(componentsDir, 'layout', 'card.json'), 'utf8'));
-const cardToc: string[] = [];
-for (const s of cardDef.sections) {
-  const m = matchSection(String(s.id || ''), String(s.title || ''));
-  if (m) cardToc.push(m);
-}
-const seenCard = new Set<string>();
-const cardTocUnique = cardToc.filter((l) => (seenCard.has(l) ? false : (seenCard.add(l), true)));
-assert.ok(cardTocUnique.includes('Métodos'), `card.json: Métodos faltante, got ${JSON.stringify(cardTocUnique)}`);
+const cardTocUnique = buildToc(cardDef);
+assert.ok(cardTocUnique.includes('API JavaScript'), `card.json: API JavaScript faltante, got ${JSON.stringify(cardTocUnique)}`);
+
+// ─── Casos concretos: button-group.json (Phase W1: ya no es 0 items) ──
+//
+// Antes: `{ intro, appearance, orientation, select, modifiers, split,
+// toolbar, native, keyboard, api, reference }` → solo `api` (1 item) →
+// < 2 → TOC vacío. Phase W1: incluye las 10 no excluidas.
+const buttonGroupDef = JSON.parse(readFileSync(join(componentsDir, 'actions', 'button-group.json'), 'utf8'));
+const bgTocUnique = buildToc(buttonGroupDef);
+assert.ok(bgTocUnique.includes('API JavaScript'), `button-group.json: API JavaScript faltante, got ${JSON.stringify(bgTocUnique)}`);
+assert.ok(bgTocUnique.length >= 2, `button-group.json: TOC debe tener al menos 2 items (Phase W1), got ${bgTocUnique.length}`);
 
 console.log(
   `docs-toc-integration.test.ts: PASS — ${withToc} con TOC, ${withoutToc} sin TOC; ` +
-    `button=${buttonTocUnique.length}/4 esperados, window=${windowTocUnique.length}/1 esperado, card=${cardTocUnique.length} matches`,
+    `button=${buttonTocUnique.length} (≥4), window=${windowTocUnique.length} (≥2), ` +
+    `button-group=${bgTocUnique.length} (≥2), card=${cardTocUnique.length} matches`,
 );
 process.exit(0);

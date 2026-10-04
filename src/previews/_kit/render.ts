@@ -235,14 +235,56 @@ export function matchStandardToc(section: PreviewSection): StandardTocEntry | nu
   return null;
 }
 
-/** Filtra las secciones de referencia (las 7 estándar, sin anatomía/ejemplos). */
+/**
+ * Devuelve las secciones que forman el TOC de la derecha.
+ *
+ * Phase W1 — antes este helper solo incluía las 7 secciones estándar. Esto
+ * rompía dos casos:
+ *   1. Componentes con `<2` secciones estándar (ej. `iswc-button-group` con
+ *      solo `api`) — el TOC quedaba vacío por el umbral `< 2`.
+ *   2. Componentes cuyas secciones reales del `.md` no encajan con las
+ *      7 canónicas (ej. `iswc-button` perdía Anatomía/Atributos/Slots
+ *      porque viven dentro de `reference` como sub-headings).
+ *
+ * Nueva política:
+ *   - Pasada 1: por cada entrada estándar en orden canónico, si alguna
+ *     sección del JSON encaja por id o título, se añade con etiqueta
+ *     canónica (Phase O). Esto mantiene la coherencia visual.
+ *   - Pasada 2: cualquier sección restante que NO esté en
+ *     `EXCLUDED_FROM_TOC` se añade con su `title` (o `id`) original.
+ *     El TOC pasa a reflejar la realidad del `.md` sin obligar a renombrar
+ *     secciones a las 7 canónicas.
+ *   - El umbral de "TOC se renderiza" baja de `< 2` a `< 1`: con una sola
+ *     entrada el panel derecho ya muestra item.
+ */
 export function standardTocSections(def: PreviewDefinition): { section: PreviewSection; label: string }[] {
   if (!def || !Array.isArray(def.sections)) return [];
   const out: { section: PreviewSection; label: string }[] = [];
-  for (const section of def.sections) {
-    const match = matchStandardToc(section);
-    if (match) out.push({ section, label: match.label });
+  const used = new Set<string>();
+
+  // Pasada 1 — secciones estándar en orden canónico.
+  for (const entry of STANDARD_TOC) {
+    for (const section of def.sections) {
+      if (!section || !section.id || used.has(section.id)) continue;
+      if (EXCLUDED_FROM_TOC.has(normId(section.id))) continue;
+      const idN = normId(section.id);
+      const titleN = normTitle(section.title || '');
+      if (entry.ids.includes(idN) || (titleN && entry.titles.includes(titleN))) {
+        out.push({ section, label: entry.label });
+        used.add(section.id);
+        break;
+      }
+    }
   }
+
+  // Pasada 2 — secciones restantes (no excluidas), en su orden del JSON.
+  for (const section of def.sections) {
+    if (!section || !section.id || used.has(section.id)) continue;
+    if (EXCLUDED_FROM_TOC.has(normId(section.id))) continue;
+    out.push({ section, label: section.title || section.id });
+    used.add(section.id);
+  }
+
   return out;
 }
 
@@ -386,13 +428,19 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   // Una sola seccion no tiene indice: el panel derecho quedaria vacio.
   if (def.withoutToc || def.sections.length < 2) return;
 
-  // Phase O: el TOC de la derecha sólo lista las 7 secciones de "Referencia
+  // Phase O + W1: el TOC de la derecha lista las secciones de "Referencia
   // completa" (Atributos, Custom states, Eventos, Slots, CSS Parts, API
-  // JavaScript, Métodos). Anatomía y Ejemplos van en el main y no aparecen
-  // aquí. Mantenemos el orden canónico del estándar aunque el `.md` los
+  // JavaScript, Métodos) con etiqueta canónica + cualquier otra sección
+  // navegable del JSON (Anatomía/Ejemplos siguen excluidas). El orden
+  // canónico del estándar se mantiene primero aunque el `.md` los
   // ponga en otro orden — así el índice es coherente entre componentes.
+  //
+  // Antes el umbral era `< 2`: si un componente declaraba solo `api`,
+  // el panel quedaba vacío. Ahora es `< 1`: cualquier sección navegable
+  // arma el TOC, lo que arregla `iswc-button-group` (solo `api`) y
+  // cualquier componente con secciones no estándar.
   const toc = standardTocSections(def);
-  if (toc.length < 2) return;
+  if (toc.length < 1) return;
 
   const h1 = document.createElement('h1');
   h1.textContent = def.tag;
