@@ -51,7 +51,7 @@
   // (4) deshabilitado
   const bloqueado = document.createElement('iswc-file-input');
   bloqueado.label = 'Archivo bloqueado';
-  bloqueado.value = 'archivo-bloqueado.pdf';
+  bloqueado.setAttribute('value', 'archivo-bloqueado.pdf');
   bloqueado.disabled = true;
   bloqueado.hint = 'No editable en este contexto.';
   document.querySelector('#sec-disabled').appendChild(bloqueado);
