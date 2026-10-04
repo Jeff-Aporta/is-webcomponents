@@ -61,6 +61,7 @@ const RAIZ_PROPS = new Set([
   '$schema', 'tag', 'category', 'title', 'titleHtml', 'description',
   'styles', 'storageKey', 'mainClass', 'wrapperClass', 'prelude',
   'hasBehavior', 'withoutToc', 'sections',
+  'ficha', // sub-objeto con sections+exclude generado por ficha-bridge
 ]);
 
 // ─────────────────────────────────────────────────────────────────────────────
