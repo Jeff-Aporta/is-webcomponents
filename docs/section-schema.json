@@ -1,0 +1,225 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://iswebcomponents.local/schemas/section-schema.json",
+  "title": "FichaSectionSchema",
+  "description": "Spec declarativo de las 9 secciones estándar de una ficha de componente (iswc). Una ficha es el JSON que alimenta al generador de páginas /docs/<tag>.html a partir del .md + manifest. Si una sección no aplica al componente, debe declararse en `exclude` para que la validación no warnée.",
+  "version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sections"],
+  "properties": {
+    "sections": {
+      "type": "object",
+      "description": "Mapa de las 9 secciones. Anatomía y Ejemplos son `content` (markdown libre). El resto son `table` (filas estructuradas).",
+      "additionalProperties": false,
+      "properties": {
+        "anatomia": {
+          "description": "Anatomía: descripción libre del componente (qué es, cuándo usarlo).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["content"],
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Markdown con la anatomía del componente."
+            }
+          }
+        },
+        "atributos": {
+          "description": "Atributos HTML observados: tabla con nombre, tipo y descripción.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table"],
+          "properties": {
+            "table": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/AttrRow" }
+            }
+          }
+        },
+        "props": {
+          "description": "Propiedades JS (no reflected): tabla con nombre, tipo, default opcional y descripción.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table"],
+          "properties": {
+            "table": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/PropRow" }
+            }
+          }
+        },
+        "states": {
+          "description": "Custom states (`:state(foo)`) del componente: estado, selector CSS y cuándo se aplica.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table"],
+          "properties": {
+            "table": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/StateRow" }
+            }
+          }
+        },
+        "eventos": {
+          "description": "Eventos CustomEvent emitidos: nombre, detalle del payload y cuándo se dispara.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table"],
+          "properties": {
+            "table": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/EventoRow" }
+            }
+          }
+        },
+        "slots": {
+          "description": "Slots del Shadow DOM: nombre y descripción.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table"],
+          "properties": {
+            "table": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/SlotRow" }
+            }
+          }
+        },
+        "parts": {
+          "description": "CSS `::part(name)` exportados al light DOM.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table"],
+          "properties": {
+            "table": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/PartRow" }
+            }
+          }
+        },
+        "apiJs": {
+          "description": "API JavaScript pública: métodos accesibles en `el.apiJs` o documentados como `Component.method()`.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table"],
+          "properties": {
+            "table": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/ApiJsRow" }
+            }
+          }
+        },
+        "ejemplos": {
+          "description": "Bloque final con ejemplos de uso (markdown + live playgrounds).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["content"],
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "Markdown con los ejemplos."
+            }
+          }
+        }
+      }
+    },
+    "exclude": {
+      "type": "array",
+      "description": "Secciones que NO aplican al componente (declaradas para que el validador no warnée). Las claves válidas coinciden con las 9 secciones declaradas arriba.",
+      "items": { "$ref": "#/$defs/SectionId" },
+      "uniqueItems": true,
+      "default": []
+    }
+  },
+  "$defs": {
+    "SectionId": {
+      "type": "string",
+      "enum": [
+        "anatomia",
+        "atributos",
+        "props",
+        "states",
+        "eventos",
+        "slots",
+        "parts",
+        "apiJs",
+        "ejemplos"
+      ]
+    },
+    "AttrRow": {
+      "type": "object",
+      "description": "Fila de la tabla de atributos. Campos extra se permiten (forward-compat) pero el validador los preserva vía passthrough en Zod.",
+      "properties": {
+        "name":  { "type": "string", "description": "Nombre del atributo (kebab-case, sin prefijo `iswc-`)." },
+        "type":  { "type": "string", "description": "Tipo del valor: `string`, `number`, `boolean`, `enum`, `Ref<…>`, etc." },
+        "desc":  { "type": "string", "description": "Descripción legible." }
+      },
+      "required": ["name"],
+      "additionalProperties": true
+    },
+    "PropRow": {
+      "type": "object",
+      "description": "Fila de la tabla de props JS. `default` es opcional (no todos los props tienen default).",
+      "properties": {
+        "name":    { "type": "string" },
+        "type":    { "type": "string" },
+        "default": { "type": "string", "description": "Valor por defecto en formato legible (ej. `'sm'`, `false`, `0`)." },
+        "desc":    { "type": "string" }
+      },
+      "required": ["name", "type"],
+      "additionalProperties": true
+    },
+    "StateRow": {
+      "type": "object",
+      "description": "Fila de la tabla de custom states.",
+      "properties": {
+        "state":    { "type": "string", "description": "Nombre del state sin `:state(…)` (ej. `loading`, `disabled`)." },
+        "selector": { "type": "string", "description": "Selector CSS completo equivalente (ej. `host(:state(disabled))`)." },
+        "cuando":   { "type": "string", "description": "Descripción de cuándo se aplica el state." }
+      },
+      "required": ["state", "cuando"],
+      "additionalProperties": true
+    },
+    "EventoRow": {
+      "type": "object",
+      "description": "Fila de la tabla de eventos.",
+      "properties": {
+        "evento":   { "type": "string", "description": "Nombre del evento (sin prefijo `iswc-`, kebab-case)." },
+        "detalle":  { "type": "string", "description": "Tipo o forma del `detail` (ej. `CustomEvent<{ value: string }>`)." },
+        "cuando":   { "type": "string", "description": "Descripción de cuándo se emite." }
+      },
+      "required": ["evento", "cuando"],
+      "additionalProperties": true
+    },
+    "SlotRow": {
+      "type": "object",
+      "description": "Fila de la tabla de slots.",
+      "properties": {
+        "slot":       { "type": "string", "description": "Nombre del slot (`default` si es el slot por defecto)." },
+        "descripcion":{ "type": "string" }
+      },
+      "required": ["slot"],
+      "additionalProperties": true
+    },
+    "PartRow": {
+      "type": "object",
+      "description": "Fila de la tabla de CSS parts.",
+      "properties": {
+        "part":       { "type": "string", "description": "Nombre del `::part(name)`." },
+        "descripcion":{ "type": "string" }
+      },
+      "required": ["part"],
+      "additionalProperties": true
+    },
+    "ApiJsRow": {
+      "type": "object",
+      "description": "Fila de la tabla de API JS.",
+      "properties": {
+        "metodo":     { "type": "string", "description": "Nombre del método (con paréntesis opcionales, ej. `open()` o `dispose()`)." },
+        "descripcion":{ "type": "string" }
+      },
+      "required": ["metodo"],
+      "additionalProperties": true
+    }
+  }
+}

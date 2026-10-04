@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-03T16:54:40.506Z",
-  "count": 63,
+  "generatedAt": "2026-10-04T14:08:06.854Z",
+  "count": 66,
   "modules": [
     {
       "file": "button-shape.ts",
@@ -80,11 +80,21 @@
       ]
     },
     {
+      "file": "code-highlight.schema.ts",
+      "id": "code-highlight.schema",
+      "path": "src/components/_shared/code-highlight.schema.ts",
+      "summary": "code-highlight.schema — Solo los tipos LOCALES (no exportados) se migran aquí. Los tipos exportados",
+      "bytes": 551,
+      "exports": [
+        "TagInnerSchema"
+      ]
+    },
+    {
       "file": "code-highlight.ts",
       "id": "code-highlight",
       "path": "src/components/_shared/code-highlight.ts",
       "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
-      "bytes": 22053,
+      "bytes": 22076,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -154,11 +164,22 @@
       ]
     },
     {
+      "file": "date-field-core.schema.ts",
+      "id": "date-field-core.schema",
+      "path": "src/components/_shared/date-field-core.schema.ts",
+      "summary": "date-field-core.schema",
+      "bytes": 704,
+      "exports": [
+        "SectionTypeSchema",
+        "LayoutItemSchema"
+      ]
+    },
+    {
       "file": "date-field-core.ts",
       "id": "date-field-core",
       "path": "src/components/_shared/date-field-core.ts",
       "summary": "Motor de campos de fecha/hora editables por secciones (MUI Fields). — Cada sección (día, mes, año, hora…) es un `role=\"spinbutton\"`: flechas para",
-      "bytes": 17177,
+      "bytes": 16943,
       "exports": [
         "sectionLayout",
         "SectionField"
@@ -245,11 +266,21 @@
       ]
     },
     {
+      "file": "diagram-edge-spread.schema.ts",
+      "id": "diagram-edge-spread.schema",
+      "path": "src/components/_shared/diagram-edge-spread.schema.ts",
+      "summary": "diagram-edge-spread.schema",
+      "bytes": 374,
+      "exports": [
+        "RunSchema"
+      ]
+    },
+    {
       "file": "diagram-edge-spread.ts",
       "id": "diagram-edge-spread",
       "path": "src/components/_shared/diagram-edge-spread.ts",
       "summary": "Separa polilíneas ortogonales que corren pegadas. — El A* reutiliza el mismo corredor: varias aristas salen como una sola raya.",
-      "bytes": 4836,
+      "bytes": 4768,
       "exports": [
         "spreadOrthogonalPaths"
       ]
@@ -488,12 +519,13 @@
       "id": "intent",
       "path": "src/components/_shared/intent.ts",
       "summary": "intent — Un \"intent\" describe EL SIGNIFICADO del color que aplica el componente,",
-      "bytes": 1911,
+      "bytes": 2726,
       "exports": [
         "INTENT",
         "DEFAULT_INTENT",
         "normalizeIntent",
-        "setEnumAttr"
+        "setEnumAttr",
+        "ensureDefaultColor"
       ]
     },
     {

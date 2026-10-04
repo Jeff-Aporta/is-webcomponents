@@ -1,0 +1,43 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-docx-view",
+  "category": "files",
+  "title": "<iswc-docx-view>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-docx-view",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "DOCX view-only (mammoth CDN).",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-docx-view height=\"14rem\"></iswc-docx-view>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

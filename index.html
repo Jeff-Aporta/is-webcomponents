@@ -58,7 +58,7 @@
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=7bj37l';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=yi7el2';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -81,7 +81,7 @@
           'iswc-palette-selector',
           'iswc-code',
         ),
-        import('./dist/cdn/preview/preview-component.min.js?h=cb73xm'),
+        import('./dist/cdn/preview/preview-component.min.js?h=1xg537'),
       ]);
       document.documentElement.dataset.kitShell = '1';
       window.dispatchEvent(new Event('iswc-gallery-shell-ready'));
@@ -142,6 +142,6 @@
              label="Componentes"></iswc-drawer>
 
   <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js?h=8tnad1"></script>
+  <script type="module" src="./dist/gallery-app.min.js?h=xp1lua"></script>
 </body>
 </html>

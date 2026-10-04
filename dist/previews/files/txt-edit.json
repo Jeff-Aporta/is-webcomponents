@@ -1,0 +1,43 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-txt-edit",
+  "category": "files",
+  "title": "<iswc-txt-edit>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-txt-edit",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Editor de texto con iswc-change.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-txt-edit content=\"editable\" height=\"12rem\"></iswc-txt-edit>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

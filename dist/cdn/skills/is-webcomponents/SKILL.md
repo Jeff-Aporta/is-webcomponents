@@ -34,6 +34,24 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 | [`/is-webcomponents:local`](tools/local.md) | Vendorizar el kit y bootear local-first, con CDN como fallback. |
 | [`/is-webcomponents:runtime`](tools/runtime.md) | APIs **sin** tag: loader, IswcUi, md-lite/hydrate/fences, response-cache, sync-pins. |
 
+## Cómo documentar un componente
+
+Cada guía de módulo (`src/components/<carpeta>/<modulo>.md`) sigue la
+misma plantilla para que el catálogo y los agentes la lean igual. La
+skill [`../document-component/SKILL.md`](../document-component/SKILL.md)
+detalla la estructura obligatoria (anatomía, atributos observados,
+props, custom states, eventos, slots, CSS parts, ejemplos), las
+convenciones de tono, el formato de tablas y los enlaces cruzados que
+cada ficha debe llevar.
+
+| Recurso | Ruta |
+| --- | --- |
+| Skill | [`../document-component/SKILL.md`](../document-component/SKILL.md) |
+| Anatomía y frontmatter | [`../document-component/references/anatomy-section.md`](../document-component/references/anatomy-section.md) |
+| Custom states | [`../document-component/references/custom-states.md`](../document-component/references/custom-states.md) |
+| Bloques de código | [`../document-component/references/code-blocks.md`](../document-component/references/code-blocks.md) |
+| Estilo visual | [`../document-component/references/visual-style.md`](../document-component/references/visual-style.md) |
+
 ## Enlaces (GitHub primero, raw como secundario)
 
 Los agentes instalan y siguen mejor skills desde URLs de **repo de GitHub**.
@@ -217,6 +235,26 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 | `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs) |
 
 <!-- apis:fin -->
+
+## Cómo construir un componente
+
+Esta skill cubre cómo **consumir** el kit desde apps externas. Si lo que
+necesitas es **crear o refactorizar un componente** del propio kit
+(añadir un `<iswc-foo>` nuevo, o revisar uno existente para que cumpla
+el contrato), sigue la skill paralela:
+
+| Skill | Cuándo |
+| --- | --- |
+| [`build-component/SKILL.md`](../build-component/SKILL.md) | Anatomía obligatoria del `.md`, custom states (`StateMachine`), CSS parts y slots, atributos observados vs propiedades, tokens `--iswc-*`, accesibilidad, tests con `node:test` + `assert/strict`, demo en `demos/<cat>/<comp>/<comp>.html`. |
+
+Sub-guías de la skill:
+
+- [`references/lifecycle.md`](../build-component/references/lifecycle.md) — Hooks de `ElementBase`, shadow, upgrade de propiedades, form-associated, cleanup.
+- [`references/states.md`](../build-component/references/states.md) — Custom states, `setCustomState`, fallback `data-state-*`.
+- [`references/parts-slots.md`](../build-component/references/parts-slots.md) — `part="..."`, slots semánticos, `:slotted(...)`.
+- [`references/props-events.md`](../build-component/references/props-events.md) — Atributos observados, propiedades, eventos `iswc-*` con `composed: true`.
+- [`references/css-tokens.md`](../build-component/references/css-tokens.md) — Tokens `--iswc-*`, temas, paletas, `static styleAttrs`.
+- [`references/accessibility.md`](../build-component/references/accessibility.md) — Semántica, foco, teclado, ARIA, focus management, modales.
 
 ## Catálogo de componentes
 
