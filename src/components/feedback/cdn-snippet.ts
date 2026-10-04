@@ -36,12 +36,6 @@ import '../code/code.js';
     <section class="cdn" aria-label="snippet">
       <header class="cdn__head">
         <h3 class="cdn__title">snippet</h3>
-        <p class="cdn__hint">
-          Pegá el bloque en el <code>&lt;head&gt;</code> (o al final del
-          <code>&lt;body&gt;</code>). Primero el loader del kit; si hay deps
-          (p. ej. <code>patyLoader</code>), van en el mismo snippet justo
-          después; luego el boot (<code>loadCSS*</code> + <code>load(tag)</code>).
-        </p>
       </header>
 
       <div class="cdn__row" data-kind="loader">
