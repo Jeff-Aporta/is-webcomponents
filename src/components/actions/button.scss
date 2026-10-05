@@ -1,3 +1,10 @@
+// button.scss — POC de migración CSS → SCSS.
+// La sintaxis es la misma que button.css (CSS es superconjunto de SCSS
+// en este dialecto); no introducimos variables ni mixins todavia para
+// que el diff contra button.css sea trivial y reversible. Fase 2 ya
+// introduce tokens via `@use '../styles/tokens' as *;` cuando
+// aparezca la primera variable compartida.
+
 /* Color × appearance ortogonales
  *
  * 1) `color` solo enlaza la familia a roles `--_tone-*` (tokens relativos
@@ -51,7 +58,7 @@
     border: var(--iswc-button-border-width) solid var(--_border);
     border-start-start-radius: var(--_button-start-start-radius, var(--iswc-button-border-radius));
     border-start-end-radius: var(--_button-start-end-radius, var(--iswc-button-border-radius));
-    border-end-start-radius: var(--_button-end-start-radius, var(--iswc-button-border-radius));
+    border-end-start-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius));
     border-end-end-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius));
     font: inherit;
     font-family: var(--iswc-button-font-family);

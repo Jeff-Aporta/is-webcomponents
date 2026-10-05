@@ -7,10 +7,12 @@
     "@browserbasehq/stagehand": "npm:@browserbasehq/stagehand@^4.0.2",
     "typescript": "npm:typescript@^5.9.0",
     "zod": "npm:zod@^4.4.3",
-    "zod/mini": "npm:zod@^4.4.3/mini"
+    "zod/mini": "npm:zod@^4.4.3/mini",
+    "sass": "npm:sass@^1.105.0"
   },
   "tasks": {
-    "build": "deno run -A --no-check scripts/build.mjs",
+    "build:scss": "deno run -A --no-check scripts/build-scss.mjs",
+    "build": "deno task build:scss ; deno run -A --no-check scripts/build.mjs",
     "dev": "deno run -A --no-check scripts/serve.mjs",
     "dev:demos": "deno run -A --no-check scripts/serve-demos.mjs",
     "icons:download": "deno run -A --no-check scripts/download-icons.ts",

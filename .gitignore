@@ -4,6 +4,10 @@ Thumbs.db
 *.log
 *.txt
 
+# CSS generado a partir de SCSS (Fase 1: POC button). El .scss es la fuente;
+# `deno task build:scss` regenera el .css hermano antes del build normal.
+src/components/actions/button.css
+
 # Markdown: ignorar solo root y specs/ (WIPs, docs de equipo).
 # IMPORTANTE: dist/ NO se ignora porque `dist/**/skills/**/*.md` se
 # bundlea desde `src/skills/` y se sirve al público. Si ignoráramos
