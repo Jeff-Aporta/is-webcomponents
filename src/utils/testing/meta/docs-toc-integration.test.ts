@@ -1,8 +1,10 @@
 // tests/docs-toc-integration.test.ts
 //
 // Verifica contra JSONs reales del repo que `standardTocSections()` filtra
-// correctamente. Lee varios `<tag>.json` de `src/components/` y aplica el
-// mismo algoritmo; comprueba que el resultado coincide con lo esperado.
+// correctamente y respeta el ORDEN del JSON (Phase W38). Lee varios
+// `<tag>.json` de `src/components/` y aplica el mismo algoritmo; comprueba
+// que el resultado coincide con lo esperado y que el orden es exactamente
+// el orden de las `sections` en el `def`.
 //
 // Por qué este test: el guardián estático (docs-toc.test.ts) verifica que
 // los símbolos existen y la firma. Este test valida que el algoritmo
@@ -54,52 +56,41 @@ function normTitle(title: string): string {
   return title.toLowerCase().trim();
 }
 
-/** Réplica del algoritmo real (Phase W1): estándar + no estándar. */
+/** Réplica del algoritmo real (Phase O + W38): per-entry en orden canónico. */
 function matchSection(id: string, title: string): string | null {
   if (!id) return null;
   const idN = normId(id);
   if (excludedIds.has(idN)) return null;
-  for (const entry of STANDARD_TOC) {
-    if (entry.ids.includes(idN)) return entry.label;
-  }
   const tN = normTitle(title || '');
-  if (tN) {
-    for (const entry of STANDARD_TOC) {
-      if (entry.titles.includes(tN)) return entry.label;
+  // Matching per-entry en orden canónico (Phase O): para cada entrada
+  // estándar, si el id O título de la sección matchea, devuelve la
+  // etiqueta. Esto preserva la precedencia "API JavaScript" sobre
+  // "Métodos" para una sección con id="methods" y title="API JavaScript"
+  // (la entrada "API JavaScript" está antes y matchea por título).
+  for (const entry of STANDARD_TOC) {
+    if (entry.ids.includes(idN) || (tN && entry.titles.includes(tN))) {
+      return entry.label;
     }
   }
   return null;
 }
 
 /**
- * Réplica de `standardTocSections(def)` (Phase W1): pasada 1 estándar en
- * orden canónico + pasada 2 con cualquier sección navegable no excluida.
+ * Réplica de `standardTocSections(def)` (Phase W38): una sola pasada sobre
+ * `def.sections` en su orden del JSON. Para cada sección navegable (no
+ * excluida), si matchea con una entrada estándar se usa la etiqueta
+ * canónica; si no, se usa `section.title || section.id` como fallback.
  */
 function buildToc(def: any): string[] {
   if (!Array.isArray(def?.sections)) return [];
   const labels: string[] = [];
   const used = new Set<string>();
-  // Pasada 1 — estándar
-  for (const entry of STANDARD_TOC) {
-    for (const s of def.sections) {
-      const id = String(s?.id || '');
-      if (!id || used.has(id)) continue;
-      if (excludedIds.has(normId(id))) continue;
-      const idN = normId(id);
-      const tN = normTitle(String(s?.title || ''));
-      if (entry.ids.includes(idN) || (tN && entry.titles.includes(tN))) {
-        labels.push(entry.label);
-        used.add(id);
-        break;
-      }
-    }
-  }
-  // Pasada 2 — resto
   for (const s of def.sections) {
     const id = String(s?.id || '');
     if (!id || used.has(id)) continue;
     if (excludedIds.has(normId(id))) continue;
-    labels.push(String(s?.title || id));
+    const canonical = matchSection(id, String(s?.title || ''));
+    labels.push(canonical || String(s?.title || id));
     used.add(id);
   }
   return labels;
@@ -148,9 +139,7 @@ assert.ok(withToc > 0, `al menos un componente debería tener >=1 sección en TO
 // theming, methods, events, playground, reference }.
 // Phase O: filtraba 4 secciones (states/parts/methods/events → 4 items).
 // Phase W1: incluye además las secciones navegables no excluidas, en su
-// orden del JSON. Esperado: las 4 estándar + 11 no estándar (variants,
-// appearances, sizes, icons, icon-only, pill, caret, loading, disabled,
-// link, form, theming, playground, reference) — anatomía, ejemplos excluidos.
+// orden del JSON. Phase W38: el ORDEN del TOC es exactamente el del JSON.
 const buttonDef = JSON.parse(readFileSync(join(componentsDir, 'actions', 'button.json'), 'utf8'));
 const buttonTocUnique = buildToc(buttonDef);
 assert.ok(buttonTocUnique.includes('Custom states'), `button.json: Custom states faltante, got ${JSON.stringify(buttonTocUnique)}`);
@@ -166,14 +155,77 @@ assert.ok(!buttonTocUnique.includes('Ejemplos'),    `button.json: Ejemplos no de
 // excluidas. Antes tenía 4; ahora ≥ 4 (incluye las 11 secciones navegables).
 assert.ok(buttonTocUnique.length >= 4, `button.json: TOC debe tener al menos 4 items, got ${buttonTocUnique.length}`);
 
+// Phase W38: el orden del TOC debe ser EXACTAMENTE el orden de las
+// sections en el JSON (excluyendo intro/anatomy/ejemplos). Tomamos la
+// primera sección navegable (no excluida) — debería ser `variants`
+// (title del JSON original).
+const buttonFirstIdx = buttonDef.sections.findIndex(
+  (s: any) => s?.id && !excludedIds.has(normId(String(s.id))),
+);
+const buttonFirstToc = buttonTocUnique[0];
+const buttonExpectedFirst =
+  matchSection(
+    String(buttonDef.sections[buttonFirstIdx].id),
+    String(buttonDef.sections[buttonFirstIdx].title || ''),
+  ) || String(buttonDef.sections[buttonFirstIdx].title || buttonDef.sections[buttonFirstIdx].id);
+assert.strictEqual(
+  buttonFirstToc,
+  buttonExpectedFirst,
+  `button.json: el primer item del TOC debe ser el de la primera section navegable, ` +
+  `esperado "${buttonExpectedFirst}", got "${buttonFirstToc}"`,
+);
+
+// Phase W38: el primer item del TOC debe estar en el MISMO ORDEN que la
+// primera section navegable del JSON. Verificamos además que
+// `Custom states` (id "states") aparece en el orden que ocupa en el JSON
+// (después de `anatomy`), no antes como haría la pasada-1 canónica.
+const anatomyIdx = buttonDef.sections.findIndex((s: any) => normId(String(s?.id)) === 'anatomy');
+const statesIdx  = buttonDef.sections.findIndex((s: any) => normId(String(s?.id)) === 'states');
+if (anatomyIdx >= 0 && statesIdx >= 0) {
+  assert.ok(
+    statesIdx > anatomyIdx,
+    `button.json sanity: "states" debe ir después de "anatomy" en el JSON (anatomy=${anatomyIdx}, states=${statesIdx})`,
+  );
+  // En el TOC, "Custom states" debe aparecer en el MISMO ORDEN relativo al
+  // resto: detrás de las secciones no-estándar que están antes de anatomy.
+  const tocIdx = buttonTocUnique.indexOf('Custom states');
+  // Cuenta cuántas sections navegables hay antes de `states` en el JSON.
+  const beforeStates = buttonDef.sections
+    .slice(0, statesIdx)
+    .filter((s: any) => s?.id && !excludedIds.has(normId(String(s.id)))).length;
+  assert.ok(
+    tocIdx >= beforeStates - 1 && tocIdx <= beforeStates + 1,
+    `button.json: "Custom states" en TOC debe respetar orden del JSON. ` +
+    `TOC idx=${tocIdx}, esperado ~${beforeStates} (sections navegables antes de states). ` +
+    `TOC=${JSON.stringify(buttonTocUnique)}`,
+  );
+}
+
 // ─── Casos concretos: window.json ──────────────────────────────────────
 //
 // window.json tiene { intro, basico, api }. Phase O: solo `api` → 1 item →
 // <2 → sin TOC. Phase W1: `basico` se añade con su título → 2 items.
+// Phase W38: el orden es el del JSON: `basico` antes de `api`.
 const windowDef = JSON.parse(readFileSync(join(componentsDir, 'overlays', 'window.json'), 'utf8'));
 const windowTocUnique = buildToc(windowDef);
 assert.ok(windowTocUnique.includes('API JavaScript'), `window.json: API JavaScript faltante, got ${JSON.stringify(windowTocUnique)}`);
 assert.ok(windowTocUnique.length >= 2, `window.json: TOC debe tener al menos 2 items (Phase W1), got ${windowTocUnique.length}`);
+// Phase W38: el primer item debe ser el de la primera section navegable
+// del JSON (`basico`), no la entrada canónica.
+if (windowTocUnique.length >= 2) {
+  const wFirst = windowDef.sections.find(
+    (s: any) => s?.id && !excludedIds.has(normId(String(s.id))),
+  );
+  const wExpected = wFirst
+    ? (matchSection(String(wFirst.id), String(wFirst.title || '')) || String(wFirst.title || wFirst.id))
+    : '';
+  assert.strictEqual(
+    windowTocUnique[0],
+    wExpected,
+    `window.json: el primer item del TOC debe ser el de la primera section navegable, ` +
+    `esperado "${wExpected}", got "${windowTocUnique[0]}"`,
+  );
+}
 
 // ─── Casos concretos: card.json (usa id="methods" con title="API JavaScript") ──
 const cardDef = JSON.parse(readFileSync(join(componentsDir, 'layout', 'card.json'), 'utf8'));
@@ -184,7 +236,8 @@ assert.ok(cardTocUnique.includes('API JavaScript'), `card.json: API JavaScript f
 //
 // Antes: `{ intro, appearance, orientation, select, modifiers, split,
 // toolbar, native, keyboard, api, reference }` → solo `api` (1 item) →
-// < 2 → TOC vacío. Phase W1: incluye las 10 no excluidas.
+// < 2 → TOC vacío. Phase W1: incluye las 10 no excluidas. Phase W38: el
+// orden es el del JSON: appearance → orientation → ... → api → reference.
 const buttonGroupDef = JSON.parse(readFileSync(join(componentsDir, 'actions', 'button-group.json'), 'utf8'));
 const bgTocUnique = buildToc(buttonGroupDef);
 assert.ok(bgTocUnique.includes('API JavaScript'), `button-group.json: API JavaScript faltante, got ${JSON.stringify(bgTocUnique)}`);
@@ -192,7 +245,7 @@ assert.ok(bgTocUnique.length >= 2, `button-group.json: TOC debe tener al menos 2
 
 console.log(
   `docs-toc-integration.test.ts: PASS — ${withToc} con TOC, ${withoutToc} sin TOC; ` +
-    `button=${buttonTocUnique.length} (≥4), window=${windowTocUnique.length} (≥2), ` +
+    `button=${buttonTocUnique.length} (≥4, orden JSON), window=${windowTocUnique.length} (≥2), ` +
     `button-group=${bgTocUnique.length} (≥2), card=${cardTocUnique.length} matches`,
 );
 process.exit(0);

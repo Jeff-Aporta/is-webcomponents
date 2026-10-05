@@ -239,50 +239,65 @@ export function matchStandardToc(section: PreviewSection): StandardTocEntry | nu
 /**
  * Devuelve las secciones que forman el TOC de la derecha.
  *
- * Phase W1 — antes este helper solo incluía las 7 secciones estándar. Esto
- * rompía dos casos:
- *   1. Componentes con `<2` secciones estándar (ej. `iswc-button-group` con
- *      solo `api`) — el TOC quedaba vacío por el umbral `< 2`.
- *   2. Componentes cuyas secciones reales del `.md` no encajan con las
- *      7 canónicas (ej. `iswc-button` perdía Anatomía/Atributos/Slots
- *      porque viven dentro de `reference` como sub-headings).
+ * Phase W38 — el orden del TOC es EXACTAMENTE el orden de las `sections`
+ * en el `def` (content order). Antes el algoritmo hacía dos pasadas:
+ *   1) Por cada entrada estándar en orden canónico, buscaba la primera
+ *      sección que encajara. Esto reordenaba el TOC para que las 7
+ *      secciones canónicas (Atributos → Custom states → … → Métodos)
+ *      aparecieran en orden fijo aunque el JSON las declarara mezcladas.
+ *   2) Las secciones restantes se añadían en su orden del JSON.
  *
- * Nueva política:
- *   - Pasada 1: por cada entrada estándar en orden canónico, si alguna
- *     sección del JSON encaja por id o título, se añade con etiqueta
- *     canónica (Phase O). Esto mantiene la coherencia visual.
- *   - Pasada 2: cualquier sección restante que NO esté en
- *     `EXCLUDED_FROM_TOC` se añade con su `title` (o `id`) original.
- *     El TOC pasa a reflejar la realidad del `.md` sin obligar a renombrar
- *     secciones a las 7 canónicas.
- *   - El umbral de "TOC se renderiza" baja de `< 2` a `< 1`: con una sola
- *     entrada el panel derecho ya muestra item.
+ * El usuario pidió que el orden del TOC coincidiera EXACTAMENTE con el
+ * orden del content. La nueva política:
+ *   - Se itera `def.sections` en orden (content order).
+ *   - Para cada sección navegable (no excluida), se busca la primera
+ *     entrada de `STANDARD_TOC` (en orden canónico) que matchee por id o
+ *     título. Si hay match, se usa la etiqueta canónica (Phase O:
+ *     coherencia visual entre componentes).
+ *   - Si NO hay match con ninguna entrada estándar, se usa `section.title
+ *     || section.id` como fallback (Phase W1: secciones navegables no
+ *     estándar que el `.md` declara con títulos propios, ej.
+ *     `Variantes`, `Con iconos`, `Loading`).
+ *
+ * Importante: el matching se hace entrada-por-entrada en orden canónico
+ * (no id-primero-luego-título). Esto preserva la convención del Phase O
+ * donde una sección con `id="methods"` y `title="API JavaScript"` se
+ * etiqueta como "API JavaScript" (match por título contra la entrada
+ * "API JavaScript", que está antes que la entrada "Métodos" en el
+ * estándar canónico).
+ *
+ * Casos históricos que esto arregla:
+ *   - `iswc-button-group` con solo `api` → antes TOC vacío por el
+ *     umbral `< 2`. Ahora el panel muestra la sección.
+ *   - `iswc-button` con secciones reales no canónicas → antes faltaban.
+ *     Ahora aparecen con su título original, en el orden del JSON.
  */
 export function standardTocSections(def: PreviewDefinition): { section: PreviewSection; label: string }[] {
   if (!def || !Array.isArray(def.sections)) return [];
   const out: { section: PreviewSection; label: string }[] = [];
   const used = new Set<string>();
 
-  // Pasada 1 — secciones estándar en orden canónico.
-  for (const entry of STANDARD_TOC) {
-    for (const section of def.sections) {
-      if (!section || !section.id || used.has(section.id)) continue;
-      if (EXCLUDED_FROM_TOC.has(normId(section.id))) continue;
-      const idN = normId(section.id);
-      const titleN = normTitle(section.title || '');
-      if (entry.ids.includes(idN) || (titleN && entry.titles.includes(titleN))) {
-        out.push({ section, label: entry.label });
-        used.add(section.id);
-        break;
-      }
-    }
-  }
-
-  // Pasada 2 — secciones restantes (no excluidas), en su orden del JSON.
   for (const section of def.sections) {
     if (!section || !section.id || used.has(section.id)) continue;
     if (EXCLUDED_FROM_TOC.has(normId(section.id))) continue;
-    out.push({ section, label: section.title || section.id });
+    const idN = normId(section.id);
+    const titleN = normTitle(section.title || '');
+    let label: string | null = null;
+    // Matching entrada-por-entrada en orden canónico (Phase O). Esto
+    // preserva la precedencia "API JavaScript" sobre "Métodos" cuando
+    // una sección tiene id="methods" y title="API JavaScript": la
+    // entrada "API JavaScript" está antes en `STANDARD_TOC` y matchea
+    // por título, ganando a la entrada "Métodos" (que matchearía por id).
+    for (const entry of STANDARD_TOC) {
+      if (entry.ids.includes(idN) || (titleN && entry.titles.includes(titleN))) {
+        label = entry.label;
+        break;
+      }
+    }
+    // Pasada 2 (Phase W1): si la sección no encaja con ninguna entrada
+    // estándar del Phase O, usamos su `title` (o `id`) original para no
+    // perder la navegación. Mantiene el orden del JSON.
+    out.push({ section, label: label || section.title || section.id });
     used.add(section.id);
   }
 
@@ -456,25 +471,32 @@ export function renderDefinition(def: PreviewDefinition, targets: { main: HTMLEl
   }
 
   // Una sola seccion no tiene indice: el panel derecho quedaria vacio.
-  if (def.withoutToc || def.sections.length < 2) return;
+  if (def.withoutToc) return;
 
-  // Phase O + W1: el TOC de la derecha lista las secciones de "Referencia
-  // completa" (Atributos, Custom states, Eventos, Slots, CSS Parts, API
-  // JavaScript, Métodos) con etiqueta canónica + cualquier otra sección
-  // navegable del JSON (Anatomía/Ejemplos siguen excluidas). El orden
-  // canónico del estándar se mantiene primero aunque el `.md` los
-  // ponga en otro orden — así el índice es coherente entre componentes.
-  //
-  // Antes el umbral era `< 2`: si un componente declaraba solo `api`,
-  // el panel quedaba vacío. Ahora es `< 1`: cualquier sección navegable
-  // arma el TOC, lo que arregla `iswc-button-group` (solo `api`) y
-  // cualquier componente con secciones no estándar.
+  // Phase W38: el TOC siempre tiene un header visible con el nombre del
+  // componente en MAYÚSCULAS (p.ej. "ISWC-BUTTON"). Aunque no haya items
+  // navegables, el panel derecho nunca queda sin título. La transformación
+  // a mayúsculas la hace CSS (`text-transform: uppercase` en `.sidebar h1`);
+  // aquí mandamos el tag en mayúsculas explícitamente para que el `textContent`
+  // refleje el contrato aunque alguien desactive la regla de estilo.
+  const h1 = document.createElement('h1');
+  h1.textContent = (def.tag || '').toUpperCase();
+  aside.append(h1);
+
+  // Sin secciones: el panel queda solo con el título, sin scrollspy.
+  if (def.sections.length < 1) return;
+
+  // Phase O + W1 + W38: el TOC de la derecha lista las secciones de
+  // "Referencia completa" (Atributos, Custom states, Eventos, Slots, CSS
+  // Parts, API JavaScript, Métodos) con etiqueta canónica + cualquier otra
+  // sección navegable del JSON (Anatomía/Ejemplos/Intro siguen excluidas).
+  // Phase W38: el orden del TOC es EXACTAMENTE el orden de las sections
+  // en el `def` (content order). Antes el algoritmo hacía dos pasadas
+  // que reordenaban al estándar canónico; ahora `standardTocSections`
+  // itera el JSON en orden para que el panel derecho refleje 1:1 el
+  // orden del main content.
   const toc = standardTocSections(def);
   if (toc.length < 1) return;
-
-  const h1 = document.createElement('h1');
-  h1.textContent = def.tag;
-  aside.append(h1);
 
   // El scroll-spy ya da feedback de "estoy en esta sección" vía
   // `aria-current="location"` + clase iswc-scrollspy-active. El sidebar
