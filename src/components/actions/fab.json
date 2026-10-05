@@ -88,8 +88,21 @@
     {
       "id": "sizes",
       "title": "Escala",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Default</dt><dd>Sin atributo <code class=\"code\">size</code>. Se mide en <code class=\"code\">em</code> y hereda el <code class=\"code\">font-size</code> del contexto.</dd>\n          <dt>Escalar</dt><dd>Cambia el <code class=\"code\">font-size</code> del ancestro: icono, padding y radio escalan con él.</dd>\n        </dl>",
+      "lede": "Sin atributo size. Se mide en em y hereda el font-size del contexto.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Escalar</code>",
+              "Cambia el font-size del ancestro: icono, padding y radio escalan con él."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<div class=\"fab-row\">\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">0.75em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1.25em</code>\r\n            </span>\r\n          </div>",
@@ -106,8 +119,21 @@
     {
       "id": "variants",
       "title": "Color",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd><code class=\"code\">color</code> = color semántico (brand, neutral, danger, success, warning).</dd>\n          <dt>Ortogonalidad</dt><dd>Distinto de <code class=\"code\">variant</code>, que gobierna la presentación (filled, outlined, plain…).</dd>\n        </dl>",
+      "lede": "color = color semántico (brand, neutral, danger, success, warning).",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Ortogonalidad</code>",
+              "Distinto de variant, que gobierna la presentación (filled, outlined, plain…)."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<iswc-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></iswc-fab>",

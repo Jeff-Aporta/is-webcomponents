@@ -11,8 +11,21 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Tabla de datos con la superficie de MUI X Data Grid.</dd>\n          <dt>Capacidades</dt><dd>Columnas tipadas, multi-orden, filtros con Y/O, quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila, agrupación con agregación, tree data, pivot, virtualización y exportación.</dd>\n        </dl>",
+      "lede": "Tabla de datos con la superficie de MUI X Data Grid.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Capacidades</code>",
+              "Columnas tipadas, multi-orden, filtros con Y/O, quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila, agrupación con agregación, tree data, pivot, virtualización y exportación."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<iswc-data-grid id=\"g-full\" class=\"grid-tall\" show-toolbar quick-filter checkbox-selection\r\n            pagination page-size=\"10\" page-size-options=\"10,25,50\" editable undo-redo clipboard\r\n            tab-navigation=\"all\"></iswc-data-grid>"

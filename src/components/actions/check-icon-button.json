@@ -11,8 +11,21 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Botón icon-only con dos estados mutuamente excluyentes; muestra un solo icono según <code class=\"code\">checked</code>.</dd>\n          <dt>Usos</dt><dd><code class=\"code\">iswc-video</code> (play/pausa, mute) e <code class=\"code\">iswc-theme-toggle</code>.</dd>\n        </dl>",
+      "lede": "Botón icon-only con dos estados mutuamente excluyentes; muestra un solo icono según checked.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Usos</code>",
+              "iswc-video (play/pausa, mute) e iswc-theme-toggle."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <span class=\"demo-label\">caso mínimo</span>\r\n            <div class=\"cluster\">\r\n              <iswc-check-icon-button\r\n                id=\"demoPlay\"\r\n                icon=\"mdi:play\"\r\n                checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\"\r\n                checked-label=\"Pausar\"\r\n              ></iswc-check-icon-button>\r\n              <span class=\"card-meta\" id=\"playState\">estado: paused</span>\r\n            </div>\r\n          </div>",

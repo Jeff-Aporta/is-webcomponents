@@ -256,8 +256,43 @@
     {
       "id": "shapes",
       "title": "Shapes",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Contorno del control. Ortogonal a <code class=\"code\">color</code> y <code class=\"code\">variant</code>.</dd>\n          <dt>Default</dt><dd><code class=\"code\">round</code> (radio del tema).</dd>\n          <dt>Valores</dt><dd><code class=\"code\">none</code> · <code class=\"code\">round</code> · <code class=\"code\">square</code> · <code class=\"code\">rect</code> · <code class=\"code\">pill</code>. <code class=\"code\">pill</code> equivale a <code class=\"code\">border-radius: 999px</code>; <code class=\"code\">square</code>/<code class=\"code\">rect</code> son esquinas vivas. <code class=\"code\">pill</code> también se activa con el booleano <code class=\"code\">pill</code>.</dd>\n        </dl>",
+      "lede": "Contorno del control. Ortogonal a color y variant.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Valor",
+            "Default",
+            "Descripcion"
+          ],
+          "rows": [
+            [
+              "<code>none</code>",
+              "—",
+              "sin forma"
+            ],
+            [
+              "<code>round</code>",
+              "✓",
+              "radio del tema"
+            ],
+            [
+              "<code>square</code>",
+              "—",
+              "esquinas vivas"
+            ],
+            [
+              "<code>rect</code>",
+              "—",
+              "esquinas vivas"
+            ],
+            [
+              "<code>pill</code>",
+              "—",
+              "border-radius: 999px (también booleano `pill`)"
+            ]
+          ]
+        },
         {
           "kind": "html",
           "html": "<h4>round · square · rect · pill</h4>"

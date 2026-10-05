@@ -11,8 +11,21 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Menú anclado a un trigger. El panel vive en un <code class=\"code\">&lt;dialog&gt;</code> del top layer (no queda debajo de otras secciones).</dd>\n          <dt>Items</dt><dd><code class=\"code\">iswc-dropdown-item</code>, <code class=\"code\">iswc-divider</code> e iconos.</dd>\n        </dl>",
+      "lede": "Menú anclado a un trigger. El panel vive en un &lt;dialog&gt; del top layer (no queda debajo de otras secciones).",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Items</code>",
+              "iswc-dropdown-item, iswc-divider e iconos."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<iswc-dropdown id=\"dd\">\r\n            <iswc-button slot=\"trigger\" with-caret>Options</iswc-button>\r\n            <iswc-dropdown-item value=\"edit\">\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:pencil\"></iswc-icon>\r\n              Edit\r\n            </iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"dup\">\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:content-copy\"></iswc-icon>\r\n              Duplicate\r\n            </iswc-dropdown-item>\r\n            <iswc-divider></iswc-divider>\r\n            <iswc-dropdown-item value=\"delete\" color=\"danger\">\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:delete\"></iswc-icon>\r\n              Delete\r\n            </iswc-dropdown-item>\r\n          </iswc-dropdown>\r\n          <p id=\"log\" class=\"lede\">selección: —</p>",

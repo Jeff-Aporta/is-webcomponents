@@ -164,8 +164,25 @@
     {
       "id": "variants",
       "title": "Variantes",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Color semántico del control. Ortogonal a <code class=\"code\">variant</code>.</dd>\n          <dt>Default</dt><dd><code class=\"code\">brand</code>.</dd>\n          <dt>Convención</dt><dd><code class=\"code\">danger</code> = acción destructiva («Eliminar»); <code class=\"code\">error</code> = estado de fallo («Error al guardar»). <code class=\"code\">info</code> y <code class=\"code\">error</code> existen aparte a propósito.</dd>\n        </dl>",
+      "lede": "Color semántico del control. Ortogonal a variant.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Default</code>",
+              "brand."
+            ],
+            [
+              "<code>Convención</code>",
+              "danger = acción destructiva («Eliminar»); error = estado de fallo («Error al guardar»). info y error existen aparte a propósito."
+            ]
+          ]
+        },
         {
           "kind": "html",
           "html": "<h3>Matriz color × appearance</h3>"
@@ -201,8 +218,21 @@
     {
       "id": "icons",
       "title": "Con iconos",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Slots</dt><dd><code class=\"code\">start</code> y <code class=\"code\">end</code> para iconos a izquierda y derecha del label.</dd>\n          <dt>Icon-only</dt><dd>Un solo hijo sin texto activa automáticamente el state <code class=\"code\">:state(icon-button)</code>.</dd>\n        </dl>",
+      "lede": "start y end para iconos a izquierda y derecha del label.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Icon-only</code>",
+              "Un solo hijo sin texto activa automáticamente el state :state(icon-button)."
+            ]
+          ]
+        },
         {
           "kind": "html",
           "html": "<h4>Icono al inicio (start)</h4>"
@@ -239,8 +269,21 @@
     {
       "id": "icon-only",
       "title": "Solo icono",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Trigger</dt><dd>Un solo elemento hijo y nada de texto.</dd>\n          <dt>Comportamiento</dt><dd>Aplica <code class=\"code\">:state(icon-button)</code>; el control se vuelve cuadrado y centra el icono.</dd>\n        </dl>",
+      "lede": "Un solo elemento hijo y nada de texto.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Comportamiento</code>",
+              "Aplica :state(icon-button); el control se vuelve cuadrado y centra el icono."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\">\r\n            <iswc-button color=\"neutral\" variant=\"outlined\" title=\"Ajustes\">\r\n              <iswc-icon icon=\"mdi:cog-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"brand\">\r\n              <iswc-icon icon=\"mdi:plus\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"success\">\r\n              <iswc-icon icon=\"mdi:check\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"warning\">\r\n              <iswc-icon icon=\"mdi:bell-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"danger\">\r\n              <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:magnify\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Me gusta\">\r\n              <iswc-icon icon=\"mdi:heart-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Perfil\">\r\n              <iswc-icon icon=\"mdi:account\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 1em; align-items: flex-end;\">\r\n            <span style=\"font-size: .8125rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n            <span style=\"font-size: 1rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n            <span style=\"font-size: 1.25rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n          </div>",
@@ -256,8 +299,43 @@
     {
       "id": "shapes",
       "title": "Shapes",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Contorno del control. Ortogonal a <code class=\"code\">color</code> y <code class=\"code\">variant</code>.</dd>\n          <dt>Default</dt><dd><code class=\"code\">round</code> (radio del tema).</dd>\n          <dt>Valores</dt><dd><code class=\"code\">none</code> · <code class=\"code\">round</code> · <code class=\"code\">square</code> · <code class=\"code\">rect</code> · <code class=\"code\">pill</code>. <code class=\"code\">pill</code> equivale a <code class=\"code\">border-radius: 999px</code>; <code class=\"code\">square</code>/<code class=\"code\">rect</code> son esquinas vivas. <code class=\"code\">pill</code> también se activa con el booleano <code class=\"code\">pill</code>.</dd>\n        </dl>",
+      "lede": "Contorno del control. Ortogonal a color y variant.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Valor",
+            "Default",
+            "Descripcion"
+          ],
+          "rows": [
+            [
+              "<code>none</code>",
+              "—",
+              "sin forma"
+            ],
+            [
+              "<code>round</code>",
+              "✓",
+              "radio del tema"
+            ],
+            [
+              "<code>square</code>",
+              "—",
+              "esquinas vivas"
+            ],
+            [
+              "<code>rect</code>",
+              "—",
+              "esquinas vivas"
+            ],
+            [
+              "<code>pill</code>",
+              "—",
+              "border-radius: 999px (también booleano `pill`)"
+            ]
+          ]
+        },
         {
           "kind": "html",
           "html": "<h4>round · square · rect · pill</h4>"
@@ -286,8 +364,21 @@
     {
       "id": "loading",
       "title": "Loading",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd><code class=\"code\">loading</code> bloquea interacción, oculta label/iconos/caret y muestra un spinner.</dd>\n          <dt>A11y</dt><dd>Aplica <code class=\"code\">aria-busy=\"true\"</code> y un region <code class=\"code\">aria-live</code> que anuncia «Cargando» / «Listo».</dd>\n        </dl>",
+      "lede": "loading bloquea interacción, oculta label/iconos/caret y muestra un spinner.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>A11y</code>",
+              "Aplica aria-busy=\"true\" y un region aria-live que anuncia «Cargando» / «Listo»."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\">\r\n            <iswc-button loading color=\"brand\">Guardando…</iswc-button>\r\n            <iswc-button loading color=\"success\" variant=\"outlined\">Enviando</iswc-button>\r\n            <iswc-button loading color=\"neutral\" variant=\"plain\">Cargando</iswc-button>\r\n            <iswc-button loading color=\"danger\">\r\n              <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\r\n              Eliminando\r\n            </iswc-button>\r\n            <span style=\"font-size: 1.25rem\"><iswc-button loading color=\"brand\" pill>Procesando</iswc-button></span>\r\n          </div>",
@@ -320,8 +411,21 @@
     {
       "id": "link",
       "title": "Como enlace",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Con <code class=\"code\">href</code> el host se renderiza como <code class=\"code\">&lt;a&gt;</code> en vez de <code class=\"code\">&lt;button&gt;</code>.</dd>\n          <dt>Atributos</dt><dd>Conserva <code class=\"code\">variant</code>, <code class=\"code\">shape</code>, <code class=\"code\">pill</code> y reenvía <code class=\"code\">download</code> al &lt;a&gt; interno.</dd>\n        </dl>",
+      "lede": "Con href el host se renderiza como &lt;a&gt; en vez de &lt;button&gt;.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Atributos</code>",
+              "Conserva variant, shape, pill y reenvía download al &lt;a&gt; interno."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\">\r\n            <iswc-button href=\"https://www.youtube.com/@JeffAporta\" color=\"brand\">\r\n              Jeff Aporta en YouTube\r\n              <iswc-icon icon=\"mdi:youtube\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button href=\"#intro\" variant=\"outlined\">Volver al inicio</iswc-button>\r\n            <iswc-button href=\"data:text/plain;charset=utf-8,Hola%20mundo\" download=\"hola.txt\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:download\"></iswc-icon>\r\n              Descargar hola.txt\r\n            </iswc-button>\r\n            <span style=\"font-size: .8125rem\"><iswc-button href=\"https://github.com\" pill>\r\n              <iswc-icon icon=\"mdi:link-variant\"></iswc-icon>\r\n            </iswc-button></span>\r\n          </div>",
@@ -341,8 +445,21 @@
     {
       "id": "form",
       "title": "En formularios",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd><strong>Form-associated</strong>: el botón participa en un <code class=\"code\">&lt;form&gt;</code> sin input oculto.</dd>\n          <dt>Comportamiento</dt><dd><code class=\"code\">type=\"submit\"</code> envía; <code class=\"code\">type=\"reset\"</code> resetea; <code class=\"code\">name</code>/<code class=\"code\">value</code> viajan con los datos; <code class=\"code\">form=\"id\"</code> lo asocia a un form externo.</dd>\n        </dl>",
+      "lede": "Form-associated: el botón participa en un &lt;form&gt; sin input oculto.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Comportamiento</code>",
+              "type=\"submit\" envía; type=\"reset\" resetea; name/value viajan con los datos; form=\"id\" lo asocia a un form externo."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<form id=\"demoForm\" style=\"display: grid; gap: 12px; max-width: 480px;\">\r\n            <label style=\"display: grid; gap: 4px; font-size: 0.85rem;\">\r\n              <span>Email</span>\r\n              <input class=\"demo-native-field\" type=\"email\" name=\"email\" required\r\n                     placeholder=\"tu@empresa.com\" />\r\n            </label>\r\n            <label style=\"display: grid; gap: 4px; font-size: 0.85rem;\">\r\n              <span>Comentario</span>\r\n              <textarea class=\"demo-native-field\" name=\"comment\" rows=\"3\"\r\n                        placeholder=\"Escribe un comentario…\"></textarea>\r\n            </label>\r\n\r\n            <div class=\"demo-row\" style=\"margin-top: 8px;\">\r\n              <iswc-button type=\"submit\" color=\"brand\" name=\"action\" value=\"save\">Guardar</iswc-button>\r\n              <iswc-button type=\"submit\" color=\"success\" variant=\"outlined\" name=\"action\" value=\"publish\">Publicar</iswc-button>\r\n              <iswc-button type=\"reset\" variant=\"plain\">Limpiar</iswc-button>\r\n            </div>\r\n\r\n            <div id=\"formOut\" class=\"log\" aria-live=\"polite\"></div>\r\n          </form>",

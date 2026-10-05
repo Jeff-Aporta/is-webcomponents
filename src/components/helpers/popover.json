@@ -10,8 +10,25 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Panel flotante con contenido interactivo. Ancla con <code class=\"code\">for</code>.</dd>\n          <dt>Cierre</dt><dd>Escape, click fuera o <code class=\"code\">data-popover=\"close\"</code>.</dd>\n          <dt>Posicionamiento</dt><dd>Lo hace un <code class=\"code\">&lt;iswc-floating&gt;</code> interno (flip, shift, auto-size, arrow). El wrapper aporta ancla declarativa, ciclo de vida y accesibilidad.</dd>\n        </dl>",
+      "lede": "Panel flotante con contenido interactivo. Ancla con for.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Cierre</code>",
+              "Escape, click fuera o data-popover=\"close\"."
+            ],
+            [
+              "<code>Posicionamiento</code>",
+              "Lo hace un &lt;iswc-floating&gt; interno (flip, shift, auto-size, arrow). El wrapper aporta ancla declarativa, ciclo de vida y accesibilidad."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<iswc-button id=\"pop1\">Show popover</iswc-button>\r\n          <iswc-popover for=\"pop1\">\r\n            <div class=\"stack\">\r\n              <p style=\"margin:0\">This popover contains interactive content.</p>\r\n              <iswc-button color=\"brand\" data-popover=\"close\">Take Action</iswc-button>\r\n            </div>\r\n          </iswc-popover>",

@@ -11,8 +11,22 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>FAB que al clic despliega un puñado de acciones rápidas.</dd>\n          <dt>Default</dt><dd>Apunta arriba. La dirección se cambia con el atributo <code class=\"code\">direction</code>.</dd>\n        </dl>",
-      "blocks": []
+      "lede": "FAB que al clic despliega un puñado de acciones rápidas.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Default</code>",
+              "Apunta arriba. La dirección se cambia con el atributo direction."
+            ]
+          ]
+        }
+      ]
     },
     {
       "id": "up",

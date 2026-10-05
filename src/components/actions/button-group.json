@@ -12,8 +12,21 @@
       "id": "intro",
       "title": "Uso",
       "titleHtml": false,
-      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Agrupa botones relacionados en una sola unidad visual.</dd>\n          <dt>Selección</dt><dd>Si se le pide, gestiona cuál está activo. Útil para controles segmentados, toolbars y split buttons.</dd>\n        </dl>",
+      "lede": "Agrupa botones relacionados en una sola unidad visual.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Selección</code>",
+              "Si se le pide, gestiona cuál está activo. Útil para controles segmentados, toolbars y split buttons."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">appearance=\"segmented\" · select=\"single\" · <code class=\"code\">hue</code> por botón</span>\n                    <iswc-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n                      <iswc-button variant=\"plain\" value=\"lista\" hue=\"210\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:format-list-bulleted\"></iswc-icon>\n                        Lista\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tabla\" hue=\"160\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:table\"></iswc-icon>\n                        Tabla\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:view-grid-outline\"></iswc-icon>\n                        Tarjetas\n                      </iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <p class=\"lede\" id=\"introLog\">vista: <code class=\"code\">lista</code></p>\n                </div>",
