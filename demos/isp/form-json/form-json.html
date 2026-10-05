@@ -98,22 +98,22 @@
       <div class="panel">
         <h3>Controles</h3>
         <form id="demo-form" style="display: grid; gap: 8px;">
-          <iswc-input name="cliente" label="Cliente"></iswc-input>
-          <iswc-input name="correo" label="Correo" type="email"></iswc-input>
-          <iswc-input name="cantidad" label="Cantidad" type="number"></iswc-input>
-          <iswc-switch name="activo">Activo</iswc-switch>
-          <iswc-select name="tipo" label="Tipo">
-            <iswc-option value="factura">Factura</iswc-option>
-            <iswc-option value="nota">Nota</iswc-option>
+          <iswc-input title="Cliente" name="cliente" label="Cliente"></iswc-input>
+          <iswc-input title="Correo" name="correo" label="Correo" type="email"></iswc-input>
+          <iswc-input title="Cantidad" name="cantidad" label="Cantidad" type="number"></iswc-input>
+          <iswc-switch title="Activo" name="activo">Activo</iswc-switch>
+          <iswc-select title="Tipo" name="tipo" label="Tipo">
+            <iswc-option title="Factura" value="factura">Factura</iswc-option>
+            <iswc-option title="Nota" value="nota">Nota</iswc-option>
           </iswc-select>
-          <iswc-checkbox name="envio" value="email">Email</iswc-checkbox>
-          <iswc-checkbox name="envio" value="sms">SMS</iswc-checkbox>
+          <iswc-checkbox title="Email" name="envio" value="email">Email</iswc-checkbox>
+          <iswc-checkbox title="SMS" name="envio" value="sms">SMS</iswc-checkbox>
         </form>
         <div style="margin-top: 12px;">
-          <button id="btn-get" type="button" class="btn">getValues()</button>
-          <button id="btn-set" type="button" class="btn">setValues({...})</button>
-          <button id="btn-list" type="button" class="btn">listControls()</button>
-          <button id="btn-clear" type="button" class="btn">Limpiar</button>
+          <button title="getValues()" id="btn-get" type="button" class="btn">getValues()</button>
+          <button title="setValues({...})" id="btn-set" type="button" class="btn">setValues({...})</button>
+          <button title="listControls()" id="btn-list" type="button" class="btn">listControls()</button>
+          <button title="Limpiar" id="btn-clear" type="button" class="btn">Limpiar</button>
         </div>
       </div>
       <div class="panel">

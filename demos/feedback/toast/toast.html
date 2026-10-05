@@ -45,11 +45,11 @@
   <h2>Lanzar varios</h2>
   <iswc-toast id="api-toaster" data-default-toaster placement="bottom-end"></iswc-toast>
   <div class="row">
-    <button id="btn-info" type="button">Info (brand, 3s)</button>
-    <button id="btn-success" type="button">Success</button>
-    <button id="btn-error" type="button">Error</button>
-    <button id="btn-loading" type="button">Loading persistente</button>
-    <button id="btn-promise" type="button">Promise (resolve en 600ms)</button>
+    <button title="Info (brand, 3s)" id="btn-info" type="button">Info (brand, 3s)</button>
+    <button title="Success" id="btn-success" type="button">Success</button>
+    <button title="Error" id="btn-error" type="button">Error</button>
+    <button title="Loading persistente" id="btn-loading" type="button">Loading persistente</button>
+    <button title="Promise (resolve en 600ms)" id="btn-promise" type="button">Promise (resolve en 600ms)</button>
   </div>
   <script type="module">
     document.getElementById('btn-info').addEventListener('click', () => {
@@ -81,8 +81,8 @@
   <h2>Gap 18 — sanitización de <code>allowHtml</code></h2>
   <p>El test verifica que el modo seguro (<code>allowHtml: false</code>, default) trata el mensaje como texto plano y NO ejecuta HTML.</p>
   <div class="row">
-    <button id="btn-safe" type="button">Mensaje con HTML (modo seguro)</button>
-    <button id="btn-unsafe" type="button">Mensaje con HTML (allowHtml: true)</button>
+    <button title="Mensaje con HTML (modo seguro)" id="btn-safe" type="button">Mensaje con HTML (modo seguro)</button>
+    <button title="Mensaje con HTML (allowHtml: true)" id="btn-unsafe" type="button">Mensaje con HTML (allowHtml: true)</button>
   </div>
   <pre id="xss-log" style="background:#0a0e15;padding:8px;border-radius:6px;font-size:12px;min-height:32px;">(sin intentos todavía)</pre>
   <script type="module">

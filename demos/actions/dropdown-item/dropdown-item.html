@@ -35,29 +35,29 @@
   <section>
     <h2>Items standalone (sin iswc-dropdown)</h2>
     <div class="menu-row">
-      <iswc-dropdown-item id="i1" value="edit">Editar</iswc-dropdown-item>
-      <iswc-dropdown-item id="i2" value="duplicate">Duplicar</iswc-dropdown-item>
-      <iswc-dropdown-item id="i3" value="delete" color="danger">Eliminar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Editar" id="i1" value="edit">Editar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Duplicar" id="i2" value="duplicate">Duplicar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Eliminar" id="i3" value="delete" color="danger">Eliminar</iswc-dropdown-item>
     </div>
   </section>
 
   <section>
     <h2>type="checkbox"</h2>
     <div class="menu-row">
-      <iswc-dropdown-item id="c1" type="checkbox" checked>Mostrar toolbar</iswc-dropdown-item>
-      <iswc-dropdown-item id="c2" type="checkbox">Mostrar statusbar</iswc-dropdown-item>
-      <iswc-dropdown-item id="c3" type="checkbox">Mostrar minimap</iswc-dropdown-item>
+      <iswc-dropdown-item title="Mostrar toolbar" id="c1" type="checkbox" checked>Mostrar toolbar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Mostrar statusbar" id="c2" type="checkbox">Mostrar statusbar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Mostrar minimap" id="c3" type="checkbox">Mostrar minimap</iswc-dropdown-item>
     </div>
   </section>
 
   <section>
     <h2>Item con submenú</h2>
     <div class="menu-row">
-      <iswc-dropdown-item id="sub1" value="export">
+      <iswc-dropdown-item title="Exportar como PDF como CSV como JSON" id="sub1" value="export">
         Exportar
-        <iswc-dropdown-item slot="submenu" value="pdf">como PDF</iswc-dropdown-item>
-        <iswc-dropdown-item slot="submenu" value="csv">como CSV</iswc-dropdown-item>
-        <iswc-dropdown-item slot="submenu" value="json">como JSON</iswc-dropdown-item>
+        <iswc-dropdown-item title="como PDF" slot="submenu" value="pdf">como PDF</iswc-dropdown-item>
+        <iswc-dropdown-item title="como CSV" slot="submenu" value="csv">como CSV</iswc-dropdown-item>
+        <iswc-dropdown-item title="como JSON" slot="submenu" value="json">como JSON</iswc-dropdown-item>
       </iswc-dropdown-item>
     </div>
     <p style="font-size:12px;color:#94a3b8;">Click en "Exportar" o pulsa → para abrir el submenú.</p>

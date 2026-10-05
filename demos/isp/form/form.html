@@ -107,9 +107,9 @@
     <iswc-form id="form-a" submit-label="Guardar">
       <h3 slot="header">Curso</h3>
       <div slot="content" style="padding: 12px; display: grid; gap: 8px;">
-        <iswc-input name="icurso" label="Código" required></iswc-input>
-        <iswc-input name="titulo" label="Título" required></iswc-input>
-        <iswc-switch name="activo">Activo</iswc-switch>
+        <iswc-input title="Código" name="icurso" label="Código" required></iswc-input>
+        <iswc-input title="Título" name="titulo" label="Título" required></iswc-input>
+        <iswc-switch title="Activo" name="activo">Activo</iswc-switch>
       </div>
     </iswc-form>
   </section>
@@ -118,9 +118,9 @@
     <h2>Demo B — desde <code>fromJSON()</code> + botones de utilidad</h2>
     <iswc-form id="form-b"></iswc-form>
     <div style="margin-top: 12px;">
-      <button id="btn-mode" type="button" class="btn">Toggle mode (edit/view)</button>
-      <button id="btn-serialize" type="button" class="btn">toJSON() en consola</button>
-      <button id="btn-load-edit" type="button" class="btn">Recargar fromJSON</button>
+      <button title="Toggle mode (edit/view)" id="btn-mode" type="button" class="btn">Toggle mode (edit/view)</button>
+      <button title="toJSON() en consola" id="btn-serialize" type="button" class="btn">toJSON() en consola</button>
+      <button title="Recargar fromJSON" id="btn-load-edit" type="button" class="btn">Recargar fromJSON</button>
     </div>
   </section>
 

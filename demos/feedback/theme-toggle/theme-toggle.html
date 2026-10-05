@@ -31,14 +31,14 @@
 
 <section>
   <h2>En la página (afecta a <code>&lt;html&gt;</code>)</h2>
-  <iswc-theme-toggle></iswc-theme-toggle>
+  <iswc-theme-toggle title="theme toggle"></iswc-theme-toggle>
   <p>El toggle detecta el contenedor con <code>[container-theme]</code>, <code>.container-theme</code>, <code>.theme-dark</code>, <code>.theme-light</code> o <code>[data-theme]</code>; si no, cae a <code>&lt;html&gt;</code>.</p>
 </section>
 
 <section class="light-theme-demo container-theme" data-theme="light">
   <h2>Sección que arrancará en light</h2>
   <p>Esta sección tiene fondo claro y la clase <code>container-theme</code> para que el toggle dentro de ella solo afecte a este subárbol.</p>
-  <iswc-theme-toggle id="nested"></iswc-theme-toggle>
+  <iswc-theme-toggle title="theme toggle" id="nested"></iswc-theme-toggle>
 </section>
 
 <section>

@@ -64,10 +64,10 @@
 </header>
 <main>
   <div class="toolbar">
-    <iswc-button id="btn-delete" color="danger">Eliminar tercero</iswc-button>
-    <iswc-button id="btn-loading" variant="outlined">Simular loading</iswc-button>
+    <iswc-button title="Eliminar tercero" id="btn-delete" color="danger">Eliminar tercero</iswc-button>
+    <iswc-button title="Simular loading" id="btn-loading" variant="outlined">Simular loading</iswc-button>
   </div>
-  <iswc-confirm-delete id="cd" entity="tercero" pk-label="NIT" confirm-value="900123456"></iswc-confirm-delete>
+  <iswc-confirm-delete title="confirm delete" id="cd" entity="tercero" pk-label="NIT" confirm-value="900123456"></iswc-confirm-delete>
   <pre id="event-log" class="log"></pre>
 </main>
 <script>

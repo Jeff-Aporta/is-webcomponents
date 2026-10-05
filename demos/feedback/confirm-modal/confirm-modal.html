@@ -31,7 +31,7 @@
 
 <section>
   <h2>Apertura por atributo <code>for</code> (click en el disparador)</h2>
-  <button id="btn-open-1" type="button">Borrar registro</button>
+  <button title="Borrar registro" id="btn-open-1" type="button">Borrar registro</button>
   <iswc-confirm-modal
     for="btn-open-1"
     heading="Eliminar registro"
@@ -41,16 +41,16 @@
 
 <section>
   <h2>Con botones personalizados (slots confirm / cancel)</h2>
-  <button id="btn-open-2" type="button">Publicar cambios</button>
+  <button title="Publicar cambios" id="btn-open-2" type="button">Publicar cambios</button>
   <iswc-confirm-modal for="btn-open-2" heading="Publicar cambios" message="Los cambios se publicarán para todos los usuarios.">
-    <iswc-button slot="cancel" variant="text" color="neutral">Atrás</iswc-button>
-    <iswc-button slot="confirm" color="success">Sí, publicar</iswc-button>
+    <iswc-button title="Atrás" slot="cancel" variant="text" color="neutral">Atrás</iswc-button>
+    <iswc-button title="Sí, publicar" slot="confirm" color="success">Sí, publicar</iswc-button>
   </iswc-confirm-modal>
 </section>
 
 <section>
   <h2>Programático (<code>el.show()</code>)</h2>
-  <button id="btn-open-3" type="button">Aviso</button>
+  <button title="Aviso" id="btn-open-3" type="button">Aviso</button>
   <iswc-confirm-modal id="modal-3" heading="Aviso" message="Cierre con Escape o click fuera."></iswc-confirm-modal>
   <script type="module">
     document.getElementById('btn-open-3').addEventListener('click', () => {

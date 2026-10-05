@@ -33,7 +33,7 @@
 <section>
   <h2>Default (hover + focus)</h2>
   <div class="row">
-    <button id="t1" type="button">Hover / Focus aquí</button>
+    <button title="Hover / Focus aquí" id="t1" type="button">Hover / Focus aquí</button>
     <iswc-tooltip for="t1">Hola, soy un tooltip</iswc-tooltip>
   </div>
 </section>
@@ -41,7 +41,7 @@
 <section>
   <h2>Placement + distance + sin arrow</h2>
   <div class="row">
-    <button id="t2" type="button">Bottom-end sin arrow</button>
+    <button title="Bottom-end sin arrow" id="t2" type="button">Bottom-end sin arrow</button>
     <iswc-tooltip for="t2" placement="bottom-end" without-arrow>Tooltip en bottom-end, sin arrow</iswc-tooltip>
   </div>
 </section>
@@ -49,7 +49,7 @@
 <section>
   <h2>Trigger focus (solo teclado)</h2>
   <div class="row">
-    <button id="t3" type="button">Focus con Tab</button>
+    <button title="Focus con Tab" id="t3" type="button">Focus con Tab</button>
     <iswc-tooltip for="t3" trigger="focus">Solo se abre con focus</iswc-tooltip>
   </div>
 </section>
@@ -57,7 +57,7 @@
 <section>
   <h2>Trigger click (toggle)</h2>
   <div class="row">
-    <button id="t4" type="button">Click para abrir/cerrar</button>
+    <button title="Click para abrir/cerrar" id="t4" type="button">Click para abrir/cerrar</button>
     <iswc-tooltip for="t4" trigger="click">Click-toggleable</iswc-tooltip>
   </div>
 </section>
@@ -65,9 +65,9 @@
 <section>
   <h2>Trigger manual (control programático)</h2>
   <div class="row">
-    <button id="t5" type="button">Trigger</button>
-    <button id="t5-show" type="button">Mostrar</button>
-    <button id="t5-hide" type="button">Ocultar</button>
+    <button title="Trigger" id="t5" type="button">Trigger</button>
+    <button title="Mostrar" id="t5-show" type="button">Mostrar</button>
+    <button title="Ocultar" id="t5-hide" type="button">Ocultar</button>
     <iswc-tooltip id="tt5" for="t5" trigger="manual">Manual: show() / hide()</iswc-tooltip>
     <script type="module">
       document.getElementById('t5-show').addEventListener('click', () => {

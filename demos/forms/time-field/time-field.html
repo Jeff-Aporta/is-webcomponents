@@ -82,44 +82,44 @@
 
   <section class="card">
     <h2>Básico (24h, sin segundos)</h2>
-    <iswc-time-field id="basic" label="Hora" name="basic"></iswc-time-field>
+    <iswc-time-field title="Hora" id="basic" label="Hora" name="basic"></iswc-time-field>
     <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con segundos</h2>
-    <iswc-time-field id="with-seconds" label="Inicio exacto" hint="Incluye segundos" name="precise" seconds></iswc-time-field>
+    <iswc-time-field title="Inicio exacto" id="with-seconds" label="Inicio exacto" hint="Incluye segundos" name="precise" seconds></iswc-time-field>
     <div class="value-readout">Valor actual: <code id="with-seconds-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Formato 12 horas (AM/PM)</h2>
-    <iswc-time-field id="ampm" label="Hora local" hint="locale en-US con ampm explícito" name="local" ampm locale="en-US"></iswc-time-field>
+    <iswc-time-field title="Hora local" id="ampm" label="Hora local" hint="locale en-US con ampm explícito" name="local" ampm locale="en-US"></iswc-time-field>
     <div class="value-readout">Valor actual: <code id="ampm-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con texto de ayuda y validación (required + min/max)</h2>
-    <iswc-time-field id="with-hint" label="Inicio de la jornada" hint="Entre 08:00 y 18:00" name="work-start"
+    <iswc-time-field title="Inicio de la jornada" id="with-hint" label="Inicio de la jornada" hint="Entre 08:00 y 18:00" name="work-start"
                     min="08:00" max="18:00" required clearable></iswc-time-field>
     <div class="value-readout">Valor actual: <code id="with-hint-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Borrable (botón × para limpiar)</h2>
-    <iswc-time-field id="clearable" label="Hora opcional" clearable name="opt" value="09:00"></iswc-time-field>
+    <iswc-time-field title="Hora opcional" id="clearable" label="Hora opcional" clearable name="opt" value="09:00"></iswc-time-field>
     <div class="value-readout">Valor actual: <code id="clearable-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Deshabilitado</h2>
-    <iswc-time-field id="disabled-field" label="No editable" name="d" disabled></iswc-time-field>
+    <iswc-time-field title="No editable" id="disabled-field" label="No editable" name="d" disabled></iswc-time-field>
     <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Solo lectura</h2>
-    <iswc-time-field id="readonly-field" label="Solo lectura" name="r" readonly></iswc-time-field>
+    <iswc-time-field title="Solo lectura" id="readonly-field" label="Solo lectura" name="r" readonly></iswc-time-field>
     <div class="value-readout">Valor actual: <code id="readonly-value">(vacío)</code></div>
   </section>
 </main>

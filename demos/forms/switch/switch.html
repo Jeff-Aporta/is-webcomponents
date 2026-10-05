@@ -62,12 +62,12 @@
   <section>
     <h2>Básico</h2>
     <form id="sw-form">
-      <iswc-switch id="demo" name="notify" value="yes" hint="Recibir notificaciones por email">
+      <iswc-switch title="Notificaciones" id="demo" name="notify" value="yes" hint="Recibir notificaciones por email">
         Notificaciones
       </iswc-switch>
     </form>
     <div class="row">
-      <button id="btn-toggle" type="button">Toggle</button>
+      <button title="Toggle" id="btn-toggle" type="button">Toggle</button>
     </div>
     <output id="out"></output>
   </section>
@@ -75,30 +75,30 @@
   <section>
     <h2>Estados</h2>
     <div class="row">
-      <iswc-switch checked>Encendido</iswc-switch>
-      <iswc-switch>Apagado</iswc-switch>
-      <iswc-switch disabled>Deshabilitado off</iswc-switch>
-      <iswc-switch checked disabled>Deshabilitado on</iswc-switch>
-      <iswc-switch required error>Requerido con error</iswc-switch>
+      <iswc-switch title="Encendido" checked>Encendido</iswc-switch>
+      <iswc-switch title="Apagado">Apagado</iswc-switch>
+      <iswc-switch title="Deshabilitado off" disabled>Deshabilitado off</iswc-switch>
+      <iswc-switch title="Deshabilitado on" checked disabled>Deshabilitado on</iswc-switch>
+      <iswc-switch title="Requerido con error" required error>Requerido con error</iswc-switch>
     </div>
   </section>
 
   <section>
     <h2>Colores</h2>
     <div class="row">
-      <iswc-switch checked color="brand">Brand</iswc-switch>
-      <iswc-switch checked color="success">Success</iswc-switch>
-      <iswc-switch checked color="warning">Warning</iswc-switch>
-      <iswc-switch checked color="danger">Danger</iswc-switch>
-      <iswc-switch checked color="neutral">Neutral</iswc-switch>
+      <iswc-switch title="Brand" checked color="brand">Brand</iswc-switch>
+      <iswc-switch title="Success" checked color="success">Success</iswc-switch>
+      <iswc-switch title="Warning" checked color="warning">Warning</iswc-switch>
+      <iswc-switch title="Danger" checked color="danger">Danger</iswc-switch>
+      <iswc-switch title="Neutral" checked color="neutral">Neutral</iswc-switch>
     </div>
   </section>
 
   <section>
     <h2>on-label / off-label</h2>
     <div class="row">
-      <iswc-switch on-label="ON" off-label="OFF" checked>Con etiquetas</iswc-switch>
-      <iswc-switch on-label="Sí" off-label="No" checked>Es</iswc-switch>
+      <iswc-switch title="Con etiquetas" on-label="ON" off-label="OFF" checked>Con etiquetas</iswc-switch>
+      <iswc-switch title="Es" on-label="Sí" off-label="No" checked>Es</iswc-switch>
     </div>
   </section>
 </main>

@@ -31,22 +31,22 @@
 
 <section>
   <h2>Popconfirm básico</h2>
-  <button id="trig-1" type="button">Borrar</button>
+  <button title="Borrar" id="trig-1" type="button">Borrar</button>
   <iswc-popconfirm for="trig-1" message="¿Seguro que quieres borrar este elemento?"></iswc-popconfirm>
 </section>
 
 <section>
   <h2>Placement top-end + slots custom</h2>
-  <button id="trig-2" type="button">Publicar</button>
+  <button title="Publicar" id="trig-2" type="button">Publicar</button>
   <iswc-popconfirm for="trig-2" placement="top-end" message="Confirmar publicación">
-    <button slot="cancel" type="button">Atrás</button>
-    <button slot="confirm" type="button">Confirmar</button>
+    <button title="Atrás" slot="cancel" type="button">Atrás</button>
+    <button title="Confirmar" slot="confirm" type="button">Confirmar</button>
   </iswc-popconfirm>
 </section>
 
 <section>
   <h2>Apertura programática (<code>el.show()</code>)</h2>
-  <button id="trig-3" type="button">Lanzar</button>
+  <button title="Lanzar" id="trig-3" type="button">Lanzar</button>
   <iswc-popconfirm id="pop-3" placement="bottom-end" message="Modal programático" hide-arrow>
     <span slot="confirm" role="button" tabindex="0">OK</span>
   </iswc-popconfirm>

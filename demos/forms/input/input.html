@@ -67,10 +67,10 @@
 
   <section>
     <h2>Básico (text + clearable)</h2>
-    <iswc-input id="demo" name="full-name" label="Nombre completo" hint="Como aparece en tu documento" clearable placeholder="Ada Lovelace"></iswc-input>
+    <iswc-input title="Nombre completo" id="demo" name="full-name" label="Nombre completo" hint="Como aparece en tu documento" clearable placeholder="Ada Lovelace"></iswc-input>
     <div class="grid2">
-      <button id="btn-set" type="button">Set "Hola mundo"</button>
-      <button id="btn-clear" type="button">Clear</button>
+      <button title="Set &quot;Hola mundo&quot;" id="btn-set" type="button">Set "Hola mundo"</button>
+      <button title="Clear" id="btn-clear" type="button">Clear</button>
     </div>
     <output id="out"></output>
   </section>
@@ -78,24 +78,24 @@
   <section>
     <h2>Tipos</h2>
     <div class="grid2">
-      <iswc-input type="email" name="email" label="Email" placeholder="ada@example.com"></iswc-input>
-      <iswc-input type="password" name="pwd" label="Contraseña" password-toggle placeholder="••••••"></iswc-input>
-      <iswc-input type="number" name="age" label="Edad" min="0" max="120" step="1" placeholder="30"></iswc-input>
-      <iswc-input type="tel" name="phone" label="Teléfono" placeholder="+34 600 000 000"></iswc-input>
-      <iswc-input type="url" name="web" label="Web" placeholder="https://example.com"></iswc-input>
-      <iswc-input type="search" name="q" label="Búsqueda" placeholder="Buscar..."></iswc-input>
+      <iswc-input title="Email" type="email" name="email" label="Email" placeholder="ada@example.com"></iswc-input>
+      <iswc-input title="Contraseña" type="password" name="pwd" label="Contraseña" password-toggle placeholder="••••••"></iswc-input>
+      <iswc-input title="Edad" type="number" name="age" label="Edad" min="0" max="120" step="1" placeholder="30"></iswc-input>
+      <iswc-input title="Teléfono" type="tel" name="phone" label="Teléfono" placeholder="+34 600 000 000"></iswc-input>
+      <iswc-input title="Web" type="url" name="web" label="Web" placeholder="https://example.com"></iswc-input>
+      <iswc-input title="Búsqueda" type="search" name="q" label="Búsqueda" placeholder="Buscar..."></iswc-input>
     </div>
   </section>
 
   <section>
     <h2>Estados</h2>
     <div class="grid2">
-      <iswc-input name="required1" label="Required" required hint="Obligatorio"></iswc-input>
-      <iswc-input name="readonly1" label="Readonly" readonly value="sólo lectura"></iswc-input>
-      <iswc-input name="errored" label="Con error" error error-text="Formato inválido" value="abc"></iswc-input>
-      <iswc-input name="disabled1" label="Disabled" disabled value="deshabilitado"></iswc-input>
-      <iswc-input name="prefixed" label="Precio" prefix="$" suffix="USD" placeholder="0.00"></iswc-input>
-      <iswc-input name="counted" label="Con contador" maxlength="20" show-count placeholder="máx 20"></iswc-input>
+      <iswc-input title="Required" name="required1" label="Required" required hint="Obligatorio"></iswc-input>
+      <iswc-input title="Readonly" name="readonly1" label="Readonly" readonly value="sólo lectura"></iswc-input>
+      <iswc-input title="Con error" name="errored" label="Con error" error error-text="Formato inválido" value="abc"></iswc-input>
+      <iswc-input title="Disabled" name="disabled1" label="Disabled" disabled value="deshabilitado"></iswc-input>
+      <iswc-input title="Precio" name="prefixed" label="Precio" prefix="$" suffix="USD" placeholder="0.00"></iswc-input>
+      <iswc-input title="Con contador" name="counted" label="Con contador" maxlength="20" show-count placeholder="máx 20"></iswc-input>
     </div>
   </section>
 </main>

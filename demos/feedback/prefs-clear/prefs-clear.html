@@ -31,13 +31,13 @@
 <section>
   <h2>Con confirmación (default)</h2>
   <p>Hace <code>window.confirm()</code> antes de limpiar y recarga la página.</p>
-  <iswc-prefs-clear>Limpiar memoria UI</iswc-prefs-clear>
+  <iswc-prefs-clear title="Limpiar memoria UI">Limpiar memoria UI</iswc-prefs-clear>
 </section>
 
 <section>
   <h2>Sin confirmación, sin recarga</h2>
   <p>Útil en tests: limpia y emite el evento <code>iswc-prefs-clear</code> sin recargar.</p>
-  <iswc-prefs-clear id="silent" confirm="false" reload="false">Limpiar silencioso</iswc-prefs-clear>
+  <iswc-prefs-clear title="Limpiar silencioso" id="silent" confirm="false" reload="false">Limpiar silencioso</iswc-prefs-clear>
   <pre id="out"></pre>
   <script type="module">
     const out = document.getElementById('out');
@@ -52,7 +52,7 @@
 <section>
   <h2>Estado de localStorage (peek)</h2>
   <pre id="peek-out">(vacío)</pre>
-  <button id="btn-peek" type="button">Refrescar peek</button>
+  <button title="Refrescar peek" id="btn-peek" type="button">Refrescar peek</button>
   <script type="module">
     document.getElementById('btn-peek').addEventListener('click', async () => {
       const silent = document.getElementById('silent');

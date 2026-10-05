@@ -32,8 +32,8 @@
   <section>
     <h2>value directo</h2>
     <div class="row">
-      <iswc-copy-button value="npm install is-webcomponents"></iswc-copy-button>
-      <iswc-copy-button value="https://github.com/" copy-label="Copiar URL" success-label="¡Copiado!" error-label="No se pudo copiar"></iswc-copy-button>
+      <iswc-copy-button title="npm install is-webcomponents" value="npm install is-webcomponents"></iswc-copy-button>
+      <iswc-copy-button title="Copiar URL" value="https://github.com/" copy-label="Copiar URL" success-label="¡Copiado!" error-label="No se pudo copiar"></iswc-copy-button>
     </div>
   </section>
 
@@ -41,14 +41,14 @@
     <h2>from (lee texto de otro elemento)</h2>
     <div class="row">
       <code class="block" id="snippet">const is = require('is-webcomponents');</code>
-      <iswc-copy-button from="snippet"></iswc-copy-button>
+      <iswc-copy-button title="copy button" from="snippet"></iswc-copy-button>
     </div>
   </section>
 
   <section>
     <h2>Estado disabled</h2>
     <div class="row">
-      <iswc-copy-button value="nunca se copia" disabled></iswc-copy-button>
+      <iswc-copy-button title="nunca se copia" value="nunca se copia" disabled></iswc-copy-button>
     </div>
   </section>
 

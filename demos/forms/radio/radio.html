@@ -62,12 +62,12 @@
 
   <section>
     <h2>Básico (standalone)</h2>
-    <iswc-radio id="demo" value="opt-1" hint="Opción individual">
+    <iswc-radio title="Opción uno Texto secundario opcional en el slot description ." id="demo" value="opt-1" hint="Opción individual">
       Opción uno
       <span slot="description">Texto secundario opcional en el slot <code>description</code>.</span>
     </iswc-radio>
     <div class="row">
-      <button id="btn-toggle" type="button">Toggle</button>
+      <button title="Toggle" id="btn-toggle" type="button">Toggle</button>
     </div>
     <output id="out"></output>
   </section>
@@ -75,22 +75,22 @@
   <section>
     <h2>Estados</h2>
     <div class="row">
-      <iswc-radio value="a">Marcado (checked)</iswc-radio>
-      <iswc-radio value="b">Sin marcar</iswc-radio>
-      <iswc-radio value="c" disabled>Deshabilitado</iswc-radio>
-      <iswc-radio value="d" disabled checked>Marcado y deshabilitado</iswc-radio>
+      <iswc-radio title="Marcado (checked)" value="a">Marcado (checked)</iswc-radio>
+      <iswc-radio title="Sin marcar" value="b">Sin marcar</iswc-radio>
+      <iswc-radio title="Deshabilitado" value="c" disabled>Deshabilitado</iswc-radio>
+      <iswc-radio title="Marcado y deshabilitado" value="d" disabled checked>Marcado y deshabilitado</iswc-radio>
     </div>
   </section>
 
   <section>
     <h2>Colores y label-placement</h2>
     <div class="row">
-      <iswc-radio value="r1" checked color="brand">brand</iswc-radio>
-      <iswc-radio value="r2" checked color="success">success</iswc-radio>
-      <iswc-radio value="r3" checked color="danger">danger</iswc-radio>
-      <iswc-radio value="r4" checked color="neutral">neutral</iswc-radio>
-      <iswc-radio value="r5" checked label-placement="top">top</iswc-radio>
-      <iswc-radio value="r6" checked label-placement="bottom">bottom</iswc-radio>
+      <iswc-radio title="brand" value="r1" checked color="brand">brand</iswc-radio>
+      <iswc-radio title="success" value="r2" checked color="success">success</iswc-radio>
+      <iswc-radio title="danger" value="r3" checked color="danger">danger</iswc-radio>
+      <iswc-radio title="neutral" value="r4" checked color="neutral">neutral</iswc-radio>
+      <iswc-radio title="top" value="r5" checked label-placement="top">top</iswc-radio>
+      <iswc-radio title="bottom" value="r6" checked label-placement="bottom">bottom</iswc-radio>
     </div>
   </section>
 </main>

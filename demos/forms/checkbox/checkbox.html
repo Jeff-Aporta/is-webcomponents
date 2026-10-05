@@ -72,13 +72,13 @@
   <section>
     <h2>Básica</h2>
     <form id="check-form">
-      <iswc-checkbox id="demo" name="tos" value="accepted" hint="Marca para aceptar los términos">
+      <iswc-checkbox title="Acepto los términos y condiciones" id="demo" name="tos" value="accepted" hint="Marca para aceptar los términos">
         Acepto los términos y condiciones
       </iswc-checkbox>
     </form>
     <div class="row">
-      <button id="btn-toggle" type="button">Toggle</button>
-      <button id="btn-indet" type="button">Indeterminate</button>
+      <button title="Toggle" id="btn-toggle" type="button">Toggle</button>
+      <button title="Indeterminate" id="btn-indet" type="button">Indeterminate</button>
     </div>
     <output id="out"></output>
   </section>
@@ -86,32 +86,32 @@
   <section>
     <h2>Variantes y estados</h2>
     <div class="row">
-      <iswc-checkbox checked>Acepto</iswc-checkbox>
-      <iswc-checkbox indeterminate>Selección parcial</iswc-checkbox>
-      <iswc-checkbox disabled>Deshabilitado</iswc-checkbox>
-      <iswc-checkbox checked disabled>Marcado y deshabilitado</iswc-checkbox>
-      <iswc-checkbox required error>Required con error</iswc-checkbox>
+      <iswc-checkbox title="Acepto" checked>Acepto</iswc-checkbox>
+      <iswc-checkbox title="Selección parcial" indeterminate>Selección parcial</iswc-checkbox>
+      <iswc-checkbox title="Deshabilitado" disabled>Deshabilitado</iswc-checkbox>
+      <iswc-checkbox title="Marcado y deshabilitado" checked disabled>Marcado y deshabilitado</iswc-checkbox>
+      <iswc-checkbox title="Required con error" required error>Required con error</iswc-checkbox>
     </div>
   </section>
 
   <section>
     <h2>Colores</h2>
     <div class="row">
-      <iswc-checkbox checked color="brand">Brand</iswc-checkbox>
-      <iswc-checkbox checked color="success">Success</iswc-checkbox>
-      <iswc-checkbox checked color="warning">Warning</iswc-checkbox>
-      <iswc-checkbox checked color="danger">Danger</iswc-checkbox>
-      <iswc-checkbox checked color="neutral">Neutral</iswc-checkbox>
+      <iswc-checkbox title="Brand" checked color="brand">Brand</iswc-checkbox>
+      <iswc-checkbox title="Success" checked color="success">Success</iswc-checkbox>
+      <iswc-checkbox title="Warning" checked color="warning">Warning</iswc-checkbox>
+      <iswc-checkbox title="Danger" checked color="danger">Danger</iswc-checkbox>
+      <iswc-checkbox title="Neutral" checked color="neutral">Neutral</iswc-checkbox>
     </div>
   </section>
 
   <section>
     <h2>label-placement</h2>
     <div class="row">
-      <iswc-checkbox checked label-placement="end">end (default)</iswc-checkbox>
-      <iswc-checkbox checked label-placement="start">start</iswc-checkbox>
-      <iswc-checkbox checked label-placement="top">top</iswc-checkbox>
-      <iswc-checkbox checked label-placement="bottom">bottom</iswc-checkbox>
+      <iswc-checkbox title="end (default)" checked label-placement="end">end (default)</iswc-checkbox>
+      <iswc-checkbox title="start" checked label-placement="start">start</iswc-checkbox>
+      <iswc-checkbox title="top" checked label-placement="top">top</iswc-checkbox>
+      <iswc-checkbox title="bottom" checked label-placement="bottom">bottom</iswc-checkbox>
     </div>
   </section>
 </main>
