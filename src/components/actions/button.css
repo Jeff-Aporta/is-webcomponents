@@ -194,18 +194,21 @@
   --_tone-soft-active: var(--iswc-color-error-soft-active, var(--_tone-pale));
   --_tone-on: var(--iswc-on-brand, #fff);
 }
-/* neutral: controles del tema, no una familia semántica. */
+/* neutral: familia semantica con base #888 (canon geometrico).
+ * W40: usar los tokens `--iswc-color-neutral-*` para que el tono #888 se
+ * aplique de verdad (antes reusaba `--iswc-control-bg/-border` y los botones
+ * filled tomaban el color del paper, no el gris central del espacio). */
 :host([color="neutral"]) {
-  --_tone: var(--iswc-control-border, #adb5bd);
-  --_tone-strong: var(--iswc-control-bg, #f1f3f5);
-  --_tone-stronger: var(--iswc-control-bg-hover, #e9ecef);
-  --_tone-strongest: var(--iswc-control-bg-active, #dee2e6);
-  --_tone-paler: var(--iswc-control-bg, #f1f3f5);
-  --_tone-pale: var(--iswc-control-bg-hover, #e9ecef);
+  --_tone: var(--iswc-color-neutral, #888);
+  --_tone-strong: var(--iswc-color-neutral-strong, #888);
+  --_tone-stronger: var(--iswc-color-neutral-stronger, #888);
+  --_tone-strongest: var(--iswc-color-neutral-strongest, #888);
+  --_tone-paler: var(--iswc-color-neutral-paler, #888);
+  --_tone-pale: var(--iswc-color-neutral-pale, #888);
   --_tone-text: var(--iswc-control-text, #212529);
-  --_tone-soft: var(--iswc-control-bg-hover, #e9ecef);
-  --_tone-soft-active: var(--iswc-control-bg-active, #dee2e6);
-  --_tone-on: var(--iswc-control-text, #212529);
+  --_tone-soft: var(--iswc-color-neutral-pale, #888);
+  --_tone-soft-active: var(--iswc-color-neutral-paler, #888);
+  --_tone-on: var(--iswc-on-brand, #fff);
 }
 
 /* ── 2. Appearance → consume roles (no conoce nombres de color) ─────────
@@ -247,8 +250,8 @@
  *   --_border-hover: var(--_tone-strong)    = filled rest border (cuando es X)
  *   --_text-hover: var(--_tone-on)          = filled rest text
  *   --_bg-active: var(--_tone-stronger)     = un escalón más fuerte
- * Neutral hereda la regla genérica (--_tone-strong = --iswc-control-bg,
- * --_tone-on = --iswc-control-text en :host([color="neutral"])).
+ * Neutral hereda la regla generica (--_tone-strong = --iswc-color-neutral-strong,
+ * --_tone-on = --iswc-on-brand en :host([color="neutral"])).
  * Sin color: usamos los tokens equivalentes del control base. */
 :host([color][variant="ghost"]) {
   --_bg: transparent;
@@ -320,46 +323,6 @@
   border-end-start-radius: unset;
   border-end-end-radius: unset;
   corner-shape: unset;
-}
-
-/* Hexágono horizontal vía bevel (css-tip / MDN corner-shape). */
-:host([shape="hexagon"]) .btn {
-  border-radius: 50% / 35%;
-  corner-shape: bevel;
-}
-
-/* Flechas: cabeza bevel + cola redondeada (propiedades lógicas). */
-:host([shape="arrow-right"]) .btn {
-  border-start-start-radius: 0.4em;
-  border-end-start-radius: 0.4em;
-  border-start-end-radius: 50%;
-  border-end-end-radius: 50%;
-  corner-start-start-shape: round;
-  corner-end-start-shape: round;
-  corner-start-end-shape: bevel;
-  corner-end-end-shape: bevel;
-}
-:host([shape="arrow-left"]) .btn {
-  border-start-start-radius: 50%;
-  border-end-start-radius: 50%;
-  border-start-end-radius: 0.4em;
-  border-end-end-radius: 0.4em;
-  corner-start-start-shape: bevel;
-  corner-end-start-shape: bevel;
-  corner-start-end-shape: round;
-  corner-end-end-shape: round;
-}
-
-@supports not (corner-shape: bevel) {
-  :host([shape="hexagon"]) .btn {
-    clip-path: polygon(12% 0%, 88% 0%, 100% 50%, 88% 100%, 12% 100%, 0% 50%);
-  }
-  :host([shape="arrow-right"]) .btn {
-    clip-path: polygon(0% 0%, 72% 0%, 100% 50%, 72% 100%, 0% 100%);
-  }
-  :host([shape="arrow-left"]) .btn {
-    clip-path: polygon(28% 0%, 100% 0%, 100% 100%, 28% 100%, 0% 50%);
-  }
 }
 
 /* Alias legado: solo si no hay `shape` (shape gana siempre). */
