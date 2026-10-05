@@ -1,13 +1,23 @@
 {
-  "generatedAt": "2026-10-05T14:58:40.811Z",
-  "count": 66,
+  "generatedAt": "2026-10-05T21:37:06.250Z",
+  "count": 112,
   "modules": [
+    {
+      "file": "button-shape.schemas.ts",
+      "id": "button-shape.schemas",
+      "path": "src/components/_shared/button-shape.schemas.ts",
+      "summary": "button-shape — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 395,
+      "exports": [
+        "ButtonShapeSchema"
+      ]
+    },
     {
       "file": "button-shape.ts",
       "id": "button-shape",
       "path": "src/components/_shared/button-shape.ts",
       "summary": "button-shape — Compartido por: iswc-button (y quien reenvía `shape` al botón, p. ej. prefs-clear).",
-      "bytes": 1374,
+      "bytes": 1377,
       "exports": [
         "BUTTON_SHAPE",
         "DEFAULT_BUTTON_SHAPE",
@@ -38,11 +48,23 @@
       ]
     },
     {
+      "file": "chart-palette.schemas.ts",
+      "id": "chart-palette.schemas",
+      "path": "src/components/_shared/chart-palette.schemas.ts",
+      "summary": "chart-palette — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 742,
+      "exports": [
+        "PaletteKeySchema",
+        "PaletteModeSchema",
+        "StatusSchema"
+      ]
+    },
+    {
       "file": "chart-palette.ts",
       "id": "chart-palette",
       "path": "src/components/_shared/chart-palette.ts",
       "summary": "Módulo compartido `chart-palette.ts`.",
-      "bytes": 3212,
+      "bytes": 3131,
       "exports": [
         "resolvePaletteKey",
         "resolveMode",
@@ -53,11 +75,23 @@
       ]
     },
     {
+      "file": "code-diff.schemas.ts",
+      "id": "code-diff.schemas",
+      "path": "src/components/_shared/code-diff.schemas.ts",
+      "summary": "code-diff — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 978,
+      "exports": [
+        "DiffLineKindSchema",
+        "StatLinePartsSchema",
+        "FormatDiffCfgSchema"
+      ]
+    },
+    {
       "file": "code-diff.ts",
       "id": "code-diff",
       "path": "src/components/_shared/code-diff.ts",
       "summary": "code-diff — commit para el motor nativo de `<iswc-code>`.",
-      "bytes": 7134,
+      "bytes": 6937,
       "exports": [
         "DIFF_LINE_CLASS",
         "DIFF_LINE_CLASSES",
@@ -68,11 +102,22 @@
       ]
     },
     {
+      "file": "code-format.schemas.ts",
+      "id": "code-format.schemas",
+      "path": "src/components/_shared/code-format.schemas.ts",
+      "summary": "code-format — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1085,
+      "exports": [
+        "CodeFormatConfigSchema",
+        "NormalizedFormatConfigSchema"
+      ]
+    },
+    {
       "file": "code-format.ts",
       "id": "code-format",
       "path": "src/components/_shared/code-format.ts",
       "summary": "code-format — No es Prettier completo (sin AST de terceros). Acepta un JSON de opciones",
-      "bytes": 6593,
+      "bytes": 6249,
       "exports": [
         "DEFAULT_FORMAT",
         "normalizeFormatConfig",
@@ -80,13 +125,17 @@
       ]
     },
     {
-      "file": "code-highlight.schema.ts",
-      "id": "code-highlight.schema",
-      "path": "src/components/_shared/code-highlight.schema.ts",
-      "summary": "code-highlight.schema — Solo los tipos LOCALES (no exportados) se migran aquí. Los tipos exportados",
-      "bytes": 551,
+      "file": "code-highlight.schemas.ts",
+      "id": "code-highlight.schemas",
+      "path": "src/components/_shared/code-highlight.schemas.ts",
+      "summary": "code-highlight — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1829,
       "exports": [
-        "TagInnerSchema"
+        "TokenTypeSchema",
+        "TokenSchema",
+        "HighlightLineSchema",
+        "HighlightStateSchema",
+        "TokenizeResultSchema"
       ]
     },
     {
@@ -94,7 +143,7 @@
       "id": "code-highlight",
       "path": "src/components/_shared/code-highlight.ts",
       "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
-      "bytes": 22076,
+      "bytes": 21216,
       "exports": [
         "normalizeLang",
         "emptyState",
@@ -107,11 +156,23 @@
       ]
     },
     {
+      "file": "code-langs.schemas.ts",
+      "id": "code-langs.schemas",
+      "path": "src/components/_shared/code-langs.schemas.ts",
+      "summary": "code-langs — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1052,
+      "exports": [
+        "CodeLangDefSchema",
+        "LanguageSummarySchema",
+        "LanguageResolutionSchema"
+      ]
+    },
+    {
       "file": "code-langs.ts",
       "id": "code-langs",
       "path": "src/components/_shared/code-langs.ts",
       "summary": "code-langs — El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el",
-      "bytes": 5182,
+      "bytes": 4573,
       "exports": [
         "registerLanguage",
         "resolveLanguage",
@@ -121,11 +182,27 @@
       ]
     },
     {
+      "file": "code-model.schemas.ts",
+      "id": "code-model.schemas",
+      "path": "src/components/_shared/code-model.schemas.ts",
+      "summary": "code-model — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 2378,
+      "exports": [
+        "CodeMarkKindSchema",
+        "CodeMarkToneSchema",
+        "CodeMarkSchema",
+        "CodeMarkInputSchema",
+        "CodeDocumentSchema",
+        "CodeDocOptsSchema",
+        "CodeDocumentInputSchema"
+      ]
+    },
+    {
       "file": "code-model.ts",
       "id": "code-model",
       "path": "src/components/_shared/code-model.ts",
       "summary": "code-model — Analogía con html2json / json2html: el texto plano es `value`; las",
-      "bytes": 6068,
+      "bytes": 5233,
       "exports": [
         "CODE_DOC_SCHEMA",
         "normalizeMark",
@@ -150,11 +227,21 @@
       ]
     },
     {
+      "file": "code-theme.schemas.ts",
+      "id": "code-theme.schemas",
+      "path": "src/components/_shared/code-theme.schemas.ts",
+      "summary": "code-theme — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 399,
+      "exports": [
+        "CodeThemeConfigSchema"
+      ]
+    },
+    {
       "file": "code-theme.ts",
       "id": "code-theme",
       "path": "src/components/_shared/code-theme.ts",
       "summary": "code-theme — El consumidor pasa un objeto de colores (como un theme de VS Code / CM).",
-      "bytes": 8396,
+      "bytes": 8406,
       "exports": [
         "THEME_PROP_MAP",
         "BUILTIN_THEMES",
@@ -164,14 +251,16 @@
       ]
     },
     {
-      "file": "date-field-core.schema.ts",
-      "id": "date-field-core.schema",
-      "path": "src/components/_shared/date-field-core.schema.ts",
-      "summary": "date-field-core.schema",
-      "bytes": 704,
+      "file": "date-field-core.schemas.ts",
+      "id": "date-field-core.schemas",
+      "path": "src/components/_shared/date-field-core.schemas.ts",
+      "summary": "date-field-core — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1470,
       "exports": [
-        "SectionTypeSchema",
-        "LayoutItemSchema"
+        "SectionMetaSchema",
+        "PartsSchema",
+        "FieldKindSchema",
+        "SectionFieldOptionsSchema"
       ]
     },
     {
@@ -179,10 +268,21 @@
       "id": "date-field-core",
       "path": "src/components/_shared/date-field-core.ts",
       "summary": "Motor de campos de fecha/hora editables por secciones (MUI Fields). — Cada sección (día, mes, año, hora…) es un `role=\"spinbutton\"`: flechas para",
-      "bytes": 16943,
+      "bytes": 16387,
       "exports": [
         "sectionLayout",
         "SectionField"
+      ]
+    },
+    {
+      "file": "date-field-element.schemas.ts",
+      "id": "date-field-element.schemas",
+      "path": "src/components/_shared/date-field-element.schemas.ts",
+      "summary": "date-field-element — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 652,
+      "exports": [
+        "DateFieldKindSchema",
+        "DefineDateFieldOptsSchema"
       ]
     },
     {
@@ -190,9 +290,23 @@
       "id": "date-field-element",
       "path": "src/components/_shared/date-field-element.ts",
       "summary": "Módulo compartido `date-field-element.ts`.",
-      "bytes": 11910,
+      "bytes": 11843,
       "exports": [
         "defineDateField"
+      ]
+    },
+    {
+      "file": "date-utils.schemas.ts",
+      "id": "date-utils.schemas",
+      "path": "src/components/_shared/date-utils.schemas.ts",
+      "summary": "date-utils — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1538,
+      "exports": [
+        "ClockTimeSchema",
+        "WeekdayLabelsOptsSchema",
+        "MonthLabelsOptsSchema",
+        "FormatDateOptsSchema",
+        "FormatTimeOptsSchema"
       ]
     },
     {
@@ -200,7 +314,7 @@
       "id": "date-utils",
       "path": "src/components/_shared/date-utils.ts",
       "summary": "Utilidades de fecha y hora para los componentes de calendario y reloj. — Todo se mueve en ISO local (`yyyy-mm-dd`, `HH:mm[:ss]`): son cadenas",
-      "bytes": 8108,
+      "bytes": 7727,
       "exports": [
         "ISO_DATE",
         "ISO_TIME",
@@ -217,11 +331,22 @@
       ]
     },
     {
+      "file": "diagram-arrow.schemas.ts",
+      "id": "diagram-arrow.schemas",
+      "path": "src/components/_shared/diagram-arrow.schemas.ts",
+      "summary": "diagram-arrow — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 773,
+      "exports": [
+        "ArrowPointSchema",
+        "SvgArrowHeadOptsSchema"
+      ]
+    },
+    {
       "file": "diagram-arrow.ts",
       "id": "diagram-arrow",
       "path": "src/components/_shared/diagram-arrow.ts",
       "summary": "Puntas de flecha para diagramas. — El problema que resuelve: cada diagrama dibujaba su cabeza asumiendo que la",
-      "bytes": 4159,
+      "bytes": 3997,
       "exports": [
         "pathPoints",
         "pathEndDirection",
@@ -231,11 +356,27 @@
       ]
     },
     {
+      "file": "diagram-astar.schemas.ts",
+      "id": "diagram-astar.schemas",
+      "path": "src/components/_shared/diagram-astar.schemas.ts",
+      "summary": "diagram-astar — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 2138,
+      "exports": [
+        "GridPointSchema",
+        "CostGridSchema",
+        "ForbiddenRegionSchema",
+        "PixelPointSchema",
+        "RouteOptsSchema",
+        "AestheticsOptsSchema",
+        "SequenceRouteSchema"
+      ]
+    },
+    {
       "file": "diagram-astar.ts",
       "id": "diagram-astar",
       "path": "src/components/_shared/diagram-astar.ts",
       "summary": "Rutas ortogonales en rejilla — A* ponderado reutilizable (secuencia, flujo, ER).",
-      "bytes": 22289,
+      "bytes": 21541,
       "exports": [
         "routeOrthogonal",
         "countTurns",
@@ -251,11 +392,26 @@
       ]
     },
     {
+      "file": "diagram-edge-actors.schemas.ts",
+      "id": "diagram-edge-actors.schemas",
+      "path": "src/components/_shared/diagram-edge-actors.schemas.ts",
+      "summary": "diagram-edge-actors — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 2004,
+      "exports": [
+        "XYPointSchema",
+        "RectLikeSchema",
+        "LabeledEdgeSchema",
+        "PlaceEdgeActorsOptsSchema",
+        "PlaceEdgeActorsResultSchema",
+        "EdgeActorLayoutSchema"
+      ]
+    },
+    {
       "file": "diagram-edge-actors.ts",
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.ts",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 9089,
+      "bytes": 8352,
       "exports": [
         "EDGE_ACTOR_H",
         "parsePathPoints  from",
@@ -266,13 +422,14 @@
       ]
     },
     {
-      "file": "diagram-edge-spread.schema.ts",
-      "id": "diagram-edge-spread.schema",
-      "path": "src/components/_shared/diagram-edge-spread.schema.ts",
-      "summary": "diagram-edge-spread.schema",
-      "bytes": 374,
+      "file": "diagram-edge-spread.schemas.ts",
+      "id": "diagram-edge-spread.schemas",
+      "path": "src/components/_shared/diagram-edge-spread.schemas.ts",
+      "summary": "diagram-edge-spread — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 606,
       "exports": [
-        "RunSchema"
+        "SpreadPointSchema",
+        "SpreadItemSchema"
       ]
     },
     {
@@ -280,9 +437,19 @@
       "id": "diagram-edge-spread",
       "path": "src/components/_shared/diagram-edge-spread.ts",
       "summary": "Separa polilíneas ortogonales que corren pegadas. — El A* reutiliza el mismo corredor: varias aristas salen como una sola raya.",
-      "bytes": 4768,
+      "bytes": 4741,
       "exports": [
         "spreadOrthogonalPaths"
+      ]
+    },
+    {
+      "file": "diagram-edge-style.schemas.ts",
+      "id": "diagram-edge-style.schemas",
+      "path": "src/components/_shared/diagram-edge-style.schemas.ts",
+      "summary": "diagram-edge-style — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 453,
+      "exports": [
+        "EdgeWithHueSchema"
       ]
     },
     {
@@ -290,13 +457,35 @@
       "id": "diagram-edge-style",
       "path": "src/components/_shared/diagram-edge-style.ts",
       "summary": "Módulo compartido `diagram-edge-style.ts`.",
-      "bytes": 1010,
+      "bytes": 1405,
       "exports": [
         "EDGE_HUES",
         "assignEdgeHues",
         "edgeStrokeHex",
         "edgeChipFill",
-        "edgeChipText"
+        "edgeChipText",
+        "edgeChipFromStroke"
+      ]
+    },
+    {
+      "file": "diagram-edit.schemas.ts",
+      "id": "diagram-edit.schemas",
+      "path": "src/components/_shared/diagram-edit.schemas.ts",
+      "summary": "diagram-edit — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 3991,
+      "exports": [
+        "NodeOverrideSchema",
+        "EdgeOverrideSchema",
+        "NodeOverrideMapSchema",
+        "EdgeOverrideMapSchema",
+        "DiagramOverridesSchema",
+        "EditorAnchorSchema",
+        "DiagramPersistSchema",
+        "LayoutChangeDetailSchema",
+        "NodeLayoutEntrySchema",
+        "EdgeLayoutEntrySchema",
+        "LayoutLikeSchema",
+        "NodeDragMoveSchema"
       ]
     },
     {
@@ -304,7 +493,7 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 12600,
+      "bytes": 11516,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -322,12 +511,24 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 9407,
+      "bytes": 9439,
       "exports": [
-        [
-          "DiagramElementBase extends ElementBase ",
-          "  static get observedAttributes"
-        ]
+        "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
+      ]
+    },
+    {
+      "file": "diagram-grid.schemas.ts",
+      "id": "diagram-grid.schemas",
+      "path": "src/components/_shared/diagram-grid.schemas.ts",
+      "summary": "diagram-grid — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1742,
+      "exports": [
+        "GridRectSchema",
+        "GridPointSchema",
+        "CostGridSchema",
+        "ForbiddenRegionSchema",
+        "ExclusionZoneSchema",
+        "DiagramSideSchema"
       ]
     },
     {
@@ -335,7 +536,7 @@
       "id": "diagram-grid",
       "path": "src/components/_shared/diagram-grid.ts",
       "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 13625,
+      "bytes": 13092,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
@@ -362,11 +563,24 @@
       ]
     },
     {
+      "file": "diagram-text-wrap.schemas.ts",
+      "id": "diagram-text-wrap.schemas",
+      "path": "src/components/_shared/diagram-text-wrap.schemas.ts",
+      "summary": "diagram-text-wrap — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1547,
+      "exports": [
+        "WrapOptsSchema",
+        "WrappedLineSchema",
+        "WrapResultSchema",
+        "TSpanSpecSchema"
+      ]
+    },
+    {
       "file": "diagram-text-wrap.ts",
       "id": "diagram-text-wrap",
       "path": "src/components/_shared/diagram-text-wrap.ts",
       "summary": "diagram-text-wrap — Tres funciones públicas:",
-      "bytes": 15856,
+      "bytes": 14591,
       "exports": [
         "defaultMeasureTextWidth",
         "wrapText",
@@ -375,11 +589,28 @@
       ]
     },
     {
+      "file": "diagram-tipos.schemas.ts",
+      "id": "diagram-tipos.schemas",
+      "path": "src/components/_shared/diagram-tipos.schemas.ts",
+      "summary": "diagram-tipos — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 3195,
+      "exports": [
+        "CajaSchema",
+        "ComponenteSchema",
+        "PaqueteSchema",
+        "AristaSchema",
+        "LadoSchema",
+        "OpcionesEmpaqueSchema",
+        "PuntoSchema",
+        "InterfazUmlSchema"
+      ]
+    },
+    {
       "file": "diagram-tipos.ts",
       "id": "diagram-tipos",
       "path": "src/components/_shared/diagram-tipos.ts",
       "summary": "diagram-tipos — POR QUÉ AQUÍ. `component-pack.ts` y `component-spec.ts` se pasan los mismos",
-      "bytes": 4399,
+      "bytes": 1994,
       "exports": []
     },
     {
@@ -411,11 +642,22 @@
       ]
     },
     {
+      "file": "form-control-mixin.schemas.ts",
+      "id": "form-control-mixin.schemas",
+      "path": "src/components/_shared/form-control-mixin.schemas.ts",
+      "summary": "form-control-mixin — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 598,
+      "exports": [
+        "LabelPlacementSchema",
+        "ElementCtorSchema"
+      ]
+    },
+    {
       "file": "form-control-mixin.ts",
       "id": "form-control-mixin",
       "path": "src/components/_shared/form-control-mixin.ts",
       "summary": "form-control-mixin — Muchos componentes de formulario (checkbox, input, select, etc.) repiten",
-      "bytes": 7644,
+      "bytes": 7613,
       "exports": [
         "formControlTemplate",
         "getFormControlTemplate",
@@ -424,11 +666,31 @@
       ]
     },
     {
+      "file": "grid-data.schemas.ts",
+      "id": "grid-data.schemas",
+      "path": "src/components/_shared/grid-data.schemas.ts",
+      "summary": "grid-data — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 3920,
+      "exports": [
+        "ResolvedColumnSchema",
+        "NormalizeOptionsSchema",
+        "PivotModelSchema",
+        "SortModelItemSchema",
+        "FilterModelSchema",
+        "AggregationModelSchema",
+        "BuildTreeOptsSchema",
+        "FilterCtxSchema",
+        "ApplyFiltersOptsSchema",
+        "TreeNodeSchema",
+        "PivotResultSchema"
+      ]
+    },
+    {
       "file": "grid-data.ts",
       "id": "grid-data",
       "path": "src/components/_shared/grid-data.ts",
       "summary": "Pipeline de datos del data grid: normalización de columnas, obtención y — formateo de valores, filtrado, ordenación, agrupación (row grouping y tree",
-      "bytes": 19429,
+      "bytes": 17854,
       "exports": [
         "normalizeColumns",
         "resolveWidths",
@@ -445,11 +707,30 @@
       ]
     },
     {
+      "file": "grid-types.schemas.ts",
+      "id": "grid-types.schemas",
+      "path": "src/components/_shared/grid-types.schemas.ts",
+      "summary": "grid-types — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 5271,
+      "exports": [
+        "CellValueSchema",
+        "FilterValueSchema",
+        "RowSchema",
+        "OperatorSchema",
+        "ColumnDefSchema",
+        "ComparatorSchema",
+        "ColumnTypeSchema",
+        "ColumnTypeNameSchema",
+        "FilterRuleSchema",
+        "AggregationFnSchema"
+      ]
+    },
+    {
       "file": "grid-types.ts",
       "id": "grid-types",
       "path": "src/components/_shared/grid-types.ts",
       "summary": "Tipos de columna del data grid: alineación por defecto, comparador, — formateo y operadores de filtro. Réplica de los tipos nativos de MUI X",
-      "bytes": 18465,
+      "bytes": 14456,
       "exports": [
         "LOGIC",
         "stringComparator",
@@ -466,11 +747,25 @@
       ]
     },
     {
+      "file": "grid-ui.schemas.ts",
+      "id": "grid-ui.schemas",
+      "path": "src/components/_shared/grid-ui.schemas.ts",
+      "summary": "grid-ui — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1813,
+      "exports": [
+        "GridPopoverElSchema",
+        "MenuItemSchema",
+        "RenderColumnsPanelOptsSchema",
+        "FilterPanelModelSchema",
+        "RenderFilterPanelOptsSchema"
+      ]
+    },
+    {
       "file": "grid-ui.ts",
       "id": "grid-ui",
       "path": "src/components/_shared/grid-ui.ts",
       "summary": "Popovers del data grid: menú de columna, panel de columnas, panel de filtros, — menús de densidad y exportación.",
-      "bytes": 13577,
+      "bytes": 13058,
       "exports": [
         "createPopover",
         "showPopover",
@@ -484,11 +779,21 @@
       ]
     },
     {
+      "file": "highlight-code.schemas.ts",
+      "id": "highlight-code.schemas",
+      "path": "src/components/_shared/highlight-code.schemas.ts",
+      "summary": "highlight-code — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 538,
+      "exports": [
+        "CodeEditorSchema"
+      ]
+    },
+    {
       "file": "highlight-code.ts",
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.ts",
       "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
-      "bytes": 8586,
+      "bytes": 8551,
       "exports": [
         "dedent",
         "unwrapHandHighlight",
@@ -500,6 +805,16 @@
         "paint",
         "repaint",
         "watchDom"
+      ]
+    },
+    {
+      "file": "icon-loader.schemas.ts",
+      "id": "icon-loader.schemas",
+      "path": "src/components/_shared/icon-loader.schemas.ts",
+      "summary": "icon-loader — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 412,
+      "exports": [
+        "IconFamilySchema"
       ]
     },
     {
@@ -518,11 +833,21 @@
       ]
     },
     {
+      "file": "intent.schemas.ts",
+      "id": "intent.schemas",
+      "path": "src/components/_shared/intent.schemas.ts",
+      "summary": "intent — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 374,
+      "exports": [
+        "IntentSchema"
+      ]
+    },
+    {
       "file": "intent.ts",
       "id": "intent",
       "path": "src/components/_shared/intent.ts",
       "summary": "intent — Un \"intent\" describe EL SIGNIFICADO del color que aplica el componente,",
-      "bytes": 2726,
+      "bytes": 2874,
       "exports": [
         "INTENT",
         "DEFAULT_INTENT",
@@ -547,11 +872,26 @@
       ]
     },
     {
+      "file": "isp-record-utils.schemas.ts",
+      "id": "isp-record-utils.schemas",
+      "path": "src/components/_shared/isp-record-utils.schemas.ts",
+      "summary": "isp-record-utils — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 2487,
+      "exports": [
+        "IspRecordSchema",
+        "GridRowSchema",
+        "IspColumnDefSchema",
+        "FlatGridColumnSchema",
+        "IspColumnsMapSchema",
+        "IspControllerSchema"
+      ]
+    },
+    {
       "file": "isp-record-utils.ts",
       "id": "isp-record-utils",
       "path": "src/components/_shared/isp-record-utils.ts",
       "summary": "Helpers de registro planos / TObject-like (ispgen) para componentes ISP. — No depende de `@ingenieria_insoft/ispgen`.",
-      "bytes": 6114,
+      "bytes": 5199,
       "exports": [
         "isPresent",
         "asStr",
@@ -565,11 +905,26 @@
       ]
     },
     {
+      "file": "json-html.schemas.ts",
+      "id": "json-html.schemas",
+      "path": "src/components/_shared/json-html.schemas.ts",
+      "summary": "json-html — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1470,
+      "exports": [
+        "Html2JsonOptsSchema",
+        "ApplyJsonBodyOptsSchema",
+        "HostToJsonOptsSchema",
+        "JsonAttrsSchema",
+        "VerboseNodeSchema",
+        "ElementTupleSchema"
+      ]
+    },
+    {
       "file": "json-html.ts",
       "id": "json-html",
       "path": "src/components/_shared/json-html.ts",
       "summary": "Codec compacto HTML ↔ JSON (lenguaje de definición del kit). — Node     = string | [tag, attrs?, ...children]",
-      "bytes": 9811,
+      "bytes": 9525,
       "exports": [
         "json2html",
         "html2json",
@@ -580,11 +935,30 @@
       ]
     },
     {
+      "file": "lane-layout.schemas.ts",
+      "id": "lane-layout.schemas",
+      "path": "src/components/_shared/lane-layout.schemas.ts",
+      "summary": "lane-layout — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 2501,
+      "exports": [
+        "TimeScaleSchema",
+        "TickUnitSchema",
+        "TimeTickSchema",
+        "LaneItemSchema",
+        "PackedLaneItemSchema",
+        "PackLanesOptsSchema",
+        "LayoutLanesOptsSchema",
+        "PositionedLaneItemSchema",
+        "LayoutLaneSchema",
+        "LayoutLanesResultSchema"
+      ]
+    },
+    {
       "file": "lane-layout.ts",
       "id": "lane-layout",
       "path": "src/components/_shared/lane-layout.ts",
       "summary": "Motor de layout puro (sin DOM) para diagramas de línea de tiempo (Gantt, — timeline). Resuelve fechas, escalas de tiempo, marcas de eje \"agradables\"",
-      "bytes": 11064,
+      "bytes": 10290,
       "exports": [
         "parseDate",
         "addDuration",
@@ -595,11 +969,24 @@
       ]
     },
     {
+      "file": "llm-agent-prompt.schemas.ts",
+      "id": "llm-agent-prompt.schemas",
+      "path": "src/components/_shared/llm-agent-prompt.schemas.ts",
+      "summary": "llm-agent-prompt — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 983,
+      "exports": [
+        "SkillDocSchema",
+        "PromptMdOptsSchema",
+        "LoadAgentPromptOptsSchema",
+        "BuildLlmPromptOptsSchema"
+      ]
+    },
+    {
       "file": "llm-agent-prompt.ts",
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
       "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`",
-      "bytes": 3899,
+      "bytes": 3753,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",
@@ -609,11 +996,21 @@
       ]
     },
     {
+      "file": "media-shape.schemas.ts",
+      "id": "media-shape.schemas",
+      "path": "src/components/_shared/media-shape.schemas.ts",
+      "summary": "media-shape — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 391,
+      "exports": [
+        "MediaShapeSchema"
+      ]
+    },
+    {
       "file": "media-shape.ts",
       "id": "media-shape",
       "path": "src/components/_shared/media-shape.ts",
       "summary": "media-shape — Compartido por: iswc-avatar, iswc-theme-img.",
-      "bytes": 1086,
+      "bytes": 1089,
       "exports": [
         "MEDIA_SHAPE",
         "DEFAULT_MEDIA_SHAPE",
@@ -636,13 +1033,39 @@
       ]
     },
     {
+      "file": "modal-base.schemas.ts",
+      "id": "modal-base.schemas",
+      "path": "src/components/_shared/modal-base.schemas.ts",
+      "summary": "modal-base — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 567,
+      "exports": [
+        "ModalBaseCtorSchema"
+      ]
+    },
+    {
       "file": "modal-base.ts",
       "id": "modal-base",
       "path": "src/components/_shared/modal-base.ts",
       "summary": "modal-base — Centraliza TODO el ciclo de vida de un modal accesible que no es nativo:",
-      "bytes": 14084,
+      "bytes": 14020,
       "exports": [
         "ModalBase extends withStyleAttrs"
+      ]
+    },
+    {
+      "file": "node-link-layout.schemas.ts",
+      "id": "node-link-layout.schemas",
+      "path": "src/components/_shared/node-link-layout.schemas.ts",
+      "summary": "node-link-layout — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1798,
+      "exports": [
+        "GraphNodeSchema",
+        "GraphEdgeSchema",
+        "NodeRectSchema",
+        "EdgeAnchorXYSchema",
+        "PositionedNodeSchema",
+        "LayoutOptsSchema",
+        "LayoutResultSchema"
       ]
     },
     {
@@ -650,7 +1073,7 @@
       "id": "node-link-layout",
       "path": "src/components/_shared/node-link-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para diagramas de nodos y — enlaces (flowchart, class, state, ER, C4, architecture, block).",
-      "bytes": 13313,
+      "bytes": 12781,
       "exports": [
         "assignLayers",
         "orderLayers",
@@ -660,11 +1083,49 @@
       ]
     },
     {
+      "file": "pan-zoom.schemas.ts",
+      "id": "pan-zoom.schemas",
+      "path": "src/components/_shared/pan-zoom.schemas.ts",
+      "summary": "pan-zoom — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1458,
+      "exports": [
+        "PanZoomViewSchema",
+        "PanZoomOptionsSchema",
+        "PanZoomControllerSchema"
+      ]
+    },
+    {
+      "file": "pan-zoom.ts",
+      "id": "pan-zoom",
+      "path": "src/components/_shared/pan-zoom.ts",
+      "summary": "pan-zoom — Contrato industria (Figma / Miro / Excalidraw):",
+      "bytes": 4889,
+      "exports": [
+        "createPanZoom"
+      ]
+    },
+    {
+      "file": "path-turtle.schemas.ts",
+      "id": "path-turtle.schemas",
+      "path": "src/components/_shared/path-turtle.schemas.ts",
+      "summary": "path-turtle — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 2131,
+      "exports": [
+        "TurtleMessageSchema",
+        "TurtleThemeSchema",
+        "TurtlePhaseSchema",
+        "TurtleStateSchema",
+        "TurtleReportSchema",
+        "TurtleDataOptsSchema",
+        "TurtleMeasureSchema"
+      ]
+    },
+    {
       "file": "path-turtle.ts",
       "id": "path-turtle",
       "path": "src/components/_shared/path-turtle.ts",
       "summary": "Módulo compartido `path-turtle.ts`.",
-      "bytes": 11838,
+      "bytes": 11119,
       "exports": [
         "PathTurtle",
         "TURTLE_AUTO_GAP",
@@ -672,13 +1133,37 @@
       ]
     },
     {
+      "file": "picker-element.schemas.ts",
+      "id": "picker-element.schemas",
+      "path": "src/components/_shared/picker-element.schemas.ts",
+      "summary": "picker-element — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 2478,
+      "exports": [
+        "PickerKindSchema",
+        "PickerPanelDefSchema",
+        "PickerFieldSchema",
+        "PanelsBuilderSchema",
+        "DefinePickerInputOptsSchema"
+      ]
+    },
+    {
       "file": "picker-element.ts",
       "id": "picker-element",
       "path": "src/components/_shared/picker-element.ts",
       "summary": "Módulo compartido `picker-element.ts`.",
-      "bytes": 22435,
+      "bytes": 21561,
       "exports": [
         "definePickerInput"
+      ]
+    },
+    {
+      "file": "popup-dismiss.schemas.ts",
+      "id": "popup-dismiss.schemas",
+      "path": "src/components/_shared/popup-dismiss.schemas.ts",
+      "summary": "popup-dismiss — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 863,
+      "exports": [
+        "PopupDismissOpcionesSchema"
       ]
     },
     {
@@ -686,9 +1171,27 @@
       "id": "popup-dismiss",
       "path": "src/components/_shared/popup-dismiss.ts",
       "summary": "popup-dismiss — Todo panel flotante del kit (iswc-dropdown, iswc-context-menu, y cualquiera que",
-      "bytes": 5014,
+      "bytes": 4400,
       "exports": [
         "createPopupDismiss"
+      ]
+    },
+    {
+      "file": "position.schemas.ts",
+      "id": "position.schemas",
+      "path": "src/components/_shared/position.schemas.ts",
+      "summary": "position — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 3352,
+      "exports": [
+        "PlacementSchema",
+        "AnchorLikeSchema",
+        "RectSchema",
+        "SizeSchema",
+        "CoordsSchema",
+        "BoundarySchema",
+        "ArrowOffsetSchema",
+        "ComputePositionOptsSchema",
+        "ComputePositionResultSchema"
       ]
     },
     {
@@ -696,7 +1199,7 @@
       "id": "position",
       "path": "src/components/_shared/position.ts",
       "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
-      "bytes": 16254,
+      "bytes": 14841,
       "exports": [
         "PLACEMENTS",
         "computePosition",
@@ -704,11 +1207,23 @@
       ]
     },
     {
+      "file": "prefs.schemas.ts",
+      "id": "prefs.schemas",
+      "path": "src/components/_shared/prefs.schemas.ts",
+      "summary": "prefs — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 759,
+      "exports": [
+        "PrefsRootSchema",
+        "PrefsEntrySchema",
+        "ClearAllPrefsResultSchema"
+      ]
+    },
+    {
       "file": "prefs.ts",
       "id": "prefs",
       "path": "src/components/_shared/prefs.ts",
       "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"iswc-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 4588,
+      "bytes": 4467,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -721,11 +1236,22 @@
       ]
     },
     {
+      "file": "prompt-md.schemas.ts",
+      "id": "prompt-md.schemas",
+      "path": "src/components/_shared/prompt-md.schemas.ts",
+      "summary": "prompt-md — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 661,
+      "exports": [
+        "BodySegmentSchema",
+        "VarPlaceholderSchema"
+      ]
+    },
+    {
       "file": "prompt-md.ts",
       "id": "prompt-md",
       "path": "src/components/_shared/prompt-md.ts",
       "summary": "Módulo compartido `prompt-md.ts`.",
-      "bytes": 10967,
+      "bytes": 10885,
       "exports": [
         "PROMPT_VAR_PATTERN",
         "MALFORMED_PROMPT_VAR_PATTERN",
@@ -766,17 +1292,25 @@
       ]
     },
     {
+      "file": "scroll-memory.schemas.ts",
+      "id": "scroll-memory.schemas",
+      "path": "src/components/_shared/scroll-memory.schemas.ts",
+      "summary": "scroll-memory — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 616,
+      "exports": [
+        "RestorePolicySchema",
+        "ScrollMemoryOptsSchema"
+      ]
+    },
+    {
       "file": "scroll-memory.ts",
       "id": "scroll-memory",
       "path": "src/components/_shared/scroll-memory.ts",
       "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
-      "bytes": 8632,
+      "bytes": 8574,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
-        [
-          "ScrollMemory ",
-          "  host"
-        ],
+        "ScrollMemory \r\n  host",
         "bindScrollMemoryApi"
       ]
     },
@@ -813,14 +1347,26 @@
       ]
     },
     {
+      "file": "tk-color.schemas.ts",
+      "id": "tk-color.schemas",
+      "path": "src/components/_shared/tk-color.schemas.ts",
+      "summary": "tk-color — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 397,
+      "exports": [
+        "RgbSchema"
+      ]
+    },
+    {
       "file": "tk-color.ts",
       "id": "tk-color",
       "path": "src/components/_shared/tk-color.ts",
       "summary": "Contraste de fuente por luminancia OKLCH — todo en JS (sin CSS), para que el — flujo lo resuelva antes de pintar. Equivale a:",
-      "bytes": 2497,
+      "bytes": 2890,
       "exports": [
         "oklchLightness",
-        "contrastFontColor"
+        "BG2FONT_L_THRESHOLD",
+        "contrastFontColor",
+        "bg2fontColor"
       ]
     },
     {
@@ -837,11 +1383,26 @@
       ]
     },
     {
+      "file": "tk-icon-inline.schemas.ts",
+      "id": "tk-icon-inline.schemas",
+      "path": "src/components/_shared/tk-icon-inline.schemas.ts",
+      "summary": "tk-icon-inline — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1813,
+      "exports": [
+        "ResolvedIconTokenSchema",
+        "SvgIconGroupOptsSchema",
+        "IconInlineOptsSchema",
+        "IconHtmlRenderSchema",
+        "IconRunSchema",
+        "LeadingIconSchema"
+      ]
+    },
+    {
       "file": "tk-icon-inline.ts",
       "id": "tk-icon-inline",
       "path": "src/components/_shared/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 16243,
+      "bytes": 15625,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",
@@ -869,11 +1430,21 @@
       ]
     },
     {
+      "file": "tk-rich-text.schemas.ts",
+      "id": "tk-rich-text.schemas",
+      "path": "src/components/_shared/tk-rich-text.schemas.ts",
+      "summary": "tk-rich-text — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 463,
+      "exports": [
+        "RichTextSegmentSchema"
+      ]
+    },
+    {
       "file": "tk-rich-text.ts",
       "id": "tk-rich-text",
       "path": "src/components/_shared/tk-rich-text.ts",
       "summary": "Módulo compartido `tk-rich-text.ts`.",
-      "bytes": 1815,
+      "bytes": 1809,
       "exports": [
         "esc",
         "splitRichTextSegments",
@@ -883,11 +1454,21 @@
       ]
     },
     {
+      "file": "tone.schemas.ts",
+      "id": "tone.schemas",
+      "path": "src/components/_shared/tone.schemas.ts",
+      "summary": "tone — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 366,
+      "exports": [
+        "ToneSchema"
+      ]
+    },
+    {
       "file": "tone.ts",
       "id": "tone",
       "path": "src/components/_shared/tone.ts",
       "summary": "tone — Un \"tone\" describe EL GRADO DE PESO VISUAL: outlined (sin relleno, sólo",
-      "bytes": 1740,
+      "bytes": 1745,
       "exports": [
         "TONE",
         "DEFAULT_TONE",
@@ -896,11 +1477,31 @@
       ]
     },
     {
+      "file": "tree-layout.schemas.ts",
+      "id": "tree-layout.schemas",
+      "path": "src/components/_shared/tree-layout.schemas.ts",
+      "summary": "tree-layout — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 3164,
+      "exports": [
+        "RawNodeSchema",
+        "TreeNodeSchema",
+        "TreeMeasureSchema",
+        "LayoutEntrySchema",
+        "LayoutTreeOptsSchema",
+        "PositionedTreeNodeSchema",
+        "LayoutTreeResultSchema",
+        "LayoutRadialOptsSchema",
+        "LayoutRadialResultSchema",
+        "SquarifyItemSchema",
+        "SquarifyResultSchema"
+      ]
+    },
+    {
       "file": "tree-layout.ts",
       "id": "tree-layout",
       "path": "src/components/_shared/tree-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 16640,
+      "bytes": 15414,
       "exports": [
         "buildTree",
         "layoutTree",
@@ -937,11 +1538,23 @@
       ]
     },
     {
+      "file": "web-share.schemas.ts",
+      "id": "web-share.schemas",
+      "path": "src/components/_shared/web-share.schemas.ts",
+      "summary": "web-share — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
+      "bytes": 1008,
+      "exports": [
+        "ShareDataSchema",
+        "ShareResultSchema",
+        "NativeShareDataSchema"
+      ]
+    },
+    {
       "file": "web-share.ts",
       "id": "web-share",
       "path": "src/components/_shared/web-share.ts",
       "summary": "Web Share: share nativo, si no copia URL/texto. AbortError = el usuario canceló.",
-      "bytes": 1430,
+      "bytes": 1231,
       "exports": [
         "sharePayload"
       ]

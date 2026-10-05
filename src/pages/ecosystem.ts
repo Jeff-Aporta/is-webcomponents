@@ -63,7 +63,6 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
   try {
     // El bundle del loader se genera con `deno task build` (dist/cdn/core/loader.min.js).
     // En dev / lint no existe: el catch muestra el mensaje y sale.
-    // @ts-expect-error — generado en build, no presente en strict-audit.
     const mod = (await import('../../dist/cdn/core/loader.min.js')) as { ISWebComponentsLoader: LoaderModule };
     catalog = mod.ISWebComponentsLoader.catalog;
   } catch {

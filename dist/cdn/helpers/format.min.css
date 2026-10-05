@@ -1,1 +1,1 @@
-:host{display:inline}:host{.value{display:inline}&:where([data-type=number],[data-type=bytes]) .value{font-variant-numeric:tabular-nums}}
+@charset "UTF-8";:host{display:inline}:host .value{display:inline}:host:where([data-type=number],[data-type=bytes]) .value{font-variant-numeric:tabular-nums}

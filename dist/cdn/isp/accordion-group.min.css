@@ -1,1 +1,1 @@
-:host{display:block;inline-size:100%;box-sizing:border-box;font-family:var(--iswc-sans, inherit);color:var(--iswc-text, inherit);.accordion{display:flex;flex-direction:column;gap:var(--iswc-accordion-gap);overflow:hidden}::slotted(iswc-details){margin:0}}
+@charset "UTF-8";:host{display:block;inline-size:100%;box-sizing:border-box;font-family:var(--iswc-sans, inherit);color:var(--iswc-text, inherit)}:host .accordion{display:flex;flex-direction:column;gap:var(--iswc-accordion-gap);overflow:hidden}:host ::slotted(iswc-details){margin:0}

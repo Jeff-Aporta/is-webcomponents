@@ -55,7 +55,7 @@
 // ─── Variantes canonicas ───────────────────────────────────────────────────
 
 /** Las 5 variantes tonal, en el orden del kit (paler → strongest). */
-import type { IswcColorVariant, ColorMixSpec, IswcColorMixFamily, IswcColorFamily } from "./color-tokens.schemas.js";
+import type { ColorMixSpec, IswcColorMixFamily, IswcColorVariant } from "./color-tokens.schemas.js";
 export const ISWC_COLOR_VARIANTS = ['paler', 'pale', 'strong', 'stronger', 'strongest'] as const;
 
 /** Firma de una variante: target (white|black) y ratio (0-100). */

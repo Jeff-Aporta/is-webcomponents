@@ -197,7 +197,10 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 | `iswc-doc-demo` | CE (catálogo) | shell light-DOM + page styles/modules |
 
 Aliases CSS: `iswc-palettes-default`, `iswc-doc-shell`, `iswc-doc-presentation`.  
-Page modules: `type: 'module' | 'classic'` (`dev-reload` classic, **opt-in** con attr `dev`).  
+Page modules: `type: 'module' | 'classic'` (`dev-reload` classic, **opt-in** con attr `dev`).
+Tema ER InSoft (sin CE nuevo): alias JS `iswc-diagram-theme` → `cdn:diagrams/theme.min.js`
+(`json2css`, `resolveErTheme`, `INSOFT_THEME`); JSON editable en `dist/cdn/diagrams/themes/insoft.json`.
+Uso: `<iswc-er-diagram theme="insoft">` / `<iswc-er-editor theme="insoft">`.  
 Evento canónico: `iswc-doc-demo-ready` / `.whenReady()`.
 
 | Opción | Efecto |

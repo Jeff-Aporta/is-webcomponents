@@ -5,9 +5,9 @@
 // Editar la fuente única en `Personal/Muéstralo/main/cdn/e2e-config.ts`.
 
 /** Estados soportados por el estándar. */
-export type EstadoE2E = 'success' | 'error' | 'warn' | 'run' | 'info';
 
 /** Emojis por estado — el estado va SIEMPRE al inicio del título. */
+import type { EstadoE2E } from "./e2e-config.schemas.js";
 export const EMOJIS: Record<EstadoE2E, string> = {
   success: '✅',
   error: '❌',

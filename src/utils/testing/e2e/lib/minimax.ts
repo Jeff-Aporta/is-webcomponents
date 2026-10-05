@@ -4,6 +4,7 @@
 // MiniMax acepta response_format pero lo ignora: la rigurosidad JSON se pide en
 // el system prompt y el texto se normaliza antes de parsear. Tipado estricto.
 
+import type { ResultadoGenerador, OpcionesGenerador, ParamsGenerador, ParteContenido } from "./minimax.schemas.js";
 const MINIMAX_TIMEOUT_MS = 120_000;
 
 function esperarMs(ms: number): Promise<void> {
@@ -11,13 +12,6 @@ function esperarMs(ms: number): Promise<void> {
 }
 
 /** Resultado normalizado del generador (contrato de Stagehand v4). */
-export type ResultadoGenerador = { role: 'assistant'; content: { type: 'text'; text: string }; outputFormat: 'json_schema'; structuredContent: unknown; usage: { inputTokens: number; outputTokens: number; totalTokens: number } };
-
-export type OpcionesGenerador = { apiKey: string; model: string; baseUrl?: string };
-
-export type ParamsGenerador = { systemPrompt?: string; messages?: Array<{ role: string; content: unknown }>; temperature?: number; responseFormat?: { schema?: unknown } };
-
-type ParteContenido = { type?: string; text?: string; mimeType?: string; data?: string; content?: Array<{ type?: string; text?: string }>; input?: unknown };
 
 function normalizarJson(texto: string): unknown {
   let t = String(texto ?? '').trim();

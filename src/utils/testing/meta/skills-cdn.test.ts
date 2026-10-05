@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
 test('existe skill is-cdn-install en fuente', async () => {
-  const skill = join(raiz, 'src/skills/is-cdn-install/SKILL.md');
+  const skill = join(raiz, 'skills/is-cdn-install/SKILL.md');
   await access(skill);
   const src = await readFile(skill, 'utf8');
   assert.match(src, /^name:\s*is-cdn-install/m);
@@ -22,9 +22,9 @@ test('existe skill is-cdn-install en fuente', async () => {
   assert.match(src, /dist\/cdn\/skills\/is-cdn-install/);
 });
 
-test('build.mjs copia src/skills → dist/cdn/skills', async () => {
+test('build.mjs copia skills/ → dist/cdn/skills', async () => {
   const build = await readFile(join(raiz, 'scripts/build.mjs'), 'utf8');
-  assert.match(build, /src['"], ['"]skills|skillsSrc|dist\/cdn\/skills|skillsOut/);
+  assert.match(build, /skillsSrc|dist\/cdn\/skills|skillsOut/);
   assert.match(build, /is-cdn-install/);
 });
 

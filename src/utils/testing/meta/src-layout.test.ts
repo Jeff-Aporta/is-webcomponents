@@ -18,8 +18,9 @@ const mustExist = [
   'src/components',
   'src/styles',
   'src/previews',
-  'src/skills',
   'src/utils/health/e2e',
+  // 'skills/' en la raíz es la fuente canónica (consolidada desde src/skills/).
+  'skills',
   // `src/assets/` se consolidÃ³ en `dist/assets/` (fuera de dist/cdn/).
   'dist/assets/icons',
   // ConsolidaciÃ³n 2026-09-07: LLM.md (root + per-componente) eliminado;
@@ -40,7 +41,7 @@ for (const rel of mustExist) {
   if (!existsSync(join(root, rel))) failures.push(`falta ${rel}`);
 }
 
-const forbiddenAtRoot = ['components', 'styles', 'previews', 'skills'];
+const forbiddenAtRoot = ['components', 'styles', 'previews'];
 for (const name of forbiddenAtRoot) {
   if (existsSync(join(root, name))) {
     failures.push(`NO debe existir ${name}/ en la raÃ­z â€” vive en src/${name}/`);

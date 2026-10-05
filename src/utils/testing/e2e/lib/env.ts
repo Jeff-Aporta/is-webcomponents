@@ -6,6 +6,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { ConfigE2E } from "./env.schemas.js";
 
 const e2eDir: string = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -65,8 +66,6 @@ function strValor(objeto: unknown, ...claves: string[]): string {
 // Secretos desde rutas fijas (nunca .env ni variables sueltas).
 const secrets = leerJson(SECRETOS_PATH);
 const MINIMAX_KEY = strValor(secrets, 'Values', 'MINIMAX_API_KEY_50USD');
-
-export type ConfigE2E = { baseUrl: string; headless: boolean; escritura: boolean; estricto: boolean; minimaxKey: string; minimaxModelo: string; minimaxUrl: string; artefactos: string; asentarseMs: number; esperaMs: number; navegador: string; sweep: string[]; puerto: number; host: string };
 
 export const ENV: ConfigE2E = {
   // Base URL quemada (no secreta): la del autoservidor o un host local.

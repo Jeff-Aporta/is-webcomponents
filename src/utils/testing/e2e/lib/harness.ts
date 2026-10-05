@@ -19,7 +19,8 @@ import type { EstadoE2E } from './e2e-config.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
 } from './tipos.d.ts';
-import { OpcionesEsperaSchema, type OpcionesEspera } from './harness.schema.ts';
+import { OpcionesEsperaSchema, type OpcionesEspera } from './harness.schemas.js';
+import type { BotonVisible } from "./harness.schemas.js";
 
 export { ENV, e2eDir, faltanRequisitos, titulo, marcar, tituloDe, lineaDe, EMOJIS };
 export type { Page, Locator, EstadoE2E };
@@ -229,8 +230,6 @@ function selectorAtributo(fragmento: string): string {
   const f = escCssAtributo(fragmento);
   return `[title*="${f}"], [aria-label*="${f}"]`;
 }
-
-export type BotonVisible = { i: number; texto: string };
 
 /** Botones/pestanas (con su texto visible); penetra shadow roots. */
 export async function botones(page: Page, contenedor: string | null = null): Promise<BotonVisible[]> {

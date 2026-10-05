@@ -9,6 +9,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { repoDir } from './env.ts';
 import type { Server } from 'node:http';
+import type { ServidorE2E } from "./server.schemas.js";
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -30,8 +31,6 @@ const MIME: Record<string, string> = {
   '.txt': 'text/plain; charset=utf-8',
   '.md': 'text/markdown; charset=utf-8',
 };
-
-export type ServidorE2E = { url: string; cerrar: () => Promise<void> };
 
 async function resolverArchivo(root: string, urlPath: string) {
   const rel = normalize(decodeURIComponent(urlPath.split('?')[0])).replace(/^([/\\])+/, '');

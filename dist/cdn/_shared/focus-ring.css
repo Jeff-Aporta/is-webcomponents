@@ -1,1 +1,1 @@
-@layer iswc.focus{:host{--iswc-focus-fallback: var(--iswc-color-brand);--iswc-focus-offset: 2px}.iswc-focus-ring{&:focus-visible{outline:2px solid var(--iswc-focus, var(--iswc-focus-fallback));outline-offset:var(--iswc-focus-offset)}}}
+@charset "UTF-8";@layer iswc.focus{:host{--iswc-focus-fallback: var(--iswc-color-brand);--iswc-focus-offset: 2px}.iswc-focus-ring:focus-visible{outline:2px solid var(--iswc-focus, var(--iswc-focus-fallback));outline-offset:var(--iswc-focus-offset)}}

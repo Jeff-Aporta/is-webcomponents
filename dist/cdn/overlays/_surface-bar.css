@@ -1,1 +1,1 @@
-@layer iswc.surface{.iswc-surface-bar{display:flex;align-items:center;gap:var(--iswc-surface-bar-gap);padding:var(--iswc-surface-bar-padding);border-block-end:1px solid var(--iswc-border-soft);background:color-mix(in srgb,var(--iswc-bg-elev) 92%,transparent)}}
+@charset "UTF-8";@layer iswc.surface{.iswc-surface-bar{display:flex;align-items:center;gap:var(--iswc-surface-bar-gap);padding:var(--iswc-surface-bar-padding);border-block-end:1px solid var(--iswc-border-soft);background:color-mix(in srgb,var(--iswc-bg-elev) 92%,transparent)}}

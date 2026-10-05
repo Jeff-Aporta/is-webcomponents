@@ -1,6 +1,6 @@
 /**
  * Prompt canónico para agentes + helpers de ensamblaje.
- * Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`
+ * Fuente de verdad en prosa: `skills/is-webcomponents/PROMPT.md`
  * (se copia a `dist/cdn/skills/` en el build).
  */
 
@@ -11,7 +11,7 @@ import type { SkillDoc, PromptMdOpts, LoadAgentPromptOpts, BuildLlmPromptOpts } 
 export const SKILL_DOCS: readonly SkillDoc[] = [
   {
     label: 'Skill · kit (general)',
-    url: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md',
+    url: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/SKILL.md',
   },
 ];
 
@@ -34,8 +34,6 @@ let loadPromise: Promise<string> | null = null;
  */
 export function promptMdCandidates(importMetaUrl: string = import.meta.url): string[] {
   const list = [
-    // src/components/_shared → src/skills/...
-    new URL('../../skills/is-webcomponents/PROMPT.md', importMetaUrl).href,
     // dist/cdn/feedback/*.min.js → dist/cdn/skills/...
     new URL('../skills/is-webcomponents/PROMPT.md', importMetaUrl).href,
     // dist/cdn/all.min.js → dist/cdn/skills/...
@@ -44,7 +42,7 @@ export function promptMdCandidates(importMetaUrl: string = import.meta.url): str
   const loc = globalThis as { location?: { origin?: string } };
   const origin = loc.location?.origin;
   if (typeof origin === 'string') {
-    list.push(`${origin}/src/skills/is-webcomponents/PROMPT.md`);
+    list.push(`${origin}/skills/is-webcomponents/PROMPT.md`);
     list.push(`${origin}/dist/cdn/skills/is-webcomponents/PROMPT.md`);
   }
   return list;

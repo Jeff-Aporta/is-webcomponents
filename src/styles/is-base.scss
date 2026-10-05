@@ -228,19 +228,23 @@
     width: var(--iswc-scrollbar-size);
     height: var(--iswc-scrollbar-size);
   }
+
   &::-webkit-scrollbar-track {
     background: var(--iswc-scrollbar-track);
     border-radius: var(--iswc-scrollbar-radius);
   }
+
   &::-webkit-scrollbar-thumb {
     background: var(--iswc-scrollbar-thumb);
     border-radius: var(--iswc-scrollbar-radius);
     border: 2px solid transparent;
     background-clip: padding-box;
   }
+
   &:hover::-webkit-scrollbar-thumb {
     background: var(--iswc-scrollbar-thumb-hover);
   }
+
   &::-webkit-scrollbar-corner {
     background: transparent;
   }

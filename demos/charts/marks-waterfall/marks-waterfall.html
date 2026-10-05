@@ -18,7 +18,7 @@
   iswc-waterfall-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  const lib = await import('../../../dist/cdn/charts/marks-waterfall.min.js?h=jda4kz');
+  const lib = await import('../../../dist/cdn/charts/marks-waterfall.min.js?h=ia2pwg');
   const { waterfallBars, drawWaterfallMarks } = lib;
   document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
 
@@ -27,7 +27,7 @@
   document.getElementById('bars').textContent = JSON.stringify(bars, null, 2);
 
   // Demo en vivo vía <iswc-waterfall-chart>
-  await import('../../../dist/cdn/data-viz/waterfall-chart.min.js?h=pgj8ao');
+  await import('../../../dist/cdn/data-viz/waterfall-chart.min.js?h=ti598c');
   await customElements.whenDefined('iswc-waterfall-chart');
 
   const wf = document.createElement('iswc-waterfall-chart');

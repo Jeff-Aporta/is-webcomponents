@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { levantarServidor } from './lib/server.ts';
 import { ENV } from './lib/env.ts';
 import { descargarConfigE2E } from './lib/vendor-e2e-config.ts';
-import type { ServidorE2E } from './lib/server.ts';
+import type { ServidorE2E } from "./lib/server.schemas.js";
 
 const e2eDir = dirname(fileURLToPath(import.meta.url));
 
