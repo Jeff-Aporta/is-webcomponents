@@ -122,16 +122,16 @@
     },
     {
       "id": "slots-pg",
-      "title": "Slots Playground",
-      "lede": "Estandar W11: dos tabs. Simple = instancia viva. Slots = segundo ejemplar editable con shadow template y un editor por cada slot.",
+      "title": "Slots",
+      "lede": "iswc-button expone tres slots: <code class=\"code\">default</code> (label), <code class=\"code\">start</code> (icono izquierdo) y <code class=\"code\">end</code> (icono derecho). El siguiente ejemplo los muestra todos a la vez con colores de fondo distintivos para que se vean las areas que cada slot ocupa.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-button\">\n  <iswc-button>Texto del boton</iswc-button>\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-slots-pg>"
+          "html": "<div class=\"demo-row\" style=\"gap: 0.75em; flex-wrap: wrap;\">\n  <iswc-button color=\"brand\" style=\"--iswc-button-slot-start-bg: rgba(174,62,201,0.12); --iswc-button-slot-default-bg: rgba(174,62,201,0.06); --iswc-button-slot-end-bg: rgba(174,62,201,0.12);\">\n    <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n    Texto del boton\n    <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n  </iswc-button>\n  <iswc-button color=\"success\" variant=\"outlined\" style=\"--iswc-button-slot-start-bg: rgba(64,192,87,0.12); --iswc-button-slot-default-bg: rgba(64,192,87,0.06); --iswc-button-slot-end-bg: rgba(64,192,87,0.12);\">\n    <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\n    Confirmar\n    <iswc-icon slot=\"end\" icon=\"mdi:check-circle-outline\"></iswc-icon>\n  </iswc-button>\n  <iswc-button color=\"warning\" variant=\"plain\" style=\"--iswc-button-slot-start-bg: rgba(245,159,0,0.14); --iswc-button-slot-default-bg: rgba(245,159,0,0.06); --iswc-button-slot-end-bg: rgba(245,159,0,0.14);\">\n    <iswc-icon slot=\"start\" icon=\"mdi:alert-outline\"></iswc-icon>\n    Atencion\n    <iswc-icon slot=\"end\" icon=\"mdi:arrow-down\"></iswc-icon>\n  </iswc-button>\n</div>"
         },
         {
-          "kind": "callout",
-          "html": "Pulsar <strong>Restart</strong> en el tab Slots devuelve el codigo al estado inicial. Editar cualquier textarea del tab Slots actualiza la instancia en vivo."
+          "kind": "code",
+          "code": "<iswc-button color=\"brand\">\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n  Texto del boton\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-button>"
         }
       ]
     },
