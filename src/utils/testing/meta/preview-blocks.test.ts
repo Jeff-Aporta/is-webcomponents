@@ -90,7 +90,9 @@ for (const archivo of jsons(componentsRoot).concat(jsons(pagesRoot))) {
 
       if (b.kind === 'code') {
         codigo++;
-        const texto = String(b.code ?? '');
+        // La refactor W43 puede traer `b.code` como `string | string[]`.
+        // Unimos con '\n' para reproducir la semántica del código original.
+        const texto = Array.isArray(b.code) ? b.code.join('\n') : String(b.code ?? '');
         if (MARKUP_DE_COLOR.test(texto)) {
           failures.push(`${donde}: markup de coloreado dentro del código (lo pinta <iswc-code> desde el texto; el JSON no debe traer spans)`);
         }

@@ -13,7 +13,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-prefs-clear reload=\"false\"></iswc-prefs-clear>\n<span class=\"demo-label\" style=\"margin-left:.75rem\">en el preview no recarga la página</span>",
+          "html": [
+            "<iswc-prefs-clear reload=\"false\"></iswc-prefs-clear>",
+            "<span class=\"demo-label\" style=\"margin-left:.75rem\">en el preview no recarga la página</span>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -31,7 +34,12 @@
         "content": "Borra <code>localStorage['is-webcomponents']</code> (splits, scrolls, grids) para auditar la carga inicial limpia."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-prefs-clear reload=\"false\"></iswc-prefs-clear>\n<span class=\"demo-label\" style=\"margin-left:.75rem\">en el preview no recarga la página</span>\n```"
+        "content": [
+          "```html",
+          "<iswc-prefs-clear reload=\"false\"></iswc-prefs-clear>",
+          "<span class=\"demo-label\" style=\"margin-left:.75rem\">en el preview no recarga la página</span>",
+          "```"
+        ]
       }
     },
     "exclude": [

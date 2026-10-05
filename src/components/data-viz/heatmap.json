@@ -4,7 +4,15 @@
   "category": "data-viz",
   "title": "&lt;iswc-heatmap&gt;",
   "titleHtml": false,
-  "styles": ".heat-wrap { height: 22rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "styles": [
+    ".heat-wrap { height: 22rem; }",
+    "    pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .8rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 8rem; overflow: auto;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-heatmap",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +28,25 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-heatmap x-label=\"Hora\" y-label=\"Día\" color=\"brand\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"xLabels\": [\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\",\"18\",\"20\",\"22\"],\r\n                \"yLabels\": [\"Lun\",\"Mar\",\"Mié\",\"Jue\",\"Vie\",\"Sáb\",\"Dom\"],\r\n                \"data\": [\r\n                  [12, 8, 4, 6, 22, 48, 71, 80, 65, 42, 30, 22],\r\n                  [10, 6, 3, 5, 28, 52, 75, 82, 70, 50, 35, 25],\r\n                  [15, 9, 5, 7, 30, 55, 78, 86, 72, 48, 32, 24],\r\n                  [11, 7, 4, 6, 25, 49, 70, 79, 66, 44, 31, 20],\r\n                  [14, 8, 4, 7, 32, 58, 80, 88, 73, 47, 30, 21],\r\n                  [22, 16, 8, 5, 7, 11, 18, 16, 12, 10, 14, 18],\r\n                  [18, 12, 6, 4, 5, 9, 14, 13, 10, 9, 12, 16]\r\n                ]\r\n              }\r\n            </script>\r\n          </iswc-heatmap>",
+          "html": [
+            "<iswc-heatmap x-label=\"Hora\" y-label=\"Día\" color=\"brand\">",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"xLabels\": [\"0\",\"2\",\"4\",\"6\",\"8\",\"10\",\"12\",\"14\",\"16\",\"18\",\"20\",\"22\"],",
+            "                \"yLabels\": [\"Lun\",\"Mar\",\"Mié\",\"Jue\",\"Vie\",\"Sáb\",\"Dom\"],",
+            "                \"data\": [",
+            "                  [12, 8, 4, 6, 22, 48, 71, 80, 65, 42, 30, 22],",
+            "                  [10, 6, 3, 5, 28, 52, 75, 82, 70, 50, 35, 25],",
+            "                  [15, 9, 5, 7, 30, 55, 78, 86, 72, 48, 32, 24],",
+            "                  [11, 7, 4, 6, 25, 49, 70, 79, 66, 44, 31, 20],",
+            "                  [14, 8, 4, 7, 32, 58, 80, 88, 73, 47, 30, 21],",
+            "                  [22, 16, 8, 5, 7, 11, 18, 16, 12, 10, 14, 18],",
+            "                  [18, 12, 6, 4, 5, 9, 14, 13, 10, 9, 12, 16]",
+            "                ]",
+            "              }",
+            "            </script>",
+            "          </iswc-heatmap>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -64,7 +90,24 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-heatmap x-label=\"Mes\" y-label=\"Categoría\" color=\"red-blue\" show-values>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"xLabels\": [\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\r\n                \"yLabels\": [\"Ingresos\",\"Costos\",\"Utilidad\",\"Impuestos\",\"Nómina\",\"Inversión\"],\r\n                \"data\": [\r\n                  [ 22, 14, -8,  30,  41,  18],\r\n                  [-12,-10,  4, -14, -22, -16],\r\n                  [ 35, 28,-12,  44,  63,  34],\r\n                  [ -8,  6,  3,  -9,  -6,  -2],\r\n                  [-18,-22, -6, -25, -34, -19],\r\n                  [ 12, 18,  3,  22,  28,  14]\r\n                ]\r\n              }\r\n            </script>\r\n          </iswc-heatmap>"
+          "html": [
+            "<iswc-heatmap x-label=\"Mes\" y-label=\"Categoría\" color=\"red-blue\" show-values>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"xLabels\": [\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],",
+            "                \"yLabels\": [\"Ingresos\",\"Costos\",\"Utilidad\",\"Impuestos\",\"Nómina\",\"Inversión\"],",
+            "                \"data\": [",
+            "                  [ 22, 14, -8,  30,  41,  18],",
+            "                  [-12,-10,  4, -14, -22, -16],",
+            "                  [ 35, 28,-12,  44,  63,  34],",
+            "                  [ -8,  6,  3,  -9,  -6,  -2],",
+            "                  [-18,-22, -6, -25, -34, -19],",
+            "                  [ 12, 18,  3,  22,  28,  14]",
+            "                ]",
+            "              }",
+            "            </script>",
+            "          </iswc-heatmap>"
+          ]
         }
       ]
     },
@@ -74,7 +117,28 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Datos vía JSON o config\nchart.config = {\n  xLabels: [...],\n  yLabels: [...],\n  data: [[v, v, ...], ...]\n};\n\n// o por puntos\nchart.config = { xLabels, yLabels, points: [{ x, y, v }, ...] };\n\nchart.addEventListener('iswc-cell-hover', e => {\n  console.log(`${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);\n});\n\n// Atributos:\n// x-label, y-label     títulos de eje\n// color                brand | neutral | success | warning | danger | red-blue\n// cell-radius          esquina (default 2)\n// show-values          boolean, imprime el número dentro de cada celda\n// legend-position      top | bottom | start | end | none"
+          "code": [
+            "// Datos vía JSON o config",
+            "chart.config = {",
+            "  xLabels: [...],",
+            "  yLabels: [...],",
+            "  data: [[v, v, ...], ...]",
+            "};",
+            "",
+            "// o por puntos",
+            "chart.config = { xLabels, yLabels, points: [{ x, y, v }, ...] };",
+            "",
+            "chart.addEventListener('iswc-cell-hover', e => {",
+            "  console.log(`${e.detail.x} · ${e.detail.y} = ${e.detail.value}`);",
+            "});",
+            "",
+            "// Atributos:",
+            "// x-label, y-label     títulos de eje",
+            "// color                brand | neutral | success | warning | danger | red-blue",
+            "// cell-radius          esquina (default 2)",
+            "// show-values          boolean, imprime el número dentro de cada celda",
+            "// legend-position      top | bottom | start | end | none"
+          ]
         }
       ]
     },

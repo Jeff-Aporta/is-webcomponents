@@ -50,7 +50,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-tag>General</iswc-tag>\r\n            <iswc-tag color=\"brand\">InSoft</iswc-tag>\r\n            <iswc-tag color=\"neutral\">Neutral</iswc-tag>\r\n            <iswc-tag color=\"info\">Info</iswc-tag>\r\n            <iswc-tag color=\"success\">Success</iswc-tag>\r\n            <iswc-tag color=\"warning\">Warning</iswc-tag>\r\n            <iswc-tag color=\"danger\">Danger</iswc-tag>\r\n            <iswc-tag with-remove id=\"rmTag\">Removible</iswc-tag>\r\n          </div>"
+          "html": [
+            "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">",
+            "            <iswc-tag>General</iswc-tag>",
+            "            <iswc-tag color=\"brand\">InSoft</iswc-tag>",
+            "            <iswc-tag color=\"neutral\">Neutral</iswc-tag>",
+            "            <iswc-tag color=\"info\">Info</iswc-tag>",
+            "            <iswc-tag color=\"success\">Success</iswc-tag>",
+            "            <iswc-tag color=\"warning\">Warning</iswc-tag>",
+            "            <iswc-tag color=\"danger\">Danger</iswc-tag>",
+            "            <iswc-tag with-remove id=\"rmTag\">Removible</iswc-tag>",
+            "          </div>"
+          ]
         },
         {
           "kind": "html",
@@ -64,7 +75,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:.5rem;flex-wrap:wrap\">\r\n            <span style=\"font-size:.75rem\"><iswc-tag>0.75rem</iswc-tag></span>\r\n            <span style=\"font-size:1rem\"><iswc-tag>1rem</iswc-tag></span>\r\n            <span style=\"font-size:1.25rem\"><iswc-tag pill>1.25rem pill</iswc-tag></span>\r\n          </div>"
+          "html": [
+            "<div class=\"demo-row\" style=\"align-items:center;gap:.5rem;flex-wrap:wrap\">",
+            "            <span style=\"font-size:.75rem\"><iswc-tag>0.75rem</iswc-tag></span>",
+            "            <span style=\"font-size:1rem\"><iswc-tag>1rem</iswc-tag></span>",
+            "            <span style=\"font-size:1.25rem\"><iswc-tag pill>1.25rem pill</iswc-tag></span>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -75,7 +92,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-tag\">\n  <iswc-tag color=\"brand\">Importante</iswc-tag>\n  <iswc-icon slot=\"start\" icon=\"mdi:star-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:close\"></iswc-icon>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-tag\">",
+            "  <iswc-tag color=\"brand\">Importante</iswc-tag>",
+            "  <iswc-icon slot=\"start\" icon=\"mdi:star-outline\"></iswc-icon>",
+            "  <iswc-icon slot=\"end\" icon=\"mdi:close\"></iswc-icon>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -87,25 +110,20 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>variant</code>",
-              "brand · neutral · text · info · success · warning · danger (default brand)"
+              "<code>variant</code>"
             ],
             [
-              "<code>appearance</code>",
-              "filled-outlined"
+              "<code>appearance</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>with-remove</code>",
-              "false"
+              "<code>with-remove</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>pill</code>",
-              "false"
+              "<code>pill</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ]
           ]
         }
@@ -138,7 +156,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-tag id=\"tagPlay\">General</iswc-tag>\n```"
+        "content": [
+          "```html",
+          "<iswc-tag id=\"tagPlay\">General</iswc-tag>",
+          "```"
+        ]
       }
     },
     "exclude": [

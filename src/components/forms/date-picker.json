@@ -108,7 +108,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <div class=\"demo-label\">open-to=\"year\"</div>\r\n            <iswc-date-picker locale=\"es\" open-to=\"year\" value=\"2026-07-30\"></iswc-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">views=\"month year\"</div>\r\n            <iswc-date-picker locale=\"es\" views=\"month year\" view=\"month\" value=\"2026-07-01\"></iswc-date-picker>\r\n          </div>"
+          "html": [
+            "<div>",
+            "            <div class=\"demo-label\">open-to=\"year\"</div>",
+            "            <iswc-date-picker locale=\"es\" open-to=\"year\" value=\"2026-07-30\"></iswc-date-picker>",
+            "          </div>",
+            "          <div>",
+            "            <div class=\"demo-label\">views=\"month year\"</div>",
+            "            <iswc-date-picker locale=\"es\" views=\"month year\" view=\"month\" value=\"2026-07-01\"></iswc-date-picker>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -119,7 +128,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <div class=\"demo-label\">domingo + outside + week numbers</div>\r\n            <iswc-date-picker locale=\"en-US\" first-day-of-week=\"0\" show-outside-days fixed-weeks show-week-numbers value=\"2026-07-15\"></iswc-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">fines de semana off</div>\r\n            <iswc-date-picker locale=\"es\" disabled-days=\"0 6\" value=\"2026-07-15\"></iswc-date-picker>\r\n          </div>"
+          "html": [
+            "<div>",
+            "            <div class=\"demo-label\">domingo + outside + week numbers</div>",
+            "            <iswc-date-picker locale=\"en-US\" first-day-of-week=\"0\" show-outside-days fixed-weeks show-week-numbers value=\"2026-07-15\"></iswc-date-picker>",
+            "          </div>",
+            "          <div>",
+            "            <div class=\"demo-label\">fines de semana off</div>",
+            "            <iswc-date-picker locale=\"es\" disabled-days=\"0 6\" value=\"2026-07-15\"></iswc-date-picker>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -129,7 +147,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <div class=\"demo-label\">disable-past</div>\r\n            <iswc-date-picker locale=\"es\" disable-past></iswc-date-picker>\r\n          </div>\r\n          <div>\r\n            <div class=\"demo-label\">disabled-dates</div>\r\n            <iswc-date-picker locale=\"es\" value=\"2026-07-01\" disabled-dates=\"2026-07-04 2026-07-05 2026-07-20\"></iswc-date-picker>\r\n          </div>"
+          "html": [
+            "<div>",
+            "            <div class=\"demo-label\">disable-past</div>",
+            "            <iswc-date-picker locale=\"es\" disable-past></iswc-date-picker>",
+            "          </div>",
+            "          <div>",
+            "            <div class=\"demo-label\">disabled-dates</div>",
+            "            <iswc-date-picker locale=\"es\" value=\"2026-07-01\" disabled-dates=\"2026-07-04 2026-07-05 2026-07-20\"></iswc-date-picker>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -140,7 +167,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-month-calendar year=\"2026\" value=\"2026-07\" locale=\"es\" style=\"width:16em\"></iswc-month-calendar>\r\n          <iswc-year-calendar value=\"2026\" min=\"2010\" max=\"2035\" style=\"width:16em\"></iswc-year-calendar>"
+          "html": [
+            "<iswc-month-calendar year=\"2026\" value=\"2026-07\" locale=\"es\" style=\"width:16em\"></iswc-month-calendar>",
+            "          <iswc-year-calendar value=\"2026\" min=\"2010\" max=\"2035\" style=\"width:16em\"></iswc-year-calendar>"
+          ]
         }
       ]
     },
@@ -152,53 +182,41 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>value</code>",
-              "— · rango: <code>start/end</code>"
+              "<code>value</code>"
             ],
             [
-              "<code>mode</code>",
-              "single · range"
+              "<code>mode</code>"
             ],
             [
-              "<code>view</code> / <code>views</code> / <code>open-to</code>",
-              "day · day month year · day"
+              "<code>view</code> / <code>views</code> / <code>open-to</code>"
             ],
             [
-              "<code>min</code> / <code>max</code>",
-              "—"
+              "<code>min</code> / <code>max</code>"
             ],
             [
-              "<code>locale</code> / <code>first-day-of-week</code>",
-              "document.lang · Intl"
+              "<code>locale</code> / <code>first-day-of-week</code>"
             ],
             [
-              "<code>show-outside-days</code> / <code>fixed-weeks</code> / <code>show-week-numbers</code>",
-              "off"
+              "<code>show-outside-days</code> / <code>fixed-weeks</code> / <code>show-week-numbers</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>disable-past</code> / <code>disable-future</code>",
-              "off"
+              "<code>disable-past</code> / <code>disable-future</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>disabled-dates</code> / <code>disabled-days</code>",
-              "—"
+              "<code>disabled-dates</code> / <code>disabled-days</code>"
             ],
             [
-              "<code>nav</code>",
-              "both · prev · next · none"
+              "<code>nav</code>"
             ],
             [
-              "<code>frameless</code>",
-              "off (para meter varios en una tarjeta)"
+              "<code>frameless</code>"
             ],
             [
-              "<code>preview-to</code>",
-              "— (rango tentativo impuesto desde fuera)"
+              "<code>preview-to</code>"
             ]
           ]
         },
@@ -263,7 +281,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></iswc-date-picker>\n```"
+        "content": [
+          "```html",
+          "<iswc-date-picker id=\"dp\" value=\"2026-07-30\" locale=\"es\"></iswc-date-picker>",
+          "```"
+        ]
       }
     },
     "exclude": [

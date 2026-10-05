@@ -4,7 +4,10 @@
   "category": "forms",
   "title": "&lt;iswc-masked-input&gt;",
   "titleHtml": false,
-  "styles": ".mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }\r\n    .mask-row label { font-size: .82rem; color: var(--iswc-text-soft); }",
+  "styles": [
+    ".mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }",
+    "    .mask-row label { font-size: .82rem; color: var(--iswc-text-soft); }"
+  ],
   "storageKey": "docs-iswc-masked-input",
   "sections": [
     {
@@ -72,7 +75,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"mask-row\"><label>Tarjeta</label>\r\n            <iswc-masked-input id=\"card\" pattern=\"0000 0000 0000 0000\" autocomplete=\"cc-number\"></iswc-masked-input>\r\n          </div>",
+          "html": [
+            "<div class=\"mask-row\"><label>Tarjeta</label>",
+            "            <iswc-masked-input id=\"card\" pattern=\"0000 0000 0000 0000\" autocomplete=\"cc-number\"></iswc-masked-input>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -126,7 +133,20 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const m = document.querySelector('iswc-masked-input');\nm.value           // texto formateado: \"1234 5678 9012 3456\"\nm.raw             // caracteres limpios: \"1234567890123456\"\nm.complete        // boolean: ¿rellenó todos los slots requeridos?\nm.formatted       // alias de value\n\nm.addEventListener('iswc-input',    e => /* cada keystroke */);\nm.addEventListener('iswc-complete', e => /* completó el patrón */);\n\n// API HTML:  invisible participa en formularios vía ElementInternals\n//   <form><iswc-masked-input name=\"card\" pattern=\"0000 0000 0000 0000\"></iswc-masked-input></form>\nformData.get('card');  // texto formateado (no raw; usar raw attr si se quiere limpio)"
+          "code": [
+            "const m = document.querySelector('iswc-masked-input');",
+            "m.value           // texto formateado: \"1234 5678 9012 3456\"",
+            "m.raw             // caracteres limpios: \"1234567890123456\"",
+            "m.complete        // boolean: ¿rellenó todos los slots requeridos?",
+            "m.formatted       // alias de value",
+            "",
+            "m.addEventListener('iswc-input',    e => /* cada keystroke */);",
+            "m.addEventListener('iswc-complete', e => /* completó el patrón */);",
+            "",
+            "// API HTML:  invisible participa en formularios vía ElementInternals",
+            "//   <form><iswc-masked-input name=\"card\" pattern=\"0000 0000 0000 0000\"></iswc-masked-input></form>",
+            "formData.get('card');  // texto formateado (no raw; usar raw attr si se quiere limpio)"
+          ]
         }
       ]
     }

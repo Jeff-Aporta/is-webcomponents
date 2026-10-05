@@ -22,6 +22,12 @@
 import type { Hallazgo } from '../types.js';
 import { DefSchema, BloqueSchema, type Def, type Bloque } from "./json-contenido.schema.js";
 
+/** Une `string | string[] | undefined` en un string. Si es array, lo une con `\n`. */
+function asText(v: unknown): string {
+  if (v == null) return '';
+  return Array.isArray(v) ? v.join('\n') : String(v);
+}
+
 /** Opciones del validador de contenido. */
 export interface OpcionesContenido {
   /** Si el tag es un módulo (helper, no custom element), el auditor
@@ -102,7 +108,7 @@ export function ejecutarValidacionContenido(def: Def, rutaJson: string, opciones
       const ruta = `${rutaJson}#sections[${si}].blocks[${bi}]`;
       switch (bloque.kind) {
         case 'demo': {
-          const html = String(bloque.html ?? '');
+          const html = asText(bloque.html);
           const tags = tagsIsUnicos(html);
 
           // 1. Demo sin iswc-* en el HTML.
@@ -179,7 +185,7 @@ export function ejecutarValidacionContenido(def: Def, rutaJson: string, opciones
         }
 
         case 'code': {
-          const code = String(bloque.code ?? '');
+          const code = asText(bloque.code);
           if (!code.trim()) {
             hallazgos.push({
               categoria: 'json-contenido', severidad: 'error', tag, ruta: rutaJson,
@@ -225,7 +231,7 @@ export function ejecutarValidacionContenido(def: Def, rutaJson: string, opciones
 
         case 'html': {
           // Mezclar <style> dentro de un bloque html es mala práctica en JSON.
-          if (/<style[\s>]/i.test(String(bloque.html ?? ''))) {
+          if (/<style[\s>]/i.test(asText(bloque.html))) {
             hallazgos.push({
               categoria: 'json-contenido', severidad: 'warn', tag, ruta: rutaJson,
               mensaje: 'Bloque html contiene <style>; usar el campo `styles` raíz o un behavior en su lugar.',

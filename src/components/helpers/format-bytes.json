@@ -84,7 +84,34 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1024&quot; unit=&quot;byte&quot;\">\r\n              <code class=\"format-grid__tag\">byte 1024</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1024\" unit=\"byte\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;kilobyte&quot;\">\r\n              <code class=\"format-grid__tag\">kilobyte 1</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"kilobyte\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot;\">\r\n              <code class=\"format-grid__tag\">megabyte 2.5</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;gigabyte&quot;\">\r\n              <code class=\"format-grid__tag\">gigabyte 1</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"gigabyte\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;terabyte&quot;\">\r\n              <code class=\"format-grid__tag\">terabyte 1</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"terabyte\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;petabyte&quot;\">\r\n              <code class=\"format-grid__tag\">petabyte 1</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"petabyte\"></iswc-format-bytes>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1024&quot; unit=&quot;byte&quot;\">",
+            "              <code class=\"format-grid__tag\">byte 1024</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1024\" unit=\"byte\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;kilobyte&quot;\">",
+            "              <code class=\"format-grid__tag\">kilobyte 1</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"kilobyte\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot;\">",
+            "              <code class=\"format-grid__tag\">megabyte 2.5</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;gigabyte&quot;\">",
+            "              <code class=\"format-grid__tag\">gigabyte 1</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"gigabyte\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;terabyte&quot;\">",
+            "              <code class=\"format-grid__tag\">terabyte 1</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"terabyte\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot; unit=&quot;petabyte&quot;\">",
+            "              <code class=\"format-grid__tag\">petabyte 1</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1\" unit=\"petabyte\"></iswc-format-bytes>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -94,7 +121,34 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;512&quot; display=&quot;short&quot;\">\r\n              <code class=\"format-grid__tag\">short · 512 B</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"512\" display=\"short\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;512&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">long · 512</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"512\" display=\"long\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1073741824&quot; display=&quot;short&quot;\">\r\n              <code class=\"format-grid__tag\">short · 1 GiB</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1073741824\" display=\"short\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1073741824&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">long · 1 GiB</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1073741824\" display=\"long\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot; display=&quot;short&quot;\">\r\n              <code class=\"format-grid__tag\">short · 2.5 MB in</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\" display=\"short\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot; display=&quot;long&quot;\">\r\n              <code class=\"format-grid__tag\">long · 2.5 MB in</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\" display=\"long\"></iswc-format-bytes>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;512&quot; display=&quot;short&quot;\">",
+            "              <code class=\"format-grid__tag\">short · 512 B</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"512\" display=\"short\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;512&quot; display=&quot;long&quot;\">",
+            "              <code class=\"format-grid__tag\">long · 512</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"512\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1073741824&quot; display=&quot;short&quot;\">",
+            "              <code class=\"format-grid__tag\">short · 1 GiB</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1073741824\" display=\"short\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1073741824&quot; display=&quot;long&quot;\">",
+            "              <code class=\"format-grid__tag\">long · 1 GiB</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1073741824\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot; display=&quot;short&quot;\">",
+            "              <code class=\"format-grid__tag\">short · 2.5 MB in</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\" display=\"short\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;2.5&quot; unit=&quot;megabyte&quot; display=&quot;long&quot;\">",
+            "              <code class=\"format-grid__tag\">long · 2.5 MB in</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"2.5\" unit=\"megabyte\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -105,7 +159,22 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;204800&quot;\">\n              <code class=\"format-grid__tag\">autofit · 204800 B</code>\n              <iswc-format-bytes class=\"format-grid__value\" autofit value=\"204800\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;1048576&quot;\">\n              <code class=\"format-grid__tag\">autofit · 1 MiB</code>\n              <iswc-format-bytes class=\"format-grid__value\" autofit value=\"1048576\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;512&quot;\">\n              <code class=\"format-grid__tag\">autofit · 512 B</code>\n              <iswc-format-bytes class=\"format-grid__value\" autofit value=\"512\"></iswc-format-bytes>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;204800&quot;\">",
+            "              <code class=\"format-grid__tag\">autofit · 204800 B</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" autofit value=\"204800\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;1048576&quot;\">",
+            "              <code class=\"format-grid__tag\">autofit · 1 MiB</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" autofit value=\"1048576\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"autofit value=&quot;512&quot;\">",
+            "              <code class=\"format-grid__tag\">autofit · 512 B</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" autofit value=\"512\"></iswc-format-bytes>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -116,7 +185,54 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">value=\"1536000\" · short</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">en → 1.5 MB</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"en\" value=\"1536000\" display=\"short\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">es → 1,5 MB</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"es\" value=\"1536000\" display=\"short\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">fr → 1,5 Mo</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"fr\" value=\"1536000\" display=\"short\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">ar-EG → ١٫٥ م.ب</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"ar-EG\" value=\"1536000\" display=\"short\"></iswc-format-bytes>\n            </div>\n          </div>\n          <span class=\"demo-label\">value=\"1536000\" · long (unidad traducida)</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">en</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"en\" value=\"1536000\" display=\"long\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">es</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"es\" value=\"1536000\" display=\"long\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">de</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"de\" value=\"1536000\" display=\"long\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">fr</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"fr\" value=\"1536000\" display=\"long\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">ja</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"ja\" value=\"1536000\" display=\"long\"></iswc-format-bytes>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">ar-EG</code>\n              <iswc-format-bytes class=\"format-grid__value\" locale=\"ar-EG\" value=\"1536000\" display=\"long\"></iswc-format-bytes>\n            </div>\n          </div>"
+          "html": [
+            "<span class=\"demo-label\">value=\"1536000\" · short</span>",
+            "          <div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">en → 1.5 MB</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"en\" value=\"1536000\" display=\"short\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">es → 1,5 MB</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"es\" value=\"1536000\" display=\"short\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">fr → 1,5 Mo</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"fr\" value=\"1536000\" display=\"short\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">ar-EG → ١٫٥ م.ب</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"ar-EG\" value=\"1536000\" display=\"short\"></iswc-format-bytes>",
+            "            </div>",
+            "          </div>",
+            "          <span class=\"demo-label\">value=\"1536000\" · long (unidad traducida)</span>",
+            "          <div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">en</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"en\" value=\"1536000\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">es</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"es\" value=\"1536000\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">de</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"de\" value=\"1536000\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">fr</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"fr\" value=\"1536000\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">ja</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"ja\" value=\"1536000\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">ar-EG</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" locale=\"ar-EG\" value=\"1536000\" display=\"long\"></iswc-format-bytes>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -126,7 +242,26 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;0&quot;\">\r\n              <code class=\"format-grid__tag\">0</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"0\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot;\">\r\n              <code class=\"format-grid__tag\">1 byte</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"1\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"value=&quot;-2048&quot;\">\r\n              <code class=\"format-grid__tag\">negativo</code>\r\n              <iswc-format-bytes class=\"format-grid__value\" value=\"-2048\"></iswc-format-bytes>\r\n            </div>\r\n            <div class=\"format-grid__row\" data-code=\"\">\r\n              <code class=\"format-grid__tag\">sin value</code>\r\n              <iswc-format-bytes class=\"format-grid__value\">«<span></span>» (vacío)</iswc-format-bytes>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;0&quot;\">",
+            "              <code class=\"format-grid__tag\">0</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"0\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;1&quot;\">",
+            "              <code class=\"format-grid__tag\">1 byte</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"1\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"value=&quot;-2048&quot;\">",
+            "              <code class=\"format-grid__tag\">negativo</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\" value=\"-2048\"></iswc-format-bytes>",
+            "            </div>",
+            "            <div class=\"format-grid__row\" data-code=\"\">",
+            "              <code class=\"format-grid__tag\">sin value</code>",
+            "              <iswc-format-bytes class=\"format-grid__value\">«<span></span>» (vacío)</iswc-format-bytes>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -138,28 +273,23 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Default",
             "Notas"
           ],
           "rows": [
             [
               "<code>value</code>",
-              "—",
               "número (bytes o según <code>unit</code>)"
             ],
             [
-              "<code>unit</code>",
-              "byte",
-              "byte · kilobyte · megabyte · gigabyte · terabyte · petabyte"
+              "<code>unit</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "byte · kilobyte · megabyte · gigabyte · terabyte · petabyte (valor por defecto)"
             ],
             [
-              "<code>display</code>",
-              "short",
-              "short · long"
+              "<code>display</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "short · long (valor por defecto)"
             ],
             [
               "<code>locale</code>",
-              "lang del documento",
               "BCP 47 — cambia separador decimal y nombre de unidad (p. ej. en <code>1.5 MB</code> vs es <code>1,5 MB</code> vs fr <code>1,5 Mo</code>)"
             ]
           ]
@@ -197,7 +327,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<p>Demo: <iswc-format-bytes value=\"1536000\"></iswc-format-bytes></p>\n```"
+        "content": [
+          "```html",
+          "<p>Demo: <iswc-format-bytes value=\"1536000\"></iswc-format-bytes></p>",
+          "```"
+        ]
       }
     },
     "exclude": [

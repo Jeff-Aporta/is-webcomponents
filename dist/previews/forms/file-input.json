@@ -14,7 +14,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></iswc-file-input>",
+          "html": [
+            "<iswc-file-input",
+            "            id=\"fi\"",
+            "            label=\"Adjuntos\"",
+            "            hint=\"PDF o imágenes · máx. varios archivos\"",
+            "            accept=\"image/*,.pdf\"",
+            "            multiple",
+            "            name=\"attachments\"",
+            "          ></iswc-file-input>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -128,7 +137,18 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></iswc-file-input>\n```"
+        "content": [
+          "```html",
+          "<iswc-file-input",
+          "            id=\"fi\"",
+          "            label=\"Adjuntos\"",
+          "            hint=\"PDF o imágenes · máx. varios archivos\"",
+          "            accept=\"image/*,.pdf\"",
+          "            multiple",
+          "            name=\"attachments\"",
+          "          ></iswc-file-input>",
+          "```"
+        ]
       }
     },
     "exclude": [

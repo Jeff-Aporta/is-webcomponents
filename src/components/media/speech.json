@@ -36,7 +36,11 @@
         "content": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>\n```"
+        "content": [
+          "```html",
+          "<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -5,7 +5,10 @@
   "title": "&lt;iswc-speed-dial-action&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-speed-dial-action de InSoft.",
-  "styles": ".sd-stage { position:relative; transform:translateZ(0); height:320px;\r\n      border:1px dashed var(--iswc-border); border-radius:.6rem; }",
+  "styles": [
+    ".sd-stage { position:relative; transform:translateZ(0); height:320px;",
+    "      border:1px dashed var(--iswc-border); border-radius:.6rem; }"
+  ],
   "storageKey": "docs-iswc-speed-dial-action",
   "sections": [
     {
@@ -15,7 +18,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"sd-stage\">\r\n            <iswc-speed-dial direction=\"up\" open>\r\n              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
+          "html": [
+            "<div class=\"sd-stage\">",
+            "            <iswc-speed-dial direction=\"up\" open>",
+            "              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",
+            "            </iswc-speed-dial>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -44,7 +55,17 @@
         "content": "Cada acción que despliega un <code class=\"code\">&lt;iswc-speed-dial&gt;</code>, con su icono y su etiqueta."
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"sd-stage\">\n  <iswc-speed-dial direction=\"up\" open>\n    <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>\n    <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>\n    <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>\n  </iswc-speed-dial>\n</div>\n```"
+        "content": [
+          "```html",
+          "<div class=\"sd-stage\">",
+          "  <iswc-speed-dial direction=\"up\" open>",
+          "    <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
+          "    <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
+          "    <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",
+          "  </iswc-speed-dial>",
+          "</div>",
+          "```"
+        ]
       }
     },
     "exclude": [

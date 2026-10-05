@@ -4,14 +4,23 @@
   "category": "forms",
   "title": "&lt;iswc-slider&gt;",
   "titleHtml": false,
-  "styles": ".stack { display: grid; gap: 1.5rem; max-width: 28rem; }\r\n    .row { display: flex; align-items: center; gap: 1rem; }\r\n    .row iswc-slider { flex: 1; }\r\n    .verticals { display: flex; gap: 3rem; align-items: flex-end; }",
+  "styles": [
+    ".stack { display: grid; gap: 1.5rem; max-width: 28rem; }",
+    "    .row { display: flex; align-items: center; gap: 1rem; }",
+    "    .row iswc-slider { flex: 1; }",
+    "    .verticals { display: flex; gap: 3rem; align-items: flex-end; }"
+  ],
   "storageKey": "docs-iswc-slider",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Control de rango form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-slider/\" target=\"_blank\" rel=\"noreferrer\">Slider de MUI</a>:\r\n          rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido.",
+      "lede": [
+        "Control de rango form-associated con paridad funcional con el",
+        "          <a href=\"https://mui.com/material-ui/react-slider/\" target=\"_blank\" rel=\"noreferrer\">Slider de MUI</a>:",
+        "          rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -133,7 +142,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <div class=\"row\">\r\n              <iswc-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></iswc-icon>\r\n              <iswc-slider label=\"Volumen\" value=\"30\"></iswc-slider>\r\n              <iswc-icon name=\"tabler:volume\" aria-hidden=\"true\"></iswc-icon>\r\n            </div>\r\n            <iswc-slider label=\"Deshabilitado\" value=\"30\" disabled></iswc-slider>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <div class=\"row\">",
+            "              <iswc-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></iswc-icon>",
+            "              <iswc-slider label=\"Volumen\" value=\"30\"></iswc-slider>",
+            "              <iswc-icon name=\"tabler:volume\" aria-hidden=\"true\"></iswc-icon>",
+            "            </div>",
+            "            <iswc-slider label=\"Deshabilitado\" value=\"30\" disabled></iswc-slider>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -144,40 +162,77 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-slider style=\"font-size:0.8em\" label=\"0.8em\" value=\"70\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"medium (default)\" value=\"50\" value-label=\"auto\"></iswc-slider>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-slider style=\"font-size:0.8em\" label=\"0.8em\" value=\"70\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider label=\"medium (default)\" value=\"50\" value-label=\"auto\"></iswc-slider>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "discrete",
       "title": "Discreto",
-      "lede": "<code class=\"code\">marks</code> sin valor dibuja un punto por step.\r\n          <code class=\"code\">shift-step</code> define el salto de <code class=\"code\">PageUp/PageDown</code> y <code class=\"code\">Shift + flechas</code>.",
+      "lede": [
+        "<code class=\"code\">marks</code> sin valor dibuja un punto por step.",
+        "          <code class=\"code\">shift-step</code> define el salto de <code class=\"code\">PageUp/PageDown</code> y <code class=\"code\">Shift + flechas</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"Temperatura\" min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\" value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"></iswc-slider>\r\n            <iswc-slider min=\"10\" max=\"110\" step=\"10\" value=\"30\" marks disabled></iswc-slider>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-slider label=\"Temperatura\" min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\" value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"></iswc-slider>",
+            "            <iswc-slider min=\"10\" max=\"110\" step=\"10\" value=\"30\" marks disabled></iswc-slider>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "marks",
       "title": "Marks personalizados",
-      "lede": "<code class=\"code\">marks=\"valor:etiqueta, …\"</code> para etiquetas propias, o la propiedad\r\n          <code class=\"code\">.marks = [{ value, label }]</code>. Con <code class=\"code\">step=\"null\"</code>\r\n          los valores quedan restringidos a los marks.",
+      "lede": [
+        "<code class=\"code\">marks=\"valor:etiqueta, …\"</code> para etiquetas propias, o la propiedad",
+        "          <code class=\"code\">.marks = [{ value, label }]</code>. Con <code class=\"code\">step=\"null\"</code>",
+        "          los valores quedan restringidos a los marks."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"Marks con etiqueta\" step=\"10\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"Valores restringidos (step null)\" step=\"null\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"Etiqueta siempre visible\" step=\"10\" value=\"80\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"on\"></iswc-slider>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-slider label=\"Marks con etiqueta\" step=\"10\" value=\"20\"",
+            "              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider label=\"Valores restringidos (step null)\" step=\"null\" value=\"20\"",
+            "              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider label=\"Etiqueta siempre visible\" step=\"10\" value=\"80\"",
+            "              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"on\"></iswc-slider>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "range",
       "title": "Rango",
-      "lede": "Dos o más valores separados por coma crean un thumb por valor.\r\n          <code class=\"code\">disable-swap</code> evita que se crucen y <code class=\"code\">min-distance</code>\r\n          impone una separación mínima.",
+      "lede": [
+        "Dos o más valores separados por coma crean un thumb por valor.",
+        "          <code class=\"code\">disable-swap</code> evita que se crucen y <code class=\"code\">min-distance</code>",
+        "          impone una separación mínima."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-slider id=\"rangeDemo\" label=\"Temperatura (rango)\" value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></iswc-slider>\r\n            <iswc-slider label=\"min-distance 10 · disable-swap\" value=\"20,37\" min-distance=\"10\" disable-swap value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"Tres thumbs\" value=\"10,40,80\" value-label=\"auto\"></iswc-slider>\r\n          </div>\r\n          <p class=\"lede\" id=\"rangeLog\">rango: <code class=\"code\">20 – 37</code></p>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-slider id=\"rangeDemo\" label=\"Temperatura (rango)\" value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></iswc-slider>",
+            "            <iswc-slider label=\"min-distance 10 · disable-swap\" value=\"20,37\" min-distance=\"10\" disable-swap value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider label=\"Tres thumbs\" value=\"10,40,80\" value-label=\"auto\"></iswc-slider>",
+            "          </div>",
+            "          <p class=\"lede\" id=\"rangeLog\">rango: <code class=\"code\">20 – 37</code></p>"
+          ]
         }
       ]
     },
@@ -188,7 +243,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"row\" style=\"max-width:28rem;\">\r\n            <iswc-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></iswc-icon>\r\n            <iswc-slider id=\"linkedSlider\" label=\"Volumen\" value=\"30\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-input id=\"linkedInput\" type=\"number\" min=\"0\" max=\"100\" step=\"1\" value=\"30\" style=\"width:5.5rem;\"></iswc-input>\r\n          </div>"
+          "html": [
+            "<div class=\"row\" style=\"max-width:28rem;\">",
+            "            <iswc-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></iswc-icon>",
+            "            <iswc-slider id=\"linkedSlider\" label=\"Volumen\" value=\"30\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-input id=\"linkedInput\" type=\"number\" min=\"0\" max=\"100\" step=\"1\" value=\"30\" style=\"width:5.5rem;\"></iswc-input>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -199,40 +260,77 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"brand (default)\" value=\"30\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"neutral\" label=\"neutral\" value=\"45\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"text\" label=\"text\" value=\"50\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"success\" label=\"success\" value=\"60\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"warning\" label=\"warning\" value=\"75\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"danger\" label=\"danger\" value=\"90\" value-label=\"auto\"></iswc-slider>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-slider label=\"brand (default)\" value=\"30\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider color=\"neutral\" label=\"neutral\" value=\"45\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider color=\"text\" label=\"text\" value=\"50\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider color=\"success\" label=\"success\" value=\"60\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider color=\"warning\" label=\"warning\" value=\"75\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider color=\"danger\" label=\"danger\" value=\"90\" value-label=\"auto\"></iswc-slider>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "vertical",
       "title": "Vertical",
-      "lede": "<code class=\"code\">orientation=\"vertical\"</code>. La longitud se controla con\r\n          <code class=\"code\">--iswc-slider-length</code>.",
+      "lede": [
+        "<code class=\"code\">orientation=\"vertical\"</code>. La longitud se controla con",
+        "          <code class=\"code\">--iswc-slider-length</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"verticals\">\r\n            <iswc-slider orientation=\"vertical\" value=\"30\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider orientation=\"vertical\" value=\"30\" disabled></iswc-slider>\r\n            <iswc-slider orientation=\"vertical\" step=\"10\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></iswc-slider>\r\n          </div>"
+          "html": [
+            "<div class=\"verticals\">",
+            "            <iswc-slider orientation=\"vertical\" value=\"30\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider orientation=\"vertical\" value=\"30\" disabled></iswc-slider>",
+            "            <iswc-slider orientation=\"vertical\" step=\"10\" value=\"20\"",
+            "              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></iswc-slider>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "track",
       "title": "Track",
-      "lede": "<code class=\"code\">track=\"none\"</code> oculta el relleno; <code class=\"code\">track=\"inverted\"</code>\r\n          rellena el tramo complementario.",
+      "lede": [
+        "<code class=\"code\">track=\"none\"</code> oculta el relleno; <code class=\"code\">track=\"inverted\"</code>",
+        "          rellena el tramo complementario."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"normal\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"none\" track=\"none\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"none · rango\" track=\"none\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"inverted\" track=\"inverted\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"inverted · rango\" track=\"inverted\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-slider label=\"normal\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>",
+            "            <iswc-slider label=\"none\" track=\"none\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>",
+            "            <iswc-slider label=\"none · rango\" track=\"none\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>",
+            "            <iswc-slider label=\"inverted\" track=\"inverted\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>",
+            "            <iswc-slider label=\"inverted · rango\" track=\"inverted\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "scale",
       "title": "Escala no lineal",
-      "lede": "La propiedad <code class=\"code\">scale</code> traduce el valor interno al valor mostrado.\r\n          Aquí <em>x</em> representa 2<sup>x</sup>: cada paso duplica el almacenamiento.",
+      "lede": [
+        "La propiedad <code class=\"code\">scale</code> traduce el valor interno al valor mostrado.",
+        "          Aquí <em>x</em> representa 2<sup>x</sup>: cada paso duplica el almacenamiento."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<p id=\"scaleLabel\" class=\"lede\">Almacenamiento: <code class=\"code\">1 MB</code></p>\r\n          <iswc-slider id=\"scaleDemo\" min=\"5\" max=\"30\" step=\"1\" value=\"10\" value-label=\"auto\" style=\"max-width:28rem;\"></iswc-slider>"
+          "html": [
+            "<p id=\"scaleLabel\" class=\"lede\">Almacenamiento: <code class=\"code\">1 MB</code></p>",
+            "          <iswc-slider id=\"scaleDemo\" min=\"5\" max=\"30\" step=\"1\" value=\"10\" value-label=\"auto\" style=\"max-width:28rem;\"></iswc-slider>"
+          ]
         }
       ]
     },
@@ -366,7 +464,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Control de rango form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-slider/\" target=\"_blank\" rel=\"noreferrer\">Slider de MUI</a>:\r\n          rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido."
+        "content": [
+          "Control de rango form-associated con paridad funcional con el",
+          "          <a href=\"https://mui.com/material-ui/react-slider/\" target=\"_blank\" rel=\"noreferrer\">Slider de MUI</a>:",
+          "          rango de dos thumbs, marks, escala no lineal, orientación vertical y track invertido."
+        ]
       },
       "apiJs": {
         "table": [
@@ -449,7 +551,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-slider id=\"demo\" label=\"Volumen\" hint=\"Arrastra o usa las flechas\" value=\"40\" value-label=\"auto\" name=\"volumen\"></iswc-slider>\n```"
+        "content": [
+          "```html",
+          "<iswc-slider id=\"demo\" label=\"Volumen\" hint=\"Arrastra o usa las flechas\" value=\"40\" value-label=\"auto\" name=\"volumen\"></iswc-slider>",
+          "```"
+        ]
       }
     },
     "exclude": [

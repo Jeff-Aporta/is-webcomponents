@@ -17,13 +17,15 @@ const __dirname = join(dirname(fileURLToPath(import.meta.url)), "..", "..", ".."
 const homePath = join(__dirname, 'pages', 'home.json');
 const homeBeh = join(__dirname, 'pages', 'home.ts');
 const homeDef = JSON.parse(readFileSync(homePath, 'utf8'));
+/** Une `string | string[] | undefined` en un string. Si es array, lo une con `\n`. */
+const asText = (v) => Array.isArray(v) ? v.join('\n') : (typeof v === 'string' ? v : '');
 /** Contenido buscable: styles + demos JSON + behavior (scripts migrados). */
 const behSrc = readFileSync(homeBeh, 'utf8');
-const src = [homeDef.styles || '', JSON.stringify(homeDef.sections), behSrc].join('\n');
+const src = [asText(homeDef.styles), JSON.stringify(homeDef.sections), behSrc].join('\n');
 /** Markup de todas las secciones, tal como el chrome lo inserta. */
 const markup = homeDef.sections
-  .flatMap((s) => s.blocks.map((b) => b.html || ''))
-  .concat(homeDef.prelude || '')
+  .flatMap((s) => s.blocks.map((b) => asText(b.html)))
+  .concat(asText(homeDef.prelude))
   .join('\n');
 
 /** Extrae el primer bloque CSS cuyo selector empieza con `selectorPrefix`. */

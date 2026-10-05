@@ -43,7 +43,11 @@
         "content": "Entrada de hora con selector desplegable."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-time-input label=\"Hora\" value=\"09:15\" style=\"max-width:280px\"></iswc-time-input>\n```"
+        "content": [
+          "```html",
+          "<iswc-time-input label=\"Hora\" value=\"09:15\" style=\"max-width:280px\"></iswc-time-input>",
+          "```"
+        ]
       }
     },
     "exclude": [

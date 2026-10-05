@@ -29,7 +29,11 @@
         "content": "Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>\n```"
+        "content": [
+          "```html",
+          "<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>",
+          "```"
+        ]
       }
     },
     "exclude": [

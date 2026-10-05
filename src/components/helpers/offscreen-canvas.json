@@ -47,7 +47,11 @@
         "content": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker)."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>\n```"
+        "content": [
+          "```html",
+          "<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -13,7 +13,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">type=\"number\" · pattern=\"#,##0.00\"</code>\n              <iswc-format id=\"pgFormat\" class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></iswc-format>\n            </div>\n          </div>",
+          "html": [
+            "<span class=\"demo-label\">vista rápida</span>",
+            "          <div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">type=\"number\" · pattern=\"#,##0.00\"</code>",
+            "              <iswc-format id=\"pgFormat\" class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></iswc-format>",
+            "            </div>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -134,7 +142,58 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">General · 1234.5</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"General\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"0\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"0.00\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" pattern=\"#,##0\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0.00</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567.8\" pattern=\"#,##0.00\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0%</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" pattern=\"0%\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00%</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.425\" pattern=\"0.00%\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00E+00</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" pattern=\"0.00E+00\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">$#,##0.00</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"12500\" pattern=\"$#,##0.00\" currency=\"USD\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Accounting</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"-1250.5\" pattern=\"Accounting\" currency=\"USD\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\"># ?/?</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"2.75\" pattern=\"# ?/?\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\"># ??/??</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.333\" pattern=\"# ??/??\"></iswc-format>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">General · 1234.5</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"General\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">0</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"0\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">0.00</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"0.00\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">#,##0</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" pattern=\"#,##0\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">#,##0.00</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567.8\" pattern=\"#,##0.00\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">0%</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" pattern=\"0%\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">0.00%</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.425\" pattern=\"0.00%\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">0.00E+00</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" pattern=\"0.00E+00\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">$#,##0.00</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"12500\" pattern=\"$#,##0.00\" currency=\"USD\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">Accounting</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"-1250.5\" pattern=\"Accounting\" currency=\"USD\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\"># ?/?</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"2.75\" pattern=\"# ?/?\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\"># ??/??</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.333\" pattern=\"# ??/??\"></iswc-format>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -144,7 +203,38 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\" pattern=\"yyyy-mm-dd\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">dd/mm/yyyy</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"dd/mm/yyyy\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">d-mmm-yyyy</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"d-mmm-yyyy\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">mmmm yyyy</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"mmmm yyyy\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">h:mm AM/PM</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\" pattern=\"h:mm AM/PM\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">h:mm:ss</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:45\" pattern=\"h:mm:ss\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd hh:mm:ss</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:45\" pattern=\"yyyy-mm-dd hh:mm:ss\"></iswc-format>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">yyyy-mm-dd</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\" pattern=\"yyyy-mm-dd\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">dd/mm/yyyy</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"dd/mm/yyyy\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">d-mmm-yyyy</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"d-mmm-yyyy\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">mmmm yyyy</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30\" pattern=\"mmmm yyyy\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">h:mm AM/PM</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:00\" pattern=\"h:mm AM/PM\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">h:mm:ss</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:45\" pattern=\"h:mm:ss\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">yyyy-mm-dd hh:mm:ss</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-07-30T17:30:45\" pattern=\"yyyy-mm-dd hh:mm:ss\"></iswc-format>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -155,7 +245,34 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">@ / as-is</code>\n              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"00123\" pattern=\"@\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">upper</code>\n              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"contapyme\" case=\"upper\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">lower</code>\n              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"ContaPyme\" case=\"lower\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">title</code>\n              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"hola mundo\" case=\"title\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">truncate 12</code>\n              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"Texto demasiado largo para la celda\" truncate=\"12\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pad-start 0 × 6</code>\n              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"42\" pad-start=\"0\" pad-length=\"6\"></iswc-format>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">@ / as-is</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"00123\" pattern=\"@\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">upper</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"contapyme\" case=\"upper\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">lower</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"ContaPyme\" case=\"lower\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">title</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"hola mundo\" case=\"title\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">truncate 12</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"Texto demasiado largo para la celda\" truncate=\"12\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">pad-start 0 × 6</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"42\" pad-start=\"0\" pad-length=\"6\"></iswc-format>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -166,7 +283,34 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">decimal</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">currency EUR</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"99.99\" format=\"currency\" currency=\"EUR\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">percent</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" format=\"percent\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">scientific</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" format=\"scientific\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">compact</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1250000\" format=\"compact\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">integer</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.9\" format=\"integer\"></iswc-format>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">decimal</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">currency EUR</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"99.99\" format=\"currency\" currency=\"EUR\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">percent</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" format=\"percent\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">scientific</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234567\" format=\"scientific\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">compact</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1250000\" format=\"compact\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">integer</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.9\" format=\"integer\"></iswc-format>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -176,7 +320,22 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">512 B</code>\n              <iswc-format class=\"format-grid__value\" type=\"bytes\" value=\"512\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">2 MB short</code>\n              <iswc-format class=\"format-grid__value\" type=\"bytes\" value=\"2097152\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">1.5 GB long</code>\n              <iswc-format class=\"format-grid__value\" type=\"bytes\" value=\"1610612736\" display=\"long\"></iswc-format>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">512 B</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"bytes\" value=\"512\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">2 MB short</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"bytes\" value=\"2097152\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">1.5 GB long</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"bytes\" value=\"1610612736\" display=\"long\"></iswc-format>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -186,7 +345,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pasado</code>\n              <iswc-format class=\"format-grid__value\" type=\"relative\" date=\"2020-01-01T12:00:00\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">futuro</code>\n              <iswc-format class=\"format-grid__value\" type=\"relative\" date=\"2099-01-01T12:00:00\"></iswc-format>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">pasado</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"relative\" date=\"2020-01-01T12:00:00\"></iswc-format>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">futuro</code>",
+            "              <iswc-format class=\"format-grid__value\" type=\"relative\" date=\"2099-01-01T12:00:00\"></iswc-format>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -283,7 +453,17 @@
         "content": "Formateo con <code class=\"code\">Intl</code> y presets estilo Excel vía <code class=\"code\">pattern</code>. Un solo elemento cubre número, fecha/hora, texto, bytes y tiempo relativo."
       },
       "ejemplos": {
-        "content": "```html\n<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">type=\"number\" · pattern=\"#,##0.00\"</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></iswc-format>\n            </div>\n          </div>\n```"
+        "content": [
+          "```html",
+          "<span class=\"demo-label\">vista rápida</span>",
+          "          <div class=\"format-grid format-grid--cards\">",
+          "            <div class=\"format-grid__row\">",
+          "              <code class=\"format-grid__tag\">type=\"number\" · pattern=\"#,##0.00\"</code>",
+          "              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></iswc-format>",
+          "            </div>",
+          "          </div>",
+          "```"
+        ]
       }
     },
     "exclude": [

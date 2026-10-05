@@ -4,7 +4,18 @@
   "category": "forms",
   "title": "&lt;iswc-signature&gt;",
   "titleHtml": false,
-  "styles": ".sig-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    .sig-card { border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); padding: .85rem; background: var(--iswc-bg-elev); }\r\n    .sig-card h4 { margin: 0 0 .55rem; font-size: .85rem; }\r\n    .sig-toolbar { display: flex; gap: .35rem; margin-top: .55rem; }\r\n    .sig-toolbar button { font: inherit; padding: .25rem .55rem; border: 1px solid var(--iswc-border); background: var(--iswc-bg-soft); color: inherit; border-radius: 6px; cursor: pointer; font-size: .82rem; }\r\n    .sig-toolbar button:hover { background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft)); }\r\n    .sig-output { display: flex; gap: 1rem; align-items: end; }\r\n    .sig-output figure { margin: 0; }\r\n    .sig-output figcaption { font-size: .7rem; color: var(--iswc-text-soft); }\r\n    .sig-output img { border: 1px solid var(--iswc-border); border-radius: 6px; background: white; padding: 4px; max-width: 16rem; }",
+  "styles": [
+    ".sig-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }",
+    "    .sig-card { border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); padding: .85rem; background: var(--iswc-bg-elev); }",
+    "    .sig-card h4 { margin: 0 0 .55rem; font-size: .85rem; }",
+    "    .sig-toolbar { display: flex; gap: .35rem; margin-top: .55rem; }",
+    "    .sig-toolbar button { font: inherit; padding: .25rem .55rem; border: 1px solid var(--iswc-border); background: var(--iswc-bg-soft); color: inherit; border-radius: 6px; cursor: pointer; font-size: .82rem; }",
+    "    .sig-toolbar button:hover { background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-soft)); }",
+    "    .sig-output { display: flex; gap: 1rem; align-items: end; }",
+    "    .sig-output figure { margin: 0; }",
+    "    .sig-output figcaption { font-size: .7rem; color: var(--iswc-text-soft); }",
+    "    .sig-output img { border: 1px solid var(--iswc-border); border-radius: 6px; background: white; padding: 4px; max-width: 16rem; }"
+  ],
   "storageKey": "docs-iswc-signature",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +31,17 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"sig-card\" style=\"width:340px\">\r\n            <h4>Firma del cliente</h4>\r\n            <iswc-signature id=\"sig\" hint=\"Firme aquí\"></iswc-signature>\r\n            <div class=\"sig-toolbar\">\r\n              <button id=\"bClear\">Limpiar</button>\r\n              <button id=\"bPNG\">Exportar PNG</button>\r\n              <button id=\"bSVG\">Exportar SVG</button>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div class=\"sig-card\" style=\"width:340px\">",
+            "            <h4>Firma del cliente</h4>",
+            "            <iswc-signature id=\"sig\" hint=\"Firme aquí\"></iswc-signature>",
+            "            <div class=\"sig-toolbar\">",
+            "              <button id=\"bClear\">Limpiar</button>",
+            "              <button id=\"bPNG\">Exportar PNG</button>",
+            "              <button id=\"bSVG\">Exportar SVG</button>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -30,7 +51,11 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"sig-output\" id=\"output\">\r\n            <small style=\"color:var(--iswc-text-soft)\">— presioná \"Exportar\" para ver el resultado —</small>\r\n          </div>"
+          "html": [
+            "<div class=\"sig-output\" id=\"output\">",
+            "            <small style=\"color:var(--iswc-text-soft)\">— presioná \"Exportar\" para ver el resultado —</small>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -40,7 +65,25 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const pad = document.querySelector('iswc-signature');\npad.toDataURL('image/png');      // dataURL PNG\npad.toDataURL('image/svg+xml'); // dataURL SVG\npad.toSVG();                    // SVG inline\npad.clear();\npad.isEmpty;                    // boolean\n\npad.addEventListener('iswc-stroke-end', e => {\n  console.log('dataURL al terminar trazo:', e.detail.dataURL.slice(0, 50), '...');\n});\n\n// Atributos:\n// width, height      dimensiones (default 320x140)\n// pen-color          color del trazo\n// line-width         grosor (default 2)\n// background         color de fondo (default transparent)\n// hint               texto del placeholder"
+          "code": [
+            "const pad = document.querySelector('iswc-signature');",
+            "pad.toDataURL('image/png');      // dataURL PNG",
+            "pad.toDataURL('image/svg+xml'); // dataURL SVG",
+            "pad.toSVG();                    // SVG inline",
+            "pad.clear();",
+            "pad.isEmpty;                    // boolean",
+            "",
+            "pad.addEventListener('iswc-stroke-end', e => {",
+            "  console.log('dataURL al terminar trazo:', e.detail.dataURL.slice(0, 50), '...');",
+            "});",
+            "",
+            "// Atributos:",
+            "// width, height      dimensiones (default 320x140)",
+            "// pen-color          color del trazo",
+            "// line-width         grosor (default 2)",
+            "// background         color de fondo (default transparent)",
+            "// hint               texto del placeholder"
+          ]
         }
       ]
     }

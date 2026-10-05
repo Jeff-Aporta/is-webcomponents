@@ -36,7 +36,11 @@
         "content": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-media-recorder source=\"mic\"></iswc-media-recorder>\n```"
+        "content": [
+          "```html",
+          "<iswc-media-recorder source=\"mic\"></iswc-media-recorder>",
+          "```"
+        ]
       }
     },
     "exclude": [

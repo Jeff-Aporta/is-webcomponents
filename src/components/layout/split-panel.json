@@ -5,7 +5,41 @@
   "title": "&lt;iswc-split-panel&gt;",
   "titleHtml": false,
   "description": "Documentación y demos del componente iswc-split-panel de InSoft.",
-  "styles": ".panel-demo {\r\n      display: grid;\r\n      place-items: center;\r\n      height: 100%;\r\n      padding: 1em;\r\n      background: var(--iswc-bg-soft);\r\n      color: var(--iswc-text);\r\n      font: 0.95rem var(--iswc-sans);\r\n      border-radius: 6px;\r\n      overflow: hidden;\r\n    }\r\n    .panel-demo--alt { background: var(--iswc-bg-elev); }\r\n    .panel-demo h4 {\r\n      margin: 0 0 0.5em;\r\n      font-size: 0.95rem;\r\n      color: var(--iswc-text-soft);\r\n    }\r\n    .split-stage {\r\n      height: 220px;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      overflow: hidden;\r\n      margin: 12px 0 24px;\r\n      box-shadow: var(--iswc-shadow);\r\n    }\r\n    .split-stage--tall { height: 360px; }\r\n    .split-stage--square { height: 320px; }\r\n    .reposition-log {\r\n      font-family: var(--iswc-mono);\r\n      font-size: 0.78rem;\r\n      color: var(--iswc-text-soft);\r\n      margin: 6px 0 18px;\r\n    }",
+  "styles": [
+    ".panel-demo {",
+    "      display: grid;",
+    "      place-items: center;",
+    "      height: 100%;",
+    "      padding: 1em;",
+    "      background: var(--iswc-bg-soft);",
+    "      color: var(--iswc-text);",
+    "      font: 0.95rem var(--iswc-sans);",
+    "      border-radius: 6px;",
+    "      overflow: hidden;",
+    "    }",
+    "    .panel-demo--alt { background: var(--iswc-bg-elev); }",
+    "    .panel-demo h4 {",
+    "      margin: 0 0 0.5em;",
+    "      font-size: 0.95rem;",
+    "      color: var(--iswc-text-soft);",
+    "    }",
+    "    .split-stage {",
+    "      height: 220px;",
+    "      border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius);",
+    "      overflow: hidden;",
+    "      margin: 12px 0 24px;",
+    "      box-shadow: var(--iswc-shadow);",
+    "    }",
+    "    .split-stage--tall { height: 360px; }",
+    "    .split-stage--square { height: 320px; }",
+    "    .reposition-log {",
+    "      font-family: var(--iswc-mono);",
+    "      font-size: 0.78rem;",
+    "      color: var(--iswc-text-soft);",
+    "      margin: 6px 0 18px;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-split-panel",
   "sections": [
     {
@@ -15,15 +49,38 @@
       "blocks": [
         {
           "kind": "callout",
-          "html": "<strong>Persistencia:</strong> con <code class=\"code\">storage-key=\"mi-panel\"</code> el tamaño se guarda en\r\n          <code class=\"code\">localStorage['is-webcomponents']</code> como JSON compartido por todos los WC:\r\n          <code class=\"code\">{ \"iswc-split-panel\": { \"mi-panel\": { \"positionInPixels\": 240 } } }</code>.\r\n          Sin <code class=\"code\">storage-key</code> no escribe nada."
+          "html": [
+            "<strong>Persistencia:</strong> con <code class=\"code\">storage-key=\"mi-panel\"</code> el tamaño se guarda en",
+            "          <code class=\"code\">localStorage['is-webcomponents']</code> como JSON compartido por todos los WC:",
+            "          <code class=\"code\">{ \"iswc-split-panel\": { \"mi-panel\": { \"positionInPixels\": 240 } } }</code>.",
+            "          Sin <code class=\"code\">storage-key</code> no escribe nada."
+          ]
         },
         {
           "kind": "html",
-          "html": "<div class=\"split-stage\">\r\n          <iswc-split-panel id=\"introSplit\" storage-key=\"demo-intro\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Start</h4>\r\n              <p>Arrastra el divisor →</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>End</h4>\r\n              <p>← Arrastra el divisor</p>\r\n            </div>\r\n          </iswc-split-panel>\r\n        </div>"
+          "html": [
+            "<div class=\"split-stage\">",
+            "          <iswc-split-panel id=\"introSplit\" storage-key=\"demo-intro\" style=\"height: 100%;\">",
+            "            <div slot=\"start\" class=\"panel-demo\">",
+            "              <h4>Start</h4>",
+            "              <p>Arrastra el divisor →</p>",
+            "            </div>",
+            "            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">",
+            "              <h4>End</h4>",
+            "              <p>← Arrastra el divisor</p>",
+            "            </div>",
+            "          </iswc-split-panel>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-split-panel>\n  <div slot=\"start\">Start</div>\n  <div slot=\"end\">End</div>\n</iswc-split-panel>"
+          "code": [
+            "<iswc-split-panel>",
+            "  <div slot=\"start\">Start</div>",
+            "  <div slot=\"end\">End</div>",
+            "</iswc-split-panel>"
+          ]
         }
       ]
     },
@@ -34,41 +91,99 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"split-stage\">\r\n          <iswc-split-panel style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Panel A</h4>\r\n              <p>50% al cargar</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Panel B</h4>\r\n              <p>50% al cargar</p>\r\n            </div>\r\n          </iswc-split-panel>\r\n        </div>"
+          "html": [
+            "<div class=\"split-stage\">",
+            "          <iswc-split-panel style=\"height: 100%;\">",
+            "            <div slot=\"start\" class=\"panel-demo\">",
+            "              <h4>Panel A</h4>",
+            "              <p>50% al cargar</p>",
+            "            </div>",
+            "            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">",
+            "              <h4>Panel B</h4>",
+            "              <p>50% al cargar</p>",
+            "            </div>",
+            "          </iswc-split-panel>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-split-panel orientation=\"horizontal\">\n  ...\n</iswc-split-panel>"
+          "code": [
+            "<iswc-split-panel orientation=\"horizontal\">",
+            "  ...",
+            "</iswc-split-panel>"
+          ]
         }
       ]
     },
     {
       "id": "vertical",
       "title": "Vertical",
-      "lede": "Con <code class=\"code\">orientation=\"vertical\"</code> el divisor se mueve en Y.\r\n          Ideal para listas en la parte superior y detalles abajo.",
+      "lede": [
+        "Con <code class=\"code\">orientation=\"vertical\"</code> el divisor se mueve en Y.",
+        "          Ideal para listas en la parte superior y detalles abajo."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"split-stage split-stage--square\">\r\n          <iswc-split-panel orientation=\"vertical\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Top</h4>\r\n              <p>Lista</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Bottom</h4>\r\n              <p>Detalle</p>\r\n            </div>\r\n          </iswc-split-panel>\r\n        </div>"
+          "html": [
+            "<div class=\"split-stage split-stage--square\">",
+            "          <iswc-split-panel orientation=\"vertical\" style=\"height: 100%;\">",
+            "            <div slot=\"start\" class=\"panel-demo\">",
+            "              <h4>Top</h4>",
+            "              <p>Lista</p>",
+            "            </div>",
+            "            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">",
+            "              <h4>Bottom</h4>",
+            "              <p>Detalle</p>",
+            "            </div>",
+            "          </iswc-split-panel>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-split-panel orientation=\"vertical\">\n  <div slot=\"start\">Top</div>\n  <div slot=\"end\">Bottom</div>\n</iswc-split-panel>"
+          "code": [
+            "<iswc-split-panel orientation=\"vertical\">",
+            "  <div slot=\"start\">Top</div>",
+            "  <div slot=\"end\">Bottom</div>",
+            "</iswc-split-panel>"
+          ]
         }
       ]
     },
     {
       "id": "primary-end",
       "title": "Primary end",
-      "lede": "Con <code class=\"code\">primary=\"end\"</code> el panel final mantiene su tamaño cuando el host cambia de dimensión;\r\n          el inicial crece/se encoge. Por defecto (<code class=\"code\">primary=\"start\"</code>) es al revés.",
+      "lede": [
+        "Con <code class=\"code\">primary=\"end\"</code> el panel final mantiene su tamaño cuando el host cambia de dimensión;",
+        "          el inicial crece/se encoge. Por defecto (<code class=\"code\">primary=\"start\"</code>) es al revés."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"split-stage\">\r\n          <iswc-split-panel primary=\"end\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Crece/se encoge</h4>\r\n              <p>Resize the window</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Mantiene tamaño</h4>\r\n              <p>200px aprox</p>\r\n            </div>\r\n          </iswc-split-panel>\r\n        </div>"
+          "html": [
+            "<div class=\"split-stage\">",
+            "          <iswc-split-panel primary=\"end\" style=\"height: 100%;\">",
+            "            <div slot=\"start\" class=\"panel-demo\">",
+            "              <h4>Crece/se encoge</h4>",
+            "              <p>Resize the window</p>",
+            "            </div>",
+            "            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">",
+            "              <h4>Mantiene tamaño</h4>",
+            "              <p>200px aprox</p>",
+            "            </div>",
+            "          </iswc-split-panel>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-split-panel primary=\"end\" position-in-pixels=\"240\">\n  ...\n</iswc-split-panel>"
+          "code": [
+            "<iswc-split-panel primary=\"end\" position-in-pixels=\"240\">",
+            "  ...",
+            "</iswc-split-panel>"
+          ]
         }
       ]
     },
@@ -79,11 +194,30 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"split-stage\">\r\n          <iswc-split-panel snap=\"25% 50% 75%\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Snap 25 / 50 / 75</h4>\r\n              <p>Intenta posicionarte cerca</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>End</h4>\r\n              <p>El divisor \"salta\"</p>\r\n            </div>\r\n          </iswc-split-panel>\r\n        </div>"
+          "html": [
+            "<div class=\"split-stage\">",
+            "          <iswc-split-panel snap=\"25% 50% 75%\" style=\"height: 100%;\">",
+            "            <div slot=\"start\" class=\"panel-demo\">",
+            "              <h4>Snap 25 / 50 / 75</h4>",
+            "              <p>Intenta posicionarte cerca</p>",
+            "            </div>",
+            "            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">",
+            "              <h4>End</h4>",
+            "              <p>El divisor \"salta\"</p>",
+            "            </div>",
+            "          </iswc-split-panel>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-split-panel\n  snap=\"25% 50% 75%\"\n  snap-threshold=\"12\">\n  ...\n</iswc-split-panel>"
+          "code": [
+            "<iswc-split-panel",
+            "  snap=\"25% 50% 75%\"",
+            "  snap-threshold=\"12\">",
+            "  ...",
+            "</iswc-split-panel>"
+          ]
         }
       ]
     },
@@ -94,22 +228,57 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"split-stage\">\r\n          <iswc-split-panel disabled style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Bloqueado</h4>\r\n              <p>Drag deshabilitado</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>Bloqueado</h4>\r\n              <p>Drag deshabilitado</p>\r\n            </div>\r\n          </iswc-split-panel>\r\n        </div>"
+          "html": [
+            "<div class=\"split-stage\">",
+            "          <iswc-split-panel disabled style=\"height: 100%;\">",
+            "            <div slot=\"start\" class=\"panel-demo\">",
+            "              <h4>Bloqueado</h4>",
+            "              <p>Drag deshabilitado</p>",
+            "            </div>",
+            "            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">",
+            "              <h4>Bloqueado</h4>",
+            "              <p>Drag deshabilitado</p>",
+            "            </div>",
+            "          </iswc-split-panel>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-split-panel disabled>\n  ...\n</iswc-split-panel>"
+          "code": [
+            "<iswc-split-panel disabled>",
+            "  ...",
+            "</iswc-split-panel>"
+          ]
         }
       ]
     },
     {
       "id": "keyboard",
       "title": "Teclado",
-      "lede": "Foco en el divisor (Tab) y luego:\r\n          <code class=\"code\">←/→</code> mueve 1%, <code class=\"code\">Shift</code> ×10.\r\n          <code class=\"code\">Home</code>/<code class=\"code\">End</code> salta a los extremos.\r\n          <code class=\"code\">Enter</code> colapsa y restaura el panel primario.",
+      "lede": [
+        "Foco en el divisor (Tab) y luego:",
+        "          <code class=\"code\">←/→</code> mueve 1%, <code class=\"code\">Shift</code> ×10.",
+        "          <code class=\"code\">Home</code>/<code class=\"code\">End</code> salta a los extremos.",
+        "          <code class=\"code\">Enter</code> colapsa y restaura el panel primario."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"split-stage\">\r\n          <iswc-split-panel id=\"kbdSplit\" style=\"height: 100%;\">\r\n            <div slot=\"start\" class=\"panel-demo\">\r\n              <h4>Foco aquí y prueba:</h4>\r\n              <p>← → Home End Enter</p>\r\n            </div>\r\n            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">\r\n              <h4>End</h4>\r\n              <p>id=\"kbdSplit\"</p>\r\n            </div>\r\n          </iswc-split-panel>\r\n        </div>"
+          "html": [
+            "<div class=\"split-stage\">",
+            "          <iswc-split-panel id=\"kbdSplit\" style=\"height: 100%;\">",
+            "            <div slot=\"start\" class=\"panel-demo\">",
+            "              <h4>Foco aquí y prueba:</h4>",
+            "              <p>← → Home End Enter</p>",
+            "            </div>",
+            "            <div slot=\"end\" class=\"panel-demo panel-demo--alt\">",
+            "              <h4>End</h4>",
+            "              <p>id=\"kbdSplit\"</p>",
+            "            </div>",
+            "          </iswc-split-panel>",
+            "        </div>"
+          ]
         }
       ]
     },
@@ -122,48 +291,39 @@
           "kind": "table",
           "columns": [
             "Propiedad",
-            "Tipo",
             "Descripción"
           ],
           "rows": [
             [
               "<code>position</code>",
-              "number (0-100)",
               "Posición del divisor en % (atributo reflected)."
             ],
             [
               "<code>positionInPixels</code>",
-              "number",
               "Posición en píxeles. Útil para persistencia."
             ],
             [
               "<code>orientation</code>",
-              "'horizontal' | 'vertical'",
               "Eje del divisor."
             ],
             [
               "<code>primary</code>",
-              "'start' | 'end' | null",
               "Panel que mantiene tamaño al resize."
             ],
             [
               "<code>disabled</code>",
-              "boolean",
               "Bloquea drag + teclado."
             ],
             [
               "<code>snap</code>",
-              "string",
               "\"100px 50%\" — anclajes separados por espacio."
             ],
             [
               "<code>snapThreshold</code>",
-              "number",
               "Px de tolerancia para snap. Default 12."
             ],
             [
               "<code>storageKey</code>",
-              "string",
               "Id único; persiste tamaño en <code>localStorage['is-webcomponents']</code>."
             ]
           ]
@@ -174,7 +334,22 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"split-stage\" style=\"height: 180px;\">\r\n            <iswc-split-panel id=\"apiSplit\" style=\"height: 100%;\">\r\n              <div slot=\"start\" class=\"panel-demo\"><h4>Start</h4><p>Pos: <span id=\"apiPos\">50</span>%</p></div>\r\n              <div slot=\"end\" class=\"panel-demo panel-demo--alt\"><h4>End</h4></div>\r\n            </iswc-split-panel>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 12px;\">\r\n            <iswc-button id=\"apiPosBtn\" color=\"neutral\" variant=\"outlined\">position += 10</iswc-button>\r\n            <iswc-button id=\"apiEnd\" color=\"neutral\" variant=\"outlined\">primary=end</iswc-button>\r\n            <iswc-button id=\"apiStart\" color=\"neutral\" variant=\"outlined\">primary=start</iswc-button>\r\n            <iswc-button id=\"apiVertical\" color=\"neutral\" variant=\"outlined\">toggle orientation</iswc-button>\r\n            <iswc-button id=\"apiDisabled\" color=\"neutral\" variant=\"outlined\">toggle disabled</iswc-button>\r\n          </div>",
+          "html": [
+            "<div class=\"split-stage\" style=\"height: 180px;\">",
+            "            <iswc-split-panel id=\"apiSplit\" style=\"height: 100%;\">",
+            "              <div slot=\"start\" class=\"panel-demo\"><h4>Start</h4><p>Pos: <span id=\"apiPos\">50</span>%</p></div>",
+            "              <div slot=\"end\" class=\"panel-demo panel-demo--alt\"><h4>End</h4></div>",
+            "            </iswc-split-panel>",
+            "          </div>",
+            "",
+            "          <div class=\"demo-row\" style=\"margin-top: 12px;\">",
+            "            <iswc-button id=\"apiPosBtn\" color=\"neutral\" variant=\"outlined\">position += 10</iswc-button>",
+            "            <iswc-button id=\"apiEnd\" color=\"neutral\" variant=\"outlined\">primary=end</iswc-button>",
+            "            <iswc-button id=\"apiStart\" color=\"neutral\" variant=\"outlined\">primary=start</iswc-button>",
+            "            <iswc-button id=\"apiVertical\" color=\"neutral\" variant=\"outlined\">toggle orientation</iswc-button>",
+            "            <iswc-button id=\"apiDisabled\" color=\"neutral\" variant=\"outlined\">toggle disabled</iswc-button>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -204,7 +379,80 @@
           ],
           "equivNote": "orientation + primary definen qué panel absorbe el resize.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-split-panel: primary\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"orientation=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"horizontal\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"vertical\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"primary=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"start crece\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"end crece\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"H\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"V\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"start\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"end\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-split-panel: primary\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"orientation=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"horizontal\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"vertical\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"primary=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"start crece\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"e\",",
+            "          \"label\": \"end crece\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"H\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"V\"",
+            "        },",
+            "        {",
+            "          \"from\": \"a\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"start\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"e\",",
+            "          \"label\": \"end\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -220,63 +468,43 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>position</code>",
-              "number 0-100",
-              "50",
-              "% desde el borde del panel primario."
+              "<code>position</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "% desde el borde del panel primario. (valor por defecto)"
             ],
             [
               "<code>position-in-pixels</code>",
-              "number",
-              "—",
               "Posición en píxeles. Sobrevive a resize."
             ],
             [
-              "<code>orientation</code>",
-              "horizontal · vertical",
-              "horizontal",
-              "Eje del divisor."
+              "<code>orientation</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Eje del divisor. (valor por defecto)"
             ],
             [
               "<code>primary</code>",
-              "start · end",
-              "—",
               "Panel que mantiene tamaño al resize."
             ],
             [
               "<code>collapse</code>",
-              "start · end",
-              "—",
               "Oculta ese panel y el divisor; el otro se queda con todo el espacio. Al quitarlo vuelve el tamaño anterior."
             ],
             [
               "<code>disabled</code>",
-              "boolean",
-              "—",
               "Bloquea drag + teclado."
             ],
             [
               "<code>snap</code>",
-              "string",
-              "—",
               "Anclajes separados por espacio: \"100px 50%\"."
             ],
             [
-              "<code>snap-threshold</code>",
-              "number",
-              "12",
-              "Tolerancia del snap en píxeles."
+              "<code>snap-threshold</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tolerancia del snap en píxeles. (valor por defecto)"
             ],
             [
               "<code>storage-key</code>",
-              "string",
-              "—",
               "Id único. Persiste en <code>localStorage.is-webcomponents</code> (JSON por componente)."
             ]
           ]
@@ -343,29 +571,24 @@
           "kind": "table",
           "columns": [
             "Variable",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>--divider-width</code>",
-              "4px",
-              "Ancho visible del divisor."
+              "<code>--divider-width</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Ancho visible del divisor. (valor por defecto)"
             ],
             [
-              "<code>--divider-hit-area</code>",
-              "12px",
-              "Hit zone invisible más ancha para drag."
+              "<code>--divider-hit-area</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Hit zone invisible más ancha para drag. (valor por defecto)"
             ],
             [
-              "<code>--min</code>",
-              "0",
-              "Tamaño mínimo del panel primario."
+              "<code>--min</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tamaño mínimo del panel primario. (valor por defecto)"
             ],
             [
-              "<code>--max</code>",
-              "100%",
-              "Tamaño máximo del panel primario."
+              "<code>--max</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tamaño máximo del panel primario. (valor por defecto)"
             ]
           ]
         },
@@ -519,7 +742,14 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-split-panel>\n  <div slot=\"start\">Start</div>\n  <div slot=\"end\">End</div>\n</iswc-split-panel>\n```"
+        "content": [
+          "```html",
+          "<iswc-split-panel>",
+          "  <div slot=\"start\">Start</div>",
+          "  <div slot=\"end\">End</div>",
+          "</iswc-split-panel>",
+          "```"
+        ]
       }
     },
     "exclude": [

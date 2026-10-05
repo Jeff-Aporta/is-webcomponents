@@ -79,7 +79,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-time-field label=\"Hora 24 h\" value=\"14:05\" hour24 locale=\"es\"></iswc-time-field>\r\n          <iswc-time-field label=\"Time\" value=\"14:05\" ampm locale=\"en-US\"></iswc-time-field>\r\n          <iswc-time-field label=\"Con segundos\" value=\"14:05:30\" hour24 seconds locale=\"es\"></iswc-time-field>"
+          "html": [
+            "<iswc-time-field label=\"Hora 24 h\" value=\"14:05\" hour24 locale=\"es\"></iswc-time-field>",
+            "          <iswc-time-field label=\"Time\" value=\"14:05\" ampm locale=\"en-US\"></iswc-time-field>",
+            "          <iswc-time-field label=\"Con segundos\" value=\"14:05:30\" hour24 seconds locale=\"es\"></iswc-time-field>"
+          ]
         }
       ]
     },
@@ -99,7 +103,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-date-field label=\"Requerido\" required locale=\"es\"></iswc-date-field>\r\n          <iswc-date-field label=\"Min 2026-08-01\" value=\"2026-07-15\" min=\"2026-08-01\" locale=\"es\"></iswc-date-field>\r\n          <iswc-date-field label=\"Solo lectura\" value=\"2026-07-30\" readonly locale=\"es\"></iswc-date-field>"
+          "html": [
+            "<iswc-date-field label=\"Requerido\" required locale=\"es\"></iswc-date-field>",
+            "          <iswc-date-field label=\"Min 2026-08-01\" value=\"2026-07-15\" min=\"2026-08-01\" locale=\"es\"></iswc-date-field>",
+            "          <iswc-date-field label=\"Solo lectura\" value=\"2026-07-30\" readonly locale=\"es\"></iswc-date-field>"
+          ]
         }
       ]
     },
@@ -111,29 +119,23 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>value</code>",
-              "fecha · HH:mm[:ss] · yyyy-mm-ddTHH:mm"
+              "<code>value</code>"
             ],
             [
-              "<code>label</code> / <code>hint</code>",
-              "—"
+              "<code>label</code> / <code>hint</code>"
             ],
             [
-              "<code>min</code> / <code>max</code> / <code>required</code>",
-              "—"
+              "<code>min</code> / <code>max</code> / <code>required</code>"
             ],
             [
-              "<code>ampm</code> / <code>hour24</code> / <code>seconds</code>",
-              "según locale · fuerza 24 h · off"
+              "<code>ampm</code> / <code>hour24</code> / <code>seconds</code>"
             ],
             [
-              "<code>clearable</code> / <code>disabled</code> / <code>readonly</code>",
-              "off"
+              "<code>clearable</code> / <code>disabled</code> / <code>readonly</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ]
           ]
         }
@@ -170,7 +172,12 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-date-field id=\"df\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-field>\r\n          <iswc-date-field label=\"Date\" value=\"2026-07-30\" locale=\"en-US\" clearable></iswc-date-field>\n```"
+        "content": [
+          "```html",
+          "<iswc-date-field id=\"df\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-field>",
+          "          <iswc-date-field label=\"Date\" value=\"2026-07-30\" locale=\"en-US\" clearable></iswc-date-field>",
+          "```"
+        ]
       }
     },
     "exclude": [

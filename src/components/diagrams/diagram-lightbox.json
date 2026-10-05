@@ -4,25 +4,67 @@
   "category": "diagrams",
   "title": "&lt;iswc-diagram-lightbox&gt;",
   "titleHtml": false,
-  "styles": ".demo { display: flex; flex-direction: column; gap: 0.65rem; }\r\n    .demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\r\n    .demo-bar iswc-select { min-width: 12rem; }\r\n    .pill {\r\n      display: inline-flex;\r\n      align-items: center;\r\n      gap: 0.35rem;\r\n      padding: 0.25rem 0.65rem;\r\n      border-radius: 999px;\r\n      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--iswc-accent) 30%, transparent);\r\n      color: var(--iswc-accent);\r\n      font-size: 0.72rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.04em;\r\n      text-transform: uppercase;\r\n    }",
+  "styles": [
+    ".demo { display: flex; flex-direction: column; gap: 0.65rem; }",
+    "    .demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }",
+    "    .demo-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }",
+    "    .demo-bar iswc-select { min-width: 12rem; }",
+    "    .pill {",
+    "      display: inline-flex;",
+    "      align-items: center;",
+    "      gap: 0.35rem;",
+    "      padding: 0.25rem 0.65rem;",
+    "      border-radius: 999px;",
+    "      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);",
+    "      border: 1px solid color-mix(in srgb, var(--iswc-accent) 30%, transparent);",
+    "      color: var(--iswc-accent);",
+    "      font-size: 0.72rem;",
+    "      font-weight: 700;",
+    "      letter-spacing: 0.04em;",
+    "      text-transform: uppercase;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-diagram-lightbox",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Visor a pantalla completa pensado para diagramas: hereda del\r\n          <code class=\"code\">&lt;iswc-lightbox&gt;</code> genérico el zoom anclado al\r\n          cursor, el pan y el dialog top-layer, y le suma la barra de la animación\r\n          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel\r\n          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>.",
+      "lede": [
+        "Visor a pantalla completa pensado para diagramas: hereda del",
+        "          <code class=\"code\">&lt;iswc-lightbox&gt;</code> genérico el zoom anclado al",
+        "          cursor, el pan y el dialog top-layer, y le suma la barra de la animación",
+        "          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel",
+        "          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-bar\">\r\n            <span class=\"pill\" aria-hidden=\"true\">Demo</span>\r\n            <iswc-select id=\"preset\" label=\"Preset\" value=\"tk1437191\">\r\n              <iswc-option value=\"tk1437191\" label=\"Facturación electrónica\"></iswc-option>\r\n              <iswc-option value=\"tk1431662\" label=\"Onboarding de cliente\"></iswc-option>\r\n            </iswc-select>\r\n            <iswc-button id=\"openViewer\" color=\"brand\" variant=\"filled\">\r\n              Abrir el visor\r\n              <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n          <iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "            <span class=\"pill\" aria-hidden=\"true\">Demo</span>",
+            "            <iswc-select id=\"preset\" label=\"Preset\" value=\"tk1437191\">",
+            "              <iswc-option value=\"tk1437191\" label=\"Facturación electrónica\"></iswc-option>",
+            "              <iswc-option value=\"tk1431662\" label=\"Onboarding de cliente\"></iswc-option>",
+            "            </iswc-select>",
+            "            <iswc-button id=\"openViewer\" color=\"brand\" variant=\"filled\">",
+            "              Abrir el visor",
+            "              <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>",
+            "            </iswc-button>",
+            "          </div>",
+            "          <iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>"
+          ]
         }
       ]
     },
     {
       "id": "api",
       "title": "API",
-      "lede": "Configura el diagrama con <code class=\"code\">payload</code> (objeto JS) o con\r\n          un <code class=\"code\">&lt;script type=\"application/json\"&gt;</code> hijo, y abre\r\n          con <code class=\"code\">open = true</code> o el método <code class=\"code\">show()</code>.",
+      "lede": [
+        "Configura el diagrama con <code class=\"code\">payload</code> (objeto JS) o con",
+        "          un <code class=\"code\">&lt;script type=\"application/json\"&gt;</code> hijo, y abre",
+        "          con <code class=\"code\">open = true</code> o el método <code class=\"code\">show()</code>."
+      ],
       "blocks": [
         {
           "kind": "table",
@@ -59,7 +101,20 @@
         },
         {
           "kind": "code",
-          "code": "<iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>\n\n<script type=\"module\">\n  const lb = document.getElementById('lb');\n  lb.payload = { preset: 'tk1437191' };\n  lb.open = true;\n\n  // O abrirlo con un click:\n  lb.addEventListener('iswc-share', (e) => {\n    console.log('Compartir:', e.detail.url);\n  });\n</script>",
+          "code": [
+            "<iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>",
+            "",
+            "<script type=\"module\">",
+            "  const lb = document.getElementById('lb');",
+            "  lb.payload = { preset: 'tk1437191' };",
+            "  lb.open = true;",
+            "",
+            "  // O abrirlo con un click:",
+            "  lb.addEventListener('iswc-share', (e) => {",
+            "    console.log('Compartir:', e.detail.url);",
+            "  });",
+            "</script>"
+          ],
           "lang": "html"
         }
       ]
@@ -68,7 +123,13 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Visor a pantalla completa pensado para diagramas: hereda del\r\n          <code class=\"code\">&lt;iswc-lightbox&gt;</code> genérico el zoom anclado al\r\n          cursor, el pan y el dialog top-layer, y le suma la barra de la animación\r\n          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel\r\n          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>."
+        "content": [
+          "Visor a pantalla completa pensado para diagramas: hereda del",
+          "          <code class=\"code\">&lt;iswc-lightbox&gt;</code> genérico el zoom anclado al",
+          "          cursor, el pan y el dialog top-layer, y le suma la barra de la animación",
+          "          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel",
+          "          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>."
+        ]
       },
       "apiJs": {
         "table": [
@@ -99,7 +160,22 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"demo-bar\">\r\n            <span class=\"pill\" aria-hidden=\"true\">Demo</span>\r\n            <iswc-select id=\"preset\" label=\"Preset\" value=\"tk1437191\">\r\n              <iswc-option value=\"tk1437191\" label=\"Facturación electrónica\"></iswc-option>\r\n              <iswc-option value=\"tk1431662\" label=\"Onboarding de cliente\"></iswc-option>\r\n            </iswc-select>\r\n            <iswc-button id=\"openViewer\" color=\"brand\" variant=\"filled\">\r\n              Abrir el visor\r\n              <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n          <iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>\n```"
+        "content": [
+          "```html",
+          "<div class=\"demo-bar\">",
+          "            <span class=\"pill\" aria-hidden=\"true\">Demo</span>",
+          "            <iswc-select id=\"preset\" label=\"Preset\" value=\"tk1437191\">",
+          "              <iswc-option value=\"tk1437191\" label=\"Facturación electrónica\"></iswc-option>",
+          "              <iswc-option value=\"tk1431662\" label=\"Onboarding de cliente\"></iswc-option>",
+          "            </iswc-select>",
+          "            <iswc-button id=\"openViewer\" color=\"brand\" variant=\"filled\">",
+          "              Abrir el visor",
+          "              <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>",
+          "            </iswc-button>",
+          "          </div>",
+          "          <iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>",
+          "```"
+        ]
       }
     },
     "exclude": [

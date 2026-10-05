@@ -14,7 +14,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\r\n            <iswc-radio value=\"contado\">Contado</iswc-radio>\r\n            <iswc-radio value=\"credito\">Crédito</iswc-radio>\r\n            <iswc-radio value=\"mixto\">Mixto</iswc-radio>\r\n          </iswc-radio-group>",
+          "html": [
+            "<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">",
+            "            <iswc-radio value=\"contado\">Contado</iswc-radio>",
+            "            <iswc-radio value=\"credito\">Crédito</iswc-radio>",
+            "            <iswc-radio value=\"mixto\">Mixto</iswc-radio>",
+            "          </iswc-radio-group>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -38,7 +44,15 @@
         "content": "Agrupa varios <code class=\"code\">&lt;iswc-radio&gt;</code> bajo un mismo nombre y expone el valor seleccionado como un único control de formulario."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\n  <iswc-radio value=\"contado\">Contado</iswc-radio>\n  <iswc-radio value=\"credito\">Crédito</iswc-radio>\n  <iswc-radio value=\"mixto\">Mixto</iswc-radio>\n</iswc-radio-group>\n```"
+        "content": [
+          "```html",
+          "<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">",
+          "  <iswc-radio value=\"contado\">Contado</iswc-radio>",
+          "  <iswc-radio value=\"credito\">Crédito</iswc-radio>",
+          "  <iswc-radio value=\"mixto\">Mixto</iswc-radio>",
+          "</iswc-radio-group>",
+          "```"
+        ]
       }
     },
     "exclude": [

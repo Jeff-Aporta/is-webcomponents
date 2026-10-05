@@ -249,7 +249,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
     if (def.styles) {
       this.#styleEl = document.createElement('style');
       this.#styleEl.setAttribute('data-preview-styles', def.tag);
-      this.#styleEl.textContent = def.styles;
+      this.#styleEl.textContent = Array.isArray(def.styles) ? def.styles.join('\n') : def.styles;
       this.prepend(this.#styleEl);
     }
 

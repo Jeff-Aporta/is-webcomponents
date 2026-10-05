@@ -9,15 +9,62 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y\r\n          relaciones; el componente decide las capas, dibuja los tres\r\n          compartimentos clásicos (nombre, atributos, métodos) y rutea las\r\n          relaciones rodeando las cajas.",
+      "lede": [
+        "Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y",
+        "          relaciones; el componente decide las capas, dibuja los tres",
+        "          compartimentos clásicos (nombre, atributos, métodos) y rutea las",
+        "          relaciones rodeando las cajas."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          Comparte motor con <code>&lt;iswc-flowchart&gt;</code>: mismo esquema\r\n          JSON, mismo visor a pantalla completa y la misma animación tortuga,\r\n          que aquí recorre las relaciones en orden.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          Comparte motor con <code>&lt;iswc-flowchart&gt;</code>: mismo esquema",
+            "          JSON, mismo visor a pantalla completa y la misma animación tortuga,",
+            "          que aquí recorre las relaciones en orden.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-class-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"classDiagram\": {\r\n                  \"title\": \"Dominio de facturación\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-dominio\", \"name\": \"Dominio\", \"hue\": 239 },\r\n                    { \"id\": \"g-terceros\", \"name\": \"Terceros\", \"hue\": 199 }\r\n                  ],\r\n                  \"classes\": [\r\n                    { \"id\": \"Factura\", \"name\": \"Factura\", \"stereotype\": \"<<entity>>\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"+numero: string\", \"-total: number\", \"-fecha: date\", \"-cufe: string\"],\r\n                      \"methods\": [\"+anular(): void\", \"+totalizar(): number\"] },\r\n                    { \"id\": \"Item\", \"name\": \"ItemFactura\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"+cantidad: number\", \"-precio: number\"],\r\n                      \"methods\": [\"+subtotal(): number\"] },\r\n                    { \"id\": \"Pago\", \"name\": \"Pago\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"-valor: number\"],\r\n                      \"methods\": [\"+registrar(): void\"] },\r\n                    { \"id\": \"Cliente\", \"name\": \"Cliente\", \"stereotype\": \"<<entity>>\", \"group\": \"g-terceros\",\r\n                      \"attributes\": [\"+nit: string\", \"+razonSocial: string\"] },\r\n                    { \"id\": \"Tercero\", \"name\": \"Tercero\", \"group\": \"g-terceros\",\r\n                      \"attributes\": [\"#id: string\"] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"Factura\", \"to\": \"Item\", \"kind\": \"composition\", \"label\": \"1..*\" },\r\n                    { \"from\": \"Factura\", \"to\": \"Cliente\", \"kind\": \"association\", \"label\": \"1\" },\r\n                    { \"from\": \"Factura\", \"to\": \"Pago\", \"kind\": \"dependency\" },\r\n                    { \"from\": \"Cliente\", \"to\": \"Tercero\", \"kind\": \"inheritance\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-class-diagram>",
+          "html": [
+            "<iswc-class-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"classDiagram\": {",
+            "                  \"title\": \"Dominio de facturación\",",
+            "                  \"direction\": \"TB\",",
+            "                  \"groups\": [",
+            "                    { \"id\": \"g-dominio\", \"name\": \"Dominio\", \"hue\": 239 },",
+            "                    { \"id\": \"g-terceros\", \"name\": \"Terceros\", \"hue\": 199 }",
+            "                  ],",
+            "                  \"classes\": [",
+            "                    { \"id\": \"Factura\", \"name\": \"Factura\", \"stereotype\": \"<<entity>>\", \"group\": \"g-dominio\",",
+            "                      \"attributes\": [\"+numero: string\", \"-total: number\", \"-fecha: date\", \"-cufe: string\"],",
+            "                      \"methods\": [\"+anular(): void\", \"+totalizar(): number\"] },",
+            "                    { \"id\": \"Item\", \"name\": \"ItemFactura\", \"group\": \"g-dominio\",",
+            "                      \"attributes\": [\"+cantidad: number\", \"-precio: number\"],",
+            "                      \"methods\": [\"+subtotal(): number\"] },",
+            "                    { \"id\": \"Pago\", \"name\": \"Pago\", \"group\": \"g-dominio\",",
+            "                      \"attributes\": [\"-valor: number\"],",
+            "                      \"methods\": [\"+registrar(): void\"] },",
+            "                    { \"id\": \"Cliente\", \"name\": \"Cliente\", \"stereotype\": \"<<entity>>\", \"group\": \"g-terceros\",",
+            "                      \"attributes\": [\"+nit: string\", \"+razonSocial: string\"] },",
+            "                    { \"id\": \"Tercero\", \"name\": \"Tercero\", \"group\": \"g-terceros\",",
+            "                      \"attributes\": [\"#id: string\"] }",
+            "                  ],",
+            "                  \"relations\": [",
+            "                    { \"from\": \"Factura\", \"to\": \"Item\", \"kind\": \"composition\", \"label\": \"1..*\" },",
+            "                    { \"from\": \"Factura\", \"to\": \"Cliente\", \"kind\": \"association\", \"label\": \"1\" },",
+            "                    { \"from\": \"Factura\", \"to\": \"Pago\", \"kind\": \"dependency\" },",
+            "                    { \"from\": \"Cliente\", \"to\": \"Tercero\", \"kind\": \"inheritance\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-class-diagram>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -34,11 +81,45 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          <code>kind</code> acepta <code>association</code> (línea con flecha\r\n          abierta), <code>inheritance</code> (triángulo hueco en el destino),\r\n          <code>composition</code> (diamante relleno en el origen),\r\n          <code>aggregation</code> (diamante hueco en el origen),\r\n          <code>dependency</code> (línea punteada) y <code>realization</code>\r\n          (punteada con triángulo hueco).\r\n        </p>"
+          "html": [
+            "<p>",
+            "          <code>kind</code> acepta <code>association</code> (línea con flecha",
+            "          abierta), <code>inheritance</code> (triángulo hueco en el destino),",
+            "          <code>composition</code> (diamante relleno en el origen),",
+            "          <code>aggregation</code> (diamante hueco en el origen),",
+            "          <code>dependency</code> (línea punteada) y <code>realization</code>",
+            "          (punteada con triángulo hueco).",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-class-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"classDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"classes\": [\r\n                    { \"id\": \"A\", \"name\": \"A\" },\r\n                    { \"id\": \"B\", \"name\": \"B\" },\r\n                    { \"id\": \"C\", \"name\": \"C\" },\r\n                    { \"id\": \"D\", \"name\": \"D\" },\r\n                    { \"id\": \"E\", \"name\": \"E\" },\r\n                    { \"id\": \"F\", \"name\": \"F\" }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"A\", \"to\": \"B\", \"kind\": \"association\", \"label\": \"association\" },\r\n                    { \"from\": \"B\", \"to\": \"C\", \"kind\": \"inheritance\", \"label\": \"inheritance\" },\r\n                    { \"from\": \"C\", \"to\": \"D\", \"kind\": \"composition\", \"label\": \"composition\" },\r\n                    { \"from\": \"D\", \"to\": \"E\", \"kind\": \"aggregation\", \"label\": \"aggregation\" },\r\n                    { \"from\": \"E\", \"to\": \"F\", \"kind\": \"dependency\", \"label\": \"dependency\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-class-diagram>"
+          "html": [
+            "<iswc-class-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"classDiagram\": {",
+            "                  \"direction\": \"LR\",",
+            "                  \"classes\": [",
+            "                    { \"id\": \"A\", \"name\": \"A\" },",
+            "                    { \"id\": \"B\", \"name\": \"B\" },",
+            "                    { \"id\": \"C\", \"name\": \"C\" },",
+            "                    { \"id\": \"D\", \"name\": \"D\" },",
+            "                    { \"id\": \"E\", \"name\": \"E\" },",
+            "                    { \"id\": \"F\", \"name\": \"F\" }",
+            "                  ],",
+            "                  \"relations\": [",
+            "                    { \"from\": \"A\", \"to\": \"B\", \"kind\": \"association\", \"label\": \"association\" },",
+            "                    { \"from\": \"B\", \"to\": \"C\", \"kind\": \"inheritance\", \"label\": \"inheritance\" },",
+            "                    { \"from\": \"C\", \"to\": \"D\", \"kind\": \"composition\", \"label\": \"composition\" },",
+            "                    { \"from\": \"D\", \"to\": \"E\", \"kind\": \"aggregation\", \"label\": \"aggregation\" },",
+            "                    { \"from\": \"E\", \"to\": \"F\", \"kind\": \"dependency\", \"label\": \"dependency\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-class-diagram>"
+          ]
         }
       ]
     },
@@ -48,11 +129,38 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          La caja crece con el número de atributos y métodos. Los\r\n          compartimentos vacíos (sin atributos, sin métodos) se omiten junto\r\n          con su línea divisoria.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          La caja crece con el número de atributos y métodos. Los",
+            "          compartimentos vacíos (sin atributos, sin métodos) se omiten junto",
+            "          con su línea divisoria.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-class-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"classDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"classes\": [\r\n                    { \"id\": \"Vacia\", \"name\": \"SoloNombre\" },\r\n                    { \"id\": \"ConAttr\", \"name\": \"ConAtributos\", \"attributes\": [\"+a: string\", \"+b: number\"] },\r\n                    { \"id\": \"Completa\", \"name\": \"Completa\", \"stereotype\": \"<<value>>\",\r\n                      \"attributes\": [\"+a: string\", \"+b: number\", \"-c: boolean\"],\r\n                      \"methods\": [\"+hacer(): void\"] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"Vacia\", \"to\": \"ConAttr\", \"kind\": \"association\" },\r\n                    { \"from\": \"ConAttr\", \"to\": \"Completa\", \"kind\": \"association\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-class-diagram>"
+          "html": [
+            "<iswc-class-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"classDiagram\": {",
+            "                  \"direction\": \"LR\",",
+            "                  \"classes\": [",
+            "                    { \"id\": \"Vacia\", \"name\": \"SoloNombre\" },",
+            "                    { \"id\": \"ConAttr\", \"name\": \"ConAtributos\", \"attributes\": [\"+a: string\", \"+b: number\"] },",
+            "                    { \"id\": \"Completa\", \"name\": \"Completa\", \"stereotype\": \"<<value>>\",",
+            "                      \"attributes\": [\"+a: string\", \"+b: number\", \"-c: boolean\"],",
+            "                      \"methods\": [\"+hacer(): void\"] }",
+            "                  ],",
+            "                  \"relations\": [",
+            "                    { \"from\": \"Vacia\", \"to\": \"ConAttr\", \"kind\": \"association\" },",
+            "                    { \"from\": \"ConAttr\", \"to\": \"Completa\", \"kind\": \"association\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-class-diagram>"
+          ]
         }
       ]
     },
@@ -195,10 +303,53 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y\r\n          relaciones; el componente decide las capas, dibuja los tres\r\n          compartimentos clásicos (nombre, atributos, métodos) y rutea las\r\n          relaciones rodeando las cajas."
+        "content": [
+          "Diagrama de clases UML en SVG, sin Mermaid. Tú declaras clases y",
+          "          relaciones; el componente decide las capas, dibuja los tres",
+          "          compartimentos clásicos (nombre, atributos, métodos) y rutea las",
+          "          relaciones rodeando las cajas."
+        ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-class-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"classDiagram\": {\r\n                  \"title\": \"Dominio de facturación\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-dominio\", \"name\": \"Dominio\", \"hue\": 239 },\r\n                    { \"id\": \"g-terceros\", \"name\": \"Terceros\", \"hue\": 199 }\r\n                  ],\r\n                  \"classes\": [\r\n                    { \"id\": \"Factura\", \"name\": \"Factura\", \"stereotype\": \"<<entity>>\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"+numero: string\", \"-total: number\", \"-fecha: date\", \"-cufe: string\"],\r\n                      \"methods\": [\"+anular(): void\", \"+totalizar(): number\"] },\r\n                    { \"id\": \"Item\", \"name\": \"ItemFactura\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"+cantidad: number\", \"-precio: number\"],\r\n                      \"methods\": [\"+subtotal(): number\"] },\r\n                    { \"id\": \"Pago\", \"name\": \"Pago\", \"group\": \"g-dominio\",\r\n                      \"attributes\": [\"-valor: number\"],\r\n                      \"methods\": [\"+registrar(): void\"] },\r\n                    { \"id\": \"Cliente\", \"name\": \"Cliente\", \"stereotype\": \"<<entity>>\", \"group\": \"g-terceros\",\r\n                      \"attributes\": [\"+nit: string\", \"+razonSocial: string\"] },\r\n                    { \"id\": \"Tercero\", \"name\": \"Tercero\", \"group\": \"g-terceros\",\r\n                      \"attributes\": [\"#id: string\"] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"Factura\", \"to\": \"Item\", \"kind\": \"composition\", \"label\": \"1..*\" },\r\n                    { \"from\": \"Factura\", \"to\": \"Cliente\", \"kind\": \"association\", \"label\": \"1\" },\r\n                    { \"from\": \"Factura\", \"to\": \"Pago\", \"kind\": \"dependency\" },\r\n                    { \"from\": \"Cliente\", \"to\": \"Tercero\", \"kind\": \"inheritance\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-class-diagram>\n```"
+        "content": [
+          "```html",
+          "<iswc-class-diagram open-on-click>",
+          "            <script type=\"application/json\">",
+          "              {",
+          "                \"classDiagram\": {",
+          "                  \"title\": \"Dominio de facturación\",",
+          "                  \"direction\": \"TB\",",
+          "                  \"groups\": [",
+          "                    { \"id\": \"g-dominio\", \"name\": \"Dominio\", \"hue\": 239 },",
+          "                    { \"id\": \"g-terceros\", \"name\": \"Terceros\", \"hue\": 199 }",
+          "                  ],",
+          "                  \"classes\": [",
+          "                    { \"id\": \"Factura\", \"name\": \"Factura\", \"stereotype\": \"<<entity>>\", \"group\": \"g-dominio\",",
+          "                      \"attributes\": [\"+numero: string\", \"-total: number\", \"-fecha: date\", \"-cufe: string\"],",
+          "                      \"methods\": [\"+anular(): void\", \"+totalizar(): number\"] },",
+          "                    { \"id\": \"Item\", \"name\": \"ItemFactura\", \"group\": \"g-dominio\",",
+          "                      \"attributes\": [\"+cantidad: number\", \"-precio: number\"],",
+          "                      \"methods\": [\"+subtotal(): number\"] },",
+          "                    { \"id\": \"Pago\", \"name\": \"Pago\", \"group\": \"g-dominio\",",
+          "                      \"attributes\": [\"-valor: number\"],",
+          "                      \"methods\": [\"+registrar(): void\"] },",
+          "                    { \"id\": \"Cliente\", \"name\": \"Cliente\", \"stereotype\": \"<<entity>>\", \"group\": \"g-terceros\",",
+          "                      \"attributes\": [\"+nit: string\", \"+razonSocial: string\"] },",
+          "                    { \"id\": \"Tercero\", \"name\": \"Tercero\", \"group\": \"g-terceros\",",
+          "                      \"attributes\": [\"#id: string\"] }",
+          "                  ],",
+          "                  \"relations\": [",
+          "                    { \"from\": \"Factura\", \"to\": \"Item\", \"kind\": \"composition\", \"label\": \"1..*\" },",
+          "                    { \"from\": \"Factura\", \"to\": \"Cliente\", \"kind\": \"association\", \"label\": \"1\" },",
+          "                    { \"from\": \"Factura\", \"to\": \"Pago\", \"kind\": \"dependency\" },",
+          "                    { \"from\": \"Cliente\", \"to\": \"Tercero\", \"kind\": \"inheritance\" }",
+          "                  ]",
+          "                }",
+          "              }",
+          "            </script>",
+          "          </iswc-class-diagram>",
+          "```"
+        ]
       }
     },
     "exclude": [

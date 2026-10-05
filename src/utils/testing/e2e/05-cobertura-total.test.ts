@@ -100,12 +100,16 @@ function metadataDe(tag: string, jsonRel: string): { descripcion: string; lede: 
     const data = JSON.parse(raw) as {
       tag?: string;
       title?: string;
-      description?: string;
-      sections?: Array<{ lede?: string; title?: string }>;
+      description?: string | string[];
+      sections?: Array<{ lede?: string | string[]; title?: string }>;
     };
+    // La refactor W43 puede traer `description` o `lede` como string o array
+    // de strings. Los unimos con '\n' para reproducir la semántica original.
+    const asText = (v: unknown): string =>
+      Array.isArray(v) ? v.join('\n') : (typeof v === 'string' ? v : '');
     return {
-      descripcion: typeof data.description === 'string' ? limpiar(data.description) : '',
-      lede: typeof data.sections?.[0]?.lede === 'string' ? limpiar(data.sections[0].lede ?? '') : '',
+      descripcion: limpiar(asText(data.description)),
+      lede: limpiar(asText(data.sections?.[0]?.lede)),
       titulo: typeof data.title === 'string' ? limpiar(data.title) : tag,
     };
   } catch {

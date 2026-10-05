@@ -14,7 +14,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-kanban>\r\n            <iswc-kanban-column title=\"Tareas\">\r\n              <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">\r\n                Revisar extracto de agosto.\r\n              </iswc-kanban-card>\r\n              <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">\r\n                Cuadrar cuentas de resultado.\r\n              </iswc-kanban-card>\r\n            </iswc-kanban-column>\r\n            <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>\r\n          </iswc-kanban>"
+          "html": [
+            "<iswc-kanban>",
+            "            <iswc-kanban-column title=\"Tareas\">",
+            "              <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">",
+            "                Revisar extracto de agosto.",
+            "              </iswc-kanban-card>",
+            "              <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">",
+            "                Cuadrar cuentas de resultado.",
+            "              </iswc-kanban-card>",
+            "            </iswc-kanban-column>",
+            "            <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>",
+            "          </iswc-kanban>"
+          ]
         }
       ]
     },
@@ -31,7 +43,21 @@
         "content": "Tarjeta de un tablero. Es arrastrable entre columnas y admite encabezado, meta, etiqueta y pie."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-kanban>\n  <iswc-kanban-column title=\"Tareas\">\n    <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">\n      Revisar extracto de agosto.\n    </iswc-kanban-card>\n    <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">\n      Cuadrar cuentas de resultado.\n    </iswc-kanban-card>\n  </iswc-kanban-column>\n  <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>\n</iswc-kanban>\n```"
+        "content": [
+          "```html",
+          "<iswc-kanban>",
+          "  <iswc-kanban-column title=\"Tareas\">",
+          "    <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">",
+          "      Revisar extracto de agosto.",
+          "    </iswc-kanban-card>",
+          "    <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">",
+          "      Cuadrar cuentas de resultado.",
+          "    </iswc-kanban-card>",
+          "  </iswc-kanban-column>",
+          "  <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>",
+          "</iswc-kanban>",
+          "```"
+        ]
       }
     },
     "exclude": [

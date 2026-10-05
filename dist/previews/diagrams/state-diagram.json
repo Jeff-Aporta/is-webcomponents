@@ -9,15 +9,59 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y\r\n          transiciones; el componente decide las capas, reduce los cruces y\r\n          rutea las flechas rodeando los estados.",
+      "lede": [
+        "Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y",
+        "          transiciones; el componente decide las capas, reduce los cruces y",
+        "          rutea las flechas rodeando los estados."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          Comparte motor con <code>&lt;iswc-flowchart&gt;</code>: mismo esquema\r\n          JSON, mismo visor a pantalla completa y la misma animación tortuga,\r\n          que aquí recorre las transiciones en orden.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          Comparte motor con <code>&lt;iswc-flowchart&gt;</code>: mismo esquema",
+            "          JSON, mismo visor a pantalla completa y la misma animación tortuga,",
+            "          que aquí recorre las transiciones en orden.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"title\": \"Ciclo de vida de la factura\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-flujo\", \"name\": \"Flujo\", \"hue\": 239 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"states\": [\r\n                    { \"id\": \"inicio\", \"kind\": \"start\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"borrador\", \"label\": \"Borrador\", \"group\": \"g-flujo\",\r\n                      \"desc\": \"Editable por el usuario; sin CUFE asignado.\" },\r\n                    { \"id\": \"decision\", \"label\": \"¿Datos válidos?\", \"kind\": \"choice\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"emitida\", \"label\": \"Emitida\", \"group\": \"g-cierre\",\r\n                      \"desc\": \"Enviada y aceptada por la **DIAN**.\" },\r\n                    { \"id\": \"anulada\", \"label\": \"Anulada\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"fin\", \"kind\": \"end\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"inicio\", \"to\": \"borrador\" },\r\n                    { \"from\": \"borrador\", \"to\": \"decision\", \"label\": \"validar\" },\r\n                    { \"from\": \"decision\", \"to\": \"borrador\", \"label\": \"no\" },\r\n                    { \"from\": \"decision\", \"to\": \"emitida\", \"label\": \"sí\" },\r\n                    { \"from\": \"emitida\", \"to\": \"anulada\", \"label\": \"anular\" },\r\n                    { \"from\": \"anulada\", \"to\": \"fin\" },\r\n                    { \"from\": \"emitida\", \"to\": \"fin\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-state-diagram>",
+          "html": [
+            "<iswc-state-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"stateDiagram\": {",
+            "                  \"title\": \"Ciclo de vida de la factura\",",
+            "                  \"direction\": \"TB\",",
+            "                  \"groups\": [",
+            "                    { \"id\": \"g-flujo\", \"name\": \"Flujo\", \"hue\": 239 },",
+            "                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }",
+            "                  ],",
+            "                  \"states\": [",
+            "                    { \"id\": \"inicio\", \"kind\": \"start\", \"group\": \"g-flujo\" },",
+            "                    { \"id\": \"borrador\", \"label\": \"Borrador\", \"group\": \"g-flujo\",",
+            "                      \"desc\": \"Editable por el usuario; sin CUFE asignado.\" },",
+            "                    { \"id\": \"decision\", \"label\": \"¿Datos válidos?\", \"kind\": \"choice\", \"group\": \"g-flujo\" },",
+            "                    { \"id\": \"emitida\", \"label\": \"Emitida\", \"group\": \"g-cierre\",",
+            "                      \"desc\": \"Enviada y aceptada por la **DIAN**.\" },",
+            "                    { \"id\": \"anulada\", \"label\": \"Anulada\", \"group\": \"g-cierre\" },",
+            "                    { \"id\": \"fin\", \"kind\": \"end\", \"group\": \"g-cierre\" }",
+            "                  ],",
+            "                  \"transitions\": [",
+            "                    { \"from\": \"inicio\", \"to\": \"borrador\" },",
+            "                    { \"from\": \"borrador\", \"to\": \"decision\", \"label\": \"validar\" },",
+            "                    { \"from\": \"decision\", \"to\": \"borrador\", \"label\": \"no\" },",
+            "                    { \"from\": \"decision\", \"to\": \"emitida\", \"label\": \"sí\" },",
+            "                    { \"from\": \"emitida\", \"to\": \"anulada\", \"label\": \"anular\" },",
+            "                    { \"from\": \"anulada\", \"to\": \"fin\" },",
+            "                    { \"from\": \"emitida\", \"to\": \"fin\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-state-diagram>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -34,11 +78,41 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          <code>kind</code> acepta <code>start</code> (círculo negro relleno),\r\n          <code>end</code> (círculo relleno dentro de un anillo),\r\n          <code>normal</code> (rectángulo redondeado, por defecto) y\r\n          <code>choice</code> (rombo de decisión).\r\n        </p>"
+          "html": [
+            "<p>",
+            "          <code>kind</code> acepta <code>start</code> (círculo negro relleno),",
+            "          <code>end</code> (círculo relleno dentro de un anillo),",
+            "          <code>normal</code> (rectángulo redondeado, por defecto) y",
+            "          <code>choice</code> (rombo de decisión).",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"states\": [\r\n                    { \"id\": \"a\", \"kind\": \"start\" },\r\n                    { \"id\": \"b\", \"label\": \"Procesando\" },\r\n                    { \"id\": \"c\", \"label\": \"¿Ok?\", \"kind\": \"choice\" },\r\n                    { \"id\": \"d\", \"label\": \"Rechazado\" },\r\n                    { \"id\": \"e\", \"kind\": \"end\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"a\", \"to\": \"b\" },\r\n                    { \"from\": \"b\", \"to\": \"c\" },\r\n                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },\r\n                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-state-diagram>"
+          "html": [
+            "<iswc-state-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"stateDiagram\": {",
+            "                  \"direction\": \"LR\",",
+            "                  \"states\": [",
+            "                    { \"id\": \"a\", \"kind\": \"start\" },",
+            "                    { \"id\": \"b\", \"label\": \"Procesando\" },",
+            "                    { \"id\": \"c\", \"label\": \"¿Ok?\", \"kind\": \"choice\" },",
+            "                    { \"id\": \"d\", \"label\": \"Rechazado\" },",
+            "                    { \"id\": \"e\", \"kind\": \"end\" }",
+            "                  ],",
+            "                  \"transitions\": [",
+            "                    { \"from\": \"a\", \"to\": \"b\" },",
+            "                    { \"from\": \"b\", \"to\": \"c\" },",
+            "                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },",
+            "                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-state-diagram>"
+          ]
         }
       ]
     },
@@ -48,11 +122,41 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          El motor detecta las transiciones que vuelven atrás y las rutea por\r\n          un lado, en vez de colgarse intentando ordenar un grafo cíclico. Una\r\n          transición de un estado a sí mismo también se dibuja sin romper el\r\n          layout.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          El motor detecta las transiciones que vuelven atrás y las rutea por",
+            "          un lado, en vez de colgarse intentando ordenar un grafo cíclico. Una",
+            "          transición de un estado a sí mismo también se dibuja sin romper el",
+            "          layout.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"direction\": \"TB\",\r\n                  \"states\": [\r\n                    { \"id\": \"s1\", \"kind\": \"start\" },\r\n                    { \"id\": \"s2\", \"label\": \"Revisión\" },\r\n                    { \"id\": \"s3\", \"label\": \"Aprobación\" },\r\n                    { \"id\": \"s4\", \"kind\": \"end\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"s1\", \"to\": \"s2\" },\r\n                    { \"from\": \"s2\", \"to\": \"s3\", \"label\": \"enviar\" },\r\n                    { \"from\": \"s3\", \"to\": \"s2\", \"label\": \"rechazar\" },\r\n                    { \"from\": \"s2\", \"to\": \"s2\", \"label\": \"reintento\" },\r\n                    { \"from\": \"s3\", \"to\": \"s4\", \"label\": \"aprobar\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-state-diagram>"
+          "html": [
+            "<iswc-state-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"stateDiagram\": {",
+            "                  \"direction\": \"TB\",",
+            "                  \"states\": [",
+            "                    { \"id\": \"s1\", \"kind\": \"start\" },",
+            "                    { \"id\": \"s2\", \"label\": \"Revisión\" },",
+            "                    { \"id\": \"s3\", \"label\": \"Aprobación\" },",
+            "                    { \"id\": \"s4\", \"kind\": \"end\" }",
+            "                  ],",
+            "                  \"transitions\": [",
+            "                    { \"from\": \"s1\", \"to\": \"s2\" },",
+            "                    { \"from\": \"s2\", \"to\": \"s3\", \"label\": \"enviar\" },",
+            "                    { \"from\": \"s3\", \"to\": \"s2\", \"label\": \"rechazar\" },",
+            "                    { \"from\": \"s2\", \"to\": \"s2\", \"label\": \"reintento\" },",
+            "                    { \"from\": \"s3\", \"to\": \"s4\", \"label\": \"aprobar\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-state-diagram>"
+          ]
         }
       ]
     },
@@ -187,10 +291,50 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y\r\n          transiciones; el componente decide las capas, reduce los cruces y\r\n          rutea las flechas rodeando los estados."
+        "content": [
+          "Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y",
+          "          transiciones; el componente decide las capas, reduce los cruces y",
+          "          rutea las flechas rodeando los estados."
+        ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"title\": \"Ciclo de vida de la factura\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-flujo\", \"name\": \"Flujo\", \"hue\": 239 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"states\": [\r\n                    { \"id\": \"inicio\", \"kind\": \"start\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"borrador\", \"label\": \"Borrador\", \"group\": \"g-flujo\",\r\n                      \"desc\": \"Editable por el usuario; sin CUFE asignado.\" },\r\n                    { \"id\": \"decision\", \"label\": \"¿Datos válidos?\", \"kind\": \"choice\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"emitida\", \"label\": \"Emitida\", \"group\": \"g-cierre\",\r\n                      \"desc\": \"Enviada y aceptada por la **DIAN**.\" },\r\n                    { \"id\": \"anulada\", \"label\": \"Anulada\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"fin\", \"kind\": \"end\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"inicio\", \"to\": \"borrador\" },\r\n                    { \"from\": \"borrador\", \"to\": \"decision\", \"label\": \"validar\" },\r\n                    { \"from\": \"decision\", \"to\": \"borrador\", \"label\": \"no\" },\r\n                    { \"from\": \"decision\", \"to\": \"emitida\", \"label\": \"sí\" },\r\n                    { \"from\": \"emitida\", \"to\": \"anulada\", \"label\": \"anular\" },\r\n                    { \"from\": \"anulada\", \"to\": \"fin\" },\r\n                    { \"from\": \"emitida\", \"to\": \"fin\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-state-diagram>\n```"
+        "content": [
+          "```html",
+          "<iswc-state-diagram open-on-click>",
+          "            <script type=\"application/json\">",
+          "              {",
+          "                \"stateDiagram\": {",
+          "                  \"title\": \"Ciclo de vida de la factura\",",
+          "                  \"direction\": \"TB\",",
+          "                  \"groups\": [",
+          "                    { \"id\": \"g-flujo\", \"name\": \"Flujo\", \"hue\": 239 },",
+          "                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }",
+          "                  ],",
+          "                  \"states\": [",
+          "                    { \"id\": \"inicio\", \"kind\": \"start\", \"group\": \"g-flujo\" },",
+          "                    { \"id\": \"borrador\", \"label\": \"Borrador\", \"group\": \"g-flujo\",",
+          "                      \"desc\": \"Editable por el usuario; sin CUFE asignado.\" },",
+          "                    { \"id\": \"decision\", \"label\": \"¿Datos válidos?\", \"kind\": \"choice\", \"group\": \"g-flujo\" },",
+          "                    { \"id\": \"emitida\", \"label\": \"Emitida\", \"group\": \"g-cierre\",",
+          "                      \"desc\": \"Enviada y aceptada por la **DIAN**.\" },",
+          "                    { \"id\": \"anulada\", \"label\": \"Anulada\", \"group\": \"g-cierre\" },",
+          "                    { \"id\": \"fin\", \"kind\": \"end\", \"group\": \"g-cierre\" }",
+          "                  ],",
+          "                  \"transitions\": [",
+          "                    { \"from\": \"inicio\", \"to\": \"borrador\" },",
+          "                    { \"from\": \"borrador\", \"to\": \"decision\", \"label\": \"validar\" },",
+          "                    { \"from\": \"decision\", \"to\": \"borrador\", \"label\": \"no\" },",
+          "                    { \"from\": \"decision\", \"to\": \"emitida\", \"label\": \"sí\" },",
+          "                    { \"from\": \"emitida\", \"to\": \"anulada\", \"label\": \"anular\" },",
+          "                    { \"from\": \"anulada\", \"to\": \"fin\" },",
+          "                    { \"from\": \"emitida\", \"to\": \"fin\" }",
+          "                  ]",
+          "                }",
+          "              }",
+          "            </script>",
+          "          </iswc-state-diagram>",
+          "```"
+        ]
       }
     },
     "exclude": [

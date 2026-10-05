@@ -10,18 +10,102 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).\r\n          Ideal para menús, filtros y contenido secundario.",
+      "lede": [
+        "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).",
+        "          Ideal para menús, filtros y contenido secundario."
+      ],
       "blocks": [
         {
           "kind": "demo",
           "html": "<iswc-button id=\"openDefault\">Abrir drawer (end)</iswc-button>",
           "equivNote": "placement define el eje; light-dismiss el cierre por backdrop.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-drawer: placement\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"placement=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"start / end → ancho\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"top / bottom → alto\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"light-dismiss?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"clic fuera cierra\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"solo chrome / Escape\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"lat\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"vert\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-drawer: placement\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"placement=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"start / end → ancho\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"top / bottom → alto\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"light-dismiss?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"clic fuera cierra\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"e\",",
+            "          \"label\": \"solo chrome / Escape\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"lat\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"vert\"",
+            "        },",
+            "        {",
+            "          \"from\": \"a\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"e\",",
+            "          \"label\": \"no\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         },
         {
           "kind": "html",
-          "html": "<iswc-drawer id=\"drwDefault\" label=\"Drawer estándar\">\r\n          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" variant=\"outlined\">Cancelar</iswc-button>\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Aceptar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
+          "html": [
+            "<iswc-drawer id=\"drwDefault\" label=\"Drawer estándar\">",
+            "          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>",
+            "          <div slot=\"footer\">",
+            "            <iswc-button data-drawer=\"close\" variant=\"outlined\">Cancelar</iswc-button>",
+            "            <iswc-button data-drawer=\"close\" color=\"brand\">Aceptar</iswc-button>",
+            "          </div>",
+            "        </iswc-drawer>"
+          ]
         }
       ]
     },
@@ -32,11 +116,35 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-button id=\"openEnd\">end (default)</iswc-button>\r\n          <iswc-button id=\"openStart\">start</iswc-button>\r\n          <iswc-button id=\"openTop\">top</iswc-button>\r\n          <iswc-button id=\"openBottom\">bottom</iswc-button>\r\n        </div>\r\n\r\n        <iswc-drawer id=\"drwEnd\" label=\"End\" placement=\"end\">\r\n          <p>Este drawer se desliza desde la derecha (default).</p>\r\n        </iswc-drawer>\r\n        <iswc-drawer id=\"drwStart\" label=\"Start\" placement=\"start\">\r\n          <p>Este drawer se desliza desde la izquierda.</p>\r\n        </iswc-drawer>\r\n        <iswc-drawer id=\"drwTop\" label=\"Top\" placement=\"top\">\r\n          <p>Este drawer se desliza desde arriba.</p>\r\n        </iswc-drawer>\r\n        <iswc-drawer id=\"drwBottom\" label=\"Bottom\" placement=\"bottom\">\r\n          <p>Este drawer se desliza desde abajo.</p>\r\n        </iswc-drawer>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-button id=\"openEnd\">end (default)</iswc-button>",
+            "          <iswc-button id=\"openStart\">start</iswc-button>",
+            "          <iswc-button id=\"openTop\">top</iswc-button>",
+            "          <iswc-button id=\"openBottom\">bottom</iswc-button>",
+            "        </div>",
+            "",
+            "        <iswc-drawer id=\"drwEnd\" label=\"End\" placement=\"end\">",
+            "          <p>Este drawer se desliza desde la derecha (default).</p>",
+            "        </iswc-drawer>",
+            "        <iswc-drawer id=\"drwStart\" label=\"Start\" placement=\"start\">",
+            "          <p>Este drawer se desliza desde la izquierda.</p>",
+            "        </iswc-drawer>",
+            "        <iswc-drawer id=\"drwTop\" label=\"Top\" placement=\"top\">",
+            "          <p>Este drawer se desliza desde arriba.</p>",
+            "        </iswc-drawer>",
+            "        <iswc-drawer id=\"drwBottom\" label=\"Bottom\" placement=\"bottom\">",
+            "          <p>Este drawer se desliza desde abajo.</p>",
+            "        </iswc-drawer>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-drawer placement=\"start\">…</iswc-drawer>\n<iswc-drawer placement=\"top\">…</iswc-drawer>\n<iswc-drawer placement=\"bottom\">…</iswc-drawer>"
+          "code": [
+            "<iswc-drawer placement=\"start\">…</iswc-drawer>",
+            "<iswc-drawer placement=\"top\">…</iswc-drawer>",
+            "<iswc-drawer placement=\"bottom\">…</iswc-drawer>"
+          ]
         }
       ]
     },
@@ -51,7 +159,11 @@
         },
         {
           "kind": "html",
-          "html": "<iswc-drawer id=\"drwWide\" label=\"50%\" size=\"50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </iswc-drawer>"
+          "html": [
+            "<iswc-drawer id=\"drwWide\" label=\"50%\" size=\"50%\">",
+            "          <p>Este drawer ocupa siempre el 50% del viewport.</p>",
+            "        </iswc-drawer>"
+          ]
         }
       ]
     },
@@ -66,7 +178,14 @@
         },
         {
           "kind": "html",
-          "html": "<iswc-drawer id=\"drwNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header!</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Cerrar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
+          "html": [
+            "<iswc-drawer id=\"drwNoHeader\" without-header>",
+            "          <p>¡Mira mamá, sin header!</p>",
+            "          <div slot=\"footer\">",
+            "            <iswc-button data-drawer=\"close\" color=\"brand\">Cerrar</iswc-button>",
+            "          </div>",
+            "        </iswc-drawer>"
+          ]
         }
       ]
     },
@@ -81,7 +200,11 @@
         },
         {
           "kind": "html",
-          "html": "<iswc-drawer id=\"drwLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del drawer para cerrarlo.</p>\r\n        </iswc-drawer>"
+          "html": [
+            "<iswc-drawer id=\"drwLD\" label=\"Light dismiss\" light-dismiss>",
+            "          <p>Haz click fuera del drawer para cerrarlo.</p>",
+            "        </iswc-drawer>"
+          ]
         }
       ]
     },
@@ -96,7 +219,17 @@
         },
         {
           "kind": "html",
-          "html": "<iswc-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" size=\"280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </iswc-drawer>"
+          "html": [
+            "<iswc-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" size=\"280px\">",
+            "          <nav style=\"display:flex;flex-direction:column;gap:.5em\">",
+            "            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>",
+            "            <a href=\"#\" style=\"text-decoration:none\">Productos</a>",
+            "            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>",
+            "            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>",
+            "            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>",
+            "          </nav>",
+            "        </iswc-drawer>"
+          ]
         }
       ]
     },
@@ -112,40 +245,28 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>open</code>",
-              "boolean",
-              "false",
-              "Estado visible. Reflected."
+              "<code>open</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Estado visible. Reflected. (valor por defecto)"
             ],
             [
               "<code>label</code>",
-              "string",
-              "—",
               "Título del header (a11y)."
             ],
             [
-              "<code>placement</code>",
-              "start | end | top | bottom",
-              "end",
-              "Borde desde el que se desliza."
+              "<code>placement</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Borde desde el que se desliza. (valor por defecto)"
             ],
             [
-              "<code>without-header</code>",
-              "boolean",
-              "false",
-              "Oculta el header y el botón de cerrar."
+              "<code>without-header</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Oculta el header y el botón de cerrar. (valor por defecto)"
             ],
             [
-              "<code>light-dismiss</code>",
-              "boolean",
-              "false",
-              "Cierra al click fuera."
+              "<code>light-dismiss</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Cierra al click fuera. (valor por defecto)"
             ]
           ]
         },
@@ -237,34 +358,28 @@
           "kind": "table",
           "columns": [
             "Variable",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>--size</code>",
-              "<code>380px</code>",
-              "Tamaño (ancho o alto según placement)."
+              "<code>--size</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tamaño (ancho o alto según placement). (valor por defecto)"
             ],
             [
-              "<code>--spacing</code>",
-              "<code>var(--iswc-space-l, 1rem)</code>",
-              "Padding interno."
+              "<code>--spacing</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Padding interno. (valor por defecto)"
             ],
             [
-              "<code>--backdrop-color</code>",
-              "<code>rgba(0,0,0,0.45)</code>",
-              "Color del fondo."
+              "<code>--backdrop-color</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Color del fondo. (valor por defecto)"
             ],
             [
-              "<code>--show-duration</code>",
-              "220ms",
-              "Duración apertura."
+              "<code>--show-duration</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Duración apertura. (valor por defecto)"
             ],
             [
-              "<code>--hide-duration</code>",
-              "180ms",
-              "Duración cierre."
+              "<code>--hide-duration</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Duración cierre. (valor por defecto)"
             ]
           ]
         }
@@ -274,7 +389,10 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).\r\n          Ideal para menús, filtros y contenido secundario."
+        "content": [
+          "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).",
+          "          Ideal para menús, filtros y contenido secundario."
+        ]
       },
       "atributos": {
         "table": [
@@ -388,7 +506,16 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-drawer=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-drawer>\n```"
+        "content": [
+          "```html",
+          "<iswc-drawer label=\"Drawer estándar\">",
+          "  Contenido.",
+          "  <div slot=\"footer\">",
+          "    <iswc-button data-drawer=\"close\">Cancelar</iswc-button>",
+          "  </div>",
+          "</iswc-drawer>",
+          "```"
+        ]
       }
     },
     "exclude": [

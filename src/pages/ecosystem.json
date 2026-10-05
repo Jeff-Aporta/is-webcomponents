@@ -5,7 +5,83 @@
   "title": "Ecosistema JS",
   "storageKey": "docs-ecosystem",
   "hasBehavior": true,
-  "styles": ".eco-lede { max-width: 46rem; line-height: 1.55; color: var(--iswc-text-soft); }\n    .eco-steps { margin: 0 0 1.25rem; padding-left: 1.25rem; color: var(--iswc-text-soft); }\n    .eco-steps li { margin: 0.35rem 0; }\n    .eco-grid {\n      display: grid;\n      gap: 1rem;\n      grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));\n      margin: 0 0 1.25rem;\n    }\n    .eco-pick {\n      display: flex; flex-direction: column; gap: 0.45rem;\n      padding: 0.75rem 0.85rem;\n      border: 1px solid var(--iswc-border);\n      border-radius: var(--iswc-radius, 0.5em);\n      background: var(--iswc-bg-elev);\n      max-height: 16rem; overflow: auto;\n    }\n    .eco-pick label {\n      display: flex; align-items: center; gap: 0.45rem;\n      font-size: 0.82rem; color: var(--iswc-text);\n      cursor: pointer;\n    }\n    .eco-pick code { font-size: 0.75rem; color: var(--iswc-text-dim); }\n    .eco-bytes {\n      margin: 0 0 0.75rem; font-size: 0.85rem; color: var(--iswc-text-soft);\n    }\n    .eco-bytes strong { color: var(--iswc-text); font-variant-numeric: tabular-nums; }\n    .eco-snippet-wrap { margin: 0 0 1rem; }\n    .eco-live {\n      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;\n      padding: 0.85rem; border: 1px dashed var(--iswc-border);\n      border-radius: var(--iswc-radius, 0.5em); background: var(--iswc-bg-soft);\n      min-height: 3.2rem;\n    }\n    .eco-toolbar {\n      display: flex; flex-wrap: wrap; gap: 0.75rem 1rem;\n      align-items: end; margin: 0 0 1rem;\n    }\n    .eco-field {\n      display: flex; flex-direction: column; gap: 0.3rem;\n      font-size: 0.75rem; color: var(--iswc-text-soft);\n      min-width: min(100%, 16rem); flex: 1 1 14rem;\n    }\n    .eco-field input {\n      font: inherit; font-size: 0.875rem; color: var(--iswc-text);\n      background: var(--iswc-bg); border: 1px solid var(--iswc-border);\n      border-radius: var(--iswc-radius-sm, 0.35em); padding: 0.4rem 0.55rem;\n    }\n    .eco-count { margin: 0 0 0.75rem; font-size: 0.8rem; color: var(--iswc-text-dim); }\n    .eco-list { display: flex; flex-direction: column; gap: 0.65rem; }\n    .eco-card {\n      padding: 0.75rem 0.9rem; border: 1px solid var(--iswc-border);\n      border-radius: var(--iswc-radius, 0.5em); background: var(--iswc-bg-elev);\n    }\n    .eco-card__head {\n      display: flex; flex-wrap: wrap; align-items: baseline;\n      gap: 0.35rem 0.75rem; margin-bottom: 0.35rem;\n    }\n    .eco-card__id { margin: 0; font-size: 1rem; font-weight: 650; color: var(--iswc-text); }\n    .eco-card__path {\n      font-family: ui-monospace, Menlo, Consolas, monospace;\n      font-size: 0.72rem; color: var(--iswc-text-dim); word-break: break-all;\n    }\n    .eco-card__sum {\n      margin: 0 0 0.45rem; font-size: 0.875rem; color: var(--iswc-text-soft); line-height: 1.4;\n    }\n    .eco-exports {\n      display: flex; flex-wrap: wrap; gap: 0.3rem;\n      margin: 0; padding: 0; list-style: none;\n    }\n    .eco-exports code {\n      font-size: 0.72rem; padding: 0.1rem 0.35rem; border-radius: 0.25em;\n      background: var(--iswc-code-bg, var(--iswc-bg-soft)); color: var(--iswc-code-text, var(--iswc-text));\n    }\n    .eco-meta { margin: 0.45rem 0 0; font-size: 0.72rem; color: var(--iswc-text-dim); }",
+  "styles": [
+    ".eco-lede { max-width: 46rem; line-height: 1.55; color: var(--iswc-text-soft); }",
+    "    .eco-steps { margin: 0 0 1.25rem; padding-left: 1.25rem; color: var(--iswc-text-soft); }",
+    "    .eco-steps li { margin: 0.35rem 0; }",
+    "    .eco-grid {",
+    "      display: grid;",
+    "      gap: 1rem;",
+    "      grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));",
+    "      margin: 0 0 1.25rem;",
+    "    }",
+    "    .eco-pick {",
+    "      display: flex; flex-direction: column; gap: 0.45rem;",
+    "      padding: 0.75rem 0.85rem;",
+    "      border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius, 0.5em);",
+    "      background: var(--iswc-bg-elev);",
+    "      max-height: 16rem; overflow: auto;",
+    "    }",
+    "    .eco-pick label {",
+    "      display: flex; align-items: center; gap: 0.45rem;",
+    "      font-size: 0.82rem; color: var(--iswc-text);",
+    "      cursor: pointer;",
+    "    }",
+    "    .eco-pick code { font-size: 0.75rem; color: var(--iswc-text-dim); }",
+    "    .eco-bytes {",
+    "      margin: 0 0 0.75rem; font-size: 0.85rem; color: var(--iswc-text-soft);",
+    "    }",
+    "    .eco-bytes strong { color: var(--iswc-text); font-variant-numeric: tabular-nums; }",
+    "    .eco-snippet-wrap { margin: 0 0 1rem; }",
+    "    .eco-live {",
+    "      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;",
+    "      padding: 0.85rem; border: 1px dashed var(--iswc-border);",
+    "      border-radius: var(--iswc-radius, 0.5em); background: var(--iswc-bg-soft);",
+    "      min-height: 3.2rem;",
+    "    }",
+    "    .eco-toolbar {",
+    "      display: flex; flex-wrap: wrap; gap: 0.75rem 1rem;",
+    "      align-items: end; margin: 0 0 1rem;",
+    "    }",
+    "    .eco-field {",
+    "      display: flex; flex-direction: column; gap: 0.3rem;",
+    "      font-size: 0.75rem; color: var(--iswc-text-soft);",
+    "      min-width: min(100%, 16rem); flex: 1 1 14rem;",
+    "    }",
+    "    .eco-field input {",
+    "      font: inherit; font-size: 0.875rem; color: var(--iswc-text);",
+    "      background: var(--iswc-bg); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius-sm, 0.35em); padding: 0.4rem 0.55rem;",
+    "    }",
+    "    .eco-count { margin: 0 0 0.75rem; font-size: 0.8rem; color: var(--iswc-text-dim); }",
+    "    .eco-list { display: flex; flex-direction: column; gap: 0.65rem; }",
+    "    .eco-card {",
+    "      padding: 0.75rem 0.9rem; border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius, 0.5em); background: var(--iswc-bg-elev);",
+    "    }",
+    "    .eco-card__head {",
+    "      display: flex; flex-wrap: wrap; align-items: baseline;",
+    "      gap: 0.35rem 0.75rem; margin-bottom: 0.35rem;",
+    "    }",
+    "    .eco-card__id { margin: 0; font-size: 1rem; font-weight: 650; color: var(--iswc-text); }",
+    "    .eco-card__path {",
+    "      font-family: ui-monospace, Menlo, Consolas, monospace;",
+    "      font-size: 0.72rem; color: var(--iswc-text-dim); word-break: break-all;",
+    "    }",
+    "    .eco-card__sum {",
+    "      margin: 0 0 0.45rem; font-size: 0.875rem; color: var(--iswc-text-soft); line-height: 1.4;",
+    "    }",
+    "    .eco-exports {",
+    "      display: flex; flex-wrap: wrap; gap: 0.3rem;",
+    "      margin: 0; padding: 0; list-style: none;",
+    "    }",
+    "    .eco-exports code {",
+    "      font-size: 0.72rem; padding: 0.1rem 0.35rem; border-radius: 0.25em;",
+    "      background: var(--iswc-code-bg, var(--iswc-bg-soft)); color: var(--iswc-code-text, var(--iswc-text));",
+    "    }",
+    "    .eco-meta { margin: 0.45rem 0 0; font-size: 0.72rem; color: var(--iswc-text-dim); }"
+  ],
   "sections": [
     {
       "id": "intro",
@@ -16,11 +92,23 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p class=\"eco-lede\">Flujo recomendado para cualquier HTML de producto:</p>\n          <ol class=\"eco-steps\">\n            <li>Importá <code>ISWebComponentsLoader</code> desde el CDN (mismo pin/ref que el resto del kit).</li>\n            <li>Llamá <code>loadPageStyles(['iswc-palettes-default'])</code> (temas + marca; <code>is-base</code> se auto-inyecta).</li>\n            <li>Llamá <code>load(...)</code> con tags (<code>iswc-button</code>) o categorías (<code>actions</code>, <code>data-viz</code>; alias <code>charts</code> → <code>data-viz</code>).</li>\n            <li>El CSS de cada componente lo trae su propio <code>.min.js</code> vía <code>adoptCss</code> en el shadow — no hace falta listarlo a mano.</li>\n          </ol>"
+          "html": [
+            "<p class=\"eco-lede\">Flujo recomendado para cualquier HTML de producto:</p>",
+            "          <ol class=\"eco-steps\">",
+            "            <li>Importá <code>ISWebComponentsLoader</code> desde el CDN (mismo pin/ref que el resto del kit).</li>",
+            "            <li>Llamá <code>loadPageStyles(['iswc-palettes-default'])</code> (temas + marca; <code>is-base</code> se auto-inyecta).</li>",
+            "            <li>Llamá <code>load(...)</code> con tags (<code>iswc-button</code>) o categorías (<code>actions</code>, <code>data-viz</code>; alias <code>charts</code> → <code>data-viz</code>).</li>",
+            "            <li>El CSS de cada componente lo trae su propio <code>.min.js</code> vía <code>adoptCss</code> en el shadow — no hace falta listarlo a mano.</li>",
+            "          </ol>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<div class=\"eco-snippet-wrap\">\n            <iswc-code id=\"ecoGetStarted\" lang=\"html\" readonly compact></iswc-code>\n          </div>"
+          "html": [
+            "<div class=\"eco-snippet-wrap\">",
+            "            <iswc-code id=\"ecoGetStarted\" lang=\"html\" readonly compact></iswc-code>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -33,7 +121,23 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"eco-grid\">\n            <div>\n              <p class=\"eco-count\">Categorías</p>\n              <div class=\"eco-pick\" id=\"ecoCats\"></div>\n            </div>\n            <div>\n              <p class=\"eco-count\">Tags (acciones rápidas)</p>\n              <div class=\"eco-pick\" id=\"ecoTags\"></div>\n            </div>\n          </div>\n          <div class=\"eco-snippet-wrap\">\n            <iswc-code id=\"ecoSnippet\" lang=\"html\" readonly compact></iswc-code>\n          </div>\n          <div class=\"eco-live\" id=\"ecoLive\" aria-live=\"polite\"></div>\n          <iswc-button id=\"ecoApply\" color=\"brand\">Aplicar load()</iswc-button>"
+          "html": [
+            "<div class=\"eco-grid\">",
+            "            <div>",
+            "              <p class=\"eco-count\">Categorías</p>",
+            "              <div class=\"eco-pick\" id=\"ecoCats\"></div>",
+            "            </div>",
+            "            <div>",
+            "              <p class=\"eco-count\">Tags (acciones rápidas)</p>",
+            "              <div class=\"eco-pick\" id=\"ecoTags\"></div>",
+            "            </div>",
+            "          </div>",
+            "          <div class=\"eco-snippet-wrap\">",
+            "            <iswc-code id=\"ecoSnippet\" lang=\"html\" readonly compact></iswc-code>",
+            "          </div>",
+            "          <div class=\"eco-live\" id=\"ecoLive\" aria-live=\"polite\"></div>",
+            "          <iswc-button id=\"ecoApply\" color=\"brand\">Aplicar load()</iswc-button>"
+          ]
         }
       ]
     },
@@ -46,7 +150,15 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"eco-toolbar\">\n            <label class=\"eco-field\">Buscar\n              <input id=\"ecoFilter\" type=\"search\" placeholder=\"nombre, path, export…\" autocomplete=\"off\" aria-describedby=\"ecoCount\" />\n            </label>\n          </div>\n          <p class=\"eco-count\" id=\"ecoCount\" aria-live=\"polite\"></p>\n          <div class=\"eco-list\" id=\"ecoList\" aria-busy=\"false\"></div>"
+          "html": [
+            "<div class=\"eco-toolbar\">",
+            "            <label class=\"eco-field\">Buscar",
+            "              <input id=\"ecoFilter\" type=\"search\" placeholder=\"nombre, path, export…\" autocomplete=\"off\" aria-describedby=\"ecoCount\" />",
+            "            </label>",
+            "          </div>",
+            "          <p class=\"eco-count\" id=\"ecoCount\" aria-live=\"polite\"></p>",
+            "          <div class=\"eco-list\" id=\"ecoList\" aria-busy=\"false\"></div>"
+          ]
         }
       ]
     }

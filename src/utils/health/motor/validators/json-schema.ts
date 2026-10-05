@@ -249,29 +249,51 @@ function validarBloque(bloque: unknown, secIdx: number, bIdx: number, tag: strin
 
   // Validaciones específicas por kind.
   switch (b.kind) {
-    case 'demo':
-      if (typeof b.html !== 'string' || !b.html.trim()) {
+    case 'demo': {
+      // W43 refactor: `html` puede ser string o array de strings.
+      const htmlVacio =
+        b.html == null
+        || (typeof b.html === 'string' && !b.html.trim())
+        || (Array.isArray(b.html) && b.html.length === 0);
+      if (htmlVacio) {
         hallazgos.push({
           categoria: 'json-schema', severidad: 'error', tag,
           mensaje: `${base}.html: bloque demo sin html.`,
         });
+      } else if (typeof b.html !== 'string' && !Array.isArray(b.html)) {
+        hallazgos.push({
+          categoria: 'json-schema', severidad: 'error', tag,
+          mensaje: `${base}.html: debe ser string o array de strings.`,
+        });
       }
       break;
-    case 'code':
-      if (typeof b.code !== 'string' || !b.code) {
+    }
+    case 'code': {
+      // W43 refactor: `code` puede ser string o array de strings.
+      const codeVacio =
+        b.code == null
+        || (typeof b.code === 'string' && !b.code)
+        || (Array.isArray(b.code) && b.code.length === 0);
+      if (codeVacio) {
         hallazgos.push({
           categoria: 'json-schema', severidad: 'error', tag,
           mensaje: `${base}.code: bloque code sin texto.`,
         });
+      } else if (typeof b.code !== 'string' && !Array.isArray(b.code)) {
+        hallazgos.push({
+          categoria: 'json-schema', severidad: 'error', tag,
+          mensaje: `${base}.code: debe ser string o array de strings.`,
+        });
       }
       break;
+    }
     case 'lede':
     case 'callout':
     case 'html':
-      if (typeof b.html !== 'string') {
+      if (typeof b.html !== 'string' && !Array.isArray(b.html)) {
         hallazgos.push({
           categoria: 'json-schema', severidad: 'error', tag,
-          mensaje: `${base}.html: bloque ${b.kind} sin html string.`,
+          mensaje: `${base}.html: bloque ${b.kind} sin html (string o array de strings).`,
         });
       }
       break;

@@ -4,7 +4,17 @@
   "category": "data",
   "title": "&lt;iswc-data-grid&gt;",
   "titleHtml": false,
-  "styles": ".grid-tall { --iswc-grid-height: 30rem; }\r\n    .grid-short { --iswc-grid-height: 18rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }\r\n    .demo-bar button { font: inherit; font-size: .85em; padding: .35em .7em; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius-sm); background: var(--iswc-control-bg); color: inherit; cursor: pointer; }\r\n    .demo-bar button:hover { background: var(--iswc-control-bg-hover); }\r\n    .out { font-family: var(--iswc-mono); font-size: .8em; opacity: .85; min-height: 1.2em; }\r\n    .tag-cell { display: inline-flex; align-items: center; gap: .3em; padding: .1em .5em; border-radius: 1em; font-size: .8em; }\r\n    .tag-ok { background: rgb(47 158 68 / 18%); color: #51cf66; }\r\n    .tag-no { background: rgb(224 49 49 / 18%); color: #ff8787; }",
+  "styles": [
+    ".grid-tall { --iswc-grid-height: 30rem; }",
+    "    .grid-short { --iswc-grid-height: 18rem; }",
+    "    .demo-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }",
+    "    .demo-bar button { font: inherit; font-size: .85em; padding: .35em .7em; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius-sm); background: var(--iswc-control-bg); color: inherit; cursor: pointer; }",
+    "    .demo-bar button:hover { background: var(--iswc-control-bg-hover); }",
+    "    .out { font-family: var(--iswc-mono); font-size: .8em; opacity: .85; min-height: 1.2em; }",
+    "    .tag-cell { display: inline-flex; align-items: center; gap: .3em; padding: .1em .5em; border-radius: 1em; font-size: .8em; }",
+    "    .tag-ok { background: rgb(47 158 68 / 18%); color: #51cf66; }",
+    "    .tag-no { background: rgb(224 49 49 / 18%); color: #ff8787; }"
+  ],
   "storageKey": "docs-iswc-data-grid",
   "hasBehavior": true,
   "sections": [
@@ -28,18 +38,36 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-data-grid id=\"g-full\" class=\"grid-tall\" show-toolbar quick-filter checkbox-selection\r\n            pagination page-size=\"10\" page-size-options=\"10,25,50\" editable undo-redo clipboard\r\n            tab-navigation=\"all\"></iswc-data-grid>"
+          "html": [
+            "<iswc-data-grid id=\"g-full\" class=\"grid-tall\" show-toolbar quick-filter checkbox-selection",
+            "            pagination page-size=\"10\" page-size-options=\"10,25,50\" editable undo-redo clipboard",
+            "            tab-navigation=\"all\"></iswc-data-grid>"
+          ]
         },
         {
           "kind": "html",
-          "html": "<p class=\"out\" id=\"out-full\"></p>\r\n        <p class=\"empty-note\">\r\n          El snippet del botón <span class=\"icon-inline\" aria-hidden=\"true\"><iswc-icon icon=\"mdi:information-outline\"></iswc-icon></span>\r\n          muestra sólo la etiqueta <code class=\"code\">&lt;iswc-data-grid&gt;</code>; los datos y columnas se asignan\r\n          por JS justo debajo. Si lo quieres autocontenido, copia este bloque (incluye <code class=\"code\">columns</code>,\r\n          <code class=\"code\">rows</code> y <code class=\"code\">aggregationModel</code> con los mismos 40 registros que\r\n          ves en la tabla):\r\n        </p>"
+          "html": [
+            "<p class=\"out\" id=\"out-full\"></p>",
+            "        <p class=\"empty-note\">",
+            "          El snippet del botón <span class=\"icon-inline\" aria-hidden=\"true\"><iswc-icon icon=\"mdi:information-outline\"></iswc-icon></span>",
+            "          muestra sólo la etiqueta <code class=\"code\">&lt;iswc-data-grid&gt;</code>; los datos y columnas se asignan",
+            "          por JS justo debajo. Si lo quieres autocontenido, copia este bloque (incluye <code class=\"code\">columns</code>,",
+            "          <code class=\"code\">rows</code> y <code class=\"code\">aggregationModel</code> con los mismos 40 registros que",
+            "          ves en la tabla):",
+            "        </p>"
+          ]
         }
       ]
     },
     {
       "id": "columns",
       "title": "Columnas",
-      "lede": "Tipos nativos (<code>string</code>, <code>number</code>, <code>date</code>, <code>dateTime</code>,\r\n          <code>boolean</code>, <code>singleSelect</code>, <code>actions</code>) con su alineación, comparador y\r\n          operadores por defecto. <code>valueGetter</code> alimenta orden y filtro, <code>valueFormatter</code>\r\n          solo el texto y <code>renderCell</code> devuelve nodos.",
+      "lede": [
+        "Tipos nativos (<code>string</code>, <code>number</code>, <code>date</code>, <code>dateTime</code>,",
+        "          <code>boolean</code>, <code>singleSelect</code>, <code>actions</code>) con su alineación, comparador y",
+        "          operadores por defecto. <code>valueGetter</code> alimenta orden y filtro, <code>valueFormatter</code>",
+        "          solo el texto y <code>renderCell</code> devuelve nodos."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -50,11 +78,23 @@
     {
       "id": "layout",
       "title": "Ancho, anclaje y grupos",
-      "lede": "Arrastra el borde derecho de una cabecera para redimensionar (doble clic ajusta al contenido),\r\n          arrastra la cabecera para reordenar y usa el menú de columna para anclar a izquierda o derecha.\r\n          <code>columnGroupingModel</code> admite grupos anidados y <code>colSpan</code> une celdas.",
+      "lede": [
+        "Arrastra el borde derecho de una cabecera para redimensionar (doble clic ajusta al contenido),",
+        "          arrastra la cabecera para reordenar y usa el menú de columna para anclar a izquierda o derecha.",
+        "          <code>columnGroupingModel</code> admite grupos anidados y <code>colSpan</code> une celdas."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-bar\">\r\n          <button data-act=\"pin-left\">Anclar ID a la izquierda</button>\r\n          <button data-act=\"pin-right\">Anclar acciones a la derecha</button>\r\n          <button data-act=\"unpin\">Desanclar todo</button>\r\n          <button data-act=\"autosize\">Ajustar al contenido</button>\r\n          <button data-act=\"hide-city\">Ocultar/mostrar Ciudad</button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "          <button data-act=\"pin-left\">Anclar ID a la izquierda</button>",
+            "          <button data-act=\"pin-right\">Anclar acciones a la derecha</button>",
+            "          <button data-act=\"unpin\">Desanclar todo</button>",
+            "          <button data-act=\"autosize\">Ajustar al contenido</button>",
+            "          <button data-act=\"hide-city\">Ocultar/mostrar Ciudad</button>",
+            "        </div>"
+          ]
         },
         {
           "kind": "demo",
@@ -65,11 +105,24 @@
     {
       "id": "editing",
       "title": "Edición",
-      "lede": "Doble clic, <kbd>Enter</kbd>, <kbd>F2</kbd> o cualquier carácter entran en edición.\r\n          <kbd>Enter</kbd> confirma, <kbd>Tab</kbd> confirma y salta, <kbd>Esc</kbd> cancela.\r\n          <code>preProcessEditCellProps</code> valida en caliente y <code>processRowUpdate</code> confirma\r\n          (aquí rechaza nombres vacíos). Con <code>clipboard</code> y <code>undo-redo</code>:\r\n          <kbd>Ctrl+C</kbd>, <kbd>Ctrl+V</kbd>, <kbd>Ctrl+Z</kbd> y <kbd>Ctrl+Shift+Z</kbd>.",
+      "lede": [
+        "Doble clic, <kbd>Enter</kbd>, <kbd>F2</kbd> o cualquier carácter entran en edición.",
+        "          <kbd>Enter</kbd> confirma, <kbd>Tab</kbd> confirma y salta, <kbd>Esc</kbd> cancela.",
+        "          <code>preProcessEditCellProps</code> valida en caliente y <code>processRowUpdate</code> confirma",
+        "          (aquí rechaza nombres vacíos). Con <code>clipboard</code> y <code>undo-redo</code>:",
+        "          <kbd>Ctrl+C</kbd>, <kbd>Ctrl+V</kbd>, <kbd>Ctrl+Z</kbd> y <kbd>Ctrl+Shift+Z</kbd>."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-bar\">\r\n          <button data-act=\"edit-cell\">Modo celda</button>\r\n          <button data-act=\"edit-row\">Modo fila</button>\r\n          <button data-act=\"undo\">Undo</button>\r\n          <button data-act=\"redo\">Redo</button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "          <button data-act=\"edit-cell\">Modo celda</button>",
+            "          <button data-act=\"edit-row\">Modo fila</button>",
+            "          <button data-act=\"undo\">Undo</button>",
+            "          <button data-act=\"redo\">Redo</button>",
+            "        </div>"
+          ]
         },
         {
           "kind": "demo",
@@ -84,11 +137,22 @@
     {
       "id": "selection",
       "title": "Selección",
-      "lede": "Filas con <code>checkbox-selection</code> y <code>selection-mode</code> (single, multiple, none);\r\n          rangos de celdas con <code>cell-selection</code> (arrastra o <kbd>Shift</kbd>+clic).\r\n          Teclado: <kbd>Shift+Space</kbd> alterna fila, <kbd>Shift+↑↓</kbd> extiende, <kbd>Ctrl+A</kbd> todo,\r\n          <kbd>Ctrl+C</kbd> copia.",
+      "lede": [
+        "Filas con <code>checkbox-selection</code> y <code>selection-mode</code> (single, multiple, none);",
+        "          rangos de celdas con <code>cell-selection</code> (arrastra o <kbd>Shift</kbd>+clic).",
+        "          Teclado: <kbd>Shift+Space</kbd> alterna fila, <kbd>Shift+↑↓</kbd> extiende, <kbd>Ctrl+A</kbd> todo,",
+        "          <kbd>Ctrl+C</kbd> copia."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-bar\">\r\n          <button data-act=\"select-all\">Seleccionar todo</button>\r\n          <button data-act=\"select-none\">Limpiar</button>\r\n          <button data-act=\"copy\">Copiar selección</button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "          <button data-act=\"select-all\">Seleccionar todo</button>",
+            "          <button data-act=\"select-none\">Limpiar</button>",
+            "          <button data-act=\"copy\">Copiar selección</button>",
+            "        </div>"
+          ]
         },
         {
           "kind": "demo",
@@ -103,11 +167,22 @@
     {
       "id": "sorting",
       "title": "Orden y filtros",
-      "lede": "Clic en la cabecera cicla <code>sorting-order</code>; <kbd>Ctrl</kbd> o <kbd>Shift</kbd>+clic añade\r\n          criterios (el número indica la prioridad). El panel de filtros combina reglas con Y/O, la fila de\r\n          <code>header-filters</code> filtra por columna y el quick filter exige todas las palabras.",
+      "lede": [
+        "Clic en la cabecera cicla <code>sorting-order</code>; <kbd>Ctrl</kbd> o <kbd>Shift</kbd>+clic añade",
+        "          criterios (el número indica la prioridad). El panel de filtros combina reglas con Y/O, la fila de",
+        "          <code>header-filters</code> filtra por columna y el quick filter exige todas las palabras."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-bar\">\r\n          <button data-act=\"sort-multi\">Orden múltiple por rol y bruto</button>\r\n          <button data-act=\"filter-set\">Filtrar bruto &gt; 5000 Y activo</button>\r\n          <button data-act=\"filter-or\">Cambiar a O</button>\r\n          <button data-act=\"filter-clear\">Limpiar filtros</button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "          <button data-act=\"sort-multi\">Orden múltiple por rol y bruto</button>",
+            "          <button data-act=\"filter-set\">Filtrar bruto &gt; 5000 Y activo</button>",
+            "          <button data-act=\"filter-or\">Cambiar a O</button>",
+            "          <button data-act=\"filter-clear\">Limpiar filtros</button>",
+            "        </div>"
+          ]
         },
         {
           "kind": "demo",
@@ -122,11 +197,24 @@
     {
       "id": "grouping",
       "title": "Agrupación, agregación y tree data",
-      "lede": "<code>rowGroupingModel</code> agrupa por columnas y <code>aggregationModel</code> resume\r\n          (<code>sum</code>, <code>avg</code>, <code>min</code>, <code>max</code>, <code>size</code>) tanto en la\r\n          fila de grupo como en el pie. Con <code>tree-data</code> más <code>getTreeDataPath</code> el árbol lo\r\n          define la propia fila. <kbd>→</kbd> / <kbd>←</kbd> y <kbd>Space</kbd> expanden y colapsan.",
+      "lede": [
+        "<code>rowGroupingModel</code> agrupa por columnas y <code>aggregationModel</code> resume",
+        "          (<code>sum</code>, <code>avg</code>, <code>min</code>, <code>max</code>, <code>size</code>) tanto en la",
+        "          fila de grupo como en el pie. Con <code>tree-data</code> más <code>getTreeDataPath</code> el árbol lo",
+        "          define la propia fila. <kbd>→</kbd> / <kbd>←</kbd> y <kbd>Space</kbd> expanden y colapsan."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-bar\">\r\n          <button data-act=\"group-city\">Agrupar por ciudad</button>\r\n          <button data-act=\"group-city-role\">Ciudad + rol</button>\r\n          <button data-act=\"group-none\">Sin agrupar</button>\r\n          <button data-act=\"expand\">Expandir todo</button>\r\n          <button data-act=\"collapse\">Colapsar todo</button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "          <button data-act=\"group-city\">Agrupar por ciudad</button>",
+            "          <button data-act=\"group-city-role\">Ciudad + rol</button>",
+            "          <button data-act=\"group-none\">Sin agrupar</button>",
+            "          <button data-act=\"expand\">Expandir todo</button>",
+            "          <button data-act=\"collapse\">Colapsar todo</button>",
+            "        </div>"
+          ]
         },
         {
           "kind": "demo",
@@ -141,7 +229,10 @@
     {
       "id": "pivot",
       "title": "Pivot",
-      "lede": "<code>pivotModel</code> cruza filas y columnas con funciones de agregación: las columnas se generan a\r\n          partir de los valores encontrados.",
+      "lede": [
+        "<code>pivotModel</code> cruza filas y columnas con funciones de agregación: las columnas se generan a",
+        "          partir de los valores encontrados."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -152,7 +243,11 @@
     {
       "id": "detail",
       "title": "Detail panel y filas ancladas",
-      "lede": "<code>getDetailPanelContent</code> añade la columna de expansión y despliega contenido bajo la fila\r\n          (<kbd>Ctrl+Enter</kbd> también lo alterna). <code>pinnedRows</code> fija filas arriba y abajo,\r\n          y <code>row-reorder</code> permite arrastrarlas.",
+      "lede": [
+        "<code>getDetailPanelContent</code> añade la columna de expansión y despliega contenido bajo la fila",
+        "          (<kbd>Ctrl+Enter</kbd> también lo alterna). <code>pinnedRows</code> fija filas arriba y abajo,",
+        "          y <code>row-reorder</code> permite arrastrarlas."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -163,7 +258,11 @@
     {
       "id": "virtual",
       "title": "Virtualización y carga incremental",
-      "lede": "50.000 filas en el DOM solo las visibles (más <code>overscan</code>). <code>getRowHeight</code>\r\n          permite alto variable. Al llegar al final se emite <code>iswc-rows-scroll-end</code> y, si hay\r\n          <code>rowsLoader</code>, se piden más filas (modo servidor / lazy loading).",
+      "lede": [
+        "50.000 filas en el DOM solo las visibles (más <code>overscan</code>). <code>getRowHeight</code>",
+        "          permite alto variable. Al llegar al final se emite <code>iswc-rows-scroll-end</code> y, si hay",
+        "          <code>rowsLoader</code>, se piden más filas (modo servidor / lazy loading)."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -178,11 +277,27 @@
     {
       "id": "density",
       "title": "Densidad, list view y overlays",
-      "lede": "<code>density</code> (compact, standard, comfortable) ajusta alto y padding; <code>list-view</code>\r\n          con <code>listViewColumn</code> renderiza una sola celda por fila. Overlays: <code>loading</code> con\r\n          <code>loading-variant</code> spinner, progress o skeleton, y los vacíos sin filas / sin resultados.",
+      "lede": [
+        "<code>density</code> (compact, standard, comfortable) ajusta alto y padding; <code>list-view</code>",
+        "          con <code>listViewColumn</code> renderiza una sola celda por fila. Overlays: <code>loading</code> con",
+        "          <code>loading-variant</code> spinner, progress o skeleton, y los vacíos sin filas / sin resultados."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-bar\">\r\n          <button data-act=\"d-compact\">Compacta</button>\r\n          <button data-act=\"d-standard\">Estándar</button>\r\n          <button data-act=\"d-comfortable\">Cómoda</button>\r\n          <button data-act=\"list-view\">List view</button>\r\n          <button data-act=\"loading\">Loading spinner</button>\r\n          <button data-act=\"loading-skeleton\">Loading skeleton</button>\r\n          <button data-act=\"loading-progress\">Loading progress</button>\r\n          <button data-act=\"empty\">Sin filas</button>\r\n          <button data-act=\"restore\">Restaurar</button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "          <button data-act=\"d-compact\">Compacta</button>",
+            "          <button data-act=\"d-standard\">Estándar</button>",
+            "          <button data-act=\"d-comfortable\">Cómoda</button>",
+            "          <button data-act=\"list-view\">List view</button>",
+            "          <button data-act=\"loading\">Loading spinner</button>",
+            "          <button data-act=\"loading-skeleton\">Loading skeleton</button>",
+            "          <button data-act=\"loading-progress\">Loading progress</button>",
+            "          <button data-act=\"empty\">Sin filas</button>",
+            "          <button data-act=\"restore\">Restaurar</button>",
+            "        </div>"
+          ]
         },
         {
           "kind": "demo",
@@ -193,11 +308,20 @@
     {
       "id": "export",
       "title": "Exportación",
-      "lede": "Exporta las filas filtradas y ordenadas: CSV (con BOM y delimitador configurable), Excel\r\n          (SpreadsheetML, sin dependencias) e impresión. También está en el botón Exportar de la toolbar.",
+      "lede": [
+        "Exporta las filas filtradas y ordenadas: CSV (con BOM y delimitador configurable), Excel",
+        "          (SpreadsheetML, sin dependencias) e impresión. También está en el botón Exportar de la toolbar."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-bar\">\r\n          <button data-act=\"csv\">exportDataAsCsv()</button>\r\n          <button data-act=\"excel\">exportDataAsExcel()</button>\r\n          <button data-act=\"print\">exportDataAsPrint()</button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-bar\">",
+            "          <button data-act=\"csv\">exportDataAsCsv()</button>",
+            "          <button data-act=\"excel\">exportDataAsExcel()</button>",
+            "          <button data-act=\"print\">exportDataAsPrint()</button>",
+            "        </div>"
+          ]
         }
       ]
     },
@@ -279,102 +403,89 @@
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Eventos: <code>iswc-sort</code>, <code>iswc-filter</code>, <code>iswc-quick-filter</code>,\r\n          <code>iswc-pagination</code>, <code>iswc-select</code>, <code>iswc-cell-select</code>,\r\n          <code>iswc-cell-click</code>, <code>iswc-cell-double-click</code>, <code>iswc-row-click</code>,\r\n          <code>iswc-row-double-click</code>, <code>iswc-edit-start</code>, <code>iswc-edit-stop</code>,\r\n          <code>iswc-row-update</code>, <code>iswc-column-resize</code>, <code>iswc-column-reorder</code>,\r\n          <code>iswc-column-visibility</code>, <code>iswc-column-pin</code>, <code>iswc-density</code>,\r\n          <code>iswc-detail-toggle</code>, <code>iswc-group-toggle</code>, <code>iswc-row-reorder</code>,\r\n          <code>iswc-copy</code>, <code>iswc-paste</code>, <code>iswc-undo</code>, <code>iswc-redo</code>,\r\n          <code>iswc-rows-scroll-end</code>, <code>iswc-export</code>.",
+      "lede": [
+        "Eventos: <code>iswc-sort</code>, <code>iswc-filter</code>, <code>iswc-quick-filter</code>,",
+        "          <code>iswc-pagination</code>, <code>iswc-select</code>, <code>iswc-cell-select</code>,",
+        "          <code>iswc-cell-click</code>, <code>iswc-cell-double-click</code>, <code>iswc-row-click</code>,",
+        "          <code>iswc-row-double-click</code>, <code>iswc-edit-start</code>, <code>iswc-edit-stop</code>,",
+        "          <code>iswc-row-update</code>, <code>iswc-column-resize</code>, <code>iswc-column-reorder</code>,",
+        "          <code>iswc-column-visibility</code>, <code>iswc-column-pin</code>, <code>iswc-density</code>,",
+        "          <code>iswc-detail-toggle</code>, <code>iswc-group-toggle</code>, <code>iswc-row-reorder</code>,",
+        "          <code>iswc-copy</code>, <code>iswc-paste</code>, <code>iswc-undo</code>, <code>iswc-redo</code>,",
+        "          <code>iswc-rows-scroll-end</code>, <code>iswc-export</code>."
+      ],
       "blocks": [
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>density</code>",
-              "standard · compact · comfortable"
+              "<code>density</code>"
             ],
             [
-              "<code>row-height</code> / <code>header-height</code>",
-              "según densidad"
+              "<code>row-height</code> / <code>header-height</code>"
             ],
             [
-              "<code>auto-height</code>",
-              "off (alto por <code>--iswc-grid-height</code>)"
+              "<code>auto-height</code>"
             ],
             [
-              "<code>pagination</code> / <code>page-size</code> / <code>page-size-options</code>",
-              "off · 25 · 10,25,50,100"
+              "<code>pagination</code> / <code>page-size</code> / <code>page-size-options</code>"
             ],
             [
-              "<code>pagination-mode</code> / <code>sorting-mode</code> / <code>filter-mode</code>",
-              "client · server"
+              "<code>pagination-mode</code> / <code>sorting-mode</code> / <code>filter-mode</code>"
             ],
             [
-              "<code>row-count</code>",
-              "total en modo servidor"
+              "<code>row-count</code>"
             ],
             [
-              "<code>sorting-order</code>",
-              "asc,desc,null"
+              "<code>sorting-order</code>"
             ],
             [
-              "<code>selection-mode</code> / <code>checkbox-selection</code> / <code>cell-selection</code>",
-              "single · multiple · none"
+              "<code>selection-mode</code> / <code>checkbox-selection</code> / <code>cell-selection</code>"
             ],
             [
-              "<code>disable-row-selection-on-click</code>",
-              "off"
+              "<code>disable-row-selection-on-click</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>editable</code> / <code>edit-mode</code>",
-              "off · cell · row"
+              "<code>editable</code> / <code>edit-mode</code>"
             ],
             [
-              "<code>show-toolbar</code> / <code>quick-filter</code> / <code>header-filters</code>",
-              "off"
+              "<code>show-toolbar</code> / <code>quick-filter</code> / <code>header-filters</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>hide-footer</code> / <code>hide-footer-selected-count</code>",
-              "off"
+              "<code>hide-footer</code> / <code>hide-footer-selected-count</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>virtualize</code> / <code>overscan</code>",
-              "on · 6"
+              "<code>virtualize</code> / <code>overscan</code>"
             ],
             [
-              "<code>loading</code> / <code>loading-variant</code>",
-              "off · spinner, progress, skeleton"
+              "<code>loading</code> / <code>loading-variant</code>"
             ],
             [
-              "<code>tree-data</code> / <code>list-view</code> / <code>row-reorder</code>",
-              "off"
+              "<code>tree-data</code> / <code>list-view</code> / <code>row-reorder</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>detail-height</code>",
-              "160"
+              "<code>detail-height</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>clipboard</code> / <code>undo-redo</code>",
-              "off"
+              "<code>clipboard</code> / <code>undo-redo</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>aggregation-position</code>",
-              "footer · inline"
+              "<code>aggregation-position</code>"
             ],
             [
-              "<code>tab-navigation</code>",
-              "none · content · header · all"
+              "<code>tab-navigation</code>"
             ],
             [
-              "<code>disable-column-menu|filter|sort|resize|reorder</code>",
-              "off"
+              "<code>disable-column-menu|filter|sort|resize|reorder</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>disable-multiple-sorting</code>",
-              "off"
+              "<code>disable-multiple-sorting</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>selectable</code> / <code>filterable</code>",
-              "alias de la v1"
+              "<code>selectable</code> / <code>filterable</code>"
             ]
           ]
         },
@@ -498,7 +609,16 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">\r\n          Parts: <code>base</code>, <code>toolbar</code>, <code>toolbar-button</code>, <code>quick-filter</code>,\r\n          <code>viewport</code>, <code>header</code>, <code>header-row</code>, <code>header-cell</code>,\r\n          <code>column-groups</code>, <code>header-filters</code>, <code>body</code>, <code>row</code>,\r\n          <code>cell</code>, <code>pinned-top</code>, <code>pinned-bottom</code>,\r\n          <code>aggregation-row</code>, <code>detail-panel</code>, <code>overlay</code>, <code>footer</code>,\r\n          <code>pagination</code>. Alto vía <code>--iswc-grid-height</code>.\r\n        </p>"
+          "html": [
+            "<p class=\"lede\">",
+            "          Parts: <code>base</code>, <code>toolbar</code>, <code>toolbar-button</code>, <code>quick-filter</code>,",
+            "          <code>viewport</code>, <code>header</code>, <code>header-row</code>, <code>header-cell</code>,",
+            "          <code>column-groups</code>, <code>header-filters</code>, <code>body</code>, <code>row</code>,",
+            "          <code>cell</code>, <code>pinned-top</code>, <code>pinned-bottom</code>,",
+            "          <code>aggregation-row</code>, <code>detail-panel</code>, <code>overlay</code>, <code>footer</code>,",
+            "          <code>pagination</code>. Alto vía <code>--iswc-grid-height</code>.",
+            "        </p>"
+          ]
         }
       ]
     }
@@ -506,7 +626,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-orden, filtros con Y/O,\r\n          quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,\r\n          agrupación con agregación, tree data, pivot, virtualización y exportación."
+        "content": [
+          "Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-orden, filtros con Y/O,",
+          "          quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,",
+          "          agrupación con agregación, tree data, pivot, virtualización y exportación."
+        ]
       },
       "atributos": {
         "table": [
@@ -705,7 +829,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<!-- El snippet completo vive en el bloque <code> de la siguiente sección (cols). -->\n```"
+        "content": [
+          "```html",
+          "<!-- El snippet completo vive en el bloque <code> de la siguiente sección (cols). -->",
+          "```"
+        ]
       }
     },
     "exclude": [

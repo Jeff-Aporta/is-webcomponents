@@ -6,6 +6,7 @@ import type {
   PreviewSection,
   PreviewBlock,
 } from './types.d.ts';
+import { asText } from './text-like.ts';
 import '../../components/preview/demo-section.js';
 
 /**
@@ -148,7 +149,7 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
     case 'lede': {
       const div = document.createElement('div');
       div.className = 'lede';
-      div.innerHTML = resolveAssets(block.html);
+      div.innerHTML = resolveAssets(asText(block.html));
       return div;
     }
     case 'demo': {
@@ -159,7 +160,7 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       if (block.heading) demo.setAttribute('heading', block.heading);
       if (block.contain) demo.setAttribute('contain', '');
       if (block.noCode) demo.dataset.noCode = '';
-      demo.append(fragmentFromHtml(block.html));
+      demo.append(fragmentFromHtml(asText(block.html)));
       wrap.append(demo);
 
       // Si el JSON declara `target` + `controls[]`, montar un <iswc-playground>
@@ -193,10 +194,11 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
 
       // Demo de diagrama SVG → enlace al editor CDN (edit.html?kind=&json=)
       // en pestaña nueva, con el JSON completo del demo.
-      const m = /<iswc-([a-z0-9-]+)-(diagram|chart)|<iswc-(flowchart|gantt|mindmap|venn-diagram|sankey-diagram|state-diagram|sequence-diagram|swimlane-diagram|use-case-diagram|class-diagram|er-diagram|block-diagram|component-diagram|org-chart|radar-chart|scatter-chart|sparkline|treemap|waterfall-chart|polar-area-chart|funnel-chart|pie-chart|doughnut-chart|line-chart|bar-chart|quadrant-chart|journey-map|timeline)\b/.exec(block.html);
+      const blockHtml = asText(block.html);
+      const m = /<iswc-([a-z0-9-]+)-(diagram|chart)|<iswc-(flowchart|gantt|mindmap|venn-diagram|sankey-diagram|state-diagram|sequence-diagram|swimlane-diagram|use-case-diagram|class-diagram|er-diagram|block-diagram|component-diagram|org-chart|radar-chart|scatter-chart|sparkline|treemap|waterfall-chart|polar-area-chart|funnel-chart|pie-chart|doughnut-chart|line-chart|bar-chart|quadrant-chart|journey-map|timeline)\b/.exec(blockHtml);
       if (m) {
         const tag = `iswc-${m[1] ? `${m[1]}-${m[2]}` : m[3]}`;
-        const href = buildDiagramEditorHref(tag, block.html);
+        const href = buildDiagramEditorHref(tag, blockHtml);
         if (href) {
           const editorLink = document.createElement('a');
           editorLink.className = 'demo-block__editor-link';
@@ -219,7 +221,7 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
     case 'callout': {
       const el = document.createElement('div');
       el.className = 'callout';
-      el.innerHTML = resolveAssets(block.html);
+      el.innerHTML = resolveAssets(asText(block.html));
       return el;
     }
     case 'code': {
@@ -229,7 +231,7 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       ed.setAttribute('compact', '');
       ed.setAttribute('wrap', '');
       ed.setAttribute('line-numbers', 'false');
-      const raw = block.code ?? '';
+      const raw = asText(block.code);
       // Sin data-cm: highlight-code.paint infiere lang + softFormat.
       // Si el JSON trae lang, lo fijamos; si no, iswc-code infiere al montar.
       if (block.lang) {
@@ -242,7 +244,7 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
     }
     case 'html': {
       const wrap = document.createElement('div');
-      wrap.append(fragmentFromHtml(block.html));
+      wrap.append(fragmentFromHtml(asText(block.html)));
       return wrap;
     }
     case 'table': {
@@ -522,7 +524,7 @@ export function renderSection(section: PreviewSection): HTMLElement {
     const div = document.createElement('div');
     div.className = 'lede';
     div.setAttribute('slot', 'lede');
-    div.innerHTML = resolveAssets(section.lede);
+    div.innerHTML = resolveAssets(asText(section.lede));
     wrapper.append(div);
   }
 

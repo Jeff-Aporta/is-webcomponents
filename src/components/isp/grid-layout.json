@@ -9,11 +9,19 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Grid declarativo. Port del <code class=\"code\">GridLayout.svelte</code> de ISP:\r\n          <code class=\"code\">cells</code> acepta un número o una track list CSS cruda.",
+      "lede": [
+        "Grid declarativo. Port del <code class=\"code\">GridLayout.svelte</code> de ISP:",
+        "          <code class=\"code\">cells</code> acepta un número o una track list CSS cruda."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <iswc-card>1</iswc-card><iswc-card>2</iswc-card><iswc-card>3</iswc-card>\r\n            <iswc-card>4</iswc-card><iswc-card>5</iswc-card><iswc-card>6</iswc-card>\r\n          </iswc-grid-layout>",
+          "html": [
+            "<iswc-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">",
+            "            <iswc-card>1</iswc-card><iswc-card>2</iswc-card><iswc-card>3</iswc-card>",
+            "            <iswc-card>4</iswc-card><iswc-card>5</iswc-card><iswc-card>6</iswc-card>",
+            "          </iswc-grid-layout>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -58,15 +66,33 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-grid-layout cells=\"3\" cells-fit gap=\"0.5rem\" justify=\"start\" style=\"width:100%\">\r\n            <iswc-tag>corto</iswc-tag><iswc-tag>un poco más largo</iswc-tag><iswc-tag>x</iswc-tag>\r\n          </iswc-grid-layout>"
+          "html": [
+            "<iswc-grid-layout cells=\"3\" cells-fit gap=\"0.5rem\" justify=\"start\" style=\"width:100%\">",
+            "            <iswc-tag>corto</iswc-tag><iswc-tag>un poco más largo</iswc-tag><iswc-tag>x</iswc-tag>",
+            "          </iswc-grid-layout>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-grid-layout cells=\"12rem 1fr\" gap=\"0.75rem\" items=\"center\" style=\"width:100%\">\r\n            <iswc-text color=\"neutral\">Etiqueta</iswc-text>\r\n            <iswc-input placeholder=\"valor\"></iswc-input>\r\n            <iswc-text color=\"neutral\">Otra</iswc-text>\r\n            <iswc-input placeholder=\"valor\"></iswc-input>\r\n          </iswc-grid-layout>"
+          "html": [
+            "<iswc-grid-layout cells=\"12rem 1fr\" gap=\"0.75rem\" items=\"center\" style=\"width:100%\">",
+            "            <iswc-text color=\"neutral\">Etiqueta</iswc-text>",
+            "            <iswc-input placeholder=\"valor\"></iswc-input>",
+            "            <iswc-text color=\"neutral\">Otra</iswc-text>",
+            "            <iswc-input placeholder=\"valor\"></iswc-input>",
+            "          </iswc-grid-layout>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-grid-layout direction=\"row\" cells=\"2\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <iswc-card>fila 1 · col 1</iswc-card>\r\n            <iswc-card>fila 2 · col 1</iswc-card>\r\n            <iswc-card>fila 1 · col 2</iswc-card>\r\n            <iswc-card>fila 2 · col 2</iswc-card>\r\n          </iswc-grid-layout>"
+          "html": [
+            "<iswc-grid-layout direction=\"row\" cells=\"2\" gap=\"0.5rem\" style=\"width:100%\">",
+            "            <iswc-card>fila 1 · col 1</iswc-card>",
+            "            <iswc-card>fila 2 · col 1</iswc-card>",
+            "            <iswc-card>fila 1 · col 2</iswc-card>",
+            "            <iswc-card>fila 2 · col 2</iswc-card>",
+            "          </iswc-grid-layout>"
+          ]
         }
       ]
     },
@@ -125,7 +151,10 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Grid declarativo. Port del <code class=\"code\">GridLayout.svelte</code> de ISP:\r\n          <code class=\"code\">cells</code> acepta un número o una track list CSS cruda."
+        "content": [
+          "Grid declarativo. Port del <code class=\"code\">GridLayout.svelte</code> de ISP:",
+          "          <code class=\"code\">cells</code> acepta un número o una track list CSS cruda."
+        ]
       },
       "atributos": {
         "table": [
@@ -168,7 +197,14 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <iswc-card>1</iswc-card><iswc-card>2</iswc-card><iswc-card>3</iswc-card>\r\n            <iswc-card>4</iswc-card><iswc-card>5</iswc-card><iswc-card>6</iswc-card>\r\n          </iswc-grid-layout>\n```"
+        "content": [
+          "```html",
+          "<iswc-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">",
+          "            <iswc-card>1</iswc-card><iswc-card>2</iswc-card><iswc-card>3</iswc-card>",
+          "            <iswc-card>4</iswc-card><iswc-card>5</iswc-card><iswc-card>6</iswc-card>",
+          "          </iswc-grid-layout>",
+          "```"
+        ]
       }
     },
     "exclude": [

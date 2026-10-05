@@ -13,7 +13,17 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem\">\n            <iswc-theme-img\n              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"\n              alt=\"Demo\"\n              shape=\"circle\"\n            ></iswc-theme-img>\n            <span style=\"font-size:0.35em;opacity:.7\">cambia el theme-toggle del chrome</span>\n          </div>",
+          "html": [
+            "<div class=\"demo-row\" style=\"align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem\">",
+            "            <iswc-theme-img",
+            "              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"",
+            "              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"",
+            "              alt=\"Demo\"",
+            "              shape=\"circle\"",
+            "            ></iswc-theme-img>",
+            "            <span style=\"font-size:0.35em;opacity:.7\">cambia el theme-toggle del chrome</span>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -31,7 +41,18 @@
         "content": "Una sola imagen dark↔light según el tema del contenedor. Caja <code class=\"code\">1em × 1em</code>; escala con <code class=\"code\">font-size</code>."
       },
       "ejemplos": {
-        "content": "```html\n<span style=\"font-size:2rem\">\n  <iswc-theme-img\n    src-dark=\"./logo-dark.svg\"\n    src-light=\"./logo-light.svg\"\n    alt=\"Marca\"\n    shape=\"circle\"\n  ></iswc-theme-img>\n</span>\n```"
+        "content": [
+          "```html",
+          "<span style=\"font-size:2rem\">",
+          "  <iswc-theme-img",
+          "    src-dark=\"./logo-dark.svg\"",
+          "    src-light=\"./logo-light.svg\"",
+          "    alt=\"Marca\"",
+          "    shape=\"circle\"",
+          "  ></iswc-theme-img>",
+          "</span>",
+          "```"
+        ]
       }
     },
     "exclude": [

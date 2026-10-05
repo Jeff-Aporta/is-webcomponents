@@ -4,14 +4,24 @@
   "category": "forms",
   "title": "&lt;iswc-textarea&gt;",
   "titleHtml": false,
-  "styles": ".stack { display: grid; gap: 1.25rem; max-width: 30rem; }\r\n    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }",
+  "styles": [
+    ".stack { display: grid; gap: 1.25rem; max-width: 30rem; }",
+    "    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }"
+  ],
   "storageKey": "docs-iswc-textarea",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Área de texto form-associated con las mismas piezas que\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField</a>\r\n          en modo <em>multiline</em> y el crecimiento automático de\r\n          <a href=\"https://mui.com/material-ui/react-textarea-autosize/\" target=\"_blank\" rel=\"noreferrer\">TextareaAutosize</a>:\r\n          appearances, error, contador y <code class=\"code\">autosize</code> con\r\n          <code class=\"code\">min-rows</code> / <code class=\"code\">max-rows</code>.",
+      "lede": [
+        "Área de texto form-associated con las mismas piezas que",
+        "          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField</a>",
+        "          en modo <em>multiline</em> y el crecimiento automático de",
+        "          <a href=\"https://mui.com/material-ui/react-textarea-autosize/\" target=\"_blank\" rel=\"noreferrer\">TextareaAutosize</a>:",
+        "          appearances, error, contador y <code class=\"code\">autosize</code> con",
+        "          <code class=\"code\">min-rows</code> / <code class=\"code\">max-rows</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -130,77 +140,155 @@
     {
       "id": "appearance",
       "title": "Appearance",
-      "lede": "Mismas variantes que <code class=\"code\">iswc-input</code>:\r\n          <code class=\"code\">outlined</code> (default) · <code class=\"code\">filled</code> ·\r\n          <code class=\"code\">underlined</code>.",
+      "lede": [
+        "Mismas variantes que <code class=\"code\">iswc-input</code>:",
+        "          <code class=\"code\">outlined</code> (default) · <code class=\"code\">filled</code> ·",
+        "          <code class=\"code\">underlined</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"outlined (default)\" rows=\"2\" placeholder=\"Caja con borde completo\"></iswc-textarea>\r\n            <iswc-textarea variant=\"filled\" label=\"filled\" rows=\"2\" placeholder=\"Superficie + línea inferior\"></iswc-textarea>\r\n            <iswc-textarea variant=\"underlined\" label=\"underlined\" rows=\"2\" placeholder=\"Solo línea inferior\"></iswc-textarea>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-textarea label=\"outlined (default)\" rows=\"2\" placeholder=\"Caja con borde completo\"></iswc-textarea>",
+            "            <iswc-textarea variant=\"filled\" label=\"filled\" rows=\"2\" placeholder=\"Superficie + línea inferior\"></iswc-textarea>",
+            "            <iswc-textarea variant=\"underlined\" label=\"underlined\" rows=\"2\" placeholder=\"Solo línea inferior\"></iswc-textarea>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "autosize",
       "title": "Autosize",
-      "lede": "<code class=\"code\">autosize</code> hace que la altura siga al contenido. Se mide el\r\n          <code class=\"code\">scrollHeight</code> real del textarea (sin clones ni librerías) y se acota entre\r\n          <code class=\"code\">min-rows</code> y <code class=\"code\">max-rows</code>; al pasar de\r\n          <code class=\"code\">max-rows</code> aparece el scroll. Sin <code class=\"code\">min-rows</code>\r\n          el mínimo es el valor de <code class=\"code\">rows</code>.\r\n          Con autosize el <em>resize</em> manual se desactiva: pelearía con la altura calculada.",
+      "lede": [
+        "<code class=\"code\">autosize</code> hace que la altura siga al contenido. Se mide el",
+        "          <code class=\"code\">scrollHeight</code> real del textarea (sin clones ni librerías) y se acota entre",
+        "          <code class=\"code\">min-rows</code> y <code class=\"code\">max-rows</code>; al pasar de",
+        "          <code class=\"code\">max-rows</code> aparece el scroll. Sin <code class=\"code\">min-rows</code>",
+        "          el mínimo es el valor de <code class=\"code\">rows</code>.",
+        "          Con autosize el <em>resize</em> manual se desactiva: pelearía con la altura calculada."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-textarea autosize min-rows=\"2\" label=\"min-rows 2 · sin techo\" placeholder=\"Escribe varias líneas y mira cómo crece…\"></iswc-textarea>\r\n            <iswc-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"min-rows 3 · max-rows 6\"\r\n              hint=\"A partir de 6 líneas hace scroll\"\r\n              value=\"Uno&#10;Dos&#10;Tres&#10;Cuatro\"></iswc-textarea>\r\n            <iswc-textarea resize=\"auto\" min-rows=\"1\" max-rows=\"4\" label='resize=\"auto\" (alias de autosize)' placeholder=\"Empieza en una línea\"></iswc-textarea>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-textarea autosize min-rows=\"2\" label=\"min-rows 2 · sin techo\" placeholder=\"Escribe varias líneas y mira cómo crece…\"></iswc-textarea>",
+            "            <iswc-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"min-rows 3 · max-rows 6\"",
+            "              hint=\"A partir de 6 líneas hace scroll\"",
+            "              value=\"Uno&#10;Dos&#10;Tres&#10;Cuatro\"></iswc-textarea>",
+            "            <iswc-textarea resize=\"auto\" min-rows=\"1\" max-rows=\"4\" label='resize=\"auto\" (alias de autosize)' placeholder=\"Empieza en una línea\"></iswc-textarea>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "resize",
       "title": "Resize",
-      "lede": "<code class=\"code\">resize</code>: <code class=\"code\">none</code> ·\r\n          <code class=\"code\">vertical</code> (default) · <code class=\"code\">both</code> ·\r\n          <code class=\"code\">auto</code> (autosize).",
+      "lede": [
+        "<code class=\"code\">resize</code>: <code class=\"code\">none</code> ·",
+        "          <code class=\"code\">vertical</code> (default) · <code class=\"code\">both</code> ·",
+        "          <code class=\"code\">auto</code> (autosize)."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"none\" resize=\"none\" rows=\"3\" value=\"El usuario no puede redimensionar.\"></iswc-textarea>\r\n            <iswc-textarea label=\"vertical (default)\" rows=\"3\" placeholder=\"Arrastra el borde inferior\"></iswc-textarea>\r\n            <iswc-textarea label=\"both\" resize=\"both\" rows=\"3\" placeholder=\"Arrastra la esquina\"></iswc-textarea>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-textarea label=\"none\" resize=\"none\" rows=\"3\" value=\"El usuario no puede redimensionar.\"></iswc-textarea>",
+            "            <iswc-textarea label=\"vertical (default)\" rows=\"3\" placeholder=\"Arrastra el borde inferior\"></iswc-textarea>",
+            "            <iswc-textarea label=\"both\" resize=\"both\" rows=\"3\" placeholder=\"Arrastra la esquina\"></iswc-textarea>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "counter",
       "title": "Contador de caracteres",
-      "lede": "<code class=\"code\">show-count</code> pinta <code class=\"code\">n/maxlength</code> a la derecha de la\r\n          fila del hint; sin <code class=\"code\">maxlength</code>, solo <code class=\"code\">n</code>.",
+      "lede": [
+        "<code class=\"code\">show-count</code> pinta <code class=\"code\">n/maxlength</code> a la derecha de la",
+        "          fila del hint; sin <code class=\"code\">maxlength</code>, solo <code class=\"code\">n</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\" hint=\"Cuenta tu experiencia\" value=\"Muy buena atención.\"></iswc-textarea>\r\n            <iswc-textarea label=\"Sin límite\" show-count rows=\"2\" placeholder=\"Escribe algo…\"></iswc-textarea>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\" hint=\"Cuenta tu experiencia\" value=\"Muy buena atención.\"></iswc-textarea>",
+            "            <iswc-textarea label=\"Sin límite\" show-count rows=\"2\" placeholder=\"Escribe algo…\"></iswc-textarea>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "validation",
       "title": "Error y validación",
-      "lede": "<code class=\"code\">error</code> fuerza el estado de peligro y <code class=\"code\">error-text</code>\r\n          sustituye al <code class=\"code\">hint</code>. Sin forzarlo, el campo entra en error cuando la\r\n          validación nativa (<code class=\"code\">required</code>, <code class=\"code\">maxlength</code>) falla tras\r\n          la primera interacción; si no diste <code class=\"code\">error-text</code>, se muestra el mensaje del\r\n          navegador. El estado se expone como <code class=\"code\">:state(invalid)</code>.",
+      "lede": [
+        "<code class=\"code\">error</code> fuerza el estado de peligro y <code class=\"code\">error-text</code>",
+        "          sustituye al <code class=\"code\">hint</code>. Sin forzarlo, el campo entra en error cuando la",
+        "          validación nativa (<code class=\"code\">required</code>, <code class=\"code\">maxlength</code>) falla tras",
+        "          la primera interacción; si no diste <code class=\"code\">error-text</code>, se muestra el mensaje del",
+        "          navegador. El estado se expone como <code class=\"code\">:state(invalid)</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Error forzado\" error error-text=\"El comentario contiene términos no permitidos\"\r\n              rows=\"2\" value=\"Texto rechazado por el backend\"></iswc-textarea>\r\n            <iswc-textarea label=\"Error sin error-text\" error hint=\"El hint se pinta en rojo\" rows=\"2\"></iswc-textarea>\r\n            <iswc-textarea id=\"autoErr\" label=\"Obligatorio (sal del campo)\" required rows=\"2\"\r\n              hint=\"Se valida al perder el foco\" error-text=\"Este comentario es obligatorio\"></iswc-textarea>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-textarea label=\"Error forzado\" error error-text=\"El comentario contiene términos no permitidos\"",
+            "              rows=\"2\" value=\"Texto rechazado por el backend\"></iswc-textarea>",
+            "            <iswc-textarea label=\"Error sin error-text\" error hint=\"El hint se pinta en rojo\" rows=\"2\"></iswc-textarea>",
+            "            <iswc-textarea id=\"autoErr\" label=\"Obligatorio (sal del campo)\" required rows=\"2\"",
+            "              hint=\"Se valida al perder el foco\" error-text=\"Este comentario es obligatorio\"></iswc-textarea>",
+            "          </div>",
+            "          <div class=\"actions\">",
+            "            <button type=\"button\" id=\"btnReport\">Validar</button>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "width",
       "title": "Ancho",
-      "lede": "Mismo token que <code class=\"code\">iswc-input</code>: <code class=\"code\">--iswc-field-width</code>\r\n          (heredable) y <code class=\"code\">full-width</code> para ocupar todo el ancho disponible.",
+      "lede": [
+        "Mismo token que <code class=\"code\">iswc-input</code>: <code class=\"code\">--iswc-field-width</code>",
+        "          (heredable) y <code class=\"code\">full-width</code> para ocupar todo el ancho disponible."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:18rem;\">\r\n            <iswc-textarea label=\"--iswc-field-width: 18rem\" rows=\"2\" placeholder=\"Heredado del contenedor\"></iswc-textarea>\r\n            <iswc-textarea label=\"full-width\" full-width rows=\"2\" placeholder=\"Ignora el token\"></iswc-textarea>\r\n          </div>"
+          "html": [
+            "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:18rem;\">",
+            "            <iswc-textarea label=\"--iswc-field-width: 18rem\" rows=\"2\" placeholder=\"Heredado del contenedor\"></iswc-textarea>",
+            "            <iswc-textarea label=\"full-width\" full-width rows=\"2\" placeholder=\"Ignora el token\"></iswc-textarea>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "label-placement",
       "title": "Label a la izquierda",
-      "lede": "<code class=\"code\">label-placement=\"start\"</code> para formularios horizontales.\r\n          El label se alinea con la primera línea del textarea y\r\n          <code class=\"code\">--iswc-field-label-width</code> fija su columna.",
+      "lede": [
+        "<code class=\"code\">label-placement=\"start\"</code> para formularios horizontales.",
+        "          El label se alinea con la primera línea del textarea y",
+        "          <code class=\"code\">--iswc-field-label-width</code> fija su columna."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <iswc-textarea label-placement=\"start\" label=\"Asunto\" full-width rows=\"1\"></iswc-textarea>\r\n            <iswc-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\" max-rows=\"8\"\r\n              hint=\"Crece con el texto\" show-count maxlength=\"500\"></iswc-textarea>\r\n          </div>"
+          "html": [
+            "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">",
+            "            <iswc-textarea label-placement=\"start\" label=\"Asunto\" full-width rows=\"1\"></iswc-textarea>",
+            "            <iswc-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\" max-rows=\"8\"",
+            "              hint=\"Crece con el texto\" show-count maxlength=\"500\"></iswc-textarea>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -210,7 +298,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Solo lectura\" readonly rows=\"2\" value=\"Contenido fijo\"></iswc-textarea>\r\n            <iswc-textarea label=\"Deshabilitado\" disabled rows=\"2\" value=\"Sin acceso\"></iswc-textarea>\r\n            <iswc-textarea variant=\"filled\" label=\"filled · readonly\" readonly rows=\"2\" value=\"Contenido fijo\"></iswc-textarea>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-textarea label=\"Solo lectura\" readonly rows=\"2\" value=\"Contenido fijo\"></iswc-textarea>",
+            "            <iswc-textarea label=\"Deshabilitado\" disabled rows=\"2\" value=\"Sin acceso\"></iswc-textarea>",
+            "            <iswc-textarea variant=\"filled\" label=\"filled · readonly\" readonly rows=\"2\" value=\"Contenido fijo\"></iswc-textarea>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -221,7 +315,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; max-width:30rem;\">\r\n            <iswc-textarea name=\"comentario\" label=\"Comentario\" required autosize min-rows=\"3\" max-rows=\"8\"\r\n              maxlength=\"300\" show-count error-text=\"El comentario es obligatorio\"></iswc-textarea>\r\n            <div class=\"actions\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+          "html": [
+            "<form id=\"f\" style=\"display:grid; gap:0.75rem; max-width:30rem;\">",
+            "            <iswc-textarea name=\"comentario\" label=\"Comentario\" required autosize min-rows=\"3\" max-rows=\"8\"",
+            "              maxlength=\"300\" show-count error-text=\"El comentario es obligatorio\"></iswc-textarea>",
+            "            <div class=\"actions\">",
+            "              <button type=\"submit\">Enviar</button>",
+            "              <button type=\"reset\">Reset</button>",
+            "            </div>",
+            "          </form>"
+          ]
         }
       ]
     },
@@ -411,7 +514,14 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Área de texto form-associated con las mismas piezas que\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField</a>\r\n          en modo <em>multiline</em> y el crecimiento automático de\r\n          <a href=\"https://mui.com/material-ui/react-textarea-autosize/\" target=\"_blank\" rel=\"noreferrer\">TextareaAutosize</a>:\r\n          appearances, error, contador y <code class=\"code\">autosize</code> con\r\n          <code class=\"code\">min-rows</code> / <code class=\"code\">max-rows</code>."
+        "content": [
+          "Área de texto form-associated con las mismas piezas que",
+          "          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField</a>",
+          "          en modo <em>multiline</em> y el crecimiento automático de",
+          "          <a href=\"https://mui.com/material-ui/react-textarea-autosize/\" target=\"_blank\" rel=\"noreferrer\">TextareaAutosize</a>:",
+          "          appearances, error, contador y <code class=\"code\">autosize</code> con",
+          "          <code class=\"code\">min-rows</code> / <code class=\"code\">max-rows</code>."
+        ]
       },
       "atributos": {
         "table": [
@@ -546,7 +656,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-textarea id=\"demo\" label=\"Descripción\" hint=\"Máximo 200 caracteres\" maxlength=\"200\" show-count rows=\"4\" placeholder=\"Cuéntanos…\" name=\"descripcion\"></iswc-textarea>\n```"
+        "content": [
+          "```html",
+          "<iswc-textarea id=\"demo\" label=\"Descripción\" hint=\"Máximo 200 caracteres\" maxlength=\"200\" show-count rows=\"4\" placeholder=\"Cuéntanos…\" name=\"descripcion\"></iswc-textarea>",
+          "```"
+        ]
       }
     },
     "exclude": [

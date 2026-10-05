@@ -5,7 +5,44 @@
   "title": "IswcUi <span class=\"ui-chip-title\">(módulo · no es un tag)</span>",
   "titleHtml": true,
   "description": "Utilidad IswcUi: html, adoptCss y define para apps consumidoras del kit.",
-  "styles": ".ui-stage {\r\n      display: grid;\r\n      gap: 0.75rem;\r\n      padding: 1rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius-md, 8px);\r\n      background: color-mix(in srgb, var(--iswc-control-bg) 80%, transparent);\r\n    }\r\n    .ui-stage__meta {\r\n      font-size: 0.85em;\r\n      color: var(--iswc-text-muted, var(--iswc-text));\r\n      opacity: 0.85;\r\n    }\r\n    demo-card {\r\n      display: block;\r\n      padding: 0.85rem 1rem;\r\n      border-radius: 8px;\r\n      border: 1px solid var(--iswc-border);\r\n      background: var(--iswc-bg);\r\n      color: var(--iswc-text);\r\n    }\r\n    demo-card[data-tone=\"brand\"] {\r\n      border-color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-border));\r\n    }\r\n    .ui-chip-title {\r\n      display: inline-block;\r\n      margin-left: 0.5rem;\r\n      padding: 0.15rem 0.6rem;\r\n      border-radius: 999px;\r\n      font-size: 0.55em;\r\n      font-weight: 600;\r\n      letter-spacing: 0.02em;\r\n      color: var(--iswc-text);\r\n      background: color-mix(in srgb, var(--iswc-accent) 22%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--iswc-accent) 45%, transparent);\r\n      vertical-align: middle;",
+  "styles": [
+    ".ui-stage {",
+    "      display: grid;",
+    "      gap: 0.75rem;",
+    "      padding: 1rem;",
+    "      border: 1px dashed var(--iswc-border);",
+    "      border-radius: var(--iswc-radius-md, 8px);",
+    "      background: color-mix(in srgb, var(--iswc-control-bg) 80%, transparent);",
+    "    }",
+    "    .ui-stage__meta {",
+    "      font-size: 0.85em;",
+    "      color: var(--iswc-text-muted, var(--iswc-text));",
+    "      opacity: 0.85;",
+    "    }",
+    "    demo-card {",
+    "      display: block;",
+    "      padding: 0.85rem 1rem;",
+    "      border-radius: 8px;",
+    "      border: 1px solid var(--iswc-border);",
+    "      background: var(--iswc-bg);",
+    "      color: var(--iswc-text);",
+    "    }",
+    "    demo-card[data-tone=\"brand\"] {",
+    "      border-color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-border));",
+    "    }",
+    "    .ui-chip-title {",
+    "      display: inline-block;",
+    "      margin-left: 0.5rem;",
+    "      padding: 0.15rem 0.6rem;",
+    "      border-radius: 999px;",
+    "      font-size: 0.55em;",
+    "      font-weight: 600;",
+    "      letter-spacing: 0.02em;",
+    "      color: var(--iswc-text);",
+    "      background: color-mix(in srgb, var(--iswc-accent) 22%, transparent);",
+    "      border: 1px solid color-mix(in srgb, var(--iswc-accent) 45%, transparent);",
+    "      vertical-align: middle;"
+  ],
   "storageKey": "docs-iswc-ui",
   "hasBehavior": true,
   "sections": [
@@ -13,11 +50,21 @@
       "id": "intro",
       "title": "Módulo de interfaz",
       "titleHtml": false,
-      "lede": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IswcUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>.",
+      "lede": [
+        "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en",
+        "          <code class=\"code\">globalThis.IswcUi</code> (alias <code class=\"code\">Ui</code>).",
+        "          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con",
+        "          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">// Disponible tras all.min.js</span>\r\n          <div class=\"ui-stage\" id=\"introStage\">\r\n            <div class=\"ui-stage__meta\">Cargando IswcUi…</div>\r\n          </div>"
+          "html": [
+            "<span class=\"demo-label\">// Disponible tras all.min.js</span>",
+            "          <div class=\"ui-stage\" id=\"introStage\">",
+            "            <div class=\"ui-stage__meta\">Cargando IswcUi…</div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -37,22 +84,40 @@
       "id": "define",
       "title": "Definir un componente",
       "titleHtml": false,
-      "lede": "Registra un custom element de dominio. El CSS va en archivo hermano\r\n          (aquí se usa <code class=\"code\">IswcUi.css</code> solo para el demo en página).",
+      "lede": [
+        "Registra un custom element de dominio. El CSS va en archivo hermano",
+        "          (aquí se usa <code class=\"code\">IswcUi.css</code> solo para el demo en página)."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">// demo-card registrado en esta página</span>\r\n          <div class=\"ui-stage\">\r\n            <demo-card data-tone=\"brand\">\r\n              <strong>app-*</strong> traduce datos → <code>is-*</code>\r\n            </demo-card>\r\n          </div>"
+          "html": [
+            "<span class=\"demo-label\">// demo-card registrado en esta página</span>",
+            "          <div class=\"ui-stage\">",
+            "            <demo-card data-tone=\"brand\">",
+            "              <strong>app-*</strong> traduce datos → <code>is-*</code>",
+            "            </demo-card>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "cdn",
       "title": "CDN",
-      "lede": "Tag del catálogo: <code class=\"code\">iswc-ui</code> (módulo). Artefacto:\r\n          <code class=\"code\">dist/cdn/helpers/ui.min.js</code>. También va dentro de\r\n          <code class=\"code\">all.min.js</code>.",
+      "lede": [
+        "Tag del catálogo: <code class=\"code\">iswc-ui</code> (módulo). Artefacto:",
+        "          <code class=\"code\">dist/cdn/helpers/ui.min.js</code>. También va dentro de",
+        "          <code class=\"code\">all.min.js</code>."
+      ],
       "blocks": [
         {
           "kind": "code",
-          "code": "<script type=\"module\"\n  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js\">\n</script>",
+          "code": [
+            "<script type=\"module\"",
+            "  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js\">",
+            "</script>"
+          ],
           "lang": "html"
         }
       ]
@@ -108,7 +173,12 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en\r\n          <code class=\"code\">globalThis.IswcUi</code> (alias <code class=\"code\">Ui</code>).\r\n          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con\r\n          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>."
+        "content": [
+          "Utilidad de render para apps consumidoras. Tras cargar el CDN queda en",
+          "          <code class=\"code\">globalThis.IswcUi</code> (alias <code class=\"code\">Ui</code>).",
+          "          No reinventes botones ni tablas: monta <code class=\"code\">is-*</code> con",
+          "          <code class=\"code\">html</code> + CSS hermano vía <code class=\"code\">adoptCss</code>."
+        ]
       },
       "apiJs": {
         "table": [
@@ -147,7 +217,14 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<span class=\"demo-label\">// Disponible tras all.min.js</span>\r\n          <div class=\"ui-stage\" id=\"introStage\">\r\n            <div class=\"ui-stage__meta\">Cargando IswcUi…</div>\r\n          </div>\n```"
+        "content": [
+          "```html",
+          "<span class=\"demo-label\">// Disponible tras all.min.js</span>",
+          "          <div class=\"ui-stage\" id=\"introStage\">",
+          "            <div class=\"ui-stage__meta\">Cargando IswcUi…</div>",
+          "          </div>",
+          "```"
+        ]
       }
     },
     "exclude": [

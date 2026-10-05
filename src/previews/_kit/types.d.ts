@@ -9,22 +9,30 @@
 
 export type PreviewBlockKind = 'demo' | 'callout' | 'code' | 'html' | 'table' | 'lede';
 
+/**
+ * Texto que en el JSON puede venir como string de una línea o como array
+ * de líneas. La refactor W43 (limpieza de `\n` en JSON) convirtió los
+ * multi-línea en arrays; los consumidores (render, audit, tests) deben
+ * pasar por `asText()` (de `./text-like.ts`) para obtener un string único.
+ */
+export type TextLike = string | string[];
+
 export interface PreviewDemoBlock {
   kind: 'demo';
   /** Markup del ejemplo (string HTML estático; el comportamiento se cablea en mount). */
-  html: string;
+  html: TextLike;
   /**
    * HTML puro equivalente (sin tags `is-*`): documentación del mapeo mental
    * nativo/ARIA. Se pinta debajo del demo como sección fija.
    */
-  equivHtml?: string;
+  equivHtml?: TextLike;
   /** Nota corta bajo el título de la sección equivalente. */
   equivNote?: string;
   /**
    * Markup opcional (p. ej. `<iswc-flowchart>…`) que aclara ramas cuando hay
    * varios HTML distintos según el caso. Va debajo del `<pre>` equivalente.
    */
-  equivFlow?: string;
+  equivFlow?: TextLike;
   /** Desactiva botón "Ver código" de demo-code.js */
   noCode?: boolean;
   contain?: boolean;
@@ -33,18 +41,18 @@ export interface PreviewDemoBlock {
 
 export interface PreviewCalloutBlock {
   kind: 'callout';
-  html: string;
+  html: TextLike;
 }
 
 export interface PreviewCodeBlock {
   kind: 'code';
-  code: string;
+  code: TextLike;
   lang?: string;
 }
 
 export interface PreviewHtmlBlock {
   kind: 'html';
-  html: string;
+  html: TextLike;
 }
 
 export interface PreviewCodeEjemploCell {

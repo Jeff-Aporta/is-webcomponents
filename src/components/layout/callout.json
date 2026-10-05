@@ -10,11 +10,19 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y\r\n          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,\r\n          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>\r\n          o slot <code class=\"code\">icon</code>).",
+      "lede": [
+        "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y",
+        "          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,",
+        "          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>",
+        "          o slot <code class=\"code\">icon</code>)."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</iswc-callout>",
+          "html": [
+            "<span class=\"demo-label\">caso mínimo</span>",
+            "          <iswc-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</iswc-callout>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -44,7 +52,67 @@
           ],
           "equivNote": "color sugiere icono; slot o icon vacío lo anulan.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-callout: icono\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"slot icon?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"override slot\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"icon=\\\"\\\"?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"sin icono\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"default por color\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-callout: icono\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"slot icon?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"override slot\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"icon=\\\"\\\"?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"sin icono\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"default por color\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"no\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"no\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -55,7 +123,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-stack\">\n  <iswc-callout color=\"brand\">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</iswc-callout>\n  <iswc-callout color=\"neutral\">Los horarios se muestran en tu zona horaria local.</iswc-callout>\n  <iswc-callout color=\"success\">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</iswc-callout>\n  <iswc-callout color=\"warning\">Tu sesión está a punto de expirar. Guarda tu trabajo.</iswc-callout>\n  <iswc-callout color=\"danger\">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</iswc-callout>\n</div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "  <iswc-callout color=\"brand\">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</iswc-callout>",
+            "  <iswc-callout color=\"neutral\">Los horarios se muestran en tu zona horaria local.</iswc-callout>",
+            "  <iswc-callout color=\"success\">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</iswc-callout>",
+            "  <iswc-callout color=\"warning\">Tu sesión está a punto de expirar. Guarda tu trabajo.</iswc-callout>",
+            "  <iswc-callout color=\"danger\">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</iswc-callout>",
+            "</div>"
+          ]
         }
       ]
     },
@@ -66,7 +142,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-stack\">\n  <iswc-callout color=\"brand\" variant=\"accent\">Esta variante <strong>accent</strong> capta la atención de inmediato.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"filled-outlined\">Fondo + borde, el más habitual.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"filled\">Solo fondo, sin borde.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"outlined\">Solo borde, fondo transparente.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"plain\">Sin fondo ni borde, solo texto e icono.</iswc-callout>\n</div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "  <iswc-callout color=\"brand\" variant=\"accent\">Esta variante <strong>accent</strong> capta la atención de inmediato.</iswc-callout>",
+            "  <iswc-callout color=\"brand\" variant=\"filled-outlined\">Fondo + borde, el más habitual.</iswc-callout>",
+            "  <iswc-callout color=\"brand\" variant=\"filled\">Solo fondo, sin borde.</iswc-callout>",
+            "  <iswc-callout color=\"brand\" variant=\"outlined\">Solo borde, fondo transparente.</iswc-callout>",
+            "  <iswc-callout color=\"brand\" variant=\"plain\">Sin fondo ni borde, solo texto e icono.</iswc-callout>",
+            "</div>"
+          ]
         }
       ]
     },
@@ -77,7 +161,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-stack\">\n  <iswc-callout style=\"font-size:0.8em\">0.8em · callout mínimo.</iswc-callout>\n  <iswc-callout style=\"font-size:0.9em\">0.9em · un poco más de énfasis.</iswc-callout>\n  <iswc-callout>1em · hereda el tamaño del contexto.</iswc-callout>\n  <iswc-callout style=\"font-size:1.15em\">1.15em · más énfasis.</iswc-callout>\n  <iswc-callout style=\"font-size:1.3em\">1.3em · énfasis máximo.</iswc-callout>\n</div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "  <iswc-callout style=\"font-size:0.8em\">0.8em · callout mínimo.</iswc-callout>",
+            "  <iswc-callout style=\"font-size:0.9em\">0.9em · un poco más de énfasis.</iswc-callout>",
+            "  <iswc-callout>1em · hereda el tamaño del contexto.</iswc-callout>",
+            "  <iswc-callout style=\"font-size:1.15em\">1.15em · más énfasis.</iswc-callout>",
+            "  <iswc-callout style=\"font-size:1.3em\">1.3em · énfasis máximo.</iswc-callout>",
+            "</div>"
+          ]
         }
       ]
     },
@@ -88,14 +180,36 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-stack\">\n  <iswc-callout color=\"warning\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:timer-sand\" aria-hidden=\"true\"></iswc-icon>\n    Tiempo limitado: queda 1 día para enviar la solicitud.\n  </iswc-callout>\n  <iswc-callout color=\"success\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:rocket-launch\" aria-hidden=\"true\"></iswc-icon>\n    Lanzamiento completado. Métricas disponibles.\n  </iswc-callout>\n  <iswc-callout color=\"danger\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:shield-alert\" aria-hidden=\"true\"></iswc-icon>\n    Bloqueo de seguridad: demasiados intentos.\n  </iswc-callout>\n  <iswc-callout color=\"brand\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:bullhorn\" aria-hidden=\"true\"></iswc-icon>\n    Anuncio global: nueva versión disponible.\n  </iswc-callout>\n</div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "  <iswc-callout color=\"warning\">",
+            "    <iswc-icon slot=\"icon\" icon=\"mdi:timer-sand\" aria-hidden=\"true\"></iswc-icon>",
+            "    Tiempo limitado: queda 1 día para enviar la solicitud.",
+            "  </iswc-callout>",
+            "  <iswc-callout color=\"success\">",
+            "    <iswc-icon slot=\"icon\" icon=\"mdi:rocket-launch\" aria-hidden=\"true\"></iswc-icon>",
+            "    Lanzamiento completado. Métricas disponibles.",
+            "  </iswc-callout>",
+            "  <iswc-callout color=\"danger\">",
+            "    <iswc-icon slot=\"icon\" icon=\"mdi:shield-alert\" aria-hidden=\"true\"></iswc-icon>",
+            "    Bloqueo de seguridad: demasiados intentos.",
+            "  </iswc-callout>",
+            "  <iswc-callout color=\"brand\">",
+            "    <iswc-icon slot=\"icon\" icon=\"mdi:bullhorn\" aria-hidden=\"true\"></iswc-icon>",
+            "    Anuncio global: nueva versión disponible.",
+            "  </iswc-callout>",
+            "</div>"
+          ]
         }
       ]
     },
     {
       "id": "no-icon",
       "title": "Sin icono",
-      "lede": "Pasa <code class=\"code\">icon=\"\"</code> para ocultar el icono por defecto y dejar\r\n          solo el mensaje.",
+      "lede": [
+        "Pasa <code class=\"code\">icon=\"\"</code> para ocultar el icono por defecto y dejar",
+        "          solo el mensaje."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -110,18 +224,34 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-stack\">\n  <iswc-callout color=\"brand\">\n    <strong>Una nueva versión está disponible</strong>\n    <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>\n    <iswc-button variant=\"outlined\" color=\"brand\">Más tarde</iswc-button>\n    <iswc-button variant=\"filled\" color=\"brand\">Actualizar ahora</iswc-button>\n  </iswc-callout>\n</div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "  <iswc-callout color=\"brand\">",
+            "    <strong>Una nueva versión está disponible</strong>",
+            "    <p>Incluye el módulo de reportes y soporte para multi-empresa.</p>",
+            "    <iswc-button variant=\"outlined\" color=\"brand\">Más tarde</iswc-button>",
+            "    <iswc-button variant=\"filled\" color=\"brand\">Actualizar ahora</iswc-button>",
+            "  </iswc-callout>",
+            "</div>"
+          ]
         }
       ]
     },
     {
       "id": "parts",
       "title": "CSS Parts",
-      "lede": "Solo dos partes expuestas: <code class=\"code\">icon</code> y <code class=\"code\">message</code>.\r\n          El contenedor raíz es la <code class=\"code\">::part(base)</code>.",
+      "lede": [
+        "Solo dos partes expuestas: <code class=\"code\">icon</code> y <code class=\"code\">message</code>.",
+        "          El contenedor raíz es la <code class=\"code\">::part(base)</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-callout color=\"success\" style=\"--callout-bg: #d3f9d8; --callout-border: #2f9e44;\">\r\n            CSS parts en uso: el fondo y el borde se redefinen vía custom properties.\r\n          </iswc-callout>"
+          "html": [
+            "<iswc-callout color=\"success\" style=\"--callout-bg: #d3f9d8; --callout-border: #2f9e44;\">",
+            "            CSS parts en uso: el fondo y el borde se redefinen vía custom properties.",
+            "          </iswc-callout>"
+          ]
         }
       ]
     },
@@ -132,7 +262,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-callout\">\n  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>\n  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-callout\">",
+            "  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>",
+            "  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -143,7 +278,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-callout\">\n  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>\n  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-callout\">",
+            "  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>",
+            "  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -159,27 +299,19 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>variant</code>",
-              "brand · neutral · text · success · warning · danger",
-              "neutral",
-              "Tono. Reflected."
+              "<code>variant</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tono. Reflected. (valor por defecto)"
             ],
             [
-              "<code>appearance</code>",
-              "accent · filled · outlined · filled-outlined · plain",
-              "filled-outlined",
-              "Tratamiento visual. Reflected."
+              "<code>appearance</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tratamiento visual. Reflected. (valor por defecto)"
             ],
             [
               "<code>icon</code>",
-              "string",
-              "(según variant)",
               "Iconify id para el icono por defecto. Vacío = sin icono."
             ]
           ]
@@ -238,33 +370,27 @@
           "kind": "table",
           "columns": [
             "Variable",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>--spacing</code>",
-              "<code>var(--iswc-space-l, 1rem)</code>",
-              "Padding/gap interno."
+              "<code>--spacing</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Padding/gap interno. (valor por defecto)"
             ],
             [
               "<code>--callout-bg</code>",
-              "var de variant",
               "Fondo computado."
             ],
             [
               "<code>--callout-border</code>",
-              "var de variant",
               "Color del borde."
             ],
             [
               "<code>--callout-text</code>",
-              "var de variant",
               "Color del texto."
             ],
             [
               "<code>--callout-accent</code>",
-              "var de variant",
               "Color del icono."
             ]
           ]
@@ -275,7 +401,12 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y\r\n          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,\r\n          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>\r\n          o slot <code class=\"code\">icon</code>)."
+        "content": [
+          "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y",
+          "          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,",
+          "          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>",
+          "          o slot <code class=\"code\">icon</code>)."
+        ]
       },
       "atributos": {
         "table": [
@@ -353,7 +484,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-callout>Esto es un callout estándar.</iswc-callout>\n```"
+        "content": [
+          "```html",
+          "<iswc-callout>Esto es un callout estándar.</iswc-callout>",
+          "```"
+        ]
       }
     },
     "exclude": [

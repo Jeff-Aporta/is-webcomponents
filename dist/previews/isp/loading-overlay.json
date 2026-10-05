@@ -11,11 +11,17 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Capa de bloqueo a pantalla completa con spinner y mensaje. No se cierra\r\n          con Escape ni con clic fuera: solo el código que la abrió la cierra.",
+      "lede": [
+        "Capa de bloqueo a pantalla completa con spinner y mensaje. No se cierra",
+        "          con Escape ni con clic fuera: solo el código que la abrió la cierra."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"loBtn\" color=\"brand\">Simular guardado (2 s)</iswc-button>\r\n          <iswc-loading-overlay id=\"loDemo\" message=\"Guardando…\" scroll-lock></iswc-loading-overlay>",
+          "html": [
+            "<iswc-button id=\"loBtn\" color=\"brand\">Simular guardado (2 s)</iswc-button>",
+            "          <iswc-loading-overlay id=\"loDemo\" message=\"Guardando…\" scroll-lock></iswc-loading-overlay>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -42,18 +48,30 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"loBtn2\" color=\"neutral\" variant=\"outlined\">Ver con icono</iswc-button>\r\n          <iswc-loading-overlay id=\"loDemo2\" message=\"Consolidando periodo…\">\r\n            <iswc-icon icon=\"mdi:database-sync\"></iswc-icon>\r\n          </iswc-loading-overlay>"
+          "html": [
+            "<iswc-button id=\"loBtn2\" color=\"neutral\" variant=\"outlined\">Ver con icono</iswc-button>",
+            "          <iswc-loading-overlay id=\"loDemo2\" message=\"Consolidando periodo…\">",
+            "            <iswc-icon icon=\"mdi:database-sync\"></iswc-icon>",
+            "          </iswc-loading-overlay>"
+          ]
         }
       ]
     },
     {
       "id": "api",
       "title": "Abrir y cerrar desde código",
-      "lede": "Cierra siempre en un <code class=\"code\">finally</code>: si la promesa falla y nadie\r\n          la cierra, la aplicación queda bloqueada.",
+      "lede": [
+        "Cierra siempre en un <code class=\"code\">finally</code>: si la promesa falla y nadie",
+        "          la cierra, la aplicación queda bloqueada."
+      ],
       "blocks": [
         {
           "kind": "code",
-          "code": "const ov = document.querySelector('iswc-loading-overlay');\nov.show();\ntry { await guardar(); } finally { ov.hide(); }"
+          "code": [
+            "const ov = document.querySelector('iswc-loading-overlay');",
+            "ov.show();",
+            "try { await guardar(); } finally { ov.hide(); }"
+          ]
         }
       ]
     }
@@ -61,10 +79,17 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Capa de bloqueo a pantalla completa con spinner y mensaje. No se cierra\r\n          con Escape ni con clic fuera: solo el código que la abrió la cierra."
+        "content": [
+          "Capa de bloqueo a pantalla completa con spinner y mensaje. No se cierra",
+          "          con Escape ni con clic fuera: solo el código que la abrió la cierra."
+        ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-loading-overlay open message=\"Guardando…\" scroll-lock></iswc-loading-overlay>\n```"
+        "content": [
+          "```html",
+          "<iswc-loading-overlay open message=\"Guardando…\" scroll-lock></iswc-loading-overlay>",
+          "```"
+        ]
       }
     },
     "exclude": [

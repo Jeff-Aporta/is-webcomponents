@@ -60,7 +60,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-time-input label=\"Columnas\" value=\"09:30\" locale=\"es\"></iswc-time-input>\r\n          <iswc-time-input label=\"Lista\" value=\"09:30\" locale=\"es\" panel=\"list\"></iswc-time-input>\r\n          <iswc-time-input label=\"Reloj\" value=\"09:30\" ampm locale=\"en-US\" panel=\"clock\"></iswc-time-input>"
+          "html": [
+            "<iswc-time-input label=\"Columnas\" value=\"09:30\" locale=\"es\"></iswc-time-input>",
+            "          <iswc-time-input label=\"Lista\" value=\"09:30\" locale=\"es\" panel=\"list\"></iswc-time-input>",
+            "          <iswc-time-input label=\"Reloj\" value=\"09:30\" ampm locale=\"en-US\" panel=\"clock\"></iswc-time-input>"
+          ]
         }
       ]
     },
@@ -81,7 +85,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-date-range-input\r\n            id=\"ri\"\r\n            start-label=\"Desde\"\r\n            end-label=\"Hasta\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-7-days current-month reset\"\r\n          ></iswc-date-range-input>"
+          "html": [
+            "<iswc-date-range-input",
+            "            id=\"ri\"",
+            "            start-label=\"Desde\"",
+            "            end-label=\"Hasta\"",
+            "            locale=\"es\"",
+            "            calendars=\"2\"",
+            "            shortcuts=\"this-week last-7-days current-month reset\"",
+            "          ></iswc-date-range-input>"
+          ]
         }
       ]
     },
@@ -104,41 +117,32 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>value</code>",
-              "fecha · HH:mm · fechaTHora · inicio/fin"
+              "<code>value</code>"
             ],
             [
-              "<code>variant</code>",
-              "desktop · mobile"
+              "<code>variant</code>"
             ],
             [
-              "<code>action-bar</code>",
-              "off (obligatoria en mobile)"
+              "<code>action-bar</code>"
             ],
             [
-              "<code>close-on-select</code>",
-              "auto (off si hay action-bar)"
+              "<code>close-on-select</code>"
             ],
             [
-              "<code>placement</code>",
-              "bottom-start"
+              "<code>placement</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>panel</code> (time)",
-              "sections · list · clock"
+              "<code>panel</code> (time)"
             ],
             [
-              "<code>start-label</code> / <code>end-label</code>",
-              "solo range"
+              "<code>start-label</code> / <code>end-label</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "resto",
-              "se reenvían al campo y al panel"
+              "resto"
             ]
           ]
         }
@@ -187,7 +191,12 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-date-input id=\"di\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-input>\r\n          <iswc-date-input label=\"Con barra\" value=\"2026-07-30\" locale=\"es\" action-bar></iswc-date-input>\n```"
+        "content": [
+          "```html",
+          "<iswc-date-input id=\"di\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-input>",
+          "          <iswc-date-input label=\"Con barra\" value=\"2026-07-30\" locale=\"es\" action-bar></iswc-date-input>",
+          "```"
+        ]
       }
     },
     "exclude": [

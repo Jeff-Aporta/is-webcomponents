@@ -11,15 +11,26 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Catálogo CRUD (port ISP <code class=\"code\">CatalogoGen</code>). El <code class=\"code\">controller</code>\n          se genera con <code class=\"code\">createCatalogController(json)</code>: listado, columnas y\n          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar).",
+      "lede": [
+        "Catálogo CRUD (port ISP <code class=\"code\">CatalogoGen</code>). El <code class=\"code\">controller</code>",
+        "          se genera con <code class=\"code\">createCatalogController(json)</code>: listado, columnas y",
+        "          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar)."
+      ],
       "blocks": [
         {
           "kind": "callout",
-          "html": "Selecciona una fila: la toolbar habilita acciones que requieren selección\n          <strong>sin parpadear</strong> (el grid pinta la selección in-place).\n          En demos se usa <code class=\"code\">mock</code>; en producción pasa <code class=\"code\">server</code> + <code class=\"code\">endpoints</code>."
+          "html": [
+            "Selecciona una fila: la toolbar habilita acciones que requieren selección",
+            "          <strong>sin parpadear</strong> (el grid pinta la selección in-place).",
+            "          En demos se usa <code class=\"code\">mock</code>; en producción pasa <code class=\"code\">server</code> + <code class=\"code\">endpoints</code>."
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></iswc-catalogo-gen>\n          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
+          "html": [
+            "<iswc-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></iswc-catalogo-gen>",
+            "          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
+          ]
         }
       ]
     },
@@ -74,10 +85,39 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Catálogo CRUD (port ISP <code class=\"code\">CatalogoGen</code>). El <code class=\"code\">controller</code>\n          se genera con <code class=\"code\">createCatalogController(json)</code>: listado, columnas y\n          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar)."
+        "content": [
+          "Catálogo CRUD (port ISP <code class=\"code\">CatalogoGen</code>). El <code class=\"code\">controller</code>",
+          "          se genera con <code class=\"code\">createCatalogController(json)</code>: listado, columnas y",
+          "          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar)."
+        ]
       },
       "ejemplos": {
-        "content": "```js\nimport { createCatalogController } from './isp/controller-from-config.min.js';\n\ncat.controller = createCatalogController({\n  entrie: 'Curso',\n  primaryKeys: ['icurso'],\n  columns: [\n    { field: 'icurso', header: 'Código' },\n    { field: 'ncurso', header: 'Nombre' },\n  ],\n  // actions: true  → todas (default)\n  // actions: ['crear','modificar','eliminar']\n  mock: [\n    { icurso: 'C001', ncurso: 'Contabilidad básica' },\n  ],\n  // server: {\n  //   useLocal: false,\n  //   local:  { host: 'localhost', port: <SERVER_PORT>, https: false },\n  //   remote: { host: '….azurewebsites.net', port: 443, https: true },\n  // },\n  // endpoints: { recurso: 'curso', recursos: 'cursos' },\n  // token: () => sessionStorage.getItem('token'),\n});\n```"
+        "content": [
+          "```js",
+          "import { createCatalogController } from './isp/controller-from-config.min.js';",
+          "",
+          "cat.controller = createCatalogController({",
+          "  entrie: 'Curso',",
+          "  primaryKeys: ['icurso'],",
+          "  columns: [",
+          "    { field: 'icurso', header: 'Código' },",
+          "    { field: 'ncurso', header: 'Nombre' },",
+          "  ],",
+          "  // actions: true  → todas (default)",
+          "  // actions: ['crear','modificar','eliminar']",
+          "  mock: [",
+          "    { icurso: 'C001', ncurso: 'Contabilidad básica' },",
+          "  ],",
+          "  // server: {",
+          "  //   useLocal: false,",
+          "  //   local:  { host: 'localhost', port: <SERVER_PORT>, https: false },",
+          "  //   remote: { host: '….azurewebsites.net', port: 443, https: true },",
+          "  // },",
+          "  // endpoints: { recurso: 'curso', recursos: 'cursos' },",
+          "  // token: () => sessionStorage.getItem('token'),",
+          "});",
+          "```"
+        ]
       }
     },
     "exclude": [

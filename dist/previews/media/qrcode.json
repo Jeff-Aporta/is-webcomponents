@@ -4,7 +4,15 @@
   "category": "media",
   "title": "&lt;iswc-qrcode&gt;",
   "titleHtml": false,
-  "styles": ".qr-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "styles": [
+    ".qr-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }",
+    "    pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .78rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 8rem; overflow: auto;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-qrcode",
   "sections": [
     {
@@ -19,7 +27,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode id=\"pgQr\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></iswc-qrcode>\r\n          </div>",
+          "html": [
+            "<div class=\"qr-row\">",
+            "            <iswc-qrcode id=\"pgQr\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></iswc-qrcode>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -48,7 +60,12 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></iswc-qrcode>\r\n          </div>",
+          "html": [
+            "<div class=\"qr-row\">",
+            "            <iswc-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></iswc-qrcode>",
+            "            <iswc-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></iswc-qrcode>",
+            "          </div>"
+          ],
           "heading": "Otros contenidos: mailto, wifi (mismo nivel/cell/bg)"
         }
       ]
@@ -59,7 +76,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode value=\"https://insoft.co\" fg=\"var(--iswc-accent)\" bg=\"var(--iswc-bg-soft)\" cell=\"8\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"https://contapyme.co\" fg=\"var(--iswc-success, #16a34a)\" cell=\"8\"></iswc-qrcode>\r\n          </div>"
+          "html": [
+            "<div class=\"qr-row\">",
+            "            <iswc-qrcode value=\"https://insoft.co\" fg=\"var(--iswc-accent)\" bg=\"var(--iswc-bg-soft)\" cell=\"8\"></iswc-qrcode>",
+            "            <iswc-qrcode value=\"https://contapyme.co\" fg=\"var(--iswc-success, #16a34a)\" cell=\"8\"></iswc-qrcode>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -69,7 +91,11 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const qr = document.querySelector('iswc-qrcode');\nconst dataURL = await qr.dataURL('image/png');\n// descargar, pegar en input[type=file], etc."
+          "code": [
+            "const qr = document.querySelector('iswc-qrcode');",
+            "const dataURL = await qr.dataURL('image/png');",
+            "// descargar, pegar en input[type=file], etc."
+          ]
         }
       ]
     },
@@ -79,7 +105,22 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Atributos\n// value        texto a codificar (requerido)\n// level        L | M | Q | H   (default L)\n// cell         tamaño en píxeles de cada módulo (default 4)\n// margin       módulos de zona de silencio (default 2)\n// fg, bg       colores\n\n// API JS\nqr.svg;        // nodo SVG\nqr.dataURL('image/png').then(url => /* … */);\n\n// Dependencias\n// Carga qrcode-generator@1.4.4 desde esm.sh. Si tu build no tiene\n// red, vendelo o usa otro loader."
+          "code": [
+            "// Atributos",
+            "// value        texto a codificar (requerido)",
+            "// level        L | M | Q | H   (default L)",
+            "// cell         tamaño en píxeles de cada módulo (default 4)",
+            "// margin       módulos de zona de silencio (default 2)",
+            "// fg, bg       colores",
+            "",
+            "// API JS",
+            "qr.svg;        // nodo SVG",
+            "qr.dataURL('image/png').then(url => /* … */);",
+            "",
+            "// Dependencias",
+            "// Carga qrcode-generator@1.4.4 desde esm.sh. Si tu build no tiene",
+            "// red, vendelo o usa otro loader."
+          ]
         }
       ]
     }

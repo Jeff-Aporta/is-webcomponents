@@ -5,17 +5,53 @@
   "title": "&lt;iswc-fab&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-fab (Floating Action Button) de InSoft.",
-  "styles": ".fab-stage {\r\n      /* `position: relative` NO contiene hijos `position: fixed` — solo lo\r\n         hacen transform/filter/contain/perspective. Sin esto el FAB del\r\n         ejemplo se ancla al viewport y se sale de la caja del demo. */\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 360px;\r\n      border: 1px dashed var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n      background: var(--iswc-bg, #0f1117);\r\n      overflow: hidden;\r\n    }\r\n    /* Los demos se organizan con flex: alineados por linea base, con hueco\r\n       uniforme y envolviendo en pantallas estrechas. */\r\n    .fab-row {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: flex-end;\r\n      gap: 1.5rem;\r\n    }\r\n    .fab-row__item {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n    }",
+  "styles": [
+    ".fab-stage {",
+    "      /* `position: relative` NO contiene hijos `position: fixed` — solo lo",
+    "         hacen transform/filter/contain/perspective. Sin esto el FAB del",
+    "         ejemplo se ancla al viewport y se sale de la caja del demo. */",
+    "      position: relative;",
+    "      transform: translateZ(0);",
+    "      height: 360px;",
+    "      border: 1px dashed var(--iswc-border, #2a2f3a);",
+    "      border-radius: 0.5rem;",
+    "      background: var(--iswc-bg, #0f1117);",
+    "      overflow: hidden;",
+    "    }",
+    "    /* Los demos se organizan con flex: alineados por linea base, con hueco",
+    "       uniforme y envolviendo en pantallas estrechas. */",
+    "    .fab-row {",
+    "      display: flex;",
+    "      flex-wrap: wrap;",
+    "      align-items: flex-end;",
+    "      gap: 1.5rem;",
+    "    }",
+    "    .fab-row__item {",
+    "      display: inline-flex;",
+    "      flex-direction: column;",
+    "      align-items: center;",
+    "      gap: 0.5rem;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-fab",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Floating Action Button: botón circular principal que se posiciona de\r\n          forma fija en la ventana. Soporta variantes, tamaños, etiquetas\r\n          extendidas, pulso de atención y posicionamiento en cualquier esquina.",
+      "lede": [
+        "Floating Action Button: botón circular principal que se posiciona de",
+        "          forma fija en la ventana. Soporta variantes, tamaños, etiquetas",
+        "          extendidas, pulso de atención y posicionamiento en cualquier esquina."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fab-stage\">\r\n            <iswc-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></iswc-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>",
+          "html": [
+            "<div class=\"fab-stage\">",
+            "            <iswc-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></iswc-fab>",
+            "          </div>",
+            "          <p>Click: <span id=\"fbLog\">0</span></p>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -77,7 +113,70 @@
           ],
           "equivNote": "position fija vs inline; pulse es atención opcional.",
           "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-fab: position\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"position=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"inline → en flujo\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"esquina fixed\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"pulse?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"anillo de atención\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"inline\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"corner\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-fab: position\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"position=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"inline → en flujo\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"esquina fixed\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"pulse?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"anillo de atención\",",
+            "          \"shape\": \"round\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"inline\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"corner\"",
+            "        },",
+            "        {",
+            "          \"from\": \"a\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"si\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -101,9 +200,29 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"fab-row\">\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">0.75em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1.25em</code>\r\n            </span>\r\n          </div>",
+          "html": [
+            "<div class=\"fab-row\">",
+            "            <span class=\"fab-row__item\">",
+            "              <iswc-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></iswc-fab>",
+            "              <code class=\"code\">0.75em</code>",
+            "            </span>",
+            "            <span class=\"fab-row__item\">",
+            "              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></iswc-fab>",
+            "              <code class=\"code\">1em</code>",
+            "            </span>",
+            "            <span class=\"fab-row__item\">",
+            "              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></iswc-fab>",
+            "              <code class=\"code\">1.25em</code>",
+            "            </span>",
+            "          </div>"
+          ],
           "heading": "El mismo FAB con tres font-size",
-          "equivHtml": "<!-- font-size del host escala el FAB -->\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:0.85rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1.25rem\">+</button>"
+          "equivHtml": [
+            "<!-- font-size del host escala el FAB -->",
+            "<button type=\"button\" aria-label=\"Crear\" style=\"font-size:0.85rem\">+</button>",
+            "<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1rem\">+</button>",
+            "<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1.25rem\">+</button>"
+          ]
         }
       ]
     },
@@ -127,8 +246,17 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></iswc-fab>",
-          "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>\n<button type=\"button\" aria-label=\"Crear\">+</button><!-- outlined vía CSS propio -->"
+          "html": [
+            "<iswc-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></iswc-fab>",
+            "          <iswc-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></iswc-fab>",
+            "          <iswc-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></iswc-fab>",
+            "          <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></iswc-fab>",
+            "          <iswc-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></iswc-fab>"
+          ],
+          "equivHtml": [
+            "<button type=\"button\" aria-label=\"Crear\">+</button>",
+            "<button type=\"button\" aria-label=\"Crear\">+</button><!-- outlined vía CSS propio -->"
+          ]
         }
       ]
     },
@@ -139,9 +267,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-fab icon=\"mdi:plus\" extended label=\"Nuevo proyecto\" position=\"inline\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:share\" color=\"neutral\" extended label=\"Compartir\" position=\"inline\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:download\" color=\"success\" extended label=\"Descargar\" position=\"inline\"></iswc-fab>",
+          "html": [
+            "<iswc-fab icon=\"mdi:plus\" extended label=\"Nuevo proyecto\" position=\"inline\"></iswc-fab>",
+            "          <iswc-fab icon=\"mdi:share\" color=\"neutral\" extended label=\"Compartir\" position=\"inline\"></iswc-fab>",
+            "          <iswc-fab icon=\"mdi:download\" color=\"success\" extended label=\"Descargar\" position=\"inline\"></iswc-fab>"
+          ],
           "equivNote": "extended = icono + etiqueta visible.",
-          "equivHtml": "<button type=\"button\">\n  <span aria-hidden=\"true\">+</span>\n  Crear\n</button>"
+          "equivHtml": [
+            "<button type=\"button\">",
+            "  <span aria-hidden=\"true\">+</span>",
+            "  Crear",
+            "</button>"
+          ]
         }
       ]
     },
@@ -152,8 +289,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"fab-stage\">\r\n            <iswc-fab icon=\"mdi:plus\" position=\"top-start\" label=\"top-start\"></iswc-fab>\r\n            <iswc-fab icon=\"mdi:pencil\" position=\"top-end\" label=\"top-end\"></iswc-fab>\r\n            <iswc-fab icon=\"mdi:share\" position=\"bottom-start\" label=\"bottom-start\"></iswc-fab>\r\n            <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"bottom-end\" label=\"bottom-end\"></iswc-fab>\r\n          </div>",
-          "equivHtml": "<button type=\"button\" aria-label=\"Crear\"\n  style=\"position:fixed; inset:auto 1.5rem 1.5rem auto\">+</button>"
+          "html": [
+            "<div class=\"fab-stage\">",
+            "            <iswc-fab icon=\"mdi:plus\" position=\"top-start\" label=\"top-start\"></iswc-fab>",
+            "            <iswc-fab icon=\"mdi:pencil\" position=\"top-end\" label=\"top-end\"></iswc-fab>",
+            "            <iswc-fab icon=\"mdi:share\" position=\"bottom-start\" label=\"bottom-start\"></iswc-fab>",
+            "            <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"bottom-end\" label=\"bottom-end\"></iswc-fab>",
+            "          </div>"
+          ],
+          "equivHtml": [
+            "<button type=\"button\" aria-label=\"Crear\"",
+            "  style=\"position:fixed; inset:auto 1.5rem 1.5rem auto\">+</button>"
+          ]
         }
       ]
     },
@@ -164,8 +311,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></iswc-fab>",
-          "equivHtml": "<button type=\"button\" aria-label=\"Crear\" class=\"pulse\">+</button>\n<!-- .pulse sería CSS propio; el kit usa el atributo pulse -->"
+          "html": [
+            "<iswc-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></iswc-fab>",
+            "          <iswc-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></iswc-fab>"
+          ],
+          "equivHtml": [
+            "<button type=\"button\" aria-label=\"Crear\" class=\"pulse\">+</button>",
+            "<!-- .pulse sería CSS propio; el kit usa el atributo pulse -->"
+          ]
         }
       ]
     },
@@ -176,7 +329,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-fab\">\n  <iswc-fab color=\"brand\">\n    <iswc-icon icon=\"mdi:plus\"></iswc-icon>\n    Crear nuevo\n  </iswc-fab>\n  <iswc-icon slot=\"icon\" icon=\"mdi:plus\"></iswc-icon>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-fab\">",
+            "  <iswc-fab color=\"brand\">",
+            "    <iswc-icon icon=\"mdi:plus\"></iswc-icon>",
+            "    Crear nuevo",
+            "  </iswc-fab>",
+            "  <iswc-icon slot=\"icon\" icon=\"mdi:plus\"></iswc-icon>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -192,52 +353,36 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>icon</code>",
-              "string",
-              "mdi:plus",
-              "Iconify id."
+              "<code>icon</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Iconify id. (valor por defecto)"
             ],
             [
-              "<code>position</code>",
-              "bottom-end | bottom-start | top-end | top-start | inline",
-              "bottom-end",
-              "Posición fija."
+              "<code>position</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Posición fija. (valor por defecto)"
             ],
             [
-              "<code>color</code>",
-              "brand | neutral | danger | success | warning",
-              "brand",
-              "Color semántico."
+              "<code>color</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Color semántico. (valor por defecto)"
             ],
             [
-              "<code>extended</code>",
-              "boolean",
-              "false",
-              "Forma pill con label."
+              "<code>extended</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Forma pill con label. (valor por defecto)"
             ],
             [
-              "<code>pulse</code>",
-              "boolean",
-              "false",
-              "Pulso de atención."
+              "<code>pulse</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Pulso de atención. (valor por defecto)"
             ],
             [
               "<code>label</code>",
-              "string",
-              "—",
               "aria-label."
             ],
             [
-              "<code>without-shadow</code>",
-              "boolean",
-              "false",
-              "Sin sombra."
+              "<code>without-shadow</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Sin sombra. (valor por defecto)"
             ]
           ]
         },
@@ -264,7 +409,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Floating Action Button: botón circular principal que se posiciona de\r\n          forma fija en la ventana. Soporta variantes, tamaños, etiquetas\r\n          extendidas, pulso de atención y posicionamiento en cualquier esquina."
+        "content": [
+          "Floating Action Button: botón circular principal que se posiciona de",
+          "          forma fija en la ventana. Soporta variantes, tamaños, etiquetas",
+          "          extendidas, pulso de atención y posicionamiento en cualquier esquina."
+        ]
       },
       "atributos": {
         "table": [
@@ -321,7 +470,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-fab icon=\"mdi:plus\" label=\"Crear\"></iswc-fab>\n```"
+        "content": [
+          "```html",
+          "<iswc-fab icon=\"mdi:plus\" label=\"Crear\"></iswc-fab>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -14,7 +14,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:1em\">\n  <div id=\"ec-target\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">\n    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>\n  </div>\n  <iswc-examples-carousel\n    tag=\"iswc-button\"\n    target=\"#ec-target iswc-button\"\n    label=\"Ejemplos predefinidos\"\n    examples='[{\"label\":\"Primario\",\"props\":{\"color\":\"brand\",\"variant\":\"filled\"},\"text\":\"Primario\",\"icon\":\"mdi:star\",\"swatch\":\"#4f46e5\"},{\"label\":\"Secundario\",\"props\":{\"color\":\"success\",\"variant\":\"outlined\"},\"text\":\"Secundario\",\"icon\":\"mdi:check-circle\",\"swatch\":\"#16a34a\"},{\"label\":\"Peligro\",\"props\":{\"color\":\"danger\",\"variant\":\"filled\"},\"text\":\"Peligro\",\"icon\":\"mdi:alert-circle\",\"swatch\":\"#dc2626\"},{\"label\":\"Discreto\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Discreto\",\"icon\":\"mdi:dots-horizontal\",\"swatch\":\"#6b7280\"}]'>\n  </iswc-examples-carousel>\n</div>"
+          "html": [
+            "<div style=\"display:flex;flex-direction:column;gap:1em\">",
+            "  <div id=\"ec-target\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">",
+            "    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>",
+            "  </div>",
+            "  <iswc-examples-carousel",
+            "    tag=\"iswc-button\"",
+            "    target=\"#ec-target iswc-button\"",
+            "    label=\"Ejemplos predefinidos\"",
+            "    examples='[{\"label\":\"Primario\",\"props\":{\"color\":\"brand\",\"variant\":\"filled\"},\"text\":\"Primario\",\"icon\":\"mdi:star\",\"swatch\":\"#4f46e5\"},{\"label\":\"Secundario\",\"props\":{\"color\":\"success\",\"variant\":\"outlined\"},\"text\":\"Secundario\",\"icon\":\"mdi:check-circle\",\"swatch\":\"#16a34a\"},{\"label\":\"Peligro\",\"props\":{\"color\":\"danger\",\"variant\":\"filled\"},\"text\":\"Peligro\",\"icon\":\"mdi:alert-circle\",\"swatch\":\"#dc2626\"},{\"label\":\"Discreto\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Discreto\",\"icon\":\"mdi:dots-horizontal\",\"swatch\":\"#6b7280\"}]'>",
+            "  </iswc-examples-carousel>",
+            "</div>"
+          ]
         }
       ]
     },
@@ -25,7 +37,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:1em\">\n  <div id=\"ec-target-3\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">\n    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>\n  </div>\n  <iswc-examples-carousel\n    tag=\"iswc-button\"\n    target=\"#ec-target-3 iswc-button\"\n    label=\"Con tabs\"\n    examples='[{\"label\":\"Primario\",\"category\":\"Estados\",\"props\":{\"color\":\"brand\",\"variant\":\"filled\"},\"text\":\"Primario\",\"icon\":\"mdi:star\",\"swatch\":\"#4f46e5\"},{\"label\":\"Secundario\",\"category\":\"Estados\",\"props\":{\"color\":\"success\",\"variant\":\"outlined\"},\"text\":\"Secundario\",\"icon\":\"mdi:check-circle\",\"swatch\":\"#16a34a\"},{\"label\":\"Discreto\",\"category\":\"Estados\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Discreto\",\"icon\":\"mdi:dots-horizontal\",\"swatch\":\"#6b7280\"},{\"label\":\"Peligro\",\"category\":\"Alertas\",\"props\":{\"color\":\"danger\",\"variant\":\"filled\"},\"text\":\"Peligro\",\"icon\":\"mdi:alert-circle\",\"swatch\":\"#dc2626\"},{\"label\":\"Aviso\",\"category\":\"Alertas\",\"props\":{\"color\":\"warning\",\"variant\":\"outlined\"},\"text\":\"Aviso\",\"icon\":\"mdi:alert\",\"swatch\":\"#f59e0b\"},{\"label\":\"Info\",\"category\":\"Alertas\",\"props\":{\"color\":\"info\",\"variant\":\"soft\"},\"text\":\"Info\",\"icon\":\"mdi:information\",\"swatch\":\"#0ea5e9\"},{\"label\":\"Con icono\",\"category\":\"Iconos\",\"props\":{\"color\":\"brand\",\"variant\":\"outlined\"},\"text\":\"Con icono\",\"icon\":\"mdi:rocket-launch\",\"swatch\":\"#7c3aed\"},{\"label\":\"Sin icono\",\"category\":\"Iconos\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Sin icono\",\"swatch\":\"#6b7280\"}]'>\n  </iswc-examples-carousel>\n</div>"
+          "html": [
+            "<div style=\"display:flex;flex-direction:column;gap:1em\">",
+            "  <div id=\"ec-target-3\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">",
+            "    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>",
+            "  </div>",
+            "  <iswc-examples-carousel",
+            "    tag=\"iswc-button\"",
+            "    target=\"#ec-target-3 iswc-button\"",
+            "    label=\"Con tabs\"",
+            "    examples='[{\"label\":\"Primario\",\"category\":\"Estados\",\"props\":{\"color\":\"brand\",\"variant\":\"filled\"},\"text\":\"Primario\",\"icon\":\"mdi:star\",\"swatch\":\"#4f46e5\"},{\"label\":\"Secundario\",\"category\":\"Estados\",\"props\":{\"color\":\"success\",\"variant\":\"outlined\"},\"text\":\"Secundario\",\"icon\":\"mdi:check-circle\",\"swatch\":\"#16a34a\"},{\"label\":\"Discreto\",\"category\":\"Estados\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Discreto\",\"icon\":\"mdi:dots-horizontal\",\"swatch\":\"#6b7280\"},{\"label\":\"Peligro\",\"category\":\"Alertas\",\"props\":{\"color\":\"danger\",\"variant\":\"filled\"},\"text\":\"Peligro\",\"icon\":\"mdi:alert-circle\",\"swatch\":\"#dc2626\"},{\"label\":\"Aviso\",\"category\":\"Alertas\",\"props\":{\"color\":\"warning\",\"variant\":\"outlined\"},\"text\":\"Aviso\",\"icon\":\"mdi:alert\",\"swatch\":\"#f59e0b\"},{\"label\":\"Info\",\"category\":\"Alertas\",\"props\":{\"color\":\"info\",\"variant\":\"soft\"},\"text\":\"Info\",\"icon\":\"mdi:information\",\"swatch\":\"#0ea5e9\"},{\"label\":\"Con icono\",\"category\":\"Iconos\",\"props\":{\"color\":\"brand\",\"variant\":\"outlined\"},\"text\":\"Con icono\",\"icon\":\"mdi:rocket-launch\",\"swatch\":\"#7c3aed\"},{\"label\":\"Sin icono\",\"category\":\"Iconos\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Sin icono\",\"swatch\":\"#6b7280\"}]'>",
+            "  </iswc-examples-carousel>",
+            "</div>"
+          ]
         }
       ]
     },
@@ -36,7 +60,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:1em\">\n  <div id=\"ec-target-2\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">\n    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>\n  </div>\n  <iswc-examples-carousel tag=\"iswc-button\" target=\"#ec-target-2 iswc-button\" label=\"Inline\">\n    <span data-label=\"Primario\" data-props='{\"color\":\"brand\",\"variant\":\"filled\"}' data-text=\"Primario\"></span>\n    <span data-label=\"Secundario\" data-props='{\"color\":\"neutral\",\"variant\":\"outlined\"}' data-text=\"Secundario\"></span>\n    <span data-label=\"Peligro\" data-props='{\"color\":\"danger\",\"variant\":\"plain\"}' data-text=\"Peligro\"></span>\n  </iswc-examples-carousel>\n</div>"
+          "html": [
+            "<div style=\"display:flex;flex-direction:column;gap:1em\">",
+            "  <div id=\"ec-target-2\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">",
+            "    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>",
+            "  </div>",
+            "  <iswc-examples-carousel tag=\"iswc-button\" target=\"#ec-target-2 iswc-button\" label=\"Inline\">",
+            "    <span data-label=\"Primario\" data-props='{\"color\":\"brand\",\"variant\":\"filled\"}' data-text=\"Primario\"></span>",
+            "    <span data-label=\"Secundario\" data-props='{\"color\":\"neutral\",\"variant\":\"outlined\"}' data-text=\"Secundario\"></span>",
+            "    <span data-label=\"Peligro\" data-props='{\"color\":\"danger\",\"variant\":\"plain\"}' data-text=\"Peligro\"></span>",
+            "  </iswc-examples-carousel>",
+            "</div>"
+          ]
         }
       ]
     },
@@ -85,46 +120,32 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripcion"
           ],
           "rows": [
             [
               "<code>tag</code>",
-              "string",
-              "—",
               "Tag del componente target (e.g. <code>iswc-button</code>). Required."
             ],
             [
               "<code>target</code>",
-              "string",
-              "—",
               "Selector CSS del host en la misma pagina al que aplicar los props. Si falta, solo se ve el carrusel."
             ],
             [
-              "<code>label</code>",
-              "string",
-              "Ejemplos predefinidos",
-              "Titulo del header."
+              "<code>label</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Titulo del header. (valor por defecto)"
             ],
             [
               "<code>lede</code>",
-              "string",
-              "—",
               "Subtitulo opcional del header."
             ],
             [
-              "<code>default-index</code>",
-              "number",
-              "<code>-1</code>",
-              "Indice del ejemplo a marcar como activo al inicio."
+              "<code>default-index</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Indice del ejemplo a marcar como activo al inicio. (valor por defecto)"
             ],
             [
-              "<code>category-field</code>",
-              "string",
-              "<code>category</code>",
-              "Nombre de la prop de <code>ExampleSpec</code> usada para agrupar y filtrar por tabs."
+              "<code>category-field</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Nombre de la prop de <code>ExampleSpec</code> usada para agrupar y filtrar por tabs. (valor por defecto)"
             ]
           ]
         },
@@ -132,18 +153,15 @@
           "kind": "table",
           "columns": [
             "Prop",
-            "Tipo",
             "Descripcion"
           ],
           "rows": [
             [
               "<code>examples</code>",
-              "<code>ExampleSpec[]</code>",
               "Lista de <code>{ label, props, text?, html?, icon?, swatch?, category? }</code>. Tambien se acepta el atributo HTML <code>examples</code> como JSON."
             ],
             [
               "<code>tag</code>, <code>target</code>, <code>label</code>, <code>lede</code>, <code>defaultIndex</code>, <code>categoryField</code>",
-              "string/number",
               "Reflejan los atributos HTML."
             ]
           ]

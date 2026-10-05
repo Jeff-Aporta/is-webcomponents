@@ -13,7 +13,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <iswc-option value=\"bog\">Bogotá</iswc-option>\r\n            <iswc-option value=\"med\">Medellín</iswc-option>\r\n            <iswc-option value=\"cal\">Cali</iswc-option>\r\n            <iswc-option value=\"barr\">Barranquilla</iswc-option>\r\n            <iswc-option value=\"buc\">Bucaramanga</iswc-option>\r\n          </iswc-combobox>",
+          "html": [
+            "<iswc-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">",
+            "            <iswc-option value=\"bog\">Bogotá</iswc-option>",
+            "            <iswc-option value=\"med\">Medellín</iswc-option>",
+            "            <iswc-option value=\"cal\">Cali</iswc-option>",
+            "            <iswc-option value=\"barr\">Barranquilla</iswc-option>",
+            "            <iswc-option value=\"buc\">Bucaramanga</iswc-option>",
+            "          </iswc-combobox>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -54,7 +62,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-combobox label=\"País\" value=\"co\" required style=\"max-width:20rem\">\r\n            <option value=\"co\">Colombia</option>\r\n            <option value=\"mx\">México</option>\r\n            <option value=\"es\">España</option>\r\n          </iswc-combobox>"
+          "html": [
+            "<iswc-combobox label=\"País\" value=\"co\" required style=\"max-width:20rem\">",
+            "            <option value=\"co\">Colombia</option>",
+            "            <option value=\"mx\">México</option>",
+            "            <option value=\"es\">España</option>",
+            "          </iswc-combobox>"
+          ]
         }
       ]
     },
@@ -66,29 +80,23 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>label</code> / <code>hint</code>",
-              "—"
+              "<code>label</code> / <code>hint</code>"
             ],
             [
-              "<code>name</code> / <code>value</code>",
-              "—"
+              "<code>name</code> / <code>value</code>"
             ],
             [
-              "<code>placeholder</code>",
-              "—"
+              "<code>placeholder</code>"
             ],
             [
-              "<code>disabled</code> / <code>required</code>",
-              "false"
+              "<code>disabled</code> / <code>required</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>open</code> / <code>clearable</code>",
-              "false"
+              "<code>open</code> / <code>clearable</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ]
           ]
         }
@@ -125,7 +133,17 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <iswc-option value=\"bog\">Bogotá</iswc-option>\r\n            <iswc-option value=\"med\">Medellín</iswc-option>\r\n            <iswc-option value=\"cal\">Cali</iswc-option>\r\n            <iswc-option value=\"barr\">Barranquilla</iswc-option>\r\n            <iswc-option value=\"buc\">Bucaramanga</iswc-option>\r\n          </iswc-combobox>\n```"
+        "content": [
+          "```html",
+          "<iswc-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">",
+          "            <iswc-option value=\"bog\">Bogotá</iswc-option>",
+          "            <iswc-option value=\"med\">Medellín</iswc-option>",
+          "            <iswc-option value=\"cal\">Cali</iswc-option>",
+          "            <iswc-option value=\"barr\">Barranquilla</iswc-option>",
+          "            <iswc-option value=\"buc\">Bucaramanga</iswc-option>",
+          "          </iswc-combobox>",
+          "```"
+        ]
       }
     },
     "exclude": [

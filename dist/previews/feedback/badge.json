@@ -64,7 +64,22 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">\r\n            <iswc-badge color=\"brand\" variant=\"accent\">accent</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled\">filled</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"outlined\">outlined</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</iswc-badge>\r\n            <iswc-badge color=\"danger\" pill attention=\"bounce\">pill bounce</iswc-badge>\r\n          </div>\r\n          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-badge color=\"neutral\" variant=\"filled\">neutral</iswc-badge>\r\n            <iswc-badge color=\"success\" variant=\"filled\">success</iswc-badge>\r\n            <iswc-badge color=\"warning\" variant=\"outlined\">warning</iswc-badge>\r\n            <iswc-badge color=\"danger\" variant=\"accent\">danger</iswc-badge>\r\n            <iswc-badge attention=\"pulse\">pulse</iswc-badge>\r\n          </div>"
+          "html": [
+            "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">",
+            "            <iswc-badge color=\"brand\" variant=\"accent\">accent</iswc-badge>",
+            "            <iswc-badge color=\"brand\" variant=\"filled\">filled</iswc-badge>",
+            "            <iswc-badge color=\"brand\" variant=\"outlined\">outlined</iswc-badge>",
+            "            <iswc-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</iswc-badge>",
+            "            <iswc-badge color=\"danger\" pill attention=\"bounce\">pill bounce</iswc-badge>",
+            "          </div>",
+            "          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">",
+            "            <iswc-badge color=\"neutral\" variant=\"filled\">neutral</iswc-badge>",
+            "            <iswc-badge color=\"success\" variant=\"filled\">success</iswc-badge>",
+            "            <iswc-badge color=\"warning\" variant=\"outlined\">warning</iswc-badge>",
+            "            <iswc-badge color=\"danger\" variant=\"accent\">danger</iswc-badge>",
+            "            <iswc-badge attention=\"pulse\">pulse</iswc-badge>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -75,7 +90,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-badge\">\n  <iswc-badge color=\"success\">Activo</iswc-badge>\n  <iswc-icon slot=\"start\" icon=\"mdi:check-circle\"></iswc-icon>\n  <span slot=\"end\">12</span>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-badge\">",
+            "  <iswc-badge color=\"success\">Activo</iswc-badge>",
+            "  <iswc-icon slot=\"start\" icon=\"mdi:check-circle\"></iswc-icon>",
+            "  <span slot=\"end\">12</span>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -87,25 +108,20 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>variant</code>",
-              "brand"
+              "<code>variant</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>appearance</code>",
-              "accent"
+              "<code>appearance</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>pill</code>",
-              "false"
+              "<code>pill</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>attention</code>",
-              "none · pulse · bounce"
+              "<code>attention</code>"
             ]
           ]
         }
@@ -138,7 +154,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\n```"
+        "content": [
+          "```html",
+          "<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>",
+          "```"
+        ]
       }
     },
     "exclude": [

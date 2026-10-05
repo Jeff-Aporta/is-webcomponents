@@ -4,7 +4,22 @@
   "category": "forms",
   "title": "&lt;iswc-dropzone&gt;",
   "titleHtml": false,
-  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }\r\n    button.go {\r\n      font: inherit;\r\n      padding: .5rem 1rem;\r\n      background: var(--iswc-accent);\r\n      color: var(--iswc-on-accent, #fff);\r\n      border: 0; border-radius: 999px;\r\n      cursor: pointer;\r\n    }",
+  "styles": [
+    "pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .8rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 8rem; overflow: auto;",
+    "    }",
+    "    button.go {",
+    "      font: inherit;",
+    "      padding: .5rem 1rem;",
+    "      background: var(--iswc-accent);",
+    "      color: var(--iswc-on-accent, #fff);",
+    "      border: 0; border-radius: 999px;",
+    "      cursor: pointer;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-dropzone",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +35,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-dropzone id=\"dz\" accept=\"image/*\" max-files=\"6\" max-size=\"5242880\">\r\n          </iswc-dropzone>\r\n          <div style=\"display:flex; gap:.5rem; margin-top:.55rem; align-items:center\">\r\n            <button class=\"go\" id=\"uploadBtn\">Simular upload</button>\r\n            <small style=\"color:var(--iswc-text-soft); font-size:.78rem\">Arrastra o selecciona archivos; click \"Simular upload\" para ver el progreso.</small>\r\n          </div>",
+          "html": [
+            "<iswc-dropzone id=\"dz\" accept=\"image/*\" max-files=\"6\" max-size=\"5242880\">",
+            "          </iswc-dropzone>",
+            "          <div style=\"display:flex; gap:.5rem; margin-top:.55rem; align-items:center\">",
+            "            <button class=\"go\" id=\"uploadBtn\">Simular upload</button>",
+            "            <small style=\"color:var(--iswc-text-soft); font-size:.78rem\">Arrastra o selecciona archivos; click \"Simular upload\" para ver el progreso.</small>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -63,7 +85,21 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const dz = document.querySelector('iswc-dropzone');\ndz.files;                 // array de FileRecord\ndz.addFile(file);\ndz.removeFile(id);\ndz.upload();              // dispara iswc-upload-progress por chunk\ndz.addEventListener('iswc-files-change',   e => console.log(e.detail.files));\ndz.addEventListener('iswc-upload-start',   e => ...);\ndz.addEventListener('iswc-upload-progress',e => console.log(e.detail.progress));\ndz.addEventListener('iswc-upload-end',     e => ...);\ndz.addEventListener('iswc-error',          e => /* reason: max-size | accept | max-files */);\n\n// Atributos\n// accept, multiple, max-files, max-size (bytes), chunked"
+          "code": [
+            "const dz = document.querySelector('iswc-dropzone');",
+            "dz.files;                 // array de FileRecord",
+            "dz.addFile(file);",
+            "dz.removeFile(id);",
+            "dz.upload();              // dispara iswc-upload-progress por chunk",
+            "dz.addEventListener('iswc-files-change',   e => console.log(e.detail.files));",
+            "dz.addEventListener('iswc-upload-start',   e => ...);",
+            "dz.addEventListener('iswc-upload-progress',e => console.log(e.detail.progress));",
+            "dz.addEventListener('iswc-upload-end',     e => ...);",
+            "dz.addEventListener('iswc-error',          e => /* reason: max-size | accept | max-files */);",
+            "",
+            "// Atributos",
+            "// accept, multiple, max-files, max-size (bytes), chunked"
+          ]
         }
       ]
     }

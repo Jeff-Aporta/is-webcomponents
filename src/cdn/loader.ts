@@ -28,7 +28,6 @@ import {
   commitLoads,
   resolveTagId,
   isTagCovered,
-  type TagEntry,
   type Catalog,
 } from './load-plan.js';
 import type { LoadJob } from './load-plan.js';
@@ -41,15 +40,6 @@ export { planLoads, commitLoads, createRegistry, tagKey } from './load-plan.js';
 export { installSheetCache, getSheetCache, createSheetCache } from './sheet-cache.js';
 export { ensureElement, isElementReady } from './ensure-element.js';
 import {
-  AppComponentEntrySchema,
-  ConfigureOptsSchema,
-  LoadedSnapshotSchema,
-  LoaderSheetsSchema,
-  LoaderStateSchema,
-  LoadResultSchema,
-  MirrorSchema,
-  PageModuleKindSchema,
-  PageModuleSpecSchema,
   type AppComponentEntry,
   type ConfigureOpts,
   type ISWebComponentsLoaderShape,
@@ -273,11 +263,6 @@ function resolvePageModule(input: string): PageModuleSpec {
   throw new Error(
     `loadPageModules: alias desconocido "${trimmed}" — registra con L.registerPageModule(alias, href) o usa un alias válido (${[...state.pageModules.keys()].join(', ')})`,
   );
-}
-
-/** @deprecated usar resolvePageModule; se mantiene el nombre para callers internos viejos. */
-function resolvePageModuleHref(input: string): string {
-  return resolvePageModule(input).href;
 }
 
 async function resolvePageModuleUrl(spec: PageModuleSpec): Promise<string> {

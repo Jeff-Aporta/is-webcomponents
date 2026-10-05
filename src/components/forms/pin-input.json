@@ -10,11 +10,18 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,\r\n          Backspace retrocede, pegar reparte todos los dígitos, navegación con\r\n          flechas y soporte para enmascarar el contenido.",
+      "lede": [
+        "Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,",
+        "          Backspace retrocede, pegar reparte todos los dígitos, navegación con",
+        "          flechas y soporte para enmascarar el contenido."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-pin-input id=\"otp1\" length=\"6\"></iswc-pin-input>\r\n          <p>Valor: <code class=\"code\" id=\"otp1Val\">—</code></p>",
+          "html": [
+            "<iswc-pin-input id=\"otp1\" length=\"6\"></iswc-pin-input>",
+            "          <p>Valor: <code class=\"code\" id=\"otp1Val\">—</code></p>"
+          ],
           "controls": [
             {
               "control": "number",
@@ -63,7 +70,26 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>3 dígitos</small>\r\n              <iswc-pin-input length=\"3\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>4 dígitos</small>\r\n              <iswc-pin-input length=\"4\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>6 dígitos</small>\r\n              <iswc-pin-input length=\"6\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>8 dígitos</small>\r\n              <iswc-pin-input length=\"8\"></iswc-pin-input>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">",
+            "            <div>",
+            "              <small>3 dígitos</small>",
+            "              <iswc-pin-input length=\"3\"></iswc-pin-input>",
+            "            </div>",
+            "            <div>",
+            "              <small>4 dígitos</small>",
+            "              <iswc-pin-input length=\"4\"></iswc-pin-input>",
+            "            </div>",
+            "            <div>",
+            "              <small>6 dígitos</small>",
+            "              <iswc-pin-input length=\"6\"></iswc-pin-input>",
+            "            </div>",
+            "            <div>",
+            "              <small>8 dígitos</small>",
+            "              <iswc-pin-input length=\"8\"></iswc-pin-input>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -74,7 +100,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start\">\r\n            <div><small>0.8em</small><iswc-pin-input style=\"font-size:0.8em\" length=\"6\"></iswc-pin-input></div>\r\n            <div><small>1em</small><iswc-pin-input length=\"6\"></iswc-pin-input></div>\r\n            <div><small>1.25em</small><iswc-pin-input style=\"font-size:1.25em\" length=\"6\"></iswc-pin-input></div>\r\n          </div>"
+          "html": [
+            "<div style=\"display:flex;flex-direction:column;gap:0.75rem;align-items:flex-start\">",
+            "            <div><small>0.8em</small><iswc-pin-input style=\"font-size:0.8em\" length=\"6\"></iswc-pin-input></div>",
+            "            <div><small>1em</small><iswc-pin-input length=\"6\"></iswc-pin-input></div>",
+            "            <div><small>1.25em</small><iswc-pin-input style=\"font-size:1.25em\" length=\"6\"></iswc-pin-input></div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -107,7 +139,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">\r\n            <div>\r\n              <small>disabled</small>\r\n              <iswc-pin-input length=\"6\" disabled value=\"123456\"></iswc-pin-input>\r\n            </div>\r\n            <div>\r\n              <small>invalid</small>\r\n              <iswc-pin-input id=\"otpErr\" length=\"6\" invalid></iswc-pin-input>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div style=\"display:flex;flex-direction:column;gap:0.75rem\">",
+            "            <div>",
+            "              <small>disabled</small>",
+            "              <iswc-pin-input length=\"6\" disabled value=\"123456\"></iswc-pin-input>",
+            "            </div>",
+            "            <div>",
+            "              <small>invalid</small>",
+            "              <iswc-pin-input id=\"otpErr\" length=\"6\" invalid></iswc-pin-input>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -123,51 +166,35 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>length</code>",
-              "number",
-              "6",
-              "Cantidad de dígitos (3-8)."
+              "<code>length</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Cantidad de dígitos (3-8). (valor por defecto)"
             ],
             [
-              "<code>type</code>",
-              "number | text",
-              "number",
-              "Tipo de carácter aceptado."
+              "<code>type</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tipo de carácter aceptado. (valor por defecto)"
             ],
             [
-              "<code>mask</code>",
-              "boolean",
-              "false",
-              "Oculta el contenido."
+              "<code>mask</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Oculta el contenido. (valor por defecto)"
             ],
             [
-              "<code>disabled</code>",
-              "boolean",
-              "false",
-              "Deshabilita."
+              "<code>disabled</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Deshabilita. (valor por defecto)"
             ],
             [
-              "<code>invalid</code>",
-              "boolean",
-              "false",
-              "Marca error."
+              "<code>invalid</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Marca error. (valor por defecto)"
             ],
             [
               "<code>placeholder</code>",
-              "string",
-              "—",
               "Marcador para casillas vacías."
             ],
             [
               "<code>value</code>",
-              "string",
-              "—",
               "Valor inicial."
             ]
           ]
@@ -199,7 +226,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,\r\n          Backspace retrocede, pegar reparte todos los dígitos, navegación con\r\n          flechas y soporte para enmascarar el contenido."
+        "content": [
+          "Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,",
+          "          Backspace retrocede, pegar reparte todos los dígitos, navegación con",
+          "          flechas y soporte para enmascarar el contenido."
+        ]
       },
       "atributos": {
         "table": [
@@ -260,7 +291,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-pin-input length=\"6\"></iswc-pin-input>\n```"
+        "content": [
+          "```html",
+          "<iswc-pin-input length=\"6\"></iswc-pin-input>",
+          "```"
+        ]
       }
     },
     "exclude": [

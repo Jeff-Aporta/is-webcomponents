@@ -13,7 +13,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-line-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\"datasets\":[{\"label\":\"Visitas\",\"data\":[4200,4800,5100,4900,5500,6200]}]}}\r\n            </script>\r\n          </iswc-line-chart>",
+          "html": [
+            "<iswc-line-chart open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {\"data\":{\"labels\":[\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\"datasets\":[{\"label\":\"Visitas\",\"data\":[4200,4800,5100,4900,5500,6200]}]}}",
+            "            </script>",
+            "          </iswc-line-chart>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -31,7 +37,15 @@
         "content": "Tendencias en el tiempo."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-line-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\"datasets\":[{\"label\":\"Visitas\",\"data\":[4200,4800,5100,4900,5500,6200]}]}}\r\n            </script>\r\n          </iswc-line-chart>\n```"
+        "content": [
+          "```html",
+          "<iswc-line-chart open-on-click>",
+          "            <script type=\"application/json\">",
+          "              {\"data\":{\"labels\":[\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\"datasets\":[{\"label\":\"Visitas\",\"data\":[4200,4800,5100,4900,5500,6200]}]}}",
+          "            </script>",
+          "          </iswc-line-chart>",
+          "```"
+        ]
       }
     },
     "exclude": [

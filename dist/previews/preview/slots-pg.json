@@ -14,7 +14,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-button\">\n  <iswc-button>Texto</iswc-button>\n  <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-button\">",
+            "  <iswc-button>Texto</iswc-button>",
+            "  <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>",
+            "  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -29,7 +35,14 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-card\" default-tab=\"slots\">\n  <iswc-card>Body principal</iswc-card>\n  <div slot=\"media\"><iswc-icon></iswc-icon></div>\n  <strong slot=\"header\">Titulo</strong>\n  <span slot=\"footer\">Pie</span>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-card\" default-tab=\"slots\">",
+            "  <iswc-card>Body principal</iswc-card>",
+            "  <div slot=\"media\"><iswc-icon></iswc-icon></div>",
+            "  <strong slot=\"header\">Titulo</strong>",
+            "  <span slot=\"footer\">Pie</span>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -41,33 +54,23 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripcion"
           ],
           "rows": [
             [
               "<code>tag</code>",
-              "string",
-              "—",
               "Tag del componente target (e.g. <code>iswc-button</code>). Requerido."
             ],
             [
               "<code>title</code>",
-              "string",
-              "<code>&lt;<i>tag</i>&gt; slots</code>",
               "Titulo visible del header."
             ],
             [
-              "<code>default-tab</code>",
-              "simple | slots | auto",
-              "auto",
-              "Tab inicial. <code>auto</code> usa <code>simple</code> si el componente tiene &le; 2 slots, si no <code>slots</code>."
+              "<code>default-tab</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tab inicial. <code>auto</code> usa <code>simple</code> si el componente tiene &le; 2 slots, si no <code>slots</code>. (valor por defecto)"
             ],
             [
               "<code>lede</code>",
-              "string",
-              "—",
               "Subtitulo del header."
             ]
           ]

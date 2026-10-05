@@ -4,7 +4,26 @@
   "category": "layout",
   "title": "&lt;iswc-dock&gt;",
   "titleHtml": false,
-  "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--iswc-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      overflow: hidden;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
+  "styles": [
+    ".stage {",
+    "      height: 28rem;",
+    "      border: 1px dashed var(--iswc-border);",
+    "      border-radius: var(--iswc-radius);",
+    "      background:",
+    "        radial-gradient(60rem 30rem at 50% 100%,",
+    "          color-mix(in srgb, var(--iswc-accent) 14%, transparent),",
+    "          transparent 60%);",
+    "      position: relative;",
+    "      transform: translateZ(0);",
+    "      overflow: hidden;",
+    "    }",
+    "    pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .8rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 9rem; overflow: auto;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-dock",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +39,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stage\"></div>\r\n          <iswc-dock>\r\n            <iswc-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></iswc-dock-item>\r\n            <iswc-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Música\"     icon=\"mdi:music\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></iswc-dock-item>\r\n          </iswc-dock>",
+          "html": [
+            "<div class=\"stage\"></div>",
+            "          <iswc-dock>",
+            "            <iswc-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Música\"     icon=\"mdi:music\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></iswc-dock-item>",
+            "          </iswc-dock>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -62,7 +92,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stage\"></div>\r\n          <iswc-dock position=\"left\">\r\n            <iswc-dock-item label=\"VS Code\"  icon=\"mdi:code-braces\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Git\"      icon=\"mdi:source-branch\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Terminal\" icon=\"mdi:console\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Docker\"   icon=\"mdi:docker\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Browser\"  icon=\"mdi:web\"></iswc-dock-item>\r\n          </iswc-dock>",
+          "html": [
+            "<div class=\"stage\"></div>",
+            "          <iswc-dock position=\"left\">",
+            "            <iswc-dock-item label=\"VS Code\"  icon=\"mdi:code-braces\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Git\"      icon=\"mdi:source-branch\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Terminal\" icon=\"mdi:console\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Docker\"   icon=\"mdi:docker\"></iswc-dock-item>",
+            "            <iswc-dock-item label=\"Browser\"  icon=\"mdi:web\"></iswc-dock-item>",
+            "          </iswc-dock>"
+          ],
           "contain": true
         }
       ]
@@ -73,7 +112,20 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Cambia el ítem activo programáticamente\ndocument.querySelector('iswc-dock-item[label=\"Inicio\"]').setAttribute('active', '');\n\n// Escucha selección\ndock.addEventListener('iswc-select', e => console.log(e.detail.item.getAttribute('label')));\n\n// Atributos\n// position    bottom (default) | top | left | right\n// max-scale   factor máximo (default 1.6)\n// range       píxeles de alcance (default 110)\n\n<iswc-dock-item label=\"…\" icon=\"mdi:…\" href=\"…\" active />"
+          "code": [
+            "// Cambia el ítem activo programáticamente",
+            "document.querySelector('iswc-dock-item[label=\"Inicio\"]').setAttribute('active', '');",
+            "",
+            "// Escucha selección",
+            "dock.addEventListener('iswc-select', e => console.log(e.detail.item.getAttribute('label')));",
+            "",
+            "// Atributos",
+            "// position    bottom (default) | top | left | right",
+            "// max-scale   factor máximo (default 1.6)",
+            "// range       píxeles de alcance (default 110)",
+            "",
+            "<iswc-dock-item label=\"…\" icon=\"mdi:…\" href=\"…\" active />"
+          ]
         }
       ]
     },

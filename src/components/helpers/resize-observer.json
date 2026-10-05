@@ -4,22 +4,102 @@
   "category": "helpers",
   "title": "&lt;iswc-resize-observer&gt;",
   "titleHtml": false,
-  "styles": ".ro-box {\n      resize: both;\n      overflow: auto;\n      box-sizing: border-box;\n      min-width: 140px;\n      min-height: 90px;\n      max-width: 100%;\n      width: 220px;\n      height: 120px;\n      padding: 1rem;\n      border: 1px dashed var(--iswc-border);\n      border-radius: var(--iswc-radius, 0.5em);\n      background:\n        repeating-linear-gradient(45deg,\n          color-mix(in srgb, var(--iswc-border) 35%, transparent) 0 8px,\n          transparent 8px 16px),\n        var(--iswc-bg-elev);\n      color: var(--iswc-text);\n      font-size: 0.9rem;\n      line-height: 1.4;\n    }\n    .ro-meta {\n      display: flex;\n      flex-wrap: wrap;\n      align-items: center;\n      gap: 0.75rem 1.25rem;\n      margin-top: 0.75rem;\n      font-size: 0.9rem;\n      color: var(--iswc-text-soft);\n    }\n    .ro-size {\n      font-variant-numeric: tabular-nums;\n      font-weight: 600;\n      color: var(--iswc-text);\n    }\n    .ro-status {\n      font-size: 0.75rem;\n      font-weight: 600;\n      letter-spacing: 0.04em;\n      text-transform: uppercase;\n      padding: 0.2em 0.55em;\n      border-radius: 999px;\n      background: var(--iswc-brand-soft, color-mix(in srgb, var(--iswc-color-brand) 18%, transparent));\n      color: var(--iswc-brand-text, var(--iswc-color-brand));\n    }\n    .ro-status.iswc-off {\n      background: var(--iswc-control-bg);\n      color: var(--iswc-text-dim);\n    }\n    .ro-actions {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 0.5rem;\n      align-items: center;\n      margin-bottom: 0.75rem;\n    }\n    .log .type-res { color: #74c0fc; }\n    .log .type-off { color: #ffa8a8; }",
+  "styles": [
+    ".ro-box {",
+    "      resize: both;",
+    "      overflow: auto;",
+    "      box-sizing: border-box;",
+    "      min-width: 140px;",
+    "      min-height: 90px;",
+    "      max-width: 100%;",
+    "      width: 220px;",
+    "      height: 120px;",
+    "      padding: 1rem;",
+    "      border: 1px dashed var(--iswc-border);",
+    "      border-radius: var(--iswc-radius, 0.5em);",
+    "      background:",
+    "        repeating-linear-gradient(45deg,",
+    "          color-mix(in srgb, var(--iswc-border) 35%, transparent) 0 8px,",
+    "          transparent 8px 16px),",
+    "        var(--iswc-bg-elev);",
+    "      color: var(--iswc-text);",
+    "      font-size: 0.9rem;",
+    "      line-height: 1.4;",
+    "    }",
+    "    .ro-meta {",
+    "      display: flex;",
+    "      flex-wrap: wrap;",
+    "      align-items: center;",
+    "      gap: 0.75rem 1.25rem;",
+    "      margin-top: 0.75rem;",
+    "      font-size: 0.9rem;",
+    "      color: var(--iswc-text-soft);",
+    "    }",
+    "    .ro-size {",
+    "      font-variant-numeric: tabular-nums;",
+    "      font-weight: 600;",
+    "      color: var(--iswc-text);",
+    "    }",
+    "    .ro-status {",
+    "      font-size: 0.75rem;",
+    "      font-weight: 600;",
+    "      letter-spacing: 0.04em;",
+    "      text-transform: uppercase;",
+    "      padding: 0.2em 0.55em;",
+    "      border-radius: 999px;",
+    "      background: var(--iswc-brand-soft, color-mix(in srgb, var(--iswc-color-brand) 18%, transparent));",
+    "      color: var(--iswc-brand-text, var(--iswc-color-brand));",
+    "    }",
+    "    .ro-status.iswc-off {",
+    "      background: var(--iswc-control-bg);",
+    "      color: var(--iswc-text-dim);",
+    "    }",
+    "    .ro-actions {",
+    "      display: flex;",
+    "      flex-wrap: wrap;",
+    "      gap: 0.5rem;",
+    "      align-items: center;",
+    "      margin-bottom: 0.75rem;",
+    "    }",
+    "    .log .type-res { color: #74c0fc; }",
+    "    .log .type-off { color: #ffa8a8; }"
+  ],
   "storageKey": "docs-iswc-resize-observer",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Observa hijos directos y emite <code class=\"code\">iswc-resize</code> con las\n          <code class=\"code\">ResizeObserverEntry</code>. Alias de\n          <code class=\"code\">&lt;iswc-observer type=\"resize\"&gt;</code>.",
+      "lede": [
+        "Observa hijos directos y emite <code class=\"code\">iswc-resize</code> con las",
+        "          <code class=\"code\">ResizeObserverEntry</code>. Alias de",
+        "          <code class=\"code\">&lt;iswc-observer type=\"resize\"&gt;</code>."
+      ],
       "blocks": [
         {
           "kind": "callout",
-          "html": "Arrastra la esquina ↘ del cuadro. El tamaño en vivo y el log se actualizan\n          con cada <code class=\"code\">iswc-resize</code>."
+          "html": [
+            "Arrastra la esquina ↘ del cuadro. El tamaño en vivo y el log se actualizan",
+            "          con cada <code class=\"code\">iswc-resize</code>."
+          ]
         },
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">resize: both · overflow: auto</span>\n          <iswc-resize-observer id=\"ro\">\n            <div id=\"roBox\" class=\"ro-box\">\n              Arrastra la esquina ↘ para redimensionar.\n            </div>\n          </iswc-resize-observer>\n          <div class=\"ro-meta\">\n            <span>Tamaño: <span class=\"ro-size\" id=\"roSize\">— × —</span></span>\n            <span class=\"ro-status\" id=\"roStatus\">activo</span>\n          </div>\n          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Los eventos <code class=\"code\">iswc-resize</code> aparecen aquí.</div>\n          </div>"
+          "html": [
+            "<span class=\"demo-label\">resize: both · overflow: auto</span>",
+            "          <iswc-resize-observer id=\"ro\">",
+            "            <div id=\"roBox\" class=\"ro-box\">",
+            "              Arrastra la esquina ↘ para redimensionar.",
+            "            </div>",
+            "          </iswc-resize-observer>",
+            "          <div class=\"ro-meta\">",
+            "            <span>Tamaño: <span class=\"ro-size\" id=\"roSize\">— × —</span></span>",
+            "            <span class=\"ro-status\" id=\"roStatus\">activo</span>",
+            "          </div>",
+            "          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\">",
+            "            <div class=\"row hint\">Los eventos <code class=\"code\">iswc-resize</code> aparecen aquí.</div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -27,11 +107,30 @@
       "id": "disabled",
       "title": "Desactivado",
       "titleHtml": false,
-      "lede": "Con <code class=\"code\">disabled</code> el observer se desconecta: redimensionar\n          ya no emite eventos. El botón alterna el atributo y su propia etiqueta.",
+      "lede": [
+        "Con <code class=\"code\">disabled</code> el observer se desconecta: redimensionar",
+        "          ya no emite eventos. El botón alterna el atributo y su propia etiqueta."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"ro-actions\">\n            <iswc-button id=\"roToggle\" color=\"neutral\" variant=\"outlined\" type=\"button\">Desactivar observer</iswc-button>\n            <span class=\"ro-status\" id=\"ro2Status\">activo</span>\n          </div>\n          <iswc-resize-observer id=\"ro2\">\n            <div id=\"roBox2\" class=\"ro-box\" style=\"width:180px;height:100px\">\n              Panel secundario — redimensiona con el observer ON/OFF.\n            </div>\n          </iswc-resize-observer>\n          <div class=\"ro-meta\">\n            <span>Tamaño: <span class=\"ro-size\" id=\"roSize2\">— × —</span></span>\n          </div>\n          <div class=\"log\" id=\"roLog2\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Solo registra mientras el observer esté activo.</div>\n          </div>"
+          "html": [
+            "<div class=\"ro-actions\">",
+            "            <iswc-button id=\"roToggle\" color=\"neutral\" variant=\"outlined\" type=\"button\">Desactivar observer</iswc-button>",
+            "            <span class=\"ro-status\" id=\"ro2Status\">activo</span>",
+            "          </div>",
+            "          <iswc-resize-observer id=\"ro2\">",
+            "            <div id=\"roBox2\" class=\"ro-box\" style=\"width:180px;height:100px\">",
+            "              Panel secundario — redimensiona con el observer ON/OFF.",
+            "            </div>",
+            "          </iswc-resize-observer>",
+            "          <div class=\"ro-meta\">",
+            "            <span>Tamaño: <span class=\"ro-size\" id=\"roSize2\">— × —</span></span>",
+            "          </div>",
+            "          <div class=\"log\" id=\"roLog2\" aria-live=\"polite\" style=\"margin-top:12px\">",
+            "            <div class=\"row hint\">Solo registra mientras el observer esté activo.</div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -41,7 +140,11 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "<iswc-observer type=\"resize\">\n  <div style=\"resize:both;overflow:auto\">…</div>\n</iswc-observer>",
+          "code": [
+            "<iswc-observer type=\"resize\">",
+            "  <div style=\"resize:both;overflow:auto\">…</div>",
+            "</iswc-observer>"
+          ],
           "lang": "html"
         }
       ]
@@ -73,7 +176,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Observa hijos directos y emite <code class=\"code\">iswc-resize</code> con las\n          <code class=\"code\">ResizeObserverEntry</code>. Alias de\n          <code class=\"code\">&lt;iswc-observer type=\"resize\"&gt;</code>."
+        "content": [
+          "Observa hijos directos y emite <code class=\"code\">iswc-resize</code> con las",
+          "          <code class=\"code\">ResizeObserverEntry</code>. Alias de",
+          "          <code class=\"code\">&lt;iswc-observer type=\"resize\"&gt;</code>."
+        ]
       },
       "atributos": {
         "table": [
@@ -88,7 +195,18 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-resize-observer>\n  <div style=\"resize:both; overflow:auto\">…</div>\n</iswc-resize-observer>\n\nel.addEventListener('iswc-resize', (e) => {\n  const entry = e.detail.entries[0];\n  console.log(entry.contentRect.width, entry.contentRect.height);\n});\n```"
+        "content": [
+          "```html",
+          "<iswc-resize-observer>",
+          "  <div style=\"resize:both; overflow:auto\">…</div>",
+          "</iswc-resize-observer>",
+          "",
+          "el.addEventListener('iswc-resize', (e) => {",
+          "  const entry = e.detail.entries[0];",
+          "  console.log(entry.contentRect.width, entry.contentRect.height);",
+          "});",
+          "```"
+        ]
       }
     },
     "exclude": [

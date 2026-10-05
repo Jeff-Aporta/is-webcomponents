@@ -10,26 +10,48 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Contenedor scrollable equivalente a <code class=\"code\">&lt;main&gt;</code>.\r\n          La persistencia de scroll es <strong>opt-in estricta</strong>: requiere\r\n          <code class=\"code\">remember-scroll</code> y <code class=\"code\">storage-key</code>.",
+      "lede": [
+        "Contenedor scrollable equivalente a <code class=\"code\">&lt;main&gt;</code>.",
+        "          La persistencia de scroll es <strong>opt-in estricta</strong>: requiere",
+        "          <code class=\"code\">remember-scroll</code> y <code class=\"code\">storage-key</code>."
+      ],
       "blocks": [
         {
           "kind": "code",
-          "code": "<iswc-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">\n  …\n</iswc-main>"
+          "code": [
+            "<iswc-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">",
+            "  …",
+            "</iswc-main>"
+          ]
         }
       ]
     },
     {
       "id": "remember",
       "title": "Remember scroll",
-      "lede": "Guarda <code class=\"code\">top</code> + <code class=\"code\">savedAt</code> en\r\n          <code class=\"code\">localStorage → is-webcomponents.iswc-main[key]</code>.\r\n          Si pasan más de <code class=\"code\">scroll-ttl</code> ms (default 1h), se ignora.",
+      "lede": [
+        "Guarda <code class=\"code\">top</code> + <code class=\"code\">savedAt</code> en",
+        "          <code class=\"code\">localStorage → is-webcomponents.iswc-main[key]</code>.",
+        "          Si pasan más de <code class=\"code\">scroll-ttl</code> ms (default 1h), se ignora."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<ul>\r\n          <li>Sin <code class=\"code\">remember-scroll</code> o sin <code class=\"code\">storage-key</code> → no hay LS.</li>\r\n          <li>Cambio de componente (iframe <code class=\"code\">navigate</code>) → siempre top.</li>\r\n          <li>F5 / back-forward → restore si el TTL sigue vigente.</li>\r\n        </ul>"
+          "html": [
+            "<ul>",
+            "          <li>Sin <code class=\"code\">remember-scroll</code> o sin <code class=\"code\">storage-key</code> → no hay LS.</li>",
+            "          <li>Cambio de componente (iframe <code class=\"code\">navigate</code>) → siempre top.</li>",
+            "          <li>F5 / back-forward → restore si el TTL sigue vigente.</li>",
+            "        </ul>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"btnTop\" variant=\"outlined\">scrollToTop()</iswc-button>\r\n          <iswc-button id=\"btnClear\" variant=\"outlined\">clearRememberedScroll()</iswc-button>\r\n          <iswc-button id=\"btnSave\" variant=\"filled\">saveScroll()</iswc-button>"
+          "html": [
+            "<iswc-button id=\"btnTop\" variant=\"outlined\">scrollToTop()</iswc-button>",
+            "          <iswc-button id=\"btnClear\" variant=\"outlined\">clearRememberedScroll()</iswc-button>",
+            "          <iswc-button id=\"btnSave\" variant=\"filled\">saveScroll()</iswc-button>"
+          ]
         },
         {
           "kind": "html",
@@ -77,7 +99,11 @@
         },
         {
           "kind": "html",
-          "html": "<div style=\"height:120vh;border:1px dashed var(--iswc-border);border-radius:8px;padding:1rem;color:var(--iswc-text-soft)\">\r\n          Zona alta — scrollea y recarga (F5) para ver restore.\r\n        </div>"
+          "html": [
+            "<div style=\"height:120vh;border:1px dashed var(--iswc-border);border-radius:8px;padding:1rem;color:var(--iswc-text-soft)\">",
+            "          Zona alta — scrollea y recarga (F5) para ver restore.",
+            "        </div>"
+          ]
         }
       ]
     }
@@ -85,7 +111,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Contenedor scrollable equivalente a <code class=\"code\">&lt;main&gt;</code>.\r\n          La persistencia de scroll es <strong>opt-in estricta</strong>: requiere\r\n          <code class=\"code\">remember-scroll</code> y <code class=\"code\">storage-key</code>."
+        "content": [
+          "Contenedor scrollable equivalente a <code class=\"code\">&lt;main&gt;</code>.",
+          "          La persistencia de scroll es <strong>opt-in estricta</strong>: requiere",
+          "          <code class=\"code\">remember-scroll</code> y <code class=\"code\">storage-key</code>."
+        ]
       },
       "apiJs": {
         "table": [
@@ -116,7 +146,13 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">\n  …\n</iswc-main>\n```"
+        "content": [
+          "```html",
+          "<iswc-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">",
+          "  …",
+          "</iswc-main>",
+          "```"
+        ]
       }
     },
     "exclude": [

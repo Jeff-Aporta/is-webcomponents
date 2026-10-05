@@ -5,17 +5,45 @@
   "title": "&lt;iswc-carousel&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-carousel / iswc-carousel-item de InSoft.",
-  "styles": ".slide {\r\n      width: 100%;\r\n      height: 100%;\r\n      display: flex;\r\n      align-items: center;\r\n      justify-content: center;\r\n      font-size: 2rem;\r\n      color: white;\r\n      border-radius: 0.5rem;\r\n    }\r\n    .slide.s1 { background: linear-gradient(135deg, #3699ff, #1f5aa6); }\r\n    .slide.s2 { background: linear-gradient(135deg, #f64e60, #b5283a); }\r\n    .slide.s3 { background: linear-gradient(135deg, #0bb783, #086c4d); }\r\n    .slide.s4 { background: linear-gradient(135deg, #ffa800, #cc8400); }\r\n    .slide.s5 { background: linear-gradient(135deg, #8950fc, #5a30a8); }",
+  "styles": [
+    ".slide {",
+    "      width: 100%;",
+    "      height: 100%;",
+    "      display: flex;",
+    "      align-items: center;",
+    "      justify-content: center;",
+    "      font-size: 2rem;",
+    "      color: white;",
+    "      border-radius: 0.5rem;",
+    "    }",
+    "    .slide.s1 { background: linear-gradient(135deg, #3699ff, #1f5aa6); }",
+    "    .slide.s2 { background: linear-gradient(135deg, #f64e60, #b5283a); }",
+    "    .slide.s3 { background: linear-gradient(135deg, #0bb783, #086c4d); }",
+    "    .slide.s4 { background: linear-gradient(135deg, #ffa800, #cc8400); }",
+    "    .slide.s5 { background: linear-gradient(135deg, #8950fc, #5a30a8); }"
+  ],
   "storageKey": "docs-iswc-carousel",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,\r\n          indicadores, scroll-snap y soporte para swipe en touch.",
+      "lede": [
+        "Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,",
+        "          indicadores, scroll-snap y soporte para swipe en touch."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-carousel id=\"c1\" loop>\r\n            <iswc-carousel-item><div class=\"slide s1\">Slide 1</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s2\">Slide 2</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s3\">Slide 3</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s4\">Slide 4</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s5\">Slide 5</div></iswc-carousel-item>\r\n          </iswc-carousel>\r\n          <p id=\"c1Log\" class=\"lede\">Slide: <code class=\"code\">0</code></p>",
+          "html": [
+            "<iswc-carousel id=\"c1\" loop>",
+            "            <iswc-carousel-item><div class=\"slide s1\">Slide 1</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s2\">Slide 2</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s3\">Slide 3</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s4\">Slide 4</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s5\">Slide 5</div></iswc-carousel-item>",
+            "          </iswc-carousel>",
+            "          <p id=\"c1Log\" class=\"lede\">Slide: <code class=\"code\">0</code></p>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -61,7 +89,70 @@
           ],
           "equivNote": "autoplay y flags de chrome (controls/indicators).",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-carousel: autoplay\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"autoplay?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"timer (+ pause hover)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"solo manual\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"without-controls?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"sin flechas\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-carousel: autoplay\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"autoplay?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"timer (+ pause hover)\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"solo manual\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"without-controls?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"sin flechas\",",
+            "          \"shape\": \"round\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"no\"",
+            "        },",
+            "        {",
+            "          \"from\": \"a\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"si\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -72,7 +163,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-carousel autoplay=\"2000\" loop>\r\n            <iswc-carousel-item><div class=\"slide s1\">Auto 1</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s2\">Auto 2</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s3\">Auto 3</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s4\">Auto 4</div></iswc-carousel-item>\r\n          </iswc-carousel>"
+          "html": [
+            "<iswc-carousel autoplay=\"2000\" loop>",
+            "            <iswc-carousel-item><div class=\"slide s1\">Auto 1</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s2\">Auto 2</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s3\">Auto 3</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s4\">Auto 4</div></iswc-carousel-item>",
+            "          </iswc-carousel>"
+          ]
         }
       ]
     },
@@ -83,7 +181,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-carousel slides-per-page=\"3\" loop>\r\n            <iswc-carousel-item><div class=\"slide s1\">A</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s2\">B</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s3\">C</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s4\">D</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s5\">E</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s1\">F</div></iswc-carousel-item>\r\n          </iswc-carousel>"
+          "html": [
+            "<iswc-carousel slides-per-page=\"3\" loop>",
+            "            <iswc-carousel-item><div class=\"slide s1\">A</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s2\">B</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s3\">C</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s4\">D</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s5\">E</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s1\">F</div></iswc-carousel-item>",
+            "          </iswc-carousel>"
+          ]
         }
       ]
     },
@@ -94,7 +201,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-carousel vertical style=\"max-width: 320px;\">\r\n            <iswc-carousel-item><div class=\"slide s1\">Top</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s2\">Middle</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s3\">Bottom</div></iswc-carousel-item>\r\n          </iswc-carousel>"
+          "html": [
+            "<iswc-carousel vertical style=\"max-width: 320px;\">",
+            "            <iswc-carousel-item><div class=\"slide s1\">Top</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s2\">Middle</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s3\">Bottom</div></iswc-carousel-item>",
+            "          </iswc-carousel>"
+          ]
         }
       ]
     },
@@ -105,7 +218,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-carousel aspect-ratio=\"4/3\">\r\n            <iswc-carousel-item><div class=\"slide s1\">4:3 #1</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s2\">4:3 #2</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s3\">4:3 #3</div></iswc-carousel-item>\r\n          </iswc-carousel>"
+          "html": [
+            "<iswc-carousel aspect-ratio=\"4/3\">",
+            "            <iswc-carousel-item><div class=\"slide s1\">4:3 #1</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s2\">4:3 #2</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s3\">4:3 #3</div></iswc-carousel-item>",
+            "          </iswc-carousel>"
+          ]
         }
       ]
     },
@@ -116,7 +235,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-carousel without-indicators without-controls style=\"max-width: 320px;\">\r\n            <iswc-carousel-item><div class=\"slide s1\">A</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s2\">B</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s3\">C</div></iswc-carousel-item>\r\n          </iswc-carousel>"
+          "html": [
+            "<iswc-carousel without-indicators without-controls style=\"max-width: 320px;\">",
+            "            <iswc-carousel-item><div class=\"slide s1\">A</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s2\">B</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide s3\">C</div></iswc-carousel-item>",
+            "          </iswc-carousel>"
+          ]
         }
       ]
     },
@@ -132,58 +257,40 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>active</code>",
-              "number",
-              "0",
-              "Slide activo (0-indexed)."
+              "<code>active</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Slide activo (0-indexed). (valor por defecto)"
             ],
             [
-              "<code>loop</code>",
-              "boolean",
-              "false",
-              "Vuelve al inicio al llegar al final."
+              "<code>loop</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Vuelve al inicio al llegar al final. (valor por defecto)"
             ],
             [
-              "<code>autoplay</code>",
-              "number (ms)",
-              "0",
-              "Avance automático (0 = desactivado)."
+              "<code>autoplay</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Avance automático (0 = desactivado). (valor por defecto)"
             ],
             [
-              "<code>vertical</code>",
-              "boolean",
-              "false",
-              "Orientación vertical."
+              "<code>vertical</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Orientación vertical. (valor por defecto)"
             ],
             [
-              "<code>slides-per-page</code>",
-              "number",
-              "1",
-              "Slides visibles por vista."
+              "<code>slides-per-page</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Slides visibles por vista. (valor por defecto)"
             ],
             [
-              "<code>aspect-ratio</code>",
-              "string",
-              "16/9",
-              "CSS aspect-ratio del contenedor."
+              "<code>aspect-ratio</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "CSS aspect-ratio del contenedor. (valor por defecto)"
             ],
             [
-              "<code>without-controls</code>",
-              "boolean",
-              "false",
-              "Oculta prev/next."
+              "<code>without-controls</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Oculta prev/next. (valor por defecto)"
             ],
             [
-              "<code>without-indicators</code>",
-              "boolean",
-              "false",
-              "Oculta los puntos."
+              "<code>without-indicators</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Oculta los puntos. (valor por defecto)"
             ]
           ]
         },
@@ -193,7 +300,14 @@
         },
         {
           "kind": "code",
-          "code": "carousel.next();        // Avanza\ncarousel.prev();        // Retrocede\ncarousel.pause();       // Pausa autoplay\ncarousel.play();        // Reanuda autoplay\ncarousel.active = 2;    // Salta a slide\ncarousel.getViewport(); // Devuelve el viewport del scroll"
+          "code": [
+            "carousel.next();        // Avanza",
+            "carousel.prev();        // Retrocede",
+            "carousel.pause();       // Pausa autoplay",
+            "carousel.play();        // Reanuda autoplay",
+            "carousel.active = 2;    // Salta a slide",
+            "carousel.getViewport(); // Devuelve el viewport del scroll"
+          ]
         },
         {
           "kind": "html",
@@ -230,7 +344,10 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,\r\n          indicadores, scroll-snap y soporte para swipe en touch."
+        "content": [
+          "Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,",
+          "          indicadores, scroll-snap y soporte para swipe en touch."
+        ]
       },
       "atributos": {
         "table": [
@@ -305,7 +422,15 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-carousel loop>\n  <iswc-carousel-item>Slide 1</iswc-carousel-item>\n  <iswc-carousel-item>Slide 2</iswc-carousel-item>\n  …\n</iswc-carousel>\n```"
+        "content": [
+          "```html",
+          "<iswc-carousel loop>",
+          "  <iswc-carousel-item>Slide 1</iswc-carousel-item>",
+          "  <iswc-carousel-item>Slide 2</iswc-carousel-item>",
+          "  …",
+          "</iswc-carousel>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -4,7 +4,17 @@
   "category": "forms",
   "title": "&lt;iswc-rte&gt;",
   "titleHtml": false,
-  "styles": ".rte-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }\r\n    @media (max-width: 800px) { .rte-pair { grid-template-columns: 1fr; } }\r\n    pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .65rem .85rem;\r\n      max-height: 12rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }",
+  "styles": [
+    ".rte-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }",
+    "    @media (max-width: 800px) { .rte-pair { grid-template-columns: 1fr; } }",
+    "    pre.output {",
+    "      font-family: ui-monospace, monospace; font-size: .78rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .65rem .85rem;",
+    "      max-height: 12rem; overflow: auto;",
+    "      white-space: pre-wrap;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-rte",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +30,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-rte id=\"rte\" placeholder=\"Empezá a escribir…\"\r\n                  value=\"<h2>Hola</h2><p><b>Bienvenido</b> al editor de ejemplo. Prueba <i>negrita</i>, <u>subrayado</u>, listas y enlaces.</p>\">\r\n          </iswc-rte>\r\n          <pre class=\"code output\" id=\"outHTML\" data-lang=\"html\"></pre>",
+          "html": [
+            "<iswc-rte id=\"rte\" placeholder=\"Empezá a escribir…\"",
+            "                  value=\"<h2>Hola</h2><p><b>Bienvenido</b> al editor de ejemplo. Prueba <i>negrita</i>, <u>subrayado</u>, listas y enlaces.</p>\">",
+            "          </iswc-rte>",
+            "          <pre class=\"code output\" id=\"outHTML\" data-lang=\"html\"></pre>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -55,7 +70,11 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-rte placeholder=\"Solo lo esencial…\"\r\n                  toolbar=\"bold, italic, link,|, undo, redo\">\r\n          </iswc-rte>"
+          "html": [
+            "<iswc-rte placeholder=\"Solo lo esencial…\"",
+            "                  toolbar=\"bold, italic, link,|, undo, redo\">",
+            "          </iswc-rte>"
+          ]
         }
       ]
     },
@@ -65,7 +84,25 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const r = document.querySelector('iswc-rte');\nr.value;        // HTML actual\nr.text;         // texto plano\nr.focus();\nr.exec('bold'); // bold, italic, underline, strike\nr.format('h2'); // h1..h6, p, blockquote, pre\nr.link();       // prompt → crea <a>\nr.clear();      // sin formato, sin listas\nr.undo(); r.redo();\n\nr.addEventListener('iswc-input',  e => /* cada keystroke */);\nr.addEventListener('iswc-change', e => console.log(e.detail.value));\nr.addEventListener('iswc-blur',   () => /* perdió foco */);\n\n// Atributos\n// value, placeholder, autofocus, readonly\n// toolbar   lista separada por comas"
+          "code": [
+            "const r = document.querySelector('iswc-rte');",
+            "r.value;        // HTML actual",
+            "r.text;         // texto plano",
+            "r.focus();",
+            "r.exec('bold'); // bold, italic, underline, strike",
+            "r.format('h2'); // h1..h6, p, blockquote, pre",
+            "r.link();       // prompt → crea <a>",
+            "r.clear();      // sin formato, sin listas",
+            "r.undo(); r.redo();",
+            "",
+            "r.addEventListener('iswc-input',  e => /* cada keystroke */);",
+            "r.addEventListener('iswc-change', e => console.log(e.detail.value));",
+            "r.addEventListener('iswc-blur',   () => /* perdió foco */);",
+            "",
+            "// Atributos",
+            "// value, placeholder, autofocus, readonly",
+            "// toolbar   lista separada por comas"
+          ]
         }
       ]
     }

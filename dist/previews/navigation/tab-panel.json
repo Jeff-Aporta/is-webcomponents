@@ -14,7 +14,17 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-tab-group>\r\n            <iswc-tab slot=\"nav\" panel=\"uno\">Uno</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"dos\">Dos</iswc-tab>\r\n            <iswc-tab-panel name=\"uno\">\r\n              <p>El panel es un contenedor normal: acepta cualquier contenido.</p>\r\n              <iswc-tag color=\"brand\">Contenido rico</iswc-tag>\r\n            </iswc-tab-panel>\r\n            <iswc-tab-panel name=\"dos\">Segundo panel.</iswc-tab-panel>\r\n          </iswc-tab-group>"
+          "html": [
+            "<iswc-tab-group>",
+            "            <iswc-tab slot=\"nav\" panel=\"uno\">Uno</iswc-tab>",
+            "            <iswc-tab slot=\"nav\" panel=\"dos\">Dos</iswc-tab>",
+            "            <iswc-tab-panel name=\"uno\">",
+            "              <p>El panel es un contenedor normal: acepta cualquier contenido.</p>",
+            "              <iswc-tag color=\"brand\">Contenido rico</iswc-tag>",
+            "            </iswc-tab-panel>",
+            "            <iswc-tab-panel name=\"dos\">Segundo panel.</iswc-tab-panel>",
+            "          </iswc-tab-group>"
+          ]
         }
       ]
     },
@@ -31,7 +41,19 @@
         "content": "Contenido asociado a una <code class=\"code\">&lt;iswc-tab&gt;</code>. Solo se muestra el panel cuyo <code class=\"code\">name</code> coincide con el <code class=\"code\">panel</code> de la pestaña activa."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-tab-group>\n  <iswc-tab slot=\"nav\" panel=\"uno\">Uno</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"dos\">Dos</iswc-tab>\n  <iswc-tab-panel name=\"uno\">\n    <p>El panel es un contenedor normal: acepta cualquier contenido.</p>\n    <iswc-tag color=\"brand\">Contenido rico</iswc-tag>\n  </iswc-tab-panel>\n  <iswc-tab-panel name=\"dos\">Segundo panel.</iswc-tab-panel>\n</iswc-tab-group>\n```"
+        "content": [
+          "```html",
+          "<iswc-tab-group>",
+          "  <iswc-tab slot=\"nav\" panel=\"uno\">Uno</iswc-tab>",
+          "  <iswc-tab slot=\"nav\" panel=\"dos\">Dos</iswc-tab>",
+          "  <iswc-tab-panel name=\"uno\">",
+          "    <p>El panel es un contenedor normal: acepta cualquier contenido.</p>",
+          "    <iswc-tag color=\"brand\">Contenido rico</iswc-tag>",
+          "  </iswc-tab-panel>",
+          "  <iswc-tab-panel name=\"dos\">Segundo panel.</iswc-tab-panel>",
+          "</iswc-tab-group>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -57,6 +57,7 @@ import type {
   PreviewSection,
   PreviewBlock,
 } from './types.d.ts';
+import { asText } from './text-like.ts';
 
 /** Tag del schema ficha dedicado. */
 export const FICHA_SCHEMA = 'iswc-ficha/v1';
@@ -234,7 +235,7 @@ function prependerPlaygroundPreview(
   const blocks = [bloqueDemo, ...seccion.blocks];
   return {
     ...seccion,
-    lede: seccion.lede ? `${seccion.lede}\n\n${lede}` : lede,
+    lede: seccion.lede ? `${asText(seccion.lede)}\n\n${lede}` : lede,
     blocks,
     className: seccion.className
       ? `${seccion.className} has-playground`
@@ -353,11 +354,11 @@ export function loadFichaLikeDefinition(
       category: (raw.category as string) ?? '',
       title: (raw.title as string) ?? `<${tag}>`,
       ...(typeof raw.titleHtml === 'boolean' ? { titleHtml: raw.titleHtml } : {}),
-      ...(typeof raw.styles === 'string' ? { styles: raw.styles } : {}),
+      ...(typeof raw.styles === 'string' || Array.isArray(raw.styles) ? { styles: raw.styles as string | string[] } : {}),
       ...(typeof raw.storageKey === 'string' ? { storageKey: raw.storageKey } : {}),
       ...(typeof raw.mainClass === 'string' ? { mainClass: raw.mainClass } : {}),
       ...(typeof raw.wrapperClass === 'string' ? { wrapperClass: raw.wrapperClass } : {}),
-      ...(typeof raw.prelude === 'string' ? { prelude: raw.prelude } : {}),
+      ...(typeof raw.prelude === 'string' || Array.isArray(raw.prelude) ? { prelude: raw.prelude as string | string[] } : {}),
       sections: seccionesVisibles,
     };
     return preview;

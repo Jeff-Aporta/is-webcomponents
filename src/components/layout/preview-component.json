@@ -24,7 +24,11 @@
         "content": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo."
       },
       "ejemplos": {
-        "content": "```html\n<p>La galería asigna la propiedad <code>preview</code> y este tag pinta el documento, el índice y los demos. No evalúa código de comportamiento.</p>\n```"
+        "content": [
+          "```html",
+          "<p>La galería asigna la propiedad <code>preview</code> y este tag pinta el documento, el índice y los demos. No evalúa código de comportamiento.</p>",
+          "```"
+        ]
       }
     },
     "exclude": [

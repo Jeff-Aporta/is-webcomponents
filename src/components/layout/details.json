@@ -10,11 +10,21 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente\r\n          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,\r\n          iconos, animaciones y comportamiento de accordion opcional.",
+      "lede": [
+        "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente",
+        "          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,",
+        "          iconos, animaciones y comportamiento de accordion opcional."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-details summary=\"¿Qué es InSoft?\">\r\n            InSoft es un ERP modular para empresas medianas que necesitan integrar\r\n            contabilidad, inventario, facturación y CRM en una sola plataforma.\r\n          </iswc-details>",
+          "html": [
+            "<span class=\"demo-label\">caso mínimo</span>",
+            "          <iswc-details summary=\"¿Qué es InSoft?\">",
+            "            InSoft es un ERP modular para empresas medianas que necesitan integrar",
+            "            contabilidad, inventario, facturación y CRM en una sola plataforma.",
+            "          </iswc-details>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -49,18 +59,68 @@
           ],
           "equivNote": "Varios details con el mismo name se comportan como accordion.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-details: accordion\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mismo name?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"accordion (uno abierto)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"disclosure independiente\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-details: accordion\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"mismo name?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"accordion (uno abierto)\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"disclosure independiente\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"no\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
     {
       "id": "appearances",
       "title": "Apariencias",
-      "lede": "El atributo <code class=\"code\">appearance</code> ajusta el fondo y borde.\r\n          Default: <code class=\"code\">outlined</code>.",
+      "lede": [
+        "El atributo <code class=\"code\">appearance</code> ajusta el fondo y borde.",
+        "          Default: <code class=\"code\">outlined</code>."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-details variant=\"outlined\" summary=\"outlined\">Borde 1px, fondo transparente.</iswc-details>\r\n          <iswc-details variant=\"filled\" summary=\"filled\">Fondo elevado, sin borde.</iswc-details>\r\n          <iswc-details variant=\"filled-outlined\" summary=\"filled-outlined\">Fondo + borde.</iswc-details>\r\n          <iswc-details variant=\"plain\" summary=\"plain\">Sin fondo ni borde, solo espaciado.</iswc-details>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-details variant=\"outlined\" summary=\"outlined\">Borde 1px, fondo transparente.</iswc-details>",
+            "          <iswc-details variant=\"filled\" summary=\"filled\">Fondo elevado, sin borde.</iswc-details>",
+            "          <iswc-details variant=\"filled-outlined\" summary=\"filled-outlined\">Fondo + borde.</iswc-details>",
+            "          <iswc-details variant=\"plain\" summary=\"plain\">Sin fondo ni borde, solo espaciado.</iswc-details>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
@@ -71,11 +131,19 @@
     {
       "id": "icon-placement",
       "title": "Posición del icono",
-      "lede": "<code class=\"code\">icon-placement</code>: <code class=\"code\">start</code> o\r\n          <code class=\"code\">end</code>. Default: <code class=\"code\">end</code>.",
+      "lede": [
+        "<code class=\"code\">icon-placement</code>: <code class=\"code\">start</code> o",
+        "          <code class=\"code\">end</code>. Default: <code class=\"code\">end</code>."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-details icon-placement=\"end\" summary=\"icono al final (default)\">Contenido que se revela al hacer click.</iswc-details>\r\n          <iswc-details icon-placement=\"start\" summary=\"icono al inicio\">El chevron rota 180° al expandir y se ubica a la izquierda.</iswc-details>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-details icon-placement=\"end\" summary=\"icono al final (default)\">Contenido que se revela al hacer click.</iswc-details>",
+            "          <iswc-details icon-placement=\"start\" summary=\"icono al inicio\">El chevron rota 180° al expandir y se ubica a la izquierda.</iswc-details>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
@@ -86,30 +154,74 @@
     {
       "id": "custom-icons",
       "title": "Iconos custom",
-      "lede": "Slots <code class=\"code\">expand-icon</code> y <code class=\"code\">collapse-icon</code>\r\n          para reemplazar el chevron por defecto.",
+      "lede": [
+        "Slots <code class=\"code\">expand-icon</code> y <code class=\"code\">collapse-icon</code>",
+        "          para reemplazar el chevron por defecto."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-details summary=\"Resumen con icono plus/minus\">\r\n            <iswc-icon slot=\"expand-icon\" icon=\"mdi:plus\" aria-hidden=\"true\"></iswc-icon>\r\n            <iswc-icon slot=\"collapse-icon\" icon=\"mdi:minus\" aria-hidden=\"true\"></iswc-icon>\r\n            Al expandirse se muestra un signo menos; al colapsarse, un más.\r\n          </iswc-details>\r\n\r\n          <iswc-details summary=\"Pregunta frecuente\" icon-placement=\"start\">\r\n            <iswc-icon slot=\"expand-icon\" icon=\"mdi:help-circle-outline\" aria-hidden=\"true\"></iswc-icon>\r\n            <iswc-icon slot=\"collapse-icon\" icon=\"mdi:help-circle\" aria-hidden=\"true\"></iswc-icon>\r\n            Cambia el icono según el estado.\r\n          </iswc-details>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-details summary=\"Resumen con icono plus/minus\">",
+            "            <iswc-icon slot=\"expand-icon\" icon=\"mdi:plus\" aria-hidden=\"true\"></iswc-icon>",
+            "            <iswc-icon slot=\"collapse-icon\" icon=\"mdi:minus\" aria-hidden=\"true\"></iswc-icon>",
+            "            Al expandirse se muestra un signo menos; al colapsarse, un más.",
+            "          </iswc-details>",
+            "",
+            "          <iswc-details summary=\"Pregunta frecuente\" icon-placement=\"start\">",
+            "            <iswc-icon slot=\"expand-icon\" icon=\"mdi:help-circle-outline\" aria-hidden=\"true\"></iswc-icon>",
+            "            <iswc-icon slot=\"collapse-icon\" icon=\"mdi:help-circle\" aria-hidden=\"true\"></iswc-icon>",
+            "            Cambia el icono según el estado.",
+            "          </iswc-details>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-details summary=\"…\">\n  <iswc-icon slot=\"expand-icon\" icon=\"mdi:plus\"></iswc-icon>\n  <iswc-icon slot=\"collapse-icon\" icon=\"mdi:minus\"></iswc-icon>\n  Contenido…\n</iswc-details>"
+          "code": [
+            "<iswc-details summary=\"…\">",
+            "  <iswc-icon slot=\"expand-icon\" icon=\"mdi:plus\"></iswc-icon>",
+            "  <iswc-icon slot=\"collapse-icon\" icon=\"mdi:minus\"></iswc-icon>",
+            "  Contenido…",
+            "</iswc-details>"
+          ]
         }
       ]
     },
     {
       "id": "rich-summary",
       "title": "Resumen con contenido",
-      "lede": "En lugar del atributo <code class=\"code\">summary</code>, usa el slot\r\n          <code class=\"code\">summary</code> para contenido rico (iconos, badges, etc.).",
+      "lede": [
+        "En lugar del atributo <code class=\"code\">summary</code>, usa el slot",
+        "          <code class=\"code\">summary</code> para contenido rico (iconos, badges, etc.)."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-details>\r\n            <div slot=\"summary\">\r\n              <strong>Pedido #A-10293</strong>\r\n              <iswc-badge color=\"success\" variant=\"filled\" style=\"margin-left:.5em\">Enviado</iswc-badge>\r\n            </div>\r\n            Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.\r\n          </iswc-details>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-details>",
+            "            <div slot=\"summary\">",
+            "              <strong>Pedido #A-10293</strong>",
+            "              <iswc-badge color=\"success\" variant=\"filled\" style=\"margin-left:.5em\">Enviado</iswc-badge>",
+            "            </div>",
+            "            Cliente: Distribuidora del Norte · Total: $1.245,00 · 3 ítems.",
+            "          </iswc-details>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-details>\n  <div slot=\"summary\">\n    <strong>Pedido #A-10293</strong>\n    <iswc-badge color=\"success\">Enviado</iswc-badge>\n  </div>\n  Cliente: …\n</iswc-details>"
+          "code": [
+            "<iswc-details>",
+            "  <div slot=\"summary\">",
+            "    <strong>Pedido #A-10293</strong>",
+            "    <iswc-badge color=\"success\">Enviado</iswc-badge>",
+            "  </div>",
+            "  Cliente: …",
+            "</iswc-details>"
+          ]
         }
       ]
     },
@@ -117,52 +229,107 @@
       "id": "accordion",
       "title": "Acordeón",
       "titleHtml": false,
-      "lede": "Cuando varios <code class=\"code\">iswc-details</code> comparten el atributo\r\n          <code class=\"code\">name</code>, abrir uno cierra los demás.",
+      "lede": [
+        "Cuando varios <code class=\"code\">iswc-details</code> comparten el atributo",
+        "          <code class=\"code\">name</code>, abrir uno cierra los demás."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-details name=\"faq\" summary=\"¿Cómo cambio de plan?\">\r\n            Ve a Configuración → Plan y elige el nuevo plan. El cambio se aplica al final del ciclo.\r\n          </iswc-details>\r\n          <iswc-details name=\"faq\" summary=\"¿Puedo exportar mis datos?\">\r\n            Sí. En Configuración → Datos encontrarás exports en CSV, JSON y Excel.\r\n          </iswc-details>\r\n          <iswc-details name=\"faq\" summary=\"¿Cómo cancelo la cuenta?\">\r\n            Puedes cancelar desde Configuración → Plan → Cancelar. Mantienes acceso hasta el fin del ciclo.\r\n          </iswc-details>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-details name=\"faq\" summary=\"¿Cómo cambio de plan?\">",
+            "            Ve a Configuración → Plan y elige el nuevo plan. El cambio se aplica al final del ciclo.",
+            "          </iswc-details>",
+            "          <iswc-details name=\"faq\" summary=\"¿Puedo exportar mis datos?\">",
+            "            Sí. En Configuración → Datos encontrarás exports en CSV, JSON y Excel.",
+            "          </iswc-details>",
+            "          <iswc-details name=\"faq\" summary=\"¿Cómo cancelo la cuenta?\">",
+            "            Puedes cancelar desde Configuración → Plan → Cancelar. Mantienes acceso hasta el fin del ciclo.",
+            "          </iswc-details>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-details name=\"faq\" summary=\"…\">…</iswc-details>\n<iswc-details name=\"faq\" summary=\"…\">…</iswc-details>"
+          "code": [
+            "<iswc-details name=\"faq\" summary=\"…\">…</iswc-details>",
+            "<iswc-details name=\"faq\" summary=\"…\">…</iswc-details>"
+          ]
         }
       ]
     },
     {
       "id": "states",
       "title": "Estados",
-      "lede": "<code class=\"code\">open</code> para abrir por defecto; <code class=\"code\">disabled</code>\r\n          bloquea la interacción.",
+      "lede": [
+        "<code class=\"code\">open</code> para abrir por defecto; <code class=\"code\">disabled</code>",
+        "          bloquea la interacción."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-details open summary=\"Empieza abierto por defecto\">\r\n            El atributo <code class=\"code\">open</code> lo deja expandido desde el primer render.\r\n          </iswc-details>\r\n          <iswc-details disabled summary=\"Bloqueado (no se puede expandir)\">\r\n            El atributo <code class=\"code\">disabled</code> desactiva el toggle.\r\n          </iswc-details>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-details open summary=\"Empieza abierto por defecto\">",
+            "            El atributo <code class=\"code\">open</code> lo deja expandido desde el primer render.",
+            "          </iswc-details>",
+            "          <iswc-details disabled summary=\"Bloqueado (no se puede expandir)\">",
+            "            El atributo <code class=\"code\">disabled</code> desactiva el toggle.",
+            "          </iswc-details>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-details open summary=\"…\">…</iswc-details>\n<iswc-details disabled summary=\"…\">…</iswc-details>"
+          "code": [
+            "<iswc-details open summary=\"…\">…</iswc-details>",
+            "<iswc-details disabled summary=\"…\">…</iswc-details>"
+          ]
         }
       ]
     },
     {
       "id": "methods",
       "title": "API JavaScript",
-      "lede": "Métodos: <code class=\"code\">show()</code>, <code class=\"code\">hide()</code>,\r\n          <code class=\"code\">toggle()</code>. Propiedades: <code class=\"code\">open</code>,\r\n          <code class=\"code\">summary</code>, <code class=\"code\">name</code>.",
+      "lede": [
+        "Métodos: <code class=\"code\">show()</code>, <code class=\"code\">hide()</code>,",
+        "          <code class=\"code\">toggle()</code>. Propiedades: <code class=\"code\">open</code>,",
+        "          <code class=\"code\">summary</code>, <code class=\"code\">name</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-details id=\"apiDetails\" summary=\"Demo controlada\">\r\n            Esto lo abro y cierro desde los botones de abajo.\r\n          </iswc-details>\r\n          <div class=\"card-row-actions\" style=\"margin-top:.5em\">\r\n            <iswc-button id=\"btnOpen\">show()</iswc-button>\r\n            <iswc-button id=\"btnClose\">hide()</iswc-button>\r\n            <iswc-button id=\"btnToggle\" variant=\"outlined\">toggle()</iswc-button>\r\n          </div>"
+          "html": [
+            "<iswc-details id=\"apiDetails\" summary=\"Demo controlada\">",
+            "            Esto lo abro y cierro desde los botones de abajo.",
+            "          </iswc-details>",
+            "          <div class=\"card-row-actions\" style=\"margin-top:.5em\">",
+            "            <iswc-button id=\"btnOpen\">show()</iswc-button>",
+            "            <iswc-button id=\"btnClose\">hide()</iswc-button>",
+            "            <iswc-button id=\"btnToggle\" variant=\"outlined\">toggle()</iswc-button>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "events",
       "title": "Eventos",
-      "lede": "Burbujean y son <code class=\"code\">composed: true</code>: <code class=\"code\">iswc-show</code>,\r\n          <code class=\"code\">iswc-after-show</code>, <code class=\"code\">iswc-hide</code>,\r\n          <code class=\"code\">iswc-after-hide</code>.",
+      "lede": [
+        "Burbujean y son <code class=\"code\">composed: true</code>: <code class=\"code\">iswc-show</code>,",
+        "          <code class=\"code\">iswc-after-show</code>, <code class=\"code\">iswc-hide</code>,",
+        "          <code class=\"code\">iswc-after-hide</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-details id=\"evtDetails\" summary=\"Pulsa y mira la consola\">\r\n            El evento <code class=\"code\">iswc-after-show</code> se dispara tras la animación de apertura.\r\n          </iswc-details>\r\n          <div id=\"evtLog\" class=\"callout\" style=\"margin-top:.5em\">Log:</div>"
+          "html": [
+            "<iswc-details id=\"evtDetails\" summary=\"Pulsa y mira la consola\">",
+            "            El evento <code class=\"code\">iswc-after-show</code> se dispara tras la animación de apertura.",
+            "          </iswc-details>",
+            "          <div id=\"evtLog\" class=\"callout\" style=\"margin-top:.5em\">Log:</div>"
+          ]
         }
       ]
     },
@@ -178,46 +345,32 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>open</code>",
-              "boolean",
-              "false",
-              "Estado expandido. Reflected."
+              "<code>open</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Estado expandido. Reflected. (valor por defecto)"
             ],
             [
               "<code>summary</code>",
-              "string",
-              "—",
               "Texto del summary si no se usa el slot."
             ],
             [
               "<code>name</code>",
-              "string",
-              "—",
               "Grupo accordion."
             ],
             [
-              "<code>disabled</code>",
-              "boolean",
-              "false",
-              "Bloquea la interacción."
+              "<code>disabled</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Bloquea la interacción. (valor por defecto)"
             ],
             [
-              "<code>appearance</code>",
-              "filled · outlined · filled-outlined · plain",
-              "outlined",
-              "Tratamiento visual."
+              "<code>appearance</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tratamiento visual. (valor por defecto)"
             ],
             [
-              "<code>icon-placement</code>",
-              "start · end",
-              "end",
-              "Lado del chevron."
+              "<code>icon-placement</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Lado del chevron. (valor por defecto)"
             ]
           ]
         },
@@ -350,24 +503,20 @@
           "kind": "table",
           "columns": [
             "Variable",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>--spacing</code>",
-              "<code>var(--iswc-space-m)</code>",
-              "Padding del header / contenido."
+              "<code>--spacing</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Padding del header / contenido. (valor por defecto)"
             ],
             [
-              "<code>--show-duration</code>",
-              "180ms",
-              "Duración de apertura."
+              "<code>--show-duration</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Duración de apertura. (valor por defecto)"
             ],
             [
-              "<code>--hide-duration</code>",
-              "160ms",
-              "Duración de cierre."
+              "<code>--hide-duration</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Duración de cierre. (valor por defecto)"
             ]
           ]
         }
@@ -377,7 +526,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente\r\n          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,\r\n          iconos, animaciones y comportamiento de accordion opcional."
+        "content": [
+          "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente",
+          "          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,",
+          "          iconos, animaciones y comportamiento de accordion opcional."
+        ]
       },
       "atributos": {
         "table": [
@@ -519,7 +672,13 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</iswc-details>\n```"
+        "content": [
+          "```html",
+          "<iswc-details summary=\"¿Qué es InSoft?\">",
+          "  InSoft es un ERP modular…",
+          "</iswc-details>",
+          "```"
+        ]
       }
     },
     "exclude": [

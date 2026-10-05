@@ -4,7 +4,21 @@
   "category": "data-viz",
   "title": "&lt;iswc-maps&gt;",
   "titleHtml": false,
-  "styles": ".row { padding-bottom: 1rem; }\r\n    .legend {\r\n      display: flex; flex-wrap: wrap; gap: .35rem;\r\n      margin-bottom: .5rem;\r\n      font-size: .75rem;\r\n    }\r\n    .legend b { color: var(--iswc-accent); }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "styles": [
+    ".row { padding-bottom: 1rem; }",
+    "    .legend {",
+    "      display: flex; flex-wrap: wrap; gap: .35rem;",
+    "      margin-bottom: .5rem;",
+    "      font-size: .75rem;",
+    "    }",
+    "    .legend b { color: var(--iswc-accent); }",
+    "    pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .78rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 6rem; overflow: auto;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-maps",
   "sections": [
     {
@@ -19,7 +33,17 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-maps id=\"m1\" viewbox=\"-79,-5,-66,13\" interactive>\r\n            <iswc-map-marker lat=\"4.7110\"  lon=\"-74.0721\"  label=\"Bogotá\"></iswc-map-marker>\r\n            <iswc-map-marker lat=\"6.2442\"  lon=\"-75.5812\"  label=\"Medellín\"></iswc-map-marker>\r\n            <iswc-map-marker lat=\"3.4516\"  lon=\"-76.5320\"  label=\"Cali\"></iswc-map-marker>\r\n            <iswc-map-marker lat=\"10.9685\" lon=\"-74.7813\"  label=\"Barranquilla\"></iswc-map-marker>\r\n            <iswc-map-marker lat=\"11.2408\" lon=\"-74.2110\"  label=\"Santa Marta\"></iswc-map-marker>\r\n            <iswc-map-marker lat=\"7.1193\"  lon=\"-73.1227\"  label=\"Bucaramanga\"></iswc-map-marker>\r\n            <iswc-map-marker lat=\"4.8144\"  lon=\"-75.6945\"  label=\"Pereira\"></iswc-map-marker>\r\n          </iswc-maps>",
+          "html": [
+            "<iswc-maps id=\"m1\" viewbox=\"-79,-5,-66,13\" interactive>",
+            "            <iswc-map-marker lat=\"4.7110\"  lon=\"-74.0721\"  label=\"Bogotá\"></iswc-map-marker>",
+            "            <iswc-map-marker lat=\"6.2442\"  lon=\"-75.5812\"  label=\"Medellín\"></iswc-map-marker>",
+            "            <iswc-map-marker lat=\"3.4516\"  lon=\"-76.5320\"  label=\"Cali\"></iswc-map-marker>",
+            "            <iswc-map-marker lat=\"10.9685\" lon=\"-74.7813\"  label=\"Barranquilla\"></iswc-map-marker>",
+            "            <iswc-map-marker lat=\"11.2408\" lon=\"-74.2110\"  label=\"Santa Marta\"></iswc-map-marker>",
+            "            <iswc-map-marker lat=\"7.1193\"  lon=\"-73.1227\"  label=\"Bucaramanga\"></iswc-map-marker>",
+            "            <iswc-map-marker lat=\"4.8144\"  lon=\"-75.6945\"  label=\"Pereira\"></iswc-map-marker>",
+            "          </iswc-maps>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -46,7 +70,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-maps engine=\"tile\" interactive=\"false\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"tileUrl\": \"https://www.openstreetmap.org/export/embed.html\",\r\n                \"zoom\": 4,\r\n                \"bbox\": \"-79,-5,-66,13\",\r\n                \"center\": \"-72.5,4\",\r\n                \"attribution\": \"© OpenStreetMap contributors\"\r\n              }\r\n            </script>\r\n          </iswc-maps>"
+          "html": [
+            "<iswc-maps engine=\"tile\" interactive=\"false\">",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"tileUrl\": \"https://www.openstreetmap.org/export/embed.html\",",
+            "                \"zoom\": 4,",
+            "                \"bbox\": \"-79,-5,-66,13\",",
+            "                \"center\": \"-72.5,4\",",
+            "                \"attribution\": \"© OpenStreetMap contributors\"",
+            "              }",
+            "            </script>",
+            "          </iswc-maps>"
+          ]
         }
       ]
     },
@@ -56,7 +92,28 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Modo nativo (SVG)\nconst m = document.querySelector('iswc-maps');\n// Atributos\n// viewbox     \"minLon,minLat,maxLon,maxLat\"  viewport inicial\n// interactive boolean — habilita pan/zoom con mouse/touch\n//\n// Marcadores\n//   <iswc-map-marker lat=\"4.6\" lon=\"-74.0\" label=\"Bogotá\"></iswc-map-marker>\n//\n// Modo tile\n//   <iswc-maps engine=\"tile\">\n//     <script type=\"application/json\">\n//       { \"tileUrl\": \"...\", \"zoom\": 4, \"bbox\": \"...\", \"center\": \"...\",\n//         \"attribution\": \"...\" }\n//     </script>\n//   </iswc-maps>\n//\n// Eventos\nm.addEventListener('iswc-viewport',     e => console.log(e.detail));\nm.addEventListener('iswc-marker-click', e => console.log(e.detail.marker));"
+          "code": [
+            "// Modo nativo (SVG)",
+            "const m = document.querySelector('iswc-maps');",
+            "// Atributos",
+            "// viewbox     \"minLon,minLat,maxLon,maxLat\"  viewport inicial",
+            "// interactive boolean — habilita pan/zoom con mouse/touch",
+            "//",
+            "// Marcadores",
+            "//   <iswc-map-marker lat=\"4.6\" lon=\"-74.0\" label=\"Bogotá\"></iswc-map-marker>",
+            "//",
+            "// Modo tile",
+            "//   <iswc-maps engine=\"tile\">",
+            "//     <script type=\"application/json\">",
+            "//       { \"tileUrl\": \"...\", \"zoom\": 4, \"bbox\": \"...\", \"center\": \"...\",",
+            "//         \"attribution\": \"...\" }",
+            "//     </script>",
+            "//   </iswc-maps>",
+            "//",
+            "// Eventos",
+            "m.addEventListener('iswc-viewport',     e => console.log(e.detail));",
+            "m.addEventListener('iswc-marker-click', e => console.log(e.detail.marker));"
+          ]
         }
       ]
     }

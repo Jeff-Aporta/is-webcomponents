@@ -24,7 +24,11 @@
         "content": "Editor visual de entidad-relación. Compartir el resultado se hace con la app de edición, sin reescribir el enlace de entrada."
       },
       "ejemplos": {
-        "content": "```html\n<p><a href=\"demos/diagramas/app/edit.html?kind=er\" target=\"_blank\" rel=\"noopener\">Abrir editor (API)</a> · <a href=\"demos/diagramas/app/view.html?kind=er\" target=\"_blank\" rel=\"noopener\">Abrir visor</a></p><iswc-er-editor style=\"display:block;height:560px\"><script type=\"application/json\">{\"entities\":[{\"id\":\"cliente\",\"name\":\"Cliente\",\"attributes\":[{\"name\":\"id\",\"key\":\"PK\",\"type\":\"uuid\"}],\"pos\":[80,80]},{\"id\":\"pedido\",\"name\":\"Pedido\",\"attributes\":[{\"name\":\"id\",\"key\":\"PK\",\"type\":\"uuid\"},{\"name\":\"cliente_id\",\"key\":\"FK\",\"type\":\"uuid\"}],\"pos\":[380,80]}],\"relations\":[{\"id\":\"r1\",\"from\":\"cliente\",\"to\":\"pedido\",\"label\":\"hace\",\"fromCard\":\"one\",\"toCard\":\"many\"}]}</script></iswc-er-editor>\n```"
+        "content": [
+          "```html",
+          "<p><a href=\"demos/diagramas/app/edit.html?kind=er\" target=\"_blank\" rel=\"noopener\">Abrir editor (API)</a> · <a href=\"demos/diagramas/app/view.html?kind=er\" target=\"_blank\" rel=\"noopener\">Abrir visor</a></p><iswc-er-editor style=\"display:block;height:560px\"><script type=\"application/json\">{\"entities\":[{\"id\":\"cliente\",\"name\":\"Cliente\",\"attributes\":[{\"name\":\"id\",\"key\":\"PK\",\"type\":\"uuid\"}],\"pos\":[80,80]},{\"id\":\"pedido\",\"name\":\"Pedido\",\"attributes\":[{\"name\":\"id\",\"key\":\"PK\",\"type\":\"uuid\"},{\"name\":\"cliente_id\",\"key\":\"FK\",\"type\":\"uuid\"}],\"pos\":[380,80]}],\"relations\":[{\"id\":\"r1\",\"from\":\"cliente\",\"to\":\"pedido\",\"label\":\"hace\",\"fromCard\":\"one\",\"toCard\":\"many\"}]}</script></iswc-er-editor>",
+          "```"
+        ]
       }
     },
     "exclude": [

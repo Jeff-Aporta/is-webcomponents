@@ -94,7 +94,9 @@ test('13. CSS hermano tiene reglas para grid/flex (es un layout)', async () => {
 test('14. JSON tiene sección intro con lede (no es solo una tabla)', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   const intro = (json.sections || [])[0];
-  assert.ok(intro && typeof intro.lede === 'string' && intro.lede.length > 30);
+  // W43 refactor: `lede` puede ser string o array de strings. Aceptamos ambos.
+  const ledeText = Array.isArray(intro?.lede) ? intro.lede.join('\n') : (intro?.lede ?? '');
+  assert.ok(intro && typeof ledeText === 'string' && ledeText.length > 30);
 });
 
 test('15. preview.ts existe (componente complejo → tiene behavior)', async () => {

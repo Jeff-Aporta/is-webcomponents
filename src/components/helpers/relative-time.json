@@ -10,11 +10,18 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).\n          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.\n          Alias de <code class=\"code\">&lt;iswc-format type=\"relative\"&gt;</code>.",
+      "lede": [
+        "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).",
+        "          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.",
+        "          Alias de <code class=\"code\">&lt;iswc-format type=\"relative\"&gt;</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>\n          <p style=\"margin:0;font-size:1.15rem\">Actualizado <iswc-relative-time id=\"live\" sync></iswc-relative-time></p>",
+          "html": [
+            "<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>",
+            "          <p style=\"margin:0;font-size:1.15rem\">Actualizado <iswc-relative-time id=\"live\" sync></iswc-relative-time></p>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -59,22 +66,63 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">long</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-86400\" format=\"long\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">short</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-3600\" format=\"short\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">narrow</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-120\" format=\"narrow\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">numeric=always</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"0\" numeric=\"always\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">en 3 días</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"259200\" format=\"long\"></iswc-relative-time>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">long</code>",
+            "              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-86400\" format=\"long\"></iswc-relative-time>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">short</code>",
+            "              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-3600\" format=\"short\"></iswc-relative-time>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">narrow</code>",
+            "              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-120\" format=\"narrow\"></iswc-relative-time>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">numeric=always</code>",
+            "              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"0\" numeric=\"always\"></iswc-relative-time>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">en 3 días</code>",
+            "              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"259200\" format=\"long\"></iswc-relative-time>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "locales",
       "title": "Idiomas",
-      "lede": "Se filtran con <code class=\"code\">Intl.RelativeTimeFormat.supportedLocalesOf()</code>.\n          Cada tarjeta muestra el mismo instante relativo en ese locale. Como mínimo\n          verás <strong>es</strong> y <strong>en</strong> en cualquier motor moderno.",
+      "lede": [
+        "Se filtran con <code class=\"code\">Intl.RelativeTimeFormat.supportedLocalesOf()</code>.",
+        "          Cada tarjeta muestra el mismo instante relativo en ese locale. Como mínimo",
+        "          verás <strong>es</strong> y <strong>en</strong> en cualquier motor moderno."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">\n            Probar locale\n            <input id=\"localeProbe\" type=\"text\" value=\"es-CO\" list=\"localeHints\"\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--iswc-border);border-radius:var(--iswc-radius-sm);background:var(--iswc-control-bg);color:var(--iswc-text);max-width:10rem\" />\n            <datalist id=\"localeHints\"></datalist>\n            <span id=\"localeProbeOut\"></span>\n          </label>"
+          "html": [
+            "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>",
+            "          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>",
+            "          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">",
+            "            Probar locale",
+            "            <input id=\"localeProbe\" type=\"text\" value=\"es-CO\" list=\"localeHints\"",
+            "              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--iswc-border);border-radius:var(--iswc-radius-sm);background:var(--iswc-control-bg);color:var(--iswc-text);max-width:10rem\" />",
+            "            <datalist id=\"localeHints\"></datalist>",
+            "            <span id=\"localeProbeOut\"></span>",
+            "          </label>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-relative-time date=\"…\" locale=\"es\"></iswc-relative-time>\n<iswc-relative-time date=\"…\" locale=\"en\"></iswc-relative-time>\n<iswc-relative-time date=\"…\" locale=\"ja\" format=\"short\"></iswc-relative-time>",
+          "code": [
+            "<iswc-relative-time date=\"…\" locale=\"es\"></iswc-relative-time>",
+            "<iswc-relative-time date=\"…\" locale=\"en\"></iswc-relative-time>",
+            "<iswc-relative-time date=\"…\" locale=\"ja\" format=\"short\"></iswc-relative-time>"
+          ],
           "lang": "html"
         }
       ]
@@ -85,7 +133,11 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<p style=\"margin:0\">\n            <iswc-format type=\"relative\" data-rt-offset=\"-7200\" style=\"short\"></iswc-format>\n          </p>"
+          "html": [
+            "<p style=\"margin:0\">",
+            "            <iswc-format type=\"relative\" data-rt-offset=\"-7200\" style=\"short\"></iswc-format>",
+            "          </p>"
+          ]
         }
       ]
     },
@@ -96,29 +148,23 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>date</code>",
-              "ISO o timestamp"
+              "<code>date</code>"
             ],
             [
-              "<code>format</code>",
-              "long · short · narrow"
+              "<code>format</code>"
             ],
             [
-              "<code>numeric</code>",
-              "auto · always"
+              "<code>numeric</code>"
             ],
             [
-              "<code>locale</code>",
-              "<code>html lang</code> (sistema) → <code>es</code>"
+              "<code>locale</code>"
             ],
             [
-              "<code>sync</code>",
-              "actualiza cada ~30s"
+              "<code>sync</code>"
             ]
           ]
         }
@@ -128,7 +174,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).\n          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.\n          Alias de <code class=\"code\">&lt;iswc-format type=\"relative\"&gt;</code>."
+        "content": [
+          "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).",
+          "          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.",
+          "          Alias de <code class=\"code\">&lt;iswc-format type=\"relative\"&gt;</code>."
+        ]
       },
       "atributos": {
         "table": [
@@ -155,7 +205,12 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>\n          <p style=\"margin:0;font-size:1.15rem\">Actualizado <iswc-relative-time id=\"live\" sync></iswc-relative-time></p>\n```"
+        "content": [
+          "```html",
+          "<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>",
+          "          <p style=\"margin:0;font-size:1.15rem\">Actualizado <iswc-relative-time id=\"live\" sync></iswc-relative-time></p>",
+          "```"
+        ]
       }
     },
     "exclude": [

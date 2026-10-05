@@ -10,11 +10,18 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones.",
+      "lede": [
+        "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,",
+        "          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.",
+        "          Cinco apariencias y dos orientaciones."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-card>Hola mundo</iswc-card>",
+          "html": [
+            "<span class=\"demo-label\">caso mínimo</span>",
+            "          <iswc-card>Hola mundo</iswc-card>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -35,60 +42,169 @@
     {
       "id": "appearances",
       "title": "Apariencias",
-      "lede": "El atributo <code class=\"code\">appearance</code> define el tratamiento visual.\r\n          Default: <code class=\"code\">outlined</code>.",
+      "lede": [
+        "El atributo <code class=\"code\">appearance</code> define el tratamiento visual.",
+        "          Default: <code class=\"code\">outlined</code>."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-grid\">\r\n          <iswc-card variant=\"outlined\">\r\n            <strong>outlined</strong>\r\n            <p class=\"card-meta\">Borde 1px, fondo transparente.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"filled\">\r\n            <strong>filled</strong>\r\n            <p class=\"card-meta\">Fondo elevado, sin borde.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"filled-outlined\">\r\n            <strong>filled-outlined</strong>\r\n            <p class=\"card-meta\">Fondo + borde.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"plain\">\r\n            <strong>plain</strong>\r\n            <p class=\"card-meta\">Sin fondo ni borde, solo espaciado.</p>\r\n          </iswc-card>\r\n          <iswc-card variant=\"accent\">\r\n            <strong>accent</strong>\r\n            <p class=\"card-meta\">Borde lateral de color de marca.</p>\r\n          </iswc-card>\r\n        </div>"
+          "html": [
+            "<div class=\"card-grid\">",
+            "          <iswc-card variant=\"outlined\">",
+            "            <strong>outlined</strong>",
+            "            <p class=\"card-meta\">Borde 1px, fondo transparente.</p>",
+            "          </iswc-card>",
+            "          <iswc-card variant=\"filled\">",
+            "            <strong>filled</strong>",
+            "            <p class=\"card-meta\">Fondo elevado, sin borde.</p>",
+            "          </iswc-card>",
+            "          <iswc-card variant=\"filled-outlined\">",
+            "            <strong>filled-outlined</strong>",
+            "            <p class=\"card-meta\">Fondo + borde.</p>",
+            "          </iswc-card>",
+            "          <iswc-card variant=\"plain\">",
+            "            <strong>plain</strong>",
+            "            <p class=\"card-meta\">Sin fondo ni borde, solo espaciado.</p>",
+            "          </iswc-card>",
+            "          <iswc-card variant=\"accent\">",
+            "            <strong>accent</strong>",
+            "            <p class=\"card-meta\">Borde lateral de color de marca.</p>",
+            "          </iswc-card>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-card variant=\"accent\">...</iswc-card>\n<iswc-card variant=\"filled-outlined\">...</iswc-card>"
+          "code": [
+            "<iswc-card variant=\"accent\">...</iswc-card>",
+            "<iswc-card variant=\"filled-outlined\">...</iswc-card>"
+          ]
         }
       ]
     },
     {
       "id": "vertical-full",
       "title": "Vertical con header, media y footer",
-      "lede": "Composición vertical completa. El slot <code class=\"code\">media</code> va arriba,\r\n          <code class=\"code\">header</code> debajo, <code class=\"code\">body</code> en el centro y\r\n          <code class=\"code\">footer</code> al final.",
+      "lede": [
+        "Composición vertical completa. El slot <code class=\"code\">media</code> va arriba,",
+        "          <code class=\"code\">header</code> debajo, <code class=\"code\">body</code> en el centro y",
+        "          <code class=\"code\">footer</code> al final."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-stage-h\">\r\n          <iswc-card style=\"max-width: 360px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <div class=\"card-demo-img\" role=\"img\" aria-label=\"Mockup\"></div>\r\n            </div>\r\n            <div slot=\"header\"><strong>Notificación importante</strong></div>\r\n            <p>Hemos detectado actividad inusual en tu cuenta. Revisa los detalles y confirma si fuiste tú.</p>\r\n            <div slot=\"footer\" class=\"card-row-actions\">\r\n              <iswc-button color=\"neutral\" variant=\"plain\">Más tarde</iswc-button>\r\n              <iswc-button color=\"brand\">Revisar</iswc-button>\r\n            </div>\r\n          </iswc-card>\r\n        </div>"
+          "html": [
+            "<div class=\"card-stage-h\">",
+            "          <iswc-card style=\"max-width: 360px; width: 100%;\">",
+            "            <div slot=\"media\">",
+            "              <div class=\"card-demo-img\" role=\"img\" aria-label=\"Mockup\"></div>",
+            "            </div>",
+            "            <div slot=\"header\"><strong>Notificación importante</strong></div>",
+            "            <p>Hemos detectado actividad inusual en tu cuenta. Revisa los detalles y confirma si fuiste tú.</p>",
+            "            <div slot=\"footer\" class=\"card-row-actions\">",
+            "              <iswc-button color=\"neutral\" variant=\"plain\">Más tarde</iswc-button>",
+            "              <iswc-button color=\"brand\">Revisar</iswc-button>",
+            "            </div>",
+            "          </iswc-card>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-card>\n  <div slot=\"media\"><img src=\"...\" alt=\"...\"/></div>\n  <div slot=\"header\">Título</div>\n  Contenido del body.\n  <div slot=\"footer\">\n    <iswc-button>Cancelar</iswc-button>\n    <iswc-button color=\"brand\">Aceptar</iswc-button>\n  </div>\n</iswc-card>"
+          "code": [
+            "<iswc-card>",
+            "  <div slot=\"media\"><img src=\"...\" alt=\"...\"/></div>",
+            "  <div slot=\"header\">Título</div>",
+            "  Contenido del body.",
+            "  <div slot=\"footer\">",
+            "    <iswc-button>Cancelar</iswc-button>",
+            "    <iswc-button color=\"brand\">Aceptar</iswc-button>",
+            "  </div>",
+            "</iswc-card>"
+          ]
         }
       ]
     },
     {
       "id": "horizontal",
       "title": "Horizontal",
-      "lede": "Con <code class=\"code\">orientation=\"horizontal\"</code> el card se vuelve una fila:\r\n          <code class=\"code\">media</code> a la izquierda, <code class=\"code\">body</code> crece, <code class=\"code\">actions</code> a la derecha.",
+      "lede": [
+        "Con <code class=\"code\">orientation=\"horizontal\"</code> el card se vuelve una fila:",
+        "          <code class=\"code\">media</code> a la izquierda, <code class=\"code\">body</code> crece, <code class=\"code\">actions</code> a la derecha."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-stage-h\">\r\n          <iswc-card orientation=\"horizontal\" style=\"max-width: 560px; width: 100%;\">\r\n            <div slot=\"media\">\r\n              <iswc-icon icon=\"mdi:bell-ring-outline\" style=\"font-size: 2.4rem; color: var(--iswc-accent);\"></iswc-icon>\r\n            </div>\r\n            <div>\r\n              <strong>Nueva mención</strong>\r\n              <p class=\"card-meta\">Te han mencionado en <code>#general</code> hace 3 min.</p>\r\n            </div>\r\n            <div slot=\"actions\" class=\"card-row-actions\">\r\n              <iswc-button color=\"neutral\" variant=\"outlined\">Ignorar</iswc-button>\r\n              <iswc-button color=\"brand\">Ver</iswc-button>\r\n            </div>\r\n          </iswc-card>\r\n        </div>"
+          "html": [
+            "<div class=\"card-stage-h\">",
+            "          <iswc-card orientation=\"horizontal\" style=\"max-width: 560px; width: 100%;\">",
+            "            <div slot=\"media\">",
+            "              <iswc-icon icon=\"mdi:bell-ring-outline\" style=\"font-size: 2.4rem; color: var(--iswc-accent);\"></iswc-icon>",
+            "            </div>",
+            "            <div>",
+            "              <strong>Nueva mención</strong>",
+            "              <p class=\"card-meta\">Te han mencionado en <code>#general</code> hace 3 min.</p>",
+            "            </div>",
+            "            <div slot=\"actions\" class=\"card-row-actions\">",
+            "              <iswc-button color=\"neutral\" variant=\"outlined\">Ignorar</iswc-button>",
+            "              <iswc-button color=\"brand\">Ver</iswc-button>",
+            "            </div>",
+            "          </iswc-card>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-card orientation=\"horizontal\">\n  <iswc-icon slot=\"media\" icon=\"mdi:bell\"></iswc-icon>\n  <strong>Nueva mención</strong>\n  <div slot=\"actions\"><iswc-button>Ver</iswc-button></div>\n</iswc-card>"
+          "code": [
+            "<iswc-card orientation=\"horizontal\">",
+            "  <iswc-icon slot=\"media\" icon=\"mdi:bell\"></iswc-icon>",
+            "  <strong>Nueva mención</strong>",
+            "  <div slot=\"actions\"><iswc-button>Ver</iswc-button></div>",
+            "</iswc-card>"
+          ]
         }
       ]
     },
     {
       "id": "header-footer-actions",
       "title": "Header / footer con acciones",
-      "lede": "Slots <code class=\"code\">header-actions</code> y <code class=\"code\">footer-actions</code>\r\n          reservan un extremo del header/footer para botones o iconos.",
+      "lede": [
+        "Slots <code class=\"code\">header-actions</code> y <code class=\"code\">footer-actions</code>",
+        "          reservan un extremo del header/footer para botones o iconos."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"card-stage-h\">\r\n          <iswc-card style=\"max-width: 420px; width: 100%;\">\r\n            <div slot=\"header\"><strong>Proyecto InSoft</strong></div>\r\n            <div slot=\"header-actions\">\r\n              <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Más opciones\">\r\n                <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>\r\n              </iswc-button>\r\n            </div>\r\n            <p>Repositorio privado con 3 issues abiertos y 12 PRs en revisión.</p>\r\n            <div slot=\"footer\" class=\"card-meta\">Actualizado hace 2 horas</div>\r\n            <div slot=\"footer-actions\">\r\n              <iswc-button color=\"brand\" variant=\"outlined\">Ver repo</iswc-button>\r\n            </div>\r\n          </iswc-card>\r\n        </div>"
+          "html": [
+            "<div class=\"card-stage-h\">",
+            "          <iswc-card style=\"max-width: 420px; width: 100%;\">",
+            "            <div slot=\"header\"><strong>Proyecto InSoft</strong></div>",
+            "            <div slot=\"header-actions\">",
+            "              <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Más opciones\">",
+            "                <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>",
+            "              </iswc-button>",
+            "            </div>",
+            "            <p>Repositorio privado con 3 issues abiertos y 12 PRs en revisión.</p>",
+            "            <div slot=\"footer\" class=\"card-meta\">Actualizado hace 2 horas</div>",
+            "            <div slot=\"footer-actions\">",
+            "              <iswc-button color=\"brand\" variant=\"outlined\">Ver repo</iswc-button>",
+            "            </div>",
+            "          </iswc-card>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-card>\n  <strong slot=\"header\">Título</strong>\n  <iswc-button slot=\"header-actions\">...</iswc-button>\n  Contenido.\n  <span slot=\"footer\">Meta</span>\n  <iswc-button slot=\"footer-actions\">CTA</iswc-button>\n</iswc-card>"
+          "code": [
+            "<iswc-card>",
+            "  <strong slot=\"header\">Título</strong>",
+            "  <iswc-button slot=\"header-actions\">...</iswc-button>",
+            "  Contenido.",
+            "  <span slot=\"footer\">Meta</span>",
+            "  <iswc-button slot=\"footer-actions\">CTA</iswc-button>",
+            "</iswc-card>"
+          ]
         }
       ]
     },
@@ -101,18 +217,15 @@
           "kind": "table",
           "columns": [
             "Propiedad",
-            "Tipo",
             "Descripción"
           ],
           "rows": [
             [
               "<code>appearance</code>",
-              "accent · filled · outlined · filled-outlined · plain",
               "Tratamiento visual (atributo reflected)."
             ],
             [
               "<code>orientation</code>",
-              "horizontal · vertical",
               "Layout del card (atributo reflected)."
             ]
           ]
@@ -123,7 +236,24 @@
         },
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">cambia propiedades</span>\r\n          <iswc-card id=\"apiCard\" variant=\"outlined\">\r\n            <strong id=\"apiLabel\">Hola</strong>\r\n            <p class=\"card-meta\">Cambia appearance / orientation desde los botones.</p>\r\n          </iswc-card>\r\n          <div class=\"demo-row\" style=\"margin-top: 12px; flex-wrap: wrap;\">\r\n            <iswc-button id=\"apiOutlined\"  color=\"neutral\" variant=\"outlined\">outlined</iswc-button>\r\n            <iswc-button id=\"apiFilled\"    color=\"neutral\" variant=\"outlined\">filled</iswc-button>\r\n            <iswc-button id=\"apiFilledOut\"  color=\"neutral\" variant=\"outlined\">filled-outlined</iswc-button>\r\n            <iswc-button id=\"apiAccent\"     color=\"neutral\" variant=\"outlined\">accent</iswc-button>\r\n            <iswc-button id=\"apiPlain\"      color=\"neutral\" variant=\"outlined\">plain</iswc-button>\r\n            <iswc-button id=\"apiOrient\"     color=\"brand\" variant=\"outlined\">toggle orientation</iswc-button>\r\n          </div>\r\n          <div class=\"log\" id=\"apiLog\" aria-live=\"polite\" style=\"margin-top: 12px;\">\r\n            <div class=\"row hint\">El log aparece al cambiar appearance u orientation.</div>\r\n          </div>"
+          "html": [
+            "<span class=\"demo-label\">cambia propiedades</span>",
+            "          <iswc-card id=\"apiCard\" variant=\"outlined\">",
+            "            <strong id=\"apiLabel\">Hola</strong>",
+            "            <p class=\"card-meta\">Cambia appearance / orientation desde los botones.</p>",
+            "          </iswc-card>",
+            "          <div class=\"demo-row\" style=\"margin-top: 12px; flex-wrap: wrap;\">",
+            "            <iswc-button id=\"apiOutlined\"  color=\"neutral\" variant=\"outlined\">outlined</iswc-button>",
+            "            <iswc-button id=\"apiFilled\"    color=\"neutral\" variant=\"outlined\">filled</iswc-button>",
+            "            <iswc-button id=\"apiFilledOut\"  color=\"neutral\" variant=\"outlined\">filled-outlined</iswc-button>",
+            "            <iswc-button id=\"apiAccent\"     color=\"neutral\" variant=\"outlined\">accent</iswc-button>",
+            "            <iswc-button id=\"apiPlain\"      color=\"neutral\" variant=\"outlined\">plain</iswc-button>",
+            "            <iswc-button id=\"apiOrient\"     color=\"brand\" variant=\"outlined\">toggle orientation</iswc-button>",
+            "          </div>",
+            "          <div class=\"log\" id=\"apiLog\" aria-live=\"polite\" style=\"margin-top: 12px;\">",
+            "            <div class=\"row hint\">El log aparece al cambiar appearance u orientation.</div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -134,7 +264,21 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-card\" default-tab=\"slots\">\n  <iswc-card>\n    <strong>Titulo de la tarjeta</strong>\n    <p>Descripcion principal del card.</p>\n  </iswc-card>\n  <div slot=\"media\" style=\"background: linear-gradient(135deg, #4f46e5, #06b6d4); height: 80px; border-radius: 8px;\"></div>\n  <strong slot=\"header\">Notificacion</strong>\n  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Mas opciones\">\n    <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>\n  </iswc-button>\n  <span slot=\"footer\">Hace 2 horas</span>\n  <iswc-button slot=\"footer-actions\" color=\"brand\" variant=\"outlined\">Ver mas</iswc-button>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-card\" default-tab=\"slots\">",
+            "  <iswc-card>",
+            "    <strong>Titulo de la tarjeta</strong>",
+            "    <p>Descripcion principal del card.</p>",
+            "  </iswc-card>",
+            "  <div slot=\"media\" style=\"background: linear-gradient(135deg, #4f46e5, #06b6d4); height: 80px; border-radius: 8px;\"></div>",
+            "  <strong slot=\"header\">Notificacion</strong>",
+            "  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Mas opciones\">",
+            "    <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>",
+            "  </iswc-button>",
+            "  <span slot=\"footer\">Hace 2 horas</span>",
+            "  <iswc-button slot=\"footer-actions\" color=\"brand\" variant=\"outlined\">Ver mas</iswc-button>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -145,7 +289,21 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-card\" default-tab=\"slots\">\n  <iswc-card>\n    <strong>Titulo de la tarjeta</strong>\n    <p>Descripcion principal del card.</p>\n  </iswc-card>\n  <div slot=\"media\" style=\"background: linear-gradient(135deg, #4f46e5, #06b6d4); height: 80px; border-radius: 8px;\"></div>\n  <strong slot=\"header\">Notificacion</strong>\n  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Mas opciones\">\n    <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>\n  </iswc-button>\n  <span slot=\"footer\">Hace 2 horas</span>\n  <iswc-button slot=\"footer-actions\" color=\"brand\" variant=\"outlined\">Ver mas</iswc-button>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-card\" default-tab=\"slots\">",
+            "  <iswc-card>",
+            "    <strong>Titulo de la tarjeta</strong>",
+            "    <p>Descripcion principal del card.</p>",
+            "  </iswc-card>",
+            "  <div slot=\"media\" style=\"background: linear-gradient(135deg, #4f46e5, #06b6d4); height: 80px; border-radius: 8px;\"></div>",
+            "  <strong slot=\"header\">Notificacion</strong>",
+            "  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Mas opciones\">",
+            "    <iswc-icon icon=\"mdi:dots-horizontal\"></iswc-icon>",
+            "  </iswc-button>",
+            "  <span slot=\"footer\">Hace 2 horas</span>",
+            "  <iswc-button slot=\"footer-actions\" color=\"brand\" variant=\"outlined\">Ver mas</iswc-button>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -161,22 +319,16 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>appearance</code>",
-              "accent · filled · outlined · filled-outlined · plain",
-              "outlined",
-              "Tratamiento visual. Reflected."
+              "<code>appearance</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Tratamiento visual. Reflected. (valor por defecto)"
             ],
             [
-              "<code>orientation</code>",
-              "horizontal · vertical",
-              "vertical",
-              "Layout. Reflected."
+              "<code>orientation</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Layout. Reflected. (valor por defecto)"
             ]
           ]
         },
@@ -262,20 +414,21 @@
           "kind": "table",
           "columns": [
             "Variable",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>--spacing</code>",
-              "<code>var(--iswc-space-l, 1rem)</code>",
-              "Padding y gap entre secciones."
+              "<code>--spacing</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Padding y gap entre secciones. (valor por defecto)"
             ]
           ]
         },
         {
           "kind": "callout",
-          "html": "<strong>Nota:</strong> AppWebcomponents no hace SSR; la detección de slots\r\n          vacíos se hace en cliente vía <code>slotchange</code>."
+          "html": [
+            "<strong>Nota:</strong> AppWebcomponents no hace SSR; la detección de slots",
+            "          vacíos se hace en cliente vía <code>slotchange</code>."
+          ]
         }
       ]
     }
@@ -283,7 +436,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones."
+        "content": [
+          "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,",
+          "          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.",
+          "          Cinco apariencias y dos orientaciones."
+        ]
       },
       "atributos": {
         "table": [
@@ -363,7 +520,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-card>Hola mundo</iswc-card>\n```"
+        "content": [
+          "```html",
+          "<iswc-card>Hola mundo</iswc-card>",
+          "```"
+        ]
       }
     },
     "exclude": [

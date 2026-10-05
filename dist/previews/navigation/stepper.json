@@ -5,17 +5,41 @@
   "title": "&lt;iswc-stepper&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-stepper / iswc-stepper-step de InSoft.",
-  "styles": ".wizard-card {\r\n      margin-top: 1rem;\r\n      padding: 1.25rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
+  "styles": [
+    ".wizard-card {",
+    "      margin-top: 1rem;",
+    "      padding: 1.25rem;",
+    "      background: var(--iswc-bg-2, #181b22);",
+    "      border: 1px solid var(--iswc-border, #2a2f3a);",
+    "      border-radius: 0.5rem;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-stepper",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.\r\n          Soporta orientación horizontal y vertical, variantes visualmente\r\n          distintas, iconos por slot, descripción y manejo de errores.",
+      "lede": [
+        "Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.",
+        "          Soporta orientación horizontal y vertical, variantes visualmente",
+        "          distintas, iconos por slot, descripción y manejo de errores."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper id=\"stepper1\" active=\"1\">\r\n            <iswc-stepper-step label=\"Cuenta\" description=\"email.verificado@ejemplo.com\" icon=\"mdi:account\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Perfil\" description=\"Completa tus datos\" icon=\"mdi:card-account-details\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Confirmar\" description=\"Revisa y envía\" icon=\"mdi:check-circle\"></iswc-stepper-step>\r\n          </iswc-stepper>\r\n\r\n          <div style=\"display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end\">\r\n            <iswc-button id=\"prevBtn\" color=\"neutral\" variant=\"outlined\">Atrás</iswc-button>\r\n            <iswc-button id=\"nextBtn\" color=\"brand\">Siguiente</iswc-button>\r\n          </div>\r\n          <p id=\"stepLog\" class=\"lede\">Active: <code class=\"code\">1</code></p>",
+          "html": [
+            "<iswc-stepper id=\"stepper1\" active=\"1\">",
+            "            <iswc-stepper-step label=\"Cuenta\" description=\"email.verificado@ejemplo.com\" icon=\"mdi:account\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Perfil\" description=\"Completa tus datos\" icon=\"mdi:card-account-details\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Confirmar\" description=\"Revisa y envía\" icon=\"mdi:check-circle\"></iswc-stepper-step>",
+            "          </iswc-stepper>",
+            "",
+            "          <div style=\"display:flex;gap:0.5rem;margin-top:1rem;justify-content:flex-end\">",
+            "            <iswc-button id=\"prevBtn\" color=\"neutral\" variant=\"outlined\">Atrás</iswc-button>",
+            "            <iswc-button id=\"nextBtn\" color=\"brand\">Siguiente</iswc-button>",
+            "          </div>",
+            "          <p id=\"stepLog\" class=\"lede\">Active: <code class=\"code\">1</code></p>"
+          ],
           "controls": [
             {
               "control": "number",
@@ -71,7 +95,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper id=\"stepper2\" orientation=\"vertical\" active=\"1\">\r\n            <iswc-stepper-step label=\"Datos personales\" description=\"Nombre, email, fecha de nacimiento\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Dirección\" description=\"Calle, ciudad, código postal\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Pago\" description=\"Método de pago preferido\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Revisar\" description=\"Confirma antes de enviar\"></iswc-stepper-step>\r\n          </iswc-stepper>"
+          "html": [
+            "<iswc-stepper id=\"stepper2\" orientation=\"vertical\" active=\"1\">",
+            "            <iswc-stepper-step label=\"Datos personales\" description=\"Nombre, email, fecha de nacimiento\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Dirección\" description=\"Calle, ciudad, código postal\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Pago\" description=\"Método de pago preferido\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Revisar\" description=\"Confirma antes de enviar\"></iswc-stepper-step>",
+            "          </iswc-stepper>"
+          ]
         }
       ]
     },
@@ -82,7 +113,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper active=\"2\">\r\n            <iswc-stepper-step label=\"Datos\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Validación\" error></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Pago\"></iswc-stepper-step>\r\n          </iswc-stepper>"
+          "html": [
+            "<iswc-stepper active=\"2\">",
+            "            <iswc-stepper-step label=\"Datos\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Validación\" error></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Pago\"></iswc-stepper-step>",
+            "          </iswc-stepper>"
+          ]
         }
       ]
     },
@@ -93,7 +130,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper active=\"0\">\r\n            <iswc-stepper-step label=\"Pendiente\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Bloqueado\" disabled></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"También bloqueado\" disabled></iswc-stepper-step>\r\n          </iswc-stepper>"
+          "html": [
+            "<iswc-stepper active=\"0\">",
+            "            <iswc-stepper-step label=\"Pendiente\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Bloqueado\" disabled></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"También bloqueado\" disabled></iswc-stepper-step>",
+            "          </iswc-stepper>"
+          ]
         }
       ]
     },
@@ -104,7 +147,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper color=\"numbered\" active=\"1\">\r\n            <iswc-stepper-step label=\"Inicio\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Medio\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Fin\"></iswc-stepper-step>\r\n          </iswc-stepper>"
+          "html": [
+            "<iswc-stepper color=\"numbered\" active=\"1\">",
+            "            <iswc-stepper-step label=\"Inicio\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Medio\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Fin\"></iswc-stepper-step>",
+            "          </iswc-stepper>"
+          ]
         }
       ]
     },
@@ -115,7 +164,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper id=\"wizard\" active=\"0\">\r\n            <iswc-stepper-step label=\"Paso 1\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Paso 2\"></iswc-stepper-step>\r\n            <iswc-stepper-step label=\"Paso 3\"></iswc-stepper-step>\r\n          </iswc-stepper>\r\n\r\n          <div class=\"wizard-card\" id=\"wizardBody\">\r\n            <h4>Paso 1: Tu nombre</h4>\r\n            <p>Introduce tu nombre completo.</p>\r\n          </div>"
+          "html": [
+            "<iswc-stepper id=\"wizard\" active=\"0\">",
+            "            <iswc-stepper-step label=\"Paso 1\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Paso 2\"></iswc-stepper-step>",
+            "            <iswc-stepper-step label=\"Paso 3\"></iswc-stepper-step>",
+            "          </iswc-stepper>",
+            "",
+            "          <div class=\"wizard-card\" id=\"wizardBody\">",
+            "            <h4>Paso 1: Tu nombre</h4>",
+            "            <p>Introduce tu nombre completo.</p>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -131,34 +191,24 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>active</code>",
-              "number",
-              "0",
-              "Paso activo (0-indexed)."
+              "<code>active</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Paso activo (0-indexed). (valor por defecto)"
             ],
             [
-              "<code>orientation</code>",
-              "horizontal | vertical",
-              "horizontal",
-              "Disposición."
+              "<code>orientation</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Disposición. (valor por defecto)"
             ],
             [
-              "<code>variant</code>",
-              "default | simple | numbered",
-              "default",
-              "Aspecto."
+              "<code>variant</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Aspecto. (valor por defecto)"
             ],
             [
-              "<code>without-line</code>",
-              "boolean",
-              "false",
-              "Oculta línea conectora."
+              "<code>without-line</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Oculta línea conectora. (valor por defecto)"
             ]
           ]
         },
@@ -170,40 +220,28 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
               "<code>label</code>",
-              "string",
-              "—",
               "Título del paso."
             ],
             [
               "<code>description</code>",
-              "string",
-              "—",
               "Texto secundario."
             ],
             [
               "<code>icon</code>",
-              "string",
-              "—",
               "Iconify id."
             ],
             [
-              "<code>disabled</code>",
-              "boolean",
-              "false",
-              "Bloquea el paso."
+              "<code>disabled</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Bloquea el paso. (valor por defecto)"
             ],
             [
-              "<code>error</code>",
-              "boolean",
-              "false",
-              "Marca error."
+              "<code>error</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Marca error. (valor por defecto)"
             ]
           ]
         },
@@ -213,7 +251,12 @@
         },
         {
           "kind": "code",
-          "code": "stepper.next();          // Siguiente paso\nstepper.prev();          // Paso anterior\nstepper.goTo(2);         // Salta a paso 2\nstepper.active = 1;      // Setter"
+          "code": [
+            "stepper.next();          // Siguiente paso",
+            "stepper.prev();          // Paso anterior",
+            "stepper.goTo(2);         // Salta a paso 2",
+            "stepper.active = 1;      // Setter"
+          ]
         },
         {
           "kind": "html",
@@ -242,7 +285,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.\r\n          Soporta orientación horizontal y vertical, variantes visualmente\r\n          distintas, iconos por slot, descripción y manejo de errores."
+        "content": [
+          "Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.",
+          "          Soporta orientación horizontal y vertical, variantes visualmente",
+          "          distintas, iconos por slot, descripción y manejo de errores."
+        ]
       },
       "atributos": {
         "table": [
@@ -315,7 +362,15 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-stepper active=\"1\">\n  <iswc-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></iswc-stepper-step>\n</iswc-stepper>\n```"
+        "content": [
+          "```html",
+          "<iswc-stepper active=\"1\">",
+          "  <iswc-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></iswc-stepper-step>",
+          "  <iswc-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></iswc-stepper-step>",
+          "  <iswc-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></iswc-stepper-step>",
+          "</iswc-stepper>",
+          "```"
+        ]
       }
     },
     "exclude": [

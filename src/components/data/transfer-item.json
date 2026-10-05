@@ -14,7 +14,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-transfer>\r\n            <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>\r\n          </iswc-transfer>"
+          "html": [
+            "<iswc-transfer>",
+            "            <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>",
+            "          </iswc-transfer>"
+          ]
         }
       ]
     },
@@ -31,7 +37,15 @@
         "content": "Elemento movible entre las dos listas de un <code class=\"code\">&lt;iswc-transfer&gt;</code>."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-transfer>\n  <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>\n</iswc-transfer>\n```"
+        "content": [
+          "```html",
+          "<iswc-transfer>",
+          "  <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>",
+          "  <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>",
+          "  <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>",
+          "</iswc-transfer>",
+          "```"
+        ]
       }
     },
     "exclude": [

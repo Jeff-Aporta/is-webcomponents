@@ -10,11 +10,21 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Migas de pan accesibles con marcado <code class=\"code\">&lt;nav&gt;</code>,\r\n          ARIA roles y separador automático entre items.",
+      "lede": [
+        "Migas de pan accesibles con marcado <code class=\"code\">&lt;nav&gt;</code>,",
+        "          ARIA roles y separador automático entre items."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-breadcrumb label=\"Catálogo\">\r\n            <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>",
+          "html": [
+            "<iswc-breadcrumb label=\"Catálogo\">",
+            "            <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>",
+            "          </iswc-breadcrumb>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -55,7 +65,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-breadcrumb id=\"bcSpa\" label=\"Navegación SPA\">\r\n            <iswc-breadcrumb-item>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Productos</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n          <p id=\"bcLog\">Última navegación: ninguna</p>"
+          "html": [
+            "<iswc-breadcrumb id=\"bcSpa\" label=\"Navegación SPA\">",
+            "            <iswc-breadcrumb-item>Inicio</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item>Productos</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>",
+            "          </iswc-breadcrumb>",
+            "          <p id=\"bcLog\">Última navegación: ninguna</p>"
+          ]
         }
       ]
     },
@@ -66,11 +83,40 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<div class=\"demo-stack\">\r\n          <iswc-breadcrumb label=\"Inicio\">\r\n            <iswc-breadcrumb-item href=\"/\" icon=\"mdi:home\">Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/articulos\" icon=\"mdi:newspaper-variant\">Artículos</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\" icon=\"mdi:airplane\">Viajes</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n\r\n          <iswc-breadcrumb label=\"App\">\r\n            <iswc-breadcrumb-item href=\"/dashboard\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:view-dashboard\" aria-hidden=\"true\"></iswc-icon>\r\n              Dashboard\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/users\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:account-group\" aria-hidden=\"true\"></iswc-icon>\r\n              Usuarios\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:account\" aria-hidden=\"true\"></iswc-icon>\r\n              Perfil\r\n            </iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-stack\">",
+            "          <iswc-breadcrumb label=\"Inicio\">",
+            "            <iswc-breadcrumb-item href=\"/\" icon=\"mdi:home\">Inicio</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"/articulos\" icon=\"mdi:newspaper-variant\">Artículos</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"\" icon=\"mdi:airplane\">Viajes</iswc-breadcrumb-item>",
+            "          </iswc-breadcrumb>",
+            "",
+            "          <iswc-breadcrumb label=\"App\">",
+            "            <iswc-breadcrumb-item href=\"/dashboard\">",
+            "              <iswc-icon slot=\"start\" icon=\"mdi:view-dashboard\" aria-hidden=\"true\"></iswc-icon>",
+            "              Dashboard",
+            "            </iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"/users\">",
+            "              <iswc-icon slot=\"start\" icon=\"mdi:account-group\" aria-hidden=\"true\"></iswc-icon>",
+            "              Usuarios",
+            "            </iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"\">",
+            "              <iswc-icon slot=\"start\" icon=\"mdi:account\" aria-hidden=\"true\"></iswc-icon>",
+            "              Perfil",
+            "            </iswc-breadcrumb-item>",
+            "          </iswc-breadcrumb>",
+            "        </div>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-breadcrumb-item icon=\"mdi:home\">Inicio</iswc-breadcrumb-item>\n<iswc-breadcrumb-item>\n  <iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>\n  Inicio\n</iswc-breadcrumb-item>"
+          "code": [
+            "<iswc-breadcrumb-item icon=\"mdi:home\">Inicio</iswc-breadcrumb-item>",
+            "<iswc-breadcrumb-item>",
+            "  <iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>",
+            "  Inicio",
+            "</iswc-breadcrumb-item>"
+          ]
         }
       ]
     },
@@ -81,7 +127,22 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-breadcrumb label=\"Slash\">\r\n            <iswc-breadcrumb-item href=\"/home\">\r\n              <span slot=\"separator\">/</span>\r\n              Inicio\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/docs\">\r\n              <span slot=\"separator\">/</span>\r\n              Docs\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">\r\n              <span slot=\"separator\">/</span>\r\n              Guía\r\n            </iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"
+          "html": [
+            "<iswc-breadcrumb label=\"Slash\">",
+            "            <iswc-breadcrumb-item href=\"/home\">",
+            "              <span slot=\"separator\">/</span>",
+            "              Inicio",
+            "            </iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"/docs\">",
+            "              <span slot=\"separator\">/</span>",
+            "              Docs",
+            "            </iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"\">",
+            "              <span slot=\"separator\">/</span>",
+            "              Guía",
+            "            </iswc-breadcrumb-item>",
+            "          </iswc-breadcrumb>"
+          ]
         }
       ]
     },
@@ -98,16 +159,12 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>label</code>",
-              "string",
-              "\"Ruta\"",
-              "aria-label del nav."
+              "<code>label</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "aria-label del nav. (valor por defecto)"
             ]
           ]
         },
@@ -161,33 +218,23 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
               "<code>href</code>",
-              "string",
-              "—",
               "Si está, renderiza <code>&lt;a&gt;</code>. <code>href=\"\"</code> = current page."
             ],
             [
               "<code>target</code>",
-              "string",
-              "—",
               "Pasado al <code>&lt;a&gt;</code>."
             ],
             [
               "<code>rel</code>",
-              "string",
-              "—",
               "Pasado al <code>&lt;a&gt;</code>."
             ],
             [
               "<code>icon</code>",
-              "string",
-              "—",
               "Iconify id por defecto (sin slot start)."
             ]
           ]
@@ -256,7 +303,10 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Migas de pan accesibles con marcado <code class=\"code\">&lt;nav&gt;</code>,\r\n          ARIA roles y separador automático entre items."
+        "content": [
+          "Migas de pan accesibles con marcado <code class=\"code\">&lt;nav&gt;</code>,",
+          "          ARIA roles y separador automático entre items."
+        ]
       },
       "atributos": {
         "table": [
@@ -345,7 +395,16 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-breadcrumb label=\"Catálogo\">\n  <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>\n</iswc-breadcrumb>\n```"
+        "content": [
+          "```html",
+          "<iswc-breadcrumb label=\"Catálogo\">",
+          "  <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>",
+          "  <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>",
+          "  <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>",
+          "  <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>",
+          "</iswc-breadcrumb>",
+          "```"
+        ]
       }
     },
     "exclude": [
