@@ -36,13 +36,14 @@
   </script>
   <!-- CSS estático: evita FOUC. El loader JS NO debe ser el primer paint de estilos. -->
   <style>
-    /* Crítico mínimo antes de que lleguen los <link> (Live Server lento). */
-    html.theme-dark, html.theme-dark body { background: #0f1520; color: #e7eef8; }
-    html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
+    /* Crítico mínimo antes de que lleguen los <link> (Live Server lento).
+     * W51: solo data-theme (las clases .theme-dark/.theme-light se erradicaron). */
+    html[data-theme="dark"],  html[data-theme="dark"]  body { background: #0f1520; color: #e7eef8; }
+    html[data-theme="light"], html[data-theme="light"] body { background: #f4f7fb; color: #142033; }
   </style>
   <!-- Kit: siempre dist/cdn (transpilado). Shell de galería: CSS local. -->
   <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=23z4yw">
-  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=4h9u6l">
+  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=02refy">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/presentation.css">
   <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=gok8j9">
@@ -58,7 +59,7 @@
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=2r375x';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=dvkr1l';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 

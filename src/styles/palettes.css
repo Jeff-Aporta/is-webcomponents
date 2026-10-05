@@ -176,7 +176,7 @@
   --iswc-control-border: color-mix(in srgb, var(--iswc-agrowin-surface) 20%, #3a3a3a);
   --iswc-shadow: 0 1px 0 rgb(255 255 255 / 2%), 0 8px 24px color-mix(in srgb, var(--iswc-agrowin-surface) 35%, rgb(0 0 0 / 40%));
 }
-:is(.theme-light, [data-theme="light"])[data-palette="agrowin"] {
+[data-theme="light"][data-palette="agrowin"] {
   --iswc-agrowin-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.3) h);
   --iswc-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 1%, #fefefe);
   --iswc-bg-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 2%, #fbfbfb);
@@ -192,7 +192,6 @@
 }
 
 /* Light: el texto y el suave usan la rampa, no un hex de cada paleta. */
-.theme-light,
 :root[data-theme="light"],
 [data-theme="light"] {
   --iswc-brand-text: var(--iswc-color-brand-stronger);
