@@ -18,11 +18,11 @@
 }
 
 .modal {
-  --iswc-confirm-modal-bg: var(--iswc-bg-elev, #1c2128);
-  --iswc-confirm-modal-text: var(--iswc-text, #e8eaf1);
-  --iswc-confirm-modal-border: var(--iswc-border, #2a2f3a);
-  --iswc-confirm-modal-accent: var(--iswc-brand, dodgerblue);
-  --iswc-confirm-modal-on-accent: var(--iswc-brand-fg, #fff);
+  --iswc-confirm-modal-bg: var(--iswc-bg-elev);
+  --iswc-confirm-modal-text: var(--iswc-text);
+  --iswc-confirm-modal-border: var(--iswc-border);
+  --iswc-confirm-modal-accent: var(--iswc-brand);
+  --iswc-confirm-modal-on-accent: var(--iswc-brand-fg);
 
   background: var(--iswc-confirm-modal-bg);
   color: var(--iswc-confirm-modal-text);

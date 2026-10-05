@@ -16,9 +16,9 @@
 
   .base {
     display: grid;
-    grid-template-columns: repeat(var(--iswc-year-columns, 3), 1fr);
+    grid-template-columns: repeat(var(--iswc-year-columns), 1fr);
     gap: 0.25em;
-    max-height: var(--iswc-year-height, 15em);
+    max-height: var(--iswc-year-height);
     overflow: auto;
     scrollbar-width: thin;
   }
@@ -26,26 +26,26 @@
   .year {
     padding: 0.6em 0.4em;
     border: 0;
-    border-radius: var(--iswc-radius-sm, 0.375em);
+    border-radius: var(--iswc-radius-sm);
     background: transparent;
     color: inherit;
     font: inherit;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
-    &:hover:not(:disabled) { background: var(--iswc-control-bg-hover, #e9ecef); }
+    &:hover:not(:disabled) { background: var(--iswc-control-bg-hover); }
 
     &:focus-visible {
-      outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent));
       outline-offset: 1px;
     }
 
     &[data-current] {
-      box-shadow: inset 0 0 0 1px var(--iswc-color-brand, #e03131);
+      box-shadow: inset 0 0 0 1px var(--iswc-color-brand);
     }
 
     &[data-selected] {
-      background: var(--iswc-color-brand-strong, #c92a2a);
-      color: var(--iswc-on-brand, #fff);
+      background: var(--iswc-color-brand-strong);
+      color: var(--iswc-on-brand);
     }
 
     &:disabled {

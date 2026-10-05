@@ -8,7 +8,7 @@
   width: 100%;
   box-sizing: border-box;
   color: inherit;
-  font-family: var(--iswc-sans, system-ui, sans-serif);
+  font-family: var(--iswc-sans);
   --ex-bg-elev: color-mix(in srgb, currentColor 4%, transparent);
   --ex-border: color-mix(in srgb, currentColor 16%, transparent);
   --ex-radius: 0.6em;
@@ -133,13 +133,13 @@
 }
 
 .card:focus-visible::part(base) {
-  outline: 0.125em solid var(--iswc-color-brand, #4f46e5);
+  outline: 0.125em solid var(--iswc-color-brand);
   outline-offset: 0.1em;
 }
 
 .card[active]::part(base) {
-  border-color: var(--iswc-color-brand, #4f46e5);
-  box-shadow: 0 0 0 0.0625em var(--iswc-color-brand, #4f46e5) inset;
+  border-color: var(--iswc-color-brand);
+  box-shadow: 0 0 0 0.0625em var(--iswc-color-brand) inset;
 }
 
 .card[active]::part(base)::before { opacity: 0.28; }

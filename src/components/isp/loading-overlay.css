@@ -10,15 +10,15 @@
 }
 
 :host {
-  --iswc-loading-backdrop: color-mix(in srgb, var(--iswc-bg, #101418) 72%, transparent);
-  --iswc-loading-indicator: var(--iswc-accent, var(--iswc-color-brand, #339af0));
+  --iswc-loading-backdrop: color-mix(in srgb, var(--iswc-bg) 72%, transparent);
+  --iswc-loading-indicator: var(--iswc-accent, var(--iswc-color-brand));
   display: contents;
   font-family: var(--iswc-sans, inherit);
 
   .backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--iswc-z-overlay, 1000);
+    z-index: var(--iswc-z-overlay);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,6 +58,6 @@
 
   /* prefers-reduced-motion: backdrop sólido (sin transparencia). */
   @media (prefers-reduced-motion: reduce) {
-    --iswc-loading-backdrop: var(--iswc-bg, #101418);
+    --iswc-loading-backdrop: var(--iswc-bg);
   }
 }

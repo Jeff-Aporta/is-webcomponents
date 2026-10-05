@@ -901,6 +901,10 @@ if (typeof document !== 'undefined') {
     const next = routeHref(link.href);
     if (next && next !== link.href) link.href = next;
   }
+  // W50: auto-cargar is-base.min.css al inicializar el loader, para que el
+  // consumer no tenga que llamar loadCSSBase() manualmente. Es idempotente
+  // (cssDone Set) y respeta host/pin/mirrors del loader.
+  void ISWebComponentsLoader.loadCSSBase();
 }
 
 export default ISWebComponentsLoader;

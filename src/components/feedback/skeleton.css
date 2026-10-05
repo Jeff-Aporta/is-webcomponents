@@ -1,7 +1,7 @@
 :host {
   /* Base soft; sheen = brillo fantasma (bajo contraste), no metal */
-  --iswc-skeleton-color: var(--iswc-control-bg, #21262d);
-  --iswc-skeleton-sheen: color-mix(in srgb, var(--iswc-text, #fff) 11%, transparent);
+  --iswc-skeleton-color: var(--iswc-control-bg);
+  --iswc-skeleton-sheen: color-mix(in srgb, var(--iswc-text) 11%, transparent);
   display: block;
   position: relative;
   height: 1em;

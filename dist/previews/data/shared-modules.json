@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T17:49:04.717Z",
+  "generatedAt": "2026-10-05T13:36:18.673Z",
   "count": 66,
   "modules": [
     {
@@ -7,7 +7,7 @@
       "id": "button-shape",
       "path": "src/components/_shared/button-shape.ts",
       "summary": "button-shape — Compartido por: iswc-button (y quien reenvía `shape` al botón, p. ej. prefs-clear).",
-      "bytes": 1556,
+      "bytes": 1374,
       "exports": [
         "BUTTON_SHAPE",
         "DEFAULT_BUTTON_SHAPE",

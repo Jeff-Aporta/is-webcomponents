@@ -20,7 +20,7 @@
 :host {
   --iswc-heading-color: var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text)));
   --iswc-heading-mix: 15%;
-  --iswc-heading-mix-with: var(--iswc-text, currentColor);
+  --iswc-heading-mix-with: var(--iswc-text);
   --iswc-heading-size: 2em;
   display: block;
   min-inline-size: 0;

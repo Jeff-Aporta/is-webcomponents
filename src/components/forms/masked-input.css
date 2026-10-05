@@ -16,11 +16,11 @@
   position: relative;
   display: flex;
   align-items: center;
-  inline-size: var(--iswc-field-width, 16rem);
+  inline-size: var(--iswc-field-width);
   max-inline-size: 100%;
   border: 1px solid var(--iswc-control-border, var(--iswc-border));
   background: var(--iswc-control-bg, var(--iswc-bg-soft));
-  border-radius: var(--iswc-control-radius, 6px);
+  border-radius: var(--iswc-control-radius);
   transition: border-color 120ms ease, background-color 120ms ease;
 
   :host([variant="filled"]) & { background: var(--iswc-control-bg, var(--iswc-bg-soft)); }
@@ -41,7 +41,7 @@
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--iswc-focus, var(--iswc-accent)) 25%, transparent);
   }
 
-  :host([invalid]) & { border-color: var(--iswc-danger, #dc2626); }
+  :host([invalid]) & { border-color: var(--iswc-danger); }
 }
 
 .input {

@@ -3,7 +3,7 @@
   display: inline-block;
   font: inherit;
   color: var(--iswc-text);
-  --iswc-mega-menu-focus: var(--iswc-accent, dodgerblue);
+  --iswc-mega-menu-focus: var(--iswc-accent);
 }
 
 .root {
@@ -22,7 +22,7 @@ iswc-button.trigger {
     padding: .45rem .85rem;
     border: 1px solid transparent;
     background: transparent;
-    border-radius: var(--iswc-radius, 8px);
+    border-radius: var(--iswc-radius);
     color: inherit;
     min-block-size: 0;
   }
@@ -40,7 +40,7 @@ iswc-button.trigger {
 
 .panel {
   border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius, 12px);
+  border-radius: var(--iswc-radius);
   background: var(--iswc-bg-elev);
   padding: 1.25rem 1.5rem;
   margin: 0;
@@ -101,7 +101,7 @@ iswc-button.trigger {
         color-mix(in srgb, var(--iswc-accent) 18%, transparent),
         color-mix(in srgb, var(--iswc-accent) 4%, transparent));
     border: 1px solid color-mix(in srgb, var(--iswc-accent) 40%, var(--iswc-border));
-    border-radius: var(--iswc-radius, 10px);
+    border-radius: var(--iswc-radius);
     padding: 1rem;
     font-size: .85rem;
     display: flex; flex-direction: column; gap: .55rem;

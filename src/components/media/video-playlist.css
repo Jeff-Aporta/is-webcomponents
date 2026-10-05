@@ -3,7 +3,7 @@
   display: block;
   font: inherit;
   color: var(--iswc-text);
-  --iswc-video-playlist-radius: var(--iswc-radius, 10px);
+  --iswc-video-playlist-radius: var(--iswc-radius);
   --iswc-video-playlist-bg: var(--iswc-bg-elev);
   --iswc-video-playlist-border: var(--iswc-border);
   --iswc-video-playlist-stripe: color-mix(in srgb, var(--iswc-text) 4%, transparent);
@@ -287,7 +287,7 @@
 
     .playlist-item-index {
       background: var(--iswc-video-playlist-accent);
-      color: var(--iswc-on-accent, #fff);
+      color: var(--iswc-on-accent);
       border-radius: 999px;
     }
   }
@@ -309,7 +309,7 @@
 .playlist-item-thumb {
   position: relative;
   aspect-ratio: 16 / 9;
-  border-radius: var(--iswc-radius-sm, 6px);
+  border-radius: var(--iswc-radius-sm);
   overflow: hidden;
   background: var(--iswc-video-playlist-thumb-bg);
   display: grid; place-items: center;

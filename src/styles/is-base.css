@@ -159,7 +159,7 @@
   --iswc-scrollbar-radius: 999px;
   --iswc-scrollbar-track: transparent;
   --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 65%, transparent);
-  --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent, dodgerblue) 45%, var(--iswc-control-border));
+  --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
 }
 
 /* color-scheme solo con data-theme="dark": no oscurece el canvas del browser
@@ -209,10 +209,10 @@
   --iswc-error-soft-active: var(--iswc-color-error-pale);
   --iswc-scrollbar-track: color-mix(in srgb, var(--iswc-bg-soft) 70%, transparent);
   --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 55%, transparent);
-  --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent, dodgerblue) 40%, var(--iswc-control-border));
-  --iswc-brand-text: var(--iswc-color-brand-stronger, #a61e1e);
-  --iswc-brand-soft: var(--iswc-color-brand-paler, #fff1f1);
-  --iswc-brand-soft-active: var(--iswc-color-brand-pale, #ffd9d9);
+  --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent) 40%, var(--iswc-control-border));
+  --iswc-brand-text: var(--iswc-color-brand-stronger);
+  --iswc-brand-soft: var(--iswc-color-brand-paler);
+  --iswc-brand-soft-active: var(--iswc-color-brand-pale);
 }
 
 /* --- Scrollbars themizados (documento + overflow light DOM) ----------

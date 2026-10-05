@@ -7,7 +7,7 @@
   gap: var(--_gap);
   font-size: inherit;
   font-family: inherit;
-  color: var(--iswc-text-muted, #6c757d);
+  color: var(--iswc-text-muted);
   position: relative;
 }
 :host([current]) {
@@ -36,12 +36,12 @@
     cursor: pointer;
     color: var(--iswc-link, inherit);
     text-decoration: none;
-    border-radius: calc(var(--iswc-radius, 0.25em));
+    border-radius: calc(var(--iswc-radius));
     transition: color 120ms ease;
 
     &:hover { color: var(--iswc-link-hover, inherit); text-decoration: underline; }
     &:focus-visible {
-      outline: 2px solid var(--iswc-focus, #339af0);
+      outline: 2px solid var(--iswc-focus);
       outline-offset: 2px;
     }
   }
@@ -51,7 +51,7 @@
 :host(:first-of-type) .separator { display: none; }
 
 .separator {
-  color: var(--iswc-text-muted, #6c757d);
+  color: var(--iswc-text-muted);
   display: inline-flex;
   align-items: center;
   margin: 0 var(--_gap);

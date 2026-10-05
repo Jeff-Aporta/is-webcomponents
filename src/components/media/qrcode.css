@@ -12,7 +12,7 @@
   gap: .35rem;
   padding: .65rem;
   border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius, 8px);
+  border-radius: var(--iswc-radius);
   background: var(--iswc-bg-elev);
   color: inherit;
 }

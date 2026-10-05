@@ -1,10 +1,10 @@
 :host {
-  --_bg: var(--iswc-control-bg, #f1f3f5);
-  --_border: var(--iswc-control-border, #dee2e6);
-  --_text: var(--iswc-control-text, #495057);
+  --_bg: var(--iswc-control-bg);
+  --_border: var(--iswc-control-border);
+  --_text: var(--iswc-control-text);
   display: inline-flex;
   vertical-align: middle;
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family);
   font-size: inherit;
   font-weight: 500;
   line-height: 1;
@@ -44,40 +44,40 @@
 }
 
 :host([color="brand"]) {
-  --_bg: var(--iswc-color-brand-pale, #d0ebff);
-  --_border: var(--iswc-color-brand, #339af0);
-  --_text: var(--iswc-color-brand-stronger, #1971c2);
+  --_bg: var(--iswc-color-brand-pale);
+  --_border: var(--iswc-color-brand);
+  --_text: var(--iswc-color-brand-stronger);
 }
 :host([color="neutral"]) {
-  --_bg: var(--iswc-control-bg, #f1f3f5);
-  --_border: var(--iswc-control-border, #dee2e6);
-  --_text: var(--iswc-control-text, #495057);
+  --_bg: var(--iswc-control-bg);
+  --_border: var(--iswc-control-border);
+  --_text: var(--iswc-control-text);
 }
 :host([color="info"]) {
-  --_bg: var(--iswc-color-info-pale, #d0ebff);
-  --_border: var(--iswc-color-info, #228be6);
-  --_text: var(--iswc-color-info-stronger, #1864ab);
+  --_bg: var(--iswc-color-info-pale);
+  --_border: var(--iswc-color-info);
+  --_text: var(--iswc-color-info-stronger);
 }
 :host([color="success"]) {
-  --_bg: var(--iswc-color-success-pale, #d3f9d8);
-  --_border: var(--iswc-color-success, #40c057);
-  --_text: var(--iswc-color-success-stronger, #237a35);
+  --_bg: var(--iswc-color-success-pale);
+  --_border: var(--iswc-color-success);
+  --_text: var(--iswc-color-success-stronger);
 }
 :host([color="warning"]) {
-  --_bg: var(--iswc-color-warning-pale, #fff3bf);
-  --_border: var(--iswc-color-warning, #f59f00);
-  --_text: var(--iswc-color-warning-stronger, #9a4f00);
+  --_bg: var(--iswc-color-warning-pale);
+  --_border: var(--iswc-color-warning);
+  --_text: var(--iswc-color-warning-stronger);
 }
 :host([color="danger"]) {
-  --_bg: var(--iswc-color-danger-pale, #ffe3e3);
-  --_border: var(--iswc-color-danger, #fa5252);
-  --_text: var(--iswc-color-danger-stronger, #b02525);
+  --_bg: var(--iswc-color-danger-pale);
+  --_border: var(--iswc-color-danger);
+  --_text: var(--iswc-color-danger-stronger);
 }
 
 :host([variant="filled"]) {
   .tag {
     background: var(--_border);
-    color: var(--iswc-on-brand, #fff);
+    color: var(--iswc-on-brand);
     border-color: var(--_border);
   }
 }

@@ -1,15 +1,15 @@
 :host {
   --iswc-progress-ring-track-width: 2.75;
   --iswc-progress-ring-width: 2.75;
-  --iswc-progress-ring-track-color: color-mix(in srgb, var(--iswc-control-border, #59636e) 55%, transparent);
-  --iswc-progress-ring-color: var(--iswc-accent, var(--iswc-color-brand, #339af0));
+  --iswc-progress-ring-track-color: color-mix(in srgb, var(--iswc-control-border) 55%, transparent);
+  --iswc-progress-ring-color: var(--iswc-accent, var(--iswc-color-brand));
   display: inline-flex;
   vertical-align: middle;
   font-size: inherit;
   width: 1em;
   height: 1em;
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
-  color: var(--iswc-text, #e6e8eb);
+  font-family: var(--iswc-font-family);
+  color: var(--iswc-text);
 }
 
 .ring-wrap {

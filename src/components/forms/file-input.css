@@ -1,8 +1,8 @@
 :host {
   display: block;
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family);
   font-size: inherit;
-  color: var(--iswc-text, #212529);
+  color: var(--iswc-text);
   box-sizing: border-box;
 }
 
@@ -21,7 +21,7 @@
 
 .hint {
   font-size: 0.85em;
-  color: var(--iswc-text-soft, #868e96);
+  color: var(--iswc-text-soft);
 
   &[hidden] { display: none !important; }
 }
@@ -33,21 +33,21 @@
   justify-content: center;
   min-height: 6em;
   padding: 1.25em;
-  border: 1.5px dashed var(--iswc-control-border, #dee2e6);
+  border: 1.5px dashed var(--iswc-control-border);
   border-radius: 0.5em;
-  background: var(--iswc-control-bg, #f8f9fa);
+  background: var(--iswc-control-bg);
   cursor: pointer;
   transition: border-color 120ms ease, background 120ms ease;
   outline: none;
   box-sizing: border-box;
 
   &:hover {
-    border-color: color-mix(in srgb, var(--iswc-color-brand, #339af0) 45%, var(--iswc-control-border, #dee2e6));
-    background: color-mix(in srgb, var(--iswc-color-brand, #339af0) 30%, transparent);
+    border-color: color-mix(in srgb, var(--iswc-color-brand) 45%, var(--iswc-control-border));
+    background: color-mix(in srgb, var(--iswc-color-brand) 30%, transparent);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-color-brand, #339af0));
+    outline: 2px solid var(--iswc-focus, var(--iswc-color-brand));
     outline-offset: 2px;
   }
 }
@@ -57,9 +57,9 @@
  * selector `:state(...)` que esbuild rechaza dentro de nesting de Shadow DOM. */
 :host([data-state-dragging]) {
   .dropzone {
-    border-color: var(--iswc-color-brand, #339af0);
+    border-color: var(--iswc-color-brand);
     border-style: solid;
-    background: color-mix(in srgb, var(--iswc-color-brand, #339af0) 30%, transparent);
+    background: color-mix(in srgb, var(--iswc-color-brand) 30%, transparent);
   }
 }
 
@@ -78,14 +78,14 @@
   align-items: center;
   gap: 0.5em;
   text-align: center;
-  color: var(--iswc-text-soft, #868e96);
+  color: var(--iswc-text-soft);
   font-size: 0.95em;
   pointer-events: none;
 
   & iswc-icon,
   & ::slotted(iswc-icon) {
     font-size: 1.75em;
-    color: var(--iswc-color-brand, #339af0);
+    color: var(--iswc-color-brand);
   }
 }
 
@@ -118,9 +118,9 @@
   align-items: center;
   gap: 0.65em;
   padding: 0.45em 0.65em;
-  border: 1px solid var(--iswc-control-border, #dee2e6);
+  border: 1px solid var(--iswc-control-border);
   border-radius: 0.4em;
-  background: var(--iswc-surface, #fff);
+  background: var(--iswc-surface);
   font-size: 0.9em;
 }
 
@@ -132,7 +132,7 @@
 }
 
 .file-size {
-  color: var(--iswc-text-soft, #868e96);
+  color: var(--iswc-text-soft);
   font-size: 0.9em;
   white-space: nowrap;
 }
@@ -144,5 +144,5 @@
   opacity: 0.65;
   color: inherit;
 
-  &:hover { opacity: 1; color: var(--iswc-color-danger, #fa5252); }
+  &:hover { opacity: 1; color: var(--iswc-color-danger); }
 }

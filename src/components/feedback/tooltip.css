@@ -9,19 +9,19 @@
 
 .popup {
   --iswc-tooltip-arrow-color: var(--iswc-tooltip-bg);
-  --iswc-tooltip-arrow-size: var(--iswc-tooltip-arrow-size, 8px);
+  --iswc-tooltip-arrow-size: var(--iswc-tooltip-arrow-size);
 }
 
 .tooltip {
   display: block;
   max-width: var(--iswc-tooltip-max-width);
   padding: 0.4em 0.65em;
-  border-radius: var(--iswc-radius-sm, 0.25em);
+  border-radius: var(--iswc-radius-sm);
   background: var(--iswc-tooltip-bg);
   color: var(--iswc-tooltip-fg);
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
-  font-size: var(--iswc-tooltip-font-size, 0.8125em);
-  line-height: var(--iswc-tooltip-line-height, 1.35);
+  font-family: var(--iswc-font-family);
+  font-size: var(--iswc-tooltip-font-size);
+  line-height: var(--iswc-tooltip-line-height);
   box-shadow: var(--iswc-shadow, 0 4px 16px rgb(0 0 0 / 25%));
   pointer-events: none;
 }
@@ -43,7 +43,7 @@
   }
   & ::slotted(strong) { font-weight: 700; }
   & ::slotted(code) {
-    font-family: var(--iswc-mono, ui-monospace, monospace);
+    font-family: var(--iswc-mono);
     font-size: 0.92em;
     opacity: 0.92;
   }

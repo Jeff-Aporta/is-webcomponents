@@ -6,9 +6,9 @@
   font-size: inherit;
   inline-size: 1em;
   block-size: 1em;
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family);
   font-weight: 600;
-  color: var(--iswc-text, #212529);
+  color: var(--iswc-text);
   line-height: 1;
 }
 
@@ -18,8 +18,8 @@
   inline-size: 100%;
   block-size: 100%;
   overflow: hidden;
-  background: var(--iswc-control-bg, #f1f3f5);
-  border: 1px solid var(--iswc-control-border, #dee2e6);
+  background: var(--iswc-control-bg);
+  border: 1px solid var(--iswc-control-border);
   box-sizing: border-box;
 }
 
@@ -47,7 +47,7 @@
 
 .icon {
   font-size: 0.55em;
-  color: var(--iswc-muted, #868e96);
+  color: var(--iswc-muted);
 
   & ::slotted(*),
   & iswc-icon { font-size: 1em; }

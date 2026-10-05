@@ -56,7 +56,7 @@
       color-mix(in srgb, var(--iswc-bg-elev) 92%, #fff) 0%,
       var(--iswc-bg-elev) 100%);
   border: 1px solid var(--iswc-border);
-  border-radius: calc(var(--iswc-radius, 0.625em) + 2px);
+  border-radius: calc(var(--iswc-radius) + 2px);
   padding: clamp(1.1rem, 2.4vw, 1.5rem);
   margin: 0 0 1.6em;
   box-shadow:

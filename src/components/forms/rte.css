@@ -8,7 +8,7 @@
 .root {
   display: flex; flex-direction: column;
   border: 1px solid var(--iswc-control-border, var(--iswc-border));
-  border-radius: var(--iswc-control-radius, 8px);
+  border-radius: var(--iswc-control-radius);
   background: var(--iswc-bg-elev);
   overflow: hidden;
 }
@@ -27,7 +27,7 @@
   background: transparent;
   color: var(--iswc-text);
   padding: .2rem .55rem;
-  border-radius: var(--iswc-rte-button-radius, 6px);
+  border-radius: var(--iswc-rte-button-radius);
   cursor: pointer;
   font-size: .85rem;
   min-width: 1.8rem;
@@ -55,7 +55,7 @@
 
 .content {
   padding: .85rem 1rem;
-  min-height: var(--iswc-rte-content-min-h, 12rem);
+  min-height: var(--iswc-rte-content-min-h);
   outline: 0;
   font-size: .92rem;
   line-height: 1.6;
@@ -96,7 +96,7 @@
     vertical-align: baseline;
     background: var(--iswc-rte-token-bg, var(--iswc-accent));
     color: var(--iswc-rte-token-color, var(--iswc-bg));
-    border-radius: var(--iswc-rte-token-radius, 6px);
+    border-radius: var(--iswc-rte-token-radius);
     font-weight: 500;
     font-size: .8em;
     padding: .18em .38em;
@@ -113,7 +113,7 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: .82rem;
   line-height: 1.55;
-  min-height: var(--iswc-rte-content-min-h, 12rem);
+  min-height: var(--iswc-rte-content-min-h);
   padding: .85rem 1rem;
   border: 0;
   outline: 0;

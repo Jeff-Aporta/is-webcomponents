@@ -10,9 +10,9 @@
     justify-content: space-between;
     gap: var(--spacing, 1rem);
     padding: calc(var(--spacing, 1rem) * 0.85) var(--spacing, 1rem);
-    border-block-end: 1px solid var(--iswc-border, transparent);
+    border-block-end: 1px solid var(--iswc-border);
     font-family: var(--iswc-font-family, inherit);
-    background: var(--iswc-bg-soft, transparent);
+    background: var(--iswc-bg-soft);
   }
 
   .title {
@@ -46,8 +46,8 @@
     justify-content: flex-end;
     gap: 0.5em;
     padding: calc(var(--spacing, 1rem) * 0.65) var(--spacing, 1rem);
-    border-block-start: 1px solid var(--iswc-border, transparent);
-    background: var(--iswc-bg-elev, var(--iswc-bg-soft, transparent));
+    border-block-start: 1px solid var(--iswc-border);
+    background: var(--iswc-bg-elev, var(--iswc-bg-soft));
 
     &:empty,
     &[hidden] { display: none; }

@@ -10,7 +10,7 @@
   min-inline-size: 0;
   box-sizing: border-box;
   --iswc-md-editor-preview-max-height: 16em;
-  --_radius: var(--iswc-radius, 0.625em);
+  --_radius: var(--iswc-radius);
 }
 
 /* Rellena el alto del padre (splits, paneles flex). Sin esto el preview
@@ -43,18 +43,18 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0.75em 0.9em;
-  border: 1px solid var(--iswc-border, #2a3038);
+  border: 1px solid var(--iswc-border);
   border-radius: var(--_radius);
-  background: var(--iswc-bg-soft, transparent);
+  background: var(--iswc-bg-soft);
   color: var(--iswc-text, inherit);
   cursor: pointer;
   font-family: var(--iswc-sans, inherit);
   outline: none;
   box-sizing: border-box;
 
-  &:hover { border-color: var(--iswc-control-border, currentColor); }
+  &:hover { border-color: var(--iswc-control-border); }
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, #339af0);
+    outline: 2px solid var(--iswc-focus);
     outline-offset: 2px;
   }
 }
@@ -72,7 +72,7 @@
 
 .preview-empty {
   margin: 0;
-  color: var(--iswc-text-dim, #7a8390);
+  color: var(--iswc-text-dim);
   font-style: italic;
 }
 
@@ -139,7 +139,7 @@
   flex-wrap: wrap;
   padding-block-end: 0.6em;
   margin-block-end: 0.6em;
-  border-block-end: 1px solid var(--iswc-border-soft, transparent);
+  border-block-end: 1px solid var(--iswc-border-soft);
 
   &[hidden] { display: none !important; }
 }
@@ -148,7 +148,7 @@
   inline-size: 1px;
   block-size: 1.3em;
   margin: 0 0.3em;
-  background: var(--iswc-border, currentColor);
+  background: var(--iswc-border);
   opacity: 0.6;
   flex: 0 0 auto;
 }
@@ -172,7 +172,7 @@
 }
 .vars-label {
   font-size: 0.8em;
-  color: var(--iswc-text-dim, #7a8390);
+  color: var(--iswc-text-dim);
 }
 
 .surface {
@@ -189,11 +189,11 @@
   min-block-size: 40vh;
   resize: vertical;
   padding: 0.75em;
-  border: 1px solid var(--iswc-border, #2a3038);
-  border-radius: var(--iswc-radius-sm, 0.375em);
-  background: var(--iswc-code-bg, transparent);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius-sm);
+  background: var(--iswc-code-bg);
   color: var(--iswc-code-text, inherit);
-  font-family: var(--iswc-mono, monospace);
+  font-family: var(--iswc-mono);
   font-size: 0.95em;
 
   &[hidden] { display: none; }
@@ -214,7 +214,7 @@
   flex: 1 1 auto;
   min-inline-size: 0;
   font-size: 0.78em;
-  color: var(--iswc-text-dim, #7a8390);
+  color: var(--iswc-text-dim);
   font-variant-numeric: tabular-nums;
 }
 .ft-meta-item {
@@ -246,7 +246,7 @@
 .dlg-filename {
   font-size: 0.78em;
   font-weight: 500;
-  color: var(--iswc-text-dim, #7a8390);
+  color: var(--iswc-text-dim);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -256,7 +256,7 @@
 
 /* Render híbrido MD + HTML + iswc-code / diagramas (alineado a iswc-md-render). */
 .prompt-md-preview {
-  --_brand: var(--iswc-color-brand, var(--iswc-brand, #339af0));
+  --_brand: var(--iswc-color-brand, var(--iswc-brand));
 
   /* Diagramas iswc-* y atajo de clase — mismo bloque visual. */
   .md-iswc-diagram,
@@ -272,10 +272,10 @@
     inline-size: 100%;
     max-inline-size: 100%;
     margin: 0.35em 0 1.1em;
-    border: 1px solid color-mix(in srgb, var(--_brand) 16%, var(--iswc-border, transparent));
-    border-radius: var(--iswc-radius, 0.5em);
+    border: 1px solid color-mix(in srgb, var(--_brand) 16%, var(--iswc-border));
+    border-radius: var(--iswc-radius);
     overflow: hidden;
-    background: var(--iswc-bg-elev, var(--iswc-bg-soft, transparent));
+    background: var(--iswc-bg-elev, var(--iswc-bg-soft));
   }
 
   > :first-child { margin-block-start: 0; }
@@ -338,7 +338,7 @@
     border: 0;
     background: transparent;
     color: color-mix(in srgb, var(--_brand) 58%, var(--iswc-text));
-    font-family: var(--iswc-font-mono, var(--iswc-mono, monospace));
+    font-family: var(--iswc-font-mono, var(--iswc-mono));
     font-size: 0.92em;
     white-space: break-spaces;
   }
@@ -347,8 +347,8 @@
     max-inline-size: 100%;
     padding: 0.85em 1em;
     border: 1px solid color-mix(in srgb, var(--_brand) 18%, transparent);
-    border-radius: var(--iswc-radius, 0.5em);
-    background: color-mix(in srgb, var(--_brand) 8%, var(--iswc-bg, transparent));
+    border-radius: var(--iswc-radius);
+    background: color-mix(in srgb, var(--_brand) 8%, var(--iswc-bg));
     overflow-x: auto;
     line-height: 1.55;
 
@@ -388,12 +388,12 @@
   }
   hr {
     border: none;
-    border-block-start: 1px solid color-mix(in srgb, var(--_brand) 25%, var(--iswc-border, currentColor));
+    border-block-start: 1px solid color-mix(in srgb, var(--_brand) 25%, var(--iswc-border));
     margin: 1.25em 0;
   }
   img {
     max-inline-size: 100%;
-    border-radius: var(--iswc-radius-sm, 0.375em);
+    border-radius: var(--iswc-radius-sm);
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--_brand) 12%, transparent);
   }
   .md-table-wrap {
@@ -402,8 +402,8 @@
     max-inline-size: 100%;
     overflow-x: auto;
     margin: 0 0 0.95em;
-    border-radius: var(--iswc-radius-sm, 0.35em);
-    border: 1px solid color-mix(in srgb, var(--_brand) 14%, var(--iswc-border-soft, transparent));
+    border-radius: var(--iswc-radius-sm);
+    border: 1px solid color-mix(in srgb, var(--_brand) 14%, var(--iswc-border-soft));
   }
   table {
     border-collapse: collapse;
@@ -413,12 +413,12 @@
   }
   th, td {
     padding: 0.55em 0.8em;
-    border-block-end: 1px solid color-mix(in srgb, var(--_brand) 10%, var(--iswc-border-soft, #2a3038));
+    border-block-end: 1px solid color-mix(in srgb, var(--_brand) 10%, var(--iswc-border-soft));
     text-align: start;
     vertical-align: top;
   }
   th {
-    background: color-mix(in srgb, var(--_brand) 12%, var(--iswc-bg-elev, var(--iswc-bg-soft, transparent)));
+    background: color-mix(in srgb, var(--_brand) 12%, var(--iswc-bg-elev, var(--iswc-bg-soft)));
     color: color-mix(in srgb, var(--_brand) 35%, var(--iswc-text));
     font-weight: 650;
   }
@@ -432,7 +432,7 @@
   padding: 0.05em 0.55em;
   margin: 0 0.05em;
   border-radius: 999px;
-  font-family: var(--iswc-mono, monospace);
+  font-family: var(--iswc-mono);
   font-size: 0.85em;
   line-height: 1.5;
   white-space: nowrap;

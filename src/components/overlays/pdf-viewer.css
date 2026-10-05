@@ -37,7 +37,7 @@
   align-items: center;
   gap: .35rem;
   padding: .3rem .6rem;
-  border-radius: var(--iswc-radius, 6px);
+  border-radius: var(--iswc-radius);
   border: 1px solid var(--iswc-border);
   background: var(--iswc-bg-soft);
   color: inherit;

@@ -9,13 +9,13 @@
   /* Preferir px (o rem/em). El JS convierte a px para el virtual scroll. */
   --iswc-grid-row-h: 40px;
   --iswc-grid-header-h: 44px;
-  --iswc-grid-header-bg: color-mix(in srgb, var(--iswc-bg-elev, #12151a) 92%, transparent);
+  --iswc-grid-header-bg: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
   --iswc-grid-stripe: color-mix(in srgb, var(--iswc-text) 3.5%, transparent);
-  --iswc-grid-row-hover: color-mix(in srgb, var(--iswc-accent, #1e90ff) 10%, transparent);
-  --iswc-grid-selected: color-mix(in srgb, var(--iswc-accent, #1e90ff) 18%, transparent);
-  --iswc-grid-selected-bar: var(--iswc-accent, #1e90ff);
-  --iswc-grid-bg: var(--iswc-bg-elev, #12151a);
-  --iswc-grid-border: var(--iswc-border, #2a3140);
+  --iswc-grid-row-hover: color-mix(in srgb, var(--iswc-accent) 10%, transparent);
+  --iswc-grid-selected: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+  --iswc-grid-selected-bar: var(--iswc-accent);
+  --iswc-grid-bg: var(--iswc-bg-elev);
+  --iswc-grid-border: var(--iswc-border);
 }
 
 /* Compact / comfortable aplica al host y al contenedor interno. */
@@ -36,7 +36,7 @@
   min-block-size: 0;
   overflow: hidden;
   border: 1px solid var(--iswc-grid-border);
-  border-radius: var(--iswc-radius, 10px);
+  border-radius: var(--iswc-radius);
   background: var(--iswc-grid-bg);
   font-size: 0.875rem;
   line-height: 1.35;
@@ -76,9 +76,9 @@
   gap: 0.35rem;
   padding: 2px 0.55rem;
   border: 1px solid var(--iswc-grid-border);
-  border-radius: var(--iswc-radius, 6px);
-  background: var(--iswc-bg-soft, #0e1116);
-  color: var(--iswc-text-soft, #9aa4b2);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-soft);
+  color: var(--iswc-text-soft);
   font-size: 0.8rem;
   inline-size: clamp(11rem, 28%, 22rem);
   iswc-icon {
@@ -104,7 +104,7 @@
   border: 1px solid var(--iswc-grid-border);
   border-radius: 6px;
   padding: 1px;
-  background: var(--iswc-bg-soft, #0e1116);
+  background: var(--iswc-bg-soft);
 }
 
 /* Botones base: misma forma cuadrada centrada, solo cambian tamaño/padding. */
@@ -112,7 +112,7 @@
   appearance: none;
   border: 0;
   background: transparent;
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
   cursor: pointer;
   display: inline-grid;
   place-items: center;
@@ -125,8 +125,8 @@
   block-size: 1.7rem;
   /* Activo (lo pinta el JS con `iswc-active`) y hover comparten highlight. */
   &:is(.iswc-active, :hover) {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 16%, transparent);
-    color: var(--iswc-accent, #1e90ff);
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
   }
 }
 
@@ -140,8 +140,8 @@
   font: inherit;
   font-size: 0.78rem;
   &:hover {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 16%, transparent);
-    color: var(--iswc-accent, #1e90ff);
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
   }
 }
 
@@ -160,7 +160,7 @@
   min-block-size: 2.1rem;
   padding: 0.35rem 0.65rem;
   border-block-end: 1px solid var(--iswc-grid-border);
-  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 5%, var(--iswc-grid-bg));
+  background: color-mix(in srgb, var(--iswc-accent) 5%, var(--iswc-grid-bg));
 }
 
 .mim-dg__group-panel-label {
@@ -168,12 +168,12 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
 }
 
 .mim-dg__group-hint {
   font-size: 0.76rem;
-  color: var(--iswc-text-dim, #6b7380);
+  color: var(--iswc-text-dim);
   font-style: italic;
 }
 
@@ -190,8 +190,8 @@
   gap: 0.25rem;
   padding: 0.12rem 0.35rem 0.12rem 0.25rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--iswc-accent, #1e90ff) 35%, var(--iswc-grid-border));
-  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-grid-border));
+  background: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
   font-size: 0.74rem;
   font-weight: 600;
 }
@@ -213,8 +213,8 @@
   border-radius: 50%;
   padding: 0;
   &:hover {
-    background: color-mix(in srgb, var(--iswc-danger, #dc2626) 22%, transparent);
-    color: var(--iswc-danger, #dc2626);
+    background: color-mix(in srgb, var(--iswc-danger) 22%, transparent);
+    color: var(--iswc-danger);
   }
 }
 
@@ -233,8 +233,8 @@
   inline-size: 1.6rem;
   block-size: 1.6rem;
   &:hover {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 16%, transparent);
-    color: var(--iswc-accent, #1e90ff);
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
   }
 }
 
@@ -255,7 +255,7 @@
   position: relative;
   outline: none;
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--iswc-accent, #1e90ff) 55%, transparent);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--iswc-accent) 55%, transparent);
   }
 }
 
@@ -302,17 +302,17 @@
     box-shadow: inset 3px 0 0 var(--iswc-grid-selected-bar);
   }
   &.iswc-focused {
-    outline: 1px solid color-mix(in srgb, var(--iswc-accent, #1e90ff) 55%, transparent);
+    outline: 1px solid color-mix(in srgb, var(--iswc-accent) 55%, transparent);
     outline-offset: -1px;
   }
 }
 
 .mim-dg__group-row {
-  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 7%, var(--iswc-grid-bg));
+  background: color-mix(in srgb, var(--iswc-accent) 7%, var(--iswc-grid-bg));
   font-weight: 600;
   cursor: pointer;
   &:hover {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 14%, var(--iswc-grid-bg));
+    background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-grid-bg));
   }
 }
 
@@ -327,11 +327,11 @@
 
 .mim-dg__group-chevron {
   flex: 0 0 auto;
-  color: var(--iswc-accent, #1e90ff);
+  color: var(--iswc-accent);
 }
 
 .mim-dg__group-count {
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
   font-weight: 500;
   font-size: 0.78rem;
 }
@@ -339,7 +339,7 @@
 .mim-dg__group-agg {
   margin-inline-start: 0.75rem;
   font-size: 0.74rem;
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
   font-weight: 500;
   b {
     color: var(--iswc-text);
@@ -389,7 +389,7 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
   user-select: none;
   background: var(--iswc-grid-header-bg);
 
@@ -397,7 +397,7 @@
   &.iswc-sortable {
     cursor: pointer;
     &:hover {
-      background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 12%, var(--iswc-grid-header-bg));
+      background: color-mix(in srgb, var(--iswc-accent) 12%, var(--iswc-grid-header-bg));
     }
   }
   /* Pinned head cell mantiene su fondo y sube en el apilado. */
@@ -418,7 +418,7 @@
 
 :is(.mim-dg__sort-icon, .mim-dg__filter-icon) {
   flex: 0 0 auto;
-  color: var(--iswc-accent, #1e90ff);
+  color: var(--iswc-accent);
   font-size: 0.9rem;
 }
 
@@ -428,8 +428,8 @@
   min-inline-size: 0.95rem;
   block-size: 0.95rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 22%, transparent);
-  color: var(--iswc-accent, #1e90ff);
+  background: color-mix(in srgb, var(--iswc-accent) 22%, transparent);
+  color: var(--iswc-accent);
   font-size: 0.65rem;
   font-weight: 700;
 }
@@ -440,8 +440,8 @@
   opacity: 0.35;
   flex: 0 0 auto;
   &:hover {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 16%, transparent);
-    color: var(--iswc-accent, #1e90ff);
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
   }
   &:focus-visible { opacity: 1; }
 }
@@ -455,7 +455,7 @@
   cursor: col-resize;
   z-index: 2;
   &:is(:hover, :active) {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 45%, transparent);
+    background: color-mix(in srgb, var(--iswc-accent) 45%, transparent);
   }
 }
 
@@ -466,12 +466,12 @@
 .mim-dg__checkbox {
   inline-size: 1.45rem;
   block-size: 1.45rem;
-  color: var(--iswc-accent, #1e90ff);
+  color: var(--iswc-accent);
 }
 /* El JS aplica `mim-dg__checkbox--none` (no `&--none` SASS-style) — clase
    escrita plana, no anidada. */
 .mim-dg__checkbox--none {
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
 }
 
 .iswc-pinned         { background: inherit; }
@@ -483,8 +483,8 @@
   align-items: center;
   padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--c, var(--iswc-accent, #1e90ff)) 18%, transparent);
-  color: var(--c, var(--iswc-accent, #1e90ff));
+  background: color-mix(in srgb, var(--c, var(--iswc-accent)) 18%, transparent);
+  color: var(--c, var(--iswc-accent));
   font-weight: 700;
   font-size: 0.75rem;
   line-height: 1.2;
@@ -499,7 +499,7 @@
   border-radius: 4px;
   margin-inline-end: 3px;
   background: color-mix(in srgb, var(--iswc-text) 8%, transparent);
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
   font-size: 0.75rem;
   line-height: 1.2;
   overflow: visible;
@@ -510,18 +510,18 @@
   inline-size: 12px;
   block-size: 12px;
   border-radius: 3px;
-  background: var(--iswc-success, #16a34a);
+  background: var(--iswc-success);
   opacity: 0.7;
   /* Estado "false" o `aria-checked="false"` lo pinta el JS. */
   &.mim-dg-bool--false,
   &[aria-checked="false"] {
-    background: var(--iswc-border-soft, #3a4252);
+    background: var(--iswc-border-soft);
     opacity: 0.55;
   }
 }
 
 .mim-dg-link {
-  color: var(--iswc-accent, #1e90ff);
+  color: var(--iswc-accent);
   text-decoration: none;
   &:hover { text-decoration: underline; }
 }
@@ -530,8 +530,8 @@
   inline-size: 1.55rem;
   block-size: 1.55rem;
   &:hover {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 16%, transparent);
-    color: var(--iswc-accent, #1e90ff);
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
   }
 }
 
@@ -558,7 +558,7 @@
   gap: 0.35rem;
   border: 0;
   background: transparent;
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
   font: inherit;
   font-size: 0.74rem;
   padding: 0.35rem 0.45rem;
@@ -568,8 +568,8 @@
   transform: rotate(180deg);
   /* Activo (`aria-selected="true"`) o hover comparten highlight. */
   &:is([aria-selected="true"], :hover) {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 14%, transparent);
-    color: var(--iswc-accent, #1e90ff);
+    background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+    color: var(--iswc-accent);
   }
 }
 
@@ -607,7 +607,7 @@
   cursor: pointer;
 
   &:hover {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 10%, transparent);
+    background: color-mix(in srgb, var(--iswc-accent) 10%, transparent);
   }
 }
 
@@ -629,12 +629,12 @@
 
 :is(.mim-dg__count, .mim-dg__pager-info, .mim-dg__page-size) {
   font-size: 0.78rem;
-  color: var(--iswc-text-soft, #9aa4b2);
+  color: var(--iswc-text-soft);
   font-variant-numeric: tabular-nums;
 }
 
 .mim-dg__count-sel {
-  color: var(--iswc-accent, #1e90ff);
+  color: var(--iswc-accent);
   font-weight: 600;
 }
 
@@ -649,7 +649,7 @@
   padding: 2px 6px;
   border-radius: 4px;
   border: 1px solid var(--iswc-grid-border);
-  background: var(--iswc-bg-soft, #0e1116);
+  background: var(--iswc-bg-soft);
   color: var(--iswc-text);
 }
 
@@ -658,8 +658,8 @@
   block-size: 1.6rem;
   border: 1px solid var(--iswc-grid-border);
   &:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 16%, transparent);
-    color: var(--iswc-accent, #1e90ff);
+    background: color-mix(in srgb, var(--iswc-accent) 16%, transparent);
+    color: var(--iswc-accent);
   }
   &:disabled {
     opacity: 0.35;

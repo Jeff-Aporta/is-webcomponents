@@ -1,10 +1,10 @@
 :host {
   --iswc-progress-bar-track-height: 0.5em;
-  --iswc-progress-bar-track-color: var(--iswc-control-bg, #e9ecef);
-  --iswc-progress-bar-color: var(--iswc-color-brand, #339af0);
+  --iswc-progress-bar-track-color: var(--iswc-control-bg);
+  --iswc-progress-bar-color: var(--iswc-color-brand);
   display: block;
   width: 100%;
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family);
   font-size: inherit;
 
   .track {
@@ -34,7 +34,7 @@
   .label {
     display: block;
     margin-top: 0.35em;
-    color: var(--iswc-text-soft, #868e96);
+    color: var(--iswc-text-soft);
     font-size: 0.85em;
 
     &:empty { display: none; }

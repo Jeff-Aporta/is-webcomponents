@@ -4,14 +4,14 @@
 
 :host {
   --iswc-drawer-size: 380px;
-  --iswc-drawer-spacing: var(--iswc-space-l, 1rem);
+  --iswc-drawer-spacing: var(--iswc-space-l);
   /* modal-chrome.css lee --spacing; sin alias el chrome interno queda sin padding. */
   --spacing: var(--iswc-drawer-spacing);
   --iswc-drawer-backdrop-color: rgba(0, 0, 0, 0.45);
   --iswc-drawer-show-duration: 220ms;
   --iswc-drawer-hide-duration: 180ms;
 
-  --_radius: calc(var(--iswc-radius, 0.75em));
+  --_radius: calc(var(--iswc-radius));
   --_shadow: 0 -8px 24px rgba(0, 0, 0, 0.18), 8px 0 24px rgba(0, 0, 0, 0.18);
 
   position: fixed;
@@ -36,7 +36,7 @@
 
 .drawer {
   position: fixed;
-  background: var(--iswc-bg, #fff);
+  background: var(--iswc-bg);
   color: var(--iswc-text, inherit);
   box-shadow: var(--_shadow);
   display: grid;
@@ -121,7 +121,7 @@
   flex: 0 0 auto;
   font-size: 1rem;
   line-height: 0;
-  color: var(--iswc-text-muted, #6c757d);
+  color: var(--iswc-text-muted);
 
-  &:hover { color: var(--iswc-text, #212529); }
+  &:hover { color: var(--iswc-text); }
 }

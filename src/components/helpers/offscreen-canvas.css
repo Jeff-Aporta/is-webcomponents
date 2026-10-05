@@ -5,7 +5,7 @@
     display: block;
     inline-size: 100%;
     max-inline-size: 100%;
-    background: var(--iswc-bg-elev, transparent);
-    border-radius: var(--iswc-radius, 0.4em);
+    background: var(--iswc-bg-elev);
+    border-radius: var(--iswc-radius);
   }
 }

@@ -3,14 +3,14 @@
    El acento de marca sustituye al rojo de YouTube. */
 
 :host {
-  --iswc-video-accent: var(--iswc-accent, #f03);
+  --iswc-video-accent: var(--iswc-accent);
   --played: 0%;
   --buffered: 0%;
   --vol: 100%;
 
   display: block;
   position: relative;
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family);
   font-size: inherit;
   color: #fff;
   background: #000;

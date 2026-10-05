@@ -9,18 +9,18 @@
   box-sizing: border-box;
 
   /* Tipografía: todo en em, escala con el font-size del contexto. */
-  font-family: var(--iswc-sans, ui-sans-serif, system-ui, sans-serif);
+  font-family: var(--iswc-sans);
   --chart-tick-size: 0.6875em;
   --chart-legend-size: 0.75em;
   --chart-title-size: 0.875em;
   --chart-tooltip-size: 0.75em;
 
   /* Superficie y tinta */
-  --chart-text: var(--iswc-text, #e6e8eb);
-  --chart-muted: var(--iswc-text-dim, #7a8390);
-  --chart-surface: var(--iswc-bg-elev, #1c2128);
-  --iswc-chart-grid-color: color-mix(in srgb, var(--iswc-border, #2a3038) 85%, transparent);
-  --chart-axis-color: color-mix(in srgb, var(--iswc-border, #2a3038) 100%, transparent);
+  --chart-text: var(--iswc-text);
+  --chart-muted: var(--iswc-text-dim);
+  --chart-surface: var(--iswc-bg-elev);
+  --iswc-chart-grid-color: color-mix(in srgb, var(--iswc-border) 85%, transparent);
+  --chart-axis-color: color-mix(in srgb, var(--iswc-border) 100%, transparent);
 
   /* Geometría de marks — unitless (px), legibles desde JS */
   --chart-bar-radius: 4;
@@ -215,7 +215,7 @@
   gap: 0.4em;
   background: none;
   border: none;
-  border-radius: var(--iswc-radius-sm, 0.375em);
+  border-radius: var(--iswc-radius-sm);
   color: var(--chart-text);
   cursor: pointer;
   padding: 0.15em 0.3em;
@@ -223,7 +223,7 @@
   transition: opacity 120ms ease-out, background-color 120ms ease-out;
   &:hover { background: color-mix(in srgb, var(--chart-text) 8%, transparent); }
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline: 2px solid var(--iswc-focus);
     outline-offset: 1px;
   }
   &[aria-pressed="false"] {
@@ -280,7 +280,7 @@
   pointer-events: none;
   max-inline-size: 16em;
   padding: 0.45em 0.6em;
-  border: 1px solid var(--iswc-border, #2a3038);
+  border: 1px solid var(--iswc-border);
   border-radius: 0.4em;
   background: color-mix(in srgb, var(--chart-surface) 96%, transparent);
   color: var(--chart-text);

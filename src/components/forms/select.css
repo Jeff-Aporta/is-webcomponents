@@ -1,11 +1,11 @@
 :host {
-  --iswc-select-border-radius: var(--iswc-radius-sm, 0.375em);
-  --iswc-select-border: var(--iswc-control-border, #adb5bd);
-  --iswc-select-bg: var(--iswc-control-bg, #f1f3f5);
-  --iswc-select-text: var(--iswc-control-text, #212529);
-  --iswc-select-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
-  --iswc-select-danger: var(--iswc-color-danger, #fa5252);
-  --iswc-select-danger-text: var(--iswc-danger-text, var(--iswc-color-danger-strong, #e03131));
+  --iswc-select-border-radius: var(--iswc-radius-sm);
+  --iswc-select-border: var(--iswc-control-border);
+  --iswc-select-bg: var(--iswc-control-bg);
+  --iswc-select-text: var(--iswc-control-text);
+  --iswc-select-focus: var(--iswc-focus, var(--iswc-accent));
+  --iswc-select-danger: var(--iswc-color-danger);
+  --iswc-select-danger-text: var(--iswc-danger-text, var(--iswc-color-danger-strong));
   display: block;
   position: relative;
   font-family: var(--iswc-sans, inherit);
@@ -31,7 +31,7 @@
 
   .hint {
     font-size: 0.8em;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     &:not([hidden]) { margin-block-start: 0.35em; }
   }
 
@@ -46,8 +46,8 @@
     align-items: center;
     gap: 0.15em;
     box-sizing: border-box;
-    block-size: var(--iswc-control-height, 2.5em);
-    min-block-size: var(--iswc-control-height, 2.5em);
+    block-size: var(--iswc-control-height);
+    min-block-size: var(--iswc-control-height);
     padding-block: 0;
     padding-inline: 0.75em 0.35em;
     background: var(--iswc-select-bg);
@@ -75,7 +75,7 @@
   /* `contents` evita que el hueco del slot vacío genere gap en el trigger */
   .start {
     display: contents;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
   }
 
   .content {
@@ -95,7 +95,7 @@
     line-height: 1.4;
 
     &.iswc-placeholder {
-      color: var(--iswc-text-dim, #7a8390);
+      color: var(--iswc-text-dim);
     }
 
     .display-start {
@@ -122,7 +122,7 @@
 
   .clear {
     flex: none;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     line-height: 0;
     &[hidden] { display: none !important; }
   }
@@ -132,7 +132,7 @@
     align-items: center;
     justify-content: center;
     inline-size: 1.5em;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     transition: transform 0.15s ease;
   }
 
@@ -163,9 +163,9 @@
     max-block-size: 16em;
     overflow: auto;
     padding: 0.35em;
-    background: var(--iswc-bg-elev, #fff);
-    border: 1px solid var(--iswc-border, #d0d7de);
-    border-radius: var(--iswc-radius, 0.625em);
+    background: var(--iswc-bg-elev);
+    border: 1px solid var(--iswc-border);
+    border-radius: var(--iswc-radius);
     box-shadow: var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 12%));
     color: var(--iswc-text, inherit);
   }
@@ -176,7 +176,7 @@
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     cursor: default;
   }
 
@@ -184,7 +184,7 @@
     & + .group {
       .group-label {
         margin-block-start: 0.25em;
-        border-block-start: 1px solid var(--iswc-border-soft, #e1e4e8);
+        border-block-start: 1px solid var(--iswc-border-soft);
       }
     }
   }
@@ -194,10 +194,10 @@
     align-items: center;
     gap: 0.5em;
     padding: 0.45em 0.6em;
-    border-radius: var(--iswc-radius-sm, 0.375em);
+    border-radius: var(--iswc-radius-sm);
     cursor: pointer;
     line-height: 1.3;
-    &:hover { background: var(--iswc-control-bg-hover, #e9ecef); }
+    &:hover { background: var(--iswc-control-bg-hover); }
 
     &[data-active] {
       outline: 1px solid var(--iswc-select-focus);
@@ -230,7 +230,7 @@
     text-overflow: ellipsis;
 
     .opt-default {
-      color: var(--iswc-text-soft, #8b949e);
+      color: var(--iswc-text-soft);
       font-weight: 400;
     }
   }
@@ -239,7 +239,7 @@
     display: block;
     font-size: 0.8em;
     line-height: 1.35;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -251,7 +251,7 @@
     flex: none;
     line-height: 0;
     font-size: 1.15em;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
   }
 
   /* Sin `checkmarks` el marco no existe: solo el icono ocupa su hueco */
@@ -262,7 +262,7 @@
   .check {
     flex: none;
     visibility: hidden;
-    color: var(--iswc-accent, currentColor);
+    color: var(--iswc-accent);
   }
 }
 
@@ -326,19 +326,19 @@
     box-sizing: border-box;
     inline-size: 1.15em;
     block-size: 1.15em;
-    border: 1px solid var(--iswc-control-border, #adb5bd);
+    border: 1px solid var(--iswc-control-border);
     border-radius: 0.25em;
   }
 
   .check {
     font-size: 0.85em;
-    color: var(--iswc-on-brand, #fff);
+    color: var(--iswc-on-brand);
   }
 
   .option[aria-selected="true"] {
     .mark {
-      background: var(--iswc-accent, #339af0);
-      border-color: var(--iswc-accent, #339af0);
+      background: var(--iswc-accent);
+      border-color: var(--iswc-accent);
     }
   }
 }

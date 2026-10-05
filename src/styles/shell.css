@@ -374,11 +374,11 @@ body {
       inline-size: 0.35em;
       block-size: 0.35em;
       border-radius: 50%;
-      background: color-mix(in srgb, var(--iswc-text-dim, #64748b) 70%, transparent);
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-border, #273040) 50%, transparent);
+      background: color-mix(in srgb, var(--iswc-text-dim) 70%, transparent);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-border) 50%, transparent);
     }
     & .shell-nav__tag {
-      font-family: var(--iswc-mono, ui-monospace, monospace);
+      font-family: var(--iswc-mono);
       font-size: 0.72em;
       font-weight: 500;
       line-height: 1.15;

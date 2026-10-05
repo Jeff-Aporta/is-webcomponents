@@ -4,7 +4,7 @@
 
 :host {
   --iswc-dialog-width: 500px;
-  --iswc-dialog-spacing: var(--iswc-space-l, 1rem);
+  --iswc-dialog-spacing: var(--iswc-space-l);
   /* modal-chrome.css lee --spacing; sin este alias header/body/footer quedan sin padding. */
   --spacing: var(--iswc-dialog-spacing);
   /* Default backdrop-variant=none: sin oscuridad. basic pisa el color. */
@@ -13,7 +13,7 @@
   --iswc-dialog-show-duration: 200ms;
   --iswc-dialog-hide-duration: 160ms;
 
-  --_radius: calc(var(--iswc-radius, 0.75em));
+  --_radius: calc(var(--iswc-radius));
   --_shadow: 0 24px 56px -16px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.12);
 
   position: fixed;
@@ -60,7 +60,7 @@
   position: relative;
   inline-size: min(var(--width, var(--iswc-dialog-width)), 100%);
   max-block-size: min(100%, calc(100dvh - 2 * var(--iswc-dialog-spacing)));
-  background: var(--iswc-bg, #fff);
+  background: var(--iswc-bg);
   color: var(--iswc-text, inherit);
   border: 1px solid var(--iswc-border, color-mix(in srgb, currentColor 14%, transparent));
   border-radius: var(--_radius);
@@ -88,7 +88,7 @@
   font-size: 1.15rem;
   line-height: 0;
   opacity: 0.72;
-  color: var(--iswc-text, currentColor);
+  color: var(--iswc-text);
 
   &:hover { opacity: 1; }
 

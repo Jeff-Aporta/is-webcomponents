@@ -8,24 +8,24 @@
  * Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) hermanas.
  */
 :host {
-  --iswc-button-font-family: var(--iswc-font-family, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  --iswc-button-font-family: var(--iswc-font-family);
   --iswc-button-font-weight: 500;
   /* No fijar --iswc-button-border-radius aquí: si no, pisa el 999px de
      <iswc-button-group pill> vía ::slotted (el :host gana al padre). El
      default 6px vive como fallback en .btn y en shape/pill. */
   --iswc-button-border-width: 1px;
   --iswc-button-transition-duration: 120ms;
-  --_bg: var(--iswc-control-bg, #f1f3f5);
-  --_bg-hover: var(--iswc-control-bg-hover, #e9ecef);
-  --_bg-active: var(--iswc-control-bg-active, #dee2e6);
-  --_border: var(--iswc-control-border, #dee2e6);
-  --_text: var(--iswc-control-text, #212529);
+  --_bg: var(--iswc-control-bg);
+  --_bg-hover: var(--iswc-control-bg-hover);
+  --_bg-active: var(--iswc-control-bg-active);
+  --_border: var(--iswc-control-border);
+  --_text: var(--iswc-control-text);
   /* Por defecto el hover no toca texto ni borde; `ghost` los usa para
      pasar de outlined a filled sin dejar el label ilegible. */
   --_text-hover: var(--_text);
   --_border-hover: var(--_border);
-  --_focus: var(--iswc-focus, var(--iswc-color-brand, dodgerblue));
-  --_height: var(--iswc-control-height, 2.5em);
+  --_focus: var(--iswc-focus, var(--iswc-color-brand));
+  --_height: var(--iswc-control-height);
   --_hpad: 1em;
   display: inline-flex;
   vertical-align: middle;
@@ -50,10 +50,10 @@
     background: var(--_bg);
     color: var(--_text);
     border: var(--iswc-button-border-width) solid var(--_border);
-    border-start-start-radius: var(--_button-start-start-radius, var(--iswc-button-border-radius, 6px));
-    border-start-end-radius: var(--_button-start-end-radius, var(--iswc-button-border-radius, 6px));
-    border-end-start-radius: var(--_button-end-start-radius, var(--iswc-button-border-radius, 6px));
-    border-end-end-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius, 6px));
+    border-start-start-radius: var(--_button-start-start-radius, var(--iswc-button-border-radius));
+    border-start-end-radius: var(--_button-start-end-radius, var(--iswc-button-border-radius));
+    border-end-start-radius: var(--_button-end-start-radius, var(--iswc-button-border-radius));
+    border-end-end-radius: var(--_button-end-end-radius, var(--iswc-button-border-radius));
     font: inherit;
     font-family: var(--iswc-button-font-family);
     font-weight: var(--iswc-button-font-weight);
@@ -121,86 +121,86 @@
 :host([color="brand"]) {
   /* Solo tokens relativos (+ hex). Nunca -500/-600 aquí: el tema ya no los define
      y el fallback numérico en var() hace que token-vocabulary / el ojo vean dos idiomas. */
-  --_tone: var(--iswc-color-brand, dodgerblue);
-  --_tone-strong: var(--iswc-color-brand-strong, dodgerblue);
+  --_tone: var(--iswc-color-brand);
+  --_tone-strong: var(--iswc-color-brand-strong);
   --_tone-stronger: var(--iswc-color-brand-stronger, color-mix(in srgb, dodgerblue 86%, black));
   --_tone-strongest: var(--iswc-color-brand-strongest, color-mix(in srgb, dodgerblue 74%, black));
-  --_tone-paler: var(--iswc-color-brand-paler, #e7f5ff);
-  --_tone-pale: var(--iswc-color-brand-pale, #d0ebff);
+  --_tone-paler: var(--iswc-color-brand-paler);
+  --_tone-pale: var(--iswc-color-brand-pale);
   --_tone-text: var(--iswc-brand-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand, #fff);
+  --_tone-on: var(--iswc-on-brand);
 }
 :host([color="success"]) {
-  --_tone: var(--iswc-color-success, #40c057);
-  --_tone-strong: var(--iswc-color-success-strong, #2f9e44);
-  --_tone-stronger: var(--iswc-color-success-stronger, #237a35);
-  --_tone-strongest: var(--iswc-color-success-stronger, #237a35);
-  --_tone-paler: var(--iswc-color-success-paler, #ebfbee);
-  --_tone-pale: var(--iswc-color-success-pale, #d3f9d8);
+  --_tone: var(--iswc-color-success);
+  --_tone-strong: var(--iswc-color-success-strong);
+  --_tone-stronger: var(--iswc-color-success-stronger);
+  --_tone-strongest: var(--iswc-color-success-stronger);
+  --_tone-paler: var(--iswc-color-success-paler);
+  --_tone-pale: var(--iswc-color-success-pale);
   --_tone-text: var(--iswc-success-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand, #fff);
+  --_tone-on: var(--iswc-on-brand);
 }
 :host([color="warning"]) {
-  --_tone: var(--iswc-color-warning, #f59f00);
-  --_tone-strong: var(--iswc-color-warning-strong, #d97706);
-  --_tone-stronger: var(--iswc-color-warning-stronger, #9a4f00);
-  --_tone-strongest: var(--iswc-color-warning-stronger, #9a4f00);
-  --_tone-paler: var(--iswc-color-warning-paler, #fff9db);
-  --_tone-pale: var(--iswc-color-warning-pale, #fff3bf);
+  --_tone: var(--iswc-color-warning);
+  --_tone-strong: var(--iswc-color-warning-strong);
+  --_tone-stronger: var(--iswc-color-warning-stronger);
+  --_tone-strongest: var(--iswc-color-warning-stronger);
+  --_tone-paler: var(--iswc-color-warning-paler);
+  --_tone-pale: var(--iswc-color-warning-pale);
   --_tone-text: var(--iswc-warning-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand, #fff);
+  --_tone-on: var(--iswc-on-brand);
 }
 :host([color="danger"]) {
-  --_tone: var(--iswc-color-danger, crimson);
-  --_tone-strong: var(--iswc-color-danger-strong, #e03131);
-  --_tone-stronger: var(--iswc-color-danger-stronger, #b02525);
-  --_tone-strongest: var(--iswc-color-danger-stronger, #b02525);
-  --_tone-paler: var(--iswc-color-danger-paler, #fff5f5);
-  --_tone-pale: var(--iswc-color-danger-pale, #ffe3e3);
+  --_tone: var(--iswc-color-danger);
+  --_tone-strong: var(--iswc-color-danger-strong);
+  --_tone-stronger: var(--iswc-color-danger-stronger);
+  --_tone-strongest: var(--iswc-color-danger-stronger);
+  --_tone-paler: var(--iswc-color-danger-paler);
+  --_tone-pale: var(--iswc-color-danger-pale);
   --_tone-text: var(--iswc-danger-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand, #fff);
+  --_tone-on: var(--iswc-on-brand);
 }
 /* info: dato a notar sin implicar éxito ni fallo (p.ej. "Nueva versión"). */
 :host([color="info"]) {
-  --_tone: var(--iswc-color-info, #339af0);
-  --_tone-strong: var(--iswc-color-info-strong, #1c7ed6);
-  --_tone-stronger: var(--iswc-color-info-stronger, #1864ab);
-  --_tone-strongest: var(--iswc-color-info-strongest, var(--iswc-color-info-stronger, #145591));
-  --_tone-paler: var(--iswc-color-info-paler, #e7f5ff);
-  --_tone-pale: var(--iswc-color-info-pale, #d0ebff);
+  --_tone: var(--iswc-color-info);
+  --_tone-strong: var(--iswc-color-info-strong);
+  --_tone-stronger: var(--iswc-color-info-stronger);
+  --_tone-strongest: var(--iswc-color-info-strongest, var(--iswc-color-info-stronger));
+  --_tone-paler: var(--iswc-color-info-paler);
+  --_tone-pale: var(--iswc-color-info-pale);
   --_tone-text: var(--iswc-info-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand, #fff);
+  --_tone-on: var(--iswc-on-brand);
 }
 /* error: fallo ("Error al guardar"), distinto de danger (acción destructiva). */
 :host([color="error"]) {
-  --_tone: var(--iswc-color-error, red);
-  --_tone-strong: var(--iswc-color-error-strong, #e03131);
-  --_tone-stronger: var(--iswc-color-error-stronger, #c92a2a);
-  --_tone-strongest: var(--iswc-color-error-stronger, #c92a2a);
-  --_tone-paler: var(--iswc-color-error-paler, #fff5f5);
-  --_tone-pale: var(--iswc-color-error-pale, #ffe3e3);
+  --_tone: var(--iswc-color-error);
+  --_tone-strong: var(--iswc-color-error-strong);
+  --_tone-stronger: var(--iswc-color-error-stronger);
+  --_tone-strongest: var(--iswc-color-error-stronger);
+  --_tone-paler: var(--iswc-color-error-paler);
+  --_tone-pale: var(--iswc-color-error-pale);
   --_tone-text: var(--iswc-error-text, var(--_tone-stronger));
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand, #fff);
+  --_tone-on: var(--iswc-on-brand);
 }
 /* text: color del texto en el contexto actual (light/dark theme).
  * Heredado de --iswc-text. Asi un boton con color="text" adopta
  * el color de fuente del theme, util para botones de accion que
  * no deben destacar en un layout de lectura. */
 :host([color="text"]) {
-  --_tone: var(--iswc-text, currentColor);
-  --_tone-strong: var(--iswc-text, currentColor);
+  --_tone: var(--iswc-text);
+  --_tone-strong: var(--iswc-text);
   --_tone-stronger: color-mix(in srgb, var(--_tone) 86%, black);
   --_tone-strongest: color-mix(in srgb, var(--_tone) 74%, black);
   --_tone-paler: color-mix(in srgb, var(--_tone) 12%, white);
@@ -221,16 +221,16 @@
  * todas las variants (outlined/plain/ghost/soft-filled), igual que
  * los otros colores cuyo text es su propio tono. */
 :host([color="neutral"]) {
-  --_tone: var(--iswc-color-neutral, #888);
-  --_tone-strong: var(--iswc-color-neutral-strong, #888);
-  --_tone-stronger: var(--iswc-color-neutral-stronger, #888);
-  --_tone-strongest: var(--iswc-color-neutral-strongest, #888);
-  --_tone-paler: var(--iswc-color-neutral-paler, #888);
-  --_tone-pale: var(--iswc-color-neutral-pale, #888);
+  --_tone: var(--iswc-color-neutral);
+  --_tone-strong: var(--iswc-color-neutral-strong);
+  --_tone-stronger: var(--iswc-color-neutral-stronger);
+  --_tone-strongest: var(--iswc-color-neutral-strongest);
+  --_tone-paler: var(--iswc-color-neutral-paler);
+  --_tone-pale: var(--iswc-color-neutral-pale);
   --_tone-text: var(--_tone);
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand, #fff);
+  --_tone-on: var(--iswc-on-brand);
 }
 
 /* ── 2. Appearance → consume roles (no conoce nombres de color) ─────────
@@ -286,21 +286,21 @@
 }
 :host([variant="ghost"]:not([color])) {
   --_bg: transparent;
-  --_border: var(--iswc-control-border, #adb5bd);
-  --_text: var(--iswc-control-text, #212529);
-  --_bg-hover: var(--iswc-control-bg, #f1f3f5);
-  --_bg-active: var(--iswc-control-bg-hover, #e9ecef);
-  --_border-hover: var(--iswc-control-border, #dee2e6);
-  --_text-hover: var(--iswc-control-text, #212529);
+  --_border: var(--iswc-control-border);
+  --_text: var(--iswc-control-text);
+  --_bg-hover: var(--iswc-control-bg);
+  --_bg-active: var(--iswc-control-bg-hover);
+  --_border-hover: var(--iswc-control-border);
+  --_text-hover: var(--iswc-control-text);
 }
 
 /* soft: ya nace teñido (plain no). */
 :host([variant="soft"]) {
-  --_bg: var(--iswc-control-bg, #f1f3f5);
-  --_bg-hover: var(--iswc-control-bg-hover, #e9ecef);
-  --_bg-active: var(--iswc-control-bg-active, #dee2e6);
+  --_bg: var(--iswc-control-bg);
+  --_bg-hover: var(--iswc-control-bg-hover);
+  --_bg-active: var(--iswc-control-bg-active);
   --_border: transparent;
-  --_text: var(--iswc-control-text, #212529);
+  --_text: var(--iswc-control-text);
 }
 :host([color][variant="soft"]) {
   --_bg: var(--_tone-soft);
@@ -331,8 +331,8 @@
   --_bg-active: transparent;
   --_border: transparent;
   --_border-hover: transparent;
-  --_text: var(--iswc-control-text, #212529);
-  --_text-hover: var(--iswc-control-text, #212529);
+  --_text: var(--iswc-control-text);
+  --_text-hover: var(--iswc-control-text);
 
   .btn {
     &:hover { text-decoration: underline; }
@@ -344,7 +344,7 @@
 }
 
 /* ── shape: ortogonal a color y variant (corner-shape donde aplica) ──────── */
-:host([shape="round"]) { --iswc-button-border-radius: var(--iswc-radius-sm, 6px); }
+:host([shape="round"]) { --iswc-button-border-radius: var(--iswc-radius-sm); }
 :host([shape="square"]),
 :host([shape="rect"]) { --iswc-button-border-radius: 0; }
 :host([shape="pill"]) { --iswc-button-border-radius: 999px; }

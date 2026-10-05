@@ -65,7 +65,7 @@
       fill: var(--iswc-accent);
       stroke: var(--iswc-bg-elev);
       stroke-width: 2;
-      &:hover { fill: var(--iswc-danger, #dc2626); cursor: pointer; }
+      &:hover { fill: var(--iswc-danger); cursor: pointer; }
     }
     .marker-label {
       fill: var(--iswc-text);

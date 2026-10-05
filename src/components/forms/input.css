@@ -1,16 +1,16 @@
 /* Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) como regla hermana. */
 :host {
-  --iswc-input-border-radius: var(--iswc-radius-sm, 0.375em);
-  --iswc-input-border: var(--iswc-control-border, #adb5bd);
-  --iswc-input-bg: var(--iswc-control-bg, #f1f3f5);
-  --iswc-input-text: var(--iswc-control-text, #212529);
-  --iswc-input-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
-  --iswc-input-danger: var(--iswc-color-danger, #fa5252);
-  --iswc-input-danger-text: var(--iswc-danger-text, var(--iswc-color-danger-stronger, #b02525));
+  --iswc-input-border-radius: var(--iswc-radius-sm);
+  --iswc-input-border: var(--iswc-control-border);
+  --iswc-input-bg: var(--iswc-control-bg);
+  --iswc-input-text: var(--iswc-control-text);
+  --iswc-input-focus: var(--iswc-focus, var(--iswc-accent));
+  --iswc-input-danger: var(--iswc-color-danger);
+  --iswc-input-danger-text: var(--iswc-danger-text, var(--iswc-color-danger-stronger));
   --_border: var(--iswc-input-border);
   --_focus: var(--iswc-input-focus);
   display: block;
-  inline-size: var(--iswc-field-width, auto);
+  inline-size: var(--iswc-field-width);
   max-inline-size: 100%;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
@@ -35,7 +35,7 @@
     align-items: flex-start;
     gap: 0.75em;
     font-size: 0.8em;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     &[hidden] { display: none !important; }
   }
 
@@ -59,8 +59,8 @@
     align-items: center;
     gap: 0.15em;
     box-sizing: border-box;
-    block-size: var(--iswc-control-height, 2.5em);
-    min-block-size: var(--iswc-control-height, 2.5em);
+    block-size: var(--iswc-control-height);
+    min-block-size: var(--iswc-control-height);
     padding-block: 0;
     padding-inline: 0.75em 0.35em;
     background: var(--iswc-input-bg);
@@ -77,7 +77,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.25em;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     line-height: 0;
     font-size: 1.1em;
 
@@ -105,7 +105,7 @@
     font: inherit;
     padding: 0.5em 0;
     outline: none;
-    &::placeholder { color: var(--iswc-text-dim, #7a8390); opacity: 0.9; }
+    &::placeholder { color: var(--iswc-text-dim); opacity: 0.9; }
     &:disabled { cursor: not-allowed; }
 
     /* Ocultar los controles nativos redundantes (search / number / date) */
@@ -121,7 +121,7 @@
     flex: none;
     font-size: 1.05em;
     line-height: 0;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
 
     &[hidden] { display: none !important; }
   }
@@ -131,7 +131,7 @@
 
 :host([variant="filled"]) {
   .base {
-    background: var(--iswc-control-bg-hover, #e9ecef);
+    background: var(--iswc-control-bg-hover);
     border-color: transparent;
     border-bottom-color: var(--_border);
     border-radius: var(--iswc-input-border-radius) var(--iswc-input-border-radius) 0 0;
@@ -140,7 +140,7 @@
 
 :host([variant="underlined"]) {
   .base {
-    background: color-mix(in srgb, var(--iswc-control-bg, transparent) 35%, transparent);
+    background: color-mix(in srgb, var(--iswc-control-bg) 35%, transparent);
     border-color: transparent;
     border-bottom: 2px solid var(--_border);
     border-radius: 0;
@@ -174,7 +174,7 @@
 :host([label-placement="start"]) {
   .form-control {
     display: grid;
-    grid-template-columns: var(--iswc-field-label-width, auto) minmax(0, 1fr);
+    grid-template-columns: var(--iswc-field-label-width) minmax(0, 1fr);
     align-items: center;
     column-gap: 0.75em;
     row-gap: 0.35em;
@@ -190,7 +190,7 @@
    borde salen de los tokens de tema --iswc-b-* (nunca literales). */
 
 :host([label-placement="float"]) {
-  --_border: var(--iswc-b-optional, var(--iswc-control-border, #adb5bd));
+  --_border: var(--iswc-b-optional, var(--iswc-control-border));
 
   .form-control { position: relative; }
 
@@ -233,18 +233,18 @@
 
 /* Campo obligatorio / de solo lectura: mismo contrato de color que ISP. */
 :host([label-placement="float"][required]) {
-  --_border: var(--iswc-b-required, var(--iswc-control-border, #adb5bd));
+  --_border: var(--iswc-b-required, var(--iswc-control-border));
 }
 :host([label-placement="float"][readonly]) {
-  --_border: var(--iswc-b-readonly, var(--iswc-control-border, #adb5bd));
+  --_border: var(--iswc-b-readonly, var(--iswc-control-border));
 
   .base {
-    background: var(--iswc-bg-readonly, var(--iswc-control-bg, #f1f3f5));
+    background: var(--iswc-bg-readonly, var(--iswc-control-bg));
     border-style: solid;
   }
 }
 :host([label-placement="float"][disabled]) {
-  --_border: var(--iswc-b-readonly, var(--iswc-control-border, #adb5bd));
+  --_border: var(--iswc-b-readonly, var(--iswc-control-border));
 }
 
 /* Etiqueta que sube: `:focus-within` para el caso atributo, `:state(focused)`
@@ -261,17 +261,17 @@
 
 :host([label-placement="float"][required]:state(focused)) {
   .label {
-    color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+    color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border)) 40%, var(--iswc-text));
   }
 }
 :host([label-placement="float"]:not([required]):state(focused)) {
   .label {
-    color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+    color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border)) 40%, var(--iswc-text));
   }
 }
 :host([label-placement="float"][readonly]) {
   .label {
-    color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border, #adb5bd)) 40%, var(--iswc-text, currentColor));
+    color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border)) 40%, var(--iswc-text));
   }
 }
 

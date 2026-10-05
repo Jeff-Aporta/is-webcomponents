@@ -3,7 +3,7 @@
   width: 100%;
   box-sizing: border-box;
   color: inherit;
-  font-family: var(--iswc-sans, system-ui, sans-serif);
+  font-family: var(--iswc-sans);
 
   .root { display: flex; flex-direction: column; gap: 0.85em; }
   .head { display: flex; flex-direction: column; gap: 0.25em; }
@@ -30,7 +30,7 @@
   &[layout="panel"] .body { grid-template-columns: 1fr; }
   .stage-wrap {
     border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
-    border-radius: var(--iswc-radius, 0.75em);
+    border-radius: var(--iswc-radius);
     background: var(--iswc-bg-elev, color-mix(in srgb, currentColor 4%, transparent));
     min-block-size: 12em;
     display: grid;

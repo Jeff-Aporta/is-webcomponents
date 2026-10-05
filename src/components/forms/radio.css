@@ -1,12 +1,12 @@
 :host {
-  --_size: var(--iswc-radio-size, 1.15em);
-  --_bg: var(--iswc-radio-bg, var(--iswc-control-bg, #f1f3f5));
-  --_bg-hover: var(--iswc-radio-bg-hover, var(--iswc-control-bg-hover, #e9ecef));
-  --_border: var(--iswc-radio-border, var(--iswc-control-border, #adb5bd));
-  --_accent: var(--iswc-radio-accent, var(--iswc-accent, var(--iswc-color-brand, #339af0)));
-  --_dot: var(--iswc-radio-dot, var(--iswc-on-brand, #fff));
+  --_size: var(--iswc-radio-size);
+  --_bg: var(--iswc-radio-bg, var(--iswc-control-bg));
+  --_bg-hover: var(--iswc-radio-bg-hover, var(--iswc-control-bg-hover));
+  --_border: var(--iswc-radio-border, var(--iswc-control-border));
+  --_accent: var(--iswc-radio-accent, var(--iswc-accent, var(--iswc-color-brand)));
+  --_dot: var(--iswc-radio-dot, var(--iswc-on-brand));
   --_focus: var(--iswc-radio-focus, var(--_accent));
-  --_halo: var(--iswc-radio-halo-size, 0.45em);
+  --_halo: var(--iswc-radio-halo-size);
   display: inline-flex;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
@@ -58,7 +58,7 @@
 
   .description {
     font-size: 0.8em;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     &[hidden] { display: none; }
   }
 }
@@ -74,14 +74,14 @@
    Sin atributo se hereda el --iswc-radio-accent que publica el grupo; con él,
    la declaración local gana a la heredada. */
 
-:host([color="brand"])   { --iswc-radio-accent: var(--iswc-accent, var(--iswc-color-brand, #339af0)); }
-:host([color="neutral"]) { --iswc-radio-accent: var(--iswc-control-border, #59636e); }
-:host([color="success"]) { --iswc-radio-accent: var(--iswc-color-success, #40c057); }
-:host([color="warning"]) { --iswc-radio-accent: var(--iswc-color-warning, #f59f00); }
-:host([color="danger"])  { --iswc-radio-accent: var(--iswc-color-danger, #fa5252); }
+:host([color="brand"])   { --iswc-radio-accent: var(--iswc-accent, var(--iswc-color-brand)); }
+:host([color="neutral"]) { --iswc-radio-accent: var(--iswc-control-border); }
+:host([color="success"]) { --iswc-radio-accent: var(--iswc-color-success); }
+:host([color="warning"]) { --iswc-radio-accent: var(--iswc-color-warning); }
+:host([color="danger"])  { --iswc-radio-accent: var(--iswc-color-danger); }
 
 /* El error del grupo manda sobre cualquier variant */
-:host(:state(error)) { --iswc-radio-accent: var(--iswc-color-danger, #fa5252); }
+:host(:state(error)) { --iswc-radio-accent: var(--iswc-color-danger); }
 
 /* ---- label-placement (propio o heredado del grupo) -------------------- */
 

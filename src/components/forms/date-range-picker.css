@@ -8,8 +8,8 @@
 }
 
 :host {
-  --iswc-daterange-border: var(--iswc-border, #d0d7de);
-  --iswc-daterange-bg: var(--iswc-bg-elev, #fff);
+  --iswc-daterange-border: var(--iswc-border);
+  --iswc-daterange-bg: var(--iswc-bg-elev);
   display: inline-block;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
@@ -22,8 +22,8 @@
     padding: 0.85em;
     background: var(--iswc-daterange-bg);
     border: 1px solid var(--iswc-daterange-border);
-    border-radius: var(--iswc-radius, 0.625em);
-    box-shadow: var(--iswc-shadow, none);
+    border-radius: var(--iswc-radius);
+    box-shadow: var(--iswc-shadow);
   }
 
   .shortcuts {

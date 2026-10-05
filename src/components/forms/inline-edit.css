@@ -3,7 +3,7 @@
   display: inline-block;
   font: inherit;
   color: var(--iswc-text);
-  border-radius: var(--iswc-inline-edit-radius, 6px);
+  border-radius: var(--iswc-inline-edit-radius);
   position: relative;
   max-inline-size: 100%;
 }
@@ -71,7 +71,7 @@ textarea {
 
 textarea {
   resize: vertical;
-  min-block-size: var(--iswc-inline-edit-min-h, 3rem);
+  min-block-size: var(--iswc-inline-edit-min-h);
   max-block-size: 16rem;
   font-family: inherit;
 }
@@ -88,10 +88,10 @@ textarea {
 :host(:state(cancelled)) { .root { animation: ie-cancelled 280ms ease; } }
 
 @keyframes ie-saved {
-  from { background: color-mix(in srgb, var(--iswc-success, #16a34a) 18%, transparent); }
+  from { background: color-mix(in srgb, var(--iswc-success) 18%, transparent); }
   to   { background: transparent; }
 }
 @keyframes ie-cancelled {
-  from { background: color-mix(in srgb, var(--iswc-danger, #dc2626) 18%, transparent); }
+  from { background: color-mix(in srgb, var(--iswc-danger) 18%, transparent); }
   to   { background: transparent; }
 }

@@ -41,8 +41,8 @@
     html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
   </style>
   <!-- Kit: siempre dist/cdn (transpilado). Shell de galería: CSS local. -->
-  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=p4b472">
-  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=q5fu5e">
+  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=23z4yw">
+  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=4h9u6l">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/presentation.css">
   <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=gok8j9">
@@ -58,7 +58,7 @@
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script src="scripts/preview-boot.js"></script>
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=efmoia';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=v8zsq1';
     // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
 
@@ -81,7 +81,7 @@
           'iswc-palette-selector',
           'iswc-code',
         ),
-        import('./dist/cdn/preview/preview-component.min.js?h=vqw9qr'),
+        import('./dist/cdn/preview/preview-component.min.js?h=963ta6'),
       ]);
       document.documentElement.dataset.kitShell = '1';
       window.dispatchEvent(new Event('iswc-gallery-shell-ready'));
@@ -147,7 +147,7 @@
              label="Componentes"></iswc-drawer>
 
   <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js?h=a1n9zi"></script>
+  <script type="module" src="./dist/gallery-app.min.js?h=atcg3m"></script>
 <script>
 /* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
  * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos

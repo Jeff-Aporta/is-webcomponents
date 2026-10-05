@@ -2,11 +2,11 @@
  * Usar siempre :host([attr]) como reglas hermanas, nunca &[attr] anidado. */
 
 :host {
-  --iswc-button-border-width: var(--iswc-control-border-width, 1px);
-  --iswc-button-group-radius: var(--iswc-button-border-radius, 6px);
+  --iswc-button-border-width: var(--iswc-control-border-width);
+  --iswc-button-group-radius: var(--iswc-button-border-radius);
   --iswc-button-group-gap: 0.3em;
   --iswc-button-group-pad: 0.25em;
-  --iswc-button-group-accent: var(--iswc-accent, #339af0);
+  --iswc-button-group-accent: var(--iswc-accent);
   display: inline-flex;
   vertical-align: middle;
   max-width: 100%;
@@ -127,31 +127,31 @@
 /* La pista crece lo que mide su padding para que la pastilla interior conserve
  * el radio natural del botón. */
 :host([variant='segmented']) {
-  --iswc-button-group-radius: calc(var(--iswc-button-border-radius, 6px) + var(--iswc-button-group-pad));
+  --iswc-button-group-radius: calc(var(--iswc-button-border-radius) + var(--iswc-button-group-pad));
   /* --iswc-bg-soft queda por debajo de --iswc-bg-elev en claro y en oscuro, así la
    * pista se lee hundida en ambos temas sin depender de la elevación. */
   .button-group {
     gap: 0.15em;
     padding: var(--iswc-button-group-pad);
-    background: var(--iswc-bg-soft, #f6f8fa);
-    border: var(--iswc-button-border-width) solid var(--iswc-border-soft, #e1e4e8);
+    background: var(--iswc-bg-soft);
+    border: var(--iswc-button-border-width) solid var(--iswc-border-soft);
     box-shadow: inset 0 1px 2px color-mix(in srgb, #000 12%, transparent);
   }
   ::slotted(*) {
     --iswc-control-bg: transparent;
-    --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-text, #f0f3f6) 8%, transparent);
-    --iswc-control-bg-active: color-mix(in srgb, var(--iswc-text, #f0f3f6) 14%, transparent);
+    --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-text) 8%, transparent);
+    --iswc-control-bg-active: color-mix(in srgb, var(--iswc-text) 14%, transparent);
     --iswc-control-border: transparent;
     --iswc-control-text: var(--iswc-text-soft, var(--iswc-text, inherit));
   }
   ::slotted([selected]) {
     --_sel: var(--iswc-button-selected-color, var(--iswc-button-group-accent));
-    --iswc-control-bg: color-mix(in srgb, var(--_sel) 18%, var(--iswc-bg-elev, #fff));
-    --iswc-control-bg-hover: color-mix(in srgb, var(--_sel) 26%, var(--iswc-bg-elev, #fff));
-    --iswc-control-bg-active: color-mix(in srgb, var(--_sel) 32%, var(--iswc-bg-elev, #fff));
+    --iswc-control-bg: color-mix(in srgb, var(--_sel) 18%, var(--iswc-bg-elev));
+    --iswc-control-bg-hover: color-mix(in srgb, var(--_sel) 26%, var(--iswc-bg-elev));
+    --iswc-control-bg-active: color-mix(in srgb, var(--_sel) 32%, var(--iswc-bg-elev));
     --iswc-control-border: color-mix(in srgb, var(--_sel) 45%, transparent);
     --iswc-control-text: var(--_sel);
-    border-radius: var(--iswc-button-border-radius, 6px);
+    border-radius: var(--iswc-button-border-radius);
     box-shadow: 0 1px 3px color-mix(in srgb, #000 22%, transparent);
   }
 }

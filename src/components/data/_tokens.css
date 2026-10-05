@@ -11,12 +11,12 @@
  * que reescribir cada uno a mano.
  */
 :host {
-  --bg: var(--iswc-bg-elev, #1c2128);
-  --fg: var(--iswc-text, #e8eaf1);
+  --bg: var(--iswc-bg-elev);
+  --fg: var(--iswc-text);
   --muted: color-mix(in srgb, var(--fg) 65%, transparent);
-  --border: var(--iswc-border, #2a2f3a);
-  --brand: var(--iswc-brand, dodgerblue);
-  --success: var(--iswc-success, #0bb783);
-  --warning: var(--iswc-warning, #ffa800);
-  --danger: var(--iswc-danger, #f64e60);
+  --border: var(--iswc-border);
+  --brand: var(--iswc-brand);
+  --success: var(--iswc-success);
+  --warning: var(--iswc-warning);
+  --danger: var(--iswc-danger);
 }

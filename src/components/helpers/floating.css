@@ -1,7 +1,7 @@
 :host {
   display: contents;
   --iswc-floating-arrow-size: 8px;
-  --iswc-floating-arrow-color: var(--iswc-color-brand, #339af0);
+  --iswc-floating-arrow-color: var(--iswc-color-brand);
   --iswc-floating-show-duration: 150ms;
   --iswc-floating-hide-duration: 100ms;
 
@@ -26,8 +26,8 @@
      (z-index: -1); la punta exterior asoma gracias al offset negativo que
      calcula `position.js` (`top/right/bottom/left: -arrowSize`). */
   .arrow {
-    --iswc-floating-arrow-color: var(--iswc-bg-elev, #1c2128);
-    --iswc-floating-arrow-border-color: var(--iswc-border, #2a3038);
+    --iswc-floating-arrow-color: var(--iswc-bg-elev);
+    --iswc-floating-arrow-border-color: var(--iswc-border);
     position: absolute;
     box-sizing: border-box;
     inline-size: calc(var(--iswc-floating-arrow-size) * 2);

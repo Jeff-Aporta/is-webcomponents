@@ -3,7 +3,7 @@
 :host {
   display: inline-block;
   position: relative;
-  color: var(--iswc-text-muted, var(--iswc-control-text, #495057));
+  color: var(--iswc-text-muted, var(--iswc-control-text));
   font-family: var(--iswc-sans, inherit);
   font-size: inherit;
   vertical-align: middle;
@@ -30,7 +30,7 @@
         padding: 0;
         background: transparent;
         border: none;
-        border-radius: var(--iswc-radius, 6px);
+        border-radius: var(--iswc-radius);
         color: inherit;
         font: inherit;
         height: 2em;
@@ -47,7 +47,7 @@
 
       &:hover:not([disabled]),
       &:focus-within:not([disabled]) {
-        &::part(button) { background: var(--iswc-control-bg-hover, #e9ecef); }
+        &::part(button) { background: var(--iswc-control-bg-hover); }
       }
 
       &[disabled] {
@@ -101,11 +101,11 @@
  * nesting que esbuild rechaza. */
 
 :host([data-state-success]) {
-  .tip { --iswc-tooltip-bg: var(--iswc-color-success-strong, #2f9e44); }
+  .tip { --iswc-tooltip-bg: var(--iswc-color-success-strong); }
 }
 
 :host([data-state-error]) {
-  .tip { --iswc-tooltip-bg: var(--iswc-color-danger-strong, #e03131); }
+  .tip { --iswc-tooltip-bg: var(--iswc-color-danger-strong); }
 }
 
 @keyframes iswc-copy-show {

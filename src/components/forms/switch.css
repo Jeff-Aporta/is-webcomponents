@@ -2,14 +2,14 @@
   /* Track ~0.85em; host ~1em → legible junto a inputs 2.5em. */
   --iswc-switch-height: 0.85em;
   --iswc-switch-width: calc(0.85em * 1.75);
-  --iswc-switch-bg: var(--iswc-control-bg, #f1f3f5);
-  --iswc-switch-bg-hover: var(--iswc-control-bg-hover, #e9ecef);
-  --iswc-switch-border: var(--iswc-control-border, #adb5bd);
+  --iswc-switch-bg: var(--iswc-control-bg);
+  --iswc-switch-bg-hover: var(--iswc-control-bg-hover);
+  --iswc-switch-border: var(--iswc-control-border);
   /* Default brand (igual que button/checkbox); consumer pisa con color=… */
-  --iswc-switch-accent: var(--iswc-accent, var(--iswc-color-brand, #339af0));
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
-  --iswc-switch-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
-  --iswc-switch-icon: var(--iswc-control-text, #212529);
+  --iswc-switch-accent: var(--iswc-accent, var(--iswc-color-brand));
+  --iswc-switch-thumb: var(--iswc-on-brand);
+  --iswc-switch-focus: var(--iswc-focus, var(--iswc-accent));
+  --iswc-switch-icon: var(--iswc-control-text);
   --iswc-switch-icon-checked: var(--iswc-switch-accent);
   --iswc-switch-halo: 0.4em;
   display: inline-flex;
@@ -100,13 +100,13 @@
     &.on {
       justify-content: flex-start;
       padding-inline-start: 0.9em;
-      color: var(--iswc-on-brand, #fff);
+      color: var(--iswc-on-brand);
     }
 
     &.off {
       justify-content: flex-end;
       padding-inline-end: 0.9em;
-      color: var(--iswc-text-dim, #7a8390);
+      color: var(--iswc-text-dim);
       opacity: 1;
     }
 
@@ -127,7 +127,7 @@
   .hint {
     font-size: 0.8em;
     line-height: 1.35;
-    color: var(--iswc-text-dim, #7a8390);
+    color: var(--iswc-text-dim);
     cursor: default;
     inline-size: fit-content;
     &[hidden] { display: none !important; }
@@ -136,41 +136,41 @@
 
 :host(:not([color])),
 :host([color="brand"])   {
-  --iswc-switch-accent: var(--iswc-accent, var(--iswc-color-brand, #339af0));
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-accent, var(--iswc-color-brand));
+  --iswc-switch-thumb: var(--iswc-on-brand);
 }
 :host([color="neutral"]) {
-  --iswc-switch-accent: var(--iswc-control-border, #59636e);
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-control-border);
+  --iswc-switch-thumb: var(--iswc-on-brand);
 }
 :host([color="success"]) {
-  --iswc-switch-accent: var(--iswc-color-success, #40c057);
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-success);
+  --iswc-switch-thumb: var(--iswc-on-brand);
 }
 :host([color="warning"]) {
-  --iswc-switch-accent: var(--iswc-color-warning, #f59f00);
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-warning);
+  --iswc-switch-thumb: var(--iswc-on-brand);
 }
 :host([color="danger"])  {
-  --iswc-switch-accent: var(--iswc-color-danger, #fa5252);
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-danger);
+  --iswc-switch-thumb: var(--iswc-on-brand);
 }
 :host([color="info"]) {
-  --iswc-switch-accent: var(--iswc-color-info, #339af0);
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-info);
+  --iswc-switch-thumb: var(--iswc-on-brand);
 }
 :host([color="error"]) {
-  --iswc-switch-accent: var(--iswc-color-error, #e03131);
-  --iswc-switch-thumb: var(--iswc-on-brand, #fff);
+  --iswc-switch-accent: var(--iswc-color-error);
+  --iswc-switch-thumb: var(--iswc-on-brand);
 }
 
 :host([error]) {
-  --iswc-switch-accent: var(--iswc-color-danger, #fa5252);
-  --iswc-switch-border: var(--iswc-color-danger, #fa5252);
-  --iswc-switch-focus: var(--iswc-color-danger, #fa5252);
+  --iswc-switch-accent: var(--iswc-color-danger);
+  --iswc-switch-border: var(--iswc-color-danger);
+  --iswc-switch-focus: var(--iswc-color-danger);
 
   .hint {
-    color: var(--iswc-danger-text, var(--iswc-color-danger-strong, #e03131));
+    color: var(--iswc-danger-text, var(--iswc-color-danger-strong));
   }
 }
 
