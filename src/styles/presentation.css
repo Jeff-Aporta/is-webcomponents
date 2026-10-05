@@ -1068,6 +1068,22 @@ code.code { padding: 0.15em 0.4em; font-size: 0.86em; }
 
 /* --- Tables (referencia) ------------------------------------------- */
 
+/* Marcador de fila "default" (estrella en color de marca).
+   Se inyecta en celdas de tablas `kind:table` que reemplazaron
+   la columna `Default`. La estrella es decorativa; el texto
+   "(default)" / "(valor por defecto)" se añade en la columna
+   Descripción para que sea claro sin depender del icono. */
+.ref .iswc-default-marker,
+.iswc-default-marker {
+  display: inline-block;
+  margin-inline-start: 0.35em;
+  color: var(--iswc-color-brand, var(--iswc-accent));
+  font-weight: 700;
+  vertical-align: baseline;
+  /* Glow sutil para que destaque en temas claros sin gritar. */
+  text-shadow: 0 0 0.5em color-mix(in srgb, var(--iswc-color-brand, var(--iswc-accent)) 25%, transparent);
+}
+
 table.ref {
   inline-size: 100%;
   border-collapse: separate;
