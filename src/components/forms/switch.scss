@@ -1,3 +1,5 @@
+@use '../../styles/mixins' as *;
+
 :host {
   /* Track ~0.85em; host ~1em → legible junto a inputs 2.5em. */
   --iswc-switch-height: 0.85em;
@@ -147,26 +149,11 @@
   --iswc-switch-accent: var(--iswc-text);
   --iswc-switch-thumb: var(--iswc-on-brand);
 }
-:host([color="success"]) {
-  --iswc-switch-accent: var(--iswc-color-success);
-  --iswc-switch-thumb: var(--iswc-on-brand);
-}
-:host([color="warning"]) {
-  --iswc-switch-accent: var(--iswc-color-warning);
-  --iswc-switch-thumb: var(--iswc-on-brand);
-}
-:host([color="danger"])  {
-  --iswc-switch-accent: var(--iswc-color-danger);
-  --iswc-switch-thumb: var(--iswc-on-brand);
-}
-:host([color="info"]) {
-  --iswc-switch-accent: var(--iswc-color-info);
-  --iswc-switch-thumb: var(--iswc-on-brand);
-}
-:host([color="error"]) {
-  --iswc-switch-accent: var(--iswc-color-error);
-  --iswc-switch-thumb: var(--iswc-on-brand);
-}
+:host([color="success"]) { @include switch-accent(success); }
+:host([color="warning"]) { @include switch-accent(warning); }
+:host([color="danger"])  { @include switch-accent(danger); }
+:host([color="info"]) { @include switch-accent(info); }
+:host([color="error"]) { @include switch-accent(error); }
 
 :host([error]) {
   --iswc-switch-accent: var(--iswc-color-danger);

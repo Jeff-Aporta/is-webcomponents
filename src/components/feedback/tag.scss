@@ -1,3 +1,5 @@
+@use '../../styles/mixins' as *;
+
 :host {
   --_bg: var(--iswc-control-bg);
   --_border: var(--iswc-control-border);
@@ -43,11 +45,7 @@
   .tag { border-radius: 999px; }
 }
 
-:host([color="brand"]) {
-  --_bg: var(--iswc-color-brand-pale);
-  --_border: var(--iswc-color-brand);
-  --_text: var(--iswc-color-brand-stronger);
-}
+:host([color="brand"]) { @include tag-roles(brand); }
 :host([color="neutral"]) {
   --_bg: var(--iswc-control-bg);
   --_border: var(--iswc-control-border);
@@ -58,26 +56,10 @@
   --_border: var(--iswc-text);
   --_text: var(--iswc-text);
 }
-:host([color="info"]) {
-  --_bg: var(--iswc-color-info-pale);
-  --_border: var(--iswc-color-info);
-  --_text: var(--iswc-color-info-stronger);
-}
-:host([color="success"]) {
-  --_bg: var(--iswc-color-success-pale);
-  --_border: var(--iswc-color-success);
-  --_text: var(--iswc-color-success-stronger);
-}
-:host([color="warning"]) {
-  --_bg: var(--iswc-color-warning-pale);
-  --_border: var(--iswc-color-warning);
-  --_text: var(--iswc-color-warning-stronger);
-}
-:host([color="danger"]) {
-  --_bg: var(--iswc-color-danger-pale);
-  --_border: var(--iswc-color-danger);
-  --_text: var(--iswc-color-danger-stronger);
-}
+:host([color="info"]) { @include tag-roles(info); }
+:host([color="success"]) { @include tag-roles(success); }
+:host([color="warning"]) { @include tag-roles(warning); }
+:host([color="danger"]) { @include tag-roles(danger); }
 
 :host([variant="filled"]) {
   .tag {

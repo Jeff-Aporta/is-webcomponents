@@ -1,3 +1,5 @@
+@use '../../styles/mixins' as *;
+
 :host {
   --_bg: var(--iswc-control-bg);
   --_border: var(--iswc-control-border);
@@ -15,30 +17,10 @@
   display: none !important;
 }
 
-:host([color="brand"]) {
-  --_bg: var(--iswc-color-brand-paler);
-  --_border: var(--iswc-color-brand);
-  --_text: var(--iswc-color-brand-stronger);
-  --_accent: var(--iswc-color-brand);
-}
-:host([color="success"]) {
-  --_bg: var(--iswc-color-success-paler);
-  --_border: var(--iswc-color-success);
-  --_text: var(--iswc-color-success-stronger);
-  --_accent: var(--iswc-color-success);
-}
-:host([color="warning"]) {
-  --_bg: var(--iswc-color-warning-paler);
-  --_border: var(--iswc-color-warning);
-  --_text: var(--iswc-color-warning-stronger);
-  --_accent: var(--iswc-color-warning);
-}
-:host([color="danger"]) {
-  --_bg: var(--iswc-color-danger-paler);
-  --_border: var(--iswc-color-danger);
-  --_text: var(--iswc-color-danger-stronger);
-  --_accent: var(--iswc-color-danger);
-}
+:host([color="brand"]) { @include toast-roles(brand); }
+:host([color="success"]) { @include toast-roles(success); }
+:host([color="warning"]) { @include toast-roles(warning); }
+:host([color="danger"]) { @include toast-roles(danger); }
 :host([color="neutral"]) {
   --_bg: var(--iswc-control-bg);
   --_border: var(--iswc-control-border);

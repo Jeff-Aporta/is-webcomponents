@@ -125,3 +125,13 @@
   --_text: var(--iswc-color-#{$family}-stronger);
   --_accent: var(--iswc-color-#{$family});
 }
+
+// Switch: `--iswc-switch-accent` = color saturado, `--iswc-switch-thumb`
+// siempre on-brand. Para `color=neutral` la fuente del accent no es la
+// rampa `--iswc-color-$family` sino `--iswc-control-border`; para
+// `color=text` es `--iswc-text`. Esos dos casos quedan inline (no entran
+// en este mixin parametrico).
+@mixin switch-accent($family) {
+  --iswc-switch-accent: var(--iswc-color-#{$family});
+  --iswc-switch-thumb: var(--iswc-on-brand);
+}

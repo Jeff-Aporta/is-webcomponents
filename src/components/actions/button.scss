@@ -10,17 +10,7 @@
 //
 // Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) hermanas.
 
-/* ── 1. Color → roles de tono (unica capa que conoce nombres) ─────────── */
-:host([color="brand"]) { @include brand-tones; }
-:host([color="info"]) { @include info-tones; }
-:host([color="success"]) { @include tones(success); }
-:host([color="warning"]) { @include tones(warning); }
-:host([color="danger"]) { @include tones(danger); }
-:host([color="error"]) { @include tones(error); }
-:host([color="text"]) { @include text-tones; }
-:host([color="neutral"]) { @include neutral-tones; }
-
-/* ── 2. Host base + .btn ─────────────────────────────────────────────── */
+/* ── 1. Host base + .btn ─────────────────────────────────────────────── */
 :host {
   --iswc-button-font-family: var(--iswc-font-family);
   --iswc-button-font-weight: 500;
@@ -130,7 +120,22 @@
   }
 }
 
-/* ── 2. Appearance → consume roles (no conoce nombres de color) ─────────
+/* ── 2. Color → roles de tono (unica capa que conoce nombres) ─────────── */
+:host([color="brand"]) { @include brand-tones; }
+:host([color="success"]) { @include tones(success); }
+:host([color="warning"]) { @include tones(warning); }
+:host([color="danger"]) { @include tones(danger); }
+/* info: dato a notar sin implicar éxito ni fallo (p.ej. "Nueva versión"). */
+:host([color="info"]) { @include info-tones; }
+/* error: fallo ("Error al guardar"), distinto de danger (acción destructiva). */
+:host([color="error"]) { @include tones(error); }
+/* text: foreground del tema (--iswc-text). Plain/outlined legibles.
+ * Distinto de neutral (#888 muted). Rampa local con color-mix. */
+:host([color="text"]) { @include text-tones; }
+/* neutral: familia semantica con base #888 (canon geometrico). W40-W47. */
+:host([color="neutral"]) { @include neutral-tones; }
+
+/* ── 3. Appearance → consume roles (no conoce nombres de color) ─────────
    filled = default (sin variant) o variant="filled". */
 :host(:is([color]:not([variant]), [color][variant=""], [color][variant="filled"])) {
   --_bg: var(--_tone-strong);
