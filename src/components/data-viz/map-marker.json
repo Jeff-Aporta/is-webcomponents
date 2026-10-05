@@ -14,11 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\r\n            <iswc-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></iswc-map-marker>\r\n          </iswc-maps>"},
-        {
-          "kind": "code",
-          "code": "<iswc-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\n  <iswc-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></iswc-map-marker>\n  <iswc-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></iswc-map-marker>\n  <iswc-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></iswc-map-marker>\n</iswc-maps>",
-          "lang": "html"
+          "html": "<iswc-maps viewbox=\"-80,-5,-66,13\" style=\"height:320px\">\r\n            <iswc-map-marker lon=\"-74.07\" lat=\"4.71\" label=\"Bogotá\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-75.56\" lat=\"6.25\" label=\"Medellín\"></iswc-map-marker>\r\n            <iswc-map-marker lon=\"-76.53\" lat=\"3.45\" label=\"Cali\"></iswc-map-marker>\r\n          </iswc-maps>"
         }
       ]
     },
@@ -26,8 +22,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-maps&gt; — Visualizador geográfico. Modo nativo (default): lienzo SVG que mapea coordenadas (lat, lon) a un viewport interno mediante una proyección equirectangular. Permite marcadores, zoom y pan, todo sin dependencias externas. Modo tile: atributo `engine=\"tile\"` y un `&lt;script type=\"application/json\"&gt;` con `{ tileUrl, attribution, zoom, center }` para apuntar a un proveedor (OpenStreetMap, etc.) embebido vía iframe (no requiere libs en este bundle). Atributos viewbox       cuadro inicial: \"minLon,minLat,maxLon,maxLat\" (default mundo) zoom          zoom inicial 1..n para vista controlada por JS engine        svg | tile interactive   boolean — false desactiva pan/zoom (mostrar) Marcadores &lt;iswc-map-marker lat=\"4.6\" lon=\"-74.0\" label=\"Bogotá\"&gt; &lt;span slot=\"popup\"&gt;Capital de Colombia&lt;/span&gt; &lt;/iswc-map-marker&gt; Eventos iswc-viewport   detail: { minLon, minLat, maxLon, maxLat } iswc-marker-click  detail: { marker }",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

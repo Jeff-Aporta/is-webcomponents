@@ -22,11 +22,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\n  <iswc-radio value=\"contado\">Contado</iswc-radio>\n  <iswc-radio value=\"credito\">Crédito</iswc-radio>\n  <iswc-radio value=\"mixto\">Mixto</iswc-radio>\n</iswc-radio-group>",
-          "lang": "html"
         }
       ]
     },
@@ -34,8 +29,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-radio-group&gt; — Grupo form-associated de &lt;iswc-radio&gt;. El grupo es el dueño del valor: los radios solo avisan con `iswc-radio-select`. Atributos name, value, label, hint orientation      vertical (default) | horizontal   ·   row = alias booleano de horizontal color          brand (default) | neutral | success | warning | danger label-placement  end (default) | start | top | bottom   (se aplica a los hijos) error-text       mensaje de error; sustituye al hint y activa el estado de error disabled, required, readonly, error   (boolean) Slots: default (&lt;iswc-radio&gt;), label, hint, error-text Parts: form-control, label, base, hint, error-text Custom states: disabled, readonly, error, blank Events: iswc-change { value }",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

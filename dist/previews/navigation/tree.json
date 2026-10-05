@@ -41,10 +41,6 @@
           "equivNote": "El atributo selection define si el árbol selecciona nodos y cómo.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-tree: selection\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"selection=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"none → solo expand\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"single → un nodo\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"leaf → solo hojas\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"multiple → checks\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"none\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"single\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"leaf\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"multiple\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-tree selection=\"single\" expanded>\n  <iswc-tree-item>\n    <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\n    Documentos\n    <iswc-tree-item>facturas-2024.pdf</iswc-tree-item>\n  </iswc-tree-item>\n</iswc-tree>"
         }
       ]
     },

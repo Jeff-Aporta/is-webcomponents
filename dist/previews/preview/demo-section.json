@@ -15,11 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-demo-section id=\"intro\" class=\"section\">\n  <h2 slot=\"title\">Encabezado flotante</h2>\n  <p class=\"lede\" slot=\"lede\">Titulo y lede van fuera de la card. El resto del contenido va dentro.</p>\n  <iswc-callout color=\"brand\" variant=\"filled-outlined\">\n    Contenido real: vive dentro de la card homogenea.\n  </iswc-callout>\n</iswc-demo-section>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-demo-section id=\"intro\" class=\"section\">\n  <h2 slot=\"title\">Encabezado flotante</h2>\n  <p class=\"lede\" slot=\"lede\">Titulo y lede van fuera de la card.</p>\n  <iswc-callout color=\"brand\" variant=\"filled-outlined\">\n    Contenido real: vive dentro de la card homogenea.\n  </iswc-callout>\n</iswc-demo-section>"
         }
       ]
     },
@@ -51,29 +46,79 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Tipo", "Default", "Descripcion"],
+          "columns": [
+            "Atributo",
+            "Tipo",
+            "Default",
+            "Descripcion"
+          ],
           "rows": [
-            ["<code>id</code>", "string", "—", "Ancla para el TOC / scrollspy (lo reenvia el renderer desde `section.id`)."],
-            ["<code>as</code>", "<code>section | aside</code>", "<code>section</code>", "Preserva el semantico del JSON. Con <code>aside</code>, <code>role</code> se vuelve <code>complementary</code> salvo que declares <code>role</code> explicito."],
-            ["<code>aria-label</code> / <code>aria-labelledby</code>", "string", "—", "Se aplican al host. Necesarios para que las secciones con <code>as=&quot;aside&quot;</code> se conviertan en landmarks."],
-            ["<code>role</code>", "string", "derivado de <code>as</code>", "Sobreescribe el rol por defecto (<code>complementary</code> para aside, vacio para section)."]
+            [
+              "<code>id</code>",
+              "string",
+              "—",
+              "Ancla para el TOC / scrollspy (lo reenvia el renderer desde `section.id`)."
+            ],
+            [
+              "<code>as</code>",
+              "<code>section | aside</code>",
+              "<code>section</code>",
+              "Preserva el semantico del JSON. Con <code>aside</code>, <code>role</code> se vuelve <code>complementary</code> salvo que declares <code>role</code> explicito."
+            ],
+            [
+              "<code>aria-label</code> / <code>aria-labelledby</code>",
+              "string",
+              "—",
+              "Se aplican al host. Necesarios para que las secciones con <code>as=&quot;aside&quot;</code> se conviertan en landmarks."
+            ],
+            [
+              "<code>role</code>",
+              "string",
+              "derivado de <code>as</code>",
+              "Sobreescribe el rol por defecto (<code>complementary</code> para aside, vacio para section)."
+            ]
           ]
         },
         {
           "kind": "table",
-          "columns": ["Slot light DOM", "Donde se proyecta", "Notas"],
+          "columns": [
+            "Slot light DOM",
+            "Donde se proyecta",
+            "Notas"
+          ],
           "rows": [
-            ["<code>slot=&quot;title&quot;</code>", "Header (flotante)", "Un <code>&lt;h2&gt;</code>. Se omite si la seccion declara <code>hideTitle:true</code>."],
-            ["<code>slot=&quot;lede&quot;</code>", "Header (flotante)", "Un <code>&lt;p class=&quot;lede&quot;&gt;</code>. Se omite si la seccion no declara <code>lede</code>."],
-            ["Hijos sin <code>slot</code>", "Card", "Bloques <code>demo</code>, <code>code</code>, <code>callout</code>, <code>html</code>, <code>table</code>. Cualquier nodo es valido."]
+            [
+              "<code>slot=&quot;title&quot;</code>",
+              "Header (flotante)",
+              "Un <code>&lt;h2&gt;</code>. Se omite si la seccion declara <code>hideTitle:true</code>."
+            ],
+            [
+              "<code>slot=&quot;lede&quot;</code>",
+              "Header (flotante)",
+              "Un <code>&lt;p class=&quot;lede&quot;&gt;</code>. Se omite si la seccion no declara <code>lede</code>."
+            ],
+            [
+              "Hijos sin <code>slot</code>",
+              "Card",
+              "Bloques <code>demo</code>, <code>code</code>, <code>callout</code>, <code>html</code>, <code>table</code>. Cualquier nodo es valido."
+            ]
           ]
         },
         {
           "kind": "table",
-          "columns": ["CSS Part", "Donde"],
+          "columns": [
+            "CSS Part",
+            "Donde"
+          ],
           "rows": [
-            ["<code>::part(head)</code>", "Contenedor del titulo + lede."],
-            ["<code>::part(card)</code>", "Caja homogenea donde va el contenido."]
+            [
+              "<code>::part(head)</code>",
+              "Contenedor del titulo + lede."
+            ],
+            [
+              "<code>::part(card)</code>",
+              "Caja homogenea donde va el contenido."
+            ]
           ]
         }
       ]

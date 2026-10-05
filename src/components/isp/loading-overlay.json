@@ -32,10 +32,6 @@
               "label": "scroll-lock"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-loading-overlay open message=\"Guardando…\" scroll-lock></iswc-loading-overlay>"
         }
       ]
     },
@@ -47,10 +43,6 @@
         {
           "kind": "demo",
           "html": "<iswc-button id=\"loBtn2\" color=\"neutral\" variant=\"outlined\">Ver con icono</iswc-button>\r\n          <iswc-loading-overlay id=\"loDemo2\" message=\"Consolidando periodo…\">\r\n            <iswc-icon icon=\"mdi:database-sync\"></iswc-icon>\r\n          </iswc-loading-overlay>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-loading-overlay message=\"Consolidando…\">\n  <iswc-icon icon=\"mdi:database-sync\"></iswc-icon>\n</iswc-loading-overlay>"
         }
       ]
     },

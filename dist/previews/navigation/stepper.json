@@ -61,10 +61,6 @@
               "label": "disabled"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-stepper active=\"1\">\n  <iswc-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></iswc-stepper-step>\n</iswc-stepper>"
         }
       ]
     },

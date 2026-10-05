@@ -205,10 +205,6 @@
           "equivNote": "orientation + primary definen qué panel absorbe el resize.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-split-panel: primary\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"orientation=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"horizontal\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"vertical\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"primary=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"start crece\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"end crece\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"H\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"V\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"start\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"end\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "const sp = document.getElementById('apiSplit');\nsp.position += 10;             // asignar valor\nsp.primary = 'end';           // o 'start'\nsp.toggleAttribute('disabled');\nsp.addEventListener('reposition', e => this.log(e.detail));"
         }
       ]
     },

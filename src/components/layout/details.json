@@ -50,10 +50,6 @@
           "equivNote": "Varios details con el mismo name se comportan como accordion.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-details: accordion\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mismo name?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"accordion (uno abierto)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"disclosure independiente\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</iswc-details>"
         }
       ]
     },
@@ -156,10 +152,6 @@
         {
           "kind": "demo",
           "html": "<iswc-details id=\"apiDetails\" summary=\"Demo controlada\">\r\n            Esto lo abro y cierro desde los botones de abajo.\r\n          </iswc-details>\r\n          <div class=\"card-row-actions\" style=\"margin-top:.5em\">\r\n            <iswc-button id=\"btnOpen\">show()</iswc-button>\r\n            <iswc-button id=\"btnClose\">hide()</iswc-button>\r\n            <iswc-button id=\"btnToggle\" variant=\"outlined\">toggle()</iswc-button>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-details id=\"apiDetails\" summary=\"Demo\">…</iswc-details>\n<script>\n  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();\n  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();\n  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();\n</script>"
         }
       ]
     },
@@ -171,10 +163,6 @@
         {
           "kind": "demo",
           "html": "<iswc-details id=\"evtDetails\" summary=\"Pulsa y mira la consola\">\r\n            El evento <code class=\"code\">iswc-after-show</code> se dispara tras la animación de apertura.\r\n          </iswc-details>\r\n          <div id=\"evtLog\" class=\"callout\" style=\"margin-top:.5em\">Log:</div>"
-        },
-        {
-          "kind": "code",
-          "code": "document.getElementById('evtDetails').addEventListener('iswc-after-show', () => {\n  console.log('abierto');\n});"
         }
       ]
     },

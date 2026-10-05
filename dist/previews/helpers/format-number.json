@@ -112,11 +112,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"format-grid format-grid--cards\">\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">decimal · 1234,5</code>\r\n              <iswc-format-number class=\"format-grid__value\" value=\"1234.5\" type=\"decimal\"></iswc-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">percent · 0,875</code>\r\n              <iswc-format-number class=\"format-grid__value\" value=\"0.875\" type=\"percent\"></iswc-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency COP · 12.500</code>\r\n              <iswc-format-number class=\"format-grid__value\" value=\"12500\" type=\"currency\" currency=\"COP\"></iswc-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency USD · 99,9</code>\r\n              <iswc-format-number class=\"format-grid__value\" value=\"99.9\" type=\"currency\" currency=\"USD\"></iswc-format-number>\r\n            </div>\r\n            <div class=\"format-grid__row\">\r\n              <code class=\"format-grid__tag\">currency EUR · 49,99</code>\r\n              <iswc-format-number class=\"format-grid__value\" value=\"49.99\" type=\"currency\" currency=\"EUR\"></iswc-format-number>\r\n            </div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-format-number value=\"0.875\" type=\"percent\"></iswc-format-number>\n<iswc-format-number value=\"99.9\" type=\"currency\" currency=\"USD\"></iswc-format-number>",
-          "lang": "html"
         }
       ]
     },
@@ -127,11 +122,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">min 2 · 1234,5</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"1234.5\" minimum-fraction-digits=\"2\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">max 0 · 1234,56</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"1234.56\" maximum-fraction-digits=\"0\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">min 2 · max 4 · 1,2</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"1.2\" minimum-fraction-digits=\"2\" maximum-fraction-digits=\"4\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">currency + max 0 · 99,9</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"99.9\" type=\"currency\" currency=\"USD\" maximum-fraction-digits=\"0\"></iswc-format-number>\n            </div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-format-number value=\"1234.5\" minimum-fraction-digits=\"2\"></iswc-format-number>\n<iswc-format-number value=\"1234.56\" maximum-fraction-digits=\"0\"></iswc-format-number>",
-          "lang": "html"
         }
       ]
     },
@@ -143,11 +133,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pad 0 × 6 · 42</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"42\" pad-start=\"0\" pad-length=\"6\" maximum-fraction-digits=\"0\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pad 0 × 8 · 7</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"7\" pad-length=\"8\" maximum-fraction-digits=\"0\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pad * × 5 · 12</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"12\" pad-start=\"*\" pad-length=\"5\" maximum-fraction-digits=\"0\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">min-integer 5 · 42</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"42\" minimum-integer-digits=\"5\" maximum-fraction-digits=\"0\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">min-integer 4 · 1234.5</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"1234.5\" minimum-integer-digits=\"4\" minimum-fraction-digits=\"2\"></iswc-format-number>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">pad tras currency</code>\n              <iswc-format-number class=\"format-grid__value\" value=\"9.5\" type=\"currency\" currency=\"USD\" pad-start=\" \" pad-length=\"12\"></iswc-format-number>\n            </div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-format-number value=\"42\" pad-start=\"0\" pad-length=\"6\" maximum-fraction-digits=\"0\"></iswc-format-number>\n<!-- → 000042 -->\n<iswc-format-number value=\"42\" minimum-integer-digits=\"5\" maximum-fraction-digits=\"0\"></iswc-format-number>\n<!-- → 00042 (Intl) -->",
-          "lang": "html"
         }
       ]
     },

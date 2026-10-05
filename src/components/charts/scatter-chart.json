@@ -78,11 +78,6 @@
         {
           "kind": "demo",
           "html": "<iswc-scatter-chart open-on-click label=\"Students\" x-label=\"Hours studied\" y-label=\"Score\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"datasets\": [{\r\n                    \"label\": \"Students\",\r\n                    \"data\": [\r\n                      { \"x\": 2, \"y\": 65 }, { \"x\": 3, \"y\": 72 }, { \"x\": 4, \"y\": 78 },\r\n                      { \"x\": 5, \"y\": 82 }, { \"x\": 6, \"y\": 88 }, { \"x\": 7, \"y\": 85 },\r\n                      { \"x\": 8, \"y\": 92 }, { \"x\": 9, \"y\": 95 }\r\n                    ]\r\n                  }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-scatter-chart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-scatter-chart label=\"Students\" x-label=\"Hours\" y-label=\"Score\">\n  <script type=\"application/json\">\n    { \"data\": { \"datasets\": [{ \"label\": \"Students\", \"data\": [{ \"x\": 2, \"y\": 65 }, …] }] } }\n  </script>\n</iswc-scatter-chart>",
-          "lang": "html"
         }
       ]
     },
@@ -93,11 +88,6 @@
         {
           "kind": "demo",
           "html": "<iswc-scatter-chart open-on-click id=\"scatterJs\" label=\"Students\" x-label=\"Hours\" y-label=\"Score\"></iswc-scatter-chart>"
-        },
-        {
-          "kind": "code",
-          "code": "const chart = document.querySelector('#scatterJs');\nchart.config = {\n  data: {\n    datasets: [{\n      label: 'Students',\n      data: [\n        { x: 2, y: 65 }, { x: 3, y: 72 }, { x: 4, y: 78 },\n        { x: 5, y: 82 }, { x: 6, y: 88 }, { x: 7, y: 85 },\n        { x: 8, y: 92 }, { x: 9, y: 95 },\n      ],\n    }],\n  },\n};",
-          "lang": "javascript"
         }
       ]
     },
@@ -109,11 +99,6 @@
         {
           "kind": "demo",
           "html": "<iswc-scatter-chart open-on-click id=\"scatterMulti\" label=\"Study methods\" x-label=\"Hours\" y-label=\"Score\"></iswc-scatter-chart>"
-        },
-        {
-          "kind": "code",
-          "code": "datasets: [\n  { label: 'Tutored', data: [{ x: 3, y: 78 }, …] },\n  { label: 'Self-study', data: [{ x: 3, y: 68 }, …] },\n]",
-          "lang": "javascript"
         }
       ]
     },
@@ -124,11 +109,6 @@
         {
           "kind": "demo",
           "html": "<iswc-scatter-chart open-on-click grid=\"y\" x-label=\"Temp (°F)\" y-label=\"Sales\" label=\"Ice cream\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"datasets\": [{\r\n                    \"label\": \"Ice cream sales\",\r\n                    \"data\": [\r\n                      { \"x\": 68, \"y\": 120 }, { \"x\": 74, \"y\": 175 }, { \"x\": 79, \"y\": 210 },\r\n                      { \"x\": 84, \"y\": 280 }, { \"x\": 89, \"y\": 340 }, { \"x\": 95, \"y\": 410 }\r\n                    ]\r\n                  }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-scatter-chart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-scatter-chart grid=\"y\" x-label=\"Temp\" y-label=\"Sales\">…</iswc-scatter-chart>\n<iswc-scatter-chart without-legend without-animation>…</iswc-scatter-chart>",
-          "lang": "html"
         }
       ]
     },

@@ -22,10 +22,6 @@
               "label": "multiple"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-accordion-group>\n  <iswc-details summary=\"Datos básicos\" open>…</iswc-details>\n  <iswc-details summary=\"Contacto\">…</iswc-details>\n</iswc-accordion-group>"
         }
       ]
     },
@@ -37,10 +33,6 @@
         {
           "kind": "demo",
           "html": "<iswc-accordion-group multiple>\r\n            <iswc-details summary=\"Primero\" open>Contenido uno.</iswc-details>\r\n            <iswc-details summary=\"Segundo\" open>Contenido dos.</iswc-details>\r\n            <iswc-details summary=\"Tercero\">Contenido tres.</iswc-details>\r\n          </iswc-accordion-group>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-accordion-group multiple>…</iswc-accordion-group>"
         }
       ]
     },

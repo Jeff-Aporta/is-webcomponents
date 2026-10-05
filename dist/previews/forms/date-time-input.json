@@ -27,11 +27,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-date-time-input label=\"Vencimiento\" value=\"2026-08-15T17:00\" style=\"max-width:340px\"></iswc-date-time-input>",
-          "lang": "html"
         }
       ]
     },
@@ -39,8 +34,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-date-time-input&gt; — Fecha y hora en un solo campo con calendario y reloj lado a lado (MUI DateTimePicker). El valor es `yyyy-mm-ddTHH:mm[:ss]`. Atributos: los de iswc-date-input más ampm, hour24, seconds, step Events: iswc-change, iswc-show, iswc-hide Methods: show(), hide()",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

@@ -24,11 +24,6 @@
           ]
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-media-recorder source=\"mic\"></iswc-media-recorder>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }

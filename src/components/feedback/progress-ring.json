@@ -46,11 +46,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"ring-row\">\r\n            <div class=\"ring-card\" style=\"font-size: 2rem\">\r\n              <iswc-progress-ring value=\"60\" label=\"60%\"></iswc-progress-ring>\r\n              <p class=\"ring-card__cap\">2rem</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 3.5rem\">\r\n              <iswc-progress-ring value=\"60\" label=\"60%\"></iswc-progress-ring>\r\n              <p class=\"ring-card__cap\">3.5rem</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 5.5rem\">\r\n              <iswc-progress-ring\r\n                value=\"60\"\r\n                label=\"60%\"\r\n                style=\"--indicator-color: var(--iswc-color-success)\"\r\n              ></iswc-progress-ring>\r\n              <p class=\"ring-card__cap\">5.5rem</p>\r\n            </div>\r\n            <div class=\"ring-card\" style=\"font-size: 7rem\">\r\n              <iswc-progress-ring\r\n                value=\"60\"\r\n                label=\"60%\"\r\n                style=\"--track-width: 2; --indicator-width: 4.5\"\r\n              ></iswc-progress-ring>\r\n              <p class=\"ring-card__cap\">7rem · stroke</p>\r\n            </div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<span style=\"font-size:4rem\">\n  <iswc-progress-ring value=\"75\" label=\"75%\"></iswc-progress-ring>\n</span>",
-          "lang": "html"
         }
       ]
     },

@@ -32,11 +32,6 @@
               "label": "end"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></iswc-date-range-input>",
-          "lang": "html"
         }
       ]
     },
@@ -44,8 +39,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-date-range-input&gt; — Dos campos (inicio y fin) con el calendario de rango en el panel (MUI DateRangePicker). El valor es `inicio/fin`. Atributos: start-label, end-label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, calendars, shortcuts, color, action-bar, placement, close-on-select Events: iswc-change, iswc-show, iswc-hide Methods: show(), hide()",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

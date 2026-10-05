@@ -64,10 +64,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\" style=\"align-items:center;gap:.5rem;flex-wrap:wrap\">\r\n            <span style=\"font-size:.75rem\"><iswc-tag>0.75rem</iswc-tag></span>\r\n            <span style=\"font-size:1rem\"><iswc-tag>1rem</iswc-tag></span>\r\n            <span style=\"font-size:1.25rem\"><iswc-tag pill>1.25rem pill</iswc-tag></span>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<span style=\"font-size:1.25rem\">\n  <iswc-tag pill>Grande</iswc-tag>\n</span>"
         }
       ]
     },

@@ -147,11 +147,6 @@
         {
           "kind": "callout",
           "html": "<strong>Requiere contexto seguro.</strong>\r\n          <code class=\"code\">clipboard.writeText()</code> necesita HTTPS o localhost."
-        },
-        {
-          "kind": "code",
-          "code": "<code id=\"cbValue\">https://api.insoft.com.co/v1</code>\n<iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>",
-          "lang": "html"
         }
       ]
     },
@@ -163,10 +158,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"cluster\">\r\n            <span id=\"my-phone\">+57 300 123 4567</span>\r\n            <iswc-copy-button from=\"my-phone\"></iswc-copy-button>\r\n          </div>\r\n          <div class=\"cluster\">\r\n            <input id=\"my-input\" class=\"from-input\" type=\"text\" value=\"Texto del usuario\" />\r\n            <iswc-copy-button from=\"my-input.value\"></iswc-copy-button>\r\n          </div>\r\n          <div class=\"cluster\">\r\n            <a id=\"my-link\" href=\"https://insoft.com.co\">Sitio InSoft</a>\r\n            <iswc-copy-button from=\"my-link[href]\"></iswc-copy-button>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<span id=\"my-phone\">+57 300 123 4567</span>\n<iswc-copy-button from=\"my-phone\"></iswc-copy-button>\n\n<iswc-copy-button from=\"my-input.value\"></iswc-copy-button>\n<iswc-copy-button from=\"my-link[href]\"></iswc-copy-button>"
         }
       ]
     },
@@ -250,10 +241,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"placements\">\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"top\" tooltip-placement=\"top\" copy-label=\"top\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">top</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"top-start\" tooltip-placement=\"top-start\" copy-label=\"top-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">top-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"top-end\" tooltip-placement=\"top-end\" copy-label=\"top-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">top-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"right\" tooltip-placement=\"right\" copy-label=\"right\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">right</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"right-start\" tooltip-placement=\"right-start\" copy-label=\"right-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">right-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"right-end\" tooltip-placement=\"right-end\" copy-label=\"right-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">right-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"bottom\" tooltip-placement=\"bottom\" copy-label=\"bottom\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">bottom</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"bottom-start\" tooltip-placement=\"bottom-start\" copy-label=\"bottom-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">bottom-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"bottom-end\" tooltip-placement=\"bottom-end\" copy-label=\"bottom-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">bottom-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"left\" tooltip-placement=\"left\" copy-label=\"left\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">left</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"left-start\" tooltip-placement=\"left-start\" copy-label=\"left-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">left-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"left-end\" tooltip-placement=\"left-end\" copy-label=\"left-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">left-end</small>\r\n            </span>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-copy-button value=\"…\" tooltip-placement=\"bottom-start\"></iswc-copy-button>"
         }
       ]
     },

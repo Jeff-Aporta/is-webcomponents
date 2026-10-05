@@ -15,11 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-kanban>\r\n            <iswc-kanban-column title=\"Tareas\">\r\n              <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">\r\n                Revisar extracto de agosto.\r\n              </iswc-kanban-card>\r\n              <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">\r\n                Cuadrar cuentas de resultado.\r\n              </iswc-kanban-card>\r\n            </iswc-kanban-column>\r\n            <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>\r\n          </iswc-kanban>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-kanban>\n  <iswc-kanban-column title=\"Tareas\">\n    <iswc-kanban-card heading=\"Conciliar banco\" meta=\"Vence hoy\" tag=\"Urgente\" tag-color=\"danger\">\n      Revisar extracto de agosto.\n    </iswc-kanban-card>\n    <iswc-kanban-card heading=\"Cierre de mes\" meta=\"3 días\" tag=\"Normal\">\n      Cuadrar cuentas de resultado.\n    </iswc-kanban-card>\n  </iswc-kanban-column>\n  <iswc-kanban-column title=\"Hechas\"></iswc-kanban-column>\n</iswc-kanban>",
-          "lang": "html"
         }
       ]
     },
@@ -27,8 +22,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-kanban&gt; + &lt;iswc-kanban-column&gt; + &lt;iswc-kanban-card&gt; — Tablero (vanilla, zero dependencies). &lt;iswc-kanban&gt; &lt;iswc-kanban-column title=\"Pendiente\"&gt; &lt;iswc-kanban-card heading=\"Tarea 1\"&gt;Descripción&lt;/iswc-kanban-card&gt; &lt;/iswc-kanban-column&gt; &lt;/iswc-kanban&gt; Atributos &lt;iswc-kanban&gt; columns        number — nº columnas visibles al estilo \"compact\". orientation    column | row — layout de los stacks (default column: stacks lado a lado; row: stacks apilados en filas). Atributos &lt;iswc-kanban-column&gt; title          string accent         string (color, e.g. dodgerblue, #0bb783) badge          string — opcional en el header. Atributos &lt;iswc-kanban-card&gt; heading        string meta           string — bajo el heading. tag            string — texto de la badge lateral. tag-color    brand | neutral | success | warning | danger cover          string — URL de imagen de cabecera. without-shadow boolean Slots &lt;iswc-kanban-column&gt; (default)       cards. header-actions  elementos en la cabecera. &lt;iswc-kanban-card&gt; (default)        descripción. footer           pie de la card. Eventos iswc-kanban-card-click  detail: { card, column } iswc-kanban-move        detail: { card, from, to } — card soltada en otra columna (o reordenada en la misma).",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

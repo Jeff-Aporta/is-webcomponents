@@ -53,10 +53,6 @@
               "label": "invalid"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-pin-input length=\"6\"></iswc-pin-input>"
         }
       ]
     },

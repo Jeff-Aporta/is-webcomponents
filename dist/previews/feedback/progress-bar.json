@@ -52,11 +52,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"pb-demo\">\r\n            <div class=\"pb-meta\">\r\n              <span id=\"pbStatus\">Listo para empezar</span>\r\n              <strong><span id=\"pbPct\">0</span>%</strong>\r\n            </div>\r\n            <iswc-progress-bar id=\"pbLive\" value=\"0\" label=\"Progreso 0%\"></iswc-progress-bar>\r\n            <div class=\"pb-actions\">\r\n              <iswc-button id=\"pbPlus\" color=\"brand\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:plus\"></iswc-icon>\r\n                +10\r\n              </iswc-button>\r\n              <iswc-button id=\"pbMinus\" variant=\"outlined\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:minus\"></iswc-icon>\r\n                −10\r\n              </iswc-button>\r\n              <iswc-button id=\"pbReset\" variant=\"plain\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:restart\"></iswc-icon>\r\n                Reset\r\n              </iswc-button>\r\n            </div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "let value = 0;\nconst bar = document.querySelector('#pbLive');\n\ndocument.querySelector('#pbPlus').addEventListener('click', () => {\n  value = Math.min(100, value + 10);\n  bar.value = value;\n  bar.label = `Progreso ${value}%`;\n});\n\ndocument.querySelector('#pbReset').addEventListener('click', () => {\n  value = 0;\n  bar.value = 0;\n});",
-          "lang": "javascript"
         }
       ]
     },
@@ -67,11 +62,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"pb-demo\">\r\n            <iswc-progress-bar value=\"30\" label=\"30%\"></iswc-progress-bar>\r\n            <iswc-progress-bar value=\"100\" label=\"Completado\"\r\n              style=\"--indicator-color: var(--iswc-color-success)\"></iswc-progress-bar>\r\n            <iswc-progress-bar indeterminate label=\"Procesando\"></iswc-progress-bar>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-progress-bar value=\"65\" label=\"Carga\"></iswc-progress-bar>\n<iswc-progress-bar indeterminate label=\"Procesando\"></iswc-progress-bar>",
-          "lang": "html"
         }
       ]
     },

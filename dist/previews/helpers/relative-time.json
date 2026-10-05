@@ -60,11 +60,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">long</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-86400\" format=\"long\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">short</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-3600\" format=\"short\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">narrow</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-120\" format=\"narrow\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">numeric=always</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"0\" numeric=\"always\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">en 3 días</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"259200\" format=\"long\"></iswc-relative-time>\n            </div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-relative-time date=\"2026-07-30T10:00:00\" format=\"short\" sync></iswc-relative-time>\n<iswc-relative-time date=\"…\" locale=\"en\" numeric=\"always\"></iswc-relative-time>",
-          "lang": "html"
         }
       ]
     },
@@ -91,11 +86,6 @@
         {
           "kind": "demo",
           "html": "<p style=\"margin:0\">\n            <iswc-format type=\"relative\" data-rt-offset=\"-7200\" style=\"short\"></iswc-format>\n          </p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-format type=\"relative\" date=\"…\" style=\"short\" locale=\"en\"></iswc-format>",
-          "lang": "html"
         }
       ]
     },

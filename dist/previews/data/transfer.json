@@ -15,10 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-transfer id=\"tr1\" source-title=\"Disponibles\" target-title=\"Asignados\" searchable>\r\n            <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"d\">Delta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"e\">Epsilon</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"f\">Zeta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"g\">Eta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"h\">Theta</iswc-transfer-item>\r\n          </iswc-transfer>\r\n          <p id=\"tr1Log\">Seleccionados: <code class=\"code\">b</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-transfer searchable>\n  <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\n  …\n</iswc-transfer>"
         }
       ]
     },

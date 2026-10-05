@@ -78,11 +78,6 @@
         {
           "kind": "demo",
           "html": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"animation=flow\",\n      \"direction\": \"LR\",\n      \"nodes\": [\n        { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\" },\n        { \"id\": \"b\", \"label\": \"Procesar\" },\n        { \"id\": \"c\", \"label\": \"¿Ok?\", \"shape\": \"diamond\" },\n        { \"id\": \"d\", \"label\": \"Fin\", \"shape\": \"stadium\" }\n      ],\n      \"edges\": [\n        { \"from\": \"a\", \"to\": \"b\" },\n        { \"from\": \"b\", \"to\": \"c\" },\n        { \"from\": \"c\", \"to\": \"d\", \"label\": \"sí\" }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-flowchart animation=\"flow\" open-on-click>…</iswc-flowchart>",
-          "lang": "html"
         }
       ]
     },

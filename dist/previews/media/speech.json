@@ -24,11 +24,6 @@
           ]
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }

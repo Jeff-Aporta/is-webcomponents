@@ -27,11 +27,6 @@
               "label": "placeholder"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "lang": "markdown",
-          "code": "```iswc-flowchart\n{ \"flowchart\": { \"nodes\": [...], \"edges\": [...] } }\n```\n\n```js\nconst x = 1;\n```\n-> theme completo\n\n`inline` -> brand-mono sin fondo"
         }
       ]
     },

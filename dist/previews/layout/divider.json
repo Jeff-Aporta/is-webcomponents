@@ -59,10 +59,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0.35rem;width:100%\">\r\n            <span class=\"demo-label\">color theme</span>\r\n            <iswc-divider color=\"text\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"brand\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"success\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"warning\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"danger\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"border\" opacity=\"100\"></iswc-divider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-divider></iswc-divider>\n<iswc-divider opacity=\"80\" color=\"brand\"></iswc-divider>\n<iswc-divider orientation=\"vertical\" color=\"accent\"></iswc-divider>"
         }
       ]
     },

@@ -17,11 +17,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"fc-demo\">\n            <iswc-float-card id=\"fcDemo\" horizontal=\"right\" vertical=\"center\">\n              <span>Lección — hover aquí</span>\n              <iswc-flex-options id=\"fcOpts\" slot=\"float\" compact></iswc-flex-options>\n            </iswc-float-card>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-float-card open horizontal=\"right\" vertical=\"center\">\n  <span>Fila</span>\n  <iswc-button slot=\"float\" variant=\"plain\">Acción</iswc-button>\n</iswc-float-card>",
-          "lang": "html"
         }
       ]
     }

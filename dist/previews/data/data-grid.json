@@ -20,11 +20,6 @@
         {
           "kind": "html",
           "html": "<p class=\"out\" id=\"out-full\"></p>\r\n        <p class=\"empty-note\">\r\n          El snippet del botón <span class=\"icon-inline\" aria-hidden=\"true\"><iswc-icon icon=\"mdi:information-outline\"></iswc-icon></span>\r\n          muestra sólo la etiqueta <code class=\"code\">&lt;iswc-data-grid&gt;</code>; los datos y columnas se asignan\r\n          por JS justo debajo. Si lo quieres autocontenido, copia este bloque (incluye <code class=\"code\">columns</code>,\r\n          <code class=\"code\">rows</code> y <code class=\"code\">aggregationModel</code> con los mismos 40 registros que\r\n          ves en la tabla):\r\n        </p>"
-        },
-        {
-          "kind": "code",
-          "code": "<!-- El snippet completo vive en el bloque <code> de la siguiente sección (cols). -->",
-          "lang": "html"
         }
       ]
     },
@@ -36,11 +31,6 @@
         {
           "kind": "demo",
           "html": "<iswc-data-grid id=\"g-cols\" class=\"grid-short\" header-filters></iswc-data-grid>"
-        },
-        {
-          "kind": "code",
-          "code": "grid.columns = [\n  { field: 'name', headerName: 'Nombre', flex: 1, minWidth: 140 },\n  { field: 'gross', headerName: 'Bruto', type: 'number' },\n  { field: 'taxRate', headerName: 'IVA', type: 'number',\n    valueGetter: (v) => v * 100, valueFormatter: (v) => `${v}%` },\n  { field: 'profit', headerName: 'Margen', type: 'number',\n    valueGetter: (v, row) => row.gross - row.costs },\n  { field: 'hired', headerName: 'Alta', type: 'date' },\n  { field: 'active', headerName: 'Activo', type: 'boolean',\n    renderCell: ({ value }) => {\n      const el = document.createElement('span');\n      el.className = `tag-cell ${value ? 'tag-ok' : 'tag-no'}`;\n      el.textContent = value ? 'activo' : 'baja';\n      return el;\n    } },\n  { field: 'role', headerName: 'Rol', type: 'singleSelect',\n    valueOptions: ['Dev', 'QA', 'PM'] },\n  { field: 'acciones', type: 'actions', getActions: ({ row }) => [\n    { label: 'Ver', icon: '👁', onClick: () => alert(row.name) },\n    { label: 'Borrar', icon: '🗑', showInMenu: true, onClick: () => grid.updateRows([]) },\n  ] },\n];",
-          "lang": "javascript"
         }
       ]
     },
@@ -56,11 +46,6 @@
         {
           "kind": "demo",
           "html": "<iswc-data-grid id=\"g-layout\" class=\"grid-short\"></iswc-data-grid>"
-        },
-        {
-          "kind": "code",
-          "code": "grid.columnGroupingModel = [\n  { groupId: 'persona', headerName: 'Persona', children: [\n    { groupId: 'ident', headerName: 'Identidad', children: [{ field: 'name' }, { field: 'email' }] },\n    { field: 'city' },\n  ] },\n  { groupId: 'dinero', headerName: 'Económico', children: [{ field: 'gross' }, { field: 'costs' }] },\n];\ngrid.pinnedColumns = { left: ['id'], right: ['acciones'] };",
-          "lang": "javascript"
         }
       ]
     },
@@ -148,11 +133,6 @@
         {
           "kind": "demo",
           "html": "<iswc-data-grid id=\"g-pivot\" class=\"grid-short\"></iswc-data-grid>"
-        },
-        {
-          "kind": "code",
-          "code": "grid.pivotModel = {\n  rows: ['city'],\n  columns: ['role'],\n  values: [{ field: 'gross', fn: 'sum' }],\n};",
-          "lang": "javascript"
         }
       ]
     },

@@ -16,11 +16,6 @@
         {
           "kind": "demo",
           "html": "<iswc-flex-options id=\"foDemo\"></iswc-flex-options>"
-        },
-        {
-          "kind": "code",
-          "code": "el.actions = [\n  { icon: 'mdi:plus', title: 'Agregar', onClick: () => {} },\n  { icon: 'mdi:pencil', title: 'Editar', onClick: () => {} },\n];",
-          "lang": "js"
         }
       ]
     },

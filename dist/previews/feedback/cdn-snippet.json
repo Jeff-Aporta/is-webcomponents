@@ -48,11 +48,6 @@
               "label": "dependencies (JSON)"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-cdn-snippet\n  tag=\"iswc-button\"\n  category=\"actions\"\n></iswc-cdn-snippet>",
-          "lang": "html"
         }
       ]
     },
@@ -64,11 +59,6 @@
         {
           "kind": "demo",
           "html": "<iswc-cdn-snippet\r\n            tag=\"iswc-popconfirm\"\r\n            category=\"feedback\"\r\n            title=\"Popconfirm — Consumo por CDN\"\r\n          >\r\n            <script type=\"application/json\" slot=\"deps\">\r\n              [\r\n                {\r\n                  \"name\": \"dayjs\",\r\n                  \"version\": \"1.11.13\",\r\n                  \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\r\n                  \"note\": \"Formatea fechas y horas en la UI del componente (API estilo Moment, ~2 kB). Sin CSS propio.\"\r\n                }\r\n              ]\r\n            </script>\r\n          </iswc-cdn-snippet>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-cdn-snippet tag=\"iswc-popconfirm\" category=\"feedback\">\n  <script type=\"application/json\" slot=\"deps\">\n    [\n      {\n        \"name\": \"dayjs\",\n        \"version\": \"1.11.13\",\n        \"js\":  \"https://cdn.jsdelivr.net/npm/dayjs@1.11.13/dayjs.min.js\",\n        \"note\": \"Formatea fechas y horas (sin CSS).\"\n      }\n    ]\n  </script>\n</iswc-cdn-snippet>",
-          "lang": "html"
         }
       ]
     },
@@ -80,11 +70,6 @@
         {
           "kind": "demo",
           "html": "<iswc-cdn-snippet\r\n            tag=\"iswc-chart\"\r\n            category=\"data\"\r\n            dependencies='[\r\n              {\"name\":\"Chart.js\",\"version\":\"4.4.0\",\"js\":\"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\",\"note\":\"Necesario si usas &lt;iswc-chart&gt; con type=&quot;bar&quot; o &quot;line&quot;.\"}\r\n            ]'\r\n          ></iswc-cdn-snippet>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-cdn-snippet\n  tag=\"iswc-chart\"\n  category=\"data\"\n  dependencies='[\n    { \"name\": \"Chart.js\", \"version\": \"4.4.0\",\n      \"js\": \"https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js\" }\n  ]'\n></iswc-cdn-snippet>",
-          "lang": "html"
         }
       ]
     },

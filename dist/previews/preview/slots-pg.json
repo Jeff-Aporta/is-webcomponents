@@ -15,11 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-slots-pg tag=\"iswc-button\">\n  <iswc-button>Texto</iswc-button>\n  <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-slots-pg>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-slots-pg tag=\"iswc-button\">\n  <iswc-button>Texto</iswc-button>\n  <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -44,27 +39,69 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Tipo", "Default", "Descripcion"],
+          "columns": [
+            "Atributo",
+            "Tipo",
+            "Default",
+            "Descripcion"
+          ],
           "rows": [
-            ["<code>tag</code>", "string", "—", "Tag del componente target (e.g. <code>iswc-button</code>). Requerido."],
-            ["<code>title</code>", "string", "<code>&lt;<i>tag</i>&gt; slots</code>", "Titulo visible del header."],
-            ["<code>default-tab</code>", "simple | slots | auto", "auto", "Tab inicial. <code>auto</code> usa <code>simple</code> si el componente tiene &le; 2 slots, si no <code>slots</code>."],
-            ["<code>lede</code>", "string", "—", "Subtitulo del header."]
+            [
+              "<code>tag</code>",
+              "string",
+              "—",
+              "Tag del componente target (e.g. <code>iswc-button</code>). Requerido."
+            ],
+            [
+              "<code>title</code>",
+              "string",
+              "<code>&lt;<i>tag</i>&gt; slots</code>",
+              "Titulo visible del header."
+            ],
+            [
+              "<code>default-tab</code>",
+              "simple | slots | auto",
+              "auto",
+              "Tab inicial. <code>auto</code> usa <code>simple</code> si el componente tiene &le; 2 slots, si no <code>slots</code>."
+            ],
+            [
+              "<code>lede</code>",
+              "string",
+              "—",
+              "Subtitulo del header."
+            ]
           ]
         },
         {
           "kind": "table",
-          "columns": ["Evento", "Detalle", "Cuando"],
+          "columns": [
+            "Evento",
+            "Detalle",
+            "Cuando"
+          ],
           "rows": [
-            ["<code>iswc-slots-pg-restart</code>", "<code>{ tag, slots }</code>", "Pulsar el boton Restart."]
+            [
+              "<code>iswc-slots-pg-restart</code>",
+              "<code>{ tag, slots }</code>",
+              "Pulsar el boton Restart."
+            ]
           ]
         },
         {
           "kind": "table",
-          "columns": ["Slot light DOM", "Descripcion"],
+          "columns": [
+            "Slot light DOM",
+            "Descripcion"
+          ],
           "rows": [
-            ["Hijos con <code>slot=\"X\"</code>", "Contenido inicial para el slot <code>X</code> del componente target."],
-            ["Hijos sin <code>slot</code>", "Van al slot default."]
+            [
+              "Hijos con <code>slot=\"X\"</code>",
+              "Contenido inicial para el slot <code>X</code> del componente target."
+            ],
+            [
+              "Hijos sin <code>slot</code>",
+              "Van al slot default."
+            ]
           ]
         }
       ]

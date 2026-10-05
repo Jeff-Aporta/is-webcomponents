@@ -15,10 +15,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"row\">\r\n            <iswc-palette-selector id=\"defaultPalette\" scope=\"root\"></iswc-palette-selector>\r\n            <iswc-theme-toggle id=\"defaultTheme\" scope=\"root\"></iswc-theme-toggle>\r\n          </div>\r\n          <div data-palette=\"insoft\" data-theme=\"light\" class=\"theme-light\" style=\"margin-top:1rem;padding:1rem;border-radius:0.6em;background:var(--iswc-bg);color:var(--iswc-text)\">\r\n            <iswc-palette-selector scope=\"closest\"></iswc-palette-selector>\r\n            <iswc-theme-toggle scope=\"closest\"></iswc-theme-toggle>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-palette-selector></iswc-palette-selector>"
         }
       ]
     },
@@ -30,10 +26,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"row\">\r\n            <iswc-palette-selector id=\"logoPalette\">\r\n              <button type=\"button\" slot=\"trigger\" class=\"logo-trigger\" aria-label=\"Elegir paleta de marca\">\r\n                <span class=\"logo-trigger__lead\" data-role=\"lead\">in</span><span class=\"logo-trigger__accent\" data-role=\"accent\">soft</span>\r\n                <iswc-icon class=\"logo-trigger__caret\" icon=\"mdi:chevron-down\" aria-hidden=\"true\"></iswc-icon>\r\n              </button>\r\n            </iswc-palette-selector>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-palette-selector>\n  <button slot=\"trigger\" class=\"logo-trigger\">\n    <span class=\"logo-trigger__lead\">in</span>\n    <span class=\"logo-trigger__accent\">soft</span>\n  </button>\n</iswc-palette-selector>"
         },
         {
           "kind": "html",
@@ -62,10 +54,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-palette-selector value=\"acme\" palettes='[\n  {\n    \"value\": \"acme\",\n    \"label\": \"Acme Corp\",\n    \"bg\": \"#fff\",\n    \"fg\": \"#111\",\n    \"content\": [\n      { \"iswc-text\": { \"color\": \"#111\", \"content\": [\"ac\"] } },\n      { \"iswc-text\": { \"color\": \"#e03131\", \"content\": [\"me\"] } }\n    ]\n  },\n  {\n    \"value\": \"ocean\",\n    \"label\": \"Ocean\",\n    \"bg\": \"#fff\",\n    \"fg\": \"#111\",\n    \"content\": [\n      { \"iswc-text\": { \"color\": \"#111\", \"content\": [\"o\"] } },\n      { \"iswc-text\": { \"color\": \"#0ea5e9\", \"content\": [\"cean\"] } }\n    ]\n  }\n]'>\n</iswc-palette-selector>"
         }
       ]
     },

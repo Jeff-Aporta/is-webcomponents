@@ -48,11 +48,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"canvas\" id=\"canvas-lock\">Clic derecho (scroll bloqueado) →</div>\r\n          <iswc-context-menu for=\"#canvas-lock\" scroll-lock>\r\n            <button class=\"item\" data-value=\"confirm\">Confirmar acción</button>\r\n            <button class=\"item\" data-value=\"cancel\">Cancelar</button>\r\n          </iswc-context-menu>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-context-menu for=\"#canvas\" scroll-lock>\n  <button class=\"item\" data-value=\"ok\">Confirmar</button>\n</iswc-context-menu>",
-          "lang": "html"
         }
       ]
     },

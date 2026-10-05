@@ -15,11 +15,6 @@
         {
           "kind": "demo",
           "html": "<div style=\"display:flex;flex-direction:column;gap:1em\">\n  <div id=\"ec-target\" style=\"display:flex;align-items:center;justify-content:center;padding:1.5em;border:0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));border-radius:0.6em;min-height:4em\">\n    <iswc-button color=\"brand\" variant=\"filled\">Demo</iswc-button>\n  </div>\n  <iswc-examples-carousel\n    tag=\"iswc-button\"\n    target=\"#ec-target iswc-button\"\n    label=\"Ejemplos predefinidos\"\n    examples='[{\"label\":\"Primario\",\"props\":{\"color\":\"brand\",\"variant\":\"filled\"},\"text\":\"Primario\",\"icon\":\"mdi:star\",\"swatch\":\"#4f46e5\"},{\"label\":\"Secundario\",\"props\":{\"color\":\"success\",\"variant\":\"outlined\"},\"text\":\"Secundario\",\"icon\":\"mdi:check-circle\",\"swatch\":\"#16a34a\"},{\"label\":\"Peligro\",\"props\":{\"color\":\"danger\",\"variant\":\"filled\"},\"text\":\"Peligro\",\"icon\":\"mdi:alert-circle\",\"swatch\":\"#dc2626\"},{\"label\":\"Discreto\",\"props\":{\"color\":\"neutral\",\"variant\":\"plain\"},\"text\":\"Discreto\",\"icon\":\"mdi:dots-horizontal\",\"swatch\":\"#6b7280\"}]'>\n  </iswc-examples-carousel>\n</div>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-examples-carousel\n  tag=\"iswc-button\"\n  target=\"#playground-btn\"\n  label=\"Ejemplos predefinidos\"\n  examples='[\n    { \"label\": \"Primario\",   \"props\": { \"color\": \"brand\",   \"variant\": \"filled\"   } },\n    { \"label\": \"Secundario\", \"props\": { \"color\": \"success\", \"variant\": \"outlined\" } },\n    { \"label\": \"Peligro\",    \"props\": { \"color\": \"danger\",  \"variant\": \"filled\"   } }\n  ]'>\n</iswc-examples-carousel>"
         }
       ]
     },
@@ -52,12 +47,32 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Bloque UI", "Componente ISWC reusado", "Donde"],
+          "columns": [
+            "Bloque UI",
+            "Componente ISWC reusado",
+            "Donde"
+          ],
           "rows": [
-            ["Card del carrusel", "<iswc-card>", "Stage en `slot=\"media\"` (preview escalado), meta en `slot=\"body\"` (icon + label)."],
-            ["Boton prev/next", "<iswc-button>", "Prev usa `slot=\"start\"` con chevron-left; Next usa `slot=\"end\"` con chevron-right."],
-            ["Iconos (chevrons y meta)", "<iswc-icon>", "Chevron mdi:chevron-left/right en nav; icon por ejemplo en la card."],
-            ["Filtro por categoria (opcional)", "<iswc-tab-group> + <iswc-tab> + <iswc-tab-panel>", "Se renderiza solo si hay 2+ categorias declaradas en `examples`."]
+            [
+              "Card del carrusel",
+              "<iswc-card>",
+              "Stage en `slot=\"media\"` (preview escalado), meta en `slot=\"body\"` (icon + label)."
+            ],
+            [
+              "Boton prev/next",
+              "<iswc-button>",
+              "Prev usa `slot=\"start\"` con chevron-left; Next usa `slot=\"end\"` con chevron-right."
+            ],
+            [
+              "Iconos (chevrons y meta)",
+              "<iswc-icon>",
+              "Chevron mdi:chevron-left/right en nav; icon por ejemplo en la card."
+            ],
+            [
+              "Filtro por categoria (opcional)",
+              "<iswc-tab-group> + <iswc-tab> + <iswc-tab-panel>",
+              "Se renderiza solo si hay 2+ categorias declaradas en `examples`."
+            ]
           ]
         }
       ]
@@ -68,30 +83,89 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo", "Tipo", "Default", "Descripcion"],
+          "columns": [
+            "Atributo",
+            "Tipo",
+            "Default",
+            "Descripcion"
+          ],
           "rows": [
-            ["<code>tag</code>", "string", "—", "Tag del componente target (e.g. <code>iswc-button</code>). Required."],
-            ["<code>target</code>", "string", "—", "Selector CSS del host en la misma pagina al que aplicar los props. Si falta, solo se ve el carrusel."],
-            ["<code>label</code>", "string", "Ejemplos predefinidos", "Titulo del header."],
-            ["<code>lede</code>", "string", "—", "Subtitulo opcional del header."],
-            ["<code>default-index</code>", "number", "<code>-1</code>", "Indice del ejemplo a marcar como activo al inicio."],
-            ["<code>category-field</code>", "string", "<code>category</code>", "Nombre de la prop de <code>ExampleSpec</code> usada para agrupar y filtrar por tabs."]
+            [
+              "<code>tag</code>",
+              "string",
+              "—",
+              "Tag del componente target (e.g. <code>iswc-button</code>). Required."
+            ],
+            [
+              "<code>target</code>",
+              "string",
+              "—",
+              "Selector CSS del host en la misma pagina al que aplicar los props. Si falta, solo se ve el carrusel."
+            ],
+            [
+              "<code>label</code>",
+              "string",
+              "Ejemplos predefinidos",
+              "Titulo del header."
+            ],
+            [
+              "<code>lede</code>",
+              "string",
+              "—",
+              "Subtitulo opcional del header."
+            ],
+            [
+              "<code>default-index</code>",
+              "number",
+              "<code>-1</code>",
+              "Indice del ejemplo a marcar como activo al inicio."
+            ],
+            [
+              "<code>category-field</code>",
+              "string",
+              "<code>category</code>",
+              "Nombre de la prop de <code>ExampleSpec</code> usada para agrupar y filtrar por tabs."
+            ]
           ]
         },
         {
           "kind": "table",
-          "columns": ["Prop", "Tipo", "Descripcion"],
+          "columns": [
+            "Prop",
+            "Tipo",
+            "Descripcion"
+          ],
           "rows": [
-            ["<code>examples</code>", "<code>ExampleSpec[]</code>", "Lista de <code>{ label, props, text?, html?, icon?, swatch?, category? }</code>. Tambien se acepta el atributo HTML <code>examples</code> como JSON."],
-            ["<code>tag</code>, <code>target</code>, <code>label</code>, <code>lede</code>, <code>defaultIndex</code>, <code>categoryField</code>", "string/number", "Reflejan los atributos HTML."]
+            [
+              "<code>examples</code>",
+              "<code>ExampleSpec[]</code>",
+              "Lista de <code>{ label, props, text?, html?, icon?, swatch?, category? }</code>. Tambien se acepta el atributo HTML <code>examples</code> como JSON."
+            ],
+            [
+              "<code>tag</code>, <code>target</code>, <code>label</code>, <code>lede</code>, <code>defaultIndex</code>, <code>categoryField</code>",
+              "string/number",
+              "Reflejan los atributos HTML."
+            ]
           ]
         },
         {
           "kind": "table",
-          "columns": ["Evento", "Detalle", "Cuando"],
+          "columns": [
+            "Evento",
+            "Detalle",
+            "Cuando"
+          ],
           "rows": [
-            ["<code>iswc-examples-pick</code>", "<code>{ example, index, applied }</code>", "Click en una card. <code>applied=true</code> si se pudo aplicar al target."],
-            ["<code>iswc-examples-category</code>", "<code>{ category }</code>", "Cambio de tab de categoria. <code>category=\"\"</code> para Todos."]
+            [
+              "<code>iswc-examples-pick</code>",
+              "<code>{ example, index, applied }</code>",
+              "Click en una card. <code>applied=true</code> si se pudo aplicar al target."
+            ],
+            [
+              "<code>iswc-examples-category</code>",
+              "<code>{ category }</code>",
+              "Cambio de tab de categoria. <code>category=\"\"</code> para Todos."
+            ]
           ]
         }
       ]

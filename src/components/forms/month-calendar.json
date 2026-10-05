@@ -22,11 +22,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-month-calendar value=\"2026-08-12\"></iswc-month-calendar>",
-          "lang": "html"
         }
       ]
     },
@@ -34,8 +29,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-month-calendar&gt; — Rejilla de los 12 meses de un año (MUI MonthCalendar). Atributos: value (yyyy-mm), year, min, max (ISO), locale, columns, month-width (short|long), disabled, readonly Events: iswc-change  detail { value, year, month }",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

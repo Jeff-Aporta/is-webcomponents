@@ -35,11 +35,6 @@
           ]
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }

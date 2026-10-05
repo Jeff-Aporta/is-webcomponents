@@ -57,10 +57,6 @@
               "label": "case-sensitive"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-button id=\"del\" color=\"danger\">Eliminar</iswc-button>\n<iswc-confirm-delete for=\"del\" entity=\"tercero\"\n  pk-label=\"NIT\" confirm-value=\"900123456\"></iswc-confirm-delete>"
         }
       ]
     },
@@ -72,10 +68,6 @@
         {
           "kind": "demo",
           "html": "<iswc-button id=\"cdBtn2\" color=\"danger\" variant=\"outlined\">Eliminar plantilla</iswc-button>\r\n          <iswc-confirm-delete\r\n            for=\"cdBtn2\"\r\n            case-sensitive\r\n            entity=\"plantilla\"\r\n            pk-label=\"código\"\r\n            confirm-value=\"PLT-Alfa\"\r\n            message=\"Esta plantilla se usa en 12 documentos. No hay vuelta atrás.\"></iswc-confirm-delete>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-confirm-delete case-sensitive confirm-value=\"PLT-Alfa\"></iswc-confirm-delete>"
         }
       ]
     },

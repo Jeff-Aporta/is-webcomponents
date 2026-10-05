@@ -32,10 +32,6 @@
               "label": "without-scroll-buttons"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-scroller>\n  <iswc-button>Pills 1</iswc-button>\n  <iswc-button>Pills 2</iswc-button>\n  …\n</iswc-scroller>"
         }
       ]
     },

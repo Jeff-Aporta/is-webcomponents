@@ -67,10 +67,6 @@
         {
           "kind": "callout",
           "html": "<strong>Los dos labels son obligatorios.</strong>\r\n          El icono cambia pero el botón es el mismo nodo: sin\r\n          <code class=\"code\">label</code> y <code class=\"code\">checked-label</code>\r\n          un lector de pantalla anuncia lo mismo en ambos estados."
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-check-icon-button\n  icon=\"mdi:play\"\n  checked-icon=\"mdi:pause\"\n  label=\"Reproducir\"\n  checked-label=\"Pausar\"\n></iswc-check-icon-button>"
         }
       ]
     },
@@ -93,10 +89,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <span class=\"demo-label\">default · sobre superficie normal</span>\r\n            <div class=\"cluster\">\r\n              <iswc-check-icon-button icon=\"mdi:play\" checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\" checked-label=\"Pausar\"></iswc-check-icon-button>\r\n              <iswc-check-icon-button icon=\"mdi:volume-high\" checked-icon=\"mdi:volume-off\"\r\n                label=\"Silenciar\" checked-label=\"Activar sonido\"></iswc-check-icon-button>\r\n            </div>\r\n\r\n            <span class=\"demo-label\">appearance=\"plain\" · sobre chrome de vídeo</span>\r\n            <div class=\"player-bar\">\r\n              <iswc-check-icon-button variant=\"plain\" icon=\"mdi:play\" checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\" checked-label=\"Pausar\"></iswc-check-icon-button>\r\n              <span>0:42</span>\r\n              <span class=\"track\"><i></i></span>\r\n              <span>3:15</span>\r\n              <iswc-check-icon-button variant=\"plain\" icon=\"mdi:volume-high\" checked-icon=\"mdi:volume-off\"\r\n                label=\"Silenciar\" checked-label=\"Activar sonido\"></iswc-check-icon-button>\r\n              <iswc-check-icon-button variant=\"plain\" icon=\"mdi:fullscreen\" checked-icon=\"mdi:fullscreen-exit\"\r\n                label=\"Pantalla completa\" checked-label=\"Salir de pantalla completa\"></iswc-check-icon-button>\r\n            </div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-check-icon-button variant=\"plain\" icon=\"mdi:volume-high\" checked-icon=\"mdi:volume-off\"\n  label=\"Silenciar\" checked-label=\"Activar sonido\"></iswc-check-icon-button>"
         }
       ]
     },

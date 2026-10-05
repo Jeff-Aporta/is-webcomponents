@@ -51,10 +51,6 @@
         {
           "kind": "demo",
           "html": "<iswc-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></iswc-video>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-video\n  controls\n  playsinline\n  src=\"video.mp4\"\n></iswc-video>"
         }
       ]
     },

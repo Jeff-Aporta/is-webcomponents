@@ -28,11 +28,6 @@
               "label": "submit-label"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "form.fromJSON({\n  mode: 'edit',\n  body: [\n    ['h3', { slot: 'header' }, 'Curso'],\n    ['div', { slot: 'content', style: 'display:flex;flex-direction:column;gap:0.75rem;padding:0.5rem' },\n      ['iswc-input', { name: 'icurso', label: 'Código', required: true, 'full-width': true }],\n      ['iswc-input', { name: 'ncurso', label: 'Nombre', 'full-width': true }],\n      ['iswc-switch', { name: 'activo' }, 'Activo'],\n    ],\n  ],\n  values: { icurso: 'C001', ncurso: 'Nómina', activo: true },\n});\n\nform.html2json(); // solo el light DOM\nform.toJSON();    // chrome + body + values",
-          "lang": "js"
         }
       ]
     },

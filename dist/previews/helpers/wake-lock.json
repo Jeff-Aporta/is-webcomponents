@@ -17,11 +17,6 @@
           "html": "<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>"
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }

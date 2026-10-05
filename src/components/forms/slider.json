@@ -134,10 +134,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <div class=\"row\">\r\n              <iswc-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></iswc-icon>\r\n              <iswc-slider label=\"Volumen\" value=\"30\"></iswc-slider>\r\n              <iswc-icon name=\"tabler:volume\" aria-hidden=\"true\"></iswc-icon>\r\n            </div>\r\n            <iswc-slider label=\"Deshabilitado\" value=\"30\" disabled></iswc-slider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider label=\"Volumen\" value=\"30\"></iswc-slider>\n<iswc-slider value=\"30\" disabled></iswc-slider>"
         }
       ]
     },
@@ -149,10 +145,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-slider style=\"font-size:0.8em\" label=\"0.8em\" value=\"70\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"medium (default)\" value=\"50\" value-label=\"auto\"></iswc-slider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider style=\"font-size:0.8em\" value=\"70\" value-label=\"auto\"></iswc-slider>\n<iswc-slider value=\"50\" value-label=\"auto\"></iswc-slider>"
         }
       ]
     },
@@ -164,10 +156,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"Temperatura\" min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\" value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"></iswc-slider>\r\n            <iswc-slider min=\"10\" max=\"110\" step=\"10\" value=\"30\" marks disabled></iswc-slider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider\n  label=\"Temperatura\"\n  min=\"10\" max=\"110\" step=\"10\" shift-step=\"30\"\n  value=\"30\" marks value-label=\"auto\" format=\"{v}°C\"\n></iswc-slider>"
         }
       ]
     },
@@ -179,10 +167,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"Marks con etiqueta\" step=\"10\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"Valores restringidos (step null)\" step=\"null\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"Etiqueta siempre visible\" step=\"10\" value=\"80\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"on\"></iswc-slider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider step=\"null\" value=\"20\"\n  marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"\n  value-label=\"auto\"></iswc-slider>"
         }
       ]
     },
@@ -194,10 +178,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-slider id=\"rangeDemo\" label=\"Temperatura (rango)\" value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></iswc-slider>\r\n            <iswc-slider label=\"min-distance 10 · disable-swap\" value=\"20,37\" min-distance=\"10\" disable-swap value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider label=\"Tres thumbs\" value=\"10,40,80\" value-label=\"auto\"></iswc-slider>\r\n          </div>\r\n          <p class=\"lede\" id=\"rangeLog\">rango: <code class=\"code\">20 – 37</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider value=\"20,37\" value-label=\"auto\" format=\"{v}°C\"></iswc-slider>\n<iswc-slider value=\"20,37\" min-distance=\"10\" disable-swap></iswc-slider>"
         }
       ]
     },
@@ -209,10 +189,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"row\" style=\"max-width:28rem;\">\r\n            <iswc-icon name=\"tabler:volume-2\" aria-hidden=\"true\"></iswc-icon>\r\n            <iswc-slider id=\"linkedSlider\" label=\"Volumen\" value=\"30\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-input id=\"linkedInput\" type=\"number\" min=\"0\" max=\"100\" step=\"1\" value=\"30\" style=\"width:5.5rem;\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "slider.addEventListener('iswc-input', (e) => { input.value = e.detail.value; });\ninput.addEventListener('iswc-input', (e) => { slider.value = e.detail.value; });"
         }
       ]
     },
@@ -224,10 +200,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"brand (default)\" value=\"30\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"neutral\" label=\"neutral\" value=\"45\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"success\" label=\"success\" value=\"60\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"warning\" label=\"warning\" value=\"75\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider color=\"danger\" label=\"danger\" value=\"90\" value-label=\"auto\"></iswc-slider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider color=\"success\" value=\"60\"></iswc-slider>"
         }
       ]
     },
@@ -239,10 +211,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"verticals\">\r\n            <iswc-slider orientation=\"vertical\" value=\"30\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider orientation=\"vertical\" value=\"30\" disabled></iswc-slider>\r\n            <iswc-slider orientation=\"vertical\" step=\"10\" value=\"20\"\r\n              marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\" value-label=\"auto\"></iswc-slider>\r\n            <iswc-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></iswc-slider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider orientation=\"vertical\" value=\"20,37\" value-label=\"auto\"></iswc-slider>"
         }
       ]
     },
@@ -254,10 +222,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-slider label=\"normal\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"none\" track=\"none\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"none · rango\" track=\"none\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"inverted\" track=\"inverted\" value=\"30\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n            <iswc-slider label=\"inverted · rango\" track=\"inverted\" value=\"20,37\" marks=\"0:0°C, 20:20°C, 37:37°C, 100:100°C\"></iswc-slider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-slider track=\"inverted\" value=\"20,37\"></iswc-slider>"
         }
       ]
     },
@@ -269,10 +233,6 @@
         {
           "kind": "demo",
           "html": "<p id=\"scaleLabel\" class=\"lede\">Almacenamiento: <code class=\"code\">1 MB</code></p>\r\n          <iswc-slider id=\"scaleDemo\" min=\"5\" max=\"30\" step=\"1\" value=\"10\" value-label=\"auto\" style=\"max-width:28rem;\"></iswc-slider>"
-        },
-        {
-          "kind": "code",
-          "code": "const slider = document.querySelector('iswc-slider');\nslider.scale = (x) => 2 ** x;\nslider.valueLabelFormat = (bytes) => format(bytes); // 1 MB, 2 GB…"
         }
       ]
     },

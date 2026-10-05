@@ -161,11 +161,6 @@
           "kind": "demo",
           "html": "<div class=\"radial-stage radial-stage--corner\">\r\n            <iswc-speed-dial direction=\"radial\" icon=\"mdi:plus\" label=\"Crear\" open\r\n                           data-wrapper=\".radial-stage--corner\">\r\n              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:calendar\" label=\"Evento\"></iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
           "heading": "Contra la esquina: arco y ángulo automáticos"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-speed-dial direction=\"radial\" data-arc=\"180\" data-start-angle=\"-90\"\n               data-sweep=\"counter-clockwise\" data-wrapper=\".mi-lienzo\">\n  <iswc-speed-dial-action icon=\"mdi:brush\" label=\"Tema\"></iswc-speed-dial-action>\n</iswc-speed-dial>",
-          "lang": "html"
         }
       ]
     },

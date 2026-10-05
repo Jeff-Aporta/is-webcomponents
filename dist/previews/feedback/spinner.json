@@ -25,10 +25,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1.5rem\">\r\n            <iswc-spinner style=\"font-size:1rem\"></iswc-spinner>\r\n            <iswc-spinner style=\"font-size:2rem;--indicator-color:var(--iswc-color-success)\"></iswc-spinner>\r\n            <iswc-spinner style=\"font-size:2.5rem;--track-width:4px\"></iswc-spinner>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-spinner></iswc-spinner>\n<iswc-spinner style=\"font-size:2rem;--indicator-color:#40c057\"></iswc-spinner>"
         }
       ]
     },
@@ -40,11 +36,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"speed-demo\">\r\n            <div class=\"speed-demo__row\">\r\n              <iswc-spinner id=\"speedSpinner\" style=\"font-size:2.5rem;--track-width:4px\"></iswc-spinner>\r\n              <div class=\"speed-demo__control\">\r\n                <div class=\"speed-demo__meta\">\r\n                  <span>Velocidad</span>\r\n                  <strong><span id=\"speedPct\">40</span>% · <span id=\"speedSec\">1.05</span>s</strong>\r\n                </div>\r\n                <input id=\"speedRange\" type=\"range\" min=\"5\" max=\"100\" value=\"40\" step=\"1\"\r\n                  aria-label=\"Velocidad del spinner\" />\r\n              </div>\r\n            </div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-spinner style=\"--speed:1.05s\"></iswc-spinner>",
-          "lang": "html"
         }
       ]
     },

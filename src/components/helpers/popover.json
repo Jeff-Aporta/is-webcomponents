@@ -73,10 +73,6 @@
           "equivNote": "Base de overlays anclados: click o API; cierre Escape/fuera.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-popover: trigger\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"trigger=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"click → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"manual → open()\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"Escape / fuera / close\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"click\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"manual\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-button id=\"pop1\">Show popover</iswc-button>\n<iswc-popover for=\"pop1\">\n  …contenido…\n  <iswc-button data-popover=\"close\">Dismiss</iswc-button>\n</iswc-popover>"
         }
       ]
     },

@@ -24,11 +24,6 @@
           ]
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-barcode-scanner formats=\"qr_code,ean_13\"></iswc-barcode-scanner>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }

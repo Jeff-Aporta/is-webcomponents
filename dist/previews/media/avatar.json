@@ -111,10 +111,6 @@
           "kind": "demo",
           "html": "<div class=\"shape-grid\">\r\n            <span class=\"shape-grid__head\"></span>\r\n            <span class=\"shape-grid__head\">imagen</span>\r\n            <span class=\"shape-grid__head\">iniciales</span>\r\n            <span class=\"shape-grid__head\">icono</span>\r\n\r\n            <code class=\"code\">circle</code>\r\n            <iswc-avatar shape=\"circle\" image=\"https://i.pravatar.cc/120?u=21\" label=\"Ana\"></iswc-avatar>\r\n            <iswc-avatar shape=\"circle\" initials=\"AN\" label=\"Ana\"></iswc-avatar>\r\n            <iswc-avatar shape=\"circle\" label=\"Sin datos\"></iswc-avatar>\r\n\r\n            <code class=\"code\">square</code>\r\n            <iswc-avatar shape=\"square\" image=\"https://i.pravatar.cc/120?u=22\" label=\"Bea\"></iswc-avatar>\r\n            <iswc-avatar shape=\"square\" initials=\"BE\" label=\"Bea\"></iswc-avatar>\r\n            <iswc-avatar shape=\"square\" label=\"Sin datos\"></iswc-avatar>\r\n\r\n            <code class=\"code\">rounded</code>\r\n            <iswc-avatar shape=\"rounded\" image=\"https://i.pravatar.cc/120?u=23\" label=\"Caro\"></iswc-avatar>\r\n            <iswc-avatar shape=\"rounded\" initials=\"CA\" label=\"Caro\"></iswc-avatar>\r\n            <iswc-avatar shape=\"rounded\" label=\"Sin datos\"></iswc-avatar>\r\n          </div>",
           "heading": "Cada forma con los tres contenidos posibles"
-        },
-        {
-          "kind": "code",
-          "code": "<span style=\"font-size:3rem\">\n  <iswc-avatar initials=\"AB\" shape=\"rounded\"></iswc-avatar>\n</span>"
         }
       ]
     },

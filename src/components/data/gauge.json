@@ -91,10 +91,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>"
         }
       ]
     },

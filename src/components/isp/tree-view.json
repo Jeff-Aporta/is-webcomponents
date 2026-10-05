@@ -27,11 +27,6 @@
               "label": "label-field"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "// Equivalente: pasar `list` y `customs` por JSON al host.\n// El componente lee el <script type=\"application/json\"> como spec\n// y aplica la configuración al upgrade.\ntv.list = [...];\ntv.customs = new PlanCustoms();",
-          "lang": "js"
         }
       ]
     }

@@ -41,10 +41,6 @@
         {
           "kind": "demo",
           "html": "<div>\r\n            <span class=\"demo-label\">sheen</span>\r\n            <iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">pulse</span>\r\n            <iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">none</span>\r\n            <iswc-skeleton effect=\"none\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>\n<iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>"
         }
       ]
     },

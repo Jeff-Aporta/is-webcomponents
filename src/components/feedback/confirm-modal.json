@@ -26,10 +26,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-button id=\"btnDelete\">Eliminar cuenta</iswc-button>\n<iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-confirm-modal>"
         }
       ]
     },

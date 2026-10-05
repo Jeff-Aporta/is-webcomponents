@@ -17,11 +17,6 @@
           "html": "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }

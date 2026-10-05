@@ -41,11 +41,6 @@
           "equivNote": "checkbox vs acción; submenu abre popover anidado.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-dropdown-item: tipo\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"type=checkbox?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"toggle + aria-checked\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"slot submenu?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"popover anidado\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"ítem de acción\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-dropdown placement=\"bottom-start\">\n  <iswc-button slot=\"trigger\" color=\"brand\">Acciones</iswc-button>\n  <iswc-dropdown-item value=\"edit\"><iswc-icon slot=\"start\" icon=\"mdi:pencil\"></iswc-icon>Editar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"dup\"><iswc-icon slot=\"start\" icon=\"mdi:content-copy\"></iswc-icon>Duplicar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"del\" color=\"danger\"><iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>Eliminar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"off\" disabled>No disponible</iswc-dropdown-item>\n</iswc-dropdown>",
-          "lang": "html"
         }
       ]
     },
@@ -53,8 +48,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-dropdown-item&gt; — ítem de menú para iswc-dropdown. El submenú va en un popover (top layer) y se posiciona con computePosition: el menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría recortado y le abriría scroll horizontal. Attrs: value, type (normal|checkbox), checked, disabled, color (default|danger) Slots: default (label), icon, details, submenu Methods: openSubmenu(), closeSubmenu() Parts: checkmark, icon, label, details, submenu, submenu-icon",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

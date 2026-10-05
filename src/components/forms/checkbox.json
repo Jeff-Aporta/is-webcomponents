@@ -133,10 +133,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <iswc-checkbox checked>brand (default)</iswc-checkbox>\r\n            <iswc-checkbox color=\"neutral\" checked>neutral</iswc-checkbox>\r\n            <iswc-checkbox color=\"success\" checked>success</iswc-checkbox>\r\n            <iswc-checkbox color=\"warning\" checked>warning</iswc-checkbox>\r\n            <iswc-checkbox color=\"danger\" checked>danger</iswc-checkbox>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-checkbox color=\"success\" checked>success</iswc-checkbox>"
         }
       ]
     },
@@ -148,10 +144,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"placements\">\r\n            <iswc-checkbox checked>end (default)</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"start\" checked>start</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"top\" checked>top</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"bottom\" checked>bottom</iswc-checkbox>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-checkbox label-placement=\"start\" checked>start</iswc-checkbox>\n<iswc-checkbox label-placement=\"top\" checked>top</iswc-checkbox>"
         }
       ]
     },
@@ -169,10 +161,6 @@
           "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"r1\" value=\"lun\" checked>Lun</iswc-checkbox>\r\n            <iswc-checkbox name=\"r2\" value=\"mar\" checked>Mar</iswc-checkbox>\r\n            <iswc-checkbox name=\"r3\" value=\"mie\">Mié</iswc-checkbox>\r\n            <iswc-checkbox name=\"r4\" value=\"jue\">Jue</iswc-checkbox>\r\n            <iswc-checkbox name=\"r5\" value=\"vie\" checked>Vie</iswc-checkbox>\r\n          </div>"
         },
         {
-          "kind": "code",
-          "code": "<div style=\"display:flex;flex-direction:column;align-items:flex-start;gap:.7rem\">\n  <iswc-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</iswc-checkbox>\n  <iswc-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</iswc-checkbox>\n</div>"
-        },
-        {
           "kind": "html",
           "html": "<h3>Padre indeterminado</h3>"
         },
@@ -183,10 +171,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-checkbox id=\"parentBox\">Todos los permisos</iswc-checkbox>\r\n            <div class=\"stack\" style=\"padding-left:1.6rem\">\r\n              <iswc-checkbox class=\"childBox\" checked>Lectura</iswc-checkbox>\r\n              <iswc-checkbox class=\"childBox\">Escritura</iswc-checkbox>\r\n              <iswc-checkbox class=\"childBox\">Borrado</iswc-checkbox>\r\n            </div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "const all = children.every(c => c.checked);\nparent.checked = all;\nparent.indeterminate = !all && children.some(c => c.checked);"
         }
       ]
     },
@@ -198,10 +182,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <iswc-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>Favorito</iswc-checkbox>\r\n            <iswc-checkbox icon=\"mdi:bookmark-outline\" checked-icon=\"mdi:bookmark\">Guardar</iswc-checkbox>\r\n            <iswc-checkbox icon=\"mdi:star-outline\" checked-icon=\"mdi:star\" color=\"warning\" checked>Destacar</iswc-checkbox>\r\n            <iswc-checkbox checked-icon=\"mdi:check-bold\" indeterminate-icon=\"mdi:dots-horizontal\" indeterminate>Con caja</iswc-checkbox>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>\n  Favorito\n</iswc-checkbox>"
         }
       ]
     },
@@ -213,10 +193,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"ro1\" checked readonly>Solo lectura (marcada)</iswc-checkbox>\r\n            <iswc-checkbox name=\"ro2\" readonly>Solo lectura (sin marcar)</iswc-checkbox>\r\n            <iswc-checkbox name=\"di1\" checked disabled>Deshabilitada</iswc-checkbox>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-checkbox name=\"ro1\" checked readonly>Solo lectura</iswc-checkbox>"
         }
       ]
     },
@@ -228,10 +204,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-checkbox hint=\"Puedes cambiarlo más tarde en Ajustes.\">Recibir novedades</iswc-checkbox>\r\n            <iswc-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>Acepto los términos</iswc-checkbox>\r\n            <iswc-checkbox error checked>\r\n              Consentimiento revocado\r\n              <span slot=\"hint\">El texto de ayuda también admite un <b>slot</b>.</span>\r\n            </iswc-checkbox>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>\n  Acepto los términos\n</iswc-checkbox>"
         }
       ]
     },
@@ -247,10 +219,6 @@
         {
           "kind": "html",
           "html": "<div class=\"log\" id=\"formLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Envía el formulario para ver el FormData.</div></div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-checkbox name=\"terminos\" value=\"si\" required>\n  Acepto los términos\n</iswc-checkbox>"
         }
       ]
     },
@@ -262,10 +230,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <span style=\"font-size:.8rem\"><iswc-checkbox checked>0.8rem</iswc-checkbox></span>\r\n            <span style=\"font-size:1rem\"><iswc-checkbox checked>1rem</iswc-checkbox></span>\r\n            <span style=\"font-size:1.35rem\"><iswc-checkbox checked>1.35rem</iswc-checkbox></span>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<span style=\"font-size:1.35rem\"><iswc-checkbox checked>Grande</iswc-checkbox></span>"
         }
       ]
     },

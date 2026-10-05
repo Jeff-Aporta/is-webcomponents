@@ -22,10 +22,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwDefault\" label=\"Drawer estándar\">\r\n          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" variant=\"outlined\">Cancelar</iswc-button>\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Aceptar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-drawer=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-drawer>"
         }
       ]
     },
@@ -56,10 +52,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwWide\" label=\"50%\" size=\"50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer size=\"50%\">…</iswc-drawer>"
         }
       ]
     },
@@ -75,10 +67,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header!</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Cerrar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer without-header>…</iswc-drawer>"
         }
       ]
     },
@@ -94,10 +82,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del drawer para cerrarlo.</p>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer light-dismiss>…</iswc-drawer>"
         }
       ]
     },
@@ -113,10 +97,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" size=\"280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer placement=\"start\" label=\"Menú\" size=\"280px\">\n  <nav>…</nav>\n</iswc-drawer>"
         }
       ]
     },

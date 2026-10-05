@@ -65,10 +65,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">\r\n            <iswc-badge color=\"brand\" variant=\"accent\">accent</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled\">filled</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"outlined\">outlined</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</iswc-badge>\r\n            <iswc-badge color=\"danger\" pill attention=\"bounce\">pill bounce</iswc-badge>\r\n          </div>\r\n          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-badge color=\"neutral\" variant=\"filled\">neutral</iswc-badge>\r\n            <iswc-badge color=\"success\" variant=\"filled\">success</iswc-badge>\r\n            <iswc-badge color=\"warning\" variant=\"outlined\">warning</iswc-badge>\r\n            <iswc-badge color=\"danger\" variant=\"accent\">danger</iswc-badge>\r\n            <iswc-badge attention=\"pulse\">pulse</iswc-badge>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-badge color=\"success\" variant=\"filled\">OK</iswc-badge>\n<iswc-badge pill attention=\"pulse\">Live</iswc-badge>"
         }
       ]
     },

@@ -20,11 +20,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">resize: both · overflow: auto</span>\n          <iswc-resize-observer id=\"ro\">\n            <div id=\"roBox\" class=\"ro-box\">\n              Arrastra la esquina ↘ para redimensionar.\n            </div>\n          </iswc-resize-observer>\n          <div class=\"ro-meta\">\n            <span>Tamaño: <span class=\"ro-size\" id=\"roSize\">— × —</span></span>\n            <span class=\"ro-status\" id=\"roStatus\">activo</span>\n          </div>\n          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Los eventos <code class=\"code\">iswc-resize</code> aparecen aquí.</div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-resize-observer>\n  <div style=\"resize:both; overflow:auto\">…</div>\n</iswc-resize-observer>\n\nel.addEventListener('iswc-resize', (e) => {\n  const entry = e.detail.entries[0];\n  console.log(entry.contentRect.width, entry.contentRect.height);\n});",
-          "lang": "html"
         }
       ]
     },
@@ -37,11 +32,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"ro-actions\">\n            <iswc-button id=\"roToggle\" color=\"neutral\" variant=\"outlined\" type=\"button\">Desactivar observer</iswc-button>\n            <span class=\"ro-status\" id=\"ro2Status\">activo</span>\n          </div>\n          <iswc-resize-observer id=\"ro2\">\n            <div id=\"roBox2\" class=\"ro-box\" style=\"width:180px;height:100px\">\n              Panel secundario — redimensiona con el observer ON/OFF.\n            </div>\n          </iswc-resize-observer>\n          <div class=\"ro-meta\">\n            <span>Tamaño: <span class=\"ro-size\" id=\"roSize2\">— × —</span></span>\n          </div>\n          <div class=\"log\" id=\"roLog2\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Solo registra mientras el observer esté activo.</div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-resize-observer disabled>…</iswc-resize-observer>\n// o en runtime:\nel.toggleAttribute('disabled');",
-          "lang": "html"
         }
       ]
     },

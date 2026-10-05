@@ -29,10 +29,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-card>Hola mundo</iswc-card>"
         }
       ]
     },
@@ -128,10 +124,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">cambia propiedades</span>\r\n          <iswc-card id=\"apiCard\" variant=\"outlined\">\r\n            <strong id=\"apiLabel\">Hola</strong>\r\n            <p class=\"card-meta\">Cambia appearance / orientation desde los botones.</p>\r\n          </iswc-card>\r\n          <div class=\"demo-row\" style=\"margin-top: 12px; flex-wrap: wrap;\">\r\n            <iswc-button id=\"apiOutlined\"  color=\"neutral\" variant=\"outlined\">outlined</iswc-button>\r\n            <iswc-button id=\"apiFilled\"    color=\"neutral\" variant=\"outlined\">filled</iswc-button>\r\n            <iswc-button id=\"apiFilledOut\"  color=\"neutral\" variant=\"outlined\">filled-outlined</iswc-button>\r\n            <iswc-button id=\"apiAccent\"     color=\"neutral\" variant=\"outlined\">accent</iswc-button>\r\n            <iswc-button id=\"apiPlain\"      color=\"neutral\" variant=\"outlined\">plain</iswc-button>\r\n            <iswc-button id=\"apiOrient\"     color=\"brand\" variant=\"outlined\">toggle orientation</iswc-button>\r\n          </div>\r\n          <div class=\"log\" id=\"apiLog\" aria-live=\"polite\" style=\"margin-top: 12px;\">\r\n            <div class=\"row hint\">El log aparece al cambiar appearance u orientation.</div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "const c = document.querySelector('iswc-card');\nc.variant = 'filled';\nc.orientation = 'horizontal';\nc.addEventListener('slotchange', e => this.log(e));"
         }
       ]
     },

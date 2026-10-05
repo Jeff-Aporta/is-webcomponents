@@ -121,10 +121,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <iswc-switch checked>brand (default)</iswc-switch>\r\n            <iswc-switch color=\"neutral\" checked>neutral</iswc-switch>\r\n            <iswc-switch color=\"success\" checked>success</iswc-switch>\r\n            <iswc-switch color=\"warning\" checked>warning</iswc-switch>\r\n            <iswc-switch color=\"danger\" checked>danger</iswc-switch>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-switch color=\"success\" checked>success</iswc-switch>"
         }
       ]
     },
@@ -144,10 +140,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"settings\">\r\n            <iswc-switch label-placement=\"start\" checked>Modo compacto</iswc-switch>\r\n            <iswc-switch label-placement=\"start\">Sonidos de la interfaz</iswc-switch>\r\n            <iswc-switch label-placement=\"start\" checked>Guardado automático</iswc-switch>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": ".settings { display: flex; flex-direction: column; }\n.settings iswc-switch::part(base) { justify-content: space-between; }"
         }
       ]
     },
@@ -159,10 +151,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <iswc-switch icon=\"mdi:weather-night\" checked-icon=\"mdi:white-balance-sunny\" color=\"warning\" checked>Tema claro</iswc-switch>\r\n            <iswc-switch icon=\"mdi:close\" checked-icon=\"mdi:check\" color=\"success\">Sincronizar</iswc-switch>\r\n            <iswc-switch checked-icon=\"mdi:lock\" checked>Bloquear pantalla</iswc-switch>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-switch icon=\"mdi:weather-night\" checked-icon=\"mdi:white-balance-sunny\"\n  color=\"warning\" checked>Tema claro</iswc-switch>"
         }
       ]
     },
@@ -174,10 +162,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <iswc-switch on-label=\"ON\" off-label=\"OFF\" checked>Encendido</iswc-switch>\r\n            <iswc-switch on-label=\"SÍ\" off-label=\"NO\" color=\"success\">Confirmación</iswc-switch>\r\n            <iswc-switch on-label=\"24h\" off-label=\"12h\" checked>Formato de hora</iswc-switch>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-switch on-label=\"ON\" off-label=\"OFF\" checked>Encendido</iswc-switch>"
         }
       ]
     },
@@ -189,10 +173,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-switch name=\"ro1\" checked readonly>Solo lectura (encendido)</iswc-switch>\r\n            <iswc-switch name=\"ro2\" readonly>Solo lectura (apagado)</iswc-switch>\r\n            <iswc-switch name=\"di1\" checked disabled>Deshabilitado</iswc-switch>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-switch name=\"ro1\" checked readonly>Solo lectura</iswc-switch>"
         }
       ]
     },
@@ -204,10 +184,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-switch hint=\"Se aplica de inmediato, sin guardar.\" checked>Sincronización en la nube</iswc-switch>\r\n            <iswc-switch error hint=\"Actívalo para poder facturar electrónicamente.\" required>Firma electrónica</iswc-switch>\r\n            <iswc-switch error checked>\r\n              Modo mantenimiento\r\n              <span slot=\"hint\">El texto de ayuda también admite un <b>slot</b>.</span>\r\n            </iswc-switch>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-switch error hint=\"Actívalo para poder facturar electrónicamente.\" required>\n  Firma electrónica\n</iswc-switch>"
         }
       ]
     },
@@ -223,10 +199,6 @@
         {
           "kind": "html",
           "html": "<div class=\"log\" id=\"formLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Envía el formulario para ver el FormData.</div></div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-switch name=\"boletin\" value=\"semanal\" checked>Boletín semanal</iswc-switch>"
         }
       ]
     },
@@ -238,10 +210,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"inline\">\r\n            <span style=\"font-size:.8rem\"><iswc-switch checked>0.8rem</iswc-switch></span>\r\n            <span style=\"font-size:1rem\"><iswc-switch checked>1rem</iswc-switch></span>\r\n            <span style=\"font-size:1.35rem\"><iswc-switch checked>1.35rem</iswc-switch></span>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<span style=\"font-size:1.35rem\"><iswc-switch checked>Grande</iswc-switch></span>"
         }
       ]
     },

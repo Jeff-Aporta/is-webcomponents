@@ -121,10 +121,6 @@
         {
           "kind": "html",
           "html": "<p class=\"lede\" id=\"log\">value: <code class=\"code\">3</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating label=\"Satisfacción\" value=\"3\" name=\"rating\"></iswc-rating>"
         }
       ]
     },
@@ -136,10 +132,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"Por defecto (max 5)\" value=\"2\"></iswc-rating>\r\n            <iswc-rating label=\"10 iconos\" max=\"10\" value=\"7\"></iswc-rating>\r\n            <iswc-rating label=\"Contexto grande\" value=\"3\" style=\"font-size:1.5rem;\"></iswc-rating>\r\n            <iswc-rating label=\"Deshabilitado\" value=\"2\" disabled></iswc-rating>\r\n            <iswc-rating label=\"Obligatorio\" required></iswc-rating>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating label=\"10 iconos\" max=\"10\" value=\"7\"></iswc-rating>\n<iswc-rating value=\"3\" style=\"font-size:1.5rem\"></iswc-rating>"
         }
       ]
     },
@@ -151,10 +143,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"precision 1 (default)\" value=\"3\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"precision 0.5\" precision=\"0.5\" value=\"3.5\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"precision 0.25\" precision=\"0.25\" value=\"2.75\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"precision 0.1\" precision=\"0.1\" value=\"4.3\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"allow-half (compat)\" allow-half value=\"2.5\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating precision=\"0.25\" value=\"2.75\"></iswc-rating>\n<iswc-rating allow-half value=\"2.5\"></iswc-rating>   <!-- = precision=\"0.5\" -->"
         }
       ]
     },
@@ -166,10 +154,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"Corazones\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Pulgares\" icon=\"tabler:thumb-up-filled\" empty-icon=\"tabler:thumb-up\" max=\"3\" value=\"2\"></iswc-rating>\r\n            <iswc-rating label=\"Rayos (mismo icono en hueco)\" icon=\"tabler:bolt-filled\" value=\"2\"></iswc-rating>\r\n            <iswc-rating label=\"Círculos · precision 0.5\" icon=\"tabler:circle-filled\" empty-icon=\"tabler:circle\" precision=\"0.5\" value=\"3.5\"></iswc-rating>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></iswc-rating>"
         }
       ]
     },
@@ -181,10 +165,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-rating\r\n              id=\"faces\"\r\n              label=\"¿Cómo fue tu experiencia?\"\r\n              highlight-selected-only\r\n              max=\"5\"\r\n              value=\"2\"\r\n              show-label></iswc-rating>\r\n            <iswc-rating label=\"Normal (acumulativo)\" value=\"2\" show-label></iswc-rating>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating highlight-selected-only value=\"2\" show-label></iswc-rating>\n\nrating.labels = ['Muy malo', 'Malo', 'Normal', 'Bueno', 'Excelente'];"
         }
       ]
     },
@@ -196,10 +176,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-rating id=\"labelled\" label=\"labels (array)\" value=\"4\" show-label></iswc-rating>\r\n            <iswc-rating label=\"label-format\" value=\"3\" show-label label-format=\"{v} de {max} estrellas\"></iswc-rating>\r\n            <iswc-rating id=\"fn\" label=\"getLabelText (función)\" precision=\"0.5\" value=\"3.5\" show-label></iswc-rating>\r\n          </div>\r\n          <p class=\"lede\" id=\"hoverLog\">hover: <code class=\"code\">—</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "rating.labels = ['Pésimo', 'Malo', 'Normal', 'Bueno', 'Excelente'];\nrating.getLabelText = (v) => `${v} punto${v === 1 ? '' : 's'}`;\n\nrating.addEventListener('iswc-hover', (e) => {\n  console.log(e.detail.phantomValue, e.detail.label);\n});"
         }
       ]
     },
@@ -211,10 +187,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"brand (default)\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"neutral\" label=\"neutral\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"success\" label=\"success\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"warning\" label=\"warning\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"danger\" label=\"danger\" value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Token propio\" value=\"3\" style=\"--iswc-rating-color:#845ef7;\"></iswc-rating>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating color=\"success\" value=\"3\"></iswc-rating>\n<iswc-rating style=\"--iswc-rating-color:#845ef7\" value=\"3\"></iswc-rating>"
         }
       ]
     },
@@ -226,10 +198,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <div class=\"row\">\r\n              <iswc-rating readonly value=\"3.7\" label=\"Media de 128 opiniones\"></iswc-rating>\r\n            </div>\r\n            <iswc-rating readonly value=\"4.28\" label=\"4,28 · sin precision\"></iswc-rating>\r\n            <iswc-rating readonly value=\"2.1\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" label=\"Fracción con icono propio\"></iswc-rating>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating readonly value=\"3.7\"></iswc-rating>"
         }
       ]
     },
@@ -241,10 +209,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-rating id=\"clearDemo\" label=\"clearable\" clearable value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Sin clearable\" value=\"3\"></iswc-rating>\r\n          </div>\r\n          <p class=\"lede\" id=\"clearLog\">value: <code class=\"code\">3</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-rating clearable value=\"3\"></iswc-rating>\n\nrating.clear();   // también por API"
         }
       ]
     },

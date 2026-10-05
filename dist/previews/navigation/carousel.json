@@ -62,10 +62,6 @@
           "equivNote": "autoplay y flags de chrome (controls/indicators).",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-carousel: autoplay\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"autoplay?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"timer (+ pause hover)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"solo manual\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"without-controls?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"sin flechas\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-carousel loop>\n  <iswc-carousel-item>Slide 1</iswc-carousel-item>\n  <iswc-carousel-item>Slide 2</iswc-carousel-item>\n  …\n</iswc-carousel>"
         }
       ]
     },

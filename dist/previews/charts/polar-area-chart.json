@@ -60,11 +60,6 @@
         {
           "kind": "demo",
           "html": "<iswc-polar-area-chart open-on-click label=\"Canales de tráfico\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\r\n                  \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-polar-area-chart label=\"Canales de tráfico\">\n  <script type=\"application/json\">\n    {\n      \"data\": {\n        \"labels\": [\"Orgánico\", \"Directo\", \"Social\", \"Email\", \"Paid\"],\n        \"datasets\": [{ \"label\": \"Sesiones\", \"data\": [4200, 3100, 1800, 950, 2400] }]\n      }\n    }\n  </script>\n</iswc-polar-area-chart>",
-          "lang": "html"
         }
       ]
     },
@@ -96,11 +91,6 @@
         {
           "kind": "demo",
           "html": "<iswc-polar-area-chart open-on-click label=\"Sin animación\" without-animation>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Q1\", \"Q2\", \"Q3\", \"Q4\"],\r\n                  \"datasets\": [{ \"label\": \"Score\", \"data\": [78, 82, 75, 90] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-polar-area-chart legend-position=\"end\" label=\"NPS\">…</iswc-polar-area-chart>\n<iswc-polar-area-chart without-legend>…</iswc-polar-area-chart>\n<iswc-polar-area-chart without-animation>…</iswc-polar-area-chart>",
-          "lang": "html"
         }
       ]
     },
@@ -112,11 +102,6 @@
         {
           "kind": "demo",
           "html": "<iswc-polar-area-chart open-on-click class=\"polar-theme-demo\" label=\"Paleta custom\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Alpha\", \"Beta\", \"Gamma\", \"Delta\", \"Epsilon\"],\r\n                  \"datasets\": [{ \"label\": \"Índice\", \"data\": [65, 88, 42, 70, 55] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-polar-area-chart>"
-        },
-        {
-          "kind": "code",
-          "code": "iswc-polar-area-chart.mi-tema {\n  --fill-color-1: color-mix(in srgb, #38bdf8 72%, transparent);\n  --fill-color-2: color-mix(in srgb, #a78bfa 72%, transparent);\n  --border-color-1: #38bdf8;\n  --border-color-2: #a78bfa;\n}",
-          "lang": "css"
         }
       ]
     },

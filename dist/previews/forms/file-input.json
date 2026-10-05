@@ -59,10 +59,6 @@
         {
           "kind": "demo",
           "html": "<iswc-file-input label=\"Avatar\" accept=\"image/*\" required hint=\"Obligatorio\"></iswc-file-input>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-file-input\n  label=\"Adjuntos\"\n  accept=\"image/*,.pdf\"\n  multiple\n  name=\"attachments\"\n></iswc-file-input>"
         }
       ]
     },

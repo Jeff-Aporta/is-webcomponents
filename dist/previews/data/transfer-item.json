@@ -15,11 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-transfer>\r\n            <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>\r\n          </iswc-transfer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-transfer>\n  <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>\n</iswc-transfer>",
-          "lang": "html"
         }
       ]
     },
@@ -27,8 +22,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-transfer&gt; — Doble lista de selección (vanilla, zero dependencies). Mueve elementos entre una lista de origen y una lista de destino. &lt;iswc-transfer id=\"t1\"&gt; &lt;iswc-transfer-item value=\"a\"&gt;Alpha&lt;/iswc-transfer-item&gt; &lt;iswc-transfer-item value=\"b\" selected&gt;Beta&lt;/iswc-transfer-item&gt; &lt;/iswc-transfer&gt; Atributos &lt;iswc-transfer&gt; source-title       string target-title       string searchable         boolean without-buttons    boolean  — sin botones prev/next without-headings   boolean max-target         number   — máximo de items en target. Atributos &lt;iswc-transfer-item&gt; value        string disabled     boolean Slots &lt;iswc-transfer-item&gt; (default)   label. Eventos iswc-transfer-change  detail: { item, source, target, values }",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

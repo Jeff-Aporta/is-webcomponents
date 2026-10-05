@@ -135,10 +135,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"outlined (default)\" rows=\"2\" placeholder=\"Caja con borde completo\"></iswc-textarea>\r\n            <iswc-textarea variant=\"filled\" label=\"filled\" rows=\"2\" placeholder=\"Superficie + línea inferior\"></iswc-textarea>\r\n            <iswc-textarea variant=\"underlined\" label=\"underlined\" rows=\"2\" placeholder=\"Solo línea inferior\"></iswc-textarea>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-textarea variant=\"filled\" label=\"filled\" rows=\"2\"></iswc-textarea>"
         }
       ]
     },
@@ -150,10 +146,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-textarea autosize min-rows=\"2\" label=\"min-rows 2 · sin techo\" placeholder=\"Escribe varias líneas y mira cómo crece…\"></iswc-textarea>\r\n            <iswc-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"min-rows 3 · max-rows 6\"\r\n              hint=\"A partir de 6 líneas hace scroll\"\r\n              value=\"Uno&#10;Dos&#10;Tres&#10;Cuatro\"></iswc-textarea>\r\n            <iswc-textarea resize=\"auto\" min-rows=\"1\" max-rows=\"4\" label='resize=\"auto\" (alias de autosize)' placeholder=\"Empieza en una línea\"></iswc-textarea>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-textarea autosize min-rows=\"3\" max-rows=\"6\" label=\"Comentario\"></iswc-textarea>\n\n<!-- equivalente -->\n<iswc-textarea resize=\"auto\" min-rows=\"3\" max-rows=\"6\"></iswc-textarea>"
         }
       ]
     },
@@ -165,10 +157,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"none\" resize=\"none\" rows=\"3\" value=\"El usuario no puede redimensionar.\"></iswc-textarea>\r\n            <iswc-textarea label=\"vertical (default)\" rows=\"3\" placeholder=\"Arrastra el borde inferior\"></iswc-textarea>\r\n            <iswc-textarea label=\"both\" resize=\"both\" rows=\"3\" placeholder=\"Arrastra la esquina\"></iswc-textarea>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-textarea resize=\"none\" rows=\"3\"></iswc-textarea>\n<iswc-textarea resize=\"both\" rows=\"3\"></iswc-textarea>"
         }
       ]
     },
@@ -180,10 +168,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\" hint=\"Cuenta tu experiencia\" value=\"Muy buena atención.\"></iswc-textarea>\r\n            <iswc-textarea label=\"Sin límite\" show-count rows=\"2\" placeholder=\"Escribe algo…\"></iswc-textarea>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-textarea label=\"Reseña\" maxlength=\"120\" show-count rows=\"3\"></iswc-textarea>"
         }
       ]
     },
@@ -195,10 +179,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-textarea label=\"Error forzado\" error error-text=\"El comentario contiene términos no permitidos\"\r\n              rows=\"2\" value=\"Texto rechazado por el backend\"></iswc-textarea>\r\n            <iswc-textarea label=\"Error sin error-text\" error hint=\"El hint se pinta en rojo\" rows=\"2\"></iswc-textarea>\r\n            <iswc-textarea id=\"autoErr\" label=\"Obligatorio (sal del campo)\" required rows=\"2\"\r\n              hint=\"Se valida al perder el foco\" error-text=\"Este comentario es obligatorio\"></iswc-textarea>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-textarea error error-text=\"El comentario contiene términos no permitidos\"></iswc-textarea>\n\ntextarea.reportValidity();   // marca el campo como tocado y pinta el error"
         }
       ]
     },
@@ -210,10 +190,6 @@
         {
           "kind": "demo",
           "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:18rem;\">\r\n            <iswc-textarea label=\"--iswc-field-width: 18rem\" rows=\"2\" placeholder=\"Heredado del contenedor\"></iswc-textarea>\r\n            <iswc-textarea label=\"full-width\" full-width rows=\"2\" placeholder=\"Ignora el token\"></iswc-textarea>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<div style=\"--iswc-field-width: 18rem\">\n  <iswc-textarea label=\"Estrecho\" rows=\"2\"></iswc-textarea>\n  <iswc-textarea label=\"Ancho completo\" full-width rows=\"2\"></iswc-textarea>\n</div>"
         }
       ]
     },
@@ -225,10 +201,6 @@
         {
           "kind": "demo",
           "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <iswc-textarea label-placement=\"start\" label=\"Asunto\" full-width rows=\"1\"></iswc-textarea>\r\n            <iswc-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\" max-rows=\"8\"\r\n              hint=\"Crece con el texto\" show-count maxlength=\"500\"></iswc-textarea>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <iswc-textarea label-placement=\"start\" label=\"Mensaje\" full-width autosize min-rows=\"3\"></iswc-textarea>\n</div>"
         }
       ]
     },

@@ -60,10 +60,6 @@
         {
           "kind": "demo",
           "html": "<iswc-color-picker\r\n            label=\"Paleta corta\"\r\n            swatches=\"#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529\"\r\n            value=\"#2f9e44\"\r\n            style=\"min-width:13rem\"\r\n          ></iswc-color-picker>\r\n          <iswc-color-picker label=\"Deshabilitado\" value=\"#c2255c\" disabled style=\"min-width:13rem\"></iswc-color-picker>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-color-picker\n  label=\"Color de marca\"\n  name=\"brand\"\n  value=\"#1971c2\"\n  swatches=\"#e03131,#f59f00,#2f9e44\"\n></iswc-color-picker>"
         }
       ]
     },

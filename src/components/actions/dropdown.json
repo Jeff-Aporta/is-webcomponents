@@ -64,10 +64,6 @@
               "label": "checked"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-dropdown>\n  <iswc-button slot=\"trigger\" with-caret>Options</iswc-button>\n  <iswc-dropdown-item value=\"edit\">Edit</iswc-dropdown-item>\n  <iswc-divider></iswc-divider>\n  <iswc-dropdown-item value=\"delete\" color=\"danger\">Delete</iswc-dropdown-item>\n</iswc-dropdown>"
         }
       ]
     },

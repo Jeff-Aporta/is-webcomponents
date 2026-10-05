@@ -55,10 +55,6 @@
         {
           "kind": "demo",
           "html": "<iswc-combobox label=\"País\" value=\"co\" required style=\"max-width:20rem\">\r\n            <option value=\"co\">Colombia</option>\r\n            <option value=\"mx\">México</option>\r\n            <option value=\"es\">España</option>\r\n          </iswc-combobox>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-combobox label=\"Ciudad\" clearable>\n  <iswc-option value=\"bog\">Bogotá</iswc-option>\n  <iswc-option value=\"med\">Medellín</iswc-option>\n</iswc-combobox>"
         }
       ]
     },

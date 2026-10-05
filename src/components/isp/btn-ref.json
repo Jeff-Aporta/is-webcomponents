@@ -37,11 +37,6 @@
               "label": "multi"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "import { createBtnRefController } from './isp/controller-from-config.min.js';\n\nel.controller = createBtnRefController({\n  entrie: 'Aplicación',\n  primaryKeys: ['app'],\n  ColumnsBtnRef: ['app'],\n  columns: [{ field: 'app', header: 'Aplicación' }],\n  mock: [{ app: 'ContaPyme' }, { app: 'AgroWin' }],\n});",
-          "lang": "js"
         }
       ]
     },
@@ -53,11 +48,6 @@
         {
           "kind": "demo",
           "html": "<iswc-btn-ref id=\"btnRefMulti\" label=\"Aplicaciones\" multi style=\"width: 22rem;\"></iswc-btn-ref>\n          <p id=\"btnRefMultiLog\">Seleccionado: <code class=\"code\">—</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-btn-ref label=\"Apps\" multi></iswc-btn-ref>\n\ncreateBtnRefController({ …, multiSelect: true, mock: […] });",
-          "lang": "html"
         }
       ]
     }

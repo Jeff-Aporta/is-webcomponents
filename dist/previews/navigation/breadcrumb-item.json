@@ -14,11 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-breadcrumb>\r\n            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"},
-        {
-          "kind": "code",
-          "code": "<iswc-breadcrumb>\n  <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\n</iswc-breadcrumb>",
-          "lang": "html"
+          "html": "<iswc-breadcrumb>\r\n            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"
         }
       ]
     },
@@ -37,8 +33,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-breadcrumb-item&gt; — un paso individual dentro de un &lt;iswc-breadcrumb&gt;. Si tiene `href` (incluido `href=\"\"`), el item se renderiza como &lt;a href&gt;. Con `href=\"\"` se marca como current page (aria-current=\"page\", CSS [current]). Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos). Atributos href    string  — opcional: el item se vuelve enlace. \"\" = current page. target  string  — opcional. rel     string  — opcional. icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start. Slots (default)  texto del item. start      icono propio al inicio (gana sobre icon). end        icono propio al final. separator  override del separador (chevron-right por default). CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

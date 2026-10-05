@@ -37,10 +37,6 @@
               "label": "hide-arrow"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-button id=\"btnDelete\">Borrar</iswc-button>\n<iswc-popconfirm for=\"btnDelete\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, borrar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-popconfirm>"
         }
       ]
     },

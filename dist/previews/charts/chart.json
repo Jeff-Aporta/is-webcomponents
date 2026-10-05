@@ -232,10 +232,6 @@
           "html": "<iswc-chart open-on-click id=\"jsChart\" type=\"line\" without-legend></iswc-chart>"
         },
         {
-          "kind": "code",
-          "code": "const el = document.querySelector('#jsChart');\nel.config = {\n  data: {\n    labels: ['Q1', 'Q2', 'Q3', 'Q4'],\n    datasets: [{ label: 'Ventas', data: [420, 580, 630, 710], tension: 0.4, fill: true }]\n  }\n};"
-        },
-        {
           "kind": "html",
           "html": "<h3>Propiedades del elemento</h3>"
         },

@@ -30,11 +30,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"ui-stage\" id=\"htmlStage\"></div>"
-        },
-        {
-          "kind": "code",
-          "code": "const { html } = IswcUi;\nhost.append(html`\n  <iswc-button color=\"brand\" onclick=${() => IswcUi.toast?.() || console.log('ok')}>\n    Guardar\n  </iswc-button>\n`);",
-          "lang": "javascript"
         }
       ]
     },
@@ -47,11 +42,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">// demo-card registrado en esta página</span>\r\n          <div class=\"ui-stage\">\r\n            <demo-card data-tone=\"brand\">\r\n              <strong>app-*</strong> traduce datos → <code>is-*</code>\r\n            </demo-card>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "import { html, adoptCss, define } from '…/helpers/ui.min.js';\n\nclass AppPanel extends HTMLElement {\n  #root = this.attachShadow({ mode: 'open' });\n  connectedCallback() {\n    this.#root.append(html`<iswc-button color=\"brand\">Acción</iswc-button>`);\n    adoptCss(this.#root, import.meta.url); // → AppPanel.css hermano\n  }\n}\ndefine('app-panel', AppPanel);",
-          "lang": "javascript"
         }
       ]
     },

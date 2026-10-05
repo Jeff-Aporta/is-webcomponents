@@ -22,11 +22,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></iswc-time-field>",
-          "lang": "html"
         }
       ]
     },
@@ -34,8 +29,7 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-time-field&gt; — Campo de hora editable por secciones (MUI TimeField). Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, invalid Slots: start, end Events: iswc-change, iswc-input",
-      "blocks": [
-      ]
+      "blocks": []
     }
   ],
   "ficha": {

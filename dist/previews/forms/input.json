@@ -67,10 +67,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"outlined (default)\" placeholder=\"Caja con borde completo\"></iswc-input>\r\n            <iswc-input variant=\"filled\" label=\"filled\" placeholder=\"Superficie + línea inferior\"></iswc-input>\r\n            <iswc-input variant=\"underlined\" label=\"underlined\" placeholder=\"Solo línea inferior\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input label=\"outlined (default)\"></iswc-input>\n<iswc-input variant=\"filled\" label=\"filled\"></iswc-input>\n<iswc-input variant=\"underlined\" label=\"underlined\"></iswc-input>"
         }
       ]
     },
@@ -82,10 +78,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input type=\"email\" label=\"Email\" placeholder=\"tu@empresa.com\" required hint=\"Obligatorio\"></iswc-input>\r\n            <iswc-input type=\"password\" label=\"Contraseña\" password-toggle placeholder=\"••••••••\"></iswc-input>\r\n            <iswc-input type=\"number\" label=\"Cantidad\" value=\"10\" min=\"0\" max=\"100\" step=\"5\"></iswc-input>\r\n            <iswc-input type=\"search\" label=\"Buscar\" clearable placeholder=\"Filtrar…\"></iswc-input>\r\n            <iswc-input type=\"tel\" label=\"Teléfono\" placeholder=\"+57 300 000 0000\" autocomplete=\"tel\"></iswc-input>\r\n            <iswc-input type=\"url\" label=\"Sitio web\" placeholder=\"https://…\"></iswc-input>\r\n            <iswc-input type=\"date\" label=\"Fecha\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input type=\"password\" label=\"Contraseña\" password-toggle></iswc-input>\n<iswc-input type=\"number\" label=\"Cantidad\" min=\"0\" max=\"100\" step=\"5\"></iswc-input>\n<iswc-input type=\"search\" label=\"Buscar\" clearable></iswc-input>"
         }
       ]
     },
@@ -97,10 +89,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Importe\" type=\"number\" value=\"1200\" prefix=\"$\" suffix=\"COP\"></iswc-input>\r\n            <iswc-input label=\"Peso\" type=\"number\" value=\"72\" suffix=\"kg\"></iswc-input>\r\n            <iswc-input label=\"Con iconos\" placeholder=\"Buscar…\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:magnify\"></iswc-icon>\r\n              <iswc-icon slot=\"end\" icon=\"mdi:filter-variant\"></iswc-icon>\r\n            </iswc-input>\r\n            <iswc-input label=\"Slot + prefix\" prefix=\"https://\" placeholder=\"empresa.com\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:web\"></iswc-icon>\r\n            </iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input label=\"Importe\" type=\"number\" prefix=\"$\" suffix=\"COP\"></iswc-input>\n\n<iswc-input label=\"Con iconos\">\n  <iswc-icon slot=\"start\" icon=\"mdi:magnify\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:filter-variant\"></iswc-icon>\n</iswc-input>"
         },
         {
           "kind": "html",
@@ -116,10 +104,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Error forzado\" value=\"valor@malo\" error error-text=\"Ese correo no existe en el sistema\"></iswc-input>\r\n            <iswc-input label=\"Error sin error-text\" value=\"12\" error hint=\"El hint se pinta en rojo\"></iswc-input>\r\n            <iswc-input id=\"autoErr\" type=\"email\" label=\"Correo (sale del campo para validar)\" required\r\n              hint=\"Se valida al perder el foco\" error-text=\"Escribe un correo válido\"></iswc-input>\r\n            <iswc-input id=\"reportErr\" label=\"Obligatorio\" required hint=\"Pulsa «Validar»\"></iswc-input>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n            <button type=\"button\" id=\"btnToggleErr\">Alternar error</button>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input error error-text=\"Ese correo no existe en el sistema\"></iswc-input>\n\n// error derivado de la validación nativa\ninput.reportValidity();          // marca el campo como tocado y pinta el error\ninput.error = true;              // o fuérzalo desde fuera"
         }
       ]
     },
@@ -131,10 +115,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\" value=\"Facturación electrónica\"></iswc-input>\r\n            <iswc-input label=\"Sin límite\" show-count placeholder=\"Escribe algo…\"></iswc-input>\r\n            <iswc-input label=\"Solo contador\" maxlength=\"10\" show-count></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\"></iswc-input>"
         }
       ]
     },
@@ -146,10 +126,6 @@
         {
           "kind": "demo",
           "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:14rem;\">\r\n            <iswc-input label=\"--iswc-field-width: 14rem\" placeholder=\"Heredado del contenedor\"></iswc-input>\r\n            <iswc-input label=\"Mismo contenedor, full-width\" full-width placeholder=\"Ignora el token\"></iswc-input>\r\n            <iswc-input label=\"Override local\" style=\"--iswc-field-width:8rem;\" type=\"number\" value=\"42\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<div style=\"--iswc-field-width: 14rem\">\n  <iswc-input label=\"Estrecho\"></iswc-input>\n  <iswc-input label=\"Ancho completo\" full-width></iswc-input>\n</div>"
         }
       ]
     },
@@ -161,10 +137,6 @@
         {
           "kind": "demo",
           "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <iswc-input label-placement=\"start\" label=\"Nombre\" full-width placeholder=\"Jane Doe\"></iswc-input>\r\n            <iswc-input label-placement=\"start\" label=\"Correo\" type=\"email\" full-width placeholder=\"jane@empresa.com\" hint=\"Se usa para la factura\"></iswc-input>\r\n            <iswc-input label-placement=\"start\" label=\"NIT\" full-width prefix=\"CO\" show-count maxlength=\"12\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <iswc-input label-placement=\"start\" label=\"Nombre\" full-width></iswc-input>\n  <iswc-input label-placement=\"start\" label=\"Correo\" full-width></iswc-input>\n</div>"
         }
       ]
     },

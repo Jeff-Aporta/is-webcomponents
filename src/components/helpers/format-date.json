@@ -147,11 +147,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">24h</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">12h</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">auto</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"auto\"></iswc-format-date>\n            </div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n<iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></iswc-format-date>",
-          "lang": "html"
         }
       ]
     },

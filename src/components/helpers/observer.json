@@ -72,11 +72,6 @@
               "label": "child-list"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-observer type=\"intersection\" root=\"#scroller\" intersect-class=\"iswc-in\" threshold=\"0.4\">\n  <article class=\"obs-card\">…</article>\n</iswc-observer>",
-          "lang": "html"
         }
       ]
     },
@@ -89,11 +84,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">child-list + attr=&quot;data-tag&quot;</span>\n          <div class=\"obs-panel\">\n            <div class=\"obs-panel__title\">Nodo observado</div>\n            <iswc-observer id=\"mo\" type=\"mutation\" attr=\"data-tag\" child-list>\n              <div id=\"moTarget\" class=\"obs-target\" data-tag=\"init\">Contenido editable</div>\n            </iswc-observer>\n            <div class=\"obs-actions\">\n              <iswc-button id=\"moAdd\" color=\"brand\" variant=\"outlined\" type=\"button\">\n                <iswc-icon slot=\"start\" icon=\"mdi:plus\"></iswc-icon>\n                Añadir hijo\n              </iswc-button>\n              <iswc-button id=\"moAttr\" color=\"neutral\" variant=\"outlined\" type=\"button\">\n                <iswc-icon slot=\"start\" icon=\"mdi:tag-plus-outline\"></iswc-icon>\n                Cambiar data-tag\n              </iswc-button>\n              <iswc-button id=\"moReset\" color=\"neutral\" variant=\"plain\" type=\"button\">\n                Reset\n              </iswc-button>\n            </div>\n            <p class=\"obs-hint\" id=\"moExplain\">Pulsa un botón para mutar el DOM y ver el evento.</p>\n          </div>\n          <div class=\"log\" id=\"moLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Las mutaciones aparecen aquí.</div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-observer type=\"mutation\" attr=\"data-tag\" child-list>\n  <div id=\"target\" data-tag=\"init\">…</div>\n</iswc-observer>",
-          "lang": "html"
         }
       ]
     },
@@ -106,11 +96,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">ResizeObserver sobre el hijo</span>\n          <div class=\"obs-resize-wrap\">\n            <iswc-observer id=\"ro\" type=\"resize\">\n              <div id=\"roBox\" class=\"obs-resize-box\">\n                Arrastra la esquina ↘ para redimensionar.\n              </div>\n            </iswc-observer>\n            <p class=\"obs-hint\">\n              Tamaño actual:\n              <span class=\"obs-size\" id=\"roSize\">— × —</span>\n            </p>\n          </div>\n          <div class=\"log\" id=\"roLog\" aria-live=\"polite\" style=\"margin-top:12px\">\n            <div class=\"row hint\">Cada resize emite <code class=\"code\">iswc-resize</code>.</div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-observer type=\"resize\">\n  <div style=\"resize:both; overflow:auto\">…</div>\n</iswc-observer>",
-          "lang": "html"
         }
       ]
     },

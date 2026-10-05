@@ -104,10 +104,6 @@
         {
           "kind": "html",
           "html": "<div class=\"log\" id=\"rgLog\" aria-live=\"polite\" style=\"margin-top:12px\"><div class=\"row hint\">Elige una opción para ver el evento.</div></div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group name=\"plan\" value=\"pro\" label=\"Plan\">\n  <iswc-radio value=\"free\">Gratis</iswc-radio>\n  <iswc-radio value=\"pro\">Profesional</iswc-radio>\n  <iswc-radio value=\"legacy\" disabled>Heredado</iswc-radio>\n</iswc-radio-group>"
         }
       ]
     },
@@ -119,10 +115,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-radio-group row value=\"a\" label=\"brand (default)\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"neutral\" value=\"a\" label=\"neutral\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"success\" value=\"a\" label=\"success\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"warning\" value=\"a\" label=\"warning\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"danger\" value=\"a\" label=\"danger\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"success\" value=\"c\" label=\"El radio manda sobre el grupo\">\r\n              <iswc-radio value=\"c\">Hereda success</iswc-radio>\r\n              <iswc-radio value=\"d\" color=\"danger\">variant=\"danger\"</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group color=\"success\" row>\n  <iswc-radio value=\"c\">Hereda success</iswc-radio>\n  <iswc-radio value=\"d\" color=\"danger\">Se sale del grupo</iswc-radio>\n</iswc-radio-group>"
         }
       ]
     },
@@ -134,10 +126,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"spread\">\r\n            <iswc-radio-group label-placement=\"top\" row value=\"t\" label=\"top\">\r\n              <iswc-radio value=\"t\">Top</iswc-radio><iswc-radio value=\"t2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group label-placement=\"start\" value=\"s\" label=\"start\">\r\n              <iswc-radio value=\"s\">Start</iswc-radio><iswc-radio value=\"s2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group label-placement=\"bottom\" row value=\"b\" label=\"bottom\">\r\n              <iswc-radio value=\"b\">Bottom</iswc-radio><iswc-radio value=\"b2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group label-placement=\"end\" value=\"e\" label=\"end (default)\">\r\n              <iswc-radio value=\"e\">End</iswc-radio><iswc-radio value=\"e2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group label-placement=\"top\" row>…</iswc-radio-group>\n<iswc-radio value=\"x\" label-placement=\"start\">Solo este</iswc-radio>"
         }
       ]
     },
@@ -149,10 +137,6 @@
         {
           "kind": "demo",
           "html": "<iswc-radio-group name=\"soporte\" value=\"std\" label=\"Nivel de soporte\">\r\n            <iswc-radio value=\"std\">\r\n              Estándar\r\n              <span slot=\"description\">Respuesta en 48 h laborables. Incluido en todos los planes.</span>\r\n            </iswc-radio>\r\n            <iswc-radio value=\"prio\">\r\n              Prioritario\r\n              <span slot=\"description\">Respuesta en 4 h y canal directo con ingeniería.</span>\r\n            </iswc-radio>\r\n            <iswc-radio value=\"ded\" disabled>\r\n              Dedicado\r\n              <span slot=\"description\">Solo para contratos anuales.</span>\r\n            </iswc-radio>\r\n          </iswc-radio-group>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio value=\"prio\">\n  Prioritario\n  <span slot=\"description\">Respuesta en 4 h</span>\n</iswc-radio>"
         }
       ]
     },
@@ -164,10 +148,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-radio-group name=\"envio\" value=\"normal\" row label=\"row\">\r\n              <iswc-radio value=\"normal\">Normal</iswc-radio>\r\n              <iswc-radio value=\"express\">Express</iswc-radio>\r\n              <iswc-radio value=\"recoger\">Recoger en tienda</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group name=\"envio2\" value=\"normal\" orientation=\"horizontal\" label='orientation=\"horizontal\"'>\r\n              <iswc-radio value=\"normal\">Normal</iswc-radio>\r\n              <iswc-radio value=\"express\">Express</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group row>…</iswc-radio-group>\n<iswc-radio-group orientation=\"horizontal\">…</iswc-radio-group>"
         }
       ]
     },
@@ -183,10 +163,6 @@
         {
           "kind": "html",
           "html": "<div class=\"demo-row\" style=\"gap:.5rem;margin-top:12px\">\r\n          <iswc-button variant=\"outlined\" id=\"btnError\">Alternar error</iswc-button>\r\n        </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group error error-text=\"Debes elegir una opción\">…</iswc-radio-group>\ngrupo.errorText = '';   // limpia mensaje y estado"
         }
       ]
     },
@@ -198,10 +174,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-radio-group name=\"tema\" value=\"auto\" readonly row label=\"readonly\" hint=\"Prueba a moverte con las flechas\">\r\n              <iswc-radio value=\"claro\">Claro</iswc-radio>\r\n              <iswc-radio value=\"oscuro\">Oscuro</iswc-radio>\r\n              <iswc-radio value=\"auto\">Automático</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group name=\"tema2\" value=\"auto\" disabled row label=\"disabled\">\r\n              <iswc-radio value=\"claro\">Claro</iswc-radio>\r\n              <iswc-radio value=\"oscuro\">Oscuro</iswc-radio>\r\n              <iswc-radio value=\"auto\">Automático</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group value=\"a\" row label=\"Radio suelto deshabilitado\">\r\n              <iswc-radio value=\"a\">Disponible</iswc-radio>\r\n              <iswc-radio value=\"b\" disabled>No disponible</iswc-radio>\r\n              <iswc-radio value=\"c\">Disponible</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group readonly value=\"auto\">…</iswc-radio-group>"
         }
       ]
     },

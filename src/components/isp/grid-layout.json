@@ -67,10 +67,6 @@
         {
           "kind": "demo",
           "html": "<iswc-grid-layout direction=\"row\" cells=\"2\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <iswc-card>fila 1 · col 1</iswc-card>\r\n            <iswc-card>fila 2 · col 1</iswc-card>\r\n            <iswc-card>fila 1 · col 2</iswc-card>\r\n            <iswc-card>fila 2 · col 2</iswc-card>\r\n          </iswc-grid-layout>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-grid-layout cells=\"3\" gap=\"0.5rem\">…</iswc-grid-layout>\n<iswc-grid-layout cells=\"12rem 1fr\" items=\"center\">…</iswc-grid-layout>\n<iswc-grid-layout direction=\"row\" cells=\"2\">…</iswc-grid-layout>"
         }
       ]
     },

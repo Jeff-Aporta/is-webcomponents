@@ -45,10 +45,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-breadcrumb label=\"Catálogo\">\n  <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>\n</iswc-breadcrumb>"
         }
       ]
     },
@@ -60,10 +56,6 @@
         {
           "kind": "demo",
           "html": "<iswc-breadcrumb id=\"bcSpa\" label=\"Navegación SPA\">\r\n            <iswc-breadcrumb-item>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Productos</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n          <p id=\"bcLog\">Última navegación: ninguna</p>"
-        },
-        {
-          "kind": "code",
-          "code": "bc.addEventListener('click', (e) => {\n  const item = e.target.closest('iswc-breadcrumb-item');\n  if (item) console.log('item click', item.textContent.trim());\n});"
         }
       ]
     },
@@ -90,10 +82,6 @@
         {
           "kind": "demo",
           "html": "<iswc-breadcrumb label=\"Slash\">\r\n            <iswc-breadcrumb-item href=\"/home\">\r\n              <span slot=\"separator\">/</span>\r\n              Inicio\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/docs\">\r\n              <span slot=\"separator\">/</span>\r\n              Docs\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">\r\n              <span slot=\"separator\">/</span>\r\n              Guía\r\n            </iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-breadcrumb-item href=\"/home\">\n  <span slot=\"separator\">/</span>\n  Inicio\n</iswc-breadcrumb-item>"
         }
       ]
     },

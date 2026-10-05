@@ -41,10 +41,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <iswc-icon src=\"{assets}icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--iswc-accent)\"></iswc-icon>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-icon icon=\"mdi:home\"></iswc-icon>\n<iswc-icon icon=\"mdi:check-circle\"></iswc-icon>\n<iswc-icon src=\"./logo.svg\" label=\"Logo\"></iswc-icon>"
         }
       ]
     },

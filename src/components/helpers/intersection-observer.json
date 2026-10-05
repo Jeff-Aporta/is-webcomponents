@@ -71,10 +71,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">once · threshold 0.25</span>\r\n          <div id=\"scrollerOnce\" class=\"io-scroller\" style=\"height:200px\">\r\n            <div class=\"io-spacer\">↓ scroll ↓</div>\r\n            <iswc-intersection-observer root=\"#scrollerOnce\" intersect-class=\"iswc-in\" threshold=\"0.25\" once>\r\n              <article class=\"io-card\" data-label=\"once-1\">\r\n                <span>Reveal permanente (no vuelve a “fuera”)</span>\r\n                <span class=\"io-badge\">esperando</span>\r\n              </article>\r\n              <article class=\"io-card\" data-label=\"once-2\">\r\n                <span>Otra animación one-shot</span>\r\n                <span class=\"io-badge\">esperando</span>\r\n              </article>\r\n            </iswc-intersection-observer>\r\n            <div class=\"io-spacer\">fin</div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-intersection-observer root=\"#scroller\" intersect-class=\"iswc-in\" threshold=\"0.4\" once>\n  <article class=\"io-card\">…</article>\n</iswc-intersection-observer>"
         }
       ]
     },
