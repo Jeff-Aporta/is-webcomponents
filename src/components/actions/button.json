@@ -383,11 +383,6 @@
           "kind": "demo",
           "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"success\" variant=\"outlined\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"plain\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"danger\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"brand\" pill onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n          </div>",
           "equivHtml": "<button type=\"button\" onclick=\"this.setAttribute('aria-busy','true'); setTimeout(() => this.removeAttribute('aria-busy'), 5000)\">Clic me</button>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-button\n  onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\"\n  color=\"brand\">Clic me</iswc-button>"
         }
       ]
     },
