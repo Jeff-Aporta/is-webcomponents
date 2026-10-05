@@ -31,7 +31,8 @@
                 "error",
                 "#ae3ec9",
                 "#0ca678",
-                "#d9480f"
+                "#d9480f",
+                "text"
               ],
               "default": "brand"
             },
