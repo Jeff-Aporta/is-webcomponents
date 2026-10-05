@@ -325,13 +325,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button loading color=\"brand\">Guardando…</iswc-button>\r\n            <iswc-button loading color=\"success\" variant=\"outlined\">Enviando</iswc-button>\r\n            <iswc-button loading color=\"neutral\" variant=\"plain\">Cargando</iswc-button>\r\n            <iswc-button loading color=\"danger\">\r\n              <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\r\n              Eliminando\r\n            </iswc-button>\r\n            <span style=\"font-size: 1.25rem\"><iswc-button loading color=\"brand\" pill>Procesando</iswc-button></span>\r\n          </div>",
-          "equivHtml": "<button type=\"button\" aria-busy=\"true\" disabled>\n  Guardando…\n</button>"
-        },
-        {
-          "kind": "demo",
-          "html": "<iswc-button color=\"brand\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>",
-          "equivHtml": "<button type=\"button\">Clic me</button>"
+          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"success\" variant=\"outlined\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"plain\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"danger\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"brand\" pill onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n          </div>",
+          "equivHtml": "<button type=\"button\" onclick=\"this.setAttribute('aria-busy','true'); setTimeout(() => this.removeAttribute('aria-busy'), 5000)\">Clic me</button>"
         },
         {
           "kind": "code",
