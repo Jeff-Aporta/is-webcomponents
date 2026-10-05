@@ -70,7 +70,7 @@ Captura console errors con playwright/stagehand. Para añadir:
 | `FAIL dist/scripts/<x>.min.js (404)` | `bundle-scripts.mjs` no se corrió | `deno task bundle` |
 | `FAIL dist/pages/<x>.min.js (404)` | Page agregada sin bundle | Añadir `<x>` a `pages` array en `bundle-scripts.mjs` |
 | `FAIL dist/previews/<cat>/<tag>.preview.min.js (404)` | Preview.ts no se bundleó | Verificar que `bundle-scripts.mjs` lo detectó (revisar logs) |
-| `FAIL dist/cdn/skills/.../PROMPT.md (404)` | Skill no copiado | Verificar `cp -r src/skills dist/cdn/skills` en build.mjs |
+| `FAIL dist/cdn/skills/.../PROMPT.md (404)` | Skill no copiado | Verificar `cp -r skills dist/cdn/skills` en build.mjs |
 | `FAIL index.html (404)` | Working tree sucio o branch incorrecto | `git status` + checkout main |
 | Cache devuelve versión vieja | GH Pages cache 1-3 min | Re-run después de 90s |
 

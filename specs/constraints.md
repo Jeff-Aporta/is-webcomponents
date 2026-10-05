@@ -23,8 +23,8 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 
 ## Repo y estructura
 
-- **Toda la fuente vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/skills`, `src/utils` (health/e2e + system), `src/manifest.js`. En la raíz: `scripts/`, `dist/`, `tests/`, `specs/` (**contrato SDD**), `index.html`, `robots.txt`.
-- No recrear carpetas de fuente en la raíz (`components/`, `styles/`, `previews/`, `skills/`); guardián `src-layout`.
+- **La fuente del kit vive bajo `src/`**: `src/components`, `src/styles`, `src/previews`, `src/utils` (health/e2e + system), `src/manifest.js`. Las **skills** son contenido de proyecto, no código del kit, y viven en `skills/` (raíz). En la raíz también: `scripts/`, `dist/`, `tests/`, `specs/` (**contrato SDD**), `index.html`, `robots.txt`.
+- No recrear carpetas de fuente en la raíz (`components/`, `styles/`, `previews/`); guardián `src-layout`. (`skills/` SÍ vive en la raíz.)
 - No hay `docs/` ni `src/docs/` (HTML SEO y planes de superpowers eliminados 31-ago y 03-sep-2026). El HTML SEO generado se retiró: no recrear un `docs/` en la raíz.
 - **Previews = JSON homogéneo** `iswc-preview/v1` + `<iswc-preview-component>` + `behaviors/<tag>.js`. Único HTML permitido bajo previews: `src/previews/_shell.html`. **No** HTML por tag.
 - **Utilerías (`helpers/`)**: cada módulo público tiene `manifest.page` (`.json`) + MD. `iswc-floating` = internal (sin tab). Guardián `helpers-homogeneity`.
