@@ -32,7 +32,8 @@
                 "#ae3ec9",
                 "#0ca678",
                 "#d9480f"
-              ]
+              ],
+              "default": "brand"
             },
             {
               "control": "select",
@@ -45,7 +46,8 @@
                 "ghost",
                 "soft",
                 "text"
-              ]
+              ],
+              "default": "filled"
             },
             {
               "control": "select",
@@ -112,8 +114,8 @@
             },
             {
               "control": "text",
-              "prop": "attr:download",
-              "label": "download"
+              "prop": "attr:href",
+              "label": "href"
             },
             {
               "control": "select",
@@ -123,13 +125,19 @@
                 "button",
                 "submit",
                 "reset"
-              ]
+              ],
+              "default": "button"
             },
             {
               "control": "select",
               "prop": "attr:value",
               "label": "value",
               "options": [
+                {
+                  "value": "",
+                  "label": "without a default setting",
+                  "placeholder": true
+                },
                 "save",
                 "publish"
               ]
@@ -140,8 +148,10 @@
               "label": "radius",
               "options": [
                 "0",
+                "6px",
                 "18px"
-              ]
+              ],
+              "default": "6px"
             }
           ],
           "equivNote": "Segun attrs, el host se comporta como button o como enlace. El diagrama resume las ramas — clic para abrir el lightbox.",
@@ -332,18 +342,14 @@
           "equivHtml": "<button type=\"button\" aria-busy=\"true\" disabled>\n  Guardando…\n</button>"
         },
         {
-          "kind": "html",
-          "html": "<h4>Demo interactivo</h4>"
-        },
-        {
           "kind": "demo",
-          "html": "<iswc-button id=\"loadingDemo\" color=\"brand\">Iniciar carga</iswc-button>",
-          "equivHtml": "<button type=\"button\" aria-busy=\"true\" disabled>\n  Guardando…\n</button>"
+          "html": "<iswc-button color=\"brand\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>",
+          "equivHtml": "<button type=\"button\">Clic me</button>"
         },
         {
           "kind": "code",
-          "lang": "javascript",
-          "code": "btn.toggleAttribute('loading');\nbtn.toggleAttribute('loading');  // o false"
+          "lang": "html",
+          "code": "<iswc-button\n  onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\"\n  color=\"brand\">Clic me</iswc-button>"
         }
       ]
     },
@@ -362,7 +368,7 @@
     {
       "id": "link",
       "title": "Como enlace",
-      "lede": "Con <code class=\"code\">href</code> el botón se renderiza como <code class=\"code\">&lt;a&gt;</code>.\r\n          Conserva variant, appearance, pill y demás atributos,\r\n          y soporta <code class=\"code\">download</code>.",
+      "lede": "Con <code class=\"code\">href</code> el botón se renderiza como <code class=\"code\">&lt;a&gt;</code>.\r\n          Conserva variant, appearance, pill y demás atributos,\r\n          y reenvía <code class=\"code\">download</code> al &lt;a&gt; interno si lo necesitas.",
       "blocks": [
         {
           "kind": "demo",
