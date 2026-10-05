@@ -24,6 +24,11 @@
  *   - o, en su defecto, se deriva del propio control (label, control,
  *     default, options).
  *
+ * Phase W39 (2026-10-03-zod-migration): los controles se auto-ordenan por
+ * tipo al render (text → number → select → otros → switch/boolean AL FINAL).
+ * El orden del `controls[]` en el JSON no importa: el componente garantiza
+ * la presentación consistente.
+ *
  * Atributos:
  *   label   string             — header del panel (default: "Controles").
  *   tag     string             — tag del componente target (ej. "iswc-button").
@@ -589,6 +594,32 @@ function enriquecerControl(c: ControlPanel): ControlPanel {
   return copy;
 }
 
+/**
+ * Phase W39 (2026-10-03-zod-migration): orden canónico de los controles en el
+ * render del panel — `text` → `number` (`range` cuenta como number) →
+ * `select` → otros (`color`, `json`) → `boolean` (switch, AL FINAL).
+ * El sort es estable (Array#sort en motores modernos), así que controles del
+ * mismo grupo quedan en el orden original del JSON.
+ */
+const TIPO_ORDEN: Record<string, number> = {
+  text: 0,
+  number: 1,
+  range: 1,
+  select: 2,
+  color: 3,
+  json: 3,
+  boolean: 4,
+};
+
+function ordenTipo(c: ControlPanel): number {
+  return TIPO_ORDEN[c.control] ?? TIPO_ORDEN.text;
+}
+
+/** Devuelve una copia ordenada por `ordenTipo` (estable). */
+function ordenarPorTipo(lista: ControlPanel[]): ControlPanel[] {
+  return lista.slice().sort((a, b) => ordenTipo(a) - ordenTipo(b));
+}
+
 const TPL = document.createElement('template');
 TPL.innerHTML = `<style>${CSS}</style><div class="panel">
   <div class="titulo"></div>
@@ -775,7 +806,10 @@ class IswcPreviewControls extends HTMLElement {
         h.textContent = nombre;
         grupos.appendChild(h);
       }
-      for (const control of lista) grupos.appendChild(this.#fila(control));
+      // Phase W39: auto-orden por tipo (text → number → select → otros → switch)
+      // dentro de cada grupo, sin importar el orden del consumer.
+      const ordenados = ordenarPorTipo(lista);
+      for (const control of ordenados) grupos.appendChild(this.#fila(control));
     }
   }
 
