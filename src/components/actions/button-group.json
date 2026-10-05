@@ -12,7 +12,7 @@
       "id": "intro",
       "title": "Uso",
       "titleHtml": false,
-      "lede": "Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons.",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Agrupa botones relacionados en una sola unidad visual.</dd>\n          <dt>Selección</dt><dd>Si se le pide, gestiona cuál está activo. Útil para controles segmentados, toolbars y split buttons.</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",

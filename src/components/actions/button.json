@@ -593,122 +593,135 @@
             "Atributo",
             "Tipo",
             "Default",
-            "Descripción"
+            "Descripción",
+            "Sección"
           ],
           "rows": [
             [
               "<code>color</code>",
               "brand · neutral · success · warning · danger · info · error",
               "brand",
-              "Color semántico (tono)."
+              "Color semántico (tono).",
+              "[Variantes](#variants)"
             ],
             [
               "<code>variant</code>",
               "filled · outlined · plain · ghost · soft · text",
               "filled",
-              "Apariencia. Ortogonal a <code>color</code>."
+              "Apariencia. Ortogonal a <code>color</code>.",
+              "[Variantes](#variants)"
             ],
             [
               "<code>shape</code>",
               "round · rect · pill",
               "round",
-              "Forma del control. <code>pill</code> también vía booleano <code>pill</code>."
+              "Forma del control. <code>pill</code> también vía booleano <code>pill</code>.",
+              "[Shapes](#shapes)"
             ],
             [
               "<code>disabled</code>",
               "boolean",
               "—",
-              "Deshabilita interacción."
+              "Deshabilita interacción.",
+              "[Disabled](#disabled)"
             ],
             [
               "<code>loading</code>",
               "boolean",
               "—",
-              "Estado de carga: spinner + bloqueo."
+              "Estado de carga: spinner + bloqueo.",
+              "[Loading](#loading)"
             ],
             [
               "<code>pill</code>",
               "boolean",
               "—",
-              "Border-radius completo."
+              "Border-radius completo.",
+              "[Shapes](#shapes)"
             ],
             [
               "<code>with-caret</code>",
               "boolean",
               "—",
-              "Muestra chevron al final."
+              "Muestra chevron al final.",
+              "[Caret](#caret)"
             ],
             [
               "<code>href</code>",
               "string",
               "—",
-              "Si está, renderiza como &lt;a&gt;."
-            ],
-            [
-              "<code>download</code>",
-              "string",
-              "—",
-              "Atributo download del enlace."
+              "Si está, renderiza como &lt;a&gt;.",
+              "[Como enlace](#link)"
             ],
             [
               "<code>type</code>",
               "button · submit · reset",
               "button",
-              "Tipo de botón en formularios."
+              "Tipo de botón en formularios.",
+              "[En formularios](#form)"
             ],
             [
               "<code>name</code>",
               "string",
               "—",
-              "Nombre para form data."
+              "Nombre para form data.",
+              "[En formularios](#form)"
             ],
             [
               "<code>value</code>",
               "string",
               "—",
-              "Valor para form data."
+              "Valor para form data.",
+              "[En formularios](#form)"
             ],
             [
               "<code>title</code>",
               "string",
               "—",
-              "Tooltip / a11y name."
+              "Tooltip / a11y name.",
+              "—"
             ],
             [
               "<code>form</code>",
               "string",
               "—",
-              "Id del form a asociarse (si está fuera de él)."
+              "Id del form a asociarse (si está fuera de él).",
+              "[En formularios](#form)"
             ],
             [
               "<code>formaction</code>",
               "string",
               "—",
-              "Override de action al submit."
+              "Override de action al submit.",
+              "[En formularios](#form)"
             ],
             [
               "<code>formenctype</code>",
               "string",
               "—",
-              "Override de enctype al submit."
+              "Override de enctype al submit.",
+              "[En formularios](#form)"
             ],
             [
               "<code>formmethod</code>",
               "string",
               "—",
-              "Override de method al submit."
+              "Override de method al submit.",
+              "[En formularios](#form)"
             ],
             [
               "<code>formnovalidate</code>",
               "boolean",
               "—",
-              "Desactiva validación al submit."
+              "Desactiva validación al submit.",
+              "[En formularios](#form)"
             ],
             [
               "<code>formtarget</code>",
               "string",
               "—",
-              "Override de target al submit."
+              "Override de target al submit.",
+              "[En formularios](#form)"
             ]
           ]
         },
