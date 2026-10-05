@@ -1,0 +1,63 @@
+@charset "UTF-8";
+/* <iswc-loading-overlay> — capa de bloqueo a pantalla completa con spinner.
+   El JS no lo reposiciona, pero DEBE ser fixed: es una capa de bloqueo que
+   no puede ocupar sitio en el flujo del documento. No dismissable: el clic
+   se traga aquí, no llega al contenido de abajo. */
+@property --iswc-loading-backdrop {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(0, 0, 0, 0.72);
+}
+:host {
+  --iswc-loading-backdrop: color-mix(in srgb, var(--iswc-bg) 72%, transparent);
+  --iswc-loading-indicator: var(--iswc-accent, var(--iswc-color-brand));
+  display: contents;
+  font-family: var(--iswc-sans, inherit);
+}
+:host .backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--iswc-z-overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  background: var(--iswc-loading-backdrop);
+  backdrop-filter: blur(2px);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: progress;
+}
+:host .backdrop[hidden] {
+  display: none;
+}
+:host .panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75em;
+  max-inline-size: min(80vw, 28em);
+  text-align: center;
+}
+:host .indicator {
+  font-size: 3em;
+  line-height: 1;
+  color: var(--iswc-loading-indicator);
+}
+:host .message {
+  margin: 0;
+  font-size: 1em;
+  color: var(--iswc-text, inherit);
+}
+:host .message[hidden] {
+  display: none;
+}
+:host {
+  /* prefers-reduced-motion: backdrop sólido (sin transparencia). */
+}
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --iswc-loading-backdrop: var(--iswc-bg);
+  }
+}

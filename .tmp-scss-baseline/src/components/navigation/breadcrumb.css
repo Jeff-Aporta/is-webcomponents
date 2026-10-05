@@ -1,0 +1,23 @@
+@charset "UTF-8";
+/* <iswc-breadcrumb> — contenedor de migas de pan. */
+:host {
+  display: block;
+  font-family: var(--iswc-font-family, inherit);
+}
+
+.bc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9em;
+  color: var(--iswc-text-muted);
+}
+
+.bc ::slotted(iswc-breadcrumb-item) {
+  display: inline-flex;
+  align-items: center;
+}

@@ -1,4 +1,4 @@
-﻿# `ISWebComponentsLoader` (`loader.min.js`)
+# `ISWebComponentsLoader` (`loader.min.js`)
 
 Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redundancia.
 
@@ -13,7 +13,7 @@ Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redunda
 | Raw | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md` |
 | CDN | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js` |
 
-Skill de instalación: [`src/skills/is-cdn-install/SKILL.md`](../skills/is-cdn-install/SKILL.md).
+Skill de instalación: [`skills/is-cdn-install/SKILL.md`](../../skills/is-cdn-install/SKILL.md).
 
 ## Bootstrap
 

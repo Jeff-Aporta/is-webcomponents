@@ -1,0 +1,33 @@
+:host {
+  display: contents;
+  --iswc-popover-max-width: 25rem;
+  --iswc-popover-arrow-size: 8px;
+  --iswc-popover-show-duration: 120ms;
+  --iswc-popover-hide-duration: 100ms;
+}
+:host[hidden] {
+  display: none !important;
+}
+:host .dialog {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  outline: none;
+}
+:host .dialog[hidden] {
+  display: none !important;
+}
+:host .body {
+  max-inline-size: var(--iswc-popover-max-width);
+  padding: 0.85em 1em;
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-elev);
+  color: var(--iswc-text);
+  border: 1px solid var(--iswc-border);
+  box-shadow: var(--iswc-shadow, 0 8px 24px rgba(0, 0, 0, 0.3));
+  font-family: var(--iswc-font-family);
+  font-size: 0.925em;
+  line-height: 1.45;
+}

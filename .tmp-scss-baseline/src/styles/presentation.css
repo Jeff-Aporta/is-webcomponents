@@ -1,0 +1,1694 @@
+@charset "UTF-8";
+/* =========================================================
+   presentation.css — docs / playground de componentes IS.
+   Dirección: panel técnico editorial. Tipografía propia,
+   acento de marca como señal, demos con profundidad.
+   ========================================================= */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap");
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  block-size: 100%;
+  background: var(--iswc-bg);
+  color: var(--iswc-text);
+  font-family: "Manrope", var(--iswc-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  overflow: hidden;
+}
+
+a {
+  color: var(--iswc-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+/* --- Layout --------------------------------------------------------- */
+.page {
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
+  --min: 160px;
+  --max: 280px;
+  --divider-width: 5px;
+}
+
+.sidebar {
+  align-self: stretch;
+  block-size: 100%;
+  min-block-size: 0;
+  margin: 0;
+  padding-block: 22px 28px;
+  padding-inline: 12px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--iswc-accent) 6%, transparent) 0%, transparent 120px), var(--iswc-bg-soft);
+  border-left: 1px solid color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-border));
+  font-family: "Manrope", var(--iswc-sans);
+  font-weight: 400;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--iswc-scrollbar-thumb) transparent;
+  /* Título pegado arriba: el índice puede ser largo y se pierde la referencia. */
+}
+.sidebar h1 {
+  position: sticky;
+  inset-block-start: -22px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+  padding-block: 6px 10px;
+  padding-inline: 10px;
+  color: var(--iswc-text-dim);
+  background: linear-gradient(180deg, var(--iswc-bg-soft) 60%, color-mix(in srgb, var(--iswc-bg-soft) 0%, transparent));
+  /* El preview-chrome está clavado dentro de iswc-main.main con sticky.
+     No flota sobre el viewport, así que el sidebar no necesita hueco arriba.
+     Originalmente anidado como `html:not([data-embed="1"]) &` (CSS Nesting L2);
+     sass solo soporta L1, asi que la regla sale del nesting. */
+  /* html:not([data-embed="1"]) .preview-chrome — ver bloque homónimo al final */
+}
+.sidebar h1::after {
+  content: "";
+  flex: 1;
+  block-size: 1px;
+  background: linear-gradient(90deg, var(--iswc-border), transparent);
+}
+.sidebar {
+  /* El TOC de las previews vive en <iswc-scrollspy>, no en <nav>: los <a> son
+     light DOM, así que la regla global de enlaces (color: var(--iswc-accent))
+     los pintaba todos de rojo y el ::slotted del componente no gana el
+     cascade. Ambos selectores comparten estilo. */
+}
+.sidebar :is(nav, iswc-scrollspy) {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sidebar :is(nav, iswc-scrollspy) a {
+  position: relative;
+  display: block;
+  padding-block: 7px;
+  padding-inline-start: 14px;
+  padding-inline-end: 12px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--iswc-text-soft);
+  transition: background 140ms ease, color 140ms ease, translate 140ms ease;
+}
+.sidebar :is(nav, iswc-scrollspy) a:hover {
+  background: color-mix(in srgb, var(--iswc-bg-elev) 85%, transparent);
+  color: var(--iswc-text);
+  translate: 3px 0;
+  text-decoration: none;
+}
+.sidebar :is(nav a.active, nav a.iswc-scrollspy-active, iswc-scrollspy a.iswc-scrollspy-active) {
+  background: var(--iswc-accent-bg);
+  color: var(--iswc-brand-text);
+  font-weight: 650;
+  /* Barra de acento como pseudo: convive con el border-radius. */
+}
+.sidebar :is(nav a.active, nav a.iswc-scrollspy-active, iswc-scrollspy a.iswc-scrollspy-active)::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 5px;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--iswc-accent);
+}
+@media (max-width: 900px) {
+  .sidebar {
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-border));
+  }
+}
+
+.main,
+iswc-main.main {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  block-size: 100%;
+  min-block-size: 0;
+  /* Expuestos como variables: el preview-chrome los cancela con margenes
+     negativos para poder anclarse a 10px del borde real de iswc-main. */
+  --main-pad-top: 36px;
+  --main-pad-x: clamp(24px, 4vw, 48px);
+  padding: var(--main-pad-top) var(--main-pad-x) 88px;
+  max-inline-size: none;
+  margin: 0;
+  inline-size: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Restore programático (F5): smooth hereda de html y pelea con remember-scroll. */
+  scroll-behavior: auto;
+  background: radial-gradient(900px 420px at 12% -8%, color-mix(in srgb, var(--iswc-accent) 11%, transparent), transparent 60%), radial-gradient(700px 360px at 92% 8%, color-mix(in srgb, var(--iswc-bg-elev) 70%, transparent), transparent 55%), var(--iswc-bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--iswc-scrollbar-thumb) var(--iswc-scrollbar-track);
+}
+
+/* --- Scrollbar consistente en superficies de los demos ----------------
+ * El is-base.css ya pone `* { scrollbar-color: ... }`; aquí consolidamos
+ * el estilo WebKit (track invisible, thumb con padding-clip, hover con
+ * acento) para que cualquier `.section`, `.main`, `.sidebar`, `<iswc-main>`
+ * o `.demo` con overflow muestre el mismo thumb que el sidebar TOC. */
+:is(.main, iswc-main.main, .sidebar, .section, .demo, html, body)::-webkit-scrollbar {
+  inline-size: var(--iswc-scrollbar-size);
+  block-size: var(--iswc-scrollbar-size);
+}
+:is(.main, iswc-main.main, .sidebar, .section, .demo, html, body)::-webkit-scrollbar-track {
+  background: var(--iswc-scrollbar-track);
+  border-radius: var(--iswc-scrollbar-radius);
+}
+:is(.main, iswc-main.main, .sidebar, .section, .demo, html, body)::-webkit-scrollbar-thumb {
+  background: var(--iswc-scrollbar-thumb);
+  border-radius: var(--iswc-scrollbar-radius);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+:is(.main, iswc-main.main, .sidebar, .section, .demo, html, body)::-webkit-scrollbar-thumb:hover {
+  background: var(--iswc-scrollbar-thumb-hover);
+}
+:is(.main, iswc-main.main, .sidebar, .section, .demo, html, body)::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* --- Theme toggle --------------------------------------------------- */
+.theme-toggle {
+  position: fixed;
+  inset-block-start: 16px;
+  inset-inline-end: 16px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--iswc-text-soft);
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: var(--iswc-shadow);
+}
+.theme-toggle:hover {
+  color: var(--iswc-text);
+}
+.theme-toggle svg {
+  inline-size: 14px;
+  block-size: 14px;
+}
+
+/* --- Sections ------------------------------------------------------- */
+@keyframes section-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.section {
+  padding-block: 40px 12px;
+  border-block-start: 1px solid color-mix(in srgb, var(--iswc-border) 70%, transparent);
+  /* `backwards` y no `both`: con el fill hacia adelante Chrome deja aplicada
+     una matriz identidad al terminar, la seccion queda como containing block
+     y cualquier overlay `position: fixed` dentro (iswc-context-menu, iswc-popup…)
+     aparece desplazado por el offset de la seccion. */
+  animation: section-in 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.section:first-of-type {
+  border-block-start: 0;
+  padding-block-start: 8px;
+}
+.section:where(:nth-of-type(2)) {
+  animation-delay: 40ms;
+}
+.section:where(:nth-of-type(3)) {
+  animation-delay: 80ms;
+}
+.section:where(:nth-of-type(4)) {
+  animation-delay: 120ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    animation: none;
+  }
+}
+.section h2 {
+  font-size: clamp(1.55rem, 2.2vw, 1.95rem);
+  font-weight: 800;
+  margin: 0 0 10px;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+  color: var(--iswc-text);
+}
+.section:first-of-type h2 {
+  font-size: clamp(2rem, 3.4vw, 2.65rem);
+  letter-spacing: -0.055em;
+}
+.section:first-of-type h2::after {
+  content: "";
+  display: block;
+  inline-size: 2.5rem;
+  block-size: 3px;
+  margin-block-start: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--iswc-accent), color-mix(in srgb, var(--iswc-accent) 20%, transparent));
+}
+.section {
+  /* Título = tag del CE (`<iswc-button>`). */
+}
+.section h2.section__tag-title {
+  font-family: "JetBrains Mono", var(--iswc-mono);
+  font-weight: 700;
+}
+.section .lede {
+  color: var(--iswc-text-soft);
+  margin: 0 0 28px;
+  max-inline-size: none; /* ancho completo de la columna de docs */
+  font-size: 1.02rem;
+  line-height: 1.65;
+  font-weight: 450;
+}
+.section h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 32px 0 10px;
+  letter-spacing: -0.02em;
+  color: var(--iswc-text);
+}
+.section h4 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--iswc-text-dim);
+  margin: 26px 0 12px;
+}
+.section p {
+  margin: 0 0 12px;
+  color: var(--iswc-text-soft);
+  max-inline-size: none; /* homogenizar con el lede: todo el ancho útil */
+}
+
+/* --- Demo cards ----------------------------------------------------- */
+.demo-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 0 28px;
+}
+.demo-block > .demo {
+  margin-block-end: 0;
+  border-radius: calc(var(--iswc-radius) + 2px);
+}
+
+/* Enlace "Abrir editor en nueva pestana": aparece solo en demos de
+   diagramas SVG (render.ts detecta el tag y lo agrega). Compacto,
+   alineado a la derecha, discreto, no compite con el demo. */
+.demo-block__editor-link {
+  align-self: flex-end;
+  margin: 6px 4px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--iswc-fg-muted);
+  text-decoration: none;
+  border-block-end: 1px dashed currentColor;
+  padding-block-end: 1px;
+}
+.demo-block__editor-link:hover, .demo-block__editor-link:focus-visible {
+  color: var(--iswc-fg);
+  border-block-end-style: solid;
+  outline: none;
+}
+
+/* .demo-equiv: retirado de demos (equivHtml queda en JSON solo como dato opcional). */
+.demo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--iswc-bg-elev) 92%, #fff) 0%, var(--iswc-bg-elev) 100%);
+  border: 1px solid var(--iswc-border);
+  border-radius: calc(var(--iswc-radius) + 2px);
+  padding: 22px 24px;
+  margin-block: 12px 28px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), var(--iswc-shadow);
+  overflow: hidden;
+  /* Controles nativos en demos: borde/fondo de control para no fundirse con la card.
+     `--pg-*` no existe en el kit; usar tokens `--iswc-control-*`. */
+}
+.demo :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not([type=hidden]):not([type=submit]):not([type=button]):not([type=reset]):not([type=image]):not([type=color]),
+textarea,
+select) {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  padding: 0.5em 0.65em;
+  font: inherit;
+  color: var(--iswc-control-text, var(--iswc-text, inherit));
+  background: var(--iswc-control-bg);
+  border: 1px solid var(--iswc-control-border);
+  border-radius: var(--iswc-radius-sm);
+}
+.demo :is(input, textarea, select):focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: 1px;
+}
+.demo textarea.demo-native-field,
+.demo textarea {
+  resize: vertical;
+  min-block-size: 4.5em;
+}
+.demo {
+  /* iswc-copy-button lleva un iswc-tooltip dentro de su shadow: :has() no lo ve. */
+}
+.demo:has(iswc-tooltip, iswc-popover, iswc-dropdown, iswc-popup, iswc-copy-button, iswc-lightbox, iswc-diagram-lightbox, iswc-loading-overlay, iswc-modal-verificacion) {
+  overflow: visible;
+}
+.demo > * {
+  position: relative;
+  z-index: 1;
+}
+.demo > :is(iswc-loading-overlay, iswc-modal-verificacion) {
+  position: static;
+  z-index: auto;
+}
+.demo {
+  /* <iswc-demo> reusa el chrome de .demo; el heading es su label opcional.
+     Originalmente `iswc-demo&` (CSS Nesting L2); sass solo soporta L1, asi que
+     el bloque sale del nesting: la regla es `<iswc-demo class="demo">`. */
+  /* iswc-demo.demo — ver bloque homónimo al final */
+  /* Overlays: su z-index interno no cruza el stacking del host; subir el host
+     para que no lo tapen siblings posteriores (#log, captions, etc.). */
+}
+.demo > :is(iswc-dropdown, iswc-popup, iswc-tooltip, iswc-popover, iswc-combobox, iswc-date-picker, iswc-date-input, iswc-lightbox, iswc-diagram-lightbox, iswc-loading-overlay, iswc-modal-verificacion) {
+  z-index: 5;
+}
+.demo {
+  /* Menu absolute: el recuadro de abajo lo tapa si ambos valen z-index 1. */
+}
+.demo > *:has(iswc-palette-selector) {
+  z-index: 2;
+}
+.demo > *:has(iswc-palette-selector) ~ * {
+  z-index: 1;
+}
+.demo {
+  /* Charts / playlist: llenan la altura del demo (fit height) */
+}
+.demo:has(iswc-chart, iswc-bar-chart, iswc-line-chart, iswc-pie-chart, iswc-doughnut-chart,
+iswc-radar-chart, iswc-polar-area-chart, iswc-scatter-chart, iswc-bubble-chart) {
+  min-block-size: 16rem;
+}
+.demo > :is(iswc-chart, iswc-bar-chart, iswc-line-chart, iswc-pie-chart, iswc-doughnut-chart,
+iswc-radar-chart, iswc-polar-area-chart, iswc-scatter-chart, iswc-bubble-chart) {
+  flex: 1 1 auto;
+  align-self: stretch;
+  inline-size: 100%;
+  min-block-size: 0;
+  block-size: auto;
+}
+.demo:has(iswc-video-playlist) {
+  min-block-size: 22rem;
+}
+.demo > iswc-video-playlist {
+  flex: 1 1 auto;
+  align-self: stretch;
+  inline-size: 100%;
+  min-block-size: 0;
+  block-size: auto;
+}
+.demo {
+  /* Diagramas / treemap / charts de área: el SVG usa width/height 100% + meet,
+     así que el host DEBE tener altura definida (si queda en auto, el % cae a
+     auto y el dibujo crece hasta que .demo lo recorta). */
+}
+.demo:has(iswc-sequence-diagram, iswc-flowchart, iswc-state-diagram, iswc-gantt,
+iswc-block-diagram, iswc-class-diagram, iswc-er-diagram, iswc-mindmap,
+iswc-timeline, iswc-org-chart, iswc-treemap, iswc-funnel-chart, iswc-heatmap,
+iswc-waterfall-chart, iswc-gauge, iswc-sparkline) {
+  min-block-size: 22rem;
+}
+.demo > :is(iswc-sequence-diagram, iswc-flowchart, iswc-state-diagram, iswc-gantt,
+iswc-block-diagram, iswc-class-diagram, iswc-er-diagram, iswc-mindmap,
+iswc-timeline, iswc-org-chart, iswc-treemap, iswc-funnel-chart, iswc-heatmap,
+iswc-waterfall-chart, iswc-gauge, iswc-sparkline) {
+  flex: 1 1 auto;
+  align-self: stretch;
+  inline-size: 100%;
+  min-block-size: 0;
+  block-size: 20rem;
+  max-block-size: 28rem;
+}
+.demo {
+  /* Como flex item de .demo (columna) el chip se estiraría a todo el ancho */
+}
+.demo > .demo-label {
+  align-self: flex-start;
+}
+
+/* Controles nativos en demos: borde/fondo de control para no fundirse con la card.
+   `--pg-*` no existe en el kit; usar tokens `--iswc-control-*`. */
+.demo-native-field {
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  padding: 0.5em 0.65em;
+  font: inherit;
+  color: var(--iswc-control-text, var(--iswc-text, inherit));
+  background: var(--iswc-control-bg);
+  border: 1px solid var(--iswc-control-border);
+  border-radius: var(--iswc-radius-sm);
+}
+.demo-native-field:focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: 1px;
+}
+
+/* Demos de componentes anclados al viewport (iswc-fab, iswc-speed-dial, iswc-toast…).
+   `transform` crea un containing block, asi que los hijos `position: fixed`
+   se anclan a ESTA caja en vez de al viewport y no se escapan del demo.
+   Sin esto el FAB del ejemplo se va a la esquina de la pagina. */
+:is(iswc-demo[contain], .demo--contain) {
+  position: relative;
+  transform: translateZ(0);
+  min-block-size: 220px;
+  overflow: hidden;
+}
+
+.demo__heading {
+  margin: 0 0 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--iswc-text-soft);
+}
+
+.demo--with-code {
+  padding-inline-end: 3rem;
+}
+.demo--with-code.demo--with-sources {
+  padding-inline-end: 5.5rem;
+}
+
+.demo--with-sources {
+  padding-inline-end: 3rem;
+}
+
+/* Fuentes del componente (JS/CSS/MD) — a la izquierda del botón «Ver código». */
+.demo-sources-btn {
+  position: absolute;
+  inset-block-start: 0.65rem;
+  inset-inline-end: 0.65rem;
+  z-index: 3;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25em;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--iswc-text-dim);
+  cursor: pointer;
+  font: inherit;
+  line-height: 0;
+  transition: background-color 120ms ease, color 120ms ease;
+  /* `.demo--with-code &` es CSS Nesting L2; sass solo soporta L1, asi que
+     la regla sale del nesting: `.demo--with-code .demo-sources-btn`. */
+  /* .demo--with-code .demo-sources-btn — ver bloque homónimo al final */
+}
+.demo-sources-btn:hover {
+  background: var(--iswc-control-bg-hover);
+  color: var(--iswc-text);
+}
+.demo-sources-btn:focus-visible {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 2px;
+}
+.demo-sources-btn iswc-icon {
+  inline-size: 1.15em;
+  block-size: 1.15em;
+}
+
+/* Legacy: barras de fuentes/meta retiradas de los demos. */
+.vs-page-bar,
+.vs-page-hint,
+.file-meta,
+.file-meta-page {
+  display: none !important;
+}
+
+/* Modal full-page de fuentes */
+iswc-dialog.iswc-view-sources {
+  --iswc-dialog-width: 100%;
+  --iswc-dialog-spacing: 0px;
+  --spacing: 0px;
+  --width: 100%;
+}
+iswc-dialog.iswc-view-sources::part(dialog) {
+  inline-size: 100%;
+  max-inline-size: none;
+  block-size: 100%;
+  max-block-size: none;
+  border-radius: 0;
+  box-shadow: none;
+  align-self: stretch;
+  justify-self: stretch;
+}
+iswc-dialog.iswc-view-sources::part(body) {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  max-block-size: none;
+  min-block-size: 0;
+  block-size: 100%;
+}
+iswc-dialog.iswc-view-sources::part(footer) {
+  border-block-start: 1px solid var(--iswc-border);
+}
+
+.vs-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vs-open {
+  font-size: 0.8rem;
+  color: var(--iswc-accent, var(--iswc-brand));
+  text-decoration: none;
+}
+.vs-open:hover {
+  text-decoration: underline;
+}
+
+.vs-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-block-size: 0;
+  flex: 1 1 auto;
+  block-size: 100%;
+}
+
+.vs-path {
+  display: block;
+  margin: 0;
+  padding: 0.45rem 0.85rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  color: var(--iswc-accent, var(--iswc-text-soft));
+  text-decoration: none;
+  border-block-end: 1px solid var(--iswc-border-soft, var(--iswc-border));
+  background: var(--iswc-bg-soft);
+  word-break: break-all;
+}
+.vs-path:hover {
+  text-decoration: underline;
+}
+
+.vs-tabs {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+.vs-tabs::part(tab-group) {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  block-size: 100%;
+}
+.vs-tabs::part(body) {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow: hidden;
+}
+
+.vs-panel {
+  box-sizing: border-box;
+  block-size: 100%;
+  min-block-size: 0;
+  overflow: auto;
+  padding: 0.75rem 1rem;
+}
+
+.vs-pre {
+  display: block;
+  margin: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 12rem;
+  white-space: pre;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.vs-empty {
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  color: var(--iswc-text-soft);
+}
+
+.demo-code-btn {
+  position: absolute;
+  inset-block-start: 0.65rem;
+  inset-inline-end: 0.65rem;
+  z-index: 3;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 2.25em;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--iswc-text-dim);
+  cursor: pointer;
+  font: inherit;
+  line-height: 0;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.demo-code-btn:hover {
+  background: var(--iswc-control-bg-hover);
+  color: var(--iswc-text);
+}
+.demo-code-btn:focus-visible {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 2px;
+}
+.demo-code-btn iswc-icon {
+  inline-size: 1.15em;
+  block-size: 1.15em;
+}
+
+/* El panel vive dentro de <iswc-dropdown>: el anclaje y el reposicionado los
+   hace el componente (dialog en top layer), así que aquí sólo va la caja.
+   Antes era un popover con top/left calculados a mano que se despegaba. */
+.demo-code-dd {
+  position: absolute;
+  inset-block-start: 0.65rem;
+  inset-inline-end: 0.65rem;
+  z-index: 3;
+}
+.demo-code-dd .demo-code-btn {
+  position: static;
+  inset: auto;
+}
+.demo-code-dd {
+  /* iswc-dropdown::part(menu) trae max-width:20rem + overflow:auto pensado para
+     menús cortos: aquí abre paso al ancho real del panel de código y le quita
+     su propio scroll, así el único scroll horizontal que queda es el del
+     <pre> (demo-code-pop__pre). Sin esto había dos scrollbars horizontales
+     anidados: el del ::part(menu) y el del <pre>. */
+}
+.demo-code-dd::part(menu) {
+  max-inline-size: min(48rem, 100vw - 3rem);
+  overflow: visible;
+  padding: 0;
+}
+
+.demo-code-pop {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  inline-size: min(48rem, 100vw - 3rem);
+  max-block-size: min(70vh, 26rem);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--iswc-text);
+}
+
+.demo-code-pop__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem 3rem;
+  border-block-end: 1px solid var(--iswc-border-soft);
+  background: var(--iswc-bg-soft);
+}
+
+.demo-code-pop__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-inline-end: auto;
+}
+
+/* Switch de nivel de minimalidad: component | category | all, con <iswc-tab-group>. */
+.demo-code-pop__level {
+  --track-width: 2px;
+  font-size: 0.7rem;
+}
+.demo-code-pop__level::part(nav) {
+  padding: 0;
+}
+.demo-code-pop__level::part(tabs) {
+  gap: 0.4rem;
+}
+.demo-code-pop__level {
+  /* Sin <iswc-tab-panel>: el body vacío solo aportaría un hueco. */
+}
+.demo-code-pop__level::part(body) {
+  display: none;
+}
+.demo-code-pop__level iswc-tab::part(base) {
+  padding-block: 0.2rem;
+  padding-inline: 0.4rem;
+  gap: 0.3em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  color: var(--iswc-text-dim);
+}
+.demo-code-pop__level iswc-tab:hover::part(base), .demo-code-pop__level iswc-tab[aria-selected=true]::part(base) {
+  color: var(--iswc-text);
+}
+
+/* Cuántos <script> emite cada nivel. Va en el slot `end` del <iswc-tab>. */
+.demo-code-pop__count {
+  min-inline-size: 1.35em;
+  padding-inline: 0.3em;
+  border-radius: 999px;
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--iswc-text-dim);
+  background: var(--iswc-bg-elev);
+}
+.demo-code-pop__count:empty {
+  display: none;
+}
+iswc-tab[aria-selected=true] .demo-code-pop__count {
+  color: var(--iswc-bg);
+  background: var(--iswc-brand, var(--iswc-accent));
+}
+
+.demo-code-pop__size {
+  font-size: 0.7rem;
+  color: var(--iswc-text-dim);
+  white-space: nowrap;
+}
+
+.demo-code-pop__copy {
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-end: 0.6rem;
+  z-index: 1;
+  font-size: 0.9rem;
+}
+
+.demo-code-pop__pre {
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  border-inline-start: 0 !important;
+  box-shadow: none !important;
+  flex: 0 1 auto;
+  min-block-size: 4rem;
+  max-block-size: min(60vh, 22rem);
+  /* Colchón por si la barra crece a dos líneas (switch + tamaño) y el botón
+     de copiar (absolute, anclado al popup) queda más bajo de lo normal. */
+  padding-block-start: 0.5rem !important;
+  overflow: auto;
+  overflow-x: auto;
+  white-space: pre;
+  inline-size: 100%;
+  max-inline-size: none;
+}
+
+.demo-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0 0 0.35em;
+  padding: 0.2em 0.55em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--iswc-border) 80%, transparent);
+  background: color-mix(in srgb, var(--iswc-bg-soft) 70%, transparent);
+  font-family: "JetBrains Mono", var(--iswc-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--iswc-text-soft);
+  text-transform: none;
+  vertical-align: middle;
+}
+.demo-label::before {
+  content: none;
+}
+
+.demo-caption {
+  display: block;
+  margin: 0 0 0.75em;
+  font-size: 0.8rem;
+  color: var(--iswc-text-dim);
+}
+
+.demo-locale-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.65rem;
+}
+
+.demo-locale-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  padding: 0.7em 0.85em;
+  border: 1px solid var(--iswc-border-soft);
+  border-radius: var(--iswc-radius-sm);
+  background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
+  min-inline-size: 0;
+}
+.demo-locale-card iswc-format-date,
+.demo-locale-card iswc-relative-time {
+  font-size: 0.92rem;
+  color: var(--iswc-text-soft);
+}
+
+.demo-locale-card__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.demo-locale-card__name {
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--iswc-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demo-locale-card__code {
+  flex-shrink: 0;
+  font-family: "JetBrains Mono", var(--iswc-mono);
+  font-size: 0.68rem;
+  color: var(--iswc-text-dim);
+}
+
+/* Grid de filas (etiqueta + valor) para demos de format-bytes/format-number/format-date.
+   La primera columna es la firma del ejemplo y la segunda el valor renderizado; en
+   columnas anchas se ven 2×N pero sin partir una fila a la mitad. */
+.format-grid {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, max-content) 1fr;
+  gap: 0.4rem 1.25rem;
+  margin: 0;
+  font-size: 0.92rem;
+}
+@media (max-width: 38rem) {
+  .format-grid {
+    grid-template-columns: 1fr;
+    gap: 0.25rem 0;
+  }
+}
+
+.format-grid__row {
+  display: contents;
+}
+@media (max-width: 38rem) {
+  .format-grid__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    align-items: baseline;
+  }
+}
+
+.format-grid__tag {
+  align-self: center;
+  justify-self: start;
+  font-family: var(--iswc-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  color: var(--iswc-text-soft);
+  background: color-mix(in srgb, var(--iswc-bg-soft) 70%, transparent);
+  padding: 0.18em 0.55em;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--iswc-border) 60%, transparent);
+  white-space: nowrap;
+}
+
+.format-grid__value {
+  align-self: center;
+  justify-self: start;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--iswc-text);
+  /* Permitir que un valor largo no rompa el grid. */
+  min-inline-size: 0;
+}
+@media (max-width: 38rem) {
+  .format-grid__value {
+    flex: 1 1 auto;
+  }
+}
+
+/* Variante en cards: cada fila vive en una tarjeta con borde sutil y aire.
+   La rejilla interna deja la firma (`.format-grid__tag`) arriba a la izquierda
+   y el valor destacado abajo a la derecha. Pensada para entradas, presets y
+   listas de ejemplos cortos (3–6 filas). */
+.format-grid--cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.75rem;
+}
+.format-grid--cards .format-grid__row {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-content: space-between;
+  gap: 0.4rem 0.6rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: color-mix(in srgb, var(--iswc-bg-elev) 70%, transparent);
+  min-block-size: 4.5rem;
+}
+.format-grid--cards .format-grid__tag {
+  align-self: start;
+  justify-self: start;
+}
+.format-grid--cards .format-grid__value {
+  align-self: end;
+  justify-self: end;
+  text-align: right;
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.demo-stack > * + * {
+  margin-block-start: 12px;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  align-items: center;
+}
+
+/* centered cell para matrices variants x appearance */
+.matrix {
+  display: grid;
+  grid-template-columns: max-content repeat(5, minmax(120px, 1fr));
+  gap: 10px 14px;
+  align-items: center;
+  overflow-x: auto;
+  padding-bottom: 0.5em;
+}
+.matrix > .cell-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--iswc-text-dim);
+  text-align: center;
+}
+.matrix > .row-label {
+  font-size: 0.82rem;
+  color: var(--iswc-text-soft);
+  font-weight: 600;
+  grid-column: 1;
+}
+.matrix > .demo-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-block-size: 2.75em;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
+  border: 1px solid var(--iswc-border-soft);
+  border-radius: var(--iswc-radius-sm);
+}
+
+/* --- Code blocks ---------------------------------------------------- */
+pre.code, code.code {
+  font-family: "JetBrains Mono", var(--iswc-mono);
+  font-size: 0.8rem;
+  background: var(--iswc-code-bg);
+  color: var(--iswc-code-text);
+  border-radius: var(--iswc-radius-sm);
+  border: 1px solid var(--iswc-border-soft);
+}
+
+pre.code {
+  padding: 14px 16px;
+  max-block-size: 80vh;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-block: 10px 20px;
+  line-height: 1.55;
+  tab-size: 2;
+  white-space: pre;
+  border-inline-start: 1px solid color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-border));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+code.code {
+  padding: 0.15em 0.4em;
+  font-size: 0.86em;
+}
+
+.tag {
+  color: #74c0fc;
+}
+
+.attr {
+  color: #ffe066;
+}
+
+.val {
+  color: #b2f2bb;
+}
+
+.str {
+  color: #ffc078;
+}
+
+.kw {
+  color: #e599f7;
+}
+
+.com {
+  color: #868e96;
+  font-style: italic;
+}
+
+/* --- Tables (referencia) ------------------------------------------- */
+/* Marcador de fila "default" (estrella en color de marca).
+   Se inyecta en celdas de tablas `kind:table` que reemplazaron
+   la columna `Default`. La estrella es decorativa; el texto
+   "(default)" / "(valor por defecto)" se añade en la columna
+   Descripción para que sea claro sin depender del icono. */
+.ref .iswc-default-marker,
+.iswc-default-marker {
+  display: inline-block;
+  margin-inline-start: 0.35em;
+  color: var(--iswc-color-brand, var(--iswc-accent));
+  font-weight: 700;
+  vertical-align: baseline;
+  /* Glow sutil para que destaque en temas claros sin gritar. */
+  text-shadow: 0 0 0.5em color-mix(in srgb, var(--iswc-color-brand, var(--iswc-accent)) 25%, transparent);
+}
+
+table.ref {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.85rem;
+  margin-block: 10px 22px;
+  overflow: hidden;
+  border: 1px solid var(--iswc-border-soft);
+  border-radius: var(--iswc-radius);
+  background: color-mix(in srgb, var(--iswc-bg-elev) 50%, transparent);
+}
+table.ref th, table.ref td {
+  text-align: left;
+  padding: 10px 12px;
+  border-block-end: 1px solid var(--iswc-border-soft);
+  vertical-align: top;
+}
+table.ref tr:last-child td {
+  border-block-end: 0;
+}
+table.ref th {
+  font-weight: 700;
+  color: var(--iswc-text-soft);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: color-mix(in srgb, var(--iswc-bg-soft) 80%, transparent);
+}
+table.ref td code {
+  font-family: "JetBrains Mono", var(--iswc-mono);
+  font-size: 0.76rem;
+  background: var(--iswc-code-bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--iswc-text);
+  border: 1px solid var(--iswc-border-soft);
+}
+table.ref {
+  /* Columna Ejemplo (API JS): disclosure + iswc-code */
+}
+table.ref td.ref__ejemplo {
+  min-inline-size: 12rem;
+  max-inline-size: 28rem;
+}
+table.ref td.ref__ejemplo iswc-details.api-ejemplo {
+  display: block;
+  inline-size: 100%;
+}
+table.ref td.ref__ejemplo iswc-code.api-ejemplo__code {
+  display: block;
+  inline-size: 100%;
+  margin-block-start: 0.35rem;
+  --iswc-code-min-height: 4rem;
+  max-block-size: 16rem;
+  overflow: auto;
+}
+table.ref td:first-child {
+  inline-size: 30%;
+}
+table.ref td:nth-child(2) {
+  inline-size: 16%;
+  color: var(--iswc-text-soft);
+  white-space: nowrap;
+}
+table.ref td:nth-child(3) {
+  inline-size: auto;
+}
+table.ref {
+  /* Tablas de tokens (p. ej. Personalización): la columna Tokens debe
+     envolver; el nowrap global de .ref col-2 la aplastaba. */
+}
+table.ref.ref--tokens {
+  table-layout: fixed;
+  inline-size: 100%;
+}
+table.ref.ref--tokens th:nth-child(1),
+table.ref.ref--tokens td:nth-child(1) {
+  inline-size: 8.75rem;
+  white-space: normal;
+}
+table.ref.ref--tokens th:nth-child(2),
+table.ref.ref--tokens td:nth-child(2) {
+  inline-size: auto;
+  color: var(--iswc-text);
+  white-space: normal;
+}
+table.ref.ref--tokens th:nth-child(3),
+table.ref.ref--tokens td:nth-child(3) {
+  inline-size: 11rem;
+  color: var(--iswc-text-soft);
+  word-break: break-word;
+}
+table.ref.ref--tokens td:nth-child(2) {
+  line-height: 1.65;
+}
+table.ref.ref--tokens td:nth-child(2) code {
+  display: inline-block;
+  margin: 0.12rem 0.3rem 0.12rem 0;
+  max-inline-size: 100%;
+  word-break: break-all;
+  vertical-align: middle;
+}
+table.ref {
+  /* Derivación (2 cols): la 2ª columna es prosa, no un tipo corto. */
+}
+table.ref.ref--derive {
+  table-layout: fixed;
+  inline-size: 100%;
+}
+table.ref.ref--derive td:nth-child(1) {
+  inline-size: 38%;
+  white-space: normal;
+}
+table.ref.ref--derive td:nth-child(1) code {
+  display: inline-block;
+  margin: 0.1rem 0.2rem 0.1rem 0;
+  word-break: break-all;
+}
+table.ref.ref--derive td:nth-child(2) {
+  inline-size: auto;
+  white-space: normal;
+  color: var(--iswc-text-soft);
+  line-height: 1.45;
+}
+
+.ref-wrap {
+  inline-size: 100%;
+  overflow-x: auto;
+}
+
+/* --- Anatomy diagram ----------------------------------------------- */
+.anatomy {
+  position: relative;
+  background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--iswc-accent) 8%, transparent), transparent 55%), linear-gradient(180deg, transparent 0%, var(--iswc-bg-soft) 100%);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  padding: 40px 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block: 12px 24px;
+}
+.anatomy iswc-button {
+  transform: scale(1.4);
+  transform-origin: center;
+}
+@media (max-width: 900px) {
+  .anatomy iswc-button {
+    transform: scale(1.1);
+  }
+}
+
+.anatomy-calls {
+  position: absolute;
+  font-size: 0.7rem;
+  color: var(--iswc-text-dim);
+  font-family: "JetBrains Mono", var(--iswc-mono);
+}
+.anatomy-calls .call {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.anatomy-calls .line {
+  display: inline-block;
+  block-size: 1px;
+  background: var(--iswc-text-dim);
+  flex: 1;
+  min-inline-size: 24px;
+}
+.anatomy-calls .lbl {
+  color: var(--iswc-accent);
+}
+
+/* --- Playground ---------------------------------------------------- */
+.playground {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .playground {
+    grid-template-columns: 1fr;
+  }
+}
+.playground .stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 220px;
+  padding: 32px;
+  background: var(--iswc-bg-soft);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+.playground .stage iswc-button {
+  font-size: 1.1rem;
+}
+
+.controls {
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  padding: 18px;
+  font-size: 0.85rem;
+  box-shadow: var(--iswc-shadow);
+}
+.controls h4 {
+  margin-block-start: 0;
+  letter-spacing: -0.02em;
+}
+.controls .ctl-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 8px 0;
+}
+.controls label {
+  color: var(--iswc-text-soft);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.controls select,
+.controls input[type=text] {
+  inline-size: 100%;
+  padding: 6px 9px;
+  background: var(--iswc-bg);
+  color: var(--iswc-text);
+  border: 1px solid var(--iswc-border);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.85rem;
+}
+.controls .checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.controls .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  background: var(--iswc-bg);
+  border: 1px solid var(--iswc-border);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  user-select: none;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+.controls .chip input {
+  margin: 0;
+}
+.controls .chip:has(input:checked) {
+  background: var(--iswc-accent-bg);
+  border-color: var(--iswc-accent);
+  color: var(--iswc-accent);
+}
+
+/* --- Event log ----------------------------------------------------- */
+.log {
+  background: var(--iswc-code-bg);
+  color: var(--iswc-code-text);
+  font-family: "JetBrains Mono", var(--iswc-mono);
+  font-size: 0.78rem;
+  border-radius: var(--iswc-radius-sm);
+  padding: 10px 12px;
+  max-block-size: 160px;
+  overflow-y: auto;
+  border: 1px solid var(--iswc-border-soft);
+  margin-block-start: 8px;
+  min-block-size: 2.5em;
+}
+.log:empty {
+  display: none;
+}
+.log .row {
+  padding: 2px 0;
+}
+.log .t {
+  color: var(--iswc-text-dim);
+}
+.log .e {
+  color: #74c0fc;
+}
+.log .hint {
+  color: var(--iswc-text-dim);
+  font-style: italic;
+}
+
+/* --- Callout -------------------------------------------------------- */
+.callout {
+  background: color-mix(in srgb, var(--iswc-accent) 7%, var(--iswc-bg-soft));
+  border: 1px solid color-mix(in srgb, var(--iswc-accent) 32%, var(--iswc-border-soft));
+  padding: 12px 16px;
+  margin-block: 14px 20px;
+  border-radius: var(--iswc-radius-sm);
+  font-size: 0.9rem;
+  color: var(--iswc-text-soft);
+  line-height: 1.5;
+}
+.callout strong {
+  color: var(--iswc-text);
+  font-weight: 700;
+}
+.callout {
+  /* inline code dentro de callout: mismos tokens que pre.code */
+}
+.callout code.code .tag {
+  color: #74c0fc;
+}
+.callout code.code .attr {
+  color: #ffe066;
+}
+.callout code.code .val {
+  color: #b2f2bb;
+}
+.callout code.code .str {
+  color: #ffc078;
+}
+
+/* --- Footer --------------------------------------------------------- */
+.foot {
+  margin-block-start: 72px;
+  padding-block-start: 28px;
+  border-block-start: 1px solid var(--iswc-border-soft);
+  font-size: 0.78rem;
+  color: var(--iswc-text-dim);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: "JetBrains Mono", var(--iswc-mono);
+  letter-spacing: 0.02em;
+}
+
+/* --- Card preview helpers (iswc-card) -------------------------------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-block: 14px 28px;
+}
+.card-grid > iswc-card {
+  align-self: stretch;
+}
+
+.card-meta {
+  font-size: 0.85rem;
+  color: var(--iswc-text-soft);
+  margin: 6px 0 0;
+  line-height: 1.45;
+}
+
+.card-row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-stage-h {
+  block-size: auto;
+  min-block-size: 0;
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  padding: 20px;
+  margin-block: 12px 28px;
+  background: var(--iswc-bg-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: flex-start;
+}
+
+.card-demo-img {
+  display: block;
+  inline-size: 100%;
+  block-size: 132px;
+  object-fit: cover;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--iswc-color-brand) 85%, #fff), var(--iswc-color-brand-stronger));
+}
+
+/* --- Preview chrome (theme + palette; hidden when ?embed=1) ---------- */
+.preview-chrome {
+  position: sticky;
+  z-index: 20;
+  /* 10px del borde real de iswc-main. Hay que descontar su padding en los dos
+     ejes: el chrome es un hijo dentro de la caja de contenido y, ademas, el
+     `top` de sticky se resuelve contra el borde de contenido (ya pasado el
+     padding), no contra el borde del scroller. */
+  inset-block-start: calc(10px - var(--main-pad-top, 36px));
+  margin-block-start: calc(10px - var(--main-pad-top, 36px));
+  margin-inline-start: auto;
+  margin-inline-end: calc(10px - var(--main-pad-x, 48px));
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  inline-size: max-content;
+  max-inline-size: calc(100% - 2rem);
+  padding-block: 0.35rem;
+  padding-inline: 0.45rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
+  border: 1px solid var(--iswc-border);
+  box-shadow: var(--iswc-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+.preview-chrome[hidden] {
+  display: none !important;
+}
+html[data-embed="1"] .preview-chrome {
+  display: none !important;
+}
+.preview-chrome iswc-theme-toggle {
+  font-size: 1.15rem;
+}
+.preview-chrome {
+  /* Hueco para la hamburguesa del índice, que vive en la esquina. */
+}
+@media (max-width: 900px) {
+  .preview-chrome {
+    margin-inline-end: calc(56px - var(--main-pad-x, 20px));
+  }
+}
+
+/* El main reserva un poco de aire arriba para que el chrome fixed no tape el
+   primer heading al cargar. El valor coincide con la altura aprox. del chrome
+   + su offset.
+   Las variables acompañan al padding: el preview-chrome sticky se ancla
+   descontándolas, así que cambiar solo `padding` lo dejaba mal puesto. */
+:is(.main, iswc-main.main) {
+  scroll-padding-top: 4rem;
+}
+@media (max-width: 900px) {
+  :is(.main, iswc-main.main) {
+    --main-pad-top: 24px;
+    --main-pad-x: 20px;
+    padding: var(--main-pad-top) var(--main-pad-x) 60px;
+  }
+}
+
+.preview-chrome__palette {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--iswc-text-soft);
+}
+.preview-chrome__palette select {
+  appearance: none;
+  margin: 0;
+  padding-block: 0.3rem;
+  padding-inline: 0.55rem 1.6rem;
+  border: 1px solid var(--iswc-border);
+  border-radius: 999px;
+  background: var(--iswc-bg-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='%237a8390' d='M4.5 6L8 9.5 11.5 6z'/%3E%3C/svg%3E") no-repeat right 0.45rem center;
+  color: var(--iswc-text);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.preview-chrome__palette select:focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: 2px;
+}
+
+.preview-chrome__label {
+  display: none;
+}
+
+.preview-chrome__save {
+  font-size: 1.15rem; /* a la par del iswc-theme-toggle vecino */
+  flex-shrink: 0;
+}
+
+/* --- iswc-icon defaults ----------------------------------------------- */
+iswc-icon {
+  display: inline-flex;
+  inline-size: 1.1em;
+  block-size: 1.1em;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+iswc-button iswc-icon {
+  color: currentColor;
+}
+
+/* --- Snippets con botón de copiar (docs-chrome.js) ------------------- */
+/* Todo `pre.code` queda envuelto aquí para colgar el botón en la esquina. */
+.code-block {
+  position: relative;
+  display: block;
+  margin-block: 12px 18px;
+}
+.code-block > pre.code,
+.code-block > iswc-code.code,
+.code-block > iswc-code.iswc-code-view {
+  margin: 0;
+}
+.code-block {
+  /* Se revela al acercarse; con foco por teclado siempre visible. */
+}
+.code-block:hover .code-block__copy, .code-block:focus-within .code-block__copy {
+  opacity: 1;
+}
+
+/* Vista readonly de snippets (sustituye pre.code coloreado con runMode). */
+iswc-code.iswc-code-view,
+iswc-code.code[readonly] {
+  display: block;
+  inline-size: 100%;
+  --iswc-code-min-height: 0;
+  --iswc-code-radius: var(--iswc-radius);
+}
+
+.code-block__copy {
+  position: absolute;
+  inset-block-start: 0.45em;
+  inset-inline-end: 0.45em;
+  z-index: 2;
+  font-size: 0.85em;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+@media (hover: none) {
+  .code-block__copy {
+    opacity: 1;
+  }
+}
+
+.callout--cdn .code-block {
+  margin-block: 8px 14px;
+}
+
+/* Homónimos de bloques anidados en `.preview-chrome` / `.demo` / `.demo-sources-btn`
+   (CSS Nesting L2). sass solo soporta L1, asi que las reglas salen del nesting. */
+html:not([data-embed="1"]) .preview-chrome {
+  inset-block-start: 0.5rem;
+}
+
+iswc-demo.demo {
+  display: flex;
+  flex-direction: column;
+}
+
+.demo--with-code .demo-sources-btn {
+  inset-inline-end: 3.15rem;
+}

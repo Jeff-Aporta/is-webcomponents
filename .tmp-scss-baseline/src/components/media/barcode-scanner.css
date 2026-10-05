@@ -1,0 +1,50 @@
+@charset "UTF-8";
+/* <iswc-barcode-scanner> — preview + botón de escaneo. */
+:host {
+  display: grid;
+  gap: 0.5em;
+  font: inherit;
+  max-inline-size: 22rem;
+}
+
+.preview {
+  inline-size: 100%;
+  aspect-ratio: 4/3;
+  background: var(--iswc-bg-elev);
+  border-radius: var(--iswc-radius);
+  object-fit: cover;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.8em;
+  color: var(--iswc-text-soft, inherit);
+  min-block-size: 1em;
+}
+.hint:empty {
+  display: none;
+}
+
+/* F0.3 g12 [a11y/focus]: foco visible solo con teclado */
+:host(:focus-visible) {
+  outline: 2px solid var(--iswc-accent);
+  outline-offset: 3px;
+}
+
+:host(:focus) {
+  outline: none;
+}
+
+/* F0.3 g12 [media/loading]: botón atenuado durante permiso/escaneo */
+:host([aria-busy=true]) .go {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* F0.3 g12 [a11y/disabled]: bloqueado por atributo o por aria-disabled */
+:host([disabled]) .go,
+.go[aria-disabled=true] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

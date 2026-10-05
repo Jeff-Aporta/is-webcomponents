@@ -56,7 +56,7 @@
     {
       "id": "variants",
       "title": "Variantes",
-      "lede": "brand, neutral, success, warning, danger.",
+      "lede": "brand, neutral, text, success, warning, danger.",
       "blocks": [
         {
           "kind": "demo",
@@ -64,6 +64,7 @@
             "<div class=\"stats-grid\">",
             "            <iswc-stat color=\"brand\" label=\"Brand\" value=\"42\" icon=\"mdi:star\"></iswc-stat>",
             "            <iswc-stat color=\"neutral\" label=\"Neutral\" value=\"42\" icon=\"mdi:cog\"></iswc-stat>",
+            "            <iswc-stat color=\"text\" label=\"Text\" value=\"42\" icon=\"mdi:format-text\"></iswc-stat>",
             "            <iswc-stat color=\"success\" label=\"Success\" value=\"98%\" trend=\"+1.2%\" icon=\"mdi:check\"></iswc-stat>",
             "            <iswc-stat color=\"warning\" label=\"Warning\" value=\"12\" trend=\"+4\" icon=\"mdi:alert\"></iswc-stat>",
             "            <iswc-stat color=\"danger\" label=\"Danger\" value=\"3\" trend=\"-1\" icon=\"mdi:close\"></iswc-stat>",
@@ -207,7 +208,7 @@
           },
           {
             "name": "<code>variant</code>",
-            "type": "brand | neutral | success | warning | danger",
+            "type": "brand | neutral | text | success | warning | danger",
             "default": "neutral",
             "desc": "Color."
           }

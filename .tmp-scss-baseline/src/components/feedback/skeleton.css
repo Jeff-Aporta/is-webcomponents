@@ -1,0 +1,71 @@
+@charset "UTF-8";
+:host {
+  /* Base soft; sheen = brillo fantasma (bajo contraste), no metal */
+  --iswc-skeleton-color: var(--iswc-control-bg);
+  --iswc-skeleton-sheen: color-mix(in srgb, var(--iswc-text) 11%, transparent);
+  display: block;
+  position: relative;
+  height: 1em;
+  width: 100%;
+  min-height: 0.75rem;
+  border-radius: 0.25em;
+  overflow: hidden;
+  /* Transparente: si no, pulse se “aplana” contra este fondo */
+  background: transparent;
+}
+
+.indicator {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--iswc-skeleton-color);
+}
+
+/* sheen (default): barrido ghost sobre el color base */
+:host([effect=sheen]) .indicator,
+:host(:not([effect])) .indicator {
+  background-image: linear-gradient(105deg, transparent 0%, transparent 42%, var(--iswc-skeleton-sheen) 50%, transparent 58%, transparent 100%);
+  background-color: var(--iswc-skeleton-color);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: iswc-skeleton-sheen 1.85s ease-in-out infinite;
+}
+
+/* pulse: late y vuelve (visible gracias al host transparente).
+   `alternate` con dos keyframes en vez de 0/50/100: así la curva de ida es el
+   espejo exacto de la de vuelta y el latido aparece y desaparece igual de
+   rápido. Con tres keyframes el ease-in-out se aplicaba por tramo y el pulso
+   se notaba a tirones. */
+:host([effect=pulse]) .indicator {
+  background: var(--iswc-skeleton-color);
+  animation: iswc-skeleton-pulse 0.9s ease-in-out infinite alternate;
+}
+
+:host([effect=none]) .indicator {
+  background: var(--iswc-skeleton-color);
+  background-image: none;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host(:is([effect=sheen], :not([effect]), [effect=pulse])) .indicator {
+    animation: none;
+  }
+}
+@keyframes iswc-skeleton-sheen {
+  0% {
+    background-position: 120% 0;
+  }
+  100% {
+    background-position: -120% 0;
+  }
+}
+@keyframes iswc-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.32;
+  }
+}

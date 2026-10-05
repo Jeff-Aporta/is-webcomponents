@@ -1,0 +1,311 @@
+@charset "UTF-8";
+/* Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) como regla hermana. */
+:host {
+  --iswc-input-border-radius: var(--iswc-radius-sm);
+  --iswc-input-border: var(--iswc-control-border);
+  --iswc-input-bg: var(--iswc-control-bg);
+  --iswc-input-text: var(--iswc-control-text);
+  --iswc-input-focus: var(--iswc-focus, var(--iswc-accent));
+  --iswc-input-danger: var(--iswc-color-danger);
+  --iswc-input-danger-text: var(--iswc-danger-text, var(--iswc-color-danger-stronger));
+  --_border: var(--iswc-input-border);
+  --_focus: var(--iswc-input-focus);
+  display: block;
+  inline-size: var(--iswc-field-width);
+  max-inline-size: 100%;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+}
+:host .form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+:host .label {
+  font-size: 0.875em;
+  font-weight: 500;
+  color: var(--iswc-text-soft, inherit);
+  inline-size: fit-content;
+}
+:host .label[hidden] {
+  display: none !important;
+}
+:host .support {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75em;
+  font-size: 0.8em;
+  color: var(--iswc-text-dim);
+}
+:host .support[hidden] {
+  display: none !important;
+}
+:host .hint,
+:host .error-text {
+  min-inline-size: 0;
+}
+:host .hint[hidden],
+:host .error-text[hidden] {
+  display: none !important;
+}
+:host .error-text {
+  color: var(--iswc-input-danger-text);
+}
+:host .count {
+  margin-inline-start: auto;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+:host .count[hidden] {
+  display: none !important;
+}
+:host .base {
+  display: flex;
+  align-items: center;
+  gap: 0.15em;
+  box-sizing: border-box;
+  block-size: var(--iswc-control-height);
+  min-block-size: var(--iswc-control-height);
+  padding-block: 0;
+  padding-inline: 0.75em 0.35em;
+  background: var(--iswc-input-bg);
+  border: 0.0625em solid var(--_border);
+  border-radius: var(--iswc-input-border-radius);
+  color: var(--iswc-input-text);
+}
+:host .base:focus-within {
+  outline: 2px solid var(--_focus);
+  outline-offset: 1px;
+}
+:host .adorn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  color: var(--iswc-text-dim);
+  line-height: 0;
+  font-size: 1.1em;
+}
+:host .adorn:first-child {
+  margin-inline-end: 0.2em;
+}
+:host .adorn:last-child {
+  margin-inline-start: 0.2em;
+  padding-inline-end: 0.15em;
+}
+:host .adorn[hidden] {
+  display: none !important;
+}
+:host {
+  /* Adornos de texto (prefix/suffix): atenuados y no seleccionables */
+}
+:host .adorn-text {
+  font-size: 0.9em;
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+:host .adorn-text[hidden] {
+  display: none !important;
+}
+:host .input {
+  flex: 1;
+  min-inline-size: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0.5em 0;
+  outline: none;
+}
+:host .input::placeholder {
+  color: var(--iswc-text-dim);
+  opacity: 0.9;
+}
+:host .input:disabled {
+  cursor: not-allowed;
+}
+:host .input {
+  /* Ocultar los controles nativos redundantes (search / number / date) */
+}
+:host .input[type=search] {
+  appearance: none;
+  -webkit-appearance: none;
+}
+:host .input::-webkit-search-cancel-button, :host .input::-webkit-search-decoration {
+  display: none;
+  -webkit-appearance: none;
+}
+:host .input::-webkit-outer-spin-button, :host .input::-webkit-inner-spin-button {
+  margin-inline-start: 0.25em;
+}
+:host .input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.65;
+}
+:host .icon-btn {
+  flex: none;
+  font-size: 1.05em;
+  line-height: 0;
+  color: var(--iswc-text-dim);
+}
+:host .icon-btn[hidden] {
+  display: none !important;
+}
+
+/* ---- appearance ------------------------------------------------------ */
+:host([variant=filled]) .base {
+  background: var(--iswc-control-bg-hover);
+  border-color: transparent;
+  border-bottom-color: var(--_border);
+  border-radius: var(--iswc-input-border-radius) var(--iswc-input-border-radius) 0 0;
+}
+
+:host([variant=underlined]) .base {
+  background: color-mix(in srgb, var(--iswc-control-bg) 35%, transparent);
+  border-color: transparent;
+  border-bottom: 2px solid var(--_border);
+  border-radius: 0;
+  padding-inline-start: 0.15em;
+}
+
+/* ---- estado de error -------------------------------------------------- */
+/* Reglas separadas: si `:state()` no se compila, queremos que la rama [error]
+   siga funcionando. `:is()` también funcionaría pero lo dejamos explícito. */
+:host([error]) {
+  --_border: var(--iswc-input-danger);
+  --_focus: var(--iswc-input-danger);
+}
+:host([error]) :is(.label, .hint) {
+  color: var(--iswc-input-danger-text);
+}
+
+:host(:state(invalid)) {
+  --_border: var(--iswc-input-danger);
+  --_focus: var(--iswc-input-danger);
+}
+:host(:state(invalid)) :is(.label, .hint) {
+  color: var(--iswc-input-danger-text);
+}
+
+/* ---- ancho ------------------------------------------------------------ */
+:host([full-width]) {
+  inline-size: 100%;
+}
+
+/* ---- label a la izquierda --------------------------------------------- */
+:host([label-placement=start]) .form-control {
+  display: grid;
+  grid-template-columns: var(--iswc-field-label-width) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.75em;
+  row-gap: 0.35em;
+}
+:host([label-placement=start]) .label {
+  grid-column: 1;
+  grid-row: 1;
+}
+:host([label-placement=start]) .base {
+  grid-column: 2;
+  grid-row: 1;
+}
+:host([label-placement=start]) .support {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* ---- label flotante (paridad con ISP form/_LabelInput.svelte) ----------
+   Opt-in con label-placement="float". La etiqueta descansa dentro del campo
+   y "traslada" hacia arriba al enfocar o cuando ya hay valor. Los colores de
+   borde salen de los tokens de tema --iswc-b-* (nunca literales). */
+:host([label-placement=float]) {
+  --_border: var(--iswc-b-optional, var(--iswc-control-border));
+}
+:host([label-placement=float]) .form-control {
+  position: relative;
+}
+:host([label-placement=float]) .base {
+  align-items: flex-end;
+  min-block-size: 3.2em;
+  background: transparent;
+  border-color: transparent;
+  border-bottom-color: var(--_border);
+  border-radius: 0;
+  padding: 0 0.35em;
+  padding-inline-start: 0.75em;
+}
+:host([label-placement=float]) .input {
+  padding-block: 0.95em 0.5em;
+}
+:host([label-placement=float]) {
+  /* La etiqueta sale del flujo: `.base` pasa a ocupar la primera fila. */
+}
+:host([label-placement=float]) .label {
+  position: absolute;
+  inset-block-start: 1.05em;
+  inset-inline-start: 0.9em;
+  max-inline-size: calc(100% - 1.8em);
+  margin: 0;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1;
+  cursor: text;
+  transform-origin: left top;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), font-size 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+:host([label-placement=float]) .support {
+  margin-block-start: 0.15em;
+}
+
+/* Campo obligatorio / de solo lectura: mismo contrato de color que ISP. */
+:host([label-placement=float][required]) {
+  --_border: var(--iswc-b-required, var(--iswc-control-border));
+}
+
+:host([label-placement=float][readonly]) {
+  --_border: var(--iswc-b-readonly, var(--iswc-control-border));
+}
+:host([label-placement=float][readonly]) .base {
+  background: var(--iswc-bg-readonly, var(--iswc-control-bg));
+  border-style: solid;
+}
+
+:host([label-placement=float][disabled]) {
+  --_border: var(--iswc-b-readonly, var(--iswc-control-border));
+}
+
+/* Etiqueta que sube: `:focus-within` para el caso atributo, `:state(focused)`
+   y `:not(:state(blank))` para los customs. Lista simple: esbuild y los
+   navegadores la parsean aunque algún selector no aplique. */
+:host([label-placement=float]:focus-within) .label,
+:host([label-placement=float]:state(focused)) .label,
+:host([label-placement=float]:not(:state(blank))) .label {
+  transform: translateY(-0.95em);
+  font-size: 0.75em;
+}
+
+:host([label-placement=float][required]:state(focused)) .label {
+  color: color-mix(in srgb, var(--iswc-b-required, var(--iswc-control-border)) 40%, var(--iswc-text));
+}
+
+:host([label-placement=float]:not([required]):state(focused)) .label {
+  color: color-mix(in srgb, var(--iswc-b-optional, var(--iswc-control-border)) 40%, var(--iswc-text));
+}
+
+:host([label-placement=float][readonly]) .label {
+  color: color-mix(in srgb, var(--iswc-b-readonly, var(--iswc-control-border)) 40%, var(--iswc-text));
+}
+
+:host([disabled]) {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+:host([readonly]) .base {
+  background: transparent;
+  border-style: dashed;
+}

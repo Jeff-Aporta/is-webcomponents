@@ -183,13 +183,21 @@
     {
       "id": "sizes",
       "title": "Escala",
-      "lede": [
-        "No hay atributo <code class=\"code\">size</code>: el componente se mide entero en",
-        "          <code class=\"code\">em</code>, así que su tamaño sale del",
-        "          <code class=\"code\">font-size</code> del contexto. Para hacerlo más grande o más",
-        "          pequeño se cambia el font-size, y todo (icono, padding, radio) escala con él."
-      ],
+      "lede": "Sin atributo size. Se mide en em y hereda el font-size del contexto.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Escalar</code>",
+              "Cambia el font-size del ancestro: icono, padding y radio escalan con él."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": [
@@ -221,13 +229,21 @@
     {
       "id": "variants",
       "title": "Color",
-      "lede": [
-        "<code class=\"code\">color</code> define el color semántico:",
-        "          brand, neutral, danger, success, warning. Es una dimensión distinta de",
-        "          <code class=\"code\">variant</code>, que gobierna la presentación",
-        "          (filled, outlined, plain…)."
-      ],
+      "lede": "color = color semántico (brand, neutral, danger, success, warning).",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Ortogonalidad</code>",
+              "Distinto de variant, que gobierna la presentación (filled, outlined, plain…)."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": [

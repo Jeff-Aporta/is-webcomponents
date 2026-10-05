@@ -1,19 +1,26 @@
-// button.scss — POC de migración CSS → SCSS.
-// La sintaxis es la misma que button.css (CSS es superconjunto de SCSS
-// en este dialecto); no introducimos variables ni mixins todavia para
-// que el diff contra button.css sea trivial y reversible. Fase 2 ya
-// introduce tokens via `@use '../styles/tokens' as *;` cuando
-// aparezca la primera variable compartida.
+@use '../../styles/mixins' as *;
 
-/* Color × appearance ortogonales
- *
- * 1) `color` solo enlaza la familia a roles `--_tone-*` (tokens relativos
- *    de is-base: base / strong / stronger / paler / pale + soft/text).
- * 2) `variant` solo consume esos roles. Añadir un color = una regla de
- *    enlace; añadir una apariencia = una regla de variant. Sin matriz N×M.
- *
- * Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) hermanas.
- */
+// button.scss — Color × appearance ortogonales
+//   1) `color` solo enlaza la familia a roles `--_tone-*` (tokens relativos
+//      de is-base: base / strong / stronger / paler / pale + soft/text).
+//   2) `variant` solo consume esos roles. Añadir un color = una regla de
+//      enlace; añadir una apariencia = una regla de variant. Sin matriz N×M.
+//   Las 8 familias (brand/info/success/warning/danger/error/neutral/text)
+//   se generan con `tones($family)` + los 4 mixins dedicados.
+//
+// Shadow DOM: :host:is([attr]) NO matchea. Usar :host([attr]) hermanas.
+
+/* ── 1. Color → roles de tono (unica capa que conoce nombres) ─────────── */
+:host([color="brand"]) { @include brand-tones; }
+:host([color="info"]) { @include info-tones; }
+:host([color="success"]) { @include tones(success); }
+:host([color="warning"]) { @include tones(warning); }
+:host([color="danger"]) { @include tones(danger); }
+:host([color="error"]) { @include tones(error); }
+:host([color="text"]) { @include text-tones; }
+:host([color="neutral"]) { @include neutral-tones; }
+
+/* ── 2. Host base + .btn ─────────────────────────────────────────────── */
 :host {
   --iswc-button-font-family: var(--iswc-font-family);
   --iswc-button-font-weight: 500;
@@ -121,120 +128,6 @@
       &:empty { display: none; }
     }
   }
-}
-
-/* ── 1. Color → roles de tono (unica capa que conoce nombres) ─────────── */
-:host([color="brand"]) {
-  /* Solo tokens relativos (+ hex). Nunca -500/-600 aquí: el tema ya no los define
-     y el fallback numérico en var() hace que token-vocabulary / el ojo vean dos idiomas. */
-  --_tone: var(--iswc-color-brand);
-  --_tone-strong: var(--iswc-color-brand-strong);
-  --_tone-stronger: var(--iswc-color-brand-stronger, color-mix(in srgb, dodgerblue 86%, black));
-  --_tone-strongest: var(--iswc-color-brand-strongest, color-mix(in srgb, dodgerblue 74%, black));
-  --_tone-paler: var(--iswc-color-brand-paler);
-  --_tone-pale: var(--iswc-color-brand-pale);
-  --_tone-text: var(--iswc-brand-text, var(--_tone-stronger));
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
-}
-:host([color="success"]) {
-  --_tone: var(--iswc-color-success);
-  --_tone-strong: var(--iswc-color-success-strong);
-  --_tone-stronger: var(--iswc-color-success-stronger);
-  --_tone-strongest: var(--iswc-color-success-stronger);
-  --_tone-paler: var(--iswc-color-success-paler);
-  --_tone-pale: var(--iswc-color-success-pale);
-  --_tone-text: var(--iswc-success-text, var(--_tone-stronger));
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
-}
-:host([color="warning"]) {
-  --_tone: var(--iswc-color-warning);
-  --_tone-strong: var(--iswc-color-warning-strong);
-  --_tone-stronger: var(--iswc-color-warning-stronger);
-  --_tone-strongest: var(--iswc-color-warning-stronger);
-  --_tone-paler: var(--iswc-color-warning-paler);
-  --_tone-pale: var(--iswc-color-warning-pale);
-  --_tone-text: var(--iswc-warning-text, var(--_tone-stronger));
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
-}
-:host([color="danger"]) {
-  --_tone: var(--iswc-color-danger);
-  --_tone-strong: var(--iswc-color-danger-strong);
-  --_tone-stronger: var(--iswc-color-danger-stronger);
-  --_tone-strongest: var(--iswc-color-danger-stronger);
-  --_tone-paler: var(--iswc-color-danger-paler);
-  --_tone-pale: var(--iswc-color-danger-pale);
-  --_tone-text: var(--iswc-danger-text, var(--_tone-stronger));
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
-}
-/* info: dato a notar sin implicar éxito ni fallo (p.ej. "Nueva versión"). */
-:host([color="info"]) {
-  --_tone: var(--iswc-color-info);
-  --_tone-strong: var(--iswc-color-info-strong);
-  --_tone-stronger: var(--iswc-color-info-stronger);
-  --_tone-strongest: var(--iswc-color-info-strongest, var(--iswc-color-info-stronger));
-  --_tone-paler: var(--iswc-color-info-paler);
-  --_tone-pale: var(--iswc-color-info-pale);
-  --_tone-text: var(--iswc-info-text, var(--_tone-stronger));
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
-}
-/* error: fallo ("Error al guardar"), distinto de danger (acción destructiva). */
-:host([color="error"]) {
-  --_tone: var(--iswc-color-error);
-  --_tone-strong: var(--iswc-color-error-strong);
-  --_tone-stronger: var(--iswc-color-error-stronger);
-  --_tone-strongest: var(--iswc-color-error-stronger);
-  --_tone-paler: var(--iswc-color-error-paler);
-  --_tone-pale: var(--iswc-color-error-pale);
-  --_tone-text: var(--iswc-error-text, var(--_tone-stronger));
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
-}
-/* text: foreground del tema (--iswc-text). Plain/outlined legibles.
- * Distinto de neutral (#888 muted). Rampa local con color-mix. */
-:host([color="text"]) {
-  --_tone: var(--iswc-text);
-  --_tone-strong: color-mix(in srgb, var(--iswc-text) 82%, black);
-  --_tone-stronger: color-mix(in srgb, var(--iswc-text) 62%, black);
-  --_tone-strongest: color-mix(in srgb, var(--iswc-text) 45%, black);
-  --_tone-paler: color-mix(in srgb, var(--iswc-text) 12%, white);
-  --_tone-pale: color-mix(in srgb, var(--iswc-text) 28%, white);
-  --_tone-text: var(--_tone);
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-bg);
-}
-/* neutral: familia semantica con base #888 (canon geometrico).
- * W40: usar los tokens `--iswc-color-neutral-*` para que el tono #888 se
- * aplique de verdad (antes reusaba `--iswc-control-bg/-border` y los botones
- * filled tomaban el color del paper, no el gris central del espacio).
- * W46: --_tone-soft y --_tone-soft-active ahora usan alpha del color
- * (como soft-filled) en vez de mezcla con blanco.
- * W47: --_tone-text ahora es el propio --_tone (no --iswc-control-text
- * que en dark mode es blanco). Asi el text de neutral es #888 en
- * todas las variants (outlined/plain/ghost/soft-filled), igual que
- * los otros colores cuyo text es su propio tono. */
-:host([color="neutral"]) {
-  --_tone: var(--iswc-color-neutral);
-  --_tone-strong: var(--iswc-color-neutral-strong);
-  --_tone-stronger: var(--iswc-color-neutral-stronger);
-  --_tone-strongest: var(--iswc-color-neutral-strongest);
-  --_tone-paler: var(--iswc-color-neutral-paler);
-  --_tone-pale: var(--iswc-color-neutral-pale);
-  --_tone-text: var(--_tone);
-  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
-  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: var(--iswc-on-brand);
 }
 
 /* ── 2. Appearance → consume roles (no conoce nombres de color) ─────────

@@ -1,0 +1,73 @@
+/* iswc-divider */
+:host {
+  --iswc-divider-color: var(--iswc-text);
+  --opacity: 0.2;
+  --iswc-divider-width: 1px;
+  --iswc-divider-spacing: 0.75em;
+  display: block;
+}
+
+.divider {
+  display: block;
+  background: var(--iswc-divider-color);
+  opacity: var(--opacity);
+}
+
+/* theme colors */
+:host([color=text]) {
+  --iswc-divider-color: var(--iswc-text);
+}
+
+:host([color=text-soft]) {
+  --iswc-divider-color: var(--iswc-text-soft);
+}
+
+:host([color=text-dim]) {
+  --iswc-divider-color: var(--iswc-text-dim);
+}
+
+:host([color=border]) {
+  --iswc-divider-color: var(--iswc-border);
+}
+
+:host([color=control]) {
+  --iswc-divider-color: var(--iswc-control-border);
+}
+
+:host(:is([color=brand], [color=accent])) {
+  --iswc-divider-color: var(--iswc-accent, var(--iswc-color-brand));
+}
+
+:host([color=success]) {
+  --iswc-divider-color: var(--iswc-color-success);
+}
+
+:host([color=warning]) {
+  --iswc-divider-color: var(--iswc-color-warning);
+}
+
+:host([color=danger]) {
+  --iswc-divider-color: var(--iswc-color-danger);
+}
+
+:host([orientation=horizontal]) {
+  inline-size: 100%;
+  margin-block: var(--iswc-divider-spacing);
+}
+:host([orientation=horizontal]) .divider {
+  inline-size: 100%;
+  block-size: var(--iswc-divider-width);
+}
+
+:host([orientation=vertical]) {
+  display: inline-block;
+  block-size: 100%;
+  min-block-size: 1em;
+  margin-inline: var(--iswc-divider-spacing);
+  align-self: stretch;
+}
+:host([orientation=vertical]) .divider {
+  inline-size: var(--iswc-divider-width);
+  block-size: 100%;
+  min-block-size: inherit;
+}

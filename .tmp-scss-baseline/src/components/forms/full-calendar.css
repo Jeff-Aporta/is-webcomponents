@@ -1,0 +1,196 @@
+@charset "UTF-8";
+/* iswc-full-calendar */
+:host {
+  display: block;
+  font: inherit;
+  color: var(--iswc-text);
+  --_row-h: 4rem;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: var(--iswc-bg-elev);
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--iswc-border-soft);
+  background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
+}
+
+/* Botones de la barra: <iswc-button>. La apariencia (incluida la del botón de
+   vista activo) se pide por atributos `variant`/`color`; pintar fondo o borde
+   desde aquí caería en el host, no en el <button> de su shadow root. */
+.ctrl,
+.view-btn {
+  font-size: 0.82rem;
+}
+
+.title {
+  font-weight: 600;
+  margin-left: 0.5rem;
+  text-transform: capitalize;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.grid {
+  padding: 0;
+}
+.grid[data-view=month] {
+  overflow: hidden;
+}
+
+/* Cabeceras de columna compartidas: misma tipografía pequeña + mayúsculas,
+ * borde inferior suave. La variante month (.wk-head) y la week (.col-head)
+ * añaden su propio padding. */
+:is(.wk-head, .col-head) {
+  font-size: 0.72rem;
+  color: var(--iswc-text-dim);
+  border-bottom: 1px solid var(--iswc-border-soft);
+  text-transform: uppercase;
+}
+
+.month {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.month .wk-head {
+  padding: 0.35rem 0.45rem;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+.month .day {
+  text-align: left;
+  border-right: 1px solid var(--iswc-border-soft);
+  border-bottom: 1px solid var(--iswc-border-soft);
+  padding: 0.25rem 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 6.5rem;
+  font: inherit;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.month .day.out {
+  background: color-mix(in srgb, var(--iswc-text) 4%, transparent);
+  color: var(--iswc-text-soft);
+}
+.month .day.today {
+  background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+}
+.month .day .num {
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+.month .events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.month .ev {
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--c, var(--iswc-accent));
+  color: white;
+  border: 0;
+}
+.month .ev:hover {
+  opacity: 0.85;
+}
+
+.grid-week {
+  display: grid;
+  grid-template-columns: 4rem repeat(var(--cc, 7), 1fr);
+  border-bottom: 1px solid var(--iswc-border-soft);
+}
+.grid-week .col-head {
+  padding: 0.35rem 0.45rem;
+  font-size: 0.78rem;
+  color: var(--iswc-text-soft);
+  text-transform: capitalize;
+  border-right: 1px solid var(--iswc-border-soft);
+  font-weight: 500;
+}
+.grid-week .axis {
+  background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
+}
+
+.hours {
+  display: grid;
+  grid-template-columns: 4rem repeat(var(--cc, 7), 1fr);
+  position: relative;
+}
+.hours .axis {
+  border-right: 1px solid var(--iswc-border-soft);
+}
+.hours .axis .hour {
+  height: var(--_row-h);
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  color: var(--iswc-text-soft);
+  border-top: 1px solid var(--iswc-border-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.day-col {
+  position: relative;
+  border-right: 1px solid var(--iswc-border-soft);
+  min-height: calc(var(--_row-h) * 13);
+}
+
+.cell-hour {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border: 0;
+  background: transparent;
+  height: var(--_row-h);
+}
+.cell-hour[data-hour="7"] {
+  top: 0;
+}
+.cell-hour:hover {
+  background: color-mix(in srgb, var(--iswc-accent) 6%, transparent);
+}
+
+/* Pastilla de evento: misma forma en month (inline) y week/day (bloque). */
+:is(.ev, .ev-block) {
+  background: var(--c, var(--iswc-accent));
+  color: white;
+  border: 0;
+}
+:is(.ev, .ev-block):hover {
+  opacity: 0.85;
+}
+
+.ev-block {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 0.72rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+}

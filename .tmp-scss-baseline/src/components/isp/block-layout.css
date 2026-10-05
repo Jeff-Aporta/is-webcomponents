@@ -1,0 +1,46 @@
+@charset "UTF-8";
+/* <iswc-block-layout> — caja de bloque que mide su propio tamaño.
+   Índice de --vars publicadas por el JS (solo lectura desde CSS):
+     --clientw : ancho del host en px, sin unidad.
+     --clienth : alto del host en px, sin unidad.
+     --lerpw   : progreso 0→1 entre los breakpoints sm y xl.
+
+   ISP: `inline` cambiaba el display del div contenedor.
+   ISP: `cscroll` (o un style con overflow auto/scroll) añadía `custom-scrollbar`.
+        Aquí el scrollbar ya viene temizado por _shared/scrollbars.css. */
+:host {
+  display: block;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  /* g11 — UX/UI proposals: preferencias de accesibilidad y esquema de color. */
+}
+@media (prefers-reduced-motion: reduce) {
+  :host, :host * {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([inline]) {
+  display: inline-block;
+  max-inline-size: none;
+}
+
+:host([cscroll]) {
+  overflow: auto;
+}
+
+/* Default para esquema claro; el dark override añade el color lavanda. */
+:host(:focus-visible) {
+  outline-color: var(--iswc-brand);
+}
+@media (prefers-color-scheme: dark) {
+  :host(:focus-visible) {
+    outline-color: var(--iswc-brand);
+  }
+}

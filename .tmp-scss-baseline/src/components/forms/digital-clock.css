@@ -1,0 +1,83 @@
+@charset "UTF-8";
+/* hidden en un nodo interno debe ganar al display propio del componente. */
+[hidden] {
+  display: none !important;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host {
+  --iswc-clock-height: 14em;
+  display: inline-block;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+}
+:host .base {
+  display: flex;
+  gap: 0.25em;
+  padding: 0.4em;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  box-shadow: var(--iswc-shadow);
+}
+:host {
+  /* Las columnas (HH/MM/SS) y la lista (grupo) comparten scroll vertical y
+   * paddin interno para que el scrollIntoView deje la opción centrada. */
+}
+:host :is(.list, .col) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  max-height: var(--iswc-clock-height);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  /* Deja que la opción elegida quede centrada al hacer scrollIntoView. */
+  scroll-padding: 3em 0;
+}
+:host .list {
+  min-width: 7.5em;
+}
+:host .col {
+  min-width: 3.25em;
+}
+:host .col + .col {
+  padding-inline-start: 0.25em;
+  border-inline-start: 1px solid var(--iswc-border);
+}
+:host .opt {
+  flex: 0 0 auto;
+  padding: 0.45em 0.7em;
+  border: 0;
+  border-radius: var(--iswc-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  cursor: pointer;
+}
+:host .opt:hover:not(:disabled) {
+  background: var(--iswc-control-bg-hover);
+}
+:host .opt:focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: -2px;
+}
+:host .opt[data-selected] {
+  background: var(--iswc-color-brand-strong);
+  color: var(--iswc-on-brand);
+  font-weight: 600;
+}
+:host .opt:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+:host([disabled]) .base {
+  opacity: 0.6;
+  pointer-events: none;
+}

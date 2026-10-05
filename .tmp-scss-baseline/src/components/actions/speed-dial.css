@@ -1,0 +1,280 @@
+@charset "UTF-8";
+/* iswc-speed-dial */
+@import url("../_shared/focus-ring.css");
+:host {
+  display: inline-flex;
+  position: relative;
+  --iswc-radius-fab: 999px;
+}
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--distance, 0.65rem);
+  position: relative;
+}
+
+/* El trigger es un <iswc-check-icon-button>: hace el SWITCH entre el icono de
+   cerrado y el de abierto (antes se rotaba un solo icono 45deg, que ademas
+   amplificaba cualquier desalineacion). Aqui solo se le da el look de FAB
+   a traves de su ::part(button). */
+.trigger {
+  --iswc-speed-dial-radius: var(--iswc-radius-fab);
+  /* El host DEBE medir lo mismo que su boton visible: iswc-check-icon-button
+     no se dimensiona solo y el host quedaba en 33.8x45 mientras el circulo
+     era 45x45, con los centros desalineados. El abanico se calcula desde el
+     centro del host, asi que esa diferencia hacia que los items de un lado
+     se vieran mas cerca del trigger que los del otro. */
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  transition: transform 180ms ease;
+}
+
+.trigger:hover {
+  transform: translateY(-1px);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-focus-fallback));
+  outline-offset: var(--iswc-focus-offset);
+}
+
+/* `iswc-check-icon-button.trigger` y no solo `.trigger`: dentro de ese botón
+   ahora hay un <iswc-button>, cuyas reglas internas son `:host([color=…]) .btn`
+   (0,2,0). Con `.trigger::part(button)` (0,1,1) el fondo de acento del FAB
+   perdía contra el fondo del botón del kit; añadir el tipo lo sube a (0,2,1). */
+iswc-check-icon-button.trigger::part(button) {
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  border-radius: var(--iswc-speed-dial-radius);
+  background: var(--iswc-accent);
+  color: var(--iswc-on-accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-accent) 70%, transparent), 0 8px 22px color-mix(in srgb, var(--iswc-accent) 35%, transparent);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 180ms ease, box-shadow 180ms ease;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  align-items: center;
+  pointer-events: none;
+}
+
+.actions ::slotted(iswc-speed-dial-action) {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 200ms ease, transform 200ms ease;
+  pointer-events: none;
+}
+
+:host([open]) .actions ::slotted(iswc-speed-dial-action) {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: calc(var(--i, 0) * 35ms);
+}
+
+/* Arreglo de la dirección: para "left/right" el actions contenedor cambia
+   layout. Mantener simple: las acciones se apilan arriba del trigger por
+   default y abajo cuando direction=down. Para left/right se reordenan. */
+.root[data-direction=up] {
+  flex-direction: column-reverse;
+}
+
+.root[data-direction=down] {
+  flex-direction: column;
+}
+
+.root[data-direction=left] {
+  flex-direction: row-reverse;
+}
+
+.root[data-direction=right] {
+  flex-direction: row;
+}
+
+/* iswc-speed-dial-action */
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem 0.3rem 0.65rem;
+  background: var(--iswc-bg-elev);
+  color: var(--iswc-text);
+  border: 1px solid var(--iswc-border);
+  border-radius: 999px;
+  text-decoration: none;
+  font: inherit;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  box-shadow: 0 6px 14px color-mix(in srgb, #000 18%, transparent);
+}
+
+.action .ico {
+  display: inline-grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+  color: var(--iswc-accent);
+  font-size: 1rem;
+}
+
+.action:hover {
+  background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev));
+}
+
+.action.iswc-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.action {
+  /* Los 4 colores no son una enum semántica (no cambian fondo del pill,
+     solo el swatch .ico): se consolidan en :is() para no repetir el bloque. */
+}
+
+.action[data-color=neutral] .ico {
+  background: color-mix(in srgb, var(--iswc-text) 10%, transparent);
+  color: var(--iswc-text);
+}
+
+.action[data-color=text] .ico {
+  background: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+  color: var(--iswc-text);
+}
+
+.action[data-color=success] .ico {
+  background: color-mix(in srgb, var(--iswc-success) 18%, transparent);
+  color: var(--iswc-success);
+}
+
+.action[data-color=warning] .ico {
+  background: color-mix(in srgb, var(--iswc-warning) 18%, transparent);
+  color: var(--iswc-warning);
+}
+
+.action[data-color=danger] .ico {
+  background: color-mix(in srgb, var(--iswc-danger) 18%, transparent);
+  color: var(--iswc-danger);
+}
+
+/* ── direction="radial" ────────────────────────────────────────────────
+   El JS calcula --sd-x / --sd-y por accion (coordenadas polares respecto
+   al centro del trigger) y aquí solo se aplican. El contenedor deja de
+   apilar en flex: cada accion se posiciona absoluta sobre el centro. */
+.root[data-direction=radial] {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.root[data-direction=radial] .actions {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.root[data-direction=radial] .actions ::slotted(iswc-speed-dial-action) {
+  position: absolute;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  /* Cerrado: todas colapsadas en el centro, bajo el trigger. */
+  transform: translate(-50%, -50%) scale(0.6);
+  transform-origin: center;
+}
+
+.root[data-direction=radial] {
+  /* El trigger queda por encima del abanico colapsado. */
+}
+
+.root[data-direction=radial] .trigger {
+  position: relative;
+  z-index: 1;
+}
+
+:host([direction=radial][open]) .actions ::slotted(iswc-speed-dial-action) {
+  /* Abierto: cada una viaja a su coordenada polar. */
+  transform: translate(calc(-50% + var(--sd-x, 0px)), calc(-50% + var(--sd-y, 0px))) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actions ::slotted(iswc-speed-dial-action) {
+    transition: none;
+  }
+}
+/* En radial las acciones son BOTONES CIRCULARES de icono: la geometria del
+   abanico asume items uniformes y redondos. Con la pildora (icono + etiqueta)
+   el icono queda descentrado respecto al radio y los calculos de colision
+   dejan de valer. El padre marca cada accion con data-radial; la etiqueta
+   pasa a tooltip nativo + aria-label, que ya pone el JS. */
+:host([data-radial]) .action {
+  width: 2.75em;
+  height: 2.75em;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+:host([data-radial]) .action .label {
+  display: none;
+}
+
+:host([data-radial]) .action .ico {
+  margin: 0;
+}
+
+/* ── data-packed: reparto por LAYOUT dentro del wrapper ────────────────
+   Cuando el area radial no da para todas las acciones (o se pide
+   data-layout="grid"/"flex"), se abandonan las coordenadas polares y el
+   reparto lo hace el layout nativo dentro de la caja del wrapper. Al no
+   haber posiciones absolutas calculadas, NINGUNA accion puede salirse. */
+:host([data-packed]) .actions {
+  position: absolute;
+  /* El JS publica la banda libre del wrapper (sin la huella del trigger).
+     El grid reparte DENTRO de esa caja, asi que nada puede desbordarla. */
+  inset: auto;
+  left: var(--sd-pack-left, 0px);
+  top: var(--sd-pack-top, 0px);
+  width: var(--sd-pack-w, auto);
+  height: var(--sd-pack-h, auto);
+  padding: 0.25rem;
+  place-content: center;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+:host([data-packed=grid]) .actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(2.75em, max-content));
+  justify-content: center;
+  align-content: center;
+}
+
+:host([data-packed=flex]) .actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+}
+
+/* En modo empaquetado las acciones vuelven al flujo: sin --sd-x/--sd-y. */
+:host([data-packed]) .actions ::slotted(iswc-speed-dial-action) {
+  position: static;
+  transform: scale(0.6);
+}
+
+:host([data-packed][open]) .actions ::slotted(iswc-speed-dial-action) {
+  transform: scale(1);
+}

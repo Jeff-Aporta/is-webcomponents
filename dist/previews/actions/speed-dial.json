@@ -44,8 +44,22 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "FAB que al clic despliega un puñado de acciones rápidas. Apunta arriba por defecto; cambiá la dirección con el atributo <code class=\"code\">direction</code>.",
-      "blocks": []
+      "lede": "FAB que al clic despliega un puñado de acciones rápidas.",
+      "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Default</code>",
+              "Apunta arriba. La dirección se cambia con el atributo direction."
+            ]
+          ]
+        }
+      ]
     },
     {
       "id": "up",

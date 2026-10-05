@@ -1,0 +1,87 @@
+@charset "UTF-8";
+/* <iswc-catalogo-gen> — catálogo CRUD: toolbar de acciones + grid + drawer
+   de ficha + modales Verificar / Eliminar / Recodificar / Duplicar /
+   Consolidar. El backdrop y la caja los pone el <iswc-dialog> interno. */
+:host {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 20rem;
+  font-family: var(--iswc-sans, inherit);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--iswc-text, inherit);
+  background: transparent;
+}
+:host .root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: auto;
+}
+:host .toolbar {
+  display: grid;
+  grid-template-rows: repeat(var(--iswc-cat-rows), minmax(0, 1fr));
+  grid-auto-flow: column;
+  justify-content: left;
+  gap: 0;
+  inline-size: 100%;
+  overflow-x: auto;
+  align-items: center;
+}
+:host .toolbar[hidden] {
+  display: none;
+}
+:host .actions {
+  display: contents;
+}
+:host .tool-btn {
+  justify-content: left;
+  border-radius: 0;
+  min-inline-size: 100px;
+}
+:host .search {
+  min-inline-size: 12rem;
+  margin-inline: 0.25rem;
+}
+:host .grid-wrap {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+:host .grid {
+  flex: 1 1 auto;
+}
+:host .drawer-body {
+  padding: 0.75rem;
+  box-sizing: border-box;
+}
+:host {
+  /* Modal genérico de PK: --width lo consume el <iswc-dialog> interno. */
+}
+:host .pk-dlg {
+  --width: 24em;
+}
+:host .pk-title {
+  font-size: 1em;
+  font-weight: 600;
+}
+:host .pk-hint {
+  margin: 0 0 0.65em;
+  color: var(--iswc-text-muted, var(--iswc-text, inherit));
+  font-size: 0.9em;
+}
+:host .pk-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65em;
+}
+:host .pk-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}

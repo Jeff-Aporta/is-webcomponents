@@ -1,6 +1,6 @@
 # Catálogo iswc-* (inventario completo)
 
-Fuente viva: regenerar con `node scripts/ops/sync-skill-catalog.mjs`.
+Fuente viva: regenerar con `node scripts/sync-skill-catalog.mjs`.
 Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools/runtime.md).
 
 ## Categorías

@@ -1,0 +1,77 @@
+@charset "UTF-8";
+/*
+ * <iswc-icon> — caja 1em × 1em para SVG inline (currentColor).
+ *
+ * El icono NO se inyecta como <img src>: eso rompe `currentColor` y los iconos
+ * quedan negros sobre fondos claros. El SVG llega inline al shadow y el
+ * `#normalizeInlineSvg()` del JS fuerza `fill: currentColor` /
+ * `stroke: currentColor` para que los SVGs del CDN hereden el color del host.
+ * Por eso esta hoja protege `currentColor` y `fill: currentColor` en todos los
+ * niveles — no toques la cadena.
+ */
+:host {
+  /* Caja CUADRADA y explicita de 1em. Sin width/height propios, el host es
+     una caja inline que la linea estira hasta el line-height heredado (medido:
+     15x23.3 dentro de un trigger), y el SVG de 1em queda descolgado hacia
+     arriba dentro de ella: el icono se ve descentrado en cualquier contenedor
+     que lo centre (FAB, speed-dial, botones). Con una rotacion encima —el
+     `rotate(45deg)` del trigger— el desfase se amplifica. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: content-box;
+  inline-size: 1em;
+  block-size: 1em;
+  font-size: 1em;
+  /* line-height: 1 y no 0: con 0 el half-leading es negativo y vuelve a
+     desalinear el contenido respecto al centro de la caja. */
+  line-height: 1;
+  color: inherit;
+  vertical-align: middle;
+  flex: none;
+}
+:host .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 100%;
+  line-height: 1;
+}
+:host .wrap .inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: inherit;
+  fill: currentColor;
+  /* sin stroke: los iconos de relleno se contornean y ennegrecen */
+  inline-size: 1em;
+  block-size: 1em;
+}
+:host .wrap .inline > svg {
+  inline-size: 1em;
+  block-size: 1em;
+  display: block;
+  fill: currentColor;
+}
+:host .wrap .inline {
+  /* Iconos con paleta propia (banderas, logos, emoji). El JS marca la
+     clase. Sin esto, los paths que NO declaran fill heredarian el
+     currentColor del host y el icono saldria a medio pintar; el default
+     del SVG (negro) es el que el autor asumio. */
+}
+:host .wrap .inline.iswc-multicolor {
+  color: initial;
+  fill: initial;
+}
+:host .wrap .inline.iswc-multicolor > svg {
+  fill: initial;
+}
+:host .wrap .inline[hidden] {
+  display: none !important;
+}
+
+:host([hidden]) {
+  display: none !important;
+}

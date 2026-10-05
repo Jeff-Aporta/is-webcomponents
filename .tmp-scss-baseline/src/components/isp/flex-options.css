@@ -1,0 +1,38 @@
+@charset "UTF-8";
+/* <iswc-flex-options> — toolbar de acciones (grupos + separador + menú "más").
+   g11 — UX/UI proposals: accesibilidad y esquema de color. */
+:host {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.15rem;
+  min-inline-size: 0;
+}
+
+/* Compact = wrap siempre off (no-op hoy, pero deja el knob para el futuro). */
+:host([compact]) .toolbar {
+  flex-wrap: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host, :host *, .toolbar, .toolbar * {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+/* Default claro; dark override aplica el lavanda al outline de foco. */
+:host(:focus-visible), .toolbar > *:focus-visible {
+  outline-color: var(--iswc-brand);
+}
+@media (prefers-color-scheme: dark) {
+  :host(:focus-visible), .toolbar > *:focus-visible {
+    outline-color: var(--iswc-brand);
+  }
+}

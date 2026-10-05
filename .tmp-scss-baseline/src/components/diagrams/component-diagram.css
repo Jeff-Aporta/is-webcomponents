@@ -1,0 +1,85 @@
+@charset "UTF-8";
+@import url("../_shared/diagram-kit.css");
+:host {
+  width: 100%;
+  min-height: 0;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  font-family: var(--iswc-sans);
+}
+:host[hidden] {
+  display: none;
+}
+:host[color=viewer] {
+  width: 100%;
+  height: 100%;
+}
+
+.wrap {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--iswc-border);
+  padding: 0.75rem;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.wrap.iswc-viewer {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  cursor: default;
+}
+.wrap[data-empty]::after {
+  content: "Diagrama de componentes no disponible (payload inválido).";
+  display: block;
+  padding: 1rem;
+  font-size: 0.875em;
+  color: var(--iswc-text-soft);
+}
+
+.cd-svg {
+  display: block;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  overflow: visible;
+}
+.wrap[data-theme=dark] .cd-svg {
+  --cd-circle-fill: #10141a;
+  --cd-title-fill: #10141a;
+}
+.wrap[data-theme=light] .cd-svg {
+  --cd-circle-fill: #ffffff;
+  --cd-title-fill: #ffffff;
+}
+
+.cd-pkg,
+.cd-cmp,
+.cd-edge,
+.cd-iface {
+  transition: opacity 0.18s ease;
+}
+
+.cd-edge__path {
+  transition: stroke-width 0.12s ease-out;
+}
+
+:host([open-on-click]) .wrap {
+  cursor: zoom-in;
+}

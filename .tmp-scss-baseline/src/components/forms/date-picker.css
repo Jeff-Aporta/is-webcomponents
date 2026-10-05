@@ -1,0 +1,204 @@
+@charset "UTF-8";
+/* hidden en un nodo interno debe ganar al display propio del componente. */
+[hidden] {
+  display: none !important;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host {
+  --iswc-datepicker-border: var(--iswc-border);
+  --iswc-datepicker-bg: var(--iswc-bg-elev);
+  --iswc-datepicker-radius: var(--iswc-radius);
+  display: inline-block;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+}
+:host .base {
+  --iswc-dp-cols: repeat(7, 1fr);
+  width: min(18.5em, 100%);
+  padding: 0.85em;
+  background: var(--iswc-datepicker-bg);
+  border: 1px solid var(--iswc-datepicker-border);
+  border-radius: var(--iswc-datepicker-radius);
+  box-shadow: var(--iswc-shadow);
+}
+:host .nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  margin-bottom: 0.65em;
+}
+:host .nav-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+:host .nav-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15em;
+  padding: 0.15em 0.35em;
+  border: 0;
+  border-radius: var(--iswc-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+:host .caret {
+  font-size: 0.85em;
+  line-height: 1;
+  opacity: 0.8;
+}
+:host .nav-btn {
+  width: 2em;
+  height: 2em;
+  border: 0;
+  border-radius: var(--iswc-radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.25em;
+  line-height: 1;
+}
+:host {
+  /* Hover compartido por los selectores del nav y el day cell: misma superficie. */
+}
+:host :is(.nav-select, .nav-btn, .day):hover:not(:disabled) {
+  background: var(--iswc-control-bg-hover);
+}
+:host {
+  /* Anillo de foco de los selectores del nav (los day cells llevan el suyo propio
+   * con outline-offset negativo). */
+}
+:host .nav-select:focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: 1px;
+}
+:host {
+  /* Cabecera y semanas comparten la definición de columnas para que los días
+   * queden alineados con sus nombres, con o sin columna de nº de semana. */
+}
+:host :is(.weekdays, .week) {
+  display: grid;
+  grid-template-columns: var(--iswc-dp-cols);
+  gap: 0.15em;
+}
+:host .grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+:host .wd {
+  text-align: center;
+  font-size: 0.7em;
+  color: var(--iswc-text-dim);
+  padding: 0.25em 0;
+  text-transform: capitalize;
+}
+:host .wknum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7em;
+  font-variant-numeric: tabular-nums;
+  color: var(--iswc-text-dim);
+  border-inline-end: 1px solid var(--iswc-datepicker-border);
+  margin-inline-end: 0.15em;
+}
+:host .day {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+:host .day:focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: -2px;
+}
+:host .day.empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+:host .day {
+  /* Días del mes vecino: presentes para no romper la retícula, atenuados para
+   * que el mes en curso siga leyéndose de un vistazo. */
+}
+:host .day[data-outside] {
+  color: var(--iswc-text-dim);
+  opacity: 0.65;
+}
+:host .day[data-today] {
+  box-shadow: inset 0 0 0 1px var(--iswc-color-brand);
+}
+:host .day {
+  /* Rango confirmado y rango tentativo (mientras se mueve el cursor o el foco)
+   * comparten banda: nunca coexisten, así que se ve exactamente lo que se va a
+   * seleccionar. El extremo móvil redondea su lado y lleva anillo. */
+}
+:host .day[data-in-range], :host .day[data-in-preview] {
+  background: var(--iswc-accent-bg, rgba(224, 49, 49, 0.12));
+  border-radius: 0;
+}
+:host .day[data-preview-edge] {
+  box-shadow: inset 0 0 0 1px var(--iswc-accent);
+}
+:host .day[data-preview-edge=end] {
+  border-start-end-radius: 999px;
+  border-end-end-radius: 999px;
+}
+:host .day[data-preview-edge=start] {
+  border-start-start-radius: 999px;
+  border-end-start-radius: 999px;
+}
+:host .day[data-selected] {
+  background: var(--iswc-color-brand-strong);
+  color: var(--iswc-on-brand);
+  border-radius: 999px;
+}
+:host .day:disabled, :host .day[data-disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+:host .month-view,
+:host .year-view {
+  margin-top: 0.15em;
+}
+:host .year-view {
+  --iswc-year-height: 13.5em;
+}
+
+:host([mode=range]) .day[data-selected][data-in-range] {
+  border-radius: 999px;
+}
+
+/* Sin marco: para meter varios calendarios dentro de una sola tarjeta. */
+:host([frameless]) .base {
+  width: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+:host([disabled]) .base {
+  opacity: 0.6;
+  pointer-events: none;
+}

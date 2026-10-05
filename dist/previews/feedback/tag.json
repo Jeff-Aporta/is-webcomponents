@@ -23,6 +23,7 @@
               "options": [
                 "brand",
                 "neutral",
+                "text",
                 "info",
                 "success",
                 "warning",
@@ -138,7 +139,7 @@
         "table": [
           {
             "name": "<code>variant</code>",
-            "default": "brand · neutral · info · success · warning · danger (default brand)"
+            "default": "brand · neutral · text · info · success · warning · danger (default brand)"
           },
           {
             "name": "<code>appearance</code>",

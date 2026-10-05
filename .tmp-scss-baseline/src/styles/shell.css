@@ -1,0 +1,466 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "header" "main";
+  min-height: 100%;
+  overflow: hidden;
+  background: var(--iswc-bg);
+  color: var(--iswc-text);
+  font: 0.9375rem/1.4 var(--iswc-sans);
+}
+
+/* Light-DOM shell: header/split/drawer entran al grid de body.
+   Sin contents el host crece con el preview y rompe overflow/scroll. */
+iswc-doc-demo {
+  display: contents;
+}
+
+.main-split {
+  grid-area: main;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  /* nav estrecho: nunca media pantalla */
+  --min: 140px;
+  --max: 280px;
+  --divider-width: 5px;
+}
+
+.shell-bar {
+  grid-area: header;
+  position: sticky;
+  inset-block-start: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  min-block-size: 3.75em;
+  padding-block: 0.625em;
+  padding-inline: 0.875em;
+  /* Cristal sobrio: elevación por profundidad, no por color. */
+  background: color-mix(in srgb, var(--iswc-bg-elev) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border-block-end: 1px solid var(--iswc-border);
+  box-shadow: 0 1px 0 color-mix(in srgb, #fff 5%, transparent) inset, 0 6px 20px rgba(0, 0, 0, 0.14);
+  /* Encima del split/preview: herramientas siempre alcanzables. */
+  z-index: 40;
+  /* Hilo de marca al pie de la barra: firma discreta, no decoración. */
+}
+.shell-bar::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  block-size: 1px;
+  background: linear-gradient(90deg, var(--iswc-accent), color-mix(in srgb, var(--iswc-accent) 25%, transparent) 42%, transparent 72%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.shell-bar .shell-brand {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding-block: 0.42em;
+  padding-inline: 0.7em 0.85em;
+  border: 1px solid transparent;
+  border-radius: 0.55em;
+  background: transparent;
+  color: var(--iswc-text);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, filter 120ms ease, transform 120ms ease;
+}
+.shell-bar .shell-brand:hover {
+  background: var(--iswc-control-bg-hover);
+  border-color: var(--iswc-border);
+}
+.shell-bar .shell-brand:active {
+  transform: translateY(1px);
+}
+.shell-bar .shell-brand:focus-visible {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 2px;
+}
+.shell-bar .shell-brand__icon {
+  flex: 0 0 auto;
+  font-size: 1.3em;
+  color: var(--iswc-accent);
+}
+.shell-bar .shell-brand__text {
+  flex: 0 0 auto;
+  color: var(--iswc-text);
+}
+.shell-bar .brand-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+.shell-bar .brand {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6.8em;
+  min-block-size: 0;
+  padding-block: 0.45em;
+  padding-inline: 0.8em;
+  border: 0;
+  border-radius: 0.45em;
+  background: var(--iswc-logo-bg);
+  color: var(--iswc-logo-fg);
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: filter 120ms ease, transform 120ms ease;
+}
+.shell-bar .brand:hover {
+  filter: brightness(1.04);
+}
+.shell-bar .brand:active {
+  transform: translateY(1px);
+}
+.shell-bar .brand:focus-visible {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 2px;
+}
+.shell-bar .brand .brand__accent {
+  color: var(--iswc-logo-accent);
+}
+.shell-bar .brand-menu {
+  position: absolute;
+  inset-block-start: calc(100% + 0.4em);
+  inset-inline-start: 0;
+  z-index: 20;
+  min-inline-size: 11em;
+  margin: 0;
+  padding: 0.35em;
+  list-style: none;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: 0.55em;
+  box-shadow: var(--iswc-shadow);
+}
+.shell-bar .brand-menu [role=option] {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.5em 0.7em;
+  border-radius: 0.4em;
+  color: var(--iswc-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  /* Apagado por defecto: cada item no seleccionado se distingue del activo. */
+  opacity: 0.55;
+  transition: opacity 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+.shell-bar .brand-menu [role=option]:hover {
+  opacity: 1;
+  background: var(--iswc-control-bg-hover);
+}
+.shell-bar .brand-menu [role=option] {
+  /* focus (teclado): mismo nivel visual que hover para no perdernos. */
+}
+.shell-bar .brand-menu [role=option]:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: -2px;
+}
+.shell-bar .brand-menu [role=option][aria-selected=true] {
+  opacity: 1;
+  background: var(--iswc-brand-soft);
+  color: var(--iswc-brand-text);
+}
+.shell-bar .brand-menu {
+  /* El li trae data-palette, asi que --iswc-color-brand ya es el de esa paleta. */
+}
+.shell-bar .brand-menu .brand-menu__swatch {
+  background: var(--iswc-color-brand);
+  flex: 0 0 auto;
+  inline-size: 0.85em;
+  block-size: 0.85em;
+  border-radius: 50%;
+  /* ring neutro para que destaque sobre fondos suaves */
+  box-shadow: 0 0 0 1px var(--iswc-border);
+}
+.shell-bar .brand-menu .brand-menu__label {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.shell-bar .brand-menu .brand-menu__check {
+  flex: 0 0 auto;
+  inline-size: 1em;
+  block-size: 1em;
+  /* Oculto cuando no es el activo — reserva el ancho para que el
+     texto no salte de posición al cambiar la selección. */
+  visibility: hidden;
+}
+.shell-bar .brand-menu [aria-selected=true] .brand-menu__check {
+  visibility: visible;
+}
+.shell-bar .brand-wrap.iswc-open .brand {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 2px;
+}
+.shell-bar button {
+  min-block-size: 2.25em;
+  border: 1px solid var(--iswc-control-border);
+  border-radius: 0.4em;
+  background: var(--iswc-control-bg);
+  color: var(--iswc-control-text);
+  font: inherit;
+}
+.shell-bar button:focus-visible {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 2px;
+}
+.shell-bar {
+  /* Empuja el cluster de herramientas + iconos a la derecha. */
+}
+.shell-bar .shell-tools {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+.shell-bar .shell-icon-btn {
+  margin-inline-start: 0;
+}
+.shell-bar iswc-theme-toggle {
+  margin-inline-start: 0;
+}
+.shell-bar {
+  /* Activo = paneles compactados (pressed). */
+}
+.shell-bar .shell-tool-btn[aria-pressed=true] {
+  color: var(--iswc-accent);
+}
+@media (max-width: 640px) {
+  .shell-bar {
+    flex-wrap: wrap;
+  }
+  .shell-bar .brand {
+    min-width: 5.5em;
+  }
+}
+
+.shell-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1em;
+  box-sizing: border-box;
+  block-size: 100%;
+  min-block-size: 0;
+  padding-block: 0.9em 1.5em;
+  padding-inline: 0.55em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Tinte de marca mínimo arriba: ubica la columna sin gritar. */
+  background: linear-gradient(180deg, color-mix(in srgb, var(--iswc-accent) 5%, transparent) 0, transparent 7em), var(--iswc-bg-elev);
+  border-inline-end: 1px solid var(--iswc-border);
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-control-border)) transparent;
+}
+.shell-nav::-webkit-scrollbar {
+  inline-size: 9px;
+}
+.shell-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.shell-nav::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+  background-color: color-mix(in srgb, var(--iswc-control-border) 70%, transparent);
+}
+.shell-nav::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-control-border));
+}
+.shell-nav .shell-nav__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  min-inline-size: 0;
+}
+.shell-nav {
+  /* Encabezado de grupo con hilo: separa sin añadir cajas. */
+}
+.shell-nav .shell-nav__heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding-block: 0.2em 0.5em;
+  padding-inline: 0.5em;
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--iswc-text-dim);
+  line-height: 1.25;
+  user-select: text;
+}
+.shell-nav .shell-nav__heading::after {
+  content: "";
+  flex: 1;
+  block-size: 1px;
+  background: linear-gradient(90deg, var(--iswc-border), transparent);
+  /* El hilo decorativo no debe robar selección del título. */
+  user-select: none;
+  pointer-events: none;
+}
+.shell-nav {
+  /* El item es <button>: layout vertical para title + tag.
+     user-select:text — el UA de button suele bloquear selección; aquí se permite
+     copiar nombre/tag del catálogo. */
+}
+.shell-nav .shell-nav__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05em;
+  padding-block: 0.28em;
+  padding-inline-start: 0.95em;
+  padding-inline-end: 0.5em;
+  margin-inline-start: 0.35em;
+  border: 1px solid transparent;
+  border-radius: 0.35em;
+  background: transparent;
+  color: var(--iswc-text);
+  font: inherit;
+  font-size: 0.9em;
+  line-height: 1.22;
+  cursor: pointer;
+  text-align: left;
+  user-select: text;
+  -webkit-user-select: text;
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, padding-inline-start 140ms ease;
+}
+.shell-nav .shell-nav__item:hover {
+  background: var(--iswc-control-bg-hover);
+  padding-inline-start: 1.15em;
+}
+.shell-nav .shell-nav__item:focus-visible {
+  outline: 2px solid var(--iswc-focus);
+  outline-offset: 1px;
+}
+.shell-nav .shell-nav__item .shell-nav__title {
+  line-height: 1.22;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+.shell-nav .shell-nav__item .shell-nav__isp-dot {
+  flex: 0 0 auto;
+  inline-size: 0.35em;
+  block-size: 0.35em;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--iswc-text-dim) 70%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-border) 50%, transparent);
+}
+.shell-nav .shell-nav__item .shell-nav__tag {
+  font-family: var(--iswc-mono);
+  font-size: 0.72em;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--iswc-text-dim);
+  word-break: break-all;
+}
+.shell-nav .shell-nav__item[aria-current=true] {
+  background: var(--iswc-brand-soft);
+  border-color: var(--iswc-brand-soft-active);
+  color: var(--iswc-brand-text);
+  font-weight: 600;
+  /* Barra de acento a la izquierda: el activo se lee de un golpe. */
+}
+.shell-nav .shell-nav__item[aria-current=true]::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0.28em;
+  inset-block: 0.4em;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--iswc-accent);
+}
+.shell-nav .shell-nav__item[aria-current=true] .shell-nav__tag {
+  color: color-mix(in srgb, var(--iswc-brand-text) 75%, var(--iswc-text-dim));
+}
+
+.preview-frame {
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  background: var(--iswc-bg);
+}
+.preview-frame[hidden] {
+  display: none !important;
+}
+
+.preview-stage {
+  position: relative;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
+  display: grid;
+  background: var(--iswc-bg);
+}
+.preview-stage > .preview-frame,
+.preview-stage > .preview-host {
+  grid-area: 1/1;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
+  border: 0;
+}
+
+.preview-host {
+  overflow: auto;
+  background: var(--iswc-bg);
+}
+.preview-host[hidden] {
+  display: none !important;
+}
+
+/* Hamburguesa del catálogo: solo se muestra cuando el nav vive en el drawer
+   (lo controla syncNavLayout con el atributo hidden). Es iswc-button plain+pill. */
+.shell-menu-btn {
+  flex: 0 0 auto;
+}
+.shell-menu-btn[hidden] {
+  display: none;
+}
+
+/* El nav conserva su lista vertical dentro del drawer; lo que sobra ahí es el
+   cromo de columna (borde propio, fondo, alto completo). */
+.shell-nav-drawer {
+  --size: min(300px, 88vw);
+  --spacing: 0.9rem;
+}
+.shell-nav-drawer .shell-nav {
+  block-size: auto;
+  padding: 0;
+  border-inline-end: 0;
+  background: none;
+  overflow: visible;
+}

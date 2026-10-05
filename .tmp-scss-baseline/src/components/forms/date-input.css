@@ -1,0 +1,152 @@
+@charset "UTF-8";
+/* Hoja compartida por iswc-date-input, iswc-time-input, iswc-date-time-input e
+ * iswc-date-range-input: todos son "campo + panel flotante". */
+[hidden] {
+  display: none !important;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host {
+  display: inline-block;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+}
+:host .base {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.5em;
+}
+:host .dash {
+  padding-bottom: 0.55em;
+  color: var(--iswc-text-dim);
+}
+:host .trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6em;
+  height: 1.6em;
+  margin-inline-start: 0.1em;
+  border: 0;
+  border-radius: var(--iswc-radius-sm);
+  background: transparent;
+  color: var(--iswc-text-dim);
+  cursor: pointer;
+}
+:host .trigger:hover:not(:disabled) {
+  background: var(--iswc-control-bg-hover);
+  color: var(--iswc-text, inherit);
+}
+:host .trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+:host {
+  /* El dialog modal ocupa el viewport; el panel es lo que se ve y se coloca. */
+}
+:host .popup {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+:host .popup::backdrop {
+  background: transparent;
+}
+:host .popup:has(.panel[data-color=mobile])::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+:host .panel {
+  position: fixed;
+  width: max-content;
+  max-width: min(96vw, 46em);
+  padding: 0.6em;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  box-shadow: var(--iswc-shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.28));
+  /* Móvil: centrado y con fondo atenuado, como los pickers móviles de MUI. */
+}
+:host .panel[data-color=mobile] {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+:host .toolbar {
+  padding: 0.35em 0.5em 0.6em;
+  font-size: 1.05em;
+  font-weight: 600;
+  text-transform: capitalize;
+  border-bottom: 1px solid var(--iswc-border);
+  margin-bottom: 0.5em;
+}
+:host .content {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6em;
+  /* Un panel que ya trae su propio marco no necesita el nuestro. */
+}
+:host .content > .flush::part(base) {
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+:host .content > iswc-digital-clock {
+  --iswc-clock-height: 16.5em;
+}
+@media (max-width: 32em) {
+  :host .content {
+    flex-direction: column;
+  }
+}
+:host .actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--iswc-border);
+}
+:host .spacer {
+  flex: 1;
+}
+:host .act {
+  padding: 0.35em 0.75em;
+  border: 1px solid transparent;
+  border-radius: var(--iswc-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+:host .act:hover {
+  background: var(--iswc-control-bg-hover);
+}
+:host .act.primary {
+  background: var(--iswc-color-brand-strong);
+  color: var(--iswc-on-brand);
+  font-weight: 600;
+}
+:host .act.primary:hover {
+  background: var(--iswc-color-brand-stronger);
+}
+:host {
+  /* Anillo de foco compartido: tanto el disparador del calendario como los
+   * botones de acción usan exactamente el mismo outline. */
+}
+:host :is(.trigger, .act):focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: 1px;
+}

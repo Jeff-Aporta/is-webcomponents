@@ -114,14 +114,25 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": [
-        "Panel flotante con contenido interactivo. Ancla con <code class=\"code\">for</code>.",
-        "          Cierra con Escape, click fuera o <code class=\"code\">data-popover=\"close\"</code>.",
-        "          El posicionamiento (flip, shift, auto-size, arrow) lo hace un",
-        "          <code class=\"code\">&lt;iswc-floating&gt;</code> interno — el wrapper sólo",
-        "          aporta ancla declarativa, ciclo de vida y accesibilidad."
-      ],
+      "lede": "Panel flotante con contenido interactivo. Ancla con for.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Cierre</code>",
+              "Escape, click fuera o data-popover=\"close\"."
+            ],
+            [
+              "<code>Posicionamiento</code>",
+              "Lo hace un &lt;iswc-floating&gt; interno (flip, shift, auto-size, arrow). El wrapper aporta ancla declarativa, ciclo de vida y accesibilidad."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": [

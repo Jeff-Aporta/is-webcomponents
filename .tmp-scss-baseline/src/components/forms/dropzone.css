@@ -1,0 +1,151 @@
+@charset "UTF-8";
+/* iswc-dropzone */
+:host {
+  display: block;
+  font: inherit;
+  color: var(--iswc-text);
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.35rem;
+  padding: 2rem 1rem;
+  border: 2px dashed var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--iswc-text) 3%, transparent) 0 6px, transparent 6px 12px);
+  cursor: pointer;
+  outline: 0;
+  transition: border-color 150ms ease, background-color 150ms ease;
+  /* Estado "encima" se aplica desde JS con la clase .iswc-over (drag/drop),
+   * :focus-visible lo aplica el navegador. Misma pinta para los dos. */
+}
+.zone:focus-visible, .zone.iswc-over {
+  border-color: var(--iswc-accent);
+  background: color-mix(in srgb, var(--iswc-accent) 10%, transparent);
+}
+.zone .ico {
+  font-size: 2rem;
+  color: var(--iswc-accent);
+}
+.zone .title {
+  font-size: 1rem;
+}
+.zone .sub {
+  color: var(--iswc-text-soft);
+  font-size: 0.85rem;
+}
+
+.queue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr 6rem auto auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+}
+
+.thumb {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--iswc-bg-soft) 80%, transparent);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: var(--iswc-text-soft);
+  font-size: 1.25rem;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.meta {
+  min-width: 0;
+}
+
+.name {
+  display: block;
+  font-weight: 600;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.size {
+  color: var(--iswc-text-soft);
+  font-size: 0.7rem;
+}
+
+progress {
+  appearance: none;
+  height: 6px;
+  border: 0;
+  width: 100%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+  overflow: hidden;
+}
+progress::-webkit-progress-bar {
+  background: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+}
+progress::-webkit-progress-value {
+  background: var(--iswc-accent);
+  transition: width 120ms ease;
+}
+progress::-moz-progress-bar {
+  background: var(--iswc-accent);
+}
+
+.status {
+  font-size: 0.7rem;
+  color: var(--iswc-text-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Color del status según el estado del upload (JS pone la clase en la fila). */
+.status-done .status {
+  color: var(--iswc-success);
+}
+
+.status-uploading .status {
+  color: var(--iswc-accent);
+}
+
+.status-error .status {
+  color: var(--iswc-danger);
+}
+
+.del {
+  flex: none;
+  line-height: 0;
+  color: var(--iswc-text-soft);
+}
+.del:hover {
+  color: var(--iswc-danger);
+}

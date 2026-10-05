@@ -1,0 +1,177 @@
+@charset "UTF-8";
+/* `hidden` en un nodo interno debe ganar al display propio del componente. */
+[hidden] {
+  display: none !important;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host {
+  --iswc-clock-size: 14em;
+  --iswc-clock-face: var(--iswc-control-bg);
+  display: inline-block;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+  box-sizing: border-box;
+}
+:host .base {
+  width: min(var(--iswc-clock-size), 100%);
+  padding: 0.85em;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-radius);
+  box-shadow: var(--iswc-shadow);
+}
+:host .header {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.1em;
+  margin-bottom: 0.6em;
+  font-variant-numeric: tabular-nums;
+}
+:host {
+  /* Estilo base compartido por las unidades (HH/MM/SS) y los meridianos (AM/PM):
+   * mismo hover y misma activación visual. El meridiano además rellena el fondo. */
+}
+:host :is(.unit, .mer) {
+  border: 0;
+  background: transparent;
+  color: var(--iswc-text-dim);
+  font: inherit;
+  cursor: pointer;
+}
+:host :is(.unit, .mer):hover {
+  background: var(--iswc-control-bg-hover);
+}
+:host :is(.unit, .mer)[data-active] {
+  color: var(--iswc-accent);
+  font-weight: 600;
+}
+:host .unit {
+  font-size: 1.6em;
+  line-height: 1;
+  padding: 0 0.1em;
+  border-radius: var(--iswc-radius-sm);
+}
+:host .sep {
+  font-size: 1.6em;
+  line-height: 1;
+  color: var(--iswc-text-dim);
+}
+:host .meridiem {
+  display: flex;
+  flex-direction: column;
+  margin-inline-start: 0.4em;
+  gap: 0.1em;
+}
+:host .mer {
+  font-size: 0.7em;
+  padding: 0.1em 0.35em;
+  border-radius: 999px;
+  /* Fondo activo específico del meridiano (lo unit ya tienen el suyo vía :hover). */
+}
+:host .mer[data-active] {
+  background: var(--iswc-accent-bg, rgba(224, 49, 49, 0.12));
+}
+:host .clock {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--iswc-clock-face);
+  touch-action: none;
+  cursor: pointer;
+}
+:host .clock:focus-visible {
+  outline: 2px solid var(--iswc-focus, var(--iswc-accent));
+  outline-offset: 2px;
+}
+:host {
+  /* Anillos (outer/inner) y números rotados: comparten posicionamiento absoluto.
+   * El inset del inner se customiza con --iswc-clock-inset, usado por .lbl. */
+}
+:host :is(.ring, .num) {
+  position: absolute;
+  inset: 0;
+}
+:host .ring.inner {
+  --iswc-clock-inset: 20%;
+}
+:host .ring.inner .lbl {
+  font-size: 0.7em;
+  color: var(--iswc-text-dim);
+}
+:host {
+  /* El envoltorio ocupa el disco y gira; la etiqueta se desgira para quedar
+   * recta. Con radios relativos, cambiar --iswc-clock-size escala todo. */
+}
+:host .num {
+  transform: rotate(var(--a, 0deg));
+  pointer-events: none;
+  user-select: none;
+}
+:host .lbl {
+  position: absolute;
+  top: var(--iswc-clock-inset);
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  margin-left: -1em;
+  font-size: 0.8em;
+  font-variant-numeric: tabular-nums;
+  transform: rotate(calc(-1 * var(--a, 0deg)));
+}
+:host .num[data-selected] .lbl {
+  color: var(--iswc-on-brand);
+  font-weight: 600;
+}
+:host .num[data-disabled] .lbl {
+  opacity: 0.3;
+}
+:host .hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  height: var(--iswc-hand-length);
+  background: var(--iswc-color-brand-strong);
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(var(--a, 0deg));
+  pointer-events: none;
+}
+:host .hand[data-short] {
+  --iswc-hand-length: 26%;
+}
+:host .hand[hidden] {
+  display: none;
+}
+:host .knob {
+  position: absolute;
+  top: -1em;
+  left: 50%;
+  width: 2em;
+  height: 2em;
+  margin-left: -1em;
+  border-radius: 50%;
+  background: var(--iswc-color-brand-strong);
+}
+:host .center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.4em;
+  height: 0.4em;
+  margin: -0.2em 0 0 -0.2em;
+  border-radius: 50%;
+  background: var(--iswc-color-brand-strong);
+}
+
+:host([disabled]) .base {
+  opacity: 0.6;
+  pointer-events: none;
+}

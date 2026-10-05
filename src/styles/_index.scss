@@ -1,0 +1,8 @@
+// _index.scss — entrada unica para los parciales de src/styles/.
+//
+// Permite `@use 'index' as *;` desde cualquier componente para traer
+// todos los tokens + mixins. La convencion del repo es que los
+// `@use` sean por nombre (no `index`), pero este archivo existe
+// como punto de referencia para los refactors que necesiten varios
+// parciales a la vez y prefieran un unico import.
+@forward 'mixins';

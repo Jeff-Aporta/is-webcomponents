@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T21:37:06.250Z",
+  "generatedAt": "2026-10-05T21:42:56.410Z",
   "count": 112,
   "modules": [
     {
@@ -986,7 +986,7 @@
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
       "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `skills/is-webcomponents/PROMPT.md`",
-      "bytes": 3753,
+      "bytes": 3614,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",

@@ -19,7 +19,7 @@ Prompt completo, listo para copiar: [`PROMPT.md`](PROMPT.md).
 
 **Antes de escribir HTML/CSS/JS**, lee en orden:
 
-1. [`is-cdn-install/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) — bootstrap, espejos, pin SHA, fallback.
+1. [`is-cdn-install/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md) — bootstrap, espejos, pin SHA, fallback.
 2. Este archivo — arquitectura, reglas de reuso y el índice de cada componente.
 3. La guía del módulo, enlazada en el catálogo de abajo.
 
@@ -59,10 +59,10 @@ Usa `raw.githubusercontent.com` solo para lectura como `text/plain` puro.
 
 | Recurso | GitHub | raw (texto plano) |
 | --- | --- | --- |
-| Prompt LLM | [PROMPT.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/PROMPT.md) |
-| Esta skill | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/SKILL.md) |
-| Skill instalación CDN | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md) |
-| Herramientas | [tools/](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) | — |
+| Prompt LLM | [PROMPT.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/PROMPT.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-webcomponents/PROMPT.md) |
+| Esta skill | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-webcomponents/SKILL.md) |
+| Skill instalación CDN | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md) |
+| Herramientas | [tools/](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/is-webcomponents/tools) | — |
 | Catálogo de producto | [componentes.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) |
 
 Local: `dist/cdn/skills/<name>/SKILL.md` vía jsDelivr o Pages una vez la app ya arranca desde ahí.

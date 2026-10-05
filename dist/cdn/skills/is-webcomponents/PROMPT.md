@@ -46,9 +46,9 @@ Cuando el usuario pida una de estas intenciones, sigue la skill de la herramient
 
 | Comando | Skill | Uso |
 | --- | --- | --- |
-| `/is-webcomponents:build` | [tools/build.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/build.md) | Fundar o extender apps con `is-*` |
-| `/is-webcomponents:migrate` | [tools/migrate.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/migrate.md) | Migrar un front (React/MUI/Svelte/…) a vanilla + `is-*` |
-| `/is-webcomponents:local` | [tools/local.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/local.md) | Vendorizar JS/CSS locales (preferido) y actualizar SHA |
+| `/is-webcomponents:build` | [tools/build.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/tools/build.md) | Fundar o extender apps con `is-*` |
+| `/is-webcomponents:migrate` | [tools/migrate.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/tools/migrate.md) | Migrar un front (React/MUI/Svelte/…) a vanilla + `is-*` |
+| `/is-webcomponents:local` | [tools/local.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/tools/local.md) | Vendorizar JS/CSS locales (preferido) y actualizar SHA |
 
 Instalación de skills (preferir repo GitHub):
 
@@ -124,8 +124,8 @@ Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
-  // is-base.min.css se auto-carga al importar el loader (W52).
-  await L.loadPageStyles(['iswc-palettes-default']);
+  await L.loadCSSBase();
+  await L.loadCSSPalettesDefault();
   await L.load("iswc-button");
 </script>
 ```
@@ -161,8 +161,8 @@ for(const base of MIRRORS){
  try{
   await import(`${base}/core/loader.min.js`);
   const L = globalThis.ISWebComponentsLoader;
-  // is-base.min.css se auto-carga al importar el loader (W52).
-  await L.loadPageStyles(['iswc-palettes-default']);
+  await L.loadCSSBase();
+  await L.loadCSSPalettesDefault();
   await L.load("iswc-button");
   break;
  }catch{}
@@ -191,7 +191,7 @@ El repositorio contiene:
 - helpers compartidos
 - convenciones
 - pruebas
-- skills (`src/skills/`)
+- skills (`skills/`)
 
 Cuando exista una discrepancia entre una respuesta del LLM y el repositorio, prevalece siempre el repositorio.
 
@@ -203,15 +203,15 @@ Preferir enlaces **GitHub** (mejor instalación de skills). Raw como secundario 
 
 ## 1. Instalación CDN
 
-https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
+https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md
 
 ## 2. Guía general
 
-https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
+https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/SKILL.md
 
 ## 3. Prompt completo (este archivo)
 
-https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
+https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/PROMPT.md
 
 ## 4. Guía CDN publicada (jsDelivr)
 
@@ -231,7 +231,7 @@ Leer siempre el archivo `.md` del componente antes de utilizarlo.
 
 ## 8. Herramientas
 
-- https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools
+- https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/is-webcomponents/tools
 
 ---
 

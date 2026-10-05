@@ -1,0 +1,87 @@
+@charset "UTF-8";
+@import './_tokens.css';
+:host {
+  display: inline-block;
+  --iswc-gauge-track-color: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+
+.gauge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* El diámetro lo pone el CSS en em (antes venía en px desde JS, por eso hacía
+   falta el atributo `size`). 7.5em = los 120px del tamaño medio anterior. */
+svg {
+  display: block;
+  inline-size: var(--gauge-size, 7.5em);
+  block-size: var(--gauge-size, 7.5em);
+}
+svg[data-half=true] {
+  block-size: calc(var(--gauge-size, 7.5em) / 2);
+}
+
+.track {
+  fill: none;
+  stroke: var(--iswc-gauge-track-color);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.fill {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease-out;
+}
+
+/* Estados semánticos por data-color. Cada uno cambia solo el stroke del fill;
+   lo escribimos con @container de @scope sería más enrevesado que tres
+   selectores planos, así que se queda tal cual. */
+svg[data-color=success] .fill {
+  stroke: var(--success);
+}
+
+svg[data-color=warning] .fill {
+  stroke: var(--warning);
+}
+
+svg[data-color=danger] .fill {
+  stroke: var(--danger);
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+svg[data-half=true] ~ .content {
+  inset-block-end: 0;
+  justify-content: flex-end;
+  padding-block-end: 0;
+}
+
+.value {
+  font-size: 1.5em;
+  font-weight: 700;
+  font-feature-settings: "tnum" 1;
+  color: var(--fg);
+  line-height: 1;
+}
+
+.label {
+  font-size: 0.75em;
+  color: var(--muted);
+  margin-block-start: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

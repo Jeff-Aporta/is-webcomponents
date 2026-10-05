@@ -1,0 +1,72 @@
+@charset "UTF-8";
+:host {
+  position: fixed;
+  z-index: 10000;
+  display: block;
+  pointer-events: none;
+  box-sizing: border-box;
+  padding: 1rem;
+  max-width: 100vw;
+  font-family: var(--iswc-font-family);
+  font-size: inherit;
+}
+
+/* Las 6 placements + default se agrupan por eje en lugar de una regla por
+   placement. `&[attr]` no funciona dentro de `:host` anidado, así que cada
+   combinación vive en su propio bloque :host([...]) explícito.
+   `:is()` reduce las 7 reglas originales a 4 (block-start, block-end,
+   inline-start, inline-end) + 1 centrada. */
+:host([placement=top-start]),
+:host([placement=top-center]),
+:host([placement=top-end]) {
+  inset-block-start: 0;
+}
+
+:host([placement=bottom-start]),
+:host([placement=bottom-center]),
+:host([placement=bottom-end]),
+:host(:not([placement])) {
+  inset-block-end: 0;
+}
+
+:host([placement=top-start]),
+:host([placement=bottom-start]) {
+  inset-inline-start: 0;
+}
+
+:host([placement=top-end]),
+:host([placement=bottom-end]),
+:host(:not([placement])) {
+  inset-inline-end: 0;
+}
+
+:host([placement=top-center]),
+:host([placement=bottom-center]) {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+  width: max-content;
+  max-width: min(24rem, 100vw - 2rem);
+}
+:host([placement^=bottom]) .stack {
+  flex-direction: column-reverse;
+}
+:host([placement$=center]) .stack {
+  margin-inline: auto;
+}
+:host([placement$=end]) .stack {
+  margin-inline-start: auto;
+}
+:host([placement$=start]) .stack {
+  margin-inline-end: auto;
+}
+
+::slotted(iswc-toast-item) {
+  pointer-events: auto;
+}

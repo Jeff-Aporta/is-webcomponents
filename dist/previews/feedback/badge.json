@@ -23,6 +23,7 @@
               "options": [
                 "brand",
                 "neutral",
+                "text",
                 "success",
                 "warning",
                 "danger"
@@ -74,6 +75,7 @@
             "          </div>",
             "          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">",
             "            <iswc-badge color=\"neutral\" variant=\"filled\">neutral</iswc-badge>",
+            "            <iswc-badge color=\"text\" variant=\"outlined\">text</iswc-badge>",
             "            <iswc-badge color=\"success\" variant=\"filled\">success</iswc-badge>",
             "            <iswc-badge color=\"warning\" variant=\"outlined\">warning</iswc-badge>",
             "            <iswc-badge color=\"danger\" variant=\"accent\">danger</iswc-badge>",

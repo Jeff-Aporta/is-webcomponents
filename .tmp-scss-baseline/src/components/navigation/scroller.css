@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  position: relative;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: hidden;
+  --iswc-scroller-button-size: 2rem;
+  --iswc-scroller-button-bg: var(--iswc-bg-elev);
+  --iswc-scroller-button-text: var(--iswc-text);
+  --iswc-scroller-button-border: var(--iswc-border);
+}
+
+.scroller {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  block-size: 100%;
+  min-block-size: 0;
+}
+
+.viewport {
+  flex: 1 1 auto;
+  overflow: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  min-block-size: 0;
+  block-size: 100%;
+}
+
+.scroller[data-orientation=horizontal] .viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+.scroller[data-orientation=vertical] .viewport {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-block-size: 100%;
+  display: block;
+}
+.scroller[data-orientation=both] .viewport {
+  overflow: auto;
+}
+
+.scroll-btn {
+  flex: 0 0 auto;
+  inline-size: var(--iswc-scroller-button-size);
+  block-size: var(--iswc-scroller-button-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--iswc-scroller-button-border);
+  background: var(--iswc-scroller-button-bg);
+  color: var(--iswc-scroller-button-text);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.scroll-btn:hover {
+  transform: translateY(-1px);
+}
+.scroll-btn:active {
+  transform: translateY(0);
+}
+.scroll-btn[hidden] {
+  display: none;
+}
+
+::slotted(*) {
+  /* sin reglas agresivas; los hijos deciden su layout */
+}

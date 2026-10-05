@@ -1,0 +1,195 @@
+@charset "UTF-8";
+/* palettes.css — Paletas de marca (ContaPyme, InSoft, AgroWin).
+ *
+ * Separado de is-base.css: sin esta hoja el tema dark/light sigue en gris.
+ *
+ *   <link rel="stylesheet" href=".../is-base.min.css">
+ *   <link rel="stylesheet" href=".../palettes.min.css">
+ *
+ * Cada data-palette SOLO declara el tono, la saturacion y el brillo:
+ *
+ *   --iswc-brand-h   0–360, numero pelado (para restar en calc)
+ *   --iswc-brand-s   saturacion HSL
+ *   --iswc-brand-b   brillo, como luminosidad HSL (css no tiene hsb())
+ *
+ * La rampa (--iswc-color-brand, strong, stronger, strongest, pale, paler),
+ * el acento, los alpha y --iswc-hue-rotate los calcula la capa comun.
+ * El logo pintado en --iswc-logo-h gira con:
+ *
+ *   filter: hue-rotate(var(--iswc-hue-rotate));
+ *
+ * Los seeds viven tambien en palettes.json. El brand-wrap se arma con
+ * buildBrandMenu() (palette-build.ts). Default palette = contapyme, en :root.
+ *
+ * Phase W24: brand es la 7ª familia del helper canonico en
+ * `src/styles/color-tokens.ts` (ISWC_COLOR_VARIANTS = paler/pale/strong/
+ * stronger/strongest). Su derivada matematica es `hsl(from base ...)`
+ * en vez de color-mix() porque el base es parametrizable (h/s/b cambian
+ * por paleta), pero la interfaz publica (los 6 tokens por familia) es
+ * IDENTICA a la de las 6 familias de color-mix que viven en is-base.css.
+ * Las definiciones de aqui DEBEN coincidir con `brandFamilyBlock()` del
+ * helper; el guardian w24-color-tokens-helper.test.ts lo verifica.
+ *
+ * Info tambien sigue el patron W24: 5 variantes con valores fijos por
+ * paleta (no color-mix) porque la paleta override el fallback de
+ * is-base.css con un azul de marca mas vivo.
+ */
+/* ─── Capa comun: cualquiera con h/s/b hereda la rampa ────────────── */
+:root,
+[data-palette] {
+  --iswc-color-brand: hsl(calc(var(--iswc-brand-h) * 1deg) var(--iswc-brand-s) var(--iswc-brand-b));
+  --iswc-color-brand-strong: hsl(from var(--iswc-color-brand) h s calc(l * 0.88));
+  --iswc-color-brand-stronger: hsl(from var(--iswc-color-brand) h s calc(l * 0.72));
+  --iswc-color-brand-strongest: hsl(from var(--iswc-color-brand) h s calc(l * 0.56));
+  --iswc-color-brand-pale: hsl(from var(--iswc-color-brand) h s 93%);
+  --iswc-color-brand-paler: hsl(from var(--iswc-color-brand) h s 97%);
+  --iswc-accent: var(--iswc-color-brand);
+  --iswc-accent-bg: rgb(from var(--iswc-accent) r g b / 12%);
+  --iswc-brand-soft: rgb(from var(--iswc-accent) r g b / 18%);
+  --iswc-brand-soft-active: rgb(from var(--iswc-accent) r g b / 28%);
+  --iswc-brand-text: hsl(from var(--iswc-color-brand) h s 76%);
+  --iswc-focus: var(--iswc-color-brand);
+  --iswc-logo-bg: var(--iswc-color-brand);
+  --iswc-logo-fg: #fff;
+  --iswc-logo-accent: var(--iswc-color-brand);
+  /* Tono en el que estan pintados los SVG. La paleta solo mueve --iswc-brand-h. */
+  --iswc-logo-h: 210;
+  --iswc-hue-rotate: calc((var(--iswc-brand-h) - var(--iswc-logo-h)) * 1deg);
+  --iswc-color-info-paler: #e7f5ff;
+  --iswc-color-info-pale: #d0ebff;
+  --iswc-color-info: #228be6;
+  --iswc-color-info-strong: #1c7ed6;
+  --iswc-color-info-stronger: #1864ab;
+  --iswc-color-info-strongest: #145591;
+  --iswc-radius: 0.5em;
+  --iswc-radius-sm: 0.25em;
+}
+
+/* ─── CONTAPYME (default). dodgerblue = hsl(210 100% 56%) ─────────── */
+:root,
+[data-palette=contapyme] {
+  --iswc-brand-h: 210;
+  --iswc-brand-s: 100%;
+  --iswc-brand-b: 56%;
+}
+
+/* Tema ContaPyme: SOLO el nodo con data-theme (html o contenedor scoped).
+ * Nunca `:not([data-theme])` suelto: matchearía cada descendiente sin el
+ * atributo y pintaría light encima del dark heredado del <html>. */
+[data-theme=dark]:is(:not([data-palette]), [data-palette=contapyme]) {
+  --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
+  --iswc-bg: #10151c;
+  --iswc-bg-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 5.5%, #121820);
+  --iswc-bg-elev: color-mix(in srgb, var(--iswc-contapyme-surface) 6.5%, #161c26);
+  --iswc-border: color-mix(in srgb, var(--iswc-contapyme-surface) 10%, #273040);
+  --iswc-border-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 8%, #1c2430);
+  --iswc-code-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 4.5%, #0d1218);
+  --iswc-control-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 5.5%, #1c2430);
+  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-contapyme-surface) 7%, #283242);
+  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-contapyme-surface) 8%, #344054);
+  --iswc-control-border: color-mix(in srgb, var(--iswc-contapyme-surface) 12%, #59636e);
+  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-contapyme-surface) 14%, rgb(0 0 0 / 25%));
+}
+
+[data-theme=light]:is(:not([data-palette]), [data-palette=contapyme]) {
+  --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
+  --iswc-bg: #fff;
+  --iswc-bg-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 4%, #f6f8fa);
+  --iswc-bg-elev: #fff;
+  --iswc-border: #ccc;
+  --iswc-border-soft: rgb(229 231 235);
+  --iswc-code-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 3%, #f6f8fa);
+  --iswc-control-bg: color-mix(in srgb, var(--iswc-contapyme-surface) 3%, #f1f3f5);
+  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-contapyme-surface) 5%, #e9ecef);
+  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-contapyme-surface) 7%, #dee2e6);
+  --iswc-control-border: #80808050;
+  --iswc-text: #222;
+  --iswc-text-soft: #334155;
+  --iswc-text-dim: #64748b;
+  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px color-mix(in srgb, var(--iswc-contapyme-surface) 8%, rgb(0 0 0 / 6%));
+}
+
+/* ─── INSOFT. #e03131 = hsl(0 74% 54%) ────────────────────────────── */
+[data-palette=insoft] {
+  --iswc-brand-h: 0;
+  --iswc-brand-s: 74%;
+  --iswc-brand-b: 54%;
+  --iswc-logo-bg: #fff;
+  --iswc-logo-fg: #111;
+  --iswc-logo-accent: var(--iswc-color-brand);
+}
+
+[data-theme=dark][data-palette=insoft] {
+  --iswc-bg: #0b0d10;
+  --iswc-bg-soft: #14181d;
+  --iswc-bg-elev: #1c2128;
+  --iswc-border: #2a3038;
+  --iswc-border-soft: #1f242b;
+  --iswc-code-bg: #0f1318;
+  --iswc-control-bg: #21262d;
+  --iswc-control-bg-hover: #30363d;
+  --iswc-control-bg-active: #3d444d;
+  --iswc-control-border: #59636e;
+  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px rgb(0 0 0 / 25%);
+}
+
+[data-theme=light][data-palette=insoft] {
+  --iswc-bg: #fff;
+  --iswc-bg-soft: #f6f8fa;
+  --iswc-bg-elev: #fff;
+  --iswc-border: #d0d7de;
+  --iswc-border-soft: #e1e4e8;
+  --iswc-code-bg: #f6f8fa;
+  --iswc-control-bg: #f1f3f5;
+  --iswc-control-bg-hover: #e9ecef;
+  --iswc-control-bg-active: #dee2e6;
+  --iswc-control-border: #adb5bd;
+  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
+}
+
+/* ─── AGROWIN. yellowgreen = hsl(80 61% 50%) ──────────────────────── */
+[data-palette=agrowin] {
+  --iswc-brand-h: 80;
+  --iswc-brand-s: 61%;
+  --iswc-brand-b: 50%;
+  --iswc-logo-fg: #17200a;
+  --iswc-logo-accent: #17200a;
+}
+
+[data-theme=dark][data-palette=agrowin] {
+  --iswc-agrowin-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.3) h);
+  --iswc-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 22%, #050505);
+  --iswc-bg-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 18%, #0a0a0a);
+  --iswc-bg-elev: color-mix(in srgb, var(--iswc-agrowin-surface) 16%, #101010);
+  --iswc-border: color-mix(in srgb, var(--iswc-agrowin-surface) 14%, #1c1c1c);
+  --iswc-border-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 12%, #141414);
+  --iswc-code-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 18%, #080808);
+  --iswc-control-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 14%, #141414);
+  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-agrowin-surface) 16%, #1c1c1c);
+  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-agrowin-surface) 18%, #242424);
+  --iswc-control-border: color-mix(in srgb, var(--iswc-agrowin-surface) 20%, #3a3a3a);
+  --iswc-shadow: 0 1px 0 rgb(255 255 255 / 2%), 0 8px 24px color-mix(in srgb, var(--iswc-agrowin-surface) 35%, rgb(0 0 0 / 40%));
+}
+
+[data-theme=light][data-palette=agrowin] {
+  --iswc-agrowin-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.3) h);
+  --iswc-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 1%, #fefefe);
+  --iswc-bg-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 2%, #fbfbfb);
+  --iswc-bg-elev: #fff;
+  --iswc-border: color-mix(in srgb, var(--iswc-agrowin-surface) 6%, #e0e0e0);
+  --iswc-border-soft: color-mix(in srgb, var(--iswc-agrowin-surface) 4%, #ececec);
+  --iswc-code-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 1.5%, #fbfbfb);
+  --iswc-control-bg: color-mix(in srgb, var(--iswc-agrowin-surface) 2.5%, #f5f5f5);
+  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-agrowin-surface) 4%, #eeeeee);
+  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-agrowin-surface) 5.5%, #e6e6e6);
+  --iswc-control-border: color-mix(in srgb, var(--iswc-agrowin-surface) 8%, #b8b8b8);
+  --iswc-shadow: 0 1px 0 rgb(0 0 0 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-agrowin-surface) 4%, rgb(0 0 0 / 5%));
+}
+
+/* Light: el texto y el suave usan la rampa, no un hex de cada paleta. */
+:root[data-theme=light],
+[data-theme=light] {
+  --iswc-brand-text: var(--iswc-color-brand-stronger);
+  --iswc-brand-soft: var(--iswc-color-brand-paler);
+  --iswc-brand-soft-active: var(--iswc-color-brand-pale);
+}

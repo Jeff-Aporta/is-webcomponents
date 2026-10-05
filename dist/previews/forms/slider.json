@@ -264,6 +264,7 @@
             "<div class=\"stack\">",
             "            <iswc-slider label=\"brand (default)\" value=\"30\" value-label=\"auto\"></iswc-slider>",
             "            <iswc-slider color=\"neutral\" label=\"neutral\" value=\"45\" value-label=\"auto\"></iswc-slider>",
+            "            <iswc-slider color=\"text\" label=\"text\" value=\"50\" value-label=\"auto\"></iswc-slider>",
             "            <iswc-slider color=\"success\" label=\"success\" value=\"60\" value-label=\"auto\"></iswc-slider>",
             "            <iswc-slider color=\"warning\" label=\"warning\" value=\"75\" value-label=\"auto\"></iswc-slider>",
             "            <iswc-slider color=\"danger\" label=\"danger\" value=\"90\" value-label=\"auto\"></iswc-slider>",

@@ -1,0 +1,82 @@
+:host {
+  display: contents;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: color-mix(in srgb, #000 45%, transparent);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: confirm-backdrop-in 0.14s ease-out;
+}
+.backdrop[hidden] {
+  display: none;
+}
+
+.modal {
+  --iswc-confirm-modal-bg: var(--iswc-bg-elev);
+  --iswc-confirm-modal-text: var(--iswc-text);
+  --iswc-confirm-modal-border: var(--iswc-border);
+  --iswc-confirm-modal-accent: var(--iswc-brand);
+  --iswc-confirm-modal-on-accent: var(--iswc-brand-fg);
+  background: var(--iswc-confirm-modal-bg);
+  color: var(--iswc-confirm-modal-text);
+  border: 1px solid var(--iswc-confirm-modal-border);
+  border-radius: 0.65rem;
+  padding: 1.1rem 1.2rem;
+  min-width: 280px;
+  max-width: min(420px, 92vw);
+  box-shadow: 0 14px 42px color-mix(in srgb, #000 32%, transparent), 0 3px 10px color-mix(in srgb, #000 18%, transparent);
+  font-size: 0.92rem;
+  animation: confirm-modal-in 0.16s ease-out;
+}
+
+.heading {
+  margin: 0 0 0.45rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.heading[hidden] {
+  display: none;
+}
+
+.message {
+  margin-bottom: 0.9rem;
+  line-height: 1.45;
+  color: var(--iswc-text-soft, var(--iswc-confirm-modal-text));
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@keyframes confirm-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes confirm-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .modal {
+    animation: none;
+  }
+}

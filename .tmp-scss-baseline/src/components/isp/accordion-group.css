@@ -1,0 +1,20 @@
+@charset "UTF-8";
+/* <iswc-accordion-group> — coordinador de varios <iswc-details>.
+   El disclosure lo pinta <iswc-details>; aquí solo se ajusta su ritmo
+   vertical dentro del grupo. */
+:host {
+  display: block;
+  inline-size: 100%;
+  box-sizing: border-box;
+  font-family: var(--iswc-sans, inherit);
+  color: var(--iswc-text, inherit);
+}
+:host .accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--iswc-accordion-gap);
+  overflow: hidden;
+}
+:host ::slotted(iswc-details) {
+  margin: 0;
+}

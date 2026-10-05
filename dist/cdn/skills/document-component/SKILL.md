@@ -124,7 +124,7 @@ Los enlaces a guías hermanas deben usar la ruta **relativa** dentro de
 [`../media/icon.md`](../media/icon.md)
 ```
 
-Los enlaces a la skill del kit van con la ruta desde `src/skills/`:
+Los enlaces a la skill del kit van con la ruta desde `skills/`:
 
 ```md
 [Skill del kit](../is-webcomponents/SKILL.md)

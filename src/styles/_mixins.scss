@@ -1,0 +1,127 @@
+// _mixins.scss — mixins compartidos para componentes iswc-*
+//
+// Contrato de estilo: cada mixin emite CSS con la misma forma byte-a-byte
+// que las reglas inline que reemplaza, para que la compilación SCSS
+// (build-scss.mjs) produzca .css identico al original.
+//
+// Convenciones:
+//   * Los mixins se llaman desde dentro de `:host(...) { @include ... }`.
+//   * Ningún mixin emite `:host(...)` por su cuenta: quien decide la
+//     especificidad (selector, atributos) es el caller. Así se evita el
+//     riesgo de que el orden de las reglas cambie y rompa cascada.
+//   * Cuando una familia tiene un caso especial (brand con fallbacks
+//     dodgerblue, info con `strongest=stronger`, text con color-mix local,
+//     neutral con `_tone-text: var(--_tone)`) hay un mixin dedicado con
+//     el nombre de la familia, no un flag del genérico.
+//
+// Familias cubiertas por `tones($family)`:
+//   success, warning, danger, error  — todas comparten la rampa canonica
+//   de color-mix (helper ISWC_COLOR_MIX en color-tokens.ts).
+// Familias con mixin dedicado por la variación:
+//   brand, info, neutral, text.
+
+// ─── Tono (botones + familia) ────────────────────────────────────────────
+//   Rampa canonica W24: tokens `--iswc-color-$family{-strong,-stronger,
+//   -paler,-pale}` + `--iswc-$family-text` (con fallback a stronger) +
+//   alpha del color via color-mix + `--iswc-on-brand` como texto sobre
+//   fondo saturado. Se usa dentro de `:host([color="X"])`.
+@mixin tones($family) {
+  --_tone: var(--iswc-color-#{$family});
+  --_tone-strong: var(--iswc-color-#{$family}-strong);
+  --_tone-stronger: var(--iswc-color-#{$family}-stronger);
+  --_tone-strongest: var(--iswc-color-#{$family}-stronger);
+  --_tone-paler: var(--iswc-color-#{$family}-paler);
+  --_tone-pale: var(--iswc-color-#{$family}-pale);
+  --_tone-text: var(--iswc-#{$family}-text, var(--_tone-stronger));
+  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
+  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
+  --_tone-on: var(--iswc-on-brand);
+}
+
+// brand: `_tone-stronger` y `_tone-strongest` llevan fallback a dodgerblue
+// por si la paleta se desactiva (palettes.css ausente) y no se pueden
+// derivar las rampa de hsl(from ...). W24 phase.
+@mixin brand-tones {
+  --_tone: var(--iswc-color-brand);
+  --_tone-strong: var(--iswc-color-brand-strong);
+  --_tone-stronger: var(--iswc-color-brand-stronger, color-mix(in srgb, dodgerblue 86%, black));
+  --_tone-strongest: var(--iswc-color-brand-strongest, color-mix(in srgb, dodgerblue 74%, black));
+  --_tone-paler: var(--iswc-color-brand-paler);
+  --_tone-pale: var(--iswc-color-brand-pale);
+  --_tone-text: var(--iswc-brand-text, var(--_tone-stronger));
+  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
+  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
+  --_tone-on: var(--iswc-on-brand);
+}
+
+// info: `_tone-strongest` cae a `stronger` (la rampa info solo tiene 4
+// escalones canonicos + paler/pale, no deepest).
+@mixin info-tones {
+  --_tone: var(--iswc-color-info);
+  --_tone-strong: var(--iswc-color-info-strong);
+  --_tone-stronger: var(--iswc-color-info-stronger);
+  --_tone-strongest: var(--iswc-color-info-strongest, var(--iswc-color-info-stronger));
+  --_tone-paler: var(--iswc-color-info-paler);
+  --_tone-pale: var(--iswc-color-info-pale);
+  --_tone-text: var(--iswc-info-text, var(--_tone-stronger));
+  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
+  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
+  --_tone-on: var(--iswc-on-brand);
+}
+
+// neutral: `_tone-text` es el propio tono (no control-text) para que el
+// outlined/plain/ghost/soft-filled quede #888 en dark y light. W47.
+@mixin neutral-tones {
+  --_tone: var(--iswc-color-neutral);
+  --_tone-strong: var(--iswc-color-neutral-strong);
+  --_tone-stronger: var(--iswc-color-neutral-stronger);
+  --_tone-strongest: var(--iswc-color-neutral-strongest);
+  --_tone-paler: var(--iswc-color-neutral-paler);
+  --_tone-pale: var(--iswc-color-neutral-pale);
+  --_tone-text: var(--_tone);
+  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
+  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
+  --_tone-on: var(--iswc-on-brand);
+}
+
+// text: el "color" es el foreground del tema, sin rampa `--iswc-color-*`.
+// Toda la familia se deriva con color-mix local (text vs black/white).
+@mixin text-tones {
+  --_tone: var(--iswc-text);
+  --_tone-strong: color-mix(in srgb, var(--iswc-text) 82%, black);
+  --_tone-stronger: color-mix(in srgb, var(--iswc-text) 62%, black);
+  --_tone-strongest: color-mix(in srgb, var(--iswc-text) 45%, black);
+  --_tone-paler: color-mix(in srgb, var(--iswc-text) 12%, white);
+  --_tone-pale: color-mix(in srgb, var(--iswc-text) 28%, white);
+  --_tone-text: var(--_tone);
+  --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
+  --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
+  --_tone-on: var(--iswc-bg);
+}
+
+// ─── Roles de color (badge / tag / callout / toast) ──────────────────────
+//   Patrón de 3-4 vars: `--_bg` (alpha), `--_border` (saturado), `--_text`
+//   (foreground del tema). Para `color=neutral` los tres se derivan de
+//   `--iswc-control-*` y `--iswc-text`; para `color=text` se usa color-mix
+//   local. `tag-roles` / `toast-roles` / `badge-roles` / `callout-roles`
+//   especializan los nombres de los tokens y la `--_bg` exacta.
+//
+// Estos mixins se usan dentro de `:host([color="X"]) { @include ... }` y
+// producen exactamente el mismo CSS que las reglas inline.
+
+// Tag: `_bg` = `-pale` (pastel), `_text` = `-stronger` (tinta). Patron
+// comun a iswc-tag, iswc-toast-item, iswc-callout (con token names custom).
+@mixin tag-roles($family) {
+  --_bg: var(--iswc-color-#{$family}-pale);
+  --_border: var(--iswc-color-#{$family});
+  --_text: var(--iswc-color-#{$family}-stronger);
+}
+
+// Toast-item: `_bg` = `-paler` (mas suave que `-pale`), mismo `_text` que
+// tag. Usa tambien `--_accent` que delega a `--iswc-muted` o al color.
+@mixin toast-roles($family) {
+  --_bg: var(--iswc-color-#{$family}-paler);
+  --_border: var(--iswc-color-#{$family});
+  --_text: var(--iswc-color-#{$family}-stronger);
+  --_accent: var(--iswc-color-#{$family});
+}

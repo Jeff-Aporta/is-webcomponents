@@ -1,0 +1,65 @@
+/* iswc-duration-picker */
+:host {
+  display: inline-block;
+  font: inherit;
+  color: var(--iswc-text);
+  --iswc-duration-picker-bg: var(--iswc-control-bg, var(--iswc-bg-soft));
+  --iswc-duration-picker-border: var(--iswc-control-border, var(--iswc-border));
+}
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  background: var(--iswc-duration-picker-bg);
+  border: 1px solid var(--iswc-duration-picker-border);
+  border-radius: var(--iswc-radius);
+  padding: 0.25rem 0.45rem;
+}
+
+/* Botones arriba/abajo de cada columna: comparten estilo base. */
+:is(.col button, .cell) {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.col {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: stretch;
+  gap: 1px;
+}
+.col button {
+  cursor: pointer;
+  color: var(--iswc-text-soft);
+  font-size: 0.65rem;
+  height: 1rem;
+}
+.col button:hover {
+  background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+  color: var(--iswc-accent);
+}
+
+.cell {
+  width: 2.4rem;
+  outline: 0;
+  font-size: 1rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  padding: 0.25rem 0;
+}
+.cell:focus {
+  background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+}
+
+.sep {
+  font-weight: 600;
+  color: var(--iswc-text-soft);
+  align-self: center;
+  font-size: 1.05rem;
+}

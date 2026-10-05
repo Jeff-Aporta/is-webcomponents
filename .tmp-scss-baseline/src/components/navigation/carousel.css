@@ -1,0 +1,128 @@
+:host {
+  display: block;
+  position: relative;
+  --iswc-carousel-control-bg: var(--iswc-bg-elev);
+  --iswc-carousel-control-text: var(--iswc-text);
+  --iswc-carousel-control-border: var(--iswc-border);
+  --iswc-carousel-indicator-active: var(--iswc-brand);
+  --iswc-carousel-indicator: var(--iswc-border);
+}
+
+.carousel {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: var(--aspect-ratio, 16/9);
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: var(--iswc-bg-elev);
+  border: 1px solid var(--iswc-carousel-control-border);
+}
+
+.viewport {
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+
+/* Variante vertical: snap en Y. */
+.carousel[data-orientation=vertical] .viewport {
+  scroll-snap-type: y mandatory;
+}
+
+.track {
+  display: flex;
+  flex-direction: row;
+  block-size: 100%;
+}
+.track[data-orientation=vertical] {
+  flex-direction: column;
+}
+
+::slotted(iswc-carousel-item) {
+  display: block;
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  block-size: 100%;
+  box-sizing: border-box;
+}
+
+.indicators {
+  position: absolute;
+  inset-block-end: 0.5rem;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  z-index: 2;
+}
+.indicators[hidden] {
+  display: none;
+}
+.indicators button {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: var(--iswc-carousel-indicator);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.indicators button[aria-selected=true] {
+  background: var(--iswc-carousel-indicator-active);
+  transform: scale(1.4);
+}
+
+.ctrl {
+  position: absolute;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--iswc-carousel-control-border);
+  background: var(--iswc-carousel-control-bg);
+  color: var(--iswc-carousel-control-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.2s, transform 0.2s;
+}
+.ctrl:hover {
+  background: color-mix(in srgb, var(--iswc-carousel-control-bg) 70%, var(--iswc-carousel-control-text) 30%);
+}
+.ctrl[hidden] {
+  display: none;
+}
+
+.prev {
+  inset-inline-start: 0.5rem;
+}
+
+.next {
+  inset-inline-end: 0.5rem;
+}
+
+/* Item internal */
+.citem {
+  inline-size: 100%;
+  block-size: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}

@@ -266,6 +266,7 @@
             "<div class=\"stack\">",
             "            <iswc-rating label=\"brand (default)\" value=\"3\"></iswc-rating>",
             "            <iswc-rating color=\"neutral\" label=\"neutral\" value=\"3\"></iswc-rating>",
+            "            <iswc-rating color=\"text\" label=\"text\" value=\"3\"></iswc-rating>",
             "            <iswc-rating color=\"success\" label=\"success\" value=\"3\"></iswc-rating>",
             "            <iswc-rating color=\"warning\" label=\"warning\" value=\"3\"></iswc-rating>",
             "            <iswc-rating color=\"danger\" label=\"danger\" value=\"3\"></iswc-rating>",

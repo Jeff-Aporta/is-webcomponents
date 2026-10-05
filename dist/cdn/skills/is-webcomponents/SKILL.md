@@ -19,7 +19,7 @@ Prompt completo, listo para copiar: [`PROMPT.md`](PROMPT.md).
 
 **Antes de escribir HTML/CSS/JS**, lee en orden:
 
-1. [`is-cdn-install/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) — bootstrap, espejos, pin SHA, fallback.
+1. [`is-cdn-install/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md) — bootstrap, espejos, pin SHA, fallback.
 2. Este archivo — arquitectura, reglas de reuso y el índice de cada componente.
 3. La guía del módulo, enlazada en el catálogo de abajo.
 
@@ -59,10 +59,10 @@ Usa `raw.githubusercontent.com` solo para lectura como `text/plain` puro.
 
 | Recurso | GitHub | raw (texto plano) |
 | --- | --- | --- |
-| Prompt LLM | [PROMPT.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/PROMPT.md) |
-| Esta skill | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-webcomponents/SKILL.md) |
-| Skill instalación CDN | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md) |
-| Herramientas | [tools/](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) | — |
+| Prompt LLM | [PROMPT.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/PROMPT.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-webcomponents/PROMPT.md) |
+| Esta skill | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-webcomponents/SKILL.md) |
+| Skill instalación CDN | [SKILL.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md) |
+| Herramientas | [tools/](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/is-webcomponents/tools) | — |
 | Catálogo de producto | [componentes.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) | [raw](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) |
 
 Local: `dist/cdn/skills/<name>/SKILL.md` vía jsDelivr o Pages una vez la app ya arranca desde ahí.
@@ -112,8 +112,8 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
   <script type="module">
     const L = globalThis.ISWebComponentsLoader;
-    // is-base.min.css se auto-carga al importar el loader (W52).
-    await L.loadPageStyles(['iswc-palettes-default']);
+    await L.loadCSSBase();
+    await L.loadCSSPalettesDefault();
     await L.load("iswc-toast");
   </script>
 </head>
@@ -123,7 +123,7 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
 </html>
 ```
 
-- CSS de documento: `loadPageStyles(['iswc-palettes-default'])` (`is-base` auto). El CSS de cada `is-*` lo carga el propio tag.
+- CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
 - Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categoría (no hay bundle). `load('all')` pide todos los tags, no un archivo único.
 - Tema: `data-theme` / `data-palette` en `<html>`. Tokens: `--iswc-text`, `--iswc-bg`, `--iswc-border`, `--iswc-accent`, etc.
 - Si la app prefiere no depender de red: usar [`/is-webcomponents:local`](tools/local.md) (vendoriza JS y CSS, arranque local con fallback a CDN).

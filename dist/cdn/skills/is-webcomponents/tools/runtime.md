@@ -14,18 +14,18 @@ Guía larga: [`cdn/loader.md`](https://github.com/Jeff-Aporta/is-webcomponents/b
 
 | API | Efecto |
 | --- | --- |
-| `loadPageStyles(['iswc-palettes-default'])` | CSS de documento (palettes; `is-base` auto) |
+| `loadCSSBase()` / `loadCSSPalettesDefault()` | CSS de documento |
 | `load(...ids)` | Tags, categorías o `'all'` → `{ loaded, skipped }` |
 | `has(id)` / `getLoaded()` / `resetLoaded()` | Anti-redundancia |
 | `ensure(tag)` | Lazy load de un tag |
 | `pin(ref)` / `unpin()` / `resolvePin()` | Pin branch/SHA |
-| `configure({ host, sha, mirrors, preferSelf, local, v, query })` | Host / espejos / bust |
+| `configure({ host, sha, mirrors, preferSelf, v, query })` | Host / espejos / bust |
 | `listBases()` / `fallbackBases()` | Cadena de espejos |
 | `shaDefault` / `shaFromUrl` / `host` / `selfBase` / `repo` | Pin y orígenes |
 | `assetUrl(href)` / `hashes` | `?h=` del build |
 | `sheets.install` / `warm*` | Cache de CSS (apps) |
 | `registerApp(map)` | Tags de la app fuera del catálogo |
-| `loadPageStyles` / `loadPageModules` / `registerPageStyle` | Galería / paths / aliases |
+| `loadPageStyles` / `loadPageModules` | Galería / paths de página |
 
 **Fallback fijo:** jsDelivr → raw.githack → GitHub Pages (sticky del que responde).  
 **SHA:** quemado en el bundle; no hace falta `configure({ host })` si importas `@<sha>/…`.
