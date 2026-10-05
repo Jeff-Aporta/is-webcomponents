@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-toast-item",
   "category": "feedback",
-  "title": "<iswc-toast-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-toast-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-toast-item de InSoft.",
   "storageKey": "docs-iswc-toast-item",
   "sections": [
@@ -14,14 +14,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-toast-item color=\"success\" open duration=\"0\">\r\n            <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\r\n            Guardado correctamente\r\n          </iswc-toast-item>\r\n          <iswc-toast-item color=\"danger\" open duration=\"0\">\r\n            <iswc-icon slot=\"icon\" icon=\"mdi:alert-circle\"></iswc-icon>\r\n            No se pudo guardar\r\n          </iswc-toast-item>",
+          "html": "<iswc-toast-item id=\"tiPlay\" color=\"success\" open duration=\"0\">\r\n            <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\r\n            Guardado correctamente\r\n          </iswc-toast-item>",
+          "target": "#tiPlay",
           "controls": [
             {
               "control": "select",
               "prop": "attr:color",
               "label": "color",
               "options": [
+                "brand",
+                "neutral",
                 "success",
+                "warning",
                 "danger"
               ]
             },
@@ -39,11 +43,17 @@
               "step": 1
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
         {
-          "kind": "code",
-          "code": "<iswc-toast-item color=\"success\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\n  Guardado correctamente\n</iswc-toast-item>\n<iswc-toast-item color=\"danger\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:alert-circle\"></iswc-icon>\n  No se pudo guardar\n</iswc-toast-item>",
-          "lang": "html"
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-toast-item\">\n  <iswc-toast-item open>\n    <strong>Titulo del toast</strong>\n    <span slot=\"caption\">Descripcion breve</span>\n    <iswc-icon slot=\"icon\" icon=\"mdi:bell-ring-outline\"></iswc-icon>\n  </iswc-toast-item>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -51,12 +61,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-toast-item&gt; — Web Component (vanilla). Ítem individual de toast con countdown y cierre. Atributos color   brand | success | warning | danger | neutral (default neutral) duration  number ms (default 5000; 0 = hasta dismiss). Reflect. open      boolean — visible Slots: default, icon | start Métodos: show(), hide() Eventos (bubbles, composed): iswc-after-show, iswc-after-hide CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(close-button) ::part(progress)",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/feedback/toast-item.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Ítem individual de notificación. Se crea normalmente con <code class=\"code\">toaster.create()</code>, pero también se puede declarar suelto para controlar su ciclo de vida a mano."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-toast-item color=\"success\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\n  Guardado correctamente\n</iswc-toast-item>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

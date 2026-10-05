@@ -1,4 +1,4 @@
-# Auditoría exhaustiva de componentes is-webcomponents
+﻿# Auditoría exhaustiva de componentes is-webcomponents
 
 Este directorio contiene tests exhaustivos (UI + UX + lógica + edge cases) por componente, organizados por categoría.
 
@@ -85,4 +85,4 @@ deno test -A --no-check src/utils/health/exhaustive/<categoría>/<componente>.te
 
 ## Estado actual (post-tanda 1)
 
-Ver `docs/AUDITORIA-EXHAUSTIVA-RESULTADOS.md` para los resultados consolidados.
+Ver `.audit/auditoria-exhaustiva.md` para los resultados consolidados.

@@ -1,0 +1,60 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-file-view",
+  "category": "files",
+  "title": "<iswc-file-view>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-file-view",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Shell view: despacha por MIME/nombre.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-file-view name=\"demo.csv\" content=\"a,b&#10;1,2\" height=\"12rem\"></iswc-file-view>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Shell view: despacha por MIME/nombre."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
+}

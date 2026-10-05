@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-inline-edit",
   "category": "forms",
-  "title": "<iswc-inline-edit>",
-  "titleHtml": true,
+  "title": "&lt;iswc-inline-edit&gt;",
+  "titleHtml": false,
   "styles": ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }\r\n    .ie-row > span.label { font-size: .82rem; color: var(--iswc-text-soft); width: 7rem; flex: 0 0 auto; }\r\n    .ie-row p { margin: 0; font-size: .82rem; color: var(--iswc-text-dim); }",
   "storageKey": "docs-iswc-inline-edit",
   "sections": [
@@ -19,30 +19,30 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <iswc-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></iswc-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Email</span>\r\n            <iswc-inline-edit id=\"ie2\" value=\"caro@empresa.co\"></iswc-inline-edit>\r\n          </div>\r\n          <div class=\"ie-row\">\r\n            <span class=\"label\">Vacío</span>\r\n            <iswc-inline-edit placeholder=\"Clic para escribir\"></iswc-inline-edit>\r\n          </div>",
+          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <iswc-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></iswc-inline-edit>\r\n          </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:placeholder",
-                "label": "placeholder",
-                "options": [
-                  "Sin nombre",
-                  "Clic para escribir"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:mode",
-                "label": "mode"
-              },
-              {
-                "control": "number",
-                "prop": "attr:rows",
-                "label": "rows",
-                "min": 0,
-                "max": 100,
-                "step": 1
-              }
+            {
+              "control": "select",
+              "prop": "attr:placeholder",
+              "label": "placeholder",
+              "options": [
+                "Sin nombre",
+                "Clic para escribir"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:mode",
+              "label": "mode"
+            },
+            {
+              "control": "number",
+              "prop": "attr:rows",
+              "label": "rows",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            }
           ],
           "equivNote": "mode elige control; cancel-on-blur decide si blur guarda o cancela.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -84,5 +84,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Texto plano que se vuelve editable al clic. Enter guarda y sale. Esc cancela y revierte. Blur guarda por defecto; usá <code class=\"code\">cancel-on-blur</code> para invertirlo."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

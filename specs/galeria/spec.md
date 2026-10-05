@@ -1,4 +1,4 @@
-# Spec — Galería y previews
+﻿# Spec — Galería y previews
 
 Shell de demostración, estado en URL y previews controlados por JSON.
 
@@ -11,7 +11,7 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 ## S-G1 Previews JSON
 
 - Archivo: `src/previews/<categoria>/<tag>.json` con `$schema: "iswc-preview/v1"`.
-- `manifest.js` → `page` apunta al `.json`, no a HTML por tag.
+- `src/manifest.ts` → `page` apunta al `.json`, no a HTML por tag.
 - Único HTML bajo previews: `src/previews/_shell.html` (fullscreen).
 - Comportamiento dinámico: `src/previews/behaviors/<tag>.js` (`mount` / `unmount`). **Prohibido** `eval` o listeners en strings del JSON.
 
@@ -20,6 +20,9 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 - Componente: `<iswc-preview-component>` (`src/components/layout/preview-component.js`).
 - Catálogo: `src/previews/catalog.ts` + `registry.loadPreview(tag)`.
 - Utilerías públicas en `helpers/`: tab en nav + JSON + MD (`src/utils/health/meta/helpers-homogeneity.test.ts`).
+- Playground de producto: `<iswc-playground>` ([`playground/spec.md`](../playground/spec.md)).
+  Si el JSON trae seccion playground, va **primera**. Knobs = contrato `controls`;
+  no HTML nativo de formularios en el chrome.
 
 ## S-G3 Estado en URL
 

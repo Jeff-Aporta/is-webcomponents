@@ -1,6 +1,6 @@
 /**
- * Behavior del home: CTAs, parallax del collage, progreso de lectura, reveal,
- * contadores KPI, cintas en bucle y botón «abrir demo» de cada card.
+ * Behavior del home: CTAs, parallax del collage, reveal, contadores KPI,
+ * cintas en bucle y botón «abrir demo» de cada card.
  *
  * Todo se cablea contra `ctx.main`, que es el scroller que pinta el chrome. La
  * versión anterior buscaba `iswc-main.home-main` por `document`: cuando ese nodo
@@ -101,30 +101,6 @@ function parallaxCollage(raiz: HTMLElement, signal: AbortSignal) {
 }
 
 /**
- * Barra de progreso de lectura sobre el scroller del home.
- * @param {HTMLElement} raiz Es a la vez el scroller y la raíz de consulta.
- * @param {AbortSignal} signal
- */
-function progresoDeLectura(raiz: HTMLElement, signal: AbortSignal) {
-  const barra = raiz.querySelector<HTMLElement>('#homeProgress');
-  if (!barra) return;
-  let raf = 0;
-  const sincronizar = () => {
-    raf = 0;
-    const max = raiz.scrollHeight - raiz.clientHeight;
-    (barra as HTMLProgressElement).value = max > 0 ? Math.round((raiz.scrollTop / max) * 100) : 0;
-  };
-  raiz.addEventListener(
-    'scroll',
-    () => {
-      if (!raf) raf = requestAnimationFrame(sincronizar);
-    },
-    { passive: true, signal },
-  );
-  sincronizar();
-}
-
-/**
  * Reveal de tiles y cards. Solo para navegadores sin `animation-timeline:
  * view()` (Safari/Firefox): donde existe, lo hace el CSS.
  *
@@ -204,9 +180,15 @@ function contadores(raiz: HTMLElement, signal: AbortSignal) {
  * contenido escrito a mano las cintas cortas dejaban un hueco y parecían
  * quietas: aquí se rellena hasta cubrir el ancho y luego se clona el grupo.
  *
+ * Los ítems son `<a target=_blank>` al demo (`_shell.html?tag=…`). El pause
+ * al hover/focus lo hace el CSS (`animation-play-state: paused`).
+ *
  * @param {HTMLElement} raiz
  */
 function cintasEnBucle(raiz: HTMLElement) {
+  const wrap = raiz.querySelector<HTMLElement>('.collage-ribbons');
+  wrap?.removeAttribute('aria-hidden');
+
   for (const cinta of raiz.querySelectorAll<HTMLElement>('.collage-ribbon')) {
     const carril = cinta.querySelector<HTMLElement>('.collage-ribbon__track');
     if (!carril?.children.length) continue;
@@ -259,12 +241,13 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
   pintarConsumoCdn(raiz);
   cablearCtas(raiz);
   botonesDeDemo(raiz);
+  // Cintas: enlaces al demo aunque reduced-motion salte la animación.
+  raiz.querySelector('.collage-ribbons')?.removeAttribute('aria-hidden');
 
   if (menosMovimiento) return;
 
   parallaxCollage(raiz, signal);
   cintasEnBucle(raiz);
-  progresoDeLectura(raiz, signal);
   revelarAlEntrar(raiz, signal);
   contadores(raiz, signal);
 }

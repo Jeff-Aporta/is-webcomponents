@@ -52,16 +52,12 @@ interface IsRadioElement extends HTMLElement {
     'orientation', 'row', 'color', 'label-placement', 'error', 'error-text',
   ];
 
-  const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const VARIANTS = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
   const PLACEMENTS = ['end', 'start', 'top', 'bottom'];
   const NEXT_KEYS = ['ArrowDown', 'ArrowRight'];
   const PREV_KEYS = ['ArrowUp', 'ArrowLeft'];
 
   class IswcRadioGroup extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-radio-accent', onlyColorValues: true },
-    };
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-treemap",
   "category": "data-viz",
-  "title": "<iswc-treemap>",
-  "titleHtml": true,
+  "title": "&lt;iswc-treemap&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-treemap",
   "sections": [
     {
@@ -120,5 +120,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Treemap anidado en SVG, con el algoritmo squarified (Bruls/Huizing/\r\n          van Wijk): rectángulos con aspect-ratio cercano a 1, sin huecos ni\r\n          solapes."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-treemap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"treemap\": {\r\n                  \"title\": \"Estructura del activo\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"inv\", \"label\": \"Inventario\", \"value\": 3200, \"hue\": 239 },\r\n                    { \"id\": \"inv-a\", \"parent\": \"inv\", \"label\": \"Materia prima\", \"value\": 1800 },\r\n                    { \"id\": \"inv-b\", \"parent\": \"inv\", \"label\": \"Producto terminado\", \"value\": 900 },\r\n                    { \"id\": \"inv-c\", \"parent\": \"inv\", \"label\": \"En proceso\", \"value\": 500 },\r\n                    { \"id\": \"cxc\", \"label\": \"Cartera\", \"value\": 2100, \"hue\": 199 },\r\n                    { \"id\": \"cxc-a\", \"parent\": \"cxc\", \"label\": \"Corriente\", \"value\": 1500 },\r\n                    { \"id\": \"cxc-b\", \"parent\": \"cxc\", \"label\": \"Vencida\", \"value\": 600 },\r\n                    { \"id\": \"caja\", \"label\": \"Caja y bancos\", \"value\": 1400, \"hue\": 38 },\r\n                    { \"id\": \"otros\", \"label\": \"Otros activos\", \"value\": 700, \"hue\": 280 }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-treemap>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

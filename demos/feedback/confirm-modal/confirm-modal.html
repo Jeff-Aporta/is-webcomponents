@@ -17,7 +17,7 @@
   iswc-confirm-modal:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/confirm-modal.min.js?h=sbqm8b');
+  await import('../../../dist/cdn/feedback/confirm-modal.min.js?h=t4c9dm');
 
   await customElements.whenDefined('iswc-confirm-modal');
   document.documentElement.dataset.confirmModalReady = '1';
@@ -31,7 +31,7 @@
 
 <section>
   <h2>Apertura por atributo <code>for</code> (click en el disparador)</h2>
-  <button id="btn-open-1" type="button">Borrar registro</button>
+  <button title="Borrar registro" id="btn-open-1" type="button">Borrar registro</button>
   <iswc-confirm-modal
     for="btn-open-1"
     heading="Eliminar registro"
@@ -41,16 +41,16 @@
 
 <section>
   <h2>Con botones personalizados (slots confirm / cancel)</h2>
-  <button id="btn-open-2" type="button">Publicar cambios</button>
+  <button title="Publicar cambios" id="btn-open-2" type="button">Publicar cambios</button>
   <iswc-confirm-modal for="btn-open-2" heading="Publicar cambios" message="Los cambios se publicarán para todos los usuarios.">
-    <iswc-button slot="cancel" variant="text" color="neutral">Atrás</iswc-button>
-    <iswc-button slot="confirm" color="success">Sí, publicar</iswc-button>
+    <iswc-button title="Atrás" slot="cancel" variant="text" color="neutral">Atrás</iswc-button>
+    <iswc-button title="Sí, publicar" slot="confirm" color="success">Sí, publicar</iswc-button>
   </iswc-confirm-modal>
 </section>
 
 <section>
   <h2>Programático (<code>el.show()</code>)</h2>
-  <button id="btn-open-3" type="button">Aviso</button>
+  <button title="Aviso" id="btn-open-3" type="button">Aviso</button>
   <iswc-confirm-modal id="modal-3" heading="Aviso" message="Cierre con Escape o click fuera."></iswc-confirm-modal>
   <script type="module">
     document.getElementById('btn-open-3').addEventListener('click', () => {
@@ -58,5 +58,80 @@
     });
   </script>
 </section>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

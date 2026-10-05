@@ -1,6 +1,6 @@
-# IS Web Components
+# ISWC
 
-Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de InSoft (`is-*`).
+Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components) vanilla de InSoft (`iswc-*`).
 
 ## Demo (GitHub Pages)
 
@@ -33,7 +33,7 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 | `src/assets/` | Iconos Iconify y favicon |
 | `src/skills/is-webcomponents/` | Guía para agentes IDE (CDN-first) — **solo fuente**, no en `dist/` |
 | `src/components/**/*.md` | Docs LLM por módulo / categoría — raw bajo `…/main/src/components/` |
-| `src/manifest.js` | Índice de la galería |
+| `src/manifest.ts` | Índice de la galería |
 | `AGENTS.md` | Carta de leyes + guía para agentes (único diario en raíz) |
 | `robots.txt` | Crawl de GitHub Pages (`Allow: /`) |
 | `scripts/` · `dist/cdn/` · `tests/` | Build, CDN, invariantes (`*.test.mjs` commiteados) |
@@ -43,9 +43,9 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada preview, `<iswc-cdn-snippet>` muestra los enlaces y un prompt CDN-first.
 
 ```
-Usa el kit IS Web Components solo por CDN (jsDelivr), sin npm ni npx.
+Usa el kit ISWC solo por CDN (jsDelivr), sin npm ni npx.
 Bootstrap: `loader.min.js` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
-Reutiliza tags is-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
+Reutiliza tags iswc-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
 Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
 ```
 

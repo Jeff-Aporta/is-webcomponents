@@ -47,10 +47,23 @@ export interface PreviewHtmlBlock {
   html: string;
 }
 
+export interface PreviewCodeEjemploCell {
+  /** Celda de tabla: disclosure + <iswc-code> copiable. */
+  kind: 'code-ejemplo';
+  /** Fuente del snippet (preferir HTML autocontenido). */
+  code: string;
+  /** Lenguaje de iswc-code (default html). */
+  lang?: string;
+  /** Texto del summary del disclosure (default "Ejemplo"). */
+  summary?: string;
+}
+
+export type PreviewTableCell = string | PreviewCodeEjemploCell;
+
 export interface PreviewTableBlock {
   kind: 'table';
   columns: string[];
-  rows: string[][];
+  rows: PreviewTableCell[][];
   /** HTML opcional encima de la tabla */
   captionHtml?: string;
   /** Clases extra del `<table>` (además de `ref`). Ej. `ref--tokens`. */
@@ -73,7 +86,11 @@ export type PreviewBlock =
 export interface PreviewSection {
   id: string;
   title: string;
-  /** Si true, title se inserta como HTML (p. ej. con <code>). Default: texto. */
+  /**
+   * Si true, title se inserta como HTML (p. ej. `<code>` / `<span>`).
+   * Tags CE (`<iswc-*>`, `<paty-*>`) y el resto se escapan a `&lt;…&gt;`.
+   * Default: texto (`textContent`).
+   */
   titleHtml?: boolean;
   /**
    * No pintar el <h2> del chrome: el markup de la sección ya trae su propio
@@ -109,7 +126,10 @@ export interface PreviewDefinition {
   tag: string;
   /** Categoría (carpeta bajo previews/) */
   category: string;
-  /** Título visible del H2 intro (texto o HTML si titleHtml) */
+  /**
+   * Título visible del H2 intro. Con titleHtml: markup seguro (`code`/`span`);
+   * tags CE se escapan a `&lt;…&gt;`. Sin titleHtml: textContent.
+   */
   title: string;
   titleHtml?: boolean;
   description?: string;
@@ -140,6 +160,18 @@ export interface PreviewDefinition {
    * (p. ej. home a ancho completo). Una sola seccion hace lo mismo sola.
    */
   withoutToc?: boolean;
+  /**
+   * Phase W21 (zod-migration): array tipado de ejemplos que alimenta a
+   * cualquier `<iswc-examples-carousel>` declarado en los bloques `demo` /
+   * `html` de las secciones. Si está presente, el render inyecta estos
+   * ejemplos en el/los carruseles (la propiedad `examples` del carousel
+   * acepta la forma legacy `label` y la nueva `name` indistintamente).
+   *
+   * El tipado fuerte vive en `src/utils/section-schema.ts` (ExampleSchema /
+   * ExamplesSchema); este `unknown[]` evita acoplar el sistema de render al
+   * módulo de Zod.
+   */
+  examples?: unknown[];
   sections: PreviewSection[];
 }
 

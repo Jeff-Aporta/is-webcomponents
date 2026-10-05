@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tab",
   "category": "navigation",
-  "title": "<iswc-tab>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tab&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tab de InSoft.",
   "storageKey": "docs-iswc-tab",
   "sections": [
@@ -14,29 +14,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-tab-group>\r\n            <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>\r\n            <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>\r\n          </iswc-tab-group>",
-          "controls": [
-            {
-              "control": "select",
-              "prop": "attr:panel",
-              "label": "panel",
-              "options": [
-                "a",
-                "b",
-                "c"
-              ]
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:disabled",
-              "label": "disabled"
-            }
-          ]
-        },
+          "html": "<iswc-tab-group>\r\n            <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>\r\n            <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>\r\n          </iswc-tab-group>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
         {
-          "kind": "code",
-          "code": "<iswc-tab-group>\n  <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>\n  <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>\n  <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>\n  <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>\n</iswc-tab-group>",
-          "lang": "html"
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-tab\">\n  <iswc-tab active>General</iswc-tab>\n  <iswc-icon slot=\"start\" icon=\"mdi:cog-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:check\"></iswc-icon>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -44,12 +33,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-tab-group&gt;, &lt;iswc-tab&gt;, &lt;iswc-tab-panel&gt; — Web Components (vanilla, zero dependencies). Tres componentes cohabitantes: &lt;iswc-tab-group active=\"general\" placement=\"top\" activation=\"auto\"&gt; &lt;iswc-tab slot=\"nav\" panel=\"general\"&gt;General&lt;/iswc-tab&gt; &lt;iswc-tab slot=\"nav\" panel=\"custom\" disabled&gt;Custom&lt;/iswc-tab&gt; &lt;iswc-tab-panel name=\"general\"&gt;…&lt;/iswc-tab-panel&gt; &lt;iswc-tab-panel name=\"custom\"&gt;…&lt;/iswc-tab-panel&gt; &lt;/iswc-tab-group&gt; Atributos &lt;iswc-tab-group&gt; active        string   — nombre del panel activo. placement     top | bottom | start | end  (default 'top') activation    auto | manual (default 'auto') without-scroll-controls  boolean (default false) Atributos &lt;iswc-tab&gt; panel         string   — nombre del panel al que apunta (required). disabled      boolean closable      boolean  — muestra un botón de cerrar (slot close-button). Atributos &lt;iswc-tab-panel&gt; name          string   — id único dentro del tab-group (required). Slots &lt;iswc-tab-group&gt; nav        — tabs (se proyectan automáticamente). (default)  — paneles. &lt;iswc-tab&gt; (default)   label del tab. start       icono al inicio. end         icono al final. close-button  botón de cerrar (cuando closable). &lt;iswc-tab-panel&gt; (default)  contenido del panel. Eventos iswc-tab-show   detail: { name, panel, tab } — al activar un panel. iswc-tab-hide   detail: { name, panel, tab } — al ocultar un panel. iswc-tab-close  detail: { tab, name }  — cuando se hace click en el close-btn de un iswc-tab closable. CSS Parts iswc-tab-group: ::part(tab-group) ::part(nav) ::part(body) ::part(tabs) iswc-tab: ::part(base) ::part(active-indicator) iswc-tab-panel: ::part(base)",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/tab-group.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Pestaña de un <code class=\"code\">&lt;iswc-tab-group&gt;</code>. El atributo <code class=\"code\">panel</code> la enlaza con su <code class=\"code\">&lt;iswc-tab-panel&gt;</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tab-group>\n  <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>\n  <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>\n  <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>\n  <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>\n</iswc-tab-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

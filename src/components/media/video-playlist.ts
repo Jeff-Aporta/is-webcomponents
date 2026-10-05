@@ -195,15 +195,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     return attr ? attr.trim() : '';
   }
 
-  class IswcVideoPlaylist extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-video-playlist-radius',
-    bg: { prop: '--iswc-video-playlist-bg', onlyColorValues: true },
-    'border-color': { prop: '--iswc-video-playlist-border', onlyColorValues: true },
-    'stripe-color': { prop: '--iswc-video-playlist-stripe', onlyColorValues: true },
-    accent: { prop: '--iswc-video-playlist-accent', onlyColorValues: true },
-    };
+  class IswcVideoPlaylist extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'bg', 'border-color', 'stripe-color', 'accent']; }
 

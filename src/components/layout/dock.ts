@@ -18,7 +18,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
  *   range       píxeles: la magnificación cae a 0 a esta distancia del item
  *               bajo el cursor (default 110)
  *
- * Custom states: hovering
+ * Magnificación: se aplica por item con la variable CSS `--scale`; el dock no expone `:state()`.
  * Eventos:
  *   iswc-select   detail: { item }
  *
@@ -29,10 +29,6 @@ import { withStyleAttrs } from '../../core/attrs.js';
   const OBSERVED = ['position', 'max-scale', 'range'];
 
   class IswcDock extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'scale-unit': '--iswc-dock-scale-unit',
-    };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'scale-unit']; }
     #raf = 0;

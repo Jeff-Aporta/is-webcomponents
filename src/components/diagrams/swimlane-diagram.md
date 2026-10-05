@@ -1,39 +1,39 @@
----
+﻿---
 tag: iswc-swimlane-diagram
 tags:
   - iswc-swimlane-diagram
 category: diagrams
 status: public
-source: ./swimlane-diagram.js
+source: ./swimlane-diagram.ts
 style: ./swimlane-diagram.css
 preview: ./swimlane-diagram.json
 ---
 # `<iswc-swimlane-diagram>`
 
-## Propósito
+## PropÃ³sito
 
 Diagrama de **carriles** (cross-functional flowchart) en SVG, sin Mermaid:
 cada fila es un responsable y cada columna un momento del proceso.
 
-Este módulo registra `<iswc-swimlane-diagram>`.
+Este mÃ³dulo registra `<iswc-swimlane-diagram>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Cuando el proceso cruza varias áreas y lo importante es **quién** hace cada
-paso, no solo en qué orden ocurre.
+Cuando el proceso cruza varias Ã¡reas y lo importante es **quiÃ©n** hace cada
+paso, no solo en quÃ© orden ocurre.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Si no hay más de un responsable → `<iswc-flowchart>` dice lo mismo con menos
-tinta. Si lo que importa es el reparto de una magnitud → `<iswc-sankey-diagram>`.
+Si no hay mÃ¡s de un responsable â†’ `<iswc-flowchart>` dice lo mismo con menos
+tinta. Si lo que importa es el reparto de una magnitud â†’ `<iswc-sankey-diagram>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './swimlane-diagram.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-swimlane-diagram>
@@ -51,9 +51,9 @@ import './swimlane-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -71,19 +71,39 @@ import './swimlane-diagram.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+| `iswc-toggle-lane` | Evento personalizado del componente (toggle lane). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-open-viewer` | sí | sí | sí | sí |
-| `iswc-toggle-lane` | sí | sí | sí | no |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-toggle-lane` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-swimlane-diagram');
+el.addEventListener('iswc-render', (e) => {
+  console.log('iswc-render', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -101,21 +121,21 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-La columna de un paso se declara con `column` o se deduce por orden topológico. Un enlace hacia atrás (reproceso) se dibuja punteado y por debajo del carril, para que no se confunda con el avance normal.
+La columna de un paso se declara con `column` o se deduce por orden topolÃ³gico. Un enlace hacia atrÃ¡s (reproceso) se dibuja punteado y por debajo del carril, para que no se confunda con el avance normal.
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
+> <iswc-swimlane-diagram> â€” diagrama de carriles en SVG, sin Mermaid.
 >   <iswc-swimlane-diagram>
 >     <script type="application/json">
 >       { "swimlane": { "lanes": [...], "steps": [...], "links": [...] } }
@@ -141,20 +161,20 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 - [`../_shared/diagram-arrow.js`](../_shared/diagram-arrow.js)
 
-Tags del módulo: `<iswc-swimlane-diagram>`.
+Tags del mÃ³dulo: `<iswc-swimlane-diagram>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
-Ver el preview de la galería, que trae el payload completo con grupos y estilos:
+Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estilos:
 [`./swimlane-diagram.json`](./swimlane-diagram.json).
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -162,18 +182,18 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./swimlane-diagram.js)
+- [JavaScript](./swimlane-diagram.ts)
 - [CSS](./swimlane-diagram.css)
 - [Spec y layout](./swimlane-spec.js)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./swimlane-diagram.json)
 
 ## App API
@@ -181,4 +201,4 @@ Ver el preview de la galería, que trae el payload completo con grupos y estilos
 Visor: `demos/diagramas/app/view.html?kind=swimlane&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=swimlane&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.

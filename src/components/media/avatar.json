@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-avatar",
   "category": "media",
-  "title": "<iswc-avatar>",
-  "titleHtml": true,
+  "title": "&lt;iswc-avatar&gt;",
+  "titleHtml": false,
   "styles": "/* Rejilla formas x contenido: se lee como tabla de referencia. */\r\n    .shape-grid {\r\n      display: grid;\r\n      grid-template-columns: auto repeat(3, minmax(0, max-content));\r\n      align-items: center;\r\n      gap: 0.9rem 1.6rem;\r\n      font-size: 2.5rem;\r\n    }\r\n    .shape-grid > code.code { font-size: 0.8rem; }\r\n    .shape-grid__head {\r\n      font-size: 0.7rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.06em;\r\n      text-transform: uppercase;\r\n      color: var(--iswc-text-soft);\r\n    }\r\n\r\n    /* El acento del \"+N\" va en la parte de iniciales, que si respeta la forma. */\r\n    .stack-more::part(initials) {\r\n      background: var(--iswc-accent);\r\n      color: var(--iswc-on-accent, #fff);\r\n    }\r\n\r\n    .fallback-grid { display: flex; flex-wrap: wrap; gap: 2rem; }\r\n    .fallback-case {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 0.75rem;\r\n      margin: 0;\r\n      font-size: 2.5rem;\r\n    }\r\n    .fallback-case figcaption {\r\n      display: flex;\r\n      flex-direction: column;\r\n      font-size: 0.85rem;\r\n      line-height: 1.35;\r\n    }\r\n    .fallback-case small { color: var(--iswc-text-soft); }",
   "storageKey": "docs-iswc-avatar",
   "sections": [
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <iswc-avatar initials=\"JD\" label=\"Juan Díaz\"></iswc-avatar>\r\n            <iswc-avatar image=\"https://i.pravatar.cc/80?u=1\" label=\"Usuario demo\"></iswc-avatar>\r\n            <iswc-avatar label=\"Sin foto\"></iswc-avatar>\r\n            <iswc-avatar image=\"https://invalid.example/no.jpg\" initials=\"FB\" label=\"Imagen rota → iniciales\"></iswc-avatar>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <iswc-avatar id=\"pgAvatar\" initials=\"JD\" label=\"Juan Díaz\"></iswc-avatar>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -80,10 +80,23 @@
               "prop": "attr:shape",
               "label": "shape",
               "options": [
-                "circle",
-                "square",
-                "rounded"
-              ]
+                {
+                  "value": "circle",
+                  "label": "circle",
+                  "icon": "mdi:circle-outline"
+                },
+                {
+                  "value": "square",
+                  "label": "square",
+                  "icon": "mdi:square-outline"
+                },
+                {
+                  "value": "rounded",
+                  "label": "rounded",
+                  "icon": "mdi:rounded-corner"
+                }
+              ],
+              "default": "circle"
             }
           ]
         }
@@ -98,10 +111,6 @@
           "kind": "demo",
           "html": "<div class=\"shape-grid\">\r\n            <span class=\"shape-grid__head\"></span>\r\n            <span class=\"shape-grid__head\">imagen</span>\r\n            <span class=\"shape-grid__head\">iniciales</span>\r\n            <span class=\"shape-grid__head\">icono</span>\r\n\r\n            <code class=\"code\">circle</code>\r\n            <iswc-avatar shape=\"circle\" image=\"https://i.pravatar.cc/120?u=21\" label=\"Ana\"></iswc-avatar>\r\n            <iswc-avatar shape=\"circle\" initials=\"AN\" label=\"Ana\"></iswc-avatar>\r\n            <iswc-avatar shape=\"circle\" label=\"Sin datos\"></iswc-avatar>\r\n\r\n            <code class=\"code\">square</code>\r\n            <iswc-avatar shape=\"square\" image=\"https://i.pravatar.cc/120?u=22\" label=\"Bea\"></iswc-avatar>\r\n            <iswc-avatar shape=\"square\" initials=\"BE\" label=\"Bea\"></iswc-avatar>\r\n            <iswc-avatar shape=\"square\" label=\"Sin datos\"></iswc-avatar>\r\n\r\n            <code class=\"code\">rounded</code>\r\n            <iswc-avatar shape=\"rounded\" image=\"https://i.pravatar.cc/120?u=23\" label=\"Caro\"></iswc-avatar>\r\n            <iswc-avatar shape=\"rounded\" initials=\"CA\" label=\"Caro\"></iswc-avatar>\r\n            <iswc-avatar shape=\"rounded\" label=\"Sin datos\"></iswc-avatar>\r\n          </div>",
           "heading": "Cada forma con los tres contenidos posibles"
-        },
-        {
-          "kind": "code",
-          "code": "<span style=\"font-size:3rem\">\n  <iswc-avatar initials=\"AB\" shape=\"rounded\"></iswc-avatar>\n</span>"
         }
       ]
     },
@@ -218,5 +227,52 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Avatar con imagen, iniciales o icono fallback. Caja = <code class=\"code\">1em × 1em</code>; escala con <code class=\"code\">font-size</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>image</code>",
+            "default": "—",
+            "desc": "URL de imagen."
+          },
+          {
+            "name": "<code>initials</code>",
+            "default": "—",
+            "desc": "Hasta 2 letras si no hay imagen."
+          },
+          {
+            "name": "<code>label</code>",
+            "default": "—",
+            "desc": "aria-label."
+          },
+          {
+            "name": "<code>shape</code>",
+            "default": "circle",
+            "desc": "circle · square · rounded."
+          },
+          {
+            "name": "<code>loading</code>",
+            "default": "eager",
+            "desc": "eager · lazy."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"demo-row\" style=\"align-items:center;gap:1rem;flex-wrap:wrap;font-size:3rem\">\r\n            <iswc-avatar initials=\"JD\" label=\"Juan Díaz\"></iswc-avatar>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

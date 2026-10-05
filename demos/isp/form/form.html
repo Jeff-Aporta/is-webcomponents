@@ -24,15 +24,15 @@
 </style>
 <script type="module">
   // Dependencias de <iswc-form>.
-  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
-  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
-  await import('../../../dist/cdn/forms/textarea.min.js?h=byuzij');
-  await import('../../../dist/cdn/forms/select.min.js?h=lggml9');
-  await import('../../../dist/cdn/forms/option.min.js?h=00bfco');
-  await import('../../../dist/cdn/forms/checkbox.min.js?h=4leq51');
+  await import('../../../dist/cdn/actions/button.min.js?h=h7i2nj');
+  await import('../../../dist/cdn/forms/input.min.js?h=r5wcsk');
+  await import('../../../dist/cdn/forms/textarea.min.js?h=8ainq2');
+  await import('../../../dist/cdn/forms/select.min.js?h=olm1br');
+  await import('../../../dist/cdn/forms/option.min.js?h=fq4zvo');
+  await import('../../../dist/cdn/forms/checkbox.min.js?h=limpcu');
   await import('../../../dist/cdn/forms/switch.js');
-  await import('../../../dist/cdn/forms/radio.min.js?h=ubj2qt');
-  await import('../../../dist/cdn/isp/form.min.js?h=qftbsa');
+  await import('../../../dist/cdn/forms/radio.min.js?h=9fddk8');
+  await import('../../../dist/cdn/isp/form.min.js?h=3ow7hv');
   await customElements.whenDefined('iswc-form');
 
   const eventLog = document.getElementById('event-log');
@@ -107,9 +107,9 @@
     <iswc-form id="form-a" submit-label="Guardar">
       <h3 slot="header">Curso</h3>
       <div slot="content" style="padding: 12px; display: grid; gap: 8px;">
-        <iswc-input name="icurso" label="Código" required></iswc-input>
-        <iswc-input name="titulo" label="Título" required></iswc-input>
-        <iswc-switch name="activo">Activo</iswc-switch>
+        <iswc-input title="Código" name="icurso" label="Código" required></iswc-input>
+        <iswc-input title="Título" name="titulo" label="Título" required></iswc-input>
+        <iswc-switch title="Activo" name="activo">Activo</iswc-switch>
       </div>
     </iswc-form>
   </section>
@@ -118,9 +118,9 @@
     <h2>Demo B — desde <code>fromJSON()</code> + botones de utilidad</h2>
     <iswc-form id="form-b"></iswc-form>
     <div style="margin-top: 12px;">
-      <button id="btn-mode" type="button" class="btn">Toggle mode (edit/view)</button>
-      <button id="btn-serialize" type="button" class="btn">toJSON() en consola</button>
-      <button id="btn-load-edit" type="button" class="btn">Recargar fromJSON</button>
+      <button title="Toggle mode (edit/view)" id="btn-mode" type="button" class="btn">Toggle mode (edit/view)</button>
+      <button title="toJSON() en consola" id="btn-serialize" type="button" class="btn">toJSON() en consola</button>
+      <button title="Recargar fromJSON" id="btn-load-edit" type="button" class="btn">Recargar fromJSON</button>
     </div>
   </section>
 
@@ -149,5 +149,80 @@
     <pre id="event-log" class="log"></pre>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

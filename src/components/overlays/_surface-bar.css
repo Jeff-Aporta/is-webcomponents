@@ -10,8 +10,8 @@
   .iswc-surface-bar {
     display: flex;
     align-items: center;
-    gap: var(--iswc-surface-bar-gap, .45rem);
-    padding: var(--iswc-surface-bar-padding, .5rem .75rem);
+    gap: var(--iswc-surface-bar-gap);
+    padding: var(--iswc-surface-bar-padding);
     border-block-end: 1px solid var(--iswc-border-soft);
     background: color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent);
   }

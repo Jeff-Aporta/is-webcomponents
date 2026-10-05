@@ -108,7 +108,7 @@
 
 /* ============ <iswc-kanban-card> ============ */
 .card {
-  background: var(--iswc-bg, #0f1117);
+  background: var(--iswc-bg);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   padding: 0.75rem;

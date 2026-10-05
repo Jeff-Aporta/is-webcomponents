@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-kanban",
   "category": "data",
-  "title": "<iswc-kanban>",
-  "titleHtml": true,
+  "title": "&lt;iswc-kanban&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-kanban / iswc-kanban-column / iswc-kanban-card de InSoft.",
   "storageKey": "docs-iswc-kanban",
   "sections": [
@@ -15,10 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-kanban id=\"kb1\">\r\n            <iswc-kanban-column title=\"Pending\" accent=\"dodgerblue\">\r\n              <iswc-kanban-card heading=\"Diseñar landing\" meta=\"Asignado a Ana\" tag=\"Design\" tag-color=\"brand\">\r\n                Maquetar la nueva landing con el sistema de paneles.\r\n              </iswc-kanban-card>\r\n              <iswc-kanban-card heading=\"Investigar SSO\" meta=\"Asignado a Diego\" tag=\"R&amp;D\" tag-color=\"warning\">\r\n                Contactar con Auth0 y Okta para comparar planes.\r\n              </iswc-kanban-card>\r\n              <iswc-kanban-card heading=\"Newsletter mensual\" meta=\"Pendiente de copy\" tag=\"Marketing\" tag-color=\"neutral\">\r\n                Preparar el email de finales de mes.\r\n              </iswc-kanban-card>\r\n            </iswc-kanban-column>\r\n            <iswc-kanban-column title=\"In progress\" accent=\"var(--iswc-warning, #ffa800)\">\r\n              <iswc-kanban-card heading=\"Implementar /api/v2\" meta=\"Backend ⋅ 70%\" tag=\"Backend\" tag-color=\"warning\">\r\n                <span slot=\"footer\">\r\n                  <iswc-icon icon=\"mdi:clock-outline\"></iswc-icon>\r\n                  <span>3 días</span>\r\n                </span>\r\n              </iswc-kanban-card>\r\n              <iswc-kanban-card heading=\"Bug: scrollspy\" meta=\"Frontend\" tag=\"Frontend\" tag-color=\"brand\">\r\n                El observer no se desconecta al cambiar de pestaña.\r\n              </iswc-kanban-card>\r\n            </iswc-kanban-column>\r\n            <iswc-kanban-column title=\"QA\" accent=\"var(--iswc-success, #0bb783)\">\r\n              <iswc-kanban-card heading=\"Refactor pagination\" meta=\"PR #429\" tag=\"Refactor\" tag-color=\"success\">\r\n                Sustituir el paginador custom por iswc-pagination.\r\n              </iswc-kanban-card>\r\n            </iswc-kanban-column>\r\n            <iswc-kanban-column title=\"Done\" accent=\"var(--iswc-success, #0bb783)\">\r\n              <iswc-kanban-card heading=\"Calendar widget\" tag=\"UI\" tag-color=\"success\">Componente terminado y desplegado.</iswc-kanban-card>\r\n            </iswc-kanban-column>\r\n          </iswc-kanban>\r\n          <p id=\"kLog\">Click sobre una card: <code class=\"code\">—</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-kanban>\n  <iswc-kanban-column title=\"Pending\" accent=\"dodgerblue\">\n    <iswc-kanban-card heading=\"Diseñar landing\" tag=\"Design\">…</iswc-kanban-card>\n  </iswc-kanban-column>\n</iswc-kanban>"
         }
       ]
     },
@@ -140,5 +136,88 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tablero kanban con columnas y tarjetas. Cada columna tiene un accent\r\n          color, badge automático con el conteo, slots de header-actions y\r\n          cards con cover, heading, meta, tag y footer."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>title</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Nombre de la columna."
+          },
+          {
+            "name": "<code>accent</code>",
+            "type": "string",
+            "default": "brand",
+            "desc": "Color de acento."
+          },
+          {
+            "name": "<code>badge</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Override del conteo."
+          },
+          {
+            "name": "<code>heading</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título de la card."
+          },
+          {
+            "name": "<code>meta</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Subtítulo."
+          },
+          {
+            "name": "<code>tag</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Tag de la cabecera."
+          },
+          {
+            "name": "<code>tag-variant</code>",
+            "type": "brand | neutral | success | warning | danger",
+            "default": "neutral",
+            "desc": "Color del tag."
+          },
+          {
+            "name": "<code>cover</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "URL de imagen."
+          },
+          {
+            "name": "<code>without-shadow</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Sin sombra."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-kanban-card-click</code>",
+            "cuando": "Click. <code>detail: { card, column }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-kanban>\n  <iswc-kanban-column title=\"Pending\" accent=\"dodgerblue\">\n    <iswc-kanban-card heading=\"Diseñar landing\" tag=\"Design\">…</iswc-kanban-card>\n  </iswc-kanban-column>\n</iswc-kanban>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

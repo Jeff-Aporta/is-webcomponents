@@ -108,8 +108,8 @@ const conChip = [
 ];
 for (const archivo of conChip) {
   const src = readFileSync(new URL(`./${archivo}`, import.meta.url), 'utf8');
-  assert.ok(src.includes('edgeChipFill'),
-    `${archivo}: el chip de arista debe usar edgeChipFill (alfa 0.5, mismo hue)`);
+  assert.ok(src.includes('edgeChipFill') || src.includes('edgeChipFromStroke'),
+    `${archivo}: el chip de arista debe usar edgeChipFill/edgeChipFromStroke (bg = color arista)`);
 }
 
 console.log('render-legibilidad.selfcheck: OK');

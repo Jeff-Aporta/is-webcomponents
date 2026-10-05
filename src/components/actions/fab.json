@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-fab",
   "category": "actions",
-  "title": "<iswc-fab>",
-  "titleHtml": true,
+  "title": "&lt;iswc-fab&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-fab (Floating Action Button) de InSoft.",
   "styles": ".fab-stage {\r\n      /* `position: relative` NO contiene hijos `position: fixed` — solo lo\r\n         hacen transform/filter/contain/perspective. Sin esto el FAB del\r\n         ejemplo se ancla al viewport y se sale de la caja del demo. */\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      height: 360px;\r\n      border: 1px dashed var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n      background: var(--iswc-bg, #0f1117);\r\n      overflow: hidden;\r\n    }\r\n    /* Los demos se organizan con flex: alineados por linea base, con hueco\r\n       uniforme y envolviendo en pantallas estrechas. */\r\n    .fab-row {\r\n      display: flex;\r\n      flex-wrap: wrap;\r\n      align-items: flex-end;\r\n      gap: 1.5rem;\r\n    }\r\n    .fab-row__item {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n    }",
   "storageKey": "docs-iswc-fab",
@@ -17,97 +17,114 @@
           "kind": "demo",
           "html": "<div class=\"fab-stage\">\r\n            <iswc-fab id=\"fb1\" icon=\"mdi:plus\" position=\"bottom-end\" label=\"Crear\"></iswc-fab>\r\n          </div>\r\n          <p>Click: <span id=\"fbLog\">0</span></p>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:position",
-                "label": "position",
-                "options": [
-                  "bottom-end",
-                  "inline",
-                  "top-start",
-                  "top-end",
-                  "bottom-start"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:label",
-                "label": "label",
-                "options": [
-                  "Crear",
-                  "Notificación",
-                  "brand",
-                  "neutral",
-                  "danger",
-                  "success",
-                  "warning",
-                  "Nuevo proyecto",
-                  "Compartir",
-                  "Descargar",
-                  "top-start",
-                  "top-end",
-                  "bottom-start",
-                  "bottom-end",
-                  "Notificaciones",
-                  "Mensajes"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:color",
-                "label": "color",
-                "options": [
-                  "brand",
-                  "neutral",
-                  "danger",
-                  "success",
-                  "warning"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:extended",
-                "label": "extended"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:pulse",
-                "label": "pulse"
-              }
+            {
+              "control": "select",
+              "prop": "attr:position",
+              "label": "position",
+              "options": [
+                "bottom-end",
+                "bottom-start",
+                "top-end",
+                "top-start",
+                "inline"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Crear",
+                "Notificación",
+                "brand",
+                "neutral",
+                "danger",
+                "success",
+                "warning",
+                "Nuevo proyecto",
+                "Compartir",
+                "Descargar",
+                "top-start",
+                "top-end",
+                "bottom-start",
+                "bottom-end",
+                "Notificaciones",
+                "Mensajes"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:extended",
+              "label": "extended"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:pulse",
+              "label": "pulse"
+            }
           ],
           "equivNote": "position fija vs inline; pulse es atención opcional.",
           "equivHtml": "<button type=\"button\" aria-label=\"Crear\">+</button>",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-fab: position\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"position=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"inline → en flujo\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"esquina fixed\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"pulse?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"anillo de atención\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"inline\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"corner\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-fab icon=\"mdi:plus\" label=\"Crear\"></iswc-fab>"
         }
       ]
     },
     {
       "id": "sizes",
       "title": "Escala",
-      "lede": "No hay atributo <code class=\"code\">size</code>: el componente se mide entero en\r\n          <code class=\"code\">em</code>, así que su tamaño sale del\r\n          <code class=\"code\">font-size</code> del contexto. Para hacerlo más grande o más\r\n          pequeño se cambia el font-size, y todo (icono, padding, radio) escala con él.",
+      "lede": "Sin atributo size. Se mide en em y hereda el font-size del contexto.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Escalar</code>",
+              "Cambia el font-size del ancestro: icono, padding y radio escalan con él."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<div class=\"fab-row\">\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:0.75em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">0.75em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1em</code>\r\n            </span>\r\n            <span class=\"fab-row__item\">\r\n              <iswc-fab icon=\"mdi:bell\" style=\"font-size:1.25em\" position=\"inline\" label=\"Notificación\"></iswc-fab>\r\n              <code class=\"code\">1.25em</code>\r\n            </span>\r\n          </div>",
           "heading": "El mismo FAB con tres font-size",
           "equivHtml": "<!-- font-size del host escala el FAB -->\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:0.85rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1rem\">+</button>\n<button type=\"button\" aria-label=\"Crear\" style=\"font-size:1.25rem\">+</button>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-fab icon=\"mdi:bell\" style=\"font-size: 0.75em\"></iswc-fab>\n<iswc-fab icon=\"mdi:bell\" style=\"font-size: 1.25em\"></iswc-fab>",
-          "lang": "html"
         }
       ]
     },
     {
       "id": "variants",
       "title": "Color",
-      "lede": "<code class=\"code\">color</code> define el color semántico:\r\n          brand, neutral, danger, success, warning. Es una dimensión distinta de\r\n          <code class=\"code\">variant</code>, que gobierna la presentación\r\n          (filled, outlined, plain…).",
+      "lede": "color = color semántico (brand, neutral, danger, success, warning).",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Ortogonalidad</code>",
+              "Distinto de variant, que gobierna la presentación (filled, outlined, plain…)."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<iswc-fab icon=\"mdi:plus\" color=\"brand\" position=\"inline\" label=\"brand\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:pencil\" color=\"neutral\" position=\"inline\" label=\"neutral\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:trash-can\" color=\"danger\" position=\"inline\" label=\"danger\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:check\" color=\"success\" position=\"inline\" label=\"success\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:alert\" color=\"warning\" position=\"inline\" label=\"warning\"></iswc-fab>",
@@ -149,6 +166,17 @@
           "kind": "demo",
           "html": "<iswc-fab icon=\"mdi:bell\" pulse color=\"warning\" position=\"inline\" label=\"Notificaciones\"></iswc-fab>\r\n          <iswc-fab icon=\"mdi:message\" pulse color=\"brand\" position=\"inline\" label=\"Mensajes\"></iswc-fab>",
           "equivHtml": "<button type=\"button\" aria-label=\"Crear\" class=\"pulse\">+</button>\n<!-- .pulse sería CSS propio; el kit usa el atributo pulse -->"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-fab\">\n  <iswc-fab color=\"brand\">\n    <iswc-icon icon=\"mdi:plus\"></iswc-icon>\n    Crear nuevo\n  </iswc-fab>\n  <iswc-icon slot=\"icon\" icon=\"mdi:plus\"></iswc-icon>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -232,5 +260,76 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Floating Action Button: botón circular principal que se posiciona de\r\n          forma fija en la ventana. Soporta variantes, tamaños, etiquetas\r\n          extendidas, pulso de atención y posicionamiento en cualquier esquina."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "mdi:plus",
+            "desc": "Iconify id."
+          },
+          {
+            "name": "<code>position</code>",
+            "type": "bottom-end | bottom-start | top-end | top-start | inline",
+            "default": "bottom-end",
+            "desc": "Posición fija."
+          },
+          {
+            "name": "<code>color</code>",
+            "type": "brand | neutral | danger | success | warning",
+            "default": "brand",
+            "desc": "Color semántico."
+          },
+          {
+            "name": "<code>extended</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Forma pill con label."
+          },
+          {
+            "name": "<code>pulse</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Pulso de atención."
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "aria-label."
+          },
+          {
+            "name": "<code>without-shadow</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Sin sombra."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-fab-click</code>",
+            "cuando": "Click. <code>detail: { originalEvent }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-fab icon=\"mdi:plus\" label=\"Crear\"></iswc-fab>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

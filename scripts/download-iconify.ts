@@ -1,7 +1,7 @@
 /**
  * scripts/download-iconify.ts
  *
- * Escanea un proyecto consumidor de IS Web Components, detecta ids Iconify
+ * Escanea un proyecto consumidor de ISWC, detecta ids Iconify
  * (`colección:nombre`) en `<iswc-icon icon="…">` / literales, y descarga cada SVG
  * a `outputDir/<colección>/<nombre>.svg`.
  *

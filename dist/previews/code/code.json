@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-code",
   "category": "code",
-  "title": "<iswc-code>",
-  "titleHtml": true,
+  "title": "&lt;iswc-code&gt;",
+  "titleHtml": false,
   "styles": ".stack { display: grid; gap: 1rem; }\n.ed { min-height: 14rem; }\n.row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\n.out { font-family: var(--iswc-mono, monospace); font-size: 0.75rem; white-space: pre-wrap; background: var(--iswc-bg-soft); border: 1px solid var(--iswc-border); border-radius: 8px; padding: 0.75rem; max-height: 12rem; overflow: auto; }\n.prose { line-height: 1.7; font-size: 1rem; max-width: 42rem; }\n.prose iswc-code { margin-inline: 0.2em; }\n.playground .stage { align-items: stretch; justify-content: stretch; display: grid; gap: 1rem; }\n.playground .stage.iswc-inline { align-items: center; }\n.playground .stage .pg-prose { margin: 0; line-height: 1.75; }\n.playground #pgCode[mode=\"block\"] { min-height: 12rem; width: 100%; }",
   "storageKey": "docs-iswc-code",
   "hasBehavior": true,
@@ -18,15 +18,47 @@
           "html": "<iswc-code class=\"ed\" id=\"demo-basic\" lang=\"javascript\" wrap line-numbers min-height=\"14rem\" value=\"function greet(name) {&#10;  return `Hola, ${name}`;&#10;}&#10;&#10;console.log(greet('IS'));\"></iswc-code>",
           "target": "#demo-basic",
           "controls": [
-            { "control": "select", "prop": "attr:lang", "label": "Lenguaje", "group": "Motor", "options": ["javascript", "typescript", "html", "css", "json", "python", "shell", "plaintext"] },
-            { "control": "boolean", "prop": "attr:wrap", "label": "Wrap", "group": "Editor" },
-            { "control": "boolean", "prop": "attr:readonly", "label": "Solo lectura", "group": "Editor" },
-            { "control": "number", "prop": "attr:tab-size", "label": "Tab (espacios)", "group": "Editor", "min": 1, "max": 8, "step": 1 }
+            {
+              "control": "select",
+              "prop": "attr:lang",
+              "label": "Lenguaje",
+              "group": "Motor",
+              "options": [
+                "javascript",
+                "typescript",
+                "jsx",
+                "tsx",
+                "html",
+                "css",
+                "json",
+                "python",
+                "shell",
+                "curl",
+                "plaintext"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:wrap",
+              "label": "Wrap",
+              "group": "Editor"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:readonly",
+              "label": "Solo lectura",
+              "group": "Editor"
+            },
+            {
+              "control": "number",
+              "prop": "attr:tab-size",
+              "label": "Tab (espacios)",
+              "group": "Editor",
+              "min": 1,
+              "max": 8,
+              "step": 1
+            }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-code lang=\"javascript\" wrap line-numbers\n  value=\"function greet(name) {\\n  return `Hola, ${name}`;\\n}\"></iswc-code>"
         }
       ]
     },
@@ -38,10 +70,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\n  <p class=\"prose\">\n    Usa <iswc-code mode=\"inline\" lang=\"javascript\" readonly value=\"openModal()\"></iswc-code>\n    para disparar el diálogo, o edita\n    <iswc-code id=\"demo-inline-edit\" mode=\"inline\" lang=\"css\" value=\"--iswc-accent\"></iswc-code>\n    en vivo.\n  </p>\n  <iswc-code class=\"ed\" mode=\"block\" lang=\"javascript\" wrap line-numbers\n    value=\"export function openModal() {&#10;  dialog.show();&#10;}\"></iswc-code>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<p>Llama <iswc-code mode=\"inline\" lang=\"js\" readonly value=\"save()\"></iswc-code> al guardar.</p>\n<iswc-code mode=\"block\" lang=\"javascript\" wrap></iswc-code>"
         }
       ]
     },
@@ -53,10 +81,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <iswc-button id=\"lang-js\" variant=\"outlined\">JS</iswc-button>\n    <iswc-button id=\"lang-ts\" variant=\"outlined\">TS</iswc-button>\n    <iswc-button id=\"lang-html\" variant=\"outlined\">HTML</iswc-button>\n    <iswc-button id=\"lang-css\" variant=\"outlined\">CSS</iswc-button>\n    <iswc-button id=\"lang-py\" variant=\"outlined\">Python</iswc-button>\n  </div>\n  <iswc-code class=\"ed\" id=\"demo-lang\" lang=\"typescript\" wrap min-height=\"12rem\"></iswc-code>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-code lang=\"python\" wrap></iswc-code>\n<!-- python: el motor nativo lo tokeniza como plaintext, sin descargas -->"
         }
       ]
     },
@@ -72,10 +96,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <iswc-button id=\"diff-format\" variant=\"outlined\">format() — alinear rejilla</iswc-button>\n  </div>\n  <iswc-code class=\"ed\" id=\"demo-diff-stat\" lang=\"commit\" line-numbers min-height=\"12rem\" value=\"// Lote de alineación de permisos — resumen de 8 archivos&#10;src/models-controllers/Ctrl_Auth.ts | 344 + (commit a06e10f, reescrito)&#10;src/lib/storage/UlChatMode.ts | 62 +++++ (commit dcd0b2a)&#10;src/health/perms-open.test.ts | 50 +++ (commit dcd0b2a)&#10;src/lib/filter/conversacion-list-owner.ts | 24 ++ (commit 7839bd7)&#10;src/health/match-branch.test.ts | 4 ++ -- (commit 6c88bb8)&#10;src/models-controllers/_Types.ts | 2 +- (commit 39e911b)&#10;&#10;8 files changed, 486 insertions(+), 12 deletions(-)\"></iswc-code>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-code lang=\"diff\" readonly line-numbers\n  value=\"@@ -1,2 +1,3 @@\\n-const a = 0;\\n+const a = 1;\"></iswc-code>\n\n<!-- format() alinea ruta | contador | barra del --stat -->\n<iswc-code lang=\"commit\" value=\"src/app.js | 12 ++++----\"></iswc-code>"
         }
       ]
     },
@@ -87,10 +107,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <iswc-button id=\"btn-format\" color=\"brand\">Format</iswc-button>\n  </div>\n  <iswc-code class=\"ed\" id=\"demo-format\" lang=\"javascript\" wrap\n    format='{\"tabWidth\":2,\"semi\":true,\"singleQuote\":true}'\n    value=\"const x=1;const y={a:1,b:2};function f(a,b){return a+b}\"></iswc-code>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-code lang=\"javascript\"\n  format='{\"tabWidth\":2,\"singleQuote\":true,\"semi\":true}'></iswc-code>\n\n<script type=\"module\">\n  editor.format();\n</script>"
         }
       ]
     },
@@ -102,10 +118,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <iswc-button id=\"theme-ocean\" variant=\"outlined\">Ocean</iswc-button>\n    <iswc-button id=\"theme-reset\" variant=\"plain\">Reset preset</iswc-button>\n  </div>\n  <iswc-code class=\"ed\" id=\"demo-theme\" lang=\"css\" wrap\n    value=\".card {&#10;  color: tomato;&#10;  background: #111;&#10;}\"></iswc-code>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-code lang=\"css\"\n  theme-config='{\"background\":\"#0b1220\",\"keyword\":\"#7dd3fc\",\"string\":\"#86efac\"}'></iswc-code>"
         }
       ]
     },
@@ -117,10 +129,6 @@
         {
           "kind": "demo",
           "html": "<iswc-code class=\"ed\" id=\"demo-marks\" lang=\"javascript\" wrap min-height=\"12rem\"></iswc-code>"
-        },
-        {
-          "kind": "code",
-          "code": "editor.setMarks([\n  { from: 9, to: 12, kind: 'tooltip', title: 'add()', body: 'Suma a + b' },\n  { from: 26, to: 27, kind: 'highlight', tone: 'warning', message: 'Prefer const' },\n]);"
         }
       ]
     },
@@ -132,10 +140,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\n  <div class=\"row\">\n    <iswc-button id=\"btn-to-json\" color=\"brand\">code → json</iswc-button>\n    <iswc-button id=\"btn-from-json\" variant=\"outlined\">json → code</iswc-button>\n  </div>\n  <iswc-code class=\"ed\" id=\"demo-json\" lang=\"jsx\" wrap\n    value=\"export function Hi({ name }) {&#10;  return &lt;h1&gt;Hola {name}&lt;/h1&gt;;&#10;}\"></iswc-code>\n  <pre class=\"out\" id=\"json-out\">(pulsa code → json)</pre>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "const doc = editor.code2json();\neditor.setDocument(doc);"
         }
       ]
     },
@@ -147,10 +151,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\n  <iswc-code lang=\"html\" line-numbers=\"false\" wrap\n    value=\"&lt;section class=&quot;hero&quot;&gt;&lt;h1&gt;IS&lt;/h1&gt;&lt;/section&gt;\"></iswc-code>\n  <iswc-code lang=\"javascript\" readonly\n    value=\"// solo lectura&#10;export const VERSION = '1.0.0';\"></iswc-code>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-code lang=\"html\" line-numbers=\"false\" wrap></iswc-code>\n<iswc-code lang=\"javascript\" readonly></iswc-code>"
         }
       ]
     },
@@ -212,5 +212,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Editor de código con motor NATIVO de resaltado y editor integrado (sin CodeMirror): lenguajes, temas JSON, formateo estilo Prettier, números de línea, word-wrap y anotaciones externas (highlight / tooltips). API texto ↔ JSON <code class=\"code\">iswc-code-doc/v1</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-code lang=\"javascript\" wrap line-numbers\n  value=\"function greet(name) {\\n  return `Hola, ${name}`;\\n}\"></iswc-code>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

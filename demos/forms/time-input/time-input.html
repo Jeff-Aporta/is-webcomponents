@@ -24,7 +24,7 @@
 </style>
 <script type="module">
   // Carga solo el bundle que necesitamos desde los pre-construidos en dist/cdn/.
-  await import('../../../dist/cdn/forms/time-input.min.js?h=xik0ti');
+  await import('../../../dist/cdn/forms/time-input.min.js?h=vz82v3');
 
   await customElements.whenDefined('iswc-time-input');
 
@@ -88,46 +88,121 @@
   <section class="card">
     <h2>Básico (panel=sections)</h2>
     <p style="margin:0;font-size:12px;color:#94a3b8;">Click en el icono para abrir el panel de columnas digitales.</p>
-    <iswc-time-input id="basic" label="Hora" name="basic"></iswc-time-input>
+    <iswc-time-input title="Hora" id="basic" label="Hora" name="basic"></iswc-time-input>
     <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con valor inicial</h2>
-    <iswc-time-input id="initial" label="Cita" hint="Edita el campo o usa el panel" name="appt" value="15:45"></iswc-time-input>
+    <iswc-time-input title="Cita" id="initial" label="Cita" hint="Edita el campo o usa el panel" name="appt" value="15:45"></iswc-time-input>
     <div class="value-readout">Valor actual: <code id="initial-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Panel de lista simple</h2>
-    <iswc-time-input id="list" label="Hora con lista" hint="panel=list" name="list" panel="list"></iswc-time-input>
+    <iswc-time-input title="Hora con lista" id="list" label="Hora con lista" hint="panel=list" name="list" panel="list"></iswc-time-input>
     <div class="value-readout">Valor actual: <code id="list-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Panel de reloj analógico</h2>
-    <iswc-time-input id="clock" label="Hora con reloj" hint="panel=clock" name="clock" panel="clock"></iswc-time-input>
+    <iswc-time-input title="Hora con reloj" id="clock" label="Hora con reloj" hint="panel=clock" name="clock" panel="clock"></iswc-time-input>
     <div class="value-readout">Valor actual: <code id="clock-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Formato 12 horas (AM/PM)</h2>
-    <iswc-time-input id="ampm" label="Hora local" hint="locale en-US con ampm explícito" name="local" ampm locale="en-US"></iswc-time-input>
+    <iswc-time-input title="Hora local" id="ampm" label="Hora local" hint="locale en-US con ampm explícito" name="local" ampm locale="en-US"></iswc-time-input>
     <div class="value-readout">Valor actual: <code id="ampm-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Modo móvil (centered dialog con barra de acciones)</h2>
     <p style="margin:0;font-size:12px;color:#94a3b8;"><code>color="mobile"</code> + <code>action-bar</code>: el panel se centra y se cierra con Aceptar/Cancelar.</p>
-    <iswc-time-input id="mobile" label="Hora de inicio" name="event" color="mobile" action-bar></iswc-time-input>
+    <iswc-time-input title="Hora de inicio" id="mobile" label="Hora de inicio" name="event" color="mobile" action-bar></iswc-time-input>
     <div class="value-readout">Valor actual: <code id="mobile-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Deshabilitado</h2>
-    <iswc-time-input id="disabled-field" label="No editable" name="d" disabled value="08:00"></iswc-time-input>
+    <iswc-time-input title="No editable" id="disabled-field" label="No editable" name="d" disabled value="08:00"></iswc-time-input>
     <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

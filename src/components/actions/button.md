@@ -4,34 +4,34 @@ tags:
   - iswc-button
 category: actions
 status: public
-source: ./button.js
+source: ./button.ts
 style: ./button.css
 preview: ./button.json
 ---
 # `<iswc-button>`
 
-## Propósito
+## PropÃ³sito
 
 Componente InSoft accesible y personalizable, escrito con JavaScript nativo,
 Shadow DOM y sin frameworks.
 
-Este módulo registra `<iswc-button>`.
+Este mÃ³dulo registra `<iswc-button>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Acciones, selección de comandos y menús interactivos.
+Acciones, selecciÃ³n de comandos y menÃºs interactivos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No usar como decoración ni reemplazar enlaces semánticos para navegación simple.
+No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './button.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-button color="success">Aprobado</iswc-button>
@@ -46,30 +46,28 @@ import './button.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `variant` | `filled` / `outlined` / `plain` / `ghost` / `soft` / `text` | Default `filled`. Ortogonal a `color`. |
 | `shape` | `round` / `rect` / `pill` | Default `round`. Ortogonal a `color` y `variant`. |
-| `hue` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `loading` | boolean | Fuente define default/restricción. |
-| `pill` | boolean | Fuente define default/restricción. |
-| `with-caret` | boolean | Fuente define default/restricción. |
-| `href` | string/según contrato | Fuente define default/restricción. |
-| `target` | string/según contrato | Fuente define default/restricción. |
-| `rel` | string/según contrato | Fuente define default/restricción. |
-| `download` | string/según contrato | Fuente define default/restricción. |
-| `type` | string/según contrato | Fuente define default/restricción. |
-| `title` | string/según contrato | Fuente define default/restricción. |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `form` | string/según contrato | Fuente define default/restricción. |
-| `formaction` | string/según contrato | Fuente define default/restricción. |
-| `formenctype` | string/según contrato | Fuente define default/restricción. |
-| `formmethod` | string/según contrato | Fuente define default/restricción. |
-| `formnovalidate` | string/según contrato | Fuente define default/restricción. |
-| `formtarget` | string/según contrato | Fuente define default/restricción. |
+| `hue` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `loading` | boolean | Fuente define default/restricciÃ³n. |
+| `pill` | boolean | Fuente define default/restricciÃ³n. |
+| `with-caret` | boolean | Fuente define default/restricciÃ³n. |
+| `href` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `download` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `type` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `title` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `form` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `formaction` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `formenctype` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `formmethod` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `formnovalidate` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `formtarget` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -89,23 +87,44 @@ import './button.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-focus` | Emitido cuando el componente recibe foco. |
+| `iswc-blur` | Emitido cuando el componente pierde foco. |
+| `iswc-click` | Emitido al hacer clic sobre el componente. |
+| `iswc-invalid` | Emitido cuando la validaciÃ³n de formulario falla. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-focus` | sí | sí | sí | no |
-| `iswc-blur` | sí | sí | sí | no |
-| `iswc-click` | sí | sí | sí | no |
-| `iswc-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
+| `iswc-focus` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-blur` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-click` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-invalid` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-button');
+el.addEventListener('iswc-focus', (e) => {
+  console.log('iswc-focus', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `setFocus()` | Método público declarado. |
-| `checkValidity()` | Método público declarado. |
-| `reportValidity()` | Método público declarado. |
-| `setCustomValidity()` | Método público declarado. |
+| `setFocus()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | MÃ©todo pÃºblico declarado. |
+| `reportValidity()` | MÃ©todo pÃºblico declarado. |
+| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -117,111 +136,110 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `end` | Personalizable con `::part(end)`. |
 | `caret` | Personalizable con `::part(caret)`. |
 | `spinner` | Personalizable con `::part(spinner)`. |
+| `sr-status` | Region `aria-live` para anuncios a lectores de pantalla (oculta visualmente). |
 
 ### Custom states
 
 | Estado | Uso |
 | --- | --- |
-| `:state(icon-button)` | Estado usado por implementación/CSS. |
-| `:state(loading)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
-| `:state(link)` | Estado usado por implementación/CSS. |
+| `:state(icon-button)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(loading)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(link)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-button-font-family` | Token leído o definido por componente. |
-| `--iswc-button-font-weight` | Token leído o definido por componente. |
-| `--iswc-button-border-radius` | Token leído o definido por componente. |
-| `--iswc-button-border-width` | Token leído o definido por componente. |
-| `--iswc-button-transition-duration` | Token leído o definido por componente. |
-| `--iswc-button-selected-hue` | Token leído o definido por componente. |
-| `--iswc-button-selected-color` | Token leído o definido por componente. |
-| `--iswc-color-success-50` | Token leído o definido por componente. |
-| `--iswc-color-success-100` | Token leído o definido por componente. |
-| `--iswc-color-success-500` | Token leído o definido por componente. |
-| `--iswc-color-success-600` | Token leído o definido por componente. |
-| `--iswc-color-success-700` | Token leído o definido por componente. |
-| `--iswc-color-warning-50` | Token leído o definido por componente. |
-| `--iswc-color-warning-100` | Token leído o definido por componente. |
-| `--iswc-color-warning-500` | Token leído o definido por componente. |
-| `--iswc-color-warning-600` | Token leído o definido por componente. |
-| `--iswc-color-warning-700` | Token leído o definido por componente. |
-| `--iswc-color-danger-50` | Token leído o definido por componente. |
-| `--iswc-color-danger-100` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-color-danger-600` | Token leído o definido por componente. |
-| `--iswc-color-danger-700` | Token leído o definido por componente. |
-| `--iswc-font-family` | Token leído o definido por componente. |
-| `--_bg` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--_bg-hover` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--_bg-active` | Token leído o definido por componente. |
-| `--iswc-control-bg-active` | Token leído o definido por componente. |
-| `--_border` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--_text` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--_focus` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--_height` | Token leído o definido por componente. |
-| `--_hpad` | Token leído o definido por componente. |
-| `--_button-horizontal-indent` | Token leído o definido por componente. |
-| `--_button-vertical-indent` | Token leído o definido por componente. |
-| `--_button-start-start-radius` | Token leído o definido por componente. |
-| `--_button-start-end-radius` | Token leído o definido por componente. |
-| `--_button-end-start-radius` | Token leído o definido por componente. |
-| `--_button-end-end-radius` | Token leído o definido por componente. |
-| `--iswc-color-brand-600` | Token leído o definido por componente. |
-| `--iswc-color-brand-700` | Token leído o definido por componente. |
-| `--iswc-color-brand-800` | Token leído o definido por componente. |
-| `--iswc-on-brand` | Token leído o definido por componente. |
-| `--iswc-brand-soft` | Token leído o definido por componente. |
-| `--iswc-color-brand-50` | Token leído o definido por componente. |
-| `--iswc-brand-soft-active` | Token leído o definido por componente. |
-| `--iswc-color-brand-100` | Token leído o definido por componente. |
-| `--iswc-brand-text` | Token leído o definido por componente. |
-| `--iswc-success-soft` | Token leído o definido por componente. |
-| `--iswc-success-soft-active` | Token leído o definido por componente. |
-| `--iswc-success-text` | Token leído o definido por componente. |
-| `--iswc-warning-soft` | Token leído o definido por componente. |
-| `--iswc-warning-soft-active` | Token leído o definido por componente. |
-| `--iswc-warning-text` | Token leído o definido por componente. |
-| `--iswc-danger-soft` | Token leído o definido por componente. |
-| `--iswc-danger-soft-active` | Token leído o definido por componente. |
-| `--iswc-danger-text` | Token leído o definido por componente. |
-| `--_button-horizontal-indent-outlined` | Token leído o definido por componente. |
-| `--_button-vertical-indent-outlined` | Token leído o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-button-font-family` | Token leÃ­do o definido por componente. |
+| `--iswc-button-font-weight` | Token leÃ­do o definido por componente. |
+| `--iswc-button-border-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-button-border-width` | Token leÃ­do o definido por componente. |
+| `--iswc-button-transition-duration` | Token leÃ­do o definido por componente. |
+| `--iswc-button-selected-hue` | Token leÃ­do o definido por componente. |
+| `--iswc-button-selected-color` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-50` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-100` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-600` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-50` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-100` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-600` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-50` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-100` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-600` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-700` | Token leÃ­do o definido por componente. |
+| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--_bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--_bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--_bg-active` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-active` | Token leÃ­do o definido por componente. |
+| `--_border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--_text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--_focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--_height` | Token leÃ­do o definido por componente. |
+| `--_hpad` | Token leÃ­do o definido por componente. |
+| `--_button-horizontal-indent` | Token leÃ­do o definido por componente. |
+| `--_button-vertical-indent` | Token leÃ­do o definido por componente. |
+| `--_button-start-start-radius` | Token leÃ­do o definido por componente. |
+| `--_button-start-end-radius` | Token leÃ­do o definido por componente. |
+| `--_button-end-start-radius` | Token leÃ­do o definido por componente. |
+| `--_button-end-end-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-600` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-800` | Token leÃ­do o definido por componente. |
+| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
+| `--iswc-brand-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-50` | Token leÃ­do o definido por componente. |
+| `--iswc-brand-soft-active` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-100` | Token leÃ­do o definido por componente. |
+| `--iswc-brand-text` | Token leÃ­do o definido por componente. |
+| `--iswc-success-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-success-soft-active` | Token leÃ­do o definido por componente. |
+| `--iswc-success-text` | Token leÃ­do o definido por componente. |
+| `--iswc-warning-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-warning-soft-active` | Token leÃ­do o definido por componente. |
+| `--iswc-warning-text` | Token leÃ­do o definido por componente. |
+| `--iswc-danger-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-danger-soft-active` | Token leÃ­do o definido por componente. |
+| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
+| `--_button-horizontal-indent-outlined` | Token leÃ­do o definido por componente. |
+| `--_button-vertical-indent-outlined` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-button> — Web Component (vanilla).
-> Define el custom element `iswc-button` automáticamente al importarse.
+> <iswc-button> â€” Web Component (vanilla).
+> Define el custom element `iswc-button` automÃ¡ticamente al importarse.
 > Usa Shadow DOM con CSS propio, es form-associated (participa en <form>),
-> y expone parts + custom states para personalización desde fuera.
+> y expone parts + custom states para personalizaciÃ³n desde fuera.
 > Atributos
->  color      brand | neutral | success | warning | danger | info | error   (default: brand)
+>  color      brand | neutral | text | success | warning | danger | info | error   (default: brand)
 >  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
->  hue          number (0-360)  color propio para el highlight cuando está
+>  hue          number (0-360)  color propio para el highlight cuando estÃ¡
 >                             [selected] dentro de <iswc-button-group>. Si no
 >                             se define, el grupo usa su --iswc-accent.
 >  disabled     boolean
 >  loading      boolean
 >  pill         boolean
 >  with-caret   boolean
->  href         string   → renderiza como <a>
->  target       string
->  rel          string
+>  href         string   â†’ renderiza como <a>
 >  download     string
 >  type         button | submit | reset                       (default: button)
 >  title        string
@@ -230,37 +248,37 @@ Documentación de cabecera preservada desde fuente:
 >  form, formaction, formenctype, formmethod,
 >  formnovalidate, formtarget                                (form association)
 >  aria-label, aria-pressed, aria-expanded, aria-haspopup,
->  aria-current                                              (se reenvían al inner)
+>  aria-current                                              (se reenvÃ­an al inner)
 > Slots
->  default   etiqueta del botón
+>  default   etiqueta del botÃ³n
 >  start     icono / nodo a la izquierda
 >  end       icono / nodo a la derecha
 > CSS Parts:  ::part(button) ::part(label) ::part(start) ::part(end)
 >             ::part(caret) ::part(spinner)
 > Custom States: :state(loading) :state(disabled) :state(link) :state(icon-button)
 > Events nativos (burbujean, composed:true): focus, blur, click
-> Custom events (composed:true, bubbles:true — cruzan Shadow DOM y son
+> Custom events (composed:true, bubbles:true â€” cruzan Shadow DOM y son
 > consumibles desde React via addEventListener o React 19+ on<EventName>):
->   iswc-focus   — emitido al recibir foco (mismo momento que `focus`)
->   iswc-blur    — emitido al perder foco
->   iswc-click   — emitido al hacer click (mismo momento que `click`)
->   iswc-invalid — emitido cuando la validación de formulario falla
+>   iswc-focus   â€” emitido al recibir foco (mismo momento que `focus`)
+>   iswc-blur    â€” emitido al perder foco
+>   iswc-click   â€” emitido al hacer click (mismo momento que `click`)
+>   iswc-invalid â€” emitido cuando la validaciÃ³n de formulario falla
 > Mapping para React:
->   onClick       → click  (nativo, React 17+)
->   onFocus       → focus  (nativo, React 17+)
->   onBlur        → blur   (nativo, React 17+)
->   onIsFocus     → iswc-focus   (React 19+  |  ref.addEventListener('iswc-focus', fn))
->   onIsBlur      → iswc-blur
->   onIsClick     → iswc-click
->   onIsInvalid   → iswc-invalid
+>   onClick       â†’ click  (nativo, React 17+)
+>   onFocus       â†’ focus  (nativo, React 17+)
+>   onBlur        â†’ blur   (nativo, React 17+)
+>   onIsFocus     â†’ iswc-focus   (React 19+  |  ref.addEventListener('iswc-focus', fn))
+>   onIsBlur      â†’ iswc-blur
+>   onIsClick     â†’ iswc-click
+>   onIsInvalid   â†’ iswc-invalid
 > El host expone los custom states :state(loading|disabled|link|icon-button)
 > (y como fallback los atributos data-state-* equivalentes para entornos sin
 > soporte de ElementInternals.states).
-> Color × appearance ortogonales: cada color enlaza roles `--_tone-*` a
+> Color Ã— appearance ortogonales: cada color enlaza roles `--_tone-*` a
 > tokens relativos de is-base; cada variant solo consume esos roles.
 > Tokens de familia X (brand|success|warning|danger|info|error):
 >  --iswc-color-X, --iswc-color-X-strong/-stronger/-strongest/-pale/-paler
->  --iswc-X-text, --iswc-X-soft, --iswc-X-soft-active (brand → --iswc-brand-*)
+>  --iswc-X-text, --iswc-X-soft, --iswc-X-soft-active (brand â†’ --iswc-brand-*)
 >  --iswc-button-font-family, --iswc-button-font-weight
 >  --iswc-button-border-radius, --iswc-button-border-width
 >  --iswc-button-transition-duration
@@ -270,11 +288,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<iswc-button>`.
+Tags del mÃ³dulo: `<iswc-button>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-current`, `aria-hidden`, `aria-disabled`, `aria-busy`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-current`, `aria-hidden`, `aria-disabled`, `aria-busy`.
 
 ## Ejemplo avanzado
 
@@ -286,7 +304,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -294,15 +312,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./button.js)
+- [JavaScript](./button.ts)
 - [CSS](./button.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./button.json)

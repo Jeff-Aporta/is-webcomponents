@@ -1,0 +1,60 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-csv-edit",
+  "category": "files",
+  "title": "<iswc-csv-edit>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-csv-edit",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "CSV editable + export.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-csv-edit content=\"nombre,edad&#10;Ada,36\" height=\"14rem\"></iswc-csv-edit>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "CSV editable + export."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
+}

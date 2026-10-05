@@ -73,7 +73,7 @@
 
   &.active .ico {
     background: var(--iswc-accent);
-    color: var(--iswc-on-accent, #fff);
+    color: var(--iswc-on-accent);
     border-color: color-mix(in srgb, var(--iswc-accent) 60%, transparent);
   }
 

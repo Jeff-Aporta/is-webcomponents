@@ -1,7 +1,8 @@
 @import './_inline-host.css';
 
-.value { display: inline; }
-
-:host(:where([data-type="number"], [data-type="bytes"])) .value {
-  font-variant-numeric: tabular-nums;
+:host {
+  .value { display: inline; }
+  &:where([data-type="number"], [data-type="bytes"]) .value {
+    font-variant-numeric: tabular-nums;
+  }
 }

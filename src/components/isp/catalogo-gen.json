@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-catalogo-gen",
   "category": "isp",
-  "title": "<iswc-catalogo-gen>",
-  "titleHtml": true,
+  "title": "&lt;iswc-catalogo-gen&gt;",
+  "titleHtml": false,
   "description": "Catálogo CRUD genérico ISP con controller JSON.",
   "storageKey": "docs-iswc-catalogo-gen",
   "hasBehavior": true,
@@ -20,11 +20,6 @@
         {
           "kind": "demo",
           "html": "<iswc-catalogo-gen id=\"catDemo\" style=\"height: 30rem;\"></iswc-catalogo-gen>\n          <p id=\"catLog\">Última acción: <code class=\"code\">—</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "import { createCatalogController } from './isp/controller-from-config.min.js';\n\ncat.controller = createCatalogController({\n  entrie: 'Curso',\n  primaryKeys: ['icurso'],\n  columns: [\n    { field: 'icurso', header: 'Código' },\n    { field: 'ncurso', header: 'Nombre' },\n  ],\n  // actions: true  → todas (default)\n  // actions: ['crear','modificar','eliminar']\n  mock: [\n    { icurso: 'C001', ncurso: 'Contabilidad básica' },\n  ],\n  // server: {\n  //   useLocal: false,\n  //   local:  { host: 'localhost', port: <SERVER_PORT>, https: false },\n  //   remote: { host: '….azurewebsites.net', port: 443, https: true },\n  // },\n  // endpoints: { recurso: 'curso', recursos: 'cursos' },\n  // token: () => sessionStorage.getItem('token'),\n});",
-          "lang": "js"
         }
       ]
     },
@@ -34,19 +29,65 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Campo", "Notas"],
+          "columns": [
+            "Campo",
+            "Notas"
+          ],
           "rows": [
-            ["<code>entrie</code>", "Nombre singular del recurso (títulos)"],
-            ["<code>primaryKeys</code>", "PK(s) del registro"],
-            ["<code>columns</code>", "Defs de grilla <code>{ field, header }</code>"],
-            ["<code>actions</code>", "<code>true</code> (todas) · lista · <code>false</code>"],
-            ["<code>mock</code>", "Array en memoria (demos / offline)"],
-            ["<code>server.local / remote</code>", "Host/port/https como TInfoConnection"],
-            ["<code>endpoints.recurso</code>", "→ <code>/api/{recurso}</code>; plural auto o <code>recursos</code>"],
-            ["<code>token</code>", "string o <code>() => string</code> (Bearer)"]
+            [
+              "<code>entrie</code>",
+              "Nombre singular del recurso (títulos)"
+            ],
+            [
+              "<code>primaryKeys</code>",
+              "PK(s) del registro"
+            ],
+            [
+              "<code>columns</code>",
+              "Defs de grilla <code>{ field, header }</code>"
+            ],
+            [
+              "<code>actions</code>",
+              "<code>true</code> (todas) · lista · <code>false</code>"
+            ],
+            [
+              "<code>mock</code>",
+              "Array en memoria (demos / offline)"
+            ],
+            [
+              "<code>server.local / remote</code>",
+              "Host/port/https como TInfoConnection"
+            ],
+            [
+              "<code>endpoints.recurso</code>",
+              "→ <code>/api/{recurso}</code>; plural auto o <code>recursos</code>"
+            ],
+            [
+              "<code>token</code>",
+              "string o <code>() => string</code> (Bearer)"
+            ]
           ]
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Catálogo CRUD (port ISP <code class=\"code\">CatalogoGen</code>). El <code class=\"code\">controller</code>\n          se genera con <code class=\"code\">createCatalogController(json)</code>: listado, columnas y\n          acciones (crear / modificar / visualizar / verificar / duplicar / recodificar / eliminar / consolidar)."
+      },
+      "ejemplos": {
+        "content": "```js\nimport { createCatalogController } from './isp/controller-from-config.min.js';\n\ncat.controller = createCatalogController({\n  entrie: 'Curso',\n  primaryKeys: ['icurso'],\n  columns: [\n    { field: 'icurso', header: 'Código' },\n    { field: 'ncurso', header: 'Nombre' },\n  ],\n  // actions: true  → todas (default)\n  // actions: ['crear','modificar','eliminar']\n  mock: [\n    { icurso: 'C001', ncurso: 'Contabilidad básica' },\n  ],\n  // server: {\n  //   useLocal: false,\n  //   local:  { host: 'localhost', port: <SERVER_PORT>, https: false },\n  //   remote: { host: '….azurewebsites.net', port: 443, https: true },\n  // },\n  // endpoints: { recurso: 'curso', recursos: 'cursos' },\n  // token: () => sessionStorage.getItem('token'),\n});\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

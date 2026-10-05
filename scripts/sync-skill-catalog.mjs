@@ -59,17 +59,24 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
   console.log('md', rel);
 }
 
+/** Tags CE en títulos → entidades (el H2 usa textContent y las decodifica). */
+function escapeTitleCe(title) {
+  return String(title).replace(/<\/?([a-zA-Z][\w]*-[\w.-]*)\b[^>]*>/g, (m) =>
+    m.includes('&lt;') ? m : m.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+}
+
 function preview(tag, category, title, lede, html) {
+  const safeTitle = escapeTitleCe(title);
   return {
     $schema: 'iswc-preview/v1',
     tag,
     category,
-    title,
+    title: safeTitle,
     titleHtml: false,
     description: lede,
     sections: [{
       id: 'intro',
-      title,
+      title: safeTitle,
       lede,
       blocks: [{ kind: 'demo', html }],
     }],
@@ -248,18 +255,20 @@ for (const file of walk(comp)) {
   const md = readFileSync(file, 'utf8');
   const rel = file.slice(comp.length + 1).replace(/\\/g, '/');
   const folder = rel.split('/')[0];
-  const tag = (md.match(/^tag:\s*(\S+)/m) || [])[1];
-  const tags = [...md.matchAll(/^ {2}- (is-[\w-]+)/gm)].map((m) => m[1]);
-  const lista = tags.length ? tags : (tag ? [tag] : []);
+  const tagRaw = (md.match(/^tag:\s*(\S+)/m) || [])[1];
+  const tag = tagRaw && tagRaw !== '—' && tagRaw !== '-' ? tagRaw : null;
+  const tags = [...md.matchAll(/^ {2}- (iswc-[\w-]+)/gm)].map((m) => m[1]);
+  const lista = tags.length ? tags : (tag?.startsWith('iswc-') ? [tag] : []);
   const resumen = resumenDe(md, rel);
+  const status = (md.match(/^status:\s*(\S+)/m) || [])[1] || 'public';
   for (const t of lista) {
-    if (!porTag.has(t)) porTag.set(t, { rel, folder, resumen });
+    if (!porTag.has(t)) porTag.set(t, { rel, folder, resumen, status });
   }
-  if (!lista.length) porTag.set(rel, { rel, folder, resumen });
+  if (!lista.length) porTag.set(rel, { rel, folder, resumen, status });
 }
 
 const manifest = readFileSync(join(root, 'src', 'manifest.ts'), 'utf8');
-const orden = [...manifest.matchAll(/tag:\s*'(is-[^']+)'[\s\S]*?category:\s*'([^']+)'/g)].map((m) => ({
+const orden = [...manifest.matchAll(/tag:\s*'(iswc-[^']+)'[\s\S]*?category:\s*'([^']+)'/g)].map((m) => ({
   tag: m[1],
   category: m[2],
 }));
@@ -284,11 +293,141 @@ for (const [category, items] of grupos) {
   lineas.push('');
 }
 
+/** Módulos / APIs públicas que no son custom elements (contexto obligatorio para agentes). */
+const API_MODULES = [
+  {
+    id: 'ISWebComponentsLoader',
+    cdn: 'core/loader.min.js',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md',
+    resumen: 'Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado.',
+  },
+  {
+    id: 'IswcUi / Ui',
+    cdn: 'helpers/ui.min.js',
+    guia: `${gh}/helpers/ui.md`,
+    resumen: 'html, adoptCss, define, css, el: primitivas de apps dominio. No es CE.',
+  },
+  {
+    id: 'mdToHtml',
+    cdn: 'helpers/md-lite.min.js',
+    guia: `${gh}/helpers/md-lite.md`,
+    resumen: 'Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas).',
+  },
+  {
+    id: 'resolveIswcFenceTag',
+    cdn: 'helpers/md-iswc-fences.min.js',
+    guia: `${gh}/helpers/md-iswc-fences.md`,
+    resumen: 'Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...).',
+  },
+  {
+    id: 'hydrateMdEmbeds',
+    cdn: 'helpers/md-hydrate.min.js',
+    guia: `${gh}/helpers/md-hydrate.md`,
+    resumen: 'L.ensure de tags presentes + upgrade .md-iswc-code -> iswc-code.',
+  },
+  {
+    id: 'md-editor-api',
+    cdn: 'helpers/md-editor-api.min.js',
+    guia: `${gh}/helpers/md-editor-api.md`,
+    resumen: 'CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token).',
+  },
+  {
+    id: 'IsResponseCache',
+    cdn: 'helpers/response-cache.min.js',
+    guia: `${gh}/helpers/response-cache.md`,
+    resumen: 'SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado.',
+  },
+  {
+    id: 'sync-pins',
+    cdn: 'scripts/sync-pins.mjs (repo)',
+    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs',
+    resumen: 'Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins).',
+  },
+];
+
+const apisLineas = [
+  '',
+  'APIs y módulos **sin** tag `iswc-*`. Misma obligación de reuso que el catálogo de componentes.',
+  'Detalle operativo: [`tools/runtime.md`](tools/runtime.md).',
+  '',
+  '| API / módulo | CDN o ruta | Resumen | Guía |',
+  '| --- | --- | --- | --- |',
+];
+for (const m of API_MODULES) {
+  const guia = m.guia.startsWith('http') ? `[docs](${m.guia})` : m.guia;
+  apisLineas.push(`| \`${m.id}\` | \`${m.cdn}\` | ${m.resumen.replace(/\|/g, '/')} | ${guia} |`);
+}
+apisLineas.push('');
+
 const skillPath = join(root, 'src', 'skills', 'is-webcomponents', 'SKILL.md');
-const skill = readFileSync(skillPath, 'utf8');
-const next = skill.replace(
+let skill = readFileSync(skillPath, 'utf8');
+if (!/<!-- apis:inicio -->/.test(skill)) {
+  skill = skill.replace(
+    /## Catálogo de componentes/,
+    `## Módulos API (sin custom element)\n\n<!-- apis:inicio -->\n<!-- apis:fin -->\n\n## Catálogo de componentes`,
+  );
+}
+skill = skill.replace(
+  /<!-- apis:inicio -->[\s\S]*<!-- apis:fin -->/,
+  `<!-- apis:inicio -->\n${apisLineas.join('\n')}\n<!-- apis:fin -->`,
+);
+skill = skill.replace(
   /<!-- catalogo:inicio -->[\s\S]*<!-- catalogo:fin -->/,
   `<!-- catalogo:inicio -->\n${lineas.join('\n')}\n<!-- catalogo:fin -->`,
 );
-writeFileSync(skillPath, next, 'utf8');
-console.log('catalogo', orden.length, 'tags');
+writeFileSync(skillPath, skill, 'utf8');
+console.log('catalogo', orden.length, 'tags;', API_MODULES.length, 'apis');
+
+// catalog.md — inventario completo (tags + APIs) para agentes
+const catPath = join(root, 'src', 'skills', 'is-webcomponents', 'catalog.md');
+const catOut = [
+  '# Catálogo iswc-* (inventario completo)',
+  '',
+  'Fuente viva: regenerar con `node scripts/sync-skill-catalog.mjs`.',
+  'Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools/runtime.md).',
+  '',
+  '## Categorías',
+  '',
+  '| Carpeta | Propósito |',
+  '| --- | --- |',
+  '| `actions` | Acciones, comandos, menús |',
+  '| `charts` / `data-viz` | Series, distribuciones, mapas |',
+  '| `code` | Editor / visor de código |',
+  '| `data` | Grid, stats, transfer, kanban, pivot |',
+  '| `diagrams` | Flujos, ER, gantt, timeline… |',
+  '| `feedback` | Toast, tag, skeleton, progress, CDN snippet |',
+  '| `forms` | Captura y validación |',
+  '| `helpers` | Formato, observers, MD, popover, APIs módulo |',
+  '| `isp` | Layout/forms ContaPyme (ISP) |',
+  '| `layout` | Regiones, dialog, drawer, demo, dock |',
+  '| `media` | Iconos, avatar, video |',
+  '| `navigation` | Tabs, tree, stepper, breadcrumb, carousel |',
+  '| `overlays` | Command palette, PDF, window |',
+  '| `preview` | Shell de galería (no producto) |',
+  '| `cdn` / `core` | Loader y base CE (sin tag de producto) |',
+  '',
+  '## Módulos API (sin custom element)',
+  '',
+  '| API / módulo | CDN o ruta | Resumen | Guía |',
+  '| --- | --- | --- | --- |',
+];
+for (const m of API_MODULES) {
+  const guia = m.guia.startsWith('http') ? `[docs](${m.guia})` : m.guia;
+  catOut.push(`| \`${m.id}\` | \`${m.cdn}\` | ${m.resumen.replace(/\|/g, '/')} | ${guia} |`);
+}
+catOut.push('', '## Tags por categoría', '');
+for (const [category, items] of grupos) {
+  catOut.push(`### ${category}`, '', '| Doc | Tags |', '| --- | --- |');
+  const byRel = new Map();
+  for (const item of items) {
+    const key = item.rel || item.tag;
+    if (!byRel.has(key)) byRel.set(key, []);
+    byRel.get(key).push(`\`<${item.tag}>\``);
+  }
+  for (const [rel, tags] of byRel) {
+    catOut.push(`| \`${rel || '—'}\` | ${tags.join(', ')} |`);
+  }
+  catOut.push('');
+}
+writeFileSync(catPath, `${catOut.join('\n')}\n`, 'utf8');
+console.log('catalog.md', orden.length, 'tags');

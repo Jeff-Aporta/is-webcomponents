@@ -35,10 +35,14 @@ test('iswc-cdn-snippet pinta Skill simple (enlaces + ver), sin visor MD', async 
   assert.match(src, /data-ver-md|mdi:eye-outline/);
   assert.doesNotMatch(src, /iswc-md-editor|data-slot="llm-prompt"/);
   const prompt = await readFile(join(raiz, 'src/components/_shared/llm-agent-prompt.ts'), 'utf8');
-  assert.match(prompt, /skills\/is-cdn-install\/SKILL\.md/);
+  const skillDocs = prompt.match(/export const SKILL_DOCS[\s\S]*?\];/)?.[0] || '';
+  assert.match(skillDocs, /skills\/is-webcomponents\/SKILL\.md/);
+  assert.equal((skillDocs.match(/label:\s*'/g) || []).length, 1, 'SKILL_DOCS debe tener un solo enlace general');
+  assert.doesNotMatch(skillDocs, /is-cdn-install|PROMPT\.md|tools\//);
 });
 
-test('cdn-panel incluye skill en llmDocs', async () => {
+test('cdn-panel solo aporta el MD del módulo (skill general vive en SKILL_DOCS)', async () => {
   const src = await readFile(join(raiz, 'scripts/cdn-panel.js'), 'utf8');
-  assert.match(src, /skills\/is-cdn-install\/SKILL\.md/);
+  assert.match(src, /label:\s*'Módulo'/);
+  assert.doesNotMatch(src, /is-cdn-install|Índice global|specs\/componentes/);
 });

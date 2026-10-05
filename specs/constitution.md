@@ -1,4 +1,4 @@
-# Constitution — IS Web Components
+# Constitution — ISWC
 
 Invariantes del kit. Un cambio aquí es decisión de producto, no de una sesión.
 
@@ -14,7 +14,7 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 | Pieza | Fuente |
 |---|---|
-| Inventario de tags | [`manifest.js`](../src/manifest.ts) |
+| Inventario de tags | [`src/manifest.ts`](../src/manifest.ts) |
 | Fuentes de componentes | `src/components/` |
 | Previews | `src/previews/<cat>/<tag>.json` + `behaviors/` |
 | Estilos / tokens | `src/styles/` (`--iswc-*`) |

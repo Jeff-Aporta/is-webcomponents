@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tooltip",
   "category": "feedback",
-  "title": "<iswc-tooltip>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tooltip&gt;",
+  "titleHtml": false,
   "styles": ".grid { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }",
   "storageKey": "docs-iswc-tooltip",
   "hasBehavior": true,
@@ -17,35 +17,31 @@
           "kind": "demo",
           "html": "<iswc-button id=\"tip-target\">Hover Me</iswc-button>\r\n          <iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:placement",
-                "label": "placement",
-                "options": [
-                  "top",
-                  "right",
-                  "bottom",
-                  "left",
-                  "bottom-start"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:trigger",
-                "label": "trigger",
-                "options": [
-                  "click",
-                  "manual"
-                ]
-              }
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "top",
+                "right",
+                "bottom",
+                "left",
+                "bottom-start"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:trigger",
+              "label": "trigger",
+              "options": [
+                "click",
+                "manual"
+              ]
+            }
           ],
           "equivNote": "trigger decide cómo se abre; tip con HTML suele ir mejor con click.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-tooltip: trigger\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"trigger=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"hover → show/hide\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"click → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"manual → API\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"hover\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"click\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"manual\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-button id=\"tip-target\">Hover Me</iswc-button>\n<iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>"
         }
       ]
     },
@@ -78,10 +74,17 @@
         {
           "kind": "demo",
           "html": "<iswc-button id=\"t-html\" color=\"brand\">Auditoría · tip largo</iswc-button>\r\n          <iswc-tooltip\r\n            for=\"t-html\"\r\n            trigger=\"click\"\r\n            placement=\"bottom-start\"\r\n            style=\"--max-width: 22rem\"\r\n          >\r\n            <p><strong>Resumen de cumplimiento</strong></p>\r\n            <p>\r\n              Este tip muestra contenido enriquecido para revisar wrapping,\r\n              contraste y dismiss al clic fuera.\r\n            </p>\r\n            <ul>\r\n              <li>Tokens <code>--iswc-*</code> y tipografía del tema</li>\r\n              <li>Máximo ancho vía <code>--max-width</code></li>\r\n              <li>Enlace de ejemplo:\r\n                <a href=\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role\" target=\"_blank\" rel=\"noopener\">ARIA tooltip</a>\r\n              </li>\r\n            </ul>\r\n            <p>Última revisión: sprint actual · owner: Design System</p>\r\n          </iswc-tooltip>"
-        },
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
         {
-          "kind": "code",
-          "code": "<iswc-tooltip for=\"t-html\" trigger=\"click\" style=\"--max-width:22rem\">\n  <p><strong>Resumen</strong></p>\n  <ul><li>…</li></ul>\n</iswc-tooltip>"
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-tooltip\">\n  <iswc-tooltip label=\"Informacion extra\">\n    <iswc-button>Pasa el mouse</iswc-button>\n  </iswc-tooltip>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -128,5 +131,55 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tip breve anclado con <code class=\"code\">for</code>. Depende de <code class=\"code\">iswc-popover</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>for</code>",
+            "desc": "id del target"
+          },
+          {
+            "metodo": "<code>trigger</code>",
+            "desc": "hover focus | click | manual — click/manual: fuera + Escape cierra"
+          },
+          {
+            "metodo": "<code>--max-width</code>",
+            "desc": "ancho del tip (default 16rem)"
+          },
+          {
+            "metodo": "slot",
+            "desc": "texto o HTML (p, ul, a, code…)"
+          },
+          {
+            "metodo": "<code>placement</code> <code>distance</code> <code>skidding</code>",
+            "desc": "posicionamiento"
+          },
+          {
+            "metodo": "<code>show()</code> <code>hide()</code>",
+            "desc": "métodos"
+          },
+          {
+            "metodo": "events",
+            "desc": "iswc-show, iswc-after-show, iswc-hide, iswc-after-hide"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"tip-target\">Hover Me</iswc-button>\n<iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

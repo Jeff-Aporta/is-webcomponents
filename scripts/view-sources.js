@@ -1,9 +1,12 @@
 /**
  * view-sources.js — visor full-page de fuentes JS / CSS / MD del componente.
  *
- * En cada `<iswc-demo>` / `.demo` puede haber un botón que abre un `<iswc-dialog>`
- * a viewport completo con tabs (JS · CSS · MD). El contenido es el archivo
- * fuente del repo (local same-origin o raw.githubusercontent).
+ * Abre un `<iswc-dialog>` a viewport completo con tabs (JS · CSS · MD). El
+ * contenido es el archivo fuente del repo (local same-origin o
+ * raw.githubusercontent). Se invoca vía `openViewSources(tag)` desde código
+ * externo (p. ej. consola, deep-link) — el botón "Ver fuentes" que solía
+ * montarse sobre cada `.demo` fue retirado en Phase E: los snippets deben
+ * ser minimalistas y no deben incluir chrome extra.
  *
  * Distinto de `demo-code.js` (snippet CDN del ejemplo) y de `demo-file-meta.js`
  * (barra `.file-meta` sin hints).
@@ -269,29 +272,14 @@ export async function openViewSources(tag, prefer = 'js') {
 }
 
 function enhanceDemo(demo) {
+  // Phase E: el botón "Ver fuentes" (`<button class="demo-sources-btn">`)
+  // ya NO se monta sobre cada `.demo` / `<iswc-demo>`. El visor sigue
+  // disponible vía `openViewSources(tag)` (consola, deep-link, etc.) pero
+  // los snippets de la galería deben ser minimalistas, sin chrome extra.
+  // Dejamos el hook noop por compat con imports previos y para que la
+  // signature siga exportada (otros tests/code base todavía lo esperan).
   if (!(demo instanceof Element)) return;
-  if (demo.dataset.sourcesReady || demo.hasAttribute('data-no-sources')) return;
-
-  const tag = currentTag
-    || demo.closest('iswc-preview-component')?.preview?.definition?.tag
-    || null;
-  if (!tag || !entryFor(tag)) return;
-
   demo.dataset.sourcesReady = '1';
-  demo.classList.add('demo--with-sources');
-
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'demo-sources-btn';
-  btn.setAttribute('aria-label', 'Ver fuentes JS / CSS / MD');
-  btn.title = 'Ver fuentes (JS · CSS · MD)';
-  btn.innerHTML = '<iswc-icon icon="mdi:file-code-outline"></iswc-icon>';
-  btn.addEventListener('click', (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    openViewSources(tag).catch(console.error);
-  });
-  demo.append(btn);
 }
 
 function mountPageButton(_tag) {

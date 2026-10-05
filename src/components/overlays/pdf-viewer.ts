@@ -1,6 +1,11 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr } from '../_shared/reflect.js';
+import { setOptionalAttr, setStringAttr } from '../_shared/reflect.js';
+import {
+  blobUrlFromBuffer,
+  loadArrayBuffer,
+  resolveFileSource,
+} from '../files/_shared/file-source.js';
 
 /**
  * <iswc-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador
@@ -9,7 +14,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  * pdf.js desde tu build pipeline.
  *
  * Atributos
- *   src         URL del PDF (requerido)
+ *   src         URL del PDF
+ *   content     payload inline (data-URL o base64); gana sobre src (familia files)
  *   page        número de página a saltar (1) — sólo aplica con engine=pdfjs
  *   zoom        nivel de zoom (1) — sólo engine=pdfjs
  *   engine      native (default) | pdfjs
@@ -25,14 +31,9 @@ import { setOptionalAttr } from '../_shared/reflect.js';
  *   toolbar — contenido personalizado a la derecha de los botones
  */
 (() => {
-  const OBSERVED = ['src', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
+  const OBSERVED = ['src', 'content', 'page', 'zoom', 'engine', 'height', 'download', 'print'];
 
-  class IswcPdfViewer extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    shadow: '--iswc-popover-shadow',
-    'bar-gap': '--iswc-surface-bar-gap',
-    };
+  class IswcPdfViewer extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'shadow', 'bar-gap']; }
 
@@ -91,8 +92,8 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       } catch { return 1; }
     }
 
-    #sync() {
-      const src = this.getAttribute('src');
+    async #sync() {
+      const gen = ++this.#syncGen;
       const engine = this.getAttribute('engine') || 'native';
       if (engine === 'pdfjs') {
         // pdfjs requiere bundling externo; dejamos el atributo en iframe para
@@ -101,15 +102,38 @@ import { setOptionalAttr } from '../_shared/reflect.js';
       } else {
         this.#iframe.setAttribute('type', 'application/pdf');
       }
-      if (src) this.#iframe.src = src;
       this.#dl.hidden = !this.hasAttribute('download');
       this.#print.hidden = !this.hasAttribute('print');
       this.#iframe.style.height = this.getAttribute('height') || '80vh';
+
+      const source = resolveFileSource(this.getAttribute('src'), this.getAttribute('content'));
+      if (source.kind === 'empty') {
+        this.#revokeBlob();
+        this.#iframe.removeAttribute('src');
+        return;
+      }
+      try {
+        let href: string;
+        if (source.kind === 'content') {
+          const buf = await loadArrayBuffer(source);
+          if (gen !== this.#syncGen) return;
+          this.#revokeBlob();
+          this.#blobUrl = blobUrlFromBuffer(buf, 'application/pdf');
+          href = this.#blobUrl;
+        } else {
+          this.#revokeBlob();
+          href = source.src;
+        }
+        this.#iframe.src = href;
+      } catch {
+        if (gen !== this.#syncGen) return;
+        emit(this, 'iswc-error', { reason: 'fetch' });
+      }
     }
 
     #download() {
       const a = document.createElement('a');
-      a.href = this.getAttribute('src') || '';
+      a.href = this.#blobUrl || this.getAttribute('src') || '';
       a.download = '';
       a.click();
     }
@@ -124,6 +148,22 @@ import { setOptionalAttr } from '../_shared/reflect.js';
     #iframe!: HTMLIFrameElement;
     #dl!: HTMLElement;
     #print!: HTMLElement;
+    #blobUrl: string | null = null;
+    #syncGen = 0;
+
+    get content() { return this.getAttribute('content') ?? ''; }
+    set content(v) { setStringAttr(this, 'content', v); }
+
+    onDisconnected() {
+      this.#revokeBlob();
+    }
+
+    #revokeBlob() {
+      if (this.#blobUrl) {
+        URL.revokeObjectURL(this.#blobUrl);
+        this.#blobUrl = null;
+      }
+    }
   }
 
   defineElement('iswc-pdf-viewer', IswcPdfViewer);

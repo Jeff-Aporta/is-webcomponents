@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-date-input",
   "category": "forms",
-  "title": "<iswc-date-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-date-input&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-date-input",
   "sections": [
     {
@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-date-input id=\"di\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-input>\r\n          <iswc-date-input label=\"Con barra\" value=\"2026-07-30\" locale=\"es\" action-bar></iswc-date-input>",
+          "html": "<iswc-date-input id=\"di\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-input>",
           "controls": [
             {
               "control": "select",
@@ -144,5 +144,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo + calendario en un panel del top layer (DatePicker de MUI X). Edita por secciones o abre el calendario. Alt+↓ abre el panel."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "default": "fecha · HH:mm · fechaTHora · inicio/fin"
+          },
+          {
+            "name": "<code>variant</code>",
+            "default": "desktop · mobile"
+          },
+          {
+            "name": "<code>action-bar</code>",
+            "default": "off (obligatoria en mobile)"
+          },
+          {
+            "name": "<code>close-on-select</code>",
+            "default": "auto (off si hay action-bar)"
+          },
+          {
+            "name": "<code>placement</code>",
+            "default": "bottom-start"
+          },
+          {
+            "name": "<code>panel</code> (time)",
+            "default": "sections · list · clock"
+          },
+          {
+            "name": "<code>start-label</code> / <code>end-label</code>",
+            "default": "solo range"
+          },
+          {
+            "name": "resto",
+            "default": "se reenvían al campo y al panel"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-date-input id=\"di\" label=\"Fecha\" value=\"2026-07-30\" locale=\"es\" clearable></iswc-date-input>\r\n          <iswc-date-input label=\"Con barra\" value=\"2026-07-30\" locale=\"es\" action-bar></iswc-date-input>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

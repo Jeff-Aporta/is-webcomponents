@@ -12,8 +12,7 @@ interface LoaderCatalog {
 }
 interface LoaderModule {
   load(...ids: string[]): Promise<unknown>;
-  loadCSSBase(): Promise<unknown>;
-  loadCSSPalettesDefault(): Promise<unknown>;
+  loadPageStyles(hrefs: string[]): Promise<unknown>;
   catalog: LoaderCatalog;
 }
 
@@ -46,8 +45,8 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
   // ISWebComponentsLoader.pin('abcdef0123456789…');
   ISWebComponentsLoader.configure({ mirrors: ['jsdelivr', 'pages'] });
 
-  await ISWebComponentsLoader.loadCSSBase();
-  await ISWebComponentsLoader.loadCSSPalettesDefault();
+  // is-base.min.css se auto-carga al inicializar el loader (W52).
+  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);
   await ISWebComponentsLoader.load('iswc-button', 'iswc-button-group');
   // Categorías: load('actions', 'data-viz')  // alias: charts → data-viz
   // Todo el kit: load('all')
@@ -124,8 +123,8 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
       : `await ISWebComponentsLoader.load('iswc-button'); // elegí arriba`;
     const snip = `<script type="module">
   import { ISWebComponentsLoader } from '../previews/behaviors/dist/cdn/core/loader.min.js';
-  await ISWebComponentsLoader.loadCSSBase();
-  await ISWebComponentsLoader.loadCSSPalettesDefault();
+  // is-base.min.css se auto-carga al inicializar el loader (W52).
+  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);
   ${body}
 </script>`;
     if (snipEl) setEditorValue(snipEl, snip);

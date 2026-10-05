@@ -15,8 +15,9 @@
  * No entra al snippet: botones «Ver código» / «Ver fuentes», `.demo-label`,
  * `.demo-caption`, `.demo__heading` ni modales — solo markup replicable.
  *
- * Sí entra un bloque `<style>` cuando el ejemplo usa clases de layout de la
- * galería (`.matrix`, `.demo-row`, …) o estilos del preview (`styles` en JSON).
+ * Por contrato Phase E, el snippet NO incluye bloques `<style>` con utility
+ * classes (`.matrix`, `.demo-row`, …) ni estilos del preview: el ejemplo debe
+ * usar los estilos por default de los componentes iswc-*.
  *
  * Es un módulo ES: importa lo que necesita (manifest, cdn-ref, el pintor y los
  * componentes del chrome) en vez de leerlo de `window.__*`.
@@ -28,7 +29,6 @@ import './highlight-pre.js';
 import { paint } from '../src/components/_shared/highlight-code.js';
 import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
 import manifest from '../src/manifest.js';
-import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles.ts';
 
 {
   /** CDN base — el snippet debe usar URLs públicas para que sea portable. */
@@ -114,14 +114,12 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     document.documentElement.dataset.palette || 'contapyme'
   );
 
-  /** Sella data-theme + data-palette + .theme-* en un nodo raíz del snippet
-   *  para que, al pegarlo, el ejemplo herede el contexto sin pintar toda la
-   *  página (el canvas lo decide la app). */
+  /** Sella data-theme + data-palette en un nodo raíz del snippet para que,
+   *  al pegarlo, el ejemplo herede el contexto sin pintar toda la página
+   *  (el canvas lo decide la app). Contrato W51: sin clases .theme-*. */
   const stampContext = (el, theme, palette) => {
     el.setAttribute('data-theme', theme);
     el.setAttribute('data-palette', palette);
-    el.classList.remove('theme-dark', 'theme-light');
-    el.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
   };
 
   /** Inyecta el contexto actual en la(s) raíz(ces) del markup serializado. */
@@ -224,21 +222,12 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     lines.push(`<script type="module" src="${CDN}/core/loader.min.js"><\/script>`);
     lines.push('<script type="module">');
     lines.push('  const L = globalThis.ISWebComponentsLoader;');
-    lines.push('  await L.loadCSSBase();');
-    lines.push('  await L.loadCSSPalettesDefault();');
+    lines.push('  // is-base.min.css se auto-carga al inicializar el loader (W52).');
+    lines.push("  await L.loadPageStyles(['iswc-palettes-default']);");
     if (args) lines.push(`  await L.load(${args});`);
     lines.push('<\/script>');
 
-    const previewStyles = demo.closest('iswc-preview-component')?.preview?.definition?.styles ?? '';
-    const styleCss = buildDemoSnippetStyles(inner, previewStyles);
-
     if (lines.length) lines.push('');
-    if (styleCss) {
-      lines.push('<style>');
-      lines.push(styleCss);
-      lines.push('</style>');
-      lines.push('');
-    }
     lines.push(inner);
 
     return { snippet: lines.join('\n'), urls };
@@ -279,7 +268,7 @@ import { buildDemoSnippetStyles } from '../src/previews/_kit/demo-snippet-styles
     pop.innerHTML = `
       <div class="demo-code-pop__bar">
         <div class="demo-code-pop__meta">
-          <span class="demo-code-pop__hint">loader.min.js</span>
+          <span class="demo-code-pop__hint">snippet</span>
         </div>
         <iswc-copy-button class="demo-code-pop__copy" copy-label="Copiar" success-label="Copiado"
                         tooltip-placement="left"></iswc-copy-button>

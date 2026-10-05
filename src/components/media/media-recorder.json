@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-media-recorder",
   "category": "media",
-  "title": "<iswc-media-recorder>",
-  "titleHtml": true,
+  "title": "&lt;iswc-media-recorder&gt;",
+  "titleHtml": false,
   "description": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob.",
   "storageKey": "docs-iswc-media-recorder",
   "sections": [
@@ -24,15 +24,29 @@
           ]
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-media-recorder source=\"mic\"></iswc-media-recorder>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Graba cámara, micrófono o pantalla (`getDisplayMedia`) con `MediaRecorder` y entrega un Blob."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-media-recorder source=\"mic\"></iswc-media-recorder>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

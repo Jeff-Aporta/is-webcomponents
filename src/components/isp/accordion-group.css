@@ -12,7 +12,7 @@
   .accordion {
     display: flex;
     flex-direction: column;
-    gap: var(--iswc-accordion-gap, 0.3em);
+    gap: var(--iswc-accordion-gap);
     overflow: hidden;
   }
 

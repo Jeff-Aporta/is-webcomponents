@@ -39,8 +39,8 @@ const buildBundleSnippet = (): string => [
   `${open}script type="module" src="${CDN}/core/loader.min.js"${close}${open}${slash}script${close}`,
   `${open}script type="module"${close}`,
   `  const L = globalThis.ISWebComponentsLoader;`,
-  `  await L.loadCSSBase();`,
-  `  await L.loadCSSPalettesDefault();`,
+  `  // is-base.min.css se auto-carga al inicializar el loader (W52).`,
+  `  await L.loadPageStyles(['iswc-palettes-default']);`,
   `  await L.load("iswc-button");`,
   `${open}${slash}script${close}`,
   '',
@@ -83,7 +83,7 @@ const buildDemoHtml = (variant: string): string => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IS Web Components · demo CDN</title>
+  <title>ISWC · demo CDN</title>
   <link rel="stylesheet" href="${CDN}/core/is-base.min.css">
   <style>
     :root { color-scheme: dark; }
@@ -146,7 +146,7 @@ const buildDemoHtml = (variant: string): string => {
 </head>
 <body>
   <header>
-    <h1>IS Web Components — demo por CDN</h1>
+    <h1>ISWC — demo por CDN</h1>
     <small>Variante: ${variant === 'bundle' ? 'import map' : 'JS + CSS por componente'}</small>
   </header>
 

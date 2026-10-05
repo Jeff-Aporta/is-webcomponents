@@ -40,7 +40,7 @@ import '../actions/button.js';
       <div class="arrow" part="arrow"></div>
       <div class="message" part="message"><slot name="message"></slot></div>
       <div class="actions" part="actions">
-        <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="neutral" class="cancel" data-popconfirm-cancel>Cancelar</iswc-button></slot></span>
+        <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel" data-popconfirm-cancel>Cancelar</iswc-button></slot></span>
         <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-popconfirm-confirm>Aceptar</iswc-button></slot></span>
       </div>
     </div>
@@ -54,14 +54,6 @@ import '../actions/button.js';
   ];
 
   class IswcPopconfirm extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-popconfirm-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-popconfirm-text', onlyColorValues: true },
-    'border-color': { prop: '--iswc-popconfirm-border', onlyColorValues: true },
-    accent: { prop: '--iswc-popconfirm-accent', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-popconfirm-danger', onlyColorValues: true },
-    };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent', 'danger-color']; }
 

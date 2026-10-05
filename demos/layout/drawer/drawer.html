@@ -20,7 +20,7 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/drawer.min.js?h=bycvbv');
+  await import('../../../dist/cdn/layout/drawer.min.js?h=zqsb7h');
   await customElements.whenDefined('iswc-drawer');
 
   // (1) Drawer end (default).
@@ -117,11 +117,11 @@
 <main>
   <section>
     <h2>Placements</h2>
-    <button id="btn-start" type="button">Abrir start</button>
-    <button id="btn-end" type="button">Abrir end</button>
-    <button id="btn-top" type="button">Abrir top</button>
-    <button id="btn-bottom" type="button">Abrir bottom</button>
-    <button id="btn-noheader" type="button">Abrir without-header</button>
+    <button title="Abrir start" id="btn-start" type="button">Abrir start</button>
+    <button title="Abrir end" id="btn-end" type="button">Abrir end</button>
+    <button title="Abrir top" id="btn-top" type="button">Abrir top</button>
+    <button title="Abrir bottom" id="btn-bottom" type="button">Abrir bottom</button>
+    <button title="Abrir without-header" id="btn-noheader" type="button">Abrir without-header</button>
   </section>
   <section>
     <h2>Eventos</h2>
@@ -131,5 +131,80 @@
 <footer>
   Estado: <code>customElements.whenDefined('iswc-drawer')</code> resuelto.
 </footer>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

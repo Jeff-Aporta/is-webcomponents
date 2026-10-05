@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-divider
 tags:
   - iswc-divider
 category: layout
 status: public
-source: ./divider.js
+source: ./divider.ts
 style: ./divider.css
 preview: ./divider.json
 ---
 # `<iswc-divider>`
 
-## Propósito
+## PropÃ³sito
 
-Separador horizontal o vertical. Opacidad default 20; color vía tokens del theme.
+Separador horizontal o vertical. Opacidad default 20; color vÃ­a tokens del theme.
 
-Este módulo registra `<iswc-divider>`.
+Este mÃ³dulo registra `<iswc-divider>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Estructura, superficies, overlays y navegación por regiones de contenido.
+Estructura, superficies, overlays y navegaciÃ³n por regiones de contenido.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear size colors; escalar mediante font-size contextual y em.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './divider.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-divider></iswc-divider>
@@ -46,11 +46,11 @@ import './divider.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `orientation` | string/según contrato | Fuente define default/restricción. |
-| `opacity` | string/según contrato | Fuente define default/restricción. |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `orientation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `opacity` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -64,13 +64,30 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+
 No expone.
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-divider');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -86,34 +103,34 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--color` | Token leído o definido por componente. |
-| `--opacity` | Token leído o definido por componente. |
-| `--width` | Token leído o definido por componente. |
-| `--spacing` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--iswc-color-success-500` | Token leído o definido por componente. |
-| `--iswc-color-warning-500` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
+| `--color` | Token leÃ­do o definido por componente. |
+| `--opacity` | Token leÃ­do o definido por componente. |
+| `--width` | Token leÃ­do o definido por componente. |
+| `--spacing` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-divider> — Web Component (vanilla).
+> <iswc-divider> â€” Web Component (vanilla).
 > Separador visual horizontal o vertical.
 > Atributos
 >   orientation  horizontal | vertical (default horizontal)
->   opacity      0–100 (default 20)
+>   opacity      0â€“100 (default 20)
 >   color        text | text-soft | text-dim | border | control | brand | accent |
 >                success | warning | danger (default text)
 > role=separator + aria-orientation en el host
@@ -123,11 +140,11 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-divider>`.
+Tags del mÃ³dulo: `<iswc-divider>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-orientation`, `aria-hidden`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-orientation`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -139,7 +156,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-orient
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -147,15 +164,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-orient
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./divider.js)
+- [JavaScript](./divider.ts)
 - [CSS](./divider.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./divider.json)

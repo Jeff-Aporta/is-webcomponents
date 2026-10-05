@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-transfer-item",
   "category": "data",
-  "title": "<iswc-transfer-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-transfer-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-transfer-item de InSoft.",
   "storageKey": "docs-iswc-transfer-item",
   "sections": [
@@ -15,11 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-transfer>\r\n            <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>\r\n          </iswc-transfer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-transfer>\n  <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>\n</iswc-transfer>",
-          "lang": "html"
         }
       ]
     },
@@ -27,12 +22,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-transfer&gt; — Doble lista de selección (vanilla, zero dependencies). Mueve elementos entre una lista de origen y una lista de destino. &lt;iswc-transfer id=\"t1\"&gt; &lt;iswc-transfer-item value=\"a\"&gt;Alpha&lt;/iswc-transfer-item&gt; &lt;iswc-transfer-item value=\"b\" selected&gt;Beta&lt;/iswc-transfer-item&gt; &lt;/iswc-transfer&gt; Atributos &lt;iswc-transfer&gt; source-title       string target-title       string searchable         boolean without-buttons    boolean  — sin botones prev/next without-headings   boolean max-target         number   — máximo de items en target. Atributos &lt;iswc-transfer-item&gt; value        string disabled     boolean Slots &lt;iswc-transfer-item&gt; (default)   label. Eventos iswc-transfer-change  detail: { item, source, target, values }",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/data/transfer.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Elemento movible entre las dos listas de un <code class=\"code\">&lt;iswc-transfer&gt;</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-transfer>\n  <iswc-transfer-item value=\"a\">Cuentas por cobrar</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Cuentas por pagar</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Inventario</iswc-transfer-item>\n</iswc-transfer>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

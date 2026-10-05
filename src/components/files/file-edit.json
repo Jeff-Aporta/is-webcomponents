@@ -1,0 +1,60 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-file-edit",
+  "category": "files",
+  "title": "<iswc-file-edit>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-file-edit",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Shell edit: despacha por MIME/nombre.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-file-edit name=\"notas.txt\" content=\"hola\" height=\"12rem\"></iswc-file-edit>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Shell edit: despacha por MIME/nombre."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
+}

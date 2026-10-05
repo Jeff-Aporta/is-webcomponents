@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 
 const state = Buffer.from(JSON.stringify({ component: 'iswc-code' })).toString('base64');
-const url = `http://127.0.0.1:5505/apps/is-webcomponents/index.html?s=${state}&_=${Date.now()}`;
+const url = `http://127.0.0.1:8391/?s=${state}&_=${Date.now()}`;
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1400, height: 900 } });
@@ -13,9 +13,10 @@ try {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForTimeout(3500);
 
-  const pageBars = await page.locator('.file-meta-page').count();
-  if (pageBars === 1) ok('file-meta-page único');
-  else bad(`file-meta-page count=${pageBars} (esperado 1)`);
+  // Contrato actual: no hay barra JS/CSS/MD + CDN en demos.
+  const pageBars = await page.locator('.file-meta-page, .file-meta').count();
+  if (pageBars === 0) ok('sin file-meta en la página');
+  else bad(`file-meta residual count=${pageBars} (esperado 0)`);
 
   const underH2 = await page.locator('.section > h2 + .file-meta').count();
   if (underH2 === 0) ok('sin meta bajo h2');
@@ -24,29 +25,6 @@ try {
   const inDemos = await page.locator('iswc-demo > .file-meta, .demo > .file-meta').count();
   if (inDemos === 0) ok('sin meta dentro de demos/papers');
   else bad(`meta en demos: ${inDemos}`);
-
-  const paths = await page.locator('.file-meta-page code.file-meta__path').first().evaluate((el) => el.textContent);
-  if (paths?.includes('.min.js')) ok(`path min: ${paths}`);
-  else bad(`path no minificado: ${paths}`);
-
-  const bytes = await page.locator('.file-meta-page iswc-format-bytes[value]').count();
-  if (bytes > 0) ok(`format-bytes con value: ${bytes}`);
-  else bad('sin pesos (iswc-format-bytes value)');
-
-  const srcBtns = await page.locator('.file-meta-page .file-meta__src-btn').count();
-  if (srcBtns >= 3) ok(`botones src: ${srcBtns}`);
-  else bad(`botones src insuficientes: ${srcBtns}`);
-
-  await page.locator('.file-meta-page .file-meta__src-btn[data-kind="js"]').first().click();
-  await page.waitForTimeout(800);
-  const dlg = await page.locator('iswc-dialog.iswc-view-sources').count();
-  const open = await page.locator('iswc-dialog.iswc-view-sources[open], iswc-dialog.iswc-view-sources[data-open]').count()
-    || await page.evaluate(() => {
-      const d = document.querySelector('iswc-dialog.iswc-view-sources');
-      return d && (d.open || d.hasAttribute('open') || d.getAttribute('aria-hidden') === 'false') ? 1 : 0;
-    });
-  if (dlg) ok(`dialog fuentes presente (open≈${open})`);
-  else bad('click JS no abrió dialog fuentes');
 } catch (e) {
   bad(String(e?.message || e));
 } finally {

@@ -20,7 +20,7 @@
   iswc-textarea:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/textarea.min.js?h=byuzij');
+  await import('../../../dist/cdn/forms/textarea.min.js?h=8ainq2');
 
   await customElements.whenDefined('iswc-textarea');
 
@@ -64,10 +64,10 @@
 
   <section>
     <h2>Básico (autosize)</h2>
-    <iswc-textarea id="demo" name="message" label="Mensaje" hint="Cuéntanos algo" autosize placeholder="Escribe aquí..."></iswc-textarea>
+    <iswc-textarea title="Mensaje" id="demo" name="message" label="Mensaje" hint="Cuéntanos algo" autosize placeholder="Escribe aquí..."></iswc-textarea>
     <div class="grid2">
-      <button id="btn-set" type="button">Set 4 líneas</button>
-      <button id="btn-clear" type="button">Clear</button>
+      <button title="Set 4 líneas" id="btn-set" type="button">Set 4 líneas</button>
+      <button title="Clear" id="btn-clear" type="button">Clear</button>
     </div>
     <output id="out"></output>
   </section>
@@ -75,23 +75,98 @@
   <section>
     <h2>Variantes</h2>
     <div class="grid2">
-      <iswc-textarea name="fixed" label="Filas fijas" rows="4" resize="vertical" placeholder="4 filas"></iswc-textarea>
-      <iswc-textarea name="neversize" label="Sin resize" rows="3" resize="none" placeholder="no resize"></iswc-textarea>
-      <iswc-textarea name="both" label="Resize both" rows="2" resize="both" placeholder="both"></iswc-textarea>
-      <iswc-textarea name="auto-bounded" label="Autosize acotado" autosize min-rows="2" max-rows="6" placeholder="2 a 6 filas"></iswc-textarea>
+      <iswc-textarea title="Filas fijas" name="fixed" label="Filas fijas" rows="4" resize="vertical" placeholder="4 filas"></iswc-textarea>
+      <iswc-textarea title="Sin resize" name="neversize" label="Sin resize" rows="3" resize="none" placeholder="no resize"></iswc-textarea>
+      <iswc-textarea title="Resize both" name="both" label="Resize both" rows="2" resize="both" placeholder="both"></iswc-textarea>
+      <iswc-textarea title="Autosize acotado" name="auto-bounded" label="Autosize acotado" autosize min-rows="2" max-rows="6" placeholder="2 a 6 filas"></iswc-textarea>
     </div>
   </section>
 
   <section>
     <h2>Estados</h2>
     <div class="grid2">
-      <iswc-textarea name="rq" label="Required" required hint="Obligatorio"></iswc-textarea>
-      <iswc-textarea name="ro" label="Readonly" readonly value="sólo lectura"></iswc-textarea>
-      <iswc-textarea name="count" label="Con contador" maxlength="50" show-count placeholder="máx 50"></iswc-textarea>
-      <iswc-textarea name="err" label="Con error" error error-text="Demasiado corto" value="x"></iswc-textarea>
-      <iswc-textarea name="dis" label="Disabled" disabled value="deshabilitado"></iswc-textarea>
+      <iswc-textarea title="Required" name="rq" label="Required" required hint="Obligatorio"></iswc-textarea>
+      <iswc-textarea title="Readonly" name="ro" label="Readonly" readonly value="sólo lectura"></iswc-textarea>
+      <iswc-textarea title="Con contador" name="count" label="Con contador" maxlength="50" show-count placeholder="máx 50"></iswc-textarea>
+      <iswc-textarea title="Con error" name="err" label="Con error" error error-text="Demasiado corto" value="x"></iswc-textarea>
+      <iswc-textarea title="Disabled" name="dis" label="Disabled" disabled value="deshabilitado"></iswc-textarea>
     </div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

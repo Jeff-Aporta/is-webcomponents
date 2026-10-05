@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-popconfirm",
   "category": "feedback",
-  "title": "<iswc-popconfirm>",
-  "titleHtml": true,
+  "title": "&lt;iswc-popconfirm&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-popconfirm de InSoft.",
   "storageKey": "docs-iswc-popconfirm",
   "sections": [
@@ -21,14 +21,14 @@
               "prop": "attr:placement",
               "label": "placement",
               "options": [
-                "bottom-end",
                 "top",
+                "bottom",
+                "start",
+                "end",
                 "top-start",
                 "top-end",
-                "bottom",
                 "bottom-start",
-                "start",
-                "end"
+                "bottom-end"
               ]
             },
             {
@@ -37,10 +37,6 @@
               "label": "hide-arrow"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-button id=\"btnDelete\">Borrar</iswc-button>\n<iswc-popconfirm for=\"btnDelete\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, borrar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-popconfirm>"
         }
       ]
     },
@@ -63,6 +59,17 @@
         {
           "kind": "demo",
           "html": "<iswc-button id=\"pcMega\">Power action</iswc-button>\r\n          <iswc-popconfirm for=\"pcMega\" placement=\"bottom\" hide-arrow>\r\n            <div slot=\"message\">\r\n              <strong>¿Reiniciar el servidor?</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Esto detendrá todos los servicios activos.\r\n              </p>\r\n            </div>\r\n            <iswc-button slot=\"cancel\">Cancelar</iswc-button>\r\n            <iswc-button slot=\"confirm\" color=\"danger\">Reiniciar</iswc-button>\r\n          </iswc-popconfirm>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-popconfirm\">\n  <iswc-popconfirm>\n    <iswc-button color=\"danger\" variant=\"outlined\">\n      <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\n      Eliminar\n    </iswc-button>\n  </iswc-popconfirm>\n  <span slot=\"message\">¿Eliminar este elemento?</span>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -146,5 +153,76 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Cuadro de confirmación rápido anclado a un botón. Sin modal, sin tapar\r\n          la pantalla. Perfecto para \"¿Seguro que quieres borrar?\" en línea."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>for</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "id del trigger."
+          },
+          {
+            "name": "<code>message</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto del mensaje."
+          },
+          {
+            "name": "<code>placement</code>",
+            "type": "top | bottom | start | end | top-start | top-end | bottom-start | bottom-end",
+            "default": "top",
+            "desc": "Posición."
+          },
+          {
+            "name": "<code>hide-arrow</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta la flecha."
+          },
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado controlado."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-popconfirm-show</code>",
+            "cuando": "Popconfirm visible."
+          },
+          {
+            "evento": "<code>iswc-popconfirm-hide</code>",
+            "cuando": "Popconfirm se cierra."
+          },
+          {
+            "evento": "<code>iswc-popconfirm-confirm</code>",
+            "cuando": "Click en confirmar."
+          },
+          {
+            "evento": "<code>iswc-popconfirm-cancel</code>",
+            "cuando": "Click en cancelar."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"btnDelete\">Borrar</iswc-button>\n<iswc-popconfirm for=\"btnDelete\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, borrar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-popconfirm>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

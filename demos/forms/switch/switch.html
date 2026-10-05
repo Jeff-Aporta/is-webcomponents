@@ -22,7 +22,7 @@
   iswc-icon:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/switch.min.js?h=kuxu6x');
+  await import('../../../dist/cdn/forms/switch.min.js?h=0y6r52');
 
   await customElements.whenDefined('iswc-switch');
 
@@ -62,12 +62,12 @@
   <section>
     <h2>Básico</h2>
     <form id="sw-form">
-      <iswc-switch id="demo" name="notify" value="yes" hint="Recibir notificaciones por email">
+      <iswc-switch title="Notificaciones" id="demo" name="notify" value="yes" hint="Recibir notificaciones por email">
         Notificaciones
       </iswc-switch>
     </form>
     <div class="row">
-      <button id="btn-toggle" type="button">Toggle</button>
+      <button title="Toggle" id="btn-toggle" type="button">Toggle</button>
     </div>
     <output id="out"></output>
   </section>
@@ -75,32 +75,107 @@
   <section>
     <h2>Estados</h2>
     <div class="row">
-      <iswc-switch checked>Encendido</iswc-switch>
-      <iswc-switch>Apagado</iswc-switch>
-      <iswc-switch disabled>Deshabilitado off</iswc-switch>
-      <iswc-switch checked disabled>Deshabilitado on</iswc-switch>
-      <iswc-switch required error>Requerido con error</iswc-switch>
+      <iswc-switch title="Encendido" checked>Encendido</iswc-switch>
+      <iswc-switch title="Apagado">Apagado</iswc-switch>
+      <iswc-switch title="Deshabilitado off" disabled>Deshabilitado off</iswc-switch>
+      <iswc-switch title="Deshabilitado on" checked disabled>Deshabilitado on</iswc-switch>
+      <iswc-switch title="Requerido con error" required error>Requerido con error</iswc-switch>
     </div>
   </section>
 
   <section>
     <h2>Colores</h2>
     <div class="row">
-      <iswc-switch checked color="brand">Brand</iswc-switch>
-      <iswc-switch checked color="success">Success</iswc-switch>
-      <iswc-switch checked color="warning">Warning</iswc-switch>
-      <iswc-switch checked color="danger">Danger</iswc-switch>
-      <iswc-switch checked color="neutral">Neutral</iswc-switch>
+      <iswc-switch title="Brand" checked color="brand">Brand</iswc-switch>
+      <iswc-switch title="Success" checked color="success">Success</iswc-switch>
+      <iswc-switch title="Warning" checked color="warning">Warning</iswc-switch>
+      <iswc-switch title="Danger" checked color="danger">Danger</iswc-switch>
+      <iswc-switch title="Neutral" checked color="neutral">Neutral</iswc-switch>
     </div>
   </section>
 
   <section>
     <h2>on-label / off-label</h2>
     <div class="row">
-      <iswc-switch on-label="ON" off-label="OFF" checked>Con etiquetas</iswc-switch>
-      <iswc-switch on-label="Sí" off-label="No" checked>Es</iswc-switch>
+      <iswc-switch title="Con etiquetas" on-label="ON" off-label="OFF" checked>Con etiquetas</iswc-switch>
+      <iswc-switch title="Es" on-label="Sí" off-label="No" checked>Es</iswc-switch>
     </div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

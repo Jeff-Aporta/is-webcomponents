@@ -22,7 +22,7 @@
 </style>
 <script type="module">
   // El bundle del grupo importa automáticamente <iswc-radio>.
-  await import('../../../dist/cdn/forms/radio-group.min.js?h=pp75xe');
+  await import('../../../dist/cdn/forms/radio-group.min.js?h=xb6k8s');
 
   await customElements.whenDefined('iswc-radio-group');
 
@@ -72,14 +72,14 @@
   <section>
     <h2>Básico (vertical)</h2>
     <iswc-radio-group id="group" name="answer" label="Elige una opción" hint="Usa las flechas para navegar" value="uno" required>
-      <iswc-radio value="uno">Uno</iswc-radio>
-      <iswc-radio value="dos">Dos</iswc-radio>
-      <iswc-radio value="tres">Tres</iswc-radio>
-      <iswc-radio value="cuatro" disabled>Cuatro (deshabilitado)</iswc-radio>
+      <iswc-radio title="Uno" value="uno">Uno</iswc-radio>
+      <iswc-radio title="Dos" value="dos">Dos</iswc-radio>
+      <iswc-radio title="Tres" value="tres">Tres</iswc-radio>
+      <iswc-radio title="Cuatro (deshabilitado)" value="cuatro" disabled>Cuatro (deshabilitado)</iswc-radio>
     </iswc-radio-group>
     <div>
-      <button id="btn-set" type="button">Set "dos"</button>
-      <button id="btn-clear" type="button">Clear</button>
+      <button title="Set &quot;dos&quot;" id="btn-set" type="button">Set "dos"</button>
+      <button title="Clear" id="btn-clear" type="button">Clear</button>
     </div>
     <output id="out"></output>
   </section>
@@ -87,27 +87,102 @@
   <section>
     <h2>Horizontal</h2>
     <iswc-radio-group id="group-h" name="orientation" label="Orientación" value="h">
-      <iswc-radio value="v">Vertical</iswc-radio>
-      <iswc-radio value="h">Horizontal</iswc-radio>
-      <iswc-radio value="b">Both</iswc-radio>
+      <iswc-radio title="Vertical" value="v">Vertical</iswc-radio>
+      <iswc-radio title="Horizontal" value="h">Horizontal</iswc-radio>
+      <iswc-radio title="Both" value="b">Both</iswc-radio>
     </iswc-radio-group>
   </section>
 
   <section>
     <h2>Con error</h2>
     <iswc-radio-group id="group-err" name="confirm" label="¿Confirmas?" error error-text="Debes elegir una opción" required>
-      <iswc-radio value="yes">Sí</iswc-radio>
-      <iswc-radio value="no">No</iswc-radio>
+      <iswc-radio title="Sí" value="yes">Sí</iswc-radio>
+      <iswc-radio title="No" value="no">No</iswc-radio>
     </iswc-radio-group>
   </section>
 
   <section>
     <h2>Disabled</h2>
     <iswc-radio-group id="group-dis" name="disabled" label="Grupo deshabilitado" disabled value="a">
-      <iswc-radio value="a">A</iswc-radio>
-      <iswc-radio value="b">B</iswc-radio>
+      <iswc-radio title="A" value="a">A</iswc-radio>
+      <iswc-radio title="B" value="b">B</iswc-radio>
     </iswc-radio-group>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

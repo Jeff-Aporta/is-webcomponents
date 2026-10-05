@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-grid-layout",
   "category": "isp",
-  "title": "<iswc-grid-layout>",
-  "titleHtml": true,
+  "title": "&lt;iswc-grid-layout&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-grid-layout",
   "sections": [
     {
@@ -67,10 +67,6 @@
         {
           "kind": "demo",
           "html": "<iswc-grid-layout direction=\"row\" cells=\"2\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <iswc-card>fila 1 · col 1</iswc-card>\r\n            <iswc-card>fila 2 · col 1</iswc-card>\r\n            <iswc-card>fila 1 · col 2</iswc-card>\r\n            <iswc-card>fila 2 · col 2</iswc-card>\r\n          </iswc-grid-layout>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-grid-layout cells=\"3\" gap=\"0.5rem\">…</iswc-grid-layout>\n<iswc-grid-layout cells=\"12rem 1fr\" items=\"center\">…</iswc-grid-layout>\n<iswc-grid-layout direction=\"row\" cells=\"2\">…</iswc-grid-layout>"
         }
       ]
     },
@@ -125,5 +121,63 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Grid declarativo. Port del <code class=\"code\">GridLayout.svelte</code> de ISP:\r\n          <code class=\"code\">cells</code> acepta un número o una track list CSS cruda."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>cells</code>",
+            "type": "número → <code>repeat(n, minmax(0,1fr))</code> · o track list CSS cruda"
+          },
+          {
+            "name": "<code>cells-fit</code>",
+            "type": "boolean → <code>repeat(n, max-content)</code>"
+          },
+          {
+            "name": "<code>direction</code>",
+            "type": "column (default, alimenta columnas) · row (filas + auto-flow columna)"
+          },
+          {
+            "name": "<code>gap</code>",
+            "type": "valor CSS · default responsive 0.2 / 0.35 / 0.5rem"
+          },
+          {
+            "name": "<code>justify</code>",
+            "type": "start · center · end · stretch · between · around · evenly · …"
+          },
+          {
+            "name": "<code>items</code>",
+            "type": "start · center · end · stretch · baseline · normal"
+          },
+          {
+            "name": "<code>inline</code>",
+            "type": "boolean → <code>display: inline-grid</code>"
+          },
+          {
+            "name": "<code>cscroll</code>",
+            "type": "boolean → <code>overflow: auto</code>"
+          },
+          {
+            "name": "<code>data-sizew</code> · <code>--lerpw</code>",
+            "type": "igual que <code>&lt;iswc-block-layout&gt;</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-grid-layout cells=\"3\" gap=\"0.5rem\" style=\"width:100%\">\r\n            <iswc-card>1</iswc-card><iswc-card>2</iswc-card><iswc-card>3</iswc-card>\r\n            <iswc-card>4</iswc-card><iswc-card>5</iswc-card><iswc-card>6</iswc-card>\r\n          </iswc-grid-layout>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

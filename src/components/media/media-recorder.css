@@ -10,8 +10,8 @@
 .preview {
   inline-size: 100%;
   aspect-ratio: 16 / 9;
-  background: var(--iswc-bg-elev, #111);
-  border-radius: var(--iswc-radius, 0.5em);
+  background: var(--iswc-bg-elev);
+  border-radius: var(--iswc-radius);
   object-fit: cover;
 }
 
@@ -19,7 +19,7 @@
 .dl { font-size: 0.85em; }
 
 /* F0.3 g12 [a11y/focus]: foco visible solo con teclado. */
-:host(:focus-visible) { outline: 2px solid var(--iswc-accent, #339af0); outline-offset: 3px; }
+:host(:focus-visible) { outline: 2px solid var(--iswc-accent); outline-offset: 3px; }
 :host(:focus) { outline: none; }
 
 /* F0.3 g12 [media/loading]: spinner accesible mientras aria-busy=true.

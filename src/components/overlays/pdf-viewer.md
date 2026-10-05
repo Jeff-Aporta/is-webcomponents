@@ -1,37 +1,37 @@
----
+﻿---
 tag: iswc-pdf-viewer
 tags:
   - iswc-pdf-viewer
 category: overlays
 status: public
-source: ./pdf-viewer.js
+source: ./pdf-viewer.ts
 style: ./pdf-viewer.css
 preview: ./pdf-viewer.json
 ---
 # `<iswc-pdf-viewer>`
 
-## Propósito
+## PropÃ³sito
 
 Visor de PDF. Por defecto usa el visor nativo del navegador; opcionalmente `engine="pdfjs"`.
 
-Este módulo registra `<iswc-pdf-viewer>`.
+Este mÃ³dulo registra `<iswc-pdf-viewer>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Paleta de comandos, visor de documentos y ventanas flotantes.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Para diálogos/cajones genéricos usar `<iswc-dialog>` / `<iswc-drawer>` en layout.
-No reinventar overlays si este módulo cubre el caso.
+Para diÃ¡logos/cajones genÃ©ricos usar `<iswc-dialog>` / `<iswc-drawer>` en layout.
+No reinventar overlays si este mÃ³dulo cubre el caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './pdf-viewer.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-pdf-viewer src="/docs/manual.pdf" download print></iswc-pdf-viewer>
@@ -46,14 +46,14 @@ import './pdf-viewer.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `src` | string | URL del PDF (requerido). |
-| `page` | string/según contrato | Página inicial (pdfjs). |
-| `zoom` | string/según contrato | Nivel de zoom (pdfjs). |
+| `page` | string/segÃºn contrato | PÃ¡gina inicial (pdfjs). |
+| `zoom` | string/segÃºn contrato | Nivel de zoom (pdfjs). |
 | `engine` | string | `native` (default) | `pdfjs`. |
 | `height` | string | Alto del iframe (default 80vh). |
-| `download` | boolean | Muestra botón Descargar. |
-| `print` | boolean | Muestra botón Imprimir. |
+| `download` | boolean | Muestra botÃ³n Descargar. |
+| `print` | boolean | Muestra botÃ³n Imprimir. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -64,22 +64,41 @@ import './pdf-viewer.js';
 | Slot | Uso |
 | --- | --- |
 | `default` | Contenido proyectado. |
-| `footer` | Bloque inferior (si el módulo lo declara). |
+| `footer` | Bloque inferior (si el mÃ³dulo lo declara). |
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-load` | Emitido cuando el recurso se ha cargado. |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-load` | sí | sí | sí | no |
-| `iswc-error` | sí | sí | sí | no |
+| `iswc-load` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-error` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-pdf-viewer');
+el.addEventListener('iswc-load', (e) => {
+  console.log('iswc-load', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| — | No expone. |
+| â€” | No expone. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -97,24 +116,24 @@ No expone.
 
 ### CSS custom properties
 
-Tokens del tema (`--iswc-*`) según CSS del módulo.
+Tokens del tema (`--iswc-*`) segÃºn CSS del mÃ³dulo.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-pdf-viewer> — src/page/zoom/engine/height/download/print. Eventos iswc-load / iswc-error. Slots title y toolbar.
+> <iswc-pdf-viewer> â€” src/page/zoom/engine/height/download/print. Eventos iswc-load / iswc-error. Slots title y toolbar.
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<iswc-pdf-viewer>`.
+Tags del mÃ³dulo: `<iswc-pdf-viewer>`.
 
 ## Accesibilidad
 
@@ -122,20 +141,20 @@ El host lleva `role="region"` con `aria-label="Visor de PDF"` para que
 lectores de pantalla lo identifiquen como una zona de contenido. La barra
 de herramientas interna lleva `role="toolbar"` con `aria-label="Controles
 del visor"`, y los botones Descargar / Imprimir llevan `aria-label`
-explícito (icon-only).
+explÃ­cito (icon-only).
 
 El `<iframe>` interno recibe `title="Visor PDF"`, `role="document"` y
 `aria-labelledby="pdf-title"` (referencia al slot `title`), de modo que su
 nombre accesible queda sincronizado con el encabezado del componente.
 
-| Atributo / Rol | Dónde | Notas |
+| Atributo / Rol | DÃ³nde | Notas |
 | --- | --- | --- |
-| `role="region"` + `aria-label` | `<div class="root">` | Marca el visor como una región navegable. |
+| `role="region"` + `aria-label` | `<div class="root">` | Marca el visor como una regiÃ³n navegable. |
 | `role="toolbar"` + `aria-label` | `<div class="toolbar">` | Agrupa los botones Descargar / Imprimir / slot. |
-| `aria-label` en botones internos | `#dl`, `#print` | Botones icon-only con label explícito. |
+| `aria-label` en botones internos | `#dl`, `#print` | Botones icon-only con label explÃ­cito. |
 | `title` + `role="document"` + `aria-labelledby` | `<iframe>` | Nombre accesible del documento PDF, sincronizado con el slot `title`. |
 
-Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. Listeners globales solo en
 `connectedCallback` / `disconnectedCallback`.
 
 ## Ejemplo avanzado
@@ -146,7 +165,7 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Agregar listeners de `document`/`window` en el constructor.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -154,15 +173,15 @@ Preservar semántica, foco, teclado, labels y ARIA. Listeners globales solo en
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./pdf-viewer.js)
+- [JavaScript](./pdf-viewer.ts)
 - [CSS](./pdf-viewer.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./pdf-viewer.json)

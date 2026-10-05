@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-swimlane-diagram",
   "category": "diagrams",
-  "title": "<iswc-swimlane-diagram>",
-  "titleHtml": true,
+  "title": "&lt;iswc-swimlane-diagram&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-swimlane-diagram",
   "sections": [
     {
@@ -39,5 +39,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Diagrama de actividad con carriles: cada fila es un responsable y cada columna un momento del proceso."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-swimlane-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"swimlane\": {\n        \"title\": \"Publicación de instrucciones\",\n        \"lanes\": [\n          { \"id\": \"negocio\", \"name\": \"Área solicitante\", \"hue\": 210 },\n          { \"id\": \"ing\", \"name\": \"Ingeniería\", \"hue\": 160 },\n          { \"id\": \"bd\", \"name\": \"Base de datos\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"pide\", \"lane\": \"negocio\", \"label\": \"Solicita ajuste\", \"kind\": \"start\" },\n          { \"id\": \"redacta\", \"lane\": \"ing\", \"label\": \"Redacta catálogo\" },\n          { \"id\": \"revisa\", \"lane\": \"negocio\", \"label\": \"¿Aprueba?\", \"kind\": \"decision\" },\n          { \"id\": \"merge\", \"lane\": \"bd\", \"label\": \"MERGE idempotente\" },\n          { \"id\": \"verifica\", \"lane\": \"ing\", \"label\": \"Verifica conteo\" },\n          { \"id\": \"cierra\", \"lane\": \"negocio\", \"label\": \"Cierra tiquete\", \"kind\": \"end\" }\n        ],\n        \"links\": [\n          { \"from\": \"pide\", \"to\": \"redacta\" },\n          { \"from\": \"redacta\", \"to\": \"revisa\" },\n          { \"from\": \"revisa\", \"to\": \"merge\", \"label\": \"sí\" },\n          { \"from\": \"revisa\", \"to\": \"redacta\", \"label\": \"ajustes\" },\n          { \"from\": \"merge\", \"to\": \"verifica\" },\n          { \"from\": \"verifica\", \"to\": \"cierra\" }\n        ]\n      }\n    }\n  </script>\n</iswc-swimlane-diagram>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

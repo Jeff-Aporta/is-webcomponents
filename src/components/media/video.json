@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-video",
   "category": "media",
-  "title": "<iswc-video>",
-  "titleHtml": true,
+  "title": "&lt;iswc-video&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-video",
   "hasBehavior": true,
   "sections": [
@@ -51,10 +51,6 @@
         {
           "kind": "demo",
           "html": "<iswc-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></iswc-video>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-video\n  controls\n  playsinline\n  src=\"video.mp4\"\n></iswc-video>"
         }
       ]
     },
@@ -164,5 +160,67 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y\r\n          scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture\r\n          y pantalla completa. Los controles se ocultan solos mientras reproduce."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>src</code> <code>poster</code>",
+            "desc": "media"
+          },
+          {
+            "metodo": "<code>controls</code>",
+            "desc": "default true; <code>\"false\"</code> deja solo el vídeo (sin chrome ni overlay)"
+          },
+          {
+            "metodo": "<code>muted</code> <code>loop</code> <code>autoplay</code> <code>playsinline</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "<code>play()</code> <code>pause()</code>",
+            "desc": "métodos"
+          },
+          {
+            "metodo": "<code>toggleFullscreen()</code> <code>togglePictureInPicture()</code>",
+            "desc": "métodos"
+          },
+          {
+            "metodo": "<code>media</code>",
+            "desc": "getter al <code>&lt;video&gt;</code> interno"
+          },
+          {
+            "metodo": "events",
+            "desc": "iswc-play, iswc-pause, iswc-ended (+ play/pause/ended)"
+          },
+          {
+            "metodo": "estado",
+            "desc": "<code>data-playing</code>, <code>data-idle</code> (chrome oculto), <code>data-no-controls</code>"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-video-accent</code> (default <code>--iswc-accent</code>)"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>base</code> <code>video</code> <code>big-play</code> <code>controls</code>\r\n                <code>progress</code> <code>seek</code> <code>play-button</code> <code>volume</code>\r\n                <code>mute-button</code> <code>volume-slider</code> <code>time</code>\r\n                <code>settings-button</code> <code>pip-button</code> <code>fullscreen-button</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></iswc-video>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

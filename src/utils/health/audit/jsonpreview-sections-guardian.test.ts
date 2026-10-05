@@ -81,11 +81,11 @@ test('guard: JsonPreview.ts NO contiene la línea literal `sections: []` (regres
   );
 });
 
-test('guard: JsonPreview.ts hace spread de `...definition` antes de overrides (precondición)', () => {
+test('guard: JsonPreview.ts hace spread de `...converted` antes de overrides (precondición)', () => {
   const src = readFileSync(join(RAIZ, 'src', 'previews', '_kit', 'JsonPreview.ts'), 'utf8');
   assert.ok(
-    src.includes('...definition'),
-    'JsonPreview.ts debe hacer spread `...definition` antes de cualquier override; ' +
+    /\{\s*\.\.\.(?:converted|definition)/.test(src),
+    'JsonPreview.ts debe hacer spread de la definition (o converted post-ficha-bridge) antes de cualquier override; ' +
       'sin él, los campos del JSON (sections, prelude, etc.) no llegan al constructor de ISComponentPreview.',
   );
 });

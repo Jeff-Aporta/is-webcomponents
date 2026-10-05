@@ -4,7 +4,7 @@
  * El validador de esquema (json-schema.ts) confirma que la estructura
  * cumple iswc-preview/v1. Este módulo audita el CONTENIDO de cada bloque:
  *
- *   - Bloques `demo` cuyo HTML contiene tags no is-* y muchos slots sin
+ *   - Bloques `demo` cuyo HTML contiene tags no iswc-* y muchos slots sin
  *     inicializar (síntoma típico de demo que no se pensó como dato).
  *   - Bloques `demo` con scripts inline (deben pasarse por JSON al
  *     componente o usar `<script type="application/json">`).
@@ -20,37 +20,32 @@
  */
 
 import type { Hallazgo } from '../types.js';
-
-/** Forma mínima del JSON que necesitamos. */
-type Def = { tag: string; sections?: Array<{ blocks?: any[] }> };
+import { DefSchema, BloqueSchema, type Def, type Bloque } from "./json-contenido.schema.js";
 
 /** Opciones del validador de contenido. */
 export interface OpcionesContenido {
   /** Si el tag es un módulo (helper, no custom element), el auditor
-   *  no exige que el demo contenga <is-*>: el behavior puede inyectar
+   *  no exige que el demo contenga <iswc-*>: el behavior puede inyectar
    *  los tags dinámicamente. */
   esModulo?: boolean;
 }
 
-/** Bloque normalizado. */
-type Bloque = Record<string, any>;
-
 /**
  * Detecta si un bloque `demo` contiene un <script type="application/json">
  * con payload para el componente. Esta es la forma canónica de pasarle
- * data compleja a un is-* (charts, diagramas, grids).
+ * data compleja a un iswc-* (charts, diagramas, grids).
  */
 function tieneJsonEnDemo(html: string): boolean {
   return /<script\s+type=["']application\/json["']/i.test(html);
 }
 
-/** Cuenta tags is-* en un HTML (sin importar host del demo). */
+/** Cuenta tags iswc-* en un HTML (sin importar host del demo). */
 function contarTagsIs(html: string): number {
-  const matches = html.match(/<is-[a-z0-9-]+/g);
+  const matches = html.match(/<iswc-[a-z0-9-]+/g);
   return matches ? matches.length : 0;
 }
 
-/** Devuelve los tags is-* únicos en el HTML. */
+/** Devuelve los tags iswc-* únicos en el HTML. */
 function tagsIsUnicos(html: string): string[] {
   const set = new Set<string>();
   for (const m of html.matchAll(/<iswc-([a-z0-9-]+)/g)) set.add(`iswc-${m[1]}`);
@@ -110,8 +105,8 @@ export function ejecutarValidacionContenido(def: Def, rutaJson: string, opciones
           const html = String(bloque.html ?? '');
           const tags = tagsIsUnicos(html);
 
-          // 1. Demo sin is-* en el HTML.
-          //    Módulos (helpers como iswc-ui) reciben los <is-*> por behavior
+          // 1. Demo sin iswc-* en el HTML.
+          //    Módulos (helpers como iswc-ui) reciben los <iswc-*> por behavior
           //    en runtime; no se puede auditar estáticamente.
           if (contarTagsIs(html) === 0 && !esModulo) {
             hallazgos.push({
@@ -119,9 +114,9 @@ export function ejecutarValidacionContenido(def: Def, rutaJson: string, opciones
               severidad: 'warn',
               tag,
               ruta: rutaJson,
-              mensaje: `Bloque demo en sections[${si}].blocks[${bi}] no contiene ningún <is-*>.`,
+              mensaje: `Bloque demo en sections[${si}].blocks[${bi}] no contiene ningún <iswc-*>.`,
               detalle: { html: html.slice(0, 80) + (html.length > 80 ? '…' : '') },
-              sugerencia: 'Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo).',
+              sugerencia: 'Si el demo no usa ningún iswc-*, convertilo a bloque `html` (no necesita chrome de demo).',
             });
           }
 

@@ -8,7 +8,7 @@ import { defineElement, emit } from '../../core/element.js';
  * y los botones de chrome:
  *   - "Ver código" (`demo-code.js`) — snippet CDN del ejemplo
  *   - "Ver fuentes" (`view-sources.js`) — JS/CSS/MD del módulo sin minificar
- *   - Meta de archivos (`demo-file-meta.js`) — botones JS/CSS/MD + pesos `.min` CDN
+ *   - `demo-file-meta.js` — ya no pinta barra; solo limpia restos legacy
  *
  *   <iswc-demo heading="Apariencias">
  *     <iswc-button variant="filled">Filled</iswc-button>
@@ -20,7 +20,7 @@ import { defineElement, emit } from '../../core/element.js';
  *   contain         boolean — containing block para hijos `position: fixed`.
  *   data-no-code    boolean — desactiva el botón "Ver código".
  *   data-no-sources boolean — desactiva el botón "Ver fuentes".
- *   data-no-file-meta boolean — desactiva la meta JS/CSS/MD + pesos min.
+ *   data-no-file-meta boolean — legacy (la barra de meta ya no se monta).
  *
  * El contenido va en light DOM a propósito: los estilos de la página y el
  * extractor de código del demo ven el markup real del ejemplo.

@@ -1,4 +1,4 @@
-# Flujo SDD — IS Web Components
+# Flujo SDD — ISWC
 
 Spec-Driven Development. Tres etapas, en orden.
 

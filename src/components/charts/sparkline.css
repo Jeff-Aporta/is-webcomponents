@@ -7,29 +7,29 @@
   box-sizing: border-box;
 
   /* Sin trend: sigue el acento de la marca activa. */
-  --line-color: var(--iswc-accent, #339af0);
-  --fill-color-1: color-mix(in srgb, var(--iswc-accent, #339af0) 28%, transparent);
-  --border-color-1: var(--iswc-accent, #339af0);
+  --line-color: var(--iswc-accent);
+  --fill-color-1: color-mix(in srgb, var(--iswc-accent) 28%, transparent);
+  --border-color-1: var(--iswc-accent);
   --line-width: 1.5;
 }
 
 /* Con trend el color es semántico: reutiliza los tokens de estado del sistema. */
 :host([trend="positive"]) {
-  --line-color: var(--iswc-success-text, #40c057);
-  --border-color-1: var(--iswc-success-text, #40c057);
-  --fill-color-1: color-mix(in srgb, var(--iswc-success-text, #40c057) 28%, transparent);
+  --line-color: var(--iswc-success-text);
+  --border-color-1: var(--iswc-success-text);
+  --fill-color-1: color-mix(in srgb, var(--iswc-success-text) 28%, transparent);
 }
 
 :host([trend="negative"]) {
-  --line-color: var(--iswc-danger-text, #fa5252);
-  --border-color-1: var(--iswc-danger-text, #fa5252);
-  --fill-color-1: color-mix(in srgb, var(--iswc-danger-text, #fa5252) 28%, transparent);
+  --line-color: var(--iswc-danger-text);
+  --border-color-1: var(--iswc-danger-text);
+  --fill-color-1: color-mix(in srgb, var(--iswc-danger-text) 28%, transparent);
 }
 
 :host([trend="neutral"]) {
-  --line-color: var(--iswc-text-dim, #868e96);
-  --border-color-1: var(--iswc-text-dim, #868e96);
-  --fill-color-1: color-mix(in srgb, var(--iswc-text-dim, #868e96) 28%, transparent);
+  --line-color: var(--iswc-text-dim);
+  --border-color-1: var(--iswc-text-dim);
+  --fill-color-1: color-mix(in srgb, var(--iswc-text-dim) 28%, transparent);
 }
 
 :host([hidden]) { display: none; }

@@ -132,7 +132,7 @@ interface EditorHistory {
       }
       // aria-label obligatorio en cada botón (icon-only); title se mantiene
       // como fallback visual al hover.
-      html += `<iswc-button class="tb-btn" part="toolbar-button" data-cmd="${t.cmd}" variant="text" color="neutral" aria-label="${t.title}" title="${t.title}"><iswc-icon icon="${t.icon}" aria-hidden="true"></iswc-icon></iswc-button>`;
+      html += `<iswc-button class="tb-btn" part="toolbar-button" data-cmd="${t.cmd}" variant="text" color="text" aria-label="${t.title}" title="${t.title}"><iswc-icon icon="${t.icon}" aria-hidden="true"></iswc-icon></iswc-button>`;
     }
     html += '<span class="tb-flex"></span>';
     html += '<iswc-switch class="tb-plain" part="plain-switch" aria-label="Alternar modo texto plano">Texto plano</iswc-switch>';
@@ -161,10 +161,10 @@ interface EditorHistory {
       <div slot="footer" class="footer" part="footer">
         <div class="ft-meta" part="footer-meta" aria-live="polite"></div>
         <div class="ft-actions" role="toolbar" aria-label="Acciones del documento">
-          <iswc-button class="ft-btn" part="footer-download" data-action="download" variant="outlined" color="neutral" aria-label="Descargar documento">
+          <iswc-button class="ft-btn" part="footer-download" data-action="download" variant="outlined" color="text" aria-label="Descargar documento">
             <iswc-icon slot="start" icon="mdi:download" aria-hidden="true"></iswc-icon>Descargar
           </iswc-button>
-          <iswc-button class="ft-btn" part="footer-discard" data-action="discard" variant="text" color="neutral" aria-label="Descartar cambios">Descartar</iswc-button>
+          <iswc-button class="ft-btn" part="footer-discard" data-action="discard" variant="text" color="text" aria-label="Descartar cambios">Descartar</iswc-button>
           <iswc-button class="ft-btn" part="footer-save" data-action="save" variant="filled" color="brand" aria-label="Guardar documento">Guardar</iswc-button>
         </div>
       </div>
@@ -277,10 +277,6 @@ interface EditorHistory {
   }
 
   class IswcMdEditor extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      'preview-max-height': '--iswc-md-editor-preview-max-height',
-    };
 
     static override get observedAttributes(): string[] {
       return [...OBSERVED, 'preview-max-height'];

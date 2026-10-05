@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tree-view",
   "category": "isp",
-  "title": "<iswc-tree-view>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tree-view&gt;",
+  "titleHtml": false,
   "description": "Árbol editable ISP (port TreeRowView): drag, historial y ficha.",
   "storageKey": "docs-iswc-tree-view",
   "hasBehavior": true,
@@ -27,13 +27,27 @@
               "label": "label-field"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "// Equivalente: pasar `list` y `customs` por JSON al host.\n// El componente lee el <script type=\"application/json\"> como spec\n// y aplica la configuración al upgrade.\ntv.list = [...];\ntv.customs = new PlanCustoms();",
-          "lang": "js"
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;iswc-tree&gt;</code>:\n          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +\n          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>)."
+      },
+      "ejemplos": {
+        "content": "```js\n// Equivalente: pasar `list` y `customs` por JSON al host.\n// El componente lee el <script type=\"application/json\"> como spec\n// y aplica la configuración al upgrade.\ntv.list = [...];\ntv.customs = new PlanCustoms();\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

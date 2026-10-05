@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-diagram-lightbox",
   "category": "diagrams",
-  "title": "<iswc-diagram-lightbox>",
-  "titleHtml": true,
+  "title": "&lt;iswc-diagram-lightbox&gt;",
+  "titleHtml": false,
   "styles": ".demo { display: flex; flex-direction: column; gap: 0.65rem; }\r\n    .demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }\r\n    .demo-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }\r\n    .demo-bar iswc-select { min-width: 12rem; }\r\n    .pill {\r\n      display: inline-flex;\r\n      align-items: center;\r\n      gap: 0.35rem;\r\n      padding: 0.25rem 0.65rem;\r\n      border-radius: 999px;\r\n      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);\r\n      border: 1px solid color-mix(in srgb, var(--iswc-accent) 30%, transparent);\r\n      color: var(--iswc-accent);\r\n      font-size: 0.72rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.04em;\r\n      text-transform: uppercase;\r\n    }",
   "storageKey": "docs-iswc-diagram-lightbox",
   "hasBehavior": true,
@@ -64,5 +64,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Visor a pantalla completa pensado para diagramas: hereda del\r\n          <code class=\"code\">&lt;iswc-lightbox&gt;</code> genérico el zoom anclado al\r\n          cursor, el pan y el dialog top-layer, y le suma la barra de la animación\r\n          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel\r\n          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code class=\"code\">kind</code>",
+            "desc": "<code class=\"code\">\"sequence\"</code> por defecto. Hoy sólo diagrama de secuencia; la barra se adapta a la API turtle del nodo."
+          },
+          {
+            "metodo": "<code class=\"code\">payload</code>",
+            "desc": "Objeto con la configuración del diagrama (<code class=\"code\">preset</code>, <code class=\"code\">sequence</code>, etc.)."
+          },
+          {
+            "metodo": "<code class=\"code\">open</code> · <code class=\"code\">show()</code> · <code class=\"code\">hide()</code>",
+            "desc": "Visibilidad del dialog."
+          },
+          {
+            "metodo": "Hereda de <code class=\"code\">&lt;iswc-lightbox&gt;</code>",
+            "desc": "zoom, pan, slot <code class=\"code\">toolbar</code>, eventos <code class=\"code\">iswc-open</code>, <code class=\"code\">iswc-close</code>, <code class=\"code\">iswc-reposition</code>, <code class=\"code\">iswc-share</code>."
+          },
+          {
+            "metodo": "<code class=\"code\">iswc-turtle-state</code>",
+            "desc": "detail: <code class=\"code\">{ playing, idx, total, replay }</code>"
+          },
+          {
+            "metodo": "<code class=\"code\">iswc-toggle-group</code>",
+            "desc": "detail: <code class=\"code\">{ id }</code> — clic en una leyenda de grupo del diagrama."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"demo-bar\">\r\n            <span class=\"pill\" aria-hidden=\"true\">Demo</span>\r\n            <iswc-select id=\"preset\" label=\"Preset\" value=\"tk1437191\">\r\n              <iswc-option value=\"tk1437191\" label=\"Facturación electrónica\"></iswc-option>\r\n              <iswc-option value=\"tk1431662\" label=\"Onboarding de cliente\"></iswc-option>\r\n            </iswc-select>\r\n            <iswc-button id=\"openViewer\" color=\"brand\" variant=\"filled\">\r\n              Abrir el visor\r\n              <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n          <iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

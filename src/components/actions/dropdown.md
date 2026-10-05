@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-dropdown
 tags:
   - iswc-dropdown
 category: actions
 status: public
-source: ./dropdown.js
+source: ./dropdown.ts
 style: ./dropdown.css
 preview: ./dropdown.json
 ---
 # `<iswc-dropdown>`
 
-## Propósito
+## PropÃ³sito
 
-Menú anclado a un trigger. Panel en <dialog> modal
+MenÃº anclado a un trigger. Panel en <dialog> modal
 (top layer) para no quedar debajo de otras secciones. Items:
 iswc-dropdown-item, iswc-divider e iconos.
 
-Este módulo registra `<iswc-dropdown>`.
+Este mÃ³dulo registra `<iswc-dropdown>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Acciones, selección de comandos y menús interactivos.
+Acciones, selecciÃ³n de comandos y menÃºs interactivos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No usar como decoración ni reemplazar enlaces semánticos para navegación simple.
+No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './dropdown.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-dropdown>
@@ -51,12 +51,12 @@ import './dropdown.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `open` | boolean | Fuente define default/restricción. |
-| `placement` | string/según contrato | Fuente define default/restricción. |
-| `distance` | string/según contrato | Fuente define default/restricción. |
-| `skidding` | string/según contrato | Fuente define default/restricción. |
+| `open` | boolean | Fuente define default/restricciÃ³n. |
+| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `distance` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `skidding` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -75,22 +75,44 @@ import './dropdown.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-select` | sí | sí | sí | sí |
-| `iswc-show` | no | sí | sí | sí |
-| `iswc-after-show` | no | sí | sí | sí |
-| `iswc-hide` | no | sí | sí | sí |
-| `iswc-after-hide` | no | sí | sí | no |
+| `iswc-select` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-show` | no | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-after-show` | no | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-hide` | no | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-after-hide` | no | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-dropdown');
+el.addEventListener('iswc-select', (e) => {
+  console.log('iswc-select', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `show()` | Método público declarado. |
-| `hide()` | Método público declarado. |
+| `show()` | MÃ©todo pÃºblico declarado. |
+| `hide()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -108,28 +130,28 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-font-family` | Token leído o definido por componente. |
-| `--show-duration` | Token leído o definido por componente. |
-| `--hide-duration` | Token leído o definido por componente. |
-| `--auto-size-available-height` | Token leído o definido por componente. |
-| `--iswc-radius` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-shadow` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--show-duration` | Token leÃ­do o definido por componente. |
+| `--hide-duration` | Token leÃ­do o definido por componente. |
+| `--auto-size-available-height` | Token leÃ­do o definido por componente. |
+| `--iswc-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-shadow` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-dropdown> — menú anclado a un trigger.
+> <iswc-dropdown> â€” menÃº anclado a un trigger.
 > El panel usa <dialog showModal()> (top layer) para no quedar debajo de
-> headings/secciones/overflow de ancestros — mismo patrón que iswc-combobox.
+> headings/secciones/overflow de ancestros â€” mismo patrÃ³n que iswc-combobox.
 > Slots: trigger | default (items / dividers / headings)
 > Attrs: open, placement (default bottom-start), distance, skidding
 > Events: iswc-show, iswc-after-show, iswc-hide, iswc-after-hide, iswc-select { item }
@@ -141,14 +163,14 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/position.js`](../_shared/position.js)
 - [`./dropdown-item.js`](./dropdown-item.js)
 - [`../layout/divider.js`](../layout/divider.js)
-- [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js) — ciclo de escucha
+- [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js) â€” ciclo de escucha
   mientras el panel esta abierto (teclado, scroll), compartido con `iswc-context-menu`.
 
-Tags del módulo: `<iswc-dropdown>`.
+Tags del mÃ³dulo: `<iswc-dropdown>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspopup`, `aria-expanded`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspopup`, `aria-expanded`.
 
 ## Ejemplo avanzado
 
@@ -163,7 +185,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -171,15 +193,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./dropdown.js)
+- [JavaScript](./dropdown.ts)
 - [CSS](./dropdown.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./dropdown.json)

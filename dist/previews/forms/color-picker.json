@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-color-picker",
   "category": "forms",
-  "title": "<iswc-color-picker>",
-  "titleHtml": true,
+  "title": "&lt;iswc-color-picker&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-color-picker",
   "hasBehavior": true,
   "sections": [
@@ -60,10 +60,6 @@
         {
           "kind": "demo",
           "html": "<iswc-color-picker\r\n            label=\"Paleta corta\"\r\n            swatches=\"#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529\"\r\n            value=\"#2f9e44\"\r\n            style=\"min-width:13rem\"\r\n          ></iswc-color-picker>\r\n          <iswc-color-picker label=\"Deshabilitado\" value=\"#c2255c\" disabled style=\"min-width:13rem\"></iswc-color-picker>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-color-picker\n  label=\"Color de marca\"\n  name=\"brand\"\n  value=\"#1971c2\"\n  swatches=\"#e03131,#f59f00,#2f9e44\"\n></iswc-color-picker>"
         }
       ]
     },
@@ -125,5 +121,59 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Trigger con muestra + hex. El panel (<code>input type=\"color\"</code>, campo hex y paleta) vive en un <code>&lt;dialog&gt;</code> en el top layer."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>name</code>",
+            "desc": "entra en FormData con el hex"
+          },
+          {
+            "metodo": "<code>value</code>",
+            "desc": "hex normalizado a <code>#rrggbb</code> (default <code>#808080</code>)"
+          },
+          {
+            "metodo": "<code>swatches</code>",
+            "desc": "lista hex separada por comas; si falta usa la paleta por defecto"
+          },
+          {
+            "metodo": "<code>label</code> <code>hint</code>",
+            "desc": "texto o slots homónimos"
+          },
+          {
+            "metodo": "<code>disabled</code> <code>required</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>base</code> <code>trigger</code> <code>swatch</code> <code>panel</code> <code>input</code> <code>hex-input</code> <code>label</code> <code>hint</code>"
+          },
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-input</code> { value } · <code>iswc-change</code> { value }"
+          },
+          {
+            "metodo": "métodos",
+            "desc": "<code>show()</code> <code>hide()</code> <code>checkValidity()</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></iswc-color-picker>\r\n          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

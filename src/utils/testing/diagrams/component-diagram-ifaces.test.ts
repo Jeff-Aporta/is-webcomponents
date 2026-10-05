@@ -4,7 +4,7 @@
 // síntesis de lollipops: un payload con `links` y sin `interfaces`
 // tiene que salir con O/C y path, o el PNG solo enseña cajas.
 
-import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_GAP, parseHttpEndpoint } from '../../../components/diagrams/component-spec.ts';
+import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_GAP, assemblyEntityMargin, parseHttpEndpoint } from '../../../components/diagrams/component-spec.ts';
 import { parsePathPoints } from '../../../components/_shared/diagram-edge-actors.ts';
 import { COL_GUTTER, EDGE_CLEARANCE, orthoPolysOverlap, pathHasDiagonal, pathIllegal, pathShareLen, pointInOrtho, segsFromPath, segmentoCortaCaja } from '../../../components/diagrams/component-pack.ts';
 
@@ -282,6 +282,32 @@ for (const e of fan.edges) {
   fanUsed.push(...segsFromPath(p));
 }
 check(fanShare < 80, `abanico no debe empilar tramos; share=${fanShare.toFixed(0)}`);
+
+{
+  // Seed apretado (estilo galería Gateway→Sesion→D1): el margen -(O- debe abrir hueco.
+  const voice = resolveComponentSpec({
+    componentDiagram: {
+      packages: [{ id: 'pkg-api', label: 'API', x: 36, y: 56, w: 540, h: 220 }],
+      components: [
+        { id: 'gw', label: 'Gateway', stereotype: 'worker', x: 56, y: 100, w: 140, h: 56 },
+        { id: 'sess', label: 'Sesion', stereotype: 'module', x: 300, y: 100, w: 140, h: 56 },
+        { id: 'db', label: 'D1', stereotype: 'db', x: 300, y: 188, w: 140, h: 50 },
+      ],
+      links: [
+        { from: 'gw', to: 'sess' },
+        { from: 'sess', to: 'db' },
+      ],
+    },
+  });
+  const need = assemblyEntityMargin();
+  const gw = voice.components.find((c) => c.id === 'gw');
+  const sess = voice.components.find((c) => c.id === 'sess');
+  const db = voice.components.find((c) => c.id === 'db');
+  const gapH = sess.x - (gw.x + gw.w);
+  const gapV = db.y - (sess.y + sess.h);
+  check(gapH + 0.5 >= need, `margen H Gateway↔Sesion ≥${need}; salió ${gapH.toFixed(1)}`);
+  check(gapV + 0.5 >= need, `margen V Sesion↔D1 ≥${need}; salió ${gapV.toFixed(1)}`);
+}
 
 {
   const low = resolveComponentSpec({

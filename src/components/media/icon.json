@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-icon",
   "category": "media",
-  "title": "<iswc-icon>",
-  "titleHtml": true,
+  "title": "&lt;iswc-icon&gt;",
+  "titleHtml": false,
   "styles": ".xp-embed {\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 0.6rem;\r\n      overflow: hidden;\r\n      background: var(--iswc-bg);\r\n      /* Alto fijo: el explorador scrollea internamente (su .xp), así que un\r\n         alto en auto lo colapsaría a 0. */\r\n      height: min(72vh, 720px);\r\n    }\r\n    .xp-embed iframe { display: block; width: 100%; height: 100%; border: 0; }",
   "storageKey": "docs-iswc-icon",
   "sections": [
@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon icon=\"mdi:home\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:check-circle\" style=\"color:var(--iswc-accent)\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:star\" label=\"Favorito\"></iswc-icon>\r\n            <iswc-icon icon=\"mdi:cog-outline\"></iswc-icon>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon id=\"pgIcon\" icon=\"mdi:home\"></iswc-icon>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -41,10 +41,6 @@
         {
           "kind": "demo",
           "html": "<span class=\"demo-label\">src personalizado</span>\r\n          <iswc-icon src=\"{assets}icons/mdi/heart.svg\" label=\"Corazón\" style=\"font-size:1.5rem;color:var(--iswc-accent)\"></iswc-icon>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-icon icon=\"mdi:home\"></iswc-icon>\n<iswc-icon icon=\"mdi:check-circle\"></iswc-icon>\n<iswc-icon src=\"./logo.svg\" label=\"Logo\"></iswc-icon>"
         }
       ]
     },
@@ -91,5 +87,42 @@
       ]
     }
   ],
-  "hasBehavior": true
+  "hasBehavior": true,
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "API única de iconos del kit. Usa <code class=\"code\">icon=\"grupo:nombre\"</code> (ids Iconify)\r\n          o <code class=\"code\">src</code> para un SVG/imagen. Escala con <code class=\"code\">font-size</code>.\r\n          Iconify se carga solo como dependencia interna."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>icon</code>",
+            "default": "—",
+            "desc": "Iconify id <code>grupo:nombre</code> (ej. <code>mdi:home</code>)."
+          },
+          {
+            "name": "<code>label</code>",
+            "default": "—",
+            "desc": "aria-label; vacío → aria-hidden."
+          },
+          {
+            "name": "<code>src</code>",
+            "default": "—",
+            "desc": "URL img/svg (gana sobre icon)."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"demo-row\" style=\"font-size:1.5rem; gap:1rem; align-items:center;\">\r\n            <iswc-icon icon=\"mdi:home\"></iswc-icon>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

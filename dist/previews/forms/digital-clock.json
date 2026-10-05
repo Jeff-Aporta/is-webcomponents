@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-digital-clock",
   "category": "forms",
-  "title": "<iswc-digital-clock>",
-  "titleHtml": true,
+  "title": "&lt;iswc-digital-clock&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-digital-clock de InSoft.",
   "storageKey": "docs-iswc-digital-clock",
   "sections": [
@@ -22,11 +22,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-digital-clock value=\"14:30\"></iswc-digital-clock>",
-          "lang": "html"
         }
       ]
     },
@@ -34,12 +29,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-digital-clock&gt; — Selector de hora en lista (MUI DigitalClock) o en columnas de horas / minutos / segundos / AM-PM (MultiSectionDigitalClock). Atributos: value (HH:mm[:ss]), layout (list|sections), step (minutos en lista), minutes-step, seconds, ampm, hour24, min-time, max-time, skip-disabled, locale, disabled, readonly Events: iswc-change { value }",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/digital-clock.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Reloj digital: muestra la hora en formato numérico y admite selección por teclado."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-digital-clock value=\"14:30\"></iswc-digital-clock>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

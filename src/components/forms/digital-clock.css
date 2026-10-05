@@ -18,10 +18,10 @@
     display: flex;
     gap: 0.25em;
     padding: 0.4em;
-    background: var(--iswc-bg-elev, #fff);
-    border: 1px solid var(--iswc-border, #d0d7de);
-    border-radius: var(--iswc-radius, 0.625em);
-    box-shadow: var(--iswc-shadow, none);
+    background: var(--iswc-bg-elev);
+    border: 1px solid var(--iswc-border);
+    border-radius: var(--iswc-radius);
+    box-shadow: var(--iswc-shadow);
   }
 
   /* Las columnas (HH/MM/SS) y la lista (grupo) comparten scroll vertical y
@@ -46,7 +46,7 @@
 
     & + .col {
       padding-inline-start: 0.25em;
-      border-inline-start: 1px solid var(--iswc-border, #d0d7de);
+      border-inline-start: 1px solid var(--iswc-border);
     }
   }
 
@@ -54,23 +54,23 @@
     flex: 0 0 auto;
     padding: 0.45em 0.7em;
     border: 0;
-    border-radius: var(--iswc-radius-sm, 0.375em);
+    border-radius: var(--iswc-radius-sm);
     background: transparent;
     color: inherit;
     font: inherit;
     font-variant-numeric: tabular-nums;
     text-align: center;
     cursor: pointer;
-    &:hover:not(:disabled) { background: var(--iswc-control-bg-hover, #e9ecef); }
+    &:hover:not(:disabled) { background: var(--iswc-control-bg-hover); }
 
     &:focus-visible {
-      outline: 2px solid var(--iswc-focus, var(--iswc-accent, #e03131));
+      outline: 2px solid var(--iswc-focus, var(--iswc-accent));
       outline-offset: -2px;
     }
 
     &[data-selected] {
-      background: var(--iswc-color-brand-strong, #c92a2a);
-      color: var(--iswc-on-brand, #fff);
+      background: var(--iswc-color-brand-strong);
+      color: var(--iswc-on-brand);
       font-weight: 600;
     }
 

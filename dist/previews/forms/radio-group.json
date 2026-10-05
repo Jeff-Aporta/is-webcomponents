@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-radio-group",
   "category": "forms",
-  "title": "<iswc-radio-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-radio-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-radio-group de InSoft.",
   "storageKey": "docs-iswc-radio-group",
   "sections": [
@@ -22,11 +22,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\n  <iswc-radio value=\"contado\">Contado</iswc-radio>\n  <iswc-radio value=\"credito\">Crédito</iswc-radio>\n  <iswc-radio value=\"mixto\">Mixto</iswc-radio>\n</iswc-radio-group>",
-          "lang": "html"
         }
       ]
     },
@@ -34,12 +29,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-radio-group&gt; — Grupo form-associated de &lt;iswc-radio&gt;. El grupo es el dueño del valor: los radios solo avisan con `iswc-radio-select`. Atributos name, value, label, hint orientation      vertical (default) | horizontal   ·   row = alias booleano de horizontal color          brand (default) | neutral | success | warning | danger label-placement  end (default) | start | top | bottom   (se aplica a los hijos) error-text       mensaje de error; sustituye al hint y activa el estado de error disabled, required, readonly, error   (boolean) Slots: default (&lt;iswc-radio&gt;), label, hint, error-text Parts: form-control, label, base, hint, error-text Custom states: disabled, readonly, error, blank Events: iswc-change { value }",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/radio-group.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Agrupa varios <code class=\"code\">&lt;iswc-radio&gt;</code> bajo un mismo nombre y expone el valor seleccionado como un único control de formulario."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-radio-group label=\"Forma de pago\" value=\"credito\" name=\"pago\">\n  <iswc-radio value=\"contado\">Contado</iswc-radio>\n  <iswc-radio value=\"credito\">Crédito</iswc-radio>\n  <iswc-radio value=\"mixto\">Mixto</iswc-radio>\n</iswc-radio-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

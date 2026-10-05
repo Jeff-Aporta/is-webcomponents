@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-masked-input",
   "category": "forms",
-  "title": "<iswc-masked-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-masked-input&gt;",
+  "titleHtml": false,
   "styles": ".mask-row { display: grid; grid-template-columns: 12rem 1fr; gap: 1rem; align-items: center; padding: .35rem 0; }\r\n    .mask-row label { font-size: .82rem; color: var(--iswc-text-soft); }",
   "storageKey": "docs-iswc-masked-input",
   "sections": [
@@ -72,7 +72,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"mask-row\"><label>Tarjeta</label>\r\n            <iswc-masked-input id=\"card\" pattern=\"0000 0000 0000 0000\" autocomplete=\"cc-number\"></iswc-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Vencimiento</label>\r\n            <iswc-masked-input pattern=\"00/00\" placeholder=\"MM/AA\" required></iswc-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Fecha</label>\r\n            <iswc-masked-input pattern=\"00/00/0000\" placeholder=\"DD/MM/AAAA\"></iswc-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Teléfono</label>\r\n            <iswc-masked-input pattern=\"(+00) 0000-0000\" placeholder=\"(+57) 3000-0000\"></iswc-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hora</label>\r\n            <iswc-masked-input pattern=\"00:00\" placeholder=\"HH:MM\"></iswc-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Código postal</label>\r\n            <iswc-masked-input pattern=\"A0A 0A0\"></iswc-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Placa</label>\r\n            <iswc-masked-input pattern=\"AAA-0000\"></iswc-masked-input>\r\n          </div>\r\n          <div class=\"mask-row\"><label>Hex color</label>\r\n            <iswc-masked-input pattern=\"#000000\" placeholder=\"#000000\" value=\"1a2b\"></iswc-masked-input>\r\n          </div>",
+          "html": "<div class=\"mask-row\"><label>Tarjeta</label>\r\n            <iswc-masked-input id=\"card\" pattern=\"0000 0000 0000 0000\" autocomplete=\"cc-number\"></iswc-masked-input>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -130,5 +130,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo de texto que aplica un patrón mientras el usuario tipea. Útil para tarjetas, fechas, teléfonos y todo formato con estructura fija."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

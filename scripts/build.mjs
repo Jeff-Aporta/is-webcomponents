@@ -127,7 +127,9 @@ async function walk(dir, out = []) {
                && !name.name.endsWith('.d.ts')
                && !name.name.includes('.selfcheck.')
                && !name.name.includes('.preview.')
-               && !name.name.endsWith('.json')) {
+               && !name.name.endsWith('.json')
+               // Companions de iswc-doc-demo: boot ESM + host module (no CE).
+               && !/^doc-demo-(boot|host)\.(ts|js)$/.test(name.name)) {
       out.push(p);
     }
   }
@@ -384,13 +386,49 @@ console.log(`  ${'palettes'.padEnd(18)} css ${String(palettesStat.size).padStart
 await copyFile(baseOut, join(dist, 'is-base.min.css'));
 await copyFile(palettesOut, join(dist, 'palettes.min.css'));
 
+// ── iswc-doc-demo companions (boot ESM + host module + page CSS) ──
+{
+  const previewDist = join(dist, 'preview');
+  await mkdir(previewDist, { recursive: true });
+  const bootIn = join(compRoot, 'layout', 'doc-demo-boot.ts');
+  const hostIn = join(compRoot, 'layout', 'doc-demo-host.ts');
+  const bootOut = join(previewDist, 'doc-demo-boot.min.js');
+  const hostOut = join(previewDist, 'doc-demo-host.min.js');
+  const shellOut = join(previewDist, 'doc-shell.min.css');
+  const presentationOut = join(previewDist, 'doc-presentation.min.css');
+
+  await bundleMinJs({
+    entry: bootIn,
+    outfile: bootOut,
+    format: 'esm',
+    banner: docsBanner([`md: ${GH_RAW}/src/components/layout/doc-demo.md`]),
+  });
+  await bundleMinJs({
+    entry: hostIn,
+    outfile: hostOut,
+    format: 'esm',
+    target: 'es2022',
+    banner: docsBanner([`md: ${GH_RAW}/src/components/layout/doc-demo.md`]),
+  });
+  await bundleCss(join(root, 'src', 'styles', 'shell.css'), shellOut);
+  await bundleCss(join(root, 'src', 'styles', 'presentation.css'), presentationOut);
+
+  const [b, h, sh, pr] = await Promise.all([
+    stat(bootOut), stat(hostOut), stat(shellOut), stat(presentationOut),
+  ]);
+  console.log(`  ${'doc-demo-boot'.padEnd(18)} js ${String(b.size).padStart(6)}  (module)`);
+  console.log(`  ${'doc-demo-host'.padEnd(18)} js ${String(h.size).padStart(6)}  (module)`);
+  console.log(`  ${'doc-shell'.padEnd(18)} css ${String(sh.size).padStart(6)}`);
+  console.log(`  ${'doc-presentation'.padEnd(18)} css ${String(pr.size).padStart(6)}`);
+}
+
 try { await unlink(join(dist, 'all.min.js')); } catch { /* leftover */ }
 for (const [category] of byCategory) {
   try { await unlink(join(dist, category, `category.${category}.min.js`)); } catch { /* leftover */ }
 }
 
 // ── loader.min.js ────────────────────────────────────────────────
-// Entry liviano: manifiesto embebido + load / loadCSSBase / loadCSSPalettesDefault.
+// Entry liviano: manifiesto embebido + load / loadPageStyles (alias iswc-palettes-default).
 const loaderCatalog = {
   aliases: { charts: 'data-viz', 'data-viz': 'data-viz', dataviz: 'data-viz' },
   categories: {},
@@ -489,7 +527,8 @@ await build({
   bundle: true,
   minify: true,
   format: 'esm',
-  target: 'es2020',
+  // es2022: TLA para esperar el shell de iswc-doc-demo (host sibling async).
+  target: 'es2022',
   legalComments: 'none',
   // load-json.ts tiene imports dinamicos node:* solo para tests; el browser usa fetch.
   external: ['node:fs', 'node:url'],
@@ -545,5 +584,17 @@ const indexNext = applyHashToHtml(indexPrev, hashes);
 if (indexNext !== indexPrev) await writeFile(indexPath, indexNext);
 const htmlTouched = await rewriteHtmlTree(join(root, 'demos'), hashes) + (indexNext !== indexPrev ? 1 : 0);
 console.log(`  html                 ${htmlTouched} con ?h=`);
+
+// Pin de auto-reload: el snippet embebido en cada HTML hace polling de este
+// endpoint y recarga el browser al cambiar. Lo escribimos también al build
+// (valor estable basado en HEAD) para que producción / `deno task dev` sin
+// watcher no devuelvan 404. El watcher (`scripts/watch.mjs`) lo sobreescribe
+// con un timestamp al detectar cambios.
+await writeFile(
+  join(dist, 'reload-pin'),
+  `build:${shaDelBuild().slice(0, 12)}\n`,
+  'utf8',
+);
+console.log(`  reload-pin           build:<sha>`);
 
 console.log(`OK dist/cdn  ${entries.length} components + is-base + loader + gallery-app`);

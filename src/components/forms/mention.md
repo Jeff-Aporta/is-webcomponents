@@ -1,45 +1,45 @@
----
+﻿---
 tag: iswc-mention
 tags:
   - iswc-mention
 category: forms
 status: public
-source: ./mention.js
+source: ./mention.ts
 style: ./mention.css
 preview: ./mention.json
 ---
 # `<iswc-mention>`
 
-## Propósito
+## PropÃ³sito
 
 Campo de texto con autocompletado disparado por caracteres trigger (`@`
 usuario, `#` etiqueta). Al escribir un trigger se abre un popup filtrado; al
-elegir, el texto se inserta en línea y el `value` sigue siendo texto plano.
+elegir, el texto se inserta en lÃ­nea y el `value` sigue siendo texto plano.
 
-Este módulo registra `<iswc-mention>`.
+Este mÃ³dulo registra `<iswc-mention>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Comentarios, notas y descripciones donde el usuario menciona personas o
 etiqueta contenido.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Para elegir de un catálogo cerrado usar `<iswc-combobox>` o `<iswc-select>`; para
+Para elegir de un catÃ¡logo cerrado usar `<iswc-combobox>` o `<iswc-select>`; para
 texto enriquecido con formato usar `<iswc-rte>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './mention.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-mention placeholder="Escribe @ para mencionar">
   <script type="application/json">
-    { "@": ["Ana", "Pedro", "Sofía"], "#": ["urgente", "bug"] }
+    { "@": ["Ana", "Pedro", "SofÃ­a"], "#": ["urgente", "bug"] }
   </script>
 </iswc-mention>
 ```
@@ -53,20 +53,20 @@ import './mention.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `value` | string | Texto completo del campo. |
-| `name` | string | Nombre lógico del campo. |
+| `name` | string | Nombre lÃ³gico del campo. |
 | `placeholder` | string | Texto de ayuda. |
 | `disabled` | boolean | Deshabilita el input interno. |
 | `readonly` | boolean | Solo lectura. |
 | `trigger` | string | Caracteres que abren el popup, default `@#`. |
 | `max-items` | number | Tope de sugerencias mostradas, default `8`. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
 | `value` | lectura/escritura | Texto plano; escribirlo refleja el atributo. |
 | `suggestions` | lectura/escritura | Objeto `{ [trigger]: string[] }`. Sustituye al `<script>` del slot. |
-| `isOpen` | lectura | `true` mientras el popup está visible. |
+| `isOpen` | lectura | `true` mientras el popup estÃ¡ visible. |
 
 ### Slots
 
@@ -76,18 +76,38 @@ import './mention.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-input` | sin detail | sí | sí | no |
-| `iswc-select` | `{ trigger, item, range: [start, end] }` | sí | sí | no |
-| `iswc-change` | `{ value }` | sí | sí | no |
+| `iswc-input` | sin detail | sÃ­ | sÃ­ | no |
+| `iswc-select` | `{ trigger, item, range: [start, end] }` | sÃ­ | sÃ­ | no |
+| `iswc-change` | `{ value }` | sÃ­ | sÃ­ | no |
 
-`iswc-change` se emite al seleccionar una sugerencia, no en cada pulsación.
+`iswc-change` se emite al seleccionar una sugerencia, no en cada pulsaciÃ³n.
 
-### Métodos y propiedades públicas
 
-No expone métodos públicos; la interacción es por teclado y puntero.
-Las propiedades públicas figuran en la tabla anterior.
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-mention');
+el.addEventListener('iswc-input', (e) => {
+  console.log('iswc-input', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+No expone mÃ©todos pÃºblicos; la interacciÃ³n es por teclado y puntero.
+Las propiedades pÃºblicas figuran en la tabla anterior.
 
 ### CSS parts
 
@@ -113,22 +133,22 @@ No expone custom states.
 | `--iswc-border` | Borde del popup. |
 | `--iswc-radius` | Radio del popup. |
 | `--iswc-shadow` | Sombra del popup. |
-| `--iswc-accent` | Realce de la opción activa. |
+| `--iswc-accent` | Realce de la opciÃ³n activa. |
 | `--iswc-focus` | Anillo de foco. |
-| `--iswc-text-soft` | Carácter trigger en la opción. |
+| `--iswc-text-soft` | CarÃ¡cter trigger en la opciÃ³n. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated: `name` es descriptivo y el valor no llega a `FormData`
-por sí solo. Reflejarlo en un campo oculto desde `iswc-input` si se envía por
+por sÃ­ solo. Reflejarlo en un campo oculto desde `iswc-input` si se envÃ­a por
 formulario nativo.
 
 ## Comportamiento
 
-- En cada pulsación se busca hacia atrás el último carácter trigger antes del
+- En cada pulsaciÃ³n se busca hacia atrÃ¡s el Ãºltimo carÃ¡cter trigger antes del
   caret; si el texto entre trigger y caret contiene un espacio, el popup se
   cierra.
-- El filtro es `includes` sin distinguir mayúsculas, recortado a `max-items`.
+- El filtro es `includes` sin distinguir mayÃºsculas, recortado a `max-items`.
 - Teclado con popup abierto: `ArrowDown` / `ArrowUp` mueven, `Enter` o `Tab`
   seleccionan, `Escape` cierra.
 - Al seleccionar se reemplaza el rango `[trigger, caret]` por
@@ -141,12 +161,12 @@ formulario nativo.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del módulo: `<iswc-mention>`.
+Tags del mÃ³dulo: `<iswc-mention>`.
 
 ## Accesibilidad
 
 El popup usa `role="listbox"` y sus opciones `role="option"`. Las opciones son
-botones alcanzables con teclado y la navegación ocurre con flechas sin mover
+botones alcanzables con teclado y la navegaciÃ³n ocurre con flechas sin mover
 el foco fuera del input.
 
 ## Ejemplo avanzado
@@ -167,24 +187,24 @@ el foco fuera del input.
 ## Errores comunes
 
 - Cambiar el `<script type="application/json">` tras conectar el componente:
-  solo se lee al conectar; después usar la propiedad `suggestions`.
+  solo se lee al conectar; despuÃ©s usar la propiedad `suggestions`.
 - Esperar chips u objetos: el `value` es siempre texto plano.
-- Esperar `iswc-change` en cada tecla: ahí se emite `iswc-input`.
-- Definir `trigger` con más de un carácter por token: cada carácter de la
+- Esperar `iswc-change` en cada tecla: ahÃ­ se emite `iswc-input`.
+- Definir `trigger` con mÃ¡s de un carÃ¡cter por token: cada carÃ¡cter de la
   cadena es un trigger independiente.
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./mention.js)
+- [JavaScript](./mention.ts)
 - [CSS](./mention.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./mention.json)

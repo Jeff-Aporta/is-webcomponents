@@ -18,16 +18,9 @@ import { withStyleAttrs } from '../../core/attrs.js';
     <span part="spinner" class="spinner" aria-hidden="true"></span>
   `;
 
-  class IswcSpinner extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      'track-width': '--iswc-spinner-track-width',
-      'track-color': { prop: '--iswc-spinner-track-color', onlyColorValues: true },
-      color: { prop: '--iswc-spinner-color', onlyColorValues: true },
-      speed: '--iswc-spinner-speed',
-    };
+  class IswcSpinner extends withStyleAttrs(HTMLElement) {
 
-    static get observedAttributes(): string[] { return IswcSpinner.styleAttrNames; }
+    static get observedAttributes(): string[] { return []; }
 
     constructor() {
       super();

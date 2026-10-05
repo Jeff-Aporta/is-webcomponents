@@ -1,42 +1,42 @@
----
+﻿---
 tag: iswc-toast-item
 tags:
   - iswc-toast-item
 category: feedback
 status: public
-source: ./toast-item.js
+source: ./toast-item.ts
 style: ./toast-item.css
 preview: ./toast-item.json
 ---
 # `<iswc-toast-item>`
 
-## Propósito
+## PropÃ³sito
 
 Un toast individual: la tarjeta que muestra el mensaje, su icono opcional, el
-botón de cerrar y la barra de countdown que se agota hasta auto-ocultarse
-(pausa al pasar el ratón o al enfocar dentro).
+botÃ³n de cerrar y la barra de countdown que se agota hasta auto-ocultarse
+(pausa al pasar el ratÃ³n o al enfocar dentro).
 
 Es la pieza que apila `<iswc-toast>`; normalmente no se instancia a mano, pero
 puede declararse suelto cuando se quiere un aviso fijo en una zona concreta.
-No tiene `create()` — eso vive en `<iswc-toast>` (ver [toast.md](./toast.md)).
+No tiene `create()` â€” eso vive en `<iswc-toast>` (ver [toast.md](./toast.md)).
 
-Este módulo registra `<iswc-toast-item>`.
+Este mÃ³dulo registra `<iswc-toast-item>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Estado, progreso, confirmación, carga o resultado de operaciones.
+Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No saturar interfaz con señales redundantes o alertas sin acción.
+No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './toast-item.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-toast-item></iswc-toast-item>
@@ -50,11 +50,11 @@ import './toast-item.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
-| `duration` | string/según contrato | Fuente define default/restricción. |
-| `open` | boolean | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `duration` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `open` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -66,26 +66,45 @@ import './toast-item.js';
 
 | Slot | Uso |
 | --- | --- |
-| `default` | Título. |
+| `default` | TÃ­tulo. |
 | `icon` | Contenido proyectado. |
 | `start` | Contenido proyectado. |
-| `caption` | Texto menor bajo el título. |
+| `caption` | Texto menor bajo el tÃ­tulo. |
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-after-show` | Emitido tras finalizar la animaciÃ³n de apertura. |
+| `iswc-after-hide` | Emitido tras finalizar la animaciÃ³n de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-after-show` | `{ color, message, caption, log }` | sí | sí | no |
-| `iswc-after-hide` | no | sí | sí | no |
+| `iswc-after-show` | `{ color, message, caption, log }` | sÃ­ | sÃ­ | no |
+| `iswc-after-hide` | no | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-toast-item');
+el.addEventListener('iswc-after-show', (e) => {
+  console.log('iswc-after-show', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `show()` | Método público declarado. |
-| `hide()` | Método público declarado. |
+| `show()` | MÃ©todo pÃºblico declarado. |
+| `hide()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -107,45 +126,45 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--_bg` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--_border` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--_text` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--_accent` | Token leído o definido por componente. |
-| `--iswc-muted` | Token leído o definido por componente. |
-| `--iswc-font-family` | Token leído o definido por componente. |
-| `--iswc-color-brand-50` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--iswc-color-brand-700` | Token leído o definido por componente. |
-| `--iswc-color-success-50` | Token leído o definido por componente. |
-| `--iswc-color-success-500` | Token leído o definido por componente. |
-| `--iswc-color-success-700` | Token leído o definido por componente. |
-| `--iswc-color-warning-50` | Token leído o definido por componente. |
-| `--iswc-color-warning-500` | Token leído o definido por componente. |
-| `--iswc-color-warning-700` | Token leído o definido por componente. |
-| `--iswc-color-danger-50` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-color-danger-700` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
+| `--_bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--_border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--_text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--_accent` | Token leÃ­do o definido por componente. |
+| `--iswc-muted` | Token leÃ­do o definido por componente. |
+| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-50` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-50` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-success-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-50` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-warning-700` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-50` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-700` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-toast-item> — Web Component (vanilla).
-> Ítem individual de toast con countdown y cierre.
+> <iswc-toast-item> â€” Web Component (vanilla).
+> Ãtem individual de toast con countdown y cierre.
 > Atributos
 >   color   brand | success | warning | danger | neutral (default brand)
 >   duration  number ms (default 5000; 0 = hasta dismiss). Reflect.
->   open      boolean — visible
-> Slots: default (título), caption, icon | start
-> Métodos: show(), hide()
+>   open      boolean â€” visible
+> Slots: default (tÃ­tulo), caption, icon | start
+> MÃ©todos: show(), hide()
 > Eventos (bubbles, composed): iswc-after-show { color, message, caption, log }, iswc-after-hide
 > CSS Parts: ::part(base) ::part(icon) ::part(message) ::part(title) ::part(caption) ::part(close-button) ::part(progress)
 
@@ -154,11 +173,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<iswc-toast-item>`.
+Tags del mÃ³dulo: `<iswc-toast-item>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`, `aria-label`, `aria-hidden`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`, `aria-label`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -168,7 +187,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -176,15 +195,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-live`,
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./toast-item.js)
+- [JavaScript](./toast-item.ts)
 - [CSS](./toast-item.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./toast-item.json)

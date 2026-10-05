@@ -1,40 +1,40 @@
----
+﻿---
 tag: iswc-input
 tags:
   - iswc-input
 category: forms
 status: public
-source: ./input.js
+source: ./input.ts
 style: ./input.css
 preview: ./input.json
 ---
 # `<iswc-input>`
 
-## Propósito
+## PropÃ³sito
 
 Campo de texto form-associated con paridad funcional con el
 TextField de MUI:
-tres variants, estado de error ligado a la validación nativa, adornos, contador de
-caracteres y ancho controlable. Participa en <form> vía
+tres variants, estado de error ligado a la validaciÃ³n nativa, adornos, contador de
+caracteres y ancho controlable. Participa en <form> vÃ­a
 ElementInternals.
 
-Este módulo registra `<iswc-input>`.
+Este mÃ³dulo registra `<iswc-input>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './input.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-input label="outlined (default)"></iswc-input>
@@ -50,31 +50,31 @@ import './input.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `type` | string/según contrato | Fuente define default/restricción. |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `placeholder` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `hint` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `required` | boolean | Fuente define default/restricción. |
-| `readonly` | boolean | Fuente define default/restricción. |
-| `clearable` | boolean | Fuente define default/restricción. |
-| `password-toggle` | boolean | Fuente define default/restricción. |
-| `min` | string/según contrato | Fuente define default/restricción. |
-| `max` | string/según contrato | Fuente define default/restricción. |
-| `step` | string/según contrato | Fuente define default/restricción. |
-| `maxlength` | string/según contrato | Fuente define default/restricción. |
-| `autocomplete` | string/según contrato | Fuente define default/restricción. |
-| `error` | boolean | Fuente define default/restricción. |
-| `error-text` | string/según contrato | Fuente define default/restricción. |
-| `show-count` | boolean | Fuente define default/restricción. |
-| `prefix` | string/según contrato | Fuente define default/restricción. |
-| `suffix` | string/según contrato | Fuente define default/restricción. |
+| `type` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `placeholder` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `required` | boolean | Fuente define default/restricciÃ³n. |
+| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `clearable` | boolean | Fuente define default/restricciÃ³n. |
+| `password-toggle` | boolean | Fuente define default/restricciÃ³n. |
+| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `step` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `maxlength` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `autocomplete` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `error` | boolean | Fuente define default/restricciÃ³n. |
+| `error-text` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `show-count` | boolean | Fuente define default/restricciÃ³n. |
+| `prefix` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `suffix` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `label-placement` | `top` / `start` / `float` | Default `top`. `float` = etiqueta flotante estilo ISP. |
-| `data-typing-delay` | número (ms) | Debounce de `iswc-typing-end`. Default 600. |
+| `data-typing-delay` | nÃºmero (ms) | Debounce de `iswc-typing-end`. Default 600. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -120,28 +120,51 @@ import './input.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `input` | Evento nativo al cambiar el valor. |
+| `change` | Evento nativo al confirmar el cambio de valor. |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-typing-end` | Emitido tras el debounce de escritura (default 600 ms). |
+| `iswc-otp` | Emitido al autocompletar el valor vÃ­a Web OTP (autocomplete="one-time-code"). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `input` | no | sí | sí | no |
-| `change` | no | sí | sí | no |
-| `iswc-input` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-typing-end` | `{ value }` | sí | sí | no |
-| `iswc-otp` | `{ code }` | sí | sí | no |
+| `input` | no | sÃ­ | sÃ­ | no |
+| `change` | no | sÃ­ | sÃ­ | no |
+| `iswc-input` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-typing-end` | `{ value }` | sÃ­ | sÃ­ | no |
+| `iswc-otp` | `{ code }` | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-input');
+el.addEventListener('input', (e) => {
+  console.log('input', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `focus()` | Método público declarado. |
-| `blur()` | Método público declarado. |
-| `select()` | Método público declarado. |
-| `setSelectionRange()` | Método público declarado. |
-| `checkValidity()` | Método público declarado. |
-| `reportValidity()` | Método público declarado. |
-| `setCustomValidity()` | Método público declarado. |
+| `focus()` | MÃ©todo pÃºblico declarado. |
+| `blur()` | MÃ©todo pÃºblico declarado. |
+| `select()` | MÃ©todo pÃºblico declarado. |
+| `setSelectionRange()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | MÃ©todo pÃºblico declarado. |
+| `reportValidity()` | MÃ©todo pÃºblico declarado. |
+| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -166,52 +189,52 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Estado | Uso |
 | --- | --- |
-| `:state(invalid)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
-| `:state(readonly)` | Estado usado por implementación/CSS. |
-| `:state(blank)` | Estado usado por implementación/CSS. |
-| `:state(focused)` | Estado usado por implementación/CSS. |
-| `:state(password-visible)` | Estado usado por implementación/CSS. |
+| `:state(invalid)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(readonly)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(blank)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(focused)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(password-visible)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-field-width` | Token leído o definido por componente. |
-| `--iswc-field-label-width` | Token leído o definido por componente. |
-| `--iswc-input-border-radius` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-input-border` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-input-bg` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-input-text` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--iswc-input-focus` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-input-danger` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-input-danger-text` | Token leído o definido por componente. |
-| `--iswc-danger-text` | Token leído o definido por componente. |
-| `--iswc-color-danger-700` | Token leído o definido por componente. |
-| `--_border` | Token leído o definido por componente. |
-| `--_focus` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-field-width` | Token leÃ­do o definido por componente. |
+| `--iswc-field-label-width` | Token leÃ­do o definido por componente. |
+| `--iswc-input-border-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-input-border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-input-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-input-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-input-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-input-danger` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-input-danger-text` | Token leÃ­do o definido por componente. |
+| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-700` | Token leÃ­do o definido por componente. |
+| `--_border` | Token leÃ­do o definido por componente. |
+| `--_focus` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
+> <iswc-input> â€” Campo de texto form-associated (vanilla + Shadow DOM).
 > Atributos
 >   type            text | email | password | number | search | tel | url | date  (default text)
 >   name, value, placeholder, label, hint, autocomplete
@@ -239,23 +262,23 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/web-otp.js`](../_shared/web-otp.js)
 - [`../media/icon.js`](../media/icon.js)
 
-Tags del módulo: `<iswc-input>`.
+Tags del mÃ³dulo: `<iswc-input>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-describedby`, `aria-label`, `aria-invalid`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-describedby`, `aria-label`, `aria-invalid`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-input type="password" label="Contraseña" password-toggle></iswc-input>
+<iswc-input type="password" label="ContraseÃ±a" password-toggle></iswc-input>
 <iswc-input type="number" label="Cantidad" min="0" max="100" step="5"></iswc-input>
 <iswc-input type="search" label="Buscar" clearable></iswc-input>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -263,15 +286,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./input.js)
+- [JavaScript](./input.ts)
 - [CSS](./input.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./input.json)

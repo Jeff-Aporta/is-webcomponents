@@ -27,13 +27,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   const OBSERVED = ['value', 'label', 'indeterminate'];
 
-  class IswcProgressBar extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'track-height': '--iswc-progress-bar-track-height',
-    'track-color': '--iswc-progress-bar-track-color',
-    color: { prop: '--iswc-progress-bar-color', onlyColorValues: true },
-    };
+  class IswcProgressBar extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-height', 'track-color', 'color']; }
 

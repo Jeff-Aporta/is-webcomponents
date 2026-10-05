@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-heatmap",
   "category": "data-viz",
-  "title": "<iswc-heatmap>",
-  "titleHtml": true,
+  "title": "&lt;iswc-heatmap&gt;",
+  "titleHtml": false,
   "styles": ".heat-wrap { height: 22rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
   "storageKey": "docs-iswc-heatmap",
   "hasBehavior": true,
@@ -88,5 +88,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Matriz coloreada por valor. Útil para visualizar correlaciones, frecuencias a lo largo de día × semana, o calor por hora × servidor."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

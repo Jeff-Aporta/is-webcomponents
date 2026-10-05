@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-doughnut-chart",
   "category": "data-viz",
-  "title": "<iswc-doughnut-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-doughnut-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-doughnut-chart",
   "sections": [
     {
@@ -24,5 +24,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Proporciones con centro hueco."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-doughnut-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}\r\n            </script>\r\n          </iswc-doughnut-chart>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

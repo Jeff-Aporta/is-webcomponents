@@ -1,45 +1,45 @@
----
+﻿---
 tag: iswc-accordion-group
 tags:
   - iswc-accordion-group
 category: isp
 status: public
-source: ./accordion-group.js
+source: ./accordion-group.ts
 style: ./accordion-group.css
 preview: ./accordion-group.json
 ---
 # `<iswc-accordion-group>`
 
-## Propósito
+## PropÃ³sito
 
 Coordinador de varios `<iswc-details>`. Port de
 `src/lib/navigation/accordion/Accordion.svelte` (ISP-SvelteComponents), donde el
-contenedor mantenía la lista de abiertos y el item solo la consultaba.
+contenedor mantenÃ­a la lista de abiertos y el item solo la consultaba.
 
-Este módulo registra `<iswc-accordion-group>`.
+Este mÃ³dulo registra `<iswc-accordion-group>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Cuando varios disclosures deben comportarse como un acordeón: uno abierto a la
+Cuando varios disclosures deben comportarse como un acordeÃ³n: uno abierto a la
 vez, o varios con `multiple`.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No usar para un único disclosure: para eso está `<iswc-details>` a secas. Tampoco
-para pestañas — eso es `<iswc-tab-group>`.
+No usar para un Ãºnico disclosure: para eso estÃ¡ `<iswc-details>` a secas. Tampoco
+para pestaÃ±as â€” eso es `<iswc-tab-group>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './accordion-group.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-accordion-group>
-  <iswc-details summary="Datos básicos" open>…</iswc-details>
-  <iswc-details summary="Contacto">…</iswc-details>
+  <iswc-details summary="Datos bÃ¡sicos" open>â€¦</iswc-details>
+  <iswc-details summary="Contacto">â€¦</iswc-details>
 </iswc-accordion-group>
 ```
 
@@ -51,9 +51,9 @@ import './accordion-group.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `multiple` | boolean | Permite varios paneles abiertos. Sin él, abrir uno cierra el resto. |
+| `multiple` | boolean | Permite varios paneles abiertos. Sin Ã©l, abrir uno cierra el resto. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -65,17 +65,35 @@ import './accordion-group.js';
 
 | Slot | Uso |
 | --- | --- |
-| `default` | Uno o más `<iswc-details>`. |
+| `default` | Uno o mÃ¡s `<iswc-details>`. |
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-accordion-change` | Evento personalizado del componente (accordion change). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-accordion-change` | `{ open, opened, closed }` | sí | sí | no |
+| `iswc-accordion-change` | `{ open, opened, closed }` | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-accordion-group');
+el.addEventListener('iswc-accordion-change', (e) => {
+  console.log('iswc-accordion-change', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
 | `showAll()` | Abre todos (solo con `multiple`). |
 | `hideAll()` | Cierra todos. |
@@ -94,16 +112,16 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-accordion-gap` | Separación vertical entre paneles. |
+| `--iswc-accordion-gap` | SeparaciÃ³n vertical entre paneles. |
 
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated.
+No declara integraciÃ³n form-associated.
 ## Comportamiento
 
 El grupo NO reimplementa el disclosure: escucha los `iswc-show` / `iswc-hide`
-(composed) de sus `<iswc-details>` hijos y cierra los demás cuando toca. Si el
+(composed) de sus `<iswc-details>` hijos y cierra los demÃ¡s cuando toca. Si el
 markup llega con varios `open` y no hay `multiple`, sobrevive el primero.
 
 ## Dependencias y componentes relacionados
@@ -111,18 +129,18 @@ markup llega con varios `open` y no hay `multiple`, sobrevive el primero.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../layout/details.js`](../layout/details.js)
 
-Tags del módulo: `<iswc-accordion-group>`.
+Tags del mÃ³dulo: `<iswc-accordion-group>`.
 
 ## Accesibilidad
 
-Cada panel conserva el `aria-expanded` y el botón de `<iswc-details>`.
+Cada panel conserva el `aria-expanded` y el botÃ³n de `<iswc-details>`.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-accordion-group id="faq" multiple>
-  <iswc-details summary="Facturación">Contenido</iswc-details>
-  <iswc-details summary="Nómina">Contenido</iswc-details>
+  <iswc-details summary="FacturaciÃ³n">Contenido</iswc-details>
+  <iswc-details summary="NÃ³mina">Contenido</iswc-details>
 </iswc-accordion-group>
 
 <script type="module">
@@ -137,16 +155,16 @@ Cada panel conserva el `aria-expanded` y el botón de `<iswc-details>`.
 ## Errores comunes
 
 - Anidar los `<iswc-details>` dentro de un wrapper: deben ser hijos directos.
-- Usar el atributo `name` de `<iswc-details>` a la vez que el grupo (doble coordinación).
+- Usar el atributo `name` de `<iswc-details>` a la vez que el grupo (doble coordinaciÃ³n).
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"`.
 
 ## Fuentes
 
-- [JavaScript](./accordion-group.js)
+- [JavaScript](./accordion-group.ts)
 - [CSS](./accordion-group.css)
 - [Preview](./accordion-group.json)

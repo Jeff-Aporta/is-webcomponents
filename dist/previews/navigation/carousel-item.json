@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-carousel-item",
   "category": "navigation",
-  "title": "<iswc-carousel-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-carousel-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-carousel-item de InSoft.",
   "styles": ".slide { display:grid; place-items:center; height:180px; border-radius:.6rem;\r\n      background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); font-weight:600; }",
   "storageKey": "docs-iswc-carousel-item",
@@ -16,11 +16,6 @@
         {
           "kind": "demo",
           "html": "<iswc-carousel style=\"max-width:520px\">\r\n            <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>\r\n          </iswc-carousel>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-carousel style=\"max-width:520px\">\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>\n</iswc-carousel>",
-          "lang": "html"
         }
       ]
     },
@@ -28,12 +23,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-carousel&gt; + &lt;iswc-carousel-item&gt; — Web Components (vanilla, zero dependencies). Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next, indicadores y soporte para swipe en touch. &lt;iswc-carousel autoplay loop&gt; &lt;iswc-carousel-item&gt;…&lt;/iswc-carousel-item&gt; &lt;iswc-carousel-item&gt;…&lt;/iswc-carousel-item&gt; &lt;iswc-carousel-item&gt;…&lt;/iswc-carousel-item&gt; &lt;/iswc-carousel&gt; Atributos &lt;iswc-carousel&gt; active             number (0-indexed) loop               boolean                  (default false) autoplay           number (ms)              (default 0 — desactivado) without-controls   boolean                  (oculta prev/next) without-indicators boolean                  (oculta indicators) vertical           boolean                  (slides verticales) slides-per-page    number                   (default 1) aspect-ratio       string                   (CSS, e.g. \"16/9\") Atributos &lt;iswc-carousel-item&gt; label              string (accesibilidad) disabled           boolean Slots &lt;iswc-carousel&gt; (default)    items. prev-icon    override del icono prev. next-icon    override del icono next. &lt;iswc-carousel-item&gt; (default)   contenido del slide. Eventos iswc-carousel-change detail: { from, to, item } iswc-carousel-pause  detail: { reason: 'user' | 'auto' | 'visibility' } iswc-carousel-play   detail: {} iswc-carousel-slide-end (cuando termina swipe) CSS Parts iswc-carousel: ::part(base) ::part(viewport) ::part(track) ::part(indicators) ::part(controls) iswc-carousel-item: ::part(base)",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/carousel.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Cada diapositiva de un <code class=\"code\">&lt;iswc-carousel&gt;</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-carousel style=\"max-width:520px\">\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>\n</iswc-carousel>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

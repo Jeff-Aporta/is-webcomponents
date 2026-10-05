@@ -10,6 +10,7 @@
 import "../../flex-options.js";
 import "../../float-card.js";
 import type { TreeActionEntry, TreeActionSpec, TNode } from "./_types.js";
+import { HandlerStoreSchema, ControllerWithLockSchema, type HandlerStore, type ControllerWithLock } from "./render-rows.schema.js";
 
 /** Opciones que recibe `paintForest` para customizar el pintado. */
 interface RenderOpts {
@@ -32,7 +33,7 @@ interface RenderAdapter {
 }
 
 /** Forma del "row config" que `paintRow` consume para aplicar CSS / aria. */
-interface RowController {
+export interface RowController {
   flatPath: string;
   isSelected: boolean;
   isHighlighted: boolean;
@@ -114,7 +115,6 @@ function applySummaryClass(sum: HTMLElement, rc: RowController): void {
 }
 
 /** Almacén de handlers en `._trvwrH` para evitar doble-binding. */
-type HandlerStore = Record<string, EventListener | undefined>;
 
 /** Liga un evento a `el` con `fn` y guarda el handler bajo `key` para idempotencia. */
 function bindOnce(
@@ -202,7 +202,6 @@ function paintHandle(row: HTMLElement, rc: RowController): void {
 /** Tipo del `isLockedByProtection` que consume `paintHandle`. */
 // (RowController ya incluye isLockedByProtection e isFrozen; se conserva
 // el nombre ControllerWithLock como alias para no romper call-sites.)
-type ControllerWithLock = RowController;
 
 /**
  * Pinta una fila (host + details + summary + handle + iconos + label +

@@ -20,6 +20,7 @@
 import { AggFunc } from './types.js';
 import { getCellValue, formatValue } from './value-formatter.js';
 import type { ColumnState, DisplayRow, RowNode } from './types.js';
+import { CuboSchema, type Cubo } from './pipeline-grouping.schema.js';
 
 /**
  * @param {string} fn
@@ -61,7 +62,6 @@ function aggregateGroup(leaves: RowNode[], colById: Map<string, ColumnState>): R
  * @returns {Array<{value: unknown, label: string, leaves: RowNode[]}>}
  */
 /** Un valor distinto de la columna, con las hojas que lo comparten. */
-type Cubo = { value: unknown; label: string; leaves: RowNode[]; };
 
 function groupLevel(leaves: RowNode[], col: ColumnState): Cubo[] {
   const map = new Map<string, Cubo>();

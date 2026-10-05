@@ -17,11 +17,14 @@ const indexHtml = readFileSync(join(root, 'index.html'), 'utf8');
 test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () => {
   const code = readFileSync(src, 'utf8');
   assert.match(code, /export const ISWebComponentsLoader/);
-  assert.match(code, /loadCSSBase\s*\(/);
-  assert.match(code, /loadCSSPalettesDefault\s*\(/);
+  // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
+  // Palettes: alias iswc-palettes-default vía loadPageStyles (no loadCSSPalettesDefault).
+  assert.doesNotMatch(code, /loadCSSPalettesDefault\s*\(/);
+  assert.match(code, /iswc-palettes-default/);
   assert.match(code, /async load\s*\(/);
   assert.match(code, /loadPageStyles/);
   assert.match(code, /loadPageModules/);
+  assert.match(code, /registerPageStyle/);
   assert.match(code, /\bpin\s*\(/);
   assert.match(code, /\bunpin\s*\(/);
   assert.match(code, /configure\s*\(/);
@@ -48,7 +51,7 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
   const code = readFileSync(dist, 'utf8');
   assert.ok(code.length < 120_000, `loader.min.js demasiado grande (${code.length} B)`);
   assert.match(code, /ISWebComponentsLoader/);
-  assert.match(code, /loadCSSBase/);
+  // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   assert.match(code, /jsdelivr|Jeff-Aporta\/is-webcomponents/);
   assert.match(code, /"iswc-button"/);
   assert.match(code, /src\/cdn\/loader\.md|loader\.md/);
@@ -77,12 +80,13 @@ test('min.js de componente lleva banner de docs MD', () => {
   assert.match(btn, /is-cdn-install\/SKILL\.md/);
 });
 
-test('index.html arranca con loader (sin all.min suelto; CSS dist)', () => {
-  assert.match(indexHtml, /loader\.min\.js/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css\?h=[0-9a-z]{6}"/);
+test('index.html arranca con doc-demo host (sin all.min; CSS vía loader)', () => {
+  assert.match(indexHtml, /doc-demo-host\.min\.js/);
+  assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
+  assert.match(indexHtml, /<iswc-doc-demo/);
+  assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css/);
   assert.doesNotMatch(indexHtml, /L\.load\(['"]all['"]\)/);
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
-  // Detalle del orden await/shell → tests/gallery-boot.test.ts (error #43)
 });
 
 test('index.html no reimporta preview-component ni icon desde src/ (Pages 404)', () => {
@@ -102,20 +106,24 @@ test('specs/cdn.md documenta pin/mirrors (consolidación 2026-09-07)', () => {
   // specs/cdn.md § "Detalle operativo". El guardián migró.
   const cdn = readFileSync(join(root, 'specs', 'cdn.md'), 'utf8');
   assert.match(cdn, /loader\.min\.js/);
-  assert.match(cdn, /loadCSSBase|ISWebComponentsLoader/i);
+  // W52: loadCSSBase se elimino del loader; ISWebComponentsLoader es el contrato.
+  assert.match(cdn, /ISWebComponentsLoader/);
   assert.match(cdn, /pin|SHA|branch/i);
   assert.match(cdn, /mirrors|jsDelivr|Pages/i);
   assert.ok(!existsSync(join(root, 'dist', 'cdn', 'README.txt')), 'README.txt retirado — specs/cdn.md es el índice');
 });
 
-test('configure acepta host + v/query (cache-bust)', () => {
+test('configure acepta host + local + v/query (cache-bust)', () => {
   const code = readFileSync(src, 'utf8');
   assert.match(code, /host\?:/);
+  assert.match(code, /local\?:/);
   assert.match(code, /query\?:/);
   assert.match(code, /\bv\?:/);
   assert.match(code, /githack/);
   assert.match(code, /state\.host/);
   assert.match(code, /state\.query/);
+  assert.match(code, /mirrorsExplicit/);
+  assert.match(code, /resolveHostInput/);
 });
 
 test('fallback CDN: jsDelivr → githack → Pages + stickyBase', () => {

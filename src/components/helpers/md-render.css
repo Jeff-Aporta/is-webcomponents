@@ -22,23 +22,23 @@
   min-block-size: 1.5em;
   padding: 0.15em 0;
 
-  border-radius: var(--iswc-radius-sm, 0.35em);
+  border-radius: var(--iswc-radius-sm);
 
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-color-brand, #339af0));
+    outline: 2px solid var(--iswc-focus, var(--iswc-color-brand));
     outline-offset: 2px;
   }
 }
 
 .empty {
   margin: 0;
-  color: var(--iswc-text-dim, #7a8390);
+  color: var(--iswc-text-dim);
   font-style: italic;
 }
 
 /* Render híbrido MD + HTML + iswc-code / diagramas. */
 .prompt-md-preview {
-  --_brand: var(--iswc-color-brand, var(--iswc-brand, #339af0));
+  --_brand: var(--iswc-color-brand, var(--iswc-brand));
 
   /* Diagramas iswc-* y atajo de clase — mismo bloque visual. */
   .md-iswc-diagram,
@@ -54,10 +54,10 @@
     inline-size: 100%;
     max-inline-size: 100%;
     margin: 0.35em 0 1.1em;
-    border: 1px solid color-mix(in srgb, var(--_brand) 16%, var(--iswc-border, transparent));
-    border-radius: var(--iswc-radius, 0.5em);
+    border: 1px solid color-mix(in srgb, var(--_brand) 16%, var(--iswc-border));
+    border-radius: var(--iswc-radius);
     overflow: hidden;
-    background: var(--iswc-bg-elev, var(--iswc-bg-soft, transparent));
+    background: var(--iswc-bg-elev, var(--iswc-bg-soft));
   }
 
   > :first-child { margin-block-start: 0; }
@@ -122,7 +122,7 @@
     border-radius: 0;
     background: transparent;
     color: color-mix(in srgb, var(--_brand) 58%, var(--iswc-text));
-    font-family: var(--iswc-font-mono, var(--iswc-mono, monospace));
+    font-family: var(--iswc-font-mono, var(--iswc-mono));
     font-size: 0.92em;
     white-space: break-spaces;
   }
@@ -131,8 +131,8 @@
     max-inline-size: 100%;
     padding: 0.85em 1em;
     border: 1px solid color-mix(in srgb, var(--_brand) 18%, transparent);
-    border-radius: var(--iswc-radius, 0.5em);
-    background: color-mix(in srgb, var(--_brand) 8%, var(--iswc-bg, transparent));
+    border-radius: var(--iswc-radius);
+    background: color-mix(in srgb, var(--_brand) 8%, var(--iswc-bg));
     overflow-x: auto;
     line-height: 1.55;
 
@@ -172,12 +172,12 @@
   }
   hr {
     border: none;
-    border-block-start: 1px solid color-mix(in srgb, var(--_brand) 25%, var(--iswc-border, currentColor));
+    border-block-start: 1px solid color-mix(in srgb, var(--_brand) 25%, var(--iswc-border));
     margin: 1.25em 0;
   }
   img {
     max-inline-size: 100%;
-    border-radius: var(--iswc-radius-sm, 0.375em);
+    border-radius: var(--iswc-radius-sm);
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--_brand) 12%, transparent);
   }
   .md-table-wrap {
@@ -186,8 +186,8 @@
     max-inline-size: 100%;
     overflow-x: auto;
     margin: 0 0 0.95em;
-    border-radius: var(--iswc-radius-sm, 0.35em);
-    border: 1px solid color-mix(in srgb, var(--_brand) 14%, var(--iswc-border-soft, transparent));
+    border-radius: var(--iswc-radius-sm);
+    border: 1px solid color-mix(in srgb, var(--_brand) 14%, var(--iswc-border-soft));
   }
   table {
     border-collapse: collapse;
@@ -197,12 +197,12 @@
   }
   th, td {
     padding: 0.55em 0.8em;
-    border-block-end: 1px solid color-mix(in srgb, var(--_brand) 10%, var(--iswc-border-soft, #2a3038));
+    border-block-end: 1px solid color-mix(in srgb, var(--_brand) 10%, var(--iswc-border-soft));
     text-align: start;
     vertical-align: top;
   }
   th {
-    background: color-mix(in srgb, var(--_brand) 12%, var(--iswc-bg-elev, var(--iswc-bg-soft, transparent)));
+    background: color-mix(in srgb, var(--_brand) 12%, var(--iswc-bg-elev, var(--iswc-bg-soft)));
     color: color-mix(in srgb, var(--_brand) 35%, var(--iswc-text));
     font-weight: 650;
   }
@@ -216,7 +216,7 @@
   padding: 0.05em 0.55em;
   margin: 0 0.05em;
   border-radius: 999px;
-  font-family: var(--iswc-mono, monospace);
+  font-family: var(--iswc-mono);
   font-size: 0.85em;
   line-height: 1.5;
   white-space: nowrap;
@@ -225,7 +225,7 @@
   color: hsl(var(--_h) 75% 72%);
 }
 
-:host-context(.theme-light) .prompt-var-chip {
+:host-context([data-theme="light"]) .prompt-var-chip {
   background: hsl(var(--_h) 65% 88% / 90%);
   border-color: hsl(var(--_h) 55% 55%);
   color: hsl(var(--_h) 55% 30%);

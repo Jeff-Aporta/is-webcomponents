@@ -25,13 +25,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
     'brand', 'accent', 'success', 'warning', 'danger',
   ];
 
-  class IswcDivider extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    color: { prop: '--iswc-divider-color', onlyColorValues: true },
-    spacing: '--iswc-divider-spacing',
-    width: '--iswc-divider-width',
-    };
+  class IswcDivider extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'color', 'spacing', 'width']; }
 

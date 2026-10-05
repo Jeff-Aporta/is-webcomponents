@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-er-diagram",
   "category": "diagrams",
-  "title": "<iswc-er-diagram>",
-  "titleHtml": true,
+  "title": "&lt;iswc-er-diagram&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-er-diagram",
   "sections": [
     {
@@ -43,6 +43,21 @@
       ]
     },
     {
+      "id": "theme-insoft",
+      "title": "Tema InSoft",
+      "lede": "Sin CE nuevo: theme=\"insoft\" (o erDiagram.theme) aplica el estilo docs InSoft (Poppins, naranja/verde, clusters, aristas #3D5A80). El JSON vive en cdn/diagrams/themes/insoft.json; json2css lo convierte a CSS.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Misma paleta que <code>der.svg</code> de AyudasCPIA. El editor hereda el atributo: <code>&lt;iswc-er-editor theme=\"insoft\"&gt;</code>. Utils CDN: <code>L.loadPageModules(\"iswc-diagram-theme\")</code> → <code>json2css</code>, <code>resolveErTheme</code>, <code>INSOFT_THEME</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<iswc-er-diagram theme=\"insoft\" open-on-click>\n            <script type=\"application/json\">\n              {\n                \"erDiagram\": {\n                  \"title\": \"ISS · estilo InSoft\",\n                  \"direction\": \"LR\",\n                  \"groups\": [\n                    { \"id\": \"g_oper\", \"name\": \"Operativa\" },\n                    { \"id\": \"g_conf\", \"name\": \"Config\" },\n                    { \"id\": \"g_seg\", \"name\": \"SEG\" }\n                  ],\n                  \"entities\": [\n                    { \"id\": \"ticket\", \"name\": \"TICKET\", \"group\": \"g_oper\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"asunto\", \"type\": \"varchar\" }\n                      ] },\n                    { \"id\": \"conv\", \"name\": \"CONVERSATION\", \"group\": \"g_oper\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"ticket_id\", \"type\": \"uuid\", \"key\": \"FK\" }\n                      ] },\n                    { \"id\": \"sys\", \"name\": \"SYS_VALUES\", \"group\": \"g_conf\",\n                      \"attributes\": [\n                        { \"name\": \"clave\", \"type\": \"varchar\", \"key\": \"PK\" },\n                        { \"name\": \"valor\", \"type\": \"jsonb\" }\n                      ] },\n                    { \"id\": \"rol\", \"name\": \"SEG_ROL\", \"group\": \"g_seg\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\n                      ] },\n                    { \"id\": \"huérfana\", \"name\": \"PROVIDER\", \"group\": \"g_conf\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\n                      ] }\n                  ],\n                  \"relations\": [\n                    { \"from\": \"conv\", \"to\": \"ticket\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },\n                    { \"from\": \"ticket\", \"to\": \"rol\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": false }\n                  ]\n                }\n              }\n            </script>\n          </iswc-er-diagram>"
+        }
+      ]
+    },
+    {
       "id": "api",
       "title": "Referencia",
       "blocks": [
@@ -67,6 +82,11 @@
               "<code>open-on-click</code>",
               "booleano",
               "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ],
+            [
+              "<code>theme</code>",
+              "<code>insoft</code> · id registrado",
+              "Aplica paleta JSON (cdn/diagrams/themes/). También <code>erDiagram.theme</code> en el payload."
             ]
           ]
         },
@@ -161,5 +181,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus\r\n          atributos y las relaciones entre ellas; el componente ubica las cajas,\r\n          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-er-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"erDiagram\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"direction\": \"LR\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"g2\", \"name\": \"Terceros\", \"hue\": 239 }\r\n                  ],\r\n                  \"entities\": [\r\n                    { \"id\": \"FACTURA\", \"name\": \"FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"cliente_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"fecha\", \"type\": \"date\" },\r\n                        { \"name\": \"total\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"ITEM\", \"name\": \"ITEM_FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"factura_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"producto_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"cantidad\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"CLIENTE\", \"name\": \"CLIENTE\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\r\n                      ] },\r\n                    { \"id\": \"PRODUCTO\", \"name\": \"PRODUCTO\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" },\r\n                        { \"name\": \"precio\", \"type\": \"decimal\" }\r\n                      ] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"FACTURA\", \"to\": \"CLIENTE\", \"label\": \"pertenece a\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },\r\n                    { \"from\": \"FACTURA\", \"to\": \"ITEM\", \"label\": \"contiene\", \"fromCard\": \"one\", \"toCard\": \"many\", \"identifying\": true },\r\n                    { \"from\": \"ITEM\", \"to\": \"PRODUCTO\", \"label\": \"referencia\", \"fromCard\": \"zeroOrOne\", \"toCard\": \"zeroOrMany\", \"identifying\": false }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-er-diagram>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -25,7 +25,7 @@
 </style>
 <script type="module">
   // Carga solo el bundle que necesitamos desde los pre-construidos en dist/cdn/.
-  await import('../../../dist/cdn/forms/date-field.min.js?h=wj9bo2');
+  await import('../../../dist/cdn/forms/date-field.min.js?h=tt3rv8');
 
   await customElements.whenDefined('iswc-date-field');
 
@@ -80,40 +80,115 @@
 
   <section class="card">
     <h2>Básico</h2>
-    <iswc-date-field id="basic" label="Fecha" name="basic"></iswc-date-field>
+    <iswc-date-field title="Fecha" id="basic" label="Fecha" name="basic"></iswc-date-field>
     <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con texto de ayuda y validación (required + min/max)</h2>
-    <iswc-date-field id="with-hint" label="Fecha de inicio" hint="Entre el 2025-01-01 y el 2026-12-31" name="start"
+    <iswc-date-field title="Fecha de inicio" id="with-hint" label="Fecha de inicio" hint="Entre el 2025-01-01 y el 2026-12-31" name="start"
                    min="2025-01-01" max="2026-12-31" required clearable></iswc-date-field>
     <div class="value-readout">Valor actual: <code id="with-hint-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con valor inicial</h2>
-    <iswc-date-field id="initial" label="Cumpleaños" hint="Edita el día con flechas o dígitos" name="birth"></iswc-date-field>
+    <iswc-date-field title="Cumpleaños" id="initial" label="Cumpleaños" hint="Edita el día con flechas o dígitos" name="birth"></iswc-date-field>
     <div class="value-readout">Valor actual: <code id="initial-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Borrable (botón × para limpiar)</h2>
-    <iswc-date-field id="clearable" label="Fecha opcional" clearable name="opt" value="2026-03-10"></iswc-date-field>
+    <iswc-date-field title="Fecha opcional" id="clearable" label="Fecha opcional" clearable name="opt" value="2026-03-10"></iswc-date-field>
     <div class="value-readout">Valor actual: <code id="clearable-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Deshabilitado</h2>
-    <iswc-date-field id="disabled-field" label="No editable" name="d" disabled></iswc-date-field>
+    <iswc-date-field title="No editable" id="disabled-field" label="No editable" name="d" disabled></iswc-date-field>
     <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Solo lectura</h2>
-    <iswc-date-field id="readonly-field" label="Solo lectura" name="r" readonly></iswc-date-field>
+    <iswc-date-field title="Solo lectura" id="readonly-field" label="Solo lectura" name="r" readonly></iswc-date-field>
     <div class="value-readout">Valor actual: <code id="readonly-value">(vacío)</code></div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

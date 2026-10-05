@@ -86,7 +86,7 @@ const bundleJs = (entry, outfile, plugins, banner, define) =>
 const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 const docsBanner = (tag) =>
   ['/*!',
-   ' * IS Web Components - docs (LLM)',
+   ' * ISWC - docs (LLM)',
    ` * component: ${GH_RAW}/src/components/overlays/${tag}.md`,
    ` * kit: ${GH_RAW}/specs/componentes.md`,
    ' */'].join('\n');

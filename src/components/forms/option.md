@@ -1,41 +1,41 @@
----
+﻿---
 tag: iswc-option
 tags:
   - iswc-option
 category: forms
 status: public
-source: ./option.js
+source: ./option.ts
 style: ./option.css
 preview: ./option.json
 ---
 # `<iswc-option>`
 
-## Propósito
+## PropÃ³sito
 
 Input + listbox filtrable con teclado y opciones iswc-option.
 
-Este módulo registra `<iswc-option>`.
+Este mÃ³dulo registra `<iswc-option>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './option.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-combobox label="Ciudad" clearable>
-<iswc-option value="bog">Bogotá</iswc-option>
-<iswc-option value="med">Medellín</iswc-option>
+<iswc-option value="bog">BogotÃ¡</iswc-option>
+<iswc-option value="med">MedellÃ­n</iswc-option>
 </iswc-combobox>
 ```
 
@@ -47,12 +47,12 @@ import './option.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `selected` | boolean | Fuente define default/restricción. |
-| `group` | string/según contrato | Fuente define default/restricción. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `selected` | boolean | Fuente define default/restricciÃ³n. |
+| `group` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -73,13 +73,30 @@ import './option.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+
 No expone.
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-option');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -98,24 +115,24 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-accent-bg` | Token leído o definido por componente. |
-| `--iswc-brand-text` | Token leído o definido por componente. |
-| `--iswc-color-brand-700` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-brand-text` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-700` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-option> — Opción para iswc-combobox / iswc-select (listboxes).
+> <iswc-option> â€” OpciÃ³n para iswc-combobox / iswc-select (listboxes).
 > Atributos: value, disabled, selected, group
 > Slots: default (etiqueta), start (icono/avatar), description (texto secundario)
 > Parts: base, start, label, description
@@ -124,24 +141,24 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-option>`.
+Tags del mÃ³dulo: `<iswc-option>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-selected`, `aria-disabled`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-selected`, `aria-disabled`.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-combobox label="Ciudad" clearable>
-<iswc-option value="bog">Bogotá</iswc-option>
-<iswc-option value="med">Medellín</iswc-option>
+<iswc-option value="bog">BogotÃ¡</iswc-option>
+<iswc-option value="med">MedellÃ­n</iswc-option>
 </iswc-combobox>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -149,15 +166,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-select
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./option.js)
+- [JavaScript](./option.ts)
 - [CSS](./option.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./option.json)

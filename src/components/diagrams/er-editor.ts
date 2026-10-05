@@ -16,9 +16,13 @@
 //   Playwright: smoke + funcional (drag, click-to-connect, undo/redo,
 //     export JSON/SVG) + determinismo (round-trip idéntico).
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
-import { adoptCss, defineElement, emit } from '../../core/element.js';
+import { defineElement, emit } from '../../core/element.js';
 import { serializeErPayload, renderErSvg as renderErSvgString } from './er-archify.js';
 import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride, ErRouteKind, ErDashStyle, EdgeVariant } from './diagram-types.js';
+import '../media/icon.js';
+import '../actions/context-menu.js';
+import '../layout/split-panel.js';
+import { createPanZoom, type PanZoomController } from '../_shared/pan-zoom.js';
 
 const SNAP = 8;
 const HISTORY_LIMIT = 200;
@@ -36,18 +40,14 @@ const EDITOR_CSS = `
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 28rem;
   font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
   color: var(--iswc-text, #e2e8f0);
 }
-.stage {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 12px;
-  padding: 12px;
-  height: 100%;
-  box-sizing: border-box;
-}
+.stage { display: block; height: 100%; min-height: inherit; box-sizing: border-box; }
+.stage > iswc-split-panel { display: block; height: 100%; min-height: inherit; }
+.pane-canvas, .pane-side { display: grid; height: 100%; min-height: 0; box-sizing: border-box; }
+.pane-side { min-width: 0; }
 .canvas {
   position: relative;
   background: var(--iswc-bg, #0c1118);
@@ -55,285 +55,241 @@ const EDITOR_CSS = `
   border-radius: 8px;
   overflow: hidden;
   min-height: 400px;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
 }
-.canvas-inner { position: absolute; inset: 0; }
+.canvas[data-panning] { cursor: grabbing; }
+.canvas-inner { position: absolute; inset: 0; transform-origin: center center; }
 .canvas-inner > iswc-er-diagram { width: 100%; height: 100%; display: block; }
 .toolbar {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  gap: 6px;
-  z-index: 5;
-  background: var(--iswc-bg-elev, #131a24);
+  position: absolute; top: 10px; left: 10px; right: 10px;
+  display: flex; flex-wrap: wrap; gap: 4px; z-index: 5; pointer-events: none;
+}
+.toolbar__group {
+  pointer-events: auto; display: inline-flex; flex-wrap: wrap; gap: 4px;
+  background: color-mix(in srgb, var(--iswc-bg-elev, #131a24) 92%, transparent);
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
-  border-radius: 8px;
-  padding: 6px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  border-radius: 8px; padding: 4px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.28); backdrop-filter: blur(8px);
 }
+.toolbar__group--end { margin-inline-start: auto; }
 .toolbar button {
-  appearance: none;
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  background: transparent;
-  color: var(--iswc-text, #e2e8f0);
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  appearance: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 2.1rem; height: 2.1rem; padding: 0; border: 1px solid transparent;
+  background: transparent; color: var(--iswc-text, #e2e8f0); border-radius: 6px; cursor: pointer;
 }
-.toolbar button:hover { background: rgba(255,255,255,0.06); }
+.toolbar button:hover { background: rgba(255,255,255,0.06); border-color: var(--iswc-border, rgba(255,255,255,0.18)); }
 .toolbar button[aria-pressed="true"] {
-  background: var(--iswc-accent, #2563eb);
-  border-color: transparent;
+  background: color-mix(in srgb, var(--iswc-accent, #2563eb) 28%, transparent);
+  border-color: color-mix(in srgb, var(--iswc-accent, #2563eb) 55%, transparent);
 }
+.toolbar button.danger { color: var(--iswc-danger, #f87171); }
+.toolbar button iswc-icon { font-size: 1.1rem; line-height: 1; }
 .panel {
   background: var(--iswc-bg-elev, #131a24);
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
-  border-radius: 8px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  overflow: auto;
+  border-radius: 8px; padding: 12px; overflow: auto; height: 100%; box-sizing: border-box;
+  display: grid; gap: 10px; align-content: start;
 }
 .panel h3 {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0;
-  color: var(--iswc-text-soft, #94a3b8);
-  font-weight: 700;
+  margin: 0; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--iswc-text-soft, #94a3b8);
+}
+.panel .selection-info, .selection-info {
+  font-size: 0.82rem; color: var(--iswc-text-soft, #94a3b8); line-height: 1.35;
 }
 .panel fieldset {
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
-  border-radius: 6px;
-  padding: 8px 10px;
+  margin: 0; padding: 8px 0 0; border: 0;
+  border-top: 1px solid var(--iswc-border, rgba(255,255,255,0.1));
+  display: grid; gap: 6px;
 }
 .panel fieldset legend {
-  font-size: 10px;
-  text-transform: uppercase;
-  color: var(--iswc-text-soft, #94a3b8);
-  padding: 0 4px;
+  padding: 0; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em;
+  text-transform: uppercase; color: var(--iswc-text-soft, #94a3b8);
 }
 .panel label {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 6px;
-  align-items: center;
-  font-size: 12px;
-  margin-bottom: 4px;
+  display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center;
+  font-size: 0.78rem; color: var(--iswc-text-soft, #94a3b8);
 }
-
-/* Editor de atributos (CRUD de rows) */
 .panel fieldset[data-attrs] .attr-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 70px 22px;
-  gap: 4px;
-  align-items: center;
-  margin-bottom: 4px;
-  font-size: 12px;
+  display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 4px; align-items: center; margin-bottom: 4px;
 }
 .panel fieldset[data-attrs] .attr-row input,
 .panel fieldset[data-attrs] .attr-row select {
-  width: 100%;
-  background: transparent;
-  color: var(--iswc-text, #e2e8f0);
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  border-radius: 3px;
-  padding: 3px 5px;
-  font: 11px ui-monospace, Menlo, Consolas, monospace;
-  box-sizing: border-box;
-  min-width: 0;
+  width: 100%; min-width: 0; font: inherit; font-size: 0.78rem; color: inherit;
+  background: var(--iswc-control-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.14));
+  border-radius: 6px; padding: 4px 6px;
 }
 .panel fieldset[data-attrs] .attr-row input:focus,
 .panel fieldset[data-attrs] .attr-row select:focus {
-  outline: 1px solid var(--iswc-accent, #2563eb);
-  outline-offset: 0;
-  border-color: var(--iswc-accent, #2563eb);
+  outline: 2px solid color-mix(in srgb, var(--iswc-accent, #2563eb) 55%, transparent); outline-offset: 0;
 }
-.panel fieldset[data-attrs] .attr-row .key-pk {
-  border-color: var(--iswc-accent, #2563eb);
-  background: rgba(37, 99, 235, 0.12);
-}
-.panel fieldset[data-attrs] .attr-row .key-fk {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.12);
-}
+.panel fieldset[data-attrs] .attr-row .key-pk { border-color: #fbbf24; }
+.panel fieldset[data-attrs] .attr-row .key-fk { border-color: #60a5fa; }
 .panel fieldset[data-attrs] .attr-row .attr-del {
-  appearance: none;
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  background: transparent;
-  color: var(--iswc-danger, #f87171);
-  border-radius: 3px;
-  cursor: pointer;
-  font: 12px ui-monospace, Menlo, Consolas, monospace;
-  padding: 0;
-  line-height: 1;
+  appearance: none; width: 1.85rem; height: 1.85rem; padding: 0; border: 1px solid transparent;
+  border-radius: 6px; background: transparent; color: var(--iswc-danger, #f87171); cursor: pointer;
 }
-.panel fieldset[data-attrs] .attr-row .attr-del:hover {
-  background: rgba(248, 113, 113, 0.16);
-  border-color: var(--iswc-danger, #f87171);
-}
-.panel fieldset[data-attrs] button[data-action="add-attr"] {
-  width: 100%;
-  margin-top: 6px;
-}
+.panel fieldset[data-attrs] .attr-row .attr-del:hover { background: rgba(248,113,113,0.12); }
+.panel fieldset[data-attrs] button[data-action="add-attr"] { justify-self: start; }
 .panel input[type="text"],
 .panel input[type="number"],
 .panel select {
-  width: 100%;
-  background: transparent;
-  color: var(--iswc-text, #e2e8f0);
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  border-radius: 4px;
-  padding: 4px 6px;
-  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
-  box-sizing: border-box;
+  font: inherit; font-size: 0.78rem; color: inherit;
+  background: var(--iswc-control-bg, rgba(255,255,255,0.04));
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.14));
+  border-radius: 6px; padding: 4px 6px; min-width: 4.5rem;
 }
 .panel input[type="color"] {
-  width: 100%;
-  height: 28px;
-  padding: 0;
+  width: 2rem; height: 1.6rem; padding: 0;
   border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  border-radius: 4px;
-  background: transparent;
-  cursor: pointer;
+  border-radius: 4px; background: transparent; cursor: pointer;
 }
-.panel .row { display: flex; gap: 6px; }
 .panel button {
-  appearance: none;
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  background: transparent;
-  color: var(--iswc-text, #e2e8f0);
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font: 12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  appearance: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 2rem; height: 2rem; padding: 0;
+  border: 1px solid var(--iswc-border, rgba(255,255,255,0.14));
+  background: transparent; color: inherit; border-radius: 6px; cursor: pointer;
 }
+.panel button iswc-icon { font-size: 1.05rem; line-height: 1; }
+.panel button.icon-wide { width: 100%; }
 .panel button:hover { background: rgba(255,255,255,0.06); }
-.panel button.primary {
-  background: var(--iswc-accent, #2563eb);
-  border-color: transparent;
-  color: #fff;
+.hint {
+  position: absolute; left: 12px; bottom: 10px; z-index: 4; margin: 0; padding: 4px 8px;
+  border-radius: 6px; font-size: 0.72rem; color: var(--iswc-text-soft, #94a3b8);
+  background: color-mix(in srgb, var(--iswc-bg-elev, #131a24) 88%, transparent); pointer-events: none;
 }
-.panel button.danger { color: var(--iswc-danger, #f87171); }
-.selection-info {
-  font-size: 11px;
-  color: var(--iswc-text-soft, #94a3b8);
-}
-textarea[data-json-readout] {
-  width: 100%;
-  height: 160px;
-  background: transparent;
-  color: var(--iswc-text-soft, #94a3b8);
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.08));
-  border-radius: 4px;
-  font: 11px ui-monospace, Menlo, Consolas, monospace;
-  padding: 6px;
-  box-sizing: border-box;
-  resize: vertical;
-}
-.empty {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--iswc-text-soft, #94a3b8);
-  font-size: 14px;
-  pointer-events: none;
-}
+textarea[data-json-readout] { display: none; }
 `;
 
 const EDITOR_TEMPLATE = `
 <div class="stage">
-  <div class="canvas" data-canvas>
-    <div class="canvas-inner" data-canvas-inner></div>
-    <div class="toolbar" data-toolbar>
-      <button data-mode="edit" aria-pressed="true">Editar</button>
-      <button data-mode="connect">Conectar</button>
+  <iswc-split-panel orientation="horizontal" position="74" storage-key="iswc-er-editor-split">
+    <div slot="start" class="pane-canvas">
+      <div class="canvas" data-canvas>
+        <div class="canvas-inner" data-canvas-inner></div>
+        <div class="toolbar" data-toolbar role="toolbar" aria-label="Herramientas del canvas">
+          <div class="toolbar__group" role="group" aria-label="Modo">
+            <button type="button" data-mode="edit" aria-pressed="true" title="Modo editar" aria-label="Modo editar">
+              <iswc-icon icon="mdi:cursor-default-outline" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-mode="connect" title="Modo conectar" aria-label="Modo conectar">
+              <iswc-icon icon="mdi:vector-polyline" aria-hidden="true"></iswc-icon>
+            </button>
+          </div>
+          <div class="toolbar__group" role="group" aria-label="Edición">
+            <button type="button" data-action="add-entity" title="Agregar entidad" aria-label="Agregar entidad">
+              <iswc-icon icon="mdi:table-plus" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="add-relation" title="Agregar relación" aria-label="Agregar relación">
+              <iswc-icon icon="mdi:vector-link" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="duplicate" title="Duplicar" aria-label="Duplicar">
+              <iswc-icon icon="mdi:content-copy" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="delete" title="Borrar selección" aria-label="Borrar selección" class="danger">
+              <iswc-icon icon="mdi:trash-can-outline" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="undo" title="Deshacer (Ctrl+Z)" aria-label="Deshacer">
+              <iswc-icon icon="mdi:undo" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="redo" title="Rehacer (Ctrl+Y)" aria-label="Rehacer">
+              <iswc-icon icon="mdi:redo" aria-hidden="true"></iswc-icon>
+            </button>
+          </div>
+          <div class="toolbar__group" role="group" aria-label="Zoom">
+            <button type="button" data-action="zoom-out" title="Zoom −" aria-label="Reducir zoom">
+              <iswc-icon icon="mdi:magnify-minus-outline" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="zoom-reset" title="Restablecer zoom" aria-label="Restablecer zoom">
+              <iswc-icon icon="mdi:fit-to-screen-outline" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="zoom-in" title="Zoom +" aria-label="Aumentar zoom">
+              <iswc-icon icon="mdi:magnify-plus-outline" aria-hidden="true"></iswc-icon>
+            </button>
+          </div>
+          <div class="toolbar__group toolbar__group--end" role="group" aria-label="Exportar">
+            <button type="button" data-action="copy-json" title="Copiar JSON" aria-label="Copiar JSON">
+              <iswc-icon icon="mdi:code-json" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="download-json" title="Descargar JSON" aria-label="Descargar JSON">
+              <iswc-icon icon="mdi:download" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="copy-svg" title="Copiar SVG" aria-label="Copiar SVG">
+              <iswc-icon icon="mdi:svg" aria-hidden="true"></iswc-icon>
+            </button>
+            <button type="button" data-action="download-svg" title="Descargar SVG" aria-label="Descargar SVG">
+              <iswc-icon icon="mdi:file-download-outline" aria-hidden="true"></iswc-icon>
+            </button>
+          </div>
+        </div>
+        <p class="hint">Rueda = pan · Ctrl+rueda = zoom · Arrastre vacío = pan · Entidad = mover</p>
+      </div>
     </div>
-  </div>
-  <aside class="panel" data-panel aria-label="Panel de edición del diagrama ER">
-    <h3>Selección</h3>
-    <div class="selection-info" data-selection-info>Vacía</div>
-    <fieldset>
-      <legend>Acciones</legend>
-      <div class="row" style="margin-bottom:6px;">
-        <button data-action="add-entity">+ Entidad</button>
-        <button data-action="add-relation">+ Relación</button>
-      </div>
-      <div class="row">
-        <button data-action="delete">Borrar</button>
-        <button data-action="duplicate">Duplicar</button>
-      </div>
-      <div class="row" style="margin-top:6px;">
-        <button data-action="undo">↶ Deshacer</button>
-        <button data-action="redo">↷ Rehacer</button>
-      </div>
-    </fieldset>
-    <fieldset data-attrs hidden>
-      <legend>Atributos</legend>
-      <div data-attr-list></div>
-      <button data-action="add-attr">+ Atributo</button>
-    </fieldset>
-    <fieldset data-styles>
-      <legend>Estilo</legend>
-      <label>fill <input type="color" data-style="fill"></label>
-      <label>stroke <input type="color" data-style="stroke"></label>
-      <label>stroke-width <input type="number" step="0.1" min="0" max="10" data-style="strokeWidth"></label>
-      <label>radius <input type="number" step="1" min="0" max="32" data-style="radius"></label>
-      <label>opacity <input type="number" step="0.05" min="0" max="1" data-style="opacity"></label>
-    </fieldset>
-    <fieldset data-edge-styles>
-      <legend>Aristas</legend>
-      <label>route
-        <select data-style="route">
-          <option value="orthogonal">orthogonal</option>
-          <option value="straight">straight</option>
-          <option value="orthogonal-h">orthogonal-h</option>
-          <option value="orthogonal-v">orthogonal-v</option>
-        </select>
-      </label>
-      <label>dashStyle
-        <select data-style="dashStyle">
-          <option value="solid">solid</option>
-          <option value="dashed">dashed</option>
-          <option value="dotted">dotted</option>
-        </select>
-      </label>
-      <label>variant
-        <select data-style="variant">
-          <option value="default">default</option>
-          <option value="emphasis">emphasis</option>
-          <option value="security">security</option>
-          <option value="dashed">dashed</option>
-        </select>
-      </label>
-      <label>width <input type="number" step="0.1" min="0.2" max="8" data-style="width"></label>
-    </fieldset>
-    <fieldset>
-      <legend>Exportar</legend>
-      <div class="row" style="margin-bottom:6px;">
-        <button data-action="copy-json">Copiar JSON</button>
-        <button data-action="download-json">Descargar .json</button>
-      </div>
-      <div class="row">
-        <button data-action="copy-svg">Copiar SVG</button>
-        <button data-action="download-svg">Descargar .svg</button>
-      </div>
-    </fieldset>
-    <fieldset>
-      <legend>JSON en vivo</legend>
-      <textarea data-json-readout readonly></textarea>
-    </fieldset>
-  </aside>
+    <div slot="end" class="pane-side">
+      <aside class="panel" data-panel aria-label="Propiedades del diagrama ER">
+        <h3>Selección</h3>
+        <div class="selection-info" data-selection-info>Vacía</div>
+        <fieldset data-attrs hidden>
+          <legend>Atributos</legend>
+          <div data-attr-list></div>
+          <button type="button" data-action="add-attr" title="Agregar atributo" aria-label="Agregar atributo" class="icon-wide">
+            <iswc-icon icon="mdi:plus" aria-hidden="true"></iswc-icon>
+          </button>
+        </fieldset>
+        <fieldset data-styles>
+          <legend>Estilo</legend>
+          <label>fill <input type="color" data-style="fill"></label>
+          <label>stroke <input type="color" data-style="stroke"></label>
+          <label>stroke-width <input type="number" step="0.1" min="0" max="10" data-style="strokeWidth"></label>
+          <label>radius <input type="number" step="1" min="0" max="32" data-style="radius"></label>
+          <label>opacity <input type="number" step="0.05" min="0" max="1" data-style="opacity"></label>
+        </fieldset>
+        <fieldset data-edge-styles>
+          <legend>Aristas</legend>
+          <label>route
+            <select data-style="route">
+              <option value="orthogonal">orthogonal</option>
+              <option value="straight">straight</option>
+              <option value="orthogonal-h">orthogonal-h</option>
+              <option value="orthogonal-v">orthogonal-v</option>
+            </select>
+          </label>
+          <label>dashStyle
+            <select data-style="dashStyle">
+              <option value="solid">solid</option>
+              <option value="dashed">dashed</option>
+              <option value="dotted">dotted</option>
+            </select>
+          </label>
+          <label>variant
+            <select data-style="variant">
+              <option value="default">default</option>
+              <option value="emphasis">emphasis</option>
+              <option value="security">security</option>
+              <option value="dashed">dashed</option>
+            </select>
+          </label>
+          <label>width <input type="number" step="0.1" min="0.2" max="8" data-style="width"></label>
+        </fieldset>
+      </aside>
+    </div>
+  </iswc-split-panel>
+  <iswc-context-menu data-entity-menu scroll-lock>
+    <button type="button" class="item" data-value="rename">Renombrar…</button>
+    <button type="button" class="item" data-value="duplicate">Duplicar</button>
+    <button type="button" class="item" data-value="connect">Conectar desde aquí</button>
+    <hr />
+    <button type="button" class="item" data-value="delete">Eliminar</button>
+  </iswc-context-menu>
 </div>
 `;
 
 class IswcErEditor extends HTMLElement {
   static get observedAttributes(): string[] {
-    return ['animation'];
+    return ['animation', 'theme'];
   }
 
   #diagram: HTMLElement & { payload: unknown; svg: SVGElement } | null = null;
@@ -347,6 +303,8 @@ class IswcErEditor extends HTMLElement {
   #pendingConnection: { fromId: string } | null = null;
   #undoHotkey: ((e: KeyboardEvent) => void) | null = null;
   #attrEditDebounce: number | null = null;
+  #ctxEntityId: string | null = null;
+  #pz: PanZoomController | null = null;
 
   constructor() {
     super();
@@ -362,6 +320,7 @@ class IswcErEditor extends HTMLElement {
 
   connectedCallback() {
     this.#ensureDiagram();
+    this.#ensurePanZoom();
     this.#installHotkeys();
     if (!this.#state) this.#state = this.#readJsonSlot() ?? cloneState({ entities: [], relations: [] });
     this.#render();
@@ -375,12 +334,21 @@ class IswcErEditor extends HTMLElement {
   }
   disconnectedCallback() {
     this.#uninstallHotkeys();
+    this.#pz?.destroy();
+    this.#pz = null;
     if (this.#attrEditDebounce !== null) clearTimeout(this.#attrEditDebounce);
     this.#attrEditDebounce = null;
   }
   attributeChangedCallback(name: string): void {
-    if (name === 'animation' && this.#diagram) {
+    if (!this.#diagram) return;
+    if (name === 'animation') {
       this.#diagram.setAttribute('animation', this.getAttribute('animation') ?? '');
+      this.#render();
+    }
+    if (name === 'theme') {
+      const t = this.getAttribute('theme');
+      if (t == null || t === '') this.#diagram.removeAttribute('theme');
+      else this.#diagram.setAttribute('theme', t);
       this.#render();
     }
   }
@@ -444,9 +412,19 @@ class IswcErEditor extends HTMLElement {
     const host = this.shadowRoot!.querySelector('[data-canvas-inner]')!;
     const diagram = document.createElement('iswc-er-diagram') as unknown as HTMLElement & { payload: unknown; svg: SVGElement };
     diagram.setAttribute('animation', this.getAttribute('animation') ?? '');
+    const theme = this.getAttribute('theme');
+    if (theme) diagram.setAttribute('theme', theme);
     diagram.addEventListener('iswc-render', this.#onDiagramRender as EventListener);
     host.appendChild(diagram);
     this.#diagram = diagram;
+  }
+
+  #ensurePanZoom(): void {
+    if (this.#pz || !this.shadowRoot) return;
+    const canvas = this.shadowRoot.querySelector<HTMLElement>('[data-canvas]');
+    const inner = this.shadowRoot.querySelector<HTMLElement>('[data-canvas-inner]');
+    if (!canvas || !inner) return;
+    this.#pz = createPanZoom(canvas, inner);
   }
 
   #onDiagramRender = (): void => {
@@ -461,7 +439,12 @@ class IswcErEditor extends HTMLElement {
       if (this.#diagram) this.#diagram.payload = null;
       return;
     }
-    if (this.#diagram) this.#diagram.payload = this.#state;
+    if (this.#diagram) {
+      const theme = this.getAttribute('theme') || this.#state.theme;
+      if (theme) this.#diagram.setAttribute('theme', theme);
+      else this.#diagram.removeAttribute('theme');
+      this.#diagram.payload = this.#state;
+    }
     this.#updatePanel();
     this.#syncJsonReadout();
   }
@@ -583,6 +566,33 @@ class IswcErEditor extends HTMLElement {
       const modeBtn = path.find((x) => (x as HTMLElement | undefined)?.dataset?.mode);
       if (modeBtn) this.#setMode((modeBtn as HTMLElement).dataset.mode!);
     });
+    this.shadowRoot!.addEventListener('iswc-select', (e: Event) => {
+      const ce = e as CustomEvent<{ value?: string }>;
+      const value = ce.detail?.value;
+      const entityId = this.#ctxEntityId;
+      if (!value || !entityId || !this.#state) return;
+      this.#selection = new Set([entityId]);
+      if (value === 'delete') this.#handleAction('delete', e);
+      else if (value === 'duplicate') this.#handleAction('duplicate', e);
+      else if (value === 'connect') {
+        this.#setMode('connect');
+        this.#pendingConnection = { fromId: entityId };
+      } else if (value === 'rename') {
+        const ent = this.#state.entities.find((x) => x.id === entityId);
+        if (!ent) return;
+        const next = window.prompt('Nombre de la entidad', ent.name);
+        if (next == null || !next.trim() || next === ent.name) return;
+        const before = ent.name;
+        ent.name = next.trim();
+        this.#commit(HISTORY_OP.UPDATE_ENTITY, { id: entityId, before }, () => {
+          const ee = this.#state?.entities.find((x) => x.id === entityId);
+          if (ee) ee.name = before;
+        });
+        this.#render();
+        this.#emitStateChange();
+      }
+      this.#ctxEntityId = null;
+    });
     this.shadowRoot!.addEventListener('input', (e: Event) => {
       const t = e.target as HTMLInputElement | null;
       if (!t) return;
@@ -624,6 +634,9 @@ class IswcErEditor extends HTMLElement {
       case 'download-json': this.#downloadFile(this.exportJson(), 'application/json', 'er-diagram.json'); break;
       case 'copy-svg': this.#copyToClipboard(this.exportSvg(), 'image/svg+xml'); break;
       case 'download-svg': this.#downloadFile(this.exportSvg(), 'image/svg+xml', 'er-diagram.svg'); break;
+      case 'zoom-in': this.#pz?.zoomBy(1.2); break;
+      case 'zoom-out': this.#pz?.zoomBy(1 / 1.2); break;
+      case 'zoom-reset': this.#pz?.reset(); break;
     }
     // Los atributos se manejan via dataset.attrAction (delete), no via action.
     void ev;
@@ -674,11 +687,25 @@ class IswcErEditor extends HTMLElement {
     relations.forEach((g) => this.#bindRelation(g as SVGGElement));
   }
 
+  #entityMenu(): (HTMLElement & { openAt(x: number, y: number): void }) | null {
+    return this.shadowRoot!.querySelector('[data-entity-menu]') as
+      (HTMLElement & { openAt(x: number, y: number): void }) | null;
+  }
+
   #bindEntity(g: SVGGElement): void {
     const id = g.dataset.entityId;
     if (!id || g.dataset.editorBound) return;
     g.dataset.editorBound = '1';
     g.style.cursor = 'grab';
+
+    g.addEventListener('contextmenu', (ev: MouseEvent) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.#selection = new Set([id]);
+      this.#ctxEntityId = id;
+      this.#updatePanel();
+      this.#entityMenu()?.openAt(ev.clientX, ev.clientY);
+    });
 
     g.addEventListener('pointerdown', (ev: PointerEvent) => {
       if (this.#mode === 'connect') return;
@@ -710,9 +737,10 @@ class IswcErEditor extends HTMLElement {
 
       const onMove = (mv: PointerEvent) => {
         if (!this.#state) return;
-        const dx = mv.clientX - startX;
-        const dy = mv.clientY - startY;
-        if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+        const scale = this.#pz?.view.scale || 1;
+        const dx = (mv.clientX - startX) / scale;
+        const dy = (mv.clientY - startY) / scale;
+        if (Math.abs(dx) + Math.abs(dy) > 2 / scale) moved = true;
         for (const [sid, start] of startPositions) {
           if (!start) continue;
           const e = this.#state.entities.find((x) => x.id === sid);
@@ -761,23 +789,58 @@ class IswcErEditor extends HTMLElement {
       }
     });
 
-    g.addEventListener('dblclick', (ev: Event) => {
-      const texts = g.querySelectorAll('text');
-      if (!texts.length) return;
-      const target = texts[0] as SVGTextElement;
+    g.addEventListener('dblclick', (ev: MouseEvent) => {
+      ev.preventDefault();
       ev.stopPropagation();
-      this.#inlineEditText(target, (newName: string) => {
-        if (!this.#state) return;
-        const e = this.#state.entities.find((x) => x.id === id);
-        if (e) {
-          const before = e.name;
-          e.name = newName;
-          this.#commit(HISTORY_OP.UPDATE_ENTITY, { id, before }, () => {
-            if (!this.#state) return;
-            const ee = this.#state.entities.find((x) => x.id === id);
-            if (ee) ee.name = before;
+      if (!this.#state) return;
+      const path = ev.composedPath() as Element[];
+      const textEl = path.find((n) => n instanceof SVGTextElement) as SVGTextElement | undefined;
+      if (!textEl) return;
+
+      // Atributo (nombre / tipo)
+      const attrField = textEl.dataset.attrField as 'name' | 'type' | undefined;
+      if (attrField != null && textEl.dataset.attrIndex != null) {
+        const idx = Number(textEl.dataset.attrIndex);
+        const entity = this.#state.entities.find((x) => x.id === id);
+        const attr = entity?.attributes?.[idx];
+        if (!entity || !attr) return;
+        this.#inlineEditText(textEl, (next) => {
+          if (!this.#state) return;
+          const e = this.#state.entities.find((x) => x.id === id);
+          const a = e?.attributes?.[idx];
+          if (!a) return;
+          const before = { ...a };
+          if (attrField === 'name') a.name = next || a.name;
+          else a.type = next;
+          this.#commit(HISTORY_OP.UPDATE_ENTITY, { id, attrIndex: idx, before }, () => {
+            const ee = this.#state?.entities.find((x) => x.id === id);
+            const aa = ee?.attributes?.[idx];
+            if (aa) {
+              aa.name = before.name;
+              aa.type = before.type;
+            }
           });
-        }
+        });
+        return;
+      }
+
+      // Nombre de entidad (clase er-entity__name o primer text del grupo)
+      const isName = textEl.classList.contains('er-entity__name')
+        || textEl.closest?.('.er-entity__name')
+        || path.some((n) => (n as Element).classList?.contains('er-entity__name'));
+      if (!isName && textEl.dataset.attrField) return;
+
+      this.#inlineEditText(textEl, (newName: string) => {
+        if (!this.#state || !newName) return;
+        const e = this.#state.entities.find((x) => x.id === id);
+        if (!e || e.name === newName) return;
+        const before = e.name;
+        e.name = newName;
+        this.#commit(HISTORY_OP.UPDATE_ENTITY, { id, before }, () => {
+          if (!this.#state) return;
+          const ee = this.#state.entities.find((x) => x.id === id);
+          if (ee) ee.name = before;
+        });
       });
     });
   }
@@ -799,15 +862,51 @@ class IswcErEditor extends HTMLElement {
       this.#selection = ns;
       this.#updatePanel();
     });
+    g.addEventListener('dblclick', (ev: MouseEvent) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (!this.#state) return;
+      const path = ev.composedPath() as Element[];
+      const textEl = path.find((n) => n instanceof SVGTextElement) as SVGTextElement | undefined;
+      if (!textEl) return;
+      const rel = this.#state.relations.find((r) => r.id === id);
+      if (!rel) return;
+      this.#inlineEditText(textEl, (next) => {
+        if (!this.#state) return;
+        const r = this.#state.relations.find((x) => x.id === id);
+        if (!r) return;
+        const before = r.label;
+        r.label = next || undefined;
+        this.#commit(HISTORY_OP.UPDATE_ENTITY, { id, before }, () => {
+          const rr = this.#state?.relations.find((x) => x.id === id);
+          if (rr) rr.label = before;
+        });
+      });
+    });
   }
 
   #inlineEditText(textNode: SVGTextElement, onSave: (newName: string) => void): void {
     const r = textNode.getBoundingClientRect();
     const input = document.createElement('input');
     input.type = 'text';
-    input.value = textNode.textContent ?? '';
-    const rectCss = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;font:inherit;color:inherit;background:#000a;border:1px solid var(--iswc-accent,#2563eb);border-radius:2px;z-index:9999;padding:0 4px;`;
-    input.style.cssText = rectCss;
+    input.value = (textNode.textContent ?? '').trim();
+    const w = Math.max(48, r.width + 12);
+    const h = Math.max(18, r.height + 4);
+    input.style.cssText = [
+      'position:fixed',
+      `left:${r.left}px`,
+      `top:${r.top - 2}px`,
+      `width:${w}px`,
+      `height:${h}px`,
+      'font:12px var(--iswc-ui, ui-sans-serif, system-ui, sans-serif)',
+      'color:var(--iswc-text, #e2e8f0)',
+      'background:var(--iswc-bg-elev, #131a24)',
+      'border:1px solid var(--iswc-accent, #2563eb)',
+      'border-radius:4px',
+      'z-index:10000',
+      'padding:0 6px',
+      'box-shadow:0 8px 24px rgba(0,0,0,0.35)',
+    ].join(';');
     document.body.appendChild(input);
     input.focus();
     input.select();
@@ -1164,27 +1263,35 @@ class IswcErEditor extends HTMLElement {
 }
 
 function snap8(v: number): number { return Math.round(v / 8) * 8; }
-function cloneState(s: unknown): ErEditorState | null {
+
+/** Acepta payload plano o envuelto `{ erDiagram | er: {...} }`. */
+function unwrapErSource(s: unknown): Record<string, unknown> | null {
   if (!s || typeof s !== 'object') return null;
-  const o = s as Partial<ErEditorState> & {
-    entities?: unknown[];
-    relations?: unknown[];
-    meta?: Record<string, unknown>;
-    groups?: unknown[];
-    title?: string;
-    subtitle?: string;
-    direction?: ErEditorState['direction'];
-    ratio?: number;
-  };
+  const o = s as Record<string, unknown>;
+  const inner = o.erDiagram ?? o.er;
+  if (inner && typeof inner === 'object') {
+    const nest = inner as Record<string, unknown>;
+    return {
+      ...nest,
+      theme: nest.theme ?? o.theme,
+    };
+  }
+  return o;
+}
+
+function cloneState(s: unknown): ErEditorState | null {
+  const o = unwrapErSource(s);
+  if (!o) return null;
   return {
     entities: cloneEntities((o.entities ?? []) as ErSpecEntity[]),
     relations: cloneRelations((o.relations ?? []) as ErSpecRelation[]),
-    meta: { ...(o.meta ?? {}) },
-    groups: (o.groups ?? []).map((g) => ({ ...(g as { id: string; name: string; hue?: number }) })),
-    title: o.title,
-    subtitle: o.subtitle,
-    direction: o.direction,
-    ratio: o.ratio,
+    meta: { ...((o.meta as Record<string, unknown>) ?? {}) },
+    groups: ((o.groups ?? []) as Array<{ id: string; name: string; hue?: number }>).map((g) => ({ ...g })),
+    title: typeof o.title === 'string' ? o.title : undefined,
+    subtitle: typeof o.subtitle === 'string' ? o.subtitle : undefined,
+    direction: o.direction as ErEditorState['direction'],
+    ratio: typeof o.ratio === 'number' ? o.ratio : undefined,
+    theme: typeof o.theme === 'string' ? o.theme : undefined,
   };
 }
 function cloneEntities(arr: ErSpecEntity[]): ErSpecEntity[] {

@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-date-picker
 tags:
   - iswc-date-picker
 category: forms
 status: public
-source: ./date-picker.js
+source: ./date-picker.ts
 style: ./date-picker.css
 preview: ./date-picker.json
 ---
 # `<iswc-date-picker>`
 
-## Propósito
+## PropÃ³sito
 
-Calendario inline (DateCalendar de MUI X). Tres vistas (día, mes, año), teclado, números de semana y reglas de deshabilitado. El mes y el año del encabezado abren un iswc-dropdown.
+Calendario inline (DateCalendar de MUI X). Tres vistas (dÃ­a, mes, aÃ±o), teclado, nÃºmeros de semana y reglas de deshabilitado. El mes y el aÃ±o del encabezado abren un iswc-dropdown.
 
-Este módulo registra `<iswc-date-picker>`.
+Este mÃ³dulo registra `<iswc-date-picker>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './date-picker.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-date-picker></iswc-date-picker>
@@ -44,34 +44,34 @@ import './date-picker.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `mode` | string/según contrato | Fuente define default/restricción. |
-| `min` | string/según contrato | Fuente define default/restricción. |
-| `max` | string/según contrato | Fuente define default/restricción. |
-| `locale` | string/según contrato | Fuente define default/restricción. |
-| `view` | string/según contrato | Fuente define default/restricción. |
-| `views` | string/según contrato | Fuente define default/restricción. |
-| `open-to` | string/según contrato | Fuente define default/restricción. |
-| `first-day-of-week` | string/según contrato | Fuente define default/restricción. |
-| `weekday-width` | string/según contrato | Fuente define default/restricción. |
-| `show-outside-days` | boolean | Fuente define default/restricción. |
-| `fixed-weeks` | boolean | Fuente define default/restricción. |
-| `show-week-numbers` | boolean | Fuente define default/restricción. |
-| `disable-past` | boolean | Fuente define default/restricción. |
-| `disable-future` | boolean | Fuente define default/restricción. |
-| `disabled-dates` | string/según contrato | Fuente define default/restricción. |
-| `disabled-days` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `readonly` | boolean | Fuente define default/restricción. |
-| `preview-to` | string/según contrato | Fuente define default/restricción. |
-| `nav` | string/según contrato | Fuente define default/restricción. |
-| `month` | string/según contrato | Fuente define default/restricción. |
-| `both` | string/según contrato | Fuente define default/restricción. |
-| `prev` | string/según contrato | Fuente define default/restricción. |
-| `next` | string/según contrato | Fuente define default/restricción. |
-| `none` | string/según contrato | Fuente define default/restricción. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `mode` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `min` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `locale` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `view` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `views` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `open-to` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `first-day-of-week` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `weekday-width` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `show-outside-days` | boolean | Fuente define default/restricciÃ³n. |
+| `fixed-weeks` | boolean | Fuente define default/restricciÃ³n. |
+| `show-week-numbers` | boolean | Fuente define default/restricciÃ³n. |
+| `disable-past` | boolean | Fuente define default/restricciÃ³n. |
+| `disable-future` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled-dates` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled-days` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `preview-to` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `nav` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `month` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `both` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `prev` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `next` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `none` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -102,23 +102,44 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-view-change` | Evento personalizado del componente (view change). |
+| `iswc-month-change` | Evento personalizado del componente (month change). |
+| `iswc-day-hover` | Evento personalizado del componente (day hover). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-view-change` | sí | sí | sí | no |
-| `iswc-month-change` | sí | sí | sí | no |
-| `iswc-day-hover` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
+| `iswc-view-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-month-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-day-hover` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-date-picker');
+el.addEventListener('iswc-view-change', (e) => {
+  console.log('iswc-view-change', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `showMonth()` | Método público declarado. |
-| `navigate()` | Método público declarado. |
-| `focusDate()` | Método público declarado. |
-| `clear()` | Método público declarado. |
+| `showMonth()` | MÃ©todo pÃºblico declarado. |
+| `navigate()` | MÃ©todo pÃºblico declarado. |
+| `focusDate()` | MÃ©todo pÃºblico declarado. |
+| `clear()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -133,6 +154,8 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `grid` | Personalizable con `::part(grid)`. |
 | `month-view` | Personalizable con `::part(month-view)`. |
 | `year-view` | Personalizable con `::part(year-view)`. |
+| `day` | Cada celda de dÃ­a en la grilla. |
+| `week-number` | Columna de nÃºmero de semana. |
 
 ### Custom states
 
@@ -142,40 +165,40 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-dp-cols` | Token leído o definido por componente. |
-| `--iswc-datepicker-border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-datepicker-bg` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-datepicker-radius` | Token leído o definido por componente. |
-| `--iswc-radius` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-shadow` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
-| `--iswc-accent-bg` | Token leído o definido por componente. |
-| `--iswc-color-brand-600` | Token leído o definido por componente. |
-| `--iswc-on-brand` | Token leído o definido por componente. |
-| `--iswc-year-height` | Token leído o definido por componente. |
+| `--iswc-dp-cols` | Token leÃ­do o definido por componente. |
+| `--iswc-datepicker-border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-datepicker-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-datepicker-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-shadow` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
+| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-600` | Token leÃ­do o definido por componente. |
+| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
+| `--iswc-year-height` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-date-picker> — Calendario inline (equivalente a DateCalendar de MUI X).
-> Tres vistas: día, mes y año. El mes y el año del encabezado son triggers de
+> <iswc-date-picker> â€” Calendario inline (equivalente a DateCalendar de MUI X).
+> Tres vistas: dÃ­a, mes y aÃ±o. El mes y el aÃ±o del encabezado son triggers de
 > un iswc-dropdown para saltar sin encadenar clics en las flechas.
 > Atributos:
->   value            yyyy-mm-dd · rango: `inicio/fin`
+>   value            yyyy-mm-dd Â· rango: `inicio/fin`
 >   mode             single | range
 >   min / max        ISO
 >   view             day | month | year   (vista mostrada)
@@ -185,7 +208,7 @@ Documentación de cabecera preservada desde fuente:
 >   show-outside-days, fixed-weeks, show-week-numbers
 >   disable-past, disable-future, disabled-dates="ISO,ISO", disabled-days="0,6"
 >   disabled, readonly
-> Events: iswc-change { value } | { start, end } · iswc-view-change { view }
+> Events: iswc-change { value } | { start, end } Â· iswc-view-change { view }
 >         iswc-month-change { month }
 
 ## Dependencias y componentes relacionados
@@ -196,11 +219,11 @@ Documentación de cabecera preservada desde fuente:
 - [`./month-calendar.js`](./month-calendar.js)
 - [`./year-calendar.js`](./year-calendar.js)
 
-Tags del módulo: `<iswc-date-picker>`.
+Tags del mÃ³dulo: `<iswc-date-picker>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-selected`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-selected`.
 
 ## Ejemplo avanzado
 
@@ -210,7 +233,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -218,15 +241,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./date-picker.js)
+- [JavaScript](./date-picker.ts)
 - [CSS](./date-picker.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./date-picker.json)

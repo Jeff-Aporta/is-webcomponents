@@ -171,35 +171,9 @@ function isNumericXY(datasets: ChartDataset[]): boolean {
   return !!first && typeof first === 'object' && 'x' in first;
 }
 
-class IswcChart extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      'text-color': { prop: '--chart-text', onlyColorValues: true },
-      'muted-color': { prop: '--chart-muted', onlyColorValues: true },
-      surface: { prop: '--chart-surface', onlyColorValues: true },
-      'grid-color': { prop: '--iswc-chart-grid-color', onlyColorValues: true },
-      'axis-color': { prop: '--chart-axis-color', onlyColorValues: true },
-      'bar-radius': '--chart-bar-radius',
-      'bar-gap': '--chart-bar-gap',
-      'line-width': '--chart-line-width',
-      'point-radius': '--chart-point-radius',
-      'slice-gap': '--chart-slice-gap',
-      'doughnut-ratio': '--chart-doughnut-ratio',
-      'tick-size': '--chart-tick-size',
-      'legend-size': '--chart-legend-size',
-      'title-size': '--chart-title-size',
-      'tooltip-size': '--chart-tooltip-size',
-      // Slots de paleta: los consumen las variantes radiales (radar,
-      // polar-area) además de las series de iswc-chart.
-      'fill-1': { prop: '--fill-color-1', onlyColorValues: true },
-      'fill-2': { prop: '--fill-color-2', onlyColorValues: true },
-      'fill-3': { prop: '--fill-color-3', onlyColorValues: true },
-      'fill-4': { prop: '--fill-color-4', onlyColorValues: true },
-      'fill-5': { prop: '--fill-color-5', onlyColorValues: true },
-      'fill-6': { prop: '--fill-color-6', onlyColorValues: true },
-    };
+class IswcChart extends withStyleAttrs(HTMLElement) {
 
-  static get observedAttributes(): string[] { return [...OBSERVED, ...IswcChart.styleAttrNames]; }
+  static get observedAttributes(): string[] { return [...OBSERVED]; }
   static fixedType: string | null = null;
   static styleModuleUrl: string | null = null;
   static drawMarks: ((ctx: ChartCtx) => void) | null = null;

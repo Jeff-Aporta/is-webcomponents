@@ -48,9 +48,10 @@ const BASE = (() => {
 const B64 = (s) => Buffer.from(s, 'utf8').toString('base64').replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
 const urlFor = (tag) => `${BASE}/?s=${B64(JSON.stringify({ component: tag }))}`;
 
-const PAGES = ['home', 'theming', 'ecosystem', 'iswc-icon-explorer', 'iswc-ui'];
+const PAGES = ['home', 'icons', 'theming', 'ecosystem', 'iswc-icon-explorer', 'iswc-ui'];
 const PAGE_MARKERS = {
-  home: [/IS Web Components|Componentes|kit/i, /cat(?:egorías|egory)|sección|hero/i],
+  home: [/ISWC|Componentes|kit/i, /cat(?:egorías|egory)|sección|hero/i],
+  icons: [/Mapa de componentes|imap__|Filtrar/i],
   theming: [/theming|palette|theme|tema|paleta|color/i],
   ecosystem: [/ecosistema|ecosystem|componentes|categor/i],
   // iswc-icon-explorer: meta-página, no es un custom element. Sin customElements

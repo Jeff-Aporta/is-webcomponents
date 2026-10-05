@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-pin-input
 tags:
   - iswc-pin-input
 category: forms
 status: public
-source: ./pin-input.js
+source: ./pin-input.ts
 style: ./pin-input.css
 preview: ./pin-input.json
 ---
 # `<iswc-pin-input>`
 
-## Propósito
+## PropÃ³sito
 
-Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,
-Backspace retrocede, pegar reparte todos los dígitos, navegación con
+Casillas para OTP / PIN de 3 a 8 dÃ­gitos. Auto-avance al escribir,
+Backspace retrocede, pegar reparte todos los dÃ­gitos, navegaciÃ³n con
 flechas y soporte para enmascarar el contenido.
 
-Este módulo registra `<iswc-pin-input>`.
+Este mÃ³dulo registra `<iswc-pin-input>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './pin-input.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-pin-input length="6"></iswc-pin-input>
@@ -46,16 +46,16 @@ import './pin-input.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `length` | string/según contrato | Fuente define default/restricción. |
-| `type` | string/según contrato | Fuente define default/restricción. |
-| `mask` | boolean | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `invalid` | boolean | Fuente define default/restricción. |
-| `placeholder` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `autocomplete` | string/según contrato | Fuente define default/restricción. |
+| `length` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `type` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `mask` | boolean | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `invalid` | boolean | Fuente define default/restricciÃ³n. |
+| `placeholder` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `autocomplete` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -67,21 +67,42 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-pin-change` | Evento personalizado del componente (pin change). |
+| `iswc-pin-complete` | Evento personalizado del componente (pin complete). |
+| `iswc-pin-invalid` | Evento personalizado del componente (pin invalid). |
+| `iswc-otp` | Emitido al autocompletar el valor vÃ­a Web OTP (autocomplete="one-time-code"). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-pin-change` | sí | sí | sí | no |
-| `iswc-pin-complete` | sí | sí | sí | no |
-| `iswc-pin-invalid` | según cabecera | según cabecera | según cabecera | según cabecera |
-| `iswc-otp` | `{ code }` | sí | sí | no |
+| `iswc-pin-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-pin-complete` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-pin-invalid` | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera | segÃºn cabecera |
+| `iswc-otp` | `{ code }` | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-pin-input');
+el.addEventListener('iswc-pin-change', (e) => {
+  console.log('iswc-pin-change', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `reset()` | Método público declarado. |
-| `focus()` | Método público declarado. |
+| `reset()` | MÃ©todo pÃºblico declarado. |
+| `focus()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -98,41 +119,41 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--cell-size` | Token leído o definido por componente. |
-| `--gap` | Token leído o definido por componente. |
-| `--bg` | Token leído o definido por componente. |
-| `--iswc-bg-2` | Token leído o definido por componente. |
-| `--fg` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--brand` | Token leído o definido por componente. |
-| `--iswc-brand` | Token leído o definido por componente. |
-| `--danger` | Token leído o definido por componente. |
-| `--iswc-danger` | Token leído o definido por componente. |
+| `--cell-size` | Token leÃ­do o definido por componente. |
+| `--gap` | Token leÃ­do o definido por componente. |
+| `--bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-2` | Token leÃ­do o definido por componente. |
+| `--fg` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--brand` | Token leÃ­do o definido por componente. |
+| `--iswc-brand` | Token leÃ­do o definido por componente. |
+| `--danger` | Token leÃ­do o definido por componente. |
+| `--iswc-danger` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-pin-input> — Web Component (vanilla, zero dependencies).
-> Casillas para OTP / PIN de 4 a 6 dígitos. Auto-avance al escribir, Backspace
-> retrocede, pegar distribuye todos los dígitos, focus automático.
+> <iswc-pin-input> â€” Web Component (vanilla, zero dependencies).
+> Casillas para OTP / PIN de 4 a 6 dÃ­gitos. Auto-avance al escribir, Backspace
+> retrocede, pegar distribuye todos los dÃ­gitos, focus automÃ¡tico.
 >   <iswc-pin-input length="6" required></iswc-pin-input>
 > Atributos
 >   length       number  (3-8, default 6)
 >   type         number | text   (default 'number')
->   mask         boolean — si true, muestra asteriscos.
+>   mask         boolean â€” si true, muestra asteriscos.
 >   disabled     boolean
 >   invalid      boolean
->   placeholder  string — carácter para casillas vacías.
+>   placeholder  string â€” carÃ¡cter para casillas vacÃ­as.
 >   autocomplete one-time-code | numeric
 > Slots
->   (default)  — hijos ignorados (este componente es self-contained).
+>   (default)  â€” hijos ignorados (este componente es self-contained).
 > Eventos
 >   iswc-pin-change  detail: { value, index }
 >   iswc-pin-complete detail: { value }
@@ -149,11 +170,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/web-otp.js`](../_shared/web-otp.js)
 
-Tags del módulo: `<iswc-pin-input>`.
+Tags del mÃ³dulo: `<iswc-pin-input>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -163,7 +184,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -171,15 +192,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./pin-input.js)
+- [JavaScript](./pin-input.ts)
 - [CSS](./pin-input.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./pin-input.json)

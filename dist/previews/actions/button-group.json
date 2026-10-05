@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-button-group",
   "category": "actions",
-  "title": "<iswc-button-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-button-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-button-group de InSoft.",
   "styles": "\n  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }\n  .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }\n  .field { display: grid; gap: 0.4rem; justify-items: start; }\n  .field > .cap {\n    font-family: \"JetBrains Mono\", var(--iswc-mono);\n    font-size: 0.7rem;\n    color: var(--iswc-text-dim);\n  }\n  .native-demo {\n    font: inherit;\n    padding: 0.55em 1em;\n    border: 1px solid var(--iswc-border);\n    background: var(--iswc-control-bg);\n    color: var(--iswc-text);\n    cursor: pointer;\n  }\n",
   "storageKey": "docs-iswc-button-group",
@@ -11,85 +11,106 @@
     {
       "id": "intro",
       "title": "Uso",
-      "titleHtml": true,
-      "lede": "Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons.",
+      "titleHtml": false,
+      "lede": "Agrupa botones relacionados en una sola unidad visual.",
       "blocks": [
         {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Selección</code>",
+              "Si se le pide, gestiona cuál está activo. Útil para controles segmentados, toolbars y split buttons."
+            ]
+          ]
+        },
+        {
           "kind": "demo",
-          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">appearance=\"segmented\" · select=\"single\" · <code class=\"code\">hue</code> por botón</span>\n                    <iswc-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n                      <iswc-button variant=\"plain\" value=\"lista\" hue=\"210\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:format-list-bulleted\"></iswc-icon>\n                        Lista\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tabla\" hue=\"160\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:table\"></iswc-icon>\n                        Tabla\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:view-grid-outline\"></iswc-icon>\n                        Tarjetas\n                      </iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <p class=\"lede\" id=\"introLog\">vista: <code class=\"code\">lista</code></p>\n                </div>",
+          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">appearance=\"segmented\" · select=\"single\" · <code class=\"code\">hue</code> por botón</span>\n                    <iswc-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n                      <iswc-button variant=\"plain\" value=\"lista\" hue=\"210\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:format-list-bulleted\"></iswc-icon>\n                        Lista\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tabla\" hue=\"160\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:table\"></iswc-icon>\n                        Tabla\n                      </iswc-button>\n                      <iswc-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">\n                        <iswc-icon slot=\"start\" icon=\"mdi:view-grid-outline\"></iswc-icon>\n                        Tarjetas\n                      </iswc-button>\n                    </iswc-button-group>\n                  </div>\n                </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:label",
-                "label": "label",
-                "options": [
-                  "Vista",
-                  "Alineación",
-                  "Opciones",
-                  "Periodo",
-                  "Formato",
-                  "Prioridad",
-                  "Plan",
-                  "Guardar",
-                  "Exportar",
-                  "Historial",
-                  "Demo"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "segmented",
-                  "separated",
-                  "joined"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:select",
-                "label": "select",
-                "options": [
-                  "single",
-                  "multiple"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "lista",
-                  "Centro",
-                  "Medio",
-                  "mes",
-                  "bold",
-                  "pro",
-                  "left",
-                  "B"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:orientation",
-                "label": "orientation"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:allow-empty",
-                "label": "allow-empty"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:pill",
-                "label": "pill"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:stretch",
-                "label": "stretch"
-              }
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Vista",
+                "Alineación",
+                "Opciones",
+                "Periodo",
+                "Formato",
+                "Prioridad",
+                "Plan",
+                "Guardar",
+                "Exportar",
+                "Historial",
+                "Demo"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "joined",
+                "segmented",
+                "separated"
+              ],
+              "default": "joined"
+            },
+            {
+              "control": "select",
+              "prop": "attr:select",
+              "label": "select",
+              "options": [
+                "none",
+                "single",
+                "multiple"
+              ],
+              "default": "none"
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                {
+                  "value": "",
+                  "label": "without a default setting",
+                  "placeholder": true
+                },
+                "lista",
+                "Centro",
+                "Medio",
+                "mes",
+                "bold",
+                "pro",
+                "left",
+                "B"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:orientation",
+              "label": "orientation"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:allow-empty",
+              "label": "allow-empty"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:pill",
+              "label": "pill"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:stretch",
+              "label": "stretch"
+            }
           ],
           "equivNote": "El kit aporta selección, hue y estilos. En HTML puro el análogo más cercano es un <code class=\"code\">radiogroup</code> con botones.",
           "equivHtml": "<div role=\"radiogroup\" aria-label=\"Vista\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\">Lista</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Tabla</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Tarjetas</button>\n</div>"
@@ -97,11 +118,6 @@
         {
           "kind": "callout",
           "html": "<strong>Dale siempre un <code class=\"code\">label</code>.</strong> No se muestra en pantalla, pero los lectores de pantalla lo anuncian."
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n  <iswc-button variant=\"plain\" value=\"lista\" hue=\"210\">Lista</iswc-button>\n  <iswc-button variant=\"plain\" value=\"tabla\" hue=\"160\">Tabla</iswc-button>\n  <iswc-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">Tarjetas</iswc-button>\n</iswc-button-group>"
         }
       ]
     },
@@ -115,11 +131,6 @@
           "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">joined</span>\n                    <iswc-button-group label=\"Alineación\" select=\"single\" value=\"Centro\">\n                      <iswc-button variant=\"outlined\">Izquierda</iswc-button>\n                      <iswc-button variant=\"outlined\">Centro</iswc-button>\n                      <iswc-button variant=\"outlined\">Derecha</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">segmented</span>\n                    <iswc-button-group label=\"Alineación\" variant=\"segmented\" select=\"single\" value=\"Centro\">\n                      <iswc-button variant=\"plain\">Izquierda</iswc-button>\n                      <iswc-button variant=\"plain\">Centro</iswc-button>\n                      <iswc-button variant=\"plain\">Derecha</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">separated</span>\n                    <iswc-button-group label=\"Alineación\" variant=\"separated\" select=\"single\" value=\"Centro\">\n                      <iswc-button variant=\"outlined\">Izquierda</iswc-button>\n                      <iswc-button variant=\"outlined\">Centro</iswc-button>\n                      <iswc-button variant=\"outlined\">Derecha</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                </div>",
           "equivNote": "joined / segmented / separated son presentación del kit. En nativo suele bastar un grupo de botones; el “segmented” se acerca a una barra de tabs o toggles.",
           "equivHtml": "<!-- joined / separated → toolbar de botones -->\n<div role=\"group\" aria-label=\"Alineación\">\n  <button type=\"button\">Izquierda</button>\n  <button type=\"button\" aria-pressed=\"true\">Centro</button>\n  <button type=\"button\">Derecha</button>\n</div>\n\n<!-- segmented ≈ pista + segmento activo (ARIA igual) -->\n<div role=\"radiogroup\" aria-label=\"Alineación\" class=\"segmented\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Izquierda</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\">Centro</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Derecha</button>\n</div>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-button-group variant=\"segmented\" select=\"single\">…</iswc-button-group>"
         }
       ]
     },
@@ -132,11 +143,6 @@
           "kind": "demo",
           "html": "\n                <div class=\"bar\" style=\"align-items: flex-start;\">\n                  <div class=\"field\">\n                    <span class=\"cap\">joined</span>\n                    <iswc-button-group orientation=\"vertical\" label=\"Opciones\" select=\"single\" value=\"Medio\">\n                      <iswc-button variant=\"outlined\">Arriba</iswc-button>\n                      <iswc-button variant=\"outlined\">Medio</iswc-button>\n                      <iswc-button variant=\"outlined\">Abajo</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">segmented</span>\n                    <iswc-button-group orientation=\"vertical\" variant=\"segmented\" label=\"Opciones\" select=\"single\" value=\"Medio\">\n                      <iswc-button variant=\"plain\">Arriba</iswc-button>\n                      <iswc-button variant=\"plain\">Medio</iswc-button>\n                      <iswc-button variant=\"plain\">Abajo</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                </div>",
           "equivHtml": "<div role=\"radiogroup\" aria-label=\"Opciones\" style=\"display:flex;flex-direction:column\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Arriba</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\">Medio</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Abajo</button>\n</div>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-button-group orientation=\"vertical\" label=\"Opciones\">\n  <iswc-button variant=\"outlined\">Arriba</iswc-button>\n  …\n</iswc-button-group>"
         }
       ]
     },
@@ -147,15 +153,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">single</span>\n                    <iswc-button-group id=\"selSingle\" label=\"Periodo\" variant=\"segmented\" select=\"single\" value=\"mes\">\n                      <iswc-button variant=\"plain\" value=\"dia\">Día</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"semana\">Semana</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"mes\">Mes</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"anio\">Año</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">multiple</span>\n                    <iswc-button-group id=\"selMulti\" label=\"Formato\" select=\"multiple\" value=\"bold\">\n                      <iswc-button variant=\"outlined\" value=\"bold\" aria-label=\"Negrita\">\n                        <iswc-icon icon=\"mdi:format-bold\" label=\"Negrita\"></iswc-icon>\n                      </iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"italic\" aria-label=\"Cursiva\">\n                        <iswc-icon icon=\"mdi:format-italic\" label=\"Cursiva\"></iswc-icon>\n                      </iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"underline\" aria-label=\"Subrayado\">\n                        <iswc-icon icon=\"mdi:format-underline\" label=\"Subrayado\"></iswc-icon>\n                      </iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">single + allow-empty</span>\n                    <iswc-button-group id=\"selEmpty\" label=\"Prioridad\" select=\"single\" allow-empty>\n                      <iswc-button variant=\"outlined\" value=\"baja\">Baja</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"media\">Media</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"alta\">Alta</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <p class=\"lede\" id=\"selLog\">Sin cambios todavía.</p>\n                </div>",
+          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">single</span>\n                    <iswc-button-group id=\"selSingle\" label=\"Periodo\" variant=\"segmented\" select=\"single\" value=\"mes\">\n                      <iswc-button variant=\"plain\" value=\"dia\">Día</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"semana\">Semana</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"mes\">Mes</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"anio\">Año</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">multiple</span>\n                    <iswc-button-group id=\"selMulti\" label=\"Formato\" select=\"multiple\" value=\"bold\">\n                      <iswc-button variant=\"outlined\" value=\"bold\" aria-label=\"Negrita\">\n                        <iswc-icon icon=\"mdi:format-bold\" label=\"Negrita\"></iswc-icon>\n                      </iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"italic\" aria-label=\"Cursiva\">\n                        <iswc-icon icon=\"mdi:format-italic\" label=\"Cursiva\"></iswc-icon>\n                      </iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"underline\" aria-label=\"Subrayado\">\n                        <iswc-icon icon=\"mdi:format-underline\" label=\"Subrayado\"></iswc-icon>\n                      </iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">single + allow-empty</span>\n                    <iswc-button-group id=\"selEmpty\" label=\"Prioridad\" select=\"single\" allow-empty>\n                      <iswc-button variant=\"outlined\" value=\"baja\">Baja</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"media\">Media</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"alta\">Alta</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                </div>",
           "equivNote": "single ≈ radios; multiple ≈ checkboxes con aria-pressed; allow-empty permite volver a “ninguno”. Diagrama: clic para ampliar.",
           "equivHtml": "<!-- select=\"single\" -->\n<div role=\"radiogroup\" aria-label=\"Periodo\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Día</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Semana</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\">Mes</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Año</button>\n</div>\n\n<!-- select=\"multiple\" -->\n<div role=\"group\" aria-label=\"Formato\">\n  <button type=\"button\" aria-pressed=\"true\" aria-label=\"Negrita\">B</button>\n  <button type=\"button\" aria-pressed=\"false\" aria-label=\"Cursiva\">I</button>\n  <button type=\"button\" aria-pressed=\"false\" aria-label=\"Subrayado\">U</button>\n</div>\n\n<!-- single + allow-empty: mismo radiogroup, permitiendo checked=false en todos -->\n<div role=\"radiogroup\" aria-label=\"Prioridad\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Baja</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Media</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">Alta</button>\n</div>",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"Selección en iswc-button-group\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        { \"id\": \"s\", \"label\": \"select=?\", \"shape\": \"diamond\" },\n        { \"id\": \"a\", \"label\": \"single → role=radiogroup\", \"shape\": \"round\" },\n        { \"id\": \"b\", \"label\": \"multiple → role=group + aria-pressed\", \"shape\": \"round\" },\n        { \"id\": \"c\", \"label\": \"allow-empty → se puede vaciar\", \"shape\": \"round\" },\n        { \"id\": \"d\", \"label\": \"HTML: fieldset + radio\", \"shape\": \"stadium\" },\n        { \"id\": \"e\", \"label\": \"HTML: fieldset + checkbox\", \"shape\": \"stadium\" },\n        { \"id\": \"f\", \"label\": \"HTML: radios + botón clear\", \"shape\": \"stadium\" }\n      ],\n      \"edges\": [\n        { \"from\": \"s\", \"to\": \"a\", \"label\": \"single\" },\n        { \"from\": \"s\", \"to\": \"b\", \"label\": \"multiple\" },\n        { \"from\": \"a\", \"to\": \"c\", \"label\": \"+ allow-empty\" },\n        { \"from\": \"a\", \"to\": \"d\" },\n        { \"from\": \"b\", \"to\": \"e\" },\n        { \"from\": \"c\", \"to\": \"f\" }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "lang": "javascript",
-          "code": "group.addEventListener('iswc-change', (e) => {\n  e.detail.value;   // 'mes'  ·  ['bold', 'italic'] en multiple\n  e.detail.values;  // siempre array\n});"
         }
       ]
     },
@@ -168,11 +169,6 @@
           "kind": "demo",
           "html": "\n                <div class=\"stack\" style=\"align-self: stretch;\">\n                  <div class=\"field\">\n                    <span class=\"cap\">pill</span>\n                    <iswc-button-group label=\"Alineación\" pill select=\"single\" value=\"Centro\">\n                      <iswc-button variant=\"outlined\">Izquierda</iswc-button>\n                      <iswc-button variant=\"outlined\">Centro</iswc-button>\n                      <iswc-button variant=\"outlined\">Derecha</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">pill + segmented</span>\n                    <iswc-button-group label=\"Alineación\" pill variant=\"segmented\" select=\"single\" value=\"Centro\">\n                      <iswc-button variant=\"plain\">Izquierda</iswc-button>\n                      <iswc-button variant=\"plain\">Centro</iswc-button>\n                      <iswc-button variant=\"plain\">Derecha</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\" style=\"justify-items: stretch; width: 100%;\">\n                    <span class=\"cap\">stretch + segmented</span>\n                    <iswc-button-group label=\"Plan\" stretch variant=\"segmented\" select=\"single\" value=\"pro\">\n                      <iswc-button variant=\"plain\" value=\"free\">Free</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"pro\">Pro</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"empresa\">Empresa</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                </div>",
           "equivHtml": "<!-- pill / stretch: presentación CSS; la semántica sigue siendo radiogroup -->\n<div role=\"radiogroup\" aria-label=\"Plan\" style=\"display:flex;width:100%\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\" style=\"flex:1\">Free</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\" style=\"flex:1\">Pro</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\" style=\"flex:1\">Empresa</button>\n</div>"
-        },
-        {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-button-group pill stretch variant=\"segmented\" select=\"single\">…</iswc-button-group>"
         }
       ]
     },
@@ -252,11 +248,12 @@
     },
     {
       "id": "api",
-      "title": "API live",
+      "title": "Combinaciones",
+      "lede": "Ejemplos estáticos de <code class=\"code\">orientation</code>, <code class=\"code\">variant</code> y <code class=\"code\">pill</code> (sin controles de depuración).",
       "blocks": [
         {
           "kind": "demo",
-          "html": "\n                <div class=\"stack\">\n                  <iswc-button-group id=\"apiGroup\" label=\"Demo\" select=\"single\" value=\"B\">\n                    <iswc-button variant=\"outlined\">A</iswc-button>\n                    <iswc-button variant=\"outlined\">B</iswc-button>\n                    <iswc-button variant=\"outlined\">C</iswc-button>\n                  </iswc-button-group>\n                  <div class=\"bar\">\n                    <iswc-button id=\"apiOrient\" variant=\"outlined\">Toggle orientation</iswc-button>\n                    <iswc-button id=\"apiAppear\" variant=\"outlined\">Ciclar appearance</iswc-button>\n                    <iswc-button id=\"apiPill\" variant=\"outlined\">Toggle pill</iswc-button>\n                    <iswc-button id=\"apiValue\" variant=\"outlined\">value = 'C'</iswc-button>\n                  </div>\n                </div>\n                <div class=\"log\" id=\"apiLog\"><div class=\"row\"><span class=\"hint\">Acciones de API aparecerán aquí.</span></div></div>",
+          "html": "\n                <div class=\"stack\">\n                  <div class=\"field\">\n                    <span class=\"cap\">horizontal · joined</span>\n                    <iswc-button-group label=\"Demo\" select=\"single\" value=\"B\">\n                      <iswc-button variant=\"outlined\" value=\"A\">A</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"B\">B</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"C\">C</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">vertical · segmented</span>\n                    <iswc-button-group orientation=\"vertical\" variant=\"segmented\" label=\"Demo\" select=\"single\" value=\"B\">\n                      <iswc-button variant=\"plain\" value=\"A\">A</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"B\">B</iswc-button>\n                      <iswc-button variant=\"plain\" value=\"C\">C</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                  <div class=\"field\">\n                    <span class=\"cap\">pill · joined</span>\n                    <iswc-button-group pill label=\"Demo\" select=\"single\" value=\"B\">\n                      <iswc-button variant=\"outlined\" value=\"A\">A</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"B\">B</iswc-button>\n                      <iswc-button variant=\"outlined\" value=\"C\">C</iswc-button>\n                    </iswc-button-group>\n                  </div>\n                </div>",
           "equivHtml": "<div role=\"radiogroup\" aria-label=\"Demo\">\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">A</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"true\">B</button>\n  <button type=\"button\" role=\"radio\" aria-checked=\"false\">C</button>\n</div>"
         }
       ]
@@ -370,5 +367,112 @@
       ]
     }
   ],
-  "hasBehavior": true
+  "hasBehavior": false,
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Agrupa botones relacionados en una sola unidad visual y, si se lo pides, gestiona cuál está activo. Sirve para controles segmentados, toolbars y split buttons."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "Nombre accesible del grupo"
+          },
+          {
+            "name": "<code>orientation</code>",
+            "type": "horizontal | vertical",
+            "default": "horizontal",
+            "desc": "Reflejado"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "joined | segmented | separated",
+            "default": "joined",
+            "desc": "Reflejado"
+          },
+          {
+            "name": "<code>select</code>",
+            "type": "none | single | multiple",
+            "default": "none",
+            "desc": "Activa la gestión de selección"
+          },
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "En <code>multiple</code>, valores separados por coma"
+          },
+          {
+            "name": "<code>pill</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Extremos redondeados en todo el grupo"
+          },
+          {
+            "name": "<code>stretch</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Los botones reparten el ancho"
+          },
+          {
+            "name": "<code>allow-empty</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "En <code>single</code>, permite deseleccionar"
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea el grupo completo"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "propiedades",
+            "desc": "<code>value</code> · <code>values</code> · <code>items</code> · <code>selectedItems</code>"
+          },
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-change</code> con <code>{ value, values }</code>"
+          },
+          {
+            "metodo": "slot",
+            "desc": "default: uno o más <code class=\"code\">iswc-button</code> o <code class=\"code\">button</code>"
+          },
+          {
+            "metodo": "part",
+            "desc": "<code>base</code>"
+          },
+          {
+            "metodo": "en los hijos",
+            "desc": "el grupo escribe <code>selected</code> y <code>aria-pressed</code>"
+          },
+          {
+            "metodo": "valor de un hijo",
+            "desc": "atributo <code>value</code>; si falta, texto; si vacío, índice"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-button-group-radius</code> <code>--iswc-button-group-gap</code> <code>--iswc-button-group-pad</code> <code>--iswc-button-group-accent</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button-group label=\"Vista\" variant=\"segmented\" select=\"single\" value=\"lista\">\n  <iswc-button variant=\"plain\" value=\"lista\" hue=\"210\">Lista</iswc-button>\n  <iswc-button variant=\"plain\" value=\"tabla\" hue=\"160\">Tabla</iswc-button>\n  <iswc-button variant=\"plain\" value=\"tarjetas\" hue=\"35\">Tarjetas</iswc-button>\n</iswc-button-group>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

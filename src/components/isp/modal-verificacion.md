@@ -1,46 +1,46 @@
----
+﻿---
 tag: iswc-modal-verificacion
 tags:
   - iswc-modal-verificacion
 category: isp
 status: public
-source: ./modal-verificacion.js
+source: ./modal-verificacion.ts
 style: ./modal-verificacion.css
 preview: ./modal-verificacion.json
 ---
 # `<iswc-modal-verificacion>`
 
-## Propósito
+## PropÃ³sito
 
 Port de `src/lib/base/modal/ModalVerificacion.svelte` (ISP-SvelteComponents).
 Al abrirse ejecuta `controller.actVerificar(record)` y pinta los mensajes
-devueltos coloreados por severidad. Al cerrarse vacía la lista de mensajes,
+devueltos coloreados por severidad. Al cerrarse vacÃ­a la lista de mensajes,
 igual que el original reasignaba un `TMensajesVerificacion` nuevo.
 
-Este módulo registra `<iswc-modal-verificacion>`.
+Este mÃ³dulo registra `<iswc-modal-verificacion>`.
 
 NO extiende `ModalBase`: el focus-trap de `ModalBase` recorre el LIGHT DOM
-(`this.querySelectorAll`) y aquí todo el contenido vive en el shadow, así que
-el trap dejaría el diálogo sin tabulación. Sigue el mismo patrón que
+(`this.querySelectorAll`) y aquÃ­ todo el contenido vive en el shadow, asÃ­ que
+el trap dejarÃ­a el diÃ¡logo sin tabulaciÃ³n. Sigue el mismo patrÃ³n que
 `<iswc-confirm-delete>`, el otro modal ISP portado.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Verificaciones asíncronas de un registro antes de una acción (guardar, cerrar,
+Verificaciones asÃ­ncronas de un registro antes de una acciÃ³n (guardar, cerrar,
 aprobar), donde el backend devuelve una lista de mensajes por severidad.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 Para confirmar un borrado usar `<iswc-confirm-delete>`; para un aviso sin
-verificación asíncrona usar `<iswc-dialog>` o `<iswc-toast>`.
+verificaciÃ³n asÃ­ncrona usar `<iswc-dialog>` o `<iswc-toast>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './modal-verificacion.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-button id="verBtn">Verificar</iswc-button>
@@ -50,7 +50,7 @@ import './modal-verificacion.js';
   modal.controller = {
     entrie: 'tercero',
     async actVerificar(record) {
-      return { mensajes: [{ itdmensaje: 'info', mensaje: 'NIT válido.' }] };
+      return { mensajes: [{ itdmensaje: 'info', mensaje: 'NIT vÃ¡lido.' }] };
     },
   };
   modal.record = { nit: '900123456' };
@@ -76,9 +76,9 @@ import './modal-verificacion.js';
 | --- | --- | --- |
 | `open` | boolean | Visible (reflected). |
 | `loading` | boolean | Se pone solo mientras corre `actVerificar`. |
-| `entity` | string | `Controller.entrie`; el título usa su minúscula. |
-| `icon` | string | Icono del título. Default `mdi:check`. |
-| `close-label` | string | Texto del botón de cierre. Default `Cerrar`. |
+| `entity` | string | `Controller.entrie`; el tÃ­tulo usa su minÃºscula. |
+| `icon` | string | Icono del tÃ­tulo. Default `mdi:check`. |
+| `close-label` | string | Texto del botÃ³n de cierre. Default `Cerrar`. |
 | `light-dismiss` | boolean | **Opt-in**: cerrar al hacer click en el backdrop. Antes cerraba siempre. |
 
 #### Propiedades de solo lectura
@@ -91,29 +91,50 @@ import './modal-verificacion.js';
 
 ### Slots
 
-No expone: todo el contenido del diálogo se construye en el shadow root.
+No expone: todo el contenido del diÃ¡logo se construye en el shadow root.
 
-### Métodos y propiedades públicas
+### MÃ©todos y propiedades pÃºblicas
 
-| Método | Uso |
+| MÃ©todo | Uso |
 | --- | --- |
-| `show()` | Abre el diálogo. |
-| `hide()` | Lo cierra y vacía los mensajes. |
+| `show()` | Abre el diÃ¡logo. |
+| `hide()` | Lo cierra y vacÃ­a los mensajes. |
 | `verify()` | Re-ejecuta `controller.actVerificar` y repinta. Devuelve `mensajes`. |
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-verificacion` | Evento personalizado del componente (verificacion). |
+| `iswc-verificacion-error` | Evento personalizado del componente (verificacion error). |
+| `iswc-cancel` | Emitido al cancelar la operaciÃ³n. |
+| `iswc-show / iswc-after-show / iswc-hide / iswc-after-hide` | Evento personalizado del componente (show / iswc after show / iswc hide / iswc after hide). |
+
 | Evento | detail | bubbles | composed |
 | --- | --- | --- | --- |
-| `iswc-verificacion` | `{ mensajes, qinfos, qwarning, qerrores }` | sí | sí |
-| `iswc-verificacion-error` | `{ message, error }` | sí | sí |
-| `iswc-cancel` | `{}` — cierre pedido por el usuario | sí | sí |
-| `iswc-show` / `iswc-after-show` / `iswc-hide` / `iswc-after-hide` | ciclo estándar del `<iswc-dialog>` interno | sí | sí |
+| `iswc-verificacion` | `{ mensajes, qinfos, qwarning, qerrores }` | sÃ­ | sÃ­ |
+| `iswc-verificacion-error` | `{ message, error }` | sÃ­ | sÃ­ |
+| `iswc-cancel` | `{}` â€” cierre pedido por el usuario | sÃ­ | sÃ­ |
+| `iswc-show` / `iswc-after-show` / `iswc-hide` / `iswc-after-hide` | ciclo estÃ¡ndar del `<iswc-dialog>` interno | sÃ­ | sÃ­ |
 
-`iswc-hide` es **cancelable**: es la vía para vetar un cierre. `iswc-cancel` se
-conserva como evento semántico ADICIONAL y acompaña a `iswc-hide` cuando el
-cierre lo pide el usuario (Escape, backdrop, botón Cerrar); un `hide()`
-programático no emite ninguno de los dos.
+`iswc-hide` es **cancelable**: es la vÃ­a para vetar un cierre. `iswc-cancel` se
+conserva como evento semÃ¡ntico ADICIONAL y acompaÃ±a a `iswc-hide` cuando el
+cierre lo pide el usuario (Escape, backdrop, botÃ³n Cerrar); un `hide()`
+programÃ¡tico no emite ninguno de los dos.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-modal-verificacion');
+el.addEventListener('iswc-verificacion', (e) => {
+  console.log('iswc-verificacion', e.detail);
+});
+```
+
+</details>
 
 ### Custom states
 
@@ -134,20 +155,20 @@ No expone custom states.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-modal-verificacion-accent` | Color del título. |
+| `--iswc-modal-verificacion-accent` | Color del tÃ­tulo. |
 | `--iswc-z-modal` | Capa de apilado. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated: es un diálogo de verificación, no un
+No declara integraciÃ³n form-associated: es un diÃ¡logo de verificaciÃ³n, no un
 campo.
 
-## Exports adicionales del módulo
+## Exports adicionales del mÃ³dulo
 
-- `getMsgColor(itd)` — mapea severidad (`1..4`, o `'info'|'warning'|'error'|'success'`,
-  incluidas variantes en mayúscula, copia exacta de `getMsgColor` del original)
-  a color semántico de `<iswc-text>`.
-- `lowerCase(value)` — equivalente a `lowerCase` de ispgen: `null/undefined/''` → `''`.
+- `getMsgColor(itd)` â€” mapea severidad (`1..4`, o `'info'|'warning'|'error'|'success'`,
+  incluidas variantes en mayÃºscula, copia exacta de `getMsgColor` del original)
+  a color semÃ¡ntico de `<iswc-text>`.
+- `lowerCase(value)` â€” equivalente a `lowerCase` de ispgen: `null/undefined/''` â†’ `''`.
 
 ## Comportamiento
 
@@ -157,8 +178,8 @@ esperar la promesa de `actVerificar`, exactamente como el original. Si
 en vez de `iswc-verificacion`.
 
 El componente NO implementa su propio ciclo de modal: compone un `<iswc-dialog>`
-dentro de su shadow root y cuelga el contenido como light DOM suyo. De ahí
-salen gratis el focus-trap (que antes no existía), el `Escape`, el restore de
+dentro de su shadow root y cuelga el contenido como light DOM suyo. De ahÃ­
+salen gratis el focus-trap (que antes no existÃ­a), el `Escape`, el restore de
 foco y las animaciones.
 
 ## Dependencias y componentes relacionados
@@ -168,19 +189,19 @@ foco y las animaciones.
 - [`../media/icon.js`](../media/icon.js)
 - [`./text.js`](./text.js)
 - [`./heading.js`](./heading.js)
-- [`../layout/dialog.js`](../layout/dialog.js) — provee todo el ciclo del modal.
+- [`../layout/dialog.js`](../layout/dialog.js) â€” provee todo el ciclo del modal.
 
-Tags del módulo: `<iswc-modal-verificacion>`.
+Tags del mÃ³dulo: `<iswc-modal-verificacion>`.
 
 ## Accesibilidad
 
 `role="dialog"` + `aria-modal` (los pone el `<iswc-dialog>` interno); el foco
 entra en el primer elemento focuseable y vuelve al elemento previamente
-enfocado al cerrar. `Escape` cierra el diálogo. Hay **focus-trap** con `Tab` /
+enfocado al cerrar. `Escape` cierra el diÃ¡logo. Hay **focus-trap** con `Tab` /
 `Shift+Tab`, que antes faltaba.
 
-Los `<iswc-button>` llevan `tabindex="0"` a propósito: usan `delegatesFocus`, así
-que sin él no matchean el selector de focuseables del trap.
+Los `<iswc-button>` llevan `tabindex="0"` a propÃ³sito: usan `delegatesFocus`, asÃ­
+que sin Ã©l no matchean el selector de focuseables del trap.
 
 ## Ejemplo avanzado
 
@@ -204,18 +225,18 @@ que sin él no matchean el selector de focuseables del trap.
 
 ## Errores comunes
 
-- Asignar `record`/`controller` después de `show()`: hacerlo antes, `verify()`
+- Asignar `record`/`controller` despuÃ©s de `show()`: hacerlo antes, `verify()`
   los lee en el momento de ejecutarse.
-- Esperar que `mensajes` sobreviva a un cierre: se vacía siempre al cerrar.
+- Esperar que `mensajes` sobreviva a un cierre: se vacÃ­a siempre al cerrar.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"`.
 
 ## Fuentes
 
-- [JavaScript](./modal-verificacion.js)
+- [JavaScript](./modal-verificacion.ts)
 - [CSS](./modal-verificacion.css)
 - [Preview](./modal-verificacion.json)

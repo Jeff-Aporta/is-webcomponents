@@ -1,40 +1,40 @@
----
+﻿---
 tag: iswc-speed-dial
 tags:
   - iswc-speed-dial
   - iswc-speed-dial-action
 category: actions
 status: public
-source: ./speed-dial.js
+source: ./speed-dial.ts
 style: ./speed-dial.css
 preview: ./speed-dial.json
 ---
 # `<iswc-speed-dial>`
 
-## Propósito
+## PropÃ³sito
 
-FAB que despliega un abanico de acciones. Cada acción es un
+FAB que despliega un abanico de acciones. Cada acciÃ³n es un
 `<iswc-speed-dial-action>` hijo con icono y etiqueta. En modo radial reparte
-las acciones en anillos concéntricos acotados a un wrapper y, si no caben,
+las acciones en anillos concÃ©ntricos acotados a un wrapper y, si no caben,
 pasa a un reparto por grid.
 
-Este módulo registra `<iswc-speed-dial>` y `<iswc-speed-dial-action>`.
+Este mÃ³dulo registra `<iswc-speed-dial>` y `<iswc-speed-dial-action>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Acciones, selección de comandos y menús interactivos.
+Acciones, selecciÃ³n de comandos y menÃºs interactivos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No usar como decoración ni reemplazar enlaces semánticos para navegación simple.
+No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './speed-dial.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-speed-dial label="Acciones">
@@ -51,28 +51,28 @@ import './speed-dial.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `icon` | string/según contrato | Fuente define default/restricción. |
-| `open-icon` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `direction` | string/según contrato | Fuente define default/restricción. |
-| `open` | boolean | Fuente define default/restricción. |
-| `distance` | string/según contrato | Fuente define default/restricción. |
-| `start-angle` | string/según contrato | Fuente define default/restricción. |
-| `sweep` | string/según contrato | Fuente define default/restricción. |
-| `arc` | string/según contrato | Fuente define default/restricción. |
-| `radius` | string/según contrato | Fuente define default/restricción. |
-| `boundary` | string/según contrato | Fuente define default/restricción. |
-| `data-layout` | string/según contrato | Fuente define default/restricción. |
-| `data-wrapper` | string/según contrato | Fuente define default/restricción. |
-| `data-start-angle` | string/según contrato | Fuente define default/restricción. |
-| `data-sweep` | string/según contrato | Fuente define default/restricción. |
-| `data-arc` | string/según contrato | Fuente define default/restricción. |
-| `data-radius` | string/según contrato | Fuente define default/restricción. |
+| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `open-icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `direction` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `open` | boolean | Fuente define default/restricciÃ³n. |
+| `distance` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `start-angle` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `sweep` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `arc` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `radius` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `boundary` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `data-layout` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `data-wrapper` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `data-start-angle` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `data-sweep` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `data-arc` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `data-radius` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
 Atributos observados de `<iswc-speed-dial-action>`: `icon`, `label`, `color`,
 `href`, `disabled`.
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -89,20 +89,39 @@ En `<iswc-speed-dial-action>`: slot `default` (etiqueta) y slot `icon`
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-toggle` | Emitido al alternar el estado abierto/cerrado. |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-toggle` | sí | sí | sí | no |
-| `iswc-select` | sí | sí | sí | no |
+| `iswc-toggle` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-select` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-speed-dial');
+el.addEventListener('iswc-toggle', (e) => {
+  console.log('iswc-toggle', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
 | `open()` | Despliega el abanico. |
 | `close()` | Repliega el abanico. |
 | `toggle()` | Alterna el estado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -121,37 +140,37 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--distance` | Token leído o definido por componente. |
-| `--i` | Token leído o definido por componente. |
-| `--r` | Token leído o definido por componente. |
-| `--sd-x` | Token leído o definido por componente. |
-| `--sd-y` | Token leído o definido por componente. |
-| `--sd-pack-left` | Token leído o definido por componente. |
-| `--sd-pack-top` | Token leído o definido por componente. |
-| `--sd-pack-w` | Token leído o definido por componente. |
-| `--sd-pack-h` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-on-accent` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-radius-fab` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-focus-fallback` | Token leído o definido por componente. |
-| `--iswc-focus-offset` | Token leído o definido por componente. |
-| `--iswc-success` | Token leído o definido por componente. |
-| `--iswc-warning` | Token leído o definido por componente. |
-| `--iswc-danger` | Token leído o definido por componente. |
+| `--distance` | Token leÃ­do o definido por componente. |
+| `--i` | Token leÃ­do o definido por componente. |
+| `--r` | Token leÃ­do o definido por componente. |
+| `--sd-x` | Token leÃ­do o definido por componente. |
+| `--sd-y` | Token leÃ­do o definido por componente. |
+| `--sd-pack-left` | Token leÃ­do o definido por componente. |
+| `--sd-pack-top` | Token leÃ­do o definido por componente. |
+| `--sd-pack-w` | Token leÃ­do o definido por componente. |
+| `--sd-pack-h` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-on-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-fab` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus-fallback` | Token leÃ­do o definido por componente. |
+| `--iswc-focus-offset` | Token leÃ­do o definido por componente. |
+| `--iswc-success` | Token leÃ­do o definido por componente. |
+| `--iswc-warning` | Token leÃ­do o definido por componente. |
+| `--iswc-danger` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-speed-dial> — FAB que despliega un abanico de acciones.
+> <iswc-speed-dial> â€” FAB que despliega un abanico de acciones.
 > Atributos
 >   icon          icono con el dial CERRADO (default mdi:plus)
 >   open-icon     icono con el dial ABIERTO (default mdi:close). El trigger
@@ -159,7 +178,7 @@ Documentación de cabecera preservada desde fuente:
 >                 dos iconos en vez de rotar uno solo.
 >   label         aria-label del trigger
 >   direction     up (default) | down | left | right | radial
->   open          boolean — controlado, refleja estado
+>   open          boolean â€” controlado, refleja estado
 >   distance      espacio entre trigger y acciones (default .25rem)
 > Data props (mismo espiritu que data-theme / data-palette):
 >   data-layout    radial (default con direction="radial") | grid | flex
@@ -174,16 +193,16 @@ Documentación de cabecera preservada desde fuente:
 > area radial para todas, el componente marca data-packed y las acciones
 > pasan a un GRID dentro del wrapper.
 > Slots
->   default    <iswc-speed-dial-action>…
+>   default    <iswc-speed-dial-action>â€¦
 > Eventos
 >   iswc-toggle  detail: { open }
->   iswc-select  detail: { action }   — cuando se elige una acción
+>   iswc-select  detail: { action }   â€” cuando se elige una acciÃ³n
 > Cada <iswc-speed-dial-action> acepta:
 >   icon, label, color (brand|neutral|success|warning|danger), href, disabled
->   El clic dispara iswc-select y, si no está disabled ni tiene href, cierra el dial.
+>   El clic dispara iswc-select y, si no estÃ¡ disabled ni tiene href, cierra el dial.
 
-El componente escribe `data-rings` en el host como diagnóstico del reparto
-radial (`radio x nº de items @ arco` por anillo) y `data-packed` cuando cae al
+El componente escribe `data-rings` en el host como diagnÃ³stico del reparto
+radial (`radio x nÂº de items @ arco` por anillo) y `data-packed` cuando cae al
 reparto por layout nativo.
 
 ## Dependencias y componentes relacionados
@@ -193,16 +212,16 @@ reparto por layout nativo.
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/misc-utils.js`](../_shared/misc-utils.js)
 - [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js)
-- [`./check-icon-button.js`](./check-icon-button.js) — el trigger es un
+- [`./check-icon-button.js`](./check-icon-button.js) â€” el trigger es un
   `<iswc-check-icon-button>` que alterna entre `icon` y `open-icon`.
 
-Tags del módulo: `<iswc-speed-dial>`, `<iswc-speed-dial-action>`.
+Tags del mÃ³dulo: `<iswc-speed-dial>`, `<iswc-speed-dial-action>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado:
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado:
 `aria-expanded` en el trigger, `role="menuitem"` y `aria-label` en cada
-acción (se rellena desde `label` o el texto del item).
+acciÃ³n (se rellena desde `label` o el texto del item).
 
 ## Ejemplo avanzado
 
@@ -219,7 +238,7 @@ acción (se rellena desde `label` o el texto del item).
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -227,15 +246,15 @@ acción (se rellena desde `label` o el texto del item).
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./speed-dial.js)
+- [JavaScript](./speed-dial.ts)
 - [CSS](./speed-dial.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./speed-dial.json)

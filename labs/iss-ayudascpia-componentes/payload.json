@@ -1,0 +1,157 @@
+{
+  "_lab": "iss-ayudascpia-componentes",
+  "_fase": "v2-actual",
+  "_doc": "Estado actual ISS-AyudasCPIA: PostgreSQL clientesis, apps ISW, OpenAI, DSCLIENTES (JWT/login), R2 CF (storage). Fuente endpoints: docs-experimental/gen/endpoints.generated.json.",
+  "componentDiagram": {
+    "theme": "insoft",
+    "title": "ISS AyudasCPIA · componentes de servidores",
+    "subtitle": "API Azure · apps ISW · PostgreSQL · OpenAI · DSCLIENTES · R2",
+    "layout": {
+      "mode": "pack",
+      "minGap": 72,
+      "rowGap": 72,
+      "colGutter": 72,
+      "pkgCorridor": 88
+    },
+    "packages": [
+      { "id": "pkg-apps", "name": "Apps / ISW", "stereotype": "consumidores", "x": 24, "y": 80, "w": 240, "h": 320 },
+      { "id": "pkg-api", "name": "AYUDASCP-IA", "stereotype": "Azure Functions · API", "x": 340, "y": 40, "w": 420, "h": 780 },
+      { "id": "pkg-db", "name": "PostgreSQL", "stereotype": "clientesis · patyia_*", "x": 840, "y": 200, "w": 240, "h": 180 },
+      { "id": "pkg-openai", "name": "@OPENAI", "stereotype": "LLM · vector store", "x": 1160, "y": 60, "w": 240, "h": 200 },
+      { "id": "pkg-ds", "name": "@DSCLIENTES", "stereotype": "login · JWT", "x": 1160, "y": 320, "w": 240, "h": 140 },
+      { "id": "pkg-r2", "name": "@R2 Cloudflare", "stereotype": "storage · CDN", "x": 1160, "y": 520, "w": 240, "h": 140 }
+    ],
+    "components": [
+      {
+        "id": "app-testpatyia",
+        "name": "ISW-TestPatyIA",
+        "stereotype": "SPA · QA local",
+        "package": "pkg-apps",
+        "x": 44, "y": 120, "w": 200, "h": 64
+      },
+      {
+        "id": "app-soporte",
+        "name": "ISW-ContaPyme /soporte",
+        "stereotype": "portal ContaPyme",
+        "package": "pkg-apps",
+        "x": 44, "y": 220, "w": 200, "h": 64
+      },
+      {
+        "id": "grp-auth",
+        "name": "auth",
+        "stereotype": "2 EP · DSCLIENTES",
+        "package": "pkg-api",
+        "x": 360, "y": 80, "w": 380, "h": 88,
+        "items": ["POST /JWT", "POST /auth/portal-login"]
+      },
+      {
+        "id": "grp-conversacion",
+        "name": "conversacion",
+        "stereotype": "turno · OpenAI · DB",
+        "package": "pkg-api",
+        "x": 360, "y": 190, "w": 380, "h": 168,
+        "items": [
+          "POST /conversacion",
+          "GET /conversacion/{id}",
+          "DELETE /conversacion/{id}",
+          "QUERY /conversaciones",
+          "GET /conversaciones",
+          "GET /resumen_conversacion/{id}",
+          "GET /conversacion/logs/{id}",
+          "GET …/mcp/asw"
+        ]
+      },
+      {
+        "id": "grp-mensaje-tiquete",
+        "name": "mensaje · tiquete",
+        "stereotype": "2 EP · DB",
+        "package": "pkg-api",
+        "x": 360, "y": 390, "w": 380, "h": 88,
+        "items": ["POST /mensaje", "POST /tiquete"]
+      },
+      {
+        "id": "grp-archivo",
+        "name": "archivo",
+        "stereotype": "1 EP · R2",
+        "package": "pkg-api",
+        "x": 360, "y": 500, "w": 380, "h": 72,
+        "items": ["POST /archivo", "GET /cdn/{file}"]
+      },
+      {
+        "id": "grp-config",
+        "name": "config · proveedores",
+        "stereotype": "runtime · openai · tdconsulta",
+        "package": "pkg-api",
+        "x": 360, "y": 600, "w": 380, "h": 140,
+        "items": [
+          "GET|PUT /cfg/runtime",
+          "GET|PUT /conversaciones/cfg",
+          "GET|PUT /proveedor/{id}/cfg",
+          "GET|POST|PUT /tdconsulta"
+        ]
+      },
+      {
+        "id": "grp-ops",
+        "name": "ops",
+        "stereotype": "errores · docs · permisos",
+        "package": "pkg-api",
+        "x": 360, "y": 760, "w": 380, "h": 100,
+        "items": ["POST|GET|DELETE /error(es)", "GET /docs", "QUERY /permisos"]
+      },
+      {
+        "id": "db-pg",
+        "name": "clientesis",
+        "stereotype": "BD PostgreSQL",
+        "package": "pkg-db",
+        "x": 860, "y": 250, "w": 200, "h": 72
+      },
+      {
+        "id": "openai-asistente",
+        "name": "Paty-Asistente",
+        "stereotype": "Recurso IA",
+        "package": "pkg-openai",
+        "x": 1180, "y": 100, "w": 200, "h": 56
+      },
+      {
+        "id": "openai-vs",
+        "name": "Vector Store Paty",
+        "stereotype": "file_search",
+        "package": "pkg-openai",
+        "x": 1180, "y": 180, "w": 200, "h": 56
+      },
+      {
+        "id": "ds-login",
+        "name": "LoginContacto",
+        "stereotype": "dsclientes",
+        "package": "pkg-ds",
+        "x": 1180, "y": 360, "w": 200, "h": 56
+      },
+      {
+        "id": "r2-bucket",
+        "name": "R2 bucket",
+        "stereotype": "CF Workers · CDN",
+        "package": "pkg-r2",
+        "x": 1180, "y": 560, "w": 200, "h": 56
+      }
+    ],
+    "links": [
+      { "from": "app-testpatyia", "to": "grp-auth" },
+      { "from": "app-testpatyia", "to": "grp-conversacion" },
+      { "from": "app-testpatyia", "to": "grp-mensaje-tiquete" },
+      { "from": "app-testpatyia", "to": "grp-archivo" },
+      { "from": "app-testpatyia", "to": "grp-config" },
+      { "from": "app-soporte", "to": "grp-auth" },
+      { "from": "app-soporte", "to": "grp-conversacion" },
+      { "from": "app-soporte", "to": "grp-mensaje-tiquete" },
+      { "from": "grp-auth", "to": "db-pg" },
+      { "from": "grp-conversacion", "to": "db-pg" },
+      { "from": "grp-mensaje-tiquete", "to": "db-pg" },
+      { "from": "grp-config", "to": "db-pg" },
+      { "from": "grp-ops", "to": "db-pg" },
+      { "from": "grp-conversacion", "to": "openai-asistente" },
+      { "from": "openai-asistente", "to": "openai-vs" },
+      { "from": "grp-auth", "to": "ds-login" },
+      { "from": "grp-archivo", "to": "r2-bucket" }
+    ]
+  }
+}

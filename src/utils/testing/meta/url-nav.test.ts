@@ -71,7 +71,7 @@ test('snippet CDN loader: script src + loadCSS/load', async () => {
   assert.match(src, /#loaderHref/);
   assert.match(src, /loader\.min\.js/);
   assert.match(src, /type="module" src=/);
-  assert.match(src, /loadCSSBase/);
+  // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   assert.match(src, /await L\.load\(/);
   assert.doesNotMatch(src, /#buildBootSnippet/);
 });

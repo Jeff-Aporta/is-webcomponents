@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-combobox",
   "category": "forms",
-  "title": "<iswc-combobox>",
-  "titleHtml": true,
+  "title": "&lt;iswc-combobox&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-combobox",
   "sections": [
     {
@@ -55,10 +55,6 @@
         {
           "kind": "demo",
           "html": "<iswc-combobox label=\"País\" value=\"co\" required style=\"max-width:20rem\">\r\n            <option value=\"co\">Colombia</option>\r\n            <option value=\"mx\">México</option>\r\n            <option value=\"es\">España</option>\r\n          </iswc-combobox>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-combobox label=\"Ciudad\" clearable>\n  <iswc-option value=\"bog\">Bogotá</iswc-option>\n  <iswc-option value=\"med\">Medellín</iswc-option>\n</iswc-combobox>"
         }
       ]
     },
@@ -98,5 +94,47 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Input + listbox filtrable con teclado y opciones <code>iswc-option</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>label</code> / <code>hint</code>",
+            "default": "—"
+          },
+          {
+            "name": "<code>name</code> / <code>value</code>",
+            "default": "—"
+          },
+          {
+            "name": "<code>placeholder</code>",
+            "default": "—"
+          },
+          {
+            "name": "<code>disabled</code> / <code>required</code>",
+            "default": "false"
+          },
+          {
+            "name": "<code>open</code> / <code>clearable</code>",
+            "default": "false"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-combobox label=\"Ciudad\" hint=\"Escribe para filtrar\" placeholder=\"Buscar…\" clearable name=\"city\" style=\"max-width:20rem\">\r\n            <iswc-option value=\"bog\">Bogotá</iswc-option>\r\n            <iswc-option value=\"med\">Medellín</iswc-option>\r\n            <iswc-option value=\"cal\">Cali</iswc-option>\r\n            <iswc-option value=\"barr\">Barranquilla</iswc-option>\r\n            <iswc-option value=\"buc\">Bucaramanga</iswc-option>\r\n          </iswc-combobox>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

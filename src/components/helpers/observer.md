@@ -1,46 +1,46 @@
----
+﻿---
 tag: iswc-observer
 tags:
   - iswc-observer
 category: helpers
 status: public
-source: ./observer.js
+source: ./observer.ts
 style: ./observer.css
 preview: ./observer.json
 ---
 # `<iswc-observer>`
 
-## Propósito
+## PropÃ³sito
 
-Web Component genérico que envuelve `IntersectionObserver`, `MutationObserver` y `ResizeObserver` vía `type`. Los nombres históricos (`iswc-intersection-observer`, `iswc-mutation-observer`, `iswc-resize-observer`) son alias con `type` prefijado.
+Web Component genÃ©rico que envuelve `IntersectionObserver`, `MutationObserver` y `ResizeObserver` vÃ­a `type`. Los nombres histÃ³ricos (`iswc-intersection-observer`, `iswc-mutation-observer`, `iswc-resize-observer`) son alias con `type` prefijado.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Observar visibilidad, mutaciones del subárbol o tamaño de hijos sin cablear observers a mano.
+Observar visibilidad, mutaciones del subÃ¡rbol o tamaÃ±o de hijos sin cablear observers a mano.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No crear otro wrapper Observer si este módulo (o sus alias) cubre el caso.
+No crear otro wrapper Observer si este mÃ³dulo (o sus alias) cubre el caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './observer.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-observer type="intersection" intersect-class="visible">
-  <div>…</div>
+  <div>â€¦</div>
 </iswc-observer>
 
 <iswc-observer type="mutation" attr="class open" child-list>
-  <div>…</div>
+  <div>â€¦</div>
 </iswc-observer>
 
 <iswc-observer type="resize">
-  <div style="resize:both;overflow:auto">…</div>
+  <div style="resize:both;overflow:auto">â€¦</div>
 </iswc-observer>
 ```
 
@@ -58,12 +58,12 @@ import './observer.js';
 | `once` | boolean | Deja de observar tras la primera |
 | `root` | string | Selector root (default viewport) |
 | `root-margin` | string | p. ej. `10px 20px` |
-| `threshold` | number | 0–1 |
+| `threshold` | number | 0â€“1 |
 | `attr` | string | Filtro de atributos (mutation) |
 | `child-list` | boolean | Default true |
 | `character-data` | boolean | Mutation |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 No expone propiedades de negocio adicionales.
 
@@ -71,9 +71,16 @@ No expone propiedades de negocio adicionales.
 
 | Slot | Uso |
 | --- | --- |
-| default | Elementos a observar / subárbol a vigilar |
+| default | Elementos a observar / subÃ¡rbol a vigilar |
 
 ### Eventos
+
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-intersect` | Emitido al entrar/salir de la zona observada. |
+| `iswc-mutate` | Emitido al detectarse una mutaciÃ³n en el Ã¡rbol observado. |
+| `iswc-resize` | Emitido al cambiar el tamaÃ±o del elemento observado. |
 
 | Evento | `type` | detail |
 | --- | --- | --- |
@@ -81,13 +88,28 @@ No expone propiedades de negocio adicionales.
 | `iswc-mutate` | mutation | `{ records }` |
 | `iswc-resize` | resize | `{ entries }` |
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-observer');
+el.addEventListener('iswc-intersect', (e) => {
+  console.log('iswc-intersect', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
 ### CSS parts
 
-No expone. Host con `display: contents`.
+| Part | Uso |
+| --- | --- |
+| `base` | Personalizable con `::part(base)`. |
 
 ### Custom states
 
@@ -97,13 +119,13 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated.
 
 ## Comportamiento
 
-Una instancia de observer por elemento; `disconnect()` en `disconnectedCallback`. Alias históricos reutilizan esta clase.
+Una instancia de observer por elemento; `disconnect()` en `disconnectedCallback`. Alias histÃ³ricos reutilizan esta clase.
 
 ## Dependencias y componentes relacionados
 
@@ -112,7 +134,7 @@ Una instancia de observer por elemento; `disconnect()` en `disconnectedCallback`
 
 ## Accesibilidad
 
-No altera el árbol accesible (`display: contents`); el contenido observado sigue siendo el del light DOM.
+No altera el Ã¡rbol accesible (`display: contents`); el contenido observado sigue siendo el del light DOM.
 
 ## Ejemplo avanzado
 
@@ -134,5 +156,5 @@ No altera el árbol accesible (`display: contents`); el contenido observado sigu
 
 ## Fuentes
 
-- `./observer.js` · `./observer.css`
+- `./observer.js` Â· `./observer.css`
 - Preview: `./observer.json`

@@ -85,6 +85,8 @@ function buscarJsonEnComponentes(raiz: string, tag: string): string {
     join(raiz, 'src', 'components', 'isp', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'code', `${sinPrefijo}.json`),
     join(raiz, 'src', 'components', 'charts', `${sinPrefijo}.json`),
+    join(raiz, 'src', 'components', 'preview', `${sinPrefijo}.json`),
+    join(raiz, 'src', 'components', 'files', `${sinPrefijo}.json`),
     // Algunos archivos SÍ llevan el prefijo is- completo (raro, pero lo
     // respetamos).
     join(raiz, 'src', 'components', 'isp', `${tag}.json`),

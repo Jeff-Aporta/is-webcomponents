@@ -1,48 +1,48 @@
----
+﻿---
 tag: iswc-tree-view
 tags:
   - iswc-tree-view
 category: isp
 status: public
-source: ./tree-view.js
+source: ./tree-view.ts
 style: ./tree-view.css
 preview: ./tree-view.json
 ---
 # `<iswc-tree-view>`
 
-## Propósito
+## PropÃ³sito
 
-Árbol jerárquico editable portado de `TreeRowView.svelte` (ClientesIS / cursos):
-expansión, drag & drop, historial undo/redo, modo protegido, drawer de ficha
-y confirmación de borrado. Distinto de `<iswc-tree>` (navegación, sin mutaciones).
+Ãrbol jerÃ¡rquico editable portado de `TreeRowView.svelte` (ClientesIS / cursos):
+expansiÃ³n, drag & drop, historial undo/redo, modo protegido, drawer de ficha
+y confirmaciÃ³n de borrado. Distinto de `<iswc-tree>` (navegaciÃ³n, sin mutaciones).
 
-Este módulo registra `<iswc-tree-view>`.
+Este mÃ³dulo registra `<iswc-tree-view>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Planes de estudio, catálogos anidados y cualquier lista plana con `flatPath`
-tipo `"1.2.3"` que el consumidor mapea vía `customs`.
+Planes de estudio, catÃ¡logos anidados y cualquier lista plana con `flatPath`
+tipo `"1.2.3"` que el consumidor mapea vÃ­a `customs`.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-Navegación de archivos o menú jerárquico de solo lectura → `<iswc-tree>`.
-CRUD tabular sin jerarquía → `<iswc-catalogo-gen>`.
+NavegaciÃ³n de archivos o menÃº jerÃ¡rquico de solo lectura â†’ `<iswc-tree>`.
+CRUD tabular sin jerarquÃ­a â†’ `<iswc-catalogo-gen>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './tree-view.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-tree-view id="tv" label-field="titulo" style="height: 24rem;"></iswc-tree-view>
 <script type="module">
   const tv = document.getElementById('tv');
   tv.list = [
-    { iplan: '1', titulo: 'Módulo 1' },
-    { iplan: '1.1', titulo: 'Introducción' },
+    { iplan: '1', titulo: 'MÃ³dulo 1' },
+    { iplan: '1.1', titulo: 'IntroducciÃ³n' },
   ];
   tv.customs = {
     entrie: 'contenido',
@@ -71,7 +71,7 @@ import './tree-view.js';
 | `label-field` | string | Campo del nodo para el label. Default `titulo`. |
 | `helper-field` | string | Texto secundario a la derecha. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -92,22 +92,43 @@ import './tree-view.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-frm-open` | Evento personalizado del componente (frm open). |
+| `iswc-frm-close` | Evento personalizado del componente (frm close). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-select` | `{ node, flatPath }` | sí | sí | no |
-| `iswc-frm-open` | `{ record, itdForm, ancestors, isNew }` | sí | sí | no |
-| `iswc-frm-close` | `{}` | sí | sí | no |
-| `iswc-error` | `{ message }` | sí | sí | no |
+| `iswc-select` | `{ node, flatPath }` | sÃ­ | sÃ­ | no |
+| `iswc-frm-open` | `{ record, itdForm, ancestors, isNew }` | sÃ­ | sÃ­ | no |
+| `iswc-frm-close` | `{}` | sÃ­ | sÃ­ | no |
+| `iswc-error` | `{ message }` | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-tree-view');
+el.addEventListener('iswc-select', (e) => {
+  console.log('iswc-select', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
 | `refresh()` | Reinyecta list + pinta. |
 | `showDelete(obj)` | Abre confirm-delete del nodo. |
 | `runCustomsPreSubmit()` | Sanea + `commitFlatPaths` antes de persistir. |
 
-También se reexportan `TreeAdapter`, `TreeRowViewAdapter`, `TreeCustomsBase`,
+TambiÃ©n se reexportan `TreeAdapter`, `TreeRowViewAdapter`, `TreeCustomsBase`,
 `TreeRowAdapter`, `objRootsToNodes`, `TreeNode`, `groupedWithSeparators`.
 
 ### CSS parts
@@ -133,7 +154,7 @@ No expone.
 | `--iswc-text` | Color de texto. |
 | `--iswc-accent` | Acento (drop + caret). |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated. El formulario de ficha vive en el slot `frm`.
 
@@ -141,15 +162,15 @@ No es form-associated. El formulario de ficha vive en el slot `frm`.
 
 - `customs.getFlatPath` / `setFlatPath` mapean el id de dominio (`iplan`, etc.).
   `flatPath` muta durante moves; el dominio se escribe en `runCustomsPreSubmit`.
-- **Roles 3D** por nodo: tres ejes (`topology`, `containment`, `mobility`) más
-  `freeze` puntual. Los getters (`isAtom`, `isPrison`, …) son solo lectura.
-  Guía ilustrativa completa con casos de uso y matriz de efectos:
+- **Roles 3D** por nodo: tres ejes (`topology`, `containment`, `mobility`) mÃ¡s
+  `freeze` puntual. Los getters (`isAtom`, `isPrison`, â€¦) son solo lectura.
+  GuÃ­a ilustrativa completa con casos de uso y matriz de efectos:
   **[tree-view-roles.md](./tree-view-roles.md)**.
-- Toolbar default: extender `TreeCustomsBase` (agregar, expandir, undo/protección/redo).
+- Toolbar default: extender `TreeCustomsBase` (agregar, expandir, undo/protecciÃ³n/redo).
 - Drag: reorder entre hermanos y nest `into` en agrupadores. `canDrop` combina roles
-  (`hermetic`, `freezer`, anti-ciclos). Ver guía de roles.
-- Doble clic abre drawer en edit (o view si readonly). Delete pide reescribir el código.
-  `extinguish` / `release` dependen de `containment` (prisión vs celda).
+  (`hermetic`, `freezer`, anti-ciclos). Ver guÃ­a de roles.
+- Doble clic abre drawer en edit (o view si readonly). Delete pide reescribir el cÃ³digo.
+  `extinguish` / `release` dependen de `containment` (prisiÃ³n vs celda).
 
 ## Dependencias y componentes relacionados
 
@@ -158,22 +179,22 @@ No es form-associated. El formulario de ficha vive en el slot `frm`.
 - [`../actions/button.js`](../actions/button.js), [`../actions/dropdown.js`](../actions/dropdown.js)
 - No confundir con [`../navigation/tree.md`](../navigation/tree.md) (`<iswc-tree>`).
 
-Tags del módulo: `<iswc-tree-view>`.
+Tags del mÃ³dulo: `<iswc-tree-view>`.
 
 ## Accesibilidad
 
 El body es `role="tree"`; cada summary es `role="treeitem"` con teclado
-(↑/↓/←/→/Home/End). El drawer y los modales atrapan foco.
+(â†‘/â†“/â†/â†’/Home/End). El drawer y los modales atrapan foco.
 
 ## Ejemplo avanzado
 
-Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
+Ver tambiÃ©n **[Roles 3D](./tree-view-roles.md)** para cuÃ¡ndo usar `atom`,
 `hermetic`, `prison`, `freezer`, etc.
 
 ```html
 <iswc-tree-view id="plan" label-field="titulo" style="height: 28rem;">
   <form slot="frm">
-    <iswc-input name="titulo" label="Título"></iswc-input>
+    <iswc-input name="titulo" label="TÃ­tulo"></iswc-input>
   </form>
 </iswc-tree-view>
 <script type="module">
@@ -183,13 +204,13 @@ Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
     entries = 'Plan de contenidos';
     getFlatPath = (r) => String(r.iplan ?? '').trim();
     setFlatPath = (r, fp) => { r.iplan = fp; };
-    levelName = ({ depth }) => depth === 0 ? 'Módulo' : 'Lección';
+    levelName = ({ depth }) => depth === 0 ? 'MÃ³dulo' : 'LecciÃ³n';
     updateNode = (node, isNew) => {
       const depth = Number(node.depth ?? 0);
       node.topology = depth >= 1 ? 'atom' : 'group';
       if (depth < 1) node.containment = 'hermetic';
       if (!isNew) return;
-      if (!node.titulo) node.titulo = node.isAtom ? 'Nueva lección' : 'Nuevo módulo';
+      if (!node.titulo) node.titulo = node.isAtom ? 'Nueva lecciÃ³n' : 'Nuevo mÃ³dulo';
     };
     rowActions = (node, tree) => [
       { icon: 'mdi:arrow-up', title: 'Subir', onClick: () => tree.move?.(node, 'up') },
@@ -198,40 +219,40 @@ Ver también **[Roles 3D](./tree-view-roles.md)** para cuándo usar `atom`,
   }
   const el = document.getElementById('plan');
   el.customs = new PlanCustoms();
-  el.list = [ { iplan: '1', titulo: 'Módulo 1' }, { iplan: '1.1', titulo: 'Tema A' } ];
+  el.list = [ { iplan: '1', titulo: 'MÃ³dulo 1' }, { iplan: '1.1', titulo: 'Tema A' } ];
 </script>
 ```
 
 ## Errores comunes
 
-- Usar `<iswc-tree>` pensando que trae drag/historial: ese tag es solo navegación.
+- Usar `<iswc-tree>` pensando que trae drag/historial: ese tag es solo navegaciÃ³n.
 - Olvidar `getFlatPath` / `setFlatPath`: los moves no llegan al dominio al guardar.
 - Llamar `commitFlatPaths()` a mano: el punto de entrada es `runCustomsPreSubmit()`.
 - Inventar `variant="ghost"` en botones del consumidor sin mirar `VALID_*` de `iswc-button`.
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"` salvo `draggable="false"`.
 - **Roles:** leer [tree-view-roles.md](./tree-view-roles.md) antes de modelar nodos;
   asignar `topology` / `containment` / `mobility` en `updateNode`, nunca getters.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 - No portar ObjJConfig: drawer + slot `frm` + `iswc-confirm-delete`.
 
 ## Fuentes
 
-- [JavaScript](./tree-view.js)
+- [JavaScript](./tree-view.ts)
 - [CSS](./tree-view.css)
-- [Roles 3D — guía ilustrativa](./tree-view-roles.md)
-- [Índice de categoría](./LLM.md)
+- [Roles 3D â€” guÃ­a ilustrativa](./tree-view-roles.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./tree-view.json)
 
-## Relación con ISP
+## RelaciÃ³n con ISP
 
 Fuente: `ISW-ClientesIS/.../cursos/TreeView/TreeRowView.svelte` + cascada
 `_treeAdapter/` + `_asRow/`. UI Svelte traducida a tags `is-*`:
-`FlexOptions` → `<iswc-flex-options>`, `FloatingComponent` → `<iswc-float-card>`.
+`FlexOptions` â†’ `<iswc-flex-options>`, `FloatingComponent` â†’ `<iswc-float-card>`.
 ObjJConfig no se porta: drawer + slot `frm` + `iswc-confirm-delete`.

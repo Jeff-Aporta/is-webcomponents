@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-breadcrumb-item",
   "category": "navigation",
-  "title": "<iswc-breadcrumb-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-breadcrumb-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-breadcrumb-item de InSoft.",
   "storageKey": "docs-iswc-breadcrumb-item",
   "sections": [
@@ -14,22 +14,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-breadcrumb>\r\n            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>",
-          "controls": [
-              {
-                "control": "text",
-                "prop": "attr:href",
-                "label": "href"
-              }
-          ],
-          "equivNote": "Con href pinta enlace; vacío = current; sin href = span.",
-          "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-breadcrumb-item: host\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"tiene href?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"elemento a (enlace)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"href vacío?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"página actual (span)\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"span SPA\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"\\\"\\\"\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"a\",\n          \"label\": \"url\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
+          "html": "<iswc-breadcrumb>\r\n            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
         {
-          "kind": "code",
-          "code": "<iswc-breadcrumb>\n  <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\n</iswc-breadcrumb>",
-          "lang": "html"
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-breadcrumb-item\">\n  <iswc-breadcrumb-item href=\"#\">Inicio</iswc-breadcrumb-item>\n  <iswc-icon slot=\"start\" icon=\"mdi:home-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:chevron-right\"></iswc-icon>\n  <span slot=\"separator\">/</span>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -37,12 +33,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-breadcrumb-item&gt; — un paso individual dentro de un &lt;iswc-breadcrumb&gt;. Si tiene `href` (incluido `href=\"\"`), el item se renderiza como &lt;a href&gt;. Con `href=\"\"` se marca como current page (aria-current=\"page\", CSS [current]). Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos). Atributos href    string  — opcional: el item se vuelve enlace. \"\" = current page. target  string  — opcional. rel     string  — opcional. icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start. Slots (default)  texto del item. start      icono propio al inicio (gana sobre icon). end        icono propio al final. separator  override del separador (chevron-right por default). CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/breadcrumb-item.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Cada eslabón de un <code class=\"code\">&lt;iswc-breadcrumb&gt;</code>. Puede ser enlace (<code class=\"code\">href</code>) o texto plano cuando es la página actual."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-breadcrumb>\n  <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\n</iswc-breadcrumb>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

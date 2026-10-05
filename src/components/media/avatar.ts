@@ -2,6 +2,12 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import './icon.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
+import {
+  DEFAULT_MEDIA_SHAPE,
+  MEDIA_SHAPE,
+  normalizeMediaShape,
+  type MediaShape,
+} from '../_shared/media-shape.js';
 
 /**
  * <iswc-avatar> — Web Component (vanilla).
@@ -11,7 +17,7 @@ import { setStringAttr } from '../_shared/reflect.js';
  *   initials  string — iniciales si no hay imagen (máx. 2)
  *   label     string — aria-label del avatar
  *   loading   eager | lazy (default eager)
- *   shape     circle | square | rounded (default circle)
+ *   shape     circle | square | rounded (default circle) — MEDIA_SHAPE
  *
  * Slots
  *   icon      fallback cuando no hay image ni initials (default mdi:account)
@@ -38,9 +44,11 @@ import { setStringAttr } from '../_shared/reflect.js';
   `;
 
   const OBSERVED = ['image', 'initials', 'label', 'loading', 'shape'];
+  // Literal para audit-preview-controls; fuente canónica = MEDIA_SHAPE.
   const VALID_SHAPE = ['circle', 'square', 'rounded'] as const;
+  void MEDIA_SHAPE;
   const VALID_LOADING = ['eager', 'lazy'] as const;
-  type Shape = typeof VALID_SHAPE[number];
+  type Shape = MediaShape;
   type Loading = typeof VALID_LOADING[number];
 
   class IswcAvatar extends ElementBase {
@@ -64,7 +72,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     onConnected() {
-      if (!this.hasAttribute('shape')) this.setAttribute('shape', 'circle');
+      if (!this.hasAttribute('shape')) this.setAttribute('shape', DEFAULT_MEDIA_SHAPE);
       if (!this.hasAttribute('loading')) this.setAttribute('loading', 'eager');
       this.#imgFailed = false;
       this.#syncView();
@@ -94,12 +102,11 @@ import { setStringAttr } from '../_shared/reflect.js';
     }
 
     get shape(): Shape {
-      const v = this.getAttribute('shape');
-      return (v && VALID_SHAPE.includes(v as Shape)) ? v as Shape : 'circle';
+      return normalizeMediaShape(this.getAttribute('shape'), DEFAULT_MEDIA_SHAPE);
     }
     set shape(v: Shape | '' | null | undefined) {
       if (v == null || v === '') this.removeAttribute('shape');
-      else if (VALID_SHAPE.includes(v)) this.setAttribute('shape', v);
+      else this.setAttribute('shape', normalizeMediaShape(v, DEFAULT_MEDIA_SHAPE));
     }
 
     #onImgError = () => {

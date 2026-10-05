@@ -24,6 +24,7 @@ const scripts = [
 
 const pages = [
   'home',
+  'icons',
   'theming',
   'ecosystem',
 ];

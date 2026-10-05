@@ -1,12 +1,12 @@
 :host {
   display: block;
-  --iswc-stepper-accent: var(--iswc-brand, dodgerblue);
-  --iswc-stepper-on-accent: var(--iswc-brand-fg, #fff);
-  --iswc-stepper-text: var(--iswc-text, #e8eaf1);
+  --iswc-stepper-accent: var(--iswc-brand);
+  --iswc-stepper-on-accent: var(--iswc-brand-fg);
+  --iswc-stepper-text: var(--iswc-text);
   --iswc-stepper-muted: color-mix(in srgb, var(--iswc-stepper-text) 65%, transparent);
-  --iswc-stepper-border: var(--iswc-border, #2a2f3a);
-  --iswc-stepper-success: var(--iswc-success, #0bb783);
-  --iswc-stepper-danger: var(--iswc-danger, #f64e60);
+  --iswc-stepper-border: var(--iswc-border);
+  --iswc-stepper-success: var(--iswc-success);
+  --iswc-stepper-danger: var(--iswc-danger);
   --iswc-stepper-bg-pending: color-mix(in srgb, var(--iswc-stepper-text) 8%, transparent);
 }
 

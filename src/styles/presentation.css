@@ -273,10 +273,16 @@ iswc-main.main {
     }
   }
 
+  /* Título = tag del CE (`<iswc-button>`). */
+  h2.section__tag-title {
+    font-family: "JetBrains Mono", var(--iswc-mono);
+    font-weight: 700;
+  }
+
   .lede {
     color: var(--iswc-text-soft);
     margin: 0 0 28px;
-    max-inline-size: 62ch;
+    max-inline-size: none; /* ancho completo de la columna de docs */
     font-size: 1.02rem;
     line-height: 1.65;
     font-weight: 450;
@@ -301,7 +307,7 @@ iswc-main.main {
   p {
     margin: 0 0 12px;
     color: var(--iswc-text-soft);
-    max-inline-size: 68ch;
+    max-inline-size: none; /* homogenizar con el lede: todo el ancho útil */
   }
 }
 
@@ -327,14 +333,14 @@ iswc-main.main {
   margin: 6px 4px 0 0;
   font-size: 12px;
   font-weight: 600;
-  color: var(--iswc-fg-muted, #9aa3b2);
+  color: var(--iswc-fg-muted);
   text-decoration: none;
   border-block-end: 1px dashed currentColor;
   padding-block-end: 1px;
 
   &:hover,
   &:focus-visible {
-    color: var(--iswc-fg, #e7eef8);
+    color: var(--iswc-fg);
     border-block-end-style: solid;
     outline: none;
   }
@@ -370,13 +376,13 @@ iswc-main.main {
     padding: 0.5em 0.65em;
     font: inherit;
     color: var(--iswc-control-text, var(--iswc-text, inherit));
-    background: var(--iswc-control-bg, #f1f3f5);
-    border: 1px solid var(--iswc-control-border, #adb5bd);
-    border-radius: var(--iswc-radius-sm, 0.375em);
+    background: var(--iswc-control-bg);
+    border: 1px solid var(--iswc-control-border);
+    border-radius: var(--iswc-radius-sm);
   }
 
   :is(input, textarea, select):focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-accent, #339af0));
+    outline: 2px solid var(--iswc-focus, var(--iswc-accent));
     outline-offset: 1px;
   }
 
@@ -470,12 +476,12 @@ iswc-main.main {
   padding: 0.5em 0.65em;
   font: inherit;
   color: var(--iswc-control-text, var(--iswc-text, inherit));
-  background: var(--iswc-control-bg, #f1f3f5);
-  border: 1px solid var(--iswc-control-border, #adb5bd);
-  border-radius: var(--iswc-radius-sm, 0.375em);
+  background: var(--iswc-control-bg);
+  border: 1px solid var(--iswc-control-border);
+  border-radius: var(--iswc-radius-sm);
 
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, var(--iswc-accent, #339af0));
+    outline: 2px solid var(--iswc-focus, var(--iswc-accent));
     outline-offset: 1px;
   }
 }
@@ -543,132 +549,12 @@ iswc-main.main {
   }
 }
 
-/* Legacy: la barra con hints ya no se monta (sustituida por .file-meta-page). */
+/* Legacy: barras de fuentes/meta retiradas de los demos. */
 .vs-page-bar,
-.vs-page-hint {
-  display: none !important;
-}
-
-/* Barra única de fuentes + pesos CDN (tras el título del preview) */
-.file-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.65rem 1rem;
-  margin: 0 0 1.25rem;
-  padding: 0.55rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--iswc-border) 80%, transparent);
-  border-radius: calc(var(--iswc-radius, 10px) + 2px);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 7%, transparent),
-      transparent 42%
-    ),
-    color-mix(in srgb, var(--iswc-bg-elev, var(--iswc-bg-soft, var(--iswc-bg))) 92%, transparent);
-  box-shadow:
-    0 1px 0 color-mix(in srgb, #fff 6%, transparent) inset,
-    0 8px 22px -18px rgb(0 0 0 / 45%);
-  font-size: 0.78rem;
-
-  [data-theme="light"] & {
-    box-shadow:
-      0 1px 0 color-mix(in srgb, #fff 70%, transparent) inset,
-      0 10px 24px -18px rgb(0 0 0 / 14%);
-  }
-
-  @media (max-width: 720px) {
-    gap: 0.55rem;
-    padding: 0.5rem 0.6rem;
-  }
-}
-/* Barra de página: fluye con el scroll del iswc-main (no sticky). */
+.vs-page-hint,
+.file-meta,
 .file-meta-page {
-  position: static;
-}
-.file-meta__srcs {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  align-items: center;
-  padding: 0.15rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);
-  border: 1px solid color-mix(in srgb, var(--iswc-border) 70%, transparent);
-}
-.file-meta__src-btn {
-  font-size: 0.72rem;
-  --iswc-button-radius: 999px;
-}
-.file-meta__mins {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 0.85rem;
-  align-items: center;
-  min-inline-size: 0;
-  flex: 1 1 16rem;
-}
-.file-meta__row {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 0.4rem;
-  min-inline-size: 0;
-  max-inline-size: 100%;
-}
-.file-meta__path {
-  display: inline-block;
-  max-inline-size: min(100%, 18rem);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding: 0.2rem 0.5rem;
-  border-radius: 0.4rem;
-  border: 1px solid color-mix(in srgb, var(--iswc-border) 75%, transparent);
-  background: color-mix(in srgb, var(--iswc-bg) 70%, transparent);
-  color: var(--iswc-text-soft);
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
-
-  @media (max-width: 720px) {
-    max-inline-size: 12rem;
-  }
-}
-.file-meta__bytes {
-  color: var(--iswc-text);
-  font-variant-numeric: tabular-nums;
-  font-weight: 650;
-  font-size: 0.75rem;
-}
-.file-meta__total {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-inline-start: auto;
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 28%, var(--iswc-border));
-  background: color-mix(in srgb, var(--iswc-accent, var(--iswc-brand)) 10%, transparent);
-  color: var(--iswc-text);
-  font-weight: 700;
-
-  @media (max-width: 720px) {
-    margin-inline-start: 0;
-  }
-}
-.file-meta__total-label {
-  color: var(--iswc-text-soft);
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-size: 0.62rem;
-}
-.file-meta__total-bytes {
-  color: var(--iswc-accent, var(--iswc-brand));
-  font-variant-numeric: tabular-nums;
+  display: none !important;
 }
 
 /* Modal full-page de fuentes */
@@ -1038,7 +924,7 @@ iswc-dialog.iswc-view-sources {
 .format-grid__tag {
   align-self: center;
   justify-self: start;
-  font-family: var(--iswc-mono, ui-monospace, Consolas, monospace);
+  font-family: var(--iswc-mono);
   font-size: 0.78rem;
   letter-spacing: 0.01em;
   color: var(--iswc-text-soft);
@@ -1079,8 +965,8 @@ iswc-dialog.iswc-view-sources {
     gap: 0.4rem 0.6rem;
     padding: 0.85rem 1rem;
     border: 1px solid var(--iswc-border);
-    border-radius: var(--iswc-radius, 0.5em);
-    background: color-mix(in srgb, var(--iswc-bg-elev, #1c2128) 70%, transparent);
+    border-radius: var(--iswc-radius);
+    background: color-mix(in srgb, var(--iswc-bg-elev) 70%, transparent);
     min-block-size: 4.5rem;
   }
 
@@ -1117,9 +1003,11 @@ iswc-dialog.iswc-view-sources {
 /* centered cell para matrices variants x appearance */
 .matrix {
   display: grid;
-  grid-template-columns: max-content repeat(3, 1fr);
+  grid-template-columns: max-content repeat(5, minmax(120px, 1fr));
   gap: 10px 14px;
   align-items: center;
+  overflow-x: auto;
+  padding-bottom: 0.5em;
 
   > .cell-label {
     font-size: 0.72rem;
@@ -1214,6 +1102,24 @@ table.ref {
     border-radius: 4px;
     color: var(--iswc-text);
     border: 1px solid var(--iswc-border-soft);
+  }
+
+  /* Columna Ejemplo (API JS): disclosure + iswc-code */
+  td.ref__ejemplo {
+    min-inline-size: 12rem;
+    max-inline-size: 28rem;
+  }
+  td.ref__ejemplo iswc-details.api-ejemplo {
+    display: block;
+    inline-size: 100%;
+  }
+  td.ref__ejemplo iswc-code.api-ejemplo__code {
+    display: block;
+    inline-size: 100%;
+    margin-block-start: 0.35rem;
+    --iswc-code-min-height: 4rem;
+    max-block-size: 16rem;
+    overflow: auto;
   }
   td:first-child { inline-size: 30%; }
   td:nth-child(2) { inline-size: 16%; color: var(--iswc-text-soft); white-space: nowrap; }
@@ -1640,7 +1546,7 @@ iswc-code.code[readonly] {
   display: block;
   inline-size: 100%;
   --iswc-code-min-height: 0;
-  --iswc-code-radius: var(--iswc-radius, 8px);
+  --iswc-code-radius: var(--iswc-radius);
 }
 
 .code-block__copy {

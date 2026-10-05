@@ -1,43 +1,43 @@
----
+﻿---
 tag: iswc-stat
 tags:
   - iswc-stat
 category: data
 status: public
-source: ./stat.js
+source: ./stat.ts
 style: ./stat.css
 preview: ./stat.json
 ---
 # `<iswc-stat>`
 
-## Propósito
+## PropÃ³sito
 
-Tarjeta KPI para dashboards: label, número principal, helper text,
-trend (subida/bajada) e icono. Detecta automáticamente la dirección
-del trend según el signo del valor.
+Tarjeta KPI para dashboards: label, nÃºmero principal, helper text,
+trend (subida/bajada) e icono. Detecta automÃ¡ticamente la direcciÃ³n
+del trend segÃºn el signo del valor.
 
-Este módulo registra `<iswc-stat>`.
+Este mÃ³dulo registra `<iswc-stat>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Presentación, comparación, movimiento u organización de datos estructurados.
+PresentaciÃ³n, comparaciÃ³n, movimiento u organizaciÃ³n de datos estructurados.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No reemplazar HTML semántico cuando contenido es estático y simple.
+No reemplazar HTML semÃ¡ntico cuando contenido es estÃ¡tico y simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './stat.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-stat
 label="Ingresos"
-value="€ 1.249,00"
+value="â‚¬ 1.249,00"
 helper="vs mes anterior"
 trend="+12.5%"
 icon="mdi:cash-multiple"
@@ -52,15 +52,15 @@ icon="mdi:cash-multiple"
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `helper` | string/según contrato | Fuente define default/restricción. |
-| `trend` | string/según contrato | Fuente define default/restricción. |
-| `trend-direction` | string/según contrato | Fuente define default/restricción. |
-| `icon` | string/según contrato | Fuente define default/restricción. |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `helper` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `trend` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `trend-direction` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 No expone.
 
@@ -76,13 +76,30 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+
 No expone.
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-stat');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -105,37 +122,37 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--bg` | Token leído o definido por componente. |
-| `--iswc-bg-2` | Token leído o definido por componente. |
-| `--fg` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--muted` | Token leído o definido por componente. |
-| `--border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--brand` | Token leído o definido por componente. |
-| `--iswc-brand` | Token leído o definido por componente. |
-| `--success` | Token leído o definido por componente. |
-| `--iswc-success` | Token leído o definido por componente. |
-| `--danger` | Token leído o definido por componente. |
-| `--iswc-danger` | Token leído o definido por componente. |
-| `--warning` | Token leído o definido por componente. |
-| `--iswc-warning` | Token leído o definido por componente. |
+| `--bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-2` | Token leÃ­do o definido por componente. |
+| `--fg` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--muted` | Token leÃ­do o definido por componente. |
+| `--border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--brand` | Token leÃ­do o definido por componente. |
+| `--iswc-brand` | Token leÃ­do o definido por componente. |
+| `--success` | Token leÃ­do o definido por componente. |
+| `--iswc-success` | Token leÃ­do o definido por componente. |
+| `--danger` | Token leÃ­do o definido por componente. |
+| `--iswc-danger` | Token leÃ­do o definido por componente. |
+| `--warning` | Token leÃ­do o definido por componente. |
+| `--iswc-warning` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-stat> — Stat / KPI Card (vanilla, zero dependencies).
-> Bloque para KPI en dashboards: label, número principal, helper text,
+> <iswc-stat> â€” Stat / KPI Card (vanilla, zero dependencies).
+> Bloque para KPI en dashboards: label, nÃºmero principal, helper text,
 > cambio/trend opcional e icono.
->   <iswc-stat label="Ingresos" value="€ 1.249,00" helper="vs mes anterior" trend="+12.5"></iswc-stat>
+>   <iswc-stat label="Ingresos" value="â‚¬ 1.249,00" helper="vs mes anterior" trend="+12.5"></iswc-stat>
 > Atributos
 >   label       string
->   value       string (texto del número principal; admite formato HTML)
+>   value       string (texto del nÃºmero principal; admite formato HTML)
 >   helper      string
 >   trend       string (e.g. "+12.5%" o "-3.2%")
 >   trend-direction up | down | flat   (auto-detect si trend empieza con + o -)
@@ -154,18 +171,18 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-stat>`.
+Tags del mÃ³dulo: `<iswc-stat>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-stat
 label="Ingresos"
-value="€ 1.249,00"
+value="â‚¬ 1.249,00"
 helper="vs mes anterior"
 trend="+12.5%"
 icon="mdi:cash-multiple"
@@ -174,7 +191,7 @@ icon="mdi:cash-multiple"
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -182,15 +199,15 @@ icon="mdi:cash-multiple"
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./stat.js)
+- [JavaScript](./stat.ts)
 - [CSS](./stat.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./stat.json)

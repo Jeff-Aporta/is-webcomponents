@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-drawer",
   "category": "layout",
-  "title": "<iswc-drawer>",
-  "titleHtml": true,
+  "title": "&lt;iswc-drawer&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-drawer de InSoft.",
   "storageKey": "docs-iswc-drawer",
   "sections": [
@@ -22,10 +22,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwDefault\" label=\"Drawer estándar\">\r\n          <p>Un drawer es una excelente manera de mostrar contenido adicional sin salir de la página actual.</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" variant=\"outlined\">Cancelar</iswc-button>\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Aceptar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-drawer=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-drawer>"
         }
       ]
     },
@@ -56,10 +52,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwWide\" label=\"50%\" size=\"50%\">\r\n          <p>Este drawer ocupa siempre el 50% del viewport.</p>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer size=\"50%\">…</iswc-drawer>"
         }
       ]
     },
@@ -75,10 +67,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwNoHeader\" without-header>\r\n          <p>¡Mira mamá, sin header!</p>\r\n          <div slot=\"footer\">\r\n            <iswc-button data-drawer=\"close\" color=\"brand\">Cerrar</iswc-button>\r\n          </div>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer without-header>…</iswc-drawer>"
         }
       ]
     },
@@ -94,10 +82,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwLD\" label=\"Light dismiss\" light-dismiss>\r\n          <p>Haz click fuera del drawer para cerrarlo.</p>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer light-dismiss>…</iswc-drawer>"
         }
       ]
     },
@@ -113,10 +97,6 @@
         {
           "kind": "html",
           "html": "<iswc-drawer id=\"drwNav\" placement=\"start\" label=\"Navegación\" size=\"280px\">\r\n          <nav style=\"display:flex;flex-direction:column;gap:.5em\">\r\n            <a href=\"#\" style=\"text-decoration:none\">Inicio</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Productos</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Clientes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Reportes</a>\r\n            <a href=\"#\" style=\"text-decoration:none\">Configuración</a>\r\n          </nav>\r\n        </iswc-drawer>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-drawer placement=\"start\" label=\"Menú\" size=\"280px\">\n  <nav>…</nav>\n</iswc-drawer>"
         }
       ]
     },
@@ -290,5 +270,131 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Panel que se desliza desde un borde del viewport (derecha, izquierda, arriba o abajo).\r\n          Ideal para menús, filtros y contenido secundario."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado visible. Reflected."
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título del header (a11y)."
+          },
+          {
+            "name": "<code>placement</code>",
+            "type": "start | end | top | bottom",
+            "default": "end",
+            "desc": "Borde desde el que se desliza."
+          },
+          {
+            "name": "<code>without-header</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta el header y el botón de cerrar."
+          },
+          {
+            "name": "<code>light-dismiss</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Cierra al click fuera."
+          },
+          {
+            "name": "<code>--size</code>",
+            "default": "<code>380px</code>",
+            "desc": "Tamaño (ancho o alto según placement)."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-l, 1rem)</code>",
+            "desc": "Padding interno."
+          },
+          {
+            "name": "<code>--backdrop-color</code>",
+            "default": "<code>rgba(0,0,0,0.45)</code>",
+            "desc": "Color del fondo."
+          },
+          {
+            "name": "<code>--show-duration</code>",
+            "default": "220ms",
+            "desc": "Duración apertura."
+          },
+          {
+            "name": "<code>--hide-duration</code>",
+            "default": "180ms",
+            "desc": "Duración cierre."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-show</code>",
+            "cancelable": "no",
+            "cuando": "Antes de abrir."
+          },
+          {
+            "evento": "<code>iswc-after-show</code>",
+            "cancelable": "no",
+            "cuando": "Tras la animación de apertura."
+          },
+          {
+            "evento": "<code>iswc-hide</code>",
+            "cancelable": "sí",
+            "cuando": "Antes de cerrar. <code>detail.source</code> indica quién lo pidió."
+          },
+          {
+            "evento": "<code>iswc-after-hide</code>",
+            "cancelable": "no",
+            "cuando": "Tras la animación de cierre."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Body principal."
+          },
+          {
+            "slot": "<code>label</code>",
+            "desc": "Título propio."
+          },
+          {
+            "slot": "<code>header-actions</code>",
+            "desc": "Acciones adicionales en el header."
+          },
+          {
+            "slot": "<code>footer</code>",
+            "desc": "Pie del drawer."
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>show() / hide() / toggle()</code>",
+            "desc": "API imperativa."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-drawer label=\"Drawer estándar\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-drawer=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-drawer>\n```"
+      }
+    },
+    "exclude": [
+      "parts",
+      "props",
+      "states"
+    ]
+  }
 }

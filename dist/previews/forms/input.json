@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-input",
   "category": "forms",
-  "title": "<iswc-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-input&gt;",
+  "titleHtml": false,
   "styles": ".stack { display: grid; gap: 1.25rem; max-width: 26rem; }\r\n    .stack--wide { max-width: 34rem; }\r\n    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }",
   "storageKey": "docs-iswc-input",
   "hasBehavior": true,
@@ -18,11 +18,36 @@
           "html": "<iswc-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></iswc-input>",
           "target": "#demo",
           "controls": [
-            { "control": "text", "prop": "attr:label", "label": "Label", "group": "Contenido" },
-            { "control": "text", "prop": "attr:placeholder", "label": "Placeholder", "group": "Contenido" },
-            { "control": "text", "prop": "attr:hint", "label": "Hint", "group": "Contenido" },
-            { "control": "boolean", "prop": "attr:clearable", "label": "Limpiable", "group": "Estado" },
-            { "control": "boolean", "prop": "attr:required", "label": "Requerido", "group": "Estado" }
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "Label",
+              "group": "Contenido"
+            },
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "Placeholder",
+              "group": "Contenido"
+            },
+            {
+              "control": "text",
+              "prop": "attr:hint",
+              "label": "Hint",
+              "group": "Contenido"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:clearable",
+              "label": "Limpiable",
+              "group": "Estado"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "Requerido",
+              "group": "Estado"
+            }
           ],
           "equivNote": "type especializa chrome (ojo, clear, steppers) sobre el FA base.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -42,10 +67,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"outlined (default)\" placeholder=\"Caja con borde completo\"></iswc-input>\r\n            <iswc-input variant=\"filled\" label=\"filled\" placeholder=\"Superficie + línea inferior\"></iswc-input>\r\n            <iswc-input variant=\"underlined\" label=\"underlined\" placeholder=\"Solo línea inferior\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input label=\"outlined (default)\"></iswc-input>\n<iswc-input variant=\"filled\" label=\"filled\"></iswc-input>\n<iswc-input variant=\"underlined\" label=\"underlined\"></iswc-input>"
         }
       ]
     },
@@ -57,10 +78,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input type=\"email\" label=\"Email\" placeholder=\"tu@empresa.com\" required hint=\"Obligatorio\"></iswc-input>\r\n            <iswc-input type=\"password\" label=\"Contraseña\" password-toggle placeholder=\"••••••••\"></iswc-input>\r\n            <iswc-input type=\"number\" label=\"Cantidad\" value=\"10\" min=\"0\" max=\"100\" step=\"5\"></iswc-input>\r\n            <iswc-input type=\"search\" label=\"Buscar\" clearable placeholder=\"Filtrar…\"></iswc-input>\r\n            <iswc-input type=\"tel\" label=\"Teléfono\" placeholder=\"+57 300 000 0000\" autocomplete=\"tel\"></iswc-input>\r\n            <iswc-input type=\"url\" label=\"Sitio web\" placeholder=\"https://…\"></iswc-input>\r\n            <iswc-input type=\"date\" label=\"Fecha\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input type=\"password\" label=\"Contraseña\" password-toggle></iswc-input>\n<iswc-input type=\"number\" label=\"Cantidad\" min=\"0\" max=\"100\" step=\"5\"></iswc-input>\n<iswc-input type=\"search\" label=\"Buscar\" clearable></iswc-input>"
         }
       ]
     },
@@ -72,10 +89,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Importe\" type=\"number\" value=\"1200\" prefix=\"$\" suffix=\"COP\"></iswc-input>\r\n            <iswc-input label=\"Peso\" type=\"number\" value=\"72\" suffix=\"kg\"></iswc-input>\r\n            <iswc-input label=\"Con iconos\" placeholder=\"Buscar…\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:magnify\"></iswc-icon>\r\n              <iswc-icon slot=\"end\" icon=\"mdi:filter-variant\"></iswc-icon>\r\n            </iswc-input>\r\n            <iswc-input label=\"Slot + prefix\" prefix=\"https://\" placeholder=\"empresa.com\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:web\"></iswc-icon>\r\n            </iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input label=\"Importe\" type=\"number\" prefix=\"$\" suffix=\"COP\"></iswc-input>\n\n<iswc-input label=\"Con iconos\">\n  <iswc-icon slot=\"start\" icon=\"mdi:magnify\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:filter-variant\"></iswc-icon>\n</iswc-input>"
         },
         {
           "kind": "html",
@@ -91,10 +104,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Error forzado\" value=\"valor@malo\" error error-text=\"Ese correo no existe en el sistema\"></iswc-input>\r\n            <iswc-input label=\"Error sin error-text\" value=\"12\" error hint=\"El hint se pinta en rojo\"></iswc-input>\r\n            <iswc-input id=\"autoErr\" type=\"email\" label=\"Correo (sale del campo para validar)\" required\r\n              hint=\"Se valida al perder el foco\" error-text=\"Escribe un correo válido\"></iswc-input>\r\n            <iswc-input id=\"reportErr\" label=\"Obligatorio\" required hint=\"Pulsa «Validar»\"></iswc-input>\r\n          </div>\r\n          <div class=\"actions\">\r\n            <button type=\"button\" id=\"btnReport\">Validar</button>\r\n            <button type=\"button\" id=\"btnToggleErr\">Alternar error</button>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input error error-text=\"Ese correo no existe en el sistema\"></iswc-input>\n\n// error derivado de la validación nativa\ninput.reportValidity();          // marca el campo como tocado y pinta el error\ninput.error = true;              // o fuérzalo desde fuera"
         }
       ]
     },
@@ -106,10 +115,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <iswc-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\" value=\"Facturación electrónica\"></iswc-input>\r\n            <iswc-input label=\"Sin límite\" show-count placeholder=\"Escribe algo…\"></iswc-input>\r\n            <iswc-input label=\"Solo contador\" maxlength=\"10\" show-count></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-input label=\"Titular\" maxlength=\"40\" show-count hint=\"Máximo 40 caracteres\"></iswc-input>"
         }
       ]
     },
@@ -121,10 +126,6 @@
         {
           "kind": "demo",
           "html": "<div style=\"display:grid; gap:1.25rem; --iswc-field-width:14rem;\">\r\n            <iswc-input label=\"--iswc-field-width: 14rem\" placeholder=\"Heredado del contenedor\"></iswc-input>\r\n            <iswc-input label=\"Mismo contenedor, full-width\" full-width placeholder=\"Ignora el token\"></iswc-input>\r\n            <iswc-input label=\"Override local\" style=\"--iswc-field-width:8rem;\" type=\"number\" value=\"42\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<div style=\"--iswc-field-width: 14rem\">\n  <iswc-input label=\"Estrecho\"></iswc-input>\n  <iswc-input label=\"Ancho completo\" full-width></iswc-input>\n</div>"
         }
       ]
     },
@@ -136,10 +137,6 @@
         {
           "kind": "demo",
           "html": "<div style=\"display:grid; gap:0.75rem; --iswc-field-label-width:7rem; max-width:34rem;\">\r\n            <iswc-input label-placement=\"start\" label=\"Nombre\" full-width placeholder=\"Jane Doe\"></iswc-input>\r\n            <iswc-input label-placement=\"start\" label=\"Correo\" type=\"email\" full-width placeholder=\"jane@empresa.com\" hint=\"Se usa para la factura\"></iswc-input>\r\n            <iswc-input label-placement=\"start\" label=\"NIT\" full-width prefix=\"CO\" show-count maxlength=\"12\"></iswc-input>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<div style=\"--iswc-field-label-width: 7rem\">\n  <iswc-input label-placement=\"start\" label=\"Nombre\" full-width></iswc-input>\n  <iswc-input label-placement=\"start\" label=\"Correo\" full-width></iswc-input>\n</div>"
         }
       ]
     },
@@ -166,6 +163,17 @@
         {
           "kind": "html",
           "html": "<p class=\"lede\" id=\"out\">FormData: —</p>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-input\">\n  <iswc-input placeholder=\"Buscar...\" label=\"Busqueda\">\n    <iswc-icon slot=\"start\" icon=\"mdi:magnify\"></iswc-icon>\n    <iswc-icon slot=\"end\" icon=\"mdi:close\"></iswc-icon>\n  </iswc-input>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -351,5 +359,154 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo de texto form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField de MUI</a>:\r\n          tres <em>appearances</em>, estado de error ligado a la validación nativa, adornos, contador de\r\n          caracteres y ancho controlable. Participa en <code class=\"code\">&lt;form&gt;</code> vía\r\n          <code class=\"code\">ElementInternals</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>type</code>",
+            "desc": "<code>text</code> (default) · email · password · number · search · tel · url · date"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "desc": "<code>outlined</code> (default) · <code>filled</code> · <code>underlined</code>"
+          },
+          {
+            "name": "<code>label-placement</code>",
+            "desc": "<code>top</code> (default) · <code>start</code>"
+          },
+          {
+            "name": "<code>name</code> <code>value</code> <code>placeholder</code> <code>autocomplete</code>",
+            "desc": "string"
+          },
+          {
+            "name": "<code>label</code> <code>hint</code>",
+            "desc": "texto o slots homónimos"
+          },
+          {
+            "name": "<code>error-text</code>",
+            "desc": "mensaje que sustituye al <code>hint</code> cuando hay error"
+          },
+          {
+            "name": "<code>prefix</code> <code>suffix</code>",
+            "desc": "adorno de texto corto, atenuado y no interactivo"
+          },
+          {
+            "name": "<code>min</code> <code>max</code> <code>step</code> <code>maxlength</code>",
+            "desc": "pasan al input nativo interno"
+          },
+          {
+            "name": "<code>disabled</code> <code>required</code> <code>readonly</code>",
+            "desc": "boolean"
+          },
+          {
+            "name": "<code>clearable</code> <code>password-toggle</code>",
+            "desc": "boolean · botón de limpiar y ojo de contraseña"
+          },
+          {
+            "name": "<code>error</code>",
+            "desc": "boolean · fuerza el estado visual de peligro"
+          },
+          {
+            "name": "<code>show-count</code>",
+            "desc": "boolean · contador <code>n/maxlength</code> (o <code>n</code>)"
+          },
+          {
+            "name": "<code>full-width</code>",
+            "desc": "boolean · 100% del ancho disponible, ignora <code>--iswc-field-width</code>"
+          },
+          {
+            "name": "<code>--iswc-field-width</code>",
+            "desc": "ancho del control (default <code>auto</code>); heredable desde el contenedor"
+          },
+          {
+            "name": "<code>--iswc-field-label-width</code>",
+            "desc": "columna del label con <code>label-placement=\"start\"</code>"
+          },
+          {
+            "name": "<code>--iswc-input-bg</code> <code>--iswc-input-border</code> <code>--iswc-input-text</code>",
+            "desc": "caen en <code>--iswc-control-*</code>"
+          },
+          {
+            "name": "<code>--iswc-input-border-radius</code> <code>--iswc-input-focus</code>",
+            "desc": "caen en <code>--iswc-radius-sm</code> / <code>--iswc-focus</code>"
+          },
+          {
+            "name": "<code>--iswc-input-danger</code> <code>--iswc-input-danger-text</code>",
+            "desc": "borde y texto del estado de error"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>value</code> <code>defaultValue</code>",
+            "desc": "valor actual · valor del atributo <code>value</code> (el del reset)"
+          },
+          {
+            "metodo": "<code>type</code> <code>appearance</code> <code>labelPlacement</code>",
+            "desc": "sanitizan valores no válidos al default"
+          },
+          {
+            "metodo": "<code>prefixText</code> <code>suffixText</code>",
+            "desc": "reflejan <code>prefix</code> / <code>suffix</code> (<code>Element.prefix</code> ya existe)"
+          },
+          {
+            "metodo": "<code>error</code> <code>errorText</code> <code>showCount</code> <code>fullWidth</code>",
+            "desc": "reflejan sus atributos"
+          },
+          {
+            "metodo": "<code>clearable</code> <code>passwordToggle</code> <code>disabled</code> <code>required</code> <code>readonly</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "<code>input</code>",
+            "desc": "el <code>&lt;input&gt;</code> nativo interno, para casos avanzados"
+          },
+          {
+            "metodo": "<code>validity</code> <code>validationMessage</code> <code>willValidate</code>",
+            "desc": "espejo de <code>ElementInternals</code>"
+          },
+          {
+            "metodo": "<code>focus()</code> <code>blur()</code> <code>select()</code> <code>setSelectionRange()</code>",
+            "desc": "delegan en el input interno"
+          },
+          {
+            "metodo": "<code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>",
+            "desc": "<code>reportValidity()</code> además marca el campo como tocado"
+          },
+          {
+            "metodo": "slots",
+            "desc": "<code>label</code> <code>hint</code> <code>start</code> <code>end</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>form-control</code> <code>label</code> <code>base</code> <code>start</code> <code>prefix</code> <code>input</code> <code>clear</code> <code>toggle</code> <code>suffix</code> <code>end</code> <code>support</code> <code>hint</code> <code>error-text</code> <code>count</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>blank</code> <code>disabled</code> <code>readonly</code> <code>focused</code> <code>invalid</code> <code>password-visible</code>"
+          },
+          {
+            "metodo": "events",
+            "desc": "<code>iswc-input</code> <code>iswc-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-input id=\"demo\" label=\"Nombre\" hint=\"Como aparece en la factura\" placeholder=\"Escribe aquí\" clearable name=\"nombre\"></iswc-input>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

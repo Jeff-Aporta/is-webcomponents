@@ -1,39 +1,39 @@
----
+﻿---
 tag: iswc-speech
 tags:
   - iswc-speech
 category: media
 status: public
-source: ./speech.js
+source: ./speech.ts
 style: ./speech.css
 preview: ./speech.json
 ---
 # `<iswc-speech>`
 
-## Propósito
+## PropÃ³sito
 
 Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.
 
-Este módulo registra `<iswc-speech>`.
+Este mÃ³dulo registra `<iswc-speech>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Asistentes, dictado al campo, leer un resultado en voz alta.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No sustituye una nota de voz (`MediaRecorder`). Firefox no trae SpeechRecognition.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './speech.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
-<iswc-speech lang="es-ES" text="Proceso completado con éxito"></iswc-speech>
+<iswc-speech lang="es-ES" text="Proceso completado con Ã©xito"></iswc-speech>
 ```
 
 ## API
@@ -47,7 +47,7 @@ import './speech.js';
 | `lang` | string | Default `document.documentElement.lang` o `es-ES` |
 | `text` | string | Texto a leer |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -62,19 +62,42 @@ import './speech.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-result` | Evento personalizado del componente (result). |
+| `iswc-speak-end` | Evento personalizado del componente (speak end). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-result` | sí `{ transcript, isFinal }` | sí | sí | no |
-| `iswc-speak-end` | no | sí | sí | no |
-| `iswc-error` | sí `{ message }` | sí | sí | no |
+| `iswc-result` | sÃ­ `{ transcript, isFinal }` | sÃ­ | sÃ­ | no |
+| `iswc-speak-end` | no | sÃ­ | sÃ­ | no |
+| `iswc-error` | sÃ­ `{ message }` | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-speech');
+el.addEventListener('iswc-result', (e) => {
+  console.log('iswc-result', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 `listen()`, `stop()`, `speak(text?)`, `cancel()`.
 
 ### CSS parts
 
-`bar`, `transcript`
+| Part | Uso |
+| --- | --- |
+| `bar` | Barra de nivel/vu-meter. |
+| `transcript` | Texto transcrito del audio. |
 
 ### Custom states
 
@@ -84,7 +107,7 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated.
 
@@ -110,7 +133,7 @@ Botones con `aria-pressed` en dictado; transcript `aria-live`.
 ## Errores comunes
 
 - Esperar STT en Firefox.
-- No pedir permiso de micrófono.
+- No pedir permiso de micrÃ³fono.
 
 ## Reglas para LLM
 
@@ -118,5 +141,5 @@ Botones con `aria-pressed` en dictado; transcript `aria-live`.
 
 ## Fuentes
 
-- `./speech.js` · `./speech.css`
+- `./speech.js` Â· `./speech.css`
 - Preview: `./speech.json`

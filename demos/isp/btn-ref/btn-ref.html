@@ -24,12 +24,12 @@
 </style>
 <script type="module">
   // Cargar bundles necesarios para <iswc-btn-ref> y sus dependencias transitivas.
-  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
-  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
-  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=6ocp5e');
-  await import('../../../dist/cdn/isp/catalogo-gen.min.js?h=ol07ry');
-  await import('../../../dist/cdn/isp/btn-ref.min.js?h=s23pbn');
+  await import('../../../dist/cdn/forms/input.min.js?h=r5wcsk');
+  await import('../../../dist/cdn/actions/button.min.js?h=h7i2nj');
+  await import('../../../dist/cdn/media/icon.min.js?h=cjurkr');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=6iyovb');
+  await import('../../../dist/cdn/isp/catalogo-gen.min.js?h=8enlyr');
+  await import('../../../dist/cdn/isp/btn-ref.min.js?h=7symr0');
   await customElements.whenDefined('iswc-btn-ref');
 
   // ── Controller con datos fake ────────────────────────────────────────
@@ -92,8 +92,8 @@
     <h2>Ejemplo</h2>
     <div class="row">
       <iswc-btn-ref id="ref-app" label="Aplicación" name="aplicacion" required maxlength="6"></iswc-btn-ref>
-      <button id="open-modal" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir catálogo</button>
-      <button id="set-value" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Set value = NS</button>
+      <button title="Abrir catálogo" id="open-modal" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir catálogo</button>
+      <button title="Set value = NS" id="set-value" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Set value = NS</button>
     </div>
   </section>
 
@@ -102,5 +102,80 @@
     <pre id="event-log" class="log"></pre>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-copy-button",
   "category": "actions",
-  "title": "<iswc-copy-button>",
-  "titleHtml": true,
+  "title": "&lt;iswc-copy-button&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-copy-button de InSoft.",
   "styles": ".cluster { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }\r\n    .stack { display: flex; flex-direction: column; gap: 0.75rem; }\r\n    /* Hueco generoso: los tooltips de los 12 placements se despliegan sin taparse */\r\n    .placement-cell {\r\n      display: inline-flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.45rem;\r\n    }\r\n    /* El nombre visible evita la \"pared de botones grises\": sin el, las 12\r\n       celdas son identicas y hay que pasar el raton para saber cual es cual. */\r\n    .placement-cell__name {\r\n      font-family: var(--iswc-mono, ui-monospace, Consolas, monospace);\r\n      font-size: 0.68rem;\r\n      color: var(--iswc-text-soft);\r\n    }\r\n\r\n    .placements {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));\r\n      gap: 2.5rem 1rem;\r\n      justify-items: center;\r\n      padding: 2rem 1rem;\r\n    }\r\n    /* El demo debe dejar claro QUE se copia: valor visible, boton pegado a el\r\n       y un campo donde pegar para comprobar el resultado. */\r\n    .copy-showcase {\r\n      display: grid;\r\n      gap: 1.25rem;\r\n      max-width: 34rem;\r\n    }\r\n    .copy-field__label,\r\n    .copy-proof__label {\r\n      display: block;\r\n      margin-bottom: 0.4rem;\r\n      font-size: 0.72rem;\r\n      font-weight: 700;\r\n      letter-spacing: 0.06em;\r\n      text-transform: uppercase;\r\n      color: var(--iswc-text-soft);\r\n    }\r\n    .copy-field__row {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 0.45rem 0.5rem 0.45rem 0.85rem;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 0.5rem;\r\n      background: var(--iswc-code-bg, var(--iswc-bg-elev));\r\n    }\r\n    .copy-field__value {\r\n      flex: 1;\r\n      min-width: 0;\r\n      overflow-x: auto;\r\n      white-space: nowrap;\r\n      font-family: var(--iswc-mono, ui-monospace, Consolas, monospace);\r\n      font-size: 0.85rem;\r\n      color: var(--iswc-code-text, var(--iswc-text));\r\n    }\r\n\r\n    .from-input {\r\n      font: inherit;\r\n      padding: 0.45em 0.7em;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 6px;\r\n      background: var(--iswc-bg-elev, transparent);\r\n      color: var(--iswc-text);\r\n      max-width: 280px;\r\n      width: 100%;\r\n    }",
   "storageKey": "docs-iswc-copy-button",
@@ -17,128 +17,128 @@
           "kind": "demo",
           "html": "<div class=\"copy-showcase\">\r\n            <div class=\"copy-field\">\r\n              <span class=\"copy-field__label\">Endpoint de la API</span>\r\n              <div class=\"copy-field__row\">\r\n                <code class=\"copy-field__value\" id=\"cbValue\">https://api.insoft.com.co/v1</code>\r\n                <iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>\r\n              </div>\r\n            </div>\r\n\r\n            <div class=\"copy-proof\">\r\n              <label class=\"copy-proof__label\" for=\"cbPaste\">Pega aquí para comprobarlo</label>\r\n              <input id=\"cbPaste\" class=\"from-input\" type=\"text\" placeholder=\"Ctrl+V / Cmd+V\">\r\n            </div>\r\n          </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:from",
-                "label": "from",
-                "options": [
-                  "cbValue",
-                  "my-phone",
-                  "my-input.value",
-                  "my-link[href]"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:copy-label",
-                "label": "copy-label",
-                "options": [
-                  "Copiar",
-                  "Clic para copiar",
-                  "250ms",
-                  "3s",
-                  "full",
-                  "copy (solo feedback)",
-                  "none",
-                  "top",
-                  "top-start",
-                  "top-end",
-                  "right",
-                  "right-start",
-                  "right-end",
-                  "bottom",
-                  "bottom-start",
-                  "bottom-end",
-                  "left",
-                  "left-start",
-                  "left-end"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:success-label",
-                "label": "success-label",
-                "options": [
-                  "¡Copiado!",
-                  "¡Listo!"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "Labels custom",
-                  "Iconos custom",
-                  "Desde un botón custom",
-                  "No se puede copiar",
-                  "Rápido",
-                  "Lento",
-                  "full",
-                  "copy",
-                  "none",
-                  "top",
-                  "top-start",
-                  "top-end",
-                  "right",
-                  "right-start",
-                  "right-end",
-                  "bottom",
-                  "bottom-start",
-                  "bottom-end",
-                  "left",
-                  "left-start",
-                  "left-end",
-                  "hola-iswc-copy"
-                ]
-              },
-              {
-                "control": "text",
-                "prop": "attr:error-label",
-                "label": "error-label"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              },
-              {
-                "control": "number",
-                "prop": "attr:feedback-duration",
-                "label": "feedback-duration",
-                "min": 0,
-                "max": 3000,
-                "step": 1
-              },
-              {
-                "control": "select",
-                "prop": "attr:tooltip",
-                "label": "tooltip",
-                "options": [
-                  "full",
-                  "copy",
-                  "none"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:tooltip-placement",
-                "label": "tooltip-placement",
-                "options": [
-                  "top",
-                  "top-start",
-                  "top-end",
-                  "right",
-                  "right-start",
-                  "right-end",
-                  "bottom",
-                  "bottom-start",
-                  "bottom-end",
-                  "left",
-                  "left-start",
-                  "left-end"
-                ]
-              }
+            {
+              "control": "select",
+              "prop": "attr:from",
+              "label": "from",
+              "options": [
+                "cbValue",
+                "my-phone",
+                "my-input.value",
+                "my-link[href]"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:copy-label",
+              "label": "copy-label",
+              "options": [
+                "Copiar",
+                "Clic para copiar",
+                "250ms",
+                "3s",
+                "full",
+                "copy (solo feedback)",
+                "none",
+                "top",
+                "top-start",
+                "top-end",
+                "right",
+                "right-start",
+                "right-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end",
+                "left",
+                "left-start",
+                "left-end"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:success-label",
+              "label": "success-label",
+              "options": [
+                "¡Copiado!",
+                "¡Listo!"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "Labels custom",
+                "Iconos custom",
+                "Desde un botón custom",
+                "No se puede copiar",
+                "Rápido",
+                "Lento",
+                "full",
+                "copy",
+                "none",
+                "top",
+                "top-start",
+                "top-end",
+                "right",
+                "right-start",
+                "right-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end",
+                "left",
+                "left-start",
+                "left-end",
+                "hola-iswc-copy"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:error-label",
+              "label": "error-label"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            },
+            {
+              "control": "number",
+              "prop": "attr:feedback-duration",
+              "label": "feedback-duration",
+              "min": 0,
+              "max": 3000,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:tooltip",
+              "label": "tooltip",
+              "options": [
+                "full",
+                "copy",
+                "none"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:tooltip-placement",
+              "label": "tooltip-placement",
+              "options": [
+                "top",
+                "top-start",
+                "top-end",
+                "right",
+                "right-start",
+                "right-end",
+                "bottom",
+                "bottom-start",
+                "bottom-end",
+                "left",
+                "left-start",
+                "left-end"
+              ]
+            }
           ],
           "equivNote": "from gana sobre value. Sin fuente válida emite iswc-error.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -147,11 +147,6 @@
         {
           "kind": "callout",
           "html": "<strong>Requiere contexto seguro.</strong>\r\n          <code class=\"code\">clipboard.writeText()</code> necesita HTTPS o localhost."
-        },
-        {
-          "kind": "code",
-          "code": "<code id=\"cbValue\">https://api.insoft.com.co/v1</code>\n<iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>",
-          "lang": "html"
         }
       ]
     },
@@ -163,10 +158,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"cluster\">\r\n            <span id=\"my-phone\">+57 300 123 4567</span>\r\n            <iswc-copy-button from=\"my-phone\"></iswc-copy-button>\r\n          </div>\r\n          <div class=\"cluster\">\r\n            <input id=\"my-input\" class=\"from-input\" type=\"text\" value=\"Texto del usuario\" />\r\n            <iswc-copy-button from=\"my-input.value\"></iswc-copy-button>\r\n          </div>\r\n          <div class=\"cluster\">\r\n            <a id=\"my-link\" href=\"https://insoft.com.co\">Sitio InSoft</a>\r\n            <iswc-copy-button from=\"my-link[href]\"></iswc-copy-button>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<span id=\"my-phone\">+57 300 123 4567</span>\n<iswc-copy-button from=\"my-phone\"></iswc-copy-button>\n\n<iswc-copy-button from=\"my-input.value\"></iswc-copy-button>\n<iswc-copy-button from=\"my-link[href]\"></iswc-copy-button>"
         }
       ]
     },
@@ -250,10 +241,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"placements\">\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"top\" tooltip-placement=\"top\" copy-label=\"top\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">top</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"top-start\" tooltip-placement=\"top-start\" copy-label=\"top-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">top-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"top-end\" tooltip-placement=\"top-end\" copy-label=\"top-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">top-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"right\" tooltip-placement=\"right\" copy-label=\"right\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">right</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"right-start\" tooltip-placement=\"right-start\" copy-label=\"right-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">right-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"right-end\" tooltip-placement=\"right-end\" copy-label=\"right-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">right-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"bottom\" tooltip-placement=\"bottom\" copy-label=\"bottom\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">bottom</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"bottom-start\" tooltip-placement=\"bottom-start\" copy-label=\"bottom-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">bottom-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"bottom-end\" tooltip-placement=\"bottom-end\" copy-label=\"bottom-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">bottom-end</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"left\" tooltip-placement=\"left\" copy-label=\"left\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">left</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"left-start\" tooltip-placement=\"left-start\" copy-label=\"left-start\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">left-start</small>\r\n            </span>\r\n            <span class=\"placement-cell\">\r\n              <iswc-copy-button value=\"left-end\" tooltip-placement=\"left-end\" copy-label=\"left-end\"></iswc-copy-button>\r\n              <small class=\"placement-cell__name\">left-end</small>\r\n            </span>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-copy-button value=\"…\" tooltip-placement=\"bottom-start\"></iswc-copy-button>"
         }
       ]
     },
@@ -361,5 +348,95 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Copia texto al portapapeles con feedback de éxito/error."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "''"
+          },
+          {
+            "name": "<code>from</code>",
+            "type": "string",
+            "default": "''"
+          },
+          {
+            "name": "<code>copy-label</code>",
+            "type": "string",
+            "default": "'' → Copiar"
+          },
+          {
+            "name": "<code>success-label</code>",
+            "type": "string",
+            "default": "'' → Copiado"
+          },
+          {
+            "name": "<code>error-label</code>",
+            "type": "string",
+            "default": "'' → Error"
+          },
+          {
+            "name": "<code>feedback-duration</code>",
+            "type": "number",
+            "default": "1000"
+          },
+          {
+            "name": "<code>tooltip</code>",
+            "type": "full | copy | none",
+            "default": "full"
+          },
+          {
+            "name": "<code>tooltip-placement</code>",
+            "type": "los 12 de <code>iswc-popover</code>: top | top-start | top-end | bottom* | left* | right*",
+            "default": "top"
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-copy</code> con <code>{ value }</code> · <code>iswc-error</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>:state(success)</code> · <code>:state(error)</code> · <code>:state(disabled)</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>button</code> · <code>copy-icon</code> · <code>success-icon</code> · <code>error-icon</code> · <code>feedback</code> (burbuja) · <code>feedback-body</code>"
+          },
+          {
+            "metodo": "compone",
+            "desc": "<code class=\"code\">iswc-tooltip</code> (posición, flip, flecha) e <code class=\"code\">iswc-icon</code>"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-tooltip-bg</code> y <code>--iswc-tooltip-fg</code> mandan en la burbuja; éxito y error la tiñen solos"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<code id=\"cbValue\">https://api.insoft.com.co/v1</code>\n<iswc-copy-button from=\"cbValue\" copy-label=\"Copiar\" success-label=\"¡Copiado!\"></iswc-copy-button>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

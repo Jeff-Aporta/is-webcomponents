@@ -7,12 +7,12 @@
   .backdrop {
     position: fixed;
     inset: 0;
-    z-index: var(--iswc-z-modal, 1100);
+    z-index: var(--iswc-z-modal);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1em;
-    background: color-mix(in srgb, var(--iswc-bg, #101418) 68%, transparent);
+    background: color-mix(in srgb, var(--iswc-bg) 68%, transparent);
 
     &[hidden] { display: none; }
   }

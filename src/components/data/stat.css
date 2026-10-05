@@ -25,6 +25,7 @@
   &[data-color="success"] .icon { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
   &[data-color="danger"]  .icon { background: color-mix(in srgb, var(--danger) 15%, transparent);  color: var(--danger); }
   &[data-color="warning"] .icon { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
+  &[data-color="text"]    .icon { background: color-mix(in srgb, var(--fg) 12%, transparent); color: var(--fg); }
 
   /* Variantes de tendencia: idem para .trend. */
   &[data-trend="up"]   .trend { background: color-mix(in srgb, var(--success) 18%, transparent); color: var(--success); }

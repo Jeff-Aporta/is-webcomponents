@@ -28,13 +28,13 @@
 </style>
 <script type="module">
   // Dependencias: los controles que vamos a leer/escribir.
-  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
-  await import('../../../dist/cdn/forms/select.min.js?h=lggml9');
-  await import('../../../dist/cdn/forms/option.min.js?h=00bfco');
-  await import('../../../dist/cdn/forms/checkbox.min.js?h=4leq51');
+  await import('../../../dist/cdn/forms/input.min.js?h=r5wcsk');
+  await import('../../../dist/cdn/forms/select.min.js?h=olm1br');
+  await import('../../../dist/cdn/forms/option.min.js?h=fq4zvo');
+  await import('../../../dist/cdn/forms/checkbox.min.js?h=limpcu');
   await import('../../../dist/cdn/forms/switch.js');
   // Cargar también el form (lo usa como contenedor del helper).
-  await import('../../../dist/cdn/isp/form-json.min.js?h=cemiy4');
+  await import('../../../dist/cdn/isp/form-json.min.js?h=pv616a');
 
   // ── form-json es un módulo helper, NO un custom element ────────────
   // Expone: getValues, setValues, listControls, getControlValue, setControlValue.
@@ -48,7 +48,7 @@
 
   // Helper para invocar los exports del módulo.
   async function loadHelpers() {
-    return await import('../../../dist/cdn/isp/form-json.min.js?h=cemiy4');
+    return await import('../../../dist/cdn/isp/form-json.min.js?h=pv616a');
   }
 
   document.getElementById('btn-get').addEventListener('click', async () => {
@@ -98,22 +98,22 @@
       <div class="panel">
         <h3>Controles</h3>
         <form id="demo-form" style="display: grid; gap: 8px;">
-          <iswc-input name="cliente" label="Cliente"></iswc-input>
-          <iswc-input name="correo" label="Correo" type="email"></iswc-input>
-          <iswc-input name="cantidad" label="Cantidad" type="number"></iswc-input>
-          <iswc-switch name="activo">Activo</iswc-switch>
-          <iswc-select name="tipo" label="Tipo">
-            <iswc-option value="factura">Factura</iswc-option>
-            <iswc-option value="nota">Nota</iswc-option>
+          <iswc-input title="Cliente" name="cliente" label="Cliente"></iswc-input>
+          <iswc-input title="Correo" name="correo" label="Correo" type="email"></iswc-input>
+          <iswc-input title="Cantidad" name="cantidad" label="Cantidad" type="number"></iswc-input>
+          <iswc-switch title="Activo" name="activo">Activo</iswc-switch>
+          <iswc-select title="Tipo" name="tipo" label="Tipo">
+            <iswc-option title="Factura" value="factura">Factura</iswc-option>
+            <iswc-option title="Nota" value="nota">Nota</iswc-option>
           </iswc-select>
-          <iswc-checkbox name="envio" value="email">Email</iswc-checkbox>
-          <iswc-checkbox name="envio" value="sms">SMS</iswc-checkbox>
+          <iswc-checkbox title="Email" name="envio" value="email">Email</iswc-checkbox>
+          <iswc-checkbox title="SMS" name="envio" value="sms">SMS</iswc-checkbox>
         </form>
         <div style="margin-top: 12px;">
-          <button id="btn-get" type="button" class="btn">getValues()</button>
-          <button id="btn-set" type="button" class="btn">setValues({...})</button>
-          <button id="btn-list" type="button" class="btn">listControls()</button>
-          <button id="btn-clear" type="button" class="btn">Limpiar</button>
+          <button title="getValues()" id="btn-get" type="button" class="btn">getValues()</button>
+          <button title="setValues({...})" id="btn-set" type="button" class="btn">setValues({...})</button>
+          <button title="listControls()" id="btn-list" type="button" class="btn">listControls()</button>
+          <button title="Limpiar" id="btn-clear" type="button" class="btn">Limpiar</button>
         </div>
       </div>
       <div class="panel">
@@ -123,5 +123,80 @@
     </div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

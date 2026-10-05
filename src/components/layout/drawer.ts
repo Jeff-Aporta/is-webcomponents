@@ -56,7 +56,7 @@ import { ModalBase } from '../_shared/modal-base.js';
             class="close-btn"
             part="close-button"
             variant="text"
-            color="neutral"
+            color="text"
             aria-label="Cerrar"
           >
             <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -81,19 +81,11 @@ import { ModalBase } from '../_shared/modal-base.js';
   };
 
   class IswcDrawer extends ModalBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      size: '--iswc-drawer-size',
-      spacing: '--iswc-drawer-spacing',
-      'backdrop-color': { prop: '--iswc-drawer-backdrop-color', onlyColorValues: true },
-      'show-duration': '--iswc-drawer-show-duration',
-      'hide-duration': '--iswc-drawer-hide-duration',
-    };
 
     static __TEMPLATE = TEMPLATE;
 
     static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'placement', ...IswcDrawer.styleAttrNames];
+      return [...super.observedAttributes, 'placement'];
     }
 
     get modalClass() { return '.drawer'; }

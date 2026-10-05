@@ -4,14 +4,13 @@
   <meta charset="UTF-8" />
   <script src="../../scripts/preview-boot.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Preview · IS Web Components</title>
+  <title>Preview · ISWC</title>
   <script type="module">
     import { ISWebComponentsLoader as L } from '../../dist/cdn/core/loader.min.js';
     import { GALLERY_CHROME_TAGS } from '../../src/cdn/collect-iswc-tags.js';
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
-    await L.loadCSSBase();
-    await L.loadCSSPalettesDefault();
     await L.loadPageStyles([
+      'iswc-palettes-default',
       '../styles/presentation.css',
       '../components/layout/preview-component.css',
     ]);
@@ -43,7 +42,7 @@
       document.body.innerHTML = '<p class="lede" style="padding:2rem">Falta ?tag=…</p>';
       throw new Error('missing tag');
     }
-    document.title = `${tag} · IS Web Components`;
+    document.title = `${tag} · ISWC`;
     const preview = await loadPreview(tag);
     if (!preview) {
       document.body.innerHTML = `<p class="lede" style="padding:2rem">Sin preview controlado para <code>${tag}</code>.</p>`;

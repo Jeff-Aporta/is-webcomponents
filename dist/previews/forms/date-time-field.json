@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-date-time-field",
   "category": "forms",
-  "title": "<iswc-date-time-field>",
-  "titleHtml": true,
+  "title": "&lt;iswc-date-time-field&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-date-time-field de InSoft.",
   "storageKey": "docs-iswc-date-time-field",
   "sections": [
@@ -22,11 +22,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-date-time-field label=\"Inicio del turno\" value=\"2026-08-01T08:30\" style=\"max-width:320px\"></iswc-date-time-field>",
-          "lang": "html"
         }
       ]
     },
@@ -34,12 +29,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-date-time-field&gt; — Campo de fecha y hora por secciones (MUI DateTimeField). El valor es `yyyy-mm-ddTHH:mm[:ss]`. Atributos: label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, invalid Slots: start, end Events: iswc-change, iswc-input",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/date-time-field.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo combinado de fecha y hora en un solo control."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-date-time-field label=\"Inicio del turno\" value=\"2026-08-01T08:30\" style=\"max-width:320px\"></iswc-date-time-field>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -26,6 +26,7 @@ import './floating.js';
  *        ::part(hover-bridge) ::part(anchor)
  * CSS: --iswc-popover-max-width --iswc-popover-arrow-size --iswc-popover-show-duration --iswc-popover-hide-duration
  *        --auto-size-available-width --auto-size-available-height
+ * Custom states: :state(open)
  * data-popover="close" en hijos cierra el popover.
  */
 
@@ -85,14 +86,6 @@ interface FloatingElement extends HTMLElement {
   const OBSERVED: readonly string[] = ['for', 'open', ...POPUP_DELEGATED];
 
   class IswcPopover extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      'max-width': '--iswc-popover-max-width',
-      'arrow-size': '--iswc-popover-arrow-size',
-      'show-duration': '--iswc-popover-show-duration',
-      'hide-duration': '--iswc-popover-hide-duration',
-    };
-
     static get observedAttributes(): string[] {
       return [...OBSERVED, 'max-width', 'arrow-size', 'show-duration', 'hide-duration'];
     }

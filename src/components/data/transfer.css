@@ -47,7 +47,7 @@
   border-bottom: 1px solid var(--border);
   input {
     inline-size: 100%;
-    background: var(--iswc-bg, #0f1117);
+    background: var(--iswc-bg);
     border: 1px solid var(--border);
     color: var(--fg);
     padding: 0.35em 0.5em;

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-details",
   "category": "layout",
-  "title": "<iswc-details>",
-  "titleHtml": true,
+  "title": "&lt;iswc-details&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-details de InSoft.",
   "storageKey": "docs-iswc-details",
   "sections": [
@@ -16,44 +16,40 @@
           "kind": "demo",
           "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-details summary=\"¿Qué es InSoft?\">\r\n            InSoft es un ERP modular para empresas medianas que necesitan integrar\r\n            contabilidad, inventario, facturación y CRM en una sola plataforma.\r\n          </iswc-details>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "outlined",
-                  "filled",
-                  "filled-outlined",
-                  "plain"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:icon-placement",
-                "label": "icon-placement",
-                "options": [
-                  "end",
-                  "start"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:open",
-                "label": "open"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              }
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "filled",
+                "outlined",
+                "filled-outlined",
+                "plain"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:icon-placement",
+              "label": "icon-placement",
+              "options": [
+                "start",
+                "end"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:open",
+              "label": "open"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ],
           "equivNote": "Varios details con el mismo name se comportan como accordion.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-details: accordion\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mismo name?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"accordion (uno abierto)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"disclosure independiente\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</iswc-details>"
         }
       ]
     },
@@ -120,7 +116,7 @@
     {
       "id": "accordion",
       "title": "Acordeón",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "Cuando varios <code class=\"code\">iswc-details</code> comparten el atributo\r\n          <code class=\"code\">name</code>, abrir uno cierra los demás.",
       "blocks": [
         {
@@ -156,10 +152,6 @@
         {
           "kind": "demo",
           "html": "<iswc-details id=\"apiDetails\" summary=\"Demo controlada\">\r\n            Esto lo abro y cierro desde los botones de abajo.\r\n          </iswc-details>\r\n          <div class=\"card-row-actions\" style=\"margin-top:.5em\">\r\n            <iswc-button id=\"btnOpen\">show()</iswc-button>\r\n            <iswc-button id=\"btnClose\">hide()</iswc-button>\r\n            <iswc-button id=\"btnToggle\" variant=\"outlined\">toggle()</iswc-button>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-details id=\"apiDetails\" summary=\"Demo\">…</iswc-details>\n<script>\n  document.getElementById('btnOpen').onclick  = () => document.getElementById('apiDetails').show();\n  document.getElementById('btnClose').onclick = () => document.getElementById('apiDetails').hide();\n  document.getElementById('btnToggle').onclick = () => document.getElementById('apiDetails').toggle();\n</script>"
         }
       ]
     },
@@ -171,10 +163,6 @@
         {
           "kind": "demo",
           "html": "<iswc-details id=\"evtDetails\" summary=\"Pulsa y mira la consola\">\r\n            El evento <code class=\"code\">iswc-after-show</code> se dispara tras la animación de apertura.\r\n          </iswc-details>\r\n          <div id=\"evtLog\" class=\"callout\" style=\"margin-top:.5em\">Log:</div>"
-        },
-        {
-          "kind": "code",
-          "code": "document.getElementById('evtDetails').addEventListener('iswc-after-show', () => {\n  console.log('abierto');\n});"
         }
       ]
     },
@@ -385,5 +373,158 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Disclosure colapsable: muestra un resumen y, al expandir, el contenido. Equivalente\r\n          accesible al <code class=\"code\">&lt;details&gt;</code> nativo, con apariencias,\r\n          iconos, animaciones y comportamiento de accordion opcional."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado expandido. Reflected."
+          },
+          {
+            "name": "<code>summary</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto del summary si no se usa el slot."
+          },
+          {
+            "name": "<code>name</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Grupo accordion."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea la interacción."
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "filled · outlined · filled-outlined · plain",
+            "default": "outlined",
+            "desc": "Tratamiento visual."
+          },
+          {
+            "name": "<code>icon-placement</code>",
+            "type": "start · end",
+            "default": "end",
+            "desc": "Lado del chevron."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-m)</code>",
+            "desc": "Padding del header / contenido."
+          },
+          {
+            "name": "<code>--show-duration</code>",
+            "default": "180ms",
+            "desc": "Duración de apertura."
+          },
+          {
+            "name": "<code>--hide-duration</code>",
+            "default": "160ms",
+            "desc": "Duración de cierre."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-show</code>",
+            "cuando": "Antes de abrir.",
+            "cancelable": "sí (solo desde click)"
+          },
+          {
+            "evento": "<code>iswc-after-show</code>",
+            "cuando": "Tras la animación de apertura.",
+            "cancelable": "no"
+          },
+          {
+            "evento": "<code>iswc-hide</code>",
+            "cuando": "Antes de cerrar.",
+            "cancelable": "sí (solo desde click)"
+          },
+          {
+            "evento": "<code>iswc-after-hide</code>",
+            "cuando": "Tras la animación de cierre.",
+            "cancelable": "no"
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Contenido principal."
+          },
+          {
+            "slot": "<code>summary</code>",
+            "desc": "Summary propio (gana sobre el atributo)."
+          },
+          {
+            "slot": "<code>expand-icon</code>",
+            "desc": "Icono de expandido."
+          },
+          {
+            "slot": "<code>collapse-icon</code>",
+            "desc": "Icono de colapsado."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(base)</code>",
+            "desc": "Contenedor raíz."
+          },
+          {
+            "part": "<code>::part(header)</code>",
+            "desc": "Wrapper del botón summary."
+          },
+          {
+            "part": "<code>::part(summary)</code>",
+            "desc": "Botón summary."
+          },
+          {
+            "part": "<code>::part(icon)</code>",
+            "desc": "Wrapper del chevron."
+          },
+          {
+            "part": "<code>::part(content)</code>",
+            "desc": "Wrapper del contenido colapsable."
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>show()</code>",
+            "desc": "Abre (con animación)."
+          },
+          {
+            "metodo": "<code>hide()</code>",
+            "desc": "Cierra (con animación)."
+          },
+          {
+            "metodo": "<code>toggle()</code>",
+            "desc": "Alterna."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-details summary=\"¿Qué es InSoft?\">\n  InSoft es un ERP modular…\n</iswc-details>\n```"
+      }
+    },
+    "exclude": [
+      "props",
+      "states"
+    ]
+  }
 }

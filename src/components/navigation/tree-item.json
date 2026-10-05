@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tree-item",
   "category": "navigation",
-  "title": "<iswc-tree-item>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tree-item&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tree-item de InSoft.",
   "storageKey": "docs-iswc-tree-item",
   "sections": [
@@ -14,19 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-tree>\r\n            <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\r\n          </iswc-tree>",
-          "controls": [
-            {
-              "control": "boolean",
-              "prop": "attr:expanded",
-              "label": "expanded"
-            }
-          ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-tree>\n  <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\n  </iswc-tree-item>\n  <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\n</iswc-tree>",
-          "lang": "html"
+          "html": "<iswc-tree>\r\n            <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\r\n          </iswc-tree>"
         }
       ]
     },
@@ -34,12 +22,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-tree&gt; + &lt;iswc-tree-item&gt; — Web Components (vanilla, zero dependencies). Árbol jerárquico con expansión, selección, checkboxes, navegación por teclado (Arrow, Home, End, Enter, Space) e iconos por slot. &lt;iswc-tree selection=\"leaf\"&gt; &lt;iswc-tree-item expanded&gt; &lt;iswc-icon slot=\"icon\" icon=\"mdi:folder\"&gt;&lt;/iswc-icon&gt; Documentos &lt;iswc-tree-item&gt; … &lt;/iswc-tree-item&gt; &lt;iswc-tree-item&gt; … &lt;/iswc-tree-item&gt; &lt;/iswc-tree-item&gt; &lt;/iswc-tree&gt; Atributos &lt;iswc-tree&gt; selection  none | single | leaf | multiple (default 'single') expanded   boolean — todos los nodos empiezan expandidos. Atributos &lt;iswc-tree-item&gt; expanded         boolean selected         boolean disabled         boolean has-children     boolean (si lo declaras, se ignoran los hijos declarados) lazy             boolean — carga hijos bajo demanda. Slots &lt;iswc-tree-item&gt; (default)   label. icon        icono a la izquierda. expand-icon override del caret. checkbox    override del checkbox. Eventos iswc-tree-select    detail: { item, selected, selectedItems } iswc-tree-expand    detail: { item, expanded } iswc-tree-toggle    detail: { item, expanded } CSS Parts iswc-tree: ::part(base) ::part(items) iswc-tree-item: ::part(item) ::part(item-content) ::part(item-children) ::part(checkbox) ::part(expand-toggle)",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/tree.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Nodo de un <code class=\"code\">&lt;iswc-tree&gt;</code>. Anidando items se construye la jerarquía; <code class=\"code\">expanded</code> controla el pliegue."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tree>\n  <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\n  </iswc-tree-item>\n  <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\n</iswc-tree>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

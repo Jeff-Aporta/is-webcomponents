@@ -40,7 +40,7 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/split-panel.min.js?h=1ejfxk');
+  await import('../../../dist/cdn/layout/split-panel.min.js?h=mor35p');
   await customElements.whenDefined('iswc-split-panel');
 
   // (1) Split-panel horizontal básico, posición por defecto (50%).
@@ -150,10 +150,10 @@
     <h2>1. Horizontal (default)</h2>
     <div class="sp-host" id="host-1"></div>
     <div class="actions">
-      <button id="btn-30" type="button">position = 30%</button>
-      <button id="btn-70" type="button">position = 70%</button>
-      <button id="btn-home" type="button">position = 0 (Home)</button>
-      <button id="btn-end" type="button">position = 100 (End)</button>
+      <button title="position = 30%" id="btn-30" type="button">position = 30%</button>
+      <button title="position = 70%" id="btn-70" type="button">position = 70%</button>
+      <button title="position = 0 (Home)" id="btn-home" type="button">position = 0 (Home)</button>
+      <button title="position = 100 (End)" id="btn-end" type="button">position = 100 (End)</button>
     </div>
   </section>
   <section>
@@ -164,15 +164,15 @@
     <h2>3. Con persistencia (storage-key)</h2>
     <div class="sp-host" id="host-3"></div>
     <div class="actions">
-      <button id="btn-reset-storage" type="button">Borrar prefs (demo-sp-3)</button>
+      <button title="Borrar prefs (demo-sp-3)" id="btn-reset-storage" type="button">Borrar prefs (demo-sp-3)</button>
     </div>
   </section>
   <section>
     <h2>4. primary="end" + snap="120px 50%"</h2>
     <div class="sp-host" id="host-4"></div>
     <div class="actions">
-      <button id="btn-collapse-start" type="button">toggle collapse=start</button>
-      <button id="btn-collapse-end" type="button">toggle collapse=end</button>
+      <button title="toggle collapse=start" id="btn-collapse-start" type="button">toggle collapse=start</button>
+      <button title="toggle collapse=end" id="btn-collapse-end" type="button">toggle collapse=end</button>
     </div>
     <pre id="collapse-log" class="log" style="max-height:32px;"></pre>
   </section>
@@ -180,7 +180,7 @@
     <h2>5. Disabled</h2>
     <div class="sp-host" id="host-5"></div>
     <div class="actions">
-      <button id="btn-disabled-toggle" type="button">toggle disabled</button>
+      <button title="toggle disabled" id="btn-disabled-toggle" type="button">toggle disabled</button>
     </div>
     <pre id="disabled-log" class="log" style="max-height:32px;"></pre>
   </section>
@@ -192,5 +192,80 @@
 <footer>
   Estado: <code>customElements.whenDefined('iswc-split-panel')</code> resuelto.
 </footer>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

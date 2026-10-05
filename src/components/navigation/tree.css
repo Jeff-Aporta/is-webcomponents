@@ -3,9 +3,9 @@
   --iswc-tree-indent: 1rem;
   --iswc-tree-row-padding-y: 0.25rem;
   --iswc-tree-row-padding-x: 0.5rem;
-  --iswc-tree-row-hover: color-mix(in srgb, var(--iswc-brand, dodgerblue) 8%, transparent);
-  --iswc-tree-row-selected-bg: color-mix(in srgb, var(--iswc-brand, dodgerblue) 18%, transparent);
-  --iswc-tree-row-selected-text: var(--iswc-text, #e8eaf1);
+  --iswc-tree-row-hover: color-mix(in srgb, var(--iswc-brand) 8%, transparent);
+  --iswc-tree-row-selected-bg: color-mix(in srgb, var(--iswc-brand) 18%, transparent);
+  --iswc-tree-row-selected-text: var(--iswc-text);
 }
 
 .tree {
@@ -85,7 +85,7 @@
   justify-content: center;
   inline-size: 1.25rem;
   block-size: 1.25rem;
-  color: color-mix(in srgb, var(--iswc-text, #e8eaf1) 80%, transparent);
+  color: color-mix(in srgb, var(--iswc-text) 80%, transparent);
 }
 
 .content {

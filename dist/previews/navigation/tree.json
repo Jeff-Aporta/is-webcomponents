@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tree",
   "category": "navigation",
-  "title": "<iswc-tree>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tree&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tree / iswc-tree-item de InSoft.",
   "storageKey": "docs-iswc-tree",
   "sections": [
@@ -16,35 +16,31 @@
           "kind": "demo",
           "html": "<iswc-tree id=\"tree1\" selection=\"single\" expanded>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Documentos\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>\r\n                facturas-2024.pdf\r\n              </iswc-tree-item>\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>\r\n                contratos.odt\r\n              </iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n              Proyectos\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n                ContaPyme\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:language-typescript\"></iswc-icon>\r\n                  app.ts\r\n                </iswc-tree-item>\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:language-css3\"></iswc-icon>\r\n                  styles.css\r\n                </iswc-tree-item>\r\n              </iswc-tree-item>\r\n              <iswc-tree-item>\r\n                <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\r\n                InSoft\r\n                <iswc-tree-item>\r\n                  <iswc-icon slot=\"icon\" icon=\"mdi:react\"></iswc-icon>\r\n                  index.jsx\r\n                </iswc-tree-item>\r\n              </iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item>\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:image\"></iswc-icon>\r\n              Capturas\r\n            </iswc-tree-item>\r\n          </iswc-tree>\r\n          <p id=\"tree1Log\" class=\"lede\">Seleccionado: <code class=\"code\">—</code></p>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:selection",
-                "label": "selection",
-                "options": [
-                  "single",
-                  "multiple",
-                  "leaf",
-                  "none"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:expanded",
-                "label": "expanded"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              }
+            {
+              "control": "select",
+              "prop": "attr:selection",
+              "label": "selection",
+              "options": [
+                "none",
+                "single",
+                "leaf",
+                "multiple"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:expanded",
+              "label": "expanded"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ],
           "equivNote": "El atributo selection define si el árbol selecciona nodos y cómo.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-tree: selection\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"selection=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"none → solo expand\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"single → un nodo\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"leaf → solo hojas\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"multiple → checks\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"none\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"single\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"leaf\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"d\",\n          \"label\": \"multiple\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-tree selection=\"single\" expanded>\n  <iswc-tree-item>\n    <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\n    Documentos\n    <iswc-tree-item>facturas-2024.pdf</iswc-tree-item>\n  </iswc-tree-item>\n</iswc-tree>"
         }
       ]
     },
@@ -185,5 +181,74 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Árbol jerárquico accesible: expansión, selección, navegación por teclado\r\n          (↑/↓/←/→/Home/End/Enter/Space), iconos por slot y selección\r\n          <code class=\"code\">single</code> | <code class=\"code\">leaf</code> | <code class=\"code\">multiple</code> | <code class=\"code\">none</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>selection</code>",
+            "type": "none | single | leaf | multiple",
+            "default": "single",
+            "desc": "Modo de selección."
+          },
+          {
+            "name": "<code>expanded</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Inicia todos los nodos expandidos."
+          },
+          {
+            "name": "<code>expanded</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "El nodo está expandido."
+          },
+          {
+            "name": "<code>selected</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "El nodo está seleccionado."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea interacción."
+          },
+          {
+            "name": "<code>has-children</code>",
+            "type": "boolean",
+            "default": "auto",
+            "desc": "Fuerza presencia de hijos."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-tree-select</code>",
+            "cuando": "Selección. <code>detail: { item, selected, selectedItems }</code>."
+          },
+          {
+            "evento": "<code>iswc-tree-toggle</code>",
+            "cuando": "Expande/colapsa. <code>detail: { item, expanded }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tree selection=\"single\" expanded>\n  <iswc-tree-item>\n    <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\n    Documentos\n    <iswc-tree-item>facturas-2024.pdf</iswc-tree-item>\n  </iswc-tree-item>\n</iswc-tree>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

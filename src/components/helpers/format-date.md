@@ -1,41 +1,41 @@
----
+﻿---
 tag: iswc-format-date
 tags:
   - iswc-format-date
 category: helpers
 status: public
-source: ./format-date.js
+source: ./format-date.ts
 style: ./format-date.css
 preview: ./format-date.json
 ---
 # `<iswc-format-date>`
 
-## Propósito
+## PropÃ³sito
 
-Formatea fechas con Intl.DateTimeFormat. Cualquier locale BCP 47 vía locale (o lang del documento).
+Formatea fechas con Intl.DateTimeFormat. Cualquier locale BCP 47 vÃ­a locale (o lang del documento).
 
-Este módulo registra `<iswc-format-date>`.
+Este mÃ³dulo registra `<iswc-format-date>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Formato, observación y posicionamiento reutilizable sobre APIs nativas.
+Formato, observaciÃ³n y posicionamiento reutilizable sobre APIs nativas.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear wrapper nuevo si Intl/Observer/position existente cubre caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './format-date.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 const asked = ['es','en','fr','de','ja','zh-CN','ar','pt-BR'];
 const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
-// → p.ej. ["es","en","fr","de","ja","zh-CN","ar","pt-BR"]
+// â†’ p.ej. ["es","en","fr","de","ja","zh-CN","ar","pt-BR"]
 <iswc-format-date locale="ja" date="2026-07-30" weekday="long" month="long" day="numeric" year="numeric"></iswc-format-date>
 ```
 
@@ -47,21 +47,21 @@ const ok = Intl.DateTimeFormat.supportedLocalesOf(asked);
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `date` | string/según contrato | Fuente define default/restricción. |
-| `weekday` | string/según contrato | Fuente define default/restricción. |
-| `era` | string/según contrato | Fuente define default/restricción. |
-| `year` | string/según contrato | Fuente define default/restricción. |
-| `month` | string/según contrato | Fuente define default/restricción. |
-| `day` | string/según contrato | Fuente define default/restricción. |
-| `hour` | string/según contrato | Fuente define default/restricción. |
-| `minute` | string/según contrato | Fuente define default/restricción. |
-| `second` | string/según contrato | Fuente define default/restricción. |
-| `time-zone` | string/según contrato | Fuente define default/restricción. |
-| `time-zone-name` | string/según contrato | Fuente define default/restricción. |
-| `hour-format` | string/según contrato | Fuente define default/restricción. |
-| `locale` | string/según contrato | Fuente define default/restricción. |
+| `date` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `weekday` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `era` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `year` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `month` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `day` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hour` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `minute` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `second` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `time-zone` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `time-zone-name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hour-format` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `locale` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -74,13 +74,30 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+
 No expone.
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-format-date');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -96,15 +113,15 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-format-date> — Web Component (vanilla).
+> <iswc-format-date> â€” Web Component (vanilla).
 > Formatea fechas con Intl.DateTimeFormat.
 > Atributos: date, weekday, era, year, month, day, hour, minute, second,
 >            time-zone, time-zone-name, hour-format (auto|12|24),
@@ -114,11 +131,11 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-format-date>`.
+Tags del mÃ³dulo: `<iswc-format-date>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
 
 ## Ejemplo avanzado
 
@@ -129,7 +146,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -137,15 +154,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./format-date.js)
+- [JavaScript](./format-date.ts)
 - [CSS](./format-date.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./format-date.json)

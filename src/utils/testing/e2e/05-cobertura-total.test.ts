@@ -122,7 +122,7 @@ async function descripcionRenderizada(page: Page): Promise<{ h1: string; primerP
     const host = document.getElementById('previewHost');
     if (!host) return { h1: '', primerParrafo: '' };
     const h1 = host.querySelector('h1')?.textContent?.trim() ?? '';
-    const candidato = host.querySelector('section.section p.lede, section.section p, aside p');
+    const candidato = host.querySelector('section.section .lede, section.section p, aside p');
     const primerParrafo = candidato?.textContent?.trim().slice(0, 280) ?? '';
     return { h1, primerParrafo };
   });

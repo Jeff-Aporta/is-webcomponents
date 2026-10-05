@@ -24,3 +24,35 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ```html
 <iswc-preview-component></iswc-preview-component>
 ```
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-preview-component');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>
+
+
+### CSS parts
+
+| Part | Uso |
+| --- | --- |
+| `aside` | Barra lateral complementaria (TOC). |
+| `main` | Área principal del contenido. |
+| `page` | Página completa (aside + main). |
+| `toc-drawer` | Drawer que contiene el TOC en móvil. |
+| `toc-toggle` | Botón para abrir/cerrar el TOC. |

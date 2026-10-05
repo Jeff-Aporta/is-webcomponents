@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-loading-overlay",
   "category": "isp",
-  "title": "<iswc-loading-overlay>",
-  "titleHtml": true,
+  "title": "&lt;iswc-loading-overlay&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-loading-overlay de InSoft.",
   "storageKey": "docs-iswc-loading-overlay",
   "hasBehavior": true,
@@ -32,10 +32,6 @@
               "label": "scroll-lock"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-loading-overlay open message=\"Guardando…\" scroll-lock></iswc-loading-overlay>"
         }
       ]
     },
@@ -47,10 +43,6 @@
         {
           "kind": "demo",
           "html": "<iswc-button id=\"loBtn2\" color=\"neutral\" variant=\"outlined\">Ver con icono</iswc-button>\r\n          <iswc-loading-overlay id=\"loDemo2\" message=\"Consolidando periodo…\">\r\n            <iswc-icon icon=\"mdi:database-sync\"></iswc-icon>\r\n          </iswc-loading-overlay>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-loading-overlay message=\"Consolidando…\">\n  <iswc-icon icon=\"mdi:database-sync\"></iswc-icon>\n</iswc-loading-overlay>"
         }
       ]
     },
@@ -65,5 +57,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Capa de bloqueo a pantalla completa con spinner y mensaje. No se cierra\r\n          con Escape ni con clic fuera: solo el código que la abrió la cierra."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-loading-overlay open message=\"Guardando…\" scroll-lock></iswc-loading-overlay>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

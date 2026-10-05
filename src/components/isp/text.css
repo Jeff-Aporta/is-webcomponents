@@ -17,7 +17,7 @@
 }
 
 :host {
-  --iswc-text-mix-with: var(--iswc-text, currentColor);
+  --iswc-text-mix-with: var(--iswc-text);
   display: inline;
   color: var(--iswc-text-color, inherit);
   font: inherit;
@@ -30,17 +30,18 @@
 /* Con mix: atenuar / aclarar / oscurecer vía color-mix. JS dispara
    `data-has-mix` cuando aplica el mix programáticamente, además del attr. */
 :host(:is([mix], [data-has-mix])) {
-  color: var(--iswc-text-color, currentColor);
+  color: var(--iswc-text-color);
   color: color-mix(
     in srgb,
-    var(--iswc-text-color, currentColor),
-    var(--iswc-text-mix-with) var(--iswc-text-mix, 0%)
+    var(--iswc-text-color),
+    var(--iswc-text-mix-with) var(--iswc-text-mix)
   );
 }
 
 /* Semánticos → tokens del tema. */
 :host([color="brand"])   { --iswc-text-color: var(--iswc-brand-text,   var(--iswc-accent,    var(--iswc-color-brand,   var(--iswc-text)))); }
 :host([color="neutral"]) { --iswc-text-color: var(--iswc-text-soft,    var(--iswc-text)); }
+:host([color="text"])     { --iswc-text-color: var(--iswc-text); }
 :host([color="info"])    { --iswc-text-color: var(--iswc-info-text,    var(--iswc-color-info,    var(--iswc-text))); }
 :host([color="success"]) { --iswc-text-color: var(--iswc-success-text, var(--iswc-color-success, var(--iswc-text))); }
 :host([color="warning"]) { --iswc-text-color: var(--iswc-warning-text, var(--iswc-color-warning, var(--iswc-text))); }

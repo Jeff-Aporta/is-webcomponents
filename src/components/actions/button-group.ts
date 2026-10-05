@@ -41,18 +41,14 @@ import { withStyleAttrs } from '../../core/attrs.js';
   `;
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
-  const STYLE_ATTRS = {
-    radius: '--iswc-button-group-radius',
-    gap: '--iswc-button-group-gap',
-    padding: '--iswc-button-group-pad',
-    accent: { prop: '--iswc-button-group-accent', onlyColorValues: true },
-    'border-width': '--iswc-button-border-width',
-  };
 
   const OBSERVED = [
     'label', 'orientation', 'variant', 'select', 'value',
     'pill', 'stretch', 'allow-empty', 'disabled',
-    ...Object.keys(STYLE_ATTRS),
+    // Phase V5: STYLE_ATTRS removido. El consumer define los tokens vía class
+    // o inline style. Se conservan los nombres como observados por si llegan
+    // del HTML antiguo.
+    'radius', 'gap', 'padding', 'accent', 'border-width',
   ];
 
   /** ¿El valor está en la lista? Acota `string | null` al literal de la lista. */
@@ -67,7 +63,6 @@ import { withStyleAttrs } from '../../core/attrs.js';
   type Seleccion = string[];
 
   class IswcButtonGroup extends withStyleAttrs(HTMLElement) {
-    static styleAttrs = STYLE_ATTRS;
 
     static get observedAttributes(): string[] { return OBSERVED; }
 
@@ -88,7 +83,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
     }
 
     connectedCallback(): void {
-      // El mixin vuelca STYLE_ATTRS antes de esto.
+      // Phase V5: STYLE_ATTRS removido. El mixin ya no vuelca el mapa.
       super.connectedCallback();
       this.#mounted = true;
       upgradeProperties(this, OBSERVED);

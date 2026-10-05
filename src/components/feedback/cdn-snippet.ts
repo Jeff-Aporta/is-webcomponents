@@ -15,7 +15,7 @@ import '../actions/button.js';
 import '../code/code.js';
 
 /**
- * <iswc-cdn-snippet> — panel CDN copy-paste vía loader.min.js (sin npm/npx).
+ * <iswc-cdn-snippet> — panel copy-paste del snippet mínimo de uso.
  *
  * Un solo bloque:
  *   <script type="module" src="…/loader.min.js"></script>
@@ -25,20 +25,32 @@ import '../code/code.js';
  *
  *   tag / category / base / title / dependencies / config
  *
+ * Las deps (p. ej. patyLoader) van EN EL MISMO snippet, justo después del
+ * `<script>` del loader — no en filas "Dependencia · …" sueltas.
+ *
  * La carga es siempre el tag: un componente por L.load. No hay radio de alcance.
  */
+
+/**
+ * Normaliza el tag que va al `L.load("…")` del snippet para que SIEMPRE use
+ * el prefijo canónico `iswc-`. Si llega con el legacy `is-` (ej. `is-button`)
+ * se reescribe a `iswc-button`; si ya viene con `iswc-` se pasa tal cual;
+ * cualquier otro valor (categoría, `all`, vacío) no se toca.
+ */
+const normalizeIswcTag = (tag: string): string => {
+  const t = String(tag || '').trim();
+  if (!t) return '';
+  if (t.startsWith('iswc-')) return t;
+  if (t.startsWith('is-')) return `iswc-${t.slice(3)}`;
+  return t;
+};
+
 (() => {
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
-    <section class="cdn" aria-label="Consumo por CDN">
+    <section class="cdn" aria-label="snippet">
       <header class="cdn__head">
-        <h3 class="cdn__title">Consumo por CDN</h3>
-        <p class="cdn__hint">
-          Estrategia única: <code>loader.min.js</code>. Pegá los dos
-          <code>&lt;script&gt;</code> en el <code>&lt;head&gt;</code>
-          (o al final del <code>&lt;body&gt;</code>). El primero carga el
-          loader; el segundo pide CSS + el componente de <code>tag</code>.
-        </p>
+        <h3 class="cdn__title">snippet</h3>
       </header>
 
       <div class="cdn__row" data-kind="loader">
@@ -52,23 +64,8 @@ import '../code/code.js';
         </div>
         <iswc-code class="cdn__pre code iswc-code-view" data-slot="loader" readonly compact wrap
                  line-numbers="false" lang="html"></iswc-code>
+        <p class="cdn__dep-note" data-slot="deps-note" hidden></p>
       </div>
-
-      <ol class="cdn__list" data-slot="deps-list">
-        <li class="cdn__row cdn__row--dep" data-kind="dep" hidden>
-          <div class="cdn__row-head">
-            <span class="cdn__label cdn__dep-name">Dependencia · <code data-slot="dep-name"></code></span>
-            <button type="button" class="cdn__copy iswc-focus-ring" data-copy="dep"
-                    aria-label="Copiar enlaces de la dependencia">
-              <iswc-icon icon="mdi:content-copy" aria-hidden="true"></iswc-icon>
-              Copiar
-            </button>
-          </div>
-          <iswc-code class="cdn__pre code iswc-code-view" data-slot="dep-pre" readonly compact wrap
-                   line-numbers="false" lang="html"></iswc-code>
-          <p class="cdn__dep-note" data-slot="dep-note" hidden></p>
-        </li>
-      </ol>
 
       <section class="cdn__agents" aria-label="Skill">
         <header class="cdn__head">
@@ -80,20 +77,16 @@ import '../code/code.js';
   `;
 
   class IswcCdnSnippet extends withStyleAttrs(HTMLElement) {
-    static styleAttrs = {
-      radius: '--iswc-cdn-snippet-radius',
-      'border-color': '--iswc-cdn-snippet-border',
-      'pre-bg': '--iswc-cdn-snippet-pre-bg',
-    };
+    
 
     static get observedAttributes(): string[] {
-      return ['tag', 'category', 'base', 'title', 'dependencies', 'config', ...IswcCdnSnippet.styleAttrNames];
+      return ['tag', 'category', 'base', 'title', 'dependencies', 'config'];
     }
 
     #mounted = false;
     #urls: { loader: string; loadArg: string } = { loader: '', loadArg: '' };
     #onHighlightReady = () => this.#render();
-    #deps: { name: string; version: string; css: string; js: string; note: string }[] = [];
+    #deps: { name: string; version: string; css: string; js: string; note: string; module: boolean }[] = [];
     #docs: SkillDoc[] = [];
     #resolvedRef = 'main';
 
@@ -140,7 +133,7 @@ import '../code/code.js';
 
     #loadArg() {
       const tag = (this.getAttribute('tag') || '').trim();
-      return tag;
+      return normalizeIswcTag(tag);
     }
 
     /** Huella estable del doc (ignora blob/raw/host). */
@@ -159,8 +152,23 @@ import '../code/code.js';
         const script = this.querySelector<HTMLElement>('script[type="application/json"][slot="config"]');
         raw = script?.textContent || '';
       }
+      // Orden fijo: 1) módulo (config) · 2) skill general (SKILL_DOCS).
       const seen = new Set<string>();
       this.#docs = [];
+      let cfg = null;
+      if (raw?.trim()) {
+        try { cfg = JSON.parse(raw) || {}; } catch { cfg = null; }
+      }
+      if (Array.isArray(cfg?.docs)) {
+        for (const d of cfg.docs) {
+          if (!d?.url) continue;
+          const url = String(d.url);
+          const key = this.#docKey(url);
+          if (seen.has(key)) continue;
+          seen.add(key);
+          this.#docs.push({ label: String(d.label || 'Módulo'), url });
+        }
+      }
       for (const d of SKILL_DOCS) {
         if (!d?.url) continue;
         const key = this.#docKey(d.url);
@@ -168,23 +176,7 @@ import '../code/code.js';
         seen.add(key);
         this.#docs.push({ label: d.label, url: d.url });
       }
-      if (!raw?.trim()) return null;
-      try {
-        const cfg = JSON.parse(raw) || {};
-        if (Array.isArray(cfg.docs)) {
-          for (const d of cfg.docs) {
-            if (!d?.url) continue;
-            const url = String(d.url);
-            const key = this.#docKey(url);
-            if (seen.has(key)) continue;
-            seen.add(key);
-            this.#docs.push({ label: String(d.label || 'Documentación'), url });
-          }
-        }
-        return cfg;
-      } catch {
-        return null;
-      }
+      return cfg;
     }
 
     /** Lista Skill tipo Paty: enlace + botón ojo (abre MD en pestaña). */
@@ -247,59 +239,67 @@ import '../code/code.js';
         this.#deps = Array.isArray(data)
           ? data.filter((d: unknown): d is Record<string, unknown> =>
               !!d && typeof d === 'object' && (Boolean((d as Record<string, unknown>)['js']) || Boolean((d as Record<string, unknown>)['css'])))
-            .map((d: Record<string, unknown>) => ({
-              name: String(d['name'] || 'dependencia'),
-              version: d['version'] ? String(d['version']) : '',
-              css: d['css'] ? String(d['css']) : '',
-              js: d['js'] ? String(d['js']) : '',
-              note: d['note'] ? String(d['note']) : '',
-            }))
+            .map((d: Record<string, unknown>) => {
+              const js = d['js'] ? String(d['js']) : '';
+              const name = String(d['name'] || 'dependencia');
+              // ES module si lo piden, o si es patyLoader (usa import.meta.url).
+              const module = d['module'] === true
+                || (d['module'] !== false && /patyLoader/i.test(`${name} ${js}`));
+              return {
+                name,
+                version: d['version'] ? String(d['version']) : '',
+                css: d['css'] ? String(d['css']) : '',
+                js,
+                note: d['note'] ? String(d['note']) : '',
+                module,
+              };
+            })
           : [];
       } catch { this.#deps = []; }
     }
 
-    #buildDepSnippet(dep: { css: string; js: string }): string {
+    /** Tags link/script de una dep (van embebidos en el snippet principal). */
+    #buildDepLines(dep: { css: string; js: string; module: boolean }): string[] {
       const lines: string[] = [];
       if (dep.css) lines.push(`<link rel="stylesheet" href="${dep.css}">`);
-      if (dep.js) lines.push(`<script src="${dep.js}"><\/script>`);
-      return lines.join('\n');
+      if (dep.js) {
+        lines.push(dep.module
+          ? `<script type="module" src="${dep.js}"><\/script>`
+          : `<script src="${dep.js}"><\/script>`);
+      }
+      return lines;
     }
 
     #buildLoaderSnippet() {
       const href = this.#loaderHref();
       const arg = this.#loadArg();
       const loadLine = arg ? `  await L.load(${JSON.stringify(arg)});` : '';
+      // Orden canónico: loader kit → deps (patyLoader, chart.js, …) → boot.
+      const depLines = this.#deps.flatMap((d) => this.#buildDepLines(d));
       return [
         `<script type="module" src="${href}"><\/script>`,
+        ...depLines,
         `<script type="module">`,
         `  const L = globalThis.ISWebComponentsLoader;`,
-        `  await L.loadCSSBase();`,
-        `  await L.loadCSSPalettesDefault();`,
+        `  // is-base.min.css se auto-carga al inicializar el loader (W52).`,
+        `  await L.loadPageStyles(['iswc-palettes-default']);`,
         loadLine,
         `<\/script>`,
       ].filter(Boolean).join('\n');
     }
 
-    #renderDeps() {
-      const root = this.shadowRoot!;
-      const list = root.querySelector<HTMLElement>('[data-slot="deps-list"]');
-      const template = root.querySelector<HTMLElement>('[data-kind="dep"][hidden]');
-      if (!list || !template) return;
-      for (const row of list.querySelectorAll<HTMLElement>('[data-kind="dep"]:not([hidden])')) row.remove();
-      for (const dep of this.#deps) {
-        const clone = template.cloneNode(true) as HTMLElement;
-        clone.hidden = false;
-        const label = clone.querySelector<HTMLElement>('[data-slot="dep-name"]');
-        if (label) label.textContent = dep.version ? `${dep.name}@${dep.version}` : dep.name;
-        const pre = clone.querySelector<HTMLElement>('[data-slot="dep-pre"]');
-        const snippet = this.#buildDepSnippet(dep);
-        this.#setCode(pre, snippet);
-        const note = clone.querySelector<HTMLElement>('[data-slot="dep-note"]');
-        if (note) { note.textContent = dep.note; note.hidden = !dep.note; }
-        const btn = clone.querySelector<HTMLElement>('[data-copy="dep"]');
-        if (btn) btn.dataset.copyValue = snippet;
-        list.insertBefore(clone, template);
+    /** Notas de deps bajo el snippet único (sin filas sueltas). */
+    #renderDepsNote() {
+      const note = this.shadowRoot?.querySelector<HTMLElement>('[data-slot="deps-note"]');
+      if (!note) return;
+      const texts = this.#deps.map((d) => d.note).filter(Boolean);
+      if (!texts.length) {
+        note.hidden = true;
+        note.textContent = '';
+        return;
       }
+      note.hidden = false;
+      note.textContent = texts.join(' · ');
     }
 
     #setCode(el: HTMLElement | null, text: string) {
@@ -319,6 +319,7 @@ import '../code/code.js';
       const root = this.shadowRoot!;
       if (!root) return;
 
+      this.#parseDeps();
       const loadArg = this.#loadArg();
       this.#urls = {
         loader: this.#buildLoaderSnippet(),
@@ -334,9 +335,7 @@ import '../code/code.js';
       const cfg = this.#parseConfig();
       if (cfg?.title && titleEl) titleEl.textContent = cfg.title;
       this.#renderSkills();
-
-      this.#parseDeps();
-      this.#renderDeps();
+      this.#renderDepsNote();
       this.#highlight();
     }
 
@@ -363,9 +362,8 @@ import '../code/code.js';
       if (!btn) return;
       e.preventDefault();
       const kind = btn.dataset.copy;
-      let text = '';
-      if (kind === 'dep') text = btn.dataset.copyValue || '';
-      else if (kind === 'loader') text = this.#urls.loader || this.#buildLoaderSnippet();
+      if (kind !== 'loader') return;
+      const text = this.#urls.loader || this.#buildLoaderSnippet();
       if (!text) return;
       await copyText(text);
       const original = btn.innerHTML;

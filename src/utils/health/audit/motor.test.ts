@@ -145,6 +145,32 @@ test('json-schema: definición válida no produce hallazgos fatales', () => {
   assert.equal(fatales.length, 0, `no debería haber fatales: ${JSON.stringify(fatales)}`);
 });
 
+test('json-schema: campo `ficha` (ficha-bridge) es válido en RAIZ_PROPS', () => {
+  // El ficha-bridge (Phase N) añade un sub-objeto `ficha: { sections, exclude }`
+  // a cada definition antes de validar. Si quitás `ficha` de RAIZ_PROPS, los 194
+  // playground.json legítimos empiezan a warnar "Campo raíz no documentado".
+  const def = {
+    $schema: 'iswc-preview/v1',
+    tag: 'iswc-foo',
+    sections: [{ id: 's1', blocks: [{ kind: 'demo', html: '<iswc-foo>x</iswc-foo>' }] }],
+    ficha: {
+      sections: { anatomia: { content: 'Anatomía' }, atributos: { items: [] } },
+      exclude: ['apiJs'],
+    },
+  };
+  const hs = validarEsquema(def);
+  const raizNoDocumentada = hs.filter((h) =>
+    h.categoria === 'json-schema' &&
+    h.mensaje.includes('"ficha"') &&
+    h.mensaje.includes('no documentado')
+  );
+  assert.equal(
+    raizNoDocumentada.length,
+    0,
+    `ficha debe estar en RAIZ_PROPS; encontrados: ${JSON.stringify(raizNoDocumentada)}`,
+  );
+});
+
 test('json-contenido: detecta chart sin JSON embebido', () => {
   const def = {
     tag: 'iswc-bar-chart',
@@ -172,6 +198,31 @@ test('json-contenido: chart CON JSON embebido pasa el check', () => {
   const hs = ejecutarValidacionContenido(def, 'fake.json');
   const erroresChart = hs.filter((h) => h.categoria === 'json-complejidad');
   assert.equal(erroresChart.length, 0, 'chart con JSON embebido no debe tener errores de complejidad');
+});
+
+test('json-contenido: reconoce tags iswc-* (no exige prefijo legacy is-)', () => {
+  const def = {
+    tag: 'iswc-button',
+    sections: [{
+      blocks: [{ kind: 'demo', html: '<iswc-button color="brand">ok</iswc-button>' }],
+    }],
+  };
+  const hs = ejecutarValidacionContenido(def, 'fake.json');
+  assert.ok(
+    !hs.some((h) => h.mensaje.includes('no contiene ningún')),
+    'demo con <iswc-*> no debe WARN de tag ausente',
+  );
+});
+
+test('json-contenido: WARN si demo vacío sin iswc-*', () => {
+  const def = {
+    tag: 'iswc-button',
+    sections: [{
+      blocks: [{ kind: 'demo', html: '<div>solo html</div>' }],
+    }],
+  };
+  const hs = ejecutarValidacionContenido(def, 'fake.json');
+  assert.ok(hs.some((h) => h.mensaje.includes('no contiene ningún <iswc-*>')));
 });
 
 test('consistency: detecta módulo sin customElements.define', async () => {

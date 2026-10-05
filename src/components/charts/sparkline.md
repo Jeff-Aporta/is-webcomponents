@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-sparkline
 tags:
   - iswc-sparkline
 category: charts
 status: public
-source: ./sparkline.js
+source: ./sparkline.ts
 style: ./sparkline.css
 preview: ./sparkline.json
 ---
 # `<iswc-sparkline>`
 
-## Propósito
+## PropÃ³sito
 
 <iswc-sparkline>
 
-Este módulo registra `<iswc-sparkline>`.
+Este mÃ³dulo registra `<iswc-sparkline>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Series, distribuciones, relaciones o jerarquías de datos.
+Series, distribuciones, relaciones o jerarquÃ­as de datos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear otro engine si marks/engine existentes cubren caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './sparkline.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-sparkline data="3 5 4 8 6 9 7 10" label="Ventas"></iswc-sparkline>
@@ -45,15 +45,15 @@ import './sparkline.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `values` | string/según contrato | Fuente define default/restricción. |
-| `data` | string/según contrato | Fuente define default/restricción. |
-| `type` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
-| `curve` | string/según contrato | Fuente define default/restricción. |
-| `trend` | `positive \| negative \| neutral` (sin atributo = color de acento de marca) | Controla `--line-color`/`--border-color-1`/`--fill-color-1` vía tokens de estado (`--iswc-success-text`, `--iswc-danger-text`, `--iswc-text-dim`). |
+| `values` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `data` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `type` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `curve` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `trend` | `positive \| negative \| neutral` (sin atributo = color de acento de marca) | Controla `--line-color`/`--border-color-1`/`--fill-color-1` vÃ­a tokens de estado (`--iswc-success-text`, `--iswc-danger-text`, `--iswc-text-dim`). |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -65,13 +65,30 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+
 No expone.
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-sparkline');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -79,6 +96,7 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | --- | --- |
 | `sparkline` | Personalizable con `::part(sparkline)`. |
 | `canvas` | Personalizable con `::part(canvas)`. |
+| `sr-status` | Region `aria-live` para anuncios a lectores de pantalla (oculta visualmente). |
 
 ### Custom states
 
@@ -88,22 +106,22 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--line-color` | Token leído o definido por componente. |
-| `--fill-color-1` | Token leído o definido por componente. |
-| `--line-width` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--border-color-1` | Token leído o definido por componente. |
-| `--iswc-success-text` | Token leído o definido por componente. |
-| `--iswc-danger-text` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
+| `--line-color` | Token leÃ­do o definido por componente. |
+| `--fill-color-1` | Token leÃ­do o definido por componente. |
+| `--line-width` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--border-color-1` | Token leÃ­do o definido por componente. |
+| `--iswc-success-text` | Token leÃ­do o definido por componente. |
+| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
 > Contrato derivado de fuente y preview actuales.
 
@@ -112,23 +130,23 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
 
-Tags del módulo: `<iswc-sparkline>`.
+Tags del mÃ³dulo: `<iswc-sparkline>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explícito en fuente.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: ninguno explÃ­cito en fuente.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-sparkline variant="solid" data="…"></iswc-sparkline>
-<iswc-sparkline variant="gradient" data="…"></iswc-sparkline>
-<iswc-sparkline variant="line" data="…"></iswc-sparkline>
+<iswc-sparkline variant="solid" data="â€¦"></iswc-sparkline>
+<iswc-sparkline variant="gradient" data="â€¦"></iswc-sparkline>
+<iswc-sparkline variant="line" data="â€¦"></iswc-sparkline>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -136,15 +154,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./sparkline.js)
+- [JavaScript](./sparkline.ts)
 - [CSS](./sparkline.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./sparkline.json)

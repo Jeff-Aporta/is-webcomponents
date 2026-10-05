@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-journey-map",
   "category": "diagrams",
-  "title": "<iswc-journey-map>",
-  "titleHtml": true,
+  "title": "&lt;iswc-journey-map&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-journey-map",
   "sections": [
     {
@@ -39,5 +39,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Mapa de recorrido (user journey): fases, pasos y la curva de satisfacción que los atraviesa."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-journey-map open-on-click>\n  <script type=\"application/json\">\n    {\n      \"journey\": {\n        \"title\": \"Recorrido de una nota de voz\",\n        \"phases\": [\n          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },\n          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },\n          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },\n          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },\n          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },\n          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },\n          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }\n        ]\n      }\n    }\n  </script>\n</iswc-journey-map>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

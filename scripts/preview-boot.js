@@ -43,8 +43,7 @@
     palette = PALETTES.has(ls) ? ls : (root.dataset.palette || 'contapyme');
   }
 
-  root.classList.toggle('theme-light', theme === 'light');
-  root.classList.toggle('theme-dark', theme === 'dark');
+  // Contrato W51: solo data-theme / data-palette (sin clases .theme-*).
   root.dataset.theme = theme;
   root.dataset.palette = palette;
   if (embed) root.dataset.embed = '1';

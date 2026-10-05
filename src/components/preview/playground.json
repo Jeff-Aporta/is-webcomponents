@@ -1,0 +1,86 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-playground",
+  "category": "preview",
+  "title": "&lt;iswc-playground&gt;",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-playground",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Stage + knobs homogeneos. Contrato de controls igual que los demos JSON. Layouts: split | panel.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-playground layout=\"split\" title=\"Playground\" target=\"iswc-button\">\n  <iswc-button slot=\"stage\" color=\"brand\">Hola mundo</iswc-button>\n  <script type=\"application/json\" slot=\"spec\">{\n    \"controls\": [\n      { \"control\": \"select\", \"prop\": \"attr:color\", \"label\": \"color\", \"options\": [\"brand\", \"neutral\", \"success\", \"danger\"] },\n      { \"control\": \"select\", \"prop\": \"attr:variant\", \"label\": \"variant\", \"options\": [\"filled\", \"outlined\", \"plain\"] },\n      { \"control\": \"boolean\", \"prop\": \"attr:disabled\", \"label\": \"disabled\", \"group\": \"flags\" }\n    ]\n  }</script>\n</iswc-playground>"
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Stage + knobs homogeneos para galeria y apps. Layouts: `split` (stage | config) o `panel` (solo controles). El spec de knobs acepta el mismo contrato que `controls` (`control`, `prop`, `label`, `options`, …)."
+      },
+      "atributos": {
+        "table": [
+          { "name": "layout", "type": "'split' | 'panel'", "desc": "Layout del cuerpo: stage | config (split) o solo config (panel). Default: split." },
+          { "name": "title", "type": "string", "desc": "Titulo del header. Default: 'Playground'." },
+          { "name": "lede", "type": "string", "desc": "Subtitulo bajo el titulo." },
+          { "name": "target", "type": "string", "desc": "Selector CSS del host vivo dentro del slot=stage." },
+          { "name": "spec", "type": "SpecItem[]", "desc": "Array de controles (propiedad JS, equivalente al slot `spec`)." }
+        ]
+      },
+      "props": {
+        "table": [
+          { "name": "spec", "type": "SpecItem[]", "default": "[]", "desc": "Setter JS equivalente a la propiedad, sobreescribe el slot si se asigna despues del mount." }
+        ]
+      },
+      "states": {
+        "table": [
+          { "state": "split", "selector": "host([layout='split'])", "cuando": "Atributo layout = 'split' (default). Stage a la izquierda, panel a la derecha." },
+          { "state": "panel", "selector": "host([layout='panel'])", "cuando": "Atributo layout = 'panel'. Solo se renderiza el panel de controles." }
+        ]
+      },
+      "eventos": {
+        "table": [
+          { "evento": "iswc-controls-change", "detalle": "{ def: SpecItem; valor: unknown }", "cuando": "Cuando el usuario cambia un control del panel. Misma firma que <iswc-preview-controls>." }
+        ]
+      },
+      "slots": {
+        "table": [
+          { "slot": "stage", "descripcion": "Host vivo a manipular. El componente resuelve el `target` dentro de este slot (o cae al primer is-* si no hay target)." },
+          { "slot": "spec", "descripcion": "Script type=application/json con `{ controls: SpecItem[] }`. Alternativa declarativa a la propiedad `spec`." }
+        ]
+      },
+      "parts": {
+        "table": [
+          { "part": "root", "descripcion": "Contenedor flex del playground." },
+          { "part": "head", "descripcion": "Cabecera con titulo y lede." },
+          { "part": "title", "descripcion": "H2 del titulo." },
+          { "part": "lede", "descripcion": "Parrafo del subtitulo." },
+          { "part": "body", "descripcion": "Grid split/panel con stage y config." },
+          { "part": "stage-wrap", "descripcion": "Marco del stage (border, radius, fondo elevado)." },
+          { "part": "stage", "descripcion": "Slot que monta el host." },
+          { "part": "config", "descripcion": "Aside con el panel <iswc-preview-controls>." }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          { "metodo": "get spec()", "descripcion": "Devuelve el array actual de controles." },
+          { "metodo": "set spec(value)", "descripcion": "Reemplaza el array de controles y repinta el panel." },
+          { "metodo": "get layout()", "descripcion": "Layout efectivo ('split' o 'panel')." },
+          { "metodo": "set layout(value)", "descripcion": "Cambia el layout en vivo (repinta body)." },
+          { "metodo": "get title() / set title(value)", "descripcion": "Lee/escribe el titulo del header." },
+          { "metodo": "get lede() / set lede(value)", "descripcion": "Lee/escribe el subtitulo del header." },
+          { "metodo": "get target() / set target(value)", "descripcion": "Selector CSS del host dentro de slot=stage." }
+        ]
+      },
+      "ejemplos": {
+        "content": "## Consumir el evento `iswc-controls-change`\n\n```js\nconst pg = document.querySelector('iswc-playground');\npg.addEventListener('iswc-controls-change', (e) => {\n  console.log('control', e.detail.def.prop, '=', e.detail.valor);\n});\n```\n\n## Cambiar el spec en vivo\n\n```js\npg.spec = [\n  { control: 'boolean', prop: 'attr:disabled', label: 'disabled' },\n];\n```\n\n## Layout en panel (solo controles)\n\n```html\n<iswc-playground layout=\"panel\" target=\"iswc-button\">\n  <iswc-button slot=\"stage\" hidden></iswc-button>\n  <script type=\"application/json\" slot=\"spec\">{ \"controls\": [] }</script>\n</iswc-playground>\n```\n"
+      }
+    },
+    "exclude": []
+  }
+}

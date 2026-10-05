@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-stepper-step",
   "category": "navigation",
-  "title": "<iswc-stepper-step>",
-  "titleHtml": true,
+  "title": "&lt;iswc-stepper-step&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-stepper-step de InSoft.",
   "storageKey": "docs-iswc-stepper-step",
   "sections": [
@@ -14,24 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-stepper current=\"1\">\r\n            <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\r\n          </iswc-stepper>",
-          "controls": [
-            {
-              "control": "select",
-              "prop": "attr:description",
-              "label": "description",
-              "options": [
-                "Identificación",
-                "Líneas del comprobante",
-                "Confirmar y guardar"
-              ]
-            }
-          ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-stepper current=\"1\">\n  <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\n</iswc-stepper>",
-          "lang": "html"
+          "html": "<iswc-stepper current=\"1\">\r\n            <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\r\n            <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\r\n          </iswc-stepper>"
         }
       ]
     },
@@ -39,12 +22,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-stepper&gt; + &lt;iswc-stepper-step&gt; — Web Components (vanilla, zero dependencies). Indicador de flujo por pasos. Ideal para wizards y formularios multipaso. &lt;iswc-stepper active=\"1\"&gt; &lt;iswc-stepper-step label=\"Cuenta\"&gt;…&lt;/iswc-stepper-step&gt; &lt;iswc-stepper-step label=\"Perfil\"&gt;…&lt;/iswc-stepper-step&gt; &lt;iswc-stepper-step label=\"Confirmar\"&gt;…&lt;/iswc-stepper-step&gt; &lt;/iswc-stepper&gt; Atributos &lt;iswc-stepper&gt; active       number  — paso activo (0-indexed). orientation  horizontal | vertical    (default horizontal) without-line boolean  — oculta la línea conectora. color      default | simple | numbered | glass (default 'default') Atributos &lt;iswc-stepper-step&gt; label       string description string icon        string (iconify id) disabled    boolean error       boolean Slots &lt;iswc-stepper&gt; (default)  steps. &lt;iswc-stepper-step&gt; (default)  contenido del paso (si el padre lo pinta dentro de un wizard). icon       override del icono del step. label      override del label. description override del description. Eventos iswc-stepper-change  detail: { from, to, step } iswc-stepper-complete detail: { step } — cuando active &gt;= total. CSS Parts iswc-stepper: ::part(base) ::part(steps) iswc-stepper-step: ::part(base) ::part(indicator) ::part(label) ::part(line)",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/stepper.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Paso de un <code class=\"code\">&lt;iswc-stepper&gt;</code>, con su título, descripción y estado."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-stepper current=\"1\">\n  <iswc-stepper-step title=\"Datos\" description=\"Identificación\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Detalle\" description=\"Líneas del comprobante\"></iswc-stepper-step>\n  <iswc-stepper-step title=\"Revisión\" description=\"Confirmar y guardar\"></iswc-stepper-step>\n</iswc-stepper>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

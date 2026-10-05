@@ -37,7 +37,7 @@ import { copyText } from '../_shared/dom-utils.js';
  *   error-icon      icono de error
  *
  * Events (bubbles + composed): iswc-copy { value }, iswc-error
- * Custom states: :state(success) :state(error)
+ * Custom states: :state(success) :state(error) :state(disabled)
  * CSS Parts: button, copy-icon, success-icon, error-icon,
  *            feedback (burbuja del tooltip), feedback-body
  */
@@ -84,18 +84,13 @@ import { copyText } from '../_shared/dom-utils.js';
     'right', 'right-start', 'right-end',
   ];
 
-  class IswcCopyButton extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'max-width': '--iswc-copy-button-max-width',
-    };
+  class IswcCopyButton extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] {
       return [
         'value', 'from', 'disabled',
         'copy-label', 'success-label', 'error-label',
         'feedback-duration', 'tooltip', 'tooltip-placement',
-        ...IswcCopyButton.styleAttrNames,
       ];
     }
 

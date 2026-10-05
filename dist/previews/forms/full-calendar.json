@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-full-calendar",
   "category": "forms",
-  "title": "<iswc-full-calendar>",
-  "titleHtml": true,
+  "title": "&lt;iswc-full-calendar&gt;",
+  "titleHtml": false,
   "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }\r\n    .kbds {\r\n      display: flex; gap: 1rem; flex-wrap: wrap;\r\n      font-size: .78rem; color: var(--iswc-text-soft);\r\n    }\r\n    .kbds b { color: var(--iswc-text); }",
   "storageKey": "docs-iswc-full-calendar",
   "hasBehavior": true,
@@ -70,5 +70,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Vista mes / semana / día con eventos por día y franjas horarias en week/day."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

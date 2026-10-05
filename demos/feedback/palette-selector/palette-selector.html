@@ -16,7 +16,7 @@
   iswc-palette-selector:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/palette-selector.min.js?h=qj23c9');
+  await import('../../../dist/cdn/feedback/palette-selector.min.js?h=knu80q');
 
   await customElements.whenDefined('iswc-palette-selector');
   document.documentElement.dataset.paletteSelectorReady = '1';
@@ -30,7 +30,7 @@
 
 <section>
   <h2>Default (3 paletas built-in)</h2>
-  <iswc-palette-selector></iswc-palette-selector>
+  <iswc-palette-selector title="palette selector"></iswc-palette-selector>
   <div class="container" id="sample-1" style="margin-top:16px;">
     <h3>Vista previa</h3>
     <p>Esta caja usa las CSS variables de la paleta activa. Cambiá la paleta arriba para ver el efecto.</p>
@@ -39,10 +39,85 @@
 
 <section>
   <h2>Con paletas custom (atributo <code>palettes</code> JSON)</h2>
-  <iswc-palette-selector id="custom"
+  <iswc-palette-selector title="palette selector" id="custom"
     storage-key="iswc-palette-custom"
     palettes='[{"value":"midnight","label":"Midnight","accent":"#7c3aed","bg":"#0f0f1e","fg":"#fff"},{"value":"sand","label":"Sand","accent":"#d97706","bg":"#fdf6e3","fg":"#3a2a1a"}]'
   ></iswc-palette-selector>
 </section>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

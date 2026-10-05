@@ -67,13 +67,20 @@ export const LOLLI_R = 8;
 export const LOLLI_STEM = 18;
 /** Aire boca-C vs borde-O. 1 px: enchufe junto, sin anidar. */
 export const LOLLI_GAP = 1;
+/** Aire extra caja↔caja además de 2 stems + O + C. */
+const ASSEMBLY_ENTITY_PAD = 16;
+
+/** Hueco mínimo entre bordes de cajas unidas por `-(O-`. */
+export function assemblyEntityMargin(): number {
+  return 2 * LOLLI_STEM + 2 * LOLLI_R + LOLLI_GAP + ASSEMBLY_ENTITY_PAD;
+}
 
 const LINE_H = 13;
 const BUBBLE_H = 18;
 const BUBBLE_GAP = 4;
 
 interface HttpEndpoint {
-  method: string;
+  methods: string[];
   path: string;
 }
 
@@ -89,15 +96,49 @@ export const HTTP_METHOD_BADGE: Record<string, { fill: string; text: string }> =
   OPTIONS: { fill: '#0d5aa7', text: '#ffffff' },
 };
 
+const HTTP_VERBS = 'GET|POST|PUT|PATCH|DELETE|QUERY|HEAD|OPTIONS';
+const HTTP_METHOD_ORDER = ['GET', 'QUERY', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
+
+/** Parsea `GET /x`, `GET|PUT /x` o `GET|POST|PUT /x`. */
 export function parseHttpEndpoint(raw: unknown): HttpEndpoint {
   const s = String(raw ?? '').trim();
-  const m = /^(GET|POST|PUT|PATCH|DELETE|QUERY|HEAD|OPTIONS)\b\s*/i.exec(s);
-  if (!m) return { method: '', path: s };
-  return { method: m[1]!.toUpperCase(), path: s.slice(m[0].length).trim() };
+  const re = new RegExp(
+    `^((?:${HTTP_VERBS})(?:\\s*\\|\\s*(?:${HTTP_VERBS}))*)\\b\\s*`,
+    'i',
+  );
+  const m = re.exec(s);
+  if (!m) return { methods: [], path: s };
+  const methods = m[1]!.split(/\s*\|\s*/).map((x) => x.toUpperCase());
+  return { methods, path: s.slice(m[0].length).trim() };
+}
+
+/** Une filas del mismo path (GET + PUT → una row con ambos badges). */
+export function consolidateHttpEndpoints(items: unknown[]): HttpEndpoint[] {
+  const parsed = items.map((it) => parseHttpEndpoint(it));
+  const byKey = new Map<string, HttpEndpoint>();
+  const order: string[] = [];
+  for (const ep of parsed) {
+    const key = ep.path || ep.methods.join('|') || '_';
+    const prev = byKey.get(key);
+    if (!prev) {
+      byKey.set(key, { methods: [...ep.methods], path: ep.path });
+      order.push(key);
+      continue;
+    }
+    for (const m of ep.methods) {
+      if (!prev.methods.includes(m)) prev.methods.push(m);
+    }
+  }
+  for (const ep of byKey.values()) {
+    ep.methods.sort(
+      (a, b) => (HTTP_METHOD_ORDER.indexOf(a) + 99) - (HTTP_METHOD_ORDER.indexOf(b) + 99),
+    );
+  }
+  return order.map((k) => byKey.get(k)!);
 }
 
 function fittedHeight(c: Componente): number {
-  const items = c.items ?? [];
+  const items = consolidateHttpEndpoints(c.items ?? []);
   if (!items.length) return c.h;
   const nameN = wrapLabel(c.name ?? '', c.w).length;
   const header = c.stereotype ? 18 : 8;
@@ -116,11 +157,13 @@ function asRecord(v: unknown): Record<string, unknown> {
 
 function readPackage(raw: unknown, i: number): Paquete {
   const r = asRecord(raw);
+  const parent = String(r.parent ?? '').trim();
   return {
     id: String(r.id ?? `pkg-${i}`),
     name: String(r.name ?? r.label ?? r.id ?? `Paquete ${i + 1}`),
     stereotype: String(r.stereotype ?? '').trim() || undefined,
     hue: r.hue != null ? Number(r.hue) : undefined,
+    parent: parent || undefined,
     x: Number(r.x ?? 0),
     y: Number(r.y ?? 0),
     w: Math.max(80, Number(r.w ?? 200)),
@@ -247,6 +290,8 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
   if (layout.mode !== 'manual') packDiagram(packages, components, edges, layout);
 
   const wired = wireComponentDiagram(components, interfaces, edges);
+  // Tras sintetizar -(O-: aleja cajas para que O/C no se peguen al borde.
+  enforceAssemblyEntityMargins(wired.components, wired.edges, wired.interfaces);
 
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
@@ -257,6 +302,71 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
     interfaces: wired.interfaces,
     edges: wired.edges,
   };
+}
+
+function isAssemblyEdge(e: SpecEdge): boolean {
+  return e.kind === 'assembly' || Boolean(e.fromInterface && e.toInterface);
+}
+
+function assemblyAxis(
+  fromSide: Lado | undefined,
+  toSide: Lado | undefined,
+  a: Caja,
+  b: Caja,
+): 'h' | 'v' {
+  const lr = (s: Lado) => s === 'left' || s === 'right';
+  const tb = (s: Lado) => s === 'top' || s === 'bottom';
+  if (fromSide && toSide) {
+    if (lr(fromSide) && lr(toSide)) return 'h';
+    if (tb(fromSide) && tb(toSide)) return 'v';
+  }
+  const dx = Math.abs((a.x + a.w / 2) - (b.x + b.w / 2));
+  const dy = Math.abs((a.y + a.h / 2) - (b.y + b.h / 2));
+  return dx >= dy ? 'h' : 'v';
+}
+
+/**
+ * Obliga hueco ≥ assemblyEntityMargin() entre cajas de un conector `-(O-`.
+ * Empuja la caja lejana (derecha/abajo) para no pegar O/( al borde.
+ */
+export function enforceAssemblyEntityMargins(
+  components: Componente[],
+  edges: readonly SpecEdge[],
+  interfaces: readonly InterfazUml[] = [],
+): void {
+  const byId = new Map(components.map((c) => [c.id, c]));
+  const ifById = new Map(interfaces.map((i) => [i.id, i]));
+  const minGap = assemblyEntityMargin();
+  let moved = true;
+  for (let guard = 0; moved && guard < 12; guard++) {
+    moved = false;
+    for (const e of edges) {
+      if (!isAssemblyEdge(e)) continue;
+      const a = byId.get(e.from);
+      const b = byId.get(e.to);
+      if (!a || !b || a === b) continue;
+      const fi = e.fromInterface ? ifById.get(e.fromInterface) : undefined;
+      const ti = e.toInterface ? ifById.get(e.toInterface) : undefined;
+      const axis = assemblyAxis(fi?.side, ti?.side, a, b);
+      if (axis === 'h') {
+        const left = a.x <= b.x ? a : b;
+        const right = a.x <= b.x ? b : a;
+        const gap = right.x - (left.x + left.w);
+        if (gap < minGap) {
+          right.x += minGap - gap;
+          moved = true;
+        }
+      } else {
+        const top = a.y <= b.y ? a : b;
+        const bot = a.y <= b.y ? b : a;
+        const gap = bot.y - (top.y + top.h);
+        if (gap < minGap) {
+          bot.y += minGap - gap;
+          moved = true;
+        }
+      }
+    }
+  }
 }
 
 function boundsOfComps(comps: readonly Caja[]): Caja {
@@ -909,6 +1019,7 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
       sourceGap: (gaps.sourceGap ?? 0) + b * 8,
       rowGap: (gaps.rowGap ?? 0) + b * 8,
     });
+    enforceAssemblyEntityMargins(spec.components, spec.edges, spec.interfaces);
     return computeComponentLayout(spec);
   }
 
@@ -1052,8 +1163,8 @@ export function packageTitleText(p: Paquete): string {
 }
 
 /** Ancho de tinta del título (cursiva 11px; 6.2 recortaba y las aristas lo cruzaban). */
-export function packageTitleInkWidth(p: number): number {
-  return Math.max(TAB_W, packageTitleText({ id: '', x: 0, y: 0, w: 0, h: 0, name: '' } as Paquete).length * 0);
+export function packageTitleInkWidth(p: Paquete): number {
+  return Math.max(TAB_W, Math.ceil(packageTitleText(p).length * 7.2));
 }
 
 const OUTLINE_PAD = 14;
@@ -1061,7 +1172,7 @@ const OUTLINE_TAB = TAB_H + 4;
 
 /** Caja del rótulo = pestaña del paquete. Las aristas la rodean. */
 export function packageTitleBox(p: Paquete, components: Componente[] = []): Caja & { id: string } {
-  const w = packageTitleInkWidth(p.w);
+  const w = packageTitleInkWidth(p);
   const h = OUTLINE_TAB + 6;
   const kids = components.filter((c) => c.package === p.id);
   if (!kids.length) {
@@ -1085,7 +1196,7 @@ export function packageTitleBox(p: Paquete, components: Componente[] = []): Caja
  * «Consulta» a media palabra. El título largo es obstáculo de aristas.
  */
 export function packageTabWidth(p: Paquete): number {
-  return packageTitleInkWidth(p.w);
+  return packageTitleInkWidth(p);
 }
 
 const MAX_LINEAS = 3;

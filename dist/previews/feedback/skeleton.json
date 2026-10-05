@@ -17,16 +17,17 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-skeleton style=\"height:.875rem;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:.875rem;width:80%;margin-bottom:.5rem\"></iswc-skeleton>\r\n          <iswc-skeleton style=\"height:4rem;border-radius:8px\"></iswc-skeleton>",
+          "html": "<iswc-skeleton id=\"skPlay\" style=\"height:1rem;width:60%\"></iswc-skeleton>",
+          "target": "#skPlay",
           "controls": [
             {
               "control": "select",
               "prop": "attr:effect",
               "label": "effect",
               "options": [
+                "none",
                 "sheen",
-                "pulse",
-                "none"
+                "pulse"
               ]
             }
           ]
@@ -40,10 +41,6 @@
         {
           "kind": "demo",
           "html": "<div>\r\n            <span class=\"demo-label\">sheen</span>\r\n            <iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">pulse</span>\r\n            <iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">none</span>\r\n            <iswc-skeleton effect=\"none\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>\n<iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>"
         }
       ]
     },
@@ -74,5 +71,39 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "<code class=\"code\">&lt;iswc-skeleton&gt;</code>"
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>effect</code>",
+            "default": "sheen (none · pulse)"
+          },
+          {
+            "name": "<code>--color</code>",
+            "default": "control-bg"
+          },
+          {
+            "name": "<code>--sheen-color</code>",
+            "default": "highlight ghost (texto ~11% alpha)"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-skeleton id=\"skPlay\" style=\"height:1rem;width:60%\"></iswc-skeleton>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

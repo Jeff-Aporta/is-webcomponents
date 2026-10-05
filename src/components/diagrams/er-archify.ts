@@ -304,6 +304,8 @@ export function serializeErPayload(spec: ErSpec, opts: { stable?: boolean; inden
   if (spec.subtitle) out.subtitle = spec.subtitle;
   if (spec.direction && spec.direction !== 'LR') out.direction = spec.direction;
   if (spec.ratio && spec.ratio !== 1.4) out.ratio = spec.ratio;
+  const themeId = (spec as ErSpec & { theme?: string }).theme;
+  if (themeId) out.theme = themeId;
 
   if (spec.groups && spec.groups.length) {
     out.groups = spec.groups.map((g) => {
@@ -479,3 +481,17 @@ export const SNAP = snap8;
 // Re-exports para que consumers que ya importaban tipos desde diagram-types.js
 // puedan seguir importándolos desde aquí si lo desean.
 export type { DiagramTheme };
+export {
+  resolveErTheme,
+  themeToDiagramTheme,
+  json2css,
+  clusterPalette,
+  entityPaint,
+  edgePaint,
+  findOrphanEntityIds,
+  injectThemeCss,
+  registerErTheme,
+  listErThemes,
+  INSOFT_THEME,
+} from './theme.js';
+export type { ErThemeJson } from './theme.js';

@@ -1,42 +1,42 @@
----
+﻿---
 tag: iswc-popconfirm
 tags:
   - iswc-popconfirm
 category: feedback
 status: public
-source: ./popconfirm.js
+source: ./popconfirm.ts
 style: ./popconfirm.css
 preview: ./popconfirm.json
 ---
 # `<iswc-popconfirm>`
 
-## Propósito
+## PropÃ³sito
 
-Cuadro de confirmación rápido anclado a un botón. Sin modal, sin tapar
-la pantalla. Perfecto para "¿Seguro que quieres borrar?" en línea.
+Cuadro de confirmaciÃ³n rÃ¡pido anclado a un botÃ³n. Sin modal, sin tapar
+la pantalla. Perfecto para "Â¿Seguro que quieres borrar?" en lÃ­nea.
 
-Este módulo registra `<iswc-popconfirm>`.
+Este mÃ³dulo registra `<iswc-popconfirm>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Estado, progreso, confirmación, carga o resultado de operaciones.
+Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No saturar interfaz con señales redundantes o alertas sin acción.
+No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './popconfirm.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-button id="btnDelete">Borrar</iswc-button>
-<iswc-popconfirm for="btnDelete" message="¿Seguro?">
-<iswc-button slot="confirm" color="danger">Sí, borrar</iswc-button>
+<iswc-popconfirm for="btnDelete" message="Â¿Seguro?">
+<iswc-button slot="confirm" color="danger">SÃ­, borrar</iswc-button>
 <iswc-button slot="cancel">Cancelar</iswc-button>
 </iswc-popconfirm>
 ```
@@ -49,14 +49,14 @@ import './popconfirm.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `for` | string/según contrato | Fuente define default/restricción. |
-| `message` | string/según contrato | Fuente define default/restricción. |
-| `placement` | string/según contrato | Fuente define default/restricción. |
-| `hide-arrow` | boolean | Fuente define default/restricción. |
-| `open` | boolean | Fuente define default/restricción. |
-| `without-backdrop` | boolean | Fuente define default/restricción. |
+| `for` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `message` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `placement` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hide-arrow` | boolean | Fuente define default/restricciÃ³n. |
+| `open` | boolean | Fuente define default/restricciÃ³n. |
+| `without-backdrop` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -72,21 +72,42 @@ import './popconfirm.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-popconfirm-show` | Evento personalizado del componente (popconfirm show). |
+| `iswc-popconfirm-hide` | Evento personalizado del componente (popconfirm hide). |
+| `iswc-popconfirm-confirm` | Evento personalizado del componente (popconfirm confirm). |
+| `iswc-popconfirm-cancel` | Evento personalizado del componente (popconfirm cancel). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-popconfirm-show` | sí | sí | sí | no |
-| `iswc-popconfirm-hide` | sí | sí | sí | no |
-| `iswc-popconfirm-confirm` | sí | sí | sí | no |
-| `iswc-popconfirm-cancel` | sí | sí | sí | no |
+| `iswc-popconfirm-show` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-popconfirm-hide` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-popconfirm-confirm` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-popconfirm-cancel` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-popconfirm');
+el.addEventListener('iswc-popconfirm-show', (e) => {
+  console.log('iswc-popconfirm-show', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `show()` | Método público declarado. |
-| `hide()` | Método público declarado. |
+| `show()` | MÃ©todo pÃºblico declarado. |
+| `hide()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -105,41 +126,41 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-bg-elev` | Fondo del panel (vía `--bg`). |
-| `--iswc-text` | Color de texto (vía `--fg`). |
-| `--iswc-border` | Borde del panel (vía `--border`). |
-| `--iswc-brand` | Color de marca (vía `--brand`). |
-| `--iswc-brand-fg` | Texto sobre el color de marca (vía `--brand-fg`). |
-| `--iswc-danger` | Tono destructivo (vía `--danger`). |
+| `--iswc-bg-elev` | Fondo del panel (vÃ­a `--bg`). |
+| `--iswc-text` | Color de texto (vÃ­a `--fg`). |
+| `--iswc-border` | Borde del panel (vÃ­a `--border`). |
+| `--iswc-brand` | Color de marca (vÃ­a `--brand`). |
+| `--iswc-brand-fg` | Texto sobre el color de marca (vÃ­a `--brand-fg`). |
+| `--iswc-danger` | Tono destructivo (vÃ­a `--danger`). |
 
 Los botones por defecto de los slots `confirm` / `cancel` son `<iswc-button>`:
-su color y apariencia se controlan desde el propio botón, no desde aquí.
+su color y apariencia se controlan desde el propio botÃ³n, no desde aquÃ­.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-popconfirm> — Web Component (vanilla, zero dependencies).
-> Cuadro de confirmación emergente anclado a un disparador. Sin modal de fondo.
+> <iswc-popconfirm> â€” Web Component (vanilla, zero dependencies).
+> Cuadro de confirmaciÃ³n emergente anclado a un disparador. Sin modal de fondo.
 >   <iswc-button id="trigger">Borrar</iswc-button>
->   <iswc-popconfirm for="trigger" message="¿Seguro?">
->     <iswc-button slot="confirm" color="danger">Sí</iswc-button>
+>   <iswc-popconfirm for="trigger" message="Â¿Seguro?">
+>     <iswc-button slot="confirm" color="danger">SÃ­</iswc-button>
 >     <iswc-button slot="cancel">No</iswc-button>
 >   </iswc-popconfirm>
 > Atributos
->   for          string — id del trigger element.
->   message      string — texto principal.
+>   for          string â€” id del trigger element.
+>   message      string â€” texto principal.
 >   placement    top | bottom | start | end | top-start | top-end | bottom-start | bottom-end (default 'top')
 >   hide-arrow   boolean
->   open         boolean — controlado.
+>   open         boolean â€” controlado.
 >   without-backdrop boolean
 > Slots
->   confirm — slot del botón de confirmación.
->   cancel  — slot del botón de cancelar.
+>   confirm â€” slot del botÃ³n de confirmaciÃ³n.
+>   cancel  â€” slot del botÃ³n de cancelar.
 > Eventos
 >   iswc-popconfirm-show  detail: { trigger }
 >   iswc-popconfirm-hide  detail: { trigger }
@@ -150,25 +171,25 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-popconfirm>`.
+Tags del mÃ³dulo: `<iswc-popconfirm>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`.
 
 ## Ejemplo avanzado
 
 ```html
 <iswc-button id="btnDelete">Borrar</iswc-button>
-<iswc-popconfirm for="btnDelete" message="¿Seguro?">
-<iswc-button slot="confirm" color="danger">Sí, borrar</iswc-button>
+<iswc-popconfirm for="btnDelete" message="Â¿Seguro?">
+<iswc-button slot="confirm" color="danger">SÃ­, borrar</iswc-button>
 <iswc-button slot="cancel">Cancelar</iswc-button>
 </iswc-popconfirm>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -176,15 +197,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-modal`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./popconfirm.js)
+- [JavaScript](./popconfirm.ts)
 - [CSS](./popconfirm.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./popconfirm.json)

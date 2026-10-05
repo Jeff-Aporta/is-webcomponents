@@ -68,11 +68,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE;
   const VALID_ORIENTATION = ['horizontal', 'vertical'];
 
-  class IswcCard extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    spacing: '--iswc-card-spacing',
-    };
+  class IswcCard extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing']; }
 

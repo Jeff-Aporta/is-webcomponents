@@ -16,7 +16,7 @@
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  object-fit: var(--iswc-theme-img-fit, contain);
+  object-fit: var(--iswc-theme-img-fit);
   object-position: center;
   pointer-events: none;
   user-select: none;
@@ -48,6 +48,6 @@
 
 /* F0.3 g12 [media/error-state]: pista visual mínima cuando la imagen falla. */
 :host([data-error]) .img {
-  outline: 1px dashed var(--iswc-color-danger, #e03131);
+  outline: 1px dashed var(--iswc-color-danger);
   outline-offset: -1px;
 }

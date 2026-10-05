@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-breadcrumb",
   "category": "navigation",
-  "title": "<iswc-breadcrumb>",
-  "titleHtml": true,
+  "title": "&lt;iswc-breadcrumb&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-breadcrumb e iswc-breadcrumb-item de InSoft.",
   "storageKey": "docs-iswc-breadcrumb",
   "sections": [
@@ -45,10 +45,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-breadcrumb label=\"Catálogo\">\n  <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>\n</iswc-breadcrumb>"
         }
       ]
     },
@@ -60,10 +56,6 @@
         {
           "kind": "demo",
           "html": "<iswc-breadcrumb id=\"bcSpa\" label=\"Navegación SPA\">\r\n            <iswc-breadcrumb-item>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Productos</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>\r\n          <p id=\"bcLog\">Última navegación: ninguna</p>"
-        },
-        {
-          "kind": "code",
-          "code": "bc.addEventListener('click', (e) => {\n  const item = e.target.closest('iswc-breadcrumb-item');\n  if (item) console.log('item click', item.textContent.trim());\n});"
         }
       ]
     },
@@ -90,17 +82,13 @@
         {
           "kind": "demo",
           "html": "<iswc-breadcrumb label=\"Slash\">\r\n            <iswc-breadcrumb-item href=\"/home\">\r\n              <span slot=\"separator\">/</span>\r\n              Inicio\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"/docs\">\r\n              <span slot=\"separator\">/</span>\r\n              Docs\r\n            </iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"\">\r\n              <span slot=\"separator\">/</span>\r\n              Guía\r\n            </iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-breadcrumb-item href=\"/home\">\n  <span slot=\"separator\">/</span>\n  Inicio\n</iswc-breadcrumb-item>"
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "titleHtml": true,
+      "titleHtml": false,
       "blocks": [
         {
           "kind": "html",
@@ -264,5 +252,107 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Migas de pan accesibles con marcado <code class=\"code\">&lt;nav&gt;</code>,\r\n          ARIA roles y separador automático entre items."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "\"Ruta\"",
+            "desc": "aria-label del nav."
+          },
+          {
+            "name": "<code>href</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Si está, renderiza <code>&lt;a&gt;</code>. <code>href=\"\"</code> = current page."
+          },
+          {
+            "name": "<code>target</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Pasado al <code>&lt;a&gt;</code>."
+          },
+          {
+            "name": "<code>rel</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Pasado al <code>&lt;a&gt;</code>."
+          },
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Iconify id por defecto (sin slot start)."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Breadcrumb-items."
+          },
+          {
+            "slot": "<code>separator</code>",
+            "desc": "Icono o texto entre items. Cada item también acepta su propio separator via slot."
+          },
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Texto del item."
+          },
+          {
+            "slot": "<code>start</code>",
+            "desc": "Icono al inicio."
+          },
+          {
+            "slot": "<code>end</code>",
+            "desc": "Icono al final."
+          },
+          {
+            "slot": "<code>separator</code>",
+            "desc": "Override del separador de este item."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(breadcrumb)</code>",
+            "desc": "El wrapper &lt;nav&gt;."
+          },
+          {
+            "part": "<code>::part(label)</code>",
+            "desc": "Etiqueta (texto o enlace)."
+          },
+          {
+            "part": "<code>::part(separator)</code>",
+            "desc": "Separador."
+          },
+          {
+            "part": "<code>::part(start)</code>",
+            "desc": "Wrapper del icono al inicio."
+          },
+          {
+            "part": "<code>::part(end)</code>",
+            "desc": "Wrapper del icono al final."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-breadcrumb label=\"Catálogo\">\n  <iswc-breadcrumb-item href=\"/\">Catálogo</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa\">Ropa</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"/ropa/mujer\">Mujer</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"\">Camisetas</iswc-breadcrumb-item>\n</iswc-breadcrumb>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "props",
+      "states"
+    ]
+  }
 }

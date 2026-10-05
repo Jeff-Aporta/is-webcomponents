@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-pie-chart",
   "category": "data-viz",
-  "title": "<iswc-pie-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-pie-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-pie-chart",
   "sections": [
     {
@@ -24,5 +24,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Composición proporcional."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-pie-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Alquiler\",\"Comida\",\"Transporte\",\"Ahorro\"],\"datasets\":[{\"label\":\"Presupuesto\",\"data\":[35,25,15,25]}]}}\r\n            </script>\r\n          </iswc-pie-chart>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

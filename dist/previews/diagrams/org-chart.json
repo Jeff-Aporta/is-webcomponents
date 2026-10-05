@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-org-chart",
   "category": "diagrams",
-  "title": "<iswc-org-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-org-chart&gt;",
+  "titleHtml": false,
   "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
   "storageKey": "docs-iswc-org-chart",
   "hasBehavior": true,
@@ -81,5 +81,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Organigrama jerárquico a partir de un árbol JSON. Cada nodo tiene foto (o iniciales), nombre y cargo; los hijos se pliegan con el botón redondo con una animación suave, y un clic en el fondo abre el visor a pantalla completa."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

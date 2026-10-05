@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-data-grid
 tags:
   - iswc-data-grid
 category: data
 status: public
-source: ./data-grid.js
+source: ./data-grid.ts
 style: ./data-grid.css
 preview: ./data-grid.json
 ---
 # `<iswc-data-grid>`
 
-## Propósito
+## PropÃ³sito
 
 Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-orden, filtros con Y/O,
-quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,
-agrupación con agregación, tree data, pivot, virtualización y exportación.
+quick filter, paginaciÃ³n, selecciÃ³n de filas y de rangos de celdas, ediciÃ³n por celda o por fila,
+agrupaciÃ³n con agregaciÃ³n, tree data, pivot, virtualizaciÃ³n y exportaciÃ³n.
 
-Este módulo registra `<iswc-data-grid>`.
+Este mÃ³dulo registra `<iswc-data-grid>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Presentación, comparación, movimiento u organización de datos estructurados.
+PresentaciÃ³n, comparaciÃ³n, movimiento u organizaciÃ³n de datos estructurados.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No reemplazar HTML semántico cuando contenido es estático y simple.
+No reemplazar HTML semÃ¡ntico cuando contenido es estÃ¡tico y simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './data-grid.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-data-grid></iswc-data-grid>
@@ -46,52 +46,52 @@ import './data-grid.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `density` | string/según contrato | Fuente define default/restricción. |
-| `row-height` | string/según contrato | Fuente define default/restricción. |
-| `header-height` | string/según contrato | Fuente define default/restricción. |
-| `auto-height` | string/según contrato | Fuente define default/restricción. |
-| `page-size` | string/según contrato | Fuente define default/restricción. |
-| `page-size-options` | string/según contrato | Fuente define default/restricción. |
-| `pagination` | boolean | Fuente define default/restricción. |
-| `pagination-mode` | string/según contrato | Fuente define default/restricción. |
-| `row-count` | string/según contrato | Fuente define default/restricción. |
-| `sorting-mode` | string/según contrato | Fuente define default/restricción. |
-| `sorting-order` | string/según contrato | Fuente define default/restricción. |
-| `filter-mode` | string/según contrato | Fuente define default/restricción. |
-| `selection-mode` | string/según contrato | Fuente define default/restricción. |
-| `checkbox-selection` | boolean | Fuente define default/restricción. |
-| `cell-selection` | boolean | Fuente define default/restricción. |
-| `disable-row-selection-on-click` | string/según contrato | Fuente define default/restricción. |
-| `disable-column-menu` | string/según contrato | Fuente define default/restricción. |
-| `disable-column-filter` | string/según contrato | Fuente define default/restricción. |
-| `disable-column-sort` | string/según contrato | Fuente define default/restricción. |
-| `disable-column-resize` | string/según contrato | Fuente define default/restricción. |
-| `disable-column-reorder` | string/según contrato | Fuente define default/restricción. |
-| `disable-multiple-sorting` | string/según contrato | Fuente define default/restricción. |
-| `edit-mode` | string/según contrato | Fuente define default/restricción. |
-| `editable` | string/según contrato | Fuente define default/restricción. |
-| `show-toolbar` | string/según contrato | Fuente define default/restricción. |
+| `density` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `row-height` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `header-height` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `auto-height` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `page-size` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `page-size-options` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `pagination` | boolean | Fuente define default/restricciÃ³n. |
+| `pagination-mode` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `row-count` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `sorting-mode` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `sorting-order` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `filter-mode` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `selection-mode` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `checkbox-selection` | boolean | Fuente define default/restricciÃ³n. |
+| `cell-selection` | boolean | Fuente define default/restricciÃ³n. |
+| `disable-row-selection-on-click` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-column-menu` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-column-filter` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-column-sort` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-column-resize` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-column-reorder` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disable-multiple-sorting` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `edit-mode` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `editable` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `show-toolbar` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `toolbar-tools` | boolean (`false` oculta Columnas/Filtros/Densidad/Exportar) | Default visible cuando hay toolbar. |
-| `quick-filter` | string/según contrato | Fuente define default/restricción. |
-| `header-filters` | string/según contrato | Fuente define default/restricción. |
-| `hide-footer` | string/según contrato | Fuente define default/restricción. |
-| `hide-footer-selected-count` | string/según contrato | Fuente define default/restricción. |
-| `virtualize` | string/según contrato | Fuente define default/restricción. |
-| `overscan` | string/según contrato | Fuente define default/restricción. |
-| `loading` | boolean | Fuente define default/restricción. |
-| `loading-color` | string/según contrato | Fuente define default/restricción. |
-| `list-view` | boolean | Fuente define default/restricción. |
-| `tree-data` | boolean | Fuente define default/restricción. |
-| `row-reorder` | string/según contrato | Fuente define default/restricción. |
-| `detail-height` | string/según contrato | Fuente define default/restricción. |
-| `tab-navigation` | string/según contrato | Fuente define default/restricción. |
-| `clipboard` | string/según contrato | Fuente define default/restricción. |
-| `undo-redo` | string/según contrato | Fuente define default/restricción. |
-| `aggregation-position` | string/según contrato | Fuente define default/restricción. |
-| `selectable` | boolean | Fuente define default/restricción. |
-| `filterable` | boolean | Fuente define default/restricción. |
+| `quick-filter` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `header-filters` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hide-footer` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hide-footer-selected-count` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `virtualize` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `overscan` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `loading` | boolean | Fuente define default/restricciÃ³n. |
+| `loading-color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `list-view` | boolean | Fuente define default/restricciÃ³n. |
+| `tree-data` | boolean | Fuente define default/restricciÃ³n. |
+| `row-reorder` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `detail-height` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `tab-navigation` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `clipboard` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `undo-redo` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `aggregation-position` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `selectable` | boolean | Fuente define default/restricciÃ³n. |
+| `filterable` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -152,70 +152,114 @@ import './data-grid.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-sort-change` | Evento personalizado del componente (sort change). |
+| `iswc-filter-change` | Evento personalizado del componente (filter change). |
+| `iswc-quick-filter` | Evento personalizado del componente (quick filter). |
+| `iswc-column-hide` | Evento personalizado del componente (column hide). |
+| `iswc-column-resize` | Evento personalizado del componente (column resize). |
+| `iswc-column-pin` | Evento personalizado del componente (column pin). |
+| `iswc-density` | Evento personalizado del componente (density). |
+| `iswc-group-model` | Evento personalizado del componente (group model). |
+| `iswc-aggregation` | Evento personalizado del componente (aggregation). |
+| `iswc-export` | Emitido al exportar datos. |
+| `iswc-select` | Emitido al seleccionar un elemento. |
+| `iswc-cell-select` | Evento personalizado del componente (cell select). |
+| `iswc-edit-start` | Evento personalizado del componente (edit start). |
+| `iswc-edit-stop` | Evento personalizado del componente (edit stop). |
+| `iswc-row-update` | Evento personalizado del componente (row update). |
+| `iswc-copy` | Evento personalizado del componente (copy). |
+| `iswc-paste` | Evento personalizado del componente (paste). |
+| `iswc-column-reorder` | Evento personalizado del componente (column reorder). |
+| `iswc-cell-click` | Evento personalizado del componente (cell click). |
+| `iswc-row-click` | Evento personalizado del componente (row click). |
+| `iswc-row-double-click` | Evento personalizado del componente (row double click). |
+| `iswc-cell-double-click` | Evento personalizado del componente (cell double click). |
+| `iswc-row-reorder` | Evento personalizado del componente (row reorder). |
+| `iswc-group-toggle` | Evento personalizado del componente (group toggle). |
+| `iswc-detail-toggle` | Evento personalizado del componente (detail toggle). |
+| `iswc-rows-scroll-end` | Evento personalizado del componente (rows scroll end). |
+| `iswc-page-change` | Emitido al cambiar de pÃ¡gina. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-sort-change` | sí | sí | sí | no |
-| `iswc-filter-change` | sí | sí | sí | no |
-| `iswc-quick-filter` | sí | sí | sí | no |
-| `iswc-column-hide` | sí | sí | sí | no |
-| `iswc-column-resize` | sí | sí | sí | no |
-| `iswc-column-pin` | sí | sí | sí | no |
-| `iswc-density` | sí | sí | sí | no |
-| `iswc-group-model` | sí | sí | sí | no |
-| `iswc-aggregation` | sí | sí | sí | no |
-| `iswc-export` | sí | sí | sí | no |
-| `iswc-select` | sí | sí | sí | no |
-| `iswc-cell-select` | sí | sí | sí | no |
-| `iswc-edit-start` | sí | sí | sí | no |
-| `iswc-edit-stop` | sí | sí | sí | no |
-| `iswc-row-update` | sí | sí | sí | no |
-| `iswc-copy` | sí | sí | sí | no |
-| `iswc-paste` | sí | sí | sí | no |
-| `iswc-column-reorder` | sí | sí | sí | no |
-| `iswc-cell-click` | sí | sí | sí | no |
-| `iswc-row-click` | sí | sí | sí | no |
-| `iswc-row-double-click` | sí | sí | sí | no |
-| `iswc-cell-double-click` | sí | sí | sí | no |
-| `iswc-row-reorder` | sí | sí | sí | no |
-| `iswc-group-toggle` | sí | sí | sí | no |
-| `iswc-detail-toggle` | sí | sí | sí | no |
-| `iswc-rows-scroll-end` | sí | sí | sí | no |
-| `iswc-page-change` | sí | sí | sí | no |
+| `iswc-sort-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-filter-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-quick-filter` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-column-hide` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-column-resize` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-column-pin` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-density` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-group-model` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-aggregation` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-export` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-select` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-cell-select` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-edit-start` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-edit-stop` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-row-update` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-copy` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-paste` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-column-reorder` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-cell-click` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-row-click` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-row-double-click` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-cell-double-click` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-row-reorder` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-group-toggle` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-detail-toggle` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-rows-scroll-end` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-page-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-data-grid');
+el.addEventListener('iswc-sort-change', (e) => {
+  console.log('iswc-sort-change', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `refresh()` | Método público declarado. |
-| `setPage()` | Método público declarado. |
-| `setPageSize()` | Método público declarado. |
-| `setSortModel()` | Método público declarado. |
-| `sortColumn()` | Método público declarado. |
-| `setFilterModel()` | Método público declarado. |
-| `setQuickFilter()` | Método público declarado. |
-| `setColumnVisibility()` | Método público declarado. |
-| `setColumnWidth()` | Método público declarado. |
-| `pinColumn()` | Método público declarado. |
-| `autosizeColumns()` | Método público declarado. |
-| `setDensity()` | Método público declarado. |
-| `selectRow()` | Método público declarado. |
-| `selectAll()` | Método público declarado. |
-| `getRow()` | Método público declarado. |
-| `updateRows()` | Método público declarado. |
-| `scrollToIndex()` | Método público declarado. |
-| `startEdit()` | Método público declarado. |
-| `stopEdit()` | Método público declarado. |
-| `toggleDetailPanel()` | Método público declarado. |
-| `toggleGroup()` | Método público declarado. |
-| `expandAll()` | Método público declarado. |
-| `collapseAll()` | Método público declarado. |
-| `setRowGroupingModel()` | Método público declarado. |
-| `setAggregationModel()` | Método público declarado. |
-| `copySelectionToClipboard()` | Método público declarado. |
-| `undo()` | Método público declarado. |
-| `redo()` | Método público declarado. |
+| `refresh()` | MÃ©todo pÃºblico declarado. |
+| `setPage()` | MÃ©todo pÃºblico declarado. |
+| `setPageSize()` | MÃ©todo pÃºblico declarado. |
+| `setSortModel()` | MÃ©todo pÃºblico declarado. |
+| `sortColumn()` | MÃ©todo pÃºblico declarado. |
+| `setFilterModel()` | MÃ©todo pÃºblico declarado. |
+| `setQuickFilter()` | MÃ©todo pÃºblico declarado. |
+| `setColumnVisibility()` | MÃ©todo pÃºblico declarado. |
+| `setColumnWidth()` | MÃ©todo pÃºblico declarado. |
+| `pinColumn()` | MÃ©todo pÃºblico declarado. |
+| `autosizeColumns()` | MÃ©todo pÃºblico declarado. |
+| `setDensity()` | MÃ©todo pÃºblico declarado. |
+| `selectRow()` | MÃ©todo pÃºblico declarado. |
+| `selectAll()` | MÃ©todo pÃºblico declarado. |
+| `getRow()` | MÃ©todo pÃºblico declarado. |
+| `updateRows()` | MÃ©todo pÃºblico declarado. |
+| `scrollToIndex()` | MÃ©todo pÃºblico declarado. |
+| `startEdit()` | MÃ©todo pÃºblico declarado. |
+| `stopEdit()` | MÃ©todo pÃºblico declarado. |
+| `toggleDetailPanel()` | MÃ©todo pÃºblico declarado. |
+| `toggleGroup()` | MÃ©todo pÃºblico declarado. |
+| `expandAll()` | MÃ©todo pÃºblico declarado. |
+| `collapseAll()` | MÃ©todo pÃºblico declarado. |
+| `setRowGroupingModel()` | MÃ©todo pÃºblico declarado. |
+| `setAggregationModel()` | MÃ©todo pÃºblico declarado. |
+| `copySelectionToClipboard()` | MÃ©todo pÃºblico declarado. |
+| `undo()` | MÃ©todo pÃºblico declarado. |
+| `redo()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -237,6 +281,10 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `overlay` | Personalizable con `::part(overlay)`. |
 | `footer` | Personalizable con `::part(footer)`. |
 | `pagination` | Personalizable con `::part(pagination)`. |
+| `cell` | Personalizable con `::part(cell)`. |
+| `detail-panel` | Panel desplegable de detalle por fila. |
+| `header-cell` | Cada celda de la fila de encabezados. |
+| `row` | Personalizable con `::part(row)`. |
 
 ### Custom states
 
@@ -246,58 +294,58 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-grid-row-h` | Token leído o definido por componente. |
-| `--iswc-grid-head-h` | Token leído o definido por componente. |
-| `--iswc-grid-head-total` | Token leído o definido por componente. |
-| `--iswc-grid-border` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-grid-border-soft` | Token leído o definido por componente. |
-| `--iswc-border-soft` | Token leído o definido por componente. |
-| `--iswc-grid-bg` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-grid-header-bg` | Token leído o definido por componente. |
-| `--iswc-bg-soft` | Token leído o definido por componente. |
-| `--iswc-grid-row-hover` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--iswc-grid-selected` | Token leído o definido por componente. |
-| `--iswc-accent-bg` | Token leído o definido por componente. |
-| `--iswc-grid-radius` | Token leído o definido por componente. |
-| `--iswc-radius` | Token leído o definido por componente. |
-| `--iswc-grid-accent` | Token leído o definido por componente. |
-| `--iswc-color-brand-600` | Token leído o definido por componente. |
-| `--iswc-grid-height` | Token leído o definido por componente. |
-| `--iswc-grid-pad` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-danger` | Token leído o definido por componente. |
-| `--iswc-bg` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-shadow-md` | Token leído o definido por componente. |
+| `--iswc-grid-row-h` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-head-h` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-head-total` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-border` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-border-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-border-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-header-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-row-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-selected` | Token leÃ­do o definido por componente. |
+| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-600` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-height` | Token leÃ­do o definido por componente. |
+| `--iswc-grid-pad` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-danger` | Token leÃ­do o definido por componente. |
+| `--iswc-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-shadow-md` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-data-grid> — Tabla de datos con la superficie de MUI X Data Grid.
+> <iswc-data-grid> â€” Tabla de datos con la superficie de MUI X Data Grid.
 > Columnas: tipos string/number/date/dateTime/boolean/singleSelect/actions,
 > valueGetter, valueFormatter, renderCell, renderHeader, ancho fijo o flex,
 > resize, autosize, reorden por arrastre, visibilidad, anclaje izquierda y
-> derecha, grupos de cabecera anidados, colSpan y menú por columna.
+> derecha, grupos de cabecera anidados, colSpan y menÃº por columna.
 > Filas: id propio, alto fijo o por fila, densidad, anclaje arriba y abajo,
-> reorden, detail panel, tree data, agrupación con agregación y pivot.
+> reorden, detail panel, tree data, agrupaciÃ³n con agregaciÃ³n y pivot.
 > Datos: multi-orden, filtros con Y/O, filtros de cabecera, quick filter,
-> paginación cliente o servidor, virtualización, carga incremental.
-> Edición: por celda o por fila, validación, portapapeles y undo/redo.
-> Salida: CSV, Excel (SpreadsheetML) e impresión.
+> paginaciÃ³n cliente o servidor, virtualizaciÃ³n, carga incremental.
+> EdiciÃ³n: por celda o por fila, validaciÃ³n, portapapeles y undo/redo.
+> Salida: CSV, Excel (SpreadsheetML) e impresiÃ³n.
 > Props JS: columns, rows, pinnedRows, sortModel, filterModel, paginationModel,
 > rowSelectionModel, cellSelectionModel, columnVisibilityModel, pinnedColumns,
 > columnOrder, columnGroupingModel, rowGroupingModel, aggregationModel,
@@ -332,11 +380,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/grid-data.js`](../_shared/grid-data.js)
 - [`../_shared/grid-ui.js`](../_shared/grid-ui.js)
 
-Tags del módulo: `<iswc-data-grid>`.
+Tags del mÃ³dulo: `<iswc-data-grid>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`, `aria-haspopup`, `aria-colcount`, `aria-rowcount`, `aria-colspan`, `aria-colindex`, `aria-sort`, `aria-rowindex`, `aria-expanded`, `aria-level`, `aria-selected`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-label`, `aria-haspopup`, `aria-colcount`, `aria-rowcount`, `aria-colspan`, `aria-colindex`, `aria-sort`, `aria-rowindex`, `aria-expanded`, `aria-level`, `aria-selected`.
 
 ## Ejemplo avanzado
 
@@ -346,7 +394,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -354,15 +402,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./data-grid.js)
+- [JavaScript](./data-grid.ts)
 - [CSS](./data-grid.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./data-grid.json)

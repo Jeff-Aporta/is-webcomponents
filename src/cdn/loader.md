@@ -1,4 +1,4 @@
-# `ISWebComponentsLoader` (`loader.min.js`)
+﻿# `ISWebComponentsLoader` (`loader.min.js`)
 
 Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redundancia.
 
@@ -23,8 +23,8 @@ import { ISWebComponentsLoader as L } from
 
 // Sin configure: el loader ya trae quemado el SHA de ESTE build (o el de @REF
 // si la URL venía pinneada). load() pide componentes a jsDelivr@eseSha.
-await L.loadCSSBase();
-await L.loadCSSPalettesDefault();
+// is-base.min.css se auto-carga al import (W52).
+await L.loadPageStyles(['iswc-palettes-default']);
 await L.load('iswc-button', 'iswc-button-group');
 // o: L.load('actions') | L.load('all')
 ```
@@ -111,7 +111,11 @@ Registra tags propios (fuera del catálogo del kit). `load` / `ensure` los trata
 ```js
 L.registerApp(
   {
-    'paty-shell': './dist/cdn/all.min.js',
+    // ⚠️ NO uses `./dist/cdn/all.min.js`: es una *lista de imports* (~250 B),
+    // no un bundle importable. Para apps, registra cada tag o cada
+    // `<category>/<tag>.min.js` por separado. Ver `specs/cdn.md` §CDN y
+    // §Anti-patrones.
+    'paty-shell': './dist/cdn/<category>/paty-shell.min.js',
     'mi-widget': { href: './widgets/mi-widget.js', css: './widgets/mi-widget.css' },
   },
   { cacheName: 'mi-app-sheets-v1' },
@@ -160,17 +164,50 @@ Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) �
 
 ### Apps consumidoras (CDN)
 
-- Documento: `loadCSSBase()` + `loadCSSPalettesDefault()` explícitos (o `<link>` a los `.min.css`).
+- Documento: `loadPageStyles(['iswc-palettes-default'])` (o `<link>` a `palettes.min.css`). `is-base` se auto-inyecta al importar el loader.
 - Componente: lo trae cada `.min.js` con `adoptCss` en shadow.
-- Relativos al documento: `loadPageStyles([...])` / `loadPageModules([...])` (sin mirrors).
+- Relativos al documento: `loadPageStyles([...])` / `loadPageModules([...])` (sin mirrors). Alias CDN del kit: prefijo `cdn:` o alias registrado (`iswc-palettes-default`).
 
-### Galería local (`index.html`) — distinto
+### Shell doc-demo (`iswc-doc-demo`) — reutilizable
 
-La galería **no** debe esperar CSS del loader para el primer paint (FOUC). Contrato:
+Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
-1. `<link>` estáticos a `src/styles/is-base.css`, `palettes.css`, `shell.css`, `presentation.css` + `preview-component.css`.
-2. `await` solo shell tags + `import('./dist/cdn/preview/preview-component.min.js')`.
-3. `load('all')` y `loadPageModules` en **background** (no bloquean `dataset.kitShell`).
-4. `iswc-preview-component` **no** está en el catálogo del loader → import dist, nunca `src/` (Pages 404 lucide).
+```html
+<!-- CDN / otra app -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents/dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="./app.min.js"></script>
+<body>
+  <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
+</body>
+```
 
-Detalle + anti-patrones: `LLM.md` raíz error **#43** · guardián `tests/gallery-boot.test.ts`.
+```html
+<!-- Galería local (self-test) -->
+<script type="module" src="./dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="./dist/gallery-app.min.js" defer></script>
+<body>
+  <iswc-doc-demo brand="ISWC" local dev sheets-cache="iswc-gallery-sheets"></iswc-doc-demo>
+</body>
+```
+
+| Artefacto | Tipo | Rol |
+| --- | --- | --- |
+| `doc-demo-host.min.js` | module | `configure` + `L.loadPageModules(['iswc-doc-demo-boot'])` + `L.load('iswc-doc-demo')` |
+| `iswc-doc-demo-boot` | alias module | theme/palette + CSS crítico |
+| `iswc-doc-demo` | CE (catálogo) | shell light-DOM + page styles/modules |
+
+Aliases CSS: `iswc-palettes-default`, `iswc-doc-shell`, `iswc-doc-presentation`.  
+Page modules: `type: 'module' | 'classic'` (`dev-reload` classic, **opt-in** con attr `dev`).
+Tema ER InSoft (sin CE nuevo): alias JS `iswc-diagram-theme` → `cdn:diagrams/theme.min.js`
+(`json2css`, `resolveErTheme`, `INSOFT_THEME`); JSON editable en `dist/cdn/diagrams/themes/insoft.json`.
+Uso: `<iswc-er-diagram theme="insoft">` / `<iswc-er-editor theme="insoft">`.  
+Evento canónico: `iswc-doc-demo-ready` / `.whenReady()`.
+
+| Opción | Efecto |
+| --- | --- |
+| `local: true` | `preferSelf`, `host` = raíz del kit (`import.meta.url` → `dist/cdn/`), `mirrors: []`, sin pin |
+| `host: 'self' \| './'` | Misma raíz relativa al loader (sin quemar localhost) |
+| `host: 'dist/cdn/'` | Relativo a la página montada |
+| `mirrors: []` | Sin fallback jsDelivr/githack/Pages |
+
+Detalle: `src/components/layout/doc-demo.md` · guardián `tests/gallery-boot.test.ts`.

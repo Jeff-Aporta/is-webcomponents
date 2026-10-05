@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-er-diagram
 tags:
   - iswc-er-diagram
 category: diagrams
 status: public
-source: ./er-diagram.js
+source: ./er-diagram.ts
 style: ./er-diagram.css
 preview: ./er-diagram.json
 ---
 # `<iswc-er-diagram>`
 
-## Propósito
+## PropÃ³sito
 
-Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus
+Diagrama entidad-relaciÃ³n en SVG, sin Mermaid. Declaras entidades con sus
 atributos y las relaciones entre ellas; el componente ubica las cajas,
-rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.
+rutea las lÃ­neas con A* y dibuja la notaciÃ³n de pata de gallo en cada extremo.
 
-Este módulo registra `<iswc-er-diagram>`.
+Este mÃ³dulo registra `<iswc-er-diagram>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No inventar schemas ni usar specs/layout como custom elements.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './er-diagram.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-er-diagram></iswc-er-diagram>
@@ -46,9 +46,9 @@ import './er-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -67,20 +67,41 @@ import './er-diagram.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-turtle-state` | sí | sí | sí | no |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-toggle-group` | sí | sí | sí | sí |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-er-diagram');
+el.addEventListener('iswc-turtle-state', (e) => {
+  console.log('iswc-turtle-state', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -98,51 +119,51 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--er-circle-fill` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--er-circle-fill` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Agrupadores y ratio
 
-`groups[]` ya no es solo leyenda: cada grupo se dibuja como un **cajón con título**
-y las entidades de ese grupo se resuelven como un sub-diagrama propio dentro de él.
-Las entidades sin `group` se colocan sueltas, sin cajón.
+`groups[]` ya no es solo leyenda: cada grupo se dibuja como un **cajÃ³n con tÃ­tulo**
+y las entidades de ese grupo se resuelven como un sub-diagrama propio dentro de Ã©l.
+Las entidades sin `group` se colocan sueltas, sin cajÃ³n.
 
 ```json
 {
   "erDiagram": {
     "ratio": 1.2,
     "groups": [
-      { "id": "patyia", "name": "PatyIA — MSSQL", "hue": 210 },
-      { "id": "clientesis", "name": "ClientesIS — PostgreSQL", "hue": 38 }
+      { "id": "patyia", "name": "PatyIA â€” MSSQL", "hue": 210 },
+      { "id": "clientesis", "name": "ClientesIS â€” PostgreSQL", "hue": 38 }
     ],
     "entities": [{ "id": "CONVERSACIONES", "group": "patyia", "attributes": [] }]
   }
 }
 ```
 
-| Campo | Default | Qué hace |
+| Campo | Default | QuÃ© hace |
 | --- | --- | --- |
-| `ratio` (alias `aspectRatio`) | `1.4` | Ratio **guía** ancho/alto. El empaquetado prueba cada número de columnas y elige el reparto de cajones más cercano a ese ratio. Es una preferencia, no una restricción: nunca recorta ni deforma una caja. |
-| `groups[].name` | — | Título del cajón (y de la leyenda). |
-| `groups[].hue` | rotativo | Tinte del cajón, de su cabecera y del borde de sus entidades. |
+| `ratio` (alias `aspectRatio`) | `1.4` | Ratio **guÃ­a** ancho/alto. El empaquetado prueba cada nÃºmero de columnas y elige el reparto de cajones mÃ¡s cercano a ese ratio. Es una preferencia, no una restricciÃ³n: nunca recorta ni deforma una caja. |
+| `groups[].name` | â€” | TÃ­tulo del cajÃ³n (y de la leyenda). |
+| `groups[].hue` | rotativo | Tinte del cajÃ³n, de su cabecera y del borde de sus entidades. |
 
 El layout coloca los cajones probando permutaciones (hasta 5 cajones) y se queda con
-la que deja más cerca los extremos de las relaciones que cruzan de un cajón a otro.
-El ruteo va de la relación más corta a la más larga y cobra peaje sobre los corredores
+la que deja mÃ¡s cerca los extremos de las relaciones que cruzan de un cajÃ³n a otro.
+El ruteo va de la relaciÃ³n mÃ¡s corta a la mÃ¡s larga y cobra peaje sobre los corredores
 ya usados, de modo que dos aristas prefieren separarse antes que solaparse.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
-> Configuración por JSON, igual que <iswc-flowchart>:
+> <iswc-er-diagram> â€” diagrama entidad-relaciÃ³n en SVG, sin Mermaid.
+> ConfiguraciÃ³n por JSON, igual que <iswc-flowchart>:
 >   <iswc-er-diagram>
 >     <script type="application/json">
 >       { "erDiagram": { "entities": [...], "relations": [...] } }
@@ -152,7 +173,7 @@ Documentación de cabecera preservada desde fuente:
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
 
-Las aristas paralelas se separan unos píxeles; el trazo es un HSL oscuro del
+Las aristas paralelas se separan unos pÃ­xeles; el trazo es un HSL oscuro del
 grupo (no negro). Las etiquetas se colocan al 50% del path y no pisan cajas.
 
 ## Dependencias y componentes relacionados
@@ -165,11 +186,11 @@ grupo (no negro). Las etiquetas se colocan al 50% del path y no pisan cajas.
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<iswc-er-diagram>`.
+Tags del mÃ³dulo: `<iswc-er-diagram>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -179,7 +200,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -187,17 +208,17 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./er-diagram.js)
+- [JavaScript](./er-diagram.ts)
 - [CSS](./er-diagram.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./er-diagram.json)
 
 ## App API
@@ -205,4 +226,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 Visor: `demos/diagramas/app/view.html?kind=er&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=er&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.

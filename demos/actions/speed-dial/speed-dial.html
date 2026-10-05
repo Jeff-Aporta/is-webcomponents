@@ -35,19 +35,19 @@
   <section>
     <h2>direction="up" (default)</h2>
     <iswc-speed-dial id="sd-up" label="Acciones rápidas" direction="up">
-      <iswc-speed-dial-action icon="mdi:content-copy" label="Copiar"></iswc-speed-dial-action>
-      <iswc-speed-dial-action icon="mdi:share-variant" label="Compartir"></iswc-speed-dial-action>
-      <iswc-speed-dial-action icon="mdi:link-variant" label="Copiar enlace"></iswc-speed-dial-action>
+      <iswc-speed-dial-action title="Copiar" icon="mdi:content-copy" label="Copiar"></iswc-speed-dial-action>
+      <iswc-speed-dial-action title="Compartir" icon="mdi:share-variant" label="Compartir"></iswc-speed-dial-action>
+      <iswc-speed-dial-action title="Copiar enlace" icon="mdi:link-variant" label="Copiar enlace"></iswc-speed-dial-action>
     </iswc-speed-dial>
   </section>
 
   <section>
     <h2>direction="radial"</h2>
     <iswc-speed-dial id="sd-rad" label="Más acciones" direction="radial">
-      <iswc-speed-dial-action icon="mdi:pencil" label="Editar"></iswc-speed-dial-action>
-      <iswc-speed-dial-action icon="mdi:eye" label="Ver"></iswc-speed-dial-action>
-      <iswc-speed-dial-action icon="mdi:archive" label="Archivar"></iswc-speed-dial-action>
-      <iswc-speed-dial-action icon="mdi:trash-can" color="danger" label="Eliminar"></iswc-speed-dial-action>
+      <iswc-speed-dial-action title="Editar" icon="mdi:pencil" label="Editar"></iswc-speed-dial-action>
+      <iswc-speed-dial-action title="Ver" icon="mdi:eye" label="Ver"></iswc-speed-dial-action>
+      <iswc-speed-dial-action title="Archivar" icon="mdi:archive" label="Archivar"></iswc-speed-dial-action>
+      <iswc-speed-dial-action title="Eliminar" icon="mdi:trash-can" color="danger" label="Eliminar"></iswc-speed-dial-action>
     </iswc-speed-dial>
   </section>
 
@@ -57,8 +57,8 @@
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/speed-dial.min.js?h=ulkvjx');
-    await import('../../../dist/cdn/actions/check-icon-button.min.js?h=wwi8c3');
+    await import('../../../dist/cdn/actions/speed-dial.min.js?h=j5mlhl');
+    await import('../../../dist/cdn/actions/check-icon-button.min.js?h=7f2lsl');
     await customElements.whenDefined('iswc-speed-dial');
 
     const log = document.getElementById('log');
@@ -75,5 +75,80 @@
 
     document.documentElement.dataset.speedDialReady = '1';
   </script>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

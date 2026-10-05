@@ -11,6 +11,7 @@
 // reprocesos de swimlane) se colapsaba a su primer punto cuando había ≥2
 // aristas etiquetadas y las líneas desaparecían del render.
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
+import { RunSchema, type Run } from './diagram-edge-spread.schema.js';
 
 function rangesOverlap(a0: number, a1: number, b0: number, b1: number, min: number = 12): boolean {
   return Math.min(a1, b1) - Math.max(a0, b0) > min;
@@ -38,9 +39,6 @@ function toPath(pts: SpreadPoint[]): string {
   }
   return d;
 }
-
-/** Tramo alineado detectado durante el barrido. */
-type Run = { ii: number; i: number; j: number; pos: number; a: number; b: number };
 
 function collectRuns(items: SpreadItem[], vertical: boolean): Run[] {
   const runs: Run[] = [];

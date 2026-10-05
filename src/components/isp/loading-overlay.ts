@@ -43,12 +43,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['open', 'message', 'scroll-lock'];
 
-  class IswcLoadingOverlay extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'backdrop-color': { prop: '--iswc-loading-backdrop', onlyColorValues: true },
-    'indicator-color': { prop: '--iswc-loading-indicator', onlyColorValues: true },
-    };
+  class IswcLoadingOverlay extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'backdrop-color', 'indicator-color']; }
 

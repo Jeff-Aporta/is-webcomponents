@@ -31,52 +31,52 @@
   <section>
     <h2>Colors</h2>
     <div class="row">
-      <iswc-button>Acción</iswc-button>
-      <iswc-button color="neutral">Neutral</iswc-button>
-      <iswc-button color="success">Aceptar</iswc-button>
-      <iswc-button color="warning">Aviso</iswc-button>
-      <iswc-button color="danger">Eliminar</iswc-button>
-      <iswc-button color="info">Info</iswc-button>
+      <iswc-button title="Acción">Acción</iswc-button>
+      <iswc-button title="Neutral" color="neutral">Neutral</iswc-button>
+      <iswc-button title="Aceptar" color="success">Aceptar</iswc-button>
+      <iswc-button title="Aviso" color="warning">Aviso</iswc-button>
+      <iswc-button title="Eliminar" color="danger">Eliminar</iswc-button>
+      <iswc-button title="Info" color="info">Info</iswc-button>
     </div>
   </section>
 
   <section>
     <h2>Variants</h2>
     <div class="row">
-      <iswc-button variant="filled">Filled</iswc-button>
-      <iswc-button variant="outlined">Outlined</iswc-button>
-      <iswc-button variant="plain">Plain</iswc-button>
-      <iswc-button variant="ghost">Ghost</iswc-button>
-      <iswc-button variant="soft">Soft</iswc-button>
-      <iswc-button variant="text">Text</iswc-button>
+      <iswc-button title="Filled" variant="filled">Filled</iswc-button>
+      <iswc-button title="Outlined" variant="outlined">Outlined</iswc-button>
+      <iswc-button title="Plain" variant="plain">Plain</iswc-button>
+      <iswc-button title="Ghost" variant="ghost">Ghost</iswc-button>
+      <iswc-button title="Soft" variant="soft">Soft</iswc-button>
+      <iswc-button title="Text" variant="text">Text</iswc-button>
     </div>
   </section>
 
   <section>
     <h2>Shapes</h2>
     <div class="row">
-      <iswc-button shape="round">Round</iswc-button>
-      <iswc-button shape="rect">Rect</iswc-button>
-      <iswc-button shape="pill" pill>Pill</iswc-button>
+      <iswc-button title="Round" shape="round">Round</iswc-button>
+      <iswc-button title="Rect" shape="rect">Rect</iswc-button>
+      <iswc-button title="Pill" shape="pill" pill>Pill</iswc-button>
     </div>
   </section>
 
   <section>
     <h2>Estados</h2>
     <div class="row">
-      <iswc-button id="loading-btn" loading>Guardando…</iswc-button>
-      <iswc-button disabled>Deshabilitado</iswc-button>
-      <iswc-button with-caret>Desplegar</iswc-button>
-      <iswc-button href="https://example.com" target="_blank" rel="noopener">Ir a docs</iswc-button>
+      <iswc-button title="Guardando…" id="loading-btn" loading>Guardando…</iswc-button>
+      <iswc-button title="Deshabilitado" disabled>Deshabilitado</iswc-button>
+      <iswc-button title="Desplegar" with-caret>Desplegar</iswc-button>
+      <iswc-button title="Ir a docs" href="https://example.com" target="_blank" rel="noopener">Ir a docs</iswc-button>
     </div>
     <div class="row" style="margin-top:12px;">
-      <iswc-button id="counter">Clicks: 0</iswc-button>
+      <iswc-button title="Clicks: 0" id="counter">Clicks: 0</iswc-button>
       <pre id="event-log">log: []</pre>
     </div>
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+    await import('../../../dist/cdn/actions/button.min.js?h=h7i2nj');
     await customElements.whenDefined('iswc-button');
 
     const counter = document.getElementById('counter');
@@ -98,5 +98,80 @@
 
     document.documentElement.dataset.buttonReady = '1';
   </script>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

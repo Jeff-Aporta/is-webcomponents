@@ -69,7 +69,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 
   const EXTRA_UPGRADE_PROPS: string[] = ['labels', 'getLabelText'];
 
-  const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const VARIANTS = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
 
   const ICON_FULL = 'mdi:star';
   const ICON_EMPTY = 'mdi:star-outline';
@@ -77,14 +77,6 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
   type LabelFn = (value: number) => string;
 
   class IswcRating extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    size: '--iswc-rating-size',
-    gap: '--iswc-rating-gap',
-    color: { prop: '--iswc-rating-color', onlyColorValues: true },
-    'empty-color': { prop: '--iswc-rating-empty', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-rating-focus', onlyColorValues: true },
-    };
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color']; }

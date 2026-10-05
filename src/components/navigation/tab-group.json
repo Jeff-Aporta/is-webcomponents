@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-tab-group",
   "category": "navigation",
-  "title": "<iswc-tab-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-tab-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-tab-group / iswc-tab / iswc-tab-panel de InSoft.",
   "storageKey": "docs-iswc-tab-group",
   "sections": [
@@ -36,6 +36,7 @@
               "prop": "attr:placement",
               "label": "placement",
               "options": [
+                "top",
                 "bottom",
                 "start",
                 "end"
@@ -45,10 +46,6 @@
           "equivNote": "activation define teclado; closable añade cierre de pestaña.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-tab-group: activation\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"activation=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"auto → flechas cambian\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"manual → Space/Enter\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"closable?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"emite close\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"auto\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"manual\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-tab-group active=\"general\">\n  <iswc-tab slot=\"nav\" panel=\"general\">General</iswc-tab>\n  <iswc-tab-panel name=\"general\">Contenido del panel.</iswc-tab-panel>\n  …\n</iswc-tab-group>"
         }
       ]
     },
@@ -82,10 +79,6 @@
         {
           "kind": "demo",
           "html": "<iswc-tab-group active=\"x1\" activation=\"manual\">\r\n            <iswc-tab slot=\"nav\" panel=\"x1\">Uno</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"x2\">Dos</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"x3\">Tres</iswc-tab>\r\n            <iswc-tab-panel name=\"x1\">Panel Uno.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"x2\">Panel Dos.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"x3\">Panel Tres.</iswc-tab-panel>\r\n          </iswc-tab-group>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-tab-group activation=\"manual\">…</iswc-tab-group>"
         }
       ]
     },
@@ -97,10 +90,6 @@
         {
           "kind": "demo",
           "html": "<iswc-tab-group id=\"closable\" active=\"t1\">\r\n            <iswc-tab slot=\"nav\" panel=\"t1\">General</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"t2\" closable>Cerrable</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"t3\">Avanzado</iswc-tab>\r\n            <iswc-tab-panel name=\"t1\">General.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"t2\">Cerrable.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"t3\">Avanzado.</iswc-tab-panel>\r\n          </iswc-tab-group>\r\n          <iswc-button id=\"restoreTab\" disabled>Restaurar tab</iswc-button>"
-        },
-        {
-          "kind": "code",
-          "code": "group.addEventListener('iswc-tab-close', (e) => {\n  const t = e.detail.tab;\n  t.remove();\n  const panel = group.querySelector(\\`iswc-tab-panel[name=\"\\${e.detail.name}\"]\\`);\n  if (panel) panel.remove();\n});"
         }
       ]
     },
@@ -228,5 +217,90 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tabs accesibles con navegación por teclado (←/→), activación automática o\r\n          manual, indicator animado, placements (top/bottom/start/end), scroll horizontal\r\n          automático y soporte para tabs cerrables."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>active</code>",
+            "type": "string",
+            "default": "\"\"",
+            "desc": "Nombre del panel activo."
+          },
+          {
+            "name": "<code>placement</code>",
+            "type": "top | bottom | start | end",
+            "default": "top",
+            "desc": "Posición de los tabs."
+          },
+          {
+            "name": "<code>activation</code>",
+            "type": "auto | manual",
+            "default": "auto",
+            "desc": "Activación por teclado."
+          },
+          {
+            "name": "<code>without-scroll-controls</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Sin botones de scroll horizontal."
+          },
+          {
+            "name": "<code>panel</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Nombre del panel al que apunta."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea la activación."
+          },
+          {
+            "name": "<code>closable</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Muestra el botón de cerrar."
+          },
+          {
+            "name": "<code>name</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Identificador único del panel."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-tab-show</code>",
+            "cuando": "Un panel pasa a activo. <code>detail: { name, panel, tab }</code>."
+          },
+          {
+            "evento": "<code>iswc-tab-hide</code>",
+            "cuando": "Un panel pasa a oculto."
+          },
+          {
+            "evento": "<code>iswc-tab-close</code>",
+            "cuando": "Click en X. <code>detail: { tab, name }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tab-group active=\"general\">\n  <iswc-tab slot=\"nav\" panel=\"general\">General</iswc-tab>\n  <iswc-tab-panel name=\"general\">Contenido del panel.</iswc-tab-panel>\n  …\n</iswc-tab-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

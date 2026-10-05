@@ -16,7 +16,7 @@
   gap: .35rem;
   padding: 2rem 1rem;
   border: 2px dashed var(--iswc-border);
-  border-radius: var(--iswc-radius, 12px);
+  border-radius: var(--iswc-radius);
   background:
     repeating-linear-gradient(135deg,
       color-mix(in srgb, var(--iswc-text) 3%, transparent) 0 6px,
@@ -54,7 +54,7 @@
   padding: .5rem .65rem;
   background: var(--iswc-bg-elev);
   border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius, 8px);
+  border-radius: var(--iswc-radius);
 }
 .thumb {
   width: 2.6rem; height: 2.6rem;
@@ -98,14 +98,14 @@ progress {
   white-space: nowrap;
 }
 /* Color del status según el estado del upload (JS pone la clase en la fila). */
-.status-done    .status { color: var(--iswc-success, #16a34a); }
+.status-done    .status { color: var(--iswc-success); }
 .status-uploading .status { color: var(--iswc-accent); }
-.status-error   .status { color: var(--iswc-danger, #dc2626); }
+.status-error   .status { color: var(--iswc-danger); }
 
 .del {
   flex: none;
   line-height: 0;
   color: var(--iswc-text-soft);
 
-  &:hover { color: var(--iswc-danger, #dc2626); }
+  &:hover { color: var(--iswc-danger); }
 }

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-accordion-group",
   "category": "isp",
-  "title": "<iswc-accordion-group>",
-  "titleHtml": true,
+  "title": "&lt;iswc-accordion-group&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-accordion-group de InSoft.",
   "storageKey": "docs-iswc-accordion-group",
   "sections": [
@@ -22,10 +22,6 @@
               "label": "multiple"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-accordion-group>\n  <iswc-details summary=\"Datos básicos\" open>…</iswc-details>\n  <iswc-details summary=\"Contacto\">…</iswc-details>\n</iswc-accordion-group>"
         }
       ]
     },
@@ -37,10 +33,6 @@
         {
           "kind": "demo",
           "html": "<iswc-accordion-group multiple>\r\n            <iswc-details summary=\"Primero\" open>Contenido uno.</iswc-details>\r\n            <iswc-details summary=\"Segundo\" open>Contenido dos.</iswc-details>\r\n            <iswc-details summary=\"Tercero\">Contenido tres.</iswc-details>\r\n          </iswc-accordion-group>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-accordion-group multiple>…</iswc-accordion-group>"
         }
       ]
     },
@@ -55,5 +47,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Coordina varios <code class=\"code\">&lt;iswc-details&gt;</code>: por defecto solo uno\r\n          queda abierto. No reimplementa el disclosure, solo lo orquesta."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-accordion-group>\n  <iswc-details summary=\"Datos básicos\" open>…</iswc-details>\n  <iswc-details summary=\"Contacto\">…</iswc-details>\n</iswc-accordion-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

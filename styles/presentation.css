@@ -281,10 +281,35 @@ body::-webkit-scrollbar-corner {
 .section .lede {
   color: var(--iswc-text-soft);
   margin: 0 0 28px;
-  max-width: 62ch;
+  max-width: none; /* full width (W41): no envolver en columnas estrechas */
   font-size: 1.02rem;
   line-height: 1.65;
   font-weight: 450;
+}
+
+/* W41: estructura semántica Definición/Default/Valores para ledes.
+   Grid 2 col: dt a la izquierda (etiqueta corta), dd a la derecha (contenido). */
+.section .lede.lede-def {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 18px;
+  align-items: baseline;
+  margin: 0 0 28px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.section .lede.lede-def dt {
+  color: var(--iswc-text-dim);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  padding-top: 1px;
+}
+.section .lede.lede-def dd {
+  margin: 0;
+  color: var(--iswc-text-soft);
 }
 
 .section h3 {
@@ -306,7 +331,7 @@ body::-webkit-scrollbar-corner {
 .section p {
   margin: 0 0 12px;
   color: var(--iswc-text-soft);
-  max-width: 68ch;
+  max-width: none; /* homogenizar con .lede: todo el ancho útil */
 }
 
 /* --- Demo cards ----------------------------------------------------- */

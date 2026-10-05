@@ -1,139 +1,43 @@
 <!DOCTYPE html>
-<html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
+<html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IS Web Components</title>
-  <meta name="description" content="Galería de Web Components ContaPyme / InSoft.">
-  <meta name="author" content="Jeff-Aporta">
+  <title>ISWC</title>
+  <meta name="description" content="Galería de Web Components open source (iswc-*).">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://jeff-aporta.github.io/is-webcomponents/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="IS Web Components">
+  <meta property="og:site_name" content="ISWC">
   <meta property="og:locale" content="es_ES">
   <meta property="og:url" content="https://jeff-aporta.github.io/is-webcomponents/">
-  <meta property="og:title" content="IS Web Components">
-  <meta property="og:description" content="Galería de Web Components ContaPyme / InSoft.">
+  <meta property="og:title" content="ISWC">
+  <meta property="og:description" content="Galería de Web Components open source (iswc-*).">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "IS Web Components",
+    "name": "ISWC",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Cualquiera con navegador moderno",
     "url": "https://jeff-aporta.github.io/is-webcomponents/",
-    "description": "Galería de Web Components vanilla de InSoft (is-*): catálogo, previews y consumo por CDN.",
-    "author": { "@type": "Person", "name": "Jeff-Aporta" },
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    "description": "Galería de Web Components vanilla open source (iswc-*): catálogo, previews y consumo por CDN o local."
   }
   </script>
-  <script>
-    /* Locale por defecto: sistema → es (misma regla que resolveLocale del kit). */
-    (function () {
-      var sys = (navigator.language || (navigator.languages && navigator.languages[0]) || '').trim();
-      document.documentElement.lang = sys || 'es';
-    })();
-  </script>
-  <!-- CSS estático: evita FOUC. El loader JS NO debe ser el primer paint de estilos. -->
-  <style>
-    /* Crítico mínimo antes de que lleguen los <link> (Live Server lento). */
-    html.theme-dark, html.theme-dark body { background: #0f1520; color: #e7eef8; }
-    html.theme-light, html.theme-light body { background: #f4f7fb; color: #142033; }
-  </style>
-  <!-- Kit: siempre dist/cdn (transpilado). Shell de galería: CSS local. -->
-  <link rel="stylesheet" href="dist/cdn/is-base.min.css?h=gbf6d8">
-  <link rel="stylesheet" href="dist/cdn/palettes.min.css?h=q5fu5e">
-  <link rel="stylesheet" href="src/styles/shell.css">
-  <link rel="stylesheet" href="src/styles/presentation.css">
-  <link rel="stylesheet" href="dist/cdn/preview/preview-component.min.css?h=8ema4c">
-  <style>
-    /* Chrome del shell: no mostrar tags crudos mientras upgradan. */
-    .shell-bar iswc-button:not(:defined),
-    .shell-bar iswc-icon:not(:defined),
-    .shell-bar iswc-theme-toggle:not(:defined),
-    .shell-bar iswc-palette-selector:not(:defined) {
-      visibility: hidden;
-    }
-  </style>
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
-  <script src="scripts/preview-boot.js"></script>
-  <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=umjnkm';
-    // Galería local: self (dist/cdn) primero; espejos CDN como fallback.
-    L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
-
-    // Shell mínimo (tags puntuales). Evita:
-    //  - loadCSS* vía JS → FOUC blanco (CSS ya está en <link>)
-    //  - await load('all') → 6–10s de tags crudos
-    //  - await page modules (cdn-panel/md-editor) en el path crítico
-    // preview-component NO está en el catálogo → dist/cdn directo (no src/).
-    try {
-      await Promise.all([
-        L.load(
-          'iswc-split-panel',
-          'iswc-main',
-          'iswc-drawer',
-          'iswc-demo',
-          'iswc-scrollspy',
-          'iswc-button',
-          'iswc-icon',
-          'iswc-theme-toggle',
-          'iswc-palette-selector',
-          'iswc-code',
-        ),
-        import('./dist/cdn/preview/preview-component.min.js?h=h1uuun'),
-      ]);
-      document.documentElement.dataset.kitShell = '1';
-      window.dispatchEvent(new Event('iswc-gallery-shell-ready'));
-    } catch (err) {
-      console.error('[gallery] shell boot', err);
-    }
-
-    // Chrome de docs + categorías útiles + resto del kit: no bloquean paint.
-    // API por ALIASES (retrocompat ante renames/rutas): pasamos nombres
-    // estables y el loader los resuelve internamente a los bundles desplegables.
-    // Si el path cambia en una versión futura, basta actualizar el alias-table
-    // del loader; los consumidores siguen funcionando.
-    L.loadPageModules([
-      'highlight-pre',
-      'demo-code',
-      'docs-chrome',
-      'cdn-panel',
-      'view-sources',
-      'demo-file-meta',
-    ]).catch((err) => console.warn('[gallery] page modules', err));
-  </script>
+  <script type="module" src="./dist/cdn/preview/doc-demo-host.min.js"></script>
+  <script type="module" src="./dist/gallery-app.min.js" defer></script>
 </head>
 <body>
-  <header class="shell-bar">
-    <iswc-button class="shell-menu-btn" id="navToggle" color="neutral" variant="plain" pill type="button"
-            aria-expanded="false" aria-controls="navDrawer"
-            aria-label="Abrir el catálogo de componentes" title="Catálogo de componentes" hidden>
-      <iswc-icon slot="start" icon="mdi:menu"></iswc-icon>
-    </iswc-button>
-
-    <iswc-palette-selector id="brandPalette" scope="root" storage-key="iswc-palette" aria-label="Elegir paleta"></iswc-palette-selector>
-
-    <iswc-button class="shell-icon-btn" id="fullscreenBtn" color="neutral" variant="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
-      <iswc-icon slot="start" icon="mdi:open-in-new"></iswc-icon>
-    </iswc-button>
-
-    <iswc-theme-toggle id="themeToggle" scope="root" dark="true"></iswc-theme-toggle>
-  </header>
-
-  <iswc-split-panel id="mainSplit" class="main-split" orientation="horizontal" position-in-pixels="200" primary="start" storage-key="gallery-nav">
-    <nav class="shell-nav" slot="start" id="shellNav" aria-label="Componentes"></nav>
-    <div class="preview-stage" slot="end">
-      <iswc-preview-component class="preview-host" id="previewHost" hidden></iswc-preview-component>
-      <iframe class="preview-frame" id="previewFrame" title="Vista del componente"></iframe>
-    </div>
-  </iswc-split-panel>
-
-  <!-- En pantallas pequeñas el nav se muda aquí (ver syncNavLayout). -->
-  <iswc-drawer id="navDrawer" class="shell-nav-drawer" placement="start" light-dismiss
-             label="Componentes"></iswc-drawer>
-
-  <!-- Gallery SPA: dist/gallery-app.min.js (from src/gallery/app.ts). -->
-  <script type="module" src="./dist/gallery-app.min.js?h=gnwpq1"></script>
+  <iswc-doc-demo
+    brand="ISWC"
+    brand-icon="mdi:apps-box"
+    brand-href="./"
+    local
+    dev
+    sheets-cache="iswc-gallery-sheets"
+    storage-key-nav="gallery-nav"
+    palette-storage-key="iswc-palette"
+  ></iswc-doc-demo>
 </body>
 </html>

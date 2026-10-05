@@ -4,7 +4,7 @@ tags:
   - iswc-popover
 category: helpers
 status: public
-source: ./popover.js
+source: ./popover.ts
 style: ./popover.css
 preview: ./popover.json
 ---
@@ -85,12 +85,33 @@ import './popover.js';
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-after-show` | Emitido tras finalizar la animación de apertura. |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+| `iswc-after-hide` | Emitido tras finalizar la animación de cierre. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
 | `iswc-show` | no | sí | sí | sí |
 | `iswc-after-show` | no | sí | sí | sí |
 | `iswc-hide` | no | sí | sí | sí |
 | `iswc-after-hide` | no | sí | sí | no |
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-popover');
+el.addEventListener('iswc-show', (e) => {
+  console.log('iswc-show', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 
@@ -109,10 +130,15 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `popup` | Personalizable con `::part(popup)`. |
 | `dialog` | Personalizable con `::part(dialog)`. |
 | `body` | Personalizable con `::part(body)`. |
+| `popup__arrow` | Flecha del popover. |
+| `popup__hover-bridge` | Puente invisible que mantiene el hover entre trigger y popup. |
+| `popup__popup` | Panel flotante interno del popover. |
 
 ### Custom states
 
-No expone.
+| Estado | Uso |
+| --- | --- |
+| `:state(open)` | El popover está visible; sincronizado con `aria-expanded` en el ancla. |
 
 ### CSS custom properties
 
@@ -200,7 +226,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 
 ## Fuentes
 
-- [JavaScript](./popover.js)
+- [JavaScript](./popover.ts)
 - [CSS](./popover.css)
-- [Índice de categoría](./LLM.md)
+- [Índice de categoría](../../specs/componentes.md)
 - [Preview](./popover.json)

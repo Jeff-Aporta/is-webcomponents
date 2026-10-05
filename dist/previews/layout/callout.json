@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-callout",
   "category": "layout",
-  "title": "<iswc-callout>",
-  "titleHtml": true,
+  "title": "&lt;iswc-callout&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-callout de InSoft.",
   "storageKey": "docs-iswc-callout",
   "sections": [
@@ -16,38 +16,34 @@
           "kind": "demo",
           "html": "<span class=\"demo-label\">caso mínimo</span>\r\n          <iswc-callout>Esto es un callout estándar. Puedes personalizar su contenido e icono.</iswc-callout>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:color",
-                "label": "color",
-                "options": [
-                  "brand",
-                  "neutral",
-                  "success",
-                  "warning",
-                  "danger"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "accent",
-                  "filled-outlined",
-                  "filled",
-                  "outlined",
-                  "plain"
-                ]
-              }
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "color",
+              "options": [
+                "brand",
+                "neutral",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "accent",
+                "filled",
+                "outlined",
+                "filled-outlined",
+                "plain"
+              ]
+            }
           ],
           "equivNote": "color sugiere icono; slot o icon vacío lo anulan.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-callout: icono\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"slot icon?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"override slot\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"icon=\\\"\\\"?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"sin icono\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"default por color\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-callout>Esto es un callout estándar.</iswc-callout>"
         }
       ]
     },
@@ -59,10 +55,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-stack\">\n  <iswc-callout color=\"brand\">Hay un nuevo tema disponible. Prueba desde Configuración cuando quieras.</iswc-callout>\n  <iswc-callout color=\"neutral\">Los horarios se muestran en tu zona horaria local.</iswc-callout>\n  <iswc-callout color=\"success\">Tus cambios se han guardado. Puedes cerrar esta pestaña con seguridad.</iswc-callout>\n  <iswc-callout color=\"warning\">Tu sesión está a punto de expirar. Guarda tu trabajo.</iswc-callout>\n  <iswc-callout color=\"danger\">Esta acción no se puede deshacer. Eliminará el proyecto para todos.</iswc-callout>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-callout color=\"success\">…</iswc-callout>\n<iswc-callout color=\"danger\">…</iswc-callout>"
         }
       ]
     },
@@ -74,10 +66,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-stack\">\n  <iswc-callout color=\"brand\" variant=\"accent\">Esta variante <strong>accent</strong> capta la atención de inmediato.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"filled-outlined\">Fondo + borde, el más habitual.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"filled\">Solo fondo, sin borde.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"outlined\">Solo borde, fondo transparente.</iswc-callout>\n  <iswc-callout color=\"brand\" variant=\"plain\">Sin fondo ni borde, solo texto e icono.</iswc-callout>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-callout variant=\"accent\">…</iswc-callout>"
         }
       ]
     },
@@ -89,10 +77,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-stack\">\n  <iswc-callout style=\"font-size:0.8em\">0.8em · callout mínimo.</iswc-callout>\n  <iswc-callout style=\"font-size:0.9em\">0.9em · un poco más de énfasis.</iswc-callout>\n  <iswc-callout>1em · hereda el tamaño del contexto.</iswc-callout>\n  <iswc-callout style=\"font-size:1.15em\">1.15em · más énfasis.</iswc-callout>\n  <iswc-callout style=\"font-size:1.3em\">1.3em · énfasis máximo.</iswc-callout>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-callout style=\"font-size:1.15em\">…</iswc-callout>"
         }
       ]
     },
@@ -104,10 +88,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-stack\">\n  <iswc-callout color=\"warning\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:timer-sand\" aria-hidden=\"true\"></iswc-icon>\n    Tiempo limitado: queda 1 día para enviar la solicitud.\n  </iswc-callout>\n  <iswc-callout color=\"success\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:rocket-launch\" aria-hidden=\"true\"></iswc-icon>\n    Lanzamiento completado. Métricas disponibles.\n  </iswc-callout>\n  <iswc-callout color=\"danger\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:shield-alert\" aria-hidden=\"true\"></iswc-icon>\n    Bloqueo de seguridad: demasiados intentos.\n  </iswc-callout>\n  <iswc-callout color=\"brand\">\n    <iswc-icon slot=\"icon\" icon=\"mdi:bullhorn\" aria-hidden=\"true\"></iswc-icon>\n    Anuncio global: nueva versión disponible.\n  </iswc-callout>\n</div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-callout color=\"warning\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:timer-sand\"></iswc-icon>\n  Tiempo limitado…\n</iswc-callout>"
         }
       ]
     },
@@ -119,10 +99,6 @@
         {
           "kind": "demo",
           "html": "<iswc-callout color=\"neutral\" icon=\"\">Todas las horas se muestran en tu zona horaria local.</iswc-callout>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-callout icon=\"\">Texto plano.</iswc-callout>"
         }
       ]
     },
@@ -145,6 +121,28 @@
         {
           "kind": "demo",
           "html": "<iswc-callout color=\"success\" style=\"--callout-bg: #d3f9d8; --callout-border: #2f9e44;\">\r\n            CSS parts en uso: el fondo y el borde se redefinen vía custom properties.\r\n          </iswc-callout>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-callout\">\n  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>\n  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-callout\">\n  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>\n  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -272,5 +270,96 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y\r\n          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,\r\n          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>\r\n          o slot <code class=\"code\">icon</code>)."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>variant</code>",
+            "type": "brand · neutral · success · warning · danger",
+            "default": "neutral",
+            "desc": "Tono. Reflected."
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "accent · filled · outlined · filled-outlined · plain",
+            "default": "filled-outlined",
+            "desc": "Tratamiento visual. Reflected."
+          },
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "(según variant)",
+            "desc": "Iconify id para el icono por defecto. Vacío = sin icono."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-l, 1rem)</code>",
+            "desc": "Padding/gap interno."
+          },
+          {
+            "name": "<code>--callout-bg</code>",
+            "default": "var de variant",
+            "desc": "Fondo computado."
+          },
+          {
+            "name": "<code>--callout-border</code>",
+            "default": "var de variant",
+            "desc": "Color del borde."
+          },
+          {
+            "name": "<code>--callout-text</code>",
+            "default": "var de variant",
+            "desc": "Color del texto."
+          },
+          {
+            "name": "<code>--callout-accent</code>",
+            "default": "var de variant",
+            "desc": "Color del icono."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Mensaje principal."
+          },
+          {
+            "slot": "<code>icon</code>",
+            "desc": "Icono propio (iswc-icon o img)."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(base)</code>",
+            "desc": "Contenedor raíz."
+          },
+          {
+            "part": "<code>::part(icon)</code>",
+            "desc": "Wrapper del icono."
+          },
+          {
+            "part": "<code>::part(message)</code>",
+            "desc": "Wrapper del mensaje."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-callout>Esto es un callout estándar.</iswc-callout>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "props",
+      "states"
+    ]
+  }
 }

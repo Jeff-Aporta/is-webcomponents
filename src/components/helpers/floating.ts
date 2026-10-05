@@ -65,13 +65,7 @@ import {
     'modal', 'label', 'labelledby',
   ];
 
-  class IswcFloating extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'arrow-size': '--iswc-floating-arrow-size',
-    'show-duration': '--iswc-floating-show-duration',
-    'hide-duration': '--iswc-floating-hide-duration',
-    };
+  class IswcFloating extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'arrow-size', 'show-duration', 'hide-duration']; }
 

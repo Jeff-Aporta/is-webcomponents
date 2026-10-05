@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-relative-time",
   "category": "helpers",
-  "title": "<iswc-relative-time>",
-  "titleHtml": true,
+  "title": "&lt;iswc-relative-time&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-relative-time",
   "hasBehavior": true,
   "sections": [
@@ -60,11 +60,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">long</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-86400\" format=\"long\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">short</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-3600\" format=\"short\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">narrow</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"-120\" format=\"narrow\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">numeric=always</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"0\" numeric=\"always\"></iswc-relative-time>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">en 3 días</code>\n              <iswc-relative-time class=\"format-grid__value\" data-rt-offset=\"259200\" format=\"long\"></iswc-relative-time>\n            </div>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-relative-time date=\"2026-07-30T10:00:00\" format=\"short\" sync></iswc-relative-time>\n<iswc-relative-time date=\"…\" locale=\"en\" numeric=\"always\"></iswc-relative-time>",
-          "lang": "html"
         }
       ]
     },
@@ -91,11 +86,6 @@
         {
           "kind": "demo",
           "html": "<p style=\"margin:0\">\n            <iswc-format type=\"relative\" data-rt-offset=\"-7200\" style=\"short\"></iswc-format>\n          </p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-format type=\"relative\" date=\"…\" style=\"short\" locale=\"en\"></iswc-format>",
-          "lang": "html"
         }
       ]
     },
@@ -134,5 +124,47 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).\n          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.\n          Alias de <code class=\"code\">&lt;iswc-format type=\"relative\"&gt;</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>date</code>",
+            "default": "ISO o timestamp"
+          },
+          {
+            "name": "<code>format</code>",
+            "default": "long · short · narrow"
+          },
+          {
+            "name": "<code>numeric</code>",
+            "default": "auto · always"
+          },
+          {
+            "name": "<code>locale</code>",
+            "default": "<code>html lang</code> (sistema) → <code>es</code>"
+          },
+          {
+            "name": "<code>sync</code>",
+            "default": "actualiza cada ~30s"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>\n          <p style=\"margin:0;font-size:1.15rem\">Actualizado <iswc-relative-time id=\"live\" sync></iswc-relative-time></p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

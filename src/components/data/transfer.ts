@@ -75,13 +75,9 @@ import { ElementBase } from '../../core/element-base.js';
 
   const TRANSFER_OBSERVED = ['source-title', 'target-title', 'searchable', 'without-buttons', 'without-headings', 'max-target'];
 
-  class IswcTransfer extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'row-height': '--iswc-transfer-row-height',
-    };
+  class IswcTransfer extends ElementBase {
 
-    static get observedAttributes(): string[] { return [...TRANSFER_OBSERVED, ...IswcTransfer.styleAttrNames]; }
+    static get observedAttributes(): string[] { return [...TRANSFER_OBSERVED]; }
     #panelSource!: HTMLElement;
     #panelTarget!: HTMLElement;
     #searchSource!: HTMLInputElement;

@@ -60,7 +60,7 @@
   &.se { inset-block-end:   -6px;    inset-inline-end:   -6px;  cursor: nwse-resize; }
 
   /* F0.3 g12 [a11y/focus]: outline solo con teclado */
-  &:focus-visible { outline: 2px solid var(--iswc-text, #111); outline-offset: 2px; }
+  &:focus-visible { outline: 2px solid var(--iswc-text); outline-offset: 2px; }
 }
 
 /* F0.3 g12 [media/loading]: overlay mientras aria-busy=true */
@@ -71,7 +71,7 @@
 
 /* F0.3 g12 [media/error-state]: pista visual cuando la imagen falla */
 :host([data-error]) .viewport {
-  outline: 1px dashed var(--iswc-color-danger, #e03131);
+  outline: 1px dashed var(--iswc-color-danger);
   outline-offset: -1px;
 }
 
@@ -86,7 +86,7 @@
   font: inherit;
   padding: .3rem .6rem;
   border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius, 6px);
+  border-radius: var(--iswc-radius);
   background: var(--iswc-bg-soft);
   color: inherit;
   cursor: pointer;

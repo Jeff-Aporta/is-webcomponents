@@ -20,7 +20,7 @@
 :host {
   --iswc-heading-color: var(--iswc-accent, var(--iswc-color-brand, var(--iswc-text)));
   --iswc-heading-mix: 15%;
-  --iswc-heading-mix-with: var(--iswc-text, currentColor);
+  --iswc-heading-mix-with: var(--iswc-text);
   --iswc-heading-size: 2em;
   display: block;
   min-inline-size: 0;
@@ -54,6 +54,7 @@
 /* Semánticos → tokens del tema. */
 :host([color="brand"])   { --iswc-heading-color: var(--iswc-brand-text,   var(--iswc-accent,    var(--iswc-color-brand,   var(--iswc-text)))); }
 :host([color="neutral"]) { --iswc-heading-color: var(--iswc-text-soft,    var(--iswc-text)); }
+:host([color="text"])     { --iswc-heading-color: var(--iswc-text); }
 :host([color="info"])    { --iswc-heading-color: var(--iswc-info-text,    var(--iswc-color-info,    var(--iswc-text))); }
 :host([color="success"]) { --iswc-heading-color: var(--iswc-success-text, var(--iswc-color-success, var(--iswc-text))); }
 :host([color="warning"]) { --iswc-heading-color: var(--iswc-warning-text, var(--iswc-color-warning, var(--iswc-text))); }

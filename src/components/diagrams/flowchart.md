@@ -1,48 +1,48 @@
----
+﻿---
 tag: iswc-flowchart
 tags:
   - iswc-flowchart
 category: diagrams
 status: public
-source: ./flowchart.js
+source: ./flowchart.ts
 style: ./flowchart.css
 preview: ./flowchart.json
 ---
 # `<iswc-flowchart>`
 
-## Propósito
+## PropÃ³sito
 
-Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el
+Diagrama de flujo en SVG, sin Mermaid. TÃº declaras nodos y aristas; el
 componente decide las capas, reduce los cruces y rutea las flechas
 rodeando las cajas.
 
-Este módulo registra `<iswc-flowchart>`.
+Este mÃ³dulo registra `<iswc-flowchart>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No inventar schemas ni usar specs/layout como custom elements.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './flowchart.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-flowchart open-on-click animation="flow">
   <script type="application/json">
-    { "flowchart": { "direction": "TB", "nodes": […], "edges": […] } }
+    { "flowchart": { "direction": "TB", "nodes": [â€¦], "edges": [â€¦] } }
   </script>
 </iswc-flowchart>
 ```
 
-`animation="flow"` dibuja una arista dashed brand (con transparencia) detrás de cada arista continua; los dash se desplazan en el sentido del flujo. Ausente = sin animación. Tokens futuros se suman con espacios (`animation="flow …"`).
+`animation="flow"` dibuja una arista dashed brand (con transparencia) detrÃ¡s de cada arista continua; los dash se desplazan en el sentido del flujo. Ausente = sin animaciÃ³n. Tokens futuros se suman con espacios (`animation="flow â€¦"`).
 
 ## API
 
@@ -53,16 +53,16 @@ import './flowchart.js';
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
 | `color` | `inline` \| `viewer` | Modo visor vs embebido. |
-| `mode` | `read` \| `edit` | Edición de layout (drag). |
+| `mode` | `read` \| `edit` | EdiciÃ³n de layout (drag). |
 | `open-on-click` | boolean | Clic abre `<iswc-diagram-lightbox>`. |
-| `animation` | tokens (`flow`, …) | Efectos opcionales (espacio-separados). Default: off. |
+| `animation` | tokens (`flow`, â€¦) | Efectos opcionales (espacio-separados). Default: off. |
 | `persist` / `storage-key` | string | Persistencia de overrides en edit. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| `animation` | lectura/escritura | Tokens (`flow`, …). Vacío = off. |
+| `animation` | lectura/escritura | Tokens (`flow`, â€¦). VacÃ­o = off. |
 | `mode` | lectura/escritura | Declarada por clase. |
 | `overrides` | lectura/escritura | Declarada por clase. |
 | `isViewer` | solo lectura | Declarada por clase. |
@@ -80,20 +80,41 @@ import './flowchart.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-turtle-state` | sí | sí | sí | no |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-toggle-group` | sí | sí | sí | sí |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-flowchart');
+el.addEventListener('iswc-turtle-state', (e) => {
+  console.log('iswc-turtle-state', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -111,20 +132,20 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
-> Configuración por JSON, igual que <iswc-sequence-diagram>:
+> <iswc-flowchart> â€” diagrama de flujo en SVG, sin Mermaid.
+> ConfiguraciÃ³n por JSON, igual que <iswc-sequence-diagram>:
 >   <iswc-flowchart>
 >     <script type="application/json">
 >       { "flowchart": { "direction": "TB", "nodes": [...], "edges": [...] } }
@@ -147,11 +168,11 @@ Documentación de cabecera preservada desde fuente:
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 - [`../_shared/diagram-edit.js`](../_shared/diagram-edit.js)
 
-Tags del módulo: `<iswc-flowchart>`.
+Tags del mÃ³dulo: `<iswc-flowchart>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -161,7 +182,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -169,17 +190,17 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./flowchart.js)
+- [JavaScript](./flowchart.ts)
 - [CSS](./flowchart.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./flowchart.json)
 
 ## App API
@@ -187,4 +208,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 Visor: `demos/diagramas/app/view.html?kind=flowchart&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=flowchart&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.

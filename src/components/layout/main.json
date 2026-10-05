@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-main",
   "category": "layout",
-  "title": "<iswc-main>",
-  "titleHtml": true,
+  "title": "&lt;iswc-main&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-main",
   "hasBehavior": true,
   "sections": [
@@ -81,5 +81,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Contenedor scrollable equivalente a <code class=\"code\">&lt;main&gt;</code>.\r\n          La persistencia de scroll es <strong>opt-in estricta</strong>: requiere\r\n          <code class=\"code\">remember-scroll</code> y <code class=\"code\">storage-key</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>remember-scroll</code>",
+            "desc": "boolean — opt-in (default off)"
+          },
+          {
+            "metodo": "<code>storage-key</code>",
+            "desc": "id único; obligatorio si remember-scroll"
+          },
+          {
+            "metodo": "<code>scroll-ttl</code>",
+            "desc": "ms; default <code>3600000</code> (1h)"
+          },
+          {
+            "metodo": "<code>scrollToTop()</code>",
+            "desc": "sube al inicio"
+          },
+          {
+            "metodo": "<code>saveScroll()</code> <code>restoreScroll()</code>",
+            "desc": "API manual"
+          },
+          {
+            "metodo": "<code>clearRememberedScroll()</code>",
+            "desc": "invalida la entrada guardada"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-main class=\"main\" remember-scroll storage-key=\"docs-mi-vista\">\n  …\n</iswc-main>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

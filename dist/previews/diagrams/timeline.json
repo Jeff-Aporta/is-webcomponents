@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-timeline",
   "category": "diagrams",
-  "title": "<iswc-timeline>",
-  "titleHtml": true,
+  "title": "&lt;iswc-timeline&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-timeline",
   "sections": [
     {
@@ -145,5 +145,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Línea de tiempo de hitos en SVG, sin Mermaid. Declaras eventos con\r\n          fecha; el componente los reparte a lo largo de un eje y separa los\r\n          que caen demasiado cerca en el tiempo para que no se encimen."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-timeline open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"timeline\": {\r\n                  \"title\": \"Hitos 2026\",\r\n                  \"orientation\": \"horizontal\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Producto\", \"hue\": 199 },\r\n                    { \"id\": \"g2\", \"name\": \"Cumplimiento\", \"hue\": 38 }\r\n                  ],\r\n                  \"events\": [\r\n                    { \"id\": \"e1\", \"date\": \"2026-01-15\", \"label\": \"Kickoff\", \"group\": \"g1\" },\r\n                    { \"id\": \"e2\", \"date\": \"2026-03-01\", \"label\": \"Lanzamiento beta\", \"group\": \"g1\", \"desc\": \"Primera versión abierta a un grupo piloto de contadores.\" },\r\n                    { \"id\": \"e3\", \"date\": \"2026-03-04\", \"label\": \"Hotfix\", \"group\": \"g1\" },\r\n                    { \"id\": \"e4\", \"date\": \"2026-06-01\", \"label\": \"Cierre fiscal\", \"group\": \"g2\" },\r\n                    { \"id\": \"e5\", \"date\": \"2026-09-15\", \"label\": \"Renovación DIAN\", \"group\": \"g2\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-timeline>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

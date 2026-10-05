@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-video-playlist",
   "category": "media",
-  "title": "<iswc-video-playlist>",
-  "titleHtml": true,
+  "title": "&lt;iswc-video-playlist&gt;",
+  "titleHtml": false,
   "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }",
   "storageKey": "docs-iswc-video-playlist",
   "hasBehavior": true,
@@ -27,15 +27,12 @@
               "prop": "attr:placement",
               "label": "placement",
               "options": [
-                "bottom",
-                "right"
+                "left",
+                "right",
+                "bottom"
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-video-playlist autoplay-next placement=\"bottom\">\n  <iswc-video title=\"Big Buck Bunny\" channel=\"Blender\" poster=\"…\" src=\"01.mp4\"></iswc-video>\n  <iswc-video title=\"Sintel\" poster=\"…\" src=\"02.mp4\"></iswc-video>\n  <iswc-video title=\"Elephants Dream\" poster=\"…\" src=\"03.mp4\"></iswc-video>\n</iswc-video-playlist>"
         }
       ]
     },
@@ -47,10 +44,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"cluster\" style=\"margin-bottom:0.75rem;flex-shrink:0\">\r\n            <iswc-button id=\"placeLeft\" variant=\"outlined\">left</iswc-button>\r\n            <iswc-button id=\"placeRight\" variant=\"outlined\">right</iswc-button>\r\n            <iswc-button id=\"placeBottom\" variant=\"filled\">bottom</iswc-button>\r\n          </div>\r\n          <iswc-video-playlist id=\"plPlace\" placement=\"bottom\">\r\n            <iswc-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-video-playlist placement=\"right\">…</iswc-video-playlist>"
         }
       ]
     },
@@ -62,10 +55,6 @@
         {
           "kind": "demo",
           "html": "<iswc-video-playlist id=\"plTools\" placement=\"bottom\">\r\n            <button slot=\"tools-left\" class=\"vp-tool vp-custom\" aria-label=\"Aleatorio\">\r\n              <iswc-icon icon=\"mdi:shuffle\"></iswc-icon>\r\n            </button>\r\n            <button slot=\"tools-left\" class=\"vp-tool vp-custom\" aria-label=\"Bucle\">\r\n              <iswc-icon icon=\"mdi:repeat\"></iswc-icon>\r\n            </button>\r\n            <button slot=\"tools-right\" class=\"vp-tool vp-custom\" aria-label=\"Subtítulos\">\r\n              <iswc-icon icon=\"mdi:closed-caption\"></iswc-icon>\r\n            </button>\r\n            <button slot=\"tools-right\" class=\"vp-tool vp-custom\" aria-label=\"Pantalla completa\">\r\n              <iswc-icon icon=\"mdi:fullscreen\"></iswc-icon>\r\n            </button>\r\n            <iswc-video\r\n              title=\"Big Buck Bunny\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/01-big-buck-bunny.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            ></iswc-video>\r\n            <iswc-video\r\n              title=\"Sintel\"\r\n              channel=\"Blender Open Movies\"\r\n              poster=\"{assets}playlist/02-sintel.jpg\"\r\n              playsinline\r\n              src=\"{assets}playlist/02-sintel.mp4\"\r\n            ></iswc-video>\r\n          </iswc-video-playlist>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-video-playlist no-default-tools>\n  <button slot=\"tools-left\"><iswc-icon icon=\"mdi:shuffle\"></iswc-icon></button>\n  <button slot=\"tools-right\"><iswc-icon icon=\"mdi:fullscreen\"></iswc-icon></button>\n  <iswc-video …></iswc-video>\n</iswc-video-playlist>"
         }
       ]
     },
@@ -83,7 +72,7 @@
     {
       "id": "config",
       "title": "Configuración",
-      "titleHtml": true,
+      "titleHtml": false,
       "lede": "La esquina superior derecha de la cabecera acepta un slot\r\n          <code class=\"code\">config</code> para colgar un botón / menú opcional.\r\n          Si no se usa, esa zona queda vacía.",
       "blocks": [
         {
@@ -154,5 +143,63 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Reproductor de playlist con look YouTube: cabecera con título y canal,\r\n          barra inferior overlay con play / seek / vol, lista colapsable debajo.\r\n          Las herramientas adicionales (prev / next / autoplay) se proyectan\r\n          automáticamente en los slots <code class=\"code\">tools-left</code>\r\n          y <code class=\"code\">tools-right</code> del reproductor."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>placement</code>",
+            "desc": "<code>left</code> | <code>right</code> | <code>bottom</code> (default); <code>top</code> queda como <code>bottom</code>."
+          },
+          {
+            "metodo": "<code>autoplay-next</code>",
+            "desc": "boolean — al terminar, reproduce el siguiente (en el último se detiene)"
+          },
+          {
+            "metodo": "<code>accordion</code>",
+            "desc": "<code>auto</code> (default) | <code>open</code> | <code>closed</code>"
+          },
+          {
+            "metodo": "<code>channel</code>",
+            "desc": "caption global (estilo canal YouTube) bajo el título del clip activo"
+          },
+          {
+            "metodo": "<code>no-default-tools</code>",
+            "desc": "desactiva los botones prev / next / autoplay por defecto"
+          },
+          {
+            "metodo": "<code>goTo(i)</code> <code>next()</code> <code>previous()</code>",
+            "desc": "navegación (también botones en el player)"
+          },
+          {
+            "metodo": "<code>iswc-video-change</code>",
+            "desc": "<code>{ previousIndex, currentIndex, video }</code>"
+          },
+          {
+            "metodo": "slots",
+            "desc": "<code>tools-left</code>, <code>tools-right</code> (botones en la barra del reproductor) · <code>config</code> (esquina sup. derecha de la cabecera)"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>video-playlist</code> <code>header</code> <code>title</code> <code>channel</code> <code>player-toolbar</code> <code>tools-left</code> <code>tools-right</code> <code>playlist</code> <code>playlist-item</code> <code>playlist-thumbnail</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-video-playlist autoplay-next placement=\"bottom\">\n  <iswc-video title=\"Big Buck Bunny\" channel=\"Blender\" poster=\"…\" src=\"01.mp4\"></iswc-video>\n  <iswc-video title=\"Sintel\" poster=\"…\" src=\"02.mp4\"></iswc-video>\n  <iswc-video title=\"Elephants Dream\" poster=\"…\" src=\"03.mp4\"></iswc-video>\n</iswc-video-playlist>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

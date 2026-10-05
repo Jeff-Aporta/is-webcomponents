@@ -12,7 +12,7 @@ import { TONE } from '../_shared/tone.js';
  * Modelo equivalente a wa-callout (Web Awesome) / v-alert.
  *
  * Atributos
- *   color     brand | neutral | success | warning | danger
+ *   color     brand | neutral | text | success | warning | danger
  *               (default 'brand', reflected)
  *   variant  accent | filled | outlined | filled-outlined | plain
  *               (default 'filled-outlined', reflected)
@@ -64,14 +64,6 @@ import { TONE } from '../_shared/tone.js';
   };
 
   class IswcCallout extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-callout-bg', onlyColorValues: true },
-    'border-color': { prop: '--iswc-callout-border', onlyColorValues: true },
-    'text-color': { prop: '--iswc-callout-text', onlyColorValues: true },
-    accent: { prop: '--iswc-callout-accent', onlyColorValues: true },
-    spacing: '--iswc-callout-spacing',
-    };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing']; }
 

@@ -30,14 +30,7 @@ import { setStringAttr } from '../_shared/reflect.js';
   const OBSERVED = ['value', 'label', 'indeterminate'];
   const CIRC = 2 * Math.PI * 15.9155;
 
-  class IswcProgressRing extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'track-width': '--iswc-progress-ring-track-width',
-    width: '--iswc-progress-ring-width',
-    'track-color': { prop: '--iswc-progress-ring-track-color', onlyColorValues: true },
-    color: { prop: '--iswc-progress-ring-color', onlyColorValues: true },
-    };
+  class IswcProgressRing extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-width', 'width', 'track-color', 'color']; }
 

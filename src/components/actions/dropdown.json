@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-dropdown",
   "category": "actions",
-  "title": "<iswc-dropdown>",
-  "titleHtml": true,
+  "title": "&lt;iswc-dropdown&gt;",
+  "titleHtml": false,
   "styles": ".cluster { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }\r\n    #log { color: var(--iswc-text-soft); font-size: 0.9em; }",
   "storageKey": "docs-iswc-dropdown",
   "hasBehavior": true,
@@ -11,8 +11,21 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Menú anclado a un trigger. Panel en <code class=\"code\">&lt;dialog&gt;</code> modal\r\n          (top layer) para no quedar debajo de otras secciones. Items:\r\n          <code class=\"code\">iswc-dropdown-item</code>, <code class=\"code\">iswc-divider</code> e iconos.",
+      "lede": "Menú anclado a un trigger. El panel vive en un &lt;dialog&gt; del top layer (no queda debajo de otras secciones).",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Items</code>",
+              "iswc-dropdown-item, iswc-divider e iconos."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<iswc-dropdown id=\"dd\">\r\n            <iswc-button slot=\"trigger\" with-caret>Options</iswc-button>\r\n            <iswc-dropdown-item value=\"edit\">\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:pencil\"></iswc-icon>\r\n              Edit\r\n            </iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"dup\">\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:content-copy\"></iswc-icon>\r\n              Duplicate\r\n            </iswc-dropdown-item>\r\n            <iswc-divider></iswc-divider>\r\n            <iswc-dropdown-item value=\"delete\" color=\"danger\">\r\n              <iswc-icon slot=\"icon\" icon=\"mdi:delete\"></iswc-icon>\r\n              Delete\r\n            </iswc-dropdown-item>\r\n          </iswc-dropdown>\r\n          <p id=\"log\" class=\"lede\">selección: —</p>",
@@ -51,10 +64,6 @@
               "label": "checked"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-dropdown>\n  <iswc-button slot=\"trigger\" with-caret>Options</iswc-button>\n  <iswc-dropdown-item value=\"edit\">Edit</iswc-dropdown-item>\n  <iswc-divider></iswc-divider>\n  <iswc-dropdown-item value=\"delete\" color=\"danger\">Delete</iswc-dropdown-item>\n</iswc-dropdown>"
         }
       ]
     },
@@ -75,6 +84,17 @@
         {
           "kind": "demo",
           "html": "<iswc-dropdown>\r\n            <iswc-button slot=\"trigger\" with-caret>File</iswc-button>\r\n            <iswc-dropdown-item value=\"new\">New</iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"open\">Open</iswc-dropdown-item>\r\n            <iswc-divider></iswc-divider>\r\n            <iswc-dropdown-item>\r\n              Export\r\n              <iswc-dropdown-item slot=\"submenu\" value=\"pdf\">PDF</iswc-dropdown-item>\r\n              <iswc-dropdown-item slot=\"submenu\" value=\"docx\">Word</iswc-dropdown-item>\r\n              <iswc-dropdown-item slot=\"submenu\" value=\"csv\">CSV</iswc-dropdown-item>\r\n            </iswc-dropdown-item>\r\n          </iswc-dropdown>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-dropdown\">\n  <iswc-dropdown>\n    <iswc-button slot=\"trigger\" with-caret>Acciones</iswc-button>\n    <iswc-dropdown-item>Editar</iswc-dropdown-item>\n    <iswc-dropdown-item>Duplicar</iswc-dropdown-item>\n    <iswc-dropdown-item>Eliminar</iswc-dropdown-item>\n  </iswc-dropdown>\n  <iswc-button slot=\"trigger\" with-caret color=\"brand\">Abrir menu</iswc-button>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -117,5 +137,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Menú anclado a un trigger. Panel en <code class=\"code\">&lt;dialog&gt;</code> modal\r\n          (top layer) para no quedar debajo de otras secciones. Items:\r\n          <code class=\"code\">iswc-dropdown-item</code>, <code class=\"code\">iswc-divider</code> e iconos."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "slots",
+            "desc": "<code>trigger</code> + default items"
+          },
+          {
+            "metodo": "panel",
+            "desc": "<code>&lt;dialog showModal&gt;</code> — top layer (no stacking bajo secciones)"
+          },
+          {
+            "metodo": "<code>placement</code>",
+            "desc": "default <code>bottom-start</code>"
+          },
+          {
+            "metodo": "<code>iswc-select</code>",
+            "desc": "detail.item — cancelable para no cerrar"
+          },
+          {
+            "metodo": "item attrs",
+            "desc": "value, type=checkbox, checked, disabled, variant=danger"
+          },
+          {
+            "metodo": "item slots",
+            "desc": "icon, details, submenu"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-dropdown>\n  <iswc-button slot=\"trigger\" with-caret>Options</iswc-button>\n  <iswc-dropdown-item value=\"edit\">Edit</iswc-dropdown-item>\n  <iswc-divider></iswc-divider>\n  <iswc-dropdown-item value=\"delete\" color=\"danger\">Delete</iswc-dropdown-item>\n</iswc-dropdown>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

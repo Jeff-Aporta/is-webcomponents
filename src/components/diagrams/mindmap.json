@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-mindmap",
   "category": "diagrams",
-  "title": "<iswc-mindmap>",
-  "titleHtml": true,
+  "title": "&lt;iswc-mindmap&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-mindmap",
   "sections": [
     {
@@ -149,5 +149,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Mapa mental en SVG, sin Mermaid. Declaras ideas con un `parent`\r\n          opcional y el componente arma el árbol, reparte las ramas y las une\r\n          con curvas suaves coloreadas por rama."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-mindmap open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"mindmap\": {\r\n                  \"title\": \"ContaPyme\",\r\n                  \"layout\": \"radial\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"root\", \"label\": \"ContaPyme\", \"icon\": \"mdi:star\", \"hue\": 210 },\r\n                    { \"id\": \"a\", \"parent\": \"root\", \"label\": \"Contabilidad\", \"hue\": 239 },\r\n                    { \"id\": \"a1\", \"parent\": \"a\", \"label\": \"Plan de cuentas\" },\r\n                    { \"id\": \"a2\", \"parent\": \"a\", \"label\": \"Comprobantes\" },\r\n                    { \"id\": \"a3\", \"parent\": \"a\", \"label\": \"Estados financieros\" },\r\n                    { \"id\": \"b\", \"parent\": \"root\", \"label\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"b1\", \"parent\": \"b\", \"label\": \"Electrónica DIAN\" },\r\n                    { \"id\": \"b2\", \"parent\": \"b\", \"label\": \"Recurrente\" },\r\n                    { \"id\": \"c\", \"parent\": \"root\", \"label\": \"Inventario\", \"hue\": 38 },\r\n                    { \"id\": \"c1\", \"parent\": \"c\", \"label\": \"Bodegas\" },\r\n                    { \"id\": \"c2\", \"parent\": \"c\", \"label\": \"Kardex\" },\r\n                    { \"id\": \"d\", \"parent\": \"root\", \"label\": \"Nómina\", \"hue\": 280 },\r\n                    { \"id\": \"d1\", \"parent\": \"d\", \"label\": \"Liquidación\" },\r\n                    { \"id\": \"d2\", \"parent\": \"d\", \"label\": \"Seguridad social\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-mindmap>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

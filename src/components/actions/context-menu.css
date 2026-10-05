@@ -8,7 +8,7 @@
    --iswc-popover-radius / --iswc-popover-shadow. */
 .panel {
   border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-popover-radius, var(--iswc-radius, 8px));
+  border-radius: var(--iswc-popover-radius, var(--iswc-radius));
   background: var(--iswc-bg-elev);
   color: var(--iswc-text);
   padding: .35rem;
@@ -41,7 +41,7 @@
   align-items: center;
   gap: .55rem;
   padding: .45rem .6rem;
-  border-radius: calc(var(--iswc-radius, 8px) - 3px);
+  border-radius: calc(var(--iswc-radius) - 3px);
   background: transparent;
   border: 0;
   color: inherit;

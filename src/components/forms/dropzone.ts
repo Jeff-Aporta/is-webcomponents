@@ -198,7 +198,7 @@ import '../actions/button.js';
         </div>
         <progress max="100" value="${rec.progress}"></progress>
         <span class="status">${rec.status} ${rec.progress}%</span>
-        <iswc-button type="button" class="del" variant="text" color="neutral" aria-label="Quitar">
+        <iswc-button type="button" class="del" variant="text" color="text" aria-label="Quitar">
           <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
         </iswc-button>
       `;

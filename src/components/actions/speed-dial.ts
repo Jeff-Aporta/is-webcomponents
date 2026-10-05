@@ -55,7 +55,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *   iswc-select  detail: { action }   — cuando se elige una acción
  *
  * Cada <iswc-speed-dial-action> acepta:
- *   icon, label, color (brand|neutral|success|warning|danger), href, disabled
+ *   icon, label, color (brand|neutral|text|success|warning|danger), href, disabled
  *   El clic dispara iswc-select y, si no está disabled ni tiene href, cierra el dial.
  */
 (() => {
@@ -74,14 +74,15 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
   const DEG = Math.PI / 180;
 
   /** Personalización por atributo (ver `core/attrs.ts`). */
-  const STYLE_ATTRS = {
-    radius: '--iswc-speed-dial-radius',
-  };
 
   class IswcSpeedDial extends withStyleAttrs(HTMLElement) {
-    static styleAttrs = STYLE_ATTRS;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, ...Object.keys(STYLE_ATTRS)]; }
+    static get observedAttributes(): string[] {
+      // Phase V5: STYLE_ATTRS removido. El consumer define los tokens vía class
+      // o inline style. Se conserva el nombre como observado por si llega del
+      // HTML antiguo.
+      return [...OBSERVED, 'radius'];
+    }
 
     #mo: MutationObserver | null = null;
     #ro: ResizeObserver | null = null;

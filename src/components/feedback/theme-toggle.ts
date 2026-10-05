@@ -7,9 +7,9 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
  *
  * Compone <iswc-check-icon-button> (noche ↔ sol). Al activarse:
  *   1. Busca el contenedor de tema más cercano:
- *        [container-theme] | .container-theme | .theme-dark | .theme-light | [data-theme]
+ *        [container-theme] | .container-theme | [data-theme]
  *      (fallback: document.documentElement)
- *   2. Alterna theme-dark / theme-light + data-theme en ese contenedor
+ *   2. Alterna data-theme en ese contenedor
  *   3. Refleja `dark` en el host
  *   4. Emite `iswc-theme-change` { detail: { theme, dark, container } }
  *
@@ -20,8 +20,11 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
  */
 
 (() => {
-  const SCOPE =
-    '[container-theme], .container-theme, .theme-dark, .theme-light, [data-theme]';
+  // W51: SCOPE simplificado — solo data-theme. Las clases .theme-dark/.theme-light
+  // se erradicaron en W48 del CSS, asi que mantenerlas en el SCOPE solo añade
+  // ruido y posibles falsos positivos (un nodo con .theme-dark residual haria
+  // match aunque no tuviera data-theme).
+  const SCOPE = '[container-theme], .container-theme, [data-theme]';
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -39,16 +42,12 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
 
   function readTheme(el: HTMLElement): ThemeName {
     if (!el) return 'dark';
-    if (el.classList.contains('theme-light')) return 'light';
-    if (el.classList.contains('theme-dark')) return 'dark';
     const dt = el.getAttribute?.('data-theme') || el.dataset?.theme;
     return dt === 'light' ? 'light' : 'dark';
   }
 
   function applyTheme(el: HTMLElement, theme: ThemeName): void {
     if (!el) return;
-    el.classList.toggle('theme-light', theme === 'light');
-    el.classList.toggle('theme-dark', theme === 'dark');
     if (el.dataset) el.dataset.theme = theme;
     else el.setAttribute('data-theme', theme);
   }
@@ -123,7 +122,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       this.#scopeObs = obs;
       obs.observe(container, {
         attributes: true,
-        attributeFilter: ['class', 'data-theme'],
+        attributeFilter: ['data-theme'],
       });
     }
 
@@ -133,6 +132,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       const container = this.themeContainer;
       this.#applying = true;
       applyTheme(container, next);
+      this.dark = next === 'dark';
       this.#applying = false;
       this.#render();
       emit(this, 'iswc-theme-change', { theme: next, dark: next === 'dark', container });

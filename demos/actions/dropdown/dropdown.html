@@ -31,21 +31,21 @@
   <section>
     <h2>Menú básico (placement=bottom-start)</h2>
     <iswc-dropdown id="d1" label="Acciones">
-      <iswc-button slot="trigger" variant="outlined">Abrir menú</iswc-button>
-      <iswc-dropdown-item value="edit">Editar</iswc-dropdown-item>
-      <iswc-dropdown-item value="duplicate">Duplicar</iswc-dropdown-item>
-      <iswc-dropdown-item value="move">Mover…</iswc-dropdown-item>
-      <iswc-dropdown-item value="delete" color="danger">Eliminar</iswc-dropdown-item>
+      <iswc-button title="Abrir menú" slot="trigger" variant="outlined">Abrir menú</iswc-button>
+      <iswc-dropdown-item title="Editar" value="edit">Editar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Duplicar" value="duplicate">Duplicar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Mover…" value="move">Mover…</iswc-dropdown-item>
+      <iswc-dropdown-item title="Eliminar" value="delete" color="danger">Eliminar</iswc-dropdown-item>
     </iswc-dropdown>
   </section>
 
   <section>
     <h2>Menú con checkbox items</h2>
     <iswc-dropdown id="d2" label="Ver">
-      <iswc-button slot="trigger" variant="ghost">Ver</iswc-button>
-      <iswc-dropdown-item type="checkbox" checked>Mostrar toolbar</iswc-dropdown-item>
-      <iswc-dropdown-item type="checkbox">Mostrar sidebar</iswc-dropdown-item>
-      <iswc-dropdown-item type="checkbox" checked>Mostrar statusbar</iswc-dropdown-item>
+      <iswc-button title="Ver" slot="trigger" variant="ghost">Ver</iswc-button>
+      <iswc-dropdown-item title="Mostrar toolbar" type="checkbox" checked>Mostrar toolbar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Mostrar sidebar" type="checkbox">Mostrar sidebar</iswc-dropdown-item>
+      <iswc-dropdown-item title="Mostrar statusbar" type="checkbox" checked>Mostrar statusbar</iswc-dropdown-item>
     </iswc-dropdown>
   </section>
 
@@ -55,8 +55,8 @@
   </section>
 
   <script type="module">
-    await import('../../../dist/cdn/actions/dropdown.min.js?h=u9x6om');
-    await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
+    await import('../../../dist/cdn/actions/dropdown.min.js?h=irrxcm');
+    await import('../../../dist/cdn/actions/button.min.js?h=h7i2nj');
     await customElements.whenDefined('iswc-dropdown');
 
     const log = document.getElementById('log');
@@ -76,5 +76,80 @@
 
     document.documentElement.dataset.dropdownReady = '1';
   </script>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

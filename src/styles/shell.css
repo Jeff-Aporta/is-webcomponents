@@ -20,6 +20,12 @@ body {
   font: 0.9375rem/1.4 var(--iswc-sans);
 }
 
+/* Light-DOM shell: header/split/drawer entran al grid de body.
+   Sin contents el host crece con el preview y rompe overflow/scroll. */
+iswc-doc-demo {
+  display: contents;
+}
+
 .main-split {
   grid-area: main;
   width: 100%;
@@ -35,7 +41,8 @@ body {
 
 .shell-bar {
   grid-area: header;
-  position: relative;
+  position: sticky;
+  inset-block-start: 0;
   display: flex;
   align-items: center;
   gap: 0.75em;
@@ -50,7 +57,8 @@ body {
   box-shadow:
     0 1px 0 color-mix(in srgb, #fff 5%, transparent) inset,
     0 6px 20px rgb(0 0 0 / 14%);
-  z-index: 1;
+  /* Encima del split/preview: herramientas siempre alcanzables. */
+  z-index: 40;
 
   /* Hilo de marca al pie de la barra: firma discreta, no decoración. */
   &::after {
@@ -64,6 +72,50 @@ body {
       transparent 72%);
     opacity: 0.7;
     pointer-events: none;
+  }
+
+  & .shell-brand {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    padding-block: 0.42em;
+    padding-inline: 0.7em 0.85em;
+    border: 1px solid transparent;
+    border-radius: 0.55em;
+    background: transparent;
+    color: var(--iswc-text);
+    font: inherit;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 120ms ease, border-color 120ms ease,
+                color 120ms ease, filter 120ms ease, transform 120ms ease;
+
+    &:hover {
+      background: var(--iswc-control-bg-hover);
+      border-color: var(--iswc-border);
+    }
+    &:active { transform: translateY(1px); }
+    &:focus-visible {
+      outline: 2px solid var(--iswc-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  & .shell-brand__icon {
+    flex: 0 0 auto;
+    font-size: 1.3em;
+    color: var(--iswc-accent);
+  }
+
+  & .shell-brand__text {
+    flex: 0 0 auto;
+    color: var(--iswc-text);
   }
 
   & .brand-wrap {
@@ -188,13 +240,25 @@ body {
     }
   }
 
-  /* push icon cluster a la derecha; plain+pill viven en el WC */
-  & .shell-icon-btn {
+  /* Empuja el cluster de herramientas + iconos a la derecha. */
+  & .shell-tools {
     margin-inline-start: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+  }
+
+  & .shell-icon-btn {
+    margin-inline-start: 0;
   }
 
   & iswc-theme-toggle {
     margin-inline-start: 0;
+  }
+
+  /* Activo = paneles compactados (pressed). */
+  & .shell-tool-btn[aria-pressed="true"] {
+    color: var(--iswc-accent);
   }
 
   @media (max-width: 640px) {
@@ -316,11 +380,11 @@ body {
       inline-size: 0.35em;
       block-size: 0.35em;
       border-radius: 50%;
-      background: color-mix(in srgb, var(--iswc-text-dim, #64748b) 70%, transparent);
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-border, #273040) 50%, transparent);
+      background: color-mix(in srgb, var(--iswc-text-dim) 70%, transparent);
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--iswc-border) 50%, transparent);
     }
     & .shell-nav__tag {
-      font-family: var(--iswc-mono, ui-monospace, monospace);
+      font-family: var(--iswc-mono);
       font-size: 0.72em;
       font-weight: 500;
       line-height: 1.15;

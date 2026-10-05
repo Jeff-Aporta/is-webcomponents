@@ -155,13 +155,13 @@ TEMPLATE.innerHTML = /* html */ `
           <iswc-icon icon="mdi:view-stream"></iswc-icon>
         </iswc-button>
       </div>
-      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
+      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
         <iswc-icon icon="mdi:view-column-outline"></iswc-icon>
       </iswc-button>
-      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
+      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
         <iswc-icon icon="mdi:backup-restore"></iswc-icon>
       </iswc-button>
-      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
+      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
         <iswc-icon icon="mdi:file-delimited-outline"></iswc-icon>
         <span class="mim-dg__tool-btn-label">CSV</span>
       </iswc-button>
@@ -373,14 +373,6 @@ function asHTMLElement(target: EventTarget | null): HTMLElement | null {
 }
 
 export class IswcAgGrid extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'header-height': '--iswc-grid-header-h',
-    'header-bg': { prop: '--iswc-grid-header-bg', onlyColorValues: true },
-    'stripe-color': { prop: '--iswc-grid-stripe', onlyColorValues: true },
-    'row-hover': { prop: '--iswc-grid-row-hover', onlyColorValues: true },
-    'selected-color': { prop: '--iswc-grid-selected', onlyColorValues: true },
-    };
 
   static TEMPLATE = TEMPLATE;
   static get observedAttributes(): string[] {
@@ -391,7 +383,6 @@ export class IswcAgGrid extends ElementBase {
       'quick-filter', 'group-by',
       'remember-state', 'storage-key',
       'toolbar', 'theme',
-      ...IswcAgGrid.styleAttrNames,
     ];
   }
 

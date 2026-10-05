@@ -1,0 +1,60 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-csv-view",
+  "category": "files",
+  "title": "<iswc-csv-view>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-csv-view",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Tabla CSV solo lectura.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-csv-view content=\"nombre,edad&#10;Ada,36&#10;Lin,41\" height=\"12rem\"></iswc-csv-view>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tabla CSV solo lectura."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
+}

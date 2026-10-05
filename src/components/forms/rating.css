@@ -1,9 +1,9 @@
 :host {
   --iswc-rating-size: 1.4em;
   --iswc-rating-gap: 0.1em;
-  --iswc-rating-color: var(--iswc-accent, #f59f00);
-  --iswc-rating-empty: var(--iswc-control-border, #adb5bd);
-  --iswc-rating-focus: var(--iswc-focus, var(--iswc-accent, #339af0));
+  --iswc-rating-color: var(--iswc-accent);
+  --iswc-rating-empty: var(--iswc-control-border);
+  --iswc-rating-focus: var(--iswc-focus, var(--iswc-accent));
   display: block;
   font-family: var(--iswc-sans, inherit);
   color: var(--iswc-text, inherit);
@@ -12,10 +12,11 @@
 
 :host([hidden]) { display: none !important; }
 
-:host([color="neutral"]) { --iswc-rating-color: var(--iswc-control-text, #f0f3f6); }
-:host([color="success"]) { --iswc-rating-color: var(--iswc-color-success, #40c057); }
-:host([color="warning"]) { --iswc-rating-color: var(--iswc-color-warning, #f59f00); }
-:host([color="danger"])  { --iswc-rating-color: var(--iswc-color-danger, #fa5252); }
+:host([color="neutral"]) { --iswc-rating-color: var(--iswc-control-text); }
+:host([color="text"]) { --iswc-rating-color: var(--iswc-text); }
+:host([color="success"]) { --iswc-rating-color: var(--iswc-color-success); }
+:host([color="warning"]) { --iswc-rating-color: var(--iswc-color-warning); }
+:host([color="danger"])  { --iswc-rating-color: var(--iswc-color-danger); }
 
 .form-control {
   display: flex;
@@ -45,7 +46,7 @@
   gap: var(--iswc-rating-gap);
   inline-size: fit-content;
   padding: 0.1em;
-  border-radius: var(--iswc-radius-sm, 0.375em);
+  border-radius: var(--iswc-radius-sm);
   outline: none;
   cursor: pointer;
   touch-action: manipulation;

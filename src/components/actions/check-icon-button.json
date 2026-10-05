@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-check-icon-button",
   "category": "actions",
-  "title": "<iswc-check-icon-button>",
-  "titleHtml": true,
+  "title": "&lt;iswc-check-icon-button&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos del componente iswc-check-icon-button de InSoft.",
   "styles": ".cluster { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }\r\n    .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }\r\n    /* Simula la chrome de un reproductor: es el contexto real de appearance=plain */\r\n    .player-bar {\r\n      display: inline-flex;\r\n      align-items: center;\r\n      gap: 0.6rem;\r\n      padding: 0.5rem 0.85rem;\r\n      border-radius: var(--iswc-radius-sm);\r\n      background: rgb(0 0 0 / 72%);\r\n      color: #fff;\r\n      font-size: 0.8125rem;\r\n      backdrop-filter: blur(6px);\r\n    }\r\n    .player-bar .track {\r\n      width: 8rem;\r\n      height: 3px;\r\n      border-radius: 999px;\r\n      background: rgb(255 255 255 / 25%);\r\n    }\r\n    .player-bar .track > i {\r\n      display: block;\r\n      width: 40%;\r\n      height: 100%;\r\n      border-radius: inherit;\r\n      background: #fff;\r\n    }\r\n    .state-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));\r\n      gap: 0.75rem;\r\n    }\r\n    .state-grid > div {\r\n      display: grid;\r\n      justify-items: center;\r\n      gap: 0.5rem;\r\n      padding: 0.75rem 0.5rem;\r\n      border: 1px solid var(--iswc-border-soft);\r\n      border-radius: var(--iswc-radius-sm);\r\n      background: color-mix(in srgb, var(--iswc-bg) 55%, transparent);\r\n    }",
   "storageKey": "docs-iswc-check-icon-button",
@@ -11,8 +11,21 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Botón icon-only con dos estados mutuamente excluyentes: muestra un solo icono\r\n          según <code class=\"code\">checked</code>. Lo usan <code class=\"code\">iswc-video</code>\r\n          (play/pausa, mute) e <code class=\"code\">iswc-theme-toggle</code>.",
+      "lede": "Botón icon-only con dos estados mutuamente excluyentes; muestra un solo icono según checked.",
       "blocks": [
+        {
+          "kind": "table",
+          "columns": [
+            "Key",
+            "Value"
+          ],
+          "rows": [
+            [
+              "<code>Usos</code>",
+              "iswc-video (play/pausa, mute) e iswc-theme-toggle."
+            ]
+          ]
+        },
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <span class=\"demo-label\">caso mínimo</span>\r\n            <div class=\"cluster\">\r\n              <iswc-check-icon-button\r\n                id=\"demoPlay\"\r\n                icon=\"mdi:play\"\r\n                checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\"\r\n                checked-label=\"Pausar\"\r\n              ></iswc-check-icon-button>\r\n              <span class=\"card-meta\" id=\"playState\">estado: paused</span>\r\n            </div>\r\n          </div>",
@@ -67,10 +80,6 @@
         {
           "kind": "callout",
           "html": "<strong>Los dos labels son obligatorios.</strong>\r\n          El icono cambia pero el botón es el mismo nodo: sin\r\n          <code class=\"code\">label</code> y <code class=\"code\">checked-label</code>\r\n          un lector de pantalla anuncia lo mismo en ambos estados."
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-check-icon-button\n  icon=\"mdi:play\"\n  checked-icon=\"mdi:pause\"\n  label=\"Reproducir\"\n  checked-label=\"Pausar\"\n></iswc-check-icon-button>"
         }
       ]
     },
@@ -93,10 +102,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"stack\">\r\n            <span class=\"demo-label\">default · sobre superficie normal</span>\r\n            <div class=\"cluster\">\r\n              <iswc-check-icon-button icon=\"mdi:play\" checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\" checked-label=\"Pausar\"></iswc-check-icon-button>\r\n              <iswc-check-icon-button icon=\"mdi:volume-high\" checked-icon=\"mdi:volume-off\"\r\n                label=\"Silenciar\" checked-label=\"Activar sonido\"></iswc-check-icon-button>\r\n            </div>\r\n\r\n            <span class=\"demo-label\">appearance=\"plain\" · sobre chrome de vídeo</span>\r\n            <div class=\"player-bar\">\r\n              <iswc-check-icon-button variant=\"plain\" icon=\"mdi:play\" checked-icon=\"mdi:pause\"\r\n                label=\"Reproducir\" checked-label=\"Pausar\"></iswc-check-icon-button>\r\n              <span>0:42</span>\r\n              <span class=\"track\"><i></i></span>\r\n              <span>3:15</span>\r\n              <iswc-check-icon-button variant=\"plain\" icon=\"mdi:volume-high\" checked-icon=\"mdi:volume-off\"\r\n                label=\"Silenciar\" checked-label=\"Activar sonido\"></iswc-check-icon-button>\r\n              <iswc-check-icon-button variant=\"plain\" icon=\"mdi:fullscreen\" checked-icon=\"mdi:fullscreen-exit\"\r\n                label=\"Pantalla completa\" checked-label=\"Salir de pantalla completa\"></iswc-check-icon-button>\r\n            </div>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-check-icon-button variant=\"plain\" icon=\"mdi:volume-high\" checked-icon=\"mdi:volume-off\"\n  label=\"Silenciar\" checked-label=\"Activar sonido\"></iswc-check-icon-button>"
         }
       ]
     },
@@ -236,5 +241,92 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Botón icon-only con dos estados mutuamente excluyentes: muestra un solo icono\r\n          según <code class=\"code\">checked</code>. Lo usan <code class=\"code\">iswc-video</code>\r\n          (play/pausa, mute) e <code class=\"code\">iswc-theme-toggle</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>checked</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Reflejado"
+          },
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "Iconify id cuando unchecked"
+          },
+          {
+            "name": "<code>checked-icon</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "Iconify id cuando checked"
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "<code>aria-label</code> cuando unchecked"
+          },
+          {
+            "name": "<code>checked-label</code>",
+            "type": "string",
+            "default": "''",
+            "desc": "<code>aria-label</code> cuando checked (fallback: <code>label</code>)"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "plain",
+            "default": "—",
+            "desc": "Compacto y hereda color, para chrome oscura"
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea puntero y teclado"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "propiedades",
+            "desc": "<code>checked</code> · <code>disabled</code> · <code>icon</code> · <code>checkedIcon</code> · <code>label</code> · <code>checkedLabel</code>"
+          },
+          {
+            "metodo": "métodos",
+            "desc": "<code>toggle(force?)</code> — sin argumento invierte; con booleano fija el estado"
+          },
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-change</code> con <code>{ checked }</code> (bubbles, composed)"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>button</code> · <code>icon</code>"
+          },
+          {
+            "metodo": "a11y",
+            "desc": "El host es el control: <code>role=\"button\"</code>, <code>aria-pressed</code> y <code>aria-label</code> por estado"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-check-icon-button\n  icon=\"mdi:play\"\n  checked-icon=\"mdi:pause\"\n  label=\"Reproducir\"\n  checked-label=\"Pausar\"\n></iswc-check-icon-button>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

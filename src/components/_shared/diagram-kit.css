@@ -139,7 +139,7 @@
   gap: 0.4em;
   background: none;
   border: none;
-  border-radius: var(--iswc-radius-sm, 0.375em);
+  border-radius: var(--iswc-radius-sm);
   color: inherit;
   cursor: pointer;
   padding: 0.15em 0.3em;
@@ -149,7 +149,7 @@
   &:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
 
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline: 2px solid var(--iswc-focus);
     outline-offset: 1px;
   }
 
@@ -163,14 +163,14 @@
 /* ── Tipografía inline (markdown de las etiquetas) ── */
 
 .tk-inline-code {
-  font-family: var(--iswc-mono, Consolas, Monaco, monospace);
+  font-family: var(--iswc-mono);
   font-size: 0.88em;
   padding: 0.08em 0.32em;
   border-radius: 4px;
-  background: color-mix(in srgb, var(--iswc-accent, #1e90ff) 12%, transparent);
+  background: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
 }
 
-.tk-inline-link { color: var(--iswc-brand-text, #74bdff); }
+.tk-inline-link { color: var(--iswc-brand-text); }
 
 .tk-inline-icon {
   inline-size: 0.95em;

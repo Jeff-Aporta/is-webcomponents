@@ -10,7 +10,7 @@ import {
  * <iswc-text> — port de ISP `typography/Text.svelte`.
  *
  * Atributos
- *   color      brand | neutral | info | success | warning | danger
+ *   color      brand | neutral | text | info | success | warning | danger
  *              | current | <color CSS>
  *              Ausente → hereda el color del contexto.
  *   mix        % → mezcla hacia `mix-with` (atenuar / aclarar / oscurecer).
@@ -27,10 +27,6 @@ import {
   TEMPLATE.innerHTML = /* html */ `<slot part="content"></slot>`;
 
   class IswcText extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'mix-with': { prop: '--iswc-text-mix-with', onlyColorValues: true },
-    };
 
     static TEMPLATE = TEMPLATE;
     static get observedAttributes(): string[] {

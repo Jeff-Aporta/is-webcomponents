@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-flex-options",
   "category": "isp",
-  "title": "<iswc-flex-options>",
-  "titleHtml": true,
+  "title": "&lt;iswc-flex-options&gt;",
+  "titleHtml": false,
   "description": "Toolbar de acciones ISP pintada con iswc-button / iswc-dropdown.",
   "storageKey": "docs-iswc-flex-options",
   "hasBehavior": true,
@@ -16,11 +16,6 @@
         {
           "kind": "demo",
           "html": "<iswc-flex-options id=\"foDemo\"></iswc-flex-options>"
-        },
-        {
-          "kind": "code",
-          "code": "el.actions = [\n  { icon: 'mdi:plus', title: 'Agregar', onClick: () => {} },\n  { icon: 'mdi:pencil', title: 'Editar', onClick: () => {} },\n];",
-          "lang": "js"
         }
       ]
     },
@@ -35,5 +30,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Port de <code class=\"code\">FlexOptions</code>. El consumidor pasa <code class=\"code\">actions</code> / <code class=\"code\">more</code>; el tag pinta el kit."
+      },
+      "ejemplos": {
+        "content": "```js\nel.actions = [\n  { icon: 'mdi:plus', title: 'Agregar', onClick: () => {} },\n  { icon: 'mdi:pencil', title: 'Editar', onClick: () => {} },\n];\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

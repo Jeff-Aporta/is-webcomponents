@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-wake-lock",
   "category": "helpers",
-  "title": "<iswc-wake-lock>",
-  "titleHtml": true,
+  "title": "&lt;iswc-wake-lock&gt;",
+  "titleHtml": false,
   "description": "Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto.",
   "storageKey": "docs-iswc-wake-lock",
   "sections": [
@@ -17,15 +17,29 @@
           "html": "<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>"
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-wake-lock><p>Pon el atributo <code>active</code> para pedir el lock.</p></iswc-wake-lock>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

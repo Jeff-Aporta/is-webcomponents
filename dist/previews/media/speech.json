@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-speech",
   "category": "media",
-  "title": "<iswc-speech>",
-  "titleHtml": true,
+  "title": "&lt;iswc-speech&gt;",
+  "titleHtml": false,
   "description": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento.",
   "storageKey": "docs-iswc-speech",
   "sections": [
@@ -24,15 +24,29 @@
           ]
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Dictado (`SpeechRecognition`) y lectura (`SpeechSynthesis`) con `lang` del documento."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-speech lang=\"es-ES\" text=\"Hola, esto es texto a voz.\"></iswc-speech>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

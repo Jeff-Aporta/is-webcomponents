@@ -1,14 +1,14 @@
 ---
 name: is-cdn-install
 description: >-
-  Instala y consume el kit IS Web Components solo por CDN (jsDelivr / GitHub Pages),
+  Instala y consume el kit ISWC solo por CDN (jsDelivr / GitHub Pages),
   sin npm ni npx. Cubre bootstrap (is-base + palettes + .min.js), espejos, pin por
   SHA, boot con fallback, y lectura de docs vía iswc-cdn-snippet. Usar cuando el
   usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
 
-# IS Web Components — instalación por CDN
+# ISWC — instalación por CDN
 
 ## Regla absoluta
 
@@ -156,6 +156,6 @@ No inventar props/eventos que no están en el MD.
 ## Más detalle
 
 - Prompt LLM completo: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md)
-- Herramientas `/is-webcomponents:build|migrate|local`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools)
+- Herramientas `/is-webcomponents:build|migrate|local|runtime`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) (runtime = loader, IswcUi, MD, cache)
 - Espejos y resolución de ref: [reference.md](reference.md)
 - Skill de reuso de tags: `../is-webcomponents/SKILL.md`

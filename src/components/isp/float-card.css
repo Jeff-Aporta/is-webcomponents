@@ -30,7 +30,7 @@
   padding-inline: 0.2rem;
   background: var(--iswc-bg-elev, var(--iswc-bg));
   border: 1px solid var(--iswc-border);
-  border-radius: var(--iswc-radius-sm, 0.35rem);
+  border-radius: var(--iswc-radius-sm);
   box-shadow: var(--iswc-shadow, 0 4px 16px color-mix(in srgb, #000 18%, transparent));
   pointer-events: none;
   overflow: visible;
@@ -58,10 +58,10 @@
 
 /* Default claro; el dark override ajusta tanto el outline como la sombra. */
 :host(:focus-visible) {
-  outline-color: var(--iswc-brand, #2563eb);
+  outline-color: var(--iswc-brand);
 
   @media (prefers-color-scheme: dark) {
-    outline-color: var(--iswc-brand, #60a5fa);
+    outline-color: var(--iswc-brand);
   }
 }
 

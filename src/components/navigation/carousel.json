@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-carousel",
   "category": "navigation",
-  "title": "<iswc-carousel>",
-  "titleHtml": true,
+  "title": "&lt;iswc-carousel&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-carousel / iswc-carousel-item de InSoft.",
   "styles": ".slide {\r\n      width: 100%;\r\n      height: 100%;\r\n      display: flex;\r\n      align-items: center;\r\n      justify-content: center;\r\n      font-size: 2rem;\r\n      color: white;\r\n      border-radius: 0.5rem;\r\n    }\r\n    .slide.s1 { background: linear-gradient(135deg, #3699ff, #1f5aa6); }\r\n    .slide.s2 { background: linear-gradient(135deg, #f64e60, #b5283a); }\r\n    .slide.s3 { background: linear-gradient(135deg, #0bb783, #086c4d); }\r\n    .slide.s4 { background: linear-gradient(135deg, #ffa800, #cc8400); }\r\n    .slide.s5 { background: linear-gradient(135deg, #8950fc, #5a30a8); }",
   "storageKey": "docs-iswc-carousel",
@@ -17,55 +17,51 @@
           "kind": "demo",
           "html": "<iswc-carousel id=\"c1\" loop>\r\n            <iswc-carousel-item><div class=\"slide s1\">Slide 1</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s2\">Slide 2</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s3\">Slide 3</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s4\">Slide 4</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide s5\">Slide 5</div></iswc-carousel-item>\r\n          </iswc-carousel>\r\n          <p id=\"c1Log\" class=\"lede\">Slide: <code class=\"code\">0</code></p>",
           "controls": [
-              {
-                "control": "boolean",
-                "prop": "attr:loop",
-                "label": "loop"
-              },
-              {
-                "control": "number",
-                "prop": "attr:autoplay",
-                "label": "autoplay",
-                "min": 0,
-                "max": 2000,
-                "step": 1
-              },
-              {
-                "control": "number",
-                "prop": "attr:slides-per-page",
-                "label": "slides-per-page",
-                "min": 0,
-                "max": 100,
-                "step": 1
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:vertical",
-                "label": "vertical"
-              },
-              {
-                "control": "text",
-                "prop": "attr:aspect-ratio",
-                "label": "aspect-ratio"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:without-indicators",
-                "label": "without-indicators"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:without-controls",
-                "label": "without-controls"
-              }
+            {
+              "control": "boolean",
+              "prop": "attr:loop",
+              "label": "loop"
+            },
+            {
+              "control": "number",
+              "prop": "attr:autoplay",
+              "label": "autoplay",
+              "min": 0,
+              "max": 2000,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:slides-per-page",
+              "label": "slides-per-page",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:vertical",
+              "label": "vertical"
+            },
+            {
+              "control": "text",
+              "prop": "attr:aspect-ratio",
+              "label": "aspect-ratio"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-indicators",
+              "label": "without-indicators"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:without-controls",
+              "label": "without-controls"
+            }
           ],
           "equivNote": "autoplay y flags de chrome (controls/indicators).",
           "equivHtml": "<!-- ver diagrama de ramas -->",
           "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-carousel: autoplay\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"autoplay?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"timer (+ pause hover)\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"solo manual\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"without-controls?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"sin flechas\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-carousel loop>\n  <iswc-carousel-item>Slide 1</iswc-carousel-item>\n  <iswc-carousel-item>Slide 2</iswc-carousel-item>\n  …\n</iswc-carousel>"
         }
       ]
     },
@@ -230,5 +226,94 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Carrusel tipo slides con paginación, autoplay, loop, navegación prev/next,\r\n          indicadores, scroll-snap y soporte para swipe en touch."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>active</code>",
+            "type": "number",
+            "default": "0",
+            "desc": "Slide activo (0-indexed)."
+          },
+          {
+            "name": "<code>loop</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Vuelve al inicio al llegar al final."
+          },
+          {
+            "name": "<code>autoplay</code>",
+            "type": "number (ms)",
+            "default": "0",
+            "desc": "Avance automático (0 = desactivado)."
+          },
+          {
+            "name": "<code>vertical</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Orientación vertical."
+          },
+          {
+            "name": "<code>slides-per-page</code>",
+            "type": "number",
+            "default": "1",
+            "desc": "Slides visibles por vista."
+          },
+          {
+            "name": "<code>aspect-ratio</code>",
+            "type": "string",
+            "default": "16/9",
+            "desc": "CSS aspect-ratio del contenedor."
+          },
+          {
+            "name": "<code>without-controls</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta prev/next."
+          },
+          {
+            "name": "<code>without-indicators</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta los puntos."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-carousel-change</code>",
+            "cuando": "Cambia el slide. <code>detail: { from, to, item }</code>."
+          },
+          {
+            "evento": "<code>iswc-carousel-play</code>",
+            "cuando": "Comienza autoplay."
+          },
+          {
+            "evento": "<code>iswc-carousel-pause</code>",
+            "cuando": "Pausa autoplay. <code>detail: { reason }</code>."
+          },
+          {
+            "evento": "<code>iswc-carousel-slide-end</code>",
+            "cuando": "Termina un swipe."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-carousel loop>\n  <iswc-carousel-item>Slide 1</iswc-carousel-item>\n  <iswc-carousel-item>Slide 2</iswc-carousel-item>\n  …\n</iswc-carousel>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

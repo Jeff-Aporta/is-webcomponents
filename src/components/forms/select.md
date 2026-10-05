@@ -1,45 +1,45 @@
----
+﻿---
 tag: iswc-select
 tags:
   - iswc-select
 category: forms
 status: public
-source: ./select.js
+source: ./select.ts
 style: ./select.css
 preview: ./select.json
 ---
 # `<iswc-select>`
 
-## Propósito
+## PropÃ³sito
 
 Select form-associated con paridad funcional con el
 Select de MUI:
-colors, error, selección múltiple con chips o checkmarks, agrupación, opciones ricas y typeahead.
-El listbox vive en un <dialog> del top layer, así que nunca lo recorta
+colors, error, selecciÃ³n mÃºltiple con chips o checkmarks, agrupaciÃ³n, opciones ricas y typeahead.
+El listbox vive en un <dialog> del top layer, asÃ­ que nunca lo recorta
 el overflow de un ancestro.
 
-Este módulo registra `<iswc-select>`.
+Este mÃ³dulo registra `<iswc-select>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './select.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
-<iswc-select label="Ciudad" name="city" placeholder="Elige una ciudad…" clearable>
-<iswc-option value="bog">Bogotá</iswc-option>
-<iswc-option value="med">Medellín</iswc-option>
+<iswc-select label="Ciudad" name="city" placeholder="Elige una ciudadâ€¦" clearable>
+<iswc-option value="bog">BogotÃ¡</iswc-option>
+<iswc-option value="med">MedellÃ­n</iswc-option>
 </iswc-select>
 ```
 
@@ -51,27 +51,27 @@ import './select.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `multiple` | boolean | Fuente define default/restricción. |
-| `placeholder` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `hint` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `required` | boolean | Fuente define default/restricción. |
-| `clearable` | boolean | Fuente define default/restricción. |
-| `open` | boolean | Fuente define default/restricción. |
-| `variant` | string/según contrato | Fuente define default/restricción. |
-| `checkmarks` | boolean | Fuente define default/restricción. |
-| `selection-display` | string/según contrato | Fuente define default/restricción. |
-| `limit-tags` | string/según contrato | Fuente define default/restricción. |
-| `error` | boolean | Fuente define default/restricción. |
-| `error-text` | string/según contrato | Fuente define default/restricción. |
-| `full-width` | boolean | Fuente define default/restricción. |
-| `auto-width` | boolean | Fuente define default/restricción. |
-| `max-visible` | string/según contrato | Fuente define default/restricción. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `multiple` | boolean | Fuente define default/restricciÃ³n. |
+| `placeholder` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `required` | boolean | Fuente define default/restricciÃ³n. |
+| `clearable` | boolean | Fuente define default/restricciÃ³n. |
+| `open` | boolean | Fuente define default/restricciÃ³n. |
+| `variant` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `checkmarks` | boolean | Fuente define default/restricciÃ³n. |
+| `selection-display` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `limit-tags` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `error` | boolean | Fuente define default/restricciÃ³n. |
+| `error-text` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `full-width` | boolean | Fuente define default/restricciÃ³n. |
+| `auto-width` | boolean | Fuente define default/restricciÃ³n. |
+| `max-visible` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -109,23 +109,43 @@ import './select.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+| `iswc-show` | Emitido justo antes de mostrarse (cancelable). |
+| `iswc-hide` | Emitido justo antes de ocultarse (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
-| `iswc-show` | sí | sí | sí | no |
-| `iswc-hide` | sí | sí | sí | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-show` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-hide` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-select');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `show()` | Método público declarado. |
-| `hide()` | Método público declarado. |
-| `checkValidity()` | Método público declarado. |
-| `reportValidity()` | Método público declarado. |
-| `setCustomValidity()` | Método público declarado. |
+| `show()` | MÃ©todo pÃºblico declarado. |
+| `hide()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | MÃ©todo pÃºblico declarado. |
+| `reportValidity()` | MÃ©todo pÃºblico declarado. |
+| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -139,60 +159,68 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 | `error-text` | Personalizable con `::part(error-text)`. |
 | `dialog` | Personalizable con `::part(dialog)`. |
 | `listbox` | Personalizable con `::part(listbox)`. |
+| `check` | Icono check que marca la opciÃ³n seleccionada. |
+| `group` | `<optgroup>` del listado. |
+| `group-label` | Etiqueta del `<optgroup>`. |
+| `option` | Cada opciÃ³n del listado. |
+| `option-description` | Texto secundario bajo la etiqueta de la opciÃ³n. |
+| `option-start` | Slot/icono a la izquierda de la opciÃ³n. |
+| `tag` | Cada chip del modo multi-selecciÃ³n. |
+| `tag-more` | Chip `+N` que indica cuÃ¡ntas opciones mÃ¡s hay. |
 
 ### Custom states
 
 | Estado | Uso |
 | --- | --- |
-| `:state(open)` | Estado usado por implementación/CSS. |
-| `:state(blank)` | Estado usado por implementación/CSS. |
-| `:state(error)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
+| `:state(open)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(blank)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(error)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-select-border-radius` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-select-border` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-select-bg` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-select-text` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--iswc-select-focus` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-select-danger` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-select-danger-text` | Token leído o definido por componente. |
-| `--iswc-danger-text` | Token leído o definido por componente. |
-| `--iswc-color-danger-600` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--iswc-bg-elev` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-radius` | Token leído o definido por componente. |
-| `--iswc-shadow` | Token leído o definido por componente. |
-| `--iswc-border-soft` | Token leído o definido por componente. |
-| `--iswc-accent-bg` | Token leído o definido por componente. |
-| `--iswc-brand-text` | Token leído o definido por componente. |
-| `--iswc-on-brand` | Token leído o definido por componente. |
+| `--iswc-select-border-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-select-border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-select-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-select-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-select-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-select-danger` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-select-danger-text` | Token leÃ­do o definido por componente. |
+| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-600` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-bg-elev` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-shadow` | Token leÃ­do o definido por componente. |
+| `--iswc-border-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-accent-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-brand-text` | Token leÃ­do o definido por componente. |
+| `--iswc-on-brand` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
-> así el desplegable nunca se pierde por overflow/clipping de ancestros.
+> <iswc-select> â€” Select form-associated con listbox en <dialog modal> (top layer),
+> asÃ­ el desplegable nunca se pierde por overflow/clipping de ancestros.
 > Atributos: name, value, multiple, placeholder, label, hint, disabled, required,
 >            clearable, open, variant, checkmarks, selection-display, limit-tags,
 >            error, error-text, full-width, auto-width, max-visible
@@ -200,8 +228,8 @@ Documentación de cabecera preservada desde fuente:
 > Parts: base, trigger, listbox, group, group-label, option, check, option-start,
 >        option-description, tag, clear, label, hint, error-text
 > Events: iswc-change { value, values }, iswc-show, iswc-hide
-> En modo `multiple` con `name`, el valor de formulario se envía como FormData
-> con una entrada por opción seleccionada.
+> En modo `multiple` con `name`, el valor de formulario se envÃ­a como FormData
+> con una entrada por opciÃ³n seleccionada.
 
 ## Dependencias y componentes relacionados
 
@@ -211,22 +239,22 @@ Documentación de cabecera preservada desde fuente:
 - [`../feedback/tag.js`](../feedback/tag.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<iswc-select>`.
+Tags del mÃ³dulo: `<iswc-select>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspopup`, `aria-expanded`, `aria-controls`, `aria-label`, `aria-hidden`, `aria-describedby`, `aria-invalid`, `aria-required`, `aria-multiselectable`, `aria-disabled`, `aria-labelledby`, `aria-selected`, `aria-activedescendant`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspopup`, `aria-expanded`, `aria-controls`, `aria-label`, `aria-hidden`, `aria-describedby`, `aria-invalid`, `aria-required`, `aria-multiselectable`, `aria-disabled`, `aria-labelledby`, `aria-selected`, `aria-activedescendant`.
 
 ## Ejemplo avanzado
 
 ```html
-<iswc-select variant="filled" label="filled">…</iswc-select>
-<iswc-select variant="underlined" label="underlined">…</iswc-select>
+<iswc-select variant="filled" label="filled">â€¦</iswc-select>
+<iswc-select variant="underlined" label="underlined">â€¦</iswc-select>
 ```
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -234,15 +262,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-haspop
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./select.js)
+- [JavaScript](./select.ts)
 - [CSS](./select.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./select.json)

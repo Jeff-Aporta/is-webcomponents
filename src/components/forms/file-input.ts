@@ -18,7 +18,7 @@ import { ElementBase } from '../../core/element-base.js';
  *
  * Slots: label, hint, dropzone
  *
- * Custom states: blank, dragging  (:state / data-state-*)
+ * Custom states: blank, dragging, disabled  (:state / data-state-*)
  *
  * Eventos: change, input, iswc-change (bubbles, composed)
  *

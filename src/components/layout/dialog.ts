@@ -66,7 +66,7 @@ import { ModalBase } from '../_shared/modal-base.js';
             class="close-btn"
             part="close-button"
             variant="text"
-            color="neutral"
+            color="text"
             aria-label="Cerrar"
           >
             <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -86,17 +86,9 @@ import { ModalBase } from '../_shared/modal-base.js';
   const BACKDROP_VARIANTS = new Set(['none', 'basic']);
 
   class IswcDialog extends ModalBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-      spacing: '--iswc-dialog-spacing',
-      width: '--iswc-dialog-width',
-      'backdrop-color': { prop: '--iswc-dialog-backdrop-color', onlyColorValues: true },
-      'show-duration': '--iswc-dialog-show-duration',
-      'hide-duration': '--iswc-dialog-hide-duration',
-    };
 
     static get observedAttributes(): string[] {
-      return [...super.observedAttributes, 'backdrop-variant', ...IswcDialog.styleAttrNames];
+      return [...super.observedAttributes, 'backdrop-variant'];
     }
 
     static __TEMPLATE = TEMPLATE;

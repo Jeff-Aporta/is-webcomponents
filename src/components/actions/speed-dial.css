@@ -47,7 +47,7 @@ iswc-check-icon-button.trigger {
     border: 0;
     border-radius: var(--iswc-speed-dial-radius);
     background: var(--iswc-accent);
-    color: var(--iswc-on-accent, #fff);
+    color: var(--iswc-on-accent);
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--iswc-accent) 70%, transparent),
       0 8px 22px color-mix(in srgb, var(--iswc-accent) 35%, transparent);
@@ -132,17 +132,21 @@ iswc-check-icon-button.trigger {
     background: color-mix(in srgb, var(--iswc-text) 10%, transparent);
     color: var(--iswc-text);
   }
+  &[data-color="text"] .ico {
+    background: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+    color: var(--iswc-text);
+  }
   &[data-color="success"] .ico {
-    background: color-mix(in srgb, var(--iswc-success, #16a34a) 18%, transparent);
-    color: var(--iswc-success, #16a34a);
+    background: color-mix(in srgb, var(--iswc-success) 18%, transparent);
+    color: var(--iswc-success);
   }
   &[data-color="warning"] .ico {
-    background: color-mix(in srgb, var(--iswc-warning, #d97706) 18%, transparent);
-    color: var(--iswc-warning, #d97706);
+    background: color-mix(in srgb, var(--iswc-warning) 18%, transparent);
+    color: var(--iswc-warning);
   }
   &[data-color="danger"] .ico {
-    background: color-mix(in srgb, var(--iswc-danger, #dc2626) 18%, transparent);
-    color: var(--iswc-danger, #dc2626);
+    background: color-mix(in srgb, var(--iswc-danger) 18%, transparent);
+    color: var(--iswc-danger);
   }
 }
 

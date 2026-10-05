@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-avatar
 tags:
   - iswc-avatar
 category: media
 status: public
-source: ./avatar.js
+source: ./avatar.ts
 style: ./avatar.css
 preview: ./avatar.json
 ---
 # `<iswc-avatar>`
 
-## Propósito
+## PropÃ³sito
 
-Avatar con imagen, iniciales o icono fallback. Caja = 1em × 1em; escala con font-size.
+Avatar con imagen, iniciales o icono fallback. Caja = 1em Ã— 1em; escala con font-size.
 
-Este módulo registra `<iswc-avatar>`.
+Este mÃ³dulo registra `<iswc-avatar>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Iconos, identidad visual y reproducción de video.
+Iconos, identidad visual y reproducciÃ³n de video.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No crear loader/reproductor paralelo antes de revisar existentes.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './avatar.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <span style="font-size:3rem">
@@ -46,13 +46,13 @@ import './avatar.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `image` | string/según contrato | Fuente define default/restricción. |
-| `initials` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `loading` | string/según contrato | Fuente define default/restricción. |
-| `shape` | string/según contrato | Fuente define default/restricción. |
+| `image` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `initials` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `loading` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `shape` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -70,15 +70,33 @@ import './avatar.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-error` | no | sí | sí | no |
+| `iswc-error` | no | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-avatar');
+el.addEventListener('iswc-error', (e) => {
+  console.log('iswc-error', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -97,44 +115,44 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-font-family` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-muted` | Token leído o definido por componente. |
+| `--iswc-font-family` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-muted` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-avatar> — Web Component (vanilla).
+> <iswc-avatar> â€” Web Component (vanilla).
 > Atributos
->   image     string — URL de imagen
->   initials  string — iniciales si no hay imagen (máx. 2)
->   label     string — aria-label del avatar
+>   image     string â€” URL de imagen
+>   initials  string â€” iniciales si no hay imagen (mÃ¡x. 2)
+>   label     string â€” aria-label del avatar
 >   loading   eager | lazy (default eager)
 >   shape     circle | square | rounded (default circle)
 > Slots
 >   icon      fallback cuando no hay image ni initials (default mdi:account)
 > Eventos
->   iswc-error  — cuando la imagen falla al cargar (bubbles, composed)
+>   iswc-error  â€” cuando la imagen falla al cargar (bubbles, composed)
 > CSS Parts: ::part(image) ::part(initials) ::part(icon)
-> Escala con font-size del contexto (caja = 1em × 1em).
+> Escala con font-size del contexto (caja = 1em Ã— 1em).
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./icon.js`](./icon.js)
 
-Tags del módulo: `<iswc-avatar>`.
+Tags del mÃ³dulo: `<iswc-avatar>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`.
 
 ## Ejemplo avanzado
 
@@ -146,7 +164,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -154,15 +172,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./avatar.js)
+- [JavaScript](./avatar.ts)
 - [CSS](./avatar.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./avatar.json)

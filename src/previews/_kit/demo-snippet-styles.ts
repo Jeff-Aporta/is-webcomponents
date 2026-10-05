@@ -179,7 +179,7 @@ textarea.demo-native-field {
 
 .matrix {
   display: grid;
-  grid-template-columns: max-content repeat(3, 1fr);
+  grid-template-columns: max-content repeat(4, 1fr);
   gap: 10px 14px;
   align-items: center;
 }

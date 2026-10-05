@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-dropzone",
   "category": "forms",
-  "title": "<iswc-dropzone>",
-  "titleHtml": true,
+  "title": "&lt;iswc-dropzone&gt;",
+  "titleHtml": false,
   "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }\r\n    button.go {\r\n      font: inherit;\r\n      padding: .5rem 1rem;\r\n      background: var(--iswc-accent);\r\n      color: var(--iswc-on-accent, #fff);\r\n      border: 0; border-radius: 999px;\r\n      cursor: pointer;\r\n    }",
   "storageKey": "docs-iswc-dropzone",
   "hasBehavior": true,
@@ -67,5 +67,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Zona de arrastre con cola de archivos, preview de imagen, límite de tamaño y simulación de progreso chunked."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -1,7 +1,7 @@
 :host {
   --iswc-spinner-track-width: 0.15em;
-  --iswc-spinner-track-color: var(--iswc-control-border, #dee2e6);
-  --iswc-spinner-color: var(--iswc-color-brand, #339af0);
+  --iswc-spinner-track-color: var(--iswc-control-border);
+  --iswc-spinner-color: var(--iswc-color-brand);
   --iswc-spinner-speed: 0.75s;
   display: inline-flex;
   vertical-align: middle;

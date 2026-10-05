@@ -48,13 +48,7 @@ import { ElementBase } from '../../core/element-base.js';
 
   const OBSERVED = ['orientation', 'without-scroll-buttons', 'label'];
 
-  class IswcScroller extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'button-size': '--iswc-scroller-button-size',
-    'button-bg': { prop: '--iswc-scroller-button-bg', onlyColorValues: true },
-    'button-color': { prop: '--iswc-scroller-button-text', onlyColorValues: true },
-    };
+  class IswcScroller extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'button-size', 'button-bg', 'button-color']; }
 

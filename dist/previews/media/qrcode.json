@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-qrcode",
   "category": "media",
-  "title": "<iswc-qrcode>",
-  "titleHtml": true,
+  "title": "&lt;iswc-qrcode&gt;",
+  "titleHtml": false,
   "styles": ".qr-row { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: start; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
   "storageKey": "docs-iswc-qrcode",
   "sections": [
@@ -19,7 +19,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode id=\"qr1\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></iswc-qrcode>\r\n          </div>",
+          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode id=\"pgQr\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></iswc-qrcode>\r\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -45,6 +45,11 @@
               "label": "bg"
             }
           ]
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"qr-row\">\r\n            <iswc-qrcode value=\"mailto:hola@empresa.co\" level=\"Q\" cell=\"6\"></iswc-qrcode>\r\n            <iswc-qrcode value=\"WIFI:T:WPA;S:InSoft;P:clave123;;\" level=\"H\" cell=\"6\"></iswc-qrcode>\r\n          </div>",
+          "heading": "Otros contenidos: mailto, wifi (mismo nivel/cell/bg)"
         }
       ]
     },
@@ -78,5 +83,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "QR en SVG. Carga bajo demanda la lib <code>qrcode-generator</code> (MIT, esm.sh) — sin esa red no funciona."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

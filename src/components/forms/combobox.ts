@@ -30,7 +30,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           part="clear"
           class="clear"
           variant="text"
-          color="neutral"
+          color="text"
           tabindex="-1"
           aria-label="Limpiar"
           hidden
@@ -42,7 +42,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           part="trigger"
           class="trigger"
           variant="text"
-          color="neutral"
+          color="text"
           tabindex="-1"
           aria-label="Abrir"
         >
@@ -63,14 +63,6 @@ import { setStringAttr } from '../_shared/reflect.js';
   ];
 
   class IswcCombobox extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-combobox-border-radius',
-    'border-color': { prop: '--iswc-combobox-border', onlyColorValues: true },
-    bg: { prop: '--iswc-combobox-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-combobox-text', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-combobox-focus', onlyColorValues: true },
-    };
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }

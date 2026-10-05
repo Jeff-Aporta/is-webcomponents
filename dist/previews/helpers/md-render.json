@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-md-render",
   "category": "helpers",
-  "title": "<iswc-md-render>",
-  "titleHtml": true,
+  "title": "&lt;iswc-md-render&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-md-render",
   "styles": "",
   "sections": [
@@ -27,11 +27,6 @@
               "label": "placeholder"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "lang": "markdown",
-          "code": "```iswc-flowchart\n{ \"flowchart\": { \"nodes\": [...], \"edges\": [...] } }\n```\n\n```js\nconst x = 1;\n```\n-> theme completo\n\n`inline` -> brand-mono sin fondo"
         }
       ]
     },
@@ -149,5 +144,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "MD + HTML + is-*. Inline brand-mono sin fondo. Bloques theme completo. Fences iswc-*. Lazy ensure."
+      },
+      "ejemplos": {
+        "content": "```markdown\n```iswc-flowchart\n{ \"flowchart\": { \"nodes\": [...], \"edges\": [...] } }\n```\n\n```js\nconst x = 1;\n```\n-> theme completo\n\n`inline` -> brand-mono sin fondo\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

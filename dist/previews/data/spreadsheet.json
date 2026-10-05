@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-spreadsheet",
   "category": "data",
-  "title": "<iswc-spreadsheet>",
-  "titleHtml": true,
+  "title": "&lt;iswc-spreadsheet&gt;",
+  "titleHtml": false,
   "styles": "pre.output {\r\n      font-family: ui-monospace, monospace; font-size: .78rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 12rem; overflow: auto;\r\n      white-space: pre-wrap;\r\n    }\r\n    .kbd-hint {\r\n      font-size: .78rem; color: var(--iswc-text-soft);\r\n    }\r\n    .kbd-hint kbd {\r\n      font-family: ui-monospace, monospace; font-size: .72rem;\r\n      padding: 1px 5px;\r\n      border-radius: 4px;\r\n      border: 1px solid var(--iswc-border);\r\n      background: var(--iswc-bg-elev);\r\n    }",
   "storageKey": "docs-iswc-spreadsheet",
   "sections": [
@@ -38,5 +38,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Hoja de cálculo con edición por celda, fórmulas <code class=\"ic\">=SUM(A1:A5)</code> y navegación con flechas + Tab."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

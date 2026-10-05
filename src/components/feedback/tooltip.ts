@@ -57,13 +57,7 @@ import '../helpers/floating.js';
     reposition(): void;
   };
 
-  class IswcTooltip extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'max-width': '--iswc-tooltip-max-width',
-    'arrow-size': '--iswc-tooltip-arrow-size',
-    'arrow-color': { prop: '--iswc-tooltip-arrow-color', onlyColorValues: true },
-    };
+  class IswcTooltip extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'max-width', 'arrow-size', 'arrow-color']; }
 

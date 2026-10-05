@@ -3,20 +3,31 @@
    presentador salia oscuro tambien en tema claro. Las vars siguen siendo el
    punto de personalizacion; lo que cambia es a que caen por defecto. */
 :host {
-  --iswc-lightbox-bg: var(--iswc-bg, #0d1117);
-  --iswc-lightbox-text: var(--iswc-text, #e6e8eb);
-  --iswc-lightbox-border: var(--iswc-border, #1d2229);
+  --iswc-lightbox-bg: var(--iswc-bg);
+  --iswc-lightbox-text: var(--iswc-text);
+  --iswc-lightbox-border: var(--iswc-border);
   /* variant=backdrop (default): backdrop completamente SOLIDO (sin
      transparencia). El usuario prefiere un oscurecido opaco al abrir el
      lightbox para evitar el efecto "vidrio esmerilado" que distrae. */
   --iswc-lightbox-backdrop: rgb(0 0 0 / 70%);
   --iswc-lightbox-backdrop-blur: 0px;
+}
 
-  /* Cerrado: no participa del layout. Abierto: contents para que el dialog
-     top-layer no deje un hueco fantasma del host. */
+/* Cerrado/abierto con selectores compuestos (NO nesting `&[open]` dentro
+   de `:host`): en Chromium ese nesting no matchea y el dialog modal deja
+   la página inerte con host en display:none. esbuild además re-anida
+   `:host` + `:host([open])` al minificar — `:not([open])` evita eso. */
+:host(:not([open])) {
   display: none;
-  &[open] { display: contents; }
-  &[hidden] { display: none !important; }
+}
+
+:host([open]) {
+  /* contents: el dialog top-layer no deja hueco fantasma del host. */
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none !important;
 }
 
 /* solid: backdrop completamente opaco a pantalla completa. */
@@ -44,7 +55,7 @@
   /* backdrop (default): dialog transparente; el oscurecido va en ::backdrop */
   background: transparent;
   color: var(--iswc-lightbox-text);
-  font-family: var(--iswc-font-family, system-ui, sans-serif);
+  font-family: var(--iswc-font-family);
   overflow: hidden;
   box-shadow: none;
   &::backdrop {
@@ -105,7 +116,7 @@
   height: 2.4rem;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: var(--iswc-radius, 0.5em);
+  border-radius: var(--iswc-radius);
   background: transparent;
   color: inherit;
   cursor: pointer;
@@ -115,7 +126,7 @@
     border-color: var(--iswc-lightbox-border);
   }
   &:focus-visible {
-    outline: 2px solid var(--iswc-color-brand, #339af0);
+    outline: 2px solid var(--iswc-color-brand);
     outline-offset: 1px;
   }
   &[hidden] { display: none; }
@@ -123,6 +134,17 @@
     --iswc-icon-size: 1.3rem;
     pointer-events: none;
   }
+}
+
+.lb-share {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  --iswc-control-size: 2.4rem;
+  &[hidden] { display: none; }
+  iswc-icon { --iswc-icon-size: 1.3rem; }
 }
 
 .lb-stage {
@@ -178,7 +200,7 @@
   padding: 0.55rem 0.95rem;
   background: color-mix(in srgb, var(--iswc-lightbox-text) 12%, var(--iswc-lightbox-bg));
   border: 1px solid var(--iswc-lightbox-border);
-  border-radius: var(--iswc-radius, 0.5em);
+  border-radius: var(--iswc-radius);
   font-size: 0.85em;
   z-index: 5;
   box-shadow: 0 6px 18px rgb(0 0 0 / 30%);

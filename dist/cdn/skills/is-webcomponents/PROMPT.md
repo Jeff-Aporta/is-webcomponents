@@ -1,6 +1,6 @@
-# IS Web Components (Instrucciones para LLM)
+# ISWC (Instrucciones para LLM)
 
-Utiliza **IS Web Components** exclusivamente mediante **CDN** (o copia local vía `/is-webcomponents:local`).
+Utiliza **ISWC** exclusivamente mediante **CDN** (o copia local vía `/is-webcomponents:local`).
 
 **Nunca** utilices:
 
@@ -64,7 +64,7 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
 Antes de utilizar cualquier componente debes seguir este flujo:
 
 1. Leer la documentación de instalación.
-2. Leer la guía general de IS Web Components.
+2. Leer la guía general de ISWC.
 3. Consultar el índice global (`LLM.md`).
 4. Identificar la categoría adecuada.
 5. Abrir el `LLM.md` de esa categoría.
@@ -124,8 +124,8 @@ Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
-  await L.loadCSSBase();
-  await L.loadCSSPalettesDefault();
+  // is-base.min.css se auto-carga al importar el loader (W52).
+  await L.loadPageStyles(['iswc-palettes-default']);
   await L.load("iswc-button");
 </script>
 ```
@@ -161,8 +161,8 @@ for(const base of MIRRORS){
  try{
   await import(`${base}/core/loader.min.js`);
   const L = globalThis.ISWebComponentsLoader;
-  await L.loadCSSBase();
-  await L.loadCSSPalettesDefault();
+  // is-base.min.css se auto-carga al importar el loader (W52).
+  await L.loadPageStyles(['iswc-palettes-default']);
   await L.load("iswc-button");
   break;
  }catch{}

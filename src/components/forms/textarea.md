@@ -1,41 +1,41 @@
----
+﻿---
 tag: iswc-textarea
 tags:
   - iswc-textarea
 category: forms
 status: public
-source: ./textarea.js
+source: ./textarea.ts
 style: ./textarea.css
 preview: ./textarea.json
 ---
 # `<iswc-textarea>`
 
-## Propósito
+## PropÃ³sito
 
-Área de texto form-associated con las mismas piezas que
+Ãrea de texto form-associated con las mismas piezas que
 TextField
-en modo multiline y el crecimiento automático de
+en modo multiline y el crecimiento automÃ¡tico de
 TextareaAutosize:
 variants, error, contador y autosize con
 min-rows / max-rows.
 
-Este módulo registra `<iswc-textarea>`.
+Este mÃ³dulo registra `<iswc-textarea>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Captura, selección y validación de valores compatibles con formularios.
+Captura, selecciÃ³n y validaciÃ³n de valores compatibles con formularios.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No duplicar validación, form association ni pickers shared.
+No duplicar validaciÃ³n, form association ni pickers shared.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './textarea.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-textarea variant="filled" label="filled" rows="2"></iswc-textarea>
@@ -49,25 +49,25 @@ import './textarea.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `name` | string/según contrato | Fuente define default/restricción. |
-| `value` | string/según contrato | Fuente define default/restricción. |
-| `placeholder` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `hint` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
-| `required` | boolean | Fuente define default/restricción. |
-| `readonly` | boolean | Fuente define default/restricción. |
-| `rows` | string/según contrato | Fuente define default/restricción. |
-| `maxlength` | string/según contrato | Fuente define default/restricción. |
-| `resize` | string/según contrato | Fuente define default/restricción. |
-| `autosize` | boolean | Fuente define default/restricción. |
-| `min-rows` | string/según contrato | Fuente define default/restricción. |
-| `max-rows` | string/según contrato | Fuente define default/restricción. |
-| `error` | boolean | Fuente define default/restricción. |
-| `error-text` | string/según contrato | Fuente define default/restricción. |
-| `show-count` | boolean | Fuente define default/restricción. |
+| `name` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `value` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `placeholder` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `hint` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
+| `required` | boolean | Fuente define default/restricciÃ³n. |
+| `readonly` | boolean | Fuente define default/restricciÃ³n. |
+| `rows` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `maxlength` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `resize` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `autosize` | boolean | Fuente define default/restricciÃ³n. |
+| `min-rows` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `max-rows` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `error` | boolean | Fuente define default/restricciÃ³n. |
+| `error-text` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `show-count` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -106,26 +106,47 @@ import './textarea.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `input` | Evento nativo al cambiar el valor. |
+| `change` | Evento nativo al confirmar el cambio de valor. |
+| `iswc-input` | Emitido en cada cambio del valor (escribe como `input` nativo). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `input` | no | sí | sí | no |
-| `change` | no | sí | sí | no |
-| `iswc-input` | sí | sí | sí | no |
-| `iswc-change` | sí | sí | sí | no |
+| `input` | no | sÃ­ | sÃ­ | no |
+| `change` | no | sÃ­ | sÃ­ | no |
+| `iswc-input` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-textarea');
+el.addEventListener('input', (e) => {
+  console.log('input', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `focus()` | Método público declarado. |
-| `blur()` | Método público declarado. |
-| `select()` | Método público declarado. |
-| `setSelectionRange()` | Método público declarado. |
-| `checkValidity()` | Método público declarado. |
-| `reportValidity()` | Método público declarado. |
-| `setCustomValidity()` | Método público declarado. |
+| `focus()` | MÃ©todo pÃºblico declarado. |
+| `blur()` | MÃ©todo pÃºblico declarado. |
+| `select()` | MÃ©todo pÃºblico declarado. |
+| `setSelectionRange()` | MÃ©todo pÃºblico declarado. |
+| `checkValidity()` | MÃ©todo pÃºblico declarado. |
+| `reportValidity()` | MÃ©todo pÃºblico declarado. |
+| `setCustomValidity()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -144,57 +165,57 @@ Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en
 
 | Estado | Uso |
 | --- | --- |
-| `:state(invalid)` | Estado usado por implementación/CSS. |
-| `:state(disabled)` | Estado usado por implementación/CSS. |
-| `:state(readonly)` | Estado usado por implementación/CSS. |
-| `:state(blank)` | Estado usado por implementación/CSS. |
-| `:state(focused)` | Estado usado por implementación/CSS. |
+| `:state(invalid)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(disabled)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(readonly)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(blank)` | Estado usado por implementaciÃ³n/CSS. |
+| `:state(focused)` | Estado usado por implementaciÃ³n/CSS. |
 
 ### CSS custom properties
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-field-width` | Token leído o definido por componente. |
-| `--iswc-field-label-width` | Token leído o definido por componente. |
-| `--iswc-textarea-border-radius` | Token leído o definido por componente. |
-| `--iswc-radius-sm` | Token leído o definido por componente. |
-| `--iswc-textarea-border` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-textarea-bg` | Token leído o definido por componente. |
-| `--iswc-control-bg` | Token leído o definido por componente. |
-| `--iswc-textarea-text` | Token leído o definido por componente. |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--iswc-textarea-focus` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-accent` | Token leído o definido por componente. |
-| `--iswc-textarea-danger` | Token leído o definido por componente. |
-| `--iswc-color-danger-500` | Token leído o definido por componente. |
-| `--iswc-textarea-danger-text` | Token leído o definido por componente. |
-| `--iswc-danger-text` | Token leído o definido por componente. |
-| `--iswc-color-danger-700` | Token leído o definido por componente. |
-| `--_border` | Token leído o definido por componente. |
-| `--_focus` | Token leído o definido por componente. |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-text` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
-| `--iswc-text-dim` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
+| `--iswc-field-width` | Token leÃ­do o definido por componente. |
+| `--iswc-field-label-width` | Token leÃ­do o definido por componente. |
+| `--iswc-textarea-border-radius` | Token leÃ­do o definido por componente. |
+| `--iswc-radius-sm` | Token leÃ­do o definido por componente. |
+| `--iswc-textarea-border` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-textarea-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg` | Token leÃ­do o definido por componente. |
+| `--iswc-textarea-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-textarea-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-accent` | Token leÃ­do o definido por componente. |
+| `--iswc-textarea-danger` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-500` | Token leÃ­do o definido por componente. |
+| `--iswc-textarea-danger-text` | Token leÃ­do o definido por componente. |
+| `--iswc-danger-text` | Token leÃ­do o definido por componente. |
+| `--iswc-color-danger-700` | Token leÃ­do o definido por componente. |
+| `--_border` | Token leÃ­do o definido por componente. |
+| `--_focus` | Token leÃ­do o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-text` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
+| `--iswc-text-dim` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validación.
+Participa mediante ElementInternals/helpers form-associated; respetar name, value, disabled, reset, restore y validaciÃ³n.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-textarea> — Área de texto form-associated (vanilla + Shadow DOM).
+> <iswc-textarea> â€” Ãrea de texto form-associated (vanilla + Shadow DOM).
 > Atributos
 >   name, value, placeholder, label, hint, maxlength
->   rows            número de filas visibles (default 3)
+>   rows            nÃºmero de filas visibles (default 3)
 >   resize          none | vertical | both | auto   (default vertical; auto = autosize)
->   min-rows        filas mínimas con autosize (default: rows)
->   max-rows        filas máximas con autosize; a partir de ahí hace scroll
+>   min-rows        filas mÃ­nimas con autosize (default: rows)
+>   max-rows        filas mÃ¡ximas con autosize; a partir de ahÃ­ hace scroll
 >   variant      outlined (default) | filled | underlined
 >   label-placement top (default) | start
 >   error-text      mensaje mostrado en lugar del hint cuando hay error
@@ -210,11 +231,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/form-associated.js`](../_shared/form-associated.js)
 
-Tags del módulo: `<iswc-textarea>`.
+Tags del mÃ³dulo: `<iswc-textarea>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-describedby`, `aria-invalid`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-describedby`, `aria-invalid`.
 
 ## Ejemplo avanzado
 
@@ -226,7 +247,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -234,15 +255,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-descri
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./textarea.js)
+- [JavaScript](./textarea.ts)
 - [CSS](./textarea.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./textarea.json)

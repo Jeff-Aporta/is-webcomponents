@@ -2,13 +2,13 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-preview-controls",
   "category": "preview",
-  "title": "<iswc-preview-controls>",
+  "title": "&lt;iswc-preview-controls&gt;",
   "titleHtml": false,
   "description": "Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change.",
   "sections": [
     {
       "id": "intro",
-      "title": "Uso",
+      "title": "&lt;iswc-preview-controls&gt;",
       "lede": "Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change.",
       "blocks": [
         {
@@ -17,5 +17,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-preview-controls label=\"Controles\"></iswc-preview-controls>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

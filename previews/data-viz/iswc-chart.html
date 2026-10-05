@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iswc-chart · ISWC</title>
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/palettes.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/charts/chart.js"></script>
+  <script type="module" src="../../components/charts/bar-chart.js"></script>
+  <script type="module" src="../../components/charts/line-chart.js"></script>
+  <script type="module" src="../../components/charts/pie-chart.js"></script>
+  <script type="module" src="../../components/charts/doughnut-chart.js"></script>
+  <script type="module" src="../../components/charts/radar-chart.js"></script>
+  <script type="module" src="../../components/charts/polar-area-chart.js"></script>
+  <script type="module" src="../../components/charts/scatter-chart.js"></script>
+  <script type="module" src="../../components/charts/bubble-chart.js"></script>
+  <script type="module" src="../../components/charts/waterfall-chart.js"></script>
+  <script type="module" src="../../components/charts/funnel-chart.js"></script>
+  <script type="module" src="../../components/charts/sparkline.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+  <script src="../../scripts/highlight-pre.js" defer></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+  <style>
+    /* ── Sección & headers ───────────────────────────────────────────── */
+    .section { margin-block: 1.75rem; }
+    .section h2 { margin: 0 0 .15rem; font-size: 1.05rem; }
+    .section .eyebrow {
+      display: inline-block;
+      font-size: .65rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--iswc-accent);
+      margin-bottom: .35rem;
+      font-weight: 600;
+    }
+    .section .lede { color: var(--iswc-text-soft); margin: 0 0 1rem; font-size: .9rem; }
+    .section > p:not(.lede) { color: var(--iswc-text-dim); font-size: .85rem; margin: 0 0 .85rem; }
+
+    /* ── Hero ───────────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      border: 1px solid var(--iswc-border);
+      border-radius: calc(var(--iswc-radius) + 4px);
+      background:
+        radial-gradient(900px 320px at 12% -10%, color-mix(in srgb, var(--iswc-accent) 14%, transparent), transparent 60%),
+        radial-gradient(620px 280px at 100% 0%, color-mix(in srgb, var(--iswc-brand, var(--iswc-accent)) 10%, transparent), transparent 55%),
+        linear-gradient(180deg, color-mix(in srgb, var(--iswc-bg-elev) 92%, transparent), var(--iswc-bg-elev));
+      padding: 1.1rem 1.25rem 1rem;
+      overflow: hidden;
+    }
+    .hero .crumbs {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .15rem .5rem;
+      border: 1px solid var(--iswc-border);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
+      font-size: .7rem;
+      color: var(--iswc-text-soft);
+    }
+    .hero .crumbs .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--iswc-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--iswc-accent) 20%, transparent); }
+    .hero h1 {
+      margin: .6rem 0 .25rem;
+      font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+      letter-spacing: -.01em;
+      font-weight: 700;
+    }
+    .hero h1 b { font-weight: 800; color: var(--iswc-accent); }
+    .hero p { color: var(--iswc-text-soft); margin: 0 0 .85rem; max-width: 60ch; font-size: .9rem; }
+    .hero .demo { height: 17rem; border-radius: var(--iswc-radius); overflow: hidden; }
+    .hero .demo::before { content: ""; }
+
+    /* ── Stat tiles ─────────────────────────────────────────────────── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+      gap: .65rem;
+      margin: 1rem 0 0;
+    }
+    .stat-tile {
+      border: 1px solid var(--iswc-border);
+      border-radius: var(--iswc-radius);
+      background: color-mix(in srgb, var(--iswc-bg-elev) 88%, transparent);
+      padding: .7rem .85rem;
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .stat-tile .ico {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: grid; place-items: center;
+      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+      color: var(--iswc-accent);
+      font-size: 1.05rem;
+    }
+    .stat-tile b { font-size: 1.05rem; font-weight: 700; display: block; line-height: 1.1; }
+    .stat-tile small { color: var(--iswc-text-dim); font-size: .72rem; letter-spacing: .02em; }
+
+    /* ── Override .demo defaults when it wears the chart-card skin ─── */
+    .chart-card.demo {
+      margin: 0;
+      padding: .85rem .9rem .9rem;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent), var(--iswc-bg-elev));
+      box-shadow: none;
+      border: 1px solid var(--iswc-border);
+      border-radius: calc(var(--iswc-radius) + 2px);
+      overflow: hidden;
+    }
+    .chart-card.demo::before { display: none; }
+    .chart-card.demo.demo--with-code { padding-right: 2.5rem; }
+    .chart-card.demo .demo-code-btn { color: var(--iswc-text-soft); }
+    .chart-card.demo .demo-code-btn:hover { color: var(--iswc-accent); background: color-mix(in srgb, var(--iswc-accent) 12%, transparent); }
+
+    /* ── Card grid ──────────────────────────────────────────────────── */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(19.5rem, 1fr));
+      gap: 1rem;
+      margin-top: .85rem;
+    }
+    .chart-card {
+      position: relative;
+      border: 1px solid var(--iswc-border);
+      border-radius: calc(var(--iswc-radius) + 2px);
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent), var(--iswc-bg-elev));
+      padding: .85rem .9rem .9rem;
+      min-width: 0;
+      display: flex; flex-direction: column;
+      gap: .65rem;
+      transition: border-color .15s ease, transform .15s ease;
+    }
+    .chart-card:hover {
+      border-color: color-mix(in srgb, var(--iswc-accent) 45%, var(--iswc-border));
+      transform: translateY(-1px);
+    }
+    .chart-card .card-h {
+      display: flex; align-items: flex-start; gap: .65rem;
+    }
+    .chart-card .ico {
+      flex: 0 0 auto;
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      display: grid; place-items: center;
+      background: color-mix(in srgb, var(--iswc-accent) 14%, transparent);
+      color: var(--iswc-accent);
+      font-size: .9rem;
+    }
+    .chart-card.iswc-line .ico       { background: color-mix(in srgb, #5b9bff 18%, transparent); color: #5b9bff; }
+    .chart-card.iswc-bar .ico        { background: color-mix(in srgb, var(--iswc-accent) 18%, transparent); color: var(--iswc-accent); }
+    .chart-card.iswc-pie .ico        { background: color-mix(in srgb, #f59e0b 18%, transparent); color: #f59e0b; }
+    .chart-card.iswc-doughnut .ico   { background: color-mix(in srgb, #f59e0b 14%, transparent); color: #f59e0b; }
+    .chart-card.iswc-polar .ico      { background: color-mix(in srgb, #ec4899 14%, transparent); color: #ec4899; }
+    .chart-card.iswc-radar .ico      { background: color-mix(in srgb, #8b5cf6 16%, transparent); color: #8b5cf6; }
+    .chart-card.iswc-scatter .ico    { background: color-mix(in srgb, #06b6d4 16%, transparent); color: #06b6d4; }
+    .chart-card.iswc-bubble .ico     { background: color-mix(in srgb, #14b8a6 16%, transparent); color: #14b8a6; }
+    .chart-card.iswc-waterfall .ico  { background: color-mix(in srgb, #22c55e 18%, transparent); color: #22c55e; }
+    .chart-card.iswc-funnel .ico     { background: color-mix(in srgb, #f43f5e 16%, transparent); color: #f43f5e; }
+    .chart-card.iswc-spark .ico      { background: color-mix(in srgb, var(--iswc-text-soft) 14%, transparent); color: var(--iswc-text-soft); }
+
+    .chart-card h4 {
+      margin: 0; font-size: .86rem; font-weight: 650; line-height: 1.25;
+      letter-spacing: -.005em;
+    }
+    .chart-card .desc {
+      margin: .1rem 0 0;
+      font-size: .74rem; line-height: 1.45;
+      color: var(--iswc-text-dim);
+    }
+    .chart-card .pills {
+      display: flex; flex-wrap: wrap; gap: .25rem;
+      margin-top: .35rem;
+    }
+    .pill {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .65rem;
+      padding: .12rem .4rem;
+      border-radius: 999px;
+      border: 1px solid var(--iswc-border);
+      background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
+      color: var(--iswc-text-soft);
+    }
+    .pill.tone-accent { color: var(--iswc-accent); border-color: color-mix(in srgb, var(--iswc-accent) 35%, var(--iswc-border)); }
+    .pill.tone-success { color: var(--iswc-success, #16a34a); border-color: color-mix(in srgb, var(--iswc-success, #16a34a) 35%, var(--iswc-border)); }
+    .pill.tone-danger { color: var(--iswc-danger, #dc2626); border-color: color-mix(in srgb, var(--iswc-danger, #dc2626) 35%, var(--iswc-border)); }
+
+    .chart-card__plot {
+      flex: 1 1 auto;
+      height: 15rem;
+      border-top: 1px dashed var(--iswc-border-soft);
+      padding-top: .6rem;
+      min-width: 0;
+    }
+    .chart-card__plot.iswc-tall { height: 18rem; }
+    .chart-card__plot.iswc-short { height: 11rem; }
+    .chart-card__plot.iswc-flush { padding-top: 0; border-top: 0; }
+
+    /* ── Spark rows ─────────────────────────────────────────────────── */
+    .spark-row {
+      display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+      padding: .45rem 0;
+      border-bottom: 1px solid var(--iswc-border-soft);
+      font-size: .8125rem;
+    }
+    .spark-row:last-child { border-bottom: 0; }
+    .spark-row b { font-variant-numeric: tabular-nums; }
+    .spark-row small { color: var(--iswc-text-dim); font-size: .72rem; margin-left: auto; }
+
+    /* ── Ref tables ─────────────────────────────────────────────────── */
+    table.ref { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    table.ref th, table.ref td { text-align: left; padding: .4rem .55rem; border-bottom: 1px solid var(--iswc-border-soft); vertical-align: top; }
+    table.ref th { color: var(--iswc-text-dim); font-weight: 600; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
+    table.ref code { font-size: .75rem; }
+
+    /* ── Two-up demo (atributos comparados) ─────────────────────────── */
+    .duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 720px) { .duo { grid-template-columns: 1fr; } }
+
+    /* ── Inline chip code ───────────────────────────────────────────── */
+    .ic {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .72rem;
+      padding: .05rem .35rem;
+      border-radius: 4px;
+      background: color-mix(in srgb, var(--iswc-bg-elev) 80%, transparent);
+      border: 1px solid var(--iswc-border-soft);
+      color: var(--iswc-text);
+    }
+
+    /* ── Apertura del lightbox: la card entera se siente "clickable" ── */
+    .chart-card.iswc-clickable { cursor: pointer; }
+    .chart-card.iswc-clickable::after {
+      content: "↗";
+      position: absolute; top: .65rem; right: .7rem;
+      font-size: .9rem; color: var(--iswc-text-dim);
+    }
+  </style>
+</head>
+<body>
+  <iswc-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <iswc-main class="main" slot="start" remember-scroll storage-key="docs-is-chart">
+
+      <!-- ───────────────────── Hero ───────────────────── -->
+      <section class="section" id="intro">
+        <div class="hero">
+          <span class="crumbs"><span class="dot"></span>data-viz · Charts · SVG</span>
+          <h1><b>Charts</b> en SVG, sin dependencias.</h1>
+          <p>
+            Un único motor para 10 tipos de gráfico. Configuración compatible con
+            Chart.js — un <code>config</code> existente funciona sin cambios.
+            Los colores salen de la paleta de marca activa y se revalidan al cambiar
+            de tema: pruébalo con el selector del encabezado.
+          </p>
+          <div class="demo">
+            <iswc-chart type="bar" label="Ingresos vs gastos" x-label="Mes" y-label="Millones COP"
+                      style="--border-color-1: var(--iswc-success, #16a34a); --fill-color-1: color-mix(in srgb, var(--iswc-success, #16a34a) 22%, transparent); --border-color-2: var(--iswc-danger, #dc2626); --fill-color-2: color-mix(in srgb, var(--iswc-danger, #dc2626) 22%, transparent);">
+              <script type="application/json">
+                {
+                  "data": {
+                    "labels": ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+                    "datasets": [
+                      { "label": "Ingresos", "data": [48, 56, 62, 58, 71, 68] },
+                      { "label": "Gastos",   "data": [35, 38, 40, 42, 45, 43] }
+                    ]
+                  }
+                }
+              </script>
+            </iswc-chart>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-tile"><div class="ico">▮</div><div><b>bar</b><small>apilada · horizontal · grupos</small></div></div>
+          <div class="stat-tile"><div class="ico">／</div><div><b>line</b><small>curva · área · escalonada</small></div></div>
+          <div class="stat-tile"><div class="ico">◐</div><div><b>radial</b><small>pie · doughnut · polarArea</small></div></div>
+          <div class="stat-tile"><div class="ico">◇</div><div><b>radar</b><small>polígono + rejilla polar</small></div></div>
+          <div class="stat-tile"><div class="ico">●</div><div><b>scatter / bubble</b><small>x, y, r por punto</small></div></div>
+          <div class="stat-tile"><div class="ico">▦</div><div><b>waterfall</b><small>deltas + totales</small></div></div>
+          <div class="stat-tile"><div class="ico">▼</div><div><b>funnel</b><small>caída porcentual por paso</small></div></div>
+          <div class="stat-tile"><div class="ico">▰</div><div><b>sparkline</b><small>micro-gráfico inline</small></div></div>
+        </div>
+      </section>
+
+      <!-- ─────────────────── Comparar / Bar ─────────────────── -->
+      <section class="section" id="comparacion">
+        <span class="eyebrow">Comparar magnitudes</span>
+        <h2>Barras</h2>
+        <p class="lede">Lo correcto cuando el lector compara magnitudes entre categorías. Atributos: <span class="ic">stacked</span>, <span class="ic">index-axis="y"</span>, <span class="ic">min</span>, <span class="ic">max</span>, <span class="ic">grid</span>, <span class="ic">legend-position</span>.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▮</div>
+              <div style="flex:1; min-width:0">
+                <h4>Una serie</h4>
+                <p class="desc">Una sola variable entre categorías. Recomendado cuando hay una sola historia que contar.</p>
+                <div class="pills"><span class="pill">type="bar"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-bar-chart>
+                <script type="application/json">{ "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [{ "label":"Ventas", "data":[4.2,5.1,3.8,6.4,5.9,7.2] }] } }</script>
+              </iswc-bar-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▮▮</div>
+              <div style="flex:1; min-width:0">
+                <h4>Agrupada</h4>
+                <p class="desc">Varias series comparten la misma categoría (default).</p>
+                <div class="pills"><span class="pill">datasets: 3</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="bar" grid="both">
+                <script type="application/json">{ "data": { "labels": ["Q1","Q2","Q3","Q4"], "datasets": [
+                  { "label":"Ingresos", "data":[32,45,38,52] },
+                  { "label":"Costos",   "data":[22,28,25,31] },
+                  { "label":"Utilidad", "data":[10,17,13,21] } ] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▦</div>
+              <div style="flex:1; min-width:0">
+                <h4>Apilada</h4>
+                <p class="desc">Composición dentro del total: las barras se suman.</p>
+                <div class="pills"><span class="pill">stacked</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-bar-chart stacked>
+                <script type="application/json">{ "data": { "labels": ["Ene","Feb","Mar","Abr"], "datasets": [
+                  { "label":"Contado",   "data":[18,22,20,27] },
+                  { "label":"Crédito",   "data":[12,15,18,14] },
+                  { "label":"Anticipos", "data":[5,7,6,9] } ] } }</script>
+              </iswc-bar-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▮</div>
+              <div style="flex:1; min-width:0">
+                <h4>Horizontal</h4>
+                <p class="desc">Etiqueta larga: el eje de categoría va a la izquierda.</p>
+                <div class="pills"><span class="pill">index-axis="y"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-bar-chart index-axis="y" legend-position="start">
+                <script type="application/json">{ "data": { "labels": ["Bogotá","Medellín","Cali","Barranquilla","Bucaramanga","Pereira"], "datasets": [{ "label":"Clientes","data":[1240,890,610,430,280,210] }] } }</script>
+              </iswc-bar-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▮</div>
+              <div style="flex:1; min-width:0">
+                <h4>Con negativos</h4>
+                <p class="desc">La línea base marca el cero; las barras hacia abajo.</p>
+                <div class="pills"><span class="pill">stacked</span><span class="pill">min</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="bar" stacked min="-30">
+                <script type="application/json">{ "data": { "labels": ["Ene","Feb","Mar","Abr","May"], "datasets": [
+                  { "label":"Ingresos", "data":[18,15,-8,11,22] },
+                  { "label":"Costos",   "data":[7,14,-10,18,9] } ] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▮</div>
+              <div style="flex:1; min-width:0">
+                <h4>Borde redondeado</h4>
+                <p class="desc">Radio por dataset con <span class="ic">borderRadius</span>.</p>
+                <div class="pills"><span class="pill">borderRadius: 10</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="bar">
+                <script type="application/json">{ "data": { "labels": ["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"], "datasets": [{ "label":"Pedidos","data":[120,98,142,160,180,210,90], "borderRadius": 10 }] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▮</div>
+              <div style="flex:1; min-width:0">
+                <h4>Leyenda al pie</h4>
+                <p class="desc">Cambia de posición sin tocar el dataset.</p>
+                <div class="pills"><span class="pill">legend-position="bottom"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="bar" legend-position="bottom">
+                <script type="application/json">{ "data": { "labels": ["Norte","Sur","Este","Oeste","Centro"], "datasets": [
+                  { "label":"Trimestre 1","data":[140,90,170,80,110] },
+                  { "label":"Trimestre 2","data":[180,120,200,100,140] } ] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bar">
+            <div class="card-h">
+              <div class="ico">▮</div>
+              <div style="flex:1; min-width:0">
+                <h4>Sin leyenda, sin tooltip</h4>
+                <p class="desc">Presentaciones limpias: solo el trazo.</p>
+                <div class="pills"><span class="pill">without-legend</span><span class="pill">without-tooltip</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="bar" without-legend without-tooltip grid="none">
+                <script type="application/json">{ "data": { "labels": ["A","B","C","D","E","F"], "datasets": [{ "label":"Valor","data":[3,7,5,9,6,8] }] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ─────────────────── Tendencia / Line ─────────────────── -->
+      <section class="section" id="tendencia">
+        <span class="eyebrow">Tendencia en el tiempo</span>
+        <h2>Líneas</h2>
+        <p class="lede">Cuando importa la dirección del cambio. Atributos: <span class="ic">tension</span>, <span class="ic">stepped</span>, <span class="ic">fill</span> en el dataset. Atributos del elemento: <span class="ic">x-label</span>, <span class="ic">y-label</span>, <span class="ic">min</span>, <span class="ic">max</span>.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card demo iswc-line">
+            <div class="card-h">
+              <div class="ico">／</div>
+              <div style="flex:1; min-width:0">
+                <h4>Dos series, curva</h4>
+                <p class="desc"><span class="ic">tension: 0.4</span> en el dataset dibuja una curva natural.</p>
+                <div class="pills"><span class="pill">tension: 0.4</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-line-chart>
+                <script type="application/json">{ "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [
+                  { "label":"2025", "data":[30,42,38,55,48,62], "tension": 0.4 },
+                  { "label":"2024", "data":[25,30,34,40,39,45], "tension": 0.4 } ] } }</script>
+              </iswc-line-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-line">
+            <div class="card-h">
+              <div class="ico">▲</div>
+              <div style="flex:1; min-width:0">
+                <h4>Área</h4>
+                <p class="desc"><span class="ic">fill: true</span> rellena bajo la línea para reforzar la magnitud.</p>
+                <div class="pills"><span class="pill">fill: true</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-line-chart>
+                <script type="application/json">{ "data": { "labels": ["L","M","X","J","V","S","D"], "datasets": [
+                  { "label":"Visitas", "data":[120,190,170,240,280,210,150], "fill": true, "tension": 0.4 } ] } }</script>
+              </iswc-line-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-line">
+            <div class="card-h">
+              <div class="ico">⌐</div>
+              <div style="flex:1; min-width:0">
+                <h4>Escalonada</h4>
+                <p class="desc"><span class="ic">stepped: true</span>: valores que cambian de golpe.</p>
+                <div class="pills"><span class="pill">stepped: true</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-line-chart without-tooltip>
+                <script type="application/json">{ "data": { "labels": ["v1","v2","v3","v4","v5","v6"], "datasets": [
+                  { "label":"Plan",  "data":[10,10,25,25,40,40], "stepped": true },
+                  { "label":"Real",  "data":[8,12,18,28,33,46],  "stepped": true } ] } }</script>
+              </iswc-line-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-line">
+            <div class="card-h">
+              <div class="ico">／</div>
+              <div style="flex:1; min-width:0">
+                <h4>Sin marcadores</h4>
+                <p class="desc"><span class="ic">pointRadius: 0</span>: línea pura, sin ruido.</p>
+                <div class="pills"><span class="pill">pointRadius: 0</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="line" legend-position="end" without-tooltip>
+                <script type="application/json">{ "data": { "labels": ["00","03","06","09","12","15","18","21"], "datasets": [
+                  { "label":"CPU %",  "data":[12,10,15,42,68,74,55,28], "pointRadius": 0, "tension": 0.35 },
+                  { "label":"IOWait", "data":[4,3,5,9,14,18,10,6],    "pointRadius": 0, "tension": 0.35 } ] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-line">
+            <div class="card-h">
+              <div class="ico">／</div>
+              <div style="flex:1; min-width:0">
+                <h4>Dominio fijado</h4>
+                <p class="desc"><span class="ic">min</span> y <span class="ic">max</span> congelan el rango del eje.</p>
+                <div class="pills"><span class="pill">min="0"</span><span class="pill">max="100"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="line" min="0" max="100" grid="both" legend-position="bottom">
+                <script type="application/json">{ "data": { "labels": ["S1","S2","S3","S4","S5","S6","S7","S8"], "datasets": [
+                  { "label":"NPS",   "data":[62,65,68,71,69,74,78,82], "tension": 0.4 },
+                  { "label":"Meta",  "data":[70,70,70,70,70,70,70,70], "pointRadius": 0 } ] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-line iswc-clickable">
+            <div class="card-h">
+              <div class="ico">⊞</div>
+              <div style="flex:1; min-width:0">
+                <h4>Clic abre el visor</h4>
+                <p class="desc">Atributo <span class="ic">variant="viewer"</span>: clic → lightbox a pantalla completa con tortuga de animación.</p>
+                <div class="pills"><span class="pill tone-accent">variant="viewer"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-line-chart variant="viewer" without-legend>
+                <script type="application/json">{ "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [
+                  { "label":"Tráfico orgánico", "data":[1200,1480,1620,1900,2250,2780], "tension": 0.45, "fill": true } ] } }</script>
+              </iswc-line-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ─────────────────── Proporción / Radial ─────────────────── -->
+      <section class="section" id="proporcion">
+        <span class="eyebrow">Partes de un total</span>
+        <h2>Radial</h2>
+        <p class="lede">Pie, doughnut y polar. Con más de seis rebanadas dejan de ser legibles y conviene una barra horizontal.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card demo iswc-pie">
+            <div class="card-h">
+              <div class="ico">◐</div>
+              <div style="flex:1; min-width:0">
+                <h4>Pie</h4>
+                <p class="desc">El porcentaje se rotula dentro de cada rebanada.</p>
+                <div class="pills"><span class="pill">type="pie"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-pie-chart>
+                <script type="application/json">{ "data": { "labels": ["Contado","Crédito 30","Crédito 60","Crédito 90"], "datasets": [{ "label":"Cartera", "data":[45,25,18,12] }] } }</script>
+              </iswc-pie-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-doughnut">
+            <div class="card-h">
+              <div class="ico">◯</div>
+              <div style="flex:1; min-width:0">
+                <h4>Doughnut</h4>
+                <p class="desc">El hueco central muestra el total; <span class="ic">cutout</span> ajusta el grosor.</p>
+                <div class="pills"><span class="pill">cutout: 60%</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-doughnut-chart>
+                <script type="application/json">{ "options":{ "cutout":"60%" }, "data": { "labels": ["Inventario","Cartera","Bancos","Activo fijo"], "datasets": [{ "label":"Activos", "data":[3200,2100,1450,5300] }] } }</script>
+              </iswc-doughnut-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-polar">
+            <div class="card-h">
+              <div class="ico">◍</div>
+              <div style="flex:1; min-width:0">
+                <h4>Polar area</h4>
+                <p class="desc">Ángulo fijo, radio según el valor. Rejillas concentran la lectura.</p>
+                <div class="pills"><span class="pill">type="polarArea"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-polar-area-chart without-tooltip>
+                <script type="application/json">{ "data": { "labels": ["Norte","Sur","Este","Oeste","Centro","Noreste"], "datasets": [{ "label":"Cobertura", "data":[11,16,7,14,9,12] }] } }</script>
+              </iswc-polar-area-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-doughnut">
+            <div class="card-h">
+              <div class="ico">◎</div>
+              <div style="flex:1; min-width:0">
+                <h4>Doughnut con leyenda al final</h4>
+                <p class="desc">Cambia la posición del swatch list.</p>
+                <div class="pills"><span class="pill">legend-position="end"</span><span class="pill">cutout: 70%</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="doughnut" legend-position="end">
+                <script type="application/json">{ "options":{ "cutout":"70%" }, "data": { "labels": ["Soporte","Producto","Marketing","Operaciones","Otros"], "datasets": [{ "label":"Gasto", "data":[42,28,18,9,3] }] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-radar">
+            <div class="card-h">
+              <div class="ico">◇</div>
+              <div style="flex:1; min-width:0">
+                <h4>Radar</h4>
+                <p class="desc">Compara varias métricas entre dos conjuntos.</p>
+                <div class="pills"><span class="pill">type="radar"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot iswc-tall">
+              <iswc-radar-chart legend-position="bottom" without-tooltip>
+                <script type="application/json">{ "data": { "labels": ["Liquidez","Rentabilidad","Endeudamiento","Eficiencia","Crecimiento"], "datasets": [
+                  { "label":"Empresa", "data":[65,78,45,82,70] },
+                  { "label":"Sector",  "data":[55,62,60,58,52] } ] } }</script>
+              </iswc-radar-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ─────────────────── Correlación / XY ─────────────────── -->
+      <section class="section" id="correlacion">
+        <span class="eyebrow">Dos variables numéricas</span>
+        <h2>Scatter &amp; bubble</h2>
+        <p class="lede">Puntos en el plano cartesiano. Bubble añade una tercera dimensión vía <span class="ic">r</span>.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card demo iswc-scatter">
+            <div class="card-h">
+              <div class="ico">●</div>
+              <div style="flex:1; min-width:0">
+                <h4>Scatter</h4>
+                <p class="desc">Relación entre antigüedad de factura y saldo vencido.</p>
+                <div class="pills"><span class="pill">pointRadius: 4</span><span class="pill">x-label</span><span class="pill">y-label</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-scatter-chart x-label="Antigüedad (días)" y-label="Saldo (millones COP)" without-tooltip>
+                <script type="application/json">{ "data": { "datasets": [
+                  { "label":"Facturas", "pointRadius": 4, "data": [
+                    {"x":5,"y":1.2},{"x":18,"y":3.4},{"x":32,"y":2.1},{"x":45,"y":5.6},
+                    {"x":60,"y":4.3},{"x":75,"y":7.2},{"x":88,"y":5.1},{"x":95,"y":8.8} ] } ] } }</script>
+              </iswc-scatter-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-bubble">
+            <div class="card-h">
+              <div class="ico">⬤</div>
+              <div style="flex:1; min-width:0">
+                <h4>Bubble</h4>
+                <p class="desc">Margen vs volumen, con tamaño por ingreso.</p>
+                <div class="pills"><span class="pill">r: px³</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="bubble" x-label="Margen %" y-label="Volumen (M)" legend-position="bottom">
+                <script type="application/json">{ "data": { "datasets": [
+                  { "label":"Productos", "data": [
+                    {"x":12,"y":40,"r":10},{"x":24,"y":75,"r":18},{"x":33,"y":55,"r":8},
+                    {"x":45,"y":90,"r":24},{"x":58,"y":62,"r":14},{"x":70,"y":48,"r":11} ] } ] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-scatter">
+            <div class="card-h">
+              <div class="ico">●</div>
+              <div style="flex:1; min-width:0">
+                <h4>Dos datasets</h4>
+                <p class="desc">Color por categoría, mismo eje.</p>
+                <div class="pills"><span class="pill">datasets: 2</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="scatter" without-tooltip legend-position="bottom">
+                <script type="application/json">{ "data": { "datasets": [
+                  { "label":"Retención", "pointRadius": 3, "data": [{"x":2,"y":84},{"x":4,"y":78},{"x":6,"y":72},{"x":8,"y":68},{"x":10,"y":63},{"x":12,"y":58}] },
+                  { "label":"Adquisición", "pointRadius": 3, "data": [{"x":2,"y":12},{"x":4,"y":22},{"x":6,"y":31},{"x":8,"y":39},{"x":10,"y":47},{"x":12,"y":55}] }
+                ] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ─────────────────── Cascada / Waterfall ─────────────────── -->
+      <section class="section" id="cascada">
+        <span class="eyebrow">Acumulado</span>
+        <h2>Waterfall</h2>
+        <p class="lede">Cómo cambia un valor a través de pasos: cada delta sube o baja; los índices marcados en <span class="ic">totals</span> se dibujan absolutos.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card demo iswc-waterfall">
+            <div class="card-h">
+              <div class="ico">▦</div>
+              <div style="flex:1; min-width:0">
+                <h4>Flujo de caja del trimestre</h4>
+                <p class="desc">Ingresos y egresos parciales con totales al cierre.</p>
+                <div class="pills"><span class="pill tone-success">up</span><span class="pill tone-danger">down</span><span class="pill">totals</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-waterfall-chart>
+                <script type="application/json">{ "data": { "labels": ["Saldo inicial","Ventas","Servicios","Nómina","Impuestos","Inversiones","Cierre"], "datasets": [
+                  { "label":"Movimiento", "totals":[0,6], "data":[120, 80, 45, -65, -28, -22, 130] } ] } }</script>
+              </iswc-waterfall-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-waterfall">
+            <div class="card-h">
+              <div class="ico">▦</div>
+              <div style="flex:1; min-width:0">
+                <h4>Solo deltas</h4>
+                <p class="desc">Sin totales absolutos; los colores distinguen mejorías de retrocesos.</p>
+                <div class="pills"><span class="pill">type="waterfall"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot">
+              <iswc-chart type="waterfall" without-tooltip>
+                <script type="application/json">{ "data": { "labels": ["Ene","Feb","Mar","Abr","May","Jun"], "datasets": [{ "label":"Δ", "data":[14,8,-6,12,-3,9] }] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ─────────────────── Embudo / Funnel ─────────────────── -->
+      <section class="section" id="embudo">
+        <span class="eyebrow">Conversión por etapas</span>
+        <h2>Funnel</h2>
+        <p class="lede">Cada banda es proporcional al primer paso; el porcentaje indica la caída frente al paso anterior.</p>
+        <div class="chart-grid">
+
+          <article class="chart-card demo iswc-funnel">
+            <div class="card-h">
+              <div class="ico">▼</div>
+              <div style="flex:1; min-width:0">
+                <h4>Embudo de ventas</h4>
+                <p class="desc">De visitas a compra efectiva.</p>
+                <div class="pills"><span class="pill">type="funnel"</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot iswc-tall">
+              <iswc-funnel-chart without-tooltip>
+                <script type="application/json">{ "data": { "labels": ["Visitas","Leads","Cotizados","Negociando","Cerrados","Pagados"], "datasets": [{ "label":"Usuarios", "data":[12000, 4800, 1800, 920, 410, 285] }] } }</script>
+              </iswc-funnel-chart>
+            </div>
+          </article>
+
+          <article class="chart-card demo iswc-funnel">
+            <div class="card-h">
+              <div class="ico">▼</div>
+              <div style="flex:1; min-width:0">
+                <h4>Onboarding</h4>
+                <p class="desc">Cuántos avanzan desde el registro hasta la activación.</p>
+                <div class="pills"><span class="pill">5 etapas</span></div>
+              </div>
+            </div>
+            <div class="chart-card__plot iswc-tall">
+              <iswc-chart type="funnel" without-tooltip>
+                <script type="application/json">{ "data": { "labels": ["Registro","Verificó email","Primer inicio","Configuró perfil","Activó función clave"], "datasets": [{ "label":"Usuarios", "data":[9500, 7100, 4600, 2800, 1620] }] } }</script>
+              </iswc-chart>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ─────────────────── Configuración ─────────────────── -->
+      <section class="section" id="config">
+        <span class="eyebrow">Configuración</span>
+        <h2>Atributos, datasets, JS</h2>
+        <p class="lede">Datos por <span class="ic">&lt;script type="application/json"&gt;</span> hijo o por la propiedad <span class="ic">config</span>. Esquema Chart.js: <span class="ic">{ type, data: { labels, datasets }, options }</span>.</p>
+
+        <h3>Atributos del elemento</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Valores</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>type</code></td><td>bar · line · pie · doughnut · radar · polarArea · scatter · bubble · waterfall · funnel</td><td>Tipo de gráfico. Resuelto por <code>MARK_REGISTRY</code> al cargar <code>chart.js</code>.</td></tr>
+            <tr><td><code>label</code></td><td>texto</td><td>Título sobre el gráfico (también <code>plugins.title.text</code>).</td></tr>
+            <tr><td><code>x-label</code> · <code>y-label</code></td><td>texto</td><td>Títulos de eje.</td></tr>
+            <tr><td><code>index-axis</code></td><td><code>x</code> · <code>y</code></td><td><code>y</code> produce barras horizontales.</td></tr>
+            <tr><td><code>stacked</code></td><td>booleano</td><td>Apila las series.</td></tr>
+            <tr><td><code>grid</code></td><td><code>auto</code> · <code>both</code> · <code>x</code> · <code>y</code> · <code>none</code></td><td>Por defecto solo el eje de valor.</td></tr>
+            <tr><td><code>min</code> · <code>max</code></td><td>número</td><td>Fija el dominio del eje de valor.</td></tr>
+            <tr><td><code>legend-position</code></td><td><code>top</code> · <code>bottom</code> · <code>start</code> · <code>end</code></td><td>Ubicación de la leyenda.</td></tr>
+            <tr><td><code>without-legend</code> · <code>without-tooltip</code> · <code>without-animation</code></td><td>booleano</td><td>Desactivan cada parte.</td></tr>
+            <tr><td><code>variant</code></td><td><code>viewer</code></td><td>Clic → abre el visor (lightbox con tortuga de animación).</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Propiedades del dataset</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Aplica a</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>label</code></td><td>todos</td><td>Nombre de la serie en leyenda y tooltip.</td></tr>
+            <tr><td><code>backgroundColor</code> · <code>borderColor</code></td><td>todos</td><td>Forzado por dataset. <code>string</code> para todos los puntos; <code>string[]</code> por índice (pie/doughnut/polarArea).</td></tr>
+            <tr><td><code>tension</code></td><td>line</td><td>Mayor que 0 dibuja curva natural.</td></tr>
+            <tr><td><code>stepped</code></td><td>line</td><td>Línea escalonada.</td></tr>
+            <tr><td><code>fill</code></td><td>line</td><td>Rellena el área bajo la línea.</td></tr>
+            <tr><td><code>borderRadius</code></td><td>bar</td><td>Radio del extremo de la barra.</td></tr>
+            <tr><td><code>borderWidth</code> · <code>pointRadius</code></td><td>line · scatter</td><td>Grosor del trazo y tamaño del punto (0 = sin marcadores).</td></tr>
+            <tr><td><code>totals</code></td><td>waterfall</td><td>Índices con valor absoluto (acumulado en lugar de delta).</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Tokens CSS</h3>
+        <table class="ref">
+          <thead><tr><th>Variable</th><th>Default</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><code>--chart-bar-radius</code></td><td>4</td><td>Radio por defecto de las barras.</td></tr>
+            <tr><td><code>--chart-bar-gap</code></td><td>2</td><td>Separación entre barras.</td></tr>
+            <tr><td><code>--chart-line-width</code></td><td>2</td><td>Grosor de la línea.</td></tr>
+            <tr><td><code>--chart-point-radius</code></td><td>3</td><td>Marcadores.</td></tr>
+            <tr><td><code>--chart-slice-gap</code></td><td>2</td><td>Separación de rebanadas.</td></tr>
+            <tr><td><code>--chart-doughnut-ratio</code></td><td>0.62</td><td>Ratio inner/outer del doughnut.</td></tr>
+            <tr><td><code>--border-color-N</code> · <code>--fill-color-N</code></td><td>paleta</td><td>Color por índice (1-based) — útil para tematizar por dataset.</td></tr>
+            <tr><td><code>--grid-color</code> · <code>--chart-text</code> · <code>--chart-surface</code></td><td>—</td><td>Estilos globales del SVG.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Config por JavaScript</h3>
+        <div class="duo">
+          <div class="demo" style="height:14rem">
+            <iswc-chart id="jsChart" type="line" without-legend></iswc-chart>
+          </div>
+<pre class="code">const el = document.querySelector('#jsChart');
+el.config = {
+  data: {
+    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    datasets: [
+      { label: 'Ventas', data: [420, 580, 630, 710],
+        tension: 0.4, fill: true }
+    ]
+  }
+};</pre>
+        </div>
+
+        <h3>Propiedades del elemento</h3>
+        <table class="ref">
+          <thead><tr><th>Nombre</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>config</code></td><td>Configuración completa; asignarla vuelve a dibujar.</td></tr>
+            <tr><td><code>payload</code></td><td>Alias de <code>config</code> (compatible con el visor de diagramas).</td></tr>
+            <tr><td><code>svg</code></td><td>Nodo <code>&lt;svg&gt;</code> del gráfico (solo lectura).</td></tr>
+            <tr><td><code>chart</code></td><td>Alias histórico de <code>svg</code>.</td></tr>
+            <tr><td><code>turtle</code></td><td>Instancia de <code>PathTurtle</code> (cuando hay trazos).</td></tr>
+            <tr><td><code>updateComplete()</code></td><td>Promesa resuelta al terminar el render.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Eventos</h3>
+        <table class="ref">
+          <thead><tr><th>Evento</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td><code>iswc-render</code></td><td>Tras cada render. <code>detail.svg</code> contiene el nodo actualizado.</td></tr>
+            <tr><td><code>iswc-turtle-state</code></td><td>Avance de la animación de tortuga (cuando aplica).</td></tr>
+            <tr><td><code>iswc-open-viewer</code></td><td>Clic cuando <code>variant="viewer"</code>; cancelable para manejar el visor en casa.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ─────────────────── Micro / Sparkline ─────────────────── -->
+      <section class="section" id="micro">
+        <span class="eyebrow">Inline en texto</span>
+        <h2>Micro-gráficos</h2>
+        <p class="lede"><span class="ic">&lt;iswc-sparkline&gt;</span> va en línea con el texto, sin ejes ni leyenda. El atributo <span class="ic">trend</span> usa los colores semánticos del sistema.</p>
+
+        <div class="chart-grid">
+          <article class="chart-card demo iswc-spark">
+            <div class="card-h">
+              <div class="ico">▰</div>
+              <div style="flex:1; min-width:0">
+                <h4>Indicadores de tablero</h4>
+                <p class="desc">Sparkline valores o barras, con <span class="ic">trend</span>, <span class="ic">appearance</span>, <span class="ic">curve</span>.</p>
+              </div>
+            </div>
+            <div class="spark-row"><span>Ventas</span><iswc-sparkline trend="positive" values="4,6,5,8,7,11,13"></iswc-sparkline><b>+18%</b></div>
+            <div class="spark-row"><span>Cartera vencida</span><iswc-sparkline trend="negative" values="12,11,13,9,8,6,5"></iswc-sparkline><b>−22%</b></div>
+            <div class="spark-row"><span>Rotación</span><iswc-sparkline trend="neutral" type="bar" values="5,7,6,8,6,7,7"></iswc-sparkline><b>=</b></div>
+            <div class="spark-row"><span>Margen</span><iswc-sparkline appearance="gradient" curve="natural" values="3,5,4,7,6,9,12"></iswc-sparkline><b>+31%</b></div>
+            <div class="spark-row"><span>Solo línea</span><iswc-sparkline appearance="line" values="5,7,9,6,8,10,12"></iswc-sparkline><small>—</small></div>
+          </article>
+        </div>
+      </section>
+
+    </iswc-main>
+
+    <aside class="sidebar" slot="end">
+      <h1>Charts</h1>
+      <iswc-scrollspy target="iswc-main">
+        <a href="#intro">Introducción</a>
+        <a href="#comparacion">Comparar</a>
+        <a href="#tendencia">Tendencia</a>
+        <a href="#proporcion">Proporción</a>
+        <a href="#correlacion">Correlación</a>
+        <a href="#cascada">Cascada</a>
+        <a href="#embudo">Embudo</a>
+        <a href="#config">Configuración</a>
+        <a href="#micro">Micro-gráficos</a>
+      </iswc-scrollspy>
+    </aside>
+  </iswc-split-panel>
+
+  <script type="module">
+    await customElements.whenDefined('iswc-chart');
+    const el = document.querySelector('#jsChart');
+    el.config = {
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{ label: 'Ventas', data: [420, 580, 630, 710], tension: 0.4, fill: true }],
+      },
+    };
+  </script>
+  <script>
+    </script>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
+</body>
+</html>

@@ -23,8 +23,8 @@
   iswc-icon:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/option.min.js?h=00bfco');
-  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
+  await import('../../../dist/cdn/forms/option.min.js?h=fq4zvo');
+  await import('../../../dist/cdn/media/icon.min.js?h=cjurkr');
 
   await customElements.whenDefined('iswc-option');
 
@@ -75,25 +75,25 @@
     <h2>Básico</h2>
     <div class="row">
       <div class="listbox" id="list">
-        <iswc-option value="es" selected>
+        <iswc-option title="España +34 · Castellano" value="es" selected>
           España
           <span slot="description">+34 · Castellano</span>
         </iswc-option>
-        <iswc-option value="mx">
+        <iswc-option title="México +52 · Español" value="mx">
           México
           <span slot="description">+52 · Español</span>
         </iswc-option>
-        <iswc-option value="ar">
+        <iswc-option title="Argentina +54 · Castellano" value="ar">
           Argentina
           <span slot="description">+54 · Castellano</span>
         </iswc-option>
-        <iswc-option value="us" disabled>
+        <iswc-option title="United States No disponible" value="us" disabled>
           United States
           <span slot="description">No disponible</span>
         </iswc-option>
       </div>
       <div>
-        <button id="btn-set" type="button">Seleccionar México</button>
+        <button title="Seleccionar México" id="btn-set" type="button">Seleccionar México</button>
       </div>
     </div>
     <output id="out"></output>
@@ -102,23 +102,98 @@
   <section>
     <h2>Con grupos</h2>
     <div class="listbox">
-      <iswc-option value="mad" group="España">Madrid</iswc-option>
-      <iswc-option value="bcn" group="España">Barcelona</iswc-option>
-      <iswc-option value="cun" group="México">Cancún</iswc-option>
-      <iswc-option value="mex" group="México" selected>Ciudad de México</iswc-option>
-      <iswc-option value="eze" group="Argentina">Ezeiza</iswc-option>
+      <iswc-option title="Madrid" value="mad" group="España">Madrid</iswc-option>
+      <iswc-option title="Barcelona" value="bcn" group="España">Barcelona</iswc-option>
+      <iswc-option title="Cancún" value="cun" group="México">Cancún</iswc-option>
+      <iswc-option title="Ciudad de México" value="mex" group="México" selected>Ciudad de México</iswc-option>
+      <iswc-option title="Ezeiza" value="eze" group="Argentina">Ezeiza</iswc-option>
     </div>
   </section>
 
   <section>
     <h2>Estados</h2>
     <div class="row">
-      <iswc-option value="a" selected>Selected</iswc-option>
-      <iswc-option value="b">Not selected</iswc-option>
-      <iswc-option value="c" disabled>Disabled</iswc-option>
-      <iswc-option value="d" disabled selected>Disabled selected</iswc-option>
+      <iswc-option title="Selected" value="a" selected>Selected</iswc-option>
+      <iswc-option title="Not selected" value="b">Not selected</iswc-option>
+      <iswc-option title="Disabled" value="c" disabled>Disabled</iswc-option>
+      <iswc-option title="Disabled selected" value="d" disabled selected>Disabled selected</iswc-option>
     </div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

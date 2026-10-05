@@ -6,6 +6,7 @@ import {
   readTheme,
   watchThemeContainer,
 } from '../_shared/theme-scope.js';
+import { MEDIA_SHAPE, type MediaShape } from '../_shared/media-shape.js';
 
 /**
  * <iswc-theme-img> — una sola imagen que cambia dark ↔ light según el tema.
@@ -18,7 +19,7 @@ import {
  * Attributes
  *   src-dark / src-light  URLs (ambas recomendadas; si falta una, usa la otra)
  *   alt                   string
- *   shape                 circle | rounded | square (opcional)
+ *   shape                 circle | rounded | square (opcional) — MEDIA_SHAPE
  *   fit                   contain | cover (default contain → CSS var)
  *   theme                 dark | light — forzado; si falta, lee el contenedor
  *   loading               lazy | eager
@@ -39,9 +40,9 @@ import {
   `;
 
   const OBSERVED = ['src-dark', 'src-light', 'alt', 'shape', 'fit', 'theme', 'loading'];
-  const VALID_SHAPE = new Set(['circle', 'rounded', 'square']);
+  const VALID_SHAPE = new Set<string>(MEDIA_SHAPE);
   const VALID_FIT = new Set(['contain', 'cover']);
-  type Shape = 'circle' | 'rounded' | 'square';
+  type Shape = MediaShape;
   type Fit = 'contain' | 'cover';
   type Theme = 'dark' | 'light';
 
@@ -59,9 +60,7 @@ import {
   }
 
   class IswcThemeImg extends ElementBase {
-    static styleAttrs = {
-      fit: '--iswc-theme-img-fit',
-    };
+    
 
     static get observedAttributes(): string[] {
       return [...OBSERVED];

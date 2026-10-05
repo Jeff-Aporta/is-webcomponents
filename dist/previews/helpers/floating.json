@@ -2,13 +2,13 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-floating",
   "category": "helpers",
-  "title": "<iswc-floating> (interno)",
+  "title": "&lt;iswc-floating&gt; (interno)",
   "titleHtml": false,
   "description": "Building block interno. En producto usa iswc-popover o iswc-tooltip.",
   "sections": [
     {
       "id": "intro",
-      "title": "Uso interno",
+      "title": "&lt;iswc-floating&gt; (interno)",
       "lede": "Building block interno. En producto usa iswc-popover o iswc-tooltip.",
       "blocks": [
         {
@@ -17,5 +17,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Building block interno. En producto usa iswc-popover o iswc-tooltip."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-floating placement=\"bottom\" active><button slot=\"anchor\" type=\"button\">Ancla</button><div>Contenido anclado. No usar este tag en apps.</div></iswc-floating>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

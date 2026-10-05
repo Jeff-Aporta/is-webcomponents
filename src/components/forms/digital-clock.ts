@@ -26,11 +26,7 @@ import { ElementBase } from '../../core/element-base.js';
   interface TimeParts { h: number; m: number; s: number; }
   interface OptionInput { label: string; raw: string | number; selected: boolean; disabled: boolean; }
 
-  class IswcDigitalClock extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'clock-height': '--iswc-clock-height',
-    };
+  class IswcDigitalClock extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'clock-height']; }
 

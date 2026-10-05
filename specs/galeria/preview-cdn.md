@@ -1,7 +1,7 @@
 # Preview por CDN — contrato de consumo externo (apps iswc)
 
 Cómo una app externa (p. ej. PatyIA/app, iswc-tkts/app, isc-swagger) monta un
-preview `iswc-preview/v1` usando el kit is-webcomponents por CDN. Verificado con
+preview `iswc-preview/v1` usando el kit ISWC por CDN. Verificado con
 Stagehand/Playwright (is-webcomponents@60be5643d6).
 
 ## 1. Cargar el loader y los componentes de preview

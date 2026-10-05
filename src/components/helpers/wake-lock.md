@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-wake-lock
 tags:
   - iswc-wake-lock
 category: helpers
 status: public
-source: ./wake-lock.js
+source: ./wake-lock.ts
 style: ./wake-lock.css
 preview: ./wake-lock.json
 ---
 # `<iswc-wake-lock>`
 
-## Propósito
+## PropÃ³sito
 
-Mantiene la pantalla encendida con Screen Wake Lock mientras `active` está puesto.
+Mantiene la pantalla encendida con Screen Wake Lock mientras `active` estÃ¡ puesto.
 
-Este módulo registra `<iswc-wake-lock>`.
+Este mÃ³dulo registra `<iswc-wake-lock>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Lectura, dashboard, receta paso a paso, vídeo.
+Lectura, dashboard, receta paso a paso, vÃ­deo.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No lo dejes `active` en páginas que el usuario no está mirando.
+No lo dejes `active` en pÃ¡ginas que el usuario no estÃ¡ mirando.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './wake-lock.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-wake-lock active>El documento no apaga la pantalla.</iswc-wake-lock>
@@ -46,7 +46,7 @@ import './wake-lock.js';
 | --- | --- | --- |
 | `active` | boolean | Pide o suelta el lock |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -61,11 +61,29 @@ import './wake-lock.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sí `{ held }` | sí | sí | no |
+| `iswc-change` | sÃ­ `{ held }` | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-wake-lock');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
@@ -81,7 +99,7 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated.
 
@@ -96,7 +114,7 @@ Re-adquiere al volver a visible. Suelta en `disconnectedCallback`.
 
 ## Accesibilidad
 
-No altera el árbol.
+No altera el Ã¡rbol.
 
 ## Ejemplo avanzado
 
@@ -115,5 +133,5 @@ No altera el árbol.
 
 ## Fuentes
 
-- `./wake-lock.js` · `./wake-lock.css`
+- `./wake-lock.js` Â· `./wake-lock.css`
 - Preview: `./wake-lock.json`

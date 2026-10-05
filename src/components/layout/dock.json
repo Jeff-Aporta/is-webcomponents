@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-dock",
   "category": "layout",
-  "title": "<iswc-dock>",
-  "titleHtml": true,
+  "title": "&lt;iswc-dock&gt;",
+  "titleHtml": false,
   "styles": ".stage {\r\n      height: 28rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      background:\r\n        radial-gradient(60rem 30rem at 50% 100%,\r\n          color-mix(in srgb, var(--iswc-accent) 14%, transparent),\r\n          transparent 60%);\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      overflow: hidden;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
   "storageKey": "docs-iswc-dock",
   "hasBehavior": true,
@@ -22,35 +22,35 @@
           "kind": "demo",
           "html": "<div class=\"stage\"></div>\r\n          <iswc-dock>\r\n            <iswc-dock-item label=\"Inicio\"     icon=\"mdi:home-variant\" active></iswc-dock-item>\r\n            <iswc-dock-item label=\"Buscar\"     icon=\"mdi:magnify\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Mensajes\"   icon=\"mdi:message-text\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Calendario\" icon=\"mdi:calendar\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Notas\"      icon=\"mdi:notebook\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Música\"     icon=\"mdi:music\"></iswc-dock-item>\r\n            <iswc-dock-item label=\"Ajustes\"    icon=\"mdi:cog\"></iswc-dock-item>\r\n          </iswc-dock>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:label",
-                "label": "label",
-                "options": [
-                  "Inicio",
-                  "Buscar",
-                  "Mensajes",
-                  "Calendario",
-                  "Notas",
-                  "Música",
-                  "Ajustes",
-                  "VS Code",
-                  "Git",
-                  "Terminal",
-                  "Docker",
-                  "Browser"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:active",
-                "label": "active"
-              },
-              {
-                "control": "text",
-                "prop": "attr:position",
-                "label": "position"
-              }
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Inicio",
+                "Buscar",
+                "Mensajes",
+                "Calendario",
+                "Notas",
+                "Música",
+                "Ajustes",
+                "VS Code",
+                "Git",
+                "Terminal",
+                "Docker",
+                "Browser"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:active",
+              "label": "active"
+            },
+            {
+              "control": "text",
+              "prop": "attr:position",
+              "label": "position"
+            }
           ],
           "contain": true
         }
@@ -87,5 +87,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Barra tipo macOS: los íconos se magnifican al acercar el cursor. Anclada abajo por defecto; podés moverla con el atributo <code class=\"code\">position</code>."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

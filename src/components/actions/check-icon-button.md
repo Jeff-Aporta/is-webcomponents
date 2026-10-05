@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-check-icon-button
 tags:
   - iswc-check-icon-button
 category: actions
 status: public
-source: ./check-icon-button.js
+source: ./check-icon-button.ts
 style: ./check-icon-button.css
 preview: ./check-icon-button.json
 ---
 # `<iswc-check-icon-button>`
 
-## Propósito
+## PropÃ³sito
 
-Botón icon-only con dos estados mutuamente excluyentes: muestra un solo icono
-según checked. Lo usan iswc-video
+BotÃ³n icon-only con dos estados mutuamente excluyentes: muestra un solo icono
+segÃºn checked. Lo usan iswc-video
 (play/pausa, mute) e iswc-theme-toggle.
 
-Este módulo registra `<iswc-check-icon-button>`.
+Este mÃ³dulo registra `<iswc-check-icon-button>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Acciones, selección de comandos y menús interactivos.
+Acciones, selecciÃ³n de comandos y menÃºs interactivos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No usar como decoración ni reemplazar enlaces semánticos para navegación simple.
+No usar como decoraciÃ³n ni reemplazar enlaces semÃ¡nticos para navegaciÃ³n simple.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './check-icon-button.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-check-icon-button
@@ -51,14 +51,14 @@ checked-label="Pausar"
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `checked` | boolean | Fuente define default/restricción. |
-| `icon` | string/según contrato | Fuente define default/restricción. |
-| `checked-icon` | string/según contrato | Fuente define default/restricción. |
-| `label` | string/según contrato | Fuente define default/restricción. |
-| `checked-label` | string/según contrato | Fuente define default/restricción. |
-| `disabled` | boolean | Fuente define default/restricción. |
+| `checked` | boolean | Fuente define default/restricciÃ³n. |
+| `icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `checked-icon` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `checked-label` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
+| `disabled` | boolean | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -75,17 +75,35 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-change` | sí | sí | sí | no |
+| `iswc-change` | sÃ­ | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-check-icon-button');
+el.addEventListener('iswc-change', (e) => {
+  console.log('iswc-change', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `toggle()` | Método público declarado. |
+| `toggle()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -102,46 +120,46 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-control-text` | Token leído o definido por componente. |
-| `--iswc-control-bg-hover` | Token leído o definido por componente. |
-| `--iswc-control-bg-active` | Token leído o definido por componente. |
-| `--iswc-focus` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--iswc-control-text` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-hover` | Token leÃ­do o definido por componente. |
+| `--iswc-control-bg-active` | Token leÃ­do o definido por componente. |
+| `--iswc-focus` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-check-icon-button> — botón icon-only con dos estados (unchecked / checked).
-> Muestra un solo icono a la vez según `checked`. Similar a un toggle/switch visual.
+> <iswc-check-icon-button> â€” botÃ³n icon-only con dos estados (unchecked / checked).
+> Muestra un solo icono a la vez segÃºn `checked`. Similar a un toggle/switch visual.
 > Atributos
 >   checked         boolean reflected
 >   icon            Iconify id cuando unchecked (ej. mdi:play)
 >   checked-icon    Iconify id cuando checked (ej. mdi:pause)
 >   label           aria-label unchecked
 >   checked-label   aria-label checked (fallback: label)
->   variant      "plain" → compacto y hereda color (chrome oscura: vídeo)
+>   variant      "plain" â†’ compacto y hereda color (chrome oscura: vÃ­deo)
 >   disabled        boolean
 > Events (bubbles, composed)
->   iswc-change  { checked: boolean }  — tras cada toggle
+>   iswc-change  { checked: boolean }  â€” tras cada toggle
 > CSS Parts: ::part(button) ::part(icon)
 
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
-- [`./button.js`](./button.js) — la superficie pintada es un `<iswc-button variant="text">`;
+- [`./button.js`](./button.js) â€” la superficie pintada es un `<iswc-button variant="text">`;
   el control accesible sigue siendo el host.
 
-Tags del módulo: `<iswc-check-icon-button>`.
+Tags del mÃ³dulo: `<iswc-check-icon-button>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-pressed`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`, `aria-hidden`, `aria-pressed`.
 
 ## Ejemplo avanzado
 
@@ -152,7 +170,7 @@ label="Silenciar" checked-label="Activar sonido"></iswc-check-icon-button>
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -160,15 +178,15 @@ label="Silenciar" checked-label="Activar sonido"></iswc-check-icon-button>
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./check-icon-button.js)
+- [JavaScript](./check-icon-button.ts)
 - [CSS](./check-icon-button.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./check-icon-button.json)

@@ -38,7 +38,7 @@ import '../actions/button.js';
         <h2 class="heading" part="heading" hidden></h2>
         <div class="message" part="message"><span class="message-text"></span><slot name="message"></slot></div>
         <div class="actions" part="actions">
-          <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="neutral" class="cancel" data-confirm-cancel>Cancelar</iswc-button></slot></span>
+          <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel" data-confirm-cancel>Cancelar</iswc-button></slot></span>
           <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-confirm-confirm>Aceptar</iswc-button></slot></span>
         </div>
       </div>
@@ -48,13 +48,6 @@ import '../actions/button.js';
   const OBSERVED = ['for', 'heading', 'message', 'open'];
 
   class IswcConfirmModal extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    bg: { prop: '--iswc-confirm-modal-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-confirm-modal-text', onlyColorValues: true },
-    'border-color': { prop: '--iswc-confirm-modal-border', onlyColorValues: true },
-    accent: { prop: '--iswc-confirm-modal-accent', onlyColorValues: true },
-    };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent']; }
 

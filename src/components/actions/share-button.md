@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-share-button
 tags:
   - iswc-share-button
 category: actions
 status: public
-source: ./share-button.js
+source: ./share-button.ts
 style: ./share-button.css
 preview: ./share-button.json
 ---
 # `<iswc-share-button>`
 
-## Propósito
+## PropÃ³sito
 
-Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.
+Comparte tÃ­tulo, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles.
 
-Este módulo registra `<iswc-share-button>`.
+Este mÃ³dulo registra `<iswc-share-button>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Botón de compartir enlace, reporte o captura hacia WhatsApp, Mail, etc.
+BotÃ³n de compartir enlace, reporte o captura hacia WhatsApp, Mail, etc.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No uses este tag para recibir shares: Web Share Target es un campo del manifest de la PWA, no un componente.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './share-button.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-share-button share-title="PatyIA" text="Mira este reporte" url="https://insoft.com.co"></iswc-share-button>
@@ -44,12 +44,12 @@ import './share-button.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `share-title` | string | Título del share |
+| `share-title` | string | TÃ­tulo del share |
 | `text` | string | Texto |
 | `url` | string | URL (default location.href) |
 | `disabled` | boolean |  |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -66,18 +66,39 @@ import './share-button.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-share` | Evento personalizado del componente (share). |
+| `iswc-error` | Emitido cuando se produce un error. |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-share` | sí `{ how, url }` | sí | sí | no |
-| `iswc-error` | no | sí | sí | no |
+| `iswc-share` | sÃ­ `{ how, url }` | sÃ­ | sÃ­ | no |
+| `iswc-error` | no | sÃ­ | sÃ­ | no |
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-share-button');
+el.addEventListener('iswc-share', (e) => {
+  console.log('iswc-share', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 `share()`.
 
 ### CSS parts
 
-`button`
+| Part | Uso |
+| --- | --- |
+| `button` | Personalizable con `::part(button)`. |
 
 ### Custom states
 
@@ -87,7 +108,7 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated.
 
@@ -113,7 +134,7 @@ El control interno es `iswc-button`.
 ## Errores comunes
 
 - Llamar `share()` fuera de un gesto de usuario.
-- Confundir Share Target (PWA) con este botón.
+- Confundir Share Target (PWA) con este botÃ³n.
 
 ## Reglas para LLM
 
@@ -121,5 +142,5 @@ El control interno es `iswc-button`.
 
 ## Fuentes
 
-- `./share-button.js` · `./share-button.css`
+- `./share-button.js` Â· `./share-button.css`
 - Preview: `./share-button.json`

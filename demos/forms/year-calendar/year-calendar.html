@@ -22,15 +22,15 @@
   iswc-year-calendar:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/year-calendar.min.js?h=cmblg1');
+  await import('../../../dist/cdn/forms/year-calendar.min.js?h=7q3zoq');
   await customElements.whenDefined('iswc-year-calendar');
 
   // (1) básico, año actual seleccionado
   const basico = document.createElement('iswc-year-calendar');
   basico.id = 'basico';
   basico.value = '2026';
-  basico.min = '2020';
-  basico.max = '2032';
+  basico.setAttribute('min', '2020');
+  basico.setAttribute('max', '2032');
   basico.label = 'Año del evento';
   basico.hint = 'Click o flechas para navegar; Home/End saltan a los extremos';
   basico.addEventListener('iswc-change', (e) => {
@@ -41,8 +41,8 @@
   // (2) rango histórico
   const historico = document.createElement('iswc-year-calendar');
   historico.id = 'historico';
-  historico.min = '1990';
-  historico.max = '2010';
+  historico.setAttribute('min', '1990');
+  historico.setAttribute('max', '2010');
   historico.value = '2005';
   historico.label = 'Década del 2000';
   historico.hint = 'Años 1990–2010';
@@ -98,5 +98,80 @@
     </section>
   </div>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

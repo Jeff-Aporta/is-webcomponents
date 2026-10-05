@@ -1,5 +1,5 @@
 /**
- * Manifest del kit is-webcomponents.
+ * Manifest del kit ISWC.
  *
  * Cada entrada describe un Web Component publicado: su `tag`, su categoría
  * (usada para folderizar el nav y el bundle CDN) y los recursos opcionales
@@ -163,8 +163,9 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'iswc-state-diagram', title: 'Diagrama de estados', category: 'diagrams', script: 'components/diagrams/state-diagram.js', style: 'components/diagrams/state-diagram.css', page: 'components/diagrams/state-diagram.json' },
   { tag: 'iswc-er-diagram', title: 'Diagrama entidad-relación', category: 'diagrams', script: 'components/diagrams/er-diagram.js', style: 'components/diagrams/er-diagram.css', page: 'components/diagrams/er-diagram.json' },
   { tag: 'iswc-er-editor', title: 'Editor entidad-relación', category: 'diagrams', script: 'components/diagrams/er-editor.js', page: 'components/diagrams/er-editor.json' },
-  { tag: 'iswc-diagram-view-app', title: 'Visor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-view-app.json' },
-  { tag: 'iswc-diagram-edit-app', title: 'Editor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-edit-app.json' },
+  // Apps HTML (demos/diagramas/app/*). No registran CE: el script es API compartida.
+  { tag: 'iswc-diagram-view-app', title: 'Visor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-view-app.json', module: true },
+  { tag: 'iswc-diagram-edit-app', title: 'Editor de diagramas (API)', category: 'diagrams', script: 'components/diagrams/diagram-studio.js', page: 'components/diagrams/diagram-edit-app.json', module: true },
   { tag: 'iswc-block-diagram', title: 'Diagrama de bloques', category: 'diagrams', script: 'components/diagrams/block-diagram.js', style: 'components/diagrams/block-diagram.css', page: 'components/diagrams/block-diagram.json' },
   { tag: 'iswc-component-diagram', title: 'Diagrama de componentes', category: 'diagrams', script: 'components/diagrams/component-diagram.js', style: 'components/diagrams/component-diagram.css', page: 'components/diagrams/component-diagram.json' },
   { tag: 'iswc-treemap', title: 'Treemap', category: 'data-viz', script: 'components/charts/treemap.js', style: 'components/charts/treemap.css', page: 'components/charts/treemap.json' },
@@ -193,7 +194,7 @@ const manifest: ComponentManifestItem[] = [
   // es 100% UI declarada en el JSON + behavior de mount/unmount en el .preview.
   // Sin esta entrada en el manifest, el nav no muestra el item y
   // `selectComponent('iswc-icon-explorer')` cae a HOME.
-  { tag: 'iswc-icon-explorer', title: 'Explorador de iconos', category: 'media', script: 'components/media/icon-explorer.preview.ts', page: 'components/media/icon-explorer.json' },
+  { tag: 'iswc-icon-explorer', title: 'Explorador de iconos', category: 'media', script: 'components/media/icon-explorer.preview.ts', page: 'components/media/icon-explorer.json', module: true },
   { tag: 'iswc-qrcode', title: 'QR Code', category: 'media', script: 'components/media/qrcode.js', style: 'components/media/qrcode.css', page: 'components/media/qrcode.json' },
   { tag: 'iswc-palette-selector', title: 'Palette Selector', category: 'feedback', script: 'components/feedback/palette-selector.js', style: 'components/feedback/palette-selector.css', page: 'components/feedback/palette-selector.json' },
   { tag: 'iswc-dock', title: 'Dock', category: 'layout', script: 'components/layout/dock.js', style: 'components/layout/dock.css', page: 'components/layout/dock.json' },
@@ -222,12 +223,25 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'iswc-swimlane-diagram', title: 'Diagrama de carriles', category: 'diagrams', script: 'components/diagrams/swimlane-diagram.js', style: 'components/diagrams/swimlane-diagram.css', page: 'components/diagrams/swimlane-diagram.json' },
   { tag: 'iswc-journey-map', title: 'Mapa de recorrido', category: 'diagrams', script: 'components/diagrams/journey-map.js', style: 'components/diagrams/journey-map.css', page: 'components/diagrams/journey-map.json' },
   { tag: 'iswc-command-palette', title: 'Command Palette', category: 'overlays', script: 'components/overlays/command-palette.js', style: 'components/overlays/command-palette.css', page: 'components/overlays/command-palette.json' },
+  { tag: 'iswc-txt-view', title: 'TXT View', category: 'files', script: 'components/files/txt-view.js', style: 'components/files/txt-view.css', page: 'components/files/txt-view.json' },
+  { tag: 'iswc-txt-edit', title: 'TXT Edit', category: 'files', script: 'components/files/txt-edit.js', style: 'components/files/txt-edit.css', page: 'components/files/txt-edit.json' },
+  { tag: 'iswc-csv-view', title: 'CSV View', category: 'files', script: 'components/files/csv-view.js', style: 'components/files/csv-view.css', page: 'components/files/csv-view.json' },
+  { tag: 'iswc-csv-edit', title: 'CSV Edit', category: 'files', script: 'components/files/csv-edit.js', style: 'components/files/csv-edit.css', page: 'components/files/csv-edit.json' },
+  { tag: 'iswc-docx-view', title: 'DOCX View', category: 'files', script: 'components/files/docx-view.js', style: 'components/files/docx-view.css', page: 'components/files/docx-view.json' },
+  { tag: 'iswc-pptx-view', title: 'PPTX View', category: 'files', script: 'components/files/pptx-view.js', style: 'components/files/pptx-view.css', page: 'components/files/pptx-view.json' },
+  { tag: 'iswc-file-view', title: 'File View', category: 'files', script: 'components/files/file-view.js', style: 'components/files/file-view.css', page: 'components/files/file-view.json' },
+  { tag: 'iswc-file-edit', title: 'File Edit', category: 'files', script: 'components/files/file-edit.js', style: 'components/files/file-edit.css', page: 'components/files/file-edit.json' },
   { tag: 'iswc-pdf-viewer', title: 'PDF Viewer', category: 'overlays', script: 'components/overlays/pdf-viewer.js', style: 'components/overlays/pdf-viewer.css', page: 'components/overlays/pdf-viewer.json' },
   { tag: 'iswc-window', title: 'Window', category: 'overlays', script: 'components/overlays/window.js', style: 'components/overlays/window.css', page: 'components/overlays/window.json' },
   // Preview/demo system: chrome de la galería expuesto por CDN (loader) para
   // que cualquier app iswc pueda montar previews JSON de sus propios componentes.
   { tag: 'iswc-preview-component', title: 'Preview Component', category: 'preview', script: 'components/layout/preview-component.js', style: 'components/layout/preview-component.css', page: 'components/layout/preview-component.json' },
+  { tag: 'iswc-doc-demo', title: 'Doc Demo', category: 'preview', script: 'components/layout/doc-demo.js', style: 'components/layout/doc-demo.css', page: 'components/layout/doc-demo.json' },
   { tag: 'iswc-preview-controls', title: 'Preview Controls', category: 'preview', script: 'components/layout/preview-controls.js', page: 'components/layout/preview-controls.json' },
+  { tag: 'iswc-playground', title: 'Playground', category: 'preview', script: 'components/preview/playground.js', style: 'components/preview/playground.css', page: 'components/preview/playground.json' },
+  { tag: 'iswc-slots-pg', title: 'Slots Playground', category: 'preview', script: 'components/preview/slots-pg.js', style: 'components/preview/slots-pg.css', page: 'components/preview/slots-pg.json' },
+  { tag: 'iswc-examples-carousel', title: 'Examples Carousel', category: 'preview', script: 'components/preview/examples-carousel.js', style: 'components/preview/examples-carousel.css', page: 'components/preview/examples-carousel.json' },
+  { tag: 'iswc-demo-section', title: 'Demo Section', category: 'preview', script: 'components/preview/demo-section.js', style: 'components/preview/demo-section.css', page: 'components/preview/demo-section.json' },
 ];
 
 export default manifest;

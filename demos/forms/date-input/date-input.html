@@ -26,7 +26,7 @@
   iswc-date-input:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/date-input.min.js?h=qm9qev');
+  await import('../../../dist/cdn/forms/date-input.min.js?h=7c2uxg');
 
   await customElements.whenDefined('iswc-date-input');
 
@@ -83,43 +83,118 @@
 
   <section class="card">
     <h2>Básico</h2>
-    <iswc-date-input id="basic" label="Fecha" name="d"></iswc-date-input>
+    <iswc-date-input title="Fecha" id="basic" label="Fecha" name="d"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="basic-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con valor inicial</h2>
-    <iswc-date-input id="with-value" label="Cumpleaños" clearable name="birth"></iswc-date-input>
+    <iswc-date-input title="Cumpleaños" id="with-value" label="Cumpleaños" clearable name="birth"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="with-value-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Requerido</h2>
-    <iswc-date-input id="required" label="Fecha de firma" hint="Obligatorio" required name="sign"></iswc-date-input>
+    <iswc-date-input title="Fecha de firma" id="required" label="Fecha de firma" hint="Obligatorio" required name="sign"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="required-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Con rango permitido</h2>
-    <iswc-date-input id="ranged" label="Periodo" hint="Entre el 2025-01-01 y el 2026-12-31" name="range"></iswc-date-input>
+    <iswc-date-input title="Periodo" id="ranged" label="Periodo" hint="Entre el 2025-01-01 y el 2026-12-31" name="range"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="ranged-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Deshabilitado</h2>
-    <iswc-date-input id="disabled" label="Bloqueado" disabled name="x"></iswc-date-input>
+    <iswc-date-input title="Bloqueado" id="disabled" label="Bloqueado" disabled name="x"></iswc-date-input>
     <div class="value-readout">Valor actual: <code id="disabled-value">(vacío)</code></div>
   </section>
 
   <section class="card">
     <h2>Apertura programática (show / hide)</h2>
-    <iswc-date-input id="demo" label="Programable" name="prog"></iswc-date-input>
+    <iswc-date-input title="Programable" id="demo" label="Programable" name="prog"></iswc-date-input>
     <div class="actions">
-      <iswc-button id="open-btn" class="how" variant="text">Abrir</iswc-button>
-      <iswc-button id="close-btn" class="how" variant="text">Cerrar</iswc-button>
+      <iswc-button title="Abrir" id="open-btn" class="how" variant="text">Abrir</iswc-button>
+      <iswc-button title="Cerrar" id="close-btn" class="how" variant="text">Cerrar</iswc-button>
     </div>
     <div class="value-readout">Valor actual: <code id="demo-value">(vacío)</code></div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

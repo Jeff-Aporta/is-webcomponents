@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-badge",
   "category": "feedback",
-  "title": "<iswc-badge>",
-  "titleHtml": true,
+  "title": "&lt;iswc-badge&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-badge",
   "sections": [
     {
@@ -13,13 +13,48 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\r\n            <iswc-badge color=\"success\">Activo</iswc-badge>\r\n            <iswc-badge color=\"warning\" attention=\"pulse\">Pendiente</iswc-badge>\r\n          </div>",
+          "html": "<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>",
           "target": "#badge-play",
           "controls": [
-            { "control": "select", "prop": "attr:color", "label": "Color", "options": ["brand", "success", "warning", "danger", "neutral"] },
-            { "control": "select", "prop": "attr:variant", "label": "Variante", "options": ["accent", "filled", "outlined", "filled-outlined"] },
-            { "control": "select", "prop": "attr:attention", "label": "Atención", "options": ["none", "pulse", "bounce"] },
-            { "control": "boolean", "prop": "attr:pill", "label": "Píldora" }
+            {
+              "control": "select",
+              "prop": "attr:color",
+              "label": "Color",
+              "options": [
+                "brand",
+                "neutral",
+                "text",
+                "success",
+                "warning",
+                "danger"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "Variante",
+              "options": [
+                "accent",
+                "filled",
+                "outlined",
+                "filled-outlined"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:attention",
+              "label": "Atención",
+              "options": [
+                "none",
+                "pulse",
+                "bounce"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:pill",
+              "label": "Píldora"
+            }
           ]
         }
       ]
@@ -30,11 +65,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">\r\n            <iswc-badge color=\"brand\" variant=\"accent\">accent</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled\">filled</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"outlined\">outlined</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</iswc-badge>\r\n            <iswc-badge color=\"danger\" pill attention=\"bounce\">pill bounce</iswc-badge>\r\n          </div>\r\n          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-badge color=\"neutral\" variant=\"filled\">neutral</iswc-badge>\r\n            <iswc-badge color=\"success\" variant=\"filled\">success</iswc-badge>\r\n            <iswc-badge color=\"warning\" variant=\"outlined\">warning</iswc-badge>\r\n            <iswc-badge color=\"danger\" variant=\"accent\">danger</iswc-badge>\r\n            <iswc-badge attention=\"pulse\">pulse</iswc-badge>\r\n          </div>"
-        },
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem\">\r\n            <iswc-badge color=\"brand\" variant=\"accent\">accent</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled\">filled</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"outlined\">outlined</iswc-badge>\r\n            <iswc-badge color=\"brand\" variant=\"filled-outlined\">filled-outlined</iswc-badge>\r\n            <iswc-badge color=\"danger\" pill attention=\"bounce\">pill bounce</iswc-badge>\r\n          </div>\r\n          <div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem\">\r\n            <iswc-badge color=\"neutral\" variant=\"filled\">neutral</iswc-badge>\r\n            <iswc-badge color=\"text\" variant=\"outlined\">text</iswc-badge>\r\n            <iswc-badge color=\"success\" variant=\"filled\">success</iswc-badge>\r\n            <iswc-badge color=\"warning\" variant=\"outlined\">warning</iswc-badge>\r\n            <iswc-badge color=\"danger\" variant=\"accent\">danger</iswc-badge>\r\n            <iswc-badge attention=\"pulse\">pulse</iswc-badge>\r\n          </div>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
         {
-          "kind": "code",
-          "code": "<iswc-badge color=\"success\" variant=\"filled\">OK</iswc-badge>\n<iswc-badge pill attention=\"pulse\">Live</iswc-badge>"
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-badge\">\n  <iswc-badge color=\"success\">Activo</iswc-badge>\n  <iswc-icon slot=\"start\" icon=\"mdi:check-circle\"></iswc-icon>\n  <span slot=\"end\">12</span>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -70,5 +112,43 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Etiqueta compacta con variantes semánticas y apariencias."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>variant</code>",
+            "default": "brand"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "default": "accent"
+          },
+          {
+            "name": "<code>pill</code>",
+            "default": "false"
+          },
+          {
+            "name": "<code>attention</code>",
+            "default": "none · pulse · bounce"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

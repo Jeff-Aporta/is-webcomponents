@@ -1,38 +1,38 @@
----
+﻿---
 tag: iswc-sequence-diagram
 tags:
   - iswc-sequence-diagram
 category: diagrams
 status: public
-source: ./sequence-diagram.js
+source: ./sequence-diagram.ts
 style: ./sequence-diagram.css
 preview: ./sequence-diagram.json
 ---
 # `<iswc-sequence-diagram>`
 
-## Propósito
+## PropÃ³sito
 
-Diagrama de secuencia en SVG, sin Mermaid. La configuración es un JSON
+Diagrama de secuencia en SVG, sin Mermaid. La configuraciÃ³n es un JSON
 con actores, mensajes y grupos; el layout (posiciones, ruteo ortogonal
-de las flechas y colocación de etiquetas) se calcula solo.
+de las flechas y colocaciÃ³n de etiquetas) se calcula solo.
 
-Este módulo registra `<iswc-sequence-diagram>`.
+Este mÃ³dulo registra `<iswc-sequence-diagram>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 No inventar schemas ni usar specs/layout como custom elements.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './sequence-diagram.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-sequence-diagram></iswc-sequence-diagram>
@@ -46,9 +46,9 @@ import './sequence-diagram.js';
 
 | Atributo | Tipo | Notas |
 | --- | --- | --- |
-| `color` | string/según contrato | Fuente define default/restricción. |
+| `color` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -67,20 +67,41 @@ import './sequence-diagram.js';
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-turtle-state` | Emitido al actualizarse el estado del mÃ³dulo turtle (resize, datos, etc.). |
+| `iswc-render` | Emitido al renderizar o redibujar el componente. |
+| `iswc-toggle-group` | Evento personalizado del componente (toggle group). |
+| `iswc-open-viewer` | Emitido al abrir el visor ampliado (cancelable). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-turtle-state` | sí | sí | sí | no |
-| `iswc-render` | sí | sí | sí | no |
-| `iswc-toggle-group` | sí | sí | sí | sí |
-| `iswc-open-viewer` | sí | sí | sí | sí |
+| `iswc-turtle-state` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-render` | sÃ­ | sÃ­ | sÃ­ | no |
+| `iswc-toggle-group` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
+| `iswc-open-viewer` | sÃ­ | sÃ­ | sÃ­ | sÃ­ |
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-sequence-diagram');
+el.addEventListener('iswc-turtle-state', (e) => {
+  console.log('iswc-turtle-state', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
-| `updateComplete()` | Método público declarado. |
+| `updateComplete()` | MÃ©todo pÃºblico declarado. |
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -98,30 +119,30 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--iswc-sans` | Token leído o definido por componente. |
-| `--iswc-border` | Token leído o definido por componente. |
-| `--iswc-text-soft` | Token leído o definido por componente. |
+| `--iswc-sans` | Token leÃ­do o definido por componente. |
+| `--iswc-border` | Token leÃ­do o definido por componente. |
+| `--iswc-text-soft` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
-> Configuración por JSON (idéntica a la del proyecto original): un
+> <iswc-sequence-diagram> â€” diagrama de secuencia en SVG, sin Mermaid.
+> ConfiguraciÃ³n por JSON (idÃ©ntica a la del proyecto original): un
 > <script type="application/json"> hijo, o la propiedad `payload`.
 >   <iswc-sequence-diagram>
 >     <script type="application/json">
 >       { "sequence": { "actors": [...], "messages": [...] } }
 >     </script>
 >   </iswc-sequence-diagram>
-> También acepta `{ "preset": "tk1437191" }`.
+> TambiÃ©n acepta `{ "preset": "tk1437191" }`.
 > Atributos
->   color  inline (default) | viewer — viewer activa hover, leyenda clickeable
->            y auto-animación de la tortuga.
+>   color  inline (default) | viewer â€” viewer activa hover, leyenda clickeable
+>            y auto-animaciÃ³n de la tortuga.
 > Propiedades: payload, spec, layout, turtle, hiddenGroups
 > Eventos: iswc-turtle-state (detail: {playing, idx, total, replay}),
 >          iswc-open-viewer (click en colore inline),
@@ -140,11 +161,11 @@ Documentación de cabecera preservada desde fuente:
 - [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
-Tags del módulo: `<iswc-sequence-diagram>`.
+Tags del mÃ³dulo: `<iswc-sequence-diagram>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -154,7 +175,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -162,17 +183,17 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./sequence-diagram.js)
+- [JavaScript](./sequence-diagram.ts)
 - [CSS](./sequence-diagram.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./sequence-diagram.json)
 
 ## App API
@@ -180,4 +201,4 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-label`
 Visor: `demos/diagramas/app/view.html?kind=sequence&json=<base64url>`.
 Editor: `demos/diagramas/app/edit.html?kind=sequence&json=<base64url>`.
 
-`json` es el documento completo en base64url. Editar no reescribe ese parámetro: Compartir arma un enlace nuevo con el JSON resultante.
+`json` es el documento completo en base64url. Editar no reescribe ese parÃ¡metro: Compartir arma un enlace nuevo con el JSON resultante.

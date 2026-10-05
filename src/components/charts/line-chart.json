@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-line-chart",
   "category": "data-viz",
-  "title": "<iswc-line-chart>",
-  "titleHtml": true,
+  "title": "&lt;iswc-line-chart&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-line-chart",
   "sections": [
     {
@@ -24,5 +24,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tendencias en el tiempo."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-line-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Ene\",\"Feb\",\"Mar\",\"Abr\",\"May\",\"Jun\"],\"datasets\":[{\"label\":\"Visitas\",\"data\":[4200,4800,5100,4900,5500,6200]}]}}\r\n            </script>\r\n          </iswc-line-chart>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

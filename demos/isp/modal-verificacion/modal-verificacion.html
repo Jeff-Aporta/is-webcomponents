@@ -23,12 +23,12 @@
 </style>
 <script type="module">
   // Dependencias.
-  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
-  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=6ocp5e');
-  await import('../../../dist/cdn/isp/text.min.js?h=ymvems');
-  await import('../../../dist/cdn/isp/heading.min.js?h=mqv7ud');
-  await import('../../../dist/cdn/isp/modal-verificacion.min.js?h=qro1v0');
+  await import('../../../dist/cdn/actions/button.min.js?h=h7i2nj');
+  await import('../../../dist/cdn/media/icon.min.js?h=cjurkr');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=6iyovb');
+  await import('../../../dist/cdn/isp/text.min.js?h=lfyxjw');
+  await import('../../../dist/cdn/isp/heading.min.js?h=wane3i');
+  await import('../../../dist/cdn/isp/modal-verificacion.min.js?h=u7x7zp');
   await customElements.whenDefined('iswc-modal-verificacion');
 
   const modal = document.getElementById('verif');
@@ -83,14 +83,89 @@
 </header>
 <main>
   <div class="toolbar">
-    <button id="btn-show" type="button" class="btn">show()</button>
-    <button id="btn-verify" type="button" class="btn">verify()</button>
-    <button id="btn-hide" type="button" class="btn">hide()</button>
+    <button title="show()" id="btn-show" type="button" class="btn">show()</button>
+    <button title="verify()" id="btn-verify" type="button" class="btn">verify()</button>
+    <button title="hide()" id="btn-hide" type="button" class="btn">hide()</button>
   </div>
 
   <iswc-modal-verificacion id="verif" entity="comprobante"></iswc-modal-verificacion>
 
   <pre id="event-log" class="log"></pre>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

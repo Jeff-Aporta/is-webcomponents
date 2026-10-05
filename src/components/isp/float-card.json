@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-float-card",
   "category": "isp",
-  "title": "<iswc-float-card>",
-  "titleHtml": true,
+  "title": "&lt;iswc-float-card&gt;",
+  "titleHtml": false,
   "description": "Panel flotante anclado (port FloatingComponent). Hover muestra tools ya montadas.",
   "storageKey": "docs-iswc-float-card",
   "hasBehavior": true,
@@ -17,13 +17,27 @@
         {
           "kind": "demo",
           "html": "<div class=\"fc-demo\">\n            <iswc-float-card id=\"fcDemo\" horizontal=\"right\" vertical=\"center\">\n              <span>Lección — hover aquí</span>\n              <iswc-flex-options id=\"fcOpts\" slot=\"float\" compact></iswc-flex-options>\n            </iswc-float-card>\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-float-card open horizontal=\"right\" vertical=\"center\">\n  <span>Fila</span>\n  <iswc-button slot=\"float\" variant=\"plain\">Acción</iswc-button>\n</iswc-float-card>",
-          "lang": "html"
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Port de <code class=\"code\">FloatingComponent</code>. El slot <code class=\"code\">float</code> no se desmonta: <code class=\"code\">open</code> solo cambia opacidad. Pasá el mouse por la fila."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-float-card open horizontal=\"right\" vertical=\"center\">\n  <span>Fila</span>\n  <iswc-button slot=\"float\" variant=\"plain\">Acción</iswc-button>\n</iswc-float-card>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

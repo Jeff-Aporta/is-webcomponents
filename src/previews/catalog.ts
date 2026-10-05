@@ -10,7 +10,6 @@ export default {
   },
   "iswc-button-group": {
     "json": "../../dist/previews/actions/button-group.json",
-    "behavior": "../../dist/previews/actions/button-group.preview.min.js",
     "category": "actions"
   },
   "iswc-button": {
@@ -545,6 +544,11 @@ export default {
   "home": {
     "json": "../../dist/pages/home.json",
     "behavior": "../../dist/pages/home.min.js",
+    "category": ""
+  },
+  "icons": {
+    "json": "../../dist/pages/icons.json",
+    "behavior": "../../dist/pages/icons.min.js",
     "category": ""
   },
   "iswc-accordion-group": {

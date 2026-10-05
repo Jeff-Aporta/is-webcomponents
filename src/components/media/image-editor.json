@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-image-editor",
   "category": "media",
-  "title": "<iswc-image-editor>",
-  "titleHtml": true,
+  "title": "&lt;iswc-image-editor&gt;",
+  "titleHtml": false,
   "styles": ".crop-out {\r\n      max-width: 100%;\r\n      max-height: 14rem;\r\n      display: block;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      margin-top: .55rem;\r\n    }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
   "storageKey": "docs-iswc-image-editor",
   "hasBehavior": true,
@@ -41,5 +41,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Canvas de edición con crop, zoom y rotación. Clic y arrastra el rectángulo para moverlo; las esquinas redimensionan."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

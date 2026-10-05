@@ -12,8 +12,8 @@ export const COL_GUTTER = 52;
 export const PKG_CORRIDOR = 72;
 export const PKG_PAD = 16;
 export const PKG_TAB = 22;
-/** Hueco filas: C+O+stem + un carril de arista. */
-export const ROW_GAP = 64;
+/** Hueco filas: C+O+stem + un carril de arista (≈ assemblyEntityMargin). */
+export const ROW_GAP = 72;
 /** Distancia mínima entre cajas si el consumidor no pone `min-gap`. */
 export const DEFAULT_MIN_GAP = ROW_GAP;
 /** Holgura arista vs perímetro. 18 px = las conexiones no se pegan a los

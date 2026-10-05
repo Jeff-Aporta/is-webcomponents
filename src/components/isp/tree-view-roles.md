@@ -312,3 +312,24 @@ subclase los declara, `isGrouper` / `isActionGrouper` también clasifican por
 - [07-roles.js](./_shared/tree-view/07-roles.js) — reglas de rol
 - [04-tree-flow.js](./_shared/tree-view/04-tree-flow.js) — `canDrop`, `buildTree`
 - [row-adapter-drag.js](./_shared/tree-view/row-adapter-drag.js) — zonas de drop
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este componente no emite eventos personalizados. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-tree-view');
+// El componente no emite eventos personalizados.
+// Escucha los nativos si los necesitas:
+el.addEventListener('click', (e) => {
+  console.log('click', e);
+});
+```
+
+</details>

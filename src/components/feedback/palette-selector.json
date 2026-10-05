@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-palette-selector",
   "category": "feedback",
-  "title": "<iswc-palette-selector>",
-  "titleHtml": true,
+  "title": "&lt;iswc-palette-selector&gt;",
+  "titleHtml": false,
   "styles": ".row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }\r\n    .event-log {\r\n      margin-top: 12px;\r\n      padding: 12px;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 8px;\r\n      background: var(--iswc-bg-soft);\r\n      font-family: var(--iswc-mono);\r\n      font-size: 0.8rem;\r\n      min-height: 2em;\r\n      color: var(--iswc-text);\r\n    }\r\n    .event-log .hint { opacity: 0.6; }\r\n\r\n    /* --- Trigger tipo \"logo\" — el consumer pone SU HTML --- */\r\n    .logo-trigger {\r\n      display: inline-flex;\r\n      align-items: baseline;\r\n      gap: 0;\r\n      padding: 0.45em 0.85em;\r\n      background: var(--iswc-logo-bg, #fff);\r\n      color: var(--iswc-logo-fg, #111);\r\n      border-radius: 0.45em;\r\n      font: inherit;\r\n      font-weight: 800;\r\n      letter-spacing: -0.045em;\r\n      text-transform: lowercase;\r\n      transition: filter 120ms ease, transform 120ms ease;\r\n    }\r\n    .logo-trigger:hover { filter: brightness(1.05); }\r\n    .logo-trigger:active { transform: translateY(1px); }\r\n    .logo-trigger__lead { color: #000; }\r\n    .logo-trigger__accent { color: var(--iswc-accent, dodgerblue); }\r\n    .logo-trigger__caret {\r\n      margin-left: 0.5em;\r\n      font-size: 0.95em;\r\n      opacity: 0.7;\r\n      color: var(--iswc-text, #111);\r\n    }",
   "storageKey": "docs-iswc-palette-selector",
   "sections": [
@@ -15,10 +15,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"row\">\r\n            <iswc-palette-selector id=\"defaultPalette\" scope=\"root\"></iswc-palette-selector>\r\n            <iswc-theme-toggle id=\"defaultTheme\" scope=\"root\"></iswc-theme-toggle>\r\n          </div>\r\n          <div data-palette=\"insoft\" data-theme=\"light\" class=\"theme-light\" style=\"margin-top:1rem;padding:1rem;border-radius:0.6em;background:var(--iswc-bg);color:var(--iswc-text)\">\r\n            <iswc-palette-selector scope=\"closest\"></iswc-palette-selector>\r\n            <iswc-theme-toggle scope=\"closest\"></iswc-theme-toggle>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-palette-selector></iswc-palette-selector>"
         }
       ]
     },
@@ -30,10 +26,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"row\">\r\n            <iswc-palette-selector id=\"logoPalette\">\r\n              <button type=\"button\" slot=\"trigger\" class=\"logo-trigger\" aria-label=\"Elegir paleta de marca\">\r\n                <span class=\"logo-trigger__lead\" data-role=\"lead\">in</span><span class=\"logo-trigger__accent\" data-role=\"accent\">soft</span>\r\n                <iswc-icon class=\"logo-trigger__caret\" icon=\"mdi:chevron-down\" aria-hidden=\"true\"></iswc-icon>\r\n              </button>\r\n            </iswc-palette-selector>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-palette-selector>\n  <button slot=\"trigger\" class=\"logo-trigger\">\n    <span class=\"logo-trigger__lead\">in</span>\n    <span class=\"logo-trigger__accent\">soft</span>\n  </button>\n</iswc-palette-selector>"
         },
         {
           "kind": "html",
@@ -62,10 +54,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-palette-selector value=\"acme\" palettes='[\n  {\n    \"value\": \"acme\",\n    \"label\": \"Acme Corp\",\n    \"bg\": \"#fff\",\n    \"fg\": \"#111\",\n    \"content\": [\n      { \"iswc-text\": { \"color\": \"#111\", \"content\": [\"ac\"] } },\n      { \"iswc-text\": { \"color\": \"#e03131\", \"content\": [\"me\"] } }\n    ]\n  },\n  {\n    \"value\": \"ocean\",\n    \"label\": \"Ocean\",\n    \"bg\": \"#fff\",\n    \"fg\": \"#111\",\n    \"content\": [\n      { \"iswc-text\": { \"color\": \"#111\", \"content\": [\"o\"] } },\n      { \"iswc-text\": { \"color\": \"#0ea5e9\", \"content\": [\"cean\"] } }\n    ]\n  }\n]'>\n</iswc-palette-selector>"
         }
       ]
     },
@@ -199,5 +187,89 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Selector visual de paletas de marca. Por defecto expone las 3 paletas de <code class=\"code\">styles/palettes.css</code>; el consumidor puede pasar su propio array JSON para usar SU marca y SU CSS, y opcionalmente inyectar un trigger personalizado en el slot <code class=\"code\">trigger</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>palettes</code>",
+            "type": "JSON string",
+            "default": "3 paletas InSoft / ContaPyme / AgroWin"
+          },
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "la primera del array"
+          },
+          {
+            "name": "<code>storage-key</code>",
+            "type": "string",
+            "default": "<code>iswc-palette</code>"
+          },
+          {
+            "name": "<code>aria-label</code>",
+            "type": "string",
+            "default": "Elegir paleta"
+          },
+          {
+            "name": "<code>value</code>",
+            "desc": "identificador (requerido)"
+          },
+          {
+            "name": "<code>label</code>",
+            "desc": "texto en el menu y el trigger interno"
+          },
+          {
+            "name": "<code>accent</code>",
+            "desc": "color del swatch en el menu"
+          },
+          {
+            "name": "<code>css</code>",
+            "desc": "URL de <code>&lt;link rel=\"stylesheet\"&gt;</code> cargado al seleccionar"
+          },
+          {
+            "name": "<code>lead</code> + <code>accentLabel</code>",
+            "desc": "dos mitades para el trigger interno (estilo logo)"
+          },
+          {
+            "name": "<code>leadColor</code> + <code>accentColor</code>",
+            "desc": "colores de las dos mitades"
+          },
+          {
+            "name": "<code>bg</code> + <code>fg</code>",
+            "desc": "background y color del trigger interno"
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-palette-change</code>",
+            "cuando": "<code>{ value, palette }</code>"
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>trigger</code>",
+            "desc": "Sustituye el botón trigger interno. El consumidor pone SU HTML; el componente aún abre/cierra el menu y emite <code>iswc-palette-change</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-palette-selector></iswc-palette-selector>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "states"
+    ]
+  }
 }

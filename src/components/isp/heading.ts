@@ -11,7 +11,7 @@ import {
  *
  * Atributos
  *   level      1 | 2 | 3 | 4 | 5 | 6                       (default 1)
- *   color      brand | neutral | info | success | warning | danger
+ *   color      brand | neutral | text | info | success | warning | danger
  *              | current | <color CSS>                     (default: acento)
  *   mix        % → `--iswc-heading-mix`; ausente = default del nivel
  *   mix-with   text | transparent | white | black | current | <color CSS>
@@ -27,12 +27,6 @@ import {
   const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
   class IswcHeading extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    // `color` y `mix` los resuelve #syncVars() vía syncIspColor: aquí solo
-    // se expone el destino de la mezcla, que no tenía forma de tocarse.
-    'mix-with': { prop: '--iswc-heading-mix-with', onlyColorValues: true },
-    };
 
     static get observedAttributes(): string[] {
       return ['level', 'color', 'mix', 'mix-with', 'size'];

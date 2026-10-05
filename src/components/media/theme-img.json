@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-theme-img",
   "category": "media",
-  "title": "<iswc-theme-img>",
-  "titleHtml": true,
+  "title": "&lt;iswc-theme-img&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-theme-img",
   "sections": [
     {
@@ -21,12 +21,27 @@
               "label": "alt"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<span style=\"font-size:2rem\">\n  <iswc-theme-img\n    src-dark=\"./logo-dark.svg\"\n    src-light=\"./logo-light.svg\"\n    alt=\"Marca\"\n    shape=\"circle\"\n  ></iswc-theme-img>\n</span>"
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Una sola imagen dark↔light según el tema del contenedor. Caja <code class=\"code\">1em × 1em</code>; escala con <code class=\"code\">font-size</code>."
+      },
+      "ejemplos": {
+        "content": "```html\n<span style=\"font-size:2rem\">\n  <iswc-theme-img\n    src-dark=\"./logo-dark.svg\"\n    src-light=\"./logo-light.svg\"\n    alt=\"Marca\"\n    shape=\"circle\"\n  ></iswc-theme-img>\n</span>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

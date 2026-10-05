@@ -9,8 +9,7 @@
  * No evalúa strings de comportamiento. El markup estático de demos sí puede
  * ser HTML string en la definición (serializable); los listeners viven en mount.
  *
- *   import ButtonGroupPreview from '../actions/button-group.preview.controller.js';
- *   el.preview = new ButtonGroupPreview();
+ *   el.preview = new SomeComponentPreview();
  */
 import { withStyleAttrs } from '../../core/attrs.js';
 import { renderDefinition } from '../../previews/_kit/render.js';
@@ -46,11 +45,6 @@ interface DrawerEl extends HTMLElement {
 }
 
 class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    size: '--iswc-preview-size',
-    spacing: '--iswc-preview-spacing',
-    };
 
   #preview: ISComponentPreviewLike | null = null;
   #ctx: PreviewMountContext | null = null;
@@ -61,8 +55,13 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
   #compactMql: MediaQueryList | null = null;
   #onCompactChange = (): void => { this.#syncLayout(); };
 
+  /** Galería / host fuerza TOC en drawer (btn compactar paneles). */
+  #isForceCompact(): boolean {
+    return document.body?.dataset?.panelsCompact === '1';
+  }
+
   static get observedAttributes(): string[] {
-    return ['storage-key', ...IswcPreviewComponent.styleAttrNames];
+    return ['storage-key'];
   }
 
   constructor() {
@@ -98,6 +97,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
   disconnectedCallback(): void {
     this.#teardown();
     this.#compactMql?.removeEventListener('change', this.#onCompactChange);
+    document.removeEventListener('iswc-panels-compact-change', this.#onCompactChange);
     this.#compactMql = null;
     this.#mounted = false;
   }
@@ -156,6 +156,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
       });
       this.#compactMql = window.matchMedia(COMPACT_QUERY);
       this.#compactMql.addEventListener('change', this.#onCompactChange);
+      document.addEventListener('iswc-panels-compact-change', this.#onCompactChange);
     }
     this.#syncLayout();
   }
@@ -186,7 +187,7 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
       return;
     }
 
-    const compact = !!this.#compactMql?.matches;
+    const compact = this.#isForceCompact() || !!this.#compactMql?.matches;
     this.dataset.layout = compact ? 'compact' : 'wide';
     toggle.hidden = !compact;
 

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-offscreen-canvas",
   "category": "helpers",
-  "title": "<iswc-offscreen-canvas>",
-  "titleHtml": true,
+  "title": "&lt;iswc-offscreen-canvas&gt;",
+  "titleHtml": false,
   "description": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker).",
   "storageKey": "docs-iswc-offscreen-canvas",
   "sections": [
@@ -35,15 +35,29 @@
           ]
         },
         {
-          "kind": "code",
-          "lang": "html",
-          "code": "<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>"
-        },
-        {
           "kind": "callout",
           "html": "<strong>HTTPS o localhost.</strong> Estas APIs piden contexto seguro y, a menudo, un gesto del usuario."
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Lienzo que transfiere el control a OffscreenCanvas (y opcionalmente a un Worker)."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-offscreen-canvas width=\"320\" height=\"120\"></iswc-offscreen-canvas>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

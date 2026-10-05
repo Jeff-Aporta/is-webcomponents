@@ -4,7 +4,7 @@ tags:
   - iswc-date-field
 category: forms
 status: public
-source: ./date-field.js
+source: ./date-field.ts
 style: ./date-field.css
 preview: ./date-field.json
 ---
@@ -56,7 +56,24 @@ No expone.
 
 ### Eventos
 
+
+| Evento | Descripción |
+| --- | --- |
+
 No expone.
+
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-date-field');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
 
 ### Métodos y propiedades públicas
 
@@ -70,7 +87,12 @@ No expone.
 
 ### Custom states
 
-No expone.
+Hereda de la factory [`defineDateField`](../_shared/date-field-element.js), que aplica los siguientes states en el host:
+
+| Estado | Uso |
+| --- | --- |
+| `:state(disabled)` | Atributo `disabled` presente o `formDisabledCallback` recibido. |
+| `:state(invalid)` | Validación falla (required+vacío, sección incompleta, fuera de min/max o atributo `invalid`). |
 
 ### CSS custom properties
 
@@ -138,7 +160,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: ninguno expl
 
 ## Fuentes
 
-- [JavaScript](./date-field.js)
+- [JavaScript](./date-field.ts)
 - [CSS](./date-field.css)
-- [Índice de categoría](./LLM.md)
+- [Índice de categoría](../../specs/componentes.md)
 - [Preview](./date-field.json)

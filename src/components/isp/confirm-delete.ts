@@ -78,7 +78,7 @@ interface InputLike extends HTMLElement {
       </div>
       <slot name="description"></slot>
       <div part="actions" class="actions" slot="footer">
-        <iswc-button class="cancel" color="neutral" variant="outlined" data-dialog="close" tabindex="0">Cancelar</iswc-button>
+        <iswc-button class="cancel" color="text" variant="outlined" data-dialog="close" tabindex="0">Cancelar</iswc-button>
         <iswc-button class="delete" color="danger" disabled tabindex="0">Eliminar</iswc-button>
       </div>
     </iswc-dialog>
@@ -91,10 +91,6 @@ interface InputLike extends HTMLElement {
   ];
 
   class IswcConfirmDelete extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-confirm-delete-accent', onlyColorValues: true },
-    };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 

@@ -1,0 +1,60 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-pptx-view",
+  "category": "files",
+  "title": "<iswc-pptx-view>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-pptx-view",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "PPTX view-only (JSZip / preview CDN).",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-pptx-view height=\"14rem\"></iswc-pptx-view>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "PPTX view-only (JSZip / preview CDN)."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
+}

@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-transfer",
   "category": "data",
-  "title": "<iswc-transfer>",
-  "titleHtml": true,
+  "title": "&lt;iswc-transfer&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-transfer / iswc-transfer-item de InSoft.",
   "storageKey": "docs-iswc-transfer",
   "sections": [
@@ -15,10 +15,6 @@
         {
           "kind": "demo",
           "html": "<iswc-transfer id=\"tr1\" source-title=\"Disponibles\" target-title=\"Asignados\" searchable>\r\n            <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"d\">Delta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"e\">Epsilon</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"f\">Zeta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"g\">Eta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"h\">Theta</iswc-transfer-item>\r\n          </iswc-transfer>\r\n          <p id=\"tr1Log\">Seleccionados: <code class=\"code\">b</code></p>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-transfer searchable>\n  <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\n  …\n</iswc-transfer>"
         }
       ]
     },
@@ -162,5 +158,88 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Doble lista de selección tipo Material/Ant. Mueve elementos entre\r\n          origen y destino con botones, click individual, filtro de búsqueda y\r\n          límite máximo configurable."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>source-title</code>",
+            "type": "string",
+            "default": "Disponibles",
+            "desc": "Título del panel origen."
+          },
+          {
+            "name": "<code>target-title</code>",
+            "type": "string",
+            "default": "Asignados",
+            "desc": "Título del panel destino."
+          },
+          {
+            "name": "<code>searchable</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Muestra campo de búsqueda."
+          },
+          {
+            "name": "<code>without-buttons</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta los botones de mover."
+          },
+          {
+            "name": "<code>without-headings</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta los headers."
+          },
+          {
+            "name": "<code>max-target</code>",
+            "type": "number",
+            "default": "—",
+            "desc": "Máximo de items en target."
+          },
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Identificador del item."
+          },
+          {
+            "name": "<code>selected</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Está en target."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "No se puede mover."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-transfer-change</code>",
+            "cuando": "Cambia selección. <code>detail: { item, source, target, values }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-transfer searchable>\n  <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\n  …\n</iswc-transfer>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

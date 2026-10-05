@@ -10,7 +10,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
  * <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *
  * Atributos
- *   name, label, hint, color (brand|neutral|success|warning|danger)
+ *   name, label, hint, color (brand|neutral|text|success|warning|danger)
  *   value          number | "20,37" (rango con dos o más thumbs)
  *   min (0), max (100), step (1)  — step="null" restringe a los marks
  *   shift-step     salto con Shift+flechas y PageUp/PageDown (default step × 10)
@@ -94,16 +94,6 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
   }
 
   class IswcSlider extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    'track-size': '--iswc-slider-track-size',
-    'thumb-size': '--iswc-slider-thumb-size',
-    length: '--iswc-slider-length',
-    'rail-color': { prop: '--iswc-slider-rail', onlyColorValues: true },
-    'fill-color': { prop: '--iswc-slider-fill', onlyColorValues: true },
-    'thumb-color': { prop: '--iswc-slider-thumb-bg', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-slider-focus', onlyColorValues: true },
-    };
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color']; }

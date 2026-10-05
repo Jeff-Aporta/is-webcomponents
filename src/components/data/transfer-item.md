@@ -24,3 +24,23 @@ No lo reimplementes ni lo uses para sustituir al padre. La guía del padre docum
 ```html
 <iswc-transfer-item></iswc-transfer-item>
 ```
+
+
+## Eventos
+
+| Evento | Descripción |
+| --- | --- |
+| _(ninguno)_ | Este sub-componente no emite eventos propios; los eventos del componente padre (<iswc-transfer>) se documentan en la ficha del padre. |
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+// Los eventos se escuchan sobre el componente padre.
+const parent = document.querySelector('iswc-transfer');
+parent.addEventListener('iswc-event', (e) => {
+  console.log('evento del padre', e.detail);
+});
+```
+
+</details>

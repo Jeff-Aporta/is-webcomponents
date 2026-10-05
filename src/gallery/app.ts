@@ -3,6 +3,11 @@ import { PALETTES, type PaletteConfig } from '../styles/palette-build.js';
 import type { ComponentManifestItem } from '../manifest.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
+import {
+  getComponentPrefs,
+  removeComponentPrefs,
+  setComponentPrefs,
+} from '../components/_shared/prefs.js';
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
@@ -12,6 +17,8 @@ interface GalleryState {
   palette?: string;
   component?: string;
   embed?: boolean;
+  /** Preferencia de paneles laterales compactos (btn header). */
+  panelsCompact?: boolean;
   [key: string]: unknown;
 }
 
@@ -91,9 +98,39 @@ function asRecord(v: unknown): Record<string, unknown> {
 
 /* ─────────────────────────── Lookup del DOM ───────────────────────────── */
 
+/**
+ * El host (`doc-demo-host`) y esta SPA son entry points module independientes.
+ * Un TLA en el host NO bloquea siblings: gallery-app puede evaluar mientras
+ * `iswc-doc-demo` aún no está definido ni ha pintado el shell. Esperamos.
+ */
+async function waitForGalleryShell(): Promise<void> {
+  if (document.getElementById('shellNav')) return;
+
+  await Promise.race([
+    customElements.whenDefined('iswc-doc-demo'),
+    new Promise<void>((resolve) => {
+      window.addEventListener('iswc-gallery-shell-ready', () => resolve(), { once: true });
+    }),
+  ]);
+
+  // Upgrade + connectedCallback (#paintShell) son sync tras define; un
+  // microtask cubre el caso en que el ready llega un tick después.
+  if (!document.getElementById('shellNav')) {
+    await new Promise<void>((r) => queueMicrotask(r));
+  }
+  if (!document.getElementById('shellNav')) {
+    await new Promise<void>((resolve) => {
+      window.addEventListener('iswc-gallery-shell-ready', () => resolve(), { once: true });
+    });
+  }
+}
+
+await waitForGalleryShell();
+
 /** Devuelve un getElementById sin la posibilidad de `null` (la página garantiza presencia). */
 function el<T extends HTMLElement = HTMLElement>(id: string): T {
   const node = document.getElementById(id);
+  if (!node) throw new Error(`[gallery-app] falta #${id} (shell iswc-doc-demo no listo)`);
   return node as T;
 }
 
@@ -104,6 +141,8 @@ const shellNav = el<HTMLElement>('shellNav');
 const frame = el<FrameElement>('previewFrame');
 const previewHost = el<PreviewHostElement>('previewHost');
 const brandPalette = el<PaletteSelectorElement>('brandPalette');
+// Logo ISWC en top-left del header (Phase W7). Click -> home + URL limpia.
+const shellBrand = el<HTMLAnchorElement>('shellBrand');
 
 const params = new URLSearchParams(location.search);
 const themes = new Set<ThemeName>(['light', 'dark']);
@@ -138,7 +177,9 @@ const HOME = { tag: 'home', title: 'Home', page: 'home.json' };
 // suelta en previews/ raíz: el taller para armarse una paleta propia.
 const THEMING = { tag: 'theming', title: 'Personalización', page: 'theming.json' };
 const ECOSYSTEM = { tag: 'ecosystem', title: 'Ecosistema JS', page: 'ecosystem.json' };
-const catalog: CatalogItem[] = [HOME, THEMING, ECOSYSTEM, ...components];
+/** Mapa grid de categorías/componentes (`#icons` / ?s= component=icons). */
+const ICONS = { tag: 'icons', title: 'Mapa', page: 'icons.json' };
+const catalog: CatalogItem[] = [HOME, ICONS, THEMING, ECOSYSTEM, ...components];
 
 // --- build nav (Home + agrupado por categoría) ---
 // Sin filtro: el nav lista el catálogo completo del manifest.
@@ -157,6 +198,7 @@ const categoryMeta: Record<string, CategoryMeta> = {
   data: { id: 'data', label: 'Datos' },
   'data-viz': { id: 'data-viz', label: 'Gráficos' },
   diagrams: { id: 'diagrams', label: 'Diagramas' },
+  files: { id: 'files', label: 'Archivos' },
   overlays: { id: 'overlays', label: 'Overlays' },
   preview: { id: 'preview', label: 'Preview' },
   helpers: { id: 'helpers', label: 'Utilerías' },
@@ -179,6 +221,20 @@ const categoryOrder: string[] = Object.keys(categoryMeta);
   title.textContent = 'Inicio';
   btn.append(title);
   btn.addEventListener('click', () => selectComponent(HOME.tag));
+  shellNav.appendChild(btn);
+}
+
+{
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'shell-nav__item shell-nav__item--home';
+  btn.dataset.tag = ICONS.tag;
+  btn.setAttribute('aria-label', 'Mapa de componentes — icons');
+  const title = document.createElement('span');
+  title.className = 'shell-nav__title';
+  title.textContent = ICONS.title;
+  btn.append(title);
+  btn.addEventListener('click', () => selectComponent(ICONS.tag));
   shellNav.appendChild(btn);
 }
 
@@ -280,8 +336,40 @@ let palette: PaletteName = palettes.has(paletteFromUrl as PaletteName)
   : (palettes.has(paletteStored as PaletteName) ? (paletteStored as PaletteName) : 'contapyme');
 
 const componentFromUrl = typeof stateFromUrl?.component === 'string' ? stateFromUrl.component : null;
+const hashWantsIcons = location.hash.replace(/^#/, '') === 'icons';
 let component: CatalogItem =
-  catalog.find(item => item.tag === componentFromUrl) ?? HOME;
+  (hashWantsIcons ? ICONS : null)
+  ?? catalog.find(item => item.tag === componentFromUrl)
+  ?? HOME;
+
+// panelsCompact vive en ?s= — hay que inicializarlo ANTES de renderContext/updateUrl.
+const PANELS_TTL_MS = 3_600_000;
+const SHELL_PREFS_TAG = 'iswc-gallery';
+const SHELL_PREFS_KEY = 'shell';
+const ICON_COMPACT = 'mdi:arrow-collapse-horizontal';
+const ICON_EXPAND = 'mdi:arrow-expand-horizontal';
+const panelsCompactBtn = document.getElementById('panelsCompactBtn') as HTMLElement | null;
+
+function readPanelsCompactPref(): boolean {
+  const saved = getComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
+  if (!saved) return false;
+  const savedAt = Number((saved as { savedAt?: unknown }).savedAt);
+  if (!Number.isFinite(savedAt) || savedAt <= 0 || Date.now() - savedAt > PANELS_TTL_MS) {
+    removeComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
+    return false;
+  }
+  return (saved as { panelsCompact?: unknown }).panelsCompact === true;
+}
+
+function writePanelsCompactPref(compact: boolean): void {
+  setComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY, {
+    panelsCompact: compact,
+    savedAt: Date.now(),
+  });
+}
+
+let panelsCompactUser =
+  stateFromUrl?.panelsCompact === true || readPanelsCompactPref();
 
 function encodeState(obj: GalleryState): string {
   return b64urlEncode(JSON.stringify(obj));
@@ -321,6 +409,24 @@ async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<voi
     ...GALLERY_CHROME_TAGS,
     ...(collectIsTags(preview.definition ?? preview) as string[]),
   ])];
+  // Knobs JSON (target+controls) → hace falta el CE playground aunque no
+  // figure en el HTML del demo (lo monta render.ts en runtime).
+  const def = (preview.definition ?? preview) as {
+    sections?: Array<{ blocks?: Array<{ target?: string; controls?: unknown[] }> }>;
+  };
+  const needsPg = (def.sections ?? []).some((s) =>
+    (s.blocks ?? []).some((b) => Boolean(b.target) && Array.isArray(b.controls) && b.controls.length > 0),
+  );
+  if (needsPg) {
+    tags.push(
+      'iswc-playground',
+      'iswc-preview-controls',
+      'iswc-select',
+      'iswc-option',
+      'iswc-input',
+      'iswc-details',
+    );
+  }
   // Los demos pueden citar tags de soporte sin catálogo (chrome hijos como
   // iswc-tab): pedirlos al loader tiraba el mount entero. Solo cargar los
   // que el catálogo sabe resolver; el resto queda como markup declarativo.
@@ -389,22 +495,43 @@ function sendContext(): void {
 }
 
 function updateUrl(): void {
-  // Gallery: `?s=` es el único state URL. theme/palette no van en la URL live;
-  // sí se conservan otras keys de nav (docs, cdnTab, …) escritas por url-nav.
+  // `?s=` es el único state URL. theme/palette no van en la URL live.
+  // panelsCompact sí (preferencia de shell). Home sin keys → URL limpia.
   const prev = readStateParam() || {};
-  const next: GalleryState = { ...prev, component: component.tag };
+  const next: GalleryState = { ...prev };
   delete next.theme;
   delete next.palette;
   delete next.embed;
-  const encoded = encodeState(next);
+
+  if (component === HOME) delete next.component;
+  else next.component = component.tag;
+
+  if (panelsCompactUser) next.panelsCompact = true;
+  else delete next.panelsCompact;
+
   const dest = new URL(location.href);
-  dest.search = '?s=' + encoded;
-  history.replaceState(null, '', dest);
+  const keys = Object.keys(next).filter((k) => next[k] !== undefined);
+  if (!keys.length) {
+    if (location.search) {
+      dest.search = '';
+      // Conserva hash solo si apunta a algo distinto de icons en home.
+      if (dest.hash === '#icons') dest.hash = '';
+      history.replaceState(null, '', dest);
+    } else if (location.hash === '#icons' && component === HOME) {
+      dest.hash = '';
+      history.replaceState(null, '', dest);
+    }
+  } else {
+    dest.search = '?s=' + encodeState(next);
+    // Alias canónico del mapa: #icons ↔ tag icons.
+    if (component === ICONS) dest.hash = 'icons';
+    else if (dest.hash === '#icons') dest.hash = '';
+    history.replaceState(null, '', dest);
+  }
 }
 
 function renderContext({ navSmooth = false }: { navSmooth?: boolean } = {}): void {
-  root.classList.toggle('theme-light', theme === 'light');
-  root.classList.toggle('theme-dark', theme === 'dark');
+  // Contrato W51: solo data-theme / data-palette (sin clases .theme-*).
   root.dataset.theme = theme;
   root.dataset.palette = palette;
   themeToggle.dark = theme === 'dark';
@@ -525,6 +652,14 @@ fullscreenBtn.addEventListener('click', () => {
   const url = controlledShellSrc(component.tag);
   window.open(url, '_blank', 'noopener');
 });
+// Logo ISWC del top-left (Phase W7). Click -> Inicio (home) y URL limpia
+// (updateUrl limpia la query cuando component === HOME; W6).
+shellBrand.addEventListener('click', (e: MouseEvent) => {
+  // El href='./' es la salida keyboard-only / middle-click; cancelamos el
+  // click izquierdo para usar el SPA routing (no recarga la página).
+  e.preventDefault();
+  selectComponent(HOME.tag);
+});
 
 showPreview();
 renderContext();
@@ -551,14 +686,46 @@ if (typeof ResizeObserver !== 'undefined') {
   }).observe(shellNav);
 }
 
-// --- mobile: el catálogo se muda a un drawer izquierdo ---
+// --- paneles laterales: UI (estado ya inicializado arriba, antes de updateUrl) ---
+function syncPanelsCompactBtn(): void {
+  if (!panelsCompactBtn) return;
+  panelsCompactBtn.setAttribute('aria-pressed', panelsCompactUser ? 'true' : 'false');
+  panelsCompactBtn.setAttribute(
+    'aria-label',
+    panelsCompactUser ? 'Expandir paneles laterales' : 'Compactar paneles laterales',
+  );
+  panelsCompactBtn.setAttribute(
+    'title',
+    panelsCompactUser ? 'Expandir paneles laterales' : 'Compactar paneles laterales',
+  );
+  const icon = panelsCompactBtn.querySelector('iswc-icon');
+  if (icon) icon.setAttribute('icon', panelsCompactUser ? ICON_EXPAND : ICON_COMPACT);
+}
+
+function applyPanelsCompactDataset(): void {
+  if (panelsCompactUser) document.body.dataset.panelsCompact = '1';
+  else delete document.body.dataset.panelsCompact;
+  document.dispatchEvent(new Event('iswc-panels-compact-change'));
+}
+
+function setPanelsCompactUser(next: boolean): void {
+  panelsCompactUser = next;
+  writePanelsCompactPref(next);
+  syncPanelsCompactBtn();
+  applyPanelsCompactDataset();
+  syncNavLayout();
+  updateUrl();
+}
+
+// --- mobile / compact: el catálogo se muda a un drawer izquierdo ---
 const navDrawer = document.getElementById('navDrawer') as DrawerElement | null;
 const navToggle = document.getElementById('navToggle') as HTMLElement | null;
 const compactNav = window.matchMedia('(max-width: 640px)');
 
 const syncNavLayout = (): void => {
   if (!mainSplit || !navDrawer || !navToggle) return;
-  const compact = compactNav.matches;
+  // Móvil o preferencia de usuario (btn del header).
+  const compact = compactNav.matches || panelsCompactUser;
   navToggle.hidden = !compact;
   document.body.dataset.navLayout = compact ? 'drawer' : 'split';
 
@@ -591,4 +758,9 @@ navDrawer?.addEventListener('iswc-after-show', () => scrollNavToCurrent());
 navDrawer?.addEventListener('iswc-after-hide', () => {
   navToggle?.setAttribute('aria-expanded', 'false');
 });
+panelsCompactBtn?.addEventListener('click', () => {
+  setPanelsCompactUser(!panelsCompactUser);
+});
+syncPanelsCompactBtn();
+applyPanelsCompactDataset();
 syncNavLayout();

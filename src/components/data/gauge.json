@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-gauge",
   "category": "data-viz",
-  "title": "<iswc-gauge>",
-  "titleHtml": true,
+  "title": "&lt;iswc-gauge&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-gauge de InSoft.",
   "styles": ".gauge-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 1rem;\r\n      align-items: center;\r\n    }\r\n    .gauge-cell {\r\n      display: flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 1rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
   "storageKey": "docs-iswc-gauge",
@@ -16,7 +16,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"42\" label=\"CPU\" unit=\"%\" color=\"warning\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"92\" label=\"RAM\" unit=\"%\" color=\"success\"></iswc-gauge>\r\n            </div>\r\n            <div class=\"gauge-cell\">\r\n              <iswc-gauge value=\"15\" label=\"Errores\" unit=\"%\" color=\"danger\"></iswc-gauge>\r\n            </div>\r\n          </div>",
+          "html": "<iswc-gauge id=\"g1\" value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>",
           "controls": [
             {
               "control": "select",
@@ -69,8 +69,9 @@
               "prop": "attr:color",
               "label": "color",
               "options": [
-                "warning",
+                "brand",
                 "success",
+                "warning",
                 "danger"
               ]
             },
@@ -90,10 +91,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>"
         }
       ]
     },
@@ -216,5 +213,81 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,\r\n          custom min/max, unidad, formato y tamaño."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "type": "number",
+            "default": "0",
+            "desc": "Valor actual."
+          },
+          {
+            "name": "<code>min</code>",
+            "type": "number",
+            "default": "0",
+            "desc": "Mínimo."
+          },
+          {
+            "name": "<code>max</code>",
+            "type": "number",
+            "default": "100",
+            "desc": "Máximo."
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Etiqueta."
+          },
+          {
+            "name": "<code>unit</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Unidad (e.g. \"%\")."
+          },
+          {
+            "name": "<code>format</code>",
+            "type": "string",
+            "default": "0",
+            "desc": "Intl format."
+          },
+          {
+            "name": "<code>thickness</code>",
+            "type": "number",
+            "default": "8",
+            "desc": "Ancho del trazo."
+          },
+          {
+            "name": "<code>variant</code>",
+            "type": "brand | success | warning | danger",
+            "default": "brand",
+            "desc": "Color."
+          },
+          {
+            "name": "<code>half</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Semicírculo."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

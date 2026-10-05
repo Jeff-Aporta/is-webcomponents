@@ -70,13 +70,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'accent');
   const VALID_ICON_PLACEMENT = ['start', 'end'];
 
-  class IswcDetails extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    spacing: '--iswc-details-spacing',
-    'show-duration': '--iswc-details-show-duration',
-    'hide-duration': '--iswc-details-hide-duration',
-    };
+  class IswcDetails extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'spacing', 'show-duration', 'hide-duration']; }
 

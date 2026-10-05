@@ -1,34 +1,34 @@
----
+﻿---
 tag: iswc-format
 tags:
   - iswc-format
 category: helpers
 status: public
-source: ./format.js
+source: ./format.ts
 style: ./format.css
 preview: ./format.json
 ---
 # `<iswc-format>`
 
-## Propósito
+## PropÃ³sito
 
-Web Component genérico de formateo con `Intl`. Un solo elemento cubre fechas, números, bytes y tiempo relativo vía `type`. Los nombres históricos (`iswc-format-date`, `iswc-format-number`, `iswc-format-bytes`, `iswc-relative-time`) siguen como alias con `type` prefijado.
+Web Component genÃ©rico de formateo con `Intl`. Un solo elemento cubre fechas, nÃºmeros, bytes y tiempo relativo vÃ­a `type`. Los nombres histÃ³ricos (`iswc-format-date`, `iswc-format-number`, `iswc-format-bytes`, `iswc-relative-time`) siguen como alias con `type` prefijado.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Cuando quieres un solo tag de formato o documentar el contrato unificado. Los alias históricos siguen válidos.
+Cuando quieres un solo tag de formato o documentar el contrato unificado. Los alias histÃ³ricos siguen vÃ¡lidos.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No crear otro wrapper Intl si este módulo (o sus alias) ya cubre el caso.
+No crear otro wrapper Intl si este mÃ³dulo (o sus alias) ya cubre el caso.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './format.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-format type="date" value="2026-08-01"></iswc-format>
@@ -54,17 +54,17 @@ import './format.js';
 | `weekday` `era` `year` `month` `day` `hour` `minute` `second` | string | Opciones DateTimeFormat |
 | `time-zone` `time-zone-name` `hour-format` | string | Zona / ciclo horario |
 | `minimum-fraction-digits` `maximum-fraction-digits` | number | NumberFormat |
-| `unit` | string | Bytes: byte…petabyte |
+| `unit` | string | Bytes: byteâ€¦petabyte |
 | `display` | `short` \| `long` | Bytes |
 | `style` | `long` \| `short` \| `narrow` | Relative (attr `format` en alias) |
 | `numeric` | `always` \| `auto` | Relative |
-| `sync` | boolean | Relative: refresco periódico |
+| `sync` | boolean | Relative: refresco periÃ³dico |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
-| `value` | lectura/escritura | Según contrato de la clase |
+| `value` | lectura/escritura | SegÃºn contrato de la clase |
 
 ### Slots
 
@@ -72,9 +72,26 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+
 No expone.
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-format');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone APIs adicionales relevantes.
 
@@ -82,7 +99,8 @@ No expone APIs adicionales relevantes.
 
 | Part | Uso |
 | --- | --- |
-| `date` / `number` / `bytes` / `time` | Según `type` |
+| `date` / `number` / `bytes` / `time` | SegÃºn `type` |
+| `value` | El `<output>` con el valor formateado. |
 
 ### Custom states
 
@@ -92,13 +110,13 @@ No expone.
 
 No expone.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated.
 
 ## Comportamiento
 
-Los alias históricos reutilizan esta clase vía `createFormatElement(tipo)`.
+Los alias histÃ³ricos reutilizan esta clase vÃ­a `createFormatElement(tipo)`.
 
 ## Dependencias y componentes relacionados
 
@@ -127,5 +145,5 @@ Texto plano en shadow; hereda idioma del documento / `locale`.
 
 ## Fuentes
 
-- `./format.js` · `./format.css`
+- `./format.js` Â· `./format.css`
 - Preview: `./format.json`

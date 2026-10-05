@@ -48,7 +48,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           part="clear"
           class="clear"
           variant="text"
-          color="neutral"
+          color="text"
           tabindex="-1"
           aria-label="Limpiar"
           hidden
@@ -81,12 +81,33 @@ import { setStringAttr } from '../_shared/reflect.js';
   type SelectOption = {
     value: string;
     label: string;
+    /** Nodos del slot default (texto o HTML rico: iconos inline, etc.). */
+    labelNodes: Node[];
     group: string;
     description: string;
     start: HTMLElement[];
     disabled: boolean;
     el: HTMLElement;
   };
+
+  function labelNodesOf(el: Element): Node[] {
+    const out: Node[] = [];
+    for (const node of el.childNodes) {
+      if (node.nodeType === Node.ELEMENT_NODE && (node as Element).hasAttribute('slot')) continue;
+      out.push(node);
+    }
+    return out;
+  }
+
+  function fillLabel(target: HTMLElement, opt: SelectOption): void {
+    target.replaceChildren();
+    const rich = opt.labelNodes.some((n) => n.nodeType === Node.ELEMENT_NODE);
+    if (rich) {
+      for (const n of opt.labelNodes) target.appendChild(n.cloneNode(true));
+      return;
+    }
+    target.textContent = opt.label;
+  }
 
   const positive = (raw: unknown): number => {
     const n = Number(raw);
@@ -96,15 +117,6 @@ import { setStringAttr } from '../_shared/reflect.js';
   let uidSeq = 0;
 
   class IswcSelect extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-select-border-radius',
-    'border-color': { prop: '--iswc-select-border', onlyColorValues: true },
-    bg: { prop: '--iswc-select-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-select-text', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-select-focus', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-select-danger', onlyColorValues: true },
-    };
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
@@ -347,10 +359,14 @@ import { setStringAttr } from '../_shared/reflect.js';
         const tag = el.tagName.toLowerCase();
         if (tag !== 'iswc-option' && tag !== 'option') continue;
         const elAny = el as Element & { label?: string };
-        const label = typeof elAny.label === 'string' ? elAny.label : (el.textContent || '').trim();
+        const nodes = labelNodesOf(el);
+        const label = typeof elAny.label === 'string'
+          ? elAny.label
+          : nodes.map((n) => n.textContent || '').join('').trim();
         list.push({
           value: el.hasAttribute('value') ? (el.getAttribute('value') ?? label) : label,
           label,
+          labelNodes: nodes,
           group: el.getAttribute('group') || '',
           description: (el.querySelector<HTMLElement>(':scope > [slot="description"]')?.textContent || '').trim(),
           start: [...el.querySelectorAll<HTMLElement>(':scope > [slot="start"]')],
@@ -494,6 +510,10 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.required) this.#trigger.setAttribute('aria-required', 'true');
       else this.#trigger.removeAttribute('aria-required');
       if (labelAttr) this.#trigger.setAttribute('aria-label', labelAttr);
+      // title del host → trigger (tooltips nativos del listbox/trigger)
+      const hostTitle = this.getAttribute('title') || this.getAttribute('aria-label') || labelAttr;
+      if (hostTitle) this.#trigger.title = hostTitle;
+      else this.#trigger.removeAttribute('title');
       this.#listbox.setAttribute('aria-multiselectable', String(this.multiple));
       this.#renderDisplay();
     }
@@ -538,8 +558,25 @@ import { setStringAttr } from '../_shared/reflect.js';
       this.#showTags(false);
       const selected = this.#values[0];
       const empty = selected == null || selected === '';
-      this.#display.textContent = empty ? placeholder : this.#labelOf(selected);
+      this.#display.replaceChildren();
       this.#display.classList.toggle('iswc-placeholder', empty);
+      if (empty) {
+        this.#display.textContent = placeholder;
+        return;
+      }
+      const opt = this.#optionByValue(selected);
+      if (opt?.start.length) {
+        const start = document.createElement('span');
+        start.className = 'display-start';
+        start.setAttribute('aria-hidden', 'true');
+        for (const node of opt.start) start.appendChild(node.cloneNode(true));
+        this.#display.appendChild(start);
+      }
+      const labelEl = document.createElement('span');
+      labelEl.className = 'display-label';
+      if (opt) fillLabel(labelEl, opt);
+      else labelEl.textContent = this.#labelOf(selected);
+      this.#display.appendChild(labelEl);
     }
 
     #showTags(on: boolean): void {
@@ -610,6 +647,8 @@ import { setStringAttr } from '../_shared/reflect.js';
       row.setAttribute('role', 'option');
       row.dataset.index = String(index);
       row.setAttribute('aria-selected', String(this.#values.includes(opt.value)));
+      const optTitle = opt.el.getAttribute('title') || opt.label || opt.value;
+      if (optTitle) row.title = optTitle;
       if (opt.disabled) {
         row.setAttribute('aria-disabled', 'true');
         row.setAttribute('data-disabled', '');
@@ -639,7 +678,7 @@ import { setStringAttr } from '../_shared/reflect.js';
       body.className = 'option-body';
       const text = document.createElement('span');
       text.className = 'option-label';
-      text.textContent = opt.label;
+      fillLabel(text, opt);
       body.appendChild(text);
       if (opt.description) {
         const desc = document.createElement('span');

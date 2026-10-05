@@ -54,16 +54,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
 
   const EXTRA_UPGRADE_ATTRS = ['variant', 'label-placement', 'full-width'];
 
-  class IswcTextarea extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    radius: '--iswc-textarea-border-radius',
-    'border-color': { prop: '--iswc-textarea-border', onlyColorValues: true },
-    bg: { prop: '--iswc-textarea-bg', onlyColorValues: true },
-    'text-color': { prop: '--iswc-textarea-text', onlyColorValues: true },
-    'focus-color': { prop: '--iswc-textarea-focus', onlyColorValues: true },
-    'danger-color': { prop: '--iswc-textarea-danger', onlyColorValues: true },
-    };
+  class IswcTextarea extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }

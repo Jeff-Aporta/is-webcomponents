@@ -1,4 +1,4 @@
-# Specs IS Web Components (SDD)
+# Specs ISWC (SDD)
 
 Contrato vigente del kit. **No sustituye** [`constraints.md`](constraints.md) / [`lessons.md`](lessons.md): el spec dice qué debe pasar; el diario dice qué pasó y por qué.
 
@@ -20,6 +20,8 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Spec | [documentacion.md](documentacion.md) | ¿Cómo se documenta para agentes? |
 | Spec | [testing.md](testing.md) | ¿Qué hace verde el gate? |
 | Spec | [typescript/spec.md](typescript/spec.md) | ¿Cómo se tipa el kit? |
+| Spec | [file-preview/spec.md](file-preview/spec.md) | ¿Cómo se ven/editan archivos por MIME? |
+| Spec | [playground/spec.md](playground/spec.md) | ¿Cómo es el playground único (stage+knobs CDN)? |
 | Plan | [iswc-refactor-plan.md](iswc-refactor-plan.md) | Refactor ISWC 2026-09-08 (H1-H10 + S-PUERTO) |
 | Reporte | [iswc-refactor-f6.md](iswc-refactor-f6.md) | F6 del refactor ISWC 2026-09-08 (gates verdes) |
 | Plantillas | [plantillas/](plantillas) | `spec.template.md`, `tasks.template.md` |

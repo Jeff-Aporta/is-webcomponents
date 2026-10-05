@@ -1,4 +1,4 @@
-# Spec — Componentes `is-*`
+﻿# Spec — Componentes `is-*`
 
 Forma de los custom elements, `_shared/` y convenciones de API.
 
@@ -7,14 +7,14 @@ Inventario por tag: [`manifest.ts`](../src/manifest.ts) + `<categoría>/*.md`. C
 
 ## Contexto
 
-Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build salen de [`manifest.js`](../src/manifest.ts).
+Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build salen de [`src/manifest.ts`](../src/manifest.ts).
 
 ## S-K1 Nomenclatura y categorías
 
 - Prefijo obligatorio: `is-`.
 - Categorías del manifest: `actions`, `feedback`, `forms`, `data`, `charts`, `diagrams`, `layout`, `navigation`, `helpers`, `media`, `isp`, `code`, …
 - Sub-tags (p. ej. `iswc-tab-panel`) comparten `page` con el padre en nav; no son tabs propios.
-- La categoría **lógica** puede diferir de la carpeta: seguir el `script` de `manifest.js`, no el nombre de la categoría. `data-viz` es el caso típico (la mayoría de gráficas vive en `charts/`).
+- La categoría **lógica** puede diferir de la carpeta: seguir el `script` de `src/manifest.ts`, no el nombre de la categoría. `data-viz` es el caso típico (la mayoría de gráficas vive en `charts/`).
 
 ## S-K2 Shadow DOM y estilos
 
@@ -90,7 +90,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 ### S-K10 data-viz
 
-- La categoría lógica `data-viz` del manifest se reparte en **dos carpetas**: la mayoría de las gráficas vive en `charts/`; aquí solo `iswc-heatmap` y `iswc-maps`/`iswc-map-marker`. Al buscar la doc de un tag, seguir su `script` en `manifest.js`, **no** el nombre de la categoría.
+- La categoría lógica `data-viz` del manifest se reparte en **dos carpetas**: la mayoría de las gráficas vive en `charts/`; aquí solo `iswc-heatmap` y `iswc-maps`/`iswc-map-marker`. Al buscar la doc de un tag, seguir su `script` en `src/manifest.ts`, **no** el nombre de la categoría.
 - **Rampa de intensidad de heatmap** = valores de dato, no de tema: no sustituir por tokens `--iswc-*`.
 - `<iswc-map-marker>` solo tiene sentido dentro de `<iswc-maps>`: el padre proyecta los marcadores y los posiciona. `maps.js` registra ambos tags (un módulo, un doc).
 
@@ -182,8 +182,8 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
 
 | Pieza | Contrato |
 |---|---|
-| Registro | entrada en `manifest.js` |
-| Fuente | `src/components/<cat>/<name>.js` |
+| Registro | entrada en `src/manifest.ts` |
+| Fuente | `src/components/<cat>/<name>.ts` |
 | Doc tag | `src/components/<cat>/<name>.md` |
 | Preview | `src/previews/<cat>/<tag>.json` |
 

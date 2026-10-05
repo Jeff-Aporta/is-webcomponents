@@ -1,12 +1,10 @@
 /**
  * gallery-boot.test.ts
  *
- * Caza la regresion FOUC / demos vacios / boot lento:
- *  - CSS del kit desde dist/cdn (consumo transpilado)
- *  - await del head = solo shell tags + preview desde dist/cdn
- *  - SPA de galeria: dist/gallery-app.min.js (no src/*.ts en runtime)
- *  - loadPageModules fuera del await critico
- *  - cdn-panel NO importa cdn-snippet desde src/
+ * Boot vía iswc-doc-demo (boot ESM vía loader + host module + CE):
+ *  - sin <link> de kit; palettes/shell vía loader aliases
+ *  - index.html mínimo: host module + gallery-app + <iswc-doc-demo> (sin script boot clásico)
+ *  - pageModules classic vs module en loader; boot alias type module
  */
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
@@ -15,61 +13,78 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const read = (rel) => readFileSync(join(root, rel), 'utf8');
+const read = (rel: string) => readFileSync(join(root, rel), 'utf8');
 const indexHtml = read('index.html');
+const loaderTs = read('src/cdn/loader.ts');
+const docDemoTs = read('src/components/layout/doc-demo.ts');
+const bootTs = read('src/components/layout/doc-demo-boot.ts');
+const hostTs = read('src/components/layout/doc-demo-host.ts');
 const cdnPanel = read('scripts/cdn-panel.js');
 
-/** Primer <script type="module"> del <head> (boot del loader). */
-function headBootModule(html) {
-  const head = html.match(/<head[\s\S]*?<\/head>/i)?.[0] ?? '';
-  const m = head.match(/<script\s+type="module">([\s\S]*?)<\/script>/i);
-  assert.ok(m, 'falta <script type="module"> en <head>');
-  return m[1];
-}
-
-test('CSS del kit es dist/cdn (consumo); shell local', () => {
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css\?h=[0-9a-z]{6}"/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/palettes\.min\.css\?h=[0-9a-z]{6}"/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/shell\.css"/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/presentation\.css"/);
-  assert.match(
-    indexHtml,
-    /<link\s+rel="stylesheet"\s+href="dist\/cdn\/preview\/preview-component\.min\.css\?h=[0-9a-z]{6}"/,
-  );
-  assert.doesNotMatch(indexHtml, /href="src\/styles\/is-base\.css"/);
+test('galería: CSS del kit vía loader aliases (sin <link> is-base/palettes)', () => {
+  assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base/);
+  assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/palettes/);
+  assert.match(loaderTs, /iswc-palettes-default/);
+  assert.match(loaderTs, /iswc-doc-shell/);
+  assert.match(loaderTs, /iswc-doc-presentation/);
+  assert.doesNotMatch(loaderTs, /loadCSSPalettesDefault\s*\(/);
+  assert.match(docDemoTs, /iswc-palettes-default/);
+  assert.match(docDemoTs, /iswc-doc-shell/);
 });
 
-test('head no hace await loadCSS* / loadPageStyles en el boot', () => {
-  const boot = headBootModule(indexHtml);
-  assert.doesNotMatch(boot, /await\s+L\.loadCSSBase\s*\(/);
-  assert.doesNotMatch(boot, /await\s+L\.loadCSSPalettesDefault\s*\(/);
-  assert.doesNotMatch(boot, /await\s+L\.loadPageStyles\s*\(/);
+test('index.html: host module + iswc-doc-demo (boot vía loader; sin index.js/mjs/css)', () => {
+  assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
+  assert.match(indexHtml, /doc-demo-host\.min\.js/);
+  assert.match(indexHtml, /<iswc-doc-demo[\s\S]*\blocal\b/);
+  assert.match(indexHtml, /<iswc-doc-demo[\s\S]*\bdev\b/);
+  assert.match(indexHtml, /sheets-cache=["']iswc-gallery-sheets["']/);
+  assert.doesNotMatch(indexHtml, /src=["']\.\/index\.js["']/);
+  assert.doesNotMatch(indexHtml, /src=["']\.\/index\.mjs["']/);
+  assert.doesNotMatch(indexHtml, /href=["']\.\/index\.css["']/);
+  assert.ok(!existsSync(join(root, 'index.js')), 'index.js debe eliminarse');
+  assert.ok(!existsSync(join(root, 'index.mjs')), 'index.mjs debe eliminarse');
+  assert.ok(!existsSync(join(root, 'index.css')), 'index.css debe eliminarse');
 });
 
-test('await critico del head = shell tags + preview dist (no all, no pageModules)', () => {
-  const boot = headBootModule(indexHtml);
-  assert.match(boot, /await\s+Promise\.all\s*\(/);
-  assert.match(boot, /L\.load\s*\([\s\S]*iswc-split-panel[\s\S]*iswc-button/);
-  assert.match(
-    boot,
-    /import\s*\(\s*['"]\.\/dist\/cdn\/preview\/preview-component\.min\.js\?h=[0-9a-z]{6}['"]\s*\)/,
-  );
-  assert.match(boot, /dataset\.kitShell\s*=\s*['"]1['"]/);
-
-  const tryBlock = boot.match(/try\s*\{([\s\S]*?)dataset\.kitShell/);
-  assert.ok(tryBlock, 'falta try + dataset.kitShell tras el shell');
-  const critical = tryBlock[1];
-  assert.doesNotMatch(critical, /L\.load\s*\(\s*['"]all['"]\s*\)/);
-  assert.doesNotMatch(critical, /loadPageModules\s*\(/);
+test('boot ESM + host module fuentes', () => {
+  assert.match(bootTs, /data-theme|iswc-theme|localStorage/);
+  assert.match(bootTs, /export\s+(async\s+)?function\s+applyDocDemoBoot|export\s*\{/);
+  assert.match(hostTs, /configure\s*\(/);
+  assert.match(hostTs, /local:\s*true/);
+  assert.match(hostTs, /loadPageModules\s*\(\s*\[\s*['"]iswc-doc-demo-boot['"]\s*\]\s*\)/);
+  assert.match(hostTs, /load\s*\(\s*['"]iswc-doc-demo['"]\s*\)/);
+  assert.match(docDemoTs, /defineElement\s*\(\s*['"]iswc-doc-demo['"]/);
+  assert.match(docDemoTs, /id=["']shellNav["']/);
+  assert.match(docDemoTs, /id=["']previewHost["']/);
+  assert.match(read('src/components/layout/doc-demo.css'), /display:\s*contents/);
 });
 
-test('loadPageModules vive fuera del path critico (fire-and-forget)', () => {
-  const boot = headBootModule(indexHtml);
-  assert.doesNotMatch(boot, /L\.load\s*\(\s*['"]all['"]\s*\)/);
-  assert.match(boot, /loadPageModules\s*\(/);
-  const afterShell = boot.split(/dataset\.kitShell\s*=\s*['"]1['"]/)[1] ?? '';
-  assert.ok(afterShell.length > 20, 'boot truncado tras kitShell');
-  assert.doesNotMatch(afterShell, /await\s+L\.loadPageModules\s*\(/);
+test('loader: pageModules classic vs module', () => {
+  assert.match(loaderTs, /type:\s*['"]classic['"]/);
+  assert.match(loaderTs, /type:\s*['"]module['"]/);
+  assert.match(loaderTs, /iswc-doc-demo-boot[\s\S]*type:\s*['"]module['"]/);
+  assert.match(loaderTs, /iswc-doc-demo-host/);
+  assert.match(loaderTs, /loadClassicOnce|type === 'classic'/);
+  assert.match(loaderTs, /dev-reload[\s\S]*classic/);
+});
+
+test('index.html no embebe lógica de reload-pin', () => {
+  assert.doesNotMatch(indexHtml, /iswc-auto-rereload|reload-pin/);
+  assert.ok(existsSync(join(root, 'scripts', 'dev-reload.js')));
+  assert.match(loaderTs, /dev-reload/);
+});
+
+test('sin preview-boot.js externo; theme sync en doc-demo-boot', () => {
+  assert.doesNotMatch(indexHtml, /preview-boot\.js/);
+  assert.match(bootTs, /iswc-theme|data-theme/);
+});
+
+test('meta sin ContaPyme/InSoft, sin license, sin offers', () => {
+  assert.doesNotMatch(indexHtml, /ContaPyme\s*\/\s*InSoft/);
+  assert.doesNotMatch(indexHtml, /"offers"\s*:/);
+  assert.doesNotMatch(indexHtml, /"license"\s*:/);
+  assert.doesNotMatch(indexHtml, /"author"\s*:\s*\{\s*"@type"\s*:\s*"Person"/);
+  assert.match(indexHtml, /open source/i);
 });
 
 test('no reimportar preview-component ni icon-loader desde src/', () => {
@@ -78,37 +93,43 @@ test('no reimportar preview-component ni icon-loader desde src/', () => {
   assert.doesNotMatch(indexHtml, /src\/components\/_shared\/icon-loader\.js/);
 });
 
-test('SPA de galeria se consume desde dist/gallery-app.min.js (no src/*.ts)', () => {
-  assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js\?h=[0-9a-z]{6}["']/);
-  assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/previews\/registry\.ts['"]/);
-  assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/cdn\/collect-iswc-tags\.ts['"]/);
-  assert.ok(
-    existsSync(join(root, 'src', 'gallery', 'app.ts')),
-    'fuente: src/gallery/app.ts',
-  );
-  // Tras build debe existir el artefacto; si falta, el test avisa (correr deno task build).
-  if (!existsSync(join(root, 'dist', 'gallery-app.min.js'))) {
-    console.warn('gallery-boot: falta dist/gallery-app.min.js — corre deno task build');
-  }
+test('SPA de galeria desde dist/gallery-app.min.js (head + defer)', () => {
+  assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js(?:\?h=[0-9a-z]{6})?["'][^>]*\bdefer\b/);
+  assert.ok(existsSync(join(root, 'src', 'gallery', 'app.ts')));
 });
 
 test('fuente gallery app usa setHostPreview + whenDefined', () => {
   const body = read('src/gallery/app.ts');
   assert.match(body, /function\s+setHostPreview\s*\(/);
-  assert.match(body, /hasOwnProperty\.call\(\s*previewHost\s*,\s*['"]preview['"]\s*\)/);
-  assert.match(body, /delete\s+previewHost\.preview/);
   assert.match(body, /customElements\.whenDefined\(\s*['"]iswc-preview-component['"]\s*\)/);
 });
 
-test('cdn-panel importa cdn-snippet desde dist/cdn (no src/)', () => {
-  assert.match(cdnPanel, /dist\/cdn\/feedback\/cdn-snippet\.min\.js/);
-  assert.doesNotMatch(
-    cdnPanel,
-    /from\s+['"]\.\.\/src\/components\/feedback\/cdn-snippet\.js['"]/,
-  );
+test('gallery-app espera shell iswc-doc-demo antes de tocar #shellNav', () => {
+  const body = read('src/gallery/app.ts');
+  assert.match(body, /waitForGalleryShell/);
+  assert.match(body, /await\s+waitForGalleryShell\s*\(/);
+  assert.match(body, /whenDefined\(\s*['"]iswc-doc-demo['"]\s*\)/);
+  assert.match(body, /iswc-gallery-shell-ready/);
+  const waitIdx = body.indexOf('await waitForGalleryShell');
+  const navIdx = body.indexOf("el<HTMLElement>('shellNav')");
+  assert.ok(waitIdx >= 0 && navIdx > waitIdx, 'waitForGalleryShell antes de el(shellNav)');
 });
 
-test('head arranca con loader.min.js desde core/ (no all.min suelto)', () => {
-  assert.match(indexHtml, /dist\/cdn\/(?:core\/)?loader\.min\.js/);
-  assert.doesNotMatch(indexHtml, /<script\s+type="module"\s+src="dist\/cdn\/all\.min\.js"/);
+test('cdn-panel importa cdn-snippet desde dist/cdn', () => {
+  assert.match(cdnPanel, /dist\/cdn\/feedback\/cdn-snippet\.min\.js/);
+});
+
+test('manifest declara iswc-doc-demo', () => {
+  const man = read('src/manifest.ts');
+  assert.match(man, /tag:\s*['"]iswc-doc-demo['"]/);
+});
+
+test('iswc-doc-demo transversal: defaults sin gallery/dev-reload; API whenReady', () => {
+  assert.match(docDemoTs, /whenReady\s*\(/);
+  assert.match(docDemoTs, /iswc-doc-demo-ready/);
+  assert.match(docDemoTs, /storage-key-nav['"]\s*\)\s*\|\|\s*['"]iswc-doc-nav['"]/);
+  assert.doesNotMatch(docDemoTs, /DEFAULT_PAGE_MODULES\s*=\s*\[[^\]]*dev-reload/s);
+  assert.match(docDemoTs, /hasAttribute\(\s*['"]dev['"]\s*\)/);
+  assert.match(bootTs, /theme-storage-key|palette-storage-key/);
+  assert.match(hostTs, /CDN|cdn\.jsdelivr|cualquier app|reutilizable/i);
 });

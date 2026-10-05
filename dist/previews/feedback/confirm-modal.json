@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-confirm-modal",
   "category": "feedback",
-  "title": "<iswc-confirm-modal>",
-  "titleHtml": true,
+  "title": "&lt;iswc-confirm-modal&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-confirm-modal de InSoft.",
   "storageKey": "docs-iswc-confirm-modal",
   "sections": [
@@ -26,10 +26,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-button id=\"btnDelete\">Eliminar cuenta</iswc-button>\n<iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-confirm-modal>"
         }
       ]
     },
@@ -41,6 +37,17 @@
         {
           "kind": "demo",
           "html": "<iswc-button id=\"cmMega\" color=\"brand\">Publicar cambios</iswc-button>\r\n          <iswc-confirm-modal for=\"cmMega\" heading=\"Publicar a producción\">\r\n            <div slot=\"message\">\r\n              <strong>Vas a publicar 12 cambios.</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Los usuarios verán la nueva versión de inmediato.\r\n              </p>\r\n            </div>\r\n            <iswc-button slot=\"cancel\">Revisar de nuevo</iswc-button>\r\n            <iswc-button slot=\"confirm\" color=\"brand\">Publicar</iswc-button>\r\n          </iswc-confirm-modal>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-confirm-modal\">\n  <iswc-confirm-modal open label=\"Eliminar registro\">\n    <p>Esta accion no se puede deshacer.</p>\n  </iswc-confirm-modal>\n  <strong slot=\"message\">Vas a eliminar el registro seleccionado.</strong>\n  <iswc-button slot=\"cancel\" variant=\"text\" color=\"neutral\">Cancelar</iswc-button>\n  <iswc-button slot=\"confirm\" color=\"danger\">Eliminar</iswc-button>\n</iswc-slots-pg>"
         }
       ]
     },
@@ -118,5 +125,70 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;iswc-popconfirm&gt;</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>for</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "id del trigger que abre el modal."
+          },
+          {
+            "name": "<code>heading</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título del modal."
+          },
+          {
+            "name": "<code>message</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto del mensaje."
+          },
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado controlado."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-confirm-show</code>",
+            "cuando": "Modal visible."
+          },
+          {
+            "evento": "<code>iswc-confirm-hide</code>",
+            "cuando": "Modal se cierra."
+          },
+          {
+            "evento": "<code>iswc-confirm-confirm</code>",
+            "cuando": "Click en confirmar."
+          },
+          {
+            "evento": "<code>iswc-confirm-cancel</code>",
+            "cuando": "Click en cancelar, backdrop o Escape."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"btnDelete\">Eliminar cuenta</iswc-button>\n<iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-confirm-modal>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

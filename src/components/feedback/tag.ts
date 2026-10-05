@@ -12,7 +12,7 @@ import { TONE } from '../_shared/tone.js';
  * Escala con font-size del contexto (métricas en em).
  *
  * Atributos
- *   color       brand | neutral | info | success | warning | danger (default brand)
+ *   color       brand | neutral | text | info | success | warning | danger (default brand)
  *   variant    accent | filled | outlined | filled-outlined (default filled-outlined)
  *   pill          boolean
  *   with-remove   boolean — muestra botón de quitar

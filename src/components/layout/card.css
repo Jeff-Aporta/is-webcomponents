@@ -1,14 +1,14 @@
 /* <iswc-card> — superficies con secciones (media, header, body, footer, actions). */
 
 :host {
-  --iswc-card-spacing: var(--iswc-space-l, 1rem);
+  --iswc-card-spacing: var(--iswc-space-l);
 
   display: block;
   position: relative;
   overflow: hidden;
   background: var(--card-bg, transparent);
   border: var(--card-border, 0 solid transparent);
-  border-radius: var(--iswc-radius, 0.625em);
+  border-radius: var(--iswc-radius);
   color: var(--iswc-text, inherit);
   font-family: var(--iswc-sans, inherit);
   box-sizing: border-box;
@@ -83,7 +83,7 @@
 :host([variant="accent"]) {
   background: var(--iswc-accent-bg, rgb(30 144 255 / 12%));
   border: 0;
-  box-shadow: inset 3px 0 0 var(--iswc-accent, #e03131);
+  box-shadow: inset 3px 0 0 var(--iswc-accent);
 }
 
 :host(:not([orientation="horizontal"])) {

@@ -1,1 +1,1 @@
-@layer iswc.surface{.iswc-popover-panel{background:var(--iswc-bg-elev);border:1px solid var(--iswc-border);border-radius:var(--iswc-popover-radius, var(--iswc-radius, 8px));box-shadow:var(--iswc-popover-shadow, var(--iswc-shadow, 0 18px 44px rgba(0, 0, 0, .26)))}}
+@layer iswc.surface{.iswc-popover-panel{background:var(--iswc-bg-elev);border:1px solid var(--iswc-border);border-radius:var(--iswc-popover-radius, var(--iswc-radius));box-shadow:var(--iswc-popover-shadow, var(--iswc-shadow, 0 18px 44px rgba(0, 0, 0, .26)))}}

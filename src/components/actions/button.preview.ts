@@ -90,7 +90,7 @@ function wirePlayground(root: ParentNode): void {
     if (btn.hasAttribute('loading')) parts.push(' loading');
     if (btn.hasAttribute('disabled')) parts.push(' disabled');
     const href = btn.getAttribute('href');
-    if (href) parts.push(` href="${escapeAttr(href)}"`, ' target="_blank"', ' rel="noopener"');
+    if (href) parts.push(` href="${escapeAttr(href)}"`);
     parts.push('>');
     const start = btn.querySelector<HTMLElement>('iswc-icon[slot="start"]');
     const end = btn.querySelector<HTMLElement>('iswc-icon[slot="end"]');
@@ -129,12 +129,8 @@ function wirePlayground(root: ParentNode): void {
     const href = (hrefEl?.value || '').trim();
     if (href) {
       btn.setAttribute('href', href);
-      btn.setAttribute('target', '_blank');
-      btn.setAttribute('rel', 'noopener');
     } else {
       btn.removeAttribute('href');
-      btn.removeAttribute('target');
-      btn.removeAttribute('rel');
     }
 
     syncIcons();

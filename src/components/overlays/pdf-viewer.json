@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-pdf-viewer",
   "category": "overlays",
-  "title": "<iswc-pdf-viewer>",
-  "titleHtml": true,
+  "title": "&lt;iswc-pdf-viewer&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-pdf-viewer",
   "sections": [
     {
@@ -20,26 +20,26 @@
           "kind": "demo",
           "html": "<iswc-pdf-viewer\r\n            src=\"{assets}documento-ejemplo.pdf\"\r\n            download\r\n            print\r\n            height=\"70vh\">\r\n            <span slot=\"title\">Documento de ejemplo</span>\r\n            <a slot=\"toolbar\" href=\"{assets}documento-ejemplo.pdf\" target=\"_blank\" rel=\"noopener\" style=\"font-size:.8rem; color:var(--iswc-text-soft);\">abrir en pestaña ↗</a>\r\n          </iswc-pdf-viewer>",
           "controls": [
-              {
-                "control": "text",
-                "prop": "attr:src",
-                "label": "src"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:download",
-                "label": "download"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:print",
-                "label": "print"
-              },
-              {
-                "control": "text",
-                "prop": "attr:height",
-                "label": "height"
-              }
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:download",
+              "label": "download"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:print",
+              "label": "print"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
           ],
           "equivNote": "engine elige motor; flags de toolbar son independientes.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -57,5 +57,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Visor de PDF. Por defecto delega en el visor nativo del navegador (<code class=\"code\">&lt;iframe type=\"application/pdf\"&gt;</code>) — sin dependencias, sin peso adicional."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

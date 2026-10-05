@@ -1,4 +1,5 @@
 /* Estilos específicos del lightbox de diagramas, encima de lightbox.css. */
+@import url('./lightbox.css');
 
 .lb-bar__lead {
   flex: 1 1 auto;
@@ -48,7 +49,7 @@
 .lb-step {
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
-  color: var(--iswc-text-soft, #9aa0a6);
+  color: var(--iswc-text-soft);
   min-width: 2.5em;
 }
 
@@ -61,7 +62,7 @@
 }
 
 .lb-code__hint {
-  color: var(--iswc-text-soft, #9aa0a6);
+  color: var(--iswc-text-soft);
   font-size: 0.75rem;
 }
 
@@ -69,24 +70,24 @@
   width: 100%;
   min-height: 14rem;
   resize: vertical;
-  font-family: var(--iswc-mono, ui-monospace, Consolas, monospace);
+  font-family: var(--iswc-mono);
   font-size: 0.8125rem;
   line-height: 1.5;
   padding: 0.625rem;
-  border-radius: var(--iswc-radius-sm, 0.375em);
-  border: 1px solid var(--iswc-border, #2a3038);
-  background: var(--iswc-code-bg, #0f1318);
-  color: var(--iswc-code-text, #d4d8de);
+  border-radius: var(--iswc-radius-sm);
+  border: 1px solid var(--iswc-border);
+  background: var(--iswc-code-bg);
+  color: var(--iswc-code-text);
   tab-size: 2;
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline: 2px solid var(--iswc-focus);
     outline-offset: -1px;
   }
 }
 
 .lb-code__err {
   margin: 0;
-  color: var(--iswc-danger-text, #ff8787);
+  color: var(--iswc-danger-text);
   font-size: 0.75rem;
   &[hidden] { display: none; }
 }
@@ -99,27 +100,27 @@
 
 .lb-text-btn {
   padding: 0.4em 0.9em;
-  border-radius: var(--iswc-radius-sm, 0.375em);
-  border: 1px solid var(--iswc-control-border, #59636e);
-  background: var(--iswc-control-bg, #21262d);
-  color: var(--iswc-control-text, #f0f3f6);
+  border-radius: var(--iswc-radius-sm);
+  border: 1px solid var(--iswc-control-border);
+  background: var(--iswc-control-bg);
+  color: var(--iswc-control-text);
   font: inherit;
   font-size: 0.8125rem;
   cursor: pointer;
-  &:hover { background: var(--iswc-control-bg-hover, #30363d); }
+  &:hover { background: var(--iswc-control-bg-hover); }
   &.iswc-primary {
-    background: var(--iswc-accent, #1e90ff);
+    background: var(--iswc-accent);
     border-color: transparent;
-    color: var(--iswc-on-brand, #fff);
+    color: var(--iswc-on-brand);
   }
   &:focus-visible {
-    outline: 2px solid var(--iswc-focus, #4aabff);
+    outline: 2px solid var(--iswc-focus);
     outline-offset: 1px;
   }
 }
 
 .lb-unsupported {
-  color: var(--iswc-text-soft, #a8b0bb);
+  color: var(--iswc-text-soft);
   font-size: 0.875rem;
   text-align: center;
 }

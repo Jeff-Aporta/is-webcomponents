@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-stepper",
   "category": "navigation",
-  "title": "<iswc-stepper>",
-  "titleHtml": true,
+  "title": "&lt;iswc-stepper&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-stepper / iswc-stepper-step de InSoft.",
   "styles": ".wizard-card {\r\n      margin-top: 1rem;\r\n      padding: 1.25rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
   "storageKey": "docs-iswc-stepper",
@@ -61,10 +61,6 @@
               "label": "disabled"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-stepper active=\"1\">\n  <iswc-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></iswc-stepper-step>\n</iswc-stepper>"
         }
       ]
     },
@@ -242,5 +238,92 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Indicador de flujo por pasos. Ideal para wizards y formularios multipaso.\r\n          Soporta orientación horizontal y vertical, variantes visualmente\r\n          distintas, iconos por slot, descripción y manejo de errores."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>active</code>",
+            "type": "number",
+            "default": "0",
+            "desc": "Paso activo (0-indexed)."
+          },
+          {
+            "name": "<code>orientation</code>",
+            "type": "horizontal | vertical",
+            "default": "horizontal",
+            "desc": "Disposición."
+          },
+          {
+            "name": "<code>variant</code>",
+            "type": "default | simple | numbered",
+            "default": "default",
+            "desc": "Aspecto."
+          },
+          {
+            "name": "<code>without-line</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta línea conectora."
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título del paso."
+          },
+          {
+            "name": "<code>description</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto secundario."
+          },
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Iconify id."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea el paso."
+          },
+          {
+            "name": "<code>error</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Marca error."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-stepper-change</code>",
+            "cuando": "Cambia el paso. <code>detail: { from, to, step }</code>."
+          },
+          {
+            "evento": "<code>iswc-stepper-complete</code>",
+            "cuando": "Último paso completado."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-stepper active=\"1\">\n  <iswc-stepper-step label=\"Cuenta\" icon=\"mdi:account\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Perfil\" icon=\"mdi:card-account-details\"></iswc-stepper-step>\n  <iswc-stepper-step label=\"Confirmar\" icon=\"mdi:check-circle\"></iswc-stepper-step>\n</iswc-stepper>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

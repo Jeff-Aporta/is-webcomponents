@@ -117,7 +117,7 @@ export function lowerCase(value: string) {
         </div>
       </footer>
       <div part="actions" class="actions" slot="footer">
-        <iswc-button class="close" color="neutral" variant="outlined"
+        <iswc-button class="close" color="text" variant="outlined"
                    data-dialog="close" tabindex="0">Cerrar</iswc-button>
       </div>
     </iswc-dialog>
@@ -126,10 +126,6 @@ export function lowerCase(value: string) {
   const OBSERVED = ['open', 'loading', 'entity', 'icon', 'close-label', 'light-dismiss'];
 
   class IswcModalVerificacion extends ElementBase {
-    /** Personalización por atributo (ver `core/attrs.ts`). */
-    static styleAttrs = {
-    accent: { prop: '--iswc-modal-verificacion-accent', onlyColorValues: true },
-    };
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 

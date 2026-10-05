@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-barcode",
   "category": "media",
-  "title": "<iswc-barcode>",
-  "titleHtml": true,
+  "title": "&lt;iswc-barcode&gt;",
+  "titleHtml": false,
   "styles": ".bc-row { padding: 1rem 0; border-bottom: 1px dashed var(--iswc-border); }\r\n    .bc-row:last-child { border-bottom: 0; }\r\n\r\n    .bc-check { display: grid; gap: 14px; }\r\n    .bc-case {\r\n      display: flex;\r\n      align-items: center;\r\n      gap: 1.25rem;\r\n      flex-wrap: wrap;\r\n      padding: 0.9rem 0;\r\n      border-bottom: 1px dashed var(--iswc-border);\r\n    }\r\n    .bc-case:last-child { border-bottom: 0; }\r\n    /* Escala tipografica de esta seccion: DOS pasos declarados sobre el cuerpo\r\n       (1rem = 15px de presentation.css) → 0.75rem para etiquetas, 1.25rem para\r\n       el titulo. Ratio ~1.33 entre pasos.\r\n       El texto normal NO declara font-size: un 0.95rem sobre un cuerpo de 1rem\r\n       no es jerarquia, es un duplicado que aplana la escala. */\r\n    .bc-case dl {\r\n      margin: 0;\r\n      display: grid;\r\n      grid-template-columns: auto 1fr;\r\n      gap: 2px 0.75rem;\r\n      align-content: center;\r\n    }\r\n    .bc-case dt { color: var(--iswc-text-soft); font-size: 0.75rem; align-self: center; }\r\n    .bc-case dd { margin: 0; }\r\n    .bc-out { font-family: var(--iswc-mono, ui-monospace, monospace); letter-spacing: 0.04em; color: var(--iswc-accent); }\r\n\r\n    .bc-verify {\r\n      margin-top: 1.1rem;\r\n      padding: 1rem 1.1rem;\r\n      border: 1px solid var(--iswc-border);\r\n      border-radius: 0.6rem;\r\n      background: var(--iswc-bg-elev);\r\n    }\r\n    .bc-verify h3 { margin: 0 0 0.35rem; font-size: 1.25rem; }\r\n    .bc-verify ol { margin: 0.5rem 0 0.9rem; padding-left: 1.15rem; display: grid; gap: 3px; }\r\n    .bc-verify__actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }\r\n    .bc-msg { font-size: 0.75rem; color: var(--iswc-accent); }",
   "storageKey": "docs-iswc-barcode",
   "sections": [
@@ -23,51 +23,56 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"bc-check\">\r\n            <div class=\"bc-case\">\r\n              <iswc-barcode type=\"ean13\" value=\"770123456789\" height=\"70\"></iswc-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">770123456789</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7701234567897</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>770 · Colombia</dd>\r\n              </dl>\r\n            </div>\r\n\r\n            <div class=\"bc-case\">\r\n              <iswc-barcode type=\"ean13\" value=\"750103131130\" height=\"70\"></iswc-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">750103131130</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7501031311309</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>750 · México</dd>\r\n              </dl>\r\n            </div>\r\n\r\n            <div class=\"bc-case\">\r\n              <iswc-barcode type=\"ean13\" value=\"400638133393\" height=\"70\"></iswc-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">400638133393</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">4006381333931</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>400 · Alemania</dd>\r\n              </dl>\r\n            </div>\r\n          </div>",
+          "html": "<div class=\"bc-check\">\r\n            <div class=\"bc-case\">\r\n              <iswc-barcode id=\"pgBarcode\" type=\"ean13\" value=\"770123456789\" height=\"70\"></iswc-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">770123456789</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7701234567897</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>770 · Colombia</dd>\r\n              </dl>\r\n            </div>\r\n          </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:type",
-                "label": "type",
-                "options": [
-                  "ean13",
-                  "code128"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "770123456789",
-                  "750103131130",
-                  "400638133393",
-                  "INSOFT-2026-001",
-                  "LOTE-7782-A",
-                  "CEDULA 1234567890",
-                  "DEMO-INSOFT"
-                ]
-              },
-              {
-                "control": "number",
-                "prop": "attr:height",
-                "label": "height",
-                "min": 0,
-                "max": 100,
-                "step": 1
-              },
-              {
-                "control": "text",
-                "prop": "attr:fg",
-                "label": "fg"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:show-text",
-                "label": "show-text"
-              }
+            {
+              "control": "select",
+              "prop": "attr:type",
+              "label": "type",
+              "options": [
+                "ean13",
+                "code128"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "770123456789",
+                "750103131130",
+                "400638133393",
+                "INSOFT-2026-001",
+                "LOTE-7782-A",
+                "CEDULA 1234567890",
+                "DEMO-INSOFT"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:height",
+              "label": "height",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "text",
+              "prop": "attr:fg",
+              "label": "fg"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:show-text",
+              "label": "show-text"
+            }
           ],
-          "heading": "Qué lee un escáner en cada código"
+          "heading": "Qué lee un escáner"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"bc-check\">\r\n            <div class=\"bc-case\">\r\n              <iswc-barcode type=\"ean13\" value=\"750103131130\" height=\"70\"></iswc-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">750103131130</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">7501031311309</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>750 · México</dd>\r\n              </dl>\r\n            </div>\r\n\r\n            <div class=\"bc-case\">\r\n              <iswc-barcode type=\"ean13\" value=\"400638133393\" height=\"70\"></iswc-barcode>\r\n              <dl>\r\n                <dt>value=</dt><dd><code class=\"code\">400638133393</code></dd>\r\n                <dt>Un lector devuelve</dt><dd><b class=\"bc-out\">4006381333931</b></dd>\r\n                <dt>Prefijo GS1</dt><dd>400 · Alemania</dd>\r\n              </dl>\r\n            </div>\r\n          </div>",
+          "heading": "Otros prefijos GS1 (mismo tipo, solo cambia value)"
         },
         {
           "kind": "html",
@@ -113,5 +118,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Genera códigos de barras en SVG puro. Soporta <code>EAN-13</code> (productos) y <code>Code 128</code> (alfanumérico). QR queda como siguiente paso vía lib externa."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

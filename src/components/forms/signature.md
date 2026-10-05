@@ -1,39 +1,39 @@
----
+﻿---
 tag: iswc-signature
 tags:
   - iswc-signature
 category: forms
 status: public
-source: ./signature.js
+source: ./signature.ts
 style: ./signature.css
 preview: ./signature.json
 ---
 # `<iswc-signature>`
 
-## Propósito
+## PropÃ³sito
 
 Pad de firma manuscrita sobre `<canvas>`, con puntero unificado (mouse, touch,
-lápiz). Guarda los trazos como puntos y exporta a PNG o SVG.
+lÃ¡piz). Guarda los trazos como puntos y exporta a PNG o SVG.
 
-Este módulo registra `<iswc-signature>`.
+Este mÃ³dulo registra `<iswc-signature>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
 Capturar una firma o un trazo libre para adjuntarlo a un documento
 (autorizaciones, recibos, actas).
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
 Para dibujo con herramientas y capas usar `<iswc-image-editor>`; para adjuntar
 una imagen ya firmada usar `<iswc-file-input>` o `<iswc-dropzone>`.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './signature.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-signature></iswc-signature>
@@ -52,9 +52,9 @@ import './signature.js';
 | `pen-color` | string | Color del trazo, default `currentColor`. |
 | `line-width` | number | Grosor del trazo, default `2`. |
 | `background` | string | Color de fondo; `transparent` deja el canvas limpio. |
-| `hint` | string | Texto mostrado mientras no hay trazos, default `Firma aquí`. |
+| `hint` | string | Texto mostrado mientras no hay trazos, default `Firma aquÃ­`. |
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 | Propiedad | Acceso | Notas |
 | --- | --- | --- |
@@ -68,17 +68,36 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+| `iswc-stroke-end` | Evento personalizado del componente (stroke end). |
+| `iswc-change` | Emitido al confirmar el cambio de valor (escribe como `change` nativo). |
+
 | Evento | detail | bubbles | composed | cancelable |
 | --- | --- | --- | --- | --- |
-| `iswc-stroke-end` | `{ dataURL }` | sí | sí | no |
-| `iswc-change` | `{ strokes }` | sí | sí | no |
+| `iswc-stroke-end` | `{ dataURL }` | sÃ­ | sÃ­ | no |
+| `iswc-change` | `{ strokes }` | sÃ­ | sÃ­ | no |
 
-`iswc-change` se emite al terminar cada trazo y también en `clear()`.
+`iswc-change` se emite al terminar cada trazo y tambiÃ©n en `clear()`.
 `strokes` es el arreglo interno de trazos (`[{ x, y }, ...]` por trazo).
 
-### Métodos y propiedades públicas
 
-| Método | Uso |
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-signature');
+el.addEventListener('iswc-stroke-end', (e) => {
+  console.log('iswc-stroke-end', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
+
+| MÃ©todo | Uso |
 | --- | --- |
 | `clear()` | Borra los trazos, repinta y emite `iswc-change`. |
 | `toDataURL(type = 'image/png')` | Data URL del canvas; con `image/svg+xml` devuelve el SVG codificado. |
@@ -90,7 +109,7 @@ No expone.
 | --- | --- |
 | `root` | Contenedor. |
 | `canvas` | Canvas de dibujo. |
-| `hint` | Texto de ayuda mientras está vacío. |
+| `hint` | Texto de ayuda mientras estÃ¡ vacÃ­o. |
 
 ### Custom states
 
@@ -108,7 +127,7 @@ No expone custom states.
 
 El componente fija `--_w` y `--_h` en el host con las dimensiones vigentes.
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
 No es form-associated. Para enviar la firma, escribir `toDataURL()` en un
 campo oculto desde `iswc-change` o `iswc-stroke-end`.
@@ -116,9 +135,9 @@ campo oculto desde `iswc-change` o `iswc-stroke-end`.
 ## Comportamiento
 
 - El canvas se dimensiona por `devicePixelRatio` acotado a 2 y se escala con
-  `setTransform`, así el trazo no se ve pixelado en pantallas HiDPI.
+  `setTransform`, asÃ­ el trazo no se ve pixelado en pantallas HiDPI.
 - Los puntos se almacenan en px CSS; el repintado interpola con curvas
-  cuadráticas entre puntos medios para suavizar el trazo.
+  cuadrÃ¡ticas entre puntos medios para suavizar el trazo.
 - `background` distinto de `transparent` se pinta antes de los trazos, y por
   tanto queda incluido en el PNG.
 - Cambiar `width` o `height` redimensiona y repinta conservando los trazos.
@@ -130,7 +149,7 @@ campo oculto desde `iswc-change` o `iswc-stroke-end`.
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 
-Tags del módulo: `<iswc-signature>`.
+Tags del mÃ³dulo: `<iswc-signature>`.
 
 ## Accesibilidad
 
@@ -164,19 +183,19 @@ puntero: si el flujo debe ser operable sin puntero, ofrecer una alternativa
 - Cambiar `width`/`height` por CSS en lugar de por atributo: el canvas no se
   redimensiona y el trazo queda desalineado del puntero.
 - Enviarlo en un `<form>` sin campo espejo.
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./signature.js)
+- [JavaScript](./signature.ts)
 - [CSS](./signature.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./signature.json)

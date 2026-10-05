@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-divider",
   "category": "layout",
-  "title": "<iswc-divider>",
-  "titleHtml": true,
+  "title": "&lt;iswc-divider&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-divider",
   "sections": [
     {
@@ -29,11 +29,15 @@
               "label": "color",
               "options": [
                 "text",
+                "text-soft",
+                "text-dim",
+                "border",
+                "control",
                 "brand",
+                "accent",
                 "success",
                 "warning",
-                "danger",
-                "border"
+                "danger"
               ]
             }
           ]
@@ -55,10 +59,6 @@
         {
           "kind": "demo",
           "html": "<div class=\"demo-row\" style=\"flex-direction:column;gap:0.35rem;width:100%\">\r\n            <span class=\"demo-label\">color theme</span>\r\n            <iswc-divider color=\"text\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"brand\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"success\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"warning\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"danger\" opacity=\"80\"></iswc-divider>\r\n            <iswc-divider color=\"border\" opacity=\"100\"></iswc-divider>\r\n          </div>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-divider></iswc-divider>\n<iswc-divider opacity=\"80\" color=\"brand\"></iswc-divider>\n<iswc-divider orientation=\"vertical\" color=\"accent\"></iswc-divider>"
         }
       ]
     },
@@ -105,5 +105,55 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Separador horizontal o vertical. Opacidad default <code class=\"code\">20</code>; color vía tokens del theme."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>orientation</code>",
+            "default": "horizontal"
+          },
+          {
+            "name": "<code>opacity</code>",
+            "default": "20 (0–100)"
+          },
+          {
+            "name": "<code>color</code>",
+            "default": "text · text-soft · text-dim · border · control · brand · accent · success · warning · danger"
+          },
+          {
+            "name": "<code>--color</code>",
+            "default": "override CSS (gana sobre attr color si se setea en el host)"
+          },
+          {
+            "name": "<code>--opacity</code>",
+            "default": "0.2"
+          },
+          {
+            "name": "<code>--width</code>",
+            "default": "1px"
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "0.75em"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<p>Sección A</p>\r\n          <iswc-divider></iswc-divider>\r\n          <p>Sección B</p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

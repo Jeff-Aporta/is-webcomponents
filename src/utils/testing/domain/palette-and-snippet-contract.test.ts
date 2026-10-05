@@ -4,9 +4,9 @@
 // canvas de la app, no del kit):
 //
 //   1. Default palette = contapyme (CSS :root, HTML, fallbacks JS).
-//   2. is-base NO pone color-scheme en :root (solo .theme-dark/.theme-light).
+//   2. is-base NO pone color-scheme en :root (solo [data-theme]).
 //   3. is-base / palettes NO pintan html|body { background }.
-//   4. demo-code.js sella data-theme + data-palette + .theme-* y reacciona
+//   4. demo-code.js sella data-theme + data-palette y reacciona
 //      a cambios de contexto.
 //
 // Uso:  node tests/palette-and-snippet-contract.test.ts
@@ -81,21 +81,19 @@ check(agrowinIdx > insoftIdx, 'palettes.css: insoft antes que agrowin');
 
 // ─── 2. color-scheme no en :root ────────────────────────────────────────────
 
-// Bloque `:root, .theme-dark { … }` no debe declarar color-scheme.
-const rootThemeBlock = isBase.match(/:root\s*,\s*\.theme-dark\s*\{([\s\S]*?)\n\}/)?.[1]
-  || isBase.match(/:root\s*\{([\s\S]*?)\n\}/)?.[1]
-  || '';
+// Bloque `:root { … }` no debe declarar color-scheme.
+const rootThemeBlock = isBase.match(/:root\s*\{([\s\S]*?)\n\}/)?.[1] || '';
 check(
   !/color-scheme\s*:/.test(rootThemeBlock),
-  'is-base.css: el bloque :root (.theme-dark compartido) NO debe tener color-scheme',
+  'is-base.css: el bloque :root NO debe tener color-scheme',
 );
 check(
-  /\.[\s\S]*?\.theme-dark[\s\S]*?\{[^}]*color-scheme\s*:\s*dark/.test(isBase),
-  'is-base.css: color-scheme: dark debe vivir en un bloque que incluye .theme-dark',
+  /\[data-theme=["']dark["']\][\s\S]*?\{[^}]*color-scheme\s*:\s*dark/.test(isBase),
+  'is-base.css: color-scheme: dark debe vivir en [data-theme=dark]',
 );
 check(
-  /\.[\s\S]*?\.theme-light[\s\S]*?\{[^}]*color-scheme\s*:\s*light/.test(isBase),
-  'is-base.css: color-scheme: light debe vivir en un bloque que incluye .theme-light',
+  /\[data-theme=["']light["']\][\s\S]*?\{[^}]*color-scheme\s*:\s*light/.test(isBase),
+  'is-base.css: color-scheme: light debe vivir en [data-theme=light]',
 );
 
 // ─── 3. Sin pintar canvas en base/palettes ──────────────────────────────────
@@ -117,9 +115,9 @@ check(
   'demo-code.js: stampContext debe setear data-theme y data-palette',
 );
 check(
-  /classList\.add\([^)]*theme-light|classList\.add\([^)]*theme-dark/.test(demoCode)
-    || /\.theme-light|\.theme-dark/.test(demoCode),
-  'demo-code.js: debe sellar clase .theme-dark / .theme-light en la raíz',
+  !/classList\.add\([^)]*theme-light|classList\.add\([^)]*theme-dark/.test(demoCode)
+    && !/\.theme-light|\.theme-dark/.test(demoCode),
+  'demo-code.js: no debe sellar clases .theme-* (contrato data-theme)',
 );
 check(
   /iswc-theme-change/.test(demoCode) && /iswc-palette-change/.test(demoCode),
@@ -135,8 +133,8 @@ check(
   'demo-code.js: fallback de paleta en snippet = contapyme',
 );
 check(
-  /buildDemoSnippetStyles/.test(demoCode),
-  'demo-code.js: debe inyectar CSS de layout en snippets pegables',
+  !/buildDemoSnippetStyles/.test(demoCode),
+  'demo-code.js: NO debe inyectar CSS de layout en snippets pegables (Phase E: minimal)',
 );
 
 // ─── report ─────────────────────────────────────────────────────────────────

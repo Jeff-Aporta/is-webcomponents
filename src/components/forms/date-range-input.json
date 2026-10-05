@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-date-range-input",
   "category": "forms",
-  "title": "<iswc-date-range-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-date-range-input&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-date-range-input de InSoft.",
   "storageKey": "docs-iswc-date-range-input",
   "sections": [
@@ -32,11 +32,6 @@
               "label": "end"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></iswc-date-range-input>",
-          "lang": "html"
         }
       ]
     },
@@ -44,12 +39,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-date-range-input&gt; — Dos campos (inicio y fin) con el calendario de rango en el panel (MUI DateRangePicker). El valor es `inicio/fin`. Atributos: start-label, end-label, hint, name, value, min, max, required, disabled, readonly, clearable, locale, calendars, shortcuts, color, action-bar, placement, close-on-select Events: iswc-change, iswc-show, iswc-hide Methods: show(), hide()",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/date-range-input.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Entrada de rango de fechas: una sola caja para inicio y fin."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-date-range-input label=\"Periodo\" start=\"2026-08-01\" end=\"2026-08-31\" style=\"max-width:360px\"></iswc-date-range-input>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

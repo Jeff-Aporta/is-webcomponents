@@ -1,36 +1,36 @@
----
+﻿---
 tag: iswc-spinner
 tags:
   - iswc-spinner
 category: feedback
 status: public
-source: ./spinner.js
+source: ./spinner.ts
 style: ./spinner.css
 preview: ./spinner.json
 ---
 # `<iswc-spinner>`
 
-## Propósito
+## PropÃ³sito
 
-Indicador de carga animado. Sin atributos; personalizable vía CSS vars.
+Indicador de carga animado. Sin atributos; personalizable vÃ­a CSS vars.
 
-Este módulo registra `<iswc-spinner>`.
+Este mÃ³dulo registra `<iswc-spinner>`.
 
-## Cuándo usarlo
+## CuÃ¡ndo usarlo
 
-Estado, progreso, confirmación, carga o resultado de operaciones.
+Estado, progreso, confirmaciÃ³n, carga o resultado de operaciones.
 
-## Cuándo no usarlo
+## CuÃ¡ndo no usarlo
 
-No saturar interfaz con señales redundantes o alertas sin acción.
+No saturar interfaz con seÃ±ales redundantes o alertas sin acciÃ³n.
 
-## Importación
+## ImportaciÃ³n
 
 ```js
 import './spinner.js';
 ```
 
-## Ejemplo mínimo
+## Ejemplo mÃ­nimo
 
 ```html
 <iswc-spinner></iswc-spinner>
@@ -45,7 +45,7 @@ import './spinner.js';
 
 No expone.
 
-#### Propiedades públicas
+#### Propiedades pÃºblicas
 
 No expone.
 
@@ -55,13 +55,30 @@ No expone.
 
 ### Eventos
 
+
+| Evento | DescripciÃ³n |
+| --- | --- |
+
 No expone.
 
-### Métodos y propiedades públicas
+
+<details>
+<summary>Ejemplo en vivo</summary>
+
+```js
+const el = document.querySelector('iswc-spinner');
+el.addEventListener('click', (e) => {
+  console.log('click', e.detail);
+});
+```
+
+</details>
+
+### MÃ©todos y propiedades pÃºblicas
 
 No expone.
 
-Propiedades públicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
+Propiedades pÃºblicas aparecen en tabla anterior; APIs heredadas se verifican en dependencia base.
 
 ### CSS parts
 
@@ -77,22 +94,22 @@ No expone.
 
 | Token | Uso |
 | --- | --- |
-| `--track-width` | Token leído o definido por componente. |
-| `--track-color` | Token leído o definido por componente. |
-| `--indicator-color` | Token leído o definido por componente. |
-| `--speed` | Token leído o definido por componente. |
-| `--iswc-control-border` | Token leído o definido por componente. |
-| `--iswc-color-brand-500` | Token leído o definido por componente. |
+| `--track-width` | Token leÃ­do o definido por componente. |
+| `--track-color` | Token leÃ­do o definido por componente. |
+| `--indicator-color` | Token leÃ­do o definido por componente. |
+| `--speed` | Token leÃ­do o definido por componente. |
+| `--iswc-control-border` | Token leÃ­do o definido por componente. |
+| `--iswc-color-brand-500` | Token leÃ­do o definido por componente. |
 
-### Integración con formularios
+### IntegraciÃ³n con formularios
 
-No declara integración form-associated propia en este módulo.
+No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 
 ## Comportamiento
 
-Documentación de cabecera preservada desde fuente:
+DocumentaciÃ³n de cabecera preservada desde fuente:
 
-> <iswc-spinner> — Web Component (vanilla).
+> <iswc-spinner> â€” Web Component (vanilla).
 > Indicador de carga animado (anillo via border).
 > role=status en el host; respeta prefers-reduced-motion.
 > CSS Parts: ::part(spinner)
@@ -102,11 +119,11 @@ Documentación de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
-Tags del módulo: `<iswc-spinner>`.
+Tags del mÃ³dulo: `<iswc-spinner>`.
 
 ## Accesibilidad
 
-Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-live`, `aria-label`.
+Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden`, `aria-live`, `aria-label`.
 
 ## Ejemplo avanzado
 
@@ -116,7 +133,7 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Errores comunes
 
-- Usar tag sin importar módulo primero.
+- Usar tag sin importar mÃ³dulo primero.
 - Inventar API por similitud con otro componente.
 - Pasar objeto complejo por atributo cuando API exige propiedad/payload.
 - Copiar preview contra fuente actual; JS/CSS prevalecen.
@@ -124,15 +141,15 @@ Preservar semántica, foco, teclado, labels y ARIA. ARIA detectado: `aria-hidden
 
 ## Reglas para LLM
 
-- Reusar componente y dependencias antes de implementación paralela.
+- Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
-- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explícito.
-- Leer callers/shared antes de cambiar; corregir raíz común.
-- No modificar API basándose solo en preview.
+- Booleano se activa por presencia; no usar `attr="false"` salvo contrato explÃ­cito.
+- Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
+- No modificar API basÃ¡ndose solo en preview.
 
 ## Fuentes
 
-- [JavaScript](./spinner.js)
+- [JavaScript](./spinner.ts)
 - [CSS](./spinner.css)
-- [Índice de categoría](./LLM.md)
+- [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./spinner.json)

@@ -22,22 +22,22 @@
 </style>
 <script type="module">
   // Cargar todas las dependencias transitivas de tree-view.
-  await import('../../../dist/cdn/actions/button.min.js?h=5i9tzt');
-  await import('../../../dist/cdn/actions/button-group.min.js?h=delm48');
-  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=wwi8c3');
-  await import('../../../dist/cdn/actions/dropdown.min.js?h=u9x6om');
-  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=pz46gs');
-  await import('../../../dist/cdn/media/icon.min.js?h=sp71yy');
-  await import('../../../dist/cdn/layout/drawer.min.js?h=bycvbv');
-  await import('../../../dist/cdn/layout/dialog.min.js?h=6ocp5e');
-  await import('../../../dist/cdn/layout/divider.min.js?h=cqtdv2');
-  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=tiji0m');
-  await import('../../../dist/cdn/isp/flex-options.min.js?h=tt37p8');
-  await import('../../../dist/cdn/isp/float-card.min.js?h=ljuq63');
-  await import('../../../dist/cdn/isp/tree-view.min.js?h=j9e8wu');
+  await import('../../../dist/cdn/actions/button.min.js?h=h7i2nj');
+  await import('../../../dist/cdn/actions/button-group.min.js?h=ys69wo');
+  await import('../../../dist/cdn/actions/check-icon-button.min.js?h=7f2lsl');
+  await import('../../../dist/cdn/actions/dropdown.min.js?h=irrxcm');
+  await import('../../../dist/cdn/actions/dropdown-item.min.js?h=9t5zha');
+  await import('../../../dist/cdn/media/icon.min.js?h=cjurkr');
+  await import('../../../dist/cdn/layout/drawer.min.js?h=zqsb7h');
+  await import('../../../dist/cdn/layout/dialog.min.js?h=6iyovb');
+  await import('../../../dist/cdn/layout/divider.min.js?h=qov54o');
+  await import('../../../dist/cdn/isp/confirm-delete.min.js?h=jf4i34');
+  await import('../../../dist/cdn/isp/flex-options.min.js?h=wbffhm');
+  await import('../../../dist/cdn/isp/float-card.min.js?h=gvgkl3');
+  await import('../../../dist/cdn/isp/tree-view.min.js?h=1x4n36');
 
   await customElements.whenDefined('iswc-tree-view');
-  const { TreeCustomsBase } = await import('../../../dist/cdn/isp/tree-view.min.js?h=j9e8wu');
+  const { TreeCustomsBase } = await import('../../../dist/cdn/isp/tree-view.min.js?h=1x4n36');
 
   // ── Customs para un plan de estudios ─────────────────────────────────
   class PlanCustoms extends TreeCustomsBase {
@@ -110,12 +110,87 @@
 <main>
   <div style="display: grid; gap: 12px; min-height: 0;">
     <iswc-tree-view id="tree" label-field="titulo" style="height: 100%;"></iswc-tree-view>
-    <button id="btn-show-delete" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir confirm-delete del nodo actual</button>
+    <button title="Abrir confirm-delete del nodo actual" id="btn-show-delete" type="button" style="padding: 8px 14px; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Abrir confirm-delete del nodo actual</button>
   </div>
   <div style="display: grid; gap: 12px;">
     <h2 style="font-size: 14px; font-weight: 600; color: #94a3b8; margin: 0;">Eventos</h2>
     <pre id="event-log" class="log"></pre>
   </div>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>

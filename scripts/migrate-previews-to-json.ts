@@ -177,7 +177,7 @@ function convertFile(html, filePath) {
   const tag = basename(file, '.html');
 
   const titleTag = (html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || tag;
-  const pageTitle = stripTags(titleTag).replace(/\s*·\s*IS Web Components\s*$/i, '').trim() || tag;
+  const pageTitle = stripTags(titleTag).replace(/\s*·\s*ISWC\s*$/i, '').trim() || tag;
   const description =
     ((html.match(/<meta\s+name="description"\s+content="([^"]*)"/i) || [])[1] || '').trim() || undefined;
 

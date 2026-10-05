@@ -18,6 +18,8 @@
  * en la era CodeMirror.
  */
 
+import { TagInnerSchema, type TagInner } from "./code-highlight.schema.js";
+
 /** Tipos de token reconocidos por el highlighter. */
 export type TokenType =
   | 'comment' | 'string' | 'number' | 'keyword' | 'operator'
@@ -302,8 +304,6 @@ function paintAttrInterior(text: string, st: HighlightState, out: Token[]): void
   if (st.htmlAttrMode === 'json') scanJsLine(text, emptyState(), out);
   else add(out, 'string', text);
 }
-
-type TagInner = { pos: number; selfClose: boolean };
 
 /** Interior del tag. Comilla sin cierre: htmlAttr y se sigue en la línea siguiente. */
 function scanHtmlTagInner(line: string, from: number, st: HighlightState, out: Token[], continuing: boolean): TagInner {

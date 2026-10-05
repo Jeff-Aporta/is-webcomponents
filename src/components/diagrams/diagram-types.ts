@@ -365,4 +365,6 @@ export interface ErEditorState {
   subtitle?: string;
   direction?: ErSpec['direction'];
   ratio?: number;
+  /** Id de tema (`insoft`) o ausente = tokens del host. */
+  theme?: string;
 }

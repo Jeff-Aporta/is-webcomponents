@@ -35,8 +35,8 @@
   --trvwr-ctv-dflt: color-mix(in srgb, var(--iswc-text) 14%, transparent);
   --trvwr-hghlght-bg: color-mix(in srgb, var(--iswc-accent) 12%, transparent);
   --trvwr-hghlght-hvr-bg: color-mix(in srgb, var(--iswc-accent) 20%, transparent);
-  --trvwr-swp-bg: color-mix(in srgb, var(--iswc-color-success, #2e7d32) 30%, transparent);
-  --trvwr-swp-err-bg: color-mix(in srgb, var(--iswc-color-danger, #e53935) 30%, transparent);
+  --trvwr-swp-bg: color-mix(in srgb, var(--iswc-color-success) 30%, transparent);
+  --trvwr-swp-err-bg: color-mix(in srgb, var(--iswc-color-danger) 30%, transparent);
   --trvwr-fcs-rng: color-mix(in srgb, var(--iswc-accent) 55%, transparent);
   --trvwr-drp-ndctr-bg: color-mix(in srgb, var(--iswc-accent) 20%, transparent);
   --trvwr-sel-brd: var(--iswc-border);
@@ -217,8 +217,8 @@
 /* Variantes de peligro: cambian solo el color de la línea. */
 .trvwr-itm-sum--drg-forbidden-bf::before,
 .trvwr-itm-sum--drg-forbidden-aftr::after {
-  background: var(--iswc-color-danger, #e53935);
-  box-shadow: -5px 0 0 3px var(--iswc-color-danger, #e53935);
+  background: var(--iswc-color-danger);
+  box-shadow: -5px 0 0 3px var(--iswc-color-danger);
 }
 
 /* Indicadores "into" (contenedor receptor): outline dashed. */
@@ -230,9 +230,9 @@
 }
 .trvwr-itm-sum--drg-forbidden-into {
   border-radius: 0.25rem;
-  outline: 2px dashed var(--iswc-color-danger, #e53935);
+  outline: 2px dashed var(--iswc-color-danger);
   outline-offset: -2px;
-  background: color-mix(in srgb, var(--iswc-color-danger, #e53935) 18%, transparent);
+  background: color-mix(in srgb, var(--iswc-color-danger) 18%, transparent);
 }
 
 .trvwr-sum-row {

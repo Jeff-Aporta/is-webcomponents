@@ -1,13 +1,11 @@
 /**
  * ISWebComponentsLoader — entry CDN liviano + mirrors + pin + anti-redundancia.
  *
- * - loadCSSBase / loadCSSPalettesDefault / load(tags|cats|all)
- * - pin(ref) / unpin() / configure({ ref, mirrors })
+ * - loadPageStyles / loadPageModules (galería + aliases CDN)
  * - sheets.install / warm* — Cache Storage + adoptedStyleSheets (apps)
  * - registerApp / ensure — tags de app + lazy ensure de custom elements
  * - Fallbacks entre espejos (jsDelivr → githack → Pages)
  * - Registro persistente: si ya cargaste `actions`, `load('iswc-button')` no re-fetch
- * - loadPageStyles / loadPageModules para la galería
  * - `?h=` sale del mapa de build: si el archivo cambia, la URL cambia
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
@@ -130,6 +128,8 @@ const BOOT_HOST = (!isLocalKitRoot(CDN_ROOT) && BOOT_PIN)
 interface LoaderState {
   ref: string | null;
   mirrors: Mirror[];
+  /** true si el consumidor pasó `mirrors` (incluso `[]` = sin fallback CDN). */
+  mirrorsExplicit: boolean;
   preferSelf: boolean;
   /** Raíz `dist/cdn/` forzada por el consumidor (githack, local, SHA…). */
   host: string | null;
@@ -141,37 +141,68 @@ interface LoaderState {
   query: Record<string, string>;
   /**
    * Aliases para `loadPageModules` / `loadPageStyles`. Permiten que el consumidor
-   * pase un nombre estable (`'highlight-pre'`, `'demo-code'`) y el loader lo
-   * resuelva internamente al bundle desplegable (`'dist/scripts/highlight-pre.min.js'`).
+   * pase un nombre estable (`'highlight-pre'`, `'iswc-palettes-default'`) y el
+   * loader lo resuelva al bundle desplegable.
    *
-   * Esto hace retrocompatible el API ante renames de archivo o cambios de
-   * carpeta. Los nombres de los aliases son el contrato público; las URLs
-   * internas son detalle de implementación.
+   * CSS CDN del kit: prefijo `cdn:` (p. ej. `cdn:palettes.min.css`) →
+   * `injectCdnStylesheet` (host/mirrors/`?h=`). Rutas normales = relativas a la página.
+   *
+   * JS: `type: 'module'` → `import()`; `type: 'classic'` → `<script>` sin type=module
+   * (IIFE / boot sync). Prefijo `cdn:` en href → asset del kit (host/`?h=`).
    */
-  pageModules: Map<string, string>;
+  pageModules: Map<string, PageModuleSpec>;
+  pageStyles: Map<string, string>;
+}
+
+/** Spec de un page module (alias table / registerPageModule). */
+export type PageModuleKind = 'module' | 'classic';
+export interface PageModuleSpec {
+  href: string;
+  type: PageModuleKind;
+}
+
+function asPageModuleSpec(input: string | PageModuleSpec): PageModuleSpec {
+  if (typeof input === 'string') {
+    const raw = input.trim();
+    if (raw.startsWith('classic:')) {
+      return { href: raw.slice('classic:'.length), type: 'classic' };
+    }
+    return { href: raw, type: 'module' };
+  }
+  const href = String(input.href || '').trim();
+  if (!href) throw new TypeError('PageModuleSpec.href required');
+  return { href, type: input.type === 'classic' ? 'classic' : 'module' };
 }
 
 const state: LoaderState = {
   ref: BOOT_PIN,
   mirrors: DEFAULT_MIRRORS.map((m) => ({ ...m })),
+  mirrorsExplicit: false,
   preferSelf: true,
   host: BOOT_HOST,
   sha: BOOT_PIN,
   cdnUrl: null,
   query: {},
-  // Aliases estables para `loadPageModules`. Si cambia una URL, el consumidor
-  // no se entera: solo hay que actualizar este mapa en una versión mayor del
-  // loader y/o añadir migración en runtime.
-  pageModules: new Map<string, string>([
-    ['highlight-pre',   'dist/scripts/highlight-pre.min.js'],
-    ['demo-code',       'dist/scripts/demo-code.min.js'],
-    ['docs-chrome',     'dist/scripts/docs-chrome.min.js'],
-    ['cdn-panel',       'dist/scripts/cdn-panel.min.js'],
-    ['view-sources',    'dist/scripts/view-sources.min.js'],
-    ['demo-file-meta',  'dist/scripts/demo-file-meta.min.js'],
-    // Aliases legacy (pre-rename). Mantener para retrocompatibilidad: si un
-    // consumidor llama `L.loadPageModules(['scripts/demo-code.js'])` lo
-    // tratamos como path literal.
+  pageModules: new Map<string, PageModuleSpec>([
+    ['highlight-pre',        { href: 'dist/scripts/highlight-pre.min.js', type: 'module' }],
+    ['demo-code',            { href: 'dist/scripts/demo-code.min.js', type: 'module' }],
+    ['docs-chrome',          { href: 'dist/scripts/docs-chrome.min.js', type: 'module' }],
+    ['cdn-panel',            { href: 'dist/scripts/cdn-panel.min.js', type: 'module' }],
+    ['view-sources',         { href: 'dist/scripts/view-sources.min.js', type: 'module' }],
+    ['demo-file-meta',       { href: 'dist/scripts/demo-file-meta.min.js', type: 'module' }],
+    // IIFE sin export → classic (import() fallaría).
+    ['dev-reload',           { href: 'scripts/dev-reload.js', type: 'classic' }],
+    // Theme/palette del shell doc (ESM; lo importa el host vía loader).
+    ['iswc-doc-demo-boot',   { href: 'cdn:preview/doc-demo-boot.min.js', type: 'module' }],
+    ['iswc-doc-demo-host',   { href: 'cdn:preview/doc-demo-host.min.js', type: 'module' }],
+    // Tema ER InSoft (json2css + resolveErTheme). Sin CE nuevo.
+    ['iswc-diagram-theme',   { href: 'cdn:diagrams/theme.min.js', type: 'module' }],
+  ]),
+  pageStyles: new Map<string, string>([
+    // Kit CDN (respeta host/local/`?h=`). Reemplaza la antigua API de palettes.
+    ['iswc-palettes-default', 'cdn:palettes.min.css'],
+    ['iswc-doc-shell', 'cdn:preview/doc-shell.min.css'],
+    ['iswc-doc-presentation', 'cdn:preview/doc-presentation.min.css'],
   ]),
 };
 
@@ -206,44 +237,110 @@ function rememberBase(base: string): void {
 }
 
 /**
- * Resuelve un input de `loadPageModules` / `loadPageStyles` a una URL
- * relativa al host de la página.
- *
- * Comportamiento:
- *  - Si el input es una URL absoluta (empieza por `http://`, `https://`,
- *    `//`, `/`, `data:`) o contiene `/` o tiene extensión `.js`/`.mjs`/
- *    `.css`/`.ts`/`.tsx`, se trata como **path literal**.
- *  - Si el input es un nombre simple (`'demo-code'`, `'highlight-pre'`)
- *    sin `/` y sin extensión, se busca en el alias table.
- *
- * Esto garantiza retrocompatibilidad: el código viejo que pasaba paths
- * literales (`'scripts/demo-code.js'`) sigue funcionando; el código nuevo
- * que pasa aliases (`'demo-code'`) obtiene URLs estables ante renames.
+ * Resuelve un input de `loadPageStyles` a CDN del kit o URL de página.
+ * - Alias `iswc-palettes-default` → `cdn:palettes.min.css` (host/`?h=`)
+ * - Path literal / absoluto → hoja relativa a la página
  */
-function resolvePageModuleHref(input: string): string {
+function resolvePageStyle(input: string): { cdn: string } | { href: string } {
   if (typeof input !== 'string' || input === '') {
-    throw new TypeError('resolvePageModuleHref: input must be non-empty string');
+    throw new TypeError('resolvePageStyle: input must be non-empty string');
   }
   const trimmed = input.trim();
-  // URL absoluta (cross-origin) o esquema → tratar literal.
+  const alias = state.pageStyles.get(trimmed);
+  if (alias) {
+    if (alias.startsWith('cdn:')) return { cdn: alias.slice(4) };
+    return { href: alias };
+  }
   if (
-    /^[a-z][a-z0-9+.-]*:/i.test(trimmed) // http:, https:, data:, blob:, etc.
+    /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
     || trimmed.startsWith('//')
     || trimmed.startsWith('/')
+    || trimmed.includes('/')
+    || /\.css(?:\?.*)?$/i.test(trimmed)
   ) {
-    return trimmed;
+    return { href: trimmed };
   }
-  // Path con separador o extensión reconocible → tratar literal (retrocompat).
-  if (trimmed.includes('/') || /\.(?:js|mjs|cjs|ts|tsx|css)(?:\?.*)?$/i.test(trimmed)) {
-    return trimmed;
+  throw new Error(
+    `loadPageStyles: alias desconocido "${trimmed}" — registra con L.registerPageStyle(alias, href) o usa un alias válido (${[...state.pageStyles.keys()].join(', ')})`,
+  );
+}
+
+/**
+ * Resuelve un input de `loadPageModules` a href + tipo de carga.
+ *
+ * - Alias de la tabla (`'demo-code'`, `'iswc-doc-demo-boot'`)
+ * - Prefijo `classic:` → script clásico
+ * - Prefijo `cdn:` en el href del spec → asset del kit (host/`?h=`)
+ * - Path literal / URL → module por defecto
+ */
+function resolvePageModule(input: string): PageModuleSpec {
+  if (typeof input !== 'string' || input === '') {
+    throw new TypeError('resolvePageModule: input must be non-empty string');
   }
-  // Nombre simple → alias table.
-  const found = state.pageModules.get(trimmed);
-  if (!found) {
-    // Fail loud: el consumidor pasó un alias desconocido.
-    throw new Error(`loadPageModules: alias desconocido "${trimmed}" — registra con L.registerPageModule(alias, href) o usa un alias válido (${[...state.pageModules.keys()].join(', ')})`);
+  const trimmed = input.trim();
+  const alias = state.pageModules.get(trimmed);
+  if (alias) return { ...alias };
+
+  if (trimmed.startsWith('classic:')) {
+    return asPageModuleSpec(trimmed);
   }
-  return found;
+
+  if (
+    /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
+    || trimmed.startsWith('//')
+    || trimmed.startsWith('/')
+    || trimmed.includes('/')
+    || /\.(?:js|mjs|cjs|ts|tsx)(?:\?.*)?$/i.test(trimmed)
+  ) {
+    return { href: trimmed, type: 'module' };
+  }
+
+  throw new Error(
+    `loadPageModules: alias desconocido "${trimmed}" — registra con L.registerPageModule(alias, href) o usa un alias válido (${[...state.pageModules.keys()].join(', ')})`,
+  );
+}
+
+/** @deprecated usar resolvePageModule; se mantiene el nombre para callers internos viejos. */
+function resolvePageModuleHref(input: string): string {
+  return resolvePageModule(input).href;
+}
+
+async function resolvePageModuleUrl(spec: PageModuleSpec): Promise<string> {
+  const href = spec.href;
+  if (href.startsWith('cdn:')) {
+    const rel = href.slice(4).replace(/^\.\//, '');
+    const bases = orderBases(await coreAssetBases());
+    return assetHref(bases[0] || SELF_BASE, rel);
+  }
+  return new URL(href, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
+}
+
+function loadClassicOnce(href: string): Promise<void> {
+  const key = `classic:${href}`;
+  let p = jsDone.get(key);
+  if (p) return p;
+  p = new Promise<void>((resolve, reject) => {
+    if (typeof document === 'undefined') {
+      resolve();
+      return;
+    }
+    if ([...document.querySelectorAll('script[data-is-page-js]')].some((el) => (el as HTMLScriptElement).dataset.isPageJs === href)) {
+      resolve();
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = href;
+    s.async = false;
+    s.dataset.isPageJs = href;
+    s.onload = () => resolve();
+    s.onerror = () => {
+      jsDone.delete(key);
+      reject(new Error(`loadPageModules: classic script failed ${href}`));
+    };
+    document.head.appendChild(s);
+  });
+  jsDone.set(key, p);
+  return p;
 }
 
 function normalizeQuery(input: unknown): Record<string, string> {
@@ -346,6 +443,9 @@ async function coreAssetBases(forcedRef?: string): Promise<string[]> {
   if (state.host) {
     push(state.host);
     push(new URL('core/', state.host).href);
+  } else if (state.preferSelf) {
+    push(CDN_ROOT);
+    push(SELF_BASE);
   } else {
     push(SELF_BASE);
   }
@@ -357,8 +457,11 @@ async function coreAssetBases(forcedRef?: string): Promise<string[]> {
     } catch { /* mirror malo */ }
   };
   for (const m of state.mirrors) pushMirror(m);
-  for (const m of DEFAULT_MIRRORS) pushMirror(m);
-  if (out.length <= 1) {
+  // Sin espejos CDN si el consumidor vació mirrors (modo local).
+  if (!state.mirrorsExplicit || state.mirrors.length) {
+    for (const m of DEFAULT_MIRRORS) pushMirror(m);
+  }
+  if (out.length <= 1 && (!state.mirrorsExplicit || state.mirrors.length)) {
     const root = jsdelivrBase(ref);
     push(root);
     push(new URL('core/', root).href);
@@ -376,14 +479,14 @@ async function cdnBases(forcedRef?: string): Promise<string[]> {
   // host del consumidor manda: evita quedarse en un jsDelivr @main cacheado.
   if (state.host) push(state.host);
   else if (state.preferSelf) push(CDN_ROOT);
-  // Cadena de fallback fija: jsDelivr → githack → Pages (DEFAULT_MIRRORS),
-  // más los que el consumidor haya pasado en configure({ mirrors }).
   for (const m of state.mirrors) {
     try { push(m.base(ref)); } catch { /* mirror malo */ }
   }
-  // Si el consumidor vació mirrors, igual garantizamos la cadena canónica.
-  for (const m of DEFAULT_MIRRORS) {
-    try { push(m.base(ref)); } catch { /* */ }
+  // Cadena canónica solo si no estamos en modo local (mirrors=[] explícito).
+  if (!state.mirrorsExplicit || state.mirrors.length > 0) {
+    for (const m of DEFAULT_MIRRORS) {
+      try { push(m.base(ref)); } catch { /* */ }
+    }
   }
   if (!out.length) push(jsdelivrBase(ref));
   return out;
@@ -536,7 +639,22 @@ function normalizeMirrors(input: string | Mirror | (string | Mirror)[]): Mirror[
       out.push(item);
     }
   }
-  return out.length ? out : DEFAULT_MIRRORS.map((m) => ({ ...m }));
+  // `[]` explícito = sin espejos (modo local). No rellenar con DEFAULT.
+  return out;
+}
+
+/**
+ * Resuelve `host` del consumidor a una URL absoluta con slash final.
+ * - `'self'` | `'./'` | `'.'` → raíz del kit junto al loader (`dist/cdn/`)
+ * - ruta relativa → contra `location` (app montada), nunca localhost quemado
+ * - `http(s)://…` → tal cual
+ */
+function resolveHostInput(raw: string): string {
+  const h = String(raw).trim();
+  if (!h || h === 'self' || h === './' || h === '.') return CDN_ROOT;
+  if (/^https?:\/\//i.test(h) || h.startsWith('file:')) return slash(h);
+  const base = typeof location !== 'undefined' ? location.href : CDN_ROOT;
+  return slash(new URL(h, base).href);
 }
 
 function normTag(id: string): string {
@@ -560,6 +678,13 @@ export interface ConfigureOpts {
   ref?: string | null;
   mirrors?: string | Mirror | (string | Mirror)[];
   preferSelf?: boolean;
+  /**
+   * Raíz de assets del kit.
+   * - omitido: arranque (CDN pin o self)
+   * - `'self'` | `'./'`: relativo al loader (`dist/cdn/`)
+   * - ruta relativa: contra la página montada
+   * - URL absoluta: tal cual
+   */
   host?: string | null;
   /** Sustituye {{sha}} de hostDefault. Vacío usa shaDefault. */
   sha?: string | null;
@@ -567,6 +692,11 @@ export interface ConfigureOpts {
   cdnUrl?: string | null;
   query?: string | Record<string, string> | null;
   v?: string | number | null;
+  /**
+   * Galería / vendor local: host = self (`dist/cdn/` del loader), sin mirrors
+   * CDN, sin pin SHA. Todas las cargas son relativas al kit montado.
+   */
+  local?: boolean;
 }
 
 export interface LoadResult {
@@ -636,8 +766,28 @@ export const ISWebComponentsLoader = {
   },
 
   configure(opts: ConfigureOpts = {}) {
+    if (opts.local === true) {
+      state.preferSelf = true;
+      state.host = resolveHostInput(opts.host == null || opts.host === '' ? 'self' : String(opts.host));
+      state.mirrors = [];
+      state.mirrorsExplicit = true;
+      state.sha = null;
+      state.ref = null;
+      state.cdnUrl = null;
+      if ('query' in opts) {
+        state.query = opts.query == null ? {} : normalizeQuery(opts.query);
+      }
+      if ('v' in opts) {
+        if (opts.v == null || opts.v === '') delete state.query.v;
+        else state.query = { ...state.query, v: String(opts.v) };
+      }
+      return this;
+    }
     if ('ref' in opts) state.ref = opts.ref == null || opts.ref === '' ? null : String(opts.ref);
-    if ('mirrors' in opts && opts.mirrors != null) state.mirrors = normalizeMirrors(opts.mirrors);
+    if ('mirrors' in opts && opts.mirrors != null) {
+      state.mirrors = normalizeMirrors(opts.mirrors);
+      state.mirrorsExplicit = true;
+    }
     if (typeof opts.preferSelf === 'boolean') state.preferSelf = opts.preferSelf;
     if ('cdnUrl' in opts) {
       state.cdnUrl = opts.cdnUrl == null || opts.cdnUrl === '' ? null : String(opts.cdnUrl);
@@ -647,7 +797,7 @@ export const ISWebComponentsLoader = {
       if (!('ref' in opts)) state.ref = state.sha ?? SHA_DEFAULT;
     }
     if ('host' in opts) {
-      state.host = opts.host == null || opts.host === '' ? null : slash(String(opts.host));
+      state.host = opts.host == null || opts.host === '' ? null : resolveHostInput(String(opts.host));
     } else if ('sha' in opts || 'cdnUrl' in opts) {
       const pin = state.sha || SHA_DEFAULT;
       state.host = pin && pin !== 'main'
@@ -757,52 +907,63 @@ export const ISWebComponentsLoader = {
     return this;
   },
 
-  loadCSSBase() {
-    return injectCdnStylesheet('is-base.min.css');
-  },
-
-  loadCSSPalettesDefault() {
-    return injectCdnStylesheet('palettes.min.css');
-  },
-
   async loadPageStyles(hrefs: string[]) {
-    const jobs = (hrefs || []).map((h) => {
-      const abs = new URL(resolvePageModuleHref(h), typeof location !== 'undefined' ? location.href : SELF_BASE).href;
+    const jobs = (hrefs || []).map(async (h) => {
+      const resolved = resolvePageStyle(h);
+      if ('cdn' in resolved) return injectCdnStylesheet(resolved.cdn);
+      const abs = new URL(resolved.href, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
       return injectStylesheet(routeHref(abs));
     });
     await Promise.all(jobs);
   },
 
   async loadPageModules(hrefs: string[]) {
-    const jobs = (hrefs || []).map((h) => {
-      const abs = new URL(resolvePageModuleHref(h), typeof location !== 'undefined' ? location.href : SELF_BASE).href;
-      return importOnce(routeHref(abs));
+    const jobs = (hrefs || []).map(async (h) => {
+      const spec = resolvePageModule(h);
+      const abs = await resolvePageModuleUrl(spec);
+      const routed = routeHref(abs);
+      if (spec.type === 'classic') return loadClassicOnce(routed);
+      return importOnce(routed);
     });
     await Promise.all(jobs);
   },
 
   /**
-   * Registra o reemplaza un alias para `loadPageModules` / `loadPageStyles`.
+   * Registra o reemplaza un alias para `loadPageModules`.
    * Útil para apps de terceros que montan sus propios gallery scripts.
    *
-   * Retrocompat: si el `alias` ya existe, se sobreescribe.
-   *
    * @param alias Nombre estable (sin `/`, sin extensión `.js`).
-   * @param href Ruta relativa al host (`'dist/scripts/foo.min.js'` o absoluta).
+   * @param href Ruta relativa al host, `cdn:…` del kit, o `classic:…`.
+   * @param opts.type `module` (default) | `classic` (IIFE / `<script>` sin type=module).
    */
-  registerPageModule(alias: string, href: string) {
+  registerPageModule(alias: string, href: string, opts?: { type?: PageModuleKind }) {
     if (typeof alias !== 'string' || alias === '') throw new TypeError('registerPageModule: alias required');
     if (typeof href !== 'string' || href === '') throw new TypeError('registerPageModule: href required');
-    state.pageModules.set(alias, href);
+    const spec = asPageModuleSpec(opts?.type ? { href, type: opts.type } : href);
+    state.pageModules.set(alias, spec);
     return this;
   },
 
   /**
-   * Devuelve el alias-table actual (copia superficial — modificar `Map` no
-   * afecta al estado, pero sí los objetos individuales por referencia).
+   * Alias de CSS para `loadPageStyles`.
+   * - `href` normal → relativa a la página
+   * - `cdn:palettes.min.css` → hoja del kit (host/`?h=`)
    */
-  getPageModules(): Record<string, string> {
-    return Object.fromEntries(state.pageModules);
+  registerPageStyle(alias: string, href: string) {
+    if (typeof alias !== 'string' || alias === '') throw new TypeError('registerPageStyle: alias required');
+    if (typeof href !== 'string' || href === '') throw new TypeError('registerPageStyle: href required');
+    state.pageStyles.set(alias, href);
+    return this;
+  },
+
+  getPageModules(): Record<string, PageModuleSpec> {
+    return Object.fromEntries(
+      [...state.pageModules].map(([k, v]) => [k, { ...v }]),
+    );
+  },
+
+  getPageStyles(): Record<string, string> {
+    return Object.fromEntries(state.pageStyles);
   },
 
   /**
@@ -901,6 +1062,10 @@ if (typeof document !== 'undefined') {
     const next = routeHref(link.href);
     if (next && next !== link.href) link.href = next;
   }
+  // W52: auto-cargar is-base.min.css al inicializar el loader, para que el
+  // consumer no tenga que hacerlo manualmente. Es idempotente (cssDone Set)
+  // y respeta host/pin/mirrors del loader.
+  void injectCdnStylesheet('is-base.min.css');
 }
 
 export default ISWebComponentsLoader;

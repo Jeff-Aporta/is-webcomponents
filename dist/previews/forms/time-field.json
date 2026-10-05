@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-time-field",
   "category": "forms",
-  "title": "<iswc-time-field>",
-  "titleHtml": true,
+  "title": "&lt;iswc-time-field&gt;",
+  "titleHtml": false,
   "description": "Documentación y demos de iswc-time-field de InSoft.",
   "storageKey": "docs-iswc-time-field",
   "sections": [
@@ -22,11 +22,6 @@
               "label": "value"
             }
           ]
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></iswc-time-field>",
-          "lang": "html"
         }
       ]
     },
@@ -34,12 +29,26 @@
       "id": "reference",
       "title": "Referencia",
       "lede": "&lt;iswc-time-field&gt; — Campo de hora editable por secciones (MUI TimeField). Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, invalid Slots: start, end Events: iswc-change, iswc-input",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/time-field.js</code>.\r\n        </p>"
-        }
-      ]
+      "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Campo de hora con máscara y validación, asociable a formularios."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></iswc-time-field>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

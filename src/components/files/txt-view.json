@@ -1,0 +1,60 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-txt-view",
+  "category": "files",
+  "title": "<iswc-txt-view>",
+  "titleHtml": false,
+  "storageKey": "docs-iswc-txt-view",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Vista de texto plano con src/content.",
+      "blocks": []
+    },
+    {
+      "id": "demo",
+      "title": "Demo",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-txt-view content=\"Hola desde content&#10;Linea 2\" height=\"12rem\"></iswc-txt-view>",
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:src",
+              "label": "src"
+            },
+            {
+              "control": "text",
+              "prop": "attr:content",
+              "label": "content"
+            },
+            {
+              "control": "text",
+              "prop": "attr:height",
+              "label": "height"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Vista de texto plano con src/content."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
+}

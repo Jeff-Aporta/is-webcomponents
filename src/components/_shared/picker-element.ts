@@ -78,12 +78,15 @@ export function definePickerInput({
 }: DefinePickerInputOpts): typeof HTMLElement {
   // Todos los pickers (date/time/date-time y sus rangos) comparten la
   // personalización por atributo: se declara aquí una vez, no en cada tag.
-  const STYLE_ATTRS: Record<string, string> = { 'panel-height': '--iswc-clock-height', ...styleAttrs };
 
   class IsPickerInput extends withStyleAttrs(HTMLElement) {
-    static styleAttrs = STYLE_ATTRS;
 
-    static get observedAttributes(): string[] { return [...OBSERVED, ...Object.keys(STYLE_ATTRS)]; }
+    static get observedAttributes(): string[] {
+      // Phase V5: STYLE_ATTRS removido. El consumer define los tokens vía class
+      // o inline style. Se conserva el nombre como observado por si llega del
+      // HTML antiguo.
+      return [...OBSERVED, 'panel-height'];
+    }
 
     #base!: HTMLElement;
     #dialog!: HTMLElement & { open: boolean; showModal(): void; close(): void };

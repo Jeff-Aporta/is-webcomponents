@@ -2,8 +2,8 @@
   "$schema": "iswc-preview/v1",
   "tag": "iswc-file-input",
   "category": "forms",
-  "title": "<iswc-file-input>",
-  "titleHtml": true,
+  "title": "&lt;iswc-file-input&gt;",
+  "titleHtml": false,
   "storageKey": "docs-iswc-file-input",
   "hasBehavior": true,
   "sections": [
@@ -59,10 +59,6 @@
         {
           "kind": "demo",
           "html": "<iswc-file-input label=\"Avatar\" accept=\"image/*\" required hint=\"Obligatorio\"></iswc-file-input>"
-        },
-        {
-          "kind": "code",
-          "code": "<iswc-file-input\n  label=\"Adjuntos\"\n  accept=\"image/*,.pdf\"\n  multiple\n  name=\"attachments\"\n></iswc-file-input>"
         }
       ]
     },
@@ -101,5 +97,47 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Dropzone con input nativo oculto, lista de archivos y estados <code class=\"code\">blank</code> / <code class=\"code\">dragging</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>label</code> <code>hint</code>",
+            "desc": "texto o slots homónimos"
+          },
+          {
+            "metodo": "<code>name</code> <code>accept</code> <code>capture</code>",
+            "desc": "pasan al input nativo"
+          },
+          {
+            "metodo": "<code>multiple</code> <code>disabled</code> <code>required</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "<code>files</code>",
+            "desc": "File[] get/set"
+          },
+          {
+            "metodo": "events",
+            "desc": "input, change, iswc-change"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-file-input\r\n            id=\"fi\"\r\n            label=\"Adjuntos\"\r\n            hint=\"PDF o imágenes · máx. varios archivos\"\r\n            accept=\"image/*,.pdf\"\r\n            multiple\r\n            name=\"attachments\"\r\n          ></iswc-file-input>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

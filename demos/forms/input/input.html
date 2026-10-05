@@ -23,7 +23,7 @@
   iswc-icon:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/forms/input.min.js?h=268af7');
+  await import('../../../dist/cdn/forms/input.min.js?h=r5wcsk');
 
   await customElements.whenDefined('iswc-input');
 
@@ -67,10 +67,10 @@
 
   <section>
     <h2>Básico (text + clearable)</h2>
-    <iswc-input id="demo" name="full-name" label="Nombre completo" hint="Como aparece en tu documento" clearable placeholder="Ada Lovelace"></iswc-input>
+    <iswc-input title="Nombre completo" id="demo" name="full-name" label="Nombre completo" hint="Como aparece en tu documento" clearable placeholder="Ada Lovelace"></iswc-input>
     <div class="grid2">
-      <button id="btn-set" type="button">Set "Hola mundo"</button>
-      <button id="btn-clear" type="button">Clear</button>
+      <button title="Set &quot;Hola mundo&quot;" id="btn-set" type="button">Set "Hola mundo"</button>
+      <button title="Clear" id="btn-clear" type="button">Clear</button>
     </div>
     <output id="out"></output>
   </section>
@@ -78,26 +78,101 @@
   <section>
     <h2>Tipos</h2>
     <div class="grid2">
-      <iswc-input type="email" name="email" label="Email" placeholder="ada@example.com"></iswc-input>
-      <iswc-input type="password" name="pwd" label="Contraseña" password-toggle placeholder="••••••"></iswc-input>
-      <iswc-input type="number" name="age" label="Edad" min="0" max="120" step="1" placeholder="30"></iswc-input>
-      <iswc-input type="tel" name="phone" label="Teléfono" placeholder="+34 600 000 000"></iswc-input>
-      <iswc-input type="url" name="web" label="Web" placeholder="https://example.com"></iswc-input>
-      <iswc-input type="search" name="q" label="Búsqueda" placeholder="Buscar..."></iswc-input>
+      <iswc-input title="Email" type="email" name="email" label="Email" placeholder="ada@example.com"></iswc-input>
+      <iswc-input title="Contraseña" type="password" name="pwd" label="Contraseña" password-toggle placeholder="••••••"></iswc-input>
+      <iswc-input title="Edad" type="number" name="age" label="Edad" min="0" max="120" step="1" placeholder="30"></iswc-input>
+      <iswc-input title="Teléfono" type="tel" name="phone" label="Teléfono" placeholder="+34 600 000 000"></iswc-input>
+      <iswc-input title="Web" type="url" name="web" label="Web" placeholder="https://example.com"></iswc-input>
+      <iswc-input title="Búsqueda" type="search" name="q" label="Búsqueda" placeholder="Buscar..."></iswc-input>
     </div>
   </section>
 
   <section>
     <h2>Estados</h2>
     <div class="grid2">
-      <iswc-input name="required1" label="Required" required hint="Obligatorio"></iswc-input>
-      <iswc-input name="readonly1" label="Readonly" readonly value="sólo lectura"></iswc-input>
-      <iswc-input name="errored" label="Con error" error error-text="Formato inválido" value="abc"></iswc-input>
-      <iswc-input name="disabled1" label="Disabled" disabled value="deshabilitado"></iswc-input>
-      <iswc-input name="prefixed" label="Precio" prefix="$" suffix="USD" placeholder="0.00"></iswc-input>
-      <iswc-input name="counted" label="Con contador" maxlength="20" show-count placeholder="máx 20"></iswc-input>
+      <iswc-input title="Required" name="required1" label="Required" required hint="Obligatorio"></iswc-input>
+      <iswc-input title="Readonly" name="readonly1" label="Readonly" readonly value="sólo lectura"></iswc-input>
+      <iswc-input title="Con error" name="errored" label="Con error" error error-text="Formato inválido" value="abc"></iswc-input>
+      <iswc-input title="Disabled" name="disabled1" label="Disabled" disabled value="deshabilitado"></iswc-input>
+      <iswc-input title="Precio" name="prefixed" label="Precio" prefix="$" suffix="USD" placeholder="0.00"></iswc-input>
+      <iswc-input title="Con contador" name="counted" label="Con contador" maxlength="20" show-count placeholder="máx 20"></iswc-input>
     </div>
   </section>
 </main>
+<script>
+/* iswc-auto-rereload v2: backoff — polling client agnóstico del static server
+ * W17: backoff exponencial + readyState wait + giveup tras MAX_FAILS fallos
+ * consecutivos. Evita el loop infinito de reload-pin que vimos con Live
+ * Server 5505 cuando el endpoint no responde. */
+(function () {
+  var tries = [
+    'dist/cdn/reload-pin',
+    '../dist/cdn/reload-pin',
+    '../../dist/cdn/reload-pin',
+    '../../../dist/cdn/reload-pin',
+    '../../../../dist/cdn/reload-pin'
+  ];
+  var pinUrl = null;
+  var last = null;
+  var interval = 1500;          // arranca en 1.5s
+  var MAX_INTERVAL = 30000;     // tope: 30s
+  var MAX_FAILS = 6;            // tras 6 fallos consecutivos sin dev-server, dar up
+  var fails = 0;
+  var timer = 0;
+
+  function poll() {
+    if (!pinUrl) return;
+    fetch(pinUrl, { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw 0;
+        return r.text();
+      })
+      .then(function (h) {
+        h = h.trim();
+        fails = 0;
+        if (interval !== 1500) interval = 1500; // reset a 1.5s en éxito
+        if (last !== null && last !== h) {
+          location.reload();
+          return;
+        }
+        last = h;
+        schedule();
+      })
+      .catch(function () {
+        fails++;
+        if (fails >= MAX_FAILS) {
+          // Sin dev-server o server muerto: dejar de gastar batería.
+          if (timer) clearTimeout(timer);
+          return;
+        }
+        // Backoff exponencial: 1.5s → 3s → 6s → 12s → 24s → 30s.
+        interval = Math.min(interval * 2, MAX_INTERVAL);
+        schedule();
+      });
+  }
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(poll, interval);
+  }
+  function probe(i) {
+    if (i >= tries.length) return; // sin dev-server activo, no hacer nada
+    fetch(tries[i], { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw 0;
+        pinUrl = tries[i];
+        last = null;
+        schedule();
+      })
+      .catch(function () { probe(i + 1); });
+  }
+  // Esperar a que la página esté lista antes de empezar (no quemar el
+  // primer frame de CPU + red en una página que aún no pintó).
+  function start() {
+    if (document.readyState === 'complete') probe(0);
+    else window.addEventListener('load', function () { probe(0); }, { once: true });
+  }
+  start();
+})();
+</script>
 </body>
 </html>
