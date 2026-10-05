@@ -11,7 +11,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Dos paneles adyacentes separados por un divisor arrastrable.\r\n          Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks.",
+      "lede": "Dos paneles adyacentes separados por un divisor arrastrable.",
       "blocks": [
         {
           "kind": "callout",
@@ -398,7 +398,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Dos paneles adyacentes separados por un divisor arrastrable.\r\n          Componente InSoft accesible, escrito en JavaScript nativo con Shadow DOM, sin frameworks."
+        "content": "Dos paneles adyacentes separados por un divisor arrastrable."
       },
       "atributos": {
         "table": [

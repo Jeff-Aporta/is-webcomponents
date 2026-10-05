@@ -54,10 +54,6 @@
       "title": "Referencia",
       "lede": "&lt;iswc-dropdown-item&gt; — ítem de menú para iswc-dropdown. El submenú va en un popover (top layer) y se posiciona con computePosition: el menú padre scrollea (`overflow: auto`), así que un panel `absolute` quedaría recortado y le abriría scroll horizontal. Attrs: value, type (normal|checkbox), checked, disabled, color (default|danger) Slots: default (label), icon, details, submenu Methods: openSubmenu(), closeSubmenu() Parts: checkmark, icon, label, details, submenu, submenu-icon",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/actions/dropdown-item.js</code>.\r\n        </p>"
-        }
       ]
     }
   ],

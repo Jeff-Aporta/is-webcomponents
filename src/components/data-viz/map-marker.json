@@ -27,10 +27,6 @@
       "title": "Referencia",
       "lede": "&lt;iswc-maps&gt; — Visualizador geográfico. Modo nativo (default): lienzo SVG que mapea coordenadas (lat, lon) a un viewport interno mediante una proyección equirectangular. Permite marcadores, zoom y pan, todo sin dependencias externas. Modo tile: atributo `engine=\"tile\"` y un `&lt;script type=\"application/json\"&gt;` con `{ tileUrl, attribution, zoom, center }` para apuntar a un proveedor (OpenStreetMap, etc.) embebido vía iframe (no requiere libs en este bundle). Atributos viewbox       cuadro inicial: \"minLon,minLat,maxLon,maxLat\" (default mundo) zoom          zoom inicial 1..n para vista controlada por JS engine        svg | tile interactive   boolean — false desactiva pan/zoom (mostrar) Marcadores &lt;iswc-map-marker lat=\"4.6\" lon=\"-74.0\" label=\"Bogotá\"&gt; &lt;span slot=\"popup\"&gt;Capital de Colombia&lt;/span&gt; &lt;/iswc-map-marker&gt; Eventos iswc-viewport   detail: { minLon, minLat, maxLon, maxLat } iswc-marker-click  detail: { marker }",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/data-viz/maps.js</code>.\r\n        </p>"
-        }
       ]
     }
   ],

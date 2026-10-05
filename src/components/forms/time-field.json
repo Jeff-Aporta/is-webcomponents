@@ -35,10 +35,6 @@
       "title": "Referencia",
       "lede": "&lt;iswc-time-field&gt; — Campo de hora editable por secciones (MUI TimeField). Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, invalid Slots: start, end Events: iswc-change, iswc-input",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/time-field.js</code>.\r\n        </p>"
-        }
       ]
     }
   ],

@@ -10,7 +10,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks.",
+      "lede": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones.",
       "blocks": [
         {
           "kind": "demo",
@@ -291,7 +291,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones. JavaScript nativo, Shadow DOM, sin frameworks."
+        "content": "Contenedor flexible con slots para <code class=\"code\">media</code>, <code class=\"code\">header</code>,\r\n          <code class=\"code\">body</code>, <code class=\"code\">footer</code> y <code class=\"code\">actions</code>.\r\n          Cinco apariencias y dos orientaciones."
       },
       "atributos": {
         "table": [

@@ -11,7 +11,6 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Componente InSoft accesible y personalizable, escrito con JavaScript nativo,\r\n          Shadow DOM y sin frameworks.",
       "blocks": [
         {
           "kind": "demo",
@@ -212,7 +211,7 @@
         },
         {
           "kind": "html",
-          "html": "<h4>ghost — outlined en reposo, filled al pasar el mouse</h4>\n        <p class=\"lede\">\n          Pasa el mouse por encima: el borde se rellena. Util cuando la accion\n          debe ser discreta hasta que el usuario la apunta.\n        </p>"
+          "html": "<h4>ghost — outlined en reposo, filled al pasar el mouse</h4>"
         },
         {
           "kind": "html",
@@ -942,7 +941,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Componente InSoft accesible y personalizable, escrito con JavaScript nativo,\r\n          Shadow DOM y sin frameworks.\n\nEl shadow DOM expone CSS parts para que puedas estilizar piezas individuales sin re-implementar el componente."
+        "content": "El shadow DOM expone CSS parts para que puedas estilizar piezas individuales sin re-implementar el componente."
       },
       "states": {
         "table": [

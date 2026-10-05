@@ -35,10 +35,6 @@
       "title": "Referencia",
       "lede": "&lt;iswc-year-calendar&gt; — Rejilla de años desplazable (MUI YearCalendar). Atributos: value (yyyy), min, max (ISO o yyyy), columns, disabled, readonly Events: iswc-change  detail { value, year }",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/year-calendar.js</code>.\r\n        </p>"
-        }
       ]
     }
   ],

@@ -38,10 +38,6 @@
       "title": "Referencia",
       "lede": "&lt;iswc-breadcrumb-item&gt; — un paso individual dentro de un &lt;iswc-breadcrumb&gt;. Si tiene `href` (incluido `href=\"\"`), el item se renderiza como &lt;a href&gt;. Con `href=\"\"` se marca como current page (aria-current=\"page\", CSS [current]). Si no tiene href, se renderiza como &lt;span&gt; (SPAs: el desarrollador maneja eventos). Atributos href    string  — opcional: el item se vuelve enlace. \"\" = current page. target  string  — opcional. rel     string  — opcional. icon    string  — opcional: Iconify id para icono al inicio si no se usa slot start. Slots (default)  texto del item. start      icono propio al inicio (gana sobre icon). end        icono propio al final. separator  override del separador (chevron-right por default). CSS Parts: ::part(label) ::part(separator) ::part(start) ::part(end)",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/navigation/breadcrumb-item.js</code>.\r\n        </p>"
-        }
       ]
     }
   ],

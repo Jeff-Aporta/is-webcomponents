@@ -28,10 +28,6 @@
       "title": "Referencia",
       "lede": "&lt;iswc-kanban&gt; + &lt;iswc-kanban-column&gt; + &lt;iswc-kanban-card&gt; — Tablero (vanilla, zero dependencies). &lt;iswc-kanban&gt; &lt;iswc-kanban-column title=\"Pendiente\"&gt; &lt;iswc-kanban-card heading=\"Tarea 1\"&gt;Descripción&lt;/iswc-kanban-card&gt; &lt;/iswc-kanban-column&gt; &lt;/iswc-kanban&gt; Atributos &lt;iswc-kanban&gt; columns        number — nº columnas visibles al estilo \"compact\". orientation    column | row — layout de los stacks (default column: stacks lado a lado; row: stacks apilados en filas). Atributos &lt;iswc-kanban-column&gt; title          string accent         string (color, e.g. dodgerblue, #0bb783) badge          string — opcional en el header. Atributos &lt;iswc-kanban-card&gt; heading        string meta           string — bajo el heading. tag            string — texto de la badge lateral. tag-color    brand | neutral | success | warning | danger cover          string — URL de imagen de cabecera. without-shadow boolean Slots &lt;iswc-kanban-column&gt; (default)       cards. header-actions  elementos en la cabecera. &lt;iswc-kanban-card&gt; (default)        descripción. footer           pie de la card. Eventos iswc-kanban-card-click  detail: { card, column } iswc-kanban-move        detail: { card, from, to } — card soltada en otra columna (o reordenada en la misma).",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/data/kanban.js</code>.\r\n        </p>"
-        }
       ]
     }
   ],
