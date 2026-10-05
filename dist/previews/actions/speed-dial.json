@@ -24,7 +24,7 @@
     "      max-height: 9rem; overflow: auto;",
     "    }",
     "    /* Lienzos del demo radial: `transform` crea el containing block para que",
-    "       el abanico se calcule (y se acote) contra ESTA caja, no el viewport. */",
+    "      el abanico se calcule (y se acote) contra ESTA caja, no el viewport. */",
     "    .radial-stage {",
     "      position: relative;",
     "      transform: translateZ(0);",
@@ -246,7 +246,7 @@
           "html": [
             "<div class=\"radial-stage\">",
             "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:plus\" label=\"Crear\" open",
-            "                           data-wrapper=\".radial-stage\">",
+            "                          data-wrapper=\".radial-stage\">",
             "              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",
@@ -263,8 +263,8 @@
           "html": [
             "<div class=\"radial-stage\">",
             "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:cog\" label=\"Ajustes\" open",
-            "                           data-arc=\"180\" data-start-angle=\"-90\" data-sweep=\"counter-clockwise\"",
-            "                           data-wrapper=\".radial-stage\">",
+            "                          data-arc=\"180\" data-start-angle=\"-90\" data-sweep=\"counter-clockwise\"",
+            "                          data-wrapper=\".radial-stage\">",
             "              <iswc-speed-dial-action icon=\"mdi:brush\" label=\"Tema\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:translate\" label=\"Idioma\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:bell\" label=\"Avisos\"></iswc-speed-dial-action>",
@@ -279,7 +279,7 @@
           "html": [
             "<div class=\"radial-stage radial-stage--tall\">",
             "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:apps\" label=\"Todo\" open",
-            "                           data-wrapper=\".radial-stage--tall\">",
+            "                          data-wrapper=\".radial-stage--tall\">",
             "              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",
@@ -313,7 +313,7 @@
           "html": [
             "<div class=\"radial-stage radial-stage--corner\">",
             "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:plus\" label=\"Crear\" open",
-            "                           data-wrapper=\".radial-stage--corner\">",
+            "                          data-wrapper=\".radial-stage--corner\">",
             "              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
             "              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",

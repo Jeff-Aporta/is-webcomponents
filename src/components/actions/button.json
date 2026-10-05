@@ -737,7 +737,7 @@
             "            <label style=\"display: grid; gap: 4px; font-size: 0.85rem;\">",
             "              <span>Email</span>",
             "              <input class=\"demo-native-field\" type=\"email\" name=\"email\" required",
-            "                     placeholder=\"tu@empresa.com\" />",
+            "                    placeholder=\"tu@empresa.com\" />",
             "            </label>",
             "            <label style=\"display: grid; gap: 4px; font-size: 0.85rem;\">",
             "              <span>Comentario</span>",

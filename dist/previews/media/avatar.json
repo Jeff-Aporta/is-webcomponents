@@ -231,8 +231,8 @@
             "            <iswc-avatar image=\"https://i.pravatar.cc/80?u=11\" label=\"Bea\" shape=\"circle\" style=\"margin-left:-0.6em\"></iswc-avatar>",
             "            <iswc-avatar image=\"https://i.pravatar.cc/80?u=12\" label=\"Carol\" shape=\"circle\" style=\"margin-left:-0.6em\"></iswc-avatar>",
             "            <!-- El acento va en ::part(initials), NO en el host: el host es",
-            "                 cuadrado y pintarle el fondo dejaba un rectangulo asomando",
-            "                 por detras del circulo. -->",
+            "                cuadrado y pintarle el fondo dejaba un rectangulo asomando",
+            "                por detras del circulo. -->",
             "            <iswc-avatar class=\"stack-more\" initials=\"+5\" label=\"5 más\" shape=\"circle\" style=\"margin-left:-0.6em\"></iswc-avatar>",
             "          </div>"
           ]

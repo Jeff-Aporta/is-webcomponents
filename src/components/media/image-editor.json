@@ -47,7 +47,7 @@
             "            </div>",
             "          </iswc-image-editor>",
             "          <img id=\"crop1\" class=\"crop-out\" alt=\"Recorte resultante\" hidden",
-            "               src=\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>\">",
+            "              src=\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect width='1' height='1' fill='transparent'/></svg>\">",
             "          <pre class=\"log\" id=\"log\">— logs aquí —</pre>"
           ],
           "controls": [

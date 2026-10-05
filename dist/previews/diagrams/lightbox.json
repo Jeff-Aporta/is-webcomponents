@@ -185,7 +185,7 @@
           "kind": "html",
           "html": [
             "<p>El lightbox acepta cualquier HTML en su slot default. Puedes pasar",
-            "                 una card, un formulario, lo que necesites.</p>",
+            "                una card, un formulario, lo que necesites.</p>",
             "              <iswc-button>Acción</iswc-button>",
             "            </article>",
             "          </template>",
