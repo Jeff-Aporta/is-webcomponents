@@ -92,8 +92,8 @@ const defineCss = async (cssFile) => {
 
 const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
 const GH_BLOB = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main';
-const CDN_SKILL = `${GH_RAW}/src/skills/is-cdn-install/SKILL.md`;
-const KIT_SKILL = `${GH_RAW}/src/skills/is-webcomponents/SKILL.md`;
+const CDN_SKILL = `${GH_RAW}/skills/is-cdn-install/SKILL.md`;
+const KIT_SKILL = `${GH_RAW}/skills/is-webcomponents/SKILL.md`;
 // Consolidación 2026-09-07: src/components/LLM.md y src/cdn/LLM.md eliminados.
 // El catálogo global vive en specs/componentes.md; el doc del loader en
 // src/cdn/loader.md (sin cambio).
@@ -517,8 +517,10 @@ ERROR assets/icons: ${n} ficheros, se esperaban >= ${MIN_ICONOS}.`);
 
 // ── Skills para agentes (Cursor / Claude / LLM) ──────────────────
 // Van a dist/cdn/skills/ para que jsDelivr y Pages las sirvan igual que
-// el resto del kit. La fuente canónica sigue en src/skills/.
-const skillsSrc = join(root, 'src', 'skills');
+// el resto del kit. La fuente canónica vive en `skills/` (raíz); se
+// subio desde src/skills/ porque las skills son contenido de nivel
+// proyecto, no código fuente del kit.
+const skillsSrc = join(root, 'skills');
 const skillsOut = join(dist, 'skills');
 try {
   await access(skillsSrc);
@@ -530,11 +532,11 @@ try {
     .map((e) => e.name);
   console.log(`  skills/              ${names.length} → dist/cdn/skills/ (${names.join(', ')})`);
 } catch {
-  // Sin src/skills/: no bloquear el build del CDN.
+  // Sin skills/: no bloquear el build del CDN.
 }
 
 // El HTML plano por componente se retiro el 31-ago-2026: la galeria es una SPA
-// y nadie llegaba a esas 177 paginas. Para agentes el canal es `src/skills/`,
+// y nadie llegaba a esas 177 paginas. Para agentes el canal es `skills/`,
 // que este mismo build publica en `dist/cdn/skills/`.
 
 // ── gallery-app.min.js ───────────────────────────────────────────

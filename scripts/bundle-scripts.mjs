@@ -53,19 +53,17 @@ for (const css of ['host-base.css', 'scrollbars.css']) {
 //   1) ../../skills/... (relativo desde src/components/_shared) — irreal
 //   2) ../skills/...       — irreal
 //   3) ./skills/...        — apunta a dist/scripts/skills/ (id)
-//   4) ${origin}/src/skills/... — GitHub NO sirve src
+//   4) ${origin}/skills/... — SÍ funciona (raíz del repo en GitHub)
 //   5) ${origin}/dist/cdn/skills/... — SÍ funciona
 // Para que SOLO las que funcionan existan (reduce 404s en stagehand),
-// copiamos src/skills/is-webcomponents a:
+// copiamos skills/is-webcomponents a:
 //   - dist/scripts/skills/  (satisface #3)
 //   - dist/skills/          (satisface #2: ../skills desde dist/scripts)
-// Y dejamos src/skills (#1) y dist/cdn/skills (#5) que ya existen.
-//   El #4 (origen/src/) NO se copia porque GH Pages no sirve src/.
+//   - skills/               (satisface #4; ya existe en la fuente, no-op)
 try {
   await mkdir(join('dist', 'skills'), { recursive: true });
   await mkdir(join('dist', 'scripts', 'skills'), { recursive: true });
-  await mkdir(join('skills'), { recursive: true });
-  const srcSkillsDir = join('src', 'skills');
+  const srcSkillsDir = join('skills');
   const skillsDirs = readdirSync(srcSkillsDir, { withFileTypes: true }).filter(e => e.isDirectory());
   for (const skillDir of skillsDirs) {
     const skillName = skillDir.name;
@@ -73,11 +71,9 @@ try {
     await cp(join(srcSkillsDir, skillName), join('dist', 'skills', skillName), { recursive: true, force: true });
     // dist/scripts/skills/<name>/... (resuelve ./skills/... desde dist/scripts/)
     await cp(join(srcSkillsDir, skillName), join('dist', 'scripts', 'skills', skillName), { recursive: true, force: true });
-    // skills/<name>/... (root-level, resuelve ${origin}/skills/...)
-    await cp(join(srcSkillsDir, skillName), join('skills', skillName), { recursive: true, force: true });
-    ok += 3;
+    ok += 2;
   }
-  console.log(`  ✓ skills siblings copiados a dist/skills/, dist/scripts/skills/, skills/`);
+  console.log(`  ✓ skills siblings copiados a dist/skills/, dist/scripts/skills/`);
 } catch (err) {
   console.warn(`  ⚠ no se pudieron copiar skills siblings: ${err}`);
 }
@@ -263,7 +259,7 @@ for (const cat of await readdir(previewsOut, { withFileTypes: true })) {
 // (`../styles/...`, `./registry.js`, `../../src/cdn/...`) se resuelvan
 // contra dist/ en vez de src/ → 404 en styles/presentation.css y registry.js.
 
-// ── Skills: src/skills/** ya está copiado por build.mjs → dist/cdn/skills/.
+// ── Skills: skills/** ya está copiado por build.mjs → dist/cdn/skills/.
 // Aquí evitamos duplicar; el build principal es quien lo hace. Solo
 // verificamos.
 try {

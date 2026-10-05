@@ -31,7 +31,6 @@
     "src/cdn/**",
     "src/styles/**",
     "src/consts/**",
-    "src/skills/**",
     "src/utils/**",
     "src/assets/**",
     "node_modules/**"

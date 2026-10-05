@@ -12,7 +12,7 @@ src/**/*.css
 
 # Markdown: ignorar solo root y specs/ (WIPs, docs de equipo).
 # IMPORTANTE: dist/ NO se ignora porque `dist/**/skills/**/*.md` se
-# bundlea desde `src/skills/` y se sirve al público. Si ignoráramos
+# bundlea desde `skills/` y se sirve al público. Si ignoráramos
 # `*.md` global, los PROMPT.md nunca llegarían al usuario final.
 /*.md
 /specs/**/*.md
