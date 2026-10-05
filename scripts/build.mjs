@@ -13,6 +13,14 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 const dist = join(root, 'dist', 'cdn');
 const compRoot = join(root, 'src', 'components');
+// Staging de SCSS→CSS: `deno task build:scss` compila cada `src/**/*.scss`
+// a `.tmp-scss/src/<mismo-path>.css` y BORRA los `.css` previos en `src/`.
+// Aqui leemos SIEMPRE del staging: si build-scss no se ha corrido, `access`
+// falla, `hasCss` queda en false y el componente sale sin CSS (el guard
+// de "smoke test" del build detectara el problema). No leemos nunca
+// `src/**/*.css` directamente para evitar pisar el staging y ensuciar
+// otra vez el working tree.
+const cssRoot = join(root, '.tmp-scss', 'src');
 
 /** SHA de HEAD para shaDefault. Sin git, el loader queda en main. */
 function shaDelBuild() {
@@ -221,16 +229,19 @@ const sharedImports = new Set();
 // publicado: hay que emitirlos por carpeta o dan 404 en silencio.
 const localPartials = new Set();
 for (const file of entries) {
-  const cssFile = file.replace(/\.(ts|js)$/i, '.css');
+  // El .css fuente vive en el staging, NO en `src/`. `build-scss.mjs` lo
+  // pone ahi espejando la estructura. Si no existe, el componente va sin
+  // CSS (igual que antes, cuando el .css no se habia regenerado).
+  const cssFile = join(cssRoot, relative(join(root, 'src'), file).replace(/\.(ts|js)$/i, '.css'));
   let css = '';
   try { css = await readFile(cssFile, 'utf8'); } catch { continue; }
   for (const m of css.matchAll(/@import\s+(?:url\(\s*)?['"]\.\.\/_shared\/([\w.-]+\.css)['"]/g)) {
     sharedImports.add(m[1]);
   }
   for (const m of css.matchAll(/@import\s+(?:url\(\s*)?['"]\.\/([\w.-]+\.css)['"]/g)) {
-    // Origen: la carpeta FISICA del css. Destino: la carpeta de publicacion,
-    // que para algunos tags no coincide (chart.js vive en charts/ y se publica
-    // en data-viz/ segun el manifest).
+    // Origen: el .css fuente esta en el staging, junto al resto.
+    // Destino: la carpeta de publicacion, que para algunos tags no coincide
+    // (chart.js vive en charts/ y se publica en data-viz/ segun el manifest).
     localPartials.add(JSON.stringify({
       from: join(dirname(cssFile), m[1]),
       to: `${folderFor(file)}/${m[1]}`,
@@ -239,7 +250,7 @@ for (const file of entries) {
 }
 for (const name of sharedImports) {
   await mkdir(join(dist, '_shared'), { recursive: true });
-  await bundleCss(join(compRoot, '_shared', name), join(dist, '_shared', name));
+  await bundleCss(join(cssRoot, 'components', '_shared', name), join(dist, '_shared', name));
   console.log(`  ${('_shared/' + name).padEnd(28)} css (destino de @import)`);
 }
 
@@ -253,8 +264,8 @@ for (const name of sharedImports) {
   // Se minifican a un temporal para incrustar exactamente lo que se publicaria.
   const tmpBase = join(dist, '_shared', '_tmp-host-base.css');
   const tmpScroll = join(dist, '_shared', '_tmp-scrollbars.css');
-  await bundleCss(join(compRoot, '_shared', 'host-base.css'), tmpBase);
-  await bundleCss(join(compRoot, '_shared', 'scrollbars.css'), tmpScroll);
+  await bundleCss(join(cssRoot, 'components', '_shared', 'host-base.css'), tmpBase);
+  await bundleCss(join(cssRoot, 'components', '_shared', 'scrollbars.css'), tmpScroll);
   await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], kitDocsBanner(), {
     __IS_HOST_BASE_CSS__: JSON.stringify(await readFile(tmpBase, 'utf8')),
     __IS_SCROLLBARS_CSS__: JSON.stringify(await readFile(tmpScroll, 'utf8')),
@@ -291,14 +302,14 @@ for (const raw of localPartials) {
     // `adoptCss` resuelve `./host-base.css` y `./scrollbars.css` contra la URL
     // de su propio modulo. Con el core inlineado eso cae en la carpeta del
     // componente; emitirlas tambien aqui cubre el consumo directo del core.
-    await bundleCss(join(compRoot, '_shared', 'scrollbars.css'), join(outCore, 'scrollbars.css'));
-    await bundleCss(join(compRoot, '_shared', 'host-base.css'), join(outCore, 'host-base.css'));
+    await bundleCss(join(cssRoot, 'components', '_shared', 'scrollbars.css'), join(outCore, 'scrollbars.css'));
+    await bundleCss(join(cssRoot, 'components', '_shared', 'host-base.css'), join(outCore, 'host-base.css'));
     console.log('  core/                     .js + .ts (base para extender)');
   }
 }
 
-const scrollbarsIn = join(compRoot, '_shared', 'scrollbars.css');
-const hostBaseIn = join(compRoot, '_shared', 'host-base.css');
+const scrollbarsIn = join(cssRoot, 'components', '_shared', 'scrollbars.css');
+const hostBaseIn = join(cssRoot, 'components', '_shared', 'host-base.css');
 const emittedFolders = new Set();
 
 for (const inFile of entries) {
@@ -310,7 +321,10 @@ for (const inFile of entries) {
   const folder = folderFor(inFile);
   const outDir = join(dist, folder);
   await mkdir(outDir, { recursive: true });
-  const cssIn = inFile.replace(/\.(ts|js)$/i, '.css');
+  // El .css fuente vive en el staging, NO en `src/`. `deno task build:scss`
+  // lo pone ahi antes de este build; build-scss es la primera mitad de
+  // `deno task build`.
+  const cssIn = join(cssRoot, relative(join(root, 'src'), inFile).replace(/\.(ts|js)$/i, '.css'));
   const outJs = join(outDir, `${tag}.min.js`);
   const outCss = join(outDir, `${tag}.min.css`);
 
@@ -374,14 +388,14 @@ for (const inFile of entries) {
 
 const coreDist = join(dist, 'core');
 
-const baseIn = join(root, 'src', 'styles', 'is-base.css');
+const baseIn = join(cssRoot, 'styles', 'is-base.css');
 const baseOut = join(coreDist, 'is-base.min.css');
 await mkdir(coreDist, { recursive: true });
 await bundleCss(baseIn, baseOut);
 const baseStat = await stat(baseOut);
 console.log(`  ${'is-base'.padEnd(18)} css ${String(baseStat.size).padStart(6)}`);
 
-const palettesIn = join(root, 'src', 'styles', 'palettes.css');
+const palettesIn = join(cssRoot, 'styles', 'palettes.css');
 const palettesOut = join(coreDist, 'palettes.min.css');
 await bundleCss(palettesIn, palettesOut);
 const palettesStat = await stat(palettesOut);
@@ -416,8 +430,8 @@ await copyFile(palettesOut, join(dist, 'palettes.min.css'));
     target: 'es2022',
     banner: docsBanner([`md: ${GH_RAW}/src/components/layout/doc-demo.md`]),
   });
-  await bundleCss(join(root, 'src', 'styles', 'shell.css'), shellOut);
-  await bundleCss(join(root, 'src', 'styles', 'presentation.css'), presentationOut);
+  await bundleCss(join(cssRoot, 'styles', 'shell.css'), shellOut);
+  await bundleCss(join(cssRoot, 'styles', 'presentation.css'), presentationOut);
 
   const [b, h, sh, pr] = await Promise.all([
     stat(bootOut), stat(hostOut), stat(shellOut), stat(presentationOut),

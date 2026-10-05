@@ -38,6 +38,7 @@ src/utils/health/.cache/
 src/utils/health/_author-index.json
 
 .tmp/
+.tmp-scss/
 
 
 .superpowers/
