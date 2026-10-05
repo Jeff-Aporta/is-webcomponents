@@ -196,14 +196,15 @@ test('W23: no hay overrides cromaticos del neutral en palettes.css', () => {
   );
 });
 
-test('W23: la documentacion del kit lista --iswc-color-neutral', () => {
-  // El button.json documenta la familia semantica y debe nombrar al
-  // neutral. Si alguien lo borra, los nuevos componentes que usen
-  // color="neutral" no apareceran en la guia de tokens.
-  const BUTTON_JSON = join(root, 'src', 'components', 'actions', 'button.json');
-  const json = readFileSync(BUTTON_JSON, 'utf8');
+test('W23: --iswc-color-neutral aparece en las fuentes canonicas de tokens', () => {
+  // El token vive en styles/is-base.css (root + .theme-dark) — su unica
+  // fuente canonica. La guia detallada de cada componente ya no requiere
+  // listar el token (W42: "Tema visual" eliminado del button demo). Si
+  // alguien lo borra del root, el guardián lo detecta.
+  const IS_BASE = join(root, 'src', 'styles', 'is-base.css');
+  const css = readFileSync(IS_BASE, 'utf8');
   assert.ok(
-    /--iswc-color-neutral/.test(json),
-    'button.json debe listar --iswc-color-neutral en la documentacion del kit de tokens',
+    /--iswc-color-neutral\s*:/i.test(css),
+    'styles/is-base.css debe declarar --iswc-color-neutral en :root o .theme-dark',
   );
 });
