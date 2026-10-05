@@ -161,45 +161,6 @@
       ]
     },
     {
-      "id": "appearances-matrix",
-      "title": "Apariencias (matriz)",
-      "lede": "Cuatro niveles de énfasis visual. Úsalos para jerarquizar acciones.",
-      "blocks": [
-        {
-          "kind": "html",
-          "html": "<h4>filled — acción principal</h4>"
-        },
-        {
-          "kind": "html",
-          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" variant=\"filled\">Primario</iswc-button>\n            <iswc-button color=\"success\" variant=\"filled\">Confirmar</iswc-button>\n            <iswc-button color=\"warning\" variant=\"filled\">Atención</iswc-button>\n            <iswc-button color=\"danger\"  variant=\"filled\">Eliminar</iswc-button>\n            <iswc-button color=\"info\"    variant=\"filled\">Detalles</iswc-button>\n            <iswc-button color=\"error\"   variant=\"filled\">Reintentar</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"filled\">Secundario</iswc-button>\n          </div>"
-        },
-        {
-          "kind": "html",
-          "html": "<h4>outlined — acción secundaria</h4>"
-        },
-        {
-          "kind": "html",
-          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" variant=\"outlined\">Primario</iswc-button>\n            <iswc-button color=\"success\" variant=\"outlined\">Confirmar</iswc-button>\n            <iswc-button color=\"warning\" variant=\"outlined\">Atención</iswc-button>\n            <iswc-button color=\"danger\"  variant=\"outlined\">Eliminar</iswc-button>\n            <iswc-button color=\"info\"    variant=\"outlined\">Detalles</iswc-button>\n            <iswc-button color=\"error\"   variant=\"outlined\">Reintentar</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"outlined\">Secundario</iswc-button>\n          </div>"
-        },
-        {
-          "kind": "html",
-          "html": "<h4>plain — acción terciaria / contextual</h4>"
-        },
-        {
-          "kind": "html",
-          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" variant=\"plain\">Primario</iswc-button>\n            <iswc-button color=\"success\" variant=\"plain\">Confirmar</iswc-button>\n            <iswc-button color=\"warning\" variant=\"plain\">Atención</iswc-button>\n            <iswc-button color=\"danger\"  variant=\"plain\">Eliminar</iswc-button>\n            <iswc-button color=\"info\"    variant=\"plain\">Detalles</iswc-button>\n            <iswc-button color=\"error\"   variant=\"plain\">Reintentar</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"plain\">Secundario</iswc-button>\n          </div>"
-        },
-        {
-          "kind": "html",
-          "html": "<h4>ghost — outlined en reposo, filled al pasar el mouse</h4>"
-        },
-        {
-          "kind": "html",
-          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" variant=\"ghost\">Primario</iswc-button>\n            <iswc-button color=\"success\" variant=\"ghost\">Confirmar</iswc-button>\n            <iswc-button color=\"warning\" variant=\"ghost\">Atención</iswc-button>\n            <iswc-button color=\"danger\"  variant=\"ghost\">Eliminar</iswc-button>\n            <iswc-button color=\"info\"    variant=\"ghost\">Detalles</iswc-button>\n            <iswc-button color=\"error\"   variant=\"ghost\">Reintentar</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"ghost\">Secundario</iswc-button>\n          </div>"
-        }
-      ]
-    },
-    {
       "id": "variants",
       "title": "Variantes",
       "lede": "El atributo <code class=\"code\">color</code> define el color semántico.\r\n          Default: <code class=\"code\">brand</code>. <code class=\"code\">info</code> y\r\n          <code class=\"code\">error</code> existen aparte a propósito:\r\n          <code class=\"code\">danger</code> es la acción destructiva («Eliminar») y\r\n          <code class=\"code\">error</code> el estado de fallo («Error al guardar»).",
