@@ -129,6 +129,35 @@
         {
           "kind": "demo",
           "html": "<div id=\"slots-live\" class=\"demo-row\">\n  <iswc-button id=\"slotsPgBtn\" color=\"brand\">\n    <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\" aria-hidden=\"true\"></iswc-icon>\n    Texto del boton\n    <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\" aria-hidden=\"true\"></iswc-icon>\n  </iswc-button>\n</div>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Slot",
+            "Tipo",
+            "Default",
+            "Descripcion"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "text",
+              "vacio",
+              "Contenido del label. Si el host no tiene children y es icon-only, queda solo el icono."
+            ],
+            [
+              "<code>start</code>",
+              "icon",
+              "vacio",
+              "Icono a la izquierda del label. Si no hay slot, el label queda pegado al borde izquierdo."
+            ],
+            [
+              "<code>end</code>",
+              "icon",
+              "vacio",
+              "Icono a la derecha del label. Si no hay slot, el label queda pegado al borde derecho."
+            ]
+          ]
         }
       ]
     },
