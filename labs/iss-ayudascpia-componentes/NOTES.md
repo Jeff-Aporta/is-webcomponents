@@ -37,7 +37,7 @@ cajones de capa, borde negro).
 
 ```bash
 cd Personal/apps/is-webcomponents
-deno run -A --no-check scripts/_rebuild-component-diagram.mjs
+deno run -A --no-check scripts/_tmp/_rebuild-component-diagram.mjs
 deno run -A --no-check labs/iss-ayudascpia-componentes/render.mjs
 # preview: deno task dev → /labs/iss-ayudascpia-componentes/preview.html
 ```

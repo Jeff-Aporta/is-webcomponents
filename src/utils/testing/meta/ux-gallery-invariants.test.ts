@@ -65,8 +65,8 @@ test('galería mergea keys de ?s= al cambiar component', () => {
 });
 
 test('ux-audit harness existe y no se confunde con .test.ts', () => {
-  assert.ok(existsSync(join(root, 'scripts/ux-audit.ts')));
-  const src = read('scripts/ux-audit.ts');
+  assert.ok(existsSync(join(root, 'scripts/audits/ux-audit.ts')));
+  const src = read('scripts/audits/ux-audit.ts');
   assert.match(src, /pageerror|console/);
   assert.match(src, /screenshot/);
 });

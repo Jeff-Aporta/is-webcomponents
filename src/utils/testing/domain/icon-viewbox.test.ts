@@ -14,7 +14,7 @@
 // masivos. La referencia es `assets/icons/viewbox.snapshot.json`, tomado
 // despues de reparar contra la API de Iconify.
 //
-// Reparar / regenerar snapshot:  deno run -A --no-check scripts/fix-icon-viewbox.ts
+// Reparar / regenerar snapshot:  deno run -A --no-check scripts/fixes/icon-viewbox.ts
 //
 // Uso:  node tests/icon-viewbox.test.ts
 
@@ -32,7 +32,7 @@ const readJson = async (f) => JSON.parse(await readFile(join(assetsIcons, f), 'u
 let snap;
 try { snap = await readJson('viewbox.snapshot.json'); }
 catch {
-  console.log('SKIP icon-viewbox — falta viewbox.snapshot.json (corre `deno run -A --no-check scripts/fix-icon-viewbox.ts`)');
+  console.log('SKIP icon-viewbox — falta viewbox.snapshot.json (corre `deno run -A --no-check scripts/fixes/icon-viewbox.ts`)');
   process.exit(0);
 }
 
@@ -69,7 +69,7 @@ assert.equal(
   offenders.length,
   0,
   'SVG con viewBox distinto al del snapshot — alguien reescribio los headers.\n' +
-    'Si el cambio es legitimo, regenera con `deno run -A --no-check scripts/fix-icon-viewbox.ts`.\n  ' +
+    'Si el cambio es legitimo, regenera con `deno run -A --no-check scripts/fixes/icon-viewbox.ts`.\n  ' +
     offenders.slice(0, 20).join('\n  ') +
     (offenders.length > 20 ? `\n  ...y ${offenders.length - 20} mas` : ''),
 );

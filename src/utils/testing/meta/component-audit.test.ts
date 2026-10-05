@@ -1,6 +1,6 @@
 // tests/component-audit.test.ts
 //
-// Higiene de componentes: corre scripts/audit-components.ts y falla si
+// Higiene de componentes: corre scripts/audits/components.ts y falla si
 // cualquier componente presenta:
 //   - listeners de document/window sin removeEventListener simétrico
 //   - observers (Mutation/Resize/Intersection) sin disconnect()
@@ -23,7 +23,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 
 let out = '';
 try {
-  out = execFileSync(process.execPath, [join(root, 'scripts', 'audit-components.ts')], {
+  out = execFileSync(process.execPath, [join(root, 'scripts', 'audits', 'components.ts')], {
     cwd: root,
     encoding: 'utf8',
   });

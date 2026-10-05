@@ -186,7 +186,7 @@ async function mountSharedCatalog(
     modules = catalog.modules || [];
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    list.innerHTML = `<p class="lede">No se pudo cargar <code>shared-modules.json</code>. Ejecuta <code>deno run -A --no-check scripts/gen-shared-index.ts</code>. (${msg})</p>`;
+    list.innerHTML = `<p class="lede">No se pudo cargar <code>shared-modules.json</code>. Ejecuta <code>deno run -A --no-check scripts/ops/gen-shared-index.ts</code>. (${msg})</p>`;
     return;
   }
 

@@ -1,5 +1,5 @@
 /**
- * AUTO-GENERADO por scripts/migrate-previews-to-json.ts — no editar a mano.
+ * AUTO-GENERADO por scripts/migrations/previews-to-json.ts — no editar a mano.
  * tag → { json, behavior?, category }
  */
 export default {

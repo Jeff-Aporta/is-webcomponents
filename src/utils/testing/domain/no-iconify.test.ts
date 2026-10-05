@@ -33,7 +33,7 @@ const SCAN_EXT = /\.(js|mjs|css|html)$/;
 const ALLOWED_API_FILES = new Set([
   'scripts/download-iconify.ts',
   'scripts/download-icons.ts',
-  'scripts/fix-icon-viewbox.ts',
+  'scripts/fixes/icon-viewbox.ts',
   'scripts/sync-icon-collections.ts',
 ]);
 

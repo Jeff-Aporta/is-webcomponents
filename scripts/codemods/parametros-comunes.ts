@@ -15,7 +15,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import ts from 'typescript';
 
 /** Parámetros que la heurística dedujo mal; el inferidor no vuelve a tocarlos. */
-export const FICHERO_DESCARTES = 'scripts/ts-descartes.json';
+export const FICHERO_DESCARTES = 'scripts/codemods/descartes.json';
 
 export function leerDescartes(): Set<string> {
   if (!existsSync(FICHERO_DESCARTES)) return new Set();
