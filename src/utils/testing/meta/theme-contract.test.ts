@@ -46,16 +46,14 @@ check(!/<(?:svg|symbol|use)\b/i.test(component), 'components/actions/button.ts c
 check(!/--pg-/.test(styles), 'tokens legacy --pg- encontrados');
 check(styles.includes('--iswc-bg:'), 'missing --iswc-bg: token');
 
-// 8. Tokens de estado de campo: deben existir en AMBOS temas de is-base.css
-//    (los componentes los consumen sin fallback literal, asi que si una
-//    paleta futura los olvida el campo se queda sin borde).
-const FIELD_TOKENS = ['--iswc-b-required', '--iswc-b-optional', '--iswc-b-readonly', '--iswc-bg-readonly'];
-// Bloque dark = ':root,\n.theme-dark {…}'  /  bloque light = '.theme-light {…}'
-const darkBlock = isBase.slice(isBase.indexOf(':root'));
-const lightBlocks = isBase.split('.theme-light').slice(1).join('\n');
-for (const t of FIELD_TOKENS) {
-  check(darkBlock.includes(`${t}:`), `is-base.css: falta ${t} en tema dark`);
-  check(lightBlocks.includes(`${t}:`), `is-base.css: falta ${t} en tema light`);
+// 8. Los tokens legacy de estado de campo (--iswc-b-required, --iswc-b-optional,
+//    --iswc-b-readonly, --iswc-bg-readonly) fueron eliminados en W48 —
+//    los consumidores en components/ usan sus fallbacks literales.
+//    Verificamos que NO esten en is-base.css ni palettes.css.
+const REMOVED_FIELD_TOKENS = ['--iswc-b-required', '--iswc-b-optional', '--iswc-b-readonly', '--iswc-bg-readonly'];
+for (const t of REMOVED_FIELD_TOKENS) {
+  check(!isBase.includes(`${t}:`), `is-base.css ya no debe declarar ${t}`);
+  check(!palettes.includes(`${t}:`), `palettes.css ya no debe declarar ${t}`);
 }
 
 // 9. ContaPyme = hsl(210 100% 56%), que es dodgerblue. El brand no se escribe a mano.

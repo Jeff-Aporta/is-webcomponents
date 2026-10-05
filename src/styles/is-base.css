@@ -21,8 +21,7 @@
  * escribe ambos, pero un consumer que solo mute el atributo debe reaccionar.
  */
 
-:root,
-.theme-dark {
+:root {
   --iswc-bg: #0b0d10;
   --iswc-bg-soft: #14181d;
   --iswc-bg-elev: #1c2128;
@@ -125,7 +124,7 @@
      de la paleta (~4.5:1 contra negro puro, ~3.5:1 contra blanco puro,
      y degradado lineal contra cualquier tono intermedio). Se usa para
      "controles del tema" (botones neutrales, bordes suaves, divisores)
-     y se mantiene en :root/.theme-dark como un unico canon, sin pisarlo
+     y se mantiene en :root como un unico canon, sin pisarlo
      por tema, porque su valor es geometrico y no cromatico.
      Las 5 variantes siguen el patron tonal canonico (helper color-tokens.ts,
      ISWC_COLOR_MIX) y se derivan con color-mix() del base, igual que el resto
@@ -161,34 +160,17 @@
   --iswc-scrollbar-track: transparent;
   --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 65%, transparent);
   --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent, dodgerblue) 45%, var(--iswc-control-border));
-  /* Estados de campos de formulario — tokens que ISP-SvelteComponents da por
-     sentados y que esta librería no tenía. Se definen aquí como neutros para
-     las 3 paletas; palettes.css solo los pisa donde la marca lo exige.
-       --iswc-b-required   borde del campo obligatorio (gris marcado, NO rojo:
-                         "obligatorio" no es "error"; ISP usa #888 / #e5e7eb).
-       --iswc-b-optional   borde del campo opcional. Verde suave #80c080: es el
-                         código de color de ISP para "puedes dejarlo vacío".
-       --iswc-b-readonly   borde del campo de solo lectura — traslúcido para que
-                         se lea como desactivado (ISP: #8884 / #aaa / #bbb).
-       --iswc-bg-readonly  fondo del campo de solo lectura (ISP: #f9f9f9). */
-  --iswc-b-required: #8a939e;
-  --iswc-b-optional: #80c080;
-  --iswc-b-readonly: #ffffff2e;
-  --iswc-bg-readonly: #1a1f26;
 }
 
-/* color-scheme solo con clase de tema: no oscurece el canvas del browser
-   al cargar is-base.min.css sin más. La app (o un wrapper con .theme-*)
+/* color-scheme solo con data-theme="dark": no oscurece el canvas del browser
+   al cargar is-base.min.css sin más. La app (o un wrapper con [data-theme])
    es quien activa el esquema. */
-.theme-dark,
 [data-theme="dark"] {
   color-scheme: dark;
 }
 
-/* Light: tokens de superficie/control + field tokens + brand-text pasteles
-   (sin palettes.css quedan como los tokens neutros de fallback definidos en
-   :root/.theme-dark). Un solo bloque porque los tres cambian a la vez. */
-.theme-light,
+/* Light: tokens de superficie/control + brand-text pasteles. Un solo bloque
+   porque los tres cambian a la vez. */
 :root[data-theme="light"],
 [data-theme="light"] {
   color-scheme: light;
@@ -228,10 +210,6 @@
   --iswc-scrollbar-track: color-mix(in srgb, var(--iswc-bg-soft) 70%, transparent);
   --iswc-scrollbar-thumb: color-mix(in srgb, var(--iswc-control-border) 55%, transparent);
   --iswc-scrollbar-thumb-hover: color-mix(in srgb, var(--iswc-accent, dodgerblue) 40%, var(--iswc-control-border));
-  --iswc-b-required: #888;
-  --iswc-b-optional: #80c080;
-  --iswc-b-readonly: #8884;
-  --iswc-bg-readonly: #f9f9f9;
   --iswc-brand-text: var(--iswc-color-brand-stronger, #a61e1e);
   --iswc-brand-soft: var(--iswc-color-brand-paler, #fff1f1);
   --iswc-brand-soft-active: var(--iswc-color-brand-pale, #ffd9d9);

@@ -138,18 +138,17 @@ test('W23: contrast del neutral contra --iswc-text (dark y light)', () => {
   // tema (3.5:1 vs light text en dark, 4.46:1 vs dark text en light). El
   // guardian reporta los valores reales y documenta la desviacion; la
   // familia semantic es geometrica por contrato, no cromatica.
-  const darkText = expectToken('--iswc-text'); // en :root/.theme-dark
+  const darkText = expectToken('--iswc-text'); // en :root (dark default)
   const cDark = contrastRatio('#888', darkText);
   console.log(`  contrast #888 vs --iswc-text(dark=${darkText}) = ${cDark.toFixed(2)}:1`);
 
-  // Texto del tema light: vive en el bloque .theme-light. Saltamos la
-  // primera coincidencia (en el comentario de cabecera) y buscamos la
-  // siguiente, que ya es un selector real.
-  const lightIdx = css.indexOf('.theme-light,', css.indexOf('.theme-light') + 1);
-  assert.ok(lightIdx > 0, 'is-base.css debe contener un selector .theme-light real');
+  // Texto del tema light: vive en el bloque [data-theme="light"].
+  // Tomamos la primera coincidencia después del primer :root.
+  const lightIdx = css.indexOf('[data-theme="light"]');
+  assert.ok(lightIdx > 0, 'is-base.css debe contener un selector [data-theme="light"]');
   const lightBlock = css.slice(lightIdx);
   const m = lightBlock.match(/--iswc-text\s*:\s*([^;]+);/);
-  assert.ok(m, 'is-base.css debe declarar --iswc-text en .theme-light');
+  assert.ok(m, 'is-base.css debe declarar --iswc-text en [data-theme="light"]');
   const lightText = m[1].trim();
   const cLight = contrastRatio('#888', lightText);
   console.log(`  contrast #888 vs --iswc-text(light=${lightText}) = ${cLight.toFixed(2)}:1`);
@@ -170,10 +169,10 @@ test('W23: contrast del neutral contra --iswc-bg (dark y light)', () => {
   const cDark = contrastRatio('#888', darkBg);
   console.log(`  contrast #888 vs --iswc-bg(dark=${darkBg}) = ${cDark.toFixed(2)}:1`);
 
-  const lightIdx = css.indexOf('.theme-light,', css.indexOf('.theme-light') + 1);
+  const lightIdx = css.indexOf('[data-theme="light"]');
   const lightBlock = css.slice(lightIdx);
   const m = lightBlock.match(/--iswc-bg\s*:\s*([^;]+);/);
-  assert.ok(m, 'is-base.css debe declarar --iswc-bg en .theme-light');
+  assert.ok(m, 'is-base.css debe declarar --iswc-bg en [data-theme="light"]');
   const lightBg = m[1].trim();
   const cLight = contrastRatio('#888', lightBg);
   console.log(`  contrast #888 vs --iswc-bg(light=${lightBg}) = ${cLight.toFixed(2)}:1`);
