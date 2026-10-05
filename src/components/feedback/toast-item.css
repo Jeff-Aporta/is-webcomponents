@@ -45,6 +45,12 @@
   --_text: var(--iswc-control-text);
   --_accent: var(--iswc-muted);
 }
+:host([color="text"]) {
+  --_bg: color-mix(in srgb, var(--iswc-text) 10%, transparent);
+  --_border: var(--iswc-text);
+  --_text: var(--iswc-text);
+  --_accent: var(--iswc-text);
+}
 
 .base {
   position: relative;

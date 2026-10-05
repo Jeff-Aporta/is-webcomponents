@@ -69,14 +69,14 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
 
   const EXTRA_UPGRADE_PROPS: string[] = ['labels', 'getLabelText'];
 
-  const VARIANTS = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const VARIANTS = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
 
   const ICON_FULL = 'mdi:star';
   const ICON_EMPTY = 'mdi:star-outline';
 
   type LabelFn = (value: number) => string;
 
-  class IswcRating extends ElementBase {
+  class IswcRating extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'gap', 'color', 'empty-color', 'focus-color']; }

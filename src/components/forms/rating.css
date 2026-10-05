@@ -13,6 +13,7 @@
 :host([hidden]) { display: none !important; }
 
 :host([color="neutral"]) { --iswc-rating-color: var(--iswc-control-text); }
+:host([color="text"]) { --iswc-rating-color: var(--iswc-text); }
 :host([color="success"]) { --iswc-rating-color: var(--iswc-color-success); }
 :host([color="warning"]) { --iswc-rating-color: var(--iswc-color-warning); }
 :host([color="danger"])  { --iswc-rating-color: var(--iswc-color-danger); }

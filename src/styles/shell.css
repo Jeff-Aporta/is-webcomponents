@@ -20,6 +20,12 @@ body {
   font: 0.9375rem/1.4 var(--iswc-sans);
 }
 
+/* Light-DOM shell: header/split/drawer entran al grid de body.
+   Sin contents el host crece con el preview y rompe overflow/scroll. */
+iswc-doc-demo {
+  display: contents;
+}
+
 .main-split {
   grid-area: main;
   width: 100%;

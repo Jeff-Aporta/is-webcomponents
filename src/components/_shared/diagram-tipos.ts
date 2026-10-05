@@ -53,6 +53,8 @@ export type Paquete = Caja & {
   stereotype?: string | undefined;
   /** Matiz de color; lo elige el consumidor. */
   hue?: number | undefined;
+  /** Id del paquete padre (agrupador anidado). */
+  parent?: string | undefined;
 };
 
 /** Arista entre dos componentes, por id. */

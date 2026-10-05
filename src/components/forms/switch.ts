@@ -59,13 +59,13 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
 
   // Literal para audit/exhaustivos; alineado a INTENT (+ info/error).
   const VARIANTS: readonly string[] = [
-    'brand', 'neutral', 'success', 'warning', 'danger', 'info', 'error',
+    'brand', 'neutral', 'text', 'success', 'warning', 'danger', 'info', 'error',
   ];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcSwitch extends ElementBase {
+  class IswcSwitch extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'height', 'width', 'bg', 'accent', 'thumb-color', 'focus-color', 'halo']; }

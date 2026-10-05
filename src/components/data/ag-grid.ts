@@ -155,13 +155,13 @@ TEMPLATE.innerHTML = /* html */ `
           <iswc-icon icon="mdi:view-stream"></iswc-icon>
         </iswc-button>
       </div>
-      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
+      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__columns-btn" title="Columnas" aria-label="Columnas">
         <iswc-icon icon="mdi:view-column-outline"></iswc-icon>
       </iswc-button>
-      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
+      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__reset-btn" title="Reiniciar personalización" aria-label="Reiniciar personalización" hidden>
         <iswc-icon icon="mdi:backup-restore"></iswc-icon>
       </iswc-button>
-      <iswc-button variant="plain" color="neutral" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
+      <iswc-button variant="plain" color="text" class="mim-dg__tool-btn mim-dg__export-btn" title="Exportar CSV">
         <iswc-icon icon="mdi:file-delimited-outline"></iswc-icon>
         <span class="mim-dg__tool-btn-label">CSV</span>
       </iswc-button>
@@ -372,7 +372,7 @@ function asHTMLElement(target: EventTarget | null): HTMLElement | null {
   return target instanceof HTMLElement ? target : null;
 }
 
-export class IswcAgGrid extends ElementBase {
+export class IswcAgGrid extends ElementBase {
 
   static TEMPLATE = TEMPLATE;
   static get observedAttributes(): string[] {

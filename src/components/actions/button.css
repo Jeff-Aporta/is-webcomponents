@@ -193,21 +193,19 @@
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
   --_tone-on: var(--iswc-on-brand);
 }
-/* text: color del texto en el contexto actual (light/dark theme).
- * Heredado de --iswc-text. Asi un boton con color="text" adopta
- * el color de fuente del theme, util para botones de accion que
- * no deben destacar en un layout de lectura. */
+/* text: foreground del tema (--iswc-text). Plain/outlined legibles.
+ * Distinto de neutral (#888 muted). Rampa local con color-mix. */
 :host([color="text"]) {
   --_tone: var(--iswc-text);
-  --_tone-strong: var(--iswc-text);
-  --_tone-stronger: color-mix(in srgb, var(--_tone) 86%, black);
-  --_tone-strongest: color-mix(in srgb, var(--_tone) 74%, black);
-  --_tone-paler: color-mix(in srgb, var(--_tone) 12%, white);
-  --_tone-pale: color-mix(in srgb, var(--_tone) 28%, white);
+  --_tone-strong: color-mix(in srgb, var(--iswc-text) 82%, black);
+  --_tone-stronger: color-mix(in srgb, var(--iswc-text) 62%, black);
+  --_tone-strongest: color-mix(in srgb, var(--iswc-text) 45%, black);
+  --_tone-paler: color-mix(in srgb, var(--iswc-text) 12%, white);
+  --_tone-pale: color-mix(in srgb, var(--iswc-text) 28%, white);
   --_tone-text: var(--_tone);
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
-  --_tone-on: color-mix(in srgb, var(--_tone) 92%, white);
+  --_tone-on: var(--iswc-bg);
 }
 /* neutral: familia semantica con base #888 (canon geometrico).
  * W40: usar los tokens `--iswc-color-neutral-*` para que el tono #888 se

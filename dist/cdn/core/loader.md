@@ -168,24 +168,37 @@ Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) �
 - Componente: lo trae cada `.min.js` con `adoptCss` en shadow.
 - Relativos al documento: `loadPageStyles([...])` / `loadPageModules([...])` (sin mirrors). Alias CDN del kit: prefijo `cdn:` o alias registrado (`iswc-palettes-default`).
 
-### Galería local (`index.mjs`) — modo `local`
+### Shell doc-demo (`iswc-doc-demo`) — reutilizable
 
-La galería **se prueba a sí misma**: no CDN, no pin SHA, no mirrors.
+Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
-```js
-import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js';
-L.configure({ local: true }); // host = self (junto al loader), mirrors=[], sin sha
-L.sheets.install({ cacheName: 'iswc-gallery-sheets' });
-void L.loadPageStyles([
-  'iswc-palettes-default',
-  'src/styles/shell.css',
-  'src/styles/presentation.css',
-]);
-L.load(/* shell tags */, 'iswc-preview-component')
-  .then(() => { /* kitShell */ })
-  .catch(console.error);
-L.loadPageModules([/* chrome */, 'dev-reload']); // lazy
+```html
+<!-- CDN / otra app -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents/dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="./app.min.js"></script>
+<body>
+  <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>
+</body>
 ```
+
+```html
+<!-- Galería local (self-test) -->
+<script type="module" src="./dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="./dist/gallery-app.min.js" defer></script>
+<body>
+  <iswc-doc-demo brand="ISWC" local dev sheets-cache="iswc-gallery-sheets"></iswc-doc-demo>
+</body>
+```
+
+| Artefacto | Tipo | Rol |
+| --- | --- | --- |
+| `doc-demo-host.min.js` | module | `configure` + `L.loadPageModules(['iswc-doc-demo-boot'])` + `L.load('iswc-doc-demo')` |
+| `iswc-doc-demo-boot` | alias module | theme/palette + CSS crítico |
+| `iswc-doc-demo` | CE (catálogo) | shell light-DOM + page styles/modules |
+
+Aliases CSS: `iswc-palettes-default`, `iswc-doc-shell`, `iswc-doc-presentation`.  
+Page modules: `type: 'module' | 'classic'` (`dev-reload` classic, **opt-in** con attr `dev`).  
+Evento canónico: `iswc-doc-demo-ready` / `.whenReady()`.
 
 | Opción | Efecto |
 | --- | --- |
@@ -194,8 +207,4 @@ L.loadPageModules([/* chrome */, 'dev-reload']); // lazy
 | `host: 'dist/cdn/'` | Relativo a la página montada |
 | `mirrors: []` | Sin fallback jsDelivr/githack/Pages |
 
-Contrato FOUC: `index.js` + `index.css` (theme sync + visibility `:not(:defined)`). El resto lo inyecta el loader (`?h=` + Cache Storage).
-
-`iswc-preview-component` está en el catálogo (`category: preview`) → `L.load('iswc-preview-component')` sin `registerApp`.
-
-Detalle + anti-patrones: `LLM.md` raíz error **#43** · guardián `tests/gallery-boot.test.ts`.
+Detalle: `src/components/layout/doc-demo.md` · guardián `tests/gallery-boot.test.ts`.

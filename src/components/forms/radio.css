@@ -76,6 +76,7 @@
 
 :host([color="brand"])   { --iswc-radio-accent: var(--iswc-accent, var(--iswc-color-brand)); }
 :host([color="neutral"]) { --iswc-radio-accent: var(--iswc-control-border); }
+:host([color="text"]) { --iswc-radio-accent: var(--iswc-text); }
 :host([color="success"]) { --iswc-radio-accent: var(--iswc-color-success); }
 :host([color="warning"]) { --iswc-radio-accent: var(--iswc-color-warning); }
 :host([color="danger"])  { --iswc-radio-accent: var(--iswc-color-danger); }

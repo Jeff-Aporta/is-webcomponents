@@ -36,10 +36,55 @@ export function resolveAssets(html: string): string {
   return typeof html === 'string' ? html.replaceAll('{assets}', ASSETS) : html;
 }
 
-/** Base64-url encode (sin padding) — mismo formato que `?s=` en gallery/app.ts. */
+/** Base64-url encode (sin padding) — mismo formato que `?s=` / `?json=`. */
 function b64urlEncode(s: string): string {
-  const b64 = btoa(unescape(encodeURIComponent(s)));
-  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const bytes = new TextEncoder().encode(s);
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+/** tag iswc-* → kind del studio de diagramas. */
+function diagramKindFromTag(tag: string): string | null {
+  const map: Record<string, string> = {
+    'iswc-flowchart': 'flowchart',
+    'iswc-sequence-diagram': 'sequence',
+    'iswc-class-diagram': 'class',
+    'iswc-state-diagram': 'state',
+    'iswc-er-diagram': 'er',
+    'iswc-block-diagram': 'block',
+    'iswc-component-diagram': 'component',
+    'iswc-mindmap': 'mindmap',
+    'iswc-gantt': 'gantt',
+    'iswc-timeline': 'timeline',
+    'iswc-org-chart': 'org-chart',
+    'iswc-sankey-diagram': 'sankey',
+    'iswc-quadrant-chart': 'quadrant',
+    'iswc-venn-diagram': 'venn',
+    'iswc-use-case-diagram': 'usecase',
+    'iswc-swimlane-diagram': 'swimlane',
+    'iswc-journey-map': 'journey',
+  };
+  return map[tag] ?? null;
+}
+
+/** Extrae el JSON del `<script type="application/json">` del demo. */
+function extractDemoJson(html: string): unknown | null {
+  const m = /<script[^>]*type=["']application\/json["'][^>]*>([\s\S]*?)<\/script>/i.exec(html);
+  if (!m?.[1]) return null;
+  try { return JSON.parse(m[1].trim()); } catch { return null; }
+}
+
+/** URL absoluta del editor CDN con kind + json completos. */
+function buildDiagramEditorHref(tag: string, html: string): string | null {
+  const kind = diagramKindFromTag(tag);
+  if (!kind) return null;
+  const payload = extractDemoJson(html);
+  if (payload == null) return null;
+  const page = new URL(`demos/diagramas/app/edit.html`, RAIZ);
+  page.searchParams.set('kind', kind);
+  page.searchParams.set('json', b64urlEncode(JSON.stringify(payload)));
+  return page.href;
 }
 
 /**
@@ -50,6 +95,48 @@ export function fragmentFromHtml(html: string): DocumentFragment {
   const tpl = document.createElement('template');
   tpl.innerHTML = resolveAssets(html).trim();
   return tpl.content.cloneNode(true) as DocumentFragment;
+}
+
+/** Celda tipada `{ kind: 'code-ejemplo', code, lang?, summary? }`. */
+function isCodeEjemploCell(cell: unknown): cell is {
+  kind: 'code-ejemplo';
+  code: string;
+  lang?: string;
+  summary?: string;
+} {
+  return !!cell
+    && typeof cell === 'object'
+    && (cell as { kind?: string }).kind === 'code-ejemplo'
+    && typeof (cell as { code?: unknown }).code === 'string';
+}
+
+/**
+ * Disclosure + <iswc-code> readonly para copiar/pegar en HTML cualquiera.
+ * Preferir `alert(...)` en los snippets (no console.log).
+ */
+export function renderCodeEjemploCell(cell: {
+  code: string;
+  lang?: string;
+  summary?: string;
+}): HTMLElement {
+  const details = document.createElement('iswc-details');
+  details.className = 'api-ejemplo';
+  details.setAttribute('summary', cell.summary || 'Ejemplo');
+  details.setAttribute('variant', 'plain');
+  details.setAttribute('icon-placement', 'end');
+
+  const ed = document.createElement('iswc-code');
+  ed.className = 'api-ejemplo__code';
+  ed.setAttribute('readonly', '');
+  ed.setAttribute('compact', '');
+  ed.setAttribute('wrap', '');
+  ed.setAttribute('line-numbers', 'false');
+  ed.setAttribute('lang', cell.lang || 'html');
+  // Semilla via dataset (no attr/prop value): snippets largos + evita bucle reflect.
+  ed.dataset.cmSource = cell.code;
+
+  details.append(ed);
+  return details;
 }
 
 /**
@@ -83,8 +170,8 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       if (block.target && Array.isArray(block.controls) && block.controls.length) {
         const pg = document.createElement('iswc-playground');
         pg.setAttribute('target', block.target);
+        pg.setAttribute('heading', 'Atributos');
         pg.setAttribute('layout', 'split');
-        pg.setAttribute('title', 'Atributos');
         pg.setAttribute('lede', '');
         // Mover el demo al slot stage del playground ANTES de asignar spec,
         // para que connectedCallback/#mountPanel vean el host vivo.
@@ -104,22 +191,28 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
         else customElements.whenDefined('iswc-playground').then(applySpec);
       }
 
-      // Si el demo es un diagrama SVG (class/flowchart/state/etc),
-      // agregar un enlace "Abrir en editor (new tab)" para que el usuario
-      // pueda abrir el demo en su propia pestana desde la galeria/home.
-      // Esto usa `window.open` con `noopener` para abrir el shell del demo
-      // (mismo demo, contexto limpio, sin chrome de galeria).
+      // Demo de diagrama SVG → enlace al editor CDN (edit.html?kind=&json=)
+      // en pestaña nueva, con el JSON completo del demo.
       const m = /<iswc-([a-z0-9-]+)-(diagram|chart)|<iswc-(flowchart|gantt|mindmap|venn-diagram|sankey-diagram|state-diagram|sequence-diagram|swimlane-diagram|use-case-diagram|class-diagram|er-diagram|block-diagram|component-diagram|org-chart|radar-chart|scatter-chart|sparkline|treemap|waterfall-chart|polar-area-chart|funnel-chart|pie-chart|doughnut-chart|line-chart|bar-chart|quadrant-chart|journey-map|timeline)\b/.exec(block.html);
       if (m) {
         const tag = `iswc-${m[1] ? `${m[1]}-${m[2]}` : m[3]}`;
-        const editorLink = document.createElement('a');
-        editorLink.className = 'demo-block__editor-link';
-        editorLink.href = `?s=${b64urlEncode(JSON.stringify({ component: tag }))}`;
-        editorLink.target = '_blank';
-        editorLink.rel = 'noopener';
-        editorLink.textContent = 'Abrir editor en nueva pestaña ↗';
-        editorLink.setAttribute('aria-label', `Abrir demo de ${tag} en nueva pestaña`);
-        wrap.append(editorLink);
+        const href = buildDiagramEditorHref(tag, block.html);
+        if (href) {
+          const editorLink = document.createElement('a');
+          editorLink.className = 'demo-block__editor-link';
+          editorLink.href = href;
+          editorLink.target = '_blank';
+          editorLink.rel = 'noopener noreferrer';
+          editorLink.textContent = 'Abrir editor en nueva pestaña ↗';
+          editorLink.setAttribute('aria-label', `Abrir editor de ${tag} en nueva pestaña`);
+          // Garantiza pestaña nueva aunque haya captura SPA sobre <a href>.
+          editorLink.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            window.open(href, '_blank', 'noopener,noreferrer');
+          });
+          wrap.append(editorLink);
+        }
       }
       return wrap;
     }
@@ -177,7 +270,12 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
         const tr = document.createElement('tr');
         for (const cell of row) {
           const td = document.createElement('td');
-          td.innerHTML = resolveAssets(cell);
+          if (isCodeEjemploCell(cell)) {
+            td.classList.add('ref__ejemplo');
+            td.append(renderCodeEjemploCell(cell));
+          } else {
+            td.innerHTML = resolveAssets(String(cell ?? ''));
+          }
           tr.append(td);
         }
         tbody.append(tr);

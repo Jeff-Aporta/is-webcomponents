@@ -61,7 +61,7 @@ const headReq = async (path) => {
 
 // ── Listas de bundles esperados (sincronizadas con bundle-scripts.mjs) ──
 const SCRIPTS_BUNDLES = ['highlight-pre', 'demo-code', 'docs-chrome', 'cdn-panel', 'view-sources', 'demo-file-meta'];
-const PAGES_BUNDLES = ['home', 'theming', 'ecosystem'];
+const PAGES_BUNDLES = ['home', 'icons', 'theming', 'ecosystem'];
 
 const CRITICAL_PATHS = [
   'index.html',

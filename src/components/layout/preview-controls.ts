@@ -54,6 +54,19 @@ const CSS = `
   opacity: 0.9;
 }
 .grupo-titulo:first-child { margin-top: 0; }
+/* Extras: disclosure full-width al final del grid de knobs */
+.grupo-extra {
+  grid-column: 1 / -1;
+  display: block;
+  min-width: 0;
+}
+.grupo-extra__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr));
+  gap: 0.85em 1.1em;
+  align-items: start;
+  margin-block-start: 0.55em;
+}
 .fila {
   display: flex;
   flex-direction: column;
@@ -364,7 +377,16 @@ export type ControlPanel = {
   control: string;
   prop: string;
   label: string;
+  /**
+   * Agrupa knobs. `General` (default) va plano en el grid.
+   * Cualquier otro nombre → disclosure colapsable al final (extras).
+   */
   group?: string;
+  /**
+   * Fuerza disclosure aunque el grupo sea General, o desactiva el default
+   * de “grupo ≠ General → disclosure” con `false`.
+   */
+  disclosure?: boolean;
   /** string[] del JSON de demos u objetos ya normalizados. */
   options?: Array<string | OpcionPanel>;
   min?: number;
@@ -458,8 +480,10 @@ const SELECT_ICONS: Record<string, string> = {
   'bottom-left': 'mdi:arrow-bottom-left', 'bottom-right': 'mdi:arrow-bottom-right',
 };
 
-function iconForOption(_attr: string, value: unknown): string | undefined {
-  return SELECT_ICONS[String(value ?? '')] || undefined;
+function iconForOption(attr: string, value: unknown): string | undefined {
+  const key = String(value ?? '');
+  if (attr === 'color' && key === 'text') return 'mdi:format-color-text';
+  return SELECT_ICONS[key] || undefined;
 }
 
 /** Defaults kit cuando el JSON/CE no traen `default` (espejo del mapa de controles). */
@@ -476,12 +500,13 @@ const DEFAULT_BY_ATTR: Record<string, string> = {
 };
 
 /** Completa iconos + default de opciones select si el JSON no los trae.
- *  Acepta options como string[] (JSON de demos) u objetos {value,label,icon}. */
+ *  Acepta options como string[] (JSON de demos) u objetos {value,label,icon}.
+ *  Customs (hex/rgb/hsl) siempre al final. */
 function enriquecerControl(c: ControlPanel): ControlPanel {
   const copy: ControlPanel = { ...c };
   if (c.control !== 'select' || !Array.isArray(c.options)) return copy;
   const attr = attrDeProp(c.prop);
-  copy.options = c.options.map((op): OpcionPanel => {
+  const mapped = c.options.map((op): OpcionPanel => {
     const base: OpcionPanel = typeof op === 'string'
       ? { value: op, label: op }
       : {
@@ -496,6 +521,11 @@ function enriquecerControl(c: ControlPanel): ControlPanel {
     const icon = iconForOption(attr, base.value);
     return icon ? { ...base, icon } : base;
   });
+  // Semánticos primero; custom CSS (hex/rgb/…) al final.
+  copy.options = [
+    ...mapped.filter((o) => !esColorCustom(o.value)),
+    ...mapped.filter((o) => esColorCustom(o.value)),
+  ];
   if (copy.default === undefined || copy.default === null || copy.default === '') {
     const vals = copy.options.map((o) => String(o.value));
     // Avatar/media: circle; botón: round (si está en la lista).
@@ -508,6 +538,25 @@ function enriquecerControl(c: ControlPanel): ControlPanel {
     }
   }
   return copy;
+}
+
+/** Valor CSS literal (no intent semántico del kit). */
+function esColorCustom(value: unknown): boolean {
+  const s = String(value ?? '').trim();
+  return /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(s)
+    || /^(rgb|rgba|hsl|hsla)\(/i.test(s);
+}
+
+/** Título / aria de un knob (label del control). */
+function tituloKnob(c: ControlPanel): string {
+  return String(c.label || attrDeProp(c.prop) || 'control').trim();
+}
+
+/** Aplica title + aria-label a un accionable del panel. */
+function conTitulo(el: HTMLElement, titulo: string): HTMLElement {
+  el.title = titulo;
+  if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', titulo);
+  return el;
 }
 
 /**
@@ -536,6 +585,16 @@ function ordenarPorTipo(lista: ControlPanel[]): ControlPanel[] {
   return lista.slice().sort((a, b) => ordenTipo(a) - ordenTipo(b));
 }
 
+/**
+ * Extras → disclosure. Default: grupo ≠ `General`.
+ * Override por control: `disclosure: true|false` (gana el primero del grupo).
+ */
+function grupoEsDisclosure(nombre: string, lista: ControlPanel[]): boolean {
+  const explicit = lista.find((c) => typeof c.disclosure === 'boolean');
+  if (explicit) return !!explicit.disclosure;
+  return nombre !== 'General';
+}
+
 const TPL = document.createElement('template');
 TPL.innerHTML = `<style>${CSS}</style><div class="panel">
   <div class="titulo"></div>
@@ -554,7 +613,7 @@ async function asegurarWidgets(): Promise<void> {
     new Promise<boolean>((r) => setTimeout(() => r(false), 2500)),
   ]);
   await Promise.all(
-    ['iswc-switch', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-icon'].map(conTope),
+    ['iswc-switch', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-icon', 'iswc-details'].map(conTope),
   );
 }
 
@@ -683,21 +742,39 @@ class IswcPreviewControls extends HTMLElement {
     grupos.textContent = '';
     const porGrupo = new Map<string, ControlPanel[]>();
     for (const c of this.#spec) {
-      const g = c.group || 'General';
+      const g = (c.group || 'General').trim() || 'General';
       if (!porGrupo.has(g)) porGrupo.set(g, []);
       porGrupo.get(g)!.push(c);
     }
-    const multi = porGrupo.size > 1;
-    for (const [nombre, lista] of porGrupo) {
-      if (multi) {
+    // General (plano) primero; extras en disclosure al final.
+    const nombres = [...porGrupo.keys()].sort((a, b) => {
+      if (a === 'General') return -1;
+      if (b === 'General') return 1;
+      return a.localeCompare(b, 'es');
+    });
+    for (const nombre of nombres) {
+      const lista = porGrupo.get(nombre)!;
+      const ordenados = ordenarPorTipo(lista);
+      const asDisclosure = grupoEsDisclosure(nombre, lista);
+      if (asDisclosure) {
+        const det = document.createElement('iswc-details');
+        det.className = 'grupo-extra';
+        det.setAttribute('summary', nombre);
+        det.setAttribute('variant', 'plain');
+        det.setAttribute('icon-placement', 'end');
+        const inner = document.createElement('div');
+        inner.className = 'grupo-extra__grid';
+        for (const control of ordenados) inner.appendChild(this.#fila(control));
+        det.appendChild(inner);
+        grupos.appendChild(det);
+        continue;
+      }
+      if (nombres.length > 1 && nombre !== 'General') {
         const h = document.createElement('div');
         h.className = 'grupo-titulo';
         h.textContent = nombre;
         grupos.appendChild(h);
       }
-      // Phase W39: auto-orden por tipo (text → number → select → otros → switch)
-      // dentro de cada grupo, sin importar el orden del consumer.
-      const ordenados = ordenarPorTipo(lista);
       for (const control of ordenados) grupos.appendChild(this.#fila(control));
     }
   }
@@ -729,14 +806,16 @@ class IswcPreviewControls extends HTMLElement {
    * kit (con fallback a <iconify-icon> si el icono local no está disponible).
    */
   #infoBtn(c: ControlPanel): HTMLElement {
+    const nombre = tituloKnob(c);
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'info-btn';
     btn.dataset.role = 'info-btn';
-    btn.setAttribute('aria-label', `Info del atributo ${attrDeProp(c.prop) || c.label}`);
+    const detalle = `clic para ver detalle: ${nombre}`;
+    btn.setAttribute('aria-label', detalle);
     btn.setAttribute('aria-haspopup', 'dialog');
     btn.setAttribute('aria-expanded', 'false');
-    btn.title = 'Ver documentación del atributo';
+    btn.title = detalle;
     const icon = document.createElement('iswc-icon');
     icon.setAttribute('icon', 'mdi:information-outline');
     icon.setAttribute('aria-hidden', 'true');
@@ -957,12 +1036,14 @@ class IswcPreviewControls extends HTMLElement {
 
   #entrada(c: ControlPanel): HTMLElement {
     const v = c.value !== undefined && c.value !== null ? c.value : c.default;
+    const titulo = tituloKnob(c);
     switch (c.control) {
       case 'boolean': {
         const wrap = document.createElement('div');
         wrap.className = 'control-wrap';
         const sw = document.createElement('iswc-switch');
         sw.setAttribute('color', 'brand');
+        conTitulo(sw, titulo);
         if (v) sw.setAttribute('checked', '');
         sw.addEventListener('iswc-change', ((ev: Event) => {
           const checked = Boolean((ev as CustomEvent<{ checked?: boolean }>).detail?.checked);
@@ -975,6 +1056,7 @@ class IswcPreviewControls extends HTMLElement {
         const input = document.createElement('input');
         input.type = 'color';
         input.value = typeof v === 'string' && /^#/.test(v) ? v : '#7c4dff';
+        conTitulo(input, titulo);
         input.addEventListener('input', () => this.#emitir(c, input.value));
         return input;
       }
@@ -982,12 +1064,16 @@ class IswcPreviewControls extends HTMLElement {
         const sel = document.createElement('iswc-select');
         const inicial = v ?? c.default ?? '';
         sel.setAttribute('value', String(inicial));
+        conTitulo(sel, titulo);
         for (const raw of c.options ?? []) {
-          const op = typeof raw === 'string'
+          const op: OpcionPanel = typeof raw === 'string'
             ? { value: raw, label: raw }
             : raw;
           const o = document.createElement('iswc-option');
           o.setAttribute('value', String(op.value));
+          const optTitle = String(op.label || op.value || '');
+          o.title = optTitle;
+          o.setAttribute('title', optTitle);
           if (op.icon) {
             const icon = document.createElement('iswc-icon');
             icon.setAttribute('slot', 'start');
@@ -1052,6 +1138,7 @@ class IswcPreviewControls extends HTMLElement {
         const ta = document.createElement('textarea');
         ta.placeholder = c.placeholder ?? '{ ... }';
         ta.value = typeof v === 'string' ? v : JSON.stringify(v ?? '', null, 2);
+        conTitulo(ta, titulo);
         ta.addEventListener('input', () => {
           const txt = ta.value;
           let val: unknown = txt;
@@ -1067,6 +1154,7 @@ class IswcPreviewControls extends HTMLElement {
         input.max = String(c.max ?? 100);
         input.step = String(c.step ?? 1);
         input.value = String(v ?? c.min ?? 0);
+        conTitulo(input, titulo);
         input.addEventListener('input', () => this.#emitir(c, Number(input.value)));
         return input;
       }
@@ -1077,6 +1165,7 @@ class IswcPreviewControls extends HTMLElement {
         if (c.max !== undefined) input.setAttribute('max', String(c.max));
         if (c.step !== undefined) input.setAttribute('step', String(c.step));
         input.setAttribute('value', String(v ?? ''));
+        conTitulo(input, titulo);
         const leer = () => {
           const raw = (input as HTMLElement & { value?: string }).value ?? '';
           this.#emitir(c, raw === '' ? '' : Number(raw));
@@ -1090,6 +1179,7 @@ class IswcPreviewControls extends HTMLElement {
         input.setAttribute('type', 'text');
         if (c.placeholder) input.setAttribute('placeholder', c.placeholder);
         input.setAttribute('value', String(v ?? ''));
+        conTitulo(input, titulo);
         const leer = () => {
           this.#emitir(c, (input as HTMLElement & { value?: string }).value ?? '');
         };

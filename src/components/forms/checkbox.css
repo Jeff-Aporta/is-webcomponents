@@ -81,6 +81,7 @@
 }
 
 :host([color="neutral"]) { --iswc-checkbox-accent: var(--iswc-control-border); }
+:host([color="text"]) { --iswc-checkbox-accent: var(--iswc-text); }
 :host([color="success"]) { --iswc-checkbox-accent: var(--iswc-color-success); }
 :host([color="warning"]) { --iswc-checkbox-accent: var(--iswc-color-warning); }
 :host([color="danger"])  { --iswc-checkbox-accent: var(--iswc-color-danger); }

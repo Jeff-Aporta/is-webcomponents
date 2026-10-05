@@ -12,6 +12,10 @@ export interface BundleMinJsOptions {
   banner?: string;
   define?: Record<string, string>;
   external?: string[];
+  /** Default `esm`. Usar `iife` para boots classic (sin type=module). */
+  format?: 'esm' | 'iife' | 'cjs';
+  /** Default `es2020`. Host modules con top-level await: `es2022`. */
+  target?: string;
 }
 
 export function bundleMinJs(opts: BundleMinJsOptions) {
@@ -20,8 +24,8 @@ export function bundleMinJs(opts: BundleMinJsOptions) {
     outfile: opts.outfile,
     bundle: true,
     minify: true,
-    format: 'esm',
-    target: 'es2020',
+    format: opts.format || 'esm',
+    target: opts.target || 'es2020',
     legalComments: 'none',
     plugins: opts.plugins,
     ...(opts.external ? { external: opts.external } : {}),

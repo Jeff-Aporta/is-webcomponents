@@ -41,7 +41,7 @@ import '../actions/button.js';
       <iswc-button
         class="close"
         variant="text"
-        color="neutral"
+        color="text"
         label="Cerrar"
         exportparts="button: close-button"
       >

@@ -115,13 +115,13 @@ class IswcExamplesCarousel extends ElementBase {
         </div>
         <div class="viewport" part="viewport">
           <iswc-button class="nav nav--prev" part="nav-prev" type="button"
-                       variant="ghost" color="neutral" shape="round"
+                       variant="ghost" color="text" shape="round"
                        aria-label="Ejemplos anteriores">
             <iswc-icon slot="start" icon="mdi:chevron-left" aria-hidden="true"></iswc-icon>
           </iswc-button>
           <div class="track" part="track" role="list" aria-label="Ejemplos predefinidos"></div>
           <iswc-button class="nav nav--next" part="nav-next" type="button"
-                       variant="ghost" color="neutral" shape="round"
+                       variant="ghost" color="text" shape="round"
                        aria-label="Ejemplos siguientes">
             <iswc-icon slot="end" icon="mdi:chevron-right" aria-hidden="true"></iswc-icon>
           </iswc-button>

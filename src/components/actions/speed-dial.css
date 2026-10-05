@@ -132,6 +132,10 @@ iswc-check-icon-button.trigger {
     background: color-mix(in srgb, var(--iswc-text) 10%, transparent);
     color: var(--iswc-text);
   }
+  &[data-color="text"] .ico {
+    background: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+    color: var(--iswc-text);
+  }
   &[data-color="success"] .ico {
     background: color-mix(in srgb, var(--iswc-success) 18%, transparent);
     color: var(--iswc-success);

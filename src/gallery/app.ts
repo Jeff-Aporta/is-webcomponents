@@ -17,6 +17,8 @@ interface GalleryState {
   palette?: string;
   component?: string;
   embed?: boolean;
+  /** Preferencia de paneles laterales compactos (btn header). */
+  panelsCompact?: boolean;
   [key: string]: unknown;
 }
 
@@ -96,9 +98,39 @@ function asRecord(v: unknown): Record<string, unknown> {
 
 /* ─────────────────────────── Lookup del DOM ───────────────────────────── */
 
+/**
+ * El host (`doc-demo-host`) y esta SPA son entry points module independientes.
+ * Un TLA en el host NO bloquea siblings: gallery-app puede evaluar mientras
+ * `iswc-doc-demo` aún no está definido ni ha pintado el shell. Esperamos.
+ */
+async function waitForGalleryShell(): Promise<void> {
+  if (document.getElementById('shellNav')) return;
+
+  await Promise.race([
+    customElements.whenDefined('iswc-doc-demo'),
+    new Promise<void>((resolve) => {
+      window.addEventListener('iswc-gallery-shell-ready', () => resolve(), { once: true });
+    }),
+  ]);
+
+  // Upgrade + connectedCallback (#paintShell) son sync tras define; un
+  // microtask cubre el caso en que el ready llega un tick después.
+  if (!document.getElementById('shellNav')) {
+    await new Promise<void>((r) => queueMicrotask(r));
+  }
+  if (!document.getElementById('shellNav')) {
+    await new Promise<void>((resolve) => {
+      window.addEventListener('iswc-gallery-shell-ready', () => resolve(), { once: true });
+    });
+  }
+}
+
+await waitForGalleryShell();
+
 /** Devuelve un getElementById sin la posibilidad de `null` (la página garantiza presencia). */
 function el<T extends HTMLElement = HTMLElement>(id: string): T {
   const node = document.getElementById(id);
+  if (!node) throw new Error(`[gallery-app] falta #${id} (shell iswc-doc-demo no listo)`);
   return node as T;
 }
 
@@ -145,7 +177,9 @@ const HOME = { tag: 'home', title: 'Home', page: 'home.json' };
 // suelta en previews/ raíz: el taller para armarse una paleta propia.
 const THEMING = { tag: 'theming', title: 'Personalización', page: 'theming.json' };
 const ECOSYSTEM = { tag: 'ecosystem', title: 'Ecosistema JS', page: 'ecosystem.json' };
-const catalog: CatalogItem[] = [HOME, THEMING, ECOSYSTEM, ...components];
+/** Mapa grid de categorías/componentes (`#icons` / ?s= component=icons). */
+const ICONS = { tag: 'icons', title: 'Mapa', page: 'icons.json' };
+const catalog: CatalogItem[] = [HOME, ICONS, THEMING, ECOSYSTEM, ...components];
 
 // --- build nav (Home + agrupado por categoría) ---
 // Sin filtro: el nav lista el catálogo completo del manifest.
@@ -187,6 +221,20 @@ const categoryOrder: string[] = Object.keys(categoryMeta);
   title.textContent = 'Inicio';
   btn.append(title);
   btn.addEventListener('click', () => selectComponent(HOME.tag));
+  shellNav.appendChild(btn);
+}
+
+{
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'shell-nav__item shell-nav__item--home';
+  btn.dataset.tag = ICONS.tag;
+  btn.setAttribute('aria-label', 'Mapa de componentes — icons');
+  const title = document.createElement('span');
+  title.className = 'shell-nav__title';
+  title.textContent = ICONS.title;
+  btn.append(title);
+  btn.addEventListener('click', () => selectComponent(ICONS.tag));
   shellNav.appendChild(btn);
 }
 
@@ -288,8 +336,40 @@ let palette: PaletteName = palettes.has(paletteFromUrl as PaletteName)
   : (palettes.has(paletteStored as PaletteName) ? (paletteStored as PaletteName) : 'contapyme');
 
 const componentFromUrl = typeof stateFromUrl?.component === 'string' ? stateFromUrl.component : null;
+const hashWantsIcons = location.hash.replace(/^#/, '') === 'icons';
 let component: CatalogItem =
-  catalog.find(item => item.tag === componentFromUrl) ?? HOME;
+  (hashWantsIcons ? ICONS : null)
+  ?? catalog.find(item => item.tag === componentFromUrl)
+  ?? HOME;
+
+// panelsCompact vive en ?s= — hay que inicializarlo ANTES de renderContext/updateUrl.
+const PANELS_TTL_MS = 3_600_000;
+const SHELL_PREFS_TAG = 'iswc-gallery';
+const SHELL_PREFS_KEY = 'shell';
+const ICON_COMPACT = 'mdi:arrow-collapse-horizontal';
+const ICON_EXPAND = 'mdi:arrow-expand-horizontal';
+const panelsCompactBtn = document.getElementById('panelsCompactBtn') as HTMLElement | null;
+
+function readPanelsCompactPref(): boolean {
+  const saved = getComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
+  if (!saved) return false;
+  const savedAt = Number((saved as { savedAt?: unknown }).savedAt);
+  if (!Number.isFinite(savedAt) || savedAt <= 0 || Date.now() - savedAt > PANELS_TTL_MS) {
+    removeComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
+    return false;
+  }
+  return (saved as { panelsCompact?: unknown }).panelsCompact === true;
+}
+
+function writePanelsCompactPref(compact: boolean): void {
+  setComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY, {
+    panelsCompact: compact,
+    savedAt: Date.now(),
+  });
+}
+
+let panelsCompactUser =
+  stateFromUrl?.panelsCompact === true || readPanelsCompactPref();
 
 function encodeState(obj: GalleryState): string {
   return b64urlEncode(JSON.stringify(obj));
@@ -337,7 +417,16 @@ async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<voi
   const needsPg = (def.sections ?? []).some((s) =>
     (s.blocks ?? []).some((b) => Boolean(b.target) && Array.isArray(b.controls) && b.controls.length > 0),
   );
-  if (needsPg) tags.push('iswc-playground', 'iswc-preview-controls', 'iswc-select', 'iswc-option', 'iswc-input');
+  if (needsPg) {
+    tags.push(
+      'iswc-playground',
+      'iswc-preview-controls',
+      'iswc-select',
+      'iswc-option',
+      'iswc-input',
+      'iswc-details',
+    );
+  }
   // Los demos pueden citar tags de soporte sin catálogo (chrome hijos como
   // iswc-tab): pedirlos al loader tiraba el mount entero. Solo cargar los
   // que el catálogo sabe resolver; el resto queda como markup declarativo.
@@ -406,28 +495,39 @@ function sendContext(): void {
 }
 
 function updateUrl(): void {
-  // Inicio: URL limpia, sin `?s=` ni otros params. La home es el destino
-  // por defecto y se restaura desde localStorage; dejar params encima solo
-  // añade ruido al refrescar o compartir el enlace.
-  if (component === HOME) {
-    if (location.search) {
-      const dest = new URL(location.href);
-      dest.search = '';
-      history.replaceState(null, '', dest);
-    }
-    return;
-  }
-  // Gallery: `?s=` es el único state URL. theme/palette no van en la URL live;
-  // sí se conservan otras keys de nav (docs, cdnTab, …) escritas por url-nav.
+  // `?s=` es el único state URL. theme/palette no van en la URL live.
+  // panelsCompact sí (preferencia de shell). Home sin keys → URL limpia.
   const prev = readStateParam() || {};
-  const next: GalleryState = { ...prev, component: component.tag };
+  const next: GalleryState = { ...prev };
   delete next.theme;
   delete next.palette;
   delete next.embed;
-  const encoded = encodeState(next);
+
+  if (component === HOME) delete next.component;
+  else next.component = component.tag;
+
+  if (panelsCompactUser) next.panelsCompact = true;
+  else delete next.panelsCompact;
+
   const dest = new URL(location.href);
-  dest.search = '?s=' + encoded;
-  history.replaceState(null, '', dest);
+  const keys = Object.keys(next).filter((k) => next[k] !== undefined);
+  if (!keys.length) {
+    if (location.search) {
+      dest.search = '';
+      // Conserva hash solo si apunta a algo distinto de icons en home.
+      if (dest.hash === '#icons') dest.hash = '';
+      history.replaceState(null, '', dest);
+    } else if (location.hash === '#icons' && component === HOME) {
+      dest.hash = '';
+      history.replaceState(null, '', dest);
+    }
+  } else {
+    dest.search = '?s=' + encodeState(next);
+    // Alias canónico del mapa: #icons ↔ tag icons.
+    if (component === ICONS) dest.hash = 'icons';
+    else if (dest.hash === '#icons') dest.hash = '';
+    history.replaceState(null, '', dest);
+  }
 }
 
 function renderContext({ navSmooth = false }: { navSmooth?: boolean } = {}): void {
@@ -586,36 +686,7 @@ if (typeof ResizeObserver !== 'undefined') {
   }).observe(shellNav);
 }
 
-// --- paneles laterales: prefs con TTL 1h (mismo contrato que scroll-memory) ---
-const PANELS_TTL_MS = 3_600_000;
-const SHELL_PREFS_TAG = 'iswc-gallery';
-const SHELL_PREFS_KEY = 'shell';
-const ICON_COMPACT = 'mdi:arrow-collapse-horizontal';
-const ICON_EXPAND = 'mdi:arrow-expand-horizontal';
-
-const panelsCompactBtn = document.getElementById('panelsCompactBtn') as HTMLElement | null;
-
-/** Lee preferencia; si venció (>1h) se ignora y se borra. */
-function readPanelsCompactPref(): boolean {
-  const saved = getComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
-  if (!saved) return false;
-  const savedAt = Number((saved as { savedAt?: unknown }).savedAt);
-  if (!Number.isFinite(savedAt) || savedAt <= 0 || Date.now() - savedAt > PANELS_TTL_MS) {
-    removeComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY);
-    return false;
-  }
-  return (saved as { panelsCompact?: unknown }).panelsCompact === true;
-}
-
-function writePanelsCompactPref(compact: boolean): void {
-  setComponentPrefs(SHELL_PREFS_TAG, SHELL_PREFS_KEY, {
-    panelsCompact: compact,
-    savedAt: Date.now(),
-  });
-}
-
-let panelsCompactUser = readPanelsCompactPref();
-
+// --- paneles laterales: UI (estado ya inicializado arriba, antes de updateUrl) ---
 function syncPanelsCompactBtn(): void {
   if (!panelsCompactBtn) return;
   panelsCompactBtn.setAttribute('aria-pressed', panelsCompactUser ? 'true' : 'false');
@@ -643,6 +714,7 @@ function setPanelsCompactUser(next: boolean): void {
   syncPanelsCompactBtn();
   applyPanelsCompactDataset();
   syncNavLayout();
+  updateUrl();
 }
 
 // --- mobile / compact: el catálogo se muda a un drawer izquierdo ---

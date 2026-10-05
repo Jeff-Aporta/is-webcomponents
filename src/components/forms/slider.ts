@@ -10,7 +10,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
  * <iswc-slider> — Control de rango form-associated (vanilla + Shadow DOM).
  *
  * Atributos
- *   name, label, hint, color (brand|neutral|success|warning|danger)
+ *   name, label, hint, color (brand|neutral|text|success|warning|danger)
  *   value          number | "20,37" (rango con dos o más thumbs)
  *   min (0), max (100), step (1)  — step="null" restringe a los marks
  *   shift-step     salto con Shift+flechas y PageUp/PageDown (default step × 10)
@@ -93,7 +93,7 @@ import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
       .filter((m): m is { value: number; label: string } => m !== null);
   }
 
-  class IswcSlider extends ElementBase {
+  class IswcSlider extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'track-size', 'thumb-size', 'length', 'rail-color', 'fill-color', 'thumb-color', 'focus-color']; }

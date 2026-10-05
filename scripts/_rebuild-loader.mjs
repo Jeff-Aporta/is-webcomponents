@@ -36,7 +36,8 @@ async function walk(dir, out = []) {
                && !name.name.endsWith('.d.ts')
                && !name.name.includes('.selfcheck.')
                && !name.name.includes('.preview.')
-               && !name.name.endsWith('.json')) {
+               && !name.name.endsWith('.json')
+               && !/^doc-demo-(boot|host)\.(ts|js)$/.test(name.name)) {
       out.push(p);
     }
   }

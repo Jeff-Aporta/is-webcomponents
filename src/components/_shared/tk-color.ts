@@ -3,6 +3,8 @@
  * flujo lo resuelva antes de pintar. Equivale a:
  *   oklch(from C calc((sign(0.75 - l) + 1) / 2 * 100%) 0 h / 1)
  * es decir: fuente clara si la L (OKLCH) del fondo < 0.75; oscura en caso contrario.
+ *
+ * Alias público: `bg2fontColor` (mismo contrato).
  */
 
 function clamp01(n: number): number {
@@ -55,7 +57,21 @@ export function oklchLightness(color: string | null | undefined): number {
   return 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
 }
 
-/** Color de fuente con mejor contraste sobre `bg` (claro/oscuro), umbral OKLCH 0.75. */
-export function contrastFontColor(bg: string, light: string = '#ffffff', dark: string = '#0b1f33'): string {
-  return oklchLightness(bg) < 0.75 ? light : dark;
+/** Umbral OKLCH por defecto: por debajo → texto claro; por encima → oscuro. */
+export const BG2FONT_L_THRESHOLD = 0.75;
+
+/**
+ * Color de fuente legible sobre `bg` (OKLCH L vs umbral).
+ * Alias canónico del kit: `bg2fontColor`.
+ */
+export function contrastFontColor(
+  bg: string,
+  light: string = '#ffffff',
+  dark: string = '#0b1f33',
+  threshold: number = BG2FONT_L_THRESHOLD,
+): string {
+  return oklchLightness(bg) < threshold ? light : dark;
 }
+
+/** Alias explícito pedido por producto (bg → font via OKLCH). */
+export const bg2fontColor = contrastFontColor;

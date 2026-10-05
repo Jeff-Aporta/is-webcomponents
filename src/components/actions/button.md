@@ -230,7 +230,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 > Usa Shadow DOM con CSS propio, es form-associated (participa en <form>),
 > y expone parts + custom states para personalizaciÃ³n desde fuera.
 > Atributos
->  color      brand | neutral | success | warning | danger | info | error   (default: brand)
+>  color      brand | neutral | text | success | warning | danger | info | error   (default: brand)
 >  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
 >  hue          number (0-360)  color propio para el highlight cuando estÃ¡
 >                             [selected] dentro de <iswc-button-group>. Si no

@@ -8,8 +8,18 @@ import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-ed
 import type { DiagramTheme } from './diagram-types.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import { svgArrowHead, pathEndDirection } from '../_shared/diagram-arrow.js';
 import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
+import {
+  resolveErTheme,
+  pickThemeMode,
+  themeToDiagramTheme,
+  clusterPalette,
+  entityPaint,
+  edgePaint,
+  injectThemeCss,
+  type ErThemeJson,
+} from './theme.js';
 
 /**
  * <iswc-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
@@ -26,12 +36,25 @@ import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
  * Las posiciones del payload son semilla. El empaque (`pack` / `triptych`)
  * dispersa cajas con distancia mínima (`min-gap` o `layout.minGap`).
  *
- * Atributos: color (inline | viewer), open-on-click, min-gap
+ * Atributos: color (inline | viewer), open-on-click, min-gap, theme (insoft)
  * Propiedades: payload, spec, layout, isViewer, minGap
  * Eventos: iswc-render, iswc-open-viewer
  */
 
 const FONT = 'Tahoma,Arial,sans-serif';
+
+/** Clave de paleta InSoft según id/nombre del paquete. */
+function packagePaletteId(p: Paquete): string {
+  const blob = `${p.id ?? ''} ${p.name ?? ''} ${p.stereotype ?? ''}`.toLowerCase();
+  if (/cliente|app|front|isw|consumidor/.test(blob)) return 'apps';
+  if (/openai|llm|\bia\b/.test(blob)) return 'openai';
+  if (/dsclient|login|jwt.?ext/.test(blob)) return 'ds';
+  if (/\br2\b|storage|cloudflare|cdn/.test(blob)) return 'r2';
+  if (/\bdb\b|postgre|mssql|datos/.test(blob)) return 'db';
+  if (/azure/.test(blob)) return 'azure';
+  if (/api|ayudas|backend|function|http/.test(blob)) return 'api';
+  return String(p.id ?? 'oper').replace(/^pkg-/, '');
+}
 
 /** Arco C. `side` nombra abertura: right abre a +X, bottom abre a +Y (hacia el O). */
 function requiredSocketPath(cx: number, cy: number, r: number, side: Lado): string {
@@ -62,13 +85,14 @@ type AnchorPoint = Punto;
 
 class IswcComponentDiagram extends DiagramElementBase {
   static get observedAttributes(): string[] {
-    return [...DiagramElementBase.observedAttributes, 'min-gap'];
+    return [...DiagramElementBase.observedAttributes, 'min-gap', 'theme'];
   }
 
   /** Capa superior con las etiquetas de arista (ver #buildEdges). */
   #etiquetasEdges: SVGGElement | null = null;
 
   #theme: DiagramTheme | null = null;
+  #styleTheme: ErThemeJson | null = null;
 
   constructor() {
     super();
@@ -98,6 +122,13 @@ class IswcComponentDiagram extends DiagramElementBase {
     else this.setAttribute('min-gap', String(v));
   }
 
+  /** Tema InSoft (mismo JSON que ER). Attr `theme` o `componentDiagram.theme`. */
+  #resolveStyleTheme(): ErThemeJson | null {
+    const fromAttr = this.getAttribute('theme');
+    if (fromAttr) return resolveErTheme(fromAttr);
+    return resolveErTheme(this.payload);
+  }
+
   renderDiagram(): void {
     const spec = resolveComponentSpec(this.payload ?? {}, { minGap: this.minGap });
     this.spec = spec;
@@ -109,7 +140,12 @@ class IswcComponentDiagram extends DiagramElementBase {
     delete this.wrap.dataset.empty;
 
     const dark = this.isDarkTheme;
-    this.#theme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const styleThemeRaw = this.#resolveStyleTheme();
+    const styleTheme = styleThemeRaw ? pickThemeMode(styleThemeRaw, dark) : null;
+    this.#styleTheme = styleTheme;
+    this.#theme = styleTheme
+      ? themeToDiagramTheme(styleTheme, dark ? sequenceThemeDark() : sequenceThemeLight())
+      : (dark ? sequenceThemeDark() : sequenceThemeLight());
     this.syncThemeAttr();
 
     const layout: ComponentLayout = computeComponentLayout(spec);
@@ -126,10 +162,21 @@ class IswcComponentDiagram extends DiagramElementBase {
     this.svg.style.cssText = 'width:100%;height:100%;max-width:none;display:block;margin:0 auto';
     this.svg.innerHTML = '';
 
+    const fontFamily = this.#styleTheme?.font?.family ?? FONT;
+    if (this.#styleTheme) {
+      this.svg.setAttribute('data-cd-theme', this.#styleTheme.id);
+      injectThemeCss(this.svg, this.#styleTheme);
+      if (this.#styleTheme.canvas?.background) {
+        this.svg.style.background = this.#styleTheme.canvas.background;
+      }
+    } else {
+      this.svg.removeAttribute('data-cd-theme');
+    }
+
     if (layout.title) {
       const t = svgEl('text', {
         x: W / 2, y: layout.titleY, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '13', 'font-weight': '600', 'font-family': FONT,
+        'font-size': '13', 'font-weight': '600', 'font-family': fontFamily,
       });
       t.textContent = layout.title;
       this.svg.appendChild(t);
@@ -137,61 +184,73 @@ class IswcComponentDiagram extends DiagramElementBase {
     if (layout.subtitle) {
       const t = svgEl('text', {
         x: W / 2, y: layout.subtitleY, 'text-anchor': 'middle', fill: theme.muted,
-        'font-size': '11', 'font-family': FONT,
+        'font-size': '11', 'font-family': fontFamily,
       });
       t.textContent = layout.subtitle;
       this.svg.appendChild(t);
     }
 
-    // Paquetes (fondo) → cajas → aristas → lollipops O/C → etiquetas encima,
-    // para que el conector UML no quede tapado por las cajas.
-    this.#buildPackages(layout, theme);
-    this.#buildComponents(layout, theme);
+    this.#buildPackages(layout, theme, fontFamily);
+    this.#buildComponents(layout, theme, fontFamily);
     this.#etiquetasEdges = svgEl('g', { class: 'cd-edge-labels' });
-    this.#buildEdges(layout, theme);
-    this.#buildInterfaces(layout, theme);
+    this.#buildEdges(layout, theme, fontFamily);
+    this.#buildInterfaces(layout, theme, fontFamily);
     if (this.#etiquetasEdges) this.svg.appendChild(this.#etiquetasEdges);
 
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
-  #buildPackages(layout: ComponentLayout, theme: DiagramTheme): void {
+  #buildPackages(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
+    const styleTheme = this.#styleTheme;
     for (const rawP of layout.packages) {
       const p = rawP as LayoutPackage;
       const g = svgEl('g', { class: 'cd-pkg' });
-      const color = (p.hue != null && tkHueToHex(p.hue)) || theme.accent;
-      // Mismo lenguaje que el cajón de grupo del `<iswc-er-diagram>`: el tono
-      // tiñe apenas el fondo y vive en el borde. El relleno saturado anterior
-      // convertía el paquete en un bloque de color que se comía a los
-      // componentes de dentro — que son justo lo que hay que leer.
+      let fill: string;
+      let stroke: string;
+      let strokeWidth: number;
+      let dash: string | null;
+      let titleFill: string;
+      if (styleTheme) {
+        const pal = clusterPalette(styleTheme, packagePaletteId(p));
+        fill = pal.fill;
+        stroke = pal.border;
+        strokeWidth = styleTheme.cluster?.borderWidth ?? 1.5;
+        const da = styleTheme.cluster?.dasharray;
+        dash = da == null || da === '' ? null : da;
+        titleFill = styleTheme.cluster?.titleFill ?? '#000000';
+      } else {
+        const color = (p.hue != null && tkHueToHex(p.hue)) || theme.accent;
+        fill = p.hue != null ? `hsla(${p.hue},60%,50%,0.06)` : 'none';
+        stroke = color;
+        strokeWidth = 1.1;
+        dash = '2 5';
+        titleFill = color;
+      }
       g.appendChild(svgEl('path', {
         d: packageShapePath(p),
-        fill: p.hue != null ? `hsla(${p.hue},60%,50%,0.06)` : 'none',
-        stroke: color,
-        'stroke-width': 1.1,
-        'stroke-dasharray': '2 5',
+        fill,
+        stroke,
+        'stroke-width': strokeWidth,
+        'stroke-dasharray': dash,
         'stroke-linejoin': 'miter',
       }));
-      // Etiqueta del paquete en la pestaña, en cursiva y negrita (UML), en el
-      // color del grupo: es lo que ata el paquete con sus componentes.
-      // Título del grupo: caja sólida para que las aristas no lo tapen.
       const tb = p.titleBox;
       const label = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
       if (tb) {
         g.appendChild(svgEl('rect', {
-          x: tb.x, y: tb.y, width: tb.w, height: tb.h, rx: 4,
-          fill: 'var(--cd-title-fill, #ffffff)',
-          stroke: color,
-          'stroke-width': 0.8,
+          x: tb.x, y: tb.y, width: tb.w, height: tb.h, rx: styleTheme ? 0 : 4,
+          fill: '#FFFFFF',
+          stroke,
+          'stroke-width': styleTheme ? 1.5 : 0.8,
         }));
       }
       const t = svgEl('text', {
         x: (tb?.x ?? p.x) + 8, y: (tb?.y ?? p.y) + (tb ? tb.h * 0.7 : 10),
         'text-anchor': 'start',
-        fill: color,
+        fill: titleFill,
         'font-size': '11', 'font-weight': '700', 'font-style': 'italic',
         'letter-spacing': '0.04em',
-        'font-family': FONT,
+        'font-family': fontFamily,
       });
       t.textContent = label || '';
       g.appendChild(t);
@@ -199,44 +258,36 @@ class IswcComponentDiagram extends DiagramElementBase {
     }
   }
 
-  #buildEdges(layout: ComponentLayout, theme: DiagramTheme): void {
-    // Varias aristas que salen del mismo componente tienen su punto medio
-    // casi en la misma banda. Las chips se colocan en el layout como actores
-    // (`placeEdgeActors`): no se pisan entre sí ni a las cajas.
+  #buildEdges(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
+    const styleTheme = this.#styleTheme;
+    const ep = styleTheme ? edgePaint(styleTheme) : null;
     for (const rawE of layout.edges) {
-      // LayoutEdge tipa `labelX/labelY/labelW` como `unknown` por el index sig
-      // de `Arista` (`[extra: string]: unknown`). Cast a la forma real del
-      // layout para poder leer los offsets del chip de etiqueta.
       const e = rawE as typeof rawE & {
         labelX?: number;
         labelY?: number;
         labelW?: number;
       };
       if (!e.path) continue;
-      const color = edgeStrokeHex(e.hue, theme.accent);
+      const color = ep
+        ? (e.hue != null ? edgeStrokeHex(e.hue, ep.stroke) : ep.stroke)
+        : edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'cd-edge' });
       const ballSocket = Boolean(e.fromInterface && e.toInterface) || e.kind === 'assembly';
       const dashed = !ballSocket && (e.kind === 'dependency' || e.kind === 'realization');
       const path = svgEl('path', {
-        d: e.path, fill: 'none', stroke: color, 'stroke-width': 1.35,
+        d: e.path, fill: 'none', stroke: color,
+        'stroke-width': ep?.strokeWidth ?? 1.35,
         'stroke-linejoin': 'round', 'stroke-linecap': 'round',
-        'stroke-dasharray': dashed ? '6 4' : null,
+        'stroke-dasharray': dashed ? (ep?.dasharray || '6 4') : null,
         class: 'cd-edge__path',
       });
       g.appendChild(path);
       if (!ballSocket) {
-        // Recorta la punta de flecha para que el cuerpo del arrowhead NO
-        // entre dentro del nodo destino. El path ya termina en el borde
-        // (e.toX/Y), pero la flecha mide `len=7` + halfWidth=3.5 → sin
-        // este offset el cuerpo queda dentro del rect.
         const dir = pathEndDirection(e.path);
-        const back = 8; // px hacia atras del borde
+        const back = 8;
         const tipX = e.toX - dir.x * back;
         const tipY = e.toY - dir.y * back;
-        const head = (svgArrowHead as unknown as (opts: {
-          d: string; tip: { x: number; y: number }; color: string;
-          len?: number; halfWidth?: number;
-        }) => SVGElement)({
+        const head = svgArrowHead({
           d: e.path,
           tip: { x: tipX, y: tipY },
           color,
@@ -244,19 +295,19 @@ class IswcComponentDiagram extends DiagramElementBase {
         head.classList.add('cd-edge__arrow');
         g.appendChild(head);
       }
-      if (e.label) {
+      if (e.label && !(ep?.hideLabels)) {
         const mx = e.labelX ?? (e.fromX + e.toX) / 2;
         const my = e.labelY ?? (e.fromY + e.toY) / 2;
         const w = e.labelW ?? (e.label.length * 5.6 + 8);
         const etiqueta = svgEl('g', { class: 'cd-edge__label' });
         const hue = e.hue ?? 205;
         etiqueta.appendChild(svgEl('rect', {
-          x: mx - w / 2, y: my - 8, width: w, height: 16, rx: 4,
+          x: mx - w / 2, y: my - 8, width: w, height: 16, rx: styleTheme ? 0 : 4,
           fill: edgeChipFill(hue), class: 'cd-edge__chip',
         }));
         const t = svgEl('text', {
           x: mx, y: my + 3.5, 'text-anchor': 'middle', fill: edgeChipText(hue, theme.muted),
-          'font-size': '10', 'font-family': FONT,
+          'font-size': '10', 'font-family': fontFamily,
         });
         t.textContent = e.label;
         etiqueta.appendChild(t);
@@ -266,12 +317,14 @@ class IswcComponentDiagram extends DiagramElementBase {
     }
   }
 
-  #buildInterfaces(layout: ComponentLayout, theme: DiagramTheme): void {
+  #buildInterfaces(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
     const r = LOLLI_R;
+    const styleTheme = this.#styleTheme;
+    const accent = styleTheme ? (edgePaint(styleTheme).stroke) : theme.accent;
     for (const iface of layout.interfaces) {
       const g = svgEl('g', { class: 'cd-iface' });
       g.dataset.ifaceId = iface.id;
-      const stroke = (iface.hue != null && tkHueToHex(iface.hue, 48, 30)) || theme.accent;
+      const stroke = (iface.hue != null && tkHueToHex(iface.hue, 48, 30)) || accent;
       const comp = layout.components.find((c) => c.id === iface.component);
       if (comp && !iface.docked) {
         let bx: number;
@@ -309,7 +362,7 @@ class IswcComponentDiagram extends DiagramElementBase {
           x: iface.cx + dx, y: iface.cy + dy,
           'text-anchor': iface.side === 'right' ? 'start' : iface.side === 'left' ? 'end' : 'middle',
           fill: theme.muted, 'font-size': '10', 'font-style': 'italic',
-          'font-family': FONT,
+          'font-family': fontFamily,
         });
         t.textContent = `«${iface.name}»`;
         g.appendChild(t);
@@ -318,25 +371,30 @@ class IswcComponentDiagram extends DiagramElementBase {
     }
   }
 
-  #buildComponents(layout: ComponentLayout, theme: DiagramTheme): void {
+  #buildComponents(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
+    const styleTheme = this.#styleTheme;
+    const paint = styleTheme ? entityPaint(styleTheme, false) : null;
     for (const c of layout.components) {
       const g = svgEl('g', { class: 'cd-cmp' });
       g.dataset.cmpId = c.id;
-      const stroke = (c.hue != null && tkHueToHex(c.hue)) || theme.accent;
+      const stroke = paint?.border ?? ((c.hue != null && tkHueToHex(c.hue)) || theme.accent);
+      const fill = paint?.fill ?? theme.chipFill;
+      const rx = paint?.radius ?? 6;
       g.appendChild(svgEl('rect', {
-        x: c.x, y: c.y, width: c.w, height: c.h, rx: 6,
-        fill: theme.chipFill, stroke, 'stroke-width': 1.3,
+        x: c.x, y: c.y, width: c.w, height: c.h, rx,
+        fill, stroke, 'stroke-width': paint?.borderWidth ?? 1.3,
       }));
       if (c.stereotype) {
-        const headerFill = c.hue != null ? `hsla(${c.hue},65%,55%,0.22)` : theme.chipFill;
+        const headerFill = paint?.headerFill
+          ?? (c.hue != null ? `hsla(${c.hue},65%,55%,0.22)` : theme.chipFill);
         g.appendChild(svgEl('rect', {
-          x: c.x + 1, y: c.y + 1, width: c.w - 2, height: 15, rx: 5,
+          x: c.x + 1, y: c.y + 1, width: c.w - 2, height: 15, rx: Math.max(0, rx - 1),
           fill: headerFill,
         }));
         const stereo = svgEl('text', {
           x: c.x + c.w / 2, y: c.y + 12, 'text-anchor': 'middle',
           fill: theme.muted, 'font-size': '9.5', 'font-style': 'italic',
-          'font-family': FONT,
+          'font-family': fontFamily,
         });
         stereo.textContent = `«${c.stereotype}»`;
         g.appendChild(stereo);
@@ -344,10 +402,8 @@ class IswcComponentDiagram extends DiagramElementBase {
       const t = svgEl('text', {
         x: c.x + c.w / 2, y: c.labelY ?? c.y + c.h / 2 + 4, 'text-anchor': 'middle',
         fill: theme.text, 'font-size': '11', 'font-weight': '700',
-        'font-family': FONT,
+        'font-family': fontFamily,
       });
-      // Una línea por tspan: el nombre real de un componente rara vez cabe en
-      // el ancho de su caja (ver wrapLabel en component-spec.js).
       const lineas: string[] = c.lines ?? (c.name ? [c.name] : []);
       const lineHeight: number = c.lineHeight ?? 13;
       lineas.forEach((linea: string, i: number) => {
@@ -359,20 +415,20 @@ class IswcComponentDiagram extends DiagramElementBase {
       const bubbles = c.itemBubbles ?? [];
       for (const b of bubbles) {
         g.appendChild(svgEl('rect', {
-          x: b.x, y: b.y, width: b.w, height: b.h, rx: 4,
-          fill: theme.chipFillSoft ?? theme.chipFill, stroke: theme.border ?? 'rgba(0,0,0,0.08)',
+          x: b.x, y: b.y, width: b.w, height: b.h, rx: styleTheme ? 0 : 4,
+          fill: theme.chipFillSoft ?? '#FFFFFF', stroke: paint?.border ?? theme.border ?? 'rgba(0,0,0,0.08)',
           'stroke-width': 0.6,
         }));
         let textX = b.x + 6;
         if (b.method) {
           const badge = HTTP_METHOD_BADGE[b.method] ?? { fill: '#6b7280', text: '#fff' };
           g.appendChild(svgEl('rect', {
-            x: b.x + 3, y: b.y + 2.5, width: b.badgeW, height: b.h - 5, rx: 3,
+            x: b.x + 3, y: b.y + 2.5, width: b.badgeW, height: b.h - 5, rx: styleTheme ? 0 : 3,
             fill: badge.fill,
           }));
           const mt = svgEl('text', {
             x: b.x + 3 + b.badgeW / 2, y: b.y + b.h / 2 + 3.2, 'text-anchor': 'middle',
-            fill: badge.text, 'font-size': '7.5', 'font-weight': '700', 'font-family': FONT,
+            fill: badge.text, 'font-size': '7.5', 'font-weight': '700', 'font-family': fontFamily,
           });
           mt.textContent = b.method;
           g.appendChild(mt);
@@ -380,7 +436,7 @@ class IswcComponentDiagram extends DiagramElementBase {
         }
         const pt = svgEl('text', {
           x: textX, y: b.y + b.h / 2 + 3.4, 'text-anchor': 'start',
-          fill: theme.text, 'font-size': '9', 'font-family': FONT,
+          fill: theme.text, 'font-size': '9', 'font-family': fontFamily,
         });
         pt.textContent = b.path;
         g.appendChild(pt);

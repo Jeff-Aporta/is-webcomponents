@@ -3,7 +3,8 @@
  *
  * Un "intent" describe EL SIGNIFICADO del color que aplica el componente,
  * no su apariencia. Ejemplos: success (verde), warning (amarillo), danger
- * (rojo), brand (color de marca), neutral (gris, sin tinte).
+ * (rojo), brand (color de marca), neutral (gris muted), text (foreground
+ * del tema — plain/outlined legibles: Editar, Descargar…).
  *
  * Default: 'brand' (no 'neutral'). Convención 2026-08 — ver LLM.md §6.16.
  *
@@ -16,7 +17,8 @@
 
 export const INTENT = Object.freeze([
   'brand',     // color de marca (default)
-  'neutral',   // gris, sin tinte semántico
+  'neutral',   // gris #888, sin tinte semántico (muted)
+  'text',      // foreground del tema (--iswc-text)
   'success',   // verde — confirmación / validación OK
   'warning',   // amarillo — atención, no crítico
   'danger',    // rojo — error / acción destructiva

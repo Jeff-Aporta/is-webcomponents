@@ -132,7 +132,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <iswc-checkbox checked>brand (default)</iswc-checkbox>\r\n            <iswc-checkbox color=\"neutral\" checked>neutral</iswc-checkbox>\r\n            <iswc-checkbox color=\"success\" checked>success</iswc-checkbox>\r\n            <iswc-checkbox color=\"warning\" checked>warning</iswc-checkbox>\r\n            <iswc-checkbox color=\"danger\" checked>danger</iswc-checkbox>\r\n          </div>"
+          "html": "<div class=\"inline\">\r\n            <iswc-checkbox checked>brand (default)</iswc-checkbox>\r\n            <iswc-checkbox color=\"neutral\" checked>neutral</iswc-checkbox>\r\n            <iswc-checkbox color=\"text\" checked>text</iswc-checkbox>\r\n            <iswc-checkbox color=\"success\" checked>success</iswc-checkbox>\r\n            <iswc-checkbox color=\"warning\" checked>warning</iswc-checkbox>\r\n            <iswc-checkbox color=\"danger\" checked>danger</iswc-checkbox>\r\n          </div>"
         }
       ]
     },

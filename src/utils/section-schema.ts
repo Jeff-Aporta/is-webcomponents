@@ -176,13 +176,26 @@ export const PartsSectionSchema = z.object({
 });
 export type PartRow = z.infer<typeof PartsSectionSchema>["table"][number];
 
-/** API JS: filas `{ metodo, descripcion? }`. */
+/** API JS: filas `{ metodo, descripcion?, ejemplo? }`. */
 export const ApiJsSectionSchema = z.object({
   table: z.array(
     z
       .object({
         metodo: z.string().min(1, "método sin nombre"),
         descripcion: z.string().optional(),
+        desc: z.string().optional(),
+        /** Snippet HTML/JS copiable (celda Ejemplo → iswc-code en disclosure). */
+        ejemplo: z.union([
+          z.string(),
+          z.object({
+            kind: z.literal("code-ejemplo"),
+            code: z.string(),
+            lang: z.string().optional(),
+            summary: z.string().optional(),
+          }),
+        ]).optional(),
+        ejemploLang: z.string().optional(),
+        ejemploSummary: z.string().optional(),
       })
       .passthrough()
   ),

@@ -20,6 +20,7 @@ export const GALLERY_CHROME_TAGS = [
   'iswc-select',
   'iswc-option',
   'iswc-input',
+  'iswc-details',
 ];
 
 export function collectIsTags(...chunks: unknown[]) {

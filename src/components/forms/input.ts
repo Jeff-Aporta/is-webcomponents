@@ -55,7 +55,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
           class="icon-btn"
           id="clear"
           variant="text"
-          color="neutral"
+          color="text"
           tabindex="-1"
           aria-label="Limpiar"
           hidden
@@ -111,7 +111,7 @@ import { hasSlotted } from '../_shared/dom-utils.js';
   ];
 
 
-  class IswcInput extends ElementBase {
+  class IswcInput extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }

@@ -186,7 +186,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"brand (default)\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"neutral\" label=\"neutral\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"success\" label=\"success\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"warning\" label=\"warning\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"danger\" label=\"danger\" value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Token propio\" value=\"3\" style=\"--iswc-rating-color:#845ef7;\"></iswc-rating>\r\n          </div>"
+          "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"brand (default)\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"neutral\" label=\"neutral\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"text\" label=\"text\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"success\" label=\"success\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"warning\" label=\"warning\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"danger\" label=\"danger\" value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Token propio\" value=\"3\" style=\"--iswc-rating-color:#845ef7;\"></iswc-rating>\r\n          </div>"
         }
       ]
     },

@@ -52,6 +52,13 @@
   --iswc-badge-pulse-color: var(--iswc-text-dim);
 }
 
+:host([color="text"]) {
+  --_bg: color-mix(in srgb, var(--iswc-text) 14%, transparent);
+  --_border: var(--iswc-text);
+  --_text: var(--iswc-text);
+  --iswc-badge-pulse-color: var(--iswc-text);
+}
+
 :host([color="success"]) {
   --_bg: var(--iswc-success-soft, rgb(64 192 87 / 18%));
   --_border: var(--iswc-color-success);

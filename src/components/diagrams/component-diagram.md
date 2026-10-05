@@ -208,11 +208,13 @@ No declara integraciÃ³n form-associated propia en este mÃ³dulo.
   se pisan entre sÃ­ ni a las cajas. El PNG usa `labelX`/`labelW` del layout.
 - Sin `interfaces` en el payload, cada `edge`/`link` componenteâ†’componente
   sintetiza socket `C` en el origen y lollipop `O` en el destino.
+  Tras sintetizar `-(O-`, `enforceAssemblyEntityMargins` aleja las cajas
+  (â‰¥ `2Â·stem + 2Â·R + gap + 16`) para que O/C no se peguen al borde.
 - `dependency` sin lollipops se dibuja discontinua con punta polÃ­gono
   (PNG-safe, no `<marker>`). El conector `Oâ€“C` va en lÃ­nea continua.
 - El empaque (`pack` / `triptych`) reorganiza paquetes con hijos (y en
   `triptych`, los `sources`): `min-gap` (attr) o `layout.minGap` es el piso
-  de separaciÃ³n (default 64). `rowGap` / `colGutter` / `pkgCorridor` /
+  de separaciÃ³n (default 72). `rowGap` / `colGutter` / `pkgCorridor` /
   `sourceGap` afinan un eje si son mayores que ese piso. Los componentes
   libres conservan su posiciÃ³n semilla. `manual` no mueve x/y.
 - El tÃ­tulo del paquete (`Â«estereotipoÂ» nombre`) es una caja: las aristas

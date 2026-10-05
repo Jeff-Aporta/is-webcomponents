@@ -110,6 +110,7 @@ test('W24: ISWC_COLOR_MIX_FAMILIES tiene exactamente las 6 familias de color-mix
 test('W24: ISWC_COLOR_FAMILIES incluye las 6 de color-mix + brand', () => {
   assert.equal(ISWC_COLOR_FAMILIES.length, 7);
   assert.ok(ISWC_COLOR_FAMILIES.includes('brand'));
+  assert.ok(!(ISWC_COLOR_FAMILIES as readonly string[]).includes('text'), 'text es intent (= --iswc-text), no familia --iswc-color-*');
   for (const f of ISWC_COLOR_MIX_FAMILIES) {
     assert.ok(ISWC_COLOR_FAMILIES.includes(f), `falta ${f} en ISWC_COLOR_FAMILIES`);
   }

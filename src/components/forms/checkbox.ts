@@ -51,12 +51,12 @@ import { hasSlotted } from '../_shared/dom-utils.js';
     'icon', 'checked-icon', 'indeterminate-icon',
   ];
 
-  const VARIANTS: string[] = ['brand', 'neutral', 'success', 'warning', 'danger'];
+  const VARIANTS: string[] = ['brand', 'neutral', 'text', 'success', 'warning', 'danger'];
   const PLACEMENTS: string[] = ['end', 'start', 'top', 'bottom'];
 
   /** Sin flatten: el texto de fallback del slot no cuenta como contenido propio. */
 
-  class IswcCheckbox extends ElementBase {
+  class IswcCheckbox extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'radius', 'bg', 'bg-hover', 'border-color', 'accent', 'focus-color', 'mark-color', 'halo']; }

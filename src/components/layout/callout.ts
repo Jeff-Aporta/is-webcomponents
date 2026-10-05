@@ -12,7 +12,7 @@ import { TONE } from '../_shared/tone.js';
  * Modelo equivalente a wa-callout (Web Awesome) / v-alert.
  *
  * Atributos
- *   color     brand | neutral | success | warning | danger
+ *   color     brand | neutral | text | success | warning | danger
  *               (default 'brand', reflected)
  *   variant  accent | filled | outlined | filled-outlined | plain
  *               (default 'filled-outlined', reflected)
@@ -63,7 +63,7 @@ import { TONE } from '../_shared/tone.js';
     danger: 'mdi:alert-octagon-outline',
   };
 
-  class IswcCallout extends ElementBase {
+  class IswcCallout extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'border-color', 'text-color', 'accent', 'spacing']; }
 

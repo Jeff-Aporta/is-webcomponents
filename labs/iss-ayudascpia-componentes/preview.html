@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es" class="theme-light" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lab · iss-ayudascpia-componentes</title>
+  <style>
+    html, body { margin: 0; padding: 0; min-height: 100%; background: #FFFFFF; color-scheme: light;
+      font-family: "Poppins", ui-sans-serif, system-ui, sans-serif; }
+    body { display: grid; grid-template-rows: auto 1fr; }
+    header { padding: 10px 16px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    header h1 { font-size: 14px; font-weight: 700; margin: 0; color: #0F172A; }
+    header p { font-size: 11px; color: #475569; margin: 0; }
+    header button { font: inherit; font-size: 12px; padding: 4px 10px; cursor: pointer;
+      border: 1.5px solid #000; background: #F4B67B; }
+    header button[aria-pressed="true"] { background: #7ACFF4; }
+    main { padding: 8px; min-height: 0; }
+    iswc-component-diagram { width: 100%; min-height: 640px; display: block; }
+    iswc-component-diagram:not(:defined) { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lab · iss-ayudascpia-componentes</h1>
+    <p>theme=insoft · no es demo de galería</p>
+    <button type="button" id="btn-v2" aria-pressed="true">v2 actual</button>
+    <button type="button" id="btn-v1" aria-pressed="false">v1 legacy</button>
+  </header>
+  <main>
+    <iswc-component-diagram id="diag" theme="insoft" min-gap="72"></iswc-component-diagram>
+  </main>
+  <script type="module">
+    // CDN local del kit (lab). Tras ajustar el diagramador: rebuild + reload.
+    const KIT = new URL('../../dist/cdn/', import.meta.url).href;
+    await import(`${KIT}diagrams/component-diagram.min.js`);
+    await customElements.whenDefined('iswc-component-diagram');
+
+    const diag = document.getElementById('diag');
+    const load = async (file) => {
+      const r = await fetch(new URL(file, import.meta.url));
+      diag.payload = await r.json();
+    };
+
+    const btnV1 = document.getElementById('btn-v1');
+    const btnV2 = document.getElementById('btn-v2');
+    btnV2.addEventListener('click', async () => {
+      btnV2.setAttribute('aria-pressed', 'true');
+      btnV1.setAttribute('aria-pressed', 'false');
+      await load('./payload.json');
+    });
+    btnV1.addEventListener('click', async () => {
+      btnV1.setAttribute('aria-pressed', 'true');
+      btnV2.setAttribute('aria-pressed', 'false');
+      await load('./payload-v1-legacy.json');
+    });
+
+    await load('./payload.json');
+  </script>
+</body>
+</html>

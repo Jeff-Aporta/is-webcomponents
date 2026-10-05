@@ -1,0 +1,26 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "icons",
+  "category": "",
+  "title": "Mapa",
+  "titleHtml": false,
+  "storageKey": "docs-icons-map",
+  "mainClass": "icons-main",
+  "wrapperClass": "icons-map",
+  "hasBehavior": true,
+  "withoutToc": true,
+  "sections": [
+    {
+      "id": "map",
+      "title": "Mapa de componentes",
+      "hideTitle": true,
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<header class=\"imap__hero\">\n  <p class=\"imap__kicker\">Catálogo</p>\n  <h1 class=\"imap__title\">Mapa de componentes</h1>\n  <p class=\"imap__lede\">Todas las categorías y tags del kit, en grid — mismo orden que el nav izquierdo. Clic abre el preview.</p>\n  <iswc-input id=\"imapFilter\" type=\"search\" clearable placeholder=\"Filtrar por nombre o tag…\" aria-label=\"Filtrar componentes\"></iswc-input>\n</header>\n<div id=\"iconsMap\" class=\"imap\" aria-label=\"Mapa de categorías\"></div>"
+        }
+      ]
+    }
+  ],
+  "styles": ".icons-main {\n  display: block;\n  height: 100%;\n  overflow: auto;\n  padding: 0;\n  background: var(--iswc-bg);\n}\n.icons-map {\n  max-width: 72rem;\n  margin: 0 auto;\n  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2rem) 3rem;\n  box-sizing: border-box;\n}\n.imap__hero {\n  display: grid;\n  gap: 0.65rem;\n  margin-bottom: 1.75rem;\n  max-width: 36rem;\n}\n.imap__kicker {\n  margin: 0;\n  font-size: 0.7rem;\n  font-weight: 700;\n  letter-spacing: 0.12em;\n  text-transform: uppercase;\n  color: var(--iswc-accent);\n}\n.imap__title {\n  margin: 0;\n  font-size: clamp(1.6rem, 3vw, 2.2rem);\n  font-weight: 800;\n  letter-spacing: -0.03em;\n  color: var(--iswc-text);\n}\n.imap__lede {\n  margin: 0;\n  font-size: 0.95rem;\n  line-height: 1.55;\n  color: var(--iswc-text-soft);\n}\n.imap {\n  display: flex;\n  flex-direction: column;\n  gap: 1.75rem;\n}\n.imap__cat {\n  display: grid;\n  gap: 0.75rem;\n}\n.imap__cat-head {\n  display: flex;\n  align-items: center;\n  gap: 0.55rem;\n  margin: 0;\n  padding-bottom: 0.45rem;\n  border-bottom: 1px solid var(--iswc-border);\n  font-size: 0.78rem;\n  font-weight: 700;\n  letter-spacing: 0.06em;\n  text-transform: uppercase;\n  color: var(--iswc-text-soft);\n}\n.imap__cat-head iswc-icon {\n  color: var(--iswc-accent);\n  font-size: 1.1rem;\n}\n.imap__cat-count {\n  margin-left: auto;\n  font-variant-numeric: tabular-nums;\n  opacity: 0.75;\n  font-weight: 600;\n  letter-spacing: 0;\n  text-transform: none;\n}\n.imap__grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));\n  gap: 0.65rem;\n}\n.imap__card {\n  appearance: none;\n  display: grid;\n  grid-template-rows: auto auto 1fr;\n  justify-items: start;\n  gap: 0.35rem;\n  min-height: 6.2rem;\n  padding: 0.85rem 0.8rem;\n  border-radius: var(--iswc-radius, 0.65rem);\n  border: 1px solid var(--iswc-border);\n  background: var(--iswc-bg-elev, var(--iswc-bg));\n  color: var(--iswc-text);\n  text-align: left;\n  cursor: pointer;\n  box-shadow: var(--iswc-shadow, none);\n  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;\n}\n.imap__card:hover,\n.imap__card:focus-visible {\n  border-color: color-mix(in srgb, var(--iswc-accent) 55%, var(--iswc-border));\n  transform: translateY(-2px);\n  outline: none;\n  box-shadow: 0 10px 24px rgb(0 0 0 / 14%);\n}\n.imap__card iswc-icon {\n  font-size: 1.45rem;\n  color: var(--iswc-accent);\n}\n.imap__card-title {\n  margin: 0;\n  font-size: 0.82rem;\n  font-weight: 700;\n  line-height: 1.25;\n  color: var(--iswc-text);\n}\n.imap__card-tag {\n  margin: 0;\n  font-family: var(--iswc-mono, ui-monospace, Consolas, monospace);\n  font-size: 0.62rem;\n  color: var(--iswc-text-soft);\n  word-break: break-all;\n}\n.imap__empty {\n  margin: 1rem 0 0;\n  color: var(--iswc-text-soft);\n  font-size: 0.9rem;\n}\n.imap__cat[hidden],\n.imap__card[hidden] { display: none !important; }\n"
+}

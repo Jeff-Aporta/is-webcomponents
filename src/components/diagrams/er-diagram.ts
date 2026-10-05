@@ -2,29 +2,38 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './er-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
-import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
+import { edgeStrokeHex, edgeChipFromStroke } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import {
+  resolveErTheme,
+  themeToDiagramTheme,
+  clusterPalette,
+  entityPaint,
+  edgePaint,
+  findOrphanEntityIds,
+  injectThemeCss,
+  pickThemeMode,
+  type ErThemeJson,
+} from './theme.js';
 import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from './diagram-types.js';
-import type { TurtleTheme } from '../_shared/path-turtle.js';
 
 /**
  * <iswc-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
  *
  * Configuración por JSON, igual que <iswc-flowchart>:
  *
- *   <iswc-er-diagram>
+ *   <iswc-er-diagram theme="insoft">
  *     <script type="application/json">
  *       { "erDiagram": { "entities": [...], "relations": [...] } }
  *     </script>
  *   </iswc-er-diagram>
  *
- * Atributos: color (inline | viewer), open-on-click
+ * Atributos: color (inline | viewer), open-on-click, theme (id JSON: insoft)
  * Propiedades: payload, spec, layout, turtle, hiddenGroups
  * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
@@ -49,17 +58,35 @@ const iswcAnimDashCss = `
 `;
 
 class IswcErDiagram extends DiagramElementBase {
+  static get observedAttributes(): string[] {
+    return [...DiagramElementBase.observedAttributes, 'theme', 'animation', 'open-on-click'];
+  }
+
   #theme: DiagramTheme | null = null;
-  #turtle: SequenceTurtle | null = null;
+  #styleTheme: ErThemeJson | null = null;
+  #orphans: Set<string> = new Set();
   #hiddenGroups: Set<string> = new Set();
   #entityNodes = new Map<string, { e: ErLayoutEntity; g: SVGGElement; box: SVGPathElement }>();
   #relNodes = new Map<string, { r: ErLayoutEdge; g: SVGGElement; path: SVGPathElement }>();
   #hoverId: string | null = null;
 
+  /** DER no anima por tramos: la API turtle queda siempre null. */
+  get turtle() { return null; }
+
   constructor() {
     super();
     this.initDiagramShadow('er-svg', 'er-tooltip');
     adoptCss(this.shadowRoot!, import.meta.url);
+  }
+
+  /** Tema de estilo InSoft (JSON). Attr `theme`, o `erDiagram.theme` / `theme` en payload. */
+  #resolveStyleTheme(): ErThemeJson | null {
+    const fromAttr = this.getAttribute('theme');
+    if (fromAttr) {
+      const t = resolveErTheme(fromAttr);
+      if (t) return t;
+    }
+    return resolveErTheme(this.payload);
   }
 
   onDiagramConnected() {
@@ -69,8 +96,6 @@ class IswcErDiagram extends DiagramElementBase {
   }
 
   onDiagramDisconnected() {
-    this.#turtle?.destroy();
-    this.#turtle = null;
     this.wrap.removeEventListener('mousemove', this.#onMouseMove as EventListener);
     this.wrap.removeEventListener('mouseleave', this.#onMouseLeave as EventListener);
     this.wrap.removeEventListener('click', this.#onClick as EventListener);
@@ -78,7 +103,6 @@ class IswcErDiagram extends DiagramElementBase {
 
   onPayloadChanged() { this.#hiddenGroups = new Set(); }
 
-  get turtle() { return this.#turtle; }
   get hiddenGroups() { return this.#hiddenGroups; }
   set hiddenGroups(v) {
     this.#hiddenGroups = v instanceof Set ? v : new Set(v || []);
@@ -110,12 +134,20 @@ class IswcErDiagram extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const styleThemeRaw = this.#resolveStyleTheme();
+    const styleTheme = styleThemeRaw ? pickThemeMode(styleThemeRaw, dark) : null;
+    this.#styleTheme = styleTheme;
+    const theme: DiagramTheme = styleTheme
+      ? themeToDiagramTheme(styleTheme, dark ? sequenceThemeDark() : sequenceThemeLight())
+      : (dark ? sequenceThemeDark() : sequenceThemeLight());
     this.#theme = theme;
     this.syncThemeAttr();
 
     const layout = computeErLayout(visible);
     this.layout = layout;
+    this.#orphans = styleTheme
+      ? findOrphanEntityIds(layout.entities, layout.relations)
+      : new Set();
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
@@ -148,11 +180,24 @@ class IswcErDiagram extends DiagramElementBase {
       }
     }
 
+    // Tema JSON (p.ej. insoft): CSS tipografía + vars vía json2css.
+    if (this.#styleTheme) {
+      this.svg.setAttribute('data-er-theme', this.#styleTheme.id);
+      injectThemeCss(this.svg, this.#styleTheme);
+      if (this.#styleTheme.canvas?.background) {
+        this.svg.style.background = this.#styleTheme.canvas.background;
+      }
+    } else {
+      this.svg.removeAttribute('data-er-theme');
+    }
+
+    const fontFamily = this.#styleTheme?.font?.family ?? 'Tahoma,Arial,sans-serif';
+
     if (layout.titleLines?.length || layout.title) {
       const lines = layout.titleLines?.length ? layout.titleLines : [layout.title].filter((l): l is string => !!l);
       const t = svgEl('text', {
         x: W / 2, y: layout.titleY, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '13', 'font-weight': '600', 'font-family': fontFamily,
       });
       lines.forEach((line, i) => {
         const ts = svgEl('tspan', { x: W / 2, dy: i === 0 ? 0 : 16 });
@@ -165,7 +210,7 @@ class IswcErDiagram extends DiagramElementBase {
       const lines = layout.subtitleLines?.length ? layout.subtitleLines : [layout.subtitle].filter((l): l is string => !!l);
       const t = svgEl('text', {
         x: W / 2, y: layout.subtitleY, 'text-anchor': 'middle', fill: theme.muted,
-        'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '11', 'font-family': fontFamily,
       });
       lines.forEach((line, i) => {
         const ts = svgEl('tspan', { x: W / 2, dy: i === 0 ? 0 : 14 });
@@ -181,20 +226,8 @@ class IswcErDiagram extends DiagramElementBase {
     this.#buildRelations(layout, theme);
     this.#buildEntities(layout, theme);
 
-    const turtleGroup = svgEl('g');
-    this.svg.appendChild(turtleGroup);
-    this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
-    this.#turtle.setData({
-      messages: layout.relations.map((r, i: number) => ({
-        path: r.path, step: i + 1, log: r.label || '', groupHue: undefined,
-      })),
-      theme: theme as unknown as TurtleTheme,
-      viewW: W,
-      viewH: H,
-      autoLoop: this.isViewer,
-      onState: (state: unknown) => emit(this, 'iswc-turtle-state', state),
-    });
+    // DER no usa tortuga: es para procesos/flujos/secuencias, no entidades.
+    emit(this, 'iswc-turtle-state', { playing: false, replay: 0, idx: 0, total: 0 });
 
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
@@ -204,6 +237,8 @@ class IswcErDiagram extends DiagramElementBase {
    * padre (más opaco para que destaque la jerarquía) y un borde más fino sin
    * dashing — la línea dashed solo aparece en los cajones de raíz. */
   #buildClusters(layout: ErLayout, theme: DiagramTheme) {
+    const styleTheme = this.#styleTheme;
+    const fontFamily = styleTheme?.font?.family ?? 'Tahoma,Arial,sans-serif';
     // Resolver el hue del padre para clusters con parentId: el renderer pinta
     // los hijos con el color del padre para que la jerarquía visual sea
     // inmediata sin agregar un campo nuevo al layout.
@@ -215,36 +250,57 @@ class IswcErDiagram extends DiagramElementBase {
       }
     }
     for (const c of layout.clusters ?? []) {
-      const color = (c.hue != null && tkHueToHex(c.hue))
-        || (parentHue.get(c.id ?? -1) != null && tkHueToHex(parentHue.get(c.id ?? -1)!))
-        || theme.accent;
       const depth = c.depth ?? 0;
       const isNested = depth > 0;
       const g = svgEl('g', { class: isNested ? 'er-cluster er-cluster--nested' : 'er-cluster' });
       if (c.id) g.dataset.clusterId = c.id;
       if (c.parentId) g.dataset.clusterParent = c.parentId;
 
-      // Fondo: en raíz es muy tenue (0.06), en anidados usa el hue del padre
-      // con algo más de opacidad para que la jerarquía se lea de un vistazo.
-      const bgHue = c.hue ?? parentHue.get(c.id ?? -1);
-      const bg = bgHue != null
-        ? `hsla(${bgHue},60%,50%,${isNested ? 0.10 : 0.06})`
-        : 'none';
-      // Borde: raíz dashing tenue, anidado continuo y más fino.
+      let fill: string;
+      let stroke: string;
+      let strokeWidth: number;
+      let dash: string | null;
+      let rx: number;
+      let titleFill: string;
+
+      if (styleTheme) {
+        const pal = clusterPalette(styleTheme, c.id);
+        fill = pal.fill;
+        stroke = pal.border;
+        strokeWidth = styleTheme.cluster?.borderWidth ?? 1.5;
+        const da = styleTheme.cluster?.dasharray;
+        dash = da == null || da === '' ? null : da;
+        rx = styleTheme.cluster?.radius ?? 0;
+        titleFill = styleTheme.cluster?.titleFill ?? '#000000';
+      } else {
+        const color = (c.hue != null && tkHueToHex(c.hue))
+          || (parentHue.get(c.id ?? '') != null && tkHueToHex(parentHue.get(c.id ?? '')!))
+          || theme.accent;
+        const bgHue = c.hue ?? parentHue.get(c.id ?? '');
+        fill = bgHue != null
+          ? `hsla(${bgHue},60%,50%,${isNested ? 0.10 : 0.06})`
+          : 'none';
+        stroke = color;
+        strokeWidth = isNested ? 0.8 : 1.1;
+        dash = isNested ? null : '2 5';
+        rx = 12;
+        titleFill = color;
+      }
+
       g.appendChild(svgEl('rect', {
-        x: c.x, y: c.y, width: c.w, height: c.h, rx: 12,
-        fill: bg,
-        stroke: color,
-        'stroke-width': isNested ? 0.8 : 1.1,
-        'stroke-dasharray': isNested ? null : '2 5',
+        x: c.x, y: c.y, width: c.w, height: c.h, rx,
+        fill,
+        stroke,
+        'stroke-width': strokeWidth,
+        'stroke-dasharray': dash,
         class: 'er-cluster__box',
       }));
 
       if (c.name) {
         const t = svgEl('text', {
-          x: c.x + 14, y: c.y + 18, fill: color,
+          x: c.x + 14, y: c.y + 18, fill: titleFill,
           'font-size': '11', 'font-weight': '700', 'letter-spacing': '0.04em',
-          'font-family': 'Tahoma,Arial,sans-serif', class: 'er-cluster__title',
+          'font-family': fontFamily, class: 'er-cluster__title',
         });
         t.textContent = c.name;
         g.appendChild(t);
@@ -255,10 +311,13 @@ class IswcErDiagram extends DiagramElementBase {
   }
 
   #buildLegend(layout: ErLayout, theme: DiagramTheme) {
+    const fontFamily = this.#styleTheme?.font?.family ?? 'Tahoma,Arial,sans-serif';
     const g = svgEl('g', { class: 'er-legend' });
     layout.groups!.forEach((grp: DiagramGroup, gi: number) => {
       const ly = (layout.legendY ?? ((layout.subtitleY || layout.titleY || 22) + 18)) + gi * 16;
-      const color = tkHueToHex(grp.hue) ?? theme.accent;
+      const color = this.#styleTheme
+        ? clusterPalette(this.#styleTheme, grp.id).fill
+        : (tkHueToHex(grp.hue) ?? theme.accent);
       const off = this.#hiddenGroups.has(grp.id);
       const item = svgEl('g', { class: 'er-legend__item', opacity: off ? 0.4 : 1 });
       if (this.isViewer) {
@@ -273,7 +332,7 @@ class IswcErDiagram extends DiagramElementBase {
         : svgEl('circle', { cx: layout.legendX + 5, cy: ly, r: 4.5, fill: color }));
       const label = svgEl('text', {
         x: layout.legendX + 16, y: ly + 3.5, fill: theme.muted,
-        'font-size': '10', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '10', 'font-family': fontFamily,
         'text-decoration': off ? 'line-through' : null,
       });
       label.textContent = grp.name;
@@ -285,26 +344,34 @@ class IswcErDiagram extends DiagramElementBase {
 
   #buildRelations(layout: ErLayout, theme: DiagramTheme) {
     const traceEnabled = this.hasAttribute('animation') && this.getAttribute('animation') === 'trace';
+    const styleTheme = this.#styleTheme;
+    const ep = styleTheme ? edgePaint(styleTheme) : null;
+    const fontFamily = styleTheme?.font?.family ?? 'Consolas,Menlo,monospace';
+
     for (const r of layout.relations) {
-      const color = (r.style && r.style.stroke) || edgeStrokeHex(r.hue, theme.accent);
+      const color = ep?.stroke
+        ?? ((r.style && r.style.stroke) || edgeStrokeHex(r.hue, theme.accent));
       const g = svgEl('g', { class: 'er-rel' });
       g.dataset.relId = r.id;
       g.dataset.route = r.route ?? 'orthogonal';
 
       // dashStyle: 'solid' | 'dashed' | 'dotted' | undefined (default identifying-based)
       const isIdentifying = r.identifying !== false; // true por defecto
-      let dashAttr = null;
-      if (r.dashStyle === 'dashed') dashAttr = '6 4';
+      let dashAttr: string | null = null;
+      if (ep) {
+        dashAttr = ep.dasharray || null;
+      } else if (r.dashStyle === 'dashed') dashAttr = '6 4';
       else if (r.dashStyle === 'dotted') dashAttr = '2 4';
       else if (r.dashStyle === 'solid') dashAttr = null;
       else if (!isIdentifying) dashAttr = '6 4';
 
       const isAnimatable = r.dashStyle === 'dashed' || (!isIdentifying && r.dashStyle !== 'solid');
-      const animClass = (traceEnabled && isAnimatable) ? ' iswc-anim-edge-dashed' : '';
+      const animClass = (traceEnabled && isAnimatable && !ep) ? ' iswc-anim-edge-dashed' : '';
 
-      const width = (r.style && Number.isFinite(r.style.strokeWidth))
-        ? r.style.strokeWidth
-        : (r.width ?? 1.3);
+      const width = ep?.strokeWidth
+        ?? ((r.style && Number.isFinite(r.style.strokeWidth))
+          ? r.style.strokeWidth
+          : (r.width ?? 1.3));
       const path = svgEl('path', {
         d: r.path, fill: 'none', stroke: color, 'stroke-width': width,
         'stroke-dasharray': dashAttr,
@@ -316,16 +383,20 @@ class IswcErDiagram extends DiagramElementBase {
       g.appendChild(this.#buildMark(r.fromMark, color));
       g.appendChild(this.#buildMark(r.toMark, color));
 
-      if (r.label) {
+      if (r.label && !(ep?.hideLabels)) {
         const pad = 4;
         const w = r.labelW ?? (r.label.length * 5.6 + pad * 2);
+        // Chip = color de la arista; texto vía OKLCH (bg2fontColor).
+        const chip = edgeChipFromStroke(color);
         g.appendChild(svgEl('rect', {
           x: r.labelX - w / 2, y: r.labelY - 8, width: w, height: 16, rx: 4,
-          fill: edgeChipFill(r.hue), class: 'er-rel__chip',
+          fill: chip.fill, class: 'er-rel__chip',
         }));
         const t = svgEl('text', {
-          x: r.labelX, y: r.labelY + 3.5, 'text-anchor': 'middle', fill: edgeChipText(r.hue, theme.muted),
-          'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
+          x: r.labelX, y: r.labelY + 3.5, 'text-anchor': 'middle',
+          fill: chip.text,
+          'font-size': '10', 'font-family': fontFamily,
+          class: 'er-rel__label',
         });
         t.textContent = r.label;
         g.appendChild(t);
@@ -353,17 +424,25 @@ class IswcErDiagram extends DiagramElementBase {
   }
 
   #buildEntities(layout: ErLayout, theme: DiagramTheme) {
+    const styleTheme = this.#styleTheme;
+    const fontFamily = styleTheme?.font?.family ?? 'Tahoma,Arial,sans-serif';
+    const monoFamily = styleTheme ? fontFamily : 'Consolas,Menlo,monospace';
+
     for (const e of layout.entities) {
       const st = e.style ?? {};
-      const color = st.stroke || ((e.hue != null && tkHueToHex(e.hue)) || theme.accent);
+      const orphan = this.#orphans.has(e.id);
+      const paint = styleTheme ? entityPaint(styleTheme, orphan) : null;
+      const color = paint?.border
+        ?? (st.stroke || ((e.hue != null && tkHueToHex(e.hue)) || theme.accent));
       const g = svgEl('g', { class: 'er-entity' });
       g.dataset.entityId = e.id;
+      if (orphan) g.dataset.orphan = '';
       if (this.isViewer) g.style.cursor = 'pointer';
 
-      const fill = st.fill || theme.chipFill;
+      const fill = paint?.fill ?? (st.fill || theme.chipFill);
       const opacity = typeof st.opacity === 'number' ? st.opacity : null;
-      const radius = typeof st.radius === 'number' ? st.radius : 8;
-      const strokeWidth = typeof st.strokeWidth === 'number' ? st.strokeWidth : 1.3;
+      const radius = paint?.radius ?? (typeof st.radius === 'number' ? st.radius : 8);
+      const strokeWidth = paint?.borderWidth ?? (typeof st.strokeWidth === 'number' ? st.strokeWidth : 1.3);
       const box = svgEl('path', {
         d: entityBoxPath(e.x, e.y, e.w, e.h, radius),
         fill, stroke: color, 'stroke-width': strokeWidth,
@@ -372,18 +451,37 @@ class IswcErDiagram extends DiagramElementBase {
       });
       g.appendChild(box);
 
-      // Encabezado con tinte del hue del grupo (esquinas superiores ligeramente
-      // insertas: aproxima el redondeo de la caja sin necesitar un clip-path aparte).
-      const headerFill = e.hue != null ? `hsla(${e.hue},65%,55%,0.22)` : theme.chipFill;
+      // Encabezado: InSoft usa el mismo fill; default tiñe por hue del grupo.
+      const headerFill = paint?.headerFill
+        ?? (e.hue != null ? `hsla(${e.hue},65%,55%,0.22)` : theme.chipFill);
       g.appendChild(svgEl('rect', {
-        x: e.x + 1, y: e.y + 1, width: e.w - 2, height: ER_HEADER_H - 1, rx: 6,
+        x: e.x + 1, y: e.y + 1, width: e.w - 2, height: ER_HEADER_H - 1, rx: Math.min(6, radius),
         fill: headerFill, class: 'er-entity__header',
       }));
+
+      // Separadores InSoft (header / filas) — misma lógica que der.svg.
+      if (paint?.separator) {
+        const x1 = e.x + 1;
+        const x2 = e.x + e.w - 1;
+        const ys = [e.y + ER_HEADER_H];
+        for (let i = 1; i < e.attributes.length; i++) {
+          ys.push(e.y + ER_HEADER_H + i * ER_ROW_H);
+        }
+        for (const y of ys) {
+          g.appendChild(svgEl('line', {
+            x1, y1: y, x2, y2: y,
+            stroke: paint.separator,
+            'stroke-width': paint.separatorWidth,
+            class: 'er-entity__sep',
+          }));
+        }
+      }
+
       const nameT = svgEl('text', {
         x: e.x + e.w / 2, y: e.y + ER_HEADER_H / 2, 'text-anchor': 'middle',
         'dominant-baseline': 'middle',
         fill: theme.text, 'font-size': '11', 'font-weight': '700',
-        'font-family': 'Tahoma,Arial,sans-serif',
+        'font-family': fontFamily, class: 'er-entity__name',
       });
       // Wrap del nombre de la entidad si es largo.
       const entityResult = wrapText({
@@ -391,7 +489,7 @@ class IswcErDiagram extends DiagramElementBase {
         maxWidth: e.w - 12,
         maxHeight: ER_HEADER_H - 4,
         fontSize: 11,
-        fontFamily: 'Tahoma,Arial,sans-serif',
+        fontFamily,
         overflow: 'grow',
       });
       const entityTspans = buildTspans(
@@ -431,8 +529,11 @@ class IswcErDiagram extends DiagramElementBase {
         }
         const nameEl = svgEl('text', {
           x: leftX, y: ry, fill: theme.text, 'font-size': '10.5',
-          'font-family': 'Tahoma,Arial,sans-serif',
+          'font-family': fontFamily,
+          class: 'er-entity__attr-name',
         });
+        nameEl.dataset.attrIndex = String(i);
+        nameEl.dataset.attrField = 'name';
         g.appendChild(nameEl);
         if (a.name.includes('{{')) applySvgTextContent(nameEl, a.name);
         else nameEl.textContent = a.name;
@@ -440,8 +541,11 @@ class IswcErDiagram extends DiagramElementBase {
         if (a.type) {
           const typeEl = svgEl('text', {
             x: e.x + e.w - 10, y: ry, 'text-anchor': 'end', fill: theme.muted,
-            'font-size': '9.5', 'font-family': 'Consolas,Menlo,monospace',
+            'font-size': '9.5', 'font-family': monoFamily,
+            class: 'er-entity__attr-type',
           });
+          typeEl.dataset.attrIndex = String(i);
+          typeEl.dataset.attrField = 'type';
           typeEl.textContent = a.type;
           g.appendChild(typeEl);
         }
@@ -498,15 +602,14 @@ class IswcErDiagram extends DiagramElementBase {
       const active = entityId === id;
       node.g.classList.toggle('iswc-active', active);
       node.g.classList.toggle('iswc-dim', !!id && !active);
-      node.box.setAttribute('stroke-width', String(active ? 2.1 : 1.3));
+      const baseW = this.#styleTheme?.entity?.borderWidth ?? 1.3;
+      node.box.setAttribute('stroke-width', String(active ? Math.max(2.1, baseW + 0.6) : baseW));
     }
     for (const [, rel] of this.#relNodes) {
       const touches = !!id && (rel.r.from === id || rel.r.to === id);
       rel.g.classList.toggle('iswc-active', touches);
       rel.g.classList.toggle('iswc-dim', !!id && !touches);
     }
-
-    this.#turtle?.setPaused(!!id);
 
     if (!entry) {
       this.tooltipEl.hidden = true;

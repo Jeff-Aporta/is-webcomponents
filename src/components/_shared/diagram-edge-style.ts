@@ -1,4 +1,5 @@
 import { tkHueToHex } from './tk-hue.js';
+import { bg2fontColor } from './tk-color.js';
 
 /** Arista del grafo con un hue opcional para colorearla. */
 export type EdgeWithHue = { hue?: number; [key: string]: unknown };
@@ -18,10 +19,17 @@ export function edgeStrokeHex(hue: number | null | undefined, fallback: string =
   return tkHueToHex(hue, 48, 30) || fallback;
 }
 
+/** Fondo del chip = color de la arista (sólido). */
 export function edgeChipFill(hue: number | null | undefined): string {
-  return `hsla(${hue ?? 205},42%,96%,0.5)`;
+  return edgeStrokeHex(hue);
 }
 
-export function edgeChipText(hue: number | null | undefined, fallback: string): string {
-  return edgeStrokeHex(hue, fallback);
+/** Texto del chip: contraste OKLCH sobre el color de la arista. */
+export function edgeChipText(hue: number | null | undefined, fallback: string = '#334155'): string {
+  return bg2fontColor(edgeStrokeHex(hue, fallback));
+}
+
+/** Chip a partir de un stroke ya resuelto (tema / override). */
+export function edgeChipFromStroke(stroke: string): { fill: string; text: string } {
+  return { fill: stroke, text: bg2fontColor(stroke) };
 }

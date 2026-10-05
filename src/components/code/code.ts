@@ -19,13 +19,16 @@
  *   min-height        CSS length → --iswc-code-min-height
  *
  * Props JS: value, lang, mode, formatConfig, themeConfig, document, marks
- * Métodos: format(), getDocument(), setDocument(), code2json(), json2code(doc),
+ * Métodos: format(config?), IswcCode.formatCode(text, lang, config),
+ *          getDocument(), setDocument(), code2json(), json2code(doc),
  *          setMarks(), clearMarks(), focus(), refresh(), registerLanguage (módulo)
  * Eventos: iswc-ready, iswc-input, iswc-change, iswc-cursor, iswc-mark-activate
  * Parts: root, editor, tooltip
  * Custom states: :state(blank) :state(inline) :state(disabled) :state(readonly)
+ *
+ * `format` / `formatConfig` — JSON estilo Prettier:
+ *   { tabWidth, useTabs, printWidth, semi, singleQuote, trailingComma, endOfLine }
  */
-
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
 import {
   attachFormInternals, setFormValue, setCustomState,
@@ -357,12 +360,27 @@ class IswcCode extends ElementBase {
     this.#paintMarks();
   }
 
-  format(): string {
+  format(config?: CodeFormatConfig | null): string {
     const lang = resolveLanguage(this.lang)?.id || this.lang;
-    const next = formatCode(this.value, lang, this.#formatConfig);
+    const cfg = config != null
+      ? normalizeFormatConfig({ ...this.#formatConfig, ...(config as object) })
+      : this.#formatConfig;
+    const next = formatCode(this.value, lang, cfg);
     this.#setValue(next, true);
-    emit(this, 'iswc-change', { value: next, formatted: true });
+    emit(this, 'iswc-change', { value: next, formatted: true, format: cfg });
     return next;
+  }
+
+  /**
+   * Formatea texto sin instancia (misma API que Prettier-lite del kit).
+   * `config` = opciones tipo Prettier (`tabWidth`, `printWidth`, `semi`, …).
+   */
+  static formatCode(
+    text: string,
+    lang = 'javascript',
+    config: CodeFormatConfig | object = {},
+  ): string {
+    return formatCode(text, lang, config);
   }
 
   focus(): void {

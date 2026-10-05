@@ -331,7 +331,7 @@ body::-webkit-scrollbar-corner {
 .section p {
   margin: 0 0 12px;
   color: var(--iswc-text-soft);
-  max-width: 68ch;
+  max-width: none; /* homogenizar con .lede: todo el ancho útil */
 }
 
 /* --- Demo cards ----------------------------------------------------- */

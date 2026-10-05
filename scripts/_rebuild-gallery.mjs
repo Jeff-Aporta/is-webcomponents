@@ -11,7 +11,8 @@ await build({
   bundle: true,
   minify: true,
   format: 'esm',
-  target: 'es2020',
+  // es2022: TLA waitForGalleryShell (host sibling async).
+  target: 'es2022',
   legalComments: 'none',
   external: ['node:fs', 'node:url'],
 });

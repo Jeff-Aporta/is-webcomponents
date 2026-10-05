@@ -9,8 +9,7 @@
  * No evalúa strings de comportamiento. El markup estático de demos sí puede
  * ser HTML string en la definición (serializable); los listeners viven en mount.
  *
- *   import ButtonGroupPreview from '../actions/button-group.preview.controller.js';
- *   el.preview = new ButtonGroupPreview();
+ *   el.preview = new SomeComponentPreview();
  */
 import { withStyleAttrs } from '../../core/attrs.js';
 import { renderDefinition } from '../../previews/_kit/render.js';
@@ -45,7 +44,7 @@ interface DrawerEl extends HTMLElement {
   hide?(): void;
 }
 
-class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
+class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
 
   #preview: ISComponentPreviewLike | null = null;
   #ctx: PreviewMountContext | null = null;

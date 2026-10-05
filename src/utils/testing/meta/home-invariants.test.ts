@@ -292,7 +292,7 @@ test('todo id que consulta el behavior existe en el markup', () => {
 });
 
 test('los CTA del hero y el bloque de consumo por CDN están en el markup', () => {
-  for (const id of ['ctaExplore', 'ctaButton', 'ctaCharts', 'cdnJsCss', 'cdnBundle', 'homeProgress']) {
+  for (const id of ['ctaExplore', 'ctaButton', 'ctaCharts', 'cdnJsCss', 'cdnBundle']) {
     assert.ok(markup.includes(`id="${id}"`), `falta #${id} en el markup del home`);
   }
 });

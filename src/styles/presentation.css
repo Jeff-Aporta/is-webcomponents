@@ -282,7 +282,7 @@ iswc-main.main {
   .lede {
     color: var(--iswc-text-soft);
     margin: 0 0 28px;
-    max-inline-size: 62ch;
+    max-inline-size: none; /* ancho completo de la columna de docs */
     font-size: 1.02rem;
     line-height: 1.65;
     font-weight: 450;
@@ -307,7 +307,7 @@ iswc-main.main {
   p {
     margin: 0 0 12px;
     color: var(--iswc-text-soft);
-    max-inline-size: 68ch;
+    max-inline-size: none; /* homogenizar con el lede: todo el ancho útil */
   }
 }
 
@@ -1102,6 +1102,24 @@ table.ref {
     border-radius: 4px;
     color: var(--iswc-text);
     border: 1px solid var(--iswc-border-soft);
+  }
+
+  /* Columna Ejemplo (API JS): disclosure + iswc-code */
+  td.ref__ejemplo {
+    min-inline-size: 12rem;
+    max-inline-size: 28rem;
+  }
+  td.ref__ejemplo iswc-details.api-ejemplo {
+    display: block;
+    inline-size: 100%;
+  }
+  td.ref__ejemplo iswc-code.api-ejemplo__code {
+    display: block;
+    inline-size: 100%;
+    margin-block-start: 0.35rem;
+    --iswc-code-min-height: 4rem;
+    max-block-size: 16rem;
+    overflow: auto;
   }
   td:first-child { inline-size: 30%; }
   td:nth-child(2) { inline-size: 16%; color: var(--iswc-text-soft); white-space: nowrap; }

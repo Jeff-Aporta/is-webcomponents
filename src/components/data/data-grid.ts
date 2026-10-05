@@ -157,16 +157,16 @@ import '../forms/checkbox.js';
         </div>
         <span class="tool-gap"></span>
         <slot name="toolbar-end"></slot>
-        <iswc-button variant="plain" color="neutral" class="tool" data-tool="columns" part="toolbar-button" aria-haspopup="dialog">
+        <iswc-button variant="plain" color="text" class="tool" data-tool="columns" part="toolbar-button" aria-haspopup="dialog">
           <span aria-hidden="true">${ICONS.columns}</span><span class="tool-text"></span>
         </iswc-button>
-        <iswc-button variant="plain" color="neutral" class="tool" data-tool="filters" part="toolbar-button" aria-haspopup="dialog">
+        <iswc-button variant="plain" color="text" class="tool" data-tool="filters" part="toolbar-button" aria-haspopup="dialog">
           <span aria-hidden="true">${ICONS.filter}</span><span class="tool-text"></span><span class="badge" hidden></span>
         </iswc-button>
-        <iswc-button variant="plain" color="neutral" class="tool" data-tool="density" part="toolbar-button" aria-haspopup="menu">
+        <iswc-button variant="plain" color="text" class="tool" data-tool="density" part="toolbar-button" aria-haspopup="menu">
           <span aria-hidden="true">${ICONS.density}</span><span class="tool-text"></span>
         </iswc-button>
-        <iswc-button variant="plain" color="neutral" class="tool" data-tool="export" part="toolbar-button" aria-haspopup="menu">
+        <iswc-button variant="plain" color="text" class="tool" data-tool="export" part="toolbar-button" aria-haspopup="menu">
           <span aria-hidden="true">${ICONS.export}</span><span class="tool-text"></span>
         </iswc-button>
       </div>
@@ -355,7 +355,7 @@ import '../forms/checkbox.js';
   /** Argumento del `getActions` que acepta el kit (forma más explícita). */
   type ActionParams = { row: Row; id: CellValue; colDef: ColumnDef };
 
-  class IswcDataGrid extends withStyleAttrs(HTMLElement) {
+  class IswcDataGrid extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] {
       return [...OBSERVED, 'radius', 'accent', 'header-bg', 'row-hover', 'height', 'padding'];

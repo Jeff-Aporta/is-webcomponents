@@ -143,6 +143,10 @@
   --iswc-switch-accent: var(--iswc-control-border);
   --iswc-switch-thumb: var(--iswc-on-brand);
 }
+:host([color="text"]) {
+  --iswc-switch-accent: var(--iswc-text);
+  --iswc-switch-thumb: var(--iswc-on-brand);
+}
 :host([color="success"]) {
   --iswc-switch-accent: var(--iswc-color-success);
   --iswc-switch-thumb: var(--iswc-on-brand);

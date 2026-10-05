@@ -48,7 +48,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           part="clear"
           class="clear"
           variant="text"
-          color="neutral"
+          color="text"
           tabindex="-1"
           aria-label="Limpiar"
           hidden
@@ -116,7 +116,7 @@ import { setStringAttr } from '../_shared/reflect.js';
 
   let uidSeq = 0;
 
-  class IswcSelect extends ElementBase {
+  class IswcSelect extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color', 'danger-color']; }
@@ -510,6 +510,10 @@ import { setStringAttr } from '../_shared/reflect.js';
       if (this.required) this.#trigger.setAttribute('aria-required', 'true');
       else this.#trigger.removeAttribute('aria-required');
       if (labelAttr) this.#trigger.setAttribute('aria-label', labelAttr);
+      // title del host → trigger (tooltips nativos del listbox/trigger)
+      const hostTitle = this.getAttribute('title') || this.getAttribute('aria-label') || labelAttr;
+      if (hostTitle) this.#trigger.title = hostTitle;
+      else this.#trigger.removeAttribute('title');
       this.#listbox.setAttribute('aria-multiselectable', String(this.multiple));
       this.#renderDisplay();
     }
@@ -643,6 +647,8 @@ import { setStringAttr } from '../_shared/reflect.js';
       row.setAttribute('role', 'option');
       row.dataset.index = String(index);
       row.setAttribute('aria-selected', String(this.#values.includes(opt.value)));
+      const optTitle = opt.el.getAttribute('title') || opt.label || opt.value;
+      if (optTitle) row.title = optTitle;
       if (opt.disabled) {
         row.setAttribute('aria-disabled', 'true');
         row.setAttribute('data-disabled', '');

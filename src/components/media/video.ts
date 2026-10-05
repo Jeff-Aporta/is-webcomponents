@@ -56,7 +56,7 @@ interface IswcCheckIconButton extends HTMLElement {
       <video part="video" class="video" playsinline></video>
       <slot></slot>
       <div class="scrim" aria-hidden="true"></div>
-      <iswc-button part="big-play" class="big-play" variant="text" color="neutral" aria-label="Reproducir">
+      <iswc-button part="big-play" class="big-play" variant="text" color="text" aria-label="Reproducir">
         <iswc-icon icon="mdi:play" aria-hidden="true"></iswc-icon>
       </iswc-button>
       <div part="controls" class="controls" hidden>
@@ -104,7 +104,7 @@ interface IswcCheckIconButton extends HTMLElement {
           </span>
           <span class="spacer"></span>
           <div class="settings">
-            <iswc-button part="settings-button" class="iconbtn speed" variant="text" color="neutral"
+            <iswc-button part="settings-button" class="iconbtn speed" variant="text" color="text"
                     aria-label="Velocidad de reproducción" aria-haspopup="true" aria-expanded="false">
               <iswc-icon icon="mdi:cog-outline" aria-hidden="true"></iswc-icon>
             </iswc-button>
@@ -149,7 +149,7 @@ interface IswcCheckIconButton extends HTMLElement {
     return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
   }
 
-  class IswcVideo extends withStyleAttrs(HTMLElement) {
+  class IswcVideo extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'accent']; }
 

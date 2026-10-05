@@ -15,6 +15,7 @@
 :host([hidden]) { display: none !important; }
 
 :host([color="neutral"]) { --iswc-slider-fill: var(--iswc-control-border); }
+:host([color="text"]) { --iswc-slider-fill: var(--iswc-text); }
 :host([color="success"]) { --iswc-slider-fill: var(--iswc-color-success); }
 :host([color="warning"]) { --iswc-slider-fill: var(--iswc-color-warning); }
 :host([color="danger"])  { --iswc-slider-fill: var(--iswc-color-danger); }

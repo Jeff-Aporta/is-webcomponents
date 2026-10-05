@@ -11,7 +11,7 @@ import {
  *
  * Atributos
  *   level      1 | 2 | 3 | 4 | 5 | 6                       (default 1)
- *   color      brand | neutral | info | success | warning | danger
+ *   color      brand | neutral | text | info | success | warning | danger
  *              | current | <color CSS>                     (default: acento)
  *   mix        % → `--iswc-heading-mix`; ausente = default del nivel
  *   mix-with   text | transparent | white | black | current | <color CSS>
@@ -26,7 +26,7 @@ import {
   const LEVELS = ['1', '2', '3', '4', '5', '6'];
   const DEFAULT_MIX = { 1: '15%', 2: '30%', 3: '45%', 4: '65%', 5: '80%', 6: '90%' };
 
-  class IswcHeading extends ElementBase {
+  class IswcHeading extends ElementBase {
 
     static get observedAttributes(): string[] {
       return ['level', 'color', 'mix', 'mix-with', 'size'];

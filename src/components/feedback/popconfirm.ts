@@ -40,7 +40,7 @@ import '../actions/button.js';
       <div class="arrow" part="arrow"></div>
       <div class="message" part="message"><slot name="message"></slot></div>
       <div class="actions" part="actions">
-        <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="neutral" class="cancel" data-popconfirm-cancel>Cancelar</iswc-button></slot></span>
+        <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel" data-popconfirm-cancel>Cancelar</iswc-button></slot></span>
         <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-popconfirm-confirm>Aceptar</iswc-button></slot></span>
       </div>
     </div>
@@ -53,7 +53,7 @@ import '../actions/button.js';
     'top-start', 'top-end', 'bottom-start', 'bottom-end',
   ];
 
-  class IswcPopconfirm extends ElementBase {
+  class IswcPopconfirm extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent', 'danger-color']; }
 

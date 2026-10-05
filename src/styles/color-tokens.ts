@@ -101,7 +101,8 @@ export const ISWC_COLOR_MIX_FAMILIES = [
 ] as const;
 export type IswcColorMixFamily = typeof ISWC_COLOR_MIX_FAMILIES[number];
 
-/** Las 7 familias semanticas del kit (incluye brand, que usa hsl-from). */
+/** Las 7 familias semanticas del kit (incluye brand, que usa hsl-from).
+ *  `text` es intent de componente (= --iswc-text), no familia --iswc-color-*. */
 export const ISWC_COLOR_FAMILIES = [...ISWC_COLOR_MIX_FAMILIES, 'brand'] as const;
 export type IswcColorFamily = typeof ISWC_COLOR_FAMILIES[number];
 

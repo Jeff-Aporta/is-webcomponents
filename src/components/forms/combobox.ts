@@ -30,7 +30,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           part="clear"
           class="clear"
           variant="text"
-          color="neutral"
+          color="text"
           tabindex="-1"
           aria-label="Limpiar"
           hidden
@@ -42,7 +42,7 @@ import { setStringAttr } from '../_shared/reflect.js';
           part="trigger"
           class="trigger"
           variant="text"
-          color="neutral"
+          color="text"
           tabindex="-1"
           aria-label="Abrir"
         >
@@ -62,7 +62,7 @@ import { setStringAttr } from '../_shared/reflect.js';
     'disabled', 'required', 'open', 'clearable'
   ];
 
-  class IswcCombobox extends ElementBase {
+  class IswcCombobox extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }

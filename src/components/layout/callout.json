@@ -23,6 +23,7 @@
               "options": [
                 "brand",
                 "neutral",
+                "text",
                 "success",
                 "warning",
                 "danger"
@@ -165,7 +166,7 @@
           "rows": [
             [
               "<code>variant</code>",
-              "brand · neutral · success · warning · danger",
+              "brand · neutral · text · success · warning · danger",
               "neutral",
               "Tono. Reflected."
             ],
@@ -280,7 +281,7 @@
         "table": [
           {
             "name": "<code>variant</code>",
-            "type": "brand · neutral · success · warning · danger",
+            "type": "brand · neutral · text · success · warning · danger",
             "default": "neutral",
             "desc": "Tono. Reflected."
           },

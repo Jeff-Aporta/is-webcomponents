@@ -11,12 +11,23 @@
      lightbox para evitar el efecto "vidrio esmerilado" que distrae. */
   --iswc-lightbox-backdrop: rgb(0 0 0 / 70%);
   --iswc-lightbox-backdrop-blur: 0px;
+}
 
-  /* Cerrado: no participa del layout. Abierto: contents para que el dialog
-     top-layer no deje un hueco fantasma del host. */
+/* Cerrado/abierto con selectores compuestos (NO nesting `&[open]` dentro
+   de `:host`): en Chromium ese nesting no matchea y el dialog modal deja
+   la página inerte con host en display:none. esbuild además re-anida
+   `:host` + `:host([open])` al minificar — `:not([open])` evita eso. */
+:host(:not([open])) {
   display: none;
-  &[open] { display: contents; }
-  &[hidden] { display: none !important; }
+}
+
+:host([open]) {
+  /* contents: el dialog top-layer no deja hueco fantasma del host. */
+  display: contents;
+}
+
+:host([hidden]) {
+  display: none !important;
 }
 
 /* solid: backdrop completamente opaco a pantalla completa. */
@@ -123,6 +134,17 @@
     --iswc-icon-size: 1.3rem;
     pointer-events: none;
   }
+}
+
+.lb-share {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  --iswc-control-size: 2.4rem;
+  &[hidden] { display: none; }
+  iswc-icon { --iswc-icon-size: 1.3rem; }
 }
 
 .lb-stage {

@@ -47,10 +47,23 @@ export interface PreviewHtmlBlock {
   html: string;
 }
 
+export interface PreviewCodeEjemploCell {
+  /** Celda de tabla: disclosure + <iswc-code> copiable. */
+  kind: 'code-ejemplo';
+  /** Fuente del snippet (preferir HTML autocontenido). */
+  code: string;
+  /** Lenguaje de iswc-code (default html). */
+  lang?: string;
+  /** Texto del summary del disclosure (default "Ejemplo"). */
+  summary?: string;
+}
+
+export type PreviewTableCell = string | PreviewCodeEjemploCell;
+
 export interface PreviewTableBlock {
   kind: 'table';
   columns: string[];
-  rows: string[][];
+  rows: PreviewTableCell[][];
   /** HTML opcional encima de la tabla */
   captionHtml?: string;
   /** Clases extra del `<table>` (además de `ref`). Ej. `ref--tokens`. */

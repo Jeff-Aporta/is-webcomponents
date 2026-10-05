@@ -146,9 +146,32 @@ interface LoaderState {
    *
    * CSS CDN del kit: prefijo `cdn:` (p. ej. `cdn:palettes.min.css`) →
    * `injectCdnStylesheet` (host/mirrors/`?h=`). Rutas normales = relativas a la página.
+   *
+   * JS: `type: 'module'` → `import()`; `type: 'classic'` → `<script>` sin type=module
+   * (IIFE / boot sync). Prefijo `cdn:` en href → asset del kit (host/`?h=`).
    */
-  pageModules: Map<string, string>;
+  pageModules: Map<string, PageModuleSpec>;
   pageStyles: Map<string, string>;
+}
+
+/** Spec de un page module (alias table / registerPageModule). */
+export type PageModuleKind = 'module' | 'classic';
+export interface PageModuleSpec {
+  href: string;
+  type: PageModuleKind;
+}
+
+function asPageModuleSpec(input: string | PageModuleSpec): PageModuleSpec {
+  if (typeof input === 'string') {
+    const raw = input.trim();
+    if (raw.startsWith('classic:')) {
+      return { href: raw.slice('classic:'.length), type: 'classic' };
+    }
+    return { href: raw, type: 'module' };
+  }
+  const href = String(input.href || '').trim();
+  if (!href) throw new TypeError('PageModuleSpec.href required');
+  return { href, type: input.type === 'classic' ? 'classic' : 'module' };
 }
 
 const state: LoaderState = {
@@ -160,18 +183,26 @@ const state: LoaderState = {
   sha: BOOT_PIN,
   cdnUrl: null,
   query: {},
-  pageModules: new Map<string, string>([
-    ['highlight-pre',   'dist/scripts/highlight-pre.min.js'],
-    ['demo-code',       'dist/scripts/demo-code.min.js'],
-    ['docs-chrome',     'dist/scripts/docs-chrome.min.js'],
-    ['cdn-panel',       'dist/scripts/cdn-panel.min.js'],
-    ['view-sources',    'dist/scripts/view-sources.min.js'],
-    ['demo-file-meta',  'dist/scripts/demo-file-meta.min.js'],
-    ['dev-reload',      'scripts/dev-reload.js'],
+  pageModules: new Map<string, PageModuleSpec>([
+    ['highlight-pre',        { href: 'dist/scripts/highlight-pre.min.js', type: 'module' }],
+    ['demo-code',            { href: 'dist/scripts/demo-code.min.js', type: 'module' }],
+    ['docs-chrome',          { href: 'dist/scripts/docs-chrome.min.js', type: 'module' }],
+    ['cdn-panel',            { href: 'dist/scripts/cdn-panel.min.js', type: 'module' }],
+    ['view-sources',         { href: 'dist/scripts/view-sources.min.js', type: 'module' }],
+    ['demo-file-meta',       { href: 'dist/scripts/demo-file-meta.min.js', type: 'module' }],
+    // IIFE sin export → classic (import() fallaría).
+    ['dev-reload',           { href: 'scripts/dev-reload.js', type: 'classic' }],
+    // Theme/palette del shell doc (ESM; lo importa el host vía loader).
+    ['iswc-doc-demo-boot',   { href: 'cdn:preview/doc-demo-boot.min.js', type: 'module' }],
+    ['iswc-doc-demo-host',   { href: 'cdn:preview/doc-demo-host.min.js', type: 'module' }],
+    // Tema ER InSoft (json2css + resolveErTheme). Sin CE nuevo.
+    ['iswc-diagram-theme',   { href: 'cdn:diagrams/theme.min.js', type: 'module' }],
   ]),
   pageStyles: new Map<string, string>([
     // Kit CDN (respeta host/local/`?h=`). Reemplaza la antigua API de palettes.
     ['iswc-palettes-default', 'cdn:palettes.min.css'],
+    ['iswc-doc-shell', 'cdn:preview/doc-shell.min.css'],
+    ['iswc-doc-presentation', 'cdn:preview/doc-presentation.min.css'],
   ]),
 };
 
@@ -235,44 +266,81 @@ function resolvePageStyle(input: string): { cdn: string } | { href: string } {
 }
 
 /**
- * Resuelve un input de `loadPageModules` a una URL
- * relativa al host de la página.
+ * Resuelve un input de `loadPageModules` a href + tipo de carga.
  *
- * Comportamiento:
- *  - Si el input es una URL absoluta (empieza por `http://`, `https://`,
- *    `//`, `/`, `data:`) o contiene `/` o tiene extensión `.js`/`.mjs`/
- *    `.css`/`.ts`/`.tsx`, se trata como **path literal**.
- *  - Si el input es un nombre simple (`'demo-code'`, `'highlight-pre'`)
- *    sin `/` y sin extensión, se busca en el alias table.
- *
- * Esto garantiza retrocompatibilidad: el código viejo que pasaba paths
- * literales (`'scripts/demo-code.js'`) sigue funcionando; el código nuevo
- * que pasa aliases (`'demo-code'`) obtiene URLs estables ante renames.
+ * - Alias de la tabla (`'demo-code'`, `'iswc-doc-demo-boot'`)
+ * - Prefijo `classic:` → script clásico
+ * - Prefijo `cdn:` en el href del spec → asset del kit (host/`?h=`)
+ * - Path literal / URL → module por defecto
  */
-function resolvePageModuleHref(input: string): string {
+function resolvePageModule(input: string): PageModuleSpec {
   if (typeof input !== 'string' || input === '') {
-    throw new TypeError('resolvePageModuleHref: input must be non-empty string');
+    throw new TypeError('resolvePageModule: input must be non-empty string');
   }
   const trimmed = input.trim();
-  // URL absoluta (cross-origin) o esquema → tratar literal.
+  const alias = state.pageModules.get(trimmed);
+  if (alias) return { ...alias };
+
+  if (trimmed.startsWith('classic:')) {
+    return asPageModuleSpec(trimmed);
+  }
+
   if (
-    /^[a-z][a-z0-9+.-]*:/i.test(trimmed) // http:, https:, data:, blob:, etc.
+    /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
     || trimmed.startsWith('//')
     || trimmed.startsWith('/')
+    || trimmed.includes('/')
+    || /\.(?:js|mjs|cjs|ts|tsx)(?:\?.*)?$/i.test(trimmed)
   ) {
-    return trimmed;
+    return { href: trimmed, type: 'module' };
   }
-  // Path con separador o extensión reconocible → tratar literal (retrocompat).
-  if (trimmed.includes('/') || /\.(?:js|mjs|cjs|ts|tsx|css)(?:\?.*)?$/i.test(trimmed)) {
-    return trimmed;
+
+  throw new Error(
+    `loadPageModules: alias desconocido "${trimmed}" — registra con L.registerPageModule(alias, href) o usa un alias válido (${[...state.pageModules.keys()].join(', ')})`,
+  );
+}
+
+/** @deprecated usar resolvePageModule; se mantiene el nombre para callers internos viejos. */
+function resolvePageModuleHref(input: string): string {
+  return resolvePageModule(input).href;
+}
+
+async function resolvePageModuleUrl(spec: PageModuleSpec): Promise<string> {
+  const href = spec.href;
+  if (href.startsWith('cdn:')) {
+    const rel = href.slice(4).replace(/^\.\//, '');
+    const bases = orderBases(await coreAssetBases());
+    return assetHref(bases[0] || SELF_BASE, rel);
   }
-  // Nombre simple → alias table.
-  const found = state.pageModules.get(trimmed);
-  if (!found) {
-    // Fail loud: el consumidor pasó un alias desconocido.
-    throw new Error(`loadPageModules: alias desconocido "${trimmed}" — registra con L.registerPageModule(alias, href) o usa un alias válido (${[...state.pageModules.keys()].join(', ')})`);
-  }
-  return found;
+  return new URL(href, typeof location !== 'undefined' ? location.href : SELF_BASE).href;
+}
+
+function loadClassicOnce(href: string): Promise<void> {
+  const key = `classic:${href}`;
+  let p = jsDone.get(key);
+  if (p) return p;
+  p = new Promise<void>((resolve, reject) => {
+    if (typeof document === 'undefined') {
+      resolve();
+      return;
+    }
+    if ([...document.querySelectorAll('script[data-is-page-js]')].some((el) => (el as HTMLScriptElement).dataset.isPageJs === href)) {
+      resolve();
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = href;
+    s.async = false;
+    s.dataset.isPageJs = href;
+    s.onload = () => resolve();
+    s.onerror = () => {
+      jsDone.delete(key);
+      reject(new Error(`loadPageModules: classic script failed ${href}`));
+    };
+    document.head.appendChild(s);
+  });
+  jsDone.set(key, p);
+  return p;
 }
 
 function normalizeQuery(input: unknown): Record<string, string> {
@@ -850,9 +918,12 @@ export const ISWebComponentsLoader = {
   },
 
   async loadPageModules(hrefs: string[]) {
-    const jobs = (hrefs || []).map((h) => {
-      const abs = new URL(resolvePageModuleHref(h), typeof location !== 'undefined' ? location.href : SELF_BASE).href;
-      return importOnce(routeHref(abs));
+    const jobs = (hrefs || []).map(async (h) => {
+      const spec = resolvePageModule(h);
+      const abs = await resolvePageModuleUrl(spec);
+      const routed = routeHref(abs);
+      if (spec.type === 'classic') return loadClassicOnce(routed);
+      return importOnce(routed);
     });
     await Promise.all(jobs);
   },
@@ -862,12 +933,14 @@ export const ISWebComponentsLoader = {
    * Útil para apps de terceros que montan sus propios gallery scripts.
    *
    * @param alias Nombre estable (sin `/`, sin extensión `.js`).
-   * @param href Ruta relativa al host (`'dist/scripts/foo.min.js'` o absoluta).
+   * @param href Ruta relativa al host, `cdn:…` del kit, o `classic:…`.
+   * @param opts.type `module` (default) | `classic` (IIFE / `<script>` sin type=module).
    */
-  registerPageModule(alias: string, href: string) {
+  registerPageModule(alias: string, href: string, opts?: { type?: PageModuleKind }) {
     if (typeof alias !== 'string' || alias === '') throw new TypeError('registerPageModule: alias required');
     if (typeof href !== 'string' || href === '') throw new TypeError('registerPageModule: href required');
-    state.pageModules.set(alias, href);
+    const spec = asPageModuleSpec(opts?.type ? { href, type: opts.type } : href);
+    state.pageModules.set(alias, spec);
     return this;
   },
 
@@ -883,8 +956,10 @@ export const ISWebComponentsLoader = {
     return this;
   },
 
-  getPageModules(): Record<string, string> {
-    return Object.fromEntries(state.pageModules);
+  getPageModules(): Record<string, PageModuleSpec> {
+    return Object.fromEntries(
+      [...state.pageModules].map(([k, v]) => [k, { ...v }]),
+    );
   },
 
   getPageStyles(): Record<string, string> {

@@ -31,7 +31,7 @@
         },
         "prop": {
           "type": "string",
-          "description": "Propiedad del componente que se manipula. Con prefijo 'attr:' se aplica como atributo (reflejado)."
+          "description": "Destino del valor. Prefijos: `attr:` (atributo), `prop:` (propiedad JS), `content:` (textContent del host). `attr:style` / `style:` pisa el style inline."
         },
         "label": { "type": "string" },
         "group": { "type": "string" },

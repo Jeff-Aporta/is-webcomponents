@@ -38,7 +38,7 @@ import '../actions/button.js';
         <h2 class="heading" part="heading" hidden></h2>
         <div class="message" part="message"><span class="message-text"></span><slot name="message"></slot></div>
         <div class="actions" part="actions">
-          <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="neutral" class="cancel" data-confirm-cancel>Cancelar</iswc-button></slot></span>
+          <span class="cancel-wrap"><slot name="cancel"><iswc-button variant="text" color="text" class="cancel" data-confirm-cancel>Cancelar</iswc-button></slot></span>
           <span class="confirm-wrap"><slot name="confirm"><iswc-button color="brand" class="confirm" data-confirm-confirm>Aceptar</iswc-button></slot></span>
         </div>
       </div>
@@ -47,7 +47,7 @@ import '../actions/button.js';
 
   const OBSERVED = ['for', 'heading', 'message', 'open'];
 
-  class IswcConfirmModal extends ElementBase {
+  class IswcConfirmModal extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'bg', 'text-color', 'border-color', 'accent']; }
 

@@ -1,23 +1,20 @@
-import { defineElement, emit, siblingCssHref } from '../../core/element.js';
+import { defineElement, siblingCssHref } from '../../core/element.js';
 import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './diagram-kinds.js';
 import { expandSequencePayloadForJson } from './sequence-spec.js';
 import '../media/icon.js';
-import { sharePayload } from '../_shared/web-share.js';
 
 /**
  * <iswc-diagram-lightbox> — colore del lightbox para diagramas.
  *
  * Es un <iswc-lightbox> con la barra específica de la animación tortuga
  * (<< ▶/⏸ ■ >>), el anillo de cuenta regresiva del auto-replay, el botón
- * de código JSON y el botón de compartir enlace. El resto del visor
+ * de código JSON y el share kit (`iswc-share-button`). El resto del visor
  * (zoom, pan, dialog, slots) lo hereda de iswc-lightbox.
  *
- * Conceptualmente, un diagrama es "un nodo que tiene un payload JSON y
- * expone una API turtle {play,pause,stop,next,prev}". El visor hace de
- * puente entre ese contrato y la barra por defecto. Si en algún momento
- * hay otro componente con la misma forma, se hace un wrapper igual sin
- * tocar el lightbox genérico.
+ * La tortuga solo aplica a procesos/flujos/secuencias (no DER ni layouts
+ * estáticos). Si el diagrama no expone API turtle o emite total=0, la barra
+ * de tramos queda oculta.
  *
  * Atributos: kind (default "sequence"), animation (passthrough al diagrama),
  *             open
@@ -237,9 +234,10 @@ class IswcDiagramLightbox extends IswcLightbox {
     this.#ring = nav.querySelector<HTMLElement>('.lb-ring__fill');
     this.#ringLabel = nav.querySelector<HTMLElement>('.lb-step');
 
-    // Mostrar los botones por defecto que sí tienen sentido en diagramas.
+    // Mostrar share kit (iswc-share-button del lightbox base).
     const share = trail?.querySelector<HTMLElement>('[data-act="share"]');
     if (share) share.hidden = false;
+    this.#refreshShareUrl();
 
     const codePanel = this.shadowRoot!.querySelector<HTMLElement>('.lb-code');
     if (codePanel) {
@@ -283,7 +281,10 @@ class IswcDiagramLightbox extends IswcLightbox {
         break;
       }
       case 'code-save': this.#saveCode(); e.stopImmediatePropagation(); break;
-      case 'share': this.#shareDiagram(); e.stopImmediatePropagation(); break;
+      case 'share':
+        // iswc-share-button del lightbox base; solo refrescar URL del viewer.
+        this.#refreshShareUrl();
+        break;
       default: break;
     }
   };
@@ -311,6 +312,10 @@ class IswcDiagramLightbox extends IswcLightbox {
     if (anim) el.setAttribute('animation', anim);
     const minGap = this.getAttribute('min-gap');
     if (minGap) el.setAttribute('min-gap', minGap);
+    // theme (p.ej. insoft) vive en el host del lightbox tras openOwnViewer;
+    // sin esto el DER del visor cae a colores default.
+    const theme = this.getAttribute('theme');
+    if (theme) el.setAttribute('theme', theme);
     el.payload = this.#basePayload;
     el.hiddenGroups = this.#hiddenGroups;
     el.addEventListener('iswc-turtle-state', (e: Event) => {
@@ -323,10 +328,9 @@ class IswcDiagramLightbox extends IswcLightbox {
     });
     host.appendChild(el);
     this.#diagramEl = el;
-    // Diagramas sin API turtle (org-chart, mindmap, timeline…) nunca emiten
-    // `iswc-turtle-state`: ocultamos la barra ya mismo en vez de esperar un
-    // evento que no va a llegar. Los que sí tienen turtle corrigen este
-    // estado apenas termina su primer render (ver #onTurtleState arriba).
+    this.#refreshShareUrl();
+    // Diagramas sin API turtle (DER, org-chart, mindmap…) nunca emiten
+    // `iswc-turtle-state` actionable: ocultamos la barra ya mismo.
     if (!el.turtle) this.#onTurtleState({ playing: false, replay: 0, idx: 0, total: 0 });
   }
 
@@ -370,6 +374,13 @@ class IswcDiagramLightbox extends IswcLightbox {
     return this.#diagramEl?.turtle ?? null;
   }
 
+  #refreshShareUrl(): void {
+    try {
+      const url = buildViewerUrl(this.kind, this.#basePayload);
+      this.setShareUrl(url, document.title, url);
+    } catch { /* payload aún vacío */ }
+  }
+
   #openCode(): void {
     const area = this.shadowRoot?.querySelector<HTMLTextAreaElement>('.lb-code__area');
     const err = this.shadowRoot?.querySelector<HTMLElement>('.lb-code__err');
@@ -399,20 +410,6 @@ class IswcDiagramLightbox extends IswcLightbox {
     this.#hiddenGroups = new Set();
     code.hidden = true;
     this.#mountDiagram();
-  }
-
-  async #shareDiagram(): Promise<void> {
-    let url: string;
-    try { url = buildViewerUrl(this.kind, this.#basePayload); }
-    catch { return; }
-    const how = await sharePayload({ title: document.title, url, text: url });
-    if (how === 'abort') return;
-    const t = this.shadowRoot?.querySelector<HTMLElement>('.lb-toast');
-    if (t) {
-      t.hidden = false;
-      setTimeout(() => { t.hidden = true; }, 1800);
-    }
-    emit(this, 'iswc-share', { url, how });
   }
 }
 

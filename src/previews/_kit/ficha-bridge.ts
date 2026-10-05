@@ -130,7 +130,7 @@ const SECTION_COLUMNS: Record<SectionId, string[] | null> = {
   eventos: ['Evento', 'Detalle', 'Cuándo se emite'],
   slots: ['Slot', 'Descripción'],
   parts: ['Part', 'Descripción'],
-  apiJs: ['Método', 'Descripción'],
+  apiJs: ['Método', 'Descripción', 'Ejemplo'],
   ejemplos: null,
 };
 
@@ -157,17 +157,39 @@ function claveEsquemaParaColumna(col: string, id: SectionId): string {
     case 'parts':
       return col === 'Part' ? 'part' : 'descripcion';
     case 'apiJs':
-      return col === 'Método' ? 'metodo' : 'descripcion';
+      if (col === 'Método') return 'metodo';
+      if (col === 'Ejemplo') return 'ejemplo';
+      return 'descripcion';
     default:
       return col.toLowerCase();
   }
 }
 
-/** Convierte una fila ficha (tabla) en `string[]` (HTML de cada celda). */
-function filaToCeldas(fila: Record<string, unknown>, id: SectionId, columns: string[]): string[] {
+/** Convierte una fila ficha (tabla) en celdas Preview (HTML o code-ejemplo). */
+function filaToCeldas(
+  fila: Record<string, unknown>,
+  id: SectionId,
+  columns: string[],
+): Array<string | { kind: 'code-ejemplo'; code: string; lang?: string; summary?: string }> {
   return columns.map((col) => {
     const clave = claveEsquemaParaColumna(col, id);
-    const v = fila[clave];
+    let v = fila[clave];
+    // Compat: ficha histórica usa `desc` en vez de `descripcion`.
+    if (v == null && (clave === 'descripcion' || clave === 'desc')) {
+      v = fila.descripcion ?? fila.desc;
+    }
+    if (col === 'Ejemplo' || clave === 'ejemplo') {
+      if (v == null || v === '') return '';
+      if (typeof v === 'object' && v && (v as { kind?: string }).kind === 'code-ejemplo') {
+        return v as { kind: 'code-ejemplo'; code: string; lang?: string; summary?: string };
+      }
+      return {
+        kind: 'code-ejemplo' as const,
+        code: String(v),
+        lang: typeof fila.ejemploLang === 'string' ? fila.ejemploLang : 'html',
+        summary: typeof fila.ejemploSummary === 'string' ? fila.ejemploSummary : 'Ejemplo',
+      };
+    }
     if (v == null) return '';
     return String(v);
   });

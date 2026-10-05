@@ -90,6 +90,13 @@
   --iswc-callout-text: var(--iswc-text);
 }
 
+:host([color="text"]) {
+  --iswc-callout-accent: var(--iswc-text);
+  --iswc-callout-bg: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+  --iswc-callout-border: var(--iswc-text);
+  --iswc-callout-text: var(--iswc-text);
+}
+
 :host([color="success"]) {
   --iswc-callout-accent: var(--iswc-color-success);
   --iswc-callout-bg: var(--iswc-success-soft, rgb(64 192 87 / 18%));

@@ -43,6 +43,21 @@
       ]
     },
     {
+      "id": "theme-insoft",
+      "title": "Tema InSoft",
+      "lede": "Sin CE nuevo: theme=\"insoft\" (o erDiagram.theme) aplica el estilo docs InSoft (Poppins, naranja/verde, clusters, aristas #3D5A80). El JSON vive en cdn/diagrams/themes/insoft.json; json2css lo convierte a CSS.",
+      "blocks": [
+        {
+          "kind": "html",
+          "html": "<p>Misma paleta que <code>der.svg</code> de AyudasCPIA. El editor hereda el atributo: <code>&lt;iswc-er-editor theme=\"insoft\"&gt;</code>. Utils CDN: <code>L.loadPageModules(\"iswc-diagram-theme\")</code> → <code>json2css</code>, <code>resolveErTheme</code>, <code>INSOFT_THEME</code>.</p>"
+        },
+        {
+          "kind": "demo",
+          "html": "<iswc-er-diagram theme=\"insoft\" open-on-click>\n            <script type=\"application/json\">\n              {\n                \"erDiagram\": {\n                  \"title\": \"ISS · estilo InSoft\",\n                  \"direction\": \"LR\",\n                  \"groups\": [\n                    { \"id\": \"g_oper\", \"name\": \"Operativa\" },\n                    { \"id\": \"g_conf\", \"name\": \"Config\" },\n                    { \"id\": \"g_seg\", \"name\": \"SEG\" }\n                  ],\n                  \"entities\": [\n                    { \"id\": \"ticket\", \"name\": \"TICKET\", \"group\": \"g_oper\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"asunto\", \"type\": \"varchar\" }\n                      ] },\n                    { \"id\": \"conv\", \"name\": \"CONVERSATION\", \"group\": \"g_oper\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"ticket_id\", \"type\": \"uuid\", \"key\": \"FK\" }\n                      ] },\n                    { \"id\": \"sys\", \"name\": \"SYS_VALUES\", \"group\": \"g_conf\",\n                      \"attributes\": [\n                        { \"name\": \"clave\", \"type\": \"varchar\", \"key\": \"PK\" },\n                        { \"name\": \"valor\", \"type\": \"jsonb\" }\n                      ] },\n                    { \"id\": \"rol\", \"name\": \"SEG_ROL\", \"group\": \"g_seg\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\n                      ] },\n                    { \"id\": \"huérfana\", \"name\": \"PROVIDER\", \"group\": \"g_conf\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\n                      ] }\n                  ],\n                  \"relations\": [\n                    { \"from\": \"conv\", \"to\": \"ticket\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },\n                    { \"from\": \"ticket\", \"to\": \"rol\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": false }\n                  ]\n                }\n              }\n            </script>\n          </iswc-er-diagram>"
+        }
+      ]
+    },
+    {
       "id": "api",
       "title": "Referencia",
       "blocks": [
@@ -67,6 +82,11 @@
               "<code>open-on-click</code>",
               "booleano",
               "Habilita abrir el visor a pantalla completa al hacer clic. Por defecto el componente no tiene visor."
+            ],
+            [
+              "<code>theme</code>",
+              "<code>insoft</code> · id registrado",
+              "Aplica paleta JSON (cdn/diagrams/themes/). También <code>erDiagram.theme</code> en el payload."
             ]
           ]
         },

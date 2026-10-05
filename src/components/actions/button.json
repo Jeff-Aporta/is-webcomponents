@@ -18,6 +18,13 @@
           "target": "#btn-play",
           "controls": [
             {
+              "control": "text",
+              "prop": "content:",
+              "label": "content",
+              "default": "Hola mundo",
+              "placeholder": "Texto del botón"
+            },
+            {
               "control": "select",
               "prop": "attr:color",
               "label": "color",
@@ -29,10 +36,10 @@
                 "danger",
                 "info",
                 "error",
+                "text",
                 "#ae3ec9",
                 "#0ca678",
-                "#d9480f",
-                "text"
+                "#d9480f"
               ],
               "default": "brand"
             },
@@ -85,6 +92,17 @@
               "default": "round"
             },
             {
+              "control": "select",
+              "prop": "attr:type",
+              "label": "type",
+              "options": [
+                "button",
+                "submit",
+                "reset"
+              ],
+              "default": "button"
+            },
+            {
               "control": "boolean",
               "prop": "attr:with-caret",
               "label": "with-caret"
@@ -102,18 +120,23 @@
             {
               "control": "text",
               "prop": "attr:href",
-              "label": "href"
+              "label": "href",
+              "group": "Enlace",
+              "placeholder": "https://…"
             },
             {
-              "control": "select",
-              "prop": "attr:type",
-              "label": "type",
-              "options": [
-                "button",
-                "submit",
-                "reset"
-              ],
-              "default": "button"
+              "control": "text",
+              "prop": "attr:target",
+              "label": "target",
+              "group": "Enlace",
+              "placeholder": "_blank"
+            },
+            {
+              "control": "text",
+              "prop": "attr:rel",
+              "label": "rel",
+              "group": "Enlace",
+              "placeholder": "noopener noreferrer"
             }
           ],
           "equivNote": "Segun attrs, el host se comporta como button o como enlace. El diagrama resume las ramas — clic para abrir el lightbox.",
@@ -195,7 +218,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"matrix\">\r\n            <div></div>\r\n            <div class=\"cell-label\">filled</div>\r\n            <div class=\"cell-label\">soft-filled</div>\r\n            <div class=\"cell-label\">ghost</div>\r\n            <div class=\"cell-label\">outlined</div>\n            <div class=\"cell-label\">plain</div>\r\n\r\n            <div class=\"row-label\">brand</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\">Brand</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"soft-filled\">Brand</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"ghost\">Brand</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"outlined\">Brand</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"plain\">Brand</iswc-button></div>\r\n\r\n            <div class=\"row-label\">neutral</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\">Neutral</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"soft-filled\">Neutral</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"ghost\">Neutral</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"outlined\">Neutral</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"plain\">Neutral</iswc-button></div>\r\n\r\n            <div class=\"row-label\">success</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\">Success</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"soft-filled\">Success</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"ghost\">Success</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"outlined\">Success</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"plain\">Success</iswc-button></div>\r\n\r\n            <div class=\"row-label\">warning</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\">Warning</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"soft-filled\">Warning</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"ghost\">Warning</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"outlined\">Warning</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"plain\">Warning</iswc-button></div>\r\n\r\n            <div class=\"row-label\">danger</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\">Danger</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"soft-filled\">Danger</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"ghost\">Danger</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"outlined\">Danger</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"plain\">Danger</iswc-button></div>\r\n\r\n            <div class=\"row-label\">info</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\">Info</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"soft-filled\">Info</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"ghost\">Info</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"outlined\">Info</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"plain\">Info</iswc-button></div>\r\n\r\n            <div class=\"row-label\">error</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\">Error</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"soft-filled\">Error</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"ghost\">Error</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"outlined\">Error</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"plain\">Error</iswc-button></div>\r\n          </div>",
+          "html": "<div class=\"matrix\">\r\n            <div></div>\r\n            <div class=\"cell-label\">filled</div>\r\n            <div class=\"cell-label\">soft-filled</div>\r\n            <div class=\"cell-label\">ghost</div>\r\n            <div class=\"cell-label\">outlined</div>\n            <div class=\"cell-label\">plain</div>\r\n\r\n            <div class=\"row-label\">brand</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\">Brand</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"soft-filled\">Brand</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"ghost\">Brand</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"outlined\">Brand</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"brand\" variant=\"plain\">Brand</iswc-button></div>\r\n\r\n            <div class=\"row-label\">neutral</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\">Neutral</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"soft-filled\">Neutral</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"ghost\">Neutral</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"outlined\">Neutral</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"neutral\" variant=\"plain\">Neutral</iswc-button></div>\r\n\r\n            <div class=\"row-label\">text</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"text\">Text</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"text\" variant=\"soft-filled\">Text</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"text\" variant=\"ghost\">Text</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"text\" variant=\"outlined\">Text</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"text\" variant=\"plain\">Text</iswc-button></div>\r\n\r\n            <div class=\"row-label\">success</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\">Success</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"soft-filled\">Success</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"ghost\">Success</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"outlined\">Success</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"success\" variant=\"plain\">Success</iswc-button></div>\r\n\r\n            <div class=\"row-label\">warning</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\">Warning</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"soft-filled\">Warning</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"ghost\">Warning</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"outlined\">Warning</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"warning\" variant=\"plain\">Warning</iswc-button></div>\r\n\r\n            <div class=\"row-label\">danger</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\">Danger</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"soft-filled\">Danger</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"ghost\">Danger</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"outlined\">Danger</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"danger\" variant=\"plain\">Danger</iswc-button></div>\r\n\r\n            <div class=\"row-label\">info</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\">Info</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"soft-filled\">Info</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"ghost\">Info</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"outlined\">Info</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"info\" variant=\"plain\">Info</iswc-button></div>\r\n\r\n            <div class=\"row-label\">error</div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\">Error</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"soft-filled\">Error</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"ghost\">Error</iswc-button></div>\r\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"outlined\">Error</iswc-button></div>\n            <div class=\"demo-cell\"><iswc-button color=\"error\" variant=\"plain\">Error</iswc-button></div>\r\n          </div>",
           "equivHtml": "<button type=\"button\">Filled</button>\n<button type=\"button\">Outlined</button>\n<button type=\"button\">Plain</button>\n<button type=\"button\">Ghost</button>\n<button type=\"button\">Soft</button>\n<!-- variant es skin del kit -->"
         }
       ]
@@ -237,7 +260,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button color=\"brand\">\r\n              <iswc-icon icon=\"mdi:content-save-outline\"></iswc-icon>\r\n              Guardar cambios\r\n            </iswc-button>\r\n            <iswc-button color=\"success\">\r\n              <iswc-icon icon=\"mdi:check\"></iswc-icon>\r\n              Aprobar\r\n            </iswc-button>\r\n            <iswc-button color=\"danger\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\r\n              Eliminar\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n              Editar\r\n            </iswc-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-button color=\"brand\">\r\n              <iswc-icon icon=\"mdi:content-save-outline\"></iswc-icon>\r\n              Guardar cambios\r\n            </iswc-button>\r\n            <iswc-button color=\"success\">\r\n              <iswc-icon icon=\"mdi:check\"></iswc-icon>\r\n              Aprobar\r\n            </iswc-button>\r\n            <iswc-button color=\"danger\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\r\n              Eliminar\r\n            </iswc-button>\r\n            <iswc-button color=\"text\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n              Editar\r\n            </iswc-button>\r\n          </div>",
           "equivHtml": "<button type=\"button\">\n  <span aria-hidden=\"true\">★</span>\n  Destacar\n</button>"
         },
         {
@@ -246,7 +269,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button color=\"brand\" variant=\"outlined\">\r\n              Continuar\r\n              <iswc-icon icon=\"mdi:arrow-right\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\">\r\n              Descargar reporte\r\n              <iswc-icon icon=\"mdi:download\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-button color=\"brand\" variant=\"outlined\">\r\n              Continuar\r\n              <iswc-icon icon=\"mdi:arrow-right\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"text\" variant=\"plain\">\r\n              Descargar reporte\r\n              <iswc-icon icon=\"mdi:download\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>",
           "equivHtml": "<button type=\"button\">\n  <span aria-hidden=\"true\">★</span>\n  Destacar\n</button>"
         },
         {
@@ -280,7 +303,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button color=\"neutral\" variant=\"outlined\" title=\"Ajustes\">\r\n              <iswc-icon icon=\"mdi:cog-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"brand\">\r\n              <iswc-icon icon=\"mdi:plus\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"success\">\r\n              <iswc-icon icon=\"mdi:check\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"warning\">\r\n              <iswc-icon icon=\"mdi:bell-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"danger\">\r\n              <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:magnify\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Me gusta\">\r\n              <iswc-icon icon=\"mdi:heart-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"neutral\" variant=\"plain\" pill title=\"Perfil\">\r\n              <iswc-icon icon=\"mdi:account\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 1em; align-items: flex-end;\">\r\n            <span style=\"font-size: .8125rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n            <span style=\"font-size: 1rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n            <span style=\"font-size: 1.25rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-button color=\"neutral\" variant=\"outlined\" title=\"Ajustes\">\r\n              <iswc-icon icon=\"mdi:cog-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"brand\">\r\n              <iswc-icon icon=\"mdi:plus\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"success\">\r\n              <iswc-icon icon=\"mdi:check\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"warning\">\r\n              <iswc-icon icon=\"mdi:bell-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"danger\">\r\n              <iswc-icon icon=\"mdi:trash-can-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"text\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:magnify\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"text\" variant=\"plain\" pill title=\"Me gusta\">\r\n              <iswc-icon icon=\"mdi:heart-outline\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button color=\"text\" variant=\"plain\" pill title=\"Perfil\">\r\n              <iswc-icon icon=\"mdi:account\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n\r\n          <div class=\"demo-row\" style=\"margin-top: 1em; align-items: flex-end;\">\r\n            <span style=\"font-size: .8125rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n            <span style=\"font-size: 1rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n            <span style=\"font-size: 1.25rem\"><iswc-button color=\"brand\" variant=\"outlined\">\r\n              <iswc-icon icon=\"mdi:pencil-outline\"></iswc-icon>\r\n            </iswc-button></span>\r\n          </div>",
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
         },
@@ -336,7 +359,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;align-items:center\">\r\n            <iswc-button shape=\"round\" color=\"brand\">round</iswc-button>\r\n            <iswc-button shape=\"square\" color=\"brand\">square</iswc-button>\r\n            <iswc-button shape=\"rect\" color=\"brand\">rect</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"brand\">pill</iswc-button>\r\n            <iswc-button shape=\"round\" color=\"success\" variant=\"outlined\">round</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"success\" variant=\"outlined\">pill</iswc-button>\r\n            <iswc-button shape=\"square\" color=\"success\" variant=\"outlined\">square</iswc-button>\r\n            <iswc-button shape=\"round\" color=\"neutral\" variant=\"plain\">round</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"neutral\" variant=\"plain\">pill</iswc-button>\r\n            <iswc-button shape=\"rect\" color=\"neutral\" variant=\"plain\">rect</iswc-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;align-items:center\">\r\n            <iswc-button shape=\"round\" color=\"brand\">round</iswc-button>\r\n            <iswc-button shape=\"square\" color=\"brand\">square</iswc-button>\r\n            <iswc-button shape=\"rect\" color=\"brand\">rect</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"brand\">pill</iswc-button>\r\n            <iswc-button shape=\"round\" color=\"success\" variant=\"outlined\">round</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"success\" variant=\"outlined\">pill</iswc-button>\r\n            <iswc-button shape=\"square\" color=\"success\" variant=\"outlined\">square</iswc-button>\r\n            <iswc-button shape=\"round\" color=\"text\" variant=\"plain\">round</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"text\" variant=\"plain\">pill</iswc-button>\r\n            <iswc-button shape=\"rect\" color=\"text\" variant=\"plain\">rect</iswc-button>\r\n          </div>",
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
         }
@@ -349,7 +372,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button with-caret color=\"brand\">Acciones</iswc-button>\r\n            <iswc-button with-caret color=\"neutral\" variant=\"outlined\">Filtros</iswc-button>\r\n            <iswc-button with-caret color=\"neutral\" variant=\"plain\">Ordenar por</iswc-button>\r\n            <span style=\"font-size: .8125rem\"><iswc-button with-caret color=\"success\">Aplicar</iswc-button></span>\r\n            <span style=\"font-size: 1.25rem\"><iswc-button with-caret>Más opciones</iswc-button></span>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-button with-caret color=\"brand\">Acciones</iswc-button>\r\n            <iswc-button with-caret color=\"neutral\" variant=\"outlined\">Filtros</iswc-button>\r\n            <iswc-button with-caret color=\"text\" variant=\"plain\">Ordenar por</iswc-button>\r\n            <span style=\"font-size: .8125rem\"><iswc-button with-caret color=\"success\">Aplicar</iswc-button></span>\r\n            <span style=\"font-size: 1.25rem\"><iswc-button with-caret>Más opciones</iswc-button></span>\r\n          </div>",
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
         }
@@ -375,7 +398,7 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"success\" variant=\"outlined\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"neutral\" variant=\"plain\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"danger\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"brand\" pill onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n          </div>",
+          "html": "<div class=\"demo-row\">\n            <iswc-button color=\"brand\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"success\" variant=\"outlined\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"text\" variant=\"plain\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"danger\" onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n            <iswc-button color=\"brand\" pill onclick=\"this.setAttribute('loading',''); setTimeout(() => this.removeAttribute('loading'), 5000)\">Clic me</iswc-button>\n          </div>",
           "equivHtml": "<button type=\"button\" onclick=\"this.setAttribute('aria-busy','true'); setTimeout(() => this.removeAttribute('aria-busy'), 5000)\">Clic me</button>"
         }
       ]
@@ -556,52 +579,81 @@
           "kind": "table",
           "columns": [
             "Método",
-            "Descripción"
+            "Descripción",
+            "Ejemplo"
           ],
           "rows": [
             [
               "<code>click()</code>",
-              "Nativo. Dispara un click programático."
+              "Nativo. Dispara un click programático.",
+              {
+                "kind": "code-ejemplo",
+                "code": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">Hazme click</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: alert \"click() OK\" (click programático)\n  btn.addEventListener('click', () => alert('click() OK'));\n  btn.click();\n</script>",
+                "lang": "html",
+                "summary": "Ejemplo"
+              }
             ],
             [
               "<code>focus(options?)</code>",
-              "Nativo. Foco en el botón."
+              "Nativo. Foco en el botón.",
+              {
+                "kind": "code-ejemplo",
+                "code": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">Foco</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: outline de foco en el botón + alert\n  btn.focus();\n  alert('focus() aplicado — mira el outline del botón');\n</script>",
+                "lang": "html",
+                "summary": "Ejemplo"
+              }
             ],
             [
               "<code>blur()</code>",
-              "Nativo. Quita el foco."
+              "Nativo. Quita el foco.",
+              {
+                "kind": "code-ejemplo",
+                "code": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">Blur</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: recibe foco, luego lo pierde + alert\n  btn.focus();\n  btn.blur();\n  alert('blur() OK — el botón ya no tiene foco');\n</script>",
+                "lang": "html",
+                "summary": "Ejemplo"
+              }
             ],
             [
               "<code>setFocus(options?)</code>",
-              "Helper equivalente a <code>focus()</code> (misma signature)."
+              "Helper equivalente a <code>focus()</code> (misma signature).",
+              {
+                "kind": "code-ejemplo",
+                "code": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">setFocus</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: igual que focus() — outline + alert\n  btn.setFocus();\n  alert('setFocus() OK — mira el outline del botón');\n</script>",
+                "lang": "html",
+                "summary": "Ejemplo"
+              }
             ],
             [
               "<code>checkValidity()</code>",
-              "Validez (form-associated)."
+              "Validez (form-associated).",
+              {
+                "kind": "code-ejemplo",
+                "code": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<form id=\"f\">\n  <iswc-button id=\"btn\" type=\"submit\" color=\"brand\">Enviar</iswc-button>\n</form>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: alert \"checkValidity → true\" (válido por defecto)\n  alert('checkValidity → ' + btn.checkValidity());\n</script>",
+                "lang": "html",
+                "summary": "Ejemplo"
+              }
             ],
             [
               "<code>reportValidity()</code>",
-              "Muestra mensaje de validación del form."
+              "Muestra mensaje de validación del form.",
+              {
+                "kind": "code-ejemplo",
+                "code": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<form id=\"f\">\n  <iswc-button id=\"btn\" type=\"submit\" color=\"brand\">Enviar</iswc-button>\n</form>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Primero marcamos error custom; luego reportValidity muestra el UI nativo\n  btn.setCustomValidity('Debes corregir esto');\n  // Esperado: popup/mensaje nativo del navegador + alert false\n  const ok = btn.reportValidity();\n  alert('reportValidity → ' + ok);\n</script>",
+                "lang": "html",
+                "summary": "Ejemplo"
+              }
             ],
             [
               "<code>setCustomValidity(msg)</code>",
-              "Marca error custom para validación del form."
+              "Marca error custom para validación del form.",
+              {
+                "kind": "code-ejemplo",
+                "code": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<form id=\"f\">\n  <iswc-button id=\"btn\" type=\"submit\" color=\"brand\">Enviar</iswc-button>\n</form>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: checkValidity false; reportValidity muestra \"Campo requerido\"\n  btn.setCustomValidity('Campo requerido');\n  alert('checkValidity → ' + btn.checkValidity());\n  btn.reportValidity();\n  // Limpiar el error:\n  // btn.setCustomValidity('');\n</script>",
+                "lang": "html",
+                "summary": "Ejemplo"
+              }
             ]
           ]
-        },
-        {
-          "kind": "html",
-          "html": "<h4>Propiedades de validación (de ElementInternals)</h4>"
-        },
-        {
-          "kind": "html",
-          "html": "<h4>Demo</h4>"
-        },
-        {
-          "kind": "demo",
-          "html": "<iswc-button id=\"apiBtn\" color=\"brand\">Hazme click</iswc-button>\r\n          <div class=\"demo-row\" style=\"margin-top: 12px;\">\r\n            <button id=\"apiFocus\" type=\"button\" class=\"theme-toggle\" style=\"position: static;\">focus()</button>\r\n            <button id=\"apiClick\" type=\"button\" class=\"theme-toggle\" style=\"position: static;\">click()</button>\r\n            <button id=\"apiLoad\"  type=\"button\" class=\"theme-toggle\" style=\"position: static;\">toggle loading</button>\r\n            <button id=\"apiDis\"   type=\"button\" class=\"theme-toggle\" style=\"position: static;\">toggle disabled</button>\r\n            <button id=\"apiError\" type=\"button\" class=\"theme-toggle\" style=\"position: static;\">setCustomValidity</button>\r\n          </div>",
-          "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
-          "equivHtml": "<button type=\"button\">…</button>"
         }
       ]
     },
@@ -667,7 +719,7 @@
           "rows": [
             [
               "<code>color</code>",
-              "brand · neutral · success · warning · danger · info · error",
+              "brand · neutral · text · success · warning · danger · info · error",
               "brand",
               "Color semántico (tono).",
               "[Variantes](#variants)"
@@ -969,31 +1021,38 @@
         "table": [
           {
             "metodo": "<code>click()</code>",
-            "desc": "Nativo. Dispara un click programático."
+            "desc": "Nativo. Dispara un click programático.",
+            "ejemplo": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">Hazme click</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: alert \"click() OK\" (click programático)\n  btn.addEventListener('click', () => alert('click() OK'));\n  btn.click();\n</script>"
           },
           {
             "metodo": "<code>focus(options?)</code>",
-            "desc": "Nativo. Foco en el botón."
+            "desc": "Nativo. Foco en el botón.",
+            "ejemplo": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">Foco</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: outline de foco en el botón + alert\n  btn.focus();\n  alert('focus() aplicado — mira el outline del botón');\n</script>"
           },
           {
             "metodo": "<code>blur()</code>",
-            "desc": "Nativo. Quita el foco."
+            "desc": "Nativo. Quita el foco.",
+            "ejemplo": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">Blur</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: recibe foco, luego lo pierde + alert\n  btn.focus();\n  btn.blur();\n  alert('blur() OK — el botón ya no tiene foco');\n</script>"
           },
           {
             "metodo": "<code>setFocus(options?)</code>",
-            "desc": "Helper equivalente a <code>focus()</code> (misma signature)."
+            "desc": "Helper equivalente a <code>focus()</code> (misma signature).",
+            "ejemplo": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<iswc-button id=\"btn\" color=\"brand\">setFocus</iswc-button>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: igual que focus() — outline + alert\n  btn.setFocus();\n  alert('setFocus() OK — mira el outline del botón');\n</script>"
           },
           {
             "metodo": "<code>checkValidity()</code>",
-            "desc": "Validez (form-associated)."
+            "desc": "Validez (form-associated).",
+            "ejemplo": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<form id=\"f\">\n  <iswc-button id=\"btn\" type=\"submit\" color=\"brand\">Enviar</iswc-button>\n</form>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: alert \"checkValidity → true\" (válido por defecto)\n  alert('checkValidity → ' + btn.checkValidity());\n</script>"
           },
           {
             "metodo": "<code>reportValidity()</code>",
-            "desc": "Muestra mensaje de validación del form."
+            "desc": "Muestra mensaje de validación del form.",
+            "ejemplo": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<form id=\"f\">\n  <iswc-button id=\"btn\" type=\"submit\" color=\"brand\">Enviar</iswc-button>\n</form>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Primero marcamos error custom; luego reportValidity muestra el UI nativo\n  btn.setCustomValidity('Debes corregir esto');\n  // Esperado: popup/mensaje nativo del navegador + alert false\n  const ok = btn.reportValidity();\n  alert('reportValidity → ' + ok);\n</script>"
           },
           {
             "metodo": "<code>setCustomValidity(msg)</code>",
-            "desc": "Marca error custom para validación del form."
+            "desc": "Marca error custom para validación del form.",
+            "ejemplo": "<script type=\"module\">\n  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';\n  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);\n  await ISWebComponentsLoader.load('iswc-button');\n</script>\n\n<form id=\"f\">\n  <iswc-button id=\"btn\" type=\"submit\" color=\"brand\">Enviar</iswc-button>\n</form>\n\n<script type=\"module\">\n  await customElements.whenDefined('iswc-button');\n  const btn = document.querySelector('#btn');\n  // Esperado: checkValidity false; reportValidity muestra \"Campo requerido\"\n  btn.setCustomValidity('Campo requerido');\n  alert('checkValidity → ' + btn.checkValidity());\n  btn.reportValidity();\n  // Limpiar el error:\n  // btn.setCustomValidity('');\n</script>"
           }
         ]
       },
@@ -1001,7 +1060,7 @@
         "table": [
           {
             "name": "<code>color</code>",
-            "type": "brand · neutral · success · warning · danger · info · error",
+            "type": "brand · neutral · text · success · warning · danger · info · error",
             "default": "brand",
             "desc": "Color semántico (tono)."
           },

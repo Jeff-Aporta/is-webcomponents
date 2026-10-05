@@ -153,9 +153,20 @@ export function leerValor(el: Element, def: ControlDef): unknown {
  * Aplica el valor de un control al host: SIEMPRE vía JSON -> prop/attr.
  *  - attr:<name>  -> setAttribute / removeAttribute (booleans y vacíos)
  *  - prop:<name>  -> asignación de propiedad (valores complejos: objetos json)
+ *  - content: / textContent -> textContent del host
  *  - sin prefijo   -> attr si el host no define la propiedad, si no prop
  */
 export function aplicarValor(el: Element, def: ControlDef, valor: unknown): void {
+  const propRaw = String(def.prop || '');
+  if (
+    propRaw === 'content:'
+    || propRaw === 'content'
+    || propRaw === 'prop:textContent'
+    || propRaw === 'textContent'
+  ) {
+    el.textContent = valor == null ? '' : String(valor);
+    return;
+  }
   const attr = nombreAtributo(def.prop);
   if (attr) {
     if (typeof valor === 'boolean') {

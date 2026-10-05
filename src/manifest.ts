@@ -236,6 +236,7 @@ const manifest: ComponentManifestItem[] = [
   // Preview/demo system: chrome de la galería expuesto por CDN (loader) para
   // que cualquier app iswc pueda montar previews JSON de sus propios componentes.
   { tag: 'iswc-preview-component', title: 'Preview Component', category: 'preview', script: 'components/layout/preview-component.js', style: 'components/layout/preview-component.css', page: 'components/layout/preview-component.json' },
+  { tag: 'iswc-doc-demo', title: 'Doc Demo', category: 'preview', script: 'components/layout/doc-demo.js', style: 'components/layout/doc-demo.css', page: 'components/layout/doc-demo.json' },
   { tag: 'iswc-preview-controls', title: 'Preview Controls', category: 'preview', script: 'components/layout/preview-controls.js', page: 'components/layout/preview-controls.json' },
   { tag: 'iswc-playground', title: 'Playground', category: 'preview', script: 'components/preview/playground.js', style: 'components/preview/playground.css', page: 'components/preview/playground.json' },
   { tag: 'iswc-slots-pg', title: 'Slots Playground', category: 'preview', script: 'components/preview/slots-pg.js', style: 'components/preview/slots-pg.css', page: 'components/preview/slots-pg.json' },

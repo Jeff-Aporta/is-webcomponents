@@ -2,7 +2,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import '../media/icon.js';
-import { sharePayload } from '../_shared/web-share.js';
+import '../actions/share-button.js';
+import { createPanZoom, type PanZoomController } from '../_shared/pan-zoom.js';
 
 /**
  * <iswc-lightbox> — visor a pantalla completa para cualquier contenido.
@@ -63,29 +64,17 @@ const ICON = {
   zoomOut: 'mdi:magnify-minus-outline',
 };
 
-/** Holgura antes de tratar un pointerdown como pan y no como clic. */
-const PAN_THRESHOLD_PX = 4;
-
 const VALID_VARIANT = ['backdrop', 'solid'];
 
 /** Estado de la transformación (zoom + pan) que se aplica al `.lb-host`. */
 interface ViewTransform { scale: number; x: number; y: number; }
-
-/** Estado del gesto de pan en curso (entre pointerdown y pointerup). */
-interface DragState {
-  sx: number;
-  sy: number;
-  ox: number;
-  oy: number;
-  moved: boolean;
-}
 
 /** Botón de la barra del lightbox (lleva `data-act`). */
 function isActionable(n: EventTarget | null): n is HTMLElement {
   return n instanceof HTMLElement && !!n.dataset.act;
 }
 
-class IswcLightbox extends withStyleAttrs(HTMLElement) {
+class IswcLightbox extends withStyleAttrs(HTMLElement) {
 
   static get observedAttributes(): string[] {
     return ['open', 'variant', 'zoomable', 'close-on-backdrop', 'toolbar', 'no-default-actions'];
@@ -98,8 +87,7 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
   #defaultToolbar!: HTMLElement;
   #defaultLead!: HTMLElement;
   #defaultTrail!: HTMLElement;
-  #drag: DragState | null = null;
-  #dragged = false;
+  #pz: PanZoomController | null = null;
   #view: ViewTransform = { scale: 1, x: 0, y: 0 };
   /** Foco que tenía el elemento antes de abrir el lightbox: se restaura al
    *  cerrar (g06 #13). El <dialog> top-layer ya da role=dialog + aria-modal
@@ -117,18 +105,18 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
           </div>
           <div class="lb-bar__group lb-bar__trail" part="toolbar__trail">
             <slot name="toolbar"></slot>
-            <button type="button" class="lb-btn" data-act="zoom-out" title="Zoom −" aria-label="Reducir zoom" hidden>
+            <button type="button" class="lb-btn" data-act="zoom-out" title="Zoom −" aria-label="Reducir zoom">
               <iswc-icon icon="${ICON.zoomOut}"></iswc-icon>
             </button>
-            <button type="button" class="lb-btn" data-act="zoom-reset" title="Restablecer zoom" aria-label="Restablecer zoom" hidden>
+            <button type="button" class="lb-btn" data-act="zoom-reset" title="Restablecer zoom" aria-label="Restablecer zoom">
               <iswc-icon icon="${ICON.fit}"></iswc-icon>
             </button>
-            <button type="button" class="lb-btn" data-act="zoom-in" title="Zoom +" aria-label="Aumentar zoom" hidden>
+            <button type="button" class="lb-btn" data-act="zoom-in" title="Zoom +" aria-label="Aumentar zoom">
               <iswc-icon icon="${ICON.zoomIn}"></iswc-icon>
             </button>
-            <button type="button" class="lb-btn" data-act="share" title="Copiar enlace" aria-label="Copiar enlace" hidden>
+            <iswc-share-button class="lb-share" data-act="share" share-title="" text="" url="" title="Compartir" aria-label="Compartir">
               <iswc-icon icon="${ICON.share}"></iswc-icon>
-            </button>
+            </iswc-share-button>
             <button type="button" class="lb-btn" data-act="close" title="Cerrar" aria-label="Cerrar">
               <iswc-icon icon="${ICON.close}"></iswc-icon>
             </button>
@@ -165,9 +153,14 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
     this.#dialog.addEventListener('click', this.#onDialogClick as EventListener);
     // Focus trap: cycling Tab/Shift+Tab dentro del dialog (g06 #13).
     this.#dialog.addEventListener('keydown', this.#onDialogKeydown as EventListener);
-    this.#stage.addEventListener('wheel', this.#onWheel as EventListener, { passive: false });
-    this.#stage.addEventListener('pointerdown', this.#onPointerDown as EventListener);
-    this.#stage.addEventListener('click', this.#onStageClick as EventListener, true);
+
+    // Pan/zoom: helper compartido. Rueda = pan; Ctrl+rueda = zoom; drag = pan.
+    this.#pz = createPanZoom(this.#stage, this.#host, {
+      onChange: (v) => {
+        this.#view = { ...v };
+        emit(this, 'iswc-reposition', { ...v });
+      },
+    });
   }
 
   connectedCallback(): void {
@@ -178,11 +171,8 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
   }
 
   disconnectedCallback(): void {
-    window.removeEventListener('pointermove', this.#onPointerMove as EventListener);
-    // `once` vive en `AddEventListenerOptions`, no en `EventListenerOptions`:
-    // casteamos el objeto a la forma completa para silenciar la sobrecarga
-    // estricta de la firma de Window.
-    window.removeEventListener('pointerup', this.#onPointerUp as EventListener, { once: true } as AddEventListenerOptions);
+    this.#pz?.destroy();
+    this.#pz = null;
     if (this.#dialog.open) this.#dialog.close();
   }
 
@@ -223,22 +213,41 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
 
   get view(): ViewTransform { return { ...this.#view }; }
   set view(v: Partial<ViewTransform>) {
-    // `Object.assign` evita la trampa de spread (TS marca `scale`/`x`/`y`
-    // como "specified more than once" cuando se hace `{...defaults, ...v}`).
-    this.#view = Object.assign({ scale: 1, x: 0, y: 0 }, v);
-    this.#applyView();
+    if (!this.#pz) {
+      this.#view = { scale: 1, x: 0, y: 0, ...v };
+      return;
+    }
+    this.#pz.setView(v);
+    this.#view = { ...this.#pz.view };
+  }
+
+  /** Actualiza la URL del share kit (diagram-lightbox / apps). */
+  setShareUrl(url: string, title = document.title, text = ''): void {
+    const share = this.shadowRoot?.querySelector<HTMLElement & { url: string; shareTitle: string; text: string }>('iswc-share-button');
+    if (!share) return;
+    share.url = url;
+    share.shareTitle = title;
+    share.text = text || title;
   }
 
   show() { this.open = true; }
   hide() { this.open = false; }
-  resetView() { this.view = { scale: 1, x: 0, y: 0 }; }
+  resetView() {
+    if (!this.#pz) {
+      this.#view = { scale: 1, x: 0, y: 0 };
+      return;
+    }
+    this.#pz.reset();
+    this.#view = { ...this.#pz.view };
+  }
   recenter() { this.resetView(); }
-  zoomIn(factor = 1.2) { this.#zoomBy(factor); }
-  zoomOut(factor: number = 1.2) { this.#zoomBy(1 / factor); }
+  zoomIn(factor = 1.2) { this.#pz?.zoomBy(factor); }
+  zoomOut(factor: number = 1.2) { this.#pz?.zoomBy(1 / factor); }
 
   // ── Privados ────────────────────────────────────────────────────────────
   #syncOpen(): void {
     if (this.open) {
+      this.setShareUrl(window.location.href, document.title, window.location.href);
       if (!this.#dialog.open) {
         // Antes de abrir, recuerda el foco activo para restaurarlo al cerrar.
         this.#prevFocus = document.activeElement;
@@ -272,13 +281,12 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
 
   #syncDefaultActions() {
     const hideAll = this.noDefaultActions;
+    // Controles estándar de editor SVG: zoom ± / fit / share / close.
     const actions = ['zoom-in', 'zoom-out', 'zoom-reset', 'share', 'close'];
     for (const a of actions) {
       const btn = this.#defaultToolbar.querySelector<HTMLElement>(`[data-act="${a}"]`);
       if (!btn) continue;
-      // close siempre visible a menos que el usuario la oculte vía slot/override.
-      const forceHide = hideAll || (a !== 'close' && a !== 'zoom-reset');
-      btn.hidden = forceHide;
+      btn.hidden = hideAll;
     }
   }
 
@@ -316,99 +324,22 @@ class IswcLightbox extends withStyleAttrs(HTMLElement) {
       case 'zoom-in': this.zoomIn(); break;
       case 'zoom-out': this.zoomOut(); break;
       case 'zoom-reset': this.resetView(); break;
-      case 'share': this.#share(); break;
+      case 'share': break; // iswc-share-button maneja el click
       case 'close': this.open = false; break;
       default: break;
     }
   };
 
-  async #share(): Promise<void> {
-    const url = window.location.href;
-    const how = await sharePayload({ title: document.title, url, text: url });
-    if (how === 'abort') return;
-    const t = this.shadowRoot!.querySelector<HTMLElement>('.lb-toast');
-    if (t) {
-      t.hidden = false;
-      setTimeout(() => { t.hidden = true; }, 1800);
-    }
-    emit(this, 'iswc-share', { url, how });
-  }
-
-  /* ── zoom / pan ── */
+  /* ── zoom / pan (delegado a createPanZoom) ── */
 
   #zoomBy(factor: number): void {
     if (!this.zoomable) return;
-    const next = Math.max(0.3, Math.min(6, this.#view.scale * factor));
-    const k = next / this.#view.scale;
-    if (k === 1) return;
-    const rect = this.#stage.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    this.#view.x = (cx - cx) * (1 - k) + this.#view.x * k;
-    this.#view.y = (cy - cy) * (1 - k) + this.#view.y * k;
-    this.#view.scale = next;
-    this.#applyView();
+    this.#pz?.zoomBy(factor);
   }
 
   #applyView(): void {
-    const { scale, x, y } = this.#view;
-    this.#host.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
-    emit(this, 'iswc-reposition', { ...this.#view });
+    this.#pz?.setView(this.#view);
   }
-
-  /** Zoom anclado al cursor: el punto bajo el puntero no se mueve. */
-  #onWheel = (e: WheelEvent): void => {
-    if (!this.zoomable) return;
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-    const next = Math.max(0.3, Math.min(6, this.#view.scale * factor));
-    const k = next / this.#view.scale;
-    if (k === 1) return;
-    const rect = this.#stage.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    this.#view.x = (e.clientX - cx) * (1 - k) + this.#view.x * k;
-    this.#view.y = (e.clientY - cy) * (1 - k) + this.#view.y * k;
-    this.#view.scale = next;
-    this.#applyView();
-  };
-
-  #onPointerDown = (e: PointerEvent): void => {
-    if (!this.zoomable || e.button !== 0) return;
-    this.#drag = {
-      sx: e.clientX, sy: e.clientY, ox: this.#view.x, oy: this.#view.y, moved: false,
-    };
-    window.addEventListener('pointermove', this.#onPointerMove as EventListener);
-    window.addEventListener('pointerup', this.#onPointerUp as EventListener, { once: true });
-  };
-
-  #onPointerMove = (e: PointerEvent): void => {
-    const drag = this.#drag;
-    if (!drag) return;
-    const dx = e.clientX - drag.sx;
-    const dy = e.clientY - drag.sy;
-    if (!drag.moved && Math.abs(dx) < PAN_THRESHOLD_PX && Math.abs(dy) < PAN_THRESHOLD_PX) return;
-    drag.moved = true;
-    this.#stage.dataset.panning = '';
-    this.#view.x = drag.ox + dx;
-    this.#view.y = drag.oy + dy;
-    this.#applyView();
-  };
-
-  #onPointerUp = (): void => {
-    this.#dragged = !!this.#drag?.moved;
-    this.#drag = null;
-    delete this.#stage.dataset.panning;
-    window.removeEventListener('pointermove', this.#onPointerMove as EventListener);
-  };
-
-  /** Tras un pan, el clic de cierre del gesto no debe activar nada del contenido. */
-  #onStageClick = (e: MouseEvent): void => {
-    if (!this.#dragged) return;
-    this.#dragged = false;
-    e.stopPropagation();
-    e.preventDefault();
-  };
 
   /** Focus trap básico: si Tab/Shift+Tab sale del dialog, lo cicla al
    *  otro extremo (g06 #13). El `<dialog>` top-layer ya aísla el foco del

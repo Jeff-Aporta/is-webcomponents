@@ -56,7 +56,7 @@ import { ModalBase } from '../_shared/modal-base.js';
             class="close-btn"
             part="close-button"
             variant="text"
-            color="neutral"
+            color="text"
             aria-label="Cerrar"
           >
             <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -80,7 +80,7 @@ import { ModalBase } from '../_shared/modal-base.js';
     bottom: { transform: 'translateY(100%)' },
   };
 
-  class IswcDrawer extends ModalBase {
+  class IswcDrawer extends ModalBase {
 
     static __TEMPLATE = TEMPLATE;
 

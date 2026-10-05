@@ -10,7 +10,7 @@ import { TONE } from '../_shared/tone.js';
  * Etiqueta compacta con colores semánticas.
  *
  * Atributos
- *   color      brand | neutral | success | warning | danger (default brand)
+ *   color      brand | neutral | text | success | warning | danger (default brand)
  *   variant   accent | filled | outlined | filled-outlined (default accent)
  *   pill         boolean
  *   attention    none | pulse | bounce (default none)
@@ -33,7 +33,7 @@ import { TONE } from '../_shared/tone.js';
   const VALID_VARIANT = TONE.filter((t) => t !== 'plain');
   const VALID_ATTENTION = ['none', 'pulse', 'bounce'];
 
-  class IswcBadge extends withStyleAttrs(HTMLElement) {
+  class IswcBadge extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'pulse-color']; }
 

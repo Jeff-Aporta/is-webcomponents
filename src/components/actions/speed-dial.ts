@@ -55,7 +55,7 @@ import { createPopupDismiss } from '../_shared/popup-dismiss.js';
  *   iswc-select  detail: { action }   — cuando se elige una acción
  *
  * Cada <iswc-speed-dial-action> acepta:
- *   icon, label, color (brand|neutral|success|warning|danger), href, disabled
+ *   icon, label, color (brand|neutral|text|success|warning|danger), href, disabled
  *   El clic dispara iswc-select y, si no está disabled ni tiene href, cierra el dial.
  */
 (() => {

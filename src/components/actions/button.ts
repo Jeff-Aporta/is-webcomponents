@@ -1,14 +1,14 @@
+import { applyToneRamp, isCssColorValue } from '../../core/attrs.js';
+import { ElementBase } from '../../core/element-base.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
-import { ElementBase } from '../../core/element-base.js';
-import { applyToneRamp, isCssColorValue, syncPresentStyleAttrs } from '../../core/attrs.js';
 
-import { setCustomState } from '../_shared/form-associated.js';
 import {
   BUTTON_SHAPE,
   DEFAULT_BUTTON_SHAPE,
   normalizeButtonShape,
 } from '../_shared/button-shape.js';
+import { setCustomState } from '../_shared/form-associated.js';
 import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
 
 /**
@@ -19,7 +19,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
  * y expone parts + custom states para personalización desde fuera.
  *
  * Atributos
- *  color      brand | neutral | success | warning | danger | info | error   (default: brand)
+ *  color      brand | neutral | text | success | warning | danger | info | error   (default: brand)
  *  variant   filled | outlined | plain | ghost | soft | soft-filled | text  (default: filled)
  *  shape        none | round | square | rect | pill  (default: round)
  *                             `none` = sin conversión de forma; `round` = radio tema;
@@ -123,7 +123,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
   const OBSERVED = [
     "color", "variant", "shape", "hue",
     "disabled", "loading", "pill", "with-caret",
-    "href", "download",
+    "href", "download", "target", "rel",
     "type", "title", "name", "value",
     "form", "formaction", "formenctype", "formmethod",
     "formnovalidate", "formtarget"
@@ -383,6 +383,8 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
         title: "title",
         href: "href",
         download: "download",
+        target: "target",
+        rel: "rel",
         name: "name",
         value: "value",
         form: "form",

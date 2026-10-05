@@ -80,15 +80,13 @@ test('min.js de componente lleva banner de docs MD', () => {
   assert.match(btn, /is-cdn-install\/SKILL\.md/);
 });
 
-test('index.html arranca con loader local (sin all.min; CSS vía loader)', () => {
-  const indexMjs = readFileSync(join(root, 'index.mjs'), 'utf8');
-  assert.match(indexHtml, /src=["']\.\/index\.mjs["']/);
-  assert.match(indexMjs, /loader\.min\.js/);
-  assert.match(indexMjs, /configure\s*\(\s*\{\s*local\s*:\s*true\s*\}\s*\)/);
+test('index.html arranca con doc-demo host (sin all.min; CSS vía loader)', () => {
+  assert.match(indexHtml, /doc-demo-host\.min\.js/);
+  assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
+  assert.match(indexHtml, /<iswc-doc-demo/);
   assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css/);
-  assert.doesNotMatch(indexMjs, /L\.load\(['"]all['"]\)/);
+  assert.doesNotMatch(indexHtml, /L\.load\(['"]all['"]\)/);
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
-  // Detalle del orden shell → tests/gallery-boot.test.ts (error #43)
 });
 
 test('index.html no reimporta preview-component ni icon desde src/ (Pages 404)', () => {

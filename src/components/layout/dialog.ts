@@ -66,7 +66,7 @@ import { ModalBase } from '../_shared/modal-base.js';
             class="close-btn"
             part="close-button"
             variant="text"
-            color="neutral"
+            color="text"
             aria-label="Cerrar"
           >
             <iswc-icon icon="mdi:close" aria-hidden="true"></iswc-icon>
@@ -85,7 +85,7 @@ import { ModalBase } from '../_shared/modal-base.js';
   /** Valores oficiales del componente. Cualquier otro → se trata como none. */
   const BACKDROP_VARIANTS = new Set(['none', 'basic']);
 
-  class IswcDialog extends ModalBase {
+  class IswcDialog extends ModalBase {
 
     static get observedAttributes(): string[] {
       return [...super.observedAttributes, 'backdrop-variant'];

@@ -395,9 +395,14 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
     }
 
     // Apply a <html> solo si el switch de sesión está on (no se persiste).
+    // data-theme es el contrato del kit (theme-toggle); class theme-* es legado.
     if (applyRoot?.checked) {
       const html = document.documentElement;
-      const set = html.classList.contains('theme-light') ? t.light : t.dark;
+      const mode = (html.getAttribute('data-theme')
+        || html.dataset.theme
+        || (html.classList.contains('theme-light') ? 'light' : null)
+        || 'dark').toLowerCase();
+      const set = mode === 'light' ? t.light : t.dark;
       for (const [k, v] of Object.entries({ ...t.marca, ...set })) html.style.setProperty(k, v);
     }
 

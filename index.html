@@ -21,55 +21,23 @@
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Cualquiera con navegador moderno",
     "url": "https://jeff-aporta.github.io/is-webcomponents/",
-    "description": "Galería de Web Components vanilla open source (iswc-*): catálogo, previews y consumo por CDN o local.",
-    "license": "https://opensource.org/licenses"
+    "description": "Galería de Web Components vanilla open source (iswc-*): catálogo, previews y consumo por CDN o local."
   }
   </script>
-  <script src="./index.js"></script>
-  <link rel="stylesheet" href="./index.css">
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
-  <script type="module" src="./index.mjs"></script>
-  <script type="module" src="./dist/gallery-app.min.js?h=lstgoq" defer></script>
+  <script type="module" src="./dist/cdn/preview/doc-demo-host.min.js"></script>
+  <script type="module" src="./dist/gallery-app.min.js" defer></script>
 </head>
 <body>
-  <header class="shell-bar" id="shellBar">
-    <a class="shell-brand" id="shellBrand" href="./" aria-label="Inicio (Home)">
-      <iswc-icon class="shell-brand__icon" icon="mdi:apps-box" aria-hidden="true"></iswc-icon>
-      <span class="shell-brand__text">ISWC</span>
-    </a>
-
-    <iswc-button class="shell-menu-btn" id="navToggle" color="neutral" variant="plain" pill type="button"
-            aria-expanded="false" aria-controls="navDrawer"
-            aria-label="Abrir el catálogo de componentes" title="Catálogo de componentes" hidden>
-      <iswc-icon slot="start" icon="mdi:menu"></iswc-icon>
-    </iswc-button>
-
-    <iswc-palette-selector id="brandPalette" scope="root" storage-key="iswc-palette" aria-label="Elegir paleta"></iswc-palette-selector>
-
-    <div class="shell-tools" role="toolbar" aria-label="Herramientas de la galería">
-      <iswc-button class="shell-icon-btn shell-tool-btn" id="panelsCompactBtn" color="neutral" variant="plain" pill type="button"
-              aria-pressed="false"
-              aria-label="Compactar paneles laterales" title="Compactar paneles laterales">
-        <iswc-icon slot="start" icon="mdi:arrow-collapse-horizontal"></iswc-icon>
-      </iswc-button>
-    </div>
-
-    <iswc-button class="shell-icon-btn" id="fullscreenBtn" color="neutral" variant="plain" pill type="button" aria-label="Abrir preview en pantalla completa" title="Abrir preview en pantalla completa">
-      <iswc-icon slot="start" icon="mdi:open-in-new"></iswc-icon>
-    </iswc-button>
-
-    <iswc-theme-toggle id="themeToggle" scope="root" dark="true"></iswc-theme-toggle>
-  </header>
-
-  <iswc-split-panel id="mainSplit" class="main-split" orientation="horizontal" position-in-pixels="200" primary="start" storage-key="gallery-nav">
-    <nav class="shell-nav" slot="start" id="shellNav" aria-label="Componentes"></nav>
-    <div class="preview-stage" slot="end">
-      <iswc-preview-component class="preview-host" id="previewHost" hidden></iswc-preview-component>
-      <iframe class="preview-frame" id="previewFrame" title="Vista del componente"></iframe>
-    </div>
-  </iswc-split-panel>
-
-  <iswc-drawer id="navDrawer" class="shell-nav-drawer" placement="start" light-dismiss
-             label="Componentes"></iswc-drawer>
+  <iswc-doc-demo
+    brand="ISWC"
+    brand-icon="mdi:apps-box"
+    brand-href="./"
+    local
+    dev
+    sheets-cache="iswc-gallery-sheets"
+    storage-key-nav="gallery-nav"
+    palette-storage-key="iswc-palette"
+  ></iswc-doc-demo>
 </body>
 </html>

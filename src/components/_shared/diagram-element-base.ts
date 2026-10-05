@@ -57,6 +57,7 @@
  */
 
 import { ElementBase } from '../../core/element-base.js';
+import { findThemeContainer, readTheme } from './theme-scope.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -136,9 +137,11 @@ export class DiagramElementBase extends ElementBase {
   onDiagramConnected(): void {}
   onDiagramDisconnected(): void {}
 
-  /** true cuando el tema activo es oscuro (mismo criterio que hoy en los
-   *  8 diagramas: ausencia de la clase `theme-light` en <html>). */
-  get isDarkTheme(): boolean { return !document.documentElement.classList.contains('theme-light'); }
+  /** true cuando el tema activo es oscuro (`data-theme`, no clase legacy). */
+  get isDarkTheme(): boolean {
+    const container = findThemeContainer(this);
+    return readTheme(container) !== 'light';
+  }
 
   /** Aplica `data-theme` al wrapper del shadow, como hacen hoy todos los
    *  diagramas dentro de su `#render`. La subclase la llama desde

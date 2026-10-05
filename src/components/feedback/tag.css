@@ -53,6 +53,11 @@
   --_border: var(--iswc-control-border);
   --_text: var(--iswc-control-text);
 }
+:host([color="text"]) {
+  --_bg: color-mix(in srgb, var(--iswc-text) 12%, transparent);
+  --_border: var(--iswc-text);
+  --_text: var(--iswc-text);
+}
 :host([color="info"]) {
   --_bg: var(--iswc-color-info-pale);
   --_border: var(--iswc-color-info);

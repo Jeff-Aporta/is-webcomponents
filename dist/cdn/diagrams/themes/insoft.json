@@ -1,0 +1,138 @@
+{
+  "$schema": "iswc-diagram-theme/v1",
+  "id": "insoft",
+  "label": "InSoft ER (docs)",
+  "font": {
+    "family": "\"Poppins\", \"Inter\", system-ui, sans-serif",
+    "import": "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  },
+  "canvas": {
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#475569"
+  },
+  "entity": {
+    "fill": "#F4B67B",
+    "headerFill": "#F4B67B",
+    "border": "#000000",
+    "borderWidth": 1.5,
+    "radius": 0,
+    "separator": "#FBE2A2",
+    "separatorWidth": 0.7
+  },
+  "orphan": {
+    "fill": "#BFFFC0",
+    "headerFill": "#BFFFC0",
+    "border": "#000000"
+  },
+  "edge": {
+    "stroke": "#3D5A80",
+    "strokeWidth": 1.2,
+    "dasharray": "4 3",
+    "labelBg": "#FFFFFF",
+    "hideLabels": true
+  },
+  "cluster": {
+    "border": "#000000",
+    "borderWidth": 1.5,
+    "radius": 0,
+    "dasharray": "",
+    "titleFill": "#000000",
+    "palettes": {
+      "oper": "#7ACFF4",
+      "conf": "#00C3C4",
+      "seg": "#C0C000",
+      "terc": "#BFC0C1",
+      "api": "#7ACFF4",
+      "db": "#F8A0A8",
+      "openai": "#00C3C4",
+      "ds": "#BFC0C1",
+      "r2": "#BFFFC0",
+      "apps": "#7ACFF4",
+      "azure": "#FBE2A2"
+    },
+    "fallback": "#7ACFF4"
+  },
+  "diagramTheme": {
+    "text": "#0F172A",
+    "muted": "#475569",
+    "grid": "rgba(100,116,139,0.28)",
+    "panel": "transparent",
+    "border": "rgba(0,0,0,0.32)",
+    "accent": "#000000",
+    "altFill": "rgba(244,182,123,0.12)",
+    "altBorder": "#000000",
+    "chipFill": "#F4B67B",
+    "chipFillSoft": "#FFFFFF",
+    "dotText": "#0F172A"
+  },
+  "light": {
+    "canvas": {
+      "background": "#FFFFFF",
+      "text": "#0F172A",
+      "muted": "#475569"
+    },
+    "edge": {
+      "stroke": "#3D5A80",
+      "labelBg": "#FFFFFF"
+    },
+    "diagramTheme": {
+      "text": "#0F172A",
+      "muted": "#475569",
+      "chipFillSoft": "#FFFFFF",
+      "dotText": "#0F172A"
+    }
+  },
+  "dark": {
+    "canvas": {
+      "background": "#0B1220",
+      "text": "#E2E8F0",
+      "muted": "#94A3B8"
+    },
+    "entity": {
+      "fill": "#C47A3A",
+      "headerFill": "#C47A3A",
+      "border": "#E2E8F0",
+      "separator": "#8B5A2B"
+    },
+    "orphan": {
+      "fill": "#2F6B3A",
+      "headerFill": "#2F6B3A",
+      "border": "#E2E8F0"
+    },
+    "edge": {
+      "stroke": "#7EB6D9",
+      "labelBg": "#0B1220"
+    },
+    "cluster": {
+      "border": "#E2E8F0",
+      "titleFill": "#E2E8F0",
+      "palettes": {
+        "oper": "#3A8FB5",
+        "conf": "#1A8A8B",
+        "seg": "#8A8A20",
+        "terc": "#6B6C6D",
+        "api": "#3A8FB5",
+        "db": "#A85A62",
+        "openai": "#1A8A8B",
+        "ds": "#6B6C6D",
+        "r2": "#2F6B3A",
+        "apps": "#3A8FB5",
+        "azure": "#8B6B2B"
+      },
+      "fallback": "#3A8FB5"
+    },
+    "diagramTheme": {
+      "text": "#E2E8F0",
+      "muted": "#94A3B8",
+      "grid": "rgba(148,163,184,0.22)",
+      "border": "rgba(226,232,240,0.28)",
+      "accent": "#E2E8F0",
+      "altFill": "rgba(196,122,58,0.18)",
+      "altBorder": "#E2E8F0",
+      "chipFill": "#C47A3A",
+      "chipFillSoft": "#0B1220",
+      "dotText": "#E2E8F0"
+    }
+  }
+}
