@@ -240,6 +240,7 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'iswc-playground', title: 'Playground', category: 'preview', script: 'components/preview/playground.js', style: 'components/preview/playground.css', page: 'components/preview/playground.json' },
   { tag: 'iswc-slots-pg', title: 'Slots Playground', category: 'preview', script: 'components/preview/slots-pg.js', style: 'components/preview/slots-pg.css', page: 'components/preview/slots-pg.json' },
   { tag: 'iswc-examples-carousel', title: 'Examples Carousel', category: 'preview', script: 'components/preview/examples-carousel.js', style: 'components/preview/examples-carousel.css', page: 'components/preview/examples-carousel.json' },
+  { tag: 'iswc-demo-section', title: 'Demo Section', category: 'preview', script: 'components/preview/demo-section.js', style: 'components/preview/demo-section.css', page: 'components/preview/demo-section.json' },
 ];
 
 export default manifest;

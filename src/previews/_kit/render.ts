@@ -6,6 +6,7 @@ import type {
   PreviewSection,
   PreviewBlock,
 } from './types.d.ts';
+import '../../components/preview/demo-section.js';
 
 /**
  * Base de `dist/assets/` para el token `{assets}`.
@@ -341,43 +342,52 @@ function pintarTitulo(h2: HTMLElement, title: string, asHtml?: boolean): void {
   }
 }
 
-/** Contenedores permitidos para una sección: nunca un tag arbitrario del JSON. */
-const CONTENEDORES = new Set(['section', 'aside']);
-
 /**
  * @param section
  * @returns
  */
 export function renderSection(section: PreviewSection): HTMLElement {
-  const tag: 'section' | 'aside' = CONTENEDORES.has(section.as ?? '') && section.as
-    ? section.as
-    : 'section';
-  const el = document.createElement(tag);
-  el.className = section.className ? `section ${section.className}` : 'section';
-  el.id = section.id;
-  if (section.ariaLabel) el.setAttribute('aria-label', section.ariaLabel);
-  if (section.ariaLabelledby) el.setAttribute('aria-labelledby', section.ariaLabelledby);
-  if (section.role) el.setAttribute('role', section.role);
+  // Phase W32 (zod-migration): homogeneidad visual de TODAS las secciones de
+  // los demos. El wrapper `<iswc-demo-section>` proyecta el header (title +
+  // lede) fuera y el contenido dentro de una card. Las clases `section`,
+  // `id`, y atributos ARIA siguen en el host para que las reglas de
+  // `presentation.css` (`.section h2`, `.section:first-of-type h2::after`, …)
+  // sigan aplicando al header flotante.
+  const wrapper = document.createElement('iswc-demo-section');
+  wrapper.className = section.className ? `section ${section.className}` : 'section';
+  wrapper.id = section.id;
+  if (section.ariaLabel) wrapper.setAttribute('aria-label', section.ariaLabel);
+  if (section.ariaLabelledby) wrapper.setAttribute('aria-labelledby', section.ariaLabelledby);
+  if (section.role) {
+    wrapper.setAttribute('role', section.role);
+  } else if (section.as === 'aside') {
+    // Conserva el semántico del JSON original: `<aside>` es landmark
+    // `complementary`. Como ahora es un custom element, lo declaramos
+    // explícito para no perder el landmark.
+    wrapper.setAttribute('role', 'complementary');
+  }
 
-  // `hideTitle` es para las secciones cuyo markup ya trae su encabezado: pintar
-  // el <h2> del chrome encima duplicaría el título de la página.
+  // `hideTitle` es para las secciones cuyo markup ya trae su encabezado:
+  // pintar el <h2> del chrome encima duplicaría el título de la página.
   if (!section.hideTitle) {
     const h2 = document.createElement('h2');
+    h2.setAttribute('slot', 'title');
     pintarTitulo(h2, section.title, section.titleHtml === true);
-    el.append(h2);
+    wrapper.append(h2);
   }
 
   if (section.lede) {
     const p = document.createElement('p');
     p.className = 'lede';
+    p.setAttribute('slot', 'lede');
     p.innerHTML = resolveAssets(section.lede);
-    el.append(p);
+    wrapper.append(p);
   }
 
   for (const block of section.blocks) {
-    el.append(renderBlock(block));
+    wrapper.append(renderBlock(block));
   }
-  return el;
+  return wrapper;
 }
 
 /**

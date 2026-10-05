@@ -1,0 +1,82 @@
+/* <iswc-demo-section> — Phase W32 wrapper.
+   El header (title + lede) va arriba, fuera de la card. El contenido real
+   (bloques `demo`, `code`, `callout`, `html`, `table`) vive dentro de la
+   card. Las reglas de `.section h2`, `.section .lede`, etc. viven en
+   `presentation.css` y siguen aplicando al header porque el titulo y el
+   lede son light-DOM hijos del host con clase `section`. */
+
+/* `padding-inline` del .section de presentation.css: el wrapper es el
+   .section real, asi que mantiene el padding/border que ya tenia la seccion
+   legacy. */
+
+/* ─────────────────────────────── host ──────────────────────────────── */
+
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  color: inherit;
+  font-family: inherit;
+}
+
+:host([hidden]) { display: none; }
+
+/* ─────────────────────────────── head ──────────────────────────────── */
+
+/* Flotante: full-width, sin borde ni fondo. Solo titulo + lede. */
+.head {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.head[hidden] { display: none; }
+
+/* El slot[name="title"] y slot[name="lede"] no deben aportar altura cuando
+   estan vacios. `display: contents` evita que el slot sea un bloque anonimo
+   en el flow. */
+.head ::slotted([slot="title"]),
+.head ::slotted([slot="lede"]) {
+  display: block;
+}
+
+/* Por si el consumidor anade un slot vacio (no deberia): que no pinte padding. */
+.head:empty { display: none; }
+
+/* ─────────────────────────────── card ──────────────────────────────── */
+
+.card {
+  /* Look homogeneo: misma carta para que TODAS las sections de un demo
+     queden coherentes. La paleta la aportan los tokens --iswc-* ya cargados
+     en presentation.css. */
+  position: relative;
+  display: block;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--iswc-bg-elev) 92%, #fff) 0%,
+      var(--iswc-bg-elev) 100%);
+  border: 1px solid var(--iswc-border);
+  border-radius: calc(var(--iswc-radius, 0.625em) + 2px);
+  padding: clamp(1.1rem, 2.4vw, 1.5rem);
+  margin: 0 0 1.6em;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 4%),
+    var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 18%));
+  color: inherit;
+  /* El contenido puede ser interactivo: si el consumidor declara un
+     dropdown/popover dentro, que pueda salir de la card sin recortarse. */
+  overflow: visible;
+  isolation: isolate;
+}
+
+/* El primer y ultimo hijo dentro de la card: margen 0 para que no dupliquen
+   el padding del contenedor. */
+.card ::slotted(*:first-child) { margin-block-start: 0; }
+.card ::slotted(*:last-child) { margin-block-end: 0; }
+
+/* ─────────────────────────── estado `data-empty` ───────────────────── */
+
+/* Si por algun motivo el host no recibio bloques (seccion vacia), no
+   mostramos una card sin nada. El atributo lo activa el consumidor si lo
+   necesita; no se gestiona aqui automaticamente. */
+:host([data-empty]) .card { display: none; }
