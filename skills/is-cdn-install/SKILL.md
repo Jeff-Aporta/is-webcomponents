@@ -19,9 +19,9 @@ description: >-
 
 ## Prompt LLM y herramientas
 
-Prompt completo listo para copiar: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md).
-Herramientas tipo slash del kit: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) —
-en particular [`/is-webcomponents:local`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/tools/local.md) para vendorizar el kit y bootear local-first.
+Prompt completo listo para copiar: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/PROMPT.md).
+Herramientas tipo slash del kit: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/is-webcomponents/tools) —
+en particular [`/is-webcomponents:local`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/tools/local.md) para vendorizar el kit y bootear local-first.
 
 ## Skill publicada (léela primero)
 
@@ -29,12 +29,12 @@ Los agentes instalan/siguen mejor skills desde URLs de **repo de GitHub**. Usa r
 
 | Canal | URL |
 | --- | --- |
-| GitHub (preferido) | `https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md` |
-| Raw (texto plano) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md` |
+| GitHub (preferido) | `https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md` |
+| Raw (texto plano) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md` |
 | CDN jsDelivr | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md` |
 | Pages | `https://jeff-aporta.github.io/is-webcomponents/dist/cdn/skills/is-cdn-install/SKILL.md` |
 
-Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src/skills/is-webcomponents/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md) (misma carpeta en `dist/cdn/skills/`).
+Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`is-webcomponents/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/SKILL.md) (misma carpeta en `dist/cdn/skills/`).
 
 ## Espejos
 
@@ -155,7 +155,7 @@ No inventar props/eventos que no están en el MD.
 
 ## Más detalle
 
-- Prompt LLM completo: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md)
-- Herramientas `/is-webcomponents:build|migrate|local|runtime`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools) (runtime = loader, IswcUi, MD, cache)
+- Prompt LLM completo: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/PROMPT.md)
+- Herramientas `/is-webcomponents:build|migrate|local|runtime`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/is-webcomponents/tools) (runtime = loader, IswcUi, MD, cache)
 - Espejos y resolución de ref: [reference.md](reference.md)
 - Skill de reuso de tags: `../is-webcomponents/SKILL.md`
