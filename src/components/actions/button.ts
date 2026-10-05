@@ -33,8 +33,6 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
  *  pill         boolean
  *  with-caret   boolean
  *  href         string   → renderiza como <a>
- *  target       string
- *  rel          string
  *  download     string
  *  type         button | submit | reset                       (default: button)
  *  title        string
@@ -125,7 +123,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
   const OBSERVED = [
     "color", "variant", "shape", "hue",
     "disabled", "loading", "pill", "with-caret",
-    "href", "target", "rel", "download",
+    "href", "download",
     "type", "title", "name", "value",
     "form", "formaction", "formenctype", "formmethod",
     "formnovalidate", "formtarget"
@@ -153,8 +151,8 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
      * siendo la variante semántica de siempre; un color CSS literal
      * (`#ae3ec9`, `var(--x)`, `oklch(…)`) pinta el tono base directamente.
      *
-     * Phase V5: el ajuste fino por atributo (`color-hover`, `color-active`,
-     * `color-text`) ya NO se sincroniza automáticamente — el consumer define
+     * Phase W31: los atributos `color-hover` / `color-active` /
+     * `border-width` se erradicaron del componente; el consumer define
      * estos tokens vía CSS class o inline style.
      */
 
@@ -384,8 +382,6 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
       const map = {
         title: "title",
         href: "href",
-        target: "target",
-        rel: "rel",
         download: "download",
         name: "name",
         value: "value",

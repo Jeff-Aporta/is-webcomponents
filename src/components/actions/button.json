@@ -112,16 +112,6 @@
             },
             {
               "control": "text",
-              "prop": "attr:target",
-              "label": "target"
-            },
-            {
-              "control": "text",
-              "prop": "attr:rel",
-              "label": "rel"
-            },
-            {
-              "control": "text",
               "prop": "attr:download",
               "label": "download"
             },
@@ -146,32 +136,12 @@
             },
             {
               "control": "select",
-              "prop": "attr:color-hover",
-              "label": "color-hover",
-              "options": [
-                "#862e9c",
-                "#087f5b",
-                "#a03406"
-              ]
-            },
-            {
-              "control": "text",
-              "prop": "attr:color-active",
-              "label": "color-active"
-            },
-            {
-              "control": "select",
               "prop": "attr:radius",
               "label": "radius",
               "options": [
                 "0",
                 "18px"
               ]
-            },
-            {
-              "control": "text",
-              "prop": "attr:border-width",
-              "label": "border-width"
             }
           ],
           "equivNote": "Segun attrs, el host se comporta como button o como enlace. El diagrama resume las ramas — clic para abrir el lightbox.",
@@ -312,13 +282,27 @@
       ]
     },
     {
-      "id": "pill",
-      "title": "Pill",
-      "lede": "<code class=\"code\">pill</code> aplica <code class=\"code\">border-radius: 999px</code>.",
+      "id": "shapes",
+      "title": "Shapes",
+      "lede": "<code class=\"code\">shape</code> define la forma: <code class=\"code\">round</code> · <code class=\"code\">square</code> · <code class=\"code\">rect</code> · <code class=\"code\">pill</code> · <code class=\"code\">hexagon</code> (más <code class=\"code\">none</code>, <code class=\"code\">arrow-left</code>, <code class=\"code\">arrow-right</code>). <code class=\"code\">pill</code> equivale a <code class=\"code\">border-radius: 999px</code>; <code class=\"code\">hexagon</code> usa <code class=\"code\">corner-shape: bevel</code>; <code class=\"code\">arrow-*</code> mezcla esquinas bevel y round.",
       "blocks": [
         {
+          "kind": "html",
+          "html": "<h4>round · square · rect · pill · hexagon</h4>"
+        },
+        {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button pill color=\"brand\">Pill brand</iswc-button>\r\n            <iswc-button pill color=\"success\" variant=\"outlined\">Pill outlined</iswc-button>\r\n            <iswc-button pill color=\"neutral\" variant=\"plain\">Pill plain</iswc-button>\r\n            <iswc-button pill color=\"brand\">\r\n              <iswc-icon icon=\"mdi:plus\"></iswc-icon>\r\n              Crear nuevo\r\n            </iswc-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;align-items:center\">\r\n            <iswc-button shape=\"round\" color=\"brand\">round</iswc-button>\r\n            <iswc-button shape=\"square\" color=\"brand\">square</iswc-button>\r\n            <iswc-button shape=\"rect\" color=\"brand\">rect</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"brand\">pill</iswc-button>\r\n            <iswc-button shape=\"hexagon\" color=\"brand\">hexagon</iswc-button>\r\n            <iswc-button shape=\"round\" color=\"success\" variant=\"outlined\">round</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"success\" variant=\"outlined\">pill</iswc-button>\r\n            <iswc-button shape=\"hexagon\" color=\"success\" variant=\"outlined\">hexagon</iswc-button>\r\n            <iswc-button shape=\"round\" color=\"neutral\" variant=\"plain\">round</iswc-button>\r\n            <iswc-button shape=\"pill\" color=\"neutral\" variant=\"plain\">pill</iswc-button>\r\n            <iswc-button shape=\"hexagon\" color=\"neutral\" variant=\"plain\">hexagon</iswc-button>\r\n          </div>",
+          "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
+          "equivHtml": "<button type=\"button\">…</button>"
+        },
+        {
+          "kind": "html",
+          "html": "<h4>arrow-left · arrow-right</h4>"
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"demo-row\" style=\"flex-wrap:wrap;gap:.5rem;align-items:center\">\r\n            <iswc-button shape=\"arrow-right\" color=\"brand\" variant=\"filled\">Continuar</iswc-button>\r\n            <iswc-button shape=\"arrow-left\" color=\"brand\" variant=\"filled\">Volver</iswc-button>\r\n            <iswc-button shape=\"arrow-right\" color=\"success\" variant=\"outlined\">Siguiente paso</iswc-button>\r\n            <iswc-button shape=\"arrow-right\" color=\"danger\">Eliminar</iswc-button>\r\n          </div>",
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
         }
@@ -378,17 +362,17 @@
     {
       "id": "link",
       "title": "Como enlace",
-      "lede": "Con <code class=\"code\">href</code> el botón se renderiza como <code class=\"code\">&lt;a&gt;</code>.\r\n          Conserva variant, appearance, pill y demás atributos.\r\n          y soporta <code class=\"code\">target</code>, <code class=\"code\">rel</code> y <code class=\"code\">download</code>.",
+      "lede": "Con <code class=\"code\">href</code> el botón se renderiza como <code class=\"code\">&lt;a&gt;</code>.\r\n          Conserva variant, appearance, pill y demás atributos,\r\n          y soporta <code class=\"code\">download</code>.",
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-button href=\"https://www.youtube.com/@JeffAporta\" target=\"_blank\" rel=\"noopener\" color=\"brand\">\r\n              Jeff Aporta en YouTube\r\n              <iswc-icon icon=\"mdi:youtube\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button href=\"#intro\" variant=\"outlined\">Volver al inicio</iswc-button>\r\n            <iswc-button href=\"data:text/plain;charset=utf-8,Hola%20mundo\" download=\"hola.txt\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:download\"></iswc-icon>\r\n              Descargar hola.txt\r\n            </iswc-button>\r\n            <span style=\"font-size: .8125rem\"><iswc-button href=\"https://github.com\" target=\"_blank\" rel=\"noopener\" pill>\r\n              <iswc-icon icon=\"mdi:link-variant\"></iswc-icon>\r\n            </iswc-button></span>\r\n          </div>",
+          "html": "<div class=\"demo-row\">\r\n            <iswc-button href=\"https://www.youtube.com/@JeffAporta\" color=\"brand\">\r\n              Jeff Aporta en YouTube\r\n              <iswc-icon icon=\"mdi:youtube\"></iswc-icon>\r\n            </iswc-button>\r\n            <iswc-button href=\"#intro\" variant=\"outlined\">Volver al inicio</iswc-button>\r\n            <iswc-button href=\"data:text/plain;charset=utf-8,Hola%20mundo\" download=\"hola.txt\" variant=\"plain\">\r\n              <iswc-icon icon=\"mdi:download\"></iswc-icon>\r\n              Descargar hola.txt\r\n            </iswc-button>\r\n            <span style=\"font-size: .8125rem\"><iswc-button href=\"https://github.com\" pill>\r\n              <iswc-icon icon=\"mdi:link-variant\"></iswc-icon>\r\n            </iswc-button></span>\r\n          </div>",
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
         },
         {
           "kind": "code",
-          "code": "<iswc-button href=\"https://www.youtube.com/@JeffAporta\" target=\"_blank\" rel=\"noopener\">\n  Jeff Aporta en YouTube\n</iswc-button>"
+          "code": "<iswc-button href=\"https://www.youtube.com/@JeffAporta\">\n  Jeff Aporta en YouTube\n</iswc-button>"
         },
         {
           "kind": "callout",
@@ -535,11 +519,11 @@
         },
         {
           "kind": "html",
-          "html": "<h4>Demo en vivo — cambia tokens a un botón individual</h4>"
+          "html": "<h4>Demo en vivo — cambia tokens vía CSS (inline style o class)</h4>"
         },
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\" style=\"align-items: flex-end;\">\r\n            <iswc-button id=\"themed1\" color=\"#ae3ec9\" color-hover=\"#862e9c\" color-active=\"#5f1f70\" radius=\"0\" pill>Themed 1</iswc-button>\r\n            <iswc-button id=\"themed2\" color=\"#0ca678\" color-hover=\"#087f5b\" radius=\"18px\" pill>Themed 2</iswc-button>\r\n            <iswc-button id=\"themed3\" color=\"#d9480f\" color-hover=\"#a03406\" border-width=\"2px\" pill>Themed 3</iswc-button>\r\n          </div>",
+          "html": "<div class=\"demo-row\" style=\"align-items: flex-end;\">\r\n            <iswc-button id=\"themed1\" color=\"#ae3ec9\" style=\"--iswc-button-border-radius: 0;\" pill>Themed 1</iswc-button>\r\n            <iswc-button id=\"themed2\" color=\"#0ca678\" style=\"--iswc-button-border-radius: 18px;\" pill>Themed 2</iswc-button>\r\n            <iswc-button id=\"themed3\" color=\"#d9480f\" style=\"--iswc-button-border-width: 2px;\" pill>Themed 3</iswc-button>\r\n          </div>",
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
         }
@@ -762,18 +746,6 @@
               "string",
               "—",
               "Si está, renderiza como &lt;a&gt;."
-            ],
-            [
-              "<code>target</code>",
-              "string",
-              "—",
-              "Atributo target del enlace."
-            ],
-            [
-              "<code>rel</code>",
-              "string",
-              "—",
-              "Atributo rel del enlace."
             ],
             [
               "<code>download</code>",
@@ -1096,18 +1068,6 @@
             "type": "string",
             "default": "—",
             "desc": "Si está, renderiza como &lt;a&gt;."
-          },
-          {
-            "name": "<code>target</code>",
-            "type": "string",
-            "default": "—",
-            "desc": "Atributo target del enlace."
-          },
-          {
-            "name": "<code>rel</code>",
-            "type": "string",
-            "default": "—",
-            "desc": "Atributo rel del enlace."
           },
           {
             "name": "<code>download</code>",

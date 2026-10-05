@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-button
 tags:
   - iswc-button
@@ -55,8 +55,6 @@ import './button.js';
 | `pill` | boolean | Fuente define default/restricciÃ³n. |
 | `with-caret` | boolean | Fuente define default/restricciÃ³n. |
 | `href` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `target` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
-| `rel` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `download` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `type` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
 | `title` | string/segÃºn contrato | Fuente define default/restricciÃ³n. |
@@ -242,8 +240,6 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >  pill         boolean
 >  with-caret   boolean
 >  href         string   â†’ renderiza como <a>
->  target       string
->  rel          string
 >  download     string
 >  type         button | submit | reset                       (default: button)
 >  title        string
