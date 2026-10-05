@@ -128,12 +128,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div id=\"slots-live\" class=\"demo-row\">\n  <iswc-button id=\"slotsPgBtn\" color=\"brand\">\n    <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\" aria-hidden=\"true\"></iswc-icon>\n    Texto del boton\n    <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\" aria-hidden=\"true\"></iswc-icon>\n  </iswc-button>\n</div>"
+          "html": "<div id=\"slots-live\" class=\"demo-row\">\n  <iswc-button id=\"slots-live-btn\" color=\"brand\">\n    <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\" aria-hidden=\"true\"></iswc-icon>\n    Texto del boton\n    <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\" aria-hidden=\"true\"></iswc-icon>\n  </iswc-button>\n</div>"
         },
         {
           "kind": "code",
           "lang": "html",
-          "code": "<iswc-button id=\"slotsPgBtn\" color=\"brand\">\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\" aria-hidden=\"true\"></iswc-icon>\n  Texto del boton\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\" aria-hidden=\"true\"></iswc-icon>\n</iswc-button>"
+          "code": "<iswc-button id=\"slots-live-btn\" color=\"brand\">\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\" aria-hidden=\"true\"></iswc-icon>\n  Texto del boton\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\" aria-hidden=\"true\"></iswc-icon>\n</iswc-button>"
         },
         {
           "kind": "table",
