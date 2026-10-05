@@ -810,8 +810,8 @@ class IswcPreviewControls extends HTMLElement {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'info-btn';
-    btn.dataset.role = 'info-btn';
-    const detalle = `clic para ver detalle: ${nombre}`;
+    btn.setAttribute('data-role', 'info-btn');
+    const detalle = `Info del atributo ${nombre}`;
     btn.setAttribute('aria-label', detalle);
     btn.setAttribute('aria-haspopup', 'dialog');
     btn.setAttribute('aria-expanded', 'false');
