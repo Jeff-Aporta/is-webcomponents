@@ -75,6 +75,31 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
       demo.append(fragmentFromHtml(block.html));
       wrap.append(demo);
 
+      // Si el JSON declara `target` + `controls[]`, montar un <iswc-playground>
+      // alrededor del demo para que el panel de controles aparezca junto a la
+      // instancia viva. Esto restaura el contrato del PG que el usuario
+      // esperaba ver (boton a la izquierda + panel de CONFIGURACION a la
+      // derecha, orden text -> number -> select -> switch por W39).
+      if (block.target && Array.isArray(block.controls) && block.controls.length) {
+        const pg = document.createElement('iswc-playground');
+        pg.setAttribute('target', block.target);
+        pg.setAttribute('layout', 'split');
+        pg.setAttribute('title', 'Configuracion');
+        pg.setAttribute('lede', '');
+        // spec = los controls del JSON
+        try {
+          (pg as unknown as { spec: unknown[] }).spec = block.controls;
+        } catch {}
+        // Mover el demo al slot stage del playground
+        wrap.append(pg);
+        // El demo va dentro del playground
+        // (lo creamos en el shadow del playground via fragment)
+        const stageFrag = document.createElement('div');
+        stageFrag.setAttribute('slot', 'stage');
+        stageFrag.append(demo);
+        pg.append(stageFrag);
+      }
+
       // Si el demo es un diagrama SVG (class/flowchart/state/etc),
       // agregar un enlace "Abrir en editor (new tab)" para que el usuario
       // pueda abrir el demo en su propia pestana desde la galeria/home.
