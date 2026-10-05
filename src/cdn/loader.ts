@@ -28,15 +28,39 @@ import {
   commitLoads,
   resolveTagId,
   isTagCovered,
-  tagKey,
   type TagEntry,
   type Catalog,
 } from './load-plan.js';
 import type { LoadJob } from './load-plan.js';
-import { installSheetCache, getSheetCache, createSheetCache, type SheetCacheApi } from './sheet-cache.js';
+import { installSheetCache, getSheetCache, type SheetCacheApi } from './sheet-cache.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
 import { lookupHash, withAssetHash } from './build/asset-url.js';
 import { readBody, writeBody, syncHashMemory } from './asset-store.js';
+
+export { planLoads, commitLoads, createRegistry, tagKey } from './load-plan.js';
+export { installSheetCache, getSheetCache, createSheetCache } from './sheet-cache.js';
+export { ensureElement, isElementReady } from './ensure-element.js';
+import {
+  AppComponentEntrySchema,
+  ConfigureOptsSchema,
+  LoadedSnapshotSchema,
+  LoaderSheetsSchema,
+  LoaderStateSchema,
+  LoadResultSchema,
+  MirrorSchema,
+  PageModuleKindSchema,
+  PageModuleSpecSchema,
+  type AppComponentEntry,
+  type ConfigureOpts,
+  type ISWebComponentsLoaderShape,
+  type LoadedSnapshot,
+  type LoadResult,
+  type LoaderSheets,
+  type LoaderState,
+  type Mirror,
+  type PageModuleKind,
+  type PageModuleSpec,
+} from './loader.schemas.js';
 
 declare const __IS_LOADER_CATALOG__: Catalog;
 declare const __IS_ASSET_HASHES__: Record<string, string>;
@@ -67,19 +91,6 @@ function isLocalKitRoot(url: string): boolean {
   } catch {
     return false;
   }
-}
-
-export interface Mirror {
-  id: string;
-  label?: string;
-  hint?: string;
-  pin?: boolean;
-  base: (ref?: string) => string;
-}
-
-export interface AppComponentEntry {
-  href: string;
-  css?: string | string[];
 }
 
 const CATALOG: Catalog = __IS_LOADER_CATALOG__;
@@ -124,42 +135,6 @@ const BOOT_PIN = SHA_DEFAULT !== 'main' && SHA_DEFAULT !== '' ? SHA_DEFAULT : nu
 const BOOT_HOST = (!isLocalKitRoot(CDN_ROOT) && BOOT_PIN)
   ? hostFromSha(BOOT_PIN)
   : null;
-
-interface LoaderState {
-  ref: string | null;
-  mirrors: Mirror[];
-  /** true si el consumidor pasó `mirrors` (incluso `[]` = sin fallback CDN). */
-  mirrorsExplicit: boolean;
-  preferSelf: boolean;
-  /** Raíz `dist/cdn/` forzada por el consumidor (githack, local, SHA…). */
-  host: string | null;
-  /** SHA que entra en {{sha}}. null = shaDefault del build. */
-  sha: string | null;
-  /** Origen que entra en {{cdnUrl}}. null = cdnUrlDefault. */
-  cdnUrl: string | null;
-  /** Query de cache-bust en cada asset (`?v=2`). */
-  query: Record<string, string>;
-  /**
-   * Aliases para `loadPageModules` / `loadPageStyles`. Permiten que el consumidor
-   * pase un nombre estable (`'highlight-pre'`, `'iswc-palettes-default'`) y el
-   * loader lo resuelva al bundle desplegable.
-   *
-   * CSS CDN del kit: prefijo `cdn:` (p. ej. `cdn:palettes.min.css`) →
-   * `injectCdnStylesheet` (host/mirrors/`?h=`). Rutas normales = relativas a la página.
-   *
-   * JS: `type: 'module'` → `import()`; `type: 'classic'` → `<script>` sin type=module
-   * (IIFE / boot sync). Prefijo `cdn:` en href → asset del kit (host/`?h=`).
-   */
-  pageModules: Map<string, PageModuleSpec>;
-  pageStyles: Map<string, string>;
-}
-
-/** Spec de un page module (alias table / registerPageModule). */
-export type PageModuleKind = 'module' | 'classic';
-export interface PageModuleSpec {
-  href: string;
-  type: PageModuleKind;
-}
 
 function asPageModuleSpec(input: string | PageModuleSpec): PageModuleSpec {
   if (typeof input === 'string') {
@@ -674,52 +649,7 @@ async function warmEntryCss(entry: AppComponentEntry): Promise<void> {
   if (list.length) await sheets.calentar(list.map((href) => routeHref(href)));
 }
 
-export interface ConfigureOpts {
-  ref?: string | null;
-  mirrors?: string | Mirror | (string | Mirror)[];
-  preferSelf?: boolean;
-  /**
-   * Raíz de assets del kit.
-   * - omitido: arranque (CDN pin o self)
-   * - `'self'` | `'./'`: relativo al loader (`dist/cdn/`)
-   * - ruta relativa: contra la página montada
-   * - URL absoluta: tal cual
-   */
-  host?: string | null;
-  /** Sustituye {{sha}} de hostDefault. Vacío usa shaDefault. */
-  sha?: string | null;
-  /** Sustituye {{cdnUrl}} de hostDefault. Vacío usa cdnUrlDefault. */
-  cdnUrl?: string | null;
-  query?: string | Record<string, string> | null;
-  v?: string | number | null;
-  /**
-   * Galería / vendor local: host = self (`dist/cdn/` del loader), sin mirrors
-   * CDN, sin pin SHA. Todas las cargas son relativas al kit montado.
-   */
-  local?: boolean;
-}
-
-export interface LoadResult {
-  loaded: string[];
-  skipped: string[];
-}
-
-export interface LoadedSnapshot {
-  all: boolean;
-  categories: string[];
-  tags: string[];
-  app: string[];
-}
-
-export interface LoaderSheets {
-  install(opts?: { cacheName?: string }): SheetCacheApi | null;
-  get(): SheetCacheApi | null;
-  warm(hrefs: string[]): Promise<unknown>;
-  warmFromCache(): Promise<unknown>;
-  warmFromManifest(url: string, opts?: { base?: string; key?: string }): Promise<unknown>;
-}
-
-export const ISWebComponentsLoader = {
+export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
   get catalog(): Catalog { return CATALOG; },
   /** Mapa de hashes del build (`ruta` → 6 caracteres). */
   get hashes(): Record<string, string> { return HASHES; },
@@ -1069,6 +999,3 @@ if (typeof document !== 'undefined') {
 }
 
 export default ISWebComponentsLoader;
-export { planLoads, commitLoads, createRegistry, tagKey };
-export { installSheetCache, getSheetCache, createSheetCache };
-export { ensureElement, isElementReady };

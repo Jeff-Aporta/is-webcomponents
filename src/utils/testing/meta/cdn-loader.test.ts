@@ -115,10 +115,13 @@ test('specs/cdn.md documenta pin/mirrors (consolidación 2026-09-07)', () => {
 
 test('configure acepta host + local + v/query (cache-bust)', () => {
   const code = readFileSync(src, 'utf8');
-  assert.match(code, /host\?:/);
-  assert.match(code, /local\?:/);
-  assert.match(code, /query\?:/);
-  assert.match(code, /\bv\?:/);
+  const schemas = readFileSync(join(root, 'src', 'cdn', 'loader.schemas.ts'), 'utf8');
+  // Los campos del shape migran a loader.schemas.ts (Zod); el comportamiento
+  // runtime sigue en loader.ts.
+  assert.match(schemas, /host:\s*z\.string\(\)\.nullable\(\)/);
+  assert.match(schemas, /local:\s*z\.boolean\(\)\.optional\(\)/);
+  assert.match(schemas, /query:/);
+  assert.match(schemas, /\bv:\s*z\.union/);
   assert.match(code, /githack/);
   assert.match(code, /state\.host/);
   assert.match(code, /state\.query/);
