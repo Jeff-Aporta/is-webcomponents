@@ -215,9 +215,11 @@
  * aplique de verdad (antes reusaba `--iswc-control-bg/-border` y los botones
  * filled tomaban el color del paper, no el gris central del espacio).
  * W46: --_tone-soft y --_tone-soft-active ahora usan alpha del color
- * (como soft-filled) en vez de mezcla con blanco. Asi neutral no se
- * vuelve blanco solido al hover, queda como un gris translucido —
- * mismo tratamiento que cualquier otro color. */
+ * (como soft-filled) en vez de mezcla con blanco.
+ * W47: --_tone-text ahora es el propio --_tone (no --iswc-control-text
+ * que en dark mode es blanco). Asi el text de neutral es #888 en
+ * todas las variants (outlined/plain/ghost/soft-filled), igual que
+ * los otros colores cuyo text es su propio tono. */
 :host([color="neutral"]) {
   --_tone: var(--iswc-color-neutral, #888);
   --_tone-strong: var(--iswc-color-neutral-strong, #888);
@@ -225,7 +227,7 @@
   --_tone-strongest: var(--iswc-color-neutral-strongest, #888);
   --_tone-paler: var(--iswc-color-neutral-paler, #888);
   --_tone-pale: var(--iswc-color-neutral-pale, #888);
-  --_tone-text: var(--iswc-control-text, #212529);
+  --_tone-text: var(--_tone);
   --_tone-soft: color-mix(in srgb, var(--_tone) 18%, transparent);
   --_tone-soft-active: color-mix(in srgb, var(--_tone) 28%, transparent);
   --_tone-on: var(--iswc-on-brand, #fff);
