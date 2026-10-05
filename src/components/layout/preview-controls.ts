@@ -15,6 +15,15 @@
  *                          2) si no, instancia un hidden <{tag}> y lee su
  *                             `shadowRoot.innerHTML`.
  *
+ * Phase W36 (2026-10-03-zod-migration): cada `.fila` lleva un botón info
+ * (icono ⓘ) junto al label que abre un popover JSDoc-style con la info del
+ * atributo: descripción, tipo, default, valores válidos y ejemplo. La info
+ * llega por:
+ *   - el campo opcional `info: { … }` del control en el JSON del playground
+ *     (description, type, default, values[], example).
+ *   - o, en su defecto, se deriva del propio control (label, control,
+ *     default, options).
+ *
  * Atributos:
  *   label   string             — header del panel (default: "Controles").
  *   tag     string             — tag del componente target (ej. "iswc-button").
@@ -142,10 +151,187 @@ const CSS = `
   justify-content: flex-start;
   gap: 0.35em;
   min-width: 0;
+  position: relative;
 }
 .fila > .etiqueta {
   font-size: 0.9em;
   color: var(--iswc-text-dim, inherit);
+}
+/* Phase W36: cabecera del .fila con label + botón info (JSDoc popover) */
+.fila__head {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.fila__head > .etiqueta {
+  /* override: en cabecera, la fuente > cabecera controla la alineación;
+     aquí dejamos el tamaño del label heredado. */
+  font-size: 0.9em;
+  color: var(--iswc-text-dim, inherit);
+  min-inline-size: 0;
+  flex: 0 1 auto;
+}
+.info-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0.1em 0.2em;
+  margin: 0;
+  font: inherit;
+  color: var(--iswc-text-dim, inherit);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.1em;
+  block-size: 1.1em;
+  border-radius: 50%;
+  opacity: 0.6;
+  transition: opacity 120ms ease, background 120ms ease, color 120ms ease;
+  flex: 0 0 auto;
+}
+.info-btn:hover,
+.info-btn:focus-visible {
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  outline: none;
+}
+.info-btn[aria-expanded="true"] {
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  color: var(--iswc-color-brand-500, currentColor);
+}
+.info-btn iswc-icon,
+.info-btn .info-btn__icon {
+  inline-size: 1em;
+  block-size: 1em;
+  pointer-events: none;
+}
+/* Phase W36: popover JSDoc-style con la descripción, tipo, default, valores,
+   ejemplo del atributo. Se monta en el light DOM del fila (no en shadow) para
+   poder escapar visualmente del card del panel sin clipping de overflow. */
+.fila__popover {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: calc(100% + 0.25em);
+  z-index: 20;
+  min-inline-size: 16em;
+  max-inline-size: min(28em, calc(100vw - 2em));
+  padding: 0.7em 0.85em;
+  margin: 0;
+  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 18%, transparent));
+  border-radius: var(--iswc-radius, 0.5em);
+  background: var(--iswc-bg-elev, color-mix(in srgb, currentColor 5%, transparent));
+  box-shadow: 0 0.5em 1.5em -0.4em color-mix(in srgb, currentColor 28%, transparent);
+  font-family: var(--iswc-sans, system-ui, sans-serif);
+  font-size: 0.92em;
+  line-height: 1.45;
+  color: var(--iswc-text, inherit);
+}
+.fila__popover[hidden] {
+  display: none;
+}
+.fila__popover .popover__title {
+  margin: 0 0 0.4em;
+  font-size: 0.95em;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  flex-wrap: wrap;
+}
+.fila__popover .popover__title code {
+  font-family: var(--iswc-mono, ui-monospace, monospace);
+  font-size: 0.95em;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  padding: 0.05em 0.4em;
+  border-radius: 0.25em;
+}
+.fila__popover .popover__type {
+  font-size: 0.78em;
+  font-weight: 500;
+  opacity: 0.65;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.fila__popover dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(4.5em, max-content) 1fr;
+  gap: 0.25em 0.6em;
+}
+.fila__popover dt {
+  font-weight: 600;
+  font-size: 0.85em;
+  opacity: 0.85;
+}
+.fila__popover dd {
+  margin: 0;
+  font-size: 0.88em;
+  min-inline-size: 0;
+}
+.fila__popover dd code {
+  font-family: var(--iswc-mono, ui-monospace, monospace);
+  font-size: 0.95em;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  padding: 0.05em 0.35em;
+  border-radius: 0.25em;
+  word-break: break-word;
+}
+.fila__popover .popover__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+}
+.fila__popover .popover__values code {
+  font-family: var(--iswc-mono, ui-monospace, monospace);
+  font-size: 0.85em;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  padding: 0.05em 0.4em;
+  border-radius: 0.25em;
+}
+.fila__popover .popover__example {
+  font-family: var(--iswc-mono, ui-monospace, monospace);
+  font-size: 0.85em;
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  padding: 0.35em 0.5em;
+  border-radius: 0.3em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+.fila__popover .popover__close {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0.15em 0.25em;
+  margin-inline-start: auto;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.6;
+  border-radius: 0.25em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.4em;
+  block-size: 1.4em;
+}
+.fila__popover .popover__close:hover,
+.fila__popover .popover__close:focus-visible {
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  outline: none;
+}
+.fila__popover .popover__close iswc-icon,
+.fila__popover .popover__close .popover__close-icon {
+  inline-size: 1em;
+  block-size: 1em;
+  pointer-events: none;
 }
 /* Inline by default: cada control toma su ancho natural.
    El consumer decide block/full-width con [full] o width:100%.
@@ -175,6 +361,10 @@ const CSS = `
   min-block-size: var(--iswc-control-height, 2.5em);
   inline-size: fit-content;
 }
+/* Opción placeholder (Phase W30): gris neutral, indica que el componente
+   no quema default. Aplica tanto dentro del iswc-select como en chips
+   auxiliares que dibujemos en el shadow. */
+.opt-placeholder { color: #888; font-style: italic; opacity: 0.85; }
 .fila .control-wrap iswc-switch {
   --iswc-switch-height: 0.9em;
   --iswc-switch-width: calc(0.9em * 1.75);
@@ -235,6 +425,29 @@ export type OpcionPanel = {
   icon?: string;
   html?: string;
   description?: string;
+  /**
+   * Opción placeholder (no quemada por el componente). Se renderiza en gris
+   * neutral (#888) y nunca se marca como default.
+   */
+  placeholder?: boolean;
+};
+
+/**
+ * Información JSDoc-style del atributo, mostrada en el popover del botón
+ * info (Phase W36). Todos los campos son opcionales: cuando faltan, el
+ * popover deriva lo que puede del propio control (tipo, default, options).
+ */
+export type PanelInfo = {
+  /** Descripción en prosa del atributo. */
+  description?: string;
+  /** Tipo lógico (p. ej. "string", "boolean", "enum", "integer"). */
+  type?: string;
+  /** Default legible (override sobre `c.default` cuando es más rico). */
+  default?: string;
+  /** Lista de valores válidos (override sobre `c.options`). */
+  values?: string[];
+  /** Ejemplo de uso, en formato libre. */
+  example?: string;
 };
 
 export type ControlPanel = {
@@ -249,6 +462,12 @@ export type ControlPanel = {
   placeholder?: string;
   default?: unknown;
   value?: unknown;
+  /**
+   * Info JSDoc-style del atributo (Phase W36). Cuando está presente, el
+   * botón info junto al label abre un popover con esta info; en su defecto,
+   * el popover se sigue renderizando con valores derivados del control.
+   */
+  info?: PanelInfo;
 };
 
 function escProp(prop: string): string {
@@ -259,6 +478,35 @@ function attrDeProp(prop: string): string {
   if (prop.startsWith('attr:')) return prop.slice(5);
   if (prop.startsWith('prop:')) return prop.slice(5);
   return prop;
+}
+
+/** Resuelve el .fila ancestro del botón info (Phase W36). */
+function filaDeBtn(btn: HTMLElement): HTMLElement | null {
+  return btn.closest<HTMLElement>('[data-control-prop]');
+}
+
+/** Devuelve un <dt> con texto plano para los <dl> del popover info. */
+function dt(texto: string): HTMLElement {
+  const t = document.createElement('dt');
+  t.textContent = texto;
+  return t;
+}
+
+/**
+ * Mapea el `control` del panel a un tipo lógico legible en el popover info
+ * (Phase W36). Si el JSON trae `info.type`, tiene prioridad.
+ */
+function inferControlType(c: ControlPanel): string {
+  switch (c.control) {
+    case 'boolean': return 'boolean';
+    case 'number':
+    case 'range':  return 'number';
+    case 'color':  return 'color';
+    case 'select': return 'enum';
+    case 'json':   return 'object';
+    case 'text':
+    default:       return 'string';
+  }
 }
 
 /** Iconos por valor (mapa local: el espejo Paty no tiene utils/ del kit). */
@@ -394,6 +642,10 @@ class IswcPreviewControls extends HTMLElement {
   #anatomy = '';
   #anatomyReady = false;
   #anatomyPromise: Promise<string> | null = null;
+  /** Handler de click fuera (Phase W36) — cierra popovers info. */
+  #outsideClickHandler: ((ev: MouseEvent) => void) | null = null;
+  /** Handler de Escape (Phase W36) — cierra popovers info. */
+  #onPopoverEscape: ((ev: KeyboardEvent) => void) | null = null;
 
   static get observedAttributes(): string[] {
     return ['label', 'tag'];
@@ -406,6 +658,11 @@ class IswcPreviewControls extends HTMLElement {
     }
     this.#wireTabs();
     void this.#arrancar();
+  }
+
+  disconnectedCallback(): void {
+    // Phase W36: desinstala los listeners globales (click-fuera / escape).
+    this.#removeGlobalDismissHandlers();
   }
 
   attributeChangedCallback(name: string): void {
@@ -626,12 +883,253 @@ class IswcPreviewControls extends HTMLElement {
     const fila = document.createElement('div');
     fila.className = 'fila';
     fila.dataset.controlProp = c.prop;
+    // Phase W36: cabecera con label + botón info (popover JSDoc).
+    const head = document.createElement('div');
+    head.className = 'fila__head';
     const etiqueta = document.createElement('span');
     etiqueta.className = 'etiqueta';
     etiqueta.textContent = c.label;
-    fila.appendChild(etiqueta);
+    head.appendChild(etiqueta);
+    head.appendChild(this.#infoBtn(c));
+    fila.appendChild(head);
     fila.appendChild(this.#entrada(c));
+    // El popover JSDoc vive en el light DOM del fila (no en shadow) para
+    // escapar el `overflow: hidden` de algunos ancestros y poder posicionarse
+    // con position:absolute sin ser clippeado por el card del panel.
+    fila.appendChild(this.#infoPopover(c));
     return fila;
+  }
+
+  /**
+   * Phase W36: botón info (ⓘ) que abre el popover JSDoc. Se monta con un
+   * <iswc-icon> para que use el mismo pipeline de iconos que el resto del
+   * kit (con fallback a <iconify-icon> si el icono local no está disponible).
+   */
+  #infoBtn(c: ControlPanel): HTMLElement {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'info-btn';
+    btn.dataset.role = 'info-btn';
+    btn.setAttribute('aria-label', `Info del atributo ${attrDeProp(c.prop) || c.label}`);
+    btn.setAttribute('aria-haspopup', 'dialog');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.title = 'Ver documentación del atributo';
+    const icon = document.createElement('iswc-icon');
+    icon.setAttribute('icon', 'mdi:information-outline');
+    icon.setAttribute('aria-hidden', 'true');
+    btn.appendChild(icon);
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      this.#toggleInfoPopover(filaDeBtn(btn), btn);
+    });
+    return btn;
+  }
+
+  /**
+   * Phase W36: popover JSDoc del atributo, oculto por defecto (`hidden`). El
+   * botón info (#infoBtn) lo alterna al hacer click. El popover siempre se
+   * renderiza aunque `info` esté vacío: en ese caso deriva valores del
+   * propio control (control, default, options).
+   */
+  #infoPopover(c: ControlPanel): HTMLElement {
+    const info = this.#derivePanelInfo(c);
+    const pop = document.createElement('div');
+    pop.className = 'fila__popover';
+    pop.dataset.role = 'info-popover';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', `Documentación de ${attrDeProp(c.prop) || c.label}`);
+    pop.hidden = true;
+    // Título: nombre del atributo + tipo lógico.
+    const title = document.createElement('h4');
+    title.className = 'popover__title';
+    const attrName = attrDeProp(c.prop) || c.label;
+    const attrCode = document.createElement('code');
+    attrCode.textContent = attrName;
+    title.appendChild(attrCode);
+    if (info.type) {
+      const t = document.createElement('span');
+      t.className = 'popover__type';
+      t.textContent = info.type;
+      title.appendChild(t);
+    }
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'popover__close';
+    close.setAttribute('aria-label', 'Cerrar');
+    close.dataset.role = 'info-close';
+    const closeIcon = document.createElement('iswc-icon');
+    closeIcon.setAttribute('icon', 'mdi:close');
+    closeIcon.setAttribute('aria-hidden', 'true');
+    close.appendChild(closeIcon);
+    close.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const fila = pop.parentElement;
+      const btn = fila?.querySelector<HTMLElement>('[data-role="info-btn"]') ?? null;
+      this.#toggleInfoPopover(fila, btn, false);
+    });
+    title.appendChild(close);
+    pop.appendChild(title);
+    // Lista (dl) con descripción, default, valores y ejemplo.
+    const dl = document.createElement('dl');
+    if (info.description) {
+      dl.appendChild(dt('Descripción'));
+      const dd = document.createElement('dd');
+      dd.textContent = info.description;
+      dl.appendChild(dd);
+    }
+    if (info.default !== undefined) {
+      dl.appendChild(dt('Default'));
+      const dd = document.createElement('dd');
+      const code = document.createElement('code');
+      code.textContent = info.default;
+      dd.appendChild(code);
+      dl.appendChild(dd);
+    }
+    if (info.values && info.values.length > 0) {
+      dl.appendChild(dt('Valores'));
+      const dd = document.createElement('dd');
+      const list = document.createElement('div');
+      list.className = 'popover__values';
+      for (const v of info.values) {
+        const code = document.createElement('code');
+        code.textContent = v;
+        list.appendChild(code);
+      }
+      dd.appendChild(list);
+      dl.appendChild(dd);
+    }
+    if (info.example) {
+      dl.appendChild(dt('Ejemplo'));
+      const dd = document.createElement('dd');
+      const pre = document.createElement('pre');
+      pre.className = 'popover__example';
+      pre.textContent = info.example;
+      dd.appendChild(pre);
+      dl.appendChild(dd);
+    }
+    pop.appendChild(dl);
+    return pop;
+  }
+
+  /**
+   * Deriva un PanelInfo coherente del control: si el control trae `info`,
+   * se usa como fuente principal y se rellena con lo derivable del control.
+   * Si no trae `info`, devuelve uno calculado a partir del control.
+   */
+  #derivePanelInfo(c: ControlPanel): PanelInfo {
+    const base = c.control ? inferControlType(c) : '';
+    const tipo: string | undefined = c.info?.type ?? base || undefined;
+    const defStr = c.default === undefined || c.default === null || c.default === ''
+      ? undefined
+      : String(c.default);
+    const valuesFromOptions = (c.options ?? [])
+      .filter((o) => !o.placeholder)
+      .map((o) => String(o.value));
+    const values = c.info?.values
+      ?? (valuesFromOptions.length > 0 ? valuesFromOptions : undefined);
+    const def = c.info?.default ?? defStr;
+    return {
+      description: c.info?.description,
+      type: tipo,
+      default: def,
+      values,
+      example: c.info?.example,
+    };
+  }
+
+  /**
+   * Alterna el popover info del .fila (Phase W36). Si se llama con `force`
+   * (boolean), fuerza el estado; si no, lo invierte. Cierra cualquier otro
+   * popover abierto del mismo panel para que solo haya uno visible.
+   */
+  #toggleInfoPopover(fila: HTMLElement | null | undefined, btn: HTMLElement | null, force?: boolean): void {
+    const sr = this.shadowRoot;
+    if (!sr || !fila) return;
+    const pop = fila.querySelector<HTMLElement>('[data-role="info-popover"]');
+    if (!pop) return;
+    const open = typeof force === 'boolean' ? force : pop.hidden;
+    // Cierra los otros popovers abiertos del propio shadow.
+    sr.querySelectorAll<HTMLElement>('[data-role="info-popover"]:not([hidden])').forEach((other) => {
+      if (other === pop) return;
+      other.hidden = true;
+      const otherFila = other.parentElement;
+      const otherBtn = otherFila?.querySelector<HTMLElement>('[data-role="info-btn"]') ?? null;
+      if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+    });
+    pop.hidden = !open;
+    if (btn) btn.setAttribute('aria-expanded', String(open));
+    if (open) {
+      // Asegura los handlers globales (escape / click-fuera).
+      this.#installGlobalDismissHandlers();
+    } else {
+      // Si no queda ningún popover abierto, podemos soltar los handlers.
+      const anyOpen = !!sr.querySelector('[data-role="info-popover"]:not([hidden])');
+      if (!anyOpen) this.#removeGlobalDismissHandlers();
+    }
+  }
+
+  /**
+   * Instala los handlers globales (keydown escape + click-fuera) si no lo
+   * estaban ya (Phase W36). Se montan en `document` para detectar tanto
+   * clicks fuera del shadow como pulsaciones de escape en cualquier punto.
+   */
+  #installGlobalDismissHandlers(): void {
+    if (this.#outsideClickHandler && this.#onPopoverEscape) return;
+    if (!this.#outsideClickHandler) {
+      this.#outsideClickHandler = (ev: MouseEvent): void => {
+        const sr = this.shadowRoot;
+        if (!sr) return;
+        const path = ev.composedPath();
+        // ¿Cayó dentro de un .fila que tiene popover abierto?
+        for (const node of path) {
+          if (!(node instanceof HTMLElement)) continue;
+          const fila = node.closest?.('[data-control-prop]');
+          if (!fila) continue;
+          const pop = fila.querySelector?.('[data-role="info-popover"]:not([hidden])');
+          // Si el click cayó dentro del mismo fila (sea en el botón o en el
+          // popover), no cerramos — deja que el botón / close actúe.
+          if (pop && fila.contains(node)) return;
+        }
+        this.#closeAllInfoPopovers();
+      };
+      document.addEventListener('click', this.#outsideClickHandler, true);
+    }
+    if (!this.#onPopoverEscape) {
+      this.#onPopoverEscape = (ev: KeyboardEvent): void => {
+        if (ev.key !== 'Escape') return;
+        const sr = this.shadowRoot;
+        if (!sr) return;
+        const any = sr.querySelector('[data-role="info-popover"]:not([hidden])');
+        if (!any) return;
+        this.#closeAllInfoPopovers();
+      };
+      document.addEventListener('keydown', this.#onPopoverEscape, true);
+    }
+  }
+
+  /** Suelta los handlers globales si están instalados. */
+  #removeGlobalDismissHandlers(): void {
+    if (this.#outsideClickHandler) {
+      document.removeEventListener('click', this.#outsideClickHandler, true);
+      this.#outsideClickHandler = null;
+    }
+    if (this.#onPopoverEscape) {
+      document.removeEventListener('keydown', this.#onPopoverEscape, true);
+      this.#onPopoverEscape = null;
+    }
+  }
+
+  /** Cierra todos los popovers info del shadow. */
+  #closeAllInfoPopovers(): void {
+    const sr = this.shadowRoot;
+    if (!sr) return;
+    sr.querySelectorAll<HTMLElement>('[data-role="info-popover"]:not([hidden])').forEach((pop) => {
+      pop.hidden = true;
+      const fila = pop.parentElement;
+      const btn = fila?.querySelector<HTMLElement>('[data-role="info-btn"]') ?? null;
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    });
+    this.#removeGlobalDismissHandlers();
   }
 
   #entrada(c: ControlPanel): HTMLElement {
@@ -675,10 +1173,25 @@ class IswcPreviewControls extends HTMLElement {
             const wrap = document.createElement('span');
             wrap.innerHTML = op.html;
             while (wrap.firstChild) o.appendChild(wrap.firstChild);
+          } else if (op.placeholder) {
+            // Marcador visual: gris neutral (#888) e italic. Estilos inline
+            // para que sobrevivan al clonarse en el shadow del <iswc-select>.
+            const span = document.createElement('span');
+            span.className = 'opt-placeholder';
+            span.style.color = '#888';
+            span.style.fontStyle = 'italic';
+            span.style.opacity = '0.85';
+            span.textContent = op.label;
+            o.appendChild(span);
+            o.classList.add('opt-placeholder');
           } else {
             o.appendChild(document.createTextNode(op.label));
           }
-          const isDefault = c.default !== undefined && c.default !== null
+          // Una opción placeholder nunca se considera "default" aunque su
+          // value coincida con el del componente (es un estado neutro, no
+          // un valor por defecto real).
+          const isDefault = !op.placeholder
+            && c.default !== undefined && c.default !== null
             && String(op.value) === String(c.default);
           // (default) vive en el item, no en el label del control.
           if (isDefault) {
@@ -686,6 +1199,11 @@ class IswcPreviewControls extends HTMLElement {
             mark.className = 'opt-default';
             mark.textContent = ' (default)';
             o.appendChild(mark);
+            o.setAttribute('selected', '');
+          } else if (op.placeholder && c.value !== undefined && c.value !== null
+            && String(op.value) === String(c.value)) {
+            // El placeholder puede estar "seleccionado" visualmente cuando
+            // el componente no tiene valor (sin contar como default).
             o.setAttribute('selected', '');
           }
           if (op.description) {

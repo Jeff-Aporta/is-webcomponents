@@ -22,6 +22,26 @@ export type OpcionSelect = string | {
   icon?: string;
   html?: string;
   description?: string;
+  /**
+   * Marca esta opción como placeholder (no se puede seleccionar como default).
+   * El panel la renderiza en color neutral (#888) para indicar que el
+   * componente no quema un default; HTML resuelve al valor `value` (típico "").
+   */
+  placeholder?: boolean;
+};
+
+/**
+ * Información JSDoc-style opcional del atributo (Phase W36). Cuando está
+ * presente, el botón info junto al label abre un popover con esta info; en
+ * su defecto, el panel deriva lo que puede del propio control (tipo,
+ * default, options).
+ */
+export type PanelInfoDef = {
+  description?: string;
+  type?: string;
+  default?: string;
+  values?: string[];
+  example?: string;
 };
 
 /** Definición JSON de un control (espejo de controls.schema.json). */
@@ -37,6 +57,8 @@ export type ControlDef = {
   max?: number;
   step?: number;
   placeholder?: string;
+  /** Info JSDoc-style opcional (Phase W36). */
+  info?: PanelInfoDef;
 };
 
 /** `controls` que puede declarar un bloque demo/html del preview. */
@@ -69,6 +91,7 @@ function opcionesDe(def: ControlDef): Array<{
   icon?: string;
   html?: string;
   description?: string;
+  placeholder?: boolean;
 }> {
   const attr = nombreAtributo(def.prop) ?? def.prop.replace(/^prop:/, '');
   return (def.options ?? []).map((o) => {
@@ -80,6 +103,7 @@ function opcionesDe(def: ControlDef): Array<{
         icon: o.icon,
         html: o.html,
         description: o.description,
+        placeholder: o.placeholder,
       };
     // Completa icono si el JSON no lo trae (todos los selects del panel).
     if (!base.icon) {
@@ -169,6 +193,7 @@ export function opcionesSelect(def: ControlDef): Array<{
   icon?: string;
   html?: string;
   description?: string;
+  placeholder?: boolean;
 }> {
   return opcionesDe(def);
 }

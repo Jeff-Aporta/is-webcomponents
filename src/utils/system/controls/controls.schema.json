@@ -69,6 +69,21 @@
         "max": { "type": "number" },
         "step": { "type": "number" },
         "placeholder": { "type": "string" },
+        "info": {
+          "type": "object",
+          "description": "Información JSDoc-style opcional del atributo (Phase W36). Se muestra en el popover del botón info junto al label.",
+          "properties": {
+            "description": { "type": "string" },
+            "type": { "type": "string" },
+            "default": { "type": "string" },
+            "values": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "example": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
         "esquema": {
           "description": "Esquema/placeholder opcional para control=json (cómo editar el objeto)."
         }
