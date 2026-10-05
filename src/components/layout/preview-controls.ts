@@ -1051,7 +1051,7 @@ class IswcPreviewControls extends HTMLElement {
    */
   #derivePanelInfo(c: ControlPanel): PanelInfo {
     const base = c.control ? inferControlType(c) : '';
-    const tipo: string | undefined = c.info?.type ?? base || undefined;
+    const tipo: string | undefined = (c.info?.type ?? base) || undefined;
     const defStr = c.default === undefined || c.default === null || c.default === ''
       ? undefined
       : String(c.default);
