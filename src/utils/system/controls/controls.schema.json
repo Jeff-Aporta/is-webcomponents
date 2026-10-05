@@ -58,6 +58,10 @@
                   "description": {
                     "type": "string",
                     "description": "Texto secundario bajo la etiqueta (slot description)."
+                  },
+                  "placeholder": {
+                    "type": "boolean",
+                    "description": "Marca la opción como placeholder (no quemada por el componente). El panel la renderiza en gris neutral (#888) y nunca la marca como default. Útil para atributos cuyo default lo resuelve HTML (p.ej. value=\"\" en <iswc-button>)."
                   }
                 }
               }

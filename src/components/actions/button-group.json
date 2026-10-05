@@ -44,7 +44,8 @@
                 "joined",
                 "segmented",
                 "separated"
-              ]
+              ],
+              "default": "joined"
             },
             {
               "control": "select",
@@ -54,13 +55,19 @@
                 "none",
                 "single",
                 "multiple"
-              ]
+              ],
+              "default": "none"
             },
             {
               "control": "select",
               "prop": "attr:value",
               "label": "value",
               "options": [
+                {
+                  "value": "",
+                  "label": "without a default setting",
+                  "placeholder": true
+                },
                 "lista",
                 "Centro",
                 "Medio",

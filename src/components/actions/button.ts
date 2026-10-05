@@ -21,10 +21,10 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
  * Atributos
  *  color      brand | neutral | success | warning | danger | info | error   (default: brand)
  *  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
- *  shape        none | round | square | rect | pill | hexagon | arrow-left | arrow-right  (default: round)
+ *  shape        none | round | square | rect | pill  (default: round)
  *                             `none` = sin conversión de forma; `round` = radio tema;
- *                             `square`/`rect` = esquinas vivas; `pill` = cápsula;
- *                             `hexagon`/`arrow-*` = corner-shape CSS.
+ *                             `square`/`rect` = esquinas vivas; `pill` = cápsula
+ *                             (border-radius: 999px).
  *  hue          number (0-360)  color propio para el highlight cuando está
  *                             [selected] dentro de <iswc-button-group>. Si no
  *                             se define, el grupo usa su --iswc-accent.
@@ -33,7 +33,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
  *  pill         boolean
  *  with-caret   boolean
  *  href         string   → renderiza como <a>
- *  download     string
+ *  download     string   (reenviado al <a> interno; útil con `data:` URLs)
  *  type         button | submit | reset                       (default: button)
  *  title        string
  *  name         string   (form data)
@@ -116,7 +116,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
 
   // Literal para audit-preview-controls; fuente canónica = BUTTON_SHAPE.
   const VALID_SHAPE = [
-    "none", "round", "square", "rect", "pill", "hexagon", "arrow-left", "arrow-right",
+    "none", "round", "square", "rect", "pill",
   ];
   void BUTTON_SHAPE;
 
