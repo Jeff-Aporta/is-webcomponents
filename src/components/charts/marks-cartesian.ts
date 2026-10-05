@@ -1,5 +1,6 @@
 import { roundedBarRect, pathLine, pathArea, svgEl } from '../_shared/svg-chart-engine.js';
 import type { ChartCtx, ChartDataset } from './chart.js';
+import type { MarksDataset, ProjectedPoint, XYPoint, CurveKind } from "./marks-cartesian.schemas.js";
 
 /**
  * Marks cartesianas (bar, line, scatter, bubble).
@@ -15,29 +16,10 @@ import type { ChartCtx, ChartDataset } from './chart.js';
  * `[key: string]: unknown` para aceptar payloads arbitrarios; aquí tipamos
  * sólo los nombres que las marks realmente leen.
  */
-type MarksDataset = ChartDataset & {
-  /** Tipo de curva (Chart.js): 'linear' | 'natural' | 'step' | ... */
-  curve?: string;
-  stepped?: boolean;
-  tension?: number;
-  /** Color de borde para línea / scatter / bubble. */
-  borderColor?: string;
-  /** Color de relleno para área / bubble / barra. */
-  backgroundColor?: string;
-  borderWidth?: number;
-  borderRadius?: number;
-  pointRadius?: number;
-  /** Chart.js: si true, pinta el área bajo la línea. */
-  fill?: boolean | string | number;
-  /** Índice original del dataset (lo inyecta chart.ts). */
-  __i?: number;
-};
 
 /** Punto proyectado a coordenadas de pantalla, listo para `pathLine`/`pathArea`. */
-type ProjectedPoint = { x: number; y: number; value: number; index: number };
 
 /** Forma `{x,y}` (con `r` opcional) de un punto de dataset Chart.js. */
-type XYPoint = { x?: number; y: number; r?: number };
 
 /** Type guard: el punto trae coordenadas x/y (no es un escalar). */
 function isXY(p: unknown): p is XYPoint {
@@ -45,7 +27,6 @@ function isXY(p: unknown): p is XYPoint {
 }
 
 /** Curvas soportadas por `pathLine` / `pathArea`. */
-type CurveKind = 'linear' | 'natural' | 'step';
 
 /** Curva a partir de las props de dataset de Chart.js (`tension`, `stepped`). */
 function curveOf(ds: MarksDataset): CurveKind {

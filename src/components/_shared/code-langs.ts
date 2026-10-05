@@ -7,27 +7,13 @@
  */
 
 import { diffLineClass } from './code-diff.js';
+import type { CodeLangDef, LanguageSummary, LanguageResolution } from "./code-langs.schemas.js";
 
 /**
  * Definición de un lenguaje: id, alias, y opcionalmente una clase de fondo
  * por línea (la piden los lenguajes cuyo significado vive en la línea
  * completa, p. ej. diff: esta fila entra, esta sale).
  */
-export type CodeLangDef = {
-  id: string;
-  aliases?: string[];
-  /** legacy de la era CodeMirror (ya no se lee) */
-  heavy?: boolean;
-  /** legacy (ya no se lee) */
-  load?: () => Promise<void>;
-  /**
-   * Clase de fondo por línea. El tokenizador pinta texto, no filas enteras;
-   * los lenguajes cuyo significado vive en la línea completa la piden para
-   * la banda. El motor nativo la aplica por su cuenta (code-highlight); se
-   * conserva en el registro informativo.
-   */
-  lineClass?: (line: string) => string | null;
-};
 
 const LANGS = new Map<string, CodeLangDef>();
 /** alias → id */
@@ -80,8 +66,6 @@ export function inferLanguage(text: string): string {
   return 'javascript';
 }
 
-export type LanguageSummary = { id: string; aliases: string[]; heavy: boolean };
-
 export function listLanguages(): LanguageSummary[] {
   return [...LANGS.values()].map((d) => ({
     id: d.id,
@@ -89,8 +73,6 @@ export function listLanguages(): LanguageSummary[] {
     heavy: !!d.heavy,
   }));
 }
-
-export type LanguageResolution = { id: string; def: CodeLangDef | null };
 
 /** Devuelve el id y la definición del lenguaje (sin cargar modos CDN). */
 export function ensureLanguage(name: string | null | undefined): LanguageResolution {

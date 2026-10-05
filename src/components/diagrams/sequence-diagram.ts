@@ -27,6 +27,7 @@ import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import type { SequenceMessageSpec } from './sequence-spec.js';
+import type { TurtleState, MsgNode, LifelineNode, ActorNode } from "./sequence-diagram.schemas.js";
 
 /**
  * <iswc-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
@@ -55,35 +56,12 @@ import type { SequenceMessageSpec } from './sequence-spec.js';
 const GUIDE_X = 44;
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
-interface TurtleState {
-  playing: boolean;
-  idx: number;
-  total: number;
-  replay: number;
-}
 
 /** Vista cacheada por mensaje, para el hover sin reconstruir el SVG. */
-interface MsgNode {
-  m: SequenceLayoutMessage;
-  g: SVGGElement;
-  path: SVGPathElement;
-  arrow: SVGElement;
-  dot: SVGCircleElement;
-  labelNode: SVGElement | null;
-}
 
 /** Línea vertical de lifeline cacheada (para atenuar las inactivas en hover). */
-interface LifelineNode {
-  x: number;
-  line: SVGLineElement;
-}
 
 /** Caja rectangular de actor cacheada (para resaltar origen/destino en hover). */
-interface ActorNode {
-  x: number;
-  g: SVGGElement;
-  rect: SVGRectElement;
-}
 
 /** Div dentro de foreignObject con HTML inline (iconos / markdown). */
 function foreignHtml(

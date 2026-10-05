@@ -10,6 +10,7 @@
  */
 
 import { getComponentPrefs, setComponentPrefs } from './prefs.js';
+import type { RestorePolicy, ScrollMemoryOpts } from "./scroll-memory.schemas.js";
 
 export const SCROLL_MEMORY_ATTRS: readonly string[] = Object.freeze([
   'remember-scroll',
@@ -22,13 +23,6 @@ const RESTORE_WINDOW = 4_500;
 const RESTORE_STEP = 60;
 const USER_INTENT: readonly string[] = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
 const SAVE_DEBOUNCE_MS = 120;
-
-export type RestorePolicy = 'reload' | 'always';
-
-export type ScrollMemoryOpts = {
-  tag: string;
-  restorePolicy?: RestorePolicy;
-};
 
 export class ScrollMemory {
   host: HTMLElement;

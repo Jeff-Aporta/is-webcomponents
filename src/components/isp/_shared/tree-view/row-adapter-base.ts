@@ -6,7 +6,8 @@ import type {
   TNode,
   TreeActionEntry,
 } from "./_types.js";
-import { TRAContextSchema, type TRAContext } from "./row-adapter-base.schema.js";
+import { TRAContextSchema, type TRAContext } from "./row-adapter-base.schemas.js";
+import type { TreeAdapterLike } from "./row-adapter-base.schemas.js";
 
 /**
  * Subset de la API del TreeAdapter (TARowBase + mixins) que TRABase consume.
@@ -15,58 +16,6 @@ import { TRAContextSchema, type TRAContext } from "./row-adapter-base.schema.js"
  * están migrándose a tipado explícito (WT-0051). Esta interfaz es la mínima
  * necesaria para que TRABase compile bajo `strict` sin necesidad de `any`.
  */
-interface TreeAdapterLike {
-  // ── Estado / contexto (00-context.ts, 01-contract.ts) ──────────────────
-  readonly context: Record<string, unknown>;
-  readonly disabled: boolean;
-  readonly isProtected: boolean;
-  readonly isReadOnly: boolean;
-  readonly canMutate: boolean;
-  readonly disabledNodes: string[];
-  readonly flashFlatPaths: string[];
-  readonly flashErrorFlatPaths: string[];
-  readonly expandedFlatPaths: string[];
-  readonly expandedNodes: TNode[];
-  readonly rootNodes: TNode[];
-  readonly focusedNode: TNode | null;
-  readonly selectedNode: TNode | null;
-  readonly hoveredNode: TNode | null;
-  readonly floatCard: FloatCardConfig;
-  readonly currentDragFlatPath: string;
-  readonly _domRoot?: HTMLElement | null;
-
-  // ── Normalización / navegación (03-tree-shape.ts) ──────────────────────
-  normalizeFlatPath(id: string | null | undefined): string;
-  findNodeByFlatPath(id: string | null | undefined): TNode | null;
-
-  // ── Acciones de fila (00-as-row.ts) ────────────────────────────────────
-  filterRowActions(cfg: RowConfig | undefined, frozen: boolean): TreeActionEntry[];
-  getRowConfig(node: TNode): RowConfig;
-  iconParts(o: IconConfig | undefined): { icon: string; rest: Record<string, unknown>; mergedStyle: string } | null;
-  isGrouper(node: TNode): boolean;
-  isFrozen(node: TNode): boolean;
-
-  // ── Mutaciones / callbacks (02-model.ts, 05-view.ts) ──────────────────
-  onrowfocus(node: TNode): void;
-  onrowtoggle(node: TNode, open: boolean): void;
-  onaddsibling(flatPath: string, pos: "above" | "below"): void;
-  onaddchild(flatPath: string): void;
-  expandedNodesAfterToggle(source: TNode[], id: string, open: boolean): TNode[];
-  setExpandedNodesFn(nodes: TNode[]): void;
-
-  // ── Drag & drop (00-as-row.ts, row-adapter-drag.ts) ───────────────────
-  flashRowErrorFlatPaths(flatPaths: string[]): void;
-  canDrop(sourceFlatPath: string, targetFlatPath: string, position: "before" | "after" | "into"): boolean;
-  clearDragOverlays(): void;
-  clearOtherDragOverlays(keepFlatPath: string): void;
-  onrowreorder(sourceFlatPath: string, targetFlatPath: string, position: "before" | "after" | "into"): void;
-
-  // ── Render registry (01-contract.ts) ──────────────────────────────────
-  unregisterRowAdapter(adapter: TRABase): void;
-
-  // ── DOM helpers (05-view.ts) ──────────────────────────────────────────
-  blurTreeSummariesExcept(summary: HTMLElement): void;
-}
 
 /** Bridge que `paintRow` pasa a `TreeRowAdapter` (alias local tipado). */
 

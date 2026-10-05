@@ -35,6 +35,7 @@
  * `formControlTemplate()` y `FormControlMixin` por separado.
  */
 
+import type { LabelPlacement, ElementCtor } from "./form-control-mixin.schemas.js";
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
   <div part="form-control" class="form-control">
@@ -91,11 +92,9 @@ export const FORM_CONTROL_PROPS: readonly string[] = [
   'disabled', 'readonly', 'required',
 ];
 
-type LabelPlacement = 'start' | 'end' | 'top' | 'bottom';
 const VALID_PLACEMENTS: readonly LabelPlacement[] = ['start', 'end', 'top', 'bottom'];
 
 /** Constructor de un HTMLElement (la base del mixin). */
-type ElementCtor = new (...args: any[]) => HTMLElement;
 
 /**
  * Mixin que dota a una clase de las properties/attributes típicos de un

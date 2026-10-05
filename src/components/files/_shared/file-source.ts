@@ -1,10 +1,7 @@
 /** Contrato src|content de la familia file-preview (S-FP1). */
-export type FileSource =
-  | { kind: 'empty' }
-  | { kind: 'content'; content: string }
-  | { kind: 'src'; src: string };
 
 /** Si ambos llegan, gana content. */
+import type { FileSource } from "./file-source.schemas.js";
 export function resolveFileSource(
   src: string | null | undefined,
   content: string | null | undefined,

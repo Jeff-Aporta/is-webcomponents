@@ -20,6 +20,7 @@ import {
   injectThemeCss,
   type ErThemeJson,
 } from './theme.js';
+import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./component-diagram.schemas.js";
 
 /**
  * <iswc-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
@@ -65,7 +66,6 @@ function requiredSocketPath(cx: number, cy: number, r: number, side: Lado): stri
 }
 
 /** Forma del círculo O y la C (conector UML `-(O-`). */
-interface InterfaceStemPoint { x: number; y: number; }
 
 function stemInner(iface: { cx: number; cy: number; side: Lado }, r: number): InterfaceStemPoint {
   switch (iface.side) {
@@ -78,10 +78,8 @@ function stemInner(iface: { cx: number; cy: number; side: Lado }, r: number): In
 }
 
 /** Paquete con la `titleBox` añadida por `computeComponentLayout`. */
-type LayoutPackage = Paquete & { titleBox?: Caja };
 
 /** Punto anchor de una arista. */
-type AnchorPoint = Punto;
 
 class IswcComponentDiagram extends DiagramElementBase {
   static get observedAttributes(): string[] {

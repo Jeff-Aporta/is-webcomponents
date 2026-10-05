@@ -3,18 +3,7 @@
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-interface ResizeObserverEntryLike {
-  contentBoxSize?: readonly { inlineSize: number; blockSize: number }[];
-  borderBoxSize?: readonly { inlineSize: number; blockSize: number }[];
-  contentRect?: { width: number; height: number };
-}
-
-interface ResizeDetail {
-  entries?: readonly ResizeObserverEntryLike[];
-}
-
-interface BoxSize { w: number | null; h: number | null }
-
+import type { ResizeObserverEntryLike, ResizeDetail, BoxSize } from "./resize-observer.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 

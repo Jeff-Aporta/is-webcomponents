@@ -5,9 +5,9 @@
  */
 
 /** Doc individual de skill/prompt referenciada por el prompt canónico. */
-export type SkillDoc = { label: string; url: string };
 
 /** Doc general del kit. El MD del módulo lo aporta el panel (config.docs). Solo dos. */
+import type { SkillDoc, PromptMdOpts, LoadAgentPromptOpts, BuildLlmPromptOpts } from "./llm-agent-prompt.schemas.js";
 export const SKILL_DOCS: readonly SkillDoc[] = [
   {
     label: 'Skill · kit (general)',
@@ -29,8 +29,6 @@ export const LLM_PROMPT_FALLBACK: string = [
 let cachedPromptMd: string | null = null;
 let loadPromise: Promise<string> | null = null;
 
-export type PromptMdOpts = { importMetaUrl?: string };
-
 /**
  * Resuelve URLs candidatas de PROMPT.md (src gallery + dist CDN).
  */
@@ -51,8 +49,6 @@ export function promptMdCandidates(importMetaUrl: string = import.meta.url): str
   }
   return list;
 }
-
-export type LoadAgentPromptOpts = { importMetaUrl?: string; force?: boolean };
 
 /**
  * Carga y cachea el PROMPT.md canónico.
@@ -84,8 +80,6 @@ export async function loadAgentPromptMd(opts: LoadAgentPromptOpts = {}): Promise
     loadPromise = null;
   }
 }
-
-export type BuildLlmPromptOpts = { sha?: string; base?: string };
 
 /**
  * Ensambla el prompt copiable: PROMPT.md + SHA + docs del módulo.

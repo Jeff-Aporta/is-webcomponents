@@ -17,6 +17,7 @@
 
 import { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode } from './code-text.js';
 import { inferLanguage } from './code-langs.js';
+import type { CodeEditor } from "./highlight-code.schemas.js";
 
 export { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode };
 
@@ -56,11 +57,6 @@ const ensureEditorDefined = (): Promise<unknown> => {
 };
 
 /** Editor `<iswc-code>` ya montado (con atributos de configuración). */
-type CodeEditor = HTMLElement & {
-  value: string;
-  lang: string;
-  refresh?: () => void;
-};
 
 /**
  * Crea o actualiza un `<iswc-code readonly compact>` a partir de un

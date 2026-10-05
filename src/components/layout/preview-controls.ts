@@ -12,6 +12,7 @@
  * Atributos:
  *   label   string — header del panel (default: "Atributos").
  */
+import type { OpcionPanel, PanelInfo, ControlPanel } from "./preview-controls.schemas.js";
 const CSS = `
 :host {
   display: block;
@@ -342,66 +343,11 @@ const CSS = `
 }
 `;
 
-export type OpcionPanel = {
-  value: unknown;
-  label: string;
-  icon?: string;
-  html?: string;
-  description?: string;
-  /**
-   * Opción placeholder (no quemada por el componente). Se renderiza en gris
-   * neutral (#888) y nunca se marca como default.
-   */
-  placeholder?: boolean;
-};
-
 /**
  * Información JSDoc-style del atributo, mostrada en el popover del botón
  * info (Phase W36). Todos los campos son opcionales: cuando faltan, el
  * popover deriva lo que puede del propio control (tipo, default, options).
  */
-export type PanelInfo = {
-  /** Descripción en prosa del atributo. */
-  description?: string;
-  /** Tipo lógico (p. ej. "string", "boolean", "enum", "integer"). */
-  type?: string;
-  /** Default legible (override sobre `c.default` cuando es más rico). */
-  default?: string;
-  /** Lista de valores válidos (override sobre `c.options`). */
-  values?: string[];
-  /** Ejemplo de uso, en formato libre. */
-  example?: string;
-};
-
-export type ControlPanel = {
-  control: string;
-  prop: string;
-  label: string;
-  /**
-   * Agrupa knobs. `General` (default) va plano en el grid.
-   * Cualquier otro nombre → disclosure colapsable al final (extras).
-   */
-  group?: string;
-  /**
-   * Fuerza disclosure aunque el grupo sea General, o desactiva el default
-   * de “grupo ≠ General → disclosure” con `false`.
-   */
-  disclosure?: boolean;
-  /** string[] del JSON de demos u objetos ya normalizados. */
-  options?: Array<string | OpcionPanel>;
-  min?: number;
-  max?: number;
-  step?: number;
-  placeholder?: string;
-  default?: unknown;
-  value?: unknown;
-  /**
-   * Info JSDoc-style del atributo (Phase W36). Cuando está presente, el
-   * botón info junto al label abre un popover con esta info; en su defecto,
-   * el popover se sigue renderizando con valores derivados del control.
-   */
-  info?: PanelInfo;
-};
 
 function escProp(prop: string): string {
   return String(prop).replace(/[\\"]/g, '\\$&');

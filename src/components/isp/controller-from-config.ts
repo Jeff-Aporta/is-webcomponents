@@ -28,162 +28,35 @@
 /* ─────────────────────────── Tipos del contrato ───────────────────────── */
 
 /** Forma mínima de un registro: objeto plano indexado por nombre de campo. */
-export type IspRecord = Record<string, unknown>;
 
 /** Nombre de una acción CRUD reconocida por el controller. */
-export type IspActionKey =
-  | 'crear'
-  | 'modificar'
-  | 'visualizar'
-  | 'verificar'
-  | 'duplicar'
-  | 'recodificar'
-  | 'eliminar'
-  | 'consolidar';
 
 /** Definición de columna aplanada (campo + header). */
-export interface IspColumnDef {
-  field: string;
-  header?: string;
-}
 
 /** Configuración de una conexión HTTP al backend. */
-export interface IspServerConfig {
-  /** `true` para usar `local` en lugar de `remote`. */
-  useLocal?: boolean;
-  /** Conexión local (mock-friendly). */
-  local?: IspConnection | null;
-  /** Conexión remota. */
-  remote?: IspConnection | null;
-}
 
 /** Parámetros HTTP de un endpoint. */
-export interface IspConnection {
-  host: string;
-  port?: number | null;
-  /** `false` para forzar `http://`; por defecto `https`. */
-  https?: boolean;
-  /** Prefijo de contexto REST (p. ej. `/conta`). */
-  restcontext?: string;
-}
 
 /** Endpoints REST configurables por acción. */
-export interface IspEndpoints {
-  /** Recurso singular — usado para derivar `recursos` y `crud` por defecto. */
-  recurso?: string;
-  /** Recurso plural — usado para `listado` por defecto. */
-  recursos?: string;
-  /** Base CRUD (POST/PUT/DELETE). */
-  crud?: string;
-  /** Endpoint de listado (GET). */
-  listado?: string;
-  verificar?: string;
-  duplicar?: string;
-  recodificar?: string;
-  consolidar?: string;
-}
 
 /** Token resuelto o función que lo devuelve perezosamente. */
-export type IspToken = string | (() => string | null | undefined) | null | undefined;
 
 /** Forma del argumento de `Lista`. */
-export interface IspListaArgs {
-  pagina?: number;
-  qregistros?: number;
-  filtro?: { sql?: string };
-}
 
 /** Forma del resultado de `Lista` (mock o HTTP). */
-export interface IspListaResult {
-  datos: IspRecord[];
-  qregistros?: number;
-  totalregistros?: number;
-  pagina?: number;
-  totalpaginas?: number;
-}
 
 /** Configuración del controller — entrada de las factorías. */
-export interface IspControllerConfig {
-  /** `'catalog'` (default) o `'btnref'`. */
-  kind?: 'catalog' | 'btnref';
-  /** Etiqueta visible de la entidad. */
-  entrie?: string;
-  /** Clave primaria — única o compuesta. */
-  primaryKeys?: string[];
-  /** Columnas planas (alternativa a `Columns`). */
-  columns?: IspColumnDef[];
-  /** Columnas mostradas en BtnRef (default: primaryKeys). */
-  ColumnsBtnRef?: string[];
-  /** Selección múltiple. */
-  multiSelect?: boolean;
-  /** Etiqueta legible de la PK (para prompts). */
-  labelPk?: string;
-  /** Tamaño máximo de la PK. */
-  sizePk?: number;
-  /** Constructor de un objeto nuevo. */
-  klass?: new () => IspRecord;
-  /** Acciones habilitadas. */
-  actions?: boolean | IspActionKey[];
-  /** Datos iniciales (mock mode). */
-  mock?: IspRecord[];
-  /** Conexión HTTP. */
-  server?: IspServerConfig;
-  /** Endpoints REST. */
-  endpoints?: IspEndpoints;
-  /** Recurso singular (atajo). */
-  recurso?: string;
-  /** Bearer token o función que lo devuelve. */
-  token?: IspToken;
-}
 
 /** Definición del controller devuelto por `createIspController`. */
-export interface IspController {
-  entrie: string;
-  primaryKeys: string[];
-  columns: IspColumnDef[];
-  Columns: Record<string, string>;
-  ColumnsBtnRef: string[];
-  multiSelect: boolean;
-  labelPk?: string;
-  sizePk?: number;
-  klass: new () => IspRecord;
-  CtxBtnRef?: IspController | null;
-  Lista: (args?: IspListaArgs) => Promise<IspListaResult>;
-  actCrear?: (record: IspRecord) => Promise<IspRecord>;
-  actModificar?: (record: IspRecord) => Promise<IspRecord>;
-  actVisualizar?: (record: IspRecord) => Promise<IspRecord>;
-  actVerificar?: (record: IspRecord) => Promise<{ mensajes: Array<{ itdmensaje: unknown; mensaje: string }> }>;
-  actEliminar?: (record: IspRecord) => Promise<IspRecord>;
-  actDuplicar?: (src: IspRecord, work: IspRecord) => Promise<true>;
-  actRecodificar?: (src: IspRecord, work: IspRecord) => Promise<true>;
-  actConsolidar?: (src: IspRecord, work: IspRecord) => Promise<true>;
-  /** Acceso al store mock — sólo tests / demos. */
-  readonly _store: IspRecord[];
-}
 
 /** Forma del JSON que devuelve el backend ISP. */
-interface IspHttpEnvelope {
-  encabezado?: { resultado?: boolean; mensaje?: string };
-  respuesta?: {
-    datos?: IspRecord[];
-    pagina?: number;
-    qregistros?: number;
-    totalpaginas?: number;
-    totalregistros?: number;
-    verificacion?: { mensajes: Array<{ itdmensaje: unknown; mensaje: string }> };
-  };
-  /** Algunos endpoints exponen `datos` en la raíz sin `respuesta`. */
-  datos?: IspRecord[];
-}
 
 /** Forma del controller antes de añadir los `actXxx` y `_store` finales. */
-type MutableIspController = {
-  -readonly [K in keyof IspController]: IspController[K];
-};
 
 /* ───────────────────────────── helpers puros ──────────────────────────── */
 
 /** Pluralización ES mínima (curso→cursos, z→ces). */
+import type { IspRecord, IspActionKey, IspColumnDef, IspServerConfig, IspConnection, IspEndpoints, IspToken, IspListaArgs, IspListaResult, IspControllerConfig, IspController, IspHttpEnvelope, MutableIspController } from "./controller-from-config.schemas.js";
 export function pluralizeEs(s: string): string {
   if (!s) return s;
   const last = s.slice(-1).toLowerCase();

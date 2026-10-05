@@ -19,261 +19,55 @@
 // ── Tipos de dominio ─────────────────────────────────────────────────────
 
 /** Forma mínima de un nodo del árbol (port vanilla). */
-export interface TNode {
-  /** Path estable tipo "1.2.3"; se normaliza quitando prefijos `_UP_` / `_M_`. */
-  flatPath: string;
-  /** Path original (antes de remap por reorder); se congela tras la primera decoración. */
-  pathInit?: string;
-  /** Hijos directos; `undefined` o `[]` para nodos hoja. */
-  childrens?: TNode[];
-  /** Profundidad; derivada del `flatPath` en `applyDomainDefaults`. */
-  depth?: number;
-  /** Forma lógica del nodo: "atom" | "group". */
-  topology?: string;
-  /** Modo de contención: "cell" | "prison" | "hermetic". */
-  containment?: string;
-  /** Movilidad: "unanchored" | "freezer". */
-  mobility?: string;
-  /** Congela el nodo y todos sus ancestros. */
-  freeze?: boolean;
-  /** Flag materializado por `applyDomainDefaults` cuando el nodo tiene hijos. */
-  hasChildren?: boolean;
-  // Decoradores de tree-data.ts (Object.defineProperties). Read-only.
-  readonly isAtom?: boolean;
-  readonly isGroupActor?: boolean;
-  readonly isPrison?: boolean;
-  readonly isHermetic?: boolean;
-  readonly isCell?: boolean;
-  readonly isFreezer?: boolean;
-  readonly isUnanchored?: boolean;
-  readonly isEmpty?: boolean;
-  // Campos dinámicos arbitrarios (`label`, `name`, `titulo`, `iplan`, `idrow`, …).
-  [key: string]: unknown;
-}
 
 /** Forma mínima del `record` del contexto (lo que el adapter expone al consumidor). */
-export interface TRecord extends TNode {
-  iplan?: string;
-  idrow?: string;
-}
 
 // ── Acciones / botones ───────────────────────────────────────────────────
 
 /** Spec de un botón de acción del treeview. */
-export interface TreeActionSpec {
-  icon?: string;
-  iconTrue?: string;
-  iconFalse?: string;
-  label?: string;
-  title?: string;
-  hotkey?: string;
-  color?: string;
-  colorFalse?: string;
-  checked?: boolean;
-  disabled?: boolean;
-  /** Marcador de separador (FlexOptions lo trata como `<iswc-divider>`). */
-  separator?: boolean;
-  onClick?: () => void;
-}
 
 /** Una entrada de `actions` / `cascadeOptions` puede ser un grupo, un item o `null`. */
-export type TreeActionEntry =
-  | TreeActionSpec
-  | TreeActionEntry[]
-  | null
-  | undefined
-  | false;
 
 // ── Config de filas ──────────────────────────────────────────────────────
 
 /** Config devuelta por `getNodeIcon` (customs). */
-export interface IconConfig {
-  icon: string;
-  color?: string;
-  style?: string;
-  title?: string;
-}
 
 /** Config de FloatCard (mezcla de `treeAdapter.floatCard` + overrides por fila). */
-export interface FloatCardConfig {
-  e?: number;
-  ty?: number | string;
-  [key: string]: unknown;
-}
 
 /** Config calculada por `buildDefaultRowConfig` / `getRowConfig`. */
-export interface RowConfig {
-  icono?: IconConfig;
-  actions: TreeActionEntry[];
-  cascadeOptions: TreeActionEntry[];
-  floatCard?: FloatCardConfig;
-  draggable?: boolean;
-  isFirst?: boolean;
-  isLast?: boolean;
-  events?: {
-    onclick?: () => void;
-    onopen?: () => void;
-    onclose?: () => void;
-    onfocus?: () => void;
-    onblur?: () => void;
-    onleadiconclick?: () => void;
-  };
-}
 
 /** Posición que devuelve `getSiblingPosition`. */
-export interface SiblingPosition {
-  isFirst: boolean;
-  isLast: boolean;
-}
 
 // ── Posiciones / direcciones ─────────────────────────────────────────────
 
 /** Posición relativa al target en operaciones de drop. */
-export type DropPosition = "before" | "after" | "into";
 
 /** Dirección de `move`. */
-export type MoveDirection = "up" | "down";
 
 // ── Snapshot / runtime ───────────────────────────────────────────────────
 
 /** Snapshot del pending delete (para restaurar la selección). */
-export interface PendingDeleteSnapshot {
-  prevVisibleIds: string[];
-  prevDeleteIdx: number;
-}
 
 /** Bridge que `TreeRowAdapter` consume (lo que `paintRow` le pasa). */
-export interface RowAdapterBridge {
-  treeController?: unknown;
-  node?: TNode;
-  forceRefresh?: () => void;
-}
 
 // ── Contexto / customs ───────────────────────────────────────────────────
 
 /** Shape del `context` que el adapter recibe del consumidor. */
-export interface TreeContext {
-  readonly?: boolean;
-  disabled?: boolean;
-  draggable?: boolean;
-  bAllowed?: {
-    Crear?: boolean;
-    Modificar?: boolean;
-    Eliminar?: boolean;
-    Visualizar?: boolean;
-  };
-  record?: TRecord | null;
-  List2Rows?: TNode[];
-  [key: string]: unknown;
-}
 
 /** Args que recibe `levelName` (`{ depth }`). */
-export interface LevelNameArgs {
-  depth: number;
-}
 
 /** Args que recibe `getNodeIcon`. */
-export interface NodeIconArgs {
-  isLastNode: boolean;
-  isFolder: boolean;
-  hasChildren: boolean;
-  isExpanded: boolean;
-  isEmptyFolder: boolean;
-}
 
 /** Hook runtime que `buildCustomsRuntime` expone a los customs. */
-export interface CustomsRuntime {
-  readonly record: TRecord | null;
-  readonly rootNodes: TNode[];
-  readonly canCollapseAll: boolean;
-  readonly canExpandAll: boolean;
-  readonly historyCanUndo: boolean;
-  readonly historyCanRedo: boolean;
-  readonly historyIsViewingPast: boolean;
-  readonly isProtected: boolean;
-  readonly canToggleProtection: boolean;
-  readonly isReadOnlyExternal: boolean;
-  readonly isReadOnly: boolean;
-  readonly canMutate: boolean;
-  findByFlatPath: (path: string | null | undefined) => TNode | undefined;
-  findByPathInit: (pathInit: string | null | undefined) => TNode | undefined;
-  sanitizeFlatPath: (id: string | null | undefined) => string;
-  move: (rec: TRecord, dir: MoveDirection) => Promise<string | null | undefined>;
-  addChild: (rec: TRecord) => void;
-  addSibling: (rec: TRecord, pos: string) => void;
-  openEdit: (rec: TRecord) => void;
-  openView: (rec: TRecord) => void;
-  openViewNode: (rec: TRecord) => void;
-  extinguish: (rec: TRecord) => void;
-  remove: (rec: TRecord) => void;
-  release: (rec: TRecord) => void;
-  addRoot: () => void;
-  collapseAll: () => void;
-  expandAll: () => void;
-  historyUndo: () => void;
-  historyRedo: () => void;
-  historyRecover: () => void;
-  protectionToggle: () => void;
-  setProtected: (v: boolean) => void;
-  actorActions: (node: TNode) => TreeActionSpec[];
-  addChildLabel: (node: TNode) => string;
-  isFirstSibling: (node: TNode) => boolean;
-  isLastSibling: (node: TNode) => boolean;
-  isPrisonOnly: (node: TNode) => boolean;
-}
 
 /** Hotkey handler signature (`customs.hotkeys[combo]`). */
-export type HotkeyHandler = (
-  node: TNode,
-  runtime: CustomsRuntime,
-  e: KeyboardEvent,
-) => void;
 
 /** Customs interface — hooks que el consumidor puede sobreescribir. */
-export interface TreeCustoms {
-  entrie?: string;
-  entries?: string;
-  /** Clase para materializar nodos cuando el item es plano. */
-  klass?: new (...args: unknown[]) => TNode;
-  /** Override de la lista fuente. */
-  list?: () => TNode[] | null | undefined;
-  /** Hook para construir un item nuevo desde un payload parcial. */
-  newItem?: (data: Partial<TNode> | undefined) => TNode;
-  /** Hook llamado al materializar / actualizar un nodo. */
-  updateNode?: (
-    node: TNode,
-    isNew: boolean,
-    runtime: CustomsRuntime,
-  ) => void | Promise<void>;
-  /** Override del ícono de fila. */
-  getNodeIcon?: (node: TNode, ctx: NodeIconArgs) => IconConfig | null;
-  /** Etiqueta de nivel (ej: "Sector", "Subsector"). */
-  levelName?: (args: LevelNameArgs) => string | undefined;
-  /** Acciones inline por fila. */
-  rowActions?: (node: TNode, runtime: CustomsRuntime) => TreeActionEntry[];
-  /** Acciones cascada (dropdown "más opciones"). */
-  rowCascadeOptions?: (node: TNode, runtime: CustomsRuntime) => TreeActionEntry[];
-  /** Toolbar top-menu. */
-  topMenuActions?: (runtime: CustomsRuntime) => TreeActionEntry[];
-  /** Mapa de hotkeys (`combo -> handler`). */
-  hotkeys?: Record<string, HotkeyHandler>;
-  /** Override por fila de la config por defecto. */
-  getRowConfig?: (node: TNode, defaultConfig: RowConfig) => RowConfig;
-  /** Lee el pathInit desde el modelo del consumidor. */
-  getFlatPath?: (node: TNode) => string;
-  /** Persiste flatPath en el modelo del consumidor. */
-  setFlatPath?: (node: TNode, flatPath: string) => void;
-  /** Remapea referencias cuando cambia el flatPath. */
-  remapReferences?: (node: TNode, idMap: Map<string, string>) => void;
-  /** Abre selector para el último nivel (hojas). */
-  openLastLevelSelector?: () => void;
-  onExpand?: (node: TNode, runtime: CustomsRuntime) => void;
-  onCollapse?: (node: TNode, runtime: CustomsRuntime) => void;
-}
 
 // ── Helpers de casteo (convención `asRecord(v: unknown)`) ─────────────────
 
 /** Castea `unknown` a `Record<string, unknown>` de forma segura. */
+import type { TNode, TRecord, TreeActionSpec, TreeActionEntry, IconConfig, FloatCardConfig, RowConfig, SiblingPosition, DropPosition, MoveDirection, PendingDeleteSnapshot, RowAdapterBridge, TreeContext, LevelNameArgs, NodeIconArgs, CustomsRuntime, HotkeyHandler, TreeCustoms } from "./_types.schemas.js";
 export function asRecord(v: unknown): Record<string, unknown> {
   if (v === null || typeof v !== "object") return {};
   return v as Record<string, unknown>;

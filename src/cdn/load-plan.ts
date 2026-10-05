@@ -3,30 +3,7 @@
  * Cada job es un `<cat>/<file>.min.js`. Categoría / `all` se expanden a tags.
  */
 
-export interface TagEntry {
-  category: string;
-  file: string;
-}
-
-export interface Catalog {
-  categories: Record<string, string[]>;
-  tags: Record<string, TagEntry>;
-  aliases: Record<string, string>;
-}
-
-export interface LoadRegistry {
-  all: boolean;
-  cats: Set<string>;
-  tags: Set<string>;
-}
-
-export interface LoadJob {
-  kind: 'tag';
-  path: string;
-  category?: string;
-  tagKey?: string;
-}
-
+import type { TagEntry, Catalog, LoadRegistry, LoadJob, PlanLoadsResult } from "./load-plan.schemas.js";
 export function resolveCategoryId(id: string, catalog: Catalog): string | null {
   const raw = String(id || '').trim().toLowerCase();
   if (!raw) return null;
@@ -76,11 +53,6 @@ function pushTagJob(
     tagKey: k,
   });
   return true;
-}
-
-export interface PlanLoadsResult {
-  jobs: LoadJob[];
-  skipped: string[];
 }
 
 export function planLoads(ids: readonly string[], reg: LoadRegistry, catalog: Catalog): PlanLoadsResult {

@@ -6,6 +6,7 @@
  * “appearance” = variant real del componente.
  */
 import '../media/icon.js';
+import type { MountCtx } from "./button.preview.schemas.js";
 
 const START_ICONS: Record<string, string> = {
   'i-floppy': 'mdi:content-save-outline',
@@ -166,11 +167,6 @@ function wireEvents(root: ParentNode): void {
       el.addEventListener(ev, (e: Event) => stamp(`${id}:${ev}`, (e as CustomEvent).detail ?? null));
     }
   }
-}
-
-interface MountCtx {
-  main?: ParentNode;
-  root?: ParentNode;
 }
 
 export async function mount(ctx: MountCtx): Promise<void> {

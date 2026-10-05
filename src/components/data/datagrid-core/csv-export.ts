@@ -1,4 +1,5 @@
 import type { ColumnState, RowNode } from './types.js';
+import type { CsvOptions } from "./csv-export.schemas.js";
 /**
  * datagrid-core/csv-export — Exportar filas a CSV.
  *
@@ -15,13 +16,6 @@ function escapeCsv(value: string, sep: string): string {
   }
   return value;
 }
-
-export type CsvOptions = {
-  /** Separador de campos; por defecto, `,`. */
-  separator?: string;
-  onlySelected?: boolean;
-  selection?: Set<string>;
-};
 
 /**
  * Construye el contenido CSV de las columnas visibles y las filas dadas.

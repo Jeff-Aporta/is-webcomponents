@@ -42,27 +42,32 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
 
 const CTRL_TS = join(root, 'src/components/layout/preview-controls.ts');
+const CTRL_SCHEMAS_TS = join(root, 'src/components/layout/preview-controls.schemas.ts');
 const CTLS_TS = join(root, 'src/utils/system/controles.ts');
+const CTLS_SCHEMAS_TS = join(root, 'src/utils/system/controles.schemas.ts');
 const SCHEMA = join(root, 'src/utils/system/controls/controls.schema.json');
 
 const ctrlTs = readFileSync(CTRL_TS, 'utf8');
+const ctrlSchemasTs = readFileSync(CTRL_SCHEMAS_TS, 'utf8');
 const ctlsTs = readFileSync(CTLS_TS, 'utf8');
+const ctlsSchemasTs = readFileSync(CTLS_SCHEMAS_TS, 'utf8');
 const schema = JSON.parse(readFileSync(SCHEMA, 'utf8')) as {
   definitions?: { control?: { properties?: Record<string, unknown> } };
 };
 
-test('W36: preview-controls.ts exporta PanelInfo con description/type/default/values/example', () => {
-  assert.match(ctrlTs, /export\s+type\s+PanelInfo\b/, 'debe declarar export type PanelInfo');
-  assert.match(ctrlTs, /description\?/);
-  assert.match(ctrlTs, /type\?/);
-  assert.match(ctrlTs, /default\?/);
-  assert.match(ctrlTs, /values\?/);
-  assert.match(ctrlTs, /example\?/);
+test('W36: preview-controls.schemas.ts exporta PanelInfo con description/type/default/values/example', () => {
+  assert.match(ctrlSchemasTs, /export\s+type\s+PanelInfo\b/, 'debe declarar export type PanelInfo');
+  // Zod schema: el campo es `description: z.X().optional()` (sin `?`).
+  assert.match(ctrlSchemasTs, /\bdescription\s*:/);
+  assert.match(ctrlSchemasTs, /\btype\s*:/);
+  assert.match(ctrlSchemasTs, /\bdefault\s*:/);
+  assert.match(ctrlSchemasTs, /\bvalues\s*:/);
+  assert.match(ctrlSchemasTs, /\bexample\s*:/);
 });
 
 test('W36: ControlPanel acepta info?: PanelInfo', () => {
-  assert.match(ctrlTs, /info\?:\s*PanelInfo/,
-    'ControlPanel debe declarar info?: PanelInfo (campo opcional)');
+  assert.match(ctrlSchemasTs, /info\s*:\s*PanelInfoSchema/,
+    'ControlPanel debe declarar info: PanelInfoSchema (campo opcional)');
 });
 
 test('W36: cada .fila genera un botón info junto al label', () => {
@@ -133,11 +138,11 @@ test('W36: el botón info lleva un <iswc-icon> con el icono info-outline', () =>
     'el botón debe inyectar un <iswc-icon> con mdi:information-outline');
 });
 
-test('W36: controles.ts (ControlDef) acepta info?: PanelInfoDef', () => {
-  assert.match(ctlsTs, /PanelInfoDef/,
-    'controles.ts debe exportar el tipo PanelInfoDef');
-  assert.match(ctlsTs, /info\?:\s*PanelInfoDef/,
-    'ControlDef debe declarar info?: PanelInfoDef');
+test('W36: controles.schemas.ts (ControlDef) acepta info?: PanelInfoDef', () => {
+  assert.match(ctlsSchemasTs, /PanelInfoDef/,
+    'controles.schemas.ts debe exportar el tipo PanelInfoDef');
+  assert.match(ctlsSchemasTs, /info\s*:\s*PanelInfoDefSchema/,
+    'ControlDef debe declarar info: PanelInfoDefSchema');
 });
 
 test('W36: controls.schema.json documenta el campo info (sin warnear)', () => {

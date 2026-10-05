@@ -1,5 +1,6 @@
 import { ElementBase } from '../../core/element-base.js';
 import { adoptCss, defineElement } from '../../core/element.js';
+import type { LinearTransform } from "./float-card.schemas.js";
 
 /**
  * g11 — UX/UI proposals:
@@ -41,12 +42,6 @@ function cssLen(v: string | number | null | undefined): string {
   if (v === undefined || v === null || v === '') return '0';
   if (typeof v === 'number') return Number.isFinite(v) ? `${v}px` : '0';
   return String(v);
-}
-
-interface LinearTransform {
-  tx?: string | number;
-  ty?: string | number;
-  e?: number;
 }
 
 class IswcFloatCard extends ElementBase {

@@ -8,86 +8,34 @@ import {
   removeComponentPrefs,
   setComponentPrefs,
 } from '../components/_shared/prefs.js';
+import type { GalleryState, ThemeName, PaletteName, CategoryMeta, CatalogItem, ThemeToggleElement, PaletteSelectorElement, PreviewLike, PreviewHostElement, SplitPanelElement, FrameElement, DrawerElement, LoaderLike } from "./app.schemas.js";
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
 /** Estado de la galería guardado en `?s=` (b64url JSON). */
-interface GalleryState {
-  theme?: string;
-  palette?: string;
-  component?: string;
-  embed?: boolean;
-  /** Preferencia de paneles laterales compactos (btn header). */
-  panelsCompact?: boolean;
-  [key: string]: unknown;
-}
 
 /** Temas y paletas reconocidos. */
-type ThemeName = 'light' | 'dark';
-type PaletteName = 'contapyme' | 'insoft' | 'agrowin';
 
 /** Categoría visible en el nav: id estable + label traducido. */
-interface CategoryMeta {
-  id: string;
-  label: string;
-}
 
 /** Item del catálogo: puede venir del manifest (ComponentManifestItem) o ser
  *  una página "suelta" como HOME/THEMING/ECOSYSTEM. */
-interface CatalogItem {
-  tag: string;
-  title: string;
-  page?: string;
-  category?: string;
-  origin?: string;
-}
 
 /** Subset del `<iswc-theme-toggle>` que la galería consulta. */
-interface ThemeToggleElement extends HTMLElement {
-  dark: boolean;
-}
 
 /** Subset del `<iswc-palette-selector>` del shell. */
-interface PaletteSelectorElement extends HTMLElement {
-  close(): void;
-  value: string;
-}
 
 /** Forma mínima de un preview (JsonPreview satisface esta estructura). */
-interface PreviewLike {
-  readonly definition: Record<string, unknown>;
-  mount(ctx: Record<string, unknown>): void | Promise<void>;
-  unmount?(ctx: Record<string, unknown>): void;
-}
 
 /** Subset del `<iswc-preview-component>` que la galería cablea con `.preview`. */
-interface PreviewHostElement extends HTMLElement {
-  preview?: PreviewLike | null;
-}
 
 /** Subset de `<iswc-split-panel>` con la propiedad `positionInPixels`. */
-interface SplitPanelElement extends HTMLElement {
-  positionInPixels: number;
-}
 
 /** Subset del `<iframe>` con `contentWindow` / `contentDocument` strict. */
-type FrameElement = HTMLIFrameElement;
 
 /** Subset del `<iswc-drawer>` con `show` / `hide` cancelables. */
-interface DrawerElement extends HTMLElement {
-  show(): void | Promise<void>;
-  hide(): void | Promise<void>;
-}
 
 /** Subset del ISWebComponentsLoader (subset usado por la galería). */
-interface LoaderLike {
-  catalog?: {
-    tags?: Record<string, unknown>;
-    categories?: Record<string, unknown>;
-    aliases?: Record<string, string>;
-  };
-  load(...tags: string[]): Promise<unknown>;
-}
 
 /* ─────────────── asRecord: helper común del WT-ROOT ─────────────────── */
 

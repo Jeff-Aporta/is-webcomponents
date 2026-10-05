@@ -11,8 +11,8 @@
  */
 
 import { SelectionMode, HeaderCheckboxState } from './types.js';
-import type { RowNode } from './types.js';
-import type { SelectionModeName } from './types.js';
+import type { RowNode } from "./types.schemas.js";
+import type { SelectionModeName } from "./types.schemas.js";
 
 /**
  * Alterna la seleccion de una fila segun el modo.

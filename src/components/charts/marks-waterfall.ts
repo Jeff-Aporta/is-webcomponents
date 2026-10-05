@@ -1,6 +1,7 @@
 import { roundedBarRect, svgEl } from '../_shared/svg-chart-engine.js';
 import { getStatusColor } from '../_shared/chart-palette.js';
 import type { ChartCtx, ChartDataset } from './chart.js';
+import type { WaterfallKind, WaterfallBar, WaterfallDataset } from "./marks-waterfall.schemas.js";
 
 /**
  * Marca de cascada (waterfall): cada punto es un delta sobre el acumulado,
@@ -8,18 +9,10 @@ import type { ChartCtx, ChartDataset } from './chart.js';
  */
 
 /** Tipo de barra en la cascada. */
-export type WaterfallKind = 'up' | 'down' | 'total';
 
 /** Rango de una barra resuelto a partir de los valores brutos. */
-export type WaterfallBar = {
-  index: number;
-  start: number;
-  end: number;
-  kind: WaterfallKind;
-};
 
 /** Dataset con el flag `totals` que esta mark respeta. */
-type WaterfallDataset = ChartDataset & { totals?: readonly number[] };
 
 /**
  * Calcula el rango de cada barra a partir de los valores brutos.

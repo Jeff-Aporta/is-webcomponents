@@ -2,23 +2,9 @@
  * Web Share: share nativo, si no copia URL/texto. AbortError = el usuario canceló.
  */
 
-export type ShareData = {
-  title?: string;
-  text?: string;
-  url?: string;
-  files?: readonly File[];
-};
-
-export type ShareResult = 'shared' | 'copied' | 'abort' | 'fail';
-
 /** Tipado del payload que espera `navigator.share` — subset estricto. */
-type NativeShareData = {
-  title?: string;
-  text?: string;
-  url?: string;
-  files?: File[];
-};
 
+import type { ShareData, ShareResult, NativeShareData } from "./web-share.schemas.js";
 export async function sharePayload(data: ShareData = {}): Promise<ShareResult> {
   const payload: NativeShareData = {
     title: data.title || document.title || '',

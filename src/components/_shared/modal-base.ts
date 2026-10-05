@@ -46,6 +46,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 import { upgradeProperties } from '../../core/element.js';
 import { emit } from '../../core/element.js';
+import type { ModalBaseCtor } from "./modal-base.schemas.js";
 const BASE_OBSERVED: readonly string[] = ['open', 'label', 'without-header', 'light-dismiss'];
 
 /** Selector CSS para "cualquier elemento focuseable" usado en focus trap. */
@@ -55,10 +56,6 @@ const FOCUSABLE_SELECTOR =
   ' button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
 /** Forma del constructor de subclase: expone __TEMPLATE y observedAttributes. */
-type ModalBaseCtor = typeof HTMLElement & {
-  __TEMPLATE: HTMLTemplateElement;
-  observedAttributes: readonly string[];
-};
 
 // `withStyleAttrs` da la personalización por atributo (radio, colores,
 // duraciones) a dialog/drawer y a cualquier modal que herede de aquí, sin

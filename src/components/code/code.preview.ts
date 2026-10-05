@@ -2,40 +2,7 @@
  * Behavior preview: <iswc-code>
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-
-interface CodeMark {
-  id?: string;
-  from: number;
-  to: number;
-  kind: 'tooltip' | 'highlight';
-  title?: string;
-  body?: string;
-  tone?: string;
-  message?: string;
-}
-
-interface CodeDoc {
-  text: string;
-  marks?: CodeMark[];
-}
-
-interface IsCodeEl extends HTMLElement {
-  lang: string;
-  mode: 'inline' | 'block';
-  value: string;
-  lineNumbers: boolean | string;
-  ready: boolean;
-  themeConfig?: Record<string, string> | null;
-  setMarks(marks: CodeMark[]): void;
-  code2json(opts: { marks: CodeMark[] }): CodeDoc;
-  setDocument(doc: CodeDoc): void;
-  format(): void;
-  refresh(): void;
-}
-
-interface IsFormatEl extends HTMLElement {
-  format(): void;
-}
+import type { CodeMark, CodeDoc, IsCodeEl, IsFormatEl } from "./code.preview.schemas.js";
 
 const SAMPLES: Record<string, string> = {
   javascript: `function greet(name) {\n  return \`Hola, \${name}\`;\n}\n\nconsole.log(greet('IS'));`,

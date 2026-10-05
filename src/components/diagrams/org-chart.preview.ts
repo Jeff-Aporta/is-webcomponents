@@ -2,9 +2,8 @@
  * Behavior migrado desde HTML inline de iswc-org-chart.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-interface OrgSelectDetail { node: { title?: string; name?: string; } }
-interface OrgToggleDetail { id: string; collapsed: boolean; }
 
+import type { OrgSelectDetail, OrgToggleDetail } from "./org-chart.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const log = document.getElementById('log');

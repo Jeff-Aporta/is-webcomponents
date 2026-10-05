@@ -23,6 +23,7 @@ import type {
   EdgeVariant,
   NodeStyleOverride,
 } from './diagram-types.js';
+import type { AnchorLike } from "./er-archify.schemas.js";
 
 function snap8(v: number): number {
   return Math.round(v / 8) * 8;
@@ -441,8 +442,6 @@ ${traceEnabled ? `
 }
 
 /* ──────────────── route helpers (archify-aligned) ──────────────── */
-
-interface AnchorLike { cx: number; cy: number; }
 
 /**
  * Decide los lados (fromSide, toSide) de una relación según la posición

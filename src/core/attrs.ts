@@ -10,10 +10,9 @@
  * para re-aplicar roles finos encima de la rampa).
  */
 /** Una entrada del mapa: la custom property, o la property con condicion. */
-export type StyleAttrDef = string | { prop: string; onlyColorValues?: boolean };
-export type StyleAttrMap = Record<string, StyleAttrDef>;
 
 /** Nombres CSS con los que un consumidor puede pintar de verdad. */
+import type { StyleAttrDef, StyleAttrMap, Constructor, Ctx } from "./attrs.schemas.js";
 const NAMED_COLORS = new Set([
   'currentcolor', 'transparent', 'black', 'white', 'red', 'green', 'blue',
   'yellow', 'orange', 'purple', 'pink', 'gray', 'grey', 'brown', 'cyan',
@@ -141,7 +140,6 @@ export function applyToneRamp(el: HTMLElement, color: string | null, opts: { pre
  * Encadena con los callbacks de la subclase: si la clase base ya definía
  * `connectedCallback` / `attributeChangedCallback`, se llaman igual.
  */
-type Constructor<T = HTMLElement> = new (...args: any[]) => T;
 
 export function withStyleAttrs<T extends Constructor>(Base: T) {
   return class StyleAttrsElement extends Base {
@@ -169,7 +167,6 @@ export function withStyleAttrs<T extends Constructor>(Base: T) {
     }
   };
 }
-
 
 /* ───────────────────────────── decoradores ───────────────────────────── */
 
@@ -228,8 +225,6 @@ function registrar(ctx: { metadata?: object; addInitializer(fn: () => void): voi
     set.add(attr);
   });
 }
-
-type Ctx<T> = ClassAccessorDecoratorContext<HTMLElement, T>;
 
 /**
  * Booleano reflejado como presencia del atributo.

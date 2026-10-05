@@ -33,6 +33,7 @@
  *   - dist/cdn/media/icon.min.js  → ../../assets/icons/
  *   - src/components/_shared/…    → ../../../dist/assets/icons/
  */
+import type { IconFamily } from "./icon-loader.schemas.js";
 const ICON_BASES: (() => string | null)[] = [
   // Bundle publicado: dist/cdn/<categoria>/*.min.js → dist/assets/icons/
   () => {
@@ -174,7 +175,6 @@ export function clearRawCache(): void {
 }
 
 /** Entrada del listado de familias devuelto por `listIconFamilies`. */
-export type IconFamily = { prefix: string; count: number };
 
 export async function listIconFamilies(): Promise<IconFamily[]> {
   for (const base of candidateBases()) {

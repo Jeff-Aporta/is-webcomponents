@@ -2,22 +2,7 @@
  * Playground <iswc-modal-verificacion>: mock controller + botón Verificar.
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
-
-interface MensajeItem {
-  itdmensaje: string;
-  mensaje: string;
-}
-
-interface VerificationController {
-  entrie: string;
-  actVerificar(record: { nit?: string; razon?: string } | null | undefined): Promise<{ mensajes: MensajeItem[] }>;
-}
-
-interface ModalVerificacionEl extends HTMLElement {
-  controller: VerificationController;
-  record: { nit: string; razon: string };
-  show(): void;
-}
+import type { MensajeItem, VerificationController, ModalVerificacionEl } from "./modal-verificacion.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;

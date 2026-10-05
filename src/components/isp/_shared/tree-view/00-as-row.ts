@@ -38,26 +38,15 @@ import {
   TNode,
   TRecord,
 } from "./_types.js";
+import type { BridgeCallStat, AdapterConfig, HotkeyClickHandler, HotkeyList } from "./00-as-row.schemas.js";
 
 /** Stats de invocación de `getOrCreateRowAdapter` para rate-limit. */
-interface BridgeCallStat {
-  count: number;
-  since: number;
-  loggedAt?: number;
-  cutAt?: number;
-}
 
 /** Config parcial para `applyAdapterConfig`. */
-interface AdapterConfig {
-  floatCard?: FloatCardConfig;
-  [key: string]: unknown;
-}
 
 /** Resultado de `findHotkeyHandler`. */
-type HotkeyClickHandler = (() => void) | null;
 
 /** Lista de entradas de acciones pasada a `findHotkeyHandler`. */
-type HotkeyList = (TreeActionEntry | undefined | null | false)[];
 
 class TARowBase extends TARoles {
   // ── Inicialización de campos heredados (declare en TS = undefined en

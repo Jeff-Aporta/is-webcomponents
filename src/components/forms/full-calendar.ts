@@ -1,6 +1,7 @@
 import '../actions/button.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
+import type { CalEvent, View } from "./full-calendar.schemas.js";
 
 /**
  * <iswc-full-calendar> — Vista día/semana/mes con eventos.
@@ -26,17 +27,6 @@ import { escapeHtml } from '../_shared/dom-utils.js';
  *   iswc-event-click     detail: { event, date }
  *   iswc-view-change     detail: { view, date }
  */
-
-interface CalEvent {
-  id: string;
-  title: string;
-  date: string;
-  start?: string;
-  end?: string;
-  color?: string;
-}
-
-type View = 'month' | 'week' | 'day';
 
 (() => {
   const OBSERVED = ['view', 'date', 'first-day', 'locale', 'hours-start', 'hours-end'];

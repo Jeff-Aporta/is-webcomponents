@@ -39,21 +39,12 @@ import {
   crearSesion, urlPreview, inspeccionarSinBrowser,
 } from '../engine/stagehand.js';
 import type { SesionStagehand } from '../engine/stagehand.js';
+import type { EstadoMotor } from "./auditor.schemas.js";
 
 /** Versión del motor (en header de cada reporte). */
 export const MOTOR_VERSION = '1.0.0';
 
 /** Estado global del motor (config + acumulado). */
-export interface EstadoMotor {
-  raiz: string;
-  opciones: OpcionesRunner;
-  entradas: EntradaCatalogo[];
-  componentes: ReporteComponente[];
-  inicio: number;
-  erroresMotor: Hallazgo[];
-  /** Sesión de Stagehand activa (si aplica). */
-  sesion?: SesionStagehand | null;
-}
 
 /** Crea un estado inicial. */
 export function crearEstado(raiz: string, opciones: OpcionesRunner = {}): EstadoMotor {

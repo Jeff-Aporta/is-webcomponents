@@ -10,6 +10,7 @@ import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import type { StepKind, SwLayoutStep, SwLayoutLink, SwLayoutLane, SwLayout, StepEntry, LinkEntry } from "./swimlane-diagram.schemas.js";
 
 /**
  * <iswc-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
@@ -27,61 +28,6 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  * Propiedades: payload, spec, layout, hiddenLanes
  * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-lane
  */
-
-type StepKind = 'process' | 'decision' | 'start' | 'end';
-interface SwLayoutStep {
-  id: string;
-  label: string;
-  kind: StepKind;
-  lane: string;
-  description?: string;
-  hue?: number;
-  column: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  overflow?: 'grow' | 'ellipsis' | 'shrink';
-}
-interface SwLayoutLink {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  forward: boolean;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  labelX: number;
-  labelY: number;
-  labelW?: number;
-  hue?: number;
-}
-interface SwLayoutLane {
-  id: string;
-  name: string;
-  hue: number;
-  description?: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  labelW: number;
-}
-interface SwLayout {
-  width: number;
-  height: number;
-  lanes: SwLayoutLane[];
-  steps: SwLayoutStep[];
-  links: SwLayoutLink[];
-  columns: number;
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-}
-interface StepEntry { s: SwLayoutStep; g: SVGGElement; }
-interface LinkEntry { l: SwLayoutLink; g: SVGGElement; }
 
 /** Contorno del paso según su tipo, con la misma gramática que el flowchart. */
 function stepPath(kind: StepKind, x: number, y: number, w: number, h: number): string {

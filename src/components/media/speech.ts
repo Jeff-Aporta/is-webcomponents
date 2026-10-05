@@ -2,6 +2,7 @@ import '../actions/button.js';
 import '../media/icon.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { setStringAttr } from '../_shared/reflect.js';
+import type { SpeechRecognitionEvent, SpeechRecognitionResultList, SpeechRecognitionResult, SpeechRecognitionAlternative, SpeechRecognitionErrorEvent, SpeechRecognitionInstance, SpeechRecognitionCtor, SpeechRecognitionConstructorBag } from "./speech.schemas.js";
 
 /**
  * <iswc-speech> — SpeechRecognition (dictado) + SpeechSynthesis (lectura).
@@ -22,44 +23,6 @@ import { setStringAttr } from '../_shared/reflect.js';
 // Tipos de la Web Speech API: no están en lib.dom.d.ts (Chromium/webkit las
 // expone bajo `webkitSpeechRecognition` y en Firefox detrás de flag). Declaramos
 // sólo el subset que el componente usa para que `rec.lang = 'es-ES'` typecheckee.
-interface SpeechRecognitionEvent extends Event {
-  resultIndex: number;
-  results: SpeechRecognitionResultList;
-}
-interface SpeechRecognitionResultList {
-  readonly length: number;
-  [index: number]: SpeechRecognitionResult;
-}
-interface SpeechRecognitionResult {
-  readonly length: number;
-  isFinal: boolean;
-  [index: number]: SpeechRecognitionAlternative;
-}
-interface SpeechRecognitionAlternative {
-  transcript: string;
-  confidence: number;
-}
-interface SpeechRecognitionErrorEvent extends Event {
-  error: string;
-  message?: string;
-}
-interface SpeechRecognitionInstance extends EventTarget {
-  lang: string;
-  continuous: boolean;
-  interimResults: boolean;
-  onresult: ((ev: SpeechRecognitionEvent) => void) | null;
-  onerror: ((ev: SpeechRecognitionErrorEvent) => void) | null;
-  onend: ((ev: Event) => void) | null;
-  start(): void;
-  stop(): void;
-  abort?(): void;
-}
-type SpeechRecognitionCtor = new () => SpeechRecognitionInstance;
-
-interface SpeechRecognitionConstructorBag {
-  SpeechRecognition?: SpeechRecognitionCtor;
-  webkitSpeechRecognition?: SpeechRecognitionCtor;
-}
 
 declare global {
   interface Window extends SpeechRecognitionConstructorBag { }

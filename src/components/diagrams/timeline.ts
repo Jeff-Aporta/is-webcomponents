@@ -7,6 +7,7 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { TlGroup, TlEvent, TlTick, TlLayout, EventEntry } from "./timeline.schemas.js";
 
 /**
  * <iswc-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
@@ -25,43 +26,6 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Propiedades: payload, spec, layout, hiddenGroups
  * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
  */
-
-interface TlGroup { id: string; name: string; hue?: number; }
-interface TlEvent {
-  id: string;
-  label: string;
-  desc?: string;
-  hue?: number;
-  group?: string;
-  ms: number;
-  dateText?: string;
-  dotX: number;
-  dotY: number;
-  side: number;
-  cardX: number;
-  cardY: number;
-  cardW: number;
-  cardH: number;
-}
-interface TlTick { ms: number; label: string; pos: number; major?: boolean; }
-interface TlLayout {
-  width: number;
-  height: number;
-  orientation: 'horizontal' | 'vertical';
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY?: number;
-  axisX0: number;
-  axisY0: number;
-  axisLen: number;
-  events: TlEvent[];
-  ticks: TlTick[];
-  todayPos?: number;
-  groups?: TlGroup[];
-  legendX: number;
-}
-interface EventEntry { e: TlEvent; g: SVGGElement; }
 
 class IswcTimeline extends DiagramElementBase {
   #hiddenGroups = new Set<string>();

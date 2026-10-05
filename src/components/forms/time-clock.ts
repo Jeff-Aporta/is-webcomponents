@@ -1,6 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from '../_shared/date-utils.js';
 import { ElementBase } from '../../core/element-base.js';
+import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from "./time-clock.schemas.js";
 
 /**
  * <iswc-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).
@@ -13,13 +14,6 @@ import { ElementBase } from '../../core/element-base.js';
  *            disabled, readonly
  * Events: iswc-change { value } · iswc-view-change { view }
  */
-
-interface ParsedTime { h: number; m: number; s: number }
-interface RingItem { label: string; raw: number }
-type View = 'hours' | 'minutes' | 'seconds';
-type Meridiem = 'AM' | 'PM';
-interface CommitOpts { advance?: boolean }
-interface PickOpts { advance?: boolean }
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -52,7 +46,7 @@ interface PickOpts { advance?: boolean }
 
   const VIEWS: readonly View[] = ['hours', 'minutes', 'seconds'];
 
-  class IswcTimeClock extends ElementBase {
+  class IswcTimeClock extends ElementBase {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'size', 'face-color']; }
 

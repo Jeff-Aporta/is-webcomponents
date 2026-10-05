@@ -25,13 +25,9 @@ import {
   TNode,
   TRecord,
 } from "./_types.js";
+import type { MutationResult } from "./06-mutations.schemas.js";
 
 /** Resultado de las operaciones async de mutación. */
-type MutationResult = {
-  selectedNode: string;
-  flashRowFlatPaths: string[];
-  ensureExpandedIds?: string[];
-};
 
 class TAMutations extends TAView {
   // ── Re-declaraciones de campos heredados ───────────────────────────────

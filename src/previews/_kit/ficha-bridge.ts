@@ -58,43 +58,16 @@ import type {
   PreviewBlock,
 } from './types.d.ts';
 import { asText } from './text-like.ts';
+import type { FichaPlayground, FichaSubObject, FichaLikeDefinition } from "./ficha-bridge.schemas.js";
 
 /** Tag del schema ficha dedicado. */
 export const FICHA_SCHEMA = 'iswc-ficha/v1';
 
 /** Forma de un bloque de playground adjunto a la primera sección de la ficha. */
-export interface FichaPlayground {
-  /** HTML del demo a consolidar en la primera sección. */
-  html: string;
-  /** Título opcional encima del demo. */
-  title?: string;
-  /** Lede opcional bajo el título. */
-  lede?: string;
-}
 
 /** Forma del sub-objeto `ficha:` dentro de un PreviewDefinition. */
-export interface FichaSubObject {
-  /** Mapa de secciones ficha. */
-  sections?: Record<string, unknown>;
-  /** Secciones a excluir del warning. */
-  exclude?: string[];
-  /** Bloque playground (opcional) — se prepende a la primera sección del preview. */
-  playground?: FichaPlayground;
-}
 
 /** Forma mínima del JSON que este bridge entiende. */
-export interface FichaLikeDefinition {
-  $schema?: string;
-  tag: string;
-  category?: string;
-  title?: string;
-  /** Forma ficha completa (modo A). */
-  sections?: unknown;
-  /** Forma mixta (modo B): sub-objeto `ficha:`. */
-  ficha?: FichaSubObject;
-  /** Resto de campos se preservan. */
-  [key: string]: unknown;
-}
 
 /** Heurística: ¿el JSON tiene una ficha (sub-objeto o schema dedicado)? */
 export function hasFicha(def: unknown): def is FichaLikeDefinition {

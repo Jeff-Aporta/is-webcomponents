@@ -14,7 +14,7 @@
 
 import { ColumnType } from './types.js';
 import { getCellValue } from './value-formatter.js';
-import type { SortDirName, ColumnState, RowNode, SortModel } from './types.js';
+import type { SortDirName, ColumnState, RowNode, SortModel } from "./types.schemas.js";
 
 /**
  * @param {unknown} a

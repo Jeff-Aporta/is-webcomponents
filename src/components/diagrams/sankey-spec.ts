@@ -1,6 +1,7 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { SankeyNodeSpec, SankeyLinkSpec, SankeyGroupSpec, SankeyResolvedSpec, SankeyLayoutNode, SankeyLayoutLink, SankeyLayout, SankeyLayoutOptions } from "./sankey-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de Sankey (sin Mermaid).
@@ -28,86 +29,6 @@ const MARGIN = { top: 16, right: 24, bottom: 20, left: 20 };
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
-}
-
-export interface SankeyNodeSpec {
-  id: string;
-  label: string;
-  hue?: number;
-  group?: string;
-  description?: string;
-}
-
-export interface SankeyLinkSpec {
-  id: string;
-  from: string;
-  to: string;
-  value: number;
-  label?: string;
-  group?: string;
-}
-
-export interface SankeyGroupSpec {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-export interface SankeyResolvedSpec {
-  title?: string;
-  subtitle?: string;
-  unit?: string;
-  groups?: SankeyGroupSpec[];
-  nodes: SankeyNodeSpec[];
-  links: SankeyLinkSpec[];
-}
-
-export interface SankeyLayoutNode {
-  id: string;
-  label: string;
-  description?: string;
-  group?: string;
-  hue?: number;
-  layer: number;
-  value: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  labelSide: 'right';
-}
-
-export interface SankeyLayoutLink {
-  id: string;
-  from: string;
-  to: string;
-  value: number;
-  label?: string;
-  group?: string;
-  thickness: number;
-  path: string;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
-
-export interface SankeyLayout {
-  width: number;
-  height: number;
-  nodes: SankeyLayoutNode[];
-  links: SankeyLayoutLink[];
-  groups?: SankeyGroupSpec[];
-  unit?: string;
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
-}
-
-export interface SankeyLayoutOptions {
-  width?: number;
-  height?: number;
 }
 
 function readNode(raw: Record<string, unknown>, i: number): SankeyNodeSpec {

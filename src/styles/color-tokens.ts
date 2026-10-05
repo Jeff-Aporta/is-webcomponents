@@ -55,14 +55,10 @@
 // ─── Variantes canonicas ───────────────────────────────────────────────────
 
 /** Las 5 variantes tonal, en el orden del kit (paler → strongest). */
+import type { IswcColorVariant, ColorMixSpec, IswcColorMixFamily, IswcColorFamily } from "./color-tokens.schemas.js";
 export const ISWC_COLOR_VARIANTS = ['paler', 'pale', 'strong', 'stronger', 'strongest'] as const;
-export type IswcColorVariant = typeof ISWC_COLOR_VARIANTS[number];
 
 /** Firma de una variante: target (white|black) y ratio (0-100). */
-export interface ColorMixSpec {
-  readonly target: 'white' | 'black';
-  readonly pct: number;
-}
 
 /**
  * Ratio canonico de mezcla para cada variante.
@@ -99,12 +95,10 @@ export const ISWC_COLOR_MIX_FAMILIES = [
   'error',
   'neutral',
 ] as const;
-export type IswcColorMixFamily = typeof ISWC_COLOR_MIX_FAMILIES[number];
 
 /** Las 7 familias semanticas del kit (incluye brand, que usa hsl-from).
  *  `text` es intent de componente (= --iswc-text), no familia --iswc-color-*. */
 export const ISWC_COLOR_FAMILIES = [...ISWC_COLOR_MIX_FAMILIES, 'brand'] as const;
-export type IswcColorFamily = typeof ISWC_COLOR_FAMILIES[number];
 
 // ─── Generadores de CSS ────────────────────────────────────────────────────
 

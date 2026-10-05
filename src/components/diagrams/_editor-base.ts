@@ -43,54 +43,17 @@
 
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { emit } from '../../core/element.js';
+import type { EditorMode, EditorSpecLike, IsStateChangeDetail, IsEditorConstructor, EditorSpecGet } from "./_editor-base.schemas.js";
 
 /** Modo de operación del editor. 'edit' muestra toolbar + panel; 'view' los oculta. */
-export type EditorMode = 'view' | 'edit';
 
 /** Spec genérico de cualquier diagrama (placeholder). Las subclases lo estrechan. */
-export interface EditorSpecLike {
-  readonly nodes: readonly unknown[];
-  readonly edges?: readonly unknown[];
-}
 
 /** Detalle del evento `iswc-state-change` emitido por todos los editores. */
-export interface IsStateChangeDetail<Spec extends EditorSpecLike> {
-  spec: Spec;
-  /** Tag del editor que emitió (e.g. 'iswc-er-editor'). Útil para multi-edit. */
-  tag?: string;
-}
 
 /** Constructor mínimo de un editor concreto. */
-export interface IsEditorConstructor<Spec extends EditorSpecLike> {
-  readonly observedAttributes: string[];
-  new (...args: ConstructorParameters<typeof HTMLElement>): HTMLElement & {
-    setAttribute(name: string, value: string): void;
-    spec: Spec;
-    /** Acción: añadir un nodo (la subclase decide el shape). */
-    addNode(): void;
-    /** Acción: borrar el nodo/arista seleccionado. */
-    deleteSelected(): void;
-    /** Acción: conectar dos nodos seleccionados. */
-    connectSelected(): void;
-    /** Acción: deshacer. La subclase mantiene su pila. */
-    undo(): void;
-    /** Acción: rehacer. La subclase mantiene su pila. */
-    redo(): void;
-    /** Acción: zoom in sobre el viewBox del SVG. */
-    zoomIn(): void;
-    /** Acción: zoom out. */
-    zoomOut(): void;
-    /** Acción: ajustar el viewBox al contenido. */
-    fit(): void;
-    /** Hook: doble-click en un nodo. */
-    onNodeDoubleClick(nodeId: string): void;
-  };
-}
 
 /** Helper opcional que se aplica a subclases para estrechar `spec`. */
-export interface EditorSpecGet<Spec extends EditorSpecLike> {
-  readonly spec: Spec;
-}
 
 const BASE_OBSERVED: readonly string[] = ['mode', 'allow-self-loop', 'max-depth'];
 

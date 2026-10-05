@@ -2,14 +2,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
+import type { HeatmapCfg } from "./heatmap.schemas.js";
 
 /** Config leída del slot JSON. */
-type HeatmapCfg = {
-  xLabels?: unknown[];
-  yLabels?: unknown[];
-  data?: unknown[];
-  points?: Array<{ x: unknown; y: unknown; v: number }>;
-};
 
 /**
  * <iswc-heatmap> — Mapa de calor: matriz de celdas coloreadas por valor numérico.
@@ -48,7 +43,7 @@ type HeatmapCfg = {
     return [0.18, 0.36, 0.55, 0.75, 0.95].map((a: number) => `color-mix(in srgb, ${hex} ${Math.round(a * 100)}%, var(--iswc-bg-elev))`);
   }
 
-  class IswcHeatmap extends withStyleAttrs(HTMLElement) {
+  class IswcHeatmap extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'text-color', 'grid-color']; }
 

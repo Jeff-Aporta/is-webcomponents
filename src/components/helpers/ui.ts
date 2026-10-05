@@ -12,6 +12,7 @@ import {
   normalizeTone,
   setEnumToneAttr,
 } from '../_shared/tone.js';
+import type { ElChild, ElAttrs, Crudo, HandlerEntry } from "./ui.schemas.js";
 
 /**
  * helpers/ui.js — primitivas de render para apps consumidoras del kit.
@@ -35,8 +36,6 @@ import {
 
 const SHEETS = new Map<string, CSSStyleSheet>();
 
-export type ElChild = Node | string | null | false | true;
-
 /** Hoja constructable memoizada por texto: N instancias comparten 1 objeto. */
 export const css = (shadow: ShadowRoot, cssText: string): void => {
   let sheet = SHEETS.get(cssText);
@@ -47,8 +46,6 @@ export const css = (shadow: ShadowRoot, cssText: string): void => {
   }
   shadow.adoptedStyleSheets = [...shadow.adoptedStyleSheets, sheet];
 };
-
-export type ElAttrs = Record<string, string | number | boolean | null | undefined | ((ev: Event) => void)>;
 
 export const el = (tag: string, attrs: ElAttrs = {}, children: ElChild | ElChild[] = []): HTMLElement => {
   const node = document.createElement(tag);
@@ -70,7 +67,6 @@ export const el = (tag: string, attrs: ElAttrs = {}, children: ElChild | ElChild
 };
 
 const CRUDO: unique symbol = Symbol('iswc-ui-html-crudo');
-type Crudo = { [CRUDO]: string };
 
 /** Marca una cadena como HTML de confianza dentro de `html`. */
 export const raw = (valor: unknown): Crudo => ({ [CRUDO]: String(valor ?? '') });
@@ -81,11 +77,6 @@ const esCrudo = (v: unknown): v is Crudo =>
 export const esc = (s: unknown): string => String(s ?? '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-
-interface HandlerEntry {
-  evento: string;
-  fn: (ev: Event) => void;
-}
 
 /**
  * Crea un `<section role="region">` con `aria-label` (proposal g09 ui.ts).

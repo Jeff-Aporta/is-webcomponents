@@ -2,6 +2,7 @@ import { buildTree, squarify } from '../_shared/tree-layout.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type { TreeNode } from '../_shared/tree-layout.js';
+import type { Rect, RawSpecNode, SpecNode, TreemapSpec, TreemapLayout, TreemapLayoutNode, TreemapLayoutOpts } from "./treemap-spec.schemas.js";
 
 /**
  * Especificación y layout de treemaps (Chart.js-ish, sin dependencias).
@@ -14,61 +15,17 @@ import type { TreeNode } from '../_shared/tree-layout.js';
 const DEFAULT_HUES = [239, 199, 38, 280, 160, 210];
 const LABEL_H = 14;
 
-type Rect = { x: number; y: number; w: number; h: number };
-
 /** Nodo crudo del payload (entrada de `readNode`). */
-type RawSpecNode = Record<string, unknown>;
 
 /** Nodo normalizado de la spec pública. */
-export interface SpecNode {
-  id: string;
-  parent?: string;
-  label: string;
-  value: number;
-  hue?: number;
-}
 
 /** Spec normalizada que devuelve `treemapSpecFromPayload`. */
-export interface TreemapSpec {
-  title?: string;
-  subtitle?: string;
-  nodes: SpecNode[];
-}
 
 /** Layout geométrico que devuelve `computeTreemapLayout`. */
-export interface TreemapLayout {
-  width: number;
-  height: number;
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  total: number;
-  nodes: TreemapLayoutNode[];
-}
 
 /** Un nodo del layout: rectángulo teselado + datos para pintar. */
-export interface TreemapLayoutNode {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  depth: number;
-  label: string;
-  value: number;
-  hue?: number;
-  lightness: number;
-  hasChildren: boolean;
-  showLabel: boolean;
-  percent: number;
-}
 
 /** Opciones de `computeTreemapLayout`. */
-export interface TreemapLayoutOpts {
-  width?: number;
-  height?: number;
-}
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};

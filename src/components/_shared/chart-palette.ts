@@ -5,11 +5,10 @@
  *  Validated with dataviz skill's scripts/validate_palette.js (dark + light) — see plan Task 2. */
 
 /** Paleta soportada por nombre (atributo `data-palette`). */
-export type PaletteKey = 'insoft' | 'contapyme' | 'agrowin';
 
 /** Modo claro/oscuro del documento (atributo `theme-light`). */
-export type PaletteMode = 'dark' | 'light';
 
+import type { PaletteKey, PaletteMode, Status } from "./chart-palette.schemas.js";
 const CATEGORICAL: Record<PaletteKey, Record<PaletteMode, string[]>> = {
   insoft: {
     dark: ['#e66767', '#3987e5', '#199e70', '#c98500', '#9085e9', '#008300'],
@@ -60,8 +59,6 @@ export function withAlpha(hex: string, alpha: string): string {
 export function getFillColors(el: Element, count: number, alpha: string = '0.35'): string[] {
   return getCategoricalColors(el, count).map((hex) => withAlpha(hex, alpha));
 }
-
-export type Status = 'success' | 'warning' | 'danger';
 
 export function getStatusColor(el: Element, status: Status): string {
   const cs = getComputedStyle(el);

@@ -4,6 +4,7 @@ import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLinkSpec, SwimlaneResolvedSpec, SwimlaneLayoutLane, SwimlaneLayoutStep, SwimlaneLayoutLink, SwimlaneLayout } from "./swimlane-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de carriles (cross-functional flowchart).
@@ -29,94 +30,8 @@ const STEP_MIN_W = 108;
 const STEP_MAX_W = 168;
 const MARGIN = { top: 16, right: 24, bottom: 20, left: 20 };
 
-export type SwimlaneStepKind = 'start' | 'end' | 'process' | 'decision';
-
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
-}
-
-export interface SwimlaneLaneSpec {
-  id: string;
-  name: string;
-  hue: number;
-  description?: string;
-}
-
-export interface SwimlaneStepSpec {
-  id: string;
-  lane: string;
-  label: string;
-  kind: SwimlaneStepKind;
-  column?: number;
-  description?: string;
-}
-
-export interface SwimlaneLinkSpec {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-}
-
-export interface SwimlaneResolvedSpec {
-  title?: string;
-  subtitle?: string;
-  lanes: SwimlaneLaneSpec[];
-  steps: SwimlaneStepSpec[];
-  links: SwimlaneLinkSpec[];
-}
-
-export interface SwimlaneLayoutLane {
-  id: string;
-  name: string;
-  hue: number;
-  description?: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  labelW: number;
-}
-
-export interface SwimlaneLayoutStep {
-  id: string;
-  label: string;
-  kind: SwimlaneStepKind;
-  lane: string;
-  description?: string;
-  hue?: number;
-  column: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-export interface SwimlaneLayoutLink {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  forward: boolean;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
-
-export interface SwimlaneLayout {
-  width: number;
-  height: number;
-  lanes: SwimlaneLayoutLane[];
-  steps: SwimlaneLayoutStep[];
-  links: SwimlaneLayoutLink[];
-  columns: number;
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
 }
 
 function readLane(raw: Record<string, unknown>, i: number): SwimlaneLaneSpec {

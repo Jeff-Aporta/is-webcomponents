@@ -16,6 +16,7 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import type { DiagramTheme } from './diagram-types.js';
+import type { SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout } from "./sequence-spec.schemas.js";
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;
@@ -59,46 +60,6 @@ export function sequenceMessageTooltipText(m: { description?: unknown; log?: unk
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
 }
-
-export interface SequenceActorSpec {
-  id: string;
-  label: string;
-  kind?: 'participant' | 'actor';
-  icon?: string;
-  hue?: number;
-}
-
-export interface SequenceMessageSpec {
-  id: string;
-  from: string;
-  to: string;
-  label: string;
-  log?: string;
-  description?: string;
-  group?: string;
-  kind?: 'self' | 'sync' | 'async' | string;
-  step: number;
-}
-
-export interface SequenceAltSpec {
-  branches: Array<{
-    condition: string;
-    messages: SequenceMessageSpec[];
-  }>;
-}
-
-export interface SequenceResolvedSpec {
-  title?: string;
-  subtitle?: string;
-  actors: SequenceActorSpec[];
-  groups?: Array<{ id: string; name: string; hue: number }>;
-  messages?: SequenceMessageSpec[];
-  preamble?: SequenceMessageSpec[];
-  alt?: SequenceAltSpec;
-  epilogue?: SequenceMessageSpec[];
-}
-
-interface LeadingIconToken { iconId: string; hue?: number; rest: string }
 
 function readActor(raw: Record<string, unknown>, i: number): SequenceActorSpec {
   // Conserva el label COMPLETO (con el sugar) para persistencia round-trip;
@@ -366,16 +327,6 @@ function actorBoxWidth(label: string, _kind: string): number {
   return snapDiagramGrid(Math.min(240, Math.max(96, est)));
 }
 
-interface FlatMessage {
-  m: SequenceMessageSpec;
-  kind: 'self' | 'sync' | 'async' | string;
-  fromIdx: number;
-  toIdx: number;
-  labelW: number;
-  branch?: string;
-  branchFirst?: boolean;
-}
-
 /**
  * Posiciones X de las lifelines. La separación entre columnas se deriva del
  * ancho real de las etiquetas (y de los self-loops), de modo que con el JSON
@@ -437,74 +388,6 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[]): { x: number[
   const x = pos.map((p) => snapDiagramGrid(leftMargin + p));
   const rightMargin = Math.max(boxW[n - 1] / 2 + 12, 24);
   return { x, rightMargin, selfSide };
-}
-
-export interface SequenceLayoutActor {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  label: string;
-  icon: string;
-  hue: number;
-  kind: string;
-}
-
-export interface SequenceLayoutLifeline {
-  id: string;
-  x: number;
-  y1: number;
-  y2: number;
-}
-
-export interface SequenceLayoutMessage {
-  id: string;
-  step: number;
-  label: string;
-  log?: string;
-  description?: string;
-  kind: string;
-  y: number;
-  fromX: number;
-  toX: number;
-  path: string;
-  lineX1: number;
-  lineX2: number;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowDir: number;
-  labelX: number;
-  labelW: number;
-  labelY: number;
-  labelH: number;
-  branch?: string;
-  branchFirst?: boolean;
-  groupHue?: number;
-}
-
-export interface SequenceLayoutAltBox {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  label: string;
-}
-
-export interface SequenceLayout {
-  width: number;
-  height: number;
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  actors: SequenceLayoutActor[];
-  lifelines: SequenceLayoutLifeline[];
-  messages: SequenceLayoutMessage[];
-  altBox?: SequenceLayoutAltBox;
-  groups?: Array<{ id: string; name: string; hue: number }>;
-  legendX: number;
-  legendColX: number[];
-  legendMaxRows: number;
 }
 
 export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayout {

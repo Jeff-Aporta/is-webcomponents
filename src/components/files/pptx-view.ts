@@ -4,13 +4,7 @@ import { setOptionalAttr, setStringAttr } from '../_shared/reflect.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { loadArrayBuffer, resolveFileSource } from './_shared/file-source.js';
 import { JSZIP_CDN, loadCdnScript, PPTX_PREVIEW_CDN } from './_shared/load-cdn.js';
-
-type ZipLike = {
-  loadAsync: (b: ArrayBuffer) => Promise<{
-    file: (n: string) => { async: (t: string) => Promise<string> } | null;
-    files: Record<string, unknown>;
-  }>;
-};
+import type { ZipLike } from "./pptx-view.schemas.js";
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];

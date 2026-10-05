@@ -9,6 +9,7 @@
 
 import { spreadOrthogonalPaths } from './diagram-edge-spread.js';
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
+import type { XYPoint, RectLike, LabeledEdge, PlaceEdgeActorsOpts, PlaceEdgeActorsResult, EdgeActorLayout } from "./diagram-edge-actors.schemas.js";
 
 export const EDGE_ACTOR_H = 16;
 
@@ -17,26 +18,10 @@ export const EDGE_ACTOR_H = 16;
 export { pathPoints as parsePathPoints } from './diagram-arrow.js';
 
 /** Punto en píxeles (x, y). */
-export type XYPoint = { x: number; y: number };
 
 /** Rectángulo `{ x, y, w, h }` usado tanto para actores como para obstáculos. */
-export type RectLike = { x: number; y: number; w: number; h: number };
 
 /** Arista con etiqueta tal y como la modelan los diagramas del kit. */
-export type LabeledEdge = {
-  label?: string;
-  path: string;
-  fromX?: number;
-  fromY?: number;
-  toX?: number;
-  toY?: number;
-  labelX?: number;
-  labelY?: number;
-  labelW?: number;
-  labelH?: number;
-  /** Campo interno: dónde quedó la chip mientras `separateActors` corre. */
-  _actor?: RectLike;
-};
 
 export function edgeActorWidth(text: string | number | null | undefined): number {
   return Math.max(28, String(text ?? '').length * 5.6 + 10);
@@ -135,19 +120,6 @@ function spiral(maxR = 16): { dx: number; dy: number }[] {
 const SPIRAL = spiral(16);
 const SPIRAL_GLUE = spiral(2);
 
-export type PlaceEdgeActorsOpts = {
-  edges?: readonly LabeledEdge[];
-  obstacles?: readonly RectLike[];
-  canvas?: { width: number; height: number };
-  glue?: boolean;
-};
-
-export type PlaceEdgeActorsResult = {
-  width: number;
-  height: number;
-  actors: RectLike[];
-};
-
 /**
  * Coloca chips de `edges[].label` como actores.
  * Mutates edges: labelX, labelY, labelW, labelH.
@@ -237,14 +209,6 @@ export function placeEdgeActors({
   }
   return { width, height, actors: placed };
 }
-
-export type EdgeActorLayout = {
-  edges?: LabeledEdge[];
-  relations?: LabeledEdge[];
-  links?: LabeledEdge[];
-  width: number;
-  height: number;
-};
 
 function edgeListOf(layout: EdgeActorLayout | null | undefined): LabeledEdge[] | null {
   if (layout?.edges?.length) return layout.edges;

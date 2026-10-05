@@ -1,8 +1,8 @@
 import { tkHueToHex } from './tk-hue.js';
 import { bg2fontColor } from './tk-color.js';
+import type { EdgeWithHue } from "./diagram-edge-style.schemas.js";
 
 /** Arista del grafo con un hue opcional para colorearla. */
-export type EdgeWithHue = { hue?: number; [key: string]: unknown };
 
 /** Paleta de aristas: un hue por índice, distinto del tono de la caja origen. */
 export const EDGE_HUES: readonly number[] = [205, 160, 18, 280, 40, 330, 195, 250, 90, 145, 310, 55];

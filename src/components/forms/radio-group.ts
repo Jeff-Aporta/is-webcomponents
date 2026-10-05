@@ -10,6 +10,7 @@ import {
 } from '../_shared/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import type { IsRadioElement } from "./radio-group.schemas.js";
 /**
  * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño
  * del valor: los radios solo avisan con `iswc-radio-select`.
@@ -29,12 +30,6 @@ import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
  */
 
 // Subset tipado de <iswc-radio> (lo que el grupo necesita saber de cada hijo).
-interface IsRadioElement extends HTMLElement {
-  value: string;
-  checked: boolean;
-  disabled: boolean;
-  syncFromGroup?(): void;
-}
 
 (() => {
   const TEMPLATE = document.createElement('template');

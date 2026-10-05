@@ -24,6 +24,7 @@ import '../media/icon.js';
 import '../feedback/theme-toggle.js';
 import '../feedback/palette-selector.js';
 import '../code/code.js';
+import type { LoaderLike } from "./doc-demo.schemas.js";
 
 /** CSS del shell vía aliases del loader (apps pueden override con `page-styles`). */
 const DEFAULT_PAGE_STYLES = [
@@ -44,11 +45,6 @@ const DEFAULT_PAGE_MODULES = [
   'view-sources',
   'demo-file-meta',
 ];
-
-interface LoaderLike {
-  loadPageStyles(hrefs: string[]): Promise<unknown>;
-  loadPageModules(hrefs: string[]): Promise<unknown>;
-}
 
 function loader(): LoaderLike | null {
   const L = (globalThis as unknown as { ISWebComponentsLoader?: LoaderLike }).ISWebComponentsLoader;

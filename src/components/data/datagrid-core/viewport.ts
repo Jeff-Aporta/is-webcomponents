@@ -1,4 +1,5 @@
 import type { ColumnState } from './types.js';
+import type { ColLayout } from "./viewport.schemas.js";
 /**
  * datagrid-core/viewport — Matemática de virtualización (filas y columnas).
  *
@@ -58,13 +59,6 @@ export function rowWindow(rowCount: number, rowHeight: number, scrollTop: number
  * @param {ColumnState[]} right
  * @returns {ColLayout}
  */
-export type ColLayout = {
-  /** Desplazamiento en px de cada columna central, desde su inicio. */
-  positions: number[];
-  totalWidth: number;
-  leftWidth: number;
-  rightWidth: number;
-};
 
 export function columnLayout(center: ColumnState[], left: ColumnState[], right: ColumnState[]): ColLayout {
   const positions: number[] = [];

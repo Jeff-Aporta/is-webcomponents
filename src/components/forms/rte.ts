@@ -1,5 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
+import type { RteCommandDef } from "./rte.schemas.js";
 
 /**
  * <iswc-rte> — Editor de texto enriquecido basado en contentEditable.
@@ -44,7 +45,6 @@ import { ElementBase } from '../../core/element-base.js';
 
 /** Registro de comandos de toolbar aportados por OTROS componentes.
  *  Así <iswc-function-editor> añade sus botones sin que este módulo lo conozca. */
-interface RteCommandDef { icon?: string; title?: string; run: (rte: HTMLElement) => void }
 const CUSTOM_COMMANDS: Map<string, RteCommandDef> = new Map();
 
 /**

@@ -8,6 +8,7 @@ import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type { BoxSide } from './diagram-types.js';
+import type { StateKind, StateDirection, AnchorSide, StateSpec, StateTransitionSpec, StateGroupSpec, StateResolvedSpec, StateLayoutNode, StateLayoutTransition, StateLayout } from "./state-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de estado (sin Mermaid).
@@ -27,90 +28,13 @@ const END_PAD = 5;
 /** Tipos de estado soportados; cualquier otro valor cae a 'normal'. */
 export const STATE_KINDS: Set<string> = new Set(['start', 'end', 'normal', 'choice']);
 
-export type StateKind = 'start' | 'end' | 'normal' | 'choice';
-export type StateDirection = 'TB' | 'BT' | 'LR' | 'RL';
-
 const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
 // BoxSide admite `'auto'`; los anclajes efectivos del router son siempre
 // una dirección cardinal. Estrechamos para satisfacer la firma del helper.
-type AnchorSide = 'left' | 'right' | 'top' | 'bottom';
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
-}
-
-export interface StateSpec {
-  id: string;
-  label: string;
-  kind: StateKind;
-  group?: string;
-  hue?: number;
-  description?: string;
-}
-
-export interface StateTransitionSpec {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  group?: string;
-}
-
-export interface StateGroupSpec {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-export interface StateResolvedSpec {
-  title?: string;
-  subtitle?: string;
-  direction: StateDirection;
-  groups?: StateGroupSpec[];
-  states: StateSpec[];
-  transitions: StateTransitionSpec[];
-}
-
-export interface StateLayoutNode {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  layer: number;
-  label: string;
-  kind: StateKind;
-  description?: string;
-  hue?: number;
-  group?: string;
-}
-
-export interface StateLayoutTransition {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowAngle: number;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
-
-export interface StateLayout {
-  width: number;
-  height: number;
-  nodes: StateLayoutNode[];
-  edges: StateLayoutTransition[];
-  groups?: StateGroupSpec[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
 }
 
 function stateSize(kind: StateKind, label: string): { w: number; h: number } {

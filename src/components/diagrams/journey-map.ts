@@ -8,6 +8,7 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { JnLayoutStep, JnLayoutPhase, JnLayoutGridLine, JnLayout, StepEntry } from "./journey-map.schemas.js";
 
 /**
  * <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
@@ -25,53 +26,6 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Propiedades: payload, spec, layout, hiddenPhases
  * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-phase
  */
-
-interface JnLayoutStep {
-  id: string;
-  label: string;
-  phase: string;
-  actor?: string;
-  description?: string;
-  score?: number;
-  hue?: number;
-  cx: number;
-  cy: number;
-  labelY: number;
-  actorY: number;
-  hasScore: boolean;
-}
-interface JnLayoutPhase {
-  id: string;
-  name: string;
-  hue?: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  overflow?: 'grow' | 'ellipsis' | 'shrink';
-}
-interface JnLayoutGridLine {
-  value: number;
-  y: number;
-  x1: number;
-  x2: number;
-  labelX: number;
-}
-interface JnLayout {
-  width: number;
-  height: number;
-  plot: { x: number; y: number; w: number; h: number };
-  phases: JnLayoutPhase[];
-  steps: JnLayoutStep[];
-  line: string;
-  gridLines: JnLayoutGridLine[];
-  scale: { min: number; max: number };
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-}
-interface StepEntry { s: JnLayoutStep; g: SVGGElement; }
 
 class IswcJourneyMap extends DiagramElementBase {
   #hiddenPhases = new Set<string>();

@@ -33,55 +33,13 @@
 // Tipos públicos (no cambiar — Tasks 2 y 3 dependen de estas firmas)
 // -----------------------------------------------------------------------------
 
-export interface WrapOpts {
-  text: string;
-  maxWidth: number;        // ancho del nodo en px SVG
-  maxHeight: number;       // alto del nodo en px SVG
-  fontSize: number;        // px
-  fontFamily: string;      // CSS font-family
-  lineHeight?: number;     // default 1.2
-  paddingX?: number;       // default 10
-  paddingY?: number;       // default 8
-  overflow: 'grow' | 'ellipsis';
-}
-
-export interface WrappedLine {
-  text: string;
-  truncated: boolean;
-}
-
-export interface WrapResult {
-  lines: WrappedLine[];
-  requiredHeight: number;       // alto total que el texto necesita (con padding)
-  requiredHeightUsed: number;   // alto que se va a usar (puede ser < requiredHeight en ellipsis)
-  grewHeight: boolean;          // true si requiredHeight > maxHeight y overflow=grow
-}
-
-export interface TSpanSpec {
-  text: string;
-  x: number;
-  y: number;
-  dy?: number;
-  /** Si está presente, el caller debe aplicarlo como atributo
-   *  `text-anchor` al `<tspan>` correspondiente. Útil cuando el `<text>`
-   *  padre no setea text-anchor (default `start` en SVG) y los tspans
-   *  llevan su propio `x`: embebido se renderiza correctamente
-   *  centrado en x. Ver bug fix de swimlane-diagram y otros 9 diagramas. */
-  textAnchor?: 'start' | 'middle' | 'end';
-  /** Si está presente, el caller debe aplicarlo como atributo
-   *  `dominant-baseline` al `<tspan>` correspondiente. SVG por defecto
-   *  usa `alphabetic` (y = baseline del texto), por lo que para centrar
-   *  verticalmente hay que usar `middle` o `central` y poner y al
-   *  centro del box. Ver bug fix vertical centering diagramas 2026-09. */
-  dominantBaseline?: 'auto' | 'middle' | 'central' | 'hanging' | 'alphabetic' | 'ideographic';
-}
-
 // -----------------------------------------------------------------------------
 // Medición de texto
 // -----------------------------------------------------------------------------
 
 /** Ancho en px que ocupa un caracter promedio en fuentes sans-serif a tamaño
  * dado. Es una aproximación: en runtime se prefiere `getComputedTextLength`. */
+import type { WrapOpts, WrappedLine, WrapResult, TSpanSpec } from "./diagram-text-wrap.schemas.js";
 const APPROX_CHAR_WIDTH_RATIO = 0.55;
 
 /** Cache global de mediciones por (fontSize|fontFamily|text). */

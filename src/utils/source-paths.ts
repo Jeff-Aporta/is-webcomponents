@@ -8,6 +8,7 @@
  * falla (404), cae a raw.githubusercontent.
  */
 import { docsBase } from './cdn-sources.js';
+import type { ManifestEntry, SourceFile, CdnMinPaths, FetchedSource } from "./source-paths.schemas.js";
 
 /**
  * `../../components/actions/button.js` → `components/actions/button.js`
@@ -17,20 +18,6 @@ export function manifestToComponentsPath(rel: string | null | undefined): string
     .replace(/^\.\.\/\.\.\//, '')
     .replace(/^\.\.\//, '')
     .replace(/^\/+/, '');
-}
-
-export interface ManifestEntry {
-  script?: string;
-  style?: string;
-  tag?: string;
-  category?: string;
-}
-
-export interface SourceFile {
-  kind: 'js' | 'css' | 'md';
-  label: string;
-  repoPath: string;
-  fileName: string;
 }
 
 /**
@@ -85,12 +72,6 @@ export function resolveSourceFiles(entry: ManifestEntry): {
 /**
  * Rutas CDN minificadas (`dist/cdn/...`) del componente.
  */
-export interface CdnMinPaths {
-  js: string;
-  css: string | null;
-  short: string;
-  category: string;
-}
 
 export function resolveCdnMinPaths(entry: ManifestEntry): CdnMinPaths | null {
   if (!entry?.tag || !entry?.category) return null;
@@ -112,12 +93,6 @@ export function localSourceUrl(repoPath: string): string {
 
 export function rawSourceUrl(repoPath: string): string {
   return `${docsBase('main')}/${repoPath}`;
-}
-
-export interface FetchedSource {
-  text: string;
-  url: string;
-  source: 'local' | 'raw';
 }
 
 export async function fetchSourceFile(file: SourceFile): Promise<FetchedSource> {

@@ -3,36 +3,13 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { ToonTexto, ToonControl, ToonDoc } from "./toons.schemas.js";
 
 /** Texto/label de test con variantes (sin acentos vs con acentos). */
-export type ToonTexto = {
-  /** Forma canónica (normalizada NFC, con acentos). */
-  texto: string;
-  /** Variantes tolerantes (p. ej. sin acentos) para asserts por árbol. */
-  variantes?: string[];
-};
 
 /** Definición de controles esperados de un componente en su preview. */
-export type ToonControl = {
-  /** Tipo de control (text|color|number|select|boolean|range|json). */
-  control: string;
-  /** Propiedad del componente que se manipula (o atributo con `attr.`). */
-  prop: string;
-  /** Etiqueta humana del control. */
-  label: string;
-};
 
 /** Documento toon de un componente. */
-export type ToonDoc = {
-  $schema: 'toon/v1';
-  tag: string;
-  /** Textos que los tests deben escribir/verificar. */
-  textos?: Record<string, ToonTexto>;
-  /** Configuración de tester (p. ej. tiempo de asentamiento por vista). */
-  config?: Record<string, string | number | boolean>;
-  /** Controles declarados en el preview (espejo para los e2e data-driven). */
-  controles?: ToonControl[];
-};
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 

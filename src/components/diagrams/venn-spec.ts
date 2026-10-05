@@ -1,5 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { VennSet, VennRegion, VennSpec, VennJsonOut, VennLayoutCircle, VennLayoutRegion, VennLayout } from "./venn-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de Venn, sin Mermaid.
@@ -16,28 +17,6 @@ const MARGIN: { top: number; right: number; bottom: number; left: number } = { t
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
-}
-
-interface VennSet {
-  id: string;
-  label: string;
-  hue: number;
-  description?: string;
-}
-
-interface VennRegion {
-  id: string;
-  sets: string[];
-  label?: string;
-  value?: number;
-  description?: string;
-}
-
-export interface VennSpec {
-  title?: string;
-  subtitle?: string;
-  sets: VennSet[];
-  regions: VennRegion[];
 }
 
 function readSet(raw: unknown, i: number): VennSet {
@@ -83,13 +62,6 @@ export function resolveVennSpec(payload: unknown): VennSpec | null {
     sets,
     regions,
   };
-}
-
-interface VennJsonOut {
-  title?: string;
-  subtitle?: string;
-  sets: Array<{ id: string; label: string; hue: number; desc?: string }>;
-  regions?: Array<{ sets: string[]; label?: string; value?: number; desc?: string }>;
 }
 
 /** spec → objeto `venn` listo para persistir / mostrar en el editor. */
@@ -146,35 +118,6 @@ function regionCenter(ids: string[], centers: Array<{ x: number; y: number }>, b
   const len = Math.hypot(dx, dy) || 1;
   const push = count === 2 ? R * 0.5 : R * 0.52;
   return { x: cx + (dx / len) * push, y: cy + (dy / len) * push };
-}
-
-interface VennLayoutCircle {
-  id: string;
-  label: string;
-  description?: string;
-  hue: number;
-  cx: number;
-  cy: number;
-  r: number;
-  labelX: number;
-  labelY: number;
-}
-
-interface VennLayoutRegion extends VennRegion {
-  x: number;
-  y: number;
-  hues: number[];
-}
-
-export interface VennLayout {
-  width: number;
-  height: number;
-  circles: VennLayoutCircle[];
-  regions: VennLayoutRegion[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
 }
 
 /**

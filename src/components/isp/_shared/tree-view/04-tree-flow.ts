@@ -24,6 +24,7 @@ import {
   TRecord,
   TreeCustoms,
 } from "./_types.js";
+import type { CursorHook } from "./04-tree-flow.schemas.js";
 
 /** Comparador estable por la última sección numérica del `flatPath`. */
 function flatPathTailCmp(a: TNode, b: TNode): number {
@@ -33,7 +34,6 @@ function flatPathTailCmp(a: TNode, b: TNode): number {
 }
 
 /** Tipo del callback `onchangecurso` / `onprocessobj` (hooks de consumidor). */
-type CursorHook = () => void;
 
 class TATreeFlow extends TATreeShape {
   // ── Re-declaraciones de campos heredados (vienen de __publicField) ─────

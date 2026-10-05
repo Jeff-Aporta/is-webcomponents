@@ -16,24 +16,19 @@
  */
 import { TTreeAdapterContract } from "./01-contract.js";
 import { TNode, TRecord, TreeActionSpec } from "./_types.js";
+import type { ActionResult, AfterCatalogFn, DeleteConfirmedFn, HistoryPushFn, CloseEditFormFn, RebuildFlatTreeFn } from "./02-model.schemas.js";
 
 /** Resultado de las acciones `ActInsertar` / `actEliminar` / etc. */
-type ActionResult<T> = Promise<T>;
 
 /** Tipo del callback `onAfterCatalogModificar` (definido en 04-tree-flow.ts). */
-type AfterCatalogFn = () => Promise<void>;
 
 /** Tipo del callback `ondeleteconfirmed` (definido en 06-mutations.ts). */
-type DeleteConfirmedFn = () => Promise<void>;
 
 /** Tipo del callback `historyPush` (definido en 06b-history.ts). */
-type HistoryPushFn = () => void;
 
 /** Tipo del callback `closeEditForm` (definido en 06-mutations.ts). */
-type CloseEditFormFn = () => void;
 
 /** Tipo del callback `rebuildFlatTree` (definido en 04-tree-flow.ts). */
-type RebuildFlatTreeFn = (sort?: (a: TNode, b: TNode) => number) => void;
 
 class TAModel extends TTreeAdapterContract {
   // ── Callbacks externos (re-declarados para tipado) ─────────────────────

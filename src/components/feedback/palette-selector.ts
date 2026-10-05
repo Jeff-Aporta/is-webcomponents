@@ -5,6 +5,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
 import { json2html } from '../_shared/json-html.js';
 import { PALETTES } from '../../styles/palette-build.js';
+import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
 
 /**
  * <iswc-palette-selector> — Web Component (vanilla).
@@ -60,42 +61,8 @@ import { PALETTES } from '../../styles/palette-build.js';
  */
 
 /** Entrada normalizada de paleta, lista para render. */
-interface Palette {
-  value: string;
-  label: string;
-  accent: string;
-  css: string;
-  /** Para el trigger estilo logo (dos mitades de texto). */
-  lead: string;
-  accentLabel: string;
-  leadColor: string;
-  accentColor: string;
-  bg: string;
-  fg: string;
-  h: number | null;
-  s: string;
-  b: string;
-  /** Hijos del wordmark, forma json2xml. Si falta, se arma con lead/accent. */
-  content: unknown[] | null;
-}
 
 /** Entrada cruda que puede llegar en el atributo `palettes`. */
-interface PaletteCruda {
-  value?: unknown;
-  label?: unknown;
-  accent?: unknown;
-  css?: unknown;
-  lead?: unknown;
-  accentLabel?: unknown;
-  leadColor?: unknown;
-  accentColor?: unknown;
-  bg?: unknown;
-  fg?: unknown;
-  h?: unknown;
-  s?: unknown;
-  b?: unknown;
-  content?: unknown;
-}
 
 (() => {
   // 3 paletas por defecto. Primera = default del kit (ContaPyme). El

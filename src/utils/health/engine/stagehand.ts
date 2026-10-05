@@ -26,45 +26,11 @@ import { join } from 'node:path';
 import type { Hallazgo } from '../motor/types.js';
 import type { EntradaCatalogo } from '../motor/catalog.js';
 import { leerDefinicion } from './cargar.js';
+import type { SesionStagehand, ReportePagina } from "./stagehand.schemas.js";
 
 /** Estado del browser que supervisa el motor. */
-export interface SesionStagehand {
-  /** URL base del servidor (ej. http://127.0.0.1:8391/). */
-  baseUrl: string;
-  /** Cierra el browser y libera recursos. */
-  cerrar(): Promise<void>;
-  /**
-   * Navega a la URL del preview del tag dado y devuelve métricas de la
-   * página: hubo error de consola?, controles?, demos?.
-   */
-  inspeccionarTag(tag: string, titulo: string): Promise<ReportePagina>;
-  /** Versión "ligera" sin browser: solo fetch + jsdom-like. */
-  inspeccionarSinBrowser?(tag: string, titulo: string): Promise<ReportePagina>;
-}
 
 /** Métricas de una página de preview. */
-export interface ReportePagina {
-  tag: string;
-  titulo: string;
-  url: string;
-  /** Tiempo total de inspección (ms). */
-  duracionMs: number;
-  /** Errores de consola capturados durante la inspección. */
-  erroresConsola: string[];
-  /** Warnings de consola. */
-  warningsConsola: string[];
-  /** Tags is-* encontrados en la página (debería incluir al menos el audited). */
-  tagsEncontrados: string[];
-  /** Demos (kind=demo) renderizados correctamente. */
-  demosRenderizados: number;
-  /** Total de demos esperados según el JSON. */
-  demosEsperados: number;
-  /** Controles (kind=demo+controls) conectados. */
-  controlesEsperados: number;
-  controlesConectados: number;
-  /** Hallazgos que el inspector de página agrega. */
-  hallazgos: Hallazgo[];
-}
 
 /**
  * Genera la URL del preview de un tag para un servidor de docs dado.

@@ -17,40 +17,11 @@
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative, basename, dirname } from 'node:path';
+import type { EntradaCatalogo, OpcionesEnumerador, ManifestItemCrudo, CatalogItemCrudo } from "./catalog.schemas.js";
 
 /** Entrada enumerada de un componente del catálogo. */
-export interface EntradaCatalogo {
-  tag: string;
-  titulo: string;
-  categoria: string;
-  /** Ruta absoluta del JSON de preview (si existe). */
-  rutaJsonAbsoluta: string | null;
-  /** Ruta absoluta del módulo JS/TS (si existe). */
-  rutaModuloAbsoluta: string | null;
-  /** Ruta del JSON relativa a la raíz del proyecto (para reportes). */
-  rutaJsonRelativa: string | null;
-  /** Ruta del módulo relativa a la raíz del proyecto. */
-  rutaModuloRelativa: string | null;
-  /** `true` si el JSON existe y es parseable. */
-  tieneJson: boolean;
-  /** `true` si el módulo existe. */
-  tieneModulo: boolean;
-  /** `true` si es una página (home/theming/ecosystem/phase7) y no un componente. */
-  esPagina: boolean;
-  /** `true` si la entrada tiene `behavior` (módulo que extiende el preview). */
-  tieneBehavior: boolean;
-  /** `true` si el manifest lo marca como `module: true` (helper, no
-   *  custom element). El motor salta chequeos de define/defineElement. */
-  esModulo: boolean;
-  /** Origen del componente (manifest "origin" o heredado de category). */
-  origen?: string;
-}
 
 /** Opciones del enumerador. */
-export interface OpcionesEnumerador {
-  /** Incluir páginas (home, theming, ecosystem, phase7). Default: true. */
-  incluirPaginas?: boolean;
-}
 
 /**
  * @param raiz raíz del proyecto (donde vive src/ y deno.json).
@@ -114,17 +85,6 @@ export function enumerarCatalogo(raiz: string, opciones: OpcionesEnumerador = {}
 // ─────────────────────────────────────────────────────────────────────────────
 // Lectura del manifest (TS con objetos literales).
 // ─────────────────────────────────────────────────────────────────────────────
-
-interface ManifestItemCrudo {
-  tag?: string;
-  title?: string;
-  category?: string;
-  script?: string;
-  style?: string;
-  page?: string;
-  module?: boolean;
-  origin?: string;
-}
 
 /**
  * Parseo "lite" del manifest.ts: extrae cada `{ tag: '…', … }` por regex.
@@ -223,12 +183,6 @@ function existeTsOJs(abs: string): boolean {
 // ─────────────────────────────────────────────────────────────────────────────
 // Lectura del catalog.ts (mapa tag → { json, behavior, category }).
 // ─────────────────────────────────────────────────────────────────────────────
-
-interface CatalogItemCrudo {
-  json?: string;
-  behavior?: string;
-  category?: string;
-}
 
 function leerCatalog(archivo: string, raiz: string): EntradaCatalogo[] {
   let src: string;

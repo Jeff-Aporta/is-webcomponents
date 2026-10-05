@@ -4,27 +4,6 @@ import { resolveVennSpec, computeVennLayout } from './venn-spec.js';
 import type { VennLayout, VennSpec } from './venn-spec.js';
 // `VennLayoutCircle` y `VennLayoutRegion` están declarados pero no exportados
 // en venn-spec.ts. Tipamos localmente para no tocar la firma del spec.
-interface VennLayoutCircle {
-  id: string;
-  label: string;
-  description?: string;
-  hue: number;
-  cx: number;
-  cy: number;
-  r: number;
-  labelX: number;
-  labelY: number;
-}
-interface VennLayoutRegion {
-  id: string;
-  sets: string[];
-  label?: string;
-  value?: number;
-  description?: string;
-  x: number;
-  y: number;
-  hues: number[];
-}
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import type { DiagramTheme } from './diagram-types.js';
@@ -33,6 +12,7 @@ import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { VennLayoutCircle, VennLayoutRegion, CircleNodeEntry, RegionNodeEntry } from "./venn-diagram.schemas.js";
 
 /**
  * <iswc-venn-diagram> — diagrama de Venn (2 o 3 conjuntos) en SVG, sin Mermaid.
@@ -52,16 +32,8 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  */
 
 /** Conjunto cacheado en el SVG para aplicar hover sin reconstruir. */
-interface CircleNodeEntry {
-  c: VennLayoutCircle;
-  g: SVGGElement;
-}
 
 /** Región cacheada en el SVG para aplicar hover sin reconstruir. */
-interface RegionNodeEntry {
-  r: VennLayoutRegion;
-  g: SVGGElement;
-}
 
 class IswcVennDiagram extends DiagramElementBase {
   #circleNodes: Map<string, CircleNodeEntry> = new Map();

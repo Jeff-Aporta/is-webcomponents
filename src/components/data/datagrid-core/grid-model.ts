@@ -29,10 +29,7 @@ import { filterRows } from './pipeline-filtering.js';
 import { sortRows, cycleSort } from './pipeline-sorting.js';
 import { buildDisplayRows, collectGroupIds } from './pipeline-grouping.js';
 import { Density, SelectionMode, DEFAULT_PAGE_SIZE } from './types.js';
-import type {
-  ColumnDef, ColumnFilter, ColumnState, DensityName, FilterModel, GridApi, GridListener,
-  GridOptions, GridState, PinSideName, RowData, RowNode, SortModel,
-} from './types.js';
+import type { ColumnDef, ColumnFilter, ColumnState, DensityName, FilterModel, GridApi, GridListener, GridOptions, GridState, PinSideName, RowData, RowNode, SortModel } from "./types.schemas.js";
 
 
 /**

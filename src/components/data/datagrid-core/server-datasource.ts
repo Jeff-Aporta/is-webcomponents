@@ -41,6 +41,7 @@
  * @param {unknown} v
  * @returns {string}
  */
+import type { FiltroEntrada, PeticionLista, TFiltroLista, TListaPaginacion, ParamsGetRows, Literal } from "./server-datasource.schemas.js";
 export function sqlLiteral(v: unknown) {
   if (v === null || v === undefined) return 'NULL';
   if (typeof v === 'number') return String(v);
@@ -125,19 +126,14 @@ export function singleFilterToClause(field: string, def: FiltroEntrada | null | 
 /* -- Contratos con ISP --------------------------------------------------- */
 
 /** Una entrada de `filterModel`: la forma la fija ag-Grid, no el kit. */
-export type FiltroEntrada = { filterType?: string; type?: string; values?: unknown[]; filterModels?: (FiltroEntrada | null)[]; [extra: string]: unknown; };
 
 /** Peticion que manda la grilla al pedir un bloque de filas. */
-export type PeticionLista = { startRow?: number; endRow?: number; sortModel?: { colId?: string; sort?: string; dir?: string }[]; filterModel?: Record<string, FiltroEntrada | null>; };
 
 /** `TFiltroLista` de ISP: lo que espera el endpoint al otro lado. */
-export type TFiltroLista = { qregistros?: number; pagina?: number; orden?: Record<string, string>; filtro?: { idnfiltro: string; sql?: string }; };
 
 /** Respuesta paginada de ISP. */
-export type TListaPaginacion = { datos?: Record<string, unknown>[]; totalregistros?: number; [extra: string]: unknown; };
 
 /** Callbacks con los que la grilla recoge el bloque pedido. */
-export type ParamsGetRows = { request: PeticionLista; success(res: { rowData: Record<string, unknown>[]; rowCount: number }): void; fail(): void; };
 
 export function convertFilterModelToSQL(filterModel: Record<string, FiltroEntrada | null> | null | undefined, colIDFields: Map<string, string> | null): string {
   const clauses: string[] = [];
@@ -277,7 +273,6 @@ function splitAnd(sql: string): string[] {
 
 /** Convierte un literal SQL a valor JS. */
 /** Un literal SQL ya interpretado. */
-type Literal = string | number | null;
 
 function parseLiteral(tok: string): Literal {
   const t = tok.trim();

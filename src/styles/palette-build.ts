@@ -4,23 +4,9 @@ import {
   ISWC_COLOR_VARIANTS,
   type IswcColorVariant,
 } from './color-tokens.ts';
+import type { PaletteConfig } from "./palette-build.schemas.js";
 
 /** Config de una paleta: el usuario declara h, s y b. El CSS deriva la rampa. */
-export interface PaletteConfig {
-  value: string;
-  label: string;
-  lead: string;
-  accentLabel: string;
-  tail?: string;
-  /** Tono 0–360. Numero pelado para poder restarlo en calc(). */
-  h: number;
-  /** Saturacion HSL, p. ej. "100%". */
-  s: string;
-  /** Brillo, expresado como luminosidad HSL porque css hsl() no tiene canal HSV. */
-  b: string;
-  leadColor?: string;
-  accentColor?: string;
-}
 
 export const PALETTES = palettes as PaletteConfig[];
 

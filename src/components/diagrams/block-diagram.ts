@@ -4,53 +4,6 @@ import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './block-sp
 import type { BlockLayout, BlockSpec } from './block-spec.js';
 // Tipos internos del spec (no exportados) que el renderer necesita; los
 // redefinimos localmente para no tocar la firma del spec.
-interface BlockSpecGroup {
-  id: string;
-  name: string;
-  hue: number;
-}
-interface BlockSpecBlock {
-  id: string;
-  label: string;
-  shape: 'rect' | 'round';
-  icon?: string;
-  hue?: number;
-  group?: string;
-  span: number;
-}
-interface BlockSpecEdge {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-}
-interface BlockLayoutBlock {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  row: number;
-  col: number;
-  label: string;
-  shape: 'rect' | 'round';
-  icon?: string;
-  hue?: number;
-  group?: string;
-}
-interface BlockLayoutEdge {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowAngle: number;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import type { PathTurtle, TurtleTheme } from '../_shared/path-turtle.js';
@@ -64,6 +17,7 @@ import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockLayoutBlock, BlockLayoutEdge, TurtleState, BlockNodeEntry, EdgeNodeEntry } from "./block-diagram.schemas.js";
 
 /**
  * <iswc-block-diagram> — diagrama de bloques en SVG, sin Mermaid.
@@ -87,26 +41,10 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
-interface TurtleState {
-  playing: boolean;
-  idx: number;
-  total: number;
-  replay: number;
-}
 
 /** Bloque cacheado en el SVG para aplicar hover sin reconstruir el DOM. */
-interface BlockNodeEntry {
-  b: BlockLayoutBlock;
-  g: SVGGElement;
-  box: SVGPathElement;
-}
 
 /** Arista cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
-interface EdgeNodeEntry {
-  e: BlockLayoutEdge;
-  g: SVGGElement;
-  path: SVGPathElement;
-}
 
 class IswcBlockDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;

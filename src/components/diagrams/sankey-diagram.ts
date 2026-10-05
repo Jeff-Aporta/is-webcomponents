@@ -8,6 +8,7 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { SkGroup, SkLayoutNode, SkLayoutLink, SkLayout, NodeEntry, LinkEntry } from "./sankey-diagram.schemas.js";
 
 /**
  * <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
@@ -27,51 +28,6 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  */
 
 const DEFAULT_HEIGHT = 320;
-
-interface SkGroup { id: string; name: string; hue?: number; }
-interface SkLayoutNode {
-  id: string;
-  label: string;
-  description?: string;
-  group?: string;
-  hue?: number;
-  layer: number;
-  value: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  labelSide: 'right' | 'left';
-  overflow?: 'grow' | 'ellipsis' | 'shrink';
-}
-interface SkLayoutLink {
-  id: string;
-  from: string;
-  to: string;
-  value: number;
-  label?: string;
-  group?: string;
-  thickness: number;
-  path: string;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
-interface SkLayout {
-  width: number;
-  height: number;
-  nodes: SkLayoutNode[];
-  links: SkLayoutLink[];
-  groups?: SkGroup[];
-  unit?: string;
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
-}
-interface NodeEntry { n: SkLayoutNode; g: SVGGElement; }
-interface LinkEntry { l: SkLayoutLink; g: SVGGElement; }
 
 class IswcSankeyDiagram extends DiagramElementBase {
   static get observedAttributes(): string[] {

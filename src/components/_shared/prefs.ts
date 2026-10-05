@@ -13,11 +13,10 @@
  */
 
 /** Forma del root de prefs: mapa de `tag -> key -> prefs`. */
-export type PrefsRoot = Record<string, Record<string, Record<string, unknown>>>;
 
 /** Entrada individual: objeto plano `{ clave: valor }`. */
-export type PrefsEntry = Record<string, unknown>;
 
+import type { PrefsRoot, PrefsEntry, ClearAllPrefsResult } from "./prefs.schemas.js";
 const ROOT_KEY = 'is-webcomponents';
 const LEGACY_ROOT_KEY = 'is-components';
 
@@ -107,8 +106,6 @@ export function removeComponentPrefs(tag: string, key: string): void {
 export function peekComponentPrefsRoot(): PrefsRoot {
   return readRoot();
 }
-
-export type ClearAllPrefsResult = { cleared: boolean; tags: string[] };
 
 /**
  * Limpia TODA la memoria de componentes (`is-webcomponents` + legacy).

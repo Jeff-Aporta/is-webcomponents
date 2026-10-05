@@ -5,31 +5,9 @@ import type {
   PreviewMountContext,
   ISComponentPreviewLike,
 } from '../previews/_kit/types.d.ts';
-
-interface LoaderCatalog {
-  categories: Record<string, string[]>;
-  tags: Record<string, { category: string; file: string }>;
-}
-interface LoaderModule {
-  load(...ids: string[]): Promise<unknown>;
-  loadPageStyles(hrefs: string[]): Promise<unknown>;
-  catalog: LoaderCatalog;
-}
-
-interface SharedModuleEntry {
-  id: string;
-  file: string;
-  path: string;
-  summary: string;
-  exports?: string[];
-  bytes?: number;
-}
-interface SharedCatalogJSON {
-  modules: SharedModuleEntry[];
-}
+import type { LoaderCatalog, LoaderModule, SharedModuleEntry, SharedCatalogJSON, SnippetEditor } from "./ecosystem.schemas.js";
 
 /** Snippet editable: <iswc-code>, <textarea> o <input>. */
-type SnippetEditor = HTMLElement & { value: string };
 
 export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;

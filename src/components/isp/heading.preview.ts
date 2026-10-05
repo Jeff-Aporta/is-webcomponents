@@ -4,23 +4,10 @@
  */
 
 /** `<iswc-heading>` con `level`, `color`, `mix`, `mixWith`, `size`. */
-interface _HeadingLike extends HTMLElement {
-  level: string;
-  color: string | null;
-  mix: string | null;
-  mixWith: string | null;
-  size: string | null;
-}
 
 /** Input element con `value`/`checked`/`disabled` y `textContent`. */
-interface _InputLike {
-  value: string;
-  checked: boolean;
-  disabled: boolean;
-  textContent: string | null;
-  addEventListener(type: string, listener: EventListener): void;
-}
 
+import type { _HeadingLike, _InputLike } from "./heading.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const el = root.querySelector<HTMLElement>('#hdLive') as _HeadingLike | null;

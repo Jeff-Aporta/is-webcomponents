@@ -1,9 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './treemap-spec.js';
-import type { TreemapSpec, TreemapLayout } from './treemap-spec.js';
+import type { TreemapSpec, TreemapLayout } from "./treemap-spec.schemas.js";
 import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/sequence-spec.js';
-import type { DiagramTheme } from '../diagrams/diagram-types.js';
+import type { DiagramTheme } from "../diagrams/diagram-types.schemas.js";
 import { tkHueToCss } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';

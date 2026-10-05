@@ -13,7 +13,7 @@
  */
 
 import { cellText } from './value-formatter.js';
-import type { AlignName, ColumnDef, ColumnState, RowNode } from './types.js';
+import type { AlignName, ColumnDef, ColumnState, RowNode } from "./types.schemas.js";
 import {
   ColumnType,
   PinSide,

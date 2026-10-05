@@ -1,10 +1,6 @@
 import type { FlexActionEntry } from './_shared/tree-view/flex-options.js';
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-
-interface FlexOptionsLike extends HTMLElement {
-  actions: FlexActionEntry[];
-  more: FlexActionEntry[];
-}
+import type { FlexOptionsLike } from "./flex-options.preview.schemas.js";
 
 export function mount(ctx: PreviewMountContext): void {
   const root = ctx.main;

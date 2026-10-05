@@ -8,16 +8,7 @@
 
 import { prettyHtml, softFormat, dedent } from './code-text.js';
 import { formatDiff } from './code-diff.js';
-
-export type CodeFormatConfig = {
-  tabWidth?: number;
-  useTabs?: boolean;
-  printWidth?: number;
-  semi?: boolean;
-  singleQuote?: boolean;
-  trailingComma?: boolean;
-  endOfLine?: 'lf' | 'crlf' | 'cr';
-};
+import type { CodeFormatConfig, NormalizedFormatConfig } from "./code-format.schemas.js";
 
 export const DEFAULT_FORMAT: CodeFormatConfig = Object.freeze({
   tabWidth: 2,
@@ -28,16 +19,6 @@ export const DEFAULT_FORMAT: CodeFormatConfig = Object.freeze({
   trailingComma: false,
   endOfLine: 'lf',
 });
-
-export type NormalizedFormatConfig = {
-  tabWidth: number;
-  useTabs: boolean;
-  printWidth: number;
-  semi: boolean;
-  singleQuote: boolean;
-  trailingComma: boolean;
-  endOfLine: 'lf' | 'crlf' | 'cr';
-};
 
 export function normalizeFormatConfig(raw: unknown): NormalizedFormatConfig {
   const src = (raw && typeof raw === 'object') ? raw as Record<string, unknown> : {};

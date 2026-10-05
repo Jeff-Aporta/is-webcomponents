@@ -35,27 +35,15 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import '../actions/button.js';
 import './video.js';
 import './icon.js';
+import type { IsVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./video-playlist.schemas.js";
 
 // Tipo mínimo del <iswc-video> hijo. Sólo accedemos a `media`, `play`, `pause`
 // y atributos — no hace falta arrastrar todo el componente.
-interface IsVideoLike extends HTMLElement {
-  media: HTMLVideoElement;
-  play(): Promise<void>;
-  pause(): void;
-}
-type IswcVideo = IsVideoLike;
-type VideoList = readonly IswcVideo[];
 
 // Handler de MediaQueryList cuando cambia el viewport (acordeón auto).
-interface MediaObsBag {
-  mq: MediaQueryList;
-  handler: () => void;
-}
 
 // Activación de un índice: opcional play + previousIndex para emitir.
-interface ActivateOptions { play?: boolean; previousIndex?: number; }
 // Estado de applyActive: permite emitir o no el cambio.
-interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
 
 (() => {
   const TEMPLATE = document.createElement('template');
@@ -195,7 +183,7 @@ interface ApplyActiveOptions { emit?: boolean; previousIndex?: number; }
     return attr ? attr.trim() : '';
   }
 
-  class IswcVideoPlaylist extends withStyleAttrs(HTMLElement) {
+  class IswcVideoPlaylist extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'bg', 'border-color', 'stripe-color', 'accent']; }
 

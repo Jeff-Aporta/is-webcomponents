@@ -10,76 +10,9 @@
 
 import type { DiagramTheme } from './diagram-types.js';
 import insoftJson from './themes/insoft.json' with { type: 'json' };
+import type { ErThemeJson } from "./theme.schemas.js";
 
 /** Contrato del JSON de tema ER (iswc-diagram-theme/v1). */
-export interface ErThemeJson {
-  $schema?: string;
-  id: string;
-  label?: string;
-  font?: {
-    family?: string;
-    import?: string;
-  };
-  canvas?: {
-    background?: string;
-    text?: string;
-    muted?: string;
-  };
-  entity?: {
-    fill?: string;
-    headerFill?: string;
-    border?: string;
-    borderWidth?: number;
-    radius?: number;
-    separator?: string;
-    separatorWidth?: number;
-  };
-  orphan?: {
-    fill?: string;
-    headerFill?: string;
-    border?: string;
-  };
-  edge?: {
-    stroke?: string;
-    strokeWidth?: number;
-    dasharray?: string;
-    labelBg?: string;
-    hideLabels?: boolean;
-  };
-  cluster?: {
-    border?: string;
-    borderWidth?: number;
-    radius?: number;
-    dasharray?: string | null;
-    titleFill?: string;
-    palettes?: Record<string, string>;
-    fallback?: string;
-  };
-  /**
-   * Estilo propio del diagrama de componentes (distinto del ER).
-   * Si falta, el CE cae a `entity` / `cluster`.
-   */
-  component?: {
-    fill?: string;
-    headerFill?: string;
-    border?: string;
-    borderWidth?: number;
-    radius?: number;
-    /** Color del círculo O (provided). */
-    lollipop?: string;
-    /** Sin pestaña de carpeta en paquetes. */
-    noPackageTab?: boolean;
-    /** Sin rectángulo blanco detrás del título del paquete. */
-    titleBackground?: boolean;
-  };
-  diagramTheme?: Partial<DiagramTheme>;
-  /**
-   * Variantes por modo de color de página. Se fusionan sobre la base.
-   * Así light y dark no comparten los mismos fills a la fuerza.
-   */
-  light?: Partial<Omit<ErThemeJson, 'id' | 'light' | 'dark' | '$schema'>>;
-  dark?: Partial<Omit<ErThemeJson, 'id' | 'light' | 'dark' | '$schema'>>;
-}
 
 export const INSOFT_THEME = insoftJson as ErThemeJson;
 

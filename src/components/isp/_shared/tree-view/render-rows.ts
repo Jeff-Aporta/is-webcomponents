@@ -10,69 +10,16 @@
 import "../../flex-options.js";
 import "../../float-card.js";
 import type { TreeActionEntry, TreeActionSpec, TNode } from "./_types.js";
-import { HandlerStoreSchema, ControllerWithLockSchema, type HandlerStore, type ControllerWithLock } from "./render-rows.schema.js";
+import { HandlerStoreSchema, ControllerWithLockSchema, type HandlerStore, type ControllerWithLock } from "./render-rows.schemas.js";
+import type { RenderOpts, RenderAdapter, RowController } from "./render-rows.schemas.js";
 
 /** Opciones que recibe `paintForest` para customizar el pintado. */
-interface RenderOpts {
-  /** Campo del nodo a usar como label por defecto (default: "titulo"). */
-  labelField?: string;
-  /** Campo del nodo a usar como helper por defecto. */
-  helperField?: string;
-  /** Renderer custom para el label (recibe el nodo y el `<div>`). */
-  renderRow?: (node: TNode, content: HTMLElement) => void;
-  /** Renderer custom para el helper. */
-  renderHelper?: (node: TNode, helper: HTMLElement) => void;
-}
 
 export type { RenderOpts };
 
 /** Forma mínima que `paintRow` espera del adapter (`TreeRowAdapter.getOrCreateRowAdapter`). */
-interface RenderAdapter {
-  flatPath: string;
-  getOrCreateRowAdapter(bridge: unknown): unknown;
-}
 
 /** Forma del "row config" que `paintRow` consume para aplicar CSS / aria. */
-export interface RowController {
-  flatPath: string;
-  isSelected: boolean;
-  isHighlighted: boolean;
-  isNodeOpen: boolean;
-  hasChildren: boolean;
-  isDraggable: boolean;
-  mergedDisabled: boolean;
-  isLockedByProtection: boolean;
-  isFrozen: boolean;
-  shouldFlash: boolean;
-  shouldFlashError: boolean;
-  dragOver: "before" | "after" | "into" | null;
-  dragForbidden: boolean;
-  showCaret: boolean;
-  rowIcono: { icon: string; mergedStyle?: string } | null;
-  showOptions: boolean;
-  hasRowTools: boolean;
-  filteredActions: TreeActionEntry[];
-  cascadeOptions: TreeActionEntry[];
-  cascadeDisabled: boolean;
-  floatCard: Record<string, unknown>;
-  floatVisible: boolean;
-  onLeadIconClick: (() => void) | null;
-  ondragstart(e: Event): void;
-  ondragend(e: Event): void;
-  ondetailstoggle(e: Event): void;
-  onsummaryclick(e: Event): void;
-  onsummarydblclick(e: Event): void;
-  onkeydown(e: Event): void;
-  onsummaryfocus(e: Event): void;
-  onsummaryblur(): void;
-  onsummarypointerenter(e: Event): void;
-  onsummarypointerleave(e: Event): void;
-  onsummarydragenter(e: Event): void;
-  onsummarydragover(e: Event): void;
-  onsummarydragleave(e: Event): void;
-  ondrop(e: Event): void;
-  requestRowUiSync(): void;
-}
 
 /** Devuelve el texto del label de una fila (o "" si no hay renderer custom). */
 function rowLabel(node: TNode, opts: RenderOpts): string {

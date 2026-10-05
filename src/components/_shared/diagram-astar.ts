@@ -7,34 +7,15 @@ import {
   TK_DIAGRAM_GRID,
   applyForbiddenRegions,
 } from './diagram-grid.js';
+import type { GridPoint, CostGrid, ForbiddenRegion, PixelPoint, RouteOpts, AestheticsOpts, SequenceRoute } from "./diagram-astar.schemas.js";
 
 /** Punto en la rejilla: par (col, row) enteras. */
-export type GridPoint = { col: number; row: number };
 
 /** Rejilla de costos usada por el A*. Su forma concreta la define `makeCostGrid`. */
-export type CostGrid = {
-  cols: number;
-  rows: number;
-  grid: number;
-  cost: Float64Array;
-  forbidden?: Map<string, ForbiddenRegion>;
-};
 
 /** Región prohibida que se puede registrar para el ruteo A*. */
-export type ForbiddenRegion = {
-  id: string;
-  kind: 'rect' | 'poly';
-  x?: number;
-  y?: number;
-  w?: number;
-  h?: number;
-  points?: ReadonlyArray<readonly [number, number]>;
-  color?: string;
-  label?: string;
-};
 
 /** Punto en píxeles (ya fuera de la rejilla). */
-export type PixelPoint = { x: number; y: number };
 
 const DIRS = [
   { col: 0, row: -1 },
@@ -181,7 +162,6 @@ function collapseColinear(points: GridPoint[]): GridPoint[] {
   return out;
 }
 
-
 /** ¿El tramo recto entre dos celdas (mismo eje) está libre de obstáculos? */
 function segmentClear(g: CostGrid, a: GridPoint, b: GridPoint): boolean {
   if (a.col !== b.col && a.row !== b.row) return false;
@@ -244,12 +224,6 @@ function nearestOpenCell(g: CostGrid, cell: GridPoint, maxRadius = 8): GridPoint
   }
   return cell; // rodeado por completo: se deja igual, astarSegment hará el fallback
 }
-
-export type RouteOpts = {
-  turnCost?: number;
-  waypoints?: readonly GridPoint[];
-  forbiddenRegions?: readonly ForbiddenRegion[] | ForbiddenRegion[];
-};
 
 /** Ruta ortogonal A* con obstáculos y waypoints forzados. */
 export function routeOrthogonal(start: GridPoint, end: GridPoint, g: CostGrid, opts: RouteOpts = {}): GridPoint[] {
@@ -346,10 +320,6 @@ export function suggestWaypoints(start: GridPoint, end: GridPoint, g: CostGrid, 
  * de menor "costo estético" = turnos + longitud (con peso). Útil cuando el
  * ruteo directo cae en diagonal zigzagueante y queremos forzar un corredor.
  */
-export type AestheticsOpts = RouteOpts & {
-  suggestCount?: number;
-  turnWeight?: number;
-};
 
 export function routeWithAesthetics(start: GridPoint, end: GridPoint, g: CostGrid, opts: AestheticsOpts = {}): GridPoint[] {
   const suggest = opts.suggestCount ?? 4;
@@ -486,14 +456,6 @@ function collapseSvgOrtho(d: string): string {
   out.push(pts[pts.length - 1]!);
   return out.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
 }
-
-export type SequenceRoute = {
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowDir: number;
-  points: GridPoint[];
-};
 
 /** Mensaje horizontal entre dos lifelines (A* sobre la rejilla de costos). */
 export function routeSequenceHorizontal(fromX: number, toX: number, y: number, g: CostGrid): SequenceRoute {

@@ -3,12 +3,7 @@
  * `.md-iswc-code` a `<iswc-code>` (solo si hace falta iswc-code).
  */
 
-type LoaderLike = {
-  has?: (id: string) => boolean;
-  ensure?: (tag: string) => Promise<boolean>;
-  load?: (...ids: string[]) => Promise<unknown>;
-};
-
+import type { LoaderLike } from "./md-hydrate.schemas.js";
 function loader(): LoaderLike | null {
   const L = (globalThis as { ISWebComponentsLoader?: LoaderLike }).ISWebComponentsLoader;
   return L && typeof L.ensure === 'function' ? L : null;

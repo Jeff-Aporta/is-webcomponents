@@ -13,39 +13,16 @@ import type {
   ISComponentPreviewLike,
 } from '../previews/_kit/types.d.ts';
 import { BRAND_DERIVE, applyBrandVars, seedCss } from '../styles/palette-build.js';
+import type { Rgb, Oklab, Seed, OklchTriplet, PersistedData, TokenMap, BuildTokensResult, ColorPicker, TextEditor, CheckboxEl } from "./theming.schemas.js";
 
 /** Tripleta RGB lineal (0..1). */
-type Rgb = [number, number, number];
 /** Tripleta OKLab (L, a, b). */
-type Oklab = [number, number, number];
-
-interface Seed {
-  brand: string;
-  darkBg: string;
-  darkText: string;
-  lightBg: string;
-  lightText: string;
-}
-interface OklchTriplet { l: number; c: number; h: number }
-interface PersistedData { name: string; seeds: Seed }
-
-type TokenMap = Record<string, string>;
-
-interface BuildTokensResult {
-  marca: TokenMap;
-  dark: TokenMap;
-  light: TokenMap;
-  hsb: { h: number; s: string; b: string };
-}
 
 /** Editor de color (iswc-color-picker o <input type="color">). */
-type ColorPicker = HTMLElement & { value: string };
 
 /** Editor de texto / nombre. */
-type TextEditor = HTMLElement & { value: string };
 
 /** Toggle / checkbox (Aplicar a toda la página). */
-type CheckboxEl = HTMLElement & { checked: boolean };
 
 export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;

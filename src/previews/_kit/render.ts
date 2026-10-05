@@ -8,6 +8,7 @@ import type {
 } from './types.d.ts';
 import { asText } from './text-like.ts';
 import '../../components/preview/demo-section.js';
+import type { StandardTocEntry } from "./render.schemas.js";
 
 /**
  * Base de `dist/assets/` para el token `{assets}`.
@@ -310,14 +311,6 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
  * Parts → API JavaScript → Métodos. Esto evita que un componente que pone
  * "API" antes que "Estados" rompa la coherencia entre docs.
  * ------------------------------------------------------------------------*/
-export interface StandardTocEntry {
-  /** Etiqueta canónica del TOC. */
-  readonly label: string;
-  /** Ids equivalentes (normalizados a `[a-z0-9]`). */
-  readonly ids: readonly string[];
-  /** Títulos equivalentes (case-insensitive). */
-  readonly titles: readonly string[];
-}
 
 /** 7 secciones estándar del TOC. Exportado para tests. */
 export const STANDARD_TOC: readonly StandardTocEntry[] = [

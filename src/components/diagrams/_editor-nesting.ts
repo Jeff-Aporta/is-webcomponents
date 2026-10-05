@@ -33,6 +33,7 @@
  */
 
 import { emit } from '../../core/element.js';
+import type { NestingOpenDetail, NestingCloseDetail, NestingOptions } from "./_editor-nesting.schemas.js";
 
 /** Profundidad máxima permitida (handoff §0, decisión cerrada). */
 export const NESTING_DEFAULT_MAX_DEPTH = 5;
@@ -42,28 +43,7 @@ export const NESTING_OPEN_EVENT = 'iswc-editor-nesting-open';
 export const NESTING_CLOSE_EVENT = 'iswc-editor-nesting-close';
 export const NESTING_REMOTE_CLOSE_EVENT = 'iswc-editor-close';
 
-export interface NestingOpenDetail {
-  depth: number;
-  childTag: string;
-  /** Spec del diagrama hijo. Tipo genérico — la subclase lo estrecha. */
-  childSpec: unknown;
-}
-export interface NestingCloseDetail {
-  depth: number;
-  cancelled: boolean;
-}
-
 /** Opciones del modal de nesting. */
-export interface NestingOptions {
-  /** Profundidad actual antes de abrir (1 = raíz). Default 1. */
-  currentDepth?: number;
-  /** Profundidad máxima (incluyendo raíz). Default `NESTING_DEFAULT_MAX_DEPTH`. */
-  maxDepth?: number;
-  /** Override del tag del editor hijo (útil en tests). */
-  childTag?: string;
-  /** Si true, el modal NO aparece; sólo se verifica `canNest()`. */
-  dryRun?: boolean;
-}
 
 const NESTING_CSS = `
 .iswc-nesting-backdrop {

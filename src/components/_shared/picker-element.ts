@@ -5,6 +5,7 @@ import { formatDate, formatTime, splitDateTime, todayISO, toTime } from './date-
 import { defineElement } from '../../core/element.js';
 import { emit } from '../../core/element.js';
 import { resolveLocale } from './resolve-locale.js';
+import type { PickerKind, PickerPanelDef, PickerField, PanelsBuilder, DefinePickerInputOpts } from "./picker-element.schemas.js";
 
 /**
  * Fábrica de los pickers "campo + panel": iswc-date-input, iswc-time-input,
@@ -41,37 +42,6 @@ const PANEL_ATTRS = [
   'show-outside-days', 'fixed-weeks', 'show-week-numbers', 'disable-past',
   'disable-future', 'disabled-dates', 'disabled-days', 'minutes-step', 'step',
 ];
-
-export type PickerKind = 'date' | 'time' | 'datetime';
-
-export type PickerPanelDef = HTMLElement & {
-  dataset: { role?: string; which?: string; sync?: string };
-  setAttribute(name: string, value: string): void;
-  removeAttribute(name: string): void;
-  focus(opts?: { preventScroll?: boolean }): void;
-  addEventListener(type: string, listener: EventListener, options?: AddEventListenerOptions | boolean): void;
-};
-
-export type PickerField = HTMLElement & {
-  value: string;
-  setAttribute(name: string, value: string): void;
-  removeAttribute(name: string): void;
-  checkValidity?(): boolean;
-  reportValidity?(): boolean;
-  focus?(opts?: { preventScroll?: boolean }): void;
-};
-
-export type PanelsBuilder = (ctx: { host: HTMLElement; range: boolean }) => PickerPanelDef[];
-
-export type DefinePickerInputOpts = {
-  tag: string;
-  kind: PickerKind;
-  cssUrl: string;
-  fieldTag: string;
-  panels: PanelsBuilder;
-  range?: boolean;
-  styleAttrs?: Record<string, string>;
-};
 
 export function definePickerInput({
   tag, kind, cssUrl, fieldTag, panels, range = false, styleAttrs = {},

@@ -14,6 +14,7 @@ import {
   pixelToGrid,
   buildOrthogonalPath,
 } from '../_shared/diagram-astar.js';
+import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode, MindmapLayoutEdge, MindmapLayout } from "./mindmap-spec.schemas.js";
 
 /**
  * Especificación y layout de mindmaps (sin Mermaid).
@@ -29,28 +30,6 @@ const DEFAULT_HUES: number[] = [239, 199, 38, 280, 160, 210];
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
-}
-
-interface MindmapNode {
-  id: string;
-  parent?: string;
-  label: string;
-  icon?: string;
-  hue?: number;
-  description?: string;
-}
-
-export interface MindmapSpec {
-  title?: string;
-  subtitle?: string;
-  layout: 'tree' | 'radial';
-  nodes: MindmapNode[];
-}
-
-interface LeadingIcon {
-  iconId?: string;
-  hue?: number;
-  rest?: string;
 }
 
 function readNode(raw: unknown, i: number): MindmapNode {
@@ -108,17 +87,6 @@ function nodeHeight(depth: number): number {
 }
 
 /** Forma mínima del árbol que devuelve `buildTree` y usan los helpers locales. */
-interface TreeNode {
-  id: string;
-  depth?: number;
-  label?: string;
-  icon?: string;
-  hue?: number;
-  resolvedHue?: number;
-  description?: string;
-  synthetic?: boolean;
-  children: TreeNode[];
-}
 
 /** Marca `depth` en cada nodo del árbol (mutación local, no vive en tree-layout.js). */
 function annotateDepth(node: TreeNode, depth: number): void {
@@ -169,40 +137,6 @@ function stepOutPoint(p: { x: number; y: number }, side: 'left' | 'right' | 'top
   if (side === 'bottom') return { x: p.x, y: p.y + d };
   if (side === 'left') return { x: p.x - d, y: p.y };
   return { x: p.x + d, y: p.y };
-}
-
-interface MindmapLayoutNode {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  depth: number;
-  kind: 'root' | 'branch' | 'leaf';
-  label: string;
-  icon?: string;
-  description?: string;
-  hue?: number;
-}
-
-interface MindmapLayoutEdge {
-  id: string;
-  from: string;
-  to: string;
-  path: string;
-  hue?: number;
-  width: number;
-}
-
-export interface MindmapLayout {
-  width: number;
-  height: number;
-  nodes: MindmapLayoutNode[];
-  edges: MindmapLayoutEdge[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
 }
 
 /**

@@ -5,13 +5,8 @@
  * Este módulo sirve como helper suelto si la app no quiere el loader completo.
  */
 
+import type { EnsureElementOpts } from "./ensure-element.schemas.js";
 const inflight = new Map<string, Promise<boolean>>();
-
-export interface EnsureElementOpts {
-  href?: string;
-  load?: () => Promise<unknown>;
-  timeoutMs?: number;
-}
 
 export function isElementReady(tag: string): boolean {
   const name = String(tag || '').trim().toLowerCase();

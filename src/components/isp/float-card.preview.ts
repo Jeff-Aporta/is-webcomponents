@@ -1,15 +1,6 @@
 import './flex-options.js';
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-
-interface FloatCardLike extends HTMLElement {
-  open: boolean;
-  locked?: boolean;
-  _fcOff?: () => void;
-}
-
-interface FlexOptionsLike extends HTMLElement {
-  actions: unknown[];
-}
+import type { FloatCardLike, FlexOptionsLike } from "./float-card.preview.schemas.js";
 
 export function mount(ctx: PreviewMountContext): void {
   const root = ctx.main;

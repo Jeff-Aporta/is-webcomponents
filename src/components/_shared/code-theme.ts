@@ -8,7 +8,6 @@
 
 /** Mapa de roles del tema del editor a color CSS. Claves libres: cada preset
  *  declara las suyas y `applyThemeConfig` funde la del consumidor sobre la base. */
-export type CodeThemeConfig = Record<string, string>;
 
 /** @typedef {object} CodeThemeConfig
  * @property {string} [background]
@@ -45,6 +44,7 @@ export type CodeThemeConfig = Record<string, string>;
  * @property {string} [infoHighlight]
  */
 
+import type { CodeThemeConfig } from "./code-theme.schemas.js";
 export const THEME_PROP_MAP = Object.freeze({
   background: '--iswc-code-bg',
   foreground: '--iswc-code-fg',

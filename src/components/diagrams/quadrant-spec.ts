@@ -1,5 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, QuadrantSpec, QuadrantJsonOut, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxisLabel, QuadrantLayoutAxes, QuadrantLayout } from "./quadrant-spec.schemas.js";
 
 /**
  * Especificación y layout de matrices 2×2 (quadrant chart), sin Mermaid.
@@ -24,46 +25,6 @@ function unit(value: unknown, fallback = 0.5): number {
   const n = Number(value);
   if (!Number.isFinite(n)) return fallback;
   return Math.min(1, Math.max(0, n));
-}
-
-interface QuadrantPoint {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
-  hue?: number;
-  group?: string;
-  description?: string;
-}
-
-interface QuadrantGroup {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-interface QuadrantAxes {
-  left?: string;
-  right?: string;
-  bottom?: string;
-  top?: string;
-}
-
-interface QuadrantQuadrants {
-  topRight: string;
-  bottomRight: string;
-  bottomLeft: string;
-  topLeft: string;
-}
-
-export interface QuadrantSpec {
-  title?: string;
-  subtitle?: string;
-  xAxis: QuadrantAxes;
-  yAxis: QuadrantAxes;
-  quadrants: QuadrantQuadrants;
-  groups?: QuadrantGroup[];
-  points: QuadrantPoint[];
 }
 
 function readPoint(raw: unknown, i: number): QuadrantPoint {
@@ -133,23 +94,6 @@ export function resolveQuadrantSpec(payload: unknown): QuadrantSpec | null {
   };
 }
 
-interface QuadrantJsonOut {
-  title?: string;
-  subtitle?: string;
-  xAxis?: QuadrantAxes;
-  yAxis?: QuadrantAxes;
-  quadrants?: QuadrantQuadrants;
-  groups?: QuadrantGroup[];
-  points: Array<{
-    label: string;
-    x: number;
-    y: number;
-    id?: string;
-    group?: string;
-    desc?: string;
-  }>;
-}
-
 /** spec → objeto `quadrant` listo para persistir / mostrar en el editor. */
 export function quadrantSpecToJson(spec: QuadrantSpec): QuadrantJsonOut {
   const out: QuadrantJsonOut = { points: [] };
@@ -186,57 +130,6 @@ function stackLabels(points: Array<QuadrantPoint & { cx: number; cy: number; r: 
     placed.push(pt);
   }
   return points;
-}
-
-interface PlotRect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-interface QuadrantLayoutPoint extends QuadrantPoint {
-  cx: number;
-  cy: number;
-  r: number;
-  labelDy: number;
-}
-
-interface QuadrantLayoutQuadrant {
-  id: string;
-  name: string;
-  cx: number;
-  cy: number;
-}
-
-interface QuadrantLayoutAxisLabel {
-  text: string;
-  x: number;
-  y: number;
-}
-
-interface QuadrantLayoutAxes {
-  midX: number;
-  midY: number;
-  xLeft?: QuadrantLayoutAxisLabel;
-  xRight?: QuadrantLayoutAxisLabel;
-  yBottom?: QuadrantLayoutAxisLabel;
-  yTop?: QuadrantLayoutAxisLabel;
-}
-
-export interface QuadrantLayout {
-  width: number;
-  height: number;
-  plot: PlotRect;
-  points: QuadrantLayoutPoint[];
-  quadrants: QuadrantLayoutQuadrant[];
-  axes: QuadrantLayoutAxes;
-  groups?: QuadrantGroup[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
 }
 
 /**

@@ -5,11 +5,10 @@
  * Distinto de BUTTON_SHAPE (contorno de botón / chrome).
  */
 
+import type { MediaShape } from "./media-shape.schemas.js";
 export const MEDIA_SHAPE = Object.freeze(['circle', 'square', 'rounded'] as const);
 
 export const DEFAULT_MEDIA_SHAPE = 'circle';
-
-export type MediaShape = (typeof MEDIA_SHAPE)[number];
 
 export const MEDIA_SHAPE_ICON: Record<MediaShape, string> = Object.freeze({
   circle: 'mdi:circle-outline',

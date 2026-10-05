@@ -4,6 +4,7 @@
  */
 
 /** @param v valor a evaluar. */
+import type { IspRecord, GridRow, IspColumnDef, FlatGridColumn, IspColumnsMap, IspController } from "./isp-record-utils.schemas.js";
 export function isPresent(v: unknown): boolean {
   if (v == null) return false;
   if (typeof v === 'string') return v.trim().length > 0;
@@ -18,14 +19,6 @@ export function asStr(v: unknown): string {
 }
 
 /** Forma flexible de un registro ISP: plano o con `getProp`/`setProp`/`.f`. */
-export type IspRecord = {
-  getProp?: (key: string) => unknown;
-  setProp?: (key: string, value: unknown) => void;
-  toJSON?: (shallow?: boolean) => unknown;
-  clone?: () => IspRecord;
-  f?: Record<string, unknown>;
-  [key: string]: unknown;
-};
 
 /**
  * @param record Registro ISP (puede ser null).
@@ -72,11 +65,6 @@ export function cloneRecord(record: IspRecord | null | undefined): IspRecord {
 }
 
 /** Fila plana para la grilla (API de `<iswc-ag-grid>`): datos + referencia al registro. */
-export type GridRow = {
-  id?: string | number;
-  __record?: IspRecord;
-  [key: string]: unknown;
-};
 
 /**
  * Fila plana para la grilla (API de `<iswc-ag-grid>`).
@@ -105,30 +93,10 @@ export function toGridRow(record: IspRecord, primaryKeys: readonly string[] = []
 }
 
 /** Definición cruda de una columna ISP. */
-export type IspColumnDef = {
-  caption?: string;
-  size?: number;
-  align?: 'left' | 'right' | 'center';
-  visible?: boolean;
-  filter?: boolean;
-  type?: 'number' | 'currency' | 'date' | 'dateTime' | 'bool' | string;
-  children?: Record<string, IspColumnDef>;
-};
 
 /** Columna plana que entiende la grilla del kit. */
-export type FlatGridColumn = {
-  field: string;
-  header: string;
-  width?: number;
-  align: 'left' | 'right' | 'center';
-  hide: boolean;
-  sortable: boolean;
-  filter: boolean;
-  type: 'number' | 'date' | 'enum' | 'text';
-};
 
 /** Mapa anidado de columnas ISP. */
-export type IspColumnsMap = Record<string, IspColumnDef>;
 
 /**
  * Aplana `Columns` anidadas de ISP a defs de `<iswc-ag-grid>`.
@@ -163,11 +131,6 @@ export function flattenIspColumns(cols: IspColumnsMap | null | undefined, out: F
 }
 
 /** Controlador ISP: tiene `columns` array o `Columns` mapa. */
-export type IspController = {
-  columns?: FlatGridColumn[];
-  Columns?: IspColumnsMap;
-  [key: string]: unknown;
-};
 
 /**
  * @param controller Controlador ISP del que extraer columnas.

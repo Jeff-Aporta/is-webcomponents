@@ -1,5 +1,6 @@
 import { parseDate, timeScale, packLanes } from '../_shared/lane-layout.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { TimelineOrientation, TimelineEventSpec, TimelineGroupSpec, TimelineResolvedSpec, TimelineLayoutEvent, TimelineTick, TimelineLayout, TimelineLayoutOptions, CompressedScale } from "./timeline-spec.schemas.js";
 
 /**
  * Especificación y layout de líneas de tiempo (sin Mermaid).
@@ -21,76 +22,8 @@ const DEFAULT_AXIS_LEN = 640;
 /** Hueco máximo entre dos eventos consecutivos (px). Evita ejes largos vacíos. */
 const MAX_EVENT_GAP_PX = 200;
 
-export type TimelineOrientation = 'horizontal' | 'vertical';
-
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
-}
-
-export interface TimelineEventSpec {
-  id: string;
-  label: string;
-  date: unknown;
-  group?: string;
-  hue?: number;
-  description?: string;
-}
-
-export interface TimelineGroupSpec {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-export interface TimelineResolvedSpec {
-  title?: string;
-  orientation: TimelineOrientation;
-  groups?: TimelineGroupSpec[];
-  events: TimelineEventSpec[];
-}
-
-export interface TimelineLayoutEvent {
-  id: string;
-  label: string;
-  desc?: string;
-  hue?: number;
-  group?: string;
-  ms: number;
-  dateText?: string;
-  dotX: number;
-  dotY: number;
-  side: number;
-  cardX: number;
-  cardY: number;
-  cardW: number;
-  cardH: number;
-}
-
-export interface TimelineTick {
-  ms: number;
-  label: string;
-  pos: number;
-}
-
-export interface TimelineLayout {
-  width: number;
-  height: number;
-  orientation: TimelineOrientation;
-  title?: string;
-  titleY: number;
-  axisX0: number;
-  axisY0: number;
-  axisLen: number;
-  events: TimelineLayoutEvent[];
-  ticks: TimelineTick[];
-  todayPos?: number;
-  groups?: TimelineGroupSpec[];
-  legendX: number;
-}
-
-export interface TimelineLayoutOptions {
-  width?: number;
-  now?: number;
 }
 
 /**
@@ -100,11 +33,6 @@ export interface TimelineLayoutOptions {
  * @param r0 offset inicial (px) del primer evento
  * @param maxGapPx tope de hueco entre eventos consecutivos
  */
-interface CompressedScale {
-  (ms: number): number;
-  invert: (px: number) => number;
-  span: number;
-}
 
 function compressedEventScale(sortedMs: number[], r0: number, maxGapPx: number): CompressedScale {
   const n = sortedMs.length;

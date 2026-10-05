@@ -26,7 +26,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
 
 const RUTA_TS = join(root, 'src/components/preview/examples-carousel.ts');
-const RUTA_CSS = join(root, 'src/components/preview/examples-carousel.css');
+const RUTA_CSS = join(root, 'src/components/preview/examples-carousel.scss');
 const RUTA_JSON = join(root, 'src/components/preview/examples-carousel.json');
 const RUTA_MD = join(root, 'src/components/preview/examples-carousel.md');
 
@@ -36,7 +36,7 @@ const json = JSON.parse(readFileSync(RUTA_JSON, 'utf8'));
 
 test('W19 fuentes existen (ts/css/json/md)', () => {
   assert.ok(existsSync(RUTA_TS), 'falta examples-carousel.ts');
-  assert.ok(existsSync(RUTA_CSS), 'falta examples-carousel.css');
+  assert.ok(existsSync(RUTA_CSS), 'falta examples-carousel.scss');
   assert.ok(existsSync(RUTA_JSON), 'falta examples-carousel.json');
   assert.ok(existsSync(RUTA_MD), 'falta examples-carousel.md');
 });
@@ -128,11 +128,11 @@ test('W19: CSS maquilla la composicion con ::part (no reimplementa <iswc-card>)'
   // El CSS debe trabajar via ::part del <iswc-card>, no redefinir un .card
   // nativo con border/background propios.
   assert.match(css, /\.card::part\(base\)/,
-    'examples-carousel.css debe maquillar <iswc-card> via ::part(base)');
+    'examples-carousel.scss debe maquillar <iswc-card> via ::part(base)');
   assert.match(css, /\.card::part\(body\)/,
-    'examples-carousel.css debe maquillar <iswc-card> via ::part(body)');
+    'examples-carousel.scss debe maquillar <iswc-card> via ::part(body)');
   assert.match(css, /\.card::part\(media\)/,
-    'examples-carousel.css debe maquillar <iswc-card> via ::part(media)');
+    'examples-carousel.scss debe maquillar <iswc-card> via ::part(media)');
 });
 
 test('W19: JSON declara seccion de tabs con categoria (3 categorias) y de reuse', () => {

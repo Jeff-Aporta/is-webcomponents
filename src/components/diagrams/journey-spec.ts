@@ -1,5 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonOut, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "./journey-spec.schemas.js";
 
 /**
  * Especificación y layout de mapas de recorrido (user journey), sin Mermaid.
@@ -21,34 +22,6 @@ const MARGIN: { top: number; right: number; bottom: number; left: number } = { t
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
-}
-
-interface JourneyPhase {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-interface JourneyStep {
-  id: string;
-  phase: string;
-  label: string;
-  score?: number;
-  actor?: string;
-  description?: string;
-}
-
-interface JourneyScale {
-  min: number;
-  max: number;
-}
-
-export interface JourneySpec {
-  title?: string;
-  subtitle?: string;
-  scale: JourneyScale;
-  phases: JourneyPhase[];
-  steps: JourneyStep[];
 }
 
 function readPhase(raw: unknown, i: number): JourneyPhase {
@@ -107,21 +80,6 @@ export function resolveJourneySpec(payload: unknown): JourneySpec | null {
   };
 }
 
-interface JourneyJsonOut {
-  title?: string;
-  subtitle?: string;
-  scale?: JourneyScale;
-  phases: Array<{ id: string; name: string; hue: number }>;
-  steps: Array<{
-    id: string;
-    phase: string;
-    label: string;
-    score?: number;
-    actor?: string;
-    desc?: string;
-  }>;
-}
-
 /** spec → objeto `journey` listo para persistir / mostrar en el editor. */
 export function journeySpecToJson(spec: JourneySpec): JourneyJsonOut {
   const out: JourneyJsonOut = { phases: [], steps: [] };
@@ -137,61 +95,6 @@ export function journeySpecToJson(spec: JourneySpec): JourneyJsonOut {
     return row;
   });
   return out;
-}
-
-interface JourneyPlotRect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-interface JourneyLayoutStep {
-  id: string;
-  label: string;
-  phase: string;
-  actor?: string;
-  description?: string;
-  score?: number;
-  hue?: number;
-  cx: number;
-  cy: number;
-  labelY: number;
-  actorY: number;
-  hasScore: boolean;
-}
-
-interface JourneyLayoutPhase {
-  id: string;
-  name: string;
-  hue?: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-interface JourneyLayoutGridLine {
-  value: number;
-  y: number;
-  x1: number;
-  x2: number;
-  labelX: number;
-}
-
-export interface JourneyLayout {
-  width: number;
-  height: number;
-  plot: JourneyPlotRect;
-  phases: JourneyLayoutPhase[];
-  steps: JourneyLayoutStep[];
-  line: string;
-  gridLines: JourneyLayoutGridLine[];
-  scale: JourneyScale;
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
 }
 
 /**

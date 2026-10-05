@@ -4,14 +4,8 @@
  */
 
 /** `<iswc-block-layout>` con APIs específicas. */
-interface _BlockLayoutLike extends HTMLElement {
-  sizew: string;
-  clientWidthMeasured: number;
-  fromJSON(json: unknown): this;
-  toJSON(): unknown;
-  html2json(): unknown;
-}
 
+import type { _BlockLayoutLike } from "./block-layout.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 

@@ -13,6 +13,7 @@ import {
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 import { computePosition } from '../_shared/position.js';
+import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, WindowWithEyeDropper } from "./color-picker.schemas.js";
 /**
  * <iswc-color-picker> — Selector de color form-associated.
  *
@@ -27,10 +28,6 @@ import { computePosition } from '../_shared/position.js';
  */
 
 // Declaración local de la API EyeDropper (Chromium ≥95, no está en lib.dom).
-interface EyeDropperOpenResult { sRGBHex: string }
-interface EyeDropperInterface { open(): Promise<EyeDropperOpenResult> }
-interface EyeDropperConstructor { new(): EyeDropperInterface }
-interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
 
 (() => {
   const DEFAULT_VALUE = '#808080';
@@ -79,7 +76,7 @@ interface WindowWithEyeDropper { EyeDropper?: EyeDropperConstructor }
     return /^[0-9a-f]{6}$/.test(s) ? `#${s}` : '';
   }
 
-  class IswcColorPicker extends ElementBase {
+  class IswcColorPicker extends ElementBase {
 
     static formAssociated = true;
     static get observedAttributes(): string[] { return [...OBSERVED, 'radius', 'border-color', 'bg', 'text-color', 'focus-color']; }

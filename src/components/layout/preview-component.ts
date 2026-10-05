@@ -21,6 +21,7 @@ import type {
   ISComponentPreviewLike,
   PreviewMountContext,
 } from '../../previews/_kit/types.d.ts';
+import type { DrawerEl } from "./preview-component.schemas.js";
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
 const COMPACT_QUERY = '(max-width: 900px)';
@@ -38,11 +39,6 @@ TEMPLATE.innerHTML = /* html */ `
   <iswc-drawer class="toc-drawer" part="toc-drawer" placement="end" light-dismiss
              label="Índice"></iswc-drawer>
 `;
-
-interface DrawerEl extends HTMLElement {
-  show?(): void;
-  hide?(): void;
-}
 
 class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
 

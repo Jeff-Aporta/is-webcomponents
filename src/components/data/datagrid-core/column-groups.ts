@@ -25,6 +25,7 @@
 
 import { ColumnType, FilterType } from './types.js';
 import type { AlignName, ColumnDef, ColumnTypeName, SortDirName } from './types.js';
+import type { IspColumn, IspColumnDef, GroupNode, LeafNode, TreeNode } from "./column-groups.schemas.js";
 
 let uid = 0;
 const nextId = () => `c${(uid++).toString(36)}${Math.random().toString(36).slice(2, 6)}`;
@@ -64,54 +65,14 @@ export function ispFilterFor(type: string, mode: 'lista'|'filtro') {
  * Nodo de `TGridColumn` tal y como lo manda ISP. Es un arbol: los nodos con
  * `children` son grupos de cabecera y el resto son columnas.
  */
-export type IspColumn = {
-  children?: Record<string, IspColumn>;
-  caption?: string;
-  align?: AlignName;
-  type?: string;
-  size?: number;
-  visible?: boolean;
-  editable?: boolean;
-  group?: boolean;
-  filter?: boolean;
-  orderby?: SortDirName;
-  currency?: string;
-  decimals?: number;
-  dateFormat?: string;
-  format?: (v: unknown) => string;
-  valueGetter?: (row: Record<string, unknown>) => unknown;
-  /** Resolucion asincrona del valor (espejo de ISP). */
-  GetDisplayValue?: (row: Record<string, unknown>) => Promise<unknown>;
-  /** Render del texto ya resuelto (espejo de ISP). */
-  GetDisplayText?: (row: Record<string, unknown>) => string;
-};
 
 /**
  * Lo que produce la traduccion: la columna del motor mas los campos que solo
  * entiende la capa ISP. Se declara aparte de `ColumnDef` porque esos extras no
  * son parte del contrato del motor y no deben colarse en el.
  */
-export type IspColumnDef = Omit<ColumnDef, 'type'> & {
-  /**
-   * ISP maneja tipos que el motor no conoce (`currency`, `dateTime`): se
-   * ensancha aqui en vez de meterlos en el vocabulario del motor, que no sabe
-   * tratarlos.
-   */
-  type?: ColumnTypeName | 'currency' | 'dateTime';
-  format?: (v: unknown) => string;
-  currency?: string;
-  decimals?: number;
-  dateFormat?: string;
-  sort?: SortDirName;
-  GetDisplayValue?: (row: Record<string, unknown>) => Promise<unknown>;
-  GetDisplayText?: (row: Record<string, unknown>) => string;
-};
-
-export type GroupNode = { kind: 'group'; groupId: string; headerName: string; align: AlignName; children: TreeNode[]; };
-export type LeafNode = { kind: 'leaf'; colId: string; headerName: string; };
 
 /** Discriminada por `kind`. */
-export type TreeNode = GroupNode | LeafNode;
 
 /** Traduce el `TGridColumn` de ISP a defs planas mas el arbol de grupos. */
 export function toColumnDefs(

@@ -1,5 +1,6 @@
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import type { ChartCtx } from './chart.js';
+import type { FunnelBand } from "./marks-funnel.schemas.js";
 
 /**
  * Marca de embudo (funnel): bandas horizontales apiladas, cada una centrada
@@ -7,7 +8,6 @@ import type { ChartCtx } from './chart.js';
  */
 
 /** Paso del embudo: ratio respecto al primero y caída porcentual respecto al anterior. */
-export type FunnelBand = { index: number; ratio: number; dropPct: number };
 
 /**
  * Calcula la proporción y la caída de cada paso del embudo.

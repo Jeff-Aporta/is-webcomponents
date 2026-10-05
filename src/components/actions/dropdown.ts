@@ -4,9 +4,9 @@ import { computePosition, PLACEMENTS } from '../_shared/position.js';
 import './dropdown-item.js';
 import '../layout/divider.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import type { Placement, DropdownItemEl } from "./dropdown.schemas.js";
 
 /** Colocacion del panel respecto al trigger. `position.js` es la fuente. */
-type Placement = (typeof PLACEMENTS)[number];
 
 /**
  * Forma minima de `<iswc-dropdown-item>` que este componente consume.
@@ -15,7 +15,6 @@ type Placement = (typeof PLACEMENTS)[number];
  * cosas de aqui) y el bundle los trata como modulos externos. Declarar solo lo
  * que se usa es ademas lo que documenta el acoplamiento real entre los dos.
  */
-type DropdownItemEl = HTMLElement & { disabled?: boolean; type?: string; closeSubmenu?: () => void; };
 
 /**
  * <iswc-dropdown> — menú anclado a un trigger.

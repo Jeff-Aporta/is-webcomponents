@@ -11,17 +11,16 @@
 // reprocesos de swimlane) se colapsaba a su primer punto cuando había ≥2
 // aristas etiquetadas y las líneas desaparecían del render.
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
-import { RunSchema, type Run } from './diagram-edge-spread.schema.js';
+import { RunSchema, type Run } from './diagram-edge-spread.schemas.js';
+import type { SpreadPoint, SpreadItem } from "./diagram-edge-spread.schemas.js";
 
 function rangesOverlap(a0: number, a1: number, b0: number, b1: number, min: number = 12): boolean {
   return Math.min(a1, b1) - Math.max(a0, b0) > min;
 }
 
 /** Punto en píxeles. */
-type SpreadPoint = { x: number; y: number };
 
 /** Item que `spreadAxis` recibe: una arista y sus puntos. */
-type SpreadItem = { e: { path: string }; pts: SpreadPoint[] };
 
 function toPath(pts: SpreadPoint[]): string {
   if (!pts.length) return '';

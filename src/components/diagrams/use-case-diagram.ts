@@ -18,6 +18,7 @@ import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import type { NodeNodeEntry, LinkNodeEntry } from "./use-case-diagram.schemas.js";
 
 /**
  * <iswc-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.
@@ -37,16 +38,8 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  */
 
 /** Nodo (caso o actor) cacheado en el SVG para aplicar hover sin reconstruir. */
-interface NodeNodeEntry {
-  n: UseCaseLayoutActor | UseCaseLayoutCase;
-  g: SVGGElement;
-}
 
 /** Relación cacheada en el SVG para aplicar hover sin reconstruir. */
-interface LinkNodeEntry {
-  l: UseCaseLayoutLink;
-  g: SVGGElement;
-}
 
 /** Monigote UML: cabeza, tronco, brazos y piernas dentro de la caja del actor. */
 function stickFigure(

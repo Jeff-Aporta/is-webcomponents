@@ -12,38 +12,16 @@ import {
 } from '../_shared/isp-record-utils.js';
 
 /** Catálogo genérico (subset mínimo que necesitamos del controller). */
-interface _CatalogLike {
-  primaryKeys?: string[];
-  ColumnsBtnRef?: string[] | (() => string[]);
-  multiSelect?: boolean;
-  Lista?: (opts: { pagina?: number; qregistros?: number; filtro?: { sql?: string } }) => Promise<{ datos?: unknown[] | { [Symbol.iterator](): Iterator<unknown> } } | null | undefined>;
-  refreshGrid?: () => Promise<void> | void;
-}
 
 /** Columna y datos arbitrarios que devuelve el controller. */
-import { _RecordLikeSchema, type _RecordLike } from "./btn-ref.schema.js";
+import { _RecordLikeSchema, type _RecordLike } from "./btn-ref.schemas.js";
+import type { _CatalogLike, _FieldLike, _DialogLike, _CatalogEl } from "./btn-ref.schemas.js";
 
 /** Input field con attrs custom (label/name/value/etc.). */
-interface _FieldLike extends HTMLElement {
-  value?: unknown;
-  label?: unknown;
-  name?: unknown;
-  required?: unknown;
-  readonly?: unknown;
-}
 
 /** Diálogo con show/hide. */
-interface _DialogLike extends HTMLElement {
-  show?: () => void;
-  hide?: () => void;
-}
 
 /** Catálogo embebido con toggleAttribute y refresh. */
-interface _CatalogEl extends HTMLElement {
-  controller?: _CatalogLike;
-  refreshGrid?: () => Promise<void> | void;
-  selectionData?: _RecordLike[];
-}
 /**
  * <iswc-btn-ref> — port de `src/lib/form/BtnRef.svelte` (ISP).
  *

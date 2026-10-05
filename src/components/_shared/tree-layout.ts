@@ -6,25 +6,14 @@
  */
 
 /** Redondea al múltiplo de 8px más cercano (misma rejilla que node-link-layout). */
+import type { RawNode, TreeNode, TreeMeasure, LayoutEntry, LayoutTreeOpts, PositionedTreeNode, LayoutTreeResult, LayoutRadialOpts, LayoutRadialResult, SquarifyItem, SquarifyResult } from "./tree-layout.schemas.js";
 function snap8(v: number): number {
   return Math.round(v / 8) * 8;
 }
 
 /** Nodo crudo del que parte `buildTree`. */
-export type RawNode = {
-  id: string | number;
-  parent?: string | number | null;
-  children?: never; // se reconstruye dentro de `buildTree`.
-  [key: string]: unknown;
-};
 
 /** Nodo del árbol construido por `buildTree`. */
-export type TreeNode = {
-  id: string;
-  parent?: string | number | null;
-  children: TreeNode[];
-  [key: string]: unknown;
-};
 
 /**
  * Arma un árbol a partir de un array plano `[{id, parent, ...}]`.
@@ -77,24 +66,9 @@ export function buildTree(nodes: readonly RawNode[]): TreeNode {
 
 /* ───────────────────────── layoutTree (tidy tree) ───────────────────────── */
 
-export type TreeMeasure = (node: TreeNode) => { w: number; h: number };
-
 const DEFAULT_MEASURE: TreeMeasure = () => ({ w: 80, h: 32 });
 
 /** Entrada intermedia del layout tidy: contiene su subárbol de hijos. */
-type LayoutEntry = {
-  id: string;
-  depth: number;
-  w: number;
-  h: number;
-  children: LayoutEntry[];
-  extent: number;
-  childrenExtent: number;
-  crossStart: number;
-  // Solo los usa layoutRadialTree (opcional):
-  leaves?: number;
-  angle?: number;
-};
 
 /** Construye la lista plana de entradas de layout (depth, tamaño medido, hijos). */
 function flattenForLayout(root: TreeNode, measure?: TreeMeasure): { entries: LayoutEntry[]; rootEntry: LayoutEntry | null } {
@@ -115,21 +89,6 @@ function flattenForLayout(root: TreeNode, measure?: TreeMeasure): { entries: Lay
   const rootEntry = build(root, 0);
   return { entries, rootEntry };
 }
-
-export type LayoutTreeOpts = {
-  direction?: 'LR' | 'RL' | 'TB' | 'BT';
-  levelGap?: number;
-  siblingGap?: number;
-  measure?: TreeMeasure;
-};
-
-export type PositionedTreeNode = { id: string; x: number; y: number; w: number; h: number; depth: number };
-
-export type LayoutTreeResult = {
-  nodes: PositionedTreeNode[];
-  width: number;
-  height: number;
-};
 
 /**
  * Layout de árbol "tidy" (estilo Reingold–Tilford simplificado): reserva por
@@ -237,19 +196,6 @@ export function layoutTree(root: TreeNode, opts: LayoutTreeOpts = {}): LayoutTre
 }
 
 /* ───────────────────────── layoutRadialTree ───────────────────────── */
-
-export type LayoutRadialOpts = {
-  radiusStep?: number;
-  measure?: TreeMeasure;
-};
-
-export type LayoutRadialResult = {
-  nodes: PositionedTreeNode[];
-  width: number;
-  height: number;
-  cx: number;
-  cy: number;
-};
 
 /**
  * Layout radial: anillos concéntricos por profundidad, ángulo repartido
@@ -363,10 +309,8 @@ function worst(rowAreas: readonly number[], rowSum: number, shortSide: number): 
 }
 
 /** Item crudo del squarify: id + valor numérico. */
-export type SquarifyItem = { id: string | number; value: number };
 
 /** Rectángulo teselado por squarify. */
-export type SquarifyResult = { id: string | number; value: number; x: number; y: number; w: number; h: number };
 
 /**
  * Treemap "squarified" (Bruls/Huizing/van Wijk): tesela exactamente la caja

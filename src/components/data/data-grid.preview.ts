@@ -1,52 +1,8 @@
 import { paint } from '../_shared/highlight-code.js';
 import type { ColumnDef, Row } from '../_shared/grid-types.js';
+import type { DataGridElement } from "./data-grid.preview.schemas.js";
 
 /** El componente `iswc-data-grid` visto desde fuera: HTMLElement con API extendida. */
-type DataGridElement = HTMLElement & {
-  columns: ColumnDef[];
-  rows: Row[];
-  pinnedRows: { top: Row[]; bottom: Row[] };
-  sortModel: Array<{ field: string; sort: string | null }>;
-  filterModel: { items: Array<{ field?: string; operator?: string; value?: unknown }>; logicOperator: string };
-  quickFilterValue: string;
-  columnVisibilityModel: Record<string, boolean>;
-  pinnedColumns: { left: string[]; right: string[] };
-  columnOrder: string[];
-  columnGroupingModel: Array<Record<string, unknown>>;
-  rowGroupingModel: string[];
-  aggregationModel: Record<string, string>;
-  pivotModel: { rows: string[]; columns: string[]; values: Array<{ field: string; fn: string }> } | null;
-  listViewColumn: Partial<ColumnDef> | null;
-  paginationModel: { page: number; pageSize: number };
-  rowSelectionModel: unknown[];
-  selectedRows: Row[];
-  selectedIndices: number[];
-  cellSelectionModel: { start: { id: unknown; field: string }; end: { id: unknown; field: string } } | null;
-  hooks: Record<string, unknown>;
-  density: string;
-  editMode: 'cell' | 'row';
-  listView: boolean;
-  loading: boolean;
-  setSortModel(m: Array<{ field: string; sort: string | null }>): void;
-  setFilterModel(m: { items?: Array<{ field?: string; operator?: string; value?: unknown }>; logicOperator?: string }): void;
-  pinColumn(f: string, side: 'left' | 'right' | null): void;
-  autosizeColumns(): void;
-  setColumnVisibility(f: string, v: boolean): void;
-  setRowGroupingModel(m: string[]): void;
-  setDensity(v: string): void;
-  expandAll(): void;
-  collapseAll(): void;
-  setQuickFilter(v: string): void;
-  setPage(page: number): void;
-  setPageSize(size: number): void;
-  selectAll(v: boolean): void;
-  copySelectionToClipboard(): string;
-  undo(): void;
-  redo(): void;
-  exportDataAsCsv(opts?: { fileName?: string }): void;
-  exportDataAsExcel(opts?: { fileName?: string }): void;
-  exportDataAsPrint(): void;
-};
 
 /**
  * Behavior migrado desde HTML inline de iswc-data-grid.

@@ -3,12 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-
-interface CellClickDetail {
-  row: string;
-  col: string;
-  value: unknown;
-}
+import type { CellClickDetail } from "./pivot-table.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

@@ -13,25 +13,8 @@
  * No commitear cambios aquí sin correr `deno task test` — el guardián rompe el
  * build si una ruta apunta a un archivo inexistente.
  */
-export interface ComponentManifestItem {
-  /** Tag HTML del custom element (siempre `is-*`). */
-  tag: string;
-  /** Título legible para el nav y los headers de la galería. */
-  title: string;
-  /** Categoría manifest. Define la carpeta de bundle CDN y el orden del nav. */
-  category: string;
-  /** Origen del componente (`isp` = primitiva portada de ISP-SvelteComponents). Opcional. */
-  origin?: string;
-  /** Path al módulo JS/TS, relativo a `<root>/src/previews/<categoria>/`. */
-  script: string;
-  /** Path al CSS, relativo a `<root>/src/previews/<categoria>/`. Opcional. */
-  style?: string;
-  /** Path al preview JSON bajo `<root>/src/previews/`. Opcional. */
-  page?: string;
-  /** `true` si el módulo no es un custom element sino utilidades (`iswc-ui`). */
-  module?: boolean;
-}
 
+import type { ComponentManifestItem } from "./manifest.schemas.js";
 const manifest: ComponentManifestItem[] = [
   // isp — primitivas portadas de ISP-SvelteComponents (la librería Svelte de
   // ContaPyme). El orden del nav no sale de aquí sino de `categoryMeta` en

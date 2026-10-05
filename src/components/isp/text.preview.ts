@@ -4,22 +4,10 @@
  */
 
 /** `<iswc-text>` con `color`, `mix`, `mixWith`, `lines`. */
-interface _TextLike extends HTMLElement {
-  color: string | null;
-  mix: string | null;
-  mixWith: string | null;
-  lines: number;
-}
 
 /** Input/select con `value`/`checked`/`disabled` y `textContent`. */
-interface _InputLike {
-  value: string;
-  checked: boolean;
-  disabled: boolean;
-  textContent: string | null;
-  addEventListener(type: string, listener: EventListener): void;
-}
 
+import type { _TextLike, _InputLike } from "./text.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const el = root.querySelector<HTMLElement>('#txLive') as _TextLike | null;

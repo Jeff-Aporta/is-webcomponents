@@ -37,22 +37,6 @@
  * iswc-palette-selector y cualquier popup que necesite el patrón "abrir →
  * escuchar Escape/fuera/scroll → cerrar y limpiar".
  */
-export interface PopupDismissOpciones {
-  /** Escape pulsado. */
-  onEscape?: () => void;
-  /** Cualquier tecla, para navegación propia del panel (flechas). Comparte el
-   *  mismo listener que `onEscape`. */
-  onKeydown?: (e: KeyboardEvent) => void;
-  /** pointerdown fuera del host. */
-  onOutside?: () => void;
-  /** scroll o resize. Se llama como mucho una vez por frame. */
-  onReposition?: () => void;
-  /** scroll en crudo, con el evento y sin agrupar por frame. Lo necesita
-   *  quien CIERRA al hacer scroll en vez de recolocarse. */
-  onScroll?: (e: Event) => void;
-  /** Congela el scroll del documento mientras esté enganchado. */
-  scrollLock?: boolean;
-}
 
 /**
  * @param host  El componente dueño del popup. Se usa para saber qué es
@@ -61,6 +45,7 @@ export interface PopupDismissOpciones {
  *              de fuera).
  * @returns `{ attach, detach, get attached() }`
  */
+import type { PopupDismissOpciones } from "./popup-dismiss.schemas.js";
 export function createPopupDismiss(host: HTMLElement, opciones: PopupDismissOpciones = {}) {
   const {
     onEscape,

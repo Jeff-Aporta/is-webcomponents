@@ -10,45 +10,11 @@
  */
 
 import type { ReporteAuditoria, Hallazgo, Severidad } from './types.js';
+import type { ReporteJson, ReporteJsonComponente } from "./reporter.schemas.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // JSON: wrapper estable para integraciones.
 // ─────────────────────────────────────────────────────────────────────────────
-
-export interface ReporteJson {
-  /** Versión del esquema de salida. */
-  schema: 'iswc-audit/v1';
-  /** Identificador de la corrida (timestamp). */
-  corridaId: string;
-  /** ISO inicio. */
-  inicio: string;
-  /** ISO fin. */
-  fin: string;
-  /** Duración en ms. */
-  duracionMs: number;
-  /** Conteo por severidad. */
-  conteo: Record<Severidad, number>;
-  /** Total de componentes auditados. */
-  total: number;
-  /** Resumen ejecutivo: ok / warning / fail. */
-  estado: { ok: number; warning: number; fail: number };
-  /** Componentes. */
-  componentes: ReporteJsonComponente[];
-  /** Errores del motor. */
-  erroresMotor: Hallazgo[];
-}
-
-interface ReporteJsonComponente {
-  tag: string;
-  titulo: string;
-  categoria: string;
-  estado: 'ok' | 'warning' | 'fail';
-  rutaJson: string;
-  rutaModulo?: string;
-  conteo: Record<Severidad, number>;
-  hallazgos: Hallazgo[];
-  metricas?: Record<string, number | string>;
-}
 
 /** Serializa el reporte a JSON estable. */
 export function aJson(reporte: ReporteAuditoria): ReporteJson {

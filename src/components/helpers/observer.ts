@@ -1,4 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
+import type { ObserverType } from "./observer.schemas.js";
 
 /**
  * <iswc-observer type="…"> — Web Component genérico para envolver
@@ -63,8 +64,6 @@ const OBSERVED = [
   // mutation
   'attr', 'child-list', 'character-data',
 ];
-
-export type ObserverType = 'intersection' | 'mutation' | 'resize';
 
 class ObserverElement extends HTMLElement {
   static get observedAttributes(): string[] { return OBSERVED; }

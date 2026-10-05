@@ -22,54 +22,16 @@
  * }
  */
 
+import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeMarkInput, CodeDocument, CodeDocOpts, CodeDocumentInput } from "./code-model.schemas.js";
 export const CODE_DOC_SCHEMA = 'iswc-code-doc/v1';
 
-export type CodeMarkKind = 'highlight' | 'tooltip' | 'message';
-export type CodeMarkTone = 'error' | 'warning' | 'info' | 'success' | 'neutral';
-
 /** Anotación externa sobre el texto (highlight / tooltip / message). */
-export type CodeMark = {
-  id: string;
-  from: number;
-  to: number;
-  kind: CodeMarkKind;
-  tone: CodeMarkTone;
-  message?: string;
-  title?: string;
-  body?: string;
-  className?: string;
-};
 
 /** Forma cruda (algunos campos faltantes) de un mark entrante. */
-type CodeMarkInput = {
-  id?: unknown;
-  from?: unknown;
-  to?: unknown;
-  kind?: unknown;
-  tone?: unknown;
-  message?: unknown;
-  title?: unknown;
-  body?: unknown;
-  className?: unknown;
-};
 
 /** Forma normalizada del documento round-trippeable. */
-export type CodeDocument = {
-  $schema: string;
-  lang: string;
-  value: string;
-  marks: CodeMark[];
-  format?: object;
-  theme?: object;
-};
 
 /** Opciones de `code2json` (texto → documento). */
-export type CodeDocOpts = {
-  lang?: string;
-  marks?: readonly unknown[];
-  format?: object;
-  theme?: object;
-};
 
 const VALID_KINDS: ReadonlySet<string> = new Set<CodeMarkKind>(['highlight', 'tooltip', 'message']);
 const VALID_TONES: ReadonlySet<string> = new Set<CodeMarkTone>(['error', 'warning', 'info', 'success', 'neutral']);
@@ -140,14 +102,6 @@ export function json2code(doc: CodeDocument | string | null | undefined): string
 }
 
 /** Forma cruda de un doc entrante (al validar JSON.parse). */
-type CodeDocumentInput = {
-  $schema?: unknown;
-  value?: unknown;
-  lang?: unknown;
-  marks?: unknown;
-  format?: unknown;
-  theme?: unknown;
-};
 
 export function parseCodeDocument(raw: unknown): CodeDocument | null {
   if (raw == null || raw === '') return null;

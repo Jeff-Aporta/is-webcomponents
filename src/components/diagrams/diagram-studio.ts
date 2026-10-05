@@ -5,15 +5,7 @@
  * Edit mode: iswc-split-panel + iswc-tab-group + iswc-code + iswc-share-button.
  */
 
-export interface DiagramKind {
-  kind: string;
-  title: string;
-  tag: string;
-  file: string;
-  preview: string;
-  editor?: { tag: string; file: string };
-}
-
+import type { DiagramKind, Host, CodeEl, ShareEl } from "./diagram-studio.schemas.js";
 export const DIAGRAM_KINDS: readonly DiagramKind[] = [
   { kind: 'flowchart', title: 'Flujo', tag: 'iswc-flowchart', file: 'flowchart', preview: 'flowchart.json' },
   { kind: 'sequence', title: 'Secuencia', tag: 'iswc-sequence-diagram', file: 'sequence-diagram', preview: 'sequence-diagram.json' },
@@ -69,10 +61,6 @@ export function buildShareUrl(pageHref: string, kind: string, value: unknown): s
   url.searchParams.set('json', encodeJsonParam(value));
   return url.href;
 }
-
-type Host = HTMLElement & { payload?: unknown; exportJson?: () => string };
-type CodeEl = HTMLElement & { value: string };
-type ShareEl = HTMLElement & { url: string; shareTitle: string; text: string };
 
 function moduleHref(stem: string): string {
   const name = import.meta.url.includes('.min.js') ? `${stem}.min.js` : `${stem}.ts`;

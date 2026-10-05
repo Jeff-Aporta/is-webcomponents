@@ -1,4 +1,5 @@
 import { stripIconTokensPlain } from './tk-icon-inline.js';
+import type { RichTextSegment } from "./tk-rich-text.schemas.js";
 
 const HTML_TAG = /(<[^>]+>)/g;
 
@@ -11,7 +12,6 @@ export function esc(s: string | number | null | undefined): string {
 }
 
 /** Segmento que produce `splitRichTextSegments`. */
-export type RichTextSegment = { type: 'html' | 'text'; value: string };
 
 /** Parte una cadena en texto plano y etiquetas HTML (inline o bloque). */
 export function splitRichTextSegments(raw: string | null | undefined): RichTextSegment[] {

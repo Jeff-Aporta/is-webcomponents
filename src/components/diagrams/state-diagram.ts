@@ -20,6 +20,7 @@ import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./state-diagram.schemas.js";
 
 /**
  * <iswc-state-diagram> — diagrama de estados en SVG, sin Mermaid.
@@ -38,24 +39,10 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
  */
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
-interface TurtleState {
-  playing: boolean;
-  idx: number;
-  total: number;
-  replay: number;
-}
 
 /** Nodo cacheado en el SVG para aplicar hover sin reconstruir el DOM. */
-interface NodeNodeEntry {
-  n: StateLayoutNode;
-  g: SVGGElement;
-}
 
 /** Transición cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
-interface EdgeNodeEntry {
-  e: StateLayoutTransition;
-  g: SVGGElement;
-}
 
 /** Contorno SVG de un estado según su tipo. x/y = esquina superior izquierda. */
 function statePath(kind: string, x: number, y: number, w: number, h: number): string {

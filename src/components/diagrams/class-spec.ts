@@ -17,6 +17,7 @@ import type {
   ClassRelationKind,
   DiagramGroup,
 } from './diagram-types.js';
+import type { Point2D } from "./class-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de clases (sin Mermaid).
@@ -210,8 +211,6 @@ export function classSpecToJson(spec: ClassSpec): Record<string, unknown> {
 /* ───────────────────────── layout ───────────────────────── */
 
 const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
-
-interface Point2D { x: number; y: number; }
 
 /** Desplaza un punto hacia afuera del nodo, en la dirección de su lado. */
 function stepOut(p: Point2D, side: string, d: number): Point2D {

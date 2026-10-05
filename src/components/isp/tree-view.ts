@@ -15,47 +15,9 @@ import { TreeRowViewAdapter } from './_shared/tree-view/adapter.js';
 import { TreeCustomsBase } from './_shared/tree-view/customs-base.js';
 import { paintForest } from './_shared/tree-view/render-rows.js';
 import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './_shared/tree-view/_types.js';
+import type { _AdapterLike, _DrawerLike, _ModalDeleteLike, _DialogLike } from "./tree-view.schemas.js";
 
 /** Subset del adapter que `IswcTreeView` consume (no necesita el tipo completo). */
-interface _AdapterLike {
-  treeRootId: string;
-  _domRoot?: HTMLElement | null;
-  customs?: TreeCustoms | null;
-  menu?: TreeActionEntry[];
-  moreMenu?: TreeActionEntry[];
-  currentDragFlatPath: string;
-  record: TRecord | null;
-  rootNodes: TNode[];
-  decorateHotkeyTitles(actions: TreeActionEntry[]): TreeActionEntry[];
-  buildCustomsRuntime(): unknown;
-  notifySelect: () => void;
-  isPendingInsertPath?: (flatPath: string) => boolean;
-  isProtected: boolean;
-  canMutate: boolean;
-  onbranchexpand?: () => void;
-  walkAncestors(node: TNode): TNode[];
-  getRecordSecurityCode(node: TNode): string;
-  showDelete(obj: unknown): void;
-  closeEditForm?(): void;
-  clearDragOverlays(): void;
-  clearDropIndicators(): void;
-  confirmProtectionRelease(): void;
-  historyCanRedo: boolean;
-  isProtectionPromptOpen: boolean;
-  historyRedoAll(): void;
-  dismissProtectionPrompt(): void;
-  ontreeoutsidepointerdown(e: Event): void;
-  confirmDelete(value: string): Promise<boolean>;
-  onrequestopendrawer?: (mode: string) => void;
-  onrequestclosedrawer?: () => void;
-  onrequesteditshow?: (node: TNode, mode: string) => void;
-  onrequestdelete?: (node: TNode) => void;
-  onError?: (msg: string) => void;
-  addUiListener(fn: () => void): () => void;
-  runCustomsPreSubmit?(): unknown;
-  lastNodesRef: unknown;
-  onstateupdate(state: Record<string, unknown>): void;
-}
 
 export { TreeRowViewAdapter, TreeRowViewAdapter as TreeAdapter, TreeCustomsBase };
 export { objRootsToNodes, TreeNode, groupedWithSeparators } from './_shared/tree-view/tree-data.js';
@@ -108,25 +70,10 @@ TEMPLATE.innerHTML = /* html */ `
 const OBSERVED = ['readonly', 'draggable', 'disabled', 'label-field', 'helper-field'];
 
 /** Drawer con show/hide y label. */
-interface _DrawerLike extends HTMLElement {
-  show?: () => void;
-  hide?: () => void;
-  label?: string;
-}
 
 /** Modal de confirmación con loading. */
-interface _ModalDeleteLike extends HTMLElement {
-  show?: () => void;
-  hide?: () => void;
-  loading?: boolean;
-  entity?: string;
-}
 
 /** Diálogo de protección. */
-interface _DialogLike extends HTMLElement {
-  show?: () => void;
-  hide?: () => void;
-}
 
 class IswcTreeView extends HTMLElement {
   static get observedAttributes(): string[] { return OBSERVED; }

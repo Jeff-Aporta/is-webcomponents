@@ -4,38 +4,6 @@ import { resolveGanttSpec, computeGanttLayout } from './gantt-spec.js';
 import type { GanttLayout, GanttSpec } from './gantt-spec.js';
 // Tipos internos del spec (no exportados) que el renderer necesita; los
 // redefinimos localmente para no tocar la firma del spec.
-interface GanttRow {
-  id: string;
-  label: string;
-  y: number;
-  h: number;
-  milestone: boolean;
-  cx?: number;
-  cy?: number;
-  size?: number;
-  x: number;
-  w?: number;
-  progress?: number;
-  hue?: number;
-  group?: string;
-  description?: string;
-}
-interface GanttArrow {
-  id: string;
-  from: string;
-  to: string;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowAngle: number;
-  hue?: number;
-}
-interface GanttTick {
-  ms: number;
-  label: string;
-  x: number;
-  major: boolean;
-}
 import { shapePath } from './flowchart-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { PathTurtle } from '../_shared/path-turtle.js';
@@ -48,6 +16,7 @@ import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import type { GanttRow, GanttArrow, GanttTick, TurtleState, RowNodeEntry, ArrowNodeEntry } from "./gantt.schemas.js";
 
 /**
  * <iswc-gantt> — diagrama de Gantt en SVG, sin Mermaid.
@@ -70,24 +39,10 @@ import { svgArrowHead } from '../_shared/diagram-arrow.js';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
-interface TurtleState {
-  playing: boolean;
-  idx: number;
-  total: number;
-  replay: number;
-}
 
 /** Fila cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
-interface RowNodeEntry {
-  r: GanttRow;
-  g: SVGGElement;
-}
 
 /** Flecha cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
-interface ArrowNodeEntry {
-  a: GanttArrow;
-  g: SVGGElement;
-}
 
 class IswcGantt extends DiagramElementBase {
   #turtle: PathTurtle | null = null;

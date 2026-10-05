@@ -1,14 +1,5 @@
 import { prettyHtml, repaint } from '../_shared/highlight-code.js';
-
-interface CodeLike extends HTMLElement {
-  value: string;
-  lang: string;
-}
-
-interface DescribePart {
-  cls: string;
-  text: string;
-}
+import type { CodeLike, DescribePart } from "./mutation-observer.preview.schemas.js";
 
 /**
  * Behavior migrado desde HTML inline de iswc-mutation-observer.

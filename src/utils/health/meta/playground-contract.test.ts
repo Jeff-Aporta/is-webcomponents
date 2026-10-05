@@ -1,5 +1,5 @@
 /**
- * Guardián S-PG1…S-PG3 — playground canonico + chrome sin clip.
+ * GuardiÃ¡n S-PG1â€¦S-PG3 â€” playground canonico + chrome sin clip.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -12,7 +12,7 @@ const root = join(here, '../../../..');
 
 const manText = readFileSync(join(root, 'src/manifest.ts'), 'utf8');
 const pgTs = readFileSync(join(root, 'src/components/preview/playground.ts'), 'utf8');
-const pgCss = readFileSync(join(root, 'src/components/preview/playground.css'), 'utf8');
+const pgCss = readFileSync(join(root, 'src/components/preview/playground.scss'), 'utf8');
 const controlsTs = readFileSync(join(root, 'src/components/layout/preview-controls.ts'), 'utf8');
 const galeria = readFileSync(join(root, 'specs/galeria/spec.md'), 'utf8');
 const pgSpec = readFileSync(join(root, 'specs/playground/spec.md'), 'utf8');
@@ -29,7 +29,7 @@ test('S-PG1: iswc-playground en manifest con paths preview/', () => {
 test('S-PG1: fuentes playground existen', () => {
   for (const rel of [
     'src/components/preview/playground.ts',
-    'src/components/preview/playground.css',
+    'src/components/preview/playground.scss',
     'src/components/preview/playground.json',
     'src/components/preview/playground.md',
   ]) {

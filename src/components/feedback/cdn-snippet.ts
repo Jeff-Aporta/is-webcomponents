@@ -9,7 +9,7 @@ import {
 } from '../_shared/cdn-ref.js';
 import { paint } from '../_shared/highlight-code.js';
 import { SKILL_DOCS } from '../_shared/llm-agent-prompt.js';
-import type { SkillDoc } from '../_shared/llm-agent-prompt.js';
+import type { SkillDoc } from "../_shared/llm-agent-prompt.schemas.js";
 import '../media/icon.js';
 import '../actions/button.js';
 import '../code/code.js';

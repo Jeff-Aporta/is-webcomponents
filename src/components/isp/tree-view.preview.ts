@@ -4,17 +4,7 @@ import type {
   LevelNameArgs,
   TNode,
 } from './_shared/tree-view/_types.js';
-
-interface DemoNode extends TNode {
-  iplan?: string;
-  titulo?: string;
-}
-
-interface IsTreeViewEl extends HTMLElement {
-  customs: TreeCustomsBase | null;
-  list: unknown[];
-  addEventListener(type: string, listener: EventListener): void;
-}
+import type { DemoNode, IsTreeViewEl } from "./tree-view.preview.schemas.js";
 
 class DemoCustoms extends TreeCustomsBase {
   entrie = 'contenido';

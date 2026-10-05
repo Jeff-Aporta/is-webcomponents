@@ -4,13 +4,9 @@ import '../forms/input.js';
 import '../media/icon.js';
 import '../layout/dialog.js';
 import { ElementBase } from '../../core/element-base.js';
+import type { InputLike } from "./confirm-delete.schemas.js";
 
 /** Custom input-like element con label, value, y errores. */
-interface InputLike extends HTMLElement {
-  label: string;
-  value: string;
-  maxlength: string | null;
-}
 
 /**
  * <iswc-confirm-delete> — Confirmación destructiva de tipo "escribe para confirmar".

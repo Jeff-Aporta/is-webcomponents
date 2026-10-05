@@ -21,28 +21,15 @@ import { montarControles } from '../../utils/system/controles.js';
 import { loadFichaLikeDefinition } from './ficha-bridge.ts';
 
 import type { PreviewDefinition, PreviewMountContext } from './types.d.ts';
+import type { DefinicionPreview, CtxMontaje, ModuloBehavior, ConDefinicion } from "./JsonPreview.schemas.js";
 
 /** Forma mínima de la definición (iswc-preview/v1 o ficha via sub-objeto). */
-type DefinicionPreview = {
-  tag: string;
-  category?: string;
-  $schema?: string;
-  // iswc-preview/v1: array de secciones. El bridge también acepta `sections`
-  // como objeto (modo A) — el tipo se deja flexible y el bridge hace el
-  // narrowing.
-  sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }> | Record<string, unknown>;
-  // Sub-objeto `ficha:` o `exclude:` los lee el bridge; el resto se preserva.
-  [key: string]: unknown;
-};
 
 /** Contexto de montaje (main/root pintados por el chrome). */
-type CtxMontaje = { main?: HTMLElement | null; root?: HTMLElement | null; aside?: HTMLElement | null; };
 
 /** Módulo de comportamiento opcional (behaviors/<tag>.js). */
-type ModuloBehavior = { mount?(ctx: CtxMontaje, preview: unknown): unknown; unmount?(ctx: CtxMontaje, preview: unknown): void; };
 
 /** Vista del preview con su definición (la base la expone congelada). */
-type ConDefinicion = { definition: PreviewDefinition };
 
 export class JsonPreview extends ISComponentPreview {
   #behavior: ModuloBehavior | null = null;

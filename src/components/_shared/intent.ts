@@ -15,6 +15,7 @@
  * CDN: reexportado en `helpers/ui.min.js` (`IswcUi.INTENT`, `ensureDefaultColor`, …).
  */
 
+import type { Intent } from "./intent.schemas.js";
 export const INTENT = Object.freeze([
   'brand',     // color de marca (default)
   'neutral',   // gris #888, sin tinte semántico (muted)
@@ -29,7 +30,6 @@ export const INTENT = Object.freeze([
 export const DEFAULT_INTENT = 'brand';
 
 /** Los valores validos de intencion, derivados de la lista: una sola fuente. */
-export type Intent = (typeof INTENT)[number];
 
 /**
  * Devuelve el intent si es válido, o `fallback` si no.

@@ -1,15 +1,9 @@
 import { createBtnRefController } from './controller-from-config.js';
+import type { _BtnRefLike, _SelectedDetail } from "./btn-ref.preview.schemas.js";
 
 /** `<iswc-btn-ref>` con `controller` y eventos `iswc-selected-record`. */
-interface _BtnRefLike extends HTMLElement {
-  controller?: unknown;
-  multi?: boolean;
-}
 
 /** Detalle de `iswc-selected-record`. */
-interface _SelectedDetail {
-  value?: string;
-}
 
 /**
  * Demo <iswc-btn-ref> single + multi con controller JSON (sin acciones CRUD).

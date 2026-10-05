@@ -2,6 +2,7 @@ import '../actions/button.js';
 import '../media/icon.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { setStringAttr } from '../_shared/reflect.js';
+import type { BarcodeDetectorCtor, BarcodeDetectorInstance, DetectedBarcode } from "./barcode-scanner.schemas.js";
 
 /**
  * <iswc-barcode-scanner> — BarcodeDetector sobre cámara o <img>/canvas.
@@ -21,16 +22,6 @@ import { setStringAttr } from '../_shared/reflect.js';
 
 // BarcodeDetector no está en lib.dom.d.ts (aún no es estándar en todos los
 // navegadores). Declaramos el subset que usamos para tipar el código.
-interface BarcodeDetectorCtor {
-  new (init?: { formats?: string[] }): BarcodeDetectorInstance;
-}
-interface BarcodeDetectorInstance {
-  detect(source: CanvasImageSource): Promise<DetectedBarcode[]>;
-}
-interface DetectedBarcode {
-  rawValue: string;
-  format: string;
-}
 declare global {
   interface Window {
     BarcodeDetector?: BarcodeDetectorCtor;

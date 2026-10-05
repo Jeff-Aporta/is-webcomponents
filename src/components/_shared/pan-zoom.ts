@@ -9,35 +9,8 @@
  *
  * El scale permanece estático hasta un gesto de zoom deliberado.
  */
-export interface PanZoomView {
-  scale: number;
-  x: number;
-  y: number;
-}
 
-export interface PanZoomOptions {
-  minScale?: number;
-  maxScale?: number;
-  /** Factor por tick de rueda con Ctrl. Default 1.12. */
-  zoomFactor?: number;
-  /** px mínimos antes de marcar pan (evita click→drag). Default 4. */
-  panThresholdPx?: number;
-  /** Si true, rueda sin modificador hace zoom (legacy lightbox). Default false. */
-  wheelZooms?: boolean;
-  onChange?: (view: PanZoomView) => void;
-  /** Se llama tras un pan real (para tragar el click de cierre del gesto). */
-  onPanEnd?: () => void;
-}
-
-export interface PanZoomController {
-  readonly view: PanZoomView;
-  setView(next: Partial<PanZoomView>): void;
-  zoomBy(factor: number, clientX?: number, clientY?: number): void;
-  reset(): void;
-  apply(): void;
-  destroy(): void;
-}
-
+import type { PanZoomView, PanZoomOptions, PanZoomController } from "./pan-zoom.schemas.js";
 const DEFAULTS = {
   minScale: 0.3,
   maxScale: 6,

@@ -20,38 +20,12 @@ import { hydrateMdEmbeds } from './md-hydrate.js';
 // Tipos del contrato — declarados aquí localmente (en lugar de re-exportarlos
 // desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo
 // sigue siendo la documentación canónica del consumidor externo.
-interface IsMdEditorDocument {
-  id?: string;
-  filename?: string;
-  content: string;
-  contentType?: string;
-  updatedAt?: string;
-  updatedBy?: string;
-  sizeBytes?: number;
-  meta?: Record<string, string | number | boolean | null>;
-}
-interface IsMdEditorApiConfig {
-  baseUrl?: string;
-  endpoints?: {
-    get?: string;
-    put?: string;
-    post?: string;
-    delete?: string;
-  };
-  headers?: Record<string, string> | (() => Record<string, string>);
-  token?: string | (() => string);
-  fieldMap?: Partial<Record<string, keyof IsMdEditorDocument>>;
-}
-interface IsMdEditorActions {
-  load?: () => Promise<IsMdEditorDocument | string>;
-  persist?: (doc: IsMdEditorDocument) => Promise<IsMdEditorDocument | void>;
-  delete?: (doc: IsMdEditorDocument) => Promise<void>;
-}
 import '../layout/dialog.js';
 import '../actions/button.js';
 import '../actions/copy-button.js';
 import '../forms/switch.js';
 import '../media/icon.js';
+import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./md-editor.schemas.js";
 
 /**
  * <iswc-md-editor> — preview MD + diálogo fullscreen (edición / revisión).
@@ -73,34 +47,14 @@ import '../media/icon.js';
 // No usamos `extends HTMLElement` para evitar colisiones con `open`/`matches`
 // que aparecen en distintos mixins del lib.dom; nos basta con el contrato
 // mínimo que este wrapper consume.
-type DialogElement = HTMLElement & {
-  open: boolean;
-  show(): void;
-  hide(): void;
-  showPopover?: () => void;
-  hidePopover?: () => void;
-};
 
 // ── Subset del contrato público de <iswc-switch> ────────────────────────────
-interface SwitchElement extends HTMLElement {
-  checked: boolean;
-}
 
 // ── Subset del contrato público de <iswc-copy-button> ───────────────────────
-interface CopyButtonElement extends HTMLElement {
-  value: string;
-}
 
 // ── Subset del contrato público de <iswc-textarea> (<textarea> host) ────────
-interface TextareaElement extends HTMLElement {
-  value: string;
-}
 
 // ── Forma del historial de undo/redo ──────────────────────────────────────
-interface EditorHistory {
-  past: string[];
-  future: string[];
-}
 
 (() => {
   const TOOLS: Array<{ cmd: string; icon: string; title: string } | { sep: true }> = [

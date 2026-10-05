@@ -9,6 +9,7 @@ import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { MindmapNodeKind, MmLayoutNode, MmLayoutEdge, MmLayout, NodeEntry, EdgeEntry } from "./mindmap.schemas.js";
 
 /**
  * <iswc-mindmap> — mapa mental en SVG, sin Mermaid.
@@ -26,43 +27,6 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Propiedades: payload, spec, layout
  * Eventos: iswc-render, iswc-open-viewer
  */
-
-type MindmapNodeKind = 'root' | 'branch' | 'leaf';
-interface MmLayoutNode {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  depth: number;
-  kind: MindmapNodeKind;
-  label: string;
-  icon?: string;
-  description?: string;
-  hue?: number;
-  overflow?: 'grow' | 'ellipsis' | 'shrink';
-}
-interface MmLayoutEdge {
-  id: string;
-  from: string;
-  to: string;
-  path: string;
-  hue?: number;
-  width: number;
-}
-interface MmLayout {
-  width: number;
-  height: number;
-  nodes: MmLayoutNode[];
-  edges: MmLayoutEdge[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-}
-
-interface NodeEntry { n: MmLayoutNode; g: SVGGElement; }
-interface EdgeEntry { e: MmLayoutEdge; path: SVGPathElement; }
 
 class IswcMindmap extends DiagramElementBase {
   #nodeNodes = new Map<string, NodeEntry>();

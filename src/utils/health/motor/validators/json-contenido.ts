@@ -20,7 +20,8 @@
  */
 
 import type { Hallazgo } from '../types.js';
-import { DefSchema, BloqueSchema, type Def, type Bloque } from "./json-contenido.schema.js";
+import { DefSchema, BloqueSchema, type Def, type Bloque } from "./json-contenido.schemas.js";
+import type { OpcionesContenido } from "./json-contenido.schemas.js";
 
 /** Une `string | string[] | undefined` en un string. Si es array, lo une con `\n`. */
 function asText(v: unknown): string {
@@ -29,12 +30,6 @@ function asText(v: unknown): string {
 }
 
 /** Opciones del validador de contenido. */
-export interface OpcionesContenido {
-  /** Si el tag es un módulo (helper, no custom element), el auditor
-   *  no exige que el demo contenga <iswc-*>: el behavior puede inyectar
-   *  los tags dinámicamente. */
-  esModulo?: boolean;
-}
 
 /**
  * Detecta si un bloque `demo` contiene un <script type="application/json">

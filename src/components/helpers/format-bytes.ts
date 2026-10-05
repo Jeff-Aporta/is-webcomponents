@@ -1,6 +1,7 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { resolveLocale } from '../_shared/resolve-locale.js';
+import type { ByteUnit, FormatBytesOptions } from "./format-bytes.schemas.js";
 
 /**
  * <iswc-format-bytes> — Web Component (vanilla).
@@ -19,7 +20,6 @@ import { resolveLocale } from '../_shared/resolve-locale.js';
 
 /** Unidades y multiplicadores compartidos por iswc-format-bytes e iswc-format. */
 export const BYTE_UNITS = ['byte', 'kilobyte', 'megabyte', 'gigabyte', 'terabyte', 'petabyte'] as const;
-export type ByteUnit = (typeof BYTE_UNITS)[number];
 export const BYTE_MULT: Record<ByteUnit, number> = {
   byte: 1,
   kilobyte: 1024,
@@ -35,14 +35,6 @@ export function toBytes(value: number, unit: string): number {
 }
 
 /** Opciones de `formatBytes`. */
-export interface FormatBytesOptions {
-  /** Locale BCP 47 (p.ej. 'es-CO'). Si se omite, usa el del navegador. */
-  locale?: string;
-  /** 'short' → 'KB', 'MB', …; 'long' → 'kilobytes', 'megabytes', … */
-  display?: 'short' | 'long';
-  /** Evita 0.2 MB: sube a la unidad donde el número sea ≥ 1. */
-  autofit?: boolean;
-}
 
 /**
  * Escala bytes a unidad legible y la formatea con Intl.

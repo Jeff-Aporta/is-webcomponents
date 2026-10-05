@@ -7,37 +7,14 @@
 /* -- Contratos ---------------------------------------------------------- */
 
 /** El valor de una celda lo pone el consumidor: aqui no se supone nada de el. */
-export type CellValue = unknown;
 
 /**
  * El valor tecleado en un filtro, ya preparado por `prepareFilterValue`.
  * Escalar por defecto, lista si el operador declara `multiple`, par si declara
  * `range`.
  */
-export type FilterValue = string | number | boolean | readonly (string | number)[];
 
 /** Una fila: mapa columna -> valor. */
-export type Row = Record<string, CellValue>;
-
-export type Operator = {
-  readonly value: string;
-  readonly label: string;
-  /** `false` cuando el operador no pide valor (`isEmpty`). */
-  readonly input?: boolean;
-  /** El operador toma una lista (`isAnyOf`). */
-  readonly multiple?: boolean;
-  /** El operador toma dos extremos (`between`). */
-  readonly range?: boolean;
-  /** Control con el que se pide el valor: `date`, `select`, `boolean`... */
-  readonly inputType?: string;
-  /**
-   * `f` llega con la forma que el propio operador declara arriba. Se usa
-   * sintaxis de metodo a proposito: hace el parametro bivariante, y asi cada
-   * operador declara el tipo concreto que espera (`string`, `number`, una
-   * lista) en vez de repetir el mismo estrechamiento treinta veces.
-   */
-  test(v: CellValue, f: FilterValue): boolean;
-};
 
 /**
  * Columna tal y como la declara el consumidor del grid.
@@ -47,77 +24,10 @@ export type Operator = {
  * de lo que data-grid y grid-data leen de verdad, no de la API de MUI X
  * completa, para que el tipo no prometa mas de lo que el kit soporta.
  */
-export type ColumnDef = {
-  readonly field?: string;
-  readonly type?: string;
-  readonly headerName?: string;
-  readonly description?: string;
-
-  /* Presentacion */
-  readonly align?: string;
-  readonly headerAlign?: string;
-  readonly cellClassName?: string | ((params: { value: CellValue; row: Row; id: CellValue; colDef: ColumnDef }) => string);
-  readonly headerClassName?: string;
-  readonly showTooltip?: boolean;
-  readonly width?: number;
-  readonly minWidth?: number;
-  readonly maxWidth?: number;
-  readonly flex?: number;
-  readonly colSpan?: number | ((value: CellValue, row: Row, col: ColumnDef, ctx: unknown) => number);
-
-  /* Capacidades: sin valor, manda el `type` de la columna. */
-  readonly sortable?: boolean;
-  readonly filterable?: boolean;
-  readonly editable?: boolean;
-  readonly resizable?: boolean;
-  readonly hideable?: boolean;
-  readonly groupable?: boolean;
-  readonly aggregable?: boolean;
-  readonly disableColumnMenu?: boolean;
-  /** Columna interna del grid (seleccion, detalle): no es dato del consumidor. */
-  readonly system?: boolean;
-
-  /* Valor */
-  readonly valueGetter?: (value: CellValue, row: Row, col: ColumnDef, ctx: unknown) => CellValue;
-  readonly valueFormatter?: (v: CellValue, row: Row, col: ColumnDef, ctx: unknown) => string;
-  readonly valueParser?: (v: CellValue, row: Row, col: ColumnDef) => CellValue;
-  readonly valueOptions?: readonly CellValue[];
-  readonly format?: (v: CellValue) => string;
-  readonly comparator?: Comparator;
-
-  /* Render y edicion */
-  readonly editor?: string;
-  readonly renderCell?: (params: {
-    value: CellValue;
-    row: Row;
-    id: CellValue;
-    colDef: ColumnDef;
-    field: string;
-    api?: unknown;
-    tabIndex?: number;
-    hasFocus?: boolean;
-  }) => unknown;
-  readonly renderHeader?: (params: { field: string; colDef: ColumnDef }) => unknown;
-  readonly getActions?: (params: { row: Row; id: CellValue; colDef: ColumnDef }) => readonly unknown[];
-  readonly preProcessEditCellProps?: (params: {
-    props: { value: CellValue };
-    row: Row;
-    id: CellValue;
-    field: string;
-  }) => unknown;
-
-  /* Filtrado */
-  readonly operators?: readonly Operator[];
-  readonly filterOperators?: readonly Operator[];
-};
 
 /** Comparador de ordenacion: mismo contrato que `Array.prototype.sort`. */
-export type Comparator = (a: CellValue, b: CellValue) => number;
 
-export type ColumnType = { readonly align: string; readonly headerAlign?: string; readonly comparator?: Comparator; readonly operators?: readonly Operator[]; readonly editor?: string; readonly format?: (v: CellValue) => string; readonly sortable?: boolean; readonly filterable?: boolean; readonly editable?: boolean; readonly resizable?: boolean; readonly hideable?: boolean; readonly disableColumnMenu?: boolean; readonly width?: number; };
-
-export type ColumnTypeName = keyof typeof COLUMN_TYPES;
-
+import type { CellValue, FilterValue, Row, Operator, ColumnDef, Comparator, ColumnType, ColumnTypeName, FilterRule, AggregationFn } from "./grid-types.schemas.js";
 export const LOGIC = { AND: 'and', OR: 'or' } as const;
 
 /* ── Comparadores ─────────────────────────────────────────────────────── */
@@ -375,7 +285,6 @@ export function prepareFilterValue(op: Operator | null | undefined, raw: CellVal
 }
 
 /** Fábrica del test de una regla: null si la regla está incompleta. */
-export type FilterRule = { readonly field?: string; readonly operator?: string; readonly value?: CellValue; };
 
 export function filterTest(item: FilterRule, col: ColumnDef | null | undefined): ((value: CellValue) => boolean) | null {
   const op = operatorsFor(col).find((o) => o.value === item.operator);
@@ -394,13 +303,6 @@ export function filterTest(item: FilterRule, col: ColumnDef | null | undefined):
 
 const nums = (values: readonly CellValue[]): number[] =>
   values.map(Number).filter((n) => Number.isFinite(n));
-
-export type AggregationFn = {
-  readonly label: string;
-  /** Tipos de columna que la admiten; `null` = todas. */
-  readonly types: readonly string[] | null;
-  apply(values: readonly CellValue[], type?: string): CellValue;
-};
 
 export const AGGREGATION_FNS: Record<string, AggregationFn> = {
   sum: { label: 'suma', types: ['number'], apply: (v: readonly CellValue[]) => nums(v).reduce((a, b) => a + b, 0) },

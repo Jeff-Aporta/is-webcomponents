@@ -4,11 +4,7 @@
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-interface ProgressBarEl extends HTMLElement {
-  value: number;
-  label: string;
-}
-
+import type { ProgressBarEl } from "./progress-bar.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   await customElements.whenDefined('iswc-progress-bar');

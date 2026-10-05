@@ -6,6 +6,7 @@ import { getCategoricalColors, getFillColors } from '../_shared/chart-palette.js
 import { PathTurtle } from '../_shared/path-turtle.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
 import { setStringAttr } from '../_shared/reflect.js';
+import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, DrawMarksFn, ChartCtx } from "./chart.schemas.js";
 
 /**
  * <iswc-chart> — motor de charts en SVG, sin dependencias.
@@ -28,12 +29,6 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
  * <iswc-bar-chart>, <iswc-pie-chart>, etc. lo invocan vía `window.__isDefineTypedChart`
  * como guarda de carga para registrar su tipo fijo y su `drawMarks`.
  */
-export type TypedChartFactory = ((
-  tag: string,
-  fixedType: string,
-  drawMarks: (ctx: ChartCtx) => void,
-  styleModuleUrl?: string,
-) => typeof IswcChart);
 
 declare global {
   interface Window {
@@ -57,91 +52,6 @@ const RADIAL_TYPES = new Set(['pie', 'doughnut', 'polarArea', 'radar']);
 const SLICE_TYPES = new Set(['pie', 'doughnut', 'polarArea']);
 
 // Tipos de Chart.js-compatibles que consume este componente.
-type ChartDataPoint = number | { x?: number; y: number; r?: number };
-type ChartDataset = {
-  label?: string;
-  data: ChartDataPoint[];
-  [key: string]: unknown;
-};
-type ChartConfig = {
-  type?: string;
-  data?: {
-    labels?: string[];
-    datasets?: ChartDataset[];
-  };
-  options?: Record<string, unknown>;
-};
-type LegendEntry = { label: string; index: number; hidden: boolean };
-type HitRecord = {
-  el?: Element | null;
-  x: number;
-  y: number;
-  radius?: number;
-  title?: string;
-  label?: string;
-  value?: number | string;
-  display?: string;
-  color?: string;
-  crosshair?: { x1: number; y1: number; x2: number; y2: number };
-};
-type ResolvedOptions = {
-  type: string;
-  horizontal: boolean;
-  stacked: boolean;
-  gridMode: string | null;
-  min: number | null;
-  max: number | null;
-  beginAtZero: boolean;
-  animate: boolean;
-  tooltip: boolean;
-  legendDisplay: boolean | null;
-  legendPosition: string;
-  title: string | null;
-  xLabel: string | null;
-  yLabel: string | null;
-  doughnutRatio: number | null;
-};
-type DrawMarksFn = ((ctx: ChartCtx) => void) & {
-  domainValues?: (datasets: ChartDataset[], labels: string[], opts: ResolvedOptions) => number[];
-};
-
-type ChartCtx = {
-  svg: HTMLElement;
-  group: SVGGElement;
-  plot: { x: number; y: number; width: number; height: number };
-  width: number;
-  height: number;
-  data: { labels: string[]; datasets: ChartDataset[] };
-  sliceMask: boolean[] | null;
-  colors: string[];
-  fills: string[];
-  text: string;
-  grid: string;
-  surface: string;
-  style: {
-    barRadius: number;
-    barGap: number;
-    lineWidth: number;
-    pointRadius: number;
-    sliceGap: number;
-  };
-  opts: ResolvedOptions;
-  fmt: (v: number) => string;
-  addHit: (hit: HitRecord) => void;
-  scaleLinear: typeof scaleLinear;
-  scaleBand: typeof scaleBand;
-  niceTicks: typeof niceTicks;
-  drawMarks?: DrawMarksFn | null;
-  radial?: { cx: number; cy: number; rMax: number; innerRatio: number };
-  numeric?: boolean;
-  xScale?: (v: number) => number;
-  yScale?: (v: number) => number;
-  band?: { step: number; bandwidth: number; start: (i: number) => number };
-  vScale?: (v: number) => number;
-  vDomain?: [number, number];
-  horizontal?: boolean;
-  pt?: (c: number, v: number) => { x: number; y: number };
-};
 
 /** drawMarks por tipo — lo llenan los elementos tipados; permite <iswc-chart type="..."> genérico. */
 const MARK_REGISTRY: Record<string, (ctx: ChartCtx) => void> = Object.create(null) as Record<string, (ctx: ChartCtx) => void>;
@@ -171,7 +81,7 @@ function isNumericXY(datasets: ChartDataset[]): boolean {
   return !!first && typeof first === 'object' && 'x' in first;
 }
 
-class IswcChart extends withStyleAttrs(HTMLElement) {
+class IswcChart extends withStyleAttrs(HTMLElement) {
 
   static get observedAttributes(): string[] { return [...OBSERVED]; }
   static fixedType: string | null = null;

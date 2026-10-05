@@ -1,6 +1,7 @@
 /** Rejilla de alineación para diagramas SVG (secuencia / flujo). */
 
 import { countIconTokens, stripIconTokensPlain } from './tk-icon-inline.js';
+import type { GridRect, GridPoint, CostGrid, ForbiddenRegion, ExclusionZone, DiagramSide } from "./diagram-grid.schemas.js";
 
 export const TK_DIAGRAM_GRID = 8;
 
@@ -33,32 +34,12 @@ export function diagramGridRows(height: number, grid: number = TK_DIAGRAM_GRID):
  */
 
 /** Rectángulo simple `{ x, y, w, h }`. */
-export type GridRect = { x: number; y: number; w: number; h: number };
 
 /** Punto en píxeles `{ x, y }`. */
-export type GridPoint = { x: number; y: number };
 
 /** Rejilla de costos (la que produce `makeCostGrid`). */
-export type CostGrid = {
-  cols: number;
-  rows: number;
-  grid: number;
-  cost: Float64Array;
-  forbidden?: Map<string, ForbiddenRegion>;
-};
 
 /** Región prohibida (rect o polígono). */
-export type ForbiddenRegion = {
-  id: string;
-  kind: 'rect' | 'poly';
-  x?: number;
-  y?: number;
-  w?: number;
-  h?: number;
-  points?: readonly (readonly [number, number])[];
-  color?: string;
-  label?: string;
-};
 
 export const COST_BLOCKED = Infinity;
 
@@ -216,7 +197,6 @@ export function listForbiddenRegions(g: CostGrid | null | undefined): ForbiddenR
  * ──────────────────────────────────────────────────────────────────────── */
 
 /** Zona de exclusión leída del payload (rect normalizado a w,h > 0). */
-export type ExclusionZone = { x: number; y: number; w: number; h: number; label?: string };
 
 /** Normaliza `exclusionZones` del payload a rects válidos (w,h > 0). */
 export function readExclusionZones(raw: unknown): ExclusionZone[] {
@@ -255,8 +235,6 @@ function rectsOverlap(a: GridRect, b: GridRect): boolean {
 export function snapAway(value: number, direction: number, grid: number = TK_DIAGRAM_GRID): number {
   return direction > 0 ? Math.ceil(value / grid) * grid : Math.floor(value / grid) * grid;
 }
-
-export type DiagramSide = 'top' | 'bottom' | 'left' | 'right';
 
 /**
  * Snapea el punto de salida/entrada de una arista (tras `stepOut`) sin

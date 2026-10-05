@@ -11,24 +11,11 @@ import { DEFAULT_BUTTON_SHAPE } from '../../components/_shared/button-shape.js';
 import { DEFAULT_MEDIA_SHAPE } from '../../components/_shared/media-shape.js';
 import { DEFAULT_INTENT } from '../../components/_shared/intent.js';
 import { DEFAULT_TONE } from '../../components/_shared/tone.js';
+import type { TipoControl, OpcionSelect, PanelInfoDef, ControlDef, ControlesDeDemo, BloqueConControles, PanelConSpec, PreviewDefinitionShallow, PreviewMountCtxShallow } from "./controles.schemas.js";
 
 /** Tipos de control soportados por el panel. */
-export type TipoControl = 'text' | 'color' | 'number' | 'select' | 'boolean' | 'range' | 'json';
 
 /** Opción de un select: valor plano o {value,label[,icon|html]}. */
-export type OpcionSelect = string | {
-  value: string | number | boolean;
-  label: string;
-  icon?: string;
-  html?: string;
-  description?: string;
-  /**
-   * Marca esta opción como placeholder (no se puede seleccionar como default).
-   * El panel la renderiza en color neutral (#888) para indicar que el
-   * componente no quema un default; HTML resuelve al valor `value` (típico "").
-   */
-  placeholder?: boolean;
-};
 
 /**
  * Información JSDoc-style opcional del atributo (Phase W36). Cuando está
@@ -36,45 +23,14 @@ export type OpcionSelect = string | {
  * su defecto, el panel deriva lo que puede del propio control (tipo,
  * default, options).
  */
-export type PanelInfoDef = {
-  description?: string;
-  type?: string;
-  default?: string;
-  values?: string[];
-  example?: string;
-};
 
 /** Definición JSON de un control (espejo de controls.schema.json). */
-export type ControlDef = {
-  control: TipoControl;
-  /** Propiedad del host; prefijo `attr:` aplica como atributo reflejado. */
-  prop: string;
-  label: string;
-  group?: string;
-  default?: unknown;
-  options?: OpcionSelect[];
-  min?: number;
-  max?: number;
-  step?: number;
-  placeholder?: string;
-  /** Info JSDoc-style opcional (Phase W36). */
-  info?: PanelInfoDef;
-};
 
 /** `controls` que puede declarar un bloque demo/html del preview. */
-export type ControlesDeDemo = {
-  /** Selector CSS del host dentro del demo (default: primer is-* del demo). */
-  target?: string;
-  /** Grupo por defecto de todos los controles del bloque. */
-  group?: string;
-  controls: ControlDef[];
-};
 
 /** Bloque de preview que puede llevar controles (kind demo|html). */
-export type BloqueConControles = { kind: 'demo' | 'html'; html?: string } & ControlesDeDemo;
 
 /** Forma del panel <iswc-preview-controls> (su setter `spec` vive en preview-controls.ts). */
-type PanelConSpec = { spec: unknown[] };
 
 function esAttr(prop: string): boolean {
   return prop.startsWith('attr:');
@@ -262,8 +218,6 @@ export function valorDefault(el: Element, def: ControlDef): unknown {
 }
 
 /** Formas estructurales mínimas del definition/context (sin acoplar _kit). */
-export type PreviewDefinitionShallow = { tag: string; sections?: Array<{ id?: string; blocks?: Array<Record<string, unknown>> }> };
-export type PreviewMountCtxShallow = { main?: HTMLElement | null; root?: HTMLElement | null };
 
 /**
  * Monta los paneles de controles de todos los bloques demo/html con

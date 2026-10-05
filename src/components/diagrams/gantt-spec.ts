@@ -4,6 +4,7 @@ import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type { GridPoint } from './diagram-types.js';
+import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "./gantt-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas Gantt (sin Mermaid).
@@ -30,33 +31,6 @@ const MILESTONE_SIZE = 18;
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
-}
-
-interface GanttGroup {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-interface GanttTask {
-  id: string;
-  label: string;
-  start: string | number | undefined;
-  end: string | number | undefined;
-  duration?: string;
-  group?: string;
-  progress: unknown;
-  milestone: boolean;
-  after: string[];
-  hue?: number;
-  description?: string;
-}
-
-export interface GanttSpec {
-  title?: string;
-  dateFormat: string;
-  groups?: GanttGroup[];
-  tasks: GanttTask[];
 }
 
 function readGroups(src: Record<string, unknown>): GanttGroup[] | undefined {
@@ -112,62 +86,6 @@ function clampProgress(p: unknown): number | undefined {
   const n = Number(p);
   if (!Number.isFinite(n)) return undefined;
   return Math.max(0, Math.min(100, n));
-}
-
-interface GanttRow {
-  id: string;
-  label: string;
-  y: number;
-  h: number;
-  milestone: boolean;
-  cx?: number;
-  cy?: number;
-  size?: number;
-  x: number;
-  w?: number;
-  progress?: number;
-  hue?: number;
-  group?: string;
-  description?: string;
-}
-
-interface GanttArrow {
-  id: string;
-  from: string;
-  to: string;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowAngle: number;
-  hue?: number;
-}
-
-interface GanttTick {
-  ms: number;
-  label: string;
-  x: number;
-}
-
-export interface GanttLayout {
-  width: number;
-  height: number;
-  title?: string;
-  titleY: number;
-  gutterX: number;
-  gutterW: number;
-  rowsTop: number;
-  rowsBottom: number;
-  rows: GanttRow[];
-  ticks: GanttTick[];
-  todayX?: number;
-  arrows: GanttArrow[];
-  groups?: GanttGroup[];
-  legendX: number;
-}
-
-interface GanttOpts {
-  width?: number;
-  now?: number;
 }
 
 /**

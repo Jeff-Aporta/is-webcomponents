@@ -1,4 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
+import type { QRInstance, QRLib } from "./qrcode.schemas.js";
 
 /**
  * <iswc-qrcode> — Generador de QR en SVG.
@@ -24,13 +25,6 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 
 // Tipo del módulo qrcode-generator cargado por CDN. La función default exporta
 // un factory (typeNumber, errorCorrectionLevel) → instancia con addData/make/isDark.
-interface QRInstance {
-  addData(data: string): void;
-  make(): void;
-  getModuleCount(): number;
-  isDark(row: number, col: number): boolean;
-}
-type QRLib = (typeNumber: number, errorCorrectionLevel: string) => QRInstance;
 
 (() => {
   const OBSERVED = ['value', 'level', 'cell', 'margin', 'fg', 'bg'];

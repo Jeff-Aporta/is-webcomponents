@@ -1,15 +1,10 @@
+import type { _AnyRecord, _AnyCtxProps, _BAllowedShape, _PendingDeleteSnap, _TNodeLike, _TRecordLike } from "./00-context.schemas.js";
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj: unknown, key: string | symbol, value: unknown) => {
   const o = obj as Record<string | symbol, unknown>;
   return key in o ? __defProp(o, key, { enumerable: true, configurable: true, writable: true, value }) : o[key as string] = value;
 };
 var __publicField = (obj: unknown, key: string | symbol, value?: unknown) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-type _AnyRecord = Record<string, unknown>;
-type _AnyCtxProps = _AnyRecord;
-type _BAllowedShape = { Crear?: boolean; Modificar?: boolean; Eliminar?: boolean; Visualizar?: boolean };
-type _PendingDeleteSnap = { prevVisibleIds: string[]; prevDeleteIdx: number } | null;
-type _TNodeLike = { flatPath: string; [key: string]: unknown };
-type _TRecordLike = _TNodeLike & { iplan?: string; idrow?: string };
 
 const _TTreeAdapterContext = class _TTreeAdapterContext {
   // Tipos explícitos para los campos `__publicField` (escape del análisis estático).

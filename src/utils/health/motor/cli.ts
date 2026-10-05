@@ -26,6 +26,7 @@
  *   2 = error del motor (Stagehand no arranca, JSON no parsea, etc.)
  */
 
+import type { ArgSpec } from "./cli.schemas.js";
 import { writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -42,13 +43,6 @@ const __dirname = dirname(__filename);
 // El motor vive en src/utils/health/motor/. La raíz del proyecto está
 // tres niveles arriba.
 const raizProyecto = resolve(__dirname, '..', '..', '..', '..');
-
-interface ArgSpec {
-  nombre: string;
-  descripcion: string;
-  tipo: 'string' | 'boolean' | 'number';
-  default?: string | number | boolean;
-}
 
 const ESPECES: ArgSpec[] = [
   { nombre: 'solo', descripcion: 'Tags a auditar (coma-separado)', tipo: 'string' },

@@ -9,11 +9,11 @@
 import { computePosition } from './position.js';
 import { AGGREGATION_FNS, operatorNeedsInput } from './grid-types.js';
 import type { ColumnDef, FilterRule, Operator } from './grid-types.js';
+import type { GridPopoverEl, MenuItem, RenderColumnsPanelOpts, FilterPanelModel, RenderFilterPanelOpts } from "./grid-ui.schemas.js";
 
 const SUPPORTS_POPOVER = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
 
 /** Popover: `div` con `.popover = 'manual'` cuando el navegador lo soporta. */
-export type GridPopoverEl = HTMLElement & { popover?: string; showPopover?: () => void; hidePopover?: () => void };
 
 export function createPopover(className: string): GridPopoverEl {
   const el = document.createElement('div') as GridPopoverEl;
@@ -56,15 +56,6 @@ export function hidePopover(el: GridPopoverEl | null | undefined): void {
 }
 
 /** Item de menú que se renderiza con `renderMenu`. */
-export type MenuItem = {
-  label?: string;
-  icon?: string;
-  action?: string;
-  value?: string | number | null;
-  disabled?: boolean;
-  checked?: boolean;
-  separator?: boolean;
-};
 
 export function renderMenu(el: HTMLElement, items: readonly MenuItem[]): void {
   const frag = document.createDocumentFragment();
@@ -97,12 +88,6 @@ export function renderMenu(el: HTMLElement, items: readonly MenuItem[]): void {
 }
 
 /* ── Panel de columnas ────────────────────────────────────────────────── */
-
-export type RenderColumnsPanelOpts = {
-  columns: readonly ColumnDef[];
-  isVisible: (field: string) => boolean;
-  search?: string;
-};
 
 export function renderColumnsPanel(el: HTMLElement, { columns, isVisible, search: initialSearch = '' }: RenderColumnsPanelOpts): void {
   el.replaceChildren();
@@ -152,16 +137,6 @@ export function renderColumnsPanel(el: HTMLElement, { columns, isVisible, search
 }
 
 /* ── Panel de filtros ────────────────────────────────────────────────── */
-
-export type FilterPanelModel = {
-  items: FilterRule[];
-  logicOperator?: 'and' | 'or';
-};
-
-export type RenderFilterPanelOpts = {
-  columns: readonly ColumnDef[];
-  model: FilterPanelModel;
-};
 
 export function renderFilterPanel(el: HTMLElement, { columns, model }: RenderFilterPanelOpts): void {
   el.replaceChildren();

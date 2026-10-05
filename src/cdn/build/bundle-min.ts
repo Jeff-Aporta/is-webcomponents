@@ -4,19 +4,7 @@
  * o desde el CDN, y queda con el mismo formato y los mismos defines.
  */
 import { build, type Plugin } from 'esbuild';
-
-export interface BundleMinJsOptions {
-  entry: string;
-  outfile: string;
-  plugins?: Plugin[];
-  banner?: string;
-  define?: Record<string, string>;
-  external?: string[];
-  /** Default `esm`. Usar `iife` para boots classic (sin type=module). */
-  format?: 'esm' | 'iife' | 'cjs';
-  /** Default `es2020`. Host modules con top-level await: `es2022`. */
-  target?: string;
-}
+import type { BundleMinJsOptions, BundleLoaderOptions } from "./bundle-min.schemas.js";
 
 export function bundleMinJs(opts: BundleMinJsOptions) {
   return build({
@@ -49,13 +37,6 @@ export function loaderDefines(catalog: unknown, files: Record<string, string>, s
     __IS_ASSET_HASHES__: JSON.stringify(files),
     __IS_BUILD_SHA__: JSON.stringify(sha),
   };
-}
-
-export interface BundleLoaderOptions extends Omit<BundleMinJsOptions, 'define'> {
-  catalog: unknown;
-  hashes: Record<string, string>;
-  /** SHA de HEAD. Queda en shaDefault del loader. */
-  sha?: string;
 }
 
 export function bundleLoader(opts: BundleLoaderOptions) {

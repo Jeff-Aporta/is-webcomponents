@@ -2,11 +2,11 @@ import { adoptCss, defineElement } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { pathLine, pathArea, roundedBarRect } from '../_shared/svg-chart-engine.js';
+import type { SparkPoint } from "./sparkline.schemas.js";
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Punto proyectado a coordenadas de pantalla dentro del SVG del sparkline. */
-type SparkPoint = { x: number; y: number };
 
 /**
  * Resume la serie para un lector de pantalla: N puntos, mínimo, máximo,
@@ -31,7 +31,7 @@ function fmtNum(v: number): string {
 }
 
 (() => {
-  class IswcSparkline extends withStyleAttrs(HTMLElement) {
+  class IswcSparkline extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] {
       return ['values', 'data', 'type', 'label', 'variant', 'curve', 'trend'];

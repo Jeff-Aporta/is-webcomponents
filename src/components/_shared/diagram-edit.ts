@@ -17,25 +17,18 @@
  * `mode === "edit"`.
  */
 
+import type { NodeOverride, EdgeOverride, NodeOverrideMap, EdgeOverrideMap, DiagramOverrides, EditorAnchor, DiagramPersist, LayoutChangeDetail, NodeLayoutEntry, EdgeLayoutEntry, LayoutLike, NodeDragMove, NodeDragEnd, NodeDragDestroy, InlineEditorInitial, InlineEditorSave, InlineEditorCancel, OpenInlineEditorOpts } from "./diagram-edit.schemas.js";
 const STORAGE_PREFIX = 'iswc-diagram:';
 
 /** Override parcial por nodo (posición / label / hue). */
-export type NodeOverride = { x?: number; y?: number; label?: string; hue?: number };
 
 /** Override parcial por arista (label / hue). */
-export type EdgeOverride = { label?: string; hue?: number };
 
 /** Mapa de overrides: `id → override`. */
-export type NodeOverrideMap = Record<string, NodeOverride>;
-export type EdgeOverrideMap = Record<string, EdgeOverride>;
 
 /** Forma persistida de los overrides. */
-export type DiagramOverrides = { nodes?: NodeOverrideMap; edges?: EdgeOverrideMap };
 
 /** Anclaje en coordenadas de pantalla. */
-export type EditorAnchor = { x: number; y: number };
-
-export type DiagramPersist = 'none' | 'session' | 'local';
 
 /** Carga overrides persistidos (posición/color/label) si el modo lo permite. */
 export function loadOverrides(host: HTMLElement, key: string): DiagramOverrides | null {
@@ -77,7 +70,6 @@ export function clearOverrides(host: HTMLElement, key: string): void {
 }
 
 /** Detalle del evento `iswc-layout-change`. */
-export type LayoutChangeDetail = { nodes?: NodeOverrideMap; edges?: EdgeOverrideMap; [key: string]: unknown };
 
 /**
  * Emite un CustomEvent burbujeante y cancelable para notificar cambios.
@@ -95,16 +87,8 @@ export function emitLayoutChange(host: HTMLElement, detail: LayoutChangeDetail):
 }
 
 /** Nodo del layout con `id` y los campos que `applyOverrides` pisa. */
-type NodeLayoutEntry = { id: string; x?: number; y?: number; label?: string; hue?: number };
 
 /** Arista del layout con `id` y los campos que `applyOverrides` pisa. */
-type EdgeLayoutEntry = { id: string; label?: string; hue?: number };
-
-export type LayoutLike = {
-  nodes?: NodeLayoutEntry[];
-  edges?: EdgeLayoutEntry[];
-  relations?: EdgeLayoutEntry[];
-};
 
 /**
  * Aplica overrides persistidos a un layout recién calculado.
@@ -150,13 +134,10 @@ export function snap(value: number, grid: number = 8): number {
 }
 
 /** Callback que recibe el delta desde el último move del drag. */
-export type NodeDragMove = (deltaX: number, deltaY: number, totalDx: number, totalDy: number) => void;
 
 /** Callback al soltar el drag. */
-export type NodeDragEnd = () => void;
 
 /** Destructor del drag: quita los listeners. */
-export type NodeDragDestroy = () => void;
 
 /**
  * Instala un drag de nodo sobre un elemento SVG. Devuelve un destructor.
@@ -215,17 +196,6 @@ export function attachNodeDrag(el: HTMLElement, onMove: NodeDragMove, onEnd?: No
     el.removeEventListener('pointercancel', up);
   };
 }
-
-export type InlineEditorInitial = { label?: string; hue?: number };
-export type InlineEditorSave = (result: { label: string; hue: number | null }) => void;
-export type InlineEditorCancel = () => void;
-
-export type OpenInlineEditorOpts = {
-  anchor: EditorAnchor;
-  initial?: InlineEditorInitial;
-  onSave?: InlineEditorSave;
-  onCancel?: InlineEditorCancel;
-};
 
 /**
  * Editor inline flotante (label + color). Se ancla al viewport del diagrama.

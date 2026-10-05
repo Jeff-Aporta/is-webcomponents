@@ -4,7 +4,7 @@
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../previews/_kit/types.d.ts';
 import components from '../manifest.js';
-import type { ComponentManifestItem } from '../manifest.js';
+import type { ComponentManifestItem } from "../manifest.schemas.js";
 
 const CAT_META: Record<string, { label: string; icon: string }> = {
   actions: { label: 'Acciones', icon: 'mdi:gesture-tap-button' },

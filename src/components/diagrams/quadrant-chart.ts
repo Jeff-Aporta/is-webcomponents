@@ -8,6 +8,7 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { QdGroup, QdAxisLabel, QdAxes, QdLayoutPoint, QdLayoutQuadrant, QdLayout, PointEntry } from "./quadrant-chart.schemas.js";
 
 /**
  * <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
@@ -25,52 +26,6 @@ import { svgEl } from '../_shared/svg-chart-engine.js';
  * Propiedades: payload, spec, layout, hiddenGroups
  * Eventos: iswc-render, iswc-open-viewer, iswc-toggle-group
  */
-
-interface QdGroup { id: string; name: string; hue?: number; }
-interface QdAxisLabel { text: string; x: number; y: number; }
-interface QdAxes {
-  midX: number;
-  midY: number;
-  xLeft?: QdAxisLabel;
-  xRight?: QdAxisLabel;
-  yBottom?: QdAxisLabel;
-  yTop?: QdAxisLabel;
-}
-interface QdLayoutPoint {
-  id: string;
-  name: string;
-  label: string;
-  group?: string;
-  x: number;
-  y: number;
-  hue?: number;
-  description?: string;
-  cx: number;
-  cy: number;
-  r: number;
-  labelDy: number;
-}
-interface QdLayoutQuadrant {
-  id: string;
-  name: string;
-  cx: number;
-  cy: number;
-}
-interface QdLayout {
-  width: number;
-  height: number;
-  plot: { x: number; y: number; w: number; h: number };
-  points: QdLayoutPoint[];
-  quadrants: QdLayoutQuadrant[];
-  axes: QdAxes;
-  groups?: QdGroup[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
-}
-interface PointEntry { pt: QdLayoutPoint; g: SVGGElement; }
 
 class IswcQuadrantChart extends DiagramElementBase {
   #hiddenGroups = new Set<string>();

@@ -3,6 +3,7 @@
  * El cuerpo del formulario se define con html2json / json2html (`_shared/json-html.js`).
  */
 
+import type { ControlEl, ControlValue } from "./form-json.schemas.js";
 const CONTROL_SELECTOR = [
   'iswc-input[name]',
   'iswc-textarea[name]',
@@ -19,18 +20,7 @@ const CONTROL_SELECTOR = [
 
 const BOOL_TAGS = new Set(['iswc-checkbox', 'iswc-switch']);
 
-interface ControlEl extends HTMLElement {
-  value?: string | null;
-  checked?: boolean;
-  values?: string[] | null;
-  multiple?: boolean;
-  type?: string;
-  selectedOptions?: HTMLOptionElement[];
-  options?: HTMLOptionElement[];
-}
-
 /** Tipo del valor que se lee/escribe en un control. */
-type ControlValue = string | boolean | string[] | number | null | undefined;
 
 export function listControls(root: ParentNode | null | undefined): ControlEl[] {
   if (!root) return [];

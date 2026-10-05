@@ -2,21 +2,13 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import type { Viewport, DragState, TileCfg } from "./maps.schemas.js";
 
 /** Viewport geográfico (lon/lat) usado por <iswc-maps>. */
-type Viewport = { minLon: number; minLat: number; maxLon: number; maxLat: number };
 
 /** Estado de arrastre del usuario (pan). */
-type DragState = { x: number; y: number; start: Viewport };
 
 /** Config leída del slot JSON cuando `engine="tile"`. */
-type TileCfg = {
-  tileUrl?: string;
-  bbox?: string;
-  zoom?: number;
-  center?: string;
-  attribution?: string;
-};
 
 /**
  * <iswc-maps> — Visualizador geográfico.
@@ -47,7 +39,7 @@ type TileCfg = {
 (() => {
   const OBSERVED = ['viewbox', 'zoom', 'engine', 'interactive'];
 
-  class IswcMaps extends withStyleAttrs(HTMLElement) {
+  class IswcMaps extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] { return [...OBSERVED, 'grid-color', 'meridian-color']; }
     #mounted = false;

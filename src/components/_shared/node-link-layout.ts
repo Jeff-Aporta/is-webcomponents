@@ -7,15 +7,14 @@
  */
 
 /** Redondea al múltiplo de 8px más cercano (misma rejilla que el resto de los diagramas). */
+import type { GraphNode, GraphEdge, NodeRect, EdgeAnchorXY, PositionedNode, LayoutOpts, LayoutResult } from "./node-link-layout.schemas.js";
 function snap8(v: number): number {
   return Math.round(v / 8) * 8;
 }
 
 /** Nodo de un grafo tipo node-link. Solo se necesitan id/w/h para `assignLayers`; el layout completo exige w/h. */
-export type GraphNode = { id: string; w?: number; h?: number };
 
 /** Arista de un grafo tipo node-link. */
-export type GraphEdge = { from: string; to: string };
 
 /**
  * Asigna una capa (nivel jerárquico) a cada nodo mediante longest-path.
@@ -169,9 +168,6 @@ export function orderLayers(layersMap: Map<string, number>, nodes: readonly Grap
 }
 
 /** Rectángulo `{ x, y, w, h }` que representa la caja de un nodo ya colocado. */
-export type NodeRect = { x: number; y: number; w: number; h: number };
-
-export type EdgeAnchorXY = { x: number; y: number };
 
 /**
  * Punto de conexión (midpoint) de un lado del nodo.
@@ -223,29 +219,6 @@ export function pickSides(
 }
 
 /** Nodo con tamaño, ya colocado por el layout. */
-export type PositionedNode = {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  layer: number;
-  order: number;
-};
-
-export type LayoutOpts = {
-  direction?: 'TB' | 'BT' | 'LR' | 'RL';
-  layerGap?: number;
-  nodeGap?: number;
-  align?: 'center' | 'start';
-};
-
-export type LayoutResult = {
-  nodes: PositionedNode[];
-  width: number;
-  height: number;
-  layers: Map<string, number>;
-};
 
 /**
  * Calcula el layout completo: capas, orden y coordenadas en píxeles.

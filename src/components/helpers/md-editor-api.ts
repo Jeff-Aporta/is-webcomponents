@@ -6,41 +6,7 @@
  * El `.d.ts` paralelo sigue siendo la documentación canónica del consumidor externo.
  */
 
-interface IsMdEditorDocument {
-  id?: string;
-  filename?: string;
-  content: string;
-  contentType?: 'text/markdown' | 'text/plain' | string;
-  updatedAt?: string;
-  updatedBy?: string;
-  sizeBytes?: number;
-  meta?: Record<string, string | number | boolean | null>;
-}
-
-interface IsMdEditorEndpoints {
-  get?: string;
-  put?: string;
-  post?: string;
-  delete?: string;
-}
-
-interface IsMdEditorApiConfig {
-  baseUrl?: string;
-  endpoints?: IsMdEditorEndpoints;
-  headers?: Record<string, string> | (() => Record<string, string>);
-  token?: string | (() => string);
-  fieldMap?: Partial<Record<string, keyof IsMdEditorDocument>>;
-}
-
-type CanonKey =
-  | 'content'
-  | 'filename'
-  | 'updatedAt'
-  | 'updatedBy'
-  | 'id'
-  | 'sizeBytes'
-  | 'contentType';
-
+import type { IsMdEditorDocument, IsMdEditorEndpoints, IsMdEditorApiConfig, CanonKey, SrcMap } from "./md-editor-api.schemas.js";
 const DEFAULT_MAP: Record<CanonKey, readonly string[]> = {
   content: ['content', 'body', 'markdown', 'text', 'value'],
   filename: ['filename', 'fileName', 'name', 'title'],
@@ -50,8 +16,6 @@ const DEFAULT_MAP: Record<CanonKey, readonly string[]> = {
   sizeBytes: ['sizeBytes', 'size', 'bytes', 'length'],
   contentType: ['contentType', 'content_type', 'mime'],
 };
-
-type SrcMap = Record<string, unknown>;
 
 function pickCanonKey(
   src: SrcMap,

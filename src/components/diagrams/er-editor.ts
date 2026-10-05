@@ -18,7 +18,7 @@
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
 import { defineElement, emit } from '../../core/element.js';
 import { serializeErPayload, renderErSvg as renderErSvgString } from './er-archify.js';
-import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride, ErRouteKind, ErDashStyle, EdgeVariant } from './diagram-types.js';
+import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride, ErRouteKind, ErDashStyle, EdgeVariant } from "./diagram-types.schemas.js";
 import '../media/icon.js';
 import '../actions/context-menu.js';
 import '../layout/split-panel.js';

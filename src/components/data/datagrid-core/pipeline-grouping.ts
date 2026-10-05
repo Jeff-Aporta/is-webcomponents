@@ -19,8 +19,8 @@
 
 import { AggFunc } from './types.js';
 import { getCellValue, formatValue } from './value-formatter.js';
-import type { ColumnState, DisplayRow, RowNode } from './types.js';
-import { CuboSchema, type Cubo } from './pipeline-grouping.schema.js';
+import type { ColumnState, DisplayRow, RowNode } from "./types.schemas.js";
+import { CuboSchema, type Cubo } from './pipeline-grouping.schemas.js';
 
 /**
  * @param {string} fn

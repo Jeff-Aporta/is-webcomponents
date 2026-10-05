@@ -5,6 +5,7 @@
  * Sin dependencias externas: se puede testear con Node puro.
  */
 
+import type { TimeScale, TickUnit, TimeTick, LaneItem, PackedLaneItem, PackLanesOpts, LayoutLanesOpts, PositionedLaneItem, LayoutLane, LayoutLanesResult } from "./lane-layout.schemas.js";
 const HOUR_MS = 3600000;
 const DAY_MS = 86400000;
 
@@ -51,7 +52,6 @@ export function addDuration(startMs: number, spec: string | null | undefined): n
 }
 
 /** Escala lineal tiempo → píxel. */
-export type TimeScale = ((ms: number) => number) & { invert: (px: number) => number };
 
 /**
  * Escala lineal tiempo → píxel. `domain`/`range` son `[min, max]`.
@@ -75,8 +75,6 @@ function addDays(ms: number, n: number): number { const d = new Date(ms); d.setD
 function addMonths(ms: number, n: number): number { const d = new Date(ms); d.setMonth(d.getMonth() + n); return d.getTime(); }
 function addYears(ms: number, n: number): number { const d = new Date(ms); d.setFullYear(d.getFullYear() + n); return d.getTime(); }
 
-type TickUnit = 'hour' | 'day' | 'month' | 'year';
-
 // Pasos candidatos por unidad; step=7 en 'day' da un efecto "semana", step=3
 // en 'month' da un efecto "trimestre" — sin duplicar ramas por cada nombre.
 function stepCandidates(unit: TickUnit): number[] {
@@ -87,7 +85,6 @@ function stepCandidates(unit: TickUnit): number[] {
 }
 
 /** Marca producida por `niceTimeTicks`. */
-export type TimeTick = { ms: number; label: string; major: boolean };
 
 /**
  * Marcas de eje "agradables" entre `minMs` y `maxMs`. Elige la unidad
@@ -142,12 +139,8 @@ export function niceTimeTicks(minMs: number, maxMs: number, target: number = 6):
 }
 
 /** Item de Gantt/timeline: id, inicio, fin, más campos arbitrarios. */
-export type LaneItem = { id: string; start: number; end?: number; [key: string]: unknown };
 
 /** Item tras `packLanes`: incluye el índice de carril asignado. */
-export type PackedLaneItem = LaneItem & { lane: number };
-
-export type PackLanesOpts = { laneKey?: string };
 
 /**
  * Asigna un carril a cada ítem. Si se da `laneKey`, agrupa por ese campo
@@ -179,34 +172,6 @@ export function packLanes(items: readonly LaneItem[], opts: PackLanesOpts = {}):
   }
   return items.map((it, i) => ({ ...it, lane: laneByIndex.get(i) ?? 0 }));
 }
-
-export type LayoutLanesOpts = {
-  width?: number;
-  rowH?: number;
-  rowGap?: number;
-  laneKey?: string;
-  domain?: readonly [number, number];
-};
-
-export type PositionedLaneItem = {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  lane: number;
-};
-
-export type LayoutLane = { key: number; label: string; y: number; h: number };
-
-export type LayoutLanesResult = {
-  items: PositionedLaneItem[];
-  lanes: LayoutLane[];
-  width: number;
-  height: number;
-  scale: TimeScale;
-  ticks: TimeTick[];
-};
 
 /**
  * Layout completo: escala de tiempo, carriles y coordenadas px.

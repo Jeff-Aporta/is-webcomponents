@@ -15,13 +15,9 @@ import type {
   PreviewBehaviorModule,
   PreviewDefinition,
 } from './_kit/types.d.ts';
+import type { CatalogEntry } from "./registry.schemas.js";
 
 /** Mirror of an entry in catalog.ts (auto-generated). */
-interface CatalogEntry {
-  json: string;
-  behavior?: string;
-  category: string;
-}
 
 function previewsBase(): URL {
   // Consumo: gallery-app.min.js en dist/ → ../src/previews/

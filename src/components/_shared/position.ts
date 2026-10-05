@@ -3,12 +3,7 @@
  * Sin dependencias — usa getBoundingClientRect + flip/shift.
  */
 
-export type Placement =
-  | 'top' | 'top-start' | 'top-end'
-  | 'bottom' | 'bottom-start' | 'bottom-end'
-  | 'left' | 'left-start' | 'left-end'
-  | 'right' | 'right-start' | 'right-end';
-
+import type { Placement, AnchorLike, Rect, Size, Coords, Boundary, ArrowOffset, ComputePositionOpts, ComputePositionResult } from "./position.schemas.js";
 export const PLACEMENTS: Placement[] = [
   'top', 'top-start', 'top-end',
   'bottom', 'bottom-start', 'bottom-end',
@@ -21,28 +16,14 @@ const OPPOSITE: Record<'top' | 'bottom' | 'left' | 'right', 'top' | 'bottom' | '
 };
 
 /** Elemento (real o virtual) del que se puede medir un rectángulo. */
-export type AnchorLike = Element | { getBoundingClientRect(): DOMRect };
 
 /** Rectángulo medido, normalizado a campos numéricos. */
-export type Rect = {
-  top: number;
-  left: number;
-  right: number;
-  bottom: number;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-};
 
 /** Tamaño popup (w x h). */
-export type Size = { width: number; height: number };
 
 /** Coordenadas resultantes de `computeCoords`. */
-export type Coords = { top: number; left: number; placement: string };
 
 /** Borde efectivo (rect de viewport / contenedor scroll) en píxeles. */
-export type Boundary = Rect;
 
 function sideOf(p: string): string {
   return p.split('-')[0]!;
@@ -247,7 +228,6 @@ function availableSize(coords: Coords, size: Size, boundary: Boundary, autoSize:
 }
 
 /** Estilo CSS resuelto para la flecha. */
-export type ArrowOffset = { top: string; left: string; right: string; bottom: string };
 
 function arrowOffset(
   placement: string,
@@ -297,42 +277,6 @@ function arrowOffset(
   }
   return result;
 }
-
-export type ComputePositionOpts = {
-  anchor: AnchorLike;
-  popupEl: HTMLElement;
-  placement?: string;
-  distance?: number;
-  skidding?: number;
-  flip?: boolean;
-  flipFallbackPlacements?: string;
-  flipFallbackStrategy?: 'best-fit' | 'initial';
-  flipPadding?: number;
-  shift?: boolean;
-  shiftPadding?: number;
-  autoSize?: '' | 'horizontal' | 'vertical' | 'both';
-  autoSizePadding?: number;
-  boundary?: 'viewport' | 'scroll';
-  strategy?: 'absolute' | 'fixed';
-  arrow?: boolean;
-  arrowSize?: number;
-  arrowPadding?: number;
-  arrowPlacement?: string;
-};
-
-export type ComputePositionResult = {
-  top: number;
-  left: number;
-  viewportTop: number;
-  viewportLeft: number;
-  placement: string;
-  strategy: string;
-  availableWidth: number | null;
-  availableHeight: number | null;
-  arrow: ArrowOffset | null;
-  anchor: Rect;
-  popupSize: Size;
-};
 
 /**
  * Posiciona un popup anclado a un elemento, con flip/shift/arrow opcionales.

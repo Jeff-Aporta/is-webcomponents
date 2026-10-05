@@ -3,16 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-
-interface IsToastEl extends HTMLElement {
-  create(message: string, options?: Record<string, unknown>): Promise<HTMLElement>;
-  promise<T>(p: Promise<T>, callbacks: {
-    loading?: string;
-    success?: string | ((value: unknown) => unknown);
-    error?: string | ((value: unknown) => unknown);
-  }): Promise<T>;
-  placement: string;
-}
+import type { IsToastEl } from "./toast.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

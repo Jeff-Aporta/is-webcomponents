@@ -5,10 +5,8 @@
  */
 
 // Tipo mínimo del `<iswc-video-playlist>` para acceder a `placement`.
-interface IswcVideoPlaylist extends HTMLElement {
-  placement: 'left' | 'right' | 'bottom';
-}
 
+import type { IswcVideoPlaylist } from "./video-playlist.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
   const root = ctx.main;
   void root;

@@ -4,41 +4,11 @@
  */
 
 /** Elemento del host con campos custom de cacheo (signature + bound). */
-interface FlexHost extends HTMLElement {
-  _trvwrFlexSig?: string;
-  _trvwrOnClick?: () => void;
-  _trvwrBound?: boolean;
-}
 
 /** Spec mínima que necesitamos de cada acción para construir el botón. */
-interface FlexActionSpec {
-  icon?: string;
-  iconTrue?: string;
-  iconFalse?: string;
-  label?: string;
-  title?: string;
-  hotkey?: string;
-  color?: string;
-  colorFalse?: string;
-  checked?: boolean;
-  disabled?: boolean;
-  separator?: boolean;
-  onClick?: () => void;
-}
 
-type FlexActionEntry = FlexActionSpec | FlexActionSpec[] | null | undefined | false;
-
+import type { FlexHost, FlexActionSpec, FlexActionEntry, CompactOpts, MoreOpts } from "./flex-options.schemas.js";
 export type { FlexActionSpec, FlexActionEntry };
-
-interface CompactOpts {
-  compact?: boolean;
-}
-
-interface MoreOpts {
-  more?: FlexActionEntry[];
-  moreDisabled?: boolean;
-  compact?: boolean;
-}
 
 function mkIcon(name: string): HTMLElement {
   const ic = document.createElement("iswc-icon");

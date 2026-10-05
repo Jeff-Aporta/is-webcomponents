@@ -7,6 +7,7 @@ import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
+import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, BlockRect, Side } from "./block-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de bloques (sin Mermaid).
@@ -26,44 +27,6 @@ const SHAPES: Set<string> = new Set(['rect', 'round']);
 
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' ? (v as Record<string, unknown>) : {};
-}
-
-interface BlockSpecGroup {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-interface BlockSpecBlock {
-  id: string;
-  label: string;
-  shape: 'rect' | 'round';
-  icon?: string;
-  hue?: number;
-  group?: string;
-  span: number;
-}
-
-interface BlockSpecEdge {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-}
-
-export interface BlockSpec {
-  title?: string;
-  subtitle?: string;
-  columns: number;
-  groups?: BlockSpecGroup[];
-  blocks: BlockSpecBlock[];
-  edges: BlockSpecEdge[];
-}
-
-interface LeadingIcon {
-  iconId?: string;
-  hue?: number;
-  rest?: string;
 }
 
 function readBlock(raw: unknown, i: number): BlockSpecBlock {
@@ -139,13 +102,6 @@ function blockUnitWidth(label: string): number {
   return snapDiagramGrid(Math.min(MAX_UNIT_W, Math.max(MIN_UNIT_W, est)));
 }
 
-interface BlockPlacement {
-  id: string;
-  row: number;
-  col: number;
-  span: number;
-}
-
 /**
  * Empaqueta bloques en una rejilla de `columns` columnas: fluye izquierda a
  * derecha, `span` ocupa N columnas y hace wrap a la siguiente fila si no cabe
@@ -168,50 +124,6 @@ export function computeBlockGrid(blocks: Array<{ id: string; span: number }>, co
 }
 
 const MARGIN: { top: number; right: number; bottom: number; left: number } = { top: 16, right: 16, bottom: 16, left: 16 };
-
-interface BlockLayoutBlock {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  row: number;
-  col: number;
-  label: string;
-  shape: 'rect' | 'round';
-  icon?: string;
-  hue?: number;
-  group?: string;
-}
-
-interface BlockLayoutEdge {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowAngle: number;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
-
-export interface BlockLayout {
-  width: number;
-  height: number;
-  blocks: BlockLayoutBlock[];
-  edges: BlockLayoutEdge[];
-  groups?: BlockSpecGroup[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
-}
-
-interface BlockRect extends BlockLayoutBlock {}
 
 /**
  * spec → geometría lista para pintar.
@@ -351,8 +263,6 @@ export function computeBlockLayout(spec: BlockSpec): BlockLayout {
   applyEdgeActorLayout(layout, blocks.map((b) => ({ x: b.x, y: b.y, w: b.w, h: b.h })) as BlockRect[]);
   return layout;
 }
-
-type Side = 'left' | 'right' | 'top' | 'bottom';
 
 /** Elige los lados de anclaje según la posición relativa de los centros de los bloques. */
 function pickBlockSides(from: BlockLayoutBlock, to: BlockLayoutBlock): { fromSide: Side; toSide: Side } {

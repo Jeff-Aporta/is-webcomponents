@@ -2,7 +2,7 @@
  * Toolbar default del TreeView (port de TreeCustomsBase en contracts.ts).
  * El consumidor puede extender y pisar hooks.
  */
-import type { CustomsRuntime, LevelNameArgs } from "./_types.js";
+import type { CustomsRuntime, LevelNameArgs } from "./_types.schemas.js";
 export class TreeCustomsBase {
   levelName?(args: LevelNameArgs): string | undefined;
   topMenuActions(tree: CustomsRuntime) {

@@ -1,10 +1,7 @@
 import { TAHistory } from "./06b-history.js";
 import { TNode, TRecord } from "./_types.js";
 import type { TreeActionSpec } from "./_types.js";
-
-interface TARolesInternals {
-  onrowdelete(node: TNode): void;
-}
+import type { TARolesInternals } from "./07-roles.schemas.js";
 
 class TARoles extends TAHistory {
   get groupTypes(): string[] {

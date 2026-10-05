@@ -3,10 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-
-interface CustomEventWithDetail<T = unknown> extends Event {
-  detail?: T;
-}
+import type { CustomEventWithDetail } from "./context-menu.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

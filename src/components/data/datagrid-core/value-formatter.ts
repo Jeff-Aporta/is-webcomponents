@@ -9,7 +9,7 @@
  */
 
 import { ColumnType } from './types.js';
-import type { ColumnState, RowNode } from './types.js';
+import type { ColumnState, RowNode } from "./types.schemas.js";
 
 /**
  * @param {ColumnState} col

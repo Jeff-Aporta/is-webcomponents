@@ -22,6 +22,7 @@
  *   - zod v4.4.3 (ver `deno.json` imports).
  */
 import { z } from "zod";
+import type { SectionId, ContentBlock, SectionTableRow, SectionTable, AtributosRow, PropRow, StateRow, EventoRow, SlotRow, PartRow, ApiJsRow, Example, Examples, SectionsMap, ExcludeList, FichaWarning, FichaInspection, Ficha } from "./section-schema.schemas.js";
 
 /* --------------------------------------------------------------------------
  * IDs y constantes
@@ -41,7 +42,6 @@ export const SECTION_IDS = [
 ] as const;
 
 /** Tipo string-literal de los IDs de sección. */
-export type SectionId = (typeof SECTION_IDS)[number];
 
 /* --------------------------------------------------------------------------
  * Schemas base (filas de tabla)
@@ -54,7 +54,6 @@ export type SectionId = (typeof SECTION_IDS)[number];
 export const ContentBlockSchema = z.object({
   content: z.string().min(1, "el bloque de markdown no puede estar vacío"),
 });
-export type ContentBlock = z.infer<typeof ContentBlockSchema>;
 
 /**
  * Fila genérica de tabla (atributos / props / states / eventos / slots /
@@ -78,13 +77,11 @@ export const SectionTableRowSchema = z
     metodo: z.string().optional(),
   })
   .passthrough();
-export type SectionTableRow = z.infer<typeof SectionTableRowSchema>;
 
 /** Tabla con shape `{ table: SectionTableRow[] }`. */
 export const SectionTableSchema = z.object({
   table: z.array(SectionTableRowSchema).min(0),
 });
-export type SectionTable = z.infer<typeof SectionTableSchema>;
 
 /* --------------------------------------------------------------------------
  * Schemas por sección (refinan el bloque genérico con required concretos)
@@ -105,7 +102,6 @@ export const AtributosSectionSchema = z.object({
       .passthrough()
   ),
 });
-export type AtributosRow = z.infer<typeof AtributosSectionSchema>["table"][number];
 
 /** Props: filas `{ name, type, default?, desc? }`. */
 export const PropsSectionSchema = z.object({
@@ -120,7 +116,6 @@ export const PropsSectionSchema = z.object({
       .passthrough()
   ),
 });
-export type PropRow = z.infer<typeof PropsSectionSchema>["table"][number];
 
 /** Custom states: filas `{ state, selector?, cuando }`. */
 export const StatesSectionSchema = z.object({
@@ -134,7 +129,6 @@ export const StatesSectionSchema = z.object({
       .passthrough()
   ),
 });
-export type StateRow = z.infer<typeof StatesSectionSchema>["table"][number];
 
 /** Eventos: filas `{ evento, detalle?, cuando }`. */
 export const EventosSectionSchema = z.object({
@@ -148,7 +142,6 @@ export const EventosSectionSchema = z.object({
       .passthrough()
   ),
 });
-export type EventoRow = z.infer<typeof EventosSectionSchema>["table"][number];
 
 /** Slots: filas `{ slot, descripcion? }`. */
 export const SlotsSectionSchema = z.object({
@@ -161,7 +154,6 @@ export const SlotsSectionSchema = z.object({
       .passthrough()
   ),
 });
-export type SlotRow = z.infer<typeof SlotsSectionSchema>["table"][number];
 
 /** CSS parts: filas `{ part, descripcion? }`. */
 export const PartsSectionSchema = z.object({
@@ -174,7 +166,6 @@ export const PartsSectionSchema = z.object({
       .passthrough()
   ),
 });
-export type PartRow = z.infer<typeof PartsSectionSchema>["table"][number];
 
 /** API JS: filas `{ metodo, descripcion?, ejemplo? }`. */
 export const ApiJsSectionSchema = z.object({
@@ -200,7 +191,6 @@ export const ApiJsSectionSchema = z.object({
       .passthrough()
   ),
 });
-export type ApiJsRow = z.infer<typeof ApiJsSectionSchema>["table"][number];
 
 /** Ejemplos: `content` markdown. */
 export const EjemplosSectionSchema = ContentBlockSchema;
@@ -251,11 +241,9 @@ export const ExampleSchema = z.object({
   /** Descripción accesible del preset (atributo `title` de la card). */
   description: z.string().optional(),
 });
-export type Example = z.infer<typeof ExampleSchema>;
 
 /** Array de examples para alimentar a `<iswc-examples-carousel>`. */
 export const ExamplesSchema = z.array(ExampleSchema);
-export type Examples = z.infer<typeof ExamplesSchema>;
 
 /* --------------------------------------------------------------------------
  * Sections map: el bloque `sections` del JSON
@@ -277,7 +265,6 @@ export const SectionsMapSchema = z.object({
   apiJs: ApiJsSectionSchema.optional(),
   ejemplos: EjemplosSectionSchema.optional(),
 });
-export type SectionsMap = z.infer<typeof SectionsMapSchema>;
 
 /* --------------------------------------------------------------------------
  * Exclude list
@@ -291,31 +278,14 @@ export const ExcludeListSchema = z
     (arr) => new Set(arr).size === arr.length,
     "exclude tiene entradas duplicadas",
   );
-export type ExcludeList = z.infer<typeof ExcludeListSchema>;
 
 /* --------------------------------------------------------------------------
  * Resultado del refine (para que el caller pueda warnear sin re-parsear)
  * ------------------------------------------------------------------------*/
 
 /** Warning que el validador adjunta a una ficha incompleta. */
-export interface FichaWarning {
-  /** Nivel de severidad. */
-  level: "warn";
-  /** Sección afectada. */
-  section: SectionId;
-  /** Mensaje legible. */
-  message: string;
-}
 
 /** Estructura auxiliar devuelta por `inspectFicha(...)` (no por `.parse()`). */
-export interface FichaInspection {
-  /** Warnings por sección obligatoria ausente. */
-  missing: FichaWarning[];
-  /** Warnings por sección excluida que en realidad sí está presente. */
-  spuriousExclude: FichaWarning[];
-  /** Warnings por IDs de sección que no están en el estándar. */
-  unknownExclude: FichaWarning[];
-}
 
 /* --------------------------------------------------------------------------
  * FichaSchema (raíz) + helpers
@@ -351,7 +321,6 @@ export const FichaSchema = z
       path: ["sections"],
     },
   );
-export type Ficha = z.infer<typeof FichaSchema>;
 
 /**
  * Inspecciona una ficha parseada y devuelve warnings. Esta función es la

@@ -25,7 +25,8 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { basename } from 'node:path';
 import type { Hallazgo } from '../types.js';
-import { DefSchema, type Def } from "./consistency.schema.js";
+import { DefSchema, type Def } from "./consistency.schemas.js";
+import type { MetaComponente, OpcionesConsistencia } from "./consistency.schemas.js";
 
 /**
  * Lee el módulo del componente y devuelve un mapa de metadata útil:
@@ -34,22 +35,6 @@ import { DefSchema, type Def } from "./consistency.schema.js";
  *   - si define el custom element
  *   - si hay guard idempotente
  */
-interface MetaComponente {
-  /** Ruta del módulo analizada. */
-  ruta: string;
-  /** Atributos observados (extraídos de static get observedAttributes o @observed). */
-  atributosObservados: Set<string>;
-  /** Props públicas (extraídas de @prop, getters o campos públicos). */
-  propsPublicas: Set<string>;
-  /** Si customElements.define( se invoca. */
-  defineCustomElement: boolean;
-  /** Si hay guard idempotente (customElements.get). */
-  guardIdempotente: boolean;
-  /** Slots declarados (vía HTMLSlotElement o comentario @slot). */
-  slots: Set<string>;
-  /** Si hereda de ElementBase / ModalBase / DiagramElementBase. */
-  heredaBase: boolean;
-}
 
 /** Parsea el módulo del componente (TS/JS) y extrae metadata. */
 export async function extraerMetaComponente(rutaModulo: string | null): Promise<MetaComponente | null> {
@@ -317,11 +302,6 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
 }
 
 /** Opciones del validador de consistencia. */
-export interface OpcionesConsistencia {
-  /** Si el tag es un módulo (helper, no custom element), el auditor
-   *  no exige que se registre un custom element con el tag. */
-  esModulo?: boolean;
-}
 
 /**
  * Compara la metadata del módulo contra lo declarado en el JSON.

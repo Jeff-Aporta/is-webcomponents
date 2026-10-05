@@ -28,41 +28,14 @@
  */
 
 import { emit } from '../../core/element.js';
+import type { EditorAction, EditorActionDetail, EditorToolbarOptions, ButtonDef } from "./_editor-toolbar.schemas.js";
 
 /** Acción emitida por la toolbar; el editor decide qué hacer con ella. */
-export type EditorAction =
-  | 'add-node'
-  | 'connect'
-  | 'delete'
-  | 'undo'
-  | 'redo'
-  | 'zoom-in'
-  | 'zoom-out'
-  | 'fit';
 
 /** Evento custom que la toolbar usa para propagar la acción al host. */
 export const EDITOR_ACTION_EVENT = 'iswc-editor-action';
-export interface EditorActionDetail {
-  action: EditorAction;
-}
 
 /** Opciones para personalizar la toolbar. */
-export interface EditorToolbarOptions {
-  /** Mostrar el botón [+Nodo]. Default true. */
-  showAddNode?: boolean;
-  /** Mostrar el botón [Conectar]. Default true. */
-  showConnect?: boolean;
-  /** Mostrar el botón [Eliminar]. Default true. */
-  showDelete?: boolean;
-  /** Mostrar el grupo [Undo][Redo]. Default true. */
-  showHistory?: boolean;
-  /** Mostrar el grupo [Zoom+][Zoom−][Fit]. Default true. */
-  showZoom?: boolean;
-  /** Deshabilitar Undo (e.g. cuando `history.past.length === 0`). */
-  undoDisabled?: boolean;
-  /** Deshabilitar Redo (e.g. cuando `history.future.length === 0`). */
-  redoDisabled?: boolean;
-}
 
 const TB_CSS = `
 :host {
@@ -104,15 +77,6 @@ button[aria-pressed="true"] {
   margin: 0 2px;
 }
 `;
-
-interface ButtonDef {
-  action: EditorAction;
-  label: string;
-  icon: string;
-  ariaLabel: string;
-  key: string;
-  initiallyDisabled?: boolean;
-}
 
 /** Crea un `<div role="toolbar">` con los botones estándar.
  *  Devuelve el HTMLElement (no se attachea al shadow; lo hace la subclase). */

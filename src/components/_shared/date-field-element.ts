@@ -6,6 +6,7 @@ import { emit } from '../../core/element.js';
 import { resolveLocale } from './resolve-locale.js';
 import '../media/icon.js';
 import '../actions/button.js';
+import type { DateFieldKind, DefineDateFieldOpts } from "./date-field-element.schemas.js";
 
 /**
  * Fábrica de los campos por secciones: iswc-date-field, iswc-time-field e
@@ -44,14 +45,8 @@ const OBSERVED = [
 ];
 
 /** Tipo de campo por secciones: solo fecha, hora o ambas. */
-export type DateFieldKind = 'date' | 'time' | 'datetime';
 
 /** Opciones de `defineDateField`. */
-export type DefineDateFieldOpts = {
-  tag: string;
-  kind: DateFieldKind;
-  cssUrl: string;
-};
 
 export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typeof HTMLElement {
   class IsDateFieldBase extends HTMLElement {

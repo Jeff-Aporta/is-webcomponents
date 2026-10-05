@@ -29,19 +29,9 @@
  */
 
 import { emit } from '../../core/element.js';
+import type { EditorPanelNodeLite, EditorPanelOptions } from "./_editor-panel.schemas.js";
 
 /** Tipos compartidos por cualquier editor. La subclase los strecha. */
-export interface EditorPanelNodeLite {
-  id: string;
-  label?: string;
-}
-
-export interface EditorPanelOptions {
-  /** Sección de props custom. Si se omite, sólo aparece "Sin props custom". */
-  renderNodeProps?: (host: HTMLElement, nodeId: string | null, panelHost: HTMLElement) => void;
-  /** Mostrar la sección "Export JSON". Default true. */
-  showExportJson?: boolean;
-}
 
 export const EDITOR_SELECT_NODE_EVENT = 'iswc-editor-select-node';
 export const EDITOR_EXPORT_EVENT = 'iswc-editor-export';

@@ -22,6 +22,7 @@ import {
   setProp,
   toGridRow,
 } from '../_shared/isp-record-utils.js';
+import type { ActionLabel, BAllowed, IconKind, FrmMode, InputElement, ButtonElement, AgGridElement, VerifyModalElement, ConfirmDeleteElement, DialogElement, DrawerElement, GridRowSelectDetail, GridCellClickDetail, PkModalField, PkModalCfg } from "./catalogo-gen.schemas.js";
 /**
  * <iswc-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).
  *
@@ -59,120 +60,23 @@ import {
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
-type ActionLabel =
-  | 'Crear'
-  | 'Modificar'
-  | 'Visualizar'
-  | 'Verificar'
-  | 'Duplicar'
-  | 'Recodificar'
-  | 'Eliminar'
-  | 'Consolidar';
-
-interface BAllowed {
-  Crear: boolean;
-  Modificar: boolean;
-  Visualizar: boolean;
-  Verificar: boolean;
-  Duplicar: boolean;
-  Recodificar: boolean;
-  Eliminar: boolean;
-  Consolidar: boolean;
-}
-
-type IconKind =
-  | 'crear'
-  | 'modificar'
-  | 'visualizar'
-  | 'verificar'
-  | 'recodificar'
-  | 'duplicar'
-  | 'eliminar'
-  | 'consolidar'
-  | 'refrescar';
-
-type FrmMode = 'create' | 'edit' | 'view';
-
 /** Subset de la API del `<iswc-input>` que consume este componente. */
-interface InputElement extends HTMLElement {
-  value: string;
-  label: string;
-  readonly: boolean;
-  required: boolean;
-  tabIndex: number;
-  maxlength: number | null;
-}
 
 /** Subset de la API del `<iswc-button>` que consume este componente. */
-interface ButtonElement extends HTMLElement {
-  disabled: boolean;
-  loading: boolean;
-}
 
 /** Subset de la API del `<iswc-ag-grid>` que consume este componente. */
-interface AgGridElement extends HTMLElement {
-  api: {
-    setRows(rows: Array<IspRecord & { id: string; __record?: IspRecord }>): void;
-    setColumns(defs: Array<{ field: string; header?: string }>): void;
-    setQuickFilter(text: string): void;
-  };
-}
 
 /** Subset de la API del `<iswc-modal-verificacion>` que consume este componente. */
-interface VerifyModalElement extends HTMLElement {
-  controller: IspController | null;
-  record: IspRecord | null;
-  entity: string;
-  onError: (msg: string) => void;
-  show(): void;
-  hide(): void;
-}
 
 /** Subset de la API del `<iswc-confirm-delete>` que consume este componente. */
-interface ConfirmDeleteElement extends HTMLElement {
-  entity: string;
-  show(): void;
-  hide(): void;
-}
 
 /** Subset de la API del `<iswc-dialog>` que consume este componente. */
-interface DialogElement extends HTMLElement {
-  show(): void;
-  hide(): void;
-}
 
 /** Subset del `<iswc-drawer>` que consume este componente. */
-interface DrawerElement extends HTMLElement {
-  label: string;
-  show(): void;
-  hide(): void;
-}
 
 /** Detalle del evento `iswc-row-select` de `<iswc-ag-grid>`. */
-interface GridRowSelectDetail {
-  rows: Array<{ id?: string | number; __record?: IspRecord }>;
-}
 
 /** Detalle del evento `iswc-cell-click` de `<iswc-ag-grid>`. */
-interface GridCellClickDetail {
-  row: { id?: string | number; __record?: IspRecord };
-}
-
-interface PkModalField {
-  key: string;
-  label: string;
-  value?: string;
-  readonly?: boolean;
-  required?: boolean;
-  btnRef?: boolean;
-}
-
-interface PkModalCfg {
-  title: string;
-  fields: PkModalField[];
-  okLabel: string;
-  hint?: string;
-}
 
 /* ──────────────────────────── Constantes ─────────────────────────────── */
 

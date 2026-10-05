@@ -24,6 +24,7 @@
  */
 
 /** Clases de línea (fondo) que expone el modo. */
+import type { DiffLineKind, StatLineParts, FormatDiffCfg } from "./code-diff.schemas.js";
 export const DIFF_LINE_CLASS = Object.freeze({
   add: 'iswc-diff-line-add',
   del: 'iswc-diff-line-del',
@@ -36,9 +37,6 @@ export const DIFF_LINE_CLASS = Object.freeze({
 export const DIFF_LINE_CLASSES: readonly string[] = Object.freeze(Object.values(DIFF_LINE_CLASS));
 
 /** Categoría que `classifyDiffLine` puede devolver. */
-export type DiffLineKind =
-  | 'commit' | 'header' | 'file' | 'hunk' | 'add' | 'del'
-  | 'stat' | 'total' | 'context' | 'comment' | 'note';
 
 /**
  * Clasifica una línea suelta de diff / resumen de commit.
@@ -90,7 +88,6 @@ export function diffLineClass(line: string | null | undefined): string | null {
 }
 
 /** Piezas de una línea de `--stat`. */
-export type StatLineParts = { path: string; count: string; bar: string; note: string };
 
 /**
  * Descompone una línea de `--stat` en sus cuatro piezas.
@@ -109,8 +106,6 @@ export function parseStatLine(line: string | null | undefined): StatLineParts | 
     note: m[4] || '',
   };
 }
-
-export type FormatDiffCfg = { eol?: 'lf' | 'crlf' };
 
 /**
  * Alinea en columnas el bloque `--stat` de un resumen de commit.

@@ -1,0 +1,237 @@
+@charset "UTF-8";
+/* Shadow DOM: :host[attr] NO matchea (el host es "featureless").
+ * Usar siempre :host([attr]) como reglas hermanas, nunca &[attr] anidado. */
+:host {
+  --iswc-button-border-width: var(--iswc-control-border-width);
+  --iswc-button-group-radius: var(--iswc-button-border-radius);
+  --iswc-button-group-gap: 0.3em;
+  --iswc-button-group-pad: 0.25em;
+  --iswc-button-group-accent: var(--iswc-accent);
+  display: inline-flex;
+  vertical-align: middle;
+  max-width: 100%;
+}
+:host[hidden] {
+  display: none !important;
+}
+
+.button-group {
+  display: flex;
+  position: relative;
+  isolation: isolate;
+  flex-wrap: wrap;
+  border-radius: var(--iswc-button-group-radius);
+  /* El foco y la selección se dibujan por encima de los bordes vecinos */
+}
+.button-group ::slotted(:is(:focus, :focus-within, [selected], [aria-checked=true], [checked])) {
+  z-index: 2 !important;
+}
+@media (hover: hover) {
+  .button-group ::slotted(:hover) {
+    z-index: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .button-group ::slotted(*) {
+    transition: none;
+  }
+}
+
+:host([orientation=horizontal]) .button-group {
+  flex-direction: row;
+}
+
+:host([orientation=vertical]) .button-group {
+  flex-direction: column;
+}
+
+/* ---- appearance: joined (default) ------------------------------------- */
+/* Bordes fusionados: el grupo se lee como una sola pieza. */
+:host([variant=joined]) .button-group {
+  box-shadow: 0 1px 2px color-mix(in srgb, #000 10%, transparent);
+}
+
+:host([variant=joined][orientation=horizontal]) {
+  --_button-horizontal-indent: calc(var(--iswc-button-border-width) * -1);
+  --_button-horizontal-indent-outlined: calc(var(--iswc-button-border-width) * -1);
+}
+:host([variant=joined][orientation=horizontal]) ::slotted(:first-child) {
+  --_button-horizontal-indent: 0;
+  --_button-horizontal-indent-outlined: 0;
+}
+:host([variant=joined][orientation=horizontal]) ::slotted(:first-child:not(:last-child)) {
+  --_button-start-end-radius: 0;
+  --_button-end-end-radius: 0;
+}
+:host([variant=joined][orientation=horizontal]) ::slotted(:last-child:not(:first-child)) {
+  --_button-start-start-radius: 0;
+  --_button-end-start-radius: 0;
+}
+:host([variant=joined][orientation=horizontal]) ::slotted(button:not(:first-child)),
+:host([variant=joined][orientation=horizontal]) ::slotted(.iswc-filled:not(:first-child)) {
+  margin-inline-start: calc(var(--iswc-button-border-width) * -1);
+}
+:host([variant=joined][orientation=horizontal]) ::slotted(button:first-child:not(:last-child)) {
+  border-start-end-radius: 0 !important;
+  border-end-end-radius: 0 !important;
+}
+:host([variant=joined][orientation=horizontal]) ::slotted(button:last-child:not(:first-child)) {
+  border-start-start-radius: 0 !important;
+  border-end-start-radius: 0 !important;
+}
+
+:host([variant=joined][orientation=vertical]) {
+  --_button-vertical-indent: calc(var(--iswc-button-border-width) * -1);
+  --_button-vertical-indent-outlined: calc(var(--iswc-button-border-width) * -1);
+}
+:host([variant=joined][orientation=vertical]) ::slotted(:first-child) {
+  --_button-vertical-indent: 0;
+  --_button-vertical-indent-outlined: 0;
+}
+:host([variant=joined][orientation=vertical]) ::slotted(:first-child:not(:last-child)) {
+  --_button-end-start-radius: 0;
+  --_button-end-end-radius: 0;
+}
+:host([variant=joined][orientation=vertical]) ::slotted(:last-child:not(:first-child)) {
+  --_button-start-start-radius: 0;
+  --_button-start-end-radius: 0;
+}
+:host([variant=joined][orientation=vertical]) ::slotted(button:not(:first-child)),
+:host([variant=joined][orientation=vertical]) ::slotted(.iswc-filled:not(:first-child)) {
+  margin-block-start: calc(var(--iswc-button-border-width) * -1);
+}
+:host([variant=joined][orientation=vertical]) ::slotted(button:first-child:not(:last-child)) {
+  border-end-start-radius: 0 !important;
+  border-end-end-radius: 0 !important;
+}
+:host([variant=joined][orientation=vertical]) ::slotted(button:last-child:not(:first-child)) {
+  border-start-start-radius: 0 !important;
+  border-start-end-radius: 0 !important;
+}
+
+/* Intermedios sin radio */
+:host([variant=joined]) ::slotted(:not(:first-child):not(:last-child)) {
+  --_button-start-start-radius: 0;
+  --_button-start-end-radius: 0;
+  --_button-end-start-radius: 0;
+  --_button-end-end-radius: 0;
+}
+:host([variant=joined]) ::slotted(button:not(:first-child):not(:last-child)),
+:host([variant=joined]) ::slotted(.iswc-filled:not(:first-child):not(:last-child)) {
+  border-radius: 0 !important;
+}
+
+/* ---- appearance: segmented ------------------------------------------- */
+/* Pista hundida con la pastilla activa elevada (control segmentado). */
+/* La pista crece lo que mide su padding para que la pastilla interior conserve
+ * el radio natural del botón. */
+:host([variant=segmented]) {
+  --iswc-button-group-radius: calc(var(--iswc-button-border-radius) + var(--iswc-button-group-pad));
+  /* --iswc-bg-soft queda por debajo de --iswc-bg-elev en claro y en oscuro, así la
+   * pista se lee hundida en ambos temas sin depender de la elevación. */
+}
+:host([variant=segmented]) .button-group {
+  gap: 0.15em;
+  padding: var(--iswc-button-group-pad);
+  background: var(--iswc-bg-soft);
+  border: var(--iswc-button-border-width) solid var(--iswc-border-soft);
+  box-shadow: inset 0 1px 2px color-mix(in srgb, #000 12%, transparent);
+}
+:host([variant=segmented]) ::slotted(*) {
+  --iswc-control-bg: transparent;
+  --iswc-control-bg-hover: color-mix(in srgb, var(--iswc-text) 8%, transparent);
+  --iswc-control-bg-active: color-mix(in srgb, var(--iswc-text) 14%, transparent);
+  --iswc-control-border: transparent;
+  --iswc-control-text: var(--iswc-text-soft, var(--iswc-text, inherit));
+}
+:host([variant=segmented]) ::slotted([selected]) {
+  --_sel: var(--iswc-button-selected-color, var(--iswc-button-group-accent));
+  --iswc-control-bg: color-mix(in srgb, var(--_sel) 18%, var(--iswc-bg-elev));
+  --iswc-control-bg-hover: color-mix(in srgb, var(--_sel) 26%, var(--iswc-bg-elev));
+  --iswc-control-bg-active: color-mix(in srgb, var(--_sel) 32%, var(--iswc-bg-elev));
+  --iswc-control-border: color-mix(in srgb, var(--_sel) 45%, transparent);
+  --iswc-control-text: var(--_sel);
+  border-radius: var(--iswc-button-border-radius);
+  box-shadow: 0 1px 3px color-mix(in srgb, #000 22%, transparent);
+}
+
+/* ---- appearance: separated ------------------------------------------- */
+/* Botones independientes con separación: toolbars y acciones sueltas. */
+:host([variant=separated]) .button-group {
+  gap: var(--iswc-button-group-gap);
+}
+
+/* ---- selección (select="single|multiple") ----------------------------- */
+:host([variant=joined]) ::slotted([selected]),
+:host([variant=separated]) ::slotted([selected]) {
+  --_sel: var(--iswc-button-selected-color, var(--iswc-button-group-accent));
+  --iswc-control-bg: color-mix(in srgb, var(--_sel) 16%, transparent);
+  --iswc-control-bg-hover: color-mix(in srgb, var(--_sel) 24%, transparent);
+  --iswc-control-bg-active: color-mix(in srgb, var(--_sel) 30%, transparent);
+  --iswc-control-border: color-mix(in srgb, var(--_sel) 60%, transparent);
+  --iswc-control-text: var(--_sel);
+}
+
+/* ---- modificadores --------------------------------------------------- */
+:host([pill]) {
+  --iswc-button-group-radius: 999px;
+  --iswc-button-group-pad: 0.3em;
+}
+:host([pill]) ::slotted(*) {
+  --iswc-button-border-radius: 999px;
+}
+
+:host([pill][variant=segmented]) ::slotted([selected]) {
+  border-radius: 999px;
+}
+
+/* Pill + joined: forzar radios exteriores en --_button-* (iswc-button las
+ * consume sin redefinirlas). Así el extremo es pastilla aunque el hijo sea
+ * iswc-dropdown u otro wrapper, no solo iswc-button directo. */
+:host([pill][variant=joined][orientation=horizontal]) ::slotted(:first-child:not(:last-child)) {
+  --_button-start-start-radius: 999px;
+  --_button-end-start-radius: 999px;
+}
+:host([pill][variant=joined][orientation=horizontal]) ::slotted(:last-child:not(:first-child)) {
+  --_button-start-end-radius: 999px;
+  --_button-end-end-radius: 999px;
+}
+:host([pill][variant=joined][orientation=horizontal]) ::slotted(:only-child) {
+  --_button-start-start-radius: 999px;
+  --_button-start-end-radius: 999px;
+  --_button-end-start-radius: 999px;
+  --_button-end-end-radius: 999px;
+}
+
+:host([pill][variant=joined][orientation=vertical]) ::slotted(:only-child) {
+  --_button-start-start-radius: 999px;
+  --_button-start-end-radius: 999px;
+  --_button-end-start-radius: 999px;
+  --_button-end-end-radius: 999px;
+}
+:host([pill][variant=joined][orientation=vertical]) ::slotted(:first-child:not(:last-child)) {
+  --_button-start-start-radius: 999px;
+  --_button-start-end-radius: 999px;
+}
+:host([pill][variant=joined][orientation=vertical]) ::slotted(:last-child:not(:first-child)) {
+  --_button-end-start-radius: 999px;
+  --_button-end-end-radius: 999px;
+}
+
+:host([stretch]) {
+  display: flex;
+  width: 100%;
+}
+:host([stretch]) .button-group {
+  flex-wrap: nowrap;
+  width: 100%;
+}
+:host([stretch]) ::slotted(*) {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+:host([disabled]) {
+  opacity: 0.55;
+  pointer-events: none;
+}

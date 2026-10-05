@@ -130,6 +130,7 @@ import type {
   SelectionModeName,
   TextFilterOp,
 } from './datagrid-core/types.js';
+import type { ColumnDefWithActions, ActionDef, ColumnStateWithSticky, CellEditDetail, CellClickDetail, RowSelectDetail, SortChangeDetail, FilterChangeDetail, ActionEventDetail, ColumnPinDetail, PageChangeDetail, StateSavedDetail } from "./ag-grid.schemas.js";
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
@@ -271,82 +272,28 @@ const HEADER_MENU_ICONS: Record<string, string> = {
 };
 
 /** ColumnDef extendido en runtime con la lista de acciones por columna. */
-interface ColumnDefWithActions extends ColumnDef {
-  actions?: ActionDef[];
-}
 
 /** Definición de una acción dentro de una columna (botón por fila). */
-interface ActionDef {
-  value: string;
-  label?: string;
-  icon?: string;
-}
 
 /** ColumnState extendido con campos pegados al runtime (`__stickLeft`/`__stickRight`). */
-interface ColumnStateWithSticky extends ColumnState {
-  __stickLeft?: string;
-  __stickRight?: string;
-  /** Estilo de celda inyectado por el consumidor (`cellStyle`). */
-  cellStyle?: Record<string, string>;
-}
 
 /** Detalle del evento `iswc-cell-edit`. */
-interface CellEditDetail {
-  row: RowData;
-  column: ColumnState;
-  oldValue: unknown;
-  newValue: unknown;
-}
 
 /** Detalle del evento `iswc-cell-click`. */
-interface CellClickDetail {
-  row: RowData;
-  column: ColumnState | null;
-  value: unknown;
-}
 
 /** Detalle del evento `iswc-row-select`. */
-interface RowSelectDetail {
-  rows: RowData[];
-}
 
 /** Detalle del evento `iswc-sort-change`. */
-interface SortChangeDetail {
-  column: string;
-  direction: SortDirName | null;
-}
 
 /** Detalle del evento `iswc-filter-change`. */
-interface FilterChangeDetail {
-  column: string;
-  op: string | null | undefined;
-  value: unknown;
-}
 
 /** Detalle del evento `iswc-action`. */
-interface ActionEventDetail {
-  row: RowData;
-  column: ColumnState | undefined;
-  action: string | undefined;
-}
 
 /** Detalle del evento `iswc-column-pin`. */
-interface ColumnPinDetail {
-  colId: string;
-  side: PinSideName | null;
-}
 
 /** Detalle del evento `iswc-page-change`. */
-interface PageChangeDetail {
-  page: number;
-  pageSize: number;
-}
 
 /** Detalle del evento `iswc-state-saved`. */
-interface StateSavedDetail {
-  key: string;
-  state: unknown;
-}
 
 const FILTER_ACTIONS_HTML = `
   <div class="mim-dg__filter-actions">

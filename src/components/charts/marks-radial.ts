@@ -1,5 +1,6 @@
 import { pathArc, polarToCartesian, svgEl } from '../_shared/svg-chart-engine.js';
 import type { ChartCtx, ChartDataset } from './chart.js';
+import type { RadialDataset, Slice } from "./marks-radial.schemas.js";
 
 /**
  * Marks radiales (pie, doughnut, polarArea, radar).
@@ -11,14 +12,8 @@ import type { ChartCtx, ChartDataset } from './chart.js';
 const TAU = Math.PI * 2;
 
 /** Dataset con los colores extendidos que el cliente puede pasar por atributo. */
-type RadialDataset = ChartDataset & {
-  backgroundColor?: string | string[];
-  borderColor?: string;
-  __i?: number;
-};
 
 /** Rebanada visible: valor + índice original (clave para color). */
-type Slice = { value: number; index: number; label: string };
 
 function sliceColor(ds: RadialDataset, index: number, colors: readonly string[]): string {
   const bg = ds.backgroundColor;

@@ -7,6 +7,7 @@
  */
 
 import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.js';
+import type { ClusterColumn, GroupConv, RouteAvoidOpts } from "./component-pack.schemas.js";
 
 export const COL_GUTTER = 52;
 export const PKG_CORRIDOR = 72;
@@ -188,8 +189,6 @@ function packPackage(pkg: Paquete, kids: Componente[], gut: number = COL_GUTTER,
   pkg.w = Math.max(80, maxRight + PKG_PAD - pkg.x);
   pkg.h = Math.max(48, maxBottom + PKG_PAD - pkg.y);
 }
-
-interface ClusterColumn { items: Componente[]; }
 
 function clusterColumns(kids: readonly Componente[]): ClusterColumn[] {
   const sorted = kids.slice().sort((a, b) => a.x - b.x);
@@ -400,7 +399,6 @@ function connectIslands(occ: boolean[][], blocked: readonly boolean[][]): void {
  * Contornos de paquete: cuadrícula que envuelve a todos los hijos.
  * Celdas en conflicto van al paquete del hijo más cercano (tocan, no solapan).
  */
-interface GroupConv { xs: number[]; ys: number[]; occ: boolean[][]; }
 export function layoutPackageOutlines(packages: readonly Paquete[], components: readonly Componente[], opts: OpcionesEmpaque = {}) {
   const pad = opts.pad ?? 12;
   const tabH = opts.tabH ?? 18;
@@ -931,19 +929,6 @@ function wrapCandidates(
  * Polilínea ortogonal: sale perpendicular, camina fuera de cajas infladas,
  * llega alineada al centro del O. Origen/destino solo tocan en el extremo.
  */
-interface RouteAvoidOpts {
-  clearance?: number;
-  fromSide?: Lado;
-  toSide?: Lado;
-  fromBox?: Caja;
-  toBox?: Caja;
-  usedSegs?: Array<{ a: Punto; b: Punto }>;
-  frame?: Caja;
-  wrapBoxes?: readonly Caja[];
-  _loose?: boolean;
-  rank?: number;
-  total?: number;
-}
 
 export function routeAvoidingBoxes(
   from: Punto,

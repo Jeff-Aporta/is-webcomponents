@@ -11,6 +11,7 @@
  * CDN: …/dist/cdn/helpers/response-cache.min.js
  */
 
+import type { CreateResponseCacheOpts, ClaveDeInput, CachedRow, VivoAviso, VivoOpts, ResponseCache } from "./response-cache.schemas.js";
 const LIMITE_MS_DEFAULT = 1500;
 const VIDA_MS_DEFAULT = 24 * 60 * 60 * 1000;
 
@@ -28,58 +29,6 @@ export function canonico(valor: unknown): string {
   const obj = valor as Record<string, unknown>;
   const claves = Object.keys(obj).sort();
   return `{${claves.map((k) => `${JSON.stringify(k)}:${canonico(obj[k])}`).join(',')}}`;
-}
-
-export interface CreateResponseCacheOpts {
-  dbName?: string;
-  storeName?: string;
-  ttlMs?: number;
-  timeoutMs?: number;
-}
-
-export interface ClaveDeInput {
-  app?: string;
-  metodo?: string;
-  ruta?: string;
-  cuerpo?: unknown;
-  quien?: string;
-  user?: string;
-  method?: string;
-  path?: string;
-  body?: unknown;
-}
-
-export interface CachedRow<T = unknown> {
-  clave: string;
-  datos: T;
-  texto: string;
-  guardadoEn: number;
-}
-
-export interface VivoAviso {
-  origen: 'cache' | 'red';
-  cambio: boolean;
-}
-
-export interface VivoOpts<T = unknown> {
-  key: string;
-  pintar?: (datos: T, info: VivoAviso) => void;
-  onCached?: (datos: T, info: VivoAviso) => void;
-  onError?: (error: unknown) => void;
-}
-
-export interface ResponseCache {
-  dbName: string;
-  storeName: string;
-  ttlMs: number;
-  canonico: typeof canonico;
-  claveDe: (input?: ClaveDeInput) => string;
-  leer: <T = unknown>(clave: string) => Promise<CachedRow<T> | null>;
-  guardar: <T = unknown>(clave: string, datos: T) => Promise<boolean>;
-  borrar: (clave: string) => Promise<void>;
-  invalidar: (coincide: string | ((c: string) => boolean)) => Promise<void>;
-  vaciar: () => Promise<void>;
-  vivo: <T = unknown>(fetchFresh: () => Promise<T>, opts: VivoOpts<T>) => Promise<T>;
 }
 
 export function createResponseCache(opts: CreateResponseCacheOpts = {}): ResponseCache {

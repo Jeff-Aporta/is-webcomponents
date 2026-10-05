@@ -4,6 +4,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import '../media/icon.js';
 import '../actions/share-button.js';
 import { createPanZoom, type PanZoomController } from '../_shared/pan-zoom.js';
+import type { ViewTransform } from "./lightbox.schemas.js";
 
 /**
  * <iswc-lightbox> — visor a pantalla completa para cualquier contenido.
@@ -67,7 +68,6 @@ const ICON = {
 const VALID_VARIANT = ['backdrop', 'solid'];
 
 /** Estado de la transformación (zoom + pan) que se aplica al `.lb-host`. */
-interface ViewTransform { scale: number; x: number; y: number; }
 
 /** Botón de la barra del lightbox (lleva `data-act`). */
 function isActionable(n: EventTarget | null): n is HTMLElement {

@@ -1,4 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
+import type { CropRect, DragHandle, DragState } from "./image-editor.schemas.js";
 
 /**
  * <iswc-image-editor> — Editor de imagen con crop, zoom y rotación.
@@ -24,17 +25,6 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
  *   iswc-change     detail: { crop }
  *   iswc-crop       detail: { dataURL, crop }
  */
-
-interface CropRect { x: number; y: number; width: number; height: number; }
-type DragHandle = 'move' | 'nw' | 'ne' | 'sw' | 'se';
-interface DragState {
-  handle: DragHandle;
-  startX: number;
-  startY: number;
-  origRect: CropRect;
-  origScreenRect: CropRect;
-  aspect: number | null;
-}
 
 (() => {
   const OBSERVED = ['src', 'zoom', 'rotation', 'aspect'];

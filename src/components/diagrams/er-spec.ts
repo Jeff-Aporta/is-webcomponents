@@ -30,6 +30,7 @@ import type {
   EdgeVariant,
   NodeStyleOverride,
 } from './diagram-types.js';
+import type { ClusterBox, ClusterRaw } from "./er-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas entidad-relación (sin Mermaid).
@@ -336,26 +337,6 @@ function cardinalityMark(anchor: { x: number; y: number }, side: BoxSide, card: 
 /* ───────────────────────── layout ───────────────────────── */
 
 const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
-
-interface ClusterBox {
-  key: number;
-  nodes: Array<{ id: string; x: number; y: number; w: number; h: number; layer: number; order: number }>;
-  padTop: number;
-  padLado: number;
-  w: number;
-  h: number;
-}
-interface ClusterRaw {
-  id: string | null;
-  name: string;
-  hue: number | undefined;
-  ids: string[];
-  boxed: boolean;
-  /** Id del cluster padre (si está anidado). */
-  parentId?: string;
-  /** Profundidad de anidamiento (0 = root). */
-  depth: number;
-}
 
 /**
  * Reparte las entidades en clústeres: uno por grupo declarado, más uno suelto

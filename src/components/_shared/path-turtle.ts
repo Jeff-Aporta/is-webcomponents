@@ -2,6 +2,7 @@ import { tkHueToHex } from './tk-hue.js';
 import { contrastFontColor } from './tk-color.js';
 import { inlineMdWeb } from './tk-inline-md.js';
 import { svgEl } from './svg-chart-engine.js';
+import type { TurtleMessage, TurtleTheme, TurtlePhase, TurtleState, TurtleReport, TurtleDataOpts, TurtleMeasure } from "./path-turtle.schemas.js";
 
 /**
  * Dot "tortuga cometa" controlable: recorre los flujos en orden, con cola de cometa
@@ -14,46 +15,16 @@ import { svgEl } from './svg-chart-engine.js';
  */
 
 /** Mensaje de un flujo de secuencia (un dot por tramo). */
-export type TurtleMessage = {
-  step: string | number;
-  path: string;
-  color?: string;
-  groupHue?: number;
-  log?: string;
-  [key: string]: unknown;
-};
 
 /** Tema (al menos el `accent` del kit). */
-export type TurtleTheme = { accent: string; [key: string]: unknown };
 
 /** Estado interno del bucle de animación. */
-export type TurtlePhase = 'idle' | 'playing' | 'between' | 'waiting' | 'paused' | 'done';
-
-export type TurtleState = {
-  idx: number;
-  elapsed: number;
-  autoElapsed: number;
-  phase: TurtlePhase;
-  lastTs: number;
-  gapStart: number;
-  lastPct: number;
-};
 
 /** Estado reportado por `onState`. */
-export type TurtleReport = { playing: boolean; idx: number; total: number; replay: number };
 
 /** Opciones de `setData`. */
-export type TurtleDataOpts = {
-  messages?: readonly TurtleMessage[];
-  theme: TurtleTheme;
-  viewW?: number;
-  viewH?: number;
-  autoLoop?: boolean;
-  onState?: (s: TurtleReport) => void;
-};
 
 /** Resultado de medir un mensaje. */
-type TurtleMeasure = { m: TurtleMessage; len: number; dur: number };
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 

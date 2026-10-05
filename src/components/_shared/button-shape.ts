@@ -5,6 +5,7 @@
  * No mezclar con MEDIA_SHAPE (avatar / theme-img): otro dominio (recorte de media).
  */
 
+import type { ButtonShape } from "./button-shape.schemas.js";
 export const BUTTON_SHAPE = Object.freeze([
   'none',
   'round',
@@ -14,8 +15,6 @@ export const BUTTON_SHAPE = Object.freeze([
 ] as const);
 
 export const DEFAULT_BUTTON_SHAPE = 'round';
-
-export type ButtonShape = (typeof BUTTON_SHAPE)[number];
 
 /** Iconos sugeridos para paneles de demo / selects. */
 export const BUTTON_SHAPE_ICON: Record<ButtonShape, string> = Object.freeze({

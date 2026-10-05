@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import './floating.js';
+import type { FloatingElement } from "./popover.schemas.js";
 
 /**
  * <iswc-popover> — panel flotante con contenido interactivo, anclado vía `for`.
@@ -31,26 +32,6 @@ import './floating.js';
  */
 
 // ── Subset del contrato público de <iswc-floating> que este wrapper consume ──
-interface FloatingElement extends HTMLElement {
-  active: boolean;
-  placement: string;
-  distance: number;
-  skidding: number;
-  arrow: boolean;
-  strategy: string;
-  flip: boolean;
-  shift: boolean;
-  autoSize: string | boolean;
-  boundary: string;
-  flipFallbackPlacements: string;
-  flipFallbackStrategy: string;
-  flipPadding: number;
-  shiftPadding: number;
-  autoSizePadding: number;
-  hoverBridge: boolean;
-  anchor: unknown;
-  reposition(): void;
-}
 
 (() => {
   let openPopover: IswcPopover | null = null;

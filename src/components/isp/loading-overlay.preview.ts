@@ -2,11 +2,7 @@
  * Playground <iswc-loading-overlay>: show/hide desde los botones del demo.
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../../previews/_kit/types.d.ts';
-
-interface LoadingOverlayLike extends HTMLElement {
-  show(): void;
-  hide(): void;
-}
+import type { LoadingOverlayLike } from "./loading-overlay.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
   const root = ctx.main;

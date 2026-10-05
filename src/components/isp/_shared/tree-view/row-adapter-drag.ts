@@ -1,19 +1,15 @@
 import { TRABase } from "./row-adapter-base.js";
+import type { DragOverPosition, SummaryRect } from "./row-adapter-drag.schemas.js";
 
 /**
  * Posición relativa al target durante una operación de drag & drop.
  * Coincide con `DropPosition` en `_types.ts`, redeclarada localmente para no
  * importar (lock WT-0051).
  */
-type DragOverPosition = "before" | "after" | "into";
 
 /**
  * Summary rect cacheado durante un drag activo.
  */
-interface SummaryRect {
-  top: number;
-  height: number;
-}
 
 /**
  * TRADrag — extiende TRABase con la lógica de drag & drop (handle, placeholders,

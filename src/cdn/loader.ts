@@ -30,7 +30,7 @@ import {
   isTagCovered,
   type Catalog,
 } from './load-plan.js';
-import type { LoadJob } from './load-plan.js';
+import type { LoadJob } from "./load-plan.schemas.js";
 import { installSheetCache, getSheetCache, type SheetCacheApi } from './sheet-cache.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
 import { lookupHash, withAssetHash } from './build/asset-url.js';

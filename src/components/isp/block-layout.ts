@@ -11,6 +11,7 @@ import {
   ScrollMemory,
   bindScrollMemoryApi,
 } from '../_shared/scroll-memory.js';
+import type { Breakpoint, BreakpointFlags, LerpwFn } from "./block-layout.schemas.js";
 
 /**
  * <iswc-block-layout> — port de ISP `layout/BlockLayout.svelte`.
@@ -26,13 +27,11 @@ import {
  */
 
 export const BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
-export type Breakpoint = typeof BREAKPOINTS[number];
 
 /** Anchos ancla de cada breakpoint (idénticos a ISP). */
 export const BREAKPOINT_W: Record<string, number> = { xs: 0, sm: 480, md: 600, lg: 800, xl: 1200 };
 
 /** Bandera acumulativa por breakpoint: `boolszw[bp] === BREAKPOINTS.indexOf(bp) <= idx`. */
-export type BreakpointFlags = Record<string, boolean>;
 
 /** Misma escalera de comparaciones que ISP (ojo: `<` en xs y xl, `<=` en el resto). */
 export function sizewFor(width: number): Breakpoint {
@@ -60,7 +59,6 @@ export function lerpFor(width: number, b0: string = 'sm', b1: string = 'xl'): nu
 export { SCROLL_MEMORY_ATTRS };
 
 /** Callback que `lerpw` entrega dentro del evento `iswc-breakpoint`. */
-type LerpwFn = (b0?: string, b1?: string) => number;
 
 /**
  * Base compartida: observa el tamaño propio y publica el breakpoint.

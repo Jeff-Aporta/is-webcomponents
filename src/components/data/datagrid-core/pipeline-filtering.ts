@@ -14,7 +14,7 @@
  */
 
 import { cellText, getCellValue } from './value-formatter.js';
-import type { ColumnFilter, ColumnState, DateFilter, FilterModel, NumberFilter, RowNode, TextFilter } from './types.js';
+import type { ColumnFilter, ColumnState, DateFilter, FilterModel, NumberFilter, RowNode, TextFilter } from "./types.schemas.js";
 
 function toNum(v: unknown): number | null {
   if (v == null || v === '') return null;

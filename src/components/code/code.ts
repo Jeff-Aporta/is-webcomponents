@@ -50,23 +50,11 @@ import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '
 import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../_shared/code-highlight.js';
 import type { CodeFormatConfig as CodeFmtConfigShared } from '../_shared/code-format.js';
 import '../feedback/tooltip.js';
+import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IsTooltipEl, HighlightLine, HighlightResult } from "./code.schemas.js";
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).
-type CodeMarkKind = 'highlight' | 'tooltip' | 'message';
-type CodeMarkTone = 'error' | 'warning' | 'info' | 'success' | 'neutral';
-type CodeMark = CodeMarkModel;
-type CodeDocument = CodeDocModel;
-type CodeFormatConfig = CodeFmtConfigShared;
-type CodeLangDef = {
-  id: string;
-  aliases?: string[];
-  heavy?: boolean;
-  load?: () => Promise<void>;
-  lineClass?: (line: string) => string | null;
-};
 
 // Wrapper tipado para el custom element <iswc-tooltip>.
-type IsTooltipEl = HTMLElement & { open: boolean };
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
@@ -93,9 +81,6 @@ const PROP_UPGRADE = [
   'line-numbers', 'wrap', 'readonly', 'disabled', 'autofocus', 'compact',
   'mode', 'tab-size', 'name', 'placeholder', 'min-height', 'marks',
 ];
-
-type HighlightLine = CodeHighlightLine;
-type HighlightResult = { lines: HighlightLine[]; html: string; withNumbers: boolean };
 
 /** Rango [from,to) del texto viejo reemplazado por `insertedLen` caracteres. */
 function editRange(oldText: string, newText: string): [number, number, number] {

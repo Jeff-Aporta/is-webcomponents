@@ -3,7 +3,6 @@ import type { BoxSide } from './diagram-types.js';
 
 // `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
 // una dirección cardinal. Estrechamos para satisfacer la firma del helper.
-type AnchorSide = 'left' | 'right' | 'top' | 'bottom';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
@@ -16,6 +15,7 @@ import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inl
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { wrapText } from '../_shared/diagram-text-wrap.js';
+import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayoutExclusionZone, FlowLayout, FlowLayoutOverrides } from "./flowchart-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de flujo (sin Mermaid).
@@ -32,11 +32,6 @@ const MAX_W = 260;
 const NODE_H = 44;
 const DIAMOND_PAD = 28;
 
-export type FlowDirection = 'TB' | 'BT' | 'LR' | 'RL';
-export type FlowShape = 'rect' | 'round' | 'stadium' | 'circle' | 'diamond' | 'hexagon' | 'parallelogram' | 'cylinder' | 'subroutine';
-export type FlowEdgeKind = 'solid' | 'dashed' | 'thick';
-export type FlowOverflow = 'grow' | 'ellipsis';
-
 /** Direcciones aceptadas (equivalen a las de Mermaid: TB/TD, BT, LR, RL). */
 const DIRECTIONS: Set<string> = new Set(['TB', 'BT', 'LR', 'RL']);
 
@@ -47,113 +42,8 @@ export const FLOW_SHAPES: Set<string> = new Set([
 
 const DEFAULT_HUES: number[] = [210, 239, 160, 38, 280, 199];
 
-interface LeadingIconToken { iconId: string; hue?: number; rest: string }
-
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
-}
-
-export interface FlowExclusionZone {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  label?: string;
-}
-
-export interface FlowNodeSpec {
-  id: string;
-  label: string;
-  shape: FlowShape;
-  icon?: string;
-  hue?: number;
-  group?: string;
-  description?: string;
-  overflow?: FlowOverflow;
-}
-
-export interface FlowEdgeSpec {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  kind: FlowEdgeKind;
-  group?: string;
-  waypoints?: Array<{ x: number; y: number }>;
-}
-
-export interface FlowGroupSpec {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-export interface FlowResolvedSpec {
-  title?: string;
-  subtitle?: string;
-  direction: FlowDirection;
-  defaultOverflow: FlowOverflow;
-  groups?: FlowGroupSpec[];
-  exclusionZones?: FlowExclusionZone[];
-  nodes: FlowNodeSpec[];
-  edges: FlowEdgeSpec[];
-}
-
-export interface FlowLayoutNode {
-  id: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  layer: number;
-  label: string;
-  shape: FlowShape;
-  icon?: string;
-  description?: string;
-  hue?: number;
-  group?: string;
-}
-
-export interface FlowLayoutEdge {
-  id: string;
-  from: string;
-  to: string;
-  label?: string;
-  kind: FlowEdgeKind;
-  path: string;
-  arrowTipX: number;
-  arrowTipY: number;
-  arrowAngle: number;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
-
-export interface FlowLayoutExclusionZone {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  label?: string;
-}
-
-export interface FlowLayout {
-  width: number;
-  height: number;
-  nodes: FlowLayoutNode[];
-  edges: FlowLayoutEdge[];
-  groups?: FlowGroupSpec[];
-  exclusionZones?: FlowLayoutExclusionZone[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
-}
-
-export interface FlowLayoutOverrides {
-  nodes?: Record<string, { x?: number; y?: number; label?: string; hue?: number }>;
-  edges?: Record<string, { label?: string; hue?: number }>;
 }
 
 /** Ancho estimado de la caja según su etiqueta, descontando tokens {{icon}}.

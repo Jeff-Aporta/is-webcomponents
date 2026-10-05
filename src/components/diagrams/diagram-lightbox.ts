@@ -3,6 +3,7 @@ import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './diagram-kinds.js';
 import { expandSequencePayloadForJson } from './sequence-spec.js';
 import '../media/icon.js';
+import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./diagram-lightbox.schemas.js";
 
 /**
  * <iswc-diagram-lightbox> — colore del lightbox para diagramas.
@@ -42,31 +43,12 @@ const RING_R = 9;
 const RING_C = 2 * Math.PI * RING_R;
 
 /** Estado del motor tortuga publicado por los diagramas en `iswc-turtle-state`. */
-interface TurtleStateDetail {
-  playing: boolean;
-  replay: number;
-  idx: number;
-  total: number;
-}
 
 /** `iswc-toggle-group` detail: el grupo que el usuario alterna en la leyenda. */
-interface ToggleGroupDetail { id: string; }
 
 /** API `turtle` opcional expuesta por los diagramas con animación segmentada. */
-interface TurtleApi {
-  play(): void;
-  pause(): void;
-  stop(): void;
-  next(): void;
-  prev(): void;
-}
 
 /** Forma del componente-diagrama tal como la usa este visor. */
-type DiagramHost = HTMLElement & {
-  payload: unknown;
-  hiddenGroups?: Set<string>;
-  turtle?: TurtleApi | null;
-};
 
 /** Botón de la barra del lightbox (lleva `data-act`). */
 function isActionable(n: EventTarget | null): n is HTMLElement {

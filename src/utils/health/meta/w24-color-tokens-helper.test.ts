@@ -1,5 +1,5 @@
 /**
- * w24-color-tokens-helper.test.ts — Guardian del contrato W24.
+ * w24-color-tokens-helper.test.ts Ã¢â‚¬â€ Guardian del contrato W24.
  *
  * Estandar W24 (zod-migration): existe un helper canonico en
  * `src/styles/color-tokens.ts` que define las 5 variantes tonal (paler/
@@ -12,7 +12,7 @@
  *     usan EXACTAMENTE los ratios 12/28/82/62/45 contra white/black del
  *     helper (ISWC_COLOR_MIX).
  *
- *   - Brand es la excepcion parametrizable: vive en palettes.css y se
+ *   - Brand es la excepcion parametrizable: vive en palettes.scss y se
  *     deriva con `hsl(from base h s ...)` para preservar hue/saturacion
  *     al cambiar la paleta. La interfaz publica (los 6 tokens por familia)
  *     es IDENTICA a las de color-mix.
@@ -22,12 +22,12 @@
  *   1. El helper existe y exporta las constantes canonicas (ISWC_COLOR_VARIANTS,
  *      ISWC_COLOR_MIX, ISWC_COLOR_MIX_FAMILIES, ISWC_COLOR_FAMILIES).
  *   2. El helper satisface su propio contrato interno (assertColorMixContract).
- *   3. Las 6 familias de color-mix en is-base.css tienen EXACTAMENTE las 5
+ *   3. Las 6 familias de color-mix en is-base.scss tienen EXACTAMENTE las 5
  *      variantes, con los ratios del helper y los targets correctos (white/black).
- *   4. Brand tiene 5 variantes en palettes.css con la matematica HSL esperada.
+ *   4. Brand tiene 5 variantes en palettes.scss con la matematica HSL esperada.
  *   5. La salida del helper (`colorMixFamilyBlock`, `brandFamilyBlock`,
  *      `brandVariantRule`) coincide literalmente con lo escrito en los archivos
- *      CSS — si alguien edita a mano sin pasar por el helper, este test lo
+ *      CSS Ã¢â‚¬â€ si alguien edita a mano sin pasar por el helper, este test lo
  *      caza antes de que el cambio llegue a produccion.
  *   6. palette-build.ts (BRAND_DERIVE) reusa el helper (single source of truth).
  *
@@ -60,8 +60,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
 
 const HELPER_TS = join(root, 'src/styles/color-tokens.ts');
-const IS_BASE_CSS = join(root, 'src/styles/is-base.css');
-const PALETTES_CSS = join(root, 'src/styles/palettes.css');
+const IS_BASE_CSS = join(root, 'src/styles/is-base.scss');
+const PALETTES_CSS = join(root, 'src/styles/palettes.scss');
 const PALETTE_BUILD_TS = join(root, 'src/styles/palette-build.ts');
 
 const isBase = readFileSync(IS_BASE_CSS, 'utf8');
@@ -86,7 +86,7 @@ test('W24: ISWC_COLOR_VARIANTS son exactamente 5 en el orden canonico', () => {
 
 test('W24: ISWC_COLOR_MIX define los 5 ratios canonicos 12/28/82/62/45', () => {
   // El comentario de cabecera del helper explica que estos son la firma
-  // del kit. Cualquier refactor futuro los toca aqui (no en is-base.css).
+  // del kit. Cualquier refactor futuro los toca aqui (no en is-base.scss).
   assert.equal(ISWC_COLOR_MIX.paler.target, 'white');
   assert.equal(ISWC_COLOR_MIX.paler.pct, 12);
   assert.equal(ISWC_COLOR_MIX.pale.target, 'white');
@@ -123,7 +123,7 @@ test('W24: assertColorMixContract() pasa sin lanzar', () => {
 });
 
 /* --------------------------------------------------------------------------
- * 2) Las 6 familias de color-mix en is-base.css siguen el helper
+ * 2) Las 6 familias de color-mix en is-base.scss siguen el helper
  * ------------------------------------------------------------------------*/
 
 /** Extrae el valor de un token `--iswc-color-X: VALOR;` del bloque CSS.
@@ -133,11 +133,11 @@ function extractToken(css: string, name: string): string {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const re = new RegExp(`${escaped}\\s*:\\s*([^;]+);`, 'i');
   const m = css.match(re);
-  assert.ok(m, `is-base.css debe declarar ${name}`);
+  assert.ok(m, `is-base.scss debe declarar ${name}`);
   return m[1].trim();
 }
 
-test('W24: las 6 familias de color-mix tienen base declarado en is-base.css', () => {
+test('W24: las 6 familias de color-mix tienen base declarado en is-base.scss', () => {
   const expected: Record<string, string> = {
     success: '#40c057',
     warning: '#f59f00',
@@ -176,7 +176,7 @@ test('W24: las 6 familias usan EXACTAMENTE los ratios 12/28/82/62/45 del helper'
   for (const family of ISWC_COLOR_MIX_FAMILIES) {
     for (const variant of ISWC_COLOR_VARIANTS) {
       const expected = colorMixRule(family, variant);
-      // expected = "--iswc-color-X-Y: color-mix(...);" — extraemos el valor.
+      // expected = "--iswc-color-X-Y: color-mix(...);" Ã¢â‚¬â€ extraemos el valor.
       const m = expected.match(/^--iswc-color-[^:]+:\s*(.+);$/);
       assert.ok(m, `colorMixRule mal formado: ${expected}`);
       const expectedValue = m[1].trim();
@@ -192,7 +192,7 @@ test('W24: las 6 familias usan EXACTAMENTE los ratios 12/28/82/62/45 del helper'
 
 test('W24: las 6 familias usan los targets white/black del helper', () => {
   // Defensa adicional: aunque alguien cambie un ratio, no debe romper
-  // la convencion white/black (paler/pale → white; los 3 strong → black).
+  // la convencion white/black (paler/pale Ã¢â€ â€™ white; los 3 strong Ã¢â€ â€™ black).
   for (const family of ISWC_COLOR_MIX_FAMILIES) {
     for (const variant of ISWC_COLOR_VARIANTS) {
       const mix = ISWC_COLOR_MIX[variant];
@@ -265,27 +265,27 @@ test('W24: las 6 familias usan ratios IDENTICOS entre si (helper unifica)', () =
 });
 
 /* --------------------------------------------------------------------------
- * 4) Brand en palettes.css sigue el helper (HSL parametrizable)
+ * 4) Brand en palettes.scss sigue el helper (HSL parametrizable)
  * ------------------------------------------------------------------------*/
 
-test('W24: brand en palettes.css declara las 5 variantes', () => {
+test('W24: brand en palettes.scss declara las 5 variantes', () => {
   for (const variant of ISWC_COLOR_VARIANTS) {
     const token = iswcColorTokenName('brand', variant);
     const re = new RegExp(`${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*:\\s*([^;]+);`, 'i');
     const m = palettes.match(re);
-    assert.ok(m, `palettes.css debe declarar ${token}`);
+    assert.ok(m, `palettes.scss debe declarar ${token}`);
   }
 });
 
-test('W24: brandVariantRule del helper coincide con palettes.css', () => {
-  // La rampa brand de palettes.css debe coincidir LITERAL con lo que
+test('W24: brandVariantRule del helper coincide con palettes.scss', () => {
+  // La rampa brand de palettes.scss debe coincidir LITERAL con lo que
   // genera el helper. Si alguien edita a mano sin pasar por el helper,
   // este test lo caza.
   for (const variant of ISWC_COLOR_VARIANTS) {
     const token = iswcColorTokenName('brand', variant);
     const re = new RegExp(`${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*:\\s*(hsl\\([^;]+\\));`, 'i');
     const m = palettes.match(re);
-    assert.ok(m, `palettes.css debe declarar ${token} con valor hsl(...)`);
+    assert.ok(m, `palettes.scss debe declarar ${token} con valor hsl(...)`);
     const expected = brandVariantRule(variant);
     assert.equal(
       m[1].replace(/\s+/g, ' ').trim(),
@@ -312,31 +312,31 @@ test('W24: brand usa fixed para paler/pale y factor para los 3 strong', () => {
  * 5) El output del helper coincide con los archivos CSS (single source of truth)
  * ------------------------------------------------------------------------*/
 
-test('W24: colorMixFamilyBlock del helper matchea is-base.css para neutral', () => {
-  // Cogemos el bloque :root,.theme-dark de is-base.css y lo comparamos
+test('W24: colorMixFamilyBlock del helper matchea is-base.scss para neutral', () => {
+  // Cogemos el bloque :root,.theme-dark de is-base.scss y lo comparamos
   // caracter a caracter con lo que el helper genera. Si alguien edita
-  // is-base.css sin pasar por el helper, este test rompe.
+  // is-base.scss sin pasar por el helper, este test rompe.
   const helperBlock = colorMixFamilyBlock(':root', 'neutral', '#888');
-  // Extraemos de is-base.css las 6 lineas (base + 5 variantes) de neutral.
+  // Extraemos de is-base.scss las 6 lineas (base + 5 variantes) de neutral.
   const lines: string[] = [`  --iswc-color-neutral: #888;`];
   for (const v of ISWC_COLOR_VARIANTS) {
-    // colorMixRule devuelve `NAME: VALUE;` — necesitamos solo `VALUE;`.
+    // colorMixRule devuelve `NAME: VALUE;` Ã¢â‚¬â€ necesitamos solo `VALUE;`.
     const m = colorMixRule('neutral', v).match(/^--iswc-color-[^:]+:\s*(.+);$/);
     assert.ok(m, `colorMixRule mal formado: ${colorMixRule('neutral', v)}`);
     lines.push(`  ${iswcColorTokenName('neutral', v)}: ${m[1]};`);
   }
   const expected = `:root {\n${lines.join('\n')}\n}`;
   assert.equal(helperBlock, expected);
-  // Verifica que cada linea del bloque generado esta literalmente en is-base.css.
+  // Verifica que cada linea del bloque generado esta literalmente en is-base.scss.
   for (const line of lines) {
-    assert.ok(isBase.includes(line), `is-base.css debe contener literal: ${line}`);
+    assert.ok(isBase.includes(line), `is-base.scss debe contener literal: ${line}`);
   }
 });
 
-test('W24: brandFamilyBlock del helper matchea palettes.css', () => {
-  // La rampa brand en palettes.css debe ser el output literal del helper.
+test('W24: brandFamilyBlock del helper matchea palettes.scss', () => {
+  // La rampa brand en palettes.scss debe ser el output literal del helper.
   const helperBlock = brandFamilyBlock(':root, [data-palette]');
-  // Extraemos las 6 lineas (base + 5 variantes) de brand de palettes.css
+  // Extraemos las 6 lineas (base + 5 variantes) de brand de palettes.scss
   // y verificamos que cada una esta presente.
   for (const variant of ISWC_COLOR_VARIANTS) {
     const line = `  --iswc-color-brand-${variant}: ${brandVariantRule(variant)};`;
@@ -346,7 +346,7 @@ test('W24: brandFamilyBlock del helper matchea palettes.css', () => {
     );
     assert.ok(
       palettes.includes(line),
-      `palettes.css debe contener literal: ${line}`,
+      `palettes.scss debe contener literal: ${line}`,
     );
   }
 });
@@ -400,7 +400,7 @@ test('W24: BRAND_DERIVE tiene los 6 tokens de la familia brand', () => {
 
 test('W24: las 7 familias (6 color-mix + brand) tienen 5 variantes en CSS', () => {
   // Cobertura global: cada familia declarada en ISWC_COLOR_FAMILIES debe
-  // tener sus 5 variantes en is-base.css (color-mix) o palettes.css (brand).
+  // tener sus 5 variantes en is-base.scss (color-mix) o palettes.scss (brand).
   // Esto cierra el contrato "el helper unifica TODAS las familias".
   for (const family of ISWC_COLOR_FAMILIES) {
     const css = family === 'brand' ? palettes : isBase;
@@ -409,17 +409,17 @@ test('W24: las 7 familias (6 color-mix + brand) tienen 5 variantes en CSS', () =
       const re = new RegExp(`${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*:`, 'i');
       assert.ok(
         re.test(css),
-        `${token} debe estar declarado en ${family === 'brand' ? 'palettes.css' : 'is-base.css'}`,
+        `${token} debe estar declarado en ${family === 'brand' ? 'palettes.scss' : 'is-base.scss'}`,
       );
     }
   }
 });
 
-test('W24: summary — 7 familias × 5 variantes = 35 tokens unificados', () => {
+test('W24: summary Ã¢â‚¬â€ 7 familias Ãƒâ€” 5 variantes = 35 tokens unificados', () => {
   // Recuento de cobertura final, util para reportar PASS con dato duro.
   const total = ISWC_COLOR_FAMILIES.length * ISWC_COLOR_VARIANTS.length;
   assert.equal(total, 7 * 5);
-  console.log(`  W24 cobertura: ${ISWC_COLOR_FAMILIES.length} familias × ${ISWC_COLOR_VARIANTS.length} variantes = ${total} tokens`);
+  console.log(`  W24 cobertura: ${ISWC_COLOR_FAMILIES.length} familias Ãƒâ€” ${ISWC_COLOR_VARIANTS.length} variantes = ${total} tokens`);
   console.log(`  ISWC_COLOR_VARIANTS = ${[...ISWC_COLOR_VARIANTS].join(', ')}`);
   console.log(`  ISWC_COLOR_MIX = 12/28/82/62/45 (white/black)`);
 });

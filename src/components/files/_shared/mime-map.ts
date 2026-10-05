@@ -1,14 +1,6 @@
 /** Despacho MIME/ext -> tags view/edit (S-FP3). */
-export type FileKind = 'txt' | 'csv' | 'pdf' | 'docx' | 'pptx' | 'unknown';
 
-export type FileDispatch = {
-  kind: FileKind;
-  viewTag: string | null;
-  editTag: string | null;
-  tag: string | null;
-  unsupported: boolean;
-};
-
+import type { FileKind, FileDispatch } from "./mime-map.schemas.js";
 const BY_MIME: Record<string, FileKind> = {
   'text/plain': 'txt',
   'text/markdown': 'txt',

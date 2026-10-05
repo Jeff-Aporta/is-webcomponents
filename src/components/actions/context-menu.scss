@@ -1,0 +1,69 @@
+@charset "UTF-8";
+/* iswc-context-menu */
+@import url("../_shared/popover-panel.css");
+:host {
+  display: contents;
+}
+
+/* Mismo chrome de superficie flotante que iswc-dropdown / iswc-dropdown-item
+   (ver _shared/popover-panel.css): borde, radio y sombra vía los tokens
+   --iswc-popover-radius / --iswc-popover-shadow. */
+.panel {
+  border: 1px solid var(--iswc-border);
+  border-radius: var(--iswc-popover-radius, var(--iswc-radius));
+  background: var(--iswc-bg-elev);
+  color: var(--iswc-text);
+  padding: 0.35rem;
+  min-width: 12rem;
+  max-width: 22rem;
+  box-shadow: var(--iswc-popover-shadow, var(--iswc-shadow, 0 18px 44px rgba(0, 0, 0, 0.26))), 0 0 0 1px color-mix(in srgb, var(--iswc-text) 4%, transparent) inset;
+  /* El UA aplica a <dialog>: position:absolute, inset-inline 0, width:fit-content
+     y margin:auto. Con solo `left`/`top` desde JS, el `right:0` heredado y el
+     margin auto RE-CENTRAN el panel y nunca aparece en el cursor. Hay que
+     neutralizar el inset completo y el margin. */
+  position: fixed;
+  inset: auto;
+  right: auto;
+  bottom: auto;
+  margin: 0;
+  width: max-content;
+  max-height: min(70vh, 32rem);
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+::slotted(:is(.item, button, a, [role=menuitem])) {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: calc(var(--iswc-radius) - 3px);
+  background: transparent;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  cursor: pointer;
+}
+::slotted(:is(.item, button, a, [role=menuitem])):hover {
+  background: color-mix(in srgb, var(--iswc-accent) 18%, transparent);
+  color: var(--iswc-accent);
+}
+
+::slotted(:is(.item, button)[disabled]) {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+::slotted(hr) {
+  border: 0;
+  border-top: 1px solid var(--iswc-border);
+  margin: 0.25rem 0.2rem;
+}

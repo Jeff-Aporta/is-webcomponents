@@ -3,15 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-
-interface RadarChartLike extends HTMLElement {
-  config: {
-    data: {
-      labels: string[];
-      datasets: Array<{ label: string; data: number[]; fill: boolean }>;
-    };
-  };
-}
+import type { RadarChartLike } from "./radar-chart.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

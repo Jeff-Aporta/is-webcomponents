@@ -3,6 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { resolveLocale } from '../_shared/resolve-locale.js';
 import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';
+import type { NumberPreset, CurrencyPreset, AccountingPreset, FractionPreset, TextPreset, DatePreset, ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./format.schemas.js";
 
 /**
  * <iswc-format type="…" value="…"> — Formateo con Intl + presets estilo Excel.
@@ -26,38 +27,6 @@ import { parseLooseDate } from './format-date.js';
  */
 
 // ── Tipos de presets (discriminated union sobre `kind`) ──────────────────
-type NumberPreset = {
-  kind: 'number';
-  opts: Intl.NumberFormatOptions;
-};
-type CurrencyPreset = {
-  kind: 'currency';
-  digits: number;
-  currency?: string;
-};
-type AccountingPreset = {
-  kind: 'accounting';
-  digits: number;
-  currency?: string;
-};
-type FractionPreset = {
-  kind: 'fraction';
-  maxDen: number;
-};
-type TextPreset = {
-  kind: 'text';
-};
-type DatePreset = {
-  kind: 'date';
-  opts: Intl.DateTimeFormatOptions;
-};
-type ExcelPreset =
-  | NumberPreset
-  | CurrencyPreset
-  | AccountingPreset
-  | FractionPreset
-  | TextPreset
-  | DatePreset;
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `<span part="value" class="value"></span>`;
@@ -90,7 +59,6 @@ const DATE_ATTR_TO_OPT: Record<string, keyof Intl.DateTimeFormatOptions> = {
   'time-zone-name': 'timeZoneName',
 };
 
-type RelativeUnit = Intl.RelativeTimeFormatUnit;
 const RELATIVE_UNITS: ReadonlyArray<readonly [RelativeUnit, number]> = [
   ['year', 31536000],
   ['month', 2592000],
@@ -100,17 +68,12 @@ const RELATIVE_UNITS: ReadonlyArray<readonly [RelativeUnit, number]> = [
   ['minute', 60],
   ['second', 1],
 ];
-type NumberFormatKind = 'decimal' | 'currency' | 'percent' | 'unit' | 'scientific' | 'compact' | 'integer' | 'accounting';
 const NUMBER_VALID_FORMAT: readonly NumberFormatKind[] = [
   'decimal', 'currency', 'percent', 'unit', 'scientific', 'compact', 'integer', 'accounting',
 ];
-type RelativeStyle = 'long' | 'short' | 'narrow';
 const RELATIVE_VALID_STYLE: readonly RelativeStyle[] = ['long', 'short', 'narrow'];
-type RelativeNumeric = 'always' | 'auto';
 const RELATIVE_VALID_NUMERIC: readonly RelativeNumeric[] = ['always', 'auto'];
-type TextCase = 'upper' | 'lower' | 'title' | 'capitalize';
 const TEXT_CASES: readonly TextCase[] = ['upper', 'lower', 'title', 'capitalize'];
-type FormatType = 'date' | 'number' | 'bytes' | 'relative' | 'text';
 const TYPE_PARTS: Record<FormatType, string> = {
   date: 'date', number: 'number', bytes: 'bytes', relative: 'time', text: 'text',
 };
@@ -213,11 +176,6 @@ function titleCase(s: string): string {
 
 // Subset declarado de `formatBytes` (en format-bytes.ts) porque ese archivo
 // sigue siendo JSDoc-only y no expone la opción `locale` en su tipo inferido.
-type FormatBytesOpts = {
-  locale?: string;
-  display?: 'short' | 'long';
-  autofit?: boolean;
-};
 
 class FormatElement extends ElementBase {
   static override get observedAttributes(): string[] { return [...OBSERVED]; }

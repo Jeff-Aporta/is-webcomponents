@@ -1,20 +1,11 @@
-type _NodeAny = Record<string, unknown> & { flatPath: string; childrens?: _NodeAny[]; topology?: unknown; containment?: unknown; mobility?: unknown; pathInit?: unknown; f?: _NodeAny };
-type _TreeRoot = _NodeAny & { childrens: _NodeAny[]; flatPath?: string };
 
 /** Constructor genérico que `TreeNode(Base)` acepta. */
-type _TreeBaseCtor = new (...args: unknown[]) => Record<string, unknown>;
 
 /** Spec mínimo de los `groups` que pinta `groupedWithSeparators`. */
-type _GroupEntry = { separator?: boolean; [key: string]: unknown };
 
 /** Self shape de los getters de NODE_DIM_DESCRIPTORS. */
-interface _DecoratedSelf {
-  topology?: string;
-  containment?: string;
-  mobility?: string;
-  childrens?: unknown[];
-}
 
+import type { _NodeAny, _TreeRoot, _TreeBaseCtor, _GroupEntry, _DecoratedSelf } from "./tree-data.schemas.js";
 const NODE_DECORATED = /* @__PURE__ */ new WeakSet<object>();
 const NODE_DIM_DESCRIPTORS: Record<string, PropertyDescriptor> = {
   isAtom: { get() {

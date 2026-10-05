@@ -10,42 +10,16 @@ import { daysInMonth, pad, parseISO, splitDateTime } from './date-utils.js';
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 
-import { SectionTypeSchema, LayoutItemSchema, type SectionType, type LayoutItem } from "./date-field-core.schema.js";
+import { SectionTypeSchema, LayoutItemSchema, type SectionType, type LayoutItem } from "./date-field-core.schemas.js";
+import type { SectionMeta, Parts, FieldKind, SectionFieldOptions } from "./date-field-core.schemas.js";
 
 /** Metadatos por sección (dígitos que caben, rango, etiqueta accesible). */
-interface SectionMeta {
-  len: number;
-  min: number;
-  max: number;
-  label: string;
-  /** meridiem tiene `values` en lugar de rango numérico. */
-  values?: readonly string[];
-}
 
 /** Pieza del valor: `year`, `month`, `day`, `hour`, `minute`, `second`, `meridiem`. */
-interface Parts {
-  year?: number;
-  month?: number;
-  day?: number;
-  hour?: number;
-  minute?: number;
-  second?: number;
-  meridiem?: 'AM' | 'PM';
-}
 
 /** Modos del campo: solo fecha, solo hora, o ambos. */
-type FieldKind = 'date' | 'time' | 'datetime';
 
 /** Argumentos del constructor y de `configure()`. */
-interface SectionFieldOptions {
-  /** Contenedor donde se pintan los `<span class='sec' role='spinbutton'>`. */
-  container: HTMLElement;
-  kind?: FieldKind;
-  locale?: string;
-  ampm?: boolean;
-  seconds?: boolean;
-  onChange?: (value: string) => void;
-}
 
 /* ──────────────────────────── Constantes ──────────────────────────────── */
 

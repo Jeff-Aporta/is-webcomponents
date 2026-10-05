@@ -57,6 +57,7 @@ import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import type {
   Arista, Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto,
 } from '../_shared/diagram-tipos.js';
+import type { HttpEndpoint, EdgeKind, SpecEdge, LayoutMode, ComponentSpecResult, WireResult, LayoutComponent, LayoutInterface, LayoutEdge, ComponentLayout } from "./component-spec.schemas.js";
 
 const TAB_W = 56;
 const TAB_H = 14;
@@ -78,11 +79,6 @@ export function assemblyEntityMargin(): number {
 const LINE_H = 13;
 const BUBBLE_H = 18;
 const BUBBLE_GAP = 4;
-
-interface HttpEndpoint {
-  methods: string[];
-  path: string;
-}
 
 /** Colores tipo Swagger/OpenAPI para el verbo HTTP. */
 export const HTTP_METHOD_BADGE: Record<string, { fill: string; text: string }> = {
@@ -210,19 +206,6 @@ function readInterface(raw: unknown, i: number): InterfazUml {
   };
 }
 
-type EdgeKind = 'dependency' | 'association' | 'realization' | 'assembly';
-
-interface SpecEdge extends Arista {
-  id: string;
-  from: string;
-  to: string;
-  fromInterface?: string;
-  toInterface?: string;
-  label?: string;
-  hue?: number;
-  kind: EdgeKind;
-}
-
 function readEdge(raw: unknown, i: number): SpecEdge {
   const r = asRecord(raw);
   const kind = String(r.kind ?? 'dependency').toLowerCase();
@@ -239,8 +222,6 @@ function readEdge(raw: unknown, i: number): SpecEdge {
   };
 }
 
-type LayoutMode = 'manual' | 'triptych' | string;
-
 function readLayout(raw: unknown): OpcionesEmpaque {
   const r = asRecord(raw);
   const rawMode = String(r.mode);
@@ -256,16 +237,6 @@ function readLayout(raw: unknown): OpcionesEmpaque {
     rowGap: r.rowGap != null ? Number(r.rowGap) : undefined,
     minGap: r.minGap != null ? Number(r.minGap) : undefined,
   };
-}
-
-export interface ComponentSpecResult {
-  title?: string;
-  subtitle?: string;
-  layout: OpcionesEmpaque;
-  packages: Paquete[];
-  components: Componente[];
-  interfaces: InterfazUml[];
-  edges: SpecEdge[];
 }
 
 /** payload → spec normalizada, o null si no hay componentes. */
@@ -441,12 +412,6 @@ function sideOffset(comp: Componente, side: Lado, index: number, total: number):
   const t = (index + 1) / (total + 1);
   if (side === 'top' || side === 'bottom') return Math.max(12, Math.min(comp.w - 12, comp.w * t));
   return Math.max(12, Math.min(comp.h - 12, comp.h * t));
-}
-
-interface WireResult {
-  components: Componente[];
-  interfaces: InterfazUml[];
-  edges: SpecEdge[];
 }
 
 /**
@@ -744,56 +709,6 @@ function componentAnchorPoint(comp: Componente, side: Lado): Punto {
     case 'right':
     default:       return { x: comp.x + comp.w, y: comp.y + comp.h / 2 };
   }
-}
-
-interface LayoutComponent extends Componente {
-  stereoY?: number;
-  labelY?: number;
-  itemsY?: number;
-  itemBubbles?: Array<{
-    method: string;
-    path: string;
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    badgeW: number;
-  }>;
-  itemLineHeight: number;
-  lineHeight: number;
-  lines: string[];
-  itemLines: string[];
-}
-
-interface LayoutInterface extends InterfazUml {
-  hue?: number;
-  cx: number;
-  cy: number;
-}
-
-interface LayoutEdge extends SpecEdge {
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
-  path: string;
-  _fromPt?: Punto | null;
-  _toPt?: Punto | null;
-  _fromSide?: Lado;
-  _toSide?: Lado;
-}
-
-export interface ComponentLayout {
-  width: number;
-  height: number;
-  packages: Paquete[];
-  components: LayoutComponent[];
-  interfaces: LayoutInterface[];
-  edges: LayoutEdge[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
 }
 
 /**

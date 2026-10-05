@@ -8,9 +8,9 @@
  * REAL del path, no de la dirección global origen→destino.
  */
 import { svgEl } from './svg-chart-engine.js';
+import type { ArrowPoint, SvgArrowHeadOpts } from "./diagram-arrow.schemas.js";
 
 /** Punto en píxeles. */
-export type ArrowPoint = { x: number; y: number };
 
 /**
  * Puntos absolutos de un path ortogonal (`M`/`L`/`H`/`V`, may/min).
@@ -85,16 +85,6 @@ export function arrowHeadPoints(tip: ArrowPoint, dir: ArrowPoint, len: number = 
     `${baseX - px},${baseY - py}`,
   ].join(' ');
 }
-
-export type SvgArrowHeadOpts = {
-  d: string;
-  tip: ArrowPoint;
-  color: string;
-  len?: number;
-  halfWidth?: number;
-  className?: string | null;
-  fallbackDir?: ArrowPoint;
-};
 
 /**
  * `<polygon>` de cabeza de flecha ya orientado contra el final del path.

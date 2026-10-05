@@ -1,4 +1,5 @@
 import { mdToHtml } from '../helpers/md-lite.js';
+import type { BodySegment, VarPlaceholder } from "./prompt-md.schemas.js";
 
 /**
  * prompt-md.js — Variables {{nombre}} + render MD/HTML híbrido para
@@ -14,9 +15,6 @@ export const PROMPT_VAR_PATTERN = /\{\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}\}/g;
 export const MALFORMED_PROMPT_VAR_PATTERN = /\{\{\s*([A-Za-z_][A-Za-z0-9_]*)\s*\}(?!\})/g;
 
 /** Segmentos del body partido por variables `{{…}}`. */
-export type BodySegment =
-  | { type: 'text'; value: string }
-  | { type: 'var'; name: string };
 
 export function isValidVarName(name: unknown): boolean {
   return /^[A-Za-z_][A-Za-z0-9_]*$/.test(String(name ?? '').trim());
@@ -109,8 +107,6 @@ export function varChipHtml(name: string): string {
     + `<span class="prompt-var-chip__label">{{${escAttr(name)}}}</span></span>`
   );
 }
-
-type VarPlaceholder = { token: string; name: string };
 
 /** Sustituye {{vars}} por tokens, renderiza MD+HTML una vez y reemplaza por chips. */
 function renderBodyWithVarChips(body: unknown): string {

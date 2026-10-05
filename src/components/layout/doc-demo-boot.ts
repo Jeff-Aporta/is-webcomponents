@@ -7,13 +7,8 @@
  * Lee attrs del primer `<iswc-doc-demo>` si no vienen en opts
  * (`theme-storage-key`, `palette-storage-key`).
  */
-export type DocDemoBootOpts = {
-  themeKey?: string;
-  paletteKey?: string;
-  defaultTheme?: string;
-  defaultPalette?: string;
-};
 
+import type { DocDemoBootOpts } from "./doc-demo-boot.schemas.js";
 export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
   const host = document.querySelector('iswc-doc-demo');
   const themeKey = opts.themeKey

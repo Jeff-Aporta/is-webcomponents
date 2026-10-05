@@ -3,6 +3,7 @@
  * para que el consumidor no arme el query a mano.
  */
 
+import type { LoaderGlobal } from "./asset-url.schemas.js";
 export function withAssetHash(href: string, hash: string): string {
   if (!hash) return href;
   const cut = href.indexOf('#');
@@ -32,8 +33,6 @@ export function lookupHash(files: Record<string, string>, href: string): string 
   }
   return best;
 }
-
-type LoaderGlobal = { ISWebComponentsLoader?: { assetUrl?: (href: string) => string } };
 
 /** Si el loader ya esta en la pagina, enruta por el. Si no, deja el href. */
 export function routeThroughLoader(href: string): string {

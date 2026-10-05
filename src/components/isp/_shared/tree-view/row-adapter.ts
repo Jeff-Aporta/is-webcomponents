@@ -1,56 +1,12 @@
 import { TRADrag } from "./row-adapter-drag.js";
 import type { TNode, TreeActionEntry } from "./_types.js";
+import type { _SummaryEvent, _RowAdapter, TRAAccessible } from "./row-adapter.schemas.js";
 
 /** Detalle con un evento custom del row-adapter (summary/pointer). */
-interface _SummaryEvent extends Event {
-  currentTarget: HTMLElement;
-}
 
 /** Subset extendido del adapter que `TreeRowAdapter` consume (más allá de TreeAdapterLike). */
-interface _RowAdapter extends TRAAccessible {
-  onrowclick(node: TNode): void;
-  onrowdblclick(node: TNode): void;
-  syncRowSelectionChrome(): void;
-  syncHoverFloats(): void;
-  buildCustomsRuntime(): unknown;
-  customs?: {
-    hotkeys?: Record<string, (node: TNode, runtime: unknown, e: KeyboardEvent) => void>;
-    topMenuActions?: (rt: unknown) => TreeActionEntry[];
-  } | null;
-  findHotkeyHandler(
-    sources: ReadonlyArray<TreeActionEntry[] | undefined>,
-    combo: string,
-  ): (() => void) | null;
-  hoveredNode: { flatPath: string } | null;
-  normalizeFlatPath(id: string | null | undefined): string;
-  blurTreeSummariesExcept(summary: HTMLElement): void;
-  onrowfocus(node: TNode): void;
-}
 
 /** `TRADrag` no expone `treeAdapter` con todos los métodos que usamos aquí. */
-interface TRAAccessible {
-  treeAdapter: TRAAccessible & _RowAdapter;
-  mergedDisabled: boolean;
-  hasChildren: boolean;
-  isNodeOpen: boolean;
-  rowNode: TNode | null;
-  flatPath: string;
-  effectiveRowConfig?: {
-    events?: {
-      onclick?: () => void;
-      onopen?: () => void;
-      onclose?: () => void;
-      onfocus?: () => void;
-      onblur?: () => void;
-    };
-    actions?: TreeActionEntry[];
-    cascadeOptions?: TreeActionEntry[];
-  };
-  onrowtoggle(open: boolean): void;
-  requestRowUiSync(): void;
-  getVisibleSummaries(treeItem: Element): HTMLElement[];
-  focusSummary(summary: HTMLElement): void;
-}
 
 class TreeRowAdapter extends TRADrag {
   /** Timer para limpiar el hover tras pointerleave. */

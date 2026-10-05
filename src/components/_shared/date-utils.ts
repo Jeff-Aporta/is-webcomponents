@@ -7,12 +7,12 @@
  */
 
 import { resolveLocale } from './resolve-locale.js';
+import type { ClockTime, WeekdayLabelsOpts, MonthLabelsOpts, FormatDateOpts, FormatTimeOpts } from "./date-utils.schemas.js";
 
 export const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 export const ISO_TIME = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/;
 
 /** Hora descompuesta en horas / minutos / segundos. */
-export type ClockTime = { h: number; m: number; s: number };
 
 /** ISO válido → Date local. Rechaza 2026-02-31 y compañía. */
 export function parseISO(s: string | null | undefined): Date | null {
@@ -95,11 +95,6 @@ export function firstDayOfWeek(locale: string | null | undefined): number {
   return 1;
 }
 
-export type WeekdayLabelsOpts = {
-  width?: 'short' | 'long' | 'narrow';
-  firstDay?: number;
-};
-
 /** Etiquetas de los 7 días empezando en `firstDay`. */
 export function weekdayLabels(locale: string, opts: WeekdayLabelsOpts = {}): string[] {
   const { width = 'short', firstDay = 1 } = opts;
@@ -115,18 +110,11 @@ export function weekdayLabels(locale: string, opts: WeekdayLabelsOpts = {}): str
   return out;
 }
 
-export type MonthLabelsOpts = {
-  width?: 'short' | 'long' | 'narrow';
-  year?: number;
-};
-
 export function monthLabels(locale: string, opts: MonthLabelsOpts = {}): string[] {
   const { width = 'long', year = 2026 } = opts;
   const fmt = new Intl.DateTimeFormat(locale, { month: width });
   return Array.from({ length: 12 }, (_, m) => fmt.format(new Date(year, m, 1)));
 }
-
-export type FormatDateOpts = Intl.DateTimeFormatOptions & { dateStyle?: 'full' | 'long' | 'medium' | 'short'; timeStyle?: 'full' | 'long' | 'medium' | 'short' };
 
 export function formatDate(iso: string | null | undefined, locale: string, opts: FormatDateOpts = { dateStyle: 'medium' }): string {
   const d = parseISO(iso ?? '');
@@ -171,11 +159,6 @@ export function uses12Hour(locale: string | null | undefined): boolean {
     return false;
   }
 }
-
-export type FormatTimeOpts = {
-  seconds?: boolean;
-  hour12?: boolean;
-};
 
 export function formatTime(time: string | ClockTime | null | undefined, locale: string, opts: FormatTimeOpts = {}): string {
   const { seconds = false, hour12 } = opts;

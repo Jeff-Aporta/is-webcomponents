@@ -65,25 +65,7 @@ import '../layout/card.js';
 import '../actions/button.js';
 import '../media/icon.js';
 import '../navigation/tab-group.js';
-
-type ExampleSpec = {
-  /** Texto visible en la card. */
-  label: string;
-  /** Props/atributos a aplicar al host target. */
-  props?: Record<string, unknown>;
-  /** Texto del slot default del target (string). */
-  text?: string;
-  /** HTML del slot default del target (string). */
-  html?: string;
-  /** Icono para la card (mdi:foo). */
-  icon?: string;
-  /** Color de fondo distintivo de la card. */
-  swatch?: string;
-  /** Categoria opcional. Se usa para agrupar y para el filtro por tabs. */
-  category?: string;
-  /** Descripcion accesible (title). */
-  description?: string;
-};
+import type { ExampleSpec } from "./examples-carousel.schemas.js";
 
 const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index', 'category-field'];
 

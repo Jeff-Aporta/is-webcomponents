@@ -1,8 +1,0 @@
-:host {
-  display: inline-block;
-  font: inherit;
-  color: inherit;
-
-  .btn { font: inherit; }
-  .lbl { margin-inline-start: 0.35em; }
-}

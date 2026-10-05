@@ -11,6 +11,7 @@
  * define CUÁNTO PESO VISUAL tiene ese color.
  */
 
+import type { Tone } from "./tone.schemas.js";
 export const TONE = Object.freeze([
   'accent',           // borde + acento lateral (sidebar TOC, callout admonition)
   'filled',           // relleno sólido
@@ -22,7 +23,6 @@ export const TONE = Object.freeze([
 export const DEFAULT_TONE = 'filled';
 
 /** Variantes validas, derivadas de la lista: una sola fuente. */
-export type Tone = (typeof TONE)[number];
 
 /**
  * Devuelve el tone si es válido, o `fallback` si no.

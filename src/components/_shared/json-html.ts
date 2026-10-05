@@ -23,13 +23,12 @@
  * @param json Estructura JSON a renderizar.
  * @param parent Si se pasa, append y devuelve parent; si no, DocumentFragment.
  */
+import type { Html2JsonOpts, ApplyJsonBodyOpts, HostToJsonOpts, JsonAttrs, VerboseNode, ElementTuple } from "./json-html.schemas.js";
 export function json2html(json: unknown, parent?: ParentNode): ParentNode {
   const target = parent || document.createDocumentFragment();
   appendJson(target, json);
   return target;
 }
-
-export type Html2JsonOpts = { trim?: boolean; deep?: boolean };
 
 /**
  * @param node Element, Fragment, o HTML string.
@@ -69,8 +68,6 @@ export function json2dom(json: unknown): ParentNode {
 /** Mismo codec. La forma `{ tag: { ...attrs, content } }` es la de xml. */
 export const json2xml = json2html;
 
-export type ApplyJsonBodyOpts = { replace?: boolean };
-
 /**
  * Vuelca JSON en un host: si el root es el mismo tag que el host, aplica attrs
  * al host y monta solo los hijos (no anida otro host).
@@ -98,8 +95,6 @@ export function applyJsonBody(host: HTMLElement, json: unknown, opts: ApplyJsonB
   return host;
 }
 
-export type HostToJsonOpts = { self?: boolean; trim?: boolean };
-
 /**
  * Serializa el light DOM (hijos) de un host. Si `self` es true, incluye el host.
  */
@@ -113,13 +108,10 @@ export function hostToJson(host: HTMLElement | null | undefined, opts: HostToJso
 // ── internals ──────────────────────────────────────────────────────────────
 
 /** Atributos que admite `json2html`: booleanos, numéricos, strings. */
-type JsonAttrs = Record<string, string | number | boolean | { [k: string]: string } | null | undefined>;
 
 /** Forma verbose opcional: `{ t: tag, a: attrs, c: children }`. */
-type VerboseNode = { t: string; a?: JsonAttrs; c?: unknown[] };
 
 /** Tupla que produce `parseElementTuple`: `[tag, attrs?, ...children]`. */
-type ElementTuple = [string, JsonAttrs?, ...unknown[]];
 
 function asList(json: unknown): unknown[] {
   if (json == null) return [];

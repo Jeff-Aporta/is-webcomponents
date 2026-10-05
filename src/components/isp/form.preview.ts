@@ -3,16 +3,7 @@
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-interface IsFormEl extends HTMLElement {
-  fromJSON(json: unknown): unknown;
-  toJSON(): unknown;
-  setValues(values: Record<string, unknown>): void;
-  getValues(): Record<string, unknown>;
-  html2json(): unknown;
-}
-
-interface SubmitDetail { json?: unknown }
-
+import type { IsFormEl, SubmitDetail } from "./form.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const out = root.querySelector<HTMLElement>('#fJsonOut');

@@ -16,54 +16,10 @@ import {
   typeOf,
 } from './grid-types.js';
 import type { CellValue, ColumnDef, ColumnType, Comparator, Operator, Row } from './grid-types.js';
+import type { ResolvedColumn, NormalizeOptions, PivotModel, SortModelItem, FilterModel, AggregationModel, BuildTreeOpts, FilterCtx, ApplyFiltersOpts, TreeNode, PivotResult } from "./grid-data.schemas.js";
 
 /** Columna con los defaults aplicados: misma forma que `ColumnDef` pero mutable,
  * porque `normalizeColumns` la construye con spreads + assigns. */
-export type ResolvedColumn = {
-  field: string;
-  headerName: string;
-  align: string;
-  headerAlign: string;
-  width: number;
-  minWidth: number;
-  maxWidth: number;
-  flex: number;
-  sortable: boolean;
-  filterable: boolean;
-  hideable: boolean;
-  resizable: boolean;
-  editable: boolean;
-  groupable: boolean;
-  aggregable: boolean;
-  comparator: Comparator;
-  operators: readonly Operator[];
-  type: string;
-  valueFormatter?: ColumnDef['valueFormatter'];
-};
-
-export type NormalizeOptions = { defaultWidth?: number; editableAll?: boolean };
-
-export type PivotModel = {
-  rows?: readonly string[];
-  columns?: readonly string[];
-  values?: readonly { field: string; fn: string }[];
-};
-
-export type SortModelItem = { field: string; sort: 'asc' | 'desc' };
-
-export type FilterModel = {
-  items?: readonly { field?: string; operator?: string; value?: CellValue }[];
-  logicOperator?: 'and' | 'or';
-};
-
-export type AggregationModel = Record<string, string>;
-
-export type BuildTreeOpts = {
-  paths: (row: Row, i: number) => readonly (string | number)[];
-  getRowId: (row: Row, i: number) => CellValue;
-};
-
-export type FilterCtx = unknown;
 
 /* ── Columnas ─────────────────────────────────────────────────────────── */
 
@@ -151,13 +107,6 @@ export function formattedValue(value: CellValue, row: Row, col: ColumnDef, ctx: 
  * Aplica el filterModel (reglas + and/or) y el quick filter.
  * Las palabras del quick filter se exigen todas (AND) contra cualquier columna.
  */
-export type ApplyFiltersOpts = {
-  model?: FilterModel;
-  quick?: string;
-  columns: readonly ResolvedColumn[];
-  ctx: FilterCtx;
-  quickLogic?: 'and' | 'or';
-};
 
 export function applyFilters(rows: readonly Row[], { model, quick, columns, ctx, quickLogic = 'and' }: ApplyFiltersOpts): Row[] {
   const items: { col: ResolvedColumn; test: (v: CellValue) => boolean }[] = (model?.items || [])
@@ -215,19 +164,6 @@ export function applySort(rows: readonly Row[], sortModel: readonly SortModelIte
 /* ── Árbol y agrupación ───────────────────────────────────────────────── */
 
 /** Nodo del árbol construido por `buildTree`. */
-export type TreeNode = {
-  kind: 'leaf' | 'group';
-  id: CellValue;
-  key?: string | number;
-  depth: number;
-  path: readonly (string | number)[];
-  parent: TreeNode | null;
-  children: TreeNode[];
-  rows: Row[];
-  row?: Row;
-  leafRow?: Row | null;
-  aggregates?: Record<string, { value: CellValue; fn: string }>;
-};
 
 /**
  * Construye el árbol de nodos. `paths` viene de getTreeDataPath (tree data) o
@@ -340,12 +276,6 @@ export function aggregateTree(nodes: readonly TreeNode[], model: AggregationMode
 }
 
 /* ── Pivot ────────────────────────────────────────────────────────────── */
-
-export type PivotResult = {
-  rows: Row[];
-  columns: ColumnDef[];
-  colKeys: string[];
-};
 
 /**
  * Pivot simple: filas agrupadas por `rows`, una columna por cada combinación

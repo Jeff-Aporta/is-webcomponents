@@ -21,14 +21,12 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import type { Hallazgo } from '../types.js';
+import type { OpcionesRuntime } from "./runtime.schemas.js";
 
 /**
  * Revisa el módulo del componente en busca de patrones problemáticos.
  * Devuelve hallazgos (severidad error si rompe funcionalidad).
  */
-export interface OpcionesRuntime {
-  esModulo?: boolean;
-}
 
 export function auditarRuntimeComponente(rutaModulo: string | null, tag: string, opciones: OpcionesRuntime = {}): Hallazgo[] {
   const hallazgos: Hallazgo[] = [];

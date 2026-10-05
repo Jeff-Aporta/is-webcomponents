@@ -18,41 +18,18 @@
  * en la era CodeMirror.
  */
 
-import { TagInnerSchema, type TagInner } from "./code-highlight.schema.js";
+import { TagInnerSchema, type TagInner } from "./code-highlight.schemas.js";
+import type { TokenType, Token, HighlightLine, HighlightState, TokenizeResult } from "./code-highlight.schemas.js";
 
 /** Tipos de token reconocidos por el highlighter. */
-export type TokenType =
-  | 'comment' | 'string' | 'number' | 'keyword' | 'operator'
-  | 'punctuation' | 'tag' | 'tagPunct' | 'attribute' | 'property' | 'function'
-  | 'variable' | 'atom' | 'builtin' | 'type' | 'meta' | 'plain';
 
 /** Token producido por los escáneres: tipo semántico + texto. */
-export type Token = { type: TokenType; text: string };
 
 /** Línea tokenizada que devuelve `tokenizeCode`. */
-export type HighlightLine = { tokens: Token[]; lineClass: string | null; raw: string };
 
 /** Estado entre líneas (multilínea: comentarios, regiones script/style, quotes, templates, atributo HTML). */
-export type HighlightState = {
-  inComment: boolean;
-  inHtmlComment: boolean;
-  region: 'script' | 'style' | null;
-  quote: '"' | "'" | null;
-  template: boolean;
-  /** Comilla de un atributo HTML que no cerró en la línea. */
-  htmlAttr: '"' | "'" | null;
-  /** json si el valor parece JSON; text si es prosa; null hasta el primer trozo. */
-  htmlAttrMode: 'json' | 'text' | null;
-  /** Seguimos dentro del tag, después de la comilla, hasta el '>'. */
-  inHtmlTag: boolean;
-};
 
 /** Resultado de tokenizar un documento completo. */
-export type TokenizeResult = {
-  lines: HighlightLine[];
-  state: HighlightState;
-  lang: string;
-};
 
 const LANG_IDS: ReadonlySet<string> = new Set([
   'javascript', 'typescript', 'jsx', 'tsx', 'json',

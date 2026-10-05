@@ -9,15 +9,8 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type {
-  ClassLayout,
-  ClassLayoutEdge,
-  ClassLayoutNode,
-  ClassLayoutSection,
-  DiagramGroup,
-  DiagramTheme,
-} from './diagram-types.js';
-import type { TurtleTheme } from '../_shared/path-turtle.js';
+import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./diagram-types.schemas.js";
+import type { TurtleTheme } from "../_shared/path-turtle.schemas.js";
 
 /**
  * <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.

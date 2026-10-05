@@ -32,6 +32,7 @@ import {
   openInlineEditor,
 } from '../_shared/diagram-edit.js';
 import type { DiagramOverrides } from '../_shared/diagram-edit.js';
+import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./flowchart.schemas.js";
 /**
  * <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *
@@ -58,26 +59,10 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 const VALID_ANIMATION: Set<string> = new Set(['flow']);
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
-interface TurtleState {
-  playing: boolean;
-  idx: number;
-  total: number;
-  replay: number;
-}
 
 /** Nodo cacheado en el SVG para aplicar hover sin reconstruir el DOM. */
-interface NodeNodeEntry {
-  n: FlowLayoutNode;
-  g: SVGGElement;
-  box: SVGPathElement;
-}
 
 /** Arista cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
-interface EdgeNodeEntry {
-  e: FlowLayoutEdge;
-  g: SVGGElement;
-  path: SVGPathElement;
-}
 
 function parseAnimationTokens(raw: string | null | undefined): string[] {
   const out: string[] = [];

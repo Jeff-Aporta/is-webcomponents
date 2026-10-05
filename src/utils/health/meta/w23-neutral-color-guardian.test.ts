@@ -1,8 +1,8 @@
 /**
- * w23-neutral-color-guardian.test.ts — Guardian del contrato W23.
+ * w23-neutral-color-guardian.test.ts Ã¢â‚¬â€ Guardian del contrato W23.
  *
  * Estandar W23 (zod-migration): el color `neutral` del sistema se define
- * siempre como `#888` (gris central del espacio RGB) en `is-base.css`,
+ * siempre como `#888` (gris central del espacio RGB) en `is-base.scss`,
  * con 5 variantes tonal (paler/pale/strong/stronger/strongest) derivadas
  * con `color-mix()` igual que las demas familias semanticas.
  *
@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
 
-const IS_BASE = join(root, 'src', 'styles', 'is-base.css');
+const IS_BASE = join(root, 'src', 'styles', 'is-base.scss');
 const css = readFileSync(IS_BASE, 'utf8');
 
 /** Parsea un hex `#rgb` o `#rrggbb` a [r, g, b] en 0..1 (sRGB). */
@@ -76,11 +76,11 @@ function expectToken(name: string): string {
   // dentro de :root, .theme-dark o .theme-light. No distingue mayusculas.
   const re = new RegExp(`${name}\\s*:\\s*([^;]+);`, 'i');
   const m = css.match(re);
-  assert.ok(m, `is-base.css debe declarar ${name}`);
+  assert.ok(m, `is-base.scss debe declarar ${name}`);
   return m[1].trim();
 }
 
-test('W23: --iswc-color-neutral esta definido en is-base.css', () => {
+test('W23: --iswc-color-neutral esta definido en is-base.scss', () => {
   const v = expectToken('--iswc-color-neutral');
   assert.equal(
     v.toLowerCase(),
@@ -143,12 +143,12 @@ test('W23: contrast del neutral contra --iswc-text (dark y light)', () => {
   console.log(`  contrast #888 vs --iswc-text(dark=${darkText}) = ${cDark.toFixed(2)}:1`);
 
   // Texto del tema light: vive en el bloque [data-theme="light"].
-  // Tomamos la primera coincidencia después del primer :root.
+  // Tomamos la primera coincidencia despuÃƒÂ©s del primer :root.
   const lightIdx = css.indexOf('[data-theme="light"]');
-  assert.ok(lightIdx > 0, 'is-base.css debe contener un selector [data-theme="light"]');
+  assert.ok(lightIdx > 0, 'is-base.scss debe contener un selector [data-theme="light"]');
   const lightBlock = css.slice(lightIdx);
   const m = lightBlock.match(/--iswc-text\s*:\s*([^;]+);/);
-  assert.ok(m, 'is-base.css debe declarar --iswc-text en [data-theme="light"]');
+  assert.ok(m, 'is-base.scss debe declarar --iswc-text en [data-theme="light"]');
   const lightText = m[1].trim();
   const cLight = contrastRatio('#888', lightText);
   console.log(`  contrast #888 vs --iswc-text(light=${lightText}) = ${cLight.toFixed(2)}:1`);
@@ -172,7 +172,7 @@ test('W23: contrast del neutral contra --iswc-bg (dark y light)', () => {
   const lightIdx = css.indexOf('[data-theme="light"]');
   const lightBlock = css.slice(lightIdx);
   const m = lightBlock.match(/--iswc-bg\s*:\s*([^;]+);/);
-  assert.ok(m, 'is-base.css debe declarar --iswc-bg en [data-theme="light"]');
+  assert.ok(m, 'is-base.scss debe declarar --iswc-bg en [data-theme="light"]');
   const lightBg = m[1].trim();
   const cLight = contrastRatio('#888', lightBg);
   console.log(`  contrast #888 vs --iswc-bg(light=${lightBg}) = ${cLight.toFixed(2)}:1`);
@@ -183,27 +183,27 @@ test('W23: contrast del neutral contra --iswc-bg (dark y light)', () => {
   assert.ok(cDark >= 4.5, `--iswc-color-neutral debe contrastar >= 4.5:1 contra --iswc-bg dark; actual ${cDark.toFixed(2)}:1`);
 });
 
-test('W23: no hay overrides cromaticos del neutral en palettes.css', () => {
+test('W23: no hay overrides cromaticos del neutral en palettes.scss', () => {
   // El neutral es geometria, no identidad de marca. Ninguna paleta
   // (insoft/contapyme/agrowin) debe pisar --iswc-color-neutral*; si lo
   // hiciera, la "centralidad" del gris se rompe por paleta.
-  const PALETTES = join(root, 'src', 'styles', 'palettes.css');
+  const PALETTES = join(root, 'src', 'styles', 'palettes.scss');
   const palettes = readFileSync(PALETTES, 'utf8');
   assert.ok(
     !/--iswc-color-neutral\b/i.test(palettes),
-    'palettes.css no debe declarar --iswc-color-neutral (es geometria, no marca)',
+    'palettes.scss no debe declarar --iswc-color-neutral (es geometria, no marca)',
   );
 });
 
 test('W23: --iswc-color-neutral aparece en las fuentes canonicas de tokens', () => {
-  // El token vive en styles/is-base.css (root + .theme-dark) — su unica
+  // El token vive en styles/is-base.scss (root + .theme-dark) Ã¢â‚¬â€ su unica
   // fuente canonica. La guia detallada de cada componente ya no requiere
   // listar el token (W42: "Tema visual" eliminado del button demo). Si
-  // alguien lo borra del root, el guardián lo detecta.
-  const IS_BASE = join(root, 'src', 'styles', 'is-base.css');
+  // alguien lo borra del root, el guardiÃƒÂ¡n lo detecta.
+  const IS_BASE = join(root, 'src', 'styles', 'is-base.scss');
   const css = readFileSync(IS_BASE, 'utf8');
   assert.ok(
     /--iswc-color-neutral\s*:/i.test(css),
-    'styles/is-base.css debe declarar --iswc-color-neutral en :root o .theme-dark',
+    'styles/is-base.scss debe declarar --iswc-color-neutral en :root o .theme-dark',
   );
 });

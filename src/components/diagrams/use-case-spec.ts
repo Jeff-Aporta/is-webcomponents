@@ -3,6 +3,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
+import type { UseCaseActorSide, UseCaseLinkKind, UseCaseActorSpec, UseCaseCaseSpec, UseCaseLinkSpec, UseCaseGroupSpec, UseCaseResolvedSpec, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseLayoutSystem, UseCaseLayout } from "./use-case-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de casos de uso (UML), sin Mermaid.
@@ -32,119 +33,8 @@ const MARGIN = { top: 16, right: 20, bottom: 22, left: 20 };
 
 export const LINK_KINDS: Set<string> = new Set(['association', 'include', 'extend', 'generalization']);
 
-export type UseCaseActorSide = 'left' | 'right';
-export type UseCaseLinkKind = 'association' | 'include' | 'extend' | 'generalization';
-
 function asRecord(v: unknown): Record<string, unknown> {
   return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
-}
-
-export interface UseCaseActorSpec {
-  id: string;
-  label: string;
-  side: UseCaseActorSide;
-  external: boolean;
-  hue?: number;
-  description?: string;
-}
-
-export interface UseCaseCaseSpec {
-  id: string;
-  label: string;
-  group?: string;
-  hue?: number;
-  description?: string;
-}
-
-export interface UseCaseLinkSpec {
-  id: string;
-  from: string;
-  to: string;
-  kind: UseCaseLinkKind;
-  label?: string;
-}
-
-export interface UseCaseGroupSpec {
-  id: string;
-  name: string;
-  hue: number;
-}
-
-export interface UseCaseResolvedSpec {
-  title?: string;
-  subtitle?: string;
-  system?: string;
-  groups?: UseCaseGroupSpec[];
-  actors: UseCaseActorSpec[];
-  cases: UseCaseCaseSpec[];
-  links: UseCaseLinkSpec[];
-}
-
-export interface UseCaseLayoutActor {
-  id: string;
-  label: string;
-  description?: string;
-  external: boolean;
-  hue?: number;
-  side: UseCaseActorSide;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-export interface UseCaseLayoutCase {
-  id: string;
-  label: string;
-  description?: string;
-  group?: string;
-  hue?: number;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-export interface UseCaseLayoutLink {
-  id: string;
-  from: string;
-  to: string;
-  kind: UseCaseLinkKind;
-  label?: string;
-  stereotype?: string;
-  path: string;
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-  labelX: number;
-  labelY: number;
-  hue?: number;
-}
-
-export interface UseCaseLayoutSystem {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  name?: string;
-  labelX: number;
-  labelY: number;
-}
-
-export interface UseCaseLayout {
-  width: number;
-  height: number;
-  actors: UseCaseLayoutActor[];
-  cases: UseCaseLayoutCase[];
-  links: UseCaseLayoutLink[];
-  system: UseCaseLayoutSystem;
-  groups?: UseCaseGroupSpec[];
-  title?: string;
-  subtitle?: string;
-  titleY: number;
-  subtitleY: number;
-  legendX: number;
 }
 
 function readActor(raw: Record<string, unknown>, i: number): UseCaseActorSpec {

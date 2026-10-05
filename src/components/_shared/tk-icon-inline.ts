@@ -13,6 +13,7 @@
 
 import { normalizeTkHue, tkHueToCss, tkHueToHex } from './tk-hue.js';
 import { resolveIconRaw } from './icon-loader.js';
+import type { ResolvedIconToken, SvgIconGroupOpts, IconInlineOpts, IconHtmlRender, IconRun, LeadingIcon } from "./tk-icon-inline.schemas.js";
 
 /** Simple {{ … }} (sin objeto sugar) — compat tests / búsqueda rápida. */
 export const TK_ICON_TOKEN_RE = /\{\{([^}#][^}]*)\}\}/g;
@@ -111,15 +112,6 @@ function parseLooseObject(objRaw: string): Record<string, string> | null {
   }
   return Object.keys(out).length ? out : null;
 }
-
-export type ResolvedIconToken = {
-  iconId: string;
-  hue?: number;
-  size?: number;
-  color?: string;
-  /** Atributos tal cual, para <iswc-icon key="value">. */
-  attrs: Record<string, string>;
-};
 
 function tokenFromAttrs(obj: Record<string, string>): ResolvedIconToken | null {
   const name = obj.name?.trim() ?? '';
@@ -222,15 +214,6 @@ function scanIconTemplateTokens(text: string, onToken: (start: number, end: numb
 /** Icono de reemplazo cuando el pedido no existe en los assets del kit. */
 const ICONO_FALLBACK = 'mdi:shape-outline';
 
-export type SvgIconGroupOpts = {
-  x?: number;
-  y?: number;
-  size?: number;
-  hue?: number;
-  color?: string;
-  fallback?: string;
-};
-
 export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGElement {
   const { x = 0, y = 0, size = 16, hue, color, fallback = ICONO_FALLBACK } = opts;
   const NS = 'http://www.w3.org/2000/svg';
@@ -279,15 +262,6 @@ export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGE
 
   return g;
 }
-
-export type IconInlineOpts = {
-  size?: string | number;
-  className?: string;
-  hue?: number;
-  attrs?: Record<string, string>;
-};
-
-export type IconHtmlRender = string;
 
 function escAttr(v: string): string {
   return String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -354,10 +328,6 @@ export function replaceIconTokensEmail(raw: string, transformPlain: (t: string) 
   );
 }
 
-export type IconRun =
-  | { kind: 'text'; text: string }
-  | { kind: 'icon'; token: ResolvedIconToken };
-
 /** Parte el texto en tramos planos y tokens de icono resueltos. */
 export function splitIconRuns(raw: string | null | undefined): IconRun[] {
   const text = String(raw ?? '');
@@ -394,7 +364,6 @@ export function stripIconTokensPlain(raw: string | null | undefined): string {
 }
 
 /** Primer token de icono al inicio del texto (p. ej. label de actor). */
-export type LeadingIcon = { iconId: string; hue: number | undefined; color?: string; size?: number; rest: string };
 
 export function extractLeadingIconToken(raw: string | null | undefined): LeadingIcon | null {
   const text = String(raw ?? '');

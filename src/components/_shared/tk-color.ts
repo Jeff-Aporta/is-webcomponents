@@ -7,11 +7,10 @@
  * Alias público: `bg2fontColor` (mismo contrato).
  */
 
+import type { Rgb } from "./tk-color.schemas.js";
 function clamp01(n: number): number {
   return n < 0 ? 0 : n > 1 ? 1 : n;
 }
-
-type Rgb = { r: number; g: number; b: number };
 
 /** Cualquier color CSS soportado → `{r,g,b}` sRGB 0..1. Soporta #hex y hsl()/hsla(). */
 function toRgb(color: string | null | undefined): Rgb | null {

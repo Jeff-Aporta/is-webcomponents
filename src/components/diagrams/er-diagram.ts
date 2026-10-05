@@ -20,7 +20,7 @@ import {
   pickThemeMode,
   type ErThemeJson,
 } from './theme.js';
-import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from './diagram-types.js';
+import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./diagram-types.schemas.js";
 
 /**
  * <iswc-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.
