@@ -32,7 +32,7 @@ Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`).
 
 ## Skills en CDN
 
-Tras `deno task build`, `src/skills/**` se copia a `dist/cdn/skills/**`.
+Tras `deno task build`, `skills/**` se copia a `dist/cdn/skills/**`.
 
 Instalar en Cursor / agentes desde el repo:
 
