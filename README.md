@@ -31,7 +31,7 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 | `src/components/` | Fuentes por categoría (`actions`, `feedback`, `helpers`, …) |
 | `src/styles/` | Tokens (`is-base.css`) y shell |
 | `src/assets/` | Iconos Iconify y favicon |
-| `src/skills/is-webcomponents/` | Guía para agentes IDE (CDN-first) — **solo fuente**, no en `dist/` |
+| `skills/is-webcomponents/` | Guía para agentes IDE (CDN-first) — fuente en raíz, se copia a `dist/cdn/skills/` en el build |
 | `src/components/**/*.md` | Docs LLM por módulo / categoría — raw bajo `…/main/src/components/` |
 | `src/manifest.ts` | Índice de la galería |
 | `AGENTS.md` | Carta de leyes + guía para agentes (único diario en raíz) |
@@ -49,7 +49,7 @@ Reutiliza tags iswc-* existentes; no reinventes botones, dialogs, tablas, charts
 Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
 ```
 
-Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) · [catálogo de errores](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/lessons.md) · skill en `src/skills/is-webcomponents/SKILL.md`.
+Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) · [catálogo de errores](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/lessons.md) · skill en `skills/is-webcomponents/SKILL.md`.
 
 ## Licencia
 

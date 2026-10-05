@@ -985,7 +985,7 @@
       "file": "llm-agent-prompt.ts",
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
-      "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `src/skills/is-webcomponents/PROMPT.md`",
+      "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `skills/is-webcomponents/PROMPT.md`",
       "bytes": 3753,
       "exports": [
         "SKILL_DOCS",
