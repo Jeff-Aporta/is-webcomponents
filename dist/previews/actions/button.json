@@ -232,7 +232,7 @@
         },
         {
           "kind": "html",
-          "html": "<h4>ghost — outlined en reposo, filled al pasar el mouse</h4>\n        <p class=\"lede\">\n          Pasa el mouse por encima: el borde se rellena. Util cuando la accion\n          debe ser discreta hasta que el usuario la apunta.\n        </p>"
+          "html": "<h4>ghost — outlined en reposo, filled al pasar el mouse</h4>"
         },
         {
           "kind": "html",
