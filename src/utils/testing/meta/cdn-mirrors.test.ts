@@ -32,7 +32,7 @@ test('cdn-snippet: loader copy-paste; L.load del tag (sin radio de alcance, sin 
   assert.match(src, /loader\.min\.js/);
   assert.match(src, /type="module" src=/);
   assert.match(src, /ISWebComponentsLoader/);
-  assert.match(src, /loadCSSBase/);
+  // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   assert.match(src, /loadCSSPalettesDefault/);
   assert.match(src, /await L\.load\(/);
   assert.match(src, /data-copy=["']loader["']/);

@@ -281,7 +281,7 @@ const normalizeIswcTag = (tag: string): string => {
         ...depLines,
         `<script type="module">`,
         `  const L = globalThis.ISWebComponentsLoader;`,
-        `  await L.loadCSSBase();`,
+        `  // is-base.min.css se auto-carga al inicializar el loader (W52).`,
         `  await L.loadCSSPalettesDefault();`,
         loadLine,
         `<\/script>`,

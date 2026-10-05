@@ -1,7 +1,7 @@
 /**
  * ISWebComponentsLoader — entry CDN liviano + mirrors + pin + anti-redundancia.
  *
- * - loadCSSBase / loadCSSPalettesDefault / load(tags|cats|all)
+ * - loadCSSPalettesDefault / load(tags|cats|all)
  * - pin(ref) / unpin() / configure({ ref, mirrors })
  * - sheets.install / warm* — Cache Storage + adoptedStyleSheets (apps)
  * - registerApp / ensure — tags de app + lazy ensure de custom elements
@@ -757,10 +757,6 @@ export const ISWebComponentsLoader = {
     return this;
   },
 
-  loadCSSBase() {
-    return injectCdnStylesheet('is-base.min.css');
-  },
-
   loadCSSPalettesDefault() {
     return injectCdnStylesheet('palettes.min.css');
   },
@@ -901,10 +897,10 @@ if (typeof document !== 'undefined') {
     const next = routeHref(link.href);
     if (next && next !== link.href) link.href = next;
   }
-  // W50: auto-cargar is-base.min.css al inicializar el loader, para que el
-  // consumer no tenga que llamar loadCSSBase() manualmente. Es idempotente
-  // (cssDone Set) y respeta host/pin/mirrors del loader.
-  void ISWebComponentsLoader.loadCSSBase();
+  // W52: auto-cargar is-base.min.css al inicializar el loader, para que el
+  // consumer no tenga que hacerlo manualmente. Es idempotente (cssDone Set)
+  // y respeta host/pin/mirrors del loader.
+  void injectCdnStylesheet('is-base.min.css');
 }
 
 export default ISWebComponentsLoader;

@@ -43,7 +43,7 @@ const requiredConcepts = [
   ['preview-paths|preview-component', 'previews controlados'],
   ['specs/README|flujo-sdd|SDD', 'contrato SDD specs'],
   ['em-scale|font inherit|font-size contextual', 'guardián escala em'],
-  ['palette-and-snippet|loadCSSBase|loadCSSPalettes', 'pesos autofit + paleta'],
+  ['palette-and-snippet|loadCSSPalettes', 'pesos autofit + paleta'],
   ['cdn-loader|loader\.min\.js|pin[\(\.]|mirrors', 'loader pin/mirrors'],
 ];
 
