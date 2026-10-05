@@ -11,9 +11,6 @@ export const BUTTON_SHAPE = Object.freeze([
   'square',
   'rect',
   'pill',
-  'hexagon',
-  'arrow-left',
-  'arrow-right',
 ] as const);
 
 export const DEFAULT_BUTTON_SHAPE = 'round';
@@ -27,9 +24,6 @@ export const BUTTON_SHAPE_ICON: Record<ButtonShape, string> = Object.freeze({
   square: 'mdi:square-outline',
   rect: 'mdi:rectangle-outline',
   pill: 'mdi:capsule',
-  hexagon: 'mdi:hexagon-outline',
-  'arrow-left': 'mdi:arrow-left-bold-outline',
-  'arrow-right': 'mdi:arrow-right-bold-outline',
 });
 
 export function normalizeButtonShape(

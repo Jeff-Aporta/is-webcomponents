@@ -11,7 +11,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Casilla <em>form-associated</em> con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-checkbox/\" target=\"_blank\" rel=\"noreferrer\">Checkbox de MUI</a>:\r\n          entra en <code class=\"code\">FormData</code> y en la validación nativa del <code class=\"code\">&lt;form&gt;</code>\r\n          sin input oculto, con color por <code class=\"code\">variant</code>, posición de etiqueta, iconos propios y\r\n          estado de error.",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Casilla <em>form-associated</em> con paridad funcional con el <a href=\"https://mui.com/material-ui/react-checkbox/\" target=\"_blank\" rel=\"noreferrer\">Checkbox de MUI</a>: entra en <code class=\"code\">FormData</code> y en la validación nativa del <code class=\"code\">&lt;form&gt;</code> sin input oculto.</dd>\n          <dt>Capacidades</dt><dd>Color por <code class=\"code\">variant</code>, posición de etiqueta, iconos propios y estado de error.</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",

@@ -11,7 +11,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Botón icon-only con dos estados mutuamente excluyentes: muestra un solo icono\r\n          según <code class=\"code\">checked</code>. Lo usan <code class=\"code\">iswc-video</code>\r\n          (play/pausa, mute) e <code class=\"code\">iswc-theme-toggle</code>.",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Botón icon-only con dos estados mutuamente excluyentes; muestra un solo icono según <code class=\"code\">checked</code>.</dd>\n          <dt>Usos</dt><dd><code class=\"code\">iswc-video</code> (play/pausa, mute) e <code class=\"code\">iswc-theme-toggle</code>.</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",

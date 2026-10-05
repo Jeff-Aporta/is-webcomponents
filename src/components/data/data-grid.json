@@ -11,7 +11,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-orden, filtros con Y/O,\r\n          quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,\r\n          agrupación con agregación, tree data, pivot, virtualización y exportación.",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Tabla de datos con la superficie de MUI X Data Grid.</dd>\n          <dt>Capacidades</dt><dd>Columnas tipadas, multi-orden, filtros con Y/O, quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila, agrupación con agregación, tree data, pivot, virtualización y exportación.</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",

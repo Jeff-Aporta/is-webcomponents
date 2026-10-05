@@ -59,10 +59,10 @@ export function fragmentFromHtml(html: string): DocumentFragment {
 export function renderBlock(block: PreviewBlock): HTMLElement {
   switch (block.kind) {
     case 'lede': {
-      const p = document.createElement('p');
-      p.className = 'lede';
-      p.innerHTML = resolveAssets(block.html);
-      return p;
+      const div = document.createElement('div');
+      div.className = 'lede';
+      div.innerHTML = resolveAssets(block.html);
+      return div;
     }
     case 'demo': {
       const wrap = document.createElement('div');
@@ -392,11 +392,11 @@ export function renderSection(section: PreviewSection): HTMLElement {
   }
 
   if (section.lede) {
-    const p = document.createElement('p');
-    p.className = 'lede';
-    p.setAttribute('slot', 'lede');
-    p.innerHTML = resolveAssets(section.lede);
-    wrapper.append(p);
+    const div = document.createElement('div');
+    div.className = 'lede';
+    div.setAttribute('slot', 'lede');
+    div.innerHTML = resolveAssets(section.lede);
+    wrapper.append(div);
   }
 
   for (const block of section.blocks) {

@@ -10,7 +10,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Panel flotante con contenido interactivo. Ancla con <code class=\"code\">for</code>.\r\n          Cierra con Escape, click fuera o <code class=\"code\">data-popover=\"close\"</code>.\r\n          El posicionamiento (flip, shift, auto-size, arrow) lo hace un\r\n          <code class=\"code\">&lt;iswc-floating&gt;</code> interno — el wrapper sólo\r\n          aporta ancla declarativa, ciclo de vida y accesibilidad.",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Panel flotante con contenido interactivo. Ancla con <code class=\"code\">for</code>.</dd>\n          <dt>Cierre</dt><dd>Escape, click fuera o <code class=\"code\">data-popover=\"close\"</code>.</dd>\n          <dt>Posicionamiento</dt><dd>Lo hace un <code class=\"code\">&lt;iswc-floating&gt;</code> interno (flip, shift, auto-size, arrow). El wrapper aporta ancla declarativa, ciclo de vida y accesibilidad.</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",

@@ -11,7 +11,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Menú anclado a un trigger. Panel en <code class=\"code\">&lt;dialog&gt;</code> modal\r\n          (top layer) para no quedar debajo de otras secciones. Items:\r\n          <code class=\"code\">iswc-dropdown-item</code>, <code class=\"code\">iswc-divider</code> e iconos.",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd>Menú anclado a un trigger. El panel vive en un <code class=\"code\">&lt;dialog&gt;</code> del top layer (no queda debajo de otras secciones).</dd>\n          <dt>Items</dt><dd><code class=\"code\">iswc-dropdown-item</code>, <code class=\"code\">iswc-divider</code> e iconos.</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",

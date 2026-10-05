@@ -88,7 +88,7 @@
     {
       "id": "sizes",
       "title": "Escala",
-      "lede": "No hay atributo <code class=\"code\">size</code>: el componente se mide entero en\r\n          <code class=\"code\">em</code>, así que su tamaño sale del\r\n          <code class=\"code\">font-size</code> del contexto. Para hacerlo más grande o más\r\n          pequeño se cambia el font-size, y todo (icono, padding, radio) escala con él.",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Default</dt><dd>Sin atributo <code class=\"code\">size</code>. Se mide en <code class=\"code\">em</code> y hereda el <code class=\"code\">font-size</code> del contexto.</dd>\n          <dt>Escalar</dt><dd>Cambia el <code class=\"code\">font-size</code> del ancestro: icono, padding y radio escalan con él.</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",
@@ -106,7 +106,7 @@
     {
       "id": "variants",
       "title": "Color",
-      "lede": "<code class=\"code\">color</code> define el color semántico:\r\n          brand, neutral, danger, success, warning. Es una dimensión distinta de\r\n          <code class=\"code\">variant</code>, que gobierna la presentación\r\n          (filled, outlined, plain…).",
+      "lede": "<dl class=\"lede-def\">\n          <dt>Definición</dt><dd><code class=\"code\">color</code> = color semántico (brand, neutral, danger, success, warning).</dd>\n          <dt>Ortogonalidad</dt><dd>Distinto de <code class=\"code\">variant</code>, que gobierna la presentación (filled, outlined, plain…).</dd>\n        </dl>",
       "blocks": [
         {
           "kind": "demo",
