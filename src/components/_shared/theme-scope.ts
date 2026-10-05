@@ -1,10 +1,13 @@
 /**
  * Contenedor de tema del kit — misma cascada que iswc-theme-toggle.
  * Atraviesa Shadow DOM (Element.closest se corta en el shadow root).
+ *
+ * W51: SCOPE solo con [data-theme]. Las clases .theme-dark/.theme-light se
+ * erradicaron del CSS en W48.
  */
 
 export const THEME_SCOPE =
-  '[container-theme], .container-theme, .theme-dark, .theme-light, [data-theme]';
+  '[container-theme], .container-theme, [data-theme]';
 
 /**
  * Sube desde `from` atravesando hosts de shadow hasta hallar un ancestro
@@ -22,7 +25,6 @@ export function findThemeContainer(from: Element | null | undefined) {
     }
     const root = node.getRootNode?.();
     if (root instanceof ShadowRoot && root.host) {
-      // El host puede llevar data-theme / .theme-*; comprobarlo y seguir subiendo.
       if (root.host.matches(THEME_SCOPE)) return root.host;
       node = root.host;
       continue;
@@ -35,8 +37,6 @@ export function findThemeContainer(from: Element | null | undefined) {
 /** @param {Element | null | undefined} el */
 export function readTheme(el: Element | null | undefined) {
   if (!el) return 'dark';
-  if (el.classList.contains('theme-light')) return 'light';
-  if (el.classList.contains('theme-dark')) return 'dark';
   const dt = el.getAttribute?.('data-theme') || (el as HTMLElement).dataset?.theme;
   return dt === 'light' ? 'light' : 'dark';
 }

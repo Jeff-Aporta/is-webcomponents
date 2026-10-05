@@ -20,8 +20,11 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
  */
 
 (() => {
-  const SCOPE =
-    '[container-theme], .container-theme, .theme-dark, .theme-light, [data-theme]';
+  // W51: SCOPE simplificado — solo data-theme. Las clases .theme-dark/.theme-light
+  // se erradicaron en W48 del CSS, asi que mantenerlas en el SCOPE solo añade
+  // ruido y posibles falsos positivos (un nodo con .theme-dark residual haria
+  // match aunque no tuviera data-theme).
+  const SCOPE = '[container-theme], .container-theme, [data-theme]';
 
   const TEMPLATE = document.createElement('template');
   TEMPLATE.innerHTML = /* html */ `
@@ -39,16 +42,12 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
 
   function readTheme(el: HTMLElement): ThemeName {
     if (!el) return 'dark';
-    if (el.classList.contains('theme-light')) return 'light';
-    if (el.classList.contains('theme-dark')) return 'dark';
     const dt = el.getAttribute?.('data-theme') || el.dataset?.theme;
     return dt === 'light' ? 'light' : 'dark';
   }
 
   function applyTheme(el: HTMLElement, theme: ThemeName): void {
     if (!el) return;
-    el.classList.toggle('theme-light', theme === 'light');
-    el.classList.toggle('theme-dark', theme === 'dark');
     if (el.dataset) el.dataset.theme = theme;
     else el.setAttribute('data-theme', theme);
   }

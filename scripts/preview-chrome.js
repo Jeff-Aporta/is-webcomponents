@@ -30,8 +30,7 @@ const b64urlEncode = (input) => {
 
 const applyTheme = (theme) => {
   if (!THEMES.has(theme)) return;
-  root.classList.toggle('theme-light', theme === 'light');
-  root.classList.toggle('theme-dark', theme === 'dark');
+  // W51: solo data-theme (las clases .theme-dark/.theme-light se erradicaron).
   root.dataset.theme = theme;
   const toggle = document.getElementById('previewTheme');
   if (toggle && typeof toggle.forceSync === 'function') toggle.forceSync();
