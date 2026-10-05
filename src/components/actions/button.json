@@ -123,11 +123,40 @@
     {
       "id": "slots-pg",
       "title": "Slots",
-      "lede": "iswc-button expone tres slots: <code class=\"code\">default</code> (label), <code class=\"code\">start</code> (icono izquierdo) y <code class=\"code\">end</code> (icono derecho). El codigo de implementacion es editable — cada cambio actualiza la instancia en vivo.",
+      "lede": "Tres slots. Edita el codigo de implementacion para ver el cambio en vivo. La anatomia del Shadow DOM esta en la pestana correspondiente.",
       "blocks": [
         {
           "kind": "demo",
           "html": "<div id=\"slots-live\" class=\"demo-row\">\n  <iswc-button id=\"slotsPgBtn\" color=\"brand\">\n    <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n    Texto del boton\n    <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n  </iswc-button>\n</div>\n<iswc-tab-group class=\"slots-tabs\">\n  <iswc-tab slot=\"nav\" data-tab=\"impl\" selected>Implementacion</iswc-tab>\n  <iswc-tab slot=\"nav\" data-tab=\"anat\">Anatomia</iswc-tab>\n  <iswc-tab-panel data-tab=\"impl\">\n    <textarea id=\"slotsImplEditor\" class=\"code slots-editor\" spellcheck=\"false\" rows=\"5\" style=\"width:100%;font-family:ui-monospace,monospace;font-size:0.85em;padding:0.6em;background:var(--iswc-bg-elev);color:var(--iswc-text);border:1px solid var(--iswc-border-soft);border-radius:0.4em;resize:vertical;\"><iswc-button color=\"brand\">\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n  Texto del boton\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-button></textarea>\n    <p class=\"lede hint\" style=\"margin-top:0.5em;font-size:0.8em;opacity:0.7;\">Editar el codigo actualiza la instancia en vivo arriba.</p>\n  </iswc-tab-panel>\n  <iswc-tab-panel data-tab=\"anat\">\n    <p class=\"lede hint\" style=\"font-size:0.8em;opacity:0.7;\">Template del Shadow DOM (read-only).</p>\n    <pre class=\"code\" data-lang=\"html\" style=\"background:var(--iswc-bg-elev);padding:0.6em;border-radius:0.4em;overflow:auto;font-size:0.82em;\">&lt;button part=\"button\" class=\"btn\" type=\"button\"&gt;\n  &lt;span part=\"start\" class=\"btn_prefix\"&gt;\n    &lt;slot name=\"start\"&gt;&lt;/slot&gt;\n  &lt;/span&gt;\n  &lt;span part=\"label\" class=\"btn_label\"&gt;\n    &lt;slot&gt;&lt;/slot&gt;\n  &lt;/span&gt;\n  &lt;span part=\"end\" class=\"btn_suffix\"&gt;\n    &lt;slot name=\"end\"&gt;&lt;/slot&gt;\n  &lt;/span&gt;\n  &lt;iswc-icon part=\"caret\" class=\"btn_caret\" hidden&gt;&lt;/iswc-icon&gt;\n  &lt;iswc-spinner part=\"spinner\" class=\"btn_spinner\" hidden&gt;&lt;/iswc-spinner&gt;\n&lt;/button&gt;</pre>\n  </iswc-tab-panel>\n</iswc-tab-group>\n<script>\n(function(){\n  var host = document.getElementById(\"slots-live\");\n  var btn  = document.getElementById(\"slotsPgBtn\");\n  var ed  = document.getElementById(\"slotsImplEditor\");\n  if (!host || !btn || !ed) return;\n  function sync(){\n    btn.outerHTML = ed.value;\n    var newBtn = host.querySelector(\"iswc-button\");\n    if (newBtn) btn = newBtn;\n  }\n  ed.addEventListener(\"input\", sync);\n})();\n</script>"
+        },
+        {
+          "kind": "table",
+          "columns": [
+            "Slot",
+            "Tipo",
+            "Default",
+            "Descripcion"
+          ],
+          "rows": [
+            [
+              "<code>(default)</code>",
+              "text",
+              "vacio",
+              "Contenido del label. Si el host no tiene children y es icon-only, queda solo el icono."
+            ],
+            [
+              "<code>start</code>",
+              "icon",
+              "vacio",
+              "Icono a la izquierda del label. Si no hay slot, el label queda pegado al borde izquierdo."
+            ],
+            [
+              "<code>end</code>",
+              "icon",
+              "vacio",
+              "Icono a la derecha del label. Si no hay slot, el label queda pegado al borde derecho."
+            ]
+          ]
         }
       ]
     },
