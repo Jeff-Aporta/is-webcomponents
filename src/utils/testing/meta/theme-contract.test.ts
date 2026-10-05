@@ -4,7 +4,7 @@
 //
 // Verifica que el contrato de tema/paleta se mantiene:
 //   1. <html> tiene data-theme y data-palette por defecto.
-//   2. is-base.css + palettes.css declaran .theme-light, .theme-dark.
+//   2. is-base.css + palettes.css reaccionan a [data-theme=light|dark].
 //   3. is-base.css + palettes.css declaran las 3 paletas (insoft, contapyme, agrowin).
 //   4. No hay tokens con prefijo --pg- legacy.
 //   5. Componentes no usan <svg>/<use>/<symbol> inline.
@@ -29,11 +29,17 @@ const component = await readFile(join(root, 'src', 'components', 'actions', 'but
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-check(styles.includes('.theme-light'), 'missing .theme-light');
-check(styles.includes('.theme-dark'), 'missing .theme-dark');
+check(
+  /\[data-theme=["']dark["']\]/.test(isBase) && /\[data-theme=["']dark["']\]/.test(palettes),
+  'is-base.css y palettes.css deben reaccionar a [data-theme=dark]',
+);
 check(
   /\[data-theme=["']light["']\]/.test(isBase) && /\[data-theme=["']light["']\]/.test(palettes),
-  'is-base.css y palettes.css deben reaccionar a [data-theme=light], no solo a .theme-light',
+  'is-base.css y palettes.css deben reaccionar a [data-theme=light]',
+);
+check(
+  !/:is\(\s*:not\(\[data-theme\]\)/.test(palettes),
+  'palettes.css: no usar :not([data-theme]) suelto (pisa dark en descendientes)',
 );
 for (const p of ['insoft', 'contapyme', 'agrowin']) {
   check(styles.includes(`[data-palette="${p}"]`), `missing ${p} palette`);

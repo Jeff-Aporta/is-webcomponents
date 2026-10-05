@@ -15,10 +15,10 @@
  *
  * Esta hoja SOLO declara tokens (variables). No pinta el canvas de la página
  * (`html`/`body`): cada app define su `background`. Tampoco fuerza
- * `color-scheme` en `:root` — solo en `.theme-dark` / `.theme-light` (y el
- * `[data-theme]` gemelo), para que cargar el CDN no oscurezca una app clara
- * por defecto. Los tokens también siguen `data-theme`: `<iswc-theme-toggle>`
- * escribe ambos, pero un consumer que solo mute el atributo debe reaccionar.
+ * `color-scheme` en `:root` — solo en `[data-theme="dark"|"light"]`, para
+ * que cargar el CDN no oscurezca una app clara por defecto. El contrato de
+ * tema es `data-theme` (no clases `.theme-*`): `<iswc-theme-toggle>` escribe
+ * el atributo; un consumer que solo mute `data-theme` debe reaccionar.
  */
 
 :root {

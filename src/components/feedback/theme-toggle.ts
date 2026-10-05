@@ -7,9 +7,9 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
  *
  * Compone <iswc-check-icon-button> (noche ↔ sol). Al activarse:
  *   1. Busca el contenedor de tema más cercano:
- *        [container-theme] | .container-theme | .theme-dark | .theme-light | [data-theme]
+ *        [container-theme] | .container-theme | [data-theme]
  *      (fallback: document.documentElement)
- *   2. Alterna theme-dark / theme-light + data-theme en ese contenedor
+ *   2. Alterna data-theme en ese contenedor
  *   3. Refleja `dark` en el host
  *   4. Emite `iswc-theme-change` { detail: { theme, dark, container } }
  *
@@ -122,7 +122,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       this.#scopeObs = obs;
       obs.observe(container, {
         attributes: true,
-        attributeFilter: ['class', 'data-theme'],
+        attributeFilter: ['data-theme'],
       });
     }
 
@@ -132,6 +132,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       const container = this.themeContainer;
       this.#applying = true;
       applyTheme(container, next);
+      this.dark = next === 'dark';
       this.#applying = false;
       this.#render();
       emit(this, 'iswc-theme-change', { theme: next, dark: next === 'dark', container });

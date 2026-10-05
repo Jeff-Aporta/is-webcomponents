@@ -33,7 +33,9 @@ test('cdn-snippet: loader copy-paste; L.load del tag (sin radio de alcance, sin 
   assert.match(src, /type="module" src=/);
   assert.match(src, /ISWebComponentsLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
-  assert.match(src, /loadCSSPalettesDefault/);
+  // Palettes: alias iswc-palettes-default vía loadPageStyles.
+  assert.match(src, /iswc-palettes-default|loadPageStyles/);
+  assert.doesNotMatch(src, /loadCSSPalettesDefault/);
   assert.match(src, /await L\.load\(/);
   assert.match(src, /data-copy=["']loader["']/);
 });

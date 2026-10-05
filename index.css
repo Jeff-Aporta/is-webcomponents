@@ -1,0 +1,17 @@
+/* Crítico mínimo hasta que el loader inyecte is-base / palettes. */
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  background: #0f1520;
+  color: #e7eef8;
+}
+html[data-theme="light"],
+html[data-theme="light"] body {
+  background: #f4f7fb;
+  color: #142033;
+}
+.shell-bar iswc-button:not(:defined),
+.shell-bar iswc-icon:not(:defined),
+.shell-bar iswc-theme-toggle:not(:defined),
+.shell-bar iswc-palette-selector:not(:defined) {
+  visibility: hidden;
+}

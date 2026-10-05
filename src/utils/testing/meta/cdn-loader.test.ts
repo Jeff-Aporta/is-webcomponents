@@ -18,10 +18,13 @@ test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () =
   const code = readFileSync(src, 'utf8');
   assert.match(code, /export const ISWebComponentsLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
-  assert.match(code, /loadCSSPalettesDefault\s*\(/);
+  // Palettes: alias iswc-palettes-default vía loadPageStyles (no loadCSSPalettesDefault).
+  assert.doesNotMatch(code, /loadCSSPalettesDefault\s*\(/);
+  assert.match(code, /iswc-palettes-default/);
   assert.match(code, /async load\s*\(/);
   assert.match(code, /loadPageStyles/);
   assert.match(code, /loadPageModules/);
+  assert.match(code, /registerPageStyle/);
   assert.match(code, /\bpin\s*\(/);
   assert.match(code, /\bunpin\s*\(/);
   assert.match(code, /configure\s*\(/);
@@ -77,12 +80,15 @@ test('min.js de componente lleva banner de docs MD', () => {
   assert.match(btn, /is-cdn-install\/SKILL\.md/);
 });
 
-test('index.html arranca con loader (sin all.min suelto; CSS dist)', () => {
-  assert.match(indexHtml, /loader\.min\.js/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css\?h=[0-9a-z]{6}"/);
-  assert.doesNotMatch(indexHtml, /L\.load\(['"]all['"]\)/);
+test('index.html arranca con loader local (sin all.min; CSS vía loader)', () => {
+  const indexMjs = readFileSync(join(root, 'index.mjs'), 'utf8');
+  assert.match(indexHtml, /src=["']\.\/index\.mjs["']/);
+  assert.match(indexMjs, /loader\.min\.js/);
+  assert.match(indexMjs, /configure\s*\(\s*\{\s*local\s*:\s*true\s*\}\s*\)/);
+  assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css/);
+  assert.doesNotMatch(indexMjs, /L\.load\(['"]all['"]\)/);
   assert.doesNotMatch(indexHtml, /<script type="module" src="dist\/cdn\/all\.min\.js"/);
-  // Detalle del orden await/shell → tests/gallery-boot.test.ts (error #43)
+  // Detalle del orden shell → tests/gallery-boot.test.ts (error #43)
 });
 
 test('index.html no reimporta preview-component ni icon desde src/ (Pages 404)', () => {
@@ -109,14 +115,17 @@ test('specs/cdn.md documenta pin/mirrors (consolidación 2026-09-07)', () => {
   assert.ok(!existsSync(join(root, 'dist', 'cdn', 'README.txt')), 'README.txt retirado — specs/cdn.md es el índice');
 });
 
-test('configure acepta host + v/query (cache-bust)', () => {
+test('configure acepta host + local + v/query (cache-bust)', () => {
   const code = readFileSync(src, 'utf8');
   assert.match(code, /host\?:/);
+  assert.match(code, /local\?:/);
   assert.match(code, /query\?:/);
   assert.match(code, /\bv\?:/);
   assert.match(code, /githack/);
   assert.match(code, /state\.host/);
   assert.match(code, /state\.query/);
+  assert.match(code, /mirrorsExplicit/);
+  assert.match(code, /resolveHostInput/);
 });
 
 test('fallback CDN: jsDelivr → githack → Pages + stickyBase', () => {

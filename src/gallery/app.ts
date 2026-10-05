@@ -329,6 +329,15 @@ async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<voi
     ...GALLERY_CHROME_TAGS,
     ...(collectIsTags(preview.definition ?? preview) as string[]),
   ])];
+  // Knobs JSON (target+controls) → hace falta el CE playground aunque no
+  // figure en el HTML del demo (lo monta render.ts en runtime).
+  const def = (preview.definition ?? preview) as {
+    sections?: Array<{ blocks?: Array<{ target?: string; controls?: unknown[] }> }>;
+  };
+  const needsPg = (def.sections ?? []).some((s) =>
+    (s.blocks ?? []).some((b) => Boolean(b.target) && Array.isArray(b.controls) && b.controls.length > 0),
+  );
+  if (needsPg) tags.push('iswc-playground', 'iswc-preview-controls', 'iswc-select', 'iswc-option', 'iswc-input');
   // Los demos pueden citar tags de soporte sin catálogo (chrome hijos como
   // iswc-tab): pedirlos al loader tiraba el mount entero. Solo cargar los
   // que el catálogo sabe resolver; el resto queda como markup declarativo.
@@ -422,8 +431,7 @@ function updateUrl(): void {
 }
 
 function renderContext({ navSmooth = false }: { navSmooth?: boolean } = {}): void {
-  root.classList.toggle('theme-light', theme === 'light');
-  root.classList.toggle('theme-dark', theme === 'dark');
+  // Contrato W51: solo data-theme / data-palette (sin clases .theme-*).
   root.dataset.theme = theme;
   root.dataset.palette = palette;
   themeToggle.dark = theme === 'dark';

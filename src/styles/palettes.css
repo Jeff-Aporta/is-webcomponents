@@ -77,10 +77,9 @@
   --iswc-brand-b: 56%;
 }
 
-/* Tema oscuro: ContaPyme default y `:not([data-palette])` significan lo mismo
- * (sin atributo el browser cae a la primera coincidencia con :root, y
- * `data-palette="contapyme"` lo explicita). Misma firma para el bloque
- * claro. */
+/* Tema ContaPyme: SOLO el nodo con data-theme (html o contenedor scoped).
+ * Nunca `:not([data-theme])` suelto: matchearía cada descendiente sin el
+ * atributo y pintaría light encima del dark heredado del <html>. */
 [data-theme="dark"]:is(:not([data-palette]), [data-palette="contapyme"]) {
   --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
   --iswc-bg: #10151c;
@@ -96,7 +95,7 @@
   --iswc-shadow: 0 1px 0 rgb(255 255 255 / 3%), 0 8px 24px color-mix(in srgb, var(--iswc-contapyme-surface) 14%, rgb(0 0 0 / 25%));
 }
 
-:is(:not([data-theme]), [data-theme="light"]):is(:not([data-palette]), [data-palette="contapyme"]) {
+[data-theme="light"]:is(:not([data-palette]), [data-palette="contapyme"]) {
   --iswc-contapyme-surface: oklch(from var(--iswc-color-brand) l calc(c * 0.25) h);
   --iswc-bg: #fff;
   --iswc-bg-soft: color-mix(in srgb, var(--iswc-contapyme-surface) 4%, #f6f8fa);

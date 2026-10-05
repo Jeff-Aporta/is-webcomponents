@@ -23,8 +23,8 @@ import { ISWebComponentsLoader as L } from
 
 // Sin configure: el loader ya trae quemado el SHA de ESTE build (o el de @REF
 // si la URL venía pinneada). load() pide componentes a jsDelivr@eseSha.
-await L.loadCSSBase();
-await L.loadCSSPalettesDefault();
+// is-base.min.css se auto-carga al import (W52).
+await L.loadPageStyles(['iswc-palettes-default']);
 await L.load('iswc-button', 'iswc-button-group');
 // o: L.load('actions') | L.load('all')
 ```
@@ -164,17 +164,38 @@ Orden por defecto: `host` (si hay) → `self` (si `preferSelf` y no hay host) �
 
 ### Apps consumidoras (CDN)
 
-- Documento: `loadCSSBase()` + `loadCSSPalettesDefault()` explícitos (o `<link>` a los `.min.css`).
+- Documento: `loadPageStyles(['iswc-palettes-default'])` (o `<link>` a `palettes.min.css`). `is-base` se auto-inyecta al importar el loader.
 - Componente: lo trae cada `.min.js` con `adoptCss` en shadow.
-- Relativos al documento: `loadPageStyles([...])` / `loadPageModules([...])` (sin mirrors).
+- Relativos al documento: `loadPageStyles([...])` / `loadPageModules([...])` (sin mirrors). Alias CDN del kit: prefijo `cdn:` o alias registrado (`iswc-palettes-default`).
 
-### Galería local (`index.html`) — distinto
+### Galería local (`index.mjs`) — modo `local`
 
-La galería **no** debe esperar CSS del loader para el primer paint (FOUC). Contrato:
+La galería **se prueba a sí misma**: no CDN, no pin SHA, no mirrors.
 
-1. `<link>` estáticos a `src/styles/is-base.css`, `palettes.css`, `shell.css`, `presentation.css` + `preview-component.css`.
-2. `await` solo shell tags + `import('./dist/cdn/preview/preview-component.min.js')`.
-3. `load('all')` y `loadPageModules` en **background** (no bloquean `dataset.kitShell`).
-4. `iswc-preview-component` **no** está en el catálogo del loader → import dist, nunca `src/` (Pages 404 lucide).
+```js
+import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js';
+L.configure({ local: true }); // host = self (junto al loader), mirrors=[], sin sha
+L.sheets.install({ cacheName: 'iswc-gallery-sheets' });
+void L.loadPageStyles([
+  'iswc-palettes-default',
+  'src/styles/shell.css',
+  'src/styles/presentation.css',
+]);
+L.load(/* shell tags */, 'iswc-preview-component')
+  .then(() => { /* kitShell */ })
+  .catch(console.error);
+L.loadPageModules([/* chrome */, 'dev-reload']); // lazy
+```
+
+| Opción | Efecto |
+| --- | --- |
+| `local: true` | `preferSelf`, `host` = raíz del kit (`import.meta.url` → `dist/cdn/`), `mirrors: []`, sin pin |
+| `host: 'self' \| './'` | Misma raíz relativa al loader (sin quemar localhost) |
+| `host: 'dist/cdn/'` | Relativo a la página montada |
+| `mirrors: []` | Sin fallback jsDelivr/githack/Pages |
+
+Contrato FOUC: `index.js` + `index.css` (theme sync + visibility `:not(:defined)`). El resto lo inyecta el loader (`?h=` + Cache Storage).
+
+`iswc-preview-component` está en el catálogo (`category: preview`) → `L.load('iswc-preview-component')` sin `registerApp`.
 
 Detalle + anti-patrones: `LLM.md` raíz error **#43** · guardián `tests/gallery-boot.test.ts`.

@@ -42,14 +42,14 @@ export function readTheme(el: Element | null | undefined) {
 }
 
 /**
- * Observa class/data-theme del contenedor + `iswc-theme-change` (composed).
+ * Observa data-theme del contenedor + `iswc-theme-change` (composed).
  * @param {Element} container
  * @param {() => void} onChange
  * @returns {() => void}
  */
 export function watchThemeContainer(container: Element, onChange: () => void) {
   const obs = new MutationObserver(onChange);
-  obs.observe(container, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+  obs.observe(container, { attributes: true, attributeFilter: ['data-theme'] });
   document.addEventListener('iswc-theme-change', onChange);
   return () => {
     obs.disconnect();

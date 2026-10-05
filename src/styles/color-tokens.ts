@@ -128,7 +128,7 @@ export function colorMixRule(family: IswcColorMixFamily, variant: IswcColorVaria
  * output del helper.
  *
  * Ej. de output:
- *   :root, .theme-dark {
+ *   :root {
  *     --iswc-color-neutral: #888;
  *     --iswc-color-neutral-paler: color-mix(in srgb, var(--iswc-color-neutral) 12%, white);
  *     --iswc-color-neutral-pale: color-mix(in srgb, var(--iswc-color-neutral) 28%, white);

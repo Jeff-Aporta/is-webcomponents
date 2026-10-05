@@ -18,7 +18,7 @@ Muestra **un solo** bloque copy-paste:
 
 1. `<script type="module" src="â€¦/loader.min.js">` â€” loader del kit.
 2. (opcional) deps â€” p. ej. `patyLoader.min.js` â€” **en el mismo snippet**, justo despuÃ©s.
-3. `<script type="module">` â€” `loadCSSBase` + `loadCSSPalettesDefault` + `load(â€¦)`.
+3. `<script type="module">` — `loadPageStyles(['iswc-palettes-default'])` + `load(…)`.
 
 El snippet siempre hace `load('iswc-foo')` / `load('paty-â€¦')`: un componente por llamada. No hay filas Â«Dependencia Â· â€¦Â» sueltas: las deps se embeben.
 
@@ -63,8 +63,8 @@ import './cdn-snippet.js';
 <!-- si hay deps (p. ej. patyLoader), van aquÃ­ en el mismo bloque -->
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
-  await L.loadCSSBase();
-  await L.loadCSSPalettesDefault();
+  // is-base.min.css se auto-carga al importar el loader (W52).
+  await L.loadPageStyles(['iswc-palettes-default']);
   await L.load('iswc-button');
 </script>
 ```

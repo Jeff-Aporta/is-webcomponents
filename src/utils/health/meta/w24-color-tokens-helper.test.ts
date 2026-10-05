@@ -315,7 +315,7 @@ test('W24: colorMixFamilyBlock del helper matchea is-base.css para neutral', () 
   // Cogemos el bloque :root,.theme-dark de is-base.css y lo comparamos
   // caracter a caracter con lo que el helper genera. Si alguien edita
   // is-base.css sin pasar por el helper, este test rompe.
-  const helperBlock = colorMixFamilyBlock(':root, .theme-dark', 'neutral', '#888');
+  const helperBlock = colorMixFamilyBlock(':root', 'neutral', '#888');
   // Extraemos de is-base.css las 6 lineas (base + 5 variantes) de neutral.
   const lines: string[] = [`  --iswc-color-neutral: #888;`];
   for (const v of ISWC_COLOR_VARIANTS) {
@@ -324,7 +324,7 @@ test('W24: colorMixFamilyBlock del helper matchea is-base.css para neutral', () 
     assert.ok(m, `colorMixRule mal formado: ${colorMixRule('neutral', v)}`);
     lines.push(`  ${iswcColorTokenName('neutral', v)}: ${m[1]};`);
   }
-  const expected = `:root, .theme-dark {\n${lines.join('\n')}\n}`;
+  const expected = `:root {\n${lines.join('\n')}\n}`;
   assert.equal(helperBlock, expected);
   // Verifica que cada linea del bloque generado esta literalmente en is-base.css.
   for (const line of lines) {

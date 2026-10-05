@@ -84,20 +84,24 @@ export function renderBlock(block: PreviewBlock): HTMLElement {
         const pg = document.createElement('iswc-playground');
         pg.setAttribute('target', block.target);
         pg.setAttribute('layout', 'split');
-        pg.setAttribute('title', 'Configuracion');
+        pg.setAttribute('title', 'Atributos');
         pg.setAttribute('lede', '');
-        // spec = los controls del JSON
-        try {
-          (pg as unknown as { spec: unknown[] }).spec = block.controls;
-        } catch {}
-        // Mover el demo al slot stage del playground
-        wrap.append(pg);
-        // El demo va dentro del playground
-        // (lo creamos en el shadow del playground via fragment)
+        // Mover el demo al slot stage del playground ANTES de asignar spec,
+        // para que connectedCallback/#mountPanel vean el host vivo.
         const stageFrag = document.createElement('div');
         stageFrag.setAttribute('slot', 'stage');
         stageFrag.append(demo);
         pg.append(stageFrag);
+        wrap.append(pg);
+        const applySpec = (): void => {
+          try {
+            (pg as unknown as { spec: unknown[] }).spec = block.controls;
+          } catch { /* CE aún no listo */ }
+        };
+        // Solo asignar `spec` con el CE ya definido; si no, la data-prop propia
+        // tapa el setter tras el upgrade y el panel queda sin knobs.
+        if (customElements.get('iswc-playground')) applySpec();
+        else customElements.whenDefined('iswc-playground').then(applySpec);
       }
 
       // Si el demo es un diagrama SVG (class/flowchart/state/etc),

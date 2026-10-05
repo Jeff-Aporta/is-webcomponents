@@ -27,7 +27,7 @@ import { definePreviewControls } from '../layout/preview-controls.js';
           <div class="stage" part="stage"><slot name="stage"></slot></div>
         </div>
         <aside class="config" part="config">
-          <iswc-preview-controls part="controls" id="panel" label="Configuracion"></iswc-preview-controls>
+          <iswc-preview-controls part="controls" id="panel" label="Atributos"></iswc-preview-controls>
         </aside>
       </div>
     </div>
@@ -69,6 +69,12 @@ import { definePreviewControls } from '../layout/preview-controls.js';
     }
 
     onConnected(): void {
+      // `spec` asignado pre-upgrade tapa el setter (data-prop propia).
+      if (Object.prototype.hasOwnProperty.call(this, 'spec')) {
+        const raw = (this as unknown as { spec: unknown }).spec;
+        delete (this as unknown as { spec?: unknown }).spec;
+        this.spec = Array.isArray(raw) ? raw as SpecItem[] : [];
+      }
       this.#syncChrome();
       this.#readSpecSlot();
       this.#mountPanel();
@@ -132,13 +138,7 @@ import { definePreviewControls } from '../layout/preview-controls.js';
 
     #mountPanel(): void {
       this.#panel.spec = this.#spec.map((c) => ({ ...c }));
-      this.#panel.setAttribute('label', this.layout === 'split' ? 'Configuracion' : 'Controles');
-      // Phase W20: propaga el `tag` del host (o de la primera instancia is-*)
-      // al panel para que la pestaña Code pueda introspectar el Shadow DOM.
-      const host = this.#host();
-      const tag = host?.localName;
-      if (tag) this.#panel.setAttribute('tag', tag);
-      else this.#panel.removeAttribute('tag');
+      this.#panel.setAttribute('label', 'Atributos');
     }
 
     #host(): Element | null {

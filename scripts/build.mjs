@@ -390,7 +390,7 @@ for (const [category] of byCategory) {
 }
 
 // ── loader.min.js ────────────────────────────────────────────────
-// Entry liviano: manifiesto embebido + load / loadCSSBase / loadCSSPalettesDefault.
+// Entry liviano: manifiesto embebido + load / loadPageStyles (alias iswc-palettes-default).
 const loaderCatalog = {
   aliases: { charts: 'data-viz', 'data-viz': 'data-viz', dataviz: 'data-viz' },
   categories: {},

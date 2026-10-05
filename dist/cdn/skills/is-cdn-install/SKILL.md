@@ -54,8 +54,8 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`src
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js"></script>
   <script type="module">
     const L = globalThis.ISWebComponentsLoader;
-    await L.loadCSSBase();
-    await L.loadCSSPalettesDefault();
+    // is-base.min.css se auto-carga al importar el loader (W52).
+    await L.loadPageStyles(['iswc-palettes-default']);
     await L.load('iswc-button'); // o 'actions' | 'all'
   </script>
 </head>
@@ -139,7 +139,7 @@ No inventar props/eventos que no están en el MD.
 
 - [ ] Solo CDN (sin npm del kit)
 - [ ] Un solo espejo / un solo `base` en la página
-- [ ] `loader.min.js` + `L.loadCSSBase` + `L.loadCSSPalettesDefault` + `L.load(tags…)`
+- [ ] `loader.min.js` + `L.loadPageStyles(['iswc-palettes-default'])` + `L.load(tags…)`
 - [ ] JS: solo los tags de la vista (no `all.min.js`)
 - [ ] `data-theme` + `data-palette` en `<html>`
 - [ ] Pin `@<sha>` (o `@main` justificado, o copia local vía `/is-webcomponents:local`)

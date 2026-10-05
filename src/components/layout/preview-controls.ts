@@ -4,35 +4,13 @@
  * Alturas en em vía font-size del :host → --iswc-control-height del kit.
  *
  * Spec JSON → `spec`. Emite `iswc-controls-change` ({ def, valor }).
+ * Solo knobs (attrs). Sin tabs ni anatomía Code (descartado).
  *
- * Phase W20 (2026-10-03-zod-migration): el panel tiene 2 tabs:
- *   - "Attrs" (default): la grilla actual de inputs/selects/switches.
- *   - "Code"           : la anatomía (Shadow DOM template) del componente
- *                        target, read-only, renderizada en <pre class="code">
- *                        para que `scripts/highlight-pre.js` la pinte.
- *                        La detección del shadow es automática:
- *                          1) `ctor.__TEMPLATE` si el CE lo expone (dialog, drawer, …).
- *                          2) si no, instancia un hidden <{tag}> y lee su
- *                             `shadowRoot.innerHTML`.
- *
- * Phase W36 (2026-10-03-zod-migration): cada `.fila` lleva un botón info
- * (icono ⓘ) junto al label que abre un popover JSDoc-style con la info del
- * atributo: descripción, tipo, default, valores válidos y ejemplo. La info
- * llega por:
- *   - el campo opcional `info: { … }` del control en el JSON del playground
- *     (description, type, default, values[], example).
- *   - o, en su defecto, se deriva del propio control (label, control,
- *     default, options).
- *
- * Phase W39 (2026-10-03-zod-migration): los controles se auto-ordenan por
- * tipo al render (text → number → select → otros → switch/boolean AL FINAL).
- * El orden del `controls[]` en el JSON no importa: el componente garantiza
- * la presentación consistente.
+ * Phase W36: cada `.fila` lleva botón info (ⓘ) con popover JSDoc del attr.
+ * Phase W39: auto-orden text → number → select → otros → switch al final.
  *
  * Atributos:
- *   label   string             — header del panel (default: "Controles").
- *   tag     string             — tag del componente target (ej. "iswc-button").
- *                                Activa la pestaña Code.
+ *   label   string — header del panel (default: "Atributos").
  */
 const CSS = `
 :host {
@@ -62,39 +40,6 @@ const CSS = `
   text-transform: uppercase;
   opacity: 0.85;
 }
-/* Tabs (Phase W20): nav con 2 pestañas (Attrs/Code) */
-.tabs {
-  display: flex;
-  gap: 0.25em;
-  margin: 0 0 0.85em;
-  border-bottom: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
-}
-.tab {
-  appearance: none;
-  -webkit-appearance: none;
-  background: transparent;
-  border: 0;
-  border-bottom: 0.125em solid transparent;
-  font: inherit;
-  color: inherit;
-  padding: 0.45em 0.85em;
-  cursor: pointer;
-  opacity: 0.6;
-  margin-bottom: calc(-0.0625em - 0.0625em);
-  transition: opacity 120ms ease, border-color 120ms ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-}
-.tab:hover { opacity: 0.9; }
-.tab[aria-selected="true"] {
-  opacity: 1;
-  border-bottom-color: var(--iswc-color-brand-500, currentColor);
-  font-weight: 600;
-}
-.tab__icon { font-size: 1.1em; line-height: 1; }
-/* Body panels (mutuamente excluyentes via [hidden]) */
-.body { display: block; }
 .grupos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75em), 1fr));
@@ -109,46 +54,6 @@ const CSS = `
   opacity: 0.9;
 }
 .grupo-titulo:first-child { margin-top: 0; }
-/* Code tab */
-.code-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0 0.5em;
-}
-.code-head h4 {
-  margin: 0;
-  font-size: 0.85em;
-  font-weight: 650;
-  opacity: 0.9;
-}
-.code-head .code-hint {
-  font-size: 0.75em;
-  opacity: 0.55;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.code {
-  margin: 0;
-  padding: 0.7em 0.85em;
-  border: 0.0625em solid var(--iswc-border, color-mix(in srgb, currentColor 16%, transparent));
-  border-radius: 0.4em;
-  background: var(--iswc-bg, color-mix(in srgb, currentColor 3%, transparent));
-  color: var(--iswc-text, inherit);
-  font-family: var(--iswc-mono, ui-monospace, monospace);
-  font-size: 0.82em;
-  line-height: 1.5;
-  overflow: auto;
-  max-block-size: 28em;
-  white-space: pre;
-  /* readonly visual: nada de resize ni user-select:all */
-  resize: none;
-  user-select: text;
-}
-.code--empty {
-  opacity: 0.6;
-  font-style: italic;
-}
 .fila {
   display: flex;
   flex-direction: column;
@@ -460,7 +365,8 @@ export type ControlPanel = {
   prop: string;
   label: string;
   group?: string;
-  options?: OpcionPanel[];
+  /** string[] del JSON de demos u objetos ya normalizados. */
+  options?: Array<string | OpcionPanel>;
   min?: number;
   max?: number;
   step?: number;
@@ -569,15 +475,26 @@ const DEFAULT_BY_ATTR: Record<string, string> = {
   fit: 'contain',
 };
 
-/** Completa iconos + default de opciones select si el JSON no los trae. */
+/** Completa iconos + default de opciones select si el JSON no los trae.
+ *  Acepta options como string[] (JSON de demos) u objetos {value,label,icon}. */
 function enriquecerControl(c: ControlPanel): ControlPanel {
   const copy: ControlPanel = { ...c };
   if (c.control !== 'select' || !Array.isArray(c.options)) return copy;
   const attr = attrDeProp(c.prop);
-  copy.options = c.options.map((op) => {
-    if (op.icon) return { ...op };
-    const icon = iconForOption(attr, op.value);
-    return icon ? { ...op, icon } : { ...op };
+  copy.options = c.options.map((op): OpcionPanel => {
+    const base: OpcionPanel = typeof op === 'string'
+      ? { value: op, label: op }
+      : {
+        value: op.value,
+        label: op.label ?? String(op.value ?? ''),
+        icon: op.icon,
+        html: op.html,
+        description: op.description,
+        placeholder: op.placeholder,
+      };
+    if (base.icon) return base;
+    const icon = iconForOption(attr, base.value);
+    return icon ? { ...base, icon } : base;
   });
   if (copy.default === undefined || copy.default === null || copy.default === '') {
     const vals = copy.options.map((o) => String(o.value));
@@ -622,63 +539,36 @@ function ordenarPorTipo(lista: ControlPanel[]): ControlPanel[] {
 const TPL = document.createElement('template');
 TPL.innerHTML = `<style>${CSS}</style><div class="panel">
   <div class="titulo"></div>
-  <nav class="tabs" part="tabs" role="tablist" aria-label="Pestañas del panel de controles">
-    <button type="button" class="tab tab--attrs" part="tab tab--attrs"
-            role="tab" data-tab="attrs" aria-selected="true"
-            aria-controls="pcAttrsPanel">
-      <span class="tab__icon" aria-hidden="true">⚙</span>
-      <span class="tab__label">Attrs</span>
-    </button>
-    <button type="button" class="tab tab--code" part="tab tab--code"
-            role="tab" data-tab="code" aria-selected="false"
-            aria-controls="pcCodePanel">
-      <span class="tab__icon" aria-hidden="true">‹/›</span>
-      <span class="tab__label">Code</span>
-    </button>
-  </nav>
-  <div class="body" part="body">
-    <section id="pcAttrsPanel" class="panel-attrs" part="panel-attrs"
-             role="tabpanel" data-panel="attrs">
-      <div class="grupos" part="grupos"></div>
-    </section>
-    <section id="pcCodePanel" class="panel-code" part="panel-code"
-             role="tabpanel" data-panel="code" hidden>
-      <header class="code-head" part="code-head">
-        <h4 class="code-title" part="code-title">Anatomía (Shadow DOM)</h4>
-        <span class="code-hint" part="code-hint">read-only</span>
-      </header>
-      <pre class="code code--anatomy" part="code" data-role="anatomy" spellcheck="false"
-           aria-label="Anatomía del Shadow DOM del componente target"></pre>
-    </section>
-  </div>
+  <div class="grupos" part="grupos"></div>
 </div>`;
 
-/** Carga switch/select/input del kit si el loader está en la página. */
+/** Carga switch/select/input del kit si el loader está en la página.
+ *  Nunca cuelga el panel: timeout 2.5s por widget. */
 async function asegurarWidgets(): Promise<void> {
   const L = (globalThis as {
     ISWebComponentsLoader?: { ensure?: (tag: string) => Promise<boolean> };
   }).ISWebComponentsLoader;
   if (!L?.ensure) return;
+  const conTope = (tag: string) => Promise.race([
+    L.ensure!(tag).catch(() => false),
+    new Promise<boolean>((r) => setTimeout(() => r(false), 2500)),
+  ]);
   await Promise.all(
-    ['iswc-switch', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-icon'].map((t) =>
-      L.ensure!(t).catch(() => false),
-    ),
+    ['iswc-switch', 'iswc-select', 'iswc-option', 'iswc-input', 'iswc-icon'].map(conTope),
   );
 }
 
 class IswcPreviewControls extends HTMLElement {
   #spec: ControlPanel[] = [];
   #listo = false;
-  #anatomy = '';
-  #anatomyReady = false;
-  #anatomyPromise: Promise<string> | null = null;
+  #arrancando = false;
   /** Handler de click fuera (Phase W36) — cierra popovers info. */
   #outsideClickHandler: ((ev: MouseEvent) => void) | null = null;
   /** Handler de Escape (Phase W36) — cierra popovers info. */
   #onPopoverEscape: ((ev: KeyboardEvent) => void) | null = null;
 
   static get observedAttributes(): string[] {
-    return ['label', 'tag'];
+    return ['label'];
   }
 
   connectedCallback(): void {
@@ -686,8 +576,20 @@ class IswcPreviewControls extends HTMLElement {
       this.attachShadow({ mode: 'open' });
       this.shadowRoot!.appendChild(TPL.content.cloneNode(true));
     }
-    this.#wireTabs();
+    // Si `spec` se asignó antes del upgrade, queda como data-prop propia y
+    // tapa el setter → knobs vacíos. Recuperar.
+    this.#reclamarSpecProp();
+    // Pintar ya: no esperar ensure (si cuelga, knobs vacíos).
+    this.#pintar();
     void this.#arrancar();
+  }
+
+  /** Own-prop `spec` pre-upgrade → setter real. */
+  #reclamarSpecProp(): void {
+    if (!Object.prototype.hasOwnProperty.call(this, 'spec')) return;
+    const raw = (this as unknown as { spec: unknown }).spec;
+    delete (this as unknown as { spec?: unknown }).spec;
+    this.spec = Array.isArray(raw) ? raw as ControlPanel[] : [];
   }
 
   disconnectedCallback(): void {
@@ -697,8 +599,7 @@ class IswcPreviewControls extends HTMLElement {
 
   attributeChangedCallback(name: string): void {
     if (!this.shadowRoot) return;
-    if (name === 'label' && this.#listo) this.#pintar();
-    if (name === 'tag') this.#refreshAnatomy();
+    if (name === 'label') this.#pintar();
   }
 
   getSpec(): ControlPanel[] {
@@ -749,40 +650,29 @@ class IswcPreviewControls extends HTMLElement {
 
   set spec(lista: ControlPanel[]) {
     this.#spec = Array.isArray(lista) ? lista.map((s) => enriquecerControl(s)) : [];
-    if (this.shadowRoot && this.#listo) this.#pintar();
-    else if (this.shadowRoot) void this.#arrancar();
+    if (!this.shadowRoot) return;
+    this.#pintar();
+    if (!this.#listo) void this.#arrancar();
   }
 
   get spec(): ControlPanel[] {
     return this.#spec;
   }
 
-  /**
-   * Tag del componente target (p.ej. "iswc-button"). Si está presente, el
-   * panel activa la pestaña Code e introspecciona su Shadow DOM.
-   */
-  get tag(): string {
-    return this.getAttribute('tag') ?? '';
-  }
-  set tag(v: string) {
-    if (v == null || v === '') this.removeAttribute('tag');
-    else this.setAttribute('tag', String(v));
-  }
-
-  /** Anatomía detectada (Shadow DOM serializado). Útil para tests. */
-  get anatomy(): string {
-    return this.#anatomy;
-  }
-
   async #arrancar(): Promise<void> {
-    await asegurarWidgets();
-    this.#listo = true;
-    this.#pintar();
-    this.#refreshAnatomy();
+    if (this.#arrancando) return;
+    this.#arrancando = true;
+    try {
+      await asegurarWidgets();
+      this.#listo = true;
+      this.#pintar();
+    } finally {
+      this.#arrancando = false;
+    }
   }
 
   #titulo(): string {
-    return this.getAttribute('label') || 'Controles';
+    return this.getAttribute('label') || 'Atributos';
   }
 
   #pintar(): void {
@@ -810,106 +700,6 @@ class IswcPreviewControls extends HTMLElement {
       const ordenados = ordenarPorTipo(lista);
       for (const control of ordenados) grupos.appendChild(this.#fila(control));
     }
-  }
-
-  /** Cablea los listeners de click en las dos pestañas. */
-  #wireTabs(): void {
-    const sr = this.shadowRoot;
-    if (!sr) return;
-    const tabAttrs = sr.querySelector<HTMLElement>('.tab--attrs');
-    const tabCode = sr.querySelector<HTMLElement>('.tab--code');
-    if (tabAttrs) tabAttrs.addEventListener('click', () => this.#showTab('attrs'));
-    if (tabCode) tabCode.addEventListener('click', () => this.#showTab('code'));
-  }
-
-  /** Activa una de las dos pestañas y desactiva la otra. */
-  #showTab(which: 'attrs' | 'code'): void {
-    const sr = this.shadowRoot;
-    if (!sr) return;
-    const isAttrs = which === 'attrs';
-    const tabAttrs = sr.querySelector<HTMLElement>('.tab--attrs');
-    const tabCode = sr.querySelector<HTMLElement>('.tab--code');
-    const panelAttrs = sr.querySelector<HTMLElement>('[data-panel="attrs"]');
-    const panelCode = sr.querySelector<HTMLElement>('[data-panel="code"]');
-    if (tabAttrs) tabAttrs.setAttribute('aria-selected', String(isAttrs));
-    if (tabCode) tabCode.setAttribute('aria-selected', String(!isAttrs));
-    if (panelAttrs) panelAttrs.toggleAttribute('hidden', !isAttrs);
-    if (panelCode) panelCode.toggleAttribute('hidden', isAttrs);
-    this.dataset.activeTab = which;
-  }
-
-  /**
-   * Lanza la detección de anatomía cuando hay `tag`. Re-renderiza el bloque
-   * Code tan pronto como resuelve (sync o async). Idempotente: si ya hay
-   * una detección en vuelo, no arranca otra.
-   */
-  #refreshAnatomy(): void {
-    const sr = this.shadowRoot;
-    if (!sr) return;
-    const tag = this.tag.trim();
-    const pre = sr.querySelector<HTMLElement>('[data-role="anatomy"]');
-    if (!pre) return;
-    if (!tag) {
-      this.#anatomy = '';
-      this.#anatomyReady = false;
-      this.#anatomyPromise = null;
-      pre.textContent = '(sin tag: define `tag="iswc-…"` para ver la anatomía)';
-      pre.classList.add('code--empty');
-      return;
-    }
-    pre.classList.remove('code--empty');
-    if (this.#anatomyPromise) return;
-    this.#anatomyPromise = this.#detectAnatomy(tag).then((html) => {
-      this.#anatomy = html;
-      this.#anatomyReady = true;
-      const live = this.shadowRoot?.querySelector<HTMLElement>('[data-role="anatomy"]');
-      if (live) live.textContent = html;
-      return html;
-    }).catch((err) => {
-      const msg = `<!-- no se pudo detectar la anatomía de <${tag}>: ${String(err)} -->`;
-      this.#anatomy = msg;
-      this.#anatomyReady = true;
-      const live = this.shadowRoot?.querySelector<HTMLElement>('[data-role="anatomy"]');
-      if (live) {
-        live.textContent = msg;
-        live.classList.add('code--empty');
-      }
-      return msg;
-    });
-  }
-
-  /**
-   * Detecta la anatomía del componente target:
-   *   1) `ctor.__TEMPLATE` si el CE lo expone (dialog, drawer, …).
-   *   2) Si no, instancia un hidden <{tag}> y lee `shadowRoot.innerHTML`.
-   * Devuelve siempre un string (vacío si no se pudo).
-   */
-  async #detectAnatomy(tag: string): Promise<string> {
-    if (typeof customElements === 'undefined') return '';
-    const ctor = customElements.get(tag);
-    if (ctor) {
-      const tpl = (ctor as unknown as { __TEMPLATE?: HTMLTemplateElement }).__TEMPLATE;
-      if (tpl && tpl.innerHTML) return tpl.innerHTML.trim();
-    }
-    if (typeof document === 'undefined') return '';
-    return this.#introspectInstance(tag);
-  }
-
-  /** Crea un hidden instance y devuelve su shadowRoot serializado. */
-  async #introspectInstance(tag: string): Promise<string> {
-    const probe = document.createElement(tag);
-    probe.style.position = 'absolute';
-    probe.style.left = '-99999px';
-    probe.style.top = '-99999px';
-    probe.style.pointerEvents = 'none';
-    probe.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(probe);
-    // Esperar a que el shadow se monte (connectedCallback + initShadow).
-    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-    const root = probe.shadowRoot;
-    const html = root ? root.innerHTML.trim() : '';
-    probe.remove();
-    return html;
   }
 
   #fila(c: ControlPanel): HTMLElement {
@@ -1192,7 +982,10 @@ class IswcPreviewControls extends HTMLElement {
         const sel = document.createElement('iswc-select');
         const inicial = v ?? c.default ?? '';
         sel.setAttribute('value', String(inicial));
-        for (const op of c.options ?? []) {
+        for (const raw of c.options ?? []) {
+          const op = typeof raw === 'string'
+            ? { value: raw, label: raw }
+            : raw;
           const o = document.createElement('iswc-option');
           o.setAttribute('value', String(op.value));
           if (op.icon) {

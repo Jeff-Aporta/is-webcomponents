@@ -10,9 +10,8 @@
 :host {
   --iswc-button-font-family: var(--iswc-font-family);
   --iswc-button-font-weight: 500;
-  /* No fijar --iswc-button-border-radius aquí: si no, pisa el 999px de
-     <iswc-button-group pill> vía ::slotted (el :host gana al padre). El
-     default 6px vive como fallback en .btn y en shape/pill. */
+  /* Radio: no fijarlo siempre en :host (pisaría pill del button-group vía
+     ::slotted). Default = round vía :host(:not([shape])) más abajo. */
   --iswc-button-border-width: 1px;
   --iswc-button-transition-duration: 120ms;
   --_bg: var(--iswc-control-bg);
@@ -343,7 +342,10 @@
   --_text-hover: var(--_tone-strong);
 }
 
-/* ── shape: ortogonal a color y variant (corner-shape donde aplica) ──────── */
+/* ── shape: ortogonal a color y variant (corner-shape donde aplica) ────────
+   Sin atributo = round (default del contrato). El group pill gana con
+   --_button-*-radius en las esquinas, no con esta var. */
+:host(:not([shape])),
 :host([shape="round"]) { --iswc-button-border-radius: var(--iswc-radius-sm); }
 :host([shape="square"]),
 :host([shape="rect"]) { --iswc-button-border-radius: 0; }

@@ -301,10 +301,7 @@ async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs:
   }
   if (!host) throw new Error(`no se encontró el host de controles (target: ${targetSel || 'primer is-*'})`);
   const panel = document.createElement('iswc-preview-controls');
-  panel.setAttribute('label', 'Controles');
-  // Phase W20: propaga el `tag` del host para que la pestaña Code del panel
-  // pueda introspectar el Shadow DOM del componente target.
-  if (host.localName) panel.setAttribute('tag', host.localName);
+  panel.setAttribute('label', 'Atributos');
   const spec = defs.map((def) => {
     const d = { ...def, group: def.group ?? grupo };
     const defVal = valorDefault(host as HTMLElement, d);
@@ -316,6 +313,10 @@ async function montarPanel(contenedor: HTMLElement, _seccion: HTMLElement, defs:
       value: valorInicial(host as HTMLElement, d) ?? defVal,
     };
   });
+  // Esperar define: asignar `spec` pre-upgrade crea data-prop que tapa el setter.
+  if (!customElements.get('iswc-preview-controls')) {
+    await customElements.whenDefined('iswc-preview-controls');
+  }
   (panel as unknown as PanelConSpec).spec = spec;
   const ancla = isDemo ?? contenedor;
   ancla.insertAdjacentElement('afterend', panel);

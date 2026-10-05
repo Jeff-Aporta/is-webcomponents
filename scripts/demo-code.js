@@ -114,14 +114,12 @@ import manifest from '../src/manifest.js';
     document.documentElement.dataset.palette || 'contapyme'
   );
 
-  /** Sella data-theme + data-palette + .theme-* en un nodo raíz del snippet
-   *  para que, al pegarlo, el ejemplo herede el contexto sin pintar toda la
-   *  página (el canvas lo decide la app). */
+  /** Sella data-theme + data-palette en un nodo raíz del snippet para que,
+   *  al pegarlo, el ejemplo herede el contexto sin pintar toda la página
+   *  (el canvas lo decide la app). Contrato W51: sin clases .theme-*. */
   const stampContext = (el, theme, palette) => {
     el.setAttribute('data-theme', theme);
     el.setAttribute('data-palette', palette);
-    el.classList.remove('theme-dark', 'theme-light');
-    el.classList.add(theme === 'light' ? 'theme-light' : 'theme-dark');
   };
 
   /** Inyecta el contexto actual en la(s) raíz(ces) del markup serializado. */
@@ -225,7 +223,7 @@ import manifest from '../src/manifest.js';
     lines.push('<script type="module">');
     lines.push('  const L = globalThis.ISWebComponentsLoader;');
     lines.push('  // is-base.min.css se auto-carga al inicializar el loader (W52).');
-    lines.push('  await L.loadCSSPalettesDefault();');
+    lines.push("  await L.loadPageStyles(['iswc-palettes-default']);");
     if (args) lines.push(`  await L.load(${args});`);
     lines.push('<\/script>');
 

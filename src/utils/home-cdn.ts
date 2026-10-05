@@ -40,7 +40,7 @@ const buildBundleSnippet = (): string => [
   `${open}script type="module"${close}`,
   `  const L = globalThis.ISWebComponentsLoader;`,
   `  // is-base.min.css se auto-carga al inicializar el loader (W52).`,
-  `  await L.loadCSSPalettesDefault();`,
+  `  await L.loadPageStyles(['iswc-palettes-default']);`,
   `  await L.load("iswc-button");`,
   `${open}${slash}script${close}`,
   '',

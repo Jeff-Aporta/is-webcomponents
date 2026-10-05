@@ -1,12 +1,12 @@
 /**
  * gallery-boot.test.ts
  *
- * Caza la regresion FOUC / demos vacios / boot lento:
- *  - CSS del kit desde dist/cdn (consumo transpilado)
- *  - await del head = solo shell tags + preview desde dist/cdn
- *  - SPA de galeria: dist/gallery-app.min.js (no src/*.ts en runtime)
- *  - loadPageModules fuera del await critico
- *  - cdn-panel NO importa cdn-snippet desde src/
+ * Boot de la galería local vía loader (`configure({ local: true })`):
+ *  - sin <link> de kit (is-base / palettes los inyecta el loader)
+ *  - shell = L.load(...).then/.catch (sin try/catch)
+ *  - loadPageModules / loadPageStyles fuera del path crítico (fire-and-forget)
+ *  - theme/CSS críticos en index.js / index.css; boot en index.mjs
+ *  - SPA desde dist/gallery-app.min.js (head + defer)
  */
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
@@ -15,61 +15,89 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const read = (rel) => readFileSync(join(root, rel), 'utf8');
+const read = (rel: string) => readFileSync(join(root, rel), 'utf8');
 const indexHtml = read('index.html');
+const indexMjs = read('index.mjs');
+const indexJs = read('index.js');
+const indexCss = read('index.css');
 const cdnPanel = read('scripts/cdn-panel.js');
+const loaderTs = read('src/cdn/loader.ts');
 
-/** Primer <script type="module"> del <head> (boot del loader). */
-function headBootModule(html) {
-  const head = html.match(/<head[\s\S]*?<\/head>/i)?.[0] ?? '';
-  const m = head.match(/<script\s+type="module">([\s\S]*?)<\/script>/i);
-  assert.ok(m, 'falta <script type="module"> en <head>');
-  return m[1];
-}
-
-test('CSS del kit es dist/cdn (consumo); shell local', () => {
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css\?h=[0-9a-z]{6}"/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/palettes\.min\.css\?h=[0-9a-z]{6}"/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/shell\.css"/);
-  assert.match(indexHtml, /<link\s+rel="stylesheet"\s+href="src\/styles\/presentation\.css"/);
-  assert.match(
-    indexHtml,
-    /<link\s+rel="stylesheet"\s+href="dist\/cdn\/preview\/preview-component\.min\.css\?h=[0-9a-z]{6}"/,
-  );
+test('galería: CSS del kit vía loader (sin <link> is-base/palettes/preview)', () => {
+  assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base/);
+  assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/palettes/);
+  assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/preview\/preview-component/);
   assert.doesNotMatch(indexHtml, /href="src\/styles\/is-base\.css"/);
+  assert.match(indexMjs, /loadPageStyles\s*\(/);
+  assert.match(indexMjs, /iswc-palettes-default/);
+  assert.match(indexMjs, /shell\.css/);
+  assert.match(indexMjs, /presentation\.css/);
+  assert.doesNotMatch(indexMjs, /loadCSSPalettesDefault/);
+  assert.match(loaderTs, /iswc-palettes-default/);
+  assert.doesNotMatch(loaderTs, /loadCSSPalettesDefault\s*\(/);
 });
 
-test('head no hace await loadCSS* / loadPageStyles en el boot', () => {
-  const boot = headBootModule(indexHtml);
-  assert.doesNotMatch(boot, /await\s+L\.loadCSSBase\s*\(/);
-  assert.doesNotMatch(boot, /await\s+L\.loadCSSPalettesDefault\s*\(/);
-  assert.doesNotMatch(boot, /await\s+L\.loadPageStyles\s*\(/);
+test('galería: configure({ local: true }) — sin mirrors ni pin', () => {
+  assert.match(indexMjs, /configure\s*\(\s*\{\s*local\s*:\s*true\s*\}\s*\)/);
+  assert.doesNotMatch(indexMjs, /mirrors\s*:\s*\[\s*['"]jsdelivr['"]/);
+  assert.doesNotMatch(indexMjs, /preferSelf\s*:\s*true/);
+  assert.match(loaderTs, /local\?:\s*boolean/);
+  assert.match(loaderTs, /mirrorsExplicit/);
+  assert.match(loaderTs, /resolveHostInput/);
 });
 
-test('await critico del head = shell tags + preview dist (no all, no pageModules)', () => {
-  const boot = headBootModule(indexHtml);
-  assert.match(boot, /await\s+Promise\.all\s*\(/);
-  assert.match(boot, /L\.load\s*\([\s\S]*iswc-split-panel[\s\S]*iswc-button/);
-  assert.match(
-    boot,
-    /import\s*\(\s*['"]\.\/dist\/cdn\/preview\/preview-component\.min\.js\?h=[0-9a-z]{6}['"]\s*\)/,
-  );
-  assert.match(boot, /dataset\.kitShell\s*=\s*['"]1['"]/);
+test('shell = L.load(...).then/.catch; preview-component desde catálogo (sin registerApp)', () => {
+  assert.match(indexMjs, /L\.load\s*\(/);
+  assert.match(indexMjs, /iswc-split-panel[\s\S]*iswc-button/);
+  assert.match(indexMjs, /iswc-preview-component/);
+  assert.doesNotMatch(indexMjs, /registerApp\s*\(/);
+  assert.doesNotMatch(indexMjs, /import\s*\(\s*['"]\.\/dist\/cdn\/preview\/preview-component/);
+  assert.match(indexMjs, /\.then\s*\(/);
+  assert.match(indexMjs, /\.catch\s*\(/);
+  assert.doesNotMatch(indexMjs, /\btry\s*\{/);
+  assert.match(indexMjs, /dataset\.kitShell\s*=\s*['"]1['"]/);
 
-  const tryBlock = boot.match(/try\s*\{([\s\S]*?)dataset\.kitShell/);
-  assert.ok(tryBlock, 'falta try + dataset.kitShell tras el shell');
-  const critical = tryBlock[1];
-  assert.doesNotMatch(critical, /L\.load\s*\(\s*['"]all['"]\s*\)/);
-  assert.doesNotMatch(critical, /loadPageModules\s*\(/);
+  const beforeThen = indexMjs.split(/\.then\s*\(/)[0] ?? '';
+  assert.doesNotMatch(beforeThen, /L\.load\s*\(\s*['"]all['"]\s*\)/);
+  assert.doesNotMatch(beforeThen, /loadPageModules\s*\(/);
 });
 
-test('loadPageModules vive fuera del path critico (fire-and-forget)', () => {
-  const boot = headBootModule(indexHtml);
-  assert.doesNotMatch(boot, /L\.load\s*\(\s*['"]all['"]\s*\)/);
-  assert.match(boot, /loadPageModules\s*\(/);
-  const afterShell = boot.split(/dataset\.kitShell\s*=\s*['"]1['"]/)[1] ?? '';
+test('loadPageModules vive fuera del path crítico (fire-and-forget)', () => {
+  assert.doesNotMatch(indexMjs, /L\.load\s*\(\s*['"]all['"]\s*\)/);
+  assert.match(indexMjs, /loadPageModules\s*\(/);
+  assert.match(indexMjs, /dev-reload/);
+  const afterShell = indexMjs.split(/dataset\.kitShell\s*=\s*['"]1['"]/)[1] ?? '';
   assert.ok(afterShell.length > 20, 'boot truncado tras kitShell');
   assert.doesNotMatch(afterShell, /await\s+L\.loadPageModules\s*\(/);
+});
+
+test('index.html enlaza index.js / index.css / index.mjs (sin lógica embebida)', () => {
+  assert.match(indexHtml, /src=["']\.\/index\.js["']/);
+  assert.match(indexHtml, /href=["']\.\/index\.css["']/);
+  assert.match(indexHtml, /src=["']\.\/index\.mjs["']/);
+  assert.doesNotMatch(indexHtml, /<script\s+type="module">/);
+  assert.doesNotMatch(indexHtml, /atob\(|loadPageStyles|ISWebComponentsLoader/);
+  assert.match(indexJs, /iswc-theme|data-theme|localStorage/);
+  assert.match(indexCss, /data-theme=["']dark["']/);
+  assert.match(indexCss, /:not\(:defined\)/);
+});
+
+test('index.html no embebe lógica de reload-pin (va en scripts/dev-reload.js)', () => {
+  assert.doesNotMatch(indexHtml, /iswc-auto-rereload|reload-pin/);
+  assert.ok(existsSync(join(root, 'scripts', 'dev-reload.js')), 'falta scripts/dev-reload.js');
+  assert.match(loaderTs, /dev-reload/);
+});
+
+test('sin preview-boot.js externo; theme sync en index.js', () => {
+  assert.doesNotMatch(indexHtml, /preview-boot\.js/);
+  assert.match(indexJs, /iswc-theme|data-theme/);
+});
+
+test('meta sin ContaPyme/InSoft redundantes ni offers de venta', () => {
+  assert.doesNotMatch(indexHtml, /ContaPyme\s*\/\s*InSoft/);
+  assert.doesNotMatch(indexHtml, /"offers"\s*:/);
+  assert.doesNotMatch(indexHtml, /"author"\s*:\s*\{\s*"@type"\s*:\s*"Person"/);
+  assert.match(indexHtml, /open source/i);
 });
 
 test('no reimportar preview-component ni icon-loader desde src/', () => {
@@ -78,18 +106,10 @@ test('no reimportar preview-component ni icon-loader desde src/', () => {
   assert.doesNotMatch(indexHtml, /src\/components\/_shared\/icon-loader\.js/);
 });
 
-test('SPA de galeria se consume desde dist/gallery-app.min.js (no src/*.ts)', () => {
-  assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js\?h=[0-9a-z]{6}["']/);
+test('SPA de galeria se consume desde dist/gallery-app.min.js (head + defer)', () => {
+  assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js(?:\?h=[0-9a-z]{6})?["'][^>]*\bdefer\b/);
   assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/previews\/registry\.ts['"]/);
-  assert.doesNotMatch(indexHtml, /from\s+['"]\.\/src\/cdn\/collect-iswc-tags\.ts['"]/);
-  assert.ok(
-    existsSync(join(root, 'src', 'gallery', 'app.ts')),
-    'fuente: src/gallery/app.ts',
-  );
-  // Tras build debe existir el artefacto; si falta, el test avisa (correr deno task build).
-  if (!existsSync(join(root, 'dist', 'gallery-app.min.js'))) {
-    console.warn('gallery-boot: falta dist/gallery-app.min.js — corre deno task build');
-  }
+  assert.ok(existsSync(join(root, 'src', 'gallery', 'app.ts')), 'fuente: src/gallery/app.ts');
 });
 
 test('fuente gallery app usa setHostPreview + whenDefined', () => {
@@ -109,6 +129,6 @@ test('cdn-panel importa cdn-snippet desde dist/cdn (no src/)', () => {
 });
 
 test('head arranca con loader.min.js desde core/ (no all.min suelto)', () => {
-  assert.match(indexHtml, /dist\/cdn\/(?:core\/)?loader\.min\.js/);
+  assert.match(indexMjs, /dist\/cdn\/(?:core\/)?loader\.min\.js/);
   assert.doesNotMatch(indexHtml, /<script\s+type="module"\s+src="dist\/cdn\/all\.min\.js"/);
 });

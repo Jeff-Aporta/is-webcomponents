@@ -112,8 +112,8 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@{{SHA}}/dist/cdn/core/loader.min.js"></script>
   <script type="module">
     const L = globalThis.ISWebComponentsLoader;
-    await L.loadCSSBase();
-    await L.loadCSSPalettesDefault();
+    // is-base.min.css se auto-carga al importar el loader (W52).
+    await L.loadPageStyles(['iswc-palettes-default']);
     await L.load("iswc-toast");
   </script>
 </head>
@@ -123,7 +123,7 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
 </html>
 ```
 
-- CSS de documento: `loadCSSBase` + `loadCSSPalettesDefault`. El CSS de cada `is-*` lo carga el propio tag.
+- CSS de documento: `loadPageStyles(['iswc-palettes-default'])` (`is-base` auto). El CSS de cada `is-*` lo carga el propio tag.
 - Cargar solo los tags de la vista. `load('actions')` expande a cada `.min.js` de la categoría (no hay bundle). `load('all')` pide todos los tags, no un archivo único.
 - Tema: `data-theme` / `data-palette` en `<html>`. Tokens: `--iswc-text`, `--iswc-bg`, `--iswc-border`, `--iswc-accent`, etc.
 - Si la app prefiere no depender de red: usar [`/is-webcomponents:local`](tools/local.md) (vendoriza JS y CSS, arranque local con fallback a CDN).

@@ -9,9 +9,8 @@
     import { ISWebComponentsLoader as L } from '../../dist/cdn/core/loader.min.js';
     import { GALLERY_CHROME_TAGS } from '../../src/cdn/collect-iswc-tags.js';
     L.configure({ preferSelf: true, mirrors: ['jsdelivr', 'pages'] });
-    await L.loadCSSBase();
-    await L.loadCSSPalettesDefault();
     await L.loadPageStyles([
+      'iswc-palettes-default',
       '../styles/presentation.css',
       '../components/layout/preview-component.css',
     ]);

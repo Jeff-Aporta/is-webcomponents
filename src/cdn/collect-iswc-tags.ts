@@ -13,6 +13,13 @@ export const GALLERY_CHROME_TAGS = [
   'iswc-dialog',
   'iswc-switch',
   'iswc-tab-group',
+  // Playground de attrs (render.ts monta <iswc-playground> si el JSON
+  // trae target+controls; no aparece en el HTML del demo → hay que pedirlo).
+  'iswc-playground',
+  'iswc-preview-controls',
+  'iswc-select',
+  'iswc-option',
+  'iswc-input',
 ];
 
 export function collectIsTags(...chunks: unknown[]) {
