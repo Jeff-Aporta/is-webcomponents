@@ -20,7 +20,7 @@ import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
  *
  * Atributos
  *  color      brand | neutral | success | warning | danger | info | error   (default: brand)
- *  variant   filled | outlined | plain | ghost | soft | text  (default: filled)
+ *  variant   filled | outlined | plain | ghost | soft | soft-filled | text  (default: filled)
  *  shape        none | round | square | rect | pill  (default: round)
  *                             `none` = sin conversión de forma; `round` = radio tema;
  *                             `square`/`rect` = esquinas vivas; `pill` = cápsula

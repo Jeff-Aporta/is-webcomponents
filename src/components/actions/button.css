@@ -288,6 +288,19 @@
   --_text: var(--_tone-text);
 }
 
+/* soft-filled: tiñe con alpha del color (no tinte blanco). Ideal para
+ * overlays sobre imagenes o fondos. Diferencia con `soft`: usa el color
+ * real translucido, no la mezcla con blanco. Asi neutral es gris
+ * translucido (no blanco-grisaceo) y brand es brand translucido. */
+:host([color][variant="soft-filled"]) {
+  --_bg: color-mix(in srgb, var(--_tone) 18%, transparent);
+  --_bg-hover: color-mix(in srgb, var(--_tone) 28%, transparent);
+  --_bg-active: color-mix(in srgb, var(--_tone) 40%, transparent);
+  --_border: transparent;
+  --_text: var(--_tone-text);
+  --_text-hover: var(--_tone-text);
+}
+
 /* text: sin caja; plain sí tiñe fondo. */
 :host([variant="text"]) {
   --_hpad: 0.35em;
