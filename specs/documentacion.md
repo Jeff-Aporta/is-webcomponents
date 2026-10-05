@@ -14,7 +14,7 @@ Humanos y agentes consumen el kit vía galería, CDN y markdown raw en GitHub. L
 | SDD | [`specs/README.md`](README.md) | Contrato por dominio |
 | Inventario tags | [`manifest.ts`](../src/manifest.ts) | Mapa categorías → MD |
 | Por tag | `src/components/<cat>/<tag>.md` | API del componente |
-| Skills | `src/skills/is-webcomponents/` | Prompt + catálogo |
+| Skills | `skills/is-webcomponents/` | Prompt + catálogo |
 
 ## S-D2 MD por componente
 
@@ -34,7 +34,7 @@ Humanos y agentes consumen el kit vía galería, CDN y markdown raw en GitHub. L
 |---|---|
 | Generar SEO | `deno task docs` |
 | Banner loader | comentario `/*! … */` en bundles + `dist/cdn/loader.md` |
-| Catálogo skill | `src/skills/is-webcomponents/catalog.md` |
+| Catálogo skill | `skills/is-webcomponents/catalog.md` |
 
 ## Aceptación
 
