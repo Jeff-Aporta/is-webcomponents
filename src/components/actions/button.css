@@ -240,7 +240,16 @@
   --_border-hover: transparent;
 }
 
-/* ghost: outlined en reposo, filled al hover (unico que cambia --_*-hover). */
+/* ghost: outlined en reposo, filled al hover (unico que cambia --_*-hover).
+ * W28: --_bg-hover / --_border-hover / --_text-hover = mismo aspecto que
+ * `:host([variant="filled"]):not(:hover)`. Para cada color X:
+ *   --_bg-hover: var(--_tone-strong)        = filled rest bg
+ *   --_border-hover: var(--_tone-strong)    = filled rest border (cuando es X)
+ *   --_text-hover: var(--_tone-on)          = filled rest text
+ *   --_bg-active: var(--_tone-stronger)     = un escalón más fuerte
+ * Neutral hereda la regla genérica (--_tone-strong = --iswc-control-bg,
+ * --_tone-on = --iswc-control-text en :host([color="neutral"])).
+ * Sin color: usamos los tokens equivalentes del control base. */
 :host([color][variant="ghost"]) {
   --_bg: transparent;
   --_border: var(--_tone);
@@ -250,21 +259,14 @@
   --_border-hover: var(--_tone-strong);
   --_text-hover: var(--_tone-on);
 }
-:host([color="neutral"][variant="ghost"]) {
-  /* Relleno = color de texto del tema; on-brand (blanco) fallaba en dark. */
-  --_bg-hover: var(--iswc-control-text, #212529);
-  --_bg-active: var(--iswc-control-text, #212529);
-  --_border-hover: var(--iswc-control-text, #212529);
-  --_text-hover: var(--iswc-bg, #fff);
-}
 :host([variant="ghost"]:not([color])) {
   --_bg: transparent;
   --_border: var(--iswc-control-border, #adb5bd);
   --_text: var(--iswc-control-text, #212529);
-  --_bg-hover: var(--iswc-control-text, #212529);
-  --_bg-active: var(--iswc-control-text, #212529);
-  --_border-hover: var(--iswc-control-text, #212529);
-  --_text-hover: var(--iswc-bg, #fff);
+  --_bg-hover: var(--iswc-control-bg, #f1f3f5);
+  --_bg-active: var(--iswc-control-bg-hover, #e9ecef);
+  --_border-hover: var(--iswc-control-border, #dee2e6);
+  --_text-hover: var(--iswc-control-text, #212529);
 }
 
 /* soft: ya nace teñido (plain no). */
