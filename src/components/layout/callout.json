@@ -6,6 +6,7 @@
   "titleHtml": false,
   "description": "Documentación y demos del componente iswc-callout de InSoft.",
   "storageKey": "docs-iswc-callout",
+  "loads": ["iswc-slots-pg"],
   "sections": [
     {
       "id": "intro",

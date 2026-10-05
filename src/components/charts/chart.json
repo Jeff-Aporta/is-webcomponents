@@ -46,6 +46,17 @@
   ],
   "storageKey": "docs-iswc-chart",
   "hasBehavior": true,
+  "loads": [
+    "iswc-bar-chart",
+    "iswc-bubble-chart",
+    "iswc-doughnut-chart",
+    "iswc-line-chart",
+    "iswc-pie-chart",
+    "iswc-polar-area-chart",
+    "iswc-radar-chart",
+    "iswc-scatter-chart",
+    "iswc-sparkline"
+  ],
   "sections": [
     {
       "id": "intro",

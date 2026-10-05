@@ -5,6 +5,7 @@
   "title": "&lt;iswc-kanban&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-kanban / iswc-kanban-column / iswc-kanban-card de InSoft.",
+  "loads": ["iswc-kanban-card", "iswc-kanban-column"],
   "storageKey": "docs-iswc-kanban",
   "sections": [
     {

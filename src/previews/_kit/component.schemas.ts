@@ -42,8 +42,19 @@
  *    reject it with a clear message — exactly what the test wants.
  *
  * 5. **`ComponentJsonSchema.passthrough()`** at the root lets us add
- *    fields (e.g. `ficha`, `examples`) without re-releasing the schema.
- *    Forward-compat by design.
+ *    fields (e.g. `ficha`, `examples`, `loads`) without re-releasing
+ *    the schema. Forward-compat by design.
+ *
+ * 6. **`loads?: string[]`** (Phase W56) declares the `iswc-*` tags
+ *    whose module/JS the preview actually needs. The render kicks
+ *    `L.load(...loads)` (via `loadFor` en `render.ts`) before the
+ *    `iswc-demo` mounts so the tags inside the demo's HTML are
+ *    upgraded. The field is optional: JSONs that only render plain
+ *    HTML don't need to declare anything. Tags que la galería ya
+ *    carga como chrome (e.g. `iswc-demo-section`, `iswc-playground`,
+ *    `iswc-icon`, `iswc-button`) **no** deben listarse: el loader ya
+ *    los trae como parte del boot. Listar solo los específicos de
+ *    este preview que **no** estén en el chrome de la galería.
  *
  * ### Out of scope
  *
@@ -282,6 +293,16 @@ export const ComponentJsonSchema = z
     sections: z.array(SectionSchema),
     /** Phase W21: presets tipados para `<iswc-examples-carousel>`. */
     examples: z.array(z.record(z.string(), z.unknown())).optional(),
+    /**
+     * Phase W56: lista de tags `iswc-*` que el loader debe precargar
+     * antes de pintar el demo. Típicamente son componentes del kit
+     * referenciados en los bloques `demo`/`html` que el chrome de la
+     * galería no trae de base. Opcional: si el JSON no declara
+     * `loads`, se asume que el render puede proceder sin carga
+     * adicional (caso típico: previews con solo HTML nativo, tablas o
+     * callouts).
+     */
+    loads: z.array(z.string()).optional(),
     /** Sub-objeto ficha-bridge (sections + exclude + playground). */
     ficha: z
       .object({

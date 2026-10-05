@@ -11,6 +11,7 @@
   ],
   "storageKey": "docs-iswc-select",
   "hasBehavior": true,
+  "loads": ["iswc-slots-pg"],
   "sections": [
     {
       "id": "intro",

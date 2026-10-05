@@ -180,6 +180,13 @@ export interface PreviewDefinition {
    * módulo de Zod.
    */
   examples?: unknown[];
+  /**
+   * Phase W56: tags `iswc-*` que el loader debe precargar antes de
+   * pintar el demo. Ver `loadFor` en `render.ts`. Opcional: si el
+   * JSON no declara `loads`, se asume que el render puede proceder
+   * sin carga adicional.
+   */
+  loads?: string[];
   sections: PreviewSection[];
 }
 

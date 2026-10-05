@@ -63,6 +63,7 @@ const RAIZ_PROPS = new Set([
   'hasBehavior', 'withoutToc', 'sections',
   'ficha', // sub-objeto con sections+exclude generado por ficha-bridge
   'examples', // Phase W21: array tipado de ExampleSpec para <iswc-examples-carousel>
+  'loads',   // Phase W56: tags `iswc-*` que el loader debe precargar para el demo
 ]);
 
 // ─────────────────────────────────────────────────────────────────────────────

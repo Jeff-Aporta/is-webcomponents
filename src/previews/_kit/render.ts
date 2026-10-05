@@ -527,6 +527,21 @@ export function renderSection(section: PreviewSection): HTMLElement {
   return wrapper;
 }
 
+/* --------------------------------------------------------------------------
+ * Phase W56 — `loads`: lazy-load de componentes del kit referenciados por
+ * un preview. La implementación vive en `./load-for.ts` (sin dependencias
+ * del DOM, para que los tests en Node la puedan importar). Aquí solo
+ * re-exportamos para que los callers del render tengan un único punto
+ * de entrada.
+ * ------------------------------------------------------------------------*/
+
+export {
+  loadFor,
+  normalizeLoads,
+  type LoadForResult,
+  type LoaderLike,
+} from './load-for.ts';
+
 /**
  * @param def
  * @param targets
