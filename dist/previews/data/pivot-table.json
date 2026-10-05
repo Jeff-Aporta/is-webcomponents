@@ -4,7 +4,14 @@
   "category": "data",
   "title": "&lt;iswc-pivot-table&gt;",
   "titleHtml": false,
-  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 8rem; overflow: auto;\r\n    }",
+  "styles": [
+    "pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .8rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 8rem; overflow: auto;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-pivot-table",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +27,30 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-pivot-table rows=\"region\" cols=\"trimestre\" measure=\"ventas\" agg=\"sum\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q1\", \"ventas\": 320 },\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q2\", \"ventas\": 410 },\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q3\", \"ventas\": 380 },\r\n                { \"region\": \"Norte\", \"trimestre\": \"Q4\", \"ventas\": 520 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q1\", \"ventas\": 220 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q2\", \"ventas\": 280 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q3\", \"ventas\": 350 },\r\n                { \"region\": \"Sur\",   \"trimestre\": \"Q4\", \"ventas\": 410 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q1\", \"ventas\": 180 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q2\", \"ventas\": 240 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q3\", \"ventas\": 300 },\r\n                { \"region\": \"Este\",  \"trimestre\": \"Q4\", \"ventas\": 360 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q1\", \"ventas\": 140 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q2\", \"ventas\": 190 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q3\", \"ventas\": 230 },\r\n                { \"region\": \"Oeste\", \"trimestre\": \"Q4\", \"ventas\": 280 }\r\n              ]\r\n            </script>\r\n          </iswc-pivot-table>"
+          "html": [
+            "<iswc-pivot-table rows=\"region\" cols=\"trimestre\" measure=\"ventas\" agg=\"sum\">",
+            "            <script type=\"application/json\">",
+            "              [",
+            "                { \"region\": \"Norte\", \"trimestre\": \"Q1\", \"ventas\": 320 },",
+            "                { \"region\": \"Norte\", \"trimestre\": \"Q2\", \"ventas\": 410 },",
+            "                { \"region\": \"Norte\", \"trimestre\": \"Q3\", \"ventas\": 380 },",
+            "                { \"region\": \"Norte\", \"trimestre\": \"Q4\", \"ventas\": 520 },",
+            "                { \"region\": \"Sur\",   \"trimestre\": \"Q1\", \"ventas\": 220 },",
+            "                { \"region\": \"Sur\",   \"trimestre\": \"Q2\", \"ventas\": 280 },",
+            "                { \"region\": \"Sur\",   \"trimestre\": \"Q3\", \"ventas\": 350 },",
+            "                { \"region\": \"Sur\",   \"trimestre\": \"Q4\", \"ventas\": 410 },",
+            "                { \"region\": \"Este\",  \"trimestre\": \"Q1\", \"ventas\": 180 },",
+            "                { \"region\": \"Este\",  \"trimestre\": \"Q2\", \"ventas\": 240 },",
+            "                { \"region\": \"Este\",  \"trimestre\": \"Q3\", \"ventas\": 300 },",
+            "                { \"region\": \"Este\",  \"trimestre\": \"Q4\", \"ventas\": 360 },",
+            "                { \"region\": \"Oeste\", \"trimestre\": \"Q1\", \"ventas\": 140 },",
+            "                { \"region\": \"Oeste\", \"trimestre\": \"Q2\", \"ventas\": 190 },",
+            "                { \"region\": \"Oeste\", \"trimestre\": \"Q3\", \"ventas\": 230 },",
+            "                { \"region\": \"Oeste\", \"trimestre\": \"Q4\", \"ventas\": 280 }",
+            "              ]",
+            "            </script>",
+            "          </iswc-pivot-table>"
+          ]
         }
       ]
     },
@@ -30,7 +60,23 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-pivot-table rows=\"canal\" cols=\"mes\" measure=\"ticket\" agg=\"avg\" decimals=\"0\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"canal\": \"Web\",     \"mes\": \"Ene\", \"ticket\": 420 },\r\n                { \"canal\": \"Web\",     \"mes\": \"Feb\", \"ticket\": 480 },\r\n                { \"canal\": \"Web\",     \"mes\": \"Mar\", \"ticket\": 510 },\r\n                { \"canal\": \"Móvil\",   \"mes\": \"Ene\", \"ticket\": 320 },\r\n                { \"canal\": \"Móvil\",   \"mes\": \"Feb\", \"ticket\": 360 },\r\n                { \"canal\": \"Móvil\",   \"mes\": \"Mar\", \"ticket\": 410 },\r\n                { \"canal\": \"Mostrador\",\"mes\": \"Ene\", \"ticket\": 580 },\r\n                { \"canal\": \"Mostrador\",\"mes\": \"Feb\", \"ticket\": 600 },\r\n                { \"canal\": \"Mostrador\",\"mes\": \"Mar\", \"ticket\": 640 }\r\n              ]\r\n            </script>\r\n          </iswc-pivot-table>"
+          "html": [
+            "<iswc-pivot-table rows=\"canal\" cols=\"mes\" measure=\"ticket\" agg=\"avg\" decimals=\"0\">",
+            "            <script type=\"application/json\">",
+            "              [",
+            "                { \"canal\": \"Web\",     \"mes\": \"Ene\", \"ticket\": 420 },",
+            "                { \"canal\": \"Web\",     \"mes\": \"Feb\", \"ticket\": 480 },",
+            "                { \"canal\": \"Web\",     \"mes\": \"Mar\", \"ticket\": 510 },",
+            "                { \"canal\": \"Móvil\",   \"mes\": \"Ene\", \"ticket\": 320 },",
+            "                { \"canal\": \"Móvil\",   \"mes\": \"Feb\", \"ticket\": 360 },",
+            "                { \"canal\": \"Móvil\",   \"mes\": \"Mar\", \"ticket\": 410 },",
+            "                { \"canal\": \"Mostrador\",\"mes\": \"Ene\", \"ticket\": 580 },",
+            "                { \"canal\": \"Mostrador\",\"mes\": \"Feb\", \"ticket\": 600 },",
+            "                { \"canal\": \"Mostrador\",\"mes\": \"Mar\", \"ticket\": 640 }",
+            "              ]",
+            "            </script>",
+            "          </iswc-pivot-table>"
+          ]
         }
       ]
     },
@@ -44,7 +90,21 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-pivot-table rows=\"estado\" cols=\"prioridad\" agg=\"count\">\r\n            <script type=\"application/json\">\r\n              [\r\n                { \"estado\": \"Nuevo\",    \"prioridad\": \"Alta\" },\r\n                { \"estado\": \"Nuevo\",    \"prioridad\": \"Alta\" },\r\n                { \"estado\": \"En curso\", \"prioridad\": \"Alta\" },\r\n                { \"estado\": \"En curso\", \"prioridad\": \"Media\" },\r\n                { \"estado\": \"En curso\", \"prioridad\": \"Baja\" },\r\n                { \"estado\": \"Cerrado\",  \"prioridad\": \"Media\" },\r\n                { \"estado\": \"Cerrado\",  \"prioridad\": \"Baja\" }\r\n              ]\r\n            </script>\r\n          </iswc-pivot-table>"
+          "html": [
+            "<iswc-pivot-table rows=\"estado\" cols=\"prioridad\" agg=\"count\">",
+            "            <script type=\"application/json\">",
+            "              [",
+            "                { \"estado\": \"Nuevo\",    \"prioridad\": \"Alta\" },",
+            "                { \"estado\": \"Nuevo\",    \"prioridad\": \"Alta\" },",
+            "                { \"estado\": \"En curso\", \"prioridad\": \"Alta\" },",
+            "                { \"estado\": \"En curso\", \"prioridad\": \"Media\" },",
+            "                { \"estado\": \"En curso\", \"prioridad\": \"Baja\" },",
+            "                { \"estado\": \"Cerrado\",  \"prioridad\": \"Media\" },",
+            "                { \"estado\": \"Cerrado\",  \"prioridad\": \"Baja\" }",
+            "              ]",
+            "            </script>",
+            "          </iswc-pivot-table>"
+          ]
         }
       ]
     },
@@ -54,7 +114,22 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "// Atributos\n// rows, cols            nombre de campo (requeridos)\n// measure               nombre de campo a agregar (opcional)\n// agg                   sum | avg | count | min | max   (default sum)\n// format                locale para Intl.NumberFormat (default 'es-CO')\n// decimals              dígitos (default 0; máximo 2)\n\n// Datos: cualquier objeto plano serializable en <script type=\"application/json\">\n// o vía propiedad: chart.dataset = [...]\n\n// Evento\ntable.addEventListener('iswc-cell-click', e => {\n  console.log(e.detail.row, '·', e.detail.col, '=', e.detail.value);\n});"
+          "code": [
+            "// Atributos",
+            "// rows, cols            nombre de campo (requeridos)",
+            "// measure               nombre de campo a agregar (opcional)",
+            "// agg                   sum | avg | count | min | max   (default sum)",
+            "// format                locale para Intl.NumberFormat (default 'es-CO')",
+            "// decimals              dígitos (default 0; máximo 2)",
+            "",
+            "// Datos: cualquier objeto plano serializable en <script type=\"application/json\">",
+            "// o vía propiedad: chart.dataset = [...]",
+            "",
+            "// Evento",
+            "table.addEventListener('iswc-cell-click', e => {",
+            "  console.log(e.detail.row, '·', e.detail.col, '=', e.detail.value);",
+            "});"
+          ]
         }
       ]
     },

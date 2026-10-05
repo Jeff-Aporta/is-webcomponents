@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\r\n            <iswc-option value=\"bog\">Bogotá</iswc-option>\r\n            <iswc-option value=\"mde\">Medellín</iswc-option>\r\n            <iswc-option value=\"cal\">Cali</iswc-option>\r\n            <iswc-option value=\"brr\" disabled>Barranquilla (sin cobertura)</iswc-option>\r\n          </iswc-combobox>",
+          "html": [
+            "<iswc-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">",
+            "            <iswc-option value=\"bog\">Bogotá</iswc-option>",
+            "            <iswc-option value=\"mde\">Medellín</iswc-option>",
+            "            <iswc-option value=\"cal\">Cali</iswc-option>",
+            "            <iswc-option value=\"brr\" disabled>Barranquilla (sin cobertura)</iswc-option>",
+            "          </iswc-combobox>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -49,7 +56,16 @@
         "content": "Opción de un <code class=\"code\">&lt;iswc-combobox&gt;</code> o <code class=\"code\">&lt;iswc-select&gt;</code>. El <code class=\"code\">value</code> es lo que expone el control; el contenido es lo que ve el usuario."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\n  <iswc-option value=\"bog\">Bogotá</iswc-option>\n  <iswc-option value=\"mde\">Medellín</iswc-option>\n  <iswc-option value=\"cal\">Cali</iswc-option>\n  <iswc-option value=\"brr\" disabled>Barranquilla (sin cobertura)</iswc-option>\n</iswc-combobox>\n```"
+        "content": [
+          "```html",
+          "<iswc-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">",
+          "  <iswc-option value=\"bog\">Bogotá</iswc-option>",
+          "  <iswc-option value=\"mde\">Medellín</iswc-option>",
+          "  <iswc-option value=\"cal\">Cali</iswc-option>",
+          "  <iswc-option value=\"brr\" disabled>Barranquilla (sin cobertura)</iswc-option>",
+          "</iswc-combobox>",
+          "```"
+        ]
       }
     },
     "exclude": [

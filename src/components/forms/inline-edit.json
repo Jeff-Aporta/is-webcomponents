@@ -4,7 +4,11 @@
   "category": "forms",
   "title": "&lt;iswc-inline-edit&gt;",
   "titleHtml": false,
-  "styles": ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }\r\n    .ie-row > span.label { font-size: .82rem; color: var(--iswc-text-soft); width: 7rem; flex: 0 0 auto; }\r\n    .ie-row p { margin: 0; font-size: .82rem; color: var(--iswc-text-dim); }",
+  "styles": [
+    ".ie-row { padding: .55rem 0; display: flex; gap: 1.25rem; align-items: baseline; flex-wrap: wrap; }",
+    "    .ie-row > span.label { font-size: .82rem; color: var(--iswc-text-soft); width: 7rem; flex: 0 0 auto; }",
+    "    .ie-row p { margin: 0; font-size: .82rem; color: var(--iswc-text-dim); }"
+  ],
   "storageKey": "docs-iswc-inline-edit",
   "sections": [
     {
@@ -19,7 +23,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"ie-row\">\r\n            <span class=\"label\">Nombre</span>\r\n            <iswc-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></iswc-inline-edit>\r\n          </div>",
+          "html": [
+            "<div class=\"ie-row\">",
+            "            <span class=\"label\">Nombre</span>",
+            "            <iswc-inline-edit id=\"ie1\" value=\"Carolina Méndez\" placeholder=\"Sin nombre\"></iswc-inline-edit>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -46,7 +55,80 @@
           ],
           "equivNote": "mode elige control; cancel-on-blur decide si blur guarda o cancela.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-inline-edit: blur\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"mode=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"text → input\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"textarea\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"cancel-on-blur?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"descarta\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"guarda (iswc-change)\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"text\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"textarea\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"d\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-inline-edit: blur\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"mode=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"text → input\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"textarea\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"cancel-on-blur?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"descarta\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"e\",",
+            "          \"label\": \"guarda (iswc-change)\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"text\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"textarea\"",
+            "        },",
+            "        {",
+            "          \"from\": \"a\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"e\",",
+            "          \"label\": \"no\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -70,7 +152,11 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-inline-edit value=\"InSoft\" style=\"font-size:1.15rem; font-weight:600;\">\r\n            <span slot=\"display\"><iswc-icon icon=\"mdi:office-building\" style=\"vertical-align:middle\"></iswc-icon> InSoft S.A.</span>\r\n          </iswc-inline-edit>"
+          "html": [
+            "<iswc-inline-edit value=\"InSoft\" style=\"font-size:1.15rem; font-weight:600;\">",
+            "            <span slot=\"display\"><iswc-icon icon=\"mdi:office-building\" style=\"vertical-align:middle\"></iswc-icon> InSoft S.A.</span>",
+            "          </iswc-inline-edit>"
+          ]
         }
       ]
     },
@@ -80,7 +166,21 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const ie = document.querySelector('iswc-inline-edit');\nie.value              // string actual\nie.editing            // boolean\nie.edit()             // entra en modo edición (programáticamente)\nie.save()             // guarda y sale\nie.cancel()           // revierte y sale\nie.addEventListener('iswc-save',   e => console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));\nie.addEventListener('iswc-cancel', e => ...);\nie.addEventListener('iswc-edit',   () => ...);\n\n// form-associated\n// <form><iswc-inline-edit name=\"label\"></iswc-inline-edit></form>\nnew FormData(form).get('label')  // = ie.value"
+          "code": [
+            "const ie = document.querySelector('iswc-inline-edit');",
+            "ie.value              // string actual",
+            "ie.editing            // boolean",
+            "ie.edit()             // entra en modo edición (programáticamente)",
+            "ie.save()             // guarda y sale",
+            "ie.cancel()           // revierte y sale",
+            "ie.addEventListener('iswc-save',   e => console.log('nuevo:', e.detail.value, 'prev:', e.detail.previous));",
+            "ie.addEventListener('iswc-cancel', e => ...);",
+            "ie.addEventListener('iswc-edit',   () => ...);",
+            "",
+            "// form-associated",
+            "// <form><iswc-inline-edit name=\"label\"></iswc-inline-edit></form>",
+            "new FormData(form).get('label')  // = ie.value"
+          ]
         }
       ]
     }

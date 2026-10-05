@@ -9,15 +9,64 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el\r\n          componente decide las capas, reduce los cruces y rutea las flechas\r\n          rodeando las cajas.",
+      "lede": [
+        "Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el",
+        "          componente decide las capas, reduce los cruces y rutea las flechas",
+        "          rodeando las cajas."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          Comparte motor con <code>&lt;iswc-sequence-diagram&gt;</code>: mismo esquema\r\n          JSON, mismo visor a pantalla completa y la misma animación tortuga, que\r\n          aquí recorre las aristas en orden.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          Comparte motor con <code>&lt;iswc-sequence-diagram&gt;</code>: mismo esquema",
+            "          JSON, mismo visor a pantalla completa y la misma animación tortuga, que",
+            "          aquí recorre las aristas en orden.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-flowchart open-on-click animation=\"flow\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"de la venta al acuse de la DIAN\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"nodes\": [\r\n                    { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"b\", \"label\": \"Registrar venta\", \"group\": \"g-emision\",\r\n                      \"desc\": \"Se arma el documento con el tercero y los ítems facturados.\" },\r\n                    { \"id\": \"c\", \"label\": \"¿Datos completos?\", \"shape\": \"diamond\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"d\", \"label\": \"Corregir datos\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"e\", \"label\": \"Generar XML y firmar\", \"group\": \"g-dian\",\r\n                      \"desc\": \"Se construye el **XML UBL** y se aplica la firma digital del emisor.\" },\r\n                    { \"id\": \"f\", \"label\": \"Enviar a la DIAN\", \"group\": \"g-dian\" },\r\n                    { \"id\": \"g\", \"label\": \"Almacenar CUFE\", \"shape\": \"cylinder\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"h\", \"label\": \"Fin\", \"shape\": \"stadium\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"a\", \"to\": \"b\" },\r\n                    { \"from\": \"b\", \"to\": \"c\" },\r\n                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },\r\n                    { \"from\": \"d\", \"to\": \"b\", \"kind\": \"dashed\" },\r\n                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" },\r\n                    { \"from\": \"e\", \"to\": \"f\" },\r\n                    { \"from\": \"f\", \"to\": \"g\" },\r\n                    { \"from\": \"g\", \"to\": \"h\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-flowchart>",
+          "html": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"flowchart\": {",
+            "                  \"title\": \"Facturación electrónica\",",
+            "                  \"subtitle\": \"de la venta al acuse de la DIAN\",",
+            "                  \"direction\": \"TB\",",
+            "                  \"groups\": [",
+            "                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },",
+            "                    { \"id\": \"g-dian\", \"name\": \"DIAN\", \"hue\": 199 },",
+            "                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }",
+            "                  ],",
+            "                  \"nodes\": [",
+            "                    { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\", \"group\": \"g-emision\" },",
+            "                    { \"id\": \"b\", \"label\": \"Registrar venta\", \"group\": \"g-emision\",",
+            "                      \"desc\": \"Se arma el documento con el tercero y los ítems facturados.\" },",
+            "                    { \"id\": \"c\", \"label\": \"¿Datos completos?\", \"shape\": \"diamond\", \"group\": \"g-emision\" },",
+            "                    { \"id\": \"d\", \"label\": \"Corregir datos\", \"group\": \"g-emision\" },",
+            "                    { \"id\": \"e\", \"label\": \"Generar XML y firmar\", \"group\": \"g-dian\",",
+            "                      \"desc\": \"Se construye el **XML UBL** y se aplica la firma digital del emisor.\" },",
+            "                    { \"id\": \"f\", \"label\": \"Enviar a la DIAN\", \"group\": \"g-dian\" },",
+            "                    { \"id\": \"g\", \"label\": \"Almacenar CUFE\", \"shape\": \"cylinder\", \"group\": \"g-cierre\" },",
+            "                    { \"id\": \"h\", \"label\": \"Fin\", \"shape\": \"stadium\", \"group\": \"g-cierre\" }",
+            "                  ],",
+            "                  \"edges\": [",
+            "                    { \"from\": \"a\", \"to\": \"b\" },",
+            "                    { \"from\": \"b\", \"to\": \"c\" },",
+            "                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },",
+            "                    { \"from\": \"d\", \"to\": \"b\", \"kind\": \"dashed\" },",
+            "                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" },",
+            "                    { \"from\": \"e\", \"to\": \"f\" },",
+            "                    { \"from\": \"f\", \"to\": \"g\" },",
+            "                    { \"from\": \"g\", \"to\": \"h\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-flowchart>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -34,11 +83,38 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          <code>direction</code> acepta <code>TB</code> (por defecto), <code>BT</code>,\r\n          <code>LR</code> y <code>RL</code>. <code>TD</code> se acepta como alias de\r\n          <code>TB</code>, igual que en Mermaid.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          <code>direction</code> acepta <code>TB</code> (por defecto), <code>BT</code>,",
+            "          <code>LR</code> y <code>RL</code>. <code>TD</code> se acepta como alias de",
+            "          <code>TB</code>, igual que en Mermaid.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"direction\": \"LR\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"p\", \"label\": \"Pedido\", \"shape\": \"stadium\" },\r\n                    { \"id\": \"q\", \"label\": \"Alistamiento\" },\r\n                    { \"id\": \"r\", \"label\": \"Despacho\" },\r\n                    { \"id\": \"s\", \"label\": \"Entregado\", \"shape\": \"stadium\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"p\", \"to\": \"q\" },\r\n                    { \"from\": \"q\", \"to\": \"r\" },\r\n                    { \"from\": \"r\", \"to\": \"s\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-flowchart>"
+          "html": [
+            "<iswc-flowchart open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"flowchart\": {",
+            "                  \"direction\": \"LR\",",
+            "                  \"nodes\": [",
+            "                    { \"id\": \"p\", \"label\": \"Pedido\", \"shape\": \"stadium\" },",
+            "                    { \"id\": \"q\", \"label\": \"Alistamiento\" },",
+            "                    { \"id\": \"r\", \"label\": \"Despacho\" },",
+            "                    { \"id\": \"s\", \"label\": \"Entregado\", \"shape\": \"stadium\" }",
+            "                  ],",
+            "                  \"edges\": [",
+            "                    { \"from\": \"p\", \"to\": \"q\" },",
+            "                    { \"from\": \"q\", \"to\": \"r\" },",
+            "                    { \"from\": \"r\", \"to\": \"s\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -48,11 +124,45 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          Nueve formas, equivalentes a las de Mermaid: <code>rect</code> (por defecto),\r\n          <code>round</code>, <code>stadium</code>, <code>circle</code>,\r\n          <code>diamond</code>, <code>hexagon</code>, <code>parallelogram</code>,\r\n          <code>cylinder</code> y <code>subroutine</code>.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          Nueve formas, equivalentes a las de Mermaid: <code>rect</code> (por defecto),",
+            "          <code>round</code>, <code>stadium</code>, <code>circle</code>,",
+            "          <code>diamond</code>, <code>hexagon</code>, <code>parallelogram</code>,",
+            "          <code>cylinder</code> y <code>subroutine</code>.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"direction\": \"LR\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"n1\", \"label\": \"rect\" },\r\n                    { \"id\": \"n2\", \"label\": \"round\", \"shape\": \"round\" },\r\n                    { \"id\": \"n3\", \"label\": \"stadium\", \"shape\": \"stadium\" },\r\n                    { \"id\": \"n4\", \"label\": \"diamond\", \"shape\": \"diamond\" },\r\n                    { \"id\": \"n5\", \"label\": \"hexagon\", \"shape\": \"hexagon\" },\r\n                    { \"id\": \"n6\", \"label\": \"parallelogram\", \"shape\": \"parallelogram\" },\r\n                    { \"id\": \"n7\", \"label\": \"cylinder\", \"shape\": \"cylinder\" },\r\n                    { \"id\": \"n8\", \"label\": \"subroutine\", \"shape\": \"subroutine\" },\r\n                    { \"id\": \"n9\", \"label\": \"circle\", \"shape\": \"circle\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"n1\", \"to\": \"n2\" }, { \"from\": \"n2\", \"to\": \"n3\" },\r\n                    { \"from\": \"n3\", \"to\": \"n4\" }, { \"from\": \"n4\", \"to\": \"n5\" },\r\n                    { \"from\": \"n5\", \"to\": \"n6\" }, { \"from\": \"n6\", \"to\": \"n7\" },\r\n                    { \"from\": \"n7\", \"to\": \"n8\" }, { \"from\": \"n8\", \"to\": \"n9\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-flowchart>"
+          "html": [
+            "<iswc-flowchart open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"flowchart\": {",
+            "                  \"direction\": \"LR\",",
+            "                  \"nodes\": [",
+            "                    { \"id\": \"n1\", \"label\": \"rect\" },",
+            "                    { \"id\": \"n2\", \"label\": \"round\", \"shape\": \"round\" },",
+            "                    { \"id\": \"n3\", \"label\": \"stadium\", \"shape\": \"stadium\" },",
+            "                    { \"id\": \"n4\", \"label\": \"diamond\", \"shape\": \"diamond\" },",
+            "                    { \"id\": \"n5\", \"label\": \"hexagon\", \"shape\": \"hexagon\" },",
+            "                    { \"id\": \"n6\", \"label\": \"parallelogram\", \"shape\": \"parallelogram\" },",
+            "                    { \"id\": \"n7\", \"label\": \"cylinder\", \"shape\": \"cylinder\" },",
+            "                    { \"id\": \"n8\", \"label\": \"subroutine\", \"shape\": \"subroutine\" },",
+            "                    { \"id\": \"n9\", \"label\": \"circle\", \"shape\": \"circle\" }",
+            "                  ],",
+            "                  \"edges\": [",
+            "                    { \"from\": \"n1\", \"to\": \"n2\" }, { \"from\": \"n2\", \"to\": \"n3\" },",
+            "                    { \"from\": \"n3\", \"to\": \"n4\" }, { \"from\": \"n4\", \"to\": \"n5\" },",
+            "                    { \"from\": \"n5\", \"to\": \"n6\" }, { \"from\": \"n6\", \"to\": \"n7\" },",
+            "                    { \"from\": \"n7\", \"to\": \"n8\" }, { \"from\": \"n8\", \"to\": \"n9\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -62,11 +172,43 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          El motor detecta las aristas que vuelven atrás y las rutea por un lado, en\r\n          vez de colgarse intentando ordenar un grafo cíclico. Los reprocesos y los\r\n          reintentos se declaran sin ceremonia.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          El motor detecta las aristas que vuelven atrás y las rutea por un lado, en",
+            "          vez de colgarse intentando ordenar un grafo cíclico. Los reprocesos y los",
+            "          reintentos se declaran sin ceremonia.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-flowchart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"direction\": \"TB\",\r\n                  \"nodes\": [\r\n                    { \"id\": \"r1\", \"label\": \"Recibir soporte\", \"shape\": \"stadium\" },\r\n                    { \"id\": \"r2\", \"label\": \"Clasificar\" },\r\n                    { \"id\": \"r3\", \"label\": \"¿Aprobado?\", \"shape\": \"diamond\" },\r\n                    { \"id\": \"r4\", \"label\": \"Devolver al área\" },\r\n                    { \"id\": \"r5\", \"label\": \"Contabilizar\" },\r\n                    { \"id\": \"r6\", \"label\": \"Archivo\", \"shape\": \"cylinder\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"r1\", \"to\": \"r2\" },\r\n                    { \"from\": \"r2\", \"to\": \"r3\" },\r\n                    { \"from\": \"r3\", \"to\": \"r4\", \"label\": \"no\" },\r\n                    { \"from\": \"r4\", \"to\": \"r2\", \"kind\": \"dashed\", \"label\": \"reproceso\" },\r\n                    { \"from\": \"r3\", \"to\": \"r5\", \"label\": \"sí\" },\r\n                    { \"from\": \"r5\", \"to\": \"r6\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-flowchart>"
+          "html": [
+            "<iswc-flowchart open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"flowchart\": {",
+            "                  \"direction\": \"TB\",",
+            "                  \"nodes\": [",
+            "                    { \"id\": \"r1\", \"label\": \"Recibir soporte\", \"shape\": \"stadium\" },",
+            "                    { \"id\": \"r2\", \"label\": \"Clasificar\" },",
+            "                    { \"id\": \"r3\", \"label\": \"¿Aprobado?\", \"shape\": \"diamond\" },",
+            "                    { \"id\": \"r4\", \"label\": \"Devolver al área\" },",
+            "                    { \"id\": \"r5\", \"label\": \"Contabilizar\" },",
+            "                    { \"id\": \"r6\", \"label\": \"Archivo\", \"shape\": \"cylinder\" }",
+            "                  ],",
+            "                  \"edges\": [",
+            "                    { \"from\": \"r1\", \"to\": \"r2\" },",
+            "                    { \"from\": \"r2\", \"to\": \"r3\" },",
+            "                    { \"from\": \"r3\", \"to\": \"r4\", \"label\": \"no\" },",
+            "                    { \"from\": \"r4\", \"to\": \"r2\", \"kind\": \"dashed\", \"label\": \"reproceso\" },",
+            "                    { \"from\": \"r3\", \"to\": \"r5\", \"label\": \"sí\" },",
+            "                    { \"from\": \"r5\", \"to\": \"r6\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -77,7 +219,29 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"animation=flow\",\n      \"direction\": \"LR\",\n      \"nodes\": [\n        { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\" },\n        { \"id\": \"b\", \"label\": \"Procesar\" },\n        { \"id\": \"c\", \"label\": \"¿Ok?\", \"shape\": \"diamond\" },\n        { \"id\": \"d\", \"label\": \"Fin\", \"shape\": \"stadium\" }\n      ],\n      \"edges\": [\n        { \"from\": \"a\", \"to\": \"b\" },\n        { \"from\": \"b\", \"to\": \"c\" },\n        { \"from\": \"c\", \"to\": \"d\", \"label\": \"sí\" }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "html": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"animation=flow\",",
+            "      \"direction\": \"LR\",",
+            "      \"nodes\": [",
+            "        { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\" },",
+            "        { \"id\": \"b\", \"label\": \"Procesar\" },",
+            "        { \"id\": \"c\", \"label\": \"¿Ok?\", \"shape\": \"diamond\" },",
+            "        { \"id\": \"d\", \"label\": \"Fin\", \"shape\": \"stadium\" }",
+            "      ],",
+            "      \"edges\": [",
+            "        { \"from\": \"a\", \"to\": \"b\" },",
+            "        { \"from\": \"b\", \"to\": \"c\" },",
+            "        { \"from\": \"c\", \"to\": \"d\", \"label\": \"sí\" }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -221,10 +385,55 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el\r\n          componente decide las capas, reduce los cruces y rutea las flechas\r\n          rodeando las cajas."
+        "content": [
+          "Diagrama de flujo en SVG, sin Mermaid. Tú declaras nodos y aristas; el",
+          "          componente decide las capas, reduce los cruces y rutea las flechas",
+          "          rodeando las cajas."
+        ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-flowchart open-on-click animation=\"flow\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"flowchart\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"subtitle\": \"de la venta al acuse de la DIAN\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },\r\n                    { \"id\": \"g-dian\", \"name\": \"DIAN\", \"hue\": 199 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"nodes\": [\r\n                    { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"b\", \"label\": \"Registrar venta\", \"group\": \"g-emision\",\r\n                      \"desc\": \"Se arma el documento con el tercero y los ítems facturados.\" },\r\n                    { \"id\": \"c\", \"label\": \"¿Datos completos?\", \"shape\": \"diamond\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"d\", \"label\": \"Corregir datos\", \"group\": \"g-emision\" },\r\n                    { \"id\": \"e\", \"label\": \"Generar XML y firmar\", \"group\": \"g-dian\",\r\n                      \"desc\": \"Se construye el **XML UBL** y se aplica la firma digital del emisor.\" },\r\n                    { \"id\": \"f\", \"label\": \"Enviar a la DIAN\", \"group\": \"g-dian\" },\r\n                    { \"id\": \"g\", \"label\": \"Almacenar CUFE\", \"shape\": \"cylinder\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"h\", \"label\": \"Fin\", \"shape\": \"stadium\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"edges\": [\r\n                    { \"from\": \"a\", \"to\": \"b\" },\r\n                    { \"from\": \"b\", \"to\": \"c\" },\r\n                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },\r\n                    { \"from\": \"d\", \"to\": \"b\", \"kind\": \"dashed\" },\r\n                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" },\r\n                    { \"from\": \"e\", \"to\": \"f\" },\r\n                    { \"from\": \"f\", \"to\": \"g\" },\r\n                    { \"from\": \"g\", \"to\": \"h\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-flowchart>\n```"
+        "content": [
+          "```html",
+          "<iswc-flowchart open-on-click animation=\"flow\">",
+          "            <script type=\"application/json\">",
+          "              {",
+          "                \"flowchart\": {",
+          "                  \"title\": \"Facturación electrónica\",",
+          "                  \"subtitle\": \"de la venta al acuse de la DIAN\",",
+          "                  \"direction\": \"TB\",",
+          "                  \"groups\": [",
+          "                    { \"id\": \"g-emision\", \"name\": \"Emisión\", \"hue\": 239 },",
+          "                    { \"id\": \"g-dian\", \"name\": \"DIAN\", \"hue\": 199 },",
+          "                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }",
+          "                  ],",
+          "                  \"nodes\": [",
+          "                    { \"id\": \"a\", \"label\": \"Inicio\", \"shape\": \"stadium\", \"group\": \"g-emision\" },",
+          "                    { \"id\": \"b\", \"label\": \"Registrar venta\", \"group\": \"g-emision\",",
+          "                      \"desc\": \"Se arma el documento con el tercero y los ítems facturados.\" },",
+          "                    { \"id\": \"c\", \"label\": \"¿Datos completos?\", \"shape\": \"diamond\", \"group\": \"g-emision\" },",
+          "                    { \"id\": \"d\", \"label\": \"Corregir datos\", \"group\": \"g-emision\" },",
+          "                    { \"id\": \"e\", \"label\": \"Generar XML y firmar\", \"group\": \"g-dian\",",
+          "                      \"desc\": \"Se construye el **XML UBL** y se aplica la firma digital del emisor.\" },",
+          "                    { \"id\": \"f\", \"label\": \"Enviar a la DIAN\", \"group\": \"g-dian\" },",
+          "                    { \"id\": \"g\", \"label\": \"Almacenar CUFE\", \"shape\": \"cylinder\", \"group\": \"g-cierre\" },",
+          "                    { \"id\": \"h\", \"label\": \"Fin\", \"shape\": \"stadium\", \"group\": \"g-cierre\" }",
+          "                  ],",
+          "                  \"edges\": [",
+          "                    { \"from\": \"a\", \"to\": \"b\" },",
+          "                    { \"from\": \"b\", \"to\": \"c\" },",
+          "                    { \"from\": \"c\", \"to\": \"d\", \"label\": \"no\" },",
+          "                    { \"from\": \"d\", \"to\": \"b\", \"kind\": \"dashed\" },",
+          "                    { \"from\": \"c\", \"to\": \"e\", \"label\": \"sí\" },",
+          "                    { \"from\": \"e\", \"to\": \"f\" },",
+          "                    { \"from\": \"f\", \"to\": \"g\" },",
+          "                    { \"from\": \"g\", \"to\": \"h\" }",
+          "                  ]",
+          "                }",
+          "              }",
+          "            </script>",
+          "          </iswc-flowchart>",
+          "```"
+        ]
       }
     },
     "exclude": [

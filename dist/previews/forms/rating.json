@@ -4,14 +4,21 @@
   "category": "forms",
   "title": "&lt;iswc-rating&gt;",
   "titleHtml": false,
-  "styles": ".stack { display: grid; gap: 1.25rem; width: fit-content; }\r\n    .row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }",
+  "styles": [
+    ".stack { display: grid; gap: 1.25rem; width: fit-content; }",
+    "    .row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }"
+  ],
   "storageKey": "docs-iswc-rating",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Valoración form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-rating/\" target=\"_blank\" rel=\"noreferrer\">Rating de MUI</a>:\r\n          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset.",
+      "lede": [
+        "Valoración form-associated con paridad funcional con el",
+        "          <a href=\"https://mui.com/material-ui/react-rating/\" target=\"_blank\" rel=\"noreferrer\">Rating de MUI</a>:",
+        "          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -127,99 +134,212 @@
     {
       "id": "basics",
       "title": "Básicos",
-      "lede": "<code class=\"code\">max</code> define cuántos iconos hay.\r\n          El tamaño no es un atributo: los iconos escalan con el\r\n          <code class=\"code\">font-size</code> del contexto (o con\r\n          <code class=\"code\">--iswc-rating-size</code>).",
+      "lede": [
+        "<code class=\"code\">max</code> define cuántos iconos hay.",
+        "          El tamaño no es un atributo: los iconos escalan con el",
+        "          <code class=\"code\">font-size</code> del contexto (o con",
+        "          <code class=\"code\">--iswc-rating-size</code>)."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"Por defecto (max 5)\" value=\"2\"></iswc-rating>\r\n            <iswc-rating label=\"10 iconos\" max=\"10\" value=\"7\"></iswc-rating>\r\n            <iswc-rating label=\"Contexto grande\" value=\"3\" style=\"font-size:1.5rem;\"></iswc-rating>\r\n            <iswc-rating label=\"Deshabilitado\" value=\"2\" disabled></iswc-rating>\r\n            <iswc-rating label=\"Obligatorio\" required></iswc-rating>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-rating label=\"Por defecto (max 5)\" value=\"2\"></iswc-rating>",
+            "            <iswc-rating label=\"10 iconos\" max=\"10\" value=\"7\"></iswc-rating>",
+            "            <iswc-rating label=\"Contexto grande\" value=\"3\" style=\"font-size:1.5rem;\"></iswc-rating>",
+            "            <iswc-rating label=\"Deshabilitado\" value=\"2\" disabled></iswc-rating>",
+            "            <iswc-rating label=\"Obligatorio\" required></iswc-rating>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "precision",
       "title": "Precisión",
-      "lede": "<code class=\"code\">precision</code> fija la granularidad del valor: <code class=\"code\">1</code> (default),\r\n          <code class=\"code\">0.5</code>, <code class=\"code\">0.25</code> o <code class=\"code\">0.1</code>.\r\n          El icono se rellena con la fracción exacta, no por mitades.\r\n          <code class=\"code\">allow-half</code> sigue funcionando como alias de <code class=\"code\">precision=\"0.5\"</code>.",
+      "lede": [
+        "<code class=\"code\">precision</code> fija la granularidad del valor: <code class=\"code\">1</code> (default),",
+        "          <code class=\"code\">0.5</code>, <code class=\"code\">0.25</code> o <code class=\"code\">0.1</code>.",
+        "          El icono se rellena con la fracción exacta, no por mitades.",
+        "          <code class=\"code\">allow-half</code> sigue funcionando como alias de <code class=\"code\">precision=\"0.5\"</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"precision 1 (default)\" value=\"3\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"precision 0.5\" precision=\"0.5\" value=\"3.5\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"precision 0.25\" precision=\"0.25\" value=\"2.75\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"precision 0.1\" precision=\"0.1\" value=\"4.3\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n            <iswc-rating label=\"allow-half (compat)\" allow-half value=\"2.5\" show-label label-format=\"{v} / {max}\"></iswc-rating>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-rating label=\"precision 1 (default)\" value=\"3\" show-label label-format=\"{v} / {max}\"></iswc-rating>",
+            "            <iswc-rating label=\"precision 0.5\" precision=\"0.5\" value=\"3.5\" show-label label-format=\"{v} / {max}\"></iswc-rating>",
+            "            <iswc-rating label=\"precision 0.25\" precision=\"0.25\" value=\"2.75\" show-label label-format=\"{v} / {max}\"></iswc-rating>",
+            "            <iswc-rating label=\"precision 0.1\" precision=\"0.1\" value=\"4.3\" show-label label-format=\"{v} / {max}\"></iswc-rating>",
+            "            <iswc-rating label=\"allow-half (compat)\" allow-half value=\"2.5\" show-label label-format=\"{v} / {max}\"></iswc-rating>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "icons",
       "title": "Iconos personalizados",
-      "lede": "<code class=\"code\">icon</code> y <code class=\"code\">empty-icon</code> aceptan cualquier nombre de\r\n          <code class=\"code\">iswc-icon</code> (Iconify, <code class=\"code\">grupo:nombre</code>).\r\n          Si solo se define <code class=\"code\">icon</code>, el hueco reutiliza ese mismo icono en gris.",
+      "lede": [
+        "<code class=\"code\">icon</code> y <code class=\"code\">empty-icon</code> aceptan cualquier nombre de",
+        "          <code class=\"code\">iswc-icon</code> (Iconify, <code class=\"code\">grupo:nombre</code>).",
+        "          Si solo se define <code class=\"code\">icon</code>, el hueco reutiliza ese mismo icono en gris."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"Corazones\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Pulgares\" icon=\"tabler:thumb-up-filled\" empty-icon=\"tabler:thumb-up\" max=\"3\" value=\"2\"></iswc-rating>\r\n            <iswc-rating label=\"Rayos (mismo icono en hueco)\" icon=\"tabler:bolt-filled\" value=\"2\"></iswc-rating>\r\n            <iswc-rating label=\"Círculos · precision 0.5\" icon=\"tabler:circle-filled\" empty-icon=\"tabler:circle\" precision=\"0.5\" value=\"3.5\"></iswc-rating>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-rating label=\"Corazones\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" value=\"3\"></iswc-rating>",
+            "            <iswc-rating label=\"Pulgares\" icon=\"tabler:thumb-up-filled\" empty-icon=\"tabler:thumb-up\" max=\"3\" value=\"2\"></iswc-rating>",
+            "            <iswc-rating label=\"Rayos (mismo icono en hueco)\" icon=\"tabler:bolt-filled\" value=\"2\"></iswc-rating>",
+            "            <iswc-rating label=\"Círculos · precision 0.5\" icon=\"tabler:circle-filled\" empty-icon=\"tabler:circle\" precision=\"0.5\" value=\"3.5\"></iswc-rating>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "highlight",
       "title": "Resaltar solo el seleccionado",
-      "lede": "Con <code class=\"code\">highlight-selected-only</code> el hover y la selección marcan únicamente\r\n          el icono del valor actual, no los anteriores (equivale al ejemplo <em>Radio group</em> de MUI).",
+      "lede": [
+        "Con <code class=\"code\">highlight-selected-only</code> el hover y la selección marcan únicamente",
+        "          el icono del valor actual, no los anteriores (equivale al ejemplo <em>Radio group</em> de MUI)."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating\r\n              id=\"faces\"\r\n              label=\"¿Cómo fue tu experiencia?\"\r\n              highlight-selected-only\r\n              max=\"5\"\r\n              value=\"2\"\r\n              show-label></iswc-rating>\r\n            <iswc-rating label=\"Normal (acumulativo)\" value=\"2\" show-label></iswc-rating>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-rating",
+            "              id=\"faces\"",
+            "              label=\"¿Cómo fue tu experiencia?\"",
+            "              highlight-selected-only",
+            "              max=\"5\"",
+            "              value=\"2\"",
+            "              show-label></iswc-rating>",
+            "            <iswc-rating label=\"Normal (acumulativo)\" value=\"2\" show-label></iswc-rating>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "labels",
       "title": "Textos de hover",
-      "lede": "<code class=\"code\">show-label</code> muestra junto a los iconos el texto del valor bajo el cursor\r\n          (o del valor actual si no hay hover). El texto sale, por orden de prioridad, de la propiedad\r\n          <code class=\"code\">getLabelText</code>, de la propiedad <code class=\"code\">labels</code>\r\n          (índice 0 = valor 1) o del atributo <code class=\"code\">label-format</code> con\r\n          <code class=\"code\">{v}</code> y <code class=\"code\">{max}</code>.\r\n          El mismo texto alimenta el <code class=\"code\">aria-label</code> de cada icono y el\r\n          <code class=\"code\">aria-valuetext</code> del control.",
+      "lede": [
+        "<code class=\"code\">show-label</code> muestra junto a los iconos el texto del valor bajo el cursor",
+        "          (o del valor actual si no hay hover). El texto sale, por orden de prioridad, de la propiedad",
+        "          <code class=\"code\">getLabelText</code>, de la propiedad <code class=\"code\">labels</code>",
+        "          (índice 0 = valor 1) o del atributo <code class=\"code\">label-format</code> con",
+        "          <code class=\"code\">{v}</code> y <code class=\"code\">{max}</code>.",
+        "          El mismo texto alimenta el <code class=\"code\">aria-label</code> de cada icono y el",
+        "          <code class=\"code\">aria-valuetext</code> del control."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating id=\"labelled\" label=\"labels (array)\" value=\"4\" show-label></iswc-rating>\r\n            <iswc-rating label=\"label-format\" value=\"3\" show-label label-format=\"{v} de {max} estrellas\"></iswc-rating>\r\n            <iswc-rating id=\"fn\" label=\"getLabelText (función)\" precision=\"0.5\" value=\"3.5\" show-label></iswc-rating>\r\n          </div>\r\n          <p class=\"lede\" id=\"hoverLog\">hover: <code class=\"code\">—</code></p>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-rating id=\"labelled\" label=\"labels (array)\" value=\"4\" show-label></iswc-rating>",
+            "            <iswc-rating label=\"label-format\" value=\"3\" show-label label-format=\"{v} de {max} estrellas\"></iswc-rating>",
+            "            <iswc-rating id=\"fn\" label=\"getLabelText (función)\" precision=\"0.5\" value=\"3.5\" show-label></iswc-rating>",
+            "          </div>",
+            "          <p class=\"lede\" id=\"hoverLog\">hover: <code class=\"code\">—</code></p>"
+          ]
         }
       ]
     },
     {
       "id": "color",
       "title": "Color",
-      "lede": "<code class=\"code\">variant</code> redefine <code class=\"code\">--iswc-rating-color</code>.\r\n          El hueco usa siempre <code class=\"code\">--iswc-rating-empty</code>.",
+      "lede": [
+        "<code class=\"code\">variant</code> redefine <code class=\"code\">--iswc-rating-color</code>.",
+        "          El hueco usa siempre <code class=\"code\">--iswc-rating-empty</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating label=\"brand (default)\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"neutral\" label=\"neutral\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"success\" label=\"success\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"warning\" label=\"warning\" value=\"3\"></iswc-rating>\r\n            <iswc-rating color=\"danger\" label=\"danger\" value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Token propio\" value=\"3\" style=\"--iswc-rating-color:#845ef7;\"></iswc-rating>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-rating label=\"brand (default)\" value=\"3\"></iswc-rating>",
+            "            <iswc-rating color=\"neutral\" label=\"neutral\" value=\"3\"></iswc-rating>",
+            "            <iswc-rating color=\"success\" label=\"success\" value=\"3\"></iswc-rating>",
+            "            <iswc-rating color=\"warning\" label=\"warning\" value=\"3\"></iswc-rating>",
+            "            <iswc-rating color=\"danger\" label=\"danger\" value=\"3\"></iswc-rating>",
+            "            <iswc-rating label=\"Token propio\" value=\"3\" style=\"--iswc-rating-color:#845ef7;\"></iswc-rating>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "readonly",
       "title": "Solo lectura y fracciones",
-      "lede": "En <code class=\"code\">readonly</code> el valor no se ajusta a <code class=\"code\">precision</code>:\r\n          puede mostrar cualquier fracción, que es lo habitual para una media de valoraciones.",
+      "lede": [
+        "En <code class=\"code\">readonly</code> el valor no se ajusta a <code class=\"code\">precision</code>:",
+        "          puede mostrar cualquier fracción, que es lo habitual para una media de valoraciones."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <div class=\"row\">\r\n              <iswc-rating readonly value=\"3.7\" label=\"Media de 128 opiniones\"></iswc-rating>\r\n            </div>\r\n            <iswc-rating readonly value=\"4.28\" label=\"4,28 · sin precision\"></iswc-rating>\r\n            <iswc-rating readonly value=\"2.1\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" label=\"Fracción con icono propio\"></iswc-rating>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <div class=\"row\">",
+            "              <iswc-rating readonly value=\"3.7\" label=\"Media de 128 opiniones\"></iswc-rating>",
+            "            </div>",
+            "            <iswc-rating readonly value=\"4.28\" label=\"4,28 · sin precision\"></iswc-rating>",
+            "            <iswc-rating readonly value=\"2.1\" icon=\"tabler:heart-filled\" empty-icon=\"tabler:heart\" color=\"danger\" label=\"Fracción con icono propio\"></iswc-rating>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "clearable",
       "title": "Reiniciar",
-      "lede": "Con <code class=\"code\">clearable</code>, volver a pulsar el valor ya seleccionado lo pone a\r\n          <code class=\"code\">0</code> (solo si <code class=\"code\">value &gt;= 1</code>).\r\n          <code class=\"code\">Delete</code> y <code class=\"code\">Backspace</code> hacen lo mismo desde el teclado.\r\n          Sin el atributo, el segundo clic no hace nada.",
+      "lede": [
+        "Con <code class=\"code\">clearable</code>, volver a pulsar el valor ya seleccionado lo pone a",
+        "          <code class=\"code\">0</code> (solo si <code class=\"code\">value &gt;= 1</code>).",
+        "          <code class=\"code\">Delete</code> y <code class=\"code\">Backspace</code> hacen lo mismo desde el teclado.",
+        "          Sin el atributo, el segundo clic no hace nada."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-rating id=\"clearDemo\" label=\"clearable\" clearable value=\"3\"></iswc-rating>\r\n            <iswc-rating label=\"Sin clearable\" value=\"3\"></iswc-rating>\r\n          </div>\r\n          <p class=\"lede\" id=\"clearLog\">value: <code class=\"code\">3</code></p>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-rating id=\"clearDemo\" label=\"clearable\" clearable value=\"3\"></iswc-rating>",
+            "            <iswc-rating label=\"Sin clearable\" value=\"3\"></iswc-rating>",
+            "          </div>",
+            "          <p class=\"lede\" id=\"clearLog\">value: <code class=\"code\">3</code></p>"
+          ]
         }
       ]
     },
     {
       "id": "form",
       "title": "Dentro de un formulario",
-      "lede": "El valor se envía bajo <code class=\"code\">name</code>; con <code class=\"code\">value = 0</code>\r\n          la entrada se omite y <code class=\"code\">required</code> bloquea el envío.\r\n          <code class=\"code\">form.reset()</code> vuelve al valor del atributo.",
+      "lede": [
+        "El valor se envía bajo <code class=\"code\">name</code>; con <code class=\"code\">value = 0</code>",
+        "          la entrada se omite y <code class=\"code\">required</code> bloquea el envío.",
+        "          <code class=\"code\">form.reset()</code> vuelve al valor del atributo."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"f\" style=\"display:grid; gap:0.75rem; width:fit-content;\">\r\n            <iswc-rating name=\"calidad\" label=\"Calidad\" required></iswc-rating>\r\n            <iswc-rating name=\"precio\" label=\"Precio\" precision=\"0.5\" value=\"3.5\"></iswc-rating>\r\n            <div class=\"row\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reiniciar</button>\r\n            </div>\r\n          </form>"
+          "html": [
+            "<form id=\"f\" style=\"display:grid; gap:0.75rem; width:fit-content;\">",
+            "            <iswc-rating name=\"calidad\" label=\"Calidad\" required></iswc-rating>",
+            "            <iswc-rating name=\"precio\" label=\"Precio\" precision=\"0.5\" value=\"3.5\"></iswc-rating>",
+            "            <div class=\"row\">",
+            "              <button type=\"submit\">Enviar</button>",
+            "              <button type=\"reset\">Reiniciar</button>",
+            "            </div>",
+            "          </form>"
+          ]
         },
         {
           "kind": "html",
@@ -357,7 +477,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Valoración form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-rating/\" target=\"_blank\" rel=\"noreferrer\">Rating de MUI</a>:\r\n          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset."
+        "content": [
+          "Valoración form-associated con paridad funcional con el",
+          "          <a href=\"https://mui.com/material-ui/react-rating/\" target=\"_blank\" rel=\"noreferrer\">Rating de MUI</a>:",
+          "          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset."
+        ]
       },
       "apiJs": {
         "table": [
@@ -440,7 +564,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-rating label=\"Satisfacción\" value=\"3\" name=\"rating\"></iswc-rating>\n```"
+        "content": [
+          "```html",
+          "<iswc-rating label=\"Satisfacción\" value=\"3\" name=\"rating\"></iswc-rating>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -14,7 +14,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-tab-group>\r\n            <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>\r\n            <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>\r\n            <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>\r\n            <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>\r\n          </iswc-tab-group>"
+          "html": [
+            "<iswc-tab-group>",
+            "            <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>",
+            "            <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>",
+            "            <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>",
+            "            <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>",
+            "            <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>",
+            "            <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>",
+            "          </iswc-tab-group>"
+          ]
         }
       ]
     },
@@ -25,7 +34,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-tab\">\n  <iswc-tab active>General</iswc-tab>\n  <iswc-icon slot=\"start\" icon=\"mdi:cog-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:check\"></iswc-icon>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-tab\">",
+            "  <iswc-tab active>General</iswc-tab>",
+            "  <iswc-icon slot=\"start\" icon=\"mdi:cog-outline\"></iswc-icon>",
+            "  <iswc-icon slot=\"end\" icon=\"mdi:check\"></iswc-icon>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -42,7 +57,18 @@
         "content": "Pestaña de un <code class=\"code\">&lt;iswc-tab-group&gt;</code>. El atributo <code class=\"code\">panel</code> la enlaza con su <code class=\"code\">&lt;iswc-tab-panel&gt;</code>."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-tab-group>\n  <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>\n  <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>\n  <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>\n  <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>\n  <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>\n</iswc-tab-group>\n```"
+        "content": [
+          "```html",
+          "<iswc-tab-group>",
+          "  <iswc-tab slot=\"nav\" panel=\"a\"><iswc-icon slot=\"start\" icon=\"mdi:chart-line\"></iswc-icon>Resumen</iswc-tab>",
+          "  <iswc-tab slot=\"nav\" panel=\"b\">Movimientos</iswc-tab>",
+          "  <iswc-tab slot=\"nav\" panel=\"c\" disabled>Cierre</iswc-tab>",
+          "  <iswc-tab-panel name=\"a\">Panel de resumen.</iswc-tab-panel>",
+          "  <iswc-tab-panel name=\"b\">Panel de movimientos.</iswc-tab-panel>",
+          "  <iswc-tab-panel name=\"c\">Panel de cierre.</iswc-tab-panel>",
+          "</iswc-tab-group>",
+          "```"
+        ]
       }
     },
     "exclude": [

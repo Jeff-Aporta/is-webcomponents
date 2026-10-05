@@ -17,7 +17,26 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-venn-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"venn\": {\n        \"title\": \"Alcance del tiquete\",\n        \"sets\": [\n          { \"id\": \"pedido\", \"label\": \"Lo pedido\", \"hue\": 210 },\n          { \"id\": \"entregado\", \"label\": \"Lo entregado\", \"hue\": 160 }\n        ],\n        \"regions\": [\n          { \"sets\": [\"pedido\"], \"label\": \"Pendiente\", \"value\": 2 },\n          { \"sets\": [\"entregado\"], \"label\": \"Extra\", \"value\": 1 },\n          { \"sets\": [\"pedido\", \"entregado\"], \"label\": \"Cumplido\", \"value\": 7 }\n        ]\n      }\n    }\n  </script>\n</iswc-venn-diagram>",
+          "html": [
+            "<iswc-venn-diagram open-on-click>",
+            "  <script type=\"application/json\">",
+            "    {",
+            "      \"venn\": {",
+            "        \"title\": \"Alcance del tiquete\",",
+            "        \"sets\": [",
+            "          { \"id\": \"pedido\", \"label\": \"Lo pedido\", \"hue\": 210 },",
+            "          { \"id\": \"entregado\", \"label\": \"Lo entregado\", \"hue\": 160 }",
+            "        ],",
+            "        \"regions\": [",
+            "          { \"sets\": [\"pedido\"], \"label\": \"Pendiente\", \"value\": 2 },",
+            "          { \"sets\": [\"entregado\"], \"label\": \"Extra\", \"value\": 1 },",
+            "          { \"sets\": [\"pedido\", \"entregado\"], \"label\": \"Cumplido\", \"value\": 7 }",
+            "        ]",
+            "      }",
+            "    }",
+            "  </script>",
+            "</iswc-venn-diagram>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -46,7 +65,28 @@
         "content": "Diagrama de Venn de dos o tres conjuntos, con las posiciones canónicas de cualquier libro de texto."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-venn-diagram open-on-click>\n  <script type=\"application/json\">\n    {\n      \"venn\": {\n        \"title\": \"Alcance del tiquete\",\n        \"sets\": [\n          { \"id\": \"pedido\", \"label\": \"Lo pedido\", \"hue\": 210 },\n          { \"id\": \"entregado\", \"label\": \"Lo entregado\", \"hue\": 160 }\n        ],\n        \"regions\": [\n          { \"sets\": [\"pedido\"], \"label\": \"Pendiente\", \"value\": 2 },\n          { \"sets\": [\"entregado\"], \"label\": \"Extra\", \"value\": 1 },\n          { \"sets\": [\"pedido\", \"entregado\"], \"label\": \"Cumplido\", \"value\": 7 }\n        ]\n      }\n    }\n  </script>\n</iswc-venn-diagram>\n```"
+        "content": [
+          "```html",
+          "<iswc-venn-diagram open-on-click>",
+          "  <script type=\"application/json\">",
+          "    {",
+          "      \"venn\": {",
+          "        \"title\": \"Alcance del tiquete\",",
+          "        \"sets\": [",
+          "          { \"id\": \"pedido\", \"label\": \"Lo pedido\", \"hue\": 210 },",
+          "          { \"id\": \"entregado\", \"label\": \"Lo entregado\", \"hue\": 160 }",
+          "        ],",
+          "        \"regions\": [",
+          "          { \"sets\": [\"pedido\"], \"label\": \"Pendiente\", \"value\": 2 },",
+          "          { \"sets\": [\"entregado\"], \"label\": \"Extra\", \"value\": 1 },",
+          "          { \"sets\": [\"pedido\", \"entregado\"], \"label\": \"Cumplido\", \"value\": 7 }",
+          "        ]",
+          "      }",
+          "    }",
+          "  </script>",
+          "</iswc-venn-diagram>",
+          "```"
+        ]
       }
     },
     "exclude": [

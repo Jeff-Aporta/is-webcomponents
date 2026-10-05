@@ -10,11 +10,27 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Doble lista de selección tipo Material/Ant. Mueve elementos entre\r\n          origen y destino con botones, click individual, filtro de búsqueda y\r\n          límite máximo configurable.",
+      "lede": [
+        "Doble lista de selección tipo Material/Ant. Mueve elementos entre",
+        "          origen y destino con botones, click individual, filtro de búsqueda y",
+        "          límite máximo configurable."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-transfer id=\"tr1\" source-title=\"Disponibles\" target-title=\"Asignados\" searchable>\r\n            <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"d\">Delta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"e\">Epsilon</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"f\">Zeta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"g\">Eta</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"h\">Theta</iswc-transfer-item>\r\n          </iswc-transfer>\r\n          <p id=\"tr1Log\">Seleccionados: <code class=\"code\">b</code></p>"
+          "html": [
+            "<iswc-transfer id=\"tr1\" source-title=\"Disponibles\" target-title=\"Asignados\" searchable>",
+            "            <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"d\">Delta</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"e\">Epsilon</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"f\">Zeta</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"g\">Eta</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"h\">Theta</iswc-transfer-item>",
+            "          </iswc-transfer>",
+            "          <p id=\"tr1Log\">Seleccionados: <code class=\"code\">b</code></p>"
+          ]
         }
       ]
     },
@@ -25,7 +41,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-transfer max-target=\"3\" source-title=\"Suscriptores\" target-title=\"Newsletter (máx 3)\" searchable>\r\n            <iswc-transfer-item value=\"a\">Alice</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"b\">Bob</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"c\" selected>Carol</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"d\">David</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"e\">Eve</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"f\">Frank</iswc-transfer-item>\r\n          </iswc-transfer>"
+          "html": [
+            "<iswc-transfer max-target=\"3\" source-title=\"Suscriptores\" target-title=\"Newsletter (máx 3)\" searchable>",
+            "            <iswc-transfer-item value=\"a\">Alice</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"b\">Bob</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"c\" selected>Carol</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"d\">David</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"e\">Eve</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"f\">Frank</iswc-transfer-item>",
+            "          </iswc-transfer>"
+          ]
         }
       ]
     },
@@ -36,7 +61,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-transfer source-title=\"Permisos\" target-title=\"Asignados\">\r\n            <iswc-transfer-item value=\"read\">read</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"write\" selected>write</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"delete\" disabled>delete</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"admin\">admin</iswc-transfer-item>\r\n          </iswc-transfer>"
+          "html": [
+            "<iswc-transfer source-title=\"Permisos\" target-title=\"Asignados\">",
+            "            <iswc-transfer-item value=\"read\">read</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"write\" selected>write</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"delete\" disabled>delete</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"admin\">admin</iswc-transfer-item>",
+            "          </iswc-transfer>"
+          ]
         }
       ]
     },
@@ -47,7 +79,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-transfer without-buttons without-headings searchable>\r\n            <iswc-transfer-item value=\"rojo\">Rojo</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"verde\" selected>Verde</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"azul\">Azul</iswc-transfer-item>\r\n            <iswc-transfer-item value=\"amarillo\">Amarillo</iswc-transfer-item>\r\n          </iswc-transfer>"
+          "html": [
+            "<iswc-transfer without-buttons without-headings searchable>",
+            "            <iswc-transfer-item value=\"rojo\">Rojo</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"verde\" selected>Verde</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"azul\">Azul</iswc-transfer-item>",
+            "            <iswc-transfer-item value=\"amarillo\">Amarillo</iswc-transfer-item>",
+            "          </iswc-transfer>"
+          ]
         }
       ]
     },
@@ -63,45 +102,31 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>source-title</code>",
-              "string",
-              "Disponibles",
-              "Título del panel origen."
+              "<code>source-title</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Título del panel origen. (valor por defecto)"
             ],
             [
-              "<code>target-title</code>",
-              "string",
-              "Asignados",
-              "Título del panel destino."
+              "<code>target-title</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Título del panel destino. (valor por defecto)"
             ],
             [
-              "<code>searchable</code>",
-              "boolean",
-              "false",
-              "Muestra campo de búsqueda."
+              "<code>searchable</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Muestra campo de búsqueda. (valor por defecto)"
             ],
             [
-              "<code>without-buttons</code>",
-              "boolean",
-              "false",
-              "Oculta los botones de mover."
+              "<code>without-buttons</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Oculta los botones de mover. (valor por defecto)"
             ],
             [
-              "<code>without-headings</code>",
-              "boolean",
-              "false",
-              "Oculta los headers."
+              "<code>without-headings</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Oculta los headers. (valor por defecto)"
             ],
             [
               "<code>max-target</code>",
-              "number",
-              "—",
               "Máximo de items en target."
             ]
           ]
@@ -114,28 +139,20 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
               "<code>value</code>",
-              "string",
-              "—",
               "Identificador del item."
             ],
             [
-              "<code>selected</code>",
-              "boolean",
-              "false",
-              "Está en target."
+              "<code>selected</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Está en target. (valor por defecto)"
             ],
             [
-              "<code>disabled</code>",
-              "boolean",
-              "false",
-              "No se puede mover."
+              "<code>disabled</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "No se puede mover. (valor por defecto)"
             ]
           ]
         },
@@ -162,7 +179,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Doble lista de selección tipo Material/Ant. Mueve elementos entre\r\n          origen y destino con botones, click individual, filtro de búsqueda y\r\n          límite máximo configurable."
+        "content": [
+          "Doble lista de selección tipo Material/Ant. Mueve elementos entre",
+          "          origen y destino con botones, click individual, filtro de búsqueda y",
+          "          límite máximo configurable."
+        ]
       },
       "atributos": {
         "table": [
@@ -231,7 +252,16 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-transfer searchable>\n  <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>\n  <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>\n  <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>\n  …\n</iswc-transfer>\n```"
+        "content": [
+          "```html",
+          "<iswc-transfer searchable>",
+          "  <iswc-transfer-item value=\"a\">Alpha</iswc-transfer-item>",
+          "  <iswc-transfer-item value=\"b\" selected>Beta</iswc-transfer-item>",
+          "  <iswc-transfer-item value=\"c\">Gamma</iswc-transfer-item>",
+          "  …",
+          "</iswc-transfer>",
+          "```"
+        ]
       }
     },
     "exclude": [

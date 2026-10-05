@@ -4,17 +4,34 @@
   "category": "forms",
   "title": "&lt;iswc-radio&gt; + &lt;iswc-radio-group&gt;",
   "titleHtml": false,
-  "styles": ".stack { display: grid; gap: 1.5rem; max-width: 32rem; }\r\n    .spread { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-start; }",
+  "styles": [
+    ".stack { display: grid; gap: 1.5rem; max-width: 32rem; }",
+    "    .spread { display: flex; flex-wrap: wrap; gap: 2.5rem; align-items: flex-start; }"
+  ],
   "storageKey": "docs-iswc-radio",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-radio-button/\" target=\"_blank\" rel=\"noreferrer\">Radio Group de MUI</a>:\r\n          color por <code class=\"code\">variant</code>, posición de etiqueta, estado de error, solo lectura y\r\n          navegación por teclado según el patrón ARIA <em>radiogroup</em>.\r\n          El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.\r\n          Los <code class=\"code\">iswc-radio</code> son las opciones y solo avisan al grupo cuando se eligen.",
+      "lede": [
+        "Paridad funcional con el",
+        "          <a href=\"https://mui.com/material-ui/react-radio-button/\" target=\"_blank\" rel=\"noreferrer\">Radio Group de MUI</a>:",
+        "          color por <code class=\"code\">variant</code>, posición de etiqueta, estado de error, solo lectura y",
+        "          navegación por teclado según el patrón ARIA <em>radiogroup</em>.",
+        "          El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.",
+        "          Los <code class=\"code\">iswc-radio</code> son las opciones y solo avisan al grupo cuando se eligen."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-radio-group id=\"plan\" name=\"plan\" value=\"pro\" label=\"Plan\" hint=\"Flechas para navegar, Espacio para elegir\">\r\n            <iswc-radio value=\"free\">Gratis</iswc-radio>\r\n            <iswc-radio value=\"pro\">Profesional</iswc-radio>\r\n            <iswc-radio value=\"empresa\">Empresa</iswc-radio>\r\n            <iswc-radio value=\"legacy\" disabled>Heredado (no disponible)</iswc-radio>\r\n          </iswc-radio-group>",
+          "html": [
+            "<iswc-radio-group id=\"plan\" name=\"plan\" value=\"pro\" label=\"Plan\" hint=\"Flechas para navegar, Espacio para elegir\">",
+            "            <iswc-radio value=\"free\">Gratis</iswc-radio>",
+            "            <iswc-radio value=\"pro\">Profesional</iswc-radio>",
+            "            <iswc-radio value=\"empresa\">Empresa</iswc-radio>",
+            "            <iswc-radio value=\"legacy\" disabled>Heredado (no disponible)</iswc-radio>",
+            "          </iswc-radio-group>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -110,81 +127,226 @@
     {
       "id": "color",
       "title": "Color",
-      "lede": "<code class=\"code\">variant</code> (equivalente a <code class=\"code\">color</code> en MUI) se pone en el grupo y\r\n          lo heredan todos los radios. Un <code class=\"code\">iswc-radio</code> con <code class=\"code\">variant</code>\r\n          propio sobrescribe al del grupo.",
+      "lede": [
+        "<code class=\"code\">variant</code> (equivalente a <code class=\"code\">color</code> en MUI) se pone en el grupo y",
+        "          lo heredan todos los radios. Un <code class=\"code\">iswc-radio</code> con <code class=\"code\">variant</code>",
+        "          propio sobrescribe al del grupo."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-radio-group row value=\"a\" label=\"brand (default)\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"neutral\" value=\"a\" label=\"neutral\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"text\" value=\"a\" label=\"text\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"success\" value=\"a\" label=\"success\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"warning\" value=\"a\" label=\"warning\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"danger\" value=\"a\" label=\"danger\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group row color=\"success\" value=\"c\" label=\"El radio manda sobre el grupo\">\r\n              <iswc-radio value=\"c\">Hereda success</iswc-radio>\r\n              <iswc-radio value=\"d\" color=\"danger\">variant=\"danger\"</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-radio-group row value=\"a\" label=\"brand (default)\">",
+            "              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group row color=\"neutral\" value=\"a\" label=\"neutral\">",
+            "              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group row color=\"text\" value=\"a\" label=\"text\">",
+            "              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group row color=\"success\" value=\"a\" label=\"success\">",
+            "              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group row color=\"warning\" value=\"a\" label=\"warning\">",
+            "              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group row color=\"danger\" value=\"a\" label=\"danger\">",
+            "              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group row color=\"success\" value=\"c\" label=\"El radio manda sobre el grupo\">",
+            "              <iswc-radio value=\"c\">Hereda success</iswc-radio>",
+            "              <iswc-radio value=\"d\" color=\"danger\">variant=\"danger\"</iswc-radio>",
+            "            </iswc-radio-group>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "placement",
       "title": "Posición de la etiqueta",
-      "lede": "<code class=\"code\">label-placement</code> (<code class=\"code\">labelPlacement</code> de\r\n          <em>FormControlLabel</em>): <code class=\"code\">end</code> (default), <code class=\"code\">start</code>,\r\n          <code class=\"code\">top</code> y <code class=\"code\">bottom</code>. Se puede fijar en el grupo para todos\r\n          los hijos o en cada radio.",
+      "lede": [
+        "<code class=\"code\">label-placement</code> (<code class=\"code\">labelPlacement</code> de",
+        "          <em>FormControlLabel</em>): <code class=\"code\">end</code> (default), <code class=\"code\">start</code>,",
+        "          <code class=\"code\">top</code> y <code class=\"code\">bottom</code>. Se puede fijar en el grupo para todos",
+        "          los hijos o en cada radio."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"spread\">\r\n            <iswc-radio-group label-placement=\"top\" row value=\"t\" label=\"top\">\r\n              <iswc-radio value=\"t\">Top</iswc-radio><iswc-radio value=\"t2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group label-placement=\"start\" value=\"s\" label=\"start\">\r\n              <iswc-radio value=\"s\">Start</iswc-radio><iswc-radio value=\"s2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group label-placement=\"bottom\" row value=\"b\" label=\"bottom\">\r\n              <iswc-radio value=\"b\">Bottom</iswc-radio><iswc-radio value=\"b2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group label-placement=\"end\" value=\"e\" label=\"end (default)\">\r\n              <iswc-radio value=\"e\">End</iswc-radio><iswc-radio value=\"e2\">Otro</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
+          "html": [
+            "<div class=\"spread\">",
+            "            <iswc-radio-group label-placement=\"top\" row value=\"t\" label=\"top\">",
+            "              <iswc-radio value=\"t\">Top</iswc-radio><iswc-radio value=\"t2\">Otro</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group label-placement=\"start\" value=\"s\" label=\"start\">",
+            "              <iswc-radio value=\"s\">Start</iswc-radio><iswc-radio value=\"s2\">Otro</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group label-placement=\"bottom\" row value=\"b\" label=\"bottom\">",
+            "              <iswc-radio value=\"b\">Bottom</iswc-radio><iswc-radio value=\"b2\">Otro</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group label-placement=\"end\" value=\"e\" label=\"end (default)\">",
+            "              <iswc-radio value=\"e\">End</iswc-radio><iswc-radio value=\"e2\">Otro</iswc-radio>",
+            "            </iswc-radio-group>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "description",
       "title": "Contenido rico",
-      "lede": "El slot <code class=\"code\">description</code> añade texto secundario bajo la etiqueta, con el color\r\n          atenuado del tema. No entra en el <code class=\"code\">value</code> implícito.",
+      "lede": [
+        "El slot <code class=\"code\">description</code> añade texto secundario bajo la etiqueta, con el color",
+        "          atenuado del tema. No entra en el <code class=\"code\">value</code> implícito."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-radio-group name=\"soporte\" value=\"std\" label=\"Nivel de soporte\">\r\n            <iswc-radio value=\"std\">\r\n              Estándar\r\n              <span slot=\"description\">Respuesta en 48 h laborables. Incluido en todos los planes.</span>\r\n            </iswc-radio>\r\n            <iswc-radio value=\"prio\">\r\n              Prioritario\r\n              <span slot=\"description\">Respuesta en 4 h y canal directo con ingeniería.</span>\r\n            </iswc-radio>\r\n            <iswc-radio value=\"ded\" disabled>\r\n              Dedicado\r\n              <span slot=\"description\">Solo para contratos anuales.</span>\r\n            </iswc-radio>\r\n          </iswc-radio-group>"
+          "html": [
+            "<iswc-radio-group name=\"soporte\" value=\"std\" label=\"Nivel de soporte\">",
+            "            <iswc-radio value=\"std\">",
+            "              Estándar",
+            "              <span slot=\"description\">Respuesta en 48 h laborables. Incluido en todos los planes.</span>",
+            "            </iswc-radio>",
+            "            <iswc-radio value=\"prio\">",
+            "              Prioritario",
+            "              <span slot=\"description\">Respuesta en 4 h y canal directo con ingeniería.</span>",
+            "            </iswc-radio>",
+            "            <iswc-radio value=\"ded\" disabled>",
+            "              Dedicado",
+            "              <span slot=\"description\">Solo para contratos anuales.</span>",
+            "            </iswc-radio>",
+            "          </iswc-radio-group>"
+          ]
         }
       ]
     },
     {
       "id": "orientation",
       "title": "Orientación",
-      "lede": "<code class=\"code\">orientation=\"vertical\"</code> es el default.\r\n          <code class=\"code\">row</code> es el alias booleano de <code class=\"code\">orientation=\"horizontal\"</code>\r\n          (el nombre que usa MUI); si pones ambos, gana <code class=\"code\">orientation</code>.",
+      "lede": [
+        "<code class=\"code\">orientation=\"vertical\"</code> es el default.",
+        "          <code class=\"code\">row</code> es el alias booleano de <code class=\"code\">orientation=\"horizontal\"</code>",
+        "          (el nombre que usa MUI); si pones ambos, gana <code class=\"code\">orientation</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-radio-group name=\"envio\" value=\"normal\" row label=\"row\">\r\n              <iswc-radio value=\"normal\">Normal</iswc-radio>\r\n              <iswc-radio value=\"express\">Express</iswc-radio>\r\n              <iswc-radio value=\"recoger\">Recoger en tienda</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group name=\"envio2\" value=\"normal\" orientation=\"horizontal\" label='orientation=\"horizontal\"'>\r\n              <iswc-radio value=\"normal\">Normal</iswc-radio>\r\n              <iswc-radio value=\"express\">Express</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-radio-group name=\"envio\" value=\"normal\" row label=\"row\">",
+            "              <iswc-radio value=\"normal\">Normal</iswc-radio>",
+            "              <iswc-radio value=\"express\">Express</iswc-radio>",
+            "              <iswc-radio value=\"recoger\">Recoger en tienda</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group name=\"envio2\" value=\"normal\" orientation=\"horizontal\" label='orientation=\"horizontal\"'>",
+            "              <iswc-radio value=\"normal\">Normal</iswc-radio>",
+            "              <iswc-radio value=\"express\">Express</iswc-radio>",
+            "            </iswc-radio-group>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "error",
       "title": "Error",
-      "lede": "<code class=\"code\">error</code> tiñe de peligro la etiqueta, el hint y los controles.\r\n          <code class=\"code\">error-text</code> escribe el mensaje (el <em>FormHelperText</em> con error de MUI),\r\n          sustituye al <code class=\"code\">hint</code> y activa el estado de error por sí solo.\r\n          Es presentacional: no altera <code class=\"code\">checkValidity()</code>, solo marca\r\n          <code class=\"code\">aria-invalid</code>.",
+      "lede": [
+        "<code class=\"code\">error</code> tiñe de peligro la etiqueta, el hint y los controles.",
+        "          <code class=\"code\">error-text</code> escribe el mensaje (el <em>FormHelperText</em> con error de MUI),",
+        "          sustituye al <code class=\"code\">hint</code> y activa el estado de error por sí solo.",
+        "          Es presentacional: no altera <code class=\"code\">checkValidity()</code>, solo marca",
+        "          <code class=\"code\">aria-invalid</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-radio-group id=\"errDemo\" name=\"acepta\" label=\"Condiciones\" hint=\"Elige una opción\"\r\n              error-text=\"Debes elegir una opción para continuar\">\r\n              <iswc-radio value=\"si\">Acepto</iswc-radio>\r\n              <iswc-radio value=\"no\">No acepto</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group error value=\"a\" row label=\"Solo el booleano\" hint=\"El hint también se tiñe\">\r\n              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-radio-group id=\"errDemo\" name=\"acepta\" label=\"Condiciones\" hint=\"Elige una opción\"",
+            "              error-text=\"Debes elegir una opción para continuar\">",
+            "              <iswc-radio value=\"si\">Acepto</iswc-radio>",
+            "              <iswc-radio value=\"no\">No acepto</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group error value=\"a\" row label=\"Solo el booleano\" hint=\"El hint también se tiñe\">",
+            "              <iswc-radio value=\"a\">Uno</iswc-radio><iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            </iswc-radio-group>",
+            "          </div>"
+          ]
         },
         {
           "kind": "html",
-          "html": "<div class=\"demo-row\" style=\"gap:.5rem;margin-top:12px\">\r\n          <iswc-button variant=\"outlined\" id=\"btnError\">Alternar error</iswc-button>\r\n        </div>"
+          "html": [
+            "<div class=\"demo-row\" style=\"gap:.5rem;margin-top:12px\">",
+            "          <iswc-button variant=\"outlined\" id=\"btnError\">Alternar error</iswc-button>",
+            "        </div>"
+          ]
         }
       ]
     },
     {
       "id": "readonly",
       "title": "Solo lectura y deshabilitado",
-      "lede": "<code class=\"code\">readonly</code> bloquea el cambio pero mantiene el valor en el\r\n          <code class=\"code\">FormData</code> y el foco navegable: las flechas mueven el foco sin cambiar la\r\n          selección. <code class=\"code\">disabled</code> saca el grupo del formulario y del orden de tabulación.\r\n          Los dos se propagan a todos los radios sin tocarlos uno a uno.",
+      "lede": [
+        "<code class=\"code\">readonly</code> bloquea el cambio pero mantiene el valor en el",
+        "          <code class=\"code\">FormData</code> y el foco navegable: las flechas mueven el foco sin cambiar la",
+        "          selección. <code class=\"code\">disabled</code> saca el grupo del formulario y del orden de tabulación.",
+        "          Los dos se propagan a todos los radios sin tocarlos uno a uno."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-radio-group name=\"tema\" value=\"auto\" readonly row label=\"readonly\" hint=\"Prueba a moverte con las flechas\">\r\n              <iswc-radio value=\"claro\">Claro</iswc-radio>\r\n              <iswc-radio value=\"oscuro\">Oscuro</iswc-radio>\r\n              <iswc-radio value=\"auto\">Automático</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group name=\"tema2\" value=\"auto\" disabled row label=\"disabled\">\r\n              <iswc-radio value=\"claro\">Claro</iswc-radio>\r\n              <iswc-radio value=\"oscuro\">Oscuro</iswc-radio>\r\n              <iswc-radio value=\"auto\">Automático</iswc-radio>\r\n            </iswc-radio-group>\r\n            <iswc-radio-group value=\"a\" row label=\"Radio suelto deshabilitado\">\r\n              <iswc-radio value=\"a\">Disponible</iswc-radio>\r\n              <iswc-radio value=\"b\" disabled>No disponible</iswc-radio>\r\n              <iswc-radio value=\"c\">Disponible</iswc-radio>\r\n            </iswc-radio-group>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-radio-group name=\"tema\" value=\"auto\" readonly row label=\"readonly\" hint=\"Prueba a moverte con las flechas\">",
+            "              <iswc-radio value=\"claro\">Claro</iswc-radio>",
+            "              <iswc-radio value=\"oscuro\">Oscuro</iswc-radio>",
+            "              <iswc-radio value=\"auto\">Automático</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group name=\"tema2\" value=\"auto\" disabled row label=\"disabled\">",
+            "              <iswc-radio value=\"claro\">Claro</iswc-radio>",
+            "              <iswc-radio value=\"oscuro\">Oscuro</iswc-radio>",
+            "              <iswc-radio value=\"auto\">Automático</iswc-radio>",
+            "            </iswc-radio-group>",
+            "            <iswc-radio-group value=\"a\" row label=\"Radio suelto deshabilitado\">",
+            "              <iswc-radio value=\"a\">Disponible</iswc-radio>",
+            "              <iswc-radio value=\"b\" disabled>No disponible</iswc-radio>",
+            "              <iswc-radio value=\"c\">Disponible</iswc-radio>",
+            "            </iswc-radio-group>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "form",
       "title": "En un formulario",
-      "lede": "El grupo publica una entrada <code class=\"code\">name=value</code> y, con\r\n          <code class=\"code\">required</code>, bloquea el envío mientras no haya selección.\r\n          <code class=\"code\">reset()</code> vuelve al <code class=\"code\">value</code> inicial.",
+      "lede": [
+        "El grupo publica una entrada <code class=\"code\">name=value</code> y, con",
+        "          <code class=\"code\">required</code>, bloquea el envío mientras no haya selección.",
+        "          <code class=\"code\">reset()</code> vuelve al <code class=\"code\">value</code> inicial."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"demoForm\">\r\n            <div class=\"demo-row\" style=\"flex-direction:column;align-items:flex-start;gap:.9rem\">\r\n              <iswc-radio-group name=\"pago\" required label=\"Forma de pago\" hint=\"Obligatorio\">\r\n                <iswc-radio value=\"tarjeta\">Tarjeta</iswc-radio>\r\n                <iswc-radio value=\"transferencia\">Transferencia</iswc-radio>\r\n                <iswc-radio value=\"efectivo\">Efectivo</iswc-radio>\r\n              </iswc-radio-group>\r\n              <div class=\"demo-row\" style=\"gap:.5rem\">\r\n                <iswc-button color=\"brand\" id=\"btnSend\">Enviar</iswc-button>\r\n                <iswc-button variant=\"outlined\" id=\"btnReset\">Reset</iswc-button>\r\n              </div>\r\n            </div>\r\n          </form>"
+          "html": [
+            "<form id=\"demoForm\">",
+            "            <div class=\"demo-row\" style=\"flex-direction:column;align-items:flex-start;gap:.9rem\">",
+            "              <iswc-radio-group name=\"pago\" required label=\"Forma de pago\" hint=\"Obligatorio\">",
+            "                <iswc-radio value=\"tarjeta\">Tarjeta</iswc-radio>",
+            "                <iswc-radio value=\"transferencia\">Transferencia</iswc-radio>",
+            "                <iswc-radio value=\"efectivo\">Efectivo</iswc-radio>",
+            "              </iswc-radio-group>",
+            "              <div class=\"demo-row\" style=\"gap:.5rem\">",
+            "                <iswc-button color=\"brand\" id=\"btnSend\">Enviar</iswc-button>",
+            "                <iswc-button variant=\"outlined\" id=\"btnReset\">Reset</iswc-button>",
+            "              </div>",
+            "            </div>",
+            "          </form>"
+          ]
         },
         {
           "kind": "html",
@@ -195,7 +357,11 @@
     {
       "id": "keyboard",
       "title": "Teclado",
-      "lede": "Patrón ARIA <em>radiogroup</em>: el grupo entero ocupa una sola parada de tabulación\r\n          (<em>roving tabindex</em>). Solo el radio seleccionado —o el primero habilitado si no hay\r\n          selección— tiene <code class=\"code\">tabindex=\"0\"</code>.",
+      "lede": [
+        "Patrón ARIA <em>radiogroup</em>: el grupo entero ocupa una sola parada de tabulación",
+        "          (<em>roving tabindex</em>). Solo el radio seleccionado —o el primero habilitado si no hay",
+        "          selección— tiene <code class=\"code\">tabindex=\"0\"</code>."
+      ],
       "blocks": [
         {
           "kind": "table",
@@ -232,18 +398,36 @@
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">\r\n          Las flechas mueven foco y selección a la vez, saltando los deshabilitados. Con\r\n          <code class=\"code\">readonly</code> mueven solo el foco.\r\n        </p>"
+          "html": [
+            "<p class=\"lede\">",
+            "          Las flechas mueven foco y selección a la vez, saltando los deshabilitados. Con",
+            "          <code class=\"code\">readonly</code> mueven solo el foco.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-radio-group value=\"b\" label=\"Prueba el teclado\" hint=\"Los pares están deshabilitados\">\r\n            <iswc-radio value=\"a\" disabled>Uno (disabled)</iswc-radio>\r\n            <iswc-radio value=\"b\">Dos</iswc-radio>\r\n            <iswc-radio value=\"c\" disabled>Tres (disabled)</iswc-radio>\r\n            <iswc-radio value=\"d\">Cuatro</iswc-radio>\r\n            <iswc-radio value=\"e\">Cinco</iswc-radio>\r\n          </iswc-radio-group>"
+          "html": [
+            "<iswc-radio-group value=\"b\" label=\"Prueba el teclado\" hint=\"Los pares están deshabilitados\">",
+            "            <iswc-radio value=\"a\" disabled>Uno (disabled)</iswc-radio>",
+            "            <iswc-radio value=\"b\">Dos</iswc-radio>",
+            "            <iswc-radio value=\"c\" disabled>Tres (disabled)</iswc-radio>",
+            "            <iswc-radio value=\"d\">Cuatro</iswc-radio>",
+            "            <iswc-radio value=\"e\">Cinco</iswc-radio>",
+            "          </iswc-radio-group>"
+          ]
         }
       ]
     },
     {
       "id": "reference",
       "title": "Referencia",
-      "lede": "Los tokens <code class=\"code\">--iswc-radio-*</code> se heredan: ponlos en el grupo (o en cualquier\r\n          ancestro) para tematizar todas sus opciones de golpe. Un <code class=\"code\">iswc-radio</code> suelto\r\n          (sin grupo) se marca solo, útil para maquetas; el valor de formulario siempre lo publica el grupo, así\r\n          nunca hay dos radios marcados con el mismo <code class=\"code\">name</code>.",
+      "lede": [
+        "Los tokens <code class=\"code\">--iswc-radio-*</code> se heredan: ponlos en el grupo (o en cualquier",
+        "          ancestro) para tematizar todas sus opciones de golpe. Un <code class=\"code\">iswc-radio</code> suelto",
+        "          (sin grupo) se marca solo, útil para maquetas; el valor de formulario siempre lo publica el grupo, así",
+        "          nunca hay dos radios marcados con el mismo <code class=\"code\">name</code>."
+      ],
       "blocks": [
         {
           "kind": "table",
@@ -381,10 +565,25 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-radio-button/\" target=\"_blank\" rel=\"noreferrer\">Radio Group de MUI</a>:\r\n          color por <code class=\"code\">variant</code>, posición de etiqueta, estado de error, solo lectura y\r\n          navegación por teclado según el patrón ARIA <em>radiogroup</em>.\r\n          El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.\r\n          Los <code class=\"code\">iswc-radio</code> son las opciones y solo avisan al grupo cuando se eligen."
+        "content": [
+          "Paridad funcional con el",
+          "          <a href=\"https://mui.com/material-ui/react-radio-button/\" target=\"_blank\" rel=\"noreferrer\">Radio Group de MUI</a>:",
+          "          color por <code class=\"code\">variant</code>, posición de etiqueta, estado de error, solo lectura y",
+          "          navegación por teclado según el patrón ARIA <em>radiogroup</em>.",
+          "          El grupo es el elemento <em>form-associated</em>: publica el valor, valida y gobierna el teclado.",
+          "          Los <code class=\"code\">iswc-radio</code> son las opciones y solo avisan al grupo cuando se eligen."
+        ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-radio-group name=\"plan\" value=\"pro\" label=\"Plan\">\n  <iswc-radio value=\"free\">Gratis</iswc-radio>\n  <iswc-radio value=\"pro\">Profesional</iswc-radio>\n  <iswc-radio value=\"legacy\" disabled>Heredado</iswc-radio>\n</iswc-radio-group>\n```"
+        "content": [
+          "```html",
+          "<iswc-radio-group name=\"plan\" value=\"pro\" label=\"Plan\">",
+          "  <iswc-radio value=\"free\">Gratis</iswc-radio>",
+          "  <iswc-radio value=\"pro\">Profesional</iswc-radio>",
+          "  <iswc-radio value=\"legacy\" disabled>Heredado</iswc-radio>",
+          "</iswc-radio-group>",
+          "```"
+        ]
       }
     },
     "exclude": [

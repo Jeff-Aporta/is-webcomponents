@@ -13,7 +13,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-doughnut-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}\r\n            </script>\r\n          </iswc-doughnut-chart>",
+          "html": [
+            "<iswc-doughnut-chart open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}",
+            "            </script>",
+            "          </iswc-doughnut-chart>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -31,7 +37,15 @@
         "content": "Proporciones con centro hueco."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-doughnut-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}\r\n            </script>\r\n          </iswc-doughnut-chart>\n```"
+        "content": [
+          "```html",
+          "<iswc-doughnut-chart open-on-click>",
+          "            <script type=\"application/json\">",
+          "              {\"data\":{\"labels\":[\"Dev\",\"Diseño\",\"QA\",\"Reuniones\"],\"datasets\":[{\"label\":\"Horas\",\"data\":[35,20,15,18]}]}}",
+          "            </script>",
+          "          </iswc-doughnut-chart>",
+          "```"
+        ]
       }
     },
     "exclude": [

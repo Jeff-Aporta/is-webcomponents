@@ -5,14 +5,34 @@
   "title": "&lt;iswc-gauge&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-gauge de InSoft.",
-  "styles": ".gauge-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 1rem;\r\n      align-items: center;\r\n    }\r\n    .gauge-cell {\r\n      display: flex;\r\n      flex-direction: column;\r\n      align-items: center;\r\n      gap: 0.5rem;\r\n      padding: 1rem;\r\n      background: var(--iswc-bg-2, #181b22);\r\n      border: 1px solid var(--iswc-border, #2a2f3a);\r\n      border-radius: 0.5rem;\r\n    }",
+  "styles": [
+    ".gauge-grid {",
+    "      display: grid;",
+    "      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));",
+    "      gap: 1rem;",
+    "      align-items: center;",
+    "    }",
+    "    .gauge-cell {",
+    "      display: flex;",
+    "      flex-direction: column;",
+    "      align-items: center;",
+    "      gap: 0.5rem;",
+    "      padding: 1rem;",
+    "      background: var(--iswc-bg-2, #181b22);",
+    "      border: 1px solid var(--iswc-border, #2a2f3a);",
+    "      border-radius: 0.5rem;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-gauge",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,\r\n          custom min/max, unidad, formato y tamaño.",
+      "lede": [
+        "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,",
+        "          custom min/max, unidad, formato y tamaño."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -101,7 +121,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><iswc-gauge style=\"font-size:0.7em\" value=\"42\" label=\"0.7em\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"42\" label=\"1em\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge style=\"font-size:1.35em\" value=\"42\" label=\"1.35em\"></iswc-gauge></div>\r\n          </div>"
+          "html": [
+            "<div class=\"gauge-grid\">",
+            "            <div class=\"gauge-cell\"><iswc-gauge style=\"font-size:0.7em\" value=\"42\" label=\"0.7em\"></iswc-gauge></div>",
+            "            <div class=\"gauge-cell\"><iswc-gauge value=\"42\" label=\"1em\"></iswc-gauge></div>",
+            "            <div class=\"gauge-cell\"><iswc-gauge style=\"font-size:1.35em\" value=\"42\" label=\"1.35em\"></iswc-gauge></div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -112,7 +138,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><iswc-gauge half value=\"68\" label=\"Velocímetro\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge half value=\"42\" label=\"Velocímetro\" color=\"warning\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge half value=\"88\" label=\"Velocímetro\" color=\"success\"></iswc-gauge></div>\r\n          </div>"
+          "html": [
+            "<div class=\"gauge-grid\">",
+            "            <div class=\"gauge-cell\"><iswc-gauge half value=\"68\" label=\"Velocímetro\"></iswc-gauge></div>",
+            "            <div class=\"gauge-cell\"><iswc-gauge half value=\"42\" label=\"Velocímetro\" color=\"warning\"></iswc-gauge></div>",
+            "            <div class=\"gauge-cell\"><iswc-gauge half value=\"88\" label=\"Velocímetro\" color=\"success\"></iswc-gauge></div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -123,7 +155,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"gauge-grid\">\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"3.14159\" label=\"π\" format=\"0.00\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"12345\" label=\"USD\" format=\"0,0\" unit=\"€\"></iswc-gauge></div>\r\n            <div class=\"gauge-cell\"><iswc-gauge value=\"0.5\" label=\"CTR\" format=\"0.0%\" unit=\"\"></iswc-gauge></div>\r\n          </div>"
+          "html": [
+            "<div class=\"gauge-grid\">",
+            "            <div class=\"gauge-cell\"><iswc-gauge value=\"3.14159\" label=\"π\" format=\"0.00\"></iswc-gauge></div>",
+            "            <div class=\"gauge-cell\"><iswc-gauge value=\"12345\" label=\"USD\" format=\"0,0\" unit=\"€\"></iswc-gauge></div>",
+            "            <div class=\"gauge-cell\"><iswc-gauge value=\"0.5\" label=\"CTR\" format=\"0.0%\" unit=\"\"></iswc-gauge></div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -134,7 +172,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-gauge id=\"gInteractive\" value=\"50\" label=\"Dinámico\"></iswc-gauge>\r\n          <iswc-slider id=\"gSlider\" min=\"0\" max=\"100\" value=\"50\" label=\"Valor\"></iswc-slider>"
+          "html": [
+            "<iswc-gauge id=\"gInteractive\" value=\"50\" label=\"Dinámico\"></iswc-gauge>",
+            "          <iswc-slider id=\"gSlider\" min=\"0\" max=\"100\" value=\"50\" label=\"Valor\"></iswc-slider>"
+          ]
         }
       ]
     },
@@ -150,64 +191,44 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
-              "<code>value</code>",
-              "number",
-              "0",
-              "Valor actual."
+              "<code>value</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Valor actual. (valor por defecto)"
             ],
             [
-              "<code>min</code>",
-              "number",
-              "0",
-              "Mínimo."
+              "<code>min</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Mínimo. (valor por defecto)"
             ],
             [
-              "<code>max</code>",
-              "number",
-              "100",
-              "Máximo."
+              "<code>max</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Máximo. (valor por defecto)"
             ],
             [
               "<code>label</code>",
-              "string",
-              "—",
               "Etiqueta."
             ],
             [
               "<code>unit</code>",
-              "string",
-              "—",
               "Unidad (e.g. \"%\")."
             ],
             [
-              "<code>format</code>",
-              "string",
-              "0",
-              "Intl format."
+              "<code>format</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Intl format. (valor por defecto)"
             ],
             [
-              "<code>thickness</code>",
-              "number",
-              "8",
-              "Ancho del trazo."
+              "<code>thickness</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Ancho del trazo. (valor por defecto)"
             ],
             [
-              "<code>variant</code>",
-              "brand | success | warning | danger",
-              "brand",
-              "Color."
+              "<code>variant</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Color. (valor por defecto)"
             ],
             [
-              "<code>half</code>",
-              "boolean",
-              "false",
-              "Semicírculo."
+              "<code>half</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Semicírculo. (valor por defecto)"
             ]
           ]
         }
@@ -217,7 +238,10 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,\r\n          custom min/max, unidad, formato y tamaño."
+        "content": [
+          "Medidor circular SVG de porcentaje. Soporta variantes, semicírculo,",
+          "          custom min/max, unidad, formato y tamaño."
+        ]
       },
       "atributos": {
         "table": [
@@ -278,7 +302,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>\n```"
+        "content": [
+          "```html",
+          "<iswc-gauge value=\"67\" label=\"Conversión\" unit=\"%\"></iswc-gauge>",
+          "```"
+        ]
       }
     },
     "exclude": [

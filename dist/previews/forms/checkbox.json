@@ -4,14 +4,24 @@
   "category": "forms",
   "title": "&lt;iswc-checkbox&gt;",
   "titleHtml": false,
-  "styles": ".stack { display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; }\r\n    .inline { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; }\r\n    .placements { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2rem; }",
+  "styles": [
+    ".stack { display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem; }",
+    "    .inline { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; }",
+    "    .placements { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2rem; }"
+  ],
   "storageKey": "docs-iswc-checkbox",
   "hasBehavior": true,
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Casilla <em>form-associated</em> con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-checkbox/\" target=\"_blank\" rel=\"noreferrer\">Checkbox de MUI</a>:\r\n          entra en <code class=\"code\">FormData</code> y en la validación nativa del <code class=\"code\">&lt;form&gt;</code>\r\n          sin input oculto, con color por <code class=\"code\">variant</code>, posición de etiqueta, iconos propios y\r\n          estado de error.",
+      "lede": [
+        "Casilla <em>form-associated</em> con paridad funcional con el",
+        "          <a href=\"https://mui.com/material-ui/react-checkbox/\" target=\"_blank\" rel=\"noreferrer\">Checkbox de MUI</a>:",
+        "          entra en <code class=\"code\">FormData</code> y en la validación nativa del <code class=\"code\">&lt;form&gt;</code>",
+        "          sin input oculto, con color por <code class=\"code\">variant</code>, posición de etiqueta, iconos propios y",
+        "          estado de error."
+      ],
       "blocks": [
         {
           "kind": "demo",
@@ -104,48 +114,169 @@
           ],
           "equivNote": "checked / indeterminate / bloqueo (readonly vs disabled).",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-checkbox: estado\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"indeterminate?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"tri-state UI\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"checked?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"on → FormData\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"off\",\n          \"shape\": \"round\"\n        },\n        {\n          \"id\": \"e\",\n          \"label\": \"readonly / disabled\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"c\",\n          \"to\": \"e\"\n        },\n        {\n          \"from\": \"d\",\n          \"to\": \"e\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"e\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-checkbox: estado\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"indeterminate?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"tri-state UI\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"checked?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"on → FormData\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"off\",",
+            "          \"shape\": \"round\"",
+            "        },",
+            "        {",
+            "          \"id\": \"e\",",
+            "          \"label\": \"readonly / disabled\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"no\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"no\"",
+            "        },",
+            "        {",
+            "          \"from\": \"c\",",
+            "          \"to\": \"e\"",
+            "        },",
+            "        {",
+            "          \"from\": \"d\",",
+            "          \"to\": \"e\"",
+            "        },",
+            "        {",
+            "          \"from\": \"a\",",
+            "          \"to\": \"e\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">\r\n          El estado indeterminado se limpia en el primer clic, igual que una casilla nativa.\r\n          Al pasar el puntero o al enfocar aparece el halo circular alrededor del control.\r\n        </p>"
+          "html": [
+            "<p class=\"lede\">",
+            "          El estado indeterminado se limpia en el primer clic, igual que una casilla nativa.",
+            "          Al pasar el puntero o al enfocar aparece el halo circular alrededor del control.",
+            "        </p>"
+          ]
         }
       ]
     },
     {
       "id": "color",
       "title": "Color",
-      "lede": "<code class=\"code\">variant</code> equivale a la prop <code class=\"code\">color</code> de MUI: redefine el\r\n          acento del control marcado, del halo y del anillo de foco.",
+      "lede": [
+        "<code class=\"code\">variant</code> equivale a la prop <code class=\"code\">color</code> de MUI: redefine el",
+        "          acento del control marcado, del halo y del anillo de foco."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <iswc-checkbox checked>brand (default)</iswc-checkbox>\r\n            <iswc-checkbox color=\"neutral\" checked>neutral</iswc-checkbox>\r\n            <iswc-checkbox color=\"success\" checked>success</iswc-checkbox>\r\n            <iswc-checkbox color=\"warning\" checked>warning</iswc-checkbox>\r\n            <iswc-checkbox color=\"danger\" checked>danger</iswc-checkbox>\r\n          </div>"
+          "html": [
+            "<div class=\"inline\">",
+            "            <iswc-checkbox checked>brand (default)</iswc-checkbox>",
+            "            <iswc-checkbox color=\"neutral\" checked>neutral</iswc-checkbox>",
+            "            <iswc-checkbox color=\"success\" checked>success</iswc-checkbox>",
+            "            <iswc-checkbox color=\"warning\" checked>warning</iswc-checkbox>",
+            "            <iswc-checkbox color=\"danger\" checked>danger</iswc-checkbox>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "label-placement",
       "title": "Posición de la etiqueta",
-      "lede": "<code class=\"code\">label-placement</code> equivale a <code class=\"code\">labelPlacement</code> del\r\n          <code class=\"code\">FormControlLabel</code> de MUI.",
+      "lede": [
+        "<code class=\"code\">label-placement</code> equivale a <code class=\"code\">labelPlacement</code> del",
+        "          <code class=\"code\">FormControlLabel</code> de MUI."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"placements\">\r\n            <iswc-checkbox checked>end (default)</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"start\" checked>start</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"top\" checked>top</iswc-checkbox>\r\n            <iswc-checkbox label-placement=\"bottom\" checked>bottom</iswc-checkbox>\r\n          </div>"
+          "html": [
+            "<div class=\"placements\">",
+            "            <iswc-checkbox checked>end (default)</iswc-checkbox>",
+            "            <iswc-checkbox label-placement=\"start\" checked>start</iswc-checkbox>",
+            "            <iswc-checkbox label-placement=\"top\" checked>top</iswc-checkbox>",
+            "            <iswc-checkbox label-placement=\"bottom\" checked>bottom</iswc-checkbox>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "groups",
       "title": "Grupos",
-      "lede": "No hay componente de grupo: <code class=\"code\">iswc-checkbox</code> es <code class=\"code\">inline-flex</code>\r\n          y se apila con el <code class=\"code\">display:flex</code> del contenedor. En columna, alinea\r\n          <code class=\"code\">align-items:flex-start</code> para que el halo no recorte.",
+      "lede": [
+        "No hay componente de grupo: <code class=\"code\">iswc-checkbox</code> es <code class=\"code\">inline-flex</code>",
+        "          y se apila con el <code class=\"code\">display:flex</code> del contenedor. En columna, alinea",
+        "          <code class=\"code\">align-items:flex-start</code> para que el halo no recorte."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</iswc-checkbox>\r\n            <iswc-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</iswc-checkbox>\r\n            <iswc-checkbox name=\"g3\" value=\"antoine\">Antoine Llorca</iswc-checkbox>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-checkbox name=\"g1\" value=\"gilad\" checked>Gilad Gray</iswc-checkbox>",
+            "            <iswc-checkbox name=\"g2\" value=\"jason\" checked>Jason Killian</iswc-checkbox>",
+            "            <iswc-checkbox name=\"g3\" value=\"antoine\">Antoine Llorca</iswc-checkbox>",
+            "          </div>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"r1\" value=\"lun\" checked>Lun</iswc-checkbox>\r\n            <iswc-checkbox name=\"r2\" value=\"mar\" checked>Mar</iswc-checkbox>\r\n            <iswc-checkbox name=\"r3\" value=\"mie\">Mié</iswc-checkbox>\r\n            <iswc-checkbox name=\"r4\" value=\"jue\">Jue</iswc-checkbox>\r\n            <iswc-checkbox name=\"r5\" value=\"vie\" checked>Vie</iswc-checkbox>\r\n          </div>"
+          "html": [
+            "<div class=\"inline\">",
+            "            <iswc-checkbox name=\"r1\" value=\"lun\" checked>Lun</iswc-checkbox>",
+            "            <iswc-checkbox name=\"r2\" value=\"mar\" checked>Mar</iswc-checkbox>",
+            "            <iswc-checkbox name=\"r3\" value=\"mie\">Mié</iswc-checkbox>",
+            "            <iswc-checkbox name=\"r4\" value=\"jue\">Jue</iswc-checkbox>",
+            "            <iswc-checkbox name=\"r5\" value=\"vie\" checked>Vie</iswc-checkbox>",
+            "          </div>"
+          ]
         },
         {
           "kind": "html",
@@ -157,51 +288,110 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-checkbox id=\"parentBox\">Todos los permisos</iswc-checkbox>\r\n            <div class=\"stack\" style=\"padding-left:1.6rem\">\r\n              <iswc-checkbox class=\"childBox\" checked>Lectura</iswc-checkbox>\r\n              <iswc-checkbox class=\"childBox\">Escritura</iswc-checkbox>\r\n              <iswc-checkbox class=\"childBox\">Borrado</iswc-checkbox>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-checkbox id=\"parentBox\">Todos los permisos</iswc-checkbox>",
+            "            <div class=\"stack\" style=\"padding-left:1.6rem\">",
+            "              <iswc-checkbox class=\"childBox\" checked>Lectura</iswc-checkbox>",
+            "              <iswc-checkbox class=\"childBox\">Escritura</iswc-checkbox>",
+            "              <iswc-checkbox class=\"childBox\">Borrado</iswc-checkbox>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "icons",
       "title": "Iconos personalizados",
-      "lede": "<code class=\"code\">icon</code>, <code class=\"code\">checked-icon</code> e\r\n          <code class=\"code\">indeterminate-icon</code> reciben nombres de <code class=\"code\">iswc-icon</code>\r\n          (Iconify). Al definir <code class=\"code\">icon</code> el control pierde la caja y queda solo el glifo,\r\n          como el ejemplo de iconos de MUI. Sin estos atributos el <em>look</em> por defecto es el check dibujado.",
+      "lede": [
+        "<code class=\"code\">icon</code>, <code class=\"code\">checked-icon</code> e",
+        "          <code class=\"code\">indeterminate-icon</code> reciben nombres de <code class=\"code\">iswc-icon</code>",
+        "          (Iconify). Al definir <code class=\"code\">icon</code> el control pierde la caja y queda solo el glifo,",
+        "          como el ejemplo de iconos de MUI. Sin estos atributos el <em>look</em> por defecto es el check dibujado."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <iswc-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>Favorito</iswc-checkbox>\r\n            <iswc-checkbox icon=\"mdi:bookmark-outline\" checked-icon=\"mdi:bookmark\">Guardar</iswc-checkbox>\r\n            <iswc-checkbox icon=\"mdi:star-outline\" checked-icon=\"mdi:star\" color=\"warning\" checked>Destacar</iswc-checkbox>\r\n            <iswc-checkbox checked-icon=\"mdi:check-bold\" indeterminate-icon=\"mdi:dots-horizontal\" indeterminate>Con caja</iswc-checkbox>\r\n          </div>"
+          "html": [
+            "<div class=\"inline\">",
+            "            <iswc-checkbox icon=\"mdi:heart-outline\" checked-icon=\"mdi:heart\" color=\"danger\" checked>Favorito</iswc-checkbox>",
+            "            <iswc-checkbox icon=\"mdi:bookmark-outline\" checked-icon=\"mdi:bookmark\">Guardar</iswc-checkbox>",
+            "            <iswc-checkbox icon=\"mdi:star-outline\" checked-icon=\"mdi:star\" color=\"warning\" checked>Destacar</iswc-checkbox>",
+            "            <iswc-checkbox checked-icon=\"mdi:check-bold\" indeterminate-icon=\"mdi:dots-horizontal\" indeterminate>Con caja</iswc-checkbox>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "readonly",
       "title": "Solo lectura y deshabilitada",
-      "lede": "<code class=\"code\">readonly</code> bloquea el cambio pero mantiene el valor en el formulario y el foco\r\n          navegable con <code class=\"code\">Tab</code>. <code class=\"code\">disabled</code> saca el control del orden\r\n          de tabulación y no aporta entrada al <code class=\"code\">FormData</code>.",
+      "lede": [
+        "<code class=\"code\">readonly</code> bloquea el cambio pero mantiene el valor en el formulario y el foco",
+        "          navegable con <code class=\"code\">Tab</code>. <code class=\"code\">disabled</code> saca el control del orden",
+        "          de tabulación y no aporta entrada al <code class=\"code\">FormData</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <iswc-checkbox name=\"ro1\" checked readonly>Solo lectura (marcada)</iswc-checkbox>\r\n            <iswc-checkbox name=\"ro2\" readonly>Solo lectura (sin marcar)</iswc-checkbox>\r\n            <iswc-checkbox name=\"di1\" checked disabled>Deshabilitada</iswc-checkbox>\r\n          </div>"
+          "html": [
+            "<div class=\"inline\">",
+            "            <iswc-checkbox name=\"ro1\" checked readonly>Solo lectura (marcada)</iswc-checkbox>",
+            "            <iswc-checkbox name=\"ro2\" readonly>Solo lectura (sin marcar)</iswc-checkbox>",
+            "            <iswc-checkbox name=\"di1\" checked disabled>Deshabilitada</iswc-checkbox>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "error",
       "title": "Error y texto de ayuda",
-      "lede": "<code class=\"code\">hint</code> pinta un texto bajo el control (atributo o slot homónimo).\r\n          <code class=\"code\">error</code> tiñe control y ayuda con el color de peligro y marca\r\n          <code class=\"code\">aria-invalid</code>.",
+      "lede": [
+        "<code class=\"code\">hint</code> pinta un texto bajo el control (atributo o slot homónimo).",
+        "          <code class=\"code\">error</code> tiñe control y ayuda con el color de peligro y marca",
+        "          <code class=\"code\">aria-invalid</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stack\">\r\n            <iswc-checkbox hint=\"Puedes cambiarlo más tarde en Ajustes.\">Recibir novedades</iswc-checkbox>\r\n            <iswc-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>Acepto los términos</iswc-checkbox>\r\n            <iswc-checkbox error checked>\r\n              Consentimiento revocado\r\n              <span slot=\"hint\">El texto de ayuda también admite un <b>slot</b>.</span>\r\n            </iswc-checkbox>\r\n          </div>"
+          "html": [
+            "<div class=\"stack\">",
+            "            <iswc-checkbox hint=\"Puedes cambiarlo más tarde en Ajustes.\">Recibir novedades</iswc-checkbox>",
+            "            <iswc-checkbox error hint=\"Debes aceptar los términos para continuar.\" required>Acepto los términos</iswc-checkbox>",
+            "            <iswc-checkbox error checked>",
+            "              Consentimiento revocado",
+            "              <span slot=\"hint\">El texto de ayuda también admite un <b>slot</b>.</span>",
+            "            </iswc-checkbox>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "form",
       "title": "Dentro de un formulario",
-      "lede": "Sin marcar no aporta entrada al <code class=\"code\">FormData</code>. Con\r\n          <code class=\"code\">required</code> reporta <code class=\"code\">valueMissing</code> y bloquea el envío.",
+      "lede": [
+        "Sin marcar no aporta entrada al <code class=\"code\">FormData</code>. Con",
+        "          <code class=\"code\">required</code> reporta <code class=\"code\">valueMissing</code> y bloquea el envío."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"demoForm\">\r\n            <div class=\"stack\">\r\n              <iswc-checkbox name=\"terminos\" value=\"si\" required>Acepto los términos (obligatorio)</iswc-checkbox>\r\n              <iswc-checkbox name=\"boletin\" value=\"semanal\">Recibir boletín</iswc-checkbox>\r\n              <iswc-checkbox name=\"archivado\" value=\"si\" checked readonly hint=\"Fijado por la política de la empresa.\">Archivar copia</iswc-checkbox>\r\n              <div class=\"inline\" style=\"gap:.5rem\">\r\n                <iswc-button color=\"brand\" id=\"btnSend\">Enviar</iswc-button>\r\n                <iswc-button variant=\"outlined\" id=\"btnReset\">Reset</iswc-button>\r\n              </div>\r\n            </div>\r\n          </form>"
+          "html": [
+            "<form id=\"demoForm\">",
+            "            <div class=\"stack\">",
+            "              <iswc-checkbox name=\"terminos\" value=\"si\" required>Acepto los términos (obligatorio)</iswc-checkbox>",
+            "              <iswc-checkbox name=\"boletin\" value=\"semanal\">Recibir boletín</iswc-checkbox>",
+            "              <iswc-checkbox name=\"archivado\" value=\"si\" checked readonly hint=\"Fijado por la política de la empresa.\">Archivar copia</iswc-checkbox>",
+            "              <div class=\"inline\" style=\"gap:.5rem\">",
+            "                <iswc-button color=\"brand\" id=\"btnSend\">Enviar</iswc-button>",
+            "                <iswc-button variant=\"outlined\" id=\"btnReset\">Reset</iswc-button>",
+            "              </div>",
+            "            </div>",
+            "          </form>"
+          ]
         },
         {
           "kind": "html",
@@ -212,11 +402,20 @@
     {
       "id": "scale",
       "title": "Escala por contexto",
-      "lede": "Sin atributo <code class=\"code\">size</code>: el control mide <code class=\"code\">1.15em</code> y hereda el\r\n          <code class=\"code\">font-size</code> del contenedor.",
+      "lede": [
+        "Sin atributo <code class=\"code\">size</code>: el control mide <code class=\"code\">1.15em</code> y hereda el",
+        "          <code class=\"code\">font-size</code> del contenedor."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"inline\">\r\n            <span style=\"font-size:.8rem\"><iswc-checkbox checked>0.8rem</iswc-checkbox></span>\r\n            <span style=\"font-size:1rem\"><iswc-checkbox checked>1rem</iswc-checkbox></span>\r\n            <span style=\"font-size:1.35rem\"><iswc-checkbox checked>1.35rem</iswc-checkbox></span>\r\n          </div>"
+          "html": [
+            "<div class=\"inline\">",
+            "            <span style=\"font-size:.8rem\"><iswc-checkbox checked>0.8rem</iswc-checkbox></span>",
+            "            <span style=\"font-size:1rem\"><iswc-checkbox checked>1rem</iswc-checkbox></span>",
+            "            <span style=\"font-size:1.35rem\"><iswc-checkbox checked>1.35rem</iswc-checkbox></span>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -330,7 +529,13 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Casilla <em>form-associated</em> con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-checkbox/\" target=\"_blank\" rel=\"noreferrer\">Checkbox de MUI</a>:\r\n          entra en <code class=\"code\">FormData</code> y en la validación nativa del <code class=\"code\">&lt;form&gt;</code>\r\n          sin input oculto, con color por <code class=\"code\">variant</code>, posición de etiqueta, iconos propios y\r\n          estado de error."
+        "content": [
+          "Casilla <em>form-associated</em> con paridad funcional con el",
+          "          <a href=\"https://mui.com/material-ui/react-checkbox/\" target=\"_blank\" rel=\"noreferrer\">Checkbox de MUI</a>:",
+          "          entra en <code class=\"code\">FormData</code> y en la validación nativa del <code class=\"code\">&lt;form&gt;</code>",
+          "          sin input oculto, con color por <code class=\"code\">variant</code>, posición de etiqueta, iconos propios y",
+          "          estado de error."
+        ]
       },
       "apiJs": {
         "table": [
@@ -405,7 +610,16 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"inline\">\r\n            <iswc-checkbox name=\"a\" checked>Marcada</iswc-checkbox>\r\n            <iswc-checkbox name=\"b\">Sin marcar</iswc-checkbox>\r\n            <iswc-checkbox name=\"c\" indeterminate>Indeterminada</iswc-checkbox>\r\n            <iswc-checkbox name=\"d\" checked disabled>Deshabilitada</iswc-checkbox>\r\n          </div>\n```"
+        "content": [
+          "```html",
+          "<div class=\"inline\">",
+          "            <iswc-checkbox name=\"a\" checked>Marcada</iswc-checkbox>",
+          "            <iswc-checkbox name=\"b\">Sin marcar</iswc-checkbox>",
+          "            <iswc-checkbox name=\"c\" indeterminate>Indeterminada</iswc-checkbox>",
+          "            <iswc-checkbox name=\"d\" checked disabled>Deshabilitada</iswc-checkbox>",
+          "          </div>",
+          "```"
+        ]
       }
     },
     "exclude": [

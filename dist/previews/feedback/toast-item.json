@@ -14,7 +14,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-toast-item id=\"tiPlay\" color=\"success\" open duration=\"0\">\r\n            <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\r\n            Guardado correctamente\r\n          </iswc-toast-item>",
+          "html": [
+            "<iswc-toast-item id=\"tiPlay\" color=\"success\" open duration=\"0\">",
+            "            <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>",
+            "            Guardado correctamente",
+            "          </iswc-toast-item>"
+          ],
           "target": "#tiPlay",
           "controls": [
             {
@@ -53,7 +58,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-toast-item\">\n  <iswc-toast-item open>\n    <strong>Titulo del toast</strong>\n    <span slot=\"caption\">Descripcion breve</span>\n    <iswc-icon slot=\"icon\" icon=\"mdi:bell-ring-outline\"></iswc-icon>\n  </iswc-toast-item>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-toast-item\">",
+            "  <iswc-toast-item open>",
+            "    <strong>Titulo del toast</strong>",
+            "    <span slot=\"caption\">Descripcion breve</span>",
+            "    <iswc-icon slot=\"icon\" icon=\"mdi:bell-ring-outline\"></iswc-icon>",
+            "  </iswc-toast-item>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -70,7 +83,14 @@
         "content": "Ítem individual de notificación. Se crea normalmente con <code class=\"code\">toaster.create()</code>, pero también se puede declarar suelto para controlar su ciclo de vida a mano."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-toast-item color=\"success\" open duration=\"0\">\n  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>\n  Guardado correctamente\n</iswc-toast-item>\n```"
+        "content": [
+          "```html",
+          "<iswc-toast-item color=\"success\" open duration=\"0\">",
+          "  <iswc-icon slot=\"icon\" icon=\"mdi:check-circle\"></iswc-icon>",
+          "  Guardado correctamente",
+          "</iswc-toast-item>",
+          "```"
+        ]
       }
     },
     "exclude": [

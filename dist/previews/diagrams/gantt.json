@@ -9,15 +9,48 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Diagrama de Gantt en SVG, sin Mermaid. Una fila por tarea, en el\r\n          orden que la declares; el componente calcula la escala de tiempo,\r\n          dibuja las barras y rutea las flechas de dependencia rodeando las\r\n          demás barras.",
+      "lede": [
+        "Diagrama de Gantt en SVG, sin Mermaid. Una fila por tarea, en el",
+        "          orden que la declares; el componente calcula la escala de tiempo,",
+        "          dibuja las barras y rutea las flechas de dependencia rodeando las",
+        "          demás barras."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          Comparte motor con <code>&lt;iswc-flowchart&gt;</code> y\r\n          <code>&lt;iswc-sequence-diagram&gt;</code>: mismo esquema JSON, mismo\r\n          visor a pantalla completa y la misma animación tortuga, que aquí\r\n          recorre las flechas de dependencia en orden.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          Comparte motor con <code>&lt;iswc-flowchart&gt;</code> y",
+            "          <code>&lt;iswc-sequence-diagram&gt;</code>: mismo esquema JSON, mismo",
+            "          visor a pantalla completa y la misma animación tortuga, que aquí",
+            "          recorre las flechas de dependencia en orden.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-gantt open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"gantt\": {\r\n                  \"title\": \"Cierre contable\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Preparación\", \"hue\": 239 },\r\n                    { \"id\": \"g2\", \"name\": \"Revisión\", \"hue\": 199 }\r\n                  ],\r\n                  \"tasks\": [\r\n                    { \"id\": \"t1\", \"label\": \"Conciliar bancos\", \"start\": \"2026-01-05\", \"duration\": \"3d\", \"group\": \"g1\", \"progress\": 100 },\r\n                    { \"id\": \"t2\", \"label\": \"Depreciaciones\", \"start\": \"2026-01-08\", \"end\": \"2026-01-12\", \"group\": \"g1\", \"after\": [\"t1\"], \"progress\": 60 },\r\n                    { \"id\": \"t3\", \"label\": \"Provisiones\", \"start\": \"2026-01-08\", \"duration\": \"5d\", \"group\": \"g1\", \"after\": [\"t1\"] },\r\n                    { \"id\": \"t4\", \"label\": \"Revisión contador\", \"start\": \"2026-01-13\", \"duration\": \"4d\", \"group\": \"g2\", \"after\": [\"t2\", \"t3\"] },\r\n                    { \"id\": \"m1\", \"label\": \"Cierre\", \"start\": \"2026-01-20\", \"milestone\": true, \"after\": [\"t4\"] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-gantt>",
+          "html": [
+            "<iswc-gantt open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"gantt\": {",
+            "                  \"title\": \"Cierre contable\",",
+            "                  \"groups\": [",
+            "                    { \"id\": \"g1\", \"name\": \"Preparación\", \"hue\": 239 },",
+            "                    { \"id\": \"g2\", \"name\": \"Revisión\", \"hue\": 199 }",
+            "                  ],",
+            "                  \"tasks\": [",
+            "                    { \"id\": \"t1\", \"label\": \"Conciliar bancos\", \"start\": \"2026-01-05\", \"duration\": \"3d\", \"group\": \"g1\", \"progress\": 100 },",
+            "                    { \"id\": \"t2\", \"label\": \"Depreciaciones\", \"start\": \"2026-01-08\", \"end\": \"2026-01-12\", \"group\": \"g1\", \"after\": [\"t1\"], \"progress\": 60 },",
+            "                    { \"id\": \"t3\", \"label\": \"Provisiones\", \"start\": \"2026-01-08\", \"duration\": \"5d\", \"group\": \"g1\", \"after\": [\"t1\"] },",
+            "                    { \"id\": \"t4\", \"label\": \"Revisión contador\", \"start\": \"2026-01-13\", \"duration\": \"4d\", \"group\": \"g2\", \"after\": [\"t2\", \"t3\"] },",
+            "                    { \"id\": \"m1\", \"label\": \"Cierre\", \"start\": \"2026-01-20\", \"milestone\": true, \"after\": [\"t4\"] }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-gantt>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -34,11 +67,31 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          <code>milestone: true</code> dibuja un rombo en vez de una barra.\r\n          <code>progress</code> (0-100) pinta una barra interna más oscura\r\n          sobre la fracción completada.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          <code>milestone: true</code> dibuja un rombo en vez de una barra.",
+            "          <code>progress</code> (0-100) pinta una barra interna más oscura",
+            "          sobre la fracción completada.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-gantt open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"gantt\": {\r\n                  \"tasks\": [\r\n                    { \"id\": \"a\", \"label\": \"Desarrollo\", \"start\": \"2026-02-01\", \"duration\": \"10d\", \"progress\": 80 },\r\n                    { \"id\": \"b\", \"label\": \"QA\", \"start\": \"2026-02-08\", \"duration\": \"5d\", \"after\": [\"a\"], \"progress\": 30 },\r\n                    { \"id\": \"m\", \"label\": \"Entrega\", \"start\": \"2026-02-16\", \"milestone\": true, \"after\": [\"b\"] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-gantt>"
+          "html": [
+            "<iswc-gantt open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"gantt\": {",
+            "                  \"tasks\": [",
+            "                    { \"id\": \"a\", \"label\": \"Desarrollo\", \"start\": \"2026-02-01\", \"duration\": \"10d\", \"progress\": 80 },",
+            "                    { \"id\": \"b\", \"label\": \"QA\", \"start\": \"2026-02-08\", \"duration\": \"5d\", \"after\": [\"a\"], \"progress\": 30 },",
+            "                    { \"id\": \"m\", \"label\": \"Entrega\", \"start\": \"2026-02-16\", \"milestone\": true, \"after\": [\"b\"] }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-gantt>"
+          ]
         }
       ]
     },
@@ -169,10 +222,38 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Diagrama de Gantt en SVG, sin Mermaid. Una fila por tarea, en el\r\n          orden que la declares; el componente calcula la escala de tiempo,\r\n          dibuja las barras y rutea las flechas de dependencia rodeando las\r\n          demás barras."
+        "content": [
+          "Diagrama de Gantt en SVG, sin Mermaid. Una fila por tarea, en el",
+          "          orden que la declares; el componente calcula la escala de tiempo,",
+          "          dibuja las barras y rutea las flechas de dependencia rodeando las",
+          "          demás barras."
+        ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-gantt open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"gantt\": {\r\n                  \"title\": \"Cierre contable\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Preparación\", \"hue\": 239 },\r\n                    { \"id\": \"g2\", \"name\": \"Revisión\", \"hue\": 199 }\r\n                  ],\r\n                  \"tasks\": [\r\n                    { \"id\": \"t1\", \"label\": \"Conciliar bancos\", \"start\": \"2026-01-05\", \"duration\": \"3d\", \"group\": \"g1\", \"progress\": 100 },\r\n                    { \"id\": \"t2\", \"label\": \"Depreciaciones\", \"start\": \"2026-01-08\", \"end\": \"2026-01-12\", \"group\": \"g1\", \"after\": [\"t1\"], \"progress\": 60 },\r\n                    { \"id\": \"t3\", \"label\": \"Provisiones\", \"start\": \"2026-01-08\", \"duration\": \"5d\", \"group\": \"g1\", \"after\": [\"t1\"] },\r\n                    { \"id\": \"t4\", \"label\": \"Revisión contador\", \"start\": \"2026-01-13\", \"duration\": \"4d\", \"group\": \"g2\", \"after\": [\"t2\", \"t3\"] },\r\n                    { \"id\": \"m1\", \"label\": \"Cierre\", \"start\": \"2026-01-20\", \"milestone\": true, \"after\": [\"t4\"] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-gantt>\n```"
+        "content": [
+          "```html",
+          "<iswc-gantt open-on-click>",
+          "            <script type=\"application/json\">",
+          "              {",
+          "                \"gantt\": {",
+          "                  \"title\": \"Cierre contable\",",
+          "                  \"groups\": [",
+          "                    { \"id\": \"g1\", \"name\": \"Preparación\", \"hue\": 239 },",
+          "                    { \"id\": \"g2\", \"name\": \"Revisión\", \"hue\": 199 }",
+          "                  ],",
+          "                  \"tasks\": [",
+          "                    { \"id\": \"t1\", \"label\": \"Conciliar bancos\", \"start\": \"2026-01-05\", \"duration\": \"3d\", \"group\": \"g1\", \"progress\": 100 },",
+          "                    { \"id\": \"t2\", \"label\": \"Depreciaciones\", \"start\": \"2026-01-08\", \"end\": \"2026-01-12\", \"group\": \"g1\", \"after\": [\"t1\"], \"progress\": 60 },",
+          "                    { \"id\": \"t3\", \"label\": \"Provisiones\", \"start\": \"2026-01-08\", \"duration\": \"5d\", \"group\": \"g1\", \"after\": [\"t1\"] },",
+          "                    { \"id\": \"t4\", \"label\": \"Revisión contador\", \"start\": \"2026-01-13\", \"duration\": \"4d\", \"group\": \"g2\", \"after\": [\"t2\", \"t3\"] },",
+          "                    { \"id\": \"m1\", \"label\": \"Cierre\", \"start\": \"2026-01-20\", \"milestone\": true, \"after\": [\"t4\"] }",
+          "                  ]",
+          "                }",
+          "              }",
+          "            </script>",
+          "          </iswc-gantt>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -11,11 +11,18 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Campo con selector modal (port <code class=\"code\">BtnRef</code>). El modal usa\n          <code class=\"code\">&lt;iswc-catalogo-gen select-mode&gt;</code> centrado. Controller vía\n          <code class=\"code\">createBtnRefController</code> — <strong>sin acciones CRUD</strong>, solo listado y selección.",
+      "lede": [
+        "Campo con selector modal (port <code class=\"code\">BtnRef</code>). El modal usa",
+        "          <code class=\"code\">&lt;iswc-catalogo-gen select-mode&gt;</code> centrado. Controller vía",
+        "          <code class=\"code\">createBtnRefController</code> — <strong>sin acciones CRUD</strong>, solo listado y selección."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-btn-ref id=\"btnRefDemo\" label=\"Aplicación\" required style=\"width: 22rem;\"></iswc-btn-ref>\n          <p id=\"btnRefLog\">Seleccionado: <code class=\"code\">—</code></p>",
+          "html": [
+            "<iswc-btn-ref id=\"btnRefDemo\" label=\"Aplicación\" required style=\"width: 22rem;\"></iswc-btn-ref>",
+            "          <p id=\"btnRefLog\">Seleccionado: <code class=\"code\">—</code></p>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -43,11 +50,17 @@
     {
       "id": "multi",
       "title": "Multi-select",
-      "lede": "Atributo <code class=\"code\">multi</code> (o <code class=\"code\">multiSelect: true</code> en el JSON).\n          El modal permite marcar varias filas; al confirmar se aplica el registro elegido (último / pick).",
+      "lede": [
+        "Atributo <code class=\"code\">multi</code> (o <code class=\"code\">multiSelect: true</code> en el JSON).",
+        "          El modal permite marcar varias filas; al confirmar se aplica el registro elegido (último / pick)."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-btn-ref id=\"btnRefMulti\" label=\"Aplicaciones\" multi style=\"width: 22rem;\"></iswc-btn-ref>\n          <p id=\"btnRefMultiLog\">Seleccionado: <code class=\"code\">—</code></p>"
+          "html": [
+            "<iswc-btn-ref id=\"btnRefMulti\" label=\"Aplicaciones\" multi style=\"width: 22rem;\"></iswc-btn-ref>",
+            "          <p id=\"btnRefMultiLog\">Seleccionado: <code class=\"code\">—</code></p>"
+          ]
         }
       ]
     }
@@ -55,10 +68,26 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Campo con selector modal (port <code class=\"code\">BtnRef</code>). El modal usa\n          <code class=\"code\">&lt;iswc-catalogo-gen select-mode&gt;</code> centrado. Controller vía\n          <code class=\"code\">createBtnRefController</code> — <strong>sin acciones CRUD</strong>, solo listado y selección."
+        "content": [
+          "Campo con selector modal (port <code class=\"code\">BtnRef</code>). El modal usa",
+          "          <code class=\"code\">&lt;iswc-catalogo-gen select-mode&gt;</code> centrado. Controller vía",
+          "          <code class=\"code\">createBtnRefController</code> — <strong>sin acciones CRUD</strong>, solo listado y selección."
+        ]
       },
       "ejemplos": {
-        "content": "```js\nimport { createBtnRefController } from './isp/controller-from-config.min.js';\n\nel.controller = createBtnRefController({\n  entrie: 'Aplicación',\n  primaryKeys: ['app'],\n  ColumnsBtnRef: ['app'],\n  columns: [{ field: 'app', header: 'Aplicación' }],\n  mock: [{ app: 'ContaPyme' }, { app: 'AgroWin' }],\n});\n```"
+        "content": [
+          "```js",
+          "import { createBtnRefController } from './isp/controller-from-config.min.js';",
+          "",
+          "el.controller = createBtnRefController({",
+          "  entrie: 'Aplicación',",
+          "  primaryKeys: ['app'],",
+          "  ColumnsBtnRef: ['app'],",
+          "  columns: [{ field: 'app', header: 'Aplicación' }],",
+          "  mock: [{ app: 'ContaPyme' }, { app: 'AgroWin' }],",
+          "});",
+          "```"
+        ]
       }
     },
     "exclude": [

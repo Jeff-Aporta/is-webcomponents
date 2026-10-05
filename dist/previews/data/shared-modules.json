@@ -324,7 +324,10 @@
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
       "bytes": 9407,
       "exports": [
-        "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
+        [
+          "DiagramElementBase extends ElementBase ",
+          "  static get observedAttributes"
+        ]
       ]
     },
     {
@@ -770,7 +773,10 @@
       "bytes": 8632,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
-        "ScrollMemory \r\n  host",
+        [
+          "ScrollMemory ",
+          "  host"
+        ],
         "bindScrollMemoryApi"
       ]
     },

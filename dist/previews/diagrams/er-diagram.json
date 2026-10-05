@@ -9,15 +9,71 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus\r\n          atributos y las relaciones entre ellas; el componente ubica las cajas,\r\n          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo.",
+      "lede": [
+        "Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus",
+        "          atributos y las relaciones entre ellas; el componente ubica las cajas,",
+        "          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo."
+      ],
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          Comparte motor con <code>&lt;iswc-flowchart&gt;</code>: mismo esquema JSON de\r\n          grupos/leyenda, mismo visor a pantalla completa y la misma animación tortuga.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          Comparte motor con <code>&lt;iswc-flowchart&gt;</code>: mismo esquema JSON de",
+            "          grupos/leyenda, mismo visor a pantalla completa y la misma animación tortuga.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-er-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"erDiagram\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"direction\": \"LR\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"g2\", \"name\": \"Terceros\", \"hue\": 239 }\r\n                  ],\r\n                  \"entities\": [\r\n                    { \"id\": \"FACTURA\", \"name\": \"FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"cliente_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"fecha\", \"type\": \"date\" },\r\n                        { \"name\": \"total\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"ITEM\", \"name\": \"ITEM_FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"factura_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"producto_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"cantidad\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"CLIENTE\", \"name\": \"CLIENTE\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\r\n                      ] },\r\n                    { \"id\": \"PRODUCTO\", \"name\": \"PRODUCTO\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" },\r\n                        { \"name\": \"precio\", \"type\": \"decimal\" }\r\n                      ] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"FACTURA\", \"to\": \"CLIENTE\", \"label\": \"pertenece a\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },\r\n                    { \"from\": \"FACTURA\", \"to\": \"ITEM\", \"label\": \"contiene\", \"fromCard\": \"one\", \"toCard\": \"many\", \"identifying\": true },\r\n                    { \"from\": \"ITEM\", \"to\": \"PRODUCTO\", \"label\": \"referencia\", \"fromCard\": \"zeroOrOne\", \"toCard\": \"zeroOrMany\", \"identifying\": false }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-er-diagram>",
+          "html": [
+            "<iswc-er-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"erDiagram\": {",
+            "                  \"title\": \"Facturación electrónica\",",
+            "                  \"direction\": \"LR\",",
+            "                  \"groups\": [",
+            "                    { \"id\": \"g1\", \"name\": \"Facturación\", \"hue\": 199 },",
+            "                    { \"id\": \"g2\", \"name\": \"Terceros\", \"hue\": 239 }",
+            "                  ],",
+            "                  \"entities\": [",
+            "                    { \"id\": \"FACTURA\", \"name\": \"FACTURA\", \"group\": \"g1\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+            "                        { \"name\": \"cliente_id\", \"type\": \"int\", \"key\": \"FK\" },",
+            "                        { \"name\": \"fecha\", \"type\": \"date\" },",
+            "                        { \"name\": \"total\", \"type\": \"decimal\" }",
+            "                      ] },",
+            "                    { \"id\": \"ITEM\", \"name\": \"ITEM_FACTURA\", \"group\": \"g1\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+            "                        { \"name\": \"factura_id\", \"type\": \"int\", \"key\": \"FK\" },",
+            "                        { \"name\": \"producto_id\", \"type\": \"int\", \"key\": \"FK\" },",
+            "                        { \"name\": \"cantidad\", \"type\": \"decimal\" }",
+            "                      ] },",
+            "                    { \"id\": \"CLIENTE\", \"name\": \"CLIENTE\", \"group\": \"g2\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+            "                        { \"name\": \"nombre\", \"type\": \"varchar\" }",
+            "                      ] },",
+            "                    { \"id\": \"PRODUCTO\", \"name\": \"PRODUCTO\", \"group\": \"g2\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+            "                        { \"name\": \"nombre\", \"type\": \"varchar\" },",
+            "                        { \"name\": \"precio\", \"type\": \"decimal\" }",
+            "                      ] }",
+            "                  ],",
+            "                  \"relations\": [",
+            "                    { \"from\": \"FACTURA\", \"to\": \"CLIENTE\", \"label\": \"pertenece a\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },",
+            "                    { \"from\": \"FACTURA\", \"to\": \"ITEM\", \"label\": \"contiene\", \"fromCard\": \"one\", \"toCard\": \"many\", \"identifying\": true },",
+            "                    { \"from\": \"ITEM\", \"to\": \"PRODUCTO\", \"label\": \"referencia\", \"fromCard\": \"zeroOrOne\", \"toCard\": \"zeroOrMany\", \"identifying\": false }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-er-diagram>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -34,11 +90,35 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>\r\n          Cada extremo de una relación admite <code>one</code>, <code>many</code>,\r\n          <code>zeroOrOne</code> y <code>zeroOrMany</code>, dibujados como pata de\r\n          gallo / marca de uno / círculo de opcionalidad, igual que la notación\r\n          crow's foot clásica. <code>identifying: false</code> dibuja la línea punteada.\r\n        </p>"
+          "html": [
+            "<p>",
+            "          Cada extremo de una relación admite <code>one</code>, <code>many</code>,",
+            "          <code>zeroOrOne</code> y <code>zeroOrMany</code>, dibujados como pata de",
+            "          gallo / marca de uno / círculo de opcionalidad, igual que la notación",
+            "          crow's foot clásica. <code>identifying: false</code> dibuja la línea punteada.",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-er-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"erDiagram\": {\r\n                  \"direction\": \"LR\",\r\n                  \"entities\": [\r\n                    { \"id\": \"A\", \"name\": \"A\", \"attributes\": [{ \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" }] },\r\n                    { \"id\": \"B\", \"name\": \"B\", \"attributes\": [{ \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" }] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"A\", \"to\": \"B\", \"label\": \"1 a N\", \"fromCard\": \"one\", \"toCard\": \"many\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-er-diagram>"
+          "html": [
+            "<iswc-er-diagram open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"erDiagram\": {",
+            "                  \"direction\": \"LR\",",
+            "                  \"entities\": [",
+            "                    { \"id\": \"A\", \"name\": \"A\", \"attributes\": [{ \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" }] },",
+            "                    { \"id\": \"B\", \"name\": \"B\", \"attributes\": [{ \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" }] }",
+            "                  ],",
+            "                  \"relations\": [",
+            "                    { \"from\": \"A\", \"to\": \"B\", \"label\": \"1 a N\", \"fromCard\": \"one\", \"toCard\": \"many\" }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-er-diagram>"
+          ]
         }
       ]
     },
@@ -53,7 +133,54 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-er-diagram theme=\"insoft\" open-on-click>\n            <script type=\"application/json\">\n              {\n                \"erDiagram\": {\n                  \"title\": \"ISS · estilo InSoft\",\n                  \"direction\": \"LR\",\n                  \"groups\": [\n                    { \"id\": \"g_oper\", \"name\": \"Operativa\" },\n                    { \"id\": \"g_conf\", \"name\": \"Config\" },\n                    { \"id\": \"g_seg\", \"name\": \"SEG\" }\n                  ],\n                  \"entities\": [\n                    { \"id\": \"ticket\", \"name\": \"TICKET\", \"group\": \"g_oper\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"asunto\", \"type\": \"varchar\" }\n                      ] },\n                    { \"id\": \"conv\", \"name\": \"CONVERSATION\", \"group\": \"g_oper\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"ticket_id\", \"type\": \"uuid\", \"key\": \"FK\" }\n                      ] },\n                    { \"id\": \"sys\", \"name\": \"SYS_VALUES\", \"group\": \"g_conf\",\n                      \"attributes\": [\n                        { \"name\": \"clave\", \"type\": \"varchar\", \"key\": \"PK\" },\n                        { \"name\": \"valor\", \"type\": \"jsonb\" }\n                      ] },\n                    { \"id\": \"rol\", \"name\": \"SEG_ROL\", \"group\": \"g_seg\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\n                      ] },\n                    { \"id\": \"huérfana\", \"name\": \"PROVIDER\", \"group\": \"g_conf\",\n                      \"attributes\": [\n                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\n                      ] }\n                  ],\n                  \"relations\": [\n                    { \"from\": \"conv\", \"to\": \"ticket\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },\n                    { \"from\": \"ticket\", \"to\": \"rol\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": false }\n                  ]\n                }\n              }\n            </script>\n          </iswc-er-diagram>"
+          "html": [
+            "<iswc-er-diagram theme=\"insoft\" open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"erDiagram\": {",
+            "                  \"title\": \"ISS · estilo InSoft\",",
+            "                  \"direction\": \"LR\",",
+            "                  \"groups\": [",
+            "                    { \"id\": \"g_oper\", \"name\": \"Operativa\" },",
+            "                    { \"id\": \"g_conf\", \"name\": \"Config\" },",
+            "                    { \"id\": \"g_seg\", \"name\": \"SEG\" }",
+            "                  ],",
+            "                  \"entities\": [",
+            "                    { \"id\": \"ticket\", \"name\": \"TICKET\", \"group\": \"g_oper\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },",
+            "                        { \"name\": \"asunto\", \"type\": \"varchar\" }",
+            "                      ] },",
+            "                    { \"id\": \"conv\", \"name\": \"CONVERSATION\", \"group\": \"g_oper\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },",
+            "                        { \"name\": \"ticket_id\", \"type\": \"uuid\", \"key\": \"FK\" }",
+            "                      ] },",
+            "                    { \"id\": \"sys\", \"name\": \"SYS_VALUES\", \"group\": \"g_conf\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"clave\", \"type\": \"varchar\", \"key\": \"PK\" },",
+            "                        { \"name\": \"valor\", \"type\": \"jsonb\" }",
+            "                      ] },",
+            "                    { \"id\": \"rol\", \"name\": \"SEG_ROL\", \"group\": \"g_seg\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+            "                        { \"name\": \"nombre\", \"type\": \"varchar\" }",
+            "                      ] },",
+            "                    { \"id\": \"huérfana\", \"name\": \"PROVIDER\", \"group\": \"g_conf\",",
+            "                      \"attributes\": [",
+            "                        { \"name\": \"id\", \"type\": \"uuid\", \"key\": \"PK\" },",
+            "                        { \"name\": \"nombre\", \"type\": \"varchar\" }",
+            "                      ] }",
+            "                  ],",
+            "                  \"relations\": [",
+            "                    { \"from\": \"conv\", \"to\": \"ticket\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },",
+            "                    { \"from\": \"ticket\", \"to\": \"rol\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": false }",
+            "                  ]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-er-diagram>"
+          ]
         }
       ]
     },
@@ -185,10 +312,63 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus\r\n          atributos y las relaciones entre ellas; el componente ubica las cajas,\r\n          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo."
+        "content": [
+          "Diagrama entidad-relación en SVG, sin Mermaid. Declaras entidades con sus",
+          "          atributos y las relaciones entre ellas; el componente ubica las cajas,",
+          "          rutea las líneas con A* y dibuja la notación de pata de gallo en cada extremo."
+        ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-er-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"erDiagram\": {\r\n                  \"title\": \"Facturación electrónica\",\r\n                  \"direction\": \"LR\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g1\", \"name\": \"Facturación\", \"hue\": 199 },\r\n                    { \"id\": \"g2\", \"name\": \"Terceros\", \"hue\": 239 }\r\n                  ],\r\n                  \"entities\": [\r\n                    { \"id\": \"FACTURA\", \"name\": \"FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"cliente_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"fecha\", \"type\": \"date\" },\r\n                        { \"name\": \"total\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"ITEM\", \"name\": \"ITEM_FACTURA\", \"group\": \"g1\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"factura_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"producto_id\", \"type\": \"int\", \"key\": \"FK\" },\r\n                        { \"name\": \"cantidad\", \"type\": \"decimal\" }\r\n                      ] },\r\n                    { \"id\": \"CLIENTE\", \"name\": \"CLIENTE\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" }\r\n                      ] },\r\n                    { \"id\": \"PRODUCTO\", \"name\": \"PRODUCTO\", \"group\": \"g2\",\r\n                      \"attributes\": [\r\n                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },\r\n                        { \"name\": \"nombre\", \"type\": \"varchar\" },\r\n                        { \"name\": \"precio\", \"type\": \"decimal\" }\r\n                      ] }\r\n                  ],\r\n                  \"relations\": [\r\n                    { \"from\": \"FACTURA\", \"to\": \"CLIENTE\", \"label\": \"pertenece a\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },\r\n                    { \"from\": \"FACTURA\", \"to\": \"ITEM\", \"label\": \"contiene\", \"fromCard\": \"one\", \"toCard\": \"many\", \"identifying\": true },\r\n                    { \"from\": \"ITEM\", \"to\": \"PRODUCTO\", \"label\": \"referencia\", \"fromCard\": \"zeroOrOne\", \"toCard\": \"zeroOrMany\", \"identifying\": false }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-er-diagram>\n```"
+        "content": [
+          "```html",
+          "<iswc-er-diagram open-on-click>",
+          "            <script type=\"application/json\">",
+          "              {",
+          "                \"erDiagram\": {",
+          "                  \"title\": \"Facturación electrónica\",",
+          "                  \"direction\": \"LR\",",
+          "                  \"groups\": [",
+          "                    { \"id\": \"g1\", \"name\": \"Facturación\", \"hue\": 199 },",
+          "                    { \"id\": \"g2\", \"name\": \"Terceros\", \"hue\": 239 }",
+          "                  ],",
+          "                  \"entities\": [",
+          "                    { \"id\": \"FACTURA\", \"name\": \"FACTURA\", \"group\": \"g1\",",
+          "                      \"attributes\": [",
+          "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+          "                        { \"name\": \"cliente_id\", \"type\": \"int\", \"key\": \"FK\" },",
+          "                        { \"name\": \"fecha\", \"type\": \"date\" },",
+          "                        { \"name\": \"total\", \"type\": \"decimal\" }",
+          "                      ] },",
+          "                    { \"id\": \"ITEM\", \"name\": \"ITEM_FACTURA\", \"group\": \"g1\",",
+          "                      \"attributes\": [",
+          "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+          "                        { \"name\": \"factura_id\", \"type\": \"int\", \"key\": \"FK\" },",
+          "                        { \"name\": \"producto_id\", \"type\": \"int\", \"key\": \"FK\" },",
+          "                        { \"name\": \"cantidad\", \"type\": \"decimal\" }",
+          "                      ] },",
+          "                    { \"id\": \"CLIENTE\", \"name\": \"CLIENTE\", \"group\": \"g2\",",
+          "                      \"attributes\": [",
+          "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+          "                        { \"name\": \"nombre\", \"type\": \"varchar\" }",
+          "                      ] },",
+          "                    { \"id\": \"PRODUCTO\", \"name\": \"PRODUCTO\", \"group\": \"g2\",",
+          "                      \"attributes\": [",
+          "                        { \"name\": \"id\", \"type\": \"int\", \"key\": \"PK\" },",
+          "                        { \"name\": \"nombre\", \"type\": \"varchar\" },",
+          "                        { \"name\": \"precio\", \"type\": \"decimal\" }",
+          "                      ] }",
+          "                  ],",
+          "                  \"relations\": [",
+          "                    { \"from\": \"FACTURA\", \"to\": \"CLIENTE\", \"label\": \"pertenece a\", \"fromCard\": \"many\", \"toCard\": \"one\", \"identifying\": true },",
+          "                    { \"from\": \"FACTURA\", \"to\": \"ITEM\", \"label\": \"contiene\", \"fromCard\": \"one\", \"toCard\": \"many\", \"identifying\": true },",
+          "                    { \"from\": \"ITEM\", \"to\": \"PRODUCTO\", \"label\": \"referencia\", \"fromCard\": \"zeroOrOne\", \"toCard\": \"zeroOrMany\", \"identifying\": false }",
+          "                  ]",
+          "                }",
+          "              }",
+          "            </script>",
+          "          </iswc-er-diagram>",
+          "```"
+        ]
       }
     },
     "exclude": [

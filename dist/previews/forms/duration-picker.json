@@ -4,7 +4,14 @@
   "category": "forms",
   "title": "&lt;iswc-duration-picker&gt;",
   "titleHtml": false,
-  "styles": "pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 6rem; overflow: auto;\r\n    }",
+  "styles": [
+    "pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .8rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 6rem; overflow: auto;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-duration-picker",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +27,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-duration-picker id=\"dur\" value=\"3725\"></iswc-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--iswc-text-soft); font-size:.78rem; margin-top:.5rem\">\r\n            <code>value=\"3725\"</code> = 1h 02m 05s\r\n          </p>",
+          "html": [
+            "<iswc-duration-picker id=\"dur\" value=\"3725\"></iswc-duration-picker>",
+            "          <p class=\"kbd-hint\" style=\"color:var(--iswc-text-soft); font-size:.78rem; margin-top:.5rem\">",
+            "            <code>value=\"3725\"</code> = 1h 02m 05s",
+            "          </p>"
+          ],
           "controls": [
             {
               "control": "number",
@@ -64,7 +76,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-duration-picker min=\"60\" max=\"5400\" step=\"5\" value=\"600\"></iswc-duration-picker>\r\n          <p class=\"kbd-hint\" style=\"color:var(--iswc-text-soft); font-size:.78rem\">De 1 minuto a 1:30:00, paso de 5 segundos.</p>"
+          "html": [
+            "<iswc-duration-picker min=\"60\" max=\"5400\" step=\"5\" value=\"600\"></iswc-duration-picker>",
+            "          <p class=\"kbd-hint\" style=\"color:var(--iswc-text-soft); font-size:.78rem\">De 1 minuto a 1:30:00, paso de 5 segundos.</p>"
+          ]
         }
       ]
     },
@@ -74,7 +89,21 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const d = document.querySelector('iswc-duration-picker');\nd.value;        // segundos totales\nd.text;        // \"01:02:05\" o \"02:05\" si hours=0\nd.hours; d.minutes; d.seconds;\nd.tick(30);    // suma 30 segundos respetando límites\nd.setSeconds(3600);\nd.set(1, 30, 0);\n\nd.addEventListener('iswc-change', e => console.log(e.detail.value, e.detail.text));\n\n// Atributos\n// value, min, max  límites en segundos\n// step             incremento del botón (default 1)"
+          "code": [
+            "const d = document.querySelector('iswc-duration-picker');",
+            "d.value;        // segundos totales",
+            "d.text;        // \"01:02:05\" o \"02:05\" si hours=0",
+            "d.hours; d.minutes; d.seconds;",
+            "d.tick(30);    // suma 30 segundos respetando límites",
+            "d.setSeconds(3600);",
+            "d.set(1, 30, 0);",
+            "",
+            "d.addEventListener('iswc-change', e => console.log(e.detail.value, e.detail.text));",
+            "",
+            "// Atributos",
+            "// value, min, max  límites en segundos",
+            "// step             incremento del botón (default 1)"
+          ]
         }
       ]
     }

@@ -14,7 +14,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-breadcrumb>\r\n            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\r\n            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\r\n          </iswc-breadcrumb>"
+          "html": [
+            "<iswc-breadcrumb>",
+            "            <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>",
+            "            <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>",
+            "          </iswc-breadcrumb>"
+          ]
         }
       ]
     },
@@ -25,7 +32,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-breadcrumb-item\">\n  <iswc-breadcrumb-item href=\"#\">Inicio</iswc-breadcrumb-item>\n  <iswc-icon slot=\"start\" icon=\"mdi:home-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:chevron-right\"></iswc-icon>\n  <span slot=\"separator\">/</span>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-breadcrumb-item\">",
+            "  <iswc-breadcrumb-item href=\"#\">Inicio</iswc-breadcrumb-item>",
+            "  <iswc-icon slot=\"start\" icon=\"mdi:home-outline\"></iswc-icon>",
+            "  <iswc-icon slot=\"end\" icon=\"mdi:chevron-right\"></iswc-icon>",
+            "  <span slot=\"separator\">/</span>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -42,7 +56,16 @@
         "content": "Cada eslabón de un <code class=\"code\">&lt;iswc-breadcrumb&gt;</code>. Puede ser enlace (<code class=\"code\">href</code>) o texto plano cuando es la página actual."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-breadcrumb>\n  <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>\n  <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>\n</iswc-breadcrumb>\n```"
+        "content": [
+          "```html",
+          "<iswc-breadcrumb>",
+          "  <iswc-breadcrumb-item href=\"#\"><iswc-icon slot=\"start\" icon=\"mdi:home\"></iswc-icon>Inicio</iswc-breadcrumb-item>",
+          "  <iswc-breadcrumb-item href=\"#\">Contabilidad</iswc-breadcrumb-item>",
+          "  <iswc-breadcrumb-item href=\"#\">Comprobantes</iswc-breadcrumb-item>",
+          "  <iswc-breadcrumb-item>Detalle</iswc-breadcrumb-item>",
+          "</iswc-breadcrumb>",
+          "```"
+        ]
       }
     },
     "exclude": [

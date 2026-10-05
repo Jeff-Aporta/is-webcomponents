@@ -4,7 +4,16 @@
   "category": "forms",
   "title": "&lt;iswc-mention&gt;",
   "titleHtml": false,
-  "styles": ".mention-wrap { padding: 1.25rem; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); }\r\n    .mention-wrap > iswc-mention { width: 100%; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }",
+  "styles": [
+    ".mention-wrap { padding: 1.25rem; border: 1px solid var(--iswc-border); border-radius: var(--iswc-radius); background: var(--iswc-bg-elev); }",
+    "    .mention-wrap > iswc-mention { width: 100%; }",
+    "    pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .8rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 9rem; overflow: auto;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-mention",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +29,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"mention-wrap\">\r\n            <label for=\"cmt\" style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--iswc-text-soft)\">Comentario</label>\r\n            <iswc-mention id=\"cmt\" trigger=\"@#\" placeholder=\"Escribe @ o # para autocompletar…\">\r\n              <script type=\"application/json\">\r\n                {\r\n                  \"@\": [\"Ana Ramírez\", \"Pedro Castaño\", \"Sofía Velez\", \"Jorge Arias\", \"Lina Mora\", \"Camilo Pérez\", \"Valentina López\"],\r\n                  \"#\": [\"urgente\", \"bug\", \"idea\", \"blocked\", \"wip\", \"ready-to-ship\", \"tech-debt\"]\r\n                }\r\n              </script>\r\n            </iswc-mention>\r\n          </div>",
+          "html": [
+            "<div class=\"mention-wrap\">",
+            "            <label for=\"cmt\" style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--iswc-text-soft)\">Comentario</label>",
+            "            <iswc-mention id=\"cmt\" trigger=\"@#\" placeholder=\"Escribe @ o # para autocompletar…\">",
+            "              <script type=\"application/json\">",
+            "                {",
+            "                  \"@\": [\"Ana Ramírez\", \"Pedro Castaño\", \"Sofía Velez\", \"Jorge Arias\", \"Lina Mora\", \"Camilo Pérez\", \"Valentina López\"],",
+            "                  \"#\": [\"urgente\", \"bug\", \"idea\", \"blocked\", \"wip\", \"ready-to-ship\", \"tech-debt\"]",
+            "                }",
+            "              </script>",
+            "            </iswc-mention>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -45,7 +66,16 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"mention-wrap\">\r\n            <label style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--iswc-text-soft)\">Solo usuarios</label>\r\n            <iswc-mention trigger=\"@\" placeholder=\"Escribe @ para nombrar…\">\r\n              <script type=\"application/json\">\r\n                { \"@\": [\"Ana\", \"Pedro\", \"Sofía\", \"Jorge\", \"Lina\", \"Camilo\"] }\r\n              </script>\r\n            </iswc-mention>\r\n          </div>"
+          "html": [
+            "<div class=\"mention-wrap\">",
+            "            <label style=\"font-size:.85rem;display:block;margin-bottom:.35rem;color:var(--iswc-text-soft)\">Solo usuarios</label>",
+            "            <iswc-mention trigger=\"@\" placeholder=\"Escribe @ para nombrar…\">",
+            "              <script type=\"application/json\">",
+            "                { \"@\": [\"Ana\", \"Pedro\", \"Sofía\", \"Jorge\", \"Lina\", \"Camilo\"] }",
+            "              </script>",
+            "            </iswc-mention>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -55,7 +85,21 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const m = document.querySelector('iswc-mention');\nm.value;          // string con tokens ya insertos: \"uy @Ana esto es #urgente\"\nm.suggestions;    // { \"@\": [...], \"#\": [...] }\nm.addEventListener('iswc-select', e => {\n  console.log('elegiste:', e.detail.trigger, e.detail.item, e.detail.range);\n});\n\n// Sugerencias vía propiedad (alternativa al script)\nm.suggestions = { '@': persons, '#': tags };\n\n// Atributos:\n// trigger   caracteres que abren el popup (default \"@#\")\n// max-items tope del popup (default 8)"
+          "code": [
+            "const m = document.querySelector('iswc-mention');",
+            "m.value;          // string con tokens ya insertos: \"uy @Ana esto es #urgente\"",
+            "m.suggestions;    // { \"@\": [...], \"#\": [...] }",
+            "m.addEventListener('iswc-select', e => {",
+            "  console.log('elegiste:', e.detail.trigger, e.detail.item, e.detail.range);",
+            "});",
+            "",
+            "// Sugerencias vía propiedad (alternativa al script)",
+            "m.suggestions = { '@': persons, '#': tags };",
+            "",
+            "// Atributos:",
+            "// trigger   caracteres que abren el popup (default \"@#\")",
+            "// max-items tope del popup (default 8)"
+          ]
         }
       ]
     },

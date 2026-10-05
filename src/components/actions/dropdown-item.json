@@ -14,7 +14,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-dropdown placement=\"bottom-start\">\r\n            <iswc-button slot=\"trigger\" color=\"brand\">Acciones</iswc-button>\r\n            <iswc-dropdown-item value=\"edit\"><iswc-icon slot=\"start\" icon=\"mdi:pencil\"></iswc-icon>Editar</iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"dup\"><iswc-icon slot=\"start\" icon=\"mdi:content-copy\"></iswc-icon>Duplicar</iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"del\" color=\"danger\"><iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>Eliminar</iswc-dropdown-item>\r\n            <iswc-dropdown-item value=\"off\" disabled>No disponible</iswc-dropdown-item>\r\n          </iswc-dropdown>",
+          "html": [
+            "<iswc-dropdown placement=\"bottom-start\">",
+            "            <iswc-button slot=\"trigger\" color=\"brand\">Acciones</iswc-button>",
+            "            <iswc-dropdown-item value=\"edit\"><iswc-icon slot=\"start\" icon=\"mdi:pencil\"></iswc-icon>Editar</iswc-dropdown-item>",
+            "            <iswc-dropdown-item value=\"dup\"><iswc-icon slot=\"start\" icon=\"mdi:content-copy\"></iswc-icon>Duplicar</iswc-dropdown-item>",
+            "            <iswc-dropdown-item value=\"del\" color=\"danger\"><iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>Eliminar</iswc-dropdown-item>",
+            "            <iswc-dropdown-item value=\"off\" disabled>No disponible</iswc-dropdown-item>",
+            "          </iswc-dropdown>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -40,7 +48,67 @@
           ],
           "equivNote": "checkbox vs acción; submenu abre popover anidado.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-dropdown-item: tipo\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"type=checkbox?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"toggle + aria-checked\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"slot submenu?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"popover anidado\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"d\",\n          \"label\": \"ítem de acción\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"no\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\",\n          \"label\": \"si\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"d\",\n          \"label\": \"no\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-dropdown-item: tipo\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"type=checkbox?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"toggle + aria-checked\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"slot submenu?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"popover anidado\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"d\",",
+            "          \"label\": \"ítem de acción\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"no\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\",",
+            "          \"label\": \"si\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"d\",",
+            "          \"label\": \"no\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -57,7 +125,17 @@
         "content": "Item de un <code class=\"code\">&lt;iswc-dropdown&gt;</code>. Aporta el estado (activo, deshabilitado), el slot de icono y el valor que viaja en el evento de selección."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-dropdown placement=\"bottom-start\">\n  <iswc-button slot=\"trigger\" color=\"brand\">Acciones</iswc-button>\n  <iswc-dropdown-item value=\"edit\"><iswc-icon slot=\"start\" icon=\"mdi:pencil\"></iswc-icon>Editar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"dup\"><iswc-icon slot=\"start\" icon=\"mdi:content-copy\"></iswc-icon>Duplicar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"del\" color=\"danger\"><iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>Eliminar</iswc-dropdown-item>\n  <iswc-dropdown-item value=\"off\" disabled>No disponible</iswc-dropdown-item>\n</iswc-dropdown>\n```"
+        "content": [
+          "```html",
+          "<iswc-dropdown placement=\"bottom-start\">",
+          "  <iswc-button slot=\"trigger\" color=\"brand\">Acciones</iswc-button>",
+          "  <iswc-dropdown-item value=\"edit\"><iswc-icon slot=\"start\" icon=\"mdi:pencil\"></iswc-icon>Editar</iswc-dropdown-item>",
+          "  <iswc-dropdown-item value=\"dup\"><iswc-icon slot=\"start\" icon=\"mdi:content-copy\"></iswc-icon>Duplicar</iswc-dropdown-item>",
+          "  <iswc-dropdown-item value=\"del\" color=\"danger\"><iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>Eliminar</iswc-dropdown-item>",
+          "  <iswc-dropdown-item value=\"off\" disabled>No disponible</iswc-dropdown-item>",
+          "</iswc-dropdown>",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -14,7 +14,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-tree>\r\n            <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\r\n              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\r\n            </iswc-tree-item>\r\n            <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\r\n          </iswc-tree>"
+          "html": [
+            "<iswc-tree>",
+            "            <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad",
+            "              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>",
+            "              <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>",
+            "            </iswc-tree-item>",
+            "            <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>",
+            "          </iswc-tree>"
+          ]
         }
       ]
     },
@@ -31,7 +39,17 @@
         "content": "Nodo de un <code class=\"code\">&lt;iswc-tree&gt;</code>. Anidando items se construye la jerarquía; <code class=\"code\">expanded</code> controla el pliegue."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-tree>\n  <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>\n    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>\n  </iswc-tree-item>\n  <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>\n</iswc-tree>\n```"
+        "content": [
+          "```html",
+          "<iswc-tree>",
+          "  <iswc-tree-item expanded><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Contabilidad",
+          "    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Balance</iswc-tree-item>",
+          "    <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:file-document\"></iswc-icon>Estado de resultados</iswc-tree-item>",
+          "  </iswc-tree-item>",
+          "  <iswc-tree-item><iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>Inventario</iswc-tree-item>",
+          "</iswc-tree>",
+          "```"
+        ]
       }
     },
     "exclude": [

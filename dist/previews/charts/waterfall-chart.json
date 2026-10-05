@@ -13,7 +13,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-waterfall-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Saldo inicial\", \"Ventas\", \"Costos\", \"Impuestos\", \"Saldo final\"],\r\n                  \"datasets\": [{ \"label\": \"Flujo\", \"data\": [1200, 850, -420, -180, null], \"totals\": [0, 4] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-waterfall-chart>",
+          "html": [
+            "<iswc-waterfall-chart open-on-click>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"data\": {",
+            "                  \"labels\": [\"Saldo inicial\", \"Ventas\", \"Costos\", \"Impuestos\", \"Saldo final\"],",
+            "                  \"datasets\": [{ \"label\": \"Flujo\", \"data\": [1200, 850, -420, -180, null], \"totals\": [0, 4] }]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-waterfall-chart>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -31,7 +42,20 @@
         "content": "Cascada para explicar cómo un saldo inicial llega a un saldo final."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-waterfall-chart open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Saldo inicial\", \"Ventas\", \"Costos\", \"Impuestos\", \"Saldo final\"],\r\n                  \"datasets\": [{ \"label\": \"Flujo\", \"data\": [1200, 850, -420, -180, null], \"totals\": [0, 4] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-waterfall-chart>\n```"
+        "content": [
+          "```html",
+          "<iswc-waterfall-chart open-on-click>",
+          "            <script type=\"application/json\">",
+          "              {",
+          "                \"data\": {",
+          "                  \"labels\": [\"Saldo inicial\", \"Ventas\", \"Costos\", \"Impuestos\", \"Saldo final\"],",
+          "                  \"datasets\": [{ \"label\": \"Flujo\", \"data\": [1200, 850, -420, -180, null], \"totals\": [0, 4] }]",
+          "                }",
+          "              }",
+          "            </script>",
+          "          </iswc-waterfall-chart>",
+          "```"
+        ]
       }
     },
     "exclude": [

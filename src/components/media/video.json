@@ -10,11 +10,23 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y\r\n          scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture\r\n          y pantalla completa. Los controles se ocultan solos mientras reproduce.",
+      "lede": [
+        "Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y",
+        "          scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture",
+        "          y pantalla completa. Los controles se ocultan solos mientras reproduce."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></iswc-video>",
+          "html": [
+            "<iswc-video",
+            "            id=\"v1\"",
+            "            controls",
+            "            playsinline",
+            "            src=\"{assets}playlist/01-big-buck-bunny.mp4\"",
+            "            style=\"max-width:36rem\"",
+            "          ></iswc-video>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -50,7 +62,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-video\r\n            muted\r\n            loop\r\n            playsinline\r\n            controls=\"false\"\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:20rem\"\r\n          ></iswc-video>"
+          "html": [
+            "<iswc-video",
+            "            muted",
+            "            loop",
+            "            playsinline",
+            "            controls=\"false\"",
+            "            src=\"{assets}playlist/01-big-buck-bunny.mp4\"",
+            "            style=\"max-width:20rem\"",
+            "          ></iswc-video>"
+          ]
         }
       ]
     },
@@ -154,7 +175,12 @@
             ],
             [
               "parts",
-              "<code>base</code> <code>video</code> <code>big-play</code> <code>controls</code>\r\n                <code>progress</code> <code>seek</code> <code>play-button</code> <code>volume</code>\r\n                <code>mute-button</code> <code>volume-slider</code> <code>time</code>\r\n                <code>settings-button</code> <code>pip-button</code> <code>fullscreen-button</code>"
+              [
+                "<code>base</code> <code>video</code> <code>big-play</code> <code>controls</code>",
+                "                <code>progress</code> <code>seek</code> <code>play-button</code> <code>volume</code>",
+                "                <code>mute-button</code> <code>volume-slider</code> <code>time</code>",
+                "                <code>settings-button</code> <code>pip-button</code> <code>fullscreen-button</code>"
+              ]
             ]
           ]
         }
@@ -164,7 +190,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y\r\n          scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture\r\n          y pantalla completa. Los controles se ocultan solos mientras reproduce."
+        "content": [
+          "Reproductor con chrome propio al estilo YouTube: barra de progreso con buffer y",
+          "          scrubber, fila de controles con volumen desplegable, velocidad, picture-in-picture",
+          "          y pantalla completa. Los controles se ocultan solos mientras reproduce."
+        ]
       },
       "apiJs": {
         "table": [
@@ -206,12 +236,27 @@
           },
           {
             "metodo": "parts",
-            "desc": "<code>base</code> <code>video</code> <code>big-play</code> <code>controls</code>\r\n                <code>progress</code> <code>seek</code> <code>play-button</code> <code>volume</code>\r\n                <code>mute-button</code> <code>volume-slider</code> <code>time</code>\r\n                <code>settings-button</code> <code>pip-button</code> <code>fullscreen-button</code>"
+            "desc": [
+              "<code>base</code> <code>video</code> <code>big-play</code> <code>controls</code>",
+              "                <code>progress</code> <code>seek</code> <code>play-button</code> <code>volume</code>",
+              "                <code>mute-button</code> <code>volume-slider</code> <code>time</code>",
+              "                <code>settings-button</code> <code>pip-button</code> <code>fullscreen-button</code>"
+            ]
           }
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-video\r\n            id=\"v1\"\r\n            controls\r\n            playsinline\r\n            src=\"{assets}playlist/01-big-buck-bunny.mp4\"\r\n            style=\"max-width:36rem\"\r\n          ></iswc-video>\n```"
+        "content": [
+          "```html",
+          "<iswc-video",
+          "            id=\"v1\"",
+          "            controls",
+          "            playsinline",
+          "            src=\"{assets}playlist/01-big-buck-bunny.mp4\"",
+          "            style=\"max-width:36rem\"",
+          "          ></iswc-video>",
+          "```"
+        ]
       }
     },
     "exclude": [

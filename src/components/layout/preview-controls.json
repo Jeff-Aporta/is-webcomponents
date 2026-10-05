@@ -24,7 +24,11 @@
         "content": "Panel de knobs del playground. La galería le pasa spec y escucha iswc-controls-change."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-preview-controls label=\"Controles\"></iswc-preview-controls>\n```"
+        "content": [
+          "```html",
+          "<iswc-preview-controls label=\"Controles\"></iswc-preview-controls>",
+          "```"
+        ]
       }
     },
     "exclude": [

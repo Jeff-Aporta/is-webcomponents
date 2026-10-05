@@ -11,15 +11,43 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;iswc-tree&gt;</code>:\n          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +\n          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>).",
+      "lede": [
+        "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;iswc-tree&gt;</code>:",
+        "          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +",
+        "          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>)."
+      ],
       "blocks": [
         {
           "kind": "callout",
-          "html": "Toolbar: agregar raíz, expandir/colapsar, deshacer / proteger / rehacer.\n          Hover en una fila muestra mover / agregar hijo. Doble clic abre el drawer."
+          "html": [
+            "Toolbar: agregar raíz, expandir/colapsar, deshacer / proteger / rehacer.",
+            "          Hover en una fila muestra mover / agregar hijo. Doble clic abre el drawer."
+          ]
         },
         {
           "kind": "demo",
-          "html": "<iswc-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\">\n            <script type=\"application/json\">\n              {\n                \"list\": [\n                  { \"iplan\": \"1\", \"titulo\": \"Módulo 1\", \"children\": [\n                    { \"iplan\": \"1.1\", \"titulo\": \"Introducción\" },\n                    { \"iplan\": \"1.2\", \"titulo\": \"Conceptos básicos\" }\n                  ]},\n                  { \"iplan\": \"2\", \"titulo\": \"Módulo 2\", \"children\": [\n                    { \"iplan\": \"2.1\", \"titulo\": \"Lección 1\" },\n                    { \"iplan\": \"2.2\", \"titulo\": \"Lección 2\" }\n                  ]}\n                ],\n                \"customs\": {\n                  \"iplan\": \"flatPath\"\n                }\n              }\n            </script>\n          </iswc-tree-view>\n          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>",
+          "html": [
+            "<iswc-tree-view id=\"tvDemo\" label-field=\"titulo\" style=\"height: 28rem;\">",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"list\": [",
+            "                  { \"iplan\": \"1\", \"titulo\": \"Módulo 1\", \"children\": [",
+            "                    { \"iplan\": \"1.1\", \"titulo\": \"Introducción\" },",
+            "                    { \"iplan\": \"1.2\", \"titulo\": \"Conceptos básicos\" }",
+            "                  ]},",
+            "                  { \"iplan\": \"2\", \"titulo\": \"Módulo 2\", \"children\": [",
+            "                    { \"iplan\": \"2.1\", \"titulo\": \"Lección 1\" },",
+            "                    { \"iplan\": \"2.2\", \"titulo\": \"Lección 2\" }",
+            "                  ]}",
+            "                ],",
+            "                \"customs\": {",
+            "                  \"iplan\": \"flatPath\"",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-tree-view>",
+            "          <p id=\"tvLog\">Última acción: <code class=\"code\">—</code></p>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -34,10 +62,22 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;iswc-tree&gt;</code>:\n          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +\n          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>)."
+        "content": [
+          "Port de <code class=\"code\">TreeRowView</code> (ClientesIS). No es <code class=\"code\">&lt;iswc-tree&gt;</code>:",
+          "          este sí muta, arrastra y guarda historial. El consumidor pasa <code class=\"code\">list</code> +",
+          "          <code class=\"code\">customs</code> (mapeo <code class=\"code\">iplan</code> ↔ <code class=\"code\">flatPath</code>)."
+        ]
       },
       "ejemplos": {
-        "content": "```js\n// Equivalente: pasar `list` y `customs` por JSON al host.\n// El componente lee el <script type=\"application/json\"> como spec\n// y aplica la configuración al upgrade.\ntv.list = [...];\ntv.customs = new PlanCustoms();\n```"
+        "content": [
+          "```js",
+          "// Equivalente: pasar `list` y `customs` por JSON al host.",
+          "// El componente lee el <script type=\"application/json\"> como spec",
+          "// y aplica la configuración al upgrade.",
+          "tv.list = [...];",
+          "tv.customs = new PlanCustoms();",
+          "```"
+        ]
       }
     },
     "exclude": [

@@ -5,7 +5,10 @@
   "title": "&lt;iswc-carousel-item&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-carousel-item de InSoft.",
-  "styles": ".slide { display:grid; place-items:center; height:180px; border-radius:.6rem;\r\n      background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); font-weight:600; }",
+  "styles": [
+    ".slide { display:grid; place-items:center; height:180px; border-radius:.6rem;",
+    "      background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); font-weight:600; }"
+  ],
   "storageKey": "docs-iswc-carousel-item",
   "sections": [
     {
@@ -15,7 +18,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-carousel style=\"max-width:520px\">\r\n            <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>\r\n            <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>\r\n          </iswc-carousel>"
+          "html": [
+            "<iswc-carousel style=\"max-width:520px\">",
+            "            <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>",
+            "            <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>",
+            "          </iswc-carousel>"
+          ]
         }
       ]
     },
@@ -32,7 +41,15 @@
         "content": "Cada diapositiva de un <code class=\"code\">&lt;iswc-carousel&gt;</code>."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-carousel style=\"max-width:520px\">\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>\n  <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>\n</iswc-carousel>\n```"
+        "content": [
+          "```html",
+          "<iswc-carousel style=\"max-width:520px\">",
+          "  <iswc-carousel-item><div class=\"slide\">Diapositiva 1</div></iswc-carousel-item>",
+          "  <iswc-carousel-item><div class=\"slide\">Diapositiva 2</div></iswc-carousel-item>",
+          "  <iswc-carousel-item><div class=\"slide\">Diapositiva 3</div></iswc-carousel-item>",
+          "</iswc-carousel>",
+          "```"
+        ]
       }
     },
     "exclude": [

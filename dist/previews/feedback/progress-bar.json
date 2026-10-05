@@ -4,7 +4,15 @@
   "category": "feedback",
   "title": "Progress Bar",
   "titleHtml": false,
-  "styles": ".pb-demo { max-width: 28rem; display: flex; flex-direction: column; gap: 0.85rem; }\r\n    .pb-meta {\r\n      display: flex; justify-content: space-between; align-items: baseline;\r\n      font-size: 0.9rem; color: var(--iswc-text-soft);\r\n    }\r\n    .pb-meta strong { color: var(--iswc-text); font-variant-numeric: tabular-nums; }\r\n    .pb-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }",
+  "styles": [
+    ".pb-demo { max-width: 28rem; display: flex; flex-direction: column; gap: 0.85rem; }",
+    "    .pb-meta {",
+    "      display: flex; justify-content: space-between; align-items: baseline;",
+    "      font-size: 0.9rem; color: var(--iswc-text-soft);",
+    "    }",
+    "    .pb-meta strong { color: var(--iswc-text); font-variant-numeric: tabular-nums; }",
+    "    .pb-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }"
+  ],
   "storageKey": "docs-iswc-progress-bar",
   "hasBehavior": true,
   "sections": [
@@ -19,7 +27,11 @@
         },
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>\r\n          </div>",
+          "html": [
+            "<div class=\"pb-demo\">",
+            "            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>",
+            "          </div>"
+          ],
           "target": "#pb-play",
           "controls": [
             {
@@ -47,11 +59,36 @@
     {
       "id": "interactive",
       "title": "Contador interactivo",
-      "lede": "Cada clic avanza el progreso; Reset vuelve a 0. El <code class=\"code\">value</code>\r\n          y la etiqueta se actualizan en vivo.",
+      "lede": [
+        "Cada clic avanza el progreso; Reset vuelve a 0. El <code class=\"code\">value</code>",
+        "          y la etiqueta se actualizan en vivo."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <div class=\"pb-meta\">\r\n              <span id=\"pbStatus\">Listo para empezar</span>\r\n              <strong><span id=\"pbPct\">0</span>%</strong>\r\n            </div>\r\n            <iswc-progress-bar id=\"pbLive\" value=\"0\" label=\"Progreso 0%\"></iswc-progress-bar>\r\n            <div class=\"pb-actions\">\r\n              <iswc-button id=\"pbPlus\" color=\"brand\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:plus\"></iswc-icon>\r\n                +10\r\n              </iswc-button>\r\n              <iswc-button id=\"pbMinus\" variant=\"outlined\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:minus\"></iswc-icon>\r\n                −10\r\n              </iswc-button>\r\n              <iswc-button id=\"pbReset\" variant=\"plain\">\r\n                <iswc-icon slot=\"start\" icon=\"mdi:restart\"></iswc-icon>\r\n                Reset\r\n              </iswc-button>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div class=\"pb-demo\">",
+            "            <div class=\"pb-meta\">",
+            "              <span id=\"pbStatus\">Listo para empezar</span>",
+            "              <strong><span id=\"pbPct\">0</span>%</strong>",
+            "            </div>",
+            "            <iswc-progress-bar id=\"pbLive\" value=\"0\" label=\"Progreso 0%\"></iswc-progress-bar>",
+            "            <div class=\"pb-actions\">",
+            "              <iswc-button id=\"pbPlus\" color=\"brand\">",
+            "                <iswc-icon slot=\"start\" icon=\"mdi:plus\"></iswc-icon>",
+            "                +10",
+            "              </iswc-button>",
+            "              <iswc-button id=\"pbMinus\" variant=\"outlined\">",
+            "                <iswc-icon slot=\"start\" icon=\"mdi:minus\"></iswc-icon>",
+            "                −10",
+            "              </iswc-button>",
+            "              <iswc-button id=\"pbReset\" variant=\"plain\">",
+            "                <iswc-icon slot=\"start\" icon=\"mdi:restart\"></iswc-icon>",
+            "                Reset",
+            "              </iswc-button>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -61,7 +98,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"pb-demo\">\r\n            <iswc-progress-bar value=\"30\" label=\"30%\"></iswc-progress-bar>\r\n            <iswc-progress-bar value=\"100\" label=\"Completado\"\r\n              style=\"--indicator-color: var(--iswc-color-success)\"></iswc-progress-bar>\r\n            <iswc-progress-bar indeterminate label=\"Procesando\"></iswc-progress-bar>\r\n          </div>"
+          "html": [
+            "<div class=\"pb-demo\">",
+            "            <iswc-progress-bar value=\"30\" label=\"30%\"></iswc-progress-bar>",
+            "            <iswc-progress-bar value=\"100\" label=\"Completado\"",
+            "              style=\"--indicator-color: var(--iswc-color-success)\"></iswc-progress-bar>",
+            "            <iswc-progress-bar indeterminate label=\"Procesando\"></iswc-progress-bar>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -123,7 +167,13 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<div class=\"pb-demo\">\r\n            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>\r\n          </div>\n```"
+        "content": [
+          "```html",
+          "<div class=\"pb-demo\">",
+          "            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>",
+          "          </div>",
+          "```"
+        ]
       }
     },
     "exclude": [

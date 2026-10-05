@@ -38,7 +38,11 @@
         "content": "Campo de hora con máscara y validación, asociable a formularios."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></iswc-time-field>\n```"
+        "content": [
+          "```html",
+          "<iswc-time-field label=\"Hora de ingreso\" value=\"08:30\" style=\"max-width:280px\"></iswc-time-field>",
+          "```"
+        ]
       }
     },
     "exclude": [

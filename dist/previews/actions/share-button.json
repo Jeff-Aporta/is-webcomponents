@@ -29,7 +29,11 @@
         "content": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>\n```"
+        "content": [
+          "```html",
+          "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>",
+          "```"
+        ]
       }
     },
     "exclude": [

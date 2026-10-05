@@ -5,17 +5,34 @@
   "title": "&lt;iswc-stat&gt;",
   "titleHtml": false,
   "description": "Documentación y demos de iswc-stat (KPI Card) de InSoft.",
-  "styles": ".stats-grid {\r\n      display: grid;\r\n      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\r\n      gap: 0.75rem;\r\n    }",
+  "styles": [
+    ".stats-grid {",
+    "      display: grid;",
+    "      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));",
+    "      gap: 0.75rem;",
+    "    }"
+  ],
   "storageKey": "docs-iswc-stat",
   "sections": [
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Tarjeta KPI para dashboards: label, número principal, helper text,\r\n          trend (subida/bajada) e icono. Detecta automáticamente la dirección\r\n          del trend según el signo del valor.",
+      "lede": [
+        "Tarjeta KPI para dashboards: label, número principal, helper text,",
+        "          trend (subida/bajada) e icono. Detecta automáticamente la dirección",
+        "          del trend según el signo del valor."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stats-grid\">\r\n            <iswc-stat label=\"Ingresos\" value=\"€ 1.249,00\" helper=\"vs mes anterior\" trend=\"+12.5%\" icon=\"mdi:cash-multiple\"></iswc-stat>\r\n            <iswc-stat label=\"Usuarios activos\" value=\"3.421\" helper=\"últimas 24h\" trend=\"+8.1%\" icon=\"mdi:account-group\" color=\"brand\"></iswc-stat>\r\n            <iswc-stat label=\"Tasa de conversión\" value=\"2.4%\" helper=\"vs objetivo\" trend=\"-0.3%\" icon=\"mdi:target\" color=\"danger\"></iswc-stat>\r\n            <iswc-stat label=\"Tickets abiertos\" value=\"47\" helper=\"12 críticos\" trend=\"flat\" icon=\"mdi:ticket-outline\" color=\"warning\"></iswc-stat>\r\n          </div>"
+          "html": [
+            "<div class=\"stats-grid\">",
+            "            <iswc-stat label=\"Ingresos\" value=\"€ 1.249,00\" helper=\"vs mes anterior\" trend=\"+12.5%\" icon=\"mdi:cash-multiple\"></iswc-stat>",
+            "            <iswc-stat label=\"Usuarios activos\" value=\"3.421\" helper=\"últimas 24h\" trend=\"+8.1%\" icon=\"mdi:account-group\" color=\"brand\"></iswc-stat>",
+            "            <iswc-stat label=\"Tasa de conversión\" value=\"2.4%\" helper=\"vs objetivo\" trend=\"-0.3%\" icon=\"mdi:target\" color=\"danger\"></iswc-stat>",
+            "            <iswc-stat label=\"Tickets abiertos\" value=\"47\" helper=\"12 críticos\" trend=\"flat\" icon=\"mdi:ticket-outline\" color=\"warning\"></iswc-stat>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -26,7 +43,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stats-grid\">\r\n            <iswc-stat style=\"font-size:0.85em\" label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></iswc-stat>\r\n            <iswc-stat label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></iswc-stat>\r\n            <iswc-stat style=\"font-size:1.25em\" label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></iswc-stat>\r\n          </div>"
+          "html": [
+            "<div class=\"stats-grid\">",
+            "            <iswc-stat style=\"font-size:0.85em\" label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></iswc-stat>",
+            "            <iswc-stat label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></iswc-stat>",
+            "            <iswc-stat style=\"font-size:1.25em\" label=\"Visitas\" value=\"8.432\" trend=\"+3.2%\" icon=\"mdi:eye\"></iswc-stat>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -37,7 +60,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stats-grid\">\r\n            <iswc-stat color=\"brand\" label=\"Brand\" value=\"42\" icon=\"mdi:star\"></iswc-stat>\r\n            <iswc-stat color=\"neutral\" label=\"Neutral\" value=\"42\" icon=\"mdi:cog\"></iswc-stat>\r\n            <iswc-stat color=\"success\" label=\"Success\" value=\"98%\" trend=\"+1.2%\" icon=\"mdi:check\"></iswc-stat>\r\n            <iswc-stat color=\"warning\" label=\"Warning\" value=\"12\" trend=\"+4\" icon=\"mdi:alert\"></iswc-stat>\r\n            <iswc-stat color=\"danger\" label=\"Danger\" value=\"3\" trend=\"-1\" icon=\"mdi:close\"></iswc-stat>\r\n          </div>"
+          "html": [
+            "<div class=\"stats-grid\">",
+            "            <iswc-stat color=\"brand\" label=\"Brand\" value=\"42\" icon=\"mdi:star\"></iswc-stat>",
+            "            <iswc-stat color=\"neutral\" label=\"Neutral\" value=\"42\" icon=\"mdi:cog\"></iswc-stat>",
+            "            <iswc-stat color=\"success\" label=\"Success\" value=\"98%\" trend=\"+1.2%\" icon=\"mdi:check\"></iswc-stat>",
+            "            <iswc-stat color=\"warning\" label=\"Warning\" value=\"12\" trend=\"+4\" icon=\"mdi:alert\"></iswc-stat>",
+            "            <iswc-stat color=\"danger\" label=\"Danger\" value=\"3\" trend=\"-1\" icon=\"mdi:close\"></iswc-stat>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -48,7 +79,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stats-grid\">\r\n            <iswc-stat label=\"MRR\" value=\"€ 48.230\" helper=\"Monthly recurring revenue\" trend=\"+12.5%\" icon=\"mdi:trending-up\" color=\"success\"></iswc-stat>\r\n            <iswc-stat label=\"Churn\" value=\"1.8%\" helper=\"Cancelaciones del mes\" trend=\"-0.4%\" icon=\"mdi:account-remove\" color=\"danger\"></iswc-stat>\r\n            <iswc-stat label=\"LTV\" value=\"€ 1.249\" helper=\"Promedio 12 meses\" trend=\"+5.2%\" icon=\"mdi:cash-multiple\" color=\"brand\"></iswc-stat>\r\n            <iswc-stat label=\"CAC\" value=\"€ 89\" helper=\"Coste de adquisición\" trend=\"flat\" icon=\"mdi:cart-outline\"></iswc-stat>\r\n          </div>"
+          "html": [
+            "<div class=\"stats-grid\">",
+            "            <iswc-stat label=\"MRR\" value=\"€ 48.230\" helper=\"Monthly recurring revenue\" trend=\"+12.5%\" icon=\"mdi:trending-up\" color=\"success\"></iswc-stat>",
+            "            <iswc-stat label=\"Churn\" value=\"1.8%\" helper=\"Cancelaciones del mes\" trend=\"-0.4%\" icon=\"mdi:account-remove\" color=\"danger\"></iswc-stat>",
+            "            <iswc-stat label=\"LTV\" value=\"€ 1.249\" helper=\"Promedio 12 meses\" trend=\"+5.2%\" icon=\"mdi:cash-multiple\" color=\"brand\"></iswc-stat>",
+            "            <iswc-stat label=\"CAC\" value=\"€ 89\" helper=\"Coste de adquisición\" trend=\"flat\" icon=\"mdi:cart-outline\"></iswc-stat>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -59,7 +97,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-stat\">\n  <iswc-stat value=\"1,234\">\n    <span slot=\"label\">Usuarios activos</span>\n    <iswc-icon slot=\"icon\" icon=\"mdi:account-multiple\"></iswc-icon>\n    <span slot=\"trend\">+12%</span>\n    <span slot=\"helper\">vs mes pasado</span>\n  </iswc-stat>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-stat\">",
+            "  <iswc-stat value=\"1,234\">",
+            "    <span slot=\"label\">Usuarios activos</span>",
+            "    <iswc-icon slot=\"icon\" icon=\"mdi:account-multiple\"></iswc-icon>",
+            "    <span slot=\"trend\">+12%</span>",
+            "    <span slot=\"helper\">vs mes pasado</span>",
+            "  </iswc-stat>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -75,52 +122,36 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
               "<code>label</code>",
-              "string",
-              "—",
               "Título del KPI."
             ],
             [
               "<code>value</code>",
-              "string",
-              "—",
               "Valor principal."
             ],
             [
               "<code>helper</code>",
-              "string",
-              "—",
               "Texto aclaratorio."
             ],
             [
               "<code>trend</code>",
-              "string",
-              "—",
               "Valor de cambio (e.g. \"+12.5%\")."
             ],
             [
-              "<code>trend-direction</code>",
-              "up | down | flat",
-              "auto",
-              "Dirección manual."
+              "<code>trend-direction</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Dirección manual. (valor por defecto)"
             ],
             [
               "<code>icon</code>",
-              "string",
-              "—",
               "Iconify id."
             ],
             [
-              "<code>variant</code>",
-              "brand | neutral | success | warning | danger",
-              "neutral",
-              "Color."
+              "<code>variant</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Color. (valor por defecto)"
             ]
           ]
         }
@@ -130,7 +161,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Tarjeta KPI para dashboards: label, número principal, helper text,\r\n          trend (subida/bajada) e icono. Detecta automáticamente la dirección\r\n          del trend según el signo del valor."
+        "content": [
+          "Tarjeta KPI para dashboards: label, número principal, helper text,",
+          "          trend (subida/bajada) e icono. Detecta automáticamente la dirección",
+          "          del trend según el signo del valor."
+        ]
       },
       "atributos": {
         "table": [
@@ -179,7 +214,17 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-stat\n  label=\"Ingresos\"\n  value=\"€ 1.249,00\"\n  helper=\"vs mes anterior\"\n  trend=\"+12.5%\"\n  icon=\"mdi:cash-multiple\"\n></iswc-stat>\n```"
+        "content": [
+          "```html",
+          "<iswc-stat",
+          "  label=\"Ingresos\"",
+          "  value=\"€ 1.249,00\"",
+          "  helper=\"vs mes anterior\"",
+          "  trend=\"+12.5%\"",
+          "  icon=\"mdi:cash-multiple\"",
+          "></iswc-stat>",
+          "```"
+        ]
       }
     },
     "exclude": [

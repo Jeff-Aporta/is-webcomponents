@@ -13,7 +13,18 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-bar-chart open-on-click stacked>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],\r\n                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-bar-chart>",
+          "html": [
+            "<iswc-bar-chart open-on-click stacked>",
+            "            <script type=\"application/json\">",
+            "              {",
+            "                \"data\": {",
+            "                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],",
+            "                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]",
+            "                }",
+            "              }",
+            "            </script>",
+            "          </iswc-bar-chart>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -36,7 +47,20 @@
         "content": "Barras para comparar cantidades entre categorías."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-bar-chart open-on-click stacked>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],\r\n                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-bar-chart>\n```"
+        "content": [
+          "```html",
+          "<iswc-bar-chart open-on-click stacked>",
+          "            <script type=\"application/json\">",
+          "              {",
+          "                \"data\": {",
+          "                  \"labels\": [\"Excelente\", \"Bueno\", \"Regular\", \"Malo\"],",
+          "                  \"datasets\": [{ \"label\": \"Respuestas\", \"data\": [45, 30, 18, 7] }]",
+          "                }",
+          "              }",
+          "            </script>",
+          "          </iswc-bar-chart>",
+          "```"
+        ]
       }
     },
     "exclude": [

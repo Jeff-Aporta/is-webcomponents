@@ -15,7 +15,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"tip-target\">Hover Me</iswc-button>\r\n          <iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>",
+          "html": [
+            "<iswc-button id=\"tip-target\">Hover Me</iswc-button>",
+            "          <iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -41,7 +44,57 @@
           ],
           "equivNote": "trigger decide cómo se abre; tip con HTML suele ir mejor con click.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-tooltip: trigger\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"trigger=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"hover → show/hide\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"click → toggle\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"manual → API\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"hover\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"click\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"c\",\n          \"label\": \"manual\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-tooltip: trigger\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"trigger=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"hover → show/hide\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"click → toggle\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"manual → API\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"hover\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"click\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"c\",",
+            "          \"label\": \"manual\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -51,7 +104,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"t-top\">top</iswc-button>\r\n          <iswc-tooltip for=\"t-top\" placement=\"top\">top</iswc-tooltip>\r\n          <iswc-button id=\"t-right\">right</iswc-button>\r\n          <iswc-tooltip for=\"t-right\" placement=\"right\">right</iswc-tooltip>\r\n          <iswc-button id=\"t-bottom\">bottom</iswc-button>\r\n          <iswc-tooltip for=\"t-bottom\" placement=\"bottom\">bottom</iswc-tooltip>\r\n          <iswc-button id=\"t-left\">left</iswc-button>\r\n          <iswc-tooltip for=\"t-left\" placement=\"left\">left</iswc-tooltip>"
+          "html": [
+            "<iswc-button id=\"t-top\">top</iswc-button>",
+            "          <iswc-tooltip for=\"t-top\" placement=\"top\">top</iswc-tooltip>",
+            "          <iswc-button id=\"t-right\">right</iswc-button>",
+            "          <iswc-tooltip for=\"t-right\" placement=\"right\">right</iswc-tooltip>",
+            "          <iswc-button id=\"t-bottom\">bottom</iswc-button>",
+            "          <iswc-tooltip for=\"t-bottom\" placement=\"bottom\">bottom</iswc-tooltip>",
+            "          <iswc-button id=\"t-left\">left</iswc-button>",
+            "          <iswc-tooltip for=\"t-left\" placement=\"left\">left</iswc-tooltip>"
+          ]
         }
       ]
     },
@@ -62,18 +124,48 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"t-click\">Click to Toggle</iswc-button>\r\n          <iswc-tooltip for=\"t-click\" trigger=\"click\">Click nuevamente o fuera para cerrar</iswc-tooltip>\r\n          <iswc-button id=\"t-manual-btn\">Toggle Manually</iswc-button>\r\n          <iswc-tooltip id=\"t-manual\" for=\"t-manual-btn\" trigger=\"manual\">Manual tooltip</iswc-tooltip>"
+          "html": [
+            "<iswc-button id=\"t-click\">Click to Toggle</iswc-button>",
+            "          <iswc-tooltip for=\"t-click\" trigger=\"click\">Click nuevamente o fuera para cerrar</iswc-tooltip>",
+            "          <iswc-button id=\"t-manual-btn\">Toggle Manually</iswc-button>",
+            "          <iswc-tooltip id=\"t-manual\" for=\"t-manual-btn\" trigger=\"manual\">Manual tooltip</iswc-tooltip>"
+          ]
         }
       ]
     },
     {
       "id": "html",
       "title": "Contenido HTML largo",
-      "lede": "El slot acepta markup. Útil para tips densos; preferir\r\n          <code class=\"code\">trigger=\"click\"</code> si hay enlaces o texto seleccionable.",
+      "lede": [
+        "El slot acepta markup. Útil para tips densos; preferir",
+        "          <code class=\"code\">trigger=\"click\"</code> si hay enlaces o texto seleccionable."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"t-html\" color=\"brand\">Auditoría · tip largo</iswc-button>\r\n          <iswc-tooltip\r\n            for=\"t-html\"\r\n            trigger=\"click\"\r\n            placement=\"bottom-start\"\r\n            style=\"--max-width: 22rem\"\r\n          >\r\n            <p><strong>Resumen de cumplimiento</strong></p>\r\n            <p>\r\n              Este tip muestra contenido enriquecido para revisar wrapping,\r\n              contraste y dismiss al clic fuera.\r\n            </p>\r\n            <ul>\r\n              <li>Tokens <code>--iswc-*</code> y tipografía del tema</li>\r\n              <li>Máximo ancho vía <code>--max-width</code></li>\r\n              <li>Enlace de ejemplo:\r\n                <a href=\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role\" target=\"_blank\" rel=\"noopener\">ARIA tooltip</a>\r\n              </li>\r\n            </ul>\r\n            <p>Última revisión: sprint actual · owner: Design System</p>\r\n          </iswc-tooltip>"
+          "html": [
+            "<iswc-button id=\"t-html\" color=\"brand\">Auditoría · tip largo</iswc-button>",
+            "          <iswc-tooltip",
+            "            for=\"t-html\"",
+            "            trigger=\"click\"",
+            "            placement=\"bottom-start\"",
+            "            style=\"--max-width: 22rem\"",
+            "          >",
+            "            <p><strong>Resumen de cumplimiento</strong></p>",
+            "            <p>",
+            "              Este tip muestra contenido enriquecido para revisar wrapping,",
+            "              contraste y dismiss al clic fuera.",
+            "            </p>",
+            "            <ul>",
+            "              <li>Tokens <code>--iswc-*</code> y tipografía del tema</li>",
+            "              <li>Máximo ancho vía <code>--max-width</code></li>",
+            "              <li>Enlace de ejemplo:",
+            "                <a href=\"https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tooltip_role\" target=\"_blank\" rel=\"noopener\">ARIA tooltip</a>",
+            "              </li>",
+            "            </ul>",
+            "            <p>Última revisión: sprint actual · owner: Design System</p>",
+            "          </iswc-tooltip>"
+          ]
         }
       ]
     },
@@ -84,7 +176,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-tooltip\">\n  <iswc-tooltip label=\"Informacion extra\">\n    <iswc-button>Pasa el mouse</iswc-button>\n  </iswc-tooltip>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-tooltip\">",
+            "  <iswc-tooltip label=\"Informacion extra\">",
+            "    <iswc-button>Pasa el mouse</iswc-button>",
+            "  </iswc-tooltip>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -170,7 +268,12 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-button id=\"tip-target\">Hover Me</iswc-button>\n<iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>\n```"
+        "content": [
+          "```html",
+          "<iswc-button id=\"tip-target\">Hover Me</iswc-button>",
+          "<iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>",
+          "```"
+        ]
       }
     },
     "exclude": [

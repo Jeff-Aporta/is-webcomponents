@@ -40,7 +40,20 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div>\r\n            <span class=\"demo-label\">sheen</span>\r\n            <iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">pulse</span>\r\n            <iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>\r\n          <div>\r\n            <span class=\"demo-label\">none</span>\r\n            <iswc-skeleton effect=\"none\" style=\"height:1rem\"></iswc-skeleton>\r\n          </div>"
+          "html": [
+            "<div>",
+            "            <span class=\"demo-label\">sheen</span>",
+            "            <iswc-skeleton effect=\"sheen\" style=\"height:1rem\"></iswc-skeleton>",
+            "          </div>",
+            "          <div>",
+            "            <span class=\"demo-label\">pulse</span>",
+            "            <iswc-skeleton effect=\"pulse\" style=\"height:1rem\"></iswc-skeleton>",
+            "          </div>",
+            "          <div>",
+            "            <span class=\"demo-label\">none</span>",
+            "            <iswc-skeleton effect=\"none\" style=\"height:1rem\"></iswc-skeleton>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -51,21 +64,17 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo / var",
-            "Default"
+            "Atributo / var"
           ],
           "rows": [
             [
-              "<code>effect</code>",
-              "sheen (none · pulse)"
+              "<code>effect</code>"
             ],
             [
-              "<code>--color</code>",
-              "control-bg"
+              "<code>--color</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>--sheen-color</code>",
-              "highlight ghost (texto ~11% alpha)"
+              "<code>--sheen-color</code>"
             ]
           ]
         }
@@ -94,7 +103,11 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-skeleton id=\"skPlay\" style=\"height:1rem;width:60%\"></iswc-skeleton>\n```"
+        "content": [
+          "```html",
+          "<iswc-skeleton id=\"skPlay\" style=\"height:1rem;width:60%\"></iswc-skeleton>",
+          "```"
+        ]
       }
     },
     "exclude": [

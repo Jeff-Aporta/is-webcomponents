@@ -18,7 +18,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-pdf-viewer\r\n            src=\"{assets}documento-ejemplo.pdf\"\r\n            download\r\n            print\r\n            height=\"70vh\">\r\n            <span slot=\"title\">Documento de ejemplo</span>\r\n            <a slot=\"toolbar\" href=\"{assets}documento-ejemplo.pdf\" target=\"_blank\" rel=\"noopener\" style=\"font-size:.8rem; color:var(--iswc-text-soft);\">abrir en pestaña ↗</a>\r\n          </iswc-pdf-viewer>",
+          "html": [
+            "<iswc-pdf-viewer",
+            "            src=\"{assets}documento-ejemplo.pdf\"",
+            "            download",
+            "            print",
+            "            height=\"70vh\">",
+            "            <span slot=\"title\">Documento de ejemplo</span>",
+            "            <a slot=\"toolbar\" href=\"{assets}documento-ejemplo.pdf\" target=\"_blank\" rel=\"noopener\" style=\"font-size:.8rem; color:var(--iswc-text-soft);\">abrir en pestaña ↗</a>",
+            "          </iswc-pdf-viewer>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -43,7 +52,60 @@
           ],
           "equivNote": "engine elige motor; flags de toolbar son independientes.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-pdf-viewer: engine\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"engine=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"native → iframe\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"pdfjs → page/zoom\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"c\",\n          \"label\": \"download / print\",\n          \"shape\": \"round\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"native\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"pdfjs\"\n        },\n        {\n          \"from\": \"a\",\n          \"to\": \"c\"\n        },\n        {\n          \"from\": \"b\",\n          \"to\": \"c\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-pdf-viewer: engine\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"engine=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"native → iframe\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"pdfjs → page/zoom\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"c\",",
+            "          \"label\": \"download / print\",",
+            "          \"shape\": \"round\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"native\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"pdfjs\"",
+            "        },",
+            "        {",
+            "          \"from\": \"a\",",
+            "          \"to\": \"c\"",
+            "        },",
+            "        {",
+            "          \"from\": \"b\",",
+            "          \"to\": \"c\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -53,7 +115,27 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const v = document.querySelector('iswc-pdf-viewer');\nv.src = '/files/manual.pdf';\nv.currentPage;  // número de página actual (iframe + #page=N)\n\n// Eventos\nv.addEventListener('iswc-load',  () => /* listo */);\nv.addEventListener('iswc-error', () => /* error de carga */);\n\n// Slots\n//   title       texto de la izquierda\n//   toolbar     contenido extra a la derecha\n\n// Atributos\n// src           URL del PDF (requerido)\n// engine        native (default) | pdfjs\n// height        alto del iframe\n// download      boolean — botón Descargar\n// print         boolean — botón Imprimir\n// page, zoom    sólo con engine=pdfjs (cuando integres pdfjs en tu build)"
+          "code": [
+            "const v = document.querySelector('iswc-pdf-viewer');",
+            "v.src = '/files/manual.pdf';",
+            "v.currentPage;  // número de página actual (iframe + #page=N)",
+            "",
+            "// Eventos",
+            "v.addEventListener('iswc-load',  () => /* listo */);",
+            "v.addEventListener('iswc-error', () => /* error de carga */);",
+            "",
+            "// Slots",
+            "//   title       texto de la izquierda",
+            "//   toolbar     contenido extra a la derecha",
+            "",
+            "// Atributos",
+            "// src           URL del PDF (requerido)",
+            "// engine        native (default) | pdfjs",
+            "// height        alto del iframe",
+            "// download      boolean — botón Descargar",
+            "// print         boolean — botón Imprimir",
+            "// page, zoom    sólo con engine=pdfjs (cuando integres pdfjs en tu build)"
+          ]
         }
       ]
     }

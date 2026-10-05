@@ -17,7 +17,29 @@
         },
         {
           "kind": "demo",
-          "html": "<iswc-journey-map open-on-click>\n  <script type=\"application/json\">\n    {\n      \"journey\": {\n        \"title\": \"Recorrido de una nota de voz\",\n        \"phases\": [\n          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },\n          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },\n          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },\n          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },\n          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },\n          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },\n          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }\n        ]\n      }\n    }\n  </script>\n</iswc-journey-map>",
+          "html": [
+            "<iswc-journey-map open-on-click>",
+            "  <script type=\"application/json\">",
+            "    {",
+            "      \"journey\": {",
+            "        \"title\": \"Recorrido de una nota de voz\",",
+            "        \"phases\": [",
+            "          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },",
+            "          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },",
+            "          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }",
+            "        ],",
+            "        \"steps\": [",
+            "          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },",
+            "          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },",
+            "          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },",
+            "          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },",
+            "          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }",
+            "        ]",
+            "      }",
+            "    }",
+            "  </script>",
+            "</iswc-journey-map>"
+          ],
           "controls": [
             {
               "control": "boolean",
@@ -46,7 +68,31 @@
         "content": "Mapa de recorrido (user journey): fases, pasos y la curva de satisfacción que los atraviesa."
       },
       "ejemplos": {
-        "content": "```html\n<iswc-journey-map open-on-click>\n  <script type=\"application/json\">\n    {\n      \"journey\": {\n        \"title\": \"Recorrido de una nota de voz\",\n        \"phases\": [\n          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },\n          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },\n          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }\n        ],\n        \"steps\": [\n          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },\n          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },\n          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },\n          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },\n          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }\n        ]\n      }\n    }\n  </script>\n</iswc-journey-map>\n```"
+        "content": [
+          "```html",
+          "<iswc-journey-map open-on-click>",
+          "  <script type=\"application/json\">",
+          "    {",
+          "      \"journey\": {",
+          "        \"title\": \"Recorrido de una nota de voz\",",
+          "        \"phases\": [",
+          "          { \"id\": \"entrada\", \"name\": \"Entrada\", \"hue\": 210 },",
+          "          { \"id\": \"proceso\", \"name\": \"Proceso\", \"hue\": 160 },",
+          "          { \"id\": \"salida\", \"name\": \"Salida\", \"hue\": 38 }",
+          "        ],",
+          "        \"steps\": [",
+          "          { \"id\": \"graba\", \"phase\": \"entrada\", \"label\": \"Graba la nota\", \"score\": 5, \"actor\": \"Usuario\" },",
+          "          { \"id\": \"sube\", \"phase\": \"entrada\", \"label\": \"Sube el audio\", \"score\": 4, \"actor\": \"App\" },",
+          "          { \"id\": \"transcribe\", \"phase\": \"proceso\", \"label\": \"Transcribe\", \"score\": 3, \"actor\": \"Servicio\" },",
+          "          { \"id\": \"clasifica\", \"phase\": \"proceso\", \"label\": \"Clasifica\", \"score\": 2, \"actor\": \"Servicio\" },",
+          "          { \"id\": \"responde\", \"phase\": \"salida\", \"label\": \"Responde\", \"score\": 4, \"actor\": \"Asistente\" }",
+          "        ]",
+          "      }",
+          "    }",
+          "  </script>",
+          "</iswc-journey-map>",
+          "```"
+        ]
       }
     },
     "exclude": [

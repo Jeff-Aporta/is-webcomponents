@@ -14,7 +14,10 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></iswc-color-picker>\r\n          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>",
+          "html": [
+            "<iswc-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></iswc-color-picker>",
+            "          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -59,7 +62,15 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-color-picker\r\n            label=\"Paleta corta\"\r\n            swatches=\"#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529\"\r\n            value=\"#2f9e44\"\r\n            style=\"min-width:13rem\"\r\n          ></iswc-color-picker>\r\n          <iswc-color-picker label=\"Deshabilitado\" value=\"#c2255c\" disabled style=\"min-width:13rem\"></iswc-color-picker>"
+          "html": [
+            "<iswc-color-picker",
+            "            label=\"Paleta corta\"",
+            "            swatches=\"#e03131,#f59f00,#2f9e44,#1971c2,#6741d9,#212529\"",
+            "            value=\"#2f9e44\"",
+            "            style=\"min-width:13rem\"",
+            "          ></iswc-color-picker>",
+            "          <iswc-color-picker label=\"Deshabilitado\" value=\"#c2255c\" disabled style=\"min-width:13rem\"></iswc-color-picker>"
+          ]
         }
       ]
     },
@@ -70,7 +81,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<form id=\"demo-form\" style=\"display:flex;flex-direction:column;gap:0.75rem;max-width:18rem\">\r\n            <iswc-color-picker label=\"Fondo\" name=\"bg\" value=\"#212529\"></iswc-color-picker>\r\n            <iswc-color-picker label=\"Texto\" name=\"fg\" value=\"#f8f9fa\"></iswc-color-picker>\r\n            <div style=\"display:flex;gap:0.5rem\">\r\n              <button type=\"submit\">Enviar</button>\r\n              <button type=\"reset\">Reset</button>\r\n            </div>\r\n          </form>"
+          "html": [
+            "<form id=\"demo-form\" style=\"display:flex;flex-direction:column;gap:0.75rem;max-width:18rem\">",
+            "            <iswc-color-picker label=\"Fondo\" name=\"bg\" value=\"#212529\"></iswc-color-picker>",
+            "            <iswc-color-picker label=\"Texto\" name=\"fg\" value=\"#f8f9fa\"></iswc-color-picker>",
+            "            <div style=\"display:flex;gap:0.5rem\">",
+            "              <button type=\"submit\">Enviar</button>",
+            "              <button type=\"reset\">Reset</button>",
+            "            </div>",
+            "          </form>"
+          ]
         }
       ]
     },
@@ -164,7 +184,12 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></iswc-color-picker>\r\n          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>\n```"
+        "content": [
+          "```html",
+          "<iswc-color-picker id=\"cp\" label=\"Color de marca\" hint=\"Formato #rrggbb\" name=\"brand\" value=\"#1971c2\" style=\"max-width:14rem\"></iswc-color-picker>",
+          "          <span id=\"chip\" style=\"width:3rem;height:3rem;border-radius:0.5rem;background:#1971c2;box-shadow:inset 0 0 0 1px rgb(0 0 0 / 20%)\"></span>",
+          "```"
+        ]
       }
     },
     "exclude": [

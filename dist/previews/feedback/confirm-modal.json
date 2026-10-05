@@ -10,11 +10,25 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;iswc-popconfirm&gt;</code>.",
+      "lede": [
+        "Confirmación en modal centrado con backdrop. Para decisiones que",
+        "          merecen foco total. Si prefieres confirmar en línea sin tapar la",
+        "          pantalla, usa <code class=\"code\">&lt;iswc-popconfirm&gt;</code>."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"btnDelete\" color=\"danger\">\r\n            <iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>\r\n            Eliminar cuenta\r\n          </iswc-button>\r\n          <iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"Se borrarán todos tus datos. Esta acción no se puede deshacer.\">\r\n            <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\r\n            <iswc-button slot=\"cancel\">Cancelar</iswc-button>\r\n          </iswc-confirm-modal>\r\n          <p id=\"cmLog\">Última acción: <code class=\"code\">—</code></p>",
+          "html": [
+            "<iswc-button id=\"btnDelete\" color=\"danger\">",
+            "            <iswc-icon slot=\"start\" icon=\"mdi:trash-can\"></iswc-icon>",
+            "            Eliminar cuenta",
+            "          </iswc-button>",
+            "          <iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"Se borrarán todos tus datos. Esta acción no se puede deshacer.\">",
+            "            <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>",
+            "            <iswc-button slot=\"cancel\">Cancelar</iswc-button>",
+            "          </iswc-confirm-modal>",
+            "          <p id=\"cmLog\">Última acción: <code class=\"code\">—</code></p>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -36,7 +50,19 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-button id=\"cmMega\" color=\"brand\">Publicar cambios</iswc-button>\r\n          <iswc-confirm-modal for=\"cmMega\" heading=\"Publicar a producción\">\r\n            <div slot=\"message\">\r\n              <strong>Vas a publicar 12 cambios.</strong>\r\n              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">\r\n                Los usuarios verán la nueva versión de inmediato.\r\n              </p>\r\n            </div>\r\n            <iswc-button slot=\"cancel\">Revisar de nuevo</iswc-button>\r\n            <iswc-button slot=\"confirm\" color=\"brand\">Publicar</iswc-button>\r\n          </iswc-confirm-modal>"
+          "html": [
+            "<iswc-button id=\"cmMega\" color=\"brand\">Publicar cambios</iswc-button>",
+            "          <iswc-confirm-modal for=\"cmMega\" heading=\"Publicar a producción\">",
+            "            <div slot=\"message\">",
+            "              <strong>Vas a publicar 12 cambios.</strong>",
+            "              <p style=\"margin:0.25rem 0;font-size:0.85em;color:color-mix(in srgb,currentColor 70%,transparent)\">",
+            "                Los usuarios verán la nueva versión de inmediato.",
+            "              </p>",
+            "            </div>",
+            "            <iswc-button slot=\"cancel\">Revisar de nuevo</iswc-button>",
+            "            <iswc-button slot=\"confirm\" color=\"brand\">Publicar</iswc-button>",
+            "          </iswc-confirm-modal>"
+          ]
         }
       ]
     },
@@ -47,7 +73,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-confirm-modal\">\n  <iswc-confirm-modal open label=\"Eliminar registro\">\n    <p>Esta accion no se puede deshacer.</p>\n  </iswc-confirm-modal>\n  <strong slot=\"message\">Vas a eliminar el registro seleccionado.</strong>\n  <iswc-button slot=\"cancel\" variant=\"text\" color=\"neutral\">Cancelar</iswc-button>\n  <iswc-button slot=\"confirm\" color=\"danger\">Eliminar</iswc-button>\n</iswc-slots-pg>"
+          "html": [
+            "<iswc-slots-pg tag=\"iswc-confirm-modal\">",
+            "  <iswc-confirm-modal open label=\"Eliminar registro\">",
+            "    <p>Esta accion no se puede deshacer.</p>",
+            "  </iswc-confirm-modal>",
+            "  <strong slot=\"message\">Vas a eliminar el registro seleccionado.</strong>",
+            "  <iswc-button slot=\"cancel\" variant=\"text\" color=\"neutral\">Cancelar</iswc-button>",
+            "  <iswc-button slot=\"confirm\" color=\"danger\">Eliminar</iswc-button>",
+            "</iswc-slots-pg>"
+          ]
         }
       ]
     },
@@ -63,34 +98,24 @@
           "kind": "table",
           "columns": [
             "Atributo",
-            "Tipo",
-            "Default",
             "Descripción"
           ],
           "rows": [
             [
               "<code>for</code>",
-              "string",
-              "—",
               "id del trigger que abre el modal."
             ],
             [
               "<code>heading</code>",
-              "string",
-              "—",
               "Título del modal."
             ],
             [
               "<code>message</code>",
-              "string",
-              "—",
               "Texto del mensaje."
             ],
             [
-              "<code>open</code>",
-              "boolean",
-              "false",
-              "Estado controlado."
+              "<code>open</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>",
+              "Estado controlado. (valor por defecto)"
             ]
           ]
         },
@@ -129,7 +154,11 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Confirmación en modal centrado con backdrop. Para decisiones que\r\n          merecen foco total. Si prefieres confirmar en línea sin tapar la\r\n          pantalla, usa <code class=\"code\">&lt;iswc-popconfirm&gt;</code>."
+        "content": [
+          "Confirmación en modal centrado con backdrop. Para decisiones que",
+          "          merecen foco total. Si prefieres confirmar en línea sin tapar la",
+          "          pantalla, usa <code class=\"code\">&lt;iswc-popconfirm&gt;</code>."
+        ]
       },
       "atributos": {
         "table": [
@@ -180,7 +209,15 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-button id=\"btnDelete\">Eliminar cuenta</iswc-button>\n<iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">\n  <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>\n  <iswc-button slot=\"cancel\">Cancelar</iswc-button>\n</iswc-confirm-modal>\n```"
+        "content": [
+          "```html",
+          "<iswc-button id=\"btnDelete\">Eliminar cuenta</iswc-button>",
+          "<iswc-confirm-modal for=\"btnDelete\" heading=\"Eliminar cuenta\" message=\"¿Seguro?\">",
+          "  <iswc-button slot=\"confirm\" color=\"danger\">Sí, eliminar</iswc-button>",
+          "  <iswc-button slot=\"cancel\">Cancelar</iswc-button>",
+          "</iswc-confirm-modal>",
+          "```"
+        ]
       }
     },
     "exclude": [

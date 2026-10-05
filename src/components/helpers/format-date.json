@@ -14,7 +14,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>\n          </p>",
+          "html": [
+            "<span class=\"demo-label\">ahora · en vivo</span>",
+            "          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">",
+            "            <iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>",
+            "          </p>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -108,7 +113,22 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">fecha + hora + s</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">solo día</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">timestamp (attr)</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></iswc-format-date>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">fecha + hora + s</code>",
+            "              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">solo día</code>",
+            "              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">timestamp (attr)</code>",
+            "              <iswc-format-date class=\"format-grid__value\" year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\"></iswc-format-date>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -119,11 +139,28 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>\n          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>\n          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">\n            Probar locale\n            <input id=\"localeProbe\" type=\"text\" value=\"es-MX\" list=\"localeHints\"\n              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--iswc-border);border-radius:var(--iswc-radius-sm);background:var(--iswc-control-bg);color:var(--iswc-text);max-width:10rem\" />\n            <datalist id=\"localeHints\"></datalist>\n            <span id=\"localeProbeOut\"></span>\n          </label>"
+          "html": [
+            "<p class=\"demo-caption\" id=\"localeCaption\">Cargando locales…</p>",
+            "          <div class=\"demo-locale-grid\" id=\"localeGrid\"></div>",
+            "          <label class=\"demo-caption\" style=\"display:flex;align-items:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap\">",
+            "            Probar locale",
+            "            <input id=\"localeProbe\" type=\"text\" value=\"es-MX\" list=\"localeHints\"",
+            "              style=\"font:inherit;padding:.35em .6em;border:1px solid var(--iswc-border);border-radius:var(--iswc-radius-sm);background:var(--iswc-control-bg);color:var(--iswc-text);max-width:10rem\" />",
+            "            <datalist id=\"localeHints\"></datalist>",
+            "            <span id=\"localeProbeOut\"></span>",
+            "          </label>"
+          ]
         },
         {
           "kind": "code",
-          "code": "<iswc-format-date\n  locale=\"ja\"\n  weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"\n  hour=\"numeric\" minute=\"numeric\" second=\"numeric\"\n></iswc-format-date>\n<!-- en el preview, date se reescribe cada 1s con Date.now() -->",
+          "code": [
+            "<iswc-format-date",
+            "  locale=\"ja\"",
+            "  weekday=\"long\" month=\"long\" day=\"numeric\" year=\"numeric\"",
+            "  hour=\"numeric\" minute=\"numeric\" second=\"numeric\"",
+            "></iswc-format-date>",
+            "<!-- en el preview, date se reescribe cada 1s con Date.now() -->"
+          ],
           "lang": "html"
         }
       ]
@@ -135,7 +172,30 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">weekday long</code>\n              <iswc-format-date class=\"format-grid__value\" weekday=\"long\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month short</code>\n              <iswc-format-date class=\"format-grid__value\" month=\"short\" day=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">month narrow · 2-digit</code>\n              <iswc-format-date class=\"format-grid__value\" month=\"narrow\" day=\"numeric\" year=\"2-digit\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">era · short</code>\n              <iswc-format-date class=\"format-grid__value\" era=\"short\" year=\"numeric\" month=\"long\" day=\"numeric\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">year 2-digit</code>\n              <iswc-format-date class=\"format-grid__value\" year=\"2-digit\" month=\"numeric\" day=\"numeric\"></iswc-format-date>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">weekday long</code>",
+            "              <iswc-format-date class=\"format-grid__value\" weekday=\"long\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">month short</code>",
+            "              <iswc-format-date class=\"format-grid__value\" month=\"short\" day=\"numeric\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">month narrow · 2-digit</code>",
+            "              <iswc-format-date class=\"format-grid__value\" month=\"narrow\" day=\"numeric\" year=\"2-digit\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">era · short</code>",
+            "              <iswc-format-date class=\"format-grid__value\" era=\"short\" year=\"numeric\" month=\"long\" day=\"numeric\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">year 2-digit</code>",
+            "              <iswc-format-date class=\"format-grid__value\" year=\"2-digit\" month=\"numeric\" day=\"numeric\"></iswc-format-date>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -146,7 +206,22 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">24h</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">12h</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">auto</code>\n              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"auto\"></iswc-format-date>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">24h</code>",
+            "              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">12h</code>",
+            "              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"12\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">auto</code>",
+            "              <iswc-format-date class=\"format-grid__value\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"auto\"></iswc-format-date>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -157,7 +232,30 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">UTC · short</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"UTC\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">America/Bogota</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"America/Bogota\" time-zone-name=\"short\"\n                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Europe/Madrid</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"Europe/Madrid\" time-zone-name=\"shortOffset\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">Asia/Tokyo</code>\n              <iswc-format-date class=\"format-grid__value\" time-zone=\"Asia/Tokyo\" time-zone-name=\"short\"\n                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>\n            </div>\n          </div>"
+          "html": [
+            "<div class=\"format-grid format-grid--cards\">",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">UTC · short</code>",
+            "              <iswc-format-date class=\"format-grid__value\" time-zone=\"UTC\" time-zone-name=\"short\"",
+            "                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">America/Bogota</code>",
+            "              <iswc-format-date class=\"format-grid__value\" time-zone=\"America/Bogota\" time-zone-name=\"short\"",
+            "                year=\"numeric\" month=\"short\" day=\"numeric\" hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">Europe/Madrid</code>",
+            "              <iswc-format-date class=\"format-grid__value\" time-zone=\"Europe/Madrid\" time-zone-name=\"shortOffset\"",
+            "                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>",
+            "            </div>",
+            "            <div class=\"format-grid__row\">",
+            "              <code class=\"format-grid__tag\">Asia/Tokyo</code>",
+            "              <iswc-format-date class=\"format-grid__value\" time-zone=\"Asia/Tokyo\" time-zone-name=\"short\"",
+            "                hour=\"numeric\" minute=\"numeric\" second=\"numeric\" hour-format=\"24\"></iswc-format-date>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
@@ -235,7 +333,14 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<span class=\"demo-label\">ahora · en vivo</span>\n          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">\n            <iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>\n          </p>\n```"
+        "content": [
+          "```html",
+          "<span class=\"demo-label\">ahora · en vivo</span>",
+          "          <p style=\"margin:0;font-size:1.25rem;font-weight:600\">",
+          "            <iswc-format-date hour=\"numeric\" minute=\"numeric\" second=\"numeric\" year=\"numeric\" month=\"short\" day=\"numeric\"></iswc-format-date>",
+          "          </p>",
+          "```"
+        ]
       }
     },
     "exclude": [

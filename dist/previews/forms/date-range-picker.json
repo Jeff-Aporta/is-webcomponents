@@ -13,7 +13,14 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-date-range-picker\r\n            id=\"rp\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"\r\n          ></iswc-date-range-picker>",
+          "html": [
+            "<iswc-date-range-picker",
+            "            id=\"rp\"",
+            "            locale=\"es\"",
+            "            calendars=\"2\"",
+            "            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"",
+            "          ></iswc-date-range-picker>"
+          ],
           "controls": [
             {
               "control": "text",
@@ -58,7 +65,13 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-date-range-picker locale=\"es\" calendars=\"2\" shortcuts=\"none\">\r\n            <iswc-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-01/2026-07-15\">Primera quincena</iswc-button>\r\n            <iswc-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-16/2026-07-31\">Segunda quincena</iswc-button>\r\n            <iswc-button slot=\"shortcut\" variant=\"outlined\" color=\"neutral\" pill data-preset=\"reset\">Limpiar</iswc-button>\r\n          </iswc-date-range-picker>"
+          "html": [
+            "<iswc-date-range-picker locale=\"es\" calendars=\"2\" shortcuts=\"none\">",
+            "            <iswc-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-01/2026-07-15\">Primera quincena</iswc-button>",
+            "            <iswc-button slot=\"shortcut\" variant=\"outlined\" pill data-range=\"2026-07-16/2026-07-31\">Segunda quincena</iswc-button>",
+            "            <iswc-button slot=\"shortcut\" variant=\"outlined\" color=\"neutral\" pill data-preset=\"reset\">Limpiar</iswc-button>",
+            "          </iswc-date-range-picker>"
+          ]
         }
       ]
     },
@@ -70,29 +83,23 @@
         {
           "kind": "table",
           "columns": [
-            "Atributo",
-            "Default"
+            "Atributo"
           ],
           "rows": [
             [
-              "<code>value</code>",
-              "<code>inicio/fin</code>"
+              "<code>value</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>calendars</code>",
-              "2 (1–3)"
+              "<code>calendars</code> <span class=\"iswc-default-marker\" aria-hidden=\"true\">★</span>"
             ],
             [
-              "<code>shortcuts</code>",
-              "— · this-week last-week last-7-days current-month next-month this-year reset · none"
+              "<code>shortcuts</code>"
             ],
             [
-              "<code>month</code>",
-              "mes del primer calendario"
+              "<code>month</code>"
             ],
             [
-              "resto",
-              "igual que <code>iswc-date-picker</code> (min, max, locale, disable-*, etc.)"
+              "resto"
             ]
           ]
         }
@@ -129,7 +136,16 @@
         ]
       },
       "ejemplos": {
-        "content": "```html\n<iswc-date-range-picker\r\n            id=\"rp\"\r\n            locale=\"es\"\r\n            calendars=\"2\"\r\n            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"\r\n          ></iswc-date-range-picker>\n```"
+        "content": [
+          "```html",
+          "<iswc-date-range-picker",
+          "            id=\"rp\"",
+          "            locale=\"es\"",
+          "            calendars=\"2\"",
+          "            shortcuts=\"this-week last-week last-7-days current-month next-month reset\"",
+          "          ></iswc-date-range-picker>",
+          "```"
+        ]
       }
     },
     "exclude": [

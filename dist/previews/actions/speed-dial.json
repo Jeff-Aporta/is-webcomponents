@@ -4,7 +4,40 @@
   "category": "actions",
   "title": "&lt;iswc-speed-dial&gt;",
   "titleHtml": false,
-  "styles": ".stage {\r\n      position: relative;\r\n      min-height: 16rem;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: var(--iswc-radius);\r\n      display: grid;\r\n      place-items: end center;\r\n      padding: 1rem;\r\n    }\r\n    .col { display: flex; flex-direction: column; gap: .85rem; padding: .5rem; }\r\n    .col > h4 { margin: 0; font-size: .85rem; }\r\n    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }\r\n    pre.log {\r\n      font-family: ui-monospace, monospace; font-size: .8rem;\r\n      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);\r\n      border-radius: var(--iswc-radius); padding: .55rem .75rem;\r\n      max-height: 9rem; overflow: auto;\r\n    }\r\n    /* Lienzos del demo radial: `transform` crea el containing block para que\r\n       el abanico se calcule (y se acote) contra ESTA caja, no el viewport. */\r\n    .radial-stage {\r\n      position: relative;\r\n      transform: translateZ(0);\r\n      display: grid;\r\n      place-items: center;\r\n      height: 340px;\r\n      border: 1px dashed var(--iswc-border);\r\n      border-radius: 0.6rem;\r\n      background: var(--iswc-bg);\r\n    }\r\n    .radial-stage--tall { height: 440px; }\r\n    .radial-stage--corner { place-items: end start; padding: 1rem; }",
+  "styles": [
+    ".stage {",
+    "      position: relative;",
+    "      min-height: 16rem;",
+    "      border: 1px dashed var(--iswc-border);",
+    "      border-radius: var(--iswc-radius);",
+    "      display: grid;",
+    "      place-items: end center;",
+    "      padding: 1rem;",
+    "    }",
+    "    .col { display: flex; flex-direction: column; gap: .85rem; padding: .5rem; }",
+    "    .col > h4 { margin: 0; font-size: .85rem; }",
+    "    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }",
+    "    pre.log {",
+    "      font-family: ui-monospace, monospace; font-size: .8rem;",
+    "      background: var(--iswc-bg-elev); border: 1px solid var(--iswc-border);",
+    "      border-radius: var(--iswc-radius); padding: .55rem .75rem;",
+    "      max-height: 9rem; overflow: auto;",
+    "    }",
+    "    /* Lienzos del demo radial: `transform` crea el containing block para que",
+    "       el abanico se calcule (y se acote) contra ESTA caja, no el viewport. */",
+    "    .radial-stage {",
+    "      position: relative;",
+    "      transform: translateZ(0);",
+    "      display: grid;",
+    "      place-items: center;",
+    "      height: 340px;",
+    "      border: 1px dashed var(--iswc-border);",
+    "      border-radius: 0.6rem;",
+    "      background: var(--iswc-bg);",
+    "    }",
+    "    .radial-stage--tall { height: 440px; }",
+    "    .radial-stage--corner { place-items: end start; padding: 1rem; }"
+  ],
   "storageKey": "docs-iswc-speed-dial",
   "hasBehavior": true,
   "sections": [
@@ -20,7 +53,16 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"stage\">\r\n            <iswc-speed-dial id=\"dial1\">\r\n              <iswc-speed-dial-action icon=\"mdi:content-copy\" label=\"Copiar\">Copiar</iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:share-variant\" label=\"Compartir\">Compartir</iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:download\" label=\"Descargar\">Descargar</iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:pencil\" label=\"Editar\">Editar</iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
+          "html": [
+            "<div class=\"stage\">",
+            "            <iswc-speed-dial id=\"dial1\">",
+            "              <iswc-speed-dial-action icon=\"mdi:content-copy\" label=\"Copiar\">Copiar</iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:share-variant\" label=\"Compartir\">Compartir</iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:download\" label=\"Descargar\">Descargar</iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:pencil\" label=\"Editar\">Editar</iswc-speed-dial-action>",
+            "            </iswc-speed-dial>",
+            "          </div>"
+          ],
           "controls": [
             {
               "control": "select",
@@ -105,7 +147,47 @@
           ],
           "equivNote": "direction lineal vs radial cambia el layout de acciones.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
-          "equivFlow": "<iswc-flowchart open-on-click animation=\"flow\">\n  <script type=\"application/json\">\n  {\n    \"flowchart\": {\n      \"title\": \"iswc-speed-dial: layout\",\n      \"direction\": \"TB\",\n      \"nodes\": [\n        {\n          \"id\": \"q\",\n          \"label\": \"direction=?\",\n          \"shape\": \"diamond\"\n        },\n        {\n          \"id\": \"a\",\n          \"label\": \"radial → grid/flex\",\n          \"shape\": \"stadium\"\n        },\n        {\n          \"id\": \"b\",\n          \"label\": \"up/down/left/right\",\n          \"shape\": \"stadium\"\n        }\n      ],\n      \"edges\": [\n        {\n          \"from\": \"q\",\n          \"to\": \"a\",\n          \"label\": \"radial\"\n        },\n        {\n          \"from\": \"q\",\n          \"to\": \"b\",\n          \"label\": \"lineal\"\n        }\n      ]\n    }\n  }\n  </script>\n</iswc-flowchart>"
+          "equivFlow": [
+            "<iswc-flowchart open-on-click animation=\"flow\">",
+            "  <script type=\"application/json\">",
+            "  {",
+            "    \"flowchart\": {",
+            "      \"title\": \"iswc-speed-dial: layout\",",
+            "      \"direction\": \"TB\",",
+            "      \"nodes\": [",
+            "        {",
+            "          \"id\": \"q\",",
+            "          \"label\": \"direction=?\",",
+            "          \"shape\": \"diamond\"",
+            "        },",
+            "        {",
+            "          \"id\": \"a\",",
+            "          \"label\": \"radial → grid/flex\",",
+            "          \"shape\": \"stadium\"",
+            "        },",
+            "        {",
+            "          \"id\": \"b\",",
+            "          \"label\": \"up/down/left/right\",",
+            "          \"shape\": \"stadium\"",
+            "        }",
+            "      ],",
+            "      \"edges\": [",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"a\",",
+            "          \"label\": \"radial\"",
+            "        },",
+            "        {",
+            "          \"from\": \"q\",",
+            "          \"to\": \"b\",",
+            "          \"label\": \"lineal\"",
+            "        }",
+            "      ]",
+            "    }",
+            "  }",
+            "  </script>",
+            "</iswc-flowchart>"
+          ]
         }
       ]
     },
@@ -115,37 +197,116 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"row-2\">\r\n            <div class=\"stage\" style=\"align-items:start\">\r\n              <iswc-speed-dial direction=\"left\" icon=\"mdi:cog\" label=\"Ajustes\">\r\n                <iswc-speed-dial-action icon=\"mdi:brush\" label=\"Tema\">Tema</iswc-speed-dial-action>\r\n                <iswc-speed-dial-action icon=\"mdi:translate\" label=\"Idioma\">Idioma</iswc-speed-dial-action>\r\n              </iswc-speed-dial>\r\n            </div>\r\n            <div class=\"stage\" style=\"align-items:start\">\r\n              <iswc-speed-dial direction=\"right\" icon=\"mdi:dots-vertical\" label=\"Más\">\r\n                <iswc-speed-dial-action icon=\"mdi:share-variant\" label=\"Compartir\">Compartir</iswc-speed-dial-action>\r\n                <iswc-speed-dial-action icon=\"mdi:link-variant\" label=\"Copiar enlace\">Copiar enlace</iswc-speed-dial-action>\r\n              </iswc-speed-dial>\r\n            </div>\r\n          </div>"
+          "html": [
+            "<div class=\"row-2\">",
+            "            <div class=\"stage\" style=\"align-items:start\">",
+            "              <iswc-speed-dial direction=\"left\" icon=\"mdi:cog\" label=\"Ajustes\">",
+            "                <iswc-speed-dial-action icon=\"mdi:brush\" label=\"Tema\">Tema</iswc-speed-dial-action>",
+            "                <iswc-speed-dial-action icon=\"mdi:translate\" label=\"Idioma\">Idioma</iswc-speed-dial-action>",
+            "              </iswc-speed-dial>",
+            "            </div>",
+            "            <div class=\"stage\" style=\"align-items:start\">",
+            "              <iswc-speed-dial direction=\"right\" icon=\"mdi:dots-vertical\" label=\"Más\">",
+            "                <iswc-speed-dial-action icon=\"mdi:share-variant\" label=\"Compartir\">Compartir</iswc-speed-dial-action>",
+            "                <iswc-speed-dial-action icon=\"mdi:link-variant\" label=\"Copiar enlace\">Copiar enlace</iswc-speed-dial-action>",
+            "              </iswc-speed-dial>",
+            "            </div>",
+            "          </div>"
+          ]
         }
       ]
     },
     {
       "id": "radial",
       "title": "Radial",
-      "lede": "<code class=\"code\">direction=\"radial\"</code> reparte las acciones en un abanico\r\n          alrededor del trigger. El ángulo inicial y la amplitud del arco se calculan\r\n          según el espacio libre dentro del contenedor, y cuando el arco no alcanza para\r\n          todas las acciones se abren <strong>anillos concéntricos</strong> con los\r\n          elementos desfasados medio paso (distribución en panal).",
+      "lede": [
+        "<code class=\"code\">direction=\"radial\"</code> reparte las acciones en un abanico",
+        "          alrededor del trigger. El ángulo inicial y la amplitud del arco se calculan",
+        "          según el espacio libre dentro del contenedor, y cuando el arco no alcanza para",
+        "          todas las acciones se abren <strong>anillos concéntricos</strong> con los",
+        "          elementos desfasados medio paso (distribución en panal)."
+      ],
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"radial-stage\">\r\n            <iswc-speed-dial direction=\"radial\" icon=\"mdi:plus\" label=\"Crear\" open\r\n                           data-wrapper=\".radial-stage\">\r\n              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:calendar\" label=\"Evento\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:account\" label=\"Contacto\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:tag\" label=\"Etiqueta\"></iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
+          "html": [
+            "<div class=\"radial-stage\">",
+            "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:plus\" label=\"Crear\" open",
+            "                           data-wrapper=\".radial-stage\">",
+            "              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:calendar\" label=\"Evento\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:account\" label=\"Contacto\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:tag\" label=\"Etiqueta\"></iswc-speed-dial-action>",
+            "            </iswc-speed-dial>",
+            "          </div>"
+          ],
           "heading": "360° completo, sentido horario"
         },
         {
           "kind": "demo",
-          "html": "<div class=\"radial-stage\">\r\n            <iswc-speed-dial direction=\"radial\" icon=\"mdi:cog\" label=\"Ajustes\" open\r\n                           data-arc=\"180\" data-start-angle=\"-90\" data-sweep=\"counter-clockwise\"\r\n                           data-wrapper=\".radial-stage\">\r\n              <iswc-speed-dial-action icon=\"mdi:brush\" label=\"Tema\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:translate\" label=\"Idioma\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:bell\" label=\"Avisos\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:shield\" label=\"Privacidad\"></iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
+          "html": [
+            "<div class=\"radial-stage\">",
+            "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:cog\" label=\"Ajustes\" open",
+            "                           data-arc=\"180\" data-start-angle=\"-90\" data-sweep=\"counter-clockwise\"",
+            "                           data-wrapper=\".radial-stage\">",
+            "              <iswc-speed-dial-action icon=\"mdi:brush\" label=\"Tema\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:translate\" label=\"Idioma\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:bell\" label=\"Avisos\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:shield\" label=\"Privacidad\"></iswc-speed-dial-action>",
+            "            </iswc-speed-dial>",
+            "          </div>"
+          ],
           "heading": "Arco de 180° antihorario con ángulo inicial fijo"
         },
         {
           "kind": "demo",
-          "html": "<div class=\"radial-stage radial-stage--tall\">\r\n            <iswc-speed-dial direction=\"radial\" icon=\"mdi:apps\" label=\"Todo\" open\r\n                           data-wrapper=\".radial-stage--tall\">\r\n              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:calendar\" label=\"Evento\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:account\" label=\"Contacto\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:tag\" label=\"Etiqueta\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:chart-bar\" label=\"Reporte\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:email\" label=\"Correo\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:map-marker\" label=\"Ubicación\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:music\" label=\"Audio\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:video\" label=\"Video\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:code-tags\" label=\"Código\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:folder\" label=\"Carpeta\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:star\" label=\"Favorito\"></iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
+          "html": [
+            "<div class=\"radial-stage radial-stage--tall\">",
+            "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:apps\" label=\"Todo\" open",
+            "                           data-wrapper=\".radial-stage--tall\">",
+            "              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:calendar\" label=\"Evento\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:account\" label=\"Contacto\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:tag\" label=\"Etiqueta\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:chart-bar\" label=\"Reporte\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:email\" label=\"Correo\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:map-marker\" label=\"Ubicación\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:music\" label=\"Audio\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:video\" label=\"Video\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:code-tags\" label=\"Código\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:folder\" label=\"Carpeta\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:star\" label=\"Favorito\"></iswc-speed-dial-action>",
+            "            </iswc-speed-dial>",
+            "          </div>"
+          ],
           "heading": "Panal: 14 acciones no caben en un anillo"
         },
         {
           "kind": "html",
-          "html": "<p class=\"lede\">\r\n          Pega el dial contra una esquina y el abanico se recorta y se gira solo hacia\r\n          donde hay sitio:\r\n        </p>"
+          "html": [
+            "<p class=\"lede\">",
+            "          Pega el dial contra una esquina y el abanico se recorta y se gira solo hacia",
+            "          donde hay sitio:",
+            "        </p>"
+          ]
         },
         {
           "kind": "demo",
-          "html": "<div class=\"radial-stage radial-stage--corner\">\r\n            <iswc-speed-dial direction=\"radial\" icon=\"mdi:plus\" label=\"Crear\" open\r\n                           data-wrapper=\".radial-stage--corner\">\r\n              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:calendar\" label=\"Evento\"></iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
+          "html": [
+            "<div class=\"radial-stage radial-stage--corner\">",
+            "            <iswc-speed-dial direction=\"radial\" icon=\"mdi:plus\" label=\"Crear\" open",
+            "                           data-wrapper=\".radial-stage--corner\">",
+            "              <iswc-speed-dial-action icon=\"mdi:file-document\" label=\"Documento\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:image\" label=\"Imagen\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:link\" label=\"Enlace\"></iswc-speed-dial-action>",
+            "              <iswc-speed-dial-action icon=\"mdi:calendar\" label=\"Evento\"></iswc-speed-dial-action>",
+            "            </iswc-speed-dial>",
+            "          </div>"
+          ],
           "heading": "Contra la esquina: arco y ángulo automáticos"
         }
       ]
@@ -156,14 +317,29 @@
       "blocks": [
         {
           "kind": "code",
-          "code": "const dial = document.querySelector('iswc-speed-dial');\ndial.open();         // abre\ndial.close();        // cierra\ndial.toggle();       // alterna\ndial.isOpen;         // boolean\ndial.addEventListener('iswc-select', e => console.log(e.detail.action.getAttribute('label')));\ndial.addEventListener('iswc-toggle', e => console.log('open=', e.detail.open));\n\n// Acciones: cada <iswc-speed-dial-action> emite iswc-select en el padre.\n// Si tiene href, no se cierra el dial al elegir.\n<iswc-speed-dial-action icon=\"…\" label=\"…\" color=\"brand|neutral|success|warning|danger\" href=\"…\">Texto</iswc-speed-dial-action>"
+          "code": [
+            "const dial = document.querySelector('iswc-speed-dial');",
+            "dial.open();         // abre",
+            "dial.close();        // cierra",
+            "dial.toggle();       // alterna",
+            "dial.isOpen;         // boolean",
+            "dial.addEventListener('iswc-select', e => console.log(e.detail.action.getAttribute('label')));",
+            "dial.addEventListener('iswc-toggle', e => console.log('open=', e.detail.open));",
+            "",
+            "// Acciones: cada <iswc-speed-dial-action> emite iswc-select en el padre.",
+            "// Si tiene href, no se cierra el dial al elegir.",
+            "<iswc-speed-dial-action icon=\"…\" label=\"…\" color=\"brand|neutral|success|warning|danger\" href=\"…\">Texto</iswc-speed-dial-action>"
+          ]
         }
       ]
     },
     {
       "id": "log",
       "title": "Bitácora de eventos",
-      "lede": "Cada interacción con los diales de arriba aparece aquí. Sirve para ver\r\n          qué evento emite el componente y con qué detalle.",
+      "lede": [
+        "Cada interacción con los diales de arriba aparece aquí. Sirve para ver",
+        "          qué evento emite el componente y con qué detalle."
+      ],
       "blocks": [
         {
           "kind": "table",
