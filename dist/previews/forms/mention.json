@@ -69,5 +69,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Input con autocompletado al tipear <code class=\"code\">@</code> (usuario) o <code class=\"code\">#</code> (etiqueta). Popup se posiciona y se navega con flechas + Enter."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

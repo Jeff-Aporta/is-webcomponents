@@ -78,5 +78,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Duración HH:MM:SS. Tres columnas con botones ±, inputs numéricos y saltos con <kbd class=\"ic\">:</kbd> o <kbd class=\"ic\">Tab</kbd>."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

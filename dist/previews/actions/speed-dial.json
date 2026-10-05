@@ -22,86 +22,86 @@
           "kind": "demo",
           "html": "<div class=\"stage\">\r\n            <iswc-speed-dial id=\"dial1\">\r\n              <iswc-speed-dial-action icon=\"mdi:content-copy\" label=\"Copiar\">Copiar</iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:share-variant\" label=\"Compartir\">Compartir</iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:download\" label=\"Descargar\">Descargar</iswc-speed-dial-action>\r\n              <iswc-speed-dial-action icon=\"mdi:pencil\" label=\"Editar\">Editar</iswc-speed-dial-action>\r\n            </iswc-speed-dial>\r\n          </div>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:label",
-                "label": "label",
-                "options": [
-                  "Copiar",
-                  "Compartir",
-                  "Descargar",
-                  "Editar",
-                  "Ajustes",
-                  "Tema",
-                  "Idioma",
-                  "Más",
-                  "Copiar enlace",
-                  "Crear",
-                  "Documento",
-                  "Imagen",
-                  "Enlace",
-                  "Evento",
-                  "Contacto",
-                  "Etiqueta",
-                  "Avisos",
-                  "Privacidad",
-                  "Todo",
-                  "Reporte",
-                  "Correo",
-                  "Ubicación",
-                  "Audio",
-                  "Video",
-                  "Código",
-                  "Carpeta",
-                  "Favorito"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:direction",
-                "label": "direction",
-                "options": [
-                  "left",
-                  "right",
-                  "radial"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:open",
-                "label": "open"
-              },
-              {
-                "control": "select",
-                "prop": "attr:data-wrapper",
-                "label": "data-wrapper",
-                "options": [
-                  ".radial-stage",
-                  ".radial-stage--tall",
-                  ".radial-stage--corner"
-                ]
-              },
-              {
-                "control": "number",
-                "prop": "attr:data-arc",
-                "label": "data-arc",
-                "min": 0,
-                "max": 180,
-                "step": 1
-              },
-              {
-                "control": "number",
-                "prop": "attr:data-start-angle",
-                "label": "data-start-angle",
-                "min": -90,
-                "max": 100,
-                "step": 1
-              },
-              {
-                "control": "text",
-                "prop": "attr:data-sweep",
-                "label": "data-sweep"
-              }
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Copiar",
+                "Compartir",
+                "Descargar",
+                "Editar",
+                "Ajustes",
+                "Tema",
+                "Idioma",
+                "Más",
+                "Copiar enlace",
+                "Crear",
+                "Documento",
+                "Imagen",
+                "Enlace",
+                "Evento",
+                "Contacto",
+                "Etiqueta",
+                "Avisos",
+                "Privacidad",
+                "Todo",
+                "Reporte",
+                "Correo",
+                "Ubicación",
+                "Audio",
+                "Video",
+                "Código",
+                "Carpeta",
+                "Favorito"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:direction",
+              "label": "direction",
+              "options": [
+                "left",
+                "right",
+                "radial"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:open",
+              "label": "open"
+            },
+            {
+              "control": "select",
+              "prop": "attr:data-wrapper",
+              "label": "data-wrapper",
+              "options": [
+                ".radial-stage",
+                ".radial-stage--tall",
+                ".radial-stage--corner"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:data-arc",
+              "label": "data-arc",
+              "min": 0,
+              "max": 180,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:data-start-angle",
+              "label": "data-start-angle",
+              "min": -90,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "text",
+              "prop": "attr:data-sweep",
+              "label": "data-sweep"
+            }
           ],
           "equivNote": "direction lineal vs radial cambia el layout de acciones.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -186,5 +186,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "FAB que al clic despliega un puñado de acciones rápidas. Apunta arriba por defecto; cambiá la dirección con el atributo <code class=\"code\">direction</code>."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

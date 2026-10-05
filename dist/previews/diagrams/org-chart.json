@@ -81,5 +81,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Organigrama jerárquico a partir de un árbol JSON. Cada nodo tiene foto (o iniciales), nombre y cargo; los hijos se pliegan con el botón redondo con una animación suave, y un clic en el fondo abre el visor a pantalla completa."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

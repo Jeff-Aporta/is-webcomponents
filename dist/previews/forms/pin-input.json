@@ -199,5 +199,80 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Casillas para OTP / PIN de 3 a 8 dígitos. Auto-avance al escribir,\r\n          Backspace retrocede, pegar reparte todos los dígitos, navegación con\r\n          flechas y soporte para enmascarar el contenido."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>length</code>",
+            "type": "number",
+            "default": "6",
+            "desc": "Cantidad de dígitos (3-8)."
+          },
+          {
+            "name": "<code>type</code>",
+            "type": "number | text",
+            "default": "number",
+            "desc": "Tipo de carácter aceptado."
+          },
+          {
+            "name": "<code>mask</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta el contenido."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Deshabilita."
+          },
+          {
+            "name": "<code>invalid</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Marca error."
+          },
+          {
+            "name": "<code>placeholder</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Marcador para casillas vacías."
+          },
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Valor inicial."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-pin-change</code>",
+            "cuando": "Cambia cualquier dígito. <code>detail: { value, index }</code>."
+          },
+          {
+            "evento": "<code>iswc-pin-complete</code>",
+            "cuando": "Todos los dígitos completos."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-pin-input length=\"6\"></iswc-pin-input>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

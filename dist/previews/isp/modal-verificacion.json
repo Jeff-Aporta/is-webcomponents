@@ -15,14 +15,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div style=\"display:flex;gap:.5rem;flex-wrap:wrap\">\r\n            <iswc-button id=\"mvBtnOk\" color=\"brand\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\r\n              Verificar tercero (caso OK)\r\n            </iswc-button>\r\n            <iswc-button id=\"mvBtnWarn\" color=\"warning\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:alert\"></iswc-icon>\r\n              Verificar con warnings\r\n            </iswc-button>\r\n            <iswc-button id=\"mvBtnErr\" color=\"danger\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:close-circle\"></iswc-icon>\r\n              Verificar con errores\r\n            </iswc-button>\r\n          </div>\r\n          <iswc-modal-verificacion id=\"mvDemoOk\" entity=\"tercero\"></iswc-modal-verificacion>\r\n          <iswc-modal-verificacion id=\"mvDemoWarn\" entity=\"tercero\"></iswc-modal-verificacion>\r\n          <iswc-modal-verificacion id=\"mvDemoErr\" entity=\"tercero\"></iswc-modal-verificacion>\r\n          <script type=\"application/json\" data-mv-scenarios>{\r\n            \"ok\": {\r\n              \"entrie\": \"tercero\",\r\n              \"record\": { \"nit\": \"900123456-7\", \"razonSocial\": \"InSoft S.A.\" },\r\n              \"mensajes\": [\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"NIT valido y activo en DIAN.\" },\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"Razon social coincide con registro mercantil.\" },\r\n                { \"itdmensaje\": \"success\", \"mensaje\": \"Verificacion satisfactoria.\" }\r\n              ]\r\n            },\r\n            \"warn\": {\r\n              \"entrie\": \"tercero\",\r\n              \"record\": { \"nit\": \"900999999-9\", \"razonSocial\": \"Demo S.A.S.\" },\r\n              \"mensajes\": [\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"NIT valido.\" },\r\n                { \"itdmensaje\": \"warning\", \"mensaje\": \"Sin correo registrado: las notificaciones llegaran al admin.\" },\r\n                { \"itdmensaje\": \"warning\", \"mensaje\": \"Actividad economica requiere clasificacion CIIU v4.\" },\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"Continuar y completar despues desde el perfil.\" }\r\n              ]\r\n            },\r\n            \"err\": {\r\n              \"entrie\": \"tercero\",\r\n              \"record\": { \"nit\": \"800000000-0\", \"razonSocial\": \"Inactiva Ltda.\" },\r\n              \"mensajes\": [\r\n                { \"itdmensaje\": \"error\",   \"mensaje\": \"NIT no encontrado en el registro unico tributario.\" },\r\n                { \"itdmensaje\": \"error\",   \"mensaje\": \"Razon social con estado inactiva desde 2021.\" },\r\n                { \"itdmensaje\": \"warning\", \"mensaje\": \"Documentos de soporte obligatorios pendientes.\" },\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"No se puede continuar hasta corregir.\" }\r\n              ]\r\n            }\r\n          }</script>",
-          "controls": [
-            {
-              "control": "text",
-              "prop": "attr:entity",
-              "label": "entity"
-            }
-          ]
+          "html": "<div style=\"display:flex;gap:.5rem;flex-wrap:wrap\">\r\n            <iswc-button id=\"mvBtnOk\" color=\"brand\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:check\"></iswc-icon>\r\n              Verificar tercero (caso OK)\r\n            </iswc-button>\r\n            <iswc-button id=\"mvBtnWarn\" color=\"warning\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:alert\"></iswc-icon>\r\n              Verificar con warnings\r\n            </iswc-button>\r\n            <iswc-button id=\"mvBtnErr\" color=\"danger\">\r\n              <iswc-icon slot=\"start\" icon=\"mdi:close-circle\"></iswc-icon>\r\n              Verificar con errores\r\n            </iswc-button>\r\n          </div>\r\n          <iswc-modal-verificacion id=\"mvDemoOk\" entity=\"tercero\"></iswc-modal-verificacion>\r\n          <iswc-modal-verificacion id=\"mvDemoWarn\" entity=\"tercero\"></iswc-modal-verificacion>\r\n          <iswc-modal-verificacion id=\"mvDemoErr\" entity=\"tercero\"></iswc-modal-verificacion>\r\n          <script type=\"application/json\" data-mv-scenarios>{\r\n            \"ok\": {\r\n              \"entrie\": \"tercero\",\r\n              \"record\": { \"nit\": \"900123456-7\", \"razonSocial\": \"InSoft S.A.\" },\r\n              \"mensajes\": [\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"NIT valido y activo en DIAN.\" },\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"Razon social coincide con registro mercantil.\" },\r\n                { \"itdmensaje\": \"success\", \"mensaje\": \"Verificacion satisfactoria.\" }\r\n              ]\r\n            },\r\n            \"warn\": {\r\n              \"entrie\": \"tercero\",\r\n              \"record\": { \"nit\": \"900999999-9\", \"razonSocial\": \"Demo S.A.S.\" },\r\n              \"mensajes\": [\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"NIT valido.\" },\r\n                { \"itdmensaje\": \"warning\", \"mensaje\": \"Sin correo registrado: las notificaciones llegaran al admin.\" },\r\n                { \"itdmensaje\": \"warning\", \"mensaje\": \"Actividad economica requiere clasificacion CIIU v4.\" },\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"Continuar y completar despues desde el perfil.\" }\r\n              ]\r\n            },\r\n            \"err\": {\r\n              \"entrie\": \"tercero\",\r\n              \"record\": { \"nit\": \"800000000-0\", \"razonSocial\": \"Inactiva Ltda.\" },\r\n              \"mensajes\": [\r\n                { \"itdmensaje\": \"error\",   \"mensaje\": \"NIT no encontrado en el registro unico tributario.\" },\r\n                { \"itdmensaje\": \"error\",   \"mensaje\": \"Razon social con estado inactiva desde 2021.\" },\r\n                { \"itdmensaje\": \"warning\", \"mensaje\": \"Documentos de soporte obligatorios pendientes.\" },\r\n                { \"itdmensaje\": \"info\",    \"mensaje\": \"No se puede continuar hasta corregir.\" }\r\n              ]\r\n            }\r\n          }</script>"
         },
         {
           "kind": "code",
@@ -36,5 +29,24 @@
       "lede": "Propiedades JS: <code class=\"code\">controller</code>, <code class=\"code\">record</code>,\r\n          <code class=\"code\">onError</code>. Métodos: <code class=\"code\">show()</code>,\r\n          <code class=\"code\">hide()</code>, <code class=\"code\">verify()</code>.",
       "blocks": []
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Al abrirse ejecuta <code class=\"code\">controller.actVerificar(record)</code>\r\n          y pinta los mensajes devueltos coloreados por severidad, con contadores\r\n          de infos, warnings y errores."
+      },
+      "ejemplos": {
+        "content": "```html\nconst modal = document.querySelector('iswc-modal-verificacion');\nmodal.controller = {\n  entrie: 'tercero',\n  async actVerificar(record) {\n    return { mensajes: [\n      { itdmensaje: 'info', mensaje: 'NIT válido.' },\n      { itdmensaje: 'warning', mensaje: 'Sin correo registrado.' },\n    ] };\n  },\n};\nmodal.record = { nit: '900123456' };\nmodal.show();\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

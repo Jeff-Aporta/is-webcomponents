@@ -57,6 +57,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-stat\">\n  <iswc-stat value=\"1,234\">\n    <span slot=\"label\">Usuarios activos</span>\n    <iswc-icon slot=\"icon\" icon=\"mdi:account-multiple\"></iswc-icon>\n    <span slot=\"trend\">+12%</span>\n    <span slot=\"helper\">vs mes pasado</span>\n  </iswc-stat>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "blocks": [
@@ -119,5 +130,69 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tarjeta KPI para dashboards: label, número principal, helper text,\r\n          trend (subida/bajada) e icono. Detecta automáticamente la dirección\r\n          del trend según el signo del valor."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título del KPI."
+          },
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Valor principal."
+          },
+          {
+            "name": "<code>helper</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Texto aclaratorio."
+          },
+          {
+            "name": "<code>trend</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Valor de cambio (e.g. \"+12.5%\")."
+          },
+          {
+            "name": "<code>trend-direction</code>",
+            "type": "up | down | flat",
+            "default": "auto",
+            "desc": "Dirección manual."
+          },
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Iconify id."
+          },
+          {
+            "name": "<code>variant</code>",
+            "type": "brand | neutral | success | warning | danger",
+            "default": "neutral",
+            "desc": "Color."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-stat\n  label=\"Ingresos\"\n  value=\"€ 1.249,00\"\n  helper=\"vs mes anterior\"\n  trend=\"+12.5%\"\n  icon=\"mdi:cash-multiple\"\n></iswc-stat>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

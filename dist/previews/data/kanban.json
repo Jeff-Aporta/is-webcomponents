@@ -140,5 +140,88 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tablero kanban con columnas y tarjetas. Cada columna tiene un accent\r\n          color, badge automático con el conteo, slots de header-actions y\r\n          cards con cover, heading, meta, tag y footer."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>title</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Nombre de la columna."
+          },
+          {
+            "name": "<code>accent</code>",
+            "type": "string",
+            "default": "brand",
+            "desc": "Color de acento."
+          },
+          {
+            "name": "<code>badge</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Override del conteo."
+          },
+          {
+            "name": "<code>heading</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título de la card."
+          },
+          {
+            "name": "<code>meta</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Subtítulo."
+          },
+          {
+            "name": "<code>tag</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Tag de la cabecera."
+          },
+          {
+            "name": "<code>tag-variant</code>",
+            "type": "brand | neutral | success | warning | danger",
+            "default": "neutral",
+            "desc": "Color del tag."
+          },
+          {
+            "name": "<code>cover</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "URL de imagen."
+          },
+          {
+            "name": "<code>without-shadow</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Sin sombra."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-kanban-card-click</code>",
+            "cuando": "Click. <code>detail: { card, column }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-kanban>\n  <iswc-kanban-column title=\"Pending\" accent=\"dodgerblue\">\n    <iswc-kanban-card heading=\"Diseñar landing\" tag=\"Design\">…</iswc-kanban-card>\n  </iswc-kanban-column>\n</iswc-kanban>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -17,5 +17,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Abre cualquier diagrama con ?kind= y ?json= en base64url. La dirección no cambia al mirar el documento."
+      },
+      "ejemplos": {
+        "content": "```html\n<iframe title=\"Visor de diagramas\" src=\"demos/diagramas/app/view.html?kind=flowchart\" style=\"width:100%;height:720px;border:1px solid var(--iswc-border);border-radius:12px;background:var(--iswc-bg)\"></iframe><ul><li>Flujo: <a href=\"demos/diagramas/app/view.html?kind=flowchart\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=flowchart\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Secuencia: <a href=\"demos/diagramas/app/view.html?kind=sequence\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=sequence\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Clases: <a href=\"demos/diagramas/app/view.html?kind=class\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=class\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Estados: <a href=\"demos/diagramas/app/view.html?kind=state\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=state\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Entidad-relación: <a href=\"demos/diagramas/app/view.html?kind=er\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=er\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Bloques: <a href=\"demos/diagramas/app/view.html?kind=block\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=block\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Componentes: <a href=\"demos/diagramas/app/view.html?kind=component\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=component\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Mapa mental: <a href=\"demos/diagramas/app/view.html?kind=mindmap\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=mindmap\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Gantt: <a href=\"demos/diagramas/app/view.html?kind=gantt\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=gantt\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Línea de tiempo: <a href=\"demos/diagramas/app/view.html?kind=timeline\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=timeline\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Organigrama: <a href=\"demos/diagramas/app/view.html?kind=org-chart\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=org-chart\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Sankey: <a href=\"demos/diagramas/app/view.html?kind=sankey\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=sankey\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Cuadrantes: <a href=\"demos/diagramas/app/view.html?kind=quadrant\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=quadrant\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Venn: <a href=\"demos/diagramas/app/view.html?kind=venn\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=venn\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Casos de uso: <a href=\"demos/diagramas/app/view.html?kind=usecase\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=usecase\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Carriles: <a href=\"demos/diagramas/app/view.html?kind=swimlane\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=swimlane\" target=\"_blank\" rel=\"noopener\">editor</a></li><li>Recorrido: <a href=\"demos/diagramas/app/view.html?kind=journey\" target=\"_blank\" rel=\"noopener\">visor</a> · <a href=\"demos/diagramas/app/edit.html?kind=journey\" target=\"_blank\" rel=\"noopener\">editor</a></li></ul>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -149,6 +149,28 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-callout\">\n  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>\n  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-callout\">\n  <iswc-callout>Esto es una notificacion informativa.</iswc-callout>\n  <iswc-icon slot=\"icon\" icon=\"mdi:information-outline\"></iswc-icon>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia completa",
       "blocks": [
@@ -272,5 +294,96 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Mensaje en línea con borde y fondo suaves. Pensado para tips, info, warnings y\r\n          errores que el usuario no debe pasar por alto. Cinco variantes y cinco apariencias,\r\n          con icono automático según la variante (sobrescribible vía <code class=\"code\">icon</code>\r\n          o slot <code class=\"code\">icon</code>)."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>variant</code>",
+            "type": "brand · neutral · success · warning · danger",
+            "default": "neutral",
+            "desc": "Tono. Reflected."
+          },
+          {
+            "name": "<code>appearance</code>",
+            "type": "accent · filled · outlined · filled-outlined · plain",
+            "default": "filled-outlined",
+            "desc": "Tratamiento visual. Reflected."
+          },
+          {
+            "name": "<code>icon</code>",
+            "type": "string",
+            "default": "(según variant)",
+            "desc": "Iconify id para el icono por defecto. Vacío = sin icono."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-l, 1rem)</code>",
+            "desc": "Padding/gap interno."
+          },
+          {
+            "name": "<code>--callout-bg</code>",
+            "default": "var de variant",
+            "desc": "Fondo computado."
+          },
+          {
+            "name": "<code>--callout-border</code>",
+            "default": "var de variant",
+            "desc": "Color del borde."
+          },
+          {
+            "name": "<code>--callout-text</code>",
+            "default": "var de variant",
+            "desc": "Color del texto."
+          },
+          {
+            "name": "<code>--callout-accent</code>",
+            "default": "var de variant",
+            "desc": "Color del icono."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Mensaje principal."
+          },
+          {
+            "slot": "<code>icon</code>",
+            "desc": "Icono propio (iswc-icon o img)."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(base)</code>",
+            "desc": "Contenedor raíz."
+          },
+          {
+            "part": "<code>::part(icon)</code>",
+            "desc": "Wrapper del icono."
+          },
+          {
+            "part": "<code>::part(message)</code>",
+            "desc": "Wrapper del mensaje."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-callout>Esto es un callout estándar.</iswc-callout>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "props",
+      "states"
+    ]
+  }
 }

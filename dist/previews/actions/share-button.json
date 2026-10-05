@@ -14,12 +14,12 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
+          "html": "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
         },
         {
           "kind": "code",
           "lang": "html",
-          "code": "<iswc-share-button share-title=\"IS Web Components\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
+          "code": "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
         },
         {
           "kind": "callout",
@@ -27,5 +27,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Comparte título, texto y URL con las apps nativas (Web Share). Si no hay share, copia al portapapeles."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

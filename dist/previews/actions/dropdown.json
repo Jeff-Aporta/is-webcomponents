@@ -79,6 +79,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-dropdown\">\n  <iswc-dropdown>\n    <iswc-button slot=\"trigger\" with-caret>Acciones</iswc-button>\n    <iswc-dropdown-item>Editar</iswc-dropdown-item>\n    <iswc-dropdown-item>Duplicar</iswc-dropdown-item>\n    <iswc-dropdown-item>Eliminar</iswc-dropdown-item>\n  </iswc-dropdown>\n  <iswc-button slot=\"trigger\" with-caret color=\"brand\">Abrir menu</iswc-button>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "blocks": [
@@ -117,5 +128,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Menú anclado a un trigger. Panel en <code class=\"code\">&lt;dialog&gt;</code> modal\r\n          (top layer) para no quedar debajo de otras secciones. Items:\r\n          <code class=\"code\">iswc-dropdown-item</code>, <code class=\"code\">iswc-divider</code> e iconos."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "slots",
+            "desc": "<code>trigger</code> + default items"
+          },
+          {
+            "metodo": "panel",
+            "desc": "<code>&lt;dialog showModal&gt;</code> — top layer (no stacking bajo secciones)"
+          },
+          {
+            "metodo": "<code>placement</code>",
+            "desc": "default <code>bottom-start</code>"
+          },
+          {
+            "metodo": "<code>iswc-select</code>",
+            "desc": "detail.item — cancelable para no cerrar"
+          },
+          {
+            "metodo": "item attrs",
+            "desc": "value, type=checkbox, checked, disabled, variant=danger"
+          },
+          {
+            "metodo": "item slots",
+            "desc": "icon, details, submenu"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-dropdown>\n  <iswc-button slot=\"trigger\" with-caret>Options</iswc-button>\n  <iswc-dropdown-item value=\"edit\">Edit</iswc-dropdown-item>\n  <iswc-divider></iswc-divider>\n  <iswc-dropdown-item value=\"delete\" color=\"danger\">Delete</iswc-dropdown-item>\n</iswc-dropdown>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

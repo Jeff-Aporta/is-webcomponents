@@ -8,7 +8,7 @@ description: >-
   migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
 ---
 
-# IS Web Components — stack obligatorio
+# ISWC — stack obligatorio
 
 ## Regla absoluta (léela primero)
 
@@ -33,6 +33,24 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 | [`/is-webcomponents:migrate`](tools/migrate.md) | Convertir un frontend con framework (React/MUI/Svelte/…) a vanilla + `iswc-*`. |
 | [`/is-webcomponents:local`](tools/local.md) | Vendorizar el kit y bootear local-first, con CDN como fallback. |
 | [`/is-webcomponents:runtime`](tools/runtime.md) | APIs **sin** tag: loader, IswcUi, md-lite/hydrate/fences, response-cache, sync-pins. |
+
+## Cómo documentar un componente
+
+Cada guía de módulo (`src/components/<carpeta>/<modulo>.md`) sigue la
+misma plantilla para que el catálogo y los agentes la lean igual. La
+skill [`../document-component/SKILL.md`](../document-component/SKILL.md)
+detalla la estructura obligatoria (anatomía, atributos observados,
+props, custom states, eventos, slots, CSS parts, ejemplos), las
+convenciones de tono, el formato de tablas y los enlaces cruzados que
+cada ficha debe llevar.
+
+| Recurso | Ruta |
+| --- | --- |
+| Skill | [`../document-component/SKILL.md`](../document-component/SKILL.md) |
+| Anatomía y frontmatter | [`../document-component/references/anatomy-section.md`](../document-component/references/anatomy-section.md) |
+| Custom states | [`../document-component/references/custom-states.md`](../document-component/references/custom-states.md) |
+| Bloques de código | [`../document-component/references/code-blocks.md`](../document-component/references/code-blocks.md) |
+| Estilo visual | [`../document-component/references/visual-style.md`](../document-component/references/visual-style.md) |
 
 ## Enlaces (GitHub primero, raw como secundario)
 
@@ -218,6 +236,26 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 
 <!-- apis:fin -->
 
+## Cómo construir un componente
+
+Esta skill cubre cómo **consumir** el kit desde apps externas. Si lo que
+necesitas es **crear o refactorizar un componente** del propio kit
+(añadir un `<iswc-foo>` nuevo, o revisar uno existente para que cumpla
+el contrato), sigue la skill paralela:
+
+| Skill | Cuándo |
+| --- | --- |
+| [`build-component/SKILL.md`](../build-component/SKILL.md) | Anatomía obligatoria del `.md`, custom states (`StateMachine`), CSS parts y slots, atributos observados vs propiedades, tokens `--iswc-*`, accesibilidad, tests con `node:test` + `assert/strict`, demo en `demos/<cat>/<comp>/<comp>.html`. |
+
+Sub-guías de la skill:
+
+- [`references/lifecycle.md`](../build-component/references/lifecycle.md) — Hooks de `ElementBase`, shadow, upgrade de propiedades, form-associated, cleanup.
+- [`references/states.md`](../build-component/references/states.md) — Custom states, `setCustomState`, fallback `data-state-*`.
+- [`references/parts-slots.md`](../build-component/references/parts-slots.md) — `part="..."`, slots semánticos, `:slotted(...)`.
+- [`references/props-events.md`](../build-component/references/props-events.md) — Atributos observados, propiedades, eventos `iswc-*` con `composed: true`.
+- [`references/css-tokens.md`](../build-component/references/css-tokens.md) — Tokens `--iswc-*`, temas, paletas, `static styleAttrs`.
+- [`references/accessibility.md`](../build-component/references/accessibility.md) — Semántica, foco, teclado, ARIA, focus management, modales.
+
 ## Catálogo de componentes
 
 Índice para agentes. Cada fila es un tag que ya existe: abre la guía y reutilízalo. No reimplementes la fila. Los módulos sin tag están arriba en **Módulos API**.
@@ -244,7 +282,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-heading>` | Para los encabezados de una vista cuando se quiere el color tintado de la | [isp/heading.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/heading.md) |
 | `<iswc-loading-overlay>` | Operaciones que el usuario NO debe poder interrumpir ni esquivar: guardar, | [isp/loading-overlay.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/loading-overlay.md) |
 | `<iswc-text>` | Para dar color semántico a un fragmento de texto, o para recortar contenido | [isp/text.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/text.md) |
-| `<iswc-tree-view>` | isp/tree-view-roles.md | [isp/tree-view-roles.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/tree-view-roles.md) |
+| `<iswc-tree-view>` | Para árboles jerárquicos con roles 3D. Ver [isp/tree-view.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/tree-view.md); apéndice de roles: [isp/tree-view-roles.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/isp/tree-view-roles.md) |
 
 ### actions
 
@@ -322,7 +360,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | --- | --- | --- |
 | `<iswc-popover>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/popover.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/popover.md) |
 | `<iswc-ui>` | Primitivas de render para apps consumidoras del kit. | [helpers/ui.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/ui.md) |
-| `<iswc-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/lightbox.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/lightbox.md) |
+
 | `<iswc-relative-time>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/relative-time.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/relative-time.md) |
 | `<iswc-format>` | Web Component genérico de formateo con Intl. | [helpers/format.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/format.md) |
 | `<iswc-observer>` | Web Component genérico que envuelve IntersectionObserver, MutationObserver y ResizeObserver vía type. | [helpers/observer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/observer.md) |
@@ -336,7 +374,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-resize-observer>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/resize-observer.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/resize-observer.md) |
 | `<iswc-md-render>` | - Mostrar un bloque MD embebido en una página o card. | [helpers/md-render.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-render.md) |
 | `<iswc-md-editor>` | - Instrucciones/prompts con {{variables}} que hay que revisar o editar en un diálogo grande. | [helpers/md-editor.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/md-editor.md) |
-| `<iswc-floating>` | Building block de posicionamiento anclado: coloca un panel respecto de un ancla resolviendo flip, shift, auto-size, flecha y hover bridge sobre _shared/position.js. | [helpers/floating.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/floating.md) |
+| _omitido_ | _`<iswc-floating>` es interno (no es API de producto); ver la nota arriba en §Catálogo._ | [helpers/floating.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/helpers/floating.md) (referencia interna) |
 
 ### navigation
 
@@ -445,7 +483,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | Tag | Resumen | Guía |
 | --- | --- | --- |
 | `<iswc-flowchart>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/flowchart.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/flowchart.md) |
-| `<iswc-sequence-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/sequence-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/sequence-diagram.md) |
+| `<iswc-lightbox>` | Visor a pantalla completa para imágenes y diagramas renderizados por el kit. | [diagrams/lightbox.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/lightbox.md) |
 | `<iswc-diagram-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/diagram-lightbox.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/diagram-lightbox.md) |
 | `<iswc-class-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/class-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/class-diagram.md) |
 | `<iswc-state-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/state-diagram.md](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/diagrams/state-diagram.md) |

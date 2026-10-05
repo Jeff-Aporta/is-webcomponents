@@ -509,5 +509,218 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tabla de datos con la superficie de MUI X Data Grid: columnas tipadas, multi-orden, filtros con Y/O,\r\n          quick filter, paginación, selección de filas y de rangos de celdas, edición por celda o por fila,\r\n          agrupación con agregación, tree data, pivot, virtualización y exportación."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>density</code>",
+            "default": "standard · compact · comfortable"
+          },
+          {
+            "name": "<code>row-height</code> / <code>header-height</code>",
+            "default": "según densidad"
+          },
+          {
+            "name": "<code>auto-height</code>",
+            "default": "off (alto por <code>--iswc-grid-height</code>)"
+          },
+          {
+            "name": "<code>pagination</code> / <code>page-size</code> / <code>page-size-options</code>",
+            "default": "off · 25 · 10,25,50,100"
+          },
+          {
+            "name": "<code>pagination-mode</code> / <code>sorting-mode</code> / <code>filter-mode</code>",
+            "default": "client · server"
+          },
+          {
+            "name": "<code>row-count</code>",
+            "default": "total en modo servidor"
+          },
+          {
+            "name": "<code>sorting-order</code>",
+            "default": "asc,desc,null"
+          },
+          {
+            "name": "<code>selection-mode</code> / <code>checkbox-selection</code> / <code>cell-selection</code>",
+            "default": "single · multiple · none"
+          },
+          {
+            "name": "<code>disable-row-selection-on-click</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>editable</code> / <code>edit-mode</code>",
+            "default": "off · cell · row"
+          },
+          {
+            "name": "<code>show-toolbar</code> / <code>quick-filter</code> / <code>header-filters</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>hide-footer</code> / <code>hide-footer-selected-count</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>virtualize</code> / <code>overscan</code>",
+            "default": "on · 6"
+          },
+          {
+            "name": "<code>loading</code> / <code>loading-variant</code>",
+            "default": "off · spinner, progress, skeleton"
+          },
+          {
+            "name": "<code>tree-data</code> / <code>list-view</code> / <code>row-reorder</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>detail-height</code>",
+            "default": "160"
+          },
+          {
+            "name": "<code>clipboard</code> / <code>undo-redo</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>aggregation-position</code>",
+            "default": "footer · inline"
+          },
+          {
+            "name": "<code>tab-navigation</code>",
+            "default": "none · content · header · all"
+          },
+          {
+            "name": "<code>disable-column-menu|filter|sort|resize|reorder</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>disable-multiple-sorting</code>",
+            "default": "off"
+          },
+          {
+            "name": "<code>selectable</code> / <code>filterable</code>",
+            "default": "alias de la v1"
+          },
+          {
+            "name": "<code>columns</code>",
+            "forma": "<code>[{ field, headerName, type, width, flex, minWidth, maxWidth, align, headerAlign, sortable, filterable, hideable, resizable, editable, groupable, description, valueGetter, valueFormatter, valueParser, renderCell, renderHeader, cellClassName, headerClassName, colSpan, getActions, valueOptions, filterOperators, sortComparator, preProcessEditCellProps }]</code>"
+          },
+          {
+            "name": "<code>rows</code> / <code>pinnedRows</code>",
+            "forma": "<code>[obj]</code> · <code>{ top, bottom }</code>"
+          },
+          {
+            "name": "<code>sortModel</code>",
+            "forma": "<code>[{ field, sort }]</code>"
+          },
+          {
+            "name": "<code>filterModel</code>",
+            "forma": "<code>{ items: [{ field, operator, value }], logicOperator }</code>"
+          },
+          {
+            "name": "<code>quickFilterValue</code>",
+            "forma": "texto"
+          },
+          {
+            "name": "<code>paginationModel</code>",
+            "forma": "<code>{ page, pageSize }</code>"
+          },
+          {
+            "name": "<code>rowSelectionModel</code> / <code>cellSelectionModel</code>",
+            "forma": "<code>[id]</code> · <code>{ start, end }</code>"
+          },
+          {
+            "name": "<code>columnVisibilityModel</code> / <code>pinnedColumns</code> / <code>columnOrder</code>",
+            "forma": "<code>{ field: bool }</code> · <code>{ left, right }</code> · <code>[field]</code>"
+          },
+          {
+            "name": "<code>columnGroupingModel</code>",
+            "forma": "<code>[{ groupId, headerName, children }]</code> (anidable)"
+          },
+          {
+            "name": "<code>rowGroupingModel</code> / <code>aggregationModel</code>",
+            "forma": "<code>[field]</code> · <code>{ field: 'sum' }</code>"
+          },
+          {
+            "name": "<code>pivotModel</code>",
+            "forma": "<code>{ rows, columns, values: [{ field, fn }] }</code>"
+          },
+          {
+            "name": "<code>listViewColumn</code>",
+            "forma": "definición de columna única"
+          },
+          {
+            "name": "<code>localeText</code>",
+            "forma": "textos de UI"
+          },
+          {
+            "name": "hooks",
+            "forma": "<code>getRowId</code>, <code>getRowHeight</code>, <code>getRowClassName</code>, <code>getCellClassName</code>, <code>getTreeDataPath</code>, <code>getDetailPanelContent</code>, <code>isRowSelectable</code>, <code>isCellEditable</code>, <code>processRowUpdate</code>, <code>rowsLoader</code>"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>setPage</code>, <code>setPageSize</code>",
+            "desc": "paginación"
+          },
+          {
+            "metodo": "<code>setSortModel</code>, <code>sortColumn</code>",
+            "desc": "orden"
+          },
+          {
+            "metodo": "<code>setFilterModel</code>, <code>setQuickFilter</code>",
+            "desc": "filtros"
+          },
+          {
+            "metodo": "<code>setColumnVisibility</code>, <code>setColumnWidth</code>, <code>pinColumn</code>, <code>autosizeColumns</code>",
+            "desc": "columnas"
+          },
+          {
+            "metodo": "<code>selectRow</code>, <code>selectAll</code>, <code>getRow</code>, <code>updateRows</code>",
+            "desc": "filas"
+          },
+          {
+            "metodo": "<code>startEdit</code>, <code>stopEdit</code>",
+            "desc": "edición"
+          },
+          {
+            "metodo": "<code>toggleGroup</code>, <code>expandAll</code>, <code>collapseAll</code>, <code>toggleDetailPanel</code>",
+            "desc": "árbol"
+          },
+          {
+            "metodo": "<code>setRowGroupingModel</code>, <code>setAggregationModel</code>, <code>setDensity</code>",
+            "desc": "modelos"
+          },
+          {
+            "metodo": "<code>exportDataAsCsv</code>, <code>exportDataAsExcel</code>, <code>exportDataAsPrint</code>",
+            "desc": "salida"
+          },
+          {
+            "metodo": "<code>copySelectionToClipboard</code>, <code>undo</code>, <code>redo</code>",
+            "desc": "portapapeles e historial"
+          },
+          {
+            "metodo": "<code>scrollToIndex</code>, <code>refresh</code>",
+            "desc": "vista"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<!-- El snippet completo vive en el bloque <code> de la siguiente sección (cols). -->\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

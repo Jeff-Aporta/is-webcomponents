@@ -199,5 +199,89 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Selector visual de paletas de marca. Por defecto expone las 3 paletas de <code class=\"code\">styles/palettes.css</code>; el consumidor puede pasar su propio array JSON para usar SU marca y SU CSS, y opcionalmente inyectar un trigger personalizado en el slot <code class=\"code\">trigger</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>palettes</code>",
+            "type": "JSON string",
+            "default": "3 paletas InSoft / ContaPyme / AgroWin"
+          },
+          {
+            "name": "<code>value</code>",
+            "type": "string",
+            "default": "la primera del array"
+          },
+          {
+            "name": "<code>storage-key</code>",
+            "type": "string",
+            "default": "<code>iswc-palette</code>"
+          },
+          {
+            "name": "<code>aria-label</code>",
+            "type": "string",
+            "default": "Elegir paleta"
+          },
+          {
+            "name": "<code>value</code>",
+            "desc": "identificador (requerido)"
+          },
+          {
+            "name": "<code>label</code>",
+            "desc": "texto en el menu y el trigger interno"
+          },
+          {
+            "name": "<code>accent</code>",
+            "desc": "color del swatch en el menu"
+          },
+          {
+            "name": "<code>css</code>",
+            "desc": "URL de <code>&lt;link rel=\"stylesheet\"&gt;</code> cargado al seleccionar"
+          },
+          {
+            "name": "<code>lead</code> + <code>accentLabel</code>",
+            "desc": "dos mitades para el trigger interno (estilo logo)"
+          },
+          {
+            "name": "<code>leadColor</code> + <code>accentColor</code>",
+            "desc": "colores de las dos mitades"
+          },
+          {
+            "name": "<code>bg</code> + <code>fg</code>",
+            "desc": "background y color del trigger interno"
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-palette-change</code>",
+            "cuando": "<code>{ value, palette }</code>"
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>trigger</code>",
+            "desc": "Sustituye el botón trigger interno. El consumidor pone SU HTML; el componente aún abre/cierra el menu y emite <code>iswc-palette-change</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-palette-selector></iswc-palette-selector>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "states"
+    ]
+  }
 }

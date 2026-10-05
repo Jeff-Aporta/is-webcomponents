@@ -229,5 +229,90 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tabs accesibles con navegación por teclado (←/→), activación automática o\r\n          manual, indicator animado, placements (top/bottom/start/end), scroll horizontal\r\n          automático y soporte para tabs cerrables."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>active</code>",
+            "type": "string",
+            "default": "\"\"",
+            "desc": "Nombre del panel activo."
+          },
+          {
+            "name": "<code>placement</code>",
+            "type": "top | bottom | start | end",
+            "default": "top",
+            "desc": "Posición de los tabs."
+          },
+          {
+            "name": "<code>activation</code>",
+            "type": "auto | manual",
+            "default": "auto",
+            "desc": "Activación por teclado."
+          },
+          {
+            "name": "<code>without-scroll-controls</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Sin botones de scroll horizontal."
+          },
+          {
+            "name": "<code>panel</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Nombre del panel al que apunta."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea la activación."
+          },
+          {
+            "name": "<code>closable</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Muestra el botón de cerrar."
+          },
+          {
+            "name": "<code>name</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Identificador único del panel."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-tab-show</code>",
+            "cuando": "Un panel pasa a activo. <code>detail: { name, panel, tab }</code>."
+          },
+          {
+            "evento": "<code>iswc-tab-hide</code>",
+            "cuando": "Un panel pasa a oculto."
+          },
+          {
+            "evento": "<code>iswc-tab-close</code>",
+            "cuando": "Click en X. <code>detail: { tab, name }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tab-group active=\"general\">\n  <iswc-tab slot=\"nav\" panel=\"general\">General</iswc-tab>\n  <iswc-tab-panel name=\"general\">Contenido del panel.</iswc-tab-panel>\n  …\n</iswc-tab-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

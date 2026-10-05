@@ -389,5 +389,103 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Valoración form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-rating/\" target=\"_blank\" rel=\"noreferrer\">Rating de MUI</a>:\r\n          precisión arbitraria, iconos propios, textos de hover, variantes de color y reset."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>name</code>",
+            "desc": "clave en FormData (omitida si value = 0)"
+          },
+          {
+            "metodo": "<code>value</code>",
+            "desc": "0 … <code>max</code> (default 0)"
+          },
+          {
+            "metodo": "<code>max</code>",
+            "desc": "número de iconos (default 5)"
+          },
+          {
+            "metodo": "<code>precision</code>",
+            "desc": "granularidad: <code>1</code> (default) · <code>0.5</code> · <code>0.25</code> · <code>0.1</code>"
+          },
+          {
+            "metodo": "<code>allow-half</code>",
+            "desc": "alias histórico de <code>precision=\"0.5\"</code>"
+          },
+          {
+            "metodo": "<code>icon</code> <code>empty-icon</code>",
+            "desc": "nombres de <code>iswc-icon</code>; sin <code>empty-icon</code> se reutiliza <code>icon</code>"
+          },
+          {
+            "metodo": "<code>highlight-selected-only</code>",
+            "desc": "resalta solo el icono del valor, no los anteriores"
+          },
+          {
+            "metodo": "<code>variant</code>",
+            "desc": "<code>brand</code> (default) · <code>neutral</code> · <code>success</code> · <code>warning</code> · <code>danger</code>"
+          },
+          {
+            "metodo": "<code>label-format</code>",
+            "desc": "plantilla del texto, ej. <code>\"{v} de {max}\"</code>"
+          },
+          {
+            "metodo": "<code>show-label</code>",
+            "desc": "muestra el texto del hover/valor junto a los iconos"
+          },
+          {
+            "metodo": "<code>clearable</code>",
+            "desc": "reclicar el valor actual (o <code>Delete</code>) lo pone a 0"
+          },
+          {
+            "metodo": "<code>label</code>",
+            "desc": "texto o slot homónimo"
+          },
+          {
+            "metodo": "<code>disabled</code> <code>readonly</code> <code>required</code>",
+            "desc": "boolean; en <code>readonly</code> el valor admite cualquier fracción"
+          },
+          {
+            "metodo": "propiedades JS",
+            "desc": "<code>value</code> <code>labels</code> (índice 0 = valor 1) <code>getLabelText(v)</code> <code>precision</code> <code>icon</code> <code>emptyIcon</code> <code>variant</code>"
+          },
+          {
+            "metodo": "métodos",
+            "desc": "<code>clear()</code> <code>focus()</code> <code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>form-control</code> <code>label</code> <code>base</code> <code>star</code> <code>icon-empty</code> <code>icon-filled</code> <code>hover-label</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>blank</code> <code>disabled</code> <code>readonly</code>"
+          },
+          {
+            "metodo": "events",
+            "desc": "<code>iswc-change</code> · <code>iswc-hover</code> (<code>detail.phantomValue</code>, <code>detail.label</code>)"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-rating-size</code> <code>--iswc-rating-gap</code> <code>--iswc-rating-color</code> <code>--iswc-rating-empty</code> <code>--iswc-rating-focus</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-rating label=\"Satisfacción\" value=\"3\" name=\"rating\"></iswc-rating>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

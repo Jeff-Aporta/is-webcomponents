@@ -185,5 +185,74 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Árbol jerárquico accesible: expansión, selección, navegación por teclado\r\n          (↑/↓/←/→/Home/End/Enter/Space), iconos por slot y selección\r\n          <code class=\"code\">single</code> | <code class=\"code\">leaf</code> | <code class=\"code\">multiple</code> | <code class=\"code\">none</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>selection</code>",
+            "type": "none | single | leaf | multiple",
+            "default": "single",
+            "desc": "Modo de selección."
+          },
+          {
+            "name": "<code>expanded</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Inicia todos los nodos expandidos."
+          },
+          {
+            "name": "<code>expanded</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "El nodo está expandido."
+          },
+          {
+            "name": "<code>selected</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "El nodo está seleccionado."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Bloquea interacción."
+          },
+          {
+            "name": "<code>has-children</code>",
+            "type": "boolean",
+            "default": "auto",
+            "desc": "Fuerza presencia de hijos."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-tree-select</code>",
+            "cuando": "Selección. <code>detail: { item, selected, selectedItems }</code>."
+          },
+          {
+            "evento": "<code>iswc-tree-toggle</code>",
+            "cuando": "Expande/colapsa. <code>detail: { item, expanded }</code>."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-tree selection=\"single\" expanded>\n  <iswc-tree-item>\n    <iswc-icon slot=\"icon\" icon=\"mdi:folder\"></iswc-icon>\n    Documentos\n    <iswc-tree-item>facturas-2024.pdf</iswc-tree-item>\n  </iswc-tree-item>\n</iswc-tree>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

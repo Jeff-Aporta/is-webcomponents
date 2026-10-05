@@ -435,5 +435,154 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Área de texto form-associated con las mismas piezas que\r\n          <a href=\"https://mui.com/material-ui/react-text-field/\" target=\"_blank\" rel=\"noreferrer\">TextField</a>\r\n          en modo <em>multiline</em> y el crecimiento automático de\r\n          <a href=\"https://mui.com/material-ui/react-textarea-autosize/\" target=\"_blank\" rel=\"noreferrer\">TextareaAutosize</a>:\r\n          appearances, error, contador y <code class=\"code\">autosize</code> con\r\n          <code class=\"code\">min-rows</code> / <code class=\"code\">max-rows</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>appearance</code>",
+            "desc": "<code>outlined</code> (default) · <code>filled</code> · <code>underlined</code>"
+          },
+          {
+            "name": "<code>label-placement</code>",
+            "desc": "<code>top</code> (default) · <code>start</code>"
+          },
+          {
+            "name": "<code>name</code> <code>value</code> <code>placeholder</code>",
+            "desc": "string"
+          },
+          {
+            "name": "<code>label</code> <code>hint</code>",
+            "desc": "texto o slots homónimos"
+          },
+          {
+            "name": "<code>error-text</code>",
+            "desc": "mensaje que sustituye al <code>hint</code> cuando hay error"
+          },
+          {
+            "name": "<code>rows</code>",
+            "desc": "filas visibles (default 3)"
+          },
+          {
+            "name": "<code>resize</code>",
+            "desc": "<code>none</code> · <code>vertical</code> (default) · <code>both</code> · <code>auto</code>"
+          },
+          {
+            "name": "<code>min-rows</code> <code>max-rows</code>",
+            "desc": "límites del autosize; <code>min-rows</code> cae en <code>rows</code>"
+          },
+          {
+            "name": "<code>maxlength</code>",
+            "desc": "límite de caracteres (pasa al textarea nativo)"
+          },
+          {
+            "name": "<code>autosize</code>",
+            "desc": "boolean · altura pegada al contenido (= <code>resize=\"auto\"</code>)"
+          },
+          {
+            "name": "<code>disabled</code> <code>required</code> <code>readonly</code>",
+            "desc": "boolean"
+          },
+          {
+            "name": "<code>error</code>",
+            "desc": "boolean · fuerza el estado visual de peligro"
+          },
+          {
+            "name": "<code>show-count</code>",
+            "desc": "boolean · contador <code>n/maxlength</code> (o <code>n</code>)"
+          },
+          {
+            "name": "<code>full-width</code>",
+            "desc": "boolean · 100% del ancho disponible, ignora <code>--iswc-field-width</code>"
+          },
+          {
+            "name": "<code>--iswc-field-width</code>",
+            "desc": "ancho del control (default <code>auto</code>); heredable desde el contenedor"
+          },
+          {
+            "name": "<code>--iswc-field-label-width</code>",
+            "desc": "columna del label con <code>label-placement=\"start\"</code>"
+          },
+          {
+            "name": "<code>--iswc-textarea-bg</code> <code>--iswc-textarea-border</code> <code>--iswc-textarea-text</code>",
+            "desc": "caen en <code>--iswc-control-*</code>"
+          },
+          {
+            "name": "<code>--iswc-textarea-border-radius</code> <code>--iswc-textarea-focus</code>",
+            "desc": "caen en <code>--iswc-radius-sm</code> / <code>--iswc-focus</code>"
+          },
+          {
+            "name": "<code>--iswc-textarea-danger</code> <code>--iswc-textarea-danger-text</code>",
+            "desc": "borde y texto del estado de error"
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>value</code> <code>defaultValue</code>",
+            "desc": "valor actual · valor del atributo <code>value</code> (el del reset)"
+          },
+          {
+            "metodo": "<code>appearance</code> <code>labelPlacement</code> <code>resize</code>",
+            "desc": "sanitizan valores no válidos al default"
+          },
+          {
+            "metodo": "<code>autosize</code> <code>minRows</code> <code>maxRows</code>",
+            "desc": "<code>autosize</code> devuelve <code>true</code> también con <code>resize=\"auto\"</code>"
+          },
+          {
+            "metodo": "<code>error</code> <code>errorText</code> <code>showCount</code> <code>fullWidth</code>",
+            "desc": "reflejan sus atributos"
+          },
+          {
+            "metodo": "<code>textarea</code>",
+            "desc": "el <code>&lt;textarea&gt;</code> nativo interno"
+          },
+          {
+            "metodo": "<code>validity</code> <code>validationMessage</code> <code>willValidate</code>",
+            "desc": "espejo de <code>ElementInternals</code>"
+          },
+          {
+            "metodo": "<code>focus()</code> <code>blur()</code> <code>select()</code> <code>setSelectionRange()</code>",
+            "desc": "delegan en el textarea interno"
+          },
+          {
+            "metodo": "<code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity()</code>",
+            "desc": "<code>reportValidity()</code> además marca el campo como tocado"
+          },
+          {
+            "metodo": "slots",
+            "desc": "<code>label</code> <code>hint</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>form-control</code> <code>label</code> <code>base</code> <code>textarea</code> <code>support</code> <code>hint</code> <code>error-text</code> <code>count</code>"
+          },
+          {
+            "metodo": "states",
+            "desc": "<code>blank</code> <code>disabled</code> <code>readonly</code> <code>focused</code> <code>invalid</code>"
+          },
+          {
+            "metodo": "events",
+            "desc": "<code>iswc-input</code> <code>iswc-change</code> (<code>detail.value</code>) + nativos <code>input</code> / <code>change</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-textarea id=\"demo\" label=\"Descripción\" hint=\"Máximo 200 caracteres\" maxlength=\"200\" show-count rows=\"4\" placeholder=\"Cuéntanos…\" name=\"descripcion\"></iswc-textarea>\n```"
+      }
+    },
+    "exclude": [
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

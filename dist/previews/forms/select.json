@@ -17,142 +17,142 @@
           "kind": "demo",
           "html": "<iswc-select id=\"sel\" label=\"Ciudad\" hint=\"Una sola opción\" placeholder=\"Elige una ciudad…\" name=\"city\" clearable style=\"max-width:20rem\">\r\n            <iswc-option value=\"bog\">Bogotá</iswc-option>\r\n            <iswc-option value=\"med\">Medellín</iswc-option>\r\n            <iswc-option value=\"cal\">Cali</iswc-option>\r\n            <iswc-option value=\"barr\">Barranquilla</iswc-option>\r\n            <iswc-option value=\"buc\" disabled>Bucaramanga (no disponible)</iswc-option>\r\n            <iswc-option value=\"cta\">Cartagena</iswc-option>\r\n          </iswc-select>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:label",
-                "label": "label",
-                "options": [
-                  "Ciudad",
-                  "outlined (default)",
-                  "filled",
-                  "underlined",
-                  "Con hint",
-                  "Con error",
-                  "Error + filled",
-                  "normal",
-                  "full-width",
-                  "auto-width",
-                  "max-visible 4.5",
-                  "tags (default)",
-                  "text",
-                  "count",
-                  "limit-tags 2",
-                  "Personas",
-                  "Categoría",
-                  "Destino",
-                  "País",
-                  "Etiquetas",
-                  "Deshabilitado",
-                  "Con slot start",
-                  "Clearable"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:placeholder",
-                "label": "placeholder",
-                "options": [
-                  "Elige una ciudad…",
-                  "Sin selección…",
-                  "Ancho por defecto…",
-                  "Ocupa el resto…",
-                  "Estrecho…",
-                  "20 opciones…",
-                  "Selecciona…",
-                  "Elige una…",
-                  "Elige un destino…",
-                  "Obligatorio…",
-                  "Opcional…",
-                  "Buscar…"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:clearable",
-                "label": "clearable"
-              },
-              {
-                "control": "select",
-                "prop": "attr:value",
-                "label": "value",
-                "options": [
-                  "a",
-                  "js,css",
-                  "js,css,html",
-                  "js,ts,css,html",
-                  "oliver,april",
-                  "1"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:variant",
-                "label": "variant",
-                "options": [
-                  "filled",
-                  "underlined"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:error",
-                "label": "error"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:full-width",
-                "label": "full-width"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:auto-width",
-                "label": "auto-width"
-              },
-              {
-                "control": "number",
-                "prop": "attr:max-visible",
-                "label": "max-visible",
-                "min": 0,
-                "max": 100,
-                "step": 1
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:multiple",
-                "label": "multiple"
-              },
-              {
-                "control": "select",
-                "prop": "attr:selection-display",
-                "label": "selection-display",
-                "options": [
-                  "text",
-                  "count"
-                ]
-              },
-              {
-                "control": "number",
-                "prop": "attr:limit-tags",
-                "label": "limit-tags",
-                "min": 0,
-                "max": 100,
-                "step": 1
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:checkmarks",
-                "label": "checkmarks"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:required",
-                "label": "required"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:disabled",
-                "label": "disabled"
-              }
+            {
+              "control": "select",
+              "prop": "attr:label",
+              "label": "label",
+              "options": [
+                "Ciudad",
+                "outlined (default)",
+                "filled",
+                "underlined",
+                "Con hint",
+                "Con error",
+                "Error + filled",
+                "normal",
+                "full-width",
+                "auto-width",
+                "max-visible 4.5",
+                "tags (default)",
+                "text",
+                "count",
+                "limit-tags 2",
+                "Personas",
+                "Categoría",
+                "Destino",
+                "País",
+                "Etiquetas",
+                "Deshabilitado",
+                "Con slot start",
+                "Clearable"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:placeholder",
+              "label": "placeholder",
+              "options": [
+                "Elige una ciudad…",
+                "Sin selección…",
+                "Ancho por defecto…",
+                "Ocupa el resto…",
+                "Estrecho…",
+                "20 opciones…",
+                "Selecciona…",
+                "Elige una…",
+                "Elige un destino…",
+                "Obligatorio…",
+                "Opcional…",
+                "Buscar…"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:clearable",
+              "label": "clearable"
+            },
+            {
+              "control": "select",
+              "prop": "attr:value",
+              "label": "value",
+              "options": [
+                "a",
+                "js,css",
+                "js,css,html",
+                "js,ts,css,html",
+                "oliver,april",
+                "1"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "filled",
+                "underlined"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:error",
+              "label": "error"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:full-width",
+              "label": "full-width"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:auto-width",
+              "label": "auto-width"
+            },
+            {
+              "control": "number",
+              "prop": "attr:max-visible",
+              "label": "max-visible",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:multiple",
+              "label": "multiple"
+            },
+            {
+              "control": "select",
+              "prop": "attr:selection-display",
+              "label": "selection-display",
+              "options": [
+                "text",
+                "count"
+              ]
+            },
+            {
+              "control": "number",
+              "prop": "attr:limit-tags",
+              "label": "limit-tags",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:checkmarks",
+              "label": "checkmarks"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:required",
+              "label": "required"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:disabled",
+              "label": "disabled"
+            }
           ],
           "equivNote": "Ramas de selección: multiple cambia FormData y cómo se muestra el valor.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -378,6 +378,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-select\">\n  <iswc-select label=\"Pais\">\n    <iswc-option>Pais</iswc-option>\n    <iswc-option>Mexico</iswc-option>\n    <iswc-option>Espana</iswc-option>\n    <iswc-option>Argentina</iswc-option>\n  </iswc-select>\n  <iswc-icon slot=\"start\" icon=\"mdi:earth\"></iswc-icon>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia — iswc-select",
       "blocks": [
@@ -513,5 +524,135 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Select form-associated con paridad funcional con el\r\n          <a href=\"https://mui.com/material-ui/react-select/\" target=\"_blank\" rel=\"noreferrer\">Select de MUI</a>:\r\n          variants, error, selección múltiple con chips o checkmarks, agrupación, opciones ricas y typeahead.\r\n          El listbox vive en un <code class=\"code\">&lt;dialog&gt;</code> del top layer, así que nunca lo recorta\r\n          el <code class=\"code\">overflow</code> de un ancestro."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>name</code>",
+            "desc": "clave en FormData; en <code>multiple</code>, una entrada por valor"
+          },
+          {
+            "metodo": "<code>value</code>",
+            "desc": "valor único, o lista separada por comas en <code>multiple</code>"
+          },
+          {
+            "metodo": "<code>multiple</code>",
+            "desc": "boolean — selección múltiple"
+          },
+          {
+            "metodo": "<code>selection-display</code>",
+            "desc": "<code>tags</code> (default) · <code>text</code> · <code>count</code>"
+          },
+          {
+            "metodo": "<code>limit-tags</code>",
+            "desc": "nº de chips visibles en modo <code>tags</code>; el resto se resume en <code>+N</code>"
+          },
+          {
+            "metodo": "<code>checkmarks</code>",
+            "desc": "boolean — casilla por opción en el listbox (solo <code>multiple</code>)"
+          },
+          {
+            "metodo": "<code>appearance</code>",
+            "desc": "<code>outlined</code> (default) · <code>filled</code> · <code>underlined</code>"
+          },
+          {
+            "metodo": "<code>error</code> <code>error-text</code>",
+            "desc": "estado de peligro; <code>error-text</code> sustituye al <code>hint</code>"
+          },
+          {
+            "metodo": "<code>full-width</code>",
+            "desc": "boolean — <code>width: 100%</code>"
+          },
+          {
+            "metodo": "<code>auto-width</code>",
+            "desc": "boolean — listbox al ancho del contenido, no del trigger"
+          },
+          {
+            "metodo": "<code>max-visible</code>",
+            "desc": "alto máximo del listbox en nº de opciones (admite decimales)"
+          },
+          {
+            "metodo": "<code>placeholder</code> <code>label</code> <code>hint</code>",
+            "desc": "texto o slots <code>label</code> / <code>hint</code>"
+          },
+          {
+            "metodo": "<code>disabled</code> <code>required</code> <code>clearable</code> <code>open</code>",
+            "desc": "boolean"
+          },
+          {
+            "metodo": "propiedades JS",
+            "desc": "<code>value</code> <code>values</code> (string[]) <code>selectedOptions</code> <code>selectionDisplay</code> <code>appearance</code> <code>errorText</code> <code>limitTags</code> <code>maxVisible</code> <code>form</code> <code>validity</code> <code>validationMessage</code>"
+          },
+          {
+            "metodo": "métodos",
+            "desc": "<code>show()</code> <code>hide()</code> <code>checkValidity()</code> <code>reportValidity()</code> <code>setCustomValidity(msg)</code>"
+          },
+          {
+            "metodo": "slots",
+            "desc": "default (<code>iswc-option</code>) · <code>label</code> · <code>hint</code> · <code>start</code>"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>label</code> <code>base</code> <code>trigger</code> <code>clear</code> <code>hint</code> <code>error-text</code> <code>dialog</code> <code>listbox</code> <code>group</code> <code>group-label</code> <code>option</code> <code>check</code> <code>option-start</code> <code>option-description</code> <code>tag</code>"
+          },
+          {
+            "metodo": "custom states",
+            "desc": "<code>:state(open)</code> <code>:state(blank)</code> <code>:state(disabled)</code> <code>:state(error)</code>"
+          },
+          {
+            "metodo": "eventos",
+            "desc": "<code>iswc-change</code> { value, values } · <code>iswc-show</code> · <code>iswc-hide</code>"
+          },
+          {
+            "metodo": "tokens",
+            "desc": "<code>--iswc-select-border-radius</code> <code>--iswc-select-border</code> <code>--iswc-select-bg</code> <code>--iswc-select-text</code> <code>--iswc-select-focus</code> <code>--iswc-select-danger</code> <code>--iswc-select-danger-text</code>"
+          },
+          {
+            "metodo": "<code>value</code>",
+            "desc": "valor enviado; si falta, la etiqueta del slot por defecto"
+          },
+          {
+            "metodo": "<code>group</code>",
+            "desc": "cabecera bajo la que agrupar la opción en el listbox"
+          },
+          {
+            "metodo": "<code>disabled</code> <code>selected</code>",
+            "desc": "boolean — <code>selected</code> lo sincroniza el select"
+          },
+          {
+            "metodo": "propiedades JS",
+            "desc": "<code>value</code> <code>label</code> <code>description</code> <code>group</code> <code>disabled</code> <code>selected</code>"
+          },
+          {
+            "metodo": "slots",
+            "desc": "default (etiqueta) · <code>start</code> (icono/avatar) · <code>description</code> (texto secundario)"
+          },
+          {
+            "metodo": "parts",
+            "desc": "<code>base</code> <code>start</code> <code>label</code> <code>description</code>"
+          },
+          {
+            "metodo": "notas",
+            "desc": "lo compartido con <code>iswc-combobox</code>; ahí el texto de <code>description</code> aún cuenta como etiqueta"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-select label=\"Ciudad\" name=\"city\" placeholder=\"Elige una ciudad…\" clearable>\n  <iswc-option value=\"bog\">Bogotá</iswc-option>\n  <iswc-option value=\"med\">Medellín</iswc-option>\n</iswc-select>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

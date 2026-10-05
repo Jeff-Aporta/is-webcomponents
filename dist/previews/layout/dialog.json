@@ -144,6 +144,28 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-dialog\">\n  <iswc-dialog open label=\"Confirmar\">\n    <p>¿Estas seguro de que quieres continuar?</p>\n    <iswc-button slot=\"footer\" color=\"brand\">Aceptar</iswc-button>\n    <iswc-button slot=\"footer\" color=\"neutral\" variant=\"plain\">Cancelar</iswc-button>\n  </iswc-dialog>\n  <strong slot=\"label\">Confirmar accion</strong>\n  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Ayuda\">\n    <iswc-icon icon=\"mdi:help-circle-outline\"></iswc-icon>\n  </iswc-button>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-dialog\">\n  <iswc-dialog open label=\"Confirmar\">\n    <p>¿Estas seguro de que quieres continuar?</p>\n    <iswc-button slot=\"footer\" color=\"brand\">Aceptar</iswc-button>\n    <iswc-button slot=\"footer\" color=\"neutral\" variant=\"plain\">Cancelar</iswc-button>\n  </iswc-dialog>\n  <strong slot=\"label\">Confirmar accion</strong>\n  <iswc-button slot=\"header-actions\" color=\"neutral\" variant=\"plain\" pill title=\"Ayuda\">\n    <iswc-icon icon=\"mdi:help-circle-outline\"></iswc-icon>\n  </iswc-button>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia completa",
       "blocks": [
@@ -356,5 +378,164 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Modal accesible que requiere la atención inmediata del usuario. Equivalente\r\n          a <code class=\"code\">&lt;dialog&gt;</code> nativo, con header, footer, animaciones,\r\n          light-dismiss y API declarativa <code class=\"code\">data-dialog=\"close\"</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>open</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Estado visible. Reflected."
+          },
+          {
+            "name": "<code>label</code>",
+            "type": "string",
+            "default": "—",
+            "desc": "Título del header (a11y)."
+          },
+          {
+            "name": "<code>without-header</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Oculta el header y el botón de cerrar."
+          },
+          {
+            "name": "<code>light-dismiss</code>",
+            "type": "boolean",
+            "default": "false",
+            "desc": "Cierra al click fuera."
+          },
+          {
+            "name": "<code>--width</code>",
+            "default": "<code>500px</code>",
+            "desc": "Ancho preferido."
+          },
+          {
+            "name": "<code>--spacing</code>",
+            "default": "<code>var(--iswc-space-l, 1rem)</code>",
+            "desc": "Padding interno."
+          },
+          {
+            "name": "<code>--backdrop-color</code>",
+            "default": "<code>rgba(0,0,0,0.55)</code>",
+            "desc": "Color del fondo."
+          },
+          {
+            "name": "<code>--show-duration</code>",
+            "default": "200ms",
+            "desc": "Duración apertura."
+          },
+          {
+            "name": "<code>--hide-duration</code>",
+            "default": "160ms",
+            "desc": "Duración cierre."
+          }
+        ]
+      },
+      "eventos": {
+        "table": [
+          {
+            "evento": "<code>iswc-show</code>",
+            "cancelable": "no",
+            "cuando": "Antes de abrir."
+          },
+          {
+            "evento": "<code>iswc-after-show</code>",
+            "cancelable": "no",
+            "cuando": "Tras la animación de apertura."
+          },
+          {
+            "evento": "<code>iswc-hide</code>",
+            "cancelable": "sí",
+            "cuando": "Antes de cerrar. <code>detail.source</code> indica qué elemento lo pidió."
+          },
+          {
+            "evento": "<code>iswc-after-hide</code>",
+            "cancelable": "no",
+            "cuando": "Tras la animación de cierre."
+          }
+        ]
+      },
+      "slots": {
+        "table": [
+          {
+            "slot": "<code>(default)</code>",
+            "desc": "Contenido del body."
+          },
+          {
+            "slot": "<code>label</code>",
+            "desc": "Título propio (gana sobre el atributo)."
+          },
+          {
+            "slot": "<code>header-actions</code>",
+            "desc": "Acciones adicionales en el header."
+          },
+          {
+            "slot": "<code>footer</code>",
+            "desc": "Pie del diálogo."
+          }
+        ]
+      },
+      "parts": {
+        "table": [
+          {
+            "part": "<code>::part(dialog)</code>",
+            "desc": "Contenedor del diálogo."
+          },
+          {
+            "part": "<code>::part(header)</code>",
+            "desc": "Header."
+          },
+          {
+            "part": "<code>::part(title)</code>",
+            "desc": "Título."
+          },
+          {
+            "part": "<code>::part(close-button)</code>",
+            "desc": "Botón de cerrar."
+          },
+          {
+            "part": "<code>::part(header-actions)</code>",
+            "desc": "Acciones del header."
+          },
+          {
+            "part": "<code>::part(body)</code>",
+            "desc": "Body."
+          },
+          {
+            "part": "<code>::part(footer)</code>",
+            "desc": "Footer."
+          }
+        ]
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>show()</code>",
+            "desc": "Abre."
+          },
+          {
+            "metodo": "<code>hide()</code>",
+            "desc": "Cierra."
+          },
+          {
+            "metodo": "<code>toggle()</code>",
+            "desc": "Alterna."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button onclick=\"document.getElementById('dlg').open = true\">Abrir</iswc-button>\n<iswc-dialog id=\"dlg\" label=\"Título\">\n  Contenido.\n  <div slot=\"footer\">\n    <iswc-button data-dialog=\"close\">Cancelar</iswc-button>\n  </div>\n</iswc-dialog>\n```"
+      }
+    },
+    "exclude": [
+      "props",
+      "states"
+    ]
+  }
 }

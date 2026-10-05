@@ -183,5 +183,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Diagrama de estados en SVG, sin Mermaid. Tú declaras estados y\r\n          transiciones; el componente decide las capas, reduce los cruces y\r\n          rutea las flechas rodeando los estados."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-state-diagram open-on-click>\r\n            <script type=\"application/json\">\r\n              {\r\n                \"stateDiagram\": {\r\n                  \"title\": \"Ciclo de vida de la factura\",\r\n                  \"direction\": \"TB\",\r\n                  \"groups\": [\r\n                    { \"id\": \"g-flujo\", \"name\": \"Flujo\", \"hue\": 239 },\r\n                    { \"id\": \"g-cierre\", \"name\": \"Cierre\", \"hue\": 38 }\r\n                  ],\r\n                  \"states\": [\r\n                    { \"id\": \"inicio\", \"kind\": \"start\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"borrador\", \"label\": \"Borrador\", \"group\": \"g-flujo\",\r\n                      \"desc\": \"Editable por el usuario; sin CUFE asignado.\" },\r\n                    { \"id\": \"decision\", \"label\": \"¿Datos válidos?\", \"kind\": \"choice\", \"group\": \"g-flujo\" },\r\n                    { \"id\": \"emitida\", \"label\": \"Emitida\", \"group\": \"g-cierre\",\r\n                      \"desc\": \"Enviada y aceptada por la **DIAN**.\" },\r\n                    { \"id\": \"anulada\", \"label\": \"Anulada\", \"group\": \"g-cierre\" },\r\n                    { \"id\": \"fin\", \"kind\": \"end\", \"group\": \"g-cierre\" }\r\n                  ],\r\n                  \"transitions\": [\r\n                    { \"from\": \"inicio\", \"to\": \"borrador\" },\r\n                    { \"from\": \"borrador\", \"to\": \"decision\", \"label\": \"validar\" },\r\n                    { \"from\": \"decision\", \"to\": \"borrador\", \"label\": \"no\" },\r\n                    { \"from\": \"decision\", \"to\": \"emitida\", \"label\": \"sí\" },\r\n                    { \"from\": \"emitida\", \"to\": \"anulada\", \"label\": \"anular\" },\r\n                    { \"from\": \"anulada\", \"to\": \"fin\" },\r\n                    { \"from\": \"emitida\", \"to\": \"fin\" }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-state-diagram>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

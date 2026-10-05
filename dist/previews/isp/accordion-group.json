@@ -55,5 +55,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Coordina varios <code class=\"code\">&lt;iswc-details&gt;</code>: por defecto solo uno\r\n          queda abierto. No reimplementa el disclosure, solo lo orquesta."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-accordion-group>\n  <iswc-details summary=\"Datos básicos\" open>…</iswc-details>\n  <iswc-details summary=\"Contacto\">…</iswc-details>\n</iswc-accordion-group>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

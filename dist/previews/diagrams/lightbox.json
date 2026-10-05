@@ -152,5 +152,63 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Visor a pantalla completa, genérico: lo que metas en el slot default se\r\n          monta dentro de un <code class=\"code\">&lt;dialog&gt;</code> top-layer\r\n          con zoom anclado al cursor y pan. Por defecto usa <code class=\"code\">variant=\"backdrop\"</code>\r\n          (20% oscuro + blur 2px). La barra por defecto trae cerrar,\r\n          reset de zoom y compartir enlace; usa el slot <code class=\"code\">toolbar</code>\r\n          para añadir tus propios controles sin tocar el componente."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>variant</code>",
+            "desc": "<code>backdrop</code> (default · 20% + blur 2px) · <code>solid</code> (lienzo opaco)"
+          },
+          {
+            "metodo": "<code>open</code> · <code>show()</code> · <code>hide()</code>",
+            "desc": "visibilidad del dialog"
+          },
+          {
+            "metodo": "<code>zoomable</code> · <code>zoomIn()</code> · <code>zoomOut()</code> · <code>resetView()</code>",
+            "desc": "zoom + pan anclado al cursor"
+          },
+          {
+            "metodo": "<code>view</code> · <code>iswc-reposition</code>",
+            "desc": "estado <code>{scale, x, y}</code> actual"
+          },
+          {
+            "metodo": "<code>close-on-backdrop</code>",
+            "desc": "bool — click fuera cierra (default true)"
+          },
+          {
+            "metodo": "<code>no-default-actions</code>",
+            "desc": "oculta todos los botones por defecto"
+          },
+          {
+            "metodo": "slot <code>toolbar</code>",
+            "desc": "controles propios (anulan zoom/share)"
+          },
+          {
+            "metodo": "slot <code>code-panel</code>",
+            "desc": "panel de código opcional"
+          },
+          {
+            "metodo": "eventos <code>iswc-open</code> · <code>iswc-close</code> · <code>iswc-share</code>",
+            "desc": "ciclo de vida y compartir"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<!-- default: backdrop 20% + blur 2px -->\n<iswc-lightbox id=\"lb\">…</iswc-lightbox>\n\n<!-- lienzo opaco a pantalla completa -->\n<iswc-lightbox variant=\"solid\">…</iswc-lightbox>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

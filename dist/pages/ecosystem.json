@@ -28,7 +28,7 @@
       "id": "playground",
       "title": "Playground del loader",
       "role": "region",
-      "ariaLabel": "Playground interactivo del loader de IS Web Components",
+      "ariaLabel": "Playground interactivo del loader de ISWC",
       "lede": "Elegí categorías o tags y copiá el snippet. El live demo aplica <code>load()</code> sobre esta misma página.",
       "blocks": [
         {

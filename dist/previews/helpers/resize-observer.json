@@ -62,13 +62,52 @@
       "blocks": [
         {
           "kind": "table",
-          "columns": ["Atributo / evento", "Descripción"],
+          "columns": [
+            "Atributo / evento",
+            "Descripción"
+          ],
           "rows": [
-            ["<code>disabled</code>", "Desconecta el ResizeObserver"],
-            ["<code>iswc-resize</code>", "detail: { entries } — array de ResizeObserverEntry"]
+            [
+              "<code>disabled</code>",
+              "Desconecta el ResizeObserver"
+            ],
+            [
+              "<code>iswc-resize</code>",
+              "detail: { entries } — array de ResizeObserverEntry"
+            ]
           ]
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Observa hijos directos y emite <code class=\"code\">iswc-resize</code> con las\n          <code class=\"code\">ResizeObserverEntry</code>. Alias de\n          <code class=\"code\">&lt;iswc-observer type=\"resize\"&gt;</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>disabled</code>",
+            "desc": "Desconecta el ResizeObserver"
+          },
+          {
+            "name": "<code>iswc-resize</code>",
+            "desc": "detail: { entries } — array de ResizeObserverEntry"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-resize-observer>\n  <div style=\"resize:both; overflow:auto\">…</div>\n</iswc-resize-observer>\n\nel.addEventListener('iswc-resize', (e) => {\n  const entry = e.detail.entries[0];\n  console.log(entry.contentRect.width, entry.contentRect.height);\n});\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

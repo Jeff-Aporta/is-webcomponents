@@ -17,27 +17,27 @@
           "kind": "demo",
           "html": "<iswc-button id=\"tip-target\">Hover Me</iswc-button>\r\n          <iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>",
           "controls": [
-              {
-                "control": "select",
-                "prop": "attr:placement",
-                "label": "placement",
-                "options": [
-                  "top",
-                  "right",
-                  "bottom",
-                  "left",
-                  "bottom-start"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:trigger",
-                "label": "trigger",
-                "options": [
-                  "click",
-                  "manual"
-                ]
-              }
+            {
+              "control": "select",
+              "prop": "attr:placement",
+              "label": "placement",
+              "options": [
+                "top",
+                "right",
+                "bottom",
+                "left",
+                "bottom-start"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:trigger",
+              "label": "trigger",
+              "options": [
+                "click",
+                "manual"
+              ]
+            }
           ],
           "equivNote": "trigger decide cómo se abre; tip con HTML suele ir mejor con click.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -86,6 +86,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-tooltip\">\n  <iswc-tooltip label=\"Informacion extra\">\n    <iswc-button>Pasa el mouse</iswc-button>\n  </iswc-tooltip>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "blocks": [
@@ -128,5 +139,55 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tip breve anclado con <code class=\"code\">for</code>. Depende de <code class=\"code\">iswc-popover</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>for</code>",
+            "desc": "id del target"
+          },
+          {
+            "metodo": "<code>trigger</code>",
+            "desc": "hover focus | click | manual — click/manual: fuera + Escape cierra"
+          },
+          {
+            "metodo": "<code>--max-width</code>",
+            "desc": "ancho del tip (default 16rem)"
+          },
+          {
+            "metodo": "slot",
+            "desc": "texto o HTML (p, ul, a, code…)"
+          },
+          {
+            "metodo": "<code>placement</code> <code>distance</code> <code>skidding</code>",
+            "desc": "posicionamiento"
+          },
+          {
+            "metodo": "<code>show()</code> <code>hide()</code>",
+            "desc": "métodos"
+          },
+          {
+            "metodo": "events",
+            "desc": "iswc-show, iswc-after-show, iswc-hide, iswc-after-hide"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-button id=\"tip-target\">Hover Me</iswc-button>\n<iswc-tooltip for=\"tip-target\">This is a tooltip</iswc-tooltip>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

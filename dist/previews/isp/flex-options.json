@@ -35,5 +35,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Port de <code class=\"code\">FlexOptions</code>. El consumidor pasa <code class=\"code\">actions</code> / <code class=\"code\">more</code>; el tag pinta el kit."
+      },
+      "ejemplos": {
+        "content": "```js\nel.actions = [\n  { icon: 'mdi:plus', title: 'Agregar', onClick: () => {} },\n  { icon: 'mdi:pencil', title: 'Editar', onClick: () => {} },\n];\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -17,5 +17,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Caja de los ejemplos de la galería."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-demo heading=\"Ejemplo\"><p>El contenido del ejemplo va en light DOM.</p></iswc-demo>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

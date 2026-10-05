@@ -81,5 +81,45 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Responde a: <strong>¿cambió el HTML de este nodo?</strong>\r\n          Cuando alguien añade/quita hijos, cambia un atributo o el texto, emite\r\n          <code class=\"code\">iswc-mutate</code> con el detalle de qué pasó."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>child-list</code>",
+            "que hace": "Observa altas/bajas de hijos (y, con subtree, nietos)."
+          },
+          {
+            "name": "<code>attr</code>",
+            "que hace": "Lista de atributos a vigilar (espacio-separados). Activa el filtro."
+          },
+          {
+            "name": "<code>character-data</code>",
+            "que hace": "Observa cambios de texto."
+          },
+          {
+            "name": "<code>disabled</code>",
+            "que hace": "Apaga el observer."
+          },
+          {
+            "name": "<code>iswc-mutate</code>",
+            "que hace": "Evento. <code>detail.records</code> = array de <code>MutationRecord</code>."
+          }
+        ]
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

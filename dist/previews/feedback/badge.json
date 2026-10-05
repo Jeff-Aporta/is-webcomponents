@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"demo-row\">\r\n            <iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\r\n            <iswc-badge color=\"success\">Activo</iswc-badge>\r\n            <iswc-badge color=\"warning\" attention=\"pulse\">Pendiente</iswc-badge>\r\n          </div>",
+          "html": "<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>",
           "target": "#badge-play",
           "controls": [
             {
@@ -73,6 +73,17 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs (Simple + Slots). El tab Slots muestra shadow template, codigo editable y un editor por cada slot detectado del componente.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-badge\">\n  <iswc-badge color=\"success\">Activo</iswc-badge>\n  <iswc-icon slot=\"start\" icon=\"mdi:check-circle\"></iswc-icon>\n  <span slot=\"end\">12</span>\n</iswc-slots-pg>"
+        }
+      ]
+    },
+    {
       "id": "reference",
       "title": "Referencia",
       "lede": "Slots: default, start, end.",
@@ -104,5 +115,43 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Etiqueta compacta con variantes semánticas y apariencias."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>variant</code>",
+            "default": "brand"
+          },
+          {
+            "name": "<code>appearance</code>",
+            "default": "accent"
+          },
+          {
+            "name": "<code>pill</code>",
+            "default": "false"
+          },
+          {
+            "name": "<code>attention</code>",
+            "default": "none · pulse · bounce"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-badge id=\"badge-play\">Nuevo</iswc-badge>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

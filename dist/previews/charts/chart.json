@@ -262,5 +262,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Motor de gráficos en SVG, sin dependencias externas. La configuración usa el\r\n          mismo esquema de Chart.js, así que un <code>config</code> existente funciona\r\n          sin cambios."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-chart open-on-click type=\"bar\" label=\"Ingresos vs gastos\" x-label=\"Mes\" y-label=\"Millones COP\">\r\n            <script type=\"application/json\">\r\n              {\r\n                \"data\": {\r\n                  \"labels\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\", \"May\", \"Jun\"],\r\n                  \"datasets\": [\r\n                    { \"label\": \"Ingresos\", \"data\": [48, 56, 62, 58, 71, 68] },\r\n                    { \"label\": \"Gastos\", \"data\": [35, 38, 40, 42, 45, 43] }\r\n                  ]\r\n                }\r\n              }\r\n            </script>\r\n          </iswc-chart>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

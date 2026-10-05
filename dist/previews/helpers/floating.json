@@ -17,5 +17,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Building block interno. En producto usa iswc-popover o iswc-tooltip."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-floating placement=\"bottom\" active><button slot=\"anchor\" type=\"button\">Ancla</button><div>Contenido anclado. No usar este tag en apps.</div></iswc-floating>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

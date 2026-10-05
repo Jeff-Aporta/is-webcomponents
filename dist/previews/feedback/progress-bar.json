@@ -22,9 +22,24 @@
           "html": "<div class=\"pb-demo\">\r\n            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>\r\n          </div>",
           "target": "#pb-play",
           "controls": [
-            { "control": "range", "prop": "attr:value", "label": "Valor", "min": 0, "max": 100, "step": 5 },
-            { "control": "text", "prop": "attr:label", "label": "Label" },
-            { "control": "boolean", "prop": "attr:indeterminate", "label": "Indeterminada" }
+            {
+              "control": "range",
+              "prop": "attr:value",
+              "label": "Valor",
+              "min": 0,
+              "max": 100,
+              "step": 5
+            },
+            {
+              "control": "text",
+              "prop": "attr:label",
+              "label": "Label"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:indeterminate",
+              "label": "Indeterminada"
+            }
           ]
         }
       ]
@@ -91,5 +106,43 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "<code class=\"code\">&lt;iswc-progress-bar&gt;</code>"
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>value</code>",
+            "desc": "0–100 (propiedad reflectada)"
+          },
+          {
+            "name": "<code>label</code>",
+            "desc": "aria-label / valuetext"
+          },
+          {
+            "name": "<code>indeterminate</code>",
+            "desc": "Animación continua"
+          },
+          {
+            "name": "<code>--indicator-color</code>",
+            "desc": "Color del fill"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"pb-demo\">\r\n            <iswc-progress-bar id=\"pb-play\" value=\"65\" label=\"Subiendo archivo\"></iswc-progress-bar>\r\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

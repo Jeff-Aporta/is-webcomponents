@@ -68,5 +68,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Tabla pivot: agrupa por filas y columnas, agrega una medida. Soporta <code>sum</code>, <code>avg</code>, <code>count</code>, <code>min</code> y <code>max</code>."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

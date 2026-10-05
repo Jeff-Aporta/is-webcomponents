@@ -13,7 +13,8 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-cdn-snippet tag=\"iswc-button\"></iswc-cdn-snippet>",
+          "html": "<iswc-cdn-snippet id=\"csPlay\" tag=\"iswc-button\"></iswc-cdn-snippet>",
+          "target": "#csPlay",
           "controls": [
             {
               "control": "select",
@@ -27,134 +28,24 @@
               ]
             },
             {
-              "control": "boolean",
+              "control": "text",
+              "prop": "attr:category",
+              "label": "category"
+            },
+            {
+              "control": "text",
+              "prop": "attr:title",
+              "label": "title"
+            },
+            {
+              "control": "text",
+              "prop": "attr:base",
+              "label": "base (override CDN)"
+            },
+            {
+              "control": "text",
               "prop": "attr:dependencies",
-              "label": "dependencies"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:Chart",
-              "label": "Chart"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:js",
-              "label": "js"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:version",
-              "label": "version"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:https:",
-              "label": "https:"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:cdn",
-              "label": "cdn"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:jsdelivr",
-              "label": "jsdelivr"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:net",
-              "label": "net"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:npm",
-              "label": "npm"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:chart",
-              "label": "chart"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:dist",
-              "label": "dist"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:umd",
-              "label": "umd"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:min",
-              "label": "min"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:note",
-              "label": "note"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:Necesario",
-              "label": "Necesario"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:si",
-              "label": "si"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:usas",
-              "label": "usas"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:lt",
-              "label": "lt"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:iswc-chart",
-              "label": "iswc-chart"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:gt",
-              "label": "gt"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:con",
-              "label": "con"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:type",
-              "label": "type"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:quot",
-              "label": "quot"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:bar",
-              "label": "bar"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:o",
-              "label": "o"
-            },
-            {
-              "control": "boolean",
-              "prop": "attr:line",
-              "label": "line"
+              "label": "dependencies (JSON)"
             }
           ]
         },
@@ -247,5 +138,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Panel copy-paste via <code>loader.min.js</code>: un script del loader y otro que hace <code>loadCSS*</code> y <code>load(tag)</code>. Cada componente se carga solo."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code>tag</code>",
+            "desc": "string — p. ej. <code>\"iswc-button\"</code>. El snippet siempre hace load de ese tag."
+          },
+          {
+            "metodo": "<code>base</code>",
+            "desc": "string — override del CDN base (default <code>cdn.jsdelivr.net/.../dist/cdn</code>)"
+          },
+          {
+            "metodo": "<code>title</code>",
+            "desc": "string — título del panel (default \"Consumo por CDN\")"
+          },
+          {
+            "metodo": "<code>dependencies</code>",
+            "desc": "JSON string — array de deps externas (alternativa al slot)"
+          },
+          {
+            "metodo": "<code>slot=\"deps\"</code>",
+            "desc": "<code>&lt;script type=\"application/json\"&gt;</code> con array de deps"
+          },
+          {
+            "metodo": "Dep shape",
+            "desc": "<code>{name, version?, css?, js?, note?}</code> &mdash; css y js son opcionales independientes"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-cdn-snippet\n  tag=\"iswc-button\"\n  category=\"actions\"\n></iswc-cdn-snippet>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">#,##0.00</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">yyyy-mm-dd</code>\n              <iswc-format class=\"format-grid__value\" type=\"date\" value=\"2026-08-01\" pattern=\"yyyy-mm-dd\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">0.00%</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"0.42\" pattern=\"0.00%\"></iswc-format>\n            </div>\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">title case</code>\n              <iswc-format class=\"format-grid__value\" type=\"text\" value=\"hola mundo contapyme\" case=\"title\"></iswc-format>\n            </div>\n          </div>",
+          "html": "<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">type=\"number\" · pattern=\"#,##0.00\"</code>\n              <iswc-format id=\"pgFormat\" class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></iswc-format>\n            </div>\n          </div>",
           "controls": [
             {
               "control": "select",
@@ -281,5 +281,24 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Formateo con <code class=\"code\">Intl</code> y presets estilo Excel vía <code class=\"code\">pattern</code>. Un solo elemento cubre número, fecha/hora, texto, bytes y tiempo relativo."
+      },
+      "ejemplos": {
+        "content": "```html\n<span class=\"demo-label\">vista rápida</span>\n          <div class=\"format-grid format-grid--cards\">\n            <div class=\"format-grid__row\">\n              <code class=\"format-grid__tag\">type=\"number\" · pattern=\"#,##0.00\"</code>\n              <iswc-format class=\"format-grid__value\" type=\"number\" value=\"1234.5\" pattern=\"#,##0.00\"></iswc-format>\n            </div>\n          </div>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

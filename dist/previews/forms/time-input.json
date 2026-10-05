@@ -40,11 +40,26 @@
       "title": "Referencia",
       "lede": "&lt;iswc-time-input&gt; — Campo de hora con panel (MUI TimePicker). `panel` elige la superficie: columnas digitales (por defecto, como el picker de escritorio de MUI), lista simple o reloj analógico. Atributos: label, hint, name, value (HH:mm[:ss]), min, max, required, disabled, readonly, clearable, locale, ampm, hour24, seconds, panel (sections|list|clock), minutes-step, step, color, action-bar, placement, close-on-select Events: iswc-change, iswc-show, iswc-hide Methods: show(), hide()",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/time-input.js</code>.\r\n        </p>"
-        }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Entrada de hora con selector desplegable."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-time-input label=\"Hora\" value=\"09:15\" style=\"max-width:280px\"></iswc-time-input>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

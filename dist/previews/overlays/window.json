@@ -19,58 +19,58 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<div class=\"desk\">\r\n            <note>Arrastra el header · minimizar las deja como pastillas abajo · esquina redimensiona · clic en la pastilla restaura</note>\r\n            <iswc-window\r\n              title=\"Editor — reporte mensual.txt\"\r\n              x=\"40\" y=\"40\"\r\n              width=\"22rem\" height=\"14rem\"\r\n              minimizable maximizable closable resizable>\r\n              <p>Diseño minimalista del reporte mensual: KPIs arriba, treemap al medio, tabla abajo. Prueba a arrastrarlo y maximizarlo.</p>\r\n            </iswc-window>\r\n            <iswc-window\r\n              title=\"Clientes\"\r\n              x=\"360\" y=\"100\"\r\n              width=\"18rem\" height=\"12rem\"\r\n              minimizable maximizable closable>\r\n              <ul style=\"margin:0; padding-left: 1.25rem; font-size:.85rem; color:var(--iswc-text-soft)\">\r\n                <li>InSoft S.A. — contacto@ins.co</li>\r\n                <li>ContaPyme — hola@conta.co</li>\r\n                <li>AgroWin — soporte@agro.co</li>\r\n              </ul>\r\n            </iswc-window>\r\n          </div>",
+          "html": "<div class=\"desk\">\r\n            <note>Arrastra el header · minimizar las deja como pastillas abajo · esquina redimensiona · clic en la pastilla restaura</note>\r\n            <iswc-window id=\"pgWindow\"\r\n              title=\"Editor — reporte mensual.txt\"\r\n              x=\"40\" y=\"40\"\r\n              width=\"22rem\" height=\"14rem\"\r\n              minimizable maximizable closable resizable>\r\n              <p>Diseño minimalista del reporte mensual: KPIs arriba, treemap al medio, tabla abajo. Prueba a arrastrarlo y maximizarlo.</p>\r\n            </iswc-window>\r\n          </div>",
           "controls": [
-              {
-                "control": "number",
-                "prop": "attr:x",
-                "label": "x",
-                "min": 0,
-                "max": 360,
-                "step": 1
-              },
-              {
-                "control": "number",
-                "prop": "attr:y",
-                "label": "y",
-                "min": 0,
-                "max": 100,
-                "step": 1
-              },
-              {
-                "control": "select",
-                "prop": "attr:width",
-                "label": "width",
-                "options": [
-                  "22rem",
-                  "18rem"
-                ]
-              },
-              {
-                "control": "select",
-                "prop": "attr:height",
-                "label": "height",
-                "options": [
-                  "14rem",
-                  "12rem"
-                ]
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:minimizable",
-                "label": "minimizable"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:maximizable",
-                "label": "maximizable"
-              },
-              {
-                "control": "boolean",
-                "prop": "attr:closable",
-                "label": "closable"
-              },
-              {
+            {
+              "control": "number",
+              "prop": "attr:x",
+              "label": "x",
+              "min": 0,
+              "max": 360,
+              "step": 1
+            },
+            {
+              "control": "number",
+              "prop": "attr:y",
+              "label": "y",
+              "min": 0,
+              "max": 100,
+              "step": 1
+            },
+            {
+              "control": "select",
+              "prop": "attr:width",
+              "label": "width",
+              "options": [
+                "22rem",
+                "18rem"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:height",
+              "label": "height",
+              "options": [
+                "14rem",
+                "12rem"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:minimizable",
+              "label": "minimizable"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:maximizable",
+              "label": "maximizable"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:closable",
+              "label": "closable"
+            },
+            {
               "control": "boolean",
               "prop": "attr:resizable",
               "label": "resizable"
@@ -79,16 +79,27 @@
               "control": "select",
               "prop": "attr:scope",
               "label": "scope",
-              "options": ["local", "global"]
+              "options": [
+                "local",
+                "global"
+              ]
             },
             {
               "control": "select",
               "prop": "attr:position",
               "label": "position",
-              "options": ["absolute", "fixed"]
+              "options": [
+                "absolute",
+                "fixed"
+              ]
             }
           ],
           "contain": true
+        },
+        {
+          "kind": "demo",
+          "html": "<div class=\"desk\">\r\n            <iswc-window\r\n              title=\"Clientes\"\r\n              x=\"360\" y=\"100\"\r\n              width=\"18rem\" height=\"12rem\"\r\n              minimizable maximizable closable>\r\n              <ul style=\"margin:0; padding-left: 1.25rem; font-size:.85rem; color:var(--iswc-text-soft)\">\r\n                <li>InSoft S.A. — contacto@ins.co</li>\r\n                <li>ContaPyme — hola@conta.co</li>\r\n                <li>AgroWin — soporte@agro.co</li>\r\n              </ul>\r\n            </iswc-window>\r\n          </div>",
+          "heading": "Dos ventanas: la del playground (con controles) y una segunda independiente (con título/contenido distintos)"
         }
       ]
     },
@@ -102,5 +113,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Ventana flotante con botones minimizar/maximizar/cerrar y drag del header. La esquina inferior derecha redimensiona cuando tiene el atributo <code>resizable</code>."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

@@ -1,4 +1,4 @@
----
+﻿---
 name: build-component
 description: >-
   Cómo construir un componente nuevo del kit iswc-* desde cero: anatomía
@@ -73,7 +73,7 @@ Reglas duras:
   para que las tablas de Atributos observados / Custom states / CSS custom
   properties **matcheen** con el código.
 - **Frontmatter obligatorio** al inicio del `.md` (lo lee
-  `manifest.js` y el manifest del catálogo):
+  `src/manifest.ts` y el manifest del catálogo):
 
   ```yaml
   ---
@@ -82,14 +82,14 @@ Reglas duras:
     - iswc-foo
   category: <actions|feedback|forms|data|charts|diagrams|layout|navigation|helpers|media|isp|overlays|code|preview|files>
   status: public | internal
-  source: ./<name>.js
+  source: ./<name>.ts
   style: ./<name>.css
   preview: ./<name>.json
   ---
   ```
 
   `category` debe estar en la lista canónica del repo (ver
-  `manifest.js`); **`data-viz` no es categoría lógica** (los charts viven
+  `src/manifest.ts`); **`data-viz` no es categoría lógica** (los charts viven
   en `charts/`, los sub-folders `data-viz/` de demos/previews son alias).
 
 Detalle: [`references/lifecycle.md`](references/lifecycle.md).

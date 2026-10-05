@@ -58,5 +58,22 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Observa la intersección de las secciones de un contenedor scrollable y\r\n          va marcando el enlace correspondiente. Pensado para la navegación\r\n          lateral de los previews de docs, pero sirve para cualquier nav largo."
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "ejemplos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

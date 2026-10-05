@@ -134,5 +134,47 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Fechas relativas con <code class=\"code\">Intl.RelativeTimeFormat</code> (nativo).\n          Locale por defecto: <code class=\"code\">html lang</code> (sistema al boot) → <strong>es</strong>.\n          Alias de <code class=\"code\">&lt;iswc-format type=\"relative\"&gt;</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>date</code>",
+            "default": "ISO o timestamp"
+          },
+          {
+            "name": "<code>format</code>",
+            "default": "long · short · narrow"
+          },
+          {
+            "name": "<code>numeric</code>",
+            "default": "auto · always"
+          },
+          {
+            "name": "<code>locale</code>",
+            "default": "<code>html lang</code> (sistema) → <code>es</code>"
+          },
+          {
+            "name": "<code>sync</code>",
+            "default": "actualiza cada ~30s"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<span class=\"demo-label\">sync · refresca cada ~30s · locale del sistema</span>\n          <p style=\"margin:0;font-size:1.15rem\">Actualizado <iswc-relative-time id=\"live\" sync></iswc-relative-time></p>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

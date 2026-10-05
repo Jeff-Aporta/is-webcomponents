@@ -64,5 +64,51 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Visor a pantalla completa pensado para diagramas: hereda del\r\n          <code class=\"code\">&lt;iswc-lightbox&gt;</code> genérico el zoom anclado al\r\n          cursor, el pan y el dialog top-layer, y le suma la barra de la animación\r\n          tortuga (play / pause / prev / next), el anillo de auto-replay, el panel\r\n          de código JSON y el enlace compartible con el payload en <code class=\"code\">?d=</code>."
+      },
+      "apiJs": {
+        "table": [
+          {
+            "metodo": "<code class=\"code\">kind</code>",
+            "desc": "<code class=\"code\">\"sequence\"</code> por defecto. Hoy sólo diagrama de secuencia; la barra se adapta a la API turtle del nodo."
+          },
+          {
+            "metodo": "<code class=\"code\">payload</code>",
+            "desc": "Objeto con la configuración del diagrama (<code class=\"code\">preset</code>, <code class=\"code\">sequence</code>, etc.)."
+          },
+          {
+            "metodo": "<code class=\"code\">open</code> · <code class=\"code\">show()</code> · <code class=\"code\">hide()</code>",
+            "desc": "Visibilidad del dialog."
+          },
+          {
+            "metodo": "Hereda de <code class=\"code\">&lt;iswc-lightbox&gt;</code>",
+            "desc": "zoom, pan, slot <code class=\"code\">toolbar</code>, eventos <code class=\"code\">iswc-open</code>, <code class=\"code\">iswc-close</code>, <code class=\"code\">iswc-reposition</code>, <code class=\"code\">iswc-share</code>."
+          },
+          {
+            "metodo": "<code class=\"code\">iswc-turtle-state</code>",
+            "desc": "detail: <code class=\"code\">{ playing, idx, total, replay }</code>"
+          },
+          {
+            "metodo": "<code class=\"code\">iswc-toggle-group</code>",
+            "desc": "detail: <code class=\"code\">{ id }</code> — clic en una leyenda de grupo del diagrama."
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<div class=\"demo-bar\">\r\n            <span class=\"pill\" aria-hidden=\"true\">Demo</span>\r\n            <iswc-select id=\"preset\" label=\"Preset\" value=\"tk1437191\">\r\n              <iswc-option value=\"tk1437191\" label=\"Facturación electrónica\"></iswc-option>\r\n              <iswc-option value=\"tk1431662\" label=\"Onboarding de cliente\"></iswc-option>\r\n            </iswc-select>\r\n            <iswc-button id=\"openViewer\" color=\"brand\" variant=\"filled\">\r\n              Abrir el visor\r\n              <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\r\n            </iswc-button>\r\n          </div>\r\n          <iswc-diagram-lightbox id=\"lb\" kind=\"sequence\"></iswc-diagram-lightbox>\n```"
+      }
+    },
+    "exclude": [
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

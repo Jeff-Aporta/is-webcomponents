@@ -46,11 +46,26 @@
       "title": "Referencia",
       "lede": "&lt;iswc-option&gt; — Opción para iswc-combobox / iswc-select (listboxes). Atributos: value, disabled, selected, group Slots: default (etiqueta), start (icono/avatar), description (texto secundario) Parts: base, start, label, description",
       "blocks": [
-        {
-          "kind": "html",
-          "html": "<p class=\"lede\">\r\n          API declarada en el módulo fuente\r\n          <code class=\"code\">components/forms/option.js</code>.\r\n        </p>"
-        }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Opción de un <code class=\"code\">&lt;iswc-combobox&gt;</code> o <code class=\"code\">&lt;iswc-select&gt;</code>. El <code class=\"code\">value</code> es lo que expone el control; el contenido es lo que ve el usuario."
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-combobox label=\"Ciudad\" placeholder=\"Elige una\" style=\"max-width:320px\">\n  <iswc-option value=\"bog\">Bogotá</iswc-option>\n  <iswc-option value=\"mde\">Medellín</iswc-option>\n  <iswc-option value=\"cal\">Cali</iswc-option>\n  <iswc-option value=\"brr\" disabled>Barranquilla (sin cobertura)</iswc-option>\n</iswc-combobox>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "atributos",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }

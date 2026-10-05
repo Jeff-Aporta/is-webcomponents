@@ -16,11 +16,11 @@
           "kind": "demo",
           "html": "<iswc-theme-toggle dark></iswc-theme-toggle>\r\n          <span class=\"demo-label\" style=\"margin-left:.75rem\">afecta al documento (html)</span>",
           "controls": [
-              {
-                "control": "boolean",
-                "prop": "attr:dark",
-                "label": "dark"
-              }
+            {
+              "control": "boolean",
+              "prop": "attr:dark",
+              "label": "dark"
+            }
           ],
           "equivNote": "Cascada de dónde escribe el tema al conmutar.",
           "equivHtml": "<!-- ver diagrama de ramas -->",
@@ -75,5 +75,43 @@
         }
       ]
     }
-  ]
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "Alterna el tema del contenedor más cercano\r\n          (<code class=\"code\">[container-theme]</code> / <code class=\"code\">.container-theme</code>\r\n          / <code class=\"code\">.theme-dark|.theme-light</code> / <code class=\"code\">[data-theme]</code>;\r\n          si no hay, <code class=\"code\">&lt;html&gt;</code>).\r\n          Compone <code class=\"code\">iswc-check-icon-button</code> (noche ↔ sol).\r\n          Emite <code class=\"code\">theme-toggle</code> con <code class=\"code\">detail.theme</code> y\r\n          <code class=\"code\">detail.container</code>."
+      },
+      "atributos": {
+        "table": [
+          {
+            "name": "<code>dark</code>",
+            "desc": "boolean reflected — tema actual del scope"
+          },
+          {
+            "name": "<code>themeContainer</code>",
+            "desc": "getter — nodo resuelto por <code>closest</code>"
+          },
+          {
+            "name": "<code>theme-toggle</code>",
+            "desc": "CustomEvent · <code>detail: { theme, dark, container }</code>"
+          },
+          {
+            "name": "Scope",
+            "desc": "<code>[container-theme]</code>, <code>.container-theme</code>, <code>.theme-*</code>, <code>[data-theme]</code>, else <code>&lt;html&gt;</code>"
+          }
+        ]
+      },
+      "ejemplos": {
+        "content": "```html\n<iswc-theme-toggle dark></iswc-theme-toggle>\r\n          <span class=\"demo-label\" style=\"margin-left:.75rem\">afecta al documento (html)</span>\n```"
+      }
+    },
+    "exclude": [
+      "apiJs",
+      "eventos",
+      "parts",
+      "props",
+      "slots",
+      "states"
+    ]
+  }
 }
