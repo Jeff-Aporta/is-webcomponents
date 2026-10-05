@@ -1,7 +1,7 @@
 // tests/src-layout.test.ts
 //
-// Guardián del layout post-move: fuente bajo src/, dist/ y scripts/ en raíz.
-// Si alguien vuelve a crear components/ o styles/ en la raíz, o rompe la
+// GuardiÃ¡n del layout post-move: fuente bajo src/, dist/ y scripts/ en raÃ­z.
+// Si alguien vuelve a crear components/ o styles/ en la raÃ­z, o rompe la
 // profundidad de scripts/dist en previews, este test falla.
 //
 // Uso: node tests/src-layout.test.ts
@@ -20,13 +20,13 @@ const mustExist = [
   'src/previews',
   'src/skills',
   'src/utils/health/e2e',
-  // `src/assets/` se consolidó en `dist/assets/` (fuera de dist/cdn/).
+  // `src/assets/` se consolidÃ³ en `dist/assets/` (fuera de dist/cdn/).
   'dist/assets/icons',
-  // Consolidación 2026-09-07: LLM.md (root + per-componente) eliminado;
+  // ConsolidaciÃ³n 2026-09-07: LLM.md (root + per-componente) eliminado;
   // el contenido vive en specs/lessons.md + specs/constraints.md +
   // specs/componentes.md.
   'specs/lessons.md',
-  'src/styles/is-base.css',
+  'src/styles/is-base.scss',
   'scripts/build.mjs',
   'dist/cdn',
   'src/manifest.ts',
@@ -43,7 +43,7 @@ for (const rel of mustExist) {
 const forbiddenAtRoot = ['components', 'styles', 'previews', 'skills'];
 for (const name of forbiddenAtRoot) {
   if (existsSync(join(root, name))) {
-    failures.push(`NO debe existir ${name}/ en la raíz — vive en src/${name}/`);
+    failures.push(`NO debe existir ${name}/ en la raÃ­z â€” vive en src/${name}/`);
   }
 }
 
@@ -51,7 +51,7 @@ for (const name of forbiddenAtRoot) {
 if (existsSync(join(root, 'assets'))) {
   const icons = join(root, 'assets', 'icons');
   if (existsSync(icons)) {
-    failures.push('NO debe existir assets/icons/ en la raiz — usa dist/assets/icons/');
+    failures.push('NO debe existir assets/icons/ en la raiz â€” usa dist/assets/icons/');
   }
 }
 
@@ -71,9 +71,9 @@ function walkHtml(dir, out = []) {
 
 const previewRoot = join(root, 'src', 'previews');
 const shell = join(previewRoot, '_shell.html');
-if (!existsSync(shell)) failures.push('falta src/previews/_shell.html (único HTML permitido)');
+if (!existsSync(shell)) failures.push('falta src/previews/_shell.html (Ãºnico HTML permitido)');
 const shellBody = readFileSync(shell, 'utf8');
-// _shell vive en src/previews/ (depth 1) → ../../scripts y ../../dist
+// _shell vive en src/previews/ (depth 1) â†’ ../../scripts y ../../dist
 if (!/src=["']\.\.\/\.\.\/scripts\//.test(shellBody)) {
   failures.push('_shell.html: scripts debe ser ../../scripts/');
 }
@@ -85,10 +85,10 @@ if (!/\.\.\/styles\//.test(shellBody)) {
 }
 
 if (failures.length) {
-  console.error(`src-layout.test.ts: FAIL — ${failures.length}\n`);
+  console.error(`src-layout.test.ts: FAIL â€” ${failures.length}\n`);
   for (const f of failures.slice(0, 40)) console.error(`  - ${f}`);
-  if (failures.length > 40) console.error(`  ... y ${failures.length - 40} más`);
+  if (failures.length > 40) console.error(`  ... y ${failures.length - 40} mÃ¡s`);
   process.exit(1);
 }
 
-console.log('src-layout.test.ts: PASS — layout src/ + profundidad de previews OK');
+console.log('src-layout.test.ts: PASS â€” layout src/ + profundidad de previews OK');

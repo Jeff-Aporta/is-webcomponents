@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
-const css = readFileSync(join(root, 'src', 'styles', 'presentation.css'), 'utf8');
+const css = readFileSync(join(root, 'src', 'styles', 'presentation.scss'), 'utf8');
 
 // Tomamos el bloque de la regla `.sidebar { ... }` contando {} balanceados.
 function pickBlock(src, selector) {
@@ -33,17 +33,17 @@ test('sidebar: font-family Manrope y peso ligero', () => {
   );
   assert.ok(
     /font-weight:\s*400\b/.test(block),
-    '.sidebar debe usar font-weight 400 (más ligero que el main)',
+    '.sidebar debe usar font-weight 400 (mÃ¡s ligero que el main)',
   );
 });
 
 test('sidebar: acento de marca sutil en el borde', () => {
   const block = pickBlock(css, '.sidebar');
   assert.ok(block, '.sidebar { ... } existe');
-  // Acento sutil: 1px teñido con --iswc-accent (no side-tab grueso).
+  // Acento sutil: 1px teÃ±ido con --iswc-accent (no side-tab grueso).
   assert.ok(
     /border-left:\s*1px\s+solid\s+color-mix\(in srgb, var\(--iswc-accent\)/.test(block),
-    '.sidebar debe tener border-left 1px teñido con var(--iswc-accent)',
+    '.sidebar debe tener border-left 1px teÃ±ido con var(--iswc-accent)',
   );
   // No debe quedar el border gris antiguo de 1px.
   assert.ok(
@@ -52,16 +52,16 @@ test('sidebar: acento de marca sutil en el borde', () => {
   );
 });
 
-test('sidebar responsive: en móvil el accent pasa a border-top', () => {
+test('sidebar responsive: en mÃ³vil el accent pasa a border-top', () => {
   const mql = /\@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\.sidebar\s*\{([\s\S]*?)\}/m.exec(css);
   assert.ok(mql, 'Hay media (max-width:900px) con bloque .sidebar');
   const block = mql[1];
   assert.ok(
     /border-left:\s*0\b/.test(block) || /border-left:\s*none\b/.test(block),
-    'En móvil el border-left debe desactivarse (0 o none)',
+    'En mÃ³vil el border-left debe desactivarse (0 o none)',
   );
   assert.ok(
     /border-top:\s*1px\s+solid\s+color-mix\(in srgb, var\(--iswc-accent\)/.test(block),
-    'En móvil el accent debe pasar a border-top 1px teñido con var(--iswc-accent)',
+    'En mÃ³vil el accent debe pasar a border-top 1px teÃ±ido con var(--iswc-accent)',
   );
 });

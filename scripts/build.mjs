@@ -24,7 +24,8 @@ function shaDelBuild() {
 }
 
 // Índice de utilidades _shared para el preview «Ecosistema JS».
-await import('./gen-shared-index.ts');
+// (Carpeta `ops/` desde refactor(scripts) c693e58a45; antes vivía en `scripts/`.)
+await import('./ops/gen-shared-index.ts');
 
 // ─────────────────────── PROTOCOLO DE CONSTRUCCION ───────────────────────
 //
@@ -129,7 +130,12 @@ async function walk(dir, out = []) {
                && !name.name.includes('.preview.')
                && !name.name.endsWith('.json')
                // Companions de iswc-doc-demo: boot ESM + host module (no CE).
-               && !/^doc-demo-(boot|host)\.(ts|js)$/.test(name.name)) {
+               && !/^doc-demo-(boot|host)\.(ts|js)$/.test(name.name)
+               // Companions Zod (W54): esquemas declarativos; los importa el
+               // `.ts` padre via `import {...} from './foo.schemas.js'`, asi
+               // que esbuild los inlinea cuando procesa al padre. Procesarlos
+               // ademas como entry los duplica y rompe si el WIP no compila.
+               && !name.name.endsWith('.schemas.ts')) {
       out.push(p);
     }
   }

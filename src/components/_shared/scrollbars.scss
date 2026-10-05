@@ -1,0 +1,57 @@
+@charset "UTF-8";
+/**
+ * Scrollbars themizados dentro de Shadow DOM.
+ * Inyectado por adoptCss en cada is-*. Tokens: --iswc-scrollbar-* (is-base / paleta).
+ *
+ * El look replica el estilo del sidebar del video-playlist: thumb sutil
+ * sobre track transparente, hover con tinte de acento. Se aplica a :host
+ * y a todos sus descendientes para que cualquier overflow interno herede
+ * el mismo color. Si las vars no están definidas en el árbol (p. ej. el
+ * componente se monta fuera de is-base.css), los fallbacks de :host
+ * garantizan que el scrollbar siga siendo visible.
+ *
+ * Firefox consume `scrollbar-color/width` desde :host; WebKit necesita las
+ * pseudos en CADA nivel (host + descendientes) porque no hereda el color.
+ */
+:host {
+  --iswc-scrollbar-size-fallback: 0.5rem;
+  --iswc-scrollbar-thumb-fallback: color-mix(in srgb, #59636e 65%, transparent);
+  --iswc-scrollbar-thumb-hover-fallback: color-mix(in srgb, #e03131 45%, #59636e);
+  scrollbar-width: thin;
+  scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback)) var(--iswc-scrollbar-track);
+}
+
+:host * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback)) var(--iswc-scrollbar-track);
+}
+
+:host::-webkit-scrollbar,
+:host *::-webkit-scrollbar {
+  width: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
+  height: var(--iswc-scrollbar-size, var(--iswc-scrollbar-size-fallback));
+}
+
+:host::-webkit-scrollbar-track,
+:host *::-webkit-scrollbar-track {
+  background: var(--iswc-scrollbar-track);
+  border-radius: var(--iswc-scrollbar-radius);
+}
+
+:host::-webkit-scrollbar-thumb,
+:host *::-webkit-scrollbar-thumb {
+  background: var(--iswc-scrollbar-thumb, var(--iswc-scrollbar-thumb-fallback));
+  border-radius: var(--iswc-scrollbar-radius);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+:host::-webkit-scrollbar-thumb:hover,
+:host *::-webkit-scrollbar-thumb:hover {
+  background: var(--iswc-scrollbar-thumb-hover, var(--iswc-scrollbar-thumb-hover-fallback));
+}
+
+:host::-webkit-scrollbar-corner,
+:host *::-webkit-scrollbar-corner {
+  background: transparent;
+}

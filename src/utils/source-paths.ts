@@ -48,13 +48,14 @@ export function resolveSourceFiles(entry: ManifestEntry): {
 
   const styleRel = entry.style
     ? manifestToComponentsPath(entry.style)
-    : scriptPath.replace(/\.js$/, '.css');
-  if (styleRel && styleRel.endsWith('.css')) {
+    : scriptPath.replace(/\.js$/, '.scss');
+  if (styleRel && styleRel.endsWith('.scss')) {
+    const scssRel = styleRel;
     out.css = {
       kind: 'css',
-      label: 'CSS',
-      repoPath: `src/${styleRel}`,
-      fileName: styleRel.split('/').pop() || 'module.css',
+      label: 'SCSS',
+      repoPath: `src/${scssRel}`,
+      fileName: scssRel.split('/').pop() || 'module.scss',
     };
   }
 

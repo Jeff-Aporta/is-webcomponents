@@ -1,26 +1,28 @@
 #!/usr/bin/env node
 /**
- * build-scss.mjs — compila `.scss` a `.css` con Dart Sass.
+ * build-scss.mjs — compila cada `.scss` de `src/` a un `.css` hermano
+ * para que `build.mjs` siga leyendo `.css` como hasta ahora.
  *
- * Fase 1 (POC): solo `src/components/actions/button.scss` se procesa.
- * El `.css` que el `build.mjs` ya consume se sobreescribe con la salida
- * expandida de sass; esbuild se encarga de minificar a `.min.css` despues.
+ * Regla del contrato:
+ *   - source  : `src/<ruta>/<nombre>.scss`           (versionado en git)
+ *   - salida  : `src/<ruta>/<nombre>.css`            (gitignored; regenerado)
  *
- * Fase 2 (siguiente tarea): procesar todos los `.scss` que vivan junto
- * a un `.css` en `src/`. Mantener el contrato: cada `.scss` produce
- * un `.css` hermano, que es el archivo que `build.mjs` sigue leyendo.
+ * La conversion es 1:1 + aplanado de CSS Nesting que Sass aplica al
+ * compilar; los `@import url(...)` se preservan tal cual porque llevan
+ * el prefijo `url(` o una extension `.css` y Sass los trata como
+ * imports de runtime (mismo criterio que un navegador moderno).
  *
  * Por que CSS expandido y no compressed:
  *   - esbuild ya minifica (mejor que sass para el caso de bundle).
  *   - Mantener la salida legible ayuda a diffs y a debugging en CI.
  *
  * Por que loadPaths = src/styles:
- *   - Para que `@use 'tokens'` o `@use 'mixins'` encuentre futuros
- *     parciales compartidos (Fase 2). El POC no los usa todavia.
+ *   - Para que futuros `@use 'tokens'` o `@use 'mixins'` encuentren
+ *     parciales compartidos. Hoy los fuentes son CSS plano.
  */
 import { readdirSync, existsSync } from 'node:fs';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { join, dirname, relative } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import { join, dirname, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as sass from 'sass';
 
@@ -28,53 +30,75 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(here);
 const srcDir = join(root, 'src');
 
-/**
- * Lista de `.scss` que se compilan en este build.
- * Por ahora solo el POC; Fase 2 la convierte en walk recursivo de
- * src/components y src/styles cuando se migren.
- */
-const POC_ENTRIES = [
-  'src/components/actions/button.scss',
-];
-
-function toCssPath(scssPath) {
-  return scssPath.replace(/\.scss$/, '.css');
+/** Recorre `dir` recursivamente y devuelve paths absolutos de `.scss`. */
+function walkScss(dir, out = []) {
+  for (const name of readdirSync(dir, { withFileTypes: true })) {
+    // No entrar en carpetas que no producen CSS: dist, build artifacts, etc.
+    if (name.isDirectory()) {
+      if (name.name === 'node_modules' || name.name.startsWith('.')) continue;
+      walkScss(join(dir, name.name), out);
+    } else if (name.isFile() && name.name.endsWith('.scss')) {
+      out.push(join(dir, name.name));
+    }
+  }
+  return out;
 }
 
-async function compileOne(scssRel) {
-  const scssAbs = join(root, scssRel);
-  if (!existsSync(scssAbs)) {
-    throw new Error(`build-scss: no existe ${scssRel}`);
-  }
+function toCssPath(scssAbs) {
+  return scssAbs.replace(/\.scss$/, '.css');
+}
+
+function compileOne(scssAbs) {
   const result = sass.compile(scssAbs, {
     style: 'expanded',
     sourceMap: false,
     // Busca parciales por nombre sin extension (`@use 'tokens'`).
-    // El POC no usa @use, pero la convención queda lista para Fase 2.
+    // Los `@import './_foo.css'` se tratan como runtime (tienen extension)
+    // y se preservan en la salida, igual que hacia el bundler con el
+    // .css plano original.
     loadPaths: [dirname(scssAbs), join(srcDir, 'styles')],
-    // CSS plano que aparece dentro de un .scss se trata como @import
-    // de runtime (preserva el `@import url(...)` que usa esbuild para
-    // bundling) en vez de inlinearlo.
     importers: [],
-    silenceDeprecations: ['legacy-js-api', 'import'],
+    silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions'],
   });
-  const cssRel = toCssPath(scssRel);
-  const cssAbs = join(root, cssRel);
-  await mkdir(dirname(cssAbs), { recursive: true });
-  await writeFile(cssAbs, result.css, 'utf8');
-  return { scssRel, cssRel, bytes: Buffer.byteLength(result.css, 'utf8') };
+  return { css: result.css, bytes: Buffer.byteLength(result.css, 'utf8') };
 }
 
 async function main() {
   const t0 = Date.now();
-  console.log('build-scss — Dart Sass (Fase 1: POC button)');
-  let compiled = 0;
-  for (const scssRel of POC_ENTRIES) {
-    const { cssRel, bytes } = await compileOne(scssRel);
-    console.log(`  ${scssRel.padEnd(42)} → ${cssRel}  (${bytes} B)`);
-    compiled += 1;
+  const scssFiles = walkScss(srcDir).sort();
+  if (!scssFiles.length) {
+    throw new Error(`build-scss: no hay .scss bajo ${srcDir}`);
   }
-  console.log(`OK ${compiled} scss → css en ${Date.now() - t0} ms`);
+  console.log(`build-scss — Dart Sass (${scssFiles.length} fuentes)`);
+
+  let compiled = 0;
+  let failed = 0;
+  const failures = [];
+  for (const scssAbs of scssFiles) {
+    const scssRel = relative(root, scssAbs).split(sep).join('/');
+    const cssAbs = toCssPath(scssAbs);
+    try {
+      const { css, bytes } = compileOne(scssAbs);
+      await mkdir(dirname(cssAbs), { recursive: true });
+      const { writeFile } = await import('node:fs/promises');
+      await writeFile(cssAbs, css, 'utf8');
+      compiled += 1;
+      console.log(`  ${scssRel.padEnd(48)} -> ${relative(root, cssAbs).split(sep).join('/')}  (${bytes} B)`);
+    } catch (err) {
+      failed += 1;
+      const msg = err && err.message ? err.message : String(err);
+      failures.push({ scssRel, msg });
+      console.error(`  FAIL ${scssRel}: ${msg}`);
+    }
+  }
+
+  const dt = Date.now() - t0;
+  if (failed) {
+    console.error(`build-scss: FAIL — ${failed} de ${scssFiles.length} fallaron en ${dt} ms`);
+    for (const f of failures) console.error(`  - ${f.scssRel}: ${f.msg}`);
+    process.exit(1);
+  }
+  console.log(`OK ${compiled} scss -> css en ${dt} ms`);
 }
 
 main().catch((err) => {

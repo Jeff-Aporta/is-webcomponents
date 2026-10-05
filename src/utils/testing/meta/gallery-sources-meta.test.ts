@@ -1,13 +1,13 @@
 /**
  * gallery-sources-meta.test.ts
  *
- * Caza regresiones del chrome de galería (ago/2026):
+ * Caza regresiones del chrome de galerÃ­a (ago/2026):
  *  - barra = `.file-meta*` (sin hints / `.vs-page-bar` montado)
  *  - modal fuentes full-page + `#vsPath` como `<a>` con URL absoluta
- *  - tag canónico `iswc-code` (no `iswc-code-editor`)
- *  - pesos vía `resolveCdnMinPaths` + `iswc-format-bytes`
+ *  - tag canÃ³nico `iswc-code` (no `iswc-code-editor`)
+ *  - pesos vÃ­a `resolveCdnMinPaths` + `iswc-format-bytes`
  *
- * Extensión: *.test.mjs (no .ts). La carpeta tests/ se commitea;
+ * ExtensiÃ³n: *.test.mjs (no .ts). La carpeta tests/ se commitea;
  * solo se ignoran *.tmp / coverage / .cache.
  */
 import assert from 'node:assert/strict';
@@ -35,7 +35,7 @@ test('manifest usa iswc-code (no iswc-code-editor)', () => {
 test('component-sources: localSourceUrl es absoluta (.href)', async () => {
   const mod = await import(pathToFileURL(join(root, 'src/utils/source-paths.ts')).href);
   const url = mod.localSourceUrl('src/components/actions/button.ts');
-  // En Node es file://…; en browser Live Server es http(s)://host/…
+  // En Node es file://â€¦; en browser Live Server es http(s)://host/â€¦
   assert.match(url, /^[a-z][a-z0-9+.-]*:\/\//i, `esperado URL absoluta, got: ${url}`);
   assert.match(url, /\/src\/components\/actions\/button\.ts$/);
   assert.ok(typeof mod.resolveCdnMinPaths === 'function');
@@ -60,12 +60,12 @@ test('view-sources: path absoluto, full-page, sin vs-page-bar con hints', () => 
 
   // mountPageButton solo limpia legacy; no recrea hints en UI.
   assert.match(src, /querySelectorAll(?:<[^>]+>)?\(['"]\.vs-page-bar['"]\)/);
-  assert.doesNotMatch(code, /sin minificar|auditoría\s*\/\s*GH Pages|Pesos CDN y fuentes: cargando/);
+  assert.doesNotMatch(code, /sin minificar|auditorÃ­a\s*\/\s*GH Pages|Pesos CDN y fuentes: cargando/);
   assert.doesNotMatch(code, /className\s*=\s*['"]vs-page-bar['"]/);
   assert.doesNotMatch(code, /['"]vs-page-hint['"]/);
 });
 
-test('view-sources: chrome de galería incluye iswc-tab-group', () => {
+test('view-sources: chrome de galerÃ­a incluye iswc-tab-group', () => {
   const src = read('src/cdn/collect-iswc-tags.ts');
   assert.match(src, /GALLERY_CHROME_TAGS/);
   assert.match(src, /iswc-tab-group/);
@@ -92,8 +92,8 @@ test('demo-file-meta: ya no monta barra; solo limpia restos', () => {
 
 test('iswc-code preserva scroll del iswc-main (evita F5 al final)', () => {
   const src = read('src/components/code/code.ts');
-  // Motor nativo: ningún path llama scrollIntoView (el que movía el iswc-main al
-  // final en F5) y el scroll de edición queda local (textarea .ic-input con
+  // Motor nativo: ningÃºn path llama scrollIntoView (el que movÃ­a el iswc-main al
+  // final en F5) y el scroll de ediciÃ³n queda local (textarea .ic-input con
   // translate del <pre>), nunca sobre el ancestro iswc-main/.main.
   assert.match(src, /#onEditScroll/);
   assert.match(src, /translate\(\$?\{?-ta\.scrollLeft/);
@@ -104,12 +104,12 @@ test('iswc-main: restore window amplio + scroll-behavior auto en CSS', () => {
   // RESTORE_WINDOW vive en _shared/scroll-memory.ts (refactor desde main.ts).
   const memory = read('src/components/_shared/scroll-memory.ts');
   assert.match(memory, /RESTORE_WINDOW\s*=\s*4_?500/);
-  const css = read('src/styles/presentation.css');
+  const css = read('src/styles/presentation.scss');
   assert.match(css, /iswc-main\.main\s*\{[\s\S]*?scroll-behavior:\s*auto/);
 });
 
-test('presentation.css: full-page view-sources + file-meta oculto', () => {
-  const css = read('src/styles/presentation.css');
+test('presentation.scss: full-page view-sources + file-meta oculto', () => {
+  const css = read('src/styles/presentation.scss');
   assert.match(css, /iswc-dialog\.iswc-view-sources/);
   assert.match(css, /::part\(dialog\)/);
   assert.match(css, /align-self:\s*stretch/);
@@ -131,12 +131,12 @@ test('index + shell cargan view-sources y demo-file-meta', () => {
 
 test('specs/lessons.md + code.md documentan contrato y errores de fuentes/meta', () => {
   // Antes: src/components/code/LLM.md documentaba el contrato del componente
-  // code y errores conocidos. Consolidación 2026-09-07: el contenido vive
+  // code y errores conocidos. ConsolidaciÃ³n 2026-09-07: el contenido vive
   // repartido entre:
-  //   - specs/lessons.md (catálogo de errores consolidado)
+  //   - specs/lessons.md (catÃ¡logo de errores consolidado)
   //   - src/components/code/code.md (spec per-componente)
-  // El guardián verifica que ambas piezas cubran el contrato: visor de
-  // fuentes, file-meta, gallery-sources-meta (guardián citado).
+  // El guardiÃ¡n verifica que ambas piezas cubran el contrato: visor de
+  // fuentes, file-meta, gallery-sources-meta (guardiÃ¡n citado).
   const lessons = read('specs/lessons.md');
   const codeMd = read('src/components/code/code.md');
   const ambos = lessons + '\n' + codeMd;

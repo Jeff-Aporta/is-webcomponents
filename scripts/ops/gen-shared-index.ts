@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const dir = path.join(root, 'src/components/_shared');
 const outDir = path.join(root, 'src/previews/data');
 const outFile = path.join(outDir, 'shared-modules.json');

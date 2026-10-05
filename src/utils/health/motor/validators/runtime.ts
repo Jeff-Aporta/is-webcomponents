@@ -118,27 +118,30 @@ export function auditarRuntimeComponente(rutaModulo: string | null, tag: string,
     }
   }
 
-  // 5. CSS huérfano / adoptCss sin CSS.
-  const hasCss = existsSync(rutaModulo.replace(/\.[jt]s$/, '.css'));
+  // 5. SCSS huérfano / adoptCss sin SCSS hermano.
+  // La fuente canonica es `.scss` (el `.css` que usa adoptCss lo regenera
+  // `deno task build:scss` desde el `.scss`); adoptCss resuelve la URL del
+  // `.css` hermano en runtime, pero la auditoria se hace sobre la fuente.
+  const hasScss = existsSync(rutaModulo.replace(/\.[jt]s$/, '.scss'));
   const usesShadow = /attachShadow\s*\(/.test(src);
   const adoptCssCall = /(?<!export const )adoptCss\s*\(/.test(src)
     && !/export\s+const\s+adoptCss\s*=/.test(src);
-  if (hasCss && usesShadow && !adoptCssCall) {
+  if (hasScss && usesShadow && !adoptCssCall) {
     hallazgos.push({
       categoria: 'runtime',
       severidad: 'warn',
       tag,
       ruta: rutaModulo,
-      mensaje: 'Componente con attachShadow y .css hermano, pero sin adoptCss(). Los estilos nunca se inyectan en el shadow.',
+      mensaje: 'Componente con attachShadow y .scss hermano, pero sin adoptCss(). Los estilos nunca se inyectan en el shadow.',
     });
   }
-  if (!hasCss && adoptCssCall) {
+  if (!hasScss && adoptCssCall) {
     hallazgos.push({
       categoria: 'runtime',
       severidad: 'error',
       tag,
       ruta: rutaModulo,
-      mensaje: 'adoptCss() invocado pero sin .css hermano. 404 silencioso en runtime.',
+      mensaje: 'adoptCss() invocado pero sin .scss hermano (los .css se regeneran desde .scss en build:scss).',
     });
   }
 

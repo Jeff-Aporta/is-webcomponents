@@ -4,8 +4,8 @@
 //
 // Verifica que el contrato de tema/paleta se mantiene:
 //   1. <html> tiene data-theme y data-palette por defecto.
-//   2. is-base.css + palettes.css reaccionan a [data-theme=light|dark].
-//   3. is-base.css + palettes.css declaran las 3 paletas (insoft, contapyme, agrowin).
+//   2. is-base.scss + palettes.scss reaccionan a [data-theme=light|dark].
+//   3. is-base.scss + palettes.scss declaran las 3 paletas (insoft, contapyme, agrowin).
 //   4. No hay tokens con prefijo --pg- legacy.
 //   5. Componentes no usan <svg>/<use>/<symbol> inline.
 //   6. Componentes no usan size= hardcodeado (usar tokens em).
@@ -21,8 +21,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 
 const html = await readFile(join(root, 'index.html'), 'utf8');
-const isBase = await readFile(join(root, 'src', 'styles', 'is-base.css'), 'utf8');
-const palettes = await readFile(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
+const isBase = await readFile(join(root, 'src', 'styles', 'is-base.scss'), 'utf8');
+const palettes = await readFile(join(root, 'src', 'styles', 'palettes.scss'), 'utf8');
 const styles = `${isBase}\n${palettes}`;
 const component = await readFile(join(root, 'src', 'components', 'actions', 'button.ts'), 'utf8');
 
@@ -31,15 +31,15 @@ const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
 check(
   /\[data-theme=["']dark["']\]/.test(isBase) && /\[data-theme=["']dark["']\]/.test(palettes),
-  'is-base.css y palettes.css deben reaccionar a [data-theme=dark]',
+  'is-base.scss y palettes.scss deben reaccionar a [data-theme=dark]',
 );
 check(
   /\[data-theme=["']light["']\]/.test(isBase) && /\[data-theme=["']light["']\]/.test(palettes),
-  'is-base.css y palettes.css deben reaccionar a [data-theme=light]',
+  'is-base.scss y palettes.scss deben reaccionar a [data-theme=light]',
 );
 check(
   !/:is\(\s*:not\(\[data-theme\]\)/.test(palettes),
-  'palettes.css: no usar :not([data-theme]) suelto (pisa dark en descendientes)',
+  'palettes.scss: no usar :not([data-theme]) suelto (pisa dark en descendientes)',
 );
 for (const p of ['insoft', 'contapyme', 'agrowin']) {
   check(styles.includes(`[data-palette="${p}"]`), `missing ${p} palette`);
@@ -53,13 +53,13 @@ check(!/--pg-/.test(styles), 'tokens legacy --pg- encontrados');
 check(styles.includes('--iswc-bg:'), 'missing --iswc-bg: token');
 
 // 8. Los tokens legacy de estado de campo (--iswc-b-required, --iswc-b-optional,
-//    --iswc-b-readonly, --iswc-bg-readonly) fueron eliminados en W48 —
+//    --iswc-b-readonly, --iswc-bg-readonly) fueron eliminados en W48 Ã¢â‚¬â€
 //    los consumidores en components/ usan sus fallbacks literales.
-//    Verificamos que NO esten en is-base.css ni palettes.css.
+//    Verificamos que NO esten en is-base.scss ni palettes.scss.
 const REMOVED_FIELD_TOKENS = ['--iswc-b-required', '--iswc-b-optional', '--iswc-b-readonly', '--iswc-bg-readonly'];
 for (const t of REMOVED_FIELD_TOKENS) {
-  check(!isBase.includes(`${t}:`), `is-base.css ya no debe declarar ${t}`);
-  check(!palettes.includes(`${t}:`), `palettes.css ya no debe declarar ${t}`);
+  check(!isBase.includes(`${t}:`), `is-base.scss ya no debe declarar ${t}`);
+  check(!palettes.includes(`${t}:`), `palettes.scss ya no debe declarar ${t}`);
 }
 
 // 9. ContaPyme = hsl(210 100% 56%), que es dodgerblue. El brand no se escribe a mano.
@@ -74,9 +74,9 @@ check(/--iswc-hue-rotate:\s*calc\(\(var\(--iswc-brand-h\) - var\(--iswc-logo-h\)
 check(/:root,\s*\[data-palette="contapyme"\]/.test(palettes), 'contapyme debe aplicarse en :root como default');
 const catalog = JSON.parse(await readFile(join(root, 'src', 'styles', 'palettes.json'), 'utf8'));
 for (const p of catalog) {
-  check(palettes.includes(`--iswc-brand-h: ${p.h};`), `palettes.css no tiene el h de ${p.value}`);
-  check(palettes.includes(`--iswc-brand-s: ${p.s};`), `palettes.css no tiene la s de ${p.value}`);
-  check(palettes.includes(`--iswc-brand-b: ${p.b};`), `palettes.css no tiene la b de ${p.value}`);
+  check(palettes.includes(`--iswc-brand-h: ${p.h};`), `palettes.scss no tiene el h de ${p.value}`);
+  check(palettes.includes(`--iswc-brand-s: ${p.s};`), `palettes.scss no tiene la s de ${p.value}`);
+  check(palettes.includes(`--iswc-brand-b: ${p.b};`), `palettes.scss no tiene la b de ${p.value}`);
 }
 
 check(!/\bsize\s*=|["']size["']|pgSize|small\s*\|\s*medium\s*\|\s*large/.test(`${html}\n${component}`), 'size API legacy encontrada');
@@ -120,4 +120,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`theme-contract.test.ts: PASS — 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);
+console.log(`theme-contract.test.ts: PASS Ã¢â‚¬â€ 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);
