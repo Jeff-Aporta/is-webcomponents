@@ -121,6 +121,21 @@
       ]
     },
     {
+      "id": "slots-pg",
+      "title": "Slots Playground",
+      "lede": "Estandar W11: dos tabs. Simple = instancia viva. Slots = segundo ejemplar editable con shadow template y un editor por cada slot.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<iswc-slots-pg tag=\"iswc-button\">\n  <iswc-button>Texto del boton</iswc-button>\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-slots-pg>"
+        },
+        {
+          "kind": "callout",
+          "html": "Pulsar <strong>Restart</strong> en el tab Slots devuelve el codigo al estado inicial. Editar cualquier textarea del tab Slots actualiza la instancia en vivo."
+        }
+      ]
+    },
+    {
       "id": "appearances-matrix",
       "title": "Apariencias (matriz)",
       "lede": "Cuatro niveles de énfasis visual. Úsalos para jerarquizar acciones.",
@@ -561,21 +576,6 @@
           "html": "<div class=\"demo-row\">\r\n            <iswc-button id=\"evtBtn\" color=\"brand\">Probar eventos</iswc-button>\r\n            <iswc-button id=\"evtBtn2\" color=\"success\" variant=\"outlined\">Segundo botón</iswc-button>\r\n          </div>\r\n          <div id=\"evtLog\" class=\"log\" aria-live=\"polite\"></div>",
           "equivNote": "Equivalente nativo generico de iswc-button: button type=button (o a si hay href).",
           "equivHtml": "<button type=\"button\">…</button>"
-        }
-      ]
-    },
-    {
-      "id": "slots-pg",
-      "title": "Slots Playground",
-      "lede": "Estandar W11: dos tabs. Simple = instancia viva. Slots = segundo ejemplar editable con shadow template y un editor por cada slot.",
-      "blocks": [
-        {
-          "kind": "demo",
-          "html": "<iswc-slots-pg tag=\"iswc-button\">\n  <iswc-button>Texto del boton</iswc-button>\n  <iswc-icon slot=\"start\" icon=\"mdi:content-save-outline\"></iswc-icon>\n  <iswc-icon slot=\"end\" icon=\"mdi:arrow-right\"></iswc-icon>\n</iswc-slots-pg>"
-        },
-        {
-          "kind": "callout",
-          "html": "Pulsar <strong>Restart</strong> en el tab Slots devuelve el codigo al estado inicial. Editar cualquier textarea del tab Slots actualiza la instancia en vivo."
         }
       ]
     },
