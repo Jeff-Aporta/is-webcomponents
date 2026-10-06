@@ -15,10 +15,13 @@ Deno.test('insoft theme resolves and matches der.svg palette', () => {
   assertEquals(t?.id, 'insoft');
   assertEquals(entityPaint(t!, false).fill, '#F4B67B');
   assertEquals(entityPaint(t!, true).fill, '#BFFFC0');
-  assertEquals(clusterPalette(t!, 'g_oper').fill, '#7ACFF4');
-  assertEquals(clusterPalette(t!, 'g_conf').fill, '#00C3C4');
-  assertEquals(clusterPalette(t!, 'g_seg').fill, '#C0C000');
-  assertEquals(clusterPalette(t!, 'g_terc').fill, '#BFC0C1');
+  // La paleta del theme se renombró a nombres semánticos
+  // (`primary` / `secondary` / `accent` / `neutral`); los `g_*` que
+  // anteponían un prefijo de dominio se resuelven por `startsWith`.
+  assertEquals(clusterPalette(t!, 'g_primary').fill, '#7ACFF4');
+  assertEquals(clusterPalette(t!, 'g_secondary').fill, '#00C3C4');
+  assertEquals(clusterPalette(t!, 'g_accent').fill, '#C0C000');
+  assertEquals(clusterPalette(t!, 'g_neutral').fill, '#BFC0C1');
   assertEquals(edgePaint(t!).stroke, '#3D5A80');
   assertEquals(edgePaint(t!).hideLabels, true);
   assertEquals(themeToDiagramTheme(t!).text, '#0F172A');
