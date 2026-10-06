@@ -29,9 +29,9 @@ export const PKG_BORDER_CLEARANCE = 40;
  */
 export const LANE_PITCH = 20;
 /** Factor de costo si el tramo está a < lanePitch de otro riel. */
-export const LANE_NEAR_FACTOR = 3;
+export const LANE_NEAR_FACTOR = 6;
 /** Factor de costo cerca del perímetro (bordes) de un agrupador. */
-export const PKG_BORDER_NEAR_FACTOR = 3;
+export const PKG_BORDER_NEAR_FACTOR = 5;
 /** Factor de costo al caminar por el interior de un agrupador (vs exterior). */
 export const PKG_CROSS_FACTOR = 3;
 /** Hueco entre componentes dentro de paquetes anidados (p.ej. PatyIA API). */
@@ -42,9 +42,10 @@ export const TITLE_CLEARANCE = 22;
  * W54: penalización por cada giro de 90° dentro de la A*. Un camino recto
  * (manhattan puro) sigue siendo el más barato; un zigzag lo paga en cada
  * cambio de dirección. La unidad es la misma que `step` (px), así que un
- * giro equivale a desviarse 50px de la línea recta.
+ * giro equivale a desviarse 200px de la línea recta — un L doble "barato"
+ * ya no compensa: el router prefiere rodear antes que zigzaguear.
  */
-export const TURN_PENALTY = 50;
+export const TURN_PENALTY = 200;
 /**
  * W54: nº máximo de giros que puede tener una arista. 4 = "recta + esquina
  * + recta + esquina + recta" (la forma canónica de un L doble). El router
@@ -53,11 +54,20 @@ export const TURN_PENALTY = 50;
  */
 export const MAX_TURNS_PER_EDGE = 4;
 /**
- * W54: nº de giros a partir del cual un path se considera zigzag y se
- * multiplica su coste por `ZIGZAG_PENALTY`. Por debajo de
- * `MAX_TURNS_PER_EDGE` solo se cobra TURN_PENALTY por giro.
+ * W54: penalización por cada giro por encima de `MAX_TURNS_PER_EDGE`. El
+ * router descarta paths con >4 giros en estricto, pero en _loose los
+ * permite hasta 12; el multiplicador por exceso se aplica igual para que
+ * el A* siga prefiriendo rodear a zigzag.
  */
-export const ZIGZAG_PENALTY = 4;
+export const ZIGZAG_PENALTY = 100;
+/**
+ * W54 (tuning agresivo): penalización multiplicativa por aristas que
+ * comparten corredor. Cada celda (x, y) del grid recuerda cuántas aristas
+ * ya la cruzan; las nuevas se pagan `1 + count * CORRIDOR_PENALTY`. Esto
+ * empuja a las aristas a buscar carriles sin ocupar, en vez de apiñarse
+ * sobre el mismo eje.
+ */
+export const CORRIDOR_PENALTY = 8;
 
 export function packDiagram(packages: Paquete[], components: Componente[], edges: readonly Arista[] = [], opts: OpcionesEmpaque = {}): void {
   if (opts.mode === 'manual') return;
@@ -1268,6 +1278,37 @@ function gridRoute(
   const goalK = `${gx},${gy}`;
   const { xs: usedXs, ys: usedYs } = usedLaneAxes(usedSegs, step);
   /**
+   * W54 (tuning agresivo): mapa de uso por celda. Cada celda (x, y) del
+   * grid (snapped a `step`) recuerda cuántas aristas previas la cruzan. El
+   * A* paga un multiplicador `1 + count * CORRIDOR_PENALTY` por pisar
+   * celdas ya usadas — empuja a las nuevas aristas a buscar carriles
+   * libres en vez de apiñarse sobre el mismo eje.
+   */
+  const cellUsage: Map<string, number> = (() => {
+    const m = new Map<string, number>();
+    if (!CORRIDOR_PENALTY) return m;
+    for (const u of usedSegs) {
+      const ax = snap(u.a.x), ay = snap(u.a.y);
+      const bx = snap(u.b.x), by = snap(u.b.y);
+      if (Math.abs(ax - bx) < 0.5) {
+        const x = ax;
+        const stepY = ay < by ? step : -step;
+        for (let y = ay; Math.abs(y - by) >= step * 0.5; y += stepY) {
+          const k = `${x},${y}`;
+          m.set(k, (m.get(k) ?? 0) + 1);
+        }
+      } else if (Math.abs(ay - by) < 0.5) {
+        const y = ay;
+        const stepX = ax < bx ? step : -step;
+        for (let x = ax; Math.abs(x - bx) >= step * 0.5; x += stepX) {
+          const k = `${x},${y}`;
+          m.set(k, (m.get(k) ?? 0) + 1);
+        }
+      }
+    }
+    return m;
+  })();
+  /**
    * Regla 5/6: coste de paso ADITIVO. Cada arista (usedXs/usedYs) y cada
    * borde de agrupador (borderXs/borderYs) a < lanePitch del paso añade
    * `nearFactor` al multiplicador — NO se multiplican entre sí, se SUMAN.
@@ -1333,8 +1374,14 @@ function gridRoute(
       }
       const base = step;
       const mul = stepPenaltyMul(nx, ny, dx, dy);
+      // W54 (tuning agresivo): pisar una celda ya usada por N aristas
+      // previas cuesta `1 + N * CORRIDOR_PENALTY`. Se aplica DESPUÉS del
+      // mul de carril/borde para que el apiñamiento entre aristas tenga
+      // coste propio (no se diluye con la penalización por cercanía).
+      const usedCount = cellUsage.get(`${nx},${ny}`) ?? 0;
+      const corridorMul = CORRIDOR_PENALTY ? 1 + usedCount * CORRIDOR_PENALTY : 1;
       // Regla 7: cada paso dentro de un agrupador = ×pkgCrossFactor.
-      const distCost = (inSoftPkg(nx, ny) ? base * crossFactor : base) * mul;
+      const distCost = (inSoftPkg(nx, ny) ? base * crossFactor : base) * mul * corridorMul;
       // W54: TURN_PENALTY por cada cambio de dirección (excepto el primer
       // paso, donde dir = -1).
       const turnCost = (cdir !== -1 && cdir !== ndir) ? TURN_PENALTY : 0;
@@ -1627,10 +1674,13 @@ export function routeAvoidingBoxes(
       if (opts.fromSide === 'top' && pts.some((p, i) => i > 0 && p.y > fp.y + fp.h + 2)) return false;
     }
     if (!opts._loose && pathCrossingCount(pts, used) > 0) return false;
-    // W54: máx. Nº de giros. Un camino con > MAX_TURNS_PER_EDGE es zigzag
-    // ilegible; descartado en estricto. En _loose se permite hasta 12 para
-    // no quedarnos sin ruta en geometrías apretadas.
-    const maxTurns = opts._loose ? Math.max(MAX_TURNS_PER_EDGE * 3, 12) : MAX_TURNS_PER_EDGE;
+    // W54 (tuning agresivo): máx. Nº de giros. Un camino con >
+    // MAX_TURNS_PER_EDGE es zigzag ilegible; descartado en estricto. En
+    // _loose permitimos +1 (5) para fallback en geometrías apretadas
+    // (p.ej. cuando la unión desde/hasta lollipop no se alinea al grid
+    // del A* y aparece un segmento extra de 2px). Mantener el fallback
+    // en 5 es preferible a la línea recta diagonal del último recurso.
+    const maxTurns = opts._loose ? MAX_TURNS_PER_EDGE + 1 : MAX_TURNS_PER_EDGE;
     if (countPuntoTurns(pts) > maxTurns) return false;
     return true;
   };

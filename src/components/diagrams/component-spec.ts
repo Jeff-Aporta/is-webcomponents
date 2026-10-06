@@ -651,9 +651,8 @@ function wireComponentDiagram(components: Componente[], interfaces: InterfazUml[
     let bestTs: Lado = toRanked[0]!;
     let bestScore = Infinity;
     // W54: brute-force sobre las 4 lateralidades (N/E/S/W) en ambos
-    // extremos. Cada combinación se puntúa con `estimateAssemblyCost`
-    // (que ahora incluye el castigo por conector cerca de un borde de
-    // agrupador). El par con menor coste gana. Es O(4×4) por arista.
+    // extremos. Cada combinación se puntúa con `estimateAssemblyCost`.
+    // El par con menor coste gana. Es O(4×4) por arista.
     for (const fs of fromRanked) {
       for (const ts of toRanked) {
         const base = estimateAssemblyCost(fromC, fs, toC, ts, fromSibs, toSibs);
