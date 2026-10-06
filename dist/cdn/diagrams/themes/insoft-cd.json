@@ -1,0 +1,109 @@
+{
+  "$schema": "iswc-diagram-theme/v1",
+  "id": "insoft-cd",
+  "label": "InSoft Component Diagram",
+  "font": {
+    "family": "\"Poppins\", \"Inter\", system-ui, sans-serif",
+    "import": "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  },
+  "canvas": {
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#475569"
+  },
+  "entity": {
+    "fill": "#F4B67B",
+    "headerFill": "#F4B67B",
+    "border": "#000000",
+    "borderWidth": 1.5,
+    "radius": 0
+  },
+  "edge": {
+    "stroke": "#0F172A",
+    "strokeWidth": 1.35,
+    "dasharray": "4 3",
+    "labelBg": "#FFFFFF",
+    "hideLabels": true
+  },
+  "cluster": {
+    "border": "#000000",
+    "borderWidth": 1.5,
+    "radius": 0,
+    "dasharray": "",
+    "titleFill": "#000000",
+    "palettes": {
+      "expose": "#7ACFF4",
+      "group": "#FFFFC1",
+      "service": "#BCFFBB",
+      "store": "#EAB6B0",
+      "external": "#81FF81",
+      "strong": "#01C000",
+      "cool": "#C1BFFF",
+      "leaf": "#FFF2AF"
+    },
+    "fallback": "#7ACFF4"
+  },
+  "component": {
+    "fill": "#C1BFFF",
+    "headerFill": "#C1BFFF",
+    "border": "#000000",
+    "borderWidth": 1.5,
+    "radius": 0,
+    "lollipop": "#7ACFF4",
+    "noPackageTab": true,
+    "titleBackground": false,
+    "invertAssembly": true,
+    "epFill": "transparent",
+    "epBorder": "rgba(255,255,255,0.55)",
+    "epRowTransparent": true
+  },
+  "diagramTheme": {
+    "text": "#0F172A",
+    "muted": "#475569",
+    "grid": "rgba(100,116,139,0.28)",
+    "panel": "transparent",
+    "border": "rgba(0,0,0,0.32)",
+    "accent": "#0F172A",
+    "chipFill": "#C1BFFF",
+    "chipFillSoft": "transparent",
+    "dotText": "#0F172A"
+  },
+  "dark": {
+    "canvas": {
+      "background": "#0B1220",
+      "text": "#E2E8F0",
+      "muted": "#94A3B8"
+    },
+    "edge": {
+      "stroke": "#E2E8F0",
+      "strokeWidth": 1.35
+    },
+    "component": {
+      "fill": "#6B6BB5",
+      "headerFill": "#6B6BB5",
+      "border": "#E2E8F0",
+      "lollipop": "#7ACFF4",
+      "noPackageTab": true,
+      "titleBackground": false,
+      "invertAssembly": true,
+      "epFill": "transparent",
+      "epBorder": "rgba(255,255,255,0.45)",
+      "epRowTransparent": true
+    },
+    "cluster": {
+      "border": "#E2E8F0",
+      "titleFill": "#E2E8F0",
+      "palettes": {
+        "expose": "#3A8FB5",
+        "group": "#8B6B2B",
+        "service": "#2F6B3A",
+        "store": "#A85A62",
+        "external": "#2F6B3A",
+        "strong": "#1A6B1A",
+        "cool": "#6B6BB5",
+        "leaf": "#8B7A3A"
+      },
+      "fallback": "#3A8FB5"
+    }
+  }
+}

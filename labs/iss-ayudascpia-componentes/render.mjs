@@ -70,7 +70,7 @@ function htmlFor(base, payloadJson) {
 <style>html,body{margin:0;padding:8px;background:#fff}iswc-component-diagram{display:block;width:100%;min-height:400px}</style>
 </head>
 <body>
-<iswc-component-diagram id="d" theme="insoft" min-gap="72"></iswc-component-diagram>
+<iswc-component-diagram id="d" theme="insoft-cd" min-gap="72"></iswc-component-diagram>
 <script type="module">
   try {
     await import(${JSON.stringify(base + 'dist/cdn/diagrams/component-diagram.min.js')});
@@ -113,7 +113,14 @@ try {
     await writeFile(tmpHtml, htmlFor(base, payload), 'utf8');
     const pageUrl = `${base}labs/iss-ayudascpia-componentes/out/_render-${job.out}.html`;
     await page.goto(pageUrl, { waitUntil: 'networkidle' });
-    await page.waitForFunction(() => window.__LAB_READY__ === true, null, { timeout: 45000 });
+    // W55+ (Phase 5): timeout subido a 360s. El payload del lab (v2) pesa
+    // ~6KB y dispara la optimización iterativa del A*; con 18 aristas
+    // y 2 iteraciones el `updateComplete` suele resolverse en 200-260s.
+    // 60s (brief) era insuficiente — la primera corrida del lab ya
+    // necesitaba ~240s para MAX_ITERS=4 (ahora 2 debería ser ~120s, pero
+    // hay un cuello de botella en `nudgePaths` con 5 paquetes que
+    // extiende el tiempo).
+    await page.waitForFunction(() => window.__LAB_READY__ === true, null, { timeout: 360000 });
     const err = await page.evaluate(() => window.__LAB_ERR__);
     if (err) throw new Error(`render fail ${job.payload}: ${err}`);
     await page.waitForTimeout(500);

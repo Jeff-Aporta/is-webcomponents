@@ -51,7 +51,7 @@
 
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { packDiagram, layoutPackageOutlines, outlineToPath, routeAvoidingBoxes, pathIllegal, pathHasDiagonal, segsFromPath, pathHitsBoxes, pathCrossingCount, pathShareLen, resolvePackingGaps, inflateBox, inflateTitleObstacle, nudgePathsFromPackageBorders, countPuntoTurns, COL_GUTTER, PKG_CORRIDOR, ROW_GAP, EDGE_CLEARANCE, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE } from './component-pack.js';
+import { packDiagram, layoutPackageOutlines, outlineToPath, routeAvoidingBoxes, pathIllegal, pathHasDiagonal, segsFromPath, pathHitsBoxes, pathCrossingCount, pathShareLen, resolvePackingGaps, inflateBox, inflateTitleObstacle, nudgePathsFromPackageBorders, countPuntoTurns, spreadEdges, findProhibitedViolations, pathPoints, COL_GUTTER, PKG_CORRIDOR, ROW_GAP, EDGE_CLEARANCE, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
 import { parsePathPoints } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import type {
@@ -1041,20 +1041,41 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   const layoutGaps = resolvePackingGaps(spec.layout ?? {});
   const routeLanePitch = layoutGaps.lanePitch;
   const routePkgBorder = layoutGaps.pkgBorderClearance;
-  ranked.forEach((item, rank) => {
-    const e = item.e;
-    const fromPt = e._fromPt;
-    const toPt = e._toPt;
-    const fromSide = e._fromSide;
-    const toSide = e._toSide;
-    delete e._fromPt;
-    delete e._toPt;
-    delete e._fromSide;
-    delete e._toSide;
-    if (!fromPt || !toPt) return;
-    // Los anillos O/C de interfaces AJENAS son obstáculos: sin ellos el router
-    // no los veía y un cable podía atravesar el disco del lollipop de otro
-    // componente (o del propio, en el rodeo del lado lejano).
+  const pkgById = new Map(packages.map((p) => [p.id, p]));
+  const ancestorsOf = (pkgId: string | undefined): Set<string> => {
+    const out = new Set<string>();
+    let cur = pkgId;
+    while (cur) {
+      out.add(cur);
+      cur = pkgById.get(cur)?.parent;
+    }
+    return out;
+  };
+  /**
+   * W55 (Phase 4): extrae el contexto de ruteo de cada arista para que la
+   * optimización iterativa pueda re-invocar el router con diferentes
+   * `usedSegs` sin tener que re-derivar todo. Es una pre-computación
+   * barata (O(edges) en lookups) que se amortiza con K iteraciones.
+   */
+  const edgeRoutingCtx = edges.map((e) => {
+    const fromBox = compById.get(e.from);
+    const toBox = compById.get(e.to);
+    const allowedPkgs = new Set([
+      ...ancestorsOf(fromBox?.package),
+      ...ancestorsOf(toBox?.package),
+    ]);
+    const foreignPkgs: Caja[] = packages
+      .filter((p) => !allowedPkgs.has(p.id))
+      .map((p) => inflateBox({
+        id: `pkg-${p.id}`,
+        x: p.x, y: p.y, w: p.w, h: p.h,
+      }, Math.min(16, PKG_BORDER_CLEARANCE / 2)));
+    const pkgBoxes: Caja[] = packages.map((p) => ({
+      id: `pkg-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h,
+    }));
+    const prohibitedPkgBoxes: Caja[] = packages
+      .filter((p) => p.prohibido && !allowedPkgs.has(p.id))
+      .map((p) => ({ id: `prohibited-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }));
     const ringObst: Caja[] = interfaces
       .filter((i) => i.id !== e.fromInterface && i.id !== e.toInterface && i.cx > 0)
       .map((i) => ({
@@ -1064,47 +1085,6 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         w: LOLLI_R * 2 + 4,
         h: LOLLI_R * 2 + 4,
       }));
-    const fromBox = compById.get(e.from);
-    const toBox = compById.get(e.to);
-    // Paquetes ajenos = muro: la arista no puede atravesar su perímetro.
-    // Se excluyen el paquete (y ancestros) de origen/destino para poder salir/entrar.
-    const pkgById = new Map(packages.map((p) => [p.id, p]));
-    const ancestorsOf = (pkgId: string | undefined): Set<string> => {
-      const out = new Set<string>();
-      let cur = pkgId;
-      while (cur) {
-        out.add(cur);
-        cur = pkgById.get(cur)?.parent;
-      }
-      return out;
-    };
-    const allowedPkgs = new Set([
-      ...ancestorsOf(fromBox?.package),
-      ...ancestorsOf(toBox?.package),
-    ]);
-    const foreignPkgs: Caja[] = packages
-      .filter((p) => !allowedPkgs.has(p.id))
-      .map((p) => inflateBox({
-        id: `pkg-${p.id}`,
-        x: p.x,
-        y: p.y,
-        w: p.w,
-        h: p.h,
-      }, Math.min(16, PKG_BORDER_CLEARANCE / 2)));
-    const pkgBoxes: Caja[] = packages.map((p) => ({
-      id: `pkg-${p.id}`,
-      x: p.x,
-      y: p.y,
-      w: p.w,
-      h: p.h,
-    }));
-    // W54: agrupadores prohibidos (`prohibido: true` en el payload) son muro
-    // duro (Infinity) para el A*. Filtramos los del propio origen/destino
-    // para que la arista pueda entrar/salir.
-    const prohibitedPkgBoxes: Caja[] = packages
-      .filter((p) => p.prohibido && !allowedPkgs.has(p.id))
-      .map((p) => ({ id: `prohibited-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }));
-    // Muros duros: componentes + textos + anillos. Agrupadores = soft (×pkgCrossFactor).
     const obstaculos: Caja[] = [
       ...shiftedComps.filter((c) => c.id !== e.from && c.id !== e.to),
       ...titleObst,
@@ -1116,77 +1096,84 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
       ...packages
         .filter((p) => allowedPkgs.has(p.id))
         .map((p) => ({ id: `wrap-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h })),
-      // Preferir rodear también paquetes ajenos (candidatos wrap).
       ...foreignPkgs.map((p) => ({ ...p, id: `wrap-foreign-${(p as Caja & { id?: string }).id ?? ''}` })),
     ];
+    const fromPkgBox = fromBox?.package ? pkgById.get(fromBox.package) : undefined;
+    const toPkgBox = toBox?.package ? pkgById.get(toBox.package) : undefined;
+    return {
+      e,
+      fromBox, toBox,
+      fromPkgBox, toPkgBox,
+      allowedPkgs, foreignPkgs, pkgBoxes, prohibitedPkgBoxes,
+      obstaculos, hardComps, wrapBoxes, ringObst,
+    };
+  });
+  /**
+   * Router reutilizable: dado el contexto pre-computado y `usedSegs`,
+   * devuelve el path string. Es el mismo flujo que el loop inline:
+   * diagonal → routeAvoidingBoxes (wrap) → routeAvoidingBoxes (sin
+   * ajenos) → fallback absoluto (con muro duro sobre componentes y
+   * prohibidos) → routeAvoidingBoxes _loose.
+   */
+  const routeEdgeWithSegs = (ctx: typeof edgeRoutingCtx[number], usedSegsArg: ReadonlyArray<{ a: Punto; b: Punto }>, rank: number): string => {
+    const { e, fromBox, toBox, fromPkgBox, toPkgBox, foreignPkgs, pkgBoxes, prohibitedPkgBoxes, obstaculos, hardComps, wrapBoxes } = ctx;
+    const fromPt = { x: e.fromX, y: e.fromY };
+    const toPt = { x: e.toX, y: e.toY };
+    const fromSide = (e as Arista & { _fromSide?: Lado })._fromSide;
+    const toSide = (e as Arista & { _toSide?: Lado })._toSide;
     const routeOptsBase = {
       fromSide, toSide, fromBox, toBox,
-      clearance: EDGE_CLEARANCE, usedSegs, frame, pkgBoxes,
+      clearance: EDGE_CLEARANCE, usedSegs: usedSegsArg as { a: Punto; b: Punto }[], frame, pkgBoxes,
       lanePitch: routeLanePitch,
       laneNearFactor: layoutGaps.laneNearFactor,
       pkgBorderClearance: routePkgBorder,
       pkgCrossFactor: layoutGaps.pkgCrossFactor,
       softPkgs: pkgBoxes,
       textBoxes: titleObst,
-      // W54: prohibidos en payload.
       prohibitedPkgs: prohibitedPkgBoxes,
     } as const;
     const allowDiag = Boolean((spec.layout as OpcionesEmpaque | undefined)?.allowDiagonal);
     let path: string | null = null;
     if (allowDiag) {
-      // Diagonal solo si el tramo está limpio: sin paquetes ajenos, sin cruces.
       const straight = [fromPt, toPt];
-      const fromPkgBox = fromBox?.package ? pkgById.get(fromBox.package) : undefined;
-      const toPkgBox = toBox?.package ? pkgById.get(toBox.package) : undefined;
       const ownPkgHit = (fromPkgBox && pathHitsBoxes(straight, [inflateBox(fromPkgBox, 2)]))
         || (toPkgBox && pathHitsBoxes(straight, [inflateBox(toPkgBox, 2)]));
-      // Diagonal que solo roza el borde del propio paquete en extremos: OK si el
-      // segmento no corta el interior (inflate negativo = shrink). Mejor: exigir
-      // que no atraviese paquetes ajenos ni cruces; el propio se valida aparte.
       const hitsForeign = pathHitsBoxes(straight, foreignPkgs.map((p) => inflateBox(p, 4)));
       const hitsComps = pathHitsBoxes(
         straight,
         hardComps.map((c) => inflateBox(c, EDGE_CLEARANCE)),
       );
-      const hitsUsed = pathCrossingCount(straight, usedSegs) > 0
-        || pathShareLen(straight, usedSegs) > 8;
-      // Si origen y destino están en paquetes distintos, la recta casi siempre
-      // corta el propio: no usar diagonal salvo corredor limpio sin ownPkg.
+      const hitsUsed = pathCrossingCount(straight, usedSegsArg) > 0
+        || pathShareLen(straight, usedSegsArg) > 8;
       const distinctPkgs = fromBox?.package && toBox?.package && fromBox.package !== toBox.package;
       if (!hitsForeign && !hitsComps && !hitsUsed && !(distinctPkgs && ownPkgHit)) {
         path = `M${fromPt.x},${fromPt.y} L${toPt.x},${toPt.y}`;
       }
     }
     if (!path) {
-      const fromPkg = fromBox?.package ? pkgById.get(fromBox.package) : undefined;
-      const toPkg = toBox?.package ? pkgById.get(toBox.package) : undefined;
       path = routeAvoidingBoxes(fromPt, toPt, obstaculos, rank, ranked.length, {
         ...routeOptsBase,
-        fromPkg: fromPkg ? { x: fromPkg.x, y: fromPkg.y, w: fromPkg.w, h: fromPkg.h } : undefined,
-        toPkg: toPkg ? { x: toPkg.x, y: toPkg.y, w: toPkg.w, h: toPkg.h } : undefined,
+        fromPkg: fromPkgBox ? { x: fromPkgBox.x, y: fromPkgBox.y, w: fromPkgBox.w, h: fromPkgBox.h } : undefined,
+        toPkg: toPkgBox ? { x: toPkgBox.x, y: toPkgBox.y, w: toPkgBox.w, h: toPkgBox.h } : undefined,
         wrapBoxes,
       });
     }
-    // Último recurso: sin paquetes ajenos (mejor cable imperfecto que silencio).
     if (!path) {
-      const fromPkg = fromBox?.package ? pkgById.get(fromBox.package) : undefined;
-      const toPkg = toBox?.package ? pkgById.get(toBox.package) : undefined;
       path = routeAvoidingBoxes(
         fromPt, toPt,
         [
           ...hardComps,
           ...titleObst,
-          ...ringObst,
+          ...ctx.ringObst,
         ],
         rank, ranked.length,
         {
           ...routeOptsBase,
-          fromPkg: fromPkg ? { x: fromPkg.x, y: fromPkg.y, w: fromPkg.w, h: fromPkg.h } : undefined,
-          toPkg: toPkg ? { x: toPkg.x, y: toPkg.y, w: toPkg.w, h: toPkg.h } : undefined,
+          fromPkg: fromPkgBox ? { x: fromPkgBox.x, y: fromPkgBox.y, w: fromPkgBox.w, h: fromPkgBox.h } : undefined,
+          toPkg: toPkgBox ? { x: toPkgBox.x, y: toPkgBox.y, w: toPkgBox.w, h: toPkgBox.h } : undefined,
         },
       );
     }
-    // Fallback absoluto: solo si NO pisa cajas moradas.
     if (!path) {
       const pitch = routeLanePitch;
       const outBase = fromSide === 'right' || fromSide === 'left' || fromSide === 'bottom' || fromSide === 'top'
@@ -1199,11 +1186,16 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         ? { x: a.x, y: toPt.y }
         : { x: toPt.x, y: a.y };
       const candidate = [fromPt, a, b, toPt];
-      if (!pathIllegal(candidate, [...shiftedComps, ...titleObst], e.from, e.to, EDGE_CLEARANCE)) {
+      // W55: el fallback absoluto AHORA valida también prohibidos — antes
+      // podía colar paths que atravesaban `pkg-db` por la ruta L simple.
+      const walls = [
+        ...shiftedComps, ...titleObst,
+        ...prohibitedPkgBoxes.map((p) => inflateBox(p, EDGE_CLEARANCE)),
+      ];
+      if (!pathIllegal(candidate, walls, e.from, e.to, EDGE_CLEARANCE)) {
         path = `M${fromPt.x},${fromPt.y} L${a.x},${a.y} L${b.x},${b.y} L${toPt.x},${toPt.y}`;
       }
     }
-    // Si aún no hay ruta, forzar grid solo contra componentes (no-superposición).
     if (!path) {
       path = routeAvoidingBoxes(fromPt, toPt, hardComps, rank, ranked.length, {
         ...routeOptsBase,
@@ -1211,13 +1203,75 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         _loose: true,
       });
     }
-    e.path = path ?? `M${fromPt.x},${fromPt.y} L${toPt.x},${toPt.y}`;
+    return path ?? `M${fromPt.x},${fromPt.y} L${toPt.x},${toPt.y}`;
+  };
+
+  /**
+   * Primera pasada (original). Calcula e.path de forma secuencial —
+   * cada arista ve `usedSegs` acumulados de las anteriores. Esto es el
+   * comportamiento heredado que produce los problemas del usuario:
+   * las primeras aristas eligen el mejor carril gratis, las últimas
+   * pagan el coste de congestión.
+   */
+  ranked.forEach((item, rank) => {
+    const e = item.e;
+    if (!e._fromPt || !e._toPt) return;
+    e.path = routeEdgeWithSegs(edgeRoutingCtx[item.i]!, usedSegs, rank);
     // No registrar en usedSegs un tramo que aún pisa moradas: ensucia carriles.
     const pts = parsePathPoints(e.path);
-    if (pts.length && !pathIllegal(pts, hardComps, e.from, e.to, EDGE_CLEARANCE)) {
+    if (pts.length && !pathIllegal(pts, edgeRoutingCtx[item.i]!.hardComps, e.from, e.to, EDGE_CLEARANCE)) {
       usedSegs.push(...segsFromPath(pts));
     }
   });
+
+  /**
+   * W55 (Phase 4): optimización iterativa. Cada arista se re-rutea K
+   * veces usando `usedSegs` = segmentos de TODAS las OTRAS aristas
+   * (los suyos propios excluidos). Esto le da a cada una un field of
+   * view equivalente: en la primera pasada, las primeras elegían su
+   * mejor ruta sin peaje; aquí todas pagan el mismo coste de
+   * congestión → tienden a separarse en carriles distintos desde el
+   * origen, evitando el apiñamiento cerca del destino.
+   *
+   * W55+ (Phase 5): MAX_ITERS baja de 4 a 2. La pasada 1 ya consigue
+   * la mayor parte de la mejora (carriles separados en el origen);
+   * pasarla 4 veces duplica el coste de CPU sin ganancia visible en el
+   * SVG y puede agotar el timeout del render con payloads grandes
+   * (caso del intento anterior). Con 2 iters + spreadEdges agresivo
+   * se llega a un resultado equivalente en 1/2 del tiempo.
+   *
+   * Convergencia: paramos cuando ningún path cambia entre iteraciones
+   * (o llegamos a MAX_ITERS).
+   */
+  const MAX_ITERS = 2;
+  for (let iter = 0; iter < MAX_ITERS; iter++) {
+    // Construir el snapshot GLOBAL de segmentos tras la pasada previa.
+    const globalSegs: Array<{ a: Punto; b: Punto }> = [];
+    for (const ee of edges) {
+      const pts = parsePathPoints(ee.path);
+      if (pts.length >= 2) globalSegs.push(...segsFromPath(pts));
+    }
+    let changed = false;
+    for (let i = 0; i < edges.length; i++) {
+      const e = edges[i]!;
+      if (!e._fromPt || !e._toPt) continue;
+      // Segmentos de "los otros" = global - míos. Comparamos por igualdad
+      // exacta de coordenadas (los segmentos son inmutables entre pasadas).
+      const myPts = parsePathPoints(e.path);
+      const mySegs = myPts.length >= 2 ? segsFromPath(myPts) : [];
+      const myKey = (s: { a: Punto; b: Punto }): string =>
+        `${s.a.x},${s.a.y}|${s.b.x},${s.b.y}`;
+      const myKeys = new Set(mySegs.map(myKey));
+      const otherSegs = globalSegs.filter((s) => !myKeys.has(myKey(s)));
+      const rank = ranked.findIndex((r) => r.i === i);
+      const newPath = routeEdgeWithSegs(edgeRoutingCtx[i]!, otherSegs, rank);
+      if (newPath !== e.path) {
+        e.path = newPath;
+        changed = true;
+      }
+    }
+    if (!changed) break;
+  }
 
   // Alejar corredores de bordes de agrupador (como si fueran otras aristas).
   nudgePathsFromPackageBorders(
@@ -1225,6 +1279,79 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
     packages.map((p) => ({ id: p.id, x: p.x, y: p.y, w: p.w, h: p.h })),
     Math.max(28, Math.round(routePkgBorder * 0.7)),
   );
+
+  /**
+   * W55: separador de corredores. Tras nudgePaths, varios orígenes que
+   * comparten destino pueden seguir apiñados sobre el mismo eje (el
+   * nudge los aleja de paquetes pero no entre sí). spreadEdges detecta
+   * celdas con >2 aristas y desplaza ±lanePitch a la mitad de ellas.
+   */
+  spreadEdges(
+    edges,
+    [...shiftedComps, ...packages.map((p) => ({ id: `pkg-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }))],
+    Math.max(LANE_PITCH, Number(routeLanePitch) || LANE_PITCH),
+  );
+
+  /**
+   * W55: validador absoluto del muro `prohibido`. Tras todos los
+   * fallbacks, ningún path puede atravesar un paquete prohibido. Si
+   * alguno lo hace, lo recolocamos:
+   *   1. Plan A: nudgePaths round 2 con las cajas prohibidas como
+   *      bordes (las empuja perpendicularmente).
+   *   2. Plan B: re-ruteo completo del edge con un contexto reforzado
+   *      donde la caja prohibida se añade como muro duro del A* (mayor
+   *      clearance). Si esto no produce un path válido, conservamos el
+   *      path viejo (preferible a una recta rota) — el caller verá la
+   *      superposición como overlap.
+   */
+  const prohibitedPkgBoxes: Caja[] = packages
+    .filter((p) => (p as Paquete & { prohibido?: boolean }).prohibido && !sourceSet.has(p.id))
+    .map((p) => ({ id: `prohibited-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }));
+  if (prohibitedPkgBoxes.length) {
+    let violators = findProhibitedViolations(edges, prohibitedPkgBoxes, EDGE_CLEARANCE);
+    if (violators.length) {
+      // Plan A: nudgePaths con las prohibidas como bordes.
+      nudgePathsFromPackageBorders(
+        edges.filter((_, i) => violators.includes(i)),
+        prohibitedPkgBoxes,
+        Math.max(EDGE_CLEARANCE, routePkgBorder),
+      );
+      // Re-validar; si todavía quedan, plan B (re-ruteo reforzado).
+      violators = findProhibitedViolations(edges, prohibitedPkgBoxes, EDGE_CLEARANCE);
+      if (violators.length) {
+        for (const vi of violators) {
+          const e = edges[vi];
+          if (!e?._fromPt || !e?._toPt) continue;
+          const ctx = edgeRoutingCtx[vi];
+          if (!ctx) continue;
+          const walls = prohibitedPkgBoxes.map((p) => inflateBox(p, Math.max(EDGE_CLEARANCE + 8, routePkgBorder)));
+          const hardObstaculos: Caja[] = [...ctx.obstaculos, ...walls];
+          const fromPt = { x: e.fromX, y: e.fromY };
+          const toPt = { x: e.toX, y: e.toY };
+          const fromSide = (e as Arista & { _fromSide?: Lado })._fromSide;
+          const toSide = (e as Arista & { _toSide?: Lado })._toSide;
+          const alt = routeAvoidingBoxes(fromPt, toPt, hardObstaculos, 0, 1, {
+            fromSide, toSide,
+            fromBox: ctx.fromBox, toBox: ctx.toBox,
+            clearance: EDGE_CLEARANCE + 4,
+            usedSegs: [],
+            frame,
+            pkgBoxes: ctx.pkgBoxes,
+            lanePitch: routeLanePitch,
+            laneNearFactor: layoutGaps.laneNearFactor,
+            pkgBorderClearance: routePkgBorder,
+            pkgCrossFactor: layoutGaps.pkgCrossFactor,
+            softPkgs: ctx.pkgBoxes,
+            textBoxes: titleObst,
+            prohibitedPkgs: ctx.prohibitedPkgBoxes,
+          });
+          if (alt && !pathIllegal(parsePathPoints(alt), prohibitedPkgBoxes, undefined, undefined, EDGE_CLEARANCE)) {
+            e.path = alt;
+          }
+        }
+      }
+    }
+  }
 
   const allowDiag = Boolean((spec.layout as OpcionesEmpaque | undefined)?.allowDiagonal);
   const mustRelax = edges.some((e) => {

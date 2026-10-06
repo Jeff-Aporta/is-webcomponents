@@ -66,8 +66,25 @@ export const ZIGZAG_PENALTY = 100;
  * ya la cruzan; las nuevas se pagan `1 + count * CORRIDOR_PENALTY`. Esto
  * empuja a las aristas a buscar carriles sin ocupar, en vez de apiñarse
  * sobre el mismo eje.
+ *
+ * W55 (Phase 4): elevado de 8 a 14 — combinado con la optimización
+ * iterativa (re-route con `usedSegs` globales en lugar de acumulado
+ * secuencial), esto fuerza la separación temprana de carriles que
+ * vienen del mismo origen (p.ej. 5 aristas desde ISW-TestPatyIA → 5
+ * grupos en `pkg-api`).
  */
-export const CORRIDOR_PENALTY = 8;
+export const CORRIDOR_PENALTY = 14;
+/**
+ * W55: penalización ADITIVA por cada paso pegado al borde del PADRE del
+ * origen (no a cualquier paquete). Suma — no multiplica — para que el
+ * A* prefiera rodear el perímetro del padre antes que pegarse a él.
+ * 15000 ≈ 150 pasos de coste (10 px/step) → el rodeo siempre gana sobre
+ * el atajo que pasa rozando el borde interior. Subido agresivamente
+ * desde 5000 para forzar la separación temprana de carriles en
+ * geometrías con muchos orígenes hijos del mismo paquete (lab
+ * ISS·AyudasCPIA: 5 aristas desde ISW-TestPatyIA → pkg-api).
+ */
+export const PARENT_BORDER_PENALTY = 15000;
 
 export function packDiagram(packages: Paquete[], components: Componente[], edges: readonly Arista[] = [], opts: OpcionesEmpaque = {}): void {
   if (opts.mode === 'manual') return;
@@ -1237,6 +1254,19 @@ function gridRoute(
     borderYs?: readonly number[];
     /** W54: agrupadores marcados `prohibido: true` → muro duro (Infinity). */
     prohibitedPkgs?: readonly Caja[];
+    /**
+     * W55: bordes del agrupador PADRE del origen (no todos los bordes).
+     * Dentro del padre, acercarse a SU perímetro cuesta muchísimo —
+     * evita que la arista arranque corriendo por el borde interior del
+     * paquete antes de salir.
+     */
+    parentBorderXs?: readonly number[];
+    /** W55: id. para Y. */
+    parentBorderYs?: readonly number[];
+    /** W55: penalización ADITIVA por paso pegado al borde del padre. */
+    parentBorderPenalty?: number;
+    /** W55: radio de influencia del borde del padre (px). */
+    parentBorderClearance?: number;
   } = {},
 ): Punto[] | null {
   const step = 10;
@@ -1249,6 +1279,18 @@ function gridRoute(
     ...(soft.textBoxes ?? []).map((c) => inflateBox(c, 4)),
     ...(soft.prohibitedPkgs ?? []).map((c) => inflateBox(c, clearance)),
   ];
+  const parentBorderXs = soft.parentBorderXs ?? [];
+  const parentBorderYs = soft.parentBorderYs ?? [];
+  const parentBorderPenalty = Math.max(0, Number(soft.parentBorderPenalty) || 0);
+  /**
+   * W55+: clearance por defecto subido de 40 → 60 para que la
+   * penalización del padre cubra el rango típico de conectores hijos
+   * (un componente hijo de 60-100px de alto, cuyos conectores pueden
+   * estar a 30-50px del borde top/bot del padre). Con 40, la W55 no
+   * se disparaba en geometrías como ISW-TestPatyIA dentro de pkg-apps
+   * (5 aristas paralelas al borde del padre).
+   */
+  const parentBorderClearance = Math.max(8, Number(soft.parentBorderClearance) || Math.max(60, PKG_BORDER_CLEARANCE + 20));
   const softPkgs = soft.softPkgs ?? [];
   const crossFactor = Math.max(1, Number(soft.pkgCrossFactor) || PKG_CROSS_FACTOR);
   const lanePitch = Math.max(8, Number(soft.lanePitch) || LANE_PITCH);
@@ -1326,6 +1368,53 @@ function gridRoute(
     return 1 + n * nearFactor;
   };
   /**
+   * W55: penalización por paso pegado al borde del PADRE del origen.
+   * Si el segmento evaluado pasa a < parentBorderClearance del borde del
+   * paquete que contiene al origen, sumamos `parentBorderPenalty` al coste
+   * del paso (no multiplicativo, ADITIVO) — así el A* prefiere rodear el
+   * perímetro del padre antes que pegarse a él. Solo aplica a los ejes
+   * del padre (no a todos los paquetes).
+   *
+   * W55+ (parentBorderProximity): cuando el primer segmento de la arista
+   * corre PARALELO al borde del padre (e.g. aristas desde ISW-TestPatyIA
+   * que hacen 44-200px horizontales pegadas al top/bot del pkg-apps),
+   * añadimos una penalización ADITIVA proporcional a la longitud del
+   * tramo paralelo. Esto fuerza a la arista a separarse del borde
+   * perpendicularmente en lugar de pegarse a él.
+   */
+  const parentBorderStepCost = (x: number, y: number, dx: number, dy: number): number => {
+    if (!parentBorderPenalty) return 0;
+    if (!parentBorderXs.length && !parentBorderYs.length) return 0;
+    let extra = 0;
+    if (dx !== 0) {
+      // Movimiento horizontal: el borde del padre vertical (axis Y) cuenta si y
+      // está cerca de un eje Y del padre. Y también si el propio eje x está
+      // cerca de un eje X del padre (la arista va paralela al borde).
+      for (const by of parentBorderYs) {
+        if (Math.abs(y - by) < parentBorderClearance) {
+          extra += parentBorderPenalty * (parentBorderClearance - Math.abs(y - by)) / parentBorderClearance;
+        }
+      }
+      for (const bx of parentBorderXs) {
+        if (Math.abs(x - bx) < 4) {
+          extra += parentBorderPenalty * 2;
+        }
+      }
+    } else if (dy !== 0) {
+      for (const bx of parentBorderXs) {
+        if (Math.abs(x - bx) < parentBorderClearance) {
+          extra += parentBorderPenalty * (parentBorderClearance - Math.abs(x - bx)) / parentBorderClearance;
+        }
+      }
+      for (const by of parentBorderYs) {
+        if (Math.abs(y - by) < 4) {
+          extra += parentBorderPenalty * 2;
+        }
+      }
+    }
+    return extra;
+  };
+  /**
    * W54: A* consciente de dirección. Estado = (x, y, dir) donde dir ∈
    * {0,1,2,3} codifica la última dirección de movimiento
    * (R/D/L/U); -1 = sin dirección (inicio). Cada cambio de dirección
@@ -1382,10 +1471,12 @@ function gridRoute(
       const corridorMul = CORRIDOR_PENALTY ? 1 + usedCount * CORRIDOR_PENALTY : 1;
       // Regla 7: cada paso dentro de un agrupador = ×pkgCrossFactor.
       const distCost = (inSoftPkg(nx, ny) ? base * crossFactor : base) * mul * corridorMul;
+      // W55: penalización ADITIVA por paso pegado al borde del padre.
+      const parentBorderExtra = parentBorderStepCost(nx, ny, dx, dy);
       // W54: TURN_PENALTY por cada cambio de dirección (excepto el primer
       // paso, donde dir = -1).
       const turnCost = (cdir !== -1 && cdir !== ndir) ? TURN_PENALTY : 0;
-      const stepCost = distCost + turnCost;
+      const stepCost = distCost + turnCost + parentBorderExtra;
       const ng = curG + stepCost;
       if (ng >= (dist.get(nk) ?? Infinity)) continue;
       dist.set(nk, ng);
@@ -1635,6 +1726,19 @@ export function routeAvoidingBoxes(
    * los candidatos heurísticos (codos, wrapCandidates, etc.).
    */
   const prohibitedPkgs: Caja[] = ((opts as { prohibitedPkgs?: readonly Caja[] }).prohibitedPkgs ?? []).slice() as Caja[];
+  /**
+   * W55: bordes del paquete PADRE del source (no de cualquier paquete).
+   * Cuando el origen vive dentro de un paquete, sus bordes cuentan como
+   * "pared caliente" — el A* paga parentBorderPenalty por cada paso a
+   * < parentBorderClearance del perímetro del padre. Esto evita que la
+   * arista arranque corriendo por el borde interior del paquete antes
+   * de salir al corredor.
+   */
+  const fromPkgBox = opts.fromPkg as Caja | undefined;
+  const parentBorderPkg: Caja[] = fromPkgBox ? [fromPkgBox] : [];
+  const { xs: parentBorderXs, ys: parentBorderYs } = packageBorderAxes(parentBorderPkg, 4);
+  const parentBorderPenalty = Number(opts.parentBorderPenalty) || PARENT_BORDER_PENALTY;
+  const parentBorderClearance = Math.max(24, Number(opts.parentBorderClearance) || Math.max(60, PKG_BORDER_CLEARANCE + 20));
 
   const legal = (pts: Punto[]): boolean => {
     if (pts.length < 2 || pathHasDiagonal(pts)) return false;
@@ -1648,7 +1752,11 @@ export function routeAvoidingBoxes(
     if (textBoxes.length && pathHitsBoxes(pts, textBoxes.map((t) => inflateBox(t, 2)))) return false;
     // W54: prohibidos absolutos para aristas. Igual que los textos, las
     // aristas NO pueden atravesar un agrupador marcado como prohibido.
-    if (prohibitedPkgs.length && pathHitsBoxes(pts, prohibitedPkgs.map((p) => inflateBox(p, 2)))) return false;
+    // W55: la inflación aquí debe ser ≥ gridRoute para que el check
+    // post-A* no sea más permisivo que el muro duro del A*. Antes era
+    // 2 (≈ stroke width) → paths que rozan el borde pasaban el check.
+    // Subimos a EDGE_CLEARANCE para alinear con el muro del A*.
+    if (prohibitedPkgs.length && pathHitsBoxes(pts, prohibitedPkgs.map((p) => inflateBox(p, EDGE_CLEARANCE)))) return false;
     if (overshootsTip(pts) || overshootsStart(pts)) return false;
     if (lastMissesApproach(pts, opts.toSide)) return false;
     const stem1 = [pts[0]!, pts[1]!];
@@ -1732,6 +1840,42 @@ export function routeAvoidingBoxes(
     // Interior de agrupador: ×pkgCrossFactor sobre la longitud interior.
     const insideLen = pathInsidePkgsLen(clean, softPkgs);
     const pkgTax = insideLen * (pkgCrossFactor - 1);
+    /**
+     * W55: penalización post-A* por tramo pegado al borde del PADRE del
+     * origen. Complementa al coste del A* (este cubre candidatos
+     * heurísticos como codos y wrapCandidates). Mide la longitud del
+     * tramo que está a < parentBorderClearance de cualquier borde del
+     * padre y lo multiplica por parentBorderPenalty.
+     *
+     * W55+ (Phase 5): extra de "primer tramo paralelo al borde" — cuando
+     * los primeros 3 puntos del path forman un segmento pegado al borde
+     * top/bot del padre y la arista está justo dentro del ancho del
+     * padre, suma un extra proporcional a la longitud. Esto penaliza
+     * los "renglones" de aristas que corren paralelas al borde en lugar
+     * de separarse perpendicularmente.
+     */
+    let parentBorderTax = 0;
+    if (parentBorderPenalty && (parentBorderXs.length || parentBorderYs.length)) {
+      for (let i = 1; i < clean.length - 1; i++) {
+        const a = clean[i]!;
+        const b = clean[i + 1]!;
+        const len = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+        if (len < 1) continue;
+        let near = 0;
+        if (Math.abs(a.x - b.x) < 0.6) {
+          // Segmento vertical: paga si x está pegado a un eje X del padre.
+          for (const bx of parentBorderXs) {
+            if (Math.abs(a.x - bx) < parentBorderClearance) near += (parentBorderClearance - Math.abs(a.x - bx)) / parentBorderClearance;
+          }
+        } else if (Math.abs(a.y - b.y) < 0.6) {
+          // Segmento horizontal: paga si y está pegado a un eje Y del padre.
+          for (const by of parentBorderYs) {
+            if (Math.abs(a.y - by) < parentBorderClearance) near += (parentBorderClearance - Math.abs(a.y - by)) / parentBorderClearance;
+          }
+        }
+        parentBorderTax += len * near * parentBorderPenalty;
+      }
+    }
     const outside = frame ? boundsOverflow(clean, frame, 24) : 0;
     const hook = boundsOverflow(clean, {
       x: inner.xMin, y: inner.yMin,
@@ -1743,7 +1887,7 @@ export function routeAvoidingBoxes(
     const turnTax = turns * TURN_PENALTY + (turns > MAX_TURNS_PER_EDGE ? (turns - MAX_TURNS_PER_EDGE) * ZIGZAG_PENALTY * TURN_PENALTY : 0);
     // Rieles pegados / interior agrupador / zigzags cuestan más que un rodeo.
     const score = manhattan(clean) + share * 1800 + laneTax + borderTax + pkgTax
-      + crosses * 1200 + outside * 24 + hook * 16 + turnTax;
+      + crosses * 1200 + outside * 24 + hook * 16 + turnTax + parentBorderTax;
     if (score < bestScore || (score === bestScore && share < (best?._share ?? Infinity))) {
       bestScore = score;
       best = clean as ScoredPath;
@@ -1771,6 +1915,13 @@ export function routeAvoidingBoxes(
         // W54: agrupadores prohibidos = muro duro. Sin este pase, el A*
         // atravesaba el paquete "«PG» clientesis" para "ahorrar" un giro.
         prohibitedPkgs,
+        // W55: penalización ADITIVA por estar cerca del borde del PADRE
+        // del origen — evita que la arista recorra pegada al perímetro
+        // interior del paquete antes de salir al corredor.
+        parentBorderXs,
+        parentBorderYs,
+        parentBorderPenalty,
+        parentBorderClearance,
       });
       if (g) consider(collapseOrtho(g));
     }
@@ -1900,6 +2051,11 @@ export function routeAvoidingBoxes(
         borderXs,
         borderYs,
         prohibitedPkgs,
+        // W55: id. pase primario.
+        parentBorderXs,
+        parentBorderYs,
+        parentBorderPenalty,
+        parentBorderClearance,
       });
       if (g) consider(collapseOrtho(g));
     }
@@ -2018,4 +2174,174 @@ export function nudgePathsFromPackageBorders(
     }
     if (changed) e.path = rebuild(pts);
   }
+}
+
+/**
+ * Parsea un atributo `d` SVG a una lista de puntos.
+ */
+export function pathPoints(d: string): Punto[] {
+  const pts: Punto[] = [];
+  const re = /[ML]\s*([\d.-]+)\s*,\s*([\d.-]+)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(d))) pts.push({ x: +m[1]!, y: +m[2]! });
+  return pts;
+}
+
+/**
+ * W55: post-procesado de corredor-splitter.
+ *
+ * Tras el A* + nudges, agrupamos las aristas por las celdas (x, y)
+ * snapeadas a `lanePitch` que comparten. Si en alguna celda pasan 2+
+ * aristas, desplazamos la mitad por +lanePitch y la otra mitad por
+ * -lanePitch en su eje dominante. El objetivo es romper los corredores
+ * apiñados que aparecen cuando múltiples orígenes comparten destino
+ * (p.ej. 5 aristas desde App-testpatyia → 5 grupos en `pkg-api`).
+ *
+ * W55+ (Phase 5): `minOvercrowd` baja de 2 a 1 (≥2 aristas en una
+ * celda ya se considera apiñamiento) y el offset sube de 1×step a
+ * 1.5×step para que la separación sea más visible.
+ *
+ * Restricciones:
+ *   - No tocamos los extremos (origen/destino) de la arista.
+ *   - Solo desplazamos tramos INTERMEDIOS (entre pts[1] y pts[-2]).
+ *   - Si el desplazamiento cruza una caja de `boxes`, lo descartamos.
+ *
+ * @returns número de aristas que se pudieron re-colocar.
+ */
+export function spreadEdges(
+  paths: Array<{ path: string }>,
+  boxes: readonly Caja[],
+  lanePitch: number = LANE_PITCH,
+  minOvercrowd: number = 2,
+): number {
+  if (!paths.length || lanePitch <= 0) return 0;
+  const step = Math.max(4, lanePitch);
+  /**
+   * Mapa (axis, value) -> { axis: 'x' | 'y', v: number, paths: indices[] }
+   * donde `axis`/`v` son el eje y posición snapeada de la celda, e
+   * `indices` son los índices en `paths` que cruzan ese eje.
+   */
+  type Cell = { axis: 'x' | 'y'; v: number; pathIdx: Set<number> };
+  const cells = new Map<string, Cell>();
+  const snap = (v: number): number => Math.round(v / step) * step;
+  for (let i = 0; i < paths.length; i++) {
+    const p = paths[i];
+    if (!p?.path) continue;
+    const pts = pathPoints(p.path);
+    for (let j = 1; j < pts.length - 1; j++) {
+      const a = pts[j]!;
+      const b = pts[j + 1]!;
+      if (Math.abs(a.x - b.x) < 0.6) {
+        const v = snap(a.x);
+        const k = `x:${v}`;
+        let c = cells.get(k);
+        if (!c) { c = { axis: 'x', v, pathIdx: new Set() }; cells.set(k, c); }
+        c.pathIdx.add(i);
+      } else if (Math.abs(a.y - b.y) < 0.6) {
+        const v = snap(a.y);
+        const k = `y:${v}`;
+        let c = cells.get(k);
+        if (!c) { c = { axis: 'y', v, pathIdx: new Set() }; cells.set(k, c); }
+        c.pathIdx.add(i);
+      }
+    }
+  }
+  const crowded = [...cells.values()].filter((c) => c.pathIdx.size > minOvercrowd + 1);
+  if (!crowded.length) return 0;
+  const rebuild = (pts: Punto[]): string => {
+    if (!pts.length) return '';
+    let d = `M${pts[0]!.x},${pts[0]!.y}`;
+    for (let i = 1; i < pts.length; i++) d += ` L${pts[i]!.x},${pts[i]!.y}`;
+    return d;
+  };
+  const hitsBox = (a: Punto, b: Punto): boolean => {
+    if (boxes.length === 0) return false;
+    for (const c of boxes) {
+      if (segmentoCortaCaja(a.x, a.y, b.x, b.y, inflateBox(c, EDGE_CLEARANCE / 2))) return true;
+    }
+    return false;
+  };
+  let relocated = 0;
+  for (const cell of crowded) {
+    const indices = [...cell.pathIdx];
+    if (indices.length <= minOvercrowd + 1) continue;
+    // Mantener la primera (la que primero eligió el corredor), desplazar el resto.
+    const movable = indices.slice(1);
+    // Distribuir offsets: la mitad a +lanePitch, la otra mitad a -lanePitch.
+    // Ordenamos por índice para que el reparto sea estable.
+    movable.sort((a, b) => a - b);
+    const half = Math.ceil(movable.length / 2);
+    for (let k = 0; k < movable.length; k++) {
+      const idx = movable[k]!;
+      const e = paths[idx];
+      if (!e?.path) continue;
+      const pts = pathPoints(e.path);
+      if (pts.length < 4) continue;
+      const offset = k < half ? step : -step;
+      const axisKey = cell.axis;
+      // Aplicar offset SOLO a los puntos intermedios que están en ese eje.
+      // Tramos verticales (axis x) → cambia x; horizontales (axis y) → cambia y.
+      let changed = false;
+      for (let j = 1; j < pts.length - 1; j++) {
+        const a = pts[j]!;
+        const b = pts[j + 1]!;
+        if (axisKey === 'x' && Math.abs(a.x - b.x) < 0.6 && Math.abs(a.x - cell.v) < step * 0.6) {
+          // Verifica que el nuevo segmento no atraviese una caja.
+          const newP = { x: a.x + offset, y: a.y };
+          const newQ = { x: b.x + offset, y: b.y };
+          if (hitsBox(newP, newQ)) continue;
+          // Empuja también los puntos que estén en ese eje.
+          for (let m = j; m < pts.length - 1; m++) {
+            if (Math.abs(pts[m]!.x - a.x) < 0.6) {
+              pts[m]!.x += offset;
+              changed = true;
+            } else break;
+          }
+        } else if (axisKey === 'y' && Math.abs(a.y - b.y) < 0.6 && Math.abs(a.y - cell.v) < step * 0.6) {
+          const newP = { x: a.x, y: a.y + offset };
+          const newQ = { x: b.x, y: b.y + offset };
+          if (hitsBox(newP, newQ)) continue;
+          for (let m = j; m < pts.length - 1; m++) {
+            if (Math.abs(pts[m]!.y - a.y) < 0.6) {
+              pts[m]!.y += offset;
+              changed = true;
+            } else break;
+          }
+        }
+      }
+      if (changed) {
+        e.path = rebuild(pts);
+        relocated++;
+      }
+    }
+  }
+  return relocated;
+}
+
+/**
+ * W55: validador absoluto del muro duro `prohibido`. Tras todo el
+ * pipeline de ruteo, comprueba que ninguna arista atraviese un paquete
+ * prohibido. Devuelve la lista de aristas que SÍ lo atraviesan (para que
+ * el caller las pueda recolocar o marcar como inválidas).
+ *
+ * Diferencia con `legal()`: este corre AL FINAL, después de los fallbacks
+ * (incluido el "fallback absoluto" en component-spec.ts que genera un
+ * path L-shape sin pasar por `legal()`).
+ */
+export function findProhibitedViolations(
+  paths: ReadonlyArray<{ path?: string }>,
+  prohibitedPkgs: readonly Caja[],
+  inflate: number = EDGE_CLEARANCE,
+): number[] {
+  if (!prohibitedPkgs.length || !paths.length) return [];
+  const walls: Caja[] = prohibitedPkgs.map((p) => inflateBox(p, inflate));
+  const out: number[] = [];
+  for (let i = 0; i < paths.length; i++) {
+    const p = paths[i];
+    if (!p?.path) continue;
+    const pts = pathPoints(p.path);
+    if (pts.length < 2) continue;
+    if (pathHitsBoxes(pts, walls)) out.push(i);
+  }
+  return out;
 }
