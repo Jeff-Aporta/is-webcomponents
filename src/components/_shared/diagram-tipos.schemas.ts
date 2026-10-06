@@ -21,6 +21,8 @@ export const ComponenteSchema = z.intersection(CajaSchema, z.object({
   name: z.string().optional(),
   stereotype: z.union([z.string(), z.undefined()]).optional(),
   hue: z.union([z.number(), z.undefined()]).optional(),
+  /** Color hex de caja/aristas (#080, #800…). */
+  color: z.union([z.string(), z.undefined()]).optional(),
   provides: z.array(z.unknown()).optional(),
   requires: z.array(z.unknown()).optional(),
   connects: z.array(z.unknown()).optional(),
@@ -35,6 +37,15 @@ export const PaqueteSchema = z.intersection(CajaSchema, z.object({
   stereotype: z.union([z.string(), z.undefined()]).optional(),
   hue: z.union([z.number(), z.undefined()]).optional(),
   parent: z.union([z.string(), z.undefined()]).optional(),
+  /**
+   * W54: si `true`, el agrupador es un muro duro (Infinity) para el ruteo de
+   * aristas — equivalente a un texto de título. Útil para agrupadores
+   * "decorativos" (p.ej. el paquete "«PostgreSQL» clientesis" del lab
+   * ISS-AyudasCPIA) por los que las aristas no deben colarse. La única
+   * manera de alcanzar un componente dentro es a través del perímetro del
+   * paquete, no del interior.
+   */
+  prohibido: z.boolean().optional(),
 }));
 export type Paquete = z.infer<typeof PaqueteSchema>;
 
@@ -57,7 +68,19 @@ export const OpcionesEmpaqueSchema = z.object({
   colGutter: z.number().optional(),
   pkgCorridor: z.number().optional(),
   rowGap: z.number().optional(),
+  /** Hueco entre componentes en paquetes no-Apps (OpenAI, API anidada…). */
+  nestedRowGap: z.number().optional(),
+  /** Hueco entre paquetes raíz apilados en columna (OpenAI/DS/R2…). */
+  pkgRowGap: z.number().optional(),
   minGap: z.number().optional(),
+  /** Distancia mínima entre rieles H/V de aristas (px). Default 20. */
+  lanePitch: z.number().optional(),
+  /** ×N si el tramo está a < lanePitch de otro riel. Default 3. */
+  laneNearFactor: z.number().optional(),
+  /** Margen arista ↔ borde de agrupador (px). Default 40. */
+  pkgBorderClearance: z.number().optional(),
+  /** Multiplicador de costo al atravesar interior de agrupador. Default 3. */
+  pkgCrossFactor: z.number().optional(),
   pad: z.number().optional(),
   tabH: z.number().optional(),
   clearance: z.number().optional(),
@@ -71,6 +94,8 @@ export const OpcionesEmpaqueSchema = z.object({
   wrapBoxes: z.array(z.unknown() /* TODO: cannot convert */).optional(),
   frame: CajaSchema.optional(),
   usedSegs: z.array(z.unknown()).optional(),
+  /** Permite tramos en diagonal (línea recta) entre conectores. */
+  allowDiagonal: z.boolean().optional(),
 });
 export type OpcionesEmpaque = z.infer<typeof OpcionesEmpaqueSchema>;
 

@@ -25,6 +25,8 @@ export const SpecEdgeSchema = z.object({
   toInterface: z.string().optional(),
   label: z.string().optional(),
   hue: z.number().optional(),
+  /** Stroke hex (#080 / #800). Gana sobre hue. */
+  color: z.string().optional(),
   kind: EdgeKindSchema,
 });
 export type SpecEdge = z.infer<typeof SpecEdgeSchema>;
@@ -59,7 +61,7 @@ export const LayoutComponentSchema = z.object({
   labelY: z.number().optional(),
   itemsY: z.number().optional(),
   itemBubbles: z.array(z.object({
-  method: z.string(),
+  methods: z.array(z.string()),
   path: z.string(),
   x: z.number(),
   y: z.number(),
@@ -89,6 +91,8 @@ export const LayoutEdgeSchema = z.object({
   toX: z.number(),
   toY: z.number(),
   path: z.string(),
+  color: z.string().optional(),
+  hue: z.number().optional(),
   _fromPt: z.union([z.unknown() /* TODO: ref Punto */, z.null()]).optional(),
   _toPt: z.union([z.unknown() /* TODO: ref Punto */, z.null()]).optional(),
   _fromSide: z.unknown() /* TODO: ref Lado */.optional(),
