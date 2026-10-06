@@ -6,6 +6,7 @@
     "jsr:@std/internal@^1.0.14": "1.0.14",
     "jsr:@std/path@1": "1.1.6",
     "npm:@browserbasehq/stagehand@^4.0.2": "4.1.0",
+    "npm:esbuild@*": "0.25.0",
     "npm:esbuild@0.25": "0.25.0",
     "npm:esbuild@0.25.0": "0.25.0",
     "npm:playwright@^1.62.1": "1.63.0",

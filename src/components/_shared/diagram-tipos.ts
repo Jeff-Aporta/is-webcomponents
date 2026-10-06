@@ -14,37 +14,16 @@
  * MUTABLES A PROPÓSITO. El empaquetado reposiciona las cajas in situ (`c.x =
  * …`), así que estas interfaces no llevan `readonly`: marcarlas lo haría
  * mentir sobre lo que el módulo hace con ellas.
- */
-
-/** Rectángulo colocado. La unidad de todo el layout. */
-
-/** Un componente del diagrama. */
-
-/**
- * Un paquete: contorno que agrupa componentes.
  *
- * Su geometría no la pone el consumidor, la calcula el empaquetado como unión
- * ortogonal de sus hijos — por eso hereda de `Caja` igual que un componente.
+ * Tipos canónicos: `diagram-tipos.schemas.ts` (Zod). Aquí solo re-export.
  */
-
-/** Arista entre dos componentes, por id. */
-
-/** Lado de una caja por el que entra o sale una arista. */
-
-/**
- * Opciones de empaquetado y ruteo.
- *
- * Es un saco heterogéneo porque lo comparten el empaquetado y el trazado de
- * aristas, que se llaman con el mismo objeto. Separarlo en dos exigiría tocar
- * a los dos consumidores; se deja documentado por bloques.
- */
-
-/** Punto suelto: extremos y vértices de las aristas trazadas. */
-
-/**
- * Interfaz UML anclada al borde de un componente (la «piruleta»).
- *
- * `cx`/`cy` no vienen del payload: los calcula el trazado y los escribe aquí,
- * por eso son opcionales y mutables.
- */
-import type { Caja, Componente, Paquete, Arista, Lado, OpcionesEmpaque, Punto, InterfazUml } from "./diagram-tipos.schemas.js";
+export type {
+  Caja,
+  Componente,
+  Paquete,
+  Arista,
+  Lado,
+  OpcionesEmpaque,
+  Punto,
+  InterfazUml,
+} from './diagram-tipos.schemas.js';

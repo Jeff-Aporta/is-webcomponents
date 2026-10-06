@@ -26,7 +26,7 @@
 /* Flotante: full-width, sin borde ni fondo. Solo titulo + lede. */
 .head {
   display: block;
-  margin: 0;
+  margin: 0 0 0.65rem;
   padding: 0;
 }
 
@@ -45,29 +45,59 @@
 
 /* ─────────────────────────────── card ──────────────────────────────── */
 
+/* Neon-glass card; `:host(.section--plain)` = shell transparente (mapa icons). */
 .card {
-  /* Look homogeneo: misma carta para que TODAS las sections de un demo
-     queden coherentes. La paleta la aportan los tokens --iswc-* ya cargados
-     en presentation.css. */
   position: relative;
   display: block;
   background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--iswc-accent) 7%, transparent) 0%,
+      transparent 42%),
     linear-gradient(180deg,
-      color-mix(in srgb, var(--iswc-bg-elev) 92%, #fff) 0%,
-      var(--iswc-bg-elev) 100%);
-  border: 1px solid var(--iswc-border);
-  border-radius: calc(var(--iswc-radius) + 2px);
-  padding: clamp(1.1rem, 2.4vw, 1.5rem);
-  margin: 0 0 1.6em;
+      color-mix(in srgb, var(--iswc-bg-elev) 88%, #fff) 0%,
+      color-mix(in srgb, var(--iswc-bg-elev) 96%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--iswc-accent) 22%, var(--iswc-border));
+  border-radius: calc(var(--iswc-radius) + 4px);
+  padding: clamp(1rem, 2.2vw, 1.4rem);
+  margin: 0 0 1.75em;
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 4%),
+    inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--iswc-accent) 6%, transparent),
+    0 12px 36px color-mix(in srgb, var(--iswc-accent) 8%, transparent),
     var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 18%));
   color: inherit;
-  /* El contenido puede ser interactivo: si el consumidor declara un
-     dropdown/popover dentro, que pueda salir de la card sin recortarse. */
   overflow: visible;
   isolation: isolate;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  border-radius: inherit inherit 0 0;
+  background: linear-gradient(90deg,
+    var(--iswc-accent),
+    color-mix(in srgb, var(--iswc-accent) 15%, transparent) 55%,
+    transparent);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+:host(.section--plain) .card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:host(.section--plain) .card::before { display: none; }
 
 /* El primer y ultimo hijo dentro de la card: margen 0 para que no dupliquen
    el padding del contenedor. */

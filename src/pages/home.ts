@@ -1,6 +1,6 @@
 /**
- * Behavior del home: CTAs, parallax del collage, reveal, contadores KPI,
- * cintas en bucle y botón «abrir demo» de cada card.
+ * Behavior del home: CTAs, parallax del collage, reveal, contadores KPI
+ * y cintas en bucle.
  *
  * Todo se cablea contra `ctx.main`, que es el scroller que pinta el chrome. La
  * versión anterior buscaba `iswc-main.home-main` por `document`: cuando ese nodo
@@ -16,13 +16,6 @@
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../previews/_kit/types.d.ts';
 import { init as pintarConsumoCdn } from '../utils/home-cdn.js';
-
-/** Tags con demo propia: definen en qué cards aparece el botón de «abrir». */
-const CON_DEMO = new Set([
-  'iswc-bar-chart', 'iswc-line-chart', 'iswc-doughnut-chart', 'iswc-pie-chart',
-  'iswc-polar-area-chart', 'iswc-radar-chart', 'iswc-scatter-chart',
-  'iswc-bubble-chart', 'iswc-sparkline', 'iswc-flowchart', 'iswc-timeline',
-]);
 
 /**
  * Pide al shell que abra el preview de `tag`.
@@ -202,33 +195,6 @@ function cintasEnBucle(raiz: HTMLElement) {
 }
 
 /**
- * Botón «abrir demo» en cada card que contenga un `is-*` con preview propio.
- * @param {HTMLElement} raiz
- */
-function botonesDeDemo(raiz: HTMLElement) {
-  for (const card of raiz.querySelectorAll<HTMLElement>('.tile, .collage-card, .lab-card')) {
-    const componente = [...card.querySelectorAll<HTMLElement>('*')].find((el) =>
-      CON_DEMO.has(el.tagName.toLowerCase()),
-    );
-    if (!componente) continue;
-    const tag = componente.tagName.toLowerCase();
-    const boton = document.createElement('button');
-    boton.type = 'button';
-    boton.className = 'card-demo';
-    boton.title = 'Abrir demo';
-    boton.setAttribute('aria-label', `Abrir demo de ${tag}`);
-    const icono = document.createElement('iswc-icon');
-    icono.setAttribute('icon', 'mdi:open-in-new');
-    boton.appendChild(icono);
-    boton.addEventListener('click', (e: Event) => {
-      e.stopPropagation();
-      seleccionar(tag);
-    });
-    card.appendChild(boton);
-  }
-}
-
-/**
  * @param ctx Mount context del preview.
  * @param preview Preview concreto (ISComponentPreview). Se accede a `signal`
  *              que es AbortSignal compartido para listeners/observers.
@@ -240,7 +206,6 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
 
   pintarConsumoCdn(raiz);
   cablearCtas(raiz);
-  botonesDeDemo(raiz);
   // Cintas: enlaces al demo aunque reduced-motion salte la animación.
   raiz.querySelector('.collage-ribbons')?.removeAttribute('aria-hidden');
 

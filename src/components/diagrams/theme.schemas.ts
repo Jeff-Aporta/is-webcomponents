@@ -58,6 +58,13 @@ export const ErThemeJsonSchema = z.object({
   lollipop: z.string().optional(),
   noPackageTab: z.boolean().optional(),
   titleBackground: z.boolean().optional(),
+  /** true = InSoft: -( expone, -O consume (invierte glifos UML). */
+  invertAssembly: z.boolean().optional(),
+  /** Fill de filas EP (entidad hoja). */
+  epFill: z.string().optional(),
+  epBorder: z.string().optional(),
+  /** Filas badge sin bg ni stroke negro. */
+  epRowTransparent: z.boolean().optional(),
 }).optional(),
   diagramTheme: z.unknown() /* TODO: ref DiagramTheme */.optional(),
   light: z.unknown() /* TODO: ref Omit<...> */.optional(),

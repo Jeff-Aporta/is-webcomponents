@@ -15,6 +15,19 @@ export function assignEdgeHues<T extends EdgeWithHue>(edges: readonly T[]): T[] 
   });
 }
 
+/** Mezcla un hex con blanco (fondos acordes a stroke oscuro). */
+export function hexMixWhite(hex: string, t = 0.88): string {
+  const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(hex).trim());
+  if (!m) return hex;
+  let h = m[1]!;
+  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  const mix = (c: number) => Math.round(c + (255 - c) * t);
+  return `#${[mix(r), mix(g), mix(b)].map((x) => x.toString(16).padStart(2, '0')).join('')}`;
+}
+
 export function edgeStrokeHex(hue: number | null | undefined, fallback: string = '#334155'): string {
   return tkHueToHex(hue, 48, 30) || fallback;
 }

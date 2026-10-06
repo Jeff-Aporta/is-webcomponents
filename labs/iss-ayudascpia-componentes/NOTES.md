@@ -7,8 +7,8 @@
 ## Objetivo
 
 Diagrama de componentes de servidores (API + apps ISW + DB + externos) con el
-mismo theme InSoft que el DER (`themes/insoft.json`: Poppins, naranja entidad,
-cajones de capa, borde negro).
+theme InSoft **de componentes** (no el de ER): Poppins, cajas `#C1BFFF`,
+agrupadores `#7ACFF4/#FFFFC1/#BCFFBB/#EAB6B0/#81FF81/#01C000`, O/C `#7ACFF4`.
 
 ## Fases
 
@@ -23,15 +23,22 @@ cajones de capa, borde negro).
 - Lab **persiste en el repo**; no se documenta en demos/galería.
 - El render usa el CDN **local** (`dist/cdn`) para validar ajustes del kit
   antes de publicar. Mismo patrón que `ISS…/docs-experimental/gen/tools/render-iswc.mjs`.
-- Theme InSoft en component-diagram: attr `theme="insoft"` (añadido 2026-10-05).
-- Margen `-(O-`: `enforceAssemblyEntityMargins` (69 px) ya en component-spec.
+- Theme InSoft CD: `theme="insoft-cd"` (paleta CD + `invertAssembly`).
+- `@Azure` anida API + PG (`packages[].parent`).
+- EPs consolidados (`GET|PUT`, …) → una row; fondo transparente, borde blanco α.
+- InSoft: `-(`` expone / `-O` consume (`invertAssembly`); un `-(`` por expositor.
+- Relleno de la O = `#7ACFF4` (expositor); aristas ortogonales oscuras (`#0F172A`).
+- `layout.allowDiagonal: false` — solo ortogonales.
+- Sin O/C huérfanos: solo interfaces cableadas.
+- Themes: `themes/insoft.json` (ER genérico) · `themes/insoft-cd.json` (componentes).
 - SVG regenerados 2026-10-05: `out/v1-legacy.svg`, `out/componentes.svg`.
 
 ## Ajustes de kit tocados en este lab
 
-1. `component-diagram.ts` — soporte `theme` / paletas de paquete.
-2. `themes/insoft.json` — paletas `api|db|openai|ds|r2|apps|azure`.
-3. `theme.ts` — `resolveErTheme` también lee `componentDiagram.theme`.
+1. `component-diagram.ts` — theme, paletas, títulos sin bg, Poppins, O `#7ACFF4`.
+2. `component-spec.ts` — `allowDiagonal`, consolidate HTTP, prune ifaces, noTab rect.
+3. `component-pack.ts` — nesting parent/child; AABB en anidados (sin outline folder).
+4. `themes/insoft.json` — `component.*` + paletas api/db/openai/ds/r2/apps/azure.
 
 ## Cómo regenerar
 

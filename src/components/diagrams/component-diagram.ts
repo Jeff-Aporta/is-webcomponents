@@ -4,7 +4,7 @@ import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R
 import type { ComponentLayout } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
-import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
+import { edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite } from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -15,7 +15,7 @@ import {
   pickThemeMode,
   themeToDiagramTheme,
   clusterPalette,
-  entityPaint,
+  componentBoxPaint,
   edgePaint,
   injectThemeCss,
   type ErThemeJson,
@@ -26,8 +26,8 @@ import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./component
  * <iswc-component-diagram> — diagrama de componentes UML en SVG, sin Mermaid.
  *
  * Tres primitivas declaradas por el payload:
- *   - packages: carpetas con pestaña (tab) arriba a la izquierda, hueco de 4px
- *     entre la pestaña y el cuerpo para que se lea como dos piezas.
+ *   - packages: agrupadores (rectángulo InSoft sin pestaña de carpeta);
+ *     soporta anidación vía `parent`.
  *   - components: rectángulos con estereotipo `<<name>>` sobre la etiqueta.
  *     El estereotipo se pinta en cursiva; la etiqueta va en negrita debajo.
  *   - interfaces (lollipop / socket): `provided` = círculo hueco O;
@@ -42,19 +42,23 @@ import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./component
  * Eventos: iswc-render, iswc-open-viewer
  */
 
-const FONT = 'Tahoma,Arial,sans-serif';
+const FONT = '"Poppins", "Inter", system-ui, sans-serif';
 
-/** Clave de paleta InSoft según id/nombre del paquete. */
+/** Clave de paleta genérica según rol del paquete (sin nombres de tech). */
 function packagePaletteId(p: Paquete): string {
   const blob = `${p.id ?? ''} ${p.name ?? ''} ${p.stereotype ?? ''}`.toLowerCase();
-  if (/cliente|app|front|isw|consumidor/.test(blob)) return 'apps';
-  if (/openai|llm|\bia\b/.test(blob)) return 'openai';
-  if (/dsclient|login|jwt.?ext/.test(blob)) return 'ds';
-  if (/\br2\b|storage|cloudflare|cdn/.test(blob)) return 'r2';
-  if (/\bdb\b|postgre|mssql|datos/.test(blob)) return 'db';
-  if (/azure/.test(blob)) return 'azure';
-  if (/api|ayudas|backend|function|http/.test(blob)) return 'api';
-  return String(p.id ?? 'oper').replace(/^pkg-/, '');
+  // Roles genéricos → claves del theme CD (expose|group|service|store|…).
+  if (/dsclient|\bds\b|login|jwt.?ext/.test(blob)) return 'external';
+  if (/\bdb\b|postgre|mssql|datos|clientesis|store|storage/.test(blob) && !/cdn|cloudflare|\br2\b/.test(blob)) {
+    return 'store';
+  }
+  if (/openai|\bllm\b|vector|service|ia\b/.test(blob)) return 'service';
+  if (/\br2\b|cdn|cloudflare|external/.test(blob)) return 'external';
+  if (/cliente|app|front|isw|consumidor|expose/.test(blob)) return 'expose';
+  if (/api|ayudas|backend|function|http/.test(blob)) return 'expose';
+  if (/azure|cloud|group|panel/.test(blob)) return 'group';
+  if (/portal|web\b|cool/.test(blob)) return 'cool';
+  return String(p.id ?? 'expose').replace(/^pkg-/, '');
 }
 
 /** Arco C. `side` nombra abertura: right abre a +X, bottom abre a +Y (hacia el O). */
@@ -123,8 +127,15 @@ class IswcComponentDiagram extends DiagramElementBase {
   /** Tema InSoft (mismo JSON que ER). Attr `theme` o `componentDiagram.theme`. */
   #resolveStyleTheme(): ErThemeJson | null {
     const fromAttr = this.getAttribute('theme');
-    if (fromAttr) return resolveErTheme(fromAttr);
-    return resolveErTheme(this.payload);
+    if (fromAttr) {
+      const id = fromAttr.trim().toLowerCase();
+      // CD usa paleta propia; "insoft" apunta a insoft-cd.
+      if (id === 'insoft') return resolveErTheme('insoft-cd') ?? resolveErTheme('insoft');
+      return resolveErTheme(fromAttr);
+    }
+    const fromPayload = resolveErTheme(this.payload);
+    if (fromPayload?.id === 'insoft') return resolveErTheme('insoft-cd') ?? fromPayload;
+    return fromPayload;
   }
 
   renderDiagram(): void {
@@ -170,6 +181,7 @@ class IswcComponentDiagram extends DiagramElementBase {
     } else {
       this.svg.removeAttribute('data-cd-theme');
     }
+    this.svg.style.fontFamily = fontFamily;
 
     if (layout.title) {
       const t = svgEl('text', {
@@ -200,6 +212,7 @@ class IswcComponentDiagram extends DiagramElementBase {
 
   #buildPackages(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
     const styleTheme = this.#styleTheme;
+    const cd = styleTheme ? componentBoxPaint(styleTheme) : null;
     for (const rawP of layout.packages) {
       const p = rawP as LayoutPackage;
       const g = svgEl('g', { class: 'cd-pkg' });
@@ -225,7 +238,7 @@ class IswcComponentDiagram extends DiagramElementBase {
         titleFill = color;
       }
       g.appendChild(svgEl('path', {
-        d: packageShapePath(p),
+        d: packageShapePath(p, { noTab: cd?.noPackageTab ?? Boolean(styleTheme) }),
         fill,
         stroke,
         'stroke-width': strokeWidth,
@@ -234,7 +247,9 @@ class IswcComponentDiagram extends DiagramElementBase {
       }));
       const tb = p.titleBox;
       const label = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
-      if (tb) {
+      const noTab = cd?.noPackageTab ?? Boolean(styleTheme);
+      // InSoft: título sin fondo ni caja (solo tinta).
+      if (!noTab && tb && (cd ? cd.titleBackground : !styleTheme)) {
         g.appendChild(svgEl('rect', {
           x: tb.x, y: tb.y, width: tb.w, height: tb.h, rx: styleTheme ? 0 : 4,
           fill: '#FFFFFF',
@@ -242,8 +257,11 @@ class IswcComponentDiagram extends DiagramElementBase {
           'stroke-width': styleTheme ? 1.5 : 0.8,
         }));
       }
+      // Sin pestaña: título dentro, arriba-izquierda (no centrado, no caja).
+      const tx = noTab ? p.x + 10 : (tb?.x ?? p.x) + 8;
+      const ty = noTab ? p.y + 16 : (tb?.y ?? p.y) + (tb ? tb.h * 0.7 : 14);
       const t = svgEl('text', {
-        x: (tb?.x ?? p.x) + 8, y: (tb?.y ?? p.y) + (tb ? tb.h * 0.7 : 10),
+        x: tx, y: ty,
         'text-anchor': 'start',
         fill: titleFill,
         'font-size': '11', 'font-weight': '700', 'font-style': 'italic',
@@ -259,6 +277,7 @@ class IswcComponentDiagram extends DiagramElementBase {
   #buildEdges(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
     const styleTheme = this.#styleTheme;
     const ep = styleTheme ? edgePaint(styleTheme) : null;
+    const cd = styleTheme ? componentBoxPaint(styleTheme) : null;
     for (const rawE of layout.edges) {
       const e = rawE as typeof rawE & {
         labelX?: number;
@@ -266,11 +285,13 @@ class IswcComponentDiagram extends DiagramElementBase {
         labelW?: number;
       };
       if (!e.path) continue;
-      const color = ep
-        ? (e.hue != null ? edgeStrokeHex(e.hue, ep.stroke) : ep.stroke)
-        : edgeStrokeHex(e.hue, theme.accent);
-      const g = svgEl('g', { class: 'cd-edge' });
       const ballSocket = Boolean(e.fromInterface && e.toInterface) || e.kind === 'assembly';
+      // Color por arista (hex) > hue > stroke del theme.
+      const color = (e as { color?: string }).color
+        || (ep
+          ? (e.hue != null ? edgeStrokeHex(e.hue, ep.stroke) : ep.stroke)
+          : edgeStrokeHex(e.hue, theme.accent));
+      const g = svgEl('g', { class: 'cd-edge' });
       const dashed = !ballSocket && (e.kind === 'dependency' || e.kind === 'realization');
       const path = svgEl('path', {
         d: e.path, fill: 'none', stroke: color,
@@ -318,11 +339,16 @@ class IswcComponentDiagram extends DiagramElementBase {
   #buildInterfaces(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
     const r = LOLLI_R;
     const styleTheme = this.#styleTheme;
-    const accent = styleTheme ? (edgePaint(styleTheme).stroke) : theme.accent;
+    const cd = styleTheme ? componentBoxPaint(styleTheme) : null;
+    const ep = styleTheme ? edgePaint(styleTheme) : null;
+    const lolliFill = cd?.lollipop ?? '#7ACFF4';
+    // Contorno O/C y stem = arista oscura; relleno O = color expositor (cian).
+    const stroke = ep?.stroke ?? (styleTheme ? theme.accent : theme.accent);
+    // InSoft: -( expone (provided→C), -O consume (required→O). UML clásico = al revés.
+    const invert = cd?.invertAssembly === true;
     for (const iface of layout.interfaces) {
       const g = svgEl('g', { class: 'cd-iface' });
       g.dataset.ifaceId = iface.id;
-      const stroke = (iface.hue != null && tkHueToHex(iface.hue, 48, 30)) || accent;
       const comp = layout.components.find((c) => c.id === iface.component);
       if (comp && !iface.docked) {
         let bx: number;
@@ -340,7 +366,9 @@ class IswcComponentDiagram extends DiagramElementBase {
           stroke, 'stroke-width': 1.3,
         }));
       }
-      if (iface.kind === 'required') {
+      // provided = expone; required = consume. Glifo según invertAssembly.
+      const drawSocket = invert ? iface.kind === 'provided' : iface.kind === 'required';
+      if (drawSocket) {
         g.appendChild(svgEl('path', {
           d: requiredSocketPath(iface.cx, iface.cy, r, iface.side),
           fill: 'none', stroke, 'stroke-width': 1.3,
@@ -349,7 +377,7 @@ class IswcComponentDiagram extends DiagramElementBase {
       } else {
         g.appendChild(svgEl('circle', {
           cx: iface.cx, cy: iface.cy, r,
-          fill: 'var(--cd-circle-fill, #ffffff)',
+          fill: lolliFill,
           stroke, 'stroke-width': 1.3,
         }));
       }
@@ -371,20 +399,27 @@ class IswcComponentDiagram extends DiagramElementBase {
 
   #buildComponents(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
     const styleTheme = this.#styleTheme;
-    const paint = styleTheme ? entityPaint(styleTheme, false) : null;
+    const paint = styleTheme ? componentBoxPaint(styleTheme) : null;
     for (const c of layout.components) {
       const g = svgEl('g', { class: 'cd-cmp' });
       g.dataset.cmpId = c.id;
-      const stroke = paint?.border ?? ((c.hue != null && tkHueToHex(c.hue)) || theme.accent);
-      const fill = paint?.fill ?? theme.chipFill;
+      const ownColor = (c as { color?: string }).color;
+      const stroke = ownColor
+        || paint?.border
+        || ((c.hue != null && tkHueToHex(c.hue)) || theme.accent);
+      const fill = ownColor
+        ? hexMixWhite(ownColor, 0.88)
+        : (paint?.fill ?? theme.chipFill);
       const rx = paint?.radius ?? 6;
       g.appendChild(svgEl('rect', {
         x: c.x, y: c.y, width: c.w, height: c.h, rx,
         fill, stroke, 'stroke-width': paint?.borderWidth ?? 1.3,
       }));
       if (c.stereotype) {
-        const headerFill = paint?.headerFill
-          ?? (c.hue != null ? `hsla(${c.hue},65%,55%,0.22)` : theme.chipFill);
+        const headerFill = ownColor
+          ? hexMixWhite(ownColor, 0.78)
+          : (paint?.headerFill
+            ?? (c.hue != null ? `hsla(${c.hue},65%,55%,0.22)` : theme.chipFill));
         g.appendChild(svgEl('rect', {
           x: c.x + 1, y: c.y + 1, width: c.w - 2, height: 15, rx: Math.max(0, rx - 1),
           fill: headerFill,
@@ -412,26 +447,31 @@ class IswcComponentDiagram extends DiagramElementBase {
       g.appendChild(t);
       const bubbles = c.itemBubbles ?? [];
       for (const b of bubbles) {
+        // EP: fondo transparente; borde blanco semitransparente (theme.epBorder).
+        const epTransparent = paint?.epRowTransparent !== false;
         g.appendChild(svgEl('rect', {
           x: b.x, y: b.y, width: b.w, height: b.h, rx: styleTheme ? 0 : 4,
-          fill: theme.chipFillSoft ?? '#FFFFFF', stroke: paint?.border ?? theme.border ?? 'rgba(0,0,0,0.08)',
-          'stroke-width': 0.6,
+          fill: epTransparent ? 'none' : (paint?.epFill ?? 'none'),
+          stroke: paint?.epBorder ?? (styleTheme ? 'rgba(255,255,255,0.55)' : (paint?.border ?? theme.border ?? 'rgba(0,0,0,0.08)')),
+          'stroke-width': styleTheme ? 1.2 : 0.6,
         }));
         let textX = b.x + 6;
-        if (b.method) {
-          const badge = HTTP_METHOD_BADGE[b.method] ?? { fill: '#6b7280', text: '#fff' };
+        const methods = b.methods?.length ? b.methods : [];
+        methods.forEach((method, mi) => {
+          const badge = HTTP_METHOD_BADGE[method] ?? { fill: '#6b7280', text: '#fff' };
+          const bx = b.x + 3 + mi * (b.badgeW + 2);
           g.appendChild(svgEl('rect', {
-            x: b.x + 3, y: b.y + 2.5, width: b.badgeW, height: b.h - 5, rx: styleTheme ? 0 : 3,
+            x: bx, y: b.y + 2.5, width: b.badgeW, height: b.h - 5, rx: styleTheme ? 0 : 3,
             fill: badge.fill,
           }));
           const mt = svgEl('text', {
-            x: b.x + 3 + b.badgeW / 2, y: b.y + b.h / 2 + 3.2, 'text-anchor': 'middle',
+            x: bx + b.badgeW / 2, y: b.y + b.h / 2 + 3.2, 'text-anchor': 'middle',
             fill: badge.text, 'font-size': '7.5', 'font-weight': '700', 'font-family': fontFamily,
           });
-          mt.textContent = b.method;
+          mt.textContent = method;
           g.appendChild(mt);
-          textX = b.x + 8 + b.badgeW;
-        }
+          textX = bx + b.badgeW + 5;
+        });
         const pt = svgEl('text', {
           x: textX, y: b.y + b.h / 2 + 3.4, 'text-anchor': 'start',
           fill: theme.text, 'font-size': '9', 'font-family': fontFamily,

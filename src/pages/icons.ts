@@ -1,6 +1,6 @@
 /**
- * Behavior del mapa de componentes (`#icons` / tag `icons`).
- * Pinta categorías + cards desde el manifest; clic → iswc-select al shell.
+ * Behavior del catálogo de componentes (`#icons` / tag `icons`).
+ * Cada categoría = <iswc-demo-section>: título flotante + card neon-glass.
  */
 import type { PreviewMountContext, ISComponentPreviewLike } from '../previews/_kit/types.d.ts';
 import components from '../manifest.js';
@@ -63,11 +63,15 @@ function buildMap(host: HTMLElement): void {
     const list = byCat.get(key) ?? [];
     if (!list.length) continue;
     const meta = CAT_META[key]!;
-    const section = document.createElement('section');
-    section.className = 'imap__cat';
+
+    // Título flotante + body en card: mismo contrato que el resto de demos.
+    const section = document.createElement('iswc-demo-section');
+    section.className = 'imap__cat section';
+    section.id = `imap-${key}`;
     section.dataset.cat = key;
 
     const head = document.createElement('h2');
+    head.slot = 'title';
     head.className = 'imap__cat-head';
     const ic = document.createElement('iswc-icon');
     ic.setAttribute('icon', meta.icon);
@@ -77,7 +81,10 @@ function buildMap(host: HTMLElement): void {
     const count = document.createElement('span');
     count.className = 'imap__cat-count';
     count.textContent = String(list.length);
-    head.append(ic, label, count);
+    const rule = document.createElement('span');
+    rule.className = 'imap__cat-rule';
+    rule.setAttribute('aria-hidden', 'true');
+    head.append(ic, label, count, rule);
     section.appendChild(head);
 
     const grid = document.createElement('div');
@@ -141,7 +148,10 @@ export async function mount(ctx: PreviewMountContext, _preview: ISComponentPrevi
   const raiz = ctx.main;
   const host = raiz.querySelector<HTMLElement>('#iconsMap');
   if (!host) return;
-  await customElements.whenDefined('iswc-icon').catch(() => {});
+  await Promise.all([
+    customElements.whenDefined('iswc-icon').catch(() => {}),
+    customElements.whenDefined('iswc-demo-section').catch(() => {}),
+  ]);
   buildMap(host);
   wireFilter(raiz);
 }

@@ -255,3 +255,21 @@ export function drawBubbleMarks(ctx: ChartCtx): void {
     });
   });
 }
+
+/**
+ * Aire en px que el eje debe dejar alrededor del dominio: el `r` más grande
+ * (+ stroke) para que el pico no se corte contra el borde del plot.
+ */
+(drawBubbleMarks as unknown as {
+  plotPad: (datasets: readonly ChartDataset[]) => number;
+}).plotPad = (datasets: readonly ChartDataset[]) => {
+  let maxR = 5;
+  for (const ds of datasets) {
+    for (const raw of ds.data || []) {
+      if (!raw || typeof raw !== 'object' || !('r' in raw)) continue;
+      const r = Number((raw as { r?: number }).r);
+      if (Number.isFinite(r)) maxR = Math.max(maxR, r);
+    }
+  }
+  return maxR + 2;
+};

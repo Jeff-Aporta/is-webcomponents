@@ -62,6 +62,16 @@ export const RouteAvoidOptsSchema = z.object({
    * tratan como muro duro (Infinity) — la arista no puede atravesarlos.
    */
   prohibitedPkgs: z.array(z.unknown() /* TODO: ref Caja */).optional(),
+  /**
+   * W56 (fan-out por origen): índice de esta arista entre las N que
+   * salen del mismo `from` (0..N-1). Permite centrar el abanico
+   * perpendicular al `fromSide` (no global) para que 5 aristas desde
+   * ISW-TestPatyIA → 5 destinos en `pkg-api` no caigan sobre la misma
+   * celda de destino.
+   */
+  sourceOffsetIndex: z.number().optional(),
+  /** W56: total de aristas que comparten el mismo `from`. */
+  sourceEdgeCount: z.number().optional(),
   _loose: z.boolean().optional(),
   rank: z.number().optional(),
   total: z.number().optional(),

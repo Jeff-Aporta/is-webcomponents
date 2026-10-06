@@ -10,14 +10,20 @@
 
 import type { DiagramTheme } from './diagram-types.js';
 import insoftJson from './themes/insoft.json' with { type: 'json' };
+import insoftCdJson from './themes/insoft-cd.json' with { type: 'json' };
 import type { ErThemeJson } from "./theme.schemas.js";
+export type { ErThemeJson };
 
 /** Contrato del JSON de tema ER (iswc-diagram-theme/v1). */
 
 export const INSOFT_THEME = insoftJson as ErThemeJson;
+export const INSOFT_CD_THEME = insoftCdJson as ErThemeJson;
 
 const BUILTIN: Record<string, ErThemeJson> = {
   insoft: INSOFT_THEME,
+  'insoft-cd': INSOFT_CD_THEME,
+  // Alias: theme="insoft" en component-diagram resuelve al CD.
+  insoftcd: INSOFT_CD_THEME,
 };
 
 /** Temas registrados en runtime (apps pueden `registerErTheme`). */
@@ -164,6 +170,10 @@ export function componentBoxPaint(theme: ErThemeJson): {
   lollipop: string;
   noPackageTab: boolean;
   titleBackground: boolean;
+  invertAssembly: boolean;
+  epFill: string;
+  epBorder: string;
+  epRowTransparent: boolean;
 } {
   const c = theme.component ?? {};
   const e = theme.entity ?? {};
@@ -176,6 +186,11 @@ export function componentBoxPaint(theme: ErThemeJson): {
     lollipop: c.lollipop ?? theme.cluster?.fallback ?? '#7ACFF4',
     noPackageTab: c.noPackageTab !== false,
     titleBackground: c.titleBackground === true,
+    // InSoft CD: -( expone, -O consume. UML clásico = false.
+    invertAssembly: c.invertAssembly === true,
+    epFill: c.epFill ?? 'transparent',
+    epBorder: c.epBorder ?? 'rgba(255,255,255,0.55)',
+    epRowTransparent: c.epRowTransparent !== false,
   };
 }
 

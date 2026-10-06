@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-05T22:01:07.451Z",
+  "generatedAt": "2026-10-06T14:25:07.877Z",
   "count": 112,
   "modules": [
     {
@@ -457,10 +457,11 @@
       "id": "diagram-edge-style",
       "path": "src/components/_shared/diagram-edge-style.ts",
       "summary": "Módulo compartido `diagram-edge-style.ts`.",
-      "bytes": 1405,
+      "bytes": 2001,
       "exports": [
         "EDGE_HUES",
         "assignEdgeHues",
+        "hexMixWhite",
         "edgeStrokeHex",
         "edgeChipFill",
         "edgeChipText",
@@ -593,7 +594,7 @@
       "id": "diagram-tipos.schemas",
       "path": "src/components/_shared/diagram-tipos.schemas.ts",
       "summary": "diagram-tipos — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 3195,
+      "bytes": 4574,
       "exports": [
         "CajaSchema",
         "ComponenteSchema",
@@ -610,7 +611,7 @@
       "id": "diagram-tipos",
       "path": "src/components/_shared/diagram-tipos.ts",
       "summary": "diagram-tipos — POR QUÉ AQUÍ. `component-pack.ts` y `component-spec.ts` se pasan los mismos",
-      "bytes": 1994,
+      "bytes": 1114,
       "exports": []
     },
     {

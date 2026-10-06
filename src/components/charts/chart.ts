@@ -580,9 +580,15 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
       opts.min ?? vTicks[0] ?? 0,
       opts.max ?? vTicks[vTicks.length - 1] ?? 1,
     ];
+    // Bubble (y similares) piden pad en px: el dominio mapea a un rect interior
+    // para que el radio no se corte contra el borde del plot / contain:paint.
+    const markPad = typeof (ctx.drawMarks as { plotPad?: (ds: readonly ChartDataset[]) => number } | null)?.plotPad === 'function'
+      ? Math.max(0, Number((ctx.drawMarks as { plotPad: (ds: readonly ChartDataset[]) => number }).plotPad(datasets)) || 0)
+      : 0;
+    const pad = Math.min(markPad, Math.floor(Math.min(plot.width, plot.height) / 4));
     const vRange: [number, number] = horizontal
-      ? [plot.x, plot.x + plot.width]
-      : [plot.y + plot.height, plot.y];
+      ? [plot.x + pad, plot.x + plot.width - pad]
+      : [plot.y + plot.height - pad, plot.y + pad];
     const vScale = scaleLinear(vDomain, vRange);
 
     // Grid: por defecto sólo el eje de valor (menos ruido).
@@ -614,7 +620,10 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
         return Number.NaN;
       })).filter(Number.isFinite);
       const xTicks = niceTicks(Math.min(...xs), Math.max(...xs), 5);
-      const xScale = scaleLinear([xTicks[0] ?? 0, xTicks[xTicks.length - 1] ?? 1], [plot.x, plot.x + plot.width]);
+      const xScale = scaleLinear(
+        [xTicks[0] ?? 0, xTicks[xTicks.length - 1] ?? 1],
+        [plot.x + pad, plot.x + plot.width - pad],
+      );
       for (const tv of xTicks) {
         const x = xScale(tv);
         const line = svgEl('line', { x1: x, x2: x, y1: plot.y, y2: plot.y + plot.height, class: 'grid-line' });
@@ -628,7 +637,9 @@ class IswcChart extends withStyleAttrs(HTMLElement) {
       ctx.yScale = vScale;
     } else {
       const labels = ctx.data.labels;
-      const catRange: [number, number] = horizontal ? [plot.y, plot.y + plot.height] : [plot.x, plot.x + plot.width];
+      const catRange: [number, number] = horizontal
+        ? [plot.y + pad, plot.y + plot.height - pad]
+        : [plot.x + pad, plot.x + plot.width - pad];
       const band = scaleBand(labels.length, catRange, 0.28);
       const maxLabelChars = Math.max(6, Math.floor(band.step / 7));
       labels.forEach((lb: string, i: number) => {

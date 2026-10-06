@@ -1,4 +1,4 @@
-/** Rebuild puntual de component-diagram. */
+/** Rebuild chart + bubble tras plotPad (burbujas sin clip). */
 import { join, dirname, basename, resolve, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { access, readFile, mkdir, readdir, stat } from 'node:fs/promises';
@@ -71,8 +71,7 @@ const defineCss = async (cssFile) => {
 async function rebuildOne(srcRel, category) {
   const inFile = join(compRoot, srcRel);
   const tag = basename(inFile).replace(/\.(ts|js)$/, '');
-  // SCSS staging (W54): nunca leer .css desde src/
-  const cssIn = join(root, '.tmp-scss', 'src', 'components', srcRel.replace(/\.(ts|js)$/i, '.css'));
+  const cssIn = inFile.replace(/\.(ts|js)$/i, '.css');
   const outDir = join(dist, category);
   const outJs = join(outDir, `${tag}.min.js`);
   const outCss = join(outDir, `${tag}.min.css`);
@@ -89,24 +88,9 @@ async function rebuildOne(srcRel, category) {
   console.log(`OK ${relative(root, outJs)} ${(await stat(outJs)).size}`);
 }
 
-await rebuildOne('diagrams/theme.ts', 'diagrams');
-await rebuildOne('diagrams/component-pack.ts', 'diagrams');
-await rebuildOne('diagrams/component-spec.ts', 'diagrams');
-await rebuildOne('diagrams/component-diagram.ts', 'diagrams');
-
-// JSON de tema editable en CDN
-try {
-  const { mkdir, copyFile } = await import('node:fs/promises');
-  await mkdir(join(root, 'dist', 'cdn', 'diagrams', 'themes'), { recursive: true });
-  for (const name of ['insoft.json', 'insoft-cd.json']) {
-    await copyFile(
-      join(root, 'src', 'components', 'diagrams', 'themes', name),
-      join(root, 'dist', 'cdn', 'diagrams', 'themes', name),
-    );
-    console.log(`OK dist/cdn/diagrams/themes/${name}`);
-  }
-} catch (e) {
-  console.warn('theme json copy failed', e);
-}
-
-console.log('component-diagram rebuild done');
+await rebuildOne('charts/chart.ts', 'data-viz');
+await rebuildOne('charts/marks-cartesian.ts', 'charts');
+await rebuildOne('charts/bubble-chart.ts', 'data-viz');
+await rebuildOne('charts/scatter-chart.ts', 'data-viz');
+await rebuildOne('charts/bar-chart.ts', 'data-viz');
+await rebuildOne('charts/line-chart.ts', 'data-viz');

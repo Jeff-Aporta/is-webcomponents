@@ -1024,6 +1024,30 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   const ranked = edges
     .map((e, i) => ({ e, i, mid: (e.fromY + e.toY) / 2 }))
     .sort((a, b) => a.mid - b.mid || a.i - b.i);
+  /**
+   * W56 (Phase 3, fan-out por origen): contamos cuántas aristas
+   * comparten cada `from` y asignamos a cada una un `sourceOffsetIndex`
+   * (0..N-1) en el orden del payload. Esto permite a `routeAvoidingBoxes`
+   * centrar el offset perpendicular al `fromSide` y separar los stems
+   * en el origen — sin esto, 5 aristas desde ISW-TestPatyIA → 5 destinos
+   * en `pkg-api` caían sobre la misma celda de destino (1167, 781).
+   *
+   * El orden estable por payload es importante: garantiza que el
+   * `sourceOffsetIndex` de una arista es el mismo en todas las
+   * iteraciones del A* (de lo contrario, la pasada 2 podría recolocar
+   * aristas basándose en un orden distinto y romper la convergencia).
+   */
+  const sourceEdgeCountMap = new Map<string, number>();
+  for (const e of edges) {
+    if (!e.from) continue;
+    sourceEdgeCountMap.set(e.from, (sourceEdgeCountMap.get(e.from) ?? 0) + 1);
+  }
+  const sourceSeenMap = new Map<string, number>();
+  const edgeSourceRank = edges.map((e) => {
+    const idx = sourceSeenMap.get(e.from) ?? 0;
+    sourceSeenMap.set(e.from, idx + 1);
+    return idx;
+  });
   const usedSegs: Array<{ a: Punto; b: Punto }> = [];
   const sourceSet = new Set<string>(((spec.layout?.sources ?? []) as unknown[]).map((x: unknown) => String(x)));
   const titleBoxes: Caja[] = packages.map((p) => packageTitleBox(p, shiftedComps));
@@ -1121,6 +1145,14 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
     const toPt = { x: e.toX, y: e.toY };
     const fromSide = (e as Arista & { _fromSide?: Lado })._fromSide;
     const toSide = (e as Arista & { _toSide?: Lado })._toSide;
+    /**
+     * W56 (fan-out): el rank del origen y el total de aristas que
+     * comparten ese origen se pre-computan fuera y se pasan al router
+     * para que aplique el offset perpendicular a `fromSide`.
+     */
+    const edgeIdx = edges.indexOf(e);
+    const sourceOffsetIndex = edgeIdx >= 0 ? edgeSourceRank[edgeIdx] ?? 0 : 0;
+    const sourceEdgeCount = sourceEdgeCountMap.get(e.from) ?? 1;
     const routeOptsBase = {
       fromSide, toSide, fromBox, toBox,
       clearance: EDGE_CLEARANCE, usedSegs: usedSegsArg as { a: Punto; b: Punto }[], frame, pkgBoxes,
@@ -1131,6 +1163,8 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
       softPkgs: pkgBoxes,
       textBoxes: titleObst,
       prohibitedPkgs: prohibitedPkgBoxes,
+      sourceOffsetIndex,
+      sourceEdgeCount,
     } as const;
     const allowDiag = Boolean((spec.layout as OpcionesEmpaque | undefined)?.allowDiagonal);
     let path: string | null = null;

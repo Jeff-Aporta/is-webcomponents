@@ -72,8 +72,16 @@ export const ZIGZAG_PENALTY = 100;
  * secuencial), esto fuerza la separación temprana de carriles que
  * vienen del mismo origen (p.ej. 5 aristas desde ISW-TestPatyIA → 5
  * grupos en `pkg-api`).
+ *
+ * W56 (tuning usuario): bajado de 14 a 10 — la ración "10x coste por
+ * misma carril" del usuario se traduce a 1 + 1 * 10 ≈ 11x para la
+ * segunda arista en el mismo eje (un cambio de 11× vs 15× anterior).
+ * Combinado con el factor 600 de `pathShareLen` (antes 1800) y el 400
+ * de `pathCrossingCount` (antes 1200), el router ahora prefiere
+ * negociar un carril paralelo en vez de apiñar 5 aristas sobre la
+ * misma celda (caso ISW-TestPatyIA → 5 destinos en pkg-api).
  */
-export const CORRIDOR_PENALTY = 14;
+export const CORRIDOR_PENALTY = 10;
 /**
  * W55: penalización ADITIVA por cada paso pegado al borde del PADRE del
  * origen (no a cualquier paquete). Suma — no multiplica — para que el
@@ -83,8 +91,20 @@ export const CORRIDOR_PENALTY = 14;
  * desde 5000 para forzar la separación temprana de carriles en
  * geometrías con muchos orígenes hijos del mismo paquete (lab
  * ISS·AyudasCPIA: 5 aristas desde ISW-TestPatyIA → pkg-api).
+ *
+ * W56 (anti-tracing): elevado de 15000 a 50000. Con 15000, conectores
+ * a < 5px del borde de la entidad (caso ISW-TestPatyIA: el O de salida
+ * está pegado al bottom del rectángulo) elegían correr paralelos al
+ * borde durante 30-50px antes de bajar — eso es exactamente el bug
+ * que el usuario reportó como "la arista recorre el perímetro". Con
+ * 50000 (≈ 500 pasos) el A* descarta ese primer segmento y prefiere
+ * bajar perpendicular al borde desde la primera celda.
+ *
+ * No se rompe con aristas que SÍ necesitan bordearse (caso general)
+ * porque la penalización es ADITIVA y solo se dispara si el segmento
+ * está a < parentBorderClearance del borde (no en cualquier celda).
  */
-export const PARENT_BORDER_PENALTY = 15000;
+export const PARENT_BORDER_PENALTY = 50000;
 
 export function packDiagram(packages: Paquete[], components: Componente[], edges: readonly Arista[] = [], opts: OpcionesEmpaque = {}): void {
   if (opts.mode === 'manual') return;
@@ -1668,7 +1688,84 @@ export function routeAvoidingBoxes(
   opts: RouteAvoidOpts = {},
 ): string | null {
   const clearance = opts.clearance ?? EDGE_CLEARANCE;
-  const a0 = outward(from, opts.fromSide, clearance);
+  /**
+   * W56 (Phase 3, fan-out por origen): para cada arista contamos cuántas
+   * comparten su `from` y le aplicamos un offset perpendicular a
+   * `fromSide` centrado en 0. Esto SEPARA los stems en el origen en
+   * lugar de apiñarlos sobre la misma celda de destino (caso típico:
+   * 5 aristas desde ISW-TestPatyIA → 5 grupos en `pkg-api`).
+   *
+   * El offset es `(offsetIndex - (N-1)/2) * LANE_PITCH`, así que para
+   * N=5: -2·pitch, -1·pitch, 0, +1·pitch, +2·pitch. Con `LANE_PITCH=20`
+   * los stems se reparten en 80px perpendiculares al `fromSide` —
+   * suficiente para que el A* negocie carriles paralelos en lugar de
+   * competir por el mismo eje.
+   *
+   * `fromAdjusted` se usa como punto de partida de TODOS los candidatos
+   * (A* + heurísticos + fallback absoluto), de forma que la primera
+   * celda de la arista ya está separada del resto.
+   *
+   * El lollipop (O) sigue dibujándose en el `from` original en
+   * component-spec.ts — el pequeño gap visual entre el círculo y el
+   * path es aceptable y consistente con el resto del routing.
+   */
+  const sourceEdgeCount = Math.max(1, Number(opts.sourceEdgeCount) || 1);
+  const sourceOffsetIndex = Math.max(0, Math.min(
+    sourceEdgeCount - 1,
+    Number(opts.sourceOffsetIndex) || 0,
+  ));
+  /**
+   * `borderProximity` (W56 anti-tracing, Phase 4): si el conector está
+   * pegado al top/bot de la entidad source (a < 30px de un borde) el
+   * offset se amplifica para forzar que la primera celda del stem
+   * salga perpendicular al borde. Caso real: ISW-TestPatyIA tiene
+   * conectores a < 5px del bottom — la arista salía horizontalmente
+   * recorriendo el perímetro antes de bajar.
+   */
+  const fromBox = opts.fromBox as Caja | undefined;
+  const fromBorderProximity = (() => {
+    if (!fromBox) return 0;
+    const top = Math.abs(from.y - fromBox.y);
+    const bot = Math.abs(from.y - (fromBox.y + fromBox.h));
+    const left = Math.abs(from.x - fromBox.x);
+    const right = Math.abs(from.x - (fromBox.x + fromBox.w));
+    return Math.min(top, bot, left, right);
+  })();
+  /**
+   * Si el conector está a < 30px de cualquier borde de la entidad,
+   * AMPLIFICAMOS el offset para garantizar que la primera celda NO
+   * quede paralela al borde. Para conectores en el centro (proximity
+   * > 30), el offset simple de fan-out ya basta.
+   */
+  const antiTraceBoost = fromBox && fromBorderProximity < 30
+    ? Math.max(2, Math.round(30 / Math.max(1, fromBorderProximity)))
+    : 1;
+  /**
+   * `lanePitch` se declara más abajo — leemos el valor "crudo" del
+   * opt (con el mismo piso que la versión oficial) para no romper el
+   * orden de inicialización.
+   */
+  const _fanLanePitch = Math.max(8, Number(opts.lanePitch) || LANE_PITCH);
+  const fanOffset = sourceEdgeCount > 1
+    ? (sourceOffsetIndex - (sourceEdgeCount - 1) / 2) * _fanLanePitch * antiTraceBoost
+    : 0;
+  /**
+   * Dirección del offset: perpendicular a `fromSide`. Si no hay
+   * fromSide, offset en Y (suposición razonable para diagramas con
+   * flujo horizontal dominante).
+   */
+  const offsetPoint = (p: Punto): Punto => {
+    if (!fanOffset) return p;
+    if (opts.fromSide === 'left' || opts.fromSide === 'right') {
+      return { x: p.x, y: p.y + fanOffset };
+    }
+    if (opts.fromSide === 'top' || opts.fromSide === 'bottom') {
+      return { x: p.x + fanOffset, y: p.y };
+    }
+    return { x: p.x, y: p.y + fanOffset };
+  };
+  const fromAdjusted = offsetPoint(from);
+  const a0 = outward(fromAdjusted, opts.fromSide, clearance);
   const b0 = outward(to, opts.toSide, clearance);
   const lanePitch = Math.max(8, Number(opts.lanePitch) || LANE_PITCH);
   const laneNearFactor = Math.max(1, Number(opts.laneNearFactor) || LANE_NEAR_FACTOR);
@@ -1701,10 +1798,10 @@ export function routeAvoidingBoxes(
     return pt.x < inf.x || pt.x > inf.x + inf.w || pt.y < inf.y || pt.y > inf.y + inf.h;
   };
   if (opts.fromBox && farFrom(opts.fromBox, to)) midObst.push(inflateBox(opts.fromBox, 4));
-  if (opts.toBox && farFrom(opts.toBox, from)) midObst.push(inflateBox(opts.toBox, 4));
-  const blocking: Caja[] = obstaculos.filter((c: Caja) => inCorridor(from, to, c, clearance + 8));
+  if (opts.toBox && farFrom(opts.toBox, fromAdjusted)) midObst.push(inflateBox(opts.toBox, 4));
+  const blocking: Caja[] = obstaculos.filter((c: Caja) => inCorridor(fromAdjusted, to, c, clearance + 8));
   const wrapBoxes: readonly Caja[] = opts.wrapBoxes ?? obstaculos;
-  const inner = endpointClamp(from, to, opts.fromBox, opts.toBox);
+  const inner = endpointClamp(fromAdjusted, to, opts.fromBox, opts.toBox);
   const clamp: { xMin: number; xMax: number; yMin: number; yMax: number } | undefined = undefined as { xMin: number; xMax: number; yMin: number; yMax: number } | undefined;
   const used = opts.usedSegs ?? [];
   const { xs: busyXs, ys: busyYs } = usedLaneAxes(used, 4);
@@ -1886,8 +1983,17 @@ export function routeAvoidingBoxes(
     const turns = countPuntoTurns(clean);
     const turnTax = turns * TURN_PENALTY + (turns > MAX_TURNS_PER_EDGE ? (turns - MAX_TURNS_PER_EDGE) * ZIGZAG_PENALTY * TURN_PENALTY : 0);
     // Rieles pegados / interior agrupador / zigzags cuestan más que un rodeo.
-    const score = manhattan(clean) + share * 1800 + laneTax + borderTax + pkgTax
-      + crosses * 1200 + outside * 24 + hook * 16 + turnTax + parentBorderTax;
+    /**
+     * W56: ración "3x cruce" del usuario. Antes `crosses * 1200` pesaba
+     * 1.2× el coste de `pathShareLen` (1800); ambos coeficientes eran
+     * tan altos que la única forma de evitar el solape era pagar un
+     * rodeo de 1000+ px. Bajamos a `400` y `600` respectivamente para
+     * que el router pueda repartir carriles paralelos sin salir
+     * pitando del bounding box. El `1 + N*10` del A* sigue penalizando
+     * el corredor; aquí solo se penaliza el "tramo exacto compartido".
+     */
+    const score = manhattan(clean) + share * 600 + laneTax + borderTax + pkgTax
+      + crosses * 400 + outside * 24 + hook * 16 + turnTax + parentBorderTax;
     if (score < bestScore || (score === bestScore && share < (best?._share ?? Infinity))) {
       bestScore = score;
       best = clean as ScoredPath;
@@ -1902,7 +2008,7 @@ export function routeAvoidingBoxes(
       return !id.startsWith('pkg-') && !id.startsWith('wrap-');
     });
     for (const cl of [clearance, Math.max(8, clearance - 6)]) {
-      const g = gridRoute(from, to, hardOnly, cl, used, {
+      const g = gridRoute(fromAdjusted, to, hardOnly, cl, used, {
         softPkgs,
         textBoxes,
         pkgCrossFactor,
@@ -1932,10 +2038,10 @@ export function routeAvoidingBoxes(
     ? laneFree(0, corridorFrom.y, false)
     : laneFree(corridorFrom.x, 0, true);
   if (corridorAxisFree || opts._loose) {
-    consider([from, a0, aJog, corridorFrom, { x: corridorFrom.x, y: corridorTo.y }, corridorTo, bJog, b0, to]);
-    consider([from, a0, aJog, corridorFrom, { x: corridorTo.x, y: corridorFrom.y }, corridorTo, bJog, b0, to]);
-    consider([from, a0, aJog, { x: corridorFrom.x, y: aJog.y }, { x: corridorFrom.x, y: bJog.y }, bJog, b0, to]);
-    consider([from, a0, aJog, { x: aJog.x, y: corridorFrom.y }, { x: bJog.x, y: corridorFrom.y }, bJog, b0, to]);
+    consider([fromAdjusted, a0, aJog, corridorFrom, { x: corridorFrom.x, y: corridorTo.y }, corridorTo, bJog, b0, to]);
+    consider([fromAdjusted, a0, aJog, corridorFrom, { x: corridorTo.x, y: corridorFrom.y }, corridorTo, bJog, b0, to]);
+    consider([fromAdjusted, a0, aJog, { x: corridorFrom.x, y: aJog.y }, { x: corridorFrom.x, y: bJog.y }, bJog, b0, to]);
+    consider([fromAdjusted, a0, aJog, { x: aJog.x, y: corridorFrom.y }, { x: bJog.x, y: corridorFrom.y }, bJog, b0, to]);
   }
   // Oferta de carriles 0..N globales: elige el libre más cercano (ignora rank local).
   const laneN = Math.max(total * 3, 24);
@@ -1950,16 +2056,16 @@ export function routeAvoidingBoxes(
     else vx = aJog.x + laneBase + k * pitch;
     if (opts.fromSide === 'top' || opts.fromSide === 'bottom') {
       if (!laneFree(0, hy, false) && !opts._loose) continue;
-      consider([from, a0, aJog, { x: aJog.x, y: hy }, { x: bJog.x, y: hy }, bJog, b0, to]);
+      consider([fromAdjusted, a0, aJog, { x: aJog.x, y: hy }, { x: bJog.x, y: hy }, bJog, b0, to]);
     } else {
       if (!laneFree(vx, 0, true) && !opts._loose) continue;
-      consider([from, a0, aJog, { x: vx, y: aJog.y }, { x: vx, y: bJog.y }, bJog, b0, to]);
-      consider([from, a0, aJog, { x: vx, y: aJog.y }, { x: vx, y: corridorTo.y }, corridorTo, bJog, b0, to]);
+      consider([fromAdjusted, a0, aJog, { x: vx, y: aJog.y }, { x: vx, y: bJog.y }, bJog, b0, to]);
+      consider([fromAdjusted, a0, aJog, { x: vx, y: aJog.y }, { x: vx, y: corridorTo.y }, corridorTo, bJog, b0, to]);
     }
   }
   if (rank === 0 && !used.length) {
-    consider([from, a0, { x: a0.x, y: b0.y }, b0, to]);
-    consider([from, a0, { x: b0.x, y: a0.y }, b0, to]);
+    consider([fromAdjusted, a0, { x: a0.x, y: b0.y }, b0, to]);
+    consider([fromAdjusted, a0, { x: b0.x, y: a0.y }, b0, to]);
   }
 
   for (const extra of [0, 12, 24, 40, 56]) {
@@ -1967,17 +2073,17 @@ export function routeAvoidingBoxes(
     const groups = [blocking, wrapBoxes].filter((g) => g.length);
     if (!groups.length) groups.push([]);
     for (const boxes of groups) {
-      for (const raw of wrapCandidates(from, to, a0, b0, corridorFrom, corridorTo, boxes, pad, rank, clamp)) {
+      for (const raw of wrapCandidates(fromAdjusted, to, a0, b0, corridorFrom, corridorTo, boxes, pad, rank, clamp)) {
         consider(raw);
       }
     }
     if (obstaculos.length) {
       const xMin = clamp
-        ? Math.max(clamp.xMin, Math.min(from.x, to.x, ...obstaculos.map((c) => c.x)) - 24 - extra)
-        : Math.min(from.x, to.x, ...obstaculos.map((c) => c.x)) - 24 - extra;
+        ? Math.max(clamp.xMin, Math.min(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x)) - 24 - extra)
+        : Math.min(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x)) - 24 - extra;
       const xMax = clamp
-        ? Math.min(clamp.xMax, Math.max(from.x, to.x, ...obstaculos.map((c) => c.x + c.w)) + 24 + extra)
-        : Math.max(from.x, to.x, ...obstaculos.map((c) => c.x + c.w)) + 24 + extra;
+        ? Math.min(clamp.xMax, Math.max(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x + c.w)) + 24 + extra)
+        : Math.max(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x + c.w)) + 24 + extra;
       if (xMax - xMin < 20) continue;
       const gaps = verticalGaps(obstaculos.map((c) => inflateBox(c, clearance)), xMin, xMax);
       if (gaps.length) {
@@ -1988,7 +2094,7 @@ export function routeAvoidingBoxes(
           for (let k = 0; k < nLanes; k++) {
             const x = g.a + 6 + (k + 0.5) * ((span - 12) / nLanes);
             if (!laneFree(x, 0, true) && !opts._loose) continue;
-            consider([from, a0, aJog, corridorFrom, { x, y: corridorFrom.y }, { x, y: corridorTo.y }, corridorTo, bJog, b0, to]);
+            consider([fromAdjusted, a0, aJog, corridorFrom, { x, y: corridorFrom.y }, { x, y: corridorTo.y }, corridorTo, bJog, b0, to]);
           }
         }
         const gFrom = nearestGap(gaps, corridorFrom.x);
@@ -2009,14 +2115,14 @@ export function routeAvoidingBoxes(
         };
         const lane1 = pickLane(gFrom, corridorFrom.x);
         const lane2 = pickLane(gTo, corridorTo.x);
-        consider([from, a0, aJog, corridorFrom, { x: lane1, y: corridorFrom.y }, { x: lane1, y: corridorTo.y }, corridorTo, bJog, b0, to]);
+        consider([fromAdjusted, a0, aJog, corridorFrom, { x: lane1, y: corridorFrom.y }, { x: lane1, y: corridorTo.y }, corridorTo, bJog, b0, to]);
         const ys = obstaculos.flatMap((c) => [c.y, c.y + c.h]);
         const top = clamp ? Math.max(clamp.yMin, Math.min(...ys) - pad) : Math.min(...ys) - pad;
         const bot = clamp ? Math.min(clamp.yMax, Math.max(...ys) + pad) : Math.max(...ys) + pad;
         for (const wrapY of [top, bot]) {
           if (!laneFree(0, wrapY, false) && !opts._loose) continue;
           consider([
-            from, a0, aJog, corridorFrom,
+            fromAdjusted, a0, aJog, corridorFrom,
             { x: lane1, y: corridorFrom.y }, { x: lane1, y: wrapY },
             { x: lane2, y: wrapY }, { x: lane2, y: corridorTo.y },
             corridorTo, bJog, b0, to,
@@ -2031,18 +2137,18 @@ export function routeAvoidingBoxes(
   if (opts.toBox) all.push(opts.toBox);
   if (all.length) {
     for (const extra of [24, 48, 80]) {
-      for (const raw of wrapCandidates(from, to, a0, b0, corridorFrom, corridorTo, all, clearance + extra + Math.min(rank, 4) * 4, rank, clamp)) {
+      for (const raw of wrapCandidates(fromAdjusted, to, a0, b0, corridorFrom, corridorTo, all, clearance + extra + Math.min(rank, 4) * 4, rank, clamp)) {
         consider(raw);
       }
     }
   }
 
   if (!best && !opts._loose) {
-    return routeAvoidingBoxes(from, to, obstaculos, rank, total, { ...opts, _loose: true });
+    return routeAvoidingBoxes(fromAdjusted, to, obstaculos, rank, total, { ...opts, _loose: true });
   }
   if (!best) {
     for (const cl of [clearance, Math.max(6, clearance - 4)]) {
-      const g = gridRoute(from, to, obstaculos, cl, used, {
+      const g = gridRoute(fromAdjusted, to, obstaculos, cl, used, {
         softPkgs,
         textBoxes,
         pkgCrossFactor,
