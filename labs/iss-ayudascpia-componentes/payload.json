@@ -4,8 +4,8 @@
   "_doc": "Estado actual ISS-AyudasCPIA: @Azure anida API + PG; apps ISW; OpenAI; DSCLIENTES; R2. EPs desde Functions (app.http). Consolidación GET|PUT|CRUD en misma row. ISW colores: TestPatyIA #080 / ContaPyme #800.",
   "componentDiagram": {
     "theme": "insoft-cd",
-    "title": "ISS AyudasCPIA · componentes de servidores",
-    "subtitle": "Azure · ISW · OpenAI · DSCLIENTES · R2",
+    "title": "ISS AyudasCPIA · Diagrama de componentes",
+    "subtitle": "",
     "layout": {
       "mode": "pack",
       "minGap": 72,
