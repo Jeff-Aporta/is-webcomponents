@@ -59,12 +59,13 @@
         {
           "id": "f-alta",
           "kind": "region",
-          "name": "alta del tiquete y efectos sobre la conversación (solo el dueño la cierra)",
+          "name": "alta del tiquete",
           "messages": [
             "m6",
             "m7"
           ],
-          "color": "neutral"
+          "color": "neutral",
+          "condition": "solo el dueño puede cerrar la conversación"
         }
       ],
       "preamble": [
@@ -72,7 +73,7 @@
           "id": "m1",
           "from": "u",
           "to": "t",
-          "label": "POST /tiquete { iconversacion, itema, iclasificador, bcerrar_conversacion?, bautoriza_visualizacion? }",
+          "label": "crea un tiquete sobre la conversación (tema, clasificador, cerrar, autorizar visualización)",
           "kind": "sync",
           "group": "g-http"
         },
@@ -80,7 +81,7 @@
           "id": "m2",
           "from": "t",
           "to": "t",
-          "label": "Zod · itiquete o codigotk · recorte a 30 · JWT · accionRecurso(Crear)",
+          "label": "valida el cuerpo, recorta el código a 30, verifica token y permiso de crear",
           "kind": "self",
           "group": "g-ctl"
         },
@@ -88,12 +89,13 @@
           "id": "m3",
           "from": "t",
           "to": "pg",
-          "label": "lookUp patyia_conversaciones",
+          "label": "busca la conversación",
           "kind": "sync",
           "group": "g-db"
         }
       ],
       "alt": {
+        "name": "según el estado de la conversación",
         "branches": [
           {
             "condition": "no existe",
@@ -102,7 +104,7 @@
                 "id": "m4",
                 "from": "t",
                 "to": "u",
-                "label": "500",
+                "label": "500 · la conversación no existe",
                 "kind": "async",
                 "group": "g-err"
               }
@@ -115,7 +117,7 @@
                 "id": "m5",
                 "from": "t",
                 "to": "u",
-                "label": "400",
+                "label": "400 · la conversación está cerrada o eliminada",
                 "kind": "async",
                 "group": "g-err"
               }
@@ -128,7 +130,7 @@
                 "id": "m6",
                 "from": "t",
                 "to": "pg",
-                "label": "nextVal(seq_patyia_itiquete) · INSERT … ON CONFLICT DO NOTHING",
+                "label": "crea el tiquete (nuevo id; si ya existe, no duplica)",
                 "kind": "sync",
                 "group": "g-db"
               },
@@ -136,7 +138,7 @@
                 "id": "m7",
                 "from": "t",
                 "to": "pg",
-                "label": "si es el dueño: UPDATE itdestado = 1 / bautoriza_visualizacion",
+                "label": "si es el dueño: cierra la conversación y/o autoriza su visualización",
                 "kind": "sync",
                 "group": "g-db"
               },
@@ -144,7 +146,7 @@
                 "id": "m8",
                 "from": "t",
                 "to": "u",
-                "label": "201 { ticket, sideEffects }",
+                "label": "201 · tiquete creado con sus efectos",
                 "kind": "async",
                 "group": "g-http"
               }

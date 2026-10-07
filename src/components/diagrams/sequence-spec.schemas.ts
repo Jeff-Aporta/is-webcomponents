@@ -31,6 +31,8 @@ export type SequenceMessageSpec = z.infer<typeof SequenceMessageSpecSchema>;
 
 
 export const SequenceAltSpecSchema = z.object({
+  /** Título de la bifurcación en la pestaña (default «alternativas»). */
+  name: z.string().optional(),
   branches: z.array(z.object({
   condition: z.string(),
   messages: z.array(SequenceMessageSpecSchema),
@@ -67,6 +69,8 @@ export const SequenceFragmentSpecSchema = z.object({
   messages: z.array(z.string()).min(1),
   color: z.string().optional(),
   span: z.enum(['actors', 'all']).default('actors'),
+  /** Condición para entrar (procesos opcionales): se muestra junto a la pestaña. */
+  condition: z.string().optional(),
 });
 export type SequenceFragmentSpec = z.infer<typeof SequenceFragmentSpecSchema>;
 
@@ -157,8 +161,9 @@ export const SequenceLayoutMessageSchema = z.object({
   groupHue: z.number().optional(),
   /** Nombre de paleta o hex del grupo; el renderer lo resuelve con el tema. */
   groupColor: z.string().optional(),
-  /** Título e icono del grupo: solo en la primera arista de cada tramo del grupo. */
+  /** Título del grupo: solo en la primera arista de cada tramo del grupo. */
   groupTitle: z.string().optional(),
+  /** Icono del grupo: en todas sus aristas, junto al índice. */
   groupIcon: z.string().optional(),
 });
 export type SequenceLayoutMessage = z.infer<typeof SequenceLayoutMessageSchema>;
@@ -180,6 +185,7 @@ export const SequenceLayoutFragmentSchema = z.object({
   name: z.string(),
   kind: z.string(),
   color: z.string().optional(),
+  condition: z.string().optional(),
   x: z.number(),
   y: z.number(),
   w: z.number(),

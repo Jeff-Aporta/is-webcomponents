@@ -196,6 +196,22 @@ ocurre a la vez, no bloquea o se repite:
   cada región abre su propio aire antes de la primera fila y tras la última,
   así nunca monta sobre un `alt` ni sobre otra región.
 
+## Iconos con fondo e índices
+
+Cada grupo puede llevar `icon`; con estilo cargado (leyenda apagada) el icono
+va junto al índice de **todas** las aristas del grupo, al lado contrario de
+la flecha, con fondo circular translúcido, y el título del grupo solo en la
+primera arista de cada tramo, pequeño y atenuado. Los iconos con fondo salen
+de `svgIconBadge` (`_shared/tk-icon-inline.ts`): `bg` circle / rect / round /
+none, `bgColor`, `bgAlpha` (sólido con 1) y `size`, el mismo contrato para
+cualquier diagrama.
+
+Las pestañas de `alt` y de cada región llevan icono del tipo (bifurcación,
+rayo = async, repetir = loop, interrogación = opt) y el **título** (`alt.name`,
+`fragments[].name`); `fragments[].condition` se muestra entre corchetes al lado
+cuando el proceso es opcional. Todas las regiones y cajas de participantes van
+con borde punteado y relleno con alpha.
+
 ## Estilo de arista (`edgeStyle`)
 
 `"policy": { "edgeStyle": "curved" }` (o `edgeStyle` en la raíz del payload)

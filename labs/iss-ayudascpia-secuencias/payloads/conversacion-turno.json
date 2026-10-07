@@ -77,7 +77,7 @@
         {
           "id": "f-log",
           "kind": "region",
-          "name": "registro del mensaje del usuario (turno·1000+1)",
+          "name": "registro del mensaje del usuario",
           "messages": [
             "m6",
             "m7"
@@ -87,19 +87,20 @@
         {
           "id": "f-stream",
           "kind": "async",
-          "name": "respuesta en stream · cada delta de OpenAI se reenvía como evento SSE (× N)",
+          "name": "respuesta en stream",
           "messages": [
             "m11",
             "m12",
             "m13",
             "m14"
           ],
-          "color": "service"
+          "color": "service",
+          "condition": "hay clave de OpenAI; si no, el turno termina degradado"
         },
         {
           "id": "f-close",
           "kind": "region",
-          "name": "cierre del turno (turno·1000+2)",
+          "name": "cierre del turno",
           "messages": [
             "m15",
             "m16",
@@ -114,7 +115,7 @@
           "id": "m1",
           "from": "u",
           "to": "w",
-          "label": "POST /conversacion { prompt, iconversacion?, mode }",
+          "label": "envía un mensaje (prompt, conversación si continúa, modo)",
           "kind": "sync",
           "group": "g-sse"
         },
@@ -122,7 +123,7 @@
           "id": "m2",
           "from": "w",
           "to": "c",
-          "label": "insert(body, ctx, emit)",
+          "label": "abre el turno con el emisor de eventos",
           "kind": "sync",
           "group": "g-ctl"
         },
@@ -130,12 +131,13 @@
           "id": "m3",
           "from": "c",
           "to": "c",
-          "label": "Zod · verifyAuthorization · contexto · prompt o adjuntos · mode libre",
+          "label": "valida el cuerpo, el token, el contexto y que haya prompt o adjuntos",
           "kind": "self",
           "group": "g-ctl"
         }
       ],
       "alt": {
+        "name": "según si la conversación existe",
         "branches": [
           {
             "condition": "continúa (iconversacion > 0)",
@@ -144,7 +146,7 @@
                 "id": "m4",
                 "from": "c",
                 "to": "pg",
-                "label": "dueño estricto + itdestado = 0 · UPDATE fhultact",
+                "label": "comprueba que la conversación es suya y está abierta; actualiza la última actividad",
                 "kind": "sync",
                 "group": "g-db"
               }
@@ -157,7 +159,7 @@
                 "id": "m5",
                 "from": "c",
                 "to": "pg",
-                "label": "nextVal(seq_patyia_idconversaciones) · INSERT",
+                "label": "crea la conversación (nuevo id de secuencia)",
                 "kind": "sync",
                 "group": "g-db"
               }
@@ -170,7 +172,7 @@
           "id": "m6",
           "from": "c",
           "to": "l",
-          "label": "mensajes() + mensaje del usuario (turno·1000+1)",
+          "label": "registra el mensaje del usuario en el historial (turno·1000+1)",
           "kind": "sync",
           "group": "g-ctl"
         },
@@ -178,7 +180,7 @@
           "id": "m7",
           "from": "l",
           "to": "pg",
-          "label": "upsert patyia_conversacion_log",
+          "label": "guarda el historial",
           "kind": "sync",
           "group": "g-db"
         },
@@ -186,7 +188,7 @@
           "id": "m8",
           "from": "c",
           "to": "pg",
-          "label": "getOpenaiCfg → patyia_providers.jcuenta",
+          "label": "lee la configuración del proveedor (clave de OpenAI)",
           "kind": "sync",
           "group": "g-db"
         },
@@ -194,7 +196,7 @@
           "id": "m9",
           "from": "c",
           "to": "w",
-          "label": "emit begin",
+          "label": "evento begin",
           "kind": "async",
           "group": "g-sse"
         },
@@ -202,7 +204,7 @@
           "id": "m10",
           "from": "w",
           "to": "u",
-          "label": "200 text/event-stream · begin",
+          "label": "abre el stream (200 text/event-stream) · begin",
           "kind": "async",
           "group": "g-sse"
         },
@@ -210,7 +212,7 @@
           "id": "m11",
           "from": "c",
           "to": "ai",
-          "label": "si hay apiKey: chat/completions stream:true",
+          "label": "si hay clave: pide la respuesta en stream",
           "kind": "sync",
           "group": "g-llm"
         },
@@ -218,7 +220,7 @@
           "id": "m12",
           "from": "ai",
           "to": "c",
-          "label": "deltas",
+          "label": "fragmentos de la respuesta (deltas)",
           "kind": "async",
           "group": "g-llm"
         },
@@ -226,7 +228,7 @@
           "id": "m13",
           "from": "c",
           "to": "w",
-          "label": "emit message × N",
+          "label": "evento message por cada fragmento",
           "kind": "async",
           "group": "g-sse"
         },
@@ -242,7 +244,7 @@
           "id": "m15",
           "from": "c",
           "to": "l",
-          "label": "respuesta del asistente (turno·1000+2)",
+          "label": "registra la respuesta del asistente en el historial (turno·1000+2)",
           "kind": "sync",
           "group": "g-ctl"
         },
@@ -250,7 +252,7 @@
           "id": "m16",
           "from": "c",
           "to": "pg",
-          "label": "UPDATE qmensajes",
+          "label": "actualiza el contador de mensajes",
           "kind": "sync",
           "group": "g-db"
         },
@@ -258,7 +260,7 @@
           "id": "m17",
           "from": "c",
           "to": "w",
-          "label": "emit end { stream_ok, providerDegraded }",
+          "label": "evento end (stream_ok, proveedor degradado)",
           "kind": "async",
           "group": "g-sse"
         },
@@ -266,7 +268,7 @@
           "id": "m18",
           "from": "w",
           "to": "u",
-          "label": "SSE end",
+          "label": "SSE end · cierra el stream",
           "kind": "async",
           "group": "g-sse"
         }

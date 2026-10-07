@@ -59,14 +59,15 @@
         {
           "id": "f-contacto",
           "kind": "region",
-          "name": "existencia del contacto y empresas a las que pertenece",
+          "name": "contacto y empresas",
           "messages": [
             "m3",
             "m4",
             "m5",
             "m6"
           ],
-          "color": "neutral"
+          "color": "neutral",
+          "condition": "se consulta DataSnap antes de validar credenciales"
         }
       ],
       "preamble": [
@@ -74,7 +75,7 @@
           "id": "m1",
           "from": "p",
           "to": "i",
-          "label": "POST /auth/portal-login { semail, password, itercero? }",
+          "label": "inicia sesión con correo y contraseña (y empresa, si la eligió)",
           "kind": "sync",
           "group": "g-http"
         },
@@ -82,7 +83,7 @@
           "id": "m2",
           "from": "i",
           "to": "i",
-          "label": "normaliza semail (sin @ → @contapyme.com) · password → MD5",
+          "label": "normaliza el correo (sin @ → @contapyme.com) y cifra la contraseña (MD5)",
           "kind": "self",
           "group": "g-jwt"
         },
@@ -90,7 +91,7 @@
           "id": "m3",
           "from": "i",
           "to": "d",
-          "label": "TCatContactos.GetExisteContacto",
+          "label": "¿existe el contacto y tiene acceso web?",
           "kind": "sync",
           "group": "g-ds"
         },
@@ -106,7 +107,7 @@
           "id": "m5",
           "from": "i",
           "to": "d",
-          "label": "TCatContactos.GetListaTercerosPorContacto",
+          "label": "¿a qué empresas pertenece el contacto?",
           "kind": "sync",
           "group": "g-ds"
         },
@@ -114,12 +115,13 @@
           "id": "m6",
           "from": "d",
           "to": "i",
-          "label": "terceros del contacto",
+          "label": "empresas del contacto",
           "kind": "async",
           "group": "g-ds"
         }
       ],
       "alt": {
+        "name": "según las empresas del contacto",
         "branches": [
           {
             "condition": "varias empresas y sin itercero",
@@ -128,7 +130,7 @@
                 "id": "m7",
                 "from": "i",
                 "to": "p",
-                "label": "409 MULTI_EMPRESA { terceros } · el front pregunta y reintenta con itercero",
+                "label": "409 MULTI_EMPRESA · lista de empresas para que el portal pregunte y reintente",
                 "kind": "async",
                 "group": "g-err"
               }
@@ -141,7 +143,7 @@
                 "id": "m8",
                 "from": "i",
                 "to": "d",
-                "label": "TBasicoGeneral.LogInContacto",
+                "label": "valida las credenciales (LogInContacto)",
                 "kind": "sync",
                 "group": "g-ds"
               },
@@ -149,7 +151,7 @@
                 "id": "m9",
                 "from": "d",
                 "to": "i",
-                "label": "controlKey · itercero · icontacto · nombres",
+                "label": "llave de sesión e identidad (controlKey, empresa, contacto, nombres)",
                 "kind": "async",
                 "group": "g-ds"
               },
@@ -157,7 +159,7 @@
                 "id": "m10",
                 "from": "i",
                 "to": "i",
-                "label": "jwtSign HS384 · 24 h",
+                "label": "firma el token (HS384, 24 h)",
                 "kind": "self",
                 "group": "g-jwt"
               },
@@ -165,7 +167,7 @@
                 "id": "m11",
                 "from": "i",
                 "to": "p",
-                "label": "{ token, username, displayName, expiresAt, claims }",
+                "label": "entrega el token con usuario, nombre, vencimiento y claims",
                 "kind": "async",
                 "group": "g-http"
               }

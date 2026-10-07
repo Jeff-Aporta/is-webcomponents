@@ -24,7 +24,8 @@ import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import type { PathTurtle, TurtleMessage, TurtleTheme } from '../_shared/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
-import { svgIconGroup, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
+import { svgIconGroup, svgIconBadge, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
+import { pathPoints } from '../_shared/diagram-arrow.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { contrastFontColor } from '../_shared/tk-color.js';
@@ -62,6 +63,15 @@ import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./s
 
 const GUIDE_X = 44;
 const FONT_UI = 'Tahoma,Arial,sans-serif';
+/** Icono de cada tipo de región: el tipo se lee por el icono, no por la palabra. */
+const FRAGMENT_ICON: Record<string, string> = {
+  par: 'mdi:call-split',
+  async: 'mdi:lightning-bolt-outline',
+  loop: 'mdi:repeat',
+  opt: 'mdi:help-circle-outline',
+  alt: 'mdi:source-branch',
+  region: 'mdi:shape-outline',
+};
 const FONT_MONO = 'Consolas,Menlo,monospace';
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
@@ -329,11 +339,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(rect);
 
       if (!iconInLabel) {
-        const fill = tkHueToHex(a.hue) ?? '#64748b';
-        g.appendChild(svgEl('circle', { cx: iconCx, cy: a.y, r: 16 * 0.74, fill, opacity: 0.16 }));
-        g.appendChild(svgIconGroup(a.icon, {
-          x: iconCx - 8, y: a.y - 8, size: 16, hue: a.hue,
-        }));
+        g.appendChild(svgIconBadge(a.icon, { cx: iconCx, cy: a.y, size: 24, hue: a.hue, bg: 'circle', bgAlpha: 0.16 }));
       }
 
       if (a.label.includes('{{')) {
@@ -382,7 +388,8 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(svgEl('rect', {
         x: b.x, y: b.y, width: b.w, height: b.h, rx: paint ? 0 : TK_DIAGRAM_RADIUS_PX,
         fill, 'fill-opacity': b.color ? (paint?.boxOpacity ?? 0.35) : 1,
-        stroke: paint ? paint.fragmentBorder : (b.color ?? theme.border), 'stroke-width': paint ? 1.5 : 1.2,
+        stroke: paint ? paint.fragmentBorder : (b.color ?? theme.border), 'stroke-width': paint ? 1.2 : 1.2,
+        'stroke-dasharray': '6 4',
       }));
       const t = svgEl('text', {
         x: b.x + 12, y: b.y + 17, fill: theme.text,
@@ -404,36 +411,48 @@ class IswcSequenceDiagram extends DiagramElementBase {
     const g = svgEl('g', { class: 'seq-alt' });
     g.appendChild(svgEl('rect', {
       x: box.x, y: box.y, width: box.w, height: box.h, rx: this.#paint ? 0 : TK_DIAGRAM_RADIUS_PX,
-      fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2',
+      fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2', 'stroke-dasharray': '6 4',
     }));
-    // Pestaña «alt» en la esquina (pentágono UML).
-    const tw = 34;
-    const th = 18;
-    g.appendChild(svgEl('path', {
-      d: `M${box.x},${box.y} H${box.x + tw} V${box.y + th - 6} L${box.x + tw - 6},${box.y + th} H${box.x} Z`,
-      fill: theme.altBorder, stroke: theme.altBorder,
-    }));
-    const t = svgEl('text', {
-      x: box.x + 8, y: box.y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: '#FFFFFF',
-      'font-size': '10', 'font-weight': '700', 'font-family': this.#font,
-    });
-    t.textContent = box.label;
-    g.appendChild(t);
+    // Pestaña: icono de bifurcación + título (todas las regiones llevan su
+    // título en la pestaña; el tipo se lee por el icono).
+    const tw = this.#buildTab(g, box.x, box.y, 'mdi:source-branch', box.label, theme.altBorder);
     for (const y of box.dividers ?? []) {
       g.appendChild(svgEl('line', {
         x1: box.x, y1: y, x2: box.x + box.w, y2: y,
         stroke: theme.altBorder, 'stroke-width': 1, 'stroke-dasharray': '6 4',
       }));
     }
-    for (const br of box.branches ?? []) {
+    for (const [k, br] of (box.branches ?? []).entries()) {
       const c = svgEl('text', {
-        x: box.x + tw + 10, y: br.y, 'dominant-baseline': 'middle', fill: theme.text,
-        'font-size': '10.5', 'font-style': 'italic', 'font-family': this.#font,
+        x: k === 0 ? box.x + 10 : box.x + 10, y: br.y, 'dominant-baseline': 'middle', fill: theme.text, 'fill-opacity': 0.75,
+        'font-size': '9.5', 'font-style': 'italic', 'font-family': this.#font,
       });
       c.textContent = `[${br.label}]`;
       g.appendChild(c);
     }
     this.svg.appendChild(g);
+  }
+
+  /**
+   * Pestaña UML (pentágono) con icono y título. Devuelve su ancho para que
+   * el llamador acomode lo que va al lado.
+   */
+  #buildTab(g: SVGElement, x: number, y: number, icon: string, title: string, fill: string): number {
+    const th = 18;
+    const tw = Math.max(40, 24 + Math.ceil(title.length * 6.2) + 10);
+    g.appendChild(svgEl('path', {
+      d: `M${x},${y} H${x + tw} V${y + th - 6} L${x + tw - 6},${y + th} H${x} Z`,
+      fill, stroke: fill,
+    }));
+    const ink = contrastFontColor(fill);
+    g.appendChild(svgIconBadge(icon, { cx: x + 12, cy: y + th / 2, size: 14, color: ink, bg: 'none' }));
+    const t = svgEl('text', {
+      x: x + 22, y: y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: ink,
+      'font-size': '10', 'font-weight': '700', 'font-family': this.#font,
+    });
+    t.textContent = title;
+    g.appendChild(t);
+    return tw;
   }
 
   /** Color de un grupo: nombre de paleta/hex del tema > hue > acento. */
@@ -459,28 +478,16 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(svgEl('rect', {
         x: fr.x, y: fr.y, width: fr.w, height: fr.h, rx: paint ? 0 : TK_DIAGRAM_RADIUS_PX,
         fill, 'fill-opacity': paint?.fragmentOpacity ?? 0.18,
-        stroke, 'stroke-width': 1.2, 'stroke-dasharray': fr.kind === 'async' ? '6 4' : null,
+        stroke, 'stroke-width': 1.2, 'stroke-dasharray': '6 4',
       }));
-      // Pestaña con el tipo de región (par / async / loop / opt / region).
-      const tag = fr.kind;
-      const tw = Math.max(34, tag.length * 6.5 + 14);
-      const th = 18;
-      g.appendChild(svgEl('path', {
-        d: `M${fr.x},${fr.y} H${fr.x + tw} V${fr.y + th - 6} L${fr.x + tw - 6},${fr.y + th} H${fr.x} Z`,
-        fill: stroke, stroke,
-      }));
-      const t = svgEl('text', {
-        x: fr.x + 7, y: fr.y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: contrastFontColor(stroke),
-        'font-size': '10', 'font-weight': '700', 'font-family': this.#font,
-      });
-      t.textContent = tag;
-      g.appendChild(t);
-      if (fr.name) {
+      // Pestaña negra con icono del tipo + título; la condición (si la hay) al lado.
+      const tw = this.#buildTab(g, fr.x, fr.y, FRAGMENT_ICON[fr.kind] ?? FRAGMENT_ICON.region!, fr.name || fr.kind, stroke);
+      if (fr.condition) {
         const n = svgEl('text', {
-          x: fr.x + tw + 8, y: fr.y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: theme.text,
-          'font-size': '10.5', 'font-style': 'italic', 'font-family': this.#font,
+          x: fr.x + tw + 8, y: fr.y + 9.5, 'dominant-baseline': 'middle', fill: theme.text, 'fill-opacity': 0.75,
+          'font-size': '9.5', 'font-style': 'italic', 'font-family': this.#font,
         });
-        n.textContent = fr.name;
+        n.textContent = `[${fr.condition}]`;
         g.appendChild(n);
       }
       this.svg.appendChild(g);
@@ -543,11 +550,14 @@ class IswcSequenceDiagram extends DiagramElementBase {
       arrow.classList.add('seq-msg-head');
       g.appendChild(arrow);
 
+      // El índice va en el ARRANQUE real del trazo: en un self-loop el path
+      // nace arriba y vuelve a la lifeline, así la punta no queda tapada.
+      const start = m.kind === 'self' ? (pathPoints(m.path)[0] ?? { x: m.fromX, y: m.y }) : { x: m.fromX, y: m.y };
       const dotG = svgEl('g', { class: 'seq-start' });
-      const dot = svgEl('circle', { cx: m.fromX, cy: m.y, r: 8, fill: color });
+      const dot = svgEl('circle', { cx: start.x, cy: start.y, r: 8, fill: color });
       dotG.appendChild(dot);
       const stepText = svgEl('text', {
-        x: m.fromX, y: m.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: contrastFontColor(color),
+        x: start.x, y: start.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: contrastFontColor(color),
         'font-size': '9', 'font-weight': '700', 'font-family': this.#font,
       });
       stepText.textContent = String(m.step);
@@ -566,28 +576,27 @@ class IswcSequenceDiagram extends DiagramElementBase {
       const labelNode = this.#buildMessageLabel(m, theme);
       if (labelNode) g.appendChild(labelNode);
 
-      // Título del grupo (con icono) bajo el arranque de la primera arista
-      // del tramo: reemplaza la leyenda sin ensanchar el lienzo.
+      // Dirección de salida del trazo (para un self, el lado del lazo).
+      const dir = m.kind === 'self'
+        ? ((pathPoints(m.path)[1]?.x ?? m.fromX + 1) >= m.fromX ? 1 : -1)
+        : (m.toX >= m.fromX ? 1 : -1);
+      // Icono del grupo junto al índice, al lado contrario de la arista, con
+      // fondo circular translúcido: el color solo no basta para leer el grupo.
+      if (m.groupIcon) {
+        g.appendChild(svgIconBadge(m.groupIcon, {
+          cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgAlpha: 0.16,
+        }));
+      }
+      // Título del grupo bajo el arranque de la primera arista del tramo:
+      // texto auxiliar, pequeño y atenuado para no robar protagonismo.
       if (m.groupTitle) {
-        const dir = m.toX >= m.fromX ? 1 : -1;
-        const tagX = m.fromX + dir * 12;
-        const tagY = m.y + 15;
-        const tg = svgEl('g', { class: 'seq-group-tag' });
-        let tx = tagX;
-        if (m.groupIcon) {
-          tg.appendChild(svgIconGroup(m.groupIcon, {
-            x: dir > 0 ? tagX : tagX - 11, y: tagY - 9, size: 11, color,
-          }));
-          tx = tagX + dir * 14;
-        }
         const t = svgEl('text', {
-          x: tx, y: tagY, 'dominant-baseline': 'middle', fill: color,
+          x: m.fromX + dir * 12, y: m.y + 14, 'dominant-baseline': 'middle', fill: color, 'fill-opacity': 0.62,
           'text-anchor': dir > 0 ? 'start' : 'end',
-          'font-size': '9', 'font-weight': '600', 'font-family': this.#font, 'letter-spacing': '0.02em',
+          'font-size': '8', 'font-weight': '600', 'font-family': this.#font, 'letter-spacing': '0.03em',
         });
         t.textContent = m.groupTitle;
-        tg.appendChild(t);
-        g.appendChild(tg);
+        g.appendChild(t);
       }
 
       this.svg.appendChild(g);

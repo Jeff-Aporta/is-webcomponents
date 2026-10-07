@@ -183,6 +183,7 @@ function readFragments(seq: Record<string, unknown>): SequenceFragmentSpec[] | u
       messages: Array.isArray(r.messages) ? r.messages.map(String) : [],
       ...(typeof r.color === 'string' && r.color.trim() ? { color: r.color.trim() } : {}),
       ...(r.span === 'all' ? { span: 'all' } : {}),
+      ...(typeof r.condition === 'string' && r.condition.trim() ? { condition: r.condition.trim() } : {}),
     });
     if (parsed.success) out.push(parsed.data);
     else console.warn(`[iswc-sequence-diagram] región "${String(r.id ?? i)}" ignorada: ${parsed.error.issues[0]?.message ?? 'inválida'}`);
@@ -217,6 +218,7 @@ export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec 
   const branches = Array.isArray(rawAlt.branches) ? rawAlt.branches : [];
   if (branches.length) {
     alt = {
+      ...(typeof rawAlt.name === 'string' && rawAlt.name.trim() ? { name: rawAlt.name.trim() } : {}),
       branches: branches.map((b) => {
         const br = asRecord(b);
         const msgs = Array.isArray(br.messages) ? br.messages : [];
@@ -297,6 +299,7 @@ export function sequenceSpecToJson(spec: SequenceResolvedSpec): Record<string, u
   // antes descartaba las ramas al serializar un payload mixto desde el visor.
   if (spec.alt?.branches?.length) {
     seq.alt = {
+      ...(spec.alt.name ? { name: spec.alt.name } : {}),
       branches: spec.alt.branches.map((b) => ({
         condition: b.condition,
         messages: b.messages.map(sequenceMessageToJson),
@@ -372,6 +375,7 @@ const PART_BOX_HEAD = 26;
 const FRAG_HEAD = 30;
 const FRAG_FOOT = 14;
 const ALT_BRANCH_HEAD = 24;
+const ALT_HEAD = 20;
 
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
 function actorBoxWidth(label: string, _kind: string): number {
@@ -574,6 +578,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   // Cada rama de `alt` (salvo la primera) abre aire para su condición: el
   // rótulo `[condición]` va entre el divisor y el chip de la primera fila.
   flat.forEach((f, i) => { if (f.branchFirst && i > 0 && i !== altStart) headGap[i]! += ALT_BRANCH_HEAD; });
+  // La pestaña del `alt` lleva título: la primera condición va debajo de
+  // ella, así que el marco abre una cabecera propia.
+  if (altEnd > altStart) headGap[altStart]! += ALT_HEAD;
   const rowOffset: number[] = [];
   let acc = 0;
   for (let r = 0; r < flat.length; r++) {
@@ -659,8 +666,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       branchFirst: f.branchFirst,
       groupHue: f.m.group ? groupHueMap.get(f.m.group) : undefined,
       groupColor: f.m.group ? groupColorMap.get(f.m.group) : undefined,
+      ...(spec.legend === false && f.m.group ? { groupIcon: groupById.get(f.m.group)?.icon } : {}),
       ...(spec.legend === false && f.m.group && flat[row - 1]?.m.group !== f.m.group
-        ? { groupTitle: groupById.get(f.m.group)?.name, groupIcon: groupById.get(f.m.group)?.icon }
+        ? { groupTitle: groupById.get(f.m.group)?.name }
         : {}),
     });
   });
@@ -687,7 +695,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     // anidadas: la exterior toma todo el hueco, cada nivel interior cede 8 px.
     const y0 = Math.min(yAt(x.first) - (headGap[x.first] ?? FRAG_HEAD) + 6, firstChip - FRAG_HEAD + 8) + depth * 8;
     const y1 = yAt(x.last) + (footGap[x.last] ?? FRAG_FOOT) - 4 - depth * 8;
-    return { id: x.fr.id, name: x.fr.name, kind: x.fr.kind, color: x.fr.color, x: x0, y: y0, w: x1 - x0, h: y1 - y0, depth };
+    return { id: x.fr.id, name: x.fr.name, kind: x.fr.kind, color: x.fr.color, condition: x.fr.condition, x: x0, y: y0, w: x1 - x0, h: y1 - y0, depth };
   });
 
   // 6) Caja alt (si hay ramas).
@@ -707,9 +715,8 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     const firstChip = Math.min(...inAlt.map((f) => messages[flat.indexOf(f)]!.labelY));
     // Nunca por encima de la fila anterior (+ su pie de región): el marco
     // `alt` no se monta sobre la región o el mensaje que lo precede.
-    const y1 = altStart > 0
-      ? Math.max(Math.min(yAt(altStart) - 28, firstChip - 22), yAt(altStart - 1) + FRAG_FOOT + 10)
-      : Math.min(yAt(altStart) - 28, firstChip - 22);
+    const deseado = Math.min(yAt(altStart) - 28, firstChip - 22) - ALT_HEAD;
+    const y1 = altStart > 0 ? Math.max(deseado, yAt(altStart - 1) + FRAG_FOOT + 10) : deseado;
     const y2 = yAt(altEnd - 1) + 26;
     const dividers: number[] = [];
     const branches: Array<{ label: string; y: number }> = [];
@@ -717,9 +724,10 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       if (!flat[k]!.branchFirst) continue;
       const top = k === altStart ? y1 : (yAt(k - 1) + yAt(k)) / 2 - 10;
       if (k !== altStart) dividers.push(top);
-      branches.push({ label: flat[k]!.branch ?? '', y: top + 14 });
+      // Primera rama: bajo la pestaña (que lleva el título); las demás, junto al divisor.
+      branches.push({ label: flat[k]!.branch ?? '', y: k === altStart ? top + 18 + 12 : top + 14 });
     }
-    altBox = { x: x0, y: y1, w: x1 - x0, h: y2 - y1, label: 'alt', dividers, branches } as SequenceLayoutAltBox;
+    altBox = { x: x0, y: y1, w: x1 - x0, h: y2 - y1, label: spec.alt?.name ?? 'alternativas', dividers, branches } as SequenceLayoutAltBox;
   }
 
   // Regiones de participantes (detrás de lifelines y mensajes).

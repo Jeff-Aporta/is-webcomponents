@@ -13,7 +13,7 @@
 
 import { normalizeTkHue, tkHueToCss, tkHueToHex } from './tk-hue.js';
 import { resolveIconRaw } from './icon-loader.js';
-import type { ResolvedIconToken, SvgIconGroupOpts, IconInlineOpts, IconHtmlRender, IconRun, LeadingIcon } from "./tk-icon-inline.schemas.js";
+import type { ResolvedIconToken, SvgIconBadgeOpts, SvgIconGroupOpts, IconInlineOpts, IconHtmlRender, IconRun, LeadingIcon } from "./tk-icon-inline.schemas.js";
 
 /** Simple {{ … }} (sin objeto sugar) — compat tests / búsqueda rápida. */
 export const TK_ICON_TOKEN_RE = /\{\{([^}#][^}]*)\}\}/g;
@@ -260,6 +260,43 @@ export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGE
     g.appendChild(inner);
   }).catch(() => { /* icono inexistente: el diagrama sigue legible sin el */ });
 
+  return g;
+}
+
+/**
+ * Icono con fondo (insignia). Mismo contrato para todos los diagramas: el
+ * fondo puede ser `circle` | `rect` | `round` | `none`, con color propio o
+ * el del icono, sólido (`bgAlpha: 1`) o translúcido (default 0.18), y
+ * `size` escala fondo e icono juntos.
+ */
+export function svgIconBadge(iconId: string, opts: SvgIconBadgeOpts): SVGGElement {
+  const { cx, cy, size = 18, color, hue, bg = 'circle', bgColor, bgAlpha = 0.18, fallback } = opts;
+  const NS = 'http://www.w3.org/2000/svg';
+  const g = document.createElementNS(NS, 'g');
+  g.setAttribute('class', 'tk-svg-badge');
+  const tint = color || (hue != null ? tkHueToHex(hue as number) : undefined) || 'currentColor';
+  const fondo = bgColor || tint;
+  if (bg !== 'none') {
+    const shape = bg === 'circle'
+      ? document.createElementNS(NS, 'circle')
+      : document.createElementNS(NS, 'rect');
+    if (bg === 'circle') {
+      shape.setAttribute('cx', String(cx));
+      shape.setAttribute('cy', String(cy));
+      shape.setAttribute('r', String(size / 2));
+    } else {
+      shape.setAttribute('x', String(cx - size / 2));
+      shape.setAttribute('y', String(cy - size / 2));
+      shape.setAttribute('width', String(size));
+      shape.setAttribute('height', String(size));
+      if (bg === 'round') shape.setAttribute('rx', String(Math.round(size * 0.22)));
+    }
+    shape.setAttribute('fill', fondo);
+    shape.setAttribute('fill-opacity', String(bgAlpha));
+    g.appendChild(shape);
+  }
+  const inner = Math.round(size * 0.62);
+  g.appendChild(svgIconGroup(iconId, { x: cx - inner / 2, y: cy - inner / 2, size: inner, color: tint, fallback }));
   return g;
 }
 

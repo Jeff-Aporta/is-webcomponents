@@ -71,24 +71,26 @@
         {
           "id": "f-rol",
           "kind": "region",
-          "name": "rol vigente · seg_rolescontacto (grupo PATYIA, ffinal nula o futura, bprincipal primero)",
+          "name": "rol vigente",
           "messages": [
             "m5",
             "m6",
             "m7"
           ],
-          "color": "panel"
+          "color": "panel",
+          "condition": "seg_rolescontacto del grupo PATYIA, vigente, principal primero"
         },
         {
           "id": "f-accion",
           "kind": "region",
-          "name": "valor de la acción · seg_accionesxrol para (rol, METHOD:/ruta)",
+          "name": "valor de la acción",
           "messages": [
             "m8",
             "m9",
             "m10"
           ],
-          "color": "panel"
+          "color": "panel",
+          "condition": "seg_accionesxrol para el rol y METHOD:/ruta"
         }
       ],
       "messages": [
@@ -96,7 +98,7 @@
           "id": "m1",
           "from": "c",
           "to": "w",
-          "label": "petición + Authorization: Bearer",
+          "label": "llega la petición con su token (Authorization: Bearer)",
           "kind": "sync",
           "group": "g-http"
         },
@@ -104,7 +106,7 @@
           "id": "m2",
           "from": "w",
           "to": "w",
-          "label": "TContextUser · _patySeg = SEG_ENDPOINTS[METHOD:/ruta] ?? METHOD:/ruta",
+          "label": "identifica el permiso que exige la ruta (METHOD:/ruta, o el alias de SEG_ENDPOINTS)",
           "kind": "self",
           "group": "g-seg"
         },
@@ -112,7 +114,7 @@
           "id": "m3",
           "from": "w",
           "to": "b",
-          "label": "handler del controller",
+          "label": "entrega al controller de la ruta",
           "kind": "sync",
           "group": "g-http"
         },
@@ -120,7 +122,7 @@
           "id": "m4",
           "from": "b",
           "to": "b",
-          "label": "verifyAuthorization() · jwtVerify HS384 (sin token o inválido → 401)",
+          "label": "verifica el token (HS384) · sin token o inválido → 401",
           "kind": "self",
           "group": "g-jwt"
         },
@@ -128,7 +130,7 @@
           "id": "m5",
           "from": "b",
           "to": "pm",
-          "label": "rolPrincipal(icontacto)",
+          "label": "pide el rol vigente del contacto",
           "kind": "sync",
           "group": "g-seg"
         },
@@ -136,7 +138,7 @@
           "id": "m6",
           "from": "pm",
           "to": "pg",
-          "label": "SELECT seg_rolescontacto",
+          "label": "busca el rol en seg_rolescontacto",
           "kind": "sync",
           "group": "g-db"
         },
@@ -144,7 +146,7 @@
           "id": "m7",
           "from": "pg",
           "to": "pm",
-          "label": "irol · sin fila → USR · SEG caído → 503",
+          "label": "rol del contacto · sin rol → USR · SEG caído → 503",
           "kind": "async",
           "group": "g-db"
         },
@@ -152,7 +154,7 @@
           "id": "m8",
           "from": "b",
           "to": "pm",
-          "label": "accionRecurso(METHOD:/ruta)",
+          "label": "pregunta si el rol tiene la acción permitida",
           "kind": "sync",
           "group": "g-seg"
         },
@@ -160,7 +162,7 @@
           "id": "m9",
           "from": "pm",
           "to": "pg",
-          "label": "SELECT seg_accionesxrol.valor",
+          "label": "lee el valor en seg_accionesxrol",
           "kind": "sync",
           "group": "g-db"
         },
@@ -168,7 +170,7 @@
           "id": "m10",
           "from": "pg",
           "to": "pm",
-          "label": "true · false · sin fila",
+          "label": "permitido · negado · sin fila",
           "kind": "async",
           "group": "g-db"
         },
@@ -176,7 +178,7 @@
           "id": "m11",
           "from": "b",
           "to": "b",
-          "label": "solo \"false\" niega (401) · true, sin fila o ruta no configurable: pasa",
+          "label": "solo un «negado» corta con 401; permitido, sin fila o ruta no configurable siguen",
           "kind": "self",
           "group": "g-seg"
         },
@@ -184,7 +186,7 @@
           "id": "m12",
           "from": "b",
           "to": "c",
-          "label": "respuesta del endpoint",
+          "label": "responde el endpoint",
           "kind": "async",
           "group": "g-http"
         }

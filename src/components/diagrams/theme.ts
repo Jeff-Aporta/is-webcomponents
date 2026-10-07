@@ -237,7 +237,7 @@ export function sequencePaint(theme: ErThemeJson): {
   const e = theme.edge ?? {};
   const c = theme.canvas ?? {};
   return {
-    actorFill: s.actorFill ?? theme.component?.fill ?? '#C1BFFF',
+    actorFill: s.actorFill ?? theme.component?.fill ?? '#E6E5FF',
     actorBorder: s.actorBorder ?? theme.entity?.border ?? '#000000',
     actorRadius: s.actorRadius ?? 0,
     lifeline: s.lifeline ?? 'rgba(15,23,42,0.45)',
