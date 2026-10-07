@@ -37,6 +37,7 @@ export {
   cooldownMs,
   createTestCooldown,
   formatMs,
+  testCooldownFromEnv,
   testId,
 } from './test-cooldown.js';
 
@@ -49,3 +50,6 @@ export type {
 } from './test-cooldown.js';
 
 export { runQueue, TEST_CONCURRENCY, testConcurrency } from './test-queue.js';
+
+export { denoTest, readDenoJunit } from './deno-test.js';
+export type { DenoTestOptions } from './deno-test.js';

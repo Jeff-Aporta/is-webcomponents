@@ -23,7 +23,7 @@ import { dirname, join } from "node:path";
 import process from "node:process";
 
 export type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
-import type { TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
+import type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
 
 /** Factor estándar: 60 min de cooldown por cada minuto de ejecución. */
 export const COOLDOWN_FACTOR = 60;

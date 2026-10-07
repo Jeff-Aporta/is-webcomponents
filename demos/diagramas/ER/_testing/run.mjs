@@ -8,8 +8,10 @@
 //   DEMOS_PORT=8501 deno run -A --no-check demos/_testing/run.mjs 
 import { spawn } from 'node:child_process';
 import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { formatMs, testCooldownFromEnv, testId } from '../../../../src/cdn/tools/test-cooldown.ts';
+import { runQueue } from '../../../../src/cdn/tools/test-queue.ts';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const repoRoot = join(here, '..', '..', '..', '..');
@@ -106,19 +108,28 @@ const all = [...testFiles, ...nested].filter((f) => !only || f.includes(only));
 console.log(`[demos-test] ${all.length} suite(s) a correr:`);
 all.forEach((f) => console.log('   -', f.replace(repoRoot, '')));
 
-// Correrlas secuencialmente.
+// Runner estándar is-*: cola de 3 suites a la vez + cooldown (src/cdn/tools/).
 let failures = 0;
 process.env.DEMOS_BASE_URL = `http://${HOST}:${PORT}`;
-for (const f of all) {
-  console.log(`\n[demos-test] corriendo ${f.replace(repoRoot, '')} ...`);
-  const proc = spawn(process.execPath, ['run', '-A', '--no-check', f], {
-    cwd: repoRoot,
-    stdio: 'inherit',
-    env: { ...process.env, DEMOS_BASE_URL: process.env.DEMOS_BASE_URL },
-  });
-  const code = await new Promise((r) => proc.once('exit', r));
-  if (code !== 0) failures++;
-}
+const cooldown = testCooldownFromEnv();
+await runQueue(all, async (f) => {
+  const rel = relative(repoRoot, f).replace(/\\/g, '/');
+  try {
+    const r = await cooldown.run(testId(rel, '*'), async () => {
+      console.log(`\n[demos-test] corriendo ${rel} ...`);
+      const proc = spawn(process.execPath, ['run', '-A', '--no-check', f], {
+        cwd: repoRoot,
+        stdio: 'inherit',
+        env: { ...process.env, DEMOS_BASE_URL: process.env.DEMOS_BASE_URL },
+      });
+      const code = await new Promise((r) => proc.once('exit', r));
+      if (code !== 0) throw new Error(`exit ${code}`);
+    });
+    if (r.skipped) console.log(`[cooldown] ~ ${rel} (faltan ${formatMs(r.remainingMs)})`);
+  } catch {
+    failures++;
+  }
+});
 
 console.log(`\n[demos-test] ${failures === 0 ? 'OK' : `${failures} suite(s) fallaron`}`);
 await killServer().catch(() => {});

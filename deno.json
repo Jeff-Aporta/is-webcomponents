@@ -18,7 +18,7 @@
     "icons:download": "deno run -A --no-check scripts/download-icons.ts",
     "labs:render": "deno run -A --no-check --sloppy-imports scripts/render-labs.mjs",
     "typecheck": "deno run -A --no-check npm:typescript@5.9.3/lib/tsc.js -p tsconfig.json",
-    "test": "deno test -A --no-check src/utils/health/meta/ src/utils/health/diagrams/ src/utils/health/audit/ src/utils/testing/domain/load-plan.test.ts",
+    "test": "deno run -A --no-check src/utils/testing/run-unit.ts",
     "test:e2e": "deno run -A --no-check src/utils/testing/e2e/run.ts",
     "test:demos": "deno run -A --no-check demos/diagramas/ER/_testing/run.mjs",
     "audit": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json",
