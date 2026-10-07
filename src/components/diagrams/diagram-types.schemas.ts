@@ -160,6 +160,12 @@ export const ClassLayoutOptsSchema = z.object({
   boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
   /** Sobreescritura del campo de costos del router (ver `routing-costs.ts`). */
   routing: z.record(z.string(), z.record(z.string(), z.number())).optional(),
+  /**
+   * Conjunto de generalización explícito (barra + tronco) para padres con
+   * 3+ hijos en otra franja. Apagado por defecto: la barra es un riel
+   * compartido; sin ella los hijos convergen por el incentivo del router.
+   */
+  inheritanceBus: z.boolean().optional(),
 });
 export type ClassLayoutOpts = z.infer<typeof ClassLayoutOptsSchema>;
 

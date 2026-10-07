@@ -20,10 +20,14 @@ export type { RoutingCosts, RoutingCostsInput };
 /** Valores por defecto del kit (los publica el build como routing-costs.json). */
 export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
   grid: { step: 20, clearance: 20, lanePitch: 32, stub: 20, iterations: 8, turnPenalty: 200, minFactor: 0.05 },
-  entity: { glow: 3, radius: 40 },
-  package: { borderGlow: 10, borderRadius: 64, nestingFactor: 4 },
+  // Brillo de entidad: un paso mas alla del aire (clearance); un radio mayor
+  // se comia los carriles de los corredores estrechos entre franjas.
+  entity: { glow: 3, radius: 20 },
+  // Entrar/salir de un agrupador y girar son sumas fijas (no brillos):
+  // relación 10 : 5 : 3 entre giro, entrada y salida.
+  package: { borderGlow: 10, borderRadius: 64, nestingFactor: 4, enter: 100, exit: 60 },
   rail: { overlap: 120, near: 6, headOn: 120, cross: 8, sameFunnel: 42, retreat: 30, history: 6, mergePitches: 2 },
-  share: { radius: 150, joinTail: 0.35 },
+  share: { radius: 150, joinTail: 0.1, newTip: 240 },
 });
 
 const isObj = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);

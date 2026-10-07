@@ -280,8 +280,18 @@ Deno.test('clases: cada clase dentro de su paquete y con el relleno semántico d
   assertEquals(L.nodes.find((n) => n.id === 'c1')?.fill, 'service');
 });
 
-Deno.test('herencia en bus: un solo triángulo por padre y ningún hijo corre sobre la barra', () => {
+Deno.test('herencia sin bus (default): los hijos convergen por incentivo en pocas puntas del padre', () => {
   const L = computeClassLayout(clases());
+  assertEquals(L.edges.filter((e) => e.id.endsWith('::bus')).length, 0, 'sin bus por defecto');
+  const hijos = L.edges.filter((e) => e.from !== e.to && e.kind === 'inheritance');
+  assertEquals(hijos.length, 4);
+  const puntas = new Set(hijos.filter((e) => !e.noTip).map((e) => `${e.targetTipX},${e.targetTipY}`));
+  assert(puntas.size >= 1 && puntas.size <= 2, `${puntas.size} triángulos para 4 hijos`);
+});
+
+Deno.test('herencia en bus (layout.inheritanceBus): un solo triángulo por padre y ningún hijo corre sobre la barra', () => {
+  const base = clases();
+  const L = computeClassLayout({ ...base, layout: { ...(base.layout ?? {}), inheritanceBus: true } });
   const bus = L.edges.filter((e) => e.id.endsWith('::bus'));
   assertEquals(bus.length, 1);
   const busY = puntos(bus[0]!.path)[0]!.y;

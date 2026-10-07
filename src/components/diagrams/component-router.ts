@@ -279,6 +279,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const MIN_MUL = C.grid.minFactor;
   const HISTORY_MUL = C.rail.history;
   const JOIN_TAIL_MUL = C.share.joinTail;
+  const NEW_TIP_COST = C.share.newTip;
 
   // ── Grilla ────────────────────────────────────────────────────────────
   const all: Caja[] = [...world.components, ...world.packages, ...world.titles, ...world.rings];
@@ -315,6 +316,12 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const prohOwner = new Int32Array(N).fill(-1);
   // baseMul = anidación × brillo de entidades (isótropo). Parte de 1.
   const baseMul = new Float32Array(N);
+  // Máscara de agrupadores que contienen cada nodo (hasta 32): entrar o salir
+  // de uno suma un costo fijo por cruce.
+  const pkgMask = new Uint32Array(N);
+  const ENTER_COST = C.package.enter;
+  const EXIT_COST = C.package.exit;
+  const popcount = (v: number): number => { let c = 0; v >>>= 0; while (v) { v &= v - 1; c++; } return c; };
   // Cercanía a borde de agrupador por orientación del paso: correr PARALELO
   // a un borde cuesta; cruzarlo perpendicular no. [0] = paso H (bordes
   // horizontales cerca), [1] = paso V (bordes verticales cerca).
@@ -345,23 +352,42 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       }
       // Anidación: ×(crossFactor · nivel).
       let depth = 0;
-      let nearH = 0;
-      let nearV = 0;
-      for (const p of world.packages) {
-        if (inside(x, y, p, 0)) depth++;
-        const inX = x >= p.x - borderKeep && x <= p.x + p.w + borderKeep;
-        const inY = y >= p.y - borderKeep && y <= p.y + p.h + borderKeep;
-        // Distancia a los bordes horizontales (top/bottom) dentro de su tramo.
-        if (x >= p.x && x <= p.x + p.w && inY) {
-          const d = Math.min(Math.abs(y - p.y), Math.abs(y - p.y - p.h));
-          if (d < borderKeep) nearH = Math.max(nearH, 1 - d / borderKeep);
+      let mask = 0;
+      // Brillo de borde con radio acotado al pasillo: el borde más cercano a
+      // cada lado del nodo (arriba/abajo para pasos H, izquierda/derecha para
+      // pasos V). Si dos bordes se enfrentan (un corredor), el radio se
+      // reduce a un tercio del corredor para que su centro quede libre; si
+      // no, los rieles escapaban por fuera de todo el diagrama.
+      let dUp = Infinity;
+      let dDown = Infinity;
+      let dLeft = Infinity;
+      let dRight = Infinity;
+      for (let pi = 0; pi < world.packages.length; pi++) {
+        const p = world.packages[pi]!;
+        if (inside(x, y, p, 0)) { depth++; if (pi < 32) mask |= 1 << pi; }
+        if (x >= p.x && x <= p.x + p.w) {
+          for (const by of [p.y, p.y + p.h]) {
+            if (by <= y) dUp = Math.min(dUp, y - by); else dDown = Math.min(dDown, by - y);
+          }
         }
-        if (y >= p.y && y <= p.y + p.h && inX) {
-          const d = Math.min(Math.abs(x - p.x), Math.abs(x - p.x - p.w));
-          if (d < borderKeep) nearV = Math.max(nearV, 1 - d / borderKeep);
+        if (y >= p.y && y <= p.y + p.h) {
+          for (const bx of [p.x, p.x + p.w]) {
+            if (bx <= x) dLeft = Math.min(dLeft, x - bx); else dRight = Math.min(dRight, bx - x);
+          }
         }
       }
+      const glowBorde = (dA: number, dB: number): number => {
+        const d = Math.min(dA, dB);
+        if (!Number.isFinite(d)) return 0;
+        // Corredor: el tercio central queda sin brillo (las líneas de la
+        // grilla rara vez caen en el centro exacto).
+        const radio = Number.isFinite(dA) && Number.isFinite(dB) ? Math.min(borderKeep, (dA + dB) / 3) : borderKeep;
+        return d < radio && radio > 0 ? 1 - d / radio : 0;
+      };
+      const nearH = glowBorde(dUp, dDown);
+      const nearV = glowBorde(dLeft, dRight);
       baseMul[k] = (depth > 0 ? crossFactor * depth : 1) * glow;
+      pkgMask[k] = mask >>> 0;
       borderMul[0]![k] = 1 + borderFactor * nearH;
       borderMul[1]![k] = 1 + borderFactor * nearV;
     }
@@ -487,17 +513,17 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         // Largo restante del camino ajeno desde cada nodo hasta su punta.
         const tail = new Float64Array(ns.length);
         const endK = ns[ns.length - 1]!;
-        const host = edges[oj]!;
-        tail[ns.length - 1] = Math.abs(xs[endK % nx]! - host.to.x) + Math.abs(ys[Math.floor(endK / nx)]! - host.to.y);
+        // Punta real del anfitrión: el puerto que eligió (o el de su raíz).
+        const hostTip = toOf(rootOf(oj));
+        tail[ns.length - 1] = Math.abs(xs[endK % nx]! - hostTip.x) + Math.abs(ys[Math.floor(endK / nx)]! - hostTip.y);
         for (let t = ns.length - 2; t >= 0; t--) {
           const a = ns[t]!;
           const b = ns[t + 1]!;
           tail[t] = tail[t + 1]! + Math.abs(xs[a % nx]! - xs[b % nx]!) + Math.abs(ys[Math.floor(a / nx)]! - ys[Math.floor(b / nx)]!);
         }
         // Brillo de la punta de la raíz de ese riel (la punta real).
-        const tipE = edges[rootOf(oj)]!;
-        const tx = tipE.to.x;
-        const ty = tipE.to.y;
+        const tx = hostTip.x;
+        const ty = hostTip.y;
         for (let jj = 0; jj < ny; jj++) {
           const dy = Math.abs(ys[jj]! - ty);
           if (dy >= shareRadius) continue;
@@ -511,9 +537,10 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         }
         for (let t = 0; t < ns.length; t++) {
           const k = ns[t]!;
-          // Unirse solo dentro del radio de incentivo de la punta y lejos
-          // del arranque del anfitrión (no en su stub de salida).
-          if (allowJoin && t >= 2 && t < ns.length - 1 && tail[t]! <= shareRadius) {
+          // Unirse en cualquier punto del riel anfitrión (lejos de su stub
+          // de salida): desde ahí son UNA sola línea, no dos rieles. Lo que
+          // se penaliza es correr en paralelo a un riel ajeno.
+          if (allowJoin && t >= 2 && t < ns.length - 1) {
             const dirOut = dIn[t + 1]!;
             const prev = joinAt.get(k);
             if (!prev || tail[t]! < prev.tail) joinAt.set(k, { host: oj, t, dirOut, tail: tail[t]! });
@@ -665,10 +692,13 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         if (shareField) mul *= shareField[nk]!;
         mul = Math.max(MIN_MUL, mul);
         let cost = len * mul;
-        // Giro: penalización geométrica (no es un campo), escalada por el
-        // terreno para que dentro de agrupadores no salga “barato” codear.
-        if (nd !== d) cost += turnPenalty * baseMul[nk]!;
-        if (goals.has(nk) && nd !== goals.get(nk)!.dir) cost += turnPenalty * baseMul[nk]!;
+        // Sumas fijas (no brillos): cada giro +B; cada entrada/salida de un
+        // agrupador +A. Así el riel gira y cruza agrupadores solo cuando no
+        // hay otra opción.
+        if (nd !== d) cost += turnPenalty;
+        if (goals.has(nk) && nd !== goals.get(nk)!.dir) cost += turnPenalty;
+        const cruce = (pkgMask[nk]! ^ pkgMask[k]!) >>> 0;
+        if (cruce) cost += ENTER_COST * popcount(cruce & pkgMask[nk]!) + EXIT_COST * popcount(cruce & pkgMask[k]!);
         const ns = nk * 4 + nd;
         const ng = gk + cost;
         // Unirse a otra `->` en este nodo: sigue su camino hasta su punta. Se
@@ -676,7 +706,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         // reutilizado cuesta poco (ya está dibujado).
         const union = joinAt.get(nk);
         if (union && nd !== ((union.dirOut + 2) & 3)) {
-          const total = ng + (nd !== union.dirOut ? turnPenalty * baseMul[nk]! : 0) + union.tail * JOIN_TAIL_MUL;
+          const total = ng + (nd !== union.dirOut ? turnPenalty : 0) + union.tail * JOIN_TAIL_MUL;
           if (!bestJoin || total < bestJoin.cost) bestJoin = { cost: total, parent: s, last: ns, host: union.host, t: union.t };
         }
         if (ng >= gCost[ns]!) continue;
@@ -686,7 +716,10 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       }
     }
     // La unión gana si cuesta menos que la punta propia (o si no hay propia).
-    const useJoin = bestJoin != null && (goal < 0 || bestJoin.cost < gCost[goal]!);
+    // Abrir una punta propia teniendo otra de la misma clave a la vista
+    // (hay uniones posibles) cuesta +newTip: así las `->` convergen.
+    const propio = goal < 0 ? Infinity : gCost[goal]! + (joinAt.size ? NEW_TIP_COST : 0);
+    const useJoin = bestJoin != null && bestJoin.cost < propio;
     if (!useJoin && goal < 0) return { st: null, join: null, ports: null, cost: Infinity };
     // La unión se registró al relajar con su padre fijo (otra ruta pudo
     // mejorar ese estado después): se reconstruye desde ese padre.
@@ -762,7 +795,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
 
   // Uniones vigentes: el anfitrión tiene que seguir pasando por el nodo de
   // unión (pudo re-rutearse después). Si no, la arista vuelve a su punta propia.
-  for (let pass = 0; pass < 3; pass++) {
+  for (let pass = 0; pass < 4; pass++) {
     let fixed = false;
     for (let ei = 0; ei < edges.length; ei++) {
       const j = joinOf[ei];
@@ -770,10 +803,13 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       const hn = nodes[j.host];
       const own = nodes[ei];
       if (hn && own && hn[j.t] === own[own.length - 1] && rootOf(ei) !== ei) continue;
+      // Las dos primeras pasadas re-rutean con uniones permitidas (los
+      // anfitriones ya no se mueven, así la unión queda consistente); la
+      // última cierra con punta propia lo que siga sin encajar.
       mark(ei, -1);
-      const r = route(ei, 1 + iterations * 0.25, false);
+      const r = route(ei, 1 + iterations * 0.25, pass < 2);
       states[ei] = r.st;
-      joinOf[ei] = null;
+      joinOf[ei] = pass < 2 ? r.join : null;
       chosen[ei] = r.ports;
       costOf[ei] = r.cost;
       commit(ei, r.st);

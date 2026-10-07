@@ -96,7 +96,7 @@ export const RoutingCostsSchema = z.object({
     stub: z.number().min(0),
     /** Vueltas de negociación. */
     iterations: z.number().int().min(1),
-    /** Penalización de giro (aditiva, escalada por el terreno). */
+    /** Giro: +B aditivo por cada vértice (px equivalentes); no depende del terreno. */
     turnPenalty: z.number().min(0),
     /** Piso del factor total (nunca gratis; mantiene admisible la heurística). */
     minFactor: z.number().positive().max(1),
@@ -114,6 +114,10 @@ export const RoutingCostsSchema = z.object({
     borderRadius: z.number().min(0),
     /** Factor por nivel de anidación (dentro de un agrupador ajeno). */
     nestingFactor: z.number().min(1),
+    /** +A aditivo cada vez que el riel ENTRA en un agrupador (px equivalentes). */
+    enter: z.number().min(0),
+    /** +A aditivo cada vez que el riel SALE de un agrupador (px equivalentes). */
+    exit: z.number().min(0),
   }),
   rail: z.object({
     /** Riel ajeno encima. */
@@ -138,6 +142,8 @@ export const RoutingCostsSchema = z.object({
     radius: z.number().min(0),
     /** Costo por px del tramo ajeno reutilizado al unirse. */
     joinTail: z.number().min(0),
+    /** +A aditivo por abrir una punta `->` nueva cuando ya hay una de la misma clave dentro del radio. */
+    newTip: z.number().min(0),
   }),
 });
 export type RoutingCosts = z.infer<typeof RoutingCostsSchema>;

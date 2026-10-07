@@ -191,6 +191,7 @@ function readClassLayoutOpts(raw: unknown): ClassLayoutOpts | undefined {
   }
   if (r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp') out.boxStyle = r.boxStyle;
   if (r.routing && typeof r.routing === 'object') out.routing = r.routing as ClassLayoutOpts['routing'];
+  if (r.inheritanceBus === true) out.inheritanceBus = true;
   return Object.keys(out).length ? out : undefined;
 }
 
@@ -565,6 +566,9 @@ function computePackagedClassLayout(
     porPadre.set(r.to, [...(porPadre.get(r.to) ?? []), i]);
   });
   for (const [padre, idx] of porPadre) {
+    // Sin `layout.inheritanceBus` no hay barra: cada hijo rutea con la clave
+    // `padre::inheritance` y converge por incentivo cerca del triángulo.
+    if (opts.inheritanceBus !== true) break;
     const p = nodeById.get(padre)!;
     const rootP = pkgBox.get(rootOf(p.package) ?? '');
     const hijos = idx.map((i) => nodeById.get(rels[i]!.from)!);

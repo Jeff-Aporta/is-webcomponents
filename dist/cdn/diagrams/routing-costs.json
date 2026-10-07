@@ -10,12 +10,14 @@
   },
   "entity": {
     "glow": 3,
-    "radius": 40
+    "radius": 20
   },
   "package": {
     "borderGlow": 10,
     "borderRadius": 64,
-    "nestingFactor": 4
+    "nestingFactor": 4,
+    "enter": 100,
+    "exit": 60
   },
   "rail": {
     "overlap": 120,
@@ -29,6 +31,7 @@
   },
   "share": {
     "radius": 150,
-    "joinTail": 0.35
+    "joinTail": 0.1,
+    "newTip": 240
   }
 }
