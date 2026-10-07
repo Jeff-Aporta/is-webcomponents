@@ -92,6 +92,10 @@ export const ClassSpecClassSchema = z.object({
   stereotype: z.string().optional(),
   group: z.string().optional(),
   hue: z.number().optional(),
+  /** Paquete (agrupador dibujado) que contiene la clase. */
+  package: z.string().optional(),
+  /** Color de acento hex (cabecera, borde, aristas que emite). */
+  color: z.string().optional(),
   attributes: z.array(z.string()),
   methods: z.array(z.string()),
 });
@@ -115,6 +119,35 @@ export const ClassSpecRelationSchema = z.object({
 export type ClassSpecRelation = z.infer<typeof ClassSpecRelationSchema>;
 
 
+/** Agrupador dibujado de un diagrama de clases (paquete UML). */
+export const ClassPackageSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  stereotype: z.string().optional(),
+  parent: z.string().optional(),
+  /** Relleno del agrupador (#hex). */
+  palette: z.string().optional(),
+  /** Acento de las clases que contiene (#hex); si falta, se deriva de `palette`. */
+  accent: z.string().optional(),
+  /** Clases por fila dentro del paquete, o columnas de su rejilla de subpaquetes. */
+  cols: z.number().optional(),
+});
+export type ClassPackage = z.infer<typeof ClassPackageSchema>;
+
+/** Opciones de empaque cuando hay paquetes (modo capas, como componentes). */
+export const ClassLayoutOptsSchema = z.object({
+  layerCols: z.number().optional(),
+  nestedCols: z.number().optional(),
+  colGutter: z.number().optional(),
+  nestedRowGap: z.number().optional(),
+  nestedPkgGap: z.number().optional(),
+  pkgRowGap: z.number().optional(),
+  lanePitch: z.number().optional(),
+  /** `uml` (default) o `card`: cabecera con acento, cuerpo blanco y sombra. */
+  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
+});
+export type ClassLayoutOpts = z.infer<typeof ClassLayoutOptsSchema>;
+
 export const ClassSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
@@ -122,6 +155,8 @@ export const ClassSpecSchema = z.object({
   classes: z.array(ClassSpecClassSchema),
   relations: z.array(ClassSpecRelationSchema),
   groups: z.array(DiagramGroupSchema).optional(),
+  packages: z.array(ClassPackageSchema).optional(),
+  layout: ClassLayoutOptsSchema.optional(),
 });
 export type ClassSpec = z.infer<typeof ClassSpecSchema>;
 
@@ -149,6 +184,9 @@ export const ClassLayoutNodeSchema = z.object({
   dividerYs: z.array(z.number()),
   hue: z.number().optional(),
   group: z.string().optional(),
+  package: z.string().optional(),
+  /** Acento resuelto (#hex): clase > paquete > hue. */
+  color: z.string().optional(),
   overflow: z.union([z.literal('grow'), z.literal('shrink')]).optional(),
 });
 export type ClassLayoutNode = z.infer<typeof ClassLayoutNodeSchema>;
@@ -159,6 +197,10 @@ export const ClassLayoutEdgeSchema = z.object({
   from: z.string(),
   to: z.string(),
   kind: ClassRelationKindSchema,
+  /** Color hex del emisor (modo paquetes). */
+  color: z.string().optional(),
+  /** Tramo de un bus de herencia: sin decoración propia (el triángulo va en el tronco). */
+  noTip: z.boolean().optional(),
   label: z.string().optional(),
   fromLabel: z.string().optional(),
   toLabel: z.string().optional(),
@@ -188,6 +230,11 @@ export const ClassLayoutSchema = z.object({
   titleY: z.number(),
   subtitleY: z.number(),
   legendX: z.number(),
+  /** Agrupadores empacados (modo paquetes), en orden de pintura (padres antes). */
+  packages: z.array(ClassPackageSchema.extend({
+    x: z.number(), y: z.number(), w: z.number(), h: z.number(), depth: z.number(),
+  })).optional(),
+  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
 });
 export type ClassLayout = z.infer<typeof ClassLayoutSchema>;
 

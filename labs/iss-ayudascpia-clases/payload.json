@@ -1,0 +1,168 @@
+{
+  "_lab": "iss-ayudascpia-clases",
+  "_fuente": "PatyIA/_experimental/ISS-AyudasCPIA/src/sources (controllers server + models), 2026-10-07",
+  "classDiagram": {
+    "title": "ISS PatyIA · Clases del servidor",
+    "layout": {
+      "boxStyle": "card",
+      "layerCols": 4,
+      "nestedCols": 2,
+      "colGutter": 80,
+      "nestedRowGap": 72,
+      "nestedPkgGap": 80,
+      "lanePitch": 24
+    },
+    "packages": [
+      { "id": "pkg-stack", "name": "Stack InSoft", "stereotype": "npm @ingenieria_insoft", "palette": "#BFC0C1", "accent": "#4B5563" },
+      { "id": "pkg-base", "name": "Base de controllers", "stereotype": "020 Controllers/server", "palette": "#BCFFBB", "accent": "#166534" },
+      { "id": "pkg-ctrl", "name": "Controllers por dominio", "stereotype": "020 Controllers/server", "palette": "#BCFFBB", "cols": 2 },
+      { "id": "pkg-conv", "name": "Conversación", "parent": "pkg-ctrl", "palette": "#DDFFDC", "accent": "#7C3AED", "cols": 2 },
+      { "id": "pkg-cfg", "name": "Configuración", "parent": "pkg-ctrl", "palette": "#DDFFDC", "accent": "#0E7490", "cols": 2 },
+      { "id": "pkg-ident", "name": "Identidad", "parent": "pkg-ctrl", "palette": "#DDFFDC", "accent": "#B45309", "cols": 2 },
+      { "id": "pkg-ops", "name": "Operación", "parent": "pkg-ctrl", "palette": "#DDFFDC", "accent": "#BE123C", "cols": 2 },
+      { "id": "pkg-models", "name": "models · extienden TObject (ispgen)", "stereotype": "010 Objetos", "palette": "#FFFFBA", "accent": "#854D0E", "cols": 5 }
+    ],
+    "classes": [
+      {
+        "id": "catalogo", "name": "TCatalogoClientesISController<T>", "stereotype": "ispclientesisserver", "package": "pkg-stack",
+        "methods": ["+ get() · insert() · update() · delete()", "+ lookUp(campos, pk)", "+ ctxUser: TContextUser"]
+      },
+      {
+        "id": "base", "name": "TBasePatyIA<T>", "stereotype": "abstract", "package": "pkg-base",
+        "attributes": ["# itercero · icontacto · irol"],
+        "methods": ["+ verifyAuthorization(): Auth", "+ accionRecurso(accion): fila SEG", "+ upsert(pojo)", "+ deleteList() · updateList()"]
+      },
+      {
+        "id": "conv", "name": "TConversacionController", "package": "pkg-conv",
+        "attributes": ["- nTbl = patyia_conversaciones"],
+        "methods": ["+ insert(): SSE", "+ get() · delete()", "+ getLogs() · getResumen()", "+ listConversaciones()", "+ auditConversaciones()", "+ probeMcpAsw()", "+ timerCerrarConversaciones()"]
+      },
+      {
+        "id": "log", "name": "TConversationLogController", "package": "pkg-conv",
+        "attributes": ["- nTbl = patyia_conversacion_log"],
+        "methods": ["+ mensajes(iconversacion)", "+ contenido(iconversacion)", "+ purgarLogConversaciones()"]
+      },
+      {
+        "id": "tiq", "name": "TConversationTicketController", "package": "pkg-conv",
+        "attributes": ["- nTbl = patyia_tiquetesconversacion"],
+        "methods": ["+ insert(): 201", "+ porConversacion(iconversacion)"]
+      },
+      {
+        "id": "msg", "name": "TQualifiedMessageController", "package": "pkg-conv",
+        "attributes": ["- nTbl = patyia_mensajescalificados"],
+        "methods": ["+ insert()", "+ porConversacion(iconversacion)"]
+      },
+      {
+        "id": "mcp", "name": "TMcpSessionController", "package": "pkg-conv",
+        "attributes": ["- nTbl = patyia_mcp_sesiones"],
+        "methods": ["+ GetCurrent(): sesión vigente", "+ UpdateOrInsert(sesión)"]
+      },
+      {
+        "id": "sys", "name": "TSysValueController", "package": "pkg-cfg",
+        "attributes": ["- nTbl = patyia_sys_values"],
+        "methods": ["+ getConversacion() · putConversacion()", "+ getProveedor() · putProveedor()", "+ getRuntime() · putRuntime()", "+ docs()", "+ getOpenaiCfg() «static»"]
+      },
+      {
+        "id": "prov", "name": "TProviderController", "package": "pkg-cfg",
+        "attributes": ["- nTbl = patyia_providers"],
+        "methods": ["+ getDetalle() · putDetalle()", "+ getCuenta(iproveedor)", "+ activo(iproveedor)"]
+      },
+      {
+        "id": "td", "name": "TTdConsultationController", "package": "pkg-cfg",
+        "attributes": ["- nTbl = patyia_tdconsultas"],
+        "methods": ["+ list() · create() · upsert()", "+ instruccion(ntdconsulta)"]
+      },
+      {
+        "id": "ident", "name": "TIdentityController", "package": "pkg-ident",
+        "methods": ["+ bootstrapJwt(): token", "+ portalLogin(): token | 409"]
+      },
+      {
+        "id": "perm", "name": "TPermissionsController", "package": "pkg-ident",
+        "methods": ["+ me(): perfil SEG", "+ rolPrincipal(icontacto) «static»", "+ valorAccion(rol, accion) «static»"]
+      },
+      {
+        "id": "err", "name": "TErrorController", "package": "pkg-ops",
+        "attributes": ["- nTbl = patyia_errores"],
+        "methods": ["+ insert() · registrar()", "+ list() · delete()", "+ purgarErroresAtendidos()"]
+      },
+      {
+        "id": "file", "name": "TFileStorageController", "package": "pkg-ops",
+        "attributes": ["- nTbl = patyia_files_storage"],
+        "methods": ["+ upload(): 503"]
+      },
+      { "id": "info", "name": "TInfoController", "package": "pkg-ops", "methods": ["+ info(): salud"] },
+      { "id": "cdn", "name": "TCdnController", "package": "pkg-ops", "methods": ["+ file(): front.ts"] },
+      {
+        "id": "m_conv", "name": "TConversacion", "stereotype": "patyia_conversaciones", "package": "pkg-models",
+        "attributes": ["+ iconversacion: bigint «PK»", "+ itercero · icontacto", "+ titulo · hilo", "+ itdestado: 0 | 1 | 2", "+ fhcre · fhultact"]
+      },
+      {
+        "id": "m_log", "name": "TConversationLog", "stereotype": "patyia_conversacion_log", "package": "pkg-models",
+        "attributes": ["+ iconversacion: bigint", "+ content: jsonb", "+ fhultact"]
+      },
+      {
+        "id": "m_tiq", "name": "TConversationTicket", "stereotype": "patyia_tiquetesconversacion", "package": "pkg-models",
+        "attributes": ["+ itiquete «PK»", "+ iconversacion «PK»", "+ itema · iclasificador"]
+      },
+      {
+        "id": "m_msg", "name": "TQualifiedMessage", "stereotype": "patyia_mensajescalificados", "package": "pkg-models",
+        "attributes": ["+ imensaje «PK»", "+ iconversacion «PK»", "+ butil · contenido"]
+      },
+      {
+        "id": "m_mcp", "name": "TMcpSession", "stereotype": "patyia_mcp_sesiones", "package": "pkg-models",
+        "attributes": ["+ iusuario «PK»", "+ jsession · bactivo · fhcre"]
+      },
+      {
+        "id": "m_sys", "name": "TSysValue", "stereotype": "patyia_sys_values", "package": "pkg-models",
+        "attributes": ["+ isystemkey «PK»", "+ jvalue: jsonb"]
+      },
+      {
+        "id": "m_prov", "name": "TProvider", "stereotype": "patyia_providers", "package": "pkg-models",
+        "attributes": ["+ iproveedor «PK»", "+ jcuenta: jsonb", "+ bactivo"]
+      },
+      {
+        "id": "m_td", "name": "TTdConsulta", "stereotype": "patyia_tdconsultas", "package": "pkg-models",
+        "attributes": ["+ itdconsulta «PK»", "+ instruccion · jconfig", "+ jpermisos"]
+      },
+      {
+        "id": "m_err", "name": "TError", "stereotype": "patyia_errores", "package": "pkg-models",
+        "attributes": ["+ ierror «PK»", "+ jerror: jsonb", "+ batendido · referencia"]
+      },
+      {
+        "id": "m_file", "name": "TFileStorage", "stereotype": "patyia_files_storage", "package": "pkg-models",
+        "attributes": ["+ ifile «PK»", "+ jfile: jsonb"]
+      }
+    ],
+    "relations": [
+      { "from": "base", "to": "catalogo", "kind": "inheritance" },
+      { "from": "conv", "to": "base", "kind": "inheritance" },
+      { "from": "log", "to": "base", "kind": "inheritance" },
+      { "from": "tiq", "to": "base", "kind": "inheritance" },
+      { "from": "msg", "to": "base", "kind": "inheritance" },
+      { "from": "mcp", "to": "base", "kind": "inheritance" },
+      { "from": "sys", "to": "base", "kind": "inheritance" },
+      { "from": "prov", "to": "base", "kind": "inheritance" },
+      { "from": "td", "to": "base", "kind": "inheritance" },
+      { "from": "ident", "to": "base", "kind": "inheritance" },
+      { "from": "perm", "to": "base", "kind": "inheritance" },
+      { "from": "err", "to": "base", "kind": "inheritance" },
+      { "from": "file", "to": "base", "kind": "inheritance" },
+      { "from": "info", "to": "base", "kind": "inheritance" },
+      { "from": "cdn", "to": "base", "kind": "inheritance" },
+      { "from": "conv", "to": "log", "kind": "dependency" },
+      { "from": "conv", "to": "mcp", "kind": "dependency" },
+      { "from": "conv", "to": "sys", "kind": "dependency" },
+      { "from": "sys", "to": "prov", "kind": "dependency" },
+      { "from": "conv", "to": "m_conv", "kind": "dependency" },
+      { "from": "log", "to": "m_log", "kind": "dependency" },
+      { "from": "tiq", "to": "m_tiq", "kind": "dependency" },
+      { "from": "msg", "to": "m_msg", "kind": "dependency" },
+      { "from": "mcp", "to": "m_mcp", "kind": "dependency" },
+      { "from": "sys", "to": "m_sys", "kind": "dependency" },
+      { "from": "prov", "to": "m_prov", "kind": "dependency" },
+      { "from": "td", "to": "m_td", "kind": "dependency" },
+      { "from": "err", "to": "m_err", "kind": "dependency" },
+      { "from": "file", "to": "m_file", "kind": "dependency" }
+    ]
+  }
+}

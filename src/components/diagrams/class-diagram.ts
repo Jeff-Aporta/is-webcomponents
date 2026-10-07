@@ -30,6 +30,18 @@ import type { TurtleTheme } from "../_shared/path-turtle.schemas.js";
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/** Tinta legible sobre `hex`: oscura sobre claros, blanca sobre oscuros. */
+function inkOn(hex: string): string {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return '#FFFFFF';
+  const n = parseInt(m[1]!, 16);
+  const lum = 0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255);
+  return lum > 150 ? '#1F2937' : '#FFFFFF';
+}
+
+/** Color del glifo de visibilidad UML (+ público, - privado, # protegido, ~ paquete). */
+const VISIBILIDAD: Record<string, string> = { '+': '#16A34A', '-': '#DC2626', '#': '#D97706', '~': '#2563EB' };
+
 class IswcClassDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
   #turtle: SequenceTurtle | null = null;
@@ -131,8 +143,10 @@ class IswcClassDiagram extends DiagramElementBase {
     }
 
     if (layout.groups?.length) this.#buildLegend(layout, theme);
+    if (layout.packages?.length) this.#buildPackages(layout, theme);
     this.#buildEdges(layout, theme);
-    this.#buildNodes(layout, theme);
+    if (layout.boxStyle === 'card') this.#buildCards(layout, theme);
+    else this.#buildNodes(layout, theme);
 
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
@@ -186,7 +200,7 @@ class IswcClassDiagram extends DiagramElementBase {
   #targetTriangle(e: ClassLayoutEdge, color: string, hollow: boolean) {
     return svgEl('polygon', {
       points: '0,0 -12,-6 -12,6',
-      fill: hollow ? (this.#theme?.chipFill ?? '#0d1b2a') : color,
+      fill: hollow ? (this.layout?.boxStyle === 'card' ? '#FFFFFF' : (this.#theme?.chipFill ?? '#0d1b2a')) : color,
       stroke: color,
       'stroke-width': 1.2,
       transform: `translate(${e.targetTipX},${e.targetTipY}) rotate(${e.targetAngle})`,
@@ -222,7 +236,7 @@ class IswcClassDiagram extends DiagramElementBase {
 
   #buildEdges(layout: ClassLayout, theme: DiagramTheme) {
     for (const e of layout.edges) {
-      const color = edgeStrokeHex(e.hue, theme.accent);
+      const color = e.color ?? edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'cls-rel' });
       g.dataset.edgeId = e.id;
 
@@ -234,7 +248,9 @@ class IswcClassDiagram extends DiagramElementBase {
       });
       g.appendChild(path);
 
-      switch (e.kind) {
+      switch (e.noTip ? 'none' : e.kind) {
+        case 'none':
+          break;
         case 'inheritance':
           g.appendChild(this.#targetTriangle(e, color, true));
           break;
@@ -388,6 +404,112 @@ class IswcClassDiagram extends DiagramElementBase {
       this.#nodeNodes.set(n.id, { n, g, box });
     }
   }
+
+  /**
+   * Paquetes UML (modo paquetes): franja con relleno de paleta, borde de
+   * tinta y rótulo en la esquina superior izquierda. Se pintan de afuera
+   * hacia adentro para que el hijo quede encima del padre.
+   */
+  #buildPackages(layout: ClassLayout, theme: DiagramTheme) {
+    const g = svgEl('g', { class: 'cls-pkgs' });
+    for (const p of layout.packages ?? []) {
+      g.appendChild(svgEl('rect', {
+        x: p.x, y: p.y, width: p.w, height: p.h, rx: 0,
+        fill: p.palette ?? (p.depth % 2 ? '#F3F4F6' : '#E5E7EB'),
+        stroke: '#1F2937', 'stroke-width': p.depth ? 1 : 1.4,
+        class: 'cls-pkg',
+      }));
+      const t = svgEl('text', {
+        x: p.x + 10, y: p.y + 17, 'text-anchor': 'start', fill: theme.text ?? '#111827',
+        'font-size': p.depth ? '11' : '12', 'font-weight': '700', 'font-style': 'italic',
+        'letter-spacing': '0.03em', 'font-family': 'Poppins,Tahoma,Arial,sans-serif',
+      });
+      t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+      g.appendChild(t);
+    }
+    this.svg.appendChild(g);
+  }
+
+  /**
+   * Clase como tarjeta: cuerpo blanco con sombra y borde del acento,
+   * cabecera llena del acento con «estereotipo» y nombre, y miembros con
+   * glifo de visibilidad de color. El blanco contrasta con cualquier
+   * paquete; el color queda en la cabecera, el borde y las aristas que emite.
+   */
+  #buildCards(layout: ClassLayout, theme: DiagramTheme) {
+    const FONT = 'Poppins,Tahoma,Arial,sans-serif';
+    const MONO = 'Consolas,Menlo,monospace';
+    for (const n of layout.nodes) {
+      const accent = n.color ?? ((n.hue != null && tkHueToHex(n.hue)) || theme.accent);
+      const ink = inkOn(accent);
+      const g = svgEl('g', { class: 'cls-node cls-node--card' });
+      g.dataset.nodeId = n.id;
+      if (this.isViewer) g.style.cursor = 'pointer';
+      const rx = 8;
+      const header = n.sections.find((sec) => sec.type === 'header');
+      const hh = header?.h ?? 24;
+
+      g.appendChild(svgEl('rect', {
+        x: n.x + 2, y: n.y + 3, width: n.w, height: n.h, rx, fill: 'rgba(15,23,42,0.16)',
+      }));
+      const box = svgEl('rect', {
+        x: n.x, y: n.y, width: n.w, height: n.h, rx,
+        fill: '#FFFFFF', stroke: accent, 'stroke-width': 1.4, class: 'cls-node__box',
+      });
+      g.appendChild(box);
+      // Cabecera: esquinas superiores redondeadas, inferiores rectas.
+      g.appendChild(svgEl('path', {
+        d: `M${n.x},${n.y + hh} V${n.y + rx} Q${n.x},${n.y} ${n.x + rx},${n.y} H${n.x + n.w - rx} `
+          + `Q${n.x + n.w},${n.y} ${n.x + n.w},${n.y + rx} V${n.y + hh} Z`,
+        fill: accent, class: 'cls-node__header',
+      }));
+      const cx = n.x + n.w / 2;
+      if (n.stereotype) {
+        const st = svgEl('text', {
+          x: cx, y: n.y + 12, 'text-anchor': 'middle', fill: ink, opacity: 0.85,
+          'font-size': '9.5', 'font-style': 'italic', 'font-family': FONT,
+        });
+        st.textContent = `«${n.stereotype}»`;
+        g.appendChild(st);
+      }
+      const nameT = svgEl('text', {
+        x: cx, y: n.y + (n.stereotype ? hh - 9 : hh / 2 + 4), 'text-anchor': 'middle', fill: ink,
+        'font-size': '12', 'font-weight': '700', 'font-family': FONT,
+      });
+      nameT.textContent = n.name;
+      g.appendChild(nameT);
+
+      n.sections.forEach((sec, si) => {
+        if (sec.type === 'header') return;
+        if (si > 1) {
+          g.appendChild(svgEl('line', {
+            x1: n.x + 8, y1: n.y + sec.y, x2: n.x + n.w - 8, y2: n.y + sec.y,
+            stroke: '#E5E7EB', 'stroke-width': 1, class: 'cls-node__divider',
+          }));
+        }
+        sec.rows.forEach((row, ri) => {
+          const y = n.y + sec.y + 6 + ri * 16 + 8;
+          const vis = row.trim().charAt(0);
+          const color = VISIBILIDAD[vis];
+          const texto = color ? row.trim().slice(1).trim() : row;
+          if (color) {
+            g.appendChild(svgEl('circle', { cx: n.x + 12, cy: y, r: 3.2, fill: color }));
+          }
+          const t = svgEl('text', {
+            x: n.x + (color ? 20 : 10), y, 'dominant-baseline': 'middle',
+            fill: sec.type === 'methods' ? '#1F2937' : '#374151',
+            'font-size': '10.5', 'font-family': MONO,
+          });
+          g.appendChild(t);
+          applySvgTextContent(t, texto);
+        });
+      });
+
+      this.svg.appendChild(g);
+      this.#nodeNodes.set(n.id, { n, g, box });
+    }
+  }
+
 
   /* ── hover ── */
 

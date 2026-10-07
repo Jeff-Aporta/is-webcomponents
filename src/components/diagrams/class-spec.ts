@@ -4,6 +4,9 @@ import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
+import { packDiagram } from './component-pack.js';
+import type { Componente, Paquete } from '../_shared/diagram-tipos.js';
+import type { ClassPackage, ClassLayoutOpts } from './diagram-types.schemas.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type {
@@ -80,6 +83,8 @@ function readClass(raw: unknown, i: number): ClassSpecClass {
     stereotype: String(r.stereotype ?? '').trim() || undefined,
     group: String(r.group ?? '') || undefined,
     hue: r.hue != null ? resolveTkHue(r) : undefined,
+    package: String(r.package ?? '').trim() || undefined,
+    color: typeof r.color === 'string' && r.color.trim() ? r.color.trim() : undefined,
     attributes,
     methods,
   };
@@ -135,6 +140,8 @@ export function resolveClassSpec(payload: unknown): ClassSpec | null {
   const direction: ClassSpec['direction'] =
     dir === 'BT' || dir === 'LR' || dir === 'RL' ? dir : 'TB';
   const groups = readGroups(src);
+  const packages = readPackages(src);
+  const layout = readClassLayoutOpts(src.layout);
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
@@ -142,8 +149,69 @@ export function resolveClassSpec(payload: unknown): ClassSpec | null {
     groups,
     classes,
     relations,
+    ...(packages ? { packages } : {}),
+    ...(layout ? { layout } : {}),
   };
 }
+
+function readPackages(src: Record<string, any>): ClassPackage[] | undefined {
+  const raw = src.packages;
+  if (!Array.isArray(raw) || !raw.length) return undefined;
+  const hex = (v: unknown): string | undefined =>
+    typeof v === 'string' && /^#[0-9a-f]{3,8}$/i.test(v.trim()) ? v.trim() : undefined;
+  return raw.map((g: unknown, i: number): ClassPackage => {
+    const r = asRecord(g);
+    const palette = hex(r.palette);
+    const accent = hex(r.accent);
+    return {
+      id: String(r.id ?? `pkg-${i}`),
+      name: String(r.name ?? r.label ?? r.id ?? `Paquete ${i + 1}`),
+      ...(String(r.stereotype ?? '').trim() ? { stereotype: String(r.stereotype).trim() } : {}),
+      ...(String(r.parent ?? '').trim() ? { parent: String(r.parent).trim() } : {}),
+      ...(palette ? { palette } : {}),
+      ...(accent ? { accent } : {}),
+      ...(Number(r.cols) > 0 ? { cols: Number(r.cols) } : {}),
+    };
+  });
+}
+
+function readClassLayoutOpts(raw: unknown): ClassLayoutOpts | undefined {
+  const r = asRecord(raw);
+  const out: ClassLayoutOpts = {};
+  for (const k of ['layerCols', 'nestedCols', 'colGutter', 'nestedRowGap', 'nestedPkgGap', 'pkgRowGap', 'lanePitch'] as const) {
+    if (r[k] != null && Number.isFinite(Number(r[k]))) out[k] = Number(r[k]);
+  }
+  if (r.boxStyle === 'card' || r.boxStyle === 'uml') out.boxStyle = r.boxStyle;
+  return Object.keys(out).length ? out : undefined;
+}
+
+/** Acento legible derivado de un relleno pastel: mismo tono, más saturado y oscuro. */
+export function accentFromPalette(hex: string): string {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return hex;
+  const n = parseInt(m[1]!, 16);
+  const r = ((n >> 16) & 255) / 255;
+  const g = ((n >> 8) & 255) / 255;
+  const b = (n & 255) / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  if (max !== min) {
+    const d = max - min;
+    h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+  const sat = max === min ? 0 : 0.6;
+  const lig = max === min ? 0.3 : 0.34;
+  const c = (1 - Math.abs(2 * lig - 1)) * sat;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const mm = lig - c / 2;
+  const [r1, g1, b1] = h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+  const to = (v: number): string => Math.round((v + mm) * 255).toString(16).padStart(2, '0');
+  return `#${to(r1)}${to(g1)}${to(b1)}`.toUpperCase();
+}
+
 
 /**
  * Geometría de compartimentos de una clase: nombre (+estereotipo), atributos,
@@ -227,6 +295,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
   const titleY = title ? 22 : 14;
   const subtitleY = title ? 40 : 24;
   const headerH = hasHeader ? (subtitle ? 54 : 36) : 0;
+  if (spec.packages?.length) return computePackagedClassLayout(spec, { title, subtitle, titleY, subtitleY, headerH });
 
   const geomById = new Map(spec.classes.map((c) => [c.id, classGeometry(c)]));
   const sized = spec.classes.map((c) => {
@@ -359,6 +428,258 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
     titleY,
     subtitleY,
     legendX,
+  };
+  applyEdgeActorLayout(layout, nodes.map((n) => ({ x: n.x, y: n.y, w: n.w, h: n.h })));
+  return layout;
+}
+
+/** Alto del rótulo de un paquete (franja superior donde va el título). */
+const PKG_TITLE_H = 26;
+
+/**
+ * Layout con paquetes: las clases se empacan por capas dentro de sus
+ * paquetes (mismo `packDiagram` en modo `layers` que el diagrama de
+ * componentes: franjas apiladas, subpaquetes en rejilla de columnas) y las
+ * relaciones se rutean con el mismo router, que conoce los agrupadores
+ * (costo por anidación y por cercanía a bordes) y rodea sus títulos.
+ *
+ * El orden de las franjas es el del payload: en un diagrama de herencia
+ * conviene declarar primero los ancestros, así las flechas de herencia
+ * apuntan hacia arriba como en UML.
+ */
+function computePackagedClassLayout(
+  spec: ClassSpec,
+  head: { title: string; subtitle: string; titleY: number; subtitleY: number; headerH: number },
+): ClassLayout {
+  const opts = spec.layout ?? {};
+  const pkgSpec = spec.packages ?? [];
+  const pkgById = new Map(pkgSpec.map((p) => [p.id, p]));
+  const geomById = new Map(spec.classes.map((c) => [c.id, classGeometry(c)]));
+
+  const paquetes: Paquete[] = pkgSpec.map((p) => ({
+    id: p.id, name: p.name, stereotype: p.stereotype, parent: p.parent,
+    ...(p.cols ? { cols: p.cols } : {}),
+    x: 0, y: 0, w: 0, h: 0,
+  }));
+  const cajas: Componente[] = spec.classes.map((c) => {
+    const g = geomById.get(c.id)!;
+    return { id: c.id, name: c.name, package: c.package, x: 0, y: 0, w: g.w, h: g.h };
+  });
+  const lanePitch = opts.lanePitch ?? 24;
+  packDiagram(paquetes, cajas, [], {
+    mode: 'layers',
+    layerCols: opts.layerCols ?? 4,
+    nestedCols: opts.nestedCols ?? 2,
+    colGutter: opts.colGutter ?? 80,
+    nestedRowGap: opts.nestedRowGap ?? 72,
+    nestedPkgGap: opts.nestedPkgGap ?? 80,
+    ...(opts.pkgRowGap != null ? { pkgRowGap: opts.pkgRowGap } : {}),
+    lanePitch,
+  });
+
+  const depthOf = (id: string): number => {
+    let d = 0;
+    for (let cur = pkgById.get(id); cur?.parent; cur = pkgById.get(cur.parent)) d++;
+    return d;
+  };
+  const rootOf = (id: string | undefined): string | undefined => {
+    let cur = id ? pkgById.get(id) : undefined;
+    while (cur?.parent && pkgById.has(cur.parent)) cur = pkgById.get(cur.parent);
+    return cur?.id;
+  };
+  const ancestros = (id: string | undefined): Set<string> => {
+    const out = new Set<string>();
+    for (let cur = id ? pkgById.get(id) : undefined; cur; cur = cur.parent ? pkgById.get(cur.parent) : undefined) out.add(cur.id);
+    return out;
+  };
+  const accentOfPkg = (id: string | undefined): string | undefined => {
+    for (let cur = id ? pkgById.get(id) : undefined; cur; cur = cur.parent ? pkgById.get(cur.parent) : undefined) {
+      if (cur.accent) return cur.accent;
+      if (cur.palette) return accentFromPalette(cur.palette);
+    }
+    return undefined;
+  };
+
+  const packages = paquetes
+    .filter((p) => p.w > 0 && p.h > 0)
+    .map((p) => ({ ...pkgById.get(p.id)!, x: p.x, y: p.y, w: p.w, h: p.h, depth: depthOf(p.id) }))
+    .sort((a, b) => a.depth - b.depth);
+  const pkgBox = new Map(packages.map((p) => [p.id, p]));
+
+  const specById = new Map(spec.classes.map((c) => [c.id, c]));
+  // En modo paquetes solo se pintan las clases con paquete conocido: packLayers no coloca las sueltas.
+  const nodes: ClassLayoutNode[] = cajas
+    .filter((c) => c.package && pkgById.has(c.package))
+    .map((c) => {
+      const s = specById.get(c.id)!;
+      const g = geomById.get(c.id)!;
+      const color = s.color ?? accentOfPkg(s.package);
+      return {
+        id: c.id, x: c.x, y: c.y, w: c.w, h: c.h, layer: 0,
+        name: s.name, stereotype: s.stereotype, sections: g.sections, dividerYs: g.dividerYs,
+        hue: s.hue, group: s.group, package: s.package,
+        ...(color ? { color } : {}),
+      };
+    });
+  const nodeById = new Map(nodes.map((n) => [n.id, n]));
+  const rels = spec.relations.filter((r) => nodeById.has(r.from) && nodeById.has(r.to));
+
+  // ── Herencia en bus ────────────────────────────────────────────────
+  // Un padre con 3 o más hijos por debajo, en otra franja: cada hijo sube
+  // hasta una barra común en el corredor entre franjas y de ahí un solo
+  // tronco llega al triángulo. Es la notación UML de conjunto de
+  // generalización: un triángulo por padre, no uno por hijo.
+  const busOf = new Map<string, { y: number; members: number[] }>();
+  const porPadre = new Map<string, number[]>();
+  rels.forEach((r, i) => {
+    if (r.kind !== 'inheritance') return;
+    porPadre.set(r.to, [...(porPadre.get(r.to) ?? []), i]);
+  });
+  for (const [padre, idx] of porPadre) {
+    const p = nodeById.get(padre)!;
+    const rootP = pkgBox.get(rootOf(p.package) ?? '');
+    const hijos = idx.map((i) => nodeById.get(rels[i]!.from)!);
+    if (idx.length < 3 || !rootP) continue;
+    if (!hijos.every((h) => h.y > p.y + p.h && rootOf(h.package) !== rootP.id)) continue;
+    const debajo = packages.filter((q) => !q.parent && q.y >= rootP.y + rootP.h);
+    if (!debajo.length) continue;
+    const siguiente = debajo.reduce((a, b) => (b.y < a.y ? b : a));
+    busOf.set(padre, { y: (rootP.y + rootP.h + siguiente.y) / 2, members: idx });
+  }
+  const enBus = new Set([...busOf.values()].flatMap((b) => b.members));
+
+  // Títulos: franja superior izquierda de cada paquete (donde se pinta).
+  const titles = packages.map((p) => {
+    const label = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+    return { x: p.x - 4, y: p.y - 4, w: Math.ceil(label.length * 7.2) + 28, h: PKG_TITLE_H + 8 };
+  });
+  const boxes = nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, w: n.w, h: n.h }));
+  const normales = rels.map((_, i) => i).filter((i) => !enBus.has(i));
+  const plans = planPorts(boxes, normales.map((i) => ({ from: rels[i]!.from, to: rels[i]!.to })), {
+    pitch: lanePitch, room: 2 * 28 + 20, obstacles: titles, obstacleRoom: 28 + 12,
+  });
+  const planOf = new Map<number, NonNullable<(typeof plans)[number]>>();
+  normales.forEach((i, k) => { if (plans[k]) planOf.set(i, plans[k]!); });
+
+  // Llegadas al bus: cada hijo sale por arriba y llega a su propio punto de
+  // la barra (hijos apilados en la misma columna se corren un carril).
+  const busPlan = new Map<number, { from: { x: number; y: number }; to: { x: number; y: number } }>();
+  for (const [, bus] of busOf) {
+    const usados = new Map<number, number>();
+    const orden = [...bus.members].sort((a, b) => nodeById.get(rels[a]!.from)!.y - nodeById.get(rels[b]!.from)!.y);
+    for (const i of orden) {
+      const h = nodeById.get(rels[i]!.from)!;
+      const cx = Math.round(h.x + h.w / 2);
+      const k = usados.get(cx) ?? 0;
+      usados.set(cx, k + 1);
+      const x = cx + k * lanePitch;
+      busPlan.set(i, { from: { x, y: h.y }, to: { x, y: bus.y } });
+    }
+  }
+
+  const ruteables = rels.map((_, i) => i).filter((i) => planOf.has(i) || busPlan.has(i));
+  const res = routeEdges(
+    { components: boxes, packages: packages.map((p) => ({ id: p.id, x: p.x, y: p.y, w: p.w, h: p.h })), titles, rings: [] },
+    ruteables.map((i) => {
+      const r = rels[i]!;
+      const pl = planOf.get(i);
+      const bp = busPlan.get(i);
+      const from = pl ? pl.from : bp!.from;
+      const to = pl ? pl.to : bp!.to;
+      const punto = { id: `${r.to}::bus`, x: to.x, y: to.y, w: 1, h: 1 };
+      return {
+        id: r.id ?? `r${i}`, from, fromSide: pl ? pl.fromSide : 'top', to, toSide: pl ? pl.toSide : 'bottom',
+        fromBox: boxes.find((b) => b.id === r.from)!, toBox: pl ? boxes.find((b) => b.id === r.to)! : punto,
+        fromPkgs: ancestros(specById.get(r.from)?.package),
+        toPkgs: pl ? ancestros(specById.get(r.to)?.package) : new Set<string>(),
+      };
+    }),
+    { clearance: 20, stub: 28, lanePitch, pkgCrossFactor: 1.4 },
+  );
+  const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
+  ruteables.forEach((i, k) => {
+    const pl = planOf.get(i);
+    const from = pl ? pl.from : busPlan.get(i)!.from;
+    const to = pl ? pl.to : busPlan.get(i)!.to;
+    ptsOf.set(i, res.paths[k] ?? simplifyOrthoPath([from, { x: to.x, y: from.y }, to]));
+  });
+
+  // Lienzo: todo lo pintado entra con margen uniforme, también los rieles
+  // que el router saque por fuera de los paquetes.
+  const bb = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+  const hit = (x: number, y: number): void => {
+    bb.x0 = Math.min(bb.x0, x); bb.y0 = Math.min(bb.y0, y); bb.x1 = Math.max(bb.x1, x); bb.y1 = Math.max(bb.y1, y);
+  };
+  for (const p of packages) { hit(p.x, p.y); hit(p.x + p.w, p.y + p.h); }
+  for (const n of nodes) { hit(n.x, n.y); hit(n.x + n.w, n.y + n.h); }
+  for (const pts of ptsOf.values()) for (const q of pts) hit(q.x, q.y);
+  const dx = MARGIN.left + 8 - bb.x0;
+  const dy = MARGIN.top + head.headerH + 8 - bb.y0;
+  for (const p of packages) { p.x += dx; p.y += dy; }
+  for (const n of nodes) { n.x += dx; n.y += dy; }
+  for (const [k, pts] of ptsOf) ptsOf.set(k, pts.map((q) => ({ x: q.x + dx, y: q.y + dy })));
+  for (const b of busOf.values()) b.y += dy;
+
+  const midOf = (pts: Array<{ x: number; y: number }>): { x: number; y: number } => {
+    let mid = { x: (pts[0]!.x + pts[pts.length - 1]!.x) / 2, y: (pts[0]!.y + pts[pts.length - 1]!.y) / 2 };
+    let best = -1;
+    for (let k = 1; k < pts.length; k++) {
+      const len = Math.abs(pts[k]!.x - pts[k - 1]!.x) + Math.abs(pts[k]!.y - pts[k - 1]!.y);
+      if (len > best) { best = len; mid = { x: (pts[k]!.x + pts[k - 1]!.x) / 2, y: (pts[k]!.y + pts[k - 1]!.y) / 2 }; }
+    }
+    return mid;
+  };
+  const edges: ClassLayoutEdge[] = ruteables.flatMap((i) => {
+    const r = rels[i]!;
+    const pts = ptsOf.get(i);
+    if (!pts) return [];
+    const pl = planOf.get(i);
+    const a = pts[0]!;
+    const b = pts[pts.length - 1]!;
+    const targetTip = tipAt(b, pl ? pl.toSide : 'bottom');
+    const sourceTip = tipAt(a, pl ? pl.fromSide : 'top');
+    const mid = midOf(pts);
+    const color = nodeById.get(r.from)?.color;
+    return [{
+      id: r.id ?? `r${i}`, from: r.from, to: r.to, kind: r.kind,
+      label: r.label, fromLabel: r.fromLabel, toLabel: r.toLabel,
+      path: pointsToPath(pts),
+      targetTipX: targetTip.x, targetTipY: targetTip.y, targetAngle: targetTip.angle,
+      sourceTipX: sourceTip.x, sourceTipY: sourceTip.y, sourceAngle: sourceTip.angle,
+      labelX: mid.x, labelY: mid.y,
+      ...(color ? { color } : {}),
+      ...(busPlan.has(i) ? { noTip: true } : {}),
+    }];
+  });
+  // Barra + tronco de cada bus, con el único triángulo en el padre.
+  for (const [padre, bus] of busOf) {
+    const p = nodeById.get(padre)!;
+    const xs = bus.members.map((i) => ptsOf.get(i)?.[ptsOf.get(i)!.length - 1]?.x).filter((x): x is number => x != null);
+    const cx = Math.round(p.x + p.w / 2);
+    const x0 = Math.min(cx, ...xs);
+    const x1 = Math.max(cx, ...xs);
+    const base = { x: cx, y: p.y + p.h };
+    const tip = tipAt(base, 'bottom');
+    edges.push({
+      id: `${padre}::bus`, from: padre, to: padre, kind: 'inheritance',
+      path: `M${x0},${bus.y} L${x1},${bus.y} M${cx},${bus.y} L${base.x},${base.y}`,
+      targetTipX: tip.x, targetTipY: tip.y, targetAngle: tip.angle,
+      sourceTipX: cx, sourceTipY: bus.y, sourceAngle: tip.angle,
+      labelX: cx, labelY: bus.y,
+      ...(p.color ? { color: p.color } : {}),
+    });
+  }
+
+  const width = Math.max(bb.x1 + dx + MARGIN.right + 8, diagramHeaderWidth(head.title, head.subtitle));
+  const height = bb.y1 + dy + MARGIN.bottom + 8;
+
+  const layout: ClassLayout = {
+    width, height, nodes, edges,
+    title: head.title || undefined,
+    subtitle: head.subtitle || undefined,
+    titleY: head.titleY, subtitleY: head.subtitleY, legendX: 0,
+    packages,
+    boxStyle: opts.boxStyle ?? 'card',
   };
   applyEdgeActorLayout(layout, nodes.map((n) => ({ x: n.x, y: n.y, w: n.w, h: n.h })));
   return layout;

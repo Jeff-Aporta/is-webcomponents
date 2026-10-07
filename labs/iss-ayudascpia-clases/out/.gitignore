@@ -1,0 +1,5 @@
+# HTML temporal del render headless
+_render-*.html
+# Probes / benches / dumps de sesión (no son salida del lab)
+_*.mjs
+_*.json
