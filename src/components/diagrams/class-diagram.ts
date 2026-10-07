@@ -559,7 +559,7 @@ class IswcClassDiagram extends DiagramElementBase {
       const shift = icon ? 24 : 0;
       const x0 = izquierda ? p.x + 10 : p.x + p.w / 2 - (textW + shift) / 2;
       if (icon) {
-        g.appendChild(svgIconBadge(icon, { cx: x0 + 9, cy: p.y + 13, size: 18, color: '#1F2937', bg: 'circle', bgColor: '#FFFFFF', bgAlpha: 0.85 }));
+        g.appendChild(svgIconBadge(icon, { cx: x0 + 9, cy: p.y + 13, size: 18, color: '#1F2937', bg: 'circle', bgColor: '#FFFFFF', bgAlpha: 0.45 }));
       }
       const t = svgEl('text', {
         x: x0 + shift, y: p.y + 17,

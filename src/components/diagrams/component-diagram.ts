@@ -672,7 +672,7 @@ class IswcComponentDiagram extends DiagramElementBase {
     const shift = icon ? 24 : 0;
     const x0 = centro ? p.x + p.w / 2 - (textW + shift) / 2 : p.x + 10;
     if (icon) {
-      rotulos.appendChild(svgIconBadge(icon, { cx: x0 + 9, cy: p.y + 12, size: 18, color: '#1F2937', bg: 'circle', bgColor: '#FFFFFF', bgAlpha: 0.85 }));
+      rotulos.appendChild(svgIconBadge(icon, { cx: x0 + 9, cy: p.y + 12, size: 18, color: '#1F2937', bg: 'circle', bgColor: '#FFFFFF', bgAlpha: 0.45 }));
     }
     const t = svgEl('text', {
       x: x0 + shift, y: p.y + 16,
