@@ -27,6 +27,10 @@ export const ComponenteSchema = z.intersection(CajaSchema, z.object({
   icon: z.union([z.string(), z.undefined()]).optional(),
   /** Relleno de la caja en `boxStyle: 'vp'` (#hex). */
   fill: z.union([z.string(), z.undefined()]).optional(),
+  /** Sin `x`/`y` en el payload: la coloca el algoritmo (equilibrio simétrico). */
+  autoPos: z.boolean().optional(),
+  /** Sin `w` en el payload: ancho ajustado al contenido (nombre e ítems). */
+  autoSize: z.boolean().optional(),
   provides: z.array(z.unknown()).optional(),
   requires: z.array(z.unknown()).optional(),
   connects: z.array(z.unknown()).optional(),

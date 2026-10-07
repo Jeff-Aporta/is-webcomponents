@@ -2,8 +2,8 @@
 // `testConcurrency()` archivos a la vez (3 por defecto) y cooldown de iswc.
 //
 // Unidad = archivo `.test.ts`: `deno test` con varios archivos no deja saltar
-// un `Deno.test` suelto. Un archivo verde se salta 30 min por hora de
-// ejecución (proporcional); con un rojo no entra en cooldown. Duraciones y
+// un `Deno.test` suelto. Un archivo verde se salta duración × 60
+// (1 min -> 60 min, proporcional); con un rojo no entra en cooldown. Duraciones y
 // fallos salen del reporte JUnit de Deno.
 //
 //   const code = await denoTest(archivos, { args: ['-A', '--no-check'] });

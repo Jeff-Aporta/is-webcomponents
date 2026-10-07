@@ -2,13 +2,14 @@
 // memoria en un JSON.
 //
 // Regla: un test que pasa en verde no se vuelve a correr durante
-// `30 min × duración / 1 h` (proporcional): 1 h -> 30 min, 1 min -> 30 s,
-// 13 ms -> 6,5 ms (casi inmediato). Un test en rojo borra su entrada y corre
-// siempre hasta que pase.
+// `duración × 60` (proporcional): 1 min -> 60 min, 1 s -> 1 min,
+// 13 ms -> 780 ms (casi inmediato). Un test en rojo borra su entrada y corre
+// siempre hasta que pase. Calibración WT-2026-10-07 (Jeff): antes era
+// 30 min por hora (x0,5); ahora x60 para penalizar más los tests lentos.
 //
 // Transversal (Node y Deno): solo depende de `node:fs`/`node:path`/
 // `node:process`. Cada proyecto lo adapta con las opciones (ruta del JSON,
-// minutos por hora, desactivarlo, reloj).
+// factor, desactivarlo, reloj).
 //
 // Vendor: copiar `dist/cdn/tools/test-cooldown.ts` al proyecto (ISS, ISW)
 // e importar desde ahi; no tiene imports relativos.
@@ -33,8 +34,8 @@ export interface TestCooldownEntry {
 export interface TestCooldownOptions {
     /** Ruta del JSON que guarda la memoria. */
     dbPath: string;
-    /** Minutos de cooldown por cada hora de ejecución (proporcional). Default 30. */
-    minutesPerHour?: number;
+    /** Factor cooldown/duración (proporcional). Default 60: 1 min verde -> 60 min de skip. */
+    factor?: number;
     /** `true` corre todo y no registra nada (p. ej. `--sin-cooldown`). */
     disabled?: boolean;
     /** Reloj inyectable para tests. Default `Date.now`. */
@@ -47,12 +48,12 @@ export type TestCooldownRun<T> =
     | { skipped: true; until: number; remainingMs: number }
     | { skipped: false; durationMs: number; value: T };
 
-const MINUTO = 60_000;
-const HORA = 3_600_000;
+/** Factor estándar: 60 min de cooldown por cada minuto de ejecución. */
+export const COOLDOWN_FACTOR = 60;
 
-/** Cooldown de una corrida verde: `minutesPerHour` min por hora, proporcional. */
-export function cooldownMs(durationMs: number, minutesPerHour = 30): number {
-    return Math.max(0, Math.round((durationMs / HORA) * minutesPerHour * MINUTO));
+/** Cooldown de una corrida verde: `duración × factor`, proporcional. */
+export function cooldownMs(durationMs: number, factor = COOLDOWN_FACTOR): number {
+    return Math.max(0, Math.round(durationMs * factor));
 }
 
 /** `95000` → `"1m 35s"`. */
@@ -68,7 +69,7 @@ export function testId(file: string, name: string): string {
 }
 
 export function createTestCooldown(opts: TestCooldownOptions) {
-    const minutesPerHour = opts.minutesPerHour ?? 30;
+    const factor = opts.factor ?? COOLDOWN_FACTOR;
     const now = opts.now ?? Date.now;
     let db: Record<string, TestCooldownEntry> | null = null;
 
@@ -102,7 +103,7 @@ export function createTestCooldown(opts: TestCooldownOptions) {
         const d = load();
         if (ok) {
             const t = now();
-            d[id] = { durationMs, okAt: t, until: t + cooldownMs(durationMs, minutesPerHour) };
+            d[id] = { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor) };
         } else {
             delete d[id];
         }

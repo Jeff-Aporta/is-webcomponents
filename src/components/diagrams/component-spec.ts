@@ -56,6 +56,7 @@ import { routeEdges, pointsToPath, simplifyOrthoPath } from './component-router.
 import type { RouterEdge, RouterWorld } from './component-router.schemas.js';
 import { parsePathPoints } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues, assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
+import { layoutNodeLink } from '../_shared/node-link-layout.js';
 import type {
   Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto,
 } from '../_shared/diagram-tipos.js';
@@ -173,6 +174,22 @@ export function consolidateHttpEndpoints(items: unknown[]): HttpEndpoint[] {
   return order.map((k) => byKey.get(k)!);
 }
 
+/**
+ * Ancho ajustado al contenido (fit size) cuando el payload no trae `w`:
+ * el nombre en una línea (negrita 11.5 px ≈ 7.2 px/carácter), el
+ * estereotipo y el ítem más ancho (badges de método + ruta), con 2U de aire.
+ * Acotado a [120, 320] para que una ruta larga no desborde la franja.
+ */
+function fittedWidth(c: Componente): number {
+  const nameW = Math.ceil(String(c.name ?? '').length * 7.2);
+  const stW = c.stereotype ? Math.ceil((c.stereotype.length + 2) * 6.4) : 0;
+  const items = consolidateHttpEndpoints(c.items ?? []);
+  const itemW = items.length
+    ? Math.max(...items.map((it) => it.methods.length * 42 + Math.ceil(it.path.length * 6.2)))
+    : 0;
+  return Math.min(320, Math.max(120, Math.max(nameW, stW, itemW) + 40));
+}
+
 function fittedHeight(c: Componente): number {
   const items = consolidateHttpEndpoints(c.items ?? []);
   if (!items.length) return c.h;
@@ -229,11 +246,51 @@ function readComponent(raw: unknown, i: number): Componente {
     y: Number(r.y ?? 0),
     w: Math.max(72, Number(r.w ?? 160)),
     h: Math.max(36, Number(r.h ?? 56)),
+    // Defaults inteligentes: sin x/y lo coloca el algoritmo; sin w, fit size.
+    ...(r.x == null && r.y == null ? { autoPos: true } : {}),
+    ...(r.w == null ? { autoSize: true } : {}),
     provides: asList(r.provides ?? r.expose ?? r.exposes),
     requires: asList(r.requires ?? r.consume ?? r.consumes ?? r.needs),
     connects: asList(r.connects ?? r.links ?? r.depends ?? r.uses ?? r.to),
     items: asList(r.items ?? r.endpoints ?? r.body),
   };
+}
+
+/**
+ * Componentes sin `x`/`y` ni paquete (el empaque solo coloca los que tienen
+ * paquete): se distribuyen con el layout por capas (Sugiyama), que reparte
+ * los nodos por niveles y centra cada nivel: equilibrio simétrico que acorta
+ * las rutas. Sin paquetes es el único algoritmo; con paquetes, los libres van
+ * en una columna a la izquierda del bloque empacado, centrados en su alto.
+ */
+function placeAutoComponents(packages: Paquete[], components: Componente[], edges: readonly SpecEdge[], gap: number): void {
+  const libres = components.filter((c) => c.autoPos && !c.package);
+  if (!libres.length) return;
+  const ids = new Set(libres.map((c) => c.id));
+  const internos = edges.filter((e) => ids.has(e.from) && ids.has(e.to)).map((e) => ({ from: e.from, to: e.to }));
+  const res = layoutNodeLink(libres.map((c) => ({ id: c.id, w: c.w, h: c.h })), internos, {
+    direction: packages.length ? 'TB' : 'LR', layerGap: Math.max(64, 3 * gap), nodeGap: Math.max(28, 2 * gap), align: 'center',
+  });
+  const pos = new Map(res.nodes.map((n) => [n.id, n]));
+  if (!packages.length) {
+    for (const c of libres) { const n = pos.get(c.id); if (n) { c.x = n.x; c.y = n.y; } }
+    return;
+  }
+  // Con paquetes: columna a la izquierda del bloque, centrada en su alto.
+  const empacados = components.filter((c) => !ids.has(c.id));
+  const cajas = [...packages, ...empacados];
+  const minX = Math.min(...cajas.map((b) => b.x));
+  const minY = Math.min(...cajas.map((b) => b.y));
+  const maxY = Math.max(...cajas.map((b) => b.y + b.h));
+  const colW = Math.max(...libres.map((c) => c.w));
+  const x0 = minX - colW - Math.max(120, 4 * gap);
+  const y0 = (minY + maxY) / 2 - res.height / 2;
+  for (const c of libres) {
+    const n = pos.get(c.id);
+    if (!n) continue;
+    c.x = x0 + (colW - c.w) / 2 + (n.x - Math.min(...res.nodes.map((m) => m.x)));
+    c.y = y0 + n.y;
+  }
 }
 
 /** Guardia de lado: el unico sitio donde se valida contra los cuatro. */
@@ -315,7 +372,9 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
   if (!Array.isArray(rawComponents) || !rawComponents.length) return null;
 
   const packages: Paquete[] = (Array.isArray(src.packages) ? src.packages : []).map(readPackage);
-  const components: Componente[] = rawComponents.map(readComponent).map((c) => ({ ...c, h: fittedHeight(c) }));
+  const components: Componente[] = rawComponents.map(readComponent)
+    .map((c) => (c.autoSize ? { ...c, w: fittedWidth(c) } : c))
+    .map((c) => ({ ...c, h: fittedHeight(c) }));
   const compIds = new Set<string>(components.map((c) => c.id));
   // Interfaces huérfanas (component inexistente): se descartan como las aristas
   // colgantes; si no, caían a cx/cy=(0,0) y se dibujaban sueltas en la esquina.
@@ -330,7 +389,10 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
   // Empacar → cablear. Si alguna cara no tiene alto para sus puertos a
   // `lanePitch`, crece y se re-empaca (el cableado muta aristas: copias).
   const plan = (): WireResult => {
-    if (layout.mode !== 'manual') packDiagram(packages, components, edges, layout);
+    if (layout.mode !== 'manual') {
+      packDiagram(packages, components, edges, layout);
+      placeAutoComponents(packages, components, edges, lanePitch);
+    }
     return wireComponentDiagram(
       components, interfaces.map((i) => ({ ...i })), edges.map((e) => ({ ...e })), packages, lanePitch,
       layout.connector === 'arrow' ? 'arrow' : 'assembly',

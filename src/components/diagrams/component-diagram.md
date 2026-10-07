@@ -322,6 +322,14 @@ convergen en el mismo punto son *hermanas* y entre ellas se anula el costo por
 pasar cerca y por cruzarse, así se dibujan juntas. Se repite hasta que ningún
 riel cambie (tope `grid.iterations`).
 
+**Defaults inteligentes.** Un componente sin `w` ajusta su ancho al contenido
+(nombre, estereotipo e ítems, entre 120 y 320 px); los agrupadores siempre
+ajustan su tamaño al suyo con 2U de relleno. Un componente sin `x`/`y` lo
+coloca el algoritmo: sin agrupadores, un layout por capas centrado (equilibrio
+simétrico que acorta las rutas); con agrupadores, los libres van en una columna
+a la izquierda del bloque empacado, centrados en su alto. Con `x`/`y` o `w` en
+el payload, mandan los valores del payload.
+
 Los agrupadores admiten `icon` (Iconify) y se pintan con fondo circular
 delante del rótulo. Entre agrupadores hermanos apilados hay al menos 3U
 (`PKG_ROW_GAP`) y el relleno interior es de 2U.

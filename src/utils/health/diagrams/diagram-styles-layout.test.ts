@@ -140,6 +140,33 @@ Deno.test('capas (fit por defecto): cada agrupador ajusta ancho y alto a su cont
   assert(b.w < a.w, 'la franja con una sola caja no debería medir lo mismo que la de tres subpaquetes');
 });
 
+Deno.test('defaults: sin w el componente ajusta su ancho al contenido; sin x/y y sin paquetes, el algoritmo los reparte sin solapes y centrado', () => {
+  const spec = resolveComponentSpec({
+    componentDiagram: {
+      components: [
+        { id: 'a', name: 'A', items: ['GET /ruta/muy/larga/para/probar/el/ancho'] },
+        { id: 'b', name: 'B' },
+        { id: 'c', name: 'C' },
+        { id: 'd', name: 'D' },
+      ],
+      links: [{ from: 'a', to: 'b' }, { from: 'a', to: 'c' }, { from: 'b', to: 'd' }, { from: 'c', to: 'd' }],
+    },
+  })!;
+  const L = computeComponentLayout(spec);
+  const comps = L.components as Array<Caja & { id: string }>;
+  const a = comps.find((c) => c.id === 'a')!;
+  const b = comps.find((c) => c.id === 'b')!;
+  assert(a.w > b.w, 'el componente con ruta larga debería ser más ancho');
+  assert(b.w >= 120 && a.w <= 320);
+  for (const p of comps) for (const q of comps) if (p !== q) assert(!solapan(p, q), `${p.id} y ${q.id} se solapan`);
+  // Simetría: b y c (misma capa) quedan a la misma coordenada principal y a y d centrados entre ellos.
+  const c = comps.find((x) => x.id === 'c')!;
+  const d = comps.find((x) => x.id === 'd')!;
+  assertEquals(b.x, c.x, 'b y c en la misma capa');
+  const centroBC = (b.y + b.h / 2 + c.y + c.h / 2) / 2;
+  assert(Math.abs(a.y + a.h / 2 - centroBC) <= 2 && Math.abs(d.y + d.h / 2 - centroBC) <= 2, 'a y d centrados entre b y c');
+});
+
 Deno.test('capas: layout.fitPackages=false restaura franjas igualadas', () => {
   const L = computeComponentLayout(capas({ fitPackages: false }));
   const a1 = L.packages.find((p) => p.id === 'a1')!;
