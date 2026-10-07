@@ -1,0 +1,50 @@
+{
+  "slug": "seguridad-jwt",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": { "diagram-style": "insoft" },
+  "payload": {
+    "sequence": {
+      "title": "ISS PatyIA · Token desde ContaPyme (POST /JWT)",
+      "actors": [
+        { "id": "c", "label": "ContaPyme / ISW", "kind": "actor", "icon": "mdi:monitor-dashboard" },
+        { "id": "i", "label": "ISS · TIdentityController", "kind": "participant", "icon": "mdi:shield-key" },
+        { "id": "d", "label": "DataSnap DSCLIENTES", "kind": "participant", "icon": "mdi:server-network" }
+      ],
+      "groups": [
+        { "id": "g-http", "name": "Petición y respuesta", "color": "stream" },
+        { "id": "g-ds", "name": "Validación en DataSnap", "color": "data" },
+        { "id": "g-jwt", "name": "Firma del token", "color": "auth" },
+        { "id": "g-err", "name": "Salida de error", "color": "error" }
+      ],
+      "fragments": [
+        { "id": "f-ds", "kind": "region", "name": "la llave de sesión se valida contra DataSnap antes de firmar", "messages": ["m2"], "color": "neutral" }
+      ],
+      "preamble": [
+        { "id": "m1", "from": "c", "to": "i", "label": "POST /JWT { controlKey, iapp, idmaquina }", "kind": "sync", "group": "g-http" },
+        { "id": "m2", "from": "i", "to": "d", "label": "TBasicoGeneral.LogInContacto", "kind": "sync", "group": "g-ds" }
+      ],
+      "alt": {
+        "branches": [
+          { "condition": "DataSnap no responde", "messages": [
+            { "id": "m3", "from": "i", "to": "c", "label": "503 · reintentar", "kind": "async", "group": "g-err" }
+          ] },
+          { "condition": "DataSnap rechaza la llave", "messages": [
+            { "id": "m4", "from": "i", "to": "c", "label": "401 · volver a iniciar sesión", "kind": "async", "group": "g-err" }
+          ] },
+          { "condition": "identidad válida", "messages": [
+            { "id": "m5", "from": "d", "to": "i", "label": "itercero · icontacto · nombres", "kind": "async", "group": "g-ds" },
+            { "id": "m6", "from": "i", "to": "i", "label": "jwtSign HS384 · 24 h · secreto de configuraciones (sin semilla → 503)", "kind": "self", "group": "g-jwt" },
+            { "id": "m7", "from": "i", "to": "c", "label": "{ encabezado, respuesta: { token } }", "kind": "async", "group": "g-http" }
+          ] }
+        ]
+      },
+      "epilogue": [],
+      "boxes": [
+        { "id": "iss", "name": "ISS PatyIA", "actors": ["i"], "color": "primary" },
+        { "id": "ext", "name": "Servicios", "actors": ["d"], "color": "group" }
+      ]
+    }
+  }
+}

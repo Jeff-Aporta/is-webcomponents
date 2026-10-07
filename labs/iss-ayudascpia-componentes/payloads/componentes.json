@@ -1,0 +1,290 @@
+{
+  "slug": "componentes",
+  "module": "010-General",
+  "tag": "iswc-component-diagram",
+  "script": "diagrams/component-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "componentDiagram": {
+      "title": "ISS PatyIA · Diagrama de componentes",
+      "layout": {
+        "mode": "pack",
+        "minGap": 72,
+        "rowGap": 160,
+        "nestedRowGap": 80,
+        "pkgRowGap": 24,
+        "colGutter": 120,
+        "pkgCorridor": 360,
+        "nestedPkgGap": 128,
+        "lanePitch": 32,
+        "laneNearFactor": 48,
+        "pkgBorderClearance": 64,
+        "pkgBorderNearFactor": 10,
+        "pkgCrossFactor": 4,
+        "allowDiagonal": false
+      },
+      "packages": [
+        {
+          "id": "pkg-apps",
+          "name": "Apps",
+          "stereotype": "ISW",
+          "x": 24,
+          "y": 80,
+          "w": 240,
+          "h": 280
+        },
+        {
+          "id": "pkg-azure",
+          "name": "Azure",
+          "stereotype": "Cloud",
+          "x": 340,
+          "y": 40,
+          "w": 720,
+          "h": 900
+        },
+        {
+          "id": "pkg-api",
+          "name": "PatyIA API",
+          "stereotype": "Azure Functions",
+          "parent": "pkg-azure",
+          "x": 360,
+          "y": 80,
+          "w": 420,
+          "h": 820
+        },
+        {
+          "id": "pkg-db",
+          "name": "clientesis",
+          "stereotype": "PostgreSQL",
+          "parent": "pkg-azure",
+          "x": 920,
+          "y": 280,
+          "w": 220,
+          "h": 160,
+          "prohibido": true
+        },
+        {
+          "id": "pkg-openai",
+          "name": "OpenAI",
+          "stereotype": "LLM",
+          "x": 1160,
+          "y": 60,
+          "w": 240,
+          "h": 140
+        },
+        {
+          "id": "pkg-ds",
+          "name": "DSCLIENTES",
+          "stereotype": "DataSnap InSoft",
+          "x": 1160,
+          "y": 340,
+          "w": 260,
+          "h": 140
+        }
+      ],
+      "components": [
+        {
+          "id": "app-testpatyia",
+          "name": "ISW-TestPatyIA",
+          "stereotype": "ISW",
+          "package": "pkg-apps",
+          "color": "#080",
+          "x": 44,
+          "y": 120,
+          "w": 200,
+          "h": 64
+        },
+        {
+          "id": "app-soporte",
+          "name": "ISW-ContaPyme /soporte",
+          "stereotype": "ISW",
+          "package": "pkg-apps",
+          "color": "#800",
+          "x": 44,
+          "y": 220,
+          "w": 200,
+          "h": 64
+        },
+        {
+          "id": "grp-identidad",
+          "name": "identidad",
+          "stereotype": "Auth",
+          "package": "pkg-api",
+          "x": 380,
+          "y": 110,
+          "w": 380,
+          "h": 128,
+          "items": [
+            "POST /JWT",
+            "POST /auth/portal-login",
+            "QUERY|GET|POST /permisos",
+            "POST /permisos/query"
+          ]
+        },
+        {
+          "id": "grp-conversacion",
+          "name": "conversacion",
+          "stereotype": "Chat",
+          "package": "pkg-api",
+          "x": 380,
+          "y": 220,
+          "w": 380,
+          "h": 216,
+          "items": [
+            "POST /conversacion",
+            "POST /conversacion/query",
+            "GET|DELETE /conversacion/{iconversacion}",
+            "GET /conversacion/logs/{iconversacion}",
+            "GET /conversaciones/{iconversacion}/mcp/asw",
+            "GET /resumen_conversacion/{iconversacion}",
+            "QUERY|GET|POST /conversaciones",
+            "POST /conversaciones/query"
+          ]
+        },
+        {
+          "id": "grp-mensaje-tiquete",
+          "name": "mensaje · tiquete",
+          "stereotype": "Calificación",
+          "package": "pkg-api",
+          "x": 380,
+          "y": 500,
+          "w": 380,
+          "h": 84,
+          "items": [
+            "POST /mensaje",
+            "POST /tiquete"
+          ]
+        },
+        {
+          "id": "grp-config",
+          "name": "configuración",
+          "stereotype": "Config",
+          "package": "pkg-api",
+          "x": 380,
+          "y": 610,
+          "w": 380,
+          "h": 150,
+          "items": [
+            "GET|PUT|POST /tdconsulta",
+            "GET|PUT /conversaciones/cfg",
+            "GET|PUT /proveedor/{iproveedor}/cfg",
+            "GET|PUT /proveedor/{iproveedor}",
+            "GET|PUT /sysvalue"
+          ]
+        },
+        {
+          "id": "grp-ops",
+          "name": "operación",
+          "stereotype": "Ops",
+          "package": "pkg-api",
+          "x": 380,
+          "y": 760,
+          "w": 380,
+          "h": 172,
+          "items": [
+            "POST|DELETE /error",
+            "GET /errores",
+            "GET /docs",
+            "GET /info",
+            "GET /cdn/{file}",
+            "POST /archivo"
+          ]
+        },
+        {
+          "id": "db-pg",
+          "name": "clientesis",
+          "stereotype": "PG",
+          "package": "pkg-db",
+          "x": 840,
+          "y": 320,
+          "w": 180,
+          "h": 72
+        },
+        {
+          "id": "openai-chat",
+          "name": "chat/completions",
+          "stereotype": "LLM",
+          "package": "pkg-openai",
+          "x": 1180,
+          "y": 100,
+          "w": 200,
+          "h": 56
+        },
+        {
+          "id": "ds-login",
+          "name": "TCatContactos · TBasicoGeneral",
+          "stereotype": "DataSnap",
+          "package": "pkg-ds",
+          "x": 1180,
+          "y": 380,
+          "w": 240,
+          "h": 56
+        }
+      ],
+      "links": [
+        {
+          "from": "app-testpatyia",
+          "to": "grp-identidad"
+        },
+        {
+          "from": "app-testpatyia",
+          "to": "grp-conversacion"
+        },
+        {
+          "from": "app-testpatyia",
+          "to": "grp-mensaje-tiquete"
+        },
+        {
+          "from": "app-testpatyia",
+          "to": "grp-config"
+        },
+        {
+          "from": "app-testpatyia",
+          "to": "grp-ops"
+        },
+        {
+          "from": "app-soporte",
+          "to": "grp-identidad"
+        },
+        {
+          "from": "app-soporte",
+          "to": "grp-conversacion"
+        },
+        {
+          "from": "app-soporte",
+          "to": "grp-mensaje-tiquete"
+        },
+        {
+          "from": "grp-identidad",
+          "to": "ds-login"
+        },
+        {
+          "from": "grp-identidad",
+          "to": "db-pg"
+        },
+        {
+          "from": "grp-conversacion",
+          "to": "db-pg"
+        },
+        {
+          "from": "grp-conversacion",
+          "to": "openai-chat"
+        },
+        {
+          "from": "grp-mensaje-tiquete",
+          "to": "db-pg"
+        },
+        {
+          "from": "grp-config",
+          "to": "db-pg"
+        },
+        {
+          "from": "grp-ops",
+          "to": "db-pg"
+        }
+      ]
+    }
+  }
+}

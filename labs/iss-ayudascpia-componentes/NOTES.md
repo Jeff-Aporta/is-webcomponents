@@ -96,3 +96,18 @@ cuando se cierre el diseño (publish-iswc-svg o a mano).
 
 Guardián: `tests/diagram-astar-rules.test.mjs`.
 
+
+## Editable del ISS (2026-10-07)
+
+`payloads/componentes.json` es el editable del ISS tal cual
+(`docs-experimental/diagramas/componentes.json`, formato `slug/module/tag/attrs/payload`)
+y se renderiza con `render-iss.mjs`:
+
+```bash
+deno run -A --no-check labs/iss-ayudascpia-componentes/render-iss.mjs   # out/componentes.svg + .png
+```
+
+Se quitó `layout.connector: "arrow"` (lo puso el commit 51fdffd del ISS): el
+diagrama de componentes del ISS va con conectores `-(O-` (ensamble, familia
+`connector` del vocabulario), un `-(` por expositor y `-O` por consumidor. Las
+rutas de cada frente se cotejaron con el registro de `src/functions/index.ts`.

@@ -1,0 +1,47 @@
+{
+  "slug": "seguridad-autorizacion",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": { "diagram-style": "insoft" },
+  "payload": {
+    "sequence": {
+      "title": "ISS PatyIA · Autorización de una petición",
+      "actors": [
+        { "id": "c", "label": "Cliente", "kind": "actor", "icon": "mdi:account" },
+        { "id": "w", "label": "makeDispatchHandler", "kind": "participant", "icon": "mdi:api" },
+        { "id": "b", "label": "TBasePatyIA", "kind": "participant", "icon": "mdi:server" },
+        { "id": "pm", "label": "TPermissionsController", "kind": "participant", "icon": "mdi:shield-account" },
+        { "id": "pg", "label": "PostgreSQL · seg_*", "kind": "participant", "icon": "mdi:database" }
+      ],
+      "groups": [
+        { "id": "g-http", "name": "Petición y respuesta", "color": "stream" },
+        { "id": "g-jwt", "name": "Autenticación (JWT)", "color": "auth" },
+        { "id": "g-seg", "name": "Autorización (SEG)", "color": "seg" },
+        { "id": "g-db", "name": "Lectura en PostgreSQL", "color": "data" }
+      ],
+      "fragments": [
+        { "id": "f-rol", "kind": "region", "name": "rol vigente · seg_rolescontacto (grupo PATYIA, ffinal nula o futura, bprincipal primero)", "messages": ["m5", "m6", "m7"], "color": "panel" },
+        { "id": "f-accion", "kind": "region", "name": "valor de la acción · seg_accionesxrol para (rol, METHOD:/ruta)", "messages": ["m8", "m9", "m10"], "color": "panel" }
+      ],
+      "messages": [
+        { "id": "m1", "from": "c", "to": "w", "label": "petición + Authorization: Bearer", "kind": "sync", "group": "g-http" },
+        { "id": "m2", "from": "w", "to": "w", "label": "TContextUser · _patySeg = SEG_ENDPOINTS[METHOD:/ruta] ?? METHOD:/ruta", "kind": "self", "group": "g-seg" },
+        { "id": "m3", "from": "w", "to": "b", "label": "handler del controller", "kind": "sync", "group": "g-http" },
+        { "id": "m4", "from": "b", "to": "b", "label": "verifyAuthorization() · jwtVerify HS384 (sin token o inválido → 401)", "kind": "self", "group": "g-jwt" },
+        { "id": "m5", "from": "b", "to": "pm", "label": "rolPrincipal(icontacto)", "kind": "sync", "group": "g-seg" },
+        { "id": "m6", "from": "pm", "to": "pg", "label": "SELECT seg_rolescontacto", "kind": "sync", "group": "g-db" },
+        { "id": "m7", "from": "pg", "to": "pm", "label": "irol · sin fila → USR · SEG caído → 503", "kind": "async", "group": "g-db" },
+        { "id": "m8", "from": "b", "to": "pm", "label": "accionRecurso(METHOD:/ruta)", "kind": "sync", "group": "g-seg" },
+        { "id": "m9", "from": "pm", "to": "pg", "label": "SELECT seg_accionesxrol.valor", "kind": "sync", "group": "g-db" },
+        { "id": "m10", "from": "pg", "to": "pm", "label": "true · false · sin fila", "kind": "async", "group": "g-db" },
+        { "id": "m11", "from": "b", "to": "b", "label": "solo \"false\" niega (401) · true, sin fila o ruta no configurable: pasa", "kind": "self", "group": "g-seg" },
+        { "id": "m12", "from": "b", "to": "c", "label": "respuesta del endpoint", "kind": "async", "group": "g-http" }
+      ],
+      "boxes": [
+        { "id": "iss", "name": "ISS PatyIA", "actors": ["w", "b", "pm"], "color": "primary" },
+        { "id": "ext", "name": "Servicios", "actors": ["pg"], "color": "group" }
+      ]
+    }
+  }
+}

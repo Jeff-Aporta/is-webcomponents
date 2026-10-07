@@ -1,0 +1,52 @@
+{
+  "slug": "seguridad-portal-login",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": { "diagram-style": "insoft" },
+  "payload": {
+    "sequence": {
+      "title": "ISS PatyIA · Login del portal (POST /auth/portal-login)",
+      "actors": [
+        { "id": "p", "label": "Portal / ISW", "kind": "actor", "icon": "mdi:monitor-dashboard" },
+        { "id": "i", "label": "ISS · TIdentityController", "kind": "participant", "icon": "mdi:shield-key" },
+        { "id": "d", "label": "DataSnap DSCLIENTES", "kind": "participant", "icon": "mdi:server-network" }
+      ],
+      "groups": [
+        { "id": "g-http", "name": "Petición y respuesta", "color": "stream" },
+        { "id": "g-ds", "name": "Consulta a DataSnap", "color": "data" },
+        { "id": "g-jwt", "name": "Normalización y firma", "color": "auth" },
+        { "id": "g-err", "name": "Salida de error", "color": "error" }
+      ],
+      "fragments": [
+        { "id": "f-contacto", "kind": "region", "name": "existencia del contacto y empresas a las que pertenece", "messages": ["m3", "m4", "m5", "m6"], "color": "neutral" }
+      ],
+      "preamble": [
+        { "id": "m1", "from": "p", "to": "i", "label": "POST /auth/portal-login { semail, password, itercero? }", "kind": "sync", "group": "g-http" },
+        { "id": "m2", "from": "i", "to": "i", "label": "normaliza semail (sin @ → @contapyme.com) · password → MD5", "kind": "self", "group": "g-jwt" },
+        { "id": "m3", "from": "i", "to": "d", "label": "TCatContactos.GetExisteContacto", "kind": "sync", "group": "g-ds" },
+        { "id": "m4", "from": "d", "to": "i", "label": "existe · acceso web", "kind": "async", "group": "g-ds" },
+        { "id": "m5", "from": "i", "to": "d", "label": "TCatContactos.GetListaTercerosPorContacto", "kind": "sync", "group": "g-ds" },
+        { "id": "m6", "from": "d", "to": "i", "label": "terceros del contacto", "kind": "async", "group": "g-ds" }
+      ],
+      "alt": {
+        "branches": [
+          { "condition": "varias empresas y sin itercero", "messages": [
+            { "id": "m7", "from": "i", "to": "p", "label": "409 MULTI_EMPRESA { terceros } · el front pregunta y reintenta con itercero", "kind": "async", "group": "g-err" }
+          ] },
+          { "condition": "una empresa o itercero elegido", "messages": [
+            { "id": "m8", "from": "i", "to": "d", "label": "TBasicoGeneral.LogInContacto", "kind": "sync", "group": "g-ds" },
+            { "id": "m9", "from": "d", "to": "i", "label": "controlKey · itercero · icontacto · nombres", "kind": "async", "group": "g-ds" },
+            { "id": "m10", "from": "i", "to": "i", "label": "jwtSign HS384 · 24 h", "kind": "self", "group": "g-jwt" },
+            { "id": "m11", "from": "i", "to": "p", "label": "{ token, username, displayName, expiresAt, claims }", "kind": "async", "group": "g-http" }
+          ] }
+        ]
+      },
+      "epilogue": [],
+      "boxes": [
+        { "id": "iss", "name": "ISS PatyIA", "actors": ["i"], "color": "primary" },
+        { "id": "ext", "name": "Servicios", "actors": ["d"], "color": "group" }
+      ]
+    }
+  }
+}
