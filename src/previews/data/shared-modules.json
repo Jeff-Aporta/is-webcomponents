@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T11:16:04.840Z",
+  "generatedAt": "2026-10-07T12:22:29.170Z",
   "count": 112,
   "modules": [
     {
@@ -519,7 +519,7 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 10923,
+      "bytes": 11448,
       "exports": [
         "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
       ]
@@ -601,7 +601,7 @@
       "id": "diagram-tipos.schemas",
       "path": "src/components/_shared/diagram-tipos.schemas.ts",
       "summary": "diagram-tipos — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 6325,
+      "bytes": 6583,
       "exports": [
         "CajaSchema",
         "ComponenteSchema",

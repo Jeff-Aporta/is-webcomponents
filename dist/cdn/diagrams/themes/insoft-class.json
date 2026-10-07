@@ -1,0 +1,67 @@
+{
+  "$schema": "iswc-diagram-theme/v1",
+  "id": "insoft-class",
+  "kind": "class",
+  "label": "InSoft Class Diagram (Visual Paradigm)",
+  "font": {
+    "family": "Tahoma, Arial, sans-serif"
+  },
+  "canvas": {
+    "background": "#FFFFFF",
+    "text": "#000000",
+    "muted": "#334155"
+  },
+  "edge": {
+    "stroke": "#3D5A80",
+    "strokeWidth": 1.3,
+    "dasharray": "6 4",
+    "labelBg": "#FFFFFF",
+    "hideLabels": true
+  },
+  "cluster": {
+    "border": "#000000",
+    "borderWidth": 1,
+    "radius": 0,
+    "dasharray": "",
+    "titleFill": "#000000",
+    "palettes": {
+      "primary": "#7ACFF4",
+      "secondary": "#00C3C4",
+      "accent": "#C0C000",
+      "neutral": "#BFC0C1",
+      "panel": "#FFFFC1",
+      "lite": "#81FF81",
+      "cool": "#C1BFFF",
+      "warm": "#EAB6B0",
+      "soft": "#BCFFBB",
+      "strong": "#01C000"
+    },
+    "fallback": "#7ACFF4"
+  },
+  "fills": {
+    "service": "#BCFFBB",
+    "app": "#C1BFFF",
+    "store": "#EAB6B0",
+    "leaf": "#FFF2AF",
+    "external": "#BFFFC0",
+    "neutral": "#E5E7EB"
+  },
+  "component": {
+    "fill": "#BCFFBB",
+    "headerFill": "#BCFFBB",
+    "border": "#000000",
+    "borderWidth": 1,
+    "radius": 0
+  },
+  "diagramTheme": {
+    "text": "#000000",
+    "muted": "#334155",
+    "grid": "rgba(100,116,139,0.28)",
+    "panel": "transparent",
+    "border": "rgba(0,0,0,0.32)",
+    "accent": "#3D5A80",
+    "chipFill": "#BCFFBB",
+    "chipFillSoft": "#FFFFFF",
+    "dotText": "#0F172A"
+  }
+}
