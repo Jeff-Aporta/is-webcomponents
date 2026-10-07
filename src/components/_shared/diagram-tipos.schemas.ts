@@ -125,6 +125,12 @@ export const OpcionesEmpaqueSchema = z.object({
   edgeStyle: z.union([z.literal('orthogonal'), z.literal('curved'), z.literal('straight')]).optional(),
   /** Modo `layers`: componentes por fila dentro de cada franja. Default 6. */
   layerCols: z.number().optional(),
+  /**
+   * Modo `layers`: cada agrupador ajusta su tamaño a su contenido (padding
+   * 2U) en vez de estirarse a la franja más ancha o al hermano más alto.
+   * Default true; `false` restaura las franjas de ancho/alto igualados.
+   */
+  fitPackages: z.boolean().optional(),
   /** Modo `layers`: columnas de la rejilla de subpaquetes de una franja. Default 2. */
   nestedCols: z.number().optional(),
   /**

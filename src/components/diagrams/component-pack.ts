@@ -81,7 +81,7 @@ export function packDiagram(packages: Paquete[], components: Componente[], edges
     return;
   }
   if (opts.mode === 'layers') {
-    packLayers(packages, components, gaps, Number(opts.layerCols) || 6, Number(opts.nestedCols) || 2);
+    packLayers(packages, components, gaps, Number(opts.layerCols) || 6, Number(opts.nestedCols) || 2, opts.fitPackages !== false);
     return;
   }
   if (!packages?.length) return;
@@ -147,6 +147,7 @@ function packLayers(
   gaps: ReturnType<typeof resolvePackingGaps>,
   cols: number,
   nestedCols: number,
+  fit: boolean = true,
 ): void {
   const pad = Math.max(PKG_PAD, PKG_PAD_LOLLI);
   const corridor = Math.max(gaps.pkgRowGap, 2 * PKG_BORDER_CLEARANCE + 2 * gaps.lanePitch);
@@ -178,7 +179,8 @@ function packLayers(
     // Hermanos de una fila: mismo alto. Mismo ancho (el mayor) solo si la
     // rejilla tiene varias filas, para que las columnas alineen; en una sola
     // fila cada subpaquete conserva su ancho y no sobra aire.
-    const igualAncho = sRows.length > 1;
+    // Con `fit` cada subpaquete conserva su ancho y su alto naturales.
+    const igualAncho = !fit && sRows.length > 1;
     const anchoDe = (r: Bloque[], b: Bloque): number => (igualAncho ? Math.max(...r.map((o) => o.w)) : b.w);
     const sRowW = sRows.map((r) => r.reduce((acc, b) => acc + anchoDe(r, b), 0) + gaps.nestedPkgGap * (r.length - 1));
     const sRowH = sRows.map((r) => Math.max(...r.map((b) => b.h)));
@@ -209,7 +211,7 @@ function packLayers(
           let sx = x + pad + (inner - sRowW[k]!) / 2;
           for (const b of r) {
             const bw = anchoDe(r, b);
-            b.place(sx, ry, bw, sRowH[k]!);
+            b.place(sx, ry, bw, fit ? b.h : sRowH[k]!);
             sx += bw + gaps.nestedPkgGap;
           }
           ry += sRowH[k]! + gaps.nestedRowGap;
@@ -224,7 +226,9 @@ function packLayers(
   const bandW = Math.max(...bands.map((b) => b.w));
   let y = 0;
   for (const b of bands) {
-    b.place(0, y, bandW, b.h);
+    // Fit: cada franja con su ancho natural, centrada sobre la más ancha.
+    if (fit) b.place((bandW - b.w) / 2, y, b.w, b.h);
+    else b.place(0, y, bandW, b.h);
     y += b.h + corridor;
   }
 }

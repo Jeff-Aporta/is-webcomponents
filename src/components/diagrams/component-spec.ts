@@ -298,6 +298,7 @@ function readLayout(raw: unknown): OpcionesEmpaque {
     allowDiagonal: r.allowDiagonal === true,
     // Modo `layers`: componentes por fila dentro de cada franja.
     ...(r.layerCols != null ? { layerCols: Number(r.layerCols) } : {}),
+    ...(r.fitPackages === false ? { fitPackages: false } : {}),
     ...(r.nestedCols != null ? { nestedCols: Number(r.nestedCols) } : {}),
     ...(r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp' ? { boxStyle: r.boxStyle } : {}),
     ...(r.connector === 'arrow' || r.connector === 'assembly' ? { connector: r.connector } : {}),

@@ -116,13 +116,35 @@ Deno.test('capas: cada caja dentro de su paquete, cada subpaquete dentro del pad
   assert(!solapan(pk.get('a1')!, pk.get('a2')!));
 });
 
-Deno.test('capas: subpaquetes de una sola fila comparten alto pero conservan su ancho', () => {
+Deno.test('capas (fit por defecto): cada agrupador ajusta ancho y alto a su contenido con 2U de padding', () => {
   const L = computeComponentLayout(capas());
+  const pk = new Map(L.packages.map((p) => [p.id, p as Caja & { id: string; parent?: string }]));
+  const a1 = pk.get('a1')!;
+  const a2 = pk.get('a2')!;
+  assertEquals(a1.y, a2.y, 'hermanos alineados arriba');
+  assert(a2.w > a1.w, 'el subpaquete de 3 columnas debería ser más ancho');
+  // Alto y ancho = contenido + 2U de padding (40 px) a cada lado, no el del hermano.
+  const comps = L.components as Array<Caja & { package?: string }>;
+  for (const p of [a1, a2, pk.get('b')!]) {
+    const mine = comps.filter((c) => c.package === p.id);
+    const kids = [...pk.values()].filter((q) => q.parent === p.id);
+    const items = [...mine, ...kids];
+    const right = Math.max(...items.map((c) => c.x + c.w));
+    const bottom = Math.max(...items.map((c) => c.y + c.h));
+    assert(Math.abs(p.x + p.w - right - 40) <= 1, `${p.id}: sobra ancho (${p.x + p.w - right} px a la derecha)`);
+    assert(Math.abs(p.y + p.h - bottom - 40) <= 1, `${p.id}: sobra alto (${p.y + p.h - bottom} px abajo)`);
+  }
+  // Las franjas raíz no se estiran a la más ancha.
+  const a = pk.get('a')!;
+  const b = pk.get('b')!;
+  assert(b.w < a.w, 'la franja con una sola caja no debería medir lo mismo que la de tres subpaquetes');
+});
+
+Deno.test('capas: layout.fitPackages=false restaura franjas igualadas', () => {
+  const L = computeComponentLayout(capas({ fitPackages: false }));
   const a1 = L.packages.find((p) => p.id === 'a1')!;
   const a2 = L.packages.find((p) => p.id === 'a2')!;
-  assertEquals(a1.y, a2.y);
   assertEquals(a1.h, a2.h);
-  assert(a2.w > a1.w, 'el subpaquete de 3 columnas debería ser más ancho');
 });
 
 Deno.test('remate arrow: sin lollipops, cada flecha termina en la cara de su destino y cada punta se pinta una vez', () => {
