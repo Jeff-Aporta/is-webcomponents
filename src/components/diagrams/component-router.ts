@@ -32,34 +32,18 @@
  */
 
 import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.js';
-import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan } from './component-router.schemas.js';
+import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from './component-router.schemas.js';
+import { resolveRoutingCosts } from './routing-costs.js';
 
 const DIRS: ReadonlyArray<readonly [number, number]> = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 const SIDE_DIR: Record<Lado, number> = { right: 0, bottom: 1, left: 2, top: 3 };
-/** Brillo de riel ajeno encima (×, por paso). */
-const OVERLAP_MUL = 120;
-/** Aristas al mismo conector se tratan como ajenas salvo cerca de la punta B. */
-const MERGE_RADIUS_PITCHES = 2;
-/** Brillo de ir por detrás del origen (W68): rodeo ilegible (×). */
-const RETREAT_MUL = 30;
-/** Brillo de riel del mismo conector dentro de su embudo (×): se juntan, no gratis. */
-const SAME_FUNNEL_MUL = 1 + OVERLAP_MUL * 0.35;
-/** Brillo máximo de riel ajeno a < lanePitch (×, decrece lineal hasta 1 en el pitch). */
-const NEAR_RAIL_MUL = 6;
-/** Brillo máximo de una entidad en su hitbox (×, decrece lineal hasta 1 en `entityGlow`). */
-const ENTITY_GLOW_MUL = 3;
-/** Brillo de cruzar perpendicular un riel ajeno (×, en ese nodo). */
-const CROSS_MUL = 8;
-/** Piso del factor total: el paso nunca es gratis y la heurística sigue admisible. */
-const MIN_MUL = 0.05;
+// Los valores del campo (brillos, radios, límites) viven en
+// `routing-costs.ts` y se sobreescriben por diagrama con `layout.routing`.
 /** Lados perpendiculares (llegadas laterales al O). */
 const PERP: Record<Lado, [Lado, Lado]> = {
   left: ['top', 'bottom'], right: ['top', 'bottom'], top: ['left', 'right'], bottom: ['left', 'right'],
 };
-/** Historial de conflicto por nodo (×, acumulativo por vuelta). */
-const HISTORY_MUL = 6;
-/** Costo por px del tramo ajeno que se reutiliza al unirse a otra `->`. */
-const JOIN_TAIL_MUL = 0.35;
+
 
 const inside = (x: number, y: number, c: Caja, pad: number): boolean =>
   x > c.x - pad && x < c.x + c.w + pad && y > c.y - pad && y < c.y + c.h + pad;
@@ -76,6 +60,28 @@ function gridLines(lo: number, hi: number, step: number, extra: number[]): numbe
     if (last == null || v - last > 1) out.push(v);
     // Puerto a ≤1px de una línea: gana el puerto (stem exacto).
     else if (v % step !== 0) out[out.length - 1] = v;
+  }
+  return out;
+}
+
+/**
+ * Puertos del perímetro de una caja: en cada lado, nodos a `step` (1U) entre
+ * sí, nunca en las esquinas, y con la mitad del sobrante a cada extremo (el
+ * reparto queda centrado). Son los candidatos entre los que el router elige.
+ */
+export function perimeterPorts(b: Caja, step: number = 20, sides: readonly Lado[] = ['top', 'right', 'bottom', 'left']): RouterPort[] {
+  const out: RouterPort[] = [];
+  for (const side of sides) {
+    const L = side === 'top' || side === 'bottom' ? b.w : b.h;
+    const n = Math.max(1, Math.floor((L - step) / step) + 1);
+    const off0 = (L - (n - 1) * step) / 2;
+    for (let i = 0; i < n; i++) {
+      const off = off0 + i * step;
+      if (side === 'top') out.push({ x: b.x + off, y: b.y, side });
+      else if (side === 'bottom') out.push({ x: b.x + off, y: b.y + b.h, side });
+      else if (side === 'left') out.push({ x: b.x, y: b.y + off, side });
+      else out.push({ x: b.x + b.w, y: b.y + off, side });
+    }
   }
   return out;
 }
@@ -245,20 +251,34 @@ export function validateRoute(
  * congestión. `paths[i]` incluye los stems: from → A … B → to.
  */
 export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opts: RouterOpts = {}): RouteResult {
-  const step = opts.step ?? 20;
-  const clearance = opts.clearance ?? 20;
-  const pitch = Math.max(step, opts.lanePitch ?? 32);
+  // Config compartida (defaults + `layout.routing`); las opciones sueltas
+  // del llamador (perillas históricas del payload) ganan sobre ella.
+  const C = resolveRoutingCosts(opts.costs);
+  const step = opts.step ?? C.grid.step;
+  const clearance = opts.clearance ?? C.grid.clearance;
+  const pitch = Math.max(step, opts.lanePitch ?? C.grid.lanePitch);
   // `laneNearFactor` del payload se conserva por contrato; el brillo de riel
-  // vecino es un factor fijo (NEAR_RAIL_MUL) con radio `lanePitch`.
+  // vecino es `rail.near` con radio `lanePitch`.
   void opts.laneNearFactor;
-  const borderKeep = opts.pkgBorderClearance ?? 64;
-  const borderFactor = opts.pkgBorderNearFactor ?? 10;
-  const crossFactor = Math.max(1, opts.pkgCrossFactor ?? 4);
-  const turnPenalty = opts.turnPenalty ?? 200;
-  const iterations = opts.iterations ?? 8;
-  const stub = Math.max(clearance, opts.stub ?? clearance);
-  const shareRadius = opts.shareRadius ?? 150;
-  const entityGlowR = opts.entityGlow ?? 2 * clearance;
+  const borderKeep = opts.pkgBorderClearance ?? C.package.borderRadius;
+  const borderFactor = opts.pkgBorderNearFactor ?? C.package.borderGlow;
+  const crossFactor = Math.max(1, opts.pkgCrossFactor ?? C.package.nestingFactor);
+  const turnPenalty = opts.turnPenalty ?? C.grid.turnPenalty;
+  const iterations = opts.iterations ?? C.grid.iterations;
+  const stub = Math.max(clearance, opts.stub ?? C.grid.stub);
+  const shareRadius = opts.shareRadius ?? C.share.radius;
+  const entityGlowR = opts.entityGlow ?? C.entity.radius;
+  const OVERLAP_MUL = C.rail.overlap;
+  const MERGE_RADIUS_PITCHES = C.rail.mergePitches;
+  const RETREAT_MUL = C.rail.retreat;
+  const SAME_FUNNEL_MUL = C.rail.sameFunnel;
+  const NEAR_RAIL_MUL = C.rail.near;
+  const ENTITY_GLOW_MUL = C.entity.glow;
+  const CROSS_MUL = C.rail.cross;
+  const HEAD_ON_MUL = C.rail.headOn;
+  const MIN_MUL = C.grid.minFactor;
+  const HISTORY_MUL = C.rail.history;
+  const JOIN_TAIL_MUL = C.share.joinTail;
 
   // ── Grilla ────────────────────────────────────────────────────────────
   const all: Caja[] = [...world.components, ...world.packages, ...world.titles, ...world.rings];
@@ -274,6 +294,11 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     // El O admite llegada por 3 lados: ambas líneas por su centro.
     extraX.push(e.to.x);
     extraY.push(e.to.y);
+    // Cada puerto candidato se proyecta a la grilla: su línea existe, así el
+    // riel sale perpendicular y los vértices quedan a 90°.
+    for (const c of [...(e.fromCandidates ?? []), ...(e.toCandidates ?? [])]) {
+      if (c.side === 'left' || c.side === 'right') extraY.push(c.y); else extraX.push(c.x);
+    }
   }
   const xs = gridLines(minX, maxX, step, extraX);
   const ys = gridLines(minY, maxY, step, extraY);
@@ -386,6 +411,20 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   for (const kk of new Set(keyOf.filter((x): x is string => x != null))) keyOcc.set(kk, [new Int16Array(N), new Int16Array(N)]);
   /** A qué arista (y en qué nodo de su camino) se unió cada una. */
   const joinOf: Array<{ host: number; t: number } | null> = edges.map(() => null);
+  /** Puertos elegidos por arista (con candidatos los decide el router). */
+  const chosen: Array<{ from: RouterPort; to: RouterPort } | null> = edges.map(() => null);
+  const costOf: number[] = edges.map(() => Infinity);
+  /** Ocupación de puertos: `x,y` → aristas que lo usan. */
+  const portUse = new Map<string, Set<number>>();
+  const pk = (p: { x: number; y: number }): string => `${Math.round(p.x)},${Math.round(p.y)}`;
+  const portTaken = (p: { x: number; y: number }, ei: number): boolean => {
+    const users = portUse.get(pk(p));
+    if (!users) return false;
+    for (const u of users) if (u !== ei && (!keyOf[ei] || keyOf[u] !== keyOf[ei])) return true;
+    return false;
+  };
+  const fromOf = (ei: number): RouterPort => chosen[ei]?.from ?? { x: edges[ei]!.from.x, y: edges[ei]!.from.y, side: edges[ei]!.fromSide };
+  const toOf = (ei: number): RouterPort => chosen[ei]?.to ?? { x: edges[ei]!.to.x, y: edges[ei]!.to.y, side: edges[ei]!.toSide };
   const nodes: Array<number[] | null> = edges.map(() => null);
   const orients: Array<number[] | null> = edges.map(() => null);
   // Dirección con que cada arista ENTRA a cada nodo (para choques de frente).
@@ -393,6 +432,14 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const dirOcc = new Int16Array(N * 4);
 
   const mark = (ei: number, sign: 1 | -1): void => {
+    // Puertos: se toman/sueltan junto con el riel.
+    if (chosen[ei]) {
+      for (const p of [chosen[ei]!.from, chosen[ei]!.to]) {
+        const k = pk(p);
+        if (sign > 0) portUse.set(k, (portUse.get(k) ?? new Set()).add(ei));
+        else portUse.get(k)?.delete(ei);
+      }
+    }
     const ns = nodes[ei];
     const os = orients[ei];
     if (!ns || !os) return;
@@ -419,7 +466,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     while (joinOf[cur] && !seen.has(cur)) { seen.add(cur); cur = joinOf[cur]!.host; }
     return cur;
   };
-  const route = (ei: number, pf: number, allowJoin = true): { st: number[] | null; join: { host: number; t: number } | null } => {
+  const route = (ei: number, pf: number, allowJoin = true): { st: number[] | null; join: { host: number; t: number } | null; ports: { from: RouterPort; to: RouterPort } | null; cost: number } => {
     const e = edges[ei]!;
     const go = groupOcc.get(groupOf[ei]!)!;
     const key = keyOf[ei];
@@ -486,17 +533,37 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       if (side === 'bottom') return r.y + r.h - p.y;
       return p.y - r.y;
     };
-    const A = tipFor(e.from, e.fromSide, stub, free);
-    // Llegada al O por cualquiera de sus 3 lados libres (no por el del
-    // componente / `(`): una punta B por lado, el A* elige la mejor.
-    const arrivalSides = (e.toConnector ? [e.toSide, ...PERP[e.toSide]] : [e.toSide]) as Lado[];
-    const goals = new Map<number, number>(); // nodo B → dirección de llegada
-    arrivalSides.forEach((t, n) => {
-      const k = tipFor(e.to, t, Math.max(stub, ringOut(t, e.to, e.toRing)), free, n > 0);
-      if (k >= 0 && !goals.has(k)) goals.set(k, (SIDE_DIR[t] + 2) % 4);
-    });
+    // Candidatos de salida y llegada: con `fromCandidates`/`toCandidates` el
+    // router prueba todas las parejas (multi-origen, multi-destino) y se
+    // queda con la más barata; un puerto tomado por una arista ajena no vale.
+    const libres = (cs: RouterPort[]): RouterPort[] => {
+      const ok = cs.filter((c) => !portTaken(c, ei));
+      return ok.length ? ok : cs;
+    };
+    const fromCands = libres(e.fromCandidates?.length ? e.fromCandidates : [{ x: e.from.x, y: e.from.y, side: e.fromSide }]);
+    const toCands = libres(e.toCandidates?.length ? e.toCandidates : [{ x: e.to.x, y: e.to.y, side: e.toSide }]);
+    // Arranques: punta A de cada candidato de salida (estado = nodo × dirección).
+    const startOf = new Map<number, RouterPort>();
+    for (const c of fromCands) {
+      const A = tipFor(c, c.side, stub, free);
+      if (A < 0 || !free(A)) continue;
+      const s0 = A * 4 + SIDE_DIR[c.side];
+      if (!startOf.has(s0)) startOf.set(s0, c);
+    }
+    // Llegadas: al O por cualquiera de sus 3 lados libres (no por el del
+    // componente / `(`); a una cara, perpendicular. Una punta B por lado y
+    // por candidato: el A* elige la mejor.
+    const goals = new Map<number, { dir: number; port: RouterPort }>();
+    for (const c of toCands) {
+      const arrivalSides = (e.toConnector ? [c.side, ...PERP[c.side]] : [c.side]) as Lado[];
+      arrivalSides.forEach((t, n) => {
+        const k = tipFor(c, t, Math.max(stub, ringOut(t, c, e.toRing)), free, n > 0);
+        if (k >= 0 && !goals.has(k)) goals.set(k, { dir: (SIDE_DIR[t] + 2) % 4, port: c });
+      });
+    }
     const goalPts = [...goals.keys()].map((k) => ({ x: xs[k % nx]!, y: ys[Math.floor(k / nx)]! }));
-    const startDir = SIDE_DIR[e.fromSide];
+    const conCandidatos = Boolean(e.fromCandidates?.length || e.toCandidates?.length);
+    const destino = toCands[0]!;
     const S = N * 4;
     const gCost = new Float64Array(S).fill(Infinity);
     const came = new Int32Array(S).fill(-1);
@@ -507,15 +574,17 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     // W68: “por detrás” = detrás de la cara de salida, o del lado de la
     // caja de origen opuesto al destino (rodeos por la espalda).
     const fb = e.fromBox;
+    // Con candidatos la cara de salida no es fija: solo cuenta el lado de la
+    // caja opuesto al destino.
     const behind = (x: number, y: number): boolean =>
-      (e.fromSide === 'right' && x < e.from.x)
-      || (e.fromSide === 'left' && x > e.from.x)
-      || (e.fromSide === 'bottom' && y < e.from.y)
-      || (e.fromSide === 'top' && y > e.from.y)
-      || (e.to.x > fb.x + fb.w && x < fb.x)
-      || (e.to.x < fb.x && x > fb.x + fb.w)
-      || (e.to.y > fb.y + fb.h && y < fb.y)
-      || (e.to.y < fb.y && y > fb.y + fb.h);
+      (!conCandidatos && e.fromSide === 'right' && x < e.from.x)
+      || (!conCandidatos && e.fromSide === 'left' && x > e.from.x)
+      || (!conCandidatos && e.fromSide === 'bottom' && y < e.from.y)
+      || (!conCandidatos && e.fromSide === 'top' && y > e.from.y)
+      || (destino.x > fb.x + fb.w && x < fb.x)
+      || (destino.x < fb.x && x > fb.x + fb.w)
+      || (destino.y > fb.y + fb.h && y < fb.y)
+      || (destino.y < fb.y && y > fb.y + fb.h);
     const hScale = key ? MIN_MUL : 1;
     const h = (k: number): number => {
       const x = xs[k % nx]!;
@@ -525,9 +594,10 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       return m * hScale;
     };
     let bestJoin: { cost: number; parent: number; last: number; host: number; t: number } | null = null;
-    const s0 = A * 4 + startDir;
-    gCost[s0] = 0;
-    heap.push(h(A), s0);
+    for (const s0 of startOf.keys()) {
+      gCost[s0] = 0;
+      heap.push(h(s0 >> 2), s0);
+    }
     let goal = -1;
     while (heap.size) {
       const s = heap.pop();
@@ -567,7 +637,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         if (sameFunnel > 0) mul *= SAME_FUNNEL_MUL;
         // De frente contra otra arista (verde baja, café sube al mismo nodo):
         // se lee como una sola línea que sigue. Brilla como riel compartido.
-        if (dirOcc[nk * 4 + ((nd + 2) & 3)]! > 0 && others > 0) mul *= 1 + OVERLAP_MUL * pf;
+        if (dirOcc[nk * 4 + ((nd + 2) & 3)]! > 0 && others > 0) mul *= 1 + HEAD_ON_MUL * pf;
         // Rieles ajenos paralelos a < pitch: brillo decreciente con la distancia.
         const nearRail = (dist: number, n2: number): number => 1 + NEAR_RAIL_MUL * n2 * (1 - dist / pitch) * pf;
         if (o === 0) {
@@ -598,7 +668,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         // Giro: penalización geométrica (no es un campo), escalada por el
         // terreno para que dentro de agrupadores no salga “barato” codear.
         if (nd !== d) cost += turnPenalty * baseMul[nk]!;
-        if (goals.has(nk) && nd !== goals.get(nk)) cost += turnPenalty * baseMul[nk]!;
+        if (goals.has(nk) && nd !== goals.get(nk)!.dir) cost += turnPenalty * baseMul[nk]!;
         const ns = nk * 4 + nd;
         const ng = gk + cost;
         // Unirse a otra `->` en este nodo: sigue su camino hasta su punta. Se
@@ -617,14 +687,22 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     }
     // La unión gana si cuesta menos que la punta propia (o si no hay propia).
     const useJoin = bestJoin != null && (goal < 0 || bestJoin.cost < gCost[goal]!);
-    if (!useJoin && goal < 0) return { st: null, join: null };
+    if (!useJoin && goal < 0) return { st: null, join: null, ports: null, cost: Infinity };
     // La unión se registró al relajar con su padre fijo (otra ruta pudo
     // mejorar ese estado después): se reconstruye desde ese padre.
     const out: number[] = [];
-    for (let s = useJoin ? bestJoin!.parent : goal; s >= 0; s = came[s]!) out.push(s);
+    let raizEstado = -1;
+    for (let s = useJoin ? bestJoin!.parent : goal; s >= 0; s = came[s]!) { out.push(s); raizEstado = s; }
     out.reverse();
     if (useJoin) out.push(bestJoin!.last);
-    return { st: out, join: useJoin ? { host: bestJoin!.host, t: bestJoin!.t } : null };
+    const fromPort = startOf.get(raizEstado) ?? fromCands[0]!;
+    const toPort = useJoin ? toOf(rootOf(bestJoin!.host)) : goals.get(goal >> 2)!.port;
+    return {
+      st: out,
+      join: useJoin ? { host: bestJoin!.host, t: bestJoin!.t } : null,
+      ports: { from: fromPort, to: toPort },
+      cost: useJoin ? bestJoin!.cost : gCost[goal]!,
+    };
   };
 
   /** Estados → nodos + orientación ocupada (bit0 = H, bit1 = V). */
@@ -662,6 +740,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       if (JSON.stringify(st) !== JSON.stringify(states[ei]) || JSON.stringify(r.join) !== JSON.stringify(joinOf[ei])) changed = true;
       states[ei] = st;
       joinOf[ei] = r.join;
+      chosen[ei] = r.ports;
+      costOf[ei] = r.cost;
       commit(ei, st);
       mark(ei, 1);
     }
@@ -694,6 +774,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       const r = route(ei, 1 + iterations * 0.25, false);
       states[ei] = r.st;
       joinOf[ei] = null;
+      chosen[ei] = r.ports;
+      costOf[ei] = r.cost;
       commit(ei, r.st);
       mark(ei, 1);
       fixed = true;
@@ -709,21 +791,29 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   };
   /** La arista tal como termina: con la punta de la raíz si se unió. */
   const effEdge = (ei: number): RouterEdge => {
-    if (!joinOf[ei]) return edges[ei]!;
-    const r = edges[rootOf(ei)]!;
-    return { ...edges[ei]!, to: r.to, toSide: r.toSide, toBox: r.toBox, toRing: r.toRing, toConnector: r.toConnector, toPkgs: r.toPkgs };
+    const f = fromOf(ei);
+    const base: RouterEdge = { ...edges[ei]!, from: { x: f.x, y: f.y }, fromSide: f.side };
+    if (!joinOf[ei]) {
+      const t = toOf(ei);
+      return { ...base, to: { x: t.x, y: t.y }, toSide: t.side };
+    }
+    const ri = rootOf(ei);
+    const r = edges[ri]!;
+    const t = toOf(ri);
+    return { ...base, to: { x: t.x, y: t.y }, toSide: t.side, toBox: r.toBox, toRing: r.toRing, toConnector: r.toConnector, toPkgs: r.toPkgs };
   };
   const shared = new Set<number>();
   joinOf.forEach((j, ei) => { if (j) { shared.add(ei); shared.add(rootOf(ei)); shared.add(j.host); } });
 
-  const paths = edges.map((e, ei) => {
+  const paths = edges.map((e0, ei) => {
+    const e = effEdge(ei);
     if (joinOf[ei]) {
-      const ee = effEdge(ei);
       const pts: Punto[] = [{ x: e.from.x, y: e.from.y }];
       for (const k of fullNodes(ei)) pts.push({ x: xs[k % nx]!, y: ys[Math.floor(k / nx)]! });
-      pts.push({ x: ee.to.x, y: ee.to.y });
+      pts.push({ x: e.to.x, y: e.to.y });
       return simplifyOrthoPath(pts);
     }
+    void e0;
     // Ensamble directo: caras enfrentadas y alineadas → recta P→Q (sin
     // pasar por la grilla; con cajas cercanas las puntas A/B se cruzan).
     const facing = SIDE_DIR[e.toSide] === (SIDE_DIR[e.fromSide] + 2) % 4;
@@ -864,7 +954,9 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     }
   });
   const joinedTo = edges.map((_, ei) => (joinOf[ei] ? rootOf(ei) : null));
-  return { paths, violations, crowding, joinedTo };
+  const fromPorts = edges.map((_, ei) => (paths[ei] ? fromOf(ei) : null));
+  const toPorts = edges.map((_, ei) => (paths[ei] ? (joinOf[ei] ? toOf(rootOf(ei)) : toOf(ei)) : null));
+  return { paths, violations, crowding, joinedTo, costs: costOf, fromPorts, toPorts };
 }
 
 /* ─────────────────────── Distribución de puertos ─────────────────────── */

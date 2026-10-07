@@ -158,6 +158,8 @@ export const ClassLayoutOptsSchema = z.object({
    * paquetes con pestaña y título centrado).
    */
   boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
+  /** Sobreescritura del campo de costos del router (ver `routing-costs.ts`). */
+  routing: z.record(z.string(), z.record(z.string(), z.number())).optional(),
 });
 export type ClassLayoutOpts = z.infer<typeof ClassLayoutOptsSchema>;
 

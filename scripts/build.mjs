@@ -4,7 +4,7 @@ import { access, readdir, mkdir, stat, rm, writeFile, readFile, copyFile, unlink
 import { existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { join, dirname, basename, relative, resolve, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '../src/cdn/build/bundle-min.ts';
 import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '../src/cdn/build/stamp-hashes.ts';
@@ -622,6 +622,13 @@ for (const name of await readdir(themesSrc)) {
   nTemas++;
 }
 console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida por diagram-style)`);
+// Campo de costos del router: los defaults del kit se publican como JSON
+// para consumidores y auditoría (la fuente es routing-costs.ts).
+{
+  const { ROUTING_COSTS_DEFAULTS } = await import(pathToFileURL(join(root, 'src', 'components', 'diagrams', 'routing-costs.ts')).href);
+  await writeFile(join(dist, 'diagrams', 'routing-costs.json'), JSON.stringify(ROUTING_COSTS_DEFAULTS, null, 2) + '\n', 'utf8');
+  console.log(`  ${'diagrams/'.padEnd(18)} routing-costs.json (campo de costos compartido)`);
+}
 
 const indexPath = join(root, 'index.html');
 const indexPrev = await readFile(indexPath, 'utf8');

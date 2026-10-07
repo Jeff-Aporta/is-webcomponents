@@ -117,6 +117,8 @@ export const OpcionesEmpaqueSchema = z.object({
   usedSegs: z.array(z.unknown()).optional(),
   /** Permite tramos en diagonal (línea recta) entre conectores. */
   allowDiagonal: z.boolean().optional(),
+  /** Sobreescritura del campo de costos del router (ver `routing-costs.ts`). */
+  routing: z.record(z.string(), z.record(z.string(), z.number())).optional(),
   /** `orthogonal` (default) | `curved` (mismo recorrido, giros Bézier) | `straight`. Solo pintura. */
   edgeStyle: z.union([z.literal('orthogonal'), z.literal('curved'), z.literal('straight')]).optional(),
   /** Modo `layers`: componentes por fila dentro de cada franja. Default 6. */

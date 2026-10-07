@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T18:06:12.517Z",
+  "generatedAt": "2026-10-07T18:15:39.671Z",
   "count": 113,
   "modules": [
     {
@@ -614,7 +614,7 @@
       "id": "diagram-tipos.schemas",
       "path": "src/components/_shared/diagram-tipos.schemas.ts",
       "summary": "diagram-tipos — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 6632,
+      "bytes": 6791,
       "exports": [
         "CajaSchema",
         "ComponenteSchema",

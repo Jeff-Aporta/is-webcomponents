@@ -31,6 +31,13 @@ Un padre con 3 o más hijos en otra franja recibe un **conjunto de generalizaci�
 
 `component-router.ts` ya no suma costos: cada nodo de la grilla vale 1 y cada fuente emite un brillo con radio y caída lineal; el costo del paso es largo × producto de brillos. Desincentivo (> 1): entidades (2·clearance alrededor del hitbox), bordes de agrupador, anidación, rieles ajenos (encima ×120; a < `lanePitch` hasta ×6 decreciente), choque de frente, ir por detrás, cruces (×8), historial. Incentivo (< 1): puntas `->` de la misma clave con radio 150 px (en la punta ~0, a 150 px 1); dentro de ese radio los rieles de la misma clave no son ajenos y una arista puede unirse a otra si le sale más barato que su puerto propio. Lo único aditivo es el giro.
 
+## Puertos del perímetro y config de costos (2026-10-07)
+
+- Cada clase ofrece puertos candidatos en sus cuatro lados a 1U (`grid.step`, 20 px), nunca en las esquinas y centrados (medio paso sobrante a cada extremo). Cada candidato proyecta su línea a la grilla, así el riel sale perpendicular y los vértices quedan a 90°.
+- Para cada relación el router prueba todas las parejas origen × destino (búsqueda multi-origen y multi-destino sobre el campo de factores) y se queda con la más barata; un puerto tomado por una arista ajena no se reutiliza. Cada riel guarda su costo (`RouteResult.costs`), y los remates se pintan en el puerto que eligió el router (`fromPorts`/`toPorts`).
+- Los valores del campo (radios, brillos, límites) salen de `routing-costs.ts` (publicado como `dist/cdn/diagrams/routing-costs.json`). Cualquier diagrama los sobreescribe desde su payload: `layout.routing = { share: { radius: 200 }, rail: { near: 10 } }`.
+- Pendiente: el `-(O-` de componentes todavía fija la posición del conector con `planPorts`/`wire` (el glifo y su hitbox dependen de ella). Evaluar todas sus posiciones exige recolocar el glifo tras el ruteo.
+
 ## Estilo `vp` (Visual Paradigm / InSoft) — el del payload
 
 Referencia: los diagramas de componentes de los servidores hechos en Visual Paradigm.

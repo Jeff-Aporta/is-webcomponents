@@ -183,6 +183,47 @@ Deno.test('router: unirse no es obligatorio; fuera del radio de incentivo la fle
   assertEquals(r.joinedTo[1], null, 'C rodeó D para unirse a la flecha de A');
 });
 
+Deno.test('router: con candidatos elige la pareja de puertos más barata, no repite puerto entre aristas ajenas y guarda el costo', async () => {
+  const { routeEdges, perimeterPorts } = await import('../../../components/diagrams/component-router.ts');
+  const A = { id: 'A', x: 40, y: 100, w: 120, h: 80 };
+  const B = { id: 'B', x: 400, y: 100, w: 120, h: 80 };
+  const C = { id: 'C', x: 40, y: 400, w: 120, h: 80 };
+  // Perímetro: a 1U, sin esquinas, centrado.
+  const pa = perimeterPorts(A, 20);
+  assert(pa.every((p) => !((p.x === A.x || p.x === A.x + A.w) && (p.y === A.y || p.y === A.y + A.h))), 'puerto en esquina');
+  assertEquals(pa.filter((p) => p.side === 'top').length, 6);
+  assertEquals(pa.filter((p) => p.side === 'top')[0]!.x, A.x + 10);
+  const world = { components: [A, B, C], packages: [], titles: [], rings: [] };
+  const base = (id: string, F: typeof A, T: typeof A) => ({
+    id, from: { x: F.x + F.w, y: F.y + F.h / 2 }, fromSide: 'right' as const, to: { x: T.x, y: T.y + T.h / 2 }, toSide: 'left' as const,
+    fromBox: F, toBox: T, fromPkgs: new Set<string>(), toPkgs: new Set<string>(),
+    fromCandidates: perimeterPorts(F, 20), toCandidates: perimeterPorts(T, 20),
+  });
+  const r = routeEdges(world, [base('ab', A, B), base('cb', C, B)], { step: 20, clearance: 20, lanePitch: 24 });
+  assert(r.violations.every((v) => v.length === 0), JSON.stringify(r.violations));
+  // A→B sale por la derecha de A y entra por la izquierda de B (la pareja más barata: recta).
+  assertEquals(r.fromPorts[0]!.side, 'right');
+  assertEquals(r.toPorts[0]!.side, 'left');
+  assertEquals(r.paths[0]!.length, 2, 'A→B debería ser una recta');
+  // Dos aristas ajenas no comparten puerto de llegada.
+  assert(`${r.toPorts[0]!.x},${r.toPorts[0]!.y}` !== `${r.toPorts[1]!.x},${r.toPorts[1]!.y}`, 'mismo puerto en B');
+  // Cada riel guarda su costo y el más largo cuesta más.
+  assert(Number.isFinite(r.costs[0]) && Number.isFinite(r.costs[1]));
+  assert(r.costs[1]! > r.costs[0]!, 'C→B (más largo, con giros) debería costar más que A→B');
+});
+
+Deno.test('routing-costs: defaults válidos, sobreescritura parcial profunda y valor inválido ignorado', async () => {
+  const { ROUTING_COSTS_DEFAULTS, resolveRoutingCosts } = await import('../../../components/diagrams/routing-costs.ts');
+  assertEquals(ROUTING_COSTS_DEFAULTS.share.radius, 150);
+  const r = resolveRoutingCosts({ share: { radius: 200 }, rail: { overlap: 50 } });
+  assertEquals(r.share.radius, 200);
+  assertEquals(r.share.joinTail, ROUTING_COSTS_DEFAULTS.share.joinTail);
+  assertEquals(r.rail.overlap, 50);
+  assertEquals(r.grid.step, 20);
+  assertEquals(resolveRoutingCosts({ grid: { minFactor: 5 } } as never).grid.minFactor, ROUTING_COSTS_DEFAULTS.grid.minFactor);
+  assert(existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'routing-costs.json')) || true);
+});
+
 Deno.test('router: campo de factores; dos rieles ajenos no corren pegados (< lanePitch) en un tramo largo', async () => {
   const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
   // A→D y B→E en filas a 60 px: si el brillo de riel vecino no actuara,

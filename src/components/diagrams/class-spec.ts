@@ -3,7 +3,7 @@ import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { snapDiagramGrid } from '../_shared/diagram-grid.js';
-import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
+import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts } from './component-router.js';
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
 import { assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
 import type { Componente, Paquete } from '../_shared/diagram-tipos.js';
@@ -190,6 +190,7 @@ function readClassLayoutOpts(raw: unknown): ClassLayoutOpts | undefined {
     if (r[k] != null && Number.isFinite(Number(r[k]))) out[k] = Number(r[k]);
   }
   if (r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp') out.boxStyle = r.boxStyle;
+  if (r.routing && typeof r.routing === 'object') out.routing = r.routing as ClassLayoutOpts['routing'];
   return Object.keys(out).length ? out : undefined;
 }
 
@@ -689,6 +690,13 @@ function computePackagedClassLayout(
         toPkgs: pl ? ancestros(specById.get(r.to)?.package) : new Set<string>(),
         // Remate `->` compartible: mismo destino y mismo tipo de relación.
         ...(pl ? { shareKey: `${r.to}::${r.kind}` } : {}),
+        // Puertos candidatos en el perímetro (1U, sin esquinas): el router
+        // prueba todas las parejas y elige la más barata. `planPorts` queda
+        // solo como fallback si ningún candidato tiene nodo libre.
+        ...(pl ? {
+          fromCandidates: perimeterPorts(boxes.find((b) => b.id === r.from)!, GRID_STEP),
+          toCandidates: perimeterPorts(boxes.find((b) => b.id === r.to)!, GRID_STEP),
+        } : {}),
       };
     }),
     // Mismo router y mismas perillas que el diagrama de componentes: grilla,
@@ -704,6 +712,7 @@ function computePackagedClassLayout(
       pkgBorderClearance: rails.pkgBorderClearance,
       pkgBorderNearFactor: rails.pkgBorderNearFactor,
       pkgCrossFactor: rails.pkgCrossFactor,
+      ...(opts.routing ? { costs: opts.routing } : {}),
     },
   );
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
@@ -712,6 +721,10 @@ function computePackagedClassLayout(
   ruteables.forEach((i, k) => {
     const raiz = res.joinedTo[k];
     if (raiz != null) unidaA.set(i, ruteables[raiz]!);
+    // Puertos que eligió el router (los remates se pintan donde llegó el riel).
+    const fp = res.fromPorts[k];
+    const tp = res.toPorts[k];
+    if (planOf.has(i) && fp && tp) planOf.set(i, { from: { x: fp.x, y: fp.y }, fromSide: fp.side, to: { x: tp.x, y: tp.y }, toSide: tp.side });
     const pl = planOf.get(i);
     const bp = busPlan.get(i);
     const from = pl ? pl.from : bp!.from;
