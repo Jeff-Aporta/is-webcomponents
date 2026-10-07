@@ -146,6 +146,7 @@ class IswcClassDiagram extends DiagramElementBase {
     if (layout.packages?.length) this.#buildPackages(layout, theme);
     this.#buildEdges(layout, theme);
     if (layout.boxStyle === 'card') this.#buildCards(layout, theme);
+    else if (layout.boxStyle === 'vp') this.#buildVpBoxes(layout);
     else this.#buildNodes(layout, theme);
 
     const turtleGroup = svgEl('g');
@@ -199,8 +200,9 @@ class IswcClassDiagram extends DiagramElementBase {
   /** Decoración en la punta target: triángulo hueco (herencia/realización). */
   #targetTriangle(e: ClassLayoutEdge, color: string, hollow: boolean) {
     return svgEl('polygon', {
-      points: '0,0 -12,-6 -12,6',
-      fill: hollow ? (this.layout?.boxStyle === 'card' ? '#FFFFFF' : (this.#theme?.chipFill ?? '#0d1b2a')) : color,
+      // +10 % sobre el glifo original; en card/vp relleno del color de la arista.
+      points: '0,0 -13.2,-6.6 -13.2,6.6',
+      fill: hollow && !this.layout?.packages?.length ? (this.#theme?.chipFill ?? '#0d1b2a') : color,
       stroke: color,
       'stroke-width': 1.2,
       transform: `translate(${e.targetTipX},${e.targetTipY}) rotate(${e.targetAngle})`,
@@ -211,7 +213,7 @@ class IswcClassDiagram extends DiagramElementBase {
   /** Decoración en la punta target: flecha abierta (asociación/dependencia). */
   #targetArrowOpen(e: ClassLayoutEdge, color: string) {
     return svgEl('polyline', {
-      points: '-9,-5 0,0 -9,5',
+      points: '-9.9,-5.5 0,0 -9.9,5.5',
       fill: 'none',
       stroke: color,
       'stroke-width': 1.3,
@@ -225,7 +227,7 @@ class IswcClassDiagram extends DiagramElementBase {
   /** Decoración en la punta source: diamante (composición rellena / agregación hueca). */
   #sourceDiamond(e: ClassLayoutEdge, color: string, hollow: boolean) {
     return svgEl('polygon', {
-      points: '0,0 -8,-5 -16,0 -8,5',
+      points: '0,0 -8.8,-5.5 -17.6,0 -8.8,5.5',
       fill: hollow ? (this.#theme?.chipFill ?? '#0d1b2a') : color,
       stroke: color,
       'stroke-width': 1.2,
@@ -412,6 +414,11 @@ class IswcClassDiagram extends DiagramElementBase {
    */
   #buildPackages(layout: ClassLayout, theme: DiagramTheme) {
     const g = svgEl('g', { class: 'cls-pkgs' });
+    if (layout.boxStyle === 'vp') {
+      this.#buildVpPackages(layout, g);
+      this.svg.appendChild(g);
+      return;
+    }
     for (const p of layout.packages ?? []) {
       g.appendChild(svgEl('rect', {
         x: p.x, y: p.y, width: p.w, height: p.h, rx: 0,
@@ -505,6 +512,91 @@ class IswcClassDiagram extends DiagramElementBase {
         });
       });
 
+      this.svg.appendChild(g);
+      this.#nodeNodes.set(n.id, { n, g, box });
+    }
+  }
+
+
+  /**
+   * Paquetes estilo Visual Paradigm / InSoft: carpeta con pestaña corta a la
+   * izquierda, borde negro fino y rótulo centrado en la franja superior.
+   */
+  #buildVpPackages(layout: ClassLayout, g: SVGGElement) {
+    const TAB_W = 56;
+    const TAB_H = 12;
+    for (const p of layout.packages ?? []) {
+      const fill = p.palette ?? (p.depth % 2 ? '#7ACFF4' : '#FFFFC1');
+      g.appendChild(svgEl('rect', {
+        x: p.x, y: p.y, width: Math.min(TAB_W, p.w / 3), height: TAB_H,
+        fill, stroke: '#000000', 'stroke-width': 1, class: 'cls-pkg__tab',
+      }));
+      g.appendChild(svgEl('rect', {
+        x: p.x, y: p.y + TAB_H, width: p.w, height: p.h - TAB_H,
+        fill, stroke: '#000000', 'stroke-width': 1, class: 'cls-pkg',
+      }));
+      const izquierda = p.titleAlign === 'left';
+      const t = svgEl('text', {
+        x: izquierda ? p.x + Math.min(TAB_W, p.w / 3) + 12 : p.x + p.w / 2, y: p.y + TAB_H + 15,
+        'text-anchor': izquierda ? 'start' : 'middle', fill: '#000000',
+        'font-size': '12', 'font-family': 'Tahoma,Arial,sans-serif',
+      });
+      t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+      g.appendChild(t);
+    }
+  }
+
+  /**
+   * Clase estilo Visual Paradigm / InSoft: caja recta con relleno pastel del
+   * paquete, borde negro fino, «estereotipo» y nombre en negrita centrados,
+   * y compartimentos separados por línea negra. La visibilidad se escribe
+   * con el símbolo UML (+ - # ~) como prefijo, en negro.
+   */
+  #buildVpBoxes(layout: ClassLayout) {
+    const FONT = 'Tahoma,Arial,sans-serif';
+    for (const n of layout.nodes) {
+      const g = svgEl('g', { class: 'cls-node cls-node--vp' });
+      g.dataset.nodeId = n.id;
+      if (this.isViewer) g.style.cursor = 'pointer';
+      const box = svgEl('rect', {
+        x: n.x, y: n.y, width: n.w, height: n.h,
+        fill: n.fill ?? '#BCFFBB', stroke: '#000000', 'stroke-width': 1, class: 'cls-node__box',
+      });
+      g.appendChild(box);
+      for (const dy of n.dividerYs) {
+        g.appendChild(svgEl('line', {
+          x1: n.x, y1: n.y + dy, x2: n.x + n.w, y2: n.y + dy,
+          stroke: '#000000', 'stroke-width': 1, class: 'cls-node__divider',
+        }));
+      }
+      const cx = n.x + n.w / 2;
+      const header = n.sections.find((sec) => sec.type === 'header');
+      const hh = header?.h ?? 24;
+      if (n.stereotype) {
+        const st = svgEl('text', {
+          x: cx, y: n.y + 13, 'text-anchor': 'middle', fill: '#000000',
+          'font-size': '10.5', 'font-family': FONT,
+        });
+        st.textContent = `«${n.stereotype}»`;
+        g.appendChild(st);
+      }
+      const nameT = svgEl('text', {
+        x: cx, y: n.y + (n.stereotype ? hh - 8 : hh / 2 + 4), 'text-anchor': 'middle', fill: '#000000',
+        'font-size': '11.5', 'font-weight': '700', 'font-family': FONT,
+      });
+      nameT.textContent = n.name;
+      g.appendChild(nameT);
+      for (const sec of n.sections) {
+        if (sec.type === 'header') continue;
+        sec.rows.forEach((row, ri) => {
+          const t = svgEl('text', {
+            x: n.x + 8, y: n.y + sec.y + 6 + ri * 16 + 8, 'dominant-baseline': 'middle', fill: '#000000',
+            'font-size': '10.5', 'font-family': FONT,
+          });
+          g.appendChild(t);
+          applySvgTextContent(t, row.replace(/^\s*([+\-#~])\s*/, '$1 '));
+        });
+      }
       this.svg.appendChild(g);
       this.#nodeNodes.set(n.id, { n, g, box });
     }

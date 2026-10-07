@@ -4,7 +4,8 @@ import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
-import { packDiagram } from './component-pack.js';
+import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
+import { assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
 import type { Componente, Paquete } from '../_shared/diagram-tipos.js';
 import type { ClassPackage, ClassLayoutOpts } from './diagram-types.schemas.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -85,6 +86,7 @@ function readClass(raw: unknown, i: number): ClassSpecClass {
     hue: r.hue != null ? resolveTkHue(r) : undefined,
     package: String(r.package ?? '').trim() || undefined,
     color: typeof r.color === 'string' && r.color.trim() ? r.color.trim() : undefined,
+    fill: typeof r.fill === 'string' && r.fill.trim() ? r.fill.trim() : undefined,
     attributes,
     methods,
   };
@@ -171,6 +173,7 @@ function readPackages(src: Record<string, any>): ClassPackage[] | undefined {
       ...(palette ? { palette } : {}),
       ...(accent ? { accent } : {}),
       ...(Number(r.cols) > 0 ? { cols: Number(r.cols) } : {}),
+      ...(hex(r.classFill) ? { classFill: hex(r.classFill) } : {}),
     };
   });
 }
@@ -178,10 +181,11 @@ function readPackages(src: Record<string, any>): ClassPackage[] | undefined {
 function readClassLayoutOpts(raw: unknown): ClassLayoutOpts | undefined {
   const r = asRecord(raw);
   const out: ClassLayoutOpts = {};
-  for (const k of ['layerCols', 'nestedCols', 'colGutter', 'nestedRowGap', 'nestedPkgGap', 'pkgRowGap', 'lanePitch'] as const) {
+  for (const k of ['layerCols', 'nestedCols', 'colGutter', 'nestedRowGap', 'nestedPkgGap', 'pkgRowGap', 'lanePitch',
+    'laneNearFactor', 'pkgBorderClearance', 'pkgBorderNearFactor', 'pkgCrossFactor'] as const) {
     if (r[k] != null && Number.isFinite(Number(r[k]))) out[k] = Number(r[k]);
   }
-  if (r.boxStyle === 'card' || r.boxStyle === 'uml') out.boxStyle = r.boxStyle;
+  if (r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp') out.boxStyle = r.boxStyle;
   return Object.keys(out).length ? out : undefined;
 }
 
@@ -465,7 +469,14 @@ function computePackagedClassLayout(
     const g = geomById.get(c.id)!;
     return { id: c.id, name: c.name, package: c.package, x: 0, y: 0, w: g.w, h: g.h };
   });
-  const lanePitch = opts.lanePitch ?? 24;
+  const rails = resolvePackingGaps({
+    ...(opts.lanePitch != null ? { lanePitch: opts.lanePitch } : {}),
+    ...(opts.laneNearFactor != null ? { laneNearFactor: opts.laneNearFactor } : {}),
+    ...(opts.pkgBorderClearance != null ? { pkgBorderClearance: opts.pkgBorderClearance } : {}),
+    ...(opts.pkgBorderNearFactor != null ? { pkgBorderNearFactor: opts.pkgBorderNearFactor } : {}),
+    ...(opts.pkgCrossFactor != null ? { pkgCrossFactor: opts.pkgCrossFactor } : {}),
+  });
+  const lanePitch = rails.lanePitch;
   packDiagram(paquetes, cajas, [], {
     mode: 'layers',
     layerCols: opts.layerCols ?? 4,
@@ -500,9 +511,20 @@ function computePackagedClassLayout(
     return undefined;
   };
 
+  const fillOfPkg = (id: string | undefined): string | undefined => {
+    for (let cur = id ? pkgById.get(id) : undefined; cur; cur = cur.parent ? pkgById.get(cur.parent) : undefined) {
+      if (cur.classFill) return cur.classFill;
+    }
+    return undefined;
+  };
+  const vp = opts.boxStyle === 'vp';
+
   const packages = paquetes
     .filter((p) => p.w > 0 && p.h > 0)
-    .map((p) => ({ ...pkgById.get(p.id)!, x: p.x, y: p.y, w: p.w, h: p.h, depth: depthOf(p.id) }))
+    .map((p) => ({
+      ...pkgById.get(p.id)!, x: p.x, y: p.y, w: p.w, h: p.h, depth: depthOf(p.id),
+      titleAlign: undefined as 'center' | 'left' | undefined,
+    }))
     .sort((a, b) => a.depth - b.depth);
   const pkgBox = new Map(packages.map((p) => [p.id, p]));
 
@@ -514,7 +536,9 @@ function computePackagedClassLayout(
       const s = specById.get(c.id)!;
       const g = geomById.get(c.id)!;
       const color = s.color ?? accentOfPkg(s.package);
+      const fill = s.fill ?? fillOfPkg(s.package);
       return {
+        ...(fill ? { fill } : {}),
         id: c.id, x: c.x, y: c.y, w: c.w, h: c.h, layer: 0,
         name: s.name, stereotype: s.stereotype, sections: g.sections, dividerYs: g.dividerYs,
         hue: s.hue, group: s.group, package: s.package,
@@ -549,9 +573,21 @@ function computePackagedClassLayout(
   const enBus = new Set([...busOf.values()].flatMap((b) => b.members));
 
   // Títulos: franja superior izquierda de cada paquete (donde se pinta).
+  // En `vp` el rótulo va centrado como en Visual Paradigm, salvo que caiga
+  // sobre la vertical de una clase directa del paquete (una franja con una
+  // sola clase centrada): ahí la arista que sube tendría que rodearlo, así
+  // que el rótulo se corre junto a la pestaña.
+  const VP_TAB_W = 56;
   const titles = packages.map((p) => {
     const label = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
-    return { x: p.x - 4, y: p.y - 4, w: Math.ceil(label.length * 7.2) + 28, h: PKG_TITLE_H + 8 };
+    const w = Math.ceil(label.length * 7.2) + 28;
+    if (!vp) return { x: p.x - 4, y: p.y - 4, w, h: PKG_TITLE_H + 8 };
+    const x0 = p.x + p.w / 2 - w / 2;
+    const tapa = nodes.some((n) => n.package === p.id && n.x < x0 + w && n.x + n.w > x0);
+    p.titleAlign = tapa ? 'left' : 'center';
+    return tapa
+      ? { x: p.x + Math.min(VP_TAB_W, p.w / 3) + 4, y: p.y - 4, w, h: PKG_TITLE_H + 12 }
+      : { x: x0, y: p.y - 4, w, h: PKG_TITLE_H + 12 };
   });
   const boxes = nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, w: n.w, h: n.h }));
   const normales = rels.map((_, i) => i).filter((i) => !enBus.has(i));
@@ -624,10 +660,20 @@ function computePackagedClassLayout(
         toPkgs: pl ? ancestros(specById.get(r.to)?.package) : new Set<string>(),
       };
     }),
-    // Entre clases el pasillo útil es el aire interior del paquete (40 px): con
-    // la penalización de borde del diagrama de componentes (×9 a < 56 px) el
-    // router prefería rodear el paquete por fuera.
-    { clearance: 20, stub: 28, lanePitch, pkgCrossFactor: 1.2, pkgBorderClearance: 16, pkgBorderNearFactor: 2 },
+    // Mismo router y mismas perillas que el diagrama de componentes: grilla,
+    // aire a cajas, carriles y costo de agrupadores salen de
+    // `resolvePackingGaps` con los nombres del payload de componentes. Solo
+    // cambia el stub, que es el largo del remate (triángulo/flecha).
+    {
+      step: GRID_STEP,
+      clearance: EDGE_CLEARANCE,
+      stub: 28,
+      lanePitch: rails.lanePitch,
+      laneNearFactor: rails.laneNearFactor,
+      pkgBorderClearance: rails.pkgBorderClearance,
+      pkgBorderNearFactor: rails.pkgBorderNearFactor,
+      pkgCrossFactor: rails.pkgCrossFactor,
+    },
   );
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
   ruteables.forEach((i, k) => {
@@ -662,6 +708,15 @@ function computePackagedClassLayout(
     }
     return mid;
   };
+  // Color de arista: la misma regla W60 del diagrama de componentes (color
+  // del emisor, B −5 %), calculada sobre copias para no tocar los rellenos.
+  const colorDeArista = new Map<number, string>();
+  {
+    const cajasColor = nodes.map((n) => ({ id: n.id, ...(n.color ? { color: n.color } : {}) }));
+    const aristasColor = rels.map((r) => ({ from: r.from, to: r.to } as { from: string; to: string; color?: string }));
+    assignEmitterReceiverPalette(cajasColor, aristasColor);
+    aristasColor.forEach((a, i) => { if (a.color) colorDeArista.set(i, a.color); });
+  }
   const edges: ClassLayoutEdge[] = ruteables.flatMap((i) => {
     const r = rels[i]!;
     const pts = ptsOf.get(i);
@@ -672,7 +727,7 @@ function computePackagedClassLayout(
     const targetTip = tipAt(b, pl ? pl.toSide : 'bottom');
     const sourceTip = tipAt(a, pl ? pl.fromSide : busPlan.get(i)!.fromSide);
     const mid = midOf(pts);
-    const color = nodeById.get(r.from)?.color;
+    const color = colorDeArista.get(i) ?? nodeById.get(r.from)?.color;
     return [{
       id: r.id ?? `r${i}`, from: r.from, to: r.to, kind: r.kind,
       label: r.label, fromLabel: r.fromLabel, toLabel: r.toLabel,
@@ -699,7 +754,7 @@ function computePackagedClassLayout(
       targetTipX: tip.x, targetTipY: tip.y, targetAngle: tip.angle,
       sourceTipX: cx, sourceTipY: bus.y, sourceAngle: tip.angle,
       labelX: cx, labelY: bus.y,
-      ...(p.color ? { color: p.color } : {}),
+      ...((colorDeArista.get(bus.members[0]!) ?? p.color) ? { color: colorDeArista.get(bus.members[0]!) ?? p.color } : {}),
     });
   }
 

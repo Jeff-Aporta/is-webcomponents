@@ -96,6 +96,8 @@ export const ClassSpecClassSchema = z.object({
   package: z.string().optional(),
   /** Color de acento hex (cabecera, borde, aristas que emite). */
   color: z.string().optional(),
+  /** Relleno de la caja en estilo `vp` (#hex). */
+  fill: z.string().optional(),
   attributes: z.array(z.string()),
   methods: z.array(z.string()),
 });
@@ -131,6 +133,8 @@ export const ClassPackageSchema = z.object({
   accent: z.string().optional(),
   /** Clases por fila dentro del paquete, o columnas de su rejilla de subpaquetes. */
   cols: z.number().optional(),
+  /** Relleno de las clases que contiene en estilo `vp` (#hex). */
+  classFill: z.string().optional(),
 });
 export type ClassPackage = z.infer<typeof ClassPackageSchema>;
 
@@ -143,8 +147,17 @@ export const ClassLayoutOptsSchema = z.object({
   nestedPkgGap: z.number().optional(),
   pkgRowGap: z.number().optional(),
   lanePitch: z.number().optional(),
-  /** `uml` (default) o `card`: cabecera con acento, cuerpo blanco y sombra. */
-  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
+  /** Mismas perillas de rieles que el diagrama de componentes (`resolvePackingGaps`). */
+  laneNearFactor: z.number().optional(),
+  pkgBorderClearance: z.number().optional(),
+  pkgBorderNearFactor: z.number().optional(),
+  pkgCrossFactor: z.number().optional(),
+  /**
+   * `uml` (default), `card` (cabecera con acento, cuerpo blanco y sombra) o
+   * `vp` (Visual Paradigm / InSoft: cajas rectas pastel, borde negro,
+   * paquetes con pestaña y título centrado).
+   */
+  boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
 });
 export type ClassLayoutOpts = z.infer<typeof ClassLayoutOptsSchema>;
 
@@ -187,6 +200,8 @@ export const ClassLayoutNodeSchema = z.object({
   package: z.string().optional(),
   /** Acento resuelto (#hex): clase > paquete > hue. */
   color: z.string().optional(),
+  /** Relleno resuelto en estilo `vp`: clase > paquete (`classFill`). */
+  fill: z.string().optional(),
   overflow: z.union([z.literal('grow'), z.literal('shrink')]).optional(),
 });
 export type ClassLayoutNode = z.infer<typeof ClassLayoutNodeSchema>;
@@ -233,8 +248,10 @@ export const ClassLayoutSchema = z.object({
   /** Agrupadores empacados (modo paquetes), en orden de pintura (padres antes). */
   packages: z.array(ClassPackageSchema.extend({
     x: z.number(), y: z.number(), w: z.number(), h: z.number(), depth: z.number(),
+    /** Estilo `vp`: rótulo centrado salvo que tape la vertical de una clase directa. */
+    titleAlign: z.union([z.literal('center'), z.literal('left')]).optional(),
   })).optional(),
-  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
+  boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
 });
 export type ClassLayout = z.infer<typeof ClassLayoutSchema>;
 

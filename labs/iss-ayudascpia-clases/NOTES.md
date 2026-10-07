@@ -19,19 +19,25 @@ Chromium a veces no arranca en Windows (`Controlador no válido`): reintentar.
 
 - `packages: [{ id, name, stereotype?, parent?, palette?, accent?, cols? }]` y cada clase con `package`.
 - Empaque: el mismo `packDiagram` en modo `layers` que el diagrama de componentes. Las franjas raíz se apilan en el orden del payload; los subpaquetes van en rejilla de `cols` (del padre) o `layout.nestedCols`. En una rejilla de una sola fila cada subpaquete conserva su ancho; con varias filas se igualan para alinear columnas.
-- Ruteo: `component-router` con paquetes y títulos como obstáculos. Para clases el costo de borde está relajado (`pkgBorderClearance: 16`, `pkgBorderNearFactor: 2`, `pkgCrossFactor: 1.2`): con los valores de componentes el pasillo interior de 40 px era caro y las aristas rodeaban el paquete por fuera.
+- Ruteo: el mismo `component-router` y **las mismas perillas que el diagrama de componentes**: `step`/`clearance` (`GRID_STEP`, `EDGE_CLEARANCE`) y `lanePitch`, `laneNearFactor`, `pkgBorderClearance`, `pkgBorderNearFactor`, `pkgCrossFactor` salen de `resolvePackingGaps` con los mismos nombres de `layout` del payload de componentes. El payload usa los valores del editable de componentes del ISS (28 · 48 · 40 · 6 · 2). Solo cambia el `stub` (largo del remate).
+- Colores de arista: la regla W60 del diagrama de componentes (`assignEmitterReceiverPalette`: color del emisor, B −5 %), calculada sobre copias para no tocar rellenos.
 - Orden de franjas: ancestros primero (stack, base) y descendientes después, así la herencia apunta hacia arriba.
 
 ## Herencia en bus
 
 Un padre con 3 o más hijos en otra franja recibe un **conjunto de generalización**: cada hijo sube a una barra común en el corredor entre franjas y un solo tronco llega al único triángulo. El hijo con el camino libre sale por arriba; uno con otra clase o un rótulo encima sale por el lateral hacia el primer pasillo libre **dentro de su paquete** (≥ 28 px del borde). Dos llegadas a la misma x se corren un carril.
 
-## Estilo (`layout.boxStyle: 'card'`, default en modo paquetes)
+## Estilo `vp` (Visual Paradigm / InSoft) — el del payload
 
-- Tarjeta blanca con sombra y borde del acento; cabecera llena del acento con «estereotipo» y nombre.
-- Acento: `class.color` > `package.accent` > derivado de `package.palette` (mismo tono, más saturado y oscuro).
-- Miembros en monoespaciada con glifo de visibilidad: `+` verde, `-` rojo, `#` ámbar, `~` azul.
-- Aristas del color de la clase que las emite; herencia con triángulo hueco blanco.
+Referencia: los diagramas de componentes de los servidores hechos en Visual Paradigm.
+
+- Paquetes: carpeta con pestaña corta a la izquierda, borde negro de 1 px, relleno de paleta InSoft (`#FFFFC1` contenedor, `#7ACFF4` subpaquete, `#81FF81` externo) y rótulo centrado. Si el rótulo centrado cae sobre la vertical de una clase directa, se corre junto a la pestaña para no obligar a rodearlo.
+- Clases: caja recta con relleno pastel por paquete (`classFill`: `#BCFFBB` controllers, `#EAB6B0` models), borde negro, «estereotipo» y nombre en negrita centrados, compartimentos con línea negra y visibilidad UML (`+ - # ~`) en el texto.
+- Remates 10 % más grandes y rellenos del color de la arista (nunca blancos).
+
+## Estilo `card`
+
+Tarjeta blanca con sombra, cabecera del acento y glifos de visibilidad de color. Sigue disponible con `layout.boxStyle: 'card'`.
 
 ## Decisiones de contenido
 
