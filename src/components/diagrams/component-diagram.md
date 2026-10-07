@@ -309,6 +309,13 @@ sobreescribe con `layout.routing`:
 "layout": { "routing": { "share": { "radius": 200 }, "package": { "enter": 400 } } }
 ```
 
+**Abanico de consolidación (estándar).** Cuando varias aristas de la misma
+clave llegan al mismo punto (flechas al mismo destino, consumidores del mismo
+`-(O-`, hijos de una herencia), dentro del radio de incentivo corren en
+paralelo a corta distancia y terminan en una sola punta. Se lee la corriente
+y la concentración sin perder el trazado de cada una. No se desactiva: es
+cómo el router consolida.
+
 Los agrupadores admiten `icon` (Iconify) y se pintan con fondo circular
 delante del rótulo. Entre agrupadores hermanos apilados hay al menos 3U
 (`PKG_ROW_GAP`) y el relleno interior es de 2U.

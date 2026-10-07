@@ -155,7 +155,7 @@ export function readEdgeStyle(payload: unknown, fallback: EdgeStyle = 'orthogona
 if (!STORE.edges.size) {
   const E = (d: EdgeKindDefInput): void => { registerEdgeKind(EdgeKindDefSchema.parse(d)); };
   // Conectores (componentes): unas exponen, otras conectan.
-  E({ id: 'assembly', family: 'connector', label: 'Ensamble -(O-', usage: 'Un componente expone una interfaz (-( ) y otro la consume (-O). Recomendado en componentes y despliegue.', recommendedFor: ['component', 'block'], start: 'socket', end: 'ball', direction: 'expose' });
+  E({ id: 'assembly', family: 'connector', label: 'Ensamble -(O-', usage: 'Un componente expone una interfaz (-( ) y otro la consume (-O). Un O por interfaz expuesta; varios consumidores al mismo O convergen en abanico (estándar de consolidación del router). Recomendado en componentes y despliegue.', recommendedFor: ['component', 'block'], start: 'socket', end: 'ball', direction: 'expose' });
   E({ id: 'dependency', family: 'connector', label: 'Dependencia', usage: 'Usa algo del destino sin exponer interfaz. Punteada con flecha abierta.', recommendedFor: ['component', 'class'], end: 'open-arrow', dash: 'dashed' });
   E({ id: 'realization', family: 'connector', label: 'Realización', usage: 'El origen implementa el contrato del destino. Punteada con triángulo hueco.', recommendedFor: ['component', 'class'], end: 'triangle', dash: 'dashed' });
   E({ id: 'association', family: 'connector', label: 'Asociación', usage: 'Vínculo estable entre dos partes, sin dirección obligada.', recommendedFor: ['component', 'class', 'usecase'], direction: 'none' });

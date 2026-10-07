@@ -1496,9 +1496,15 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         fromPkgs: ancestorsOf(fromC.package),
         toPkgs: ancestorsOf(toC.package),
         toConnector: true,
-        // Remate `->`: las flechas al mismo destino pueden compartir punta
-        // (incentivo del router). El `-(O-` sigue siendo una conexión única.
-        ...(spec.layout?.connector === 'arrow' ? { shareKey: `${toC.id}::arrow`, startKey: `${fromC.id}::arrow` } : {}),
+        // Clave de llegada compartida: las `->` al mismo destino, y los
+        // conectores al MISMO O. En ambos casos las aristas convergen en
+        // abanico (rieles paralelos a corta distancia dentro del radio de
+        // incentivo, una sola punta): es el efecto estándar de consolidación.
+        // El `-(O-` sigue siendo único por interfaz expuesta: la clave es la
+        // interfaz, no el componente.
+        ...(spec.layout?.connector === 'arrow'
+          ? { shareKey: `${toC.id}::arrow`, startKey: `${fromC.id}::arrow` }
+          : prv ? { shareKey: `${prv.id}::assembly` } : {}),
       },
     });
   }
