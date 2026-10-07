@@ -3,8 +3,9 @@
 //
 // Regla: un test que pasa en verde no se vuelve a correr durante
 // `duración × 60` (proporcional): 1 min -> 60 min, 1 s -> 1 min,
-// 13 ms -> 780 ms (casi inmediato). Un test en rojo borra su entrada y corre
-// siempre hasta que pase. Calibración WT-2026-10-07 (Jeff): antes era
+// 13 ms -> 780 ms (casi inmediato). Solo el verde actualiza el cooldown: un
+// test en rojo guarda `until: -1` (queda auditado que falló y no aplica
+// cooldown) y corre siempre hasta que pase. Calibración WT-2026-10-07 (Jeff): antes era
 // 30 min por hora (x0,5); ahora x60 para penalizar más los tests lentos.
 //
 // Transversal (Node y Deno): solo depende de `node:fs`/`node:path`/
@@ -78,12 +79,10 @@ export function createTestCooldown(opts: TestCooldownOptions) {
     const record = (id: string, durationMs: number, ok: boolean): void => {
         if (opts.disabled) return;
         const d = load();
-        if (ok) {
-            const t = now();
-            d[id] = { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor) };
-        } else {
-            delete d[id];
-        }
+        const t = now();
+        d[id] = ok
+            ? { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor) }
+            : { durationMs, okAt: null, until: -1, failAt: t };
         save();
     };
 

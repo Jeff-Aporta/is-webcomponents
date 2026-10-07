@@ -1,6 +1,6 @@
 // test-cooldown.test.ts — garantías del cooldown de tests (src/cdn/tools/test-cooldown.ts).
 //   C1 verde de 1 min -> 60 min de skip; a los 61 min vuelve a correr.
-//   C2 un rojo borra la entrada y se relanza.
+//   C2 un rojo guarda until -1 (auditado, sin cooldown) y se relanza.
 //   C3 la memoria persiste en el JSON.
 //   C4 `disabled` corre todo y no escribe.
 //   C5 proporcional (x60): 1 min -> 60 min, 1 s -> 1 min, 13 ms -> 780 ms.
@@ -33,6 +33,10 @@ Deno.test('test-cooldown: verde de 1 min -> 60 min de skip (x60); rojo corre sie
 
   await assertRejects(() => createTestCooldown({ dbPath, now: () => t + 61 * MIN }).run(id, () => { throw new Error('rojo'); }));
   assert(!createTestCooldown({ dbPath, now }).check(id).skip, 'C2 tras un rojo no hay cooldown');
+  const rojo = createTestCooldown({ dbPath, now }).entries()[id];
+  assertEquals(rojo.until, -1, 'C2 el rojo queda registrado con until -1');
+  assertEquals(rojo.okAt, null, 'C2 el rojo no tiene okAt');
+  assert(typeof rojo.failAt === 'number', 'C2 el rojo registra failAt');
 
   const offPath = join(dir, 'off.json');
   const off = createTestCooldown({ dbPath: offPath, now, disabled: true });

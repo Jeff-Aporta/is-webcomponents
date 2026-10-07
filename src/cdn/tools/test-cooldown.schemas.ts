@@ -5,12 +5,14 @@
 import type { createTestCooldown } from "./test-cooldown.ts";
 
 export interface TestCooldownEntry {
-    /** Duración de la última corrida verde, en ms. */
+    /** Duración de la última corrida (verde o roja), en ms. */
     durationMs: number;
-    /** Epoch ms en que pasó en verde. */
-    okAt: number;
-    /** Epoch ms hasta el que el test se salta. */
+    /** Epoch ms en que pasó en verde; `null` si la última corrida fue roja. */
+    okAt: number | null;
+    /** Epoch ms hasta el que el test se salta; `-1` = la última corrida fue roja (no aplica cooldown). */
     until: number;
+    /** Epoch ms del último rojo (solo cuando `until === -1`). */
+    failAt?: number;
 }
 
 export interface TestCooldownOptions {
