@@ -1494,6 +1494,9 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         fromPkgs: ancestorsOf(fromC.package),
         toPkgs: ancestorsOf(toC.package),
         toConnector: true,
+        // Remate `->`: las flechas al mismo destino pueden compartir punta
+        // (incentivo del router). El `-(O-` sigue siendo una conexión única.
+        ...(spec.layout?.connector === 'arrow' ? { shareKey: `${toC.id}::arrow` } : {}),
       },
     });
   }
@@ -1508,6 +1511,16 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   });
   routable.forEach(({ e, re }, i) => {
     const pts = routed.paths[i];
+    // Unida a otra `->`: termina en la interfaz (y la cara) de la raíz y no
+    // pinta su propia punta.
+    const raiz = routed.joinedTo[i];
+    if (raiz != null) {
+      const host = routable[raiz]!.e;
+      e.toInterface = host.toInterface;
+      e.toX = host.toX;
+      e.toY = host.toY;
+      (e as LayoutEdge & { sharedTip?: boolean }).sharedTip = true;
+    }
     // Sin ruta: L ortogonal visible (y re-empaque abajo) antes que perder la arista.
     e.path = pointsToPath(pts ?? simplifyOrthoPath([
       re.from, { x: re.to.x, y: re.from.y }, re.to,

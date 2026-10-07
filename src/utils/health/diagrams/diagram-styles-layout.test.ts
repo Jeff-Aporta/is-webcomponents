@@ -125,12 +125,14 @@ Deno.test('capas: subpaquetes de una sola fila comparten alto pero conservan su 
   assert(a2.w > a1.w, 'el subpaquete de 3 columnas debería ser más ancho');
 });
 
-Deno.test('remate arrow: sin lollipops y cada flecha termina en la cara de su destino', () => {
+Deno.test('remate arrow: sin lollipops, cada flecha termina en la cara de su destino y cada punta se pinta una vez', () => {
   const L = computeComponentLayout(capas({ connector: 'arrow' }));
   assertEquals(L.interfaces.length, 0);
   const caja = new Map((L.components as Array<Caja & { id: string }>).map((c) => [c.id, c]));
-  const llegadas = new Set<string>();
-  for (const e of L.edges as Array<{ to: string; path: string }>) {
+  // Las `->` al mismo destino pueden compartir punta (incentivo del router):
+  // en cada punto de llegada se pinta exactamente una cabeza.
+  const cabezas = new Map<string, number>();
+  for (const e of L.edges as Array<{ to: string; path: string; sharedTip?: boolean }>) {
     const pts = puntos(e.path);
     const fin = pts[pts.length - 1]!;
     const prev = pts[pts.length - 2]!;
@@ -139,9 +141,50 @@ Deno.test('remate arrow: sin lollipops y cada flecha termina en la cara de su de
       || Math.abs(fin.y - b.y) < 0.6 || Math.abs(fin.y - (b.y + b.h)) < 0.6;
     assert(enBorde, `flecha a ${e.to} no toca la caja`);
     assert(prev.x === fin.x || prev.y === fin.y, 'último tramo no es ortogonal');
-    llegadas.add(`${fin.x},${fin.y}`);
+    const k = `${fin.x},${fin.y}`;
+    cabezas.set(k, (cabezas.get(k) ?? 0) + (e.sharedTip ? 0 : 1));
   }
-  assertEquals(llegadas.size, L.edges.length, 'dos flechas llegan al mismo punto');
+  for (const [k, n] of cabezas) assertEquals(n, 1, `punta en ${k} pintada ${n} veces`);
+});
+
+Deno.test('router: las `->` de la misma clave comparten punta si les sale barato; el `-(O-` nunca', async () => {
+  const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
+  // Destino D a la derecha; A y B a la izquierda, uno sobre otro y cerca.
+  const D = { id: 'D', x: 600, y: 180, w: 120, h: 80 };
+  const A = { id: 'A', x: 40, y: 120, w: 120, h: 60 };
+  const B = { id: 'B', x: 40, y: 240, w: 120, h: 60 };
+  const world = { components: [A, B, D], packages: [], titles: [], rings: [] };
+  const arista = (id: string, src: typeof A, ty: number, shareKey?: string) => ({
+    id, from: { x: src.x + src.w, y: src.y + src.h / 2 }, fromSide: 'right' as const,
+    to: { x: D.x, y: ty }, toSide: 'left' as const, fromBox: src, toBox: D,
+    fromPkgs: new Set<string>(), toPkgs: new Set<string>(), ...(shareKey ? { shareKey } : {}),
+  });
+  const conClave = routeEdges(world, [arista('a', A, 200, 'D::arrow'), arista('b', B, 240, 'D::arrow')], { step: 20, clearance: 20, lanePitch: 24 });
+  assert(conClave.joinedTo.some((j) => j != null), 'dos flechas vecinas al mismo destino no compartieron punta');
+  assert(conClave.violations.every((v) => v.length === 0), `ruta ilegal: ${JSON.stringify(conClave.violations)}`);
+  const unida = conClave.joinedTo.findIndex((j) => j != null);
+  const raiz = conClave.joinedTo[unida]!;
+  const fin = (p: Array<{ x: number; y: number }> | null) => p![p!.length - 1]!;
+  assertEquals(fin(conClave.paths[unida]), fin(conClave.paths[raiz]), 'la unida no termina en la punta de la raíz');
+  // Sin clave (como el -(O-): cada una llega a su propio puerto.
+  const sinClave = routeEdges(world, [arista('a', A, 200), arista('b', B, 240)], { step: 20, clearance: 20, lanePitch: 24 });
+  assert(sinClave.joinedTo.every((j) => j == null), 'sin clave hubo unión');
+  assert(JSON.stringify(fin(sinClave.paths[0]!)) !== JSON.stringify(fin(sinClave.paths[1]!)));
+});
+
+Deno.test('router: unirse no es obligatorio; si el rodeo es caro, la flecha hace su propia punta', async () => {
+  const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
+  // D grande; A llega por la izquierda y C por abajo, lejos: unirse a la
+  // flecha de A exigiría rodear D. C debe llegar con su propia punta.
+  const D = { id: 'D', x: 400, y: 100, w: 200, h: 200 };
+  const A = { id: 'A', x: 40, y: 170, w: 120, h: 60 };
+  const C = { id: 'C', x: 440, y: 520, w: 120, h: 60 };
+  const world = { components: [A, C, D], packages: [], titles: [], rings: [] };
+  const r = routeEdges(world, [
+    { id: 'a', from: { x: 160, y: 200 }, fromSide: 'right', to: { x: 400, y: 200 }, toSide: 'left', fromBox: A, toBox: D, fromPkgs: new Set(), toPkgs: new Set(), shareKey: 'D::arrow' },
+    { id: 'c', from: { x: 500, y: 520 }, fromSide: 'top', to: { x: 500, y: 300 }, toSide: 'bottom', fromBox: C, toBox: D, fromPkgs: new Set(), toPkgs: new Set(), shareKey: 'D::arrow' },
+  ], { step: 20, clearance: 20, lanePitch: 24 });
+  assertEquals(r.joinedTo[1], null, 'C rodeó D para unirse a la flecha de A');
 });
 
 Deno.test('estilo vp: la pintura se declara en el layout y los rótulos no se centran', () => {

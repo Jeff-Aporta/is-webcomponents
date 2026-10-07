@@ -713,6 +713,8 @@ function computePackagedClassLayout(
         fromBox: boxes.find((b) => b.id === r.from)!, toBox: pl ? boxes.find((b) => b.id === r.to)! : punto,
         fromPkgs: ancestros(specById.get(r.from)?.package),
         toPkgs: pl ? ancestros(specById.get(r.to)?.package) : new Set<string>(),
+        // Remate `->` compartible: mismo destino y mismo tipo de relación.
+        ...(pl ? { shareKey: `${r.to}::${r.kind}` } : {}),
       };
     }),
     // Mismo router y mismas perillas que el diagrama de componentes: grilla,
@@ -731,7 +733,11 @@ function computePackagedClassLayout(
     },
   );
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
+  /** Relación unida a otra `->`: índice (en `rels`) de la raíz cuya punta usa. */
+  const unidaA = new Map<number, number>();
   ruteables.forEach((i, k) => {
+    const raiz = res.joinedTo[k];
+    if (raiz != null) unidaA.set(i, ruteables[raiz]!);
     const pl = planOf.get(i);
     const bp = busPlan.get(i);
     const from = pl ? pl.from : bp!.from;
@@ -780,9 +786,10 @@ function computePackagedClassLayout(
     const pts = ptsOf.get(i);
     if (!pts) return [];
     const pl = planOf.get(i);
+    const plRaiz = unidaA.has(i) ? planOf.get(unidaA.get(i)!) : pl;
     const a = pts[0]!;
     const b = pts[pts.length - 1]!;
-    const targetTip = tipAt(b, pl ? pl.toSide : 'bottom');
+    const targetTip = tipAt(b, plRaiz ? plRaiz.toSide : 'bottom');
     const sourceTip = tipAt(a, pl ? pl.fromSide : busPlan.get(i)!.fromSide);
     const mid = midOf(pts);
     const color = colorDeArista.get(i) ?? nodeById.get(r.from)?.color;
@@ -794,7 +801,7 @@ function computePackagedClassLayout(
       sourceTipX: sourceTip.x, sourceTipY: sourceTip.y, sourceAngle: sourceTip.angle,
       labelX: mid.x, labelY: mid.y,
       ...(color ? { color } : {}),
-      ...(busPlan.has(i) ? { noTip: true } : {}),
+      ...(busPlan.has(i) || unidaA.has(i) ? { noTip: true } : {}),
     }];
   });
   // Barra + tronco de cada bus, con su triángulo en la cara inferior del padre.

@@ -52,6 +52,16 @@ export const RouterEdgeSchema = z.object({
    * Sin él (p.ej. DER), la llegada es perpendicular a la cara `toSide`.
    */
   toConnector: z.boolean().optional(),
+  /**
+   * Remate `->` compartible. Aristas con la misma clave (mismo destino y
+   * mismo remate) pueden terminar en la punta de otra: es un INCENTIVO, no
+   * una restricción. Cerca de los rieles de la misma clave el paso es más
+   * barato (radio de 3 celdas, más cerca = más ahorro) y cualquier nodo de
+   * esos rieles es una meta alternativa; si llegar ahí cuesta más que el
+   * puerto propio (mucho giro o rodeo), la arista hace su propia `->`.
+   * Sin clave (p. ej. `-(O-`) la conexión es única.
+   */
+  shareKey: z.string().optional(),
 });
 export type RouterEdge = z.infer<typeof RouterEdgeSchema>;
 
@@ -81,6 +91,11 @@ export const RouteResultSchema = z.object({
    * del embudo final. > 0 = corredor sin ancho suficiente → re-empacar.
    */
   crowding: z.number(),
+  /**
+   * Por arista: índice de la arista cuya punta `->` comparte (la raíz de la
+   * cadena), o null si llega con su propia punta.
+   */
+  joinedTo: z.array(z.union([z.number(), z.null()])),
 });
 export type RouteResult = z.infer<typeof RouteResultSchema>;
 

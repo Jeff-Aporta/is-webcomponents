@@ -375,7 +375,8 @@ class IswcComponentDiagram extends DiagramElementBase {
         class: 'cd-edge__path',
       });
       g.appendChild(path);
-      if (!ballSocket) {
+      // Flecha unida a otra `->`: la punta la pinta la raíz.
+      if (!ballSocket && !(e as { sharedTip?: boolean }).sharedTip) {
         const dir = pathEndDirection(e.path);
         // Remate `arrow`: la punta toca la cara del destino.
         const back = layout.connector === 'arrow' ? 0 : 8;

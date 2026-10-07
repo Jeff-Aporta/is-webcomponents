@@ -43,6 +43,14 @@ const PERP: Record<Lado, [Lado, Lado]> = {
 const CROSS_COST = 160;
 /** Historial de conflicto por nodo (×, acumulativo por vuelta). */
 const HISTORY_MUL = 6;
+/** Incentivo `->`: radio (en celdas de grilla) alrededor de los rieles de la misma clave. */
+const SHARE_RADIUS_STEPS = 3;
+/** Ahorro máximo del paso sobre un riel de la misma clave (decrece lineal con la distancia). */
+const SHARE_DISCOUNT = 0.65;
+/** Piso del multiplicador con ahorro (el paso nunca es gratis). */
+const SHARE_MIN_MUL = 0.3;
+/** Costo por px del tramo ajeno que se reutiliza al unirse a otra `->`. */
+const JOIN_TAIL_MUL = 0.35;
 
 const inside = (x: number, y: number, c: Caja, pad: number): boolean =>
   x > c.x - pad && x < c.x + c.w + pad && y > c.y - pad && y < c.y + c.h + pad;
@@ -348,6 +356,12 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const groupOf = edges.map((e) => `${Math.round(e.to.x)},${Math.round(e.to.y)}`);
   const groupOcc = new Map<string, Int16Array[]>();
   for (const g of new Set(groupOf)) groupOcc.set(g, [new Int16Array(N), new Int16Array(N)]);
+  // Ocupación por clave `->`: rieles que comparten punta no se penalizan entre sí.
+  const keyOf = edges.map((e) => e.shareKey ?? null);
+  const keyOcc = new Map<string, Int16Array[]>();
+  for (const kk of new Set(keyOf.filter((x): x is string => x != null))) keyOcc.set(kk, [new Int16Array(N), new Int16Array(N)]);
+  /** A qué arista (y en qué nodo de su camino) se unió cada una. */
+  const joinOf: Array<{ host: number; t: number } | null> = edges.map(() => null);
   const nodes: Array<number[] | null> = edges.map(() => null);
   const orients: Array<number[] | null> = edges.map(() => null);
   // Dirección con que cada arista ENTRA a cada nodo (para choques de frente).
@@ -359,6 +373,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     const os = orients[ei];
     if (!ns || !os) return;
     const go = groupOcc.get(groupOf[ei]!)!;
+    const ko = keyOf[ei] ? keyOcc.get(keyOf[ei]!)! : null;
     for (let t = 0; t < ns.length; t++) {
       const k = ns[t]!;
       const o = os[t]!;
@@ -366,15 +381,71 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         if (!(o & (1 << oo))) continue;
         occ[oo]![k] += sign;
         go[oo]![k] += sign;
+        if (ko) ko[oo]![k] += sign;
       }
       dirOcc[k * 4 + dirsIn[ei]![t]!] += sign;
     }
   };
 
   // ── A* (estado = nodo × dirección) ──────────────────────────────────────
-  const route = (ei: number, pf: number): number[] | null => {
+  /** Raíz de la cadena de uniones (la arista cuya punta se usa al final). */
+  const rootOf = (ei: number): number => {
+    const seen = new Set<number>();
+    let cur = ei;
+    while (joinOf[cur] && !seen.has(cur)) { seen.add(cur); cur = joinOf[cur]!.host; }
+    return cur;
+  };
+  const route = (ei: number, pf: number, allowJoin = true): { st: number[] | null; join: { host: number; t: number } | null } => {
     const e = edges[ei]!;
     const go = groupOcc.get(groupOf[ei]!)!;
+    const key = keyOf[ei];
+    const ko = key ? keyOcc.get(key)! : null;
+    // Campo de incentivo `->`: 1 sobre un riel de la misma clave, 0 a 3 celdas.
+    const shareField = key ? new Float32Array(N) : null;
+    // Metas alternativas: nodos de rieles de la misma clave (no de la propia cadena).
+    const joinAt = new Map<number, { host: number; t: number; dirOut: number; tail: number }>();
+    if (key && shareField) {
+      const R = SHARE_RADIUS_STEPS;
+      for (let oj = 0; oj < edges.length; oj++) {
+        if (oj === ei || keyOf[oj] !== key || !nodes[oj]) continue;
+        if (rootOf(oj) === ei) continue;
+        const ns = nodes[oj]!;
+        const dIn = dirsIn[oj]!;
+        // Largo restante del camino ajeno desde cada nodo hasta su punta.
+        const tail = new Float64Array(ns.length);
+        const endK = ns[ns.length - 1]!;
+        const host = edges[oj]!;
+        tail[ns.length - 1] = Math.abs(xs[endK % nx]! - host.to.x) + Math.abs(ys[Math.floor(endK / nx)]! - host.to.y);
+        for (let t = ns.length - 2; t >= 0; t--) {
+          const a = ns[t]!;
+          const b = ns[t + 1]!;
+          tail[t] = tail[t + 1]! + Math.abs(xs[a % nx]! - xs[b % nx]!) + Math.abs(ys[Math.floor(a / nx)]! - ys[Math.floor(b / nx)]!);
+        }
+        for (let t = 0; t < ns.length; t++) {
+          const k = ns[t]!;
+          const ci = k % nx;
+          const cj = (k - ci) / nx;
+          for (let dj = -R; dj <= R; dj++) {
+            for (let di = -R; di <= R; di++) {
+              const d = Math.abs(di) + Math.abs(dj);
+              if (d > R) continue;
+              const ii = ci + di;
+              const jj = cj + dj;
+              if (ii < 0 || jj < 0 || ii >= nx || jj >= ny) continue;
+              const kk = idx(ii, jj);
+              const f = 1 - d / (R + 1);
+              if (f > shareField[kk]!) shareField[kk] = f;
+            }
+          }
+          // Unirse lejos del arranque del anfitrión (no en su stub de salida).
+          if (allowJoin && t >= 2 && t < ns.length - 1) {
+            const dirOut = dIn[t + 1]!;
+            const prev = joinAt.get(k);
+            if (!prev || tail[t]! < prev.tail) joinAt.set(k, { host: oj, t, dirOut, tail: tail[t]! });
+          }
+        }
+      }
+    }
     const prohAllowed = prohibited.map((p) => e.fromPkgs.has(p.id));
     const free = (k: number): boolean =>
       !blocked[k]
@@ -417,13 +488,15 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       || (e.to.x < fb.x && x > fb.x + fb.w)
       || (e.to.y > fb.y + fb.h && y < fb.y)
       || (e.to.y < fb.y && y > fb.y + fb.h);
+    const hScale = key ? SHARE_MIN_MUL : 1;
     const h = (k: number): number => {
       const x = xs[k % nx]!;
       const y = ys[Math.floor(k / nx)]!;
       let m = Infinity;
       for (const g of goalPts) m = Math.min(m, Math.abs(x - g.x) + Math.abs(y - g.y));
-      return m;
+      return m * hScale;
     };
+    let bestJoin: { cost: number; parent: number; last: number; host: number; t: number } | null = null;
     const s0 = A * 4 + startDir;
     gCost[s0] = 0;
     heap.push(h(A), s0);
@@ -432,6 +505,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       const s = heap.pop();
       const k = s >> 2;
       const d = s & 3;
+      // Una unión ya encontrada que nada en la cola puede mejorar: gana.
+      if (bestJoin && bestJoin.cost <= gCost[s]! + h(k)) break;
       if (goals.has(k)) { goal = s; break; }
       const gk = gCost[s]!;
       const i = k % nx;
@@ -450,53 +525,73 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         // Mismo destino: en el embudo final junto a B compartir cuesta menos,
         // pero nunca es gratis (si no, se juntan aunque haya otro lado libre).
         const merge = nearGoal(xs[ni]!, ys[nj]!);
-        const others = occ[o]![nk]! - (merge ? go[o]![nk]! : 0);
-        const sameFunnel = merge ? go[o]![nk]! : 0;
+        // Rieles de la misma clave `->` no son ajenos: se excluyen como el embudo.
+        const own = (oo: number, k2: number): number =>
+          Math.max(merge ? go[oo]![k2]! : 0, ko ? ko[oo]![k2]! : 0);
+        const others = occ[o]![nk]! - own(o, nk);
+        const sameFunnel = merge && !(ko && ko[o]![nk]! > 0) ? go[o]![nk]! : 0;
         let mul = baseMul[nk]! + (borderMul[o]![nk]! - 1) + hist[nk]! * HISTORY_MUL;
         if (behind(xs[ni]!, ys[nj]!)) mul += RETREAT_MUL;
         if (others > 0) mul += OVERLAP_MUL * others * pf;
         if (sameFunnel > 0) mul += OVERLAP_MUL * SAME_FUNNEL_SHARE * sameFunnel;
         // De frente contra otra arista (verde baja, café sube al mismo nodo):
         // se lee como una sola línea que sigue. Cuesta como riel compartido.
-        if (dirOcc[nk * 4 + ((nd + 2) & 3)]! > 0) mul += OVERLAP_MUL * pf;
+        if (dirOcc[nk * 4 + ((nd + 2) & 3)]! > 0 && others > 0) mul += OVERLAP_MUL * pf;
         // Rieles ajenos paralelos a < pitch.
         if (o === 0) {
           for (let jj = nj - 1; jj >= 0 && ys[nj]! - ys[jj]! < pitch; jj--) {
-            const n2 = occ[0]![idx(ni, jj)]! - (merge ? go[0]![idx(ni, jj)]! : 0);
+            const n2 = occ[0]![idx(ni, jj)]! - own(0, idx(ni, jj));
             if (n2 > 0) mul += nearFactor * n2 * (1 - (ys[nj]! - ys[jj]!) / pitch) * pf;
           }
           for (let jj = nj + 1; jj < ny && ys[jj]! - ys[nj]! < pitch; jj++) {
-            const n2 = occ[0]![idx(ni, jj)]! - (merge ? go[0]![idx(ni, jj)]! : 0);
+            const n2 = occ[0]![idx(ni, jj)]! - own(0, idx(ni, jj));
             if (n2 > 0) mul += nearFactor * n2 * (1 - (ys[jj]! - ys[nj]!) / pitch) * pf;
           }
         } else {
           for (let ii = ni - 1; ii >= 0 && xs[ni]! - xs[ii]! < pitch; ii--) {
-            const n2 = occ[1]![idx(ii, nj)]! - (merge ? go[1]![idx(ii, nj)]! : 0);
+            const n2 = occ[1]![idx(ii, nj)]! - own(1, idx(ii, nj));
             if (n2 > 0) mul += nearFactor * n2 * (1 - (xs[ni]! - xs[ii]!) / pitch) * pf;
           }
           for (let ii = ni + 1; ii < nx && xs[ii]! - xs[ni]! < pitch; ii++) {
-            const n2 = occ[1]![idx(ii, nj)]! - (merge ? go[1]![idx(ii, nj)]! : 0);
+            const n2 = occ[1]![idx(ii, nj)]! - own(1, idx(ii, nj));
             if (n2 > 0) mul += nearFactor * n2 * (1 - (xs[ii]! - xs[ni]!) / pitch) * pf;
           }
         }
+        // Incentivo `->`: cerca de un riel de la misma clave el paso es más
+        // barato (lineal con la distancia, piso SHARE_MIN_MUL). No prohíbe nada.
+        if (shareField && shareField[nk]! > 0) mul = Math.max(SHARE_MIN_MUL, mul * (1 - SHARE_DISCOUNT * shareField[nk]!));
         let cost = len * mul;
         // Giro escalado por el terreno: dentro de agrupadores el paso es caro
         // y un giro fijo saldría “barato” → codos innecesarios.
         if (nd !== d) cost += turnPenalty * baseMul[nk]!;
-        if (occ[1 - o]![nk]! - (merge ? go[1 - o]![nk]! : 0) > 0) cost += CROSS_COST;
+        if (occ[1 - o]![nk]! - own(1 - o, nk) > 0) cost += CROSS_COST;
         if (goals.has(nk) && nd !== goals.get(nk)) cost += turnPenalty * baseMul[nk]!;
         const ns = nk * 4 + nd;
         const ng = gk + cost;
+        // Unirse a otra `->` en este nodo: sigue su camino hasta su punta. Se
+        // entra en su sentido o perpendicular (nunca de frente); el tramo
+        // reutilizado cuesta poco (ya está dibujado).
+        const union = joinAt.get(nk);
+        if (union && nd !== ((union.dirOut + 2) & 3)) {
+          const total = ng + (nd !== union.dirOut ? turnPenalty * baseMul[nk]! : 0) + union.tail * JOIN_TAIL_MUL;
+          if (!bestJoin || total < bestJoin.cost) bestJoin = { cost: total, parent: s, last: ns, host: union.host, t: union.t };
+        }
         if (ng >= gCost[ns]!) continue;
         gCost[ns] = ng;
         came[ns] = s;
         heap.push(ng + h(nk), ns);
       }
     }
-    if (goal < 0) return null;
+    // La unión gana si cuesta menos que la punta propia (o si no hay propia).
+    const useJoin = bestJoin != null && (goal < 0 || bestJoin.cost < gCost[goal]!);
+    if (!useJoin && goal < 0) return { st: null, join: null };
+    // La unión se registró al relajar con su padre fijo (otra ruta pudo
+    // mejorar ese estado después): se reconstruye desde ese padre.
     const out: number[] = [];
-    for (let s = goal; s >= 0; s = came[s]!) out.push(s);
-    return out.reverse();
+    for (let s = useJoin ? bestJoin!.parent : goal; s >= 0; s = came[s]!) out.push(s);
+    out.reverse();
+    if (useJoin) out.push(bestJoin!.last);
+    return { st: out, join: useJoin ? { host: bestJoin!.host, t: bestJoin!.t } : null };
   };
 
   /** Estados → nodos + orientación ocupada (bit0 = H, bit1 = V). */
@@ -529,9 +624,11 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     let changed = false;
     for (const ei of order) {
       mark(ei, -1);
-      const st = route(ei, pf);
-      if (JSON.stringify(st) !== JSON.stringify(states[ei])) changed = true;
+      const r = route(ei, pf);
+      const st = r.st;
+      if (JSON.stringify(st) !== JSON.stringify(states[ei]) || JSON.stringify(r.join) !== JSON.stringify(joinOf[ei])) changed = true;
       states[ei] = st;
+      joinOf[ei] = r.join;
       commit(ei, st);
       mark(ei, 1);
     }
@@ -543,13 +640,57 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         if (tot < 2) continue;
         let maxGroup = 0;
         for (const go of groupOcc.values()) maxGroup = Math.max(maxGroup, go[o]![k]!);
+        for (const ko of keyOcc.values()) maxGroup = Math.max(maxGroup, ko[o]![k]!);
         if (tot - maxGroup > 0) { conflicts++; hist[k] += 1; }
       }
     }
     if (!changed || (conflicts === 0 && it > 0)) break;
   }
 
+  // Uniones vigentes: el anfitrión tiene que seguir pasando por el nodo de
+  // unión (pudo re-rutearse después). Si no, la arista vuelve a su punta propia.
+  for (let pass = 0; pass < 3; pass++) {
+    let fixed = false;
+    for (let ei = 0; ei < edges.length; ei++) {
+      const j = joinOf[ei];
+      if (!j) continue;
+      const hn = nodes[j.host];
+      const own = nodes[ei];
+      if (hn && own && hn[j.t] === own[own.length - 1] && rootOf(ei) !== ei) continue;
+      mark(ei, -1);
+      const r = route(ei, 1 + iterations * 0.25, false);
+      states[ei] = r.st;
+      joinOf[ei] = null;
+      commit(ei, r.st);
+      mark(ei, 1);
+      fixed = true;
+    }
+    if (!fixed) break;
+  }
+  /** Nodos completos: los propios + la cola del anfitrión desde la unión. */
+  const fullNodes = (ei: number, depth = 0): number[] => {
+    const own = nodes[ei] ?? [];
+    const j = joinOf[ei];
+    if (!j || depth > edges.length) return own;
+    return [...own, ...fullNodes(j.host, depth + 1).slice(j.t + 1)];
+  };
+  /** La arista tal como termina: con la punta de la raíz si se unió. */
+  const effEdge = (ei: number): RouterEdge => {
+    if (!joinOf[ei]) return edges[ei]!;
+    const r = edges[rootOf(ei)]!;
+    return { ...edges[ei]!, to: r.to, toSide: r.toSide, toBox: r.toBox, toRing: r.toRing, toConnector: r.toConnector, toPkgs: r.toPkgs };
+  };
+  const shared = new Set<number>();
+  joinOf.forEach((j, ei) => { if (j) { shared.add(ei); shared.add(rootOf(ei)); shared.add(j.host); } });
+
   const paths = edges.map((e, ei) => {
+    if (joinOf[ei]) {
+      const ee = effEdge(ei);
+      const pts: Punto[] = [{ x: e.from.x, y: e.from.y }];
+      for (const k of fullNodes(ei)) pts.push({ x: xs[k % nx]!, y: ys[Math.floor(k / nx)]! });
+      pts.push({ x: ee.to.x, y: ee.to.y });
+      return simplifyOrthoPath(pts);
+    }
     // Ensamble directo: caras enfrentadas y alineadas → recta P→Q (sin
     // pasar por la grilla; con cajas cercanas las puntas A/B se cruzan).
     const facing = SIDE_DIR[e.toSide] === (SIDE_DIR[e.fromSide] + 2) % 4;
@@ -583,6 +724,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     let overlap = false;
     for (let oj = 0; oj < paths.length; oj++) {
       if (oj === ei || !paths[oj]) continue;
+      // Misma clave `->`: compartir riel es lo buscado, no un choque.
+      if (keyOf[ei] && keyOf[oj] === keyOf[ei]) continue;
       const sameGroup = groupOf[oj] === groupOf[ei];
       for (const [a1, a2] of segsOf(pts)) {
         for (const [b1, b2] of segsOf(paths[oj]!)) {
@@ -627,6 +770,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   for (let ei = 0; ei < paths.length; ei++) {
     let pts = paths[ei];
     if (!pts) continue;
+    // Un riel compartido no se retoca: el atajo de uno despegaría al otro.
+    if (shared.has(ei)) continue;
     let base = clash(pts, ei);
     let baseHug = borderHug(pts);
     for (let guard = 0; guard < 12; guard++) {
@@ -658,7 +803,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     }
     paths[ei] = pts;
   }
-  const violations = paths.map((p, i) => validateRoute(p, edges[i]!, world, clearance));
+  const violations = paths.map((p, i) => validateRoute(p, effEdge(i), world, clearance));
   let crowding = 0;
   edges.forEach((_, ei) => {
     const ns = nodes[ei];
@@ -673,7 +818,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       const i = k % nx;
       const j = (k - i) / nx;
       if (Math.abs(xs[i]! - ex) + Math.abs(ys[j]! - ey) <= pitch * MERGE_RADIUS_PITCHES) continue;
-      const near = (o: number, k2: number): boolean => occ[o]![k2]! - go[o]![k2]! > 0;
+      const ko = keyOf[ei] ? keyOcc.get(keyOf[ei]!)! : null;
+      const near = (o: number, k2: number): boolean => occ[o]![k2]! - Math.max(go[o]![k2]!, ko ? ko[o]![k2]! : 0) > 0;
       if (os[t]! & 1) {
         for (let jj = j - 1; jj >= 0 && ys[j]! - ys[jj]! < pitch; jj--) if (near(0, idx(i, jj))) crowding += step;
         for (let jj = j + 1; jj < ny && ys[jj]! - ys[j]! < pitch; jj++) if (near(0, idx(i, jj))) crowding += step;
@@ -684,7 +830,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       }
     }
   });
-  return { paths, violations, crowding };
+  const joinedTo = edges.map((_, ei) => (joinOf[ei] ? rootOf(ei) : null));
+  return { paths, violations, crowding, joinedTo };
 }
 
 /* ─────────────────────── Distribución de puertos ─────────────────────── */

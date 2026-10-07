@@ -18,7 +18,7 @@
 //   if (r.skipped) console.log(`skip ${formatMs(r.remainingMs)}`);
 
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { dirname, join } from "node:path";
 import process from "node:process";
 
 export interface TestCooldownEntry {
@@ -129,3 +129,16 @@ export function createTestCooldown(opts: TestCooldownOptions) {
 }
 
 export type TestCooldown = ReturnType<typeof createTestCooldown>;
+
+/**
+ * Cooldown con la configuración estándar de los proyectos is-*:
+ *   TEST_COOLDOWN_DB  ruta del JSON (default `<cwd>/.tmp/test-cooldown.json`)
+ *   TEST_COOLDOWN=0   o `--sin-cooldown` en argv: corre todo y no registra.
+ */
+export function testCooldownFromEnv(opts: Partial<TestCooldownOptions> = {}): TestCooldown {
+    return createTestCooldown({
+        dbPath: process.env.TEST_COOLDOWN_DB ?? join(process.cwd(), ".tmp", "test-cooldown.json"),
+        disabled: process.env.TEST_COOLDOWN === "0" || process.argv.includes("--sin-cooldown"),
+        ...opts,
+    });
+}
