@@ -280,6 +280,21 @@ Lo que sí puede hacer un diagrama es restringir con `policy`:
 El `layout` del motor sigue siendo ortogonal: los guardianes que leen
 `e.path` no cambian; la curva se aplica al pintar.
 
+## Puntas `->` compartidas (incentivo) vs `-(O-` (restricción)
+
+- `-(O-` es **restrictivo**: una conexión por conector, nunca se comparte.
+- `->` (`layout.connector: "arrow"`, y las relaciones con flecha del diagrama
+  de clases) es un **sistema de incentivo**: las flechas al mismo destino y con
+  el mismo remate (`shareKey` en el router) pueden terminar en la punta de otra.
+  - Alrededor de los rieles de la misma clave el paso es más barato, con caída
+    lineal hasta 3 celdas de grilla (más cerca, más ahorro; piso 0.3).
+  - Cualquier nodo de esos rieles es una meta alternativa. El A* la elige solo
+    si llegar ahí, más una fracción del tramo reutilizado, cuesta menos que su
+    puerto propio. Si exige mucho giro o rodeo, la flecha hace su propia `->`,
+    que a su vez atrae a las siguientes.
+  - Entre rieles de la misma clave no hay penalización por solape ni por
+    carril vecino. La punta compartida la pinta solo la raíz (`sharedTip`).
+
 ## Dependencias y componentes relacionados
 
 - [`./component-spec.js`](./component-spec.js)
