@@ -32,3 +32,18 @@ export type {
   PageDiagramJob,
   StaticServer,
 } from './render-diagram.js';
+
+export {
+  cooldownMs,
+  createTestCooldown,
+  formatMs,
+  testId,
+} from './test-cooldown.js';
+
+export type {
+  TestCooldown,
+  TestCooldownCheck,
+  TestCooldownEntry,
+  TestCooldownOptions,
+  TestCooldownRun,
+} from './test-cooldown.js';
