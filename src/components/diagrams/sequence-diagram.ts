@@ -517,6 +517,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     // pestaña propia sobre su divisor.
     const ramas = box.branches ?? [];
     this.#buildTab(g, box.x, box.y, 'mdi:source-branch', box.label, theme.altBorder, ramas[0]?.label || undefined);
+    this.#buildModeTag(g, box.x + box.w, box.y, 'sync', theme.altBorder);
     for (const [k, y] of (box.dividers ?? []).entries()) {
       g.appendChild(svgEl('line', {
         x1: box.x, y1: y, x2: box.x + box.w, y2: y,
@@ -535,6 +536,26 @@ class IswcSequenceDiagram extends DiagramElementBase {
   /** Ancho real de un texto en la fuente del diagrama (negrita ≈ +8 %). */
   #anchoTexto(texto: string, size: number, negrita = false): number {
     return Math.ceil(this.#medir(texto, size, this.#font, negrita));
+  }
+
+  /**
+   * Etiqueta de modo (`sync`/`async`) en la esquina superior DERECHA de un
+   * agrupador: pestaña negra espejo de la del título (mismo formato).
+   */
+  #buildModeTag(g: SVGElement, xDer: number, y: number, modo: string, fill: string): void {
+    const th = 18;
+    const tw = this.#anchoTexto(modo, 10, true) + 20;
+    const x = xDer - tw;
+    g.appendChild(svgEl('path', {
+      d: `M${xDer},${y} H${x} V${y + th - 6} L${x + 6},${y + th} H${xDer} Z`,
+      fill, stroke: fill, class: 'seq-mode-tag',
+    }));
+    const t = svgEl('text', {
+      x: x + 12, y: y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: contrastFontColor(fill),
+      'font-size': '10', 'font-weight': '700', 'font-family': this.#font,
+    });
+    t.textContent = modo;
+    g.appendChild(t);
   }
 
   /** Pestaña negra solo con texto secundario (condición de una rama del alt). */
@@ -624,6 +645,9 @@ class IswcSequenceDiagram extends DiagramElementBase {
       }));
       // Pestaña negra con icono del tipo + título; la condición (si la hay) al lado.
       this.#buildTab(g, fr.x, fr.y, FRAGMENT_ICON[fr.kind] ?? FRAGMENT_ICON.region!, fr.name || fr.kind, stroke, fr.condition);
+      // Modo del agrupador en la esquina derecha: `async`/`par` no bloquean;
+      // el resto espera a que termine.
+      this.#buildModeTag(g, fr.x + fr.w, fr.y, fr.kind === 'async' || fr.kind === 'par' ? 'async' : 'sync', stroke);
       this.svg.appendChild(g);
     }
   }
@@ -743,39 +767,6 @@ class IswcSequenceDiagram extends DiagramElementBase {
           'font-size': '8', 'font-weight': '600', 'font-family': this.#font, 'letter-spacing': '0.03em',
         });
         t.textContent = m.groupTitle;
-        g.appendChild(t);
-      }
-
-      // Rótulo de modo en el extremo de llegada: «sync» (el flujo espera a
-      // que termine), «async» (sigue en paralelo) o «respuesta» (retorno de
-      // una llamada). Mismo estilo que el título del grupo. En un lazo a sí
-      // mismo va dentro del lazo.
-      {
-        const modo = m.kind === 'async' ? 'async' : m.kind === 'reply' ? 'respuesta' : 'sync';
-        const mw = this.#anchoTexto(modo, 8, true) + 8;
-        let cx: number;
-        let cy: number;
-        if (m.kind === 'self') {
-          const pts = pathPoints(m.path);
-          const xs = pts.map((p) => p.x);
-          const ys = pts.map((p) => p.y);
-          cx = (Math.min(...xs) + Math.max(...xs)) / 2;
-          cy = (Math.min(...ys) + Math.max(...ys)) / 2;
-        } else {
-          cx = m.arrowTipX - dir * (mw / 2 + 12);
-          cy = m.y + 21;
-        }
-        const fondo = this.#paint ? pastelColor(color, 0.9) : theme.chipFill;
-        g.appendChild(svgEl('rect', {
-          x: cx - mw / 2, y: cy - 6, width: mw, height: 12, rx: 2,
-          fill: fondo, 'fill-opacity': 0.9, class: 'seq-msg-mode-bg',
-        }));
-        const t = svgEl('text', {
-          x: cx, y: cy, 'dominant-baseline': 'middle', 'text-anchor': 'middle', fill: color, 'fill-opacity': 0.8,
-          'font-size': '8', 'font-weight': '600', 'font-family': this.#font, 'letter-spacing': '0.03em',
-          class: 'seq-msg-mode',
-        });
-        t.textContent = modo;
         g.appendChild(t);
       }
 

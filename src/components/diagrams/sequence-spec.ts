@@ -579,7 +579,22 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   // acumulan por fila para que las regiones anidadas o consecutivas no se
   // monten. `yAt` suma el desplazamiento de la fila.
   const rowIndexOf = new Map<string, number>(flat.map((f, i) => [f.m.id, i]));
-  const fragRows = (spec.fragments ?? [])
+  // Los procesos asíncronos SIEMPRE van en un agrupador (aunque sean una
+  // sola arista): los mensajes `async` que no estén ya en una región
+  // `async`/`par` se agrupan, por tramos consecutivos, en una región sintética.
+  const enAsync = new Set((spec.fragments ?? []).filter((fr) => fr.kind === 'async' || fr.kind === 'par').flatMap((fr) => fr.messages));
+  const sinteticas: SequenceFragmentSpec[] = [];
+  let tramo: string[] = [];
+  const cerrarTramo = () => {
+    if (tramo.length) sinteticas.push({ id: `auto-async-${sinteticas.length + 1}`, name: 'proceso asíncrono', kind: 'async', messages: tramo, span: 'actors' });
+    tramo = [];
+  };
+  for (const f of flat) {
+    if (f.kind === 'async' && !enAsync.has(f.m.id)) tramo.push(f.m.id);
+    else cerrarTramo();
+  }
+  cerrarTramo();
+  const fragRows = [...(spec.fragments ?? []), ...sinteticas]
     .map((fr) => {
       const rows = fr.messages.map((id) => rowIndexOf.get(id)).filter((r): r is number => r !== undefined);
       if (!rows.length) {
@@ -619,7 +634,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   const rowBottom = (r: number): number => yAt(r) + (titled ? 28 : 10);
   const rowCount = flat.length;
   // Abajo: espacio para el título bajo el último índice + margen con el pie.
-  const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) : lifelineY1 + 40) + (titled ? 56 : 36));
+  // El pie de las regiones que cierran en la última fila (anidadas incluidas)
+  // también empuja el final: ningún marco toca las cabeceras repetidas al pie.
+  const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) + (footGap[rowCount - 1] ?? 0) : lifelineY1 + 40) + (titled ? 56 : 36));
   // Cabeceras repetidas al pie: el payload manda; si no dice, el tema.
   const footer = spec.footer ?? opts.footer ?? false;
   const footerY = footer ? lifelineY2 + 24 : undefined;

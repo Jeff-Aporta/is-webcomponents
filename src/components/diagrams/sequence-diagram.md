@@ -216,17 +216,23 @@ Las condiciones de las ramas de `alt` van dentro de pestañas negras como
 texto secundario (mismo color de fuente, 80 % de opacidad): la primera junto
 al título del `alt`, las demás en una pestaña propia sobre su divisor.
 
-## Modo de cada mensaje (`kind`)
+## Modo de los agrupadores (`sync` / `async`)
 
-En el extremo de llegada de cada arista va un rótulo con su modo, con el mismo
-estilo que el título del grupo:
+Cada agrupador (región horizontal o `alt`) lleva en su esquina superior
+derecha una pestaña negra, espejo de la del título, con su modo: `async` si la
+región es `async` o `par` (no bloquea, sigue en paralelo) y `sync` en el resto
+(el flujo espera a que termine). Las aristas no llevan rótulo de modo.
 
-| `kind` | Trazo | Rótulo | Significa |
-| --- | --- | --- | --- |
-| `sync` (por defecto) | continuo | `sync` | el flujo espera a que termine |
-| `async` | punteado | `async` | sigue en paralelo (eventos, stream) |
-| `reply` | punteado | `respuesta` | retorno de una llamada (UML) |
-| `self` (from = to) | lazo | `sync` dentro del lazo | trabajo interno del actor |
+Los procesos asíncronos SIEMPRE van en un agrupador: todo mensaje
+`kind: "async"` que no esté en una región `async`/`par` se agrupa
+automáticamente (por tramos consecutivos) en una región «proceso asíncrono».
+
+| `kind` del mensaje | Trazo |
+| --- | --- |
+| `sync` (por defecto) | continuo |
+| `async` | punteado (y dentro de un agrupador `async`) |
+| `reply` | punteado (retorno de una llamada, UML) |
+| `self` (from = to) | lazo |
 
 La punta del lazo de un mensaje a sí mismo va donde termina el trazo (vuelve a
 la lifeline por arriba). Las notas y pestañas se dimensionan midiendo el texto

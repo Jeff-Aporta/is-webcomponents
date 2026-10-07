@@ -97,8 +97,10 @@ Deno.test('secuencia: grupos con color por nombre y regiones acotadas a sus fila
   const L = computeSequenceLayout(spec);
   assertEquals(L.messages.find((m) => m.id === 'm1')?.groupColor, 'auth');
   assertEquals(L.messages.find((m) => m.id === 'm2')?.groupHue, 120);
-  // La región sin mensajes válidos se omite; quedan dos.
-  assertEquals(L.fragments?.map((f) => f.id), ['f1', 'f2']);
+  // La región sin mensajes válidos se omite; m4 (async sin agrupar) recibe
+  // su agrupador automático: los procesos asíncronos siempre van agrupados.
+  assertEquals(L.fragments?.map((f) => f.id).sort(), ['auto-async-1', 'f1', 'f2']);
+  assertEquals(L.fragments?.find((f) => f.id === 'auto-async-1')?.kind, 'async');
   const f1 = L.fragments!.find((f) => f.id === 'f1')!;
   const f2 = L.fragments!.find((f) => f.id === 'f2')!;
   const m1 = L.messages.find((m) => m.id === 'm1')!;
