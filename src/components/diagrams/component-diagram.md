@@ -316,6 +316,12 @@ paralelo a corta distancia y terminan en una sola punta. Se lee la corriente
 y la concentración sin perder el trazado de cada una. No se desactiva: es
 cómo el router consolida.
 
+**Filtro convolucional.** El ruteo es iterativo: en cada pasada cada arista
+decide hacia qué punto converge; en la siguiente, las aristas que ya
+convergen en el mismo punto son *hermanas* y entre ellas se anula el costo por
+pasar cerca y por cruzarse, así se dibujan juntas. Se repite hasta que ningún
+riel cambie (tope `grid.iterations`).
+
 Los agrupadores admiten `icon` (Iconify) y se pintan con fondo circular
 delante del rótulo. Entre agrupadores hermanos apilados hay al menos 3U
 (`PKG_ROW_GAP`) y el relleno interior es de 2U.

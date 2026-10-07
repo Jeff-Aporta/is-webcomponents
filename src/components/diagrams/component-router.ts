@@ -534,6 +534,22 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       }
     }
     const skOcc = skey ? skeyOcc.get(skey)! : null;
+    // Filtro convolucional: hermanos = aristas que en la pasada anterior ya
+    // decidieron converger en el MISMO punto que esta. Entre hermanos el
+    // costo por pasar cerca (y por cruzarse) se anula: se dibujan juntos.
+    const miPunta = nodes[ei] ? pk(toOf(rootOf(ei))) : null;
+    const sibOcc = [new Int16Array(N), new Int16Array(N)];
+    if (miPunta) {
+      for (let oj = 0; oj < edges.length; oj++) {
+        if (oj === ei || !nodes[oj] || pk(toOf(rootOf(oj))) !== miPunta) continue;
+        const ns = nodes[oj]!;
+        const os = orients[oj]!;
+        for (let t = 0; t < ns.length; t++) {
+          if (os[t]! & 1) sibOcc[0]![ns[t]!]++;
+          if (os[t]! & 2) sibOcc[1]![ns[t]!]++;
+        }
+      }
+    }
     // Metas alternativas: nodos de rieles de la misma clave (no de la propia
     // cadena) dentro del radio de incentivo de su punta.
     const joinAt = new Map<number, { host: number; t: number; dirOut: number; tail: number }>();
@@ -700,27 +716,29 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         if (dirOcc[nk * 4 + ((nd + 2) & 3)]! > 0 && others > 0) mul *= 1 + HEAD_ON_MUL * pf;
         // Rieles ajenos paralelos a < pitch: brillo decreciente con la distancia.
         const nearRail = (dist: number, n2: number): number => 1 + NEAR_RAIL_MUL * n2 * (1 - dist / pitch) * pf;
+        // Vecinos ajenos = ocupación − propios − hermanos convergentes.
+        const ajenos = (oo: number, k2: number): number => occ[oo]![k2]! - own(oo, k2) - sibOcc[oo]![k2]!;
         if (o === 0) {
           for (let jj = nj - 1; jj >= 0 && ys[nj]! - ys[jj]! < pitch; jj--) {
-            const n2 = occ[0]![idx(ni, jj)]! - own(0, idx(ni, jj));
+            const n2 = ajenos(0, idx(ni, jj));
             if (n2 > 0) mul *= nearRail(ys[nj]! - ys[jj]!, n2);
           }
           for (let jj = nj + 1; jj < ny && ys[jj]! - ys[nj]! < pitch; jj++) {
-            const n2 = occ[0]![idx(ni, jj)]! - own(0, idx(ni, jj));
+            const n2 = ajenos(0, idx(ni, jj));
             if (n2 > 0) mul *= nearRail(ys[jj]! - ys[nj]!, n2);
           }
         } else {
           for (let ii = ni - 1; ii >= 0 && xs[ni]! - xs[ii]! < pitch; ii--) {
-            const n2 = occ[1]![idx(ii, nj)]! - own(1, idx(ii, nj));
+            const n2 = ajenos(1, idx(ii, nj));
             if (n2 > 0) mul *= nearRail(xs[ni]! - xs[ii]!, n2);
           }
           for (let ii = ni + 1; ii < nx && xs[ii]! - xs[ni]! < pitch; ii++) {
-            const n2 = occ[1]![idx(ii, nj)]! - own(1, idx(ii, nj));
+            const n2 = ajenos(1, idx(ii, nj));
             if (n2 > 0) mul *= nearRail(xs[ii]! - xs[ni]!, n2);
           }
         }
-        // Cruzar perpendicular un riel ajeno: brillo en ese nodo.
-        if (occ[1 - o]![nk]! - own(1 - o, nk) > 0) mul *= CROSS_MUL;
+        // Cruzar perpendicular un riel ajeno (no de un hermano): brillo en ese nodo.
+        if (ajenos(1 - o, nk) > 0) mul *= CROSS_MUL;
         // Incentivo `->`: factor < 1 cerca de una punta de la misma clave.
         if (shareField) mul *= shareField[nk]!;
         mul = Math.max(MIN_MUL, mul);
@@ -823,7 +841,10 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         if (tot - maxGroup > 0) { conflicts++; hist[k] += 1; }
       }
     }
-    if (!changed || (conflicts === 0 && it > 0)) break;
+    // Filtro convolucional: mientras algún riel cambie, otra pasada; se
+    // detiene cuando todos quedan estáticos (o al tope `grid.iterations`).
+    void conflicts;
+    if (!changed) break;
   }
 
   // Uniones vigentes: el anfitrión tiene que seguir pasando por el nodo de

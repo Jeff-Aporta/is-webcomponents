@@ -4,7 +4,7 @@
     "clearance": 20,
     "lanePitch": 32,
     "stub": 20,
-    "iterations": 8,
+    "iterations": 16,
     "turnPenalty": 200,
     "minFactor": 0.05
   },

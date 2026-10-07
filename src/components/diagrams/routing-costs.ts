@@ -19,7 +19,7 @@ export type { RoutingCosts, RoutingCostsInput };
 
 /** Valores por defecto del kit (los publica el build como routing-costs.json). */
 export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
-  grid: { step: 20, clearance: 20, lanePitch: 32, stub: 20, iterations: 8, turnPenalty: 200, minFactor: 0.05 },
+  grid: { step: 20, clearance: 20, lanePitch: 32, stub: 20, iterations: 16, turnPenalty: 200, minFactor: 0.05 },
   // Brillo de entidad: un paso mas alla del aire (clearance); un radio mayor
   // se comia los carriles de los corredores estrechos entre franjas.
   entity: { glow: 3, radius: 20 },
