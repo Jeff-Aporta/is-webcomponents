@@ -175,9 +175,12 @@ function packLayers(
     const cRowW = cRows.map((r) => r.reduce((s, c) => s + c.w, 0) + gaps.colGutter * (r.length - 1));
     const cRowH = cRows.map((r) => Math.max(...r.map((c) => c.h)));
     const sRows = chunk(subs, p.cols && subs.length ? p.cols : nestedCols);
-    // Hermanos de una fila: mismo ancho (el mayor) y mismo alto.
-    const sCellW = sRows.map((r) => Math.max(...r.map((b) => b.w)));
-    const sRowW = sRows.map((r, k) => sCellW[k]! * r.length + gaps.nestedPkgGap * (r.length - 1));
+    // Hermanos de una fila: mismo alto. Mismo ancho (el mayor) solo si la
+    // rejilla tiene varias filas, para que las columnas alineen; en una sola
+    // fila cada subpaquete conserva su ancho y no sobra aire.
+    const igualAncho = sRows.length > 1;
+    const anchoDe = (r: Bloque[], b: Bloque): number => (igualAncho ? Math.max(...r.map((o) => o.w)) : b.w);
+    const sRowW = sRows.map((r) => r.reduce((acc, b) => acc + anchoDe(r, b), 0) + gaps.nestedPkgGap * (r.length - 1));
     const sRowH = sRows.map((r) => Math.max(...r.map((b) => b.h)));
     const titleW = packageTitleTextWidth(p);
     const innerW = Math.max(titleW, ...cRowW, ...sRowW);
@@ -205,8 +208,9 @@ function packLayers(
         sRows.forEach((r, k) => {
           let sx = x + pad + (inner - sRowW[k]!) / 2;
           for (const b of r) {
-            b.place(sx, ry, sCellW[k]!, sRowH[k]!);
-            sx += sCellW[k]! + gaps.nestedPkgGap;
+            const bw = anchoDe(r, b);
+            b.place(sx, ry, bw, sRowH[k]!);
+            sx += bw + gaps.nestedPkgGap;
           }
           ry += sRowH[k]! + gaps.nestedRowGap;
         });

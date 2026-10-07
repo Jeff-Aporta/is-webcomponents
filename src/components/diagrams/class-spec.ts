@@ -561,19 +561,49 @@ function computePackagedClassLayout(
   const planOf = new Map<number, NonNullable<(typeof plans)[number]>>();
   normales.forEach((i, k) => { if (plans[k]) planOf.set(i, plans[k]!); });
 
-  // Llegadas al bus: cada hijo sale por arriba y llega a su propio punto de
-  // la barra (hijos apilados en la misma columna se corren un carril).
-  const busPlan = new Map<number, { from: { x: number; y: number }; to: { x: number; y: number } }>();
+  // Llegadas al bus. Un hijo con el camino libre hacia arriba sale por su
+  // cara superior y sube recto. Uno con otra clase encima sale por el
+  // lateral más cercano a un pasillo libre y sube por el pasillo: así nadie
+  // rodea el paquete. Dos llegadas a la misma x se corren un carril.
+  const busPlan = new Map<number, { from: { x: number; y: number }; fromSide: 'top' | 'left' | 'right'; to: { x: number; y: number } }>();
+  // Tapa: otra clase o un rótulo de paquete en la vertical, entre el bus y el hijo.
+  const tapa = (x0: number, x1: number, yTop: number, yBottom: number, self: string): boolean =>
+    nodes.some((o) => o.id !== self && o.x < x1 + 20 && o.x + o.w > x0 - 20 && o.y + o.h > yTop && o.y < yBottom)
+    || titles.some((t) => t.x < x1 + 8 && t.x + t.w > x0 - 8 && t.y + t.h > yTop && t.y < yBottom);
   for (const [, bus] of busOf) {
-    const usados = new Map<number, number>();
+    const usados = new Set<number>();
+    const libre = (x: number): number => {
+      let k = 0;
+      while (usados.has(x + k * lanePitch)) k++;
+      usados.add(x + k * lanePitch);
+      return x + k * lanePitch;
+    };
     const orden = [...bus.members].sort((a, b) => nodeById.get(rels[a]!.from)!.y - nodeById.get(rels[b]!.from)!.y);
     for (const i of orden) {
       const h = nodeById.get(rels[i]!.from)!;
       const cx = Math.round(h.x + h.w / 2);
-      const k = usados.get(cx) ?? 0;
-      usados.set(cx, k + 1);
-      const x = cx + k * lanePitch;
-      busPlan.set(i, { from: { x, y: h.y }, to: { x, y: bus.y } });
+      if (!tapa(cx - 1, cx + 1, bus.y, h.y, h.id)) {
+        const x = libre(cx);
+        busPlan.set(i, { from: { x, y: h.y }, fromSide: 'top', to: { x, y: bus.y } });
+        continue;
+      }
+      // Pasillo a cada lado: primer x a ≥ 24 px de la caja sin otra clase
+      // encima y DENTRO del paquete del hijo; fuera de él, el router rodea.
+      const caja = pkgBox.get(h.package ?? '');
+      const pasillo = (dir: -1 | 1): number | null => {
+        for (let d = 24; d < 400; d += 4) {
+          const x = dir < 0 ? h.x - d : h.x + h.w + d;
+          if (caja && (x < caja.x + 28 || x > caja.x + caja.w - 28)) return null;
+          if (!tapa(x - 1, x + 1, bus.y, h.y + h.h, h.id)) return x;
+        }
+        return null;
+      };
+      const izq = pasillo(-1);
+      const der = pasillo(1);
+      const lado: 'left' | 'right' = der == null || (izq != null && h.x - izq <= der - (h.x + h.w)) ? 'left' : 'right';
+      const x = libre(Math.round((lado === 'left' ? izq : der) ?? cx));
+      const y = Math.round(h.y + 18);
+      busPlan.set(i, { from: { x: lado === 'left' ? h.x : h.x + h.w, y }, fromSide: lado, to: { x, y: bus.y } });
     }
   }
 
@@ -588,13 +618,16 @@ function computePackagedClassLayout(
       const to = pl ? pl.to : bp!.to;
       const punto = { id: `${r.to}::bus`, x: to.x, y: to.y, w: 1, h: 1 };
       return {
-        id: r.id ?? `r${i}`, from, fromSide: pl ? pl.fromSide : 'top', to, toSide: pl ? pl.toSide : 'bottom',
+        id: r.id ?? `r${i}`, from, fromSide: pl ? pl.fromSide : bp!.fromSide, to, toSide: pl ? pl.toSide : 'bottom',
         fromBox: boxes.find((b) => b.id === r.from)!, toBox: pl ? boxes.find((b) => b.id === r.to)! : punto,
         fromPkgs: ancestros(specById.get(r.from)?.package),
         toPkgs: pl ? ancestros(specById.get(r.to)?.package) : new Set<string>(),
       };
     }),
-    { clearance: 20, stub: 28, lanePitch, pkgCrossFactor: 1.4 },
+    // Entre clases el pasillo útil es el aire interior del paquete (40 px): con
+    // la penalización de borde del diagrama de componentes (×9 a < 56 px) el
+    // router prefería rodear el paquete por fuera.
+    { clearance: 20, stub: 28, lanePitch, pkgCrossFactor: 1.2, pkgBorderClearance: 16, pkgBorderNearFactor: 2 },
   );
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
   ruteables.forEach((i, k) => {
@@ -637,7 +670,7 @@ function computePackagedClassLayout(
     const a = pts[0]!;
     const b = pts[pts.length - 1]!;
     const targetTip = tipAt(b, pl ? pl.toSide : 'bottom');
-    const sourceTip = tipAt(a, pl ? pl.fromSide : 'top');
+    const sourceTip = tipAt(a, pl ? pl.fromSide : busPlan.get(i)!.fromSide);
     const mid = midOf(pts);
     const color = nodeById.get(r.from)?.color;
     return [{
