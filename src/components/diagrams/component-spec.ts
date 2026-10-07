@@ -300,6 +300,7 @@ function readLayout(raw: unknown): OpcionesEmpaque {
     ...(r.nestedCols != null ? { nestedCols: Number(r.nestedCols) } : {}),
     ...(r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp' ? { boxStyle: r.boxStyle } : {}),
     ...(r.connector === 'arrow' || r.connector === 'assembly' ? { connector: r.connector } : {}),
+    ...(r.edgeStyle === 'curved' || r.edgeStyle === 'orthogonal' || r.edgeStyle === 'straight' ? { edgeStyle: r.edgeStyle } : {}),
   };
 }
 

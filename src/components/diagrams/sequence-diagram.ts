@@ -14,6 +14,13 @@ import type {
   SequenceLayoutMessage,
   SequenceResolvedSpec,
 } from './sequence-spec.js';
+import type { SequenceLayoutFragment } from './sequence-spec.schemas.js';
+import { hostStyleName, styleThemeFor } from './diagram-styles.js';
+import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './theme.js';
+import type { ErThemeJson } from './theme.js';
+import { readEdgeStyle } from './diagram-vocab.js';
+import type { EdgeStyle } from './diagram-vocab.js';
+import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import type { PathTurtle, TurtleMessage, TurtleTheme } from '../_shared/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
@@ -54,6 +61,8 @@ import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./s
  */
 
 const GUIDE_X = 44;
+const FONT_UI = 'Tahoma,Arial,sans-serif';
+const FONT_MONO = 'Consolas,Menlo,monospace';
 
 /** Estado del callback `onState` del motor de tortuga (path-turtle). */
 
@@ -81,6 +90,13 @@ function foreignHtml(
 /** Región de participantes calculada por el layout. */
 class IswcSequenceDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
+  /** Tema del estilo (`diagram-style="insoft"` → tema `sequence`), ya fusionado con el modo. */
+  #styleTheme: ErThemeJson | null = null;
+  #paint: ReturnType<typeof sequencePaint> | null = null;
+  /** Tipografía de rótulos (actores, pestañas, leyenda) y de etiquetas de mensaje. */
+  #font: string = FONT_UI;
+  #labelFont: string = FONT_MONO;
+  #edgeStyle: EdgeStyle = 'orthogonal';
   #turtle: PathTurtle | null = null;
   #turtleGroup: SVGGElement | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -146,13 +162,32 @@ class IswcSequenceDiagram extends DiagramElementBase {
       : spec;
 
     const dark = this.isDarkTheme;
-    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const base: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    // Estilo por atributo (`diagram-style`), o `theme` heredado / del payload.
+    const styleRaw = styleThemeFor(hostStyleName(this), 'sequence')
+      ?? (this.getAttribute('theme') ? resolveErTheme(this.getAttribute('theme')) : null)
+      ?? resolveErTheme(this.payload);
+    const styleTheme = styleRaw && styleRaw.kind === 'sequence' ? pickThemeMode(styleRaw, dark) : null;
+    this.#styleTheme = styleTheme;
+    this.#paint = styleTheme ? sequencePaint(styleTheme) : null;
+    this.#font = styleTheme?.font?.family ?? FONT_UI;
+    this.#labelFont = this.#paint?.labelFont ?? (styleTheme ? this.#font : FONT_MONO);
+    this.#edgeStyle = readEdgeStyle(this.payload);
+    const theme: DiagramTheme = styleTheme ? themeToDiagramTheme(styleTheme, base) : base;
     this.#theme = theme;
     this.syncThemeAttr();
     const layout: SequenceLayout = computeSequenceLayout(visibleSpec);
     this.layout = layout;
 
     this.#buildSvg(layout, theme);
+    // El CSS del tema viaja dentro del SVG (tipografía + variables): el
+    // export estático sale con Poppins sin depender de la página.
+    if (styleTheme) {
+      injectThemeCss(this.svg, styleTheme);
+      this.svg.setAttribute('data-seq-theme', styleTheme.id);
+    } else {
+      this.svg.removeAttribute('data-seq-theme');
+    }
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
@@ -170,10 +205,11 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.#actorNodes = [];
     this.#hoverId = null;
 
+    const FONT = this.#font;
     if (title) {
       const t = svgEl('text', {
         x: W / 2, y: titleY, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '13', 'font-weight': '600', 'font-family': FONT,
       });
       t.textContent = title;
       this.svg.appendChild(t);
@@ -181,7 +217,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     if (subtitle) {
       const t = svgEl('text', {
         x: W / 2, y: subtitleY, 'text-anchor': 'middle', fill: theme.muted,
-        'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '11', 'font-family': FONT,
       });
       t.textContent = subtitle;
       this.svg.appendChild(t);
@@ -189,6 +225,8 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
     if (groups?.length) this.#buildLegend(groups, legendX, theme);
     this.#buildParticipantBoxes((layout as { boxes?: PartBox[] }).boxes ?? [], theme);
+    // Regiones detrás de actores y lifelines; las exteriores primero.
+    this.#buildFragments([...(layout.fragments ?? [])].sort((a, b) => a.depth - b.depth), theme);
     this.#buildActors(actors, theme);
     this.#buildLifelines(lifelines, theme);
     if (altBox) this.#buildAltBox(altBox, theme);
@@ -236,7 +274,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       let cx = legendX;
       for (let c = 0; c < col; c++) cx += (colWidths[c] ?? 0) + LEGEND_GAP_X;
       const ly = baseY + row * 16;
-      const color = tkHueToHex(grp.hue) ?? theme.accent;
+      const color = this.#groupColor(grp.color, grp.hue, theme);
       const off = this.#hiddenGroups.has(grp.id);
       const clickable = this.isViewer;
 
@@ -256,7 +294,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         : svgEl('circle', { cx: cx + 5, cy: ly, r: 4.5, fill: color }));
       const label = svgEl('text', {
         x: cx + 16, y: ly + 3.5, fill: theme.muted,
-        'font-size': '10', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '10', 'font-family': this.#font,
         'text-decoration': off ? 'line-through' : null,
       });
       label.textContent = grp.name;
@@ -277,9 +315,12 @@ class IswcSequenceDiagram extends DiagramElementBase {
       const labelCx = (labelLeft + labelRight) / 2;
 
       const g = svgEl('g', { class: 'seq-actor' });
+      const paint = this.#paint;
       const rect = svgEl('rect', {
-        x: bx, y: a.y - 16, width: bw, height: 32, rx: TK_DIAGRAM_RADIUS_PX,
-        fill: 'transparent', stroke: theme.border, 'stroke-width': 1,
+        x: bx, y: a.y - 16, width: bw, height: 32, rx: paint ? paint.actorRadius : TK_DIAGRAM_RADIUS_PX,
+        fill: paint ? paint.actorFill : 'transparent',
+        stroke: paint ? paint.actorBorder : theme.border,
+        'stroke-width': paint ? 1.5 : 1,
       });
       g.appendChild(rect);
 
@@ -299,13 +340,13 @@ class IswcSequenceDiagram extends DiagramElementBase {
           {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             width: '100%', height: '100%', fontSize: '11px', fontWeight: '600',
-            fontFamily: 'Tahoma,Arial,sans-serif', color: theme.text, lineHeight: '1',
+            fontFamily: this.#font, color: theme.text, lineHeight: '1',
           },
         ));
       } else {
         const t = svgEl('text', {
           x: labelCx, y: a.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: theme.text,
-          'font-size': '11', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+          'font-size': '11', 'font-weight': '600', 'font-family': this.#font,
         });
         t.textContent = a.label;
         g.appendChild(t);
@@ -320,7 +361,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     for (const l of lifelines) {
       const line = svgEl('line', {
         x1: l.x, y1: l.y1, x2: l.x, y2: l.y2,
-        stroke: theme.grid, 'stroke-width': 1, 'stroke-dasharray': '4 4',
+        stroke: this.#paint?.lifeline ?? theme.grid, 'stroke-width': 1, 'stroke-dasharray': '4 4',
         class: 'seq-lifeline',
       });
       this.svg.appendChild(line);
@@ -332,14 +373,16 @@ class IswcSequenceDiagram extends DiagramElementBase {
   #buildParticipantBoxes(boxes: PartBox[], theme: DiagramTheme): void {
     for (const b of boxes) {
       const g = svgEl('g', { class: 'seq-box' });
+      const paint = this.#paint;
+      const fill = paletteColor(this.#styleTheme, b.color) ?? b.color ?? theme.altFill;
       g.appendChild(svgEl('rect', {
-        x: b.x, y: b.y, width: b.w, height: b.h, rx: TK_DIAGRAM_RADIUS_PX,
-        fill: b.color ?? theme.altFill, 'fill-opacity': b.color ? 0.35 : 1,
-        stroke: b.color ?? theme.border, 'stroke-width': 1.2,
+        x: b.x, y: b.y, width: b.w, height: b.h, rx: paint ? 0 : TK_DIAGRAM_RADIUS_PX,
+        fill, 'fill-opacity': b.color ? (paint?.boxOpacity ?? 0.35) : 1,
+        stroke: paint ? paint.fragmentBorder : (b.color ?? theme.border), 'stroke-width': paint ? 1.5 : 1.2,
       }));
       const t = svgEl('text', {
         x: b.x + 12, y: b.y + 17, fill: theme.text,
-        'font-size': '11', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '11', 'font-weight': '700', 'font-family': this.#font,
       });
       t.textContent = b.name;
       g.appendChild(t);
@@ -356,7 +399,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     const box = altBox as SequenceLayoutAltBox & { dividers?: number[]; branches?: Array<{ label: string; y: number }> };
     const g = svgEl('g', { class: 'seq-alt' });
     g.appendChild(svgEl('rect', {
-      x: box.x, y: box.y, width: box.w, height: box.h, rx: TK_DIAGRAM_RADIUS_PX,
+      x: box.x, y: box.y, width: box.w, height: box.h, rx: this.#paint ? 0 : TK_DIAGRAM_RADIUS_PX,
       fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2',
     }));
     // Pestaña «alt» en la esquina (pentágono UML).
@@ -368,7 +411,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     }));
     const t = svgEl('text', {
       x: box.x + 8, y: box.y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: '#FFFFFF',
-      'font-size': '10', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+      'font-size': '10', 'font-weight': '700', 'font-family': this.#font,
     });
     t.textContent = box.label;
     g.appendChild(t);
@@ -381,7 +424,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     for (const br of box.branches ?? []) {
       const c = svgEl('text', {
         x: box.x + tw + 10, y: br.y, 'dominant-baseline': 'middle', fill: theme.text,
-        'font-size': '10.5', 'font-style': 'italic', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '10.5', 'font-style': 'italic', 'font-family': this.#font,
       });
       c.textContent = `[${br.label}]`;
       g.appendChild(c);
@@ -389,13 +432,67 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
+  /** Color de un grupo: nombre de paleta/hex del tema > hue > acento. */
+  #groupColor(color: string | undefined, hue: number | undefined, theme: DiagramTheme): string {
+    return lineColor(this.#styleTheme, color)
+      ?? (hue != null ? tkHueToHex(hue) : undefined)
+      ?? this.#paint?.messageStroke
+      ?? theme.accent;
+  }
+
+  /**
+   * Regiones horizontales (`fragments`): marco con pestaña UML «kind» y el
+   * nombre al lado. El relleno es el color pedido (paleta del tema) con la
+   * opacidad del tema; sin color, el relleno de región del tema.
+   */
+  #buildFragments(fragments: SequenceLayoutFragment[], theme: DiagramTheme): void {
+    const paint = this.#paint;
+    for (const fr of fragments) {
+      const fill = paletteColor(this.#styleTheme, fr.color) ?? fr.color ?? paint?.fragmentFill ?? theme.altFill;
+      const stroke = paint?.fragmentBorder ?? theme.altBorder;
+      const g = svgEl('g', { class: 'seq-fragment' });
+      g.dataset.fragmentId = fr.id;
+      g.appendChild(svgEl('rect', {
+        x: fr.x, y: fr.y, width: fr.w, height: fr.h, rx: paint ? 0 : TK_DIAGRAM_RADIUS_PX,
+        fill, 'fill-opacity': paint?.fragmentOpacity ?? 0.18,
+        stroke, 'stroke-width': 1.2, 'stroke-dasharray': fr.kind === 'async' ? '6 4' : null,
+      }));
+      // Pestaña con el tipo de región (par / async / loop / opt / region).
+      const tag = fr.kind;
+      const tw = Math.max(34, tag.length * 6.5 + 14);
+      const th = 18;
+      g.appendChild(svgEl('path', {
+        d: `M${fr.x},${fr.y} H${fr.x + tw} V${fr.y + th - 6} L${fr.x + tw - 6},${fr.y + th} H${fr.x} Z`,
+        fill: stroke, stroke,
+      }));
+      const t = svgEl('text', {
+        x: fr.x + 7, y: fr.y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: contrastFontColor(stroke),
+        'font-size': '10', 'font-weight': '700', 'font-family': this.#font,
+      });
+      t.textContent = tag;
+      g.appendChild(t);
+      if (fr.name) {
+        const n = svgEl('text', {
+          x: fr.x + tw + 8, y: fr.y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: theme.text,
+          'font-size': '10.5', 'font-style': 'italic', 'font-family': this.#font,
+        });
+        n.textContent = fr.name;
+        g.appendChild(n);
+      }
+      this.svg.appendChild(g);
+    }
+  }
+
   #buildMessages(
     messages: SequenceLayoutMessage[],
     altBox: SequenceLayoutAltBox | undefined,
     theme: DiagramTheme,
   ): void {
+    const paint = this.#paint;
     for (const m of messages) {
-      const color = (m.groupHue != null && tkHueToHex(m.groupHue)) || theme.accent;
+      const color = (m.groupColor || m.groupHue != null)
+        ? this.#groupColor(m.groupColor, m.groupHue, theme)
+        : (paint?.messageStroke ?? theme.accent);
       const g = svgEl('g', { class: 'seq-msg' });
       g.dataset.msgId = m.id;
       if (this.isViewer) g.style.cursor = 'pointer';
@@ -403,16 +500,18 @@ class IswcSequenceDiagram extends DiagramElementBase {
       if (m.branchFirst && m.branch && !(altBox as { branches?: unknown } | undefined)?.branches) {
         const t = svgEl('text', {
           x: altBox ? altBox.x + 36 : GUIDE_X + 8, y: m.y - 10, 'dominant-baseline': 'middle', fill: theme.muted,
-          'font-size': '9', 'font-family': 'Tahoma,Arial,sans-serif',
+          'font-size': '9', 'font-family': this.#font,
         });
         t.textContent = `[${m.branch}]`;
         g.appendChild(t);
       }
 
       const path = svgEl('path', {
-        d: m.path, fill: 'none', stroke: color, 'stroke-width': 1.15,
+        d: styledEdgePath(m.path, this.#edgeStyle, 10), fill: 'none', stroke: color,
+        'stroke-width': paint?.messageWidth ?? 1.15,
         'stroke-dasharray': m.kind === 'async' ? '5 3' : null,
-        'stroke-linecap': 'square', 'stroke-linejoin': 'miter',
+        'stroke-linecap': this.#edgeStyle === 'curved' ? 'round' : 'square',
+        'stroke-linejoin': this.#edgeStyle === 'curved' ? 'round' : 'miter',
         'vector-effect': 'non-scaling-stroke',
         class: 'seq-msg-path',
       });
@@ -445,7 +544,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       dotG.appendChild(dot);
       const stepText = svgEl('text', {
         x: m.fromX, y: m.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: contrastFontColor(color),
-        'font-size': '9', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '9', 'font-weight': '700', 'font-family': this.#font,
       });
       stepText.textContent = String(m.step);
       dotG.appendChild(stepText);
@@ -454,7 +553,9 @@ class IswcSequenceDiagram extends DiagramElementBase {
       if (m.label) {
         // Chip semiopaco: enmascara las lifelines bajo el texto.
         g.appendChild(svgEl('rect', {
-          x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 4, fill: theme.chipFill,
+          x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: paint ? 0 : 4,
+          fill: paint?.labelFill ?? theme.chipFill,
+          stroke: paint ? color : null, 'stroke-width': paint ? 0.8 : null, 'stroke-opacity': paint ? 0.55 : null,
         }));
       }
 
@@ -483,7 +584,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: '100%', height: '100%', fontSize: '10px',
-          fontFamily: 'Consolas, Menlo, monospace', color: theme.muted,
+          fontFamily: this.#labelFont, color: this.#paint?.labelText ?? theme.muted,
           lineHeight: '1.2', textAlign: 'center',
         },
       );
@@ -503,7 +604,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       maxWidth: m.labelW,
       maxHeight: m.labelH,
       fontSize: 10,
-      fontFamily: 'Consolas,Menlo,monospace',
+      fontFamily: this.#labelFont,
       overflow,
       // Chip compacto: con el padding por defecto (8) un chip de 2 líneas
       // (30 px) solo admitía 1 y truncaba con «…».
@@ -516,7 +617,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       'middle', 10, 1.2,
     );
     const t = svgEl('text', {
-      fill: theme.muted, 'font-size': '10', 'font-family': 'Consolas,Menlo,monospace',
+      fill: this.#paint?.labelText ?? theme.muted, 'font-size': '10', 'font-family': this.#labelFont,
       class: 'seq-label-text',
     });
     for (const span of tspans) {
@@ -573,7 +674,9 @@ class IswcSequenceDiagram extends DiagramElementBase {
     const hovered = entry?.m ?? null;
     const theme = this.#theme;
     if (!theme) return;
-    const hiColor = hovered?.groupHue != null ? tkHueToHex(hovered.groupHue) || theme.accent : theme.accent;
+    const hiColor = hovered && (hovered.groupColor || hovered.groupHue != null)
+      ? this.#groupColor(hovered.groupColor, hovered.groupHue, theme)
+      : theme.accent;
 
     this.wrap.classList.toggle('iswc-hover-msg', !!id);
 
@@ -581,19 +684,20 @@ class IswcSequenceDiagram extends DiagramElementBase {
       const active = msgId === id;
       node.g.classList.toggle('iswc-active', active);
       node.g.classList.toggle('iswc-dim', !!id && !active);
-      node.path.setAttribute('stroke-width', String(active ? 1.75 : 1.15));
+      const base = this.#paint?.messageWidth ?? 1.15;
+      node.path.setAttribute('stroke-width', String(active ? base + 0.6 : base));
       // La cabeza es un <polygon> relleno (sync y async): no tiene trazo que
       // engrosar, el realce lo lleva la línea.
       node.dot.setAttribute('r', String(active ? 9 : 8));
       if (node.labelNode?.classList?.contains('seq-label-text')) {
-        node.labelNode.setAttribute('fill', active ? theme.text : theme.muted);
+        node.labelNode.setAttribute('fill', active ? theme.text : (this.#paint?.labelText ?? theme.muted));
         node.labelNode.setAttribute('font-weight', active ? '600' : '400');
       }
     }
 
     for (const { x, line } of this.#lifelineNodes) {
       const involved = !!hovered && (hovered.fromX === x || hovered.toX === x);
-      line.setAttribute('stroke', involved ? hiColor : theme.grid);
+      line.setAttribute('stroke', involved ? hiColor : (this.#paint?.lifeline ?? theme.grid));
       line.setAttribute('stroke-width', String(involved ? 1.6 : 1));
       line.setAttribute('opacity', String(id && !involved ? 0.3 : 1));
     }
@@ -603,8 +707,8 @@ class IswcSequenceDiagram extends DiagramElementBase {
       const dim = !!id && !active;
       g.classList.toggle('iswc-active', !!active);
       g.setAttribute('opacity', String(dim ? 0.32 : 1));
-      rect.setAttribute('stroke', active ? theme.accent : theme.border);
-      rect.setAttribute('stroke-width', String(active ? 1.4 : 1));
+      rect.setAttribute('stroke', active ? theme.accent : (this.#paint?.actorBorder ?? theme.border));
+      rect.setAttribute('stroke-width', String(active ? 1.8 : (this.#paint ? 1.5 : 1)));
     }
 
     // La tortuga se congela mientras se inspecciona un mensaje.

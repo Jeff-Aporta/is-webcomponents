@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-component-diagram
 tags:
   - iswc-component-diagram
@@ -249,6 +249,36 @@ El consumidor no define colores ni temas: elige un estilo por atributo.
 | `layout.boxStyle` | `uml` (default), `card` (tarjeta con avatar e `icon` Iconify) o `vp` (Visual Paradigm: cajas rectas pastel, borde negro, pestaña de carpeta, `component.fill` por clave semántica). Con `diagram-style` y sin `boxStyle`, el estilo pinta en `vp` |
 | `layout.connector: "arrow"` | En vez del conector `-(O-`, cada arista termina en una flecha del color de la arista, perpendicular a la cara del destino y en un punto propio (dos flechas no llegan al mismo punto) |
 | Rieles | `lanePitch`, `laneNearFactor`, `pkgBorderClearance`, `pkgBorderNearFactor`, `pkgCrossFactor`: las mismas perillas que el diagrama de clases |
+
+## Vocabulario común y estilo de arista
+
+Las aristas de todos los diagramas se nombran en un vocabulario compartido
+([`diagram-vocab.ts`](./diagram-vocab.ts)): familias `connector` (ensamble
+-(O-, dependencia, realización, asociación), `relational` (relación con
+cardinalidad, consulta, entrega), `signal` (señal sin flechas, mensajes de
+secuencia), `flow` y `structural` (herencia, composición, agregación). Cada
+tipo dice dónde se **recomienda** (`recommendedFor`), nunca dónde se prohíbe:
+un diagrama puede mezclar nodos y aristas de cualquier familia.
+
+Lo que sí puede hacer un diagrama es restringir con `policy`:
+
+```json
+"policy": { "allowEdges": ["assembly", "dependency"], "denyNodes": ["note"] }
+```
+
+`applyDiagramPolicy` devuelve los ids aceptados y los rechazados con motivo.
+`allowFamilies` / `denyFamilies` cierran familias enteras.
+
+`layout.edgeStyle` elige la pintura de las aristas:
+
+| Valor | Qué hace |
+| --- | --- |
+| `orthogonal` | El router de siempre (por defecto). |
+| `curved` | Mismo recorrido ortogonal; cada giro se redondea con una Bézier cuadrática cuyo control es el vértice (`_shared/diagram-curve.ts`). Extremos y -(O- quedan rectos. |
+| `straight` | Reservado para diagramas que unen extremos en recta (`allowDiagonal`). |
+
+El `layout` del motor sigue siendo ortogonal: los guardianes que leen
+`e.path` no cambian; la curva se aplica al pintar.
 
 ## Dependencias y componentes relacionados
 

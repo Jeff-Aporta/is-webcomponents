@@ -1,4 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
+import { readEdgeStyle } from './diagram-vocab.js';
+import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveClassSpec, computeClassLayout } from './class-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
@@ -255,7 +257,7 @@ class IswcClassDiagram extends DiagramElementBase {
 
       const dashed = e.kind === 'dependency' || e.kind === 'realization';
       const path = svgEl('path', {
-        d: e.path, fill: 'none', stroke: color, 'stroke-width': 1.3,
+        d: styledEdgePath(e.path, readEdgeStyle(this.payload)), fill: 'none', stroke: color, 'stroke-width': 1.3,
         'stroke-dasharray': dashed ? '6 4' : null, 'stroke-linejoin': 'round', 'stroke-linecap': 'round',
         class: 'cls-rel__path',
       });

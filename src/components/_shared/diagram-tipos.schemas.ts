@@ -117,6 +117,8 @@ export const OpcionesEmpaqueSchema = z.object({
   usedSegs: z.array(z.unknown()).optional(),
   /** Permite tramos en diagonal (línea recta) entre conectores. */
   allowDiagonal: z.boolean().optional(),
+  /** `orthogonal` (default) | `curved` (mismo recorrido, giros Bézier) | `straight`. Solo pintura. */
+  edgeStyle: z.union([z.literal('orthogonal'), z.literal('curved'), z.literal('straight')]).optional(),
   /** Modo `layers`: componentes por fila dentro de cada franja. Default 6. */
   layerCols: z.number().optional(),
   /** Modo `layers`: columnas de la rejilla de subpaquetes de una franja. Default 2. */

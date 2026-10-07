@@ -76,6 +76,9 @@ export function pickThemeMode(theme: ErThemeJson, dark: boolean): ErThemeJson {
       ...overlay.cluster,
       palettes: { ...theme.cluster?.palettes, ...overlay.cluster?.palettes },
     },
+    sequence: { ...theme.sequence, ...overlay.sequence },
+    fills: { ...theme.fills, ...overlay.fills },
+    lines: { ...theme.lines, ...overlay.lines },
     diagramTheme: { ...theme.diagramTheme, ...overlay.diagramTheme },
     light: theme.light,
     dark: theme.dark,
@@ -185,6 +188,69 @@ export function componentBoxPaint(theme: ErThemeJson): {
     epFill: c.epFill ?? 'transparent',
     epBorder: c.epBorder ?? 'rgba(255,255,255,0.55)',
     epRowTransparent: c.epRowTransparent !== false,
+  };
+}
+
+/**
+ * Color por nombre de paleta (`service`, `store`, `primary`…) o hex literal.
+ * Busca en `cluster.palettes` y en `fills`; sin coincidencia, null.
+ */
+export function paletteColor(theme: ErThemeJson | null | undefined, name: string | null | undefined): string | null {
+  const raw = String(name ?? '').trim();
+  if (!raw) return null;
+  if (/^(#|rgb|hsl|oklch)/i.test(raw)) return raw;
+  const k = raw.toLowerCase();
+  const pal = theme?.cluster?.palettes ?? {};
+  const fills = theme?.fills ?? {};
+  return pal[k] ?? fills[k] ?? null;
+}
+
+/**
+ * Color de línea por nombre: primero `lines` (saturados, para trazos),
+ * luego las paletas de área. Hex literal pasa tal cual.
+ */
+export function lineColor(theme: ErThemeJson | null | undefined, name: string | null | undefined): string | null {
+  const raw = String(name ?? '').trim();
+  if (!raw) return null;
+  if (/^(#|rgb|hsl|oklch)/i.test(raw)) return raw;
+  return theme?.lines?.[raw.toLowerCase()] ?? paletteColor(theme, raw);
+}
+
+/** Pintura del diagrama de secuencia (`theme.sequence`, con defaults InSoft). */
+export function sequencePaint(theme: ErThemeJson): {
+  actorFill: string;
+  actorBorder: string;
+  actorRadius: number;
+  lifeline: string;
+  messageStroke: string;
+  messageWidth: number;
+  labelFont: string | undefined;
+  labelFill: string;
+  labelText: string;
+  fragmentFill: string;
+  fragmentBorder: string;
+  fragmentOpacity: number;
+  boxOpacity: number;
+  stepText: string;
+} {
+  const s = theme.sequence ?? {};
+  const e = theme.edge ?? {};
+  const c = theme.canvas ?? {};
+  return {
+    actorFill: s.actorFill ?? theme.component?.fill ?? '#C1BFFF',
+    actorBorder: s.actorBorder ?? theme.entity?.border ?? '#000000',
+    actorRadius: s.actorRadius ?? 0,
+    lifeline: s.lifeline ?? 'rgba(15,23,42,0.45)',
+    messageStroke: s.messageStroke ?? e.stroke ?? '#0F172A',
+    messageWidth: s.messageWidth ?? e.strokeWidth ?? 1.35,
+    labelFont: s.labelFont ?? theme.font?.family,
+    labelFill: s.labelFill ?? c.background ?? '#FFFFFF',
+    labelText: s.labelText ?? c.text ?? '#0F172A',
+    fragmentFill: s.fragmentFill ?? theme.cluster?.fallback ?? '#7ACFF4',
+    fragmentBorder: s.fragmentBorder ?? theme.cluster?.border ?? '#000000',
+    fragmentOpacity: s.fragmentOpacity ?? 0.18,
+    boxOpacity: s.boxOpacity ?? 0.35,
+    stepText: s.stepText ?? '#FFFFFF',
   };
 }
 

@@ -1,4 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
+import { readEdgeStyle } from './diagram-vocab.js';
+import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './er-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
@@ -384,7 +386,7 @@ class IswcErDiagram extends DiagramElementBase {
           ? r.style.strokeWidth
           : (r.width ?? 1.3));
       const path = svgEl('path', {
-        d: r.path, fill: 'none', stroke: color, 'stroke-width': width,
+        d: styledEdgePath(r.path, readEdgeStyle(this.payload)), fill: 'none', stroke: color, 'stroke-width': width,
         'stroke-dasharray': dashAttr,
         'stroke-linejoin': 'round', 'stroke-linecap': 'round',
         class: `er-rel__path${animClass}`,

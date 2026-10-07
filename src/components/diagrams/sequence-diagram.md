@@ -1,4 +1,4 @@
-﻿---
+---
 tag: iswc-sequence-diagram
 tags:
   - iswc-sequence-diagram
@@ -147,6 +147,61 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 > Eventos: iswc-turtle-state (detail: {playing, idx, total, replay}),
 >          iswc-open-viewer (click en colore inline),
 >          iswc-toggle-group (detail: {id})
+
+## Estilo InSoft (`diagram-style`)
+
+`<iswc-sequence-diagram diagram-style="insoft">` carga el tema `sequence` del
+estilo (`themes/insoft-seq.json`) junto con los de DER, componentes y clases:
+Poppins, participantes con relleno `#C1BFFF` y borde negro sin radio, regiones
+y cajas cuadradas, y el CSS del tema incrustado en el SVG para que el export
+estático salga igual que en pantalla. En las docs del ISS / ISW todo diagrama
+lleva este atributo: los cuatro tipos comparten paletas, tipografía y trazo.
+
+## Grupos (subprocesos) con color por nombre
+
+Cada mensaje puede pertenecer a un `group`; el grupo colorea sus aristas y
+aparece en la leyenda. El color se pide **por nombre** y el tema decide el hex:
+
+```json
+"groups": [
+  { "id": "g-jwt", "name": "Autenticación (JWT)", "color": "auth" },
+  { "id": "g-db",  "name": "Lectura en PostgreSQL", "color": "data" }
+]
+```
+
+Nombres de línea del estilo InSoft: `auth`, `seg`, `data`, `llm`, `stream`,
+`ticket`, `error`, `neutral` (saturados, para trazos). También vale un nombre
+de paleta de área (`primary`, `service`, `store`…) o un hex literal. Sin
+`color`, manda `hue` como antes. Sin estilo cargado, el nombre cae al `hue` y
+luego al acento del tema.
+
+## Regiones horizontales (`fragments`)
+
+Una región agrupa filas de mensajes en una franja horizontal con pestaña UML
+(`par`, `async`, `loop`, `opt`, `region`). Sirve para decir que lo de adentro
+ocurre a la vez, no bloquea o se repite:
+
+```json
+"fragments": [
+  { "id": "f-stream", "kind": "async", "name": "respuesta en stream (× N)",
+    "messages": ["m11", "m12", "m13", "m14"], "color": "service" }
+]
+```
+
+- `messages`: ids de los mensajes que cubre (de `messages`, `preamble`, ramas
+  de `alt` o `epilogue`). Una región cuyos ids no existen se omite con aviso.
+- Se acota a las lifelines que participan; `"span": "all"` la extiende a todas.
+- `color`: nombre de paleta de área o hex; sin él, el relleno de región del tema.
+- Las regiones anidadas se detectan por contención y se dibujan con sangría;
+  cada región abre su propio aire antes de la primera fila y tras la última,
+  así nunca monta sobre un `alt` ni sobre otra región.
+
+## Estilo de arista (`edgeStyle`)
+
+`"policy": { "edgeStyle": "curved" }` (o `edgeStyle` en la raíz del payload)
+redondea los giros de cada mensaje con Bézier sobre el **mismo** recorrido
+ortogonal: el router no cambia, solo la pintura. Ver el vocabulario común en
+[`diagram-vocab.ts`](./diagram-vocab.ts).
 
 ## Dependencias y componentes relacionados
 

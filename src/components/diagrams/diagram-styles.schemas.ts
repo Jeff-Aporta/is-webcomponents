@@ -5,7 +5,7 @@ import { z } from "zod";
 import type { ErThemeJson } from "./theme.schemas.js";
 
 /** Tipo de diagrama al que aplica un tema dentro de un estilo. */
-export const DiagramStyleKindSchema = z.union([z.literal('er'), z.literal('component'), z.literal('class')]);
+export const DiagramStyleKindSchema = z.union([z.literal('er'), z.literal('component'), z.literal('class'), z.literal('sequence')]);
 export type DiagramStyleKind = z.infer<typeof DiagramStyleKindSchema>;
 
 /**

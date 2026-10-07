@@ -39,15 +39,41 @@ export const SequenceAltSpecSchema = z.object({
 export type SequenceAltSpec = z.infer<typeof SequenceAltSpecSchema>;
 
 
+/**
+ * Grupo (subproceso): colorea las aristas de sus mensajes. `color` es un
+ * nombre de paleta del tema (`auth`, `data`, `llm`…) o un hex; sin `color`
+ * manda `hue`.
+ */
+export const SequenceGroupSpecSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  hue: z.number(),
+  color: z.string().optional(),
+});
+export type SequenceGroupSpec = z.infer<typeof SequenceGroupSpecSchema>;
+
+/**
+ * Región horizontal (fragmento UML) que agrupa filas de mensajes: `par`
+ * (ocurren a la vez), `async` (no bloquea), `loop`, `opt`, `region`. Se
+ * declara por ids de mensaje; el layout la acota a esas filas y a las
+ * lifelines que participan (o a todas con `span: 'all'`).
+ */
+export const SequenceFragmentSpecSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  kind: z.enum(['par', 'async', 'loop', 'opt', 'alt', 'region']).default('region'),
+  messages: z.array(z.string()).min(1),
+  color: z.string().optional(),
+  span: z.enum(['actors', 'all']).default('actors'),
+});
+export type SequenceFragmentSpec = z.infer<typeof SequenceFragmentSpecSchema>;
+
 export const SequenceResolvedSpecSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   actors: z.array(SequenceActorSpecSchema),
-  groups: z.array(z.object({
-  id: z.string(),
-  name: z.string(),
-  hue: z.number(),
-})).optional(),
+  groups: z.array(SequenceGroupSpecSchema).optional(),
+  fragments: z.array(SequenceFragmentSpecSchema).optional(),
   messages: z.array(SequenceMessageSpecSchema).optional(),
   preamble: z.array(SequenceMessageSpecSchema).optional(),
   alt: SequenceAltSpecSchema.optional(),
@@ -121,6 +147,8 @@ export const SequenceLayoutMessageSchema = z.object({
   branch: z.string().optional(),
   branchFirst: z.boolean().optional(),
   groupHue: z.number().optional(),
+  /** Nombre de paleta o hex del grupo; el renderer lo resuelve con el tema. */
+  groupColor: z.string().optional(),
 });
 export type SequenceLayoutMessage = z.infer<typeof SequenceLayoutMessageSchema>;
 
@@ -135,6 +163,21 @@ export const SequenceLayoutAltBoxSchema = z.object({
 export type SequenceLayoutAltBox = z.infer<typeof SequenceLayoutAltBoxSchema>;
 
 
+/** Región horizontal ya acotada en píxeles. */
+export const SequenceLayoutFragmentSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  kind: z.string(),
+  color: z.string().optional(),
+  x: z.number(),
+  y: z.number(),
+  w: z.number(),
+  h: z.number(),
+  /** Nivel de anidación (0 = exterior) para el orden de pintado. */
+  depth: z.number(),
+});
+export type SequenceLayoutFragment = z.infer<typeof SequenceLayoutFragmentSchema>;
+
 export const SequenceLayoutSchema = z.object({
   width: z.number(),
   height: z.number(),
@@ -146,11 +189,8 @@ export const SequenceLayoutSchema = z.object({
   lifelines: z.array(SequenceLayoutLifelineSchema),
   messages: z.array(SequenceLayoutMessageSchema),
   altBox: SequenceLayoutAltBoxSchema.optional(),
-  groups: z.array(z.object({
-  id: z.string(),
-  name: z.string(),
-  hue: z.number(),
-})).optional(),
+  fragments: z.array(SequenceLayoutFragmentSchema).optional(),
+  groups: z.array(SequenceGroupSpecSchema).optional(),
   legendX: z.number(),
   legendColX: z.array(z.number()),
   legendMaxRows: z.number(),

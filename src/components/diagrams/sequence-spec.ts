@@ -16,7 +16,8 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import type { DiagramTheme } from './diagram-types.js';
-import type { SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout } from "./sequence-spec.schemas.js";
+import type { SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "./sequence-spec.schemas.js";
+import { SequenceFragmentSpecSchema } from "./sequence-spec.schemas.js";
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;
@@ -146,18 +147,45 @@ function readMessage(raw: Record<string, unknown>, fallbackStep: number): Sequen
   };
 }
 
-function readGroups(seq: Record<string, unknown>): Array<{ id: string; name: string; hue: number }> | undefined {
+function readGroups(seq: Record<string, unknown>): SequenceGroupSpec[] | undefined {
   const raw = seq.groups;
   const list = Array.isArray(raw) ? raw : [];
   if (!list.length) return undefined;
   return list.map((g, i: number) => {
     const r = asRecord(g);
+    const color = String(r.color ?? '').trim();
     return {
       id: String(r.id ?? `grp-${i}`),
       name: String(r.name ?? r.label ?? `Grupo ${i + 1}`),
       hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
+      ...(color ? { color } : {}),
     };
   });
+}
+
+/**
+ * Regiones horizontales: `fragments: [{ id, name, kind, messages: [ids], color?, span? }]`.
+ * Una región mal formada (sin mensajes) se descarta con aviso, no rompe.
+ */
+function readFragments(seq: Record<string, unknown>): SequenceFragmentSpec[] | undefined {
+  const raw = seq.fragments ?? seq.regions;
+  const list = Array.isArray(raw) ? raw : [];
+  if (!list.length) return undefined;
+  const out: SequenceFragmentSpec[] = [];
+  list.forEach((f, i: number) => {
+    const r = asRecord(f);
+    const parsed = SequenceFragmentSpecSchema.safeParse({
+      id: String(r.id ?? `frag-${i}`),
+      name: String(r.name ?? r.label ?? ''),
+      kind: String(r.kind ?? 'region').toLowerCase(),
+      messages: Array.isArray(r.messages) ? r.messages.map(String) : [],
+      ...(typeof r.color === 'string' && r.color.trim() ? { color: r.color.trim() } : {}),
+      ...(r.span === 'all' ? { span: 'all' } : {}),
+    });
+    if (parsed.success) out.push(parsed.data);
+    else console.warn(`[iswc-sequence-diagram] región "${String(r.id ?? i)}" ignorada: ${parsed.error.issues[0]?.message ?? 'inválida'}`);
+  });
+  return out.length ? out : undefined;
 }
 
 export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec | null {
@@ -207,6 +235,7 @@ export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec 
     // Cajas de participantes (regiones): [{ id?, name, actors: [ids], color? }].
     ...(Array.isArray(seq.boxes) ? { boxes: seq.boxes } : {}),
     groups: readGroups(seq),
+    fragments: readFragments(seq),
     messages: flatMessages.length ? flatMessages : undefined,
     preamble,
     alt,
@@ -253,6 +282,7 @@ export function sequenceSpecToJson(spec: SequenceResolvedSpec): Record<string, u
   if (spec.title) seq.title = spec.title;
   if (spec.subtitle) seq.subtitle = spec.subtitle;
   if (spec.groups?.length) seq.groups = spec.groups;
+  if (spec.fragments?.length) seq.fragments = spec.fragments;
 
   if (spec.messages?.length) {
     seq.messages = spec.messages.map(sequenceMessageToJson);
@@ -334,6 +364,9 @@ const CHIP_H = 18;
 const PART_BOX_PAD = 16;
 /** Alto de la franja de título de la caja de participantes. */
 const PART_BOX_HEAD = 26;
+/** Aire que abre una región antes de su primera fila (pestaña) y tras la última. */
+const FRAG_HEAD = 30;
+const FRAG_FOOT = 14;
 
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
 function actorBoxWidth(label: string, _kind: string): number {
@@ -423,6 +456,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   const actorLabels: string[] = actors.map((a) => (extractLeadingIconToken(a.label) as LeadingIconToken | null)?.rest ?? a.label);
   const boxW: number[] = actors.map((a, i) => actorBoxWidth(actorLabels[i], a.kind ?? 'participant'));
   const groupHueMap = new Map<string, number>((spec.groups ?? []).map((gp) => [gp.id, gp.hue]));
+  const groupColorMap = new Map<string, string>((spec.groups ?? []).filter((gp) => gp.color).map((gp) => [gp.id, gp.color!]));
 
   // 1) Aplanar mensajes en orden de render (preamble/messages → alt → epilogue).
   const flat: FlatMessage[] = [];
@@ -507,7 +541,36 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   const headerCenterY = (hasHeader ? 100 : 56) + (rawBoxes.length ? PART_BOX_HEAD : 0);
   const lifelineY1 = headerCenterY + 22;
   const messagesTop = snapDiagramGrid(headerCenterY + 58);
-  const yAt = (r: number): number => snapDiagramGrid(messagesTop + r * ROW_H);
+  // Regiones (fragmentos): cada una abre un hueco antes de su primera fila
+  // (pestaña con el rótulo) y otro después de la última (pie). Los huecos se
+  // acumulan por fila para que las regiones anidadas o consecutivas no se
+  // monten. `yAt` suma el desplazamiento de la fila.
+  const rowIndexOf = new Map<string, number>(flat.map((f, i) => [f.m.id, i]));
+  const fragRows = (spec.fragments ?? [])
+    .map((fr) => {
+      const rows = fr.messages.map((id) => rowIndexOf.get(id)).filter((r): r is number => r !== undefined);
+      if (!rows.length) {
+        console.warn(`[iswc-sequence-diagram] región "${fr.id}": ningún mensaje coincide; se omite`);
+        return null;
+      }
+      return { fr, first: Math.min(...rows), last: Math.max(...rows) };
+    })
+    .filter((x): x is { fr: SequenceFragmentSpec; first: number; last: number } => x !== null)
+    // Exteriores primero (más filas → más afuera); a igual tamaño, por orden.
+    .sort((a, b) => (b.last - b.first) - (a.last - a.first));
+  const depthOf = (k: number): number =>
+    fragRows.filter((o, j) => j !== k && o.first <= fragRows[k]!.first && o.last >= fragRows[k]!.last).length;
+  const headGap: number[] = new Array(flat.length + 1).fill(0);
+  const footGap: number[] = new Array(flat.length + 1).fill(0);
+  fragRows.forEach((x) => { headGap[x.first]! += FRAG_HEAD; footGap[x.last]! += FRAG_FOOT; });
+  const rowOffset: number[] = [];
+  let acc = 0;
+  for (let r = 0; r < flat.length; r++) {
+    acc += headGap[r]!;
+    rowOffset.push(acc);
+    acc += footGap[r]!;
+  }
+  const yAt = (r: number): number => snapDiagramGrid(messagesTop + r * ROW_H + (rowOffset[r] ?? acc));
   const rowCount = flat.length;
   const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) : lifelineY1 + 40) + 30);
   const H = lifelineY2 + 24;
@@ -584,7 +647,33 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       branch: f.branch,
       branchFirst: f.branchFirst,
       groupHue: f.m.group ? groupHueMap.get(f.m.group) : undefined,
+      groupColor: f.m.group ? groupColorMap.get(f.m.group) : undefined,
     });
+  });
+
+  // 5b) Regiones en píxeles: acotadas a las lifelines que participan (o a
+  // todas) y a las filas de sus mensajes, con aire para la pestaña y para
+  // los chips de etiqueta que cuelgan por encima de la primera fila.
+  const fragments: SequenceLayoutFragment[] = fragRows.map((x, k) => {
+    const rowsIn = flat.slice(x.first, x.last + 1);
+    const lo = x.fr.span === 'all' ? 0 : Math.min(...rowsIn.map((f) => Math.min(f.fromIdx, f.toIdx)));
+    const hi = x.fr.span === 'all' ? actors.length - 1 : Math.max(...rowsIn.map((f) => Math.max(f.fromIdx, f.toIdx)));
+    const depth = depthOf(k);
+    const inset = depth * 10;
+    let x0 = (ax[lo] ?? 0) - (boxW[lo] ?? 0) / 2 - 12 + inset;
+    let x1 = (ax[hi] ?? 0) + (boxW[hi] ?? 0) / 2 + 12 - inset;
+    for (const f of rowsIn) {
+      const m = messages[flat.indexOf(f)]!;
+      x0 = Math.min(x0, m.labelX - 8 + inset);
+      x1 = Math.max(x1, m.labelX + f.labelW + 8 - inset);
+      if (f.kind === 'self') x1 = Math.max(x1, m.arrowTipX + LOOP_W + 8);
+    }
+    const firstChip = Math.min(...rowsIn.map((f) => messages[flat.indexOf(f)]!.labelY));
+    // El hueco acumulado de cabecera/pie reparte el aire entre regiones
+    // anidadas: la exterior toma todo el hueco, cada nivel interior cede 8 px.
+    const y0 = Math.min(yAt(x.first) - (headGap[x.first] ?? FRAG_HEAD) + 6, firstChip - FRAG_HEAD + 8) + depth * 8;
+    const y1 = yAt(x.last) + (footGap[x.last] ?? FRAG_FOOT) - 4 - depth * 8;
+    return { id: x.fr.id, name: x.fr.name, kind: x.fr.kind, color: x.fr.color, x: x0, y: y0, w: x1 - x0, h: y1 - y0, depth };
   });
 
   // 6) Caja alt (si hay ramas).
@@ -602,7 +691,11 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       x1 = Math.max(x1, messages[flat.indexOf(f)]!.labelX + f.labelW + 8);
     }
     const firstChip = Math.min(...inAlt.map((f) => messages[flat.indexOf(f)]!.labelY));
-    const y1 = Math.min(yAt(altStart) - 28, firstChip - 22);
+    // Nunca por encima de la fila anterior (+ su pie de región): el marco
+    // `alt` no se monta sobre la región o el mensaje que lo precede.
+    const y1 = altStart > 0
+      ? Math.max(Math.min(yAt(altStart) - 28, firstChip - 22), yAt(altStart - 1) + FRAG_FOOT + 4)
+      : Math.min(yAt(altStart) - 28, firstChip - 22);
     const y2 = yAt(altEnd - 1) + 26;
     const dividers: number[] = [];
     const branches: Array<{ label: string; y: number }> = [];
@@ -625,6 +718,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   });
   for (const b of partBoxes) W = Math.max(W, b.x + b.w + 16);
   if (altBox) W = Math.max(W, altBox.x + altBox.w + 16);
+  for (const fr of fragments) W = Math.max(W, fr.x + fr.w + 16);
 
   const lifelines: SequenceLayoutLifeline[] = actorLayouts.map((a) => ({ id: a.id, x: a.x, y1: lifelineY1, y2: lifelineY2 }));
 
@@ -639,6 +733,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     lifelines,
     messages,
     altBox,
+    fragments: fragments.length ? fragments : undefined,
     boxes: partBoxes.length ? partBoxes : undefined,
     groups: legendGroups,
     legendX,

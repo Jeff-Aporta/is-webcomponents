@@ -6,7 +6,7 @@
  *   <iswc-component-diagram diagram-style="insoft"></iswc-component-diagram>
  *
  * Un estilo es un paquete de temas JSON, uno por tipo de diagrama (`er`,
- * `component`, `class`), y se descarga una sola vez, la primera vez que un
+ * `component`, `class`, `sequence`), y se descarga una sola vez, la primera vez que un
  * diagrama lo pide. Así los estilos no viajan dentro de cada bundle: el de
  * InSoft se carga junto (sus tres temas) y un estilo nuevo es otra carga.
  *
@@ -117,5 +117,5 @@ export function hostStyleName(host: Element): string | null {
 // bundles de diagramas (`dist/cdn/diagrams/themes/`). Solo se registra si
 // nadie lo hizo antes (otro bundle, o una librería que lo reemplazó).
 if (!ARCHIVOS.has('insoft')) registerStyleDiagram({
-  insoft: ['./themes/insoft.json', './themes/insoft-cd.json', './themes/insoft-class.json'],
+  insoft: ['./themes/insoft.json', './themes/insoft-cd.json', './themes/insoft-class.json', './themes/insoft-seq.json'],
 });
