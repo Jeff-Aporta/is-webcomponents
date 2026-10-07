@@ -1654,8 +1654,14 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
     return box;
   };
   let box = extent();
-  const dx = Number.isFinite(box.minX) ? Math.max(0, PAD - box.minX) : 0;
-  const dy = Number.isFinite(box.minY) ? Math.max(0, titleH + subtitleH + PAD - box.minY) : 0;
+  // Centrado: el rectángulo de unión de todo lo pintado (agrupadores, cajas,
+  // conectores y rieles) se centra en el lienzo. El ancho del lienzo es el
+  // del contenido + PAD a cada lado, o el de la cabecera si es mayor; en
+  // ese caso el contenido se corre para quedar centrado bajo el título.
+  const contentW = Number.isFinite(box.minX) ? box.maxX - box.minX : 0;
+  const canvasW = Math.max(640, contentW + 2 * PAD, diagramHeaderWidth(spec.title, spec.subtitle));
+  const dx = Number.isFinite(box.minX) ? (canvasW - contentW) / 2 - box.minX : 0;
+  const dy = Number.isFinite(box.minY) ? titleH + subtitleH + PAD - box.minY : 0;
   if (dx || dy) {
     for (const p of packages) {
       p.x += dx;
@@ -1697,7 +1703,7 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   const maxX = Number.isFinite(box.maxX) ? box.maxX : 0;
   const maxY = Number.isFinite(box.maxY) ? box.maxY : 0;
 
-  const width = Math.max(640, maxX + PAD, diagramHeaderWidth(spec.title, spec.subtitle));
+  const width = Math.max(canvasW, maxX + PAD);
   const height = Math.max(360, maxY + PAD);
 
   const layout: ComponentLayout = {

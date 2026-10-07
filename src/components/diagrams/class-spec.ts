@@ -750,7 +750,12 @@ function computePackagedClassLayout(
   for (const p of packages) { hit(p.x, p.y); hit(p.x + p.w, p.y + p.h); }
   for (const n of nodes) { hit(n.x, n.y); hit(n.x + n.w, n.y + n.h); }
   for (const pts of ptsOf.values()) for (const q of pts) hit(q.x, q.y);
-  const dx = MARGIN.left + 8 - bb.x0;
+  // Centrado: el rectángulo de unión de todo lo pintado se centra en el
+  // lienzo; si la cabecera es más ancha que el contenido, el contenido se
+  // corre para quedar bajo el título.
+  const contentW = bb.x1 - bb.x0;
+  const canvasW = Math.max(contentW + MARGIN.left + MARGIN.right + 16, diagramHeaderWidth(head.title, head.subtitle));
+  const dx = (canvasW - contentW) / 2 - bb.x0;
   const dy = MARGIN.top + head.headerH + 8 - bb.y0;
   for (const p of packages) { p.x += dx; p.y += dy; }
   for (const n of nodes) { n.x += dx; n.y += dy; }
@@ -817,7 +822,7 @@ function computePackagedClassLayout(
     });
   }
 
-  const width = Math.max(bb.x1 + dx + MARGIN.right + 8, diagramHeaderWidth(head.title, head.subtitle));
+  const width = Math.max(canvasW, bb.x1 + dx + MARGIN.right + 8);
   const height = bb.y1 + dy + MARGIN.bottom + 8;
 
   const layout: ClassLayout = {
