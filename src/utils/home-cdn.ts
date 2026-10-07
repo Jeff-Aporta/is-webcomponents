@@ -5,27 +5,44 @@
 // Sin literales `</script>` en este archivo: se construye con fromCharCode
 // para evitar que el lexer HTML cierre el `<script>` de este módulo.
 
-import manifest from '../manifest.js';
 import { paint } from '../components/_shared/highlight-code.js';
 
-const CDN = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn';
+const LOADER =
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';
 
-// dist/cdn folderizado por categoria: <categoria>/<tag>.min.js
-const catOf = (name: string): string =>
-  manifest.find((c) => c.tag === `iswc-${name}`)?.category || 'helpers';
-const cdnJs = (name: string): string => `${CDN}/${catOf(name)}/${name}.min.js`;
 const open = String.fromCharCode(60);
 const slash = String.fromCharCode(47);
 const close = String.fromCharCode(62);
 
-// Sin <link> de CSS: cada .min.js carga su .min.css hermano en su Shadow DOM.
+/** Tags del snippet “por componente” (mismo set que el resultado en vivo). */
+const DEMO_TAGS = [
+  'iswc-button',
+  'iswc-badge',
+  'iswc-rating',
+  'iswc-switch',
+  'iswc-sparkline',
+] as const;
+
+/** Bloque module: import loader + palettes + load(...tags). */
+const buildLoaderBoot = (tags: readonly string[]): string => [
+  `${open}script type="module"${close}`,
+  `  import { ISWebComponentsLoader as L } from '${LOADER}';`,
+  `  // is-base.min.css se auto-carga al importar el loader (W52).`,
+  `  await L.loadPageStyles(['iswc-palettes-default']);`,
+  tags.length === 1
+    ? `  await L.load('${tags[0]}');`
+    : [
+        `  await L.load(`,
+        ...tags.map((t, i) => `    '${t}'${i < tags.length - 1 ? ',' : ''}`),
+        `  );`,
+      ].join('\n'),
+  `${open}${slash}script${close}`,
+].join('\n');
+
+// Loader + tags concretos. Nunca rutas .min.js quemadas: el loader enruta.
 const buildJsCssSnippet = (): string => [
-  `${open}!-- Carga solo los componentes que necesites --${close}`,
-  `${open}script type="module" src="${cdnJs('button')}"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${cdnJs('badge')}"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${cdnJs('rating')}"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${cdnJs('switch')}"${close}${open}${slash}script${close}`,
-  `${open}script type="module" src="${cdnJs('sparkline')}"${close}${open}${slash}script${close}`,
+  `${open}!-- Loader: pide solo los tags que uses --${close}`,
+  buildLoaderBoot(DEMO_TAGS),
   '',
   `${open}!-- ...y úsalos como HTML nativo --${close}`,
   `${open}iswc-button color="brand"${close}Explorar${open}${slash}iswc-button${close}`,
@@ -35,32 +52,25 @@ const buildJsCssSnippet = (): string => [
   `${open}iswc-sparkline values="4,6,5,8,7,11,13"${close}${open}${slash}iswc-sparkline${close}`,
 ].join('\n');
 
+// Loader + kit completo (equivalente moderno a all.min.js).
 const buildBundleSnippet = (): string => [
-  `${open}script type="module" src="${CDN}/core/loader.min.js"${close}${open}${slash}script${close}`,
-  `${open}script type="module"${close}`,
-  `  const L = globalThis.ISWebComponentsLoader;`,
-  `  // is-base.min.css se auto-carga al inicializar el loader (W52).`,
-  `  await L.loadPageStyles(['iswc-palettes-default']);`,
-  `  await L.load("iswc-button");`,
-  `${open}${slash}script${close}`,
+  `${open}!-- Loader: un solo load('all') trae el kit --${close}`,
+  buildLoaderBoot(['all']),
   '',
   `${open}iswc-button color="brand"${close}Hola mundo${open}${slash}iswc-button${close}`,
 ].join('\n');
 
-// ── html autocontenido para descargar ─────────────────────────────
-const modules: string[] = [
-  'button', 'card', 'badge', 'tag', 'icon', 'avatar',
-  'toast', 'tooltip', 'theme-toggle',
-  'split-panel', 'main',
-  'combobox', 'select', 'input', 'textarea', 'slider', 'switch',
-  'rating', 'checkbox', 'radio-group', 'file-input',
-  'date-input', 'date-picker',
-  'format-bytes', 'format-date', 'format-number',
-  'chart', 'bar-chart', 'line-chart', 'doughnut-chart', 'pie-chart',
-  'polar-area-chart', 'radar-chart', 'scatter-chart', 'bubble-chart', 'sparkline',
-  'data-grid', 'lightbox', 'diagram-lightbox', 'popover',
-  'sequence-diagram',
-];
+/** Tags del HTML descargable (demo amplia). */
+const DOWNLOAD_TAGS = [
+  'iswc-theme-toggle',
+  'iswc-button', 'iswc-tag', 'iswc-badge', 'iswc-avatar', 'iswc-icon',
+  'iswc-toast', 'iswc-tooltip',
+  'iswc-input', 'iswc-select', 'iswc-option', 'iswc-switch', 'iswc-checkbox',
+  'iswc-slider', 'iswc-rating',
+  'iswc-format-bytes', 'iswc-format-date', 'iswc-format-number',
+  'iswc-bar-chart', 'iswc-line-chart', 'iswc-doughnut-chart', 'iswc-sparkline',
+  'iswc-data-grid', 'iswc-diagram-lightbox',
+] as const;
 
 const chartTile = (type: string, json: string): string => `        ${open}div class="tile"${close}
           ${open}small${close}${type}${open}${slash}small${close}
@@ -72,11 +82,21 @@ const chartTile = (type: string, json: string): string => `        ${open}div cl
         ${open}${slash}div${close}`;
 
 const buildDemoHtml = (variant: string): string => {
-  const imp = `${open}script type="importmap"${close}\n{\n  "imports": {\n    "@is-webcomponents/": "${CDN}/"\n  }\n}\n${open}${slash}script${close}`;
-  const mod = `${open}script type="module"${close}\n  ${modules.map((m) => `import '@is-webcomponents/${catOf(m)}/${m}.min.js';`).join('\n  ')}\n${open}${slash}script${close}`;
-  const moduleImports = (variant === 'bundle')
-    ? `${imp}\n\n${mod}`
-    : modules.map((m) => `  ${open}script type="module" src="${cdnJs(m)}"${close}${open}${slash}script${close}`).join('\n');
+  const loadLine = variant === 'bundle'
+    ? `  await L.load('all');`
+    : [
+        `  await L.load(`,
+        ...DOWNLOAD_TAGS.map((t, i) => `    '${t}'${i < DOWNLOAD_TAGS.length - 1 ? ',' : ''}`),
+        `  );`,
+      ].join('\n');
+
+  const moduleBoot = [
+    `${open}script type="module"${close}`,
+    `  import { ISWebComponentsLoader as L } from '${LOADER}';`,
+    `  await L.loadPageStyles(['iswc-palettes-default']);`,
+    loadLine,
+    `${open}${slash}script${close}`,
+  ].join('\n');
 
   return `<!DOCTYPE html>
 <html lang="es" class="theme-dark" data-theme="dark" data-palette="contapyme">
@@ -84,7 +104,6 @@ const buildDemoHtml = (variant: string): string => {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ISWC · demo CDN</title>
-  <link rel="stylesheet" href="${CDN}/core/is-base.min.css">
   <style>
     :root { color-scheme: dark; }
     body {
@@ -143,11 +162,12 @@ const buildDemoHtml = (variant: string): string => {
     }
     small { color: var(--iswc-text-soft); }
   </style>
+${moduleBoot}
 </head>
 <body>
   <header>
     <h1>ISWC — demo por CDN</h1>
-    <small>Variante: ${variant === 'bundle' ? 'import map' : 'JS + CSS por componente'}</small>
+    <small>Variante: ${variant === 'bundle' ? "L.load('all')" : 'L.load(tags…)'}</small>
   </header>
 
   <main>
@@ -247,19 +267,18 @@ ${chartTile('doughnut-chart', '{ "data": { "labels": ["Inventario","Cartera","Ba
     </section>
 
     <pre class="code">${variant === 'bundle'
-  ? `&lt;script type="importmap"&gt;
-  { "imports": { "@is-webcomponents/": "${CDN}/" } }
-&lt;/script&gt;
-&lt;script type="module"&gt;
-  import '@is-webcomponents/button.min.js';
-  // …
+  ? `&lt;script type="module"&gt;
+  import { ISWebComponentsLoader as L } from '${LOADER}';
+  await L.loadPageStyles(['iswc-palettes-default']);
+  await L.load('all');
 &lt;/script&gt;`
-  : `&lt;link rel="stylesheet" href="${CDN}/is-base.min.css"&gt;
-&lt;script type="module" src="${CDN}/button.min.js"&gt;&lt;/script&gt;`
+  : `&lt;script type="module"&gt;
+  import { ISWebComponentsLoader as L } from '${LOADER}';
+  await L.loadPageStyles(['iswc-palettes-default']);
+  await L.load('iswc-button', /* …tags */);
+&lt;/script&gt;`
 }</pre>
   </main>
-
-${moduleImports}
 
   <script>
     const root = document.documentElement;

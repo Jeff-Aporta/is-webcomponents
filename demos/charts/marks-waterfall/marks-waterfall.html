@@ -18,7 +18,10 @@
   iswc-waterfall-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  const lib = await import('../../../dist/cdn/charts/marks-waterfall.min.js?h=6zcu0w');
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
+  const [__base] = await L.listBases();
+  const lib = await import(L.assetUrl(new URL('charts/marks-waterfall.min.js', __base.endsWith('/') ? __base : __base + '/').href));
   const { waterfallBars, drawWaterfallMarks } = lib;
   document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
 
@@ -27,7 +30,7 @@
   document.getElementById('bars').textContent = JSON.stringify(bars, null, 2);
 
   // Demo en vivo vía <iswc-waterfall-chart>
-  await import('../../../dist/cdn/data-viz/waterfall-chart.min.js?h=vr8mvr');
+  await L.load('iswc-waterfall-chart');
   await customElements.whenDefined('iswc-waterfall-chart');
 
   const wf = document.createElement('iswc-waterfall-chart');

@@ -17,13 +17,16 @@
   svg { display: block; max-width: 100%; }
 </style>
 <script type="module">
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
   // marks-cartesian exports drawBarMarks, drawLineMarks, drawScatterMarks, drawBubbleMarks.
   // No hay custom element: las funciones reciben un `ctx` con plot, scales, colors, etc.
-  const lib = await import('../../../dist/cdn/charts/marks-cartesian.min.js?h=7v7dqc');
+  const [__base] = await L.listBases();
+  const lib = await import(L.assetUrl(new URL('charts/marks-cartesian.min.js', __base.endsWith('/') ? __base : __base + '/').href));
   const { drawBarMarks, drawLineMarks } = lib;
 
   // Construir un ctx mínimo: usamos <iswc-chart> como host para tener ejes/escala reales.
-  await import('../../../dist/cdn/data-viz/chart.min.js?h=2fihfx');
+  await L.load('iswc-chart');
   await customElements.whenDefined('iswc-chart');
 
   // Demo 1: Bar via chart (real ctx)

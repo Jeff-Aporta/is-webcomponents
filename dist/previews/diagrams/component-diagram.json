@@ -13,7 +13,7 @@
       "blocks": [
         {
           "kind": "html",
-          "html": "<p>El empaque dispersa las cajas. Ajusta la distancia mínima con <code>min-gap</code> (px) o con <code>layout.minGap</code> en el JSON. Valores por eje: <code>rowGap</code>, <code>colGutter</code>, <code>pkgCorridor</code>.</p>"
+          "html": "<p>El empaque dispersa las cajas en <strong>grid</strong> (no radial). Ajusta con <code>min-gap</code> o <code>layout</code>: <code>rowGap</code>, <code>colGutter</code>, <code>pkgCorridor</code>. Rieles de aristas: <code>lanePitch</code> (default 20 — más cerca cuesta más). Margen bordes: <code>pkgBorderClearance</code>.</p>"
         },
         {
           "kind": "demo",

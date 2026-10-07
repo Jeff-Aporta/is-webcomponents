@@ -48,7 +48,7 @@ export const RouteAvoidOptsSchema = z.object({
   laneNearFactor: z.number().optional(),
   /** Margen arista ↔ borde de agrupador. Default PKG_BORDER_CLEARANCE (40). */
   pkgBorderClearance: z.number().optional(),
-  /** Costo ×N al atravesar interior de agrupador. Default 3. */
+  /** Costo ×factor^depth al atravesar interior de agrupador(es). Default 3. */
   pkgCrossFactor: z.number().optional(),
   /** Agrupadores: costo suave (no muro duro). */
   softPkgs: z.array(z.unknown() /* TODO: ref Caja */).optional(),

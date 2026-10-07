@@ -51,9 +51,9 @@
 
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { packDiagram, layoutPackageOutlines, outlineToPath, routeAvoidingBoxes, pathIllegal, pathHasDiagonal, segsFromPath, pathHitsBoxes, pathCrossingCount, pathShareLen, resolvePackingGaps, inflateBox, inflateTitleObstacle, nudgePathsFromPackageBorders, countPuntoTurns, spreadEdges, findProhibitedViolations, pathPoints, COL_GUTTER, PKG_CORRIDOR, ROW_GAP, EDGE_CLEARANCE, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
+import { packDiagram, layoutPackageOutlines, outlineToPath, routeAvoidingBoxes, pathIllegal, pathHugsBoxes, pathHasDiagonal, segsFromPath, pathHitsBoxes, pathCrossingCount, pathShareLen, resolvePackingGaps, inflateBox, inflateTitleObstacle, nudgePathsFromPackageBorders, countPuntoTurns, spreadEdges, findProhibitedViolations, pathPoints, sanitizeEdgePath, COL_GUTTER, PKG_CORRIDOR, ROW_GAP, EDGE_CLEARANCE, PORT_CLEARANCE, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
 import { parsePathPoints } from '../_shared/diagram-edge-actors.js';
-import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import { assignEdgeHues, assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
 import type {
   Arista, Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto,
 } from '../_shared/diagram-tipos.js';
@@ -74,6 +74,99 @@ const ASSEMBLY_ENTITY_PAD = 16;
 /** Hueco mínimo entre bordes de cajas unidas por `-(O-`. */
 export function assemblyEntityMargin(): number {
   return 2 * LOLLI_STEM + 2 * LOLLI_R + LOLLI_GAP + ASSEMBLY_ENTITY_PAD;
+}
+
+/**
+ * W64/W65: caja dura sobre el glifo -(O- + carril de llegada.
+ * Además del O+C+stem, bloquea un tramo ortogonal de aproximación
+ * (APPROACH_SHIELD) para que verticales ajenas no crucen el stub
+ * horizontal que llega al O (caso ContaPyme×O de mensaje/archivo).
+ */
+const ASSEMBLY_APPROACH_SHIELD = 320;
+/** Aire extra fuera del shield para que el riel no roce el halo visual. */
+const ASSEMBLY_RAIL_KEEP = 80;
+
+/** Solo el glifo -(O- (sin banda de aproximación). */
+function ifaceGlyphRing(
+  iface: { id: string; cx?: number; cy?: number },
+): Caja {
+  const cx = iface.cx ?? 0;
+  const cy = iface.cy ?? 0;
+  const pad = Math.max(PORT_CLEARANCE, LOLLI_R + LOLLI_GAP + LOLLI_R + 10);
+  return { id: `ring-${iface.id}`, x: cx - pad, y: cy - pad, w: pad * 2, h: pad * 2 };
+}
+
+function ifaceAssemblyRing(
+  iface: { id: string; cx?: number; cy?: number; side: Lado },
+  comp: Componente | undefined,
+): Caja {
+  const cx = iface.cx ?? 0;
+  const cy = iface.cy ?? 0;
+  const pad = Math.max(PORT_CLEARANCE, LOLLI_R + LOLLI_GAP + LOLLI_R + 10);
+  const id = `ring-${iface.id}`;
+  if (!comp) return ifaceGlyphRing(iface);
+  // W67: required dockeada mueve cx al O del provider pero component
+  // sigue siendo el consumidor → "cara derecha" falsa y shield de 800px
+  // tapando el gutter. O provided vive a LOLLI_STEM del borde — tol≥stem.
+  const faceTol = LOLLI_STEM + 2;
+  const onLeft = Math.abs(cx - comp.x) <= faceTol;
+  const onRight = Math.abs(cx - (comp.x + comp.w)) <= faceTol;
+  const onTop = Math.abs(cy - comp.y) <= faceTol;
+  const onBot = Math.abs(cy - (comp.y + comp.h)) <= faceTol;
+  if (onLeft) {
+    const left = cx - ASSEMBLY_APPROACH_SHIELD - ASSEMBLY_RAIL_KEEP;
+    const right = comp.x + 4;
+    return { id, x: left, y: cy - pad, w: Math.max(pad, right - left), h: pad * 2 };
+  }
+  if (onRight) {
+    const left = comp.x + comp.w - 4;
+    const right = cx + ASSEMBLY_APPROACH_SHIELD + ASSEMBLY_RAIL_KEEP;
+    return { id, x: left, y: cy - pad, w: Math.max(pad, right - left), h: pad * 2 };
+  }
+  if (onTop) {
+    const top = cy - ASSEMBLY_APPROACH_SHIELD - ASSEMBLY_RAIL_KEEP;
+    const bot = comp.y + 4;
+    return { id, x: cx - pad, y: top, w: pad * 2, h: Math.max(pad, bot - top) };
+  }
+  if (onBot) {
+    const top = comp.y + comp.h - 4;
+    const bot = cy + ASSEMBLY_APPROACH_SHIELD + ASSEMBLY_RAIL_KEEP;
+    return { id, x: cx - pad, y: top, w: pad * 2, h: Math.max(pad, bot - top) };
+  }
+  return ifaceGlyphRing(iface);
+}
+
+/**
+ * W66/W67: rings duros por arista.
+ * En este wiring el O (`provided`) es la cara de llegada; el socket
+ * (`required`) es salida del consumidor. Shield largo SOLO en provided
+ * ajeno — si no, los required de ContaPyme/TestPatyIA tapan el gutter.
+ * - Endpoint: fuera.
+ * - Hermanos / required: solo glifo.
+ * - provided ajeno: anillo + approach shield.
+ */
+function ringsForEdge(
+  e: { from: string; to: string; fromInterface?: string; toInterface?: string },
+  ifaces: readonly InterfazUml[],
+  byComp: Map<string, Componente>,
+): { walls: Caja[]; approach: Caja[] } {
+  const walls: Caja[] = [];
+  const approach: Caja[] = [];
+  for (const i of ifaces) {
+    if (i.cx <= 0 || i.id === e.fromInterface || i.id === e.toInterface) continue;
+    // C dockeada vive pegada al O ajeno — no bloquear la llegada.
+    if (i.docked) continue;
+    const same = i.component === e.from || i.component === e.to;
+    const shield = !same && i.kind === 'provided';
+    if (!shield) {
+      walls.push(ifaceGlyphRing(i));
+      continue;
+    }
+    const ring = ifaceAssemblyRing(i, byComp.get(i.component));
+    walls.push(ring);
+    approach.push(ring);
+  }
+  return { walls, approach };
 }
 
 const LINE_H = 13;
@@ -160,6 +253,9 @@ function readPackage(raw: unknown, i: number): Paquete {
     stereotype: String(r.stereotype ?? '').trim() || undefined,
     hue: r.hue != null ? Number(r.hue) : undefined,
     parent: parent || undefined,
+    // W57: sin esto, `prohibido: true` del payload se pierde y el
+    // muro de clientesis nunca se arma en el post-check.
+    prohibido: r.prohibido === true ? true : undefined,
     x: Number(r.x ?? 0),
     y: Number(r.y ?? 0),
     w: Math.max(80, Number(r.w ?? 200)),
@@ -243,7 +339,9 @@ function readLayout(raw: unknown): OpcionesEmpaque {
     lanePitch: r.lanePitch != null ? Number(r.lanePitch) : undefined,
     laneNearFactor: r.laneNearFactor != null ? Number(r.laneNearFactor) : undefined,
     pkgBorderClearance: r.pkgBorderClearance != null ? Number(r.pkgBorderClearance) : undefined,
+    pkgBorderNearFactor: r.pkgBorderNearFactor != null ? Number(r.pkgBorderNearFactor) : undefined,
     pkgCrossFactor: r.pkgCrossFactor != null ? Number(r.pkgCrossFactor) : undefined,
+    nestedPkgGap: r.nestedPkgGap != null ? Number(r.nestedPkgGap) : undefined,
     allowDiagonal: r.allowDiagonal === true,
   };
 }
@@ -269,9 +367,11 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
   if (layout.minGap == null && host.minGap != null) layout.minGap = Number(host.minGap);
   if (layout.mode !== 'manual') packDiagram(packages, components, edges, layout);
 
-  const wired = wireComponentDiagram(components, interfaces, edges);
+  const wired = wireComponentDiagram(components, interfaces, edges, packages);
   // Tras sintetizar -(O-: aleja cajas para que O/C no se peguen al borde.
   enforceAssemblyEntityMargins(wired.components, wired.edges, wired.interfaces);
+  // W58: O/C lejos de bordes de agrupador y fuera de paquetes prohibidos.
+  enforceLollipopPackageClearance(packages, wired.components, wired.interfaces);
 
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
@@ -405,18 +505,9 @@ function outerSides(comp: Componente, cluster: Caja, sibs: readonly Componente[]
 }
 
 /**
- * W54: castigo extra cuando el punto del conector cae cerca del borde
- * de un agrupador (`PKG_BORDER_CLEARANCE` = 40). El conector en un borde
- * de paquete es "malo" — la arista que sale de él tiene que rodear el
- * paquete para alejarse, lo que multiplica la longitud de la polilínea.
- *
- * NOTA: implementada pero no enchufada al `estimateAssemblyCost` (en
- * `component-spec.ts`) porque añadir un parámetro `packages` al
- * `wireComponentDiagram` rompe el flujo de empaquetado (los paquetes
- * todavía no tienen `x/y/w/h` definitivos al planificar las aristas).
- * La heurística del brute-force ya prefiere caras que dan al corredor
- * exterior del paquete, y `borderProximityCost` en el router final
- * penaliza los tramos largos pegados al borde.
+ * W54/W58: castigo cuando el punto del conector cae cerca del borde
+ * de un agrupador. El conector en un borde de paquete es ilegible —
+ * la arista que sale de él tiene que rodear el paquete.
  */
 function connectorBorderPenalty(
   pt: Punto,
@@ -433,12 +524,124 @@ function connectorBorderPenalty(
       Math.abs(pt.y - (p.y + p.h)),
     );
     if (distToBorder < clearance) {
-      // 0px = pegado al borde (coste alto); clearance-1 = casi rozando (también alto).
       const proximity = (clearance - distToBorder) / clearance;
-      cost += proximity * 280; // proporcional a la cercanía
+      cost += proximity * 420;
     }
   }
   return cost;
+}
+
+/**
+ * W58: aleja componentes para que el círculo del -(O- no quede encima
+ * del trazo del agrupador ni dentro de un paquete `prohibido` ajeno.
+ * Empuja la caja hacia el interior del propio paquete — excepto si el
+ * propio paquete es `prohibido`: ahí el O debe quedar en el perímetro
+ * (lado corredor) para que las aristas no entren al interior.
+ */
+export function enforceLollipopPackageClearance(
+  packages: Paquete[],
+  components: Componente[],
+  interfaces: readonly InterfazUml[],
+  keep: number = 12,
+): void {
+  if (!packages.length || !interfaces.length) return;
+  const byId = new Map(components.map((c) => [c.id, c]));
+  const pkgById = new Map(packages.map((p) => [p.id, p]));
+  const ancestors = (pkgId: string | undefined): Paquete[] => {
+    const out: Paquete[] = [];
+    let cur = pkgId ? pkgById.get(pkgId) : undefined;
+    while (cur) {
+      out.push(cur);
+      cur = cur.parent ? pkgById.get(cur.parent) : undefined;
+    }
+    return out;
+  };
+  const needInside = LOLLI_STEM + LOLLI_R + keep;
+  let moved = true;
+  for (let guard = 0; moved && guard < 10; guard++) {
+    moved = false;
+    for (const iface of interfaces) {
+      const comp = byId.get(iface.component);
+      if (!comp) continue;
+      const ownPkgs = ancestors(comp.package);
+      const ownProhibido = ownPkgs.some((p) => p.prohibido);
+      // 1) Aire vs borde del propio paquete (salvo prohibido: O en perímetro).
+      if (!ownProhibido) {
+        for (const pkg of ownPkgs) {
+          if (iface.side === 'left') {
+            const minX = pkg.x + needInside;
+            if (comp.x < minX) { comp.x = minX; moved = true; }
+          } else if (iface.side === 'right') {
+            const maxRight = pkg.x + pkg.w - needInside;
+            if (comp.x + comp.w > maxRight) {
+              comp.x = maxRight - comp.w;
+              moved = true;
+            }
+          } else if (iface.side === 'top') {
+            const minY = pkg.y + 22 + needInside;
+            if (comp.y < minY) { comp.y = minY; moved = true; }
+          } else if (iface.side === 'bottom') {
+            const maxBot = pkg.y + pkg.h - needInside;
+            if (comp.y + comp.h > maxBot) {
+              comp.y = maxBot - comp.h;
+              moved = true;
+            }
+          }
+        }
+      } else {
+        // Prohibido: pegar el componente al borde del lado del O para que
+        // el lollipop quede en el perímetro (aristas no atraviesan el fill).
+        for (const pkg of ownPkgs.filter((p) => p.prohibido)) {
+          const edgePad = 16;
+          if (iface.side === 'left' && Math.abs(comp.x - (pkg.x + edgePad)) > 1) {
+            comp.x = pkg.x + edgePad;
+            moved = true;
+          } else if (iface.side === 'right') {
+            const want = pkg.x + pkg.w - edgePad - comp.w;
+            if (Math.abs(comp.x - want) > 1) { comp.x = want; moved = true; }
+          }
+        }
+      }
+      // 2) Nunca encima de paquetes prohibidos ajenos (hitbox del O).
+      const anchor = interfaceAnchor(iface, comp);
+      for (const pkg of packages) {
+        if (!pkg.prohibido) continue;
+        if (ownPkgs.some((p) => p.id === pkg.id)) continue;
+        const hit =
+          anchor.x + LOLLI_R > pkg.x - keep
+          && anchor.x - LOLLI_R < pkg.x + pkg.w + keep
+          && anchor.y + LOLLI_R > pkg.y - keep
+          && anchor.y - LOLLI_R < pkg.y + pkg.h + keep;
+        if (!hit) continue;
+        const cx = pkg.x + pkg.w / 2;
+        const cy = pkg.y + pkg.h / 2;
+        if (Math.abs(anchor.x - cx) >= Math.abs(anchor.y - cy)) {
+          comp.x += anchor.x < cx ? -needInside : needInside;
+        } else {
+          comp.y += anchor.y < cy ? -needInside : needInside;
+        }
+        moved = true;
+      }
+    }
+  }
+  // Re-envolver paquetes tras empujar hijos.
+  const pad = Math.max(16, needInside);
+  for (const pkg of packages) {
+    const kids = components.filter((c) => c.package === pkg.id);
+    const childPkgs = packages.filter((c) => c.parent === pkg.id);
+    const boxes: Caja[] = [...kids, ...childPkgs];
+    if (!boxes.length) continue;
+    // Prohibido: pad pequeño en el lado del socket (no engullir el O).
+    const usePad = pkg.prohibido ? 16 : pad;
+    const x = Math.min(...boxes.map((b) => b.x)) - usePad;
+    const y = Math.min(...boxes.map((b) => b.y)) - 22;
+    const r = Math.max(...boxes.map((b) => b.x + b.w)) + usePad;
+    const btm = Math.max(...boxes.map((b) => b.y + b.h)) + usePad;
+    pkg.x = Math.min(pkg.x, x);
+    pkg.y = Math.min(pkg.y, y);
+    pkg.w = Math.max(pkg.w, r - pkg.x);
+    pkg.h = Math.max(pkg.h, btm - pkg.y);
+  }
 }
 
 /**
@@ -452,6 +655,7 @@ function estimateAssemblyCost(
   ts: Lado,
   fromSibs: readonly Componente[] = [],
   toSibs: readonly Componente[] = [],
+  packages: readonly Caja[] = [],
 ): number {
   const a = componentSidePoint(from as Componente, fs, sideOffset(from as Componente, fs, 0, 1));
   const b = componentSidePoint(to as Componente, ts, sideOffset(to as Componente, ts, 0, 1));
@@ -486,13 +690,50 @@ function estimateAssemblyCost(
     const topY = Math.min(...fromSibs.map((c) => c.y));
     if (from.y <= topY + 8) cost += 80;
   }
+  // W58: preferir caras cuyo O no nace pegado al perímetro del agrupador.
+  if (packages.length) {
+    cost += connectorBorderPenalty(a, packages);
+    cost += connectorBorderPenalty(b, packages);
+  }
+  // W60/W63: salir hacia un hermano = atravesarlo. Castigo duro.
+  // Antes solo sondeaba 48px y fallaba si el hueco al hermano era mayor
+  // (conversacion→db elegía bottom y atravesaba mensaje a 80px).
+  const stemHit = (origin: Caja, side: Lado, sibs: readonly Componente[]): number => {
+    if (!sibs.length) return 0;
+    const oid = (origin as Componente).id;
+    let hit = 0;
+    for (const s of sibs) {
+      if (s === origin || (s as Componente).id === oid) continue;
+      // Misma columna (tb) o misma fila (lr): el rayo del lado pega al hermano.
+      const overlapX = !(s.x + s.w < origin.x - 8 || s.x > origin.x + origin.w + 8);
+      const overlapY = !(s.y + s.h < origin.y - 8 || s.y > origin.y + origin.h + 8);
+      let facing = false;
+      if (side === 'bottom' && overlapX && s.y >= origin.y + origin.h - 2) facing = true;
+      else if (side === 'top' && overlapX && s.y + s.h <= origin.y + 2) facing = true;
+      else if (side === 'right' && overlapY && s.x >= origin.x + origin.w - 2) facing = true;
+      else if (side === 'left' && overlapY && s.x + s.w <= origin.x + 2) facing = true;
+      if (facing) hit += 1200;
+    }
+    return hit;
+  };
+  cost += stemHit(from, fs, fromSibs);
+  cost += stemHit(to, ts, toSibs);
   return cost;
 }
 
 function sideOffset(comp: Componente, side: Lado, index: number, total: number): number {
-  const t = (index + 1) / (total + 1);
-  if (side === 'top' || side === 'bottom') return Math.max(12, Math.min(comp.w - 12, comp.w * t));
-  return Math.max(12, Math.min(comp.h - 12, comp.h * t));
+  const len = (side === 'top' || side === 'bottom') ? comp.w : comp.h;
+  if (total <= 1) {
+    const t = (index + 1) / (total + 1);
+    return Math.max(12, Math.min(len - 12, len * t));
+  }
+  // W63: preferir LANE_PITCH en la cara; si no caben, comprimir dentro de
+  // [12, len-12]. La separación extra la hace el fan post-stem (aFan).
+  const usable = Math.max(0, len - 24);
+  const pitch = Math.min(LANE_PITCH, usable / Math.max(1, total - 1));
+  const span = (total - 1) * pitch;
+  const start = 12 + (usable - span) / 2;
+  return start + index * pitch;
 }
 
 /**
@@ -502,7 +743,12 @@ function sideOffset(comp: Componente, side: Lado, index: number, total: number):
  *   3. Arista componente→componente sin interfaz → socket (C) en el origen
  *      y lollipop (O) en el destino. Sin esto el PNG solo enseña cajas.
  */
-function wireComponentDiagram(components: Componente[], interfaces: InterfazUml[], edges: SpecEdge[]): WireResult {
+function wireComponentDiagram(
+  components: Componente[],
+  interfaces: InterfazUml[],
+  edges: SpecEdge[],
+  packages: readonly Paquete[] = [],
+): WireResult {
   const known = new Set<string>(components.map((c) => c.id));
   const byId = new Map<string, Componente>(components.map((c) => [c.id, c]));
   const ifaces: InterfazUml[] = interfaces.slice();
@@ -655,7 +901,7 @@ function wireComponentDiagram(components: Componente[], interfaces: InterfazUml[
     // El par con menor coste gana. Es O(4×4) por arista.
     for (const fs of fromRanked) {
       for (const ts of toRanked) {
-        const base = estimateAssemblyCost(fromC, fs, toC, ts, fromSibs, toSibs);
+        const base = estimateAssemblyCost(fromC, fs, toC, ts, fromSibs, toSibs, packages);
         // Carga de carril: preferir lados libres sin forzar el exterior del paquete.
         const loadTax =
           (loads.get(`${fromC.id}:${fs}`) ?? 0) * 35
@@ -893,6 +1139,11 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
 
   const packages: Paquete[] = spec.packages.map((p) => ({ ...p, x: p.x + ox, y: p.y + oy }));
   const shiftedComps: Componente[] = spec.components.map((c) => ({ ...c, x: c.x + ox, y: c.y + oy }));
+  // W60: paleta emisor/receptor antes de pintar / cablear colores de arista.
+  assignEmitterReceiverPalette(
+    shiftedComps as Array<Componente & { color?: string }>,
+    spec.edges as Array<{ from: string; to: string; color?: string }>,
+  );
   const compById = new Map<string, Componente>(shiftedComps.map((c) => [c.id, c]));
 
   const components: LayoutComponent[] = shiftedComps.map((c) => {
@@ -1100,15 +1351,8 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
     const prohibitedPkgBoxes: Caja[] = packages
       .filter((p) => p.prohibido && !allowedPkgs.has(p.id))
       .map((p) => ({ id: `prohibited-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }));
-    const ringObst: Caja[] = interfaces
-      .filter((i) => i.id !== e.fromInterface && i.id !== e.toInterface && i.cx > 0)
-      .map((i) => ({
-        id: `ring-${i.id}`,
-        x: i.cx - LOLLI_R - 2,
-        y: i.cy - LOLLI_R - 2,
-        w: LOLLI_R * 2 + 4,
-        h: LOLLI_R * 2 + 4,
-      }));
+    // W66: ajenos = shield; hermanos origen/destino = solo glifo.
+    const ringObst: Caja[] = ringsForEdge(e, interfaces, compById).walls
     const obstaculos: Caja[] = [
       ...shiftedComps.filter((c) => c.id !== e.from && c.id !== e.to),
       ...titleObst,
@@ -1220,8 +1464,6 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         ? { x: a.x, y: toPt.y }
         : { x: toPt.x, y: a.y };
       const candidate = [fromPt, a, b, toPt];
-      // W55: el fallback absoluto AHORA valida también prohibidos — antes
-      // podía colar paths que atravesaban `pkg-db` por la ruta L simple.
       const walls = [
         ...shiftedComps, ...titleObst,
         ...prohibitedPkgBoxes.map((p) => inflateBox(p, EDGE_CLEARANCE)),
@@ -1237,7 +1479,36 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         _loose: true,
       });
     }
-    return path ?? `M${fromPt.x},${fromPt.y} L${toPt.x},${toPt.y}`;
+    // Último recurso: L ortogonal anclado al fromSide (solo si no pisa cajas).
+    if (!path) {
+      const out = Math.max(36, routePkgBorder);
+      const a = (fromSide === 'left' || fromSide === 'right' || !fromSide)
+        ? { x: fromPt.x + (fromSide === 'left' ? -out : out), y: fromPt.y }
+        : { x: fromPt.x, y: fromPt.y + (fromSide === 'top' ? -out : out) };
+      const b = (fromSide === 'left' || fromSide === 'right' || !fromSide)
+        ? { x: a.x, y: toPt.y }
+        : { x: toPt.x, y: a.y };
+      const cand = [fromPt, a, b, toPt];
+      const walls = [...shiftedComps, ...titleObst];
+      if (
+        !pathIllegal(cand, walls, e.from, e.to, EDGE_CLEARANCE)
+        && !pathHugsBoxes(cand, walls, e.from, e.to, EDGE_CLEARANCE)
+      ) {
+        path = `M${fromPt.x},${fromPt.y} L${a.x},${a.y} L${b.x},${b.y} L${toPt.x},${toPt.y}`;
+      }
+    }
+    // Si aún no hay path: L con salida forzada (mínimo legal outward).
+    if (!path) {
+      const out = Math.max(36, routePkgBorder);
+      const a = (fromSide === 'left' || fromSide === 'right' || !fromSide)
+        ? { x: fromPt.x + (fromSide === 'left' ? -out : out), y: fromPt.y }
+        : { x: fromPt.x, y: fromPt.y + (fromSide === 'top' ? -out : out) };
+      const b = (fromSide === 'left' || fromSide === 'right' || !fromSide)
+        ? { x: a.x, y: toPt.y }
+        : { x: toPt.x, y: a.y };
+      path = `M${fromPt.x},${fromPt.y} L${a.x},${a.y} L${b.x},${b.y} L${toPt.x},${toPt.y}`;
+    }
+    return path;
   };
 
   /**
@@ -1274,10 +1545,16 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
    * (caso del intento anterior). Con 2 iters + spreadEdges agresivo
    * se llega a un resultado equivalente en 1/2 del tiempo.
    *
+   * W57: con paquetes `prohibido` el A* es mucho más caro (muro duro
+   * + wrap post). 1 iter basta: el post-check de interior ya corrige
+   * las 1-2 aristas que atraviesan clientesis. Medido: 2 iters ≈ 410s
+   * en este lab; 1 iter apunta a ~half.
+   *
    * Convergencia: paramos cuando ningún path cambia entre iteraciones
    * (o llegamos a MAX_ITERS).
    */
-  const MAX_ITERS = 2;
+  const hasProhibido = packages.some((p) => (p as Paquete & { prohibido?: boolean }).prohibido);
+  const MAX_ITERS = hasProhibido ? 1 : 2;
   for (let iter = 0; iter < MAX_ITERS; iter++) {
     // Construir el snapshot GLOBAL de segmentos tras la pasada previa.
     const globalSegs: Array<{ a: Punto; b: Punto }> = [];
@@ -1319,68 +1596,369 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
    * comparten destino pueden seguir apiñados sobre el mismo eje (el
    * nudge los aleja de paquetes pero no entre sí). spreadEdges detecta
    * celdas con >2 aristas y desplaza ±lanePitch a la mitad de ellas.
+   *
+   * W57: los `prohibido` entran como muro con inflate extra para que
+   * el splitter no empuje un carril encima de clientesis.
    */
+  const prohibitedForSpread: Caja[] = packages
+    .filter((p) => (p as Paquete & { prohibido?: boolean }).prohibido && !sourceSet.has(p.id))
+    .map((p) => inflateBox({ id: `prohibited-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }, EDGE_CLEARANCE));
   spreadEdges(
     edges,
-    [...shiftedComps, ...packages.map((p) => ({ id: `pkg-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }))],
+    [
+      ...shiftedComps,
+      ...packages.map((p) => ({ id: `pkg-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h })),
+      ...prohibitedForSpread,
+    ],
     Math.max(LANE_PITCH, Number(routeLanePitch) || LANE_PITCH),
+    1, // W57: ≥2 aristas en misma celda → separar (antes default 2 exigía 4+)
   );
 
   /**
-   * W55: validador absoluto del muro `prohibido`. Tras todos los
-   * fallbacks, ningún path puede atravesar un paquete prohibido. Si
-   * alguno lo hace, lo recolocamos:
-   *   1. Plan A: nudgePaths round 2 con las cajas prohibidas como
-   *      bordes (las empuja perpendicularmente).
-   *   2. Plan B: re-ruteo completo del edge con un contexto reforzado
-   *      donde la caja prohibida se añade como muro duro del A* (mayor
-   *      clearance). Si esto no produce un path válido, conservamos el
-   *      path viejo (preferible a una recta rota) — el caller verá la
-   *      superposición como overlap.
+   * W55/W57: validador absoluto del muro `prohibido`. Por arista: solo
+   * cuenta si el paquete NO está en `allowedPkgs` de esa arista (si el
+   * destino es db-pg dentro de clientesis, acercarse al socket es
+   * legítimo; atravesar el interior desde el lado opuesto no).
+   *
+   *   1. Plan A: re-ruteo con muro duro inflado (A*).
+   *   2. Plan B: wrap ortogonal por fuera del AABB prohibido.
+   * W57: se QUITÓ el nudgePaths sobre prohibidos — empujar el eje
+   * pegado al borde a menudo metía el tramo DENTRO del paquete.
    */
-  const prohibitedPkgBoxes: Caja[] = packages
-    .filter((p) => (p as Paquete & { prohibido?: boolean }).prohibido && !sourceSet.has(p.id))
-    .map((p) => ({ id: `prohibited-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }));
-  if (prohibitedPkgBoxes.length) {
-    let violators = findProhibitedViolations(edges, prohibitedPkgBoxes, EDGE_CLEARANCE);
-    if (violators.length) {
-      // Plan A: nudgePaths con las prohibidas como bordes.
-      nudgePathsFromPackageBorders(
-        edges.filter((_, i) => violators.includes(i)),
-        prohibitedPkgBoxes,
-        Math.max(EDGE_CLEARANCE, routePkgBorder),
+  const wrapAroundWalls = (
+    fromPt: Punto,
+    toPt: Punto,
+    walls: readonly Caja[],
+    fromSide?: Lado,
+  ): string | null => {
+    if (!walls.length) return null;
+    const pad = Math.max(EDGE_CLEARANCE + 8, routePkgBorder);
+    const candidates: Punto[][] = [];
+    for (const wall of walls) {
+      const x0 = wall.x - pad;
+      const x1 = wall.x + wall.w + pad;
+      const y0 = wall.y - pad;
+      const y1 = wall.y + wall.h + pad;
+      const out = Math.max(36, routePkgBorder);
+      const a = (fromSide === 'left' || fromSide === 'right' || !fromSide)
+        ? { x: fromPt.x + (fromSide === 'left' ? -out : out), y: fromPt.y }
+        : { x: fromPt.x, y: fromPt.y + (fromSide === 'top' ? -out : out) };
+      candidates.push(
+        [fromPt, a, { x: a.x, y: y0 }, { x: toPt.x, y: y0 }, toPt],
+        [fromPt, a, { x: a.x, y: y1 }, { x: toPt.x, y: y1 }, toPt],
+        [fromPt, a, { x: x0, y: a.y }, { x: x0, y: toPt.y }, toPt],
+        [fromPt, a, { x: x1, y: a.y }, { x: x1, y: toPt.y }, toPt],
       );
-      // Re-validar; si todavía quedan, plan B (re-ruteo reforzado).
-      violators = findProhibitedViolations(edges, prohibitedPkgBoxes, EDGE_CLEARANCE);
-      if (violators.length) {
-        for (const vi of violators) {
-          const e = edges[vi];
-          if (!e?._fromPt || !e?._toPt) continue;
-          const ctx = edgeRoutingCtx[vi];
-          if (!ctx) continue;
-          const walls = prohibitedPkgBoxes.map((p) => inflateBox(p, Math.max(EDGE_CLEARANCE + 8, routePkgBorder)));
-          const hardObstaculos: Caja[] = [...ctx.obstaculos, ...walls];
-          const fromPt = { x: e.fromX, y: e.fromY };
-          const toPt = { x: e.toX, y: e.toY };
-          const fromSide = (e as Arista & { _fromSide?: Lado })._fromSide;
-          const toSide = (e as Arista & { _toSide?: Lado })._toSide;
-          const alt = routeAvoidingBoxes(fromPt, toPt, hardObstaculos, 0, 1, {
-            fromSide, toSide,
-            fromBox: ctx.fromBox, toBox: ctx.toBox,
-            clearance: EDGE_CLEARANCE + 4,
-            usedSegs: [],
-            frame,
-            pkgBoxes: ctx.pkgBoxes,
-            lanePitch: routeLanePitch,
-            laneNearFactor: layoutGaps.laneNearFactor,
-            pkgBorderClearance: routePkgBorder,
-            pkgCrossFactor: layoutGaps.pkgCrossFactor,
-            softPkgs: ctx.pkgBoxes,
-            textBoxes: titleObst,
-            prohibitedPkgs: ctx.prohibitedPkgBoxes,
-          });
-          if (alt && !pathIllegal(parsePathPoints(alt), prohibitedPkgBoxes, undefined, undefined, EDGE_CLEARANCE)) {
-            e.path = alt;
+    }
+    let best: Punto[] | null = null;
+    let bestLen = Infinity;
+    const inflated = walls.map((p) => inflateBox(p, EDGE_CLEARANCE));
+    for (const raw of candidates) {
+      const clean = raw.filter((p, i, arr) => {
+        if (i === 0) return true;
+        const prev = arr[i - 1]!;
+        return Math.abs(p.x - prev.x) > 0.5 || Math.abs(p.y - prev.y) > 0.5;
+      });
+      if (clean.length < 2 || pathHasDiagonal(clean)) continue;
+      if (pathHitsBoxes(clean, inflated)) continue;
+      let len = 0;
+      for (let i = 1; i < clean.length; i++) {
+        len += Math.abs(clean[i]!.x - clean[i - 1]!.x) + Math.abs(clean[i]!.y - clean[i - 1]!.y);
+      }
+      if (len < bestLen) { bestLen = len; best = clean; }
+    }
+    if (!best) return null;
+    return `M${best[0]!.x},${best[0]!.y}` + best.slice(1).map((p) => ` L${p.x},${p.y}`).join('');
+  };
+
+  // Cruce de INTERIOR (sin inflate): aristas hacia db-pg pueden rozar el
+  // borde izquierdo del socket, pero no cruzar el rectángulo. Con inflate
+  // 0, el stem corto 1154→1167 (izq del paquete) NO choca; el atajo
+  // 1434→1167 (atraviesa el PG) SÍ.
+  // W57b: NO recortar el último punto — ese stem es el que atraviesa.
+  // Cruce de INTERIOR (sin inflate). Con O en el perímetro del prohibido
+  // (lado corredor), el path completo debe quedar fuera del fill.
+  const crossesProhibitedInterior = (d: string, walls: readonly Caja[]): boolean => {
+    if (!walls.length || !d) return false;
+    const pts = parsePathPoints(d);
+    if (pts.length < 2) return false;
+    return pathHitsBoxes(pts, walls);
+  };
+
+  for (let vi = 0; vi < edges.length; vi++) {
+    const e = edges[vi];
+    const ctx = edgeRoutingCtx[vi];
+    if (!e?._fromPt || !e?._toPt || !ctx) continue;
+    const walls = ctx.prohibitedPkgBoxes;
+    // Si la arista tiene destino/origen en el prohibido, walls=[];
+    // aún así evitamos atravesar el interior de paquetes prohibidos
+    // globales cuando el path da la vuelta por detrás.
+    const globalProhibited = packages
+      .filter((p) => (p as Paquete & { prohibido?: boolean }).prohibido)
+      .map((p) => ({ id: `prohibited-${p.id}`, x: p.x, y: p.y, w: p.w, h: p.h }));
+    const foreignWalls = walls.length
+      ? walls
+      : globalProhibited.filter((w) => !ctx.allowedPkgs.has(w.id.replace(/^prohibited-/, '')));
+    // Caso A: muro extranjero — no tocar ni rozar (inflate).
+    const hitsForeign = foreignWalls.length
+      && pathHitsBoxes(parsePathPoints(e.path), foreignWalls.map((p) => inflateBox(p, EDGE_CLEARANCE)));
+    // Caso B: destino en prohibido — no cruzar INTERIOR (sin inflate).
+    const hitsOwnInterior = !foreignWalls.length
+      && globalProhibited.some((w) => ctx.allowedPkgs.has(w.id.replace(/^prohibited-/, '')))
+      && crossesProhibitedInterior(e.path, globalProhibited.filter((w) => ctx.allowedPkgs.has(w.id.replace(/^prohibited-/, ''))));
+    if (!hitsForeign && !hitsOwnInterior) continue;
+
+    const fromPt = { x: e.fromX, y: e.fromY };
+    const toPt = { x: e.toX, y: e.toY };
+    const fromSide = (e as Arista & { _fromSide?: Lado })._fromSide;
+    const toSide = (e as Arista & { _toSide?: Lado })._toSide;
+    const blockWalls = hitsOwnInterior
+      ? globalProhibited.filter((w) => ctx.allowedPkgs.has(w.id.replace(/^prohibited-/, '')))
+      : foreignWalls;
+    // Caso B: inflate mínimo para no tapar el socket del propio destino.
+    const wallInflate = hitsOwnInterior ? 4 : Math.max(EDGE_CLEARANCE + 8, routePkgBorder);
+    const hardObstaculos: Caja[] = [
+      ...ctx.obstaculos,
+      ...blockWalls.map((p) => inflateBox(p, wallInflate)),
+    ];
+    const alt = routeAvoidingBoxes(fromPt, toPt, hardObstaculos, 0, 1, {
+      fromSide, toSide,
+      fromBox: ctx.fromBox, toBox: ctx.toBox,
+      clearance: EDGE_CLEARANCE + 4,
+      usedSegs: [],
+      frame,
+      pkgBoxes: ctx.pkgBoxes,
+      lanePitch: routeLanePitch,
+      laneNearFactor: layoutGaps.laneNearFactor,
+      pkgBorderClearance: routePkgBorder,
+      pkgCrossFactor: layoutGaps.pkgCrossFactor,
+      softPkgs: ctx.pkgBoxes,
+      textBoxes: titleObst,
+      // Caso B: destino DENTRO del prohibido — no Infinity-wall en A*
+      // (taparías el socket); el check de interior post-ruta filtra.
+      prohibitedPkgs: hitsOwnInterior ? [] : ctx.prohibitedPkgBoxes,
+    });
+    const altOk = alt && (
+      hitsOwnInterior
+        ? !crossesProhibitedInterior(alt, blockWalls)
+        : !pathHitsBoxes(parsePathPoints(alt), blockWalls.map((p) => inflateBox(p, EDGE_CLEARANCE)))
+    );
+    if (altOk) {
+      e.path = alt;
+      continue;
+    }
+    // Wrap: en caso B validar solo interior (sin inflate) excluyendo
+    // el stem final; en caso A, inflate completo.
+    if (hitsOwnInterior) {
+      const pad = Math.max(EDGE_CLEARANCE + 8, routePkgBorder);
+      const out = Math.max(36, routePkgBorder);
+      const a = (fromSide === 'left' || fromSide === 'right' || !fromSide)
+        ? { x: fromPt.x + (fromSide === 'left' ? -out : out), y: fromPt.y }
+        : { x: fromPt.x, y: fromPt.y + (fromSide === 'top' ? -out : out) };
+      let best: Punto[] | null = null;
+      let bestLen = Infinity;
+      for (const wall of blockWalls) {
+        const y0 = wall.y - pad;
+        const y1 = wall.y + wall.h + pad;
+        // Solo arriba/abajo: acercamiento final vertical al socket (izq).
+        for (const raw of [
+          [fromPt, a, { x: a.x, y: y0 }, { x: toPt.x, y: y0 }, toPt],
+          [fromPt, a, { x: a.x, y: y1 }, { x: toPt.x, y: y1 }, toPt],
+        ]) {
+          if (pathHasDiagonal(raw)) continue;
+          if (crossesProhibitedInterior(
+            `M${raw[0]!.x},${raw[0]!.y}` + raw.slice(1).map((p) => ` L${p.x},${p.y}`).join(''),
+            blockWalls,
+          )) continue;
+          let len = 0;
+          for (let i = 1; i < raw.length; i++) {
+            len += Math.abs(raw[i]!.x - raw[i - 1]!.x) + Math.abs(raw[i]!.y - raw[i - 1]!.y);
+          }
+          if (len < bestLen) { bestLen = len; best = raw; }
+        }
+      }
+      if (best) {
+        e.path = `M${best[0]!.x},${best[0]!.y}` + best.slice(1).map((p) => ` L${p.x},${p.y}`).join('');
+      }
+    } else {
+      const wrap = wrapAroundWalls(fromPt, toPt, blockWalls, fromSide);
+      if (wrap) e.path = wrap;
+    }
+  }
+
+  // W59: pase final — ningún riel puede auto-cruzarse (spur / T / solape).
+  // Si al limpiar el path pisa una caja, se revierte (no dispara mustRelax).
+  for (const e of edges) {
+    if (!e.path) continue;
+    const raw = parsePathPoints(e.path);
+    const fixed = sanitizeEdgePath(raw);
+    if (!fixed) continue;
+    const walls = [...shiftedComps, ...titleObst];
+    if (pathIllegal(fixed, walls, e.from, e.to, EDGE_CLEARANCE)) continue;
+    if (pathHugsBoxes(fixed, walls, e.from, e.to, EDGE_CLEARANCE)) continue;
+    e.path = `M${fixed[0]!.x},${fixed[0]!.y}` + fixed.slice(1).map((p) => ` L${p.x},${p.y}`).join('');
+  }
+
+  /**
+   * W62/W66: pase duro anti-"Encima" / "sale por dentro" / pisar -(O-.
+   * Tras nudge/spread/wrap, si el path aún abraza entidad o anillo ajeno,
+   * se re-rutea con muro duro. Rings entran en walls (W66).
+   */
+  for (let hi = 0; hi < edges.length; hi++) {
+    const e = edges[hi]!;
+    const ctx = edgeRoutingCtx[hi];
+    if (!e.path || !ctx || !e._fromPt || !e._toPt) continue;
+    const { walls: ringWalls, approach: approachRings } = ringsForEdge(e, interfaces, compById);
+    const walls = [...shiftedComps, ...titleObst, ...ringWalls];
+    const pts = parsePathPoints(e.path);
+    const fromSide = (e as Arista & { _fromSide?: Lado })._fromSide;
+    const toSide = (e as Arista & { _toSide?: Lado })._toSide;
+    const fromPt0 = { x: e.fromX, y: e.fromY };
+    const pathRetreats = (cand: Punto[]): boolean => {
+      if (fromSide === 'right') return cand.some((p, i) => i > 0 && p.x < fromPt0.x - 4);
+      if (fromSide === 'left') return cand.some((p, i) => i > 0 && p.x > fromPt0.x + 4);
+      if (fromSide === 'top') return cand.some((p, i) => i > 0 && p.y > fromPt0.y + 4);
+      if (fromSide === 'bottom') return cand.some((p, i) => i > 0 && p.y < fromPt0.y - 4);
+      return false;
+    };
+    const bad = pathIllegal(pts, walls, e.from, e.to, EDGE_CLEARANCE)
+      || pathHugsBoxes(pts, walls, e.from, e.to, EDGE_CLEARANCE)
+      || pathRetreats(pts);
+    if (!bad) continue;
+    const edgeIdx = edges.indexOf(e);
+    const sourceOffsetIndex = edgeIdx >= 0 ? edgeSourceRank[edgeIdx] ?? 0 : 0;
+    const sourceEdgeCount = sourceEdgeCountMap.get(e.from) ?? 1;
+    const alt = routeAvoidingBoxes(
+      { x: e.fromX, y: e.fromY },
+      { x: e.toX, y: e.toY },
+      [...ctx.hardComps, ...titleObst, ...ringWalls],
+      0, 1,
+      {
+        fromSide, toSide,
+        fromBox: ctx.fromBox, toBox: ctx.toBox,
+        clearance: EDGE_CLEARANCE,
+        usedSegs: [],
+        frame,
+        pkgBoxes: ctx.pkgBoxes,
+        softPkgs: ctx.pkgBoxes,
+        textBoxes: titleObst,
+        prohibitedPkgs: ctx.prohibitedPkgBoxes,
+        lanePitch: routeLanePitch,
+        laneNearFactor: layoutGaps.laneNearFactor,
+        pkgBorderClearance: routePkgBorder,
+        pkgCrossFactor: layoutGaps.pkgCrossFactor,
+        sourceOffsetIndex,
+        sourceEdgeCount,
+      },
+    );
+    if (alt) {
+      const altPts = parsePathPoints(alt);
+      if (
+        !pathRetreats(altPts)
+        && !pathIllegal(altPts, walls, e.from, e.to, EDGE_CLEARANCE)
+        && !pathHugsBoxes(altPts, walls, e.from, e.to, EDGE_CLEARANCE)
+      ) {
+        e.path = alt;
+        continue;
+      }
+    }
+    // L outward forzado. W68: NUNCA probar el lado opuesto al fromSide
+    // (right→left generaba rieles a x≈38 detrás del origen).
+    const fromPt = fromPt0;
+    const toPt = { x: e.toX, y: e.toY };
+    const sides: Lado[] = (() => {
+      if (fromSide === 'right') return ['right', 'bottom', 'top'];
+      if (fromSide === 'left') return ['left', 'bottom', 'top'];
+      if (fromSide === 'top') return ['top', 'right', 'left'];
+      if (fromSide === 'bottom') return ['bottom', 'right', 'left'];
+      return ['right', 'bottom', 'top', 'left'];
+    })();
+    const outs = [40, 80, 120, 160, 220, 300, 400].map((n) => Math.max(n, routePkgBorder));
+    let fixed = false;
+    const tryPath = (cand: Punto[]): boolean => {
+      if (pathRetreats(cand)) return false;
+      if (
+        pathIllegal(cand, walls, e.from, e.to, EDGE_CLEARANCE)
+        || pathHugsBoxes(cand, walls, e.from, e.to, EDGE_CLEARANCE)
+      ) return false;
+      e.path = `M${cand[0]!.x},${cand[0]!.y}`
+        + cand.slice(1).map((p) => ` L${p.x},${p.y}`).join('');
+      return true;
+    };
+    for (const side of sides) {
+      if (fixed) break;
+      for (const out of outs) {
+        const a = (side === 'left' || side === 'right')
+          ? { x: fromPt.x + (side === 'left' ? -out : out), y: fromPt.y }
+          : { x: fromPt.x, y: fromPt.y + (side === 'top' ? -out : out) };
+        const b = (side === 'left' || side === 'right')
+          ? { x: a.x, y: toPt.y }
+          : { x: toPt.x, y: a.y };
+        if (tryPath([fromPt, a, b, toPt])) { fixed = true; break; }
+      }
+    }
+    // W63/W66: wrap stem outward; carril SOLO con approach ajenos.
+    if (!fixed) {
+      const stemOut = Math.max(40, routePkgBorder);
+      const stem = fromSide === 'left' || fromSide === 'right'
+        ? { x: fromPt.x + (fromSide === 'left' ? -stemOut : stemOut), y: fromPt.y }
+        : fromSide === 'top' || fromSide === 'bottom'
+          ? { x: fromPt.x, y: fromPt.y + (fromSide === 'top' ? -stemOut : stemOut) }
+          : { x: fromPt.x + stemOut, y: fromPt.y };
+      const pitch = Math.max(24, routeLanePitch);
+      // Carril en el gutter: (stem) .. (borde approach ajeno).
+      if (approachRings.length) {
+        const ax0 = Math.min(...approachRings.map((c) => c.x)) - pitch;
+        const ax1 = Math.max(...approachRings.map((c) => c.x + c.w)) + pitch;
+        const ay0 = Math.min(...approachRings.map((c) => c.y)) - pitch;
+        const ay1 = Math.max(...approachRings.map((c) => c.y + c.h)) + pitch;
+        const rails: Punto[][] = [];
+        if (fromSide === 'right' || !fromSide) {
+          for (let x = ax0; x > fromPt.x + 16; x -= pitch) {
+            rails.push([fromPt, stem, { x, y: stem.y }, { x, y: toPt.y }, toPt]);
+          }
+        }
+        if (fromSide === 'left') {
+          for (let x = ax1; x < fromPt.x - 16; x += pitch) {
+            rails.push([fromPt, stem, { x, y: stem.y }, { x, y: toPt.y }, toPt]);
+          }
+        }
+        rails.push(
+          [fromPt, stem, { x: stem.x, y: ay0 }, { x: toPt.x, y: ay0 }, toPt],
+          [fromPt, stem, { x: stem.x, y: ay1 }, { x: toPt.x, y: ay1 }, toPt],
+          [fromPt, stem, { x: ax1, y: stem.y }, { x: ax1, y: toPt.y }, toPt],
+          [fromPt, stem, { x: ax0, y: stem.y }, { x: ax0, y: toPt.y }, toPt],
+        );
+        for (const w of rails) {
+          if (tryPath(w)) { fixed = true; break; }
+        }
+      }
+      if (!fixed) {
+        const alien = walls.filter((c) => {
+          const id = (c as Caja & { id?: string }).id;
+          if (id === e.from || id === e.to) return false;
+          // No usar glifos hermanos para AABB (empujan x0 al origen).
+          if (id?.startsWith('ring-') && !approachRings.some((r) => r.id === id)) return false;
+          return true;
+        });
+        if (alien.length) {
+          const x0 = Math.min(...alien.map((c) => c.x)) - routePkgBorder;
+          const x1 = Math.max(...alien.map((c) => c.x + c.w)) + routePkgBorder;
+          const y0 = Math.min(...alien.map((c) => c.y)) - routePkgBorder;
+          const y1 = Math.max(...alien.map((c) => c.y + c.h)) + routePkgBorder;
+          const wraps: Punto[][] = [
+            [fromPt, stem, { x: x1, y: stem.y }, { x: x1, y: toPt.y }, toPt],
+            [fromPt, stem, { x: stem.x, y: y1 }, { x: toPt.x, y: y1 }, toPt],
+            [fromPt, stem, { x: stem.x, y: y0 }, { x: toPt.x, y: y0 }, toPt],
+            [fromPt, stem, { x: x1, y: stem.y }, { x: x1, y: y1 }, { x: toPt.x, y: y1 }, toPt],
+            [fromPt, stem, { x: x1, y: stem.y }, { x: x1, y: y0 }, { x: toPt.x, y: y0 }, toPt],
+          ];
+          // Solo wrap por x0 si queda a la derecha del stem (no reentrar).
+          if (x0 > stem.x + 8) {
+            wraps.unshift([fromPt, stem, { x: x0, y: stem.y }, { x: x0, y: toPt.y }, toPt]);
+          }
+          for (const w of wraps) {
+            if (tryPath(w)) { fixed = true; break; }
           }
         }
       }
@@ -1391,8 +1969,17 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   const mustRelax = edges.some((e) => {
     const pts = parsePathPoints(e.path);
     if (!e.path || pts.length < 2) return true;
-    if (pathHasDiagonal(pts)) return !allowDiag; // diagonal solo con allowDiagonal
-    return pathIllegal(pts, [...shiftedComps, ...titleObst], e.from, e.to, EDGE_CLEARANCE);
+    if (pathHasDiagonal(pts)) return !allowDiag;
+    // W66/W68: rings o retreat detrás del origen → re-pack.
+    const { walls: ringWalls } = ringsForEdge(e, interfaces, compById);
+    const walls = [...shiftedComps, ...titleObst, ...ringWalls];
+    const fs = (e as Arista & { _fromSide?: Lado })._fromSide;
+    const retreat = fs === 'right' ? pts.some((p, i) => i > 0 && p.x < e.fromX - 4)
+      : fs === 'left' ? pts.some((p, i) => i > 0 && p.x > e.fromX + 4)
+      : false;
+    return retreat
+      || pathIllegal(pts, walls, e.from, e.to, EDGE_CLEARANCE)
+      || pathHugsBoxes(pts, walls, e.from, e.to, EDGE_CLEARANCE);
   });
   const relaxN = (spec as ComponentSpecResult & { _relax?: number })._relax ?? 0;
   if (mustRelax && relaxN < 3) {

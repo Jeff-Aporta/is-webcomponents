@@ -89,6 +89,8 @@ Los `import` relativos entre `.min.js` llevan el mismo `?h=`, sellado en el buil
 
 Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `contentHash`). El build los publica en `dist/cdn/build/`.
 
+Render headless de diagramas (SVG/PNG): `src/cdn/tools/` (`renderDiagram`, `renderDiagramBatch`, `writeDiagramOutputs`). El build los publica en `dist/cdn/tools/`. Playwright **no** va en el vendor: el consumidor lo inyecta (`createRequire(…​)('playwright').chromium`). Sirve para labs ISWC y para generadores Deno de otros repos (ISS, etc.) con el mismo contrato.
+
 ## Sheet cache (apps)
 
 Evita flicker de CSS en ShadowRoot: Cache Storage + `adoptedStyleSheets`.
@@ -182,9 +184,12 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 ```
 
 ```html
-<!-- Galería local (self-test) -->
-<script type="module" src="./dist/cdn/preview/doc-demo-host.min.js"></script>
-<script type="module" src="./dist/gallery-app.min.js" defer></script>
+<!-- Galería local (self-test) — solo loader; sin ?h= ni script src de bundles -->
+<script type="module">
+  import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js';
+  await L.loadPageModules(['iswc-doc-demo-host']);
+  await L.loadPageModules(['iswc-gallery-app']);
+</script>
 <body>
   <iswc-doc-demo brand="ISWC" local dev sheets-cache="iswc-gallery-sheets"></iswc-doc-demo>
 </body>
@@ -192,7 +197,9 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
 | Artefacto | Tipo | Rol |
 | --- | --- | --- |
-| `doc-demo-host.min.js` | module | `configure` + `L.loadPageModules(['iswc-doc-demo-boot'])` + `L.load('iswc-doc-demo')` |
+| `loader.min.js` | module | entry; enruta `?h=` y espejos |
+| `iswc-doc-demo-host` | alias module | `configure` + boot + `L.load('iswc-doc-demo')` |
+| `iswc-gallery-app` | alias module | SPA `dist/gallery-app.min.js` |
 | `iswc-doc-demo-boot` | alias module | theme/palette + CSS crítico |
 | `iswc-doc-demo` | CE (catálogo) | shell light-DOM + page styles/modules |
 

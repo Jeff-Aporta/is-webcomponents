@@ -163,6 +163,16 @@ check(
   'R9: nudgePathsFromPackageBorders empuja corredores lejos de bordes',
 );
 
+// W59: un riel jamás se auto-cruza (spur / T / solape)
+check(
+  /export function pathSelfIntersects/.test(packSrc) && /export function sanitizeEdgePath/.test(packSrc),
+  'W59: pathSelfIntersects + sanitizeEdgePath existen',
+);
+check(
+  /pathSelfIntersects\(pts\)/.test(packSrc),
+  'W59: nudge/spread rechazan paths que se auto-cruzan',
+);
+
 // Regla 10: Columnas en grid, centradas en Y
 check(
   /centerColumnsVertically/.test(packSrc) || /centerPackedGrid/.test(packSrc),

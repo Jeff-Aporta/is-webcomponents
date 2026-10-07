@@ -15,7 +15,9 @@
   iswc-bubble-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data-viz/bubble-chart.min.js?h=kzoes8');
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
+  await L.load('iswc-bubble-chart');
   await customElements.whenDefined('iswc-bubble-chart');
 
   const chart = document.createElement('iswc-bubble-chart');

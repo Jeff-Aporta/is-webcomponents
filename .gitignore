@@ -39,6 +39,7 @@ src/utils/health/_author-index.json
 
 .tmp/
 .tmp-scss/
+.iswc-render-tmp/
 
 
 .superpowers/

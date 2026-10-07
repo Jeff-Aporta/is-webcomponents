@@ -1,14 +1,15 @@
 // labs/iss-ayudascpia-componentes/render.mjs
-// Exporta SVG desde el kit LOCAL (dist/cdn) con Playwright + http estático.
+// Thin wrapper: utilidad transversal src/cdn/tools (vendor = dist/cdn/tools).
 // Uso: deno run -A --no-check labs/iss-ayudascpia-componentes/render.mjs [v1|v2|all]
 
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { mkdir, writeFile, readFile } from 'node:fs/promises';
-import { createServer } from 'node:http';
-import { createReadStream, existsSync } from 'node:fs';
-import { extname } from 'node:path';
+import { mkdir, readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import {
+  renderDiagramBatch,
+  writeDiagramOutputs,
+} from '../../src/cdn/tools/index.ts';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
@@ -21,118 +22,66 @@ await mkdir(OUT, { recursive: true });
 const arg = (process.argv[2] || 'all').toLowerCase();
 const jobs = [];
 if (arg === 'all' || arg === 'v1') {
-  jobs.push({ payload: 'payload-v1-legacy.json', out: 'v1-legacy.svg' });
+  jobs.push({
+    id: 'v1-legacy',
+    payloadFile: 'payload-v1-legacy.json',
+    out: 'v1-legacy.svg',
+  });
 }
 if (arg === 'all' || arg === 'v2') {
-  jobs.push({ payload: 'payload.json', out: 'componentes.svg' });
-}
-
-const TYPES = {
-  '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.mjs': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml',
-};
-
-function startServer() {
-  return new Promise((resolve) => {
-    const server = createServer(async (req, res) => {
-      const url = new URL(req.url || '/', 'http://127.0.0.1');
-      let rel = decodeURIComponent(url.pathname).replace(/^\/+/, '');
-      if (!rel || rel.endsWith('/')) rel += 'index.html';
-      const abs = join(ROOT, rel);
-      if (!abs.startsWith(ROOT) || !existsSync(abs)) {
-        res.writeHead(404);
-        res.end('not found');
-        return;
-      }
-      res.writeHead(200, {
-        'Content-Type': TYPES[extname(abs)] || 'application/octet-stream',
-        'Cache-Control': 'no-store',
-        'Access-Control-Allow-Origin': '*',
-      });
-      createReadStream(abs).pipe(res);
-    });
-    server.listen(0, '127.0.0.1', () => {
-      const { port } = server.address();
-      resolve({ server, port });
-    });
+  jobs.push({
+    id: 'componentes',
+    payloadFile: 'payload.json',
+    out: 'componentes.svg',
   });
 }
 
-function htmlFor(base, payloadJson) {
-  const payload = JSON.stringify(payloadJson);
-  return `<!doctype html>
-<html lang="es" class="theme-light" data-theme="light">
-<head><meta charset="utf-8"/>
-<style>html,body{margin:0;padding:8px;background:#fff}iswc-component-diagram{display:block;width:100%;min-height:400px}</style>
-</head>
-<body>
-<iswc-component-diagram id="d" theme="insoft-cd" min-gap="72"></iswc-component-diagram>
-<script type="module">
-  try {
-    await import(${JSON.stringify(base + 'dist/cdn/diagrams/component-diagram.min.js')});
-    await customElements.whenDefined('iswc-component-diagram');
-    const el = document.getElementById('d');
-    el.payload = ${payload};
-    await el.updateComplete();
-    window.__LAB_ERR__ = null;
-  } catch (e) {
-    window.__LAB_ERR__ = String(e && e.stack || e);
-  }
-  window.__LAB_READY__ = true;
-</script>
-</body></html>`;
+const batch = [];
+for (const j of jobs) {
+  const payload = JSON.parse(await readFile(join(LAB, j.payloadFile), 'utf8'));
+  batch.push({
+    id: j.id,
+    job: {
+      tag: 'iswc-component-diagram',
+      scriptUrl: 'dist/cdn/diagrams/component-diagram.min.js',
+      payload,
+      attrs: { theme: 'insoft-cd', 'min-gap': '72' },
+    },
+  });
 }
 
-const PROBE = `(() => {
-  const h = document.querySelector('iswc-component-diagram');
-  const s = h?.shadowRoot?.querySelector('svg');
-  if (!s) return null;
-  const r = s.getBoundingClientRect();
-  return r.width > 10 && r.height > 10 ? s.outerHTML : null;
-})()`;
+// W57+: A* + wrap en este lab puede superar 360s.
+// png:true en el batch + svg-to-png.mjs de respaldo (visión del agente).
+const results = await renderDiagramBatch(batch, {
+  chromium,
+  serveRoot: ROOT,
+  timeoutMs: 900_000,
+  settleMs: 500,
+  png: true,
+});
 
-const { server, port } = await startServer();
-const base = `http://127.0.0.1:${port}/`;
-console.log('serve', base);
+const { spawn } = await import('node:child_process');
+const runSvgToPng = (svgName) => new Promise((resolve, reject) => {
+  const p = spawn(
+    'deno',
+    ['run', '-A', '--no-check', join(LAB, 'svg-to-png.mjs'), svgName],
+    { cwd: ROOT, stdio: 'inherit', shell: true },
+  );
+  p.on('exit', (code) => (code === 0 ? resolve() : reject(new Error(`svg-to-png exit ${code}`))));
+});
 
-const browser = await chromium.launch({ headless: true });
-try {
-  for (const job of jobs) {
-    const payload = JSON.parse(await readFile(join(LAB, job.payload), 'utf8'));
-    const page = await browser.newPage();
-    page.on('pageerror', (e) => console.error('pageerror', e.message));
-    page.on('console', (m) => {
-      if (m.type() === 'error') console.error('console', m.text());
-    });
-    // Misma origen: sirve HTML temporal desde el server lab
-    const tmpHtml = join(LAB, 'out', `_render-${job.out}.html`);
-    await writeFile(tmpHtml, htmlFor(base, payload), 'utf8');
-    const pageUrl = `${base}labs/iss-ayudascpia-componentes/out/_render-${job.out}.html`;
-    await page.goto(pageUrl, { waitUntil: 'networkidle' });
-    // W55+ (Phase 5): timeout subido a 360s. El payload del lab (v2) pesa
-    // ~6KB y dispara la optimización iterativa del A*; con 18 aristas
-    // y 2 iteraciones el `updateComplete` suele resolverse en 200-260s.
-    // 60s (brief) era insuficiente — la primera corrida del lab ya
-    // necesitaba ~240s para MAX_ITERS=4 (ahora 2 debería ser ~120s, pero
-    // hay un cuello de botella en `nudgePaths` con 5 paquetes que
-    // extiende el tiempo).
-    await page.waitForFunction(() => window.__LAB_READY__ === true, null, { timeout: 360000 });
-    const err = await page.evaluate(() => window.__LAB_ERR__);
-    if (err) throw new Error(`render fail ${job.payload}: ${err}`);
-    await page.waitForTimeout(500);
-    const svg = await page.evaluate(PROBE);
-    if (!svg) throw new Error(`SVG vacío: ${job.payload}`);
-    await writeFile(join(OUT, job.out), svg, 'utf8');
-    console.log(`OK ${job.out} (${svg.length} bytes)`);
-    await page.close();
+for (let i = 0; i < results.length; i++) {
+  const r = results[i];
+  const job = jobs[i];
+  if (r.error || !r.result) {
+    throw new Error(`FAIL ${r.id}: ${r.error || 'sin result'}`);
   }
-} finally {
-  await browser.close();
-  server.close();
+  const outSvg = join(OUT, job.out);
+  const outPng = outSvg.replace(/\.svg$/i, '.png');
+  await writeDiagramOutputs(r.result, outSvg, outPng);
+  if (!r.result.png) await runSvgToPng(job.out);
+  const pngNote = r.result.png ? `, png=${r.result.png.byteLength}B` : ', png via svg-to-png';
+  console.log(`OK ${job.out} (${r.result.svg.length} bytes, ${r.result.width}x${r.result.height}${pngNote})`);
 }
 
 console.log('lab render done →', OUT);

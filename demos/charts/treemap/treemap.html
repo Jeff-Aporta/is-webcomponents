@@ -15,7 +15,9 @@
   iswc-treemap:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data-viz/treemap.min.js?h=lcdi3z');
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
+  await L.load('iswc-treemap');
   await customElements.whenDefined('iswc-treemap');
 
   const tm = document.createElement('iswc-treemap');

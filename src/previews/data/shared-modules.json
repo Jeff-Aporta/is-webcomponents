@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-06T14:25:07.877Z",
+  "generatedAt": "2026-10-07T01:06:24.458Z",
   "count": 112,
   "modules": [
     {
@@ -457,15 +457,20 @@
       "id": "diagram-edge-style",
       "path": "src/components/_shared/diagram-edge-style.ts",
       "summary": "Módulo compartido `diagram-edge-style.ts`.",
-      "bytes": 2001,
+      "bytes": 5573,
       "exports": [
         "EDGE_HUES",
+        "EMITTER_S",
+        "EMITTER_L",
+        "EMITTER_HUES",
+        "RECEIVER_COLOR",
+        "EDGE_DARKEN",
         "assignEdgeHues",
-        "hexMixWhite",
-        "edgeStrokeHex",
-        "edgeChipFill",
-        "edgeChipText",
-        "edgeChipFromStroke"
+        "hexToHsl",
+        "hslToHex",
+        "darkenHex",
+        "brightenHex",
+        "assignEmitterReceiverPalette"
       ]
     },
     {
@@ -594,7 +599,7 @@
       "id": "diagram-tipos.schemas",
       "path": "src/components/_shared/diagram-tipos.schemas.ts",
       "summary": "diagram-tipos — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 4574,
+      "bytes": 4837,
       "exports": [
         "CajaSchema",
         "ComponenteSchema",

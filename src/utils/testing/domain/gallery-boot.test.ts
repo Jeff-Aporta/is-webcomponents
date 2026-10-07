@@ -3,7 +3,7 @@
  *
  * Boot vía iswc-doc-demo (boot ESM vía loader + host module + CE):
  *  - sin <link> de kit; palettes/shell vía loader aliases
- *  - index.html mínimo: host module + gallery-app + <iswc-doc-demo> (sin script boot clásico)
+ *  - index.html: loader module → iswc-doc-demo-host + iswc-gallery-app + <iswc-doc-demo>
  *  - pageModules classic vs module en loader; boot alias type module
  */
 import assert from 'node:assert/strict';
@@ -32,9 +32,13 @@ test('galería: CSS del kit vía loader aliases (sin <link> is-base/palettes)', 
   assert.match(docDemoTs, /iswc-doc-shell/);
 });
 
-test('index.html: host module + iswc-doc-demo (boot vía loader; sin index.js/mjs/css)', () => {
+test('index.html: loader module + iswc-doc-demo (boot vía aliases; sin index.js/mjs/css)', () => {
   assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
-  assert.match(indexHtml, /doc-demo-host\.min\.js/);
+  assert.match(indexHtml, /ISWebComponentsLoader|from ['"].*loader\.min\.js['"]/);
+  assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-doc-demo-host/);
+  assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-gallery-app/);
+  assert.doesNotMatch(indexHtml, /<script[^>]+src=["'][^"']*doc-demo-host\.min\.js/);
+  assert.doesNotMatch(indexHtml, /<script[^>]+src=["'][^"']*gallery-app\.min\.js/);
   assert.match(indexHtml, /<iswc-doc-demo[\s\S]*\blocal\b/);
   assert.match(indexHtml, /<iswc-doc-demo[\s\S]*\bdev\b/);
   assert.match(indexHtml, /sheets-cache=["']iswc-gallery-sheets["']/);
@@ -64,6 +68,7 @@ test('loader: pageModules classic vs module', () => {
   assert.match(loaderTs, /type:\s*['"]module['"]/);
   assert.match(loaderTs, /iswc-doc-demo-boot[\s\S]*type:\s*['"]module['"]/);
   assert.match(loaderTs, /iswc-doc-demo-host/);
+  assert.match(loaderTs, /iswc-gallery-app[\s\S]*gallery-app\.min\.js/);
   assert.match(loaderTs, /loadClassicOnce|type === 'classic'/);
   assert.match(loaderTs, /dev-reload[\s\S]*classic/);
 });
@@ -93,8 +98,9 @@ test('no reimportar preview-component ni icon-loader desde src/', () => {
   assert.doesNotMatch(indexHtml, /src\/components\/_shared\/icon-loader\.js/);
 });
 
-test('SPA de galeria desde dist/gallery-app.min.js (head + defer)', () => {
-  assert.match(indexHtml, /src=["']\.\/dist\/gallery-app\.min\.js(?:\?h=[0-9a-z]{6})?["'][^>]*\bdefer\b/);
+test('SPA de galeria vía loader alias iswc-gallery-app', () => {
+  assert.match(indexHtml, /iswc-gallery-app/);
+  assert.match(loaderTs, /iswc-gallery-app[\s\S]*dist\/gallery-app\.min\.js/);
   assert.ok(existsSync(join(root, 'src', 'gallery', 'app.ts')));
 });
 

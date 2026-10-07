@@ -77,10 +77,14 @@ export const OpcionesEmpaqueSchema = z.object({
   lanePitch: z.number().optional(),
   /** ×N si el tramo está a < lanePitch de otro riel. Default 3. */
   laneNearFactor: z.number().optional(),
-  /** Margen arista ↔ borde de agrupador (px). Default 40. */
+  /** Margen arista ↔ borde de agrupador (px). Default 56. */
   pkgBorderClearance: z.number().optional(),
-  /** Multiplicador de costo al atravesar interior de agrupador. Default 3. */
+  /** ×N si el tramo está a < pkgBorderClearance de un borde. Default 9. */
+  pkgBorderNearFactor: z.number().optional(),
+  /** Multiplicador de costo al atravesar interior de agrupador; W61: ^depth. Default 3. */
   pkgCrossFactor: z.number().optional(),
+  /** Hueco horizontal entre paquetes hermanos anidados (API↔PG). Default 88. */
+  nestedPkgGap: z.number().optional(),
   pad: z.number().optional(),
   tabH: z.number().optional(),
   clearance: z.number().optional(),

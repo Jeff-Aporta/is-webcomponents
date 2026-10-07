@@ -15,9 +15,11 @@
   iswc-funnel-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
   // Carga el bundle pre-compilado. funnel-chart.min.js importa transitivamente
   // chart.min.js + marks-funnel.min.js.
-  await import('../../../dist/cdn/data-viz/funnel-chart.min.js?h=yas9l6');
+  await L.load('iswc-funnel-chart');
   await customElements.whenDefined('iswc-funnel-chart');
 
   const chart = document.createElement('iswc-funnel-chart');

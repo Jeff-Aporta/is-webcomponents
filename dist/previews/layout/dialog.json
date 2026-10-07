@@ -6,6 +6,7 @@
   "titleHtml": false,
   "description": "Documentación y demos del componente iswc-dialog de InSoft.",
   "storageKey": "docs-iswc-dialog",
+  "loads": ["iswc-slots-pg"],
   "sections": [
     {
       "id": "intro",

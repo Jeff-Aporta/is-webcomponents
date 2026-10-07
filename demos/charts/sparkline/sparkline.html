@@ -17,7 +17,9 @@
   iswc-sparkline:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/data-viz/sparkline.min.js?h=7jxzd6');
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
+  await L.load('iswc-sparkline');
   await customElements.whenDefined('iswc-sparkline');
 
   // Demo 1: line sparkline via attribute

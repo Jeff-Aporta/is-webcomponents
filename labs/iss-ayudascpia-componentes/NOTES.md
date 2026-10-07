@@ -21,8 +21,9 @@ agrupadores `#7ACFF4/#FFFFC1/#BCFFBB/#EAB6B0/#81FF81/#01C000`, O/C `#7ACFF4`.
 ## Observaciones
 
 - Lab **persiste en el repo**; no se documenta en demos/galería.
-- El render usa el CDN **local** (`dist/cdn`) para validar ajustes del kit
-  antes de publicar. Mismo patrón que `ISS…/docs-experimental/gen/tools/render-iswc.mjs`.
+- El render usa `src/cdn/tools` (vendor `dist/cdn/tools`) + CDN **local**
+  (`dist/cdn`). Playwright se inyecta; el lab solo arma payloads. Mismo
+  contrato que puede consumir el ISS desde Deno/vendor.
 - Theme InSoft CD: `theme="insoft-cd"` (paleta CD + `invertAssembly`).
 - `@Azure` anida API + PG (`packages[].parent`).
 - EPs consolidados (`GET|PUT`, …) → una row; fondo transparente, borde blanco α.
@@ -47,6 +48,19 @@ cd Personal/apps/is-webcomponents
 deno run -A --no-check scripts/_tmp/_rebuild-component-diagram.mjs
 deno run -A --no-check labs/iss-ayudascpia-componentes/render.mjs
 # preview: deno task dev → /labs/iss-ayudascpia-componentes/preview.html
+```
+
+Vendor / Deno (otro repo): copiar `dist/cdn/tools/*.ts` e inyectar Playwright:
+
+```js
+import { createRequire } from 'node:module';
+import { renderDiagram, writeDiagramOutputs } from './vendor/iswc-tools/index.ts';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const r = await renderDiagram(
+  { scriptUrl: 'diagrams/component-diagram.min.js', payload, attrs: { theme: 'insoft-cd' } },
+  { chromium, serveRoot: pathToDistCdnParentOrKitRoot, timeoutMs: 900_000 },
+);
+await writeDiagramOutputs(r, 'out/componentes.svg');
 ```
 
 ## Salidas

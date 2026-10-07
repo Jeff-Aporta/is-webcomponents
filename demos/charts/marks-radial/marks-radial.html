@@ -18,17 +18,20 @@
   iswc-pie-chart:not(:defined), iswc-doughnut-chart:not(:defined), iswc-polar-area-chart:not(:defined), iswc-radar-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
   // El bundle marks-radial.min.js exporta las funciones puras.
-  const lib = await import('../../../dist/cdn/charts/marks-radial.min.js?h=mt7yp5');
+  const [__base] = await L.listBases();
+  const lib = await import(L.assetUrl(new URL('charts/marks-radial.min.js', __base.endsWith('/') ? __base : __base + '/').href));
   document.getElementById('exports').textContent = JSON.stringify(Object.keys(lib).sort(), null, 2);
 
-  // Para invocarlas en vivo, importamos los wrappers tipados que las usan.
-  await Promise.all([
-    import('../../../dist/cdn/data-viz/pie-chart.min.js?h=r9qcl3'),
-    import('../../../dist/cdn/data-viz/doughnut-chart.min.js?h=hsl977'),
-    import('../../../dist/cdn/data-viz/polar-area-chart.min.js?h=6m13rv'),
-    import('../../../dist/cdn/data-viz/radar-chart.min.js?h=6y6jzv'),
-  ]);
+  // Wrappers tipados vía loader (sin ?h= quemado).
+  await L.load(
+    'iswc-pie-chart',
+    'iswc-doughnut-chart',
+    'iswc-polar-area-chart',
+    'iswc-radar-chart',
+  );
   await Promise.all([
     customElements.whenDefined('iswc-pie-chart'),
     customElements.whenDefined('iswc-doughnut-chart'),

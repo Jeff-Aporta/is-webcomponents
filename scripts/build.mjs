@@ -600,6 +600,16 @@ for (const name of await readdir(buildSrc)) {
 await copyFile(join(root, 'src', 'cdn', 'asset-store.ts'), join(buildOut, 'asset-store.ts'));
 console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 
+// tools/: render headless de diagramas (Playwright inyectado por el consumidor).
+const toolsSrc = join(root, 'src', 'cdn', 'tools');
+const toolsOut = join(dist, 'tools');
+await mkdir(toolsOut, { recursive: true });
+for (const name of await readdir(toolsSrc)) {
+  if (!name.endsWith('.ts')) continue;
+  await copyFile(join(toolsSrc, name), join(toolsOut, name));
+}
+console.log(`  ${'tools/'.padEnd(18)} ts vendor (render-diagram)`);
+
 const indexPath = join(root, 'index.html');
 const indexPrev = await readFile(indexPath, 'utf8');
 const indexNext = applyHashToHtml(indexPrev, hashes);

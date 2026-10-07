@@ -160,6 +160,8 @@ const state: LoaderState = {
     // Theme/palette del shell doc (ESM; lo importa el host vía loader).
     ['iswc-doc-demo-boot',   { href: 'cdn:preview/doc-demo-boot.min.js', type: 'module' }],
     ['iswc-doc-demo-host',   { href: 'cdn:preview/doc-demo-host.min.js', type: 'module' }],
+    // SPA de la galería (fuera de dist/cdn/; relativo a la página).
+    ['iswc-gallery-app',     { href: 'dist/gallery-app.min.js', type: 'module' }],
     // Tema ER InSoft (json2css + resolveErTheme). Sin CE nuevo.
     ['iswc-diagram-theme',   { href: 'cdn:diagrams/theme.min.js', type: 'module' }],
   ]),

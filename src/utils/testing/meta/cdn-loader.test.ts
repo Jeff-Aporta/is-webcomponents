@@ -80,8 +80,9 @@ test('min.js de componente lleva banner de docs MD', () => {
   assert.match(btn, /is-cdn-install\/SKILL\.md/);
 });
 
-test('index.html arranca con doc-demo host (sin all.min; CSS vía loader)', () => {
-  assert.match(indexHtml, /doc-demo-host\.min\.js/);
+test('index.html arranca con loader module (sin all.min; CSS vía loader)', () => {
+  assert.match(indexHtml, /loader\.min\.js/);
+  assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-doc-demo-host/);
   assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
   assert.match(indexHtml, /<iswc-doc-demo/);
   assert.doesNotMatch(indexHtml, /<link\s+rel="stylesheet"\s+href="dist\/cdn\/is-base\.min\.css/);

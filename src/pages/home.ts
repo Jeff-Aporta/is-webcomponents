@@ -35,8 +35,6 @@ function cablearCtas(raiz: HTMLElement) {
   /** @type {Array<[string, string]>} */
   const ctas = [
     ['ctaExplore', 'iswc-button'],
-    ['ctaButton', 'iswc-button'],
-    ['ctaCharts', 'iswc-bar-chart'],
   ];
   for (const [id, tag] of ctas) {
     raiz.querySelector<HTMLElement>(`#${id}`)?.addEventListener('click', () => seleccionar(tag));

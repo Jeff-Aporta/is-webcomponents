@@ -15,9 +15,11 @@
   iswc-waterfall-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?h=d7l87p';
+  L.configure({ local: true });
   // Carga el bundle pre-compilado. waterfall-chart.min.js importa
   // transitivamente chart.min.js + marks-waterfall.min.js.
-  await import('../../../dist/cdn/data-viz/waterfall-chart.min.js?h=vr8mvr');
+  await L.load('iswc-waterfall-chart');
   await customElements.whenDefined('iswc-waterfall-chart');
 
   const chart = document.createElement('iswc-waterfall-chart');

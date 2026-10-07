@@ -293,10 +293,12 @@ class IswcComponentDiagram extends DiagramElementBase {
           : edgeStrokeHex(e.hue, theme.accent));
       const g = svgEl('g', { class: 'cd-edge' });
       const dashed = !ballSocket && (e.kind === 'dependency' || e.kind === 'realization');
+      // butt: round pinta medio círculo DENTRO de la caja en el arranque
+      // ("Inicia dentro"). El trazo nace en el borde y sale limpio.
       const path = svgEl('path', {
         d: e.path, fill: 'none', stroke: color,
         'stroke-width': ep?.strokeWidth ?? 1.35,
-        'stroke-linejoin': 'round', 'stroke-linecap': 'round',
+        'stroke-linejoin': 'round', 'stroke-linecap': 'butt',
         'stroke-dasharray': dashed ? (ep?.dasharray || '6 4') : null,
         class: 'cd-edge__path',
       });
