@@ -1,6 +1,7 @@
 import { layoutNodeLink } from '../_shared/node-link-layout.js';
 import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
+import { readRoutingOverride } from './routing-costs.js';
 import type { RouterEdge, RouterWorld } from './component-router.schemas.js';
 import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
@@ -274,6 +275,8 @@ export function erSpecFromPayload(payload: unknown): ErSpec | null {
     relations,
   };
   if (meta) out.meta = meta;
+  const routing = readRoutingOverride(src.layout);
+  if (routing) out.routing = routing as ErSpec['routing'];
   return out;
 }
 
@@ -940,6 +943,8 @@ export function computeErLayout(specIn: ErSpec): ErLayout {
     pkgBorderClearance: ER_BORDER_KEEP,
     pkgBorderNearFactor: 6,
     pkgCrossFactor: 2,
+    // Mismo campo de costos que componentes y clases (y su `layout.routing`).
+    ...(spec.routing ? { costs: spec.routing } : {}),
   });
   const routedPts = new Map<number, Punto[] | null>();
   routerIdx.forEach((ri, k) => routedPts.set(ri, routed.paths[k] ?? null));

@@ -363,7 +363,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
         fromBox: boxes.find((b) => b.id === r.from)!, toBox: boxes.find((b) => b.id === r.to)!,
         fromPkgs: new Set<string>(), toPkgs: new Set<string>(),
       }];
-    }), { clearance: 20, stub: 28, lanePitch: 24 });
+    }), { clearance: 20, stub: 28, lanePitch: 24, ...(spec.layout?.routing ? { costs: spec.layout.routing } : {}) });
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
   ri.forEach((i, k) => {
     const pl = plans[i]!;

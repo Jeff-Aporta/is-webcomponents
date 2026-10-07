@@ -270,6 +270,11 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const entityGlowR = opts.entityGlow ?? C.entity.radius;
   const OVERLAP_MUL = C.rail.overlap;
   const MERGE_RADIUS_PITCHES = C.rail.mergePitches;
+  // Embudo final del mismo destino (donde compartir riel no se cobra): acotado
+  // a `rail.mergePitches` pasos de grilla. Antes se medía en `lanePitch`, que
+  // en componentes es ancho, y aristas al mismo -( compartían troncos largos;
+  // fuera del embudo convergen en abanico (rieles paralelos), como en clases.
+  const MERGE_R = Math.max(step, step * MERGE_RADIUS_PITCHES);
   const RETREAT_MUL = C.rail.retreat;
   const SAME_FUNNEL_MUL = C.rail.sameFunnel;
   const NEAR_RAIL_MUL = C.rail.near;
@@ -644,7 +649,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     const gCost = new Float64Array(S).fill(Infinity);
     const came = new Int32Array(S).fill(-1);
     const heap = new MinHeap();
-    const mergeR = pitch * MERGE_RADIUS_PITCHES;
+    const mergeR = MERGE_R;
     const nearGoal = (x: number, y: number): boolean =>
       goalPts.some((g) => Math.abs(x - g.x) + Math.abs(y - g.y) <= mergeR);
     // W68: “por detrás” = detrás de la cara de salida, o del lado de la
@@ -931,7 +936,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const segsOf = (pts: readonly Punto[]): Array<[Punto, Punto]> =>
     pts.slice(1).map((p, i) => [pts[i]!, p]);
   const isV = (a: Punto, b: Punto): boolean => Math.abs(a.x - b.x) < 0.5;
-  const funnel = pitch * MERGE_RADIUS_PITCHES + 2 * clearance;
+  const funnel = MERGE_R + 2 * clearance;
   const clash = (pts: readonly Punto[], ei: number): { overlap: boolean; crosses: number } => {
     let crosses = 0;
     let overlap = false;
@@ -1030,9 +1035,14 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       const k = ns[t]!;
       const i = k % nx;
       const j = (k - i) / nx;
-      if (Math.abs(xs[i]! - ex) + Math.abs(ys[j]! - ey) <= pitch * MERGE_RADIUS_PITCHES) continue;
+      if (Math.abs(xs[i]! - ex) + Math.abs(ys[j]! - ey) <= MERGE_R) continue;
       const ko = keyOf[ei] ? keyOcc.get(keyOf[ei]!)! : null;
       const near = (o: number, k2: number): boolean => occ[o]![k2]! - Math.max(go[o]![k2]!, ko ? ko[o]![k2]! : 0) > 0;
+      // Riel compartido con una arista ajena (mismo nodo y orientación) fuera
+      // del embudo final: es peor que un vecino a < pitch. Sin esto el layout
+      // con troncos compartidos puntuaba MEJOR que el abanico y ganaba.
+      if ((os[t]! & 1) && near(0, k)) crowding += 4 * step;
+      if ((os[t]! & 2) && near(1, k)) crowding += 4 * step;
       if (os[t]! & 1) {
         for (let jj = j - 1; jj >= 0 && ys[j]! - ys[jj]! < pitch; jj--) if (near(0, idx(i, jj))) crowding += step;
         for (let jj = j + 1; jj < ny && ys[jj]! - ys[j]! < pitch; jj++) if (near(0, idx(i, jj))) crowding += step;

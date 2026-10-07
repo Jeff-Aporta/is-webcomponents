@@ -333,6 +333,8 @@ export const ErSpecSchema = z.object({
   groups: z.array(DiagramGroupSchema).optional(),
   entities: z.array(ErSpecEntitySchema),
   relations: z.array(ErSpecRelationSchema),
+  /** `layout.routing`: sobreescritura del campo de costos compartido (igual que componentes y clases). */
+  routing: z.record(z.string(), z.record(z.string(), z.number())).optional(),
   meta: z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),

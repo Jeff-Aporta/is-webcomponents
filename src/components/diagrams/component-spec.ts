@@ -1567,7 +1567,12 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         // interfaz, no el componente.
         ...(spec.layout?.connector === 'arrow'
           ? { shareKey: `${toC.id}::arrow`, startKey: `${fromC.id}::arrow` }
-          : prv ? { shareKey: `${prv.id}::assembly` } : {}),
+          // Conector -(O-: SIN clave compartida. La clave activa el bus (las
+          // aristas se unen y viajan por el mismo riel); al -( deben llegar en
+          // abanico: rieles propios, paralelos y pegados (los hermanos que
+          // convergen en el mismo O no se cobran cercanía: filtro
+          // convolucional), entrando por los 3 lados libres del O.
+          : {}),
       },
     });
   }
