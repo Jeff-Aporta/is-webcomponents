@@ -1,6 +1,6 @@
 import { tkHueToHex } from './tk-hue.js';
 import { bg2fontColor } from './tk-color.js';
-import type { EdgeWithHue } from "./diagram-edge-style.schemas.js";
+import type { EdgeWithHue, Colored, Edged } from "./diagram-edge-style.schemas.js";
 
 /** Arista del grafo con un hue opcional para colorearla. */
 
@@ -69,9 +69,6 @@ export function brightenHex(hex: string, factor = 1 / EDGE_DARKEN): string {
   return hslToHex(hsl.h, hsl.s, Math.min(92, hsl.l * factor));
 }
 
-type Colored = { id: string; color?: string };
-type Edged = { from: string; to: string; color?: string };
-
 /**
  * Emisores = misma S/L, H del payload o rota; solo-receptores = #C1BFFF;
  * aristas = color del emisor con B −5%.
@@ -102,9 +99,10 @@ export function assignEmitterReceiverPalette(
     if (!c) continue;
     c.color = RECEIVER_COLOR;
   }
+  // Huérfanos (sin aristas): siempre #C1BFFF, aunque el payload traiga otro.
   for (const c of components) {
     if (emitters.has(c.id) || receivers.has(c.id)) continue;
-    if (!c.color) c.color = RECEIVER_COLOR;
+    c.color = RECEIVER_COLOR;
   }
   for (const e of edges ?? []) {
     const src = byId.get(e.from);

@@ -80,9 +80,11 @@ const legendPayload = {
 };
 const legendLayout = computeErLayout(resolveErSpec(legendPayload));
 const legendEntity = legendLayout.entities[0];
+// Con grupos dibujados como cajones con título la leyenda sobra (y se
+// pintaba fuera del viewBox): no se emite. Si existe, nunca solapa.
 assert.ok(
-  legendLayout.legendX >= legendEntity.x + legendEntity.w + 8,
-  'la leyenda debe quedar a la derecha del contenido, sin solaparse',
+  !legendLayout.groups || legendLayout.legendX >= legendEntity.x + legendEntity.w + 8,
+  'la leyenda, si existe, debe quedar a la derecha del contenido, sin solaparse',
 );
 assert.ok(
   legendLayout.titleLines?.length >= 2,

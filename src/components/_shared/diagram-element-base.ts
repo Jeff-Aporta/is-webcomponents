@@ -62,7 +62,7 @@ import { findThemeContainer, readTheme } from './theme-scope.js';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export class DiagramElementBase extends ElementBase {
-  static get observedAttributes(): string[] { return ['color']; }
+  static get observedAttributes(): string[] { return ['color', 'look']; }
 
   #wrap: HTMLElement | null = null;
   #svg: SVGElement | null = null;
@@ -167,7 +167,10 @@ export class DiagramElementBase extends ElementBase {
     this.#renderQueued = (async () => {
       await Promise.resolve();
       try {
-        if (this.mounted) this.renderDiagram();
+        if (this.mounted) {
+          this.renderDiagram();
+          this.#applyLook();
+        }
       } finally {
         this.#renderQueued = null;
       }
@@ -176,6 +179,38 @@ export class DiagramElementBase extends ElementBase {
   }
 
   async updateComplete(): Promise<void> { await this.queueRender(); }
+
+  /**
+   * `look="sketch"` (servilleta / boceto): trazo “a mano” sobre las formas
+   * (cajas, rieles, conectores) con un filtro SVG de turbulencia; el texto
+   * queda nítido y con la tipografía del theme. Va dentro del SVG, así que
+   * el export estático lo conserva. Sirve para cualquier tipo de diagrama.
+   */
+  #applyLook(): void {
+    const svg = this.#svg;
+    if (!svg || this.getAttribute('look') !== 'sketch') return;
+    const id = 'iswc-look-sketch';
+    if (!svg.querySelector(`#${id}`)) {
+      let defs = svg.querySelector('defs');
+      if (!defs) {
+        defs = document.createElementNS(SVG_NS, 'defs');
+        svg.insertBefore(defs, svg.firstChild);
+      }
+      const f = document.createElementNS(SVG_NS, 'filter');
+      f.setAttribute('id', id);
+      f.setAttribute('x', '-5%');
+      f.setAttribute('y', '-5%');
+      f.setAttribute('width', '110%');
+      f.setAttribute('height', '110%');
+      f.innerHTML = '<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7" result="n"/>'
+        + '<feDisplacementMap in="SourceGraphic" in2="n" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>';
+      defs.appendChild(f);
+    }
+    for (const el of svg.querySelectorAll('rect, path, line, polyline, polygon, circle, ellipse')) {
+      if (el.closest('defs')) continue;
+      el.setAttribute('filter', `url(#${id})`);
+    }
+  }
 
   /** Abstracto: la subclase construye spec/layout y pinta el SVG
    *  (`this.svg`). Debe asignar `this.spec` / `this.layout`. */

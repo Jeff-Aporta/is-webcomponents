@@ -265,7 +265,10 @@ class IswcErDiagram extends DiagramElementBase {
 
       if (styleTheme) {
         const pal = clusterPalette(styleTheme, c.id);
-        fill = pal.fill;
+        // Paleta explícita del cajón (payload / regla de dominio externo):
+        // clave de theme.cluster.palettes o un hex directo (#RRGGBB).
+        const key = (c as { palette?: string }).palette;
+        fill = (key?.startsWith('#') ? key : key && styleTheme.cluster?.palettes?.[key]) || pal.fill;
         stroke = pal.border;
         strokeWidth = styleTheme.cluster?.borderWidth ?? 1.5;
         const da = styleTheme.cluster?.dasharray;
@@ -296,6 +299,11 @@ class IswcErDiagram extends DiagramElementBase {
         class: 'er-cluster__box',
       }));
 
+      // Cajón con icono en vez de título (p.ej. tablas sin relaciones).
+      const icon = (c as { icon?: string }).icon;
+      if (icon) {
+        g.appendChild(svgIconGroup(icon, { x: c.x + 10, y: c.y + 5, size: 16, color: titleFill }));
+      }
       if (c.name) {
         const t = svgEl('text', {
           x: c.x + 14, y: c.y + 18, fill: titleFill,

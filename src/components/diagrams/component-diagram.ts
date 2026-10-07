@@ -1,13 +1,16 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE } from './component-spec.js';
+import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './component-spec.js';
 import type { ComponentLayout } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
-import { edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite } from '../_shared/diagram-edge-style.js';
+import {
+  edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite, RECEIVER_COLOR,
+} from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { svgArrowHead, pathEndDirection } from '../_shared/diagram-arrow.js';
 import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
 import {
@@ -59,6 +62,25 @@ function packagePaletteId(p: Paquete): string {
   if (/azure|cloud|group|panel/.test(blob)) return 'group';
   if (/portal|web\b|cool/.test(blob)) return 'cool';
   return String(p.id ?? 'expose').replace(/^pkg-/, '');
+}
+
+/** Iniciales del avatar de tarjeta: dos palabras, o inicial + siguiente mayúscula. */
+function cardInitials(name: string): string {
+  const words = String(name).split(/[\s·/._\-()×]+/).filter((w) => /[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]/.test(w));
+  if (words.length >= 2) return (words[0]![0]! + words[1]![0]!).toUpperCase();
+  // Convención de clase `TNombre`: la T no distingue (todas la llevan).
+  const w = (words[0] ?? '?').replace(/^T(?=[A-ZÁÉÍÓÚÑ])/, '');
+  const upper = w.slice(1).match(/[A-ZÁÉÍÓÚÑ]/)?.[0];
+  return (w[0]! + (upper ?? w[1] ?? '')).toUpperCase();
+}
+
+/** Tinta legible sobre `hex`: negro sobre claros, blanco sobre oscuros. */
+function inkOn(hex: string): string {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!m) return '#FFFFFF';
+  const n = parseInt(m[1]!, 16);
+  const lum = 0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255);
+  return lum > 150 ? '#1F2937' : '#FFFFFF';
 }
 
 /** Arco C. `side` nombra abertura: right abre a +X, bottom abre a +Y (hacia el O). */
@@ -223,7 +245,9 @@ class IswcComponentDiagram extends DiagramElementBase {
       let titleFill: string;
       if (styleTheme) {
         const pal = clusterPalette(styleTheme, packagePaletteId(p));
-        fill = pal.fill;
+        // Paleta explícita del paquete (payload): clave del theme o "#hex".
+        const key = (p as { palette?: string }).palette;
+        fill = (key?.startsWith('#') ? key : key && styleTheme.cluster?.palettes?.[key]) || pal.fill;
         stroke = pal.border;
         strokeWidth = styleTheme.cluster?.borderWidth ?? 1.5;
         const da = styleTheme.cluster?.dasharray;
@@ -305,7 +329,8 @@ class IswcComponentDiagram extends DiagramElementBase {
       g.appendChild(path);
       if (!ballSocket) {
         const dir = pathEndDirection(e.path);
-        const back = 8;
+        // Remate `arrow`: la punta toca la cara del destino.
+        const back = layout.connector === 'arrow' ? 0 : 8;
         const tipX = e.toX - dir.x * back;
         const tipY = e.toY - dir.y * back;
         const head = svgArrowHead({
@@ -406,11 +431,23 @@ class IswcComponentDiagram extends DiagramElementBase {
       const g = svgEl('g', { class: 'cd-cmp' });
       g.dataset.cmpId = c.id;
       const ownColor = (c as { color?: string }).color;
-      const stroke = ownColor
+      // #C1BFFF (huérfano / solo-receptor): sólido, sin lavar con blanco.
+      const lilac = !!ownColor
+        && ownColor.replace(/^#/, '').toUpperCase()
+          === RECEIVER_COLOR.replace(/^#/, '').toUpperCase();
+      // Lila (huérfano / solo-receptor): relleno lila + borde negro del theme;
+      // con stroke = ownColor el borde desaparecía sobre el relleno.
+      const stroke = (lilac ? ((styleTheme as { orphan?: { border?: string } } | null)?.orphan?.border ?? '#000000') : '')
+        || ownColor
         || paint?.border
         || ((c.hue != null && tkHueToHex(c.hue)) || theme.accent);
+      if (layout.boxStyle === 'card') {
+        this.#paintCard(g, c, ownColor || paint?.border || theme.accent, theme, fontFamily);
+        this.svg.appendChild(g);
+        continue;
+      }
       const fill = ownColor
-        ? hexMixWhite(ownColor, 0.88)
+        ? (lilac ? ownColor : hexMixWhite(ownColor, 0.88))
         : (paint?.fill ?? theme.chipFill);
       const rx = paint?.radius ?? 6;
       g.appendChild(svgEl('rect', {
@@ -419,7 +456,7 @@ class IswcComponentDiagram extends DiagramElementBase {
       }));
       if (c.stereotype) {
         const headerFill = ownColor
-          ? hexMixWhite(ownColor, 0.78)
+          ? (lilac ? ownColor : hexMixWhite(ownColor, 0.78))
           : (paint?.headerFill
             ?? (c.hue != null ? `hsla(${c.hue},65%,55%,0.22)` : theme.chipFill));
         g.appendChild(svgEl('rect', {
@@ -482,6 +519,70 @@ class IswcComponentDiagram extends DiagramElementBase {
         g.appendChild(pt);
       }
       this.svg.appendChild(g);
+    }
+  }
+
+  /**
+   * Tarjeta de organigrama (`layout.boxStyle: 'card'`): fondo blanco con
+   * sombra, borde y avatar en el color del componente, nombre en negrita y
+   * estereotipo debajo. El blanco contrasta con cualquier paleta de
+   * agrupador; el color queda en el borde y el avatar, donde se lee.
+   */
+  #paintCard(
+    g: SVGGElement,
+    c: ComponentLayout['components'][number] & Caja & { id: string; name?: string; stereotype?: string; icon?: string },
+    accent: string,
+    theme: DiagramTheme,
+    fontFamily: string,
+  ): void {
+    const rx = 10;
+    g.appendChild(svgEl('rect', {
+      x: c.x + 2, y: c.y + 3, width: c.w, height: c.h, rx,
+      fill: 'rgba(15,23,42,0.14)',
+    }));
+    g.appendChild(svgEl('rect', {
+      x: c.x, y: c.y, width: c.w, height: c.h, rx,
+      fill: '#FFFFFF', stroke: accent, 'stroke-width': 1.4,
+    }));
+    const r = 15;
+    const cx = c.x + 8 + r;
+    const cy = c.y + c.h / 2;
+    g.appendChild(svgEl('circle', { cx, cy, r, fill: accent }));
+    if (c.icon) {
+      // Foto de perfil: icono Iconify del catálogo local, en la tinta legible.
+      const size = 18;
+      g.appendChild(svgIconGroup(c.icon, { x: cx - size / 2, y: cy - size / 2, size, color: inkOn(accent) }));
+    } else {
+      const ini = svgEl('text', {
+        x: cx, y: cy + 3.6, 'text-anchor': 'middle',
+        fill: inkOn(accent), 'font-size': '10', 'font-weight': '700',
+        'font-family': fontFamily,
+      });
+      ini.textContent = cardInitials(c.name ?? c.id);
+      g.appendChild(ini);
+    }
+    const tx = c.x + CARD_TEXT_X;
+    const t = svgEl('text', {
+      x: tx, y: c.labelY ?? cy + 4, 'text-anchor': 'start',
+      fill: theme.text, 'font-size': '11', 'font-weight': '700',
+      'font-family': fontFamily,
+    });
+    const lineas: string[] = c.lines ?? (c.name ? [c.name] : []);
+    const lineHeight = c.lineHeight ?? 13;
+    lineas.forEach((linea, i) => {
+      const ts = svgEl('tspan', { x: tx, dy: i === 0 ? 0 : lineHeight });
+      ts.textContent = linea;
+      t.appendChild(ts);
+    });
+    g.appendChild(t);
+    if (c.stereotype) {
+      const st = svgEl('text', {
+        x: tx, y: (c.labelY ?? cy) + (lineas.length - 1) * lineHeight + CARD_STEREO_DY,
+        'text-anchor': 'start', fill: theme.muted, 'font-size': '9.5', 'font-style': 'italic',
+        'font-family': fontFamily,
+      });
+      st.textContent = c.stereotype;
+      g.appendChild(st);
     }
   }
 

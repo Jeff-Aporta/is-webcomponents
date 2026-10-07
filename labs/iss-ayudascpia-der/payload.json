@@ -1,0 +1,890 @@
+{
+  "_lab": "iss-ayudascpia-der",
+  "_fuente": "PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/gen/diagrams/iswc/html/der.html",
+  "erDiagram": {
+    "title": "ISS PatyIA · DER",
+    "direction": "LR",
+    "ratio": 1.6,
+    "groups": [
+      {
+        "id": "g_patyia",
+        "name": "PatyIA",
+        "hue": 190,
+        "palette": "#FFFFBA"
+      },
+      {
+        "id": "g_operativa",
+        "name": "Operativa",
+        "hue": 190,
+        "parent": "g_patyia",
+        "palette": "#7ACFF4"
+      },
+      {
+        "id": "g_config",
+        "name": "Config",
+        "hue": 190,
+        "parent": "g_patyia",
+        "palette": "#7ACFF4"
+      },
+      {
+        "id": "g_clientesis",
+        "name": "ClientesIS",
+        "hue": 190,
+        "external": true,
+        "palette": "#FFFFBA"
+      },
+      {
+        "id": "g_seg",
+        "name": "SEG",
+        "hue": 190,
+        "external": true,
+        "parent": "g_clientesis",
+        "palette": "#7ACFF4"
+      },
+      {
+        "id": "g_terceros",
+        "name": "Terceros",
+        "hue": 190,
+        "external": true,
+        "parent": "g_clientesis"
+      }
+    ],
+    "entities": [
+      {
+        "id": "patyia_conversaciones",
+        "name": "patyia_conversaciones",
+        "group": "g_operativa",
+        "attributes": [
+          {
+            "name": "iconversacion",
+            "type": "bigint",
+            "key": "PK"
+          },
+          {
+            "name": "itercero",
+            "type": "varchar(50)",
+            "key": "FK"
+          },
+          {
+            "name": "icontacto",
+            "type": "bigint",
+            "key": "FK"
+          },
+          {
+            "name": "hilo",
+            "type": "varchar(100)"
+          },
+          {
+            "name": "titulo",
+            "type": "varchar(100)"
+          },
+          {
+            "name": "fhcre",
+            "type": "timestamp"
+          },
+          {
+            "name": "imodulo",
+            "type": "varchar(100)"
+          },
+          {
+            "name": "qmensajes",
+            "type": "smallint"
+          },
+          {
+            "name": "qtokens",
+            "type": "integer"
+          },
+          {
+            "name": "prompt",
+            "type": "text"
+          },
+          {
+            "name": "itdestado",
+            "type": "smallint"
+          },
+          {
+            "name": "fhultact",
+            "type": "timestamp"
+          },
+          {
+            "name": "bautoriza_visualizacion",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "id": "patyia_mensajescalificados",
+        "name": "patyia_mensajescalificados",
+        "group": "g_operativa",
+        "attributes": [
+          {
+            "name": "imensaje",
+            "type": "bigint",
+            "key": "PK"
+          },
+          {
+            "name": "iconversacion",
+            "type": "integer",
+            "key": "FK"
+          },
+          {
+            "name": "butil",
+            "type": "boolean"
+          },
+          {
+            "name": "contenido",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "patyia_tiquetesconversacion",
+        "name": "patyia_tiquetesconversacion",
+        "group": "g_operativa",
+        "attributes": [
+          {
+            "name": "itiquete",
+            "type": "bigint",
+            "key": "PK"
+          },
+          {
+            "name": "iconversacion",
+            "type": "bigint",
+            "key": "PK"
+          },
+          {
+            "name": "itema",
+            "type": "varchar(50)"
+          },
+          {
+            "name": "iclasificador",
+            "type": "varchar(50)"
+          },
+          {
+            "name": "bcerrar_conversacion",
+            "type": "boolean"
+          },
+          {
+            "name": "bautoriza_visualizacion",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "id": "patyia_consultas",
+        "name": "patyia_consultas",
+        "group": "g_operativa",
+        "attributes": [
+          {
+            "name": "iconsulta",
+            "type": "varchar(32)",
+            "key": "PK"
+          },
+          {
+            "name": "iconversacion",
+            "type": "varchar(32)",
+            "key": "FK"
+          },
+          {
+            "name": "consulta",
+            "type": "text"
+          },
+          {
+            "name": "itdconsulta",
+            "type": "varchar(32)",
+            "key": "FK"
+          }
+        ]
+      },
+      {
+        "id": "patyia_conversacion_log",
+        "name": "patyia_conversacion_log",
+        "group": "g_operativa",
+        "attributes": [
+          {
+            "name": "iconversacion",
+            "type": "bigint"
+          },
+          {
+            "name": "content",
+            "type": "jsonb"
+          },
+          {
+            "name": "fhultact",
+            "type": "timestamptz"
+          }
+        ]
+      },
+      {
+        "id": "patyia_errores",
+        "name": "patyia_errores",
+        "group": "g_operativa",
+        "attributes": [
+          {
+            "name": "ierror",
+            "type": "bigint",
+            "key": "PK"
+          },
+          {
+            "name": "jerror",
+            "type": "jsonb"
+          },
+          {
+            "name": "batendido",
+            "type": "boolean"
+          },
+          {
+            "name": "fhcre",
+            "type": "timestamp"
+          },
+          {
+            "name": "idominio",
+            "type": "char(1)"
+          },
+          {
+            "name": "icontexto",
+            "type": "char(1)"
+          },
+          {
+            "name": "referencia",
+            "type": "varchar(200)"
+          },
+          {
+            "name": "resumen",
+            "type": "varchar(500)"
+          }
+        ]
+      },
+      {
+        "id": "patyia_mcp_sesiones",
+        "name": "patyia_mcp_sesiones",
+        "group": "g_operativa",
+        "attributes": [
+          {
+            "name": "iusuario",
+            "type": "varchar(101)",
+            "key": "PK"
+          },
+          {
+            "name": "jsession",
+            "type": "text"
+          },
+          {
+            "name": "fhcre",
+            "type": "timestamptz"
+          },
+          {
+            "name": "bactivo",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "id": "patyia_tdconsultas",
+        "name": "patyia_tdconsultas",
+        "group": "g_config",
+        "attributes": [
+          {
+            "name": "itdconsulta",
+            "type": "varchar(64)",
+            "key": "PK"
+          },
+          {
+            "name": "ntdconsulta",
+            "type": "varchar(255)"
+          },
+          {
+            "name": "instruccion",
+            "type": "text"
+          },
+          {
+            "name": "descripcion",
+            "type": "text"
+          },
+          {
+            "name": "bactivo",
+            "type": "boolean"
+          },
+          {
+            "name": "jconfig",
+            "type": "jsonb"
+          },
+          {
+            "name": "jpermisos",
+            "type": "jsonb"
+          },
+          {
+            "name": "fhcre",
+            "type": "timestamptz",
+            "key": "AUDIT_CRE"
+          },
+          {
+            "name": "itercerocre",
+            "type": "varchar(30)",
+            "key": "AUDIT_CRE"
+          },
+          {
+            "name": "irolcre",
+            "type": "varchar(20)",
+            "key": "AUDIT_CRE"
+          },
+          {
+            "name": "icontactocre",
+            "type": "bigint",
+            "key": "AUDIT_CRE"
+          },
+          {
+            "name": "fhult",
+            "type": "timestamptz",
+            "key": "AUDIT_ULT"
+          },
+          {
+            "name": "iterceroult",
+            "type": "varchar(30)",
+            "key": "AUDIT_ULT"
+          },
+          {
+            "name": "irolult",
+            "type": "varchar(20)",
+            "key": "AUDIT_ULT"
+          },
+          {
+            "name": "icontactoult",
+            "type": "bigint",
+            "key": "AUDIT_ULT"
+          }
+        ]
+      },
+      {
+        "id": "patyia_vector_store",
+        "name": "patyia_vector_store",
+        "group": "g_config",
+        "attributes": [
+          {
+            "name": "ivectorstore",
+            "type": "varchar(64)",
+            "key": "PK"
+          },
+          {
+            "name": "nvectorstore",
+            "type": "varchar(100)"
+          },
+          {
+            "name": "descripcion",
+            "type": "varchar(500)"
+          },
+          {
+            "name": "bactivo",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "id": "patyia_tdconsultaxvector_store",
+        "name": "patyia_tdconsultaxvector_store",
+        "group": "g_config",
+        "attributes": [
+          {
+            "name": "itdconsulta",
+            "type": "varchar(32)",
+            "key": "PK"
+          },
+          {
+            "name": "ivectorstore",
+            "type": "varchar(64)",
+            "key": "PK"
+          },
+          {
+            "name": "orden",
+            "type": "smallint"
+          }
+        ]
+      },
+      {
+        "id": "patyia_sys_values",
+        "name": "patyia_sys_values",
+        "group": "g_config",
+        "attributes": [
+          {
+            "name": "isystemkey",
+            "type": "varchar(128)",
+            "key": "PK"
+          },
+          {
+            "name": "jvalue",
+            "type": "jsonb"
+          },
+          {
+            "name": "fhultact",
+            "type": "timestamptz"
+          }
+        ]
+      },
+      {
+        "id": "patyia_providers",
+        "name": "patyia_providers",
+        "group": "g_config",
+        "attributes": [
+          {
+            "name": "iproveedor",
+            "type": "varchar(64)",
+            "key": "PK"
+          },
+          {
+            "name": "nproveedor",
+            "type": "varchar(160)"
+          },
+          {
+            "name": "descripcion",
+            "type": "text"
+          },
+          {
+            "name": "bactivo",
+            "type": "boolean"
+          },
+          {
+            "name": "jcuenta",
+            "type": "jsonb"
+          }
+        ]
+      },
+      {
+        "id": "patyia_files_storage",
+        "name": "patyia_files_storage",
+        "group": "g_config",
+        "attributes": [
+          {
+            "name": "ifile",
+            "type": "varchar(32)",
+            "key": "PK"
+          },
+          {
+            "name": "jfile",
+            "type": "jsonb"
+          },
+          {
+            "name": "fhcre",
+            "type": "timestamptz"
+          }
+        ]
+      },
+      {
+        "id": "seg_grupos",
+        "name": "seg_grupos",
+        "group": "g_seg",
+        "attributes": [
+          {
+            "name": "itercero",
+            "type": "varchar(30)",
+            "key": "PK"
+          },
+          {
+            "name": "igrupo",
+            "type": "varchar(20)",
+            "key": "PK"
+          },
+          {
+            "name": "itdgrupo",
+            "type": "smallint"
+          },
+          {
+            "name": "igrupopadre",
+            "type": "varchar(20)",
+            "key": "FK"
+          },
+          {
+            "name": "nombre",
+            "type": "varchar(50)"
+          }
+        ]
+      },
+      {
+        "id": "seg_roles",
+        "name": "seg_roles",
+        "group": "g_seg",
+        "attributes": [
+          {
+            "name": "itercero",
+            "type": "varchar(30)",
+            "key": "PK"
+          },
+          {
+            "name": "igrupo",
+            "type": "varchar(20)",
+            "key": "PK"
+          },
+          {
+            "name": "irol",
+            "type": "varchar(20)",
+            "key": "PK"
+          },
+          {
+            "name": "nombre",
+            "type": "varchar(50)"
+          },
+          {
+            "name": "telefono",
+            "type": "varchar(50)"
+          },
+          {
+            "name": "email",
+            "type": "varchar(100)"
+          },
+          {
+            "name": "bactivo",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "id": "seg_rolescontacto",
+        "name": "seg_rolescontacto",
+        "group": "g_seg",
+        "attributes": [
+          {
+            "name": "itercero",
+            "type": "varchar(30)",
+            "key": "PK"
+          },
+          {
+            "name": "igrupo",
+            "type": "varchar(20)",
+            "key": "PK"
+          },
+          {
+            "name": "irol",
+            "type": "varchar(20)",
+            "key": "PK"
+          },
+          {
+            "name": "icontacto",
+            "type": "bigint",
+            "key": "PK"
+          },
+          {
+            "name": "finicial",
+            "type": "date"
+          },
+          {
+            "name": "ffinal",
+            "type": "date"
+          },
+          {
+            "name": "jhorario",
+            "type": "text"
+          },
+          {
+            "name": "bprincipal",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "id": "seg_contactosterceros",
+        "name": "seg_contactosterceros",
+        "group": "g_seg",
+        "attributes": [
+          {
+            "name": "itercero",
+            "type": "varchar(30)",
+            "key": "PK"
+          },
+          {
+            "name": "icontacto",
+            "type": "bigint",
+            "key": "PK"
+          },
+          {
+            "name": "cargo",
+            "type": "varchar(50)"
+          },
+          {
+            "name": "badminsistema",
+            "type": "boolean"
+          },
+          {
+            "name": "busuario",
+            "type": "boolean"
+          },
+          {
+            "name": "bvisible",
+            "type": "boolean"
+          },
+          {
+            "name": "telefonoempresa",
+            "type": "varchar(30)"
+          },
+          {
+            "name": "bgerente",
+            "type": "boolean"
+          },
+          {
+            "name": "bcontador",
+            "type": "boolean"
+          },
+          {
+            "name": "bcartera",
+            "type": "boolean"
+          },
+          {
+            "name": "bsistemas",
+            "type": "boolean"
+          },
+          {
+            "name": "bfactelectronica",
+            "type": "boolean"
+          },
+          {
+            "name": "bnomelectronica",
+            "type": "boolean"
+          },
+          {
+            "name": "bapi",
+            "type": "boolean"
+          }
+        ]
+      },
+      {
+        "id": "seg_accionesrecursos",
+        "name": "seg_accionesrecursos",
+        "group": "g_seg",
+        "attributes": [
+          {
+            "name": "isysrecurso",
+            "type": "varchar(50)",
+            "key": "PK"
+          },
+          {
+            "name": "iaccion",
+            "type": "varchar(50)",
+            "key": "PK"
+          },
+          {
+            "name": "itdvalor",
+            "type": "smallint"
+          },
+          {
+            "name": "valordefecto",
+            "type": "varchar(50)"
+          }
+        ]
+      },
+      {
+        "id": "seg_accionesxrol",
+        "name": "seg_accionesxrol",
+        "group": "g_seg",
+        "attributes": [
+          {
+            "name": "itercero",
+            "type": "varchar(30)",
+            "key": "PK"
+          },
+          {
+            "name": "isysrecurso",
+            "type": "varchar(50)",
+            "key": "PK"
+          },
+          {
+            "name": "iaccion",
+            "type": "varchar(50)",
+            "key": "PK"
+          },
+          {
+            "name": "igrupo",
+            "type": "varchar(20)",
+            "key": "PK"
+          },
+          {
+            "name": "irol",
+            "type": "varchar(20)",
+            "key": "PK"
+          },
+          {
+            "name": "valor",
+            "type": "varchar(255)"
+          }
+        ]
+      },
+      {
+        "id": "terceros",
+        "name": "terceros",
+        "group": "g_terceros",
+        "attributes": [
+          {
+            "name": "itercero",
+            "type": "varchar(30)",
+            "key": "PK"
+          },
+          {
+            "name": "iterceropropietario",
+            "type": "varchar(30)"
+          },
+          {
+            "name": "itercerosoporte",
+            "type": "varchar(30)"
+          },
+          {
+            "name": "ntercero",
+            "type": "varchar(255)"
+          },
+          {
+            "name": "nombrecomercial",
+            "type": "varchar(255)"
+          },
+          {
+            "name": "bdistribuidor",
+            "type": "boolean"
+          },
+          {
+            "name": "bactivo",
+            "type": "boolean"
+          },
+          {
+            "name": "bvisible",
+            "type": "boolean"
+          }
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r_conv_msg",
+        "from": "patyia_conversaciones",
+        "to": "patyia_mensajescalificados",
+        "label": "1 a N",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_conv_tiq",
+        "from": "patyia_conversaciones",
+        "to": "patyia_tiquetesconversacion",
+        "label": "1 a N",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_conv_log",
+        "from": "patyia_conversaciones",
+        "to": "patyia_conversacion_log",
+        "label": "1 a N",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_conv_qry",
+        "from": "patyia_conversaciones",
+        "to": "patyia_consultas",
+        "label": "1 a N",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_conv_ter",
+        "from": "patyia_conversaciones",
+        "to": "terceros",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one"
+      },
+      {
+        "id": "r_conv_cto",
+        "from": "patyia_conversaciones",
+        "to": "seg_contactosterceros",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one"
+      },
+      {
+        "id": "r_conv_fst",
+        "from": "patyia_conversaciones",
+        "to": "patyia_files_storage",
+        "label": "1 a N (jfile.iconversacion)",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_msg_fst",
+        "from": "patyia_mensajescalificados",
+        "to": "patyia_files_storage",
+        "label": "1 a N (tag <paty-adjunto ifile=...>)",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_qry_tdc",
+        "from": "patyia_consultas",
+        "to": "patyia_tdconsultas",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one"
+      },
+      {
+        "id": "r_xref_tdc",
+        "from": "patyia_tdconsultaxvector_store",
+        "to": "patyia_tdconsultas",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one"
+      },
+      {
+        "id": "r_xref_vs",
+        "from": "patyia_tdconsultaxvector_store",
+        "to": "patyia_vector_store",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one"
+      },
+      {
+        "id": "r_ter_grp",
+        "from": "terceros",
+        "to": "seg_grupos",
+        "label": "1 a N",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_grp_rol",
+        "from": "seg_grupos",
+        "to": "seg_roles",
+        "label": "1 a N",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_rol_rc",
+        "from": "seg_roles",
+        "to": "seg_rolescontacto",
+        "label": "1 a N",
+        "fromCard": "one",
+        "toCard": "many"
+      },
+      {
+        "id": "r_rc_cto",
+        "from": "seg_rolescontacto",
+        "to": "seg_contactosterceros",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one"
+      },
+      {
+        "id": "r_grp_pad",
+        "from": "seg_grupos",
+        "to": "seg_grupos",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one",
+        "identifying": false,
+        "dashStyle": "dashed"
+      },
+      {
+        "id": "r_axr_res",
+        "from": "seg_accionesxrol",
+        "to": "seg_accionesrecursos",
+        "label": "N a 1",
+        "fromCard": "many",
+        "toCard": "one"
+      }
+    ]
+  }
+}

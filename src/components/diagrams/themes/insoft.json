@@ -28,7 +28,7 @@
   "edge": {
     "stroke": "#3D5A80",
     "strokeWidth": 1.2,
-    "dasharray": "4 3",
+    "dasharray": "",
     "labelBg": "#FFFFFF",
     "hideLabels": true
   },

@@ -55,9 +55,12 @@ function seSolapan(p, q) {
 
 test('cada grupo declarado produce un cajón con nombre', () => {
   const layout = computeErLayout(resolveErSpec(payloadDosGrupos(1.2)));
-  assert.strictEqual(layout.clusters.length, 2, 'dos grupos → dos cajones');
+  // Cajones raíz = grupos declarados (las tablas sin relaciones van en un
+  // cajón anidado con icono dentro de su grupo).
+  const raiz = layout.clusters.filter((c) => !c.parentId);
+  assert.strictEqual(raiz.length, 2, 'dos grupos → dos cajones');
   assert.deepStrictEqual(
-    layout.clusters.map((c) => c.name).sort(),
+    raiz.map((c) => c.name).sort(),
     ['Base A', 'Base B'],
     'el cajón conserva el nombre del grupo',
   );
@@ -80,6 +83,9 @@ test('los cajones no se solapan entre sí', () => {
   const layout = computeErLayout(resolveErSpec(payloadDosGrupos(1.2)));
   for (let i = 0; i < layout.clusters.length; i++) {
     for (let j = i + 1; j < layout.clusters.length; j++) {
+      const a = layout.clusters[i];
+      const b = layout.clusters[j];
+      if (a.parentId === b.id || b.parentId === a.id) continue; // hijo dentro del padre
       assert.ok(
         !seSolapan(layout.clusters[i], layout.clusters[j]),
         `los cajones ${layout.clusters[i].name} y ${layout.clusters[j].name} se solapan`,

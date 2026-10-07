@@ -45,6 +45,7 @@ agrupadores `#7ACFF4/#FFFFC1/#BCFFBB/#EAB6B0/#81FF81/#01C000`, O/C `#7ACFF4`.
 
 ```bash
 cd Personal/apps/is-webcomponents
+deno run -A --no-check labs/iss-ayudascpia-componentes/audit.mjs   # reglas + métricas, sin navegador (<1 s)
 deno run -A --no-check scripts/_tmp/_rebuild-component-diagram.mjs
 deno run -A --no-check labs/iss-ayudascpia-componentes/render.mjs
 # preview: deno task dev → /labs/iss-ayudascpia-componentes/preview.html
@@ -73,3 +74,25 @@ await writeDiagramOutputs(r, 'out/componentes.svg');
 Copiar `out/componentes.svg` a  
 `PatyIA/_experimental/ISS-AyudasCPIA/docs/010-General/999-Adjuntos/010-Diagramas/`  
 cuando se cierre el diseño (publish-iswc-svg o a mano).
+
+## Router de aristas (2026-10-06, reemplaza W54–W69)
+
+`src/components/diagrams/component-router.ts` — un solo algoritmo, reglas por construcción:
+
+1. **Distribución** (`component-spec.ts`): cada cara tiene capacidad de puertos a
+   `lanePitch`; si se llena, las aristas pasan a otra cara (no se agranda la
+   entidad). Puertos ordenados por ángulo al destino (sin cruces al salir).
+   Hermanos enfrentados con puertos abren el hueco (rowGap/colGutter) y se re-empaca.
+2. **Grilla** 20 px + líneas de puertos; nodos sobre entidades, títulos, -(O- y
+   prohibidos ajenos no existen. Stems perpendiculares fijos (salida y llegada).
+3. **Costos aditivos** por paso: anidación (factor·nivel), correr paralelo a un
+   borde de agrupador, riel ajeno encima / a < pitch, choque de frente,
+   ir por detrás del origen, giros (escalados por terreno), cruces.
+4. **Negociación** rip-up & reroute (8 vueltas, presión creciente + historial).
+5. Llegada al O por sus **3 lados libres**; aristas al mismo O solo se juntan
+   en el embudo final (y aun ahí compartir cuesta).
+6. Pase de **atajos** (quita jogs/bolsillos) y `validateRoute` como árbitro único.
+   Si hay ilegales o rieles apiñados → re-empaque con más corredor (gana la mejor vuelta).
+
+Guardián: `tests/diagram-astar-rules.test.mjs`.
+

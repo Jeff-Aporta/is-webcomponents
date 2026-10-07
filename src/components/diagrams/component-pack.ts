@@ -1,13 +1,17 @@
 /**
- * Empaque de componentes y ruteo que no atraviesa cajas.
+ * Empaque de componentes (distribución de entidades) + geometría compartida.
  *
  * Las posiciones del payload son la semilla. Si hay paquetes, se reordenan
  * en columnas con corredor; el contorno del paquete es la unión ortogonal
  * (ángulos rectos) de sus hijos, no un rectángulo vacío.
+ *
+ * El ruteo de aristas vive en `component-router.ts`; aquí quedan las
+ * constantes de holgura/costo que comparten ambos y los chequeos
+ * geométricos (`pathIllegal`, `segmentoCortaCaja`…) que usan los tests.
  */
 
 import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.js';
-import type { ClusterColumn, GroupConv, RouteAvoidOpts } from "./component-pack.schemas.js";
+import type { ClusterColumn, GroupConv } from "./component-pack.schemas.js";
 
 export const COL_GUTTER = 52;
 export const PKG_CORRIDOR = 72;
@@ -21,19 +25,7 @@ export const PKG_ROW_GAP = 28;
 export const DEFAULT_MIN_GAP = ROW_GAP;
 /** Holgura arista vs perímetro de componentes (≥20px pedido). */
 export const EDGE_CLEARANCE = 22;
-/**
- * Holgura arista vs conector -(O- ajeno (centro → radio keep).
- * W64: 20→32 — debe cubrir O+C+aire (R+GAP+R≈17) con margen de stroke.
- */
-export const PORT_CLEARANCE = 32;
-
-/** Inflate de obstáculo: rings ya nacen con PORT_CLEARANCE — no doblar. */
-export function inflateObstacle(c: Caja, clearance: number): Caja {
-  const id = (c as Caja & { id?: string }).id ?? '';
-  if (id.startsWith('ring-')) return { id: c.id, x: c.x, y: c.y, w: c.w, h: c.h };
-  return inflateBox(c, clearance);
-}
-/** Margen arista ↔ borde de agrupador (paquete). W58: 40→56 — 20px era poco. */
+/** Margen arista ↔ borde de agrupador: correr paralelo a < esto cuesta. */
 export const PKG_BORDER_CLEARANCE = 56;
 /**
  * Distancia mínima entre rieles de aristas (carriles H/V).
@@ -41,31 +33,19 @@ export const PKG_BORDER_CLEARANCE = 56;
  */
 export const LANE_PITCH = 20;
 /**
- * W62: paso de la grilla A*. Las aristas avanzan de nodo en nodo;
- * las celdas sobre entidades bloqueantes se ELIMINAN del grafo
- * (no se expanden). 20px = un carril; no se puede “colar” a 10px.
+ * Paso de la grilla del router: las aristas avanzan de nodo en nodo y los
+ * nodos sobre entidades bloqueantes no existen en el grafo.
  */
 export const GRID_STEP = 20;
-/**
- * Factor de costo si el tramo está a < lanePitch de otro riel.
- * W64: 6→28 — pasar cerca de un riel debe doler tanto que el A* busque
- * otro carril (lectura: rieles separados, no un “cable grueso”).
- */
+/** Factor de costo si el tramo corre a < lanePitch de otro riel ajeno. */
 export const LANE_NEAR_FACTOR = 28;
-/** Factor de costo cerca del perímetro (bordes) de un agrupador. W58: 5→9. */
+/** Factor de costo al correr paralelo cerca del borde de un agrupador. */
 export const PKG_BORDER_NEAR_FACTOR = 9;
 /**
- * Factor de costo al caminar por el interior de un agrupador (vs exterior).
- * W61: se eleva a `factor^depth` — depth = nº de softPkgs que contienen
- * la celda (Azure+API = 2 → ×9). Fuera = ×1.
+ * Costo de caminar por el interior de agrupadores: × factor·nivel
+ * (Azure+API = nivel 2 → ×2·factor). Fuera = ×1.
  */
 export const PKG_CROSS_FACTOR = 3;
-/**
- * W61: banda (px) fuera del perímetro del agrupador donde compartir
- * riel se castiga extra — las aristas se separan ANTES de entrar.
- */
-/** W61+: 48→72 — el corredor Azure↔API (~40px) debe quedar dentro de la banda. */
-export const PKG_ENTRY_BAND = 72;
 /** Hueco entre componentes dentro de paquetes anidados (p.ej. PatyIA API). */
 export const NESTED_ROW_GAP = 36;
 /**
@@ -83,77 +63,6 @@ export const NESTED_PKG_GAP_PROHIBIDO = 128;
 export const PKG_PAD_LOLLI = 40;
 /** Aire extra alrededor del título de paquete. */
 export const TITLE_CLEARANCE = 22;
-/**
- * W54: penalización por cada giro de 90° dentro de la A*. Un camino recto
- * (manhattan puro) sigue siendo el más barato; un zigzag lo paga en cada
- * cambio de dirección. La unidad es la misma que `step` (px), así que un
- * giro equivale a desviarse 200px de la línea recta — un L doble "barato"
- * ya no compensa: el router prefiere rodear antes que zigzaguear.
- */
-export const TURN_PENALTY = 200;
-/**
- * W54: nº máximo de giros que puede tener una arista. 4 = "recta + esquina
- * + recta + esquina + recta" (la forma canónica de un L doble). El router
- * descarta paths con más de este nº de giros (escalada a 12 si es
- * necesario) para evitar zigzags ilegibles tipo Visio.
- */
-export const MAX_TURNS_PER_EDGE = 4;
-/**
- * W54: penalización por cada giro por encima de `MAX_TURNS_PER_EDGE`. El
- * router descarta paths con >4 giros en estricto, pero en _loose los
- * permite hasta 12; el multiplicador por exceso se aplica igual para que
- * el A* siga prefiriendo rodear a zigzag.
- */
-export const ZIGZAG_PENALTY = 100;
-/**
- * W54 (tuning agresivo): penalización multiplicativa por aristas que
- * comparten corredor. Cada celda (x, y) del grid recuerda cuántas aristas
- * ya la cruzan; las nuevas se pagan `1 + count * CORRIDOR_PENALTY`. Esto
- * empuja a las aristas a buscar carriles sin ocupar, en vez de apiñarse
- * sobre el mismo eje.
- *
- * W55 (Phase 4): elevado de 8 a 14 — combinado con la optimización
- * iterativa (re-route con `usedSegs` globales en lugar de acumulado
- * secuencial), esto fuerza la separación temprana de carriles que
- * vienen del mismo origen (p.ej. 5 aristas desde ISW-TestPatyIA → 5
- * grupos en `pkg-api`).
- *
- * W56 (tuning usuario): bajado de 14 a 10 — la ración "10x coste por
- * misma carril" del usuario se traduce a 1 + 1 * 10 ≈ 11x para la
- * segunda arista en el mismo eje (un cambio de 11× vs 15× anterior).
- * Combinado con el factor 600 de `pathShareLen` (antes 1800) y el 400
- * de `pathCrossingCount` (antes 1200), el router ahora prefiere
- * negociar un carril paralelo en vez de apiñar 5 aristas sobre la
- * misma celda (caso ISW-TestPatyIA → 5 destinos en pkg-api).
- */
-/**
- * W64: 10→32 — 2ª arista en la misma celda ≈ ×33; fuerza carril propio.
- */
-export const CORRIDOR_PENALTY = 32;
-/**
- * W55: penalización ADITIVA por cada paso pegado al borde del PADRE del
- * origen (no a cualquier paquete). Suma — no multiplica — para que el
- * A* prefiera rodear el perímetro del padre antes que pegarse a él.
- * 15000 ≈ 150 pasos de coste (10 px/step) → el rodeo siempre gana sobre
- * el atajo que pasa rozando el borde interior. Subido agresivamente
- * desde 5000 para forzar la separación temprana de carriles en
- * geometrías con muchos orígenes hijos del mismo paquete (lab
- * ISS·AyudasCPIA: 5 aristas desde ISW-TestPatyIA → pkg-api).
- *
- * W56 (anti-tracing): elevado de 15000 a 50000. Con 15000, conectores
- * a < 5px del borde de la entidad (caso ISW-TestPatyIA: el O de salida
- * está pegado al bottom del rectángulo) elegían correr paralelos al
- * borde durante 30-50px antes de bajar — eso es exactamente el bug
- * que el usuario reportó como "la arista recorre el perímetro". Con
- * 50000 (≈ 500 pasos) el A* descarta ese primer segmento y prefiere
- * bajar perpendicular al borde desde la primera celda.
- *
- * No se rompe con aristas que SÍ necesitan bordearse (caso general)
- * porque la penalización es ADITIVA y solo se dispara si el segmento
- * está a < parentBorderClearance del borde (no en cualquier celda).
- */
-export const PARENT_BORDER_PENALTY = 50000;
-
 export function packDiagram(packages: Paquete[], components: Componente[], edges: readonly Arista[] = [], opts: OpcionesEmpaque = {}): void {
   if (opts.mode === 'manual') return;
   const ungroup = new Set(opts.ungroup ?? []);
@@ -169,6 +78,10 @@ export function packDiagram(packages: Paquete[], components: Componente[], edges
   const packed = { ...opts, ...gaps };
   if (opts.mode === 'triptych') {
     packTriptych(packages, components, edges, packed);
+    return;
+  }
+  if (opts.mode === 'layers') {
+    packLayers(packages, components, gaps, Number(opts.layerCols) || 6, Number(opts.nestedCols) || 2);
     return;
   }
   if (!packages?.length) return;
@@ -215,6 +128,118 @@ export function resolvePackingGaps(opts: OpcionesEmpaque = {}) {
   };
 }
 
+/**
+ * Modo `layers` (capas tipo OSI): cada paquete raíz es una franja horizontal
+ * del MISMO ancho, apiladas en el orden del payload (arriba → abajo). Los
+ * componentes de cada capa van en filas de hasta `cols`, centradas en la
+ * franja. Entre franjas queda un corredor para los rieles (pkgRowGap, mín.
+ * 2 × holgura de borde + 2 carriles).
+ *
+ * Una franja con subpaquetes (`parent`) los pone en una rejilla de
+ * `nestedCols` columnas (o `p.cols` del padre) debajo de sus componentes
+ * directos: una subcapa no ocupa toda la fila. Los hermanos de una misma
+ * fila de la rejilla comparten ancho y alto, para que las columnas alineen.
+ * La recursión admite subpaquetes dentro de subpaquetes.
+ */
+function packLayers(
+  packages: Paquete[],
+  components: Componente[],
+  gaps: ReturnType<typeof resolvePackingGaps>,
+  cols: number,
+  nestedCols: number,
+): void {
+  const pad = Math.max(PKG_PAD, PKG_PAD_LOLLI);
+  const corridor = Math.max(gaps.pkgRowGap, 2 * PKG_BORDER_CLEARANCE + 2 * gaps.lanePitch);
+  // Piso: un -(O- entre vecinos (fila o columna) cabe sin empujar cajas.
+  const floor = 2 * LOLLI_STEM_PACK + 2 * LOLLI_R_PACK + 1 + 16;
+  gaps = {
+    ...gaps,
+    colGutter: Math.max(gaps.colGutter, floor),
+    nestedRowGap: Math.max(gaps.nestedRowGap, floor),
+    nestedPkgGap: Math.max(gaps.nestedPkgGap, floor),
+  };
+  const chunk = <T>(xs: T[], n: number): T[][] => {
+    const out: T[][] = [];
+    for (let i = 0; i < xs.length; i += Math.max(1, n)) out.push(xs.slice(i, i + Math.max(1, n)));
+    return out;
+  };
+
+  /** Bloque medido: tamaño natural y colocación con tamaño impuesto (≥ natural). */
+  interface Bloque { w: number; h: number; place: (x: number, y: number, w: number, h: number) => void }
+
+  const measure = (p: Paquete): Bloque | null => {
+    const comps = components.filter((c) => c.package === p.id);
+    const subs = packages.filter((q) => q.parent === p.id).map(measure).filter((b): b is Bloque => b !== null);
+    if (!comps.length && !subs.length) return null;
+    const cRows = chunk(comps, p.cols ?? (p.parent ? Math.min(cols, 3) : cols));
+    const cRowW = cRows.map((r) => r.reduce((s, c) => s + c.w, 0) + gaps.colGutter * (r.length - 1));
+    const cRowH = cRows.map((r) => Math.max(...r.map((c) => c.h)));
+    const sRows = chunk(subs, p.cols && subs.length ? p.cols : nestedCols);
+    // Hermanos de una fila: mismo ancho (el mayor) y mismo alto.
+    const sCellW = sRows.map((r) => Math.max(...r.map((b) => b.w)));
+    const sRowW = sRows.map((r, k) => sCellW[k]! * r.length + gaps.nestedPkgGap * (r.length - 1));
+    const sRowH = sRows.map((r) => Math.max(...r.map((b) => b.h)));
+    const titleW = packageTitleTextWidth(p);
+    const innerW = Math.max(titleW, ...cRowW, ...sRowW);
+    const sum = (xs: number[], gap: number) => xs.reduce((s, v) => s + v, 0) + gap * Math.max(0, xs.length - 1);
+    const innerH = sum(cRowH, gaps.nestedRowGap)
+      + (cRows.length && sRows.length ? gaps.nestedRowGap : 0)
+      + sum(sRowH, gaps.nestedRowGap);
+    return {
+      w: innerW + 2 * pad,
+      h: PKG_TAB + pad + innerH + pad,
+      place: (x, y, w, h) => {
+        p.x = x; p.y = y; p.w = w; p.h = h;
+        p.titleAtCorner = true;
+        const inner = w - 2 * pad;
+        let ry = y + PKG_TAB + pad;
+        cRows.forEach((r, k) => {
+          let cx = x + pad + (inner - cRowW[k]!) / 2;
+          for (const c of r) {
+            c.x = cx;
+            c.y = ry + (cRowH[k]! - c.h) / 2;
+            cx += c.w + gaps.colGutter;
+          }
+          ry += cRowH[k]! + gaps.nestedRowGap;
+        });
+        sRows.forEach((r, k) => {
+          let sx = x + pad + (inner - sRowW[k]!) / 2;
+          for (const b of r) {
+            b.place(sx, ry, sCellW[k]!, sRowH[k]!);
+            sx += sCellW[k]! + gaps.nestedPkgGap;
+          }
+          ry += sRowH[k]! + gaps.nestedRowGap;
+        });
+      },
+    };
+  };
+
+  const bands = packages.filter((p) => !p.parent)
+    .map((p) => measure(p))
+    .filter((b): b is Bloque => b !== null);
+  const bandW = Math.max(...bands.map((b) => b.w));
+  let y = 0;
+  for (const b of bands) {
+    b.place(0, y, bandW, b.h);
+    y += b.h + corridor;
+  }
+}
+
+/** Glifo -(O- (espejo de LOLLI_STEM / LOLLI_R de component-spec, sin ciclo de import). */
+const LOLLI_STEM_PACK = 18;
+const LOLLI_R_PACK = 8;
+
+/** Ancho aproximado del rótulo «estereotipo» nombre (cursiva 11px). */
+function packageTitleTextWidth(p: Paquete): number {
+  const t = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : String(p.name ?? '');
+  return Math.ceil(t.length * 7.2) + 24;
+}
+
+/** Qué hueco de filas usa el paquete: solo «ISW» Apps (raíz) usa rowGap amplio. */
+export function packRowGapKey(p: Paquete): 'rowGap' | 'nestedRowGap' {
+  return !p.parent && (p.id === 'pkg-apps' || p.stereotype === 'ISW') ? 'rowGap' : 'nestedRowGap';
+}
+
 function packPackageColumns(
   packages: Paquete[],
   components: Componente[],
@@ -238,8 +263,7 @@ function packPackageColumns(
     const comps = kidsOf(p);
     if (comps.length) {
       // Solo «ISW» Apps usa rowGap amplio; OpenAI / API / etc. → nestedRowGap.
-      const wide = !p.parent && (p.id === 'pkg-apps' || p.stereotype === 'ISW');
-      packPackage(p, comps, gut, wide ? rowGap : nestedRowGap);
+      packPackage(p, comps, gut, packRowGapKey(p) === 'rowGap' ? rowGap : nestedRowGap);
     }
     const nested = childPkgsOf(p);
     if (!nested.length) return;
@@ -770,7 +794,7 @@ export function layoutPackageOutlines(packages: readonly Paquete[], components: 
     const hasChildPkgs = packages.some((c) => c.parent === g.p.id);
     // Anidados / padres con hijos-paquete: AABB del packer; el outline
     // robaba celdas al padre y dejaba al hijo en un rectángulo de pestaña.
-    if (isNested || hasChildPkgs) {
+    if (isNested || hasChildPkgs || opts.mode === 'layers') {
       (g.p as Paquete & { outline?: Punto[] }).outline = undefined;
       continue;
     }
@@ -936,92 +960,6 @@ export function rutaChoca(puntos: readonly Punto[], obstaculos: readonly Caja[])
   return false;
 }
 
-function verticalGaps(obstaculos: readonly Caja[], xMin: number, xMax: number): Array<{ a: number; b: number }> {
-  const spans = obstaculos
-    .map((c) => ({ a: c.x, b: c.x + c.w }))
-    .filter((s) => s.b > xMin && s.a < xMax)
-    .sort((a, b) => a.a - b.a);
-  const merged: Array<{ a: number; b: number }> = [];
-  for (const s of spans) {
-    if (!merged.length || s.a > merged[merged.length - 1]!.b + 4) merged.push({ ...s });
-    else merged[merged.length - 1]!.b = Math.max(merged[merged.length - 1]!.b, s.b);
-  }
-  const gaps: Array<{ a: number; b: number }> = [];
-  let cursor = xMin;
-  for (const m of merged) {
-    if (m.a - cursor >= 20) gaps.push({ a: cursor, b: m.a });
-    cursor = Math.max(cursor, m.b);
-  }
-  if (xMax - cursor >= 20) gaps.push({ a: cursor, b: xMax });
-  return gaps;
-}
-
-function nearestGap(gaps: readonly { a: number; b: number }[], x: number): { a: number; b: number } {
-  let best = gaps[0]!;
-  let bestD = Infinity;
-  for (const g of gaps) {
-    const d = x < g.a ? g.a - x : x > g.b ? x - g.b : 0;
-    if (d < bestD) { bestD = d; best = g; }
-  }
-  return best;
-}
-
-function laneInGap(gap: { a: number; b: number }, rank: number, total: number): number {
-  const t = (rank + 1) / (total + 1);
-  return gap.a + (gap.b - gap.a) * t;
-}
-
-const comoPath = (pts: readonly Punto[]): string => `M${pts[0]!.x},${pts[0]!.y} ` + pts.slice(1).map((p) => `L${p.x},${p.y}`).join(' ');
-
-/** Cuánto se sale el path del marco (margen). */
-export function boundsOverflow(pts: readonly Punto[], frame: Caja, margin = 36): number {
-  if (!frame || !pts?.length) return 0;
-  const x0 = frame.x - margin;
-  const y0 = frame.y - margin;
-  const x1 = frame.x + frame.w + margin;
-  const y1 = frame.y + frame.h + margin;
-  let n = 0;
-  for (const p of pts) {
-    if (p.x < x0) n += x0 - p.x;
-    if (p.y < y0) n += y0 - p.y;
-    if (p.x > x1) n += p.x - x1;
-    if (p.y > y1) n += p.y - y1;
-  }
-  return n;
-}
-
-function outward(p: Punto, side: Lado | undefined, d: number): Punto {
-  if (!side) return { x: p.x, y: p.y };
-  if (side === 'left') return { x: p.x - d, y: p.y };
-  if (side === 'right') return { x: p.x + d, y: p.y };
-  if (side === 'top') return { x: p.x, y: p.y - d };
-  return { x: p.x, y: p.y + d };
-}
-
-function alongSide(p: Punto, side: Lado | undefined, d: number): Punto {
-  if (!side || !d) return { x: p.x, y: p.y };
-  if (side === 'left' || side === 'right') return { x: p.x, y: p.y + d };
-  return { x: p.x + d, y: p.y };
-}
-
-function dedupePts(pts: readonly Punto[]): Punto[] {
-  const out: Punto[] = [];
-  for (const p of pts) {
-    const last = out[out.length - 1];
-    if (last && Math.abs(last.x - p.x) < 0.5 && Math.abs(last.y - p.y) < 0.5) continue;
-    out.push(p);
-  }
-  return out;
-}
-
-function manhattan(pts: readonly Punto[]): number {
-  let n = 0;
-  for (let i = 0; i < pts.length - 1; i++) {
-    n += Math.abs(pts[i + 1]!.x - pts[i]!.x) + Math.abs(pts[i + 1]!.y - pts[i]!.y);
-  }
-  return n;
-}
-
 function collinearOverlap(a1: Punto, a2: Punto, b1: Punto, b2: Punto, tol = 6): number {
   const hA = Math.abs(a1.y - a2.y) < 0.6;
   const hB = Math.abs(b1.y - b2.y) < 0.6;
@@ -1047,8 +985,10 @@ function collinearOverlap(a1: Punto, a2: Punto, b1: Punto, b2: Punto, tol = 6): 
 export function pathShareLen(pts: readonly Punto[], usedSegs: ReadonlyArray<{ a: Punto; b: Punto }>, tol = 4): number {
   if (!usedSegs?.length || pts.length < 2) return 0;
   let n = 0;
-  // Incluye tramos de corredor (antes cortaba en length-2 y perdía el vertical largo).
-  for (let i = 1; i < pts.length - 1; i++) {
+  // W69: stem (0→1) y approach (penúltimo→último) no cuentan — dos
+  // aristas al mismo O deben poder compartir la llegada sin peaje.
+  // Solo el corredor medio debe estar en rieles distintos.
+  for (let i = 1; i < pts.length - 2; i++) {
     const a = pts[i]!;
     const b = pts[i + 1]!;
     for (const u of usedSegs) {
@@ -1058,1522 +998,12 @@ export function pathShareLen(pts: readonly Punto[], usedSegs: ReadonlyArray<{ a:
   return n;
 }
 
-/** Carriles verticales (X) y horizontales (Y) ya ocupados por aristas. */
-export function usedLaneAxes(
-  usedSegs: ReadonlyArray<{ a: Punto; b: Punto }>,
-  snap = 4,
-): { xs: number[]; ys: number[] } {
-  const xs = new Set<number>();
-  const ys = new Set<number>();
-  for (const u of usedSegs) {
-    if (Math.abs(u.a.x - u.b.x) < 0.6) {
-      const len = Math.abs(u.a.y - u.b.y);
-      if (len >= 12) xs.add(Math.round(u.a.x / snap) * snap);
-    }
-    if (Math.abs(u.a.y - u.b.y) < 0.6) {
-      const len = Math.abs(u.a.x - u.b.x);
-      if (len >= 12) ys.add(Math.round(u.a.y / snap) * snap);
-    }
-  }
-  return { xs: [...xs], ys: [...ys] };
-}
-
-/** Ejes de borde de paquetes (agrupadores): X izq/der, Y top/bot. */
-export function packageBorderAxes(
-  pkgs: readonly Caja[],
-  snap = 4,
-): { xs: number[]; ys: number[] } {
-  const xs = new Set<number>();
-  const ys = new Set<number>();
-  for (const p of pkgs) {
-    if (!(p.w > 0 && p.h > 0)) continue;
-    xs.add(Math.round(p.x / snap) * snap);
-    xs.add(Math.round((p.x + p.w) / snap) * snap);
-    ys.add(Math.round(p.y / snap) * snap);
-    ys.add(Math.round((p.y + p.h) / snap) * snap);
-  }
-  return { xs: [...xs], ys: [...ys] };
-}
-
-/** Penalización ×borderNearFactor si el tramo pasa cerca del perímetro de un agrupador. */
-function borderProximityCost(
-  pts: readonly Punto[],
-  borderXs: readonly number[],
-  borderYs: readonly number[],
-  minDist = PKG_BORDER_CLEARANCE,
-  nearFactor = PKG_BORDER_NEAR_FACTOR,
-): number {
-  if ((!borderXs.length && !borderYs.length) || pts.length < 2) return 0;
-  const factor = Math.max(1, nearFactor);
-  let cost = 0;
-  for (let i = 1; i < pts.length - 1; i++) {
-    const a = pts[i]!;
-    const b = pts[i + 1]!;
-    const len = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-    if (len < 12) continue;
-    // Regla 6/9: cada borde a < minDist suma factor al multiplicador (aditivo,
-    // no multiplicativo). El tramo no se "atasca" en 1×; cuantos más bordes
-    // pise, más paga.
-    const taxAxis = (n: number, d: number): number => {
-      if (n === 0) {
-        // Zona de transición (entre minDist y minDist+16): rampa lineal.
-        if (d < minDist + 16) return (minDist + 16 - d) * len * 1.5;
-        return 0;
-      }
-      const near = len * n * factor;
-      if (d < 4) return near + len * factor * 40;
-      return near + (minDist - d) * len * factor * 2;
-    };
-    if (Math.abs(a.x - b.x) < 0.6) {
-      const d = nearestAxisDist(a.x, borderXs);
-      cost += taxAxis(countNearAxes(a.x, borderXs, minDist), d);
-    }
-    if (Math.abs(a.y - b.y) < 0.6) {
-      const d = nearestAxisDist(a.y, borderYs);
-      cost += taxAxis(countNearAxes(a.y, borderYs, minDist), d);
-    }
-  }
-  return cost;
-}
-
-/** Distancia mínima a un eje ocupado (∞ si vacío). */
-function nearestAxisDist(v: number, axes: readonly number[]): number {
-  if (!axes.length) return Infinity;
-  let best = Infinity;
-  for (const a of axes) best = Math.min(best, Math.abs(v - a));
-  return best;
-}
-
-/**
- * Nº de ejes a menos de `pitch` del valor `v` (regla 5: cada arista/borde
- * cercana es un factor ADITIVO al multiplicador, no multiplicativo). Si
- * están 3 aristas a < 20px de un tramo, el coste es 1+3·factor — no se queda
- * en 1·factor (que era el bug previo: tope de 3× sin importar N).
- */
-function countNearAxes(v: number, axes: readonly number[], pitch: number = LANE_PITCH): number {
-  if (!axes.length || !(pitch > 0)) return 0;
-  let n = 0;
-  for (const a of axes) if (Math.abs(v - a) < pitch) n++;
-  return n;
-}
-
-/** Penalización por acercarse a carriles ya usados (×laneNearFactor si d < pitch). */
-function laneProximityCost(
-  pts: readonly Punto[],
-  used: ReadonlyArray<{ a: Punto; b: Punto }>,
-  pitch = LANE_PITCH,
-  nearFactor = LANE_NEAR_FACTOR,
-): number {
-  if (!used.length || pts.length < 2) return 0;
-  const { xs, ys } = usedLaneAxes(used, 4);
-  const factor = Math.max(1, nearFactor);
-  let cost = 0;
-  for (let i = 1; i < pts.length - 1; i++) {
-    const a = pts[i]!;
-    const b = pts[i + 1]!;
-    const len = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-    if (len < 10) continue;
-    // W64: d < pitch ≈ muro blando (×80); compartir eje exacto ×200.
-    const taxAxis = (n: number, d: number): number => {
-      if (n === 0) {
-        if (d < pitch) return (pitch - d + 1) * len * factor * 4;
-        if (d < pitch + 12) return (pitch + 12 - d) * len * 2;
-        return 0;
-      }
-      const near = len * n * factor;
-      if (d < 2) return near + len * factor * 200;
-      if (d < pitch) return near + (pitch - d) * len * factor * 80;
-      return near + (pitch - d) * len * factor * 4;
-    };
-    if (Math.abs(a.x - b.x) < 0.6) {
-      const d = nearestAxisDist(a.x, xs);
-      cost += taxAxis(countNearAxes(a.x, xs, pitch), d);
-    }
-    if (Math.abs(a.y - b.y) < 0.6) {
-      const d = nearestAxisDist(a.y, ys);
-      cost += taxAxis(countNearAxes(a.y, ys, pitch), d);
-    }
-  }
-  return cost;
-}
-
-/** Separación de carril por rango (abanico fuera del stem). */
-function corridorFan(rank: number, total: number, pitch = 14): number {
-  return (rank - (total - 1) / 2) * pitch;
-}
-
-/** Cruce propio (⊥ o X), no solape colineal. Evita intersecciones tipo Visio. */
-export function segmentsCross(
-  a1: Punto, a2: Punto, b1: Punto, b2: Punto, tipTol = 2,
-): boolean {
-  const ax = a2.x - a1.x;
-  const ay = a2.y - a1.y;
-  const bx = b2.x - b1.x;
-  const by = b2.y - b1.y;
-  const den = ax * by - ay * bx;
-  if (Math.abs(den) < 1e-9) return false; // paralelo / colineal → lo mira pathShareLen
-  const t = ((b1.x - a1.x) * by - (b1.y - a1.y) * bx) / den;
-  const u = ((b1.x - a1.x) * ay - (b1.y - a1.y) * ax) / den;
-  if (t <= 0 || t >= 1 || u <= 0 || u >= 1) return false;
-  // Ignora toques en extremos (empalme de tramos).
-  const tip = tipTol / Math.max(1, Math.hypot(ax, ay), Math.hypot(bx, by));
-  return t > tip && t < 1 - tip && u > tip && u < 1 - tip;
-}
-
-/** Nº de cruces con aristas ya ruteadas (tramos medios). */
-export function pathCrossingCount(
-  pts: readonly Punto[],
-  usedSegs: ReadonlyArray<{ a: Punto; b: Punto }>,
-): number {
-  if (!usedSegs?.length || pts.length < 2) return 0;
-  let n = 0;
-  for (let i = 1; i < pts.length - 2; i++) {
-    const a = pts[i]!;
-    const b = pts[i + 1]!;
-    for (const u of usedSegs) {
-      if (segmentsCross(a, b, u.a, u.b)) n += 1;
-    }
-  }
-  return n;
-}
-
-/**
- * W59: un riel NUNCA puede intersectarse consigo mismo.
- * Detecta: (1) cruces de tramos no adyacentes, (2) spur A→B→A,
- * (3) marcha atrás colineal (solape del mismo eje en sentido opuesto),
- * (4) bolsillo casi pegado (dos tramos paralelos a < NEAR_SELF_TOL px
- *     con proyección solapada — se ve como T / spur grueso).
- */
-export function pathSelfIntersects(pts: readonly Punto[]): boolean {
-  if (!pts || pts.length < 3) return false;
-  const NEAR_SELF_TOL = 12;
-  const eq = (a: Punto, b: Punto): boolean =>
-    Math.abs(a.x - b.x) < 0.6 && Math.abs(a.y - b.y) < 0.6;
-  // Spur / vuelta: A → B → A
-  for (let i = 0; i < pts.length - 2; i++) {
-    if (eq(pts[i]!, pts[i + 2]!)) return true;
-  }
-  // Marcha atrás colineal (T / solape en el mismo eje).
-  for (let i = 0; i < pts.length - 2; i++) {
-    const a = pts[i]!;
-    const b = pts[i + 1]!;
-    const c = pts[i + 2]!;
-    const abH = Math.abs(a.y - b.y) < 0.6;
-    const bcH = Math.abs(b.y - c.y) < 0.6;
-    const abV = Math.abs(a.x - b.x) < 0.6;
-    const bcV = Math.abs(b.x - c.x) < 0.6;
-    if (abH && bcH && (b.x - a.x) * (c.x - b.x) < -1e-6) return true;
-    if (abV && bcV && (b.y - a.y) * (c.y - b.y) < -1e-6) return true;
-  }
-  // Cruces propios + bolsillos casi pegados entre tramos no adyacentes.
-  for (let i = 0; i < pts.length - 1; i++) {
-    for (let j = i + 2; j < pts.length - 1; j++) {
-      if (segmentsCross(pts[i]!, pts[i + 1]!, pts[j]!, pts[j + 1]!, 0.5)) return true;
-      if (orthoSegsOverlap(pts[i]!, pts[i + 1]!, pts[j]!, pts[j + 1]!)) return true;
-      if (orthoSegsNearParallel(pts[i]!, pts[i + 1]!, pts[j]!, pts[j + 1]!, NEAR_SELF_TOL)) return true;
-    }
-  }
-  return false;
-}
-
-/** True si dos segmentos ortogonales se solapan en más de un punto. */
-function orthoSegsOverlap(a1: Punto, a2: Punto, b1: Punto, b2: Punto): boolean {
-  const aH = Math.abs(a1.y - a2.y) < 0.6;
-  const bH = Math.abs(b1.y - b2.y) < 0.6;
-  const aV = Math.abs(a1.x - a2.x) < 0.6;
-  const bV = Math.abs(b1.x - b2.x) < 0.6;
-  if (aH && bH && Math.abs(a1.y - b1.y) < 0.6) {
-    const a0 = Math.min(a1.x, a2.x), a1x = Math.max(a1.x, a2.x);
-    const b0 = Math.min(b1.x, b2.x), b1x = Math.max(b1.x, b2.x);
-    return Math.min(a1x, b1x) - Math.max(a0, b0) > 1;
-  }
-  if (aV && bV && Math.abs(a1.x - b1.x) < 0.6) {
-    const a0 = Math.min(a1.y, a2.y), a1y = Math.max(a1.y, a2.y);
-    const b0 = Math.min(b1.y, b2.y), b1y = Math.max(b1.y, b2.y);
-    return Math.min(a1y, b1y) - Math.max(a0, b0) > 1;
-  }
-  return false;
-}
-
-/**
- * W59: dos tramos paralelos del mismo riel a menos de `tol` px con
- * proyección solapada = bolsillo que se lee como T/spur (p.ej. U de 9px).
- */
-function orthoSegsNearParallel(
-  a1: Punto, a2: Punto, b1: Punto, b2: Punto, tol: number,
-): boolean {
-  const aH = Math.abs(a1.y - a2.y) < 0.6;
-  const bH = Math.abs(b1.y - b2.y) < 0.6;
-  const aV = Math.abs(a1.x - a2.x) < 0.6;
-  const bV = Math.abs(b1.x - b2.x) < 0.6;
-  if (aH && bH) {
-    const dy = Math.abs(a1.y - b1.y);
-    if (dy < 0.6 || dy > tol) return false;
-    const a0 = Math.min(a1.x, a2.x), a1x = Math.max(a1.x, a2.x);
-    const b0 = Math.min(b1.x, b2.x), b1x = Math.max(b1.x, b2.x);
-    return Math.min(a1x, b1x) - Math.max(a0, b0) > 1;
-  }
-  if (aV && bV) {
-    const dx = Math.abs(a1.x - b1.x);
-    if (dx < 0.6 || dx > tol) return false;
-    const a0 = Math.min(a1.y, a2.y), a1y = Math.max(a1.y, a2.y);
-    const b0 = Math.min(b1.y, b2.y), b1y = Math.max(b1.y, b2.y);
-    return Math.min(a1y, b1y) - Math.max(a0, b0) > 1;
-  }
-  // Misma línea vertical/horizontal con hueco chico (colineales no solapados).
-  if (aV && bV && Math.abs(a1.x - b1.x) < 0.6) {
-    const a0 = Math.min(a1.y, a2.y), a1y = Math.max(a1.y, a2.y);
-    const b0 = Math.min(b1.y, b2.y), b1y = Math.max(b1.y, b2.y);
-    const gap = Math.max(a0, b0) - Math.min(a1y, b1y);
-    return gap > 0 && gap <= tol;
-  }
-  if (aH && bH && Math.abs(a1.y - b1.y) < 0.6) {
-    const a0 = Math.min(a1.x, a2.x), a1x = Math.max(a1.x, a2.x);
-    const b0 = Math.min(b1.x, b2.x), b1x = Math.max(b1.x, b2.x);
-    const gap = Math.max(a0, b0) - Math.min(a1x, b1x);
-    return gap > 0 && gap <= tol;
-  }
-  return false;
-}
-
-/**
- * W59: elimina spurs A→B→A y marchas atrás colineales; luego collapseOrtho.
- * Si origen y destino comparten eje, colapsa a la recta (quita bolsillos C/U).
- * Si aún se auto-cruza, devuelve null (caller descarta / revierte).
- */
-export function sanitizeEdgePath(pts: readonly Punto[]): Punto[] | null {
-  if (!pts?.length) return null;
-  let out = pts.map((p) => ({ x: p.x, y: p.y }));
-  let changed = true;
-  for (let guard = 0; changed && guard < 16; guard++) {
-    changed = false;
-    // Quitar spur A→B→A
-    for (let i = 0; i < out.length - 2; i++) {
-      if (Math.abs(out[i]!.x - out[i + 2]!.x) < 0.6 && Math.abs(out[i]!.y - out[i + 2]!.y) < 0.6) {
-        out.splice(i + 1, 2);
-        changed = true;
-        break;
-      }
-    }
-    if (changed) continue;
-    // Marcha atrás colineal: A→B→C con C entre A y B o más atrás → saltar B
-    for (let i = 0; i < out.length - 2; i++) {
-      const a = out[i]!;
-      const b = out[i + 1]!;
-      const c = out[i + 2]!;
-      const abH = Math.abs(a.y - b.y) < 0.6;
-      const bcH = Math.abs(b.y - c.y) < 0.6;
-      const abV = Math.abs(a.x - b.x) < 0.6;
-      const bcV = Math.abs(b.x - c.x) < 0.6;
-      if (abH && bcH && (b.x - a.x) * (c.x - b.x) < -1e-6) {
-        out.splice(i + 1, 1);
-        changed = true;
-        break;
-      }
-      if (abV && bcV && (b.y - a.y) * (c.y - b.y) < -1e-6) {
-        out.splice(i + 1, 1);
-        changed = true;
-        break;
-      }
-    }
-  }
-  out = collapseOrtho(dedupePts(out));
-  // Bolsillo C/U: extremos alineados → recta directa.
-  if (out.length > 2) {
-    const a = out[0]!;
-    const b = out[out.length - 1]!;
-    if (Math.abs(a.x - b.x) < 0.6 || Math.abs(a.y - b.y) < 0.6) {
-      const straight = [{ x: a.x, y: a.y }, { x: b.x, y: b.y }];
-      if (!pathSelfIntersects(straight) && !pathHasDiagonal(straight)) out = straight;
-    }
-  }
-  if (out.length < 2 || pathSelfIntersects(out) || pathHasDiagonal(out)) return null;
-  return out;
-}
-
-/**
- * W54: nº de giros de 90° en una polilínea ortogonal. Cada cambio de
- * dirección cuenta como un giro — usado para penalizar zigzags en la
- * `consider()` y como filtro en `legal()` (descarta paths con más de
- * MAX_TURNS_PER_EDGE giros). Variante específica para `Punto`
- * (el `countTurns` exportado en diagram-astar.ts trabaja sobre
- * `GridPoint` con campos `col,row`).
- */
-export function countPuntoTurns(pts: readonly Punto[] | null | undefined): number {
-  if (!pts || pts.length < 3) return 0;
-  let turns = 0;
-  let prevDx = 0, prevDy = 0;
-  for (let i = 1; i < pts.length; i++) {
-    const dx = pts[i]!.x - pts[i - 1]!.x;
-    const dy = pts[i]!.y - pts[i - 1]!.y;
-    if (i > 1 && (dx !== prevDx || dy !== prevDy)) turns++;
-    prevDx = dx;
-    prevDy = dy;
-  }
-  return turns;
-}
-
-/**
- * Min-heap binario para la open-list del A* (W54: la búsqueda ahora
- * trabaja sobre estados (x, y, dir), 4× más que sin dirección — un
- * find-best O(n) sobre un array es prohibitivo. La heap es O(log n)).
- */
-class AStarHeap {
-  private a: { k: string; f: number }[] = [];
-  get size(): number { return this.a.length; }
-  push(k: string, f: number): void {
-    const a = this.a;
-    a.push({ k, f });
-    let i = a.length - 1;
-    while (i > 0) {
-      const p = (i - 1) >> 1;
-      if (a[p]!.f <= a[i]!.f) break;
-      [a[p], a[i]] = [a[i]!, a[p]!];
-      i = p;
-    }
-  }
-  pop(): string | undefined {
-    const a = this.a;
-    const top = a[0];
-    if (!top) return undefined;
-    const last = a.pop();
-    if (a.length && last) {
-      a[0] = last;
-      let i = 0;
-      for (;;) {
-        const l = 2 * i + 1;
-        const r = l + 1;
-        let s = i;
-        if (l < a.length && a[l]!.f < a[s]!.f) s = l;
-        if (r < a.length && a[r]!.f < a[s]!.f) s = r;
-        if (s === i) break;
-        [a[s], a[i]] = [a[i]!, a[s]!];
-        i = s;
-      }
-    }
-    return top.k;
-  }
-}
-
-/** ¿La polilínea (también diagonal) corta alguna caja? */
-export function pathHitsBoxes(pts: readonly Punto[], boxes: readonly Caja[]): boolean {
-  if (pts.length < 2 || !boxes.length) return false;
-  return rutaChoca(pts, boxes);
-}
-
 export function segsFromPath(pts: readonly Punto[]): Array<{ a: Punto; b: Punto }> {
   const out: Array<{ a: Punto; b: Punto }> = [];
   // Incluye tramos tras el stem inicial (antes se cortaba en length-2 y
   // los verticales del corredor no se registraban → cruces posteriores).
   for (let i = 1; i < pts.length - 1; i++) out.push({ a: pts[i]!, b: pts[i + 1]! });
   return out;
-}
-
-function hullOf(boxes: readonly Caja[], pad: number): { x0: number; y0: number; x1: number; y1: number } {
-  return {
-    x0: Math.min(...boxes.map((c) => c.x)) - pad,
-    y0: Math.min(...boxes.map((c) => c.y)) - pad,
-    x1: Math.max(...boxes.map((c) => c.x + c.w)) + pad,
-    y1: Math.max(...boxes.map((c) => c.y + c.h)) + pad,
-  };
-}
-
-function gridRoute(
-  from: Punto,
-  to: Punto,
-  boxes: readonly Caja[],
-  clearance: number,
-  usedSegs: ReadonlyArray<{ a: Punto; b: Punto }> = [],
-  soft: {
-    softPkgs?: readonly Caja[];
-    textBoxes?: readonly Caja[];
-    pkgCrossFactor?: number;
-    lanePitch?: number;
-    laneNearFactor?: number;
-    /** Ejes X de bordes de agrupadores (regla 6: cuentan como aristas). */
-    borderXs?: readonly number[];
-    /** Ejes Y de bordes de agrupadores. */
-    borderYs?: readonly number[];
-    /** W54: agrupadores marcados `prohibido: true` → muro duro (Infinity). */
-    prohibitedPkgs?: readonly Caja[];
-    /**
-     * W55: bordes del agrupador PADRE del origen (no todos los bordes).
-     * Dentro del padre, acercarse a SU perímetro cuesta muchísimo —
-     * evita que la arista arranque corriendo por el borde interior del
-     * paquete antes de salir.
-     */
-    parentBorderXs?: readonly number[];
-    /** W55: id. para Y. */
-    parentBorderYs?: readonly number[];
-    /** W55: penalización ADITIVA por paso pegado al borde del padre. */
-    parentBorderPenalty?: number;
-    /** W55: radio de influencia del borde del padre (px). */
-    parentBorderClearance?: number;
-  } = {},
-): Punto[] | null {
-  /**
-   * W62: grilla fija 20px. Las entidades bloqueantes BORRAN nodos del
-   * grafo — el A* no las “paga”: no existen. Inflate ≥ step evita que
-   * un salto de 20px salte por encima de una caja estrecha.
-   */
-  const step = GRID_STEP;
-  const hardPad = Math.max(clearance, step);
-  // Regla 1/2/3/4 + W54 + W62: muros duros = nodos eliminados.
-  //   - Componentes (boxes, inflated por max(clearance, step))
-  //   - Textos / títulos (textBoxes)
-  //   - Agrupadores prohibidos (prohibitedPkgs)
-  const hardBoxes: Caja[] = [
-    ...boxes.map((c) => inflateObstacle(c, hardPad)),
-    ...(soft.textBoxes ?? []).map((c) => inflateBox(c, Math.max(4, step))),
-    ...(soft.prohibitedPkgs ?? []).map((c) => inflateBox(c, hardPad)),
-  ];
-  const parentBorderXs = soft.parentBorderXs ?? [];
-  const parentBorderYs = soft.parentBorderYs ?? [];
-  const parentBorderPenalty = Math.max(0, Number(soft.parentBorderPenalty) || 0);
-  /**
-   * W55+: clearance por defecto subido de 40 → 60 para que la
-   * penalización del padre cubra el rango típico de conectores hijos
-   * (un componente hijo de 60-100px de alto, cuyos conectores pueden
-   * estar a 30-50px del borde top/bot del padre). Con 40, la W55 no
-   * se disparaba en geometrías como ISW-TestPatyIA dentro de pkg-apps
-   * (5 aristas paralelas al borde del padre).
-   */
-  const parentBorderClearance = Math.max(8, Number(soft.parentBorderClearance) || Math.max(60, PKG_BORDER_CLEARANCE + 20));
-  const softPkgs = soft.softPkgs ?? [];
-  const crossFactor = Math.max(1, Number(soft.pkgCrossFactor) || PKG_CROSS_FACTOR);
-  const lanePitch = Math.max(8, Number(soft.lanePitch) || LANE_PITCH);
-  const nearFactor = Math.max(1, Number(soft.laneNearFactor) || LANE_NEAR_FACTOR);
-  const entryBand = Math.max(lanePitch * 2, PKG_ENTRY_BAND);
-  const borderXs = soft.borderXs ?? [];
-  const borderYs = soft.borderYs ?? [];
-  const pad = 96;
-  let minX = Math.min(from.x, to.x) - pad;
-  let minY = Math.min(from.y, to.y) - pad;
-  let maxX = Math.max(from.x, to.x) + pad;
-  let maxY = Math.max(from.y, to.y) + pad;
-  for (const c of [...hardBoxes, ...softPkgs]) {
-    minX = Math.min(minX, c.x - pad);
-    minY = Math.min(minY, c.y - pad);
-    maxX = Math.max(maxX, c.x + c.w + pad);
-    maxY = Math.max(maxY, c.y + c.h + pad);
-  }
-  // Alinear bounds a la grilla.
-  minX = Math.floor(minX / step) * step;
-  minY = Math.floor(minY / step) * step;
-  maxX = Math.ceil(maxX / step) * step;
-  maxY = Math.ceil(maxY / step) * step;
-  const snap = (v: number): number => Math.round(v / step) * step;
-  const hit = (x: number, y: number, c: Caja): boolean =>
-    x >= c.x && x <= c.x + c.w && y >= c.y && y <= c.y + c.h;
-  /**
-   * W62: conjunto de celdas ELIMINADAS (encima de entidades).
-   * Solo start/goal (puertos) pueden existir si caen ahí; el resto
-   * del grafo no las tiene — imposible “recorrer encima”.
-   */
-  const blockedCells: Set<string> = (() => {
-    const m = new Set<string>();
-    for (const c of hardBoxes) {
-      const x0 = Math.floor(c.x / step) * step;
-      const y0 = Math.floor(c.y / step) * step;
-      const x1 = Math.ceil((c.x + c.w) / step) * step;
-      const y1 = Math.ceil((c.y + c.h) / step) * step;
-      for (let x = x0; x <= x1; x += step) {
-        for (let y = y0; y <= y1; y += step) {
-          if (hit(x, y, c)) m.add(`${x},${y}`);
-        }
-      }
-    }
-    return m;
-  })();
-  const cellBlocked = (x: number, y: number): boolean => blockedCells.has(`${x},${y}`);
-  /** W61: nº de agrupadores que contienen (x,y). Azure∩API = 2. */
-  const softPkgDepth = (x: number, y: number): number => {
-    let n = 0;
-    for (const c of softPkgs) if (hit(x, y, c)) n++;
-    return n;
-  };
-  /**
-   * W61: distancia ortogonal al perímetro si el punto está FUERA del
-   * caja; 0 si está dentro; Infinity si cae en esquina (no es corredor
-   * de entrada lateral).
-   */
-  const outsideOrthoDist = (x: number, y: number, c: Caja): number => {
-    const insideX = x >= c.x && x <= c.x + c.w;
-    const insideY = y >= c.y && y <= c.y + c.h;
-    if (insideX && insideY) return 0;
-    if (insideX) return y < c.y ? c.y - y : y - (c.y + c.h);
-    if (insideY) return x < c.x ? c.x - x : x - (c.x + c.w);
-    return Infinity;
-  };
-  /** True si (x,y) está en la banda de entrada de algún softPkg. */
-  const inEntryBand = (x: number, y: number): boolean => {
-    for (const c of softPkgs) {
-      const d = outsideOrthoDist(x, y, c);
-      if (d > 0 && d < entryBand) return true;
-    }
-    return false;
-  };
-  const sx = snap(from.x);
-  const sy = snap(from.y);
-  const gx = snap(to.x);
-  const gy = snap(to.y);
-  // Puertos: aunque caigan en celda bloqueada, son el único acceso.
-  blockedCells.delete(`${sx},${sy}`);
-  blockedCells.delete(`${gx},${gy}`);
-  const { xs: usedXs, ys: usedYs } = usedLaneAxes(usedSegs, step);
-  /**
-   * W54 (tuning agresivo): mapa de uso por celda. Cada celda (x, y) del
-   * grid (snapped a `step`) recuerda cuántas aristas previas la cruzan. El
-   * A* paga un multiplicador `1 + count * CORRIDOR_PENALTY` por pisar
-   * celdas ya usadas — empuja a las nuevas aristas a buscar carriles
-   * libres en vez de apiñarse sobre el mismo eje.
-   */
-  const cellUsage: Map<string, number> = (() => {
-    const m = new Map<string, number>();
-    if (!CORRIDOR_PENALTY) return m;
-    for (const u of usedSegs) {
-      const ax = snap(u.a.x), ay = snap(u.a.y);
-      const bx = snap(u.b.x), by = snap(u.b.y);
-      if (Math.abs(ax - bx) < 0.5) {
-        const x = ax;
-        const stepY = ay < by ? step : -step;
-        for (let y = ay; Math.abs(y - by) >= step * 0.5; y += stepY) {
-          const k = `${x},${y}`;
-          m.set(k, (m.get(k) ?? 0) + 1);
-        }
-      } else if (Math.abs(ay - by) < 0.5) {
-        const y = ay;
-        const stepX = ax < bx ? step : -step;
-        for (let x = ax; Math.abs(x - bx) >= step * 0.5; x += stepX) {
-          const k = `${x},${y}`;
-          m.set(k, (m.get(k) ?? 0) + 1);
-        }
-      }
-    }
-    return m;
-  })();
-  /**
-   * Regla 5/6: coste de paso ADITIVO. Cada arista (usedXs/usedYs) y cada
-   * borde de agrupador (borderXs/borderYs) a < lanePitch del paso añade
-   * `nearFactor` al multiplicador — NO se multiplican entre sí, se SUMAN.
-   *   - 0 cerca  → ×1
-   *   - 1 cerca  → ×(1 + 1·factor)
-   *   - 3 cerca  → ×(1 + 3·factor)  ← más castigo cuanto más apiñado
-   * Si el eje de movimiento no toca el eje evaluado, ese eje no se cuenta.
-   */
-  const stepPenaltyMul = (x: number, y: number, dx: number, dy: number): number => {
-    let n = 0;
-    if (dx !== 0) n += countNearAxes(y, usedYs, lanePitch);
-    if (dy !== 0) n += countNearAxes(x, usedXs, lanePitch);
-    n += countNearAxes(x, borderXs, lanePitch);
-    n += countNearAxes(y, borderYs, lanePitch);
-    return 1 + n * nearFactor;
-  };
-  /**
-   * W55: penalización por paso pegado al borde del PADRE del origen.
-   * Si el segmento evaluado pasa a < parentBorderClearance del borde del
-   * paquete que contiene al origen, sumamos `parentBorderPenalty` al coste
-   * del paso (no multiplicativo, ADITIVO) — así el A* prefiere rodear el
-   * perímetro del padre antes que pegarse a él. Solo aplica a los ejes
-   * del padre (no a todos los paquetes).
-   *
-   * W55+ (parentBorderProximity): cuando el primer segmento de la arista
-   * corre PARALELO al borde del padre (e.g. aristas desde ISW-TestPatyIA
-   * que hacen 44-200px horizontales pegadas al top/bot del pkg-apps),
-   * añadimos una penalización ADITIVA proporcional a la longitud del
-   * tramo paralelo. Esto fuerza a la arista a separarse del borde
-   * perpendicularmente en lugar de pegarse a él.
-   */
-  const parentBorderStepCost = (x: number, y: number, dx: number, dy: number): number => {
-    if (!parentBorderPenalty) return 0;
-    if (!parentBorderXs.length && !parentBorderYs.length) return 0;
-    let extra = 0;
-    if (dx !== 0) {
-      // Movimiento horizontal: el borde del padre vertical (axis Y) cuenta si y
-      // está cerca de un eje Y del padre. Y también si el propio eje x está
-      // cerca de un eje X del padre (la arista va paralela al borde).
-      for (const by of parentBorderYs) {
-        if (Math.abs(y - by) < parentBorderClearance) {
-          extra += parentBorderPenalty * (parentBorderClearance - Math.abs(y - by)) / parentBorderClearance;
-        }
-      }
-      for (const bx of parentBorderXs) {
-        if (Math.abs(x - bx) < 4) {
-          extra += parentBorderPenalty * 2;
-        }
-      }
-    } else if (dy !== 0) {
-      for (const bx of parentBorderXs) {
-        if (Math.abs(x - bx) < parentBorderClearance) {
-          extra += parentBorderPenalty * (parentBorderClearance - Math.abs(x - bx)) / parentBorderClearance;
-        }
-      }
-      for (const by of parentBorderYs) {
-        if (Math.abs(y - by) < 4) {
-          extra += parentBorderPenalty * 2;
-        }
-      }
-    }
-    return extra;
-  };
-  /**
-   * W54: A* consciente de dirección. Estado = (x, y, dir) donde dir ∈
-   * {0,1,2,3} codifica la última dirección de movimiento
-   * (R/D/L/U); -1 = sin dirección (inicio). Cada cambio de dirección
-   * entre paso y paso suma TURN_PENALTY al coste — un zigzag se paga
-   * proporcional a su nº de giros. Sin esta penalización el A* solo
-   * miraba `cellCost` y los corredores zigzagueantes (L+L+L+...)
-   * salían igual de baratos que un camino recto con un único L.
-   */
-  const encodeState = (x: number, y: number, dir: number): string => `${x},${y},${dir}`;
-  const decodeState = (k: string): { x: number; y: number; dir: number } => {
-    const parts = k.split(',');
-    return { x: Number(parts[0]), y: Number(parts[1]), dir: Number(parts[2]) };
-  };
-  // dirs[i] = [dx, dy, dirIndex] — dirIndex usado para comparar con prev.
-  const dirs: Array<[number, number, number]> = [
-    [step, 0, 0],     // right
-    [0, step, 1],     // down
-    [-step, 0, 2],    // left
-    [0, -step, 3],    // up
-  ];
-  // A*: f = g + h; h = manhattan. Interior = ×factor^depth (W61).
-  const dist = new Map<string, number>([[encodeState(sx, sy, -1), 0]]);
-  const prev = new Map<string, { x: number; y: number; dir: number } | null>([[encodeState(sx, sy, -1), null]]);
-  const open = new AStarHeap();
-  const startStateK = encodeState(sx, sy, -1);
-  open.push(startStateK, Math.abs(gx - sx) + Math.abs(gy - sy));
-  const near = (x: number, y: number, tx: number, ty: number): boolean =>
-    Math.abs(x - tx) + Math.abs(y - ty) <= step * 2;
-  void near; // reservado; el A* ya no usa near-bypass sobre hardBoxes
-  let guard = 0;
-  while (open.size && guard++ < 80000) {
-    const sk = open.pop()!;
-    const { x: cx, y: cy, dir: cdir } = decodeState(sk);
-    if (cx === gx && cy === gy) break;
-    const curG = dist.get(sk) ?? Infinity;
-    if (curG === Infinity) continue;
-    for (const [dx, dy, ndir] of dirs) {
-      const nx = cx + dx;
-      const ny = cy + dy;
-      if (nx < minX || ny < minY || nx > maxX || ny > maxY) continue;
-      const nk = encodeState(nx, ny, ndir);
-      // W62: nodo eliminado del grafo (encima de entidad) → no expandir.
-      // Start/goal ya se quitaron de blockedCells; el resto no existe.
-      if (cellBlocked(nx, ny)) continue;
-      // Cinta entre celdas: no saltar una caja aunque ambos extremos
-      // queden libres (caja < step en un eje).
-      if (hardBoxes.some((c) => segmentoCortaCaja(cx, cy, nx, ny, c))) {
-        const toPortal = (nx === gx && ny === gy) || (nx === sx && ny === sy);
-        const fromPortal = (cx === gx && cy === gy) || (cx === sx && cy === sy);
-        if (!(toPortal || fromPortal)) continue;
-      }
-      const base = step;
-      const mul = stepPenaltyMul(nx, ny, dx, dy);
-      // W54 (tuning agresivo): pisar una celda ya usada por N aristas
-      // previas cuesta `1 + N * CORRIDOR_PENALTY`. Se aplica DESPUÉS del
-      // mul de carril/borde para que el apiñamiento entre aristas tenga
-      // coste propio (no se diluye con la penalización por cercanía).
-      const usedCount = cellUsage.get(`${nx},${ny}`) ?? 0;
-      let corridorMul = CORRIDOR_PENALTY ? 1 + usedCount * CORRIDOR_PENALTY : 1;
-      /**
-       * W61: anidación — costo × factor^depth.
-       * depth 0 (fuera) → ×1; depth 1 → ×3; depth 2 (Azure+API) → ×9.
-       * Empuja a rodar por fuera antes que atravesar anidados.
-       */
-      const depth = softPkgDepth(nx, ny);
-      const nestMul = depth > 0 ? Math.pow(crossFactor, depth) : 1;
-      /**
-       * W61+: separarse en la banda de ENTRADA de CUALQUIER softPkg,
-       * aunque ya estemos dentro de un padre (corredor Azure↔API:
-       * depth=1 pero aún fuera de API). Antes exigía depth===0 y el
-       * riel compartido a x≈770 (dentro de Azure) no se castigaba.
-       */
-      if (usedCount > 0 && inEntryBand(nx, ny)) {
-        corridorMul *= crossFactor * (1 + usedCount) * Math.max(1, depth);
-      } else if (usedCount > 0 && depth > 0) {
-        // Dentro de agrupador(es): compartir riel × factor^depth.
-        corridorMul *= Math.pow(crossFactor, depth);
-      }
-      const distCost = base * nestMul * mul * corridorMul;
-      // W55: penalización ADITIVA por paso pegado al borde del padre.
-      const parentBorderExtra = parentBorderStepCost(nx, ny, dx, dy);
-      // W54: TURN_PENALTY por cada cambio de dirección (excepto el primer
-      // paso, donde dir = -1).
-      const turnCost = (cdir !== -1 && cdir !== ndir) ? TURN_PENALTY : 0;
-      const stepCost = distCost + turnCost + parentBorderExtra;
-      const ng = curG + stepCost;
-      if (ng >= (dist.get(nk) ?? Infinity)) continue;
-      dist.set(nk, ng);
-      prev.set(nk, { x: cx, y: cy, dir: cdir });
-      const h = Math.abs(gx - nx) + Math.abs(gy - ny);
-      open.push(nk, ng + h);
-    }
-  }
-  // Reconstruir el camino: empezamos en goal con cualquier dir.
-  let endKey: string | null = null;
-  for (const k of prev.keys()) {
-    const d = decodeState(k);
-    if (d.x === gx && d.y === gy) { endKey = k; break; }
-  }
-  if (!endKey) return null;
-  const rev: Punto[] = [];
-  let cur: { x: number; y: number; dir: number } | null | undefined = prev.get(endKey)!;
-  rev.push({ x: gx, y: gy });
-  while (cur) {
-    rev.push({ x: cur.x, y: cur.y });
-    const pk = encodeState(cur.x, cur.y, cur.dir);
-    cur = prev.get(pk) ?? null;
-  }
-  rev.reverse();
-  const join = (a: Punto, b: Punto): Punto[] => {
-    if (Math.abs(a.x - b.x) < 0.5 || Math.abs(a.y - b.y) < 0.5) return [a, b];
-    return [a, { x: a.x, y: b.y }, b];
-  };
-  const first = rev[0]!;
-  const last = rev[rev.length - 1]!;
-  return collapseOrtho(dedupePts([...join(from, first), ...rev.slice(1, -1), ...join(last, to).slice(1)]));
-}
-
-/**
- * W61: costo extra por longitud dentro de agrupadores, ponderado por
- * profundidad: cada segmento aporta `len * (factor^depth - 1)`.
- * depth = nº de softPkgs que contienen el punto medio del tramo.
- */
-function pathInsidePkgsCost(
-  pts: readonly Punto[],
-  pkgs: readonly Caja[],
-  crossFactor: number = PKG_CROSS_FACTOR,
-): number {
-  if (!pkgs.length || pts.length < 2) return 0;
-  const f = Math.max(1, crossFactor);
-  let cost = 0;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const a = pts[i]!;
-    const b = pts[i + 1]!;
-    const seg = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-    if (seg < 1) continue;
-    const mx = (a.x + b.x) / 2;
-    const my = (a.y + b.y) / 2;
-    let depth = 0;
-    for (const p of pkgs) {
-      if (mx >= p.x && mx <= p.x + p.w && my >= p.y && my <= p.y + p.h) depth++;
-    }
-    if (depth > 0) cost += seg * (Math.pow(f, depth) - 1);
-  }
-  return cost;
-}
-
-function overshootsTip(pts: readonly Punto[]): boolean {
-  if (pts.length < 3) return false;
-  const a = pts[pts.length - 3]!;
-  const b = pts[pts.length - 2]!;
-  const t = pts[pts.length - 1]!;
-  const between = (u: number, v: number, m: number): boolean => m > Math.min(u, v) + 0.5 && m < Math.max(u, v) - 0.5;
-  if (Math.abs(a.y - b.y) < 0.5 && Math.abs(b.y - t.y) < 0.5 && between(a.x, b.x, t.x)) return true;
-  if (Math.abs(a.x - b.x) < 0.5 && Math.abs(b.x - t.x) < 0.5 && between(a.y, b.y, t.y)) return true;
-  return false;
-}
-
-function overshootsStart(pts: readonly Punto[]): boolean {
-  if (pts.length < 3) return false;
-  const t = pts[0]!;
-  const a = pts[1]!;
-  const b = pts[2]!;
-  const between = (u: number, v: number, m: number): boolean => m > Math.min(u, v) + 0.5 && m < Math.max(u, v) - 0.5;
-  if (Math.abs(t.y - a.y) < 0.5 && Math.abs(a.y - b.y) < 0.5 && between(a.x, b.x, t.x)) return true;
-  if (Math.abs(t.x - a.x) < 0.5 && Math.abs(a.x - b.x) < 0.5 && between(a.y, b.y, t.y)) return true;
-  return false;
-}
-
-/**
- * True si el path abraza/atraviesa alguna caja ajena (skip from/to).
- * Usado en legal() y en el post-check del layout.
- */
-export function pathHugsBoxes(
-  pts: readonly Punto[],
-  comps: readonly Caja[],
-  fromId?: string,
-  toId?: string,
-  keep: number = EDGE_CLEARANCE,
-): boolean {
-  for (const c of comps) {
-    const cid = (c as Caja & { id?: string }).id;
-    if (cid && (cid === fromId || cid === toId)) continue;
-    if (cid?.startsWith('ring-') || cid?.startsWith('pkg-') || cid?.startsWith('wrap-')) continue;
-    if (hugsBoxFace(pts, c, keep, true, true)) return true;
-  }
-  return false;
-}
-
-/**
- * W60: tramo medio abraza la cara de una caja a < keep px
- * (paralelo al perímetro sin ser el stem de salida/llegada).
- */
-function hugsBoxFace(
-  pts: readonly Punto[],
-  box: Caja,
-  keep: number,
-  skipFirst: boolean,
-  skipLast: boolean,
-): boolean {
-  if (!pts || pts.length < 2 || keep <= 0) return false;
-  const x0 = box.x;
-  const x1 = box.x + box.w;
-  const y0 = box.y;
-  const y1 = box.y + box.h;
-  const i0 = skipFirst ? 1 : 0;
-  const i1 = skipLast ? pts.length - 2 : pts.length - 1;
-  for (let i = i0; i < i1; i++) {
-    const a = pts[i]!;
-    const b = pts[i + 1]!;
-    const len = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-    if (len < 8) continue;
-    if (Math.abs(a.x - b.x) < 0.6) {
-      const x = a.x;
-      const segY0 = Math.min(a.y, b.y);
-      const segY1 = Math.max(a.y, b.y);
-      if (segY1 < y0 - 1 || segY0 > y1 + 1) continue;
-      // Interior (atraviesa) o pegado a cara izq/der.
-      if (x > x0 + 0.5 && x < x1 - 0.5) return true;
-      if (Math.abs(x - x0) < keep || Math.abs(x - x1) < keep) return true;
-    } else if (Math.abs(a.y - b.y) < 0.6) {
-      const y = a.y;
-      const segX0 = Math.min(a.x, b.x);
-      const segX1 = Math.max(a.x, b.x);
-      if (segX1 < x0 - 1 || segX0 > x1 + 1) continue;
-      if (y > y0 + 0.5 && y < y1 - 0.5) return true;
-      if (Math.abs(y - y0) < keep || Math.abs(y - y1) < keep) return true;
-    }
-  }
-  return false;
-}
-
-function lastMissesApproach(pts: readonly Punto[], toSide: Lado | undefined): boolean {
-  if (!toSide || pts.length < 2) return false;
-  const a = pts[pts.length - 2]!;
-  const b = pts[pts.length - 1]!;
-  if (toSide === 'right') return a.x < b.x - 0.5;
-  if (toSide === 'left') return a.x > b.x + 0.5;
-  if (toSide === 'bottom') return a.y < b.y - 0.5;
-  if (toSide === 'top') return a.y > b.y + 0.5;
-  return false;
-}
-
-function collapseOrtho(pts: readonly Punto[]): Punto[] {
-  if (!pts?.length) return [];
-  if (pts.length < 3) return pts.slice();
-  const eq = (a: number, b: number): boolean => Math.abs(a - b) < 0.51;
-  const out: Punto[] = [pts[0]!];
-  for (let i = 1; i < pts.length - 1; i++) {
-    const a = out[out.length - 1]!;
-    const b = pts[i]!;
-    const c = pts[i + 1]!;
-    const col = (eq(a.x, b.x) && eq(b.x, c.x)) || (eq(a.y, b.y) && eq(b.y, c.y));
-    if (!col) out.push(b);
-  }
-  out.push(pts[pts.length - 1]!);
-  return dedupePts(out);
-}
-
-function inCorridor(from: Punto, to: Punto, c: Caja, inflate = 12): boolean {
-  const x0 = Math.min(from.x, to.x) - inflate;
-  const x1 = Math.max(from.x, to.x) + inflate;
-  const y0 = Math.min(from.y, to.y) - inflate;
-  const y1 = Math.max(from.y, to.y) + inflate;
-  return c.x < x1 && c.x + c.w > x0 && c.y < y1 && c.y + c.h > y0;
-}
-
-function endpointClamp(from: Punto, to: Punto, fromBox: Caja | undefined, toBox: Caja | undefined): { xMin: number; xMax: number; yMin: number; yMax: number } {
-  const xs: number[] = [from.x, to.x];
-  const ys: number[] = [from.y, to.y];
-  if (fromBox) {
-    xs.push(fromBox.x, fromBox.x + fromBox.w);
-    ys.push(fromBox.y, fromBox.y + fromBox.h);
-  }
-  if (toBox) {
-    xs.push(toBox.x, toBox.x + toBox.w);
-    ys.push(toBox.y, toBox.y + toBox.h);
-  }
-  return {
-    xMin: Math.min(...xs) - 36,
-    xMax: Math.max(...xs) + 36,
-    yMin: Math.min(...ys) - 36,
-    yMax: Math.max(...ys) + 36,
-  };
-}
-
-function wrapCandidates(
-  from: Punto,
-  to: Punto,
-  a0: Punto,
-  b0: Punto,
-  aJog: Punto,
-  bJog: Punto,
-  boxes: readonly Caja[],
-  pad: number,
-  lane: number = 0,
-  clamp?: { xMin: number; xMax: number; yMin: number; yMax: number },
-): Punto[][] {
-  const o = 8 + Math.min(lane, 6) * 8;
-  const ax = aJog.x;
-  const ay = aJog.y;
-  const bx = bJog.x;
-  const by = bJog.y;
-  // W63: sin prefijo from/a0 — lo pone anchorPort (evita deshacer el fan).
-  void from; void a0;
-  const paths: Punto[][] = [
-    [aJog, { x: bx, y: ay }, bJog, b0, to],
-    [aJog, { x: ax, y: by }, bJog, b0, to],
-  ];
-  if (!boxes.length) return paths;
-  const h = hullOf(boxes, pad);
-  let x0 = h.x0 - o;
-  let x1 = h.x1 + o;
-  let y0 = h.y0 - o;
-  let y1 = h.y1 + o;
-  if (clamp) {
-    if (clamp.xMin != null) x0 = Math.max(x0, clamp.xMin);
-    if (clamp.xMax != null) x1 = Math.min(x1, clamp.xMax);
-    if (clamp.yMin != null) y0 = Math.max(y0, clamp.yMin);
-    if (clamp.yMax != null) y1 = Math.min(y1, clamp.yMax);
-  }
-  paths.push(
-    [aJog, { x: ax, y: y0 }, { x: bx, y: y0 }, bJog, b0, to],
-    [aJog, { x: ax, y: y1 }, { x: bx, y: y1 }, bJog, b0, to],
-    [aJog, { x: x0, y: ay }, { x: x0, y: by }, bJog, b0, to],
-    [aJog, { x: x1, y: ay }, { x: x1, y: by }, bJog, b0, to],
-    [aJog, { x: x0, y: ay }, { x: x0, y: y0 }, { x: bx, y: y0 }, bJog, b0, to],
-    [aJog, { x: x1, y: ay }, { x: x1, y: y0 }, { x: bx, y: y0 }, bJog, b0, to],
-    [aJog, { x: x0, y: ay }, { x: x0, y: y1 }, { x: bx, y: y1 }, bJog, b0, to],
-    [aJog, { x: x1, y: ay }, { x: x1, y: y1 }, { x: bx, y: y1 }, bJog, b0, to],
-    [aJog, { x: ax, y: y0 }, { x: x0, y: y0 }, { x: x0, y: by }, bJog, b0, to],
-    [aJog, { x: ax, y: y0 }, { x: x1, y: y0 }, { x: x1, y: by }, bJog, b0, to],
-    [aJog, { x: ax, y: y1 }, { x: x0, y: y1 }, { x: x0, y: by }, bJog, b0, to],
-    [aJog, { x: ax, y: y1 }, { x: x1, y: y1 }, { x: x1, y: by }, bJog, b0, to],
-  );
-  return paths;
-}
-
-/**
- * Polilínea ortogonal: sale perpendicular, camina fuera de cajas infladas,
- * llega alineada al centro del O. Origen/destino solo tocan en el extremo.
- */
-
-export function routeAvoidingBoxes(
-  from: Punto,
-  to: Punto,
-  obstaculos: readonly Caja[],
-  rank: number = 0,
-  total: number = 1,
-  opts: RouteAvoidOpts = {},
-): string | null {
-  const clearance = opts.clearance ?? EDGE_CLEARANCE;
-  /**
-   * W56 (Phase 3, fan-out por origen): para cada arista contamos cuántas
-   * comparten su `from` y le aplicamos un offset perpendicular a
-   * `fromSide` centrado en 0. Esto SEPARA los stems en el origen en
-   * lugar de apiñarlos sobre la misma celda de destino (caso típico:
-   * 5 aristas desde ISW-TestPatyIA → 5 grupos en `pkg-api`).
-   *
-   * El offset es `(offsetIndex - (N-1)/2) * LANE_PITCH`, así que para
-   * N=5: -2·pitch, -1·pitch, 0, +1·pitch, +2·pitch. Con `LANE_PITCH=20`
-   * los stems se reparten en 80px perpendiculares al `fromSide` —
-   * suficiente para que el A* negocie carriles paralelos en lugar de
-   * competir por el mismo eje.
-   *
-   * `fromAdjusted` se usa como punto de partida de TODOS los candidatos
-   * (A* + heurísticos + fallback absoluto), de forma que la primera
-   * celda de la arista ya está separada del resto.
-   *
-   * El lollipop (O) sigue dibujándose en el `from` original en
-   * component-spec.ts — el pequeño gap visual entre el círculo y el
-   * path es aceptable y consistente con el resto del routing.
-   */
-  const sourceEdgeCount = Math.max(1, Number(opts.sourceEdgeCount) || 1);
-  const sourceOffsetIndex = Math.max(0, Math.min(
-    sourceEdgeCount - 1,
-    Number(opts.sourceOffsetIndex) || 0,
-  ));
-  /**
-   * W60: salida PERPENDICULAR primero. El fan-out / jog van DESPUÉS de
-   * salir del perímetro (≥ clearance). Antes `fromAdjusted` corría por
-   * la cara (alongSide) y el path abrazaba TestPatyIA / EPs.
-   */
-  const stemOut = Math.max(20, clearance);
-  const a0 = outward(from, opts.fromSide, stemOut);
-  const b0 = outward(to, opts.toSide, stemOut);
-  const lanePitch = Math.max(8, Number(opts.lanePitch) || LANE_PITCH);
-  const laneNearFactor = Math.max(1, Number(opts.laneNearFactor) || LANE_NEAR_FACTOR);
-  const pkgBorderKeep = Math.max(12, Number(opts.pkgBorderClearance) || PKG_BORDER_CLEARANCE);
-  const sideSpread = Math.max(-80, Math.min(80, corridorFan(rank, total, lanePitch)));
-  const _fanLanePitch = lanePitch;
-  const fanOffset = sourceEdgeCount > 1
-    ? (sourceOffsetIndex - (sourceEdgeCount - 1) / 2) * _fanLanePitch
-    : 0;
-  /** Offset perpendicular al stem (en el plano del corredor, ya fuera). */
-  const offsetAlong = (p: Punto): Punto => {
-    if (!fanOffset) return p;
-    if (opts.fromSide === 'left' || opts.fromSide === 'right') {
-      return { x: p.x, y: p.y + fanOffset };
-    }
-    if (opts.fromSide === 'top' || opts.fromSide === 'bottom') {
-      return { x: p.x + fanOffset, y: p.y };
-    }
-    return { x: p.x, y: p.y + fanOffset };
-  };
-  const aFan = offsetAlong(a0);
-  const aJog = alongSide(aFan, opts.fromSide, sideSpread);
-  const bJog = alongSide(b0, opts.toSide, -sideSpread);
-  // Carril ortogonal al puerto: offset lineal por rank × lanePitch.
-  const pitch = lanePitch;
-  const corridorPad = Math.max(36, pkgBorderKeep);
-  const corridorFrom = (() => {
-    if (opts.fromSide === 'right') return { x: aJog.x + corridorPad + rank * pitch, y: aJog.y };
-    if (opts.fromSide === 'left') return { x: aJog.x - corridorPad - rank * pitch, y: aJog.y };
-    if (opts.fromSide === 'bottom') return { x: aJog.x, y: aJog.y + corridorPad + rank * pitch };
-    if (opts.fromSide === 'top') return { x: aJog.x, y: aJog.y - corridorPad - rank * pitch };
-    return { ...aJog };
-  })();
-  const corridorTo = (() => {
-    if (opts.toSide === 'right') return { x: bJog.x + corridorPad + (total - 1 - rank) * pitch, y: bJog.y };
-    if (opts.toSide === 'left') return { x: bJog.x - corridorPad - (total - 1 - rank) * pitch, y: bJog.y };
-    if (opts.toSide === 'bottom') return { x: bJog.x, y: bJog.y + corridorPad + (total - 1 - rank) * pitch };
-    if (opts.toSide === 'top') return { x: bJog.x, y: bJog.y - corridorPad - (total - 1 - rank) * pitch };
-    return { ...bJog };
-  })();
-  /** Entrada al A*: ya fuera y con fan — NUNCA sobre la cara de la caja. */
-  const fromAdjusted = aFan;
-  const others: Caja[] = obstaculos.map((c) => inflateObstacle(c, clearance));
-  const midObst: Caja[] = others.slice();
-  const farFrom = (box: Caja, pt: Punto): boolean => {
-    if (!box || !pt) return false;
-    const inf = inflateBox(box, 10);
-    return pt.x < inf.x || pt.x > inf.x + inf.w || pt.y < inf.y || pt.y > inf.y + inf.h;
-  };
-  if (opts.fromBox && farFrom(opts.fromBox, to)) midObst.push(inflateBox(opts.fromBox, stemOut));
-  if (opts.toBox && farFrom(opts.toBox, fromAdjusted)) midObst.push(inflateBox(opts.toBox, stemOut));
-  const blocking: Caja[] = obstaculos.filter((c: Caja) => inCorridor(fromAdjusted, to, c, clearance + 8));
-  const wrapBoxes: readonly Caja[] = opts.wrapBoxes ?? obstaculos;
-  const inner = endpointClamp(fromAdjusted, to, opts.fromBox, opts.toBox);
-  const clamp: { xMin: number; xMax: number; yMin: number; yMax: number } | undefined = undefined as { xMin: number; xMax: number; yMin: number; yMax: number } | undefined;
-  const used = opts.usedSegs ?? [];
-  const { xs: busyXs, ys: busyYs } = usedLaneAxes(used, 4);
-  const pkgList: Caja[] = [];
-  if (opts.fromPkg) pkgList.push(opts.fromPkg as Caja);
-  if (opts.toPkg) pkgList.push(opts.toPkg as Caja);
-  for (const p of opts.pkgBoxes ?? []) pkgList.push(p as Caja);
-  for (const w of opts.wrapBoxes ?? []) {
-    const id = (w as Caja & { id?: string }).id ?? '';
-    if (id.startsWith('wrap-') || id.startsWith('pkg-')) pkgList.push(w as Caja);
-  }
-  const { xs: borderXs, ys: borderYs } = packageBorderAxes(pkgList, 4);
-  const softPkgs: Caja[] = (opts.softPkgs ?? opts.pkgBoxes ?? pkgList).slice() as Caja[];
-  const textBoxes: Caja[] = (opts.textBoxes ?? []).slice() as Caja[];
-  const pkgCrossFactor = Math.max(1, Number(opts.pkgCrossFactor) || PKG_CROSS_FACTOR);
-  /**
-   * W54: agrupadores prohibidos. Cada uno se trata como muro duro en
-   * `gridRoute` (Infinity) y aquí se valida también en `legal()` para
-   * los candidatos heurísticos (codos, wrapCandidates, etc.).
-   */
-  const prohibitedPkgs: Caja[] = ((opts as { prohibitedPkgs?: readonly Caja[] }).prohibitedPkgs ?? []).slice() as Caja[];
-  /**
-   * W55: bordes del paquete PADRE del source (no de cualquier paquete).
-   * Cuando el origen vive dentro de un paquete, sus bordes cuentan como
-   * "pared caliente" — el A* paga parentBorderPenalty por cada paso a
-   * < parentBorderClearance del perímetro del padre. Esto evita que la
-   * arista arranque corriendo por el borde interior del paquete antes
-   * de salir al corredor.
-   */
-  const fromPkgBox = opts.fromPkg as Caja | undefined;
-  const parentBorderPkg: Caja[] = fromPkgBox ? [fromPkgBox] : [];
-  const { xs: parentBorderXs, ys: parentBorderYs } = packageBorderAxes(parentBorderPkg, 4);
-  const parentBorderPenalty = Number(opts.parentBorderPenalty) || PARENT_BORDER_PENALTY;
-  const parentBorderClearance = Math.max(24, Number(opts.parentBorderClearance) || Math.max(60, PKG_BORDER_CLEARANCE + 20));
-
-  const legal = (pts: Punto[]): boolean => {
-    if (pts.length < 2 || pathHasDiagonal(pts)) return false;
-    // W60/W61: primer tramo SALE perpendicular (también en _loose).
-    // "sale por dentro" = primer paso hacia el interior de la caja.
-    if (opts.fromSide && pts.length >= 2) {
-      const a = pts[0]!;
-      const b = pts[1]!;
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      const ok =
-        (opts.fromSide === 'right' && dx > 0.5 && Math.abs(dy) < 0.6)
-        || (opts.fromSide === 'left' && dx < -0.5 && Math.abs(dy) < 0.6)
-        || (opts.fromSide === 'bottom' && dy > 0.5 && Math.abs(dx) < 0.6)
-        || (opts.fromSide === 'top' && dy < -0.5 && Math.abs(dx) < 0.6);
-      if (!ok) return false;
-    }
-    // W59 auto-cruce: se corrige en nudge/spread (rechazo) y pase final sanitize.
-    const comps: Caja[] = obstaculos.slice();
-    if (opts.fromBox) comps.push(opts.fromBox);
-    if (opts.toBox) comps.push(opts.toBox);
-    const fromId = (opts.fromBox as (Caja & { id?: string }) | undefined)?.id;
-    const toId = (opts.toBox as (Caja & { id?: string }) | undefined)?.id;
-    if (pathIllegal(pts, comps, fromId, toId, clearance)) return false;
-    // W61: tramo medio que abraza/atraviesa cara de caja ajena ("Encima").
-    if (pathHugsBoxes(pts, obstaculos, fromId, toId, clearance)) return false;
-    // Prohibido absoluto: arista sobre textos / títulos.
-    if (textBoxes.length && pathHitsBoxes(pts, textBoxes.map((t) => inflateBox(t, 2)))) return false;
-    // W54: prohibidos absolutos para aristas. Igual que los textos, las
-    // aristas NO pueden atravesar un agrupador marcado como prohibido.
-    // W55: la inflación aquí debe ser ≥ gridRoute para que el check
-    // post-A* no sea más permisivo que el muro duro del A*. Antes era
-    // 2 (≈ stroke width) → paths que rozan el borde pasaban el check.
-    // Subimos a EDGE_CLEARANCE para alinear con el muro del A*.
-    if (prohibitedPkgs.length && pathHitsBoxes(pts, prohibitedPkgs.map((p) => inflateBox(p, EDGE_CLEARANCE)))) return false;
-    if (overshootsTip(pts) || overshootsStart(pts)) return false;
-    if (lastMissesApproach(pts, opts.toSide)) return false;
-    const stem1 = [pts[0]!, pts[1]!];
-    const stem2 = [pts[pts.length - 2]!, pts[pts.length - 1]!];
-    const mid = pts.slice(1, -1);
-    // Con softPkgs el interior de agrupador es costo (×N), no muro duro.
-    // Sin soft: muro propio origen/destino en el tramo medio (legado).
-    if (!softPkgs.length) {
-      const pkgWalls: Caja[] = [];
-      if (opts.fromPkg) pkgWalls.push(inflateBox(opts.fromPkg as Caja, 2));
-      if (opts.toPkg) pkgWalls.push(inflateBox(opts.toPkg as Caja, 2));
-      if (mid.length >= 2 && rutaChoca(mid, [...midObst, ...pkgWalls])) return false;
-    } else if (mid.length >= 2 && rutaChoca(mid, midObst)) {
-      return false;
-    }
-    if (rutaChoca(stem1, others)) return false;
-    if (rutaChoca(stem2, others)) return false;
-    if (!opts._loose && opts.fromPkg && opts.fromSide) {
-      const fp = opts.fromPkg as Caja;
-      if (opts.fromSide === 'right' && pts.some((p, i) => i > 0 && p.x < fp.x - 2)) return false;
-      if (opts.fromSide === 'left' && pts.some((p, i) => i > 0 && p.x > fp.x + fp.w + 2)) return false;
-      if (opts.fromSide === 'bottom' && pts.some((p, i) => i > 0 && p.y < fp.y - 2)) return false;
-      if (opts.fromSide === 'top' && pts.some((p, i) => i > 0 && p.y > fp.y + fp.h + 2)) return false;
-    }
-    if (!opts._loose && pathCrossingCount(pts, used) > 0) return false;
-    // W54 (tuning agresivo): máx. Nº de giros. Un camino con >
-    // MAX_TURNS_PER_EDGE es zigzag ilegible; descartado en estricto. En
-    // _loose permitimos +1 (5) para fallback en geometrías apretadas
-    // (p.ej. cuando la unión desde/hasta lollipop no se alinea al grid
-    // del A* y aparece un segmento extra de 2px). Mantener el fallback
-    // en 5 es preferible a la línea recta diagonal del último recurso.
-    const maxTurns = opts._loose ? MAX_TURNS_PER_EDGE + 1 : MAX_TURNS_PER_EDGE;
-    if (countPuntoTurns(pts) > maxTurns) return false;
-    return true;
-  };
-
-  interface ScoredPath extends Array<Punto> {
-    _share?: number;
-  }
-
-  let best: ScoredPath | null = null;
-  let bestScore = Infinity;
-  const frame = opts.frame;
-  const laneFree = (x: number, y: number, vertical: boolean): boolean => {
-    // W64: rechazo duro a < pitch (antes 0.75×) — no negociar rieles pegados.
-    const busyMin = opts._loose
-      ? Math.max(8, lanePitch * 0.6)
-      : Math.max(lanePitch, lanePitch);
-    const keep = opts._loose
-      ? Math.max(10, Math.round(pkgBorderKeep * 0.4))
-      : Math.max(24, Math.round(pkgBorderKeep * 0.6));
-    if (vertical) {
-      if (nearestAxisDist(x, busyXs) < busyMin) return false;
-      if (borderXs.length && nearestAxisDist(x, borderXs) < keep) return false;
-      return true;
-    }
-    if (nearestAxisDist(y, busyYs) < busyMin) return false;
-    if (borderYs.length && nearestAxisDist(y, borderYs) < keep) return false;
-    return true;
-  };
-  /**
-   * W60/W63: ancla puerto → salida perpendicular (a0) → fan (aFan) → resto.
-   * Los candidatos a veces meten `[aFan, a0, aJog, …]` y el a0 intermedio
-   * DESHACÍA el fan (mismo riel). Aquí se fija el prefijo y se descartan
-   * repeticiones / a0 post-fan.
-   */
-  const anchorPort = (pts: Punto[]): Punto[] => {
-    if (!pts.length) return pts;
-    const same = (p: Punto, q: Punto): boolean =>
-      Math.abs(p.x - q.x) < 0.5 && Math.abs(p.y - q.y) < 0.5;
-    const head: Punto[] = [from, a0];
-    const hasFan = Boolean(fanOffset)
-      && (Math.abs(aFan.x - a0.x) > 0.5 || Math.abs(aFan.y - a0.y) > 0.5);
-    if (hasFan) head.push(aFan);
-    const rest = pts.slice();
-    while (rest.length) {
-      const p = rest[0]!;
-      if (head.some((h) => same(p, h))) { rest.shift(); continue; }
-      // a0 tras el fan = deshacer separación → saltar.
-      if (hasFan && same(p, a0)) { rest.shift(); continue; }
-      // fromAdjusted (=aFan) ya está en head.
-      if (same(p, fromAdjusted)) { rest.shift(); continue; }
-      break;
-    }
-    return [...head, ...rest];
-  };
-  const consider = (pts: Punto[]): void => {
-    const clean = collapseOrtho(dedupePts(anchorPort(pts)));
-    if (!legal(clean)) return;
-    // wrapCandidates / codos pueden rozar el borde del agrupador: rechazar
-    // en estricto (laneFree solo filtra el abanico explícito).
-    if (!opts._loose && (borderXs.length || borderYs.length)) {
-      const keep = Math.max(24, Math.round(pkgBorderKeep * 0.6));
-      for (let i = 1; i < clean.length - 2; i++) {
-        const a = clean[i]!;
-        const b = clean[i + 1]!;
-        const len = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-        if (len < 48) continue;
-        if (Math.abs(a.x - b.x) < 0.6 && nearestAxisDist(a.x, borderXs) < keep) return;
-        if (Math.abs(a.y - b.y) < 0.6 && nearestAxisDist(a.y, borderYs) < keep) return;
-      }
-    }
-    const share = pathShareLen(clean, used, 6);
-    const crosses = pathCrossingCount(clean, used);
-    const laneTax = laneProximityCost(clean, used, lanePitch, laneNearFactor);
-    const borderTax = borderProximityCost(clean, borderXs, borderYs, pkgBorderKeep);
-    // Interior de agrupador: ×factor^depth sobre la longitud interior (W61).
-    const pkgTax = pathInsidePkgsCost(clean, softPkgs, pkgCrossFactor);
-    /**
-     * W55: penalización post-A* por tramo pegado al borde del PADRE del
-     * origen. Complementa al coste del A* (este cubre candidatos
-     * heurísticos como codos y wrapCandidates). Mide la longitud del
-     * tramo que está a < parentBorderClearance de cualquier borde del
-     * padre y lo multiplica por parentBorderPenalty.
-     *
-     * W55+ (Phase 5): extra de "primer tramo paralelo al borde" — cuando
-     * los primeros 3 puntos del path forman un segmento pegado al borde
-     * top/bot del padre y la arista está justo dentro del ancho del
-     * padre, suma un extra proporcional a la longitud. Esto penaliza
-     * los "renglones" de aristas que corren paralelas al borde en lugar
-     * de separarse perpendicularmente.
-     */
-    let parentBorderTax = 0;
-    if (parentBorderPenalty && (parentBorderXs.length || parentBorderYs.length)) {
-      for (let i = 1; i < clean.length - 1; i++) {
-        const a = clean[i]!;
-        const b = clean[i + 1]!;
-        const len = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-        if (len < 1) continue;
-        let near = 0;
-        if (Math.abs(a.x - b.x) < 0.6) {
-          // Segmento vertical: paga si x está pegado a un eje X del padre.
-          for (const bx of parentBorderXs) {
-            if (Math.abs(a.x - bx) < parentBorderClearance) near += (parentBorderClearance - Math.abs(a.x - bx)) / parentBorderClearance;
-          }
-        } else if (Math.abs(a.y - b.y) < 0.6) {
-          // Segmento horizontal: paga si y está pegado a un eje Y del padre.
-          for (const by of parentBorderYs) {
-            if (Math.abs(a.y - by) < parentBorderClearance) near += (parentBorderClearance - Math.abs(a.y - by)) / parentBorderClearance;
-          }
-        }
-        parentBorderTax += len * near * parentBorderPenalty;
-      }
-    }
-    const outside = frame ? boundsOverflow(clean, frame, 24) : 0;
-    const hook = boundsOverflow(clean, {
-      x: inner.xMin, y: inner.yMin,
-      w: inner.xMax - inner.xMin, h: inner.yMax - inner.yMin,
-    }, 0);
-    // W54: cada giro suma TURN_PENALTY (legibilidad > distancia). Zigzags
-    // largos se penalizan también con ZIGZAG_PENALTY.
-    const turns = countPuntoTurns(clean);
-    const turnTax = turns * TURN_PENALTY + (turns > MAX_TURNS_PER_EDGE ? (turns - MAX_TURNS_PER_EDGE) * ZIGZAG_PENALTY * TURN_PENALTY : 0);
-    // Rieles pegados / interior agrupador / zigzags cuestan más que un rodeo.
-    /**
-     * W56: ración "3x cruce" del usuario. Antes `crosses * 1200` pesaba
-     * 1.2× el coste de `pathShareLen` (1800); ambos coeficientes eran
-     * tan altos que la única forma de evitar el solape era pagar un
-     * rodeo de 1000+ px. Bajamos a `400` y `600` respectivamente para
-     * que el router pueda repartir carriles paralelos sin salir
-     * pitando del bounding box. El `1 + N*10` del A* sigue penalizando
-     * el corredor; aquí solo se penaliza el "tramo exacto compartido".
-     */
-    // W64: share/crosses más caros — preferir rodeo corto a riel compartido.
-    const score = manhattan(clean) + share * 1800 + laneTax + borderTax + pkgTax
-      + crosses * 900 + outside * 24 + hook * 16 + turnTax + parentBorderTax;
-    if (score < bestScore || (score === bestScore && share < (best?._share ?? Infinity))) {
-      bestScore = score;
-      best = clean as ScoredPath;
-      best._share = share;
-    }
-  };
-
-  // Primario: A* sobre grid (costo mínimo + ×N dentro de agrupadores / rieles).
-  {
-    const hardOnly = obstaculos.filter((c) => {
-      const id = (c as Caja & { id?: string }).id ?? '';
-      return !id.startsWith('pkg-') && !id.startsWith('wrap-');
-    });
-    // W60: origen = muro duro (keep). Destino pad chico: el O vive a
-    // LOLLI_STEM del borde y un keep completo bloqueaba la llegada.
-    if (opts.fromBox) hardOnly.push(inflateBox(opts.fromBox as Caja, stemOut));
-    if (opts.toBox) hardOnly.push(inflateBox(opts.toBox as Caja, 8));
-    for (const cl of [clearance, Math.max(8, clearance - 6)]) {
-      const g = gridRoute(fromAdjusted, to, hardOnly, cl, used, {
-        softPkgs,
-        textBoxes,
-        pkgCrossFactor,
-        lanePitch,
-        laneNearFactor,
-        // Regla 6: bordes de agrupador cuentan como aristas en el A* (no
-        // solo en el scoring post-evaluación).
-        borderXs,
-        borderYs,
-        // W54: agrupadores prohibidos = muro duro. Sin este pase, el A*
-        // atravesaba el paquete "«PG» clientesis" para "ahorrar" un giro.
-        prohibitedPkgs,
-        // W55: penalización ADITIVA por estar cerca del borde del PADRE
-        // del origen — evita que la arista recorra pegada al perímetro
-        // interior del paquete antes de salir al corredor.
-        parentBorderXs,
-        parentBorderYs,
-        parentBorderPenalty,
-        parentBorderClearance,
-      });
-      if (g) consider(collapseOrtho(g));
-    }
-  }
-
-  // Codos: solo si el eje del corredor está libre de aristas Y de bordes de paquete.
-  const corridorAxisFree = (opts.fromSide === 'top' || opts.fromSide === 'bottom')
-    ? laneFree(0, corridorFrom.y, false)
-    : laneFree(corridorFrom.x, 0, true);
-  // W63: candidatos empiezan en aJog (ya con fan). anchorPort antepone from→a0→aFan.
-  if (corridorAxisFree || opts._loose) {
-    consider([aJog, corridorFrom, { x: corridorFrom.x, y: corridorTo.y }, corridorTo, bJog, b0, to]);
-    consider([aJog, corridorFrom, { x: corridorTo.x, y: corridorFrom.y }, corridorTo, bJog, b0, to]);
-    consider([aJog, { x: corridorFrom.x, y: aJog.y }, { x: corridorFrom.x, y: bJog.y }, bJog, b0, to]);
-    consider([aJog, { x: aJog.x, y: corridorFrom.y }, { x: bJog.x, y: corridorFrom.y }, bJog, b0, to]);
-  }
-  // Oferta de carriles 0..N globales: elige el libre más cercano (ignora rank local).
-  const laneN = Math.max(total * 3, 24);
-  const laneBase = Math.max(40, PKG_BORDER_CLEARANCE);
-  for (let k = 0; k < laneN; k++) {
-    let vx = aJog.x;
-    let hy = aJog.y;
-    if (opts.fromSide === 'right') vx = aJog.x + laneBase + k * pitch;
-    else if (opts.fromSide === 'left') vx = aJog.x - laneBase - k * pitch;
-    else if (opts.fromSide === 'bottom') hy = aJog.y + laneBase + k * pitch;
-    else if (opts.fromSide === 'top') hy = aJog.y - laneBase - k * pitch;
-    else vx = aJog.x + laneBase + k * pitch;
-    if (opts.fromSide === 'top' || opts.fromSide === 'bottom') {
-      if (!laneFree(0, hy, false) && !opts._loose) continue;
-      consider([aJog, { x: aJog.x, y: hy }, { x: bJog.x, y: hy }, bJog, b0, to]);
-    } else {
-      if (!laneFree(vx, 0, true) && !opts._loose) continue;
-      consider([aJog, { x: vx, y: aJog.y }, { x: vx, y: bJog.y }, bJog, b0, to]);
-      consider([aJog, { x: vx, y: aJog.y }, { x: vx, y: corridorTo.y }, corridorTo, bJog, b0, to]);
-    }
-  }
-  if (rank === 0 && !used.length) {
-    consider([aJog, { x: aFan.x, y: b0.y }, b0, to]);
-    consider([aJog, { x: b0.x, y: aFan.y }, b0, to]);
-  }
-
-  for (const extra of [0, 12, 24, 40, 56]) {
-    const pad = clearance + Math.min(rank, 4) * 4 + extra;
-    const groups = [blocking, wrapBoxes].filter((g) => g.length);
-    if (!groups.length) groups.push([]);
-    for (const boxes of groups) {
-      for (const raw of wrapCandidates(fromAdjusted, to, a0, b0, corridorFrom, corridorTo, boxes, pad, rank, clamp)) {
-        consider(raw);
-      }
-    }
-    if (obstaculos.length) {
-      const xMin = clamp
-        ? Math.max(clamp.xMin, Math.min(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x)) - 24 - extra)
-        : Math.min(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x)) - 24 - extra;
-      const xMax = clamp
-        ? Math.min(clamp.xMax, Math.max(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x + c.w)) + 24 + extra)
-        : Math.max(fromAdjusted.x, to.x, ...obstaculos.map((c) => c.x + c.w)) + 24 + extra;
-      if (xMax - xMin < 20) continue;
-      const gaps = verticalGaps(obstaculos.map((c) => inflateBox(c, clearance)), xMin, xMax);
-      if (gaps.length) {
-        for (const g of gaps) {
-          const span = g.b - g.a;
-          if (span < 16) continue;
-          const nLanes = Math.max(1, Math.floor((span - 8) / 12));
-          for (let k = 0; k < nLanes; k++) {
-            const x = g.a + 6 + (k + 0.5) * ((span - 12) / nLanes);
-            if (!laneFree(x, 0, true) && !opts._loose) continue;
-            consider([aJog, corridorFrom, { x, y: corridorFrom.y }, { x, y: corridorTo.y }, corridorTo, bJog, b0, to]);
-          }
-        }
-        const gFrom = nearestGap(gaps, corridorFrom.x);
-        const gTo = nearestGap(gaps, corridorTo.x);
-        // Preferir sub-carril libre dentro del gap.
-        const pickLane = (g: { a: number; b: number }, prefer: number): number => {
-          const span = g.b - g.a;
-          const nLanes = Math.max(1, Math.floor((span - 8) / 12));
-          let bestX = laneInGap(g, rank, total);
-          let bestD = Infinity;
-          for (let k = 0; k < nLanes; k++) {
-            const x = g.a + 6 + (k + 0.5) * ((span - 12) / nLanes);
-            if (!laneFree(x, 0, true) && !opts._loose) continue;
-            const d = Math.abs(x - prefer);
-            if (d < bestD) { bestD = d; bestX = x; }
-          }
-          return bestX;
-        };
-        const lane1 = pickLane(gFrom, corridorFrom.x);
-        const lane2 = pickLane(gTo, corridorTo.x);
-        consider([aJog, corridorFrom, { x: lane1, y: corridorFrom.y }, { x: lane1, y: corridorTo.y }, corridorTo, bJog, b0, to]);
-        const ys = obstaculos.flatMap((c) => [c.y, c.y + c.h]);
-        const top = clamp ? Math.max(clamp.yMin, Math.min(...ys) - pad) : Math.min(...ys) - pad;
-        const bot = clamp ? Math.min(clamp.yMax, Math.max(...ys) + pad) : Math.max(...ys) + pad;
-        for (const wrapY of [top, bot]) {
-          if (!laneFree(0, wrapY, false) && !opts._loose) continue;
-          consider([
-            aJog, corridorFrom,
-            { x: lane1, y: corridorFrom.y }, { x: lane1, y: wrapY },
-            { x: lane2, y: wrapY }, { x: lane2, y: corridorTo.y },
-            corridorTo, bJog, b0, to,
-          ]);
-        }
-      }
-    }
-  }
-
-  const all: Caja[] = obstaculos.slice();
-  if (opts.fromBox) all.push(opts.fromBox);
-  if (opts.toBox) all.push(opts.toBox);
-  if (all.length) {
-    for (const extra of [24, 48, 80]) {
-      for (const raw of wrapCandidates(fromAdjusted, to, a0, b0, corridorFrom, corridorTo, all, clearance + extra + Math.min(rank, 4) * 4, rank, clamp)) {
-        consider(raw);
-      }
-    }
-  }
-
-  // W57: reentrar con `from` (puerto), no `fromAdjusted` — si no, el
-  // fan-out se aplica DOS veces y el stem queda a ±2·offset del O.
-  if (!best && !opts._loose) {
-    return routeAvoidingBoxes(from, to, obstaculos, rank, total, { ...opts, _loose: true });
-  }
-  if (!best) {
-    for (const cl of [clearance, Math.max(6, clearance - 4)]) {
-      const g = gridRoute(fromAdjusted, to, obstaculos, cl, used, {
-        softPkgs,
-        textBoxes,
-        pkgCrossFactor,
-        lanePitch,
-        laneNearFactor,
-        borderXs,
-        borderYs,
-        prohibitedPkgs,
-        // W55: id. pase primario.
-        parentBorderXs,
-        parentBorderYs,
-        parentBorderPenalty,
-        parentBorderClearance,
-      });
-      if (g) consider(collapseOrtho(g));
-    }
-  }
-  if (!best) return null;
-  const chosen: ScoredPath = best;
-  delete chosen._share;
-  return comoPath(collapseOrtho(chosen));
 }
 
 /** Hit-test módulo-level: ¿(x, y) cae dentro de la caja? (W54 — usado en
@@ -2593,7 +1023,7 @@ export function pathIllegal(pts: Punto[], comps: Caja[], fromId?: string, toId?:
   const toBox = comps.find((c) => (c as Caja & { id?: string }).id === toId);
   for (const c of comps) {
     const cid = (c as Caja & { id?: string }).id;
-    // Rings ya incluyen PORT_CLEARANCE. Origen/destino: pad mínimo en
+    // Rings ya traen su aire. Origen/destino: pad mínimo en
     // extremos; ajenas: keep completo.
     const pad = cid?.startsWith('ring-')
       ? 0
@@ -2621,258 +1051,4 @@ export function pathIllegal(pts: Punto[], comps: Caja[], fromId?: string, toId?:
   if (fromBox && rutaChoca(pts.slice(1), [inflateBox(fromBox, keep)])) return true;
   if (toBox && rutaChoca(pts.slice(0, -1), [inflateBox(toBox, keep)])) return true;
   return false;
-}
-
-/**
- * Empuja corredores largos lejos de bordes de agrupador.
- * Pase final: el router a veces cae en _loose y se pega al perímetro.
- */
-export function nudgePathsFromPackageBorders(
-  paths: Array<{ path: string }>,
-  packages: readonly Caja[],
-  keep = Math.max(28, Math.round(PKG_BORDER_CLEARANCE * 0.7)),
-): void {
-  if (!packages.length || !paths.length) return;
-  const { xs, ys } = packageBorderAxes(packages, 2);
-  const nearest = (v: number, axes: readonly number[]): number => {
-    let best = axes[0] ?? v;
-    for (const a of axes) if (Math.abs(v - a) < Math.abs(v - best)) best = a;
-    return best;
-  };
-  const rebuild = (pts: Punto[]): string => {
-    if (!pts.length) return '';
-    let d = `M${pts[0]!.x},${pts[0]!.y}`;
-    for (let i = 1; i < pts.length; i++) d += ` L${pts[i]!.x},${pts[i]!.y}`;
-    return d;
-  };
-  for (const e of paths) {
-    if (!e.path) continue;
-    const pts: Punto[] = [];
-    const re = /[ML]\s*([\d.-]+)\s*,\s*([\d.-]+)/g;
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(e.path))) pts.push({ x: +m[1]!, y: +m[2]! });
-    if (pts.length < 4) continue;
-    let changed = false;
-    for (let i = 1; i < pts.length - 2; i++) {
-      const a = pts[i]!;
-      const b = pts[i + 1]!;
-      const len = Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-      if (len < 48) continue;
-      if (Math.abs(a.x - b.x) < 0.6 && xs.length) {
-        const d = nearestAxisDist(a.x, xs);
-        if (d < keep) {
-          const left = [...xs].filter((x) => x <= a.x + 0.5).sort((p, q) => q - p)[0];
-          const right = [...xs].filter((x) => x >= a.x - 0.5).sort((p, q) => p - q)[0];
-          let nx: number;
-          if (left != null && right != null && left !== right && right - left < keep * 2 + 4) {
-            // Hueco estrecho entre agrupadores anidados: centrar.
-            nx = (left + right) / 2;
-          } else {
-            const wall = nearest(a.x, xs);
-            nx = wall + (a.x >= wall ? 1 : -1) * keep;
-          }
-          const old = a.x;
-          for (const p of pts) {
-            if (p === pts[0] || p === pts[pts.length - 1]) continue;
-            if (Math.abs(p.x - old) < 0.6) p.x = nx;
-          }
-          changed = true;
-        }
-      }
-      if (Math.abs(a.y - b.y) < 0.6 && ys.length) {
-        const d = nearestAxisDist(a.y, ys);
-        if (d < keep) {
-          const top = [...ys].filter((y) => y <= a.y + 0.5).sort((p, q) => q - p)[0];
-          const bot = [...ys].filter((y) => y >= a.y - 0.5).sort((p, q) => p - q)[0];
-          let ny: number;
-          if (top != null && bot != null && top !== bot && bot - top < keep * 2 + 4) {
-            ny = (top + bot) / 2;
-          } else {
-            const wall = nearest(a.y, ys);
-            ny = wall + (a.y >= wall ? 1 : -1) * keep;
-          }
-          const old = a.y;
-          for (const p of pts) {
-            if (p === pts[0] || p === pts[pts.length - 1]) continue;
-            if (Math.abs(p.y - old) < 0.6) p.y = ny;
-          }
-          changed = true;
-        }
-      }
-    }
-    if (changed) {
-      // W59: si el nudge introdujo spur/auto-cruce, descartar el cambio.
-      if (!pathSelfIntersects(pts) && !pathHasDiagonal(pts)) e.path = rebuild(pts);
-    }
-  }
-}
-
-/**
- * Parsea un atributo `d` SVG a una lista de puntos.
- */
-export function pathPoints(d: string): Punto[] {
-  const pts: Punto[] = [];
-  const re = /[ML]\s*([\d.-]+)\s*,\s*([\d.-]+)/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(d))) pts.push({ x: +m[1]!, y: +m[2]! });
-  return pts;
-}
-
-/**
- * W55: post-procesado de corredor-splitter.
- *
- * Tras el A* + nudges, agrupamos las aristas por las celdas (x, y)
- * snapeadas a `lanePitch` que comparten. Si en alguna celda pasan 2+
- * aristas, desplazamos la mitad por +lanePitch y la otra mitad por
- * -lanePitch en su eje dominante. El objetivo es romper los corredores
- * apiñados que aparecen cuando múltiples orígenes comparten destino
- * (p.ej. 5 aristas desde App-testpatyia → 5 grupos en `pkg-api`).
- *
- * W55+ (Phase 5): `minOvercrowd` baja de 2 a 1 (≥2 aristas en una
- * celda ya se considera apiñamiento) y el offset sube de 1×step a
- * 1.5×step para que la separación sea más visible.
- *
- * Restricciones:
- *   - No tocamos los extremos (origen/destino) de la arista.
- *   - Solo desplazamos tramos INTERMEDIOS (entre pts[1] y pts[-2]).
- *   - Si el desplazamiento cruza una caja de `boxes`, lo descartamos.
- *
- * @returns número de aristas que se pudieron re-colocar.
- */
-export function spreadEdges(
-  paths: Array<{ path: string }>,
-  boxes: readonly Caja[],
-  lanePitch: number = LANE_PITCH,
-  minOvercrowd: number = 2,
-): number {
-  if (!paths.length || lanePitch <= 0) return 0;
-  const step = Math.max(4, lanePitch);
-  /**
-   * Mapa (axis, value) -> { axis: 'x' | 'y', v: number, paths: indices[] }
-   * donde `axis`/`v` son el eje y posición snapeada de la celda, e
-   * `indices` son los índices en `paths` que cruzan ese eje.
-   */
-  type Cell = { axis: 'x' | 'y'; v: number; pathIdx: Set<number> };
-  const cells = new Map<string, Cell>();
-  const snap = (v: number): number => Math.round(v / step) * step;
-  for (let i = 0; i < paths.length; i++) {
-    const p = paths[i];
-    if (!p?.path) continue;
-    const pts = pathPoints(p.path);
-    for (let j = 1; j < pts.length - 1; j++) {
-      const a = pts[j]!;
-      const b = pts[j + 1]!;
-      if (Math.abs(a.x - b.x) < 0.6) {
-        const v = snap(a.x);
-        const k = `x:${v}`;
-        let c = cells.get(k);
-        if (!c) { c = { axis: 'x', v, pathIdx: new Set() }; cells.set(k, c); }
-        c.pathIdx.add(i);
-      } else if (Math.abs(a.y - b.y) < 0.6) {
-        const v = snap(a.y);
-        const k = `y:${v}`;
-        let c = cells.get(k);
-        if (!c) { c = { axis: 'y', v, pathIdx: new Set() }; cells.set(k, c); }
-        c.pathIdx.add(i);
-      }
-    }
-  }
-  const crowded = [...cells.values()].filter((c) => c.pathIdx.size > minOvercrowd);
-  if (!crowded.length) return 0;
-  const rebuild = (pts: Punto[]): string => {
-    if (!pts.length) return '';
-    let d = `M${pts[0]!.x},${pts[0]!.y}`;
-    for (let i = 1; i < pts.length; i++) d += ` L${pts[i]!.x},${pts[i]!.y}`;
-    return d;
-  };
-  const hitsBox = (a: Punto, b: Punto): boolean => {
-    if (boxes.length === 0) return false;
-    for (const c of boxes) {
-      if (segmentoCortaCaja(a.x, a.y, b.x, b.y, inflateBox(c, EDGE_CLEARANCE / 2))) return true;
-    }
-    return false;
-  };
-  let relocated = 0;
-  for (const cell of crowded) {
-    const indices = [...cell.pathIdx];
-    if (indices.length <= minOvercrowd) continue;
-    // W63: abanico en carriles (…,-2,-1,0,+1,+2)×step. La primera se queda;
-    // el resto prueba ±slot×step hasta hallar hueco libre de cajas.
-    indices.sort((a, b) => a - b);
-    for (let k = 1; k < indices.length; k++) {
-      const idx = indices[k]!;
-      const e = paths[idx];
-      if (!e?.path) continue;
-      const pts = pathPoints(e.path);
-      if (pts.length < 3) continue;
-      const slot = k % 2 === 1 ? Math.ceil(k / 2) : -Math.ceil(k / 2);
-      const tryOffsets = [slot * step, -slot * step, slot * step * 2, -slot * step * 2];
-      const axisKey = cell.axis;
-      let committed: Punto[] | null = null;
-      for (const offset of tryOffsets) {
-        const trial = pts.map((p) => ({ x: p.x, y: p.y }));
-        let moved = false;
-        let blocked = false;
-        for (let j = 1; j < trial.length - 1; j++) {
-          const a = trial[j]!;
-          const b = trial[j + 1]!;
-          if (axisKey === 'x' && Math.abs(a.x - b.x) < 0.6 && Math.abs(a.x - cell.v) < step * 0.6) {
-            const newP = { x: a.x + offset, y: a.y };
-            const newQ = { x: b.x + offset, y: b.y };
-            if (hitsBox(newP, newQ)) { blocked = true; break; }
-            for (let m = j; m < trial.length - 1; m++) {
-              if (Math.abs(trial[m]!.x - a.x) < 0.6) trial[m]!.x += offset;
-              else break;
-            }
-            moved = true;
-          } else if (axisKey === 'y' && Math.abs(a.y - b.y) < 0.6 && Math.abs(a.y - cell.v) < step * 0.6) {
-            const newP = { x: a.x, y: a.y + offset };
-            const newQ = { x: b.x, y: b.y + offset };
-            if (hitsBox(newP, newQ)) { blocked = true; break; }
-            for (let m = j; m < trial.length - 1; m++) {
-              if (Math.abs(trial[m]!.y - a.y) < 0.6) trial[m]!.y += offset;
-              else break;
-            }
-            moved = true;
-          }
-        }
-        if (blocked || !moved) continue;
-        if (pathSelfIntersects(trial) || pathHasDiagonal(trial)) continue;
-        committed = trial;
-        break;
-      }
-      if (!committed) continue;
-      e.path = rebuild(committed);
-      relocated++;
-    }
-  }
-  return relocated;
-}
-
-/**
- * W55: validador absoluto del muro duro `prohibido`. Tras todo el
- * pipeline de ruteo, comprueba que ninguna arista atraviese un paquete
- * prohibido. Devuelve la lista de aristas que SÍ lo atraviesan (para que
- * el caller las pueda recolocar o marcar como inválidas).
- *
- * Diferencia con `legal()`: este corre AL FINAL, después de los fallbacks
- * (incluido el "fallback absoluto" en component-spec.ts que genera un
- * path L-shape sin pasar por `legal()`).
- */
-export function findProhibitedViolations(
-  paths: ReadonlyArray<{ path?: string }>,
-  prohibitedPkgs: readonly Caja[],
-  inflate: number = EDGE_CLEARANCE,
-): number[] {
-  if (!prohibitedPkgs.length || !paths.length) return [];
-  const walls: Caja[] = prohibitedPkgs.map((p) => inflateBox(p, inflate));
-  const out: number[] = [];
-  for (let i = 0; i < paths.length; i++) {
-    const p = paths[i];
-    if (!p?.path) continue;
-    const pts = pathPoints(p.path);
-    if (pts.length < 2) continue;
-    if (pathHitsBoxes(pts, walls)) out.push(i);
-  }
-  return out;
 }

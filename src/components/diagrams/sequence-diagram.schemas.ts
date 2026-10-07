@@ -40,3 +40,16 @@ export const ActorNodeSchema = z.object({
 });
 export type ActorNode = z.infer<typeof ActorNodeSchema>;
 
+
+
+/** Caja de participante (región que agrupa actores en la cabecera). */
+export const PartBoxSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  color: z.string().optional(),
+  x: z.number(),
+  y: z.number(),
+  w: z.number(),
+  h: z.number(),
+});
+export type PartBox = z.infer<typeof PartBoxSchema>;

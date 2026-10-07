@@ -5,6 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import { OpcionesEmpaqueSchema } from "../_shared/diagram-tipos.schemas.js";
 
 export const HttpEndpointSchema = z.object({
   methods: z.array(z.string()),
@@ -39,7 +40,7 @@ export type LayoutMode = z.infer<typeof LayoutModeSchema>;
 export const ComponentSpecResultSchema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
-  layout: z.unknown() /* TODO: ref OpcionesEmpaque */,
+  layout: OpcionesEmpaqueSchema,
   packages: z.array(z.unknown() /* TODO: ref Paquete */),
   components: z.array(z.unknown() /* TODO: ref Componente */),
   interfaces: z.array(z.unknown() /* TODO: ref InterfazUml */),
@@ -112,6 +113,10 @@ export const ComponentLayoutSchema = z.object({
   subtitle: z.string().optional(),
   titleY: z.number(),
   subtitleY: z.number(),
+  /** Pintura de componentes (`layout.boxStyle` del payload). */
+  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
+  /** Remate de aristas (`layout.connector` del payload). */
+  connector: z.union([z.literal('assembly'), z.literal('arrow')]).optional(),
 });
 export type ComponentLayout = z.infer<typeof ComponentLayoutSchema>;
 

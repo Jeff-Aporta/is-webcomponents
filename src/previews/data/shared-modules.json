@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T01:06:24.458Z",
+  "generatedAt": "2026-10-07T04:59:48.486Z",
   "count": 112,
   "modules": [
     {
@@ -447,9 +447,11 @@
       "id": "diagram-edge-style.schemas",
       "path": "src/components/_shared/diagram-edge-style.schemas.ts",
       "summary": "diagram-edge-style — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 453,
+      "bytes": 879,
       "exports": [
-        "EdgeWithHueSchema"
+        "EdgeWithHueSchema",
+        "ColoredSchema",
+        "EdgedSchema"
       ]
     },
     {
@@ -457,7 +459,7 @@
       "id": "diagram-edge-style",
       "path": "src/components/_shared/diagram-edge-style.ts",
       "summary": "Módulo compartido `diagram-edge-style.ts`.",
-      "bytes": 5573,
+      "bytes": 5545,
       "exports": [
         "EDGE_HUES",
         "EMITTER_S",
@@ -517,7 +519,7 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 9439,
+      "bytes": 10923,
       "exports": [
         "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
       ]
@@ -599,7 +601,7 @@
       "id": "diagram-tipos.schemas",
       "path": "src/components/_shared/diagram-tipos.schemas.ts",
       "summary": "diagram-tipos — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 4837,
+      "bytes": 6325,
       "exports": [
         "CajaSchema",
         "ComponenteSchema",

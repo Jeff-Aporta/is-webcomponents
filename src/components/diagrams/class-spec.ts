@@ -1,10 +1,9 @@
-import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
+import { layoutNodeLink } from '../_shared/node-link-layout.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
-import type { DiagramSide } from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
+import { snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type {
@@ -212,30 +211,10 @@ export function classSpecToJson(spec: ClassSpec): Record<string, unknown> {
 
 const MARGIN = { top: 16, right: 20, bottom: 20, left: 20 };
 
-/** Desplaza un punto hacia afuera del nodo, en la dirección de su lado. */
-function stepOut(p: Point2D, side: string, d: number): Point2D {
-  if (side === 'top') return { x: p.x, y: p.y - d };
-  if (side === 'bottom') return { x: p.x, y: p.y + d };
-  if (side === 'left') return { x: p.x - d, y: p.y };
-  return { x: p.x + d, y: p.y };
-}
-
 /** Punta de decoración (flecha/triángulo/diamante): posición y ángulo según el lado. */
 function tipAt(p: Point2D, side: string): Point2D & { angle: number } {
   const angle = side === 'top' ? 90 : side === 'bottom' ? 270 : side === 'left' ? 0 : 180;
   return { x: p.x, y: p.y, angle };
-}
-
-/** Lados de anclaje; para self-relations fuerza lados distintos (loop visible). */
-function sidesFor(
-  fromNode: { layer: number },
-  toNode: { layer: number },
-  direction: ClassSpec['direction'],
-  isSelf: boolean,
-): { fromSide: DiagramSide; toSide: DiagramSide } {
-  if (isSelf) return { fromSide: 'right', toSide: 'top' };
-  const sides = pickSides(fromNode, toNode, direction);
-  return { fromSide: sides.fromSide as DiagramSide, toSide: sides.toSide as DiagramSide };
 }
 
 /**
@@ -257,11 +236,11 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
 
   const placed = layoutNodeLink(sized, spec.relations, {
     direction: spec.direction,
-    layerGap: spec.relations.some((r) => r.label) ? 88 : 72,
-    nodeGap: 40,
+    // Corredores para el router (aire de 20 px a cada caja + carriles).
+    layerGap: spec.relations.some((r) => r.label) ? 136 : 120,
+    nodeGap: 72,
   });
 
-  const byId = new Map(placed.nodes.map((n) => [n.id, n]));
   const specById = new Map(spec.classes.map((c) => [c.id, c]));
   const groupHue = new Map((spec.groups ?? []).map((g) => [g.id, g.hue]));
 
@@ -287,51 +266,67 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
     };
   });
 
+  // ── Ruteo: mismo sistema que componentes y DER ──────────────────────
+  // Puertos por el perímetro (planPorts) + grilla con zonas prohibidas,
+  // costos aditivos y negociación (routeEdges). El glifo del extremo
+  // (triángulo, rombo, flecha) se pinta en el tip, sobre el stub recto.
+  const boxes = nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, w: n.w, h: n.h }));
+  const plans = planPorts(boxes, spec.relations.map((r) => ({ from: r.from, to: r.to })), { pitch: 24, room: 2 * 28 + 20 });
+  const ri: number[] = [];
+  const res = routeEdges({ components: boxes, packages: [], titles: [], rings: [] },
+    spec.relations.flatMap((r, i) => {
+      const pl = plans[i];
+      if (!pl) return [];
+      ri.push(i);
+      return [{
+        id: r.id ?? `r${i}`, from: pl.from, fromSide: pl.fromSide, to: pl.to, toSide: pl.toSide,
+        fromBox: boxes.find((b) => b.id === r.from)!, toBox: boxes.find((b) => b.id === r.to)!,
+        fromPkgs: new Set<string>(), toPkgs: new Set<string>(),
+      }];
+    }), { clearance: 20, stub: 28, lanePitch: 24 });
+  const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
+  ri.forEach((i, k) => {
+    const pl = plans[i]!;
+    ptsOf.set(i, res.paths[k] ?? simplifyOrthoPath([pl.from, { x: pl.to.x, y: pl.from.y }, pl.to]));
+  });
+
+  // Lienzo ajustado a cajas + rieles con margen uniforme.
+  const bb = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+  const hit = (x: number, y: number): void => {
+    bb.x0 = Math.min(bb.x0, x); bb.y0 = Math.min(bb.y0, y); bb.x1 = Math.max(bb.x1, x); bb.y1 = Math.max(bb.y1, y);
+  };
+  for (const n of nodes) { hit(n.x, n.y); hit(n.x + n.w, n.y + n.h); }
+  for (const pts of ptsOf.values()) for (const q of pts) hit(q.x, q.y);
+  const dx = MARGIN.left - bb.x0;
+  const dy = offsetY - bb.y0;
+  for (const n of nodes) { n.x += dx; n.y += dy; }
+  for (const [k, pts] of ptsOf) ptsOf.set(k, pts.map((q) => ({ x: q.x + dx, y: q.y + dy })));
+
   const legendGroups = spec.groups?.length ? spec.groups : undefined;
   const legendW = legendGroups
     ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 6) + 30))
     : 0;
-
-  const contentW = placed.width + offsetX + MARGIN.right;
+  const contentW = bb.x1 - bb.x0 + MARGIN.left + MARGIN.right;
   const width = Math.max(legendGroups ? Math.max(contentW, legendW + 180) : contentW, 160, diagramHeaderWidth(title, subtitle));
-  const height = placed.height + offsetY + MARGIN.bottom;
+  const height = bb.y1 - bb.y0 + offsetY + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
-  // Rejilla de costos: las cajas se bloquean para que el A* las rodee.
-  const grid = makeCostGrid(width, height);
-  const posById = new Map(nodes.map((n) => [n.id, n]));
-  for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
-
-  const routed: ClassLayoutEdge[] = spec.relations.map((r, i) => {
-    const isSelf = r.from === r.to;
-    const from = posById.get(r.from)!;
-    const to = posById.get(r.to)!;
-    const sides = sidesFor(byId.get(r.from)!, byId.get(r.to)!, spec.direction, isSelf);
-    const a = edgeAnchor(from, sides.fromSide);
-    const b = edgeAnchor(to, sides.toSide);
-
-    // El anclaje cae sobre el borde bloqueado: se sale un paso antes de rutear.
-    const out = stepOut(a, sides.fromSide, 16);
-    const into = stepOut(b, sides.toSide, 16);
-    // Snap direccional: nunca redondea de vuelta hacia el nodo del que se aleja
-    // (ver snapPointAwayFromSide — corrige el redondeo-al-más-cercano de antes).
-    const outSnap = snapPointAwayFromSide(out, sides.fromSide, grid.grid);
-    const intoSnap = snapPointAwayFromSide(into, sides.toSide, grid.grid);
-    const aGrid = pixelToGrid(outSnap.x, outSnap.y, grid.grid);
-    const bGrid = pixelToGrid(intoSnap.x, intoSnap.y, grid.grid);
-    const points = routeOrthogonal(aGrid, bGrid, grid);
-
-    const path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
-    const targetTip = tipAt(b, sides.toSide);
-    const sourceTip = tipAt(a, sides.fromSide);
-    const mid = points.length
-      ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }
-      : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-
-    // La etiqueta ocupa espacio: encarece la zona para que otras relaciones la esquiven.
-    if (r.label) applyRectCost(grid, mid.x - 30, mid.y - 9, 60, 18, 6, true);
-
-    return {
+  const routed: ClassLayoutEdge[] = spec.relations.flatMap((r, i) => {
+    const pts = ptsOf.get(i);
+    const pl = plans[i];
+    if (!pts || !pl) return [];
+    const a = pts[0]!;
+    const b = pts[pts.length - 1]!;
+    const targetTip = tipAt(b, pl.toSide);
+    const sourceTip = tipAt(a, pl.fromSide);
+    // Etiqueta en el centro del tramo más largo.
+    let mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    let best = -1;
+    for (let k = 1; k < pts.length; k++) {
+      const len = Math.abs(pts[k]!.x - pts[k - 1]!.x) + Math.abs(pts[k]!.y - pts[k - 1]!.y);
+      if (len > best) { best = len; mid = { x: (pts[k]!.x + pts[k - 1]!.x) / 2, y: (pts[k]!.y + pts[k - 1]!.y) / 2 }; }
+    }
+    return [{
       id: r.id ?? `r${i}`,
       from: r.from,
       to: r.to,
@@ -339,7 +334,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
       label: r.label,
       fromLabel: r.fromLabel,
       toLabel: r.toLabel,
-      path,
+      path: pointsToPath(pts),
       targetTipX: targetTip.x,
       targetTipY: targetTip.y,
       targetAngle: targetTip.angle,
@@ -349,7 +344,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
       labelX: mid.x,
       labelY: mid.y,
       hue: r.group != null ? groupHue.get(String(r.group)) : undefined,
-    };
+    }];
   });
 
   assignEdgeHues(routed as unknown as Parameters<typeof assignEdgeHues>[0]);

@@ -1,20 +1,14 @@
-import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
-import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
-import type { ForbiddenRegion } from '../_shared/diagram-astar.js';
+import { layoutNodeLink } from '../_shared/node-link-layout.js';
+import { snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
+import type { RouterEdge, RouterWorld } from './component-router.schemas.js';
+import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { countIconTokens, stripIconTokensPlain } from '../_shared/tk-icon-inline.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { wrapLabel } from './component-spec.js';
-import type { DiagramSide } from '../_shared/diagram-grid.js';
-import {
-  normalizeErPayload as _archifyNormalize,
-  pickSidesArchify,
-  straightPath,
-  orthogonalHPath,
-  orthogonalVPath,
-} from './er-archify.js';
+import { normalizeErPayload as _archifyNormalize } from './er-archify.js';
 import type {
   BoxSide,
   DiagramGroup,
@@ -55,15 +49,18 @@ const DEFAULT_RATIO = 1.4;
 /** Aire dentro del cajón de un grupo y alto de su cabecera. */
 const CLUSTER_PAD = 20;
 const CLUSTER_HEADER = 26;
-/**
- * Padding extra alrededor del rectángulo de un cajón cuando se convierte en
- * forbidden-region para el ruteo A*. 8 px deja un pasillo limpio entre la
- * línea dashed del cluster y la arista que lo bordea (también múltiplo del
- * grid 8, así no se snapea a celdas adyacentes).
- */
-const CLUSTER_BORDER_PAD = 8;
 /** Separación entre cajones y entre entidades sueltas de un mismo cajón. */
-const CLUSTER_GAP = 56;
+/**
+ * Corredor entre cajones: aire de borde a cada lado (ER_BORDER_KEEP, donde
+ * correr paralelo cuesta) + dos carriles. Con 56 px el pasillo era tan caro
+ * que las aristas rodeaban cajones enteros.
+ */
+const ER_BORDER_KEEP = 40;
+const CLUSTER_GAP = ER_BORDER_KEEP * 2 + 48;
+/** Ruteo: aire arista↔entidad, tramo recto mínimo (pata de gallo) y carril. */
+const ER_CLEARANCE = 20;
+const ER_STUB = 32;
+const ER_LANE_PITCH = 24;
 const NODE_GAP = 84;
 
 function asRecord(v: unknown): Record<string, any> {
@@ -187,6 +184,10 @@ function readGroups(src: Record<string, unknown>): DiagramGroup[] | undefined {
       hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
     };
     if (typeof r.parent === 'string' && r.parent.length > 0) group.parent = r.parent;
+    // `external`: servicio de otro dominio. `palette`: clave de
+    // theme.cluster.palettes (p.ej. "warm") que fija el fondo del cajón.
+    if (r.external === true) (group as DiagramGroup & { external?: boolean }).external = true;
+    if (typeof r.palette === 'string' && r.palette) (group as DiagramGroup & { palette?: string }).palette = r.palette;
     return group;
   });
   return normalizeGroupParents(out);
@@ -376,7 +377,14 @@ function buildClusters(spec: ErSpec): ClusterRaw[] {
     if (e.group && porGrupo.has(e.group)) porGrupo.get(e.group)!.ids.push(e.id);
     else sueltas.push(e.id);
   }
-  const out: ClusterRaw[] = [...porGrupo.values()].filter((c) => c.ids.length);
+  // Se conserva todo cajón con entidades propias o en algún descendiente
+  // (un grupo que solo contiene subgrupos —p.ej. «PatyIA»— también se dibuja).
+  const conContenido = (id: string, guard = 0): boolean => {
+    if ((porGrupo.get(id)?.ids.length ?? 0) > 0) return true;
+    if (guard > 16) return false;
+    return [...porGrupo.values()].some((c) => c.parentId === id && conContenido(c.id!, guard + 1));
+  };
+  const out: ClusterRaw[] = [...porGrupo.values()].filter((c) => conContenido(c.id!));
   if (sueltas.length) out.push({ id: null, name: '', hue: undefined, ids: sueltas, boxed: false, depth: 0 });
   return out;
 }
@@ -418,6 +426,62 @@ function packShelves(
   return mejor ?? { score: 0, pos: new Map(), width: 0, height: 0 };
 }
 
+/**
+ * Reparte cajas en filas centradas. Prueba permutaciones (≤ 6 cajas) × cortes
+ * de fila y puntúa: desviación del ratio + espacio muerto + largo de los
+ * enlaces entre cajas (centro a centro, normalizado al tamaño del lienzo).
+ */
+function arrangeRows(
+  cajas: ReadonlyArray<{ key: number; w: number; h: number }>,
+  links: ReadonlyArray<[number, number]>,
+  ratioGuia: number,
+  gap: number,
+): { pos: Map<number, { x: number; y: number }>; width: number; height: number } {
+  const n = cajas.length;
+  if (!n) return { pos: new Map(), width: 0, height: 0 };
+  const ordenes = n <= 6 ? permutaciones(cajas.map((_, i) => i)) : [cajas.map((_, i) => i)];
+  const area = cajas.reduce((s, c) => s + c.w * c.h, 0);
+  let mejor: { score: number; pos: Map<number, { x: number; y: number }>; width: number; height: number } | null = null;
+  for (const orden of ordenes) {
+    for (let mask = 0; mask < 1 << (n - 1); mask++) {
+      const filas: number[][] = [[]];
+      orden.forEach((i, k) => {
+        filas[filas.length - 1]!.push(i);
+        if (k < n - 1 && mask & (1 << k)) filas.push([]);
+      });
+      const anchos = filas.map((f) => f.reduce((s, i) => s + cajas[i]!.w, 0) + gap * (f.length - 1));
+      const altos = filas.map((f) => Math.max(...f.map((i) => cajas[i]!.h)));
+      const W = Math.max(...anchos);
+      const H = altos.reduce((s, h) => s + h, 0) + gap * (filas.length - 1);
+      const pos = new Map<number, { x: number; y: number }>();
+      let y = 0;
+      filas.forEach((f, r) => {
+        let x = (W - anchos[r]!) / 2;
+        for (const i of f) {
+          const c = cajas[i]!;
+          pos.set(c.key, { x: snapDiagramGrid(x), y: snapDiagramGrid(y + (altos[r]! - c.h) / 2) });
+          x += c.w + gap;
+        }
+        y += altos[r]! + gap;
+      });
+      let dist = 0;
+      for (const [a, b] of links) {
+        const pa = pos.get(a);
+        const pb = pos.get(b);
+        const ca = cajas.find((c) => c.key === a);
+        const cb = cajas.find((c) => c.key === b);
+        if (!pa || !pb || !ca || !cb) continue;
+        dist += Math.abs(pa.x + ca.w / 2 - pb.x - cb.w / 2) + Math.abs(pa.y + ca.h / 2 - pb.y - cb.h / 2);
+      }
+      const score = Math.abs(Math.log(W / Math.max(1, H) / ratioGuia))
+        + 2 * (1 - area / (W * H))
+        + dist / Math.max(1, (W + H) * Math.max(1, links.length));
+      if (!mejor || score < mejor.score) mejor = { score, pos, width: W, height: H };
+    }
+  }
+  return mejor!;
+}
+
 /** Permutaciones de un array corto (se usa solo con pocos clústeres). */
 function permutaciones<T>(arr: T[]): T[][] {
   if (arr.length <= 1) return [arr];
@@ -432,7 +496,30 @@ function permutaciones<T>(arr: T[]): T[][] {
 /**
  * spec → geometría lista para pintar.
  */
-export function computeErLayout(spec: ErSpec): ErLayout {
+/**
+ * Tablas sin ninguna relación: dentro de su grupo se reúnen en un cajón
+ * anidado (sin título; lo identifica el icono ER_ISOLATED_ICON) para que
+ * aparezcan siempre juntas y se reconozcan de un vistazo. Solo si el grupo tiene también tablas con
+ * relaciones (si todas están sueltas, el cajón propio ya las agrupa).
+ */
+function withIsolatedGroups(spec: ErSpec): ErSpec {
+  const linked = new Set<string>();
+  for (const r of spec.relations) { linked.add(r.from); linked.add(r.to); }
+  const groups = [...(spec.groups ?? [])];
+  const entities = spec.entities.map((e) => ({ ...e }));
+  for (const g of spec.groups ?? []) {
+    const own = entities.filter((e) => e.group === g.id);
+    const isolated = own.filter((e) => !linked.has(e.id));
+    if (!isolated.length || isolated.length === own.length) continue;
+    const id = `${g.id}${ER_ISOLATED_SUFFIX}`;
+    groups.push({ id, name: '', hue: g.hue, parent: g.id, icon: ER_ISOLATED_ICON } as DiagramGroup);
+    for (const e of isolated) e.group = id;
+  }
+  return groups.length === (spec.groups ?? []).length ? spec : { ...spec, groups, entities };
+}
+
+export function computeErLayout(specIn: ErSpec): ErLayout {
+  const spec = withIsolatedGroups(specIn);
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);
@@ -500,15 +587,17 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       : { nodes: [], width: 0, height: 0 };
 
     if (sueltas.length) {
+      // Clave = índice (antes Number(id) || id.length: ids del mismo largo
+      // colisionaban y todas las sueltas caían en la misma celda).
       const rejilla = packShelves(
-        sueltas.map((id) => ({ ...(sizeById.get(id) as { id: string; w: number; h: number }), key: Number(id) || id.length })),
+        sueltas.map((id, k) => ({ ...(sizeById.get(id) as { id: string; w: number; h: number }), key: k })),
         ratioGuia,
         NODE_GAP,
       );
       // La rejilla de sueltas se cuelga debajo del sub-grafo, dentro del mismo cajón.
       const dy = sub.height ? sub.height + NODE_GAP : 0;
-      for (const id of sueltas) {
-        const p = rejilla.pos.get(Number(id) || id.length);
+      for (const [k, id] of sueltas.entries()) {
+        const p = rejilla.pos.get(k);
         const s = sizeById.get(id);
         if (!p || !s) continue;
         sub.nodes.push({ id, x: p.x, y: p.y + dy, w: s.w, h: s.h, layer: 0, order: 0 });
@@ -516,7 +605,11 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       sub.width = Math.max(sub.width, rejilla.width);
       sub.height = dy + rejilla.height;
     }
-    const padTop = c.boxed ? CLUSTER_PAD + CLUSTER_HEADER : 0;
+    // Bajo el título queda aire para un stub + holgura: las entidades de la
+    // primera fila también pueden recibir aristas por arriba.
+    // (El cajón de tablas sin relaciones no recibe aristas: solo el icono.)
+    const sinAristas = c.id?.endsWith(ER_ISOLATED_SUFFIX);
+    const padTop = !c.boxed ? 0 : sinAristas ? CLUSTER_HEADER + 8 : CLUSTER_HEADER + ER_STUB + ER_CLEARANCE;
     const padLado = c.boxed ? CLUSTER_PAD : 0;
     return {
       key: i,
@@ -545,6 +638,7 @@ export function computeErLayout(spec: ErSpec): ErLayout {
   const orderByDepthDesc = [...Array(cajas.length).keys()]
     .filter((i) => clusters[i]!.id != null)
     .sort((a, b) => (depthByIdx.get(b) ?? 0) - (depthByIdx.get(a) ?? 0));
+  const childTop = new Map<number, number>();
   for (const i of orderByDepthDesc) {
     const c = clusters[i]!;
     if (c.id == null) continue;
@@ -554,33 +648,41 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     // Calcula pack local de los hijos para reservar ancho/alto suficiente.
     const childSizes = childIndices.map((j) => ({ key: j, w: cajas[j]!.w, h: cajas[j]!.h }));
     if (!childSizes.length) continue;
-    const childPack = packShelves(childSizes, ratioGuia, CLUSTER_GAP);
+    const childPack = arrangeRows(childSizes, [], ratioGuia, CLUSTER_GAP);
     // Reservamos ancho para los hijos + padding lateral a cada lado. El alto
     // del padre debe acomodar cabecera + cluster hijo + padding abajo.
     const childReserveW = childPack.width + CLUSTER_PAD * 2;
-    const childReserveH = CLUSTER_PAD + CLUSTER_HEADER + childPack.height + CLUSTER_PAD;
+    // Los hijos van DEBAJO de las entidades propias del padre (antes se
+    // montaban encima de ellas).
+    const ownH = cajas[i]!.nodes.length ? Math.max(...cajas[i]!.nodes.map((n) => n.y + n.h)) : 0;
+    const top = ownH ? cajas[i]!.padTop + ownH + CLUSTER_PAD * 2 : CLUSTER_PAD + CLUSTER_HEADER;
+    childTop.set(i, top);
     cajas[i]!.w = snapDiagramGrid(Math.max(cajas[i]!.w, childReserveW));
-    cajas[i]!.h = snapDiagramGrid(Math.max(cajas[i]!.h, childReserveH));
+    cajas[i]!.h = snapDiagramGrid(Math.max(ownH ? 0 : cajas[i]!.h, top + childPack.height + CLUSTER_PAD));
   }
 
-  // Orden de los cajones: se prueba cada permutación (son pocos) y gana la que
-  // deja más cerca los extremos de las relaciones que cruzan entre cajones.
+  // Cajones en filas: se prueban permutaciones × cortes de fila y gana el
+  // reparto más compacto (poco espacio muerto), cercano al ratio guía y con
+  // las relaciones entre cajones cortas. Filas centradas; cajones centrados
+  // en el alto de su fila.
   const cruzadas = spec.relations.filter((r) => clusterDe.get(r.from) !== clusterDe.get(r.to));
-  const ordenes = cajas.length <= 5 ? permutaciones(cajas.map((_, i) => i)) : [cajas.map((_, i) => i)];
-  let mejorPack: ({ score: number; pos: Map<number, { x: number; y: number }>; width: number; height: number; orden?: number[] }) | null = null;
-  for (const orden of ordenes) {
-    const pack = packShelves(orden.map((i) => cajas[i]!), spec.ratio ?? DEFAULT_RATIO, CLUSTER_GAP);
-    let distancia = 0;
-    for (const r of cruzadas) {
-      const a = pack.pos.get(clusterDe.get(r.from) ?? -1);
-      const b = pack.pos.get(clusterDe.get(r.to) ?? -1);
-      if (!a || !b) continue;
-      distancia += Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+  // Solo cajones raíz: los anidados los coloca su padre (si entraban aquí
+  // ocupaban un hueco de fila que luego quedaba vacío).
+  const raizDe = (i: number): number => {
+    let k = i;
+    for (let guard = 0; clusters[k]?.parentId && guard < 16; guard++) {
+      const pi = clusters.findIndex((c) => c.id === clusters[k]!.parentId);
+      if (pi < 0) break;
+      k = pi;
     }
-    // El ratio manda sobre la distancia; la distancia solo desempata.
-    const score = pack.score * 10 + distancia / 10_000;
-    if (!mejorPack || score < mejorPack.score) mejorPack = { ...pack, score, orden };
-  }
+    return k;
+  };
+  const mejorPack = arrangeRows(
+    cajas.filter((_, i) => !clusters[i]!.parentId),
+    cruzadas.map((r) => [raizDe(clusterDe.get(r.from) ?? -1), raizDe(clusterDe.get(r.to) ?? -1)] as [number, number]),
+    spec.ratio ?? DEFAULT_RATIO,
+    CLUSTER_GAP,
+  );
 
   const offsetX = MARGIN.left;
   const offsetY = MARGIN.top + headerH;
@@ -599,15 +701,35 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       });
     }
   }
+  const effPalette = new Map<string, string | undefined>();
   for (const caja of cajas) {
     if (!mejorPack) continue;
-    const p = mejorPack.pos.get(caja.key);
+    // Anidados: posición provisional; el bloque de anidamiento los mete en su padre.
+    const p = mejorPack.pos.get(caja.key) ?? (clusters[caja.key]?.parentId ? { x: 0, y: 0 } : undefined);
     if (!p) continue;
     const cx = offsetX + p.x;
     const cy = offsetY + p.y;
     const c = clusters[caja.key];
     if (!c) continue;
-    if (c.boxed) cajones.push({ id: c.id, name: c.name, hue: c.hue, parentId: c.parentId, x: cx, y: cy, w: caja.w, h: caja.h, depth: c.depth });
+    if (c.boxed) {
+      cajones.push({ id: c.id, name: c.name, hue: c.hue, parentId: c.parentId, x: cx, y: cy, w: caja.w, h: caja.h, depth: c.depth });
+      const g = (spec.groups ?? []).find((gg) => gg.id === c.id) as (DiagramGroup & { external?: boolean; palette?: string }) | undefined;
+      // Otro dominio con pocas tablas → gris neutro (se lee como “de paso”).
+      const total = spec.entities.filter((e) => e.group === c.id || (spec.groups ?? []).some((gg) => gg.parent === c.id && gg.id === e.group)).length;
+      // Paleta (referencia InSoft / Visual Paradigm): raíz = primary (azul),
+      // anidado = secondary (turquesa), otro dominio con < 3 tablas = neutral.
+      // Anidado sin paleta propia: alterna con la del padre para contrastar
+      // (padre turquesa → hijo azul; si no → turquesa).
+      const parentPal = c.parentId ? effPalette.get(c.parentId) : undefined;
+      const turquesa = (k?: string): boolean => k === 'secondary' || k?.toUpperCase() === '#00C3C4';
+      const palette = g?.palette
+        ?? (g?.external && total < 3 ? 'neutral'
+          : c.parentId ? (turquesa(parentPal) ? 'primary' : 'secondary') : undefined);
+      if (c.id) effPalette.set(c.id, palette);
+      if (palette) (cajones[cajones.length - 1] as { palette?: string }).palette = palette;
+      const icon = (g as { icon?: string } | undefined)?.icon;
+      if (icon) (cajones[cajones.length - 1] as { icon?: string }).icon = icon;
+    }
     for (const n of caja.nodes) {
       const s = specById.get(n.id);
       if (!s) continue;
@@ -668,9 +790,9 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       // locales (relativas al padre).
       const childIndices = childrenByParent.get(parent.id) ?? [];
       if (!childIndices.length) continue;
-      const childPack = packShelves(
+      const childPack = arrangeRows(
         childIndices.map((j) => ({ key: j, w: cajas[j]!.w, h: cajas[j]!.h })),
-        ratioGuia, CLUSTER_GAP,
+        [], ratioGuia, CLUSTER_GAP,
       );
       const childIndex = clusters.findIndex((c) => c.id === cj.id);
       if (childIndex < 0) continue;
@@ -680,12 +802,15 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       // cabecera (header) del padre en el TOP — el resto del espacio está
       // disponible para los hijos.
       const nestPad = CLUSTER_PAD;
-      const headerReserve = (parent.depth ?? 0) === 0 ? (CLUSTER_PAD + CLUSTER_HEADER) : nestPad;
+      const parentIdx = clusters.findIndex((c) => c.id === parent.id);
+      const headerReserve = childTop.get(parentIdx)
+        ?? ((parent.depth ?? 0) === 0 ? (CLUSTER_PAD + CLUSTER_HEADER) : nestPad);
       const innerX = parent.x + nestPad;
       const innerY = parent.y + headerReserve;
       const innerW = Math.max(parent.w - nestPad * 2, 0);
       const innerH = Math.max(parent.h - headerReserve - nestPad, 0);
-      const desiredX = innerX + localPos.x;
+      // Bloque de hijos centrado en el ancho del padre.
+      const desiredX = innerX + Math.max(0, (innerW - childPack.width) / 2) + localPos.x;
       const desiredY = innerY + localPos.y;
       // Clamp al interior del padre: si el hijo no cabe, lo pegamos al borde
       // y listo (caso degenerado de un JSON muy estrecho — preferible a un
@@ -725,9 +850,10 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     lockedMaxX = Math.max(lockedMaxX, e.x + e.w);
     lockedMaxY = Math.max(lockedMaxY, e.y + e.h);
   }
-  const byId = new Map(entities.map((e) => [e.id, { ...e, layer: e.layer }] as const));
 
-  const legendGroups = spec.groups?.length ? spec.groups : undefined;
+  // Leyenda solo si los grupos no se ven como cajones con título (si no,
+  // duplica la información y reserva una franja vacía a la derecha).
+  const legendGroups = spec.groups?.length && !cajones.length ? spec.groups : undefined;
   const LEGEND_GUTTER = 16;
   const legendW = legendGroups
     ? Math.max(...legendGroups.map((g) => Math.ceil(g.name.length * 6) + 24)) + 8
@@ -742,176 +868,145 @@ export function computeErLayout(spec: ErSpec): ErLayout {
   const contentW = legendGroups
     ? Math.max(minRight + LEGEND_GUTTER + legendW, 160)
     : Math.max(minRight, 160);
-  const width = contentW;
+  let width = contentW;
   const legendX = legendGroups ? contentW + LEGEND_GUTTER : 0;
   const legendY = MARGIN.top + (subtitle ? 34 : title ? 22 : 0);
   const baseHeight = (mejorPack?.height ?? 0) + offsetY + MARGIN.bottom;
   const minBottom = Math.max(baseHeight, lockedMaxY + MARGIN.bottom);
-  const height = legendGroups
+  let height = legendGroups
     ? Math.max(minBottom, legendY + legendGroups.length * 16 + 24)
     : minBottom;
   const titleMaxW = Math.max(80, width - MARGIN.left - MARGIN.right - (legendGroups ? legendW + LEGEND_GUTTER : 0));
   const titleLines = title ? wrapLabel(title, titleMaxW, 13, 3) : [];
   const subtitleLines = subtitle ? wrapLabel(subtitle, titleMaxW, 11, 2) : [];
 
-  // Rejilla de costos: las cajas se bloquean para que el A* las rodee.
-  const grid = makeCostGrid(width, height);
+  // ── Ruteo de relaciones: mismo sistema que el diagrama de componentes ──
+  // Puertos repartidos por el perímetro (planPorts), grilla con zonas
+  // prohibidas, costos aditivos y negociación (routeEdges). Solo cambia el
+  // glifo del extremo: aquí, la marca de cardinalidad (pata de gallo).
   const posById = new Map(entities.map((e) => [e.id, e] as const));
-  for (const e of entities) blockRect(grid, e.x - 6, e.y - 6, e.w + 12, e.h + 12);
-  if (legendGroups) blockRect(grid, legendX - 8, 0, legendW + 16, legendGroups.length * 16 + 40);
-  // La cabecera del cajón es texto: encarecerla evita que una arista la tache.
-  for (const c of cajones) applyRectCost(grid, c.x, c.y, c.w, CLUSTER_HEADER + 4, 12, true);
-  // Peaje suave dentro de cada cajón: una arista que va de un cajón a otro
-  // prefiere rodear por fuera antes que atravesar el territorio ajeno. Suave a
-  // propósito — las aristas internas del propio cajón deben seguir pudiendo
-  // pasar. Los obstáculos DUROS para que las aristas rodeen otros cajones se
-  // aplican por-arista vía `forbiddenRegions` en routeOrthogonal (ver más
-  // abajo): así, una arista interna del propio cajón sigue pasando libremente
-  // y una externa ve los demás cajones como muros.
-  for (const c of cajones) applyRectCost(grid, c.x, c.y, c.w, c.h, 2, true);
+  const portBoxes = entities.map((e) => ({ id: e.id, x: e.x, y: e.y, w: e.w, h: e.h }));
+  const titleBoxes: Caja[] = [
+    ...cajones.map((c) => ({ x: c.x, y: c.y, w: Math.min(c.w, String(c.name ?? '').length * 7 + 28 + ((c as { icon?: string }).icon ? 20 : 0)), h: CLUSTER_HEADER })),
+    ...(legendGroups ? [{ x: legendX - 8, y: 0, w: legendW + 16, h: legendGroups.length * 16 + 40 }] : []),
+  ];
+  const plans = planPorts(portBoxes, spec.relations.map((r) => ({
+    from: r.from,
+    to: r.to,
+    fromSide: r.fromSide && r.fromSide !== 'auto' ? r.fromSide as Lado : undefined,
+    toSide: r.toSide && r.toSide !== 'auto' ? r.toSide as Lado : undefined,
+  })), {
+    pitch: ER_LANE_PITCH,
+    room: ER_STUB * 2 + ER_CLEARANCE,
+    obstacles: titleBoxes,
+    obstacleRoom: ER_STUB + ER_CLEARANCE,
+  });
+  const sides = plans.map((p) => (p ? { fromSide: p.fromSide as BoxSide, toSide: p.toSide as BoxSide } : null));
+  const anchorAt = (i: number, end: 'from' | 'to'): Punto => plans[i]![end];
 
-  // Rutear primero lo corto deja los pasillos libres para lo largo, que es lo
-  // que de verdad necesita rodeo; al revés, las aristas largas ocupaban el
-  // centro y las cortas terminaban cruzándolas.
-  const orden = spec.relations
-    .map((r, i) => ({ r, i }))
-    .sort((a, b) => {
-      const pa = posById.get(a.r.from);
-      const qa = posById.get(a.r.to);
-      const pb = posById.get(b.r.from);
-      const qb = posById.get(b.r.to);
-      if (!pa || !qa || !pb || !qb) return 0;
-      const da = Math.abs(pa.x - qa.x) + Math.abs(pa.y - qa.y);
-      const db = Math.abs(pb.x - qb.x) + Math.abs(pb.y - qb.y);
-      return da - db;
-    });
-
-  const ruteadas: Array<NonNullable<ErLayout['relations']>[number] | undefined> = new Array(spec.relations.length);
-  for (const { r, i } of orden) {
+  const routerWorld: RouterWorld = {
+    components: entities.map((e) => ({ id: e.id, x: e.x, y: e.y, w: e.w, h: e.h })),
+    packages: cajones.filter((c) => c.id != null).map((c) => ({ id: String(c.id), x: c.x, y: c.y, w: c.w, h: c.h })),
+    titles: titleBoxes,
+    rings: [],
+  };
+  const routerIdx: number[] = [];
+  const routerEdges: RouterEdge[] = [];
+  spec.relations.forEach((r, i) => {
+    const sd = sides[i];
     const from = posById.get(r.from);
     const to = posById.get(r.to);
-    if (!from || !to) continue;
-    // Sides: del archify-style (`fromSide`/`toSide`) si están fijados;
-    // si no, heurística según `direction`. `auto` activa pickSidesArchify.
-    let fromSide: BoxSide = r.fromSide ?? 'auto';
-    let toSide: BoxSide = r.toSide ?? 'auto';
-    const fromCx = from.x + from.w / 2;
-    const fromCy = from.y + from.h / 2;
-    const toCx = to.x + to.w / 2;
-    const toCy = to.y + to.h / 2;
-    if (fromSide === 'auto') {
-      const arch = pickSidesArchify({ cx: fromCx, cy: fromCy }, { cx: toCx, cy: toCy });
-      fromSide = arch.fromSide;
-    }
-    if (toSide === 'auto') {
-      const arch = pickSidesArchify({ cx: fromCx, cy: fromCy }, { cx: toCx, cy: toCy });
-      toSide = arch.toSide;
-    }
-    // Fallback al `pickSides` histórico si el autor no fija nada:
-    if (fromSide === 'auto') {
-      const fallback = byId.get(r.from);
-      const fallback2 = byId.get(r.to);
-      fromSide = fallback && fallback2 ? pickSides(fallback, fallback2, spec.direction).fromSide as BoxSide : 'right';
-    }
-    if (toSide === 'auto') {
-      const fallback = byId.get(r.from);
-      const fallback2 = byId.get(r.to);
-      toSide = fallback && fallback2 ? pickSides(fallback, fallback2, spec.direction).toSide as BoxSide : 'left';
-    }
-    const a = edgeAnchor(from, fromSide === 'auto' ? 'top' : fromSide);
-    const b = edgeAnchor(to, toSide === 'auto' ? 'top' : toSide);
+    const route = r.route ?? 'orthogonal';
+    if (!sd || !from || !to || route === 'straight' || route === 'orthogonal-h' || route === 'orthogonal-v') return;
+    if (Array.isArray(r.via) && r.via.length) return;
+    routerIdx.push(i);
+    routerEdges.push({
+      id: r.id ?? `r${i}`,
+      from: anchorAt(i, 'from'),
+      fromSide: sd.fromSide as Lado,
+      to: anchorAt(i, 'to'),
+      toSide: sd.toSide as Lado,
+      fromBox: routerWorld.components.find((c) => c.id === r.from)!,
+      toBox: routerWorld.components.find((c) => c.id === r.to)!,
+      fromPkgs: new Set(from.group ? [from.group] : []),
+      toPkgs: new Set(to.group ? [to.group] : []),
+    });
+  });
+  const routed = routeEdges(routerWorld, routerEdges, {
+    clearance: ER_CLEARANCE,
+    stub: ER_STUB,
+    lanePitch: ER_LANE_PITCH,
+    laneNearFactor: 48,
+    pkgBorderClearance: ER_BORDER_KEEP,
+    pkgBorderNearFactor: 6,
+    pkgCrossFactor: 2,
+  });
+  const routedPts = new Map<number, Punto[] | null>();
+  routerIdx.forEach((ri, k) => routedPts.set(ri, routed.paths[k] ?? null));
 
-    const route: ErRouteKind = r.route ?? 'orthogonal'; // default ISWC: ortogonal
-    let path: string;
-    let mid: { x: number; y: number }; // {x, y} posición para la etiqueta
+  // Lienzo: abraza cajones, entidades y rieles con margen uniforme; el grupo
+  // queda centrado bajo el título (que se pinta en W/2).
+  const FIT_MARGIN = 32;
+  const box = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+  const hit = (x: number, y: number): void => {
+    box.x0 = Math.min(box.x0, x); box.y0 = Math.min(box.y0, y);
+    box.x1 = Math.max(box.x1, x); box.y1 = Math.max(box.y1, y);
+  };
+  for (const c of [...cajones, ...entities]) { hit(c.x, c.y); hit(c.x + c.w, c.y + c.h); }
+  for (const pts of routedPts.values()) for (const p of pts ?? []) hit(p.x, p.y);
+  const shiftX = Number.isFinite(box.x0) ? FIT_MARGIN - box.x0 : 0;
+  const shiftY = Number.isFinite(box.y0) ? MARGIN.top + headerH - box.y0 : 0;
+  if (Number.isFinite(box.x0) && !legendGroups) {
+    width = Math.max(160, box.x1 - box.x0 + FIT_MARGIN * 2);
+    height = box.y1 - box.y0 + MARGIN.top + headerH + FIT_MARGIN;
+    for (const c of [...cajones, ...entities]) { c.x += shiftX; c.y += shiftY; }
+    for (const [k, pts] of routedPts) routedPts.set(k, pts?.map((p) => ({ x: p.x + shiftX, y: p.y + shiftY })) ?? null);
+    plans.forEach((p) => {
+      if (!p) return;
+      p.from = { x: p.from.x + shiftX, y: p.from.y + shiftY };
+      p.to = { x: p.to.x + shiftX, y: p.to.y + shiftY };
+    });
+  }
 
-    if (route === 'straight') {
-      // Línea recta entre los anclas (sin dogleg, sin A*).
-      path = straightPath(a, b);
-      mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-    } else if (route === 'orthogonal-h' || route === 'orthogonal-v') {
-      path = route === 'orthogonal-h' ? orthogonalHPath(a, b) : orthogonalVPath(a, b);
-      mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  const ruteadas: Array<NonNullable<ErLayout['relations']>[number] | undefined> = new Array(spec.relations.length);
+  spec.relations.forEach((r, i) => {
+    const sd = sides[i];
+    const from = posById.get(r.from);
+    const to = posById.get(r.to);
+    if (!sd || !from || !to) return;
+    const { fromSide, toSide } = sd;
+    const a = anchorAt(i, 'from');
+    const b = anchorAt(i, 'to');
+    const route: ErRouteKind = r.route ?? 'orthogonal';
+    let pts: Punto[];
+    if (route === 'straight') pts = [a, b];
+    else if (route === 'orthogonal-h') pts = simplifyOrthoPath([a, { x: (a.x + b.x) / 2, y: a.y }, { x: (a.x + b.x) / 2, y: b.y }, b]);
+    else if (route === 'orthogonal-v') pts = simplifyOrthoPath([a, { x: a.x, y: (a.y + b.y) / 2 }, { x: b.x, y: (a.y + b.y) / 2 }, b]);
+    else if (Array.isArray(r.via) && r.via.length) {
+      // Waypoints del autor (archify): unión ortogonal en L entre ellos.
+      const raw = [a, stepOut(a, fromSide, ER_STUB), ...r.via.map(([x, y]) => ({ x, y })), stepOut(b, toSide, ER_STUB), b];
+      const l: Punto[] = [raw[0]!];
+      for (let k = 1; k < raw.length; k++) {
+        const p = l[l.length - 1]!;
+        const q = raw[k]!;
+        if (Math.abs(p.x - q.x) > 0.5 && Math.abs(p.y - q.y) > 0.5) l.push({ x: q.x, y: p.y });
+        l.push(q);
+      }
+      pts = simplifyOrthoPath(l);
     } else {
-      // auto / orthogonal — ruta histórica con A*.
-      const out = stepOut(a, fromSide, 18);
-      const into = stepOut(b, toSide, 18);
-      const outSnap = snapPointAwayFromSide(out, fromSide as DiagramSide, grid.grid);
-      const intoSnap = snapPointAwayFromSide(into, toSide as DiagramSide, grid.grid);
-      const aGrid = pixelToGrid(outSnap.x, outSnap.y, grid.grid);
-      const bGrid = pixelToGrid(intoSnap.x, intoSnap.y, grid.grid);
-      // Si el autor dio `via` explícitos, los inyectamos como waypoints antes
-      // del A*. El primer waypoint reemplaza a aGrid, los intermedios se
-      // insertan en la ruta, el último reemplaza a bGrid.
-      // Para cada arista identificamos su cluster origen y destino: el resto
-      // de cajones se pasan como `forbiddenRegions` al router para que las
-      // aristas RODEEN los cajones ajenos en vez de cruzarlos. Sin este
-      // filtrado, una arista interna del propio cajón quedaría bloqueada por
-      // el rectángulo de su propio cluster (la celda del ancla cae dentro).
-      const fromClusterId = from.group ? from.group : null;
-      const toClusterId = to.group ? to.group : null;
-      const otherClusters: ForbiddenRegion[] = [];
-      for (const c of cajones) {
-        if (!c.id) continue;
-        if (c.id === fromClusterId || c.id === toClusterId) continue;
-        otherClusters.push({
-          id: `fr-cluster-${c.id}-${i}`,
-          kind: 'rect',
-          x: c.x - CLUSTER_BORDER_PAD,
-          y: c.y - CLUSTER_BORDER_PAD,
-          w: c.w + CLUSTER_BORDER_PAD * 2,
-          h: c.h + CLUSTER_BORDER_PAD * 2,
-        });
-      }
-      let points: Array<{ col: number; row: number }>;
-      if (Array.isArray(r.via) && r.via.length) {
-        const midArr = r.via.map(([vx, vy]) => pixelToGrid(vx, vy, grid.grid));
-        // path = [aGrid, ...mid, bGrid]
-        const aP = pixelToGrid(a.x, a.y, grid.grid);
-        const bP = pixelToGrid(b.x, b.y, grid.grid);
-        const rawRoute = [aP, ...midArr, bP];
-        // Llamamos a routeOrthogonal por tramos para atravesar los waypoints
-        points = [];
-        let prev = rawRoute[0]!;
-        for (let k = 1; k < rawRoute.length; k++) {
-          const seg = routeOrthogonal(prev, rawRoute[k]!, grid, {
-            forbiddenRegions: otherClusters,
-          });
-          if (k === 1) points.push(...seg);
-          else points.push(...seg.slice(1));
-          prev = rawRoute[k]!;
-        }
-      } else {
-        points = routeOrthogonal(aGrid, bGrid, grid, {
-          forbiddenRegions: otherClusters,
-        });
-      }
-      path = buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
-      const midPt = points.length
-        ? points[Math.floor(points.length / 2)]!
-        : null;
-      const crudo = midPt
-        ? { x: midPt.col * grid.grid, y: midPt.row * grid.grid }
-        : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-      mid = crudo;
-      if (r.label) applyRectCost(grid, mid.x - 30, mid.y - 9, 60, 18, 6, true);
-      for (const pt of points) {
-        applyRectCost(grid, pt.col * grid.grid - grid.grid, pt.row * grid.grid - grid.grid, grid.grid * 3, grid.grid * 3, 9, true);
+      pts = routedPts.get(i) ?? simplifyOrthoPath([a, { x: b.x, y: a.y }, b]);
+    }
+    // Etiqueta en el centro del tramo más largo (lejos de las marcas).
+    let mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    let best = -1;
+    for (let k = 1; k < pts.length; k++) {
+      const len = Math.abs(pts[k]!.x - pts[k - 1]!.x) + Math.abs(pts[k]!.y - pts[k - 1]!.y);
+      if (len > best) {
+        best = len;
+        mid = { x: (pts[k]!.x + pts[k - 1]!.x) / 2, y: (pts[k]!.y + pts[k - 1]!.y) / 2 };
       }
     }
-
-    // Si el autor dio `labelAt` explícito, gana sobre el mid calculado.
-    if (Array.isArray(r.labelAt) && r.labelAt.length === 2) {
-      mid = { x: r.labelAt[0], y: r.labelAt[1] };
-    }
-
-    // holgura para mantener el label dentro del viewBox
-    const holgura = (r.label?.length ?? 0) * 2.8 + 12;
-    mid = {
-      x: Math.min(width - holgura, Math.max(holgura, mid.x)),
-      y: Math.min(height - 12, Math.max(offsetY + 10, mid.y)),
-    };
-
+    if (Array.isArray(r.labelAt) && r.labelAt.length === 2) mid = { x: r.labelAt[0], y: r.labelAt[1] };
     const edge: NonNullable<ErLayout['relations']>[number] = {
       id: r.id ?? `r${i}`,
       from: r.from,
@@ -919,12 +1014,11 @@ export function computeErLayout(spec: ErSpec): ErLayout {
       label: r.label,
       hue: from.hue === to.hue ? from.hue : 200,
       identifying: r.identifying,
-      path,
+      path: pointsToPath(pts),
       fromMark: cardinalityMark(a, fromSide, r.fromCard),
       toMark: cardinalityMark(b, toSide, r.toCard),
       labelX: mid.x,
       labelY: mid.y,
-      // Campos nuevos (consumidos por er-diagram.ts al pintar):
       route,
       fromSide,
       toSide,
@@ -934,7 +1028,10 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     if (typeof r.width === 'number') edge.width = r.width;
     if (r.style) edge.style = r.style;
     ruteadas[i] = edge;
-  }
+  });
+  const routeViolations = routerIdx
+    .map((ri, k) => ({ id: spec.relations[ri]!.id ?? `r${ri}`, rules: routed.violations[k]! }))
+    .filter((v) => v.rules.length);
   const relations: NonNullable<ErLayout['relations']> = (assignEdgeHues(ruteadas as unknown as Parameters<typeof assignEdgeHues>[0]) as unknown as NonNullable<ErLayout['relations']>)
     .filter((e): e is NonNullable<ErLayout['relations']>[number] => e !== undefined);
 
@@ -955,6 +1052,8 @@ export function computeErLayout(spec: ErSpec): ErLayout {
     legendX,
     legendY,
   };
+  // Diagnóstico (audit del lab): relaciones que violan reglas duras.
+  (layout as ErLayout & { _routeViolations?: unknown })._routeViolations = routeViolations;
   applyEdgeActorLayout(layout, entities.map((e) => ({ x: e.x, y: e.y, w: e.w, h: e.h })));
   return layout;
 }
@@ -988,6 +1087,10 @@ export const ER_ROW_H = ROW_H;
  * `ErSpecAttribute.key` y mapear aquí. Mantener el conjunto cerrado: PK/FK
  * son las dos variantes que el motor entiende hoy.
  */
+/** Icono del cajón de tablas sin relaciones (eslabón tachado). */
+export const ER_ISOLATED_ICON = 'mdi:link-variant-off';
+const ER_ISOLATED_SUFFIX = '__sin_relaciones';
+
 export const ER_KEY_ICON_IDS: Record<string, string> = {
   PK: 'mdi:key-variant',
   FK: 'mdi:key-link',

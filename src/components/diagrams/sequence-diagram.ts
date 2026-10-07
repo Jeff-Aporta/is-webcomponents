@@ -27,7 +27,7 @@ import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import type { SequenceMessageSpec } from './sequence-spec.js';
-import type { TurtleState, MsgNode, LifelineNode, ActorNode } from "./sequence-diagram.schemas.js";
+import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./sequence-diagram.schemas.js";
 
 /**
  * <iswc-sequence-diagram> — diagrama de secuencia en SVG, sin Mermaid.
@@ -78,6 +78,7 @@ function foreignHtml(
   return fo;
 }
 
+/** Región de participantes calculada por el layout. */
 class IswcSequenceDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
   #turtle: PathTurtle | null = null;
@@ -187,6 +188,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     }
 
     if (groups?.length) this.#buildLegend(groups, legendX, theme);
+    this.#buildParticipantBoxes((layout as { boxes?: PartBox[] }).boxes ?? [], theme);
     this.#buildActors(actors, theme);
     this.#buildLifelines(lifelines, theme);
     if (altBox) this.#buildAltBox(altBox, theme);
@@ -326,18 +328,64 @@ class IswcSequenceDiagram extends DiagramElementBase {
     }
   }
 
+  /** Regiones de participantes: caja con título detrás de actores y lifelines. */
+  #buildParticipantBoxes(boxes: PartBox[], theme: DiagramTheme): void {
+    for (const b of boxes) {
+      const g = svgEl('g', { class: 'seq-box' });
+      g.appendChild(svgEl('rect', {
+        x: b.x, y: b.y, width: b.w, height: b.h, rx: TK_DIAGRAM_RADIUS_PX,
+        fill: b.color ?? theme.altFill, 'fill-opacity': b.color ? 0.35 : 1,
+        stroke: b.color ?? theme.border, 'stroke-width': 1.2,
+      }));
+      const t = svgEl('text', {
+        x: b.x + 12, y: b.y + 17, fill: theme.text,
+        'font-size': '11', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
+      });
+      t.textContent = b.name;
+      g.appendChild(t);
+      this.svg.appendChild(g);
+    }
+  }
+
+  /**
+   * Fragmento `alt` (UML): marco con pestaña de título, condición de cada
+   * rama legible y divisor punteado entre ramas. Acotado a las lifelines que
+   * participan (el layout ya calcula x/w).
+   */
   #buildAltBox(altBox: SequenceLayoutAltBox, theme: DiagramTheme): void {
+    const box = altBox as SequenceLayoutAltBox & { dividers?: number[]; branches?: Array<{ label: string; y: number }> };
     const g = svgEl('g', { class: 'seq-alt' });
     g.appendChild(svgEl('rect', {
-      x: altBox.x, y: altBox.y, width: altBox.w, height: altBox.h, rx: TK_DIAGRAM_RADIUS_PX,
-      fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2', 'stroke-dasharray': '5 4',
+      x: box.x, y: box.y, width: box.w, height: box.h, rx: TK_DIAGRAM_RADIUS_PX,
+      fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2',
+    }));
+    // Pestaña «alt» en la esquina (pentágono UML).
+    const tw = 34;
+    const th = 18;
+    g.appendChild(svgEl('path', {
+      d: `M${box.x},${box.y} H${box.x + tw} V${box.y + th - 6} L${box.x + tw - 6},${box.y + th} H${box.x} Z`,
+      fill: theme.altBorder, stroke: theme.altBorder,
     }));
     const t = svgEl('text', {
-      x: altBox.x + 10, y: altBox.y + 14, 'dominant-baseline': 'middle', fill: theme.muted,
-      'font-size': '10', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+      x: box.x + 8, y: box.y + th / 2 + 0.5, 'dominant-baseline': 'middle', fill: '#FFFFFF',
+      'font-size': '10', 'font-weight': '700', 'font-family': 'Tahoma,Arial,sans-serif',
     });
-    t.textContent = altBox.label;
+    t.textContent = box.label;
     g.appendChild(t);
+    for (const y of box.dividers ?? []) {
+      g.appendChild(svgEl('line', {
+        x1: box.x, y1: y, x2: box.x + box.w, y2: y,
+        stroke: theme.altBorder, 'stroke-width': 1, 'stroke-dasharray': '6 4',
+      }));
+    }
+    for (const br of box.branches ?? []) {
+      const c = svgEl('text', {
+        x: box.x + tw + 10, y: br.y, 'dominant-baseline': 'middle', fill: theme.text,
+        'font-size': '10.5', 'font-style': 'italic', 'font-family': 'Tahoma,Arial,sans-serif',
+      });
+      c.textContent = `[${br.label}]`;
+      g.appendChild(c);
+    }
     this.svg.appendChild(g);
   }
 
@@ -352,7 +400,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.dataset.msgId = m.id;
       if (this.isViewer) g.style.cursor = 'pointer';
 
-      if (m.branchFirst && m.branch) {
+      if (m.branchFirst && m.branch && !(altBox as { branches?: unknown } | undefined)?.branches) {
         const t = svgEl('text', {
           x: altBox ? altBox.x + 36 : GUIDE_X + 8, y: m.y - 10, 'dominant-baseline': 'middle', fill: theme.muted,
           'font-size': '9', 'font-family': 'Tahoma,Arial,sans-serif',
@@ -457,6 +505,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
       fontSize: 10,
       fontFamily: 'Consolas,Menlo,monospace',
       overflow,
+      // Chip compacto: con el padding por defecto (8) un chip de 2 líneas
+      // (30 px) solo admitía 1 y truncaba con «…».
+      paddingX: 8,
+      paddingY: 3,
     });
     const tspans: TSpanSpec[] = buildTspans(
       result.lines,

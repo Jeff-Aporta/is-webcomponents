@@ -21,10 +21,22 @@ import type { SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceR
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;
 function diagramLabelW(label: string): number {
+  return labelBox(label).w;
+}
+
+/** Ancho máximo de un chip de una línea; más largo → 2 líneas (sin recortar). */
+const LABEL_MAX_W = 460;
+/**
+ * Caja del chip de etiqueta: ancho por la fuente monoespaciada real (≈6.1 px
+ * por carácter a 10 px) y hasta 2 líneas. Antes el tope de 360 px truncaba
+ * con «…» cualquier etiqueta larga (cuerpos de request, SQL).
+ */
+function labelBox(label: string): { w: number; lines: number } {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
-  const est = Math.ceil(plain.length * 6.2) + 24 + icons * ICON_INLINE_W;
-  return snapDiagramGrid(Math.min(360, Math.max(72, est)));
+  const est = Math.ceil(plain.length * 6.1) + 24 + icons * ICON_INLINE_W;
+  if (est <= LABEL_MAX_W) return { w: snapDiagramGrid(Math.max(72, est)), lines: 1 };
+  return { w: snapDiagramGrid(Math.min(LABEL_MAX_W, Math.ceil(est / 2) + 40)), lines: 2 };
 }
 
 const DEFAULT_HUES: number[] = [239, 199, 210];
@@ -192,6 +204,8 @@ export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec 
     title: String(seq.title ?? p.title ?? ''),
     subtitle: String(seq.subtitle ?? p.subtitle ?? ''),
     actors,
+    // Cajas de participantes (regiones): [{ id?, name, actors: [ids], color? }].
+    ...(Array.isArray(seq.boxes) ? { boxes: seq.boxes } : {}),
     groups: readGroups(seq),
     messages: flatMessages.length ? flatMessages : undefined,
     preamble,
@@ -316,6 +330,10 @@ const ROW_H = 48;
 const MIN_GAP = 140;
 const LABEL_PAD = 16;
 const CHIP_H = 18;
+/** Padding de una caja de participantes alrededor de sus actores. */
+const PART_BOX_PAD = 16;
+/** Alto de la franja de título de la caja de participantes. */
+const PART_BOX_HEAD = 26;
 
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
 function actorBoxWidth(label: string, _kind: string): number {
@@ -332,7 +350,7 @@ function actorBoxWidth(label: string, _kind: string): number {
  * ancho real de las etiquetas (y de los self-loops), de modo que con el JSON
  * mínimo el diagrama se auto-dimensiona sin solapes ni recortes.
  */
-function layoutActorPositions(boxW: number[], flat: FlatMessage[]): { x: number[]; rightMargin: number; selfSide: number[] } {
+function layoutActorPositions(boxW: number[], flat: FlatMessage[], boxOf: Array<number | undefined> = []): { x: number[]; rightMargin: number; selfSide: number[] } {
   const n = boxW.length;
   const selfSide: number[] = new Array(n).fill(1);
   if (n <= 1) {
@@ -360,6 +378,8 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[]): { x: number[
   const gaps: number[] = new Array(n - 1);
   for (let i = 0; i < n - 1; i++) {
     gaps[i] = Math.max(MIN_GAP, boxW[i] / 2 + boxW[i + 1] / 2 + 24);
+    // Frontera entre cajas de participantes: padding de ambas + pasillo.
+    if (boxOf[i] !== boxOf[i + 1]) gaps[i] += 2 * PART_BOX_PAD + 16;
     if (selfExtent[i] > 0) gaps[i] = Math.max(gaps[i], selfExtent[i] + 24);
   }
   // El self del último actor va a la izquierda → asegura hueco en el último gap.
@@ -423,7 +443,8 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       }
       return null;
     }
-    return { m, kind, fromIdx, toIdx: toIdx ?? fromIdx, labelW: diagramLabelW(m.label), branch, branchFirst };
+    const lb = labelBox(m.label);
+    return { m, kind, fromIdx, toIdx: toIdx ?? fromIdx, labelW: lb.w, labelLines: lb.lines, branch, branchFirst } as FlatMessage;
   };
   const pushFlat = (m: SequenceMessageSpec, b?: string, first?: boolean): void => {
     const f = toFlat(m, b, first ?? false);
@@ -436,8 +457,16 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   const altEnd = flat.length;
   (spec.epilogue ?? []).forEach((m) => pushFlat(m));
 
-  // 2) Posiciones X (auto) y ancho del lienzo.
-  const { x: ax, rightMargin, selfSide } = layoutActorPositions(boxW, flat);
+  // 2) Cajas de participantes (regiones): `boxes: [{ name, actors, color }]`.
+  const rawBoxes = ((spec as { boxes?: Array<{ id?: string; name?: string; actors?: string[]; color?: string }> }).boxes ?? [])
+    .filter((b) => Array.isArray(b.actors) && b.actors.length);
+  const boxOf: Array<number | undefined> = actors.map((a) => {
+    const k = rawBoxes.findIndex((b) => b.actors!.includes(a.id));
+    return k < 0 ? undefined : k;
+  });
+
+  // Posiciones X (auto) y ancho del lienzo.
+  const { x: ax, rightMargin, selfSide } = layoutActorPositions(boxW, flat, boxOf);
   const legendGroups = spec.groups?.length ? spec.groups : undefined;
   // La leyenda se acomoda en grid: máximo 3 filas por columna, y tantas
   // columnas como hagan falta para no invadir el área del último actor.
@@ -466,7 +495,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   // El título/subtítulo se centran en width/2: si el contenido es más
   // estrecho que el texto (actor único, pocos mensajes), la cabecera se salía
   // por los dos lados del PNG — se ensancha con lo que pida la cabecera.
-  const W = Math.max(
+  let W = Math.max(
     legendGroups ? baseW + lastActorBoxHalf + legendW + 32 : baseW,
     diagramHeaderWidth(title, subtitle),
   );
@@ -475,7 +504,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   const legendX = legendGroups ? baseW + lastActorBoxHalf + 16 : 0;
 
   // 3) Métricas verticales (más aire bajo el subtítulo).
-  const headerCenterY = hasHeader ? 100 : 56;
+  const headerCenterY = (hasHeader ? 100 : 56) + (rawBoxes.length ? PART_BOX_HEAD : 0);
   const lifelineY1 = headerCenterY + 22;
   const messagesTop = snapDiagramGrid(headerCenterY + 58);
   const yAt = (r: number): number => snapDiagramGrid(messagesTop + r * ROW_H);
@@ -503,6 +532,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   const messages: SequenceLayoutMessage[] = [];
   flat.forEach((f, row) => {
     const y = yAt(row);
+    const chipH = (f as FlatMessage & { labelLines?: number }).labelLines === 2 ? 2 * 12 + 6 : CHIP_H;
     const fromX = ax[f.fromIdx] ?? 0;
     const toX = ax[f.toIdx] ?? fromX;
     let labelX: number;
@@ -521,9 +551,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     } else {
       route = routeSequenceHorizontal(fromX, toX, y, g);
       labelX = snapDiagramGrid((fromX + toX) / 2 - f.labelW / 2);
-      labelY = snapDiagramGrid(y - 24);
+      labelY = y - 6 - chipH;
     }
-    applyRectCost(g, labelX, labelY, f.labelW, CHIP_H, 6, true);
+    applyRectCost(g, labelX, labelY, f.labelW, chipH, 6, true);
 
     messages.push({
       id: f.m.id,
@@ -550,7 +580,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       labelX,
       labelW: f.labelW,
       labelY,
-      labelH: CHIP_H,
+      labelH: chipH,
       branch: f.branch,
       branchFirst: f.branchFirst,
       groupHue: f.m.group ? groupHueMap.get(f.m.group) : undefined,
@@ -560,12 +590,41 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   // 6) Caja alt (si hay ramas).
   let altBox: SequenceLayoutAltBox | undefined;
   if (altEnd > altStart) {
-    const y1 = yAt(altStart) - 28;
+    // Acotada a las lifelines que participan en las ramas (no a todo el
+    // ancho) y con un divisor entre ramas, como un fragmento UML.
+    const inAlt = flat.slice(altStart, altEnd);
+    const lo = Math.min(...inAlt.map((f) => Math.min(f.fromIdx, f.toIdx)));
+    const hi = Math.max(...inAlt.map((f) => Math.max(f.fromIdx, f.toIdx)));
+    let x0 = (ax[lo] ?? 0) - (boxW[lo] ?? 0) / 2 - 8;
+    let x1 = (ax[hi] ?? 0) + (boxW[hi] ?? 0) / 2 + 8;
+    for (const f of inAlt) {
+      x0 = Math.min(x0, messages[flat.indexOf(f)]!.labelX - 8);
+      x1 = Math.max(x1, messages[flat.indexOf(f)]!.labelX + f.labelW + 8);
+    }
+    const firstChip = Math.min(...inAlt.map((f) => messages[flat.indexOf(f)]!.labelY));
+    const y1 = Math.min(yAt(altStart) - 28, firstChip - 22);
     const y2 = yAt(altEnd - 1) + 26;
-    const x0 = (ax[0] ?? 0) - (boxW[0] ?? 0) / 2 - 8;
-    const x1 = (ax[ax.length - 1] ?? 0) + (boxW[boxW.length - 1] ?? 0) / 2 + 8;
-    altBox = { x: x0, y: y1, w: x1 - x0, h: y2 - y1, label: 'alt' };
+    const dividers: number[] = [];
+    const branches: Array<{ label: string; y: number }> = [];
+    for (let k = altStart; k < altEnd; k++) {
+      if (!flat[k]!.branchFirst) continue;
+      const top = k === altStart ? y1 : (yAt(k - 1) + yAt(k)) / 2 - 10;
+      if (k !== altStart) dividers.push(top);
+      branches.push({ label: flat[k]!.branch ?? '', y: top + 14 });
+    }
+    altBox = { x: x0, y: y1, w: x1 - x0, h: y2 - y1, label: 'alt', dividers, branches } as SequenceLayoutAltBox;
   }
+
+  // Regiones de participantes (detrás de lifelines y mensajes).
+  const partBoxes = rawBoxes.map((b, k) => {
+    const members = actors.map((_, i) => i).filter((i) => boxOf[i] === k);
+    const x0 = Math.min(...members.map((i) => (ax[i] ?? 0) - (boxW[i] ?? 0) / 2)) - PART_BOX_PAD;
+    const x1 = Math.max(...members.map((i) => (ax[i] ?? 0) + (boxW[i] ?? 0) / 2)) + PART_BOX_PAD;
+    const y0 = headerCenterY - 16 - PART_BOX_HEAD - 8;
+    return { id: b.id ?? `box${k}`, name: b.name ?? '', color: b.color, x: x0, y: y0, w: x1 - x0, h: lifelineY2 + 8 - y0 };
+  });
+  for (const b of partBoxes) W = Math.max(W, b.x + b.w + 16);
+  if (altBox) W = Math.max(W, altBox.x + altBox.w + 16);
 
   const lifelines: SequenceLayoutLifeline[] = actorLayouts.map((a) => ({ id: a.id, x: a.x, y1: lifelineY1, y2: lifelineY2 }));
 
@@ -580,6 +639,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     lifelines,
     messages,
     altBox,
+    boxes: partBoxes.length ? partBoxes : undefined,
     groups: legendGroups,
     legendX,
     legendColX: legendColsWidths,

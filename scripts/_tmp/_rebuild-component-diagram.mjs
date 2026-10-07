@@ -91,8 +91,17 @@ async function rebuildOne(srcRel, category) {
 
 await rebuildOne('diagrams/theme.ts', 'diagrams');
 await rebuildOne('diagrams/component-pack.ts', 'diagrams');
+await rebuildOne('diagrams/component-router.ts', 'diagrams');
 await rebuildOne('diagrams/component-spec.ts', 'diagrams');
 await rebuildOne('diagrams/component-diagram.ts', 'diagrams');
+await rebuildOne('diagrams/er-spec.ts', 'diagrams');
+await rebuildOne('diagrams/er-diagram.ts', 'diagrams');
+await rebuildOne('diagrams/sequence-spec.ts', 'diagrams');
+await rebuildOne('diagrams/sequence-diagram.ts', 'diagrams');
+await rebuildOne('diagrams/flowchart-spec.ts', 'diagrams');
+await rebuildOne('diagrams/flowchart.ts', 'diagrams');
+await rebuildOne('diagrams/class-spec.ts', 'diagrams');
+await rebuildOne('diagrams/class-diagram.ts', 'diagrams');
 
 // JSON de tema editable en CDN
 try {

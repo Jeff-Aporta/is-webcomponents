@@ -23,6 +23,8 @@ export const ComponenteSchema = z.intersection(CajaSchema, z.object({
   hue: z.union([z.number(), z.undefined()]).optional(),
   /** Color hex de caja/aristas (#080, #800…). */
   color: z.union([z.string(), z.undefined()]).optional(),
+  /** Icono Iconify (`mdi:server`) del avatar en `boxStyle: 'card'`; sin él, iniciales. */
+  icon: z.union([z.string(), z.undefined()]).optional(),
   provides: z.array(z.unknown()).optional(),
   requires: z.array(z.unknown()).optional(),
   connects: z.array(z.unknown()).optional(),
@@ -46,6 +48,17 @@ export const PaqueteSchema = z.intersection(CajaSchema, z.object({
    * paquete, no del interior.
    */
   prohibido: z.boolean().optional(),
+  /**
+   * Modo `layers`: componentes por fila dentro de este paquete y, si tiene
+   * subpaquetes, columnas de su rejilla. Gana sobre `layerCols`/`nestedCols`.
+   */
+  cols: z.number().optional(),
+  /**
+   * Lo fija el empaque `layers`: el rótulo va en la esquina del rect (donde
+   * lo pinta el theme sin pestaña), no sobre los hijos directos. El
+   * obstáculo de ruteo tiene que estar donde está la tinta.
+   */
+  titleAtCorner: z.boolean().optional(),
 }));
 export type Paquete = z.infer<typeof PaqueteSchema>;
 
@@ -100,6 +113,22 @@ export const OpcionesEmpaqueSchema = z.object({
   usedSegs: z.array(z.unknown()).optional(),
   /** Permite tramos en diagonal (línea recta) entre conectores. */
   allowDiagonal: z.boolean().optional(),
+  /** Modo `layers`: componentes por fila dentro de cada franja. Default 6. */
+  layerCols: z.number().optional(),
+  /** Modo `layers`: columnas de la rejilla de subpaquetes de una franja. Default 2. */
+  nestedCols: z.number().optional(),
+  /**
+   * Pintura de los componentes: `uml` (default, cabecera «estereotipo») o
+   * `card` (tarjeta de organigrama: blanca, avatar con iniciales y sombra),
+   * que contrasta con cualquier fondo de agrupador.
+   */
+  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
+  /**
+   * Remate de las aristas sintetizadas: `assembly` (default, conector UML
+   * `-(O-`) o `arrow` (punta de flecha que llega perpendicular a la cara del
+   * destino, sin lollipops). El ruteo es el mismo: solo cambia el remate.
+   */
+  connector: z.union([z.literal('assembly'), z.literal('arrow')]).optional(),
 });
 export type OpcionesEmpaque = z.infer<typeof OpcionesEmpaqueSchema>;
 

@@ -18,6 +18,11 @@
     "borderWidth": 1.5,
     "radius": 0
   },
+  "orphan": {
+    "fill": "#C1BFFF",
+    "headerFill": "#C1BFFF",
+    "border": "#000000"
+  },
   "edge": {
     "stroke": "#0F172A",
     "strokeWidth": 1.35,
