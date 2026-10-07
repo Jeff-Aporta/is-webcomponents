@@ -20,18 +20,8 @@ import process from "node:process";
 import { formatMs, testCooldownFromEnv, testId, type TestCooldown } from "./test-cooldown.ts";
 import { testConcurrency } from "./test-queue.ts";
 
-export interface DenoTestOptions {
-    /** Flags de `deno test` (p. ej. `-A`, `--no-check`). */
-    args?: string[];
-    /** Entorno del proceso hijo. Default `process.env`. */
-    env?: Record<string, string | undefined>;
-    /** `true`: un archivo a la vez (estado compartido). Default: cola de `testConcurrency()`. */
-    serial?: boolean;
-    /** Cooldown a usar. Default `testCooldownFromEnv()`. */
-    cooldown?: TestCooldown;
-    /** Ejecutable de Deno. Default `"deno"`. */
-    deno?: string;
-}
+export type { DenoTestOptions } from "./deno-test.schemas.ts";
+import type { DenoTestOptions } from "./deno-test.schemas.ts";
 
 /** `{ "./ruta/x.test.ts": { ms, ok } }` desde un reporte JUnit de Deno. */
 export function readDenoJunit(path: string): Record<string, { ms: number; ok: boolean }> {

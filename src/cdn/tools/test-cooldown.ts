@@ -22,31 +22,8 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "
 import { dirname, join } from "node:path";
 import process from "node:process";
 
-export interface TestCooldownEntry {
-    /** Duración de la última corrida verde, en ms. */
-    durationMs: number;
-    /** Epoch ms en que pasó en verde. */
-    okAt: number;
-    /** Epoch ms hasta el que el test se salta. */
-    until: number;
-}
-
-export interface TestCooldownOptions {
-    /** Ruta del JSON que guarda la memoria. */
-    dbPath: string;
-    /** Factor cooldown/duración (proporcional). Default 60: 1 min verde -> 60 min de skip. */
-    factor?: number;
-    /** `true` corre todo y no registra nada (p. ej. `--sin-cooldown`). */
-    disabled?: boolean;
-    /** Reloj inyectable para tests. Default `Date.now`. */
-    now?: () => number;
-}
-
-export type TestCooldownCheck = { skip: false } | { skip: true; until: number; remainingMs: number };
-
-export type TestCooldownRun<T> =
-    | { skipped: true; until: number; remainingMs: number }
-    | { skipped: false; durationMs: number; value: T };
+export type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
+import type { TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
 
 /** Factor estándar: 60 min de cooldown por cada minuto de ejecución. */
 export const COOLDOWN_FACTOR = 60;
@@ -129,7 +106,6 @@ export function createTestCooldown(opts: TestCooldownOptions) {
     return { check, record, run, entries: () => ({ ...load() }) };
 }
 
-export type TestCooldown = ReturnType<typeof createTestCooldown>;
 
 /**
  * Cooldown con la configuración estándar de los proyectos is-*:

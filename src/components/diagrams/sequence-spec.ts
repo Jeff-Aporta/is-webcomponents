@@ -795,6 +795,28 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   for (const b of partBoxes) W = Math.max(W, b.x + b.w + 16);
   if (altBox) W = Math.max(W, altBox.x + altBox.w + 16);
   for (const fr of fragments) W = Math.max(W, fr.x + fr.w + 16);
+  // Centrado: el rectángulo de unión de lo pintado (cajas de actores y de
+  // participantes, regiones, alt y notas) queda centrado en el lienzo: el
+  // margen derecho iguala al izquierdo. Con leyenda lateral no aplica.
+  if (!legendGroups) {
+    const lefts = [
+      ...actorLayouts.map((a, i) => a.x - (boxW[i] ?? 0) / 2),
+      ...partBoxes.map((b) => b.x),
+      ...fragments.map((fr) => fr.x),
+      ...(altBox ? [altBox.x] : []),
+      ...messages.map((m) => m.labelX),
+    ];
+    const rights = [
+      ...actorLayouts.map((a, i) => a.x + (boxW[i] ?? 0) / 2),
+      ...partBoxes.map((b) => b.x + b.w),
+      ...fragments.map((fr) => fr.x + fr.w),
+      ...(altBox ? [altBox.x + altBox.w] : []),
+      ...messages.map((m) => m.labelX + m.labelW),
+    ];
+    const minX = Math.max(0, Math.min(...lefts));
+    const maxX = Math.max(...rights);
+    W = Math.max(diagramHeaderWidth(title, subtitle), maxX + minX);
+  }
 
   const lifelines: SequenceLayoutLifeline[] = actorLayouts.map((a) => ({ id: a.id, x: a.x, y1: lifelineY1, y2: lifelineY2 }));
 
