@@ -20,6 +20,7 @@ import {
   pickThemeMode,
   type ErThemeJson,
 } from './theme.js';
+import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./diagram-types.schemas.js";
 
 /**
@@ -81,6 +82,8 @@ class IswcErDiagram extends DiagramElementBase {
 
   /** Tema de estilo InSoft (JSON). Attr `theme`, o `erDiagram.theme` / `theme` en payload. */
   #resolveStyleTheme(): ErThemeJson | null {
+    const delEstilo = styleThemeFor(hostStyleName(this), 'er');
+    if (delEstilo) return delEstilo;
     const fromAttr = this.getAttribute('theme');
     if (fromAttr) {
       const t = resolveErTheme(fromAttr);

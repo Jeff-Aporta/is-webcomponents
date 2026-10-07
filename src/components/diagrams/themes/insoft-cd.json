@@ -1,6 +1,7 @@
 {
   "$schema": "iswc-diagram-theme/v1",
   "id": "insoft-cd",
+  "kind": "component",
   "label": "InSoft Component Diagram",
   "font": {
     "family": "\"Poppins\", \"Inter\", system-ui, sans-serif",
@@ -44,7 +45,15 @@
       "external": "#81FF81",
       "strong": "#01C000",
       "cool": "#C1BFFF",
-      "leaf": "#FFF2AF"
+      "leaf": "#FFF2AF",
+      "primary": "#7ACFF4",
+      "secondary": "#00C3C4",
+      "accent": "#C0C000",
+      "neutral": "#BFC0C1",
+      "panel": "#FFFFC1",
+      "lite": "#81FF81",
+      "warm": "#EAB6B0",
+      "soft": "#BCFFBB"
     },
     "fallback": "#7ACFF4"
   },
@@ -110,5 +119,13 @@
       },
       "fallback": "#3A8FB5"
     }
+  },
+  "fills": {
+    "service": "#BCFFBB",
+    "app": "#C1BFFF",
+    "store": "#EAB6B0",
+    "leaf": "#FFF2AF",
+    "external": "#BFFFC0",
+    "neutral": "#E5E7EB"
   }
 }

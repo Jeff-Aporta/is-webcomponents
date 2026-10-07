@@ -1519,8 +1519,8 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   const mustRelax = routeViolations.length > 0 || routed.crowding > 0;
 
   layoutPackageOutlines(packages, components, { pad: 14, tabH: TAB_H + 4, mode: spec.layout?.mode });
-  // `vp`: rótulo junto a la pestaña (no centrado). Centrado caía justo donde
-  // cruzan las verticales entre franjas y obligaba a rodearlo.
+  // `vp`: rótulo arriba a la izquierda (no centrado). Centrado caía justo
+  // donde cruzan las verticales entre franjas y obligaba a rodearlo.
   if (spec.layout?.boxStyle === 'vp') for (const p of packages) p.titleCenter = false;
   for (const p of packages) (p as Paquete & { titleBox?: Caja }).titleBox = packageTitleBox(p, components);
 
@@ -1735,8 +1735,7 @@ export function packageTitleBox(p: Paquete, components: Componente[] = []): Caja
   // Sin hijos directos (agrupador anidado) o empaque `layers`: título en
   // esquina del propio rect.
   if (!kids.length || p.titleAtCorner) {
-    // `vp` (titleCenter === false): la tinta va después de la pestaña.
-    return { id: `${p.id}::title`, x: p.x + (p.titleCenter === false ? Math.min(56, p.w / 3) + 8 : 0), y: p.y, w, h: p.titleCenter === false ? h + 6 : h };
+    return { id: `${p.id}::title`, x: p.x, y: p.y, w, h };
   }
   const x0 = Math.min(...kids.map((c) => c.x));
   const y0 = Math.min(...kids.map((c) => c.y));

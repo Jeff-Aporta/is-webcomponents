@@ -1,6 +1,7 @@
 {
   "$schema": "iswc-diagram-theme/v1",
   "id": "insoft",
+  "kind": "er",
   "label": "InSoft ER (docs)",
   "font": {
     "family": "\"Poppins\", \"Inter\", system-ui, sans-serif",

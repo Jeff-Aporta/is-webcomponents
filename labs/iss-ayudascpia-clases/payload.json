@@ -4,7 +4,6 @@
   "classDiagram": {
     "title": "ISS PatyIA · Clases del servidor",
     "layout": {
-      "boxStyle": "vp",
       "layerCols": 4,
       "nestedCols": 2,
       "colGutter": 112,
@@ -21,66 +20,59 @@
         "id": "pkg-stack",
         "name": "Stack InSoft",
         "stereotype": "npm @ingenieria_insoft",
-        "palette": "#81FF81",
         "accent": "#4B5563",
-        "classFill": "#BCFFBB"
+        "palette": "neutral",
+        "classFill": "external"
       },
       {
         "id": "pkg-base",
         "name": "Base de controllers",
         "stereotype": "020 Controllers/server",
-        "palette": "#7ACFF4",
         "accent": "#166534",
-        "classFill": "#BCFFBB"
+        "classFill": "service"
       },
       {
         "id": "pkg-ctrl",
         "name": "Controllers por dominio",
         "stereotype": "020 Controllers/server",
-        "palette": "#FFFFC1",
         "cols": 4
       },
       {
         "id": "pkg-conv",
         "name": "Conversación",
         "parent": "pkg-ctrl",
-        "palette": "#7ACFF4",
         "accent": "#7C3AED",
         "cols": 3,
-        "classFill": "#BCFFBB"
+        "classFill": "service"
       },
       {
         "id": "pkg-cfg",
         "name": "Configuración",
         "parent": "pkg-ctrl",
-        "palette": "#7ACFF4",
         "accent": "#0E7490",
         "cols": 3,
-        "classFill": "#BCFFBB"
+        "classFill": "service"
       },
       {
         "id": "pkg-ident",
         "name": "Identidad",
         "parent": "pkg-ctrl",
-        "palette": "#7ACFF4",
         "accent": "#B45309",
         "cols": 2,
-        "classFill": "#BCFFBB"
+        "classFill": "service"
       },
       {
         "id": "pkg-ops",
         "name": "Operación",
         "parent": "pkg-ctrl",
-        "palette": "#7ACFF4",
         "accent": "#BE123C",
         "cols": 4,
-        "classFill": "#BCFFBB"
+        "classFill": "service"
       },
       {
         "id": "pkg-models",
         "name": "models · extienden TObject (ispgen)",
         "stereotype": "010 Objetos",
-        "palette": "#FFFFC1",
         "accent": "#854D0E",
         "cols": 2
       },
@@ -88,19 +80,17 @@
         "id": "pkg-m-conv",
         "name": "Conversación",
         "parent": "pkg-models",
-        "palette": "#7ACFF4",
         "accent": "#854D0E",
         "cols": 3,
-        "classFill": "#EAB6B0"
+        "classFill": "store"
       },
       {
         "id": "pkg-m-cfg",
         "name": "Configuración y operación",
         "parent": "pkg-models",
-        "palette": "#7ACFF4",
         "accent": "#854D0E",
         "cols": 3,
-        "classFill": "#EAB6B0"
+        "classFill": "store"
       }
     ],
     "classes": [

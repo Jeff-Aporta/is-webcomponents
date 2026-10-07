@@ -222,6 +222,34 @@ No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 - El estilo (cajÃ³n translÃºcido, dashed `2 5`, Tahoma, cajas `chipFill`)
   sigue al `<iswc-er-diagram>` para que ER y componentes convivan en la ficha.
 
+## Estilos (`diagram-style`)
+
+El consumidor no define colores ni temas: elige un estilo por atributo.
+
+```html
+<iswc-component-diagram diagram-style="insoft"></iswc-component-diagram>
+```
+
+| Qué | Contrato |
+| --- | --- |
+| `diagram-style="<nombre>"` | Antes del primer pintado se descarga el estilo (una sola vez para toda la página) y el diagrama usa su tema de tipo ``component``. El render espera la carga: no hay un primer pintado sin estilo |
+| Estilo `insoft` | Viene registrado. Trae tres temas en una sola carga: `er` (DER, entidades naranja), `component` y `class` (paleta Visual Paradigm sin naranja: el naranja es exclusivo del DER) |
+| Estilo desconocido o carga fallida | El diagrama se pinta con su tema por defecto; no queda vacío |
+| `registerStyleDiagram({ nombre: [archivos] })` | Para librerías de estilos: registra JSON de tema (uno por tipo, con `kind`) bajo un nombre. El registro es global a todos los diagramas de la página |
+| Colores en el payload | Por **clave semántica** del tema, no por hex: paquetes `primary`, `secondary`, `accent`, `neutral`, `panel`, `lite`; cajas `service`, `app`, `store`, `leaf`, `external`. Sin clave, los paquetes se colorean por profundidad (raíz `primary`, anidado `secondary`) |
+| Atributo `theme` | Heredado: `theme="insoft"` / `"insoft-cd"` equivale a `diagram-style="insoft"` |
+
+## Empaque por capas, pintura y remate
+
+| Qué | Contrato |
+| --- | --- |
+| `layout.mode: "layers"` | Cada paquete raíz es una franja horizontal del mismo ancho, en el orden del payload. Toda caja queda dentro de su paquete y todo subpaquete dentro de su padre |
+| Subpaquetes | Van en rejilla de `package.cols` columnas (o `layout.nestedCols`, 2 por defecto) debajo de los componentes directos. En una fila, comparten alto y conservan su ancho; con varias filas se igualan para alinear columnas |
+| `package.cols` | Componentes por fila dentro del paquete (gana sobre `layout.layerCols`) |
+| `layout.boxStyle` | `uml` (default), `card` (tarjeta con avatar e `icon` Iconify) o `vp` (Visual Paradigm: cajas rectas pastel, borde negro, pestaña de carpeta, `component.fill` por clave semántica). Con `diagram-style` y sin `boxStyle`, el estilo pinta en `vp` |
+| `layout.connector: "arrow"` | En vez del conector `-(O-`, cada arista termina en una flecha del color de la arista, perpendicular a la cara del destino y en un punto propio (dos flechas no llegan al mismo punto) |
+| Rieles | `lanePitch`, `laneNearFactor`, `pkgBorderClearance`, `pkgBorderNearFactor`, `pkgCrossFactor`: las mismas perillas que el diagrama de clases |
+
 ## Dependencias y componentes relacionados
 
 - [`./component-spec.js`](./component-spec.js)

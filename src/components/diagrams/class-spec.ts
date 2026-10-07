@@ -163,7 +163,11 @@ function readPackages(src: Record<string, any>): ClassPackage[] | undefined {
     typeof v === 'string' && /^#[0-9a-f]{3,8}$/i.test(v.trim()) ? v.trim() : undefined;
   return raw.map((g: unknown, i: number): ClassPackage => {
     const r = asRecord(g);
-    const palette = hex(r.palette);
+    // `palette` y `classFill` aceptan clave del tema (`primary`, `service`…)
+    // o hex; el tema del estilo resuelve la clave al pintar.
+    const clavOHex = (v: unknown): string | undefined =>
+      typeof v === 'string' && v.trim() ? v.trim() : undefined;
+    const palette = clavOHex(r.palette);
     const accent = hex(r.accent);
     return {
       id: String(r.id ?? `pkg-${i}`),
@@ -173,7 +177,7 @@ function readPackages(src: Record<string, any>): ClassPackage[] | undefined {
       ...(palette ? { palette } : {}),
       ...(accent ? { accent } : {}),
       ...(Number(r.cols) > 0 ? { cols: Number(r.cols) } : {}),
-      ...(hex(r.classFill) ? { classFill: hex(r.classFill) } : {}),
+      ...(clavOHex(r.classFill) ? { classFill: clavOHex(r.classFill) } : {}),
     };
   });
 }
@@ -506,7 +510,7 @@ function computePackagedClassLayout(
   const accentOfPkg = (id: string | undefined): string | undefined => {
     for (let cur = id ? pkgById.get(id) : undefined; cur; cur = cur.parent ? pkgById.get(cur.parent) : undefined) {
       if (cur.accent) return cur.accent;
-      if (cur.palette) return accentFromPalette(cur.palette);
+      if (cur.palette?.startsWith('#')) return accentFromPalette(cur.palette);
     }
     return undefined;
   };
@@ -577,7 +581,6 @@ function computePackagedClassLayout(
   // sobre la vertical de una clase directa del paquete (una franja con una
   // sola clase centrada): ahí la arista que sube tendría que rodearlo, así
   // que el rótulo se corre junto a la pestaña.
-  const VP_TAB_W = 56;
   const titles = packages.map((p) => {
     const label = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
     const w = Math.ceil(label.length * 7.2) + 28;
@@ -586,8 +589,8 @@ function computePackagedClassLayout(
     const tapa = nodes.some((n) => n.package === p.id && n.x < x0 + w && n.x + n.w > x0);
     p.titleAlign = tapa ? 'left' : 'center';
     return tapa
-      ? { x: p.x + Math.min(VP_TAB_W, p.w / 3) + 4, y: p.y - 4, w, h: PKG_TITLE_H + 12 }
-      : { x: x0, y: p.y - 4, w, h: PKG_TITLE_H + 12 };
+      ? { x: p.x - 4, y: p.y - 4, w, h: PKG_TITLE_H + 8 }
+      : { x: x0, y: p.y - 4, w, h: PKG_TITLE_H + 8 };
   });
   const boxes = nodes.map((n) => ({ id: n.id, x: n.x, y: n.y, w: n.w, h: n.h }));
   const normales = rels.map((_, i) => i).filter((i) => !enBus.has(i));

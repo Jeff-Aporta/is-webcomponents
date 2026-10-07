@@ -5,26 +5,19 @@
 //   { "erDiagram": { "theme": "insoft", "entities": […] } }
 //
 // Uso por CDN / Deno (vendor):
-//   import { json2css, resolveErTheme, INSOFT_THEME } from '…/diagrams/theme.min.js'
+//   import { json2css, resolveErTheme } from '…/diagrams/theme.min.js'
 //   fetch('…/diagrams/themes/insoft.json')  // fuente editable
 
 import type { DiagramTheme } from './diagram-types.js';
-import insoftJson from './themes/insoft.json' with { type: 'json' };
-import insoftCdJson from './themes/insoft-cd.json' with { type: 'json' };
 import type { ErThemeJson } from "./theme.schemas.js";
 export type { ErThemeJson };
 
 /** Contrato del JSON de tema ER (iswc-diagram-theme/v1). */
 
-export const INSOFT_THEME = insoftJson as ErThemeJson;
-export const INSOFT_CD_THEME = insoftCdJson as ErThemeJson;
-
-const BUILTIN: Record<string, ErThemeJson> = {
-  insoft: INSOFT_THEME,
-  'insoft-cd': INSOFT_CD_THEME,
-  // Alias: theme="insoft" en component-diagram resuelve al CD.
-  insoftcd: INSOFT_CD_THEME,
-};
+// Los temas ya no viajan dentro de cada bundle: los trae `diagram-styles.ts`
+// (estilo `insoft` = insoft.json + insoft-cd.json + insoft-class.json) la
+// primera vez que un diagrama pide `diagram-style="insoft"`.
+const BUILTIN: Record<string, ErThemeJson> = {};
 
 /** Temas registrados en runtime (apps pueden `registerErTheme`). */
 const EXTRA = new Map<string, ErThemeJson>();
@@ -46,7 +39,8 @@ export function resolveErTheme(input: unknown): ErThemeJson | null {
   if (input == null || input === '') return null;
   if (typeof input === 'string') {
     const id = input.trim().toLowerCase();
-    return EXTRA.get(id) ?? BUILTIN[id] ?? null;
+    // Alias heredado: theme="insoftcd" = insoft-cd.
+    return EXTRA.get(id) ?? BUILTIN[id] ?? (id === 'insoftcd' ? EXTRA.get('insoft-cd') ?? null : null);
   }
   if (typeof input === 'object') {
     const o = input as Record<string, unknown>;
@@ -309,4 +303,3 @@ export function injectThemeCss(
   style.textContent = css;
 }
 
-export { insoftJson };

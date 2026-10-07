@@ -9,6 +9,11 @@ import { z } from "zod";
 export const ErThemeJsonSchema = z.object({
   /* TODO: parse fail $schema?: string */
   id: z.string(),
+  /**
+   * Diagrama al que aplica dentro de un estilo (`registerStyleDiagram`):
+   * `er`, `component` o `class`. Un estilo trae un tema por tipo.
+   */
+  kind: z.union([z.literal('er'), z.literal('component'), z.literal('class')]).optional(),
   label: z.string().optional(),
   font: z.object({
   family: z.string().optional(),
@@ -66,6 +71,12 @@ export const ErThemeJsonSchema = z.object({
   /** Filas badge sin bg ni stroke negro. */
   epRowTransparent: z.boolean().optional(),
 }).optional(),
+  /**
+   * Rellenos semánticos de cajas fuera del DER (el naranja de entidad es
+   * exclusivo del DER): `service`, `app`, `store`, `leaf`, `external`…
+   * El payload usa la clave; el tema decide el color.
+   */
+  fills: z.record(z.string(), z.string()).optional(),
   diagramTheme: z.unknown() /* TODO: ref DiagramTheme */.optional(),
   light: z.unknown() /* TODO: ref Omit<...> */.optional(),
   dark: z.unknown() /* TODO: ref Omit<...> */.optional(),

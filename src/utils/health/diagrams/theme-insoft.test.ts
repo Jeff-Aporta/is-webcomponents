@@ -9,6 +9,18 @@ import {
   findOrphanEntityIds,
   themeToDiagramTheme,
 } from '../../../components/diagrams/theme.ts';
+import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/diagram-styles.ts';
+
+// Los temas se cargan bajo demanda (diagram-style); el test carga el estilo InSoft.
+await loadStylesDiagram('insoft');
+
+Deno.test('estilo insoft trae un tema por tipo, y el de clases sin naranja', () => {
+  assertEquals(styleThemeFor('insoft', 'er')?.id, 'insoft');
+  assertEquals(styleThemeFor('insoft', 'component')?.id, 'insoft-cd');
+  const cls = styleThemeFor('insoft', 'class');
+  assertEquals(cls?.id, 'insoft-class');
+  assertEquals(Object.values(cls?.fills ?? {}).includes('#F4B67B'), false);
+});
 
 Deno.test('insoft theme resolves and matches der.svg palette', () => {
   const t = resolveErTheme('insoft');

@@ -23,6 +23,7 @@ import {
   injectThemeCss,
   type ErThemeJson,
 } from './theme.js';
+import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./component-diagram.schemas.js";
 
 /**
@@ -62,6 +63,29 @@ function packagePaletteId(p: Paquete): string {
   if (/azure|cloud|group|panel/.test(blob)) return 'group';
   if (/portal|web\b|cool/.test(blob)) return 'cool';
   return String(p.id ?? 'expose').replace(/^pkg-/, '');
+}
+
+/** Relleno VP de una caja: clave del tema (`service`, `store`…), hex, o `service`. */
+function vpFill(valor: string | undefined, tema: ErThemeJson | null): string {
+  const fills = tema?.fills ?? {};
+  if (valor && fills[valor]) return fills[valor]!;
+  if (valor && valor.startsWith('#')) return valor;
+  return fills.service ?? '#BCFFBB';
+}
+
+/**
+ * Relleno VP de un paquete sin paleta: por profundidad, como en los
+ * diagramas InSoft de Visual Paradigm (raíz azul, anidado turquesa).
+ */
+function vpDepthFill(p: Paquete, todos: readonly Paquete[], tema: ErThemeJson | null): string {
+  let d = 0;
+  for (let cur = p; cur.parent; d++) {
+    const padre = todos.find((q) => q.id === cur.parent);
+    if (!padre) break;
+    cur = padre;
+  }
+  const pal = tema?.cluster?.palettes ?? {};
+  return (d % 2 ? pal.secondary : pal.primary) ?? (d % 2 ? '#00C3C4' : '#7ACFF4');
 }
 
 /** Iniciales del avatar de tarjeta: dos palabras, o inicial + siguiente mayúscula. */
@@ -146,8 +170,14 @@ class IswcComponentDiagram extends DiagramElementBase {
     else this.setAttribute('min-gap', String(v));
   }
 
-  /** Tema InSoft (mismo JSON que ER). Attr `theme` o `componentDiagram.theme`. */
+  /**
+   * Tema del estilo (`diagram-style="insoft"` → su tema `component`, ya
+   * cargado por la base). Sin estilo: attr heredado `theme` o
+   * `componentDiagram.theme`.
+   */
   #resolveStyleTheme(): ErThemeJson | null {
+    const delEstilo = styleThemeFor(hostStyleName(this), 'component');
+    if (delEstilo) return delEstilo;
     const fromAttr = this.getAttribute('theme');
     if (fromAttr) {
       const id = fromAttr.trim().toLowerCase();
@@ -161,7 +191,11 @@ class IswcComponentDiagram extends DiagramElementBase {
   }
 
   renderDiagram(): void {
+    // Con estilo y sin `boxStyle` en el payload, el estilo decide la pintura:
+    // el consumidor no elige colores ni cajas a mano.
+    const conEstilo = Boolean(styleThemeFor(hostStyleName(this), 'component'));
     const spec = resolveComponentSpec(this.payload ?? {}, { minGap: this.minGap });
+    if (spec && conEstilo && !spec.layout.boxStyle) spec.layout.boxStyle = 'vp';
     this.spec = spec;
     if (!spec) {
       this.svg.innerHTML = '';
@@ -235,11 +269,14 @@ class IswcComponentDiagram extends DiagramElementBase {
   #buildPackages(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
     const styleTheme = this.#styleTheme;
     const cd = styleTheme ? componentBoxPaint(styleTheme) : null;
+    // VP: los rótulos van en una capa propia encima de todos los cuerpos;
+    // un paquete anidado pegado al borde no puede tapar el rótulo del padre.
+    const rotulosVp = svgEl('g', { class: 'cd-pkg-titles' }) as SVGGElement;
     for (const rawP of layout.packages) {
       const p = rawP as LayoutPackage;
       const g = svgEl('g', { class: 'cd-pkg' });
       if (layout.boxStyle === 'vp') {
-        this.#paintVpPackage(g, p, styleTheme ? clusterPalette(styleTheme, packagePaletteId(p)).fill : '#FFFFC1', styleTheme);
+        this.#paintVpPackage(g, p, vpDepthFill(p, layout.packages as LayoutPackage[], styleTheme), styleTheme, rotulosVp);
         this.svg.appendChild(g);
         continue;
       }
@@ -301,6 +338,7 @@ class IswcComponentDiagram extends DiagramElementBase {
       g.appendChild(t);
       this.svg.appendChild(g);
     }
+    if (rotulosVp.childNodes.length) this.svg.appendChild(rotulosVp);
   }
 
   #buildEdges(layout: ComponentLayout, theme: DiagramTheme, fontFamily: string): void {
@@ -455,11 +493,10 @@ class IswcComponentDiagram extends DiagramElementBase {
         this.svg.appendChild(g);
         continue;
       }
-      if (layout.boxStyle === 'vp') {
-        this.#paintVpComponent(g, c, (c as { fill?: string }).fill ?? (ownColor ? hexMixWhite(ownColor, 0.62) : '#BCFFBB'));
-        this.svg.appendChild(g);
-        continue;
-      }
+      // VP: caja y rótulo propios; las burbujas de endpoints se pintan igual.
+      const vpBox = layout.boxStyle === 'vp';
+      if (vpBox) this.#paintVpComponent(g, c, vpFill((c as { fill?: string }).fill, styleTheme));
+      if (!vpBox) {
       const fill = ownColor
         ? (lilac ? ownColor : hexMixWhite(ownColor, 0.88))
         : (paint?.fill ?? theme.chipFill);
@@ -498,6 +535,7 @@ class IswcComponentDiagram extends DiagramElementBase {
         t.appendChild(ts);
       });
       g.appendChild(t);
+      }
       const bubbles = c.itemBubbles ?? [];
       for (const b of bubbles) {
         // EP: fondo transparente; borde blanco semitransparente (theme.epBorder).
@@ -505,7 +543,7 @@ class IswcComponentDiagram extends DiagramElementBase {
         g.appendChild(svgEl('rect', {
           x: b.x, y: b.y, width: b.w, height: b.h, rx: styleTheme ? 0 : 4,
           fill: epTransparent ? 'none' : (paint?.epFill ?? 'none'),
-          stroke: paint?.epBorder ?? (styleTheme ? 'rgba(255,255,255,0.55)' : (paint?.border ?? theme.border ?? 'rgba(0,0,0,0.08)')),
+          stroke: vpBox ? 'rgba(0,0,0,0.28)' : (paint?.epBorder ?? (styleTheme ? 'rgba(255,255,255,0.55)' : (paint?.border ?? theme.border ?? 'rgba(0,0,0,0.08)'))),
           'stroke-width': styleTheme ? 1.2 : 0.6,
         }));
         let textX = b.x + 6;
@@ -605,26 +643,29 @@ class IswcComponentDiagram extends DiagramElementBase {
    * izquierda, borde negro de 1 px y rótulo centrado (o junto a la pestaña
    * si centrado taparía la vertical de un hijo directo).
    */
-  #paintVpPackage(g: SVGGElement, p: LayoutPackage, fallbackFill: string, styleTheme: unknown): void {
+  #paintVpPackage(g: SVGGElement, p: LayoutPackage, fallbackFill: string, styleTheme: unknown, rotulos: SVGGElement): void {
     const key = (p as { palette?: string }).palette;
     const palettes = (styleTheme as { cluster?: { palettes?: Record<string, string> } } | null)?.cluster?.palettes;
     const fill = (key?.startsWith('#') ? key : key && palettes?.[key]) || fallbackFill;
     const TAB_W = Math.min(56, p.w / 3);
     const TAB_H = 12;
+    // Pestaña sobre el borde superior (fuera de la caja empacada): el cuerpo
+    // conserva la geometría del empaque y el rótulo cabe en la franja que
+    // ya reserva (PKG_TAB), en cualquier modo de empaque.
     g.appendChild(svgEl('rect', {
-      x: p.x, y: p.y, width: TAB_W, height: TAB_H, fill, stroke: '#000000', 'stroke-width': 1,
+      x: p.x, y: p.y - TAB_H, width: TAB_W, height: TAB_H, fill, stroke: '#000000', 'stroke-width': 1,
     }));
     g.appendChild(svgEl('rect', {
-      x: p.x, y: p.y + TAB_H, width: p.w, height: p.h - TAB_H, fill, stroke: '#000000', 'stroke-width': 1,
+      x: p.x, y: p.y, width: p.w, height: p.h, fill, stroke: '#000000', 'stroke-width': 1,
     }));
     const centro = (p as { titleCenter?: boolean }).titleCenter === true;
     const t = svgEl('text', {
-      x: centro ? p.x + p.w / 2 : p.x + TAB_W + 12, y: p.y + TAB_H + 15,
+      x: centro ? p.x + p.w / 2 : p.x + 10, y: p.y + 16,
       'text-anchor': centro ? 'middle' : 'start', fill: '#000000',
       'font-size': '12', 'font-family': 'Tahoma,Arial,sans-serif',
     });
     t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
-    g.appendChild(t);
+    rotulos.appendChild(t);
   }
 
   /**

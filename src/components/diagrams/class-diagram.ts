@@ -11,6 +11,8 @@ import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./diagram-types.schemas.js";
 import type { TurtleTheme } from "../_shared/path-turtle.schemas.js";
+import { hostStyleName, styleThemeFor } from './diagram-styles.js';
+import type { ErThemeJson } from './theme.schemas.js';
 
 /**
  * <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.
@@ -44,6 +46,8 @@ const VISIBILIDAD: Record<string, string> = { '+': '#16A34A', '-': '#DC2626', '#
 
 class IswcClassDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
+  /** Tema `class` del estilo cargado (paletas y rellenos semánticos). */
+  #classTheme: ErThemeJson | null = null;
   #turtle: SequenceTurtle | null = null;
   #hiddenGroups: Set<string> = new Set();
   #nodeNodes = new Map<string, { n: ClassLayoutNode; g: SVGGElement; box: SVGElement }>();
@@ -108,6 +112,13 @@ class IswcClassDiagram extends DiagramElementBase {
     this.#theme = theme;
     this.syncThemeAttr();
 
+    // Estilo (`diagram-style="insoft"`): su tema `class` decide paletas y
+    // rellenos; en modo paquetes sin `boxStyle`, pinta en estilo VP.
+    const tema = styleThemeFor(hostStyleName(this), 'class');
+    this.#classTheme = tema;
+    if (tema && visible.packages?.length && !visible.layout?.boxStyle) {
+      visible = { ...visible, layout: { ...visible.layout, boxStyle: 'vp' } };
+    }
     const layout = computeClassLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
@@ -526,18 +537,21 @@ class IswcClassDiagram extends DiagramElementBase {
     const TAB_W = 56;
     const TAB_H = 12;
     for (const p of layout.packages ?? []) {
-      const fill = p.palette ?? (p.depth % 2 ? '#7ACFF4' : '#FFFFC1');
+      const pal = this.#classTheme?.cluster?.palettes ?? {};
+      const fill = (p.palette && (pal[p.palette] ?? (p.palette.startsWith('#') ? p.palette : undefined)))
+        ?? (p.depth % 2 ? pal.secondary ?? '#00C3C4' : pal.primary ?? '#7ACFF4');
+      // Pestaña sobre el borde superior: igual que en componentes.
       g.appendChild(svgEl('rect', {
-        x: p.x, y: p.y, width: Math.min(TAB_W, p.w / 3), height: TAB_H,
+        x: p.x, y: p.y - TAB_H, width: Math.min(TAB_W, p.w / 3), height: TAB_H,
         fill, stroke: '#000000', 'stroke-width': 1, class: 'cls-pkg__tab',
       }));
       g.appendChild(svgEl('rect', {
-        x: p.x, y: p.y + TAB_H, width: p.w, height: p.h - TAB_H,
+        x: p.x, y: p.y, width: p.w, height: p.h,
         fill, stroke: '#000000', 'stroke-width': 1, class: 'cls-pkg',
       }));
       const izquierda = p.titleAlign === 'left';
       const t = svgEl('text', {
-        x: izquierda ? p.x + Math.min(TAB_W, p.w / 3) + 12 : p.x + p.w / 2, y: p.y + TAB_H + 15,
+        x: izquierda ? p.x + 10 : p.x + p.w / 2, y: p.y + 17,
         'text-anchor': izquierda ? 'start' : 'middle', fill: '#000000',
         'font-size': '12', 'font-family': 'Tahoma,Arial,sans-serif',
       });
@@ -552,6 +566,14 @@ class IswcClassDiagram extends DiagramElementBase {
    * y compartimentos separados por línea negra. La visibilidad se escribe
    * con el símbolo UML (+ - # ~) como prefijo, en negro.
    */
+  /** Relleno VP: clave del tema (`service`, `store`…), hex, o `service`. */
+  #vpFill(valor: string | undefined): string {
+    const fills = this.#classTheme?.fills ?? {};
+    if (valor && fills[valor]) return fills[valor]!;
+    if (valor && valor.startsWith('#')) return valor;
+    return fills.service ?? '#BCFFBB';
+  }
+
   #buildVpBoxes(layout: ClassLayout) {
     const FONT = 'Tahoma,Arial,sans-serif';
     for (const n of layout.nodes) {
@@ -560,7 +582,7 @@ class IswcClassDiagram extends DiagramElementBase {
       if (this.isViewer) g.style.cursor = 'pointer';
       const box = svgEl('rect', {
         x: n.x, y: n.y, width: n.w, height: n.h,
-        fill: n.fill ?? '#BCFFBB', stroke: '#000000', 'stroke-width': 1, class: 'cls-node__box',
+        fill: this.#vpFill(n.fill), stroke: '#000000', 'stroke-width': 1, class: 'cls-node__box',
       });
       g.appendChild(box);
       for (const dy of n.dividerYs) {

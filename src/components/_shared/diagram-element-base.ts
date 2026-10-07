@@ -58,11 +58,12 @@
 
 import { ElementBase } from '../../core/element-base.js';
 import { findThemeContainer, readTheme } from './theme-scope.js';
+import { hostStyleName, loadStylesDiagram } from '../diagrams/diagram-styles.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export class DiagramElementBase extends ElementBase {
-  static get observedAttributes(): string[] { return ['color', 'look']; }
+  static get observedAttributes(): string[] { return ['color', 'look', 'diagram-style']; }
 
   #wrap: HTMLElement | null = null;
   #svg: SVGElement | null = null;
@@ -167,6 +168,12 @@ export class DiagramElementBase extends ElementBase {
     this.#renderQueued = (async () => {
       await Promise.resolve();
       try {
+        // Estilo por atributo (`diagram-style="insoft"`): se descarga una
+        // sola vez y el render espera a tenerlo, así el primer pintado ya
+        // sale con su tema y un export headless no captura la versión sin
+        // estilo. Si la carga falla, se pinta con el tema por defecto.
+        const estilo = hostStyleName(this);
+        if (estilo) await loadStylesDiagram(estilo).catch(() => undefined);
         if (this.mounted) {
           this.renderDiagram();
           this.#applyLook();

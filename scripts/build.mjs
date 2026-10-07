@@ -610,6 +610,19 @@ for (const name of await readdir(toolsSrc)) {
 }
 console.log(`  ${'tools/'.padEnd(18)} ts vendor (render-diagram)`);
 
+// Estilos de diagrama (diagram-styles.ts): los temas JSON no van dentro de
+// los bundles; se descargan bajo demanda junto a ellos, en diagrams/themes/.
+const themesSrc = join(root, 'src', 'components', 'diagrams', 'themes');
+const themesOut = join(dist, 'diagrams', 'themes');
+await mkdir(themesOut, { recursive: true });
+let nTemas = 0;
+for (const name of await readdir(themesSrc)) {
+  if (!name.endsWith('.json')) continue;
+  await copyFile(join(themesSrc, name), join(themesOut, name));
+  nTemas++;
+}
+console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida por diagram-style)`);
+
 const indexPath = join(root, 'index.html');
 const indexPrev = await readFile(indexPath, 'utf8');
 const indexNext = applyHashToHtml(indexPrev, hashes);

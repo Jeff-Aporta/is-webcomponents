@@ -491,6 +491,5 @@ export {
   injectThemeCss,
   registerErTheme,
   listErThemes,
-  INSOFT_THEME,
 } from './theme.js';
 export type { ErThemeJson } from './theme.js';

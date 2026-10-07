@@ -21,7 +21,7 @@ const [r] = await renderDiagramBatch([{
     tag: 'iswc-class-diagram',
     scriptUrl: 'dist/cdn/diagrams/class-diagram.min.js',
     payload,
-    attrs: {},
+    attrs: { "diagram-style": "insoft" },
   },
 }], { chromium, serveRoot: ROOT, timeoutMs: 300_000, settleMs: 500, png: true });
 
