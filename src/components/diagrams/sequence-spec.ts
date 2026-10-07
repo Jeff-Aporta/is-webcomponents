@@ -34,10 +34,13 @@ const LABEL_MAX_W = 460;
  */
 /** Ancho medio por carácter de la etiqueta; el renderer lo fija según la fuente del tema. */
 let LABEL_CHAR_W = 6.1;
+/** Medidor real del renderer (misma fuente que pinta la nota); sin él, estimación por carácter. */
+let LABEL_MEASURE: ((texto: string) => number) | null = null;
 function labelBox(label: string): { w: number; lines: number } {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
-  const est = Math.ceil(plain.length * LABEL_CHAR_W) + 24 + icons * ICON_INLINE_W;
+  const ancho = LABEL_MEASURE ? LABEL_MEASURE(plain) : plain.length * LABEL_CHAR_W;
+  const est = Math.ceil(ancho) + 24 + icons * ICON_INLINE_W;
   if (est <= LABEL_MAX_W) return { w: snapDiagramGrid(Math.max(72, est)), lines: 1 };
   // Dos líneas: el corte por palabras deja una línea más larga que la mitad;
   // 58 % del ancho estimado + padding evita que el texto se salga de la caja.
@@ -385,8 +388,10 @@ const ROW_H_TITLED = 64;
 const FRAG_FOOT_TITLED = 36;
 /** Margen mínimo entre un marco (región/alt) y lo que lo precede. */
 const FRAME_MARGIN = 8;
-const ALT_BRANCH_HEAD = 24;
-const ALT_HEAD = 20;
+/** Aire entre el divisor de una rama y su primera fila (la pestaña de la condición va ahí). */
+const ALT_BRANCH_HEAD = 28;
+/** La primera condición viaja en la pestaña del alt: no reserva cabecera propia. */
+const ALT_HEAD = 0;
 
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
 function actorBoxWidth(label: string, _kind: string): number {
@@ -463,10 +468,11 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[], boxOf: Array<
   return { x, rightMargin, selfSide };
 }
 
-export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelCharW?: number; footer?: boolean } = {}): SequenceLayout {
+export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelCharW?: number; footer?: boolean; measure?: (texto: string) => number } = {}): SequenceLayout {
   // Poppins a 10 px es más ancha que la monoespaciada por defecto: el chip
   // se dimensiona con el ancho real de la fuente para que el texto no se salga.
   LABEL_CHAR_W = opts.labelCharW ?? 6.1;
+  LABEL_MEASURE = opts.measure ?? null;
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);

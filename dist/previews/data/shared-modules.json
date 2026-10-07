@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T13:59:00.992Z",
+  "generatedAt": "2026-10-07T14:41:02.997Z",
   "count": 113,
   "modules": [
     {
@@ -376,7 +376,7 @@
       "id": "diagram-astar",
       "path": "src/components/_shared/diagram-astar.ts",
       "summary": "Rutas ortogonales en rejilla — A* ponderado reutilizable (secuencia, flujo, ER).",
-      "bytes": 21541,
+      "bytes": 21168,
       "exports": [
         "routeOrthogonal",
         "countTurns",
@@ -586,7 +586,7 @@
       "id": "diagram-text-wrap.schemas",
       "path": "src/components/_shared/diagram-text-wrap.schemas.ts",
       "summary": "diagram-text-wrap — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 1547,
+      "bytes": 1678,
       "exports": [
         "WrapOptsSchema",
         "WrappedLineSchema",
@@ -599,9 +599,11 @@
       "id": "diagram-text-wrap",
       "path": "src/components/_shared/diagram-text-wrap.ts",
       "summary": "diagram-text-wrap — Tres funciones públicas:",
-      "bytes": 14591,
+      "bytes": 15636,
       "exports": [
         "defaultMeasureTextWidth",
+        "fuentesListas",
+        "cargarFuente",
         "wrapText",
         "buildTextWithTspans",
         "buildTspans"

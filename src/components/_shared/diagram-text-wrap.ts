@@ -102,8 +102,34 @@ export function defaultMeasureTextWidth(
     // Fallback heurístico: ~0.55 × fontSize por caracter para sans-serif.
     width = text.length * fontSize * APPROX_CHAR_WIDTH_RATIO;
   }
-  measureCache.set(key, width);
+  // Solo se cachea con las fuentes ya cargadas: medir con la de respaldo
+  // (más estrecha que Poppins) y guardarlo dejaba las notas cortas para siempre.
+  if (fuentesListas(fontFamily, fontSize)) measureCache.set(key, width);
   return width;
+}
+
+/**
+ * ¿La fuente ya está cargada para medir con ella? (fuera del navegador: sí).
+ * `fonts.status` no basta: la webfont del tema (Poppins) se pide recién al
+ * pintar el SVG, así que en el primer render el set parece «loaded» y se
+ * medía con la de respaldo, más estrecha.
+ */
+export function fuentesListas(fontFamily?: string, fontSize = 10): boolean {
+  const fonts = typeof document !== 'undefined' ? (document as Document & { fonts?: FontFaceSet }).fonts : undefined;
+  if (!fonts) return true;
+  if (fonts.status !== 'loaded') return false;
+  if (!fontFamily) return true;
+  try { return fonts.check(`${fontSize}px ${fontFamily}`); } catch { return true; }
+}
+
+/** Pide la webfont (normal y negrita) y resuelve cuando está lista para medir. */
+export function cargarFuente(fontFamily: string, fontSize = 10): Promise<unknown> {
+  const fonts = typeof document !== 'undefined' ? (document as Document & { fonts?: FontFaceSet }).fonts : undefined;
+  if (!fonts) return Promise.resolve();
+  return Promise.all([
+    fonts.load(`${fontSize}px ${fontFamily}`),
+    fonts.load(`700 ${fontSize}px ${fontFamily}`),
+  ]).then(() => fonts.ready).catch(() => undefined);
 }
 
 // -----------------------------------------------------------------------------
@@ -186,7 +212,7 @@ export function wrapText(opts: WrapOpts): WrapResult {
 
   // Medición: si hay tokens `{{icon}}` se quitan antes.
   const plainText = stripIconTokens(text);
-  const measure = (s: string): number => defaultMeasureTextWidth(s, fontSize, fontFamily);
+  const measure = opts.measure ?? ((s: string): number => defaultMeasureTextWidth(s, fontSize, fontFamily));
 
   // Greedy wrap del texto plano.
   const rawLines = plainText.length === 0

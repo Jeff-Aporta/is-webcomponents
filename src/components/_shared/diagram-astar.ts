@@ -508,10 +508,12 @@ export function routeSequenceSelf(lifelineX: number, y: number, g: CostGrid, sid
   ].join(' ');
   return {
     path,
-    // Punta en la lifeline, entrando desde arriba: la flecha va hacia abajo.
-    arrowTipX: gx,
-    arrowTipY: gy,
-    arrowDir: 1,
+    // Punta donde TERMINA el trazo: vuelve a la lifeline por arriba, hacia
+    // dentro (-side). Antes la punta iba en el arranque (gx, gy), justo bajo
+    // el índice, y el lazo se veía sin flecha.
+    arrowTipX: corner3.x,
+    arrowTipY: corner3.y,
+    arrowDir: -side,
     points: [start, corner1, corner2, corner3] as unknown as GridPoint[],
   };
 }

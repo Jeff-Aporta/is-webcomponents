@@ -16,6 +16,8 @@ export const WrapOptsSchema = z.object({
   paddingX: z.number().optional(),
   paddingY: z.number().optional(),
   overflow: z.union([z.literal('grow'), z.literal('ellipsis')]),
+  /** Medidor propio (p. ej. dentro del shadow del diagrama, donde vive la webfont). */
+  measure: z.custom<(texto: string) => number>((v) => typeof v === 'function').optional(),
 });
 export type WrapOpts = z.infer<typeof WrapOptsSchema>;
 

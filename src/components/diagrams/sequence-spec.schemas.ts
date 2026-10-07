@@ -24,7 +24,7 @@ export const SequenceMessageSpecSchema = z.object({
   log: z.string().optional(),
   description: z.string().optional(),
   group: z.string().optional(),
-  kind: z.union([z.literal('self'), z.literal('sync'), z.literal('async'), z.string()]).optional(),
+  kind: z.union([z.literal('self'), z.literal('sync'), z.literal('async'), z.literal('reply'), z.string()]).optional(),
   step: z.number(),
 });
 export type SequenceMessageSpec = z.infer<typeof SequenceMessageSpecSchema>;
@@ -106,7 +106,7 @@ export type LeadingIconToken = z.infer<typeof LeadingIconTokenSchema>;
 
 export const FlatMessageSchema = z.object({
   m: SequenceMessageSpecSchema,
-  kind: z.union([z.literal('self'), z.literal('sync'), z.literal('async'), z.string()]),
+  kind: z.union([z.literal('self'), z.literal('sync'), z.literal('async'), z.literal('reply'), z.string()]),
   fromIdx: z.number(),
   toIdx: z.number(),
   labelW: z.number(),

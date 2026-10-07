@@ -369,5 +369,16 @@ export function injectThemeCss(
     style.setAttribute('data-iswc-theme', theme.id || '1');
   }
   style.textContent = css;
+  // El `@import` de la webfont dentro del svg (shadow DOM) no registra la
+  // fuente en el documento: el diagrama se medía y pintaba con la de respaldo
+  // y el SVG exportado (que sí la carga) quedaba con textos más anchos que sus
+  // cajas. Un <link> en el <head> la hace visible a todo el documento.
+  if (theme.font?.import && doc.head && !doc.head.querySelector(`link[data-iswc-font="${CSS.escape(theme.font.import)}"]`)) {
+    const link = doc.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = theme.font.import;
+    link.setAttribute('data-iswc-font', theme.font.import);
+    doc.head.appendChild(link);
+  }
 }
 

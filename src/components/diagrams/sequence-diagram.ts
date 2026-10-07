@@ -30,7 +30,7 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { contrastFontColor, pastelColor } from '../_shared/tk-color.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
-import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
+import { wrapText, buildTspans, defaultMeasureTextWidth } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
@@ -150,6 +150,73 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.queueRender();
   }
 
+  /** Re-render pendiente cuando las webfonts terminen de cargar. */
+  #esperandoFuentes = false;
+  /** Cache de anchos medidos en ESTE svg (la webfont del tema vive en su scope). */
+  #anchos = new Map<string, number>();
+  /** Ancho de una muestra fija con la fuente vigente: si cambia, la fuente cargó. */
+  #anchoMuestra = 0;
+  #relayoutsFuente = 0;
+  /** Alguna medida del render salió sin layout real (svg aún sin pintar). */
+  #medidaProvisional = false;
+
+  /**
+   * Ancho real de un texto medido DENTRO del svg del diagrama: ahí aplica la
+   * tipografía del tema (Poppins). Un probe en `document.body` medía con la
+   * fuente de respaldo y las notas/pestañas quedaban cortas.
+   */
+  #medir(texto: string, size: number, familia: string, negrita = false): number {
+    const clave = `${size}|${negrita ? 1 : 0}|${familia}|${texto}`;
+    const previo = this.#anchos.get(clave);
+    if (previo !== undefined) return previo;
+    let w = 0;
+    try {
+      const t = svgEl('text', { x: -9999, y: -9999, 'font-size': String(size), 'font-family': familia, 'font-weight': negrita ? '700' : null, visibility: 'hidden' }) as SVGTextElement;
+      t.textContent = texto;
+      this.svg.appendChild(t);
+      w = t.getComputedTextLength();
+      t.remove();
+    } catch { /* sin layout: estimación */ }
+    if (!(w > 0)) {
+      // Sin layout todavía (el svg aún no se pinta): estimación provisional,
+      // sin cachear; al terminar el render se repite con medidas reales.
+      this.#medidaProvisional = true;
+      return defaultMeasureTextWidth(texto, size, familia) * (negrita ? 1.08 : 1);
+    }
+    this.#anchos.set(clave, w);
+    return w;
+  }
+
+  /** Tras pintar: si la webfont terminó de cargar y cambia las medidas, repetir el layout. */
+  #vigilarFuente(): void {
+    if (this.#esperandoFuentes || typeof document === 'undefined') return;
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    if (!fonts) return;
+    this.#esperandoFuentes = true;
+    // 1) la hoja de la webfont (<link data-iswc-font>) cargada; 2) las caras
+    // que usa el diagrama pedidas y cargadas; 3) comparar la muestra.
+    const hojas = [...document.querySelectorAll('link[data-iswc-font]')] as HTMLLinkElement[];
+    const hojasListas = Promise.all(hojas.filter((l) => !l.sheet).map((l) => new Promise<void>((r) => {
+      l.addEventListener('load', () => r(), { once: true });
+      l.addEventListener('error', () => r(), { once: true });
+      setTimeout(r, 5000);
+    })));
+    const caras = () => Promise.all([this.#font, this.#labelFont].flatMap((f) => [
+      fonts.load(`10px ${f}`).catch(() => []),
+      fonts.load(`700 10px ${f}`).catch(() => []),
+    ]));
+    void hojasListas.then(caras).then(() => fonts.ready).then(() => new Promise((r) => setTimeout(r, 60))).then(() => {
+      this.#esperandoFuentes = false;
+      this.#anchos.clear();
+      const ahora = this.#medir('Muestra de ancho 0123', 10, this.#labelFont);
+      // Tope de re-layouts por cambio de fuente: nunca un bucle.
+      if (Math.abs(ahora - this.#anchoMuestra) > 0.5 && this.#relayoutsFuente < 3) {
+        this.#relayoutsFuente++;
+        this.queueRender();
+      }
+    });
+  }
+
   renderDiagram(): void {
     // Los grupos ocultos se filtran del spec (re-diseña sin esas aristas).
     const hidden = this.#hiddenGroups;
@@ -194,8 +261,14 @@ class IswcSequenceDiagram extends DiagramElementBase {
     const theme: DiagramTheme = styleTheme ? themeToDiagramTheme(styleTheme, base) : base;
     this.#theme = theme;
     this.syncThemeAttr();
+    this.#medidaProvisional = false;
+    // La hoja del tema (con su webfont) debe estar en el svg ANTES de medir:
+    // las notas se dimensionan midiendo dentro de este svg.
+    if (styleTheme) injectThemeCss(this.svg, styleTheme);
+    this.#anchoMuestra = this.#medir('Muestra de ancho 0123', 10, this.#labelFont);
     const layout: SequenceLayout = computeSequenceLayout(visibleSpec, {
       labelCharW: styleTheme ? 6.9 : 6.1,
+      measure: (texto: string) => this.#medir(texto, 10, this.#labelFont),
       footer: this.#paint?.footerActors ?? false,
     });
     this.layout = layout;
@@ -203,6 +276,12 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.#buildSvg(layout, theme);
     // El CSS del tema viaja dentro del SVG (tipografía + variables): el
     // export estático sale con Poppins sin depender de la página.
+    this.#vigilarFuente();
+    if (this.#medidaProvisional && this.#relayoutsFuente < 3) {
+      this.#relayoutsFuente++;
+      this.#medidaProvisional = false;
+      requestAnimationFrame(() => requestAnimationFrame(() => this.queueRender()));
+    }
     if (styleTheme) {
       injectThemeCss(this.svg, styleTheme);
       this.svg.setAttribute('data-seq-theme', styleTheme.id);
@@ -433,20 +512,18 @@ class IswcSequenceDiagram extends DiagramElementBase {
     }));
     // Pestaña: icono de bifurcación + título (todas las regiones llevan su
     // título en la pestaña; el tipo se lee por el icono).
-    const tw = this.#buildTab(g, box.x, box.y, 'mdi:source-branch', box.label, theme.altBorder);
-    for (const y of box.dividers ?? []) {
+    // La condición de cada rama va en una pestaña negra como texto
+    // secundario: la primera junto al título del alt; las demás, en una
+    // pestaña propia sobre su divisor.
+    const ramas = box.branches ?? [];
+    this.#buildTab(g, box.x, box.y, 'mdi:source-branch', box.label, theme.altBorder, ramas[0]?.label || undefined);
+    for (const [k, y] of (box.dividers ?? []).entries()) {
       g.appendChild(svgEl('line', {
         x1: box.x, y1: y, x2: box.x + box.w, y2: y,
         stroke: theme.altBorder, 'stroke-width': 1, 'stroke-dasharray': '6 4',
       }));
-    }
-    for (const [k, br] of (box.branches ?? []).entries()) {
-      const c = svgEl('text', {
-        x: k === 0 ? box.x + 10 : box.x + 10, y: br.y, 'dominant-baseline': 'middle', fill: theme.text, 'fill-opacity': 0.75,
-        'font-size': '9.5', 'font-style': 'italic', 'font-family': this.#font,
-      });
-      c.textContent = `[${br.label}]`;
-      g.appendChild(c);
+      const cond = ramas[k + 1]?.label;
+      if (cond) this.#buildNoteTab(g, box.x, y, cond, theme.altBorder);
     }
     this.svg.appendChild(g);
   }
@@ -455,11 +532,34 @@ class IswcSequenceDiagram extends DiagramElementBase {
    * Pestaña UML (pentágono) con icono y título. Devuelve su ancho para que
    * el llamador acomode lo que va al lado.
    */
+  /** Ancho real de un texto en la fuente del diagrama (negrita ≈ +8 %). */
+  #anchoTexto(texto: string, size: number, negrita = false): number {
+    return Math.ceil(this.#medir(texto, size, this.#font, negrita));
+  }
+
+  /** Pestaña negra solo con texto secundario (condición de una rama del alt). */
+  #buildNoteTab(g: SVGElement, x: number, y: number, note: string, fill: string): void {
+    const th = 18;
+    const texto = `[${note}]`;
+    const tw = this.#anchoTexto(texto, 9) + 20;
+    g.appendChild(svgEl('path', {
+      d: `M${x},${y} H${x + tw} V${y + th - 6} L${x + tw - 6},${y + th} H${x} Z`,
+      fill, stroke: fill,
+    }));
+    const n = svgEl('text', {
+      x: x + 8, y: y + th / 2 + 0.5, 'dominant-baseline': 'middle',
+      fill: contrastFontColor(fill), 'fill-opacity': 0.8, 'font-size': '9', 'font-style': 'italic', 'font-family': this.#font,
+    });
+    n.textContent = texto;
+    g.appendChild(n);
+  }
+
   #buildTab(g: SVGElement, x: number, y: number, icon: string, title: string, fill: string, note?: string): number {
     const th = 18;
     // La nota (condición) va dentro de la pestaña como texto secundario.
-    const noteW = note ? Math.ceil(note.length * 5.2) + 14 : 0;
-    const tw = Math.max(40, 24 + Math.ceil(title.length * 6.2) + 10 + noteW);
+    const titleW = this.#anchoTexto(title, 10, true);
+    const noteW = note ? this.#anchoTexto(`[${note}]`, 9) + 10 : 0;
+    const tw = Math.max(40, 22 + titleW + 12 + noteW);
     g.appendChild(svgEl('path', {
       d: `M${x},${y} H${x + tw} V${y + th - 6} L${x + tw - 6},${y + th} H${x} Z`,
       fill, stroke: fill,
@@ -474,7 +574,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     g.appendChild(t);
     if (note) {
       const n = svgEl('text', {
-        x: x + 24 + Math.ceil(title.length * 6.2) + 10, y: y + th / 2 + 0.5, 'dominant-baseline': 'middle',
+        x: x + 22 + titleW + 10, y: y + th / 2 + 0.5, 'dominant-baseline': 'middle',
         fill: ink, 'fill-opacity': 0.8, 'font-size': '9', 'font-style': 'italic', 'font-family': this.#font,
       });
       n.textContent = `[${note}]`;
@@ -554,7 +654,8 @@ class IswcSequenceDiagram extends DiagramElementBase {
       const path = svgEl('path', {
         d: styledEdgePath(m.path, this.#edgeStyle, 10), fill: 'none', stroke: color,
         'stroke-width': paint?.messageWidth ?? 1.15,
-        'stroke-dasharray': m.kind === 'async' ? '5 3' : null,
+        // Punteado: asíncrono (sigue en paralelo) y respuesta (retorno UML).
+        'stroke-dasharray': m.kind === 'async' || m.kind === 'reply' ? '5 3' : null,
         'stroke-linecap': this.#edgeStyle === 'curved' ? 'round' : 'square',
         'stroke-linejoin': this.#edgeStyle === 'curved' ? 'round' : 'miter',
         'vector-effect': 'non-scaling-stroke',
@@ -569,7 +670,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // se leía como un triángulo al que le falta un lado.
       const tipX = m.arrowTipX;
       const tipY = m.arrowTipY ?? m.y;
-      const wingLen = m.kind === 'async' ? 9 : 7;
+      const wingLen = m.kind === 'async' || m.kind === 'reply' ? 9 : 7;
       // `svgArrowHead` infiere `className` como `null | undefined` por el
       // default; añadimos la clase CSS al elemento resultante para no
       // depender del tipado del helper compartido (que vive en `_shared`).
@@ -645,6 +746,39 @@ class IswcSequenceDiagram extends DiagramElementBase {
         g.appendChild(t);
       }
 
+      // Rótulo de modo en el extremo de llegada: «sync» (el flujo espera a
+      // que termine), «async» (sigue en paralelo) o «respuesta» (retorno de
+      // una llamada). Mismo estilo que el título del grupo. En un lazo a sí
+      // mismo va dentro del lazo.
+      {
+        const modo = m.kind === 'async' ? 'async' : m.kind === 'reply' ? 'respuesta' : 'sync';
+        const mw = this.#anchoTexto(modo, 8, true) + 8;
+        let cx: number;
+        let cy: number;
+        if (m.kind === 'self') {
+          const pts = pathPoints(m.path);
+          const xs = pts.map((p) => p.x);
+          const ys = pts.map((p) => p.y);
+          cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+          cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+        } else {
+          cx = m.arrowTipX - dir * (mw / 2 + 12);
+          cy = m.y + 21;
+        }
+        const fondo = this.#paint ? pastelColor(color, 0.9) : theme.chipFill;
+        g.appendChild(svgEl('rect', {
+          x: cx - mw / 2, y: cy - 6, width: mw, height: 12, rx: 2,
+          fill: fondo, 'fill-opacity': 0.9, class: 'seq-msg-mode-bg',
+        }));
+        const t = svgEl('text', {
+          x: cx, y: cy, 'dominant-baseline': 'middle', 'text-anchor': 'middle', fill: color, 'fill-opacity': 0.8,
+          'font-size': '8', 'font-weight': '600', 'font-family': this.#font, 'letter-spacing': '0.03em',
+          class: 'seq-msg-mode',
+        });
+        t.textContent = modo;
+        g.appendChild(t);
+      }
+
       this.svg.appendChild(g);
       this.#msgNodes.set(m.id, {
         m,
@@ -695,6 +829,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // (30 px) solo admitía 1 y truncaba con «…».
       paddingX: 8,
       paddingY: 3,
+      measure: (t: string) => this.#medir(t, 10, this.#labelFont),
     });
     const tspans: TSpanSpec[] = buildTspans(
       result.lines,

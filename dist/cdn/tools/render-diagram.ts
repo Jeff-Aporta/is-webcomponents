@@ -200,6 +200,25 @@ async function runOnePage(
       timeout: Math.max(timeoutMs, 60_000),
     });
     await waitReady(page, timeoutMs);
+    // El diagrama registra la webfont de su tema al pintar y repite el layout
+    // cuando termina de cargar (las cajas se miden con la fuente real). Sin
+    // esperar eso, el SVG salía medido con la fuente de respaldo y, al
+    // rasterizarlo ya con Poppins, los textos desbordaban sus cajas.
+    await page.evaluate(`(async () => {
+      const espera = (ms) => new Promise((r) => setTimeout(r, ms));
+      // 1) Las hojas de las webfonts (<link data-iswc-font>) terminan de cargar.
+      for (let i = 0; i < 50; i++) {
+        const links = [...document.querySelectorAll('link[data-iswc-font]')];
+        if (links.every((l) => l.sheet)) break;
+        await espera(100);
+      }
+      // 2) Las caras que usa el diagrama cargan (fonts.ready cubre las pedidas).
+      await espera(50);
+      await document.fonts.ready;
+      // 3) El diagrama repite el layout al detectar el cambio de ancho.
+      await espera(400);
+      await document.fonts.ready;
+    })()`);
     if (settleMs > 0) await page.waitForTimeout(settleMs);
 
     const extraido = await extractSvg(page);

@@ -212,6 +212,27 @@ rayo = async, repetir = loop, interrogación = opt) y el **título** (`alt.name`
 cuando el proceso es opcional. Todas las regiones y cajas de participantes van
 con borde punteado y relleno con alpha.
 
+Las condiciones de las ramas de `alt` van dentro de pestañas negras como
+texto secundario (mismo color de fuente, 80 % de opacidad): la primera junto
+al título del `alt`, las demás en una pestaña propia sobre su divisor.
+
+## Modo de cada mensaje (`kind`)
+
+En el extremo de llegada de cada arista va un rótulo con su modo, con el mismo
+estilo que el título del grupo:
+
+| `kind` | Trazo | Rótulo | Significa |
+| --- | --- | --- | --- |
+| `sync` (por defecto) | continuo | `sync` | el flujo espera a que termine |
+| `async` | punteado | `async` | sigue en paralelo (eventos, stream) |
+| `reply` | punteado | `respuesta` | retorno de una llamada (UML) |
+| `self` (from = to) | lazo | `sync` dentro del lazo | trabajo interno del actor |
+
+La punta del lazo de un mensaje a sí mismo va donde termina el trazo (vuelve a
+la lifeline por arriba). Las notas y pestañas se dimensionan midiendo el texto
+con la webfont del tema (el diagrama la registra en el documento y repite el
+layout cuando carga), así ningún texto se sale de su caja.
+
 ## Estilo de arista (`edgeStyle`)
 
 `"policy": { "edgeStyle": "curved" }` (o `edgeStyle` en la raíz del payload)
