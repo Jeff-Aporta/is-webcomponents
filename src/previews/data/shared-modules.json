@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-07T12:22:29.170Z",
-  "count": 112,
+  "generatedAt": "2026-10-07T13:06:30.598Z",
+  "count": 113,
   "modules": [
     {
       "file": "button-shape.schemas.ts",
@@ -392,6 +392,17 @@
       ]
     },
     {
+      "file": "diagram-curve.ts",
+      "id": "diagram-curve",
+      "path": "src/components/_shared/diagram-curve.ts",
+      "summary": "diagram-curve — El router ortogonal sigue mandando: aquí no se mueve ningún tramo. Solo",
+      "bytes": 2071,
+      "exports": [
+        "roundOrthogonalPath",
+        "styledEdgePath"
+      ]
+    },
+    {
       "file": "diagram-edge-actors.schemas.ts",
       "id": "diagram-edge-actors.schemas",
       "path": "src/components/_shared/diagram-edge-actors.schemas.ts",
@@ -601,7 +612,7 @@
       "id": "diagram-tipos.schemas",
       "path": "src/components/_shared/diagram-tipos.schemas.ts",
       "summary": "diagram-tipos — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 6583,
+      "bytes": 6632,
       "exports": [
         "CajaSchema",
         "ComponenteSchema",
