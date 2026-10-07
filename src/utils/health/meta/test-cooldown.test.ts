@@ -3,10 +3,11 @@
 //   C2 un rojo borra la entrada y se relanza.
 //   C3 la memoria persiste en el JSON.
 //   C4 `disabled` corre todo y no escribe.
+//   C5 se cuenta por minuto iniciado: 13 ms -> 30 min, 1 min 10 s -> 60 min.
 import { assert, assertEquals, assertRejects } from 'jsr:@std/assert@1';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { createTestCooldown, testId } from '../../../cdn/tools/test-cooldown.ts';
+import { cooldownMs, createTestCooldown, testId } from '../../../cdn/tools/test-cooldown.ts';
 
 const MIN = 60_000;
 
@@ -36,4 +37,8 @@ Deno.test('test-cooldown: verde de 1 min -> 30 min de skip; rojo corre siempre; 
   const off = createTestCooldown({ dbPath: offPath, now, disabled: true });
   await off.run(id, () => { t += MIN; });
   assert(!off.check(id).skip && !existsSync(offPath), 'C4 disabled no se salta ni escribe');
+
+  assertEquals(cooldownMs(13), 30 * MIN, 'C5 13 ms -> 30 min');
+  assertEquals(cooldownMs(MIN), 30 * MIN, 'C5 1 min -> 30 min');
+  assertEquals(cooldownMs(MIN + 10_000), 60 * MIN, 'C5 1 min 10 s -> 60 min');
 });

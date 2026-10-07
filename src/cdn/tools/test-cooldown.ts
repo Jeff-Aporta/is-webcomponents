@@ -1,13 +1,13 @@
 // test-cooldown.ts — Cooldown de tests proporcional a su duración, con
 // memoria en un JSON.
 //
-// Regla: un test que pasa en verde no se vuelve a correr durante
-// `duración × factor` (factor 30 por defecto: 1 min de ejecución = 30 min de
-// skip). Un test en rojo borra su entrada y corre siempre hasta que pase.
+// Regla: un test que pasa en verde no se vuelve a correr durante 30 min por
+// cada minuto (o fracción) que tardó: 13 ms -> 30 min, 1 min 10 s -> 60 min.
+// Un test en rojo borra su entrada y corre siempre hasta que pase.
 //
 // Transversal (Node y Deno): solo depende de `node:fs`/`node:path`/
 // `node:process`. Cada proyecto lo adapta con las opciones (ruta del JSON,
-// factor, desactivarlo, reloj).
+// minutos por minuto, desactivarlo, reloj).
 //
 // Vendor: copiar `dist/cdn/tools/test-cooldown.ts` al proyecto (ISS, ISW)
 // e importar desde ahi; no tiene imports relativos.
@@ -32,8 +32,8 @@ export interface TestCooldownEntry {
 export interface TestCooldownOptions {
     /** Ruta del JSON que guarda la memoria. */
     dbPath: string;
-    /** Ms de cooldown por cada ms de ejecución. Default 30. */
-    factor?: number;
+    /** Minutos de cooldown por cada minuto (o fracción) de ejecución. Default 30. */
+    minutesPerMinute?: number;
     /** `true` corre todo y no registra nada (p. ej. `--sin-cooldown`). */
     disabled?: boolean;
     /** Reloj inyectable para tests. Default `Date.now`. */
@@ -46,9 +46,11 @@ export type TestCooldownRun<T> =
     | { skipped: true; until: number; remainingMs: number }
     | { skipped: false; durationMs: number; value: T };
 
-/** Cooldown que corresponde a una corrida verde de `durationMs`. */
-export function cooldownMs(durationMs: number, factor = 30): number {
-    return Math.max(0, Math.round(durationMs * factor));
+const MINUTO = 60_000;
+
+/** Cooldown de una corrida verde: `minutesPerMinute` min por minuto iniciado. */
+export function cooldownMs(durationMs: number, minutesPerMinute = 30): number {
+    return Math.max(1, Math.ceil(durationMs / MINUTO)) * minutesPerMinute * MINUTO;
 }
 
 /** `95000` → `"1m 35s"`. */
@@ -64,7 +66,7 @@ export function testId(file: string, name: string): string {
 }
 
 export function createTestCooldown(opts: TestCooldownOptions) {
-    const factor = opts.factor ?? 30;
+    const minutesPerMinute = opts.minutesPerMinute ?? 30;
     const now = opts.now ?? Date.now;
     let db: Record<string, TestCooldownEntry> | null = null;
 
@@ -98,7 +100,7 @@ export function createTestCooldown(opts: TestCooldownOptions) {
         const d = load();
         if (ok) {
             const t = now();
-            d[id] = { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor) };
+            d[id] = { durationMs, okAt: t, until: t + cooldownMs(durationMs, minutesPerMinute) };
         } else {
             delete d[id];
         }
