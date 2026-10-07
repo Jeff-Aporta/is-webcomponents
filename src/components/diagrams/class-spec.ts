@@ -644,14 +644,31 @@ function computePackagedClassLayout(
   }
 
   const ruteables = rels.map((_, i) => i).filter((i) => planOf.has(i) || busPlan.has(i));
+  // La barra del bus es un muro para el router: ninguna arista corre por
+  // encima de ella. Cada hijo llega desde abajo a un punto bajo la barra
+  // (fuera del aire del muro) y el último tramo vertical hasta la barra se
+  // agrega después: así las llegadas son perpendiculares y no se montan.
+  const BUS_APPROACH = EDGE_CLEARANCE + 4;
+  const busWalls = [...busOf.entries()].map(([padre, bus]) => {
+    const p = nodeById.get(padre)!;
+    const xs = [p.x + p.w / 2, ...bus.members.map((i) => busPlan.get(i)?.to.x).filter((x): x is number => x != null)];
+    const x0 = Math.min(...xs);
+    const x1 = Math.max(...xs);
+    return { x: x0 - 4, y: bus.y - 2, w: x1 - x0 + 8, h: 4 };
+  });
   const res = routeEdges(
-    { components: boxes, packages: packages.map((p) => ({ id: p.id, x: p.x, y: p.y, w: p.w, h: p.h })), titles, rings: [] },
+    {
+      components: boxes,
+      packages: packages.map((p) => ({ id: p.id, x: p.x, y: p.y, w: p.w, h: p.h })),
+      titles: [...titles, ...busWalls],
+      rings: [],
+    },
     ruteables.map((i) => {
       const r = rels[i]!;
       const pl = planOf.get(i);
       const bp = busPlan.get(i);
       const from = pl ? pl.from : bp!.from;
-      const to = pl ? pl.to : bp!.to;
+      const to = pl ? pl.to : { x: bp!.to.x, y: bp!.to.y + BUS_APPROACH };
       const punto = { id: `${r.to}::bus`, x: to.x, y: to.y, w: 1, h: 1 };
       return {
         id: r.id ?? `r${i}`, from, fromSide: pl ? pl.fromSide : bp!.fromSide, to, toSide: pl ? pl.toSide : 'bottom',
@@ -678,9 +695,12 @@ function computePackagedClassLayout(
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
   ruteables.forEach((i, k) => {
     const pl = planOf.get(i);
-    const from = pl ? pl.from : busPlan.get(i)!.from;
-    const to = pl ? pl.to : busPlan.get(i)!.to;
-    ptsOf.set(i, res.paths[k] ?? simplifyOrthoPath([from, { x: to.x, y: from.y }, to]));
+    const bp = busPlan.get(i);
+    const from = pl ? pl.from : bp!.from;
+    const to = pl ? pl.to : { x: bp!.to.x, y: bp!.to.y + BUS_APPROACH };
+    const pts = res.paths[k] ?? simplifyOrthoPath([from, { x: to.x, y: from.y }, to]);
+    // Hijo del bus: tramo final perpendicular hasta la barra.
+    ptsOf.set(i, bp ? simplifyOrthoPath([...pts, bp.to]) : pts);
   });
 
   // Lienzo: todo lo pintado entra con margen uniforme, también los rieles

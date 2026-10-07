@@ -238,6 +238,11 @@ class IswcComponentDiagram extends DiagramElementBase {
     for (const rawP of layout.packages) {
       const p = rawP as LayoutPackage;
       const g = svgEl('g', { class: 'cd-pkg' });
+      if (layout.boxStyle === 'vp') {
+        this.#paintVpPackage(g, p, styleTheme ? clusterPalette(styleTheme, packagePaletteId(p)).fill : '#FFFFC1', styleTheme);
+        this.svg.appendChild(g);
+        continue;
+      }
       let fill: string;
       let stroke: string;
       let strokeWidth: number;
@@ -331,12 +336,16 @@ class IswcComponentDiagram extends DiagramElementBase {
         const dir = pathEndDirection(e.path);
         // Remate `arrow`: la punta toca la cara del destino.
         const back = layout.connector === 'arrow' ? 0 : 8;
+        // VP: remate 10 % más grande, del color de la arista.
+        const escala = layout.boxStyle === 'vp' ? 1.1 : 1;
         const tipX = e.toX - dir.x * back;
         const tipY = e.toY - dir.y * back;
         const head = svgArrowHead({
           d: e.path,
           tip: { x: tipX, y: tipY },
           color,
+          len: 7 * escala,
+          halfWidth: 3.5 * escala,
         });
         head.classList.add('cd-edge__arrow');
         g.appendChild(head);
@@ -443,6 +452,11 @@ class IswcComponentDiagram extends DiagramElementBase {
         || ((c.hue != null && tkHueToHex(c.hue)) || theme.accent);
       if (layout.boxStyle === 'card') {
         this.#paintCard(g, c, ownColor || paint?.border || theme.accent, theme, fontFamily);
+        this.svg.appendChild(g);
+        continue;
+      }
+      if (layout.boxStyle === 'vp') {
+        this.#paintVpComponent(g, c, (c as { fill?: string }).fill ?? (ownColor ? hexMixWhite(ownColor, 0.62) : '#BCFFBB'));
         this.svg.appendChild(g);
         continue;
       }
@@ -584,6 +598,79 @@ class IswcComponentDiagram extends DiagramElementBase {
       st.textContent = c.stereotype;
       g.appendChild(st);
     }
+  }
+
+  /**
+   * Paquete estilo Visual Paradigm / InSoft: carpeta con pestaña corta a la
+   * izquierda, borde negro de 1 px y rótulo centrado (o junto a la pestaña
+   * si centrado taparía la vertical de un hijo directo).
+   */
+  #paintVpPackage(g: SVGGElement, p: LayoutPackage, fallbackFill: string, styleTheme: unknown): void {
+    const key = (p as { palette?: string }).palette;
+    const palettes = (styleTheme as { cluster?: { palettes?: Record<string, string> } } | null)?.cluster?.palettes;
+    const fill = (key?.startsWith('#') ? key : key && palettes?.[key]) || fallbackFill;
+    const TAB_W = Math.min(56, p.w / 3);
+    const TAB_H = 12;
+    g.appendChild(svgEl('rect', {
+      x: p.x, y: p.y, width: TAB_W, height: TAB_H, fill, stroke: '#000000', 'stroke-width': 1,
+    }));
+    g.appendChild(svgEl('rect', {
+      x: p.x, y: p.y + TAB_H, width: p.w, height: p.h - TAB_H, fill, stroke: '#000000', 'stroke-width': 1,
+    }));
+    const centro = (p as { titleCenter?: boolean }).titleCenter === true;
+    const t = svgEl('text', {
+      x: centro ? p.x + p.w / 2 : p.x + TAB_W + 12, y: p.y + TAB_H + 15,
+      'text-anchor': centro ? 'middle' : 'start', fill: '#000000',
+      'font-size': '12', 'font-family': 'Tahoma,Arial,sans-serif',
+    });
+    t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
+    g.appendChild(t);
+  }
+
+  /**
+   * Componente estilo Visual Paradigm / InSoft: caja recta pastel con borde
+   * negro, «estereotipo» y nombre en negrita centrados, y arriba a la derecha
+   * el icono del componente (Iconify) o el glifo UML de componente.
+   */
+  #paintVpComponent(
+    g: SVGGElement,
+    c: ComponentLayout['components'][number] & Caja & { id: string; name?: string; stereotype?: string; icon?: string },
+    fill: string,
+  ): void {
+    const FONT = 'Tahoma,Arial,sans-serif';
+    g.appendChild(svgEl('rect', {
+      x: c.x, y: c.y, width: c.w, height: c.h, fill, stroke: '#000000', 'stroke-width': 1,
+    }));
+    const ix = c.x + c.w - 22;
+    const iy = c.y + 6;
+    if (c.icon) {
+      g.appendChild(svgIconGroup(c.icon, { x: ix, y: iy, size: 15, color: '#1F2937' }));
+    } else {
+      g.appendChild(svgEl('rect', { x: ix + 3, y: iy, width: 11, height: 14, fill: 'none', stroke: '#000000', 'stroke-width': 0.9 }));
+      g.appendChild(svgEl('rect', { x: ix, y: iy + 3, width: 6, height: 3, fill, stroke: '#000000', 'stroke-width': 0.9 }));
+      g.appendChild(svgEl('rect', { x: ix, y: iy + 8, width: 6, height: 3, fill, stroke: '#000000', 'stroke-width': 0.9 }));
+    }
+    const cx = c.x + (c.w - 18) / 2;
+    if (c.stereotype) {
+      const st = svgEl('text', {
+        x: cx, y: (c.labelY ?? c.y + c.h / 2) - 15, 'text-anchor': 'middle', fill: '#000000',
+        'font-size': '10.5', 'font-family': FONT,
+      });
+      st.textContent = `«${c.stereotype}»`;
+      g.appendChild(st);
+    }
+    const t = svgEl('text', {
+      x: cx, y: c.labelY ?? c.y + c.h / 2 + 4, 'text-anchor': 'middle', fill: '#000000',
+      'font-size': '11.5', 'font-weight': '700', 'font-family': FONT,
+    });
+    const lineas: string[] = c.lines ?? (c.name ? [c.name] : []);
+    const lh = c.lineHeight ?? 13;
+    lineas.forEach((linea, i) => {
+      const ts = svgEl('tspan', { x: cx, dy: i === 0 ? 0 : lh });
+      ts.textContent = linea;
+      t.appendChild(ts);
+    });
+    g.appendChild(t);
   }
 
   /* ── eventos viewer ── */

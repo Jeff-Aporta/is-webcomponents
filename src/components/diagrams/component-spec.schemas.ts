@@ -114,7 +114,7 @@ export const ComponentLayoutSchema = z.object({
   titleY: z.number(),
   subtitleY: z.number(),
   /** Pintura de componentes (`layout.boxStyle` del payload). */
-  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
+  boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
   /** Remate de aristas (`layout.connector` del payload). */
   connector: z.union([z.literal('assembly'), z.literal('arrow')]).optional(),
 });

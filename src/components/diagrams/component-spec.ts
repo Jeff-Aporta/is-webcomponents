@@ -223,6 +223,7 @@ function readComponent(raw: unknown, i: number): Componente {
     hue: r.hue != null ? Number(r.hue) : undefined,
     color: typeof r.color === 'string' && r.color.trim() ? r.color.trim() : undefined,
     icon: typeof r.icon === 'string' && r.icon.trim() ? r.icon.trim() : undefined,
+    fill: typeof r.fill === 'string' && r.fill.trim() ? r.fill.trim() : undefined,
     x: Number(r.x ?? 0),
     y: Number(r.y ?? 0),
     w: Math.max(72, Number(r.w ?? 160)),
@@ -297,7 +298,7 @@ function readLayout(raw: unknown): OpcionesEmpaque {
     // Modo `layers`: componentes por fila dentro de cada franja.
     ...(r.layerCols != null ? { layerCols: Number(r.layerCols) } : {}),
     ...(r.nestedCols != null ? { nestedCols: Number(r.nestedCols) } : {}),
-    ...(r.boxStyle === 'card' || r.boxStyle === 'uml' ? { boxStyle: r.boxStyle } : {}),
+    ...(r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp' ? { boxStyle: r.boxStyle } : {}),
     ...(r.connector === 'arrow' || r.connector === 'assembly' ? { connector: r.connector } : {}),
   };
 }
@@ -1310,14 +1311,18 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   const compById = new Map<string, Componente>(shiftedComps.map((c) => [c.id, c]));
 
   const card = spec.layout?.boxStyle === 'card';
+  const vp = spec.layout?.boxStyle === 'vp';
   const components: LayoutComponent[] = shiftedComps.map((c) => {
     // Tarjeta: el avatar ocupa la franja izquierda; el texto va a su derecha.
-    const lines = wrapLabel(c.name ?? '', card ? c.w - CARD_TEXT_X + 8 : c.w);
+    // VP: texto centrado con aire a la derecha para el glifo de componente.
+    const lines = wrapLabel(c.name ?? '', card ? c.w - CARD_TEXT_X + 8 : vp ? c.w - 40 : c.w);
     const parsed: HttpEndpoint[] = consolidateHttpEndpoints(c.items ?? []);
     const topLibre = c.y + (c.stereotype && !card ? 16 : 0);
     // Tarjeta: nombre + estereotipo forman un bloque centrado en vertical.
     const cardBlockH = (lines.length - 1) * LINE_H + (c.stereotype ? CARD_STEREO_DY : 0);
-    const labelY = card && !parsed.length
+    const labelY = vp && !parsed.length
+      ? c.y + c.h / 2 + (c.stereotype ? 9 : 4) - ((lines.length - 1) * LINE_H) / 2
+      : card && !parsed.length
       ? c.y + c.h / 2 - cardBlockH / 2 + 4
       : parsed.length
       ? topLibre + 12
@@ -1514,6 +1519,9 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
   const mustRelax = routeViolations.length > 0 || routed.crowding > 0;
 
   layoutPackageOutlines(packages, components, { pad: 14, tabH: TAB_H + 4, mode: spec.layout?.mode });
+  // `vp`: rótulo junto a la pestaña (no centrado). Centrado caía justo donde
+  // cruzan las verticales entre franjas y obligaba a rodearlo.
+  if (spec.layout?.boxStyle === 'vp') for (const p of packages) p.titleCenter = false;
   for (const p of packages) (p as Paquete & { titleBox?: Caja }).titleBox = packageTitleBox(p, components);
 
   const hit = (box: { minX: number; minY: number; maxX: number; maxY: number }, x: number, y: number): void => {
@@ -1613,7 +1621,7 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
     subtitle: spec.subtitle,
     titleY: 20,
     subtitleY: titleH ? 38 : 0,
-    ...(card ? { boxStyle: 'card' as const } : {}),
+    ...(card ? { boxStyle: 'card' as const } : vp ? { boxStyle: 'vp' as const } : {}),
     packages,
     components,
     interfaces,
@@ -1720,10 +1728,15 @@ export function packageTitleBox(p: Paquete, components: Componente[] = []): Caja
   const w = packageTitleInkWidth(p);
   const h = OUTLINE_TAB + 6;
   const kids = components.filter((c) => c.package === p.id);
+  // `vp`: rótulo centrado en la franja superior, bajo la pestaña.
+  if (p.titleCenter) {
+    return { id: `${p.id}::title`, x: p.x + p.w / 2 - w / 2, y: p.y, w, h: h + 6 };
+  }
   // Sin hijos directos (agrupador anidado) o empaque `layers`: título en
   // esquina del propio rect.
   if (!kids.length || p.titleAtCorner) {
-    return { id: `${p.id}::title`, x: p.x, y: p.y, w, h };
+    // `vp` (titleCenter === false): la tinta va después de la pestaña.
+    return { id: `${p.id}::title`, x: p.x + (p.titleCenter === false ? Math.min(56, p.w / 3) + 8 : 0), y: p.y, w, h: p.titleCenter === false ? h + 6 : h };
   }
   const x0 = Math.min(...kids.map((c) => c.x));
   const y0 = Math.min(...kids.map((c) => c.y));

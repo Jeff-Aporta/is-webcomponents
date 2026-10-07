@@ -25,6 +25,8 @@ export const ComponenteSchema = z.intersection(CajaSchema, z.object({
   color: z.union([z.string(), z.undefined()]).optional(),
   /** Icono Iconify (`mdi:server`) del avatar en `boxStyle: 'card'`; sin él, iniciales. */
   icon: z.union([z.string(), z.undefined()]).optional(),
+  /** Relleno de la caja en `boxStyle: 'vp'` (#hex). */
+  fill: z.union([z.string(), z.undefined()]).optional(),
   provides: z.array(z.unknown()).optional(),
   requires: z.array(z.unknown()).optional(),
   connects: z.array(z.unknown()).optional(),
@@ -59,6 +61,8 @@ export const PaqueteSchema = z.intersection(CajaSchema, z.object({
    * obstáculo de ruteo tiene que estar donde está la tinta.
    */
   titleAtCorner: z.boolean().optional(),
+  /** `boxStyle: 'vp'`: rótulo centrado en la franja superior (Visual Paradigm). */
+  titleCenter: z.boolean().optional(),
 }));
 export type Paquete = z.infer<typeof PaqueteSchema>;
 
@@ -122,7 +126,7 @@ export const OpcionesEmpaqueSchema = z.object({
    * `card` (tarjeta de organigrama: blanca, avatar con iniciales y sombra),
    * que contrasta con cualquier fondo de agrupador.
    */
-  boxStyle: z.union([z.literal('uml'), z.literal('card')]).optional(),
+  boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
   /**
    * Remate de las aristas sintetizadas: `assembly` (default, conector UML
    * `-(O-`) o `arrow` (punta de flecha que llega perpendicular a la cara del
