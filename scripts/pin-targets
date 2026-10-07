@@ -4,8 +4,12 @@
 #   kit_pin  — export const KIT_PIN = '…'
 #   cdn_url  — …/is-webcomponents@<sha>/…
 # Líneas # y vacías se ignoran. Si el archivo no existe, se salta.
+#
+# WT-2026-10-07 (Jeff): el kit YA NO escribe pines en los consumidores. Cada consumidor
+# vendoriza dist/cdn/tools/pin-update.mjs y actualiza/verifica sus propios pines
+# (p. ej. ISW: `deno task pin --nuevo=<sha40|ultimo>`). Destinos externos retirados:
 
-cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/src/js/iswc.ts
-cdn_url	../../../PatyIA/_entregable/ISS-AyudasCPIA/src/consts/api.ts
-cdn_url	../../../PatyIA/_experimental/ISS-AyudasCPIA/src/consts/api.ts
-cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/specs/iswc-norm.md
+# cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/src/js/iswc.ts
+# cdn_url	../../../PatyIA/_entregable/ISS-AyudasCPIA/src/consts/api.ts
+# cdn_url	../../../PatyIA/_experimental/ISS-AyudasCPIA/src/consts/api.ts
+# cdn_url	../../../PatyIA/_experimental/ISW-TestPatyIA/specs/iswc-norm.md
