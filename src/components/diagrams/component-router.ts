@@ -11,8 +11,17 @@
  *      (fuera del hitbox) y llega en línea recta al conector desde la punta B
  *      (fuera del anillo). El A* solo recorre A→B, así que no puede salir por
  *      dentro ni rodear el perímetro de la entidad.
- *   3. Costo por paso = largo × anidación × cercanía-a-borde × congestión,
- *      + giros + cruces. Anidación = `crossFactor · nivel` (fuera = ×1).
+ *   3. CAMPO DE FACTORES. Cada nodo vale 1. Cada fuente emite un «brillo» con
+ *      radio definido y caída lineal por distancia, y el costo del paso es el
+ *      largo × el PRODUCTO de todos los brillos que lo alcanzan:
+ *        · desincentivo (> 1): entidades (brillo alrededor del hitbox),
+ *          bordes de agrupador (corriendo en paralelo), anidación, rieles
+ *          ajenos (encima = alto; a < lanePitch = menor, decreciente),
+ *          choque de frente, ir por detrás del origen, cruces, historial.
+ *        · incentivo (< 1): puntas `->` de la misma clave, radio `shareRadius`
+ *          (150 px): en la punta vale ~0 (unirse no cuesta), a 150 px vale 1.
+ *          Dentro de ese radio los rieles de la misma clave no son ajenos.
+ *      Lo único aditivo es el giro (penalización geométrica, no un campo).
  *   4. Negociación (rip-up & reroute, estilo PathFinder): todas las aristas se
  *      re-rutean varias veces; compartir riel o ir pegado a otro riel sube de
  *      precio en cada vuelta y deja historial donde hubo conflicto. Converge
@@ -27,28 +36,28 @@ import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, Rou
 
 const DIRS: ReadonlyArray<readonly [number, number]> = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 const SIDE_DIR: Record<Lado, number> = { right: 0, bottom: 1, left: 2, top: 3 };
-/** Riel ajeno encima = muy caro (×, por paso). */
+/** Brillo de riel ajeno encima (×, por paso). */
 const OVERLAP_MUL = 120;
 /** Aristas al mismo conector se tratan como ajenas salvo cerca de la punta B. */
 const MERGE_RADIUS_PITCHES = 2;
-/** Ir por detrás del origen (W68) = rodeo ilegible (+, por paso). */
+/** Brillo de ir por detrás del origen (W68): rodeo ilegible (×). */
 const RETREAT_MUL = 30;
-/** Fracción del costo de riel compartido dentro del embudo de un mismo conector. */
-const SAME_FUNNEL_SHARE = 0.35;
+/** Brillo de riel del mismo conector dentro de su embudo (×): se juntan, no gratis. */
+const SAME_FUNNEL_MUL = 1 + OVERLAP_MUL * 0.35;
+/** Brillo máximo de riel ajeno a < lanePitch (×, decrece lineal hasta 1 en el pitch). */
+const NEAR_RAIL_MUL = 6;
+/** Brillo máximo de una entidad en su hitbox (×, decrece lineal hasta 1 en `entityGlow`). */
+const ENTITY_GLOW_MUL = 3;
+/** Brillo de cruzar perpendicular un riel ajeno (×, en ese nodo). */
+const CROSS_MUL = 8;
+/** Piso del factor total: el paso nunca es gratis y la heurística sigue admisible. */
+const MIN_MUL = 0.05;
 /** Lados perpendiculares (llegadas laterales al O). */
 const PERP: Record<Lado, [Lado, Lado]> = {
   left: ['top', 'bottom'], right: ['top', 'bottom'], top: ['left', 'right'], bottom: ['left', 'right'],
 };
-/** Cruce perpendicular con otro riel (px equivalentes). */
-const CROSS_COST = 160;
 /** Historial de conflicto por nodo (×, acumulativo por vuelta). */
 const HISTORY_MUL = 6;
-/** Incentivo `->`: radio (en celdas de grilla) alrededor de los rieles de la misma clave. */
-const SHARE_RADIUS_STEPS = 3;
-/** Ahorro máximo del paso sobre un riel de la misma clave (decrece lineal con la distancia). */
-const SHARE_DISCOUNT = 0.65;
-/** Piso del multiplicador con ahorro (el paso nunca es gratis). */
-const SHARE_MIN_MUL = 0.3;
 /** Costo por px del tramo ajeno que se reutiliza al unirse a otra `->`. */
 const JOIN_TAIL_MUL = 0.35;
 
@@ -239,13 +248,17 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const step = opts.step ?? 20;
   const clearance = opts.clearance ?? 20;
   const pitch = Math.max(step, opts.lanePitch ?? 32);
-  const nearFactor = opts.laneNearFactor ?? 48;
+  // `laneNearFactor` del payload se conserva por contrato; el brillo de riel
+  // vecino es un factor fijo (NEAR_RAIL_MUL) con radio `lanePitch`.
+  void opts.laneNearFactor;
   const borderKeep = opts.pkgBorderClearance ?? 64;
   const borderFactor = opts.pkgBorderNearFactor ?? 10;
   const crossFactor = Math.max(1, opts.pkgCrossFactor ?? 4);
   const turnPenalty = opts.turnPenalty ?? 200;
   const iterations = opts.iterations ?? 8;
   const stub = Math.max(clearance, opts.stub ?? clearance);
+  const shareRadius = opts.shareRadius ?? 150;
+  const entityGlowR = opts.entityGlow ?? 2 * clearance;
 
   // ── Grilla ────────────────────────────────────────────────────────────
   const all: Caja[] = [...world.components, ...world.packages, ...world.titles, ...world.rings];
@@ -275,6 +288,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const blocked = new Uint8Array(N);
   const ringOwner = new Int32Array(N).fill(-1);
   const prohOwner = new Int32Array(N).fill(-1);
+  // baseMul = anidación × brillo de entidades (isótropo). Parte de 1.
   const baseMul = new Float32Array(N);
   // Cercanía a borde de agrupador por orientación del paso: correr PARALELO
   // a un borde cuesta; cruzarlo perpendicular no. [0] = paso H (bordes
@@ -288,6 +302,16 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       const k = idx(i, j);
       if (world.components.some((c) => inside(x, y, c, clearance))) blocked[k] = 1;
       else if (world.titles.some((t) => inside(x, y, t, 0))) blocked[k] = 1;
+      // Brillo de entidad: fuera del hitbox, decrece lineal hasta `entityGlowR`.
+      let glow = 1;
+      if (!blocked[k] && entityGlowR > 0) {
+        for (const c of world.components) {
+          const ddx = Math.max(c.x - clearance - x, 0, x - (c.x + c.w + clearance));
+          const ddy = Math.max(c.y - clearance - y, 0, y - (c.y + c.h + clearance));
+          const d = Math.max(ddx, ddy);
+          if (d < entityGlowR) glow = Math.max(glow, 1 + ENTITY_GLOW_MUL * (1 - d / entityGlowR));
+        }
+      }
       for (let r = 0; r < world.rings.length; r++) {
         if (inside(x, y, world.rings[r]!, 0)) { ringOwner[k] = r; break; }
       }
@@ -312,7 +336,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
           if (d < borderKeep) nearV = Math.max(nearV, 1 - d / borderKeep);
         }
       }
-      baseMul[k] = depth > 0 ? crossFactor * depth : 1;
+      baseMul[k] = (depth > 0 ? crossFactor * depth : 1) * glow;
       borderMul[0]![k] = 1 + borderFactor * nearH;
       borderMul[1]![k] = 1 + borderFactor * nearV;
     }
@@ -400,12 +424,14 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     const go = groupOcc.get(groupOf[ei]!)!;
     const key = keyOf[ei];
     const ko = key ? keyOcc.get(key)! : null;
-    // Campo de incentivo `->`: 1 sobre un riel de la misma clave, 0 a 3 celdas.
-    const shareField = key ? new Float32Array(N) : null;
-    // Metas alternativas: nodos de rieles de la misma clave (no de la propia cadena).
+    // Campo de incentivo `->`: alrededor de cada punta de la misma clave, el
+    // factor va de ~0 en la punta a 1 a `shareRadius`. Dentro de ese radio
+    // los rieles de la misma clave no son ajenos (ahí se juntan).
+    const shareField = key ? new Float32Array(N).fill(1) : null;
+    // Metas alternativas: nodos de rieles de la misma clave (no de la propia
+    // cadena) dentro del radio de incentivo de su punta.
     const joinAt = new Map<number, { host: number; t: number; dirOut: number; tail: number }>();
     if (key && shareField) {
-      const R = SHARE_RADIUS_STEPS;
       for (let oj = 0; oj < edges.length; oj++) {
         if (oj === ei || keyOf[oj] !== key || !nodes[oj]) continue;
         if (rootOf(oj) === ei) continue;
@@ -421,24 +447,26 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
           const b = ns[t + 1]!;
           tail[t] = tail[t + 1]! + Math.abs(xs[a % nx]! - xs[b % nx]!) + Math.abs(ys[Math.floor(a / nx)]! - ys[Math.floor(b / nx)]!);
         }
+        // Brillo de la punta de la raíz de ese riel (la punta real).
+        const tipE = edges[rootOf(oj)]!;
+        const tx = tipE.to.x;
+        const ty = tipE.to.y;
+        for (let jj = 0; jj < ny; jj++) {
+          const dy = Math.abs(ys[jj]! - ty);
+          if (dy >= shareRadius) continue;
+          for (let ii = 0; ii < nx; ii++) {
+            const d = Math.abs(xs[ii]! - tx) + dy;
+            if (d >= shareRadius) continue;
+            const kk = idx(ii, jj);
+            const f = d / shareRadius;
+            if (f < shareField[kk]!) shareField[kk] = f;
+          }
+        }
         for (let t = 0; t < ns.length; t++) {
           const k = ns[t]!;
-          const ci = k % nx;
-          const cj = (k - ci) / nx;
-          for (let dj = -R; dj <= R; dj++) {
-            for (let di = -R; di <= R; di++) {
-              const d = Math.abs(di) + Math.abs(dj);
-              if (d > R) continue;
-              const ii = ci + di;
-              const jj = cj + dj;
-              if (ii < 0 || jj < 0 || ii >= nx || jj >= ny) continue;
-              const kk = idx(ii, jj);
-              const f = 1 - d / (R + 1);
-              if (f > shareField[kk]!) shareField[kk] = f;
-            }
-          }
-          // Unirse lejos del arranque del anfitrión (no en su stub de salida).
-          if (allowJoin && t >= 2 && t < ns.length - 1) {
+          // Unirse solo dentro del radio de incentivo de la punta y lejos
+          // del arranque del anfitrión (no en su stub de salida).
+          if (allowJoin && t >= 2 && t < ns.length - 1 && tail[t]! <= shareRadius) {
             const dirOut = dIn[t + 1]!;
             const prev = joinAt.get(k);
             if (!prev || tail[t]! < prev.tail) joinAt.set(k, { host: oj, t, dirOut, tail: tail[t]! });
@@ -488,7 +516,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       || (e.to.x < fb.x && x > fb.x + fb.w)
       || (e.to.y > fb.y + fb.h && y < fb.y)
       || (e.to.y < fb.y && y > fb.y + fb.h);
-    const hScale = key ? SHARE_MIN_MUL : 1;
+    const hScale = key ? MIN_MUL : 1;
     const h = (k: number): number => {
       const x = xs[k % nx]!;
       const y = ys[Math.floor(k / nx)]!;
@@ -525,46 +553,51 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         // Mismo destino: en el embudo final junto a B compartir cuesta menos,
         // pero nunca es gratis (si no, se juntan aunque haya otro lado libre).
         const merge = nearGoal(xs[ni]!, ys[nj]!);
-        // Rieles de la misma clave `->` no son ajenos: se excluyen como el embudo.
+        // Dentro del radio de incentivo de una punta de la misma clave, los
+        // rieles de esa clave no son ajenos (ahí es donde se juntan).
+        const enIncentivo = shareField ? shareField[nk]! < 1 : false;
         const own = (oo: number, k2: number): number =>
-          Math.max(merge ? go[oo]![k2]! : 0, ko ? ko[oo]![k2]! : 0);
+          Math.max(merge ? go[oo]![k2]! : 0, ko && enIncentivo ? ko[oo]![k2]! : 0);
         const others = occ[o]![nk]! - own(o, nk);
-        const sameFunnel = merge && !(ko && ko[o]![nk]! > 0) ? go[o]![nk]! : 0;
-        let mul = baseMul[nk]! + (borderMul[o]![nk]! - 1) + hist[nk]! * HISTORY_MUL;
-        if (behind(xs[ni]!, ys[nj]!)) mul += RETREAT_MUL;
-        if (others > 0) mul += OVERLAP_MUL * others * pf;
-        if (sameFunnel > 0) mul += OVERLAP_MUL * SAME_FUNNEL_SHARE * sameFunnel;
+        const sameFunnel = merge && !(ko && enIncentivo && ko[o]![nk]! > 0) ? go[o]![nk]! : 0;
+        // ── Campo de factores: producto de brillos; cada nodo parte de 1 ──
+        let mul = baseMul[nk]! * borderMul[o]![nk]! * (1 + hist[nk]! * HISTORY_MUL);
+        if (behind(xs[ni]!, ys[nj]!)) mul *= 1 + RETREAT_MUL;
+        if (others > 0) mul *= 1 + OVERLAP_MUL * others * pf;
+        if (sameFunnel > 0) mul *= SAME_FUNNEL_MUL;
         // De frente contra otra arista (verde baja, café sube al mismo nodo):
-        // se lee como una sola línea que sigue. Cuesta como riel compartido.
-        if (dirOcc[nk * 4 + ((nd + 2) & 3)]! > 0 && others > 0) mul += OVERLAP_MUL * pf;
-        // Rieles ajenos paralelos a < pitch.
+        // se lee como una sola línea que sigue. Brilla como riel compartido.
+        if (dirOcc[nk * 4 + ((nd + 2) & 3)]! > 0 && others > 0) mul *= 1 + OVERLAP_MUL * pf;
+        // Rieles ajenos paralelos a < pitch: brillo decreciente con la distancia.
+        const nearRail = (dist: number, n2: number): number => 1 + NEAR_RAIL_MUL * n2 * (1 - dist / pitch) * pf;
         if (o === 0) {
           for (let jj = nj - 1; jj >= 0 && ys[nj]! - ys[jj]! < pitch; jj--) {
             const n2 = occ[0]![idx(ni, jj)]! - own(0, idx(ni, jj));
-            if (n2 > 0) mul += nearFactor * n2 * (1 - (ys[nj]! - ys[jj]!) / pitch) * pf;
+            if (n2 > 0) mul *= nearRail(ys[nj]! - ys[jj]!, n2);
           }
           for (let jj = nj + 1; jj < ny && ys[jj]! - ys[nj]! < pitch; jj++) {
             const n2 = occ[0]![idx(ni, jj)]! - own(0, idx(ni, jj));
-            if (n2 > 0) mul += nearFactor * n2 * (1 - (ys[jj]! - ys[nj]!) / pitch) * pf;
+            if (n2 > 0) mul *= nearRail(ys[jj]! - ys[nj]!, n2);
           }
         } else {
           for (let ii = ni - 1; ii >= 0 && xs[ni]! - xs[ii]! < pitch; ii--) {
             const n2 = occ[1]![idx(ii, nj)]! - own(1, idx(ii, nj));
-            if (n2 > 0) mul += nearFactor * n2 * (1 - (xs[ni]! - xs[ii]!) / pitch) * pf;
+            if (n2 > 0) mul *= nearRail(xs[ni]! - xs[ii]!, n2);
           }
           for (let ii = ni + 1; ii < nx && xs[ii]! - xs[ni]! < pitch; ii++) {
             const n2 = occ[1]![idx(ii, nj)]! - own(1, idx(ii, nj));
-            if (n2 > 0) mul += nearFactor * n2 * (1 - (xs[ii]! - xs[ni]!) / pitch) * pf;
+            if (n2 > 0) mul *= nearRail(xs[ii]! - xs[ni]!, n2);
           }
         }
-        // Incentivo `->`: cerca de un riel de la misma clave el paso es más
-        // barato (lineal con la distancia, piso SHARE_MIN_MUL). No prohíbe nada.
-        if (shareField && shareField[nk]! > 0) mul = Math.max(SHARE_MIN_MUL, mul * (1 - SHARE_DISCOUNT * shareField[nk]!));
+        // Cruzar perpendicular un riel ajeno: brillo en ese nodo.
+        if (occ[1 - o]![nk]! - own(1 - o, nk) > 0) mul *= CROSS_MUL;
+        // Incentivo `->`: factor < 1 cerca de una punta de la misma clave.
+        if (shareField) mul *= shareField[nk]!;
+        mul = Math.max(MIN_MUL, mul);
         let cost = len * mul;
-        // Giro escalado por el terreno: dentro de agrupadores el paso es caro
-        // y un giro fijo saldría “barato” → codos innecesarios.
+        // Giro: penalización geométrica (no es un campo), escalada por el
+        // terreno para que dentro de agrupadores no salga “barato” codear.
         if (nd !== d) cost += turnPenalty * baseMul[nk]!;
-        if (occ[1 - o]![nk]! - own(1 - o, nk) > 0) cost += CROSS_COST;
         if (goals.has(nk) && nd !== goals.get(nk)) cost += turnPenalty * baseMul[nk]!;
         const ns = nk * 4 + nd;
         const ng = gk + cost;

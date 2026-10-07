@@ -79,6 +79,10 @@ export const RouterOptsSchema = z.object({
   iterations: z.number().optional(),
   /** Largo mínimo del tramo recto en cada extremo (marcas de cardinalidad). */
   stub: z.number().optional(),
+  /** Radio (px) del incentivo alrededor de cada punta `->` de la misma clave. Default 150. */
+  shareRadius: z.number().optional(),
+  /** Radio (px) del brillo de desincentivo que emite cada entidad más allá de su hitbox. Default 2·clearance. */
+  entityGlow: z.number().optional(),
 });
 export type RouterOpts = z.infer<typeof RouterOptsSchema>;
 

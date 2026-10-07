@@ -149,7 +149,6 @@ Deno.test('remate arrow: sin lollipops, cada flecha termina en la cara de su des
 
 Deno.test('router: las `->` de la misma clave comparten punta si les sale barato; el `-(O-` nunca', async () => {
   const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
-  // Destino D a la derecha; A y B a la izquierda, uno sobre otro y cerca.
   const D = { id: 'D', x: 600, y: 180, w: 120, h: 80 };
   const A = { id: 'A', x: 40, y: 120, w: 120, h: 60 };
   const B = { id: 'B', x: 40, y: 240, w: 120, h: 60 };
@@ -166,16 +165,13 @@ Deno.test('router: las `->` de la misma clave comparten punta si les sale barato
   const raiz = conClave.joinedTo[unida]!;
   const fin = (p: Array<{ x: number; y: number }> | null) => p![p!.length - 1]!;
   assertEquals(fin(conClave.paths[unida]), fin(conClave.paths[raiz]), 'la unida no termina en la punta de la raíz');
-  // Sin clave (como el -(O-): cada una llega a su propio puerto.
   const sinClave = routeEdges(world, [arista('a', A, 200), arista('b', B, 240)], { step: 20, clearance: 20, lanePitch: 24 });
   assert(sinClave.joinedTo.every((j) => j == null), 'sin clave hubo unión');
   assert(JSON.stringify(fin(sinClave.paths[0]!)) !== JSON.stringify(fin(sinClave.paths[1]!)));
 });
 
-Deno.test('router: unirse no es obligatorio; si el rodeo es caro, la flecha hace su propia punta', async () => {
+Deno.test('router: unirse no es obligatorio; fuera del radio de incentivo la flecha hace su propia punta', async () => {
   const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
-  // D grande; A llega por la izquierda y C por abajo, lejos: unirse a la
-  // flecha de A exigiría rodear D. C debe llegar con su propia punta.
   const D = { id: 'D', x: 400, y: 100, w: 200, h: 200 };
   const A = { id: 'A', x: 40, y: 170, w: 120, h: 60 };
   const C = { id: 'C', x: 440, y: 520, w: 120, h: 60 };
@@ -185,6 +181,28 @@ Deno.test('router: unirse no es obligatorio; si el rodeo es caro, la flecha hace
     { id: 'c', from: { x: 500, y: 520 }, fromSide: 'top', to: { x: 500, y: 300 }, toSide: 'bottom', fromBox: C, toBox: D, fromPkgs: new Set(), toPkgs: new Set(), shareKey: 'D::arrow' },
   ], { step: 20, clearance: 20, lanePitch: 24 });
   assertEquals(r.joinedTo[1], null, 'C rodeó D para unirse a la flecha de A');
+});
+
+Deno.test('router: campo de factores; dos rieles ajenos no corren pegados (< lanePitch) en un tramo largo', async () => {
+  const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
+  // A→D y B→E en filas a 60 px: si el brillo de riel vecino no actuara,
+  // los rieles irían pegados; con él se separan al menos un carril.
+  const A = { id: 'A', x: 40, y: 170, w: 100, h: 60 };
+  const B = { id: 'B', x: 40, y: 250, w: 100, h: 60 };
+  const D = { id: 'D', x: 700, y: 170, w: 100, h: 60 };
+  const E = { id: 'E', x: 700, y: 250, w: 100, h: 60 };
+  const world = { components: [A, B, D, E], packages: [], titles: [], rings: [] };
+  const r = routeEdges(world, [
+    { id: 'a', from: { x: 140, y: 200 }, fromSide: 'right', to: { x: 700, y: 200 }, toSide: 'left', fromBox: A, toBox: D, fromPkgs: new Set(), toPkgs: new Set() },
+    { id: 'b', from: { x: 140, y: 280 }, fromSide: 'right', to: { x: 700, y: 280 }, toSide: 'left', fromBox: B, toBox: E, fromPkgs: new Set(), toPkgs: new Set() },
+  ], { step: 20, clearance: 20, lanePitch: 24 });
+  assert(r.violations.every((v) => v.length === 0));
+  const segs = (p: Array<{ x: number; y: number }>) => p.slice(1).map((b, k) => [p[k]!, b] as const).filter(([a, b]) => a.y === b.y);
+  for (const [a1, a2] of segs(r.paths[0]!)) for (const [b1, b2] of segs(r.paths[1]!)) {
+    if (Math.abs(a1.y - b1.y) >= 24) continue;
+    const ov = Math.min(Math.max(a1.x, a2.x), Math.max(b1.x, b2.x)) - Math.max(Math.min(a1.x, a2.x), Math.min(b1.x, b2.x));
+    assert(ov <= 60, `rieles a ${Math.abs(a1.y - b1.y)} px durante ${ov} px`);
+  }
 });
 
 Deno.test('estilo vp: la pintura se declara en el layout y los rótulos no se centran', () => {
@@ -221,35 +239,21 @@ Deno.test('clases: cada clase dentro de su paquete y con el relleno semántico d
   assertEquals(L.nodes.find((n) => n.id === 'c1')?.fill, 'service');
 });
 
-Deno.test('herencia en bus: un bus por paquete de hijos, cada uno en su carril y con su tronco; ningún hijo corre sobre una barra', () => {
+Deno.test('herencia en bus: un solo triángulo por padre y ningún hijo corre sobre la barra', () => {
   const L = computeClassLayout(clases());
-  const buses = L.edges.filter((e) => e.id.endsWith('::bus'));
-  assert(buses.length >= 1, 'sin bus');
-  const barras = buses.map((b) => {
-    const [a, c, t0, t1] = puntos(b.path);
-    return { y: a!.y, x0: Math.min(a!.x, c!.x), x1: Math.max(a!.x, c!.x), tx: t0!.x, ty0: t1!.y, ty1: t0!.y };
-  });
-  // Ningún riel compartido: carriles y troncos distintos.
-  assertEquals(new Set(barras.map((b) => b.y)).size, barras.length, 'dos buses en el mismo carril');
-  assertEquals(new Set(barras.map((b) => b.tx)).size, barras.length, 'dos buses con el mismo tronco');
-  // Barras y troncos no se cruzan entre buses.
-  for (const a of barras) for (const b of barras) {
-    if (a === b) continue;
-    const cruza = b.tx > a.x0 && b.tx < a.x1 && a.y > Math.min(b.ty0, b.ty1) && a.y < Math.max(b.ty0, b.ty1);
-    assert(!cruza, `el tronco de x=${b.tx} cruza la barra y=${a.y}`);
-  }
+  const bus = L.edges.filter((e) => e.id.endsWith('::bus'));
+  assertEquals(bus.length, 1);
+  const busY = puntos(bus[0]!.path)[0]!.y;
   const hijos = L.edges.filter((e) => e.from !== e.to && e.kind === 'inheritance');
   assertEquals(hijos.length, 4);
   for (const e of hijos) {
     assertEquals(e.noTip, true, `${e.from} lleva triángulo propio`);
     const pts = puntos(e.path);
-    for (const bar of barras) {
-      for (let k = 1; k < pts.length; k++) {
-        const horizontalEnBarra = pts[k]!.y === bar.y && pts[k - 1]!.y === bar.y && pts[k]!.x !== pts[k - 1]!.x;
-        assert(!horizontalEnBarra, `${e.from} corre sobre una barra`);
-      }
+    for (let k = 1; k < pts.length; k++) {
+      const horizontalEnBarra = pts[k]!.y === busY && pts[k - 1]!.y === busY && pts[k]!.x !== pts[k - 1]!.x;
+      assert(!horizontalEnBarra, `${e.from} corre sobre la barra`);
     }
-    assert(barras.some((b) => b.y === pts[pts.length - 1]!.y), `${e.from} no llega a una barra`);
+    assertEquals(pts[pts.length - 1]!.y, busY, `${e.from} no llega a la barra`);
   }
 });
 

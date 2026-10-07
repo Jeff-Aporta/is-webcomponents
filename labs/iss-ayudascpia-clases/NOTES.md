@@ -25,7 +25,11 @@ Chromium a veces no arranca en Windows (`Controlador no válido`): reintentar.
 
 ## Herencia en bus
 
-Un padre con 3 o más hijos en otra franja recibe **un conjunto de generalización por paquete de hijos** (2026-10-07): los hijos de cada paquete suben a una barra propia, en su propio carril del corredor, y un tronco propio llega a su triángulo en la cara inferior del padre. Una única barra para los 14 controllers era un riel compartido por todas las aristas. El grupo más alejado del padre va en el carril superior y los troncos siguen el orden horizontal de los grupos, así barras y troncos nunca se cruzan. Barra y tronco son muros con medio carril de aire para el router: ninguna otra arista corre encima ni pegada. El hijo con el camino libre sale por arriba; uno con otra clase o un rótulo encima sale por el lateral hacia el primer pasillo libre **dentro de su paquete** (≥ 28 px del borde). Dos llegadas a la misma x se corren un carril.
+Un padre con 3 o más hijos en otra franja recibe un **conjunto de generalización**: cada hijo sube a una barra común en el corredor entre franjas y un solo tronco llega al único triángulo. La barra es un riel compartido por aristas de la misma clave (`padre::inheritance`) a menos de 150 px de la punta: es exactamente el radio de incentivo del router, donde las `->` del mismo destino deben converger. Barra y tronco son muros con medio carril de aire, así ninguna otra arista corre encima ni pegada. Se probó un bus por paquete (cuatro troncos) y quedó peor: cuatro triángulos juntos en la cara del padre.
+
+## Campo de factores del router (2026-10-07)
+
+`component-router.ts` ya no suma costos: cada nodo de la grilla vale 1 y cada fuente emite un brillo con radio y caída lineal; el costo del paso es largo × producto de brillos. Desincentivo (> 1): entidades (2·clearance alrededor del hitbox), bordes de agrupador, anidación, rieles ajenos (encima ×120; a < `lanePitch` hasta ×6 decreciente), choque de frente, ir por detrás, cruces (×8), historial. Incentivo (< 1): puntas `->` de la misma clave con radio 150 px (en la punta ~0, a 150 px 1); dentro de ese radio los rieles de la misma clave no son ajenos y una arista puede unirse a otra si le sale más barato que su puerto propio. Lo único aditivo es el giro.
 
 ## Estilo `vp` (Visual Paradigm / InSoft) — el del payload
 
