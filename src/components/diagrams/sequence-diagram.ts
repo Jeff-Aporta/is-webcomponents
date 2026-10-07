@@ -63,6 +63,8 @@ import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./s
 
 const GUIDE_X = 44;
 const FONT_UI = 'Tahoma,Arial,sans-serif';
+/** Rotación de rellenos de área para regiones y cajas sin color propio (o repetido). */
+const AREA_ROTATION = ['panel', 'service', 'cool', 'warm', 'leaf', 'soft', 'lite', 'neutral', 'primary', 'secondary'];
 /** Icono de cada tipo de región: el tipo se lee por el icono, no por la palabra. */
 const FRAGMENT_ICON: Record<string, string> = {
   par: 'mdi:call-split',
@@ -107,6 +109,8 @@ class IswcSequenceDiagram extends DiagramElementBase {
   #font: string = FONT_UI;
   #labelFont: string = FONT_MONO;
   #edgeStyle: EdgeStyle = 'orthogonal';
+  /** Rellenos de área ya usados en este render (regiones, alt, cajas): no se repiten. */
+  #areasUsadas: Set<string> = new Set();
   #turtle: PathTurtle | null = null;
   #turtleGroup: SVGGElement | null = null;
   #hiddenGroups: Set<string> = new Set<string>();
@@ -221,6 +225,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.#lifelineNodes = [];
     this.#actorNodes = [];
     this.#hoverId = null;
+    this.#areasUsadas = new Set();
 
     const FONT = this.#font;
     if (title) {
@@ -344,7 +349,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
       if (!iconInLabel) {
         const tint = tkHueToHex(a.hue) ?? '#64748b';
-        g.appendChild(svgIconBadge(a.icon, { cx: iconCx, cy: a.y, size: 24, color: tint, bg: 'circle', bgColor: pastelColor(tint), bgAlpha: 0.85 }));
+        g.appendChild(svgIconBadge(a.icon, { cx: iconCx, cy: a.y, size: 24, color: tint, bg: 'circle', bgColor: pastelColor(tint, 0.9), bgAlpha: 0.9 }));
       }
 
       if (a.label.includes('{{')) {
@@ -387,10 +392,13 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
   /** Regiones de participantes: caja con título detrás de actores y lifelines. */
   #buildParticipantBoxes(boxes: PartBox[], theme: DiagramTheme): void {
+    const usados = new Set<string>();
     for (const b of boxes) {
       const g = svgEl('g', { class: 'seq-box' });
       const paint = this.#paint;
-      const fill = paletteColor(this.#styleTheme, b.color) ?? b.color ?? theme.altFill;
+      const pedido = paletteColor(this.#styleTheme, b.color) ?? b.color ?? null;
+      const fill = pedido && !usados.has(pedido) ? pedido : this.#nextAreaColor(usados, theme.altFill);
+      usados.add(fill);
       g.appendChild(svgEl('rect', {
         x: b.x, y: b.y, width: b.w, height: b.h, rx: paint ? 0 : TK_DIAGRAM_RADIUS_PX,
         fill, 'fill-opacity': b.color ? (paint?.boxOpacity ?? 0.35) : 1,
@@ -415,9 +423,13 @@ class IswcSequenceDiagram extends DiagramElementBase {
   #buildAltBox(altBox: SequenceLayoutAltBox, theme: DiagramTheme): void {
     const box = altBox as SequenceLayoutAltBox & { dividers?: number[]; branches?: Array<{ label: string; y: number }> };
     const g = svgEl('g', { class: 'seq-alt' });
+    // Con estilo, el alt toma un relleno de la misma rotación que las regiones.
+    const altFill = this.#paint ? this.#nextAreaColor(this.#areasUsadas, theme.altFill) : theme.altFill;
+    this.#areasUsadas.add(altFill);
     g.appendChild(svgEl('rect', {
       x: box.x, y: box.y, width: box.w, height: box.h, rx: this.#paint ? 0 : TK_DIAGRAM_RADIUS_PX,
-      fill: theme.altFill, stroke: theme.altBorder, 'stroke-width': '1.2', 'stroke-dasharray': '6 4',
+      fill: altFill, 'fill-opacity': this.#paint ? (this.#paint.fragmentOpacity) : null,
+      stroke: theme.altBorder, 'stroke-width': '1.2', 'stroke-dasharray': '6 4',
     }));
     // Pestaña: icono de bifurcación + título (todas las regiones llevan su
     // título en la pestaña; el tipo se lee por el icono).
@@ -471,6 +483,15 @@ class IswcSequenceDiagram extends DiagramElementBase {
     return tw;
   }
 
+  /** Siguiente color de área de la rotación del tema que no esté en uso. */
+  #nextAreaColor(usados: Set<string>, fallback: string): string {
+    for (const nombre of AREA_ROTATION) {
+      const c = paletteColor(this.#styleTheme, nombre);
+      if (c && !usados.has(c)) return c;
+    }
+    return fallback;
+  }
+
   /** Color de un grupo: nombre de paleta/hex del tema > hue > acento. */
   #groupColor(color: string | undefined, hue: number | undefined, theme: DiagramTheme): string {
     return lineColor(this.#styleTheme, color)
@@ -486,8 +507,13 @@ class IswcSequenceDiagram extends DiagramElementBase {
    */
   #buildFragments(fragments: SequenceLayoutFragment[], theme: DiagramTheme): void {
     const paint = this.#paint;
+    const usados = this.#areasUsadas;
     for (const fr of fragments) {
-      const fill = paletteColor(this.#styleTheme, fr.color) ?? fr.color ?? paint?.fragmentFill ?? theme.altFill;
+      // Sin color (o repetido), la región toma el siguiente de la rotación:
+      // dos regiones del mismo diagrama no comparten relleno si se puede evitar.
+      const pedido = paletteColor(this.#styleTheme, fr.color) ?? fr.color ?? null;
+      const fill = pedido && !usados.has(pedido) ? pedido : this.#nextAreaColor(usados, paint?.fragmentFill ?? theme.altFill);
+      usados.add(fill);
       const stroke = paint?.fragmentBorder ?? theme.altBorder;
       const g = svgEl('g', { class: 'seq-fragment' });
       g.dataset.fragmentId = fr.id;
@@ -578,7 +604,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
           // Nota como insignia: fondo pastel del color de la arista, sin borde.
           g.appendChild(svgEl('rect', {
             x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 3,
-            fill: pastelColor(color), 'fill-opacity': 0.8,
+            fill: pastelColor(color, 0.84), 'fill-opacity': 0.85,
           }));
         } else {
           g.appendChild(svgEl('rect', {
@@ -598,7 +624,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // fondo circular translúcido: el color solo no basta para leer el grupo.
       if (m.groupIcon) {
         g.appendChild(svgIconBadge(m.groupIcon, {
-          cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgColor: pastelColor(color), bgAlpha: 0.85,
+          cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgColor: pastelColor(color, 0.9), bgAlpha: 0.9,
         }));
       }
       // Título del grupo como rótulo centrado bajo el par icono + índice:
@@ -608,7 +634,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         const tw = Math.ceil(m.groupTitle.length * 4.6) + 8;
         g.appendChild(svgEl('rect', {
           x: start.x - dir * 10 - tw / 2, y: start.y + 15, width: tw, height: 12, rx: 2,
-          fill: pastelColor(color), 'fill-opacity': 0.85,
+          fill: pastelColor(color, 0.9), 'fill-opacity': 0.9,
         }));
         const t = svgEl('text', {
           x: start.x - dir * 10, y: start.y + 21, 'dominant-baseline': 'middle', fill: color, 'fill-opacity': 0.7,

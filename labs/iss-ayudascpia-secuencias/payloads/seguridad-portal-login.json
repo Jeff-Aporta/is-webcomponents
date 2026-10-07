@@ -66,7 +66,6 @@
             "m5",
             "m6"
           ],
-          "color": "neutral",
           "condition": "se consulta DataSnap antes de validar credenciales"
         }
       ],

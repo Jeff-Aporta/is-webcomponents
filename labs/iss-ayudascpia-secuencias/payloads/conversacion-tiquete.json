@@ -64,7 +64,6 @@
             "m6",
             "m7"
           ],
-          "color": "neutral",
           "condition": "solo el dueño puede cerrar la conversación"
         }
       ],

@@ -81,8 +81,7 @@
           "messages": [
             "m6",
             "m7"
-          ],
-          "color": "neutral"
+          ]
         },
         {
           "id": "f-stream",
@@ -94,7 +93,6 @@
             "m13",
             "m14"
           ],
-          "color": "service",
           "condition": "hay clave de OpenAI; si no, el turno termina degradado"
         },
         {
@@ -106,8 +104,7 @@
             "m16",
             "m17",
             "m18"
-          ],
-          "color": "neutral"
+          ]
         }
       ],
       "preamble": [
