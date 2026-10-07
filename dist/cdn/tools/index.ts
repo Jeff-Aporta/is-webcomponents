@@ -47,3 +47,5 @@ export type {
   TestCooldownOptions,
   TestCooldownRun,
 } from './test-cooldown.js';
+
+export { runQueue, TEST_CONCURRENCY, testConcurrency } from './test-queue.js';

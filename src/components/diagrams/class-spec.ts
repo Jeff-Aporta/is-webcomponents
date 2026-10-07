@@ -553,11 +553,15 @@ function computePackagedClassLayout(
   const rels = spec.relations.filter((r) => nodeById.has(r.from) && nodeById.has(r.to));
 
   // ── Herencia en bus ────────────────────────────────────────────────
-  // Un padre con 3 o más hijos por debajo, en otra franja: cada hijo sube
-  // hasta una barra común en el corredor entre franjas y de ahí un solo
-  // tronco llega al triángulo. Es la notación UML de conjunto de
-  // generalización: un triángulo por padre, no uno por hijo.
-  const busOf = new Map<string, { y: number; members: number[] }>();
+  // Un padre con 3 o más hijos por debajo, en otra franja: los hijos de un
+  // mismo paquete suben a una barra propia (conjunto de generalización UML)
+  // y su tronco llega a un triángulo propio en la cara inferior del padre.
+  // Una sola barra para todos los hijos era un riel compartido por decenas
+  // de aristas: cada paquete va en su carril del corredor y con su tronco,
+  // y el orden (el grupo más alejado del padre arriba, troncos en el mismo
+  // orden horizontal que los grupos) garantiza que barras y troncos no se
+  // crucen.
+  const busOf = new Map<string, { padre: string; y: number; members: number[]; trunkX: number }>();
   const porPadre = new Map<string, number[]>();
   rels.forEach((r, i) => {
     if (r.kind !== 'inheritance') return;
@@ -572,7 +576,33 @@ function computePackagedClassLayout(
     const debajo = packages.filter((q) => !q.parent && q.y >= rootP.y + rootP.h);
     if (!debajo.length) continue;
     const siguiente = debajo.reduce((a, b) => (b.y < a.y ? b : a));
-    busOf.set(padre, { y: (rootP.y + rootP.h + siguiente.y) / 2, members: idx });
+    // Grupos por paquete del hijo, en orden horizontal.
+    const grupos = new Map<string, number[]>();
+    for (const i of idx) {
+      const k = nodeById.get(rels[i]!.from)!.package ?? '';
+      grupos.set(k, [...(grupos.get(k) ?? []), i]);
+    }
+    const centro = (ids: number[]): number => {
+      const hs = ids.map((i) => nodeById.get(rels[i]!.from)!);
+      return (Math.min(...hs.map((h) => h.x)) + Math.max(...hs.map((h) => h.x + h.w))) / 2;
+    };
+    const lista = [...grupos.entries()].map(([pkg, ids]) => ({ pkg, ids, cx: centro(ids) })).sort((a, b) => a.cx - b.cx);
+    const n = lista.length;
+    // Troncos repartidos por la cara inferior del padre, en el mismo orden.
+    const pcx = p.x + p.w / 2;
+    const paso = n > 1 ? Math.min(Math.max(lanePitch, 24), (p.w - 32) / (n - 1)) : 0;
+    const x0 = pcx - (paso * (n - 1)) / 2;
+    // Carriles: el grupo más alejado del padre va arriba (más cerca del padre).
+    const porLejania = [...lista].sort((a, b) => Math.abs(b.cx - pcx) - Math.abs(a.cx - pcx));
+    const carril = Math.max(lanePitch, 28);
+    const medio = (rootP.y + rootP.h + siguiente.y) / 2;
+    const y0 = medio - (carril * (n - 1)) / 2;
+    lista.forEach((g, k) => {
+      const lane = porLejania.indexOf(g);
+      busOf.set(`${padre}::${g.pkg}`, {
+        padre, y: Math.round(y0 + lane * carril), members: g.ids, trunkX: Math.round(x0 + k * paso),
+      });
+    });
   }
   const enBus = new Set([...busOf.values()].flatMap((b) => b.members));
 
@@ -652,12 +682,17 @@ function computePackagedClassLayout(
   // (fuera del aire del muro) y el último tramo vertical hasta la barra se
   // agrega después: así las llegadas son perpendiculares y no se montan.
   const BUS_APPROACH = EDGE_CLEARANCE + 4;
-  const busWalls = [...busOf.entries()].map(([padre, bus]) => {
-    const p = nodeById.get(padre)!;
-    const xs = [p.x + p.w / 2, ...bus.members.map((i) => busPlan.get(i)?.to.x).filter((x): x is number => x != null)];
+  // Barra y tronco son muros con medio carril de aire: ninguna otra arista
+  // corre encima ni pegada a ellos (compartir riel está prohibido).
+  const aire = Math.round(lanePitch / 2);
+  const busWalls = [...busOf.values()].flatMap((bus) => {
+    const p = nodeById.get(bus.padre)!;
+    const xs = [bus.trunkX, ...bus.members.map((i) => busPlan.get(i)?.to.x).filter((x): x is number => x != null)];
     const x0 = Math.min(...xs);
     const x1 = Math.max(...xs);
-    return { x: x0 - 4, y: bus.y - 2, w: x1 - x0 + 8, h: 4 };
+    const barra = { x: x0 - 4, y: bus.y - Math.min(aire, BUS_APPROACH - 6), w: x1 - x0 + 8, h: 2 * Math.min(aire, BUS_APPROACH - 6) };
+    const tronco = { x: bus.trunkX - aire, y: p.y + p.h, w: 2 * aire, h: bus.y - (p.y + p.h) };
+    return [barra, tronco];
   });
   const res = routeEdges(
     {
@@ -762,17 +797,18 @@ function computePackagedClassLayout(
       ...(busPlan.has(i) ? { noTip: true } : {}),
     }];
   });
-  // Barra + tronco de cada bus, con el único triángulo en el padre.
-  for (const [padre, bus] of busOf) {
+  // Barra + tronco de cada bus, con su triángulo en la cara inferior del padre.
+  for (const [clave, bus] of busOf) {
+    const padre = bus.padre;
     const p = nodeById.get(padre)!;
     const xs = bus.members.map((i) => ptsOf.get(i)?.[ptsOf.get(i)!.length - 1]?.x).filter((x): x is number => x != null);
-    const cx = Math.round(p.x + p.w / 2);
+    const cx = bus.trunkX + dx;
     const x0 = Math.min(cx, ...xs);
     const x1 = Math.max(cx, ...xs);
     const base = { x: cx, y: p.y + p.h };
     const tip = tipAt(base, 'bottom');
     edges.push({
-      id: `${padre}::bus`, from: padre, to: padre, kind: 'inheritance',
+      id: `${clave}::bus`, from: padre, to: padre, kind: 'inheritance',
       path: `M${x0},${bus.y} L${x1},${bus.y} M${cx},${bus.y} L${base.x},${base.y}`,
       targetTipX: tip.x, targetTipY: tip.y, targetAngle: tip.angle,
       sourceTipX: cx, sourceTipY: bus.y, sourceAngle: tip.angle,

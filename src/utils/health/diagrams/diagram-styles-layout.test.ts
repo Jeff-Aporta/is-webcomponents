@@ -178,21 +178,35 @@ Deno.test('clases: cada clase dentro de su paquete y con el relleno semántico d
   assertEquals(L.nodes.find((n) => n.id === 'c1')?.fill, 'service');
 });
 
-Deno.test('herencia en bus: un solo triángulo por padre y ningún hijo corre sobre la barra', () => {
+Deno.test('herencia en bus: un bus por paquete de hijos, cada uno en su carril y con su tronco; ningún hijo corre sobre una barra', () => {
   const L = computeClassLayout(clases());
-  const bus = L.edges.filter((e) => e.id.endsWith('::bus'));
-  assertEquals(bus.length, 1);
-  const busY = puntos(bus[0]!.path)[0]!.y;
+  const buses = L.edges.filter((e) => e.id.endsWith('::bus'));
+  assert(buses.length >= 1, 'sin bus');
+  const barras = buses.map((b) => {
+    const [a, c, t0, t1] = puntos(b.path);
+    return { y: a!.y, x0: Math.min(a!.x, c!.x), x1: Math.max(a!.x, c!.x), tx: t0!.x, ty0: t1!.y, ty1: t0!.y };
+  });
+  // Ningún riel compartido: carriles y troncos distintos.
+  assertEquals(new Set(barras.map((b) => b.y)).size, barras.length, 'dos buses en el mismo carril');
+  assertEquals(new Set(barras.map((b) => b.tx)).size, barras.length, 'dos buses con el mismo tronco');
+  // Barras y troncos no se cruzan entre buses.
+  for (const a of barras) for (const b of barras) {
+    if (a === b) continue;
+    const cruza = b.tx > a.x0 && b.tx < a.x1 && a.y > Math.min(b.ty0, b.ty1) && a.y < Math.max(b.ty0, b.ty1);
+    assert(!cruza, `el tronco de x=${b.tx} cruza la barra y=${a.y}`);
+  }
   const hijos = L.edges.filter((e) => e.from !== e.to && e.kind === 'inheritance');
   assertEquals(hijos.length, 4);
   for (const e of hijos) {
     assertEquals(e.noTip, true, `${e.from} lleva triángulo propio`);
     const pts = puntos(e.path);
-    for (let k = 1; k < pts.length; k++) {
-      const horizontalEnBarra = pts[k]!.y === busY && pts[k - 1]!.y === busY && pts[k]!.x !== pts[k - 1]!.x;
-      assert(!horizontalEnBarra, `${e.from} corre sobre la barra`);
+    for (const bar of barras) {
+      for (let k = 1; k < pts.length; k++) {
+        const horizontalEnBarra = pts[k]!.y === bar.y && pts[k - 1]!.y === bar.y && pts[k]!.x !== pts[k - 1]!.x;
+        assert(!horizontalEnBarra, `${e.from} corre sobre una barra`);
+      }
     }
-    assertEquals(pts[pts.length - 1]!.y, busY, `${e.from} no llega a la barra`);
+    assert(barras.some((b) => b.y === pts[pts.length - 1]!.y), `${e.from} no llega a una barra`);
   }
 });
 

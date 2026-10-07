@@ -25,7 +25,7 @@ Chromium a veces no arranca en Windows (`Controlador no válido`): reintentar.
 
 ## Herencia en bus
 
-Un padre con 3 o más hijos en otra franja recibe un **conjunto de generalización**: cada hijo sube a una barra común en el corredor entre franjas y un solo tronco llega al único triángulo. El hijo con el camino libre sale por arriba; uno con otra clase o un rótulo encima sale por el lateral hacia el primer pasillo libre **dentro de su paquete** (≥ 28 px del borde). Dos llegadas a la misma x se corren un carril.
+Un padre con 3 o más hijos en otra franja recibe **un conjunto de generalización por paquete de hijos** (2026-10-07): los hijos de cada paquete suben a una barra propia, en su propio carril del corredor, y un tronco propio llega a su triángulo en la cara inferior del padre. Una única barra para los 14 controllers era un riel compartido por todas las aristas. El grupo más alejado del padre va en el carril superior y los troncos siguen el orden horizontal de los grupos, así barras y troncos nunca se cruzan. Barra y tronco son muros con medio carril de aire para el router: ninguna otra arista corre encima ni pegada. El hijo con el camino libre sale por arriba; uno con otra clase o un rótulo encima sale por el lateral hacia el primer pasillo libre **dentro de su paquete** (≥ 28 px del borde). Dos llegadas a la misma x se corren un carril.
 
 ## Estilo `vp` (Visual Paradigm / InSoft) — el del payload
 
