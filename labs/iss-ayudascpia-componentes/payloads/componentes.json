@@ -33,7 +33,8 @@
           "x": 24,
           "y": 80,
           "w": 240,
-          "h": 280
+          "h": 280,
+          "icon": "mdi:application-brackets"
         },
         {
           "id": "pkg-azure",
@@ -42,7 +43,8 @@
           "x": 340,
           "y": 40,
           "w": 720,
-          "h": 900
+          "h": 900,
+          "icon": "mdi:cloud"
         },
         {
           "id": "pkg-api",
@@ -52,7 +54,8 @@
           "x": 360,
           "y": 80,
           "w": 420,
-          "h": 820
+          "h": 820,
+          "icon": "mdi:api"
         },
         {
           "id": "pkg-db",
@@ -63,7 +66,8 @@
           "y": 280,
           "w": 220,
           "h": 160,
-          "prohibido": true
+          "prohibido": true,
+          "icon": "mdi:database"
         },
         {
           "id": "pkg-openai",
@@ -72,7 +76,8 @@
           "x": 1160,
           "y": 60,
           "w": 240,
-          "h": 140
+          "h": 140,
+          "icon": "mdi:robot-outline"
         },
         {
           "id": "pkg-ds",
@@ -81,7 +86,8 @@
           "x": 1160,
           "y": 340,
           "w": 260,
-          "h": 140
+          "h": 140,
+          "icon": "mdi:server-network"
         }
       ],
       "components": [

@@ -11,6 +11,7 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
+import { svgIconBadge } from '../_shared/tk-icon-inline.js';
 import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./diagram-types.schemas.js";
 import type { TurtleTheme } from "../_shared/path-turtle.schemas.js";
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
@@ -552,12 +553,20 @@ class IswcClassDiagram extends DiagramElementBase {
         fill, stroke: '#000000', 'stroke-width': 1, class: 'cls-pkg',
       }));
       const izquierda = p.titleAlign === 'left';
+      const label = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+      const icon = (p as { icon?: string }).icon;
+      const textW = Math.ceil(label.length * 6.6);
+      const shift = icon ? 24 : 0;
+      const x0 = izquierda ? p.x + 10 : p.x + p.w / 2 - (textW + shift) / 2;
+      if (icon) {
+        g.appendChild(svgIconBadge(icon, { cx: x0 + 9, cy: p.y + 13, size: 18, color: '#1F2937', bg: 'circle', bgColor: '#FFFFFF', bgAlpha: 0.85 }));
+      }
       const t = svgEl('text', {
-        x: izquierda ? p.x + 10 : p.x + p.w / 2, y: p.y + 17,
-        'text-anchor': izquierda ? 'start' : 'middle', fill: '#000000',
+        x: x0 + shift, y: p.y + 17,
+        'text-anchor': 'start', fill: '#000000',
         'font-size': '12', 'font-family': 'Tahoma,Arial,sans-serif',
       });
-      t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
+      t.textContent = label;
       g.appendChild(t);
     }
   }

@@ -206,6 +206,7 @@ function readPackage(raw: unknown, i: number): Paquete {
     ...(r.cols != null && Number(r.cols) > 0 ? { cols: Number(r.cols) } : {}),
     // Paleta explícita: clave de theme.cluster.palettes o "#RRGGBB".
     ...(typeof r.palette === 'string' && r.palette ? { palette: r.palette } : {}),
+    ...(typeof r.icon === 'string' && r.icon.trim() ? { icon: r.icon.trim() } : {}),
     x: Number(r.x ?? 0),
     y: Number(r.y ?? 0),
     w: Math.max(80, Number(r.w ?? 200)),
@@ -1497,7 +1498,7 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
         toConnector: true,
         // Remate `->`: las flechas al mismo destino pueden compartir punta
         // (incentivo del router). El `-(O-` sigue siendo una conexión única.
-        ...(spec.layout?.connector === 'arrow' ? { shareKey: `${toC.id}::arrow` } : {}),
+        ...(spec.layout?.connector === 'arrow' ? { shareKey: `${toC.id}::arrow`, startKey: `${fromC.id}::arrow` } : {}),
       },
     });
   }
@@ -1731,9 +1732,9 @@ export function packageTitleText(p: Paquete): string {
   return p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : String(p.name ?? '');
 }
 
-/** Ancho de tinta del título (cursiva 11px; 6.2 recortaba y las aristas lo cruzaban). */
+/** Ancho de tinta del título (cursiva 11px; 6.2 recortaba y las aristas lo cruzaban). + icono si lo hay. */
 export function packageTitleInkWidth(p: Paquete): number {
-  return Math.max(TAB_W, Math.ceil(packageTitleText(p).length * 7.2));
+  return Math.max(TAB_W, Math.ceil(packageTitleText(p).length * 7.2) + (p.icon ? 24 : 0));
 }
 
 const OUTLINE_PAD = 14;

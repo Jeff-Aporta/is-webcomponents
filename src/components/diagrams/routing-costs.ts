@@ -23,9 +23,10 @@ export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
   // Brillo de entidad: un paso mas alla del aire (clearance); un radio mayor
   // se comia los carriles de los corredores estrechos entre franjas.
   entity: { glow: 3, radius: 20 },
-  // Entrar/salir de un agrupador y girar son sumas fijas (no brillos):
-  // relación 10 : 5 : 3 entre giro, entrada y salida.
-  package: { borderGlow: 10, borderRadius: 64, nestingFactor: 4, enter: 100, exit: 60 },
+  // Entrar/salir de un agrupador y girar son sumas fijas (no brillos).
+  // Cruzar un borde de agrupador vale el doble que cruzar un riel ajeno
+  // (rail.cross = ×8 en un paso de 20 px ≈ 140 px equivalentes → 280).
+  package: { borderGlow: 10, borderRadius: 64, nestingFactor: 4, enter: 280, exit: 280 },
   rail: { overlap: 120, near: 6, headOn: 120, cross: 8, sameFunnel: 42, retreat: 30, history: 6, mergePitches: 2 },
   share: { radius: 150, joinTail: 0.1, newTip: 240 },
 });

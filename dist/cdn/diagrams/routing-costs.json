@@ -16,8 +16,8 @@
     "borderGlow": 10,
     "borderRadius": 64,
     "nestingFactor": 4,
-    "enter": 100,
-    "exit": 60
+    "enter": 280,
+    "exit": 280
   },
   "rail": {
     "overlap": 120,

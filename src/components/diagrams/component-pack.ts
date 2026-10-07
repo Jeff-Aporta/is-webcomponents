@@ -19,8 +19,8 @@ export const PKG_PAD = 16;
 export const PKG_TAB = 22;
 /** Hueco filas: C+O+stem + un carril de arista (≈ assemblyEntityMargin). */
 export const ROW_GAP = 72;
-/** Hueco entre paquetes raíz apilados en la misma columna. */
-export const PKG_ROW_GAP = 28;
+/** Hueco entre paquetes raíz apilados en la misma columna: 3U, para que no quede apretado. */
+export const PKG_ROW_GAP = 60;
 /** Distancia mínima entre cajas si el consumidor no pone `min-gap`. */
 export const DEFAULT_MIN_GAP = ROW_GAP;
 /** Holgura arista vs perímetro de componentes (≥20px pedido). */

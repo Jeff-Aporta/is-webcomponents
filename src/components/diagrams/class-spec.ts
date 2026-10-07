@@ -173,6 +173,7 @@ function readPackages(src: Record<string, any>): ClassPackage[] | undefined {
       id: String(r.id ?? `pkg-${i}`),
       name: String(r.name ?? r.label ?? r.id ?? `Paquete ${i + 1}`),
       ...(String(r.stereotype ?? '').trim() ? { stereotype: String(r.stereotype).trim() } : {}),
+      ...(typeof r.icon === 'string' && r.icon.trim() ? { icon: r.icon.trim() } : {}),
       ...(String(r.parent ?? '').trim() ? { parent: String(r.parent).trim() } : {}),
       ...(palette ? { palette } : {}),
       ...(accent ? { accent } : {}),
@@ -588,7 +589,7 @@ function computePackagedClassLayout(
   // que el rótulo se corre junto a la pestaña.
   const titles = packages.map((p) => {
     const label = p.stereotype ? `«${p.stereotype}» ${p.name}` : p.name;
-    const w = Math.ceil(label.length * 7.2) + 28;
+    const w = Math.ceil(label.length * 7.2) + 28 + (p.icon ? 24 : 0);
     if (!vp) return { x: p.x - 4, y: p.y - 4, w, h: PKG_TITLE_H + 8 };
     const x0 = p.x + p.w / 2 - w / 2;
     const tapa = nodes.some((n) => n.package === p.id && n.x < x0 + w && n.x + n.w > x0);
@@ -694,6 +695,8 @@ function computePackagedClassLayout(
         toPkgs: pl ? ancestros(specById.get(r.to)?.package) : new Set<string>(),
         // Remate `->` compartible: mismo destino y mismo tipo de relación.
         ...(pl ? { shareKey: `${r.to}::${r.kind}` } : {}),
+        // Salida compartible: mismo origen y mismo tipo (las aristas salen juntas y se separan al alejarse).
+        ...(pl ? { startKey: `${r.from}::${r.kind}` } : {}),
         // Puertos candidatos en el perímetro (1U, sin esquinas): el router
         // prueba todas las parejas y elige la más barata. `planPorts` queda
         // solo como fallback si ningún candidato tiene nodo libre.

@@ -10,7 +10,7 @@ import {
 import type { DiagramTheme } from './diagram-types.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import { svgIconGroup } from '../_shared/tk-icon-inline.js';
+import { svgIconGroup, svgIconBadge } from '../_shared/tk-icon-inline.js';
 import { svgArrowHead, pathEndDirection } from '../_shared/diagram-arrow.js';
 import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
 import {
@@ -665,12 +665,21 @@ class IswcComponentDiagram extends DiagramElementBase {
       x: p.x, y: p.y, width: p.w, height: p.h, fill, stroke: '#000000', 'stroke-width': 1,
     }));
     const centro = (p as { titleCenter?: boolean }).titleCenter === true;
+    const icon = (p as { icon?: string }).icon;
+    const label = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
+    // Icono del agrupador con fondo circular, delante del rótulo.
+    const textW = Math.ceil(label.length * 6.6);
+    const shift = icon ? 24 : 0;
+    const x0 = centro ? p.x + p.w / 2 - (textW + shift) / 2 : p.x + 10;
+    if (icon) {
+      rotulos.appendChild(svgIconBadge(icon, { cx: x0 + 9, cy: p.y + 12, size: 18, color: '#1F2937', bg: 'circle', bgColor: '#FFFFFF', bgAlpha: 0.85 }));
+    }
     const t = svgEl('text', {
-      x: centro ? p.x + p.w / 2 : p.x + 10, y: p.y + 16,
-      'text-anchor': centro ? 'middle' : 'start', fill: '#000000',
+      x: x0 + shift, y: p.y + 16,
+      'text-anchor': 'start', fill: '#000000',
       'font-size': '12', 'font-family': 'Tahoma,Arial,sans-serif',
     });
-    t.textContent = p.stereotype ? `«${p.stereotype}» ${p.name ?? ''}` : (p.name ?? '');
+    t.textContent = label;
     rotulos.appendChild(t);
   }
 

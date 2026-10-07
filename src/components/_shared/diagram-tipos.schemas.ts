@@ -38,6 +38,8 @@ export type Componente = z.infer<typeof ComponenteSchema>;
 export const PaqueteSchema = z.intersection(CajaSchema, z.object({
   id: z.string(),
   name: z.string().optional(),
+  /** Icono Iconify del rótulo (con fondo circular): ilustra el propósito del agrupador. */
+  icon: z.string().optional(),
   stereotype: z.union([z.string(), z.undefined()]).optional(),
   hue: z.union([z.number(), z.undefined()]).optional(),
   parent: z.union([z.string(), z.undefined()]).optional(),

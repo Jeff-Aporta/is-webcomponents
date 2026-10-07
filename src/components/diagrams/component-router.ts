@@ -433,8 +433,11 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   for (const g of new Set(groupOf)) groupOcc.set(g, [new Int16Array(N), new Int16Array(N)]);
   // Ocupación por clave `->`: rieles que comparten punta no se penalizan entre sí.
   const keyOf = edges.map((e) => e.shareKey ?? null);
+  const startKeyOf = edges.map((e) => e.startKey ?? null);
   const keyOcc = new Map<string, Int16Array[]>();
   for (const kk of new Set(keyOf.filter((x): x is string => x != null))) keyOcc.set(kk, [new Int16Array(N), new Int16Array(N)]);
+  const skeyOcc = new Map<string, Int16Array[]>();
+  for (const kk of new Set(startKeyOf.filter((x): x is string => x != null))) skeyOcc.set(kk, [new Int16Array(N), new Int16Array(N)]);
   /** A qué arista (y en qué nodo de su camino) se unió cada una. */
   const joinOf: Array<{ host: number; t: number } | null> = edges.map(() => null);
   /** Puertos elegidos por arista (con candidatos los decide el router). */
@@ -446,7 +449,12 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const portTaken = (p: { x: number; y: number }, ei: number): boolean => {
     const users = portUse.get(pk(p));
     if (!users) return false;
-    for (const u of users) if (u !== ei && (!keyOf[ei] || keyOf[u] !== keyOf[ei])) return true;
+    for (const u of users) {
+      if (u === ei) continue;
+      const mismaLlegada = keyOf[ei] != null && keyOf[u] === keyOf[ei];
+      const mismaSalida = startKeyOf[ei] != null && startKeyOf[u] === startKeyOf[ei];
+      if (!mismaLlegada && !mismaSalida) return true;
+    }
     return false;
   };
   const fromOf = (ei: number): RouterPort => chosen[ei]?.from ?? { x: edges[ei]!.from.x, y: edges[ei]!.from.y, side: edges[ei]!.fromSide };
@@ -471,6 +479,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     if (!ns || !os) return;
     const go = groupOcc.get(groupOf[ei]!)!;
     const ko = keyOf[ei] ? keyOcc.get(keyOf[ei]!)! : null;
+    const sko = startKeyOf[ei] ? skeyOcc.get(startKeyOf[ei]!)! : null;
     for (let t = 0; t < ns.length; t++) {
       const k = ns[t]!;
       const o = os[t]!;
@@ -479,6 +488,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         occ[oo]![k] += sign;
         go[oo]![k] += sign;
         if (ko) ko[oo]![k] += sign;
+        if (sko) sko[oo]![k] += sign;
       }
       dirOcc[k * 4 + dirsIn[ei]![t]!] += sign;
     }
@@ -500,7 +510,30 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     // Campo de incentivo `->`: alrededor de cada punta de la misma clave, el
     // factor va de ~0 en la punta a 1 a `shareRadius`. Dentro de ese radio
     // los rieles de la misma clave no son ajenos (ahí se juntan).
-    const shareField = key ? new Float32Array(N).fill(1) : null;
+    const skey = startKeyOf[ei];
+    const shareField = key || skey ? new Float32Array(N).fill(1) : null;
+    // Puertos de salida de la misma clave de salida: incentivo igual al de
+    // las puntas (0 en el puerto, 1 en el radio) y rieles no ajenos ahí.
+    const startNear = new Uint8Array(N);
+    if (skey && shareField) {
+      for (let oj = 0; oj < edges.length; oj++) {
+        if (oj === ei || startKeyOf[oj] !== skey || !nodes[oj]) continue;
+        const sp = fromOf(oj);
+        for (let jj = 0; jj < ny; jj++) {
+          const dy = Math.abs(ys[jj]! - sp.y);
+          if (dy >= shareRadius) continue;
+          for (let ii = 0; ii < nx; ii++) {
+            const d = Math.abs(xs[ii]! - sp.x) + dy;
+            if (d >= shareRadius) continue;
+            const kk = idx(ii, jj);
+            const f = d / shareRadius;
+            if (f < shareField[kk]!) shareField[kk] = f;
+            startNear[kk] = 1;
+          }
+        }
+      }
+    }
+    const skOcc = skey ? skeyOcc.get(skey)! : null;
     // Metas alternativas: nodos de rieles de la misma clave (no de la propia
     // cadena) dentro del radio de incentivo de su punta.
     const joinAt = new Map<number, { host: number; t: number; dirOut: number; tail: number }>();
@@ -654,7 +687,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         // rieles de esa clave no son ajenos (ahí es donde se juntan).
         const enIncentivo = shareField ? shareField[nk]! < 1 : false;
         const own = (oo: number, k2: number): number =>
-          Math.max(merge ? go[oo]![k2]! : 0, ko && enIncentivo ? ko[oo]![k2]! : 0);
+          Math.max(merge ? go[oo]![k2]! : 0, ko && enIncentivo ? ko[oo]![k2]! : 0, skOcc && startNear[k2] ? skOcc[oo]![k2]! : 0);
         const others = occ[o]![nk]! - own(o, nk);
         const sameFunnel = merge && !(ko && enIncentivo && ko[o]![nk]! > 0) ? go[o]![nk]! : 0;
         // ── Campo de factores: producto de brillos; cada nodo parte de 1 ──

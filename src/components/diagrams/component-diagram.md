@@ -295,6 +295,24 @@ El `layout` del motor sigue siendo ortogonal: los guardianes que leen
   - Entre rieles de la misma clave no hay penalización por solape ni por
     carril vecino. La punta compartida la pinta solo la raíz (`sharedTip`).
 
+## Campo de costos compartido (`layout.routing`)
+
+El router de componentes, clases y DER rutea sobre un campo de factores: cada
+nodo de la grilla vale 1, lo prohibido se borra, y cada fuente emite un brillo
+con radio y caída lineal (entidades, bordes de agrupador, rieles ajenos,
+puntas y salidas `->` de la misma clave). Entrar o salir de un agrupador y
+girar son sumas fijas. Los valores viven en `routing-costs.ts` y se publican
+como `dist/cdn/diagrams/routing-costs.json`; cualquier diagrama los
+sobreescribe con `layout.routing`:
+
+```json
+"layout": { "routing": { "share": { "radius": 200 }, "package": { "enter": 400 } } }
+```
+
+Los agrupadores admiten `icon` (Iconify) y se pintan con fondo circular
+delante del rótulo. Entre agrupadores hermanos apilados hay al menos 3U
+(`PKG_ROW_GAP`) y el relleno interior es de 2U.
+
 ## Dependencias y componentes relacionados
 
 - [`./component-spec.js`](./component-spec.js)

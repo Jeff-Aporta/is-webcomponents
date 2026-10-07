@@ -126,6 +126,8 @@ export const ClassPackageSchema = z.object({
   id: z.string(),
   name: z.string(),
   stereotype: z.string().optional(),
+  /** Icono Iconify del rótulo (con fondo circular). */
+  icon: z.string().optional(),
   parent: z.string().optional(),
   /** Relleno del agrupador (#hex). */
   palette: z.string().optional(),

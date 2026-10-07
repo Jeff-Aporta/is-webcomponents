@@ -22,20 +22,23 @@
         "stereotype": "npm @ingenieria_insoft",
         "accent": "#4B5563",
         "palette": "neutral",
-        "classFill": "external"
+        "classFill": "external",
+        "icon": "mdi:package-variant"
       },
       {
         "id": "pkg-base",
         "name": "Base de controllers",
         "stereotype": "020 Controllers/server",
         "accent": "#166534",
-        "classFill": "service"
+        "classFill": "service",
+        "icon": "mdi:shield-check"
       },
       {
         "id": "pkg-ctrl",
         "name": "Controllers por dominio",
         "stereotype": "020 Controllers/server",
-        "cols": 4
+        "cols": 4,
+        "icon": "mdi:api"
       },
       {
         "id": "pkg-conv",
@@ -43,7 +46,8 @@
         "parent": "pkg-ctrl",
         "accent": "#7C3AED",
         "cols": 3,
-        "classFill": "service"
+        "classFill": "service",
+        "icon": "mdi:forum"
       },
       {
         "id": "pkg-cfg",
@@ -51,7 +55,8 @@
         "parent": "pkg-ctrl",
         "accent": "#0E7490",
         "cols": 3,
-        "classFill": "service"
+        "classFill": "service",
+        "icon": "mdi:cog"
       },
       {
         "id": "pkg-ident",
@@ -59,7 +64,8 @@
         "parent": "pkg-ctrl",
         "accent": "#B45309",
         "cols": 2,
-        "classFill": "service"
+        "classFill": "service",
+        "icon": "mdi:account-key"
       },
       {
         "id": "pkg-ops",
@@ -67,14 +73,16 @@
         "parent": "pkg-ctrl",
         "accent": "#BE123C",
         "cols": 4,
-        "classFill": "service"
+        "classFill": "service",
+        "icon": "mdi:wrench"
       },
       {
         "id": "pkg-models",
         "name": "models · extienden TObject (ispgen)",
         "stereotype": "010 Objetos",
         "accent": "#854D0E",
-        "cols": 2
+        "cols": 2,
+        "icon": "mdi:database"
       },
       {
         "id": "pkg-m-conv",
@@ -82,7 +90,8 @@
         "parent": "pkg-models",
         "accent": "#854D0E",
         "cols": 3,
-        "classFill": "store"
+        "classFill": "store",
+        "icon": "mdi:forum"
       },
       {
         "id": "pkg-m-cfg",
@@ -90,7 +99,8 @@
         "parent": "pkg-models",
         "accent": "#854D0E",
         "cols": 3,
-        "classFill": "store"
+        "classFill": "store",
+        "icon": "mdi:cog"
       }
     ],
     "classes": [

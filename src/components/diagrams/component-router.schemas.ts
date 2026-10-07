@@ -75,6 +75,13 @@ export const RouterEdgeSchema = z.object({
    */
   fromCandidates: z.array(RouterPortSchema).optional(),
   toCandidates: z.array(RouterPortSchema).optional(),
+  /**
+   * Clave de SALIDA compartible (p. ej. `origen::arrow`): alrededor del puerto
+   * por donde ya salió otra arista de la misma clave el paso se abarata
+   * (factor ~0 en el puerto, 1 a `share.radius`) y ese puerto se puede
+   * reutilizar. Fuera del radio, correr pegadas vuelve a costar: se separan.
+   */
+  startKey: z.string().optional(),
 });
 export type RouterEdge = z.infer<typeof RouterEdgeSchema>;
 
