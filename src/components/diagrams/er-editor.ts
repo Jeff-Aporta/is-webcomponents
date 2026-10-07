@@ -108,7 +108,7 @@ const EDITOR_TEMPLATE = `
       </div>
     </div>
     <div slot="end" class="pane-side">
-      <aside class="panel" data-panel aria-label="Propiedades del diagrama ER">
+      <aside class="panel" data-panel aria-label="Panel de propiedades del diagrama ER">
         <h3 class="panel__head"><iswc-icon icon="mdi:tune-variant" aria-hidden="true"></iswc-icon>Propiedades</h3>
         <div class="selection-info" data-selection-info>Vacía</div>
         <fieldset data-attrs hidden>
@@ -332,7 +332,7 @@ class IswcErEditor extends HTMLElement {
     const attrsFieldset = this.shadowRoot!.querySelector('[data-attrs]') as HTMLElement | null;
     if (!info) return;
     if (!this.#selection.size || !this.#state) {
-      info.textContent = 'Nada seleccionado · haz clic en una entidad o una arista.';
+      info.textContent = 'Vacía · haz clic en una entidad o una arista.';
       info.removeAttribute('data-has-selection');
       attrsFieldset?.setAttribute('hidden', '');
       this.#syncStyleInputs();

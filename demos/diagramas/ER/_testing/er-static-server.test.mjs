@@ -92,7 +92,9 @@ try {
       const failedRequests = [];
       page.on('pageerror', (err) => pageErrors.push(err.message));
       page.on('console', (msg) => {
-        if (msg.type() === 'error') consoleErrors.push(msg.text());
+        // El sondeo de `reload-pin` (auto-recarga de los demos) prueba rutas
+        // hasta dar con dist/cdn: sus 404 son de diseño, no un error del demo.
+        if (msg.type() === 'error' && !/reload-pin/.test(msg.location()?.url ?? '')) consoleErrors.push(msg.text());
       });
       page.on('requestfailed', (req) => {
         failedRequests.push(`${req.url()} — ${req.failure()?.errorText}`);

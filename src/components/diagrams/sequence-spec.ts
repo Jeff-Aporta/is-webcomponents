@@ -32,10 +32,12 @@ const LABEL_MAX_W = 460;
  * por carácter a 10 px) y hasta 2 líneas. Antes el tope de 360 px truncaba
  * con «…» cualquier etiqueta larga (cuerpos de request, SQL).
  */
+/** Ancho medio por carácter de la etiqueta; el renderer lo fija según la fuente del tema. */
+let LABEL_CHAR_W = 6.1;
 function labelBox(label: string): { w: number; lines: number } {
   const plain = richTextPlain(label);
   const icons = countIconTokens(label);
-  const est = Math.ceil(plain.length * 6.1) + 24 + icons * ICON_INLINE_W;
+  const est = Math.ceil(plain.length * LABEL_CHAR_W) + 24 + icons * ICON_INLINE_W;
   if (est <= LABEL_MAX_W) return { w: snapDiagramGrid(Math.max(72, est)), lines: 1 };
   return { w: snapDiagramGrid(Math.min(LABEL_MAX_W, Math.ceil(est / 2) + 40)), lines: 2 };
 }
@@ -457,7 +459,10 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[], boxOf: Array<
   return { x, rightMargin, selfSide };
 }
 
-export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayout {
+export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelCharW?: number } = {}): SequenceLayout {
+  // Poppins a 10 px es más ancha que la monoespaciada por defecto: el chip
+  // se dimensiona con el ancho real de la fuente para que el texto no se salga.
+  LABEL_CHAR_W = opts.labelCharW ?? 6.1;
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
   const hasHeader = !!(title || subtitle);

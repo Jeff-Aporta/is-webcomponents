@@ -190,7 +190,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     const theme: DiagramTheme = styleTheme ? themeToDiagramTheme(styleTheme, base) : base;
     this.#theme = theme;
     this.syncThemeAttr();
-    const layout: SequenceLayout = computeSequenceLayout(visibleSpec);
+    const layout: SequenceLayout = computeSequenceLayout(visibleSpec, { labelCharW: styleTheme ? 6.9 : 6.1 });
     this.layout = layout;
 
     this.#buildSvg(layout, theme);
@@ -437,9 +437,11 @@ class IswcSequenceDiagram extends DiagramElementBase {
    * Pestaña UML (pentágono) con icono y título. Devuelve su ancho para que
    * el llamador acomode lo que va al lado.
    */
-  #buildTab(g: SVGElement, x: number, y: number, icon: string, title: string, fill: string): number {
+  #buildTab(g: SVGElement, x: number, y: number, icon: string, title: string, fill: string, note?: string): number {
     const th = 18;
-    const tw = Math.max(40, 24 + Math.ceil(title.length * 6.2) + 10);
+    // La nota (condición) va dentro de la pestaña como texto secundario.
+    const noteW = note ? Math.ceil(note.length * 5.2) + 14 : 0;
+    const tw = Math.max(40, 24 + Math.ceil(title.length * 6.2) + 10 + noteW);
     g.appendChild(svgEl('path', {
       d: `M${x},${y} H${x + tw} V${y + th - 6} L${x + tw - 6},${y + th} H${x} Z`,
       fill, stroke: fill,
@@ -452,6 +454,14 @@ class IswcSequenceDiagram extends DiagramElementBase {
     });
     t.textContent = title;
     g.appendChild(t);
+    if (note) {
+      const n = svgEl('text', {
+        x: x + 24 + Math.ceil(title.length * 6.2) + 10, y: y + th / 2 + 0.5, 'dominant-baseline': 'middle',
+        fill: '#888888', 'font-size': '9', 'font-style': 'italic', 'font-family': this.#font,
+      });
+      n.textContent = `[${note}]`;
+      g.appendChild(n);
+    }
     return tw;
   }
 
@@ -481,15 +491,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         stroke, 'stroke-width': 1.2, 'stroke-dasharray': '6 4',
       }));
       // Pestaña negra con icono del tipo + título; la condición (si la hay) al lado.
-      const tw = this.#buildTab(g, fr.x, fr.y, FRAGMENT_ICON[fr.kind] ?? FRAGMENT_ICON.region!, fr.name || fr.kind, stroke);
-      if (fr.condition) {
-        const n = svgEl('text', {
-          x: fr.x + tw + 8, y: fr.y + 9.5, 'dominant-baseline': 'middle', fill: theme.text, 'fill-opacity': 0.75,
-          'font-size': '9.5', 'font-style': 'italic', 'font-family': this.#font,
-        });
-        n.textContent = `[${fr.condition}]`;
-        g.appendChild(n);
-      }
+      this.#buildTab(g, fr.x, fr.y, FRAGMENT_ICON[fr.kind] ?? FRAGMENT_ICON.region!, fr.name || fr.kind, stroke, fr.condition);
       this.svg.appendChild(g);
     }
   }
@@ -604,7 +606,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         const tw = Math.ceil(m.groupTitle.length * 4.6) + 8;
         g.appendChild(svgEl('rect', {
           x: start.x - dir * 10 - tw / 2, y: start.y + 15, width: tw, height: 12, rx: 2,
-          fill: paint?.labelFill ?? theme.chipFill, 'fill-opacity': 0.85,
+          fill: color, 'fill-opacity': 0.16,
         }));
         const t = svgEl('text', {
           x: start.x - dir * 10, y: start.y + 21, 'dominant-baseline': 'middle', fill: color, 'fill-opacity': 0.7,
