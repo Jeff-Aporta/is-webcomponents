@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T13:47:21.319Z",
+  "generatedAt": "2026-10-07T13:51:30.626Z",
   "count": 113,
   "modules": [
     {
@@ -1380,8 +1380,9 @@
       "id": "tk-color",
       "path": "src/components/_shared/tk-color.ts",
       "summary": "Contraste de fuente por luminancia OKLCH — todo en JS (sin CSS), para que el — flujo lo resuelva antes de pintar. Equivale a:",
-      "bytes": 2890,
+      "bytes": 3532,
       "exports": [
+        "pastelColor",
         "oklchLightness",
         "BG2FONT_L_THRESHOLD",
         "contrastFontColor",

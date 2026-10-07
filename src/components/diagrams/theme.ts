@@ -232,6 +232,7 @@ export function sequencePaint(theme: ErThemeJson): {
   fragmentOpacity: number;
   boxOpacity: number;
   stepText: string;
+  footerActors: boolean;
 } {
   const s = theme.sequence ?? {};
   const e = theme.edge ?? {};
@@ -251,6 +252,7 @@ export function sequencePaint(theme: ErThemeJson): {
     fragmentOpacity: s.fragmentOpacity ?? 0.18,
     boxOpacity: s.boxOpacity ?? 0.35,
     stepText: s.stepText ?? '#FFFFFF',
+    footerActors: s.footerActors === true,
   };
 }
 

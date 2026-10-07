@@ -39,7 +39,9 @@ function labelBox(label: string): { w: number; lines: number } {
   const icons = countIconTokens(label);
   const est = Math.ceil(plain.length * LABEL_CHAR_W) + 24 + icons * ICON_INLINE_W;
   if (est <= LABEL_MAX_W) return { w: snapDiagramGrid(Math.max(72, est)), lines: 1 };
-  return { w: snapDiagramGrid(Math.min(LABEL_MAX_W, Math.ceil(est / 2) + 40)), lines: 2 };
+  // Dos líneas: el corte por palabras deja una línea más larga que la mitad;
+  // 58 % del ancho estimado + padding evita que el texto se salga de la caja.
+  return { w: snapDiagramGrid(Math.min(LABEL_MAX_W, Math.ceil(est * 0.58) + 32)), lines: 2 };
 }
 
 const DEFAULT_HUES: number[] = [239, 199, 210];
@@ -243,6 +245,7 @@ export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec 
     groups: readGroups(seq),
     fragments: readFragments(seq),
     ...(typeof seq.legend === 'boolean' ? { legend: seq.legend } : {}),
+    ...(typeof seq.footer === 'boolean' ? { footer: seq.footer } : {}),
     messages: flatMessages.length ? flatMessages : undefined,
     preamble,
     alt,
@@ -291,6 +294,7 @@ export function sequenceSpecToJson(spec: SequenceResolvedSpec): Record<string, u
   if (spec.groups?.length) seq.groups = spec.groups;
   if (spec.fragments?.length) seq.fragments = spec.fragments;
   if (typeof spec.legend === 'boolean') seq.legend = spec.legend;
+  if (typeof spec.footer === 'boolean') seq.footer = spec.footer;
 
   if (spec.messages?.length) {
     seq.messages = spec.messages.map(sequenceMessageToJson);
@@ -459,7 +463,7 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[], boxOf: Array<
   return { x, rightMargin, selfSide };
 }
 
-export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelCharW?: number } = {}): SequenceLayout {
+export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelCharW?: number; footer?: boolean } = {}): SequenceLayout {
   // Poppins a 10 px es más ancha que la monoespaciada por defecto: el chip
   // se dimensiona con el ancho real de la fuente para que el texto no se salga.
   LABEL_CHAR_W = opts.labelCharW ?? 6.1;
@@ -608,7 +612,10 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   const rowBottom = (r: number): number => yAt(r) + (titled ? 28 : 10);
   const rowCount = flat.length;
   const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) : lifelineY1 + 40) + 30);
-  const H = lifelineY2 + 24;
+  // Cabeceras repetidas al pie: el payload manda; si no dice, el tema.
+  const footer = spec.footer ?? opts.footer ?? false;
+  const footerY = footer ? lifelineY2 + 22 : undefined;
+  const H = footer ? footerY! + 16 + 24 : lifelineY2 + 24;
 
   const actorLayouts: SequenceLayoutActor[] = actors.map((a, i) => ({
     id: a.id,
@@ -758,7 +765,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
     const x0 = Math.min(...members.map((i) => (ax[i] ?? 0) - (boxW[i] ?? 0) / 2)) - PART_BOX_PAD;
     const x1 = Math.max(...members.map((i) => (ax[i] ?? 0) + (boxW[i] ?? 0) / 2)) + PART_BOX_PAD;
     const y0 = headerCenterY - 16 - PART_BOX_HEAD - 8;
-    return { id: b.id ?? `box${k}`, name: b.name ?? '', color: b.color, x: x0, y: y0, w: x1 - x0, h: lifelineY2 + 8 - y0 };
+    return { id: b.id ?? `box${k}`, name: b.name ?? '', color: b.color, x: x0, y: y0, w: x1 - x0, h: (footer ? footerY! + 16 + 8 : lifelineY2 + 8) - y0 };
   });
   for (const b of partBoxes) W = Math.max(W, b.x + b.w + 16);
   if (altBox) W = Math.max(W, altBox.x + altBox.w + 16);
@@ -783,6 +790,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
     legendX,
     legendColX: legendColsWidths,
     legendMaxRows: LEGEND_MAX_ROWS,
+    ...(footerY != null ? { footerY } : {}),
   };
 }
 

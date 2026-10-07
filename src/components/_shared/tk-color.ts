@@ -44,6 +44,21 @@ function srgbToLinear(c: number): number {
 }
 
 /** Lightness OKLCH (= L de OKLab) de un color, 0..1. */
+/**
+ * Versión pastel de un color: mezcla con blanco (`amount` 0..1, default 0.68).
+ * Para fondos de insignias y notas: parecido al color del texto, pero claro.
+ * Si el color no es hex, se devuelve tal cual.
+ */
+export function pastelColor(color: string, amount: number = 0.68): string {
+  const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(color ?? '').trim());
+  if (!m) return color;
+  let h = m[1]!;
+  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  const ch = (i: number): number => parseInt(h.slice(i, i + 2), 16);
+  const mix = (v: number): string => Math.round(v + (255 - v) * amount).toString(16).padStart(2, '0');
+  return `#${mix(ch(0))}${mix(ch(2))}${mix(ch(4))}`.toUpperCase();
+}
+
 export function oklchLightness(color: string | null | undefined): number {
   const rgb = toRgb(color);
   if (!rgb) return 0.5;

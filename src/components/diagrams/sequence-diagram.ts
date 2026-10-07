@@ -28,7 +28,7 @@ import { svgIconGroup, svgIconBadge, hasIconJsonSugar } from '../_shared/tk-icon
 import { pathPoints } from '../_shared/diagram-arrow.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import type { DiagramTheme } from './diagram-types.js';
-import { contrastFontColor } from '../_shared/tk-color.js';
+import { contrastFontColor, pastelColor } from '../_shared/tk-color.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
@@ -190,7 +190,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
     const theme: DiagramTheme = styleTheme ? themeToDiagramTheme(styleTheme, base) : base;
     this.#theme = theme;
     this.syncThemeAttr();
-    const layout: SequenceLayout = computeSequenceLayout(visibleSpec, { labelCharW: styleTheme ? 6.9 : 6.1 });
+    const layout: SequenceLayout = computeSequenceLayout(visibleSpec, {
+      labelCharW: styleTheme ? 6.9 : 6.1,
+      footer: this.#paint?.footerActors ?? false,
+    });
     this.layout = layout;
 
     this.#buildSvg(layout, theme);
@@ -242,6 +245,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     // Regiones detrás de actores y lifelines; las exteriores primero.
     this.#buildFragments([...(layout.fragments ?? [])].sort((a, b) => a.depth - b.depth), theme);
     this.#buildActors(actors, theme);
+    if (layout.footerY != null) this.#buildActors(actors.map((a) => ({ ...a, y: layout.footerY! })), theme, true);
     this.#buildLifelines(lifelines, theme);
     if (altBox) this.#buildAltBox(altBox, theme);
     this.#buildMessages(messages, altBox, theme);
@@ -318,7 +322,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildActors(actors: SequenceLayout['actors'], theme: DiagramTheme): void {
+  #buildActors(actors: SequenceLayout['actors'], theme: DiagramTheme, footer: boolean = false): void {
     for (const a of actors) {
       const bw = a.w;
       const bx = a.x - bw / 2;
@@ -339,7 +343,8 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(rect);
 
       if (!iconInLabel) {
-        g.appendChild(svgIconBadge(a.icon, { cx: iconCx, cy: a.y, size: 24, hue: a.hue, bg: 'circle', bgAlpha: 0.16 }));
+        const tint = tkHueToHex(a.hue) ?? '#64748b';
+        g.appendChild(svgIconBadge(a.icon, { cx: iconCx, cy: a.y, size: 24, color: tint, bg: 'circle', bgColor: pastelColor(tint), bgAlpha: 0.75 }));
       }
 
       if (a.label.includes('{{')) {
@@ -362,6 +367,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         g.appendChild(t);
       }
 
+      if (footer) g.classList.add('seq-actor--footer');
       this.svg.appendChild(g);
       this.#actorNodes.push({ x: a.x, g: g as SVGGElement, rect: rect as SVGRectElement });
     }
@@ -457,7 +463,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     if (note) {
       const n = svgEl('text', {
         x: x + 24 + Math.ceil(title.length * 6.2) + 10, y: y + th / 2 + 0.5, 'dominant-baseline': 'middle',
-        fill: '#888888', 'font-size': '9', 'font-style': 'italic', 'font-family': this.#font,
+        fill: ink, 'fill-opacity': 0.8, 'font-size': '9', 'font-style': 'italic', 'font-family': this.#font,
       });
       n.textContent = `[${note}]`;
       g.appendChild(n);
@@ -572,11 +578,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
           // Nota como insignia: fondo pastel del color de la arista, sin borde.
           g.appendChild(svgEl('rect', {
             x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 3,
-            fill: paint.labelFill, 'fill-opacity': 0.82,
-          }));
-          g.appendChild(svgEl('rect', {
-            x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 3,
-            fill: color, 'fill-opacity': 0.16,
+            fill: pastelColor(color), 'fill-opacity': 0.72,
           }));
         } else {
           g.appendChild(svgEl('rect', {
@@ -596,7 +598,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // fondo circular translúcido: el color solo no basta para leer el grupo.
       if (m.groupIcon) {
         g.appendChild(svgIconBadge(m.groupIcon, {
-          cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgAlpha: 0.16,
+          cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgColor: pastelColor(color), bgAlpha: 0.75,
         }));
       }
       // Título del grupo como rótulo centrado bajo el par icono + índice:
@@ -606,7 +608,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         const tw = Math.ceil(m.groupTitle.length * 4.6) + 8;
         g.appendChild(svgEl('rect', {
           x: start.x - dir * 10 - tw / 2, y: start.y + 15, width: tw, height: 12, rx: 2,
-          fill: color, 'fill-opacity': 0.16,
+          fill: pastelColor(color), 'fill-opacity': 0.75,
         }));
         const t = svgEl('text', {
           x: start.x - dir * 10, y: start.y + 21, 'dominant-baseline': 'middle', fill: color, 'fill-opacity': 0.7,

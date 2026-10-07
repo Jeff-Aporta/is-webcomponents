@@ -81,7 +81,8 @@
     "fragmentBorder": "#000000",
     "fragmentOpacity": 0.22,
     "boxOpacity": 0.35,
-    "stepText": "#FFFFFF"
+    "stepText": "#FFFFFF",
+    "footerActors": true
   },
   "diagramTheme": {
     "text": "#0F172A",

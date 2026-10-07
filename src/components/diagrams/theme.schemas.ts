@@ -103,6 +103,8 @@ export const ErThemeJsonSchema = z.object({
   fragmentOpacity: z.number().optional(),
   boxOpacity: z.number().optional(),
   stepText: z.string().optional(),
+  /** Repite las cabeceras de participantes al pie (UML clásico). */
+  footerActors: z.boolean().optional(),
 }).optional(),
   diagramTheme: z.unknown() /* TODO: ref DiagramTheme */.optional(),
   light: z.unknown() /* TODO: ref Omit<...> */.optional(),

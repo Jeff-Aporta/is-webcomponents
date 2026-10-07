@@ -86,6 +86,8 @@ export const SequenceResolvedSpecSchema = z.object({
    * donde aparece, sin ensanchar ni descentrar el lienzo.
    */
   legend: z.boolean().optional(),
+  /** Repite las cabeceras al pie. Sin valor, lo decide el tema (`sequence.footerActors`). */
+  footer: z.boolean().optional(),
   messages: z.array(SequenceMessageSpecSchema).optional(),
   preamble: z.array(SequenceMessageSpecSchema).optional(),
   alt: SequenceAltSpecSchema.optional(),
@@ -212,6 +214,8 @@ export const SequenceLayoutSchema = z.object({
   legendX: z.number(),
   legendColX: z.array(z.number()),
   legendMaxRows: z.number(),
+  /** Centro vertical de las cabeceras repetidas al pie (si las hay). */
+  footerY: z.number().optional(),
 });
 export type SequenceLayout = z.infer<typeof SequenceLayoutSchema>;
 
