@@ -163,6 +163,15 @@ export const ClassLayoutOptsSchema = z.object({
   /** Sobreescritura del campo de costos del router (ver `routing-costs.ts`). */
   routing: z.record(z.string(), z.record(z.string(), z.number())).optional(),
   /**
+   * Consolidación de rieles (efecto estándar, encendido por defecto):
+   * `ends` — las aristas que llegan al mismo punto (`->` o el O del `-(O-`)
+   * convergen en abanico (rieles paralelos pegados, una sola punta);
+   * `starts` — las que salen del mismo origen salen juntas. `false` apaga los
+   * incentivos de consolidación. Acepta un booleano para ambos.
+   */
+  consolidate: z.union([z.boolean(), z.object({ starts: z.boolean().optional(), ends: z.boolean().optional() })]).optional(),
+
+  /**
    * Conjunto de generalización explícito (barra + tronco) para padres con
    * 3+ hijos en otra franja. Apagado por defecto: la barra es un riel
    * compartido; sin ella los hijos convergen por el incentivo del router.
@@ -335,6 +344,15 @@ export const ErSpecSchema = z.object({
   relations: z.array(ErSpecRelationSchema),
   /** `layout.routing`: sobreescritura del campo de costos compartido (igual que componentes y clases). */
   routing: z.record(z.string(), z.record(z.string(), z.number())).optional(),
+  /**
+   * Consolidación de rieles (efecto estándar, encendido por defecto):
+   * `ends` — las aristas que llegan al mismo punto (`->` o el O del `-(O-`)
+   * convergen en abanico (rieles paralelos pegados, una sola punta);
+   * `starts` — las que salen del mismo origen salen juntas. `false` apaga los
+   * incentivos de consolidación. Acepta un booleano para ambos.
+   */
+  consolidate: z.union([z.boolean(), z.object({ starts: z.boolean().optional(), ends: z.boolean().optional() })]).optional(),
+
   meta: z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),

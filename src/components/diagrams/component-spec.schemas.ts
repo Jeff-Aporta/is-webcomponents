@@ -117,6 +117,15 @@ export const ComponentLayoutSchema = z.object({
   boxStyle: z.union([z.literal('uml'), z.literal('card'), z.literal('vp')]).optional(),
   /** Remate de aristas (`layout.connector` del payload). */
   connector: z.union([z.literal('assembly'), z.literal('arrow')]).optional(),
+  /**
+   * Consolidación de rieles (efecto estándar, encendido por defecto):
+   * `ends` — las aristas que llegan al mismo punto (`->` o el O del `-(O-`)
+   * convergen en abanico (rieles paralelos pegados, una sola punta);
+   * `starts` — las que salen del mismo origen salen juntas. `false` apaga los
+   * incentivos de consolidación. Acepta un booleano para ambos.
+   */
+  consolidate: z.union([z.boolean(), z.object({ starts: z.boolean().optional(), ends: z.boolean().optional() })]).optional(),
+
 });
 export type ComponentLayout = z.infer<typeof ComponentLayoutSchema>;
 

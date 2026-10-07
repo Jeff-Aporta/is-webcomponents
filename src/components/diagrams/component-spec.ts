@@ -361,6 +361,7 @@ function readLayout(raw: unknown): OpcionesEmpaque {
     ...(r.connector === 'arrow' || r.connector === 'assembly' ? { connector: r.connector } : {}),
     ...(r.edgeStyle === 'curved' || r.edgeStyle === 'orthogonal' || r.edgeStyle === 'straight' ? { edgeStyle: r.edgeStyle } : {}),
     ...(r.routing && typeof r.routing === 'object' ? { routing: r.routing as Record<string, Record<string, number>> } : {}),
+    ...(r.consolidate !== undefined ? { consolidate: r.consolidate as ComponentLayout['consolidate'] } : {}),
   };
 }
 
@@ -1585,6 +1586,7 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
     pkgBorderNearFactor: layoutGaps.pkgBorderNearFactor,
     pkgCrossFactor: layoutGaps.pkgCrossFactor,
     ...(spec.layout?.routing ? { costs: spec.layout.routing } : {}),
+    ...(spec.layout?.consolidate !== undefined ? { consolidate: spec.layout.consolidate } : {}),
   });
   routable.forEach(({ e, re }, i) => {
     const pts = routed.paths[i];

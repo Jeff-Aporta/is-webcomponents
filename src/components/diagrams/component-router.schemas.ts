@@ -175,6 +175,14 @@ export const RouterOptsSchema = z.object({
   shareRadius: z.number().optional(),
   /** Radio (px) del brillo de desincentivo que emite cada entidad más allá de su hitbox. Default 2·clearance. */
   entityGlow: z.number().optional(),
+  /**
+   * Consolidación de rieles (efecto estándar, encendido por defecto):
+   * `ends` — las aristas que llegan al mismo punto (`->` o el O del `-(O-`)
+   * convergen en abanico (rieles paralelos pegados, una sola punta);
+   * `starts` — las que salen del mismo origen salen juntas. `false` apaga los
+   * incentivos de consolidación. Acepta un booleano para ambos.
+   */
+  consolidate: z.union([z.boolean(), z.object({ starts: z.boolean().optional(), ends: z.boolean().optional() })]).optional(),
   /** Sobreescritura del campo de costos (`layout.routing` del payload). Las opciones sueltas ganan. */
   costs: z.custom<RoutingCostsInput>((v) => v == null || typeof v === 'object').optional(),
 });

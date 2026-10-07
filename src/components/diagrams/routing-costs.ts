@@ -56,3 +56,10 @@ export function readRoutingOverride(layout: unknown): RoutingCostsInput | null {
   const r = layout.routing;
   return isObj(r) ? (r as RoutingCostsInput) : null;
 }
+
+/** Normaliza `layout.consolidate` (bool o `{ starts, ends }`); por defecto ambos encendidos. */
+export function readConsolidate(v: unknown): { starts: boolean; ends: boolean } {
+  if (typeof v === 'boolean') return { starts: v, ends: v };
+  const o = isObj(v) ? v : {};
+  return { starts: o.starts !== false, ends: o.ends !== false };
+}

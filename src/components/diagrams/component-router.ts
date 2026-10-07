@@ -33,7 +33,7 @@
 
 import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.js';
 import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from './component-router.schemas.js';
-import { resolveRoutingCosts } from './routing-costs.js';
+import { resolveRoutingCosts, readConsolidate } from './routing-costs.js';
 
 const DIRS: ReadonlyArray<readonly [number, number]> = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 const SIDE_DIR: Record<Lado, number> = { right: 0, bottom: 1, left: 2, top: 3 };
@@ -317,6 +317,9 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   // blocked: entidades / títulos / conectores. prohOwner: índice del
   // prohibido que cubre el nodo (muro solo para aristas ajenas).
   const blocked = new Uint8Array(N);
+  // Nodos sobre un texto (rótulo de agrupador): zona prohibida absoluta. Ni
+  // el A* ni el stub de un puerto pueden atravesarla.
+  const sobreTexto = new Uint8Array(N);
   const ringOwner = new Int32Array(N).fill(-1);
   const prohOwner = new Int32Array(N).fill(-1);
   // baseMul = anidación × brillo de entidades (isótropo). Parte de 1.
@@ -338,7 +341,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       const x = xs[i]!;
       const k = idx(i, j);
       if (world.components.some((c) => inside(x, y, c, clearance))) blocked[k] = 1;
-      else if (world.titles.some((t) => inside(x, y, t, 0))) blocked[k] = 1;
+      else if (world.titles.some((t) => inside(x, y, t, 0))) { blocked[k] = 1; sobreTexto[k] = 1; }
       // Brillo de entidad: fuera del hitbox, decrece lineal hasta `entityGlowR`.
       let glow = 1;
       if (!blocked[k] && entityGlowR > 0) {
@@ -414,19 +417,23 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     const [dx, dy] = DIRS[d]!;
     let i = lineIndex(xs, p.x);
     let j = lineIndex(ys, p.y);
-    // Avanzar hasta superar minOut.
+    // Avanzar hasta superar minOut. Si en el camino hay un texto, ese lado
+    // no sirve: el stub pasaría por encima del rótulo.
     while (i > 0 && i < nx - 1 && j > 0 && j < ny - 1
       && Math.abs(xs[i]! - p.x) + Math.abs(ys[j]! - p.y) < minOut - 0.5) {
       i += dx;
       j += dy;
+      if (sobreTexto[idx(i, j)]) return -1;
     }
     if (strict && !free(idx(i, j))) return -1;
-    // Y hasta un nodo libre (máx. 12 pasos extra).
+    // Y hasta un nodo libre (máx. 12 pasos extra), nunca saltando un texto.
     for (let g = 0; g < 12 && !free(idx(i, j)); g++) {
+      if (sobreTexto[idx(i, j)]) return -1;
       if (i <= 0 || i >= nx - 1 || j <= 0 || j >= ny - 1) break;
       i += dx;
       j += dy;
     }
+    if (sobreTexto[idx(i, j)]) return -1;
     return idx(i, j);
   };
 
@@ -437,8 +444,11 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const groupOcc = new Map<string, Int16Array[]>();
   for (const g of new Set(groupOf)) groupOcc.set(g, [new Int16Array(N), new Int16Array(N)]);
   // Ocupación por clave `->`: rieles que comparten punta no se penalizan entre sí.
-  const keyOf = edges.map((e) => e.shareKey ?? null);
-  const startKeyOf = edges.map((e) => e.startKey ?? null);
+  // Consolidación: con `ends=false` nadie comparte punta ni converge en
+  // abanico; con `starts=false` nadie comparte salida.
+  const CONS = readConsolidate(opts.consolidate);
+  const keyOf = edges.map((e) => (CONS.ends ? e.shareKey ?? null : null));
+  const startKeyOf = edges.map((e) => (CONS.starts ? e.startKey ?? null : null));
   const keyOcc = new Map<string, Int16Array[]>();
   for (const kk of new Set(keyOf.filter((x): x is string => x != null))) keyOcc.set(kk, [new Int16Array(N), new Int16Array(N)]);
   const skeyOcc = new Map<string, Int16Array[]>();
@@ -542,7 +552,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     // Filtro convolucional: hermanos = aristas que en la pasada anterior ya
     // decidieron converger en el MISMO punto que esta. Entre hermanos el
     // costo por pasar cerca (y por cruzarse) se anula: se dibujan juntos.
-    const miPunta = nodes[ei] ? pk(toOf(rootOf(ei))) : null;
+    const miPunta = nodes[ei] && CONS.ends ? pk(toOf(rootOf(ei))) : null;
     const sibOcc = [new Int16Array(N), new Int16Array(N)];
     if (miPunta) {
       for (let oj = 0; oj < edges.length; oj++) {
@@ -703,7 +713,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         // Costos ADITIVOS: cada regla suma su parte; ninguna anula a otra.
         // Mismo destino: en el embudo final junto a B compartir cuesta menos,
         // pero nunca es gratis (si no, se juntan aunque haya otro lado libre).
-        const merge = nearGoal(xs[ni]!, ys[nj]!);
+        const merge = CONS.ends && nearGoal(xs[ni]!, ys[nj]!);
         // Dentro del radio de incentivo de una punta de la misma clave, los
         // rieles de esa clave no son ajenos (ahí es donde se juntan).
         const enIncentivo = shareField ? shareField[nk]! < 1 : false;

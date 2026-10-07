@@ -192,6 +192,7 @@ function readClassLayoutOpts(raw: unknown): ClassLayoutOpts | undefined {
   }
   if (r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp') out.boxStyle = r.boxStyle;
   if (r.routing && typeof r.routing === 'object') out.routing = r.routing as ClassLayoutOpts['routing'];
+  if (r.consolidate !== undefined) out.consolidate = r.consolidate as ClassLayoutOpts['consolidate'];
   if (r.inheritanceBus === true) out.inheritanceBus = true;
   return Object.keys(out).length ? out : undefined;
 }
@@ -363,7 +364,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
         fromBox: boxes.find((b) => b.id === r.from)!, toBox: boxes.find((b) => b.id === r.to)!,
         fromPkgs: new Set<string>(), toPkgs: new Set<string>(),
       }];
-    }), { clearance: 20, stub: 28, lanePitch: 24, ...(spec.layout?.routing ? { costs: spec.layout.routing } : {}) });
+    }), { clearance: 20, stub: 28, lanePitch: 24, ...(spec.layout?.routing ? { costs: spec.layout.routing } : {}), ...(spec.layout?.consolidate !== undefined ? { consolidate: spec.layout.consolidate } : {}) });
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();
   ri.forEach((i, k) => {
     const pl = plans[i]!;
@@ -703,7 +704,12 @@ function computePackagedClassLayout(
         ...(pl ? {
           fromCandidates: perimeterPorts(boxes.find((b) => b.id === r.from)!, GRID_STEP),
           toCandidates: perimeterPorts(boxes.find((b) => b.id === r.to)!, GRID_STEP),
-        } : {}),
+        } : {
+          // Llegada al bus: la salida también elige puerto por el perímetro.
+          // Si el rótulo del paquete tapa la cara superior, el router sale
+          // por un lateral en vez de cruzar el texto.
+          fromCandidates: perimeterPorts(boxes.find((b) => b.id === r.from)!, GRID_STEP),
+        }),
       };
     }),
     // Mismo router y mismas perillas que el diagrama de componentes: grilla,
@@ -720,6 +726,7 @@ function computePackagedClassLayout(
       pkgBorderNearFactor: rails.pkgBorderNearFactor,
       pkgCrossFactor: rails.pkgCrossFactor,
       ...(opts.routing ? { costs: opts.routing } : {}),
+      ...(opts.consolidate !== undefined ? { consolidate: opts.consolidate } : {}),
     },
   );
   const ptsOf = new Map<number, Array<{ x: number; y: number }>>();

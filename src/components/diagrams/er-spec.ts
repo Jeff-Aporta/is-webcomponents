@@ -277,6 +277,8 @@ export function erSpecFromPayload(payload: unknown): ErSpec | null {
   if (meta) out.meta = meta;
   const routing = readRoutingOverride(src.layout);
   if (routing) out.routing = routing as ErSpec['routing'];
+  const lay = asRecord(src.layout);
+  if (lay.consolidate !== undefined) out.consolidate = lay.consolidate as ErSpec['consolidate'];
   return out;
 }
 
@@ -945,6 +947,7 @@ export function computeErLayout(specIn: ErSpec): ErLayout {
     pkgCrossFactor: 2,
     // Mismo campo de costos que componentes y clases (y su `layout.routing`).
     ...(spec.routing ? { costs: spec.routing } : {}),
+    ...(spec.consolidate !== undefined ? { consolidate: spec.consolidate } : {}),
   });
   const routedPts = new Map<number, Punto[] | null>();
   routerIdx.forEach((ri, k) => routedPts.set(ri, routed.paths[k] ?? null));
