@@ -15,7 +15,8 @@
  *
  * Modos: sintético (tag+scriptUrl+payload) o pageUrl (HTML ya armado).
  */
-import { mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdir, writeFile, rm, rename } from 'node:fs/promises';
+import process from 'node:process';
 import { join, dirname, isAbsolute, relative } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
@@ -326,12 +327,16 @@ export async function writeDiagramOutputs(
   outSvg: string,
   outPng?: string,
 ): Promise<void> {
-  await mkdir(dirname(outSvg), { recursive: true });
-  await writeFile(outSvg, result.svg, 'utf8');
-  if (outPng && result.png) {
-    await mkdir(dirname(outPng), { recursive: true });
-    await writeFile(outPng, result.png);
-  }
+  // Escritura atómica (tmp + rename): un visor abierto (live server) nunca
+  // lee un SVG a medio escribir — eso se veía como "XML roto" y aristas sueltas.
+  const atomic = async (file: string, data: string | Uint8Array): Promise<void> => {
+    await mkdir(dirname(file), { recursive: true });
+    const tmp = `${file}.tmp-${process.pid}`;
+    await writeFile(tmp, data);
+    await rename(tmp, file);
+  };
+  await atomic(outSvg, result.svg);
+  if (outPng && result.png) await atomic(outPng, result.png);
 }
 
 /** Resuelve ruta de script relativa a un CDN root (local o URL). */

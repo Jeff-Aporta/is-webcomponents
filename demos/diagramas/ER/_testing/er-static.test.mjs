@@ -105,7 +105,8 @@ tests.push({
     // r2: orthogonal-h → 3 segmentos (H, V, H)
     const orthH = paths.find((p) => p.relId === 'r2');
     assert.equal(orthH.route, 'orthogonal-h');
-    assert.ok(orthH.d.includes('H') && orthH.d.includes('V'), 'orthogonal-h debe combinar H y V');
+    // H-V-H; si los puertos quedan alineados degenera en una sola H (correcto).
+    assert.ok(orthH.d.includes('H') && !/[LC]/.test(orthH.d.slice(1)), `orthogonal-h debe ser ortogonal y empezar en H: "${orthH.d}"`);
     // r3: orthogonal (default) → puede tener varios segmentos (A* puede elegir varios)
     const orth = paths.find((p) => p.relId === 'r3');
     assert.equal(orth.route, 'orthogonal');

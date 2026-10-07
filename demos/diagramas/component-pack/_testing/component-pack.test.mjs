@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import {
   packDiagram,
   layoutPackageOutlines,
-  routeAvoidingBoxes,
   resolvePackingGaps,
   orthogonalUnion,
   orthogonalWrap,
@@ -16,6 +15,7 @@ import {
   EDGE_CLEARANCE,
   TITLE_CLEARANCE,
 } from '../../../../src/components/diagrams/component-pack.ts';
+import { routeEdges } from '../../../../src/components/diagrams/component-router.ts';
 
 const tests = [];
 
@@ -71,24 +71,32 @@ tests.push({
 });
 
 tests.push({
-  name: 'routeAvoidingBoxes: devuelve path ortogonal o null',
+  name: 'routeEdges: rodea la caja intermedia con path ortogonal',
   run: () => {
-    const a = { x: 0, y: 0 };
-    const b = { x: 100, y: 100 };
-    const obstacles = [
-      { x: 30, y: 30, w: 40, h: 40, id: 'ob1' },
-    ];
-    const path = routeAvoidingBoxes(a, b, obstacles);
-    assert.ok(path === null || typeof path === 'string');
+    const A = { id: 'A', x: 0, y: 0, w: 60, h: 40 };
+    const B = { id: 'B', x: 400, y: 0, w: 60, h: 40 };
+    const M = { id: 'M', x: 180, y: -40, w: 60, h: 120 };
+    const { paths, violations } = routeEdges(
+      { components: [A, B, M], packages: [], titles: [], rings: [] },
+      [{ id: 'ab', from: { x: 60, y: 20 }, fromSide: 'right', to: { x: 400, y: 20 }, toSide: 'left',
+        fromBox: A, toBox: B, fromPkgs: new Set(), toPkgs: new Set() }],
+    );
+    assert.ok(paths[0] && paths[0].length >= 4, 'debe rodear (≥2 giros)');
+    assert.deepEqual(violations[0], []);
   },
 });
 
 tests.push({
-  name: 'routeAvoidingBoxes: path sin obstáculos es directo',
+  name: 'routeEdges: sin obstáculos y alineado es recto',
   run: () => {
-    const path = routeAvoidingBoxes({ x: 0, y: 0 }, { x: 100, y: 0 }, []);
-    assert.ok(typeof path === 'string');
-    assert.ok(path.startsWith('M'));
+    const A = { id: 'A', x: 0, y: 0, w: 60, h: 40 };
+    const B = { id: 'B', x: 300, y: 0, w: 60, h: 40 };
+    const { paths } = routeEdges(
+      { components: [A, B], packages: [], titles: [], rings: [] },
+      [{ id: 'ab', from: { x: 60, y: 20 }, fromSide: 'right', to: { x: 300, y: 20 }, toSide: 'left',
+        fromBox: A, toBox: B, fromPkgs: new Set(), toPkgs: new Set() }],
+    );
+    assert.equal(paths[0].length, 2);
   },
 });
 
