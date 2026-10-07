@@ -328,6 +328,7 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
     if (layout.mode !== 'manual') packDiagram(packages, components, edges, layout);
     return wireComponentDiagram(
       components, interfaces.map((i) => ({ ...i })), edges.map((e) => ({ ...e })), packages, lanePitch,
+      layout.connector === 'arrow' ? 'arrow' : 'assembly',
     );
   };
   let wired = plan();
@@ -841,6 +842,7 @@ function wireComponentDiagram(
   edges: SpecEdge[],
   packages: readonly Paquete[] = [],
   lanePitch: number = LANE_PITCH,
+  connector: 'assembly' | 'arrow' = 'assembly',
 ): WireResult {
   const known = new Set<string>(components.map((c) => c.id));
   const byId = new Map<string, Componente>(components.map((c) => [c.id, c]));
@@ -1073,11 +1075,38 @@ function wireComponentDiagram(
     list.sort((a, b) => along(a) - along(b));
     list.forEach((p, i) => slotIndex.set(p.e, i));
   }
+  // Remate `arrow`: no hay interfaz UML compartida; cada flecha llega a su
+  // propio puerto de la cara destino, ordenado por la posición del origen a
+  // lo largo de la cara para que las llegadas no se crucen ni se monten.
+  const arrowSlot = new Map<SpecEdge, number>();
+  const byToSlot = new Map<string, typeof planned>();
+  if (connector === 'arrow') {
+    for (const p of planned) {
+      const k = slotKey(p.toC.id, p.ts);
+      byToSlot.set(k, [...(byToSlot.get(k) ?? []), p]);
+    }
+    for (const list of byToSlot.values()) {
+      const along = (p: typeof planned[number]): number =>
+        p.ts === 'top' || p.ts === 'bottom'
+          ? p.fromC.x + p.fromC.w / 2
+          : p.fromC.y + p.fromC.h / 2;
+      list.sort((a, b) => along(a) - along(b));
+      list.forEach((p, i) => arrowSlot.set(p.e, i));
+    }
+  }
   for (const p of planned) {
     const { e, fs, ts, fromC, toC } = p;
     const fi = slotIndex.get(e) ?? takeSlot(fromC, fs);
     const key = slotKey(toC.id, ts);
-    let prv = providedByTarget.get(key);
+    let prv = connector === 'arrow'
+      ? addIface({
+        id: `if-${e.id}-prv`,
+        component: toC.id,
+        kind: 'provided',
+        side: ts,
+        offset: sideOffset(toC, ts, arrowSlot.get(e) ?? 0, byToSlot.get(key)?.length || 1, lanePitch),
+      })
+      : providedByTarget.get(key);
     if (!prv) {
       const list = providedListByComp.get(toC.id) ?? [];
       if (list.length >= 1) {
@@ -1106,6 +1135,7 @@ function wireComponentDiagram(
     });
     const unoSolo = (countSlots.get(slotKey(fromC.id, fs)) || 1) === 1
       && (countSlots.get(key) || 1) === 1
+      && (connector !== 'arrow' || (byToSlot.get(key)?.length ?? 1) === 1)
       && (providedListByComp.get(toC.id)?.length ?? 0) <= 1;
     const sameAxisTB = (fs === 'top' || fs === 'bottom') && (ts === 'top' || ts === 'bottom');
     const sameAxisLR = (fs === 'left' || fs === 'right') && (ts === 'left' || ts === 'right');
