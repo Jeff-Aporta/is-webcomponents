@@ -344,7 +344,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
       if (!iconInLabel) {
         const tint = tkHueToHex(a.hue) ?? '#64748b';
-        g.appendChild(svgIconBadge(a.icon, { cx: iconCx, cy: a.y, size: 24, color: tint, bg: 'circle', bgColor: pastelColor(tint), bgAlpha: 0.75 }));
+        g.appendChild(svgIconBadge(a.icon, { cx: iconCx, cy: a.y, size: 24, color: tint, bg: 'circle', bgColor: pastelColor(tint), bgAlpha: 0.85 }));
       }
 
       if (a.label.includes('{{')) {
@@ -578,7 +578,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
           // Nota como insignia: fondo pastel del color de la arista, sin borde.
           g.appendChild(svgEl('rect', {
             x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 3,
-            fill: pastelColor(color), 'fill-opacity': 0.72,
+            fill: pastelColor(color), 'fill-opacity': 0.8,
           }));
         } else {
           g.appendChild(svgEl('rect', {
@@ -598,7 +598,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // fondo circular translúcido: el color solo no basta para leer el grupo.
       if (m.groupIcon) {
         g.appendChild(svgIconBadge(m.groupIcon, {
-          cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgColor: pastelColor(color), bgAlpha: 0.75,
+          cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgColor: pastelColor(color), bgAlpha: 0.85,
         }));
       }
       // Título del grupo como rótulo centrado bajo el par icono + índice:
@@ -608,7 +608,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         const tw = Math.ceil(m.groupTitle.length * 4.6) + 8;
         g.appendChild(svgEl('rect', {
           x: start.x - dir * 10 - tw / 2, y: start.y + 15, width: tw, height: 12, rx: 2,
-          fill: pastelColor(color), 'fill-opacity': 0.75,
+          fill: pastelColor(color), 'fill-opacity': 0.85,
         }));
         const t = svgEl('text', {
           x: start.x - dir * 10, y: start.y + 21, 'dominant-baseline': 'middle', fill: color, 'fill-opacity': 0.7,

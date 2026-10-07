@@ -566,7 +566,8 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   // 3) Métricas verticales (más aire bajo el subtítulo).
   const headerCenterY = (hasHeader ? 100 : 56) + (rawBoxes.length ? PART_BOX_HEAD : 0);
   const lifelineY1 = headerCenterY + 22;
-  const messagesTop = snapDiagramGrid(headerCenterY + 58);
+  // Margen entre las cabeceras y la primera fila (o su marco/chip): 84 px.
+  const messagesTop = snapDiagramGrid(headerCenterY + 84);
   // Regiones (fragmentos): cada una abre un hueco antes de su primera fila
   // (pestaña con el rótulo) y otro después de la última (pie). Los huecos se
   // acumulan por fila para que las regiones anidadas o consecutivas no se
@@ -611,10 +612,11 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   /** Borde inferior de lo que ocupa una fila (línea, o icono + título bajo el índice). */
   const rowBottom = (r: number): number => yAt(r) + (titled ? 28 : 10);
   const rowCount = flat.length;
-  const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) : lifelineY1 + 40) + 30);
+  // Abajo: espacio para el título bajo el último índice + margen con el pie.
+  const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) : lifelineY1 + 40) + (titled ? 56 : 36));
   // Cabeceras repetidas al pie: el payload manda; si no dice, el tema.
   const footer = spec.footer ?? opts.footer ?? false;
-  const footerY = footer ? lifelineY2 + 22 : undefined;
+  const footerY = footer ? lifelineY2 + 24 : undefined;
   const H = footer ? footerY! + 16 + 24 : lifelineY2 + 24;
 
   const actorLayouts: SequenceLayoutActor[] = actors.map((a, i) => ({

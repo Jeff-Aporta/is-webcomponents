@@ -45,11 +45,11 @@ function srgbToLinear(c: number): number {
 
 /** Lightness OKLCH (= L de OKLab) de un color, 0..1. */
 /**
- * Versión pastel de un color: mezcla con blanco (`amount` 0..1, default 0.68).
+ * Versión pastel de un color: mezcla con blanco (`amount` 0..1, default 0.8).
  * Para fondos de insignias y notas: parecido al color del texto, pero claro.
  * Si el color no es hex, se devuelve tal cual.
  */
-export function pastelColor(color: string, amount: number = 0.68): string {
+export function pastelColor(color: string, amount: number = 0.8): string {
   const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(color ?? '').trim());
   if (!m) return color;
   let h = m[1]!;
