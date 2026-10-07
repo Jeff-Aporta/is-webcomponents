@@ -54,6 +54,8 @@ const SECCION_PROPS = new Set([
   'id', 'title', 'titleHtml', 'lede',
   'blocks', 'className', 'hideTitle',
   'as', 'ariaLabel', 'ariaLabelledby',
+  // Rol ARIA explícito del contenedor (previews/_kit/render.ts lo aplica).
+  'role',
 ]);
 
 /** Props del nivel raíz de la definición. */

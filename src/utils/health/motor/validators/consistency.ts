@@ -179,7 +179,8 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
         // Patrón de invocación: `defineDateField({...})`, `definePickerInput({...})`
         // o `window.__isDefineTypedChart?.('iswc-x-chart', ...)` para charts.
         const invokesFactory = factory === 'window.__isDefineTypedChart'
-          ? new RegExp(`window\\.\\s*__isDefineTypedChart\\s*\\?\\s*\\.\\s*\\(\\s*['"\`]is-[a-z0-9-]+['"\`]\\s*,`).test(src)
+          // Tags `iswc-` (antes `is-`): con solo `is-` la cadena nunca llegaba a chart.ts.
+          ? new RegExp(`window\\.\\s*__isDefineTypedChart\\s*\\?\\s*\\.\\s*\\(\\s*['"\`](?:iswc|is)-[a-z0-9-]+['"\`]\\s*,`).test(src)
           : new RegExp(`\\b${factory}\\s*\\(`).test(src);
         if (invokesFactory) {
           const modDir = path.dirname(rutaModulo);

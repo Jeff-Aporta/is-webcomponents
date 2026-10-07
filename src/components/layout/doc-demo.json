@@ -12,7 +12,7 @@
       "lede": "Shell transversal vía loader. Un host module + attrs; la SPA espera iswc-doc-demo-ready.",
       "blocks": [
         {
-          "kind": "demo",
+          "kind": "html",
           "html": "<p>Carga <code>doc-demo-host.min.js</code> (module). El host hace <code>L.loadPageModules(['iswc-doc-demo-boot'])</code> + <code>L.load('iswc-doc-demo')</code>. Attrs: <code>brand</code>, <code>local</code>, <code>dev</code>, <code>sheets-cache</code>, <code>page-styles</code>, <code>page-modules</code>. IDs estables + <code>whenReady()</code>.</p>"
         }
       ]
