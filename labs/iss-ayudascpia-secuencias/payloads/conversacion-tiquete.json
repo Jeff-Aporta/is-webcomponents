@@ -3,48 +3,173 @@
   "module": "020-Conversaciones",
   "tag": "iswc-sequence-diagram",
   "script": "diagrams/sequence-diagram.min.js",
-  "attrs": { "diagram-style": "insoft" },
+  "attrs": {
+    "diagram-style": "insoft"
+  },
   "payload": {
     "sequence": {
       "title": "ISS PatyIA · Tiquete sobre una conversación (POST /tiquete)",
       "actors": [
-        { "id": "u", "label": "Cliente", "kind": "actor", "icon": "mdi:account" },
-        { "id": "t", "label": "TConversationTicketController", "kind": "participant", "icon": "mdi:ticket-confirmation" },
-        { "id": "pg", "label": "PostgreSQL", "kind": "participant", "icon": "mdi:database" }
+        {
+          "id": "u",
+          "label": "Cliente",
+          "kind": "actor",
+          "icon": "mdi:account"
+        },
+        {
+          "id": "t",
+          "label": "TConversationTicketController",
+          "kind": "participant",
+          "icon": "mdi:ticket-confirmation"
+        },
+        {
+          "id": "pg",
+          "label": "PostgreSQL",
+          "kind": "participant",
+          "icon": "mdi:database"
+        }
       ],
       "groups": [
-        { "id": "g-http", "name": "Petición y respuesta", "color": "ticket" },
-        { "id": "g-ctl", "name": "Validación", "color": "neutral" },
-        { "id": "g-db", "name": "Persistencia en PostgreSQL", "color": "data" },
-        { "id": "g-err", "name": "Salida de error", "color": "error" }
+        {
+          "id": "g-http",
+          "name": "Petición y respuesta",
+          "color": "ticket",
+          "icon": "mdi:swap-horizontal"
+        },
+        {
+          "id": "g-ctl",
+          "name": "Validación",
+          "color": "neutral",
+          "icon": "mdi:cog-outline"
+        },
+        {
+          "id": "g-db",
+          "name": "Persistencia en PostgreSQL",
+          "color": "data",
+          "icon": "mdi:database"
+        },
+        {
+          "id": "g-err",
+          "name": "Salida de error",
+          "color": "error",
+          "icon": "mdi:alert-circle-outline"
+        }
       ],
       "fragments": [
-        { "id": "f-alta", "kind": "region", "name": "alta del tiquete y efectos sobre la conversación (solo el dueño la cierra)", "messages": ["m6", "m7"], "color": "neutral" }
+        {
+          "id": "f-alta",
+          "kind": "region",
+          "name": "alta del tiquete y efectos sobre la conversación (solo el dueño la cierra)",
+          "messages": [
+            "m6",
+            "m7"
+          ],
+          "color": "neutral"
+        }
       ],
       "preamble": [
-        { "id": "m1", "from": "u", "to": "t", "label": "POST /tiquete { iconversacion, itema, iclasificador, bcerrar_conversacion?, bautoriza_visualizacion? }", "kind": "sync", "group": "g-http" },
-        { "id": "m2", "from": "t", "to": "t", "label": "Zod · itiquete o codigotk · recorte a 30 · JWT · accionRecurso(Crear)", "kind": "self", "group": "g-ctl" },
-        { "id": "m3", "from": "t", "to": "pg", "label": "lookUp patyia_conversaciones", "kind": "sync", "group": "g-db" }
+        {
+          "id": "m1",
+          "from": "u",
+          "to": "t",
+          "label": "POST /tiquete { iconversacion, itema, iclasificador, bcerrar_conversacion?, bautoriza_visualizacion? }",
+          "kind": "sync",
+          "group": "g-http"
+        },
+        {
+          "id": "m2",
+          "from": "t",
+          "to": "t",
+          "label": "Zod · itiquete o codigotk · recorte a 30 · JWT · accionRecurso(Crear)",
+          "kind": "self",
+          "group": "g-ctl"
+        },
+        {
+          "id": "m3",
+          "from": "t",
+          "to": "pg",
+          "label": "lookUp patyia_conversaciones",
+          "kind": "sync",
+          "group": "g-db"
+        }
       ],
       "alt": {
         "branches": [
-          { "condition": "no existe", "messages": [
-            { "id": "m4", "from": "t", "to": "u", "label": "500", "kind": "async", "group": "g-err" }
-          ] },
-          { "condition": "cerrada o eliminada", "messages": [
-            { "id": "m5", "from": "t", "to": "u", "label": "400", "kind": "async", "group": "g-err" }
-          ] },
-          { "condition": "abierta", "messages": [
-            { "id": "m6", "from": "t", "to": "pg", "label": "nextVal(seq_patyia_itiquete) · INSERT … ON CONFLICT DO NOTHING", "kind": "sync", "group": "g-db" },
-            { "id": "m7", "from": "t", "to": "pg", "label": "si es el dueño: UPDATE itdestado = 1 / bautoriza_visualizacion", "kind": "sync", "group": "g-db" },
-            { "id": "m8", "from": "t", "to": "u", "label": "201 { ticket, sideEffects }", "kind": "async", "group": "g-http" }
-          ] }
+          {
+            "condition": "no existe",
+            "messages": [
+              {
+                "id": "m4",
+                "from": "t",
+                "to": "u",
+                "label": "500",
+                "kind": "async",
+                "group": "g-err"
+              }
+            ]
+          },
+          {
+            "condition": "cerrada o eliminada",
+            "messages": [
+              {
+                "id": "m5",
+                "from": "t",
+                "to": "u",
+                "label": "400",
+                "kind": "async",
+                "group": "g-err"
+              }
+            ]
+          },
+          {
+            "condition": "abierta",
+            "messages": [
+              {
+                "id": "m6",
+                "from": "t",
+                "to": "pg",
+                "label": "nextVal(seq_patyia_itiquete) · INSERT … ON CONFLICT DO NOTHING",
+                "kind": "sync",
+                "group": "g-db"
+              },
+              {
+                "id": "m7",
+                "from": "t",
+                "to": "pg",
+                "label": "si es el dueño: UPDATE itdestado = 1 / bautoriza_visualizacion",
+                "kind": "sync",
+                "group": "g-db"
+              },
+              {
+                "id": "m8",
+                "from": "t",
+                "to": "u",
+                "label": "201 { ticket, sideEffects }",
+                "kind": "async",
+                "group": "g-http"
+              }
+            ]
+          }
         ]
       },
       "epilogue": [],
       "boxes": [
-        { "id": "iss", "name": "ISS PatyIA", "actors": ["t"], "color": "primary" },
-        { "id": "ext", "name": "Servicios", "actors": ["pg"], "color": "group" }
+        {
+          "id": "iss",
+          "name": "ISS PatyIA",
+          "actors": [
+            "t"
+          ],
+          "color": "primary"
+        },
+        {
+          "id": "ext",
+          "name": "Servicios",
+          "actors": [
+            "pg"
+          ],
+          "color": "group"
+        }
       ]
     }
   }

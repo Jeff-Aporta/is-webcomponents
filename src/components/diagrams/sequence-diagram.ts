@@ -149,6 +149,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
     delete this.wrap.dataset.empty;
 
     const keep = (m: SequenceMessageSpec): boolean => !m.group || !hidden.has(m.group);
+    // Con estilo cargado la leyenda se apaga salvo que el payload la pida:
+    // el título del grupo va sobre su primera arista.
+    const estiloPrevio = styleThemeFor(hostStyleName(this), 'sequence');
+    if (spec.legend == null) spec.legend = !estiloPrevio;
     const visibleSpec: SequenceResolvedSpec = hidden.size
       ? {
           ...spec,
@@ -561,6 +565,30 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
       const labelNode = this.#buildMessageLabel(m, theme);
       if (labelNode) g.appendChild(labelNode);
+
+      // Título del grupo (con icono) bajo el arranque de la primera arista
+      // del tramo: reemplaza la leyenda sin ensanchar el lienzo.
+      if (m.groupTitle) {
+        const dir = m.toX >= m.fromX ? 1 : -1;
+        const tagX = m.fromX + dir * 12;
+        const tagY = m.y + 15;
+        const tg = svgEl('g', { class: 'seq-group-tag' });
+        let tx = tagX;
+        if (m.groupIcon) {
+          tg.appendChild(svgIconGroup(m.groupIcon, {
+            x: dir > 0 ? tagX : tagX - 11, y: tagY - 9, size: 11, color,
+          }));
+          tx = tagX + dir * 14;
+        }
+        const t = svgEl('text', {
+          x: tx, y: tagY, 'dominant-baseline': 'middle', fill: color,
+          'text-anchor': dir > 0 ? 'start' : 'end',
+          'font-size': '9', 'font-weight': '600', 'font-family': this.#font, 'letter-spacing': '0.02em',
+        });
+        t.textContent = m.groupTitle;
+        tg.appendChild(t);
+        g.appendChild(tg);
+      }
 
       this.svg.appendChild(g);
       this.#msgNodes.set(m.id, {

@@ -28,6 +28,14 @@ métodos, tablas, secuencias y códigos de respuesta son los reales. En
 `seguridad-autorizacion` el paso 7 dice lo que hoy hace `rolPrincipal`: sin rol
 vigente → `USR`; SEG caído → 503.
 
+## Sin leyenda: el grupo se anuncia sobre su primera arista
+
+Con `diagram-style` la leyenda queda apagada (`legend: false` implícito): la
+leyenda ensanchaba el lienzo y descentraba el diagrama. Cada grupo lleva
+`icon` y su título se pinta, en su color y con el icono, bajo el arranque de
+la primera arista de cada tramo del grupo. `"legend": true` en el payload la
+vuelve a encender.
+
 ## Formato
 
 Cada `payloads/<slug>.json` tiene **exactamente** el formato del editable del

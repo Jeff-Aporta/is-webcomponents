@@ -154,11 +154,13 @@ function readGroups(seq: Record<string, unknown>): SequenceGroupSpec[] | undefin
   return list.map((g, i: number) => {
     const r = asRecord(g);
     const color = String(r.color ?? '').trim();
+    const icon = String(r.icon ?? '').trim();
     return {
       id: String(r.id ?? `grp-${i}`),
       name: String(r.name ?? r.label ?? `Grupo ${i + 1}`),
       hue: resolveTkHue(r, DEFAULT_HUES[i % DEFAULT_HUES.length]),
       ...(color ? { color } : {}),
+      ...(icon ? { icon } : {}),
     };
   });
 }
@@ -236,6 +238,7 @@ export function sequenceSpecFromPayload(payload: unknown): SequenceResolvedSpec 
     ...(Array.isArray(seq.boxes) ? { boxes: seq.boxes } : {}),
     groups: readGroups(seq),
     fragments: readFragments(seq),
+    ...(typeof seq.legend === 'boolean' ? { legend: seq.legend } : {}),
     messages: flatMessages.length ? flatMessages : undefined,
     preamble,
     alt,
@@ -283,6 +286,7 @@ export function sequenceSpecToJson(spec: SequenceResolvedSpec): Record<string, u
   if (spec.subtitle) seq.subtitle = spec.subtitle;
   if (spec.groups?.length) seq.groups = spec.groups;
   if (spec.fragments?.length) seq.fragments = spec.fragments;
+  if (typeof spec.legend === 'boolean') seq.legend = spec.legend;
 
   if (spec.messages?.length) {
     seq.messages = spec.messages.map(sequenceMessageToJson);
@@ -502,7 +506,10 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
 
   // Posiciones X (auto) y ancho del lienzo.
   const { x: ax, rightMargin, selfSide } = layoutActorPositions(boxW, flat, boxOf);
-  const legendGroups = spec.groups?.length ? spec.groups : undefined;
+  // Sin leyenda (`legend: false`) los grupos no reservan ancho: su título va
+  // sobre la primera arista de cada tramo (`groupTitle`).
+  const legendGroups = spec.groups?.length && spec.legend !== false ? spec.groups : undefined;
+  const groupById = new Map<string, SequenceGroupSpec>((spec.groups ?? []).map((gp) => [gp.id, gp]));
   // La leyenda se acomoda en grid: máximo 3 filas por columna, y tantas
   // columnas como hagan falta para no invadir el área del último actor.
   // Antes era una columna única apilada, y con 5+ grupos solapaba el último
@@ -652,6 +659,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       branchFirst: f.branchFirst,
       groupHue: f.m.group ? groupHueMap.get(f.m.group) : undefined,
       groupColor: f.m.group ? groupColorMap.get(f.m.group) : undefined,
+      ...(spec.legend === false && f.m.group && flat[row - 1]?.m.group !== f.m.group
+        ? { groupTitle: groupById.get(f.m.group)?.name, groupIcon: groupById.get(f.m.group)?.icon }
+        : {}),
     });
   });
 
@@ -698,7 +708,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     // Nunca por encima de la fila anterior (+ su pie de región): el marco
     // `alt` no se monta sobre la región o el mensaje que lo precede.
     const y1 = altStart > 0
-      ? Math.max(Math.min(yAt(altStart) - 28, firstChip - 22), yAt(altStart - 1) + FRAG_FOOT + 4)
+      ? Math.max(Math.min(yAt(altStart) - 28, firstChip - 22), yAt(altStart - 1) + FRAG_FOOT + 10)
       : Math.min(yAt(altStart) - 28, firstChip - 22);
     const y2 = yAt(altEnd - 1) + 26;
     const dividers: number[] = [];

@@ -3,62 +3,294 @@
   "module": "020-Conversaciones",
   "tag": "iswc-sequence-diagram",
   "script": "diagrams/sequence-diagram.min.js",
-  "attrs": { "diagram-style": "insoft" },
+  "attrs": {
+    "diagram-style": "insoft"
+  },
   "payload": {
     "sequence": {
       "title": "ISS PatyIA · Turno de conversación (POST /conversacion, SSE)",
       "actors": [
-        { "id": "u", "label": "Cliente", "kind": "actor", "icon": "mdi:account" },
-        { "id": "w", "label": "abrirStreamSSE", "kind": "participant", "icon": "mdi:api" },
-        { "id": "c", "label": "TConversacionController", "kind": "participant", "icon": "mdi:server" },
-        { "id": "l", "label": "TConversationLogController", "kind": "participant", "icon": "mdi:text-box-multiple" },
-        { "id": "pg", "label": "PostgreSQL", "kind": "participant", "icon": "mdi:database" },
-        { "id": "ai", "label": "OpenAI", "kind": "participant", "icon": "mdi:robot-outline" }
+        {
+          "id": "u",
+          "label": "Cliente",
+          "kind": "actor",
+          "icon": "mdi:account"
+        },
+        {
+          "id": "w",
+          "label": "abrirStreamSSE",
+          "kind": "participant",
+          "icon": "mdi:api"
+        },
+        {
+          "id": "c",
+          "label": "TConversacionController",
+          "kind": "participant",
+          "icon": "mdi:server"
+        },
+        {
+          "id": "l",
+          "label": "TConversationLogController",
+          "kind": "participant",
+          "icon": "mdi:text-box-multiple"
+        },
+        {
+          "id": "pg",
+          "label": "PostgreSQL",
+          "kind": "participant",
+          "icon": "mdi:database"
+        },
+        {
+          "id": "ai",
+          "label": "OpenAI",
+          "kind": "participant",
+          "icon": "mdi:robot-outline"
+        }
       ],
       "groups": [
-        { "id": "g-sse", "name": "Stream SSE al cliente", "color": "stream" },
-        { "id": "g-ctl", "name": "Lógica del turno", "color": "neutral" },
-        { "id": "g-db", "name": "Persistencia en PostgreSQL", "color": "data" },
-        { "id": "g-llm", "name": "Modelo (OpenAI)", "color": "llm" }
+        {
+          "id": "g-sse",
+          "name": "Stream SSE al cliente",
+          "color": "stream",
+          "icon": "mdi:broadcast"
+        },
+        {
+          "id": "g-ctl",
+          "name": "Lógica del turno",
+          "color": "neutral",
+          "icon": "mdi:cog-outline"
+        },
+        {
+          "id": "g-db",
+          "name": "Persistencia en PostgreSQL",
+          "color": "data",
+          "icon": "mdi:database"
+        },
+        {
+          "id": "g-llm",
+          "name": "Modelo (OpenAI)",
+          "color": "llm",
+          "icon": "mdi:robot-outline"
+        }
       ],
       "fragments": [
-        { "id": "f-log", "kind": "region", "name": "registro del mensaje del usuario (turno·1000+1)", "messages": ["m6", "m7"], "color": "neutral" },
-        { "id": "f-stream", "kind": "async", "name": "respuesta en stream · cada delta de OpenAI se reenvía como evento SSE (× N)", "messages": ["m11", "m12", "m13", "m14"], "color": "service" },
-        { "id": "f-close", "kind": "region", "name": "cierre del turno (turno·1000+2)", "messages": ["m15", "m16", "m17", "m18"], "color": "neutral" }
+        {
+          "id": "f-log",
+          "kind": "region",
+          "name": "registro del mensaje del usuario (turno·1000+1)",
+          "messages": [
+            "m6",
+            "m7"
+          ],
+          "color": "neutral"
+        },
+        {
+          "id": "f-stream",
+          "kind": "async",
+          "name": "respuesta en stream · cada delta de OpenAI se reenvía como evento SSE (× N)",
+          "messages": [
+            "m11",
+            "m12",
+            "m13",
+            "m14"
+          ],
+          "color": "service"
+        },
+        {
+          "id": "f-close",
+          "kind": "region",
+          "name": "cierre del turno (turno·1000+2)",
+          "messages": [
+            "m15",
+            "m16",
+            "m17",
+            "m18"
+          ],
+          "color": "neutral"
+        }
       ],
       "preamble": [
-        { "id": "m1", "from": "u", "to": "w", "label": "POST /conversacion { prompt, iconversacion?, mode }", "kind": "sync", "group": "g-sse" },
-        { "id": "m2", "from": "w", "to": "c", "label": "insert(body, ctx, emit)", "kind": "sync", "group": "g-ctl" },
-        { "id": "m3", "from": "c", "to": "c", "label": "Zod · verifyAuthorization · contexto · prompt o adjuntos · mode libre", "kind": "self", "group": "g-ctl" }
+        {
+          "id": "m1",
+          "from": "u",
+          "to": "w",
+          "label": "POST /conversacion { prompt, iconversacion?, mode }",
+          "kind": "sync",
+          "group": "g-sse"
+        },
+        {
+          "id": "m2",
+          "from": "w",
+          "to": "c",
+          "label": "insert(body, ctx, emit)",
+          "kind": "sync",
+          "group": "g-ctl"
+        },
+        {
+          "id": "m3",
+          "from": "c",
+          "to": "c",
+          "label": "Zod · verifyAuthorization · contexto · prompt o adjuntos · mode libre",
+          "kind": "self",
+          "group": "g-ctl"
+        }
       ],
       "alt": {
         "branches": [
-          { "condition": "continúa (iconversacion > 0)", "messages": [
-            { "id": "m4", "from": "c", "to": "pg", "label": "dueño estricto + itdestado = 0 · UPDATE fhultact", "kind": "sync", "group": "g-db" }
-          ] },
-          { "condition": "nueva", "messages": [
-            { "id": "m5", "from": "c", "to": "pg", "label": "nextVal(seq_patyia_idconversaciones) · INSERT", "kind": "sync", "group": "g-db" }
-          ] }
+          {
+            "condition": "continúa (iconversacion > 0)",
+            "messages": [
+              {
+                "id": "m4",
+                "from": "c",
+                "to": "pg",
+                "label": "dueño estricto + itdestado = 0 · UPDATE fhultact",
+                "kind": "sync",
+                "group": "g-db"
+              }
+            ]
+          },
+          {
+            "condition": "nueva",
+            "messages": [
+              {
+                "id": "m5",
+                "from": "c",
+                "to": "pg",
+                "label": "nextVal(seq_patyia_idconversaciones) · INSERT",
+                "kind": "sync",
+                "group": "g-db"
+              }
+            ]
+          }
         ]
       },
       "epilogue": [
-        { "id": "m6", "from": "c", "to": "l", "label": "mensajes() + mensaje del usuario (turno·1000+1)", "kind": "sync", "group": "g-ctl" },
-        { "id": "m7", "from": "l", "to": "pg", "label": "upsert patyia_conversacion_log", "kind": "sync", "group": "g-db" },
-        { "id": "m8", "from": "c", "to": "pg", "label": "getOpenaiCfg → patyia_providers.jcuenta", "kind": "sync", "group": "g-db" },
-        { "id": "m9", "from": "c", "to": "w", "label": "emit begin", "kind": "async", "group": "g-sse" },
-        { "id": "m10", "from": "w", "to": "u", "label": "200 text/event-stream · begin", "kind": "async", "group": "g-sse" },
-        { "id": "m11", "from": "c", "to": "ai", "label": "si hay apiKey: chat/completions stream:true", "kind": "sync", "group": "g-llm" },
-        { "id": "m12", "from": "ai", "to": "c", "label": "deltas", "kind": "async", "group": "g-llm" },
-        { "id": "m13", "from": "c", "to": "w", "label": "emit message × N", "kind": "async", "group": "g-sse" },
-        { "id": "m14", "from": "w", "to": "u", "label": "SSE message × N", "kind": "async", "group": "g-sse" },
-        { "id": "m15", "from": "c", "to": "l", "label": "respuesta del asistente (turno·1000+2)", "kind": "sync", "group": "g-ctl" },
-        { "id": "m16", "from": "c", "to": "pg", "label": "UPDATE qmensajes", "kind": "sync", "group": "g-db" },
-        { "id": "m17", "from": "c", "to": "w", "label": "emit end { stream_ok, providerDegraded }", "kind": "async", "group": "g-sse" },
-        { "id": "m18", "from": "w", "to": "u", "label": "SSE end", "kind": "async", "group": "g-sse" }
+        {
+          "id": "m6",
+          "from": "c",
+          "to": "l",
+          "label": "mensajes() + mensaje del usuario (turno·1000+1)",
+          "kind": "sync",
+          "group": "g-ctl"
+        },
+        {
+          "id": "m7",
+          "from": "l",
+          "to": "pg",
+          "label": "upsert patyia_conversacion_log",
+          "kind": "sync",
+          "group": "g-db"
+        },
+        {
+          "id": "m8",
+          "from": "c",
+          "to": "pg",
+          "label": "getOpenaiCfg → patyia_providers.jcuenta",
+          "kind": "sync",
+          "group": "g-db"
+        },
+        {
+          "id": "m9",
+          "from": "c",
+          "to": "w",
+          "label": "emit begin",
+          "kind": "async",
+          "group": "g-sse"
+        },
+        {
+          "id": "m10",
+          "from": "w",
+          "to": "u",
+          "label": "200 text/event-stream · begin",
+          "kind": "async",
+          "group": "g-sse"
+        },
+        {
+          "id": "m11",
+          "from": "c",
+          "to": "ai",
+          "label": "si hay apiKey: chat/completions stream:true",
+          "kind": "sync",
+          "group": "g-llm"
+        },
+        {
+          "id": "m12",
+          "from": "ai",
+          "to": "c",
+          "label": "deltas",
+          "kind": "async",
+          "group": "g-llm"
+        },
+        {
+          "id": "m13",
+          "from": "c",
+          "to": "w",
+          "label": "emit message × N",
+          "kind": "async",
+          "group": "g-sse"
+        },
+        {
+          "id": "m14",
+          "from": "w",
+          "to": "u",
+          "label": "SSE message × N",
+          "kind": "async",
+          "group": "g-sse"
+        },
+        {
+          "id": "m15",
+          "from": "c",
+          "to": "l",
+          "label": "respuesta del asistente (turno·1000+2)",
+          "kind": "sync",
+          "group": "g-ctl"
+        },
+        {
+          "id": "m16",
+          "from": "c",
+          "to": "pg",
+          "label": "UPDATE qmensajes",
+          "kind": "sync",
+          "group": "g-db"
+        },
+        {
+          "id": "m17",
+          "from": "c",
+          "to": "w",
+          "label": "emit end { stream_ok, providerDegraded }",
+          "kind": "async",
+          "group": "g-sse"
+        },
+        {
+          "id": "m18",
+          "from": "w",
+          "to": "u",
+          "label": "SSE end",
+          "kind": "async",
+          "group": "g-sse"
+        }
       ],
       "boxes": [
-        { "id": "iss", "name": "ISS PatyIA", "actors": ["w", "c", "l"], "color": "primary" },
-        { "id": "ext", "name": "Servicios", "actors": ["pg", "ai"], "color": "group" }
+        {
+          "id": "iss",
+          "name": "ISS PatyIA",
+          "actors": [
+            "w",
+            "c",
+            "l"
+          ],
+          "color": "primary"
+        },
+        {
+          "id": "ext",
+          "name": "Servicios",
+          "actors": [
+            "pg",
+            "ai"
+          ],
+          "color": "group"
+        }
       ]
     }
   }

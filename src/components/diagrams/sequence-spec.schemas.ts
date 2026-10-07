@@ -49,6 +49,8 @@ export const SequenceGroupSpecSchema = z.object({
   name: z.string(),
   hue: z.number(),
   color: z.string().optional(),
+  /** Icono Iconify que acompaña al título del grupo sobre el diagrama. */
+  icon: z.string().optional(),
 });
 export type SequenceGroupSpec = z.infer<typeof SequenceGroupSpecSchema>;
 
@@ -74,6 +76,12 @@ export const SequenceResolvedSpecSchema = z.object({
   actors: z.array(SequenceActorSpecSchema),
   groups: z.array(SequenceGroupSpecSchema).optional(),
   fragments: z.array(SequenceFragmentSpecSchema).optional(),
+  /**
+   * Leyenda aparte (arriba a la derecha). Con estilo cargado el default es
+   * `false`: cada grupo anuncia su título e icono sobre la primera arista
+   * donde aparece, sin ensanchar ni descentrar el lienzo.
+   */
+  legend: z.boolean().optional(),
   messages: z.array(SequenceMessageSpecSchema).optional(),
   preamble: z.array(SequenceMessageSpecSchema).optional(),
   alt: SequenceAltSpecSchema.optional(),
@@ -149,6 +157,9 @@ export const SequenceLayoutMessageSchema = z.object({
   groupHue: z.number().optional(),
   /** Nombre de paleta o hex del grupo; el renderer lo resuelve con el tema. */
   groupColor: z.string().optional(),
+  /** Título e icono del grupo: solo en la primera arista de cada tramo del grupo. */
+  groupTitle: z.string().optional(),
+  groupIcon: z.string().optional(),
 });
 export type SequenceLayoutMessage = z.infer<typeof SequenceLayoutMessageSchema>;
 
@@ -190,6 +201,7 @@ export const SequenceLayoutSchema = z.object({
   messages: z.array(SequenceLayoutMessageSchema),
   altBox: SequenceLayoutAltBoxSchema.optional(),
   fragments: z.array(SequenceLayoutFragmentSchema).optional(),
+  /** Grupos de la leyenda; vacío cuando la leyenda está apagada. */
   groups: z.array(SequenceGroupSpecSchema).optional(),
   legendX: z.number(),
   legendColX: z.array(z.number()),
