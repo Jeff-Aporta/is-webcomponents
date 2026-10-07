@@ -1,0 +1,361 @@
+/* er-editor.scss — chrome del editor ER: lienzo, barra flotante, panel.
+ *
+ * Toda la pintura sale de los tokens del kit (`--iswc-*`), así el editor
+ * sigue el tema claro/oscuro de la página sin reglas propias. Los fallbacks
+ * son los del tema oscuro, para cuando el host no carga `is-base`.
+ */
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 28rem;
+  font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
+  color: var(--iswc-text, #e6e8eb);
+  --_bg: var(--iswc-bg, #0b0d10);
+  --_bg-soft: var(--iswc-bg-soft, #14181d);
+  --_elev: var(--iswc-bg-elev, #1c2128);
+  --_border: var(--iswc-border, #2a3038);
+  --_border-soft: var(--iswc-border-soft, #1f242b);
+  --_text: var(--iswc-text, #e6e8eb);
+  --_text-soft: var(--iswc-text-soft, #a8b0bb);
+  --_brand: var(--iswc-brand-text, #7ab7ff);
+  --_brand-soft: var(--iswc-brand-soft, rgb(122 183 255 / 16%));
+  --_brand-soft-active: var(--iswc-brand-soft-active, rgb(122 183 255 / 28%));
+  --_danger: var(--iswc-danger-text, #f87171);
+  --_danger-soft: var(--iswc-danger-soft, rgb(248 113 113 / 14%));
+  --_control-bg: var(--iswc-control-bg, #21262d);
+  --_control-hover: var(--iswc-control-bg-hover, #30363d);
+  --_control-border: var(--iswc-control-border, #59636e);
+  --_radius: var(--iswc-radius, 0.625em);
+  --_radius-sm: var(--iswc-radius-sm, 0.375em);
+  --_shadow: var(--iswc-shadow, 0 8px 24px rgb(0 0 0 / 25%));
+}
+
+.stage {
+  display: block;
+  height: 100%;
+  min-height: inherit;
+  box-sizing: border-box;
+}
+.stage > iswc-split-panel {
+  display: block;
+  height: 100%;
+  min-height: inherit;
+}
+.pane-canvas,
+.pane-side {
+  height: 100%;
+  min-height: inherit;
+  box-sizing: border-box;
+}
+.pane-side { padding-inline-start: 10px; }
+
+/* ── Lienzo ───────────────────────────────────────────────────────────── */
+.canvas {
+  position: relative;
+  height: 100%;
+  min-height: inherit;
+  overflow: hidden;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius);
+  background-color: var(--_bg-soft);
+  /* Rejilla de puntos: orienta el arrastre sin competir con el diagrama. */
+  background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--_text) 11%, transparent) 1px, transparent 0);
+  background-size: 24px 24px;
+  cursor: grab;
+}
+.canvas[data-panning] { cursor: grabbing; }
+.canvas-inner {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+}
+.canvas-inner > iswc-er-diagram {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Lienzo sin entidades: invitación en lugar de un hueco negro. */
+.empty {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  pointer-events: none;
+  z-index: 3;
+}
+.canvas[data-empty] .empty { display: grid; }
+.empty__card {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 22px 28px;
+  border: 1px dashed var(--_control-border);
+  border-radius: var(--_radius);
+  background: color-mix(in srgb, var(--_elev) 86%, transparent);
+  color: var(--_text-soft);
+  font-size: 0.82rem;
+  text-align: center;
+}
+.empty__card iswc-icon { font-size: 1.9rem; color: var(--_brand); }
+.empty__card strong { color: var(--_text); font-size: 0.9rem; }
+
+/* ── Barra flotante ───────────────────────────────────────────────────── */
+.toolbar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  z-index: 5;
+  pointer-events: none;
+}
+.toolbar__group {
+  pointer-events: auto;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  background: color-mix(in srgb, var(--_elev) 94%, transparent);
+  border: 1px solid var(--_border);
+  border-radius: calc(var(--_radius-sm) + 4px);
+  box-shadow: var(--_shadow);
+  backdrop-filter: blur(8px);
+}
+.toolbar__group--end { margin-inline-start: auto; }
+.toolbar button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--_radius-sm);
+  background: transparent;
+  color: var(--_text-soft);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.toolbar button:hover {
+  background: var(--_control-hover);
+  color: var(--_text);
+}
+.toolbar button:focus-visible {
+  outline: 2px solid var(--_brand);
+  outline-offset: 1px;
+}
+.toolbar button[aria-pressed="true"] {
+  background: var(--_brand-soft-active);
+  border-color: color-mix(in srgb, var(--_brand) 45%, transparent);
+  color: var(--_brand);
+}
+.toolbar button.danger { color: var(--_danger); }
+.toolbar button.danger:hover { background: var(--_danger-soft); }
+.toolbar button iswc-icon { font-size: 1.1rem; line-height: 1; }
+
+/* ── Panel de propiedades ─────────────────────────────────────────────── */
+.panel {
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 14px;
+  background: var(--_elev);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius);
+}
+.panel__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--_text);
+}
+.panel__head iswc-icon { font-size: 1.05rem; color: var(--_brand); }
+.selection-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 2rem;
+  padding: 6px 10px;
+  border-radius: var(--_radius-sm);
+  background: var(--_bg-soft);
+  border: 1px solid var(--_border-soft);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--_text-soft);
+}
+.selection-info[data-has-selection] {
+  color: var(--_text);
+  border-color: color-mix(in srgb, var(--_brand) 40%, transparent);
+  background: var(--_brand-soft);
+}
+
+.panel fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+  display: grid;
+  gap: 8px;
+}
+.panel fieldset[hidden] { display: none; }
+.panel fieldset:disabled { opacity: 0.45; }
+.panel fieldset:disabled label { cursor: not-allowed; }
+.panel legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 0 0 6px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--_border-soft);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--_text-soft);
+}
+.panel legend iswc-icon { font-size: 0.95rem; }
+
+.panel label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--_text-soft);
+}
+.panel label[data-unset] input[type="color"] { opacity: 0.4; }
+
+.panel input[type="text"],
+.panel input[type="number"],
+.panel select {
+  box-sizing: border-box;
+  height: 1.9rem;
+  min-width: 0;
+  width: 6.2rem;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--_text);
+  background: var(--_control-bg);
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  transition: border-color 120ms ease;
+}
+.panel input::placeholder { color: color-mix(in srgb, var(--_text-soft) 70%, transparent); }
+.panel input:hover,
+.panel select:hover { border-color: var(--_control-border); }
+.panel input:focus-visible,
+.panel select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--_brand) 60%, transparent);
+  outline-offset: 0;
+  border-color: var(--_brand);
+}
+.panel input[type="color"] {
+  box-sizing: border-box;
+  width: 2.6rem;
+  height: 1.9rem;
+  padding: 2px;
+  border: 1px solid var(--_border);
+  border-radius: var(--_radius-sm);
+  background: var(--_control-bg);
+  cursor: pointer;
+}
+.panel input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.panel input[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--_radius-sm) - 2px);
+}
+
+/* Filas de atributos: nombre · tipo · clave · borrar */
+.attr-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 3.6rem auto;
+  gap: 6px;
+  align-items: center;
+}
+.attr-row input,
+.attr-row select { width: 100%; }
+.attr-row select.key-pk { border-color: var(--iswc-color-warning, #fbbf24); color: var(--iswc-color-warning, #fbbf24); }
+.attr-row select.key-fk { border-color: var(--_brand); color: var(--_brand); }
+.attr-row .attr-del {
+  appearance: none;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--_radius-sm);
+  background: transparent;
+  color: var(--_text-soft);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.attr-row .attr-del:hover {
+  background: var(--_danger-soft);
+  color: var(--_danger);
+}
+
+.panel button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 1.9rem;
+  padding: 0 10px;
+  border: 1px dashed var(--_control-border);
+  border-radius: var(--_radius-sm);
+  background: transparent;
+  color: var(--_text-soft);
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.panel button iswc-icon { font-size: 1rem; line-height: 1; }
+.panel button.icon-wide { width: 100%; }
+.panel button:hover {
+  background: var(--_brand-soft);
+  border-color: var(--_brand);
+  color: var(--_brand);
+}
+.panel button:focus-visible { outline: 2px solid var(--_brand); outline-offset: 1px; }
+
+/* ── Ayuda al pie del lienzo ──────────────────────────────────────────── */
+.hint {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  z-index: 4;
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: var(--_text-soft);
+  background: color-mix(in srgb, var(--_elev) 90%, transparent);
+  border: 1px solid var(--_border-soft);
+  pointer-events: none;
+}
+.hint kbd {
+  font: inherit;
+  font-family: var(--iswc-mono, ui-monospace, Menlo, Consolas, monospace);
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--_control-bg);
+  border: 1px solid var(--_border);
+}
+
+textarea[data-json-readout] { display: none; }

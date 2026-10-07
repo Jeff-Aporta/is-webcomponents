@@ -374,6 +374,11 @@ const PART_BOX_HEAD = 26;
 /** Aire que abre una región antes de su primera fila (pestaña) y tras la última. */
 const FRAG_HEAD = 30;
 const FRAG_FOOT = 14;
+/** Con títulos de grupo bajo cada índice la fila crece y el pie abraza el texto. */
+const ROW_H_TITLED = 64;
+const FRAG_FOOT_TITLED = 36;
+/** Margen mínimo entre un marco (región/alt) y lo que lo precede. */
+const FRAME_MARGIN = 8;
 const ALT_BRANCH_HEAD = 24;
 const ALT_HEAD = 20;
 
@@ -574,13 +579,18 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     fragRows.filter((o, j) => j !== k && o.first <= fragRows[k]!.first && o.last >= fragRows[k]!.last).length;
   const headGap: number[] = new Array(flat.length + 1).fill(0);
   const footGap: number[] = new Array(flat.length + 1).fill(0);
-  fragRows.forEach((x) => { headGap[x.first]! += FRAG_HEAD; footGap[x.last]! += FRAG_FOOT; });
+  // Títulos bajo el índice (sin leyenda y con algún grupo con icono): la fila
+  // crece para el icono + título, y los marcos abrazan ese texto.
+  const titled = spec.legend === false && (spec.groups ?? []).some((gp) => gp.icon);
+  const rowH = titled ? ROW_H_TITLED : ROW_H;
+  const fragFoot = titled ? FRAG_FOOT_TITLED : FRAG_FOOT;
+  fragRows.forEach((x) => { headGap[x.first]! += FRAG_HEAD; footGap[x.last]! += fragFoot; });
   // Cada rama de `alt` (salvo la primera) abre aire para su condición: el
   // rótulo `[condición]` va entre el divisor y el chip de la primera fila.
   flat.forEach((f, i) => { if (f.branchFirst && i > 0 && i !== altStart) headGap[i]! += ALT_BRANCH_HEAD; });
   // La pestaña del `alt` lleva título: la primera condición va debajo de
   // ella, así que el marco abre una cabecera propia.
-  if (altEnd > altStart) headGap[altStart]! += ALT_HEAD;
+  if (altEnd > altStart) { headGap[altStart]! += FRAG_HEAD + ALT_HEAD; footGap[altEnd - 1]! += fragFoot; }
   const rowOffset: number[] = [];
   let acc = 0;
   for (let r = 0; r < flat.length; r++) {
@@ -588,7 +598,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     rowOffset.push(acc);
     acc += footGap[r]!;
   }
-  const yAt = (r: number): number => snapDiagramGrid(messagesTop + r * ROW_H + (rowOffset[r] ?? acc));
+  const yAt = (r: number): number => snapDiagramGrid(messagesTop + r * rowH + (rowOffset[r] ?? acc));
+  /** Borde inferior de lo que ocupa una fila (línea, o icono + título bajo el índice). */
+  const rowBottom = (r: number): number => yAt(r) + (titled ? 28 : 10);
   const rowCount = flat.length;
   const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) : lifelineY1 + 40) + 30);
   const H = lifelineY2 + 24;
@@ -627,7 +639,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
         side === 1
           ? snapDiagramGrid(fromX + LOOP_W + 8)
           : snapDiagramGrid(fromX - LOOP_W - 8 - f.labelW);
-      labelY = snapDiagramGrid(y - LOOP_H / 2 - CHIP_H / 2);
+      labelY = snapDiagramGrid(y - LOOP_H / 2 - chipH / 2);
       applyRectCost(g, Math.min(fromX, fromX + side * LOOP_W), y - LOOP_H, LOOP_W, LOOP_H, 8, true);
     } else {
       route = routeSequenceHorizontal(fromX, toX, y, g);
@@ -666,9 +678,10 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
       branchFirst: f.branchFirst,
       groupHue: f.m.group ? groupHueMap.get(f.m.group) : undefined,
       groupColor: f.m.group ? groupColorMap.get(f.m.group) : undefined,
-      ...(spec.legend === false && f.m.group ? { groupIcon: groupById.get(f.m.group)?.icon } : {}),
-      ...(spec.legend === false && f.m.group && flat[row - 1]?.m.group !== f.m.group
-        ? { groupTitle: groupById.get(f.m.group)?.name }
+      // Sin leyenda: icono y título del grupo en cada arista (el título va
+      // como rótulo bajo el par icono + índice).
+      ...(spec.legend === false && f.m.group && groupById.get(f.m.group)?.icon
+        ? { groupIcon: groupById.get(f.m.group)?.icon, groupTitle: groupById.get(f.m.group)?.name }
         : {}),
     });
   });
@@ -693,8 +706,12 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     const firstChip = Math.min(...rowsIn.map((f) => messages[flat.indexOf(f)]!.labelY));
     // El hueco acumulado de cabecera/pie reparte el aire entre regiones
     // anidadas: la exterior toma todo el hueco, cada nivel interior cede 8 px.
-    const y0 = Math.min(yAt(x.first) - (headGap[x.first] ?? FRAG_HEAD) + 6, firstChip - FRAG_HEAD + 8) + depth * 8;
-    const y1 = yAt(x.last) + (footGap[x.last] ?? FRAG_FOOT) - 4 - depth * 8;
+    // Arriba: la pestaña (18 px) queda 4 px por encima del primer chip y nunca
+    // más cerca de la fila anterior que FRAME_MARGIN. Abajo: abraza el título
+    // del último índice.
+    let y0 = Math.min(yAt(x.first) - (headGap[x.first] ?? FRAG_HEAD) + 6, firstChip - 22) + depth * 8;
+    if (x.first > 0) y0 = Math.max(y0, rowBottom(x.first - 1) + FRAME_MARGIN);
+    const y1 = Math.max(yAt(x.last) + (footGap[x.last] ?? fragFoot) - 4, rowBottom(x.last) + 6) - depth * 8;
     return { id: x.fr.id, name: x.fr.name, kind: x.fr.kind, color: x.fr.color, condition: x.fr.condition, x: x0, y: y0, w: x1 - x0, h: y1 - y0, depth };
   });
 
@@ -715,9 +732,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
     const firstChip = Math.min(...inAlt.map((f) => messages[flat.indexOf(f)]!.labelY));
     // Nunca por encima de la fila anterior (+ su pie de región): el marco
     // `alt` no se monta sobre la región o el mensaje que lo precede.
-    const deseado = Math.min(yAt(altStart) - 28, firstChip - 22) - ALT_HEAD;
-    const y1 = altStart > 0 ? Math.max(deseado, yAt(altStart - 1) + FRAG_FOOT + 10) : deseado;
-    const y2 = yAt(altEnd - 1) + 26;
+    const deseado = Math.min(yAt(altStart) - FRAG_HEAD - ALT_HEAD + 6, firstChip - 22 - ALT_HEAD);
+    const y1 = altStart > 0 ? Math.max(deseado, rowBottom(altStart - 1) + FRAME_MARGIN) : deseado;
+    const y2 = Math.max(yAt(altEnd - 1) + fragFoot - 4, rowBottom(altEnd - 1) + 6);
     const dividers: number[] = [];
     const branches: Array<{ label: string; y: number }> = [];
     for (let k = altStart; k < altEnd; k++) {

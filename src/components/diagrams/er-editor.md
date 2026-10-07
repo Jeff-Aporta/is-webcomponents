@@ -56,6 +56,17 @@ el.addEventListener('iswc-state-change', (e) => {
 
 </details>
 
+## Panel de propiedades
+
+| Qué | Contrato |
+| --- | --- |
+| Selección | El panel dice qué hay seleccionado (n entidades · n relaciones). Sin selección, los grupos **Estilo** y **Aristas** quedan deshabilitados y **Atributos** oculto |
+| Atributos | Solo con **una** entidad seleccionada: una fila por atributo (nombre, tipo, PK/FK, borrar) y un botón para agregar |
+| Estilo | Los controles muestran el valor del primer seleccionado; sin override quedan en «auto» (vacío). Cambiarlos escribe `style` en cada seleccionado y es una sola entrada de deshacer |
+| Aristas | Solo con relaciones seleccionadas: ruta, trazo, variante y ancho de la primera |
+| Lienzo vacío | Sin entidades, el lienzo muestra una invitación («Lienzo vacío») en vez de un hueco |
+| Tema | Todo el chrome sale de los tokens `--iswc-*` de la página: claro/oscuro sin reglas propias. La hoja es `er-editor.scss`, incrustada en el bundle por el build |
+
 ## Ejemplo mínimo
 
 ```html

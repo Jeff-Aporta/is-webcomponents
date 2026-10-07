@@ -566,14 +566,24 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
       if (m.label) {
         // Chip semiopaco: enmascara las lifelines bajo el texto.
-        g.appendChild(svgEl('rect', {
-          x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: paint ? 0 : 4,
-          fill: paint?.labelFill ?? theme.chipFill,
-          stroke: paint ? color : null, 'stroke-width': paint ? 0.8 : null, 'stroke-opacity': paint ? 0.55 : null,
-        }));
+        if (paint) {
+          // Nota como insignia: fondo pastel del color de la arista, sin borde.
+          g.appendChild(svgEl('rect', {
+            x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 3,
+            fill: paint.labelFill, 'fill-opacity': 0.82,
+          }));
+          g.appendChild(svgEl('rect', {
+            x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 3,
+            fill: color, 'fill-opacity': 0.16,
+          }));
+        } else {
+          g.appendChild(svgEl('rect', {
+            x: m.labelX, y: m.labelY, width: m.labelW, height: m.labelH, rx: 4, fill: theme.chipFill,
+          }));
+        }
       }
 
-      const labelNode = this.#buildMessageLabel(m, theme);
+      const labelNode = this.#buildMessageLabel(m, theme, color);
       if (labelNode) g.appendChild(labelNode);
 
       // Dirección de salida del trazo (para un self, el lado del lazo).
@@ -587,12 +597,18 @@ class IswcSequenceDiagram extends DiagramElementBase {
           cx: start.x - dir * 20, cy: start.y, size: 20, color, bg: 'circle', bgAlpha: 0.16,
         }));
       }
-      // Título del grupo bajo el arranque de la primera arista del tramo:
+      // Título del grupo como rótulo centrado bajo el par icono + índice:
       // texto auxiliar, pequeño y atenuado para no robar protagonismo.
       if (m.groupTitle) {
+        // Fondo que enmascara la lifeline bajo el rótulo (nada cruza un texto).
+        const tw = Math.ceil(m.groupTitle.length * 4.6) + 8;
+        g.appendChild(svgEl('rect', {
+          x: start.x - dir * 10 - tw / 2, y: start.y + 15, width: tw, height: 12, rx: 2,
+          fill: paint?.labelFill ?? theme.chipFill, 'fill-opacity': 0.85,
+        }));
         const t = svgEl('text', {
-          x: m.fromX + dir * 12, y: m.y + 14, 'dominant-baseline': 'middle', fill: color, 'fill-opacity': 0.62,
-          'text-anchor': dir > 0 ? 'start' : 'end',
+          x: start.x - dir * 10, y: start.y + 21, 'dominant-baseline': 'middle', fill: color, 'fill-opacity': 0.7,
+          'text-anchor': 'middle',
           'font-size': '8', 'font-weight': '600', 'font-family': this.#font, 'letter-spacing': '0.03em',
         });
         t.textContent = m.groupTitle;
@@ -611,8 +627,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
     }
   }
 
-  #buildMessageLabel(m: SequenceLayoutMessage, theme: DiagramTheme): SVGElement | null {
+  #buildMessageLabel(m: SequenceLayoutMessage, theme: DiagramTheme, color?: string): SVGElement | null {
     if (!m.label) return null;
+    // Con estilo, el texto de la nota lleva el color de su arista.
+    const ink = this.#paint && color ? color : (this.#paint?.labelText ?? theme.muted);
     if (m.label.includes('{{')) {
       return foreignHtml(
         m.labelX, m.labelY, m.labelW, m.labelH,
@@ -621,7 +639,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
         {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: '100%', height: '100%', fontSize: '10px',
-          fontFamily: this.#labelFont, color: this.#paint?.labelText ?? theme.muted,
+          fontFamily: this.#labelFont, color: ink,
           lineHeight: '1.2', textAlign: 'center',
         },
       );
@@ -654,7 +672,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       'middle', 10, 1.2,
     );
     const t = svgEl('text', {
-      fill: this.#paint?.labelText ?? theme.muted, 'font-size': '10', 'font-family': this.#labelFont,
+      fill: ink, 'font-size': '10', 'font-family': this.#labelFont,
       class: 'seq-label-text',
     });
     for (const span of tspans) {
@@ -727,7 +745,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // engrosar, el realce lo lleva la línea.
       node.dot.setAttribute('r', String(active ? 9 : 8));
       if (node.labelNode?.classList?.contains('seq-label-text')) {
-        node.labelNode.setAttribute('fill', active ? theme.text : (this.#paint?.labelText ?? theme.muted));
+        if (!this.#paint) node.labelNode.setAttribute('fill', active ? theme.text : theme.muted);
         node.labelNode.setAttribute('font-weight', active ? '600' : '400');
       }
     }

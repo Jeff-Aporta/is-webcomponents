@@ -99,8 +99,12 @@ function findJsonScript(node: unknown): string | null {
     return null;
   }
   const rec = node as Record<string, unknown>;
-  if (typeof rec.html === 'string') {
-    const m = rec.html.match(/<script type="application\/json">([\s\S]*?)<\/script>/i);
+  // Los previews escriben `html` como cadena o como lista de líneas.
+  const html = Array.isArray(rec.html)
+    ? rec.html.filter((x): x is string => typeof x === 'string').join('\n')
+    : rec.html;
+  if (typeof html === 'string') {
+    const m = html.match(/<script type="application\/json">([\s\S]*?)<\/script>/i);
     if (m) return m[1];
   }
   for (const value of Object.values(rec)) {

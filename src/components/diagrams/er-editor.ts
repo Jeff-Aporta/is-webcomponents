@@ -16,7 +16,7 @@
 //   Playwright: smoke + funcional (drag, click-to-connect, undo/redo,
 //     export JSON/SVG) + determinismo (round-trip idéntico).
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
-import { defineElement, emit } from '../../core/element.js';
+import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { serializeErPayload, renderErSvg as renderErSvgString } from './er-archify.js';
 import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride, ErRouteKind, ErDashStyle, EdgeVariant } from "./diagram-types.schemas.js";
 import '../media/icon.js';
@@ -34,148 +34,25 @@ const HISTORY_OP = {
   REPLACE_ALL: 'replace_all',
 };
 
-const EDITOR_CSS = `
-:host {
-  display: block;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 28rem;
-  font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif);
-  color: var(--iswc-text, #e2e8f0);
-}
-.stage { display: block; height: 100%; min-height: inherit; box-sizing: border-box; }
-.stage > iswc-split-panel { display: block; height: 100%; min-height: inherit; }
-.pane-canvas, .pane-side { display: grid; height: 100%; min-height: 0; box-sizing: border-box; }
-.pane-side { min-width: 0; }
-.canvas {
-  position: relative;
-  background: var(--iswc-bg, #0c1118);
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
-  border-radius: 8px;
-  overflow: hidden;
-  min-height: 400px;
-  height: 100%;
-  touch-action: none;
-  cursor: grab;
-}
-.canvas[data-panning] { cursor: grabbing; }
-.canvas-inner { position: absolute; inset: 0; transform-origin: center center; }
-.canvas-inner > iswc-er-diagram { width: 100%; height: 100%; display: block; }
-.toolbar {
-  position: absolute; top: 10px; left: 10px; right: 10px;
-  display: flex; flex-wrap: wrap; gap: 4px; z-index: 5; pointer-events: none;
-}
-.toolbar__group {
-  pointer-events: auto; display: inline-flex; flex-wrap: wrap; gap: 4px;
-  background: color-mix(in srgb, var(--iswc-bg-elev, #131a24) 92%, transparent);
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
-  border-radius: 8px; padding: 4px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.28); backdrop-filter: blur(8px);
-}
-.toolbar__group--end { margin-inline-start: auto; }
-.toolbar button {
-  appearance: none; display: inline-flex; align-items: center; justify-content: center;
-  width: 2.1rem; height: 2.1rem; padding: 0; border: 1px solid transparent;
-  background: transparent; color: var(--iswc-text, #e2e8f0); border-radius: 6px; cursor: pointer;
-}
-.toolbar button:hover { background: rgba(255,255,255,0.06); border-color: var(--iswc-border, rgba(255,255,255,0.18)); }
-.toolbar button[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--iswc-accent, #2563eb) 28%, transparent);
-  border-color: color-mix(in srgb, var(--iswc-accent, #2563eb) 55%, transparent);
-}
-.toolbar button.danger { color: var(--iswc-danger, #f87171); }
-.toolbar button iswc-icon { font-size: 1.1rem; line-height: 1; }
-.panel {
-  background: var(--iswc-bg-elev, #131a24);
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.12));
-  border-radius: 8px; padding: 12px; overflow: auto; height: 100%; box-sizing: border-box;
-  display: grid; gap: 10px; align-content: start;
-}
-.panel h3 {
-  margin: 0; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
-  text-transform: uppercase; color: var(--iswc-text-soft, #94a3b8);
-}
-.panel .selection-info, .selection-info {
-  font-size: 0.82rem; color: var(--iswc-text-soft, #94a3b8); line-height: 1.35;
-}
-.panel fieldset {
-  margin: 0; padding: 8px 0 0; border: 0;
-  border-top: 1px solid var(--iswc-border, rgba(255,255,255,0.1));
-  display: grid; gap: 6px;
-}
-.panel fieldset legend {
-  padding: 0; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em;
-  text-transform: uppercase; color: var(--iswc-text-soft, #94a3b8);
-}
-.panel label {
-  display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center;
-  font-size: 0.78rem; color: var(--iswc-text-soft, #94a3b8);
-}
-.panel fieldset[data-attrs] .attr-row {
-  display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 4px; align-items: center; margin-bottom: 4px;
-}
-.panel fieldset[data-attrs] .attr-row input,
-.panel fieldset[data-attrs] .attr-row select {
-  width: 100%; min-width: 0; font: inherit; font-size: 0.78rem; color: inherit;
-  background: var(--iswc-control-bg, rgba(255,255,255,0.04));
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.14));
-  border-radius: 6px; padding: 4px 6px;
-}
-.panel fieldset[data-attrs] .attr-row input:focus,
-.panel fieldset[data-attrs] .attr-row select:focus {
-  outline: 2px solid color-mix(in srgb, var(--iswc-accent, #2563eb) 55%, transparent); outline-offset: 0;
-}
-.panel fieldset[data-attrs] .attr-row .key-pk { border-color: #fbbf24; }
-.panel fieldset[data-attrs] .attr-row .key-fk { border-color: #60a5fa; }
-.panel fieldset[data-attrs] .attr-row .attr-del {
-  appearance: none; width: 1.85rem; height: 1.85rem; padding: 0; border: 1px solid transparent;
-  border-radius: 6px; background: transparent; color: var(--iswc-danger, #f87171); cursor: pointer;
-}
-.panel fieldset[data-attrs] .attr-row .attr-del:hover { background: rgba(248,113,113,0.12); }
-.panel fieldset[data-attrs] button[data-action="add-attr"] { justify-self: start; }
-.panel input[type="text"],
-.panel input[type="number"],
-.panel select {
-  font: inherit; font-size: 0.78rem; color: inherit;
-  background: var(--iswc-control-bg, rgba(255,255,255,0.04));
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.14));
-  border-radius: 6px; padding: 4px 6px; min-width: 4.5rem;
-}
-.panel input[type="color"] {
-  width: 2rem; height: 1.6rem; padding: 0;
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.18));
-  border-radius: 4px; background: transparent; cursor: pointer;
-}
-.panel button {
-  appearance: none; display: inline-flex; align-items: center; justify-content: center;
-  width: 2rem; height: 2rem; padding: 0;
-  border: 1px solid var(--iswc-border, rgba(255,255,255,0.14));
-  background: transparent; color: inherit; border-radius: 6px; cursor: pointer;
-}
-.panel button iswc-icon { font-size: 1.05rem; line-height: 1; }
-.panel button.icon-wide { width: 100%; }
-.panel button:hover { background: rgba(255,255,255,0.06); }
-.hint {
-  position: absolute; left: 12px; bottom: 10px; z-index: 4; margin: 0; padding: 4px 8px;
-  border-radius: 6px; font-size: 0.72rem; color: var(--iswc-text-soft, #94a3b8);
-  background: color-mix(in srgb, var(--iswc-bg-elev, #131a24) 88%, transparent); pointer-events: none;
-}
-textarea[data-json-readout] { display: none; }
-`;
-
 const EDITOR_TEMPLATE = `
 <div class="stage">
   <iswc-split-panel orientation="horizontal" position="74" storage-key="iswc-er-editor-split">
     <div slot="start" class="pane-canvas">
       <div class="canvas" data-canvas>
         <div class="canvas-inner" data-canvas-inner></div>
+        <div class="empty" aria-hidden="true">
+          <div class="empty__card">
+            <iswc-icon icon="mdi:table-plus"></iswc-icon>
+            <strong>Lienzo vacío</strong>
+            <span>Agrega una entidad o pega un JSON para empezar</span>
+          </div>
+        </div>
         <div class="toolbar" data-toolbar role="toolbar" aria-label="Herramientas del canvas">
           <div class="toolbar__group" role="group" aria-label="Modo">
-            <button type="button" data-mode="edit" aria-pressed="true" title="Modo editar" aria-label="Modo editar">
+            <button type="button" data-mode="edit" aria-pressed="true" title="Seleccionar y mover" aria-label="Modo editar">
               <iswc-icon icon="mdi:cursor-default-outline" aria-hidden="true"></iswc-icon>
             </button>
-            <button type="button" data-mode="connect" title="Modo conectar" aria-label="Modo conectar">
+            <button type="button" data-mode="connect" title="Conectar entidades" aria-label="Modo conectar">
               <iswc-icon icon="mdi:vector-polyline" aria-hidden="true"></iswc-icon>
             </button>
           </div>
@@ -186,12 +63,14 @@ const EDITOR_TEMPLATE = `
             <button type="button" data-action="add-relation" title="Agregar relación" aria-label="Agregar relación">
               <iswc-icon icon="mdi:vector-link" aria-hidden="true"></iswc-icon>
             </button>
-            <button type="button" data-action="duplicate" title="Duplicar" aria-label="Duplicar">
+            <button type="button" data-action="duplicate" title="Duplicar selección" aria-label="Duplicar">
               <iswc-icon icon="mdi:content-copy" aria-hidden="true"></iswc-icon>
             </button>
-            <button type="button" data-action="delete" title="Borrar selección" aria-label="Borrar selección" class="danger">
+            <button type="button" data-action="delete" title="Borrar selección (Supr)" aria-label="Borrar selección" class="danger">
               <iswc-icon icon="mdi:trash-can-outline" aria-hidden="true"></iswc-icon>
             </button>
+          </div>
+          <div class="toolbar__group" role="group" aria-label="Historial">
             <button type="button" data-action="undo" title="Deshacer (Ctrl+Z)" aria-label="Deshacer">
               <iswc-icon icon="mdi:undo" aria-hidden="true"></iswc-icon>
             </button>
@@ -200,13 +79,13 @@ const EDITOR_TEMPLATE = `
             </button>
           </div>
           <div class="toolbar__group" role="group" aria-label="Zoom">
-            <button type="button" data-action="zoom-out" title="Zoom −" aria-label="Reducir zoom">
+            <button type="button" data-action="zoom-out" title="Alejar" aria-label="Reducir zoom">
               <iswc-icon icon="mdi:magnify-minus-outline" aria-hidden="true"></iswc-icon>
             </button>
             <button type="button" data-action="zoom-reset" title="Restablecer zoom" aria-label="Restablecer zoom">
               <iswc-icon icon="mdi:fit-to-screen-outline" aria-hidden="true"></iswc-icon>
             </button>
-            <button type="button" data-action="zoom-in" title="Zoom +" aria-label="Aumentar zoom">
+            <button type="button" data-action="zoom-in" title="Acercar" aria-label="Aumentar zoom">
               <iswc-icon icon="mdi:magnify-plus-outline" aria-hidden="true"></iswc-icon>
             </button>
           </div>
@@ -225,54 +104,54 @@ const EDITOR_TEMPLATE = `
             </button>
           </div>
         </div>
-        <p class="hint">Rueda = pan · Ctrl+rueda = zoom · Arrastre vacío = pan · Entidad = mover</p>
+        <p class="hint">Rueda: desplazar · <kbd>Ctrl</kbd>+rueda: zoom · Arrastre: mover</p>
       </div>
     </div>
     <div slot="end" class="pane-side">
       <aside class="panel" data-panel aria-label="Propiedades del diagrama ER">
-        <h3>Selección</h3>
+        <h3 class="panel__head"><iswc-icon icon="mdi:tune-variant" aria-hidden="true"></iswc-icon>Propiedades</h3>
         <div class="selection-info" data-selection-info>Vacía</div>
         <fieldset data-attrs hidden>
-          <legend>Atributos</legend>
+          <legend><iswc-icon icon="mdi:format-list-bulleted" aria-hidden="true"></iswc-icon>Atributos</legend>
           <div data-attr-list></div>
           <button type="button" data-action="add-attr" title="Agregar atributo" aria-label="Agregar atributo" class="icon-wide">
-            <iswc-icon icon="mdi:plus" aria-hidden="true"></iswc-icon>
+            <iswc-icon icon="mdi:plus" aria-hidden="true"></iswc-icon>Agregar atributo
           </button>
         </fieldset>
         <fieldset data-styles>
-          <legend>Estilo</legend>
-          <label>fill <input type="color" data-style="fill"></label>
-          <label>stroke <input type="color" data-style="stroke"></label>
-          <label>stroke-width <input type="number" step="0.1" min="0" max="10" data-style="strokeWidth"></label>
-          <label>radius <input type="number" step="1" min="0" max="32" data-style="radius"></label>
-          <label>opacity <input type="number" step="0.05" min="0" max="1" data-style="opacity"></label>
+          <legend><iswc-icon icon="mdi:palette-outline" aria-hidden="true"></iswc-icon>Estilo</legend>
+          <label><span>Relleno</span><input type="color" data-style="fill" title="Relleno"></label>
+          <label><span>Borde</span><input type="color" data-style="stroke" title="Borde"></label>
+          <label><span>Grosor del borde</span><input type="number" step="0.1" min="0" max="10" placeholder="auto" data-style="strokeWidth"></label>
+          <label><span>Radio</span><input type="number" step="1" min="0" max="32" placeholder="auto" data-style="radius"></label>
+          <label><span>Opacidad</span><input type="number" step="0.05" min="0" max="1" placeholder="1" data-style="opacity"></label>
         </fieldset>
         <fieldset data-edge-styles>
-          <legend>Aristas</legend>
-          <label>route
+          <legend><iswc-icon icon="mdi:vector-line" aria-hidden="true"></iswc-icon>Aristas</legend>
+          <label><span>Ruta</span>
             <select data-style="route">
-              <option value="orthogonal">orthogonal</option>
-              <option value="straight">straight</option>
-              <option value="orthogonal-h">orthogonal-h</option>
-              <option value="orthogonal-v">orthogonal-v</option>
+              <option value="orthogonal">Ortogonal</option>
+              <option value="straight">Recta</option>
+              <option value="orthogonal-h">Ortogonal horizontal</option>
+              <option value="orthogonal-v">Ortogonal vertical</option>
             </select>
           </label>
-          <label>dashStyle
+          <label><span>Trazo</span>
             <select data-style="dashStyle">
-              <option value="solid">solid</option>
-              <option value="dashed">dashed</option>
-              <option value="dotted">dotted</option>
+              <option value="solid">Continuo</option>
+              <option value="dashed">Discontinuo</option>
+              <option value="dotted">Punteado</option>
             </select>
           </label>
-          <label>variant
+          <label><span>Variante</span>
             <select data-style="variant">
-              <option value="default">default</option>
-              <option value="emphasis">emphasis</option>
-              <option value="security">security</option>
-              <option value="dashed">dashed</option>
+              <option value="default">Normal</option>
+              <option value="emphasis">Énfasis</option>
+              <option value="security">Seguridad</option>
+              <option value="dashed">Discontinua</option>
             </select>
           </label>
-          <label>width <input type="number" step="0.1" min="0.2" max="8" data-style="width"></label>
+          <label><span>Ancho</span><input type="number" step="0.1" min="0.2" max="8" placeholder="auto" data-style="width"></label>
         </fieldset>
       </aside>
     </div>
@@ -309,12 +188,10 @@ class IswcErEditor extends HTMLElement {
   constructor() {
     super();
     const sr = this.attachShadow({ mode: 'open' });
-    const style = document.createElement('style');
-    style.textContent = EDITOR_CSS;
-    sr.appendChild(style);
     const tmpl = document.createElement('div');
     tmpl.innerHTML = EDITOR_TEMPLATE;
     while (tmpl.firstChild) sr.appendChild(tmpl.firstChild);
+    adoptCss(sr, import.meta.url);
     this.#installListeners();
   }
 
@@ -445,6 +322,7 @@ class IswcErEditor extends HTMLElement {
       else this.#diagram.removeAttribute('theme');
       this.#diagram.payload = this.#state;
     }
+    this.shadowRoot!.querySelector('[data-canvas]')?.toggleAttribute('data-empty', this.#state.entities.length === 0);
     this.#updatePanel();
     this.#syncJsonReadout();
   }
@@ -454,10 +332,13 @@ class IswcErEditor extends HTMLElement {
     const attrsFieldset = this.shadowRoot!.querySelector('[data-attrs]') as HTMLElement | null;
     if (!info) return;
     if (!this.#selection.size || !this.#state) {
-      info.textContent = 'Vacía — click sobre una entidad o arista para seleccionarla.';
+      info.textContent = 'Nada seleccionado · haz clic en una entidad o una arista.';
+      info.removeAttribute('data-has-selection');
       attrsFieldset?.setAttribute('hidden', '');
+      this.#syncStyleInputs();
       return;
     }
+    info.setAttribute('data-has-selection', '');
     const entitySel = [...this.#selection].filter((id) => this.#state!.entities.find((e) => e.id === id));
     const relSel = [...this.#selection].filter((id) => this.#state!.relations.find((r) => r.id === id));
     info.textContent = [
@@ -475,6 +356,49 @@ class IswcErEditor extends HTMLElement {
         attrsFieldset.setAttribute('hidden', '');
       }
     }
+    this.#syncStyleInputs();
+  }
+
+  /**
+   * Los controles de estilo muestran el valor del primer seleccionado (o
+   * quedan en «auto» si no hay override) y se deshabilitan cuando no hay
+   * nada a lo que aplicarse: «Aristas» solo con relaciones seleccionadas.
+   */
+  #syncStyleInputs(): void {
+    const sr = this.shadowRoot!;
+    const estilos = sr.querySelector<HTMLFieldSetElement>('[data-styles]');
+    const aristas = sr.querySelector<HTMLFieldSetElement>('[data-edge-styles]');
+    if (!estilos || !aristas) return;
+    const ids = [...this.#selection];
+    const ents = ids.map((id) => this.#state?.entities.find((e) => e.id === id)).filter((e): e is ErSpecEntity => Boolean(e));
+    const rels = ids.map((id) => this.#state?.relations.find((r) => r.id === id)).filter((r): r is ErSpecRelation => Boolean(r));
+    estilos.disabled = ents.length + rels.length === 0;
+    aristas.disabled = rels.length === 0;
+
+    const set = (key: string, v: unknown, fallback = ''): void => {
+      const el = sr.querySelector<HTMLInputElement | HTMLSelectElement>(`[data-style="${key}"]`);
+      if (!el) return;
+      const label = el.closest('label');
+      const vacio = v == null || v === '';
+      label?.toggleAttribute('data-unset', vacio);
+      if (el instanceof HTMLInputElement && el.type === 'color') {
+        el.value = typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v) ? v : fallback;
+        return;
+      }
+      el.value = vacio ? fallback : String(v);
+    };
+    const nodo = ents[0]?.style;
+    const rel = rels[0];
+    const base = nodo ?? rel?.style;
+    set('fill', nodo?.fill, '#1e3a5f');
+    set('stroke', nodo?.stroke, '#60a5fa');
+    set('strokeWidth', nodo?.strokeWidth);
+    set('radius', nodo?.radius);
+    set('opacity', nodo?.opacity);
+    set('route', rel?.route, 'orthogonal');
+    set('dashStyle', rel?.dashStyle, 'solid');
+    set('variant', rel?.variant, 'default');
+    set('width', rel?.width ?? base?.width);
   }
 
   /** Renderiza las filas de atributos para la entidad seleccionada. */

@@ -5,17 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Editor visual de <iswc-er-diagram> · is-webcomponents</title>
 <meta name="description" content="Editor visual completo (drag, click-to-connect, multi-select, undo/redo, panel de estilos, export JSON/SVG) para diagramas entidad-relación." />
+<link rel="stylesheet" href="../../../dist/cdn/is-base.min.css?h=lzjggg" />
+<link rel="stylesheet" href="../../../dist/cdn/palettes.min.css?h=k2dtkw" />
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--iswc-bg); color: var(--iswc-text); font-family: var(--iswc-ui, ui-sans-serif, system-ui, sans-serif); }
   body { display: grid; grid-template-rows: auto 1fr; }
   header {
-    padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
-    display: flex; align-items: center; gap: 14px; background: #0f1620;
+    padding: 12px 20px; border-bottom: 1px solid var(--iswc-border);
+    display: flex; align-items: center; gap: 14px; background: var(--iswc-bg-elev);
   }
-  header h1 { font-size: 16px; font-weight: 700; margin: 0; }
-  header p { font-size: 12px; color: #94a3b8; margin: 0; }
+  header h1 { font-size: 15px; font-weight: 700; margin: 0; }
+  header p { font-size: 12px; color: var(--iswc-text-soft); margin: 0; }
   header .spacer { flex: 1; }
-  header code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font: 12px ui-monospace, Menlo, Consolas, monospace; }
+  header kbd { background: var(--iswc-control-bg); border: 1px solid var(--iswc-border); padding: 1px 5px; border-radius: 4px; font: 11px var(--iswc-mono, ui-monospace, Menlo, Consolas, monospace); }
   main { display: grid; place-items: stretch; min-height: 0; padding: 12px; }
   iswc-er-editor { width: 100%; height: 100%; }
   /* Anti-FOUC */
@@ -26,8 +28,9 @@
   // Cargar solo los tags que necesitamos, desde los bundles pre-construidos en
   // dist/cdn/. Esto hace funcionar los demos con cualquier servidor estático
   // (incluido VS Code Live Server), no solo con el dev server que transpila TS.
-  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=9crwj0');
-  await import('../../../dist/cdn/diagrams/er-editor.min.js?h=j6ofm8');
+  await import('../../../dist/cdn/diagrams/er-diagram.min.js?h=o6o1fq');
+  await import('../../../dist/cdn/feedback/theme-toggle.min.js?h=0z8p6b');
+  await import('../../../dist/cdn/diagrams/er-editor.min.js?h=ixupqs');
 
   // Definir un payload inicial para que el editor tenga algo que mostrar.
   const initial = {
@@ -75,10 +78,10 @@
 <header>
   <div>
     <h1>Editor visual — Diagrama Entidad-Relación</h1>
-    <p>Drag para mover · Shift+click para selección múltiple · Doble-click para editar texto · <code>Ctrl+Z</code> undo</p>
+    <p>Arrastra para mover · <kbd>Shift</kbd>+clic selección múltiple · doble clic edita el texto · <kbd>Ctrl</kbd>+<kbd>Z</kbd> deshace</p>
   </div>
   <div class="spacer"></div>
-  <code data-action="download-svg" id="dl-svg">SVG</code>
+  <iswc-theme-toggle aria-label="Cambiar tema claro/oscuro"></iswc-theme-toggle>
 </header>
 <main></main>
 <script>
