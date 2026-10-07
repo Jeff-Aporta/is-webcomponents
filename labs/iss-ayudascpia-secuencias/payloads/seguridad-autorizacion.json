@@ -145,7 +145,7 @@
           "from": "pg",
           "to": "pm",
           "label": "rol del contacto · sin rol → USR · SEG caído → 503",
-          "kind": "async",
+          "kind": "reply",
           "group": "g-db"
         },
         {
@@ -169,7 +169,7 @@
           "from": "pg",
           "to": "pm",
           "label": "permitido · negado · sin fila",
-          "kind": "async",
+          "kind": "reply",
           "group": "g-db"
         },
         {
@@ -185,7 +185,7 @@
           "from": "b",
           "to": "c",
           "label": "responde el endpoint",
-          "kind": "async",
+          "kind": "reply",
           "group": "g-http"
         }
       ],

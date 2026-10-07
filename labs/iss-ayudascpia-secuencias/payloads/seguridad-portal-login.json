@@ -99,7 +99,7 @@
           "from": "d",
           "to": "i",
           "label": "existe · acceso web",
-          "kind": "async",
+          "kind": "reply",
           "group": "g-ds"
         },
         {
@@ -115,7 +115,7 @@
           "from": "d",
           "to": "i",
           "label": "empresas del contacto",
-          "kind": "async",
+          "kind": "reply",
           "group": "g-ds"
         }
       ],
@@ -130,7 +130,7 @@
                 "from": "i",
                 "to": "p",
                 "label": "409 MULTI_EMPRESA · lista de empresas para que el portal pregunte y reintente",
-                "kind": "async",
+                "kind": "reply",
                 "group": "g-err"
               }
             ]
@@ -151,7 +151,7 @@
                 "from": "d",
                 "to": "i",
                 "label": "llave de sesión e identidad (controlKey, empresa, contacto, nombres)",
-                "kind": "async",
+                "kind": "reply",
                 "group": "g-ds"
               },
               {
@@ -167,7 +167,7 @@
                 "from": "i",
                 "to": "p",
                 "label": "entrega el token con usuario, nombre, vencimiento y claims",
-                "kind": "async",
+                "kind": "reply",
                 "group": "g-http"
               }
             ]

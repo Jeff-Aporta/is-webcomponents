@@ -202,7 +202,7 @@
           "from": "w",
           "to": "u",
           "label": "abre el stream (200 text/event-stream) · begin",
-          "kind": "async",
+          "kind": "reply",
           "group": "g-sse"
         },
         {
