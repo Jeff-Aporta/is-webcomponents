@@ -1,0 +1,123 @@
+{
+  "$schema": "iswc-diagram-theme/v1",
+  "id": "insoft-seq",
+  "kind": "sequence",
+  "label": "InSoft Sequence Diagram",
+  "font": {
+    "family": "\"Poppins\", \"Inter\", system-ui, sans-serif",
+    "import": "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  },
+  "canvas": {
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#475569"
+  },
+  "entity": {
+    "border": "#000000",
+    "borderWidth": 1.5,
+    "radius": 0
+  },
+  "edge": {
+    "stroke": "#0F172A",
+    "strokeWidth": 1.35,
+    "dasharray": "5 3",
+    "labelBg": "#FFFFFF",
+    "hideLabels": false
+  },
+  "cluster": {
+    "border": "#000000",
+    "borderWidth": 1.5,
+    "radius": 0,
+    "dasharray": "",
+    "titleFill": "#000000",
+    "palettes": {
+      "expose": "#7ACFF4",
+      "group": "#FFFFC1",
+      "service": "#BCFFBB",
+      "store": "#EAB6B0",
+      "external": "#81FF81",
+      "strong": "#01C000",
+      "cool": "#C1BFFF",
+      "leaf": "#FFF2AF",
+      "primary": "#7ACFF4",
+      "secondary": "#00C3C4",
+      "accent": "#C0C000",
+      "neutral": "#BFC0C1",
+      "panel": "#FFFFC1",
+      "lite": "#81FF81",
+      "warm": "#EAB6B0",
+      "soft": "#BCFFBB"
+    },
+    "fallback": "#7ACFF4"
+  },
+  "fills": {
+    "service": "#BCFFBB",
+    "app": "#C1BFFF",
+    "store": "#EAB6B0",
+    "leaf": "#FFF2AF",
+    "external": "#BFFFC0",
+    "neutral": "#E5E7EB"
+  },
+  "lines": {
+    "auth": "#1D4ED8",
+    "seg": "#0E7490",
+    "data": "#B45309",
+    "llm": "#7C3AED",
+    "stream": "#047857",
+    "ticket": "#BE185D",
+    "error": "#B91C1C",
+    "neutral": "#334155"
+  },
+  "sequence": {
+    "actorFill": "#C1BFFF",
+    "actorBorder": "#000000",
+    "actorRadius": 0,
+    "lifeline": "rgba(15,23,42,0.45)",
+    "messageStroke": "#0F172A",
+    "messageWidth": 1.35,
+    "labelFill": "#FFFFFF",
+    "labelText": "#0F172A",
+    "fragmentFill": "#FFFFC1",
+    "fragmentBorder": "#000000",
+    "fragmentOpacity": 0.28,
+    "boxOpacity": 0.35,
+    "stepText": "#FFFFFF"
+  },
+  "diagramTheme": {
+    "text": "#0F172A",
+    "muted": "#475569",
+    "grid": "rgba(15,23,42,0.45)",
+    "panel": "transparent",
+    "border": "#000000",
+    "accent": "#0F172A",
+    "altFill": "rgba(255,255,193,0.35)",
+    "altBorder": "#000000",
+    "chipFill": "#FFFFFF",
+    "chipFillSoft": "rgba(255,255,255,0.6)",
+    "dotText": "#FFFFFF"
+  },
+  "dark": {
+    "canvas": { "background": "#0B1220", "text": "#E2E8F0", "muted": "#94A3B8" },
+    "edge": { "stroke": "#E2E8F0" },
+    "sequence": {
+      "actorFill": "#6B6BB5",
+      "actorBorder": "#E2E8F0",
+      "lifeline": "rgba(226,232,240,0.4)",
+      "messageStroke": "#E2E8F0",
+      "labelFill": "#0B1220",
+      "labelText": "#E2E8F0",
+      "fragmentFill": "#8B6B2B",
+      "fragmentBorder": "#E2E8F0",
+      "stepText": "#0B1220"
+    },
+    "cluster": {
+      "border": "#E2E8F0",
+      "palettes": { "expose": "#3A8FB5", "group": "#8B6B2B", "service": "#2F6B3A", "store": "#A85A62", "external": "#2F6B3A", "cool": "#6B6BB5", "leaf": "#8B7A3A" },
+      "fallback": "#3A8FB5"
+    },
+    "lines": {
+      "auth": "#60A5FA", "seg": "#22D3EE", "data": "#FBBF24", "llm": "#C084FC", "stream": "#34D399", "ticket": "#F472B6", "error": "#F87171", "neutral": "#CBD5E1"
+    },
+    "diagramTheme": { "text": "#E2E8F0", "muted": "#94A3B8", "grid": "rgba(226,232,240,0.4)", "border": "#E2E8F0", "accent": "#E2E8F0", "altFill": "rgba(139,107,43,0.3)", "altBorder": "#E2E8F0", "chipFill": "#0B1220", "chipFillSoft": "rgba(11,18,32,0.6)", "dotText": "#0B1220" }
+  }
+}
