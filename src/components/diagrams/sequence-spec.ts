@@ -367,6 +367,7 @@ const PART_BOX_HEAD = 26;
 /** Aire que abre una región antes de su primera fila (pestaña) y tras la última. */
 const FRAG_HEAD = 30;
 const FRAG_FOOT = 14;
+const ALT_BRANCH_HEAD = 24;
 
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
 function actorBoxWidth(label: string, _kind: string): number {
@@ -563,6 +564,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec): SequenceLayou
   const headGap: number[] = new Array(flat.length + 1).fill(0);
   const footGap: number[] = new Array(flat.length + 1).fill(0);
   fragRows.forEach((x) => { headGap[x.first]! += FRAG_HEAD; footGap[x.last]! += FRAG_FOOT; });
+  // Cada rama de `alt` (salvo la primera) abre aire para su condición: el
+  // rótulo `[condición]` va entre el divisor y el chip de la primera fila.
+  flat.forEach((f, i) => { if (f.branchFirst && i > 0 && i !== altStart) headGap[i]! += ALT_BRANCH_HEAD; });
   const rowOffset: number[] = [];
   let acc = 0;
   for (let r = 0; r < flat.length; r++) {
