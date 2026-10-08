@@ -2,11 +2,12 @@
 // memoria en un JSON.
 //
 // Regla: un test que pasa en verde no se vuelve a correr durante
-// `duración × 360` (proporcional): 1 min -> 6 h, 1 s -> 6 min,
-// 13 ms -> 4.680 ms (casi inmediato). Solo el verde actualiza el cooldown: un
+// `duración × 600` (proporcional): 1 min -> 10 h, 1 s -> 10 min,
+// 13 ms -> 7.800 ms (casi inmediato). Solo el verde actualiza el cooldown: un
 // test en rojo guarda `until: -1` (queda auditado que falló y no aplica
 // cooldown) y corre siempre hasta que pase. Calibración WT-2026-10-07 (Jeff): antes era
-// 30 min por hora (x0,5); x60 (2026-10-07) y ahora x360 (WT-2026-10-08): los lentos solo se repiten cuando hace falta.
+// 30 min por hora (x0,5); x60 (2026-10-07), x360 y luego x600 (WT-2026-10-08): los lentos solo se repiten cuando hace falta;
+// si un test cambio y hay que probarlo ya, se pone su `until` en -1 a mano.
 //
 // Transversal (Node y Deno): solo depende de `node:fs`/`node:path`/
 // `node:process`. Cada proyecto lo adapta con las opciones (ruta del JSON,
@@ -26,8 +27,8 @@ import process from "node:process";
 export type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
 import type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
 
-/** Factor estándar: 360 min (6 h) de cooldown por cada minuto de ejecución. */
-export const COOLDOWN_FACTOR = 360;
+/** Factor estándar: 600 min (10 h) de cooldown por cada minuto de ejecución. */
+export const COOLDOWN_FACTOR = 600;
 
 /** Cooldown de una corrida verde: `duración × factor`, proporcional. */
 export function cooldownMs(durationMs: number, factor = COOLDOWN_FACTOR): number {
