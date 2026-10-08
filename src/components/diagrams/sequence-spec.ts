@@ -782,6 +782,15 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
       branches.push({ label: flat[k]!.branch ?? '', y: k === altStart ? top + 18 + 12 : top + 14 });
     }
     altBox = { x: x0, y: y1, w: x1 - x0, h: y2 - y1, label: spec.alt?.name ?? 'alternativas', dividers, branches } as SequenceLayoutAltBox;
+    // Regiones anidadas dentro del alt: margen lateral con el marco que las
+    // envuelve (igual que entre regiones hermanas), nunca pegadas a su borde.
+    for (const fr of fragments) {
+      const fx = fragRows.find((x) => x.fr.id === fr.id);
+      if (!fx || fx.first < altStart || fx.last >= altEnd) continue;
+      const nx0 = Math.max(fr.x, x0 + FRAME_MARGIN);
+      const nx1 = Math.min(fr.x + fr.w, x1 - FRAME_MARGIN);
+      if (nx1 - nx0 > 40) { fr.x = nx0; fr.w = nx1 - nx0; }
+    }
   }
 
   // Regiones de participantes (detrás de lifelines y mensajes).

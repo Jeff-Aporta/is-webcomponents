@@ -216,6 +216,17 @@ Las condiciones de las ramas de `alt` van dentro de pestañas negras como
 texto secundario (mismo color de fuente, 80 % de opacidad): la primera junto
 al título del `alt`, las demás en una pestaña propia sobre su divisor.
 
+## Capas y cajas de participantes
+
+Orden de pintado: cajas de participantes → agrupadores del más grande al más
+chico (el anidado queda encima del que lo envuelve, nada tiñe a nada) →
+actores y lifelines → mensajes (aristas, notas, iconos) siempre encima de
+todo agrupador. Una región anidada en el `alt` guarda margen lateral con él.
+
+Las cajas de participantes (`boxes`) de un solo actor son válidas para el
+consumidor, pero por estética InSoft no las usa: los editables del ISS solo
+declaran cajas con dos o más actores.
+
 ## Modo de los agrupadores (`sync` / `async`)
 
 Cada agrupador (región horizontal o `alt`) lleva en su esquina superior

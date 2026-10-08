@@ -19,7 +19,7 @@
 //   deno task labs:render --sin-iss  # solo labs del kit
 //   ISS_DIR=<ruta> deno task labs:render
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { copyFileSync, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -70,9 +70,12 @@ const editables = join(ISS, 'docs-experimental', 'diagramas');
 const payloadsSec = join(LABS, 'iss-ayudascpia-secuencias', 'payloads');
 if (existsSync(editables) && existsSync(payloadsSec)) {
   let n = 0;
-  for (const f of readdirSync(payloadsSec).filter((x) => x.endsWith('.json'))) {
-    const src = join(editables, f);
-    if (existsSync(src)) { copyFileSync(src, join(payloadsSec, f)); n++; }
+  // Todos los editables de secuencia del ISS (también los nuevos): el lab
+  // renderiza el lote completo, no solo los que ya conocía.
+  for (const f of readdirSync(editables).filter((x) => x.endsWith('.json'))) {
+    const spec = JSON.parse(readFileSync(join(editables, f), 'utf8'));
+    if (spec?.tag !== 'iswc-sequence-diagram') continue;
+    copyFileSync(join(editables, f), join(payloadsSec, f)); n++;
   }
   resumen.push({ label: `payloads de secuencias sincronizados (${n})`, ok: true, ms: 0, intentos: 1 });
 }

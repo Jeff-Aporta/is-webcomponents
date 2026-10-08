@@ -1,0 +1,233 @@
+{
+  "slug": "tareas-programadas",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "ISS PatyIA · Tareas programadas y arranque",
+      "actors": [
+        {
+          "id": "h",
+          "label": "Host (func start)",
+          "kind": "actor",
+          "icon": "mdi:server"
+        },
+        {
+          "id": "a",
+          "label": "app.hook.appStart",
+          "kind": "participant",
+          "icon": "mdi:power-standby"
+        },
+        {
+          "id": "p",
+          "label": "applyPendingPatches",
+          "kind": "participant",
+          "icon": "mdi:database-cog"
+        },
+        {
+          "id": "tc",
+          "label": "timer_cerrarConversaciones",
+          "kind": "participant",
+          "icon": "mdi:clock-outline"
+        },
+        {
+          "id": "tl",
+          "label": "timer_purgarLog",
+          "kind": "participant",
+          "icon": "mdi:broom"
+        },
+        {
+          "id": "te",
+          "label": "timer_purgarErrores",
+          "kind": "participant",
+          "icon": "mdi:trash-can-outline"
+        },
+        {
+          "id": "pg",
+          "label": "PostgreSQL · clientesis",
+          "kind": "participant",
+          "icon": "mdi:database"
+        }
+      ],
+      "groups": [
+        {
+          "id": "g-arranque",
+          "name": "Arranque del host",
+          "color": "primary",
+          "icon": "mdi:rocket-launch-outline"
+        },
+        {
+          "id": "g-patch",
+          "name": "Parches al arrancar",
+          "color": "data",
+          "icon": "mdi:database-cog"
+        },
+        {
+          "id": "g-sweep",
+          "name": "Barrido inicial",
+          "color": "neutral",
+          "icon": "mdi:sync"
+        },
+        {
+          "id": "g-timers",
+          "name": "Ciclo de 30 minutos",
+          "color": "auth",
+          "icon": "mdi:timer-sand"
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f-timers",
+          "kind": "region",
+          "name": "los tres timers corren en paralelo, sin esperar al otro",
+          "messages": [
+            "m9",
+            "m10",
+            "m11"
+          ],
+          "condition": "registro `0 */30 * * * *` en src/functions/index.ts"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "h",
+          "to": "a",
+          "label": "el host arranca y dispara app.hook.appStart una vez",
+          "kind": "sync",
+          "group": "g-arranque"
+        },
+        {
+          "id": "m2",
+          "from": "a",
+          "to": "p",
+          "label": "pide aplicar los parches pendientes de patch/db/",
+          "kind": "sync",
+          "group": "g-patch"
+        },
+        {
+          "id": "m3",
+          "from": "p",
+          "to": "pg",
+          "label": "lee patyia_sys_values.patchdb para saber cuáles ya corrieron",
+          "kind": "sync",
+          "group": "g-patch"
+        },
+        {
+          "id": "m4",
+          "from": "pg",
+          "to": "p",
+          "label": "estado por archivo: aplicado · fallido · ausente",
+          "kind": "reply",
+          "group": "g-patch"
+        },
+        {
+          "id": "m5",
+          "from": "p",
+          "to": "pg",
+          "label": "ejecuta los ausentes en su propia transacción (orden de nombre) y registra el resultado",
+          "kind": "sync",
+          "group": "g-patch"
+        },
+        {
+          "id": "m6",
+          "from": "p",
+          "to": "a",
+          "label": "resumen: discovered / applied / failed / skipped-cooldown / skipped-done",
+          "kind": "reply",
+          "group": "g-patch"
+        },
+        {
+          "id": "m7",
+          "from": "a",
+          "to": "tc",
+          "label": "corre un barrido de cierre inmediato (por si los timers están apagados)",
+          "kind": "sync",
+          "group": "g-sweep"
+        },
+        {
+          "id": "m8",
+          "from": "tc",
+          "to": "pg",
+          "label": "cierra patyia_conversaciones con fhultact más vieja que timer_closeHours",
+          "kind": "sync",
+          "group": "g-sweep"
+        },
+        {
+          "id": "m9",
+          "from": "tc",
+          "to": "pg",
+          "label": "cierra por inactividad (itdestado = 1) — lote por registro",
+          "kind": "sync",
+          "group": "g-timers"
+        },
+        {
+          "id": "m10",
+          "from": "tl",
+          "to": "pg",
+          "label": "purgar log de conversaciones con fhultact de más de 21 días (lotes de 200, 250 ms entre lotes)",
+          "kind": "sync",
+          "group": "g-timers"
+        },
+        {
+          "id": "m11",
+          "from": "te",
+          "to": "pg",
+          "label": "purgar errores atendidos de más de 90 días (lotes de 500, 20 lotes máx)",
+          "kind": "sync",
+          "group": "g-timers"
+        }
+      ],
+      "alt": {
+        "name": "si Azurite no está arriba en local",
+        "branches": [
+          {
+            "condition": "is_disable_timer = true",
+            "messages": [
+              {
+                "id": "m12",
+                "from": "h",
+                "to": "a",
+                "label": "ningún timer se registra; el barrido inicial cubre el cierre",
+                "kind": "self",
+                "group": "g-timers"
+              }
+            ]
+          },
+          {
+            "condition": "is_disable_timer ausente (default)",
+            "messages": [
+              {
+                "id": "m13",
+                "from": "h",
+                "to": "a",
+                "label": "los timers toman lease en AzureWebJobsStorage; sin Azurite el host reintenta y llena el log",
+                "kind": "self",
+                "group": "g-timers"
+              }
+            ]
+          }
+        ]
+      },
+      "epilogue": [],
+      "boxes": [
+        {
+          "id": "iss",
+          "name": "ISS PatyIA",
+          "actors": [
+            "a",
+            "p",
+            "tc",
+            "tl",
+            "te"
+          ],
+          "color": "primary"
+        }
+      ]
+    }
+  }
+}

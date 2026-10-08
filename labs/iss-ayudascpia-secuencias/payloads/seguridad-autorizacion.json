@@ -199,14 +199,6 @@
             "pm"
           ],
           "color": "primary"
-        },
-        {
-          "id": "ext",
-          "name": "Servicios",
-          "actors": [
-            "pg"
-          ],
-          "color": "group"
         }
       ]
     }

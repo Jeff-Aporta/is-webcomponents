@@ -144,25 +144,7 @@
           }
         ]
       },
-      "epilogue": [],
-      "boxes": [
-        {
-          "id": "iss",
-          "name": "ISS PatyIA",
-          "actors": [
-            "i"
-          ],
-          "color": "primary"
-        },
-        {
-          "id": "ext",
-          "name": "Servicios",
-          "actors": [
-            "d"
-          ],
-          "color": "group"
-        }
-      ]
+      "epilogue": []
     }
   }
 }

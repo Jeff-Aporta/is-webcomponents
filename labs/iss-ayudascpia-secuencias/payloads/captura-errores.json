@@ -1,0 +1,204 @@
+{
+  "slug": "captura-errores",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "ISS PatyIA · Captura de errores 5xx",
+      "actors": [
+        {
+          "id": "c",
+          "label": "Cliente",
+          "kind": "actor",
+          "icon": "mdi:account"
+        },
+        {
+          "id": "w",
+          "label": "makeDispatchHandler",
+          "kind": "participant",
+          "icon": "mdi:api"
+        },
+        {
+          "id": "e",
+          "label": "applyEndpointWithErrorCapture",
+          "kind": "participant",
+          "icon": "mdi:shield-alert"
+        },
+        {
+          "id": "h",
+          "label": "controller de la ruta",
+          "kind": "participant",
+          "icon": "mdi:cog-outline"
+        },
+        {
+          "id": "pg",
+          "label": "patyia_errores",
+          "kind": "participant",
+          "icon": "mdi:database"
+        }
+      ],
+      "groups": [
+        {
+          "id": "g-http",
+          "name": "Petición y respuesta",
+          "color": "stream",
+          "icon": "mdi:swap-horizontal"
+        },
+        {
+          "id": "g-cap",
+          "name": "Captura del error",
+          "color": "error",
+          "icon": "mdi:shield-alert"
+        },
+        {
+          "id": "g-db",
+          "name": "Persistencia en la bandeja",
+          "color": "data",
+          "icon": "mdi:database"
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f-censura",
+          "kind": "region",
+          "name": "censura previa de secretos",
+          "messages": [
+            "m5",
+            "m6"
+          ],
+          "condition": "el cuerpo se escanea en busca de patrones que parecen JWT, MD5, apiKey, etc."
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "c",
+          "to": "w",
+          "label": "llega una petición a una ruta configurable",
+          "kind": "sync",
+          "group": "g-http"
+        },
+        {
+          "id": "m2",
+          "from": "w",
+          "to": "e",
+          "label": "envuelve el controller con la captura de errores",
+          "kind": "sync",
+          "group": "g-cap"
+        },
+        {
+          "id": "m3",
+          "from": "e",
+          "to": "h",
+          "label": "ejecuta el método del controller",
+          "kind": "sync",
+          "group": "g-http"
+        },
+        {
+          "id": "m4",
+          "from": "h",
+          "to": "e",
+          "label": "lanza un 5xx inesperado (sin status, o status >= 500)",
+          "kind": "reply",
+          "group": "g-cap"
+        },
+        {
+          "id": "m5",
+          "from": "e",
+          "to": "e",
+          "label": "excluye 503 (dependencia caída) y 4xx (error del cliente); excluye /error, /errores, DELETE /error",
+          "kind": "self",
+          "group": "g-cap"
+        },
+        {
+          "id": "m6",
+          "from": "e",
+          "to": "e",
+          "label": "censura tokens, hashes, claves de API y bearer del cuerpo antes de guardar",
+          "kind": "self",
+          "group": "g-cap"
+        },
+        {
+          "id": "m7",
+          "from": "e",
+          "to": "pg",
+          "label": "INSERT patyia_errores (referencia = METHOD:/ruta, jerror, resumen, fhcre)",
+          "kind": "sync",
+          "group": "g-db"
+        },
+        {
+          "id": "m8",
+          "from": "pg",
+          "to": "e",
+          "label": "índice único parcial por referencia evita duplicar el mismo fallo",
+          "kind": "reply",
+          "group": "g-db"
+        },
+        {
+          "id": "m9",
+          "from": "e",
+          "to": "w",
+          "label": "vuelve a lanzar el error para que el envelope lo convierta en respuesta",
+          "kind": "reply",
+          "group": "g-cap"
+        },
+        {
+          "id": "m10",
+          "from": "w",
+          "to": "c",
+          "label": "responde 500 (o 503 si era una Rst503_); la fila ya quedó en la bandeja",
+          "kind": "reply",
+          "group": "g-http"
+        }
+      ],
+      "alt": {
+        "name": "lo que NO se captura",
+        "branches": [
+          {
+            "condition": "timer que falla",
+            "messages": [
+              {
+                "id": "m11",
+                "from": "h",
+                "to": "h",
+                "label": "los timers no pasan por la envoltura; solo dejan rastro en el log del host",
+                "kind": "self",
+                "group": "g-cap"
+              }
+            ]
+          },
+          {
+            "condition": "ruta 4xx",
+            "messages": [
+              {
+                "id": "m12",
+                "from": "h",
+                "to": "h",
+                "label": "los 4xx son errores del cliente, no del servidor; no se persisten",
+                "kind": "self",
+                "group": "g-cap"
+              }
+            ]
+          }
+        ]
+      },
+      "epilogue": [],
+      "boxes": [
+        {
+          "id": "iss",
+          "name": "ISS PatyIA",
+          "actors": [
+            "w",
+            "e",
+            "h"
+          ],
+          "color": "primary"
+        }
+      ]
+    }
+  }
+}

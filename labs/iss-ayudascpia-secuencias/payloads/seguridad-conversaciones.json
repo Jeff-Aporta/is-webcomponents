@@ -1,0 +1,204 @@
+{
+  "slug": "seguridad-conversaciones",
+  "module": "020-Conversaciones",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "ISS PatyIA · Acceso a una conversación",
+      "actors": [
+        {
+          "id": "c",
+          "label": "Cliente (token)",
+          "kind": "actor",
+          "icon": "mdi:account"
+        },
+        {
+          "id": "w",
+          "label": "makeDispatchHandler",
+          "kind": "participant",
+          "icon": "mdi:api"
+        },
+        {
+          "id": "b",
+          "label": "TBasePatyIA",
+          "kind": "participant",
+          "icon": "mdi:shield-key"
+        },
+        {
+          "id": "k",
+          "label": "controller de conversaciones",
+          "kind": "participant",
+          "icon": "mdi:cog-outline"
+        },
+        {
+          "id": "pg",
+          "label": "patyia_conversaciones",
+          "kind": "participant",
+          "icon": "mdi:database"
+        }
+      ],
+      "groups": [
+        {
+          "id": "g-http",
+          "name": "Petición y respuesta",
+          "color": "stream",
+          "icon": "mdi:swap-horizontal"
+        },
+        {
+          "id": "g-auth",
+          "name": "Token y SEG (si aplica)",
+          "color": "auth",
+          "icon": "mdi:shield-key"
+        },
+        {
+          "id": "g-own",
+          "name": "Decisión por dueño",
+          "color": "data",
+          "icon": "mdi:account-search"
+        },
+        {
+          "id": "g-db",
+          "name": "Lectura de la conversación",
+          "color": "data",
+          "icon": "mdi:database"
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f-token",
+          "kind": "region",
+          "name": "ruta configurable = false: solo JWT",
+          "messages": [
+            "m2"
+          ],
+          "condition": "POST /conversacion, GET /conversacion/{iconversacion}, etc. — la decisión la hace el dueño"
+        },
+        {
+          "id": "f-seg",
+          "kind": "region",
+          "name": "ruta configurable: token + SEG + capacidad",
+          "messages": [
+            "m3",
+            "m4"
+          ],
+          "condition": "ruta administrativa o capacidad (QUERY:/conversacion, GET:/conversacion/logs/...)"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "c",
+          "to": "w",
+          "label": "pide una ruta de conversación con su token",
+          "kind": "sync",
+          "group": "g-http"
+        },
+        {
+          "id": "m2",
+          "from": "w",
+          "to": "b",
+          "label": "verifica JWT (HS384) — la ruta no consulta SEG, exige token y pasa",
+          "kind": "sync",
+          "group": "g-auth"
+        },
+        {
+          "id": "m3",
+          "from": "w",
+          "to": "b",
+          "label": "verifica JWT, resuelve el rol del contacto en seg_rolescontacto",
+          "kind": "sync",
+          "group": "g-auth"
+        },
+        {
+          "id": "m4",
+          "from": "b",
+          "to": "b",
+          "label": "consulta seg_accionesxrol para METHOD:/ruta o para la capacidad; solo false niega",
+          "kind": "self",
+          "group": "g-auth"
+        },
+        {
+          "id": "m5",
+          "from": "b",
+          "to": "k",
+          "label": "entrega el controller con el contexto resuelto",
+          "kind": "sync",
+          "group": "g-http"
+        },
+        {
+          "id": "m6",
+          "from": "k",
+          "to": "pg",
+          "label": "lee la conversación (iconversacion de la ruta)",
+          "kind": "sync",
+          "group": "g-db"
+        },
+        {
+          "id": "m7",
+          "from": "pg",
+          "to": "k",
+          "label": "fila: itercero, icontacto, itdestado, bautoriza_visualizacion",
+          "kind": "reply",
+          "group": "g-db"
+        },
+        {
+          "id": "m8",
+          "from": "k",
+          "to": "k",
+          "label": "dueño estricto: itercero e icontacto del token coinciden con la fila → sí",
+          "kind": "self",
+          "group": "g-own"
+        },
+        {
+          "id": "m9",
+          "from": "k",
+          "to": "k",
+          "label": "mismo tercero: itercero coincide y bautoriza_visualizacion = true → sí (lectura, calificar)",
+          "kind": "self",
+          "group": "g-own"
+        },
+        {
+          "id": "m10",
+          "from": "k",
+          "to": "k",
+          "label": "auditoría: alcance QUERY:/conversacion o capacidad del log → sí (lectura, tiquete sin efectos)",
+          "kind": "self",
+          "group": "g-own"
+        },
+        {
+          "id": "m11",
+          "from": "k",
+          "to": "c",
+          "label": "si ninguna rama aplica → 401; si el estado es 2 (eliminada) → 404; si es 1 (cerrada) → reglas propias de cada ruta",
+          "kind": "reply",
+          "group": "g-http"
+        },
+        {
+          "id": "m12",
+          "from": "k",
+          "to": "c",
+          "label": "caso dueño estricto: responde 200 con detalle, historial, cierre o continuación según la operación",
+          "kind": "reply",
+          "group": "g-http"
+        }
+      ],
+      "epilogue": [],
+      "boxes": [
+        {
+          "id": "iss",
+          "name": "ISS PatyIA",
+          "actors": [
+            "w",
+            "b",
+            "k"
+          ],
+          "color": "primary"
+        }
+      ]
+    }
+  }
+}

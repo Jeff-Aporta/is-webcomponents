@@ -326,12 +326,20 @@ class IswcSequenceDiagram extends DiagramElementBase {
 
     if (groups?.length) this.#buildLegend(groups, legendX, theme);
     this.#buildParticipantBoxes((layout as { boxes?: PartBox[] }).boxes ?? [], theme);
-    // Regiones detrás de actores y lifelines; las exteriores primero.
-    this.#buildFragments([...(layout.fragments ?? [])].sort((a, b) => a.depth - b.depth), theme);
+    // Capas: cajas de participantes → agrupadores (regiones y alt) del más
+    // grande al más chico, así el anidado queda ENCIMA del que lo envuelve y
+    // ninguno tiñe al otro → actores y lifelines → mensajes (aristas, notas,
+    // iconos) siempre por encima de todo agrupador.
+    const regiones = [...(layout.fragments ?? [])].sort((a, b) => a.depth - b.depth);
+    const areaAlt = altBox ? altBox.w * altBox.h : 0;
+    const antesDelAlt = regiones.filter((fr) => fr.w * fr.h > areaAlt);
+    const despuesDelAlt = regiones.filter((fr) => fr.w * fr.h <= areaAlt);
+    this.#buildFragments(antesDelAlt, theme);
+    if (altBox) this.#buildAltBox(altBox, theme);
+    this.#buildFragments(despuesDelAlt, theme);
     this.#buildActors(actors, theme);
     if (layout.footerY != null) this.#buildActors(actors.map((a) => ({ ...a, y: layout.footerY! })), theme, true);
     this.#buildLifelines(lifelines, theme);
-    if (altBox) this.#buildAltBox(altBox, theme);
     this.#buildMessages(messages, altBox, theme);
 
     // La tortuga se monta al final: debe quedar por encima de las marks.
