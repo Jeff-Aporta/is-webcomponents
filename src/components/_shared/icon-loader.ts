@@ -14,7 +14,19 @@
  * `dist/assets/icons/` sin importar en que ruta se embeba la pagina, y el
  * codigo fuente los encuentra en la raiz del repo.
  *
+ * Mapas registrados (primero): cada app publica `assets/iconify.json` + `assets/iconify/<set>/<n>.svg`
+ * (los genera `src/cdn/tools/download-iconify.ts` desde su `assets/dl.js`) y lo registra con
+ * `registerIcons(url)` o, sin importar este módulo, empujando la URL a la cola global
+ * `globalThis.__ISWC_ICONS__` (así lo hace el registrador `<prefijo>Loader.min.js` del build).
+ * Orden de búsqueda de un ícono:
+ *   1. mapas registrados, en orden de registro (cadena de apps); dentro de cada uno, la carpeta
+ *      junto al json y, si no es accesible, la misma ruta bajo su `host` publicado;
+ *   2. el mapa del kit (`<raíz del kit>/assets/iconify.json`, al mismo SHA que este módulo);
+ *   3. los sets que aún viajan en `dist/assets/icons/` (mdi, solar, tabler);
+ *   4. la API de Iconify.
+ *
  * API:
+ *   registerIcons(url | mapa)        -> void  añade un mapa a la cadena
  *   resolveIconSvg(prefix, name)     -> Promise<string|null>  URL del SVG
  *   resolveIconRaw(prefix, name, signal) -> Promise<string|null>  texto del SVG
  *   clearRawCache()                  -> void  vacia el cache de SVGs
@@ -34,7 +46,8 @@
  *   - dist/cdn/media/icon.min.js  → ../../assets/icons/
  *   - src/components/_shared/…    → ../../../dist/assets/icons/
  */
-import type { IconFamily } from "./icon-loader.schemas.js";
+import type { ColaIconos, IconFamily, IconMapRef, MapaListo, MapaPerezoso } from "./icon-loader.schemas.js";
+export type { IconMapRef } from "./icon-loader.schemas.js";
 const ICON_BASES: (() => string | null)[] = [
   // Bundle publicado: dist/cdn/<categoria>/*.min.js → dist/assets/icons/
   () => {
@@ -60,6 +73,126 @@ const SETS_LOCALES: ReadonlySet<string> = new Set(['mdi', 'solar', 'tabler']);
 const API_ICONOS = 'https://api.iconify.design/';
 const urlApi = (prefix: string, name: string): string =>
   `${API_ICONOS}${encodeURIComponent(prefix)}/${encodeURIComponent(name)}.svg`;
+
+// ── Mapas de íconos registrados (cadena de apps) ─────────────────────────────
+
+const COLA_GLOBAL = '__ISWC_ICONS__';
+const registrados: MapaPerezoso[] = [];
+const urlsRegistradas = new Set<string>();
+const basesCaidas = new Set<string>();
+
+function prepararMapa(m: unknown, url: string | null): MapaListo | null {
+  const x = m as Partial<IconMapRef> | null;
+  if (!x || x.v !== 1 || typeof x.icons !== 'object' || !x.icons || typeof x.base !== 'string') return null;
+  const bases: string[] = [];
+  try { if (url) bases.push(new URL(x.base, url).href); } catch { /* url rara */ }
+  try { if (x.host) bases.push(new URL(x.base, new URL(x.ruta || 'assets/iconify.json', x.host)).href); } catch { /* host raro */ }
+  const icons = new Map<string, Set<string>>();
+  for (const [set, nombres] of Object.entries(x.icons)) if (Array.isArray(nombres)) icons.set(set, new Set(nombres));
+  const svg = new Map<string, string>();
+  for (const [set, porNombre] of Object.entries(x.svg ?? {})) {
+    for (const [n, texto] of Object.entries(porNombre ?? {})) if (typeof texto === 'string' && texto.includes('<svg')) svg.set(`${set}:${n}`, texto);
+  }
+  return { bases: [...new Set(bases)], icons, svg };
+}
+
+/** El json se pide una sola vez y solo cuando se resuelve el primer ícono, no al registrar. */
+function perezoso(url: string): MapaPerezoso {
+  let carga: Promise<MapaListo | null> | null = null;
+  return () => carga ??= fetch(url, { cache: 'default' })
+    .then(async (res) => res.ok ? prepararMapa(await res.json(), res.url || url) : null)
+    .catch(() => null);
+}
+
+/**
+ * Añade un mapa de íconos a la cadena: la URL de un `iconify.json` (relativa a la página) o el mapa ya
+ * leído. Los mapas se consultan en orden de registro y antes que el del kit. Registrar dos veces la
+ * misma URL no hace nada.
+ */
+export function registerIcons(src: string | URL | IconMapRef): void {
+  colaGlobal().push(src instanceof URL ? src.href : src);
+}
+
+/** Alta en ESTA copia del módulo (cada bundle que lo incluya se suscribe a la cola global). */
+function agregarMapa(src: string | IconMapRef): void {
+  if (typeof src === 'object' && !(src instanceof URL)) {
+    const listo = prepararMapa(src, null);
+    registrados.push(() => Promise.resolve(listo));
+    return;
+  }
+  let url: string;
+  try {
+    url = new URL(String(src), typeof location !== 'undefined' ? location.href : import.meta.url).href;
+  } catch {
+    return;
+  }
+  if (urlsRegistradas.has(url)) return;
+  urlsRegistradas.add(url);
+  registrados.push(perezoso(url));
+}
+
+/** `iconify.json` del kit, en la raíz del repo publicado (mismo SHA que este módulo). */
+function urlMapaKit(): string | null {
+  const u = import.meta.url;
+  const i = u.indexOf('/dist/cdn/');
+  if (i >= 0) return `${u.slice(0, i)}/assets/iconify.json`;
+  const j = u.search(/\/src\/components\//);
+  return j >= 0 ? `${u.slice(0, j)}/assets/iconify.json` : null;
+}
+let mapaKit: MapaPerezoso | null = null;
+
+function cadena(): MapaPerezoso[] {
+  const kit = urlMapaKit();
+  if (kit && !urlsRegistradas.has(kit)) mapaKit ??= perezoso(kit);
+  return mapaKit ? [...registrados, mapaKit] : [...registrados];
+}
+
+/**
+ * Lo que los mapas (en orden de la cadena) ofrecen para un ícono: el SVG incrustado del primero que lo
+ * trae y las URLs candidatas de archivo (sin las bases que ya fallaron).
+ */
+async function buscarEnMapas(prefix: string, name: string): Promise<{ svg: string | null; urls: string[] }> {
+  const urls: string[] = [];
+  let svg: string | null = null;
+  for (const m of await Promise.all(cadena().map((f) => f()))) {
+    if (!m?.icons.get(prefix)?.has(name)) continue;
+    // Solo cuenta el incrustado del PRIMER mapa que tiene el ícono (el orden de la cadena manda).
+    if (!urls.length && svg === null) svg = m.svg.get(`${prefix}:${name}`) ?? null;
+    for (const b of m.bases) if (!basesCaidas.has(b)) urls.push(`${b}${prefix}/${name}.svg`);
+  }
+  return { svg, urls };
+}
+const urlsEnMapas = async (prefix: string, name: string): Promise<string[]> => (await buscarEnMapas(prefix, name)).urls;
+
+/**
+ * Cola global `globalThis.__ISWC_ICONS__`: los registradores de las apps empujan URLs antes o después
+ * de que cargue este módulo (si llega primero, es un array). Guarda todo lo registrado y avisa a cada
+ * copia del módulo, así dos bundles que lo incluyan ven la misma cadena.
+ */
+function colaGlobal(): ColaIconos {
+  const g = globalThis as unknown as Record<string, unknown>;
+  const actual = g[COLA_GLOBAL] as ColaIconos | unknown[] | undefined;
+  if (actual && !Array.isArray(actual) && actual.oyentes instanceof Set) return actual;
+  const items = Array.isArray(actual) ? [...actual] as (string | IconMapRef)[] : [];
+  const cola: ColaIconos = {
+    items,
+    oyentes: new Set(),
+    push(...xs) {
+      for (const x of xs) {
+        items.push(x);
+        for (const f of cola.oyentes) f(x);
+      }
+      return items.length;
+    },
+  };
+  g[COLA_GLOBAL] = cola;
+  return cola;
+}
+{
+  const cola = colaGlobal();
+  for (const x of cola.items) agregarMapa(x);
+  cola.oyentes.add(agregarMapa);
+}
 
 const LOCAL_INDEX_PATH = (prefix: string): string => `${prefix}.json`;
 const LOCAL_SVG_PATH = (prefix: string, name: string): string => `${prefix}/${name}.svg`;
@@ -140,6 +273,8 @@ if (typeof requestIdleCallback === 'function') {
 }
 
 export async function hasIconLocal(prefix: string, name: string): Promise<boolean> {
+  const enMapas = await buscarEnMapas(prefix, name);
+  if (enMapas.svg || enMapas.urls.length) return true;
   const idx = await loadIndex(prefix);
   return !!(idx && idx.has(name));
 }
@@ -149,6 +284,11 @@ export function iconSourceBase(prefix: string): string | null {
 }
 
 export async function resolveIconSvg(prefix: string, name: string): Promise<string | null> {
+  const [enMapa] = await urlsEnMapas(prefix, name);
+  return enMapa ?? resolveSinMapas(prefix, name);
+}
+
+async function resolveSinMapas(prefix: string, name: string): Promise<string | null> {
   const idx = await loadIndex(prefix);
   const base = baseCache.get(prefix);
   if (idx && base && idx.has(name) && SETS_LOCALES.has(prefix)) return base + LOCAL_SVG_PATH(prefix, name);
@@ -164,17 +304,41 @@ export async function resolveIconRaw(prefix: string, name: string, signal?: Abor
   // Resuelve primero si el icono existe y desde que base (loadIndex/baseCache),
   // igual que resolveIconSvg; el fetch del SVG respeta la senal de abort para
   // que <iswc-icon> pueda cancelar renders obsoletos.
-  const url = await resolveIconSvg(prefix, name);
-  if (!url) return null;
+  // 1-2. Mapas registrados y del kit: SVG incrustado (cero peticiones) o archivo; si el archivo no es
+  //      accesible se prueba la siguiente base.
+  const enMapas = await buscarEnMapas(prefix, name);
+  if (enMapas.svg) {
+    rawCache.set(key, enMapas.svg);
+    return enMapas.svg;
+  }
+  for (const url of enMapas.urls) {
+    const text = await traerSvg(url, signal);
+    if (text) {
+      rawCache.set(key, text);
+      return text;
+    }
+    if (text === null) basesCaidas.add(url.slice(0, url.length - `${prefix}/${name}.svg`.length));
+  }
+  // 3-4. Sets locales del kit y API de Iconify.
+  const url = await resolveSinMapas(prefix, name);
+  const text = url ? await traerSvg(url, signal) : null;
+  if (text) rawCache.set(key, text);
+  return text || null;
+}
+
+/**
+ * Texto del SVG; `''` si la base respondió pero no tiene ese archivo (404 u otra cosa que no es SVG);
+ * `null` si la base no es accesible (red, CORS, 5xx) y no conviene volver a intentarla. AbortError se propaga.
+ */
+async function traerSvg(url: string, signal?: AbortSignal): Promise<string | null> {
   try {
     const res = await fetch(url, { signal, cache: 'default' });
+    if (res.status === 404) return '';
     if (!res.ok) return null;
     const text = await res.text();
-    rawCache.set(key, text);
-    return text;
+    return text.includes('<svg') ? text : '';
   } catch (err) {
-    const name = (err as { name?: unknown } | null)?.name;
-    if (name === 'AbortError') throw err; // propagar la cancelacion
+    if ((err as { name?: unknown } | null)?.name === 'AbortError') throw err; // propagar la cancelacion
     return null;
   }
 }

@@ -14,7 +14,8 @@
  *
  * Después: cache busting `?v=<hash de contenido>` con las tools vendorizadas del kit (una URL por
  * módulo), `asset-hashes.json`, el registrador `__PREFIJO__Loader.min.js` (tag → URL hasheada vía
- * `L.registerApp`) y `build-stamp.json`.
+ * `L.registerApp`; además encadena `assets/iconify.json` en `globalThis.__ISWC_ICONS__` para que
+ * `<iswc-icon>` busque primero los íconos de la app) y `build-stamp.json`.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, sep } from 'node:path';
@@ -76,6 +77,17 @@ async function compilar(): Promise<number> {
   return fuentes.length;
 }
 
+/**
+ * Mapa de íconos de la app (`assets/iconify.json`, lo escribe `deno task icons`): el registrador lo empuja
+ * a la cola global de `<iswc-icon>` con su `?v=<hash>`. dist/cdn/ → ../../assets/.
+ */
+function iconos(): string[] {
+  const mapa = join(ROOT, 'assets', 'iconify.json');
+  if (!existsSync(mapa)) return [];
+  const href = withAssetHash('../../assets/iconify.json', contentHash(readFileSync(mapa, 'utf8')));
+  return [`(globalThis.__ISWC_ICONS__??=[]).push(new URL(${JSON.stringify(href)},raiz).href);`];
+}
+
 /** `?v=<hash>` en todos los imports propios + registrador de componentes + metadatos. */
 async function sellar(): Promise<void> {
   const hashes = await stampDirectory(OUT);
@@ -88,6 +100,7 @@ async function sellar(): Promise<void> {
     `if(!L)throw new Error("${PREFIJO}Loader: falta ISWebComponentsLoader (carga antes el loader del kit)");`,
     'const raiz=new URL("./",import.meta.url);',
     `L.registerApp({${pares.join(',')}},{installSheets:false});`,
+    ...iconos(),
   ].join('');
   const loader = (await esbuild.transform(fuente, { minify: true, format: 'esm', target: 'es2022' })).code;
   writeFileSync(join(OUT, `${PREFIJO}Loader.min.js`), loader);

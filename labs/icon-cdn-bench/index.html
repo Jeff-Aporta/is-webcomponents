@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bench de íconos</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { margin: 0 auto; max-width: 1100px; padding: 16px; }
+    form { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: end; }
+    label { display: grid; gap: 4px; font-size: 13px; }
+    input { font: inherit; padding: 4px 6px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 16px; font-size: 13px; }
+    th, td { border-bottom: 1px solid #8884; padding: 4px 8px; text-align: right; }
+    th:nth-child(2), td:nth-child(2) { text-align: left; }
+    #estado { margin-top: 8px; font-size: 13px; opacity: .8; }
+  </style>
+</head>
+<body>
+  <h1>Bench de íconos (navegador)</h1>
+  <p>Misma lógica que <code>run.ts</code> (<code>bench.mjs</code>), medida desde este navegador. Sirve esta página por http.</p>
+  <form id="f">
+    <label>SHA (40 hex, publicado) <input name="sha" size="42" required pattern="[0-9a-f]{40}"></label>
+    <label>Repo <input name="repo" value="Jeff-Aporta/is-webcomponents"></label>
+    <label>Lotes <input name="lotes" value="25,100,300"></label>
+    <label>En vuelo <input name="conc" type="number" value="6" min="1" max="64"></label>
+    <label>Semilla <input name="semilla" type="number" value="20261009"></label>
+    <button>Correr</button>
+  </form>
+  <div id="estado"></div>
+  <table><thead><tr><th>Lote</th><th>Origen</th><th>Fría</th><th>p50/p95</th><th>Tibia</th><th>p50/p95</th><th>Errores</th></tr></thead><tbody id="filas"></tbody></table>
+  <script type="module">
+    import { correr, origenes } from './bench.mjs';
+    const f = document.getElementById('f');
+    const filas = document.getElementById('filas');
+    const estado = document.getElementById('estado');
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(f));
+      const [owner, repo] = String(d.repo).split('/');
+      const pages = `https://${owner.toLowerCase()}.github.io/${repo}/`;
+      estado.textContent = 'Leyendo índice del set…';
+      filas.replaceChildren();
+      const idx = await fetch(`${pages}dist/assets/icons/mdi.json`).then((r) => r.json());
+      let semilla = Number(d.semilla);
+      const azar = () => ((semilla = (semilla * 1103515245 + 12345) % 2 ** 31) / 2 ** 31);
+      const nombres = [...idx.icons].sort(() => azar() - 0.5);
+      estado.textContent = 'Midiendo…';
+      await correr({
+        origenes: origenes({ owner, repo, sha: d.sha, pages }), set: 'mdi', nombres,
+        lotes: String(d.lotes).split(',').map(Number), concurrencia: Number(d.conc),
+        alAvanzar: (r) => {
+          const tr = document.createElement('tr');
+          const err = r.fria.err + r.tibia.err;
+          for (const v of [r.lote, r.nombre, `${r.fria.total} ms`, `${r.fria.p50}/${r.fria.p95}`, `${r.tibia.total} ms`, `${r.tibia.p50}/${r.tibia.p95}`, err ? JSON.stringify({ ...r.fria.estados }) : '—']) {
+            const td = document.createElement('td');
+            td.textContent = String(v);
+            tr.append(td);
+          }
+          filas.append(tr);
+        },
+      });
+      estado.textContent = 'Listo.';
+    });
+  </script>
+</body>
+</html>

@@ -13,6 +13,8 @@
  *   --sha=<sha40>   pin del kit. Default: la versión del kit desde la que corre esta herramienta
  *                   (el SHA de su URL, o `origin/main` del checkout local: siempre publicado).
  *   --repo=<o/n>    repo del kit. Default Jeff-Aporta/iswc-root.
+ *   --host=<url>    sitio donde se publica la app (`deno.json` → `iswc.host`; lo copia `assets/iconify.json`).
+ *                   Default GitHub Pages del dueño del repo del kit: https://<owner>.github.io/<carpeta>/.
  *
  * Crea el esqueleto COMPLETO (shell, registro de tags, base de componentes, Zod, SCSS, build con
  * `?v=<hash>`, galería, vista `hola` (bienvenida + hola mundo + modal), gate de pruebas con sus casos
@@ -29,7 +31,7 @@ const args = Object.fromEntries(Deno.args.filter((a) => a.startsWith('--')).map(
 }));
 const carpeta = Deno.args.find((a) => !a.startsWith('--'));
 if (!carpeta) {
-  console.error('uso: create-iswc-app <carpeta> [--prefijo=p] [--titulo=t] [--puerto=n] [--sha=sha40] [--repo=o/n]');
+  console.error('uso: create-iswc-app <carpeta> [--prefijo=p] [--titulo=t] [--puerto=n] [--sha=sha40] [--repo=o/n] [--host=url]');
   Deno.exit(2);
 }
 const destino = resolve(carpeta);
@@ -86,7 +88,13 @@ const MARCAS: Record<string, string> = {
   __REPO__: args.repo ?? 'Jeff-Aporta/iswc-root',
   __PUERTO__: args.puerto ?? '4200',
 };
-const marcar = (s: string) => s.replace(/__(APP|PREFIJO|CLASE|TITULO|SHA|REPO|PUERTO)__/g, (m) => MARCAS[m] ?? m);
+const host = args.host ?? `https://${MARCAS.__REPO__!.split('/')[0]!.toLowerCase()}.github.io/${nombre}/`;
+if (!/^https?:\/\/\S+$/.test(host)) {
+  console.error(`create-iswc-app: --host debe ser una URL http(s), no "${host}".`);
+  Deno.exit(2);
+}
+MARCAS.__HOST__ = host.endsWith('/') ? host : `${host}/`;
+const marcar = (s: string) => s.replace(/__(APP|PREFIJO|CLASE|TITULO|SHA|REPO|PUERTO|HOST)__/g, (m) => MARCAS[m] ?? m);
 
 // 1) Plantillas
 const manifest = JSON.parse(await leer(new URL('../templates/manifest.json', AQUI))) as { archivos: string[] };
@@ -121,6 +129,26 @@ for (const rel of VENDOR) {
   const salida = join(destino, 'src', 'vendor', 'iswc-root', rel);
   mkdirSync(dirname(salida), { recursive: true });
   writeFileSync(salida, `// @vendor iswc-root@${etiqueta} dist/cdn/${rel}\n// No editar: se cambia en el kit y se descarga con \`deno task vendor:iswc\`.\n${texto}`);
+}
+
+// 3) Skill general del kit (índice de TODOS los componentes) en specs/iswc/kit/, fijada al pin:
+//    el agente sabe qué componente usar sin salir del repo y lo que lee es la versión que usa la app.
+const SKILL_KIT = ['SKILL.md', 'catalog.md', 'reference.md', 'PROMPT.md', 'tools/build.md', 'tools/local.md', 'tools/migrate.md', 'tools/runtime.md'];
+const repoKit = MARCAS.__REPO__!;
+const fijar = (md: string) => md
+  .replaceAll('Jeff-Aporta/iswc-root', repoKit)
+  .replace(new RegExp(`(github\.com/${repoKit}/(?:blob|tree))/main/`, 'g'), `$1/${sha}/`)
+  .replace(new RegExp(`(raw\.githubusercontent\.com/${repoKit})/main/`, 'g'), `$1/${sha}/`)
+  .replace(/\]\(\.\.\/((?!catalog\.md|reference\.md|SKILL\.md|PROMPT\.md)[a-z0-9-]+\/[^)]*)\)/g, `](https://raw.githubusercontent.com/${repoKit}/${sha}/skills/$1)`);
+for (const rel of SKILL_KIT) {
+  try {
+    const texto = await leer(new URL(`../../iswc-root/${rel}`, AQUI));
+    const salida = join(destino, 'specs', 'iswc', 'kit', rel);
+    mkdirSync(dirname(salida), { recursive: true });
+    writeFileSync(salida, `<!-- Copia de skills/iswc-root/${rel} del kit ${repoKit}@${sha}. No editar: se refresca con \`deno task vendor:iswc\`. -->\n${fijar(texto)}`);
+  } catch (e) {
+    console.warn(`create-iswc-app: no pude copiar skills/iswc-root/${rel}: ${e instanceof Error ? e.message : e}`);
+  }
 }
 
 console.log(`

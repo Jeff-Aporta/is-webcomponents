@@ -1,0 +1,366 @@
+{
+  "fecha": "2026-10-09T19:02:40.161Z",
+  "owner": "Jeff-Aporta",
+  "repo": "is-webcomponents",
+  "sha": "eab3227d6a0666bcb2c1f053901c14effb02ca13",
+  "set": "mdi",
+  "lotes": [
+    25,
+    100,
+    300
+  ],
+  "concurrencia": 24,
+  "cliente": "deno 2.9.0 · windows",
+  "filas": [
+    {
+      "lote": 25,
+      "origen": "pages",
+      "nombre": "GitHub Pages (web estática)",
+      "fria": {
+        "total": 625,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 374,
+        "p95": 510,
+        "bytes": 9562,
+        "peticiones": 25
+      },
+      "tibia": {
+        "total": 71,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 45,
+        "p95": 49,
+        "bytes": 9562,
+        "peticiones": 25
+      }
+    },
+    {
+      "lote": 25,
+      "origen": "jsdelivr",
+      "nombre": "jsDelivr @SHA",
+      "fria": {
+        "total": 498,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 404,
+        "p95": 411,
+        "bytes": 9562,
+        "peticiones": 25
+      },
+      "tibia": {
+        "total": 193,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 102,
+        "p95": 107,
+        "bytes": 9562,
+        "peticiones": 25
+      }
+    },
+    {
+      "lote": 25,
+      "origen": "githack",
+      "nombre": "rawcdn.githack @SHA",
+      "fria": {
+        "total": 511,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 434,
+        "p95": 438,
+        "bytes": 9562,
+        "peticiones": 25
+      },
+      "tibia": {
+        "total": 167,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 87,
+        "p95": 91,
+        "bytes": 9562,
+        "peticiones": 25
+      }
+    },
+    {
+      "lote": 25,
+      "origen": "raw",
+      "nombre": "raw.githubusercontent @SHA",
+      "fria": {
+        "total": 201,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 168,
+        "p95": 173,
+        "bytes": 9562,
+        "peticiones": 25
+      },
+      "tibia": {
+        "total": 69,
+        "ok": 25,
+        "err": 0,
+        "estados": {
+          "200": 25
+        },
+        "p50": 34,
+        "p95": 36,
+        "bytes": 9562,
+        "peticiones": 25
+      }
+    },
+    {
+      "lote": 100,
+      "origen": "pages",
+      "nombre": "GitHub Pages (web estática)",
+      "fria": {
+        "total": 1029,
+        "ok": 100,
+        "err": 0,
+        "estados": {
+          "200": 100
+        },
+        "p50": 132,
+        "p95": 431,
+        "bytes": 42314,
+        "peticiones": 100
+      },
+      "tibia": {
+        "total": 185,
+        "ok": 100,
+        "err": 0,
+        "estados": {
+          "200": 100
+        },
+        "p50": 42,
+        "p95": 53,
+        "bytes": 42314,
+        "peticiones": 100
+      }
+    },
+    {
+      "lote": 100,
+      "origen": "jsdelivr",
+      "nombre": "jsDelivr @SHA",
+      "fria": {
+        "total": 2238,
+        "ok": 99,
+        "err": 1,
+        "estados": {
+          "200": 99,
+          "403": 1
+        },
+        "p50": 102,
+        "p95": 174,
+        "bytes": 41612,
+        "peticiones": 100
+      },
+      "tibia": {
+        "total": 500,
+        "ok": 99,
+        "err": 1,
+        "estados": {
+          "200": 99,
+          "403": 1
+        },
+        "p50": 102,
+        "p95": 151,
+        "bytes": 41612,
+        "peticiones": 100
+      }
+    },
+    {
+      "lote": 100,
+      "origen": "githack",
+      "nombre": "rawcdn.githack @SHA",
+      "fria": {
+        "total": 443,
+        "ok": 100,
+        "err": 0,
+        "estados": {
+          "200": 100
+        },
+        "p50": 94,
+        "p95": 138,
+        "bytes": 42314,
+        "peticiones": 100
+      },
+      "tibia": {
+        "total": 414,
+        "ok": 100,
+        "err": 0,
+        "estados": {
+          "200": 100
+        },
+        "p50": 85,
+        "p95": 150,
+        "bytes": 42314,
+        "peticiones": 100
+      }
+    },
+    {
+      "lote": 100,
+      "origen": "raw",
+      "nombre": "raw.githubusercontent @SHA",
+      "fria": {
+        "total": 194,
+        "ok": 100,
+        "err": 0,
+        "estados": {
+          "200": 100
+        },
+        "p50": 36,
+        "p95": 60,
+        "bytes": 42314,
+        "peticiones": 100
+      },
+      "tibia": {
+        "total": 177,
+        "ok": 100,
+        "err": 0,
+        "estados": {
+          "200": 100
+        },
+        "p50": 34,
+        "p95": 45,
+        "bytes": 42314,
+        "peticiones": 100
+      }
+    },
+    {
+      "lote": 300,
+      "origen": "pages",
+      "nombre": "GitHub Pages (web estática)",
+      "fria": {
+        "total": 1783,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 120,
+        "p95": 165,
+        "bytes": 120456,
+        "peticiones": 300
+      },
+      "tibia": {
+        "total": 433,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 32,
+        "p95": 42,
+        "bytes": 120456,
+        "peticiones": 300
+      }
+    },
+    {
+      "lote": 300,
+      "origen": "jsdelivr",
+      "nombre": "jsDelivr @SHA",
+      "fria": {
+        "total": 3528,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 104,
+        "p95": 168,
+        "bytes": 120456,
+        "peticiones": 300
+      },
+      "tibia": {
+        "total": 1389,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 104,
+        "p95": 138,
+        "bytes": 120456,
+        "peticiones": 300
+      }
+    },
+    {
+      "lote": 300,
+      "origen": "githack",
+      "nombre": "rawcdn.githack @SHA",
+      "fria": {
+        "total": 1154,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 87,
+        "p95": 102,
+        "bytes": 120456,
+        "peticiones": 300
+      },
+      "tibia": {
+        "total": 1153,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 86,
+        "p95": 129,
+        "bytes": 120456,
+        "peticiones": 300
+      }
+    },
+    {
+      "lote": 300,
+      "origen": "raw",
+      "nombre": "raw.githubusercontent @SHA",
+      "fria": {
+        "total": 460,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 35,
+        "p95": 43,
+        "bytes": 120456,
+        "peticiones": 300
+      },
+      "tibia": {
+        "total": 437,
+        "ok": 300,
+        "err": 0,
+        "estados": {
+          "200": 300
+        },
+        "p50": 33,
+        "p95": 39,
+        "bytes": 120456,
+        "peticiones": 300
+      }
+    }
+  ]
+}

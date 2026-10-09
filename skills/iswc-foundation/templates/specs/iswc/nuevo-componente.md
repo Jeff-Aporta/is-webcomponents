@@ -9,7 +9,7 @@ Referencia viva: `<__PREFIJO__-hola>` (`view/hola/components/`). Copia su forma.
 
 ## 1. Antes de escribir
 
-1. ¿El kit ya lo resuelve? Busca la intención en el [catálogo del kit](https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/skills/iswc-root/catalog.md). Botones, campos, diálogos, tablas, toasts, iconos, formatos: **siempre `iswc-*`**. Un `__PREFIJO__-*` traduce datos de la app a esos controles.
+1. ¿El kit ya lo resuelve? Busca la intención en [`kit/catalog.md`](kit/catalog.md) y [`kit/reference.md`](kit/reference.md) (intención → componente). Botones, campos, diálogos, tablas, toasts, iconos, formatos: **siempre `iswc-*`**. Un `__PREFIJO__-*` traduce datos de la app a esos controles.
 2. ¿Dónde vive? Si lo usa una sola vista → `view/<vista>/components/`; si lo usan varias → `src/js/components/__PREFIJO__/`. Una vista no importa componentes de otra.
 3. Escribe su WHAT en la spec fundación (`specs/foundation/20-…` o la del dominio) con IDs `[W-CAT-NN]`.
 

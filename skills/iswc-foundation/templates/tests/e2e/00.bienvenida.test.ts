@@ -4,6 +4,7 @@
 //   W-PLAT-12  la app arranca sin errores de consola y queda marcada como lista
 //   W-CAT-02   el título dice «Hola mundo» y hay 4 tarjetas
 //   W-CAT-03   «Ver cómo está hecha» abre el modal y lo avisa; «Entendido» lo cierra y lo avisa
+//   W-ICO-04   los íconos de la bienvenida se pintan desde el mapa de la app, sin ir a la API de Iconify
 import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
 import { abrir, enSombra, esperar } from '../../scripts/gate/e2e/harness.ts';
 
@@ -47,6 +48,22 @@ export default definirPruebas([
       await enSombra(s.page, [...HOLA, '#cerrar-modal', 'button'], 'click');
       await esperar(s.page, () => !document.querySelector('__PREFIJO__-app')?.shadowRoot?.querySelector('__PREFIJO__-hola')?.shadowRoot?.querySelector('#modal[open]'));
       eq('avisó abrir y cerrar', await s.page.evaluate(() => (globalThis as { __modal?: boolean[] }).__modal, undefined), [true, false]);
+    },
+  },
+  {
+    nombre: 'bienvenida W-ICO-04 los íconos salen del mapa de la app, no de la API',
+    categoria: 'what',
+    async correr({ expect, saltar }) {
+      const conCadena = await s.page.evaluate(() => !!(globalThis as { __ISWC_ICONS__?: { oyentes?: unknown } }).__ISWC_ICONS__?.oyentes, undefined);
+      if (!conCadena) saltar('el kit pineado aún no trae la cadena de mapas de íconos (registerIcons): sube el pin');
+      await esperar(s.page, () => {
+        const hola = document.querySelector('__PREFIJO__-app')?.shadowRoot?.querySelector('__PREFIJO__-hola')?.shadowRoot;
+        const iconos = [...(hola?.querySelectorAll('.tarjetas iswc-icon') ?? [])];
+        return iconos.length === 4 && iconos.every((i) => !!i.shadowRoot?.querySelector('svg'));
+      });
+      const red = await s.page.evaluate(() => performance.getEntriesByType('resource').map((e) => e.name), undefined);
+      expect('pidió el mapa de la app', red.some((u: string) => /\/assets\/iconify\.json\?v=/.test(u)), red.join(' '));
+      expect('ningún ícono a la API', !red.some((u: string) => u.includes('api.iconify.design')), red.filter((u: string) => u.includes('iconify')).join(' '));
     },
   },
 ], {

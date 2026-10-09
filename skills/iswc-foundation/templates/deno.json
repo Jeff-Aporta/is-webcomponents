@@ -5,6 +5,7 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true
   },
+  "iswc": { "host": "__HOST__" },
   "nodeModulesDir": "auto",
   "unstable": ["sloppy-imports"],
   "imports": {
@@ -20,11 +21,12 @@
   },
   "tasks": {
     "build:scss": "deno run -A scripts/build/build-scss.mjs",
-    "build": "deno task build:scss && deno run -A src/utils/build.ts",
+    "icons": "deno run -A assets/dl.js",
+    "build": "deno task icons ; deno task build:scss && deno run -A src/utils/build.ts",
     "dev": "deno run -A src/utils/build.ts --watch",
     "serve": "deno run -A jsr:@std/http@1/file-server -p __PUERTO__ --host 127.0.0.1",
     "check": "deno check src/js/ view/",
-    "pin": "deno run -A src/vendor/iswc-root/tools/pin-update.mjs --repo=__REPO__ --raices=index.html,src,view,deno.json",
+    "pin": "deno run -A src/vendor/iswc-root/tools/pin-update.mjs --repo=__REPO__ --raices=index.html,assets/dl.js,src,view,deno.json",
     "vendor:iswc": "deno run -A scripts/vendor/vendor-iswc-tools.mjs",
     "test": "deno task build && deno run -A scripts/gate/test-health.mjs",
     "test:health": "deno run -A scripts/gate/test-health.mjs",

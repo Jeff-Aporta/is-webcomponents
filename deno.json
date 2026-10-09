@@ -1,4 +1,5 @@
 {
+  "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/" },
   "nodeModulesDir": "auto",
   "unstable": ["sloppy-imports"],
   "imports": {
@@ -12,7 +13,8 @@
   },
   "tasks": {
     "build:scss": "deno run -A --no-check scripts/build-scss.mjs",
-    "build": "deno task build:scss ; deno run -A --no-check scripts/build.mjs",
+    "icons": "deno run -A --no-check assets/dl.js",
+    "build": "deno task icons ; deno task build:scss ; deno run -A --no-check scripts/build.mjs",
     "dev": "deno run -A --no-check scripts/serve.mjs",
     "dev:demos": "deno run -A --no-check scripts/serve-demos.mjs",
     "icons:download": "deno run -A --no-check scripts/download-icons.ts",

@@ -7,6 +7,7 @@ todas las apps iswc.
 ## Antes de tocar código
 
 1. [`specs/README.md`](specs/README.md) → [`specs/especificar-what.md`](specs/especificar-what.md).
+   Componentes del kit disponibles: [`specs/iswc/kit/catalog.md`](specs/iswc/kit/catalog.md) (no reinventes ninguno).
 2. La spec fundación del área (`specs/foundation/NN-*.md`).
 3. La skill de la tarea en [`specs/iswc/`](specs/iswc/README.md) (componente, demo, vista, pin).
 
@@ -14,7 +15,8 @@ todas las apps iswc.
 
 ```bash
 deno install                 # dependencias (npm: por deno.json; sin package.json)
-deno task build              # src/ + view/ → dist/cdn/ (SCSS, ?v=<hash>, registrador)
+deno task icons              # íconos usados → assets/iconify.json + assets/iconify/ (va dentro de build)
+deno task build              # icons + src/ + view/ → dist/cdn/ (SCSS, ?v=<hash>, registrador)
 deno task dev                # build en vigilancia
 deno task serve              # http://127.0.0.1:__PUERTO__/
 deno task check              # typecheck
@@ -35,14 +37,17 @@ deno task sync:entregable    # solo si existe el par _entregable: gate en verde 
 6. Pines fijos: un SHA de 40 hex del kit en toda la app; tools vendorizadas al mismo SHA. Nunca `@main`.
 7. `src/vendor/` no se edita: se cambia en el kit y se re-vendoriza (`deno task vendor:iswc`).
 8. Specs WHAT primero; pruebas de caja negra en `tests/` con el formato común del kit.
-9. Hecho = `deno task test:all` en verde.
+9. Íconos: `<iswc-icon icon="set:nombre">` con el id literal; viven en `assets/` (no se piden a mano a la
+   API). Un id armado en ejecución va en `extra` de `assets/dl.js`. Detalle: `10-iconos.md` del estándar.
+10. Hecho = `deno task test:all` en verde.
 
 ## Layout
 
 ```
 __APP__/
 ├── index.html                  ← shell (<__PREFIJO__-app>)
-├── deno.json · tsconfig.json
+├── deno.json · tsconfig.json   ← `iswc.host`: dónde se publica la app
+├── assets/                     ← dl.js (rutas) · iconify.json · iconify/<set>/<n>.svg
 ├── src/
 │   ├── js/
 │   │   ├── iswc.ts             ← pin canónico del kit

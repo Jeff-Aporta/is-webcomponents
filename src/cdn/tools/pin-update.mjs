@@ -73,7 +73,8 @@ const reRaw = new RegExp(`(${esc(owner)}\\/)(${reNombres})\\/([0-9a-f]{40})\\/`,
 const reMutable = new RegExp([
   `${reNombres}@(main|master|latest|[0-9a-f]{7,39}\\b)`, // rama, latest o SHA corto
   `${esc(repo.split('/')[0])}\\/${reNombres}\\/(main|master)\\/`, // raw.githack / githubusercontent por rama
-  `[a-z0-9-]+\\.github\\.io`,                              // GitHub Pages
+  // GitHub Pages DEL KIT (sirve siempre la última versión). El sitio propio de la app (`iswc.host`) no es un pin.
+  `[a-z0-9-]+\\.github\\.io\\/${reNombres}(?![\\w-])`,
 ].join('|'), 'i');
 
 function inventario() {

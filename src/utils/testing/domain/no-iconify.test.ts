@@ -36,6 +36,8 @@ const ALLOWED_API_FILES = new Set([
   // script de iconify siguen prohibidos.
   'src/components/_shared/icon-loader.ts',
   'scripts/download-iconify.ts',
+  // Herramienta de las apps (assets/dl.js): descarga en build, no en runtime.
+  'src/cdn/tools/download-iconify.ts',
   'scripts/download-icons.ts',
   'scripts/fixes/icon-viewbox.ts',
   'scripts/sync-icon-collections.ts',

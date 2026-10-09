@@ -18,6 +18,7 @@
 // Uso:  node tests/icon-render.test.ts
 
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
@@ -29,7 +30,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 const assetsIcons = join(root, 'dist', 'assets', 'icons');
 
 const iconJs = await readFile(join(root, 'src/components/media/icon.ts'), 'utf8');
-const iconCss = await readFile(join(root, 'src/components/media/icon.css'), 'utf8');
+const iconCss = await readFile(join(root, 'src/components/media/icon.scss'), 'utf8');
 const loaderJs = await readFile(join(root, 'src/components/_shared/icon-loader.ts'), 'utf8');
 
 // --- BUG 1: nada de force-cache -------------------------------------------
@@ -46,7 +47,7 @@ for (const [nombre, src] of [['icon-loader.ts', loaderJs], ['icon.ts', iconJs]])
   );
 }
 assert.ok(
-  /LOCAL_SVG_PATH\(prefix, name\), \{ signal, cache: 'default' \}/.test(loaderJs),
+  /fetch\(url, \{ signal, cache: 'default' \}\)/.test(loaderJs),
   'el fetch del SVG debe usar `cache: \'default\'` (revalida contra el ETag del servidor)',
 );
 // El cache en memoria sigue siendo el que evita requests repetidos por sesion.
@@ -82,7 +83,7 @@ assert.ok(
 );
 assert.ok(
   /iswc-multicolor/.test(iconCss),
-  'icon.css debe neutralizar el `fill: currentColor` heredado para .iswc-multicolor',
+  'icon.scss debe neutralizar el `fill: currentColor` heredado para .iswc-multicolor',
 );
 // El viewBox nativo no se toca: reescribirlo es el bug de los iconos vacios.
 assert.ok(
@@ -99,7 +100,11 @@ const colorsOf = (svg) =>
     .map((m) => m[1].trim().toLowerCase())
     .filter((v) => !NEUTRAL.has(v));
 
+// Sets fuera del repo desde 2026-10-09 (solo mdi/solar/tabler viajan; el resto llega por API): si no
+// están en disco no hay muestra que revisar.
+const enDisco = (prefix) => existsSync(join(assetsIcons, prefix));
 const sample = async (prefix, n = 6) => {
+  if (!enDisco(prefix)) return [];
   const files = (await readdir(join(assetsIcons, prefix))).filter((f) => f.endsWith('.svg'));
   const stepSize = Math.max(1, Math.floor(files.length / n));
   const out = [];
@@ -121,6 +126,7 @@ for (const prefix of MULTICOLOR) {
   const conPaleta = muestras.filter(
     ({ svg }) => colorsOf(svg).length > 0 || /<(linearGradient|radialGradient|pattern|image)\b/.test(svg),
   );
+  if (!muestras.length) continue;
   assert.ok(
     conPaleta.length > muestras.length / 2,
     `${prefix}: solo ${conPaleta.length}/${muestras.length} muestras declaran paleta propia; ` +
