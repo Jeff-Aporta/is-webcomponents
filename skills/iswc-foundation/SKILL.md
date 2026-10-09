@@ -51,7 +51,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 10 | **Cache busting** `?v=<hash de contenido>`; una sola URL por módulo |
 | 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x600) |
 | 12 | **Gate** `deno task test:all` en verde = hecho; sync a entregable solo con el gate en verde |
-| 13 | **Íconos locales**: `assets/dl.js` (solo rutas) → `assets/iconify.json` + `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`); `host` en `deno.json` → `iswc.host`; ids `set:nombre` literales |
+| 13 | **Íconos: local o API**: `assets/dl.js` (solo rutas) → `assets/iconify.json` + `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`), incluidos los íconos de todo lo que la app consume; lo que no está en el mapa sale de la API de Iconify. `host` en `deno.json` → `iswc.host`; ids `set:nombre` literales |
 
 ## 3. Mapa de referencias
 
@@ -64,7 +64,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Demos: playground `.json` y galería | [templates/specs/iswc/demo-componente.md](templates/specs/iswc/demo-componente.md) |
 | Crear una vista | [templates/specs/iswc/nueva-vista.md](templates/specs/iswc/nueva-vista.md) |
 | Estilos SCSS | [04-estilos.md](references/04-estilos.md) |
-| Íconos: `assets/dl.js`, `iconify.json`, cadena de mapas, fallback a la API | [10-iconos.md](references/10-iconos.md) |
+| Íconos: `assets/dl.js`, `iconify.json`, registro de consumos, local o API | [10-iconos.md](references/10-iconos.md) |
 | Zod y tipos | [05-zod-y-tipos.md](references/05-zod-y-tipos.md) |
 | Pines y vendor del kit | [06-pines-y-vendor.md](references/06-pines-y-vendor.md) · [actualizar-pin.md](templates/specs/iswc/actualizar-pin.md) |
 | Pruebas, Stagehand y gate | [07-pruebas-y-gate.md](references/07-pruebas-y-gate.md) |

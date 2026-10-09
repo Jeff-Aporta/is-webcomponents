@@ -1,46 +1,44 @@
 /**
- * download-iconify — descarga a la app SOLO los íconos Iconify que usa y escribe su mapa.
+ * download-iconify — descarga a la app los íconos Iconify que usa y escribe su mapa.
  *
  * Cada app iswc tiene en `assets/`:
  *   dl.js                        configuración (solo rutas) que llama a esta herramienta por URL fijada
- *   iconify.json                 mapa `IconifyMap`: qué íconos tiene, dónde está publicada (`host`)
+ *   iconify.json                 mapa `IconifyMap`: qué íconos tiene la app en local (y su `host`)
  *   iconify/<set>/<nombre>.svg   un SVG por ícono (de https://api.iconify.design)
  *
+ * En ejecución `<iswc-icon>` hace una sola pregunta: ¿está en el mapa? → archivo local; si no → API.
+ *
  * Qué hace `descargarIconos`:
- *   1. Barre `roots` (archivos .ts/.js/.mjs/.html/.json) y extrae ids `set:nombre` entre comillas
- *      (`icon="mdi:home"`, `icon: 'mdi:home'`, `['tabler:x']`…) y los tags con guion que usa.
- *   2. Suma los íconos de los tags de OTRAS apps que usa (`mapas`, por defecto el `iconify.json` del
- *      kit al mismo SHA que esta herramienta): una app que pinta `<iswc-dialog>` se lleva su `mdi:close`.
+ *   1. Barre `roots` (.ts/.js/.mjs/.html/.json) y extrae los ids `set:nombre` entre comillas
+ *      (`icon="mdi:home"`, `icono: 'mdi:home'`). Los ejemplos en comentarios no cuentan.
+ *   2. Registro de consumos: suma TODOS los íconos de los `iconify.json` de lo que la app consume
+ *      (`mapas`; por defecto el del kit al mismo SHA que esta herramienta). Son conjuntos mínimos:
+ *      que sobren unos pocos no importa, y así la app sirve en local también los de sus dependencias.
  *   3. Filtra con la lista de colecciones de Iconify (descarta `node:fs`, `http:x`, `z-index:1`…).
- *   4. Descarga lo que falta (lo existente no se vuelve a pedir), poda lo que ya nadie usa y escribe
- *      `iconify.json` determinista (sin fecha: mismo código → mismo archivo).
- *   Sin red (`offline` o la API caída) no falla: reescribe el mapa con lo que ya hay en disco y avisa.
+ *   4. Descarga en lote lo que falta (`<set>.json?icons=a,b,…`, reintentos ante 429/5xx); lo que ya
+ *      está en disco no se vuelve a pedir. Poda lo que ya nadie usa y escribe un mapa determinista.
+ *   Sin red no falla: reescribe el mapa con lo que ya hay en disco y avisa.
  *
- * `<iswc-icon>` busca primero en los mapas registrados (cadena de apps) y, si el archivo no es
- * accesible, cae a la API de Iconify. Ver `icon-loader.ts` → `registerIcons`.
- *
- * Uso (desde `assets/dl.js`, por URL fijada al SHA del kit; Deno la corre sin descargar nada):
+ * Uso (desde `assets/dl.js`; Deno corre la herramienta por URL sin descargar nada):
  *   import { descargarIconos } from 'https://raw.githubusercontent.com/<owner>/<repo>/<sha>/src/cdn/tools/download-iconify.ts';
  *   await descargarIconos({ raiz: new URL('..', import.meta.url), roots: ['index.html', 'src', 'view'] });
- * CLI: deno run -A download-iconify.ts --raiz=. --roots=src,view [--salida=assets] [--offline] [--extra=a:b,c:d]
+ * CLI: deno run -A download-iconify.ts --raiz=. --roots=src,view [--salida=assets] [--offline] [--extra=a:b] [--mapas=url1,url2]
  *
  * Solo `node:*`: corre igual en Node y en Deno.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, extname, join, relative, resolve } from 'node:path';
+import { basename, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
-import type { IconId, IconifyJson, IconifyMap, NodoArchivo, OpcionesDescarga, ResumenDescarga } from './download-iconify.schemas.ts';
+import type { IconId, IconifyJson, IconifyMap, OpcionesDescarga, ResumenDescarga } from './download-iconify.schemas.ts';
 
-export type { IconId, IconifyJson, IconifyMap, NodoArchivo, OpcionesDescarga, ResumenDescarga } from './download-iconify.schemas.ts';
+export type { IconId, IconifyJson, IconifyMap, OpcionesDescarga, ResumenDescarga } from './download-iconify.schemas.ts';
 
 export const DEFAULTS = {
   salida: 'assets',
   ignorar: ['node_modules', 'dist', 'vendor', '.git', '.tmp', '.tmp-scss'],
   extensiones: ['.ts', '.js', '.mjs', '.html', '.json'],
-  tagDeArchivo: '{stem}' as string | null,
   podar: true,
-  incrustar: true,
   offline: false,
   api: 'https://api.iconify.design/',
   concurrencia: 8,
@@ -49,10 +47,11 @@ export const DEFAULTS = {
 /** Nombre del mapa y de la carpeta de SVG dentro de `salida`. */
 export const ARCHIVO_MAPA = 'iconify.json';
 export const CARPETA_SVG = 'iconify';
+/** Íconos por petición en lote (la URL queda por debajo de ~2 KB). */
+const LOTE = 80;
 
 const RE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*$/;
 const RE_LITERAL = /(['"`])([a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*)\1/g;
-const RE_TAG = /(?<![\w-])([a-z][a-z0-9]*-[a-z0-9]+(?:-[a-z0-9]+)*)(?=[\s>/'"`])/g;
 
 export const esIdIcono = (s: string): s is IconId => RE_ID.test(s);
 
@@ -60,13 +59,6 @@ export const esIdIcono = (s: string): s is IconId => RE_ID.test(s);
 export function extraerIconos(texto: string): IconId[] {
   const out = new Set<IconId>();
   for (const m of texto.matchAll(RE_LITERAL)) out.add(m[2] as IconId);
-  return [...out];
-}
-
-/** Nombres con guion que pueden ser tags (`iswc-dialog`, `ap-hola`); se cruzan después con los tags conocidos. */
-export function extraerTags(texto: string): string[] {
-  const out = new Set<string>();
-  for (const m of texto.matchAll(RE_TAG)) out.add(m[1]!);
   return [...out];
 }
 
@@ -111,61 +103,6 @@ function listar(raiz: string, roots: string[], ignorar: Set<string>, exts: Set<s
   return out;
 }
 
-const RE_IMPORT = /(?:\bfrom\s*|\bimport\s*\(?\s*)(['"])(\.{1,2}\/[^'"]+)\1/g;
-
-/** Imports relativos de un módulo, resueltos a archivos que existen (`x.js` puede ser `x.ts` en fuente). */
-export function importsRelativos(archivo: string, texto: string): string[] {
-  const out = new Set<string>();
-  for (const m of texto.matchAll(RE_IMPORT)) {
-    const base = resolve(dirname(archivo), m[2]!);
-    const sinExt = base.replace(/\.(m?js|ts)$/, '');
-    for (const c of [base, `${sinExt}.ts`, `${sinExt}.js`, `${sinExt}.mjs`]) {
-      if (existsSync(c) && statSync(c).isFile()) {
-        out.add(c);
-        break;
-      }
-    }
-  }
-  return [...out];
-}
-
-/**
- * Ids de cada tag propio: los de su archivo, los de los módulos que importa (recursivo) y los de los
- * tags que pinta (propios por su archivo; ajenos por el mapa de otra app/kit).
- */
-export function cerrarTags(
-  nodos: Map<string, NodoArchivo>,
-  tagArchivo: Map<string, string>,
-  ajenos: Record<string, string[]> = {},
-): Record<string, IconId[]> {
-  const res: Record<string, IconId[]> = {};
-  for (const tag of [...tagArchivo.keys()].sort()) {
-    const out = new Set<string>();
-    const vistos = new Set<string>();
-    const tagsVistos = new Set<string>([tag]);
-    const pila = [tagArchivo.get(tag)!];
-    while (pila.length) {
-      const a = pila.pop()!;
-      if (vistos.has(a)) continue;
-      vistos.add(a);
-      const n = nodos.get(a);
-      if (!n) continue;
-      for (const i of n.iconos) out.add(i);
-      for (const imp of n.imports) pila.push(imp);
-      for (const t of n.tags) {
-        if (tagsVistos.has(t)) continue;
-        tagsVistos.add(t);
-        const propio = tagArchivo.get(t);
-        if (propio) pila.push(propio);
-        else for (const i of ajenos[t] ?? []) out.add(i);
-      }
-    }
-    const ids = [...out].sort() as IconId[];
-    if (ids.length) res[tag] = ids;
-  }
-  return res;
-}
-
 const agrupar = (ids: Iterable<string>): Record<string, string[]> => {
   const out: Record<string, string[]> = {};
   for (const id of [...new Set(ids)].sort()) {
@@ -195,10 +132,6 @@ async function leerMapa(ref: string, raiz: string, f: typeof fetch): Promise<Ico
   if (m?.v !== 1 || typeof m.icons !== 'object') throw new Error('no es un iconify.json v1');
   return m;
 }
-
-/** Íconos por petición en lote (la URL queda por debajo de ~2 KB). */
-const LOTE = 80;
-
 
 /** SVG suelto (como lo sirve `api.iconify.design/<set>/<n>.svg`) a partir del JSON de la colección. */
 export function svgDe(datos: IconifyJson, nombre: string): string | null {
@@ -231,7 +164,7 @@ async function enLotes<T>(items: T[], n: number, fn: (x: T) => Promise<void>): P
   }));
 }
 
-/** Barre, descarga lo que falta, poda y escribe `<salida>/iconify.json`. */
+/** Barre, suma los íconos de lo que consume, descarga lo que falta, poda y escribe `<salida>/iconify.json`. */
 export async function descargarIconos(opciones: OpcionesDescarga & { fetch?: typeof fetch }): Promise<ResumenDescarga> {
   const o = { ...DEFAULTS, ...Object.fromEntries(Object.entries(opciones).filter(([, v]) => v !== undefined)) } as typeof DEFAULTS & OpcionesDescarga;
   const f = opciones.fetch ?? fetch;
@@ -246,39 +179,26 @@ export async function descargarIconos(opciones: OpcionesDescarga & { fetch?: typ
     if (!o.silencioso) console.warn(`[iconify] aviso: ${s}`);
   };
 
-  // 1. Barrido: ids candidatos, tags usados y el grafo de archivos (íconos, tags e imports de cada uno).
+  // 1. Barrido de la app.
   const archivos = listar(raiz, o.roots, new Set(o.ignorar), new Set(o.extensiones), resolve(salida));
   const candidatos = new Set<string>(o.extra ?? []);
-  const usados = new Set<string>();
-  const nodos = new Map<string, NodoArchivo>();
-  const tagArchivo = new Map<string, string>();
   for (const a of archivos) {
-    const modulo = /\.(ts|js|mjs)$/.test(a);
-    const texto = modulo ? sinComentarios(readFileSync(a, 'utf8')) : readFileSync(a, 'utf8');
-    const iconos = extraerIconos(texto);
-    const tags = extraerTags(texto);
-    for (const i of iconos) candidatos.add(i);
-    for (const t of tags) usados.add(t);
-    if (!modulo) continue;
-    nodos.set(resolve(a), { iconos: new Set(iconos), tags: new Set(tags), imports: new Set(importsRelativos(a, texto)) });
-    if (o.tagDeArchivo) {
-      const tag = o.tagDeArchivo.replace('{stem}', basename(a).replace(/\.[^.]+$/, ''));
-      // Solo es componente el archivo que nombra su propio tag entre comillas (`define('ap-hola', …)`).
-      if (tag.includes('-') && new RegExp(`['"\`]${tag}['"\`]`).test(texto)) tagArchivo.set(tag, resolve(a));
-    }
+    const texto = readFileSync(a, 'utf8');
+    for (const i of extraerIconos(/\.(ts|js|mjs)$/.test(a) ? sinComentarios(texto) : texto)) candidatos.add(i);
   }
 
-  // 2. Íconos de los tags ajenos que la app usa (kit y otras apps).
-  const ajenos: Record<string, string[]> = {};
+  // 2. Registro de consumos: todos los íconos de los mapas del kit y de las apps que consume.
   const refs = o.mapas ?? [mapaDelKit()].filter((x): x is string => !!x);
+  let consumidos = 0;
   for (const ref of refs) {
     if (o.offline && /^https?:/.test(ref)) continue;
     try {
       const m = await leerMapa(ref, raiz, f);
-      for (const [tag, ids] of Object.entries(m.tags ?? {})) {
-        if (tagArchivo.has(tag)) continue; // los tags propios mandan
-        ajenos[tag] = ids;
-        if (usados.has(tag)) for (const i of ids) candidatos.add(i);
+      for (const [set, nombres] of Object.entries(m.icons)) {
+        for (const n of nombres) {
+          candidatos.add(`${set}:${n}`);
+          consumidos++;
+        }
       }
     } catch (e) {
       avisar(`mapa ${ref} inaccesible (${(e as Error).message}): sus íconos no se suman`);
@@ -304,8 +224,7 @@ export async function descargarIconos(opciones: OpcionesDescarga & { fetch?: typ
     .filter((id) => esIdIcono(id) && (colecciones ? colecciones.has(id.split(':')[0]!) : enDisco(id)))
     .sort();
 
-  // 4. Descarga de lo que falta: en lote por set (`<set>.json?icons=a,b,…`), no SVG a SVG (la API limita
-  //    peticiones: 429). Los alias (íconos que heredan de otro con giros) se piden sueltos como `.svg`.
+  // 4. Descarga en lote de lo que falta. Los alias (íconos que heredan de otro) se piden sueltos.
   const descargados: IconId[] = [];
   const inexistentes: IconId[] = [];
   const faltan = validos.filter((id) => !enDisco(id));
@@ -346,7 +265,7 @@ export async function descargarIconos(opciones: OpcionesDescarga & { fetch?: typ
   for (const id of inexistentes) avisar(`${id} no existe en Iconify`);
   const finales = new Set(validos.filter(enDisco));
 
-  // 5. Poda: SVG que ya ningún archivo pide (solo con veredicto completo: red disponible u offline explícito).
+  // 5. Poda: SVG que ya nadie pide (solo con veredicto completo: red disponible u offline explícito).
   const podados: IconId[] = [];
   if (o.podar && existsSync(dirSvg) && (colecciones || o.offline)) {
     for (const set of readdirSync(dirSvg)) {
@@ -364,8 +283,7 @@ export async function descargarIconos(opciones: OpcionesDescarga & { fetch?: typ
   }
   podados.sort();
 
-  // 6. Mapa determinista.
-  const tags = o.tagDeArchivo ? cerrarTags(nodos, tagArchivo, ajenos) : null;
+  // 6. Mapa determinista (sin fecha: mismo código → mismo archivo).
   const mapa: IconifyMap = {
     v: 1,
     app: nombreApp(raiz),
@@ -374,24 +292,11 @@ export async function descargarIconos(opciones: OpcionesDescarga & { fetch?: typ
     base: `${CARPETA_SVG}/`,
     icons: agrupar(finales),
   };
-  if (o.incrustar) {
-    mapa.svg = {};
-    for (const [set, nombres] of Object.entries(mapa.icons)) {
-      const porSet: Record<string, string> = (mapa.svg[set] = {});
-      for (const n of nombres) porSet[n] = readFileSync(join(dirSvg, set, `${n}.svg`), 'utf8').trim();
-    }
-  }
-  if (tags) {
-    mapa.tags = Object.fromEntries(
-      Object.entries(tags).map(([t, ids]) => [t, ids.filter((i) => finales.has(i))] as const).filter(([, ids]) => ids.length),
-    );
-  }
   if (!mapa.host) avisar('deno.json sin "iswc": { "host": "https://…/" }: el mapa sale con host null');
   mkdirSync(salida, { recursive: true });
   writeFileSync(join(salida, ARCHIVO_MAPA), `${JSON.stringify(mapa, null, 2)}\n`);
 
-  const rel = relative(raiz, join(salida, ARCHIVO_MAPA)).replace(/\\/g, '/');
-  log(`${archivos.length} archivos · ${finales.size} íconos (${descargados.length} nuevos, ${existentes} ya estaban, ${podados.length} podados, ${inexistentes.length} inexistentes) → ${rel}`);
+  log(`${archivos.length} archivos · ${finales.size} íconos (${consumidos} de consumos; ${descargados.length} nuevos, ${existentes} ya estaban, ${podados.length} podados, ${inexistentes.length} inexistentes) → ${mapa.ruta}`);
   return { archivos: archivos.length, encontrados: finales.size, descargados, existentes, inexistentes, podados, avisos, mapa };
 }
 

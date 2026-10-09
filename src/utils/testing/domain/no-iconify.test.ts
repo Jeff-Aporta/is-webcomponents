@@ -38,6 +38,10 @@ const ALLOWED_API_FILES = new Set([
   'scripts/download-iconify.ts',
   // Herramienta de las apps (assets/dl.js): descarga en build, no en runtime.
   'src/cdn/tools/download-iconify.ts',
+  // HTML para correo: se abre fuera de la app, sin sus assets.
+  'src/components/_shared/tk-icon-inline.ts',
+  // Explorador del catálogo: la lista de nombres de cada set y los SVG que no viajan en el kit.
+  'src/components/media/icon-explorer.preview.ts',
   'scripts/download-icons.ts',
   'scripts/fixes/icon-viewbox.ts',
   'scripts/sync-icon-collections.ts',

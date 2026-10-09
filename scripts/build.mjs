@@ -57,12 +57,12 @@ const PRESERVAR = new Set();
 /**
  * Minimo de ficheros que debe tener dist/assets/icons/.
  *
- * Es un canario, no una cifra exacta: el set solo crece al bajar colecciones
- * nuevas. Quedar por debajo significa que alguien borro material publicado,
- * no que falte generarlo. Subir este numero solo tras un `icons:download` que
- * anada colecciones de verdad.
+ * Es un canario, no una cifra exacta. Desde 2026-10-09 solo viajan en el repo
+ * mdi (7447) y tabler (6184) + el catalogo (index/collections/manifest/viewbox):
+ * el resto de sets lo sirve la API de Iconify y cada app lleva sus iconos en
+ * assets/iconify/. Quedar por debajo significa que alguien borro material publicado.
  */
-const MIN_ICONOS = 317_000;
+const MIN_ICONOS = 13_000;
 
 await mkdir(dist, { recursive: true });
 for (const entry of await readdir(dist, { withFileTypes: true })) {

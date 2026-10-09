@@ -31,7 +31,7 @@ const assets = join(root, 'dist', 'assets');
  *
  * Debe coincidir con `MIN_ICONOS` de `scripts/build.mjs`.
  */
-const MIN_ICONOS = 317_000;
+const MIN_ICONOS = 13_000;
 
 function contar(dir) {
   let n = 0;

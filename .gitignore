@@ -60,12 +60,17 @@ WT/
 
 
 # ── Peso del repo (2026-10-09): jsDelivr rechaza paquetes de más de 50 MB ──────────────
-# Íconos: solo viajan los SVG de los sets que usan el kit y las apps (mdi, solar, tabler) y los
-# índices <set>.json de todos; el resto se sirve SVG a SVG desde api.iconify.design (icon-loader).
+# Íconos: cada app lleva los suyos en assets/iconify/ (deno task icons); en ejecución, local o API.
+# Del set completo solo viajan mdi y tabler (explorador y diagramas) y el catálogo.
 dist/assets/icons/*/
 !dist/assets/icons/mdi/
-!dist/assets/icons/solar/
 !dist/assets/icons/tabler/
+# Solo viajan los SVG de mdi y tabler y el catalogo; las listas <set>.json salen de la API.
+dist/assets/icons/*.json
+!dist/assets/icons/index.json
+!dist/assets/icons/collections.json
+!dist/assets/icons/manifest.json
+!dist/assets/icons/viewbox.snapshot.json
 # Estado de `deno task icons:download` (cientos de MB): nunca se publica.
 dist/assets/icons/.state/
 # Capturas y salidas de pruebas/auditorías: artefactos locales.

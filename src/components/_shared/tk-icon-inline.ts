@@ -327,11 +327,15 @@ export function iconInlineHtmlWeb(iconId: string, opts: IconInlineOpts = {}): Ic
   return `<iswc-icon ${iconAttrsHtml(iconId, opts)}></iswc-icon>`;
 }
 
-/** HTML email-safe — img contra el CDN publico del repo (no api.iconify). */
+/**
+ * HTML email-safe — `<img>` contra la API de Iconify: el correo se abre fuera de la app (sin sus
+ * `assets/`) y la API sirve cualquier set. Antes apuntaba al repo por `@main` (ref mutable y sin los
+ * sets que ya no viajan en el kit).
+ */
 export function iconInlineHtmlEmail(iconId: string, opts: IconInlineOpts = {}): IconHtmlRender {
   const px = typeof opts.size === 'number' ? opts.size : 16;
   const path = iconAssetPath(iconId);
-  const url = `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/assets/icons/${path}.svg`;
+  const url = `https://api.iconify.design/${path}.svg`;
   return `<img src="${url}" width="${px}" height="${px}" alt="" class="tk-inline-icon-img" style="display:inline-block;vertical-align:-0.2em;border:0;"/>`;
 }
 

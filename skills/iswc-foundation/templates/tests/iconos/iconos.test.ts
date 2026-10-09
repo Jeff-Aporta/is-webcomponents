@@ -1,8 +1,8 @@
 // iconos.test.ts — íconos de la app (sin navegador), sobre lo que deja `deno task build`.
 //
-//   W-ICO-01  cada ícono que la app pinta está en assets/iconify.json, incrustado y como archivo suelto
+//   W-ICO-01  cada ícono que la app pinta está en local: listado en assets/iconify.json y como archivo
 //   W-ICO-02  el mapa dice dónde está publicada la app: `host` = deno.json → iswc.host
-//   W-ICO-03  el registrador publicado encadena el mapa de la app para <iswc-icon> (con ?v=<hash>)
+//   W-ICO-03  el registrador publicado registra el mapa de la app para <iswc-icon> (con ?v=<hash>)
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -11,7 +11,7 @@ import { PREFIJO } from '../../src/js/kit-tags.ts';
 
 const RAIZ = Deno.cwd();
 const leer = (rel: string) => readFileSync(join(RAIZ, rel), 'utf8');
-type Mapa = { host: string | null; ruta: string; base: string; icons: Record<string, string[]>; svg?: Record<string, Record<string, string>> };
+type Mapa = { host: string | null; ruta: string; base: string; icons: Record<string, string[]> };
 const mapa = (): Mapa => JSON.parse(leer('assets/iconify.json'));
 
 const COMUNES = ['mdi', 'solar', 'tabler', 'lucide', 'ph', 'fluent', 'material-symbols', 'simple-icons', 'carbon', 'heroicons'];
@@ -37,7 +37,7 @@ async function idsUsados(): Promise<string[]> {
 
 export default definirPruebas([
   {
-    nombre: 'iconos W-ICO-01 lo que la app pinta está local (incrustado y archivo)',
+    nombre: 'iconos W-ICO-01 lo que la app pinta está local (mapa y archivo)',
     categoria: 'what',
     async correr({ expect }) {
       const m = mapa();
@@ -46,7 +46,6 @@ export default definirPruebas([
       for (const id of usados) {
         const [set, n] = id.split(':') as [string, string];
         expect(`${id} en el mapa`, !!m.icons[set]?.includes(n));
-        expect(`${id} incrustado`, !!m.svg?.[set]?.[n]?.startsWith('<svg'));
         expect(`${id} archivo`, existsSync(join(RAIZ, 'assets', m.base, set, `${n}.svg`)));
       }
     },
@@ -61,7 +60,7 @@ export default definirPruebas([
     },
   },
   {
-    nombre: 'iconos W-ICO-03 el registrador encadena el mapa de la app',
+    nombre: 'iconos W-ICO-03 el registrador registra el mapa de la app',
     categoria: 'what',
     async correr({ expect }) {
       const g = globalThis as Record<string, unknown>;

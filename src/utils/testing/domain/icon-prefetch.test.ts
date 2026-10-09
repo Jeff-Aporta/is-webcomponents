@@ -1,6 +1,5 @@
 /**
- * Prefetch de iconos: solo mdi/tabler viven en src/ git; no spamear 404
- * contra lucide/heroicons/material-symbols en Pages.
+ * icon-loader sin prefetch de índices: el flujo es local (mapa de la app) o API de Iconify.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -12,24 +11,13 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..
 const loader = readFileSync(join(root, 'src/components/_shared/icon-loader.ts'), 'utf8');
 const preview = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
 
-test('prefetch idle solo mdi + tabler (colecciones en git bajo src/)', () => {
-  assert.match(loader, /SRC_SHIPPED_PREFIXES/);
-  assert.match(loader, /['"]mdi['"]/);
-  assert.match(loader, /['"]tabler['"]/);
-  // No precargar colecciones gitignoreadas en fuente.
-  assert.doesNotMatch(
-    loader,
-    /requestIdleCallback[\s\S]*lucide[\s\S]*heroicons[\s\S]*material-symbols/,
-  );
-  const idleBlock = loader.slice(loader.lastIndexOf('requestIdleCallback'));
-  assert.doesNotMatch(idleBlock, /lucide/);
-  assert.doesNotMatch(idleBlock, /heroicons/);
-  assert.doesNotMatch(idleBlock, /material-symbols/);
-});
-
-test('src/assets no se intenta para prefijos no shipped', () => {
-  assert.match(loader, /\/src\\\/assets\\\/icons\\\//);
-  assert.match(loader, /SRC_SHIPPED_PREFIXES\.has\(prefix\)/);
+test('icon-loader: local (mapa de la app) o API de Iconify, sin prefetch de índices ni CDN del kit', () => {
+  // Ya no hay índices <set>.json que precargar ni bases del kit por CDN: el mapa de la app dice qué
+  // hay en local y todo lo demás sale de la API.
+  assert.doesNotMatch(loader, /requestIdleCallback/);
+  assert.doesNotMatch(loader, /jsdelivr|githack|github\.io/);
+  assert.match(loader, /api\.iconify\.design/);
+  assert.match(loader, /__ISWC_ICONS__/);
 });
 
 test('iswc-preview-component no pone remember-scroll sin storage-key en el template', () => {

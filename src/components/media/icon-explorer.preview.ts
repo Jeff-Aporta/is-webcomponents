@@ -175,6 +175,27 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     return p;
   }
 
+  /*
+   * Nombres de una familia. El kit solo trae en local el catálogo (`index.json`, `collections.json`) y
+   * los SVG de mdi/tabler; la lista de nombres de cada set sale de la API de Iconify (`/collection`).
+   */
+  const API_ICONOS = 'https://api.iconify.design/';
+  const familiaCache = new Map<string, Promise<IconsJson>>();
+  function iconosDe(prefix: string): Promise<IconsJson> {
+    const cached = familiaCache.get(prefix);
+    if (cached) return cached;
+    const p = loadJson<IconsJson>(`${prefix}.json`).catch(async (): Promise<IconsJson> => {
+      const r = await fetch(`${API_ICONOS}collection?prefix=${encodeURIComponent(prefix)}`);
+      if (!r.ok) throw new Error(prefix);
+      const d = await r.json() as { uncategorized?: string[]; categories?: Record<string, string[]> };
+      const icons = [...new Set([...(d.uncategorized ?? []), ...Object.values(d.categories ?? {}).flat()])].sort();
+      if (!icons.length) throw new Error(prefix);
+      return { icons };
+    });
+    familiaCache.set(prefix, p);
+    return p;
+  }
+
   /* El feedback de "copiado" lo da <iswc-copy-button> por sí solo; el toaster
      queda para lo que no nace de un botón de copia (descargas, errores). */
   const toaster = $byId<IswcToast>('toaster');
@@ -215,7 +236,9 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
     const key = `${prefix}:${name}`;
     const cached = svgCache.get(key);
     if (cached) return cached;
+    // Local (mdi/tabler viajan en el kit) o, si no está, la API de Iconify.
     const p: Promise<SvgParsed> = fetch(new URL(`${prefix}/${name}.svg`, base))
+      .then((r) => (r.ok ? r : fetch(`${API_ICONOS}${encodeURIComponent(prefix)}/${encodeURIComponent(name)}.svg`)))
       .then((r) => (r.ok ? r.text() : Promise.reject(new Error(key))))
       .then((txt: string): SvgParsed => {
         const vb = txt.match(/viewBox="\s*([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s*"/);
@@ -602,7 +625,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
             if (!e.isIntersecting) continue;
             io?.unobserve(e.target);
             const prefix = (e.target as HTMLElement).dataset.prefix ?? '';
-            loadJson<IconsJson>(`${prefix}.json`)
+            iconosDe(prefix)
               .then((d: IconsJson) => {
                 for (const n of d.icons.slice(0, 4)) {
                   const ic = document.createElement('iswc-icon');
@@ -640,7 +663,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
             const fam = queue.shift();
             if (!fam) break;
             try {
-              const d = await loadJson<IconsJson>(`${fam.prefix}.json`);
+              const d = await iconosDe(fam.prefix);
               for (const n of d.icons) out.push({ prefix: fam.prefix, name: n });
             } catch {
               /* familia inaccesible: seguimos */
@@ -767,7 +790,7 @@ export async function mount(ctx: import('../../previews/_kit/types.d.ts').Previe
   async function renderFamily(prefix: string): Promise<void> {
     let data: IconsJson;
     try {
-      data = await loadJson<IconsJson>(`${prefix}.json`);
+      data = await iconosDe(prefix);
     } catch {
       if (app) {
         app.innerHTML = `<iswc-callout color="danger" variant="outlined" icon="mdi:alert">No existe la familia <code>${esc(prefix)}</code>. <a href="icon-explorer.html">Volver</a></iswc-callout>`;

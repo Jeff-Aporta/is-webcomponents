@@ -2,8 +2,10 @@
  * download-iconify — contratos (Zod) del mapa de iconos de una app y de la herramienta que lo genera.
  *
  * `assets/iconify.json` es el CONTRATO entre la herramienta (que lo escribe al descargar) y
- * `<iswc-icon>` (que lo lee al registrarlo): qué íconos tiene la app en `assets/iconify/<set>/<n>.svg`
- * y dónde está publicada (`host`, copiado de `deno.json` → `iswc.host`).
+ * `<iswc-icon>` (que lo lee al registrarlo): qué íconos tiene la app en local
+ * (`assets/iconify/<set>/<n>.svg`; lo que no esté se pide a la API) y dónde está publicada
+ * (`host`, copiado de `deno.json` → `iswc.host`). Otras apps lo leen al construir para bajarse
+ * esos mismos íconos (registro de consumos).
  */
 import { z } from 'zod';
 
@@ -24,13 +26,6 @@ export const IconifyMapSchema = z.object({
   base: z.string().min(1),
   /** set → nombres descargados (ordenados). */
   icons: z.record(z.string(), z.array(z.string())),
-  /**
-   * set → nombre → SVG completo. Incrustado para que `<iswc-icon>` pinte los íconos de la app con UNA sola
-   * petición (el propio json) en vez de una por SVG (ver labs/icon-cdn-bench). Los archivos sueltos siguen.
-   */
-  svg: z.record(z.string(), z.record(z.string(), z.string())).optional(),
-  /** tag → ids que pinta (incluye los de los tags que usa, transitivo). Lo usan otras apps para reusar íconos. */
-  tags: z.record(z.string(), z.array(IconIdSchema)).optional(),
 });
 export type IconifyMap = z.infer<typeof IconifyMapSchema>;
 
@@ -48,14 +43,10 @@ export const OpcionesDescargaSchema = z.object({
   ignorar: z.array(z.string()).optional(),
   /** Extensiones barridas. */
   extensiones: z.array(z.string()).optional(),
-  /** `iconify.json` de otras apps (o del kit) cuyos tags reusa esta: se descargan los íconos de los tags que la app usa. */
+  /** Registro de consumos: `iconify.json` del kit y de las apps que consume; TODOS sus íconos se descargan en esta app. Por defecto el del kit al SHA de la herramienta. */
   mapas: z.array(z.string()).optional(),
-  /** Plantilla del tag de cada archivo para `tags` (`{stem}` = nombre sin extensión). `null` = sin `tags`. */
-  tagDeArchivo: z.string().nullable().optional(),
   /** Sitio publicado; por defecto `deno.json` → `iswc.host`. */
   host: z.string().url().optional(),
-  /** Incrustar los SVG en el mapa (`svg`). Por defecto sí. */
-  incrustar: z.boolean().optional(),
   /** Borrar SVG de `iconify/` que ya nadie usa. */
   podar: z.boolean().optional(),
   /** Sin red: solo reescribe el mapa con lo que ya está en disco. */
@@ -80,14 +71,6 @@ export const ResumenDescargaSchema = z.object({
   mapa: IconifyMapSchema,
 });
 export type ResumenDescarga = z.infer<typeof ResumenDescargaSchema>;
-
-/** Lo que un archivo aporta al grafo de tags: sus íconos, los tags que pinta y los módulos relativos que importa. */
-export const NodoArchivoSchema = z.object({
-  iconos: z.set(z.string()),
-  tags: z.set(z.string()),
-  imports: z.set(z.string()),
-});
-export type NodoArchivo = z.infer<typeof NodoArchivoSchema>;
 
 const CajaSchema = { width: z.number().optional(), height: z.number().optional(), left: z.number().optional(), top: z.number().optional() };
 /** Respuesta de la API de Iconify en lote (`<set>.json?icons=a,b`): lo que la herramienta usa. */

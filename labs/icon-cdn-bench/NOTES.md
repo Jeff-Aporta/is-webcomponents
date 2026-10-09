@@ -35,18 +35,17 @@ raw 69 / 177 / 437 ms; githack 167 / 414 / 1153 ms; jsDelivr 193 / 500 / 1389 ms
 
 ## Conclusiones (decisión)
 
-1. **Un archivo, no N**: lo que más pesa es la cantidad de peticiones. Un json con todos los SVG de la
-   app llega en 35–250 ms para cualquier lote; SVG por SVG va de 1 s a 66 s en frío. → `iconify.json`
-   **incrusta** los SVG (`svg`) y `<iswc-icon>` los pinta sin pedir archivos.
-2. **Raíz de cada app = su web estática** (`host`, GitHub Pages): el origen más rápido por archivo, sin
-   límite de 50 MB y sin bloqueo por IP. El mapa se resuelve relativo a donde se sirvió y, si esa
-   carpeta no responde, bajo su `host`.
-3. **jsDelivr no sirve para íconos del kit**: lento en frío y con 403 mientras el repo supere 50 MB.
-   Para material del kit por SHA, **rawcdn.githack @SHA** (inmutable, MIME correcto, CORS) es la opción
-   estable; raw.githubusercontent es rápido pero no es un CDN (límites de GitHub). Los pines siguen
-   siendo SHA de 40 hex.
-4. **La API de Iconify solo como último recurso**, y en la descarga **en lote** (`<set>.json?icons=`):
-   SVG por SVG bloquea por IP (429/1015) en cuanto se piden unas decenas.
+1. **Flujo de `<iswc-icon>`: local o API, nada más.** Cada app sirve en local (su propio sitio) los íconos
+   que usa y los de todo lo que consume (se bajan al construir); lo demás va a la API. Pages fue el origen
+   más rápido por archivo, sin el límite de 50 MB de jsDelivr ni bloqueos por IP, y desplegada la carga
+   local es un fetch al mismo sitio.
+2. **No enlazar rutas de otras apps ni del kit por CDN en ejecución**: jsDelivr es lento en frío y da 403
+   mientras el repo supere 50 MB; rawcdn.githack es lento en frío. Lo de otras apps se resuelve al
+   construir (registro de consumos en `dl`).
+3. **La API de Iconify, como último recurso en ejecución y en lote en la descarga** (`<set>.json?icons=`):
+   SVG por SVG bloquea por IP (429/1015) en cuanto se piden unas decenas seguidas.
+4. Medido también: un único json con todos los SVG llega en 35–250 ms para cualquier lote. Se descartó
+   incrustar SVG en el mapa por simplicidad (decisión 2026-10-09): el mapa solo dice qué hay en local.
 
 ## Límites del experimento
 

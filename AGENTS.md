@@ -182,20 +182,23 @@ build(cdn): regenerar bundles despues de folderize
 
 ## 5. Sistema de iconos (la pieza más frágil)
 
-### 5.1 Resolución en cadena
+### 5.1 Local o API (desde 2026-10-09)
 
-`components/_shared/iconify-loader.js` resuelve cada `<iswc-icon icon="X:Y">` así:
+`src/components/_shared/icon-loader.ts` resuelve cada `<iswc-icon icon="X:Y">` con UNA pregunta:
 
 ```
-1. assets/icons/X.json          → ¿está Y en la lista?    (local index)
-2. {base}/assets/icons/X/Y.svg → <img src> local          (local SVG)
-3. https://cdn.jsdelivr.net/... → mirror jsDelivr         (CDN público)
-4. https://api.iconify.design/... → API oficial           (CDN con latencia)
-5. <iconify-icon> iconify.min.js → web component fallback
+¿X:Y está en el mapa de la app (assets/iconify.json, registrado en globalThis.__ISWC_ICONS__)?
+  sí → assets/iconify/X/Y.svg de la app (si el archivo falla → API)
+  no → https://api.iconify.design/X/Y.svg
 ```
 
-Si tocas el loader y rompes la cadena, **todos los iconos se quedan en
-blanco** sin error de consola. Verifica con `tests/icons.test.mjs` (ver §7).
+El mapa y los SVG los genera `deno task icons` (`assets/dl.js` → `src/cdn/tools/download-iconify.ts`,
+dentro de `build`) con los íconos de la app y TODOS los de lo que consume (kit, otras apps). El kit
+también tiene su `assets/` (235 íconos). Detalle: `skills/iswc-foundation/references/10-iconos.md`.
+Bench de raíces: `labs/icon-cdn-bench/NOTES.md`.
+
+Del set completo solo viajan `dist/assets/icons/{mdi,tabler}/` y el catálogo (`index.json`,
+`collections.json`): los usan el explorador y los diagramas, no `<iswc-icon>`.
 
 ### 5.2 Trampas que ya nos mordieron
 
@@ -575,9 +578,8 @@ Si estás escribiendo uno de estos, para y reconsidera:
   inyecta **inline** con `innerHTML` en su Shadow DOM. Ademas, hay una
   funcion `#normalizeInlineSvg()` que fuerza `fill: currentColor` y
   `stroke: currentColor` en el `<svg>` y sus hijos, para que SVGs con
-  `fill="#000"` del CDN hereden el color del host. Los fuentes del raw
-  en orden son: local `assets/icons/`, jsDelivr CDN del repo, y
-  `api.iconify.design` como último recurso.
+  `fill="#000"` del CDN hereden el color del host. Fuente del raw: el
+  mapa local de la app (`assets/iconify/`) o la API de Iconify (ver §5.1).
 
 ## 10. Cuando algo falla y no sabes por qué
 

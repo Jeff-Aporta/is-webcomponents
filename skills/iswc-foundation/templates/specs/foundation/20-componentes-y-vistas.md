@@ -18,9 +18,9 @@ ejemplo vivo en la galería.
 - [W-COMP-04] Los eventos de una pieza suben por el documento atravesando el shadow DOM.
 - [W-COMP-05] Todo color sale del tema activo (tokens del kit); con «reducir movimiento» nada anima.
 - [W-COMP-06] Cada pieza aparece en la galería (`view/demo/`) con un ejemplo vivo y «cuándo usarla / cuándo no».
-- [W-ICO-01] Todo ícono que la app pinta está en la propia app (`assets/`): se ve aunque la API de Iconify no responda, y llega con UNA petición (el mapa) en vez de una por ícono.
-- [W-ICO-02] El mapa de íconos dice dónde está publicada la app (`host`), para que otra app que lo encadene encuentre los archivos.
-- [W-ICO-03] Al cargar la app, sus íconos quedan disponibles para `<iswc-icon>` antes que los del kit; un ícono que ningún mapa sirve sale de la API de Iconify.
+- [W-ICO-01] Todo ícono que la app pinta, y todo ícono de lo que consume (kit y otras apps), está en la propia app (`assets/`): se carga en local y se ve aunque la API de Iconify no responda.
+- [W-ICO-02] El mapa de íconos dice qué hay en local y dónde está publicada la app (`host`).
+- [W-ICO-03] `<iswc-icon>` carga en local lo que el mapa lista; todo lo demás (o si el archivo local falla) sale de la API de Iconify. No hay otras rutas.
 - [W-VIEW-01] Cada dominio es una vista con un único shell; la app solo conoce el shell. Se abre sola (`/view/<v>/index.html`) y tiene demo (`/view/<v>/demo/`).
 
 ### Catálogo
@@ -43,7 +43,7 @@ ejemplo vivo en la galería.
 - [HS-COMP-01] Cuatro archivos hermanos por componente: `<tag>.ts`, `<tag>.scss`, `<tag>.md` (H2 exactos: Anatomía, Atributos observados, Props, Eventos, Slots, Ejemplos; excluir con `<!-- exclude: X -->`, Anatomía nunca), `<tag>.json` (`iswc-preview/v1`).
 - [HS-COMP-02] Registro: el tag se declara una vez en `src/js/kit-tags.ts` (`APP_TAGS` transversales en `src/js/components/__PREFIJO__/`; `VIEW_TAGS.<vista>` en `view/<vista>/components/`), su línea en `view/demo/manifest.json` y, si tiene `props`, su schema Zod en `componentes.schemas.ts` registrado en `props-registro.ts`.
 - [HS-COMP-03] Base: `crearComponente`/`define`/`emitir`/`html`/`adoptCss`/`precargarCss`/`adoptarPropsTardias` de `src/js/base/componente.ts`.
-- [HS-ICO-01] Íconos: ids Iconify literales `set:nombre` en el código (`icon="mdi:home"`, `icono: 'mdi:home'`); un id armado en ejecución va en `extra` de `assets/dl.js`. `deno task icons` (dentro de `build`) escribe `assets/iconify.json` (`IconifyMap` v1: `host` = `deno.json` → `iswc.host`, `icons`, `svg` incrustado, `tags`) y `assets/iconify/<set>/<nombre>.svg`; el registrador del build lo empuja a `globalThis.__ISWC_ICONS__`. `assets/dl.js` solo lleva rutas e importa la herramienta del kit al SHA del pin.
+- [HS-ICO-01] Íconos: ids Iconify literales `set:nombre` en el código (`icon="mdi:home"`, `icono: 'mdi:home'`); un id armado en ejecución va en `extra` de `assets/dl.js`. `deno task icons` (dentro de `build`) escribe `assets/iconify.json` (`IconifyMap` v1: `host` = `deno.json` → `iswc.host`, `ruta`, `base`, `icons`) y `assets/iconify/<set>/<nombre>.svg`, con los íconos de la app y TODOS los de los mapas que consume (`mapas`; por defecto el del kit). El registrador del build empuja el mapa a `globalThis.__ISWC_ICONS__`. `assets/dl.js` solo lleva rutas e importa la herramienta del kit al SHA del pin.
 - [HS-VIEW-01] Vista: `index.html`, `README.md`, `demo/index.html`, `components/` (+ `all.ts`), `utils/`.
 
 ## 5. Casos borde y errores
@@ -56,7 +56,7 @@ ejemplo vivo en la galería.
 
 - [W-COMP-08] Cada componente registrado tiene sus 4 archivos, su `.md` declara las 6 secciones y su `.json` valida contra `iswc-preview/v1`.
 - [W-COMP-09] El dominio de la bienvenida cumple [W-CAT-02] y [W-CAT-03] sin navegador (`tests/vistas/bienvenida`).
-- [W-ICO-04] Los íconos de la app están locales e incrustados [W-ICO-01], el mapa lleva el `host` [W-ICO-02] y el registrador lo encadena (`tests/iconos`); en e2e, la bienvenida pinta sus íconos sin pedir nada a la API (`tests/e2e/00.bienvenida`).
+- [W-ICO-04] Los íconos de la app están en local [W-ICO-01], el mapa lleva el `host` [W-ICO-02] y el registrador lo registra (`tests/iconos`); en e2e, la bienvenida pide sus íconos a `assets/iconify/` y nada a la API (`tests/e2e/00.bienvenida`).
 - [W-COMP-10] E2E: la bienvenida arranca, muestra el título y las tarjetas, y el modal se abre y se cierra como lo haría un usuario (`tests/e2e/00.bienvenida`).
 
 ## 7. Notas
