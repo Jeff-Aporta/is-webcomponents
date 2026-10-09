@@ -31,6 +31,10 @@ const SCAN_EXT = /\.(js|mjs|css|html)$/;
 // Herramientas de build/CLI: se ejecutan a mano en Node para llenar
 // `assets/icons`, nunca en el navegador. La regla es sobre RUNTIME.
 const ALLOWED_API_FILES = new Set([
+  // Respaldo de runtime para los sets que no viajan en el kit (decisión 2026-10-09: el repo debe
+  // quedar bajo el límite de 50 MB de jsDelivr). SVG suelto por ícono; el web component y el
+  // script de iconify siguen prohibidos.
+  'src/components/_shared/icon-loader.ts',
   'scripts/download-iconify.ts',
   'scripts/download-icons.ts',
   'scripts/fixes/icon-viewbox.ts',

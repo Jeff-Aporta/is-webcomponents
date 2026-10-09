@@ -1,7 +1,8 @@
 /**
  * icon-loader — resuelve el SVG de un icono Iconify SIN el web component
- * `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en
- * `assets/icons/` y se publica en `dist/assets/icons/`:
+ * `<iconify-icon>` ni su script de CDN. Los sets que usan el kit y las apps
+ * (`SETS_LOCALES`: mdi, solar, tabler) viajan en `dist/assets/icons/`; los demás
+ * se piden SVG a SVG a la API de Iconify (nunca el set entero):
  *
  *   assets/icons/<prefix>.json        indice de la coleccion (lista de nombres)
  *   assets/icons/<prefix>/<name>.svg  el SVG suelto
@@ -45,11 +46,20 @@ const ICON_BASES: (() => string | null)[] = [
     if (!/\/(?:src\/)?components\//.test(import.meta.url)) return null;
     return new URL('../../../dist/assets/icons/', import.meta.url).href;
   },
-  // GitHub Pages del proyecto (sitio publicado).
-  () => 'https://jeff-aporta.github.io/iswc-root/dist/assets/icons/',
-  // jsDelivr sobre el repo.
-  () => 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/assets/icons/',
+  // Sin GitHub Pages ni `@main`: refs mutables que sirven otra versión que la pineada. La base del
+  // bundle ya hereda el SHA del loader (misma URL `…@<sha>/dist/cdn/`), así que los íconos van al pin.
 ];
+
+/**
+ * Sets cuyos SVG viajan en el kit (`dist/assets/icons/<set>/`): los que usan el kit y las apps.
+ * El resto de sets se sirve desde la API de Iconify (SVG suelto por ícono, con `currentColor`):
+ * el repo se mantiene liviano (jsDelivr rechaza paquetes de más de 50 MB) y el loader sigue
+ * pidiendo solo el ícono que se pinta. Los índices `<set>.json` de todos los sets sí viajan.
+ */
+const SETS_LOCALES: ReadonlySet<string> = new Set(['mdi', 'solar', 'tabler']);
+const API_ICONOS = 'https://api.iconify.design/';
+const urlApi = (prefix: string, name: string): string =>
+  `${API_ICONOS}${encodeURIComponent(prefix)}/${encodeURIComponent(name)}.svg`;
 
 const LOCAL_INDEX_PATH = (prefix: string): string => `${prefix}.json`;
 const LOCAL_SVG_PATH = (prefix: string, name: string): string => `${prefix}/${name}.svg`;
@@ -62,7 +72,7 @@ const LOCAL_SVG_PATH = (prefix: string, name: string): string => `${prefix}/${na
  * colecciones que siempre están, para no prefetchear las que puede que el
  * consumidor no haya descargado y llenar la consola de 404.
  */
-const SRC_SHIPPED_PREFIXES: ReadonlySet<string> = new Set(['mdi', 'tabler']);
+const SRC_SHIPPED_PREFIXES: ReadonlySet<string> = SETS_LOCALES;
 
 /** Cache en memoria: prefix -> Set<name> | null (null = no existe indice). */
 const indexCache = new Map<string, Set<string> | null>();
@@ -140,10 +150,11 @@ export function iconSourceBase(prefix: string): string | null {
 
 export async function resolveIconSvg(prefix: string, name: string): Promise<string | null> {
   const idx = await loadIndex(prefix);
-  if (!idx || !idx.has(name)) return null;
   const base = baseCache.get(prefix);
-  if (!base) return null;
-  return base + LOCAL_SVG_PATH(prefix, name);
+  if (idx && base && idx.has(name) && SETS_LOCALES.has(prefix)) return base + LOCAL_SVG_PATH(prefix, name);
+  // Set que no viaja en el kit (o índice inalcanzable): el SVG sale de la API de Iconify.
+  if (!SETS_LOCALES.has(prefix) && (!idx || idx.has(name))) return urlApi(prefix, name);
+  return null;
 }
 
 export async function resolveIconRaw(prefix: string, name: string, signal?: AbortSignal): Promise<string | null> {
@@ -155,9 +166,8 @@ export async function resolveIconRaw(prefix: string, name: string, signal?: Abor
   // que <iswc-icon> pueda cancelar renders obsoletos.
   const url = await resolveIconSvg(prefix, name);
   if (!url) return null;
-  const base = baseCache.get(prefix) ?? '';
   try {
-    const res = await fetch(base + LOCAL_SVG_PATH(prefix, name), { signal, cache: 'default' });
+    const res = await fetch(url, { signal, cache: 'default' });
     if (!res.ok) return null;
     const text = await res.text();
     rawCache.set(key, text);

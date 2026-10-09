@@ -1,4 +1,0 @@
-[ok]   iswc-button [no-guard] arranca en scrollTop≈0 (got 0)
-[ok]   iswc-button [restore] pref tras click: activeId=events, age=1301ms
-[ok]   iswc-button [clear-on-top] pref borrada al volver a top
-[ok]   iswc-card [no-guard] arranca en scrollTop≈0 (got 0)

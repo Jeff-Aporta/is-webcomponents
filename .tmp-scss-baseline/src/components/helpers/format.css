@@ -1,7 +1,0 @@
-@import './_inline-host.css';
-:host .value {
-  display: inline;
-}
-:host:where([data-type=number], [data-type=bytes]) .value {
-  font-variant-numeric: tabular-nums;
-}
