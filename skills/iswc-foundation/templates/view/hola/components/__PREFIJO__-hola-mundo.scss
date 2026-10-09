@@ -1,0 +1,13 @@
+/* __PREFIJO__-hola-mundo — el título. Colores siempre desde tokens del kit. */
+:host {
+  display: block;
+}
+
+.titulo {
+  margin: 0;
+  color: var(--iswc-text);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}

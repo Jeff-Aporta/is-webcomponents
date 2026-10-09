@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es" data-theme="dark" data-palette="contapyme">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITULO__ · componentes</title>
+<meta name="robots" content="noindex">
+<script src="../../dist/cdn/boot.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="../../dist/cdn/__PREFIJO__Loader.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/preview/preview-component.min.css">
+<style>
+  html, body { margin: 0; height: 100%; background: var(--iswc-bg); color: var(--iswc-text); font-family: var(--iswc-font-sans); }
+  .galeria { display: grid; grid-template-columns: 14rem 1fr; height: 100%; }
+  .galeria nav { display: grid; align-content: start; gap: 0.25rem; padding: 0.75rem; border-right: 1px solid var(--iswc-border-soft); overflow: auto; }
+  .galeria nav iswc-button[aria-current="true"] { --iswc-button-bg: var(--iswc-brand-soft); }
+</style>
+</head>
+<body>
+  <div class="galeria">
+    <nav id="nav" aria-label="Componentes"></nav>
+    <iswc-preview-component id="preview"></iswc-preview-component>
+  </div>
+  <!-- La galería marca `data-app-ready` al montar; el watchdog revela la página si falla. -->
+  <script>setTimeout(function () { document.documentElement.setAttribute('data-app-ready', ''); }, 6000);</script>
+  <script type="module" src="../../dist/cdn/view/demo/components/__PREFIJO__-galeria.js"></script>
+</body>
+</html>

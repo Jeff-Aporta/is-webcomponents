@@ -1,0 +1,65 @@
+@use "tokens" as t;
+@use "mixins" as m;
+
+/* __PREFIJO__-hola — pantalla de bienvenida: portada + tarjetas + modal. */
+:host {
+  @include m.host-bloque;
+  display: grid;
+  gap: t.esp(8);
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.hero {
+  display: grid;
+  gap: t.esp(4);
+  justify-items: start;
+  padding: t.esp(8) 0 t.esp(4);
+
+  .kicker {
+    @include m.rotulo(0.75);
+    margin: 0;
+    color: var(--iswc-brand-text);
+    font-size: 0.75rem;
+  }
+
+  .lede {
+    max-width: 40rem;
+    margin: 0;
+    color: var(--iswc-text-soft);
+    font-size: 1.125rem;
+    line-height: 1.55;
+  }
+
+  .acciones,
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: t.esp(2);
+  }
+}
+
+.tarjetas {
+  display: grid;
+  gap: t.esp(4);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+
+  p {
+    margin: 0;
+    color: var(--iswc-text-soft);
+    line-height: 1.5;
+  }
+
+  iswc-icon {
+    color: var(--iswc-accent);
+  }
+}
+
+#modal {
+  --iswc-dialog-width: min(36rem, calc(100vw - 2rem));
+
+  iswc-code {
+    display: block;
+    margin-top: t.esp(3);
+  }
+}

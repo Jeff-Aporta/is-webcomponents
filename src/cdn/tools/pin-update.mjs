@@ -66,6 +66,10 @@ function archivos() {
 const rel = (f) => relative(ROOT, f).replace(/\\/g, '/');
 const reNombres = `(?:${nombres.map(esc).join('|')})`;
 const rePin = new RegExp(`(${reNombres})@([0-9a-zA-Z._-]+)`, 'g');
+// Forma raw por SHA (`raw.githubusercontent.com/<owner>/<repo>/<sha40>/…`): tan inmutable como `@sha`.
+// La usan los imports de `deno.json` (jsDelivr rechaza archivos nuevos de repos > 50 MB).
+const owner = repo.split('/')[0];
+const reRaw = new RegExp(`(${esc(owner)}\\/)(${reNombres})\\/([0-9a-f]{40})\\/`, 'g');
 const reMutable = new RegExp([
   `${reNombres}@(main|master|latest|[0-9a-f]{7,39}\\b)`, // rama, latest o SHA corto
   `${esc(repo.split('/')[0])}\\/${reNombres}\\/(main|master)\\/`, // raw.githack / githubusercontent por rama
@@ -82,6 +86,10 @@ function inventario() {
       if (!SHA.test(m[2])) continue;
       pines.set(m[2], (pines.get(m[2]) ?? new Set()).add(rel(f)));
       if (m[1] !== nombre) legados.add(rel(f));
+    }
+    for (const m of t.matchAll(reRaw)) {
+      pines.set(m[3], (pines.get(m[3]) ?? new Set()).add(rel(f)));
+      if (m[2] !== nombre) legados.add(rel(f));
     }
     t.split('\n').forEach((l, i) => { if (reMutable.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`); });
   }
@@ -138,7 +146,11 @@ const tocados = [];
 if (reViejo) {
   for (const f of archivos()) {
     const t = readFileSync(f, 'utf8');
-    const next = t.replace(reViejo, (m) => { const r = `${nombre}@${nuevo}`; if (m !== r) n += 1; return r; });
+    const shas = [...viejos, nuevo].map(esc).join('|');
+    const reViejoRaw = new RegExp(`(${esc(owner)}\\/)${reNombres}\\/(?:${shas})\\/`, 'g');
+    const next = t
+      .replace(reViejo, (m) => { const r = `${nombre}@${nuevo}`; if (m !== r) n += 1; return r; })
+      .replace(reViejoRaw, (m, pre) => { const r = `${pre}${nombre}/${nuevo}/`; if (m !== r) n += 1; return r; });
     if (next === t) continue;
     tocados.push(rel(f));
     if (!args['dry-run']) writeFileSync(f, next);

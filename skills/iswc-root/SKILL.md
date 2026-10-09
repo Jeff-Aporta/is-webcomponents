@@ -34,6 +34,21 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 | [`/iswc-root:local`](tools/local.md) | Vendorizar el kit y bootear local-first, con CDN como fallback. |
 | [`/iswc-root:runtime`](tools/runtime.md) | APIs **sin** tag: loader, IswcUi, md-lite/hydrate/fences, response-cache, sync-pins. |
 
+## Apps sobre el kit: estándar `iswc-foundation` (obligatorio)
+
+Toda **app** construida sobre iswc (no un componente del kit, una app: ISW, iswc-docs, las nuevas)
+sigue la skill [`../iswc-foundation/SKILL.md`](../iswc-foundation/SKILL.md): misma estructura, mismas
+tareas Deno, registro único de tags, vistas, demos, SCSS, Zod, pines fijos, pruebas WHAT con
+Stagehand, gate y sync. Una app nueva se crea con `create-iswc-app`, que se ejecuta directo desde la
+URL (sin descargar nada):
+
+```bash
+deno run -A https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/skills/iswc-foundation/tools/create-iswc-app.ts mi-app --prefijo=mia
+```
+
+Deja el esqueleto completo con un hola mundo, el pin fijo, las specs y skills sembradas
+(`specs/iswc/`) y los casos base de prueba.
+
 ## Cómo documentar un componente
 
 Cada guía de módulo (`src/components/<carpeta>/<modulo>.md`) sigue la

@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable", "deno.ns"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true
+  },
+  "nodeModulesDir": "auto",
+  "unstable": ["sloppy-imports"],
+  "imports": {
+    "@browserbasehq/stagehand": "npm:@browserbasehq/stagehand@4.1.0",
+    "@types/node": "npm:@types/node@^22.20.5",
+    "esbuild": "npm:esbuild@0.28.1",
+    "jsdom": "npm:jsdom@29.1.1",
+    "zod": "npm:zod@4.4.3",
+    "sass": "npm:sass@^1.105.0",
+    "@std/http/file-server": "jsr:@std/http@1/file-server",
+    "@iswc/component-schemas": "https://raw.githubusercontent.com/__REPO__/__SHA__/src/previews/_kit/component.schemas.ts",
+    "@iswc/loader-schemas": "https://raw.githubusercontent.com/__REPO__/__SHA__/src/cdn/loader.schemas.ts"
+  },
+  "tasks": {
+    "build:scss": "deno run -A scripts/build/build-scss.mjs",
+    "build": "deno task build:scss && deno run -A src/utils/build.ts",
+    "dev": "deno run -A src/utils/build.ts --watch",
+    "serve": "deno run -A jsr:@std/http@1/file-server -p __PUERTO__ --host 127.0.0.1",
+    "check": "deno check src/js/ view/",
+    "pin": "deno run -A src/vendor/iswc-root/tools/pin-update.mjs --repo=__REPO__ --raices=index.html,src,view,deno.json",
+    "vendor:iswc": "deno run -A scripts/vendor/vendor-iswc-tools.mjs",
+    "test": "deno task build && deno run -A scripts/gate/test-health.mjs",
+    "test:health": "deno run -A scripts/gate/test-health.mjs",
+    "test:e2e": "deno run -A scripts/gate/e2e/run.ts",
+    "test:all": "deno run -A scripts/gate/run-test-all.mjs",
+    "test:all:halt": "deno run -A scripts/gate/run-test-all.mjs --halt",
+    "sync:entregable": "deno run -A scripts/gate/sync-to-entregable.mjs"
+  }
+}

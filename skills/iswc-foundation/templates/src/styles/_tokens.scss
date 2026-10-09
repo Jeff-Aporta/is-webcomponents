@@ -1,0 +1,37 @@
+// _tokens.scss — escala de espaciado y radios de la app.
+//
+// Los COLORES no viven aquí: salen siempre de los tokens del kit (`--iswc-*`), así cambian con el
+// tema y la paleta. Lo que el kit no publica como token (la escala de espaciado y los radios grandes)
+// se fija una sola vez en esta hoja, para no repetir números sueltos en cada componente.
+//
+// USO:
+//   @use "tokens" as t;
+//   .tarjeta { padding: t.esp(2) t.esp(4); border-radius: t.radio(lg); }
+@use "sass:map";
+
+$espacios: (
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  5: 1.25rem,
+  6: 1.5rem,
+  8: 2rem,
+  10: 3rem,
+);
+
+/// Espaciado de la escala (1 = 0.25rem … 10 = 3rem).
+@function esp($n) {
+  @if not map.has-key($espacios, $n) {
+    @error "esp(#{$n}) no está en la escala: #{map.keys($espacios)}";
+  }
+  @return map.get($espacios, $n);
+}
+
+/// Radio: `sm` y `md` son los del kit; `lg` es el `md` del kit escalado.
+@function radio($tam) {
+  @if $tam == sm { @return var(--iswc-radius-sm); }
+  @if $tam == md { @return var(--iswc-radius); }
+  @if $tam == lg { @return calc(var(--iswc-radius) * 1.5); }
+  @error "radio(#{$tam}): usa sm, md o lg";
+}
