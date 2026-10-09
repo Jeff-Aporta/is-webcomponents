@@ -1,6 +1,6 @@
 /**
  * Prompt canónico para agentes + helpers de ensamblaje.
- * Fuente de verdad en prosa: `skills/is-webcomponents/PROMPT.md`
+ * Fuente de verdad en prosa: `skills/iswc-root/PROMPT.md`
  * (se copia a `dist/cdn/skills/` en el build).
  */
 
@@ -11,7 +11,7 @@ import type { SkillDoc, PromptMdOpts, LoadAgentPromptOpts, BuildLlmPromptOpts } 
 export const SKILL_DOCS: readonly SkillDoc[] = [
   {
     label: 'Skill · kit (general)',
-    url: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/SKILL.md',
+    url: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/skills/iswc-root/SKILL.md',
   },
 ];
 
@@ -19,10 +19,10 @@ export const SKILL_DOCS: readonly SkillDoc[] = [
 export const LLM_PROMPT_FALLBACK: string = [
   '# ISWC (Instrucciones para LLM)',
   '',
-  'Utiliza **ISWC** exclusivamente mediante **CDN** (o `/is-webcomponents:local`).',
+  'Utiliza **ISWC** exclusivamente mediante **CDN** (o `/iswc-root:local`).',
   'Nunca npm, npx, Bun, pnpm, Yarn, Vite, Webpack ni gestores de paquetes del kit.',
   'Reutiliza tags `is-*`. No inventes API. Lee skills + LLM.md de categoría + MD del módulo.',
-  'Herramientas: `/is-webcomponents:build` · `/is-webcomponents:migrate` · `/is-webcomponents:local`.',
+  'Herramientas: `/iswc-root:build` · `/iswc-root:migrate` · `/iswc-root:local`.',
   'Iconos: `<iswc-icon icon="mdi:…">`. Tema: `data-theme` / `data-palette`.',
 ].join('\n');
 
@@ -35,15 +35,15 @@ let loadPromise: Promise<string> | null = null;
 export function promptMdCandidates(importMetaUrl: string = import.meta.url): string[] {
   const list = [
     // dist/cdn/feedback/*.min.js → dist/cdn/skills/...
-    new URL('../skills/is-webcomponents/PROMPT.md', importMetaUrl).href,
+    new URL('../skills/iswc-root/PROMPT.md', importMetaUrl).href,
     // dist/cdn/all.min.js → dist/cdn/skills/...
-    new URL('./skills/is-webcomponents/PROMPT.md', importMetaUrl).href,
+    new URL('./skills/iswc-root/PROMPT.md', importMetaUrl).href,
   ];
   const loc = globalThis as { location?: { origin?: string } };
   const origin = loc.location?.origin;
   if (typeof origin === 'string') {
-    list.push(`${origin}/skills/is-webcomponents/PROMPT.md`);
-    list.push(`${origin}/dist/cdn/skills/is-webcomponents/PROMPT.md`);
+    list.push(`${origin}/skills/iswc-root/PROMPT.md`);
+    list.push(`${origin}/dist/cdn/skills/iswc-root/PROMPT.md`);
   }
   return list;
 }

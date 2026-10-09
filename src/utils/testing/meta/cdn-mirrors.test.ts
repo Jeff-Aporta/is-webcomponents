@@ -16,7 +16,7 @@ test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
   assert.match(src, /export const MIRRORS/);
   assert.match(src, /id:\s*['"]jsdelivr['"]/);
   assert.match(src, /id:\s*['"]pages['"]/);
-  assert.match(src, /jeff-aporta\.github\.io\/is-webcomponents/);
+  assert.match(src, /jeff-aporta\.github\.io\/iswc-root/);
   assert.match(src, /fallbackBases/);
 });
 

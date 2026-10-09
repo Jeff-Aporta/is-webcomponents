@@ -27,7 +27,7 @@ leen a demanda según el área que estés tocando.
 
 Si lo que vas a hacer es **consumir** el kit (HTML con `<iswc-button>`,
 estilos con tokens `--iswc-*`, etc.), esta skill **no** aplica: usa
-[`../is-webcomponents/SKILL.md`](../is-webcomponents/SKILL.md).
+[`../iswc-root/SKILL.md`](../iswc-root/SKILL.md).
 
 ## 2. Anatomía obligatoria (sección en el `.md`)
 
@@ -408,7 +408,7 @@ Patrón mínimo (extracto):
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Demo: <iswc-foo> · is-webcomponents</title>
+  <title>Demo: <iswc-foo> · iswc-root</title>
   <style>
     html, body {
       margin: 0; padding: 24px; min-height: 100%;
@@ -512,7 +512,7 @@ Antes de abrir PR con un componente nuevo, verifica:
 ## Cómo se conecta con el resto
 
 - Esta skill **no sustituye** a
-  [`../is-webcomponents/SKILL.md`](../is-webcomponents/SKILL.md), que
+  [`../iswc-root/SKILL.md`](../iswc-root/SKILL.md), que
   cubre el **consumo** del kit desde apps externas. Esta cubre la
   **construcción** de un componente dentro del repo.
 - Para los `_shared/` (bases, mixins, helpers) ver la sección

@@ -8,7 +8,7 @@
 import { paint } from '../components/_shared/highlight-code.js';
 
 const LOADER =
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';
 
 const open = String.fromCharCode(60);
 const slash = String.fromCharCode(47);
@@ -307,7 +307,7 @@ const downloadHtml = (variant: string): void => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = variant === 'bundle' ? 'is-webcomponents-demo-bundle.html' : 'is-webcomponents-demo.html';
+  a.download = variant === 'bundle' ? 'iswc-root-demo-bundle.html' : 'iswc-root-demo.html';
   document.body.appendChild(a);
   a.click();
   a.remove();

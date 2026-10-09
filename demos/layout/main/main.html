@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <iswc-main> · is-webcomponents</title>
+<title>Demo de <iswc-main> · iswc-root</title>
 <meta name="description" content="Contenedor scrollable con role='main'. Persistencia opt-in de scrollTop vía remember-scroll + storage-key. Métodos scrollToTop/clearRememberedScroll/saveScroll/restoreScroll." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -32,7 +32,7 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/main.min.js?h=y2y34x');
+  await import('../../../dist/cdn/layout/main.min.js?h=b9nqkt');
   await customElements.whenDefined('iswc-main');
 
   // (1) iswc-main básico: role="main" auto-puesto. Sin persistencia.
@@ -116,7 +116,7 @@
 
   function readPrefs() {
     try {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') ?? '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') ?? '{}');
       return root['iswc-main']?.['demo-main-interactive'] ?? null;
     } catch { return null; }
   }
@@ -156,7 +156,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('iswc-main')</code> resuelto. Persistencia en <code>localStorage['is-webcomponents']</code>.
+  Estado: <code>customElements.whenDefined('iswc-main')</code> resuelto. Persistencia en <code>localStorage['iswc-root']</code>.
 </footer>
 <script>
 /* iswc-auto-rereload v2: backoff — polling client agnóstico del static server

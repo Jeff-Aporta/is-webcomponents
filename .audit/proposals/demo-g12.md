@@ -63,7 +63,7 @@
 9. **Persistencia del último icono seleccionado en `localStorage`** — [media/browser-storage]
    - Setup: demo con selector de icono.
    - Acción: elegir un icono, recargar la página (F5).
-   - Assertion: el icono elegido se restaura al montar el componente; la key usada es namespaced (`is-webcomponents:demo-icon:lastName`); `localStorage` falla (cuota) → fallback a valor por defecto sin romper la UI.
+   - Assertion: el icono elegido se restaura al montar el componente; la key usada es namespaced (`iswc-root:demo-icon:lastName`); `localStorage` falla (cuota) → fallback a valor por defecto sin romper la UI.
    - Cobertura: storage quota, namespace collisions.
 
 10. **Carga de icono personalizado vía URL absoluta (sanitización)** — [media/file-loading]
@@ -133,7 +133,7 @@
 7. **Vista de iconos favoritos persistida en `localStorage`** — [media/browser-storage]
    - Setup: marcar 3 iconos como favoritos (estrella).
    - Acción: recargar la página.
-   - Assertion: los favoritos se restauran en el orden en que se marcaron; la key `is-webcomponents:icon-explorer:favorites` contiene un JSON array; si la key está corrupta, se ignora y se loguea warning.
+   - Assertion: los favoritos se restauran en el orden en que se marcaron; la key `iswc-root:icon-explorer:favorites` contiene un JSON array; si la key está corrupta, se ignora y se loguea warning.
    - Cobertura: persistencia, JSON malformado.
 
 8. **Búsqueda sin red (offline) usando Cache API** — [media/browser-storage]
@@ -321,7 +321,7 @@
 9. **Almacenamiento de la posición de reproducción en `localStorage`** — [media/browser-storage]
    - Setup: reproducir 60 s de un video de 5 minutos.
    - Acción: cerrar la pestaña; reabrir minutos después.
-   - Assertion: al cargar, el video reanuda en el timestamp guardado (con un margen de ±2 s); un toast ofrece "Resume from 01:00"; la key es `is-webcomponents:video:resume:<src>`; si el video ya terminó, no se restaura.
+   - Assertion: al cargar, el video reanuda en el timestamp guardado (con un margen de ±2 s); un toast ofrece "Resume from 01:00"; la key es `iswc-root:video:resume:<src>`; si el video ya terminó, no se restaura.
    - Cobertura: resume UX, storage key.
 
 10. **Picture-in-Picture + Multi-tab (warning de audio)** — [interaction/audio]
@@ -421,7 +421,7 @@
 11. **Volumen y mute persistentes** — [interaction/audio]
     - Setup: subir volumen al 80 %, recargar.
     - Acción: recargar la página.
-    - Assertion: el volumen se restaura (con mute si estaba muteado); la key es `is-webcomponents:video-playlist:volume`; los cambios se persisten al cambiar, no en cada frame.
+    - Assertion: el volumen se restaura (con mute si estaba muteado); la key es `iswc-root:video-playlist:volume`; los cambios se persisten al cambiar, no en cada frame.
     - Cobertura: volume persistence.
 
 12. **Cola de "Up next" con preview flotante** — [interaction/peek]

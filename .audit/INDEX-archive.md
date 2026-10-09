@@ -10,23 +10,23 @@ Skills que viven dentro del repo (`src/skills/`, `skills/`) y se sirven por CDN/
 
 ### Skills de producto (kit, fuente de verdad)
 
-- [`is-webcomponents`](../skills/is-webcomponents/SKILL.md) — skill raíz: arquitectura, reglas de reuso, bootstrap CDN, catálogo de tags.
+- [`iswc-root`](../skills/iswc-root/SKILL.md) — skill raíz: arquitectura, reglas de reuso, bootstrap CDN, catálogo de tags.
 - [`is-cdn-install`](../skills/is-cdn-install/SKILL.md) — bootstrap, espejos, pin SHA, fallback.
 - [`document-component`](../src/skills/document-component/SKILL.md) — cómo escribir la ficha `.md` de un componente (anatomía, custom states).
 - [`build-component`](../src/skills/build-component/SKILL.md) — checklist de qué tener en cuenta al crear un `iswc-*` nuevo.
 
 ### Tools de la skill raíz
 
-- [`build`](../skills/is-webcomponents/tools/build.md) — fundar o extender una app con `iswc-*` por CDN o local.
-- [`migrate`](../skills/is-webcomponents/tools/migrate.md) — convertir un frontend con framework a vanilla + `iswc-*`.
-- [`local`](../skills/is-webcomponents/tools/local.md) — vendorizar el kit y bootear local-first, con CDN como fallback.
-- [`runtime`](../skills/is-webcomponents/tools/runtime.md) — APIs sin tag: loader, IswcUi, md-lite/hydrate/fences, response-cache, sync-pins.
+- [`build`](../skills/iswc-root/tools/build.md) — fundar o extender una app con `iswc-*` por CDN o local.
+- [`migrate`](../skills/iswc-root/tools/migrate.md) — convertir un frontend con framework a vanilla + `iswc-*`.
+- [`local`](../skills/iswc-root/tools/local.md) — vendorizar el kit y bootear local-first, con CDN como fallback.
+- [`runtime`](../skills/iswc-root/tools/runtime.md) — APIs sin tag: loader, IswcUi, md-lite/hydrate/fences, response-cache, sync-pins.
 
 ### Referencias
 
-- [`catalog.md`](../skills/is-webcomponents/catalog.md) — inventario completo de tags + APIs.
-- [`reference.md`](../skills/is-webcomponents/reference.md) — mapa intención → componente.
-- [`PROMPT.md`](../skills/is-webcomponents/PROMPT.md) — prompt LLM listo para copiar.
+- [`catalog.md`](../skills/iswc-root/catalog.md) — inventario completo de tags + APIs.
+- [`reference.md`](../skills/iswc-root/reference.md) — mapa intención → componente.
+- [`PROMPT.md`](../skills/iswc-root/PROMPT.md) — prompt LLM listo para copiar.
 - [`document-component/references/anatomy-section.md`](../src/skills/document-component/references/anatomy-section.md) — plantilla de la sección "Anatomía".
 - [`document-component/references/custom-states.md`](../src/skills/document-component/references/custom-states.md) — guía de estados custom del host.
 

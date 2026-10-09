@@ -39,7 +39,7 @@ import { join } from 'node:path';
 
 const REPO = process.cwd();
 const BASE = (() => {
-  if (process.argv.includes('--remote')) return 'https://jeff-aporta.github.io/is-webcomponents';
+  if (process.argv.includes('--remote')) return 'https://jeff-aporta.github.io/iswc-root';
   if (process.argv.includes('--local')) return 'http://127.0.0.1:8491';
   const eq = process.argv.find((a) => a.startsWith('--base='));
   return eq ? eq.slice(7) : 'http://127.0.0.1:8491';

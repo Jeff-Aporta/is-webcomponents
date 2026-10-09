@@ -4,7 +4,7 @@ import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const BASE = 'http://localhost:8491';
-const ROOT = 'C:/ContaPyme/Personal/apps/is-webcomponents/demos/forms';
+const ROOT = 'C:/ContaPyme/Personal/apps/iswc-root/demos/forms';
 
 const forms = readdirSync(ROOT).filter((n) => {
   const full = join(ROOT, n);

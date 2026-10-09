@@ -6,7 +6,7 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
 /**
  * <iswc-prefs-clear> — borra la memoria persistente de los is-* (localStorage).
  *
- * Limpia `is-webcomponents` (y el legacy `is-components`): tamaños de
+ * Limpia `iswc-root` (y el legacy `is-components`): tamaños de
  * iswc-split-panel, scroll remember, snapshots de grid, etc. Sirve para auditar
  * la carga inicial “limpia” de layouts sin arrastrar prefs viejas.
  *
@@ -49,7 +49,7 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
     connectedCallback(): void {
       this.#syncAttrs();
       if (!this.hasAttribute('title')) {
-        this.#btn.title = 'Borra splits, scrolls y demás prefs de is-webcomponents';
+        this.#btn.title = 'Borra splits, scrolls y demás prefs de iswc-root';
       }
     }
 
@@ -104,7 +104,7 @@ import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs
       if (this.confirm) {
         const ok = window.confirm(
           tags.length
-            ? `¿Borrar memoria UI de is-webcomponents?\n\nTags: ${tags.join(', ')}`
+            ? `¿Borrar memoria UI de iswc-root?\n\nTags: ${tags.join(', ')}`
             : 'No hay prefs guardadas. ¿Recargar igual?',
         );
         if (!ok) return null;

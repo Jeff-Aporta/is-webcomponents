@@ -3,7 +3,7 @@
 Generado por capitán-led fallback (scripts/captain-proposals.mjs) tras sub-agente fallido.
 
 ## Perfil del proyecto
-is-webcomponents (vanilla TS webcomponents, Shadow DOM, GitHub Pages, Playwright).
+iswc-root (vanilla TS webcomponents, Shadow DOM, GitHub Pages, Playwright).
 
 ## Categorías aplicadas por demo
 - Interacción (5 props)

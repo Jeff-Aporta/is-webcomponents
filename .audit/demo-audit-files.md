@@ -183,4 +183,4 @@ Bundles compilados, listos para usarse. Pero no hay HTML que los importe.
 
 **Status:** COMPLETED (audit).  
 **Findings:** 0 demos auditados (la categoría `files` no tiene demos HTML); 8 componentes con fuente + docs + JSON + bundle compilado + bundle minificado en `dist/cdn/files/`; 0 demos rotos (porque no hay); 0 incoherencias demo↔doc (idem); **1 gap mayor** (toda la categoría `files` carece de demos standalone — el único lugar donde el usuario puede probar estos componentes es la gallery-app que consume los JSON de preview).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-files.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-files.md`.

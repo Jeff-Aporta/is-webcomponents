@@ -1,4 +1,4 @@
-// server.ts: servidor estatico para los tests E2E de is-webcomponents (sin
+// server.ts: servidor estatico para los tests E2E de iswc-root (sin
 // dependencias propias; usa esbuild del repo, que ya es devDep).
 // A diferencia de un servidor estatico simple, la galeria importa MODULOS TS
 // en crudo (src/previews/registry.ts, src/cdn/collect-iswc-tags.ts) y los

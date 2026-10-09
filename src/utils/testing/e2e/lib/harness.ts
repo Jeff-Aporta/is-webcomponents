@@ -1,5 +1,5 @@
 // harness.ts: arranque y utilidades compartidas de los tests E2E de
-// is-webcomponents con Stagehand. Port del esquema de
+// iswc-root con Stagehand. Port del esquema de
 // PatyIA/app/src/utils/health/e2e/lib/harness.ts adaptado a la galeria:
 // sin login ni ISS — el "estado" es el tag del componente (deep link ?s=).
 // TODO el codigo esta fuertemente tipado (tsc strict).

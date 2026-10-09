@@ -1,6 +1,6 @@
 # Phase L — Audit: sections that explain INTERNAL tokens
 
-**Scope:** All `.html` files under `Personal\apps\is-webcomponents\demos\` (168 files).
+**Scope:** All `.html` files under `Personal\apps\iswc-root\demos\` (168 files).
 **Token pattern:** `--iswc-color-*`, `--iswc-button-*`, `--iswc-*` — CSS custom properties the components use internally.
 **Public API (NOT flagged):** `color="brand"`, `color="success"`, `variant="..."`, `size="..."`, `track-height="..."`, etc.
 **Page-level kit tokens (NOT flagged per user guidance):** `--iswc-bg`, `--iswc-fg`, `--iswc-border`, `--iswc-radius`, `--iswc-accent`, `--iswc-text-soft` — declared on `:root` / `html, body` / `.card` / `.trigger-btn` to make the demo's own chrome follow the kit palette.

@@ -17,7 +17,7 @@ import {
   fallbackBases,
 } from '../components/_shared/cdn-ref.js';
 
-const GH_REPO = 'Jeff-Aporta/is-webcomponents';
+const GH_REPO = 'Jeff-Aporta/iswc-root';
 const RAW = (ref: string = 'main') => `https://raw.githubusercontent.com/${GH_REPO}/${ref}`;
 
 export const baseFor = (ref: string) => jsdelivrBase(ref);

@@ -68,7 +68,7 @@ test('copy-button: from="snippet" copia el texto del elemento referenciado', asy
   });
   await page.waitForTimeout(150);
   const clip = await page.evaluate(() => navigator.clipboard.readText());
-  assert.match(clip, /require\('is-webcomponents'\)/);
+  assert.match(clip, /require\('iswc-root'\)/);
   await ctx.close();
 });
 

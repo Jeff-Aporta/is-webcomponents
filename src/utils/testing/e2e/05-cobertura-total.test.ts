@@ -1,5 +1,5 @@
 // 05-cobertura-total.test.ts — cobertura full de TODOS los componentes del
-// demo preview de is-webcomponents con evidencia visual.
+// demo preview de iswc-root con evidencia visual.
 //
 // Para cada tag del catalog (incluidos los pages especiales: home, theming,
 // ecosystem, phase7, icon-explorer) se:
@@ -287,7 +287,7 @@ testE2E(
     }
 
     const lineas: string[] = [];
-    lineas.push(`# Currstate · is-webcomponents · ${fecha}`);
+    lineas.push(`# Currstate · iswc-root · ${fecha}`);
     lineas.push('');
     lineas.push(
       `> Generado por \`05-cobertura-total.test.ts\` (Playwright directo, batches de ${BATCH_SIZE}). ` +

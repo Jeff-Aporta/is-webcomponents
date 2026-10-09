@@ -142,7 +142,7 @@ for (const f of findings) {
 
 // Compose markdown report.
 const lines = [];
-lines.push('# Phase J1 — Audit secciones de docs en is-webcomponents');
+lines.push('# Phase J1 — Audit secciones de docs en iswc-root');
 lines.push('');
 lines.push('> Generado por `.audit/audit-sections.mjs`. Cada fila es un `.md`');
 lines.push('> en `src/components/**/*.md`. Las columnas muestran si la sección');

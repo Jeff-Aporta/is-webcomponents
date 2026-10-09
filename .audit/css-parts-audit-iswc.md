@@ -1,4 +1,4 @@
-﻿# Audit CSS Parts — is-webcomponents
+﻿# Audit CSS Parts — iswc-root
 
 - **Generated:** 2026-10-03
 - **Scope:** every `.ts` component in `src/components/**` that exposes at least one `::part()` and has a sibling `<comp>.md`.

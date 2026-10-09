@@ -18,7 +18,7 @@ function push() {
   for (let i = 0; i < arguments.length; i++) lines.push(arguments[i]);
 }
 
-push('# Audit CSS Parts — is-webcomponents', '');
+push('# Audit CSS Parts — iswc-root', '');
 push('- **Generated:** ' + today);
 push('- **Scope:** every `.ts` component in `src/components/**` that exposes at least one `::part()` and has a sibling `<comp>.md`.');
 push('- **Detection:** `part="…"` literals, `setAttribute("part", "…")`, and `exportparts="internal:external"` aliases. CSS Parts sections in the `.md` files are parsed from the Markdown table immediately under the `### CSS parts` heading.');

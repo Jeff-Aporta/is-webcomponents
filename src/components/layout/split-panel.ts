@@ -24,7 +24,7 @@ import { clampTo } from '../_shared/misc-utils.js';
  *   disabled            boolean  (reflect)
  *   snap                string  (espacio-sep "100px 50%")
  *   snap-threshold      number  (default 12)  — px ventana de snap
- *   storage-key         string  — id único; persiste tamaño en localStorage (`is-webcomponents`)
+ *   storage-key         string  — id único; persiste tamaño en localStorage (`iswc-root`)
  *
  * Slots
  *   start     contenido del panel inicial
@@ -179,7 +179,7 @@ import { clampTo } from '../_shared/misc-utils.js';
       this._syncDividerAria();
     }
 
-    /** Id único para persistir en localStorage (`is-webcomponents`). Vacío = no persiste. */
+    /** Id único para persistir en localStorage (`iswc-root`). Vacío = no persiste. */
     get storageKey(): string {
       return (this.getAttribute('storage-key') ?? '').trim();
     }

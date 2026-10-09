@@ -3,7 +3,7 @@
 Cómo hacer que un componente del kit sea accesible: semántica,
 teclado, foco, ARIA, focus management, contraste. Esta guía aplica a
 todo `iswc-*` y se complementa con
-[`AGENTS.md §6.7`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/AGENTS.md)
+[`AGENTS.md §6.7`](https://github.com/Jeff-Aporta/iswc-root/blob/main/AGENTS.md)
 (reglas duras) y la sección "Accesibilidad" del `.md` del componente.
 
 ## 1. Semántica primero
@@ -219,7 +219,7 @@ Reglas:
    - Devuelve el foco a `#lastFocus`.
    - Quita `inert` / `aria-hidden` del documento.
 
-El kit tiene [`ModalBase`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/_shared/modal-base.ts)
+El kit tiene [`ModalBase`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/_shared/modal-base.ts)
 que ya gestiona todo esto. **Úsalo** en vez de reimplementar.
 
 ```ts

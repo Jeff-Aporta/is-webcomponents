@@ -68,7 +68,7 @@ import {
  * (sin storage-key, o target suelto sin contexto de preview) es no-op.
  *
  *   * Persiste: en cada `#setActive`, debounced ~200 ms, bajo
- *     `is-webcomponents['iswc-scrollspy'][storageKey] = { activeId, savedAt }`.
+ *     `iswc-root['iswc-scrollspy'][storageKey] = { activeId, savedAt }`.
  *   * Restaura: tras el mount, en `requestAnimationFrame × 2`, hace scroll al
  *     elemento `#${activeId}` dentro del target. Usa `behavior: 'auto'` para
  *     respetar `prefers-reduced-motion` (sin animación).

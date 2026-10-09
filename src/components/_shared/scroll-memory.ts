@@ -2,7 +2,7 @@
  * ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable.
  *
  * Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.
- * Prefs: localStorage['is-webcomponents'][tag][storage-key] = { top, savedAt }.
+ * Prefs: localStorage['iswc-root'][tag][storage-key] = { top, savedAt }.
  *
  * restorePolicy:
  *   - 'reload'  → solo F5 / atrás (iswc-main / galería)

@@ -16,7 +16,7 @@ fences de cÃ³digo y fences `iswc-*` (diagramas). Conserva HTML crudo (`<iswc-*
 
 ```js
 import { mdToHtml } from
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/helpers/md-lite.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@SHA/dist/cdn/helpers/md-lite.min.js';
 
 const html = mdToHtml('# Hola\n\n```iswc-flowchart\n{"nodes":[]}\n```');
 ```

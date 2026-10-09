@@ -9,7 +9,7 @@ import {
 } from '../../../components/diagrams/diagram-studio.ts';
 
 test('el parámetro json sobrevive acentos y no reescribe la dirección de origen', () => {
-  const abierta = 'https://jeff-aporta.github.io/is-webcomponents/demos/diagramas/app/edit.html?kind=er&json=VIEJO';
+  const abierta = 'https://jeff-aporta.github.io/iswc-root/demos/diagramas/app/edit.html?kind=er&json=VIEJO';
   const doc = { title: 'Facturación', note: 'sí' };
   const enlace = buildShareUrl(abierta, 'flowchart', doc);
   assert.equal(abierta.includes('json=VIEJO'), true);

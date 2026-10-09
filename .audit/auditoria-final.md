@@ -51,7 +51,7 @@
 
 ### ✅ `phase7` — phase7 `()`
 
-- **Ruta JSON**: `C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json`
+- **Ruta JSON**: `C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json`
 - **Métricas**:
   - `secciones`: 6
   - `bloques`: 6
@@ -59,11 +59,11 @@
   - `controles`: 0
 
 - 🔵 📝 **json-contenido** — Demo con 9 tags distintos: iswc-button, iswc-icon, iswc-dialog, iswc-input, iswc-select, iswc-option, iswc-textarea, iswc-switch…. Considerá partirlo en varios bloques.
-  - 📄 `C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json`
+  - 📄 `C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json`
 - 🔵 📝 **json-contenido** — Demo con 11 tags distintos: iswc-card, iswc-badge, iswc-dropdown, iswc-button, iswc-icon, iswc-dropdown-item, iswc-tag, iswc-tab-group…. Considerá partirlo en varios bloques.
-  - 📄 `C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json`
+  - 📄 `C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json`
 - 🔵 📝 **json-contenido** — Demo con 11 tags distintos: iswc-button, iswc-icon, iswc-split-panel, iswc-tree, iswc-tree-item, iswc-drawer, iswc-tab-group, iswc-tab…. Considerá partirlo en varios bloques.
-  - 📄 `C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json`
+  - 📄 `C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json`
 
 ## Cobertura por categoría
 

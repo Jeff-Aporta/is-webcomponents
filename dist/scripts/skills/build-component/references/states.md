@@ -34,7 +34,7 @@ class IswcButton extends ElementBase {
 
 Un custom state se activa cuando la condición booleana se cumple. El
 patrón recomendado usa el helper
-[`setCustomState`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/_shared/form-associated.ts)
+[`setCustomState`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/_shared/form-associated.ts)
 de `_shared/form-associated.ts`:
 
 ```ts

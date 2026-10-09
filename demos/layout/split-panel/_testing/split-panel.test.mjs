@@ -11,9 +11,9 @@ const URL = `${BASE_URL}/demos/layout/split-panel/split-panel.html`;
 async function clearPrefs(page) {
   await page.evaluate(() => {
     try {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       if (root['iswc-split-panel']?.['demo-sp-3']) delete root['iswc-split-panel']['demo-sp-3'];
-      localStorage.setItem('is-webcomponents', JSON.stringify(root));
+      localStorage.setItem('iswc-root', JSON.stringify(root));
     } catch {}
   });
 }
@@ -283,7 +283,7 @@ tests.push({
     });
     await page.waitForTimeout(200);
     const ls = await page.evaluate(() => {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       return root['iswc-split-panel']?.['demo-sp-3'] ?? null;
     });
     assert.ok(ls, 'sp3 debe haber escrito prefs en localStorage tras drag');
@@ -314,7 +314,7 @@ tests.push({
     });
     await page.waitForTimeout(300);
     const savedPx = await page.evaluate(() => {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       return root['iswc-split-panel']?.['demo-sp-3']?.positionInPixels ?? null;
     });
     assert.ok(savedPx !== null && savedPx > 300, `positionInPixels guardado debe ser > 300, fue ${savedPx}`);

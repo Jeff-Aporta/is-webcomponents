@@ -61,9 +61,9 @@ src/components/diagrams/gantt.ts(195,7): error TS2322: Type 'DiagramTheme' is no
 src/components/diagrams/mindmap-spec.ts(215,26): error TS2345: Argument of type 'MindmapNode[]' is not assignable to parameter of type 'readonly RawNode[]'.
   Type 'MindmapNode' is not assignable to type 'RawNode'.
     Index signature for type 'string' is missing in type 'MindmapNode'.
-src/components/diagrams/mindmap-spec.ts(225,18): error TS2345: Argument of type 'TreeNode' is not assignable to parameter of type 'import("C:/ContaPyme/Personal/apps/WT/is-webcomponents-wt-root-types-strong-2026/src/components/_shared/tree-layout").TreeNode'.
+src/components/diagrams/mindmap-spec.ts(225,18): error TS2345: Argument of type 'TreeNode' is not assignable to parameter of type 'import("C:/ContaPyme/Personal/apps/WT/iswc-root-wt-root-types-strong-2026/src/components/_shared/tree-layout").TreeNode'.
   Index signature for type 'string' is missing in type 'TreeNode'.
-src/components/diagrams/mindmap-spec.ts(229,24): error TS2345: Argument of type 'TreeNode' is not assignable to parameter of type 'import("C:/ContaPyme/Personal/apps/WT/is-webcomponents-wt-root-types-strong-2026/src/components/_shared/tree-layout").TreeNode'.
+src/components/diagrams/mindmap-spec.ts(229,24): error TS2345: Argument of type 'TreeNode' is not assignable to parameter of type 'import("C:/ContaPyme/Personal/apps/WT/iswc-root-wt-root-types-strong-2026/src/components/_shared/tree-layout").TreeNode'.
   Index signature for type 'string' is missing in type 'TreeNode'.
 src/components/diagrams/mindmap.ts(193,36): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -140,7 +140,7 @@ src/components/isp/_shared/tree-view/adapter.ts(42,29): error TS7006: Parameter 
 src/components/isp/_shared/tree-view/adapter.ts(71,33): error TS7006: Parameter 'ctx' implicitly has an 'any' type.
 src/components/isp/_shared/tree-view/customs-base.ts(6,18): error TS7006: Parameter 'tree' implicitly has an 'any' type.
 src/components/isp/_shared/tree-view/customs-base.ts(9,26): error TS2339: Property 'levelName' does not exist on type 'TreeCustomsBase'.
-src/components/isp/catalogo-gen.ts(547,44): error TS2345: Argument of type 'import("C:/ContaPyme/Personal/apps/WT/is-webcomponents-wt-root-types-strong-2026/src/components/isp/controller-from-config").IspController' is not assignable to parameter of type 'import("C:/ContaPyme/Personal/apps/WT/is-webcomponents-wt-root-types-strong-2026/src/components/_shared/isp-record-utils").IspController'.
+src/components/isp/catalogo-gen.ts(547,44): error TS2345: Argument of type 'import("C:/ContaPyme/Personal/apps/WT/iswc-root-wt-root-types-strong-2026/src/components/isp/controller-from-config").IspController' is not assignable to parameter of type 'import("C:/ContaPyme/Personal/apps/WT/iswc-root-wt-root-types-strong-2026/src/components/_shared/isp-record-utils").IspController'.
   Types of property 'columns' are incompatible.
     Type 'IspColumnDef[]' is not assignable to type 'FlatGridColumn[]'.
       Type 'IspColumnDef' is missing the following properties from type 'FlatGridColumn': align, hide, sortable, filter, type

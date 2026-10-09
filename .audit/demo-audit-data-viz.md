@@ -171,4 +171,4 @@ Es una **advertencia legítima** sobre seguridad (XSS via `innerHTML` con texto 
 
 **Status:** COMPLETED (audit).  
 **Findings:** 2 demos auditados (`heatmap`, `maps`); 0 con playground interactivo; 2/2 con cobertura de props plena (2 secciones cada uno); 0/2 con tokens `--iswc-*` para chrome; 0 demos rotos; 0 incoherencias demo↔doc; 1 observación estructural (la confusión de "data-viz" — categoría lógica charts vs carpeta física data-viz — debe documentarse mejor); 1 observación de seguridad (XSS via `cfg.attribution` en `maps.html`); 1 dependencia externa (OSM iframe requiere internet).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-data-viz.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-data-viz.md`.

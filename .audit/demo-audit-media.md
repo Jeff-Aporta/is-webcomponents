@@ -188,4 +188,4 @@ La categoría `media` tiene **~12 componentes** pero solo **5 demos**. Los 7 sin
 
 **Status:** COMPLETED (audit).  
 **Findings:** 5 demos auditados (2 leídos en detalle: `avatar`, `icon`); 0 con playground interactivo; 2/5 con cobertura de props plena; 0/5 con tokens `--iswc-*` para chrome; 0 demos rotos; 0 incoherencias demo↔doc; **1 gap mayor** (7 componentes sin demo pese a tener fuente + bundle, incluyendo el crítico `icon-explorer`); 1 inconsistencia menor (carpetas en mayúsculas).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-media.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-media.md`.

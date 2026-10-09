@@ -109,8 +109,8 @@ function patchFile(kind, file) {
     );
   } else if (kind === 'cdn_url') {
     text = text.replace(
-      /(is-webcomponents@)[0-9a-fA-F]{7,40}/gi,
-      `$1${SHA}`,
+      /(?:iswc-root|is-webcomponents)@[0-9a-fA-F]{7,40}/gi,
+      `iswc-root@${SHA}`,
     );
   } else {
     console.error('modo desconocido:', kind);

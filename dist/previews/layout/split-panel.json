@@ -51,7 +51,7 @@
           "kind": "callout",
           "html": [
             "<strong>Persistencia:</strong> con <code class=\"code\">storage-key=\"mi-panel\"</code> el tamaño se guarda en",
-            "          <code class=\"code\">localStorage['is-webcomponents']</code> como JSON compartido por todos los WC:",
+            "          <code class=\"code\">localStorage['iswc-root']</code> como JSON compartido por todos los WC:",
             "          <code class=\"code\">{ \"iswc-split-panel\": { \"mi-panel\": { \"positionInPixels\": 240 } } }</code>.",
             "          Sin <code class=\"code\">storage-key</code> no escribe nada."
           ]
@@ -324,7 +324,7 @@
             ],
             [
               "<code>storageKey</code>",
-              "Id único; persiste tamaño en <code>localStorage['is-webcomponents']</code>."
+              "Id único; persiste tamaño en <code>localStorage['iswc-root']</code>."
             ]
           ]
         },
@@ -505,7 +505,7 @@
             ],
             [
               "<code>storage-key</code>",
-              "Id único. Persiste en <code>localStorage.is-webcomponents</code> (JSON por componente)."
+              "Id único. Persiste en <code>localStorage.iswc-root</code> (JSON por componente)."
             ]
           ]
         },
@@ -673,7 +673,7 @@
             "name": "<code>storage-key</code>",
             "type": "string",
             "default": "—",
-            "desc": "Id único. Persiste en <code>localStorage.is-webcomponents</code> (JSON por componente)."
+            "desc": "Id único. Persiste en <code>localStorage.iswc-root</code> (JSON por componente)."
           },
           {
             "name": "<code>--divider-width</code>",

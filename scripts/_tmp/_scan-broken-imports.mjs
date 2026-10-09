@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const root = 'c:/ContaPyme/Personal/apps/is-webcomponents';
+const root = 'c:/ContaPyme/Personal/apps/iswc-root';
 const bad = [];
 
 function walk(d) {

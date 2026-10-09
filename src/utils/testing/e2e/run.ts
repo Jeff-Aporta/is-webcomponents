@@ -1,4 +1,4 @@
-// run.ts: runner de la suite E2E de is-webcomponents. Levanta un servidor
+// run.ts: runner de la suite E2E de iswc-root. Levanta un servidor
 // estatico con la galeria (transpilando TS al vuelo, igual que serve.mjs) al
 // empezar, corre `deno test` sobre los *.test.ts y apaga el servidor al
 // terminar (pase o falle). Para apuntar a un host externo:

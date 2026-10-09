@@ -8,11 +8,11 @@ import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const BASE = (() => {
-  if (process.argv.includes('--remote')) return 'https://jeff-aporta.github.io/is-webcomponents';
+  if (process.argv.includes('--remote')) return 'https://jeff-aporta.github.io/iswc-root';
   if (process.argv.includes('--local')) return 'http://127.0.0.1:8491';
   const eq = process.argv.find(a => a.startsWith('--base='));
   if (eq) return eq.slice(7);
-  return 'https://jeff-aporta.github.io/is-webcomponents';
+  return 'https://jeff-aporta.github.io/iswc-root';
 })();
 const TAG_LIST_LIMIT = Number(process.env.TOUR_LIMIT ?? 64);
 

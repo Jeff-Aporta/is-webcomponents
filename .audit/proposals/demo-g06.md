@@ -1,7 +1,7 @@
 # F0.3 — Propuestas UX/UI exhaustivas · diagrams
 
 > Categoría: **diagrams** · 4 demos · ≥12 propuestas por demo · foco: zoom, pan, select, drag, export, animation, large graph.
-> Proyecto: is-webcomponents (Web Components vanilla TS, Shadow DOM, tokens `--is-*`).
+> Proyecto: iswc-root (Web Components vanilla TS, Shadow DOM, tokens `--is-*`).
 
 ---
 

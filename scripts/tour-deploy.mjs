@@ -45,7 +45,7 @@ if (!BASE && !MODE) {
   console.error('Uso: deno run -A --no-check scripts/tour-deploy.mjs --local|--remote|--base=<URL>');
   process.exit(2);
 }
-const effectiveBase = BASE ?? (MODE === 'local' ? 'http://127.0.0.1:8491' : 'https://jeff-aporta.github.io/is-webcomponents');
+const effectiveBase = BASE ?? (MODE === 'local' ? 'http://127.0.0.1:8491' : 'https://jeff-aporta.github.io/iswc-root');
 
 console.log(`\n=== TOUR DEPLOY · ${MODE ?? 'custom'} · ${effectiveBase} ===\n`);
 
@@ -71,7 +71,7 @@ const CRITICAL_PATHS = [
   'dist/cdn/palettes.min.css',
   ...SCRIPTS_BUNDLES.map(s => `dist/scripts/${s}.min.js`),
   ...PAGES_BUNDLES.flatMap(p => [`dist/pages/${p}.min.js`, `dist/pages/${p}.json`]),
-  'dist/cdn/skills/is-webcomponents/PROMPT.md',
+  'dist/cdn/skills/iswc-root/PROMPT.md',
 ];
 
 // ── 1. HEAD check ─────────────────────────────────────────────────────

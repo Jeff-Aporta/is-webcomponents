@@ -31,7 +31,7 @@ apagado garantizado), `E2E_HEADLESS` (visible por defecto en terminal),
 ## Cómo correr
 
 ```bash
-cd Personal/apps/is-webcomponents
+cd Personal/apps/iswc-root
 deno task test:e2e                 # autoservidor E2E_PORT (0=libre) + apagado garantizado
 E2E_HEADLESS=false deno task test:e2e   # Chrome visible (default en terminal)
 E2E_TAGS=iswc-button,iswc-code deno test -A --no-check src/utils/health/e2e/04-controles.test.ts

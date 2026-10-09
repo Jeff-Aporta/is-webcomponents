@@ -10,8 +10,8 @@ Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redunda
 | Planificador | `src/cdn/load-plan.ts` |
 | Este doc | `src/cdn/loader.md` |
 | Publicado | `dist/cdn/core/loader.min.js` · `dist/cdn/core/loader.md` |
-| Raw | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/cdn/loader.md` |
-| CDN | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js` |
+| Raw | `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/cdn/loader.md` |
+| CDN | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js` |
 
 Skill de instalación: [`skills/is-cdn-install/SKILL.md`](../../skills/is-cdn-install/SKILL.md).
 
@@ -19,7 +19,7 @@ Skill de instalación: [`skills/is-cdn-install/SKILL.md`](../../skills/is-cdn-in
 
 ```js
 import { ISWebComponentsLoader as L } from
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@REF/dist/cdn/core/loader.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@REF/dist/cdn/core/loader.min.js';
 
 // Sin configure: el loader ya trae quemado el SHA de ESTE build (o el de @REF
 // si la URL venía pinneada). load() pide componentes a jsDelivr@eseSha.
@@ -51,7 +51,7 @@ Para **otro** commit, otro espejo o bust de caché:
 L.configure({ sha: 'abcdef0123456789…' });
 
 // Host absoluto (githack, vendor, etc.) — manda sobre sha
-const KIT = 'https://raw.githack.com/Jeff-Aporta/is-webcomponents/main/dist/cdn';
+const KIT = 'https://raw.githack.com/Jeff-Aporta/iswc-root/main/dist/cdn';
 L.configure({
   host: KIT,
   preferSelf: false,
@@ -176,7 +176,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
 ```html
 <!-- CDN / otra app -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents/dist/cdn/preview/doc-demo-host.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root/dist/cdn/preview/doc-demo-host.min.js"></script>
 <script type="module" src="./app.min.js"></script>
 <body>
   <iswc-doc-demo brand="MiApp" sheets-cache="mi-app-sheets"></iswc-doc-demo>

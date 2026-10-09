@@ -7,7 +7,7 @@
  *
  * Attrs
  *   remember-scroll   boolean — activa persistencia (default: off)
- *   storage-key       string  — id único bajo is-webcomponents.iswc-main
+ *   storage-key       string  — id único bajo iswc-root.iswc-main
  *   scroll-ttl        number  — ms de validez (default: 3600000 = 1h)
  *
  * Methods: scrollToTop(), clearRememberedScroll(), saveScroll(), restoreScroll()

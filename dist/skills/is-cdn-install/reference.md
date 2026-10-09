@@ -3,15 +3,15 @@
 ## Orígenes oficiales
 
 ```
-jsDelivr  https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<ref>/dist/cdn
-Pages     https://jeff-aporta.github.io/is-webcomponents/dist/cdn
+jsDelivr  https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@<ref>/dist/cdn
+Pages     https://jeff-aporta.github.io/iswc-root/dist/cdn
 ```
 
 Fuente de verdad en código: `src/components/_shared/cdn-ref.js` (`MIRRORS`, `resolveRef`, `fallbackBases`).
 
 ## Resolución de `<ref>`
 
-1. Preferir SHA de `main` (`GET https://api.github.com/repos/Jeff-Aporta/is-webcomponents/commits/main` → header `Accept: application/vnd.github.sha`).
+1. Preferir SHA de `main` (`GET https://api.github.com/repos/Jeff-Aporta/iswc-root/commits/main` → header `Accept: application/vnd.github.sha`).
 2. Cachear el SHA en `sessionStorage` (`iswc-wc:cdn-ref`) por sesión.
 3. Si la API falla → `@main`.
 4. Pages **ignora** el pin: siempre tip desplegado.
@@ -37,8 +37,8 @@ Tras `deno task build`, `skills/**` se copia a `dist/cdn/skills/**`.
 Instalar en Cursor / agentes desde el repo:
 
 ```bash
-npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
-npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
+npx skills add Jeff-Aporta/iswc-root -s is-cdn-install
+npx skills add Jeff-Aporta/iswc-root -s iswc-root
 ```
 
 O leer directo el `SKILL.md` por raw/CDN (URLs en el SKILL).

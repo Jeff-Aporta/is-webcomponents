@@ -16,7 +16,7 @@ Resuelve fences Markdown ` ```iswc-<nombre> ` â†’ tag de diagrama `iswc-*`
 
 ```js
 import { resolveIswcFenceTag, escapeJsonForScript } from
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/helpers/md-iswc-fences.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@SHA/dist/cdn/helpers/md-iswc-fences.min.js';
 
 resolveIswcFenceTag('iswc-flowchart'); // 'iswc-flowchart'
 resolveIswcFenceTag('iswc-er');        // 'iswc-er-diagram'

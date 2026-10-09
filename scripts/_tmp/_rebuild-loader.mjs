@@ -12,8 +12,8 @@ const dist = join(root, 'dist', 'cdn');
 const coreDist = join(dist, 'core');
 const compRoot = join(root, 'src', 'components');
 
-const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
-const KIT_SKILL = `${GH_RAW}/skills/is-webcomponents/SKILL.md`;
+const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main';
+const KIT_SKILL = `${GH_RAW}/skills/iswc-root/SKILL.md`;
 const CDN_SKILL = `${GH_RAW}/skills/is-cdn-install/SKILL.md`;
 const CDN_COMP_INDEX = `${GH_RAW}/specs/componentes.md`;
 const CDN_LOADER_MD = `${GH_RAW}/src/cdn/loader.md`;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Editor de código · &lt;iswc-code&gt; · is-webcomponents</title>
+<title>Editor de código · &lt;iswc-code&gt; · iswc-root</title>
 <meta name="description" content="Editor de código nativo (sin CodeMirror) con highlighting, line numbers, marks, format, code2json/json2code, modo readonly/editable, dark/light." />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -51,7 +51,7 @@
   // Cargar el bundle pre-construido. Esto hace funcionar el demo con cualquier
   // servidor estático (incluido VS Code Live Server), no solo con el dev
   // server que transpila TS. La promesa resuelve cuando iswc-code está definido.
-  await import('../../../dist/cdn/code/code.min.js?h=a61d8w');
+  await import('../../../dist/cdn/code/code.min.js?h=1abuho');
   await customElements.whenDefined('iswc-code');
 
   const samples = {
@@ -61,7 +61,7 @@
       '  return `Hello, ${name}!`;',
       '}',
       '',
-      'console.log(greet("is-webcomponents"));',
+      'console.log(greet("iswc-root"));',
     ].join('\n'),
     css: [
       '/* estilos del propio editor */',
@@ -156,7 +156,7 @@
     ].join('\n'),
     json: [
       '{',
-      '  "name": "is-webcomponents",',
+      '  "name": "iswc-root",',
       '  "version": "1.0.0",',
       '  "kind": "code-editor"',
       '}',

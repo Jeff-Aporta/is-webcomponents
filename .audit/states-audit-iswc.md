@@ -1,4 +1,4 @@
-# Auditoría de `:state()` custom states — is-webcomponents (Phase G1)
+# Auditoría de `:state()` custom states — iswc-root (Phase G1)
 
 > **Fecha:** 2026 (sesión de auditoría).
 > **Alcance:** `src/components/**/*.ts` — todos los componentes que declaran
@@ -415,6 +415,6 @@ solo llaman `defineDateField({...})`.
 - [x] NO `Co-authored-by` (no commits).
 - [x] NO `git push`.
 
-**Reporte generado:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\states-audit-iswc.md`
+**Reporte generado:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\states-audit-iswc.md`
 **Componentes auditados:** 22 (17 con setCustomState real + 2 con JSDoc ficticio + 3 wrappers de factory)
 **Issues encontrados:** 7

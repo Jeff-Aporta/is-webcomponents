@@ -574,7 +574,7 @@
                   [1-397736] StaticText: storage-key="mi-panel"
                 [1-397737] StaticText: el tamaño se guarda en
                 [1-397701] code
-                  [1-397738] StaticText: localStorage['is-webcomponents']
+                  [1-397738] StaticText: localStorage['iswc-root']
                 [1-397739] StaticText: como JSON compartido por todos los WC:
                 [1-397702] code
                   [1-397740] StaticText: { "is-split-panel": { "mi-panel": { "positionInPixels": 240 } } }
@@ -896,10 +896,10 @@
                       [1-398295] code
                         [1-398369] StaticText: storageKey
                     [1-398297] cell: string
-                    [1-398299] cell: Id único; persiste tamaño en localStorage['is-webcomponents'].
+                    [1-398299] cell: Id único; persiste tamaño en localStorage['iswc-root'].
                       [1-398371] StaticText: Id único; persiste tamaño en
                       [1-398298] code
-                        [1-398372] StaticText: localStorage['is-webcomponents']
+                        [1-398372] StaticText: localStorage['iswc-root']
                       [1-398373] StaticText: .
               [1-398305] heading: DEMO EN VIVO
               [1-398322] div
@@ -1094,10 +1094,10 @@
                         [1-398913] StaticText: storage-key
                     [1-398614] cell: string
                     [1-398615] cell: —
-                    [1-398617] cell: Id único. Persiste en localStorage.is-webcomponents (JSON por componente).
+                    [1-398617] cell: Id único. Persiste en localStorage.iswc-root (JSON por componente).
                       [1-398916] StaticText: Id único. Persiste en
                       [1-398616] code
-                        [1-398917] StaticText: localStorage.is-webcomponents
+                        [1-398917] StaticText: localStorage.iswc-root
                       [1-398918] StaticText: (JSON por componente).
               [1-398623] heading: Slots
               [1-398642] table

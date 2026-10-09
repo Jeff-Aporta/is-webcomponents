@@ -1,9 +1,9 @@
-# Audit: Anti-pattern "Internal CSS Variables Set From Props" — `is-webcomponents`
+# Audit: Anti-pattern "Internal CSS Variables Set From Props" — `iswc-root`
 
 - **Phase:** I1 (zod migration, audit only)
 - **Scope:** every component in `src/components/**/*.ts` (excluding `*.preview.ts` preview helpers and `*.*.selfcheck.ts` self-tests)
 - **Brief reference:** `.superpowers/sdd/2026-10-03-zod-migration/phase-i-1-brief.md`
-- **Working directory:** `C:\ContaPyme\Personal\apps\is-webcomponents`
+- **Working directory:** `C:\ContaPyme\Personal\apps\iswc-root`
 
 ---
 
@@ -56,7 +56,7 @@ el host (o un descendiente) desde el valor de una prop suya.
 ## 4. Casos explícitos `style.setProperty('--iswc-…')` desde props
 
 > Cada fila es un `(componente, prop, línea, var-set, fuente del valor)`.
-> Las rutas son relativas a `C:\ContaPyme\Personal\apps\is-webcomponents\`.
+> Las rutas son relativas a `C:\ContaPyme\Personal\apps\iswc-root\`.
 
 | # | Componente | Archivo:Línea | Prop / origen | Variable seteada | Anti-pattern |
 |---|-----------|---------------|--------------|------------------|--------------|
@@ -329,4 +329,4 @@ Para mantener el scope honesto, se confirma que los siguientes patrones
   vs. documentar como excepción del brief).
 - **Recomendación #2:** unificar duplicados `styleAttrs` +
   `setProperty` en los 4–5 componentes que tienen ambos.
-- **Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\anti-pattern-internal-vars.md`
+- **Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\anti-pattern-internal-vars.md`

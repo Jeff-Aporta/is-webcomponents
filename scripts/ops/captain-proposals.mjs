@@ -58,7 +58,7 @@ const TEMPLATE = {
 
 let md = `# F0.3 propuesta UX/UI exhaustiva — ${g.label}\n\n`;
 md += `Generado por capitán-led fallback (scripts/captain-proposals.mjs) tras sub-agente fallido.\n\n`;
-md += `## Perfil del proyecto\nis-webcomponents (vanilla TS webcomponents, Shadow DOM, GitHub Pages, Playwright).\n\n`;
+md += `## Perfil del proyecto\niswc-root (vanilla TS webcomponents, Shadow DOM, GitHub Pages, Playwright).\n\n`;
 md += `## Categorías aplicadas por demo\n- Interacción (5 props)\n- Teclado (5 props)\n- ARIA / a11y (4 props)\n- Estados visuales / edge cases (7 props)\n\nTotal: ≥21 propuestas por demo.\n\n---\n\n`;
 
 for (const demo of g.demos) {

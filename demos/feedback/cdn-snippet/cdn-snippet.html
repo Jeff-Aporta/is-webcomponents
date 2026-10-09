@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo <iswc-cdn-snippet> · is-webcomponents</title>
+<title>Demo <iswc-cdn-snippet> · iswc-root</title>
 <meta name="description" content="Demo de <iswc-cdn-snippet>: panel de copy-paste con loader.min.js, deps y prompt LLM." />
 <style>
   html, body { margin: 0; padding: 0; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -13,7 +13,7 @@
   iswc-cdn-snippet:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/cdn-snippet.min.js?h=teh5q8');
+  await import('../../../dist/cdn/feedback/cdn-snippet.min.js?h=bgvdkw');
 
   await customElements.whenDefined('iswc-cdn-snippet');
   document.documentElement.dataset.cdnSnippetReady = '1';
@@ -33,8 +33,8 @@
 >
   <script type="application/json" slot="deps">
     [
-      { "name": "iswc-code",   "version": "^1", "js": "https://cdn.jsdelivr.net/npm/@insoft/is-webcomponents@main/dist/cdn/code/code.min.js" },
-      { "name": "iswc-button", "version": "^1", "js": "https://cdn.jsdelivr.net/npm/@insoft/is-webcomponents@main/dist/cdn/actions/button.min.js" }
+      { "name": "iswc-code",   "version": "^1", "js": "https://cdn.jsdelivr.net/npm/@insoft/iswc-root@main/dist/cdn/code/code.min.js" },
+      { "name": "iswc-button", "version": "^1", "js": "https://cdn.jsdelivr.net/npm/@insoft/iswc-root@main/dist/cdn/actions/button.min.js" }
     ]
   </script>
 </iswc-cdn-snippet>

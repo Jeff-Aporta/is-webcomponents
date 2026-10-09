@@ -9,7 +9,7 @@ const URL = `${BASE_URL}/demos/layout/main/main.html`;
 
 async function clearStorage(page) {
   await page.evaluate(() => {
-    try { localStorage.removeItem('is-webcomponents'); } catch {}
+    try { localStorage.removeItem('iswc-root'); } catch {}
   });
 }
 
@@ -53,7 +53,7 @@ tests.push({
     assert.equal(m1.key, '');
     // Tras hacer scroll + recargar, NO debe haber persistencia.
     await page.waitForTimeout(300);
-    const ls = await page.evaluate(() => localStorage.getItem('is-webcomponents'));
+    const ls = await page.evaluate(() => localStorage.getItem('iswc-root'));
     assert.equal(ls, null, 'sin remember-scroll + storage-key no debe escribir en localStorage');
   },
 });
@@ -69,7 +69,7 @@ tests.push({
     await page.evaluate(() => { document.getElementById('m2').scrollTop = 300; });
     await page.waitForTimeout(500);
     const lsAfterScroll = await page.evaluate(() => {
-      const raw = localStorage.getItem('is-webcomponents');
+      const raw = localStorage.getItem('iswc-root');
       return raw ? JSON.parse(raw)['iswc-main']?.['demo-main-2'] : null;
     });
     assert.ok(lsAfterScroll, 'm2 debe haber escrito en localStorage tras scroll');
@@ -94,10 +94,10 @@ tests.push({
     await waitReady(page, 'data-main-ready');
     // Sobreescribir manualmente con savedAt muy viejo (más allá del TTL).
     await page.evaluate(() => {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       root['iswc-main'] = root['iswc-main'] || {};
       root['iswc-main']['demo-main-3'] = { top: 500, savedAt: Date.now() - 120000 }; // 120s > TTL=60s
-      localStorage.setItem('is-webcomponents', JSON.stringify(root));
+      localStorage.setItem('iswc-root', JSON.stringify(root));
     });
     await page.reload({ waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-main-ready');
@@ -135,7 +135,7 @@ tests.push({
     await page.click('#btn-save');
     await page.waitForTimeout(100);
     const ls = await page.evaluate(() => {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       return root['iswc-main']?.['demo-main-interactive'] ?? null;
     });
     assert.ok(ls, 'saveScroll() debe escribir prefs');
@@ -157,7 +157,7 @@ tests.push({
     await page.click('#btn-clear');
     await page.waitForTimeout(100);
     const ls = await page.evaluate(() => {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       return root['iswc-main']?.['demo-main-interactive'] ?? null;
     });
     assert.ok(ls, 'clearRememberedScroll() debe dejar la entrada (con top=0)');
@@ -197,7 +197,7 @@ tests.push({
     await page.evaluate(() => { document.getElementById('m2').scrollTop = 200; });
     await page.waitForTimeout(500);
     const before = await page.evaluate(() => {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       return root['iswc-main']?.['demo-main-2'] ?? null;
     });
     assert.ok(before, `debe haber prefs antes del cambio de key, fue ${JSON.stringify(before)}`);
@@ -205,7 +205,7 @@ tests.push({
     await page.evaluate(() => { document.getElementById('m2').storageKey = 'demo-main-2-new'; });
     await page.waitForTimeout(100);
     const after = await page.evaluate(() => {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       return {
         oldKey: root['iswc-main']?.['demo-main-2'] ?? null,
         newKey: root['iswc-main']?.['demo-main-2-new'] ?? null,

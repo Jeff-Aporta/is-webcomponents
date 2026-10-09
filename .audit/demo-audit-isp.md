@@ -220,4 +220,4 @@ No encontré imports rotos.
 
 **Status:** COMPLETED (audit).  
 **Findings:** 17 demos auditados (4 leídos en detalle: `block-layout`, `form`, `loading-overlay`, `tree-view`); 0 con playground interactivo (algunos tienen botones que invocan API: `loading-overlay` con 4 botones); 4/4 con cobertura de props plena; 0/17 con tokens `--iswc-*` para chrome; 0 demos rotos; 0 incoherencias demo↔doc; `tree-view.html` es el demo más complejo del repo (13 imports transitivos).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-isp.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-isp.md`.

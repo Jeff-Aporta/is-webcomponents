@@ -3,7 +3,7 @@
 // Por qué este test existe:
 //
 //   W54/W55/W56 — el usuario reportó que al abrir
-//   `http://127.0.0.1:5505/apps/is-webcomponents/index.html` la página se
+//   `http://127.0.0.1:5505/apps/iswc-root/index.html` la página se
 //   quedaba en blanco. El network tab mostraba:
 //
 //     - loader.min.js                          304 (14 ms)
@@ -38,7 +38,7 @@
 //
 //   Si quieres reproducir el bug original, lanza VS Code Live Server
 //   sobre `C:\ContaPyme\Personal` apuntando a
-//   `apps/is-webcomponents/index.html` y corre este test — el request a
+//   `apps/iswc-root/index.html` y corre este test — el request a
 //   `dist/cdn/preview/doc-demo.min.js` quedará 404 (Live Server no
 //   transpila TS) y el test fallará con un mensaje claro.
 
@@ -84,7 +84,7 @@ async function startDevServer() {
       // que la página responde antes de reusarlo.
       try {
         const r = await fetch(
-          `http://127.0.0.1:${port}/apps/is-webcomponents/index.html`,
+          `http://127.0.0.1:${port}/apps/iswc-root/index.html`,
           { signal: AbortSignal.timeout(2000) },
         );
         if (r.ok) return { proc: null, port };
@@ -212,7 +212,7 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
   // El bug original era la página *colgándose* 3+ minutos. `waitForSelector`
   // con timeout corto detecta el hang de inmediato en lugar de consumir
   // minutos del runner.
-  const url = `http://127.0.0.1:${serverPort}/apps/is-webcomponents/index.html`;
+  const url = `http://127.0.0.1:${serverPort}/apps/iswc-root/index.html`;
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
   const ready = await page.waitForSelector(
     'iswc-doc-demo[data-ready="1"]',

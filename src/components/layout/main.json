@@ -31,7 +31,7 @@
       "title": "Remember scroll",
       "lede": [
         "Guarda <code class=\"code\">top</code> + <code class=\"code\">savedAt</code> en",
-        "          <code class=\"code\">localStorage → is-webcomponents.iswc-main[key]</code>.",
+        "          <code class=\"code\">localStorage → iswc-root.iswc-main[key]</code>.",
         "          Si pasan más de <code class=\"code\">scroll-ttl</code> ms (default 1h), se ignora."
       ],
       "blocks": [

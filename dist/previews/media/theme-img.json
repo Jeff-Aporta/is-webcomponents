@@ -16,8 +16,8 @@
           "html": [
             "<div class=\"demo-row\" style=\"align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:3rem\">",
             "            <iswc-theme-img",
-            "              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"",
-            "              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/docs/favicon.svg\"",
+            "              src-dark=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/docs/favicon.svg\"",
+            "              src-light=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/docs/favicon.svg\"",
             "              alt=\"Demo\"",
             "              shape=\"circle\"",
             "            ></iswc-theme-img>",

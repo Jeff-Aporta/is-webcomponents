@@ -6,7 +6,7 @@
 
 ## TL;DR
 
-Antes del push → corre `deno task prepush` (levanta `serve.mjs` local + ejecuta `tour-deploy.mjs --local`). Después del push → `deno task postpush` (corre `tour-deploy.mjs --remote` contra `jeff-aporta.github.io/is-webcomponents`).
+Antes del push → corre `deno task prepush` (levanta `serve.mjs` local + ejecuta `tour-deploy.mjs --local`). Después del push → `deno task postpush` (corre `tour-deploy.mjs --remote` contra `jeff-aporta.github.io/iswc-root`).
 
 Si el tour rojo (cualquier 404), NO hacer push hasta corregir.
 
@@ -23,7 +23,7 @@ const CRITICAL_PATHS = [
   'dist/gallery-app.min.js',
   ...SCRIPTS_BUNDLES.map(s => `dist/scripts/${s}.min.js`),
   ...PAGES_BUNDLES.flatMap(p => [`dist/pages/${p}.min.js`, `dist/pages/${p}.json`]),
-  'dist/cdn/skills/is-webcomponents/PROMPT.md',
+  'dist/cdn/skills/iswc-root/PROMPT.md',
 ];
 ```
 
@@ -59,7 +59,7 @@ Captura console errors con playwright/stagehand. Para añadir:
 | Comando | Cuándo | Qué hace |
 |---|---|---|
 | `deno task prepush` (alias de `tour:local`) | Antes de `git push origin main` | Levanta `serve.mjs` local (puerto 8491) → ejecuta tour HEAD + catalog walk |
-| `deno task postpush` (alias de `tour:remote`) | Después de `git push origin main` (esperar ~90s para cache GH Pages) | Ejecuta tour contra `jeff-aporta.github.io/is-webcomponents` |
+| `deno task postpush` (alias de `tour:remote`) | Después de `git push origin main` (esperar ~90s para cache GH Pages) | Ejecuta tour contra `jeff-aporta.github.io/iswc-root` |
 | `deno task bundle` | Antes de cualquier push | Regenera `dist/scripts/`, `dist/pages/`, `dist/previews/`, `dist/cdn/skills/` |
 | `deno task test:all` | Antes de cualquier push | typecheck + tests + audit |
 

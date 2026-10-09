@@ -6,7 +6,7 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 ## C-1 Un solo repo
 
-- Repo: `Jeff-Aporta/is-webcomponents`. Galería + CDN + fuentes en el mismo árbol.
+- Repo: `Jeff-Aporta/iswc-root`. Galería + CDN + fuentes en el mismo árbol.
 - Commits: solo si el usuario lo pide. Autor **Jeff-Aporta**. Sin `Co-authored-by`.
 - Push: solo con pedido explícito.
 

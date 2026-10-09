@@ -2,7 +2,7 @@
 
 Ciclo de vida de un componente del kit: hooks, shadow, upgrade de
 propiedades, form-associated y cleanup. La clase base es
-[`ElementBase`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/element-base.ts),
+[`ElementBase`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/core/element-base.ts),
 que centraliza el patrón repetido en ~150 componentes del repo.
 
 ## 1. Hooks de `ElementBase`
@@ -91,7 +91,7 @@ combobox, date-picker, etc.). Pasos:
 
 1. Marcar la clase con `static formAssociated = true;`.
 2. En el constructor, llamar a `attachFormInternals(this)` desde
-   [`_shared/form-associated.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/_shared/form-associated.ts).
+   [`_shared/form-associated.ts`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/_shared/form-associated.ts).
 3. Implementar `formResetCallback()` para restaurar valores iniciales
    (capturar en el constructor con un `Map`).
 4. Implementar `formDisabledCallback(disabled)` para reflejar el estado

@@ -2,7 +2,7 @@
 # Formato: <modo><TAB><ruta relativa al repo del kit>
 # modos:
 #   kit_pin  — export const KIT_PIN = '…'
-#   cdn_url  — …/is-webcomponents@<sha>/…
+#   cdn_url  — …/iswc-root@<sha>/…
 # Líneas # y vacías se ignoran. Si el archivo no existe, se salta.
 #
 # WT-2026-10-07 (Jeff): el kit YA NO escribe pines en los consumidores. Cada consumidor

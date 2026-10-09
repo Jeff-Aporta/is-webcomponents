@@ -194,4 +194,4 @@ No encontré imports rotos.
 
 **Status:** COMPLETED (audit).  
 **Findings:** 3 demos auditados (1 leído en detalle: `command-palette`); 0 con playground interactivo (con matices: `command-palette` tiene botón + atajo); 1/3 con cobertura de props plena; **1/3 con tokens `--iswc-*` parciales** (`command-palette` es el único del repo auditado con `--iswc-border`/`--iswc-radius`/`--iswc-accent`/`--iswc-text-soft`); 0 demos rotos; 0 incoherencias demo↔doc; 1 observación menor (carpetas en mayúsculas, inconsistente con el resto del repo); 1 dependencia externa (PDF en `pdf-viewer.html`).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-overlays.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-overlays.md`.

@@ -3032,7 +3032,7 @@ ok 503 - 3. JSON existe, declara el tag y respeta el esquema is-preview/v1
 #   'second',         'time-zone',
 #   'time-zone-name', 'hour-format',
 #   'locale'
-# ] TS= C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\src\\components\\helpers\\format-date.ts has date? true
+# ] TS= C:\\ContaPyme\\Personal\\apps\\iswc-root\\src\\components\\helpers\\format-date.ts has date? true
 # Subtest: 4. static observedAttributes incluye TODOS los atributos documentados en JSDoc
 ok 504 - 4. static observedAttributes incluye TODOS los atributos documentados en JSDoc
   ---

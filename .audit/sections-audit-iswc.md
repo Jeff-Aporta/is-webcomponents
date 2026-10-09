@@ -1,4 +1,4 @@
-# Phase J1 — Audit secciones de docs en is-webcomponents
+# Phase J1 — Audit secciones de docs en iswc-root
 
 > Generado por `.audit/audit-sections.mjs`. Cada fila es un `.md`
 > en `src/components/**/*.md`. Las columnas muestran si la sección

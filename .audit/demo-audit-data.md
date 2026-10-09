@@ -253,4 +253,4 @@ No encontré imports rotos.
 
 **Status:** COMPLETED (audit).  
 **Findings:** 7 demos auditados; 0 con playground interactivo; 5/7 con cobertura de props plena (los más ricos son `ag-grid`, `data-grid`, `kanban`, `stat`, `transfer`); 2/7 con tokens `--iswc-*` parciales (`--iswc-grid-height` en grids); 0 demos rotos; 0 incoherencias demo↔doc; 1 gap notable (`iswc-gauge` no tiene demo pese a tener fuente y bundle).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-data.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-data.md`.

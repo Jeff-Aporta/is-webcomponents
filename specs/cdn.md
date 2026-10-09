@@ -28,7 +28,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 
 ## S-C4 Publicación
 
-- Pages: `jeff-aporta.github.io/is-webcomponents/`
+- Pages: `jeff-aporta.github.io/iswc-root/`
 - jsDelivr: `@main` (pin por SHA puede fallar >50 MB por iconos en dist).
 - `robots.txt` en raíz. Sin `sitemap.xml` ni HTML SEO en `docs/`: la galería es
   una SPA de una sola URL y esas 178 páginas no se alcanzaban (31-ago-2026).
@@ -66,7 +66,7 @@ Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **
 </script>
 ```
 
-Skills: `npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install` · `-s is-webcomponents`.
+Skills: `npx skills add Jeff-Aporta/iswc-root -s is-cdn-install` · `-s iswc-root`.
 
 ### Qué hacer
 

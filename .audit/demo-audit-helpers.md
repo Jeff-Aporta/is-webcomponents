@@ -250,4 +250,4 @@ La categoría `helpers` tiene **~16 componentes** pero solo **5 demos**. Los 11 
 
 **Status:** COMPLETED (audit).  
 **Findings:** 5 demos auditados; 0 con playground interactivo; 3/5 con cobertura de props plena (`format`, `format-bytes`, `md-render`); 0/5 con tokens `--iswc-*` para chrome; 0 demos rotos; 0 incoherencias demo↔doc; 1 gap notable (11 componentes de `helpers` sin demo pese a tener fuente + bundle + JSON).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-helpers.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-helpers.md`.

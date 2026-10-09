@@ -692,7 +692,7 @@ export class IswcAgGrid extends ElementBase {
     try { return JSON.parse(String(raw)); } catch { return null; }
   }
 
-  /** Snapshot completo bajo `localStorage['is-webcomponents']['iswc-ag-grid'][key]`.
+  /** Snapshot completo bajo `localStorage['iswc-root']['iswc-ag-grid'][key]`.
    *  Se reemplaza entero (no merge): un merge dejaría columnas o filtros que
    *  ya no existen en el estado nuevo. */
   #persistState(): void {

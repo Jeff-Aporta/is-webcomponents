@@ -9,7 +9,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Borra <code>localStorage['is-webcomponents']</code> (splits, scrolls, grids) para auditar la carga inicial limpia.",
+      "lede": "Borra <code>localStorage['iswc-root']</code> (splits, scrolls, grids) para auditar la carga inicial limpia.",
       "blocks": [
         {
           "kind": "demo",
@@ -31,7 +31,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Borra <code>localStorage['is-webcomponents']</code> (splits, scrolls, grids) para auditar la carga inicial limpia."
+        "content": "Borra <code>localStorage['iswc-root']</code> (splits, scrolls, grids) para auditar la carga inicial limpia."
       },
       "ejemplos": {
         "content": [

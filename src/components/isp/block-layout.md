@@ -104,7 +104,7 @@ para el `overflow: auto`.
 | `inline` | boolean | `display: inline-block`. |
 | `cscroll` | boolean | `overflow: auto`. |
 | `remember-scroll` | boolean | Opt-in memoria de scroll (requiere `storage-key`). |
-| `storage-key` | string | Clave bajo `is-webcomponents[iswc-block-layout]`. |
+| `storage-key` | string | Clave bajo `iswc-root[iswc-block-layout]`. |
 | `scroll-ttl` | number | ms de validez (default 1h). |
 
 #### Atributos reflejados (salida)

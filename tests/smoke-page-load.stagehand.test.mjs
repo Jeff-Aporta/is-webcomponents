@@ -2,7 +2,7 @@
 // cargar sin errores de red y registrar `<iswc-doc-demo>`.
 //
 // Por qué este test existe: en W54/W55/W56 hubo reportes de "carga eterna"
-// en `http://127.0.0.1:5505/apps/is-webcomponents/index.html`. El network
+// en `http://127.0.0.1:5505/apps/iswc-root/index.html`. El network
 // tab mostraba `doc-demo.min.js?h=...` fallando con `net::ERR_*` y el
 // custom element nunca se registraba → la página quedaba en blanco.
 //
@@ -24,7 +24,7 @@ import { setTimeout as sleep } from 'node:timers/promises';
 import { chromium } from 'playwright';
 
 const SERVE_ROOT = process.env.SERVE_ROOT || 'C:\\ContaPyme\\Personal';
-const REPO = 'C:\\ContaPyme\\Personal\\apps\\is-webcomponents';
+const REPO = 'C:\\ContaPyme\\Personal\\apps\\iswc-root';
 
 // Arranca `serve.mjs` en un puerto libre. Devuelve {proc, port} o lanza.
 async function startDevServer() {
@@ -86,7 +86,7 @@ test.after(async () => {
 });
 
 test('smoke: la página home carga sin errores de red', async () => {
-  const url = `http://127.0.0.1:${server.port}/apps/is-webcomponents/index.html`;
+  const url = `http://127.0.0.1:${server.port}/apps/iswc-root/index.html`;
   const page = await browser.newPage();
   const failed = [];
   const errors = [];
@@ -130,7 +130,7 @@ test('smoke: la página home carga sin errores de red', async () => {
 });
 
 test('smoke: doc-demo.min.js existe y es servible', async () => {
-  const url = `http://127.0.0.1:${server.port}/apps/is-webcomponents/dist/cdn/preview/doc-demo.min.js`;
+  const url = `http://127.0.0.1:${server.port}/apps/iswc-root/dist/cdn/preview/doc-demo.min.js`;
   const resp = await fetch(url);
   assert.ok(resp.ok, `doc-demo.min.js no responde: ${resp.status}`);
   const text = await resp.text();

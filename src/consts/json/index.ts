@@ -1,7 +1,7 @@
 // src/consts/json/index.ts
 //
 // Punto de entrada para JSONs compartidos (config, listas, catálogos).
-// Vacío por ahora: is-webcomponents no tiene JSONs compartidos identificados.
+// Vacío por ahora: iswc-root no tiene JSONs compartidos identificados.
 // Cuando aparezca uno, importarlo aquí con `export { default as nombre } from './foo.json'`.
 //
 // Patrón espejo: PatyIA/api/src/consts/json/*.json se re-exportan desde

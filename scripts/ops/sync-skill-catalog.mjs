@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 
 const root = join(import.meta.dirname, '..');
 const comp = join(root, 'src', 'components');
-const gh = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components';
+const gh = 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components';
 
 const faltantes = [
   ['actions/speed-dial-action.md', 'iswc-speed-dial-action', 'actions', 'Acción hija de `<iswc-speed-dial>`. No se usa sola: vive dentro del speed dial y dispara su comando.'],
@@ -298,7 +298,7 @@ const API_MODULES = [
   {
     id: 'ISWebComponentsLoader',
     cdn: 'core/loader.min.js',
-    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/cdn/loader.md',
+    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/cdn/loader.md',
     resumen: 'Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado.',
   },
   {
@@ -340,7 +340,7 @@ const API_MODULES = [
   {
     id: 'sync-pins',
     cdn: 'scripts/sync-pins.mjs (repo)',
-    guia: 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main/scripts/sync-pins.mjs',
+    guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/scripts/sync-pins.mjs',
     resumen: 'Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins).',
   },
 ];
@@ -359,7 +359,7 @@ for (const m of API_MODULES) {
 }
 apisLineas.push('');
 
-const skillPath = join(root, 'src', 'skills', 'is-webcomponents', 'SKILL.md');
+const skillPath = join(root, 'src', 'skills', 'iswc-root', 'SKILL.md');
 let skill = readFileSync(skillPath, 'utf8');
 if (!/<!-- apis:inicio -->/.test(skill)) {
   skill = skill.replace(
@@ -379,7 +379,7 @@ writeFileSync(skillPath, skill, 'utf8');
 console.log('catalogo', orden.length, 'tags;', API_MODULES.length, 'apis');
 
 // catalog.md — inventario completo (tags + APIs) para agentes
-const catPath = join(root, 'src', 'skills', 'is-webcomponents', 'catalog.md');
+const catPath = join(root, 'src', 'skills', 'iswc-root', 'catalog.md');
 const catOut = [
   '# Catálogo iswc-* (inventario completo)',
   '',

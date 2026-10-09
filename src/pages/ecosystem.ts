@@ -17,7 +17,7 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
   const getStarted = root.querySelector<HTMLElement>('#ecoGetStarted');
   if (getStarted) {
     const snip = `<script type="module">
-  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';
+  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';
 
   // Pin a un commit (inmutable) o unpin() / sin pin → tip de main
   // ISWebComponentsLoader.pin('abcdef0123456789…');

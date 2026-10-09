@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const root = 'c:/ContaPyme/Personal/apps/is-webcomponents/src';
+const root = 'c:/ContaPyme/Personal/apps/iswc-root/src';
 const hits = [];
 const pat = /is-\$\{|<is-[a-z0-9]|<\/is-[a-z0-9]|defineElement\(['"]is-|tag: 'is-|startsWith\(['"]is-['"]\)|matchAll\(\/<is-/g;
 

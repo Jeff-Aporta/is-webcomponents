@@ -15,7 +15,7 @@ marcadores `.md-iswc-code` por `<iswc-code>` (inline = `brand-mono`, bloque = th
 
 ```js
 import { hydrateMdEmbeds, ensureNeededTags, upgradeCodeMarkers, collectNeededTags } from
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/helpers/md-hydrate.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@SHA/dist/cdn/helpers/md-hydrate.min.js';
 
 await hydrateMdEmbeds(host); // ensure + upgrade
 ```

@@ -13,7 +13,7 @@ preview: ./prefs-clear.json
 ## PropÃ³sito
 
 Borra la memoria persistente de los componentes del kit
-(`localStorage['is-webcomponents']`: splits, scrolls, gridsâ€¦).
+(`localStorage['iswc-root']`: splits, scrolls, gridsâ€¦).
 Ãštil para auditar la carga inicial sin prefs viejas que deformen el layout.
 
 Este mÃ³dulo registra `<iswc-prefs-clear>`.

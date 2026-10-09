@@ -15,13 +15,13 @@ description: >-
 - **No** `npm install` / `npx` / `yarn` / `pnpm` / `bun` / bundler (`vite`, `webpack`, —) del kit (no hay canal npm; no hace falta build step para consumirlo).
 - **Un solo origen** por página: no mezclar jsDelivr + Pages en el mismo documento (rompe imports relativos).
 - En el `<head>` solo van **tema + paletas + JS**. El CSS de cada `is-*` lo carga el propio componente.
-- Si la app no puede depender de red en runtime: usar copia **local** en vez de CDN puro — ver [`/is-webcomponents:local`](../is-webcomponents/tools/local.md) en la skill del kit.
+- Si la app no puede depender de red en runtime: usar copia **local** en vez de CDN puro — ver [`/iswc-root:local`](../iswc-root/tools/local.md) en la skill del kit.
 
 ## Prompt LLM y herramientas
 
-Prompt completo listo para copiar: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/PROMPT.md).
-Herramientas tipo slash del kit: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/is-webcomponents/tools) —
-en particular [`/is-webcomponents:local`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/tools/local.md) para vendorizar el kit y bootear local-first.
+Prompt completo listo para copiar: [`../iswc-root/PROMPT.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/skills/iswc-root/PROMPT.md).
+Herramientas tipo slash del kit: [`../iswc-root/tools/`](https://github.com/Jeff-Aporta/iswc-root/tree/main/skills/iswc-root/tools) —
+en particular [`/iswc-root:local`](https://github.com/Jeff-Aporta/iswc-root/blob/main/skills/iswc-root/tools/local.md) para vendorizar el kit y bootear local-first.
 
 ## Skill publicada (léela primero)
 
@@ -29,19 +29,19 @@ Los agentes instalan/siguen mejor skills desde URLs de **repo de GitHub**. Usa r
 
 | Canal | URL |
 | --- | --- |
-| GitHub (preferido) | `https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-cdn-install/SKILL.md` |
-| Raw (texto plano) | `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/is-cdn-install/SKILL.md` |
-| CDN jsDelivr | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md` |
-| Pages | `https://jeff-aporta.github.io/is-webcomponents/dist/cdn/skills/is-cdn-install/SKILL.md` |
+| GitHub (preferido) | `https://github.com/Jeff-Aporta/iswc-root/blob/main/skills/is-cdn-install/SKILL.md` |
+| Raw (texto plano) | `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/skills/is-cdn-install/SKILL.md` |
+| CDN jsDelivr | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/skills/is-cdn-install/SKILL.md` |
+| Pages | `https://jeff-aporta.github.io/iswc-root/dist/cdn/skills/is-cdn-install/SKILL.md` |
 
-Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`is-webcomponents/SKILL.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/SKILL.md) (misma carpeta en `dist/cdn/skills/`).
+Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`iswc-root/SKILL.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/skills/iswc-root/SKILL.md) (misma carpeta en `dist/cdn/skills/`).
 
 ## Espejos
 
 | id | Base | Pin SHA |
 | --- | --- | --- |
-| `jsdelivr` (primario) | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<ref>/dist/cdn` | Sí (`@sha` o `@main`) |
-| `pages` (reserva) | `https://jeff-aporta.github.io/is-webcomponents/dist/cdn` | No (tip desplegado) |
+| `jsdelivr` (primario) | `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@<ref>/dist/cdn` | Sí (`@sha` o `@main`) |
+| `pages` (reserva) | `https://jeff-aporta.github.io/iswc-root/dist/cdn` | No (tip desplegado) |
 
 `<ref>` preferido: **commit SHA** de `main`. `@main` solo si la app declara seguimiento continuo.
 
@@ -51,7 +51,7 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`is-
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
   <script type="module"
-    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js"></script>
+    src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js"></script>
   <script type="module">
     const L = globalThis.ISWebComponentsLoader;
     await L.loadCSSBase();
@@ -89,8 +89,8 @@ Plantilla (misma idea que el tab **Mirrors** de `<iswc-cdn-snippet>`):
 ```html
 <script type="module">
 const MIRRORS = [
-  "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn",
-  "https://jeff-aporta.github.io/is-webcomponents/dist/cdn",
+  "https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn",
+  "https://jeff-aporta.github.io/iswc-root/dist/cdn",
 ];
 async function boot(files) {
   for (const base of MIRRORS) {
@@ -131,7 +131,7 @@ Al instalar en otra app, **copia los mismos URLs** que muestra el panel (no inve
 2. Categoría: `specs/componentes.md`
 3. Módulo: `src/components/<carpeta>/<modulo>.md`
 
-Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/`
+Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/components/`
 
 No inventar props/eventos que no están en el MD.
 
@@ -142,7 +142,7 @@ No inventar props/eventos que no están en el MD.
 - [ ] `loader.min.js` + `L.loadCSSBase` + `L.loadCSSPalettesDefault` + `L.load(tags…)`
 - [ ] JS: solo los tags de la vista (no `all.min.js`)
 - [ ] `data-theme` + `data-palette` en `<html>`
-- [ ] Pin `@<sha>` (o `@main` justificado, o copia local vía `/is-webcomponents:local`)
+- [ ] Pin `@<sha>` (o `@main` justificado, o copia local vía `/iswc-root:local`)
 - [ ] Skill + MD del módulo leídos antes de componer UI
 
 ## Prohibido
@@ -155,7 +155,7 @@ No inventar props/eventos que no están en el MD.
 
 ## Más detalle
 
-- Prompt LLM completo: [`../is-webcomponents/PROMPT.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/skills/is-webcomponents/PROMPT.md)
-- Herramientas `/is-webcomponents:build|migrate|local|runtime`: [`../is-webcomponents/tools/`](https://github.com/Jeff-Aporta/is-webcomponents/tree/main/skills/is-webcomponents/tools) (runtime = loader, IswcUi, MD, cache)
+- Prompt LLM completo: [`../iswc-root/PROMPT.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/skills/iswc-root/PROMPT.md)
+- Herramientas `/iswc-root:build|migrate|local|runtime`: [`../iswc-root/tools/`](https://github.com/Jeff-Aporta/iswc-root/tree/main/skills/iswc-root/tools) (runtime = loader, IswcUi, MD, cache)
 - Espejos y resolución de ref: [reference.md](reference.md)
-- Skill de reuso de tags: `../is-webcomponents/SKILL.md`
+- Skill de reuso de tags: `../iswc-root/SKILL.md`

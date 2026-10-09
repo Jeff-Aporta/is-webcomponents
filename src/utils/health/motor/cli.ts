@@ -87,7 +87,7 @@ function parseArgs(argv: string[]): Record<string, string | boolean | number> {
 }
 
 function mostrarAyuda(): void {
-  console.log(`iswc-audit v${MOTOR_VERSION} — auditor del kit iswc (is-webcomponents).`);
+  console.log(`iswc-audit v${MOTOR_VERSION} — auditor del kit iswc (iswc-root).`);
   console.log('');
   console.log('Uso:');
   console.log('  deno run -A --no-check src/utils/health/motor/cli.ts [opciones]');

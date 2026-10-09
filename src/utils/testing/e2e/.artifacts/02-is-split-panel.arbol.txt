@@ -580,7 +580,7 @@
                   [1-48312] StaticText: storage-key="mi-panel"
                 [1-48313] StaticText: el tamaño se guarda en
                 [1-48277] code
-                  [1-48314] StaticText: localStorage['is-webcomponents']
+                  [1-48314] StaticText: localStorage['iswc-root']
                 [1-48315] StaticText: como JSON compartido por todos los WC:
                 [1-48278] code
                   [1-48316] StaticText: { "is-split-panel": { "mi-panel": { "positionInPixels": 240 } } }
@@ -914,10 +914,10 @@
                       [1-48871] code
                         [1-49010] StaticText: storageKey
                     [1-48873] cell: string
-                    [1-48875] cell: Id único; persiste tamaño en localStorage['is-webcomponents'].
+                    [1-48875] cell: Id único; persiste tamaño en localStorage['iswc-root'].
                       [1-49012] StaticText: Id único; persiste tamaño en
                       [1-48874] code
-                        [1-49013] StaticText: localStorage['is-webcomponents']
+                        [1-49013] StaticText: localStorage['iswc-root']
                       [1-49014] StaticText: .
               [1-48881] heading: DEMO EN VIVO
               [1-48898] div
@@ -1124,10 +1124,10 @@
                         [1-50185] StaticText: storage-key
                     [1-49260] cell: string
                     [1-49261] cell: —
-                    [1-49263] cell: Id único. Persiste en localStorage.is-webcomponents (JSON por componente).
+                    [1-49263] cell: Id único. Persiste en localStorage.iswc-root (JSON por componente).
                       [1-50188] StaticText: Id único. Persiste en
                       [1-49262] code
-                        [1-50189] StaticText: localStorage.is-webcomponents
+                        [1-50189] StaticText: localStorage.iswc-root
                       [1-50190] StaticText: (JSON por componente).
               [1-49269] heading: Slots
               [1-49288] table

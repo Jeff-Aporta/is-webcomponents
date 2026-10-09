@@ -28,7 +28,7 @@
     "audit:md": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json --salida-md .audit/last.md",
     "audit:tag": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json --solo",
     "audit:category": "deno run -A --no-check src/utils/health/motor/cli.ts --solo-json --categoria",
-    "audit:python": "python -B \"%DSH_HOME%\\profiles\\auditor\\motor\\auditor.py\" audit is-webcomponents --sin-deep --sin-preguntas --sin-documentar",
+    "audit:python": "python -B \"%DSH_HOME%\\profiles\\auditor\\motor\\auditor.py\" audit iswc-root --sin-deep --sin-preguntas --sin-documentar",
     "test:all": "deno task typecheck && deno task test && deno task audit",
     "test:all:e2e": "deno task test:all && deno task test:e2e",
     "test:all:demos": "deno task test:all && deno task test:demos",

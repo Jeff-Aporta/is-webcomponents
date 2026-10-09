@@ -46,9 +46,9 @@ const ICON_BASES: (() => string | null)[] = [
     return new URL('../../../dist/assets/icons/', import.meta.url).href;
   },
   // GitHub Pages del proyecto (sitio publicado).
-  () => 'https://jeff-aporta.github.io/is-webcomponents/dist/assets/icons/',
+  () => 'https://jeff-aporta.github.io/iswc-root/dist/assets/icons/',
   // jsDelivr sobre el repo.
-  () => 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/assets/icons/',
+  () => 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/assets/icons/',
 ];
 
 const LOCAL_INDEX_PATH = (prefix: string): string => `${prefix}.json`;

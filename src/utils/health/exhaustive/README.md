@@ -1,4 +1,4 @@
-﻿# Auditoría exhaustiva de componentes is-webcomponents
+﻿# Auditoría exhaustiva de componentes iswc-root
 
 Este directorio contiene tests exhaustivos (UI + UX + lógica + edge cases) por componente, organizados por categoría.
 

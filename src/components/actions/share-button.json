@@ -14,7 +14,7 @@
       "blocks": [
         {
           "kind": "demo",
-          "html": "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>"
+          "html": "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/iswc-root/\"></iswc-share-button>"
         },
         {
           "kind": "callout",
@@ -31,7 +31,7 @@
       "ejemplos": {
         "content": [
           "```html",
-          "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/is-webcomponents/\"></iswc-share-button>",
+          "<iswc-share-button share-title=\"ISWC\" text=\"Galería is-*\" url=\"https://jeff-aporta.github.io/iswc-root/\"></iswc-share-button>",
           "```"
         ]
       }

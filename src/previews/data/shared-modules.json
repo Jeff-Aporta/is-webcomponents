@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T19:55:02.628Z",
+  "generatedAt": "2026-10-09T12:57:49.725Z",
   "count": 113,
   "modules": [
     {
@@ -31,7 +31,7 @@
       "id": "cdn-ref",
       "path": "src/components/_shared/cdn-ref.ts",
       "summary": "cdn-ref — Orden de fallback al cargar assets:",
-      "bytes": 3549,
+      "bytes": 3535,
       "exports": [
         "GH_REPO",
         "resolveRef",
@@ -843,7 +843,7 @@
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.ts",
       "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component — `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en",
-      "bytes": 7504,
+      "bytes": 7490,
       "exports": [
         "hasIconLocal",
         "iconSourceBase",
@@ -1006,8 +1006,8 @@
       "file": "llm-agent-prompt.ts",
       "id": "llm-agent-prompt",
       "path": "src/components/_shared/llm-agent-prompt.ts",
-      "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `skills/is-webcomponents/PROMPT.md`",
-      "bytes": 3614,
+      "summary": "Prompt canónico para agentes + helpers de ensamblaje. — Fuente de verdad en prosa: `skills/iswc-root/PROMPT.md`",
+      "bytes": 3537,
       "exports": [
         "SKILL_DOCS",
         "LLM_PROMPT_FALLBACK",
@@ -1244,7 +1244,7 @@
       "id": "prefs",
       "path": "src/components/_shared/prefs.ts",
       "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"iswc-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 4467,
+      "bytes": 4629,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -1328,7 +1328,7 @@
       "id": "scroll-memory",
       "path": "src/components/_shared/scroll-memory.ts",
       "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
-      "bytes": 8574,
+      "bytes": 8567,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
         "ScrollMemory \r\n  host",
@@ -1425,7 +1425,7 @@
       "id": "tk-icon-inline",
       "path": "src/components/_shared/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 16889,
+      "bytes": 16882,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",

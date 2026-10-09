@@ -15,7 +15,7 @@ const state = Buffer.from(JSON.stringify({
   component: 'iswc-code',
   cdnTab: 'mirrors',
 })).toString('base64');
-const url = `http://127.0.0.1:5505/apps/is-webcomponents/index.html?s=${state}&_=${Date.now()}`;
+const url = `http://127.0.0.1:5505/apps/iswc-root/index.html?s=${state}&_=${Date.now()}`;
 
 const findings = [];
 const ok = (msg) => findings.push({ ok: true, msg });

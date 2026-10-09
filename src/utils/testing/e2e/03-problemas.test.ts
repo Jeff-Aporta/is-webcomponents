@@ -83,7 +83,7 @@ testE2E('barrido: ninguna vista del catalogo debe producir errores ni peligros',
   assert.deepEqual(
     hallazgos,
     [],
-    `PROBLEMAS DETECTADOS en la galeria is-webcomponents:\n${resumen}`,
+    `PROBLEMAS DETECTADOS en la galeria iswc-root:\n${resumen}`,
   );
 });
 

@@ -1,6 +1,6 @@
 # F0.3 propuesta UX/UI exhaustiva — isp
 
-Librería **is-webcomponents** (Web Components vanilla TypeScript + Shadow DOM). Categoría `isp` agrupa primitives de layout, controles base y overlays. Foco del grupo: layout shifts, focus traps, scroll lock, dismiss mechanisms, deep nested interactions, keyboard nav en árbol, modal ARIA y dispatch de domain events.
+Librería **iswc-root** (Web Components vanilla TypeScript + Shadow DOM). Categoría `isp` agrupa primitives de layout, controles base y overlays. Foco del grupo: layout shifts, focus traps, scroll lock, dismiss mechanisms, deep nested interactions, keyboard nav en árbol, modal ARIA y dispatch de domain events.
 
 Cada demo: ≥12 propuestas. Categorías marcadas entre corchetes: `[Interacción]`, `[Teclado]`, `[ARIA/a11y]`, `[Estado visual / Edge case]`, `[Layout shift]`, `[Focus trap]`, `[Scroll lock]`, `[Domain event]`, `[Dismiss]`, `[Deep nesting]`, `[Reducción motion / prefers-*]`.
 

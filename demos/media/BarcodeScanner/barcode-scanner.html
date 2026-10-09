@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo &lt;iswc-barcode-scanner&gt; · is-webcomponents</title>
+<title>Demo &lt;iswc-barcode-scanner&gt; · iswc-root</title>
 <meta name="description" content="Escáner de códigos de barras sobre cámara o imágenes. Usa la BarcodeDetector API; degrada con mensaje claro si no está disponible." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100%; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -22,9 +22,9 @@
 </style>
 <script type="module">
   // Cargar solo el bundle + sus deps (button, icon) desde dist/cdn/.
-  await import('../../../dist/cdn/actions/button.min.js?h=mlndvw');
-  await import('../../../dist/cdn/media/icon.min.js?h=d7xu1i');
-  await import('../../../dist/cdn/media/barcode-scanner.min.js?h=0mgsyc');
+  await import('../../../dist/cdn/actions/button.min.js?h=8txda4');
+  await import('../../../dist/cdn/media/icon.min.js?h=8yrsf7');
+  await import('../../../dist/cdn/media/barcode-scanner.min.js?h=1ix6cx');
   await customElements.whenDefined('iswc-barcode-scanner');
 
   // Suscribirse a iswc-detect e iswc-error para logging (útil para tests)

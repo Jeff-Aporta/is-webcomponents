@@ -64,7 +64,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 
 | Lección | Regla | Guardián |
 |---|---|---|
-| Keys planas / `sessionStorage` / root `is-components` → fragmentado | Un solo `localStorage['is-webcomponents'][tag][storage-key]` vía `_shared/prefs.js`; opt-in | `prefs-contract` |
+| Keys planas / `sessionStorage` / root `is-components` → fragmentado | Un solo `localStorage['iswc-root'][tag][storage-key]` vía `_shared/prefs.js`; opt-in | `prefs-contract` |
 | Sidebar de columnas en template sin cablear | Cero lógica de UI en el shadow sin wire | — |
 
 ## Previews y galería

@@ -12,7 +12,7 @@
       "lede": "Shell que monta una definición JSON de la galería. La propia galería es el ejemplo vivo.",
       "blocks": [
         {
-          "kind": "demo",
+          "kind": "html",
           "html": "<p>La galería asigna la propiedad <code>preview</code> y este tag pinta el documento, el índice y los demos. No evalúa código de comportamiento.</p>"
         }
       ]

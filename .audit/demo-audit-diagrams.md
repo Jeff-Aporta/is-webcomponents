@@ -320,4 +320,4 @@ Hay 11 carpetas con nombre corto (`block`, `component`, `journey`, `quadrant`, `
 
 **Status:** COMPLETED (audit).  
 **Findings:** 22 demos + 1 índice ER auditados (33 archivos HTML en `diagramas/`, de los cuales 11 son aliases históricos y 1 es SPA shell); 0 con playground interactivo en HTML (2 editores sí tienen interacción built-in: `er-editor` y `app/edit`); 22/22 con chrome de hex literales (0 con tokens); 2/22 con cobertura de props más rica (`er-static`, `component-pack`); 0 demos rotos; 0 incoherencias demo↔doc; 1 inconsistencia notable (`component-pack.html` importa desde `src/` no desde bundle); 11 carpetas con nombre corto conviven con versiones canónicas.  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-diagrams.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-diagrams.md`.

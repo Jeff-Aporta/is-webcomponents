@@ -29,7 +29,7 @@
           "kind": "demo",
           "html": [
             "<div class=\"qr-row\">",
-            "            <iswc-qrcode id=\"pgQr\" value=\"https://is-webcomponents\" level=\"M\" cell=\"6\"></iswc-qrcode>",
+            "            <iswc-qrcode id=\"pgQr\" value=\"https://iswc-root\" level=\"M\" cell=\"6\"></iswc-qrcode>",
             "          </div>"
           ],
           "controls": [

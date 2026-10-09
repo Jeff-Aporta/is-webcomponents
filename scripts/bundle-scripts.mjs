@@ -56,7 +56,7 @@ for (const css of ['host-base.css', 'scrollbars.css']) {
 //   4) ${origin}/skills/... — SÍ funciona (raíz del repo en GitHub)
 //   5) ${origin}/dist/cdn/skills/... — SÍ funciona
 // Para que SOLO las que funcionan existan (reduce 404s en stagehand),
-// copiamos skills/is-webcomponents a:
+// copiamos skills/iswc-root a:
 //   - dist/scripts/skills/  (satisface #3)
 //   - dist/skills/          (satisface #2: ../skills desde dist/scripts)
 //   - skills/               (satisface #4; ya existe en la fuente, no-op)

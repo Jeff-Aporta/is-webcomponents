@@ -627,7 +627,7 @@
                             [1-4857] StaticText: 
                             [1-1505] StaticText: src
                             [1-1507] StaticText: =
-                            [1-1509] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/actions/button.min.js"
+                            [1-1509] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/actions/button.min.js"
                             [1-1511] StaticText: >
                             [1-1513] StaticText: </script>
                           [1-1514] div
@@ -639,7 +639,7 @@
                             [1-4859] StaticText: 
                             [1-1524] StaticText: src
                             [1-1526] StaticText: =
-                            [1-1528] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/feedback/badge.min.js"
+                            [1-1528] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/feedback/badge.min.js"
                             [1-1530] StaticText: >
                             [1-1532] StaticText: </script>
                           [1-1533] div
@@ -651,7 +651,7 @@
                             [1-4861] StaticText: 
                             [1-1543] StaticText: src
                             [1-1545] StaticText: =
-                            [1-1547] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/forms/rating.min.js"
+                            [1-1547] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/forms/rating.min.js"
                             [1-1549] StaticText: >
                             [1-1551] StaticText: </script>
                           [1-1552] div
@@ -663,7 +663,7 @@
                             [1-4863] StaticText: 
                             [1-1562] StaticText: src
                             [1-1564] StaticText: =
-                            [1-1566] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/forms/switch.min.js"
+                            [1-1566] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/forms/switch.min.js"
                             [1-1568] StaticText: >
                             [1-1570] StaticText: </script>
                           [1-1571] div
@@ -675,7 +675,7 @@
                             [1-4865] StaticText: 
                             [1-1581] StaticText: src
                             [1-1583] StaticText: =
-                            [1-1585] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/data-viz/sparkline.min.js"
+                            [1-1585] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/data-viz/sparkline.min.js"
                             [1-1587] StaticText: >
                             [1-1589] StaticText: </script>
                           [1-1592] StaticText: <!-- ...y úsalos como HTML nativo -->

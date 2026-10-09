@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-17T23:39:41.544Z",
-  "fromInput": "C:\\ContaPyme\\Personal\\apps\\is-webcomponents\\.audit\\discovery-deep-audit.json",
+  "fromInput": "C:\\ContaPyme\\Personal\\apps\\iswc-root\\.audit\\discovery-deep-audit.json",
   "totalTestables": 432,
   "groups": [
     {

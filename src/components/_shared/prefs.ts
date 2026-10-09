@@ -8,8 +8,8 @@
  *   "iswc-ag-grid": { "mi-tabla": { … snapshot del grid … } }
  * }
  *
- * ROOT_KEY = "is-webcomponents". `is-components` es SOLO legacy: se lee una
- * vez para migrar y se borra; nunca se escribe.
+ * ROOT_KEY = "iswc-root". `is-webcomponents` (nombre del kit antes de iswc-root) e
+ * `is-components` son SOLO legacy: se leen una vez para migrar y se borran; nunca se escriben.
  */
 
 /** Forma del root de prefs: mapa de `tag -> key -> prefs`. */
@@ -17,8 +17,10 @@
 /** Entrada individual: objeto plano `{ clave: valor }`. */
 
 import type { PrefsRoot, PrefsEntry, ClearAllPrefsResult } from "./prefs.schemas.js";
-const ROOT_KEY = 'is-webcomponents';
+const ROOT_KEY = 'iswc-root';
 const LEGACY_ROOT_KEY = 'is-components';
+/** Roots anteriores, del más reciente al más viejo. */
+const LEGACY_ROOT_KEYS = ['is-webcomponents', LEGACY_ROOT_KEY] as const; // antes de iswc-root
 
 function parseRoot(raw: string | null): PrefsRoot | null {
   if (!raw) return null;
@@ -36,10 +38,13 @@ function readRoot(): PrefsRoot {
     if (current) return current;
     // Migración desde el root legacy: se copia tal cual y se retira el viejo,
     // así la siguiente lectura ya sale por el camino corto.
-    const legacy = parseRoot(localStorage.getItem(LEGACY_ROOT_KEY));
-    if (legacy) {
+    for (const key of LEGACY_ROOT_KEYS) {
+      const legacy = parseRoot(localStorage.getItem(key));
+      if (!legacy) continue;
       writeRoot(legacy);
-      try { localStorage.removeItem(LEGACY_ROOT_KEY); } catch { /* noop */ }
+      for (const k of LEGACY_ROOT_KEYS) {
+        try { localStorage.removeItem(k); } catch { /* noop */ }
+      }
       return legacy;
     }
     return {};
@@ -108,7 +113,7 @@ export function peekComponentPrefsRoot(): PrefsRoot {
 }
 
 /**
- * Limpia TODA la memoria de componentes (`is-webcomponents` + legacy).
+ * Limpia TODA la memoria de componentes (`iswc-root` + legacy).
  * Splits, scrolls, grids, etc. Vuelve a los defaults del markup.
  */
 export function clearAllComponentPrefs(): ClearAllPrefsResult {
@@ -116,7 +121,7 @@ export function clearAllComponentPrefs(): ClearAllPrefsResult {
   const tags = Object.keys(before || {});
   try {
     localStorage.removeItem(ROOT_KEY);
-    localStorage.removeItem(LEGACY_ROOT_KEY);
+    for (const k of LEGACY_ROOT_KEYS) localStorage.removeItem(k);
   } catch {
     /* quota / private */
   }

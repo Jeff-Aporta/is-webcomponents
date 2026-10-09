@@ -93,7 +93,7 @@ Cada leaf corre F0 (DISCOVER → GROUP → PROPOSE → GATE → IMPLEMENT → IT
 ## §16 — Comandos de arranque
 
 ```powershell
-cd C:\ContaPyme\Personal\apps\is-webcomponents
+cd C:\ContaPyme\Personal\apps\iswc-root
 git status --short  # debe estar limpio
 deno task typecheck    # debe pasar
 deno task test:demos   # 42/42 PASS

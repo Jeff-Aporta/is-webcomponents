@@ -5,7 +5,7 @@
 // en `localStorage` y lo restaura al hacer F5:
 //
 //   1. Al marcar una sección como activa (vía click en el TOC o scroll) se
-//      escribe `is-webcomponents['iswc-scrollspy'][storageKey].activeId` con
+//      escribe `iswc-root['iswc-scrollspy'][storageKey].activeId` con
 //      un `savedAt` reciente.
 //   2. F5 (page.reload) sobre la misma URL reposiciona el scroll dentro del
 //      `<iswc-main>` para que la sección guardada quede visible.
@@ -151,7 +151,7 @@ function galleryUrl(tag) {
 async function readActiveAnchorPref(page, storageKey) {
   return await page.evaluate((key) => {
     try {
-      const raw = localStorage.getItem('is-webcomponents');
+      const raw = localStorage.getItem('iswc-root');
       if (!raw) return null;
       const data = JSON.parse(raw);
       const bucket = data && data['iswc-scrollspy'];
@@ -167,12 +167,12 @@ async function readActiveAnchorPref(page, storageKey) {
 async function clearAllScrollspyPrefs(page) {
   await page.evaluate(() => {
     try {
-      const raw = localStorage.getItem('is-webcomponents');
+      const raw = localStorage.getItem('iswc-root');
       if (!raw) return;
       const data = JSON.parse(raw);
       if (data && data['iswc-scrollspy']) {
         delete data['iswc-scrollspy'];
-        localStorage.setItem('is-webcomponents', JSON.stringify(data));
+        localStorage.setItem('iswc-root', JSON.stringify(data));
       }
     } catch { /* noop */ }
   });

@@ -3808,8 +3808,8 @@
       "titulo": "home",
       "categoria": "",
       "estado": "ok",
-      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/home.json",
-      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/home.js",
+      "rutaJson": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/home.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/home.js",
       "conteo": {
         "fatal": 0,
         "error": 0,
@@ -3829,8 +3829,8 @@
       "titulo": "icon-explorer",
       "categoria": "media",
       "estado": "ok",
-      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/components/media/icon-explorer.json",
-      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/components/media/icon-explorer.preview.js",
+      "rutaJson": "C:/ContaPyme/Personal/apps/iswc-root/src/components/media/icon-explorer.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/iswc-root/src/components/media/icon-explorer.preview.js",
       "conteo": {
         "fatal": 0,
         "error": 0,
@@ -3850,7 +3850,7 @@
       "titulo": "phase7",
       "categoria": "",
       "estado": "ok",
-      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
+      "rutaJson": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json",
       "conteo": {
         "fatal": 0,
         "error": 0,
@@ -3862,21 +3862,21 @@
           "categoria": "json-contenido",
           "severidad": "info",
           "tag": "phase7",
-          "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
+          "ruta": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json",
           "mensaje": "Demo con 9 tags distintos: iswc-button, iswc-icon, iswc-dialog, iswc-input, iswc-select, iswc-option, iswc-textarea, iswc-switch…. Considerá partirlo en varios bloques."
         },
         {
           "categoria": "json-contenido",
           "severidad": "info",
           "tag": "phase7",
-          "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
+          "ruta": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json",
           "mensaje": "Demo con 11 tags distintos: iswc-card, iswc-badge, iswc-dropdown, iswc-button, iswc-icon, iswc-dropdown-item, iswc-tag, iswc-tab-group…. Considerá partirlo en varios bloques."
         },
         {
           "categoria": "json-contenido",
           "severidad": "info",
           "tag": "phase7",
-          "ruta": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/phase7.json",
+          "ruta": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/phase7.json",
           "mensaje": "Demo con 11 tags distintos: iswc-button, iswc-icon, iswc-split-panel, iswc-tree, iswc-tree-item, iswc-drawer, iswc-tab-group, iswc-tab…. Considerá partirlo en varios bloques."
         }
       ],
@@ -3892,8 +3892,8 @@
       "titulo": "theming",
       "categoria": "",
       "estado": "ok",
-      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/theming.json",
-      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/theming.js",
+      "rutaJson": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/theming.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/theming.js",
       "conteo": {
         "fatal": 0,
         "error": 0,
@@ -3913,8 +3913,8 @@
       "titulo": "ecosystem",
       "categoria": "",
       "estado": "ok",
-      "rutaJson": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/ecosystem.json",
-      "rutaModulo": "C:/ContaPyme/Personal/apps/is-webcomponents/src/pages/ecosystem.js",
+      "rutaJson": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/ecosystem.json",
+      "rutaModulo": "C:/ContaPyme/Personal/apps/iswc-root/src/pages/ecosystem.js",
       "conteo": {
         "fatal": 0,
         "error": 0,

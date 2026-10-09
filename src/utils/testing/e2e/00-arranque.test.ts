@@ -1,4 +1,4 @@
-// 00-arranque.test.ts: arranque de la galeria is-webcomponents, deep link por
+// 00-arranque.test.ts: arranque de la galeria iswc-root, deep link por
 // componente y navegacion por el nav. Port del esquema de PatyIA 00-sesion
 // sin login/ISS: aqui el "estado" es el tag del componente (?s={component}).
 import { before, after } from 'node:test';

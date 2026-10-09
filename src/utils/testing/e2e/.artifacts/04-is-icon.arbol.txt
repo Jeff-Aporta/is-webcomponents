@@ -670,7 +670,7 @@
                 [1-409283] StaticText: , embebida aquí.
               [1-409126] div
                 [1-409122] Iframe: Explorador de iconos
-                  [129-409301] RootWebArea: icon-explorer · IS Web Components
+                  [129-409301] RootWebArea: icon-explorer · iswc-root
                     [129-409644] scrollable, html
                       [129-409663] toolbar: Tema y paleta
                         [129-409664] LabelText

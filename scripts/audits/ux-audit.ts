@@ -270,7 +270,7 @@ const summary = {
 await writeFile(join(OUT, 'report.json'), `${JSON.stringify(summary, null, 2)}\n`);
 
 const md = [
-  `# UX audit — is-webcomponents`,
+  `# UX audit — iswc-root`,
   ``,
   `- Fecha: ${summary.generatedAt}`,
   `- Base: ${base}`,

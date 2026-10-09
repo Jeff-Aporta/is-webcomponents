@@ -110,7 +110,7 @@ luego opcionalmente uno avanzado. Ver
 Cada ficha **debe** enlazar a:
 
 1. La skill del kit:
-   [`../is-webcomponents/SKILL.md`](../is-webcomponents/SKILL.md).
+   [`../iswc-root/SKILL.md`](../iswc-root/SKILL.md).
 2. Componentes relacionados (mismo grupo, primos cercanos o dependencias).
    P.ej. `<iswc-button-group>` enlaza a `<iswc-button>`.
 3. Dependencias de código (`_shared/*.js`, primos del mismo paquete).
@@ -127,7 +127,7 @@ Los enlaces a guías hermanas deben usar la ruta **relativa** dentro de
 Los enlaces a la skill del kit van con la ruta desde `skills/`:
 
 ```md
-[Skill del kit](../is-webcomponents/SKILL.md)
+[Skill del kit](../iswc-root/SKILL.md)
 ```
 
 ## Validación

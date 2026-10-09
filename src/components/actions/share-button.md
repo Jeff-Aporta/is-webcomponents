@@ -128,7 +128,7 @@ El control interno es `iswc-button`.
 ## Ejemplo avanzado
 
 ```html
-<iswc-share-button share-title="Demo" url="https://jeff-aporta.github.io/is-webcomponents/"></iswc-share-button>
+<iswc-share-button share-title="Demo" url="https://jeff-aporta.github.io/iswc-root/"></iswc-share-button>
 ```
 
 ## Errores comunes

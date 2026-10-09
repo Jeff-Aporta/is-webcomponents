@@ -52,7 +52,7 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
   assert.ok(code.length < 120_000, `loader.min.js demasiado grande (${code.length} B)`);
   assert.match(code, /ISWebComponentsLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
-  assert.match(code, /jsdelivr|Jeff-Aporta\/is-webcomponents/);
+  assert.match(code, /jsdelivr|Jeff-Aporta\/iswc-root/);
   assert.match(code, /"iswc-button"/);
   assert.match(code, /src\/cdn\/loader\.md|loader\.md/);
   const sha = execSync('git rev-parse HEAD', { cwd: root, encoding: 'utf8' }).trim();
@@ -62,10 +62,10 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
 
 test('fillHostTemplate sustituye {{sha}} y {{cdnUrl}}', () => {
   const host = fillHostTemplate('{{cdnUrl}}@{{sha}}/dist/cdn', {
-    cdnUrl: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents',
+    cdnUrl: 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root',
     sha: 'abc',
   });
-  assert.equal(host, 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc/dist/cdn');
+  assert.equal(host, 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@abc/dist/cdn');
   assert.equal(fillHostTemplate('{{otro}}', {}), '{{otro}}');
 });
 

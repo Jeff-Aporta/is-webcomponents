@@ -1,4 +1,4 @@
-// env.ts: configuración E2E de is-webcomponents SIN .env.
+// env.ts: configuración E2E de iswc-root SIN .env.
 // Los secretos se leen SIEMPRE de rutas fijas:
 //   - MiniMax:  C:\ContaPyme\Personal\secrets.json  -> Values.MINIMAX_API_KEY_50USD
 // Base URL / modelo / host de MiniMax no son secretos y quedan quemados como
@@ -28,7 +28,7 @@ function subir(inicio: string, niveles: number): string {
 }
 
 const repoDir: string = subirHastaRaiz(e2eDir);
-// Raíz del workspace: C:\ContaPyme (repo en ...\Personal\apps\is-webcomponents)
+// Raíz del workspace: C:\ContaPyme (repo en ...\Personal\apps\iswc-root)
 const workspaceDir: string = subir(repoDir, 3);
 
 /** Ruta fija del archivo de secretos del workspace. */

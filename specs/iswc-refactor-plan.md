@@ -1,4 +1,4 @@
-# Plan de refactor ISWC — is-webcomponents (2026-09-08)
+# Plan de refactor ISWC — iswc-root (2026-09-08)
 
 > **Fecha:** 2026-09-08
 > **Sesión:** admin-is-dsh / agent-teams `iswc-full-refactor`
@@ -7,14 +7,14 @@
 
 ## Objetivo
 
-Alinear `is-webcomponents` con el **perfil ISWC** cerrando los hallazgos
+Alinear `iswc-root` con el **perfil ISWC** cerrando los hallazgos
 del audit (`--sin-deep`) y refinando las reglas del motor auditor que
 violan la definición de ISWC. Llevar el proyecto a `deep-test 100%
 limpio`.
 
 ## Contexto
 
-- El perfil ISWC define a `is-webcomponents` como **el kit** de Web
+- El perfil ISWC define a `iswc-root` como **el kit** de Web
   Components: mantiene `src/components/`, tipos colocalizados, exports
   como librería. NO es una `iswc-app` (que tendría `src/js/components/`
   con cada componente en su carpeta).
@@ -79,16 +79,16 @@ excluir archivos en `src/components/**/*.preview.ts` y `src/pages/*.ts`
 
 ### B1 · `S-PUERTO-SIN-ASIGNAR` (MEDIO) — **CERRADO EN T2**
 
-`is-webcomponents` no tenía puerto server registrado en
+`iswc-root` no tenía puerto server registrado en
 `perfil-puertos.json`.
 
 **Acción aplicada:**
 ```bash
-python -B auditor.py puertos asignar is-webcomponents server
-# → is-webcomponents server -> 8801
+python -B auditor.py puertos asignar iswc-root server
+# → iswc-root server -> 8801
 ```
 
-**Cambio:** `perfil-puertos.json` ahora incluye `is-webcomponents:
+**Cambio:** `perfil-puertos.json` ahora incluye `iswc-root:
 {server: 8801, testing: null}`.
 
 ### B2 · `S-PUERTO-FUERA` (MEDIO) — **CERRADO EN T2**
@@ -146,7 +146,7 @@ que matcheen algún patrón.
 ## Comandos de verificación (T4)
 
 ```bash
-cd C:\ContaPyme\Personal\apps\is-webcomponents
+cd C:\ContaPyme\Personal\apps\iswc-root
 
 # Gate local
 deno task typecheck                                     # exit 0

@@ -14,13 +14,13 @@ Humanos y agentes consumen el kit vía galería, CDN y markdown raw en GitHub. L
 | SDD | [`specs/README.md`](README.md) | Contrato por dominio |
 | Inventario tags | [`manifest.ts`](../src/manifest.ts) | Mapa categorías → MD |
 | Por tag | `src/components/<cat>/<tag>.md` | API del componente |
-| Skills | `skills/is-webcomponents/` | Prompt + catálogo |
+| Skills | `skills/iswc-root/` | Prompt + catálogo |
 
 ## S-D2 MD por componente
 
 - Un `.md` junto al `.js` del tag (mismo basename).
 - Enlazar la sección de grupo de [`componentes.md`](componentes.md); no repetir la carta entera.
-- URLs raw: `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/...`
+- URLs raw: `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/components/...`
 - No presentar internos (`marks-*`, engines, `_shared` helpers) como tags públicos.
 
 ## S-D3 SEO vs agentes
@@ -34,7 +34,7 @@ Humanos y agentes consumen el kit vía galería, CDN y markdown raw en GitHub. L
 |---|---|
 | Generar SEO | `deno task docs` |
 | Banner loader | comentario `/*! … */` en bundles + `dist/cdn/loader.md` |
-| Catálogo skill | `skills/is-webcomponents/catalog.md` |
+| Catálogo skill | `skills/iswc-root/catalog.md` |
 
 ## Aceptación
 

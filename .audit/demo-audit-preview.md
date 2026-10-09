@@ -176,4 +176,4 @@ El flujo es:
 
 **Status:** COMPLETED (audit).  
 **Findings:** 0 demos auditados (la categoría `preview` no tiene demos HTML); 1 componente con fuente + docs + JSON + bundle compilado + bundle minificado en `dist/cdn/preview/`; **0 demos rotos** (porque no hay); **0 incoherencias demo↔doc** (idem); **1 paradoja crítica** (el componente que crea playgrounds para los demás componentes no tiene su propio playground — es la categoría con peor ratio demos/componentes del repo junto con `files`); 1 recomendación mayor (crear `demos/preview/playground/playground.html` y considerar migrar los 12 demos auditados a usar `<iswc-playground>`).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-preview.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-preview.md`.

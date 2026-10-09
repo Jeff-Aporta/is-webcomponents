@@ -10,7 +10,7 @@
  * ese mismo origen. Mezclar orígenes a medias no aplica: cada `load`
  * prueba la cadena hasta que uno responde.
  */
-export const GH_REPO = 'Jeff-Aporta/is-webcomponents';
+export const GH_REPO = 'Jeff-Aporta/iswc-root';
 
 const REF_KEY = 'iswc-wc:cdn-ref';
 const MIRROR_KEY = 'iswc-wc:cdn-mirror';
@@ -42,7 +42,7 @@ export const githackBase = (ref = 'main') =>
   `https://raw.githack.com/${GH_REPO}/${ref}/dist/cdn`;
 
 export const pagesBase = () =>
-  'https://jeff-aporta.github.io/is-webcomponents/dist/cdn';
+  'https://jeff-aporta.github.io/iswc-root/dist/cdn';
 
 /**
  * Espejos en orden de fallback.

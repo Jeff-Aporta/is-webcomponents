@@ -1,4 +1,4 @@
-# Auditoría exhaustiva de is-webcomponents — WT-ROOT `wt/audit-exhaustivo`
+# Auditoría exhaustiva de iswc-root — WT-ROOT `wt/audit-exhaustivo`
 
 **Fecha**: 2026-09-09
 **Estrategia**: admin-is-dsh con WT-strategy multi-agent (4 subagentes en paralelo)

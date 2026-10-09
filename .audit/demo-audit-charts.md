@@ -296,4 +296,4 @@ Cada uno es **esencial** para entender el motor: muestran que existe un API puro
 
 **Status:** COMPLETED (audit).  
 **Findings:** 18 demos + 1 índice auditados; 0 con playground interactivo; 18/18 con chrome de hex literales (1/19 con token parcial); 5/18 con cobertura de props plena (sparkline + 4 marks); 0 demos rotos; 0 incoherencias demo↔doc; 1 observación estructural (categoría lógica `charts` vs carpeta física `data-viz` que conviene documentar).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-charts.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-charts.md`.

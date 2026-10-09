@@ -90,10 +90,10 @@ const defineCss = async (cssFile) => {
   }
 };
 
-const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main';
-const GH_BLOB = 'https://github.com/Jeff-Aporta/is-webcomponents/blob/main';
+const GH_RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main';
+const GH_BLOB = 'https://github.com/Jeff-Aporta/iswc-root/blob/main';
 const CDN_SKILL = `${GH_RAW}/skills/is-cdn-install/SKILL.md`;
-const KIT_SKILL = `${GH_RAW}/skills/is-webcomponents/SKILL.md`;
+const KIT_SKILL = `${GH_RAW}/skills/iswc-root/SKILL.md`;
 // Consolidación 2026-09-07: src/components/LLM.md y src/cdn/LLM.md eliminados.
 // El catálogo global vive en specs/componentes.md; el doc del loader en
 // src/cdn/loader.md (sin cambio).

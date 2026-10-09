@@ -198,4 +198,4 @@ No encontré imports rotos.
 
 **Status:** COMPLETED (audit).  
 **Findings:** 11 demos auditados (3 leídos en detalle: `card`, `dialog`, `split-panel`); 0 con playground interactivo (algunos tienen botones que invocan API: `card` con 3 botones, `dialog` con 5 botones open); 3/3 con cobertura de props plena; 0/11 con tokens `--iswc-*` para chrome; 0 demos rotos; 0 incoherencias demo↔doc.  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-layout.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-layout.md`.

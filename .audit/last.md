@@ -49,7 +49,7 @@
   - `controles`: 5
 
 - 🟡 🔗 **consistencia** — Control "variant" (prop="attr:variant") en src/components/actions/check-icon-button.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\actions\check-icon-button.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\actions\check-icon-button.ts`
   - 💡 Agregá 'variant' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-speech` — Speech `(media)`
@@ -63,10 +63,10 @@
   - `controles`: 1
 
 - 🟡 🔗 **consistencia** — Control "lang" (prop="attr:lang") en src/components/media/speech.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\speech.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\media\speech.ts`
   - 💡 Agregá 'lang' al array devuelto por static get observedAttributes().
 - 🔴 ⚙️ **runtime** — observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\speech.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\media\speech.ts`
 
 ### ❌ `iswc-media-recorder` — Media Recorder `(media)`
 
@@ -79,10 +79,10 @@
   - `controles`: 1
 
 - 🟡 🔗 **consistencia** — Control "source" (prop="attr:source") en src/components/media/media-recorder.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\media-recorder.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\media\media-recorder.ts`
   - 💡 Agregá 'source' al array devuelto por static get observedAttributes().
 - 🔴 ⚙️ **runtime** — observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\media-recorder.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\media\media-recorder.ts`
 
 ### ⚠️ `iswc-theme-toggle` — Theme Toggle `(feedback)`
 
@@ -95,7 +95,7 @@
   - `controles`: 1
 
 - 🟡 🔗 **consistencia** — Control "dark" (prop="attr:dark") en src/components/feedback/theme-toggle.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\feedback\theme-toggle.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\feedback\theme-toggle.ts`
   - 💡 Agregá 'dark' al array devuelto por static get observedAttributes().
 
 ### ⚠️ `iswc-prefs-clear` — Prefs Clear `(feedback)`
@@ -109,7 +109,7 @@
   - `controles`: 1
 
 - 🟡 🔗 **consistencia** — Control "reload" (prop="attr:reload") en src/components/feedback/prefs-clear.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\feedback\prefs-clear.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\feedback\prefs-clear.ts`
   - 💡 Agregá 'reload' al array devuelto por static get observedAttributes().
 
 ### ⚠️ `iswc-split-panel` — Panel dividido `(layout)`
@@ -157,7 +157,7 @@
   - 💡 Si el demo no usa ningún is-*, convertilo a bloque `html` (no necesita chrome de demo).
   - 🔎 {"html":"<span class=\"demo-label\">// demo-card registrado en esta página</span>\r\n        …"}
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-ui', …). El JSON declara demos de <iswc-ui> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\ui.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\ui.ts`
 
 ### ❌ `iswc-tree` — Tree `(navigation)`
 
@@ -270,27 +270,27 @@
   - `controles`: 7
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-field', …). El JSON declara demos de <iswc-date-field> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/date-field.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "locale" (prop="attr:locale") en src/components/forms/date-field.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
   - 💡 Agregá 'locale' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "clearable" (prop="attr:clearable") en src/components/forms/date-field.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
   - 💡 Agregá 'clearable' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "required" (prop="attr:required") en src/components/forms/date-field.json#sections[0].blocks[0].controls[4] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
   - 💡 Agregá 'required' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "min" (prop="attr:min") en src/components/forms/date-field.json#sections[0].blocks[0].controls[5] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
   - 💡 Agregá 'min' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "readonly" (prop="attr:readonly") en src/components/forms/date-field.json#sections[0].blocks[0].controls[6] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-field.ts`
   - 💡 Agregá 'readonly' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-time-field` — Time Field `(forms)`
@@ -304,9 +304,9 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-time-field', …). El JSON declara demos de <iswc-time-field> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\time-field.ts`
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/time-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\time-field.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-date-time-field` — Date Time Field `(forms)`
@@ -320,9 +320,9 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-time-field', …). El JSON declara demos de <iswc-date-time-field> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-time-field.ts`
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/date-time-field.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-field.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-time-field.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-date-input` — Date Input `(forms)`
@@ -336,21 +336,21 @@
   - `controles`: 5
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-input', …). El JSON declara demos de <iswc-date-input> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-input.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/date-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-input.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "locale" (prop="attr:locale") en src/components/forms/date-input.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-input.ts`
   - 💡 Agregá 'locale' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "clearable" (prop="attr:clearable") en src/components/forms/date-input.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-input.ts`
   - 💡 Agregá 'clearable' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "action-bar" (prop="attr:action-bar") en src/components/forms/date-input.json#sections[0].blocks[0].controls[4] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-input.ts`
   - 💡 Agregá 'action-bar' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-time-input` — Time Input `(forms)`
@@ -364,12 +364,12 @@
   - `controles`: 2
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-time-input', …). El JSON declara demos de <iswc-time-input> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\time-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/time-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\time-input.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/time-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\time-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\time-input.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-date-time-input` — Date Time Input `(forms)`
@@ -383,12 +383,12 @@
   - `controles`: 2
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-time-input', …). El JSON declara demos de <iswc-date-time-input> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-time-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-time-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-time-input.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "value" (prop="attr:value") en src/components/forms/date-time-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-time-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-time-input.ts`
   - 💡 Agregá 'value' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-date-range-input` — Date Range Input `(forms)`
@@ -402,15 +402,15 @@
   - `controles`: 3
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-date-range-input', …). El JSON declara demos de <iswc-date-range-input> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-range-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-range-input.ts`
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/forms/date-range-input.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-range-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-range-input.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "start" (prop="attr:start") en src/components/forms/date-range-input.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-range-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-range-input.ts`
   - 💡 Agregá 'start' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "end" (prop="attr:end") en src/components/forms/date-range-input.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\forms\date-range-input.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\forms\date-range-input.ts`
   - 💡 Agregá 'end' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-data-grid` — Data Grid `(data)`
@@ -488,15 +488,15 @@
   - `controles`: 2
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-bar-chart', …). El JSON declara demos de <iswc-bar-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\bar-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\bar-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/bar-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\bar-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "stacked" (prop="attr:stacked") en src/components/charts/bar-chart.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\bar-chart.ts`
   - 💡 Agregá 'stacked' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-line-chart` — Line Chart `(data-viz)`
@@ -510,12 +510,12 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-line-chart', …). El JSON declara demos de <iswc-line-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\line-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\line-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\line-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\line-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/line-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\line-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\line-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-pie-chart` — Pie Chart `(data-viz)`
@@ -529,12 +529,12 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-pie-chart', …). El JSON declara demos de <iswc-pie-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\pie-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\pie-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\pie-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\pie-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/pie-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\pie-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\pie-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-doughnut-chart` — Doughnut Chart `(data-viz)`
@@ -548,12 +548,12 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-doughnut-chart', …). El JSON declara demos de <iswc-doughnut-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\doughnut-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\doughnut-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\doughnut-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\doughnut-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/doughnut-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\doughnut-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\doughnut-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-radar-chart` — Radar Chart `(data-viz)`
@@ -573,18 +573,18 @@
   - 📄 `src/components/charts/radar-chart.json`
   - 💡 Pasale la data por JSON al host: <iswc-radar-chart><script type="application/json">{…}</script></iswc-radar-chart>.
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-radar-chart', …). El JSON declara demos de <iswc-radar-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\radar-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\radar-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/radar-chart.json#sections[0].blocks[1].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\radar-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/charts/radar-chart.json#sections[0].blocks[1].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\radar-chart.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "legend-position" (prop="attr:legend-position") en src/components/charts/radar-chart.json#sections[0].blocks[1].controls[2] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\radar-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\radar-chart.ts`
   - 💡 Agregá 'legend-position' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-polar-area-chart` — Polar Area Chart `(data-viz)`
@@ -598,24 +598,24 @@
   - `controles`: 5
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-polar-area-chart', …). El JSON declara demos de <iswc-polar-area-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\polar-area-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\polar-area-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\polar-area-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\polar-area-chart.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "legend-position" (prop="attr:legend-position") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\polar-area-chart.ts`
   - 💡 Agregá 'legend-position' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "without-legend" (prop="attr:without-legend") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\polar-area-chart.ts`
   - 💡 Agregá 'without-legend' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "without-animation" (prop="attr:without-animation") en src/components/charts/polar-area-chart.json#sections[0].blocks[0].controls[4] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\polar-area-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\polar-area-chart.ts`
   - 💡 Agregá 'without-animation' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-scatter-chart` — Scatter Chart `(data-viz)`
@@ -635,24 +635,24 @@
   - 📄 `src/components/charts/scatter-chart.json`
   - 💡 Pasale la data por JSON al host: <iswc-scatter-chart><script type="application/json">{…}</script></iswc-scatter-chart>.
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-scatter-chart', …). El JSON declara demos de <iswc-scatter-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\scatter-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\scatter-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\scatter-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "label" (prop="attr:label") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\scatter-chart.ts`
   - 💡 Agregá 'label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "x-label" (prop="attr:x-label") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[2] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\scatter-chart.ts`
   - 💡 Agregá 'x-label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "y-label" (prop="attr:y-label") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[3] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\scatter-chart.ts`
   - 💡 Agregá 'y-label' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "grid" (prop="attr:grid") en src/components/charts/scatter-chart.json#sections[0].blocks[1].controls[4] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\scatter-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\scatter-chart.ts`
   - 💡 Agregá 'grid' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-bubble-chart` — Bubble Chart `(data-viz)`
@@ -666,12 +666,12 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-bubble-chart', …). El JSON declara demos de <iswc-bubble-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bubble-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\bubble-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bubble-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\bubble-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/bubble-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\bubble-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\bubble-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-sparkline` — Sparkline `(data-viz)`
@@ -744,10 +744,10 @@
   - `controles`: 2
 
 - 🟡 🔗 **consistencia** — Control "width" (prop="attr:width") en src/components/helpers/offscreen-canvas.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\offscreen-canvas.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\offscreen-canvas.ts`
   - 💡 Agregá 'width' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "height" (prop="attr:height") en src/components/helpers/offscreen-canvas.json#sections[0].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\offscreen-canvas.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\offscreen-canvas.ts`
   - 💡 Agregá 'height' al array devuelto por static get observedAttributes().
 
 ### ⚠️ `iswc-format-date` — Formato de fecha `(helpers)`
@@ -776,16 +776,16 @@
   - `controles`: 4
 
 - 🟡 🔗 **consistencia** — Control "root" (prop="attr:root") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\intersection-observer.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\intersection-observer.ts`
   - 💡 Agregá 'root' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "intersect-class" (prop="attr:intersect-class") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\intersection-observer.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\intersection-observer.ts`
   - 💡 Agregá 'intersect-class' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "threshold" (prop="attr:threshold") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[2] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\intersection-observer.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\intersection-observer.ts`
   - 💡 Agregá 'threshold' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "once" (prop="attr:once") en src/components/helpers/intersection-observer.json#sections[1].blocks[0].controls[3] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\intersection-observer.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\intersection-observer.ts`
   - 💡 Agregá 'once' al array devuelto por static get observedAttributes().
 
 ### ⚠️ `iswc-mutation-observer` — Observador de mutación `(helpers)`
@@ -799,10 +799,10 @@
   - `controles`: 2
 
 - 🟡 🔗 **consistencia** — Control "child-list" (prop="attr:child-list") en src/components/helpers/mutation-observer.json#sections[1].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\mutation-observer.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\mutation-observer.ts`
   - 💡 Agregá 'child-list' al array devuelto por static get observedAttributes().
 - 🟡 🔗 **consistencia** — Control "attr" (prop="attr:attr") en src/components/helpers/mutation-observer.json#sections[1].blocks[0].controls[1] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\helpers\mutation-observer.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\helpers\mutation-observer.ts`
   - 💡 Agregá 'attr' al array devuelto por static get observedAttributes().
 
 ### ⚠️ `iswc-md-render` — Render Markdown `(helpers)`
@@ -848,12 +848,12 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-waterfall-chart', …). El JSON declara demos de <iswc-waterfall-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\waterfall-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\waterfall-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\waterfall-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\waterfall-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/waterfall-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\waterfall-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\waterfall-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-funnel-chart` — Funnel Chart `(data-viz)`
@@ -867,12 +867,12 @@
   - `controles`: 1
 
 - 🔴 🔗 **consistencia** — Módulo del componente no llama customElements.define('iswc-funnel-chart', …). El JSON declara demos de <iswc-funnel-chart> pero el tag nunca se registra.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\funnel-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\funnel-chart.ts`
 - 🟡 🔗 **consistencia** — Módulo no usa guard idempotente (customElements.get(tag)). Llamar el módulo dos veces rompe.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\funnel-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\funnel-chart.ts`
   - 💡 Envolvé customElements.define en `if (!customElements.get(tag)) customElements.define(...)`.
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/funnel-chart.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\funnel-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\funnel-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ⚠️ `iswc-treemap` — Treemap `(data-viz)`
@@ -886,7 +886,7 @@
   - `controles`: 1
 
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/charts/treemap.json#sections[0].blocks[1].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\charts\treemap.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\charts\treemap.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ❌ `iswc-stat` — Stat KPI `(data)`
@@ -1031,10 +1031,10 @@
   - `controles`: 1
 
 - 🟡 🔗 **consistencia** — Control "formats" (prop="attr:formats") en src/components/media/barcode-scanner.json#sections[0].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\barcode-scanner.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\media\barcode-scanner.ts`
   - 💡 Agregá 'formats' al array devuelto por static get observedAttributes().
 - 🔴 ⚙️ **runtime** — observedAttributes declarado pero sin attributeChangedCallback: los cambios de atributo nunca se procesan. El playground del demo no será reactivo.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\media\barcode-scanner.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\media\barcode-scanner.ts`
 
 ### ⚠️ `iswc-signature` — Signature `(forms)`
 
@@ -1076,7 +1076,7 @@
   - `controles`: 2
 
 - 🟡 🔗 **consistencia** — Control "open-on-click" (prop="attr:open-on-click") en src/components/diagrams/org-chart.json#sections[1].blocks[0].controls[0] apunta a un atributo que el módulo no declara como observado.
-  - 📄 `C:\ContaPyme\Personal\apps\is-webcomponents\src\components\diagrams\org-chart.ts`
+  - 📄 `C:\ContaPyme\Personal\apps\iswc-root\src\components\diagrams\org-chart.ts`
   - 💡 Agregá 'open-on-click' al array devuelto por static get observedAttributes().
 
 ### ⚠️ `iswc-preview-component` — Preview Component `(preview)`

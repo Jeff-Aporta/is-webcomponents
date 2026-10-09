@@ -150,7 +150,7 @@ import { crearEstado, auditarCatalogo } from './src/utils/health/motor/auditor.j
 import { aJson, aMarkdown, imprimirConsola } from './src/utils/health/motor/reporter.js';
 
 // Modo JSON (sin browser, ~100ms para el catálogo completo)
-const estado = crearEstado('/path/a/is-webcomponents', {
+const estado = crearEstado('/path/a/iswc-root', {
   solo: ['iswc-button', 'iswc-button-group'],
   soloJson: true,
 });

@@ -44,7 +44,7 @@ agrupadores `#7ACFF4/#FFFFC1/#BCFFBB/#EAB6B0/#81FF81/#01C000`, O/C `#7ACFF4`.
 ## Cómo regenerar
 
 ```bash
-cd Personal/apps/is-webcomponents
+cd Personal/apps/iswc-root
 deno run -A --no-check labs/iss-ayudascpia-componentes/audit.mjs   # reglas + métricas, sin navegador (<1 s)
 deno run -A --no-check scripts/_tmp/_rebuild-component-diagram.mjs
 deno run -A --no-check labs/iss-ayudascpia-componentes/render.mjs

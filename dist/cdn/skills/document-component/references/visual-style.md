@@ -135,7 +135,7 @@ luego tokens globales del kit (`--iswc-accent`, `--iswc-bg`, …).
 | ❌ | ✅ |
 | --- | --- |
 | `[aquí](./button.md)` | [`./button.md`](./button.md) |
-| `[link](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/components/actions/button.md)` | [`./button.md`](./button.md) (relativa) |
+| `[link](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/actions/button.md)` | [`./button.md`](./button.md) (relativa) |
 
 ## Errores comunes
 

@@ -1,7 +1,7 @@
 # F0.3 propuesta UX/UI exhaustiva — helpers (6 demos: format-date, mutation-observer, observer, relative-time, resize-observer, ui)
 
 ## Perfil del proyecto
-**is-webcomponents** — librería de Web Components vanilla TypeScript con Shadow DOM, tokens `--is-*`, y un kit de 67 demos servidos desde GitHub Pages. Stack: Playwright 1.62.1 + Chromium headless para tests browser.
+**iswc-root** — librería de Web Components vanilla TypeScript con Shadow DOM, tokens `--is-*`, y un kit de 67 demos servidos desde GitHub Pages. Stack: Playwright 1.62.1 + Chromium headless para tests browser.
 
 ## Notas de enfoque (helpers)
 - Énfasis en **lifecycle** (connectedCallback / disconnectedCallback / attributeChangedCallback).

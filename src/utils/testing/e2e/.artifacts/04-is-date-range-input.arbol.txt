@@ -660,7 +660,7 @@
                       [1-204267] StaticText: 
                       [1-204268] StaticText: src
                       [1-204269] StaticText: =
-                      [1-204270] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn/core/loader.min.js"
+                      [1-204270] StaticText: "https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn/core/loader.min.js"
                       [1-204271] StaticText: >
                       [1-204272] StaticText: </script>
                     [1-203978] div
@@ -764,19 +764,19 @@
                     [1-204351] StaticText: Prompt · agents
                     [1-203388] button: Copiar prompt para agentes
                       [1-204352] StaticText: Copiar
-                  [1-203508] scrollable, div: IS Web Components (Instrucciones para LLM) Utiliza IS Web Components exclusivamente mediante CDN (o copia local v�a /is-webcomponents:local). Nunca utilices: npm npx Bun pnpm Yarn Vite Webpack Rollup gestores de paquetes instalaciones locales del kit v�a registry copias parciales de componentes El objetivo es consumir la librer�a exactamente como se publica en dist/cdn/. Reglas generales Reutiliza siempre componentes existentes con prefijo is-*. No implementes componentes que ya existan. No reinventes componentes, atributos, propiedades, m�todos, eventos, slots, variables CSS ni Custom Properties. Toda API utilizada debe existir en la documentaci�n oficial. Antes de escribir c�digo, verifica si la librer�a ya ofrece un componente adecuado. Si existen varios componentes similares, utiliza el m�s espec�fico. Si un componente depende de otros componentes, reutiliza la composici�n existente; no la reimplementes. Utiliza siempre el sistema de iconos propio mediante <is-icon icon="prefix:name">. No utilices Iconify, FontAwesome, Material Icons ni otras librer�as externas de iconos, salvo que el usuario lo solicite expl�citamente. Configura el tema mediante data-theme. Configura la paleta mediante data-palette. La configuraci�n declarativa debe realizarse mediante atributos data-* cuando el componente lo soporte. No mezcles mirrors CDN dentro de una misma p�gina. Mant�n la accesibilidad y el comportamiento documentado por cada componente. Herramientas (slash) Cuando el usuario pida una de estas intenciones, sigue la skill de la herramienta:
+                  [1-203508] scrollable, div: iswc-root (Instrucciones para LLM) Utiliza iswc-root exclusivamente mediante CDN (o copia local v�a /iswc-root:local). Nunca utilices: npm npx Bun pnpm Yarn Vite Webpack Rollup gestores de paquetes instalaciones locales del kit v�a registry copias parciales de componentes El objetivo es consumir la librer�a exactamente como se publica en dist/cdn/. Reglas generales Reutiliza siempre componentes existentes con prefijo is-*. No implementes componentes que ya existan. No reinventes componentes, atributos, propiedades, m�todos, eventos, slots, variables CSS ni Custom Properties. Toda API utilizada debe existir en la documentaci�n oficial. Antes de escribir c�digo, verifica si la librer�a ya ofrece un componente adecuado. Si existen varios componentes similares, utiliza el m�s espec�fico. Si un componente depende de otros componentes, reutiliza la composici�n existente; no la reimplementes. Utiliza siempre el sistema de iconos propio mediante <is-icon icon="prefix:name">. No utilices Iconify, FontAwesome, Material Icons ni otras librer�as externas de iconos, salvo que el usuario lo solicite expl�citamente. Configura el tema mediante data-theme. Configura la paleta mediante data-palette. La configuraci�n declarativa debe realizarse mediante atributos data-* cuando el componente lo soporte. No mezcles mirrors CDN dentro de una misma p�gina. Mant�n la accesibilidad y el comportamiento documentado por cada componente. Herramientas (slash) Cuando el usuario pida una de estas intenciones, sigue la skill de la herramienta:
                     [1-203509] div
-                      [1-204439] heading: IS Web Components (Instrucciones para LLM)
+                      [1-204439] heading: iswc-root (Instrucciones para LLM)
                       [1-204440] paragraph
                         [1-204838] StaticText: Utiliza
                         [1-204441] strong
-                          [1-204839] StaticText: IS Web Components
+                          [1-204839] StaticText: iswc-root
                         [1-204840] StaticText: exclusivamente mediante
                         [1-204442] strong
                           [1-204841] StaticText: CDN
                         [1-204842] StaticText: (o copia local v�a
                         [1-204443] code
-                          [1-204843] StaticText: /is-webcomponents:local
+                          [1-204843] StaticText: /iswc-root:local
                         [1-204844] StaticText: ).
                       [1-204444] paragraph
                         [1-204445] strong
@@ -894,9 +894,9 @@
                             [1-204492] columnheader: Uso
                         [1-204493] tbody
                           [1-204494] row
-                            [1-204495] cell: /is-webcomponents:build
+                            [1-204495] cell: /iswc-root:build
                               [1-204496] code
-                                [1-204891] StaticText: /is-webcomponents:build
+                                [1-204891] StaticText: /iswc-root:build
                             [1-204497] cell: tools/build.md
                               [1-204498] link: tools/build.md
                             [1-204499] cell: Fundar o extender apps con is-*
@@ -904,9 +904,9 @@
                               [1-204500] code
                                 [1-204894] StaticText: is-*
                           [1-204501] row
-                            [1-204502] cell: /is-webcomponents:migrate
+                            [1-204502] cell: /iswc-root:migrate
                               [1-204503] code
-                                [1-204895] StaticText: /is-webcomponents:migrate
+                                [1-204895] StaticText: /iswc-root:migrate
                             [1-204504] cell: tools/migrate.md
                               [1-204505] link: tools/migrate.md
                             [1-204506] cell: Migrar un front (React/MUI/Svelte/�) a vanilla + is-*
@@ -914,17 +914,17 @@
                               [1-204507] code
                                 [1-204898] StaticText: is-*
                           [1-204508] row
-                            [1-204509] cell: /is-webcomponents:local
+                            [1-204509] cell: /iswc-root:local
                               [1-204510] code
-                                [1-204899] StaticText: /is-webcomponents:local
+                                [1-204899] StaticText: /iswc-root:local
                             [1-204511] cell: tools/local.md
                               [1-204512] link: tools/local.md
                             [1-204513] cell: Vendorizar JS/CSS locales (preferido) y actualizar SHA
                       [1-204514] paragraph
                         [1-204902] StaticText: Instalaci�n de skills (preferir repo GitHub):
                       [1-204516] code
-                        [1-204903] StaticText: npx skills add Jeff-Aporta/is-webcomponents -s is-webcomponents
-npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
+                        [1-204903] StaticText: npx skills add Jeff-Aporta/iswc-root -s iswc-root
+npx skills add Jeff-Aporta/iswc-root -s is-cdn-install
                       [1-204517] separator
                       [1-204518] heading: Flujo obligatorio antes de generar c�digo
                       [1-204519] paragraph
@@ -935,7 +935,7 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
                           [1-204906] StaticText: Leer la documentaci�n de instalaci�n.
                         [1-204522] listitem
                           [1-204742] ListMarker: 2.
-                          [1-204907] StaticText: Leer la gu�a general de IS Web Components.
+                          [1-204907] StaticText: Leer la gu�a general de iswc-root.
                         [1-204523] listitem
                           [1-204743] ListMarker: 3.
                           [1-204908] StaticText: Consultar el �ndice global (
@@ -1048,7 +1048,7 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
                         [1-204953] StaticText: ).
                       [1-204568] scrollable, pre
                         [1-204569] code
-                          [1-204954] StaticText: <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn/core/loader.min.js"></script>
+                          [1-204954] StaticText: <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn/core/loader.min.js"></script>
 <script type="module">
   const L = globalThis.ISWebComponentsLoader;
   await L.loadCSSBase();
@@ -1060,7 +1060,7 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
                       [1-204571] paragraph
                         [1-204956] StaticText: Si la app usa copia local, ver
                         [1-204572] code
-                          [1-204957] StaticText: /is-webcomponents:local
+                          [1-204957] StaticText: /iswc-root:local
                         [1-204958] StaticText: (local primero en el fallback).
                       [1-204573] separator
                       [1-204574] heading: Boot con fallback (opcional)
@@ -1070,9 +1070,9 @@ npx skills add Jeff-Aporta/is-webcomponents -s is-cdn-install
                         [1-204577] code
                           [1-204961] StaticText: <script type="module">
 const MIRRORS=[
-"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn",
-"https://cdn.statically.io/gh/Jeff-Aporta/is-webcomponents/dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn",
-"https://jeff-aporta.github.io/is-webcomponents/dist/cdn"
+"https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn",
+"https://cdn.statically.io/gh/Jeff-Aporta/iswc-root/dda8eb20d56b02f5e92a52d72c9e0ce196015acd/dist/cdn",
+"https://jeff-aporta.github.io/iswc-root/dist/cdn"
 ];
 
 const css=u=>new Promise((ok,err)=>{
@@ -1119,7 +1119,7 @@ for(const base of MIRRORS){
                       [1-204586] separator
                       [1-204587] heading: Repositorio oficial
                       [1-204588] paragraph
-                        [1-204976] StaticText: https://github.com/Jeff-Aporta/is-webcomponents
+                        [1-204976] StaticText: https://github.com/Jeff-Aporta/iswc-root
                       [1-204589] paragraph
                         [1-204977] StaticText: El repositorio contiene:
                       [1-204590] list
@@ -1167,19 +1167,19 @@ for(const base of MIRRORS){
                         [1-204995] StaticText: ).
                       [1-204607] heading: 1. Instalaci�n CDN
                       [1-204608] paragraph
-                        [1-204997] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
+                        [1-204997] StaticText: https://github.com/Jeff-Aporta/iswc-root/blob/main/src/skills/is-cdn-install/SKILL.md
                       [1-204609] heading: 2. Gu�a general
                       [1-204610] paragraph
-                        [1-204999] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
+                        [1-204999] StaticText: https://github.com/Jeff-Aporta/iswc-root/blob/main/src/skills/iswc-root/SKILL.md
                       [1-204611] heading: 3. Prompt completo (este archivo)
                       [1-204612] paragraph
-                        [1-205001] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
+                        [1-205001] StaticText: https://github.com/Jeff-Aporta/iswc-root/blob/main/src/skills/iswc-root/PROMPT.md
                       [1-204613] heading: 4. Gu�a CDN publicada (jsDelivr)
                       [1-204614] paragraph
-                        [1-205003] StaticText: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md
+                        [1-205003] StaticText: https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/skills/is-cdn-install/SKILL.md
                       [1-204615] heading: 5. �ndice global
                       [1-204616] paragraph
-                        [1-205005] StaticText: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md
+                        [1-205005] StaticText: https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/specs/componentes.md
                       [1-204617] heading: 6. LLM.md de la categor�a correspondiente
                       [1-204618] paragraph
                         [1-205007] StaticText: Consultar el �ndice global para localizar la categor�a correcta.
@@ -1193,7 +1193,7 @@ for(const base of MIRRORS){
                       [1-204623] list
                         [1-204624] listitem
                           [1-204774] ListMarker: •
-                          [1-205013] StaticText: https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools
+                          [1-205013] StaticText: https://github.com/Jeff-Aporta/iswc-root/tree/main/src/skills/iswc-root/tools
                       [1-204625] separator
                       [1-204626] heading: Qu� hacer
                       [1-204627] list
@@ -1400,28 +1400,28 @@ for(const base of MIRRORS){
                       [1-204703] list
                         [1-204704] listitem
                           [1-204822] ListMarker: •
-                          [1-205097] StaticText: Skill · instalación CDN: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-cdn-install/SKILL.md
+                          [1-205097] StaticText: Skill · instalación CDN: https://github.com/Jeff-Aporta/iswc-root/blob/main/src/skills/is-cdn-install/SKILL.md
                         [1-204705] listitem
                           [1-204823] ListMarker: •
-                          [1-205098] StaticText: Skill · kit (reuso is-*): https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/SKILL.md
+                          [1-205098] StaticText: Skill · kit (reuso is-*): https://github.com/Jeff-Aporta/iswc-root/blob/main/src/skills/iswc-root/SKILL.md
                         [1-204706] listitem
                           [1-204824] ListMarker: •
-                          [1-205099] StaticText: Prompt · instrucciones LLM: https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/skills/is-webcomponents/PROMPT.md
+                          [1-205099] StaticText: Prompt · instrucciones LLM: https://github.com/Jeff-Aporta/iswc-root/blob/main/src/skills/iswc-root/PROMPT.md
                         [1-204707] listitem
                           [1-204825] ListMarker: •
-                          [1-205100] StaticText: Tools · build / migrate / local: https://github.com/Jeff-Aporta/is-webcomponents/tree/main/src/skills/is-webcomponents/tools
+                          [1-205100] StaticText: Tools · build / migrate / local: https://github.com/Jeff-Aporta/iswc-root/tree/main/src/skills/iswc-root/tools
                         [1-204708] listitem
                           [1-204826] ListMarker: •
-                          [1-205101] StaticText: Skill CDN · is-cdn-install (jsDelivr): https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/skills/is-cdn-install/SKILL.md
+                          [1-205101] StaticText: Skill CDN · is-cdn-install (jsDelivr): https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/skills/is-cdn-install/SKILL.md
                         [1-204709] listitem
                           [1-204827] ListMarker: •
-                          [1-205102] StaticText: Módulo: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/forms/date-range-input.md
+                          [1-205102] StaticText: Módulo: https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/components/forms/date-range-input.md
                         [1-204710] listitem
                           [1-204828] ListMarker: •
-                          [1-205103] StaticText: Índice global: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/specs/componentes.md
+                          [1-205103] StaticText: Índice global: https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/specs/componentes.md
                         [1-204711] listitem
                           [1-204829] ListMarker: •
-                          [1-205104] StaticText: Skill · instalación CDN: https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/skills/is-cdn-install/SKILL.md
+                          [1-205104] StaticText: Skill · instalación CDN: https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/skills/is-cdn-install/SKILL.md
                     [1-203579] button: Copiar
           [1-202856] separator: Redimensionar panel
           [1-202764] complementary

@@ -115,7 +115,7 @@
           "kind": "code",
           "code": [
             "<script type=\"module\"",
-            "  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/helpers/ui.min.js\">",
+            "  src=\"https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/helpers/ui.min.js\">",
             "</script>"
           ],
           "lang": "html"

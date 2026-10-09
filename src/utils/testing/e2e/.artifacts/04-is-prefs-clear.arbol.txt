@@ -567,7 +567,7 @@
               [1-159518] paragraph
                 [1-159575] StaticText: Borra
                 [1-159517] code
-                  [1-159576] StaticText: localStorage['is-webcomponents']
+                  [1-159576] StaticText: localStorage['iswc-root']
                 [1-159577] StaticText: (splits, scrolls, grids) para auditar la carga inicial limpia.
               [1-159522] div
                 [1-159521] is-demo

@@ -39,7 +39,7 @@
       "animNormalDuration": "0.12s, 0.12s",
       "focusVisibleOk": true,
       "badHttpUrls": [
-        "403 https://api.github.com/repos/Jeff-Aporta/is-webcomponents/commits/main"
+        "403 https://api.github.com/repos/Jeff-Aporta/iswc-root/commits/main"
       ],
       "erroresText": [
         "Failed to load resource: the server responded with a status of 403 ()"
@@ -908,7 +908,7 @@
         "conLabel": 0
       },
       "badHttpUrls": [
-        "403 https://api.github.com/repos/Jeff-Aporta/is-webcomponents/commits/main"
+        "403 https://api.github.com/repos/Jeff-Aporta/iswc-root/commits/main"
       ],
       "erroresText": [
         "Failed to load resource: the server responded with a status of 403 ()"
@@ -1735,7 +1735,7 @@
       "animNormalDuration": "0.12s, 0.12s, 0.12s, 0.06s, 0.12s",
       "focusVisibleOk": false,
       "badHttpUrls": [
-        "403 https://api.github.com/repos/Jeff-Aporta/is-webcomponents/commits/main"
+        "403 https://api.github.com/repos/Jeff-Aporta/iswc-root/commits/main"
       ],
       "erroresText": [
         "Failed to load resource: the server responded with a status of 403 ()"
@@ -2560,7 +2560,7 @@
       "focusVisibleOk": false,
       "escapeOk": true,
       "badHttpUrls": [
-        "403 https://api.github.com/repos/Jeff-Aporta/is-webcomponents/commits/main"
+        "403 https://api.github.com/repos/Jeff-Aporta/iswc-root/commits/main"
       ],
       "erroresText": [
         "Failed to load resource: the server responded with a status of 403 ()"
@@ -2687,7 +2687,7 @@
         "404 http://127.0.0.1:62801/dist/src/components/helpers/ui.ts",
         "404 http://127.0.0.1:62801/dist/src/components/helpers/ui.css",
         "404 http://127.0.0.1:62801/dist/src/components/helpers/ui.md",
-        "404 https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/components/helpers/ui.css"
+        "404 https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/components/helpers/ui.css"
       ],
       "erroresText": [
         "Failed to load resource: the server responded with a status of 404 (Not Found)",

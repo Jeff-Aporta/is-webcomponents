@@ -899,7 +899,7 @@
                 "kind": "code-ejemplo",
                 "code": [
                   "<script type=\"module\">",
-                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
                   "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
                   "  await ISWebComponentsLoader.load('iswc-button');",
                   "</script>",
@@ -925,7 +925,7 @@
                 "kind": "code-ejemplo",
                 "code": [
                   "<script type=\"module\">",
-                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
                   "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
                   "  await ISWebComponentsLoader.load('iswc-button');",
                   "</script>",
@@ -951,7 +951,7 @@
                 "kind": "code-ejemplo",
                 "code": [
                   "<script type=\"module\">",
-                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
                   "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
                   "  await ISWebComponentsLoader.load('iswc-button');",
                   "</script>",
@@ -978,7 +978,7 @@
                 "kind": "code-ejemplo",
                 "code": [
                   "<script type=\"module\">",
-                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
                   "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
                   "  await ISWebComponentsLoader.load('iswc-button');",
                   "</script>",
@@ -1004,7 +1004,7 @@
                 "kind": "code-ejemplo",
                 "code": [
                   "<script type=\"module\">",
-                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
                   "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
                   "  await ISWebComponentsLoader.load('iswc-button');",
                   "</script>",
@@ -1031,7 +1031,7 @@
                 "kind": "code-ejemplo",
                 "code": [
                   "<script type=\"module\">",
-                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
                   "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
                   "  await ISWebComponentsLoader.load('iswc-button');",
                   "</script>",
@@ -1061,7 +1061,7 @@
                 "kind": "code-ejemplo",
                 "code": [
                   "<script type=\"module\">",
-                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+                  "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
                   "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
                   "  await ISWebComponentsLoader.load('iswc-button');",
                   "</script>",
@@ -1427,7 +1427,7 @@
             "desc": "Nativo. Dispara un click programático.",
             "ejemplo": [
               "<script type=\"module\">",
-              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
               "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
               "  await ISWebComponentsLoader.load('iswc-button');",
               "</script>",
@@ -1448,7 +1448,7 @@
             "desc": "Nativo. Foco en el botón.",
             "ejemplo": [
               "<script type=\"module\">",
-              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
               "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
               "  await ISWebComponentsLoader.load('iswc-button');",
               "</script>",
@@ -1469,7 +1469,7 @@
             "desc": "Nativo. Quita el foco.",
             "ejemplo": [
               "<script type=\"module\">",
-              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
               "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
               "  await ISWebComponentsLoader.load('iswc-button');",
               "</script>",
@@ -1491,7 +1491,7 @@
             "desc": "Helper equivalente a <code>focus()</code> (misma signature).",
             "ejemplo": [
               "<script type=\"module\">",
-              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
               "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
               "  await ISWebComponentsLoader.load('iswc-button');",
               "</script>",
@@ -1512,7 +1512,7 @@
             "desc": "Validez (form-associated).",
             "ejemplo": [
               "<script type=\"module\">",
-              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
               "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
               "  await ISWebComponentsLoader.load('iswc-button');",
               "</script>",
@@ -1534,7 +1534,7 @@
             "desc": "Muestra mensaje de validación del form.",
             "ejemplo": [
               "<script type=\"module\">",
-              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
               "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
               "  await ISWebComponentsLoader.load('iswc-button');",
               "</script>",
@@ -1559,7 +1559,7 @@
             "desc": "Marca error custom para validación del form.",
             "ejemplo": [
               "<script type=\"module\">",
-              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/cdn/core/loader.min.js';",
+              "  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';",
               "  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);",
               "  await ISWebComponentsLoader.load('iswc-button');",
               "</script>",

@@ -35,7 +35,7 @@ const writePrompts = () => {
     const prompt = `# F0.3 propuesta UX/UI exhaustiva — ${g.label}
 
 ## Perfil del proyecto
-**is-webcomponents** — librería de Web Components vanilla TypeScript con Shadow DOM, tokens \`--iswc-*\`, y un kit de 67 demos servidos desde GitHub Pages. Stack: Playwright 1.62.1 + Chromium headless para tests browser.
+**iswc-root** — librería de Web Components vanilla TypeScript con Shadow DOM, tokens \`--iswc-*\`, y un kit de 67 demos servidos desde GitHub Pages. Stack: Playwright 1.62.1 + Chromium headless para tests browser.
 
 ## Testables del grupo (categoría: ${g.category})
 

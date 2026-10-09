@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Demo de <iswc-split-panel> · is-webcomponents</title>
+<title>Demo de <iswc-split-panel> · iswc-root</title>
 <meta name="description" content="Dos paneles con divisor arrastrable. position/position-in-pixels, orientation, primary, collapse, disabled, snap, storage-key. Eventos reposition. Persistencia en localStorage." />
 <style>
   html, body { margin: 0; padding: 0; min-height: 100vh; background: #0c1118; color: #e2e8f0; font-family: ui-sans-serif, system-ui, sans-serif; }
@@ -40,7 +40,7 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/split-panel.min.js?h=9lbnar');
+  await import('../../../dist/cdn/layout/split-panel.min.js?h=1o8xlw');
   await customElements.whenDefined('iswc-split-panel');
 
   // (1) Split-panel horizontal básico, posición por defecto (50%).
@@ -130,9 +130,9 @@
   });
   document.getElementById('btn-reset-storage').addEventListener('click', () => {
     try {
-      const root = JSON.parse(localStorage.getItem('is-webcomponents') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
       if (root['iswc-split-panel']?.['demo-sp-3']) delete root['iswc-split-panel']['demo-sp-3'];
-      localStorage.setItem('is-webcomponents', JSON.stringify(root));
+      localStorage.setItem('iswc-root', JSON.stringify(root));
       append('storage-key=demo-sp-3 prefs borradas');
     } catch {}
   });

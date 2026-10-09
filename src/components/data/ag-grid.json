@@ -109,7 +109,7 @@
     {
       "id": "density",
       "title": "Density + columnas + persistencia",
-      "lede": "Toolbar: densidad, <strong>Columnas</strong> (checks show/hide), CSV y <strong>Reiniciar</strong> (borra personalización). Sidebar derecha: mismo panel de columnas/filtros. Con <code>remember-state</code> + <code>storage-key</code> se guarda en <code>localStorage['is-webcomponents']['iswc-ag-grid'][key]</code>: orden, visibilidad, anchos, pin, sort y filtros.",
+      "lede": "Toolbar: densidad, <strong>Columnas</strong> (checks show/hide), CSV y <strong>Reiniciar</strong> (borra personalización). Sidebar derecha: mismo panel de columnas/filtros. Con <code>remember-state</code> + <code>storage-key</code> se guarda en <code>localStorage['iswc-root']['iswc-ag-grid'][key]</code>: orden, visibilidad, anchos, pin, sort y filtros.",
       "blocks": [
         {
           "kind": "demo",
@@ -274,8 +274,8 @@
             "  density                      compact | normal | comfortable",
             "  quick-filter                 texto",
             "  group-by                     CSV de colIds iniciales",
-            "  remember-state               boolean — persiste en localStorage.is-webcomponents",
-            "  storage-key                  keyid bajo is-webcomponents.iswc-ag-grid",
+            "  remember-state               boolean — persiste en localStorage.iswc-root",
+            "  storage-key                  keyid bajo iswc-root.iswc-ag-grid",
             "  toolbar                      true | false",
             "",
             "Tipos de columna:",

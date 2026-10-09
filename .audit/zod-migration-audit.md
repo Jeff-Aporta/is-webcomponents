@@ -1,4 +1,4 @@
-# Auditoría de Migración a Zod — is-webcomponents
+# Auditoría de Migración a Zod — iswc-root
 
 > **Fecha:** 2026 (sesión de auditoría).
 > **Alcance:** `src/`, `scripts/`, `src/utils/health/`, `src/utils/testing/`, `src/previews/_kit/`.
@@ -41,7 +41,7 @@
 
 ### 0.4 Discrepancia importante con la orden
 
-- La brief asume `src/components/...` — **confirmado**: AGENTS.md y la realidad del filesystem usan `src/components/...` (NO `components/` en la raíz). La raíz es `is-webcomponents/`, no `AppWebcomponents/`.
+- La brief asume `src/components/...` — **confirmado**: AGENTS.md y la realidad del filesystem usan `src/components/...` (NO `components/` en la raíz). La raíz es `iswc-root/`, no `AppWebcomponents/`.
 - La brief asume "no Zod" — **confirmado** como dependencia directa, pero **NO** como ausente del filesystem.
 - La brief asume `*.tsx` — **confirmado que NO hay `.tsx`** en el repo (todo es `.ts`). El grep se ejecutó sobre `*.ts` y los resultados son completos.
 - La brief asume `manifest.js` como runtime metadata — confirmado, pero **hay un segundo manifest en `src/manifest.ts`** que es el que carga `src/gallery/app.ts` (el manifest.js legacy sigue vivo para los previews HTML).

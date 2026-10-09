@@ -8,7 +8,7 @@
 ## Cómo regenerar
 
 ```bash
-cd Personal/apps/is-webcomponents
+cd Personal/apps/iswc-root
 deno run -A --no-check labs/iss-ayudascpia-der/audit.mjs      # reglas + métricas, sin navegador
 deno run -A --no-check scripts/_tmp/_rebuild-component-diagram.mjs
 deno run -A --no-check labs/iss-ayudascpia-der/render.mjs     # out/der.svg + out/der.png

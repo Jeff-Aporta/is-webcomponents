@@ -205,7 +205,7 @@ class IswcFoo extends ElementBase {
 }
 ```
 
-`emit` está en [`core/element.ts`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/src/core/element.ts)
+`emit` está en [`core/element.ts`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/core/element.ts)
 y centraliza el `new CustomEvent(name, { detail, bubbles, composed,
 cancelable })`.
 

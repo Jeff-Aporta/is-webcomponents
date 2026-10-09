@@ -46,7 +46,7 @@ ISS (`slug`, `module`, `tag`, `script`, `attrs`, `payload`): se copia tal cual a
 ## Cómo regenerar
 
 ```bash
-cd Personal/apps/is-webcomponents
+cd Personal/apps/iswc-root
 deno task build                                                  # si cambió el kit
 deno run -A --no-check labs/iss-ayudascpia-secuencias/render.mjs # todos → out/*.svg + *.png
 deno run -A --no-check labs/iss-ayudascpia-secuencias/render.mjs conversacion-turno

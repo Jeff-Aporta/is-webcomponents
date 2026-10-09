@@ -1,4 +1,4 @@
-// estados.ts: estados de URL (?s=) de la galeria is-webcomponents.
+// estados.ts: estados de URL (?s=) de la galeria iswc-root.
 // Mismo formato que index.html (JSON en base64url): { component, theme?, palette? }.
 // El home (sin componente) y las paginas sueltas (theming/ecosystem) no son tags.
 import { ENV } from './env.ts';

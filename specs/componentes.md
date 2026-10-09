@@ -85,7 +85,7 @@ Cada tag es un Custom Element con Shadow DOM. El inventario y rutas de build sal
   - **No** ocultar con CSS del host (el shadow no es contrato estable). **No** inventar un segundo flag (`hide-tools`, `chrome=false`) — canónico `toolbar-tools`. `disable-column-menu` solo afecta al menú de columna.
 - **`iswc-ag-grid`:** núcleo `datagrid-core/` (port de mimicus-react) separado del render; `createGridModel({rows,columns})` ⇒ `GridApi` (store observable). Atributos: `get-row-id`, `density`, `group-by`, `remember-state`, `storage-key`, `toolbar`. Columnas: `flex`, `rowGroup`, `enableRowGroup`, `aggFunc`, `filterType`, `minWidth`, `maxWidth`, pinned. Eventos: `iswc-state-loaded`, `iswc-column-reorder/resize/pin/hide`.
   - `#readData()` auto-corrige cols/rows (primer `<script type="application/json">` = columnas; segundo = filas; si el primero es claramente rows, se corrige). **No** usar `getAttribute('rows')` directo. **No** hardcodear `DENSITY_ROW_HEIGHT` (usar `#rowHeight()` que respeta `--iswc-grid-row-h`). **No** overrides `--iswc-*` de scrollbar dentro del shadow.
-- **Persistencia:** un solo `localStorage['is-webcomponents'][tag][storage-key]` vía `_shared/prefs.js`. Opt-in (`remember-state`/`remember-scroll`). **No** keys planas / `sessionStorage`.
+- **Persistencia:** un solo `localStorage['iswc-root'][tag][storage-key]` vía `_shared/prefs.js`. Opt-in (`remember-state`/`remember-scroll`). **No** keys planas / `sessionStorage`.
 - Guardianes: `prefs-contract`, `data-grid-toolbar`.
 
 ### S-K10 data-viz

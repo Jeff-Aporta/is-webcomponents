@@ -63,7 +63,9 @@ declare const __IS_BUILD_SHA__: string;
  */
 function shaFromImportUrl(href: string): string | null {
   try {
-    const m = String(href).match(/is-webcomponents@([0-9a-f]{7,40})\b/i);
+    // `is-webcomponents` es el nombre del repo antes de iswc-root: jsDelivr sigue
+    // resolviéndolo, así que un loader pineado con el nombre viejo vale igual.
+    const m = String(href).match(/(?:iswc-root|is-webcomponents)@([0-9a-f]{7,40})\b/i);
     return m ? m[1]!.toLowerCase() : null;
   } catch {
     return null;
@@ -88,7 +90,7 @@ const HASHES: Record<string, string> = __IS_ASSET_HASHES__;
 
 /** Plantilla del host. configure({ sha }) sustituye {{cdnUrl}} y {{sha}}. */
 const HOST_DEFAULT = '{{cdnUrl}}@{{sha}}/dist/cdn';
-const CDN_URL_DEFAULT = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents';
+const CDN_URL_DEFAULT = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root';
 /**
  * Pin por defecto de ESTE loader:
  * 1) SHA de la URL (`@abc…/loader.min.js`) si viene pinneada

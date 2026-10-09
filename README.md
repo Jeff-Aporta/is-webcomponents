@@ -4,7 +4,7 @@ Galería de [Web Components](https://developer.mozilla.org/en-US/docs/Web/API/We
 
 ## Demo (GitHub Pages)
 
-**https://jeff-aporta.github.io/is-webcomponents/**
+**https://jeff-aporta.github.io/iswc-root/**
 
 ## Uso local
 
@@ -31,7 +31,7 @@ Artefactos en `dist/cdn/` (`{name}.min.js` + `{name}.min.css` + `is-base.min.css
 | `src/components/` | Fuentes por categoría (`actions`, `feedback`, `helpers`, …) |
 | `src/styles/` | Tokens (`is-base.css`) y shell |
 | `src/assets/` | Iconos Iconify y favicon |
-| `skills/is-webcomponents/` | Guía para agentes IDE (CDN-first) — fuente en raíz, se copia a `dist/cdn/skills/` en el build |
+| `skills/iswc-root/` | Guía para agentes IDE (CDN-first) — fuente en raíz, se copia a `dist/cdn/skills/` en el build |
 | `src/components/**/*.md` | Docs LLM por módulo / categoría — raw bajo `…/main/src/components/` |
 | `src/manifest.ts` | Índice de la galería |
 | `AGENTS.md` | Carta de leyes + guía para agentes (único diario en raíz) |
@@ -46,10 +46,10 @@ No hay publicación npm aún: el kit se consume por **CDN jsDelivr**. En cada pr
 Usa el kit ISWC solo por CDN (jsDelivr), sin npm ni npx.
 Bootstrap: `loader.min.js` + `L.load(tags de la vista)`. Sin `all.min.js` ni bundles de categoría.
 Reutiliza tags iswc-* existentes; no reinventes botones, dialogs, tablas, charts, toasts ni iconos.
-Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/is-webcomponents/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
+Antes de inventar API: lee [`specs/componentes.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/specs/componentes.md) (índice global) y el `.md` del módulo.
 ```
 
-Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/componentes.md) · [catálogo de errores](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/specs/lessons.md) · skill en `skills/is-webcomponents/SKILL.md`.
+Docs raw: [índice componentes](https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/specs/componentes.md) · [catálogo de errores](https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/specs/lessons.md) · skill en `skills/iswc-root/SKILL.md`.
 
 ## Licencia
 

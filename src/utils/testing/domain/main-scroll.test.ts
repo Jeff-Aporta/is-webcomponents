@@ -17,7 +17,7 @@ import { setTimeout as wait } from 'node:timers/promises';
 
 // Root canonico de `_shared/prefs.ts`. `is-components` es solo legacy: prefs
 // lo lee una vez para migrarlo y lo borra.
-const ROOT_KEY = 'is-webcomponents';
+const ROOT_KEY = 'iswc-root';
 
 /** localStorage de juguete. */
 function fakeStorage() {

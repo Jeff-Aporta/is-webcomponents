@@ -2,13 +2,13 @@
 
 Cómo una app externa (p. ej. PatyIA/app, iswc-tkts/app, isc-swagger) monta un
 preview `iswc-preview/v1` usando el kit ISWC por CDN. Verificado con
-Stagehand/Playwright (is-webcomponents@60be5643d6).
+Stagehand/Playwright (iswc-root@60be5643d6).
 
 ## 1. Cargar el loader y los componentes de preview
 ```html
 <script type="module">
   import { ISWebComponentsLoader as L }
-    from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha>/dist/cdn/core/loader.min.js';
+    from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@<sha>/dist/cdn/core/loader.min.js';
   L.configure({ mirrors: ['jsdelivr', 'pages'], preferSelf: false });
   await L.load('iswc-preview-component', 'iswc-preview-controls', /* …tags del demo… */);
   await customElements.whenDefined('iswc-preview-component');

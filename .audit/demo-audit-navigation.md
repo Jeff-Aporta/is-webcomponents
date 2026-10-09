@@ -203,4 +203,4 @@ La categoría `navigation` tiene **~13 componentes** pero solo **2 demos**. Los 
 
 **Status:** COMPLETED (audit).  
 **Findings:** 2 demos auditados (1 leído en detalle: `breadcrumb`); 0 con playground interactivo; 1/2 con cobertura de props plena (`breadcrumb` cubre 5 secciones); 0/2 con tokens `--iswc-*` para chrome; 0 demos rotos; 0 incoherencias demo↔doc; **1 gap mayor** (11 componentes sin demo — peor ratio de la categoría con demos); 1 observación menor (`breadcrumb-item.html` es demo aislado de sub-componente, inusual).  
-**Report path:** `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\demo-audit-navigation.md`.
+**Report path:** `C:\ContaPyme\Personal\apps\iswc-root\.audit\demo-audit-navigation.md`.

@@ -8,7 +8,7 @@
 ## Cómo regenerar
 
 ```bash
-cd Personal/apps/is-webcomponents
+cd Personal/apps/iswc-root
 deno run -A --no-check scripts/build.mjs                    # si cambió el kit
 deno run -A --no-check labs/iss-ayudascpia-clases/render.mjs  # out/clases.svg + out/clases.png
 ```

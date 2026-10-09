@@ -35,7 +35,7 @@ import components from '../src/manifest.js';
  * son documentos distintos. `AGENTS.md` = convenciones internas del repo;
  * `components/LLM.md` = catálogo para consumir componentes.
  */
-const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src';
+const LLM_BASE = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src';
 
 function llmDocs(entry) {
   // Solo el MD del módulo. La skill general vive en SKILL_DOCS (cdn-snippet).

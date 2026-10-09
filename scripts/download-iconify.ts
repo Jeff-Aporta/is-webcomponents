@@ -40,8 +40,8 @@ const NON_ICON_COLLECTIONS = new Set([
 
 /** Bases CDN del kit (mismo orden que `components/_shared/icon-loader.js`). */
 const OWN_CDN_BASES = [
-  'https://jeff-aporta.github.io/is-webcomponents/dist/assets/icons/',
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/dist/assets/icons/',
+  'https://jeff-aporta.github.io/iswc-root/dist/assets/icons/',
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/assets/icons/',
 ];
 
 const log = {

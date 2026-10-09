@@ -2,7 +2,7 @@
 
 > **Para:** próxima sesión / agente capitán que retome el trabajo.
 > **Desde:** sesión que se corrompió (contexto saturado). Este documento es autocontenido.
-> **Ancla:** `C:\ContaPyme\Personal\apps\is-webcomponents`
+> **Ancla:** `C:\ContaPyme\Personal\apps\iswc-root`
 > **WT-ROOT:** `C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026`
 > **Rama WT-ROOT:** `wt-root-types-strong-2026`
 > **Fecha del handoff:** sesión cerrada con STRICT_NOW=62
@@ -68,7 +68,7 @@ Estos son los requisitos que el humano expresó explícitamente durante la sesi�
 ### 3.1 Estructura de worktrees
 
 ```
-C:\ContaPyme\Personal\apps\is-webcomponents                                  [main] 371472559c
+C:\ContaPyme\Personal\apps\iswc-root                                  [main] 371472559c
 C:\ContaPyme\Personal\apps\WT\iswc-webcomponents-wt-root-types-strong-2026     [wt-root-types-strong-2026] e682fde1fa
 ```
 
@@ -146,7 +146,7 @@ Ejecutar el comando de "Top archivos con errores" (sección 3.3) para la lista v
 
 ### 6.1 Lo que existe
 
-**Infraestructura en `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\`:**
+**Infraestructura en `C:\ContaPyme\Personal\apps\iswc-root\.audit\`:**
 
 | Archivo | Contenido |
 |---|---|
@@ -359,7 +359,7 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 | `tsconfig.json` | Typecheck relajado (`strict: false`, solo `src/manifest.ts`) |
 | `tsconfig.strict-audit.json` | **Audit estricto** (`strict: true`, exclude `**/*.test.ts`) |
 
-### 11.2 Proyecto (`C:\ContaPyme\Personal\apps\is-webcomponents\`)
+### 11.2 Proyecto (`C:\ContaPyme\Personal\apps\iswc-root\`)
 
 | Archivo/Path | Propósito |
 |---|---|
@@ -425,7 +425,7 @@ Si la meta es 0 absoluto, revisar si los 62 son:
 ### PASO 5 — Completar proposals F0 faltantes (2-3 h)
 
 Despachar 3 sub-agentes (paralelo) para `g39.md`, `g43.md`, `g44.md`:
-> "Lee `C:\ContaPyme\Personal\apps\is-webcomponents\.audit\prompts-deep\g39.md` y EJECUTA el template. Escribe tu respuesta completa en `.audit\proposals-deep\g39.md`. NO escribas código de tests."
+> "Lee `C:\ContaPyme\Personal\apps\iswc-root\.audit\prompts-deep\g39.md` y EJECUTA el template. Escribe tu respuesta completa en `.audit\proposals-deep\g39.md`. NO escribas código de tests."
 
 ### PASO 6 — F0.4 GATE (2-3 h)
 
@@ -479,7 +479,7 @@ Verificar que todo está verde. **Nada en rojo.**
 
 Al aprobar:
 ```powershell
-cd C:\ContaPyme\Personal\apps\is-webcomponents
+cd C:\ContaPyme\Personal\apps\iswc-root
 git merge --no-ff wt-root-types-strong-2026 -m "merge: types-strong-2026 (8,777 → 62 errores strict, 344 commits)"
 ```
 

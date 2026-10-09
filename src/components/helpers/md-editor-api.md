@@ -17,7 +17,7 @@ requests GET/PUT/POST/DELETE y mapea campos del backend (`content`/`body`/â€�
 import {
   normalizeDocument, apiRequest, parseApiConfig, byteLength, formatBytes,
 } from
-  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@SHA/dist/cdn/helpers/md-editor-api.min.js';
+  'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@SHA/dist/cdn/helpers/md-editor-api.min.js';
 ```
 
 Tipos canÃ³nicos: ver `md-editor-api.d.ts` junto al mÃ³dulo.
