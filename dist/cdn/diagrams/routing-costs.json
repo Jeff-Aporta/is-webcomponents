@@ -12,6 +12,10 @@
     "glow": 3,
     "radius": 20
   },
+  "connector": {
+    "glow": 4,
+    "radius": 72
+  },
   "package": {
     "borderGlow": 10,
     "borderRadius": 64,

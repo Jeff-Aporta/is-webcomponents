@@ -65,12 +65,15 @@ export function stampHashTexts(input: Record<string, string>): { texts: Record<s
     }
   }
   if (pending.size) {
-    for (const key of pending) hashes.set(key, contentHash(texts[key]));
-    for (const key of pending) {
-      const text = stampText(key, texts[key], hashes, known);
-      texts[key] = text;
-      hashes.set(key, contentHash(text));
-    }
+    // Ciclo de imports (y lo que depende de el): un hash de contenido no puede
+    // ser autoconsistente dentro del ciclo. Recalcularlo tras sellar dejaba a
+    // cada importador con un `?h=` distinto del mismo archivo, y el navegador
+    // cargaba VARIAS instancias del modulo (estado duplicado, p. ej. la sesion).
+    // Todo lo pendiente comparte un sello de grupo (su contenido sin `?h=`) y
+    // cada archivo recibe uno fijo: la misma URL para todos sus importadores.
+    const grupo = contentHash([...pending].sort().map((k) => `${k}\n${texts[k].replace(/\?h=[0-9a-z]+/gi, '')}`).join('\n--\n'));
+    for (const key of pending) hashes.set(key, contentHash(`${grupo}:${key}`));
+    for (const key of pending) texts[key] = stampText(key, texts[key], hashes, known);
   }
   return { texts, hashes: Object.fromEntries(hashes) };
 }

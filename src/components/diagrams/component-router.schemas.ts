@@ -114,6 +114,12 @@ export const RoutingCostsSchema = z.object({
     /** Hasta dónde llega ese brillo más allá del hitbox (px). */
     radius: z.number().min(0),
   }),
+  connector: z.object({
+    /** Brillo máximo junto al hitbox de un conector -(O- ajeno (degradado radial). */
+    glow: z.number().min(0),
+    /** Radio del brillo medido desde el centro del conector (px). */
+    radius: z.number().min(0),
+  }),
   package: z.object({
     /** Brillo máximo corriendo paralelo a un borde de agrupador. */
     borderGlow: z.number().min(0),

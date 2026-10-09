@@ -23,6 +23,10 @@ export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
   // Brillo de entidad: un paso mas alla del aire (clearance); un radio mayor
   // se comia los carriles de los corredores estrechos entre franjas.
   entity: { glow: 3, radius: 20 },
+  // Conector -(O- ajeno: su hitbox no existe en la grilla y además irradia un
+  // brillo radial (caída lineal desde el centro) para que los rieles no pasen
+  // rozándolo. Las aristas que llegan a ESE conector no lo pagan.
+  connector: { glow: 4, radius: 72 },
   // Entrar/salir de un agrupador y girar son sumas fijas (no brillos).
   // Cruzar un borde de agrupador vale el doble que cruzar un riel ajeno
   // (rail.cross = ×8 en un paso de 20 px ≈ 140 px equivalentes → 280).

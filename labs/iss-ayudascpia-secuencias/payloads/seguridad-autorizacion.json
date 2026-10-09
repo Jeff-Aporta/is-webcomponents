@@ -69,26 +69,36 @@
       ],
       "fragments": [
         {
+          "id": "f-anon",
+          "kind": "region",
+          "name": "evaluación como anónimo",
+          "messages": [
+            "m4",
+            "m5",
+            "m6"
+          ],
+          "condition": "fila de USR, que define por defecto todos los ids"
+        },
+        {
           "id": "f-rol",
           "kind": "region",
           "name": "rol vigente",
           "messages": [
-            "m5",
-            "m6",
-            "m7"
+            "m8",
+            "m9",
+            "m10"
           ],
           "condition": "seg_rolescontacto del grupo PATYIA, vigente, principal primero"
         },
         {
           "id": "f-accion",
           "kind": "region",
-          "name": "valor de la acción",
+          "name": "valor efectivo",
           "messages": [
-            "m8",
-            "m9",
-            "m10"
+            "m11",
+            "m12"
           ],
-          "condition": "seg_accionesxrol para el rol y METHOD:/ruta"
+          "condition": "fila del rol; si no la tiene, la de USR"
         }
       ],
       "messages": [
@@ -96,7 +106,7 @@
           "id": "m1",
           "from": "c",
           "to": "w",
-          "label": "llega la petición con su token (Authorization: Bearer)",
+          "label": "llega la petición, con o sin token (Authorization: Bearer)",
           "kind": "sync",
           "group": "g-http"
         },
@@ -104,7 +114,7 @@
           "id": "m2",
           "from": "w",
           "to": "w",
-          "label": "identifica el permiso que exige la ruta (METHOD:/ruta, o el alias de SEG_ENDPOINTS)",
+          "label": "fija el id SEG por el prefijo: METHOD:/ruta · QUERY:/<ruta> (lista con filtro) · CFG:/<ruta> (configuración)",
           "kind": "self",
           "group": "g-seg"
         },
@@ -112,20 +122,44 @@
           "id": "m3",
           "from": "w",
           "to": "b",
-          "label": "entrega al controller de la ruta",
+          "label": "autorizarRuta(), antes del handler",
           "kind": "sync",
           "group": "g-http"
         },
         {
           "id": "m4",
           "from": "b",
+          "to": "pm",
+          "label": "decide el id para un anónimo",
+          "kind": "sync",
+          "group": "g-seg"
+        },
+        {
+          "id": "m5",
+          "from": "pm",
+          "to": "pg",
+          "label": "lee la matriz seg_accionesxrol (caché de 90 s)",
+          "kind": "sync",
+          "group": "g-db"
+        },
+        {
+          "id": "m6",
+          "from": "pg",
+          "to": "pm",
+          "label": "sin fila en USR o { protected: false } → pública · cualquier otro valor → exige JWT",
+          "kind": "reply",
+          "group": "g-db"
+        },
+        {
+          "id": "m7",
+          "from": "b",
           "to": "b",
-          "label": "verifica el token (HS384) · sin token o inválido → 401",
+          "label": "si es pública, sigue sin token; si no, verifica el JWT (HS384) · sin token o inválido → 401",
           "kind": "self",
           "group": "g-jwt"
         },
         {
-          "id": "m5",
+          "id": "m8",
           "from": "b",
           "to": "pm",
           "label": "pide el rol vigente del contacto",
@@ -133,7 +167,7 @@
           "group": "g-seg"
         },
         {
-          "id": "m6",
+          "id": "m9",
           "from": "pm",
           "to": "pg",
           "label": "busca el rol en seg_rolescontacto",
@@ -141,50 +175,42 @@
           "group": "g-db"
         },
         {
-          "id": "m7",
-          "from": "pg",
-          "to": "pm",
-          "label": "rol del contacto · sin rol → USR · SEG caído → 503",
-          "kind": "reply",
-          "group": "g-db"
-        },
-        {
-          "id": "m8",
-          "from": "b",
-          "to": "pm",
-          "label": "pregunta si el rol tiene la acción permitida",
-          "kind": "sync",
-          "group": "g-seg"
-        },
-        {
-          "id": "m9",
-          "from": "pm",
-          "to": "pg",
-          "label": "lee el valor en seg_accionesxrol",
-          "kind": "sync",
-          "group": "g-db"
-        },
-        {
           "id": "m10",
           "from": "pg",
           "to": "pm",
-          "label": "permitido · negado · sin fila",
+          "label": "rol del contacto · sin rol → USR · lectura fallida → 503",
           "kind": "reply",
           "group": "g-db"
         },
         {
           "id": "m11",
           "from": "b",
-          "to": "b",
-          "label": "solo un «negado» corta con 401; permitido, sin fila o ruta no configurable siguen",
-          "kind": "self",
+          "to": "pm",
+          "label": "valor efectivo del id para el rol y el verbo",
+          "kind": "sync",
           "group": "g-seg"
         },
         {
           "id": "m12",
+          "from": "pm",
+          "to": "b",
+          "label": "el del rol o, si no lo define, el de USR (en CFG, partido por verbo)",
+          "kind": "reply",
+          "group": "g-seg"
+        },
+        {
+          "id": "m13",
+          "from": "b",
+          "to": "b",
+          "label": "false → 401 · { protected: true }, true o capacidad → pasa · SEG sin respuesta → 401",
+          "kind": "self",
+          "group": "g-seg"
+        },
+        {
+          "id": "m14",
           "from": "b",
           "to": "c",
-          "label": "responde el endpoint",
+          "label": "corre el handler y responde",
           "kind": "reply",
           "group": "g-http"
         }

@@ -279,6 +279,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const SAME_FUNNEL_MUL = C.rail.sameFunnel;
   const NEAR_RAIL_MUL = C.rail.near;
   const ENTITY_GLOW_MUL = C.entity.glow;
+  const RING_GLOW_MUL = C.connector.glow;
+  const RING_GLOW_R = C.connector.radius;
   const CROSS_MUL = C.rail.cross;
   const HEAD_ON_MUL = C.rail.headOn;
   const MIN_MUL = C.grid.minFactor;
@@ -321,6 +323,10 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   // el A* ni el stub de un puerto pueden atravesarla.
   const sobreTexto = new Uint8Array(N);
   const ringOwner = new Int32Array(N).fill(-1);
+  // Brillo radial de conectores: el mayor que alcanza al nodo y de qué anillo
+  // viene (las aristas que llegan a ese anillo no lo pagan).
+  const ringGlow = new Float32Array(N).fill(1);
+  const ringGlowOwner = new Int32Array(N).fill(-1);
   const prohOwner = new Int32Array(N).fill(-1);
   // baseMul = anidación × brillo de entidades (isótropo). Parte de 1.
   const baseMul = new Float32Array(N);
@@ -353,7 +359,13 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         }
       }
       for (let r = 0; r < world.rings.length; r++) {
-        if (inside(x, y, world.rings[r]!, 0)) { ringOwner[k] = r; break; }
+        const rb = world.rings[r]!;
+        if (ringOwner[k] < 0 && inside(x, y, rb, 0)) ringOwner[k] = r;
+        if (RING_GLOW_R > 0) {
+          const d = Math.hypot(x - (rb.x + rb.w / 2), y - (rb.y + rb.h / 2));
+          const g = d < RING_GLOW_R ? 1 + RING_GLOW_MUL * (1 - d / RING_GLOW_R) : 1;
+          if (g > ringGlow[k]!) { ringGlow[k] = g; ringGlowOwner[k] = r; }
+        }
       }
       for (let p = 0; p < prohibited.length; p++) {
         if (inside(x, y, prohibited[p]!, clearance)) { prohOwner[k] = p; break; }
@@ -613,6 +625,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       }
     }
     const prohAllowed = prohibited.map((p) => e.fromPkgs.has(p.id));
+    const ownRing = e.toRing ? world.rings.findIndex((r) => r.id === e.toRing!.id) : -1;
     const free = (k: number): boolean =>
       !blocked[k]
       && (ringOwner[k] < 0)
@@ -640,6 +653,25 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       if (A < 0 || !free(A)) continue;
       const s0 = A * 4 + SIDE_DIR[c.side];
       if (!startOf.has(s0)) startOf.set(s0, c);
+    }
+    // Ninguna salida asignada sirve (p. ej. la cara mira a un rótulo): se
+    // prueba el perímetro completo antes que dejar la arista sin ruta.
+    if (!startOf.size) {
+      // Solo puertos que caen sobre una línea de la grilla (stem a 90°).
+      const enGrilla = (p: RouterPort): boolean => (p.side === 'left' || p.side === 'right'
+        ? Math.abs(ys[lineIndex(ys, p.y)]! - p.y) < 0.5
+        : Math.abs(xs[lineIndex(xs, p.x)]! - p.x) < 0.5);
+      const perim = perimeterPorts(e.fromBox, step).filter(enGrilla);
+      // Primero puertos libres; si ninguno sale, también los ya tomados.
+      for (const pool of [perim.filter((p) => !portTaken(p, ei)), perim]) {
+        for (const c of pool) {
+          const A = tipFor(c, c.side, stub, free);
+          if (A < 0 || !free(A)) continue;
+          const s0 = A * 4 + SIDE_DIR[c.side];
+          if (!startOf.has(s0)) startOf.set(s0, c);
+        }
+        if (startOf.size) break;
+      }
     }
     // Llegadas: al O por cualquiera de sus 3 lados libres (no por el del
     // componente / `(`); a una cara, perpendicular. Una punta B por lado y
@@ -723,6 +755,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         const sameFunnel = merge && !(ko && enIncentivo && ko[o]![nk]! > 0) ? go[o]![nk]! : 0;
         // ── Campo de factores: producto de brillos; cada nodo parte de 1 ──
         let mul = baseMul[nk]! * borderMul[o]![nk]! * (1 + hist[nk]! * HISTORY_MUL);
+        if (ringGlowOwner[nk]! >= 0 && ringGlowOwner[nk] !== ownRing) mul *= ringGlow[nk]!;
         if (behind(xs[ni]!, ys[nj]!)) mul *= 1 + RETREAT_MUL;
         if (others > 0) mul *= 1 + OVERLAP_MUL * others * pf;
         if (sameFunnel > 0) mul *= SAME_FUNNEL_MUL;

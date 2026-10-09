@@ -34,6 +34,28 @@ test('stampHashTexts: el padre lleva el hash del hijo y el suyo cambia si el hij
   assert.notEqual(second.hashes['actions/button.min.js'], first.hashes['actions/button.min.js']);
 });
 
+test('stampHashTexts: en un ciclo de imports todos los importadores usan la MISMA URL de cada archivo', () => {
+  // sesion <-> api (ciclo); vista y cabecera importan ambos. Con URLs distintas el
+  // navegador carga dos instancias de `sesion.js` (estado duplicado).
+  const { texts, hashes } = stampHashTexts({
+    'js/sesion.js': "import { api } from './api.js'; export let s = null;",
+    'js/api.js': "import { s } from './sesion.js'; export const api = () => s;",
+    'view/chat.js': "import { s } from '../js/sesion.js'; import { api } from '../js/api.js';",
+    'view/cabecera.js': "import { s } from '../js/sesion.js';",
+  });
+  const urls = (archivo: string) => new Set(Object.values(texts).flatMap((t) => t.split(`${archivo}?h=`).slice(1).map((resto) => resto.slice(0, 6))));
+  for (const archivo of ['sesion.js', 'api.js']) {
+    const vistas = urls(archivo);
+    assert.equal(vistas.size, 1, `${archivo}: una sola URL (${[...vistas].join(', ')})`);
+    assert.equal([...vistas][0], hashes[`js/${archivo}`], `${archivo}: la URL usa el hash publicado`);
+  }
+  const otra = stampHashTexts({
+    'js/sesion.js': "import { api } from './api.js'; export let s = 1;",
+    'js/api.js': "import { s } from './sesion.js'; export const api = () => s;",
+  });
+  assert.notEqual(otra.hashes['js/api.js'], hashes['js/api.js'], 'un cambio dentro del ciclo cambia el hash de todo el ciclo');
+});
+
 test('lookupHash prefiere el sufijo mas largo', () => {
   const files = {
     'host-base.css': 'aaaaaa',

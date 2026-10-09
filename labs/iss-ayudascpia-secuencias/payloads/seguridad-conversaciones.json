@@ -71,7 +71,7 @@
         {
           "id": "f-token",
           "kind": "region",
-          "name": "ruta configurable = false: solo JWT",
+          "name": "puerta SEG: USR { protected: true }, solo JWT",
           "messages": [
             "m2"
           ],
@@ -80,12 +80,12 @@
         {
           "id": "f-seg",
           "kind": "region",
-          "name": "ruta configurable: token + SEG + capacidad",
+          "name": "capacidad: valor efectivo en true",
           "messages": [
             "m3",
             "m4"
           ],
-          "condition": "ruta administrativa o capacidad (QUERY:/conversacion, GET:/conversacion/logs/...)"
+          "condition": "QUERY:/conversaciones (auditoría) o GET:/conversacion/{iconversacion}/logs (historial ajeno)"
         }
       ],
       "messages": [
@@ -101,7 +101,7 @@
           "id": "m2",
           "from": "w",
           "to": "b",
-          "label": "verifica JWT (HS384) — la ruta no consulta SEG, exige token y pasa",
+          "label": "autorizarRuta(): verifica JWT (HS384); el valor { protected: true } exige token y pasa",
           "kind": "sync",
           "group": "g-auth"
         },
@@ -109,7 +109,7 @@
           "id": "m3",
           "from": "w",
           "to": "b",
-          "label": "verifica JWT, resuelve el rol del contacto en seg_rolescontacto",
+          "label": "para una capacidad: resuelve el rol del contacto en seg_rolescontacto",
           "kind": "sync",
           "group": "g-auth"
         },
@@ -117,7 +117,7 @@
           "id": "m4",
           "from": "b",
           "to": "b",
-          "label": "consulta seg_accionesxrol para METHOD:/ruta o para la capacidad; solo false niega",
+          "label": "valor efectivo de la capacidad (rol, si no USR); solo true la concede",
           "kind": "self",
           "group": "g-auth"
         },
@@ -165,7 +165,7 @@
           "id": "m10",
           "from": "k",
           "to": "k",
-          "label": "auditoría: alcance QUERY:/conversacion o capacidad del log → sí (lectura, tiquete sin efectos)",
+          "label": "auditoría: QUERY:/conversaciones = true, o GET:/conversacion/{iconversacion}/logs = true para el historial, → sí (lectura, tiquete sin efectos)",
           "kind": "self",
           "group": "g-own"
         },

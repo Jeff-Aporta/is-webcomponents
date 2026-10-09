@@ -1600,6 +1600,12 @@ export function computeComponentLayout(spec: ComponentSpecResult): ComponentLayo
       e.toY = host.toY;
       (e as LayoutEdge & { sharedTip?: boolean }).sharedTip = true;
     }
+    // El router pudo salir por otra cara (la asignada no tenía salida).
+    const fp = routed.fromPorts[i];
+    if (pts && fp) {
+      e.fromX = fp.x;
+      e.fromY = fp.y;
+    }
     // Sin ruta: L ortogonal visible (y re-empaque abajo) antes que perder la arista.
     e.path = pointsToPath(pts ?? simplifyOrthoPath([
       re.from, { x: re.to.x, y: re.from.y }, re.to,

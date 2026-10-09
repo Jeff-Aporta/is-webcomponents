@@ -89,7 +89,7 @@
             "m10",
             "m11"
           ],
-          "condition": "registro `0 */30 * * * *` en src/functions/index.ts"
+          "condition": "registro `0 */30 * * * *` en src/functions/index.ts; un fallo queda en patyia_errores como TIMER:/<nombre>"
         }
       ],
       "messages": [
@@ -97,7 +97,7 @@
           "id": "m1",
           "from": "h",
           "to": "a",
-          "label": "el host arranca y dispara app.hook.appStart una vez",
+          "label": "el host arranca y dispara app.hook.appStart una vez; el trabajo de arranque corre en segundo plano, sin esperarlo",
           "kind": "sync",
           "group": "g-arranque"
         },
@@ -161,7 +161,7 @@
           "id": "m9",
           "from": "tc",
           "to": "pg",
-          "label": "cierra por inactividad (itdestado = 1) — lote por registro",
+          "label": "cierra por inactividad (itdestado = 1) y clasifica imodulo de hasta timer_batchImodulo cerradas",
           "kind": "sync",
           "group": "g-timers"
         },
@@ -169,7 +169,7 @@
           "id": "m10",
           "from": "tl",
           "to": "pg",
-          "label": "purgar log de conversaciones con fhultact de más de 21 días (lotes de 200, 250 ms entre lotes)",
+          "label": "purgar log con fhultact más vieja que purga.dias o clean_convlog (21 días por defecto), si purga.habilitarEn lo permite (lotes de 200, 250 ms entre lotes)",
           "kind": "sync",
           "group": "g-timers"
         },
@@ -186,20 +186,20 @@
         "name": "si Azurite no está arriba en local",
         "branches": [
           {
-            "condition": "is_disable_timer = true",
+            "condition": "runtime.jvalue.timers.<flag> = false",
             "messages": [
               {
                 "id": "m12",
                 "from": "h",
                 "to": "a",
-                "label": "ningún timer se registra; el barrido inicial cubre el cierre",
+                "label": "el handler sale sin correr; el barrido inicial cubre el cierre",
                 "kind": "self",
                 "group": "g-timers"
               }
             ]
           },
           {
-            "condition": "is_disable_timer ausente (default)",
+            "condition": "runtime.jvalue.timers.<flag> ausente o true (default)",
             "messages": [
               {
                 "id": "m13",

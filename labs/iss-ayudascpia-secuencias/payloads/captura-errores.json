@@ -78,7 +78,7 @@
           "id": "m1",
           "from": "c",
           "to": "w",
-          "label": "llega una petición a una ruta configurable",
+          "label": "llega una petición a una ruta propia y pasa la puerta SEG",
           "kind": "sync",
           "group": "g-http"
         },
@@ -110,7 +110,7 @@
           "id": "m5",
           "from": "e",
           "to": "e",
-          "label": "excluye 503 (dependencia caída) y 4xx (error del cliente); excluye /error, /errores, DELETE /error",
+          "label": "excluye 503 (dependencia caída) y 4xx (error del cliente); excluye POST /error, GET /errores y DELETE /errores",
           "kind": "self",
           "group": "g-cap"
         },
@@ -156,7 +156,7 @@
         }
       ],
       "alt": {
-        "name": "lo que NO se captura",
+        "name": "otros orígenes y lo que NO se captura",
         "branches": [
           {
             "condition": "timer que falla",
@@ -164,9 +164,22 @@
               {
                 "id": "m11",
                 "from": "h",
-                "to": "h",
-                "label": "los timers no pasan por la envoltura; solo dejan rastro en el log del host",
-                "kind": "self",
+                "to": "e",
+                "label": "los timers pasan por la misma envoltura; la fila queda con referencia TIMER:/<nombre> y el host sigue",
+                "kind": "sync",
+                "group": "g-cap"
+              }
+            ]
+          },
+          {
+            "condition": "ruta montada por el stack",
+            "messages": [
+              {
+                "id": "m13",
+                "from": "w",
+                "to": "e",
+                "label": "el stack ya respondió con su envelope; capturarRespuesta ancla la 5xx (salvo 503) con referencia METHOD:/ruta",
+                "kind": "sync",
                 "group": "g-cap"
               }
             ]

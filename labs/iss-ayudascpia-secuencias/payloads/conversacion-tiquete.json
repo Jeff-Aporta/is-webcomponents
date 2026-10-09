@@ -80,7 +80,7 @@
           "id": "m2",
           "from": "t",
           "to": "t",
-          "label": "valida el cuerpo, recorta el código a 30, verifica token y permiso de crear",
+          "label": "ya pasó la puerta SEG (POST:/tiquete = { protected: true }, solo JWT); valida el cuerpo y recorta tema y clasificador a 30",
           "kind": "self",
           "group": "g-ctl"
         },
@@ -103,7 +103,7 @@
                 "id": "m4",
                 "from": "t",
                 "to": "u",
-                "label": "500 · la conversación no existe",
+                "label": "404 · la conversación no existe (500 si no se pudo leer)",
                 "kind": "reply",
                 "group": "g-err"
               }
