@@ -82,7 +82,8 @@ export function createTestCooldown(opts: TestCooldownOptions) {
         const d = load();
         const t = now();
         d[id] = ok
-            ? { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor) }
+            // `cooldownMin`: solo para quien lee el JSON (minutos entre okAt y until); el runner no lo usa.
+            ? { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor), cooldownMin: Math.round(cooldownMs(durationMs, factor) / 600) / 100 }
             : { durationMs, okAt: null, until: -1, failAt: t };
         save();
     };

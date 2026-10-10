@@ -11,6 +11,8 @@ export interface TestCooldownEntry {
     okAt: number | null;
     /** Epoch ms hasta el que el test se salta; `-1` = la última corrida fue roja (no aplica cooldown). */
     until: number;
+    /** Minutos de cooldown aplicados (`until - okAt`, 2 decimales). Solo informativo para quien lee el JSON. */
+    cooldownMin?: number;
     /** Epoch ms del último rojo (solo cuando `until === -1`). */
     failAt?: number;
 }

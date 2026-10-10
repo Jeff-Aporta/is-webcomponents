@@ -9,6 +9,7 @@ Referencia viva: `<__PREFIJO__-hola>` (`view/hola/components/`). Copia su forma.
 
 ## 1. Antes de escribir
 
+0. **Todo es componente**: cualquier estructura de UI (figura, fila de metadatos, pie, paginador, caja vacía) es un componente; nunca HTML suelto en vistas, renders ni `index.html`.
 1. ¿El kit ya lo resuelve? Busca la intención en [`kit/catalog.md`](kit/catalog.md) y [`kit/reference.md`](kit/reference.md) (intención → componente). Botones, campos, diálogos, tablas, toasts, iconos, formatos: **siempre `iswc-*`**. Un `__PREFIJO__-*` traduce datos de la app a esos controles.
 2. ¿Dónde vive? Si lo usa una sola vista → `view/<vista>/components/`; si lo usan varias → `src/js/components/__PREFIJO__/`. Una vista no importa componentes de otra.
 3. Escribe su WHAT en la spec fundación (`specs/foundation/20-…` o la del dominio) con IDs `[W-CAT-NN]`.
@@ -48,7 +49,8 @@ define('__PREFIJO__-x', __CLASE__X);
 
 - `src/js/kit-tags.ts`: en `APP_TAGS` (transversal) o en `VIEW_TAGS.<vista>`. Si usa un `iswc-*` nuevo, añádelo a `KIT_TAGS`.
 - Barril: `import('./__PREFIJO__-x.js')` en el `all.ts` de su carpeta (hijos antes que el shell).
-- Galería: su línea en `view/demo/manifest.json`.
+- Galería: su línea en `view/demo/manifest.json`, con demo y playground (`controls`); el guardián de demos falla si falta.
+- ¿Es general (sin dominio de la app)? Marca en su `.json`: `"reuso": { "candidato": "iswc-root", "motivo": "…", "propuesta": "iswc-…" }`.
 
 ## 6. Cierre
 

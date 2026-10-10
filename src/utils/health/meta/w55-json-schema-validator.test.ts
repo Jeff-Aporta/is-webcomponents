@@ -27,6 +27,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
+import { FichaSchema } from '../../section-schema.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const RAIZ = join(here, '..', '..', '..', '..');
@@ -127,7 +128,16 @@ test('W55: localiza y reporta todos los JSON de src/components', async () => {
     }
 
     const result = ComponentJsonSchema.safeParse(doc);
-    if (result.success) {
+    // ComponentJsonSchema deja `ficha.sections` como record<unknown>; el runtime
+    // (ficha-bridge → FichaSchema.parse) es el que de verdad valida las secciones.
+    // Sin esto, un `content` en forma TextLike (string[]) pasaba aquí y tumbaba el preview.
+    const ficha = o.ficha as { sections?: unknown; exclude?: unknown } | undefined;
+    const fichaResult = ficha && typeof ficha === 'object'
+      ? FichaSchema.safeParse({ sections: ficha.sections ?? {}, exclude: Array.isArray(ficha.exclude) ? ficha.exclude : [] })
+      : null;
+    if (fichaResult && !fichaResult.success) {
+      reporte.noValidados.push({ ruta: rel, issues: resumeIssues(fichaResult.error).map((m) => `ficha.${m}`) });
+    } else if (result.success) {
       reporte.validados.push(rel);
     } else {
       reporte.noValidados.push({ ruta: rel, issues: resumeIssues(result.error) });
@@ -234,4 +244,25 @@ test('W55: ComponentJsonSchema acepta campos extra en la raíz (passthrough)', (
     ficha: { sections: {}, exclude: [] },
   });
   assert.equal(ok.success, true, JSON.stringify(ok));
+});
+test('W55: reuso acepta el marcador de candidato a iswc-root', () => {
+  const ok = ComponentJsonSchema.safeParse({
+    $schema: 'iswc-preview/v1',
+    tag: 'paty-pagination',
+    sections: [],
+    reuso: { candidato: 'iswc-root', motivo: 'Paginador genérico sin datos de dominio', propuesta: 'iswc-pagination' },
+  });
+  assert.equal(ok.success, true, JSON.stringify(ok));
+});
+
+test('W55: reuso rechaza destino distinto, motivo vacío o campos desconocidos', () => {
+  const base = { $schema: 'iswc-preview/v1', tag: 'paty-x', sections: [] };
+  for (const reuso of [
+    { candidato: 'otra-lib', motivo: 'Motivo suficientemente largo' },
+    { candidato: 'iswc-root', motivo: '' },
+    { candidato: 'iswc-root', motivo: 'Motivo suficientemente largo', propuesta: 'paty-x' },
+    { candidato: 'iswc-root', motivo: 'Motivo suficientemente largo', extra: true },
+  ]) {
+    assert.equal(ComponentJsonSchema.safeParse({ ...base, reuso }).success, false, JSON.stringify(reuso));
+  }
 });

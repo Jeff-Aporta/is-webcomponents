@@ -63,6 +63,14 @@ Estructura canónica del `.md` (mínimo):
 ## Ejemplo avanzado
 ## Errores comunes
 ## Reglas para LLM
+
+- **Toda estructura de UI es un componente.** Si un render, una vista o un visor arma
+  `<figure>`, `<dl>`, filas, pies o cajas con HTML suelto, esa estructura se convierte en un
+  `iswc-*` (o se reusa uno del catálogo). Solo el markup interno del shadow queda como HTML.
+- **Demo con playground obligatoria**: el `.json` `iswc-preview/v1` lleva ≥1 bloque `demo` con
+  `controls` y el tag entra en `src/manifest.ts` (galería).
+- Un componente de app candidato a subir al kit trae `"reuso": { "candidato": "iswc-root", … }`
+  en su `.json`; al subirlo, se quita el marcador y se reemplaza el de la app por el `iswc-*`.
 ## Fuentes
 ```
 
@@ -493,6 +501,9 @@ Antes de abrir PR con un componente nuevo, verifica:
       `...: PASS — <resumen>`.
 - [ ] §9 `demos/<category>/<name>/<name>.html` con tokens `--iswc-*` y
       anti-FOUC.
+- [ ] `.json` `iswc-preview/v1` con playground (`controls`) y entrada en `src/manifest.ts`.
+- [ ] Ninguna estructura de UI del componente o de sus consumidores queda como HTML suelto
+      fuera de un shadow (todo es componente).
 - [ ] §10 `.md` hermano con frontmatter, 14 secciones y "Reglas para
       LLM".
 - [ ] `node tests/llm-contract.test.ts` y `node tests/run-all.mjs`

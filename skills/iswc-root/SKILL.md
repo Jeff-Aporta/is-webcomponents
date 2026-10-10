@@ -97,7 +97,19 @@ propio para botones, formularios, tablas, charts, toasts, diálogos, iconos, lay
 3. Abrir la guía del módulo y confirmar la API. No inventar props ni eventos.
 4. Usar el tag `iswc-*` (o el módulo API de [runtime](tools/runtime.md) si no hay tag). Solo crear dominio (`tk-*`, `app-*`) que **traduzca datos** al kit.
 
-Si no hay tag exacto, usar el más cercano. Solo entonces un primitivo nativo o un wrapper mínimo.
+Si no hay tag exacto, usar el más cercano. Si no hay ninguno, se **crea un componente**: nunca HTML suelto.
+
+**Todo es componente.** Toda estructura de UI, por pequeña que sea (figura con pie, fila de
+metadatos, paginador, fila de acciones, caja vacía), es un web component. No se arma HTML suelto
+en renders (`renderers` de `iswc-md-render`, plantillas, `innerHTML`), vistas, `index.html` ni
+visores; solo el markup interno mínimo dentro del shadow de un componente. Cada componente, de
+cualquier app, tiene su demo con playground en la galería de esa app (y en la del kit si es `iswc-*`).
+
+**iswc-root es el sistema de reuso entre apps.** Las apps (`paty-*`, `tk-*`…) tienen componentes
+propios, muchos de dominio; los **generales** se marcan en su `.json` `iswc-preview/v1` con
+`"reuso": { "candidato": "iswc-root", "motivo": "…", "propuesta": "iswc-…" }` (schema
+`ReusoCandidatoSchema` en `src/previews/_kit/component.schemas.ts`) para evaluarlos
+periódicamente y subirlos al kit.
 
 ## Diagramas por enlace
 
@@ -252,6 +264,11 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 <!-- apis:fin -->
 
 ## Cómo construir un componente
+
+Regla previa: toda estructura de UI es un componente (ver **Regla de reuso**). Componente nuevo
+= `.ts` + `.scss` + `.md` + `.json` (`iswc-preview/v1` con playground `controls`) + entrada en
+`src/manifest.ts` (kit) o en `kit-tags.ts` + `view/demo/manifest.json` (app). Si nace en una app
+y es general, lleva el marcador `reuso` para subirlo al kit.
 
 Esta skill cubre cómo **consumir** el kit desde apps externas. Si lo que
 necesitas es **crear o refactorizar un componente** del propio kit

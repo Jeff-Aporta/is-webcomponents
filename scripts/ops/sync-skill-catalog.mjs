@@ -323,7 +323,7 @@ const API_MODULES = [
     id: 'hydrateMdEmbeds',
     cdn: 'helpers/md-hydrate.min.js',
     guia: `${gh}/helpers/md-hydrate.md`,
-    resumen: 'L.ensure de tags presentes + upgrade .md-iswc-code -> iswc-code.',
+    resumen: 'Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown.',
   },
   {
     id: 'md-editor-api',

@@ -52,6 +52,9 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x600) |
 | 12 | **Gate** `deno task test:all` en verde = hecho; sync a entregable solo con el gate en verde |
 | 13 | **Íconos: local o API**: `assets/dl.js` (solo rutas) → `assets/iconify.json` + `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`), incluidos los íconos de todo lo que la app consume; lo que no está en el mapa sale de la API de Iconify. `host` en `deno.json` → `iswc.host`; ids `set:nombre` literales |
+| 14 | **Toda estructura es un componente**: toda pieza de UI, por pequeña que sea (figura, fila de metadatos, pie, paginador, caja vacía, fila de acciones), es un web component: `iswc-*` del catálogo o `<prefijo>-*` propio. Prohibido armar HTML suelto en renders, vistas, `index.html` o visores (`innerHTML`/plantillas con estructura, `createElement('div')` que compone UI); solo cabe el markup interno mínimo dentro del shadow de un componente |
+| 15 | **Todo componente tiene demo con playground**: su `.json` `iswc-preview/v1` trae ≥1 bloque `demo` con `controls` y está en la galería de la app (`view/demo/manifest.json`); un `iswc-*` además en la galería del kit (`src/manifest.ts`). Un guardián falla si un tag registrado no tiene demo |
+| 16 | **Candidatos a iswc-root**: un componente de app sin dominio (útil a otras apps) se marca en su `.json` con `"reuso": { "candidato": "iswc-root", "motivo": "…", "propuesta": "iswc-…" }` (validado por `ReusoCandidatoSchema`). Se revisan periódicamente y se suben al kit; el kit es el sistema de reuso entre apps |
 
 ## 3. Mapa de referencias
 

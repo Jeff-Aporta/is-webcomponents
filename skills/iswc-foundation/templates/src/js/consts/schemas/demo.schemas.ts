@@ -25,6 +25,18 @@ export const BloqueDemoSchema = z.object({
 }).passthrough();
 export type BloqueDemo = z.infer<typeof BloqueDemoSchema>;
 
+/**
+ * Marcador de candidato a iswc-root: componente general de la app (sin dominio) que se evalúa
+ * periódicamente para subirlo al kit. Misma forma que `ReusoCandidatoSchema` del kit.
+ */
+export const ReusoDemoSchema = z.object({
+  candidato: z.literal('iswc-root'),
+  motivo: z.string().trim().min(10),
+  propuesta: z.string().regex(/^iswc-[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
+  cubre: z.string().regex(/^iswc-[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
+}).strict();
+export type ReusoDemo = z.infer<typeof ReusoDemoSchema>;
+
 export const DefinicionDemoSchema = z.object({
   $schema: z.literal('iswc-preview/v1'),
   tag: z.string().regex(/^[a-z][a-z0-9]*-[a-z0-9-]+$/),
@@ -33,6 +45,7 @@ export const DefinicionDemoSchema = z.object({
   title: z.string(),
   storageKey: z.string(),
   sections: z.array(z.object({ id: z.string(), title: z.string().optional(), blocks: z.array(BloqueDemoSchema) }).passthrough()).min(1),
+  reuso: ReusoDemoSchema.optional(),
 }).passthrough();
 export type DefinicionDemo = z.infer<typeof DefinicionDemoSchema>;
 

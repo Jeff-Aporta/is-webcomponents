@@ -30,6 +30,7 @@ Deno.test('test-cooldown: verde de 1 min -> 10 h de skip (x600); rojo corre siem
 
   await cd.run(id, () => { t += MIN; });
   assert(createTestCooldown({ dbPath, now }).check(id).skip, 'C3 otra instancia lee el JSON');
+  assertEquals(createTestCooldown({ dbPath, now }).entries()[id].cooldownMin, 600, 'C5 el verde anota los minutos de cooldown (1 min x600 = 600 min)');
 
   await assertRejects(() => createTestCooldown({ dbPath, now: () => t + 601 * MIN }).run(id, () => { throw new Error('rojo'); }));
   assert(!createTestCooldown({ dbPath, now }).check(id).skip, 'C2 tras un rojo no hay cooldown');
