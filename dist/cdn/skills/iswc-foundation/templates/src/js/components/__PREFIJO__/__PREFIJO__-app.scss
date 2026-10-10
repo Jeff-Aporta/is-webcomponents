@@ -1,0 +1,29 @@
+@use "tokens" as t;
+@use "mixins" as m;
+
+/* __PREFIJO__-app — shell: barra fija arriba y la vista ocupando el resto. */
+:host {
+  @include m.host-bloque;
+  min-height: 100dvh;
+  background: var(--iswc-bg);
+  color: var(--iswc-text);
+}
+
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: t.esp(4);
+  padding: t.esp(3) t.esp(5);
+  border-bottom: 1px solid var(--iswc-border-soft);
+
+  .marca {
+    @include m.una-linea;
+    font-size: 1rem;
+  }
+}
+
+.vista {
+  display: block;
+  padding: t.esp(5);
+}

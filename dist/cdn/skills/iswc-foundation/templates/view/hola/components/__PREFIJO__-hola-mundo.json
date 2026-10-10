@@ -1,0 +1,21 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "__PREFIJO__-hola-mundo",
+  "category": "hola",
+  "navTitle": "Hola mundo",
+  "title": "&lt;__PREFIJO__-hola-mundo&gt;",
+  "titleHtml": false,
+  "storageKey": "docs-__PREFIJO__-hola-mundo",
+  "styles": ".stage{padding:2rem}",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "&lt;__PREFIJO__-hola-mundo&gt;",
+      "lede": "El componente más simple: un título.",
+      "blocks": [
+        { "kind": "demo", "html": "<div class=\"stage\"><__PREFIJO__-hola-mundo id=\"titulo\"></__PREFIJO__-hola-mundo></div>", "target": "#titulo" },
+        { "kind": "html", "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Como molde de un componente nuevo: copia sus cuatro archivos.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>No lo uses como título genérico de la app.</iswc-callout>" }
+      ]
+    }
+  ]
+}

@@ -28,13 +28,13 @@
 </style>
 <script type="module">
   // Dependencias: los controles que vamos a leer/escribir.
-  await import('../../../dist/cdn/forms/input.min.js?h=x2bga0');
-  await import('../../../dist/cdn/forms/select.min.js?h=xjf2f5');
-  await import('../../../dist/cdn/forms/option.min.js?h=gzm2i8');
-  await import('../../../dist/cdn/forms/checkbox.min.js?h=i91ws8');
+  await import('../../../dist/cdn/forms/input.min.js?v=pu92zp');
+  await import('../../../dist/cdn/forms/select.min.js?v=zlmakf');
+  await import('../../../dist/cdn/forms/option.min.js?v=87e8ho');
+  await import('../../../dist/cdn/forms/checkbox.min.js?v=0yoedx');
   await import('../../../dist/cdn/forms/switch.js');
   // Cargar también el form (lo usa como contenedor del helper).
-  await import('../../../dist/cdn/isp/form-json.min.js?h=iob8pq');
+  await import('../../../dist/cdn/isp/form-json.min.js?v=iob8pq');
 
   // ── form-json es un módulo helper, NO un custom element ────────────
   // Expone: getValues, setValues, listControls, getControlValue, setControlValue.
@@ -48,7 +48,7 @@
 
   // Helper para invocar los exports del módulo.
   async function loadHelpers() {
-    return await import('../../../dist/cdn/isp/form-json.min.js?h=iob8pq');
+    return await import('../../../dist/cdn/isp/form-json.min.js?v=iob8pq');
   }
 
   document.getElementById('btn-get').addEventListener('click', async () => {

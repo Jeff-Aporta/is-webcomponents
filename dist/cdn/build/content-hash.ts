@@ -1,5 +1,5 @@
 /**
- * Hash corto de contenido para cache-bust (`?h=`).
+ * Hash corto de contenido para cache-bust (`?v=`).
  * 6 caracteres, alfabeto [0-9a-z]. Cambia si cambia un byte.
  * Mismo resultado en el build (Node) y si otro proyecto lo importa por vendor.
  */

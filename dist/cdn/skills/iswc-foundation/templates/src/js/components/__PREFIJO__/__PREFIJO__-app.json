@@ -1,0 +1,21 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "__PREFIJO__-app",
+  "category": "shell",
+  "navTitle": "App",
+  "title": "&lt;__PREFIJO__-app&gt;",
+  "titleHtml": false,
+  "storageKey": "docs-__PREFIJO__-app",
+  "styles": ".stage{min-height:16rem}",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "&lt;__PREFIJO__-app&gt;",
+      "lede": "Shell de la app: barra y vista activa.",
+      "blocks": [
+        { "kind": "demo", "html": "<div class=\"stage\"><__PREFIJO__-app id=\"app\"></__PREFIJO__-app></div>", "target": "#app", "props": { "vista": "hola" } },
+        { "kind": "html", "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Una sola vez, en index.html.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>No lo montes dentro de otra vista.</iswc-callout>" }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-09T12:57:49.725Z",
-  "count": 113,
+  "generatedAt": "2026-10-10T04:20:29.381Z",
+  "count": 116,
   "modules": [
     {
       "file": "button-shape.schemas.ts",
@@ -530,9 +530,48 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 11448,
+      "bytes": 11871,
       "exports": [
         "DiagramElementBase extends ElementBase \r\n  static get observedAttributes"
+      ]
+    },
+    {
+      "file": "diagram-embed.schemas.ts",
+      "id": "diagram-embed.schemas",
+      "path": "src/components/_shared/diagram-embed.schemas.ts",
+      "summary": "diagram-embed.schemas — entre diagramas (`kind` de nodo).",
+      "bytes": 5795,
+      "exports": [
+        "DiagramNodeKindSchema",
+        "EmbeddedDiagramSchema",
+        "EmbeddedDiagramFileSchema",
+        "NodeEmbedSpecSchema",
+        "EmbedBoxSchema",
+        "EmbedSizeSchema",
+        "EmbedCaptureSchema",
+        "DiagramHostLikeSchema",
+        "EmbedCaptureOptsSchema"
+      ]
+    },
+    {
+      "file": "diagram-embed.ts",
+      "id": "diagram-embed",
+      "path": "src/components/_shared/diagram-embed.ts",
+      "summary": "diagram-embed — `nested` (diagrama anidado), `tableder` (tabla del DER) y `component`",
+      "bytes": 10781,
+      "exports": [
+        "NESTED_DEFAULT_MAX",
+        "EMBED_FALLBACK_SIZE",
+        "readNodeEmbed",
+        "embedDiagramOf",
+        "embedIsNatural",
+        "fitContain",
+        "nestedMaxSize",
+        "embedScriptUrl",
+        "resolveEmbedDiagram",
+        "captureEmbeddedDiagram",
+        "embedStage",
+        "captureNodeEmbed"
       ]
     },
     {
@@ -833,20 +872,23 @@
       "id": "icon-loader.schemas",
       "path": "src/components/_shared/icon-loader.schemas.ts",
       "summary": "icon-loader — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 412,
+      "bytes": 1354,
       "exports": [
-        "IconFamilySchema"
+        "IconFamilySchema",
+        "MapaListoSchema",
+        "MapaPerezosoSchema",
+        "ColaIconosSchema"
       ]
     },
     {
       "file": "icon-loader.ts",
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.ts",
-      "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component — `<iconify-icon>` ni su script de CDN. Todo el sistema de iconos vive en",
-      "bytes": 7490,
+      "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component `<iconify-icon>` ni su — script de CDN. Dos fuentes, nada más:",
+      "bytes": 8023,
       "exports": [
+        "registerIcons",
         "hasIconLocal",
-        "iconSourceBase",
         "resolveIconSvg",
         "resolveIconRaw",
         "clearRawCache",
@@ -1104,6 +1146,19 @@
       ]
     },
     {
+      "file": "oklch.ts",
+      "id": "oklch",
+      "path": "src/components/_shared/oklch.ts",
+      "summary": "oklch — rotar el tono de un color en OKLCH conservando su luminosidad y croma (mismo «peso» — visual, otro tono). Devuelve hex para que el SVG exportado se vea igual en cualquier visor.",
+      "bytes": 3207,
+      "exports": [
+        "hexToOklch",
+        "oklchToHex",
+        "rotarTono",
+        "ANGULO_AUREO"
+      ]
+    },
+    {
       "file": "pan-zoom.schemas.ts",
       "id": "pan-zoom.schemas",
       "path": "src/components/_shared/pan-zoom.schemas.ts",
@@ -1272,7 +1327,7 @@
       "id": "prompt-md",
       "path": "src/components/_shared/prompt-md.ts",
       "summary": "Módulo compartido `prompt-md.ts`.",
-      "bytes": 10885,
+      "bytes": 11121,
       "exports": [
         "PROMPT_VAR_PATTERN",
         "MALFORMED_PROMPT_VAR_PATTERN",
@@ -1425,7 +1480,7 @@
       "id": "tk-icon-inline",
       "path": "src/components/_shared/tk-icon-inline.ts",
       "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
-      "bytes": 16882,
+      "bytes": 17440,
       "exports": [
         "TK_ICON_TOKEN_RE",
         "iconAssetPath",

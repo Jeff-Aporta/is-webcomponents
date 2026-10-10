@@ -1,16 +1,16 @@
 {
   "grid": {
-    "step": 20,
-    "clearance": 20,
+    "step": 15,
+    "clearance": 15,
     "lanePitch": 32,
-    "stub": 20,
+    "stub": 15,
     "iterations": 16,
     "turnPenalty": 200,
     "minFactor": 0.05
   },
   "entity": {
     "glow": 3,
-    "radius": 20
+    "radius": 15
   },
   "connector": {
     "glow": 4,
@@ -34,7 +34,7 @@
     "mergePitches": 2
   },
   "share": {
-    "radius": 150,
+    "radius": 200,
     "joinTail": 0.1,
     "newTip": 240
   }

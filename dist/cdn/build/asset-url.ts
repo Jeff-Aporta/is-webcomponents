@@ -1,9 +1,16 @@
 /**
- * Pega `?h=` a una ruta. El loader y el build usan la misma funcion
+ * Cache busting por query string con el parametro convencional `v`
+ * (`archivo.js?v=1dj4v0`): el valor es el hash del contenido, asi la URL solo
+ * cambia cuando cambia el archivo. El loader y el build usan la misma funcion
  * para que el consumidor no arme el query a mano.
  */
 
 import type { LoaderGlobal } from "./asset-url.schemas.js";
+/** Nombre del parametro de cache busting (convencion `?v=`). */
+export const ASSET_HASH_PARAM = 'v';
+/** Parametro anterior (`?h=`): se reemplaza al sellar. */
+export const ASSET_HASH_PARAM_LEGADO = 'h';
+
 export function withAssetHash(href: string, hash: string): string {
   if (!hash) return href;
   const cut = href.indexOf('#');
@@ -12,7 +19,8 @@ export function withAssetHash(href: string, hash: string): string {
   const q = base.indexOf('?');
   const path = q < 0 ? base : base.slice(0, q);
   const params = new URLSearchParams(q < 0 ? '' : base.slice(q + 1));
-  params.set('h', hash);
+  params.delete(ASSET_HASH_PARAM_LEGADO);
+  params.set(ASSET_HASH_PARAM, hash);
   return `${path}?${params.toString()}${frag}`;
 }
 

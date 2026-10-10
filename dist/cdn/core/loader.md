@@ -81,11 +81,11 @@ Cadena fija al cargar JS/CSS del kit (si un espejo cae, el siguiente responde):
 
 `host` o `preferSelf` van **antes** de esa cadena. El primer espejo que responde bien queda *sticky* en la página: los siguientes `load` no reintentan primero un espejo que ya falló.
 
-## Hash de contenido (`?h=`)
+## Hash de contenido (`?v=`)
 
-Cada build deja un mapa de 6 caracteres en el loader (`__IS_ASSET_HASHES__`) y en `dist/cdn/asset-hashes.json`. `load`, `loadCSS*` y `assetUrl` agregan `?h=` al enrutar. Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
+Cada build deja un mapa de 6 caracteres en el loader (`__IS_ASSET_HASHES__`) y en `dist/cdn/asset-hashes.json`. `load`, `loadCSS*` y `assetUrl` agregan `?v=` al enrutar. Si el archivo cambia, el hash cambia y el navegador pide esa URL: no hace falta un refresco forzado.
 
-Los `import` relativos entre `.min.js` llevan el mismo `?h=`, sellado en el build en orden de dependencias. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
+Los `import` relativos entre `.min.js` llevan el mismo `?v=`, sellado en el build en orden de dependencias. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
 
 Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `contentHash`). El build los publica en `dist/cdn/build/`.
 
@@ -184,7 +184,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 ```
 
 ```html
-<!-- Galería local (self-test) — solo loader; sin ?h= ni script src de bundles -->
+<!-- Galería local (self-test) — solo loader; sin ?v= ni script src de bundles -->
 <script type="module">
   import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js';
   await L.loadPageModules(['iswc-doc-demo-host']);
@@ -197,7 +197,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 
 | Artefacto | Tipo | Rol |
 | --- | --- | --- |
-| `loader.min.js` | module | entry; enruta `?h=` y espejos |
+| `loader.min.js` | module | entry; enruta `?v=` y espejos |
 | `iswc-doc-demo-host` | alias module | `configure` + boot + `L.load('iswc-doc-demo')` |
 | `iswc-gallery-app` | alias module | SPA `dist/gallery-app.min.js` |
 | `iswc-doc-demo-boot` | alias module | theme/palette + CSS crítico |
