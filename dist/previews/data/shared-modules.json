@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T06:12:39.693Z",
+  "generatedAt": "2026-10-10T06:24:28.649Z",
   "count": 118,
   "modules": [
     {
@@ -1614,7 +1614,7 @@
       "id": "url-nav",
       "path": "src/components/_shared/url-nav.ts",
       "summary": "url-nav — Opt-in: el consumidor pasa una key (`url-key=\"docs\"`). Sin key no se lee",
-      "bytes": 4226,
+      "bytes": 6131,
       "exports": [
         "URL_STATE_RESERVED",
         "b64urlEncode",
@@ -1623,7 +1623,10 @@
         "writeUrlState",
         "patchUrlState",
         "readUrlNav",
-        "writeUrlNav"
+        "writeUrlNav",
+        "URL_TABS_KEY",
+        "readUrlTabs",
+        "writeUrlTab"
       ]
     },
     {

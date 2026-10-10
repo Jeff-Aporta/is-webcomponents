@@ -18,7 +18,7 @@
   iswc-waterfall-chart:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?v=roh4bt';
+  import { ISWebComponentsLoader as L } from '../../../dist/cdn/core/loader.min.js?v=9evfiq';
   L.configure({ local: true });
   const [__base] = await L.listBases();
   const lib = await import(L.assetUrl(new URL('charts/marks-waterfall.min.js', __base.endsWith('/') ? __base : __base + '/').href));
