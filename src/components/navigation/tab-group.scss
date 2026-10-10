@@ -154,12 +154,10 @@
 :host(iswc-tab[data-placement="bottom"]) {
   .indicator { inset-inline: 0; block-size: 2px; }
 }
-:host(iswc-tab[data-placement="top"]) .indicator {
-  bottom: calc(var(--iswc-tab-group-track-width) * -1);
-}
-:host(iswc-tab[data-placement="bottom"]) .indicator {
-  top: calc(var(--iswc-tab-group-track-width) * -1);
-}
+/* Dentro del borde de la pestaña: la lista de pestañas hace scroll y recorta lo que se sale de su
+   caja, así que un indicador montado sobre la pista (fuera de la pestaña) quedaba invisible. */
+:host(iswc-tab[data-placement="top"]) .indicator { bottom: 0; }
+:host(iswc-tab[data-placement="bottom"]) .indicator { top: 0; }
 
 /* En vertical el button se ve stretched, y el indicador va al costado. */
 :host(iswc-tab[data-placement="start"]),
@@ -167,12 +165,8 @@
   .tab { inline-size: 100%; justify-content: flex-start; }
   .indicator { inset-block: 0; inline-size: 2px; }
 }
-:host(iswc-tab[data-placement="start"]) .indicator {
-  right: calc(var(--iswc-tab-group-track-width) * -1);
-}
-:host(iswc-tab[data-placement="end"]) .indicator {
-  left: calc(var(--iswc-tab-group-track-width) * -1);
-}
+:host(iswc-tab[data-placement="start"]) .indicator { right: 0; }
+:host(iswc-tab[data-placement="end"]) .indicator { left: 0; }
 
 /* <iswc-tab-panel> */
 :host(iswc-tab-panel) {
