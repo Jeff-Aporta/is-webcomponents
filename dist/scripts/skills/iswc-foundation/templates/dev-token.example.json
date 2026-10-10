@@ -1,0 +1,8 @@
+{
+  "//": "Copia este archivo a dev-token.json (ignorado por git) y pon tu clave. Solo lo usan las pruebas e2e que piden LLM (act/extract); el gate no depende de él.",
+  "minimax": {
+    "apiKey": "<tu clave de MiniMax>",
+    "model": "MiniMax-M3",
+    "baseUrl": "https://api.minimax.io/v1"
+  }
+}

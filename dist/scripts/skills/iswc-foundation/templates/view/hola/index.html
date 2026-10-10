@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es" data-theme="dark" data-palette="contapyme">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITULO__ · hola</title>
+<meta name="robots" content="noindex">
+<script src="../../dist/cdn/boot.js"></script>
+<!-- Vista aislada (QA): mismo kit y mismo pin que la app. -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.js"></script>
+<script type="module" src="../../dist/cdn/__PREFIJO__Loader.min.js"></script>
+<script type="module">
+  // Mismo arranque que la app: marca `data-app-ready` al terminar (watchdog de 6 s).
+  const L = globalThis.ISWebComponentsLoader;
+  const listo = () => document.documentElement.setAttribute('data-app-ready', '');
+  const watchdog = setTimeout(listo, 6000);
+  try {
+    await L.loadPageStyles(['iswc-palettes-default']);
+    const { KIT_TAGS, VIEW_TAGS } = await import('../../dist/cdn/js/kit-tags.js');
+    await L.load(...KIT_TAGS, ...VIEW_TAGS.hola);
+  } finally {
+    clearTimeout(watchdog);
+    listo();
+  }
+</script>
+</head>
+<body>
+  <__PREFIJO__-hola></__PREFIJO__-hola>
+</body>
+</html>

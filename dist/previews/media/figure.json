@@ -1,0 +1,100 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-figure",
+  "category": "media",
+  "title": "&lt;iswc-figure&gt;",
+  "titleHtml": false,
+  "description": "Figura de contenido: imagen + pie + enlace «abrir en una pestaña nueva».",
+  "storageKey": "docs-iswc-figure",
+  "loads": [
+    "iswc-theme-img"
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Imagen (dual tema opcional) con pie y enlace a pestaña nueva. Es la figura que pintan los visores de documentos y los renderers de <code class=\"code\">iswc-md-render</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-figure id=\"fig\" src=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20360%20120%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%231f2937%22%20stroke-width%3D%222%22%3E%3Crect%20x%3D%2210%22%20y%3D%2235%22%20width%3D%2290%22%20height%3D%2250%22%20rx%3D%228%22%2F%3E%3Crect%20x%3D%22135%22%20y%3D%2235%22%20width%3D%2290%22%20height%3D%2250%22%20rx%3D%228%22%2F%3E%3Crect%20x%3D%22260%22%20y%3D%2235%22%20width%3D%2290%22%20height%3D%2250%22%20rx%3D%228%22%2F%3E%3Cpath%20d%3D%22M100%2060h30M225%2060h30%22%2F%3E%3Cpath%20d%3D%22M124%2054l6%206-6%206M249%2054l6%206-6%206%22%2F%3E%3C%2Fg%3E%3Cg%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%231f2937%22%20text-anchor%3D%22middle%22%3E%3Ctext%20x%3D%2255%22%20y%3D%2265%22%3ECliente%3C%2Ftext%3E%3Ctext%20x%3D%22180%22%20y%3D%2265%22%3EISS%3C%2Ftext%3E%3Ctext%20x%3D%22305%22%20y%3D%2265%22%3EBD%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E\" alt=\"Diagrama de ejemplo\" caption=\"Figura 1 · Cliente → ISS → BD\" link paper></iswc-figure>"
+          ],
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:caption",
+              "label": "caption"
+            },
+            {
+              "control": "text",
+              "prop": "attr:alt",
+              "label": "alt"
+            },
+            {
+              "control": "select",
+              "prop": "attr:variant",
+              "label": "variant",
+              "options": [
+                "framed",
+                "plain"
+              ]
+            },
+            {
+              "control": "select",
+              "prop": "attr:fit",
+              "label": "fit",
+              "options": [
+                "contain",
+                "cover"
+              ]
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:link",
+              "label": "link"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:paper",
+              "label": "paper"
+            },
+            {
+              "control": "text",
+              "prop": "attr:link-label",
+              "label": "link-label",
+              "placeholder": "Abrir en una pestaña nueva"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plain",
+      "title": "Sin marco ni enlace",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-figure variant=\"plain\" src=\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20360%20120%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%231f2937%22%20stroke-width%3D%222%22%3E%3Crect%20x%3D%2210%22%20y%3D%2235%22%20width%3D%2290%22%20height%3D%2250%22%20rx%3D%228%22%2F%3E%3Crect%20x%3D%22135%22%20y%3D%2235%22%20width%3D%2290%22%20height%3D%2250%22%20rx%3D%228%22%2F%3E%3Crect%20x%3D%22260%22%20y%3D%2235%22%20width%3D%2290%22%20height%3D%2250%22%20rx%3D%228%22%2F%3E%3Cpath%20d%3D%22M100%2060h30M225%2060h30%22%2F%3E%3Cpath%20d%3D%22M124%2054l6%206-6%206M249%2054l6%206-6%206%22%2F%3E%3C%2Fg%3E%3Cg%20font-family%3D%22sans-serif%22%20font-size%3D%2214%22%20fill%3D%22%231f2937%22%20text-anchor%3D%22middle%22%3E%3Ctext%20x%3D%2255%22%20y%3D%2265%22%3ECliente%3C%2Ftext%3E%3Ctext%20x%3D%22180%22%20y%3D%2265%22%3EISS%3C%2Ftext%3E%3Ctext%20x%3D%22305%22%20y%3D%2265%22%3EBD%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E\" alt=\"Diagrama sin marco\" paper><span slot=\"caption\">Pie con <strong>slot</strong> enriquecido</span></iswc-figure>"
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "<code class=\"code\">figure[part=frame] › a[part=link] › iswc-theme-img(::part(image))</code> + <code class=\"code\">figcaption[part=caption]</code> con slot <code class=\"code\">caption</code>."
+      },
+      "ejemplos": {
+        "content": [
+          "```html",
+          "<iswc-figure src=\"./diagrama.svg\" alt=\"Flujo\" caption=\"Figura 1\" link paper></iswc-figure>",
+          "```"
+        ]
+      }
+    },
+    "exclude": []
+  }
+}

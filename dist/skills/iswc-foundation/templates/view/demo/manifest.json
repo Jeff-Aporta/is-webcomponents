@@ -1,0 +1,5 @@
+[
+  { "tag": "__PREFIJO__-app", "file": "../../src/js/components/__PREFIJO__/__PREFIJO__-app.json" },
+  { "tag": "__PREFIJO__-hola-mundo", "file": "../hola/components/__PREFIJO__-hola-mundo.json" },
+  { "tag": "__PREFIJO__-hola", "file": "../hola/components/__PREFIJO__-hola.json" }
+]

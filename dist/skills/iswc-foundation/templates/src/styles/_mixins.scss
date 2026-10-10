@@ -1,0 +1,34 @@
+// _mixins.scss — patrones recurrentes de las hojas de la app (estándar iswc-foundation).
+//
+//   - MIXIN cuando el patrón es un BLOQUE de declaraciones: `@include m.una-linea;`
+//   - FUNCIÓN (en `_tokens.scss`) cuando devuelve un VALOR: `padding: t.esp(2);`
+//
+// Un patrón entra aquí cuando se repite en varias hojas; uno que vive en un solo componente se
+// queda en su hoja. Colores siempre desde tokens `--iswc-*` del kit.
+//
+// USO:
+//   @use "mixins" as m;
+//   :host { @include m.host-bloque; }
+//   .titulo { @include m.una-linea; }
+
+/// Host de un componente de bloque: ocupa su línea, puede encogerse en un grid y hereda la fuente del kit.
+@mixin host-bloque {
+  display: block;
+  min-width: 0;
+  font-family: var(--iswc-font-sans);
+}
+
+/// Texto en una sola línea con elipsis (títulos de índice, rutas largas).
+@mixin una-linea {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/// Rótulo de sección en versalitas (PARÁMETROS, CUERPO, RESPUESTAS…). `$opacidad` atenúa el texto.
+@mixin rotulo($opacidad: 0.6) {
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  opacity: $opacidad;
+  text-transform: uppercase;
+}

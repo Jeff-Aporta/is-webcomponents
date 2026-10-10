@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es" data-theme="dark" data-palette="contapyme">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>__TITULO__</title>
+<meta name="description" content="__TITULO__ — app de web components sobre el kit iswc-root.">
+
+<!-- Tema antes del primer pintado: ?s= (theme/palette) > localStorage del kit > dark. Script plano. -->
+<script src="./dist/cdn/boot.js"></script>
+<link rel="stylesheet" href="./dist/cdn/styles/app.css">
+
+<!-- 1) Loader del kit por CDN pineado (un solo SHA en toda la app; `deno task pin` lo mantiene). -->
+<script type="module" src="https://cdn.jsdelivr.net/gh/__REPO__@__SHA__/dist/cdn/core/loader.min.js"></script>
+<!-- 2) Registrador de la app: tag → URL ?v=<hash> (lo genera el build). Sin ?v= aquí: el loader lo pone. -->
+<script type="module" src="./dist/cdn/__PREFIJO__Loader.min.js"></script>
+<!-- 3) Arranque: estilos del kit, tags del kit y de la app, marca de lista con watchdog. -->
+<script type="module">
+  const L = globalThis.ISWebComponentsLoader;
+  const listo = () => document.documentElement.setAttribute('data-app-ready', '');
+  const watchdog = setTimeout(() => { console.warn('[__PREFIJO__] el arranque excedió 6 s; se revela la página'); listo(); }, 6000);
+  try {
+    if (!L) throw new Error('falta ISWebComponentsLoader');
+    await L.loadPageStyles(['iswc-palettes-default']);
+    const { KIT_TAGS, tagsArranque } = await import('./dist/cdn/js/kit-tags.js');
+    await L.load(...KIT_TAGS, ...tagsArranque());
+  } catch (e) {
+    console.warn('[__PREFIJO__] arranque', e);
+  } finally {
+    clearTimeout(watchdog);
+    listo();
+  }
+</script>
+</head>
+<body>
+  <noscript>JavaScript requerido.</noscript>
+  <iswc-toast placement="bottom-end"></iswc-toast>
+  <__PREFIJO__-app></__PREFIJO__-app>
+</body>
+</html>

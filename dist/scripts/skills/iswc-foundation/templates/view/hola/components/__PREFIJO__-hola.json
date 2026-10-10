@@ -1,0 +1,28 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "__PREFIJO__-hola",
+  "category": "hola",
+  "navTitle": "Bienvenida",
+  "title": "&lt;__PREFIJO__-hola&gt;",
+  "titleHtml": false,
+  "storageKey": "docs-__PREFIJO__-hola",
+  "styles": ".stage{padding:1rem 2rem}",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "&lt;__PREFIJO__-hola&gt;",
+      "lede": "Pantalla de bienvenida: portada, tarjetas y un modal.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": "<div class=\"stage\"><__PREFIJO__-hola id=\"hola\"></__PREFIJO__-hola></div>",
+          "target": "#hola",
+          "controls": [
+            { "control": "boolean", "prop": "props:modal", "label": "modal", "default": false }
+          ]
+        },
+        { "kind": "html", "html": "<iswc-callout tone=\"info\"><strong slot=\"title\">Cuándo usarlo</strong>Como referencia de un shell de vista hecho solo con piezas del kit.</iswc-callout><iswc-callout tone=\"warning\"><strong slot=\"title\">Cuándo no</strong>Reemplázala por la portada real de la app.</iswc-callout>" }
+      ]
+    }
+  ]
+}

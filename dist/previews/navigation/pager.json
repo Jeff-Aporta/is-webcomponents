@@ -1,0 +1,85 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-pager",
+  "category": "navigation",
+  "title": "&lt;iswc-pager&gt;",
+  "titleHtml": false,
+  "description": "Paso a la página anterior / siguiente con el título de cada una.",
+  "storageKey": "docs-iswc-pager",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Pie de una hoja de documentación o de un paso: «← Anterior» y «Siguiente →» con el título de la otra página. Con <code class=\"code\">prev-href</code>/<code class=\"code\">next-href</code> cada lado es un enlace; sin ellos es un botón que emite <code class=\"code\">iswc-pager-navigate</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-pager prev=\"Ficha de proyecto\" next=\"Arquitectura · Visión general\"></iswc-pager>"
+          ],
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:prev",
+              "label": "prev"
+            },
+            {
+              "control": "text",
+              "prop": "attr:next",
+              "label": "next"
+            },
+            {
+              "control": "text",
+              "prop": "attr:prev-label",
+              "label": "prev-label",
+              "placeholder": "← Anterior"
+            },
+            {
+              "control": "text",
+              "prop": "attr:next-label",
+              "label": "next-label",
+              "placeholder": "Siguiente →"
+            },
+            {
+              "control": "text",
+              "prop": "attr:next-href",
+              "label": "next-href",
+              "placeholder": "#siguiente"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solo-siguiente",
+      "title": "Primera página",
+      "lede": "Sin <code class=\"code\">prev</code> solo se pinta el lado siguiente, que conserva su columna.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-pager next=\"Glosario\" next-label=\"Empezar →\"></iswc-pager>"
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "anatomia": {
+        "content": "<code class=\"code\">nav[part=base] › a[part=prev|next] › small[part=label] + span[part=title]</code>."
+      },
+      "ejemplos": {
+        "content": [
+          "```html",
+          "<iswc-pager prev=\"Introducción\" next=\"Instalación\"></iswc-pager>",
+          "```",
+          "```js",
+          "pager.addEventListener('iswc-pager-navigate', (e) => irA(e.detail.direction));",
+          "```"
+        ]
+      }
+    },
+    "exclude": []
+  }
+}

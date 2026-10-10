@@ -1,0 +1,21 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+
+# Secretos del dev (clave de MiniMax para act()/extract() de Stagehand). Formato: dev-token.example.json.
+dev-token.json
+
+# Staging del build (SCSS compilado). La fuente canonica es el .scss hermano.
+.tmp-scss/
+# Cualquier .css en src/ o view/ es artefacto: la fuente es .scss.
+src/**/*.css
+view/**/*.css
+
+# Memoria de pruebas (cooldown, huellas del gate, reportes).
+.tmp/
+tests/e2e/.artifacts/
+tests/e2e/.cobertura/
