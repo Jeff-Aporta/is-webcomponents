@@ -15,6 +15,10 @@
         "label": "Runner de parches · ZPatch"
       },
       {
+        "id": "R-clases",
+        "label": "Clases"
+      },
+      {
         "id": "P",
         "label": "PostgreSQL"
       }
@@ -166,7 +170,7 @@
         "id": "dueno-TErrorController",
         "label": "TErrorController",
         "kind": "class",
-        "lane": "R",
+        "lane": "R-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -175,14 +179,23 @@
                 "uml": true
               }
             }
-          }
-        }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
       },
       {
         "id": "dueno-TErrorController-pojo",
         "label": "TError_",
         "kind": "class",
-        "lane": "R",
+        "lane": "R-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -200,7 +213,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       }
     ],
     "edges": [

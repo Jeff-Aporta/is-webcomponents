@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "C",
         "label": "Cliente"
       },
@@ -19,11 +24,39 @@
         "label": "ISS · TBasePatyIA"
       },
       {
+        "id": "B-clases",
+        "label": "Clases"
+      },
+      {
         "id": "P",
         "label": "PostgreSQL · seg_*"
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TPermissionsClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TPermissionsClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -71,7 +104,7 @@
         "id": "base",
         "label": "TBasePatyIA",
         "kind": "class",
-        "lane": "B",
+        "lane": "B-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -85,17 +118,18 @@
             {
               "op": "push",
               "valor": {
-                "fill": "app"
+                "fill": "leaf"
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "perm",
         "label": "TPermissionsController",
         "kind": "class",
-        "lane": "B",
+        "lane": "B-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -109,17 +143,18 @@
             {
               "op": "push",
               "valor": {
-                "fill": "service"
+                "fill": "app"
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "perm-pojo",
         "label": "TPermissionsObject",
         "kind": "class",
-        "lane": "B",
+        "lane": "B-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -137,7 +172,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "id",
@@ -341,10 +377,15 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "B"
+        "lane": "C"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "perm",
         "to": "perm-pojo",

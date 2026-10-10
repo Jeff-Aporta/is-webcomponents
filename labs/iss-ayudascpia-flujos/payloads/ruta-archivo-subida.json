@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "C",
         "label": "Portal / app"
       },
@@ -20,7 +25,7 @@
       },
       {
         "id": "F-clases",
-        "label": "Controllers y modelos"
+        "label": "Clases"
       },
       {
         "id": "P",
@@ -32,6 +37,30 @@
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TFilesStorageClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TFilesStorageClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -105,7 +134,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ctl-pojo",
@@ -129,7 +159,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "alm",
@@ -149,11 +180,12 @@
             {
               "op": "push",
               "valor": {
-                "fill": "service"
+                "fill": "app"
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "val",
@@ -330,10 +362,15 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "F"
+        "lane": "C"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "ctl",
         "to": "ctl-pojo",

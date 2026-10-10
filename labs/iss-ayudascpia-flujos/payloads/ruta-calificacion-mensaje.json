@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "P",
         "label": "Portal"
       },
@@ -20,7 +25,7 @@
       },
       {
         "id": "T-clases",
-        "label": "Controllers y modelos"
+        "label": "Clases"
       },
       {
         "id": "D",
@@ -28,6 +33,30 @@
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TQualifiedMessageClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TQualifiedMessageClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -101,7 +130,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ctl-pojo",
@@ -125,7 +155,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "d1",
@@ -334,7 +365,7 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "T"
+        "lane": "P"
       },
       {
         "id": "dueno-TConversacionController",
@@ -349,8 +380,17 @@
                 "uml": true
               }
             }
-          }
-        }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
       },
       {
         "id": "dueno-TConversacionController-pojo",
@@ -374,7 +414,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "dueno-TConversationLogController",
@@ -389,8 +430,17 @@
                 "uml": true
               }
             }
-          }
-        }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
       },
       {
         "id": "dueno-TConversationLogController-pojo",
@@ -414,10 +464,16 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "ctl",
         "to": "ctl-pojo",

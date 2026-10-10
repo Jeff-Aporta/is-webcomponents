@@ -42,6 +42,9 @@ const refComponente = (ref, campo) => ({ path: './componentes.json', query: { pa
 const refTabla = (nombre, campo) => ({ path: './der.json', query: { payload: { erDiagram: { entities: { [`[name=${nombre}]`]: campo ? { [campo]: true } : true } } } } });
 const refClase = (nombre, campo) => ({ path: '../fuentes/codigo.json', query: { clases: { [`[name=${nombre}]`]: campo ? { uml: { [campo]: true } } : { uml: true } } } });
 
+/** Código de color por tipo de pieza (tokens del tema): fijo en todos los diagramas. */
+const COLOR = { controller: 'app', pojo: 'leaf', cliente: 'service' };
+
 /** Arma una ruta: lanes + nodos + aristas con atajos para cada pieza del ISS. */
 export function ruta(meta, componer) {
   const nodes = [];
@@ -81,13 +84,16 @@ export function ruta(meta, componer) {
       const name = nombreDe(ref);
       if (porClase.has(name)) { alias.set(id, porClase.get(name)); return porClase.get(name); }
       porClase.set(name, id);
-      n({ id, label: name, kind: 'class', lane, class: { ...refClase(name), ...(fill ? { actions: [{ op: 'push', valor: { fill } }] } : {}) } });
+      // Código de color por tipo (igual en todos los diagramas): todo controller del server un color,
+      // todo POJO otro. El `fill` que pida la ruta se ignora a propósito.
+      void fill;
+      n({ id, label: name, kind: 'class', lane, class: { ...refClase(name), actions: [{ op: 'push', valor: { fill: /Controller$/.test(name) ? COLOR.controller : COLOR.pojo } }] } });
       // Todo controller va con su POJO (fuente: los pares de codigo.json), unidos por «uses».
       const pojo = pojoDe.get(name);
       if (pojo && !porClase.has(pojo)) {
         const pid = `${id}-pojo`;
         porClase.set(pojo, pid);
-        n({ id: pid, label: pojo, kind: 'class', lane, class: { ...refClase(pojo), actions: [{ op: 'push', valor: { fill: 'leaf' } }] } });
+        n({ id: pid, label: pojo, kind: 'class', lane, class: { ...refClase(pojo), actions: [{ op: 'push', valor: { fill: COLOR.pojo } }] } });
         arista({ from: id, to: pid, kind: 'dashed', label: '«uses»' });
       }
       return id;
@@ -102,6 +108,8 @@ export function ruta(meta, componer) {
       return n({ id, label: refTabla(nombre, 'name'), kind: 'tableder', lane, table });
     },
     paso: (id, label, lane, icon) => n({ id, label, lane, ...(icon ? { icon } : {}) }),
+    /** Declaración de variables (config que se lee y se usa más adelante en el flujo). */
+    vars: (id, label, lane) => n({ id, label, shape: 'vars', lane }),
     decision: (id, label, lane) => n({ id, label, shape: 'diamond', lane }),
     inicio: (id, lane) => n({ id, label: 'Inicio', shape: 'start', lane }),
     fin: (id, lane) => n({ id, label: 'Fin', shape: 'end', lane }),
@@ -149,17 +157,32 @@ export function ruta(meta, componer) {
     edges.push({ from: nd.id, to: bar });
     console.warn(`[rutas] ${meta.slug}: ${nd.id} reparte a ${salen.length} procesos → barra ${bar}`);
   }
-  // Más de un controller: las clases (controllers y modelos) van en su propia columna, junto al
-  // carril del servicio. Así el contexto «Clases» es una región vertical y no abraza pasos del flujo.
-  let lanes = meta.lanes;
+  // Columnas estándar (de izquierda a derecha): cliente (centrado) · componente con su inicio y sus
+  // fines · flujo del servicio · clases (grupos Controllers y Modelos) · BD · terceros. Así cada
+  // región es una columna y ningún grupo abraza piezas ajenas.
+  let lanes = [...meta.lanes];
   const clasesEn = nodes.filter((x) => x.kind === 'class');
-  const controllers = clasesEn.filter((x) => /Controller$/.test(x.label));
-  if (controllers.length > 1) {
-    const servicio = controllers[0].lane;
-    const id = `${servicio}-clases`;
+  const principal = clasesEn.find((x) => /Controller$/.test(x.label));
+  if (principal) {
+    const servicio = principal.lane;
     const i = lanes.findIndex((l) => l.id === servicio);
-    lanes = [...lanes.slice(0, i + 1), { id, label: 'Controllers y modelos' }, ...lanes.slice(i + 1)];
-    for (const c of clasesEn) if (c.lane === servicio) c.lane = id;
+    lanes.splice(i + 1, 0, { id: `${servicio}-clases`, label: 'Clases' });
+    for (const c of clasesEn) {
+      c.lane = `${servicio}-clases`;
+      c.context = /Controller$/.test(c.label) ? 'Controllers' : 'Modelos';
+    }
+  }
+  // Los fines van en la columna del componente que inicia (abajo); el componente, arriba.
+  const llamador = lanes[0]?.id;
+  for (const f of nodes.filter((x) => x.shape === 'end')) f.lane = llamador;
+  // Controller de cliente: el que declara la ruta o el del POJO del controller principal.
+  const pojoPrincipal = principal ? pojoDe.get(principal.label) : null;
+  const cliente = meta.cliente ?? codigo.clientes?.find((c) => c.pojo === pojoPrincipal && c.client !== 'TBasePatyIA')?.client;
+  const componenteInicial = nodes.find((x) => x.kind === 'component' && x.lane === llamador);
+  if (cliente && componenteInicial) {
+    lanes.unshift({ id: 'cliente', label: 'Cliente', align: 'center' });
+    nodes.unshift({ id: 'cliente', label: cliente, kind: 'class', lane: 'cliente', class: { ...refClase(cliente), actions: [{ op: 'push', valor: { fill: COLOR.cliente } }] } });
+    edges.unshift({ from: 'cliente', to: componenteInicial.id, label: 'fetch' });
   }
   return {
     slug: `ruta-${meta.slug}`,
@@ -222,21 +245,33 @@ RUTAS.push(ruta({
   b.paso('nueva', 'Alta: título e hilo provisionales, qmensajes = 1', 'T', 'mdi:database-plus-outline');
   b.tabla('tconv', 'patyia_conversaciones', 'P', ['iconversacion', 'itercero', 'icontacto', 'titulo', 'hilo', 'qmensajes', 'qtokens', 'fhultact']);
   b.paso('begin', '200 text/event-stream · begin y los log que esperaban', 'T', 'mdi:broadcast');
+  // Config del turno: se lee una vez y se usa más adelante (modelos, topes, cada cuánto el título).
+  b.vars('cfg', 'proveedor = OPENAI · runtime = modelos y topes de RAG · conversación = cfgConversacion()', 'T');
+  b.tabla('tprov', 'patyia_providers', 'P');
+  b.tabla('tsys', 'patyia_sys_values', 'P');
   // OpenAI: un componente por API, cada uno con su interfaz -(O- (componentes.json).
   b.componente('ai-voz', 'openai-whisper', 'O');
   b.componente('ai-op', 'openai-completions', 'O');
   b.componente('ai-hilo', 'openai-conversations', 'O');
   b.componente('ai-resp', 'openai-responses', 'O');
-  b.paso('voz', 'Transcribe las notas de voz (si hay)', 'T', 'mdi:microphone-outline');
-  b.paso('clasif', 'Clasifica la consulta dentro del contexto', 'T', 'mdi:tag-search-outline');
-  b.paso('hilo', 'Asegura el hilo (Conversations API)', 'T', 'mdi:forum-outline');
+  b.decision('dvoz', '¿Trae notas de voz?', 'T');
+  b.paso('voz', 'Transcribe cada nota y valida el texto', 'T', 'mdi:microphone-outline');
+  b.decision('dctx', '¿Modo libre o contexto forzado?', 'T');
+  b.paso('clasif', 'Clasifica la consulta (tdconsulta) y elige vector stores', 'T', 'mdi:tag-search-outline');
+  b.decision('dhilo', '¿La conversación ya tiene hilo de OpenAI?', 'T');
+  b.paso('hilo', 'Crea el hilo y lo guarda en la conversación', 'T', 'mdi:forum-outline');
   b.paso('resp', 'Responses API en stream con instrucciones y file_search', 'T', 'mdi:robot-outline');
   b.paso('delta', 'Reenvía cada delta al cliente (message)', 'T', 'mdi:message-arrow-right-outline');
   b.nota('n-delta', 'delta', 'Se repite por cada fragmento del stream');
-  b.paso('titulo', 'Título y consultas, solo si el turno salió bien', 'T', 'mdi:format-title');
+  b.decision('dok', '¿El turno salió bien?', 'T');
+  b.vars('vn', 'N = conversacion.recalcularTituloCadaMensajesUsuario', 'T');
+  b.decision('dtit', '¿(qmensajes − 1) % N = 0?', 'T');
+  b.paso('titulo', 'Regenera el título (operativo 9999.1)', 'T', 'mdi:format-title');
+  b.paso('consultas', 'Extrae y clasifica las consultas del mensaje', 'T', 'mdi:text-search');
+  b.tabla('tqry', 'patyia_consultas', 'P');
   b.paso('hist', 'Guarda el historial del turno, bajo bloqueo', 'T', 'mdi:database-lock-outline');
   b.tabla('tlog', 'patyia_conversacion_log', 'P');
-  b.paso('cuenta', 'Actualiza qmensajes, qtokens, hilo y fhultact', 'T', 'mdi:database-edit-outline');
+  b.paso('cuenta', 'Actualiza qmensajes, qtokens, hilo, título y fhultact', 'T', 'mdi:database-edit-outline');
   b.paso('end', 'end · meta con traza, imensaje y stream_ok', 'T', 'mdi:flag-checkered');
   b.nota('n-log', 'begin', 'Cada paso emite además un evento log');
   b.fin('fin', 'T');
@@ -249,13 +284,37 @@ RUTAS.push(ruta({
   b.uso('nueva', 'tconv', 'INSERT');
   b.flujo('sigue', 'begin');
   b.flujo('nueva', 'begin');
-  b.cadena('begin', 'voz', 'clasif', 'hilo', 'resp', 'delta', 'titulo', 'hist', 'cuenta', 'end', 'fin');
+  b.cadena('begin', 'cfg', 'dvoz');
+  b.uso('cfg', 'tprov', 'SELECT');
+  b.uso('cfg', 'tsys', 'SELECT');
+  b.flujo('dvoz', 'voz', 'sí');
+  b.flujo('dvoz', 'dctx', 'no');
   b.uso('voz', 'ai-voz', 'transcribe');
+  b.flujo('voz', 'dctx');
+  b.flujo('dctx', 'clasif', 'no');
+  b.flujo('dctx', 'dhilo', 'sí');
   b.uso('clasif', 'ai-op', 'clasifica');
+  b.flujo('clasif', 'dhilo');
+  b.flujo('dhilo', 'hilo', 'no');
+  b.flujo('dhilo', 'resp', 'sí');
   b.uso('hilo', 'ai-hilo', 'create');
+  b.uso('hilo', 'tconv', 'UPDATE');
+  b.flujo('hilo', 'resp');
   b.uso('resp', 'ai-resp', 'stream');
-  b.uso('titulo', 'ai-op', 'título');
+  b.cadena('resp', 'delta', 'dok');
+  b.flujo('dok', 'vn', 'sí');
+  b.flujo('dok', 'hist', 'no');
+  b.uso('vn', 'tsys', 'SELECT');
+  b.flujo('vn', 'dtit');
+  b.flujo('dtit', 'titulo', 'sí');
+  b.flujo('dtit', 'consultas', 'no');
+  b.uso('titulo', 'ai-op', 'generarTitulo');
+  b.flujo('titulo', 'consultas');
+  b.uso('consultas', 'ai-op', 'extrae y clasifica');
+  b.uso('consultas', 'tqry', 'INSERT');
+  b.flujo('consultas', 'hist');
   b.uso('hist', 'tlog', 'INSERT');
+  b.cadena('hist', 'cuenta', 'end', 'fin');
   b.uso('cuenta', 'tconv', 'UPDATE');
   b.flujo('fin', 'api', 'respuesta (stream)');
 }));

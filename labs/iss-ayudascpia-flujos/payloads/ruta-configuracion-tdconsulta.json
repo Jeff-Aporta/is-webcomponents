@@ -19,6 +19,10 @@
         "label": "ISS · TTdConsultationController"
       },
       {
+        "id": "T-clases",
+        "label": "Clases"
+      },
+      {
         "id": "P",
         "label": "PostgreSQL"
       }
@@ -79,7 +83,7 @@
         "id": "ctl",
         "label": "TTdConsultationController",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -97,13 +101,14 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ctl-pojo",
         "label": "TTdConsulta",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -121,7 +126,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "d1",
@@ -215,7 +221,7 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "T"
+        "lane": "C"
       },
       {
         "id": "n-op",

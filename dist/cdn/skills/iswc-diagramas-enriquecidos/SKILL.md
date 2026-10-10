@@ -28,11 +28,22 @@ Spec del kit: `specs/diagramas/spec.md` (WHAT). Ejemplo vivo: `labs/iss-ayudascp
 - Lo que el código sabe se extrae del código (`codigo-a-fuentes.mjs`): `nTbl`, `klass`,
   `primaryKeys`, `sqlDetalle`. Si hace falta un dato nuevo, se agrega al extractor, no al JSON.
 
-## 2. Carriles
+## 2. Columnas (regiones verticales)
 
-Orden de izquierda a derecha: **quien llama** (portal, consola, ISW) → **el servicio** (un carril
-con el controller principal: `ISS · TXxxController`) → **la base de datos** → **sistemas externos**
-(un carril por proveedor: OpenAI, DataSnap, R2…).
+Cada tipo de pieza tiene su columna; ningún tipo se mezcla con otro. De izquierda a derecha:
+
+1. **Cliente**: el controller de cliente que llama al endpoint (`TXxxClient`, de `codigo.json`
+   `clientes`), solo y **centrado verticalmente** (`lanes[].align: "center"`). Se une al componente.
+2. **Componente**: arriba el componente del EP (quien inicia); abajo los **fines** (`end`). Si hay
+   respuesta, el fin vuelve al componente (`respuesta`); si no la hay, no se dibuja; si termina con
+   varias acciones, van en paralelo (barra).
+3. **Flujo**: los pasos del servicio (`ISS · TXxxController`). Aquí los colores sí varían.
+4. **Clases**: siempre su propia columna, con dos grupos: **Controllers** y **Modelos** (cada uno
+   sub-columna); entre ellos los `«uses»`.
+5. **BD**: las tablas del DER.
+6. **Terceros**: un carril por proveedor externo (OpenAI, DataSnap, R2…).
+
+Un recuadro de grupo **nunca** abraza un nodo que no es suyo (se parte en varias cajas; guardián X2).
 
 ## 3. Clases: controller con su POJO
 
@@ -40,6 +51,13 @@ con el controller principal: `ISS · TXxxController`) → **la base de datos** �
 - Dentro de un flujo, una clase es un resumen: **5 miembros por sección** y un renglón `N más`.
   El diagrama lo cambia con `config.classMaxMembers`. Solo aplica a clases.
 - Los miembros son lista: la visibilidad es la viñeta, el tipo va debajo como texto secundario.
+
+## 3b. Código de color por tipo
+
+Para identificar las piezas de un vistazo, el color lo pone el tipo y es el mismo en todos los
+diagramas: **controllers del server** un color (`app`), **POJOs** otro (`leaf`), **controllers de
+cliente** otro (`service`), **componentes** uno y **tablas del DER** uno. Solo los pasos del flujo
+varían de color. El generador ignora cualquier `fill` pedido para clases.
 
 ## 4. Tablas: siempre por su controller dueño
 
@@ -69,6 +87,20 @@ con el controller principal: `ISS · TXxxController`) → **la base de datos** �
   termina en el socket. Varios usos a la misma API convergen en abanico a un solo `-(O-`.
 - La etiqueta dice la operación (`transcribe`, `stream`, `create`, `operativo 9999.2`, `models.list`).
 - Para saber qué APIs usa el servicio, se busca en el código (`openai.<api>.<op>`), no se supone.
+
+## 6b. Declaración de variables
+
+La configuración que se lee y se usa más adelante (sys values, proveedor, runtime) es un nodo del
+flujo con `shape: "vars"`: fondo blanco, rectángulo con la esquina superior derecha en diagonal
+(hoja doblada) e insignia `mdi:variable-box`. Su texto declara la variable (`N = conversacion.…`) y
+una punteada `SELECT` va a la tabla de donde sale (por su controller dueño). La decisión que la usa
+viene después (p. ej. `¿(qmensajes − 1) % N = 0?`).
+
+## 6c. Herramientas: cuándo, no una cadena
+
+Las llamadas a herramientas o APIs no se dibujan como una pila en cadena: el flujo muestra **en
+qué caso** se usa cada una (decisiones con la condición real del código: «¿Trae notas de voz?»,
+«¿La conversación ya tiene hilo?», «¿Modo libre o contexto forzado?»). Se lee el código antes.
 
 ## 7. Flujo
 

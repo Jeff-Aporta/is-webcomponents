@@ -20,7 +20,7 @@
       },
       {
         "id": "K-clases",
-        "label": "Controllers y modelos"
+        "label": "Clases"
       },
       {
         "id": "S",
@@ -106,7 +106,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "kcdn-pojo",
@@ -130,13 +131,14 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "ksys",
         "label": "TSysValueController",
         "kind": "class",
-        "lane": "S",
+        "lane": "K-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -154,13 +156,14 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ksys-pojo",
         "label": "TSysValue",
         "kind": "class",
-        "lane": "S",
+        "lane": "K-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -178,7 +181,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "d1",
@@ -254,7 +258,7 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "K"
+        "lane": "C"
       }
     ],
     "edges": [

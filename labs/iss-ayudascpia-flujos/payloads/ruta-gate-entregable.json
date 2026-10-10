@@ -142,7 +142,7 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "E"
+        "lane": "S"
       },
       {
         "id": "fin-x",

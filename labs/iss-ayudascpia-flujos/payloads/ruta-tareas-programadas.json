@@ -24,7 +24,7 @@
       },
       {
         "id": "T-clases",
-        "label": "Controllers y modelos"
+        "label": "Clases"
       },
       {
         "id": "P",
@@ -96,7 +96,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "cconv-pojo",
@@ -120,7 +121,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "clog",
@@ -144,7 +146,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "clog-pojo",
@@ -168,7 +171,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "flag",
@@ -334,7 +338,7 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "T"
+        "lane": "H"
       },
       {
         "id": "dueno-TSysValueController",
@@ -349,8 +353,17 @@
                 "uml": true
               }
             }
-          }
-        }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
       },
       {
         "id": "dueno-TSysValueController-pojo",
@@ -374,7 +387,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       }
     ],
     "edges": [

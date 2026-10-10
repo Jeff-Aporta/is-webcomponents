@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "C",
         "label": "Consola / ISW"
       },
@@ -19,11 +24,39 @@
         "label": "ISS · TSysValueController"
       },
       {
+        "id": "S-clases",
+        "label": "Clases"
+      },
+      {
         "id": "P",
         "label": "PostgreSQL"
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TSysValueClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValueClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -80,7 +113,7 @@
         "id": "ctl",
         "label": "TSysValueController",
         "kind": "class",
-        "lane": "S",
+        "lane": "S-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -98,13 +131,14 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ctl-pojo",
         "label": "TSysValue",
         "kind": "class",
-        "lane": "S",
+        "lane": "S-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -122,7 +156,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "seg",
@@ -204,10 +239,15 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "S"
+        "lane": "C"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "ctl",
         "to": "ctl-pojo",

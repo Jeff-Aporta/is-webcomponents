@@ -861,6 +861,13 @@ class IswcFlowchart extends DiagramElementBase {
       } else if (n.shape === 'diamond') {
         box = svgEl('path', { d: shapePath('diamond', n.x, n.y, n.w, n.h), fill: pinta(paint.decisionFill), 'stroke-linejoin': 'miter', ...stroke });
         g.appendChild(box);
+      } else if (n.shape === 'vars') {
+        // Declaración de variables (config que se lee y se usa más adelante): fondo blanco, esquina en
+        // diagonal con su pliegue; la insignia lleva el ícono de variable.
+        box = svgEl('path', { d: shapePath('vars', n.x, n.y, n.w, n.h), fill: paint.background, 'stroke-linejoin': 'miter', ...stroke, class: 'flow-node__box flow-node__vars' });
+        g.appendChild(box);
+        const k = Math.min(14, n.w / 6, n.h / 2);
+        g.appendChild(svgEl('path', { d: `M${n.x + n.w - k},${n.y} V${n.y + k} H${n.x + n.w}`, fill: 'none', stroke: paint.actionBorder, 'stroke-width': paint.borderWidth, 'stroke-linejoin': 'miter' }));
       } else if (n.shape === 'rect' || n.shape === 'round' || n.shape === 'stadium') {
         const r = Math.min(paint.radius, n.h / 2);
         box = svgEl('rect', { x: n.x, y: n.y, width: n.w, height: n.h, rx: r, ry: r, fill: pinta(paint.actionFill), ...stroke });

@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "C",
         "label": "Consola / ISW"
       },
@@ -20,7 +25,7 @@
       },
       {
         "id": "V-clases",
-        "label": "Controllers y modelos"
+        "label": "Clases"
       },
       {
         "id": "P",
@@ -32,6 +37,30 @@
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TProviderClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TProviderClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -106,7 +135,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ctl-pojo",
@@ -130,7 +160,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "d1",
@@ -289,7 +320,7 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "V"
+        "lane": "C"
       },
       {
         "id": "dueno-TSysValueController",
@@ -304,8 +335,17 @@
                 "uml": true
               }
             }
-          }
-        }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
       },
       {
         "id": "dueno-TSysValueController-pojo",
@@ -329,10 +369,16 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "ctl",
         "to": "ctl-pojo",

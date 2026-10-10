@@ -47,7 +47,7 @@ const DIRECTIONS: Set<string> = new Set(['TB', 'BT', 'LR', 'RL']);
 /** Formas soportadas; el resto cae a 'rect'. */
 export const FLOW_SHAPES: Set<string> = new Set([
   'rect', 'round', 'stadium', 'circle', 'diamond', 'hexagon', 'parallelogram', 'cylinder', 'subroutine',
-  'start', 'end', 'bar', 'comment',
+  'start', 'end', 'bar', 'comment', 'vars',
 ]);
 
 /**
@@ -190,7 +190,7 @@ function readLanes(src: Record<string, unknown>): FlowLaneSpec[] | undefined {
     const id = String(r.id ?? r.label ?? `carril-${i + 1}`);
     if (vistos.has(id)) continue;
     vistos.add(id);
-    out.push({ id, label: String(r.label ?? r.name ?? id) });
+    out.push({ id, label: String(r.label ?? r.name ?? id), ...(r.align === 'center' ? { align: 'center' as const } : {}) });
   }
   return out.length ? out : undefined;
 }
@@ -339,6 +339,11 @@ export function shapePath(shape: string, x: number, y: number, w: number, h: num
     }
     case 'diamond':
       return `M${cx},${y} L${x + w},${cy} L${cx},${y + h} L${x},${cy} Z`;
+    case 'vars': {
+      // Declaración de variables: rectángulo con la esquina superior derecha en diagonal (hoja).
+      const k = Math.min(14, w / 6, h / 2);
+      return `M${x},${y} H${x + w - k} L${x + w},${y + k} V${y + h} H${x} Z`;
+    }
     case 'hexagon': {
       const k = Math.min(20, w / 4);
       return `M${x + k},${y} H${x + w - k} L${x + w},${cy} L${x + w - k},${y + h} H${x + k} L${x},${cy} Z`;
@@ -1582,6 +1587,7 @@ export function iconoPorDefecto(n: FlowNodeSpec): string {
   if (n.kind === 'tableder') return 'mdi:table';
   if (n.kind === 'nested') return 'mdi:sitemap-outline';
   if (n.shape === 'diamond') return 'mdi:source-branch';
+  if (n.shape === 'vars') return 'mdi:variable-box';
   return 'mdi:play-circle-outline';
 }
 
@@ -1986,6 +1992,13 @@ export function placeLanes(
     if (!celda.has(k)) celda.set(k, []);
     celda.get(k)!.push(n.id);
   }
+  // Dentro de una celda, los de un mismo grupo van juntos (en el orden en que aparecen los grupos):
+  // así cada grupo es una sub-columna y su recuadro no abraza a los del otro.
+  const ordenGrupo = new Map<string, number>();
+  for (const n of spec.nodes) { const g = ctx.get(n.id); if (g && !ordenGrupo.has(g)) ordenGrupo.set(g, ordenGrupo.size); }
+  if (ordenGrupo.size > 1) {
+    for (const ids of celda.values()) ids.sort((a, b) => (ordenGrupo.get(ctx.get(a) ?? '') ?? -1) - (ordenGrupo.get(ctx.get(b) ?? '') ?? -1));
+  }
   /** Lo que ocupa una celda a lo ancho del carril (cruzado al flujo) y a lo largo del flujo. */
   const globo = (id: string): FlowSizedNode | undefined => comentados.get(id);
   const cruz = (id: string): number => {
@@ -2047,6 +2060,17 @@ export function placeLanes(
       }
     }
     pos += sp;
+  }
+  // Carriles centrados: sus nodos van a la mitad del largo del diagrama (sin salirse de la banda).
+  for (const lane of lanes.filter((l) => l.align === 'center')) {
+    const ms = out.filter((n) => laneOf.get(n.id) === lane.id);
+    if (!ms.length) continue;
+    const a = (n: FlowPlacedNode) => (horizontal ? n.x : n.y);
+    const l = (n: FlowPlacedNode) => (horizontal ? n.w : n.h);
+    const ini = Math.min(...ms.map(a));
+    const fin = Math.max(...ms.map((n) => a(n) + l(n)));
+    const d = snap8(Math.max(head + LANES.pad - ini, Math.min(total - LANES.pad - fin, total / 2 - (ini + fin) / 2)));
+    for (const n of ms) { if (horizontal) n.x += d; else n.y += d; }
   }
 
   // Hijo principal: el que sigue en el mismo carril; si ninguno, el del camino más largo (una

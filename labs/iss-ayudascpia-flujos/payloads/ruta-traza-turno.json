@@ -19,6 +19,10 @@
         "label": "ISS · TConversacionController"
       },
       {
+        "id": "T-clases",
+        "label": "Clases"
+      },
+      {
         "id": "H",
         "label": "Historial"
       }
@@ -155,13 +159,13 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "T"
+        "lane": "C"
       },
       {
         "id": "dueno-TConversationLogController",
         "label": "TConversationLogController",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -170,14 +174,23 @@
                 "uml": true
               }
             }
-          }
-        }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
       },
       {
         "id": "dueno-TConversationLogController-pojo",
         "label": "TConversationLog",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -195,7 +208,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       }
     ],
     "edges": [

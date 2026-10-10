@@ -390,7 +390,7 @@ Deno.test('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) 
       }
     }
   }
-  assert((L.contexts ?? []).some((g) => g.label === 'Clases'));
+  assert((L.contexts ?? []).some((g) => g.label === 'Controllers' && g.members?.includes('ctl')), 'el controller va en su grupo «Controllers»');
 });
 
 Deno.test('etiquetas: E1 ícono de BD por defecto en verbos SQL, ícono propio del spec y caja que lo reserva', () => {

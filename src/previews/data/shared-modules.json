@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T12:06:56.416Z",
+  "generatedAt": "2026-10-10T12:22:44.946Z",
   "count": 118,
   "modules": [
     {
@@ -559,9 +559,10 @@
       "id": "diagram-embed",
       "path": "src/components/_shared/diagram-embed.ts",
       "summary": "diagram-embed — `nested` (diagrama anidado), `tableder` (tabla del DER) y `component`",
-      "bytes": 11217,
+      "bytes": 11620,
       "exports": [
         "NESTED_DEFAULT_MAX",
+        "CLASE_FILL",
         "EMBED_CLASS_MAX_MEMBERS",
         "EMBED_FALLBACK_SIZE",
         "readNodeEmbed",
@@ -571,8 +572,7 @@
         "nestedMaxSize",
         "embedScriptUrl",
         "resolveEmbedDiagram",
-        "captureEmbeddedDiagram",
-        "embedStage"
+        "captureEmbeddedDiagram"
       ]
     },
     {

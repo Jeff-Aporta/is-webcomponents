@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "C",
         "label": "Cliente"
       },
@@ -23,6 +28,10 @@
         "label": "ISS · TErrorController"
       },
       {
+        "id": "E-clases",
+        "label": "Clases"
+      },
+      {
         "id": "H",
         "label": "Controller de la ruta"
       },
@@ -32,6 +41,30 @@
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TErrorsClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TErrorsClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -93,7 +126,7 @@
         "id": "err",
         "label": "TErrorController",
         "kind": "class",
-        "lane": "E",
+        "lane": "E-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -111,13 +144,14 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "err-pojo",
         "label": "TError_",
         "kind": "class",
-        "lane": "E",
+        "lane": "E-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -135,7 +169,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "envuelve",
@@ -260,10 +295,15 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "W"
+        "lane": "C"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "err",
         "to": "err-pojo",

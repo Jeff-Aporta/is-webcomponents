@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "C",
         "label": "Portal / consola"
       },
@@ -19,11 +24,39 @@
         "label": "ISS · TConversacionController"
       },
       {
+        "id": "T-clases",
+        "label": "Clases"
+      },
+      {
         "id": "P",
         "label": "PostgreSQL"
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TConversationClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -80,7 +113,7 @@
         "id": "ctl",
         "label": "TConversacionController",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -98,13 +131,14 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ctl-pojo",
         "label": "TConversacion",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -122,7 +156,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "d1",
@@ -223,10 +258,15 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "T"
+        "lane": "C"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "ctl",
         "to": "ctl-pojo",

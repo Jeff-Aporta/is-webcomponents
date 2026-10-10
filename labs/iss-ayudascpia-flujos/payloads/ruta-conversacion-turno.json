@@ -11,6 +11,11 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "C",
         "label": "Portal"
       },
@@ -20,7 +25,7 @@
       },
       {
         "id": "T-clases",
-        "label": "Controllers y modelos"
+        "label": "Clases"
       },
       {
         "id": "P",
@@ -32,6 +37,30 @@
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TConversationClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationClient]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
+        }
+      },
       {
         "id": "api",
         "label": {
@@ -105,7 +134,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Controllers"
       },
       {
         "id": "ctl-pojo",
@@ -129,7 +159,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       },
       {
         "id": "seg",
@@ -209,6 +240,92 @@
         "label": "200 text/event-stream · begin y los log que esperaban",
         "lane": "T",
         "icon": "mdi:broadcast"
+      },
+      {
+        "id": "cfg",
+        "label": "proveedor = OPENAI · runtime = modelos y topes de RAG · conversación = cfgConversacion()",
+        "shape": "vars",
+        "lane": "T"
+      },
+      {
+        "id": "tprov",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_providers]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_providers]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "tsys",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
+            }
+          ]
+        }
       },
       {
         "id": "ai-voz",
@@ -383,20 +500,38 @@
         }
       },
       {
+        "id": "dvoz",
+        "label": "¿Trae notas de voz?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
         "id": "voz",
-        "label": "Transcribe las notas de voz (si hay)",
+        "label": "Transcribe cada nota y valida el texto",
         "lane": "T",
         "icon": "mdi:microphone-outline"
       },
       {
+        "id": "dctx",
+        "label": "¿Modo libre o contexto forzado?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
         "id": "clasif",
-        "label": "Clasifica la consulta dentro del contexto",
+        "label": "Clasifica la consulta (tdconsulta) y elige vector stores",
         "lane": "T",
         "icon": "mdi:tag-search-outline"
       },
       {
+        "id": "dhilo",
+        "label": "¿La conversación ya tiene hilo de OpenAI?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
         "id": "hilo",
-        "label": "Asegura el hilo (Conversations API)",
+        "label": "Crea el hilo y lo guarda en la conversación",
         "lane": "T",
         "icon": "mdi:forum-outline"
       },
@@ -419,10 +554,74 @@
         "about": "delta"
       },
       {
+        "id": "dok",
+        "label": "¿El turno salió bien?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "vn",
+        "label": "N = conversacion.recalcularTituloCadaMensajesUsuario",
+        "shape": "vars",
+        "lane": "T"
+      },
+      {
+        "id": "dtit",
+        "label": "¿(qmensajes − 1) % N = 0?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
         "id": "titulo",
-        "label": "Título y consultas, solo si el turno salió bien",
+        "label": "Regenera el título (operativo 9999.1)",
         "lane": "T",
         "icon": "mdi:format-title"
+      },
+      {
+        "id": "consultas",
+        "label": "Extrae y clasifica las consultas del mensaje",
+        "lane": "T",
+        "icon": "mdi:text-search"
+      },
+      {
+        "id": "tqry",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_consultas]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_consultas]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
+            }
+          ]
+        }
       },
       {
         "id": "hist",
@@ -472,7 +671,7 @@
       },
       {
         "id": "cuenta",
-        "label": "Actualiza qmensajes, qtokens, hilo y fhultact",
+        "label": "Actualiza qmensajes, qtokens, hilo, título y fhultact",
         "lane": "T",
         "icon": "mdi:database-edit-outline"
       },
@@ -492,7 +691,157 @@
         "id": "fin",
         "label": "Fin",
         "shape": "end",
-        "lane": "T"
+        "lane": "C"
+      },
+      {
+        "id": "dueno-TProviderController",
+        "label": "TProviderController",
+        "kind": "class",
+        "lane": "T-clases",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TProviderController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
+      },
+      {
+        "id": "dueno-TProviderController-pojo",
+        "label": "TProvider",
+        "kind": "class",
+        "lane": "T-clases",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TProvider]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        },
+        "context": "Modelos"
+      },
+      {
+        "id": "dueno-TSysValueController",
+        "label": "TSysValueController",
+        "kind": "class",
+        "lane": "T-clases",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValueController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
+      },
+      {
+        "id": "dueno-TSysValueController-pojo",
+        "label": "TSysValue",
+        "kind": "class",
+        "lane": "T-clases",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValue]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        },
+        "context": "Modelos"
+      },
+      {
+        "id": "dueno-TConsultaController",
+        "label": "TConsultaController",
+        "kind": "class",
+        "lane": "T-clases",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConsultaController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
+      },
+      {
+        "id": "dueno-TConsultaController-pojo",
+        "label": "TConsulta",
+        "kind": "class",
+        "lane": "T-clases",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConsulta]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        },
+        "context": "Modelos"
       },
       {
         "id": "dueno-TConversationLogController",
@@ -507,8 +856,17 @@
                 "uml": true
               }
             }
-          }
-        }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        },
+        "context": "Controllers"
       },
       {
         "id": "dueno-TConversationLogController-pojo",
@@ -532,10 +890,16 @@
               }
             }
           ]
-        }
+        },
+        "context": "Modelos"
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "api",
+        "label": "fetch"
+      },
       {
         "from": "ctl",
         "to": "ctl-pojo",
@@ -587,15 +951,85 @@
       },
       {
         "from": "begin",
-        "to": "voz"
+        "to": "cfg"
+      },
+      {
+        "from": "cfg",
+        "to": "dvoz"
+      },
+      {
+        "from": "cfg",
+        "to": "dueno-TProviderController",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "cfg",
+        "to": "dueno-TSysValueController",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "dvoz",
+        "to": "voz",
+        "label": "sí"
+      },
+      {
+        "from": "dvoz",
+        "to": "dctx",
+        "label": "no"
       },
       {
         "from": "voz",
-        "to": "clasif"
+        "to": "ai-voz",
+        "kind": "dashed",
+        "label": "transcribe"
+      },
+      {
+        "from": "voz",
+        "to": "dctx"
+      },
+      {
+        "from": "dctx",
+        "to": "clasif",
+        "label": "no"
+      },
+      {
+        "from": "dctx",
+        "to": "dhilo",
+        "label": "sí"
       },
       {
         "from": "clasif",
-        "to": "hilo"
+        "to": "ai-op",
+        "kind": "dashed",
+        "label": "clasifica"
+      },
+      {
+        "from": "clasif",
+        "to": "dhilo"
+      },
+      {
+        "from": "dhilo",
+        "to": "hilo",
+        "label": "no"
+      },
+      {
+        "from": "dhilo",
+        "to": "resp",
+        "label": "sí"
+      },
+      {
+        "from": "hilo",
+        "to": "ai-hilo",
+        "kind": "dashed",
+        "label": "create"
+      },
+      {
+        "from": "hilo",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
       },
       {
         "from": "hilo",
@@ -603,15 +1037,79 @@
       },
       {
         "from": "resp",
+        "to": "ai-resp",
+        "kind": "dashed",
+        "label": "stream"
+      },
+      {
+        "from": "resp",
         "to": "delta"
       },
       {
         "from": "delta",
-        "to": "titulo"
+        "to": "dok"
+      },
+      {
+        "from": "dok",
+        "to": "vn",
+        "label": "sí"
+      },
+      {
+        "from": "dok",
+        "to": "hist",
+        "label": "no"
+      },
+      {
+        "from": "vn",
+        "to": "dueno-TSysValueController",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "vn",
+        "to": "dtit"
+      },
+      {
+        "from": "dtit",
+        "to": "titulo",
+        "label": "sí"
+      },
+      {
+        "from": "dtit",
+        "to": "consultas",
+        "label": "no"
       },
       {
         "from": "titulo",
+        "to": "ai-op",
+        "kind": "dashed",
+        "label": "generarTitulo"
+      },
+      {
+        "from": "titulo",
+        "to": "consultas"
+      },
+      {
+        "from": "consultas",
+        "to": "ai-op",
+        "kind": "dashed",
+        "label": "extrae y clasifica"
+      },
+      {
+        "from": "consultas",
+        "to": "dueno-TConsultaController",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "consultas",
         "to": "hist"
+      },
+      {
+        "from": "hist",
+        "to": "dueno-TConversationLogController",
+        "kind": "dashed",
+        "label": "INSERT"
       },
       {
         "from": "hist",
@@ -626,42 +1124,6 @@
         "to": "fin"
       },
       {
-        "from": "voz",
-        "to": "ai-voz",
-        "kind": "dashed",
-        "label": "transcribe"
-      },
-      {
-        "from": "clasif",
-        "to": "ai-op",
-        "kind": "dashed",
-        "label": "clasifica"
-      },
-      {
-        "from": "hilo",
-        "to": "ai-hilo",
-        "kind": "dashed",
-        "label": "create"
-      },
-      {
-        "from": "resp",
-        "to": "ai-resp",
-        "kind": "dashed",
-        "label": "stream"
-      },
-      {
-        "from": "titulo",
-        "to": "ai-op",
-        "kind": "dashed",
-        "label": "título"
-      },
-      {
-        "from": "hist",
-        "to": "dueno-TConversationLogController",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
         "from": "cuenta",
         "to": "tconv",
         "kind": "dashed",
@@ -671,6 +1133,42 @@
         "from": "fin",
         "to": "api",
         "label": "respuesta (stream)"
+      },
+      {
+        "from": "dueno-TProviderController",
+        "to": "dueno-TProviderController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TProviderController",
+        "to": "tprov",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "dueno-TSysValueController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "dueno-TConsultaController",
+        "to": "dueno-TConsultaController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TConsultaController",
+        "to": "tqry",
+        "kind": "dashed",
+        "label": "INSERT"
       },
       {
         "from": "dueno-TConversationLogController",

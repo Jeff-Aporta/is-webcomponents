@@ -15,7 +15,7 @@ export const FlowDirectionSchema = z.union([z.literal('TB'), z.literal('BT'), z.
 export type FlowDirection = z.infer<typeof FlowDirectionSchema>;
 
 
-export const FlowShapeSchema = z.union([z.literal('rect'), z.literal('round'), z.literal('stadium'), z.literal('circle'), z.literal('diamond'), z.literal('hexagon'), z.literal('parallelogram'), z.literal('cylinder'), z.literal('subroutine'), z.literal('start'), z.literal('end'), z.literal('bar'), z.literal('comment')]);
+export const FlowShapeSchema = z.union([z.literal('rect'), z.literal('round'), z.literal('stadium'), z.literal('circle'), z.literal('diamond'), z.literal('hexagon'), z.literal('parallelogram'), z.literal('cylinder'), z.literal('subroutine'), z.literal('start'), z.literal('end'), z.literal('bar'), z.literal('comment'), z.literal('vars')]);
 export type FlowShape = z.infer<typeof FlowShapeSchema>;
 
 
@@ -52,6 +52,8 @@ export type FlowExclusionZone = z.infer<typeof FlowExclusionZoneSchema>;
 export const FlowLaneSpecSchema = z.object({
   id: z.string(),
   label: z.string(),
+  /** `center`: los nodos del carril van centrados a lo largo del diagrama (p. ej. el controller de cliente solo en su columna). */
+  align: z.literal('center').optional(),
 });
 export type FlowLaneSpec = z.infer<typeof FlowLaneSpecSchema>;
 
