@@ -22,8 +22,8 @@
  * bundle para el navegador).
  */
 import {
-  safeParse, ZodArray, ZodCatch, ZodDefault, ZodExactOptional, ZodLazy, ZodNonOptional, ZodNullable, ZodObject, ZodOptional,
-  ZodPipe, ZodPrefault, ZodPromise, ZodReadonly, ZodRecord, ZodSuccess, type z,
+  nullable as zNullable, object as zObject, optional as zOptional, safeParse, ZodArray, ZodCatch, ZodDefault, ZodExactOptional, ZodLazy,
+  ZodNonOptional, ZodNullable, ZodObject, ZodOptional, ZodPipe, ZodPrefault, ZodPromise, ZodReadonly, ZodRecord, ZodSuccess, ZodUnion, type z,
 } from "zod";
 import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "./obj.schemas.js";
 
@@ -138,6 +138,59 @@ export class Obj {
   /** `push` + validación del resultado con el schema (lanza el ZodError si queda fuera). */
   static pushZod<S extends z.ZodType>(schema: S, base: z.infer<S> | null | undefined, cambios: unknown): z.infer<S> {
     return schema.parse(Obj.push(esPlano(base) ? base : {}, esPlano(cambios) ? cambios : {}, schema));
+  }
+
+  /**
+   * Schema de un FRAGMENTO de push para `schema` (un objeto): cada clave declarada es opcional y
+   * acepta `null` («quitar»); un objeto anidado también se valida como fragmento. Cliente y
+   * servidor validan así el mismo fragmento.
+   */
+  static esquemaPush(schema: z.ZodType): z.ZodType {
+    const o = objetoInterno(schema);
+    if (!(o instanceof ZodObject)) return schema;
+    const declarado = o.shape as Record<string, z.core.$ZodType>;
+    const shape = Object.fromEntries(Object.entries(declarado).map(([k, campo]) => {
+      const interno = objetoInterno(campo);
+      return [k, zOptional(zNullable(interno instanceof ZodObject ? Obj.esquemaPush(interno) : campo))];
+    }));
+    const fragmento = zObject(shape);
+    return o.def.catchall ? fragmento.catchall(zNullable(o.def.catchall)) : fragmento.strict();
+  }
+
+  /**
+   * `v` con las claves de objeto escritas como las declara `schema` (comparación sin mayúsculas),
+   * recursivo por objetos, arreglos, opcionales y uniones. Para datos que llegan con las claves en
+   * minúsculas (p. ej. el stack InSoft baja a minúsculas el contenido de las columnas JSON). Claves
+   * que el schema no declara quedan tal cual.
+   */
+  static restaurarClaves(v: unknown, schema: z.core.$ZodType): unknown {
+    if (schema instanceof ZodOptional || schema instanceof ZodNullable) return Obj.restaurarClaves(v, schema.unwrap());
+    if (schema instanceof ZodDefault || schema instanceof ZodCatch || schema instanceof ZodReadonly) return Obj.restaurarClaves(v, schema.def.innerType);
+    if (schema instanceof ZodArray) return Array.isArray(v) ? v.map((x) => Obj.restaurarClaves(x, schema.element)) : v;
+    if (schema instanceof ZodUnion) {
+      for (const opcion of schema.options) {
+        const candidato = Obj.restaurarClaves(v, opcion);
+        if (safeParse(opcion, candidato).success) return candidato;
+      }
+      return v;
+    }
+    if (schema instanceof ZodObject && v !== null && typeof v === "object" && !Array.isArray(v)) {
+      const shape = schema.shape as Record<string, z.core.$ZodType>;
+      const declaradas = Object.keys(shape);
+      const out: Record<string, unknown> = {};
+      for (const [k, valor] of Object.entries(v)) {
+        const canonica = declaradas.find((d) => d.toLowerCase() === k.toLowerCase());
+        const campo = canonica === undefined ? undefined : shape[canonica];
+        out[canonica ?? k] = campo ? Obj.restaurarClaves(valor, campo) : valor;
+      }
+      return out;
+    }
+    return v;
+  }
+
+  /** `true` si `v` es un objeto plano (literal o `Object.create(null)`). */
+  static esPlano(v: unknown): v is Record<string, unknown> {
+    return esPlano(v);
   }
 
   /** Cambia solo lo que YA existe en `base` (profundo); lo que no existe se ignora. */

@@ -98,3 +98,12 @@ Deno.test('obj: R2 ciclos, refs mal formadas y consultas sin resultado lanzan; p
   await Obj.resolver({ v: { path: './der.json', query: { erDiagram: { entities: { '[name=patyia_errores]': { name: 1 } } } }, extra: 1 } }, { base: 'docs/x.json', cargar, avisar: (m) => avisos.push(m) });
   assert(avisos.some((m) => m.includes('extra')), avisos.join(' | '));
 });
+
+Deno.test('obj: S1 esquemaPush valida fragmentos y restaurarClaves recupera las mayúsculas del schema', () => {
+  const S = z.object({ maxMensajes: z.number(), sub: z.object({ aB: z.string() }) });
+  const F = Obj.esquemaPush(S);
+  assert(F.safeParse({ maxMensajes: null }).success, 'null = quitar');
+  assert(F.safeParse({ sub: { aB: 'x' } }).success, 'fragmento anidado');
+  assert(!F.safeParse({ otra: 1 }).success, 'clave desconocida: error');
+  assertEquals(Obj.restaurarClaves({ maxmensajes: 3, sub: { ab: 'x' }, libre: 1 }, S), { maxMensajes: 3, sub: { aB: 'x' }, libre: 1 });
+});
