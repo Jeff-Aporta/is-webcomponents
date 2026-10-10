@@ -341,7 +341,8 @@ Deno.test('combinado: S2 insignia estándar: arriba a la izquierda en todo paso;
     edges: [{ from: 't', to: 'd' }, { from: 'd', to: 'a', label: 'sí' }],
   })!, null, { style: 'insoft', embeds: { t: { w: 150, h: 60 } } });
   const N = byId(L);
-  assertEquals([N.get('t')!.step, N.get('d')!.step, N.get('a')!.step], [1, 2, 3]);
+  // La tabla es una entidad: sin número (solo su ícono); los pasos, 1 y 2.
+  assertEquals([N.get('t')!.step, N.get('d')!.step, N.get('a')!.step], [undefined, 1, 2]);
   for (const id of ['t', 'd', 'a']) assert(N.get(id)!.pillFloat, `${id}: insignia suelta`);
   const d = N.get('d')!;
   const cx = d.pill!.x + d.pill!.w / 2;

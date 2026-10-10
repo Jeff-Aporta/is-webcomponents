@@ -811,9 +811,12 @@ class IswcSequenceDiagram extends DiagramElementBase {
       const start = m.kind === 'self' ? (pathPoints(m.path)[0] ?? { x: m.fromX, y: m.y }) : { x: m.fromX, y: m.y };
       const dotG = svgEl('g', { class: 'seq-start' });
       // Índice jerárquico (`4.2.1`): pastilla del ancho del texto; un número corto, círculo.
+      // `stepLabel: ''`: flecha sin índice (solo el punto de arranque).
       const indice = m.stepLabel ?? String(m.step);
       const anchoIndice = indice.length > 2 ? Math.ceil(indice.length * 5.6) + 10 : 16;
-      const dot = indice.length > 2
+      const dot = !indice
+        ? svgEl('circle', { cx: start.x, cy: start.y, r: 4, fill: color })
+        : indice.length > 2
         ? svgEl('rect', { x: start.x - anchoIndice / 2, y: start.y - 8, width: anchoIndice, height: 16, rx: 8, fill: color })
         : svgEl('circle', { cx: start.x, cy: start.y, r: 8, fill: color });
       dotG.appendChild(dot);

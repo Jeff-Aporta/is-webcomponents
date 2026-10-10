@@ -55,11 +55,14 @@ Un recuadro de grupo **nunca** abraza un nodo que no es suyo (guardián X2).
 
 ## 2b. Índices automáticos (jerárquicos)
 
-Con `steps: "auto"` el diagrama numera solo, desde el grafo: sin ramas `1, 2, 3`; si el paso `p` se
-bifurca (decisión, barra, varios procesos), las ramas son `p.1, p.2…` y lo que sigue en cada rama
-`p.k.1, p.k.2…` (anidable: `x.y.z.a…`); donde se reúnen se vuelve al nivel de quien bifurcó (`p+1`).
-Inicio, fin y barras no consumen número; lo que solo se usa (tablas, POJOs) lleva solo su ícono. El
-consumidor nunca escribe índices (guardián `flowchart-indices.test.ts`).
+Con `steps: "auto"` el diagrama numera solo, desde el grafo, y **solo los pasos** (acciones,
+decisiones, declaraciones, subprocesos): cliente, componentes, controllers, tablas, inicio, fin y
+barras llevan solo su ícono. Sin ramas `1, 2, 3`; los hermanos **incrementan** (nunca se concatenan
+1s). Lo que cuelga de una bifurcación del paso `p` se numera `p.1, p.2, p.3…` en orden de lectura,
+rama tras rama; una bifurcación anidada abre su nivel (`p.2.1…`); donde las ramas se reúnen se vuelve
+al nivel de quien bifurcó (`p+1`). Sin huecos en ningún nivel. Ejemplo (parches): `1, 2, 2.1, 2.2,
+2.2.1, 2.2.2, 3`. El consumidor nunca escribe índices (guardián `flowchart-indices.test.ts`). En la
+Seq derivada cada decisión es un mensaje con su índice y la llamada de entrada va sin índice.
 
 ## 3b. Código de color por tipo
 

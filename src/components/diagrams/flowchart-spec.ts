@@ -2033,10 +2033,16 @@ function numerarEnOrden(nodes: FlowLayoutNode[], specById: ReadonlyMap<string, F
 }
 
 /**
- * Índices jerárquicos del flujo (aristas continuas): sin ramas `1, 2, 3…`; si un paso `p` se bifurca
- * (decisión, barra o varios procesos), la rama k empieza en `p.k` y sigue `p.k.1, p.k.2…`; donde las
- * ramas se reúnen se vuelve al nivel de quien bifurcó (`p+1`). Inicio, fin, barras y comentarios no
- * consumen número (son transparentes). Las ramas se ordenan por lectura (izquierda a derecha).
+ * Índices jerárquicos del flujo (aristas continuas), solo para los PASOS (acciones, decisiones,
+ * declaraciones, subprocesos); cliente, componentes, controllers, tablas, inicio, fin, barras y
+ * comentarios son transparentes (llevan solo su ícono).
+ *   - Sin ramas: `1, 2, 3…` (los hermanos incrementan; nunca se concatenan 1s).
+ *   - Lo que cuelga de una bifurcación del paso `p` (decisión o varios procesos) se numera `p.1, p.2,
+ *     p.3…` en orden de lectura, rama tras rama; una bifurcación anidada abre su propio nivel.
+ *   - Donde las ramas se reúnen se vuelve al nivel de quien bifurcó (`p+1`); una rama que va directo
+ *     a la reunión o al fin no consume número.
+ * Una bifurcación sin paso propio (barra de paralelismo) numera sus ramas bajo el último paso; si no
+ * hay ninguno antes, en el mismo nivel.
  */
 export function indicesJerarquicos(
   nodes: readonly FlowLayoutNode[],
@@ -2049,105 +2055,86 @@ export function indicesJerarquicos(
   const hijos = new Map<string, string[]>();
   for (const e of flujo) hijos.set(e.from, [...(hijos.get(e.from) ?? []), e.to]);
   const conEntrada = new Set(flujo.map((e) => e.to));
-
-  // Aristas de retorno (ciclos): fuera, para que haya orden topológico.
-  const atras = new Set<string>();
-  const estado = new Map<string, 1 | 2>();
-  const visitar = (id: string): void => {
-    estado.set(id, 1);
-    for (const h of hijos.get(id) ?? []) {
-      if (estado.get(h) === 1) atras.add(`${id}>${h}`);
-      else if (!estado.has(h)) visitar(h);
-    }
-    estado.set(id, 2);
-  };
-  for (const n of nodes) if (!conEntrada.has(n.id) && hijos.has(n.id)) visitar(n.id);
-  for (const n of nodes) if (!estado.has(n.id) && hijos.has(n.id)) visitar(n.id);
-  const adelante = flujo.filter((e) => !atras.has(`${e.from}>${e.to}`));
-  const grado = new Map<string, number>();
-  for (const e of adelante) grado.set(e.to, (grado.get(e.to) ?? 0) + 1);
-  const gradoInicial = new Map(grado);
-
-  /** Lo que un padre le pasa a su hijo: la base en la que sigue, o la cabeza de una rama nueva. */
-  type Propuesta = { base: number[]; cabeza?: number[] };
-  const propuestas = new Map<string, Propuesta[]>();
-  const contador = new Map<string, number>();
-  /** Índice → base (nivel) en la que vive; sirve para volver al nivel de quien bifurcó. */
-  const baseDeIndice = new Map<string, number[]>();
-  /** Último índice numerado antes de cada nodo (las barras y el inicio no numeran). */
-  const ultimo = new Map<string, number[]>();
-  const out = new Map<string, string>();
-  const clave = (a: readonly number[]): string => a.join('.');
-  const siguiente = (base: number[]): number[] => {
-    const c = (contador.get(clave(base)) ?? 0) + 1;
-    contador.set(clave(base), c);
-    return [...base, c];
-  };
-  const prefijo = (a: readonly number[], b: readonly number[]): number[] => {
-    let i = 0;
-    while (i < a.length && i < b.length && a[i] === b[i]) i++;
-    return a.slice(0, i);
+  const esFin = (id: string): boolean => specById.get(id)?.shape === 'end';
+  /** Paso numerable: lo numerable que no es una entidad incrustada (clase, componente, tabla). */
+  const esPaso = (id: string): boolean => {
+    const s = specById.get(id);
+    return !!s && esNumerable(s) && !(s.kind === 'class' || s.kind === 'component' || s.kind === 'tableder');
   };
   const lectura = (id: string): number => { const n = pos.get(id)!; return horizontal ? n.y : n.x; };
 
-  const cola = nodes.filter((n) => !grado.get(n.id) && (hijos.has(n.id) || conEntrada.has(n.id))).map((n) => n.id);
-  const hecho = new Set<string>();
-  while (cola.length) {
-    const id = cola.shift()!;
-    if (hecho.has(id)) continue;
-    hecho.add(id);
-    const s = specById.get(id);
-    const numerable = !!s && esNumerable(s);
-    const ps = propuestas.get(id) ?? [];
-    let base: number[] = [];
-    let cabeza: number[] | undefined;
-    if (ps.length > 1) {
-      // Reunión: el prefijo común de las ramas; si ese prefijo es el índice de quien bifurcó, su nivel.
-      let lcp = ps.map((p) => p.cabeza ?? p.base).reduce((a, b) => prefijo(a, b));
-      // Un solo nivel: del índice de quien bifurcó, al nivel en el que vive (no más arriba).
-      if (lcp.length && baseDeIndice.has(clave(lcp))) lcp = baseDeIndice.get(clave(lcp))!;
-      base = lcp;
-    } else if (ps.length === 1) {
-      base = ps[0]!.base;
-      cabeza = ps[0]!.cabeza;
+  // Aristas de retorno (ciclos): fuera, para que el recorrido sea un DAG.
+  const atras = new Set<string>();
+  const estado = new Map<string, 1 | 2>();
+  const visitarDfs = (id: string): void => {
+    estado.set(id, 1);
+    for (const h of hijos.get(id) ?? []) {
+      if (estado.get(h) === 1) atras.add(`${id}>${h}`);
+      else if (!estado.has(h)) visitarDfs(h);
     }
-    let previo = ultimo.get(id) ?? [];
-    let baseHijos = base;
-    let cabezaHijos: number[] | undefined;
-    if (numerable) {
-      let idx: number[];
-      if (cabeza && !baseDeIndice.has(clave(cabeza))) {
-        // Cabeza de rama: `p.k`; lo que sigue en la rama cuelga de ella (`p.k.1`…).
-        idx = cabeza;
-        contador.set(clave(cabeza), 0);
-        baseHijos = cabeza;
-      } else {
-        idx = siguiente(base);
-        baseHijos = base;
+    estado.set(id, 2);
+  };
+  for (const n of nodes) if (!conEntrada.has(n.id) && hijos.has(n.id)) visitarDfs(n.id);
+  for (const n of nodes) if (!estado.has(n.id) && hijos.has(n.id)) visitarDfs(n.id);
+  /** Hijos hacia adelante, en orden de lectura; el fin no se atraviesa (su respuesta vuelve al inicio). */
+  const siguientes = (id: string): string[] => (esFin(id) ? [] : [...new Set((hijos.get(id) ?? []).filter((h) => !atras.has(`${id}>${h}`)))].sort((a, b) => lectura(a) - lectura(b)));
+
+  const alcance = new Map<string, Set<string>>();
+  const alcanzables = (id: string): Set<string> => {
+    const m = alcance.get(id);
+    if (m) return m;
+    const vistos = new Set<string>();
+    const pila = [id];
+    while (pila.length) for (const h of siguientes(pila.pop()!)) if (!vistos.has(h)) { vistos.add(h); pila.push(h); }
+    alcance.set(id, vistos);
+    return vistos;
+  };
+  /** Donde se reúnen las ramas: el primer nodo (por cercanía) alcanzable desde todas; nunca el fin. */
+  const reunion = (ramas: readonly string[]): string | null => {
+    const orden: string[] = [];
+    const vistos = new Set<string>([ramas[0]!]);
+    const cola = [ramas[0]!];
+    while (cola.length) {
+      const x = cola.shift()!;
+      orden.push(x);
+      for (const h of siguientes(x)) if (!vistos.has(h)) { vistos.add(h); cola.push(h); }
+    }
+    return orden.find((x) => !esFin(x) && ramas.every((r) => r === x || alcanzables(r).has(x))) ?? null;
+  };
+
+  const out = new Map<string, string>();
+  const visitados = new Set<string>();
+  /**
+   * Numera la secuencia que arranca en `id` hasta `alto` (la reunión de quien la contiene): cada paso
+   * toma `base.(n+1)` del contador del nivel; una bifurcación numera sus ramas en un nivel propio.
+   */
+  const recorrer = (inicio: string | null | undefined, base: number[], contador: { n: number }, alto: string | null): void => {
+    let id = inicio;
+    let ultimo: number[] | null = null;
+    while (id && id !== alto && !visitados.has(id)) {
+      visitados.add(id);
+      if (esPaso(id)) {
+        ultimo = [...base, ++contador.n];
+        out.set(id, ultimo.join('.'));
       }
-      baseDeIndice.set(clave(idx), idx === cabeza ? cabeza.slice(0, -1) : base);
-      out.set(id, clave(idx));
-      previo = idx;
-    } else {
-      // Transparente (barra, inicio, fin): pasa la cabeza pendiente si la traía.
-      cabezaHijos = cabeza;
+      const hs = siguientes(id);
+      if (hs.length >= 2) {
+        const junta = reunion(hs);
+        const tope = junta ?? alto;
+        // Las ramas viven bajo el paso que bifurca (o el último paso); sin ninguno, en este nivel.
+        const sub = ultimo ? { base: ultimo, contador: { n: 0 } } : { base, contador };
+        for (const h of hs) recorrer(h, sub.base, sub.contador, tope);
+        id = junta;
+        continue;
+      }
+      id = hs[0];
     }
-    const hs = [...new Set((hijos.get(id) ?? []).filter((h) => !atras.has(`${id}>${h}`)))].sort((a, b) => lectura(a) - lectura(b));
-    // Solo abren rama (y consumen su número p.k) los hijos que de verdad son ramas: no un fin ni un
-    // nodo donde ya se reúnen varias (esos siguen en el nivel de quien bifurca).
-    const esRama = (h: string): boolean => specById.get(h)?.shape !== 'end' && (gradoInicial.get(h) ?? 0) <= 1;
-    const ramas = hs.filter(esRama);
-    hs.forEach((h) => {
-      const k = ramas.indexOf(h);
-      const p: Propuesta = hs.length > 1 && previo.length
-        ? (k >= 0 ? { base: baseHijos, cabeza: [...previo, k + 1] } : { base: previo })
-        : { base: baseHijos, ...(cabezaHijos ? { cabeza: cabezaHijos } : {}) };
-      propuestas.set(h, [...(propuestas.get(h) ?? []), p]);
-      if (previo.length) ultimo.set(h, previo);
-      grado.set(h, (grado.get(h) ?? 1) - 1);
-      if (!grado.get(h)) cola.push(h);
-    });
-  }
+  };
+  const fuentes = nodes.filter((n) => !conEntrada.has(n.id) && hijos.has(n.id)).map((n) => n.id).sort((a, b) => lectura(a) - lectura(b));
+  const raiz = { n: 0 };
+  for (const f of fuentes) recorrer(f, [], raiz, null);
+  // Lo que solo se alcanza por un ciclo o sin fuente clara: en el nivel raíz, al final.
+  for (const n of nodes) if (!visitados.has(n.id) && hijos.has(n.id)) recorrer(n.id, [], raiz, null);
   return out;
 }
 

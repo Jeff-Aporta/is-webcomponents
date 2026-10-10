@@ -24,4 +24,4 @@ export {
   loaderDefines,
   docsBanner,
 } from './bundle-min.js';
-export type { BundleMinJsOptions, BundleLoaderOptions } from './bundle-min.js';
+export type { BundleMinJsOptions, BundleLoaderOptions } from './bundle-min.schemas.js';

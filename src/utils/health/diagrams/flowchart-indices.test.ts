@@ -1,13 +1,19 @@
 /**
  * Guardián WHAT de los índices automáticos del flujo (`steps: "auto"`).
- *   I1 sin ramas: 1, 2, 3.
- *   I2 una bifurcación del paso p abre p.1, p.2 (por lectura, de izquierda a derecha) y lo que sigue
- *      en cada rama cuelga de su cabeza (p.k.1, p.k.2); al reunirse se vuelve al nivel de p (p+1).
- *   I3 las ramas anidan (p.k.j…); una rama que va directo a la reunión no consume índice propio.
+ *   I1 sin ramas: 1, 2, 3 (los hermanos incrementan; nunca se concatenan 1s).
+ *   I2 lo que cuelga de una bifurcación del paso p se numera p.1, p.2, p.3… en orden de lectura,
+ *      rama tras rama; al reunirse se vuelve al nivel de p (p+1).
+ *   I3 una bifurcación anidada abre su nivel (p.k.1…); una rama que va directo a la reunión no consume índice.
  *   I4 barras de paralelismo, inicio y fin no consumen número; un ciclo no rompe la numeración.
  *   I5 lo que solo se usa (punteadas: tablas, POJOs) no lleva índice.
+ *   I6 una reunión dentro de una rama vuelve solo al nivel de quien bifurcó.
+ *   I7 caso real (ruta de parches): 1, 2, 2.1, 2.2, 2.2.1, 2.2.2, 3.
+ *   I8 las entidades de la entrada (cliente, componente, controller) no llevan número: solo los pasos.
+ *   I9 en las rutas reales no hay huecos: en cada nivel los índices van 1..n seguidos.
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
+import { fileURLToPath } from 'node:url';
+import { Obj } from '../../../cdn/lib/obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
 
 type N = { id: string; label?: string; shape?: string };
@@ -15,35 +21,31 @@ const indices = (nodes: N[], edges: Array<{ from: string; to: string; kind?: str
   const L = computeFlowchartLayout(resolveFlowchartSpec({ steps: 'auto', nodes: nodes.map((n) => ({ label: n.id, ...n })), edges })!, null, { style: 'insoft' });
   return Object.fromEntries(L.nodes.filter((n) => n.shape !== 'comment').map((n) => [n.id, n.stepLabel]));
 };
+const porIndice = (a: string, b: string): number => a.localeCompare(b, 'es', { numeric: true });
 
 Deno.test('índices: I1 sin ramas son 1, 2, 3', () => {
   const r = indices([{ id: 'a' }, { id: 'b' }, { id: 'c' }], [{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }]);
   assertEquals([r.a, r.b, r.c], ['1', '2', '3']);
 });
 
-Deno.test('índices: I2 bifurcación p.k, seguidores p.k.j y reunión p+1', () => {
+Deno.test('índices: I2 lo de una bifurcación es p.1, p.2… rama tras rama y la reunión es p+1', () => {
   const r = indices(
     [{ id: 'a' }, { id: 'd', shape: 'diamond' }, { id: 'x' }, { id: 'x2' }, { id: 'y' }, { id: 'y2' }, { id: 'm' }],
     [{ from: 'a', to: 'd' }, { from: 'd', to: 'x' }, { from: 'x', to: 'x2' }, { from: 'd', to: 'y' }, { from: 'y', to: 'y2' }, { from: 'x2', to: 'm' }, { from: 'y2', to: 'm' }],
   );
-  assertEquals(r.a, '1');
-  assertEquals(r.d, '2');
-  assertEquals(new Set([r.x, r.y]), new Set(['2.1', '2.2']));
-  assertEquals(r.x2, `${r.x}.1`);
-  assertEquals(r.y2, `${r.y}.1`);
-  assertEquals(r.m, '3');
+  assertEquals([r.a, r.d, r.m], ['1', '2', '3']);
+  // Cada rama sigue numerando donde quedó la anterior (orden de lectura): 2.1, 2.2 | 2.3, 2.4.
+  const ramas = [[r.x!, r.x2!], [r.y!, r.y2!]].sort((p, q) => porIndice(p[0]!, q[0]!));
+  assertEquals(ramas, [['2.1', '2.2'], ['2.3', '2.4']]);
 });
 
-Deno.test('índices: I3 ramas anidadas y rama directa a la reunión', () => {
+Deno.test('índices: I3 bifurcación anidada y rama directa a la reunión', () => {
   const r = indices(
     [{ id: 'd1', shape: 'diamond' }, { id: 'v' }, { id: 'd2', shape: 'diamond' }, { id: 'p' }, { id: 'q' }, { id: 'm' }],
     [{ from: 'd1', to: 'v' }, { from: 'd1', to: 'm' }, { from: 'v', to: 'd2' }, { from: 'd2', to: 'p' }, { from: 'd2', to: 'q' }, { from: 'p', to: 'm' }, { from: 'q', to: 'm' }],
   );
-  assertEquals(r.d1, '1');
-  const v = r.v!;
-  assertEquals(v.split('.').length, 2, `v es cabeza de rama de 1: ${v}`);
-  assertEquals(r.d2, `${v}.1`);
-  assertEquals(new Set([r.p, r.q]), new Set([`${v}.1.1`, `${v}.1.2`]));
+  assertEquals([r.d1, r.v, r.d2], ['1', '1.1', '1.2']);
+  assertEquals(new Set([r.p, r.q]), new Set(['1.2.1', '1.2.2']));
   assertEquals(r.m, '2');
 });
 
@@ -64,13 +66,63 @@ Deno.test('índices: I5 lo que solo se usa no lleva índice', () => {
 });
 
 Deno.test('índices: I6 una reunión dentro de una rama vuelve solo al nivel de quien bifurcó', () => {
-  // ok(1) → sí: n(1.1) → d(1.1.1) → [t(1.1.1.1), (no)] → c(1.1.2); ok no → h; c → h(2)
+  // ok(1) → sí: n(1.1) → d(1.2) → [t(1.2.1), (no)] → c(1.3); ok no → h; c → h(2)
   const r = indices(
     [{ id: 'ok', shape: 'diamond' }, { id: 'n' }, { id: 'd', shape: 'diamond' }, { id: 't' }, { id: 'c' }, { id: 'h' }],
     [{ from: 'ok', to: 'n' }, { from: 'ok', to: 'h' }, { from: 'n', to: 'd' }, { from: 'd', to: 't' }, { from: 'd', to: 'c' }, { from: 't', to: 'c' }, { from: 'c', to: 'h' }],
   );
-  assertEquals(r.ok, '1');
-  assertEquals(r.d, `${r.n}.1`);
-  assertEquals(r.c, `${r.n}.2`, 'la reunión de d vuelve al nivel de d');
+  assertEquals([r.ok, r.n, r.d, r.t], ['1', '1.1', '1.2', '1.2.1']);
+  assertEquals(r.c, '1.3', 'la reunión de d vuelve al nivel de d');
   assertEquals(r.h, '2', 'la reunión de ok vuelve al nivel de ok');
+});
+
+Deno.test('índices: I7 caso real de la ruta de parches', () => {
+  const r = indices(
+    [{ id: 'ini', shape: 'start' }, { id: 'a' }, { id: 'b', shape: 'diamond' }, { id: 'x' }, { id: 'c' }, { id: 'd', shape: 'diamond' }, { id: 'f' }, { id: 'g' }, { id: 'fin', shape: 'end' }],
+    [
+      { from: 'ini', to: 'a' }, { from: 'a', to: 'b' }, { from: 'b', to: 'x' }, { from: 'b', to: 'c' }, { from: 'c', to: 'd' },
+      { from: 'd', to: 'x' }, { from: 'd', to: 'f' }, { from: 'f', to: 'g' }, { from: 'g', to: 'fin' }, { from: 'x', to: 'fin' },
+    ],
+  );
+  assertEquals([r.a, r.b, r.c, r.d, r.f, r.g, r.x], ['1', '2', '2.1', '2.2', '2.2.1', '2.2.2', '3']);
+});
+
+Deno.test('índices: I8 las entidades de la entrada no llevan número', () => {
+  const L = computeFlowchartLayout(resolveFlowchartSpec({
+    steps: 'auto',
+    nodes: [
+      { id: 'cli', kind: 'class', label: 'TClient', class: { name: 'TClient' } },
+      { id: 'api', kind: 'component', label: 'api', component: { name: 'api' } },
+      { id: 'ctl', kind: 'class', label: 'TCtl', class: { name: 'TCtl' } },
+      { id: 'a', label: 'a' },
+      { id: 'b', label: 'b' },
+    ],
+    edges: [{ from: 'cli', to: 'api' }, { from: 'api', to: 'ctl' }, { from: 'ctl', to: 'a' }, { from: 'a', to: 'b' }],
+  })!, null, { style: 'insoft' });
+  const r = Object.fromEntries(L.nodes.map((n) => [n.id, n.stepLabel]));
+  assertEquals([r.cli, r.api, r.ctl, r.a, r.b], [undefined, undefined, undefined, '1', '2']);
+});
+
+Deno.test('índices: I9 sin huecos en ningún nivel (rutas reales)', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const huecos: string[] = [];
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const url = new URL(f.name, dir);
+    const crudo = JSON.parse(await Deno.readTextFile(url));
+    const j = await Obj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const porNivel = new Map<string, number[]>();
+    for (const n of L.nodes) {
+      if (!n.stepLabel) continue;
+      const partes = n.stepLabel.split('.');
+      const padre = partes.slice(0, -1).join('.');
+      porNivel.set(padre, [...(porNivel.get(padre) ?? []), Number(partes.at(-1))]);
+    }
+    for (const [padre, ns] of porNivel) {
+      const orden = [...ns].sort((a, b) => a - b);
+      if (orden.some((v, i) => v !== i + 1)) huecos.push(`${f.name}: nivel «${padre || 'raíz'}» = ${orden.join(',')}`);
+    }
+  }
+  assertEquals(huecos, []);
 });

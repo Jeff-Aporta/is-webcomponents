@@ -57,6 +57,8 @@ Deno.test('vector: VF3 controller con su POJO recibe la arista klass sola', () =
 Deno.test('vector: VF4 el flowchart lo dibuja con índices automáticos', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({ vectorFlow: base() })!, null, { style: 'insoft' });
   const idx = Object.fromEntries(L.nodes.map((n) => [n.id, n.stepLabel]));
-  assertEquals([idx.c, idx.api, idx.x, idx.a, idx.d, idx.b], ['1', '2', '3', '4', '5', '5.1']);
+  // Solo los pasos llevan índice: cliente, componente y controller de la entrada, solo su ícono.
+  assertEquals([idx.c, idx.api, idx.x], [undefined, undefined, undefined]);
+  assertEquals([idx.a, idx.d, idx.b], ['1', '2', '2.1']);
   assertEquals(idx.t, undefined, 'la tabla solo se usa');
 });
