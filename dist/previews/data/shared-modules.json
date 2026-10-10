@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T19:48:31.685Z",
+  "generatedAt": "2026-10-10T20:07:24.040Z",
   "count": 118,
   "modules": [
     {
@@ -559,7 +559,7 @@
       "id": "diagram-embed",
       "path": "src/components/_shared/diagram-embed.ts",
       "summary": "diagram-embed — `nested` (diagrama anidado), `tableder` (tabla del DER) y `component`",
-      "bytes": 11387,
+      "bytes": 11372,
       "exports": [
         "NESTED_DEFAULT_MAX",
         "EMBED_CLASS_MAX_MEMBERS",

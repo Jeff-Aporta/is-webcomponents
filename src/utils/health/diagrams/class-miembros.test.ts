@@ -41,11 +41,14 @@ Deno.test('miembros: M2 partirMiembro separa el tipo tras la firma (y conserva l
   assertEquals(partirMiembro('nombre'), { vis: '', firma: 'nombre', tipo: '' });
 });
 
-Deno.test('miembros: M5 con layout.maxMembers se muestran N y un renglón «K más»; dentro de otro diagrama el tope es 5 o el de su config', async () => {
+Deno.test('miembros: M5 toda clase muestra 5 por defecto y un renglón «K más»; layout.maxMembers lo cambia (0 = todos); dentro de otro diagrama el tope es 5 o el de su config', async () => {
   const metodos = Array.from({ length: 15 }, (_, i) => `+ m${i}(): void`);
   const base = { classes: [{ id: 'a', name: 'A', methods: metodos }], relations: [] };
-  const sin = computeClassLayout(resolveClassSpec(base)).nodes[0]!.sections.find((s) => s.type === 'methods')!;
-  assertEquals(sin.members!.length, 15, 'sin tope se muestran todos');
+  const def = computeClassLayout(resolveClassSpec(base)).nodes[0]!.sections.find((s) => s.type === 'methods')!;
+  assertEquals(def.members!.length, 6, 'por defecto 5 y el sexto renglón es «10 más»');
+  assertEquals(def.members![5]!.mas, 10);
+  const sin = computeClassLayout(resolveClassSpec({ ...base, layout: { maxMembers: 0 } })).nodes[0]!.sections.find((s) => s.type === 'methods')!;
+  assertEquals(sin.members!.length, 15, 'con 0 se muestran todos');
   const con = computeClassLayout(resolveClassSpec({ ...base, layout: { maxMembers: 6 } })).nodes[0]!.sections.find((s) => s.type === 'methods')!;
   assertEquals(con.members!.length, 7);
   assertEquals(con.members!.slice(0, 6).map((m) => m.firma[0]), metodos.slice(0, 6).map((r) => r.slice(2, r.indexOf(':'))));

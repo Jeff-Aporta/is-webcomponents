@@ -287,6 +287,8 @@ function packPackageColumns(
       const gap = cur.x - (prev.x + prev.w);
       if (gap < need) shiftPackageTree(cur, packages, components, need - gap, 0);
     }
+    // Entidades y subpaquetes del mismo padre se empujan: nunca se solapan.
+    separarBloques(comps, nested, packages, components, nestedRowGap);
     // Envuelve hijos-paquete + componentes propios.
     const boxes: Caja[] = [
       ...comps,
@@ -378,6 +380,61 @@ function centerChildPkgInParent(
   const maxDy = innerBot - (child.y + child.h);
   const use = Math.max(minDy, Math.min(maxDy, dy));
   if (Math.abs(use) > 1) shiftPackageTree(child, packages, components, 0, use);
+}
+
+/**
+ * Dentro de un paquete, sus componentes y sus subpaquetes (cada uno con todo su árbol) se empujan:
+ * en orden de lectura (arriba → abajo, izquierda → derecha), cada bloque baja hasta quedar a `gap`
+ * de los que ya están puestos. Un subpaquete reserva la franja de su pestaña.
+ */
+function separarBloques(comps: Componente[], subs: Paquete[], packages: Paquete[], components: Componente[], gap: number): void {
+  const bloques = [...comps.map((c) => ({ c: c as Caja, sub: null as Paquete | null })), ...subs.map((p) => ({ c: p as Caja, sub: p }))]
+    .sort((a, b) => a.c.y - b.c.y || a.c.x - b.c.x);
+  const arriba = (b: { c: Caja; sub: Paquete | null }) => b.c.y - (b.sub ? PKG_TAB : 0);
+  const puestos: typeof bloques = [];
+  for (const b of bloques) {
+    for (let vuelta = 0; vuelta <= puestos.length; vuelta++) {
+      const choque = puestos.find((o) => b.c.x < o.c.x + o.c.w + gap && o.c.x < b.c.x + b.c.w + gap
+        && arriba(b) < o.c.y + o.c.h + gap && arriba(o) < b.c.y + b.c.h + gap);
+      if (!choque) break;
+      const dy = choque.c.y + choque.c.h + gap - arriba(b);
+      if (b.sub) shiftPackageTree(b.sub, packages, components, 0, dy); else b.c.y += dy;
+    }
+    puestos.push(b);
+  }
+}
+
+/**
+ * Todo agrupador abraza a todos sus integrantes: tras los ajustes finales (márgenes de ensamble,
+ * aire de lollipops) un componente o subpaquete que se salió hace crecer a su paquete, de los más
+ * profundos a la raíz. Solo crece (respeta el tamaño pedido).
+ */
+export function abrazarPaquetes(packages: Paquete[], components: readonly Componente[]): void {
+  const prof = (p: Paquete): number => {
+    let d = 0;
+    for (let q = p; q.parent; d++) {
+      const padre = packages.find((x) => x.id === q.parent);
+      if (!padre || d > packages.length) break;
+      q = padre;
+    }
+    return d;
+  };
+  for (const p of packages.slice().sort((a, b) => prof(b) - prof(a))) {
+    const pad = p.prohibido ? PKG_PAD : Math.max(PKG_PAD, PKG_PAD_LOLLI);
+    const cajas = [
+      ...components.filter((c) => c.package === p.id).map((c) => ({ x: c.x, y: c.y, w: c.w, h: c.h })),
+      ...packages.filter((q) => q.parent === p.id).map((q) => ({ x: q.x, y: q.y - PKG_TAB, w: q.w, h: q.h + PKG_TAB })),
+    ];
+    if (!cajas.length) continue;
+    const x0 = Math.min(p.x, ...cajas.map((c) => c.x - pad));
+    const y0 = Math.min(p.y, ...cajas.map((c) => c.y - PKG_TAB));
+    const x1 = Math.max(p.x + p.w, ...cajas.map((c) => c.x + c.w + pad));
+    const y1 = Math.max(p.y + p.h, ...cajas.map((c) => c.y + c.h + PKG_PAD));
+    p.x = x0;
+    p.y = y0;
+    p.w = x1 - x0;
+    p.h = y1 - y0;
+  }
 }
 
 /** Traslada un paquete raíz y todo su subárbol (pkgs hijos + comps). */

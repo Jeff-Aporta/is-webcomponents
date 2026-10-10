@@ -32,8 +32,8 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
  */
 export const NESTED_DEFAULT_MAX = 200;
 /**
- * Miembros por sección de una clase incrustada en otro diagrama (por defecto); el siguiente renglón
- * es «N más». El diagrama anfitrión lo cambia con `classMaxMembers` en su config.
+ * Miembros por sección de una clase incrustada en otro diagrama: el mismo default de toda clase
+ * (5); el diagrama anfitrión lo cambia con `classMaxMembers` en su config.
  */
 export const EMBED_CLASS_MAX_MEMBERS = 5;
 /** Tamaño de respaldo de `tableder` / `component` mientras no hay captura. */

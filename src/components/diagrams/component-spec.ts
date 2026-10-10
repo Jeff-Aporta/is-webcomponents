@@ -51,7 +51,7 @@
 
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { packDiagram, packRowGapKey, layoutPackageOutlines, outlineToPath, resolvePackingGaps, inflateTitleObstacle, EDGE_CLEARANCE, GRID_STEP, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
+import { packDiagram, packRowGapKey, abrazarPaquetes, layoutPackageOutlines, outlineToPath, resolvePackingGaps, inflateTitleObstacle, EDGE_CLEARANCE, GRID_STEP, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
 import { routeEdges, pointsToPath, simplifyOrthoPath } from './component-router.js';
 import type { RouterEdge, RouterWorld } from './component-router.schemas.js';
 import { parsePathPoints } from '../_shared/diagram-edge-actors.js';
@@ -434,6 +434,8 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
     // W58: O/C lejos de bordes de agrupador y fuera de paquetes prohibidos.
     enforceLollipopPackageClearance(packages, wired.components, wired.interfaces);
   }
+  // Los agrupadores siempre abrazan a todos sus integrantes (tras cualquier empuje).
+  if (layout.mode !== 'manual') abrazarPaquetes(packages, wired.components);
 
   return {
     title: String(src.title ?? p.title ?? '') || undefined,

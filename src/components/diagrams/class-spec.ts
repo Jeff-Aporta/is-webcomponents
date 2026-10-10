@@ -279,6 +279,13 @@ export function accentFromPalette(hex: string): string {
  * Geometría de compartimentos de una clase: nombre (+estereotipo), atributos,
  * métodos. Los compartimentos vacíos se omiten junto con su divisor.
  */
+/**
+ * Miembros por sección de toda clase (diagrama de clases, incrustada en flujos, DER…): el siguiente
+ * renglón es «N más». Cada diagrama lo cambia con `layout.maxMembers` (o `classMaxMembers` en el
+ * anfitrión); `0` muestra todos.
+ */
+export const CLASS_MAX_MEMBERS = 5;
+
 function classGeometry(cls: ClassSpecClass, maxMembers?: number): { w: number; h: number; headerH: number; sections: ClassLayoutSection[]; dividerYs: number[] } {
   const headerH = HEADER_H + (cls.stereotype ? STEREO_H : 0);
   const sections: ClassLayoutSection[] = [
@@ -296,7 +303,9 @@ function classGeometry(cls: ClassSpecClass, maxMembers?: number): { w: number; h
   const w = snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, widthEst)));
   // Cada miembro: firma y tipo partidos al ancho disponible (nada se corta ni se sale).
   const util = w - MIEMBRO.sangria - MIEMBRO.pad * 2;
-  const tope = maxMembers && maxMembers > 0 ? Math.floor(maxMembers) : Infinity;
+  // Tope por sección (5 por defecto, en todos los diagramas); `maxMembers <= 0` lo quita.
+  const pedido = maxMembers ?? CLASS_MAX_MEMBERS;
+  const tope = pedido > 0 ? Math.floor(pedido) : Infinity;
   const miembros = (todos: string[]) => {
     let y = 0;
     const rows = todos.length > tope ? todos.slice(0, tope) : todos;
