@@ -200,7 +200,7 @@ Con `lanes`, el estilo insoft dibuja carriles: la entidad o el contexto donde oc
 - **Texto de las acciones**: alineado a la izquierda, en rectángulos de ángulos rectos y de ancho homogéneo (el de la más ancha).
 - **Paso e ícono**: `step` (número de la secuencia) y/o `icon` (`"mdi:…"`) van en la insignia. Sin `icon`, cada tipo trae uno por defecto.
 - **Etiquetas de aristas**: son entidades. Nunca se montan entre sí, ni sobre nodos, ni bajo rieles; se prefieren horizontales y, si no caben, se abre espacio. Una arista puede llevar `icon` (va a la izquierda del texto); los verbos SQL (`SELECT`, `INSERT`, `UPDATE`, `UPSERT`, `DELETE`…) llevan uno de base de datos por defecto.
-- **Movimiento** (`flow.dashFlow`, activo en insoft): las punteadas avanzan hacia su destino; sobre las continuas corre una segunda línea de puntos (4 px más gruesa, uno cada 100 px). Es animación SVG nativa (viaja con el SVG exportado) y se apaga con `prefers-reduced-motion`.
+- **Movimiento** (`flow.dashFlow`, activo en insoft): las punteadas avanzan hacia su destino; sobre las continuas corre una segunda línea de puntos (3 px más gruesa, uno cada 100 px). Es animación SVG nativa (viaja con el SVG exportado) y se apaga con `prefers-reduced-motion`.
 
 ## Nodos especiales (`kind`)
 

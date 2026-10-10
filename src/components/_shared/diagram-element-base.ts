@@ -60,6 +60,33 @@ import { ElementBase } from '../../core/element-base.js';
 import { findThemeContainer, readTheme } from './theme-scope.js';
 import { hostStyleName, loadStylesDiagram } from '../diagrams/diagram-styles.js';
 
+/** ¿Hay alguna referencia `{ path, query }` en el payload? (recorrido liviano, sin dependencias). */
+function tieneRefs(v: unknown, n = 0): boolean {
+  if (n > 64 || v === null || typeof v !== 'object') return false;
+  if (Array.isArray(v)) return v.some((x) => tieneRefs(x, n + 1));
+  const o = v as Record<string, unknown>;
+  if (typeof o.path === 'string' && 'query' in o) return true;
+  return Object.values(o).some((x) => tieneRefs(x, n + 1));
+}
+
+/**
+ * Resuelve las referencias con `Obj.resolver` de la biblioteca común (`lib/obj.min.js`, junto a
+ * este bundle en el CDN). Se importa solo cuando hay referencias: los diagramas sin ellas no la
+ * cargan.
+ */
+async function resolverRefs(payload: unknown, base: string): Promise<unknown> {
+  const url = new URL('../lib/obj.min.js', import.meta.url).href;
+  const { Obj } = await import(/* @vite-ignore */ url) as { Obj: { resolver: (v: unknown, o: { base: string; cargar: (u: string) => Promise<unknown> }) => Promise<unknown> } };
+  return Obj.resolver(payload, {
+    base,
+    cargar: async (u: string) => {
+      const r = await fetch(u);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    },
+  });
+}
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export class DiagramElementBase extends ElementBase {
@@ -174,6 +201,16 @@ export class DiagramElementBase extends ElementBase {
         // estilo. Si la carga falla, se pinta con el tema por defecto.
         const estilo = hostStyleName(this);
         if (estilo) await loadStylesDiagram(estilo).catch(() => undefined);
+        // Referencias { path, query, actions } del payload (fuentes de verdad en JSON): se resuelven
+        // antes de pintar. Un valor que no existe es un error: no se pinta y se muestra.
+        if (this.mounted && tieneRefs(this.#payload)) {
+          try {
+            this.#payload = await resolverRefs(this.#payload, this.getAttribute('payload-base') || document.baseURI);
+          } catch (e) {
+            this.#mostrarError(e);
+            return;
+          }
+        }
         // Trabajo asíncrono previo al pintado (webfont, diagramas incrustados…).
         if (this.mounted) await this.prepareRender().catch(() => undefined);
         if (this.mounted) {
@@ -188,6 +225,21 @@ export class DiagramElementBase extends ElementBase {
   }
 
   async updateComplete(): Promise<void> { await this.queueRender(); }
+
+  /** Error del payload (p. ej. una referencia a un valor que no existe): a la consola y al lienzo. */
+  #mostrarError(e: unknown): void {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[${this.localName}] ${msg}`);
+    if (!this.#svg) return;
+    this.#svg.replaceChildren();
+    const t = document.createElementNS(SVG_NS, 'text');
+    t.setAttribute('x', '8');
+    t.setAttribute('y', '20');
+    t.setAttribute('fill', '#b91c1c');
+    t.setAttribute('font-size', '12');
+    t.textContent = msg;
+    this.#svg.appendChild(t);
+  }
 
   /** Hook opcional: trabajo asíncrono que el render necesita listo (no-op por
    *  defecto). Se espera dentro de `queueRender`, así `updateComplete` (y el

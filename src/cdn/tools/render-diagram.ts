@@ -15,7 +15,8 @@
  *
  * Modos: sintético (tag+scriptUrl+payload) o pageUrl (HTML ya armado).
  */
-import { mkdir, writeFile, rm, rename } from 'node:fs/promises';
+import { mkdir, writeFile, rm, rename, readFile } from 'node:fs/promises';
+import { Obj } from '../lib/obj.js';
 import process from 'node:process';
 import { join, dirname, isAbsolute, relative } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -267,7 +268,7 @@ export async function renderDiagram(
       const html = buildHostHtml({
         scriptUrl,
         tag: job.tag,
-        payload: job.payload,
+        payload: await payloadResuelto(job),
         attrs: job.attrs,
         css: job.css,
       });
@@ -317,7 +318,7 @@ export async function renderDiagramBatch(
           const html = buildHostHtml({
             scriptUrl,
             tag: job.tag,
-            payload: job.payload,
+            payload: await payloadResuelto(job),
             attrs: job.attrs,
             css: job.css,
           });
@@ -366,6 +367,18 @@ export async function writeDiagramOutputs(
  */
 export function sinInyeccion(svg: string): string {
   return svg.replace(/<\/svg>/g, '</svg >');
+}
+
+/**
+ * Payload con sus referencias `{ path, query, actions }` resueltas contra `payloadBase` (archivo
+ * local o URL). Sin `payloadBase`, el payload va tal cual.
+ */
+export async function payloadResuelto(job: SyntheticDiagramJob): Promise<unknown> {
+  if (!job.payloadBase) return job.payload;
+  return Obj.resolver(job.payload, {
+    base: job.payloadBase,
+    cargar: async (url) => JSON.parse(/^https?:/i.test(url) ? await (await fetch(url)).text() : await readFile(url.startsWith('file:') ? new URL(url) : url, 'utf8')),
+  });
 }
 
 /** Resuelve ruta de script relativa a un CDN root (local o URL). */

@@ -539,6 +539,23 @@ try {
 // y nadie llegaba a esas 177 paginas. Para agentes el canal es `skills/`,
 // que este mismo build publica en `dist/cdn/skills/`.
 
+// ── lib/: utilidades comunes (Obj: operaciones sobre objetos y referencias) ──
+// Dos formas: la fuente .ts (vendor de ISS/ISW con su propio zod) y un bundle ESM para el navegador
+// (zod incluido): `import { Obj } from '<cdn>/lib/obj.min.js'`.
+const libOut = join(dist, 'lib');
+await mkdir(libOut, { recursive: true });
+for (const name of ['obj.ts', 'obj.schemas.ts', 'obj.md']) await copyFile(join(root, 'src', 'cdn', 'lib', name), join(libOut, name));
+await build({
+  entryPoints: [join(root, 'src', 'cdn', 'lib', 'obj.ts')],
+  outfile: join(libOut, 'obj.min.js'),
+  bundle: true,
+  minify: true,
+  format: 'esm',
+  target: 'es2022',
+  legalComments: 'none',
+});
+console.log(`  ${'lib/'.padEnd(18)} obj.ts (vendor) + obj.min.js (navegador)`);
+
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
 // El entry vive en src/gallery/app.ts; el runtime solo carga dist/.

@@ -133,7 +133,7 @@ function colorDeEntidad(g: Element): string {
 const PUNTOS_PASO = 100;
 const PUNTOS_VEL = 60;
 /** Cuánto más gruesos que la línea son los puntos (px). */
-const PUNTOS_GROSOR = 4;
+const PUNTOS_GROSOR = 3;
 
 /** Preferencia de movimiento reducido del sistema (sin `matchMedia`, p. ej. al exportar: animar). */
 function movimientoReducido(): boolean {

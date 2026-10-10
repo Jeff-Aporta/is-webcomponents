@@ -36,6 +36,8 @@ for (const f of files) {
       tag: spec.tag || 'iswc-flowchart',
       scriptUrl: `dist/cdn/${spec.script || 'diagrams/flowchart.min.js'}`,
       payload: spec.payload,
+      // Las referencias { path, query, actions } del payload se resuelven contra el editable.
+      payloadBase: join(PAYLOADS, f),
       attrs: spec.attrs || { 'diagram-style': 'insoft' },
     },
   });
