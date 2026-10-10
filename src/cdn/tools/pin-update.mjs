@@ -12,7 +12,7 @@
 //   pin-update.mjs --nuevo=<sha40>                   reemplaza TODOS los pines por <sha40>
 //   pin-update.mjs --nuevo=ultimo                    resuelve el HEAD de la rama (--rama, default main) a su SHA y lo fija
 //   pin-update.mjs --nuevo=<sha40> --viejo=<sha40>   reemplaza solo esa cadena exacta
-//   --repo=Owner/nombre        paquete gh (default Jeff-Aporta/iswc-root)
+//   --repo=Owner/nombre        paquete gh (default Jeff-Aporta/is-webcomponents)
 //   --raices=a,b,c             rutas a barrer (default: front típico, ver RAICES)
 //   --saltar=a,b               carpetas a ignorar (default node_modules,vendor,dist,.tmp-scss,.git)
 //   --verificar=<ruta>         archivo que debe existir en el pin (default dist/cdn/core/loader.min.js)
@@ -28,11 +28,13 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => {
   return [k, v.length ? v.join('=') : true];
 }));
 const ROOT = process.cwd();
-const repo = String(args.repo || 'Jeff-Aporta/iswc-root');
+const repo = String(args.repo || 'Jeff-Aporta/is-webcomponents');
 const nombre = repo.split('/')[1];
-// Nombres anteriores del mismo repo (jsDelivr los sigue resolviendo tras renombrar). Se inventarían
-// como pines del repo y, al pinear, se reescriben al nombre actual: `is-webcomponents@x` → `iswc-root@y`.
-const ALIAS = { 'iswc-root': ['is-webcomponents'] };
+// Otros nombres del mismo repo. Se inventarían como pines del repo y, al pinear, se reescriben al
+// nombre real. Hoy el repo de GitHub es `is-webcomponents`: el rename a `iswc-root` no se hizo y
+// jsDelivr da 404 con ese nombre, así que un `iswc-root@x` se corrige a `is-webcomponents@y`.
+// Cuando el rename exista, se invierte (default `iswc-root`, alias `is-webcomponents`).
+const ALIAS = { 'is-webcomponents': ['iswc-root'], 'iswc-root': ['is-webcomponents'] };
 const nombres = [nombre, ...(args.alias ? String(args.alias).split(',') : ALIAS[nombre] ?? [])];
 const rama = String(args.rama || 'main');
 const verificar = String(args.verificar || 'dist/cdn/core/loader.min.js');
