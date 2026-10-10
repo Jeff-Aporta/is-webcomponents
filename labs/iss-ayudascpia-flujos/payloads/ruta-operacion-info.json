@@ -63,7 +63,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             },
             {
@@ -261,6 +262,86 @@
         "label": "Un fallo de una lectura queda en su campo; nunca 5xx",
         "shape": "comment",
         "about": "ok"
+      },
+      {
+        "id": "dueno-TErrorController",
+        "label": "TErrorController",
+        "kind": "class",
+        "lane": "I",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TErrorController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TErrorController-pojo",
+        "label": "TError_",
+        "kind": "class",
+        "lane": "I",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TError_]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "dueno-TSysValueController",
+        "label": "TSysValueController",
+        "kind": "class",
+        "lane": "I",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValueController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TSysValueController-pojo",
+        "label": "TSysValue",
+        "kind": "class",
+        "lane": "I",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValue]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -313,13 +394,13 @@
       },
       {
         "from": "err",
-        "to": "terr",
+        "to": "dueno-TErrorController",
         "kind": "dashed",
         "label": "SELECT"
       },
       {
         "from": "pat",
-        "to": "tsys",
+        "to": "dueno-TSysValueController",
         "kind": "dashed",
         "label": "SELECT"
       },
@@ -335,6 +416,30 @@
         "from": "fin",
         "to": "api",
         "label": "respuesta"
+      },
+      {
+        "from": "dueno-TErrorController",
+        "to": "dueno-TErrorController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TErrorController",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "dueno-TSysValueController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT"
       }
     ]
   }

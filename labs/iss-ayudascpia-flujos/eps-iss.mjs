@@ -186,7 +186,7 @@ par({ slug: 'configuracion-proveedor', module: '010-General', title: 'Proveedor 
     b.paso('cfg', 'Configuración OPENAI y modelos verificados en la cuenta', 'V', 'mdi:robot-outline');
     b.tabla('tprov', 'patyia_providers', 'P');
     b.tabla('tsys', 'patyia_sys_values', 'P');
-    b.componente('ai', 'openai-chat', 'O');
+    b.componente('ai', 'openai-models', 'O');
     b.paso('ok', 'Respuesta con la cuenta siempre enmascarada', 'V', 'mdi:reply-outline');
     b.fin('fin', 'V');
     b.flujo('api', 'ctl', 'petición con token');
@@ -198,7 +198,7 @@ par({ slug: 'configuracion-proveedor', module: '010-General', title: 'Proveedor 
     b.uso('get', 'tprov', 'SELECT');
     b.uso('put', 'tprov', 'UPSERT');
     b.uso('cfg', 'tsys', 'SELECT · UPDATE');
-    b.uso('cfg', 'ai', 'modelos');
+    b.uso('cfg', 'ai', 'models.list');
     for (const x of ['get', 'put', 'cfg']) b.flujo(x, 'ok');
     b.flujo('ok', 'fin');
     b.flujo('fin', 'api', 'respuesta');
@@ -597,7 +597,7 @@ par({ slug: 'conversacion-resumen', module: '020-Conversaciones', title: 'Resume
     b.decision('d1', '¿Tiene mensajes?', 'T');
     b.paso('e400', '400', 'T', 'mdi:message-off-outline');
     b.paso('ia', 'Operativo 9999.2, sin streaming', 'T', 'mdi:robot-outline');
-    b.componente('ai', 'openai-chat', 'O');
+    b.componente('ai', 'openai-completions', 'O');
     b.paso('ok', 'Resumen con engine, model, tokens y latencia', 'T', 'mdi:text-box-check-outline');
     b.nota('n-def', 'ok', 'Si el proveedor falla: 200 con un texto por defecto');
     b.fin('fin', 'T');
@@ -607,7 +607,7 @@ par({ slug: 'conversacion-resumen', module: '020-Conversaciones', title: 'Resume
     b.uso('hist', 'tlog', 'SELECT');
     b.flujo('d1', 'e400', 'no');
     b.flujo('d1', 'ia', 'sí');
-    b.uso('ia', 'ai', 'Responses');
+    b.uso('ia', 'ai', 'operativo 9999.2');
     b.cadena('ia', 'ok', 'fin');
     b.flujo('e400', 'fin');
     b.flujo('fin', 'api', 'respuesta');

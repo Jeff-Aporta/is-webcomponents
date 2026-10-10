@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW } from './flowchart-spec.js';
+import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET } from './flowchart-spec.js';
 import type { FlowLayoutOptions, FlowPaint } from './flowchart-spec.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { pickThemeMode, themeToDiagramTheme, injectThemeCss } from './theme.js';
@@ -756,7 +756,21 @@ class IswcFlowchart extends DiagramElementBase {
       const bx = tip.x - dir.x * len;
       const by = tip.y - dir.y * len;
       const clave = `${tip.x},${tip.y}`;
-      if (!puntas.has(clave)) g.appendChild(svgEl('polyline', {
+      if (e.socket) {
+        // Conector UML `-(O-`: el componente expone su interfaz (palo + bola desde su borde) y quien
+        // llega la toma con el socket `(` al final de su riel. Uno por punta (el abanico converge ahí).
+        if (!puntas.has(clave)) {
+          const { palo, bola, socket } = SOCKET;
+          const c = { x: tip.x - dir.x * (palo + bola), y: tip.y - dir.y * (palo + bola) };
+          g.appendChild(svgEl('line', { x1: tip.x, y1: tip.y, x2: tip.x - dir.x * palo, y2: tip.y - dir.y * palo, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
+          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: '#FFFFFF', stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
+          // Semicírculo abierto hacia el componente.
+          const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
+          const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };
+          g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 1 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
+        }
+        puntas.add(clave);
+      } else if (!puntas.has(clave)) g.appendChild(svgEl('polyline', {
         points: `${bx - dir.y * half},${by + dir.x * half} ${tip.x},${tip.y} ${bx + dir.y * half},${by - dir.x * half}`,
         fill: 'none', stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', 'stroke-linecap': 'butt',
         class: 'flow-edge__head',

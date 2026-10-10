@@ -63,7 +63,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             },
             {
@@ -205,14 +206,14 @@
         "icon": "mdi:broadcast"
       },
       {
-        "id": "ai",
+        "id": "ai-voz",
         "label": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
           "query": {
             "payload": {
               "componentDiagram": {
                 "components": {
-                  "[id=openai-chat]": {
+                  "[id=openai-whisper]": {
                     "name": true
                   }
                 }
@@ -228,7 +229,7 @@
             "payload": {
               "componentDiagram": {
                 "components": {
-                  "[id=openai-chat]": true
+                  "[id=openai-whisper]": true
                 }
               }
             }
@@ -239,7 +240,134 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ai-op",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-completions]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "kind": "component",
+        "lane": "O",
+        "component": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-completions]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true,
+                "provides": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ai-hilo",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-conversations]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "kind": "component",
+        "lane": "O",
+        "component": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-conversations]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true,
+                "provides": true
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ai-resp",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-responses]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "kind": "component",
+        "lane": "O",
+        "component": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-responses]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true,
+                "provides": true
               }
             }
           ]
@@ -490,31 +618,31 @@
       },
       {
         "from": "voz",
-        "to": "ai",
+        "to": "ai-voz",
         "kind": "dashed",
-        "label": "audio"
+        "label": "transcribe"
       },
       {
         "from": "clasif",
-        "to": "ai",
+        "to": "ai-op",
         "kind": "dashed",
         "label": "clasifica"
       },
       {
         "from": "hilo",
-        "to": "ai",
+        "to": "ai-hilo",
         "kind": "dashed",
-        "label": "Conversations"
+        "label": "create"
       },
       {
         "from": "resp",
-        "to": "ai",
+        "to": "ai-resp",
         "kind": "dashed",
-        "label": "Responses"
+        "label": "stream"
       },
       {
         "from": "titulo",
-        "to": "ai",
+        "to": "ai-op",
         "kind": "dashed",
         "label": "título"
       },

@@ -167,6 +167,11 @@ export type FlowLayoutNode = z.infer<typeof FlowLayoutNodeSchema>;
 
 
 export const FlowLayoutEdgeSchema = z.object({
+  /**
+   * Llega a un componente que expone interfaz (`provides`): conector UML `-(O-`. El riel termina en
+   * el socket `(`; la punta (`arrowTip*`) es el borde del componente, donde nace su lollipop `O-`.
+   */
+  socket: z.boolean().optional(),
   id: z.string(),
   from: z.string(),
   to: z.string(),

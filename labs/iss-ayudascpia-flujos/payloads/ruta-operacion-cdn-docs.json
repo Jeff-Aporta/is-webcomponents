@@ -63,7 +63,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             },
             {

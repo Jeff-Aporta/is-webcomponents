@@ -465,9 +465,15 @@ Deno.test('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de l
 Deno.test('combinado: U4 abanico: los usos a un mismo destino comparten punta y corren por vías paralelas propias', async () => {
   const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
   const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
-  const alAi = L.edges.filter((e) => e.to === 'ai').map((e) => pathPoints(e.path));
-  assert(alAi.length >= 4, 'varios usos a OpenAI');
-  const puntas = new Set(alAi.map((p) => JSON.stringify(p.at(-1))));
+  // El destino con más usos de la ruta (hoy Chat Completions: clasifica y título).
+  const usos = L.edges.filter((e) => e.kind === 'dashed');
+  const cuenta = new Map<string, number>();
+  for (const e of usos) cuenta.set(e.to, (cuenta.get(e.to) ?? 0) + 1);
+  const destino = [...cuenta].sort((a, b) => b[1] - a[1])[0]![0];
+  const llegan = usos.filter((e) => e.to === destino);
+  const alAi = llegan.map((e) => pathPoints(e.path));
+  assert(alAi.length >= 2, `varios usos a ${destino}`);
+  const puntas = new Set(llegan.map((e) => `${e.arrowTipX},${e.arrowTipY}`));
   assertEquals(puntas.size, 1, 'una sola punta');
   // Vías propias: ningún par de usos comparte el tramo vertical por el que baja o sube.
   const verticales = alAi.map((p) => p.slice(1).flatMap((q, k) => (q.x === p[k]!.x && q.y !== p[k]!.y ? [q.x] : [])));
@@ -562,4 +568,51 @@ Deno.test('combinado: D1 en las rutas reales, a un rombo se entra por arriba (su
     }
   }
   assertEquals(malas, []);
+});
+
+Deno.test('combinado: K1 a un componente que expone interfaz se llega por -(O- (socket), nunca con flecha', async () => {
+  const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
+  const spec = resolveFlowchartSpec(j.payload)!;
+  const L = computeFlowchartLayout(spec, null, { style: 'insoft' });
+  const expone = new Set(spec.nodes.filter((n) => {
+    const c = n.embed?.kind === 'component' ? (n.embed.component as { provides?: unknown[] }) : undefined;
+    return !!c?.provides?.length;
+  }).map((n) => n.id));
+  assert(expone.size >= 4, `componentes de OpenAI con interfaz: ${[...expone].join(', ')}`);
+  const llegan = L.edges.filter((e) => expone.has(e.to));
+  assert(llegan.length >= 5);
+  for (const e of llegan) {
+    assert(e.socket, `${e.from}→${e.to} sin socket`);
+    const fin = pathPoints(e.path).at(-1)!;
+    assert(Math.abs(fin.x - e.arrowTipX) + Math.abs(fin.y - e.arrowTipY) >= 20, `${e.from}→${e.to}: el riel termina en el socket, antes del borde`);
+  }
+});
+
+/** Tramos de aristas continuas que atraviesan una caja ajena (ni su origen ni su destino). */
+function crucesDeFlujo(L: FlowLayout): string[] {
+  const out: string[] = [];
+  for (const e of L.edges.filter((x) => x.kind !== 'dashed')) {
+    const pts = pathPoints(e.path);
+    for (let k = 1; k < pts.length; k++) {
+      const [a, b] = [pts[k - 1]!, pts[k]!];
+      for (const n of L.nodes) {
+        if (n.id === e.from || n.id === e.to || n.shape === 'comment') continue;
+        const x0 = Math.min(a.x, b.x), x1 = Math.max(a.x, b.x), y0 = Math.min(a.y, b.y), y1 = Math.max(a.y, b.y);
+        if (x1 > n.x + 2 && x0 < n.x + n.w - 2 && y1 > n.y + 2 && y0 < n.y + n.h - 2) out.push(`${e.from}→${e.to} cruza ${n.id}`);
+      }
+    }
+  }
+  return out;
+}
+
+Deno.test('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa una caja ajena', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const malos: string[] = [];
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = await editable(new URL(f.name, dir));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    malos.push(...crucesDeFlujo(L).map((m) => `${f.name}: ${m}`));
+  }
+  assertEquals(malos, []);
 });

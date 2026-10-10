@@ -63,7 +63,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             },
             {
@@ -238,7 +239,7 @@
             "payload": {
               "componentDiagram": {
                 "components": {
-                  "[id=openai-chat]": {
+                  "[id=openai-models]": {
                     "name": true
                   }
                 }
@@ -254,7 +255,7 @@
             "payload": {
               "componentDiagram": {
                 "components": {
-                  "[id=openai-chat]": true
+                  "[id=openai-models]": true
                 }
               }
             }
@@ -265,7 +266,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             }
           ]
@@ -282,6 +284,46 @@
         "label": "Fin",
         "shape": "end",
         "lane": "V"
+      },
+      {
+        "id": "dueno-TSysValueController",
+        "label": "TSysValueController",
+        "kind": "class",
+        "lane": "V",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValueController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TSysValueController-pojo",
+        "label": "TSysValue",
+        "kind": "class",
+        "lane": "V",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValue]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -329,7 +371,7 @@
       },
       {
         "from": "cfg",
-        "to": "tsys",
+        "to": "dueno-TSysValueController",
         "kind": "dashed",
         "label": "SELECT · UPDATE"
       },
@@ -337,7 +379,7 @@
         "from": "cfg",
         "to": "ai",
         "kind": "dashed",
-        "label": "modelos"
+        "label": "models.list"
       },
       {
         "from": "get",
@@ -359,6 +401,18 @@
         "from": "fin",
         "to": "api",
         "label": "respuesta"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "dueno-TSysValueController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT · UPDATE"
       }
     ]
   }

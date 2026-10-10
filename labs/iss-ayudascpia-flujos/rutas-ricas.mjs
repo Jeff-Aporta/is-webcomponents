@@ -30,6 +30,8 @@ const enCodigo = new Set(codigo.clases.map((c) => c.name));
 const pojoDe = new Map(codigo.pares.map((p) => [p.controller, p.pojo]));
 /** Tabla → controller que la gobierna (su `nTbl`): todo acceso a una tabla pasa por él y su POJO. */
 const duenoDe = new Map(codigo.pares.filter((p) => p.nTbl).map((p) => [p.nTbl, p.controller]));
+/** Tabla detalle → { maestro, arreglo, clave } según el `sqlDetalle` del controller maestro. */
+const detalleDe = new Map(codigo.pares.flatMap((p) => (p.detalles ?? []).map((d) => [d.nTbl, { maestro: p.controller, arreglo: d.arreglo, clave: d.clave }])));
 
 /*
  * Referencias { path, query, actions } (ver `Obj` del kit): los nodos no copian datos, citan su
@@ -72,7 +74,7 @@ export function ruta(meta, componer) {
     componente(id, ref, lane, items) {
       if (!componentes.has(ref)) throw new Error(`componente ${ref} no está en componentes.json`);
       // Nombre, estereotipo e ítems desde componentes.json; los ítems propios de la ruta, si los hay, los pisan.
-      const component = { ...refComponente(ref), actions: [{ op: 'get', query: { name: true, stereotype: true, items: true } }, ...(items ? [{ op: 'push', valor: { items } }] : [])] };
+      const component = { ...refComponente(ref), actions: [{ op: 'get', query: { name: true, stereotype: true, items: true, provides: true } }, ...(items ? [{ op: 'push', valor: { items } }] : [])] };
       return n({ id, label: refComponente(ref, 'name'), kind: 'component', lane, component });
     },
     clase(id, ref, lane, fill) {
@@ -123,10 +125,17 @@ export function ruta(meta, componer) {
     const desde = nodes.find((x) => x.id === e.from);
     const ctl = b.clase(`dueno-${dueno}`, dueno, desde?.lane);
     const t = e.to;
+    // Detalle de un maestro que está en la ruta: lo trae el `sqlDetalle` del maestro, así que la
+    // relación sale del controller maestro (no del paso) y nombra el arreglo y la columna que los une.
+    const det = detalleDe.get(tabla);
+    if (det && porClase.has(det.maestro)) {
+      e.from = porClase.get(det.maestro);
+      e.label = `detalle ${det.arreglo}${det.clave ? ` (${det.clave})` : ''} · ${e.label}`;
+    }
     e.to = ctl;
     const previa = edges.find((y) => y.from === ctl && y.to === t && y.kind === 'dashed');
     if (previa) { if (!previa.label.split(' · ').includes(e.label)) previa.label += ` · ${e.label}`; }
-    else edges.push({ from: ctl, to: t, kind: 'dashed', label: e.label });
+    else edges.push({ from: ctl, to: t, kind: 'dashed', label: e.label.replace(/^detalle .* · /, '') });
   }
   // Paralelismo: un nodo que no decide (ni es barra) y reparte su flujo continuo a varios procesos
   // lo hace por una barra negra; nunca salen dos caminos del mismo riel.
@@ -201,7 +210,11 @@ RUTAS.push(ruta({
   b.paso('nueva', 'Alta: título e hilo provisionales, qmensajes = 1', 'T', 'mdi:database-plus-outline');
   b.tabla('tconv', 'patyia_conversaciones', 'P', ['iconversacion', 'itercero', 'icontacto', 'titulo', 'hilo', 'qmensajes', 'qtokens', 'fhultact']);
   b.paso('begin', '200 text/event-stream · begin y los log que esperaban', 'T', 'mdi:broadcast');
-  b.componente('ai', 'openai-chat', 'O');
+  // OpenAI: un componente por API, cada uno con su interfaz -(O- (componentes.json).
+  b.componente('ai-voz', 'openai-whisper', 'O');
+  b.componente('ai-op', 'openai-completions', 'O');
+  b.componente('ai-hilo', 'openai-conversations', 'O');
+  b.componente('ai-resp', 'openai-responses', 'O');
   b.paso('voz', 'Transcribe las notas de voz (si hay)', 'T', 'mdi:microphone-outline');
   b.paso('clasif', 'Clasifica la consulta dentro del contexto', 'T', 'mdi:tag-search-outline');
   b.paso('hilo', 'Asegura el hilo (Conversations API)', 'T', 'mdi:forum-outline');
@@ -225,11 +238,11 @@ RUTAS.push(ruta({
   b.flujo('sigue', 'begin');
   b.flujo('nueva', 'begin');
   b.cadena('begin', 'voz', 'clasif', 'hilo', 'resp', 'delta', 'titulo', 'hist', 'cuenta', 'end', 'fin');
-  b.uso('voz', 'ai', 'audio');
-  b.uso('clasif', 'ai', 'clasifica');
-  b.uso('hilo', 'ai', 'Conversations');
-  b.uso('resp', 'ai', 'Responses');
-  b.uso('titulo', 'ai', 'título');
+  b.uso('voz', 'ai-voz', 'transcribe');
+  b.uso('clasif', 'ai-op', 'clasifica');
+  b.uso('hilo', 'ai-hilo', 'create');
+  b.uso('resp', 'ai-resp', 'stream');
+  b.uso('titulo', 'ai-op', 'título');
   b.uso('hist', 'tlog', 'INSERT');
   b.uso('cuenta', 'tconv', 'UPDATE');
   b.flujo('fin', 'api', 'respuesta (stream)');

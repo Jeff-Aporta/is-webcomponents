@@ -63,7 +63,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             },
             {
@@ -248,7 +249,7 @@
             "payload": {
               "componentDiagram": {
                 "components": {
-                  "[id=openai-chat]": {
+                  "[id=openai-completions]": {
                     "name": true
                   }
                 }
@@ -264,7 +265,7 @@
             "payload": {
               "componentDiagram": {
                 "components": {
-                  "[id=openai-chat]": true
+                  "[id=openai-completions]": true
                 }
               }
             }
@@ -275,7 +276,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             }
           ]
@@ -298,6 +300,46 @@
         "label": "Fin",
         "shape": "end",
         "lane": "T"
+      },
+      {
+        "id": "dueno-TConversationLogController",
+        "label": "TConversationLogController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLogController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TConversationLogController-pojo",
+        "label": "TConversationLog",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLog]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -332,7 +374,7 @@
       },
       {
         "from": "hist",
-        "to": "tlog",
+        "to": "dueno-TConversationLogController",
         "kind": "dashed",
         "label": "SELECT"
       },
@@ -350,7 +392,7 @@
         "from": "ia",
         "to": "ai",
         "kind": "dashed",
-        "label": "Responses"
+        "label": "operativo 9999.2"
       },
       {
         "from": "ia",
@@ -368,6 +410,18 @@
         "from": "fin",
         "to": "api",
         "label": "respuesta"
+      },
+      {
+        "from": "dueno-TConversationLogController",
+        "to": "dueno-TConversationLogController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TConversationLogController",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "SELECT"
       }
     ]
   }

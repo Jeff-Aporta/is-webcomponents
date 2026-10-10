@@ -181,7 +181,11 @@ export function consolidateHttpEndpoints(items: unknown[]): HttpEndpoint[] {
  * Acotado a [120, 320] para que una ruta larga no desborde la franja.
  */
 function fittedWidth(c: Componente): number {
-  const nameW = Math.ceil(String(c.name ?? '').length * 7.2);
+  // El nombre va en negrita y comparte renglón con el ícono de componente: su palabra más larga
+  // nunca se parte (si no cabe todo el nombre en un renglón, salta entre palabras).
+  const name = String(c.name ?? '');
+  const palabra = Math.max(0, ...name.split(/\s+/).map((w) => w.length));
+  const nameW = Math.max(Math.ceil(name.length * 7.2), Math.ceil(palabra * 8.6) + 24);
   const stW = c.stereotype ? Math.ceil((c.stereotype.length + 2) * 6.4) : 0;
   const items = consolidateHttpEndpoints(c.items ?? []);
   const itemW = items.length

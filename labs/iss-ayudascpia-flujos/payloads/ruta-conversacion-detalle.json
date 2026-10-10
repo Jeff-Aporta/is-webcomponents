@@ -59,7 +59,8 @@
               "query": {
                 "name": true,
                 "stereotype": true,
-                "items": true
+                "items": true,
+                "provides": true
               }
             },
             {
@@ -336,6 +337,126 @@
         "label": "Fin",
         "shape": "end",
         "lane": "T"
+      },
+      {
+        "id": "dueno-TQualifiedMessageController",
+        "label": "TQualifiedMessageController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TQualifiedMessageController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TQualifiedMessageController-pojo",
+        "label": "TQualifiedMessage",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TQualifiedMessage]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "dueno-TConversationTicketController",
+        "label": "TConversationTicketController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationTicketController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TConversationTicketController-pojo",
+        "label": "TConversationTicket",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationTicket]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "dueno-TConversationLogController",
+        "label": "TConversationLogController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLogController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TConversationLogController-pojo",
+        "label": "TConversationLog",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLog]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -395,20 +516,20 @@
         "to": "det"
       },
       {
-        "from": "det",
-        "to": "tmsg",
+        "from": "ctl",
+        "to": "dueno-TQualifiedMessageController",
         "kind": "dashed",
-        "label": "SELECT"
+        "label": "detalle MENSAJESCALIFICADOS (iconversacion) · SELECT"
       },
       {
-        "from": "det",
-        "to": "ttiq",
+        "from": "ctl",
+        "to": "dueno-TConversationTicketController",
         "kind": "dashed",
-        "label": "SELECT"
+        "label": "detalle TIQUETES (iconversacion) · SELECT"
       },
       {
         "from": "log",
-        "to": "tlog",
+        "to": "dueno-TConversationLogController",
         "kind": "dashed",
         "label": "SELECT"
       },
@@ -428,6 +549,42 @@
         "from": "fin",
         "to": "api",
         "label": "respuesta"
+      },
+      {
+        "from": "dueno-TQualifiedMessageController",
+        "to": "dueno-TQualifiedMessageController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TQualifiedMessageController",
+        "to": "tmsg",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "dueno-TConversationTicketController",
+        "to": "dueno-TConversationTicketController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TConversationTicketController",
+        "to": "ttiq",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "dueno-TConversationLogController",
+        "to": "dueno-TConversationLogController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TConversationLogController",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "SELECT"
       }
     ]
   }

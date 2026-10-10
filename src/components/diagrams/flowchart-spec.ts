@@ -579,7 +579,10 @@ export function computeFlowchartLayout(
     const ajenos = [...textos].filter(([k]) => k !== i).map(([, t]) => t);
     const tocaTexto = (pts: readonly FlowPoint[]): boolean =>
       pts.slice(1).some((q, k) => ajenos.some((t) => segHitsRect(pts[k]!, q, t, 2)));
-    const limpia = direct && !tocaTexto(direct) ? direct : null;
+    // Las cajas también son muros: una ruta fija que atraviese un nodo ajeno se descarta.
+    const tocaCaja = (pts: readonly FlowPoint[]): boolean =>
+      pts.slice(1).some((q, k) => nodes.some((n) => n.id !== e.from && n.id !== e.to && specById.get(n.id)?.shape !== 'comment' && segHitsRect(pts[k]!, q, n, 2)));
+    const limpia = direct && !tocaTexto(direct) && !tocaCaja(direct) ? direct : null;
     const path = limpia ? polylinePath(limpia) : buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
     const end = limpia?.[limpia.length - 1];
     const tip = end ? { x: end.x, y: end.y, angle: 0 } : arrowTip(b, toSide);
@@ -635,6 +638,8 @@ export function computeFlowchartLayout(
     const muros = [...cajasFijas(nodes, placed.lanes, placed.contexts, offsetX, offsetY, spec.laneDirection === 'horizontal', mideFijos), ...textos.values()];
     rutearUsos(routed, spec, nodes, muros);
   }
+  // Componentes que exponen interfaz: quien llega se conecta por `-(O-` (socket en el riel).
+  if (final) socketsDeComponentes(routed, spec);
   const routedEdges: FlowLayoutEdge[] = routed.filter((e): e is FlowLayoutEdge => e !== null);
   if (insoft) separarEtiquetasCompartidas(routedEdges);
   return routedEdges;
@@ -864,6 +869,49 @@ function abanicoEnVias(entrada: ReadonlyArray<FlowPoint[] | null | undefined>): 
   });
   separarColineales(caminos);
   return caminos;
+}
+
+/** Largo del conector `-(O-` desde el borde del componente: palo, bola y socket (px). */
+export const SOCKET = { palo: 10, bola: 5, socket: 8 } as const;
+
+/**
+ * Las aristas que llegan a un componente con interfaz (`provides`) terminan en su socket: se recorta
+ * el último tramo (palo + bola + socket) y se marca `socket`. La punta sigue en el borde del
+ * componente, así las que llegan al mismo costado comparten un solo `-(O-`.
+ */
+function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec): void {
+  const expone = new Set(spec.nodes.filter((n) => {
+    const c = n.embed?.kind === 'component' ? (n.embed.component as Record<string, unknown> | undefined) : undefined;
+    const p = c?.provides ?? c?.expose ?? c?.exposes;
+    return Array.isArray(p) ? p.length > 0 : !!p;
+  }).map((n) => n.id));
+  if (!expone.size) return;
+  const largo = SOCKET.palo + SOCKET.bola * 2 + SOCKET.socket - SOCKET.bola;
+  routed.forEach((r, i) => {
+    if (!r || !expone.has(r.to) || r.from === r.to) return;
+    const pts = pathPoints(r.path);
+    if (pts.length < 2) return;
+    const T = pts[pts.length - 1]!;
+    let P = pts[pts.length - 2]!;
+    let l = Math.abs(T.x - P.x) + Math.abs(T.y - P.y);
+    const d = { x: Math.sign(T.x - P.x), y: Math.sign(T.y - P.y) };
+    // Llegada corta tras un escalón: el escalón retrocede lo que falta para que quepa el socket.
+    if (l <= largo + 4 && pts.length >= 4) {
+      const Q = pts[pts.length - 3]!;
+      const R = pts[pts.length - 4]!;
+      const falta = largo + 8 - l;
+      const enLinea = Math.sign(Q.x - R.x) === d.x && Math.sign(Q.y - R.y) === d.y;
+      if (enLinea && Math.abs(Q.x - R.x) + Math.abs(Q.y - R.y) > falta + 8) {
+        pts[pts.length - 3] = { x: Q.x - d.x * falta, y: Q.y - d.y * falta };
+        pts[pts.length - 2] = P = { x: P.x - d.x * falta, y: P.y - d.y * falta };
+        l = Math.abs(T.x - P.x) + Math.abs(T.y - P.y);
+      }
+    }
+    if (l <= largo + 4) return;
+    const fin = { x: T.x - d.x * largo, y: T.y - d.y * largo };
+    routed[i] = { ...r, path: polylinePath([...pts.slice(0, -1), fin]), arrowTipX: T.x, arrowTipY: T.y, socket: true };
+    void spec.edges[i];
+  });
 }
 
 /** El flujo (aristas continuas) también converge en abanico a sus puntas compartidas. */
