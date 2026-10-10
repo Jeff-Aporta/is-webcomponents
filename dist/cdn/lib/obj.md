@@ -27,6 +27,8 @@ Copia la forma del dato y marca con un valor **truthy** (`!!x === true`) lo que 
 | `Obj.getValue(base, query)` | El **valor exacto** de la única hoja marcada, sin estructura. Si el camino no existe, `null`. Si la consulta marca cero o varias hojas (o usa `*`), lanza |
 | `Obj.push(base, cambios, schema?)` | Upsert profundo: lo no mencionado se conserva, `undefined` no toca, los arreglos se reemplazan, `null` quita según el schema (opcional → se borra; con default → el default; obligatoria → el primer vacío que acepte; si ninguno, no se toca) |
 | `Obj.pushZod(schema, base, cambios)` | `push` + validación del resultado |
+| `Obj.esquemaPush(schema)` | Schema de un fragmento de push (claves opcionales que aceptan `null`, anidado); cliente y servidor validan el mismo fragmento |
+| `Obj.restaurarClaves(v, schema)` | Devuelve `v` con las claves como las declara el schema (sin distinguir mayúsculas); para datos que llegan en minúsculas |
 | `Obj.update(base, cambios)` | Cambia solo lo que **ya existe** |
 | `Obj.insert(base, nuevos)` | Agrega solo lo que **no existe** |
 | `Obj.delete(base, query)` | Quita lo marcado |
