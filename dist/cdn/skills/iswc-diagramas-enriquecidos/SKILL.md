@@ -88,6 +88,11 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
 - Las columnas de entidades se **apilan** (una debajo de otra, cada controller con sus puentes) y no
   empujan a las otras columnas: cada columna solo se empuja a sí misma.
 - En los md, las pestañas de un EP son **Seq** (secuencia) y **Seq in Vec** (secuencia en vector).
+- **Fuente única**: la Seq se DERIVA de la Seq in Vec (en el consumidor, p. ej. `seq-de-vec.mjs` del
+  ISS): cada paso → mensaje (a la BD o externo que usa, propio si no usa nada; lo que termina en el
+  fin → respuesta), cada decisión → `alt`, cada barra → `par`, cada columna de flujo → un actor. Los
+  textos son referencias `{ path, query }` a los nodos del vector y los índices (`stepLabel`) son los
+  mismos `x.y.z`: nunca se escribe una Seq a mano.
 
 ## 4. Tablas: siempre por su controller dueño
 

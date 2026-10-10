@@ -204,42 +204,51 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "api",
           "to": "begin",
           "label": "POST /conversacion"
         },
         {
+          "id": "e2",
           "from": "begin",
           "to": "ev"
         },
         {
+          "id": "e3",
           "from": "ev",
           "to": "guarda"
         },
         {
+          "id": "e4",
           "from": "guarda",
           "to": "termina"
         },
         {
+          "id": "e5",
           "from": "termina",
           "to": "end"
         },
         {
+          "id": "e6",
           "from": "end",
           "to": "fin"
         },
         {
+          "id": "e7",
           "from": "fin",
           "to": "api",
           "label": "eventos SSE"
         },
         {
+          "id": "e8",
           "from": "guarda",
           "to": "dueno-TConversationLogController-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e9",
           "from": "dueno-TConversationLogController-C",
           "to": "tlog",
           "kind": "dashed"

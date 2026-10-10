@@ -233,98 +233,118 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "api",
           "to": "ctl",
           "label": "petición con token"
         },
         {
+          "id": "e2",
           "from": "ctl",
           "to": "d1"
         },
         {
+          "id": "e3",
           "from": "d1",
           "to": "lista",
           "label": "GET"
         },
         {
+          "id": "e4",
           "from": "d1",
           "to": "valida",
           "label": "POST · PUT"
         },
         {
+          "id": "e5",
           "from": "valida",
           "to": "d2"
         },
         {
+          "id": "e6",
           "from": "d2",
           "to": "anc",
           "label": "sí"
         },
         {
+          "id": "e7",
           "from": "d2",
           "to": "push",
           "label": "no"
         },
         {
+          "id": "e8",
           "from": "anc",
           "to": "push"
         },
         {
+          "id": "e9",
           "from": "push",
           "to": "guarda"
         },
         {
+          "id": "e10",
           "from": "guarda",
           "to": "ok"
         },
         {
+          "id": "e11",
           "from": "lista",
           "to": "fin"
         },
         {
+          "id": "e12",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e13",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e14",
           "from": "lista",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e15",
           "from": "ctl-R",
           "to": "ttd",
           "kind": "dashed"
         },
         {
+          "id": "e16",
           "from": "anc",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e17",
           "from": "guarda",
           "to": "ctl-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e18",
           "from": "ctl-C",
           "to": "ttd",
           "kind": "dashed"
         },
         {
+          "id": "e19",
           "from": "guarda",
           "to": "ctl-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e20",
           "from": "ctl-U",
           "to": "ttd",
           "kind": "dashed"

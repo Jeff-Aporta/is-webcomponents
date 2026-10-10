@@ -140,96 +140,118 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "ini",
           "to": "s"
         },
         {
+          "id": "e2",
           "from": "s",
           "to": "v"
         },
         {
+          "id": "e3",
           "from": "v",
           "to": "x",
           "label": "falla"
         },
         {
+          "id": "e4",
           "from": "v",
           "to": "g1",
           "label": "ok"
         },
         {
+          "id": "e5",
           "from": "g1",
           "to": "g2"
         },
         {
+          "id": "e6",
           "from": "g2",
           "to": "g3"
         },
         {
+          "id": "e7",
           "from": "g3",
           "to": "g4"
         },
         {
+          "id": "e8",
           "from": "g4",
           "to": "g5"
         },
         {
+          "id": "e9",
           "from": "g5",
           "to": "h"
         },
         {
+          "id": "e10",
           "from": "h",
           "to": "x",
           "label": "sí"
         },
         {
+          "id": "e11",
           "from": "h",
           "to": "h2",
           "label": "no"
         },
         {
+          "id": "e12",
           "from": "h2",
           "to": "t1"
         },
         {
+          "id": "e13",
           "from": "t1",
           "to": "t2"
         },
         {
+          "id": "e14",
           "from": "t2",
           "to": "t3"
         },
         {
+          "id": "e15",
           "from": "t3",
           "to": "baja"
         },
         {
+          "id": "e16",
           "from": "baja",
           "to": "q"
         },
         {
+          "id": "e17",
           "from": "q",
           "to": "x",
           "label": "no"
         },
         {
+          "id": "e18",
           "from": "q",
           "to": "w",
           "label": "sí"
         },
         {
+          "id": "e19",
           "from": "w",
           "to": "p"
         },
         {
+          "id": "e20",
           "from": "p",
           "to": "c"
         },
         {
+          "id": "e21",
           "from": "c",
           "to": "fin"
         },
         {
+          "id": "e22",
           "from": "x",
           "to": "fin-x"
         }

@@ -810,13 +810,18 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // nace arriba y vuelve a la lifeline, así la punta no queda tapada.
       const start = m.kind === 'self' ? (pathPoints(m.path)[0] ?? { x: m.fromX, y: m.y }) : { x: m.fromX, y: m.y };
       const dotG = svgEl('g', { class: 'seq-start' });
-      const dot = svgEl('circle', { cx: start.x, cy: start.y, r: 8, fill: color });
+      // Índice jerárquico (`4.2.1`): pastilla del ancho del texto; un número corto, círculo.
+      const indice = m.stepLabel ?? String(m.step);
+      const anchoIndice = indice.length > 2 ? Math.ceil(indice.length * 5.6) + 10 : 16;
+      const dot = indice.length > 2
+        ? svgEl('rect', { x: start.x - anchoIndice / 2, y: start.y - 8, width: anchoIndice, height: 16, rx: 8, fill: color })
+        : svgEl('circle', { cx: start.x, cy: start.y, r: 8, fill: color });
       dotG.appendChild(dot);
       const stepText = svgEl('text', {
         x: start.x, y: start.y, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: contrastFontColor(color),
         'font-size': '9', 'font-weight': '700', 'font-family': this.#font,
       });
-      stepText.textContent = String(m.step);
+      stepText.textContent = indice;
       dotG.appendChild(stepText);
       g.appendChild(dotG);
 

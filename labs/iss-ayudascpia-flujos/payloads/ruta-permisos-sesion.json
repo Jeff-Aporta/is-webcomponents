@@ -359,92 +359,111 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "GET|POST /permisos"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "jwt"
         },
         {
+          "id": "e4",
           "from": "jwt",
           "to": "d1"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "anon",
           "label": "no"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "owner",
           "label": "sí"
         },
         {
+          "id": "e7",
           "from": "owner",
           "to": "tgr",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e8",
           "from": "owner",
           "to": "rol"
         },
         {
+          "id": "e9",
           "from": "rol",
           "to": "d2"
         },
         {
+          "id": "e10",
           "from": "rol",
           "to": "trc",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e11",
           "from": "d2",
           "to": "sw",
           "label": "sí"
         },
         {
+          "id": "e12",
           "from": "d2",
           "to": "perms",
           "label": "no"
         },
         {
+          "id": "e13",
           "from": "sw",
           "to": "trol",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e14",
           "from": "sw",
           "to": "perms"
         },
         {
+          "id": "e15",
           "from": "perms",
           "to": "tacc",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e16",
           "from": "perms",
           "to": "ok"
         },
         {
+          "id": "e17",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e18",
           "from": "anon",
           "to": "fin"
         },
         {
+          "id": "e19",
           "from": "fin",
           "to": "api",
           "label": "respuesta"

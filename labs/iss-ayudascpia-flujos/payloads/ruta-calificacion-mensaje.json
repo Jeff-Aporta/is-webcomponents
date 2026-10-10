@@ -397,151 +397,182 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP POST /mensaje"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "POST /mensaje"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "d1"
         },
         {
+          "id": "e4",
           "from": "d1",
           "to": "r1",
           "label": "no"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "lee",
           "label": "sí"
         },
         {
+          "id": "e6",
           "from": "lee",
           "to": "d2"
         },
         {
+          "id": "e7",
           "from": "d2",
           "to": "r2",
           "label": "no"
         },
         {
+          "id": "e8",
           "from": "d2",
           "to": "d3",
           "label": "sí"
         },
         {
+          "id": "e9",
           "from": "d3",
           "to": "r3",
           "label": "sí, sin calificar tarde"
         },
         {
+          "id": "e10",
           "from": "d3",
           "to": "r4",
           "label": "sí, con bandera sin auditoría"
         },
         {
+          "id": "e11",
           "from": "d3",
           "to": "d4",
           "label": "no, o con bandera y alcance"
         },
         {
+          "id": "e12",
           "from": "d4",
           "to": "r5",
           "label": "no"
         },
         {
+          "id": "e13",
           "from": "d4",
           "to": "d5",
           "label": "sí"
         },
         {
+          "id": "e14",
           "from": "d5",
           "to": "r6",
           "label": "no"
         },
         {
+          "id": "e15",
           "from": "d5",
           "to": "ins",
           "label": "sí"
         },
         {
+          "id": "e16",
           "from": "r1",
           "to": "fin"
         },
         {
+          "id": "e17",
           "from": "r2",
           "to": "fin"
         },
         {
+          "id": "e18",
           "from": "r3",
           "to": "fin"
         },
         {
+          "id": "e19",
           "from": "r4",
           "to": "fin"
         },
         {
+          "id": "e20",
           "from": "r5",
           "to": "fin"
         },
         {
+          "id": "e21",
           "from": "r6",
           "to": "fin"
         },
         {
+          "id": "e22",
           "from": "ins",
           "to": "fin"
         },
         {
+          "id": "e23",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e24",
           "from": "lee",
           "to": "dueno-TConversacionController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e25",
           "from": "dueno-TConversacionController-R",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e26",
           "from": "d5",
           "to": "dueno-TConversationLogController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e27",
           "from": "dueno-TConversationLogController-R",
           "to": "tlog",
           "kind": "dashed"
         },
         {
+          "id": "e28",
           "from": "ins",
           "to": "dueno-TConversacionController-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e29",
           "from": "dueno-TConversacionController-C",
           "to": "ctl-C",
           "kind": "dashed",
           "label": "detalle MENSAJESCALIFICADOS"
         },
         {
+          "id": "e30",
           "from": "ctl-C",
           "to": "tmsg",
           "kind": "dashed"
         },
         {
+          "id": "e31",
           "from": "tconv",
           "to": "tmsg",
           "kind": "dashed",

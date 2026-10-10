@@ -233,79 +233,95 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "pg",
           "label": "HTTP"
         },
         {
+          "id": "e2",
           "from": "ini",
           "to": "a"
         },
         {
+          "id": "e3",
           "from": "a",
           "to": "b"
         },
         {
+          "id": "e4",
           "from": "b",
           "to": "x",
           "label": "no"
         },
         {
+          "id": "e5",
           "from": "b",
           "to": "c",
           "label": "sí"
         },
         {
+          "id": "e6",
           "from": "c",
           "to": "pg",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e7",
           "from": "c",
           "to": "d"
         },
         {
+          "id": "e8",
           "from": "d",
           "to": "x",
           "label": "sí"
         },
         {
+          "id": "e9",
           "from": "d",
           "to": "f",
           "label": "no"
         },
         {
+          "id": "e10",
           "from": "f",
           "to": "pg",
           "kind": "dashed",
           "label": "INSERT · UPDATE"
         },
         {
+          "id": "e11",
           "from": "f",
           "to": "g"
         },
         {
+          "id": "e12",
           "from": "g",
           "to": "fin"
         },
         {
+          "id": "e13",
           "from": "g",
           "to": "pg",
           "kind": "dashed",
           "label": "INSERT patchdb"
         },
         {
+          "id": "e14",
           "from": "x",
           "to": "fin"
         },
         {
+          "id": "e15",
           "from": "x",
           "to": "dueno-TErrorController-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e16",
           "from": "dueno-TErrorController-C",
           "to": "terr",
           "kind": "dashed"

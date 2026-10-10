@@ -321,82 +321,100 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP GET /info"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "GET /info"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "fork"
         },
         {
+          "id": "e4",
           "from": "fork",
           "to": "db"
         },
         {
+          "id": "e5",
           "from": "db",
           "to": "join"
         },
         {
+          "id": "e6",
           "from": "fork",
           "to": "err"
         },
         {
+          "id": "e7",
           "from": "err",
           "to": "join"
         },
         {
+          "id": "e8",
           "from": "fork",
           "to": "pat"
         },
         {
+          "id": "e9",
           "from": "pat",
           "to": "join"
         },
         {
+          "id": "e10",
           "from": "fork",
           "to": "geo"
         },
         {
+          "id": "e11",
           "from": "geo",
           "to": "join"
         },
         {
+          "id": "e12",
           "from": "join",
           "to": "ok"
         },
         {
+          "id": "e13",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e14",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e15",
           "from": "err",
           "to": "dueno-TErrorController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e16",
           "from": "dueno-TErrorController-R",
           "to": "terr",
           "kind": "dashed"
         },
         {
+          "id": "e17",
           "from": "pat",
           "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e18",
           "from": "dueno-TSysValueController-R",
           "to": "tsys",
           "kind": "dashed"

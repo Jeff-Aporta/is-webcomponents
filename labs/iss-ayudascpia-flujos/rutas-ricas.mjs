@@ -22,7 +22,8 @@ export const ISS = join(LAB, '..', '..', '..', '..', '..', 'PatyIA', '_experimen
 const leer = async (f) => JSON.parse(await readFile(join(ISS, f), 'utf8')).payload;
 
 const componentes = new Map((await leer('componentes.json')).componentDiagram.components.map((c) => [c.id, c]));
-const clases = new Map((await leer('clases.json')).classDiagram.classes.map((c) => [c.id, c]));
+// Por id o por su alias corto (`tiq`, `conv`…, ver clases-trios.mjs del ISS).
+const clases = new Map((await leer('clases.json')).classDiagram.classes.flatMap((c) => [[c.id, c], ...(c.alias ? [[c.alias, c]] : [])]));
 const der = (await leer('der.json')).erDiagram;
 const tablas = new Map(der.entities.map((e) => [e.name, e]));
 /** Grupo del DER → «BD · dominio» (la raíz del grupo es la base de datos). */
@@ -82,7 +83,11 @@ export function ruta(meta, componer) {
   const nombreDe = (ref) => {
     const c = clases.get(ref);
     // En clases.json el nombre es una referencia a codigo.json ({ query: { clases: { "[name=X]": … } } }) o un texto.
-    const crudo = c ? (typeof c.name === 'string' ? c.name : Object.keys(c.name.query.clases)[0].slice(6, -1)) : ref;
+    // El selector es `[name=X]` o, si el nombre se repite en el código (TBasePatyIA client/server), `[file=…]`.
+    const selector = c && typeof c.name !== 'string' ? Object.keys(c.name.query.clases)[0] : '';
+    const crudo = !c ? ref : typeof c.name === 'string' ? c.name
+      : selector.startsWith('[file=') ? codigo.clases.find((x) => x.file === selector.slice(6, -1))?.name ?? ref
+      : selector.slice(6, -1);
     const name = crudo.replace(/<.*>$/, '');
     // El nombre manda el código: si clases.json lo escribe distinto (p. ej. TError vs TError_), se
     // usa el real y se avisa para corregir clases.json.
@@ -323,7 +328,8 @@ function aVector(title, lanes, nodes, edges, llamador) {
       nodes: ns.map(({ lane: _l, context, ...n }) => ({ ...n, ...(context ? { group: slug(context) } : {}) })),
     };
   });
-  return { title, steps: 'auto', columns, edges };
+  // Cada arista con id estable: la Seq derivada (seq-de-vec del ISS) referencia sus etiquetas.
+  return { title, steps: 'auto', columns, edges: edges.map((e, k) => ({ id: e.id ?? `e${k + 1}`, ...e })) };
 }
 
 const RUTAS = [];

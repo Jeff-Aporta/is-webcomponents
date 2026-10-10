@@ -613,5 +613,7 @@ par({ slug: 'conversacion-resumen', module: '020-Conversaciones', title: 'Resume
     b.flujo('fin', 'api', 'respuesta');
   });
 
-await escribir(EPS);
-console.log(`${EPS.length} editables (${EPS.length / 2} EP con secuencia y secuencia enriquecida)`);
+// Solo el vector: la Seq de cada EP se deriva de él en el ISS (docs-experimental/gen/tools/seq-de-vec.mjs),
+// así las dos vistas nunca se desfasan. `secuencia()` queda para el lab (comparar contra la derivada).
+await escribir(EPS.filter((r) => r.slug.startsWith('ruta-')));
+console.log(`${EPS.length / 2} vectores (Seq in Vec); la Seq de cada uno se deriva en el ISS con seq-de-vec.mjs`);

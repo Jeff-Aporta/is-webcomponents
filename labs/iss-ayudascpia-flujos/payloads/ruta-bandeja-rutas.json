@@ -247,88 +247,106 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP POST /error"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "petición"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "d1"
         },
         {
+          "id": "e4",
           "from": "d1",
           "to": "norm",
           "label": "POST /error"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "lst",
           "label": "GET /errores"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "del",
           "label": "DELETE /errores"
         },
         {
+          "id": "e7",
           "from": "norm",
           "to": "ins"
         },
         {
+          "id": "e8",
           "from": "ins",
           "to": "ok"
         },
         {
+          "id": "e9",
           "from": "lst",
           "to": "ok"
         },
         {
+          "id": "e10",
           "from": "del",
           "to": "ok"
         },
         {
+          "id": "e11",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e12",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e13",
           "from": "ins",
           "to": "ctl-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e14",
           "from": "ctl-C",
           "to": "terr",
           "kind": "dashed"
         },
         {
+          "id": "e15",
           "from": "lst",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e16",
           "from": "ctl-R",
           "to": "terr",
           "kind": "dashed"
         },
         {
+          "id": "e17",
           "from": "del",
           "to": "ctl-D",
           "kind": "dashed",
           "label": "DELETE"
         },
         {
+          "id": "e18",
           "from": "ctl-D",
           "to": "terr",
           "kind": "dashed"

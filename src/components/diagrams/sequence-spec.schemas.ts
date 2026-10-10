@@ -40,6 +40,8 @@ export const SequenceMessageSpecSchema = z.object({
   group: z.string().optional(),
   kind: z.union([z.literal('self'), z.literal('sync'), z.literal('async'), z.literal('reply'), z.string()]).optional(),
   step: z.number(),
+  /** Índice jerárquico a mostrar (`4.2.1`), p. ej. el mismo de la Seq in Vec; si falta, `step`. */
+  stepLabel: z.string().optional(),
   /** Recuadro con el proceso que este mensaje inicia, junto a la punta de la flecha. */
   nested: SequenceNestedSpecSchema.optional(),
 });
@@ -164,6 +166,8 @@ export const SequenceLayoutMessageSchema = z.object({
   reverse: z.boolean().optional(),
   id: z.string(),
   step: z.number(),
+  /** Índice jerárquico a mostrar (`4.2.1`), p. ej. el mismo de la Seq in Vec; si falta, `step`. */
+  stepLabel: z.string().optional(),
   label: z.string(),
   log: z.string().optional(),
   description: z.string().optional(),

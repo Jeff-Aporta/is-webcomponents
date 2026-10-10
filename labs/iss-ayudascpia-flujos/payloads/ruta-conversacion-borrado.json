@@ -238,72 +238,87 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP DELETE /conversacion/{iconversacion}"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "DELETE"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "val"
         },
         {
+          "id": "e4",
           "from": "val",
           "to": "lee"
         },
         {
+          "id": "e5",
           "from": "lee",
           "to": "d1"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "e401",
           "label": "no"
         },
         {
+          "id": "e7",
           "from": "d1",
           "to": "baja",
           "label": "sí"
         },
         {
+          "id": "e8",
           "from": "baja",
           "to": "ok"
         },
         {
+          "id": "e9",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e10",
           "from": "e401",
           "to": "fin"
         },
         {
+          "id": "e11",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e12",
           "from": "lee",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e13",
           "from": "ctl-R",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e14",
           "from": "baja",
           "to": "ctl-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e15",
           "from": "ctl-U",
           "to": "tconv",
           "kind": "dashed"

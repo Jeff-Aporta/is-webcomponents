@@ -216,75 +216,91 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "POST /JWT"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "d1"
         },
         {
+          "id": "e4",
           "from": "d1",
           "to": "e400",
           "label": "falta un dato"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "login",
           "label": "completos"
         },
         {
+          "id": "e6",
           "from": "login",
           "to": "ds",
           "kind": "dashed",
           "label": "LogInContacto"
         },
         {
+          "id": "e7",
           "from": "login",
           "to": "d2"
         },
         {
+          "id": "e8",
           "from": "d2",
           "to": "e503",
           "label": "no responde o vacía"
         },
         {
+          "id": "e9",
           "from": "d2",
           "to": "e401",
           "label": "rechaza la llave"
         },
         {
+          "id": "e10",
           "from": "d2",
           "to": "firma",
           "label": "identidad válida"
         },
         {
+          "id": "e11",
           "from": "firma",
           "to": "token"
         },
         {
+          "id": "e12",
           "from": "token",
           "to": "fin"
         },
         {
+          "id": "e13",
           "from": "e400",
           "to": "fin"
         },
         {
+          "id": "e14",
           "from": "e503",
           "to": "fin"
         },
         {
+          "id": "e15",
           "from": "e401",
           "to": "fin"
         },
         {
+          "id": "e16",
           "from": "fin",
           "to": "api",
           "label": "respuesta"

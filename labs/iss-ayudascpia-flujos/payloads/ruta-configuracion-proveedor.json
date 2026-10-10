@@ -339,96 +339,115 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP GET · PUT /proveedor/{iproveedor}"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "petición con token"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "d1"
         },
         {
+          "id": "e4",
           "from": "d1",
           "to": "get",
           "label": "GET"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "put",
           "label": "PUT"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "cfg",
           "label": "…/cfg"
         },
         {
+          "id": "e7",
           "from": "cfg",
           "to": "ai",
           "kind": "dashed",
           "label": "models.list"
         },
         {
+          "id": "e8",
           "from": "get",
           "to": "ok"
         },
         {
+          "id": "e9",
           "from": "put",
           "to": "ok"
         },
         {
+          "id": "e10",
           "from": "cfg",
           "to": "ok"
         },
         {
+          "id": "e11",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e12",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e13",
           "from": "get",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e14",
           "from": "ctl-R",
           "to": "tprov",
           "kind": "dashed"
         },
         {
+          "id": "e15",
           "from": "put",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT UPSERT"
         },
         {
+          "id": "e16",
           "from": "cfg",
           "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e17",
           "from": "dueno-TSysValueController-R",
           "to": "tsys",
           "kind": "dashed"
         },
         {
+          "id": "e18",
           "from": "cfg",
           "to": "dueno-TSysValueController-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e19",
           "from": "dueno-TSysValueController-U",
           "to": "tsys",
           "kind": "dashed"

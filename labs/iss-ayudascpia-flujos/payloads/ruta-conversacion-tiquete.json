@@ -323,116 +323,140 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP POST /tiquete"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "POST /tiquete"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "val"
         },
         {
+          "id": "e4",
           "from": "val",
           "to": "lee"
         },
         {
+          "id": "e5",
           "from": "lee",
           "to": "dec"
         },
         {
+          "id": "e6",
           "from": "dec",
           "to": "e401",
           "label": "no es del dueño estricto"
         },
         {
+          "id": "e7",
           "from": "dec",
           "to": "e404",
           "label": "no existe"
         },
         {
+          "id": "e8",
           "from": "dec",
           "to": "e400",
           "label": "cerrada o eliminada"
         },
         {
+          "id": "e9",
           "from": "dec",
           "to": "ins",
           "label": "abierta y del dueño"
         },
         {
+          "id": "e10",
           "from": "ins",
           "to": "cierra"
         },
         {
+          "id": "e11",
           "from": "cierra",
           "to": "ok"
         },
         {
+          "id": "e12",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e13",
           "from": "e401",
           "to": "fin"
         },
         {
+          "id": "e14",
           "from": "e404",
           "to": "fin"
         },
         {
+          "id": "e15",
           "from": "e400",
           "to": "fin"
         },
         {
+          "id": "e16",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e17",
           "from": "lee",
           "to": "dueno-TConversacionController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e18",
           "from": "dueno-TConversacionController-R",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e19",
           "from": "ins",
           "to": "dueno-TConversacionController-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e20",
           "from": "dueno-TConversacionController-C",
           "to": "ctl-C",
           "kind": "dashed",
           "label": "detalle TIQUETES"
         },
         {
+          "id": "e21",
           "from": "ctl-C",
           "to": "ttiq",
           "kind": "dashed"
         },
         {
+          "id": "e22",
           "from": "cierra",
           "to": "dueno-TConversacionController-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e23",
           "from": "dueno-TConversacionController-U",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e24",
           "from": "tconv",
           "to": "ttiq",
           "kind": "dashed",

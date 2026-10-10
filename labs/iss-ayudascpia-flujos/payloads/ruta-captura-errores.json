@@ -286,67 +286,82 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP cualquier ruta propia"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "llega",
           "label": "petición"
         },
         {
+          "id": "e3",
           "from": "llega",
           "to": "err"
         },
         {
+          "id": "e4",
           "from": "err",
           "to": "envuelve"
         },
         {
+          "id": "e5",
           "from": "envuelve",
           "to": "ejecuta"
         },
         {
+          "id": "e6",
           "from": "ejecuta",
           "to": "lanza"
         },
         {
+          "id": "e7",
           "from": "lanza",
           "to": "excluye"
         },
         {
+          "id": "e8",
           "from": "excluye",
           "to": "censura"
         },
         {
+          "id": "e9",
           "from": "censura",
           "to": "guarda"
         },
         {
+          "id": "e10",
           "from": "guarda",
           "to": "relanza"
         },
         {
+          "id": "e11",
           "from": "relanza",
           "to": "responde"
         },
         {
+          "id": "e12",
           "from": "responde",
           "to": "fin"
         },
         {
+          "id": "e13",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e14",
           "from": "guarda",
           "to": "err-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e15",
           "from": "err-C",
           "to": "terr",
           "kind": "dashed"

@@ -343,93 +343,112 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP POST /archivo"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "POST /archivo"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "alm",
           "kind": "dashed",
           "label": "klass"
         },
         {
+          "id": "e4",
           "from": "ctl",
           "to": "val"
         },
         {
+          "id": "e5",
           "from": "val",
           "to": "bytes"
         },
         {
+          "id": "e6",
           "from": "bytes",
           "to": "cuenta"
         },
         {
+          "id": "e7",
           "from": "cuenta",
           "to": "d1"
         },
         {
+          "id": "e8",
           "from": "cuenta",
           "to": "talm",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e9",
           "from": "d1",
           "to": "img",
           "label": "imagen"
         },
         {
+          "id": "e10",
           "from": "d1",
           "to": "aud",
           "label": "audio"
         },
         {
+          "id": "e11",
           "from": "img",
           "to": "r2",
           "kind": "dashed",
           "label": "PUT ×3"
         },
         {
+          "id": "e12",
           "from": "aud",
           "to": "r2",
           "kind": "dashed",
           "label": "PUT"
         },
         {
+          "id": "e13",
           "from": "img",
           "to": "reg"
         },
         {
+          "id": "e14",
           "from": "aud",
           "to": "reg"
         },
         {
+          "id": "e15",
           "from": "reg",
           "to": "ok"
         },
         {
+          "id": "e16",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e17",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e18",
           "from": "reg",
           "to": "ctl-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e19",
           "from": "ctl-C",
           "to": "tfile",
           "kind": "dashed"

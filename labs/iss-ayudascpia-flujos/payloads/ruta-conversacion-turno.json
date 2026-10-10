@@ -790,263 +790,316 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP POST /conversacion"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "POST /conversacion"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "seg"
         },
         {
+          "id": "e4",
           "from": "seg",
           "to": "dec"
         },
         {
+          "id": "e5",
           "from": "dec",
           "to": "sigue",
           "label": "continúa"
         },
         {
+          "id": "e6",
           "from": "dec",
           "to": "nueva",
           "label": "nueva"
         },
         {
+          "id": "e7",
           "from": "sigue",
           "to": "begin"
         },
         {
+          "id": "e8",
           "from": "nueva",
           "to": "begin"
         },
         {
+          "id": "e9",
           "from": "begin",
           "to": "cfg"
         },
         {
+          "id": "e10",
           "from": "cfg",
           "to": "dvoz"
         },
         {
+          "id": "e11",
           "from": "dvoz",
           "to": "voz",
           "label": "sí"
         },
         {
+          "id": "e12",
           "from": "dvoz",
           "to": "dctx",
           "label": "no"
         },
         {
+          "id": "e13",
           "from": "voz",
           "to": "ai-voz",
           "kind": "dashed",
           "label": "transcribe"
         },
         {
+          "id": "e14",
           "from": "voz",
           "to": "dctx"
         },
         {
+          "id": "e15",
           "from": "dctx",
           "to": "clasif",
           "label": "no"
         },
         {
+          "id": "e16",
           "from": "dctx",
           "to": "dhilo",
           "label": "sí"
         },
         {
+          "id": "e17",
           "from": "clasif",
           "to": "ai-op",
           "kind": "dashed",
           "label": "clasifica"
         },
         {
+          "id": "e18",
           "from": "clasif",
           "to": "dhilo"
         },
         {
+          "id": "e19",
           "from": "dhilo",
           "to": "hilo",
           "label": "no"
         },
         {
+          "id": "e20",
           "from": "dhilo",
           "to": "resp",
           "label": "sí"
         },
         {
+          "id": "e21",
           "from": "hilo",
           "to": "ai-hilo",
           "kind": "dashed",
           "label": "create"
         },
         {
+          "id": "e22",
           "from": "hilo",
           "to": "resp"
         },
         {
+          "id": "e23",
           "from": "resp",
           "to": "ai-resp",
           "kind": "dashed",
           "label": "stream"
         },
         {
+          "id": "e24",
           "from": "resp",
           "to": "delta"
         },
         {
+          "id": "e25",
           "from": "delta",
           "to": "dok"
         },
         {
+          "id": "e26",
           "from": "dok",
           "to": "vn",
           "label": "sí"
         },
         {
+          "id": "e27",
           "from": "dok",
           "to": "hist",
           "label": "no"
         },
         {
+          "id": "e28",
           "from": "vn",
           "to": "dtit"
         },
         {
+          "id": "e29",
           "from": "dtit",
           "to": "titulo",
           "label": "sí"
         },
         {
+          "id": "e30",
           "from": "dtit",
           "to": "consultas",
           "label": "no"
         },
         {
+          "id": "e31",
           "from": "titulo",
           "to": "ai-op",
           "kind": "dashed",
           "label": "generarTitulo"
         },
         {
+          "id": "e32",
           "from": "titulo",
           "to": "consultas"
         },
         {
+          "id": "e33",
           "from": "consultas",
           "to": "ai-op",
           "kind": "dashed",
           "label": "extrae y clasifica"
         },
         {
+          "id": "e34",
           "from": "consultas",
           "to": "hist"
         },
         {
+          "id": "e35",
           "from": "hist",
           "to": "cuenta"
         },
         {
+          "id": "e36",
           "from": "cuenta",
           "to": "end"
         },
         {
+          "id": "e37",
           "from": "end",
           "to": "fin"
         },
         {
+          "id": "e38",
           "from": "fin",
           "to": "api",
           "label": "respuesta (stream)"
         },
         {
+          "id": "e39",
           "from": "sigue",
           "to": "ctl-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e40",
           "from": "ctl-U",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e41",
           "from": "nueva",
           "to": "ctl-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e42",
           "from": "ctl-C",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e43",
           "from": "cfg",
           "to": "dueno-TProviderController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e44",
           "from": "dueno-TProviderController-R",
           "to": "tprov",
           "kind": "dashed"
         },
         {
+          "id": "e45",
           "from": "cfg",
           "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e46",
           "from": "dueno-TSysValueController-R",
           "to": "tsys",
           "kind": "dashed"
         },
         {
+          "id": "e47",
           "from": "hilo",
           "to": "ctl-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e48",
           "from": "vn",
           "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e49",
           "from": "consultas",
           "to": "dueno-TConsultaController-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e50",
           "from": "dueno-TConsultaController-C",
           "to": "tqry",
           "kind": "dashed"
         },
         {
+          "id": "e51",
           "from": "hist",
           "to": "dueno-TConversationLogController-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
+          "id": "e52",
           "from": "dueno-TConversationLogController-C",
           "to": "tlog",
           "kind": "dashed"
         },
         {
+          "id": "e53",
           "from": "cuenta",
           "to": "ctl-U",
           "kind": "dashed",

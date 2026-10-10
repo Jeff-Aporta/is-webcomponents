@@ -222,76 +222,92 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "correo y contraseña (y empresa)"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "norm"
         },
         {
+          "id": "e4",
           "from": "norm",
           "to": "existe"
         },
         {
+          "id": "e5",
           "from": "existe",
           "to": "empresas"
         },
         {
+          "id": "e6",
           "from": "empresas",
           "to": "d1"
         },
         {
+          "id": "e7",
           "from": "existe",
           "to": "ds",
           "kind": "dashed",
           "label": "contacto"
         },
         {
+          "id": "e8",
           "from": "empresas",
           "to": "ds",
           "kind": "dashed",
           "label": "empresas"
         },
         {
+          "id": "e9",
           "from": "d1",
           "to": "multi",
           "label": "varias, sin itercero"
         },
         {
+          "id": "e10",
           "from": "d1",
           "to": "valida",
           "label": "una, o itercero elegido"
         },
         {
+          "id": "e11",
           "from": "valida",
           "to": "ds",
           "kind": "dashed",
           "label": "LogInContacto"
         },
         {
+          "id": "e12",
           "from": "valida",
           "to": "firma"
         },
         {
+          "id": "e13",
           "from": "firma",
           "to": "entrega"
         },
         {
+          "id": "e14",
           "from": "entrega",
           "to": "fin"
         },
         {
+          "id": "e15",
           "from": "multi",
           "to": "fin"
         },
         {
+          "id": "e16",
           "from": "fin",
           "to": "api",
           "label": "respuesta"

@@ -329,81 +329,98 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP"
         },
         {
+          "id": "e2",
           "from": "id",
           "to": "fila"
         },
         {
+          "id": "e3",
           "from": "fila",
           "to": "d1"
         },
         {
+          "id": "e4",
           "from": "fila",
           "to": "trec",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "publica",
           "label": "sin fila o protected false"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "jwt",
           "label": "exige JWT"
         },
         {
+          "id": "e7",
           "from": "jwt",
           "to": "rol"
         },
         {
+          "id": "e8",
           "from": "rol",
           "to": "valor"
         },
         {
+          "id": "e9",
           "from": "valor",
           "to": "d2"
         },
         {
+          "id": "e10",
           "from": "rol",
           "to": "trol",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e11",
           "from": "valor",
           "to": "tacc",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e12",
           "from": "d2",
           "to": "deny",
           "label": "false"
         },
         {
+          "id": "e13",
           "from": "d2",
           "to": "handler",
           "label": "protected, true o capacidad"
         },
         {
+          "id": "e14",
           "from": "publica",
           "to": "handler"
         },
         {
+          "id": "e15",
           "from": "handler",
           "to": "fin"
         },
         {
+          "id": "e16",
           "from": "deny",
           "to": "fin"
         },
         {
+          "id": "e17",
           "from": "fin",
           "to": "api",
           "label": "respuesta"

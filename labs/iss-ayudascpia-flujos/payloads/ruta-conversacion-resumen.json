@@ -347,78 +347,94 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP GET /resumen_conversacion/{iconversacion}"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "GET"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "lee"
         },
         {
+          "id": "e4",
           "from": "lee",
           "to": "hist"
         },
         {
+          "id": "e5",
           "from": "hist",
           "to": "d1"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "e400",
           "label": "no"
         },
         {
+          "id": "e7",
           "from": "d1",
           "to": "ia",
           "label": "sí"
         },
         {
+          "id": "e8",
           "from": "ia",
           "to": "ai",
           "kind": "dashed",
           "label": "operativo 9999.2"
         },
         {
+          "id": "e9",
           "from": "ia",
           "to": "ok"
         },
         {
+          "id": "e10",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e11",
           "from": "e400",
           "to": "fin"
         },
         {
+          "id": "e12",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e13",
           "from": "lee",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e14",
           "from": "ctl-R",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e15",
           "from": "hist",
           "to": "dueno-TConversationLogController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e16",
           "from": "dueno-TConversationLogController-R",
           "to": "tlog",
           "kind": "dashed"

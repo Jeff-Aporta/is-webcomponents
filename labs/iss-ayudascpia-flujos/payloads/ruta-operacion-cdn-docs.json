@@ -221,65 +221,78 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "api",
           "to": "d1",
           "label": "GET (pública)"
         },
         {
+          "id": "e2",
           "from": "d1",
           "to": "front",
           "label": "/cdn/front.ts"
         },
         {
+          "id": "e3",
           "from": "d1",
           "to": "otro",
           "label": "/cdn/otro"
         },
         {
+          "id": "e4",
           "from": "d1",
           "to": "doc",
           "label": "/docs"
         },
         {
+          "id": "e5",
           "from": "front",
           "to": "kcdn",
           "kind": "dashed",
           "label": "klass"
         },
         {
+          "id": "e6",
           "from": "doc",
           "to": "ksys",
           "kind": "dashed",
           "label": "klass"
         },
         {
+          "id": "e7",
           "from": "front",
           "to": "ok"
         },
         {
+          "id": "e8",
           "from": "otro",
           "to": "ok"
         },
         {
+          "id": "e9",
           "from": "doc",
           "to": "ok"
         },
         {
+          "id": "e10",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e11",
           "from": "fin",
           "to": "api",
           "label": "respuesta sin sobre"
         },
         {
+          "id": "e12",
           "from": "doc",
           "to": "ksys-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e13",
           "from": "ksys-R",
           "to": "tsys",
           "kind": "dashed"

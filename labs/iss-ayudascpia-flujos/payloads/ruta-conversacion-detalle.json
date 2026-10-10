@@ -432,126 +432,151 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP GET /conversacion/{iconversacion}"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "petición con token"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "lee"
         },
         {
+          "id": "e4",
           "from": "lee",
           "to": "d1"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "e401",
           "label": "no"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "d2",
           "label": "sí"
         },
         {
+          "id": "e7",
           "from": "d2",
           "to": "cierra",
           "label": "detalle"
         },
         {
+          "id": "e8",
           "from": "d2",
           "to": "log",
           "label": "…/logs"
         },
         {
+          "id": "e9",
           "from": "cierra",
           "to": "det"
         },
         {
+          "id": "e10",
           "from": "e401",
           "to": "fin"
         },
         {
+          "id": "e11",
           "from": "det",
           "to": "fin"
         },
         {
+          "id": "e12",
           "from": "log",
           "to": "fin"
         },
         {
+          "id": "e13",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e14",
           "from": "lee",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e15",
           "from": "ctl-R",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e16",
           "from": "cierra",
           "to": "ctl-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e17",
           "from": "ctl-U",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e18",
           "from": "det",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e19",
           "from": "ctl-R",
           "to": "dueno-TQualifiedMessageController-R",
           "kind": "dashed",
           "label": "detalle MENSAJESCALIFICADOS"
         },
         {
+          "id": "e20",
           "from": "dueno-TQualifiedMessageController-R",
           "to": "tmsg",
           "kind": "dashed"
         },
         {
+          "id": "e21",
           "from": "ctl-R",
           "to": "dueno-TConversationTicketController-R",
           "kind": "dashed",
           "label": "detalle TIQUETES"
         },
         {
+          "id": "e22",
           "from": "dueno-TConversationTicketController-R",
           "to": "ttiq",
           "kind": "dashed"
         },
         {
+          "id": "e23",
           "from": "log",
           "to": "dueno-TConversationLogController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e24",
           "from": "dueno-TConversationLogController-R",
           "to": "tlog",
           "kind": "dashed"
         },
         {
+          "id": "e25",
           "from": "tconv",
           "to": "tmsg",
           "kind": "dashed",
@@ -559,6 +584,7 @@
           "labelVertical": true
         },
         {
+          "id": "e26",
           "from": "tconv",
           "to": "ttiq",
           "kind": "dashed",

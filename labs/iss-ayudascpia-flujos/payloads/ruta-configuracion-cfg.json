@@ -234,72 +234,87 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP GET · PUT /sistema/cfg"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "GET|PUT <ruta>/cfg"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "seg"
         },
         {
+          "id": "e4",
           "from": "seg",
           "to": "d1"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "lee",
           "label": "GET"
         },
         {
+          "id": "e6",
           "from": "d1",
           "to": "push",
           "label": "PUT"
         },
         {
+          "id": "e7",
           "from": "push",
           "to": "guarda"
         },
         {
+          "id": "e8",
           "from": "lee",
           "to": "ok"
         },
         {
+          "id": "e9",
           "from": "guarda",
           "to": "ok"
         },
         {
+          "id": "e10",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e11",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e12",
           "from": "lee",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e13",
           "from": "ctl-R",
           "to": "tsys",
           "kind": "dashed"
         },
         {
+          "id": "e14",
           "from": "guarda",
           "to": "ctl-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e15",
           "from": "ctl-U",
           "to": "tsys",
           "kind": "dashed"

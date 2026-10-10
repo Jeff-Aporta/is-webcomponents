@@ -320,106 +320,128 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "ini",
           "to": "start"
         },
         {
+          "id": "e2",
           "from": "start",
           "to": "fork"
         },
         {
+          "id": "e3",
           "from": "fork",
           "to": "runner",
           "label": "trabajo de arranque en segundo plano"
         },
         {
+          "id": "e4",
           "from": "runner",
           "to": "estado"
         },
         {
+          "id": "e5",
           "from": "estado",
           "to": "barrido"
         },
         {
+          "id": "e6",
           "from": "barrido",
           "to": "fin-arranque"
         },
         {
+          "id": "e7",
           "from": "fork",
           "to": "cconv",
           "label": "timers"
         },
         {
+          "id": "e8",
           "from": "cconv",
           "to": "clog",
           "kind": "dashed",
           "label": "klass"
         },
         {
+          "id": "e9",
           "from": "cconv",
           "to": "flag"
         },
         {
+          "id": "e10",
           "from": "flag",
           "to": "d1"
         },
         {
+          "id": "e11",
           "from": "d1",
           "to": "nada",
           "label": "false"
         },
         {
+          "id": "e12",
           "from": "d1",
           "to": "cierra",
           "label": "encendido"
         },
         {
+          "id": "e13",
           "from": "cierra",
           "to": "purga"
         },
         {
+          "id": "e14",
           "from": "purga",
           "to": "fin"
         },
         {
+          "id": "e15",
           "from": "nada",
           "to": "fin"
         },
         {
+          "id": "e16",
           "from": "barrido",
           "to": "cconv-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e17",
           "from": "cconv-U",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e18",
           "from": "flag",
           "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e19",
           "from": "dueno-TSysValueController-R",
           "to": "tsys",
           "kind": "dashed"
         },
         {
+          "id": "e20",
           "from": "cierra",
           "to": "cconv-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
+          "id": "e21",
           "from": "purga",
           "to": "clog-D",
           "kind": "dashed",
           "label": "DELETE"
         },
         {
+          "id": "e22",
           "from": "clog-D",
           "to": "tlog",
           "kind": "dashed"

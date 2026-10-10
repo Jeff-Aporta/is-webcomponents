@@ -244,86 +244,104 @@
       ],
       "edges": [
         {
+          "id": "e1",
           "from": "cliente",
           "to": "api",
           "label": "HTTP GET /conversaciones"
         },
         {
+          "id": "e2",
           "from": "api",
           "to": "ctl",
           "label": "petición con token"
         },
         {
+          "id": "e3",
           "from": "ctl",
           "to": "d1"
         },
         {
+          "id": "e4",
           "from": "d1",
           "to": "val",
           "label": "no"
         },
         {
+          "id": "e5",
           "from": "d1",
           "to": "seg",
           "label": "sí"
         },
         {
+          "id": "e6",
           "from": "val",
           "to": "prop"
         },
         {
+          "id": "e7",
           "from": "seg",
           "to": "d2"
         },
         {
+          "id": "e8",
           "from": "d2",
           "to": "grp",
           "label": "sí"
         },
         {
+          "id": "e9",
           "from": "d2",
           "to": "flt",
           "label": "no"
         },
         {
+          "id": "e10",
           "from": "prop",
           "to": "ok"
         },
         {
+          "id": "e11",
           "from": "grp",
           "to": "ok"
         },
         {
+          "id": "e12",
           "from": "flt",
           "to": "ok"
         },
         {
+          "id": "e13",
           "from": "ok",
           "to": "fin"
         },
         {
+          "id": "e14",
           "from": "fin",
           "to": "api",
           "label": "respuesta"
         },
         {
+          "id": "e15",
           "from": "prop",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e16",
           "from": "ctl-R",
           "to": "tconv",
           "kind": "dashed"
         },
         {
+          "id": "e17",
           "from": "grp",
           "to": "ctl-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
+          "id": "e18",
           "from": "flt",
           "to": "ctl-R",
           "kind": "dashed",
