@@ -1129,11 +1129,15 @@ function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowRe
     const p = c?.provides ?? c?.expose ?? c?.exposes;
     return Array.isArray(p) ? p.length > 0 : !!p;
   }).map((n) => n.id));
-  if (!expone.size) return;
+  // Todo consumo (arista punteada) de un componente es `-(O-`, declare o no lo que expone; una arista
+  // continua (consecuencia, p. ej. la llamada HTTP al login) llega normal.
+  const componentes = new Set(spec.nodes.filter((n) => n.embed?.kind === 'component').map((n) => n.id));
+  const consume = (r: FlowLayoutEdge): boolean => expone.has(r.to) || (componentes.has(r.to) && r.kind === 'dashed');
+  if (!expone.size && !componentes.size) return;
   // Convención InSoft: el componente expone el socket `(` (palo + arco) y el riel llega a la bola O.
   const largo = SOCKET.palo + SOCKET.socket + SOCKET.bola;
   routed.forEach((r, i) => {
-    if (!r || !expone.has(r.to) || r.from === r.to) return;
+    if (!r || !consume(r) || r.from === r.to) return;
     const pts = pathPoints(r.path);
     if (pts.length < 2) return;
     const T = pts[pts.length - 1]!;

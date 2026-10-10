@@ -5,6 +5,9 @@
  *   - Riel punteado: el patrón de trazos avanza (SMIL `stroke-dashoffset`).
  *   - Riel continuo: detrás, una segunda línea de puntos color cielo (trazo de largo 0, remate
  *     redondo) más gruesa y espaciada, que avanza; el riel queda encima: un efecto sutil.
+ *   - Pulsos: los puntos laten en alfa y cada O (`-(O-`, `-(O=`) y cada ⦿ de llegada emite un
+ *     pulso de radar periódico. Todo pulso arranca transparente y empieza tras `FLUJO.pulso.inicio`:
+ *     el PNG (captura estática) sale limpio; la animación solo se ve en el SVG vivo.
  *   - `reverse`: el movimiento va de la punta al origen (p. ej. herencia en clases, o el lado N→1
  *     en el DER cuando la arista se dibuja del 1 al N).
  *
@@ -20,6 +23,8 @@ export const FLUJO = {
   punteado: { periodo: 9, dur: 0.9 },
   /** Puntos de los rieles continuos: separación, velocidad (px/s) y grosor extra sobre el riel. */
   puntos: { paso: 100, velocidad: 60, grosorExtra: 3, color: '#7ACFF4' },
+  /** Pulsos (radar en las O y ⦿, alfa en los puntos): periodo, arranque diferido y crecimiento del radar. */
+  pulso: { periodo: 3, inicio: 1.5, crece: 2.4, alfa: 0.55 },
 } as const;
 
 import type { TOpcionesFlujo } from './diagram-flow.schemas.js';
@@ -66,6 +71,9 @@ export function animarRiel(path: SVGElement, op: TOpcionesFlujo): SVGElement | n
   p.setAttribute('stroke-dasharray', `0 ${paso}`);
   p.setAttribute('class', 'iswc-flow__dots');
   p.setAttribute('pointer-events', 'none');
+  // Pulso de alfa: arranca transparente (el PNG no lleva los puntos).
+  p.setAttribute('stroke-opacity', '0');
+  p.appendChild(animar('stroke-opacity', '0;1;0', { keyTimes: '0;0.5;1' }));
   const a = document.createElementNS(SVG_NS, 'animate');
   a.setAttribute('attributeName', 'stroke-dashoffset');
   a.setAttribute('values', op.reverse ? `0;${paso}` : `${paso};0`);
@@ -73,6 +81,41 @@ export function animarRiel(path: SVGElement, op: TOpcionesFlujo): SVGElement | n
   a.setAttribute('repeatCount', 'indefinite');
   p.appendChild(a);
   return p;
+}
+
+/**
+ * Pulso de radar de una O o un ⦿: un anillo que nace en el borde, crece y se desvanece cada
+ * `FLUJO.pulso.periodo` s. Arranca transparente. Se inserta DETRÁS de la figura (el llamador lo pone
+ * antes de ella).
+ */
+export function pulsoRadar(cx: number, cy: number, r: number, color: string): SVGElement {
+  const { crece, alfa } = FLUJO.pulso;
+  const c = document.createElementNS(SVG_NS, 'circle');
+  c.setAttribute('cx', String(cx));
+  c.setAttribute('cy', String(cy));
+  c.setAttribute('r', String(r));
+  c.setAttribute('fill', color);
+  c.setAttribute('fill-opacity', '0.25');
+  c.setAttribute('stroke', color);
+  c.setAttribute('stroke-width', '1.5');
+  c.setAttribute('opacity', '0');
+  c.setAttribute('class', 'iswc-flow__radar');
+  c.setAttribute('pointer-events', 'none');
+  c.appendChild(animar('r', `${r};${r * crece}`));
+  c.appendChild(animar('opacity', `${alfa};0`));
+  return c;
+}
+
+/** `<animate>` periódico del pulso, con arranque diferido (antes de empezar rige el valor base). */
+function animar(atributo: string, valores: string, extra: Record<string, string> = {}): SVGElement {
+  const a = document.createElementNS(SVG_NS, 'animate');
+  a.setAttribute('attributeName', atributo);
+  a.setAttribute('values', valores);
+  a.setAttribute('dur', `${FLUJO.pulso.periodo}s`);
+  a.setAttribute('begin', `${FLUJO.pulso.inicio}s`);
+  a.setAttribute('repeatCount', 'indefinite');
+  for (const [k, v] of Object.entries(extra)) a.setAttribute(k, v);
+  return a;
 }
 
 /** Periodo (suma) de un `stroke-dasharray` («5 4» → 9). */

@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
+import { animarRiel, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
 import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './component-spec.js';
 import type { ComponentLayout } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
@@ -460,6 +460,7 @@ class IswcComponentDiagram extends DiagramElementBase {
           'stroke-linecap': 'round',
         }));
       } else {
+        if (flujoActivo(this)) g.appendChild(pulsoRadar(iface.cx, iface.cy, r, lolliFill));
         g.appendChild(svgEl('circle', {
           cx: iface.cx, cy: iface.cy, r,
           fill: lolliFill,

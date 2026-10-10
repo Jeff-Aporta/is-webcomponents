@@ -27,7 +27,7 @@ import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-ed
 import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
-import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
+import { animarRiel, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { edgeStyleFor } from './diagram-vocab.js';
 import { ETIQUETA_ICONO, ETIQUETA_LINE_H } from './flowchart-labels.js';
@@ -832,6 +832,7 @@ class IswcFlowchart extends DiagramElementBase {
           const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
           const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };
           g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 0 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
+          if (flujoActivo(this)) g.appendChild(pulsoRadar(c.x, c.y, bola, LOLLIPOP_FILL));
           g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
         }
         const p2 = { x: c.x - dir.x * bola, y: c.y - dir.y * bola };
@@ -862,6 +863,7 @@ class IswcFlowchart extends DiagramElementBase {
           const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
           const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };
           g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 0 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
+          if (flujoActivo(this)) g.appendChild(pulsoRadar(c.x, c.y, bola, LOLLIPOP_FILL));
           g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
         }
         // Punta de llegada tocando la bola.
@@ -969,6 +971,8 @@ class IswcFlowchart extends DiagramElementBase {
         });
         g.appendChild(box);
         g.appendChild(svgEl('circle', { cx: n.x + n.w / 2, cy: n.y + n.h / 2, r: n.w / 2 - 5, fill: paint.endFill }));
+        // ⦿ de llegada: pulso de radar (detrás del nodo).
+        if (flujoActivo(this)) g.insertBefore(pulsoRadar(n.x + n.w / 2, n.y + n.h / 2, n.w / 2, paint.endFill), box);
       } else if (n.kind === 'nested') {
         box = svgEl('rect', { x: n.x, y: n.y, width: n.w, height: n.h, rx: 4, fill: n.embed?.bg ?? paint.nestedBg, ...stroke });
         g.appendChild(box);
@@ -1005,6 +1009,7 @@ class IswcFlowchart extends DiagramElementBase {
         const raiz = PUENTE.palo + S;
         g.appendChild(svgEl('line', { x1: c.x - d.x * raiz, y1: c.y - d.y * raiz, x2: c.x - d.x * S, y2: c.y - d.y * S, stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__palo' }));
         g.appendChild(svgEl('path', { d: `M${c.x - t.x * S},${c.y - t.y * S} A${S},${S} 0 0 ${giro} ${c.x + t.x * S},${c.y + t.y * S}`, fill: 'none', stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__socket' }));
+        if (flujoActivo(this)) g.appendChild(pulsoRadar(c.x, c.y, PUENTE.bola, LOLLIPOP_FILL));
         g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: PUENTE.bola, fill: LOLLIPOP_FILL, stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__bola' }));
         const letra = svgEl('text', { x: c.x, y: c.y, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 11, 'font-weight': 700, 'font-family': paint.font, fill: tinta, class: 'flow-bridge__op' });
         letra.textContent = n.bridge.op;

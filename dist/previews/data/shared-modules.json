@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T20:07:24.040Z",
+  "generatedAt": "2026-10-10T20:26:36.179Z",
   "count": 118,
   "modules": [
     {
@@ -590,11 +590,12 @@
       "id": "diagram-flow",
       "path": "src/components/_shared/diagram-flow.ts",
       "summary": "diagram-flow — Estándar: cada riel muestra hacia dónde va lo que transporta.",
-      "bytes": 4038,
+      "bytes": 6217,
       "exports": [
         "FLUJO",
         "flujoActivo",
-        "animarRiel"
+        "animarRiel",
+        "pulsoRadar"
       ]
     },
     {
