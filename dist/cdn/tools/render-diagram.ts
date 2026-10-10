@@ -226,6 +226,14 @@ async function runOnePage(
     const sano = sanitizeSvgRoot(extraido.svgOuter);
     let svg = sano.svg;
     if (opts.transformSvg) svg = opts.transformSvg(svg);
+    // Guardia: el SVG exportado tiene que ser XML bien formado (un .svg roto se ve como imagen rota
+    // en cualquier visor). Se parsea como image/svg+xml en el mismo navegador.
+    const errorXml = await page.evaluate(`(() => {
+      const d = new DOMParser().parseFromString(${JSON.stringify(sinInyeccion(svg))}, 'image/svg+xml');
+      const e = d.querySelector('parsererror');
+      return e ? (e.textContent || 'parsererror').slice(0, 300) : '';
+    })()`) as string;
+    if (errorXml) throw new Error(`SVG mal formado (${id}): ${errorXml}`);
 
     let png: Uint8Array | undefined;
     if (opts.png) {
