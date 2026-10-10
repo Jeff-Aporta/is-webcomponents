@@ -569,6 +569,10 @@ export function computeFlowchartLayout(
   // Rejilla de costos: las cajas se bloquean para que el A* las rodee.
   const grid = makeCostGrid(width, height);
   const posById = new Map<string, FlowLayoutNode>(nodes.map((n) => [n.id, n]));
+  // Capas de costo: (1) brillo de entidad, 2U alrededor de cada caja, ×1.05, combinado por MÁXIMO
+  // (dos cajas cercanas no se suman); (2) la caja bloqueada; (3) rieles quemados, ADITIVOS (ver
+  // costearRiel), que se suman sobre todo lo anterior a medida que se rutea.
+  for (const n of nodes) brilloMax(grid, n.x - BRILLO_ENTIDAD.radio, n.y - BRILLO_ENTIDAD.radio, n.w + BRILLO_ENTIDAD.radio * 2, n.h + BRILLO_ENTIDAD.radio * 2, BRILLO_ENTIDAD.factor);
   for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
   // Segunda pasada: los textos de las aristas también son obstáculos para el A*.
   for (const t of textos.values()) blockRect(grid, t.x - 4, t.y - 4, t.w + 8, t.h + 8);
@@ -676,6 +680,8 @@ export function computeFlowchartLayout(
     const end = limpia?.[limpia.length - 1];
     const tip = end ? { x: end.x, y: end.y, angle: 0 } : arrowTip(b, toSide);
     if (insoft) rememberSegments(insoftSegs, path, e.to);
+    // Capa aditiva de rieles quemados: la siguiente arista paga más cuantas más pasen cerca.
+    costearRiel(grid, pathPoints(path));
     const mid = points.length
       ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }
       : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
@@ -3062,6 +3068,53 @@ function polylinePath(pts: readonly FlowPoint[]): string {
 }
 
 /** Guarda los tramos de una arista ya ruteada (para medir cruces y solapes). */
+/**
+ * Rieles quemados (capa ADITIVA del A* del flujo): cada arista ruteada suma costo sobre su recorrido
+ * (`nucleo`) y un halo alrededor (`halo`, hasta `radio` px). Cuantas más aristas pasan por una zona,
+ * más caro es pasar cerca: las siguientes se reparten en vez de amontonarse en un corredor común.
+ * Los extremos (`libre` px junto a cada nodo) no se costean: las aristas que comparten partida o
+ * llegada no se castigan entre sí donde convergen.
+ */
+/** Brillo de entidad del A* del flujo: 2U (32 px) alrededor de cada caja, factor ×1.05. */
+const BRILLO_ENTIDAD = { radio: 32, factor: 1.05 } as const;
+/** Lleva cada celda del rectángulo al máximo entre su costo y `factor` (los brillos no se suman). */
+function brilloMax(grid: ReturnType<typeof makeCostGrid>, x: number, y: number, w: number, h: number, factor: number): void {
+  const c0 = Math.max(0, Math.floor(x / grid.grid));
+  const r0 = Math.max(0, Math.floor(y / grid.grid));
+  const c1 = Math.min(grid.cols - 1, Math.ceil((x + w) / grid.grid) - 1);
+  const r1 = Math.min(grid.rows - 1, Math.ceil((y + h) / grid.grid) - 1);
+  for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
+    const i = r * grid.cols + c;
+    grid.cost[i] = Math.max(grid.cost[i]!, factor);
+  }
+}
+const RIEL_QUEMADO = { nucleo: 3, halo: 1.5, radio: 16, libre: 24 } as const;
+function costearRiel(grid: ReturnType<typeof makeCostGrid>, pts: readonly FlowPoint[]): void {
+  const { nucleo, halo, radio, libre } = RIEL_QUEMADO;
+  const largo = pts.slice(1).reduce((acc, q, k) => acc + Math.abs(q.x - pts[k]!.x) + Math.abs(q.y - pts[k]!.y), 0);
+  if (largo <= libre * 2) return;
+  let recorrido = 0;
+  pts.slice(1).forEach((q, k) => {
+    const p = pts[k]!;
+    const l = Math.abs(q.x - p.x) + Math.abs(q.y - p.y);
+    // Recorta el tramo a la parte que no está junto a los extremos.
+    const desde = Math.max(0, libre - recorrido);
+    const hasta = Math.min(l, largo - libre - recorrido);
+    recorrido += l;
+    if (hasta <= desde || !l) return;
+    const dx = Math.sign(q.x - p.x);
+    const dy = Math.sign(q.y - p.y);
+    const a = { x: p.x + dx * desde, y: p.y + dy * desde };
+    const b = { x: p.x + dx * hasta, y: p.y + dy * hasta };
+    const x0 = Math.min(a.x, b.x);
+    const y0 = Math.min(a.y, b.y);
+    const w = Math.abs(b.x - a.x);
+    const h = Math.abs(b.y - a.y);
+    applyRectCost(grid, x0 - radio, y0 - radio, w + radio * 2, h + radio * 2, halo, true);
+    applyRectCost(grid, x0 - 2, y0 - 2, w + 4, h + 4, nucleo, true);
+  });
+}
+
 function rememberSegments(out: FlowSegment[], path: string, to: string): void {
   const pts = pathPoints(path);
   for (let i = 1; i < pts.length; i++) {
