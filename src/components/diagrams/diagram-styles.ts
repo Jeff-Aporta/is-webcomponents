@@ -117,5 +117,5 @@ export function hostStyleName(host: Element): string | null {
 // bundles de diagramas (`dist/cdn/diagrams/themes/`). Solo se registra si
 // nadie lo hizo antes (otro bundle, o una librería que lo reemplazó).
 if (!ARCHIVOS.has('insoft')) registerStyleDiagram({
-  insoft: ['./themes/insoft.json', './themes/insoft-cd.json', './themes/insoft-class.json', './themes/insoft-seq.json'],
+  insoft: ['./themes/insoft.json', './themes/insoft-cd.json', './themes/insoft-class.json', './themes/insoft-seq.json', './themes/insoft-flow.json'],
 });

@@ -1,0 +1,270 @@
+{
+  "slug": "ruta-captura-errores",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Captura de errores 5xx",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Cliente"
+      },
+      {
+        "id": "W",
+        "label": "Host · makeDispatchHandler"
+      },
+      {
+        "id": "E",
+        "label": "ISS · TErrorController"
+      },
+      {
+        "id": "H",
+        "label": "Controller de la ruta"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "operación",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "operación",
+          "stereotype": "Ops",
+          "items": [
+            "cualquier ruta propia"
+          ]
+        }
+      },
+      {
+        "id": "llega",
+        "label": "Llega la petición y pasa la puerta SEG",
+        "lane": "W",
+        "icon": "mdi:door-open"
+      },
+      {
+        "id": "err",
+        "label": "TErrorController",
+        "kind": "class",
+        "lane": "E",
+        "class": {
+          "name": "TErrorController",
+          "attributes": [
+            "- nTbl = patyia_errores"
+          ],
+          "methods": [
+            "+ insert() · registrar()",
+            "+ listSimple() · deleteBatch()",
+            "+ purgarErroresAtendidos()",
+            "+ applyEndpointWithErrorCapture() «static»",
+            "+ capturarRespuesta() «static»"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "pojo",
+        "label": "TError",
+        "kind": "class",
+        "lane": "E",
+        "class": {
+          "name": "TError",
+          "stereotype": "patyia_errores",
+          "attributes": [
+            "+ ierror «PK»",
+            "+ jerror: jsonb",
+            "+ batendido · referencia"
+          ],
+          "fill": "leaf"
+        }
+      },
+      {
+        "id": "envuelve",
+        "label": "Envuelve el controller con la captura de errores",
+        "lane": "E",
+        "icon": "mdi:shield-bug-outline"
+      },
+      {
+        "id": "n-timer",
+        "label": "Los timers pasan por la misma envoltura: referencia TIMER:/<nombre> y el host sigue",
+        "shape": "comment",
+        "about": "envuelve"
+      },
+      {
+        "id": "ejecuta",
+        "label": "Ejecuta el método del controller",
+        "lane": "H",
+        "icon": "mdi:cog-play-outline"
+      },
+      {
+        "id": "lanza",
+        "label": "Lanza un 5xx inesperado (sin status o ≥ 500)",
+        "lane": "H",
+        "icon": "mdi:alert-octagon-outline"
+      },
+      {
+        "id": "n-4xx",
+        "label": "Los 4xx son errores del cliente: no se persisten",
+        "shape": "comment",
+        "about": "lanza"
+      },
+      {
+        "id": "excluye",
+        "label": "Excluye 503 y 4xx; también POST /error y GET|DELETE /errores",
+        "lane": "E",
+        "icon": "mdi:filter-remove-outline"
+      },
+      {
+        "id": "censura",
+        "label": "Censura tokens, hashes, claves de API y bearer del cuerpo",
+        "lane": "E",
+        "icon": "mdi:eye-off-outline"
+      },
+      {
+        "id": "guarda",
+        "label": "Registra el error (referencia METHOD:/ruta)",
+        "lane": "E",
+        "icon": "mdi:database-plus-outline"
+      },
+      {
+        "id": "terr",
+        "label": "patyia_errores",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_errores",
+          "attributes": [
+            {
+              "name": "ierror",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "jerror",
+              "type": "jsonb"
+            },
+            {
+              "name": "batendido",
+              "type": "boolean"
+            },
+            {
+              "name": "fhcre",
+              "type": "timestamp"
+            },
+            {
+              "name": "referencia",
+              "type": "varchar(200)"
+            },
+            {
+              "name": "resumen",
+              "type": "varchar(500)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "n-dup",
+        "label": "Índice único parcial por referencia: el mismo fallo no se duplica",
+        "shape": "comment",
+        "about": "terr"
+      },
+      {
+        "id": "relanza",
+        "label": "Vuelve a lanzar el error para el envelope",
+        "lane": "E",
+        "icon": "mdi:replay"
+      },
+      {
+        "id": "responde",
+        "label": "Responde 500 (o 503 si era una Rst503_)",
+        "lane": "W",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "n-stack",
+        "label": "Rutas montadas por el stack: capturarRespuesta ancla la 5xx (salvo 503)",
+        "shape": "comment",
+        "about": "responde"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "W"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "llega",
+        "label": "petición"
+      },
+      {
+        "from": "llega",
+        "to": "err"
+      },
+      {
+        "from": "err",
+        "to": "pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "err",
+        "to": "envuelve"
+      },
+      {
+        "from": "envuelve",
+        "to": "ejecuta"
+      },
+      {
+        "from": "ejecuta",
+        "to": "lanza"
+      },
+      {
+        "from": "lanza",
+        "to": "excluye"
+      },
+      {
+        "from": "excluye",
+        "to": "censura"
+      },
+      {
+        "from": "censura",
+        "to": "guarda"
+      },
+      {
+        "from": "guarda",
+        "to": "relanza"
+      },
+      {
+        "from": "relanza",
+        "to": "responde"
+      },
+      {
+        "from": "responde",
+        "to": "fin"
+      },
+      {
+        "from": "guarda",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

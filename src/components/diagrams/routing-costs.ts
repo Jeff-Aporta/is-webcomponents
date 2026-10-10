@@ -19,10 +19,11 @@ export type { RoutingCosts, RoutingCostsInput };
 
 /** Valores por defecto del kit (los publica el build como routing-costs.json). */
 export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
-  grid: { step: 20, clearance: 20, lanePitch: 32, stub: 20, iterations: 16, turnPenalty: 200, minFactor: 0.05 },
+  // 1U = 15 px (calibrado 2026-10-09; antes 20): paso de la rejilla, aire mínimo y tramo recto en los extremos.
+  grid: { step: 15, clearance: 15, lanePitch: 32, stub: 15, iterations: 16, turnPenalty: 200, minFactor: 0.05 },
   // Brillo de entidad: un paso mas alla del aire (clearance); un radio mayor
   // se comia los carriles de los corredores estrechos entre franjas.
-  entity: { glow: 3, radius: 20 },
+  entity: { glow: 3, radius: 15 },
   // Conector -(O- ajeno: su hitbox no existe en la grilla y además irradia un
   // brillo radial (caída lineal desde el centro) para que los rieles no pasen
   // rozándolo. Las aristas que llegan a ESE conector no lo pagan.
@@ -32,7 +33,8 @@ export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
   // (rail.cross = ×8 en un paso de 20 px ≈ 140 px equivalentes → 280).
   package: { borderGlow: 10, borderRadius: 64, nestingFactor: 4, enter: 280, exit: 280 },
   rail: { overlap: 120, near: 6, headOn: 120, cross: 8, sameFunnel: 42, retreat: 30, history: 6, mergePitches: 2 },
-  share: { radius: 150, joinTail: 0.1, newTip: 240 },
+  // Con U = 15 px el abanico necesita más alcance para converger igual que con U = 20 (150 → 200 px).
+  share: { radius: 200, joinTail: 0.1, newTip: 240 },
 });
 
 const isObj = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);

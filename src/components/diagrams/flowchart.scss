@@ -132,3 +132,14 @@
 :host([open-on-click]) {
   .wrap { cursor: zoom-in; }
 }
+/* Escenario fuera de pantalla: aquí se montan los diagramas de los nodos
+   especiales (`nested`, `tableder`, `component`) para capturar su SVG, y
+   la sonda que mide el texto con la webfont del tema. */
+.flow-embed-stage {
+  position: absolute;
+  left: -30000px;
+  top: 0;
+  width: 1200px;
+  visibility: hidden;
+  pointer-events: none;
+}

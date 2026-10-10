@@ -77,6 +77,7 @@ export function pickThemeMode(theme: ErThemeJson, dark: boolean): ErThemeJson {
       palettes: { ...theme.cluster?.palettes, ...overlay.cluster?.palettes },
     },
     sequence: { ...theme.sequence, ...overlay.sequence },
+    flow: { ...theme.flow, ...overlay.flow },
     fills: { ...theme.fills, ...overlay.fills },
     lines: { ...theme.lines, ...overlay.lines },
     diagramTheme: { ...theme.diagramTheme, ...overlay.diagramTheme },

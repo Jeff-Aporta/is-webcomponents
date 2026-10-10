@@ -1,0 +1,199 @@
+{
+  "slug": "ruta-seguridad-portal-login",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Login del portal (POST /auth/portal-login)",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "P",
+        "label": "Portal / ISW"
+      },
+      {
+        "id": "I",
+        "label": "ISS · TIdentityController"
+      },
+      {
+        "id": "D",
+        "label": "DataSnap DSCLIENTES"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "login",
+        "kind": "component",
+        "lane": "P",
+        "component": {
+          "name": "login",
+          "stereotype": "Auth",
+          "items": [
+            "POST /auth/portal-login"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TIdentityController",
+        "kind": "class",
+        "lane": "I",
+        "class": {
+          "name": "TIdentityController",
+          "methods": [
+            "+ bootstrapJwt(): token",
+            "+ portalLogin(): token | 409"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "norm",
+        "label": "Normaliza el correo (sin @ → @contapyme.com) y cifra la contraseña (MD5)",
+        "lane": "I",
+        "icon": "mdi:email-edit-outline"
+      },
+      {
+        "id": "existe",
+        "label": "¿Existe el contacto y tiene acceso web?",
+        "lane": "I",
+        "icon": "mdi:account-search-outline"
+      },
+      {
+        "id": "ds",
+        "label": "TCatContactos · TBasicoGeneral",
+        "kind": "component",
+        "lane": "D",
+        "component": {
+          "name": "TCatContactos · TBasicoGeneral",
+          "stereotype": "DataSnap InSoft · DSCLIENTES",
+          "items": []
+        }
+      },
+      {
+        "id": "n-ds",
+        "label": "DataSnap se consulta antes de validar las credenciales",
+        "shape": "comment",
+        "about": "existe"
+      },
+      {
+        "id": "empresas",
+        "label": "Empresas a las que pertenece el contacto",
+        "lane": "I",
+        "icon": "mdi:domain"
+      },
+      {
+        "id": "d1",
+        "label": "¿Cuántas empresas?",
+        "shape": "diamond",
+        "lane": "I"
+      },
+      {
+        "id": "multi",
+        "label": "409 MULTI_EMPRESA · lista de empresas para que el portal pregunte y reintente",
+        "lane": "I",
+        "icon": "mdi:office-building-cog-outline"
+      },
+      {
+        "id": "valida",
+        "label": "Valida las credenciales",
+        "lane": "I",
+        "icon": "mdi:account-key-outline"
+      },
+      {
+        "id": "firma",
+        "label": "Firma el token (HS384, 24 h)",
+        "lane": "I",
+        "icon": "mdi:key-chain-variant"
+      },
+      {
+        "id": "entrega",
+        "label": "Entrega el token con usuario, nombre, vencimiento y claims",
+        "lane": "I",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "I"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "correo y contraseña (y empresa)"
+      },
+      {
+        "from": "ctl",
+        "to": "norm"
+      },
+      {
+        "from": "norm",
+        "to": "existe"
+      },
+      {
+        "from": "existe",
+        "to": "empresas"
+      },
+      {
+        "from": "empresas",
+        "to": "d1"
+      },
+      {
+        "from": "existe",
+        "to": "ds",
+        "kind": "dashed",
+        "label": "contacto"
+      },
+      {
+        "from": "empresas",
+        "to": "ds",
+        "kind": "dashed",
+        "label": "empresas"
+      },
+      {
+        "from": "d1",
+        "to": "multi",
+        "label": "varias, sin itercero"
+      },
+      {
+        "from": "d1",
+        "to": "valida",
+        "label": "una, o itercero elegido"
+      },
+      {
+        "from": "valida",
+        "to": "ds",
+        "kind": "dashed",
+        "label": "LogInContacto"
+      },
+      {
+        "from": "valida",
+        "to": "firma"
+      },
+      {
+        "from": "firma",
+        "to": "entrega"
+      },
+      {
+        "from": "entrega",
+        "to": "fin"
+      },
+      {
+        "from": "multi",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

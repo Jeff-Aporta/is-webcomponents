@@ -1,0 +1,32 @@
+{
+  "slug": "secuencia-subproceso",
+  "module": "020-Conversaciones",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "_lab": "Secuencia con `nested` en la llegada de un mensaje: el arranque (self) inicia el parche de datos (flujo, por src, maxW 200) y el POST del portal inicia el turno de conversación (secuencia, por src, tamaño por defecto).",
+  "payload": {
+    "sequence": {
+      "title": "Mensaje del portal con subprocesos",
+      "actors": [
+        { "id": "P", "label": "Portal" },
+        { "id": "S", "label": "ISS PatyIA" },
+        { "id": "D", "label": "PostgreSQL" }
+      ],
+      "messages": [
+        {
+          "id": "m1", "from": "S", "to": "S", "label": "Arranque: aplica parches pendientes",
+          "nested": { "title": "Parche de datos", "src": "../labs/iss-ayudascpia-flujos/payloads/parches-de-datos.json", "maxW": 200 }
+        },
+        { "id": "m2", "from": "S", "to": "D", "label": "Registra el parche en patchdb" },
+        {
+          "id": "m3", "from": "P", "to": "S", "label": "POST /conversaciones/{id}/mensajes",
+          "nested": { "title": "Turno de conversación", "src": "../labs/iss-ayudascpia-secuencias/payloads/conversacion-turno.json" }
+        },
+        { "id": "m4", "from": "S", "to": "P", "label": "Respuesta en stream", "kind": "reply" }
+      ]
+    }
+  }
+}

@@ -33,10 +33,10 @@ export const PKG_BORDER_CLEARANCE = 56;
  */
 export const LANE_PITCH = 20;
 /**
- * Paso de la grilla del router: las aristas avanzan de nodo en nodo y los
- * nodos sobre entidades bloqueantes no existen en el grafo.
+ * Paso de la grilla del router (1U = 15 px, calibrado 2026-10-09; antes 20): las aristas avanzan de
+ * nodo en nodo y los nodos sobre entidades bloqueantes no existen en el grafo.
  */
-export const GRID_STEP = 20;
+export const GRID_STEP = 15;
 /** Factor de costo si el tramo corre a < lanePitch de otro riel ajeno. */
 export const LANE_NEAR_FACTOR = 28;
 /** Factor de costo al correr paralelo cerca del borde de un agrupador. */
@@ -297,7 +297,9 @@ function packPackageColumns(
     const pad = Math.max(PKG_PAD, PKG_PAD_LOLLI);
     const titleH = PKG_TAB;
     const x = Math.min(...boxes.map((b) => b.x)) - pad;
-    const y = Math.min(...boxes.map((b) => b.y)) - titleH;
+    // Un subpaquete dibuja su pestaña por encima de su caja: se reserva otra
+    // franja de título para que esa pestaña no pise el rótulo del padre.
+    const y = Math.min(...boxes.map((b) => b.y - (nested.includes(b as Paquete) ? PKG_TAB : 0))) - titleH;
     const r = Math.max(...boxes.map((b) => b.x + b.w)) + pad;
     const btm = Math.max(...boxes.map((b) => b.y + b.h)) + pad;
     p.x = x;

@@ -167,3 +167,35 @@ Deno.test('estilo insoft: trae tema de secuencia con tipografía, líneas por no
   assert(styleThemeFor('insoft', 'sequence') !== null || !existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'themes', 'insoft-seq.json')));
   assert(existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'themes', 'insoft-seq.json')), 'el build no publicó insoft-seq.json');
 });
+
+Deno.test('nested en secuencia: recuadro junto a la punta, contain, sin pisar lifelines ajenas ni la fila siguiente', () => {
+  const spec = resolveSequenceSpec({
+    sequence: {
+      actors: [{ id: 'P', label: 'Portal' }, { id: 'S', label: 'ISS' }, { id: 'D', label: 'BD' }],
+      messages: [
+        { id: 'm1', from: 'P', to: 'S', label: 'POST', nested: { title: 'Turno', src: 'x.json' } },
+        { id: 'm2', from: 'S', to: 'D', label: 'lee' },
+        { id: 'm3', from: 'S', to: 'D', label: 'graba', nested: { diagram: { tag: 'iswc-flowchart', payload: {} }, maxW: 120 } },
+      ],
+    },
+  })!;
+  assertEquals(spec.messages![0]!.nested?.kind, 'nested');
+  const L = computeSequenceLayout(spec, { embeds: { m1: { w: 900, h: 600 } } });
+  const [m1, m2, m3] = L.messages;
+  const xs = L.lifelines.map((l) => l.x);
+  for (const m of [m1!, m3!]) {
+    const b = m.nestedBox!;
+    const e = m.nestedEmbedBox!;
+    assert(b && e, `${m.id} sin recuadro`);
+    assert(e.x >= b.x && e.x + e.w <= b.x + b.w + 0.5 && e.y + e.h <= b.y + b.h + 0.5, `${m.id}: el diagrama se sale del recuadro`);
+    assert(b.y > m.y, `${m.id}: el recuadro debe colgar bajo la flecha`);
+    for (const x of xs) assert(!(x > b.x && x < b.x + b.w), `${m.id}: lifeline en x=${x} cruza el recuadro`);
+    assert(b.x + b.w <= L.width, `${m.id}: el lienzo no contiene el recuadro`);
+  }
+  // contain: 900×600 en 200×200 → 200×133.3
+  assert(Math.abs(m1!.nestedEmbedBox!.w - 200) < 0.5 && Math.abs(m1!.nestedEmbedBox!.h - 133.33) < 0.5);
+  assert(m3!.nestedEmbedBox!.w <= 120);
+  // la fila siguiente (con su chip) queda por debajo del recuadro
+  assert(m2!.labelY > m1!.nestedBox!.y + m1!.nestedBox!.h, 'la fila siguiente pisa el recuadro');
+  assert(L.height > m3!.nestedBox!.y + m3!.nestedBox!.h, 'el lienzo no crece para el último recuadro');
+});

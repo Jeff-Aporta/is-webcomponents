@@ -6,6 +6,7 @@ import { descargarIconos } from '../src/cdn/tools/download-iconify.ts';
 
 await descargarIconos({
   raiz: new URL('..', import.meta.url),
-  roots: ['src/components', 'src/core'],
+  // labs: los diagramas del lab (y sus íconos) se sirven en local, sin depender de la API.
+  roots: ['src/components', 'src/core', 'labs'],
   mapas: [],
 });

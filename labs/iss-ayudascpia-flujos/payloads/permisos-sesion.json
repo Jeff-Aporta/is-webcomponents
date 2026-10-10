@@ -1,0 +1,121 @@
+{
+  "slug": "permisos-sesion",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Permisos de la sesión (/permisos)",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Portal / ISW",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "ISS · TPermissionsController",
+          "kind": "participant"
+        },
+        {
+          "id": "D",
+          "label": "PostgreSQL · seg_*",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "P",
+          "label": "GET|POST /permisos (body opcional { irol })",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "P",
+          "to": "P",
+          "label": "verifica el JWT",
+          "kind": "self",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "P",
+          "to": "C",
+          "label": "{ irol: USR, perms: {} } · con irol pedido: 401",
+          "kind": "reply",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "P",
+          "to": "D",
+          "label": "dueño del grupo PATYIA (seg_grupos, caché 90 s)",
+          "kind": "sync",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "P",
+          "to": "D",
+          "label": "rol vigente del contacto (seg_rolescontacto)",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "P",
+          "to": "P",
+          "label": "irol pedido: exige capacidad auditoría (401) y que el rol exista (400)",
+          "kind": "self",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "P",
+          "to": "D",
+          "label": "filas de USR y del rol (seg_accionesxrol)",
+          "kind": "sync",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "P",
+          "to": "C",
+          "label": "{ irol, perms, roles, roleSwitch, username }",
+          "kind": "reply",
+          "step": 8
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m3"
+          ],
+          "condition": "sin token, inválido o vencido"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8"
+          ],
+          "condition": "token válido"
+        }
+      ]
+    }
+  }
+}

@@ -8,108 +8,86 @@
   },
   "payload": {
     "sequence": {
-      "title": "ISS PatyIA · Token desde ContaPyme (POST /JWT)",
       "actors": [
         {
-          "id": "c",
+          "id": "C",
           "label": "ContaPyme / ISW",
-          "kind": "actor",
-          "icon": "mdi:monitor-dashboard"
+          "kind": "participant"
         },
         {
-          "id": "i",
+          "id": "I",
           "label": "ISS · TIdentityController",
-          "kind": "participant",
-          "icon": "mdi:shield-key"
+          "kind": "participant"
         },
         {
-          "id": "d",
+          "id": "D",
           "label": "DataSnap DSCLIENTES",
-          "kind": "participant",
-          "icon": "mdi:server-network"
-        }
-      ],
-      "groups": [
-        {
-          "id": "g-http",
-          "name": "Petición y respuesta",
-          "color": "stream",
-          "icon": "mdi:swap-horizontal"
-        },
-        {
-          "id": "g-ds",
-          "name": "Validación en DataSnap",
-          "color": "data",
-          "icon": "mdi:server-network"
-        },
-        {
-          "id": "g-jwt",
-          "name": "Firma del token",
-          "color": "auth",
-          "icon": "mdi:key-variant"
-        },
-        {
-          "id": "g-err",
-          "name": "Salida de error",
-          "color": "error",
-          "icon": "mdi:alert-circle-outline"
+          "kind": "participant"
         }
       ],
       "fragments": [
         {
-          "id": "f-ds",
-          "kind": "region",
-          "name": "validación en DataSnap",
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
           "messages": [
             "m2"
           ],
-          "condition": "la llave se valida antes de firmar"
+          "condition": "falta un dato"
         }
       ],
-      "preamble": [
+      "messages": [
         {
           "id": "m1",
-          "from": "c",
-          "to": "i",
-          "label": "pide un token con la llave de sesión de ContaPyme (controlKey, iapp, idmaquina)",
+          "from": "C",
+          "to": "I",
+          "label": "POST /JWT (controlKey, iapp, idmaquina)",
           "kind": "sync",
-          "group": "g-http"
+          "step": 1
         },
         {
           "id": "m2",
-          "from": "i",
-          "to": "d",
-          "label": "valida la llave de sesión (LogInContacto)",
+          "from": "I",
+          "to": "C",
+          "label": "400",
+          "kind": "reply",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "I",
+          "to": "D",
+          "label": "TBasicoGeneral.LogInContacto",
           "kind": "sync",
-          "group": "g-ds"
+          "step": 3
         }
       ],
       "alt": {
-        "name": "según lo que responda DataSnap",
+        "name": "alt",
         "branches": [
           {
-            "condition": "DataSnap no responde",
+            "condition": "DataSnap no responde, no-2xx o respuesta vacía",
             "messages": [
               {
-                "id": "m3",
-                "from": "i",
-                "to": "c",
-                "label": "503 · DataSnap no respondió, reintentar",
+                "id": "m4",
+                "from": "I",
+                "to": "C",
+                "label": "503 · reintentar",
                 "kind": "reply",
-                "group": "g-err"
+                "step": 4
               }
             ]
           },
           {
-            "condition": "DataSnap rechaza la llave",
+            "condition": "DataSnap rechaza la llave o no trae itercero / icontacto",
             "messages": [
               {
-                "id": "m4",
-                "from": "i",
-                "to": "c",
-                "label": "401 · llave rechazada, volver a iniciar sesión",
+                "id": "m5",
+                "from": "I",
+                "to": "C",
+                "label": "401 · volver a iniciar sesión",
                 "kind": "reply",
-                "group": "g-err"
+                "step": 5
               }
             ]
           },
@@ -117,34 +95,25 @@
             "condition": "identidad válida",
             "messages": [
               {
-                "id": "m5",
-                "from": "d",
-                "to": "i",
-                "label": "identidad del contacto (empresa, contacto, nombres)",
-                "kind": "reply",
-                "group": "g-ds"
-              },
-              {
                 "id": "m6",
-                "from": "i",
-                "to": "i",
-                "label": "firma el token (HS384, 24 h) con el secreto de configuraciones · sin semilla → 503",
+                "from": "I",
+                "to": "I",
+                "label": "firma HS384, 24 h, con el secreto del código",
                 "kind": "self",
-                "group": "g-jwt"
+                "step": 6
               },
               {
                 "id": "m7",
-                "from": "i",
-                "to": "c",
-                "label": "entrega el token",
+                "from": "I",
+                "to": "C",
+                "label": "{ respuesta: { token } }",
                 "kind": "reply",
-                "group": "g-http"
+                "step": 7
               }
             ]
           }
         ]
-      },
-      "epilogue": []
+      }
     }
   }
 }

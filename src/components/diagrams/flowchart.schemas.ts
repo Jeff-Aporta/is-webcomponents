@@ -30,3 +30,14 @@ export const EdgeNodeEntrySchema = z.object({
 });
 export type EdgeNodeEntry = z.infer<typeof EdgeNodeEntrySchema>;
 
+
+
+/** Tinta del texto de un nodo (insoft o clásico). */
+export const FlowInkSchema = z.object({
+  text: z.string(),
+  muted: z.string(),
+  font: z.string(),
+  fontSize: z.number(),
+  fontWeight: z.number(),
+});
+export type FlowInk = z.infer<typeof FlowInkSchema>;

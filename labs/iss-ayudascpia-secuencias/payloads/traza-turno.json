@@ -1,0 +1,83 @@
+{
+  "slug": "traza-turno",
+  "module": "020-Conversaciones",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "actors": [
+        {
+          "id": "T",
+          "label": "Turno (ISS)",
+          "kind": "participant"
+        },
+        {
+          "id": "C",
+          "label": "Cliente (SSE)",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "Historial",
+          "kind": "participant"
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "loop",
+          "kind": "loop",
+          "messages": [
+            "m2"
+          ],
+          "condition": "cada paso del pipeline"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "T",
+          "to": "C",
+          "label": "begin",
+          "kind": "reply",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "T",
+          "to": "C",
+          "label": "event log (seq, ms, nivel, etapa, mensaje)",
+          "kind": "reply",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "T",
+          "to": "P",
+          "label": "mensaje assistant con others.traza = traza hasta ese momento",
+          "kind": "sync",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "T",
+          "to": "C",
+          "label": "event log · Turno terminado (con dur)",
+          "kind": "reply",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "T",
+          "to": "C",
+          "label": "end con meta.traza = la traza completa",
+          "kind": "reply",
+          "step": 5
+        }
+      ]
+    }
+  }
+}

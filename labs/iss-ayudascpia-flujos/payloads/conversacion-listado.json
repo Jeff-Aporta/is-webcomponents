@@ -1,0 +1,123 @@
+{
+  "slug": "conversacion-listado",
+  "module": "020-Conversaciones",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Listados de conversaciones",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Portal / consola",
+          "kind": "participant"
+        },
+        {
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "T",
+          "label": "GET /conversaciones",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "T",
+          "to": "T",
+          "label": "body estricto, searchColumn de la lista blanca (400); limit de 1 a 200",
+          "kind": "self",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "T",
+          "to": "P",
+          "label": "las propias del token",
+          "kind": "sync",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "T",
+          "to": "C",
+          "label": "{ pagina, qregistros, totalpaginas, totalregistros, datos }",
+          "kind": "reply",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "C",
+          "to": "T",
+          "label": "GET /conversaciones/{filtro}",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "T",
+          "to": "T",
+          "label": "puerta SEG QUERY:/conversaciones (auditoría)",
+          "kind": "self",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "T",
+          "to": "P",
+          "label": "filtro, orden y paginación (agrupar = tercero: por tercero y contacto)",
+          "kind": "sync",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "T",
+          "to": "C",
+          "label": "la misma lista paginada",
+          "kind": "reply",
+          "step": 8
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m1",
+            "m2",
+            "m3",
+            "m4"
+          ],
+          "condition": "GET /conversaciones"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m5",
+            "m6",
+            "m7",
+            "m8"
+          ],
+          "condition": "GET /conversaciones/{filtro}"
+        }
+      ]
+    }
+  }
+}

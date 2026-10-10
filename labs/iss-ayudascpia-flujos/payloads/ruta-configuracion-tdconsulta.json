@@ -1,0 +1,299 @@
+{
+  "slug": "ruta-configuracion-tdconsulta",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Catálogo de instrucciones (/tdconsulta)",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Consola"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TTdConsultationController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "configuración",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "configuración",
+          "stereotype": "Config",
+          "items": [
+            "GET|POST|PUT /tdconsulta"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TTdConsultationController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TTdConsultationController",
+          "attributes": [
+            "- nTbl = patyia_tdconsultas"
+          ],
+          "methods": [
+            "+ listado() · crear() · guardar()",
+            "+ instruccion(ntdconsulta)"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "pojo",
+        "label": "TTdConsulta",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TTdConsulta",
+          "stereotype": "patyia_tdconsultas",
+          "attributes": [
+            "+ itdconsulta «PK»",
+            "+ instruccion · jconfig",
+            "+ jpermisos"
+          ],
+          "fill": "leaf"
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Lee o escribe?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "lista",
+        "label": "Todo el catálogo con canEdit para la consola",
+        "lane": "T",
+        "icon": "mdi:file-tree-outline"
+      },
+      {
+        "id": "valida",
+        "label": "PK en mayúsculas, ruta d(.d)*, instrucción no vacía (400)",
+        "lane": "T",
+        "icon": "mdi:form-textbox"
+      },
+      {
+        "id": "d2",
+        "label": "¿Crea?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "anc",
+        "label": "La PK no existe y todos sus ancestros sí (400)",
+        "lane": "T",
+        "icon": "mdi:family-tree"
+      },
+      {
+        "id": "push",
+        "label": "jconfig y jpermisos: push parcial sobre lo vigente",
+        "lane": "T",
+        "icon": "mdi:code-json"
+      },
+      {
+        "id": "guarda",
+        "label": "Guarda con la auditoría de la sesión",
+        "lane": "T",
+        "icon": "mdi:content-save-outline"
+      },
+      {
+        "id": "ttd",
+        "label": "patyia_tdconsultas",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_tdconsultas",
+          "attributes": [
+            {
+              "name": "itdconsulta",
+              "type": "varchar(64)",
+              "key": "PK"
+            },
+            {
+              "name": "ntdconsulta",
+              "type": "varchar(255)"
+            },
+            {
+              "name": "instruccion",
+              "type": "text"
+            },
+            {
+              "name": "descripcion",
+              "type": "text"
+            },
+            {
+              "name": "bactivo",
+              "type": "boolean"
+            },
+            {
+              "name": "jconfig",
+              "type": "jsonb"
+            },
+            {
+              "name": "jpermisos",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhcre",
+              "type": "timestamptz",
+              "key": "AUDIT_CRE"
+            },
+            {
+              "name": "itercerocre",
+              "type": "varchar(30)",
+              "key": "AUDIT_CRE"
+            },
+            {
+              "name": "irolcre",
+              "type": "varchar(20)",
+              "key": "AUDIT_CRE"
+            },
+            {
+              "name": "icontactocre",
+              "type": "bigint",
+              "key": "AUDIT_CRE"
+            },
+            {
+              "name": "fhult",
+              "type": "timestamptz",
+              "key": "AUDIT_ULT"
+            },
+            {
+              "name": "iterceroult",
+              "type": "varchar(30)",
+              "key": "AUDIT_ULT"
+            },
+            {
+              "name": "irolult",
+              "type": "varchar(20)",
+              "key": "AUDIT_ULT"
+            },
+            {
+              "name": "icontactoult",
+              "type": "bigint",
+              "key": "AUDIT_ULT"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ok",
+        "label": "{ ok, key, updatedBy, mode, itdconsulta }",
+        "lane": "T",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      },
+      {
+        "id": "n-op",
+        "label": "Los operativos 9999.x no se borran desde la consola",
+        "shape": "comment",
+        "about": "guarda"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "petición con token"
+      },
+      {
+        "from": "ctl",
+        "to": "pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ctl",
+        "to": "d1"
+      },
+      {
+        "from": "d1",
+        "to": "lista",
+        "label": "GET"
+      },
+      {
+        "from": "d1",
+        "to": "valida",
+        "label": "POST · PUT"
+      },
+      {
+        "from": "lista",
+        "to": "ttd",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "valida",
+        "to": "d2"
+      },
+      {
+        "from": "d2",
+        "to": "anc",
+        "label": "sí"
+      },
+      {
+        "from": "d2",
+        "to": "push",
+        "label": "no"
+      },
+      {
+        "from": "anc",
+        "to": "ttd",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "anc",
+        "to": "push"
+      },
+      {
+        "from": "push",
+        "to": "guarda"
+      },
+      {
+        "from": "guarda",
+        "to": "ttd",
+        "kind": "dashed",
+        "label": "INSERT · UPDATE"
+      },
+      {
+        "from": "guarda",
+        "to": "ok"
+      },
+      {
+        "from": "lista",
+        "to": "fin"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "slug": "ruta-conversacion-resumen",
+  "module": "020-Conversaciones",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Resumen para soporte",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Soporte"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TConversacionController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      },
+      {
+        "id": "O",
+        "label": "OpenAI"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "conversación (portal)",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "conversación (portal)",
+          "stereotype": "Chat",
+          "items": [
+            "GET /resumen_conversacion/{iconversacion}"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TConversacionController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacionController",
+          "attributes": [
+            "- nTbl = patyia_conversaciones"
+          ],
+          "methods": [
+            "+ insert(): SSE",
+            "+ get() · delete()",
+            "+ getLogs() · getResumen()",
+            "+ listSimple() · list(filtro) · auditar()",
+            "+ leerCfg() · escribirCfg()",
+            "+ timerCerrarConversaciones()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "lee",
+        "label": "Lee la conversación con las reglas de lectura del detalle",
+        "lane": "T",
+        "icon": "mdi:database-search-outline"
+      },
+      {
+        "id": "tconv",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itercero",
+              "type": "varchar(50)",
+              "key": "FK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "FK"
+            },
+            {
+              "name": "bautoriza_visualizacion",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      {
+        "id": "hist",
+        "label": "Últimos maxMensajesHistorial mensajes visibles",
+        "lane": "T",
+        "icon": "mdi:history"
+      },
+      {
+        "id": "tlog",
+        "label": "patyia_conversacion_log",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversacion_log",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint"
+            },
+            {
+              "name": "content",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Tiene mensajes?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "e400",
+        "label": "400",
+        "lane": "T",
+        "icon": "mdi:message-off-outline"
+      },
+      {
+        "id": "ia",
+        "label": "Operativo 9999.2, sin streaming",
+        "lane": "T",
+        "icon": "mdi:robot-outline"
+      },
+      {
+        "id": "ai",
+        "label": "Responses · Conversations",
+        "kind": "component",
+        "lane": "O",
+        "component": {
+          "name": "Responses · Conversations",
+          "stereotype": "OpenAI",
+          "items": []
+        }
+      },
+      {
+        "id": "ok",
+        "label": "Resumen con engine, model, tokens y latencia",
+        "lane": "T",
+        "icon": "mdi:text-box-check-outline"
+      },
+      {
+        "id": "n-def",
+        "label": "Si el proveedor falla: 200 con un texto por defecto",
+        "shape": "comment",
+        "about": "ok"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "GET"
+      },
+      {
+        "from": "ctl",
+        "to": "lee"
+      },
+      {
+        "from": "lee",
+        "to": "hist"
+      },
+      {
+        "from": "hist",
+        "to": "d1"
+      },
+      {
+        "from": "lee",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "hist",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "d1",
+        "to": "e400",
+        "label": "no"
+      },
+      {
+        "from": "d1",
+        "to": "ia",
+        "label": "sí"
+      },
+      {
+        "from": "ia",
+        "to": "ai",
+        "kind": "dashed",
+        "label": "Responses"
+      },
+      {
+        "from": "ia",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "e400",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

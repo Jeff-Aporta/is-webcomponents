@@ -5,6 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import { EmbedBoxSchema, NodeEmbedSpecSchema } from "../_shared/diagram-embed.schemas.js";
 
 export const SequenceActorSpecSchema = z.object({
   id: z.string(),
@@ -16,6 +17,17 @@ export const SequenceActorSpecSchema = z.object({
 export type SequenceActorSpec = z.infer<typeof SequenceActorSpecSchema>;
 
 
+/**
+ * Subproceso que inicia un mensaje al llegar: el MISMO nodo `kind: "nested"`
+ * de `diagram-embed.schemas.ts` (src / diagram, maxW / maxH, bg) más un
+ * `title` opcional para la franja superior del recuadro.
+ */
+export const SequenceNestedSpecSchema = NodeEmbedSpecSchema.extend({
+  kind: z.literal('nested'),
+  title: z.string().optional(),
+});
+export type SequenceNestedSpec = z.infer<typeof SequenceNestedSpecSchema>;
+
 export const SequenceMessageSpecSchema = z.object({
   id: z.string(),
   from: z.string(),
@@ -26,6 +38,8 @@ export const SequenceMessageSpecSchema = z.object({
   group: z.string().optional(),
   kind: z.union([z.literal('self'), z.literal('sync'), z.literal('async'), z.literal('reply'), z.string()]).optional(),
   step: z.number(),
+  /** Recuadro con el proceso que este mensaje inicia, junto a la punta de la flecha. */
+  nested: SequenceNestedSpecSchema.optional(),
 });
 export type SequenceMessageSpec = z.infer<typeof SequenceMessageSpecSchema>;
 
@@ -112,6 +126,9 @@ export const FlatMessageSchema = z.object({
   labelW: z.number(),
   branch: z.string().optional(),
   branchFirst: z.boolean().optional(),
+  /** Tamaño del recuadro `nested` (marco completo), si el mensaje lo trae. */
+  nestedW: z.number().optional(),
+  nestedH: z.number().optional(),
 });
 export type FlatMessage = z.infer<typeof FlatMessageSchema>;
 
@@ -167,6 +184,11 @@ export const SequenceLayoutMessageSchema = z.object({
   groupTitle: z.string().optional(),
   /** Icono del grupo: en todas sus aristas, junto al índice. */
   groupIcon: z.string().optional(),
+  /** Subproceso del mensaje: spec, marco del recuadro, caja del diagrama (contain) y franja del título. */
+  nested: SequenceNestedSpecSchema.optional(),
+  nestedBox: EmbedBoxSchema.optional(),
+  nestedEmbedBox: EmbedBoxSchema.optional(),
+  nestedTitleBox: EmbedBoxSchema.optional(),
 });
 export type SequenceLayoutMessage = z.infer<typeof SequenceLayoutMessageSchema>;
 

@@ -1,0 +1,145 @@
+{
+  "slug": "ruta-traza-turno",
+  "module": "020-Conversaciones",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Traza del turno",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Portal (SSE)"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TConversacionController"
+      },
+      {
+        "id": "H",
+        "label": "Historial"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "conversación (portal)",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "conversación (portal)",
+          "stereotype": "Chat",
+          "items": [
+            "POST /conversacion"
+          ]
+        }
+      },
+      {
+        "id": "begin",
+        "label": "Emite begin",
+        "lane": "T",
+        "icon": "mdi:broadcast"
+      },
+      {
+        "id": "ev",
+        "label": "Emite un event log (seq, ms, nivel, etapa, mensaje)",
+        "lane": "T",
+        "icon": "mdi:text-box-search-outline"
+      },
+      {
+        "id": "n-ev",
+        "label": "Se repite en cada paso del pipeline",
+        "shape": "comment",
+        "about": "ev"
+      },
+      {
+        "id": "guarda",
+        "label": "Guarda el mensaje assistant con others.traza hasta ese momento",
+        "lane": "T",
+        "icon": "mdi:database-plus-outline"
+      },
+      {
+        "id": "tlog",
+        "label": "patyia_conversacion_log",
+        "kind": "tableder",
+        "lane": "H",
+        "table": {
+          "name": "patyia_conversacion_log",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint"
+            },
+            {
+              "name": "content",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "termina",
+        "label": "Emite event log · Turno terminado (con dur)",
+        "lane": "T",
+        "icon": "mdi:timer-check-outline"
+      },
+      {
+        "id": "end",
+        "label": "Emite end con meta.traza = la traza completa",
+        "lane": "T",
+        "icon": "mdi:flag-checkered"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "begin",
+        "label": "POST /conversacion"
+      },
+      {
+        "from": "begin",
+        "to": "ev"
+      },
+      {
+        "from": "ev",
+        "to": "guarda"
+      },
+      {
+        "from": "guarda",
+        "to": "termina"
+      },
+      {
+        "from": "termina",
+        "to": "end"
+      },
+      {
+        "from": "end",
+        "to": "fin"
+      },
+      {
+        "from": "guarda",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "eventos SSE"
+      }
+    ]
+  }
+}

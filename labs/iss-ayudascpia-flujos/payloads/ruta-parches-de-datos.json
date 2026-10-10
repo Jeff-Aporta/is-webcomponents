@@ -1,0 +1,188 @@
+{
+  "slug": "ruta-parches-de-datos",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Parches de datos",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "R",
+        "label": "Runner de parches · ZPatch"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "ini",
+        "label": "Inicio",
+        "shape": "start",
+        "lane": "R"
+      },
+      {
+        "id": "a",
+        "label": "El parche .sql.ts devuelve un TPatch",
+        "lane": "R",
+        "icon": "mdi:file-code-outline"
+      },
+      {
+        "id": "b",
+        "label": "¿ZPatch valida el objeto completo?",
+        "shape": "diamond",
+        "lane": "R"
+      },
+      {
+        "id": "x",
+        "label": "Falla sin escribir: va a la bandeja de errores",
+        "lane": "R",
+        "icon": "mdi:alert-octagon-outline"
+      },
+      {
+        "id": "terr",
+        "label": "patyia_errores",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_errores",
+          "attributes": [
+            {
+              "name": "ierror",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "jerror",
+              "type": "jsonb"
+            },
+            {
+              "name": "referencia",
+              "type": "varchar(200)"
+            },
+            {
+              "name": "resumen",
+              "type": "varchar(500)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "c",
+        "label": "Pasada 1: solo lee y planifica, tabla por tabla",
+        "lane": "R",
+        "icon": "mdi:clipboard-search-outline"
+      },
+      {
+        "id": "pg",
+        "label": "clientesis",
+        "kind": "component",
+        "lane": "P",
+        "component": {
+          "name": "clientesis",
+          "stereotype": "PG",
+          "items": []
+        }
+      },
+      {
+        "id": "d",
+        "label": "¿Hay bloqueos?",
+        "shape": "diamond",
+        "lane": "R"
+      },
+      {
+        "id": "f",
+        "label": "Pasada 2: aplica y cada operación vuelve a leer",
+        "lane": "R",
+        "icon": "mdi:database-sync-outline"
+      },
+      {
+        "id": "g",
+        "label": "Registra el parche en patchdb",
+        "lane": "R",
+        "icon": "mdi:database-check-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "R"
+      }
+    ],
+    "edges": [
+      {
+        "from": "ini",
+        "to": "a"
+      },
+      {
+        "from": "a",
+        "to": "b"
+      },
+      {
+        "from": "b",
+        "to": "x",
+        "label": "no"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sí"
+      },
+      {
+        "from": "c",
+        "to": "pg",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "c",
+        "to": "d"
+      },
+      {
+        "from": "d",
+        "to": "x",
+        "label": "sí"
+      },
+      {
+        "from": "d",
+        "to": "f",
+        "label": "no"
+      },
+      {
+        "from": "f",
+        "to": "pg",
+        "kind": "dashed",
+        "label": "INSERT · UPDATE"
+      },
+      {
+        "from": "f",
+        "to": "g"
+      },
+      {
+        "from": "g",
+        "to": "fin"
+      },
+      {
+        "from": "g",
+        "to": "pg",
+        "kind": "dashed",
+        "label": "INSERT patchdb"
+      },
+      {
+        "from": "x",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "x",
+        "to": "fin"
+      }
+    ]
+  }
+}

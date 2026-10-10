@@ -1,0 +1,110 @@
+{
+  "slug": "operacion-cdn-docs",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "SDK y visor de documentación (/cdn, /docs)",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Navegador / SDK",
+          "kind": "participant"
+        },
+        {
+          "id": "K",
+          "label": "ISS · TCdnController",
+          "kind": "participant"
+        },
+        {
+          "id": "S",
+          "label": "ISS · TSysValueController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "K",
+          "label": "GET /cdn/{file} (pública, sin sobre)",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "K",
+          "to": "K",
+          "label": "sin file: 400; front.ts: une front.ts y front.md (503 si no se ha generado)",
+          "kind": "self",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "K",
+          "to": "C",
+          "label": "front.ts con su Content-Type · cualquier otro archivo: 404",
+          "kind": "reply",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "C",
+          "to": "S",
+          "label": "GET /docs (?v=json | md | routes)",
+          "kind": "sync",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "S",
+          "to": "P",
+          "label": "fila doc de patyia_sys_values (routes: ids SEG del registro)",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "S",
+          "to": "C",
+          "label": "html · json · md (503 si la fila no está)",
+          "kind": "reply",
+          "step": 6
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "condition": "GET /cdn/{file}"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m4",
+            "m5",
+            "m6"
+          ],
+          "condition": "GET /docs"
+        }
+      ]
+    }
+  }
+}

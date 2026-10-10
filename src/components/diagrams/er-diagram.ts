@@ -150,7 +150,11 @@ class IswcErDiagram extends DiagramElementBase {
 
     const layout = computeErLayout(visible);
     this.layout = layout;
-    this.#orphans = styleTheme
+    // `erDiagram.orphans: false` apaga el relleno de huérfana (p. ej. una
+    // tabla suelta incrustada como nodo `tableder` en otro diagrama).
+    const payloadEr = this.payload && typeof this.payload === 'object' ? Reflect.get(this.payload, 'erDiagram') : null;
+    const marcarHuerfanas = !(payloadEr && typeof payloadEr === 'object' && Reflect.get(payloadEr, 'orphans') === false);
+    this.#orphans = styleTheme && marcarHuerfanas
       ? findOrphanEntityIds(layout.entities, layout.relations)
       : new Set();
     this.#buildSvg(layout, theme);

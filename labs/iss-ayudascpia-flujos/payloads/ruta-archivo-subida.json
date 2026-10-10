@@ -1,0 +1,287 @@
+{
+  "slug": "ruta-archivo-subida",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Subida de archivos (POST /archivo)",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Portal / app"
+      },
+      {
+        "id": "F",
+        "label": "ISS · TFileStorageController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      },
+      {
+        "id": "R",
+        "label": "Cloudflare R2"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "operación",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "operación",
+          "stereotype": "Ops",
+          "items": [
+            "POST /archivo"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TFileStorageController",
+        "kind": "class",
+        "lane": "F",
+        "class": {
+          "name": "TFileStorageController",
+          "attributes": [
+            "- nTbl = patyia_files_storage"
+          ],
+          "methods": [
+            "+ upload(): archivo en R2"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "alm",
+        "label": "TGenAlmacenamientoController",
+        "kind": "class",
+        "lane": "F",
+        "class": {
+          "name": "TGenAlmacenamientoController",
+          "attributes": [
+            "- nTbl = gen_almacenamientos (solo lectura)"
+          ],
+          "methods": [
+            "+ cuentaPatyIA() · cliente() «static»"
+          ],
+          "fill": "service"
+        }
+      },
+      {
+        "id": "val",
+        "label": "Body estricto (400); JWT y SEG ya resueltos por la puerta",
+        "lane": "F",
+        "icon": "mdi:shield-check-outline"
+      },
+      {
+        "id": "bytes",
+        "label": "Resuelve los bytes: decodifica o descarga",
+        "lane": "F",
+        "icon": "mdi:download-outline"
+      },
+      {
+        "id": "cuenta",
+        "label": "Cuenta de almacenamiento (sin cuenta: 503)",
+        "lane": "F",
+        "icon": "mdi:key-outline"
+      },
+      {
+        "id": "talm",
+        "label": "gen_almacenamientos",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "gen_almacenamientos",
+          "attributes": [
+            {
+              "name": "icuenta",
+              "type": "smallint",
+              "key": "PK"
+            },
+            {
+              "name": "ncuenta",
+              "type": "varchar"
+            },
+            {
+              "name": "itdcuenta",
+              "type": "smallint"
+            },
+            {
+              "name": "dominio",
+              "type": "varchar"
+            },
+            {
+              "name": "bpublico",
+              "type": "boolean"
+            },
+            {
+              "name": "jsonkeys",
+              "type": "jsonb"
+            }
+          ]
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Imagen o audio?",
+        "shape": "diamond",
+        "lane": "F"
+      },
+      {
+        "id": "img",
+        "label": "Variantes thumb, med y original (jpeg, lado máx. 1280)",
+        "lane": "F",
+        "icon": "mdi:image-multiple-outline"
+      },
+      {
+        "id": "aud",
+        "label": "Duración por ffprobe; solo el original",
+        "lane": "F",
+        "icon": "mdi:waveform"
+      },
+      {
+        "id": "r2",
+        "label": "Cloudflare R2",
+        "kind": "component",
+        "lane": "R",
+        "component": {
+          "name": "Cloudflare R2",
+          "stereotype": "S3",
+          "items": []
+        }
+      },
+      {
+        "id": "reg",
+        "label": "ifile en base 36 y registro del archivo",
+        "lane": "F",
+        "icon": "mdi:database-plus-outline"
+      },
+      {
+        "id": "tfile",
+        "label": "patyia_files_storage",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_files_storage",
+          "attributes": [
+            {
+              "name": "ifile",
+              "type": "varchar(32)",
+              "key": "PK"
+            },
+            {
+              "name": "jfile",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhcre",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ok",
+        "label": "{ ifile, jfile, fhcre } con URLs firmadas (7 días)",
+        "lane": "F",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "F"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "POST /archivo"
+      },
+      {
+        "from": "ctl",
+        "to": "alm",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ctl",
+        "to": "val"
+      },
+      {
+        "from": "val",
+        "to": "bytes"
+      },
+      {
+        "from": "bytes",
+        "to": "cuenta"
+      },
+      {
+        "from": "cuenta",
+        "to": "d1"
+      },
+      {
+        "from": "cuenta",
+        "to": "talm",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "d1",
+        "to": "img",
+        "label": "imagen"
+      },
+      {
+        "from": "d1",
+        "to": "aud",
+        "label": "audio"
+      },
+      {
+        "from": "img",
+        "to": "r2",
+        "kind": "dashed",
+        "label": "PUT ×3"
+      },
+      {
+        "from": "aud",
+        "to": "r2",
+        "kind": "dashed",
+        "label": "PUT"
+      },
+      {
+        "from": "img",
+        "to": "reg"
+      },
+      {
+        "from": "aud",
+        "to": "reg"
+      },
+      {
+        "from": "reg",
+        "to": "tfile",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "reg",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

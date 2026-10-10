@@ -8,104 +8,75 @@
   },
   "payload": {
     "sequence": {
-      "title": "ISS PatyIA · Tiquete sobre una conversación (POST /tiquete)",
       "actors": [
         {
-          "id": "u",
-          "label": "Cliente",
-          "kind": "actor",
-          "icon": "mdi:account"
+          "id": "C",
+          "label": "Portal",
+          "kind": "participant"
         },
         {
-          "id": "t",
-          "label": "TConversationTicketController",
-          "kind": "participant",
-          "icon": "mdi:ticket-confirmation"
+          "id": "T",
+          "label": "ISS · TConversationTicketController",
+          "kind": "participant"
         },
         {
-          "id": "pg",
+          "id": "P",
           "label": "PostgreSQL",
-          "kind": "participant",
-          "icon": "mdi:database"
+          "kind": "participant"
         }
       ],
-      "groups": [
-        {
-          "id": "g-http",
-          "name": "Petición y respuesta",
-          "color": "ticket",
-          "icon": "mdi:swap-horizontal"
-        },
-        {
-          "id": "g-ctl",
-          "name": "Validación",
-          "color": "neutral",
-          "icon": "mdi:cog-outline"
-        },
-        {
-          "id": "g-db",
-          "name": "Persistencia en PostgreSQL",
-          "color": "data",
-          "icon": "mdi:database"
-        },
-        {
-          "id": "g-err",
-          "name": "Salida de error",
-          "color": "error",
-          "icon": "mdi:alert-circle-outline"
-        }
-      ],
-      "fragments": [
-        {
-          "id": "f-alta",
-          "kind": "region",
-          "name": "alta del tiquete",
-          "messages": [
-            "m6",
-            "m7"
-          ],
-          "condition": "solo el dueño puede cerrar la conversación"
-        }
-      ],
-      "preamble": [
+      "messages": [
         {
           "id": "m1",
-          "from": "u",
-          "to": "t",
-          "label": "crea un tiquete sobre la conversación (tema, clasificador, cerrar, autorizar visualización)",
+          "from": "C",
+          "to": "T",
+          "label": "POST /tiquete (iconversacion, itiquete, tema, banderas)",
           "kind": "sync",
-          "group": "g-http"
+          "step": 1
         },
         {
           "id": "m2",
-          "from": "t",
-          "to": "t",
-          "label": "ya pasó la puerta SEG (POST:/tiquete = { protected: true }, solo JWT); valida el cuerpo y recorta tema y clasificador a 30",
+          "from": "T",
+          "to": "T",
+          "label": "body estricto, iconversacion e itiquete enteros positivos (400)",
           "kind": "self",
-          "group": "g-ctl"
+          "step": 2
         },
         {
           "id": "m3",
-          "from": "t",
-          "to": "pg",
-          "label": "busca la conversación",
+          "from": "T",
+          "to": "P",
+          "label": "lee la conversación",
           "kind": "sync",
-          "group": "g-db"
+          "step": 3
         }
       ],
       "alt": {
-        "name": "según el estado de la conversación",
+        "name": "alt",
         "branches": [
+          {
+            "condition": "no es del dueño estricto",
+            "messages": [
+              {
+                "id": "m4",
+                "from": "T",
+                "to": "C",
+                "label": "401 · Solo el propietario puede crearle tiquetes",
+                "kind": "reply",
+                "step": 4
+              }
+            ]
+          },
           {
             "condition": "no existe",
             "messages": [
               {
-                "id": "m4",
-                "from": "t",
-                "to": "u",
-                "label": "404 · la conversación no existe (500 si no se pudo leer)",
+                "id": "m5",
+                "from": "T",
+                "to": "C",
+                "label": "404 (500 si no se pudo leer)",
                 "kind": "reply",
-                "group": "g-err"
+                "step": 5
               }
             ]
           },
@@ -113,47 +84,46 @@
             "condition": "cerrada o eliminada",
             "messages": [
               {
-                "id": "m5",
-                "from": "t",
-                "to": "u",
-                "label": "400 · la conversación está cerrada o eliminada",
+                "id": "m6",
+                "from": "T",
+                "to": "C",
+                "label": "400",
                 "kind": "reply",
-                "group": "g-err"
+                "step": 6
               }
             ]
           },
           {
-            "condition": "abierta",
+            "condition": "abierta y del dueño",
             "messages": [
               {
-                "id": "m6",
-                "from": "t",
-                "to": "pg",
-                "label": "crea el tiquete (nuevo id; si ya existe, no duplica)",
-                "kind": "sync",
-                "group": "g-db"
-              },
-              {
                 "id": "m7",
-                "from": "t",
-                "to": "pg",
-                "label": "si es el dueño: cierra la conversación y/o autoriza su visualización",
+                "from": "T",
+                "to": "P",
+                "label": "inserta el tiquete (si ya existe ese número, lo relee)",
                 "kind": "sync",
-                "group": "g-db"
+                "step": 7
               },
               {
                 "id": "m8",
-                "from": "t",
-                "to": "u",
-                "label": "201 · tiquete creado con sus efectos",
+                "from": "T",
+                "to": "P",
+                "label": "cierra y/o autoriza la visualización, si se pidió",
+                "kind": "sync",
+                "step": 8
+              },
+              {
+                "id": "m9",
+                "from": "T",
+                "to": "C",
+                "label": "{ ticket, sideEffects }",
                 "kind": "reply",
-                "group": "g-http"
+                "step": 9
               }
             ]
           }
         ]
-      },
-      "epilogue": []
+      }
     }
   }
 }

@@ -1,0 +1,125 @@
+{
+  "slug": "parches-de-datos",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "direction": "TB",
+    "nodes": [
+      {
+        "id": "inicio",
+        "label": "Inicio",
+        "shape": "start"
+      },
+      {
+        "id": "A",
+        "label": "Parche .sql.ts devuelve TPatch",
+        "shape": "rect"
+      },
+      {
+        "id": "B",
+        "label": "ZPatch valida el objeto completo",
+        "shape": "diamond"
+      },
+      {
+        "id": "X",
+        "label": "Falla sin escribir · bandeja",
+        "shape": "rect"
+      },
+      {
+        "id": "C",
+        "label": "Pasada 1: solo lee y planifica, tabla por tabla",
+        "shape": "rect"
+      },
+      {
+        "id": "D",
+        "label": "¿Hay bloqueos?",
+        "shape": "diamond"
+      },
+      {
+        "id": "F",
+        "label": "Pasada 2: aplica y cada operación vuelve a leer",
+        "shape": "rect"
+      },
+      {
+        "id": "G",
+        "label": "Registra el parche en patchdb",
+        "shape": "rect"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e0",
+        "from": "inicio",
+        "to": "A",
+        "kind": "solid"
+      },
+      {
+        "id": "e1",
+        "from": "A",
+        "to": "B",
+        "kind": "solid"
+      },
+      {
+        "id": "e2",
+        "from": "B",
+        "to": "X",
+        "kind": "solid",
+        "label": "no"
+      },
+      {
+        "id": "e3",
+        "from": "B",
+        "to": "C",
+        "kind": "solid",
+        "label": "sí"
+      },
+      {
+        "id": "e4",
+        "from": "C",
+        "to": "D",
+        "kind": "solid"
+      },
+      {
+        "id": "e5",
+        "from": "D",
+        "to": "X",
+        "kind": "solid",
+        "label": "sí"
+      },
+      {
+        "id": "e6",
+        "from": "D",
+        "to": "F",
+        "kind": "solid",
+        "label": "no"
+      },
+      {
+        "id": "e9",
+        "from": "F",
+        "to": "G",
+        "kind": "solid"
+      },
+      {
+        "id": "f1",
+        "from": "X",
+        "to": "fin",
+        "kind": "solid"
+      },
+      {
+        "id": "f3",
+        "from": "G",
+        "to": "fin",
+        "kind": "solid"
+      }
+    ]
+  }
+}

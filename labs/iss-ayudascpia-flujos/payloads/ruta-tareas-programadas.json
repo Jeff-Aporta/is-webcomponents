@@ -1,0 +1,319 @@
+{
+  "slug": "ruta-tareas-programadas",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Tareas programadas",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "H",
+        "label": "Host (func start)"
+      },
+      {
+        "id": "R",
+        "label": "Runner de parches"
+      },
+      {
+        "id": "T",
+        "label": "Timers"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "ini",
+        "label": "Inicio",
+        "shape": "start",
+        "lane": "H"
+      },
+      {
+        "id": "start",
+        "label": "app.hook.appStart, sin esperar el trabajo",
+        "lane": "H",
+        "icon": "mdi:rocket-launch-outline"
+      },
+      {
+        "id": "fork",
+        "label": "",
+        "shape": "bar",
+        "lane": "H"
+      },
+      {
+        "id": "runner",
+        "label": "applyPendingPatches(): patchdb y parches pendientes, por controllers",
+        "lane": "R",
+        "icon": "mdi:database-cog-outline"
+      },
+      {
+        "id": "estado",
+        "label": "Publica el estado del runner (/api/info)",
+        "lane": "H",
+        "icon": "mdi:information-outline"
+      },
+      {
+        "id": "barrido",
+        "label": "Barrido de cierre inmediato",
+        "lane": "H",
+        "icon": "mdi:broom"
+      },
+      {
+        "id": "fin-arranque",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "H"
+      },
+      {
+        "id": "cconv",
+        "label": "TConversacionController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacionController",
+          "attributes": [
+            "- nTbl = patyia_conversaciones"
+          ],
+          "methods": [
+            "+ insert(): SSE",
+            "+ get() · delete()",
+            "+ getLogs() · getResumen()",
+            "+ listSimple() · list(filtro) · auditar()",
+            "+ leerCfg() · escribirCfg()",
+            "+ timerCerrarConversaciones()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "clog",
+        "label": "TConversationLogController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversationLogController",
+          "attributes": [
+            "- nTbl = patyia_conversacion_log"
+          ],
+          "methods": [
+            "+ mensajes(iconversacion)",
+            "+ contenido(iconversacion)",
+            "+ purgarLogConversaciones()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "flag",
+        "label": "Lee runtime.timers (flag ausente = encendido)",
+        "lane": "T",
+        "icon": "mdi:timer-cog-outline"
+      },
+      {
+        "id": "n-cada",
+        "label": "Cada 30 minutos, los dos timers en paralelo",
+        "shape": "comment",
+        "about": "flag"
+      },
+      {
+        "id": "tsys",
+        "label": "patyia_sys_values",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_sys_values",
+          "attributes": [
+            {
+              "name": "isystemkey",
+              "type": "varchar(128)",
+              "key": "PK"
+            },
+            {
+              "name": "jvalue",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Flag encendido?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "nada",
+        "label": "Sale sin hacer nada",
+        "lane": "T",
+        "icon": "mdi:skip-next-outline"
+      },
+      {
+        "id": "cierra",
+        "label": "Cierra las conversaciones inactivas",
+        "lane": "T",
+        "icon": "mdi:archive-lock-outline"
+      },
+      {
+        "id": "purga",
+        "label": "Purga el log de conversaciones",
+        "lane": "T",
+        "icon": "mdi:delete-sweep-outline"
+      },
+      {
+        "id": "tconv",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itdestado",
+              "type": "smallint"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamp"
+            }
+          ]
+        }
+      },
+      {
+        "id": "tlog",
+        "label": "patyia_conversacion_log",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversacion_log",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint"
+            },
+            {
+              "name": "content",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "ini",
+        "to": "start"
+      },
+      {
+        "from": "start",
+        "to": "fork"
+      },
+      {
+        "from": "fork",
+        "to": "runner",
+        "label": "trabajo de arranque en segundo plano"
+      },
+      {
+        "from": "runner",
+        "to": "estado"
+      },
+      {
+        "from": "estado",
+        "to": "barrido"
+      },
+      {
+        "from": "barrido",
+        "to": "fin-arranque"
+      },
+      {
+        "from": "barrido",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
+      },
+      {
+        "from": "fork",
+        "to": "cconv",
+        "label": "timers"
+      },
+      {
+        "from": "cconv",
+        "to": "clog",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "cconv",
+        "to": "flag"
+      },
+      {
+        "from": "flag",
+        "to": "d1"
+      },
+      {
+        "from": "flag",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "d1",
+        "to": "nada",
+        "label": "false"
+      },
+      {
+        "from": "d1",
+        "to": "cierra",
+        "label": "encendido"
+      },
+      {
+        "from": "cierra",
+        "to": "purga"
+      },
+      {
+        "from": "purga",
+        "to": "fin"
+      },
+      {
+        "from": "cierra",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
+      },
+      {
+        "from": "purga",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "DELETE"
+      },
+      {
+        "from": "nada",
+        "to": "fin"
+      }
+    ]
+  }
+}

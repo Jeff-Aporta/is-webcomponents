@@ -1,0 +1,95 @@
+{
+  "$schema": "iswc-diagram-theme/v1",
+  "id": "insoft-flow",
+  "kind": "flowchart",
+  "label": "InSoft Flowchart / Activity",
+  "font": {
+    "family": "\"Poppins\", \"Inter\", system-ui, sans-serif",
+    "import": "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  },
+  "canvas": {
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#475569"
+  },
+  "edge": {
+    "stroke": "#334155",
+    "strokeWidth": 1.1,
+    "labelBg": "#FFFFFF",
+    "hideLabels": false
+  },
+  "cluster": {
+    "border": "#334155",
+    "borderWidth": 1,
+    "radius": 14,
+    "palettes": {
+      "primary": "#7ACFF4",
+      "secondary": "#00C3C4",
+      "accent": "#C0C000",
+      "neutral": "#BFC0C1",
+      "warm": "#EAB6B0",
+      "cool": "#C1BFFF",
+      "soft": "#BCFFBB",
+      "panel": "#FFFFC1"
+    },
+    "fallback": "#7ACFF4"
+  },
+  "fills": {
+    "service": "#BCFFBB",
+    "app": "#C1BFFF",
+    "store": "#EAB6B0",
+    "leaf": "#FFF2AF",
+    "external": "#BFFFC0",
+    "paper": "#FFFFFF"
+  },
+  "lines": {
+    "ink": "#0F172A",
+    "slate": "#334155"
+  },
+  "flow": {
+    "actionFill": "primary",
+    "actionBorder": "slate",
+    "actionText": "ink",
+    "borderWidth": 1,
+    "radius": 0,
+    "decisionFill": "primary",
+    "startFill": "ink",
+    "endFill": "ink",
+    "edgeStroke": "slate",
+    "edgeWidth": 1.1,
+    "labelText": "ink",
+    "nestedBg": "paper",
+    "fontSize": 11,
+    "fontWeight": 500,
+    "hueRotate": true,
+    "pillTone": "entity",
+    "dashFlow": true,
+    "laneLine": "#7DD3FC"
+  },
+  "diagramTheme": {
+    "text": "#0F172A",
+    "muted": "#475569",
+    "grid": "rgba(15,23,42,0.45)",
+    "panel": "transparent",
+    "border": "#334155",
+    "accent": "#334155",
+    "altFill": "rgba(122,207,244,0.18)",
+    "altBorder": "#334155",
+    "chipFill": "#FFFFFF",
+    "chipFillSoft": "rgba(255,255,255,0.6)",
+    "dotText": "#FFFFFF"
+  },
+  "dark": {
+    "canvas": { "background": "#0B1220", "text": "#E2E8F0", "muted": "#94A3B8" },
+    "edge": { "stroke": "#CBD5E1", "labelBg": "#0B1220" },
+    "cluster": {
+      "border": "#CBD5E1",
+      "palettes": { "primary": "#3A8FB5", "secondary": "#1A8A8B", "accent": "#8A8A20", "neutral": "#6B6C6D", "warm": "#A85A62", "cool": "#6B6BB5", "soft": "#2F6B3A", "panel": "#8B6B2B" },
+      "fallback": "#3A8FB5"
+    },
+    "fills": { "paper": "#0B1220" },
+    "lines": { "ink": "#E2E8F0", "slate": "#CBD5E1", "deep": "#0B1220" },
+    "flow": { "actionText": "deep", "laneLine": "#0EA5E9" },
+    "diagramTheme": { "text": "#E2E8F0", "muted": "#94A3B8", "grid": "rgba(226,232,240,0.4)", "border": "#CBD5E1", "accent": "#CBD5E1", "altFill": "rgba(58,143,181,0.25)", "altBorder": "#CBD5E1", "chipFill": "#0B1220", "chipFillSoft": "rgba(11,18,32,0.6)", "dotText": "#0B1220" }
+  }
+}

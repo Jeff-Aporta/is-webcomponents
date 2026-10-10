@@ -15,8 +15,10 @@ import {
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
+import { fitContain, nestedMaxSize, readNodeEmbed } from '../_shared/diagram-embed.js';
+import type { EmbedBox, EmbedSize } from '../_shared/diagram-embed.schemas.js';
 import type { DiagramTheme } from './diagram-types.js';
-import type { SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "./sequence-spec.schemas.js";
+import type { SequenceNestedSpec, SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "./sequence-spec.schemas.js";
 import { SequenceFragmentSpecSchema } from "./sequence-spec.schemas.js";
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
@@ -151,7 +153,18 @@ function readMessage(raw: Record<string, unknown>, fallbackStep: number): Sequen
     // degenerado que cruzaba la lifeline hacia atrás.
     kind: (raw.kind ?? (from && from === to ? 'self' : 'sync')) as SequenceMessageSpec['kind'],
     step: Number(raw.step ?? fallbackStep),
+    ...readNested(raw.nested),
   };
+}
+
+/** `nested` del mensaje: el nodo `kind: "nested"` del contrato común (+ `title`). */
+function readNested(raw: unknown): { nested?: SequenceNestedSpec } {
+  const r = asRecord(raw);
+  if (!Object.keys(r).length) return {};
+  const embed = readNodeEmbed({ ...r, kind: 'nested' });
+  if (!embed) return {};
+  const title = typeof r.title === 'string' && r.title.trim() ? r.title.trim() : undefined;
+  return { nested: { ...embed, kind: 'nested', ...(title ? { title } : {}) } };
 }
 
 function readGroups(seq: Record<string, unknown>): SequenceGroupSpec[] | undefined {
@@ -279,6 +292,10 @@ function sequenceMessageToJson(m: SequenceMessageSpec): Record<string, unknown> 
   if (m.log) row.log = normalizeSequenceLog(m.log);
   if (m.description) row.desc = m.description;
   if (m.group) row.group = m.group;
+  if (m.nested) {
+    const { kind: _kind, ...nested } = m.nested;
+    row.nested = nested;
+  }
   return row;
 }
 
@@ -393,6 +410,27 @@ const ALT_BRANCH_HEAD = 28;
 /** La primera condición viaja en la pestaña del alt: no reserva cabecera propia. */
 const ALT_HEAD = 0;
 
+/** Recuadro `nested` en la llegada de un mensaje: padding, franja del título y separaciones. */
+const NESTED_PAD = 8;
+const NESTED_TITLE_H = 20;
+/** Separación con la lifeline destino y bajo la flecha. */
+const NESTED_GAP_X = 8;
+const NESTED_GAP_Y = 10;
+
+/** Marco del recuadro `nested`: el diagrama encajado (contain) + padding + título. */
+function nestedFrame(n: SequenceNestedSpec, natural: EmbedSize | undefined): { w: number; h: number; inner: EmbedSize; titleH: number } {
+  const max = nestedMaxSize(n);
+  const inner = fitContain(natural ?? max, max);
+  const titleH = n.title ? NESTED_TITLE_H : 0;
+  const titleW = n.title ? (LABEL_MEASURE ? LABEL_MEASURE(n.title) * 1.15 : n.title.length * 7) + NESTED_PAD * 2 : 0;
+  return {
+    w: snapDiagramGrid(Math.max(inner.w + NESTED_PAD * 2, titleW)),
+    h: Math.ceil(NESTED_PAD + titleH + inner.h + NESTED_PAD),
+    inner,
+    titleH,
+  };
+}
+
 /** Ancho de la caja del actor según su etiqueta (descuenta tokens {{icon}}). */
 function actorBoxWidth(label: string, _kind: string): number {
   const plain = richTextPlain(label);
@@ -421,6 +459,7 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[], boxOf: Array<
       if (f.kind === 'self') {
         rightMargin = Math.max(rightMargin, LOOP_W + 12 + f.labelW + 8);
       }
+      if (f.nestedW) rightMargin = Math.max(rightMargin, NESTED_GAP_X + f.nestedW + 12);
     }
     return { x: [x0], rightMargin, selfSide };
   }
@@ -429,6 +468,8 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[], boxOf: Array<
   const selfExtent: number[] = new Array(n).fill(0);
   for (const f of flat) {
     if (f.kind === 'self') selfExtent[f.fromIdx] = Math.max(selfExtent[f.fromIdx], LOOP_W + 12 + f.labelW);
+    // El recuadro `nested` va al mismo costado que el self-loop de su lifeline destino.
+    if (f.nestedW) selfExtent[f.toIdx] = Math.max(selfExtent[f.toIdx], NESTED_GAP_X + f.nestedW);
   }
   // El último actor dibuja su self-loop hacia la izquierda (no hay columna a la derecha).
   selfSide[n - 1] = -1;
@@ -468,7 +509,7 @@ function layoutActorPositions(boxW: number[], flat: FlatMessage[], boxOf: Array<
   return { x, rightMargin, selfSide };
 }
 
-export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelCharW?: number; footer?: boolean; measure?: (texto: string) => number } = {}): SequenceLayout {
+export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelCharW?: number; footer?: boolean; measure?: (texto: string) => number; embeds?: Record<string, EmbedSize> } = {}): SequenceLayout {
   // Poppins a 10 px es más ancha que la monoespaciada por defecto: el chip
   // se dimensiona con el ancho real de la fuente para que el texto no se salga.
   LABEL_CHAR_W = opts.labelCharW ?? 6.1;
@@ -507,7 +548,11 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
       return null;
     }
     const lb = labelBox(m.label);
-    return { m, kind, fromIdx, toIdx: toIdx ?? fromIdx, labelW: lb.w, labelLines: lb.lines, branch, branchFirst } as FlatMessage;
+    const nf = m.nested ? nestedFrame(m.nested, opts.embeds?.[m.id]) : null;
+    return {
+      m, kind, fromIdx, toIdx: toIdx ?? fromIdx, labelW: lb.w, labelLines: lb.lines, branch, branchFirst,
+      ...(nf ? { nestedW: nf.w, nestedH: nf.h } : {}),
+    } as FlatMessage;
   };
   const pushFlat = (m: SequenceMessageSpec, b?: string, first?: boolean): void => {
     const f = toFlat(m, b, first ?? false);
@@ -622,21 +667,27 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   // La pestaña del `alt` lleva título: la primera condición va debajo de
   // ella, así que el marco abre una cabecera propia.
   if (altEnd > altStart) { headGap[altStart]! += FRAG_HEAD + ALT_HEAD; footGap[altEnd - 1]! += fragFoot; }
+  // Recuadro `nested`: cuelga bajo la flecha; la fila siguiente (y su chip) baja lo necesario.
+  const nestedTop = titled ? 30 : NESTED_GAP_Y;
+  const nestedGap: number[] = flat.map((f) => (f.nestedH ? Math.max(0, nestedTop + f.nestedH + 32 - rowH) : 0));
   const rowOffset: number[] = [];
   let acc = 0;
   for (let r = 0; r < flat.length; r++) {
     acc += headGap[r]!;
     rowOffset.push(acc);
-    acc += footGap[r]!;
+    acc += footGap[r]! + nestedGap[r]!;
   }
   const yAt = (r: number): number => snapDiagramGrid(messagesTop + r * rowH + (rowOffset[r] ?? acc));
   /** Borde inferior de lo que ocupa una fila (línea, o icono + título bajo el índice). */
-  const rowBottom = (r: number): number => yAt(r) + (titled ? 28 : 10);
+  const rowBottom = (r: number): number => yAt(r) + Math.max(titled ? 28 : 10, flat[r]?.nestedH ? nestedTop + flat[r]!.nestedH! : 0);
   const rowCount = flat.length;
   // Abajo: espacio para el título bajo el último índice + margen con el pie.
   // El pie de las regiones que cierran en la última fila (anidadas incluidas)
   // también empuja el final: ningún marco toca las cabeceras repetidas al pie.
-  const lifelineY2 = snapDiagramGrid((rowCount ? yAt(rowCount - 1) + (footGap[rowCount - 1] ?? 0) : lifelineY1 + 40) + (titled ? 56 : 36));
+  const lifelineY2 = snapDiagramGrid(Math.max(
+    (rowCount ? yAt(rowCount - 1) + (footGap[rowCount - 1] ?? 0) : lifelineY1 + 40) + (titled ? 56 : 36),
+    rowCount ? rowBottom(rowCount - 1) + (footGap[rowCount - 1] ?? 0) + 16 : 0,
+  ));
   // Cabeceras repetidas al pie: el payload manda; si no dice, el tema.
   const footer = spec.footer ?? opts.footer ?? false;
   const footerY = footer ? lifelineY2 + 24 : undefined;
@@ -685,7 +736,24 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
     }
     applyRectCost(g, labelX, labelY, f.labelW, chipH, 6, true);
 
+    // Subproceso: recuadro pegado a la punta, al costado libre de la lifeline destino.
+    let nestedFields: Partial<SequenceLayoutMessage> = {};
+    if (f.m.nested && f.nestedW && f.nestedH) {
+      const nf = nestedFrame(f.m.nested, opts.embeds?.[f.m.id]);
+      const side = actors.length > 1 ? (selfSide[f.toIdx] ?? 1) : 1;
+      const bx = side === 1 ? toX + NESTED_GAP_X : toX - NESTED_GAP_X - nf.w;
+      const by = y + nestedTop;
+      const box: EmbedBox = { x: bx, y: by, w: nf.w, h: nf.h };
+      nestedFields = {
+        nested: f.m.nested,
+        nestedBox: box,
+        nestedEmbedBox: { x: bx + (nf.w - nf.inner.w) / 2, y: by + NESTED_PAD + nf.titleH, w: nf.inner.w, h: nf.inner.h },
+        ...(nf.titleH ? { nestedTitleBox: { x: bx, y: by, w: nf.w, h: NESTED_PAD + nf.titleH } } : {}),
+      };
+    }
+
     messages.push({
+      ...nestedFields,
       id: f.m.id,
       // Siempre el `step` propio del mensaje (ya resuelto en `readMessage`
       // con su fallback ordinal) — nunca un contador compartido que se
@@ -739,6 +807,10 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
       x0 = Math.min(x0, m.labelX - 8 + inset);
       x1 = Math.max(x1, m.labelX + f.labelW + 8 - inset);
       if (f.kind === 'self') x1 = Math.max(x1, m.arrowTipX + LOOP_W + 8);
+      if (m.nestedBox) {
+        x0 = Math.min(x0, m.nestedBox.x - 8 + inset);
+        x1 = Math.max(x1, m.nestedBox.x + m.nestedBox.w + 8 - inset);
+      }
     }
     const firstChip = Math.min(...rowsIn.map((f) => messages[flat.indexOf(f)]!.labelY));
     // El hueco acumulado de cabecera/pie reparte el aire entre regiones
@@ -763,8 +835,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
     let x0 = (ax[lo] ?? 0) - (boxW[lo] ?? 0) / 2 - 8;
     let x1 = (ax[hi] ?? 0) + (boxW[hi] ?? 0) / 2 + 8;
     for (const f of inAlt) {
-      x0 = Math.min(x0, messages[flat.indexOf(f)]!.labelX - 8);
-      x1 = Math.max(x1, messages[flat.indexOf(f)]!.labelX + f.labelW + 8);
+      const m = messages[flat.indexOf(f)]!;
+      x0 = Math.min(x0, m.labelX - 8, m.nestedBox ? m.nestedBox.x - 8 : Infinity);
+      x1 = Math.max(x1, m.labelX + f.labelW + 8, m.nestedBox ? m.nestedBox.x + m.nestedBox.w + 8 : -Infinity);
     }
     const firstChip = Math.min(...inAlt.map((f) => messages[flat.indexOf(f)]!.labelY));
     // Nunca por encima de la fila anterior (+ su pie de región): el marco
@@ -804,6 +877,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   for (const b of partBoxes) W = Math.max(W, b.x + b.w + 16);
   if (altBox) W = Math.max(W, altBox.x + altBox.w + 16);
   for (const fr of fragments) W = Math.max(W, fr.x + fr.w + 16);
+  for (const m of messages) if (m.nestedBox) W = Math.max(W, m.nestedBox.x + m.nestedBox.w + 16);
   // Centrado: el rectángulo de unión de lo pintado (cajas de actores y de
   // participantes, regiones, alt y notas) queda centrado en el lienzo: el
   // margen derecho iguala al izquierdo. Con leyenda lateral no aplica.
@@ -814,6 +888,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
       ...fragments.map((fr) => fr.x),
       ...(altBox ? [altBox.x] : []),
       ...messages.map((m) => m.labelX),
+      ...messages.flatMap((m) => (m.nestedBox ? [m.nestedBox.x] : [])),
     ];
     const rights = [
       ...actorLayouts.map((a, i) => a.x + (boxW[i] ?? 0) / 2),
@@ -821,6 +896,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
       ...fragments.map((fr) => fr.x + fr.w),
       ...(altBox ? [altBox.x + altBox.w] : []),
       ...messages.map((m) => m.labelX + m.labelW),
+      ...messages.flatMap((m) => (m.nestedBox ? [m.nestedBox.x + m.nestedBox.w] : [])),
     ];
     const minX = Math.max(0, Math.min(...lefts));
     const maxX = Math.max(...rights);

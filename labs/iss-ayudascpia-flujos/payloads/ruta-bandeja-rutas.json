@@ -1,0 +1,228 @@
+{
+  "slug": "ruta-bandeja-rutas",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Rutas de la bandeja de errores",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Front / agente"
+      },
+      {
+        "id": "E",
+        "label": "ISS · TErrorController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "operación",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "operación",
+          "stereotype": "Ops",
+          "items": [
+            "POST /error",
+            "GET|DELETE /errores"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TErrorController",
+        "kind": "class",
+        "lane": "E",
+        "class": {
+          "name": "TErrorController",
+          "attributes": [
+            "- nTbl = patyia_errores"
+          ],
+          "methods": [
+            "+ insert() · registrar()",
+            "+ listSimple() · deleteBatch()",
+            "+ purgarErroresAtendidos()",
+            "+ applyEndpointWithErrorCapture() «static»",
+            "+ capturarRespuesta() «static»"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "pojo",
+        "label": "TError",
+        "kind": "class",
+        "lane": "E",
+        "class": {
+          "name": "TError",
+          "stereotype": "patyia_errores",
+          "attributes": [
+            "+ ierror «PK»",
+            "+ jerror: jsonb",
+            "+ batendido · referencia"
+          ],
+          "fill": "leaf"
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Qué ruta?",
+        "shape": "diamond",
+        "lane": "E"
+      },
+      {
+        "id": "norm",
+        "label": "Normaliza el reporte y censura secretos; tope de tamaño",
+        "lane": "E",
+        "icon": "mdi:eye-off-outline"
+      },
+      {
+        "id": "ins",
+        "label": "Registra o devuelve la abierta con esa referencia",
+        "lane": "E",
+        "icon": "mdi:database-plus-outline"
+      },
+      {
+        "id": "lst",
+        "label": "Las abiertas, más antiguas primero, con el instructivo",
+        "lane": "E",
+        "icon": "mdi:inbox-outline"
+      },
+      {
+        "id": "del",
+        "label": "Borra el lote: atender es borrar",
+        "lane": "E",
+        "icon": "mdi:delete-sweep-outline"
+      },
+      {
+        "id": "terr",
+        "label": "patyia_errores",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_errores",
+          "attributes": [
+            {
+              "name": "ierror",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "jerror",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhcre",
+              "type": "timestamp"
+            },
+            {
+              "name": "referencia",
+              "type": "varchar(200)"
+            },
+            {
+              "name": "resumen",
+              "type": "varchar(500)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ok",
+        "label": "Respuesta",
+        "lane": "E",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "E"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "petición"
+      },
+      {
+        "from": "ctl",
+        "to": "pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ctl",
+        "to": "d1"
+      },
+      {
+        "from": "d1",
+        "to": "norm",
+        "label": "POST /error"
+      },
+      {
+        "from": "d1",
+        "to": "lst",
+        "label": "GET /errores"
+      },
+      {
+        "from": "d1",
+        "to": "del",
+        "label": "DELETE /errores"
+      },
+      {
+        "from": "norm",
+        "to": "ins"
+      },
+      {
+        "from": "ins",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "lst",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "del",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "DELETE"
+      },
+      {
+        "from": "ins",
+        "to": "ok"
+      },
+      {
+        "from": "lst",
+        "to": "ok"
+      },
+      {
+        "from": "del",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

@@ -263,12 +263,12 @@ Deno.test('router: con candidatos elige la pareja de puertos más barata, no rep
 
 Deno.test('routing-costs: defaults válidos, sobreescritura parcial profunda y valor inválido ignorado', async () => {
   const { ROUTING_COSTS_DEFAULTS, resolveRoutingCosts } = await import('../../../components/diagrams/routing-costs.ts');
-  assertEquals(ROUTING_COSTS_DEFAULTS.share.radius, 150);
-  const r = resolveRoutingCosts({ share: { radius: 200 }, rail: { overlap: 50 } });
-  assertEquals(r.share.radius, 200);
+  assertEquals(ROUTING_COSTS_DEFAULTS.share.radius, 200);
+  const r = resolveRoutingCosts({ share: { radius: 260 }, rail: { overlap: 50 } });
+  assertEquals(r.share.radius, 260);
   assertEquals(r.share.joinTail, ROUTING_COSTS_DEFAULTS.share.joinTail);
   assertEquals(r.rail.overlap, 50);
-  assertEquals(r.grid.step, 20);
+  assertEquals(r.grid.step, 15, '1U = 15 px');
   assertEquals(resolveRoutingCosts({ grid: { minFactor: 5 } } as never).grid.minFactor, ROUTING_COSTS_DEFAULTS.grid.minFactor);
   assert(existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'routing-costs.json')) || true);
 });

@@ -257,6 +257,27 @@ redondea los giros de cada mensaje con Bézier sobre el **mismo** recorrido
 ortogonal: el router no cambia, solo la pintura. Ver el vocabulario común en
 [`diagram-vocab.ts`](./diagram-vocab.ts).
 
+## Subproceso en la llegada de un mensaje (`nested`)
+
+Un mensaje puede mostrar, junto a la punta de su flecha, el proceso que esa
+acción inicia: el mismo nodo `kind: "nested"` de los flujos
+(`_shared/diagram-embed.schemas.ts`), más un `title` opcional.
+
+```json
+{ "id": "m3", "from": "P", "to": "S", "label": "POST /mensajes",
+  "nested": { "title": "Turno de conversación", "src": "diagramas/conversacion-turno.json",
+              "diagram": { "tag": "iswc-flowchart", "payload": { } },
+              "maxW": 200, "maxH": 200, "bg": "#FFFFFF" } }
+```
+
+- `src` (JSON editable, relativo a la página) gana sobre `diagram` (inline, respaldo).
+- El diagrama se monta fuera de pantalla con su web component y su SVG se copia
+  vectorial en el recuadro, escalado tipo `object-fit: contain` (por defecto
+  200 px por lado). El export estático lo conserva.
+- Recuadro: borde del tema, `bg` (insoft claro: blanco; oscuro: el lienzo), al
+  costado libre de la lifeline destino (el mismo del self-loop). La fila
+  siguiente baja y el hueco entre lifelines crece para que no se monte nada.
+
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)

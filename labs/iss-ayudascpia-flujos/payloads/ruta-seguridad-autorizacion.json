@@ -1,0 +1,340 @@
+{
+  "slug": "ruta-seguridad-autorizacion",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Autorización de una ruta (puerta SEG)",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Cliente"
+      },
+      {
+        "id": "B",
+        "label": "ISS · TBasePatyIA"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL · seg_*"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "permisos",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "permisos",
+          "stereotype": "SEG",
+          "items": [
+            "GET|POST /permisos",
+            "GET /permisos/{filtro}"
+          ]
+        }
+      },
+      {
+        "id": "base",
+        "label": "TBasePatyIA<T>",
+        "kind": "class",
+        "lane": "B",
+        "class": {
+          "name": "TBasePatyIA<T>",
+          "stereotype": "abstract",
+          "attributes": [
+            "# itercero · icontacto · irol"
+          ],
+          "methods": [
+            "+ autorizarRuta(): puerta SEG",
+            "+ verifyAuthorization(): Auth",
+            "+ accionRecurso(id): valor efectivo",
+            "+ list() · listSimple()",
+            "+ upsert() · insertBatch() · updateBatch() · deleteBatch()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "perm",
+        "label": "TPermissionsController",
+        "kind": "class",
+        "lane": "B",
+        "class": {
+          "name": "TPermissionsController",
+          "methods": [
+            "+ me(): perfil SEG",
+            "+ rolPrincipal(icontacto) «static»",
+            "+ decidir(irol, id, metodo) «static»",
+            "+ capacidad(irol, id) · permsDeRol(irol) «static»"
+          ],
+          "fill": "service"
+        }
+      },
+      {
+        "id": "id",
+        "label": "Id SEG por prefijo (METHOD:/ruta · QUERY:/ruta · CFG:/ruta)",
+        "lane": "B",
+        "icon": "mdi:identifier"
+      },
+      {
+        "id": "fila",
+        "label": "Busca la fila de USR para el id",
+        "lane": "B",
+        "icon": "mdi:database-search-outline"
+      },
+      {
+        "id": "trec",
+        "label": "seg_accionesrecursos",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "seg_accionesrecursos",
+          "attributes": [
+            {
+              "name": "isysrecurso",
+              "type": "varchar(50)",
+              "key": "PK"
+            },
+            {
+              "name": "iaccion",
+              "type": "varchar(50)",
+              "key": "PK"
+            },
+            {
+              "name": "itdvalor",
+              "type": "smallint"
+            },
+            {
+              "name": "valordefecto",
+              "type": "varchar(50)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿La ruta exige JWT?",
+        "shape": "diamond",
+        "lane": "B"
+      },
+      {
+        "id": "publica",
+        "label": "Pasa sin token (ruta pública)",
+        "lane": "B",
+        "icon": "mdi:door-open"
+      },
+      {
+        "id": "jwt",
+        "label": "Verifica el JWT HS384 (sin token o inválido: 401)",
+        "lane": "B",
+        "icon": "mdi:key-chain-variant"
+      },
+      {
+        "id": "rol",
+        "label": "Rol vigente del contacto (sin rol: USR; lectura fallida: 503)",
+        "lane": "B",
+        "icon": "mdi:shield-account-outline"
+      },
+      {
+        "id": "trol",
+        "label": "seg_rolescontacto",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "seg_rolescontacto",
+          "attributes": [
+            {
+              "name": "itercero",
+              "type": "varchar(30)",
+              "key": "PK"
+            },
+            {
+              "name": "irol",
+              "type": "varchar(20)",
+              "key": "PK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "finicial",
+              "type": "date"
+            },
+            {
+              "name": "ffinal",
+              "type": "date"
+            },
+            {
+              "name": "bprincipal",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      {
+        "id": "valor",
+        "label": "Valor efectivo del id para el rol y el verbo",
+        "lane": "B",
+        "icon": "mdi:scale-balance"
+      },
+      {
+        "id": "tacc",
+        "label": "seg_accionesxrol",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "seg_accionesxrol",
+          "attributes": [
+            {
+              "name": "itercero",
+              "type": "varchar(30)",
+              "key": "PK"
+            },
+            {
+              "name": "isysrecurso",
+              "type": "varchar(50)",
+              "key": "PK"
+            },
+            {
+              "name": "iaccion",
+              "type": "varchar(50)",
+              "key": "PK"
+            },
+            {
+              "name": "irol",
+              "type": "varchar(20)",
+              "key": "PK"
+            },
+            {
+              "name": "valor",
+              "type": "varchar(255)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "d2",
+        "label": "¿Qué permite el valor efectivo?",
+        "shape": "diamond",
+        "lane": "B"
+      },
+      {
+        "id": "deny",
+        "label": "401 · Sin permiso",
+        "lane": "B",
+        "icon": "mdi:account-cancel-outline"
+      },
+      {
+        "id": "handler",
+        "label": "Corre el handler",
+        "lane": "B",
+        "icon": "mdi:cog-play-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "B"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "base",
+        "label": "petición (con o sin Authorization)"
+      },
+      {
+        "from": "base",
+        "to": "perm",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "base",
+        "to": "id"
+      },
+      {
+        "from": "id",
+        "to": "fila"
+      },
+      {
+        "from": "fila",
+        "to": "d1"
+      },
+      {
+        "from": "fila",
+        "to": "trec",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "d1",
+        "to": "publica",
+        "label": "sin fila o protected false"
+      },
+      {
+        "from": "d1",
+        "to": "jwt",
+        "label": "exige JWT"
+      },
+      {
+        "from": "jwt",
+        "to": "rol"
+      },
+      {
+        "from": "rol",
+        "to": "valor"
+      },
+      {
+        "from": "valor",
+        "to": "d2"
+      },
+      {
+        "from": "rol",
+        "to": "trol",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "valor",
+        "to": "tacc",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "d2",
+        "to": "deny",
+        "label": "false"
+      },
+      {
+        "from": "d2",
+        "to": "handler",
+        "label": "protected, true o capacidad"
+      },
+      {
+        "from": "publica",
+        "to": "handler"
+      },
+      {
+        "from": "handler",
+        "to": "fin"
+      },
+      {
+        "from": "deny",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

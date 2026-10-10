@@ -8,157 +8,72 @@
   },
   "payload": {
     "sequence": {
-      "title": "ISS PatyIA · Turno de conversación (POST /conversacion, SSE)",
+      "subtitle": "Nota (Turno → Cliente): cada paso emite además un evento log",
       "actors": [
         {
-          "id": "u",
+          "id": "C",
           "label": "Cliente",
-          "kind": "actor",
-          "icon": "mdi:account"
+          "kind": "participant"
         },
         {
-          "id": "w",
-          "label": "abrirStreamSSE",
-          "kind": "participant",
-          "icon": "mdi:api"
+          "id": "T",
+          "label": "Turno (ISS)",
+          "kind": "participant"
         },
         {
-          "id": "c",
-          "label": "TConversacionController",
-          "kind": "participant",
-          "icon": "mdi:server"
-        },
-        {
-          "id": "l",
-          "label": "TConversationLogController",
-          "kind": "participant",
-          "icon": "mdi:text-box-multiple"
-        },
-        {
-          "id": "pg",
+          "id": "P",
           "label": "PostgreSQL",
-          "kind": "participant",
-          "icon": "mdi:database"
+          "kind": "participant"
         },
         {
-          "id": "ai",
+          "id": "O",
           "label": "OpenAI",
-          "kind": "participant",
-          "icon": "mdi:robot-outline"
-        }
-      ],
-      "groups": [
-        {
-          "id": "g-sse",
-          "name": "Stream SSE al cliente",
-          "color": "stream",
-          "icon": "mdi:broadcast"
-        },
-        {
-          "id": "g-ctl",
-          "name": "Lógica del turno",
-          "color": "neutral",
-          "icon": "mdi:cog-outline"
-        },
-        {
-          "id": "g-db",
-          "name": "Persistencia en PostgreSQL",
-          "color": "data",
-          "icon": "mdi:database"
-        },
-        {
-          "id": "g-llm",
-          "name": "Modelo (OpenAI)",
-          "color": "llm",
-          "icon": "mdi:robot-outline"
+          "kind": "participant"
         }
       ],
       "fragments": [
         {
-          "id": "f-ctx",
-          "kind": "region",
-          "name": "contexto del turno",
+          "id": "f1",
+          "name": "loop",
+          "kind": "loop",
           "messages": [
-            "m9",
             "m10",
             "m11"
           ],
-          "condition": "transcripción solo si hay notas de voz; hilo solo si aún no existe"
-        },
-        {
-          "id": "f-stream",
-          "kind": "async",
-          "name": "respuesta en stream",
-          "messages": [
-            "m12",
-            "m13",
-            "m14",
-            "m15"
-          ],
-          "condition": "hay clave de OpenAI; si no, el turno termina degradado (providerDegraded)"
-        },
-        {
-          "id": "f-post",
-          "kind": "region",
-          "name": "después de la respuesta",
-          "messages": [
-            "m16",
-            "m17"
-          ],
-          "condition": "solo si la respuesta salió bien; un fallo aquí no rompe el turno"
-        },
-        {
-          "id": "f-close",
-          "kind": "region",
-          "name": "cierre del turno",
-          "messages": [
-            "m18",
-            "m19",
-            "m20",
-            "m21",
-            "m22"
-          ]
+          "condition": "cada fragmento"
         }
       ],
-      "preamble": [
+      "messages": [
         {
           "id": "m1",
-          "from": "u",
-          "to": "w",
-          "label": "envía un mensaje (prompt, conversación si continúa, modo)",
+          "from": "C",
+          "to": "T",
+          "label": "POST /conversacion (prompt, adjuntos, iconversacion si continúa)",
           "kind": "sync",
-          "group": "g-sse"
+          "step": 1
         },
         {
           "id": "m2",
-          "from": "w",
-          "to": "c",
-          "label": "abre el turno con el emisor de eventos",
-          "kind": "sync",
-          "group": "g-ctl"
-        },
-        {
-          "id": "m3",
-          "from": "c",
-          "to": "c",
-          "label": "ya pasó la puerta SEG (JWT); valida el cuerpo, el contexto, que haya prompt o adjuntos y el modo libre",
+          "from": "T",
+          "to": "T",
+          "label": "puerta SEG, body estricto, contexto, prompt o adjuntos, modo libre",
           "kind": "self",
-          "group": "g-ctl"
+          "step": 2
         }
       ],
       "alt": {
-        "name": "según si la conversación existe",
+        "name": "alt",
         "branches": [
           {
-            "condition": "continúa (iconversacion > 0)",
+            "condition": "continúa",
             "messages": [
               {
-                "id": "m4",
-                "from": "c",
-                "to": "pg",
-                "label": "comprueba que la conversación es suya y está abierta; actualiza la última actividad",
+                "id": "m3",
+                "from": "T",
+                "to": "P",
+                "label": "es del dueño y está abierta, fhultact = ahora",
                 "kind": "sync",
-                "group": "g-db"
+                "step": 3
               }
             ]
           },
@@ -166,12 +81,12 @@
             "condition": "nueva",
             "messages": [
               {
-                "id": "m5",
-                "from": "c",
-                "to": "pg",
-                "label": "crea la conversación (nuevo id de secuencia, título provisional, hilo, qmensajes = 1)",
+                "id": "m4",
+                "from": "T",
+                "to": "P",
+                "label": "alta: secuencia, título provisional, hilo provisional, qmensajes = 1",
                 "kind": "sync",
-                "group": "g-db"
+                "step": 4
               }
             ]
           }
@@ -179,161 +94,92 @@
       },
       "epilogue": [
         {
+          "id": "m5",
+          "from": "T",
+          "to": "C",
+          "label": "200 text/event-stream · begin, y los log que esperaban",
+          "kind": "reply",
+          "step": 5
+        },
+        {
           "id": "m6",
-          "from": "c",
-          "to": "pg",
-          "label": "lee el historial previo y la configuración: llave de patyia_providers, modelos de sys_values.OPENAI",
+          "from": "T",
+          "to": "O",
+          "label": "transcribe notas de voz (si hay)",
           "kind": "sync",
-          "group": "g-db"
+          "step": 6
         },
         {
           "id": "m7",
-          "from": "c",
-          "to": "w",
-          "label": "evento begin",
-          "kind": "async",
-          "group": "g-sse"
+          "from": "T",
+          "to": "O",
+          "label": "clasifica la consulta dentro del contexto",
+          "kind": "sync",
+          "step": 7
         },
         {
           "id": "m8",
-          "from": "w",
-          "to": "u",
-          "label": "abre el stream (200 text/event-stream) · begin",
-          "kind": "reply",
-          "group": "g-sse"
+          "from": "T",
+          "to": "O",
+          "label": "asegura el hilo (Conversations API)",
+          "kind": "sync",
+          "step": 8
         },
         {
           "id": "m9",
-          "from": "c",
-          "to": "ai",
-          "label": "transcribe las notas de voz (audio/transcriptions); si alguna no se entiende, aplica 9999.3",
+          "from": "T",
+          "to": "O",
+          "label": "Responses API en stream con instrucciones y file_search",
           "kind": "sync",
-          "group": "g-llm"
+          "step": 9
         },
         {
           "id": "m10",
-          "from": "c",
-          "to": "pg",
-          "label": "clasifica la consulta (resolverContexto): instrucción de patyia_tdconsultas y vector stores",
-          "kind": "sync",
-          "group": "g-db"
+          "from": "O",
+          "to": "T",
+          "label": "delta",
+          "kind": "reply",
+          "step": 10
         },
         {
           "id": "m11",
-          "from": "c",
-          "to": "ai",
-          "label": "asegura el hilo de la conversación (Conversations API)",
-          "kind": "sync",
-          "group": "g-llm"
+          "from": "T",
+          "to": "C",
+          "label": "message",
+          "kind": "reply",
+          "step": 11
         },
         {
           "id": "m12",
-          "from": "c",
-          "to": "ai",
-          "label": "Responses API en stream: instrucción, file_search sobre los vector stores, imágenes como input_image",
+          "from": "T",
+          "to": "O",
+          "label": "título y consultas, solo si el turno salió bien",
           "kind": "sync",
-          "group": "g-llm"
+          "step": 12
         },
         {
           "id": "m13",
-          "from": "ai",
-          "to": "c",
-          "label": "fragmentos de la respuesta (deltas)",
-          "kind": "async",
-          "group": "g-llm"
+          "from": "T",
+          "to": "P",
+          "label": "historial del turno, bajo bloqueo",
+          "kind": "sync",
+          "step": 13
         },
         {
           "id": "m14",
-          "from": "c",
-          "to": "w",
-          "label": "evento message por cada fragmento",
-          "kind": "async",
-          "group": "g-sse"
+          "from": "T",
+          "to": "P",
+          "label": "qmensajes, qtokens, hilo, fhultact",
+          "kind": "sync",
+          "step": 14
         },
         {
           "id": "m15",
-          "from": "w",
-          "to": "u",
-          "label": "SSE message × N",
-          "kind": "async",
-          "group": "g-sse"
-        },
-        {
-          "id": "m16",
-          "from": "c",
-          "to": "ai",
-          "label": "regenera el título (9999.1) cada recalcularTituloCadaMensajesUsuario mensajes y extrae las consultas",
-          "kind": "sync",
-          "group": "g-llm"
-        },
-        {
-          "id": "m17",
-          "from": "c",
-          "to": "pg",
-          "label": "registra las consultas en patyia_consultas",
-          "kind": "sync",
-          "group": "g-db"
-        },
-        {
-          "id": "m18",
-          "from": "c",
-          "to": "l",
-          "label": "guarda el turno una sola vez: usuario, operativas y asistente (turno·1000+1 y +2)",
-          "kind": "sync",
-          "group": "g-ctl"
-        },
-        {
-          "id": "m19",
-          "from": "l",
-          "to": "pg",
-          "label": "escribe el historial bajo bloqueo y devuelve qmensajes",
-          "kind": "sync",
-          "group": "g-db"
-        },
-        {
-          "id": "m20",
-          "from": "c",
-          "to": "pg",
-          "label": "actualiza qmensajes, qtokens (+ uso de OpenAI), hilo y fhultact",
-          "kind": "sync",
-          "group": "g-db"
-        },
-        {
-          "id": "m21",
-          "from": "c",
-          "to": "w",
-          "label": "evento end (título, stream_ok, providerDegraded, imensaje, itdconsulta)",
-          "kind": "async",
-          "group": "g-sse"
-        },
-        {
-          "id": "m22",
-          "from": "w",
-          "to": "u",
-          "label": "SSE end · cierra el stream",
-          "kind": "async",
-          "group": "g-sse"
-        }
-      ],
-      "boxes": [
-        {
-          "id": "iss",
-          "name": "ISS PatyIA",
-          "actors": [
-            "w",
-            "c",
-            "l"
-          ],
-          "color": "primary"
-        },
-        {
-          "id": "ext",
-          "name": "Servicios",
-          "actors": [
-            "pg",
-            "ai"
-          ],
-          "color": "group"
+          "from": "T",
+          "to": "C",
+          "label": "end (meta con traza, imensaje, stream_ok)",
+          "kind": "reply",
+          "step": 15
         }
       ]
     }

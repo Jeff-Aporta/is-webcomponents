@@ -1,0 +1,129 @@
+{
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "slug": "datos-y-componentes",
+  "_lab": "Nodos kind=component (forma del diagrama de componentes) y kind=tableder (tabla del DER) dentro de un flujo.",
+  "payload": {
+    "direction": "TB",
+    "nodes": [
+      {
+        "id": "inicio",
+        "label": "Inicio",
+        "shape": "start"
+      },
+      {
+        "id": "api",
+        "label": "PatyIA API",
+        "kind": "component",
+        "component": {
+          "name": "conversacion",
+          "stereotype": "Chat",
+          "items": [
+            "POST /conversacion",
+            "POST /conversacion/mensaje"
+          ]
+        }
+      },
+      {
+        "id": "valida",
+        "label": "¿Conversación existe?",
+        "shape": "diamond"
+      },
+      {
+        "id": "crea",
+        "label": "Crea la conversación"
+      },
+      {
+        "id": "guarda",
+        "label": "Guarda el turno y su respuesta"
+      },
+      {
+        "id": "tabla",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itercero",
+              "type": "varchar(50)",
+              "key": "FK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "FK"
+            },
+            {
+              "name": "hilo",
+              "type": "varchar(100)"
+            },
+            {
+              "name": "titulo",
+              "type": "varchar(100)"
+            },
+            {
+              "name": "fhcre",
+              "type": "timestamp"
+            }
+          ]
+        }
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "inicio",
+        "to": "api"
+      },
+      {
+        "id": "e2",
+        "from": "api",
+        "to": "valida"
+      },
+      {
+        "id": "e3",
+        "from": "valida",
+        "to": "crea",
+        "label": "no"
+      },
+      {
+        "id": "e4",
+        "from": "valida",
+        "to": "guarda",
+        "label": "sí"
+      },
+      {
+        "id": "e5",
+        "from": "crea",
+        "to": "guarda"
+      },
+      {
+        "id": "e6",
+        "from": "guarda",
+        "to": "tabla",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "id": "e7",
+        "from": "tabla",
+        "to": "fin"
+      }
+    ]
+  }
+}

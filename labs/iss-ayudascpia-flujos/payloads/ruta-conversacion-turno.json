@@ -1,0 +1,405 @@
+{
+  "slug": "ruta-conversacion-turno",
+  "module": "020-Conversaciones",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Turno de conversación",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Portal"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TConversacionController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      },
+      {
+        "id": "O",
+        "label": "OpenAI"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "conversación (portal)",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "conversación (portal)",
+          "stereotype": "Chat",
+          "items": [
+            "POST /conversacion"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TConversacionController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacionController",
+          "attributes": [
+            "- nTbl = patyia_conversaciones"
+          ],
+          "methods": [
+            "+ insert(): SSE",
+            "+ get() · delete()",
+            "+ getLogs() · getResumen()",
+            "+ listSimple() · list(filtro) · auditar()",
+            "+ leerCfg() · escribirCfg()",
+            "+ timerCerrarConversaciones()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "pojo",
+        "label": "TConversacion",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacion",
+          "stereotype": "patyia_conversaciones",
+          "attributes": [
+            "+ iconversacion: bigint «PK»",
+            "+ itercero · icontacto",
+            "+ titulo · hilo",
+            "+ itdestado: 0 | 1 | 2",
+            "+ fhcre · fhultact"
+          ],
+          "fill": "leaf"
+        }
+      },
+      {
+        "id": "seg",
+        "label": "Puerta SEG, body estricto, contexto, prompt o adjuntos, modo libre",
+        "lane": "T",
+        "icon": "mdi:shield-check-outline"
+      },
+      {
+        "id": "dec",
+        "label": "¿Continúa una conversación?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "sigue",
+        "label": "Valida que es del dueño y está abierta; fhultact = ahora",
+        "lane": "T",
+        "icon": "mdi:database-edit-outline"
+      },
+      {
+        "id": "nueva",
+        "label": "Alta: título e hilo provisionales, qmensajes = 1",
+        "lane": "T",
+        "icon": "mdi:database-plus-outline"
+      },
+      {
+        "id": "tconv",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itercero",
+              "type": "varchar(50)",
+              "key": "FK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "FK"
+            },
+            {
+              "name": "hilo",
+              "type": "varchar(100)"
+            },
+            {
+              "name": "titulo",
+              "type": "varchar(100)"
+            },
+            {
+              "name": "qmensajes",
+              "type": "smallint"
+            },
+            {
+              "name": "qtokens",
+              "type": "integer"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamp"
+            }
+          ]
+        }
+      },
+      {
+        "id": "begin",
+        "label": "200 text/event-stream · begin y los log que esperaban",
+        "lane": "T",
+        "icon": "mdi:broadcast"
+      },
+      {
+        "id": "ai",
+        "label": "Responses · Conversations",
+        "kind": "component",
+        "lane": "O",
+        "component": {
+          "name": "Responses · Conversations",
+          "stereotype": "OpenAI",
+          "items": []
+        }
+      },
+      {
+        "id": "voz",
+        "label": "Transcribe las notas de voz (si hay)",
+        "lane": "T",
+        "icon": "mdi:microphone-outline"
+      },
+      {
+        "id": "clasif",
+        "label": "Clasifica la consulta dentro del contexto",
+        "lane": "T",
+        "icon": "mdi:tag-search-outline"
+      },
+      {
+        "id": "hilo",
+        "label": "Asegura el hilo (Conversations API)",
+        "lane": "T",
+        "icon": "mdi:forum-outline"
+      },
+      {
+        "id": "resp",
+        "label": "Responses API en stream con instrucciones y file_search",
+        "lane": "T",
+        "icon": "mdi:robot-outline"
+      },
+      {
+        "id": "delta",
+        "label": "Reenvía cada delta al cliente (message)",
+        "lane": "T",
+        "icon": "mdi:message-arrow-right-outline"
+      },
+      {
+        "id": "n-delta",
+        "label": "Se repite por cada fragmento del stream",
+        "shape": "comment",
+        "about": "delta"
+      },
+      {
+        "id": "titulo",
+        "label": "Título y consultas, solo si el turno salió bien",
+        "lane": "T",
+        "icon": "mdi:format-title"
+      },
+      {
+        "id": "hist",
+        "label": "Guarda el historial del turno, bajo bloqueo",
+        "lane": "T",
+        "icon": "mdi:database-lock-outline"
+      },
+      {
+        "id": "tlog",
+        "label": "patyia_conversacion_log",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversacion_log",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint"
+            },
+            {
+              "name": "content",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "cuenta",
+        "label": "Actualiza qmensajes, qtokens, hilo y fhultact",
+        "lane": "T",
+        "icon": "mdi:database-edit-outline"
+      },
+      {
+        "id": "end",
+        "label": "end · meta con traza, imensaje y stream_ok",
+        "lane": "T",
+        "icon": "mdi:flag-checkered"
+      },
+      {
+        "id": "n-log",
+        "label": "Cada paso emite además un evento log",
+        "shape": "comment",
+        "about": "begin"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "POST /conversacion"
+      },
+      {
+        "from": "ctl",
+        "to": "pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ctl",
+        "to": "seg"
+      },
+      {
+        "from": "seg",
+        "to": "dec"
+      },
+      {
+        "from": "dec",
+        "to": "sigue",
+        "label": "continúa"
+      },
+      {
+        "from": "dec",
+        "to": "nueva",
+        "label": "nueva"
+      },
+      {
+        "from": "sigue",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
+      },
+      {
+        "from": "nueva",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "sigue",
+        "to": "begin"
+      },
+      {
+        "from": "nueva",
+        "to": "begin"
+      },
+      {
+        "from": "begin",
+        "to": "voz"
+      },
+      {
+        "from": "voz",
+        "to": "clasif"
+      },
+      {
+        "from": "clasif",
+        "to": "hilo"
+      },
+      {
+        "from": "hilo",
+        "to": "resp"
+      },
+      {
+        "from": "resp",
+        "to": "delta"
+      },
+      {
+        "from": "delta",
+        "to": "titulo"
+      },
+      {
+        "from": "titulo",
+        "to": "hist"
+      },
+      {
+        "from": "hist",
+        "to": "cuenta"
+      },
+      {
+        "from": "cuenta",
+        "to": "end"
+      },
+      {
+        "from": "end",
+        "to": "fin"
+      },
+      {
+        "from": "voz",
+        "to": "ai",
+        "kind": "dashed",
+        "label": "audio"
+      },
+      {
+        "from": "clasif",
+        "to": "ai",
+        "kind": "dashed",
+        "label": "clasifica"
+      },
+      {
+        "from": "hilo",
+        "to": "ai",
+        "kind": "dashed",
+        "label": "Conversations"
+      },
+      {
+        "from": "resp",
+        "to": "ai",
+        "kind": "dashed",
+        "label": "Responses"
+      },
+      {
+        "from": "titulo",
+        "to": "ai",
+        "kind": "dashed",
+        "label": "título"
+      },
+      {
+        "from": "hist",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "cuenta",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta (stream)"
+      }
+    ]
+  }
+}

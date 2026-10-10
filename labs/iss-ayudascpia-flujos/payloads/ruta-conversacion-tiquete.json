@@ -1,0 +1,290 @@
+{
+  "slug": "ruta-conversacion-tiquete",
+  "module": "020-Conversaciones",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Alta del tiquete",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "P",
+        "label": "Portal"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TConversationTicketController"
+      },
+      {
+        "id": "D",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "mensaje · tiquete",
+        "kind": "component",
+        "lane": "P",
+        "component": {
+          "name": "mensaje · tiquete",
+          "stereotype": "Calificación",
+          "items": [
+            "POST /tiquete"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TConversationTicketController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversationTicketController",
+          "attributes": [
+            "- nTbl = patyia_tiquetesconversacion"
+          ],
+          "methods": [
+            "+ insert(): 201",
+            "+ porConversacion(iconversacion)"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "pojo",
+        "label": "TConversationTicket",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversationTicket",
+          "stereotype": "patyia_tiquetesconversacion",
+          "attributes": [
+            "+ itiquete «PK»",
+            "+ iconversacion «PK»",
+            "+ itema · iclasificador"
+          ],
+          "fill": "leaf"
+        }
+      },
+      {
+        "id": "val",
+        "label": "Valida el body: iconversacion e itiquete enteros positivos",
+        "lane": "T",
+        "icon": "mdi:shield-check-outline"
+      },
+      {
+        "id": "lee",
+        "label": "Lee la conversación",
+        "lane": "T",
+        "icon": "mdi:database-search-outline"
+      },
+      {
+        "id": "tconv",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "lane": "D",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itercero",
+              "type": "varchar(50)",
+              "key": "FK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "FK"
+            },
+            {
+              "name": "itdestado",
+              "type": "smallint"
+            },
+            {
+              "name": "bautoriza_visualizacion",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      {
+        "id": "dec",
+        "label": "¿Estado de la conversación?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "e401",
+        "label": "401 · solo el propietario crea tiquetes",
+        "lane": "T",
+        "icon": "mdi:account-cancel-outline"
+      },
+      {
+        "id": "e404",
+        "label": "404 (500 si no se pudo leer)",
+        "lane": "T",
+        "icon": "mdi:file-question-outline"
+      },
+      {
+        "id": "e400",
+        "label": "400 · cerrada o eliminada",
+        "lane": "T",
+        "icon": "mdi:lock-outline"
+      },
+      {
+        "id": "ins",
+        "label": "Inserta el tiquete (si ya existe ese número, lo relee)",
+        "lane": "T",
+        "icon": "mdi:ticket-confirmation-outline"
+      },
+      {
+        "id": "ttiq",
+        "label": "patyia_tiquetesconversacion",
+        "kind": "tableder",
+        "lane": "D",
+        "table": {
+          "name": "patyia_tiquetesconversacion",
+          "attributes": [
+            {
+              "name": "itiquete",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itema",
+              "type": "varchar(50)"
+            },
+            {
+              "name": "iclasificador",
+              "type": "varchar(50)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "cierra",
+        "label": "Cierra y/o autoriza la visualización, si se pidió",
+        "lane": "T",
+        "icon": "mdi:check-decagram-outline"
+      },
+      {
+        "id": "ok",
+        "label": "{ ticket, sideEffects }",
+        "lane": "T",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "POST /tiquete"
+      },
+      {
+        "from": "ctl",
+        "to": "pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ctl",
+        "to": "val"
+      },
+      {
+        "from": "val",
+        "to": "lee"
+      },
+      {
+        "from": "lee",
+        "to": "dec"
+      },
+      {
+        "from": "lee",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "dec",
+        "to": "e401",
+        "label": "no es del dueño estricto"
+      },
+      {
+        "from": "dec",
+        "to": "e404",
+        "label": "no existe"
+      },
+      {
+        "from": "dec",
+        "to": "e400",
+        "label": "cerrada o eliminada"
+      },
+      {
+        "from": "dec",
+        "to": "ins",
+        "label": "abierta y del dueño"
+      },
+      {
+        "from": "ins",
+        "to": "ttiq",
+        "kind": "dashed",
+        "label": "INSERT"
+      },
+      {
+        "from": "ins",
+        "to": "cierra"
+      },
+      {
+        "from": "cierra",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "cierra",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
+      },
+      {
+        "from": "e401",
+        "to": "fin"
+      },
+      {
+        "from": "e404",
+        "to": "fin"
+      },
+      {
+        "from": "e400",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

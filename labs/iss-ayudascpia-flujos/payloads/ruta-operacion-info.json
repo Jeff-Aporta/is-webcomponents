@@ -1,0 +1,225 @@
+{
+  "slug": "ruta-operacion-info",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Salud del servidor (GET /info)",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Monitor / agente"
+      },
+      {
+        "id": "I",
+        "label": "ISS · TInfoController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      },
+      {
+        "id": "G",
+        "label": "GeoIP"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "operación",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "operación",
+          "stereotype": "Ops",
+          "items": [
+            "GET /info"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TInfoController",
+        "kind": "class",
+        "lane": "I",
+        "class": {
+          "name": "TInfoController",
+          "methods": [
+            "+ info(): salud"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "fork",
+        "label": "",
+        "shape": "bar",
+        "lane": "I"
+      },
+      {
+        "id": "db",
+        "label": "SELECT 1 con tiempo de conexión",
+        "lane": "I",
+        "icon": "mdi:database-clock-outline"
+      },
+      {
+        "id": "err",
+        "label": "¿Hay errores abiertos en la bandeja?",
+        "lane": "I",
+        "icon": "mdi:inbox-outline"
+      },
+      {
+        "id": "pat",
+        "label": "Parches aplicados, fallidos y el último",
+        "lane": "I",
+        "icon": "mdi:database-cog-outline"
+      },
+      {
+        "id": "geo",
+        "label": "Ubicación del servidor",
+        "lane": "I",
+        "icon": "mdi:map-marker-outline"
+      },
+      {
+        "id": "join",
+        "label": "",
+        "shape": "bar",
+        "lane": "I"
+      },
+      {
+        "id": "terr",
+        "label": "patyia_errores",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_errores",
+          "attributes": [
+            {
+              "name": "ierror",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "batendido",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      {
+        "id": "tsys",
+        "label": "patyia_sys_values",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_sys_values",
+          "attributes": [
+            {
+              "name": "isystemkey",
+              "type": "varchar(128)",
+              "key": "PK"
+            },
+            {
+              "name": "jvalue",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ok",
+        "label": "200 siempre: versión, sello, BD, parches, runner, erroresPorAtender",
+        "lane": "I",
+        "icon": "mdi:heart-pulse"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "I"
+      },
+      {
+        "id": "n-200",
+        "label": "Un fallo de una lectura queda en su campo; nunca 5xx",
+        "shape": "comment",
+        "about": "ok"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "GET /info"
+      },
+      {
+        "from": "ctl",
+        "to": "fork"
+      },
+      {
+        "from": "fork",
+        "to": "db"
+      },
+      {
+        "from": "db",
+        "to": "join"
+      },
+      {
+        "from": "fork",
+        "to": "err"
+      },
+      {
+        "from": "err",
+        "to": "join"
+      },
+      {
+        "from": "fork",
+        "to": "pat"
+      },
+      {
+        "from": "pat",
+        "to": "join"
+      },
+      {
+        "from": "fork",
+        "to": "geo"
+      },
+      {
+        "from": "geo",
+        "to": "join"
+      },
+      {
+        "from": "err",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "pat",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "join",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

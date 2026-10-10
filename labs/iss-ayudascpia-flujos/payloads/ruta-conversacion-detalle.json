@@ -1,0 +1,341 @@
+{
+  "slug": "ruta-conversacion-detalle",
+  "module": "020-Conversaciones",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Detalle e historial de una conversación",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Portal"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TConversacionController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "conversación (portal)",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "conversación (portal)",
+          "stereotype": "Chat",
+          "items": [
+            "GET /conversacion/{iconversacion}",
+            "GET /conversacion/{iconversacion}/logs"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TConversacionController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacionController",
+          "attributes": [
+            "- nTbl = patyia_conversaciones"
+          ],
+          "methods": [
+            "+ insert(): SSE",
+            "+ get() · delete()",
+            "+ getLogs() · getResumen()",
+            "+ listSimple() · list(filtro) · auditar()",
+            "+ leerCfg() · escribirCfg()",
+            "+ timerCerrarConversaciones()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "pojo",
+        "label": "TConversacion",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacion",
+          "stereotype": "patyia_conversaciones",
+          "attributes": [
+            "+ iconversacion: bigint «PK»",
+            "+ itercero · icontacto",
+            "+ titulo · hilo",
+            "+ itdestado: 0 | 1 | 2",
+            "+ fhcre · fhultact"
+          ],
+          "fill": "leaf"
+        }
+      },
+      {
+        "id": "lee",
+        "label": "Lee la conversación (404)",
+        "lane": "T",
+        "icon": "mdi:database-search-outline"
+      },
+      {
+        "id": "tconv",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itercero",
+              "type": "varchar(50)",
+              "key": "FK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "FK"
+            },
+            {
+              "name": "itdestado",
+              "type": "smallint"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamp"
+            },
+            {
+              "name": "bautoriza_visualizacion",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Dueño, auditor o visualización autorizada?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "e401",
+        "label": "401",
+        "lane": "T",
+        "icon": "mdi:account-cancel-outline"
+      },
+      {
+        "id": "d2",
+        "label": "¿Detalle o historial?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "cierra",
+        "label": "Si es el dueño y venció la inactividad, la cierra",
+        "lane": "T",
+        "icon": "mdi:archive-lock-outline"
+      },
+      {
+        "id": "det",
+        "label": "Fila + mensajes calificados y tiquete",
+        "lane": "T",
+        "icon": "mdi:card-text-outline"
+      },
+      {
+        "id": "tmsg",
+        "label": "patyia_mensajescalificados",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_mensajescalificados",
+          "attributes": [
+            {
+              "name": "imensaje",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "iconversacion",
+              "type": "integer",
+              "key": "FK"
+            },
+            {
+              "name": "butil",
+              "type": "boolean"
+            },
+            {
+              "name": "contenido",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ttiq",
+        "label": "patyia_tiquetesconversacion",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_tiquetesconversacion",
+          "attributes": [
+            {
+              "name": "itiquete",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itema",
+              "type": "varchar(50)"
+            },
+            {
+              "name": "iclasificador",
+              "type": "varchar(50)"
+            }
+          ]
+        }
+      },
+      {
+        "id": "log",
+        "label": "Historial con meta y convLog ordenado (de otros: logsAjenos)",
+        "lane": "T",
+        "icon": "mdi:history"
+      },
+      {
+        "id": "tlog",
+        "label": "patyia_conversacion_log",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversacion_log",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint"
+            },
+            {
+              "name": "content",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "petición con token"
+      },
+      {
+        "from": "ctl",
+        "to": "pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ctl",
+        "to": "lee"
+      },
+      {
+        "from": "lee",
+        "to": "d1"
+      },
+      {
+        "from": "lee",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "d1",
+        "to": "e401",
+        "label": "no"
+      },
+      {
+        "from": "d1",
+        "to": "d2",
+        "label": "sí"
+      },
+      {
+        "from": "d2",
+        "to": "cierra",
+        "label": "detalle"
+      },
+      {
+        "from": "d2",
+        "to": "log",
+        "label": "…/logs"
+      },
+      {
+        "from": "cierra",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
+      },
+      {
+        "from": "cierra",
+        "to": "det"
+      },
+      {
+        "from": "det",
+        "to": "tmsg",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "det",
+        "to": "ttiq",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "log",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "e401",
+        "to": "fin"
+      },
+      {
+        "from": "det",
+        "to": "fin"
+      },
+      {
+        "from": "log",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

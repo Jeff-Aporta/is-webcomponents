@@ -1,0 +1,193 @@
+{
+  "slug": "ruta-conversacion-borrado",
+  "module": "020-Conversaciones",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Borrado de una conversación",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Portal"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TConversacionController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "conversación (portal)",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "conversación (portal)",
+          "stereotype": "Chat",
+          "items": [
+            "DELETE /conversacion/{iconversacion}"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TConversacionController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacionController",
+          "attributes": [
+            "- nTbl = patyia_conversaciones"
+          ],
+          "methods": [
+            "+ insert(): SSE",
+            "+ get() · delete()",
+            "+ getLogs() · getResumen()",
+            "+ listSimple() · list(filtro) · auditar()",
+            "+ leerCfg() · escribirCfg()",
+            "+ timerCerrarConversaciones()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "val",
+        "label": "PK válida (400); JWT y SEG «Eliminar»",
+        "lane": "T",
+        "icon": "mdi:shield-check-outline"
+      },
+      {
+        "id": "lee",
+        "label": "Lee la fila (404)",
+        "lane": "T",
+        "icon": "mdi:database-search-outline"
+      },
+      {
+        "id": "d1",
+        "label": "¿Es el dueño estricto?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "e401",
+        "label": "401",
+        "lane": "T",
+        "icon": "mdi:account-cancel-outline"
+      },
+      {
+        "id": "baja",
+        "label": "Baja lógica: itdestado = 2 (la fila no se borra)",
+        "lane": "T",
+        "icon": "mdi:archive-remove-outline"
+      },
+      {
+        "id": "tconv",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itercero",
+              "type": "varchar(50)",
+              "key": "FK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "FK"
+            },
+            {
+              "name": "itdestado",
+              "type": "smallint"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ok",
+        "label": "La fila releída",
+        "lane": "T",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "DELETE"
+      },
+      {
+        "from": "ctl",
+        "to": "val"
+      },
+      {
+        "from": "val",
+        "to": "lee"
+      },
+      {
+        "from": "lee",
+        "to": "d1"
+      },
+      {
+        "from": "lee",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "d1",
+        "to": "e401",
+        "label": "no"
+      },
+      {
+        "from": "d1",
+        "to": "baja",
+        "label": "sí"
+      },
+      {
+        "from": "baja",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "UPDATE"
+      },
+      {
+        "from": "baja",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "e401",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

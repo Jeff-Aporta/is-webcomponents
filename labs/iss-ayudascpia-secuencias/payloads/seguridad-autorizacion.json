@@ -8,225 +8,146 @@
   },
   "payload": {
     "sequence": {
-      "title": "ISS PatyIA · Autorización de una petición",
       "actors": [
         {
-          "id": "c",
+          "id": "C",
           "label": "Cliente",
-          "kind": "actor",
-          "icon": "mdi:account"
+          "kind": "participant"
         },
         {
-          "id": "w",
-          "label": "makeDispatchHandler",
-          "kind": "participant",
-          "icon": "mdi:api"
+          "id": "R",
+          "label": "Registro de rutas",
+          "kind": "participant"
         },
         {
-          "id": "b",
+          "id": "B",
           "label": "TBasePatyIA",
-          "kind": "participant",
-          "icon": "mdi:server"
+          "kind": "participant"
         },
         {
-          "id": "pm",
-          "label": "TPermissionsController",
-          "kind": "participant",
-          "icon": "mdi:shield-account"
-        },
-        {
-          "id": "pg",
+          "id": "P",
           "label": "PostgreSQL · seg_*",
-          "kind": "participant",
-          "icon": "mdi:database"
-        }
-      ],
-      "groups": [
-        {
-          "id": "g-http",
-          "name": "Petición y respuesta",
-          "color": "stream",
-          "icon": "mdi:swap-horizontal"
-        },
-        {
-          "id": "g-jwt",
-          "name": "Autenticación (JWT)",
-          "color": "auth",
-          "icon": "mdi:key-variant"
-        },
-        {
-          "id": "g-seg",
-          "name": "Autorización (SEG)",
-          "color": "seg",
-          "icon": "mdi:shield-check"
-        },
-        {
-          "id": "g-db",
-          "name": "Lectura en PostgreSQL",
-          "color": "data",
-          "icon": "mdi:database"
+          "kind": "participant"
         }
       ],
       "fragments": [
         {
-          "id": "f-anon",
-          "kind": "region",
-          "name": "evaluación como anónimo",
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
           "messages": [
-            "m4",
-            "m5",
-            "m6"
+            "m8"
           ],
-          "condition": "fila de USR, que define por defecto todos los ids"
+          "condition": "false"
         },
         {
-          "id": "f-rol",
-          "kind": "region",
-          "name": "rol vigente",
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
           "messages": [
-            "m8",
             "m9",
             "m10"
           ],
-          "condition": "seg_rolescontacto del grupo PATYIA, vigente, principal primero"
-        },
-        {
-          "id": "f-accion",
-          "kind": "region",
-          "name": "valor efectivo",
-          "messages": [
-            "m11",
-            "m12"
-          ],
-          "condition": "fila del rol; si no la tiene, la de USR"
+          "condition": "protected, true o capacidad"
         }
       ],
       "messages": [
         {
           "id": "m1",
-          "from": "c",
-          "to": "w",
-          "label": "llega la petición, con o sin token (Authorization: Bearer)",
+          "from": "C",
+          "to": "R",
+          "label": "petición, con o sin Authorization",
           "kind": "sync",
-          "group": "g-http"
+          "step": 1
         },
         {
           "id": "m2",
-          "from": "w",
-          "to": "w",
-          "label": "fija el id SEG por el prefijo: METHOD:/ruta · QUERY:/<ruta> (lista con filtro) · CFG:/<ruta> (configuración)",
-          "kind": "self",
-          "group": "g-seg"
+          "from": "R",
+          "to": "B",
+          "label": "id SEG por prefijo (METHOD:/ruta · QUERY:/ruta · CFG:/ruta)",
+          "kind": "sync",
+          "step": 2
         },
         {
           "id": "m3",
-          "from": "w",
-          "to": "b",
-          "label": "autorizarRuta(), antes del handler",
+          "from": "B",
+          "to": "P",
+          "label": "fila de USR para el id",
           "kind": "sync",
-          "group": "g-http"
-        },
-        {
-          "id": "m4",
-          "from": "b",
-          "to": "pm",
-          "label": "decide el id para un anónimo",
-          "kind": "sync",
-          "group": "g-seg"
-        },
-        {
-          "id": "m5",
-          "from": "pm",
-          "to": "pg",
-          "label": "lee la matriz seg_accionesxrol (caché de 90 s)",
-          "kind": "sync",
-          "group": "g-db"
-        },
-        {
-          "id": "m6",
-          "from": "pg",
-          "to": "pm",
-          "label": "sin fila en USR o { protected: false } → pública · cualquier otro valor → exige JWT",
-          "kind": "reply",
-          "group": "g-db"
-        },
-        {
-          "id": "m7",
-          "from": "b",
-          "to": "b",
-          "label": "si es pública, sigue sin token; si no, verifica el JWT (HS384) · sin token o inválido → 401",
-          "kind": "self",
-          "group": "g-jwt"
-        },
-        {
-          "id": "m8",
-          "from": "b",
-          "to": "pm",
-          "label": "pide el rol vigente del contacto",
-          "kind": "sync",
-          "group": "g-seg"
-        },
-        {
-          "id": "m9",
-          "from": "pm",
-          "to": "pg",
-          "label": "busca el rol en seg_rolescontacto",
-          "kind": "sync",
-          "group": "g-db"
-        },
-        {
-          "id": "m10",
-          "from": "pg",
-          "to": "pm",
-          "label": "rol del contacto · sin rol → USR · lectura fallida → 503",
-          "kind": "reply",
-          "group": "g-db"
-        },
-        {
-          "id": "m11",
-          "from": "b",
-          "to": "pm",
-          "label": "valor efectivo del id para el rol y el verbo",
-          "kind": "sync",
-          "group": "g-seg"
-        },
-        {
-          "id": "m12",
-          "from": "pm",
-          "to": "b",
-          "label": "el del rol o, si no lo define, el de USR (en CFG, partido por verbo)",
-          "kind": "reply",
-          "group": "g-seg"
-        },
-        {
-          "id": "m13",
-          "from": "b",
-          "to": "b",
-          "label": "false → 401 · { protected: true }, true o capacidad → pasa · SEG sin respuesta → 401",
-          "kind": "self",
-          "group": "g-seg"
-        },
-        {
-          "id": "m14",
-          "from": "b",
-          "to": "c",
-          "label": "corre el handler y responde",
-          "kind": "reply",
-          "group": "g-http"
+          "step": 3
         }
       ],
-      "boxes": [
-        {
-          "id": "iss",
-          "name": "ISS PatyIA",
-          "actors": [
-            "w",
-            "b",
-            "pm"
-          ],
-          "color": "primary"
-        }
-      ]
+      "alt": {
+        "name": "alt",
+        "branches": [
+          {
+            "condition": "sin fila o protected false",
+            "messages": [
+              {
+                "id": "m4",
+                "from": "B",
+                "to": "C",
+                "label": "pasa sin token (ruta pública)",
+                "kind": "reply",
+                "step": 4
+              }
+            ]
+          },
+          {
+            "condition": "exige JWT",
+            "messages": [
+              {
+                "id": "m5",
+                "from": "B",
+                "to": "B",
+                "label": "verifica el JWT HS384 (sin token o inválido: 401)",
+                "kind": "self",
+                "step": 5
+              },
+              {
+                "id": "m6",
+                "from": "B",
+                "to": "P",
+                "label": "rol vigente en seg_rolescontacto (sin rol: USR, lectura fallida: 503)",
+                "kind": "sync",
+                "step": 6
+              },
+              {
+                "id": "m7",
+                "from": "B",
+                "to": "P",
+                "label": "valor efectivo del id para el rol y el verbo",
+                "kind": "sync",
+                "step": 7
+              },
+              {
+                "id": "m8",
+                "from": "B",
+                "to": "C",
+                "label": "401 Sin permiso",
+                "kind": "reply",
+                "step": 8
+              },
+              {
+                "id": "m9",
+                "from": "B",
+                "to": "B",
+                "label": "corre el handler",
+                "kind": "self",
+                "step": 9
+              },
+              {
+                "id": "m10",
+                "from": "B",
+                "to": "C",
+                "label": "respuesta",
+                "kind": "reply",
+                "step": 10
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

@@ -1,6 +1,14 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveFlowchartSpec, computeFlowchartLayout, shapePath } from './flowchart-spec.js';
+import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW } from './flowchart-spec.js';
+import type { FlowLayoutOptions, FlowPaint } from './flowchart-spec.schemas.js';
+import { hostStyleName, styleThemeFor } from './diagram-styles.js';
+import { pickThemeMode, themeToDiagramTheme, injectThemeCss } from './theme.js';
+import type { ErThemeJson } from './theme.schemas.js';
+import { cargarFuente } from '../_shared/diagram-text-wrap.js';
+import { pathEndDirection } from '../_shared/diagram-arrow.js';
+import { captureEmbeddedDiagram, embedSvgElement, resolveEmbedDiagram } from '../_shared/diagram-embed.js';
+import type { EmbedCapture, EmbedSize } from '../_shared/diagram-embed.schemas.js';
 import type {
   FlowLayout,
   FlowLayoutNode,
@@ -13,10 +21,12 @@ import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import type { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
+import { ANGULO_AUREO, hexToOklch, oklchToHex, rotarTono } from '../_shared/oklch.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
+import { ETIQUETA_ICONO, ETIQUETA_LINE_H } from './flowchart-labels.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
@@ -32,7 +42,7 @@ import {
   openInlineEditor,
 } from '../_shared/diagram-edit.js';
 import type { DiagramOverrides } from '../_shared/diagram-edit.js';
-import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./flowchart.schemas.js";
+import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./flowchart.schemas.js";
 /**
  * <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *
@@ -64,6 +74,76 @@ const VALID_ANIMATION: Set<string> = new Set(['flow']);
 
 /** Arista cacheada en el SVG para aplicar hover sin reconstruir el DOM. */
 
+/** Espera a que cargue la hoja de la webfont del tema (si ya está en el <head>). */
+function esperarHoja(href: string | undefined): Promise<void> {
+  if (!href) return Promise.resolve();
+  const link = [...document.head.querySelectorAll('link[data-iswc-font]')]
+    .find((l) => l.getAttribute('data-iswc-font') === href);
+  if (!(link instanceof HTMLLinkElement) || link.sheet) return Promise.resolve();
+  return conTope(new Promise<void>((resolve) => {
+    link.addEventListener('load', () => resolve(), { once: true });
+    link.addEventListener('error', () => resolve(), { once: true });
+  }), 4000).then(() => undefined);
+}
+
+/** La promesa, o `undefined` si tarda más de `ms` (un recurso caído no congela el render). */
+function conTope<T>(p: Promise<T>, ms: number): Promise<T | undefined> {
+  return Promise.race([p, new Promise<undefined>((r) => setTimeout(() => r(undefined), ms))]);
+}
+
+/** Líneas centradas en la caja de texto (en el rombo, el rect inscrito). */
+function insoftText(lines: string[], tb: { x: number; y: number; w: number; h: number }, ink: FlowInk, align: 'middle' | 'start' = 'middle'): SVGTextElement {
+  const t = svgEl('text', {
+    fill: ink.text, 'font-size': String(ink.fontSize), 'font-weight': String(ink.fontWeight),
+    'font-family': ink.font, 'text-anchor': align, class: 'flow-node__label',
+  });
+  const cx = align === 'start' ? tb.x : tb.x + tb.w / 2;
+  const first = tb.y + tb.h / 2 - ((lines.length - 1) * FLOW_LINE_H) / 2 + ink.fontSize * 0.36;
+  lines.forEach((line, i) => {
+    const ts = svgEl('tspan', { x: cx, y: first + i * FLOW_LINE_H });
+    ts.textContent = line;
+    t.appendChild(ts);
+  });
+  return t;
+}
+
+/** El tono de un color con luminosidad 0,25 (OKLCH): la insignia oscura «del color de su entidad». */
+function oscuro(hex: string): string {
+  const o = hexToOklch(hex);
+  return o ? oklchToHex(0.25, Math.min(o[1], 0.12), o[2]) : hex;
+}
+
+/** Color de una entidad incrustada: el primer relleno con color (ni blanco, ni gris, ni transparente) de su dibujo. */
+function colorDeEntidad(g: Element): string {
+  for (const el of g.querySelectorAll('[fill]')) {
+    const f = (el.getAttribute('fill') ?? '').trim();
+    if (!/^#[0-9a-f]{6}$/i.test(f)) continue;
+    const o = hexToOklch(f);
+    if (o && o[1] > 0.03 && o[0] > 0.3 && o[0] < 0.98) return f;
+  }
+  return '';
+}
+
+/** Preferencia de movimiento reducido del sistema (sin `matchMedia`, p. ej. al exportar: animar). */
+function movimientoReducido(): boolean {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/** Globo de comentario: rect de esquinas redondeadas con un triángulo en el costado que señala. */
+function globoPath(x: number, y: number, w: number, h: number, lado: 'left' | 'right'): string {
+  const r = 8;
+  const cy = y + h / 2;
+  const t = 8;
+  const izq = lado === 'left'
+    ? `L${x},${cy + t / 2} L${x - t},${cy} L${x},${cy - t / 2} `
+    : '';
+  const der = lado === 'right'
+    ? `L${x + w},${cy - t / 2} L${x + w + t},${cy} L${x + w},${cy + t / 2} `
+    : '';
+  return `M${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} ${der}V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} `
+    + `H${x + r} Q${x},${y + h} ${x},${y + h - r} ${izq}V${y + r} Q${x},${y} ${x + r},${y} Z`;
+}
+
 function parseAnimationTokens(raw: string | null | undefined): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -88,6 +168,17 @@ class IswcFlowchart extends DiagramElementBase {
   #hoverId: string | null = null;
   #overrides: FlowLayoutOverrides | null = null;
   #dragDetach: (() => void) | null = null;
+  /** Tema del estilo (`diagram-style="insoft"` → tema `flowchart`), ya fusionado con el modo. */
+  #styleTheme: ErThemeJson | null = null;
+  /** Pintura insoft resuelta; null = estilo clásico. */
+  #paint: FlowPaint | null = null;
+  /** SVG capturado de cada nodo especial (clave: contrato del nodo + modo + estilo). */
+  /** Spec visible del último render (nodos especiales → su captura). */
+  #visibleSpec: FlowResolvedSpec | null = null;
+  #captures: Map<string, EmbedCapture | null> = new Map();
+  #stage: HTMLElement | null = null;
+  #probe: SVGTextElement | null = null;
+  #fontRetry = false;
 
   constructor() {
     super();
@@ -170,16 +261,132 @@ class IswcFlowchart extends DiagramElementBase {
     }
 
     const dark = this.isDarkTheme;
-    const theme: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const base: DiagramTheme = dark ? sequenceThemeDark() : sequenceThemeLight();
+    const styleTheme = this.#resolveStyleTheme();
+    this.#styleTheme = styleTheme;
+    this.#paint = styleTheme?.flow ? flowPaint(styleTheme) : null;
+    const theme: DiagramTheme = styleTheme ? themeToDiagramTheme(styleTheme, base) : base;
     this.#theme = theme;
+    this.#visibleSpec = visible;
     this.syncThemeAttr();
 
-    const layout: FlowLayout = computeFlowchartLayout(visible, this.#overrides);
+    const opts: FlowLayoutOptions = { embeds: this.#embedSizes(visible) };
+    if (this.#paint) {
+      const paint = this.#paint;
+      opts.style = 'insoft';
+      opts.fontSize = paint.fontSize;
+      opts.measure = (t: string) => this.#measure(t, paint);
+    }
+    const layout: FlowLayout = computeFlowchartLayout(visible, this.#overrides, opts);
     this.layout = layout;
     this.#buildSvg(layout, theme);
+    if (styleTheme) {
+      injectThemeCss(this.svg, styleTheme);
+      this.svg.setAttribute('data-flow-theme', styleTheme.id);
+    } else {
+      this.svg.removeAttribute('data-flow-theme');
+    }
+    this.#watchFont();
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
     this.wrap.classList.toggle('iswc-editable', this.mode === 'edit');
     if (this.mode === 'edit') this.#installEditInteractions();
+  }
+
+  /** Tema `flowchart` del estilo pedido por el host, fusionado con el modo claro/oscuro. */
+  #resolveStyleTheme(): ErThemeJson | null {
+    const raw = styleThemeFor(hostStyleName(this), 'flowchart');
+    return raw && raw.kind === 'flowchart' ? pickThemeMode(raw, this.isDarkTheme) : null;
+  }
+
+  /** Clave de captura de un nodo especial: su contrato + modo + estilo. */
+  #embedKey(n: FlowNodeSpec): string {
+    return `${hostStyleName(this) ?? ''}|${this.isDarkTheme ? 'd' : 'l'}|${JSON.stringify(n.embed ?? null)}`;
+  }
+
+  /** Tamaño natural medido de cada diagrama incrustado ya capturado. */
+  #embedSizes(spec: FlowResolvedSpec): Record<string, EmbedSize> {
+    const out: Record<string, EmbedSize> = {};
+    for (const n of spec.nodes) {
+      if (!n.embed) continue;
+      const cap = this.#captures.get(this.#embedKey(n));
+      if (cap) out[n.id] = { w: cap.box.w, h: cap.box.h };
+    }
+    return out;
+  }
+
+  #ensureStage(): HTMLElement {
+    if (this.#stage?.isConnected) return this.#stage;
+    const stage = document.createElement('div');
+    stage.className = 'flow-embed-stage';
+    stage.setAttribute('aria-hidden', 'true');
+    this.shadowRoot!.appendChild(stage);
+    this.#stage = stage;
+    return stage;
+  }
+
+  /** Ancho real del texto con la tipografía del tema (fuera de pantalla). */
+  #measure(text: string, paint: FlowPaint): number {
+    if (!this.#probe?.isConnected) {
+      const svg = svgEl('svg', { width: 10, height: 10 });
+      const t = svgEl('text', { x: 0, y: 10 });
+      svg.appendChild(t);
+      this.#ensureStage().appendChild(svg);
+      this.#probe = t;
+    }
+    const probe = this.#probe!;
+    probe.setAttribute('font-family', paint.font);
+    probe.setAttribute('font-size', String(paint.fontSize));
+    probe.setAttribute('font-weight', String(paint.fontWeight));
+    probe.textContent = text;
+    const w = probe.getComputedTextLength();
+    return w > 0 ? w : text.length * paint.fontSize * 0.6;
+  }
+
+  /** Si se midió antes de que llegara la webfont, re-maqueta una vez al llegar. */
+  #watchFont(): void {
+    const paint = this.#paint;
+    if (!paint || this.#fontRetry || !document.fonts) return;
+    const spec = `${paint.fontWeight} ${paint.fontSize}px ${paint.font}`;
+    let lista = true;
+    try { lista = document.fonts.check(spec); } catch { lista = true; }
+    if (lista) return;
+    this.#fontRetry = true;
+    document.fonts.load(spec).then(() => this.queueRender()).catch(() => undefined);
+  }
+
+  /**
+   * Antes de pintar: la webfont del estilo (para medir con ella) y la captura
+   * de cada nodo especial (`nested`, `tableder`, `component`).
+   */
+  override async prepareRender(): Promise<void> {
+    const styleTheme = this.#resolveStyleTheme();
+    if (styleTheme?.font?.family) {
+      injectThemeCss(this.svg, styleTheme);
+      await esperarHoja(styleTheme.font.import);
+      const paint = styleTheme.flow ? flowPaint(styleTheme) : null;
+      await conTope(cargarFuente(styleTheme.font.family, paint?.fontSize ?? 11), 4000);
+    }
+    const spec = resolveFlowchartSpec(this.payload ?? {});
+    if (!spec) return;
+    const pendientes = spec.nodes.filter((n) => n.embed && !this.#captures.has(this.#embedKey(n)));
+    for (const [i, n] of pendientes.entries()) {
+      const key = this.#embedKey(n);
+      const embed = n.embed!;
+      let cap: EmbedCapture | null = null;
+      try {
+        const diagram = await resolveEmbedDiagram(embed);
+        cap = diagram
+          ? (await conTope(captureEmbeddedDiagram(this.#ensureStage(), diagram, {
+            moduleUrl: import.meta.url,
+            styleName: hostStyleName(this),
+            idPrefix: `fe${this.#captures.size}x${i}-`,
+          }), 15000)) ?? null
+          : null;
+      } catch {
+        cap = null;
+      }
+      this.#captures.set(key, cap);
+    }
   }
 
   #buildSvg(layout: FlowLayout, theme: DiagramTheme): void {
@@ -196,7 +403,7 @@ class IswcFlowchart extends DiagramElementBase {
     if (layout.title) {
       const t = svgEl('text', {
         x: W / 2, y: layout.titleY, 'text-anchor': 'middle', fill: theme.text,
-        'font-size': '13', 'font-weight': '600', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '13', 'font-weight': '600', 'font-family': this.#paint?.font ?? 'Tahoma,Arial,sans-serif',
       });
       t.textContent = layout.title;
       this.svg.appendChild(t);
@@ -204,15 +411,22 @@ class IswcFlowchart extends DiagramElementBase {
     if (layout.subtitle) {
       const t = svgEl('text', {
         x: W / 2, y: layout.subtitleY, 'text-anchor': 'middle', fill: theme.muted,
-        'font-size': '11', 'font-family': 'Tahoma,Arial,sans-serif',
+        'font-size': '11', 'font-family': this.#paint?.font ?? 'Tahoma,Arial,sans-serif',
       });
       t.textContent = layout.subtitle;
       this.svg.appendChild(t);
     }
 
     if (layout.groups?.length) this.#buildLegend(layout, theme);
-    this.#buildEdges(layout, theme);
-    this.#buildNodes(layout, theme);
+    if (this.#paint) {
+      if (layout.lanes?.length) this.#buildInsoftLanes(layout, this.#paint);
+      if (layout.contexts?.length) this.#buildInsoftContexts(layout, this.#paint);
+      this.#buildInsoftEdges(layout, this.#paint);
+      this.#buildInsoftNodes(layout, this.#paint);
+    } else {
+      this.#buildEdges(layout, theme);
+      this.#buildNodes(layout, theme);
+    }
 
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
@@ -342,15 +556,25 @@ class IswcFlowchart extends DiagramElementBase {
       g.dataset.nodeId = n.id;
       if (this.isViewer) g.style.cursor = 'pointer';
 
+      const terminal = n.shape === 'start' || n.shape === 'end';
       const box = svgEl('path', {
         d: shapePath(n.shape, n.x, n.y, n.w, n.h),
-        fill: theme.chipFill,
+        fill: n.shape === 'start' ? color : (n.embed?.bg ?? theme.chipFill),
         stroke: color,
         'stroke-width': 1.3,
         'stroke-linejoin': 'round',
         class: 'flow-node__box',
       });
-      g.appendChild(box);
+      if (n.kind !== 'tableder' && n.kind !== 'component' && n.kind !== 'class') g.appendChild(box);
+      if (n.shape === 'end') {
+        g.appendChild(svgEl('circle', { cx: n.x + n.w / 2, cy: n.y + n.h / 2, r: n.w / 2 - 5, fill: color }));
+      }
+      if (n.embed || terminal) {
+        if (n.embed) this.#paintEmbed(g, n, { text: theme.text, muted: theme.muted, font: 'Tahoma,Arial,sans-serif', fontSize: 11, fontWeight: 600 });
+        this.svg.appendChild(g);
+        this.#nodeNodes.set(n.id, { n, g: g as SVGGElement, box: box as SVGPathElement });
+        continue;
+      }
 
       const hasIcon = !!n.icon;
       const padX = hasIcon ? 26 : 10;
@@ -421,6 +645,280 @@ class IswcFlowchart extends DiagramElementBase {
 
       this.svg.appendChild(g);
       this.#nodeNodes.set(n.id, { n, g: g as SVGGElement, box: box as SVGPathElement });
+    }
+  }
+
+  /* ── estilo insoft (actividad) ── */
+
+  /**
+   * Grupos de contexto dentro de un carril: recuadro de borde punteado celeste y fondo suave, con su
+   * título como etiqueta oscura arriba a la izquierda (como los fragmentos de secuencia).
+   */
+  #buildInsoftContexts(layout: FlowLayout, paint: FlowPaint): void {
+    const g = svgEl('g', { class: 'flow-contexts' });
+    for (const c of layout.contexts ?? []) {
+      const caja = svgEl('g', { class: 'flow-context' });
+      // Recuadro: borde punteado celeste (el de los carriles) y fondo suave.
+      caja.appendChild(svgEl('rect', {
+        x: c.x, y: c.y, width: c.w, height: c.h, rx: 6, fill: paint.laneLine, 'fill-opacity': 0.08,
+        stroke: paint.laneLine, 'stroke-width': 1.2, 'stroke-dasharray': '6 4', class: 'flow-context__bg',
+      }));
+      // Título como etiqueta de los fragmentos de secuencia: fondo oscuro arriba a la izquierda.
+      const tw = Math.ceil(c.label.length * 6.2) + 14;
+      caja.appendChild(svgEl('rect', {
+        x: c.x, y: c.y, width: tw, height: 18, rx: 3, fill: paint.startFill, class: 'flow-context__tag',
+      }));
+      const t = svgEl('text', {
+        x: c.x + 7, y: c.y + 12.5, fill: paint.background, 'font-family': paint.font, 'font-size': 10.5,
+        'font-weight': 700, class: 'flow-context__label',
+      });
+      t.textContent = c.label;
+      caja.appendChild(t);
+      g.appendChild(caja);
+    }
+    this.svg.appendChild(g);
+  }
+
+  /**
+   * Carriles de contexto: separadores punteados entre carriles y el nombre de cada contexto en
+   * negrita (arriba si son verticales; a la izquierda si son horizontales). Van detrás de todo.
+   */
+  #buildInsoftLanes(layout: FlowLayout, paint: FlowPaint): void {
+    const lanes = layout.lanes ?? [];
+    const horizontal = layout.laneDirection === 'horizontal';
+    const g = svgEl('g', { class: 'flow-lanes' });
+    lanes.forEach((l, i) => {
+      const t = svgEl('text', horizontal
+        ? { x: l.x + 12, y: l.y + l.h / 2, 'dominant-baseline': 'middle', 'text-anchor': 'start' }
+        : { x: l.x + l.w / 2, y: l.y + 26, 'text-anchor': 'middle' });
+      for (const [k, v] of Object.entries({
+        fill: paint.text, 'font-family': paint.font, 'font-size': 13, 'font-weight': 700, class: 'flow-lane__label',
+      })) t.setAttribute(k, String(v));
+      t.textContent = l.label;
+      const lane = svgEl('g', { class: 'flow-lane' });
+      lane.dataset.laneId = l.id;
+      lane.appendChild(t);
+      if (i < lanes.length - 1) {
+        lane.appendChild(svgEl('line', horizontal
+          ? { x1: l.x, y1: l.y + l.h, x2: l.x + l.w, y2: l.y + l.h }
+          : { x1: l.x + l.w, y1: l.y, x2: l.x + l.w, y2: l.y + l.h }));
+        const sep = lane.lastElementChild!;
+        for (const [k, v] of Object.entries({ stroke: paint.laneLine, 'stroke-width': 1.2, 'stroke-dasharray': '6 4', class: 'flow-lane__sep' })) sep.setAttribute(k, String(v));
+      }
+      g.appendChild(lane);
+    });
+    this.svg.appendChild(g);
+  }
+
+  #buildInsoftEdges(layout: FlowLayout, paint: FlowPaint): void {
+    const flowAnim = this.hasAnimation('flow');
+    // Ramas que se funden en la misma entrada comparten una sola punta.
+    const puntas = new Set<string>();
+    for (const e of layout.edges) {
+      const g = svgEl('g', { class: 'flow-edge' });
+      g.dataset.edgeId = e.id;
+      const color = paint.edgeStroke;
+      const wdt = e.kind === 'thick' ? paint.edgeWidth * 2 : paint.edgeWidth;
+      if (flowAnim && e.kind !== 'dashed') {
+        g.appendChild(svgEl('path', {
+          d: e.path, fill: 'none', 'stroke-width': Math.max(wdt + 1.4, 2.6),
+          'stroke-linejoin': 'round', 'stroke-linecap': 'round', class: 'flow-edge__flow', stroke: color,
+        }));
+        g.setAttribute('color', color);
+      }
+      const path = svgEl('path', {
+        d: e.path, fill: 'none', stroke: color, 'stroke-width': wdt,
+        'stroke-dasharray': e.kind === 'dashed' ? '5 4' : null,
+        'stroke-linejoin': 'miter', class: 'flow-edge__path',
+      });
+      // Riel punteado en movimiento suave hacia su destino: animación SVG nativa (viaja con el SVG
+      // exportado). El desfase baja un periodo del patrón (5 + 4) en bucle: los trazos avanzan.
+      if (e.kind === 'dashed' && paint.dashFlow && !movimientoReducido()) {
+        path.appendChild(svgEl('animate', {
+          attributeName: 'stroke-dashoffset', values: '9;0', dur: '0.9s', repeatCount: 'indefinite',
+          class: 'flow-edge__dash-flow',
+        }));
+      }
+      g.appendChild(path);
+      // Punta abierta (dos trazos), orientada por el último tramo real.
+      const dir = pathEndDirection(e.path, { x: 0, y: 1 });
+      const tip = { x: e.arrowTipX, y: e.arrowTipY };
+      const len = 9;
+      const half = 4.5;
+      const bx = tip.x - dir.x * len;
+      const by = tip.y - dir.y * len;
+      const clave = `${tip.x},${tip.y}`;
+      if (!puntas.has(clave)) g.appendChild(svgEl('polyline', {
+        points: `${bx - dir.y * half},${by + dir.x * half} ${tip.x},${tip.y} ${bx + dir.y * half},${by - dir.x * half}`,
+        fill: 'none', stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', 'stroke-linecap': 'butt',
+        class: 'flow-edge__head',
+      }));
+      puntas.add(clave);
+      if (e.label) {
+        // Junto a la arista (no encima): halo del color del lienzo para que
+        // un cruce no la ensucie.
+        const t = svgEl('text', {
+          x: e.labelX, y: e.labelY, 'text-anchor': e.labelAnchor ?? 'middle', fill: paint.labelText,
+          'font-size': String(paint.fontSize - 0.5), 'font-weight': String(paint.fontWeight),
+          'font-family': paint.font, stroke: paint.background, 'stroke-width': 3,
+          'paint-order': 'stroke', 'stroke-linejoin': 'round', class: 'flow-edge__label',
+        });
+        if (e.labelVertical) t.setAttribute('transform', `rotate(-90 ${e.labelX} ${e.labelY})`);
+        // Etiqueta partida (o resumida) por el layout: una línea por renglón.
+        const lineas = e.labelLines ?? [e.label];
+        if (lineas.length > 1) {
+          lineas.forEach((l, k) => {
+            const ts = svgEl('tspan', { x: e.labelX, dy: k ? 12 : 0 });
+            ts.textContent = l;
+            t.appendChild(ts);
+          });
+        } else t.textContent = lineas[0] ?? e.label;
+        if (e.labelIcon && e.labelBox) {
+          // Ícono delante del texto: a la izquierda (horizontal) o abajo (vertical, el texto sube).
+          const b = e.labelBox;
+          const [ix, iy] = e.labelVertical
+            ? [b.x + (b.w - ETIQUETA_ICONO) / 2, b.y + b.h - ETIQUETA_ICONO - 2]
+            : [b.x + 2, b.y + (ETIQUETA_LINE_H - ETIQUETA_ICONO) / 2];
+          const ic = svgIconGroup(e.labelIcon, { x: ix, y: iy, size: ETIQUETA_ICONO, color: paint.labelText });
+          ic.classList.add('flow-edge__label-icon');
+          g.appendChild(ic);
+        }
+        g.appendChild(t);
+      }
+      this.svg.appendChild(g);
+      this.#edgeNodes.set(e.id, { e, g: g as SVGGElement, path: path as SVGPathElement });
+    }
+  }
+
+  #buildInsoftNodes(layout: FlowLayout, paint: FlowPaint): void {
+    // Con `hueRotate`, cada símbolo pintado con el relleno del tema toma su propio tono (en orden
+    // de lectura): mismo L y C en OKLCH, el tono avanza por el ángulo áureo.
+    let simbolo = 0;
+    const relleno = (base: string): string => paint.hueRotate ? rotarTono(base, ANGULO_AUREO * simbolo++) : base;
+    // Color de la entidad (para su insignia): el relleno del símbolo o, si es incrustado, el de su diagrama.
+    let tono = '';
+    const pinta = (base: string): string => (tono = relleno(base));
+    for (const n of layout.nodes) {
+      const g = svgEl('g', { class: 'flow-node' });
+      g.dataset.nodeId = n.id;
+      if (this.isViewer) g.style.cursor = 'pointer';
+      tono = '';
+      const stroke = { stroke: paint.actionBorder, 'stroke-width': paint.borderWidth, class: 'flow-node__box' };
+      let box: SVGElement;
+      if (n.shape === 'start') {
+        box = svgEl('circle', { cx: n.x + n.w / 2, cy: n.y + n.h / 2, r: n.w / 2, fill: paint.startFill, class: 'flow-node__box' });
+        g.appendChild(box);
+      } else if (n.shape === 'end') {
+        box = svgEl('circle', {
+          cx: n.x + n.w / 2, cy: n.y + n.h / 2, r: n.w / 2 - 0.75, fill: paint.background,
+          stroke: paint.endFill, 'stroke-width': 1.5, class: 'flow-node__box',
+        });
+        g.appendChild(box);
+        g.appendChild(svgEl('circle', { cx: n.x + n.w / 2, cy: n.y + n.h / 2, r: n.w / 2 - 5, fill: paint.endFill }));
+      } else if (n.kind === 'nested') {
+        box = svgEl('rect', { x: n.x, y: n.y, width: n.w, height: n.h, rx: 4, fill: n.embed?.bg ?? paint.nestedBg, ...stroke });
+        g.appendChild(box);
+      } else if (n.kind === 'tableder' || n.kind === 'component' || n.kind === 'class') {
+        // La forma la pone el diagrama incrustado; la caja solo sirve al hover.
+        box = svgEl('rect', { x: n.x, y: n.y, width: n.w, height: n.h, fill: 'none', stroke: 'none', class: 'flow-node__box' });
+        g.appendChild(box);
+      } else if (n.shape === 'comment') {
+        // Globo de diálogo: esquinas redondeadas, triángulo hacia el nodo comentado y comillas.
+        box = svgEl('path', {
+          d: globoPath(n.x, n.y, n.w, n.h, n.pointer ?? 'left'), fill: paint.background,
+          stroke: paint.muted, 'stroke-width': 1, 'stroke-linejoin': 'round', class: 'flow-node__box flow-node__comment',
+        });
+        g.appendChild(box);
+        g.appendChild(svgIconGroup('mdi:format-quote-open', { x: n.x + 8, y: n.y + 8, size: 16, color: paint.muted }));
+      } else if (n.shape === 'bar') {
+        // Barra de sincronización (bifurcación / unión): sólida, del color del inicio.
+        box = svgEl('path', { d: shapePath('bar', n.x, n.y, n.w, n.h), fill: paint.startFill, class: 'flow-node__box' });
+        g.appendChild(box);
+      } else if (n.shape === 'diamond') {
+        box = svgEl('path', { d: shapePath('diamond', n.x, n.y, n.w, n.h), fill: pinta(paint.decisionFill), 'stroke-linejoin': 'miter', ...stroke });
+        g.appendChild(box);
+      } else if (n.shape === 'rect' || n.shape === 'round' || n.shape === 'stadium') {
+        const r = Math.min(paint.radius, n.h / 2);
+        box = svgEl('rect', { x: n.x, y: n.y, width: n.w, height: n.h, rx: r, ry: r, fill: pinta(paint.actionFill), ...stroke });
+        g.appendChild(box);
+      } else {
+        box = svgEl('path', { d: shapePath(n.shape, n.x, n.y, n.w, n.h), fill: pinta(paint.actionFill), 'stroke-linejoin': 'round', ...stroke });
+        g.appendChild(box);
+      }
+      if (n.embed) {
+        this.#paintEmbed(g, n, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: paint.fontWeight });
+        if (n.pill) g.appendChild(this.#pill(n, paint, colorDeEntidad(g)));
+      } else if (n.lines?.length && n.textBox) {
+        g.appendChild(insoftText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: paint.fontWeight }, n.textAlign ?? 'middle'));
+        if (n.pill) g.appendChild(this.#pill(n, paint, tono));
+      }
+      this.svg.appendChild(g);
+      this.#nodeNodes.set(n.id, { n, g: g as SVGGElement, box: box as SVGPathElement });
+    }
+  }
+
+  /**
+   * Pastilla de una acción: número de paso (orden de la secuencia) e ícono, sobre un fondo claro al
+   * 30 % y sin borde. Une la lectura de flujo (forma, carril) con la de secuencia (paso numerado).
+   */
+  #pill(n: FlowLayoutNode, paint: FlowPaint, entidad = ''): SVGGElement {
+    const p = n.pill!;
+    const g = svgEl('g', { class: 'flow-node__pill' }) as SVGGElement;
+    // Suelta (decisión, nodo incrustado): fondo oscuro y número claro, como los pasos de la secuencia.
+    // Con `pillTone: entity` (insoft), el fondo es el tono de su entidad oscurecido (L 0,25 en OKLCH).
+    const suelta = !!n.pillFloat;
+    const fondo = paint.pillTone !== 'entity' ? paint.pillTone : entidad ? oscuro(entidad) : paint.startFill;
+    g.appendChild(svgEl('rect', {
+      x: p.x, y: p.y, width: p.w, height: p.h, rx: p.h / 2,
+      fill: suelta ? fondo : paint.background, 'fill-opacity': suelta ? 1 : 0.3,
+      class: 'flow-node__pill-bg',
+    }));
+    let x = p.x + 6;
+    const cy = p.y + p.h / 2;
+    if (n.step != null) {
+      const t = svgEl('text', {
+        // Sin ícono, el número queda centrado en la pastilla.
+        x: n.icon ? x + pillStepW(n.step) / 2 : p.x + p.w / 2, y: cy, 'text-anchor': 'middle', 'dominant-baseline': 'central',
+        fill: suelta ? paint.background : paint.actionText, 'font-family': paint.font, 'font-size': 10, 'font-weight': 700, class: 'flow-node__step',
+      });
+      t.textContent = String(n.step);
+      g.appendChild(t);
+      x += pillStepW(n.step) + 4;
+    }
+    if (n.icon) {
+      // Sin número, el ícono queda centrado en la pastilla.
+      const ix = n.step != null ? x : p.x + (p.w - FLOW_PILL_ICON) / 2;
+      g.appendChild(svgIconGroup(n.icon, { x: ix, y: cy - FLOW_PILL_ICON / 2, size: FLOW_PILL_ICON, color: suelta ? paint.background : paint.actionText }));
+    }
+    return g;
+  }
+
+  /**
+   * Nodo especial: rótulo (si el nodo lo trae) y el diagrama capturado
+   * encajado en `embedBox`. Sin captura (bundle o `src` no disponibles), un
+   * marco punteado con el rótulo.
+   */
+  #paintEmbed(g: SVGElement, n: FlowLayoutNode, ink: FlowInk): void {
+    const source = this.#visibleSpec?.nodes.find((x) => x.id === n.id);
+    const cap = source ? this.#captures.get(this.#embedKey(source)) : null;
+    if (n.lines?.length && n.textBox) g.appendChild(insoftText(n.lines, n.textBox, ink));
+    const eb = n.embedBox;
+    if (!eb) return;
+    if (cap) {
+      g.appendChild(embedSvgElement(cap, eb));
+      return;
+    }
+    g.appendChild(svgEl('rect', {
+      x: eb.x, y: eb.y, width: eb.w, height: eb.h, rx: 3, fill: 'none', stroke: ink.muted,
+      'stroke-width': 1, 'stroke-dasharray': '3 3', class: 'flow-node__embed-missing',
+    }));
+    if (!n.lines?.length) {
+      const t = svgEl('text', {
+        x: eb.x + eb.w / 2, y: eb.y + eb.h / 2 + 4, 'text-anchor': 'middle', fill: ink.muted,
+        'font-size': '10', 'font-family': ink.font,
+      });
+      t.textContent = n.label;
+      g.appendChild(t);
     }
   }
 

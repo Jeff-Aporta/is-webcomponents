@@ -174,6 +174,8 @@ export class DiagramElementBase extends ElementBase {
         // estilo. Si la carga falla, se pinta con el tema por defecto.
         const estilo = hostStyleName(this);
         if (estilo) await loadStylesDiagram(estilo).catch(() => undefined);
+        // Trabajo asíncrono previo al pintado (webfont, diagramas incrustados…).
+        if (this.mounted) await this.prepareRender().catch(() => undefined);
         if (this.mounted) {
           this.renderDiagram();
           this.#applyLook();
@@ -186,6 +188,11 @@ export class DiagramElementBase extends ElementBase {
   }
 
   async updateComplete(): Promise<void> { await this.queueRender(); }
+
+  /** Hook opcional: trabajo asíncrono que el render necesita listo (no-op por
+   *  defecto). Se espera dentro de `queueRender`, así `updateComplete` (y el
+   *  export headless) ya incluyen su resultado. */
+  async prepareRender(): Promise<void> {}
 
   /**
    * `look="sketch"` (servilleta / boceto): trazo “a mano” sobre las formas

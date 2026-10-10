@@ -1,0 +1,234 @@
+{
+  "slug": "ruta-conversacion-listado",
+  "module": "020-Conversaciones",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Listados de conversaciones",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Portal / consola"
+      },
+      {
+        "id": "T",
+        "label": "ISS · TConversacionController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "conversación",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "conversación",
+          "stereotype": "Chat",
+          "items": [
+            "GET /conversaciones",
+            "GET /conversaciones/{filtro}"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TConversacionController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "name": "TConversacionController",
+          "attributes": [
+            "- nTbl = patyia_conversaciones"
+          ],
+          "methods": [
+            "+ insert(): SSE",
+            "+ get() · delete()",
+            "+ getLogs() · getResumen()",
+            "+ listSimple() · list(filtro) · auditar()",
+            "+ leerCfg() · escribirCfg()",
+            "+ timerCerrarConversaciones()"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Con filtro?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "val",
+        "label": "Body estricto y searchColumn de la lista blanca (400); limit de 1 a 200",
+        "lane": "T",
+        "icon": "mdi:form-textbox"
+      },
+      {
+        "id": "prop",
+        "label": "Las conversaciones propias del token",
+        "lane": "T",
+        "icon": "mdi:account-outline"
+      },
+      {
+        "id": "seg",
+        "label": "Puerta SEG QUERY:/conversaciones (auditoría)",
+        "lane": "T",
+        "icon": "mdi:shield-account-outline"
+      },
+      {
+        "id": "d2",
+        "label": "¿agrupar = tercero?",
+        "shape": "diamond",
+        "lane": "T"
+      },
+      {
+        "id": "grp",
+        "label": "Agrupa por tercero y contacto",
+        "lane": "T",
+        "icon": "mdi:account-group-outline"
+      },
+      {
+        "id": "flt",
+        "label": "Filtro, orden y paginación; otros dueños solo con auditoría",
+        "lane": "T",
+        "icon": "mdi:filter-outline"
+      },
+      {
+        "id": "tconv",
+        "label": "patyia_conversaciones",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_conversaciones",
+          "attributes": [
+            {
+              "name": "iconversacion",
+              "type": "bigint",
+              "key": "PK"
+            },
+            {
+              "name": "itercero",
+              "type": "varchar(50)",
+              "key": "FK"
+            },
+            {
+              "name": "icontacto",
+              "type": "bigint",
+              "key": "FK"
+            },
+            {
+              "name": "titulo",
+              "type": "varchar(100)"
+            },
+            {
+              "name": "itdestado",
+              "type": "smallint"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamp"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ok",
+        "label": "{ pagina, qregistros, totalpaginas, totalregistros, datos }",
+        "lane": "T",
+        "icon": "mdi:format-list-numbered"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "petición con token"
+      },
+      {
+        "from": "ctl",
+        "to": "d1"
+      },
+      {
+        "from": "d1",
+        "to": "val",
+        "label": "no"
+      },
+      {
+        "from": "d1",
+        "to": "seg",
+        "label": "sí"
+      },
+      {
+        "from": "val",
+        "to": "prop"
+      },
+      {
+        "from": "prop",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "seg",
+        "to": "d2"
+      },
+      {
+        "from": "d2",
+        "to": "grp",
+        "label": "sí"
+      },
+      {
+        "from": "d2",
+        "to": "flt",
+        "label": "no"
+      },
+      {
+        "from": "grp",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "flt",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "prop",
+        "to": "ok"
+      },
+      {
+        "from": "grp",
+        "to": "ok"
+      },
+      {
+        "from": "flt",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

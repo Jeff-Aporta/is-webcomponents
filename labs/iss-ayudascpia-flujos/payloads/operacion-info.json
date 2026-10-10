@@ -1,0 +1,100 @@
+{
+  "slug": "operacion-info",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Salud del servidor (GET /info)",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Monitor / agente",
+          "kind": "participant"
+        },
+        {
+          "id": "I",
+          "label": "ISS · TInfoController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        },
+        {
+          "id": "G",
+          "label": "GeoIP",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "I",
+          "label": "GET /info (pública, sin JWT)",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "I",
+          "to": "P",
+          "label": "SELECT 1 con tiempo de conexión",
+          "kind": "sync",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "I",
+          "to": "P",
+          "label": "¿hay errores abiertos en la bandeja?",
+          "kind": "sync",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "I",
+          "to": "P",
+          "label": "registro de parches (patchdb)",
+          "kind": "sync",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "I",
+          "to": "G",
+          "label": "ubicación del servidor",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "I",
+          "to": "C",
+          "label": "200 siempre: versión, sello, BD, parches, runner, erroresPorAtender",
+          "kind": "reply",
+          "step": 6
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "par",
+          "kind": "par",
+          "messages": [
+            "m2",
+            "m3",
+            "m4",
+            "m5"
+          ],
+          "condition": "lecturas en paralelo; cada una puede fallar sola"
+        }
+      ]
+    }
+  }
+}

@@ -13,7 +13,7 @@ export const ErThemeJsonSchema = z.object({
    * Diagrama al que aplica dentro de un estilo (`registerStyleDiagram`):
    * `er`, `component` o `class`. Un estilo trae un tema por tipo.
    */
-  kind: z.union([z.literal('er'), z.literal('component'), z.literal('class'), z.literal('sequence')]).optional(),
+  kind: z.union([z.literal('er'), z.literal('component'), z.literal('class'), z.literal('sequence'), z.literal('flowchart')]).optional(),
   label: z.string().optional(),
   font: z.object({
   family: z.string().optional(),
@@ -105,6 +105,41 @@ export const ErThemeJsonSchema = z.object({
   stepText: z.string().optional(),
   /** Repite las cabeceras de participantes al pie (UML clásico). */
   footerActors: z.boolean().optional(),
+}).optional(),
+  /**
+   * Diagrama de flujo / actividad (`iswc-flowchart`). Los colores se piden
+   * por NOMBRE de token del propio tema (`cluster.palettes`, `fills`,
+   * `lines`) o como color literal; así el celeste de las acciones es el
+   * mismo `primary` que usan los demás diagramas del estilo.
+   */
+  flow: z.object({
+  actionFill: z.string().optional(),
+  actionBorder: z.string().optional(),
+  actionText: z.string().optional(),
+  borderWidth: z.number().optional(),
+  /** Radio de las acciones (rectángulos muy redondeados). */
+  radius: z.number().optional(),
+  decisionFill: z.string().optional(),
+  startFill: z.string().optional(),
+  endFill: z.string().optional(),
+  edgeStroke: z.string().optional(),
+  edgeWidth: z.number().optional(),
+  labelText: z.string().optional(),
+  /** Fondo por defecto de los nodos `kind: "nested"`. */
+  nestedBg: z.string().optional(),
+  fontSize: z.number().optional(),
+  fontWeight: z.number().optional(),
+  /**
+   * Cada símbolo (acción, decisión…) con su propio tono: el relleno base rota en OKLCH por el
+   * ángulo áureo, con la misma luminosidad y croma (el texto conserva el contraste).
+   */
+  hueRotate: z.boolean().optional(),
+  /** Fondo de la insignia (número + ícono): `entity` = el tono de su entidad a L 0,25 (OKLCH), o un color. */
+  pillTone: z.string().optional(),
+  /** Rieles punteados con movimiento suave hacia su destino (animación SVG nativa). */
+  dashFlow: z.boolean().optional(),
+  /** Separadores de los carriles de contexto (por defecto celeste: distinto de flujos y usos). */
+  laneLine: z.string().optional(),
 }).optional(),
   diagramTheme: z.unknown() /* TODO: ref DiagramTheme */.optional(),
   light: z.unknown() /* TODO: ref Omit<...> */.optional(),

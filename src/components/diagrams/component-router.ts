@@ -19,7 +19,7 @@
  *          ajenos (encima = alto; a < lanePitch = menor, decreciente),
  *          choque de frente, ir por detrás del origen, cruces, historial.
  *        · incentivo (< 1): puntas `->` de la misma clave, radio `shareRadius`
- *          (150 px): en la punta vale ~0 (unirse no cuesta), a 150 px vale 1.
+ *          (200 px): en la punta vale ~0 (unirse no cuesta), a 200 px vale 1.
  *          Dentro de ese radio los rieles de la misma clave no son ajenos.
  *      Lo único aditivo es el giro (penalización geométrica, no un campo).
  *   4. Negociación (rip-up & reroute, estilo PathFinder): todas las aristas se
@@ -33,7 +33,7 @@
 
 import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.js';
 import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from './component-router.schemas.js';
-import { resolveRoutingCosts, readConsolidate } from './routing-costs.js';
+import { resolveRoutingCosts, readConsolidate, ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 
 const DIRS: ReadonlyArray<readonly [number, number]> = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 const SIDE_DIR: Record<Lado, number> = { right: 0, bottom: 1, left: 2, top: 3 };
@@ -69,7 +69,7 @@ function gridLines(lo: number, hi: number, step: number, extra: number[]): numbe
  * sí, nunca en las esquinas, y con la mitad del sobrante a cada extremo (el
  * reparto queda centrado). Son los candidatos entre los que el router elige.
  */
-export function perimeterPorts(b: Caja, step: number = 20, sides: readonly Lado[] = ['top', 'right', 'bottom', 'left']): RouterPort[] {
+export function perimeterPorts(b: Caja, step: number = ROUTING_COSTS_DEFAULTS.grid.step, sides: readonly Lado[] = ['top', 'right', 'bottom', 'left']): RouterPort[] {
   const out: RouterPort[] = [];
   for (const side of sides) {
     const L = side === 'top' || side === 'bottom' ? b.w : b.h;

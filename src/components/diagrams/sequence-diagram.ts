@@ -14,7 +14,9 @@ import type {
   SequenceLayoutMessage,
   SequenceResolvedSpec,
 } from './sequence-spec.js';
-import type { SequenceLayoutFragment } from './sequence-spec.schemas.js';
+import type { SequenceLayoutFragment, SequenceNestedSpec } from './sequence-spec.schemas.js';
+import { captureNodeEmbed, embedStage, embedSvgElement } from '../_shared/diagram-embed.js';
+import type { EmbedCapture, EmbedSize } from '../_shared/diagram-embed.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './theme.js';
 import type { ErThemeJson } from './theme.js';
@@ -119,6 +121,8 @@ class IswcSequenceDiagram extends DiagramElementBase {
   #lifelineNodes: LifelineNode[] = [];
   #actorNodes: ActorNode[] = [];
   #hoverId: string | null = null;
+  /** Capturas de los subprocesos `nested` (clave: estilo|modo|spec). */
+  #captures: Map<string, EmbedCapture | null> = new Map();
 
   constructor() {
     super();
@@ -217,6 +221,34 @@ class IswcSequenceDiagram extends DiagramElementBase {
     });
   }
 
+  #nestedKey(n: SequenceNestedSpec): string {
+    return `${hostStyleName(this) ?? ''}|${this.isDarkTheme ? 'd' : 'l'}|${JSON.stringify(n)}`;
+  }
+
+  /** Mensajes con subproceso `nested` (todas las ramas). */
+  #nestedMessages(spec: SequenceResolvedSpec): SequenceMessageSpec[] {
+    return [
+      ...(spec.messages ?? spec.preamble ?? []),
+      ...(spec.alt?.branches ?? []).flatMap((b) => b.messages),
+      ...(spec.epilogue ?? []),
+    ].filter((m) => m.nested);
+  }
+
+  /** Antes de pintar: captura (vectorial) el diagrama de cada subproceso `nested`. */
+  override async prepareRender(): Promise<void> {
+    const spec = resolveSequenceSpec(this.payload ?? {});
+    if (!spec) return;
+    const pendientes = this.#nestedMessages(spec).filter((m) => !this.#captures.has(this.#nestedKey(m.nested!)));
+    for (const [i, m] of pendientes.entries()) {
+      const cap = await captureNodeEmbed(embedStage(this.shadowRoot!), m.nested!, {
+        moduleUrl: import.meta.url,
+        styleName: hostStyleName(this),
+        idPrefix: `se${this.#captures.size}x${i}-`,
+      });
+      this.#captures.set(this.#nestedKey(m.nested!), cap);
+    }
+  }
+
   renderDiagram(): void {
     // Los grupos ocultos se filtran del spec (re-diseña sin esas aristas).
     const hidden = this.#hiddenGroups;
@@ -270,6 +302,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
       labelCharW: styleTheme ? 6.9 : 6.1,
       measure: (texto: string) => this.#medir(texto, 10, this.#labelFont),
       footer: this.#paint?.footerActors ?? false,
+      embeds: Object.fromEntries(this.#nestedMessages(visibleSpec).flatMap((m): Array<[string, EmbedSize]> => {
+        const cap = this.#captures.get(this.#nestedKey(m.nested!));
+        return cap ? [[m.id, { w: cap.box.w, h: cap.box.h }]] : [];
+      })),
     });
     this.layout = layout;
 
@@ -341,6 +377,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     if (layout.footerY != null) this.#buildActors(actors.map((a) => ({ ...a, y: layout.footerY! })), theme, true);
     this.#buildLifelines(lifelines, theme);
     this.#buildMessages(messages, altBox, theme);
+    this.#buildNested(messages, theme);
 
     // La tortuga se monta al final: debe quedar por encima de las marks.
     this.#turtleGroup = svgEl('g');
@@ -656,6 +693,46 @@ class IswcSequenceDiagram extends DiagramElementBase {
       // Modo del agrupador en la esquina derecha: `async`/`par` no bloquean;
       // el resto espera a que termine.
       this.#buildModeTag(g, fr.x + fr.w, fr.y, fr.kind === 'async' || fr.kind === 'par' ? 'async' : 'sync', stroke);
+      this.svg.appendChild(g);
+    }
+  }
+
+  /**
+   * Subprocesos (`nested`): recuadro con borde, título opcional y fondo
+   * (`bg`; insoft claro: blanco), con el diagrama capturado encajado (contain).
+   * Sin captura, marco punteado con el título.
+   */
+  #buildNested(messages: SequenceLayoutMessage[], theme: DiagramTheme): void {
+    const paint = this.#paint;
+    for (const m of messages) {
+      const box = m.nestedBox;
+      const eb = m.nestedEmbedBox;
+      if (!m.nested || !box || !eb) continue;
+      const g = svgEl('g', { class: 'seq-nested' });
+      g.dataset.msgId = m.id;
+      g.appendChild(svgEl('rect', {
+        x: box.x, y: box.y, width: box.w, height: box.h, rx: 4,
+        fill: m.nested.bg ?? paint?.labelFill ?? (this.isDarkTheme ? '#0d1b2a' : '#FFFFFF'),
+        stroke: paint?.actorBorder ?? theme.border, 'stroke-width': 1, class: 'seq-nested__box',
+      }));
+      if (m.nested.title && m.nestedTitleBox) {
+        const tb = m.nestedTitleBox;
+        const t = svgEl('text', {
+          x: tb.x + tb.w / 2, y: tb.y + tb.h / 2 + 2, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+          fill: theme.text, 'font-size': '11', 'font-weight': '600', 'font-family': this.#font, class: 'seq-nested__title',
+        });
+        t.textContent = m.nested.title;
+        g.appendChild(t);
+      }
+      const cap = this.#captures.get(this.#nestedKey(m.nested));
+      if (cap) {
+        g.appendChild(embedSvgElement(cap, eb));
+      } else {
+        g.appendChild(svgEl('rect', {
+          x: eb.x, y: eb.y, width: eb.w, height: eb.h, rx: 3, fill: 'none', stroke: theme.muted,
+          'stroke-width': 1, 'stroke-dasharray': '3 3', class: 'seq-nested__missing',
+        }));
+      }
       this.svg.appendChild(g);
     }
   }

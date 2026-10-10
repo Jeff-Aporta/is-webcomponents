@@ -1,0 +1,201 @@
+{
+  "slug": "ruta-operacion-cdn-docs",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "SDK y visor de documentación (/cdn, /docs)",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Navegador / SDK"
+      },
+      {
+        "id": "K",
+        "label": "ISS · TCdnController"
+      },
+      {
+        "id": "S",
+        "label": "ISS · TSysValueController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "operación",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "operación",
+          "stereotype": "Ops",
+          "items": [
+            "GET /cdn/{file}",
+            "GET /docs"
+          ]
+        }
+      },
+      {
+        "id": "kcdn",
+        "label": "TCdnController",
+        "kind": "class",
+        "lane": "K",
+        "class": {
+          "name": "TCdnController",
+          "methods": [
+            "+ file(): front.ts"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "ksys",
+        "label": "TSysValueController",
+        "kind": "class",
+        "lane": "S",
+        "class": {
+          "name": "TSysValueController",
+          "attributes": [
+            "- nTbl = patyia_sys_values"
+          ],
+          "methods": [
+            "+ leer() · escribir()",
+            "+ leerCfg() · escribirCfg()",
+            "+ leerProveedor() · escribirProveedor()",
+            "+ docs()",
+            "+ valor(clave) · getOpenaiCfg() «static»"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Qué pide?",
+        "shape": "diamond",
+        "lane": "K"
+      },
+      {
+        "id": "front",
+        "label": "front.ts: une el bundle y su documentación (503 si falta)",
+        "lane": "K",
+        "icon": "mdi:language-typescript"
+      },
+      {
+        "id": "otro",
+        "label": "Otro archivo: 404 explícito",
+        "lane": "K",
+        "icon": "mdi:file-cancel-outline"
+      },
+      {
+        "id": "doc",
+        "label": "Lee la fila doc (routes: ids SEG del registro)",
+        "lane": "S",
+        "icon": "mdi:book-open-variant"
+      },
+      {
+        "id": "tsys",
+        "label": "patyia_sys_values",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_sys_values",
+          "attributes": [
+            {
+              "name": "isystemkey",
+              "type": "varchar(128)",
+              "key": "PK"
+            },
+            {
+              "name": "jvalue",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ok",
+        "label": "Archivo o documento con su propio Content-Type",
+        "lane": "K",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "K"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "d1",
+        "label": "GET (pública)"
+      },
+      {
+        "from": "d1",
+        "to": "front",
+        "label": "/cdn/front.ts"
+      },
+      {
+        "from": "d1",
+        "to": "otro",
+        "label": "/cdn/otro"
+      },
+      {
+        "from": "d1",
+        "to": "doc",
+        "label": "/docs"
+      },
+      {
+        "from": "front",
+        "to": "kcdn",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "doc",
+        "to": "ksys",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "doc",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "front",
+        "to": "ok"
+      },
+      {
+        "from": "otro",
+        "to": "ok"
+      },
+      {
+        "from": "doc",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta sin sobre"
+      }
+    ]
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "slug": "ruta-configuracion-proveedor",
+  "module": "010-General",
+  "tag": "iswc-flowchart",
+  "script": "diagrams/flowchart.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "title": "Proveedor del modelo (/proveedor)",
+    "steps": "auto",
+    "lanes": [
+      {
+        "id": "C",
+        "label": "Consola / ISW"
+      },
+      {
+        "id": "V",
+        "label": "ISS · TProviderController"
+      },
+      {
+        "id": "P",
+        "label": "PostgreSQL"
+      },
+      {
+        "id": "O",
+        "label": "OpenAI"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "api",
+        "label": "configuración",
+        "kind": "component",
+        "lane": "C",
+        "component": {
+          "name": "configuración",
+          "stereotype": "Config",
+          "items": [
+            "GET|PUT /proveedor/{iproveedor}",
+            "GET|PUT /proveedor/{iproveedor}/cfg"
+          ]
+        }
+      },
+      {
+        "id": "ctl",
+        "label": "TProviderController",
+        "kind": "class",
+        "lane": "V",
+        "class": {
+          "name": "TProviderController",
+          "attributes": [
+            "- nTbl = patyia_providers"
+          ],
+          "methods": [
+            "+ get() · update()",
+            "+ leerCfg() · escribirCfg()",
+            "+ getCuenta(iproveedor)",
+            "+ activo(iproveedor)"
+          ],
+          "fill": "app"
+        }
+      },
+      {
+        "id": "pojo",
+        "label": "TProvider",
+        "kind": "class",
+        "lane": "V",
+        "class": {
+          "name": "TProvider",
+          "stereotype": "patyia_providers",
+          "attributes": [
+            "+ iproveedor «PK»",
+            "+ jcuenta: jsonb",
+            "+ bactivo"
+          ],
+          "fill": "leaf"
+        }
+      },
+      {
+        "id": "d1",
+        "label": "¿Qué pide?",
+        "shape": "diamond",
+        "lane": "V"
+      },
+      {
+        "id": "get",
+        "label": "Lee la fila (404) y enmascara los secretos de jcuenta",
+        "lane": "V",
+        "icon": "mdi:eye-off-outline"
+      },
+      {
+        "id": "put",
+        "label": "Merge sobre la fila: un secreto enmascarado no pisa el real",
+        "lane": "V",
+        "icon": "mdi:merge"
+      },
+      {
+        "id": "cfg",
+        "label": "Configuración OPENAI y modelos verificados en la cuenta",
+        "lane": "V",
+        "icon": "mdi:robot-outline"
+      },
+      {
+        "id": "tprov",
+        "label": "patyia_providers",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_providers",
+          "attributes": [
+            {
+              "name": "iproveedor",
+              "type": "varchar(64)",
+              "key": "PK"
+            },
+            {
+              "name": "nproveedor",
+              "type": "varchar(160)"
+            },
+            {
+              "name": "descripcion",
+              "type": "text"
+            },
+            {
+              "name": "bactivo",
+              "type": "boolean"
+            },
+            {
+              "name": "jcuenta",
+              "type": "jsonb"
+            }
+          ]
+        }
+      },
+      {
+        "id": "tsys",
+        "label": "patyia_sys_values",
+        "kind": "tableder",
+        "lane": "P",
+        "table": {
+          "name": "patyia_sys_values",
+          "attributes": [
+            {
+              "name": "isystemkey",
+              "type": "varchar(128)",
+              "key": "PK"
+            },
+            {
+              "name": "jvalue",
+              "type": "jsonb"
+            },
+            {
+              "name": "fhultact",
+              "type": "timestamptz"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ai",
+        "label": "Responses · Conversations",
+        "kind": "component",
+        "lane": "O",
+        "component": {
+          "name": "Responses · Conversations",
+          "stereotype": "OpenAI",
+          "items": []
+        }
+      },
+      {
+        "id": "ok",
+        "label": "Respuesta con la cuenta siempre enmascarada",
+        "lane": "V",
+        "icon": "mdi:reply-outline"
+      },
+      {
+        "id": "fin",
+        "label": "Fin",
+        "shape": "end",
+        "lane": "V"
+      }
+    ],
+    "edges": [
+      {
+        "from": "api",
+        "to": "ctl",
+        "label": "petición con token"
+      },
+      {
+        "from": "ctl",
+        "to": "pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ctl",
+        "to": "d1"
+      },
+      {
+        "from": "d1",
+        "to": "get",
+        "label": "GET"
+      },
+      {
+        "from": "d1",
+        "to": "put",
+        "label": "PUT"
+      },
+      {
+        "from": "d1",
+        "to": "cfg",
+        "label": "…/cfg"
+      },
+      {
+        "from": "get",
+        "to": "tprov",
+        "kind": "dashed",
+        "label": "SELECT"
+      },
+      {
+        "from": "put",
+        "to": "tprov",
+        "kind": "dashed",
+        "label": "UPSERT"
+      },
+      {
+        "from": "cfg",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT · UPDATE"
+      },
+      {
+        "from": "cfg",
+        "to": "ai",
+        "kind": "dashed",
+        "label": "modelos"
+      },
+      {
+        "from": "get",
+        "to": "ok"
+      },
+      {
+        "from": "put",
+        "to": "ok"
+      },
+      {
+        "from": "cfg",
+        "to": "ok"
+      },
+      {
+        "from": "ok",
+        "to": "fin"
+      },
+      {
+        "from": "fin",
+        "to": "api",
+        "label": "respuesta"
+      }
+    ]
+  }
+}

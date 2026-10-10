@@ -1,0 +1,149 @@
+{
+  "slug": "bandeja-rutas",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Rutas de la bandeja de errores",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Front / agente",
+          "kind": "participant"
+        },
+        {
+          "id": "E",
+          "label": "ISS · TErrorController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "E",
+          "label": "POST /error (reporte)",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "E",
+          "to": "E",
+          "label": "normaliza dominio, contexto, referencia y resumen; censura MD5 y JWT; tope de tamaño",
+          "kind": "self",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "E",
+          "to": "P",
+          "label": "INSERT … ON CONFLICT por referencia abierta",
+          "kind": "sync",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "E",
+          "to": "C",
+          "label": "la fila nueva o la abierta con esa referencia",
+          "kind": "reply",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "C",
+          "to": "E",
+          "label": "GET /errores",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "E",
+          "to": "P",
+          "label": "las abiertas, más antiguas primero",
+          "kind": "sync",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "E",
+          "to": "C",
+          "label": "lista + instructivo de la bandeja",
+          "kind": "reply",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "C",
+          "to": "E",
+          "label": "DELETE /errores [{ ierror }, …]",
+          "kind": "sync",
+          "step": 8
+        },
+        {
+          "id": "m9",
+          "from": "E",
+          "to": "P",
+          "label": "borra el lote: atender es borrar",
+          "kind": "sync",
+          "step": 9
+        },
+        {
+          "id": "m10",
+          "from": "E",
+          "to": "C",
+          "label": "ok",
+          "kind": "reply",
+          "step": 10
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m1",
+            "m2",
+            "m3",
+            "m4"
+          ],
+          "condition": "POST /error"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m5",
+            "m6",
+            "m7"
+          ],
+          "condition": "GET /errores"
+        },
+        {
+          "id": "f3",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m8",
+            "m9",
+            "m10"
+          ],
+          "condition": "DELETE /errores"
+        }
+      ]
+    }
+  }
+}

@@ -344,6 +344,8 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
       dividerYs: g.dividerYs,
       hue: s.hue ?? (s.group ? groupHue.get(s.group) : undefined),
       group: s.group,
+      // Relleno VP propio (token del tema o hex): también sin paquetes (p. ej. una clase incrustada en un flujo).
+      ...(s.fill ? { fill: s.fill } : {}),
     };
   });
 
@@ -440,6 +442,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
     titleY,
     subtitleY,
     legendX,
+    ...(spec.layout?.boxStyle ? { boxStyle: spec.layout.boxStyle } : {}),
   };
   applyEdgeActorLayout(layout, nodes.map((n) => ({ x: n.x, y: n.y, w: n.w, h: n.h })));
   return layout;
