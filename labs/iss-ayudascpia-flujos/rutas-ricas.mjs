@@ -105,6 +105,18 @@ export function ruta(meta, componer) {
     cadena: (...ids) => ids.slice(1).forEach((to, i) => arista({ from: ids[i], to })),
   };
   componer(b);
+  // Paralelismo: un nodo que no decide (ni es barra) y reparte su flujo continuo a varios procesos
+  // lo hace por una barra negra; nunca salen dos caminos del mismo riel.
+  for (const nd of [...nodes]) {
+    if (nd.shape === 'diamond' || nd.shape === 'bar' || nd.shape === 'comment') continue;
+    const salen = edges.filter((e) => e.from === nd.id && e.kind !== 'dashed');
+    if (salen.length < 2) continue;
+    const bar = `${nd.id}-par`;
+    nodes.splice(nodes.indexOf(nd) + 1, 0, { id: bar, label: '', shape: 'bar', lane: nd.lane });
+    for (const e of salen) e.from = bar;
+    edges.push({ from: nd.id, to: bar });
+    console.warn(`[rutas] ${meta.slug}: ${nd.id} reparte a ${salen.length} procesos → barra ${bar}`);
+  }
   return {
     slug: `ruta-${meta.slug}`,
     module: meta.module,

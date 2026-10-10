@@ -7,7 +7,7 @@ import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts 
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
 import { assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
 import type { Componente, Paquete } from '../_shared/diagram-tipos.js';
-import type { ClassPackage, ClassLayoutOpts } from './diagram-types.schemas.js';
+import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection } from './diagram-types.schemas.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type {
@@ -48,6 +48,50 @@ const DEFAULT_HUES = [210, 239, 160, 38, 280, 199];
 
 function asRecord(v: unknown): Record<string, any> {
   return v && typeof v === 'object' ? v as Record<string, any> : {};
+}
+
+/** Altura de un renglón de firma y de uno de tipo (texto secundario), y la sangría de la viñeta. */
+const MIEMBRO = { renglon: 16, caption: 13, sangria: 14, pad: 8, captionCharW: 5.8 } as const;
+
+/**
+ * Parte un miembro `«+ nombre(params): Tipo «static»»` en visibilidad, firma y tipo. El tipo es lo
+ * que sigue al `: ` de la firma (en un método, después de cerrar sus paréntesis).
+ */
+export function partirMiembro(row: string): { vis: string; firma: string; tipo: string } {
+  const m = row.match(/^\s*([+\-#~])\s*/);
+  const vis = m ? m[1]! : '';
+  let resto = m ? row.slice(m[0].length) : row.trim();
+  let marcas = '';
+  const mk = resto.match(/(\s*«[^»]+»)+\s*$/);
+  if (mk) { marcas = mk[0].trim(); resto = resto.slice(0, mk.index).trimEnd(); }
+  let corte = -1;
+  const ab = resto.indexOf('(');
+  if (ab >= 0) {
+    let prof = 0;
+    for (let i = ab; i < resto.length; i++) {
+      if (resto[i] === '(') prof++;
+      else if (resto[i] === ')' && --prof === 0) { corte = resto.indexOf(':', i); break; }
+    }
+  } else corte = resto.indexOf(':');
+  const firma = (corte >= 0 ? resto.slice(0, corte) : resto).trim();
+  const tipo = [corte >= 0 ? resto.slice(corte + 1).trim() : '', marcas].filter(Boolean).join(' ');
+  return { vis, firma, tipo };
+}
+
+/** Parte un texto en renglones de hasta `max` caracteres, cortando en espacios o signos. */
+function envolver(texto: string, max: number): string[] {
+  if (!texto) return [];
+  const out: string[] = [];
+  let resto = texto;
+  while (resto.length > max) {
+    const ventana = resto.slice(0, max + 1);
+    const cortes = [...ventana.matchAll(/[\s,|&(<]/g)].map((x) => x.index!).filter((i) => i > max * 0.4);
+    const i = cortes.length ? cortes[cortes.length - 1]! : max;
+    out.push(resto.slice(0, i + (resto[i] === ' ' ? 0 : 1)).trimEnd());
+    resto = resto.slice(i + (resto[i] === ' ' ? 1 : 1)).trimStart();
+  }
+  if (resto) out.push(resto);
+  return out;
 }
 
 function textWidth(text: string, charW: number): number {
@@ -229,26 +273,43 @@ export function accentFromPalette(hex: string): string {
  * Geometría de compartimentos de una clase: nombre (+estereotipo), atributos,
  * métodos. Los compartimentos vacíos se omiten junto con su divisor.
  */
-function classGeometry(cls: ClassSpecClass): { w: number; h: number; headerH: number; sections: Array<{ type: 'header' | 'attributes' | 'methods'; y: number; h: number; rows: string[] }>; dividerYs: number[] } {
+function classGeometry(cls: ClassSpecClass): { w: number; h: number; headerH: number; sections: ClassLayoutSection[]; dividerYs: number[] } {
   const headerH = HEADER_H + (cls.stereotype ? STEREO_H : 0);
-  const sections: Array<{ type: 'header' | 'attributes' | 'methods'; y: number; h: number; rows: string[] }> = [
+  const sections: ClassLayoutSection[] = [
     { type: 'header', y: 0, h: headerH, rows: [] },
   ];
-  if (cls.attributes.length) {
-    sections.push({ type: 'attributes', y: 0, h: cls.attributes.length * ROW_H + SECTION_PAD_V * 2, rows: cls.attributes });
-  }
-  if (cls.methods.length) {
-    sections.push({ type: 'methods', y: 0, h: cls.methods.length * ROW_H + SECTION_PAD_V * 2, rows: cls.methods });
-  }
-
+  // Ancho: lo que pide el renglón más largo (firma o tipo) más la sangría, entre MIN_W y MAX_W.
+  const partes = [...cls.attributes, ...cls.methods].map(partirMiembro);
   let widthEst = Math.max(
     textWidth(cls.name, NAME_CHAR_W) + 32,
     cls.stereotype ? textWidth(cls.stereotype, CHAR_W) + 24 : 0,
   );
-  for (const s of sections) {
-    for (const row of s.rows) widthEst = Math.max(widthEst, textWidth(row, CHAR_W) + 24);
+  for (const p of partes) {
+    widthEst = Math.max(widthEst, textWidth(p.firma, CHAR_W) + MIEMBRO.sangria + MIEMBRO.pad * 2, Math.ceil(p.tipo.length * MIEMBRO.captionCharW) + MIEMBRO.sangria + MIEMBRO.pad * 2);
   }
   const w = snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, widthEst)));
+  // Cada miembro: firma y tipo partidos al ancho disponible (nada se corta ni se sale).
+  const util = w - MIEMBRO.sangria - MIEMBRO.pad * 2;
+  const miembros = (rows: string[]) => {
+    let y = 0;
+    return rows.map((row) => {
+      const p = partirMiembro(row);
+      const firma = envolver(p.firma, Math.max(8, Math.floor(util / CHAR_W)));
+      const tipo = envolver(p.tipo, Math.max(8, Math.floor(util / MIEMBRO.captionCharW)));
+      const m = { vis: p.vis, firma, tipo, y };
+      y += firma.length * MIEMBRO.renglon + tipo.length * MIEMBRO.caption + 2;
+      return m;
+    });
+  };
+  const alto = (ms: Array<{ firma: string[]; tipo: string[] }>) => ms.reduce((a, m) => a + m.firma.length * MIEMBRO.renglon + m.tipo.length * MIEMBRO.caption + 2, 0);
+  if (cls.attributes.length) {
+    const members = miembros(cls.attributes);
+    sections.push({ type: 'attributes', y: 0, h: alto(members) + SECTION_PAD_V * 2, rows: cls.attributes, members });
+  }
+  if (cls.methods.length) {
+    const members = miembros(cls.methods);
+    sections.push({ type: 'methods', y: 0, h: alto(members) + SECTION_PAD_V * 2, rows: cls.methods, members });
+  }
 
   let cursor = 0;
   const dividerYs: number[] = [];

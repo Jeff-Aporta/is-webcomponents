@@ -546,3 +546,20 @@ Deno.test('combinado: U5 en las rutas reales, los usos a un mismo destino y cost
   }
   assertEquals(malos, []);
 });
+
+Deno.test('combinado: D1 en las rutas reales, a un rombo se entra por arriba (sus costados son salidas de rama)', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const malas: string[] = [];
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = await editable(new URL(f.name, dir));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    for (const e of L.edges) {
+      const d = L.nodes.find((n) => n.id === e.to && n.shape === 'diamond');
+      if (!d || e.kind === 'dashed') continue;
+      const fin = pathPoints(e.path).at(-1)!;
+      if (Math.abs(fin.y - d.y) > 1) malas.push(`${f.name}: ${e.from}→${e.to} entra por (${fin.x},${fin.y})`);
+    }
+  }
+  assertEquals(malas, []);
+});

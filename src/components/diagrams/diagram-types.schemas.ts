@@ -193,11 +193,25 @@ export const ClassSpecSchema = z.object({
 export type ClassSpec = z.infer<typeof ClassSpecSchema>;
 
 
+/**
+ * Un miembro de clase como ítem de lista: la visibilidad es la viñeta (`+ - # ~`, sin texto debajo:
+ * sangría colgante), la firma va en su(s) renglón(es) y el tipo en renglón(es) aparte como texto
+ * secundario. `y` es el desplazamiento dentro de la sección. Nada se corta: lo largo salta de línea.
+ */
+export const ClassMemberLayoutSchema = z.object({
+  vis: z.string(),
+  firma: z.array(z.string()),
+  tipo: z.array(z.string()),
+  y: z.number(),
+});
+export type ClassMemberLayout = z.infer<typeof ClassMemberLayoutSchema>;
+
 export const ClassLayoutSectionSchema = z.object({
   type: z.union([z.literal('header'), z.literal('attributes'), z.literal('methods')]),
   y: z.number(),
   h: z.number(),
   rows: z.array(z.string()),
+  members: z.array(ClassMemberLayoutSchema).optional(),
 });
 export type ClassLayoutSection = z.infer<typeof ClassLayoutSectionSchema>;
 

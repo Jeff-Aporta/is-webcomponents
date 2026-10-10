@@ -47,6 +47,42 @@ function inkOn(hex: string): string {
 /** Color del glifo de visibilidad UML (+ público, - privado, # protegido, ~ paquete). */
 const VISIBILIDAD: Record<string, string> = { '+': '#16A34A', '-': '#DC2626', '#': '#D97706', '~': '#2563EB' };
 
+/**
+ * Pinta los miembros de una sección como lista: la visibilidad es la viñeta (sin texto debajo:
+ * sangría colgante), la firma en su(s) renglón(es) y el tipo debajo como texto secundario.
+ * `vis: 'punto'` dibuja la viñeta como círculo de color; `'texto'` deja el signo.
+ */
+function pintarMiembros(
+  g: SVGGElement, x: number, y0: number, sec: ClassLayoutSection,
+  op: { font: string; fill: string; caption: string; vis: 'punto' | 'texto' },
+): void {
+  const members = sec.members ?? sec.rows.map((row, i) => ({ vis: '', firma: [row], tipo: [] as string[], y: i * 16 }));
+  for (const m of members) {
+    let y = y0 + 6 + m.y + 8;
+    const color = VISIBILIDAD[m.vis];
+    if (m.vis && op.vis === 'punto' && color) {
+      g.appendChild(svgEl('circle', { cx: x + 11, cy: y, r: 3.2, fill: color, class: 'cls-node__vis' }));
+    } else if (m.vis) {
+      const v = svgEl('text', { x: x + 8, y, 'dominant-baseline': 'middle', fill: op.fill, 'font-size': '10.5', 'font-family': op.font, class: 'cls-node__vis' });
+      v.textContent = m.vis;
+      g.appendChild(v);
+    }
+    for (const linea of m.firma) {
+      const t = svgEl('text', { x: x + 22, y, 'dominant-baseline': 'middle', fill: op.fill, 'font-size': '10.5', 'font-family': op.font, class: 'cls-node__firma' });
+      g.appendChild(t);
+      applySvgTextContent(t, linea);
+      y += 16;
+    }
+    y -= 2;
+    for (const linea of m.tipo) {
+      const t = svgEl('text', { x: x + 22, y, 'dominant-baseline': 'middle', fill: op.caption, 'font-size': '9.5', 'font-family': op.font, class: 'cls-node__tipo' });
+      t.textContent = linea;
+      g.appendChild(t);
+      y += 13;
+    }
+  }
+}
+
 class IswcClassDiagram extends DiagramElementBase {
   #theme: DiagramTheme | null = null;
   /** Tema `class` del estilo cargado (paletas y rellenos semánticos). */
@@ -406,14 +442,7 @@ class IswcClassDiagram extends DiagramElementBase {
           }
           continue;
         }
-        section.rows.forEach((row, ri: number) => {
-          const t = svgEl('text', {
-            x: n.x + 8, y: n.y + section.y + ri * 16 + 8, 'dominant-baseline': 'middle', fill: theme.text,
-            'font-size': '10.5', 'font-family': 'Consolas,Menlo,monospace',
-          });
-          g.appendChild(t);
-          applySvgTextContent(t, row);
-        });
+        pintarMiembros(g, n.x, n.y + section.y, section, { font: 'Consolas,Menlo,monospace', fill: theme.text, caption: theme.muted, vis: 'texto' });
       }
 
       this.svg.appendChild(g);
@@ -508,22 +537,7 @@ class IswcClassDiagram extends DiagramElementBase {
             stroke: '#E5E7EB', 'stroke-width': 1, class: 'cls-node__divider',
           }));
         }
-        sec.rows.forEach((row, ri) => {
-          const y = n.y + sec.y + 6 + ri * 16 + 8;
-          const vis = row.trim().charAt(0);
-          const color = VISIBILIDAD[vis];
-          const texto = color ? row.trim().slice(1).trim() : row;
-          if (color) {
-            g.appendChild(svgEl('circle', { cx: n.x + 12, cy: y, r: 3.2, fill: color }));
-          }
-          const t = svgEl('text', {
-            x: n.x + (color ? 20 : 10), y, 'dominant-baseline': 'middle',
-            fill: sec.type === 'methods' ? '#1F2937' : '#374151',
-            'font-size': '10.5', 'font-family': MONO,
-          });
-          g.appendChild(t);
-          applySvgTextContent(t, texto);
-        });
+        pintarMiembros(g, n.x, n.y + sec.y, sec, { font: MONO, fill: sec.type === 'methods' ? '#1F2937' : '#374151', caption: '#6B7280', vis: 'punto' });
       });
 
       this.svg.appendChild(g);
@@ -621,14 +635,7 @@ class IswcClassDiagram extends DiagramElementBase {
       g.appendChild(nameT);
       for (const sec of n.sections) {
         if (sec.type === 'header') continue;
-        sec.rows.forEach((row, ri) => {
-          const t = svgEl('text', {
-            x: n.x + 8, y: n.y + sec.y + 6 + ri * 16 + 8, 'dominant-baseline': 'middle', fill: '#000000',
-            'font-size': '10.5', 'font-family': FONT,
-          });
-          g.appendChild(t);
-          applySvgTextContent(t, row.replace(/^\s*([+\-#~])\s*/, '$1 '));
-        });
+        pintarMiembros(g, n.x, n.y + sec.y, sec, { font: FONT, fill: '#000000', caption: '#4B5563', vis: 'texto' });
       }
       this.svg.appendChild(g);
       this.#nodeNodes.set(n.id, { n, g, box });

@@ -1989,6 +1989,9 @@ function insoftSides(
   direction: FlowDirection,
 ): { fromSide: string; toSide: string } {
   const base = pickSides(fromMeta, toMeta, direction);
+  // A una decisión se entra siempre por arriba: sus vértices laterales e inferior son salidas de rama
+  // (entrar por un costado haría que la llegada y una rama compartan vértice).
+  if (to.shape === 'diamond' && direction === 'TB' && fromShape !== 'end') return { fromSide: base.fromSide, toSide: 'top' };
   if (direction !== 'TB' || toMeta.layer <= fromMeta.layer) return base;
   // Rombo: el vértice inferior es para la rama cuyo destino queda alineado debajo; cualquier otra
   // (sea o no la principal) sale por el vértice que mira a su destino. Así dos ramas nunca
