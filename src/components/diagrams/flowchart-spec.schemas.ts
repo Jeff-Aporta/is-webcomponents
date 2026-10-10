@@ -98,6 +98,8 @@ export const FlowEdgeSpecSchema = z.object({
   labelVertical: z.boolean().optional(),
   /** Ícono de la etiqueta (`set:nombre`), a su izquierda. Los verbos SQL llevan uno de BD por defecto. */
   icon: z.string().optional(),
+  /** Flujo animado al revés: de la punta al origen (ver _shared/diagram-flow.ts). */
+  reverse: z.boolean().optional(),
 });
 export type FlowEdgeSpec = z.infer<typeof FlowEdgeSpecSchema>;
 
@@ -187,6 +189,8 @@ export const FlowLayoutEdgeSchema = z.object({
   labelLines: z.array(z.string()).optional(),
   /** Ícono de la etiqueta (del spec o, en verbos SQL, el de BD por defecto). */
   labelIcon: z.string().optional(),
+  /** Flujo animado al revés (de la punta al origen). */
+  reverse: z.boolean().optional(),
   hue: z.number().optional(),
 });
 export type FlowLayoutEdge = z.infer<typeof FlowLayoutEdgeSchema>;

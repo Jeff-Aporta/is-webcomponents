@@ -175,6 +175,7 @@ function readEdge(raw: Record<string, unknown>, i: number): FlowEdgeSpec {
     waypoints: waypoints?.length ? waypoints : undefined,
     ...(raw.labelVertical === true || raw.labelDirection === 'vertical' ? { labelVertical: true } : {}),
     ...(typeof raw.icon === 'string' && raw.icon.includes(':') ? { icon: raw.icon.trim() } : {}),
+    ...(raw.reverse === true ? { reverse: true } : {}),
   };
 }
 
@@ -283,6 +284,7 @@ export function flowchartSpecToJson(spec: FlowResolvedSpec): Record<string, unkn
     if (e.waypoints?.length) row.waypoints = e.waypoints;
     if (e.labelVertical) row.labelVertical = true;
     if (e.icon) row.icon = e.icon;
+    if (e.reverse) row.reverse = true;
     return row;
   });
   return out;
@@ -612,6 +614,7 @@ export function computeFlowchartLayout(
       labelY: lab.y,
       ...(side ? { labelAnchor: side.anchor } : {}),
       ...(e.labelVertical ? { labelPide: 'vertical' as const } : {}),
+      ...(e.reverse ? { reverse: true } : {}),
       ...(insoft && (e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label)) ? { labelIcon: e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label) } : {}),
       hue: eOv?.hue ?? (e.group ? groupHue.get(e.group) : undefined),
     };
@@ -2086,7 +2089,7 @@ export function flowPaint(theme: ErThemeJson): FlowPaint {
     nestedBg: token(f.nestedBg, '#FFFFFF'),
     hueRotate: f.hueRotate ?? false,
     pillTone: f.pillTone === 'entity' ? 'entity' : token(f.pillTone, token(f.startFill, text)),
-    dashFlow: f.dashFlow ?? false,
+    dashFlow: f.dashFlow ?? true,
     laneLine: token(f.laneLine, '#7DD3FC'),
   };
 }

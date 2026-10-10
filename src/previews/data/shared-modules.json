@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-10T05:49:06.645Z",
-  "count": 116,
+  "generatedAt": "2026-10-10T06:12:39.693Z",
+  "count": 118,
   "modules": [
     {
       "file": "button-shape.schemas.ts",
@@ -572,6 +572,28 @@
         "captureEmbeddedDiagram",
         "embedStage",
         "captureNodeEmbed"
+      ]
+    },
+    {
+      "file": "diagram-flow.schemas.ts",
+      "id": "diagram-flow.schemas",
+      "path": "src/components/_shared/diagram-flow.schemas.ts",
+      "summary": "diagram-flow.schemas",
+      "bytes": 720,
+      "exports": [
+        "ZOpcionesFlujo"
+      ]
+    },
+    {
+      "file": "diagram-flow.ts",
+      "id": "diagram-flow",
+      "path": "src/components/_shared/diagram-flow.ts",
+      "summary": "diagram-flow — Estándar: cada riel muestra hacia dónde va lo que transporta.",
+      "bytes": 3869,
+      "exports": [
+        "FLUJO",
+        "flujoActivo",
+        "animarRiel"
       ]
     },
     {
@@ -1522,7 +1544,7 @@
       "id": "tk-rich-text",
       "path": "src/components/_shared/tk-rich-text.ts",
       "summary": "Módulo compartido `tk-rich-text.ts`.",
-      "bytes": 1809,
+      "bytes": 2198,
       "exports": [
         "esc",
         "splitRichTextSegments",

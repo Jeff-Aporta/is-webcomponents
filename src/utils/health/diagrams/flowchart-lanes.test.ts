@@ -439,11 +439,12 @@ Deno.test('ruteo: R2 radio de proximidad de giros (llegada pesa el doble que la 
   if (sale > t.y + 8 && sale < t.y + t.h - 8) assertEquals(pts.length, 2, 'recta si la altura cabe');
 });
 
-Deno.test('ruteo: A1 el estilo insoft anima los rieles punteados (activable por tema; apagado por defecto)', async () => {
+Deno.test('ruteo: A1 el flujo animado es el estándar (activo por defecto; un tema lo puede apagar)', async () => {
   const tema = JSON.parse(await Deno.readTextFile(new URL('../../../components/diagrams/themes/insoft-flow.json', import.meta.url)));
   assertEquals(flowPaint(tema).dashFlow, true, 'insoft: rieles punteados en movimiento');
   assertEquals(flowPaint(tema).pillTone, 'entity', 'insoft: insignia del tono de su entidad, oscuro');
-  assertEquals(flowPaint({ flow: {} } as never).dashFlow, false, 'sin el flag no se anima');
+  assertEquals(flowPaint({ flow: {} } as never).dashFlow, true, 'estándar: activo sin flag');
+  assertEquals(flowPaint({ flow: { dashFlow: false } } as never).dashFlow, false, 'un tema lo apaga');
 });
 
 Deno.test('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de la más ancha)', () => {

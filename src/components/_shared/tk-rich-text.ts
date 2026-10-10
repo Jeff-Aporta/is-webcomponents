@@ -1,7 +1,12 @@
 import { stripIconTokensPlain } from './tk-icon-inline.js';
 import type { RichTextSegment } from "./tk-rich-text.schemas.js";
 
-const HTML_TAG = /(<[^>]+>)/g;
+/**
+ * Etiquetas HTML que el texto enriquecido deja pasar. Solo las de texto conocidas: lo demás que
+ * parezca etiqueta (p. ej. un tipo genérico `Array<Record<string, unknown>>` o `<T>`) es texto y se
+ * escapa; antes se insertaba como elemento y rompía el SVG exportado.
+ */
+const HTML_TAG = /(<\/?(?:a|b|i|u|s|em|strong|code|kbd|br|span|sub|sup|small|mark|del|ins|p|div|ul|ol|li|hr|img)(?:\s[^<>]*)?\/?>)/gi;
 
 export function esc(s: string | number | null | undefined): string {
   return String(s ?? '')

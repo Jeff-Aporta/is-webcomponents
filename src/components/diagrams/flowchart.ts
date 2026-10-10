@@ -26,6 +26,7 @@ import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-ed
 import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
+import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
 import { ETIQUETA_ICONO, ETIQUETA_LINE_H } from './flowchart-labels.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
@@ -127,17 +128,6 @@ function colorDeEntidad(g: Element): string {
     if (o && o[1] > 0.03 && o[0] > 0.3 && o[0] < 0.98) return f;
   }
   return '';
-}
-
-/** Puntos que recorren los rieles continuos: separación (px) y velocidad (px/s). */
-const PUNTOS_PASO = 100;
-const PUNTOS_VEL = 60;
-/** Cuánto más gruesos que la línea son los puntos (px). */
-const PUNTOS_GROSOR = 3;
-
-/** Preferencia de movimiento reducido del sistema (sin `matchMedia`, p. ej. al exportar: animar). */
-function movimientoReducido(): boolean {
-  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 /** Globo de comentario: rect de esquinas redondeadas con un triángulo en el costado que señala. */
@@ -743,27 +733,12 @@ class IswcFlowchart extends DiagramElementBase {
         'stroke-dasharray': e.kind === 'dashed' ? '5 4' : null,
         'stroke-linejoin': 'miter', class: 'flow-edge__path',
       });
-      // Riel punteado en movimiento suave hacia su destino: animación SVG nativa (viaja con el SVG
-      // exportado). El desfase baja un periodo del patrón (5 + 4) en bucle: los trazos avanzan.
-      if (e.kind === 'dashed' && paint.dashFlow && !movimientoReducido()) {
-        path.appendChild(svgEl('animate', {
-          attributeName: 'stroke-dashoffset', values: '9;0', dur: '0.9s', repeatCount: 'indefinite',
-          class: 'flow-edge__dash-flow',
-        }));
-      }
       g.appendChild(path);
-      // Riel continuo: el mismo movimiento, más sutil. Encima, una segunda línea PUNTOS_GROSOR más gruesa hecha
-      // de puntos (trazo de largo 0 con remate redondo) separados por PUNTOS_PASO, que avanza hacia
-      // el destino.
-      if (e.kind !== 'dashed' && paint.dashFlow && !movimientoReducido()) {
-        const puntos = svgEl('path', {
-          d: e.path, fill: 'none', stroke: color, 'stroke-width': wdt + PUNTOS_GROSOR, 'stroke-linecap': 'round',
-          'stroke-dasharray': `0 ${PUNTOS_PASO}`, class: 'flow-edge__dots',
-        });
-        puntos.appendChild(svgEl('animate', {
-          attributeName: 'stroke-dashoffset', values: `${PUNTOS_PASO};0`, dur: `${PUNTOS_PASO / PUNTOS_VEL}s`, repeatCount: 'indefinite',
-        }));
-        g.appendChild(puntos);
+      // Flujo animado (estándar de todos los diagramas, ver _shared/diagram-flow.ts): la punteada
+      // avanza; la continua lleva su línea de puntos. `reverse` lo invierte (de la punta al origen).
+      if (paint.dashFlow && flujoActivo(this)) {
+        const puntos = animarRiel(path, { punteado: e.kind === 'dashed', reverse: !!e.reverse, color, ancho: wdt });
+        if (puntos) g.appendChild(puntos);
       }
       // Punta abierta (dos trazos), orientada por el último tramo real.
       const dir = pathEndDirection(e.path, { x: 0, y: 1 });
