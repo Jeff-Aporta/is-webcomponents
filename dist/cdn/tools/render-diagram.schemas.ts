@@ -17,6 +17,12 @@ export type SyntheticDiagramJob = {
   scriptUrl: string;
   /** Payload JSON que se asigna a `el.payload`. */
   payload?: unknown;
+  /**
+   * Ruta (o URL) del documento del que sale el payload. Con ella, cada referencia
+   * `{ path, query, actions }` del payload se resuelve (relativa a ese documento) antes de pintar;
+   * un valor que no existe hace fallar el render con el error (ver `Obj.resolver`).
+   */
+  payloadBase?: string;
   /** Atributos del host (`theme="insoft-cd"`, `min-gap="72"`…). */
   attrs?: HostAttrs;
   /** CSS extra en el documento (opcional). */
