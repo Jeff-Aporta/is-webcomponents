@@ -527,8 +527,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(svgEl('rect', {
         x: b.x, y: b.y, width: b.w, height: b.h, rx: paint ? 0 : TK_DIAGRAM_RADIUS_PX,
         fill, 'fill-opacity': b.color ? (paint?.boxOpacity ?? 0.35) : 1,
-        stroke: paint ? paint.fragmentBorder : (b.color ?? theme.border), 'stroke-width': paint ? 1.2 : 1.2,
-        'stroke-dasharray': '6 4',
+        ...this.#trazoMarco(theme),
       }));
       const t = svgEl('text', {
         x: b.x + 12, y: b.y + 17, fill: theme.text,
@@ -538,6 +537,14 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(t);
       this.svg.appendChild(g);
     }
+  }
+
+  /**
+   * Trazo de los marcos de grupo (regiones, fragmentos, `alt` y sus divisores): muy delgado, como las
+   * líneas de vida, para que no compita con los mensajes. Las pestañas conservan su color.
+   */
+  #trazoMarco(theme: DiagramTheme): Record<string, string | number> {
+    return { stroke: this.#paint?.lifeline ?? theme.grid, 'stroke-width': 1, 'stroke-dasharray': '6 4' };
   }
 
   /**
@@ -554,7 +561,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     g.appendChild(svgEl('rect', {
       x: box.x, y: box.y, width: box.w, height: box.h, rx: this.#paint ? 0 : TK_DIAGRAM_RADIUS_PX,
       fill: altFill, 'fill-opacity': this.#paint ? (this.#paint.fragmentOpacity) : null,
-      stroke: theme.altBorder, 'stroke-width': '1.2', 'stroke-dasharray': '6 4',
+      ...this.#trazoMarco(theme),
     }));
     // Pestaña: icono de bifurcación + título (todas las regiones llevan su
     // título en la pestaña; el tipo se lee por el icono).
@@ -567,7 +574,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     for (const [k, y] of (box.dividers ?? []).entries()) {
       g.appendChild(svgEl('line', {
         x1: box.x, y1: y, x2: box.x + box.w, y2: y,
-        stroke: theme.altBorder, 'stroke-width': 1, 'stroke-dasharray': '6 4',
+        ...this.#trazoMarco(theme),
       }));
       const cond = ramas[k + 1]?.label;
       if (cond) this.#buildNoteTab(g, box.x, y, cond, theme.altBorder);
@@ -687,7 +694,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(svgEl('rect', {
         x: fr.x, y: fr.y, width: fr.w, height: fr.h, rx: paint ? 0 : TK_DIAGRAM_RADIUS_PX,
         fill, 'fill-opacity': paint?.fragmentOpacity ?? 0.18,
-        stroke, 'stroke-width': 1.2, 'stroke-dasharray': '6 4',
+        ...this.#trazoMarco(theme),
       }));
       // Pestaña negra con icono del tipo + título; la condición (si la hay) al lado.
       this.#buildTab(g, fr.x, fr.y, FRAGMENT_ICON[fr.kind] ?? FRAGMENT_ICON.region!, fr.name || fr.kind, stroke, fr.condition);
