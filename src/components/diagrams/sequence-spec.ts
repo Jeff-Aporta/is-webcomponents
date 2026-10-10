@@ -390,6 +390,14 @@ export function compactSequenceActorsInPayload(payload: Record<string, unknown>)
 
 const LOOP_W = 40;
 const LOOP_H = 24;
+
+/**
+ * Lo más alto que ocupa una fila: su chip o, en un self-loop, el lazo (sube LOOP_H sobre la fila).
+ * Las pestañas de los marcos se apoyan sobre esto con su margen: ningún riel cruza una pestaña.
+ */
+function topeDeFila(kind: string | undefined, m: { y: number; labelY: number }): number {
+  return Math.min(m.labelY, kind === 'self' ? m.y - LOOP_H - 8 : Infinity);
+}
 const ROW_H = 48;
 const MIN_GAP = 140;
 const LABEL_PAD = 16;
@@ -668,6 +676,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   // La pestaña del `alt` lleva título: la primera condición va debajo de
   // ella, así que el marco abre una cabecera propia.
   if (altEnd > altStart) { headGap[altStart]! += FRAG_HEAD + ALT_HEAD; footGap[altEnd - 1]! += fragFoot; }
+  // Un self-loop que abre marco o rama sube LOOP_H sobre su fila: la cabecera reserva ese alto
+  // (más su margen) para que el lazo no cruce la pestaña ni la condición.
+  flat.forEach((f, i) => { if (headGap[i]! > 0 && f.kind === 'self') headGap[i]! += LOOP_H + 8; });
   // Recuadro `nested`: cuelga bajo la flecha; la fila siguiente (y su chip) baja lo necesario.
   const nestedTop = titled ? 30 : NESTED_GAP_Y;
   const nestedGap: number[] = flat.map((f) => (f.nestedH ? Math.max(0, nestedTop + f.nestedH + 32 - rowH) : 0));
@@ -814,7 +825,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
         x1 = Math.max(x1, m.nestedBox.x + m.nestedBox.w + 8 - inset);
       }
     }
-    const firstChip = Math.min(...rowsIn.map((f) => messages[flat.indexOf(f)]!.labelY));
+    const firstChip = Math.min(...rowsIn.map((f) => topeDeFila(f.kind, messages[flat.indexOf(f)]!)));
     // El hueco acumulado de cabecera/pie reparte el aire entre regiones
     // anidadas: la exterior toma todo el hueco, cada nivel interior cede 8 px.
     // Arriba: la pestaña (18 px) queda 4 px por encima del primer chip y nunca
@@ -841,7 +852,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
       x0 = Math.min(x0, m.labelX - 8, m.nestedBox ? m.nestedBox.x - 8 : Infinity);
       x1 = Math.max(x1, m.labelX + f.labelW + 8, m.nestedBox ? m.nestedBox.x + m.nestedBox.w + 8 : -Infinity);
     }
-    const firstChip = Math.min(...inAlt.map((f) => messages[flat.indexOf(f)]!.labelY));
+    const firstChip = Math.min(...inAlt.map((f) => topeDeFila(f.kind, messages[flat.indexOf(f)]!)));
     // Nunca por encima de la fila anterior (+ su pie de región): el marco
     // `alt` no se monta sobre la región o el mensaje que lo precede.
     const deseado = Math.min(yAt(altStart) - FRAG_HEAD - ALT_HEAD + 6, firstChip - 22 - ALT_HEAD);
