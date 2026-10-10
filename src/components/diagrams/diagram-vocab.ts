@@ -139,6 +139,15 @@ export function applyDiagramPolicy<T extends { id: string }>(
  * `policy.edgeStyle` del payload, con `orthogonal` por defecto. El router no
  * cambia; `curved` solo redondea los giros al pintar (`_shared/diagram-curve`).
  */
+/**
+ * Estilo de arista de un diagrama montado: el del payload si lo declara; si no, `look="sketch"`
+ * (servilleta) usa `bezier` y el resto `orthogonal`.
+ */
+export function edgeStyleFor(host: Element | null | undefined, payload: unknown): EdgeStyle {
+  const sketch = host?.getAttribute('look') === 'sketch';
+  return readEdgeStyle(payload, sketch ? 'bezier' : 'orthogonal');
+}
+
 export function readEdgeStyle(payload: unknown, fallback: EdgeStyle = 'orthogonal'): EdgeStyle {
   if (!payload || typeof payload !== 'object') return fallback;
   const o = payload as Record<string, unknown>;

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T06:39:51.040Z",
+  "generatedAt": "2026-10-10T06:51:41.433Z",
   "count": 118,
   "modules": [
     {
@@ -396,9 +396,10 @@
       "id": "diagram-curve",
       "path": "src/components/_shared/diagram-curve.ts",
       "summary": "diagram-curve — El router ortogonal sigue mandando: aquí no se mueve ningún tramo. Solo",
-      "bytes": 2071,
+      "bytes": 2560,
       "exports": [
         "roundOrthogonalPath",
+        "BEZIER_MAX",
         "styledEdgePath"
       ]
     },

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lab · rieles curvos</title>
+  <style>
+    html, body { margin: 0; background: #FFFFFF; color: #0F172A; font-family: "Poppins", ui-sans-serif, system-ui, sans-serif; }
+    header { padding: 12px 16px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;
+      h1 { font-size: 15px; margin: 0 0 4px; }
+      p { font-size: 12px; color: #475569; margin: 0; }
+    }
+    main { padding: 12px 16px; }
+    section { margin-bottom: 28px;
+      h2 { font-size: 13px; margin: 0 0 8px; }
+    }
+    .rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 12px;
+      figure { margin: 0; border: 1px solid #E2E8F0; }
+      figcaption { font-size: 11px; padding: 4px 8px; background: #F1F5F9; }
+      img { display: block; width: 100%; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lab · rieles curvos</h1>
+    <p>El mismo recorrido del router en cuatro estilos: orthogonal, curved (giros de 12 px), bezier (la curva más amplia que cabe, hasta 40 px) y sketch (servilleta: bezier + trazo a mano). Regenerar: <code>deno run -A --no-check labs/rieles-curvos/render.mjs</code>.</p>
+  </header>
+  <main id="m"></main>
+  <script type="module">
+    const BASES = ['flujo-ruta', 'flujo', 'secuencia', 'clases', 'der', 'componentes'];
+    const ESTILOS = ['orthogonal', 'curved', 'bezier', 'sketch'];
+    const m = document.getElementById('m');
+    for (const b of BASES) {
+      const s = document.createElement('section');
+      s.innerHTML = `<h2>${b}</h2><div class="rejilla">${ESTILOS.map((e) =>
+        `<figure><figcaption>${e}</figcaption><img loading="lazy" src="out/${b}--${e}.svg" alt="${b} · ${e}"></figure>`).join('')}</div>`;
+      m.appendChild(s);
+    }
+  </script>
+</body>
+</html>

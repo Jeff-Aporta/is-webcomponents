@@ -25,7 +25,7 @@ import {
   type ErThemeJson,
 } from './theme.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
-import { readEdgeStyle } from './diagram-vocab.js';
+import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 
 import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./component-diagram.schemas.js";
@@ -367,7 +367,7 @@ class IswcComponentDiagram extends DiagramElementBase {
       // butt: round pinta medio círculo DENTRO de la caja en el arranque
       // ("Inicia dentro"). El trazo nace en el borde y sale limpio.
       // Estilo `curved`: mismo recorrido ortogonal, giros redondeados al pintar.
-      const edgeStyle = readEdgeStyle(this.payload);
+      const edgeStyle = edgeStyleFor(this, this.payload);
       const path = svgEl('path', {
         d: styledEdgePath(e.path, edgeStyle), fill: 'none', stroke: color,
         'stroke-width': ep?.strokeWidth ?? 1.35,

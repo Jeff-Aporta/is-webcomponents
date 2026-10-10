@@ -36,7 +36,7 @@ export type LineDash = z.infer<typeof LineDashSchema>;
  * `curved` conserva ese recorrido y redondea cada giro con Bézier (capa de
  * diseño encima, no otro algoritmo); `straight` une extremos en recta.
  */
-export const EdgeStyleSchema = z.enum(['orthogonal', 'curved', 'straight']);
+export const EdgeStyleSchema = z.enum(['orthogonal', 'curved', 'bezier', 'straight']);
 export type EdgeStyle = z.infer<typeof EdgeStyleSchema>;
 
 /** Cardinalidad relacional (familia `relational`). */

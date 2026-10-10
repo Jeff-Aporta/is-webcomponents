@@ -21,7 +21,7 @@ import type { EmbedCapture, EmbedSize } from '../_shared/diagram-embed.schemas.j
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './theme.js';
 import type { ErThemeJson } from './theme.js';
-import { readEdgeStyle } from './diagram-vocab.js';
+import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
 import type { EdgeStyle } from './diagram-vocab.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { SequenceTurtle } from './sequence-turtle.js';
@@ -290,7 +290,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.#paint = styleTheme ? sequencePaint(styleTheme) : null;
     this.#font = styleTheme?.font?.family ?? FONT_UI;
     this.#labelFont = this.#paint?.labelFont ?? (styleTheme ? this.#font : FONT_MONO);
-    this.#edgeStyle = readEdgeStyle(this.payload);
+    this.#edgeStyle = edgeStyleFor(this, this.payload);
     const theme: DiagramTheme = styleTheme ? themeToDiagramTheme(styleTheme, base) : base;
     this.#theme = theme;
     this.syncThemeAttr();

@@ -41,7 +41,16 @@ export function roundOrthogonalPath(d: string, radius: number = 12): string {
   return out;
 }
 
-/** `curved` → path redondeado; cualquier otro estilo → el path tal cual. */
+/** Radio máximo de un giro `bezier`: en tramos largos evita un barrido enorme. */
+export const BEZIER_MAX = 40;
+
+/**
+ * `curved` → giros redondeados con `radius`; `bezier` → cada giro toma la curva más amplia que cabe
+ * (la mitad de sus tramos, hasta `BEZIER_MAX`): el riel fluye en «S» sin dejar el recorrido del
+ * router y sus extremos siguen rectos (puntas intactas). Cualquier otro estilo → el path tal cual.
+ */
 export function styledEdgePath(d: string, edgeStyle: string | null | undefined, radius: number = 12): string {
-  return edgeStyle === 'curved' ? roundOrthogonalPath(d, radius) : d;
+  if (edgeStyle === 'curved') return roundOrthogonalPath(d, radius);
+  if (edgeStyle === 'bezier') return roundOrthogonalPath(d, BEZIER_MAX);
+  return d;
 }

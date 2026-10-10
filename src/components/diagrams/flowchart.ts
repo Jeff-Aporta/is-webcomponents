@@ -27,6 +27,8 @@ import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
+import { styledEdgePath } from '../_shared/diagram-curve.js';
+import { edgeStyleFor } from './diagram-vocab.js';
 import { ETIQUETA_ICONO, ETIQUETA_LINE_H } from './flowchart-labels.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
@@ -480,6 +482,7 @@ class IswcFlowchart extends DiagramElementBase {
 
   #buildEdges(layout: FlowLayout, theme: DiagramTheme): void {
     const flowAnim = this.hasAnimation('flow');
+    const estilo = edgeStyleFor(this, this.payload);
     for (const e of layout.edges) {
       const color = edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'flow-edge' });
@@ -491,7 +494,7 @@ class IswcFlowchart extends DiagramElementBase {
       // Capa de flujo (opcional): dashed brand detrás de la arista continua.
       if (flowAnim && e.kind !== 'dashed') {
         g.appendChild(svgEl('path', {
-          d: e.path,
+          d: styledEdgePath(e.path, estilo),
           fill: 'none',
           'stroke-width': Math.max(wdt + 1.4, 2.6),
           'stroke-linejoin': 'round',
@@ -505,11 +508,15 @@ class IswcFlowchart extends DiagramElementBase {
       }
 
       const path = svgEl('path', {
-        d: e.path, fill: 'none', stroke: color, 'stroke-width': wdt,
+        d: styledEdgePath(e.path, estilo), fill: 'none', stroke: color, 'stroke-width': wdt,
         'stroke-dasharray': dash, 'stroke-linejoin': 'round', 'stroke-linecap': 'round',
         class: 'flow-edge__path',
       });
       g.appendChild(path);
+      if (!flowAnim && flujoActivo(this)) {
+        const puntos = animarRiel(path, { punteado: !!dash, reverse: !!e.reverse, color, ancho: wdt });
+        if (puntos) g.appendChild(puntos);
+      }
 
       // Punta orientada por el último tramo REAL del path (no por el lado de
       // entrada planificado, que el router puede no respetar).
@@ -714,6 +721,7 @@ class IswcFlowchart extends DiagramElementBase {
 
   #buildInsoftEdges(layout: FlowLayout, paint: FlowPaint): void {
     const flowAnim = this.hasAnimation('flow');
+    const estilo = edgeStyleFor(this, this.payload);
     // Ramas que se funden en la misma entrada comparten una sola punta.
     const puntas = new Set<string>();
     for (const e of layout.edges) {
@@ -723,15 +731,15 @@ class IswcFlowchart extends DiagramElementBase {
       const wdt = e.kind === 'thick' ? paint.edgeWidth * 2 : paint.edgeWidth;
       if (flowAnim && e.kind !== 'dashed') {
         g.appendChild(svgEl('path', {
-          d: e.path, fill: 'none', 'stroke-width': Math.max(wdt + 1.4, 2.6),
+          d: styledEdgePath(e.path, estilo), fill: 'none', 'stroke-width': Math.max(wdt + 1.4, 2.6),
           'stroke-linejoin': 'round', 'stroke-linecap': 'round', class: 'flow-edge__flow', stroke: color,
         }));
         g.setAttribute('color', color);
       }
       const path = svgEl('path', {
-        d: e.path, fill: 'none', stroke: color, 'stroke-width': wdt,
+        d: styledEdgePath(e.path, estilo), fill: 'none', stroke: color, 'stroke-width': wdt,
         'stroke-dasharray': e.kind === 'dashed' ? '5 4' : null,
-        'stroke-linejoin': 'miter', class: 'flow-edge__path',
+        'stroke-linejoin': estilo === 'orthogonal' ? 'miter' : 'round', class: 'flow-edge__path',
       });
       g.appendChild(path);
       // Flujo animado (estándar de todos los diagramas, ver _shared/diagram-flow.ts): la punteada
