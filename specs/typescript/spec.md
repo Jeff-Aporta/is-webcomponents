@@ -4,9 +4,9 @@ Todo el fuente del kit es TypeScript en modo estricto. Esta spec fija las
 decisiones que se repiten en cada fichero, para que no haya que volver a
 tomarlas componente a componente.
 
-Guardianes: [`src/utils/health/meta/src-layout.test.ts`](../../src/utils/health/meta/src-layout.test.ts) ·
-[`src/utils/health/domain/attr-enums.test.ts`](../../src/utils/health/domain/attr-enums.test.ts) ·
-[`src/utils/health/meta/helpers-homogeneity.test.ts`](../../src/utils/health/meta/helpers-homogeneity.test.ts)
+Guardianes: [`src/utils/testing/meta/src-layout.test.ts`](../../src/utils/testing/meta/src-layout.test.ts) ·
+[`src/utils/testing/domain/attr-enums.test.ts`](../../src/utils/testing/domain/attr-enums.test.ts) ·
+[`src/utils/testing/meta/helpers-homogeneity.test.ts`](../../src/utils/testing/meta/helpers-homogeneity.test.ts)
 
 ## Contexto
 

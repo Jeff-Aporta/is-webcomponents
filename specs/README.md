@@ -22,6 +22,7 @@ Planes fechados de una sesión viven en `docs/superpowers/` (si existen). Al cer
 | Spec | [typescript/spec.md](typescript/spec.md) | ¿Cómo se tipa el kit? |
 | Spec | [file-preview/spec.md](file-preview/spec.md) | ¿Cómo se ven/editan archivos por MIME? |
 | Spec | [playground/spec.md](playground/spec.md) | ¿Cómo es el playground único (stage+knobs CDN)? |
+| Spec | [diagramas/spec.md](diagramas/spec.md) | ¿Qué gramática comparten los diagramas (rieles, flujo, curvas, general vs restringidos)? |
 | Plan | [iswc-refactor-plan.md](iswc-refactor-plan.md) | Refactor ISWC 2026-09-08 (H1-H10 + S-PUERTO) |
 | Reporte | [iswc-refactor-f6.md](iswc-refactor-f6.md) | F6 del refactor ISWC 2026-09-08 (gates verdes) |
 | Plantillas | [plantillas/](plantillas) | `spec.template.md`, `tasks.template.md` |

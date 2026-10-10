@@ -126,8 +126,8 @@ Skills: `npx skills add Jeff-Aporta/iswc-root -s is-cdn-install` · `-s iswc-roo
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| Solo `dist/cdn/` + `dist/assets/` | sin huérfanos sueltos en `dist/` | `src/utils/health/meta/dist-cdn-layout.test.ts` |
-| Carpetas CDN | una carpeta por categoría manifest | `src/utils/health/meta/cdn-folders.test.ts` |
-| Loader y plan | sin doble fetch categoría+tag | `src/utils/health/meta/cdn-loader.test.ts`, `src/utils/health/domain/load-plan.test.ts` |
-| Snippet match preview | paths coherentes con manifest | `src/utils/health/meta/cdn-snippet-match.test.ts` |
-| Iconos vía CDN local | fetch OK con server :8391 | `src/utils/health/meta/cdn-icons.test.ts` (requiere `PORT=8391`) |
+| Solo `dist/cdn/` + `dist/assets/` | sin huérfanos sueltos en `dist/` | `src/utils/testing/meta/dist-cdn-layout.test.ts` |
+| Carpetas CDN | una carpeta por categoría manifest | `src/utils/testing/meta/cdn-folders.test.ts` |
+| Loader y plan | sin doble fetch categoría+tag | `src/utils/testing/meta/cdn-loader.test.ts`, `src/utils/testing/domain/load-plan.test.ts` |
+| Snippet match preview | paths coherentes con manifest | `src/utils/testing/meta/cdn-snippet-match.test.ts` |
+| Iconos vía CDN local | fetch OK con server :8391 | `src/utils/testing/meta/cdn-icons.test.ts` (requiere `PORT=8391`) |

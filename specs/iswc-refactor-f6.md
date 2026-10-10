@@ -175,7 +175,7 @@ NO bloqueantes del perfil ISWC.
 
 ### iswc-root (rama `feature/limpieza-docs`)
 
-1. **`src/utils/health/e2e/05-cobertura-total.test.ts`** (H1)
+1. **`src/utils/testing/e2e/05-cobertura-total.test.ts`** (H1)
    - Separado `import { chromium }` (valor) de `import type { Browser, Page }` (tipos).
    - Movido `import type { CtxE2E }` al final del bloque.
 

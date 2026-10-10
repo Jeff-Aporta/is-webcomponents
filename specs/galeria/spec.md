@@ -19,7 +19,7 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 
 - Componente: `<iswc-preview-component>` (`src/components/layout/preview-component.js`).
 - Catálogo: `src/previews/catalog.ts` + `registry.loadPreview(tag)`.
-- Utilerías públicas en `helpers/`: tab en nav + JSON + MD (`src/utils/health/meta/helpers-homogeneity.test.ts`).
+- Utilerías públicas en `helpers/`: tab en nav + JSON + MD (`src/utils/testing/meta/helpers-homogeneity.test.ts`).
 - Playground de producto: `<iswc-playground>` ([`playground/spec.md`](../playground/spec.md)).
   Si el JSON trae seccion playground, va **primera**. Knobs = contrato `controls`;
   no HTML nativo de formularios en el chrome.
@@ -49,9 +49,9 @@ La galería (`index.html` + `src/previews/`) es el laboratorio visual del kit. C
 
 | Caso | Resultado | Verificación |
 |---|---|---|
-| JSON válido por tag con page | schema + chrome montado | `src/utils/health/meta/preview-json-contract.test.ts` |
-| Controller sin eval | behaviors aislados | `src/utils/health/domain/preview-controller.test.ts` |
-| Paths de assets en preview | 0 links rotos | `src/utils/health/meta/preview-paths.test.ts` |
-| Solo `?s=` en nav | sin query huérfanos | `src/utils/health/meta/url-nav.test.ts` |
-| Boot sin FOUC crítico | shell + deps ordenadas | `src/utils/health/domain/gallery-boot.test.ts` |
-| Invariantes UX galería | tabs, meta, fuentes | `src/utils/health/meta/ux-gallery-invariants.test.ts` |
+| JSON válido por tag con page | schema + chrome montado | `src/utils/testing/meta/preview-json-contract.test.ts` |
+| Controller sin eval | behaviors aislados | `src/utils/testing/domain/preview-controller.test.ts` |
+| Paths de assets en preview | 0 links rotos | `src/utils/testing/meta/preview-paths.test.ts` |
+| Solo `?s=` en nav | sin query huérfanos | `src/utils/testing/meta/url-nav.test.ts` |
+| Boot sin FOUC crítico | shell + deps ordenadas | `src/utils/testing/domain/gallery-boot.test.ts` |
+| Invariantes UX galería | tabs, meta, fuentes | `src/utils/testing/meta/ux-gallery-invariants.test.ts` |

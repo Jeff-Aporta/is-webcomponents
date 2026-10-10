@@ -8,7 +8,8 @@ Todo el kit es TypeScript (ver [typescript/spec.md](typescript/spec.md)), pero n
 
 ## S-T1 Ubicación
 
-- **Únicamente** `src/utils/health/**/*.test.ts` (commiteados).
+- Gate (`deno task test`): las carpetas que lista `src/utils/testing/run-unit.ts` (`src/utils/health/{meta,diagrams,audit}`).
+- `src/utils/testing/**` guarda suites de dominio y e2e que se corren aparte (`test:e2e`, por archivo).
 - Categorías: `meta/` (estructura), `diagrams/` (diagramas específicos), `domain/` (componentes individuales), `audit/` (motor auditor).
 - Selfchecks junto al módulo: `src/components/_shared/*.selfcheck.ts` (opcionales, no sustituyen guardianes de repo).
 
@@ -49,8 +50,24 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 
 1. Guardián nuevo en verde.
 2. `deno task test` verde (mínimo sin servidor).
-3. Si tocó la carta (constraints/lessons): `src/utils/health/meta/llm-contract.test.ts` *(migrar el test a los specs consolidados)*.
+3. Si tocó la carta (constraints/lessons): `src/utils/testing/meta/llm-contract.test.ts` *(migrar el test a los specs consolidados)*.
 4. Si tocó `specs/`: `src/utils/health/meta/specs-sdd.test.ts`.
+
+## S-T6 Guardianes de caja negra
+
+Un guardián verifica el **WHAT** del spec, no la implementación: entra por la API pública (función
+exportada, CLI, HTTP, DOM del componente) y afirma sobre lo observable. Si un refactor que respeta el
+WHAT rompe el guardián, el guardián está mal escrito.
+
+| Qué se prueba | Cómo |
+|---|---|
+| Lógica pura (layout, parsers, libs) | llamar la función exportada y afirmar sobre su salida |
+| E2E de un servicio o parches SQL | controladores de cliente/servidor: el test habla con el servicio como lo haría un consumidor, y verifica el estado resultante por la misma vía |
+| UI/UX (interacción, legibilidad) | Stagehand sobre la página real (`tests/*.stagehand.test.mjs`) |
+| Render de diagramas | SVG exportado (XML válido, sin texto fuera de su caja), no el código del pintor |
+
+Ideas de casos: `/deep-test-proposals`. Un caso que solo se explica leyendo el código es un HOW;
+si es contrato estricto, va como HOW fuerte en el spec y su guardián lo cita.
 
 ## Contratos
 
@@ -59,7 +76,7 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 | Runner | `deno test -A --no-check src/utils/health/**/*.test.ts` |
 | Gate completo | `deno task test:all` (typecheck + test + audit) |
 | Meta SDD | `src/utils/health/meta/specs-sdd.test.ts` |
-| Carta | `src/utils/health/meta/llm-contract.test.ts` |
+| Carta | `src/utils/testing/meta/llm-contract.test.ts` |
 | Auditor motor | `src/utils/health/audit/motor.test.ts` |
 
 ## Aceptación
@@ -69,7 +86,7 @@ La estructura de `specs/` se valida con `src/utils/health/meta/specs-sdd.test.ts
 | Suite sin servidor | todos exit 0 | `deno task test` |
 | Gate completo | 🛑 0   🔴 0   🟡 0 | `deno task test:all` |
 | Estructura specs | mapa + links + citas tests | `src/utils/health/meta/specs-sdd.test.ts` |
-| LLM contractual | secciones + guardianes en disco | `src/utils/health/meta/llm-contract.test.ts` |
+| LLM contractual | secciones + guardianes en disco | `src/utils/testing/meta/llm-contract.test.ts` |
 
 ## Guardianes recientes contra regresiones
 

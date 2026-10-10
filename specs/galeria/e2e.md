@@ -34,7 +34,7 @@ apagado garantizado), `E2E_HEADLESS` (visible por defecto en terminal),
 cd Personal/apps/iswc-root
 deno task test:e2e                 # autoservidor E2E_PORT (0=libre) + apagado garantizado
 E2E_HEADLESS=false deno task test:e2e   # Chrome visible (default en terminal)
-E2E_TAGS=iswc-button,iswc-code deno test -A --no-check src/utils/health/e2e/04-controles.test.ts
+E2E_TAGS=iswc-button,iswc-code deno test -A --no-check src/utils/testing/e2e/04-controles.test.ts
 ```
 
 Requisitos: Deno, `@browserbasehq/stagehand` (import npm en `deno.json`), Chromium de Playwright,
@@ -49,7 +49,7 @@ y `Personal/secrets.json` con `MINIMAX_API_KEY_50USD`.
   `Set-Content`/redirección de PowerShell (re-encoda y corrompe UTF-8:
   `ó`→`Ã³`); tras tocar texto, escanear restos (`Ã|Â|â€`). (AGENTS #45.)
 - **Correr en paralelo** para depurar dos archivos contra un host externo:
-  `E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:8391/index.html deno test -A --no-check src/utils/health/e2e/00-arranque.test.ts src/utils/health/e2e/01-iswc-code.test.ts`
+  `E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:8391/index.html deno test -A --no-check src/utils/testing/e2e/00-arranque.test.ts src/utils/health/e2e/01-iswc-code.test.ts`
 - Verificación del gate: `deno task test:e2e` (suite completa) y
   `deno task test` (unit).
 

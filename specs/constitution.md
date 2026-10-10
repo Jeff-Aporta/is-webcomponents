@@ -27,7 +27,7 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 
 - Toda la fuente de producto bajo `src/` (incl. `src/manifest.ts`). En la raíz: `scripts/`, `dist/`, `tests/`, `index.html`, `docs/` (HTML SEO generado).
 - **Prohibido** recrear `components/`, `styles/`, `previews/`, `skills/` en la raíz del repo.
-- Guardián: `src/utils/health/meta/src-layout.test.ts`.
+- Guardián: `src/utils/testing/meta/src-layout.test.ts`.
 
 ## C-4 Guardianes
 

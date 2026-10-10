@@ -9,11 +9,17 @@ Comportamiento exigido. Diario: [`lessons.md`](../../specs/lessons.md).
 
 Qué problema, para quién. Dos o tres frases.
 
-## S-X1 <Requerimiento>
+## WHAT
 
-Comportamiento en presente. Sin detalle de implementación.
+### S-X1 <Requerimiento>
 
-## Contratos
+Comportamiento en presente, observable. Sin detalle de implementación. Es lo que el guardián verifica.
+
+## HOW
+
+**HOW débil** (opcional): cómo se piensa hacer hoy; puede cambiar sin tocar el WHAT.
+
+**HOW fuerte** (solo contratos estrictos; cambiarlos exige ADR):
 
 | Pieza | Contrato |
 |---|---|

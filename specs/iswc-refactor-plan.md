@@ -32,7 +32,7 @@ limpio`.
 
 | # | Archivo | Estado |
 |---|---|---|
-| H1 | `src/utils/health/e2e/05-cobertura-total.test.ts` L26-47 | ✅ Cerrado |
+| H1 | `src/utils/testing/e2e/05-cobertura-total.test.ts` L26-47 | ✅ Cerrado |
 | H2 | `src/utils/health/e2e/lib/harness.ts` L7-21 | ✅ Cerrado |
 | H3 | `src/utils/health/e2e/lib/server.ts` L8 | ✅ Cerrado |
 | H4 | `src/utils/health/e2e/run.ts` L11 | ✅ Cerrado |
