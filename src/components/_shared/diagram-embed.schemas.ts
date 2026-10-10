@@ -65,6 +65,8 @@ export const NodeEmbedSpecSchema = z.object({
   component: z.record(z.string(), z.unknown()).optional(),
   /** `class`: clase en el formato de `iswc-class-diagram` (`name`, `stereotype?`, `attributes`, `methods`, `fill?`: token del tema o hex). */
   class: z.record(z.string(), z.unknown()).optional(),
+  /** `class`: miembros por sección antes del renglón «N más» (lo fija la config del diagrama anfitrión). */
+  classMaxMembers: z.number().int().positive().optional(),
 });
 export type NodeEmbedSpec = z.infer<typeof NodeEmbedSpecSchema>;
 

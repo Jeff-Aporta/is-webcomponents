@@ -237,7 +237,7 @@ function readClassLayoutOpts(raw: unknown): ClassLayoutOpts | undefined {
   const r = asRecord(raw);
   const out: ClassLayoutOpts = {};
   for (const k of ['layerCols', 'nestedCols', 'colGutter', 'nestedRowGap', 'nestedPkgGap', 'pkgRowGap', 'lanePitch',
-    'laneNearFactor', 'pkgBorderClearance', 'pkgBorderNearFactor', 'pkgCrossFactor'] as const) {
+    'laneNearFactor', 'pkgBorderClearance', 'pkgBorderNearFactor', 'pkgCrossFactor', 'maxMembers'] as const) {
     if (r[k] != null && Number.isFinite(Number(r[k]))) out[k] = Number(r[k]);
   }
   if (r.boxStyle === 'card' || r.boxStyle === 'uml' || r.boxStyle === 'vp') out.boxStyle = r.boxStyle;
@@ -279,7 +279,7 @@ export function accentFromPalette(hex: string): string {
  * Geometría de compartimentos de una clase: nombre (+estereotipo), atributos,
  * métodos. Los compartimentos vacíos se omiten junto con su divisor.
  */
-function classGeometry(cls: ClassSpecClass): { w: number; h: number; headerH: number; sections: ClassLayoutSection[]; dividerYs: number[] } {
+function classGeometry(cls: ClassSpecClass, maxMembers?: number): { w: number; h: number; headerH: number; sections: ClassLayoutSection[]; dividerYs: number[] } {
   const headerH = HEADER_H + (cls.stereotype ? STEREO_H : 0);
   const sections: ClassLayoutSection[] = [
     { type: 'header', y: 0, h: headerH, rows: [] },
@@ -296,9 +296,11 @@ function classGeometry(cls: ClassSpecClass): { w: number; h: number; headerH: nu
   const w = snapDiagramGrid(Math.min(MAX_W, Math.max(MIN_W, widthEst)));
   // Cada miembro: firma y tipo partidos al ancho disponible (nada se corta ni se sale).
   const util = w - MIEMBRO.sangria - MIEMBRO.pad * 2;
-  const miembros = (rows: string[]) => {
+  const tope = maxMembers && maxMembers > 0 ? Math.floor(maxMembers) : Infinity;
+  const miembros = (todos: string[]) => {
     let y = 0;
-    return rows.map((row) => {
+    const rows = todos.length > tope ? todos.slice(0, tope) : todos;
+    const out = rows.map((row) => {
       const p = partirMiembro(row);
       const firma = envolver(p.firma, Math.max(8, Math.floor(util / CHAR_W)));
       const tipo = envolver(p.tipo, Math.max(8, Math.floor(util / MIEMBRO.captionCharW)));
@@ -306,6 +308,9 @@ function classGeometry(cls: ClassSpecClass): { w: number; h: number; headerH: nu
       y += firma.length * MIEMBRO.renglon + tipo.length * MIEMBRO.caption + 2;
       return m;
     });
+    // Lo que pasa del tope se resume en un renglón «N más» (sin viñeta).
+    if (todos.length > rows.length) out.push({ vis: '', firma: [`${todos.length - rows.length} más`], tipo: [], y, mas: todos.length - rows.length });
+    return out;
   };
   const alto = (ms: Array<{ firma: string[]; tipo: string[] }>) => ms.reduce((a, m) => a + m.firma.length * MIEMBRO.renglon + m.tipo.length * MIEMBRO.caption + 2, 0);
   if (cls.attributes.length) {
@@ -377,7 +382,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
   const headerH = hasHeader ? (subtitle ? 54 : 36) : 0;
   if (spec.packages?.length) return computePackagedClassLayout(spec, { title, subtitle, titleY, subtitleY, headerH });
 
-  const geomById = new Map(spec.classes.map((c) => [c.id, classGeometry(c)]));
+  const geomById = new Map(spec.classes.map((c) => [c.id, classGeometry(c, spec.layout?.maxMembers)]));
   const sized = spec.classes.map((c) => {
     const g = geomById.get(c.id)!;
     return { id: c.id, w: g.w, h: g.h };
@@ -538,7 +543,7 @@ function computePackagedClassLayout(
   const opts = spec.layout ?? {};
   const pkgSpec = spec.packages ?? [];
   const pkgById = new Map(pkgSpec.map((p) => [p.id, p]));
-  const geomById = new Map(spec.classes.map((c) => [c.id, classGeometry(c)]));
+  const geomById = new Map(spec.classes.map((c) => [c.id, classGeometry(c, spec.layout?.maxMembers)]));
 
   const paquetes: Paquete[] = pkgSpec.map((p) => ({
     id: p.id, name: p.name, stereotype: p.stereotype, parent: p.parent,

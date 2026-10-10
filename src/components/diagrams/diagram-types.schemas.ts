@@ -144,6 +144,8 @@ export type ClassPackage = z.infer<typeof ClassPackageSchema>;
 
 /** Opciones de empaque cuando hay paquetes (modo capas, como componentes). */
 export const ClassLayoutOptsSchema = z.object({
+  /** Máximo de miembros por sección; los demás se resumen en un renglón «N más». Sin tope por defecto. */
+  maxMembers: z.number().optional(),
   layerCols: z.number().optional(),
   nestedCols: z.number().optional(),
   colGutter: z.number().optional(),
@@ -205,6 +207,8 @@ export const ClassMemberLayoutSchema = z.object({
   firma: z.array(z.string()),
   tipo: z.array(z.string()),
   y: z.number(),
+  /** Renglón resumen: cuántos miembros quedaron sin mostrar (tope `layout.maxMembers`). */
+  mas: z.number().optional(),
 });
 export type ClassMemberLayout = z.infer<typeof ClassMemberLayoutSchema>;
 

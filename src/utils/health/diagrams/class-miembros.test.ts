@@ -40,3 +40,23 @@ Deno.test('miembros: M2 partirMiembro separa el tipo tras la firma (y conserva l
   assertEquals(partirMiembro('+ id: string «PK»'), { vis: '+', firma: 'id', tipo: 'string «PK»' });
   assertEquals(partirMiembro('nombre'), { vis: '', firma: 'nombre', tipo: '' });
 });
+
+Deno.test('miembros: M5 con layout.maxMembers se muestran N y un renglón «K más»; dentro de otro diagrama el tope es 5 o el de su config', async () => {
+  const metodos = Array.from({ length: 15 }, (_, i) => `+ m${i}(): void`);
+  const base = { classes: [{ id: 'a', name: 'A', methods: metodos }], relations: [] };
+  const sin = computeClassLayout(resolveClassSpec(base)).nodes[0]!.sections.find((s) => s.type === 'methods')!;
+  assertEquals(sin.members!.length, 15, 'sin tope se muestran todos');
+  const con = computeClassLayout(resolveClassSpec({ ...base, layout: { maxMembers: 6 } })).nodes[0]!.sections.find((s) => s.type === 'methods')!;
+  assertEquals(con.members!.length, 7);
+  assertEquals(con.members!.slice(0, 6).map((m) => m.firma[0]), metodos.slice(0, 6).map((r) => r.slice(2, r.indexOf(':'))));
+  assertEquals(con.members![6]!.mas, 9);
+  assertEquals(con.members![6]!.firma, ['9 más']);
+  assert(con.h < sin.h, 'la caja se acorta');
+  const { embedDiagramOf } = await import('../../../components/_shared/diagram-embed.ts');
+  const tope = (spec: unknown) => (embedDiagramOf(spec as never)!.payload as { classDiagram: { layout: { maxMembers: number } } }).classDiagram.layout.maxMembers;
+  assertEquals(tope({ kind: 'class', class: { name: 'A', methods: metodos } }), 5, 'por defecto 5 y el sexto renglón es «N más»');
+  // La config del diagrama anfitrión fija el tope de sus clases.
+  const { flowchartSpecFromPayload } = await import('../../../components/diagrams/flowchart-spec.ts');
+  const f = flowchartSpecFromPayload({ config: { classMaxMembers: 3 }, nodes: [{ id: 'c', kind: 'class', class: { name: 'A', methods: metodos } }, { id: 'x', label: 'x' }], edges: [] })!;
+  assertEquals(tope(f.nodes[0]!.embed), 3);
+});

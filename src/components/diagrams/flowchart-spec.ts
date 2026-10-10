@@ -216,6 +216,11 @@ export function flowchartSpecFromPayload(payload: unknown): FlowResolvedSpec | n
   if (!Array.isArray(rawNodes) || !rawNodes.length) return null;
 
   const nodes: FlowNodeSpec[] = rawNodes.map((raw: unknown, i: number) => readNode(asRecord(raw), i));
+  // Config del diagrama: miembros por sección de las clases incrustadas antes del «N más».
+  const tope = Number(asRecord(src.config).classMaxMembers ?? src.classMaxMembers);
+  if (Number.isInteger(tope) && tope > 0) {
+    for (const n of nodes) if (n.embed?.kind === 'class') n.embed = { ...n.embed, classMaxMembers: tope };
+  }
   const known = new Set<string>(nodes.map((n) => n.id));
   // Descarta aristas colgantes: una arista a un id inexistente rompería el layout.
   const rawEdges = Array.isArray(src.edges) ? src.edges : [];
@@ -623,6 +628,8 @@ export function computeFlowchartLayout(
   // Carriles: los usos (punteadas) los rutea en lote el router compartido (el de clases y
   // componentes), con el flujo ya trazado como rieles fijos. Si no halla ruta, queda la de arriba.
   // Solo en la pasada final (la que se dibuja): la primera, que abre espacio, usa el ruteo rápido.
+  // Estándar: las aristas del flujo que comparten punta convergen en abanico (vías a delta).
+  if (final) abanicoDelFlujo(routed, spec);
   if (lanesOn && final) {
     const mideFijos = (t: string): number => measurer(opts)(t) * (10.5 / (opts.fontSize ?? INSOFT.fontSize));
     const muros = [...cajasFijas(nodes, placed.lanes, placed.contexts, offsetX, offsetY, spec.laneDirection === 'horizontal', mideFijos), ...textos.values()];
@@ -798,11 +805,6 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
     edges,
     { step: U, clearance: 8, stub: U, iterations: 3 },
   );
-  // Abanico con separación por delta: quien se unió a la punta de otro corre paralelo a su tramo.
-  const vias = new Map<string, number>();
-  // Por punta: el primero es el anfitrión; cada otro se corta donde se monta sobre él (lo haya
-  // «unido» el router o lo haya llevado al mismo riel el incentivo de la clave) y sigue en su vía.
-  const anfitrion = new Map<string, number>();
   // Una sola punta por destino y costado (obligatoria, no solo incentivo): la que llegue a otra
   // altura baja o sube a la del primero justo antes de entrar.
   const puntaDe = new Map<string, FlowPoint>();
@@ -821,20 +823,7 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
     res.paths[k] = simplifyOrthoPath([...pts.slice(0, -1), codo, giro, T0]);
     void e;
   });
-  const caminos = usos.map((_, k) => {
-    const pts = res.paths[k];
-    if (!pts || pts.length < 2) return pts;
-    const punta = `${Math.round(pts[pts.length - 1]!.x)},${Math.round(pts[pts.length - 1]!.y)}`;
-    const h = anfitrion.get(punta);
-    if (h == null) { anfitrion.set(punta, k); return pts; }
-    const host = res.paths[h]!;
-    const sobre = (q: FlowPoint): boolean => host.slice(1).some((r, i) => tramoContiene(host[i]!, r, q));
-    // Primer vértice desde el que todo el resto va sobre el anfitrión.
-    let t = pts.length - 1;
-    while (t > 1 && sobre(pts[t - 1]!) && sobre({ x: (pts[t - 1]!.x + pts[t]!.x) / 2, y: (pts[t - 1]!.y + pts[t]!.y) / 2 })) t--;
-    return enVia(pts.slice(0, t + 1), host, vias, h) ?? pts;
-  });
-  separarColineales(caminos);
+  const caminos = abanicoEnVias(usos.map((_, k) => res.paths[k]));
   usos.forEach(({ i }, k) => {
     const pts = caminos[k];
     const r = routed[i];
@@ -849,6 +838,44 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
       if (l > largo) { largo = l; mitad = { x: (p.x + q.x) / 2, y: (p.y + q.y) / 2 }; }
     });
     routed[i] = { ...r, path: polylinePath(pts), arrowTipX: fin.x, arrowTipY: fin.y, arrowAngle: 0, labelX: mitad.x, labelY: mitad.y };
+  });
+}
+
+/**
+ * Abanico con separación por delta (estándar de todas las aristas que comparten punta, como en
+ * clases): por punta, la primera es el anfitrión; cada otra se corta donde se monta sobre él y sigue
+ * por su propia vía, paralela a `ABANICO.delta`, hasta reincorporarse escalonada justo antes de la
+ * punta. Luego ningún tramo interior queda encima de otro (separarColineales).
+ */
+function abanicoEnVias(entrada: ReadonlyArray<FlowPoint[] | null | undefined>): Array<FlowPoint[] | null | undefined> {
+  const vias = new Map<string, number>();
+  const anfitrion = new Map<string, number>();
+  const caminos = entrada.map((pts, k) => {
+    if (!pts || pts.length < 2) return pts;
+    const punta = `${Math.round(pts[pts.length - 1]!.x)},${Math.round(pts[pts.length - 1]!.y)}`;
+    const h = anfitrion.get(punta);
+    if (h == null) { anfitrion.set(punta, k); return pts; }
+    const host = entrada[h]!;
+    const sobre = (q: FlowPoint): boolean => host.slice(1).some((r, i) => tramoContiene(host[i]!, r, q));
+    // Primer vértice desde el que todo el resto va sobre el anfitrión.
+    let t = pts.length - 1;
+    while (t > 1 && sobre(pts[t - 1]!) && sobre({ x: (pts[t - 1]!.x + pts[t]!.x) / 2, y: (pts[t - 1]!.y + pts[t]!.y) / 2 })) t--;
+    return enVia(simplifyOrthoPath(pts.slice(0, t + 1)), host, vias, h) ?? pts;
+  });
+  separarColineales(caminos);
+  return caminos;
+}
+
+/** El flujo (aristas continuas) también converge en abanico a sus puntas compartidas. */
+function abanicoDelFlujo(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec): void {
+  const idx = routed.flatMap((r, i) => (r && spec.edges[i]!.kind !== 'dashed' && spec.edges[i]!.from !== spec.edges[i]!.to ? [i] : []));
+  const caminos = abanicoEnVias(idx.map((i) => pathPoints(routed[i]!.path)));
+  idx.forEach((i, k) => {
+    const pts = caminos[k];
+    const r = routed[i]!;
+    if (!pts || pts.length < 2) return;
+    const nuevo = polylinePath(pts);
+    if (nuevo !== r.path) routed[i] = { ...r, path: nuevo };
   });
 }
 

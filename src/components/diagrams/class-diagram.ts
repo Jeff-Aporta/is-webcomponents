@@ -60,6 +60,13 @@ function pintarMiembros(
   const members = sec.members ?? sec.rows.map((row, i) => ({ vis: '', firma: [row], tipo: [] as string[], y: i * 16 }));
   for (const m of members) {
     let y = y0 + 6 + m.y + 8;
+    if (m.mas) {
+      // Resumen de lo que no cabe en el tope (`layout.maxMembers`): «N más», sin viñeta.
+      const t = svgEl('text', { x: x + 22, y, 'dominant-baseline': 'middle', fill: op.caption, 'font-size': '10', 'font-style': 'italic', 'font-family': op.font, class: 'cls-node__mas' });
+      t.textContent = m.firma[0] ?? `${m.mas} más`;
+      g.appendChild(t);
+      continue;
+    }
     const color = VISIBILIDAD[m.vis];
     if (m.vis && op.vis === 'punto' && color) {
       g.appendChild(svgEl('circle', { cx: x + 11, cy: y, r: 3.2, fill: color, class: 'cls-node__vis' }));

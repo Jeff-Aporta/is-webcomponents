@@ -31,6 +31,11 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
  * desbordar la columna del flujo (fijado también en flowchart-lanes.test.ts, N1).
  */
 export const NESTED_DEFAULT_MAX = 200;
+/**
+ * Miembros por sección de una clase incrustada en otro diagrama (por defecto); el siguiente renglón
+ * es «N más». El diagrama anfitrión lo cambia con `classMaxMembers` en su config.
+ */
+export const EMBED_CLASS_MAX_MEMBERS = 5;
 /** Tamaño de respaldo de `tableder` / `component` mientras no hay captura. */
 export const EMBED_FALLBACK_SIZE: EmbedSize = { w: 180, h: 96 };
 
@@ -77,7 +82,8 @@ export function embedDiagramOf(spec: NodeEmbedSpec): EmbeddedDiagram | null {
       tag: 'iswc-class-diagram',
       // Caja VP (rellena con `fill`: token del tema o hex; por defecto `service`): una clase suelta
       // transparente no se lee dentro de un flujo.
-      payload: { classDiagram: { classes: [{ id, ...spec.class }], relations: [], layout: { boxStyle: 'vp' } } },
+      // Dentro de otro diagrama la clase es un resumen: hasta `classMaxMembers` miembros por sección y un renglón «N más».
+      payload: { classDiagram: { classes: [{ id, ...spec.class }], relations: [], layout: { boxStyle: 'vp', maxMembers: spec.classMaxMembers ?? EMBED_CLASS_MAX_MEMBERS } } },
       attrs: spec.diagram?.attrs,
     };
   }
