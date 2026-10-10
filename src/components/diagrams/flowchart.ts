@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET } from './flowchart-spec.js';
+import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, columnasVars } from './flowchart-spec.js';
 import type { FlowLayoutOptions, FlowPaint } from './flowchart-spec.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { pickThemeMode, themeToDiagramTheme, injectThemeCss } from './theme.js';
@@ -105,9 +105,19 @@ function insoftText(lines: string[], tb: { x: number; y: number; w: number; h: n
   const cx = align === 'start' ? tb.x : tb.x + tb.w / 2;
   const first = tb.y + tb.h / 2 - ((lines.length - 1) * FLOW_LINE_H) / 2 + ink.fontSize * 0.36;
   lines.forEach((line, i) => {
-    const ts = svgEl('tspan', { x: cx, y: first + i * FLOW_LINE_H });
-    ts.textContent = line;
-    t.appendChild(ts);
+    // `{{nombre}}` o `{{alias}}`: lectura de una variable declarada antes; va en su propio tspan para
+    // dibujarle una píldora punteada detrás (ver #marcarVariables).
+    const partes = line.split(/(\{\{[^{}]+\}\})/).filter(Boolean);
+    partes.forEach((p, k) => {
+      const ref = p.match(/^\{\{([^{}]+)\}\}$/);
+      const ts = svgEl('tspan', k === 0 ? { x: cx, y: first + i * FLOW_LINE_H } : {});
+      if (ref) {
+        ts.setAttribute('class', 'flow-var-ref');
+        ts.dataset.var = ref[1]!.trim();
+        ts.textContent = `\u2009${ref[1]!.trim()}\u2009`;
+      } else ts.textContent = p;
+      t.appendChild(ts);
+    });
   });
   return t;
 }
@@ -428,6 +438,7 @@ class IswcFlowchart extends DiagramElementBase {
       if (layout.contexts?.length) this.#buildInsoftContexts(layout, this.#paint);
       this.#buildInsoftEdges(layout, this.#paint);
       this.#buildInsoftNodes(layout, this.#paint);
+      this.#marcarVariables();
     } else {
       this.#buildEdges(layout, theme);
       this.#buildNodes(layout, theme);
@@ -814,6 +825,32 @@ class IswcFlowchart extends DiagramElementBase {
     }
   }
 
+  /**
+   * Lecturas de variables (`{{nombre}}`, alias): una píldora punteada detrás de su texto, medida
+   * con el texto ya en el lienzo. Así se ve de un vistazo qué valores vienen de una declaración.
+   */
+  #marcarVariables(): void {
+    for (const ts of this.svg.querySelectorAll<SVGTSpanElement>('tspan.flow-var-ref')) {
+      const t = ts.closest('text');
+      if (!t || typeof ts.getStartPositionOfChar !== 'function') continue;
+      try {
+        const n = ts.getNumberOfChars();
+        if (!n) continue;
+        const a = ts.getStartPositionOfChar(0);
+        const b = ts.getEndPositionOfChar(n - 1);
+        const fs = Number(t.getAttribute('font-size') ?? 11);
+        const h = fs * 1.35;
+        // La posición del carácter es la línea base; con `dominant-baseline: central` es el centro.
+        const y = t.getAttribute('dominant-baseline') === 'central' ? a.y - h / 2 : a.y - fs * 0.98;
+        const r = svgEl('rect', {
+          x: a.x, y, width: Math.max(4, b.x - a.x), height: h, rx: h / 2, ry: h / 2,
+          fill: 'none', stroke: t.getAttribute('fill') ?? '#334155', 'stroke-width': 0.9, 'stroke-dasharray': '2 2', class: 'flow-var-ref__pill',
+        });
+        t.parentNode?.insertBefore(r, t);
+      } catch { /* sin medición (fuera del navegador): el texto queda sin píldora */ }
+    }
+  }
+
   #buildInsoftNodes(layout: FlowLayout, paint: FlowPaint): void {
     // Con `hueRotate`, cada símbolo pintado con el relleno del tema toma su propio tono (en orden
     // de lectura): mismo L y C en OKLCH, el tono avanza por el ángulo áureo.
@@ -876,7 +913,35 @@ class IswcFlowchart extends DiagramElementBase {
         box = svgEl('path', { d: shapePath(n.shape, n.x, n.y, n.w, n.h), fill: pinta(paint.actionFill), 'stroke-linejoin': 'round', ...stroke });
         g.appendChild(box);
       }
-      if (n.embed) {
+      if (n.shape === 'vars' && n.vars?.length && n.varsCols && n.varsBox) {
+        // Tabla de declaración: nombre (negrita) · alias (píldora punteada) · valor · desc (tenue).
+        const columnas = columnasVars(n.vars);
+        if (n.lines?.length && n.textBox) g.appendChild(insoftText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: 700 }, 'start'));
+        const { x, y, w } = n.varsBox;
+        n.vars.forEach((v, i) => {
+          const fy = y + i * VARS.fila;
+          g.appendChild(svgEl('line', { x1: x, y1: fy, x2: x + w, y2: fy, stroke: paint.muted, 'stroke-opacity': 0.35, 'stroke-width': 1 }));
+          let cx = x;
+          columnas.forEach((col, c) => {
+            const texto = v[col] ?? '';
+            const desc = col === 'desc';
+            const t = svgEl('text', {
+              x: cx + VARS.celda, y: fy + VARS.fila / 2, 'dominant-baseline': 'central', 'font-size': paint.fontSize - 0.5,
+              'font-family': desc ? paint.font : 'Consolas,Menlo,monospace', 'font-weight': col === 'name' ? 700 : 400,
+              fill: desc ? paint.muted : paint.actionText, ...(desc ? { 'font-style': 'italic' } : {}), class: `flow-vars__${col}`,
+            });
+            if (col === 'alias' && texto) {
+              const ts = svgEl('tspan', { class: 'flow-var-ref' });
+              ts.dataset.var = texto;
+              ts.textContent = `\u2009${texto}\u2009`;
+              t.appendChild(ts);
+            } else t.textContent = texto;
+            g.appendChild(t);
+            cx += n.varsCols![c]!;
+          });
+        });
+        if (n.pill) g.appendChild(this.#pill(n, paint, tono));
+      } else if (n.embed) {
         this.#paintEmbed(g, n, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: paint.fontWeight });
         if (n.pill) g.appendChild(this.#pill(n, paint, colorDeEntidad(g)));
       } else if (n.lines?.length && n.textBox) {
@@ -909,12 +974,12 @@ class IswcFlowchart extends DiagramElementBase {
     if (n.step != null) {
       const t = svgEl('text', {
         // Sin ícono, el número queda centrado en la pastilla.
-        x: n.icon ? x + pillStepW(n.step) / 2 : p.x + p.w / 2, y: cy, 'text-anchor': 'middle', 'dominant-baseline': 'central',
+        x: n.icon ? x + pillStepW(n.stepLabel ?? n.step) / 2 : p.x + p.w / 2, y: cy, 'text-anchor': 'middle', 'dominant-baseline': 'central',
         fill: suelta ? paint.background : paint.actionText, 'font-family': paint.font, 'font-size': 10, 'font-weight': 700, class: 'flow-node__step',
       });
-      t.textContent = String(n.step);
+      t.textContent = n.stepLabel ?? String(n.step);
       g.appendChild(t);
-      x += pillStepW(n.step) + 4;
+      x += pillStepW(n.stepLabel ?? n.step) + 4;
     }
     if (n.icon) {
       // Sin número, el ícono queda centrado en la pastilla.

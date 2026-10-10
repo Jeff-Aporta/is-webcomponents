@@ -463,7 +463,8 @@ class IswcErDiagram extends DiagramElementBase {
       if (orphan) g.dataset.orphan = '';
       if (this.isViewer) g.style.cursor = 'pointer';
 
-      const fill = paint?.fill ?? (st.fill || theme.chipFill);
+      // El relleno propio de la entidad (`style.fill`, p. ej. el color por tipo que da un flujo) gana al del tema.
+      const fill = st.fill || (paint?.fill ?? theme.chipFill);
       const opacity = typeof st.opacity === 'number' ? st.opacity : null;
       const radius = paint?.radius ?? (typeof st.radius === 'number' ? st.radius : 8);
       const strokeWidth = paint?.borderWidth ?? (typeof st.strokeWidth === 'number' ? st.strokeWidth : 1.3);

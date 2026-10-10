@@ -24,12 +24,12 @@
         "label": "ISS · TIdentityController"
       },
       {
-        "id": "I-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
       },
       {
-        "id": "D",
-        "label": "DataSnap DSCLIENTES"
+        "id": "modelos",
+        "label": "Modelos"
       }
     ],
     "nodes": [
@@ -46,15 +46,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -98,13 +90,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-login",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TIdentityController",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -113,23 +107,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TIdentityObject",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -138,17 +123,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "norm",
@@ -179,7 +155,7 @@
           }
         },
         "kind": "component",
-        "lane": "D",
+        "lane": "P",
         "component": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
           "query": {
@@ -203,7 +179,9 @@
               }
             }
           ]
-        }
+        },
+        "ref": "ds-login",
+        "context": "Externos"
       },
       {
         "id": "n-ds",
@@ -264,7 +242,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "api",

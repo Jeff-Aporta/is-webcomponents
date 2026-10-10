@@ -24,16 +24,16 @@
         "label": "ISS · TProviderController"
       },
       {
-        "id": "V-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
         "label": "PostgreSQL"
-      },
-      {
-        "id": "O",
-        "label": "OpenAI"
       }
     ],
     "nodes": [
@@ -50,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -111,13 +103,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-config",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TProviderController",
         "kind": "class",
-        "lane": "V-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -126,23 +120,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TProvider",
         "kind": "class",
-        "lane": "V-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -151,17 +136,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "d1",
@@ -225,7 +201,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Configuración"
       },
       {
         "id": "tsys",
@@ -265,7 +242,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Configuración"
       },
       {
         "id": "ai",
@@ -284,7 +262,7 @@
           }
         },
         "kind": "component",
-        "lane": "O",
+        "lane": "C",
         "component": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
           "query": {
@@ -308,7 +286,9 @@
               }
             }
           ]
-        }
+        },
+        "ref": "openai-models",
+        "context": "OpenAI"
       },
       {
         "id": "ok",
@@ -326,7 +306,7 @@
         "id": "dueno-TSysValueController",
         "label": "TSysValueController",
         "kind": "class",
-        "lane": "V-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -335,23 +315,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "dueno-TSysValueController-pojo",
         "label": "TSysValue",
         "kind": "class",
-        "lane": "V-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -360,17 +331,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       }
     ],
     "edges": [
@@ -383,7 +345,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT"
       },
       {
         "from": "api",
@@ -458,7 +420,7 @@
         "from": "dueno-TSysValueController",
         "to": "dueno-TSysValueController-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT, UPDATE"
       },
       {
         "from": "dueno-TSysValueController",

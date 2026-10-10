@@ -24,8 +24,12 @@
         "label": "ISS · TErrorController"
       },
       {
-        "id": "E-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
@@ -46,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -107,13 +103,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-ops",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TErrorController",
         "kind": "class",
-        "lane": "E-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -122,23 +120,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TError_",
         "kind": "class",
-        "lane": "E-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -147,17 +136,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "d1",
@@ -233,7 +213,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "ok",
@@ -258,7 +239,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · INSERT, SELECT, DELETE"
       },
       {
         "from": "api",

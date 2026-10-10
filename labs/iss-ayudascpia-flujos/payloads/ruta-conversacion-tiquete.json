@@ -24,8 +24,12 @@
         "label": "ISS · TConversationTicketController"
       },
       {
-        "id": "T-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "D",
@@ -46,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -106,13 +102,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-mensaje-tiquete",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TConversationTicketController",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -121,23 +119,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TConversationTicket",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -146,17 +135,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "val",
@@ -214,7 +194,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "dec",
@@ -284,7 +265,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "cierra",
@@ -308,7 +290,7 @@
         "id": "dueno-TConversacionController",
         "label": "TConversacionController",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -317,23 +299,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "dueno-TConversacionController-pojo",
         "label": "TConversacion",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -342,17 +315,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       }
     ],
     "edges": [
@@ -365,7 +329,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · INSERT"
       },
       {
         "from": "api",
@@ -455,13 +419,25 @@
         "from": "dueno-TConversacionController",
         "to": "dueno-TConversacionController-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT, UPDATE"
       },
       {
         "from": "dueno-TConversacionController",
         "to": "tconv",
         "kind": "dashed",
         "label": "SELECT · UPDATE"
+      },
+      {
+        "from": "tconv",
+        "to": "ttiq",
+        "kind": "dashed",
+        "label": "detalle TIQUETES (iconversacion)"
+      },
+      {
+        "from": "dueno-TConversacionController-pojo",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "detalle TIQUETES · INSERT"
       }
     ]
   }

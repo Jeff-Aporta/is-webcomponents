@@ -24,16 +24,16 @@
         "label": "ISS · TConversacionController"
       },
       {
-        "id": "T-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
         "label": "PostgreSQL"
-      },
-      {
-        "id": "O",
-        "label": "OpenAI"
       }
     ],
     "nodes": [
@@ -50,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -110,13 +102,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-conv-portal",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TConversacionController",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -125,23 +119,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TConversacion",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -150,17 +135,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "lee",
@@ -211,7 +187,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "hist",
@@ -257,7 +234,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "d1",
@@ -294,7 +272,7 @@
           }
         },
         "kind": "component",
-        "lane": "O",
+        "lane": "C",
         "component": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
           "query": {
@@ -318,7 +296,9 @@
               }
             }
           ]
-        }
+        },
+        "ref": "openai-completions",
+        "context": "OpenAI"
       },
       {
         "id": "ok",
@@ -342,7 +322,7 @@
         "id": "dueno-TConversationLogController",
         "label": "TConversationLogController",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -351,23 +331,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "dueno-TConversationLogController-pojo",
         "label": "TConversationLog",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -376,17 +347,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       }
     ],
     "edges": [
@@ -399,7 +361,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT"
       },
       {
         "from": "api",
@@ -467,7 +429,7 @@
         "from": "dueno-TConversationLogController",
         "to": "dueno-TConversationLogController-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT"
       },
       {
         "from": "dueno-TConversationLogController",

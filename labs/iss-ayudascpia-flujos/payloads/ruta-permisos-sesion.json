@@ -24,8 +24,12 @@
         "label": "ISS · TPermissionsController"
       },
       {
-        "id": "P-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "D",
@@ -46,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -98,13 +94,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-permisos",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TPermissionsController",
         "kind": "class",
-        "lane": "P-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -113,23 +111,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TPermissionsObject",
         "kind": "class",
-        "lane": "P-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -138,17 +127,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "jwt",
@@ -212,7 +192,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Seguridad"
       },
       {
         "id": "rol",
@@ -265,7 +246,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Seguridad"
       },
       {
         "id": "d2",
@@ -317,7 +299,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Seguridad"
       },
       {
         "id": "perms",
@@ -369,7 +352,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Seguridad"
       },
       {
         "id": "ok",
@@ -394,7 +378,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "api",

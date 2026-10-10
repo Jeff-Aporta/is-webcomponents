@@ -24,16 +24,16 @@
         "label": "ISS · TFileStorageController"
       },
       {
-        "id": "F-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
         "label": "PostgreSQL"
-      },
-      {
-        "id": "R",
-        "label": "Cloudflare R2"
       }
     ],
     "nodes": [
@@ -50,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -110,13 +102,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-ops",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TFileStorageController",
         "kind": "class",
-        "lane": "F-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -125,23 +119,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TFileStorage",
         "kind": "class",
-        "lane": "F-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -150,23 +135,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "alm",
         "label": "TGenAlmacenamientoController",
         "kind": "class",
-        "lane": "F-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -175,17 +151,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "val",
@@ -243,7 +210,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Configuración"
       },
       {
         "id": "d1",
@@ -280,7 +248,7 @@
           }
         },
         "kind": "component",
-        "lane": "R",
+        "lane": "C",
         "component": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
           "query": {
@@ -304,7 +272,9 @@
               }
             }
           ]
-        }
+        },
+        "ref": "r2-bucket",
+        "context": "Externos"
       },
       {
         "id": "reg",
@@ -350,7 +320,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Configuración"
       },
       {
         "id": "ok",
@@ -375,7 +346,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · INSERT"
       },
       {
         "from": "api",
@@ -386,7 +357,7 @@
         "from": "ctl",
         "to": "alm",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · INSERT"
       },
       {
         "from": "ctl",

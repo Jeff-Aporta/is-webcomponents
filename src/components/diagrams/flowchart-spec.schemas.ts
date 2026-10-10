@@ -61,7 +61,27 @@ export type FlowLaneSpec = z.infer<typeof FlowLaneSpecSchema>;
 export const FlowLaneDirectionSchema = z.union([z.literal('vertical'), z.literal('horizontal')]);
 export type FlowLaneDirection = z.infer<typeof FlowLaneDirectionSchema>;
 
+/**
+ * Una variable de un nodo de declaración (`shape: "vars"`): nombre y valor obligatorios; `desc` solo
+ * cuando el nombre no basta. Un nombre puede ir calificado (`pojo.valor`, `instancia.valor`) si choca
+ * con otro.
+ */
+/** Tipos de entidad con color identificador, en orden fijo (un tipo conserva su color en todo diagrama). */
+export const TipoEntidadSchema = z.enum(['cliente', 'componente', 'controller', 'pojo', 'tabla']);
+export type TipoEntidad = z.infer<typeof TipoEntidadSchema>;
+
+export const FlowVarSchema = z.object({
+  name: z.string().min(1),
+  /** Alias corto (pocas letras) para nombres o expresiones largas; el texto lo usa como `{{alias}}`. */
+  alias: z.string().optional(),
+  value: z.string().min(1),
+  desc: z.string().optional(),
+});
+export type FlowVar = z.infer<typeof FlowVarSchema>;
+
 export const FlowNodeSpecSchema = z.object({
+  /** `shape: "vars"`: las variables que declara (tabla nombre · valor · desc). */
+  vars: z.array(FlowVarSchema).optional(),
   id: z.string(),
   label: z.string(),
   shape: FlowShapeSchema,
@@ -156,9 +176,19 @@ export const FlowLayoutNodeSchema = z.object({
   embedBox: EmbedBoxSchema.optional(),
   /** Número de paso y pastilla (paso + ícono) a la izquierda del texto, en coords del lienzo. */
   step: z.number().optional(),
+  /**
+   * Índice jerárquico del paso (`steps: "auto"`): `1`, `2`… sin ramas; en una bifurcación del paso `p`
+   * las ramas son `p.1`, `p.2`… y lo que sigue en cada rama `p.k.1`, `p.k.2`…; al reunirse, vuelve al
+   * nivel de quien bifurcó. Lo calcula el diagrama a partir del grafo.
+   */
+  stepLabel: z.string().optional(),
   pill: EmbedBoxSchema.optional(),
   /** Insignia suelta (decisiones y nodos incrustados): número sobre fondo oscuro en la esquina. */
   pillFloat: z.boolean().optional(),
+  /** Nodo de declaración: sus variables, el ancho de cada columna y la caja de la tabla (lienzo). */
+  vars: z.array(FlowVarSchema).optional(),
+  varsCols: z.array(z.number()).optional(),
+  varsBox: EmbedBoxSchema.optional(),
   /** Alineación horizontal del texto en su caja (rombo con pastilla: a la izquierda). */
   textAlign: z.literal('start').optional(),
   /** Comentario: nodo que señala y costado del globo donde va el triángulo indicador. */
@@ -303,6 +333,9 @@ export const FlowSizedNodeSchema = z.object({
   pill: EmbedBoxSchema.optional(),
   /** Alineación horizontal del texto en su caja (rombo con pastilla: a la izquierda). */
   textAlign: z.literal('start').optional(),
+  /** Nodo de declaración: ancho de cada columna y caja de la tabla (relativa al nodo). */
+  varsCols: z.array(z.number()).optional(),
+  varsBox: EmbedBoxSchema.optional(),
 });
 export type FlowSizedNode = z.infer<typeof FlowSizedNodeSchema>;
 

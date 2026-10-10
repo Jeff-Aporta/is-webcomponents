@@ -24,16 +24,16 @@
         "label": "ISS · TInfoController"
       },
       {
-        "id": "I-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
         "label": "PostgreSQL"
-      },
-      {
-        "id": "G",
-        "label": "GeoIP"
       }
     ],
     "nodes": [
@@ -50,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -110,13 +102,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-ops",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "ctl",
         "label": "TInfoController",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -125,23 +119,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ctl-pojo",
         "label": "TInfoObject",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -150,17 +135,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "fork",
@@ -239,7 +215,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "tsys",
@@ -279,7 +256,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Configuración"
       },
       {
         "id": "ok",
@@ -303,7 +281,7 @@
         "id": "dueno-TErrorController",
         "label": "TErrorController",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -312,23 +290,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "dueno-TErrorController-pojo",
         "label": "TError_",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -337,23 +306,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "dueno-TSysValueController",
         "label": "TSysValueController",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -362,23 +322,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "dueno-TSysValueController-pojo",
         "label": "TSysValue",
         "kind": "class",
-        "lane": "I-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -387,17 +338,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       }
     ],
     "edges": [
@@ -410,7 +352,7 @@
         "from": "ctl",
         "to": "ctl-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "api",
@@ -482,7 +424,7 @@
         "from": "dueno-TErrorController",
         "to": "dueno-TErrorController-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT"
       },
       {
         "from": "dueno-TErrorController",
@@ -494,7 +436,7 @@
         "from": "dueno-TSysValueController",
         "to": "dueno-TSysValueController-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT"
       },
       {
         "from": "dueno-TSysValueController",

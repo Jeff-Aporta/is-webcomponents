@@ -32,32 +32,37 @@ Spec del kit: `specs/diagramas/spec.md` (WHAT). Ejemplo vivo: `labs/iss-ayudascp
 
 Cada tipo de pieza tiene su columna; ningún tipo se mezcla con otro. De izquierda a derecha:
 
-1. **Cliente**: el controller de cliente que llama al endpoint (`TXxxClient`, de `codigo.json`
-   `clientes`), solo y **centrado verticalmente** (`lanes[].align: "center"`). Se une al componente.
-2. **Componente**: arriba el componente del EP (quien inicia); abajo los **fines** (`end`). Si hay
-   respuesta, el fin vuelve al componente (`respuesta`); si no la hay, no se dibuja; si termina con
-   varias acciones, van en paralelo (barra).
-3. **Flujo**: los pasos del servicio (`ISS · TXxxController`). Aquí los colores sí varían.
-4. **Clases**: siempre su propia columna, con dos grupos: **Controllers** y **Modelos** (cada uno
-   sub-columna); entre ellos los `«uses»`.
-5. **BD**: las tablas del DER.
-6. **Terceros**: un carril por proveedor externo (OpenAI, DataSnap, R2…).
+1. **Clientes**: los controllers de cliente o iniciadores del proceso (`TXxxClient`, de `codigo.json`
+   `clientes`), centrados verticalmente (`lanes[].align: "center"`). Si la acción une varios
+   llamados en cadena, desde aquí se ven todas sus conexiones y caminos.
+2. **Componentes**: todos los componentes, propios y de terceros, agrupados: «Propios (paquete)» y
+   uno por proveedor externo (p. ej. OpenAI). Arriba el que inicia; abajo los **fines** (`end`): si
+   hay respuesta el fin vuelve al componente; si termina con varias acciones, barra de paralelismo.
+3. **Flujo**: los pasos del servicio, agrupados por tipo de proceso; procesos independientes, en
+   grupos separados. Aquí los colores sí varían.
+4. **Controllers** y 5. **Modelos**: una columna cada uno (región única). Entre ellos aristas con lo
+   que se usa de verdad, nunca un `«uses»` vago: controller → su POJO `klass · SELECT, INSERT…`;
+   controller → controller de detalle `detalle ARREGLO (clave) · ops`; modelo → modelo anidado
+   `detalle ARREGLO · ops`.
+6. **BD**: las tablas, agrupadas por base y dominio (grupos del DER: «PatyIA · Operativa»…), con las
+   aristas de propagación maestro → detalle.
 
-Un recuadro de grupo **nunca** abraza un nodo que no es suyo (se parte en varias cajas; guardián X2).
+Un recuadro de grupo **nunca** abraza un nodo que no es suyo (guardián X2).
 
-## 3. Clases: controller con su POJO
+## 2b. Índices automáticos (jerárquicos)
 
-- Todo controller aparece con su POJO (par de `codigo.json`), unidos por `«uses»`.
-- Dentro de un flujo, una clase es un resumen: **5 miembros por sección** y un renglón `N más`.
-  El diagrama lo cambia con `config.classMaxMembers`. Solo aplica a clases.
-- Los miembros son lista: la visibilidad es la viñeta, el tipo va debajo como texto secundario.
+Con `steps: "auto"` el diagrama numera solo, desde el grafo: sin ramas `1, 2, 3`; si el paso `p` se
+bifurca (decisión, barra, varios procesos), las ramas son `p.1, p.2…` y lo que sigue en cada rama
+`p.k.1, p.k.2…` (anidable: `x.y.z.a…`); donde se reúnen se vuelve al nivel de quien bifurcó (`p+1`).
+Inicio, fin y barras no consumen número; lo que solo se usa (tablas, POJOs) lleva solo su ícono. El
+consumidor nunca escribe índices (guardián `flowchart-indices.test.ts`).
 
 ## 3b. Código de color por tipo
 
-Para identificar las piezas de un vistazo, el color lo pone el tipo y es el mismo en todos los
-diagramas: **controllers del server** un color (`app`), **POJOs** otro (`leaf`), **controllers de
-cliente** otro (`service`), **componentes** uno y **tablas del DER** uno. Solo los pasos del flujo
-varían de color. El generador ignora cualquier `fill` pedido para clases.
+Cada tipo de entidad tiene su color y ninguno se repite entre tipos: cliente, componente, controller,
+POJO, tabla. Lo fija `config.entityColors` del diagrama; si no, rotación de tono OKLCH entre 0° y
+330° (330°–360° se omite: se confunde con 0°). Solo los pasos del flujo varían de color. El
+generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
 
 ## 4. Tablas: siempre por su controller dueño
 
@@ -90,11 +95,14 @@ varían de color. El generador ignora cualquier `fill` pedido para clases.
 
 ## 6b. Declaración de variables
 
-La configuración que se lee y se usa más adelante (sys values, proveedor, runtime) es un nodo del
-flujo con `shape: "vars"`: fondo blanco, rectángulo con la esquina superior derecha en diagonal
-(hoja doblada) e insignia `mdi:variable-box`. Su texto declara la variable (`N = conversacion.…`) y
-una punteada `SELECT` va a la tabla de donde sale (por su controller dueño). La decisión que la usa
-viene después (p. ej. `¿(qmensajes − 1) % N = 0?`).
+La configuración que se lee y se usa más adelante es un nodo `shape: "vars"`: fondo blanco, esquina
+superior derecha en diagonal, insignia `mdi:variable-box`, y una **tabla** `vars: [{ name, alias?,
+value, desc? }]` (nombre y valor obligatorios; alias corto para nombres o expresiones largas; desc
+solo si el nombre no basta). Nombres calificados (`pojo.valor`, `instancia.valor`) si chocan; la
+instancia se declara antes. **Solo** se declaran variables que el flujo usa después.
+
+Donde se usa una variable, el texto la cita como `{{nombre}}` o `{{alias}}`: el diagrama la pinta como
+una píldora punteada en línea (lectura de una variable declarada). Así un cambio se rastrea fácil.
 
 ## 6c. Herramientas: cuándo, no una cadena
 

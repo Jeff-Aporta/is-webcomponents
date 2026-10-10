@@ -276,13 +276,17 @@ Deno.test('combinado: P1 la insignia lleva el paso y el ícono; crece con el nú
   const json = flowchartSpecToJson(spec) as { nodes: Array<{ id: string; step?: number; icon?: string }> };
   assertEquals(json.nodes.find((n) => n.id === 'a'), { id: 'a', label: 'Valida', step: 2, icon: 'mdi:shield-check-outline' });
 });
-Deno.test('combinado: S1 steps:auto numera TODO el diagrama 1..N sin saltos (inicio, fin y barras no cuentan)', () => {
+Deno.test('combinado: S1 steps:auto numera los pasos del flujo sin saltos; lo que solo se usa lleva solo ícono', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({ ...COMBINADO, steps: 'auto', nodes: [{ id: 'ini', shape: 'start', lane: 'P' }, ...COMBINADO.nodes, { id: 'fin', shape: 'end', lane: 'T' }], edges: [{ from: 'ini', to: 'api' }, ...COMBINADO.edges, { from: 'resp', to: 'fin' }] })!, null, { style: 'insoft' });
   const pasos = L.nodes.filter((n) => n.step != null).map((n) => n.step!).sort((a, b) => a - b);
-  assertEquals(pasos, Array.from({ length: COMBINADO.nodes.length }, (_, i) => i + 1));
+  assertEquals(pasos, Array.from({ length: pasos.length }, (_, i) => i + 1), 'sin saltos');
+  const enFlujo = new Set(COMBINADO.edges.filter((e) => (e as { kind?: string }).kind !== 'dashed').flatMap((e) => [e.from, e.to]));
   const N = byId(L);
+  for (const id of enFlujo) assert(N.get(id)?.stepLabel, `${id} es paso del flujo y lleva índice`);
   assertEquals(N.get('ini')!.step, undefined);
-  assertEquals(N.get('api')!.step, 1, 'empieza en 1 (el componente que abre el flujo)');
+  assertEquals(N.get('api')!.stepLabel, '1', 'empieza en 1 (el componente que abre el flujo)');
+  const etiquetas = L.nodes.filter((n) => n.stepLabel).map((n) => n.stepLabel);
+  assertEquals(new Set(etiquetas).size, etiquetas.length, 'índices únicos');
   assert(L.nodes.filter((n) => n.step != null).every((n) => n.pill && n.pillFloat), 'todo paso lleva su insignia (estándar)');
 });
 
@@ -390,7 +394,9 @@ Deno.test('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) 
       }
     }
   }
-  assert((L.contexts ?? []).some((g) => g.label === 'Controllers' && g.members?.includes('ctl')), 'el controller va en su grupo «Controllers»');
+  // Las clases tienen sus columnas (Controllers y Modelos); los grupos que queden (p. ej. el dominio de
+  // las tablas) abrazan a todos sus miembros.
+  assertEquals(resolveFlowchartSpec(d.payload)!.nodes.find((n) => n.id === 'ctl')?.lane, 'controllers', 'el controller va en su columna');
 });
 
 Deno.test('etiquetas: E1 ícono de BD por defecto en verbos SQL, ícono propio del spec y caja que lo reserva', () => {
@@ -622,8 +628,10 @@ Deno.test('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa 
 Deno.test('combinado: H2 los componentes de un mismo carril tienen un ancho homogéneo (el del más ancho)', async () => {
   const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
   const spec = resolveFlowchartSpec(j.payload)!;
-  const comps = spec.nodes.filter((n) => n.embed?.kind === 'component' && n.lane === 'O');
-  assert(comps.length >= 4, 'componentes de OpenAI en su carril');
+  // Todos los componentes (propios y de terceros) comparten la columna de componentes.
+  const carril = spec.nodes.find((n) => n.id === 'ai-op')!.lane;
+  const comps = spec.nodes.filter((n) => n.embed?.kind === 'component' && n.lane === carril);
+  assert(comps.length >= 5, 'componentes en su columna');
   const anchos = new Set(comps.map((n) => (n.embed!.component as { w?: number }).w));
   assertEquals(anchos.size, 1, `anchos: ${[...anchos].join(' ')}`);
   assert([...anchos][0]! > 0);

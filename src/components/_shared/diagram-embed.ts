@@ -31,9 +31,6 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
  * desbordar la columna del flujo (fijado también en flowchart-lanes.test.ts, N1).
  */
 export const NESTED_DEFAULT_MAX = 200;
-/** Relleno por tipo de clase incrustada (tokens del tema): controller del server y POJO. */
-export const CLASE_FILL = { controller: 'app', pojo: 'leaf' } as const;
-
 /**
  * Miembros por sección de una clase incrustada en otro diagrama (por defecto); el siguiente renglón
  * es «N más». El diagrama anfitrión lo cambia con `classMaxMembers` en su config.
@@ -81,8 +78,8 @@ export function embedDiagramOf(spec: NodeEmbedSpec): EmbeddedDiagram | null {
   if (spec.kind === 'class') {
     if (!spec.class) return spec.diagram ?? null;
     const id = String(spec.class.id ?? spec.class.name ?? 'clase');
-    // Código de color por tipo: controller y POJO tienen cada uno su color en todo diagrama.
-    const fill = spec.class.fill ?? (/Controller$/.test(String(spec.class.name ?? '')) ? CLASE_FILL.controller : CLASE_FILL.pojo);
+    // Sin `fill`: el que da el diagrama anfitrión por tipo de entidad (ver coloresDeEntidad); suelta, `service`.
+    const fill = spec.class.fill ?? 'service';
     return {
       tag: 'iswc-class-diagram',
       // Caja VP (rellena con `fill`: token del tema o hex; por defecto `service`): una clase suelta

@@ -19,8 +19,12 @@
         "label": "ISS · TCdnController"
       },
       {
-        "id": "K-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "S",
@@ -82,13 +86,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-ops",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "kcdn",
         "label": "TCdnController",
         "kind": "class",
-        "lane": "K-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -97,23 +103,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "kcdn-pojo",
         "label": "TCdnObject",
         "kind": "class",
-        "lane": "K-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -122,23 +119,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "ksys",
         "label": "TSysValueController",
         "kind": "class",
-        "lane": "K-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -147,23 +135,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "ksys-pojo",
         "label": "TSysValue",
         "kind": "class",
-        "lane": "K-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -172,17 +151,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "d1",
@@ -246,7 +216,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Configuración"
       },
       {
         "id": "ok",
@@ -266,13 +237,13 @@
         "from": "kcdn",
         "to": "kcdn-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "ksys",
         "to": "ksys-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT"
       },
       {
         "from": "api",
@@ -298,13 +269,13 @@
         "from": "front",
         "to": "kcdn",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "doc",
         "to": "ksys",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "doc",

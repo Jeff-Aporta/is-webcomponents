@@ -24,8 +24,12 @@
         "label": "ISS · TBasePatyIA"
       },
       {
-        "id": "B-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
@@ -46,15 +50,7 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "service"
-              }
-            }
-          ]
+          }
         }
       },
       {
@@ -98,13 +94,15 @@
               }
             }
           ]
-        }
+        },
+        "ref": "grp-permisos",
+        "context": "Propios (PatyIA API)"
       },
       {
         "id": "base",
         "label": "TBasePatyIA",
         "kind": "class",
-        "lane": "B-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -113,23 +111,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "perm",
         "label": "TPermissionsController",
         "kind": "class",
-        "lane": "B-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -138,23 +127,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "perm-pojo",
         "label": "TPermissionsObject",
         "kind": "class",
-        "lane": "B-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -163,17 +143,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "id",
@@ -230,7 +201,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Seguridad"
       },
       {
         "id": "d1",
@@ -301,7 +273,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Seguridad"
       },
       {
         "id": "valor",
@@ -353,7 +326,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "ClientesIS · Seguridad"
       },
       {
         "id": "d2",
@@ -390,7 +364,7 @@
         "from": "perm",
         "to": "perm-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "api",
@@ -401,7 +375,7 @@
         "from": "base",
         "to": "perm",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass"
       },
       {
         "from": "base",

@@ -11,12 +11,21 @@
     "steps": "auto",
     "lanes": [
       {
+        "id": "cliente",
+        "label": "Cliente",
+        "align": "center"
+      },
+      {
         "id": "R",
         "label": "Runner de parches · ZPatch"
       },
       {
-        "id": "R-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
@@ -24,6 +33,22 @@
       }
     ],
     "nodes": [
+      {
+        "id": "cliente",
+        "label": "TErrorsClient",
+        "kind": "class",
+        "lane": "cliente",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TErrorsClient]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
       {
         "id": "ini",
         "label": "Inicio",
@@ -91,7 +116,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "c",
@@ -116,7 +142,7 @@
           }
         },
         "kind": "component",
-        "lane": "P",
+        "lane": "R",
         "component": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
           "query": {
@@ -140,7 +166,9 @@
               }
             }
           ]
-        }
+        },
+        "ref": "db-pg",
+        "context": "Propios (clientesis)"
       },
       {
         "id": "d",
@@ -170,7 +198,7 @@
         "id": "dueno-TErrorController",
         "label": "TErrorController",
         "kind": "class",
-        "lane": "R-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -179,23 +207,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "dueno-TErrorController-pojo",
         "label": "TError_",
         "kind": "class",
-        "lane": "R-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -204,20 +223,16 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       }
     ],
     "edges": [
+      {
+        "from": "cliente",
+        "to": "pg",
+        "label": "fetch"
+      },
       {
         "from": "ini",
         "to": "a"
@@ -290,7 +305,7 @@
         "from": "dueno-TErrorController",
         "to": "dueno-TErrorController-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · INSERT"
       },
       {
         "from": "dueno-TErrorController",

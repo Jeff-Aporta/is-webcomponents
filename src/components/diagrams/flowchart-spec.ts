@@ -17,11 +17,13 @@ import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inl
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { wrapText } from '../_shared/diagram-text-wrap.js';
-import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext } from "./flowchart-spec.schemas.js";
+import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad } from "./flowchart-spec.schemas.js";
 import type { ErThemeJson } from "./theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
 import { anchoDeComponente } from './component-spec.js';
+import { oklchToHex } from '../_shared/oklch.js';
+import { FlowVarSchema, TipoEntidadSchema } from './flowchart-spec.schemas.js';
 import type { RouterEdge, RouterPort } from './component-router.schemas.js';
 import type { Lado } from '../_shared/diagram-tipos.schemas.js';
 import type { EmbedBox } from "../_shared/diagram-embed.schemas.js";
@@ -61,10 +63,10 @@ export const FLOW_PILL_ICON = 14;
 const PILL_PAD = 6;
 const PILL_GAP = 4;
 const PILL_AIRE = 8;
-/** Ancho del número de paso en la pastilla (negrita de 10 px). */
-export const pillStepW = (step: number): number => String(step).length * 6.5;
+/** Ancho del número de paso en la pastilla (negrita de 10 px; el punto de un índice jerárquico es angosto). */
+export const pillStepW = (step: number | string): number => String(step).replace(/\./g, '').length * 6.5 + (String(step).match(/\./g)?.length ?? 0) * 3;
 /** Ancho de la pastilla de un nodo (0 si no trae ni paso ni ícono). */
-export function pillWidth(step: number | undefined, icon: string | undefined): number {
+export function pillWidth(step: number | string | undefined, icon: string | undefined): number {
   if (step == null && !icon) return 0;
   const num = step != null ? pillStepW(step) : 0;
   const w = PILL_PAD * 2 + num + (icon ? FLOW_PILL_ICON : 0) + (step != null && icon ? PILL_GAP : 0);
@@ -147,7 +149,22 @@ function readNode(raw: Record<string, unknown>, i: number): FlowNodeSpec {
     ...(typeof raw.about === 'string' && raw.about.trim() ? { about: raw.about.trim() } : {}),
     ...(Number.isInteger(Number(raw.step)) && raw.step !== null && raw.step !== '' && Number(raw.step) >= 0 ? { step: Number(raw.step) } : {}),
     ...embedFields(raw),
+    ...(shape === 'vars' ? leerVars(raw.vars) : {}),
   };
+}
+
+/** Variables de un nodo `vars`: solo las que traen nombre y valor (ambos obligatorios). */
+function leerVars(raw: unknown): { vars?: FlowVar[] } {
+  if (!Array.isArray(raw)) return {};
+  const vars = raw.flatMap((v) => {
+    const o = asRecord(v);
+    const r = FlowVarSchema.safeParse({
+      name: String(o.name ?? '').trim(), value: String(o.value ?? '').trim(),
+      ...(o.alias ? { alias: String(o.alias).trim() } : {}), ...(o.desc ? { desc: String(o.desc).trim() } : {}),
+    });
+    return r.success ? [r.data] : [];
+  });
+  return vars.length ? { vars } : {};
 }
 
 /** `kind` + campos del nodo especial (nested/tableder/component), si los declara. */
@@ -231,6 +248,23 @@ export function flowchartSpecFromPayload(payload: unknown): FlowResolvedSpec | n
       for (const n of grupo) n.embed = { ...n.embed!, component: { ...n.embed!.component, w } };
     }
   }
+  // Código de color por tipo de entidad (cliente, componente, controller, POJO, tabla): uno por tipo,
+  // sin repetir entre tipos. Lo fija `config.entityColors`; si no, rotación de tono OKLCH en 0°–330°.
+  {
+    const propios = asRecord(asRecord(src.config).entityColors);
+    const colores = coloresDeEntidad(Object.fromEntries(Object.entries(propios).filter(([, v]) => typeof v === 'string')) as Partial<Record<TipoEntidad, string>>);
+    for (const n of nodes) {
+      const t = tipoDeEntidad(n);
+      if (!t || !n.embed) continue;
+      const color = colores[t];
+      if (n.embed.kind === 'class' && n.embed.class && n.embed.class.fill == null) n.embed = { ...n.embed, class: { ...n.embed.class, fill: color } };
+      else if (n.embed.kind === 'component' && n.embed.component && n.embed.component.fill == null) n.embed = { ...n.embed, component: { ...n.embed.component, fill: color } };
+      else if (n.embed.kind === 'tableder' && n.embed.table) {
+        const st = asRecord(n.embed.table.style);
+        if (st.fill == null) n.embed = { ...n.embed, table: { ...n.embed.table, style: { ...st, fill: color } } };
+      }
+    }
+  }
   // Config del diagrama: miembros por sección de las clases incrustadas antes del «N más».
   const tope = Number(asRecord(src.config).classMaxMembers ?? src.classMaxMembers);
   if (Number.isInteger(tope) && tope > 0) {
@@ -291,6 +325,7 @@ export function flowchartSpecToJson(spec: FlowResolvedSpec): Record<string, unkn
     if (n.about) row.about = n.about;
     if (n.step != null) row.step = n.step;
     if (n.icon) row.icon = n.icon;
+    if (n.vars?.length) row.vars = n.vars;
     if (n.group) row.group = n.group;
     if (n.description) row.desc = n.description;
     if (n.embed) Object.assign(row, n.embed);
@@ -502,7 +537,7 @@ export function computeFlowchartLayout(
   });
 
   if (insoft) colocarComentarios(nodes, spec, sizedById, offsetX + placed.width, overrides?.nodes, { x: offsetX, y: offsetY });
-  if (autoSteps) numerarEnOrden(nodes, specById, spec.laneDirection === 'horizontal');
+  if (autoSteps) numerarEnOrden(nodes, specById, spec.laneDirection === 'horizontal', spec.edges);
   if (insoft) insignias(nodes);
 
   const legendGroups = spec.groups?.length ? spec.groups : undefined;
@@ -798,6 +833,31 @@ export function costoGiros(pts: readonly FlowPoint[], giro: { radio: number; pes
  *     fijos (cruzarlo o correr encima cuesta lo de cualquier riel ajeno).
  * Muta `routed` (alineado con `spec.edges`); una arista sin ruta conserva la que traía.
  */
+/**
+ * Ortogonaliza una ruta: un tramo en diagonal pequeño (≤ 2U) se absorbe corriendo el tramo previo
+ * (sin escalones); uno grande recibe un codo. Los extremos no se mueven.
+ */
+function ortogonalizar(pts: FlowPoint[]): FlowPoint[] {
+  for (let i = pts.length - 1; i > 0; i--) {
+    const a = pts[i - 1]!;
+    const b = pts[i]!;
+    if (a.x === b.x || a.y === b.y) continue;
+    const dx = Math.abs(b.x - a.x);
+    const dy = Math.abs(b.y - a.y);
+    const prev = pts[i - 2];
+    if (prev && i - 2 > 0 && Math.min(dx, dy) <= 2 * U) {
+      // Corre el vértice a (y su tramo con prev) para alinearse con b en el eje del desvío menor.
+      if (dy <= dx && prev.y === a.y) { prev.y = b.y; a.y = b.y; continue; }
+      if (dx < dy && prev.x === a.x) { prev.x = b.x; a.x = b.x; continue; }
+    }
+    pts.splice(i, 0, dy <= dx ? { x: a.x, y: b.y } : { x: b.x, y: a.y });
+  }
+  return simplifyOrthoPath(pts);
+}
+
+/** Memoria del ruteo de usos por firma de su entrada (ver rutearUsos). */
+const RUTEO_USOS = new Map<string, ReturnType<typeof routeEdges>>();
+
 function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec, nodes: readonly FlowLayoutNode[], muros: readonly EmbedBox[]): void {
   const porId = new Map(nodes.map((n) => [n.id, n]));
   const usos = spec.edges.map((e, i) => ({ e, i })).filter(({ e, i }) => e.kind === 'dashed' && routed[i] && porId.has(e.from) && porId.has(e.to) && e.from !== e.to);
@@ -835,11 +895,19 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
       fromCandidates: fromC, toCandidates: toC,
     };
   });
-  const res = routeEdges(
-    { components: nodes.map(caja), packages: [], titles: [...muros], rings: [], fixedRails: fijos },
-    edges,
-    { step: U, clearance: 8, stub: U, iterations: 3 },
-  );
+  // El ruteo de usos es lo más caro del layout y las vueltas de etiquetas lo repiten con el mismo
+  // mundo: se memoriza por la firma exacta de su entrada (determinista: misma entrada, misma salida).
+  const mundo = { components: nodes.map(caja), packages: [], titles: [...muros], rings: [], fixedRails: fijos };
+  const firma = JSON.stringify([mundo.components, mundo.titles, fijos, edges.map((x) => [x.id, x.fromCandidates, x.toCandidates, x.shareKey])]);
+  let res = RUTEO_USOS.get(firma);
+  if (!res) {
+    res = routeEdges(mundo, edges, { step: 2 * U, clearance: 8, stub: U, iterations: 2 });
+    RUTEO_USOS.set(firma, res);
+    if (RUTEO_USOS.size > 64) RUTEO_USOS.delete(RUTEO_USOS.keys().next().value!);
+  }
+  // Copia: lo que sigue ajusta las rutas y no debe tocar la memoria. La rejilla gruesa deja los
+  // extremos (fuera de rejilla) en diagonal: se vuelven ortogonales.
+  res = { ...res, paths: res.paths.map((p) => (p ? ortogonalizar(p.map((q) => ({ ...q }))) : p)) };
   // Una sola punta por destino y costado (obligatoria, no solo incentivo): la que llegue a otra
   // altura baja o sube a la del primero justo antes de entrar.
   const puntaDe = new Map<string, FlowPoint>();
@@ -899,6 +967,31 @@ function abanicoEnVias(entrada: ReadonlyArray<FlowPoint[] | null | undefined>): 
   });
   separarColineales(caminos);
   return caminos;
+}
+
+/** Tipos de entidad con color identificador, en orden fijo (así un tipo conserva su color en todo diagrama). */
+export const TIPOS_ENTIDAD = TipoEntidadSchema.options;
+
+/** Tipo de entidad de un nodo incrustado (null si es un paso del flujo). */
+export function tipoDeEntidad(n: FlowNodeSpec): TipoEntidad | null {
+  const k = n.embed?.kind;
+  if (k === 'component') return 'componente';
+  if (k === 'tableder') return 'tabla';
+  if (k !== 'class') return null;
+  const name = String(asRecord(n.embed?.class).name ?? n.label ?? '');
+  return /Client$/.test(name) ? 'cliente' : /Controller$/.test(name) ? 'controller' : 'pojo';
+}
+
+/**
+ * Color por tipo de entidad: el que fije el consumidor, o una rotación de tono OKLCH repartida entre
+ * 0° y 330° (de 330° a 360° se omite: se confunde con los de 0°). Pastel legible con texto oscuro.
+ * Nunca dos tipos con el mismo color.
+ */
+export function coloresDeEntidad(propios: Partial<Record<TipoEntidad, string>> = {}): Record<TipoEntidad, string> {
+  const paso = 330 / (TIPOS_ENTIDAD.length - 1);
+  const out = {} as Record<TipoEntidad, string>;
+  TIPOS_ENTIDAD.forEach((t, i) => { out[t] = propios[t] ?? oklchToHex(0.87, 0.09, i * paso); });
+  return out;
 }
 
 /** Largo del conector `-(O-` desde el borde del componente: palo, bola y socket (px). */
@@ -1330,7 +1423,7 @@ function abrirEspacio(
   };
   for (const n of nodes) {
     if ((haciaLaDerecha ? n.x : n.y) < corte) continue;
-    for (const b of [n, n.textBox, n.embedBox, n.pill]) mover(b);
+    for (const b of [n, n.textBox, n.embedBox, n.pill, n.varsBox]) mover(b);
     const m = meta.get(n.id) as { x: number; y: number } | undefined;
     mover(m);
   }
@@ -1495,6 +1588,23 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
     return { id: n.id, w, h, lines: t.lines, textBox: { x: COMENTARIO.pad + COMENTARIO.comillas, y: 0, w: w - COMENTARIO.pad * 2 - COMENTARIO.comillas, h }, textAlign: 'start' };
   }
   const measure = measurer(opts);
+  if (n.shape === 'vars' && n.vars?.length) {
+    // Tabla de declaración: título (la etiqueta) y una fila por variable: nombre · alias · valor · desc
+    // (alias y desc solo si alguna variable los trae).
+    const col = (xs: string[]) => ceilTo(Math.max(24, ...xs.map((x) => measure(x))) + VARS.celda * 2, 4);
+    const cols = columnasVars(n.vars).map((c) => col(n.vars!.map((v) => v[c] ?? '')));
+    const titulo = n.label.trim() && n.label !== n.id ? n.label.trim() : '';
+    const tituloH = titulo ? VARS.fila : 0;
+    const tabla = cols.reduce((a, b) => a + b, 0);
+    const w = ceilTo(Math.max(INSOFT.actionMinW, tabla + VARS.pad * 2, titulo ? measure(titulo) + VARS.pad * 2 + VARS.esquina : 0), 16);
+    const h = ceilTo(VARS.pad + tituloH + n.vars.length * VARS.fila + VARS.pad, 8);
+    return {
+      id: n.id, w, h,
+      ...(titulo ? { lines: [titulo], textBox: { x: VARS.pad, y: VARS.pad, w: w - VARS.pad * 2 - VARS.esquina, h: tituloH }, textAlign: 'start' as const } : {}),
+      varsCols: cols,
+      varsBox: { x: VARS.pad, y: VARS.pad + tituloH, w: tabla, h: n.vars.length * VARS.fila },
+    };
+  }
   if (n.shape === 'diamond') {
     const t = wrapFlowLines(n.label, INSOFT.decisionText, measure);
     // El número y el ícono van en la insignia sobre el lado superior izquierdo (ver insignias()).
@@ -1689,14 +1799,135 @@ function esNumerable(n: FlowNodeSpec): boolean {
  * izquierda a derecha (de arriba abajo si los carriles son horizontales). Las acciones ya traen su
  * pastilla; decisiones y nodos incrustados llevan una insignia en la esquina superior izquierda.
  */
-function numerarEnOrden(nodes: FlowLayoutNode[], specById: ReadonlyMap<string, FlowNodeSpec>, horizontal: boolean): void {
+function numerarEnOrden(nodes: FlowLayoutNode[], specById: ReadonlyMap<string, FlowNodeSpec>, horizontal: boolean, edges: readonly FlowEdgeSpec[] = []): void {
   const lista = nodes
     .filter((n) => { const s = specById.get(n.id); return !!s && esNumerable(s); })
     .sort((a, b) => a.layer - b.layer || (horizontal ? a.y - b.y : a.x - b.x));
-  lista.forEach((n, i) => {
-    n.step = i + 1;
-  });
+  const indices = indicesJerarquicos(nodes, specById, edges, horizontal);
+  const hayFlujo = indices.size > 0;
+  let orden = 0;
+  for (const n of lista) {
+    const idx = indices.get(n.id);
+    // Lo que no es paso del flujo (tablas, POJOs, componentes que solo se usan) lleva solo su ícono.
+    if (hayFlujo && !idx) continue;
+    n.step = ++orden;
+    n.stepLabel = idx ?? String(orden);
+  }
 }
+
+/**
+ * Índices jerárquicos del flujo (aristas continuas): sin ramas `1, 2, 3…`; si un paso `p` se bifurca
+ * (decisión, barra o varios procesos), la rama k empieza en `p.k` y sigue `p.k.1, p.k.2…`; donde las
+ * ramas se reúnen se vuelve al nivel de quien bifurcó (`p+1`). Inicio, fin, barras y comentarios no
+ * consumen número (son transparentes). Las ramas se ordenan por lectura (izquierda a derecha).
+ */
+export function indicesJerarquicos(
+  nodes: readonly FlowLayoutNode[],
+  specById: ReadonlyMap<string, FlowNodeSpec>,
+  edges: readonly FlowEdgeSpec[],
+  horizontal = false,
+): Map<string, string> {
+  const pos = new Map(nodes.map((n) => [n.id, n]));
+  const flujo = edges.filter((e) => e.kind !== 'dashed' && e.from !== e.to && pos.has(e.from) && pos.has(e.to));
+  const hijos = new Map<string, string[]>();
+  for (const e of flujo) hijos.set(e.from, [...(hijos.get(e.from) ?? []), e.to]);
+  const conEntrada = new Set(flujo.map((e) => e.to));
+
+  // Aristas de retorno (ciclos): fuera, para que haya orden topológico.
+  const atras = new Set<string>();
+  const estado = new Map<string, 1 | 2>();
+  const visitar = (id: string): void => {
+    estado.set(id, 1);
+    for (const h of hijos.get(id) ?? []) {
+      if (estado.get(h) === 1) atras.add(`${id}>${h}`);
+      else if (!estado.has(h)) visitar(h);
+    }
+    estado.set(id, 2);
+  };
+  for (const n of nodes) if (!conEntrada.has(n.id) && hijos.has(n.id)) visitar(n.id);
+  for (const n of nodes) if (!estado.has(n.id) && hijos.has(n.id)) visitar(n.id);
+  const adelante = flujo.filter((e) => !atras.has(`${e.from}>${e.to}`));
+  const grado = new Map<string, number>();
+  for (const e of adelante) grado.set(e.to, (grado.get(e.to) ?? 0) + 1);
+
+  /** Lo que un padre le pasa a su hijo: la base en la que sigue, o la cabeza de una rama nueva. */
+  type Propuesta = { base: number[]; cabeza?: number[] };
+  const propuestas = new Map<string, Propuesta[]>();
+  const contador = new Map<string, number>();
+  /** Índice → base (nivel) en la que vive; sirve para volver al nivel de quien bifurcó. */
+  const baseDeIndice = new Map<string, number[]>();
+  /** Último índice numerado antes de cada nodo (las barras y el inicio no numeran). */
+  const ultimo = new Map<string, number[]>();
+  const out = new Map<string, string>();
+  const clave = (a: readonly number[]): string => a.join('.');
+  const siguiente = (base: number[]): number[] => {
+    const c = (contador.get(clave(base)) ?? 0) + 1;
+    contador.set(clave(base), c);
+    return [...base, c];
+  };
+  const prefijo = (a: readonly number[], b: readonly number[]): number[] => {
+    let i = 0;
+    while (i < a.length && i < b.length && a[i] === b[i]) i++;
+    return a.slice(0, i);
+  };
+  const lectura = (id: string): number => { const n = pos.get(id)!; return horizontal ? n.y : n.x; };
+
+  const cola = nodes.filter((n) => !grado.get(n.id) && (hijos.has(n.id) || conEntrada.has(n.id))).map((n) => n.id);
+  const hecho = new Set<string>();
+  while (cola.length) {
+    const id = cola.shift()!;
+    if (hecho.has(id)) continue;
+    hecho.add(id);
+    const s = specById.get(id);
+    const numerable = !!s && esNumerable(s);
+    const ps = propuestas.get(id) ?? [];
+    let base: number[] = [];
+    let cabeza: number[] | undefined;
+    if (ps.length > 1) {
+      // Reunión: el prefijo común de las ramas; si ese prefijo es el índice de quien bifurcó, su nivel.
+      let lcp = ps.map((p) => p.cabeza ?? p.base).reduce((a, b) => prefijo(a, b));
+      // Un solo nivel: del índice de quien bifurcó, al nivel en el que vive (no más arriba).
+      if (lcp.length && baseDeIndice.has(clave(lcp))) lcp = baseDeIndice.get(clave(lcp))!;
+      base = lcp;
+    } else if (ps.length === 1) {
+      base = ps[0]!.base;
+      cabeza = ps[0]!.cabeza;
+    }
+    let previo = ultimo.get(id) ?? [];
+    let baseHijos = base;
+    let cabezaHijos: number[] | undefined;
+    if (numerable) {
+      let idx: number[];
+      if (cabeza && !baseDeIndice.has(clave(cabeza))) {
+        // Cabeza de rama: `p.k`; lo que sigue en la rama cuelga de ella (`p.k.1`…).
+        idx = cabeza;
+        contador.set(clave(cabeza), 0);
+        baseHijos = cabeza;
+      } else {
+        idx = siguiente(base);
+        baseHijos = base;
+      }
+      baseDeIndice.set(clave(idx), idx === cabeza ? cabeza.slice(0, -1) : base);
+      out.set(id, clave(idx));
+      previo = idx;
+    } else {
+      // Transparente (barra, inicio, fin): pasa la cabeza pendiente si la traía.
+      cabezaHijos = cabeza;
+    }
+    const hs = [...new Set((hijos.get(id) ?? []).filter((h) => !atras.has(`${id}>${h}`)))].sort((a, b) => lectura(a) - lectura(b));
+    hs.forEach((h, k) => {
+      const p: Propuesta = hs.length > 1 && previo.length
+        ? { base: baseHijos, cabeza: [...previo, k + 1] }
+        : { base: baseHijos, ...(cabezaHijos ? { cabeza: cabezaHijos } : {}) };
+      propuestas.set(h, [...(propuestas.get(h) ?? []), p]);
+      if (previo.length) ultimo.set(h, previo);
+      grado.set(h, (grado.get(h) ?? 1) - 1);
+      if (!grado.get(h)) cola.push(h);
+    });
+  }
+  return out;
+}
+
 
 /**
  * Insignia estándar de cada paso (número + ícono, fondo oscuro): arriba a la izquierda, montando la
@@ -1707,13 +1938,21 @@ function insignias(nodes: FlowLayoutNode[]): void {
   for (const n of nodes) {
     if (n.step == null && !n.icon) continue;
     if (n.shape === 'start' || n.shape === 'end' || n.shape === 'bar' || n.shape === 'comment') continue;
-    const w = pillWidth(n.step, n.icon);
+    const w = pillWidth(n.stepLabel ?? n.step, n.icon);
     n.pill = n.shape === 'diamond'
       ? { x: n.x + n.w / 4 - w / 2, y: n.y + n.h / 4 - FLOW_PILL_H / 2, w, h: FLOW_PILL_H }
       : { x: n.x - 8, y: n.y - FLOW_PILL_H + 6, w, h: FLOW_PILL_H };
     n.pillFloat = true;
   }
 }
+
+/** Columnas de la tabla de declaración: nombre y valor siempre; alias y desc si alguna variable los trae. */
+export function columnasVars(vars: readonly FlowVar[]): Array<'name' | 'alias' | 'value' | 'desc'> {
+  return ['name', ...(vars.some((v) => v.alias) ? ['alias' as const] : []), 'value', ...(vars.some((v) => v.desc) ? ['desc' as const] : [])];
+}
+
+/** Medidas de la tabla de un nodo de declaración de variables. */
+export const VARS = { pad: 10, fila: 18, celda: 6, esquina: 14 } as const;
 
 /** Campos extra del nodo colocado: kind/embed y cajas absolutas de texto/incrustado. */
 function placedExtras(s: FlowNodeSpec | undefined, z: FlowSizedNode | undefined, x: number, y: number): Partial<FlowLayoutNode> {
@@ -1726,6 +1965,11 @@ function placedExtras(s: FlowNodeSpec | undefined, z: FlowSizedNode | undefined,
   if (z?.lines) out.lines = z.lines;
   if (z?.textBox) out.textBox = { x: x + z.textBox.x, y: y + z.textBox.y, w: z.textBox.w, h: z.textBox.h };
   if (z?.embedBox) out.embedBox = { x: x + z.embedBox.x, y: y + z.embedBox.y, w: z.embedBox.w, h: z.embedBox.h };
+  if (s?.vars?.length && z?.varsCols && z.varsBox) {
+    out.vars = s.vars;
+    out.varsCols = z.varsCols;
+    out.varsBox = { x: x + z.varsBox.x, y: y + z.varsBox.y, w: z.varsBox.w, h: z.varsBox.h };
+  }
   return out;
 }
 

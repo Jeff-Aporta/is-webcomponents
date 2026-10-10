@@ -23,8 +23,12 @@
         "label": "Timers"
       },
       {
-        "id": "T-clases",
-        "label": "Clases"
+        "id": "controllers",
+        "label": "Controllers"
+      },
+      {
+        "id": "modelos",
+        "label": "Modelos"
       },
       {
         "id": "P",
@@ -78,7 +82,7 @@
         "id": "cconv",
         "label": "TConversacionController",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -87,23 +91,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "cconv-pojo",
         "label": "TConversacion",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -112,23 +107,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "clog",
         "label": "TConversationLogController",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -137,23 +123,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "clog-pojo",
         "label": "TConversationLog",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -162,17 +139,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       },
       {
         "id": "flag",
@@ -224,7 +192,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Configuración"
       },
       {
         "id": "d1",
@@ -292,7 +261,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "tlog",
@@ -332,7 +302,8 @@
               }
             }
           ]
-        }
+        },
+        "context": "PatyIA · Operativa"
       },
       {
         "id": "fin",
@@ -344,7 +315,7 @@
         "id": "dueno-TSysValueController",
         "label": "TSysValueController",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "controllers",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -353,23 +324,14 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "app"
-              }
-            }
-          ]
-        },
-        "context": "Controllers"
+          }
+        }
       },
       {
         "id": "dueno-TSysValueController-pojo",
         "label": "TSysValue",
         "kind": "class",
-        "lane": "T-clases",
+        "lane": "modelos",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -378,17 +340,8 @@
                 "uml": true
               }
             }
-          },
-          "actions": [
-            {
-              "op": "push",
-              "valor": {
-                "fill": "leaf"
-              }
-            }
-          ]
-        },
-        "context": "Modelos"
+          }
+        }
       }
     ],
     "edges": [
@@ -396,13 +349,13 @@
         "from": "cconv",
         "to": "cconv-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · UPDATE"
       },
       {
         "from": "clog",
         "to": "clog-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · DELETE"
       },
       {
         "from": "ini",
@@ -444,7 +397,7 @@
         "from": "cconv",
         "to": "clog",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · UPDATE"
       },
       {
         "from": "cconv",
@@ -498,7 +451,7 @@
         "from": "dueno-TSysValueController",
         "to": "dueno-TSysValueController-pojo",
         "kind": "dashed",
-        "label": "«uses»"
+        "label": "klass · SELECT"
       },
       {
         "from": "dueno-TSysValueController",
