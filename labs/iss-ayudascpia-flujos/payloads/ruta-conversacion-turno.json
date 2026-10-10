@@ -356,6 +356,46 @@
         "label": "Fin",
         "shape": "end",
         "lane": "T"
+      },
+      {
+        "id": "dueno-TConversationLogController",
+        "label": "TConversationLogController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLogController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TConversationLogController-pojo",
+        "label": "TConversationLog",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLog]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -480,7 +520,7 @@
       },
       {
         "from": "hist",
-        "to": "tlog",
+        "to": "dueno-TConversationLogController",
         "kind": "dashed",
         "label": "INSERT"
       },
@@ -494,6 +534,18 @@
         "from": "fin",
         "to": "api",
         "label": "respuesta (stream)"
+      },
+      {
+        "from": "dueno-TConversationLogController",
+        "to": "dueno-TConversationLogController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TConversationLogController",
+        "to": "tlog",
+        "kind": "dashed",
+        "label": "INSERT"
       }
     ]
   }

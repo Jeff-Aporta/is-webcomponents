@@ -1825,7 +1825,25 @@ export function placeLanes(
   const flujo = edges.filter((e) => e.kind !== 'dashed');
   const layers = assignLayers(sized, flujo);
   const soloUsos = new Set(sized.map((n) => n.id).filter((id) => !flujo.some((e) => e.to === id || e.from === id) && edges.some((e) => e.to === id)));
+  // En cadena: un nodo de solo usos cuyo usuario también lo es (p. ej. el POJO o la tabla de un
+  // controller que solo se usa) toma la altura de ese usuario cuando ya está resuelta.
+  const resueltos = new Set<string>();
+  for (let vuelta = 0; vuelta <= soloUsos.size; vuelta++) {
+    let avanzo = false;
+    for (const id of soloUsos) {
+      if (resueltos.has(id)) continue;
+      const desde = edges.filter((e) => e.to === id && e.from !== id);
+      if (desde.some((e) => soloUsos.has(e.from) && !resueltos.has(e.from))) continue;
+      const usuarios = desde.map((e) => layers.get(e.from) ?? 0);
+      if (usuarios.length) layers.set(id, Math.min(...usuarios));
+      resueltos.add(id);
+      avanzo = true;
+    }
+    if (!avanzo) break;
+  }
+  // Ciclos entre nodos de solo usos: lo que quede, con sus usuarios del flujo (como antes).
   for (const id of soloUsos) {
+    if (resueltos.has(id)) continue;
     const usuarios = edges.filter((e) => e.to === id && !soloUsos.has(e.from)).map((e) => layers.get(e.from) ?? 0);
     if (usuarios.length) layers.set(id, Math.min(...usuarios));
   }

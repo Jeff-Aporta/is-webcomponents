@@ -28,6 +28,8 @@ const tablas = new Map((await leer('der.json')).erDiagram.entities.map((e) => [e
 const codigo = JSON.parse(await readFile(join(ISS, '..', 'fuentes', 'codigo.json'), 'utf8'));
 const enCodigo = new Set(codigo.clases.map((c) => c.name));
 const pojoDe = new Map(codigo.pares.map((p) => [p.controller, p.pojo]));
+/** Tabla → controller que la gobierna (su `nTbl`): todo acceso a una tabla pasa por él y su POJO. */
+const duenoDe = new Map(codigo.pares.filter((p) => p.nTbl).map((p) => [p.nTbl, p.controller]));
 
 /*
  * Referencias { path, query, actions } (ver `Obj` del kit): los nodos no copian datos, citan su
@@ -44,6 +46,8 @@ export function ruta(meta, componer) {
   const edges = [];
   /** Clase ya presente → id de su nodo (una clase aparece una sola vez por ruta). */
   const porClase = new Map();
+  /** Nodo de tabla → nombre de la tabla en el DER. */
+  const tablaDe = new Map();
   /** id pedido por el generador → id real (cuando la clase ya estaba, p. ej. el POJO automático). */
   const alias = new Map();
   const real = (id) => alias.get(id) ?? id;
@@ -92,6 +96,7 @@ export function ruta(meta, componer) {
       for (const c of columnas ?? []) if (!t.attributes.some((a) => a.name === c)) throw new Error(`columna ${c} no está en ${nombre} (der.json)`);
       // La tabla del DER; con `columnas`, solo esas (get conserva la estructura { name, attributes }).
       const table = { ...refTabla(nombre), actions: [{ op: 'get', query: { name: true, attributes: columnas ? Object.fromEntries(columnas.map((c) => [`[name=${c}]`, true])) : true } }] };
+      tablaDe.set(id, nombre);
       return n({ id, label: refTabla(nombre, 'name'), kind: 'tableder', lane, table });
     },
     paso: (id, label, lane, icon) => n({ id, label, lane, ...(icon ? { icon } : {}) }),
@@ -105,6 +110,24 @@ export function ruta(meta, componer) {
     cadena: (...ids) => ids.slice(1).forEach((to, i) => arista({ from: ids[i], to })),
   };
   componer(b);
+  // Toda tabla se toca por el controller que la gobierna (y su POJO): si el dueño no está en la ruta,
+  // el paso le habla a él y él a la tabla, con la misma operación. Así ningún controller aparenta
+  // conectarse a tablas ajenas.
+  for (const e of [...edges]) {
+    const tabla = e.kind === 'dashed' ? tablaDe.get(e.to) : null;
+    const dueno = tabla && duenoDe.get(tabla);
+    // Si el dueño ya está en la ruta (la clase principal), el paso habla con la tabla directo: ese
+    // controller ya aparece con su tabla.
+    const yaEsta = dueno && porClase.has(dueno) && porClase.get(dueno) !== `dueno-${dueno}`;
+    if (!dueno || yaEsta) continue;
+    const desde = nodes.find((x) => x.id === e.from);
+    const ctl = b.clase(`dueno-${dueno}`, dueno, desde?.lane);
+    const t = e.to;
+    e.to = ctl;
+    const previa = edges.find((y) => y.from === ctl && y.to === t && y.kind === 'dashed');
+    if (previa) { if (!previa.label.split(' · ').includes(e.label)) previa.label += ` · ${e.label}`; }
+    else edges.push({ from: ctl, to: t, kind: 'dashed', label: e.label });
+  }
   // Paralelismo: un nodo que no decide (ni es barra) y reparte su flujo continuo a varios procesos
   // lo hace por una barra negra; nunca salen dos caminos del mismo riel.
   for (const nd of [...nodes]) {

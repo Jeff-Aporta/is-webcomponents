@@ -331,6 +331,46 @@
         "label": "Fin",
         "shape": "end",
         "lane": "T"
+      },
+      {
+        "id": "dueno-TSysValueController",
+        "label": "TSysValueController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValueController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TSysValueController-pojo",
+        "label": "TSysValue",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValue]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -398,7 +438,7 @@
       },
       {
         "from": "flag",
-        "to": "tsys",
+        "to": "dueno-TSysValueController",
         "kind": "dashed",
         "label": "SELECT"
       },
@@ -435,6 +475,18 @@
       {
         "from": "nada",
         "to": "fin"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "dueno-TSysValueController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TSysValueController",
+        "to": "tsys",
+        "kind": "dashed",
+        "label": "SELECT"
       }
     ]
   }

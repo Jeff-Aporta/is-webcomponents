@@ -266,6 +266,46 @@
         "label": "Fin",
         "shape": "end",
         "lane": "T"
+      },
+      {
+        "id": "dueno-TConversacionController",
+        "label": "TConversacionController",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversacionController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TConversacionController-pojo",
+        "label": "TConversacion",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversacion]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -294,7 +334,7 @@
       },
       {
         "from": "lee",
-        "to": "tconv",
+        "to": "dueno-TConversacionController",
         "kind": "dashed",
         "label": "SELECT"
       },
@@ -338,7 +378,7 @@
       },
       {
         "from": "cierra",
-        "to": "tconv",
+        "to": "dueno-TConversacionController",
         "kind": "dashed",
         "label": "UPDATE"
       },
@@ -358,6 +398,18 @@
         "from": "fin",
         "to": "api",
         "label": "respuesta"
+      },
+      {
+        "from": "dueno-TConversacionController",
+        "to": "dueno-TConversacionController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TConversacionController",
+        "to": "tconv",
+        "kind": "dashed",
+        "label": "SELECT · UPDATE"
       }
     ]
   }

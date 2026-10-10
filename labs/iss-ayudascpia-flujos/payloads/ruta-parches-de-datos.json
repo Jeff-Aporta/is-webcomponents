@@ -159,6 +159,46 @@
         "label": "Fin",
         "shape": "end",
         "lane": "R"
+      },
+      {
+        "id": "dueno-TErrorController",
+        "label": "TErrorController",
+        "kind": "class",
+        "lane": "R",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TErrorController]": {
+                "uml": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "dueno-TErrorController-pojo",
+        "label": "TError_",
+        "kind": "class",
+        "lane": "R",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TError_]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
+        }
       }
     ],
     "edges": [
@@ -222,13 +262,25 @@
       },
       {
         "from": "x",
-        "to": "terr",
+        "to": "dueno-TErrorController",
         "kind": "dashed",
         "label": "INSERT"
       },
       {
         "from": "x",
         "to": "fin"
+      },
+      {
+        "from": "dueno-TErrorController",
+        "to": "dueno-TErrorController-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "dueno-TErrorController",
+        "to": "terr",
+        "kind": "dashed",
+        "label": "INSERT"
       }
     ]
   }
