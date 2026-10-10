@@ -11,7 +11,7 @@
 // Por defecto corre TODO y sale con el peor exit (todos los rojos de una vez); `--halt` corta en el
 // primer rojo. `TEST_COOLDOWN=0` o `--sin-cooldown` corren todo (diagnostico; el sync nunca los usa).
 import process from 'node:process';
-import { crearGate } from './gate-cooldown.mjs?v=7ff2kr';
+import { crearGate } from './gate-cooldown.mjs?v=y82qlj';
 
 const RAIZ = process.cwd();
 const halt = process.argv.includes('--halt');

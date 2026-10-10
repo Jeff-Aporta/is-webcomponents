@@ -52,7 +52,7 @@ Todas en `tests/<area>/*.test.ts` (áreas: `plataforma`, `componentes`, `vistas`
 archivo exporta su lista:
 
 ```ts
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/ISPruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
 export default definirPruebas([
   { nombre: 'bienvenida W-CAT-02 cuatro piezas del estándar', categoria: 'what', correr({ eq }) {
     eq('títulos', caracteristicas().map((c) => c.titulo), ['Componentes', 'Vistas', 'Tipos', 'Pruebas']);

@@ -107,8 +107,8 @@ for (const rel of manifest.archivos) {
 
 // 2) Tools del kit, vendorizadas desde ESTA versión del kit (vendor = pin desde el día 0)
 const VENDOR = [
-  ...['ISTestCooldown.ts', 'ISTestCooldown.schemas.ts', 'ISTestQueue.ts', 'ISPruebas.ts', 'ISPruebas.schemas.ts', 'ISPruebasHijo.ts',
-    'ISSyncEntregable.ts', 'ISSyncEntregable.schemas.ts', 'ISPinUpdate.mjs'].map((f) => `tools/${f}`),
+  ...['test-cooldown.ts', 'test-cooldown.schemas.ts', 'test-queue.ts', 'pruebas.ts', 'pruebas.schemas.ts', 'pruebas-hijo.ts',
+    'sync-entregable.ts', 'sync-entregable.schemas.ts', 'pin-update.mjs'].map((f) => `tools/${f}`),
   ...['index.ts', 'content-hash.ts', 'asset-url.ts', 'asset-url.schemas.ts', 'stamp-hashes.ts', 'bundle-min.ts',
     'bundle-min.schemas.ts', 'asset-store.ts'].map((f) => `build/${f}`),
 ];

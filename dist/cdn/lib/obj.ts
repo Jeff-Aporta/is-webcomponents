@@ -1,5 +1,5 @@
 /**
- * ISUtils.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).
+ * obj.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).
  *
  * `Obj` reúne, como métodos estáticos (sin tocar el `Object` global), lo que un consumidor necesita
  * para leer y modificar PARTES de un objeto sin afectar el resto:
@@ -17,18 +17,19 @@
  *                                     en su JSON (fuente de verdad), recursivo.
  *
  * Consulta: copia la forma del dato y marca con truthy (`!!x`) lo pedido; `"*"` = todos, y
- * `"[campo=valor]"` = el primer elemento con ese campo (ver ISUtils.schemas.ts). Nada muta: cada
- * operación devuelve un objeto nuevo. Se publica en `dist/cdn/lib/` con prefijo IS* (los consumidores
- * lo vendorizan sin chocar con sus propios archivos): fuente para vendorizar y
- * bundle para el navegador).
+ * `"[campo=valor]"` = el primer elemento con ese campo (ver obj.schemas.ts). Nada muta: cada
+ * operación devuelve un objeto nuevo. Se publica en `dist/cdn/lib/` (fuente para vendorizar, que el
+ * consumidor deposita en su carpeta `ISU/`, y bundle `obj.min.js` para el navegador).
+ *
+ * Doc: obj.md (junto a este archivo en dist/cdn/lib/).
  */
 import {
   nullable as zNullable, object as zObject, optional as zOptional, safeParse, ZodArray, ZodCatch, ZodDefault, ZodExactOptional, ZodLazy,
   ZodNonOptional, ZodNullable, ZodObject, ZodOptional, ZodPipe, ZodPrefault, ZodPromise, ZodReadonly, ZodRecord, ZodSuccess, ZodUnion, type z,
 } from "zod";
-import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "./ISUtils.schemas.js";
+import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "./obj.schemas.js";
 
-export type * from "./ISUtils.schemas.js";
+export type * from "./obj.schemas.js";
 
 /** Error de `Obj`: `codigo` dice qué falló y `ruta` dónde (claves separadas por punto). */
 export class ObjError extends Error {

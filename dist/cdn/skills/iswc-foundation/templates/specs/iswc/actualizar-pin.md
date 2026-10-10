@@ -16,7 +16,7 @@ deno task vendor:iswc                           # tools del kit al MISMO SHA del
 deno task build && deno task test:all           # el gate decide si el pin nuevo se queda
 ```
 
-- `ISPinUpdate.mjs` reconoce el nombre anterior del repo (`is-webcomponents@…`) y lo reescribe a
+- `pin-update.mjs` reconoce el nombre anterior del repo (`is-webcomponents@…`) y lo reescribe a
   `iswc-root@…` en el mismo paso.
 - El pin canónico es `src/js/iswc.ts`; los HTML lo repiten y el inventario los audita.
 - `deno.json` (`@iswc/component-schemas`, `@iswc/loader-schemas`) también va por SHA: lo cubre el inventario.

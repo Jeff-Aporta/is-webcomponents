@@ -1,4 +1,3 @@
-// OBSOLETO: nombre anterior de ISTestCooldown.ts (vendorice ISTestCooldown.ts).
 // test-cooldown.ts — Cooldown de tests proporcional a su duración, con
 // memoria en un JSON.
 //

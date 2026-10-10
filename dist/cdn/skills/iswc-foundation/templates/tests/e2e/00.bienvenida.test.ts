@@ -5,7 +5,7 @@
 //   W-CAT-02   el título dice «Hola mundo» y hay 4 tarjetas
 //   W-CAT-03   «Ver cómo está hecha» abre el modal y lo avisa; «Entendido» lo cierra y lo avisa
 //   W-ICO-04   los íconos de la bienvenida se piden a la carpeta local de la app, no a la API de Iconify
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/ISPruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
 import { abrir, enSombra, esperar } from '../../scripts/gate/e2e/harness.ts';
 
 let s: Awaited<ReturnType<typeof abrir>>;

@@ -6,7 +6,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/ISPruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
 import { PREFIJO } from '../../src/js/kit-tags.ts';
 
 const RAIZ = Deno.cwd();

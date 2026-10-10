@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T05:42:06.684Z",
+  "generatedAt": "2026-10-10T05:49:06.645Z",
   "count": 116,
   "modules": [
     {
@@ -530,7 +530,7 @@
       "id": "diagram-element-base",
       "path": "src/components/_shared/diagram-element-base.ts",
       "summary": "diagram-element-base — (block-diagram, class-diagram, er-diagram, flowchart, gantt, mindmap,",
-      "bytes": 13856,
+      "bytes": 13848,
       "exports": [
         "DiagramElementBase extends ElementBase \n  static get observedAttributes"
       ]

@@ -1,4 +1,3 @@
-// OBSOLETO: nombre anterior de ISPruebasHijo.ts (vendorice ISPruebasHijo.ts).
 /**
  * Proceso hijo de `correrPruebas({ aislar })`: corre UN archivo de pruebas y
  * entrega su reporte al padre en una linea marcada. Lo lanza el kit; no se usa a mano.

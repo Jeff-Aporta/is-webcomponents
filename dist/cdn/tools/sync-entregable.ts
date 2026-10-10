@@ -1,4 +1,3 @@
-// OBSOLETO: nombre anterior de ISSyncEntregable.ts (vendorice ISSyncEntregable.ts).
 /**
  * Sync comun `_experimental` -> `_entregable` de las apps del kit (ISS, ISW).
  *

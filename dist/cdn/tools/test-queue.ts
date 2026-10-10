@@ -1,4 +1,3 @@
-// OBSOLETO: nombre anterior de ISTestQueue.ts (vendorice ISTestQueue.ts).
 // test-queue.ts — Cola estándar de tests de los proyectos is-*: N trabajadores
 // (3 por defecto) toman la siguiente tarea apenas terminan la anterior.
 //

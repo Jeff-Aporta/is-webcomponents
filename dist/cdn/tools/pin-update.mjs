@@ -1,4 +1,3 @@
-// OBSOLETO: nombre anterior de ISPinUpdate.mjs (vendorice ISPinUpdate.mjs).
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
 // Regla (WT-2026-10-07, Jeff): el kit NO escribe en los consumidores. Cada consumidor
