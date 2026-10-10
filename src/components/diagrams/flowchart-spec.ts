@@ -588,14 +588,13 @@ export function computeFlowchartLayout(
   const enBarra = insoft ? puntosEnBarras(spec.edges, posById) : new Map<string, FlowPoint>();
   /** Punta compartida y rieles de las aristas de uso que llegan a un mismo costado (abanico). */
   const rielesUso = new Map<string, { punta?: FlowPoint; rieles: number[] }>();
-  const routed: Array<FlowLayoutEdge | null> = spec.edges.map((e, i) => {
+  /** Costados de salida y llegada de cada arista. */
+  const ladosDe = spec.edges.map((e) => {
     const from = posById.get(e.from);
     const to = posById.get(e.to);
     const fromMeta = byId.get(e.from);
     const toMeta = byId.get(e.to);
-    if (!from || !to || !fromMeta || !toMeta) {
-      return null;
-    }
+    if (!from || !to || !fromMeta || !toMeta) return null;
     const sides = insoft
       ? insoftSides(fromMeta, toMeta, from, to, specById.get(e.from)?.shape, placed.primaryChild?.get(e.from), spec.direction, conPuentes.has(e.from))
       : pickSides(fromMeta, toMeta, spec.direction);
@@ -604,10 +603,21 @@ export function computeFlowchartLayout(
     // `pickSides` devuelve `sides` con `fromSide`/`toSide` como `string` (no
     // tipado en el helper); los narrow explícitos aquí para mantener el
     // contrato BoxSide en el resto del pipeline.
-    const fromSide = sides.fromSide as AnchorSide;
-    const toSide = sides.toSide as AnchorSide;
-    const a = enBarra.get(`${i}|from`) ?? sobreBarra(edgeAnchor(from, fromSide), from, to, specById.get(e.from)?.shape);
-    const b = enBarra.get(`${i}|to`) ?? sobreBarra(edgeAnchor(to, toSide), to, from, specById.get(e.to)?.shape);
+    return { fromSide: sides.fromSide as AnchorSide, toSide: sides.toSide as AnchorSide };
+  });
+  const puertoDeArista = insoft ? puertosEnPerimetro(spec.edges, ladosDe, posById, specById) : new Map<string, FlowPoint>();
+  const routed: Array<FlowLayoutEdge | null> = spec.edges.map((e, i) => {
+    const from = posById.get(e.from);
+    const to = posById.get(e.to);
+    const fromMeta = byId.get(e.from);
+    const toMeta = byId.get(e.to);
+    const lados = ladosDe[i];
+    if (!from || !to || !fromMeta || !toMeta || !lados) {
+      return null;
+    }
+    const { fromSide, toSide } = lados;
+    const a = enBarra.get(`${i}|from`) ?? puertoDeArista.get(`${i}|from`) ?? sobreBarra(edgeAnchor(from, fromSide), from, to, specById.get(e.from)?.shape);
+    const b = enBarra.get(`${i}|to`) ?? puertoDeArista.get(`${i}|to`) ?? sobreBarra(edgeAnchor(to, toSide), to, from, specById.get(e.to)?.shape);
 
     // El anclaje cae sobre el borde bloqueado: se sale un paso antes de rutear.
     const out = stepOut(a, fromSide, 16);
@@ -650,7 +660,7 @@ export function computeFlowchartLayout(
     const direct = lateral ?? vuelta ?? (salida
       ? [salida, { x: topX, y: salida.y }, { x: topX, y: to.y }]
       : insoft && toMeta.layer > fromMeta.layer && !e.waypoints?.length
-      ? routeInsoftEdge(a, fromSide, to, nodes, e.to, insoftSegs, specById.get(e.to)?.shape === 'bar' ? b : undefined,
+      ? routeInsoftEdge(a, fromSide, to, nodes, e.to, insoftSegs, specById.get(e.to)?.shape === 'bar' || puertoDeArista.has(`${i}|to`) ? b : undefined,
         [...textos].filter(([k]) => k !== i).map(([, t]) => t), anclas.get(i))
       : null);
     // Segunda pasada: los textos son muros. Una ruta de forma fija (abanico, uso de lado, vuelta) que
@@ -3100,6 +3110,75 @@ function segConflicts(a: FlowPoint, b: FlowPoint, to: string, segs: readonly Flo
  * costado); Z (baja, cruza, baja). Gana la de menos solapes, cruces y
  * giros; si todas tocan una caja, null (el A* decide).
  */
+/** Formas cuyo perímetro admite puertos en cualquier punto de la rejilla (las demás usan sus vértices). */
+const PERIMETRO_LIBRE = new Set(['rect', 'round', 'stadium', 'vars', 'subroutine', 'parallelogram', 'hexagon', 'document', 'cylinder']);
+
+/**
+ * Puertos en el perímetro (cortes de la rejilla de 16 px sobre cada costado), para las aristas que
+ * comparten costado de un nodo rectangular:
+ *   - las que LLEGAN a un costado convergen en un solo puerto (abanico de consolidación);
+ *   - las que SALEN de un costado toman puertos distintos, ordenados por su destino (no se cruzan);
+ *   - una llegada y una salida nunca comparten puerto (evita arranques en sitios estrechos o muy
+ *     transitados).
+ * Un costado con una sola arista, o solo con llegadas, conserva su centro.
+ */
+function puertosEnPerimetro(
+  edges: readonly FlowEdgeSpec[],
+  lados: ReadonlyArray<{ fromSide: AnchorSide; toSide: AnchorSide } | null>,
+  pos: ReadonlyMap<string, FlowLayoutNode>,
+  specById: ReadonlyMap<string, FlowNodeSpec>,
+): Map<string, FlowPoint> {
+  const out = new Map<string, FlowPoint>();
+  type Uso = { clave: string; rol: 'entra' | 'sale'; otro: FlowLayoutNode };
+  const porCostado = new Map<string, Uso[]>();
+  const anotar = (nodo: string, lado: AnchorSide, u: Uso) => {
+    const k = `${nodo}|${lado}`;
+    if (!porCostado.has(k)) porCostado.set(k, []);
+    porCostado.get(k)!.push(u);
+  };
+  edges.forEach((e, i) => {
+    const l = lados[i];
+    const a = pos.get(e.from);
+    const b = pos.get(e.to);
+    if (!l || !a || !b || e.from === e.to || e.kind === 'dashed') return;
+    anotar(e.from, l.fromSide, { clave: `${i}|from`, rol: 'sale', otro: b });
+    anotar(e.to, l.toSide, { clave: `${i}|to`, rol: 'entra', otro: a });
+  });
+  for (const [k, usos] of porCostado) {
+    const corte = k.lastIndexOf('|');
+    const id = k.slice(0, corte);
+    const lado = k.slice(corte + 1) as AnchorSide;
+    const n = pos.get(id);
+    const forma = specById.get(id)?.shape ?? 'rect';
+    if (!n || !PERIMETRO_LIBRE.has(forma)) continue;
+    const entran = usos.filter((u) => u.rol === 'entra');
+    const salen = usos.filter((u) => u.rol === 'sale');
+    // Solo llegadas (convergen en el centro) o una sola arista: nada que cambiar.
+    if (!salen.length || usos.length < 2) continue;
+    const vertical = lado === 'left' || lado === 'right';
+    const cands = perimeterPorts({ x: n.x, y: n.y, w: n.w, h: n.h }, 16, [lado])
+      .map((q) => ({ x: snap8(q.x), y: snap8(q.y) }))
+      .filter((q) => (vertical ? q.y > n.y + 4 && q.y < n.y + n.h - 4 : q.x > n.x + 4 && q.x < n.x + n.w - 4));
+    const eje = (q: FlowPoint) => (vertical ? q.y : q.x);
+    const centroOtro = (u: Uso) => (vertical ? u.otro.y + u.otro.h / 2 : u.otro.x + u.otro.w / 2);
+    // Cada rol ocupa el tramo del costado que mira a lo que conecta: el que va «antes» toma los
+    // puertos del inicio. Las llegadas son un solo grupo (un puerto); cada salida, el suyo.
+    const media = (us: Uso[]) => us.reduce((acc, u) => acc + centroOtro(u), 0) / us.length;
+    const grupos = [
+      ...(entran.length ? [entran] : []),
+      ...salen.map((u) => [u]),
+    ].sort((p, q) => media(p) - media(q));
+    const ordenados = [...new Map(cands.map((q) => [`${q.x},${q.y}`, q])).values()].sort((p, q) => eje(p) - eje(q));
+    if (ordenados.length < grupos.length) continue;
+    const medio = Math.floor((ordenados.length - grupos.length) / 2);
+    grupos.forEach((g, j) => {
+      const q = ordenados[medio + j]!;
+      for (const u of g) out.set(u.clave, q);
+    });
+  }
+  return out;
+}
+
 function routeInsoftEdge(
   a: FlowPoint,
   fromSide: AnchorSide,
