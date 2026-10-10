@@ -2,7 +2,8 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { readEdgeStyle } from './diagram-vocab.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveClassSpec, computeClassLayout } from './class-spec.js';
+import { resolveClassSpec, computeClassLayout, sentidoFlujoClase } from './class-spec.js';
+import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
@@ -299,6 +300,11 @@ class IswcClassDiagram extends DiagramElementBase {
         class: 'cls-rel__path',
       });
       g.appendChild(path);
+      // Flujo estándar: herencia y realización fluyen del padre al hijo (al revés del trazo).
+      if (flujoActivo(this)) {
+        const puntos = animarRiel(path, { punteado: dashed, reverse: sentidoFlujoClase(e.kind) !== !!e.reverse });
+        if (puntos) g.appendChild(puntos);
+      }
 
       switch (e.noTip ? 'none' : e.kind) {
         case 'none':

@@ -29,6 +29,8 @@ export const SequenceNestedSpecSchema = NodeEmbedSpecSchema.extend({
 export type SequenceNestedSpec = z.infer<typeof SequenceNestedSpecSchema>;
 
 export const SequenceMessageSpecSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -119,6 +121,8 @@ export type LeadingIconToken = z.infer<typeof LeadingIconTokenSchema>;
 
 
 export const FlatMessageSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   m: SequenceMessageSpecSchema,
   kind: z.union([z.literal('self'), z.literal('sync'), z.literal('async'), z.literal('reply'), z.string()]),
   fromIdx: z.number(),
@@ -156,6 +160,8 @@ export type SequenceLayoutLifeline = z.infer<typeof SequenceLayoutLifelineSchema
 
 
 export const SequenceLayoutMessageSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   id: z.string(),
   step: z.number(),
   label: z.string(),

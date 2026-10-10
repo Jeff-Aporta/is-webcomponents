@@ -53,6 +53,11 @@ function asRecord(v: unknown): Record<string, any> {
 /** Altura de un renglón de firma y de uno de tipo (texto secundario), y la sangría de la viñeta. */
 const MIEMBRO = { renglon: 16, caption: 13, sangria: 14, pad: 8, captionCharW: 5.8 } as const;
 
+/** Sentido estándar de la animación de flujo: herencia y realización van al revés del trazo (padre → hijo). */
+export function sentidoFlujoClase(kind: string): boolean {
+  return kind === 'inheritance' || kind === 'realization';
+}
+
 /**
  * Parte un miembro `«+ nombre(params): Tipo «static»»` en visibilidad, firma y tipo. El tipo es lo
  * que sigue al `: ` de la firma (en un método, después de cerrar sus paréntesis).
@@ -152,6 +157,7 @@ function readRelation(raw: unknown, i: number): ClassSpecRelation | null {
     toLabel: String(r.toLabel ?? '').trim() || undefined,
     group: Number.isFinite(r.group) ? Number(r.group) : undefined,
   };
+  if (r.reverse === true) rel.reverse = true;
   return rel;
 }
 
@@ -343,6 +349,7 @@ export function classSpecToJson(spec: ClassSpec): Record<string, unknown> {
     if (r.label) row.label = r.label;
     if (r.fromLabel) row.fromLabel = r.fromLabel;
     if (r.toLabel) row.toLabel = r.toLabel;
+    if (r.reverse) row.reverse = true;
     return row;
   });
   return out;
@@ -475,6 +482,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
       from: r.from,
       to: r.to,
       kind: r.kind,
+      ...(r.reverse ? { reverse: true } : {}),
       label: r.label,
       fromLabel: r.fromLabel,
       toLabel: r.toLabel,
@@ -864,7 +872,7 @@ function computePackagedClassLayout(
     const mid = midOf(pts);
     const color = colorDeArista.get(i) ?? nodeById.get(r.from)?.color;
     return [{
-      id: r.id ?? `r${i}`, from: r.from, to: r.to, kind: r.kind,
+      id: r.id ?? `r${i}`, from: r.from, to: r.to, kind: r.kind, ...(r.reverse ? { reverse: true } : {}),
       label: r.label, fromLabel: r.fromLabel, toLabel: r.toLabel,
       path: pointsToPath(pts),
       targetTipX: targetTip.x, targetTipY: targetTip.y, targetAngle: targetTip.angle,

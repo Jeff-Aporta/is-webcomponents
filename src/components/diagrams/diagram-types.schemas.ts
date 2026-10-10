@@ -109,6 +109,8 @@ export type ClassRelationKind = z.infer<typeof ClassRelationKindSchema>;
 
 
 export const ClassSpecRelationSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -241,6 +243,8 @@ export type ClassLayoutNode = z.infer<typeof ClassLayoutNodeSchema>;
 
 
 export const ClassLayoutEdgeSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -325,6 +329,8 @@ export type ErDashStyle = z.infer<typeof ErDashStyleSchema>;
 
 
 export const ErSpecRelationSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -409,6 +415,8 @@ export type ErLayoutEdgeMark = z.infer<typeof ErLayoutEdgeMarkSchema>;
 
 
 export const ErLayoutEdgeSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   id: z.string(),
   from: z.string(),
   to: z.string(),

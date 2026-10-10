@@ -327,6 +327,7 @@ function readEdge(raw: unknown, i: number): SpecEdge {
     hue: r.hue != null ? Number(r.hue) : undefined,
     color: typeof r.color === 'string' && r.color.trim() ? r.color.trim() : undefined,
     kind: (validKinds.includes(kind as EdgeKind) ? kind : 'dependency') as EdgeKind,
+    ...(r.reverse === true ? { reverse: true } : {}),
   };
 }
 

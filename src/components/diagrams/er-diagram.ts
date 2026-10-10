@@ -2,6 +2,7 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { readEdgeStyle } from './diagram-vocab.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
+import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
 import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './er-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
@@ -383,7 +384,8 @@ class IswcErDiagram extends DiagramElementBase {
       else if (!isIdentifying) dashAttr = '6 4';
 
       const isAnimatable = r.dashStyle === 'dashed' || (!isIdentifying && r.dashStyle !== 'solid');
-      const animClass = (traceEnabled && isAnimatable && !ep) ? ' iswc-anim-edge-dashed' : '';
+      const flujo = flujoActivo(this);
+      const animClass = (!flujo && traceEnabled && isAnimatable && !ep) ? ' iswc-anim-edge-dashed' : '';
 
       const width = ep?.strokeWidth
         ?? ((r.style && Number.isFinite(r.style.strokeWidth))
@@ -396,6 +398,11 @@ class IswcErDiagram extends DiagramElementBase {
         class: `er-rel__path${animClass}`,
       });
       g.appendChild(path);
+      // Flujo estándar del lado N al 1 (`reverse` ya resuelto en el layout).
+      if (flujo) {
+        const puntos = animarRiel(path, { punteado: !!dashAttr, reverse: !!r.reverse });
+        if (puntos) g.appendChild(puntos);
+      }
 
       g.appendChild(this.#buildMark(r.fromMark, color));
       g.appendChild(this.#buildMark(r.toMark, color));

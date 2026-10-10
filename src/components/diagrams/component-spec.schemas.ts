@@ -19,6 +19,8 @@ export type EdgeKind = z.infer<typeof EdgeKindSchema>;
 
 
 export const SpecEdgeSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   id: z.string(),
   from: z.string(),
   to: z.string(),
@@ -87,6 +89,8 @@ export type LayoutInterface = z.infer<typeof LayoutInterfaceSchema>;
 
 
 export const LayoutEdgeSchema = z.object({
+  /** Invierte el sentido de la animación de flujo de esta arista (ver _shared/diagram-flow). */
+  reverse: z.boolean().optional(),
   fromX: z.number(),
   fromY: z.number(),
   toX: z.number(),

@@ -1,5 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
+import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
 import {
   computeSequenceLayout,
@@ -771,6 +772,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
         class: 'seq-msg-path',
       });
       g.appendChild(path);
+      if (flujoActivo(this)) {
+        const puntos = animarRiel(path, { punteado: !!path.getAttribute('stroke-dasharray'), reverse: !!m.reverse });
+        if (puntos) g.appendChild(puntos);
+      }
 
       // La orientación sale del ÚLTIMO TRAMO REAL del path: cuando el router
       // ortogonal desvía la llegada, una punta fija horizontal quedaba de lado

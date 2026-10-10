@@ -153,6 +153,7 @@ function readMessage(raw: Record<string, unknown>, fallbackStep: number): Sequen
     // degenerado que cruzaba la lifeline hacia atrás.
     kind: (raw.kind ?? (from && from === to ? 'self' : 'sync')) as SequenceMessageSpec['kind'],
     step: Number(raw.step ?? fallbackStep),
+    ...(raw.reverse === true ? { reverse: true } : {}),
     ...readNested(raw.nested),
   };
 }
@@ -764,6 +765,7 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
       log: f.m.log,
       description: f.m.description,
       kind: f.kind,
+      ...(f.m.reverse ? { reverse: true } : {}),
       y,
       fromX,
       toX,

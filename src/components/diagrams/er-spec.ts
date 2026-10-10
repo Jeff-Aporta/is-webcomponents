@@ -117,6 +117,18 @@ function readEntity(raw: unknown, i: number): ErSpecEntity {
   return out;
 }
 
+/**
+ * Sentido estándar de la animación de flujo en el DER: del lado N al lado 1 (la FK apunta a su
+ * padre). En 1:1, del lado opcional (0..1, el dependiente) al obligatorio. `true` = al revés del
+ * trazo (que va de `from` a `to`).
+ */
+export function sentidoFlujoEr(fromCard: ErCardinality, toCard: ErCardinality): boolean {
+  const muchos = (c: ErCardinality) => c === 'many' || c === 'zeroOrMany';
+  if (muchos(fromCard) !== muchos(toCard)) return muchos(toCard);
+  if (!muchos(fromCard)) return fromCard === 'one' && toCard === 'zeroOrOne';
+  return false;
+}
+
 function readRelation(raw: unknown, i: number): ErSpecRelation {
   const r = asRecord(raw);
   const fromCard = r.fromCard as ErCardinality | undefined;
@@ -155,6 +167,7 @@ function readRelation(raw: unknown, i: number): ErSpecRelation {
   if (typeof r.labelDy === 'number') out.labelDy = Number(r.labelDy);
   if (Number.isInteger(r.labelSegment) && (r.labelSegment as number) >= 0) out.labelSegment = r.labelSegment;
   if (dashStyle && (dashStyle === 'solid' || dashStyle === 'dashed' || dashStyle === 'dotted')) out.dashStyle = dashStyle;
+  if (r.reverse === true) out.reverse = true;
   if (Number.isFinite(r.width) && (r.width as number) > 0) out.width = Number(r.width);
   if (variant && (variant === 'default' || variant === 'emphasis' || variant === 'security' || variant === 'dashed')) out.variant = variant;
   // style override (solo claves seguras)
@@ -1033,6 +1046,7 @@ export function computeErLayout(specIn: ErSpec): ErLayout {
     };
     if (r.dashStyle) edge.dashStyle = r.dashStyle;
     if (r.variant) edge.variant = r.variant;
+    if (sentidoFlujoEr(r.fromCard, r.toCard) !== !!r.reverse) edge.reverse = true;
     if (typeof r.width === 'number') edge.width = r.width;
     if (r.style) edge.style = r.style;
     ruteadas[i] = edge;

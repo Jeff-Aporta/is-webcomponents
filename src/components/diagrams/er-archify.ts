@@ -43,7 +43,7 @@ const RELATION_KEYS: Set<string> = new Set([
   // Nuevos (archify-style):
   'route', 'fromSide', 'toSide', 'via',
   'labelAt', 'labelDx', 'labelDy', 'labelSegment',
-  'dashStyle', 'width', 'style', 'variant',
+  'dashStyle', 'width', 'style', 'variant', 'reverse',
 ]);
 
 const ATTRIBUTE_KEYS: Set<string> = new Set(['name', 'type', 'key', 'comment']);
@@ -208,6 +208,7 @@ function readRelation(raw: unknown, i: number, known: Set<string>, strict: boole
   if (variant && VARIANTS.has(variant)) out.variant = variant;
   const style = readStyle(r.style, `relations[${i}]`, strict);
   if (style) out.style = style as EdgeStyleOverride;
+  if (r.reverse === true) out.reverse = true;
   return out;
 }
 
@@ -352,6 +353,7 @@ export function serializeErPayload(spec: ErSpec, opts: { stable?: boolean; inden
     if (r.dashStyle && r.dashStyle !== 'solid') ro.dashStyle = r.dashStyle;
     if (typeof r.width === 'number' && r.width !== 1.3) ro.width = round(r.width, 2);
     if (r.variant && r.variant !== 'default') ro.variant = r.variant;
+    if (r.reverse) ro.reverse = true;
     if (r.style) ro.style = serializeStyle(r.style);
     return ro;
   });
