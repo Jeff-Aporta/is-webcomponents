@@ -1,5 +1,5 @@
 /**
- * obj.schemas.ts — tipos de `Obj` (operaciones sobre objetos JSON) y de las referencias
+ * ISUtils.schemas.ts — tipos de `Obj` (operaciones sobre objetos JSON) y de las referencias
  * `{ path, query, actions }`. Los tipos viven aquí y no en el módulo (regla W54).
  *
  * Consulta (`query`): un objeto que copia la forma del dato y marca con un valor TRUTHY (`!!x`) lo

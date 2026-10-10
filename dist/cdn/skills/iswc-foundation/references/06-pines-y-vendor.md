@@ -9,7 +9,7 @@
 - Prohibido: `@main`, `@master`, `@latest`, SHA corto, `*.github.io`, ramas en raw/githack.
 - El kit nunca escribe en la app: **la app se actualiza a sí misma**.
 
-## Protocolo (`src/vendor/iswc-root/tools/pin-update.mjs`, vendorizado)
+## Protocolo (`src/vendor/iswc-root/tools/ISPinUpdate.mjs`, vendorizado)
 
 ```bash
 deno task pin                                 # inventario: exit 1 si hay >1 SHA, refs mutables o nombre viejo del repo
@@ -26,7 +26,7 @@ deno task build && deno task test:all
 
 | Carpeta | Archivos |
 | --- | --- |
-| `tools/` | `pruebas(.schemas).ts`, `pruebas-hijo.ts`, `test-cooldown(.schemas).ts`, `test-queue.ts`, `sync-entregable(.schemas).ts`, `pin-update.mjs` |
+| `tools/` | `pruebas(.schemas).ts`, `ISPruebasHijo.ts`, `test-cooldown(.schemas).ts`, `ISTestQueue.ts`, `sync-entregable(.schemas).ts`, `ISPinUpdate.mjs` |
 | `build/` | `index.ts`, `content-hash.ts`, `asset-url(.schemas).ts`, `stamp-hashes.ts`, `bundle-min(.schemas).ts`, `asset-store.ts` |
 
 - Cabecera `// @vendor iswc-root@<sha>[+local] dist/cdn/<ruta>` y «No editar». Se cambian en el kit y se

@@ -1,3 +1,4 @@
+// OBSOLETO: nombre anterior de ISTestCooldown.schemas.ts (vendorice ISTestCooldown.schemas.ts).
 /**
  * Contratos (tipos) del cooldown de tests (`test-cooldown.ts`). W54: los
  * tipos top-level viven en *.schemas.ts.

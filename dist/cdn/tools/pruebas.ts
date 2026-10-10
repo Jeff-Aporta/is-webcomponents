@@ -1,3 +1,4 @@
+// OBSOLETO: nombre anterior de ISPruebas.ts (vendorice ISPruebas.ts).
 /// <reference types="node" />
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).

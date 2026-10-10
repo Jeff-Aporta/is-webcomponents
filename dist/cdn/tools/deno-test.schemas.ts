@@ -1,3 +1,4 @@
+// OBSOLETO: nombre anterior de ISDenoTest.schemas.ts (vendorice ISDenoTest.schemas.ts).
 /**
  * Contratos (tipos) de `deno-test.ts`. W54: los tipos top-level viven en
  * *.schemas.ts.

@@ -2,7 +2,7 @@
 //
 //   W-CAT-02   la portada presenta 4 piezas del estándar, cada una con icono, título y texto
 //   W-CAT-03   el modal lista los comandos para empezar en orden, con su propósito alineado
-import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
+import { definirPruebas } from '../../src/vendor/iswc-root/tools/ISPruebas.ts';
 
 const { caracteristicas, pasosInicio, guionInicio } = await import('../../dist/cdn/view/hola/utils/bienvenida.js');
 

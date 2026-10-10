@@ -1,3 +1,4 @@
+// OBSOLETO: nombre anterior de ISPruebas.schemas.ts (vendorice ISPruebas.schemas.ts).
 /**
  * Contratos del sistema comun de pruebas (`pruebas.ts`), compartido por las
  * apps del kit (ISS en Node, ISW en Deno). W54: los tipos viven en *.schemas.ts.

@@ -1,3 +1,4 @@
+// OBSOLETO: nombre anterior de ISSyncEntregable.schemas.ts (vendorice ISSyncEntregable.schemas.ts).
 /**
  * Contratos del sync comun `_experimental` -> `_entregable` (`sync-entregable.ts`).
  * W54: los tipos viven en *.schemas.ts.

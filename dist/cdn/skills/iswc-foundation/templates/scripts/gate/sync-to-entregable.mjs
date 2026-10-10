@@ -1,5 +1,5 @@
 // sync-to-entregable.mjs — mirror (`_experimental/<app>`) -> entregable (`_entregable/<app>`), sobre el
-// motor comun del kit (`src/vendor/iswc-root/tools/sync-entregable.ts`).
+// motor comun del kit (`src/vendor/iswc-root/tools/ISSyncEntregable.ts`).
 //
 //   deno task sync:entregable             # gate (test:all) en verde -> copia -> checkpoint (commit + push del MIRROR)
 //   deno task sync:entregable --check     # drift por contenido, no escribe (exit 1 si hay drift)
@@ -12,7 +12,7 @@
 import { existsSync } from 'node:fs';
 import { basename, join, resolve } from 'node:path';
 import process from 'node:process';
-import { codigoSync, correrSync, modoDeArgv } from '../../src/vendor/iswc-root/tools/sync-entregable.ts';
+import { codigoSync, correrSync, modoDeArgv } from '../../src/vendor/iswc-root/tools/ISSyncEntregable.ts';
 
 const MIRROR = resolve(import.meta.dirname, '..', '..');
 const ENTREGABLE = process.env.ENTREGABLE ?? resolve(MIRROR, '..', '..', '_entregable', basename(MIRROR));

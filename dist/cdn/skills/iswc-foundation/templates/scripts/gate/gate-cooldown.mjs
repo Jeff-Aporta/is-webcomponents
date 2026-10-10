@@ -1,7 +1,7 @@
 // scripts/gate/gate-cooldown.mjs
 //
 // Pasos del gate (guardianes, vigilantes, build, tests) con el MISMO cooldown
-// que los tests (vendor iswc `test-cooldown.ts`, factor x600): un paso que
+// que los tests (vendor iswc `ISTestCooldown.ts`, factor x600): un paso que
 // paso en verde hace poco no se repite. Un rojo corre siempre.
 //
 // Dos clases de paso:
@@ -18,7 +18,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 
-const { testCooldownFromEnv, formatMs } = await import("../../src/vendor/iswc-root/tools/test-cooldown.ts");
+const { testCooldownFromEnv, formatMs } = await import("../../src/vendor/iswc-root/tools/ISTestCooldown.ts");
 
 const IGNORAR = new Set(["node_modules", ".git", ".tmp", "dist", "coverage", ".cobertura"]);
 

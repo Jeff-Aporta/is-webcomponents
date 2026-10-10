@@ -26,7 +26,7 @@
     "dev": "deno run -A src/utils/build.ts --watch",
     "serve": "deno run -A jsr:@std/http@1/file-server -p __PUERTO__ --host 127.0.0.1",
     "check": "deno check src/js/ view/",
-    "pin": "deno run -A src/vendor/iswc-root/tools/pin-update.mjs --repo=__REPO__ --raices=index.html,assets/dl.js,src,view,deno.json",
+    "pin": "deno run -A src/vendor/iswc-root/tools/ISPinUpdate.mjs --repo=__REPO__ --raices=index.html,assets/dl.js,src,view,deno.json",
     "vendor:iswc": "deno run -A scripts/vendor/vendor-iswc-tools.mjs",
     "test": "deno task build && deno run -A scripts/gate/test-health.mjs",
     "test:health": "deno run -A scripts/gate/test-health.mjs",

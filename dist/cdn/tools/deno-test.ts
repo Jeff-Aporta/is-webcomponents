@@ -1,3 +1,4 @@
+// OBSOLETO: nombre anterior de ISDenoTest.ts (vendorice ISDenoTest.ts).
 // deno-test.ts — `deno test` estándar de los proyectos is-*: cola de
 // `testConcurrency()` archivos a la vez (3 por defecto) y cooldown de iswc.
 //

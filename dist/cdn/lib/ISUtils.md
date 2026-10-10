@@ -6,9 +6,9 @@ Biblioteca común de iswc (sin dependencias de DOM). Lee y modifica **partes** d
 
 | Cómo | Qué |
 | --- | --- |
-| Navegador (CDN) | `import { Obj } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/lib/obj.min.js'` (Zod incluido) |
-| Vendor (ISS, ISW) | `dist/cdn/lib/obj.ts` + `obj.schemas.ts` (usan el `zod` del consumidor). El ISS los trae con `tests/.audit/pull-vendor.mjs` a `src/sources/000 Base/iswc/` |
-| Dentro del kit | `src/cdn/lib/obj.ts` |
+| Navegador (CDN) | `import { Obj } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/lib/ISUtils.min.js'` (Zod incluido) |
+| Vendor (ISS, ISW) | `dist/cdn/lib/ISUtils.ts` + `ISUtils.schemas.ts` (usan el `zod` del consumidor). El ISS los trae con `tests/.audit/pull-vendor.mjs` a `src/sources/000 Base/iswc/` |
+| Dentro del kit | `src/cdn/lib/ISUtils.ts` |
 
 ## Consulta (`query`)
 
