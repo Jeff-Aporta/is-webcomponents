@@ -1,8 +1,8 @@
 /**
- * Contratos (tipos) de `ISDenoTest.ts`. W54: los tipos top-level viven en
+ * Contratos (tipos) de `deno-test.ts`. W54: los tipos top-level viven en
  * *.schemas.ts.
  */
-import type { TestCooldown } from "./ISTestCooldown.schemas.ts";
+import type { TestCooldown } from "./test-cooldown.schemas.ts";
 
 export interface DenoTestOptions {
     /** Flags de `deno test` (p. ej. `-A`, `--no-check`). */

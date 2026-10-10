@@ -2,7 +2,7 @@
 
 Cómo se escriben specs y pruebas WHAT: [especificar-what.md](../templates/specs/especificar-what.md).
 
-## Sistema común del kit (`tools/ISPruebas.ts`)
+## Sistema común del kit (`tools/pruebas.ts`)
 
 - Todas las pruebas en `tests/<area>/*.test.ts`; cada archivo `export default definirPruebas([...], hooks?)`.
 - Prueba: `{ nombre (id único, incluye su [W-*]), categoria: 'what'|'how', correr(ctx), timeoutMs?, nivel?: 'error'|'aviso', saltar? }`.

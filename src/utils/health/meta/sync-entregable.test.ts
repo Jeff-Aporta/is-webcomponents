@@ -1,5 +1,5 @@
 /**
- * Sync comun `_experimental` -> `_entregable` (`cdn/tools/ISSyncEntregable.ts`).
+ * Sync comun `_experimental` -> `_entregable` (`cdn/tools/sync-entregable.ts`).
  *
  *   S1 coincideGlob: `**`, `*` y prefijos de carpeta
  *   S2 replace: crea, actualiza, borra lo que sobra; respeta excluir y bloqueados; cuenta iguales
@@ -16,8 +16,8 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import process from 'node:process';
-import { codigoSync, coincideGlob, correrSync } from '../../../cdn/tools/ISSyncEntregable.ts';
-import type { ConfigSync } from '../../../cdn/tools/ISSyncEntregable.ts';
+import { codigoSync, coincideGlob, correrSync } from '../../../cdn/tools/sync-entregable.ts';
+import type { ConfigSync } from '../../../cdn/tools/sync-entregable.ts';
 
 const silencio = () => undefined;
 function arbol(raiz: string, archivos: Record<string, string>) {

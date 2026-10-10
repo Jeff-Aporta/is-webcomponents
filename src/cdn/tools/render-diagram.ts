@@ -16,7 +16,7 @@
  * Modos: sintético (tag+scriptUrl+payload) o pageUrl (HTML ya armado).
  */
 import { mkdir, writeFile, rm, rename, readFile } from 'node:fs/promises';
-import { Obj } from '../lib/ISUtils.js';
+import { Obj } from '../lib/obj.js';
 import process from 'node:process';
 import { join, dirname, isAbsolute, relative } from 'node:path';
 import { tmpdir } from 'node:os';

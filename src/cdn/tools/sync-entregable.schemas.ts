@@ -1,5 +1,5 @@
 /**
- * Contratos del sync comun `_experimental` -> `_entregable` (`ISSyncEntregable.ts`).
+ * Contratos del sync comun `_experimental` -> `_entregable` (`sync-entregable.ts`).
  * W54: los tipos viven en *.schemas.ts.
  */
 

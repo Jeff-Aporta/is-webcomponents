@@ -1,9 +1,9 @@
-// test-queue.test.ts — garantías de la cola estándar (src/cdn/tools/ISTestQueue.ts).
+// test-queue.test.ts — garantías de la cola estándar (src/cdn/tools/test-queue.ts).
 //   Q1 nunca más de `concurrency` a la vez (default 3) y llega a usarlos.
 //   Q2 resultados en el orden de entrada.
 //   Q3 testConcurrency: valor válido o 3.
 import { assertEquals } from 'jsr:@std/assert@1';
-import { runQueue, TEST_CONCURRENCY, testConcurrency } from '../../../cdn/tools/ISTestQueue.ts';
+import { runQueue, TEST_CONCURRENCY, testConcurrency } from '../../../cdn/tools/test-queue.ts';
 
 Deno.test('test-queue: 3 a la vez por defecto, orden de entrada, concurrencia configurable', async () => {
   let activos = 0, pico = 0;
