@@ -21,6 +21,7 @@ import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, 
 import type { ErThemeJson } from "./theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
+import { anchoDeComponente } from './component-spec.js';
 import type { RouterEdge, RouterPort } from './component-router.schemas.js';
 import type { Lado } from '../_shared/diagram-tipos.schemas.js';
 import type { EmbedBox } from "../_shared/diagram-embed.schemas.js";
@@ -216,6 +217,20 @@ export function flowchartSpecFromPayload(payload: unknown): FlowResolvedSpec | n
   if (!Array.isArray(rawNodes) || !rawNodes.length) return null;
 
   const nodes: FlowNodeSpec[] = rawNodes.map((raw: unknown, i: number) => readNode(asRecord(raw), i));
+  // Componentes incrustados: ancho homogéneo por carril (el del más ancho), como las acciones.
+  {
+    const porCarril = new Map<string, FlowNodeSpec[]>();
+    for (const n of nodes) {
+      if (n.embed?.kind !== 'component' || !n.embed.component || n.embed.component.w != null) continue;
+      const k = n.lane ?? '';
+      porCarril.set(k, [...(porCarril.get(k) ?? []), n]);
+    }
+    for (const grupo of porCarril.values()) {
+      if (grupo.length < 2) continue;
+      const w = Math.max(...grupo.map((n) => anchoDeComponente(n.embed!.component as Record<string, unknown>)));
+      for (const n of grupo) n.embed = { ...n.embed!, component: { ...n.embed!.component, w } };
+    }
+  }
   // Config del diagrama: miembros por sección de las clases incrustadas antes del «N más».
   const tope = Number(asRecord(src.config).classMaxMembers ?? src.classMaxMembers);
   if (Number.isInteger(tope) && tope > 0) {
@@ -595,10 +610,20 @@ export function computeFlowchartLayout(
     // Insoft: la etiqueta va junto al arranque de la arista, a un costado.
     // En abanico, la condición va encima de su riel, junto al codo donde baja (del lado del rombo).
     // Bucle corto: la etiqueta va en vertical, pegada al pasillo por fuera (no choca con los nodos).
+    // Rama en abanico: la condición va junto al codo, del lado del rombo; si ahí cae sobre una caja
+    // (p. ej. el propio rombo cuando la rama baja pegada a él), pasa al otro lado de su riel.
+    const ladoRama = (): { x: number; y: number; anchor: 'start' | 'end' } => {
+      const hacia = salida!.x > topX ? 'end' : 'start';
+      const lw = (e.label ?? '').length * 6.2 + 8;
+      const choca = (anchor: 'start' | 'end'): boolean => {
+        const x0 = anchor === 'end' ? topX - 6 - lw : topX + 6;
+        return nodes.some((n) => specById.get(n.id)?.shape !== 'comment' && x0 < n.x + n.w && x0 + lw > n.x && salida!.y - 18 < n.y + n.h && salida!.y > n.y);
+      };
+      const anchor = choca(hacia) && !choca(hacia === 'end' ? 'start' : 'end') ? (hacia === 'end' ? 'start' : 'end') : hacia;
+      return { x: topX + (anchor === 'end' ? -6 : 6), y: salida!.y - 6, anchor };
+    };
     const side = insoft && e.label
-      ? (salida
-        ? { x: topX + (salida.x > topX ? -6 : 6), y: salida.y - 6, anchor: (salida.x > topX ? 'end' : 'start') as 'start' | 'end' }
-        : sideLabel(path))
+      ? (salida ? ladoRama() : sideLabel(path))
       : null;
     const lab = side ?? { x: mid.x, y: mid.y, anchor: 'middle' as const };
     if (e.label) {
@@ -907,8 +932,23 @@ function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowRe
         l = Math.abs(T.x - P.x) + Math.abs(T.y - P.y);
       }
     }
-    if (l <= largo + 4) return;
     const fin = { x: T.x - d.x * largo, y: T.y - d.y * largo };
+    if (l <= largo + 4) {
+      // Escalera del abanico pegada a la punta: se corta donde entra a la zona del socket y se llega
+      // a él por el eje de la punta (un tramo recto de 8 px antes del socket).
+      const antes = (q: FlowPoint): number => (T.x - q.x) * d.x + (T.y - q.y) * d.y;
+      const k = pts.findIndex((q) => antes(q) <= largo + 8);
+      const A = pts[k - 1];
+      const B = pts[k];
+      if (k < 1 || !A || !B || Math.sign(B.x - A.x) !== d.x || Math.sign(B.y - A.y) !== d.y) return;
+      const corte = antes(A) - (largo + 8);
+      // Si el corte cae a menos de 8 px del vértice anterior, se usa ese vértice (sin escalones de 1 px).
+      const C = corte >= 8 ? { x: A.x + d.x * corte, y: A.y + d.y * corte } : A;
+      // Proyección de C sobre el eje de la punta.
+      const C2 = d.x ? { x: C.x, y: fin.y } : { x: fin.x, y: C.y };
+      routed[i] = { ...r, path: polylinePath(simplifyOrthoPath([...pts.slice(0, corte >= 8 ? k : k - 1), C, C2, fin])), arrowTipX: T.x, arrowTipY: T.y, socket: true };
+      return;
+    }
     routed[i] = { ...r, path: polylinePath([...pts.slice(0, -1), fin]), arrowTipX: T.x, arrowTipY: T.y, socket: true };
     void spec.edges[i];
   });
@@ -1504,8 +1544,40 @@ function sizeEmbedNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode 
  * Ícono por defecto de un elemento numerado sin `icon` (con `steps: "auto"`): el número siempre va
  * acompañado de un ícono que dice qué clase de elemento es.
  */
+/**
+ * Ícono temático de un componente por su estereotipo y nombre (el primero que coincide gana). Un
+ * `icon` propio del componente manda sobre esto.
+ */
+const ICONO_COMPONENTE: ReadonlyArray<[RegExp, string]> = [
+  [/whisper|audio|transcri|voz/, 'mdi:microphone-message'],
+  [/completion|operativ/, 'mdi:message-processing-outline'],
+  [/response|stream/, 'mdi:message-fast-outline'],
+  [/conversation|hilo|thread/, 'mdi:forum-outline'],
+  [/model|catálogo|catalogo/, 'mdi:brain'],
+  [/openai|llm|asistente|ia/, 'mdi:robot-outline'],
+  [/vector/, 'mdi:vector-polyline'],
+  [/datasnap|dsclientes/, 'mdi:server-network'],
+  [/r2|s3|bucket|cdn/, 'mdi:bucket-outline'],
+  [/archivo|file/, 'mdi:file-cloud-outline'],
+  [/auth|login|identidad|jwt/, 'mdi:shield-account-outline'],
+  [/seg|permis/, 'mdi:shield-key-outline'],
+  [/config|proveedor/, 'mdi:cog-outline'],
+  [/ops|operaci/, 'mdi:tools'],
+  [/calificaci|tiquete|ticket/, 'mdi:star-check-outline'],
+  [/chat|conversaci/, 'mdi:chat-outline'],
+  [/pg|postgres|base de datos|clientesis/, 'mdi:database-outline'],
+  [/isw|app|apps|portal/, 'mdi:application-outline'],
+];
+
+/** Ícono de un componente incrustado: el suyo (`icon`) o el temático; si nada coincide, la pieza. */
+export function iconoDeComponente(c: Record<string, unknown> | undefined): string {
+  if (typeof c?.icon === 'string' && c.icon.includes(':')) return c.icon;
+  const texto = `${c?.stereotype ?? ''} ${c?.name ?? ''}`.toLowerCase();
+  return ICONO_COMPONENTE.find(([re]) => re.test(texto))?.[1] ?? 'mdi:puzzle-outline';
+}
+
 export function iconoPorDefecto(n: FlowNodeSpec): string {
-  if (n.kind === 'component') return 'mdi:puzzle-outline';
+  if (n.kind === 'component') return iconoDeComponente(n.embed?.component as Record<string, unknown> | undefined);
   if (n.kind === 'class') return 'mdi:code-braces';
   if (n.kind === 'tableder') return 'mdi:table';
   if (n.kind === 'nested') return 'mdi:sitemap-outline';
@@ -2009,13 +2081,16 @@ export function placeLanes(
     if (!grupos.has(k)) grupos.set(k, []);
     grupos.get(k)!.push(n);
   }
-  for (const [k, ms] of grupos) {
-    const x0 = Math.min(...ms.map((n) => n.x)) - CTX.pad;
-    const y0 = Math.min(...ms.map((n) => n.y)) - CTX.pad - CTX.title;
-    const x1 = Math.max(...ms.map((n) => n.x + n.w)) + CTX.pad;
-    const y1 = Math.max(...ms.map((n) => n.y + n.h)) + CTX.pad;
+  for (const [k, todos] of grupos) {
     const corte = k.indexOf('|');
-    contexts.push({ lane: k.slice(0, corte), label: k.slice(corte + 1), members: ms.map((n) => n.id), x: x0, y: y0, w: x1 - x0, h: y1 - y0 });
+    // Un grupo puede ser varias cajas: ninguna abraza un nodo que no es del grupo.
+    for (const ms of partirGrupo(todos, out)) {
+      const x0 = Math.min(...ms.map((n) => n.x)) - CTX.pad;
+      const y0 = Math.min(...ms.map((n) => n.y)) - CTX.pad - CTX.title;
+      const x1 = Math.max(...ms.map((n) => n.x + n.w)) + CTX.pad;
+      const y1 = Math.max(...ms.map((n) => n.y + n.h)) + CTX.pad;
+      contexts.push({ lane: k.slice(0, corte), label: k.slice(corte + 1), members: ms.map((n) => n.id), x: x0, y: y0, w: x1 - x0, h: y1 - y0 });
+    }
   }
   return {
     nodes: out,
@@ -2032,7 +2107,13 @@ export function placeLanes(
  * y medir los diagramas incrustados), más aire y la franja del título. Ningún hijo queda afuera.
  */
 function abrazar(contexts: readonly FlowLayoutContext[], nodes: readonly FlowLayoutNode[], ox: number, oy: number): FlowLayoutContext[] {
-  return contexts.map((c) => {
+  // Con las posiciones definitivas se vuelve a partir: un grupo que quedó abrazando un nodo ajeno
+  // se separa en varias cajas (mismo título).
+  const partidos = contexts.flatMap((c) => {
+    const ms = nodes.filter((n) => c.members?.includes(n.id));
+    return ms.length ? partirGrupo(ms, nodes).map((p) => ({ ...c, members: p.map((n) => n.id) })) : [c];
+  });
+  return partidos.map((c) => {
     const ms = nodes.filter((n) => c.members?.includes(n.id));
     if (!ms.length) return { ...c, x: c.x + ox, y: c.y + oy };
     // La insignia de cada miembro también va dentro.
@@ -2043,6 +2124,34 @@ function abrazar(contexts: readonly FlowLayoutContext[], nodes: readonly FlowLay
     const y1 = Math.max(...cajas.map((b) => b.y + b.h)) + CTX.pad;
     return { ...c, x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
   });
+}
+
+/**
+ * Parte los miembros de un grupo en cajas que no abrazan nodos ajenos: cada miembro empieza en su
+ * caja y dos cajas se unen si el rectángulo que las envuelve (con su aire) no toca ningún otro nodo.
+ */
+function partirGrupo<T extends { id: string; x: number; y: number; w: number; h: number }>(ms: readonly T[], todos: readonly { id: string; x: number; y: number; w: number; h: number }[]): T[][] {
+  const ids = new Set(ms.map((n) => n.id));
+  const ajenos = todos.filter((n) => !ids.has(n.id));
+  const caja = (g: readonly T[]) => ({
+    x0: Math.min(...g.map((n) => n.x)) - CTX.pad, y0: Math.min(...g.map((n) => n.y)) - CTX.pad - CTX.title,
+    x1: Math.max(...g.map((n) => n.x + n.w)) + CTX.pad, y1: Math.max(...g.map((n) => n.y + n.h)) + CTX.pad,
+  });
+  const libre = (g: readonly T[]): boolean => {
+    const b = caja(g);
+    return !ajenos.some((n) => n.x < b.x1 && n.x + n.w > b.x0 && n.y < b.y1 && n.y + n.h > b.y0);
+  };
+  let grupos: T[][] = ms.map((n) => [n]);
+  for (let unio = true; unio && grupos.length > 1;) {
+    unio = false;
+    for (let i = 0; i < grupos.length && !unio; i++) {
+      for (let j = i + 1; j < grupos.length && !unio; j++) {
+        const g = [...grupos[i]!, ...grupos[j]!];
+        if (libre(g)) { grupos = [...grupos.filter((_, k) => k !== i && k !== j), g]; unio = true; }
+      }
+    }
+  }
+  return grupos;
 }
 
 /** Aire y franja de título de los recuadros de grupo de contexto. */

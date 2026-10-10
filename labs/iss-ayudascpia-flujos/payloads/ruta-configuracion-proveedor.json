@@ -19,6 +19,10 @@
         "label": "ISS · TProviderController"
       },
       {
+        "id": "V-clases",
+        "label": "Controllers y modelos"
+      },
+      {
         "id": "P",
         "label": "PostgreSQL"
       },
@@ -64,7 +68,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             },
             {
@@ -83,7 +88,7 @@
         "id": "ctl",
         "label": "TProviderController",
         "kind": "class",
-        "lane": "V",
+        "lane": "V-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -107,7 +112,7 @@
         "id": "ctl-pojo",
         "label": "TProvider",
         "kind": "class",
-        "lane": "V",
+        "lane": "V-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -267,7 +272,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             }
           ]
@@ -289,7 +295,7 @@
         "id": "dueno-TSysValueController",
         "label": "TSysValueController",
         "kind": "class",
-        "lane": "V",
+        "lane": "V-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -305,7 +311,7 @@
         "id": "dueno-TSysValueController-pojo",
         "label": "TSysValue",
         "kind": "class",
-        "lane": "V",
+        "lane": "V-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {

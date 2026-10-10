@@ -19,6 +19,10 @@
         "label": "ISS · TCdnController"
       },
       {
+        "id": "K-clases",
+        "label": "Controllers y modelos"
+      },
+      {
         "id": "S",
         "label": "ISS · TSysValueController"
       },
@@ -64,7 +68,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             },
             {
@@ -83,7 +88,7 @@
         "id": "kcdn",
         "label": "TCdnController",
         "kind": "class",
-        "lane": "K",
+        "lane": "K-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -107,7 +112,7 @@
         "id": "kcdn-pojo",
         "label": "TCdnObject",
         "kind": "class",
-        "lane": "K",
+        "lane": "K-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {

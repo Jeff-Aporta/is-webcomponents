@@ -74,7 +74,7 @@ export function ruta(meta, componer) {
     componente(id, ref, lane, items) {
       if (!componentes.has(ref)) throw new Error(`componente ${ref} no está en componentes.json`);
       // Nombre, estereotipo e ítems desde componentes.json; los ítems propios de la ruta, si los hay, los pisan.
-      const component = { ...refComponente(ref), actions: [{ op: 'get', query: { name: true, stereotype: true, items: true, provides: true } }, ...(items ? [{ op: 'push', valor: { items } }] : [])] };
+      const component = { ...refComponente(ref), actions: [{ op: 'get', query: { name: true, stereotype: true, items: true, provides: true, icon: true } }, ...(items ? [{ op: 'push', valor: { items } }] : [])] };
       return n({ id, label: refComponente(ref, 'name'), kind: 'component', lane, component });
     },
     clase(id, ref, lane, fill) {
@@ -149,13 +149,25 @@ export function ruta(meta, componer) {
     edges.push({ from: nd.id, to: bar });
     console.warn(`[rutas] ${meta.slug}: ${nd.id} reparte a ${salen.length} procesos → barra ${bar}`);
   }
+  // Más de un controller: las clases (controllers y modelos) van en su propia columna, junto al
+  // carril del servicio. Así el contexto «Clases» es una región vertical y no abraza pasos del flujo.
+  let lanes = meta.lanes;
+  const clasesEn = nodes.filter((x) => x.kind === 'class');
+  const controllers = clasesEn.filter((x) => /Controller$/.test(x.label));
+  if (controllers.length > 1) {
+    const servicio = controllers[0].lane;
+    const id = `${servicio}-clases`;
+    const i = lanes.findIndex((l) => l.id === servicio);
+    lanes = [...lanes.slice(0, i + 1), { id, label: 'Controllers y modelos' }, ...lanes.slice(i + 1)];
+    for (const c of clasesEn) if (c.lane === servicio) c.lane = id;
+  }
   return {
     slug: `ruta-${meta.slug}`,
     module: meta.module,
     tag: 'iswc-flowchart',
     script: 'diagrams/flowchart.min.js',
     attrs: { 'diagram-style': 'insoft' },
-    payload: { title: meta.title, steps: 'auto', lanes: meta.lanes, nodes, edges },
+    payload: { title: meta.title, steps: 'auto', lanes, nodes, edges },
   };
 }
 

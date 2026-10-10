@@ -60,7 +60,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             }
           ]
@@ -168,7 +169,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             }
           ]

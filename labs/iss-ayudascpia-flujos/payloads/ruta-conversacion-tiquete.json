@@ -19,6 +19,10 @@
         "label": "ISS · TConversationTicketController"
       },
       {
+        "id": "T-clases",
+        "label": "Controllers y modelos"
+      },
+      {
         "id": "D",
         "label": "PostgreSQL"
       }
@@ -60,7 +64,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             },
             {
@@ -78,7 +83,7 @@
         "id": "ctl",
         "label": "TConversationTicketController",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -102,7 +107,7 @@
         "id": "ctl-pojo",
         "label": "TConversationTicket",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -272,7 +277,7 @@
         "id": "dueno-TConversacionController",
         "label": "TConversacionController",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -288,7 +293,7 @@
         "id": "dueno-TConversacionController-pojo",
         "label": "TConversacion",
         "kind": "class",
-        "lane": "T",
+        "lane": "T-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {

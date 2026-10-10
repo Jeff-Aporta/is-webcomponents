@@ -19,6 +19,10 @@
         "label": "ISS · TFileStorageController"
       },
       {
+        "id": "F-clases",
+        "label": "Controllers y modelos"
+      },
+      {
         "id": "P",
         "label": "PostgreSQL"
       },
@@ -64,7 +68,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             },
             {
@@ -82,7 +87,7 @@
         "id": "ctl",
         "label": "TFileStorageController",
         "kind": "class",
-        "lane": "F",
+        "lane": "F-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -106,7 +111,7 @@
         "id": "ctl-pojo",
         "label": "TFileStorage",
         "kind": "class",
-        "lane": "F",
+        "lane": "F-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -130,7 +135,7 @@
         "id": "alm",
         "label": "TGenAlmacenamientoController",
         "kind": "class",
-        "lane": "F",
+        "lane": "F-clases",
         "class": {
           "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
           "query": {
@@ -262,7 +267,8 @@
                 "name": true,
                 "stereotype": true,
                 "items": true,
-                "provides": true
+                "provides": true,
+                "icon": true
               }
             }
           ]

@@ -202,8 +202,17 @@ export function resolverEtiquetas(
       const h = lineas.length * ETIQUETA_LINE_H;
       // Sin sitio limpio: al menos no pisa otro texto (los textos son entidades; nunca se montan).
       const sinTexto = (c: EmbedBox): boolean => !ocupadas.some((o) => corta(c, o, 2));
+      // Salida corta (p. ej. del vértice de un rombo): encima del primer tramo, más allá del codo y
+      // hacia donde va la arista, para no quedar sobre el emisor.
+      const codo: Array<{ caja: EmbedBox; vertical: boolean }> = [];
+      if (pts.length >= 3 && pts[0]!.y === pts[1]!.y && pts[0]!.x !== pts[1]!.x) {
+        const dx = Math.sign(pts[1]!.x - pts[0]!.x);
+        const e1 = pts[1]!;
+        codo.push({ caja: { x: dx > 0 ? e1.x + 4 : e1.x - 4 - w, y: e1.y - h - 2, w, h }, vertical: false });
+      }
       const cands = [
         ...(preferida ? [preferida] : []),
+        ...codo,
         ...candidatas(pts, w, h, false).map((caja) => ({ caja, vertical: false })),
         ...candidatas(pts, ETIQUETA_LINE_H, w, true).map((caja) => ({ caja, vertical: true })),
       ];

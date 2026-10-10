@@ -180,6 +180,11 @@ export function consolidateHttpEndpoints(items: unknown[]): HttpEndpoint[] {
  * estereotipo y el ítem más ancho (badges de método + ruta), con 2U de aire.
  * Acotado a [120, 320] para que una ruta larga no desborde la franja.
  */
+/** Ancho que pide un componente suelto (nombre, estereotipo e ítems), en px. */
+export function anchoDeComponente(raw: Record<string, unknown>): number {
+  return fittedWidth({ name: String(raw.name ?? ''), stereotype: raw.stereotype ? String(raw.stereotype) : undefined, items: asList(raw.items ?? raw.endpoints ?? raw.body) } as Componente);
+}
+
 function fittedWidth(c: Componente): number {
   // El nombre va en negrita y comparte renglón con el ícono de componente: su palabra más larga
   // nunca se parte (si no cabe todo el nombre en un renglón, salta entre palabras).

@@ -66,6 +66,8 @@ import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./flowc
  * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
 
+/** Relleno de la bola del `-(O-`: el mismo del lollipop del diagrama de componentes (insoft). */
+const LOLLIPOP_FILL = '#7ACFF4';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Tokens de `animation` conocidos (otros se ignoran para no romper). */
@@ -763,7 +765,7 @@ class IswcFlowchart extends DiagramElementBase {
           const { palo, bola, socket } = SOCKET;
           const c = { x: tip.x - dir.x * (palo + bola), y: tip.y - dir.y * (palo + bola) };
           g.appendChild(svgEl('line', { x1: tip.x, y1: tip.y, x2: tip.x - dir.x * palo, y2: tip.y - dir.y * palo, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
-          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: '#FFFFFF', stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
+          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
           // Semicírculo abierto hacia el componente.
           const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
           const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };

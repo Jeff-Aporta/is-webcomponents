@@ -378,8 +378,10 @@ Deno.test('comentario: C2 con x/y fijados a mano manda esa posición', () => {
 });
 
 Deno.test('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) en sus posiciones finales', async () => {
-  const d = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-tiquete.json', import.meta.url));
-  const L = computeFlowchartLayout(resolveFlowchartSpec(d.payload)!, null, { style: 'insoft', embeds: { ctl: { w: 300, h: 110 }, pojo: { w: 230, h: 110 }, api: { w: 230, h: 80 } } });
+  // Ruta de un solo controller: sus clases comparten carril con los pasos y van en un grupo «Clases»
+  // (con más de un controller, las clases tienen su propia columna y no hace falta recuadro).
+  const d = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-borrado.json', import.meta.url));
+  const L = computeFlowchartLayout(resolveFlowchartSpec(d.payload)!, null, { style: 'insoft', embeds: { ctl: { w: 300, h: 110 }, 'ctl-pojo': { w: 230, h: 110 }, api: { w: 230, h: 80 } } });
   for (const g of L.contexts ?? []) {
     for (const id of g.members ?? []) {
       const n = byId(L).get(id)!;
@@ -613,6 +615,33 @@ Deno.test('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa 
     const j = await editable(new URL(f.name, dir));
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     malos.push(...crucesDeFlujo(L).map((m) => `${f.name}: ${m}`));
+  }
+  assertEquals(malos, []);
+});
+
+Deno.test('combinado: H2 los componentes de un mismo carril tienen un ancho homogéneo (el del más ancho)', async () => {
+  const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
+  const spec = resolveFlowchartSpec(j.payload)!;
+  const comps = spec.nodes.filter((n) => n.embed?.kind === 'component' && n.lane === 'O');
+  assert(comps.length >= 4, 'componentes de OpenAI en su carril');
+  const anchos = new Set(comps.map((n) => (n.embed!.component as { w?: number }).w));
+  assertEquals(anchos.size, 1, `anchos: ${[...anchos].join(' ')}`);
+  assert([...anchos][0]! > 0);
+});
+
+Deno.test('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un nodo que no es suyo', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const malos: string[] = [];
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = await editable(new URL(f.name, dir));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    for (const c of L.contexts ?? []) {
+      for (const n of L.nodes) {
+        if (c.members?.includes(n.id) || n.shape === 'comment') continue;
+        if (n.x < c.x + c.w && n.x + n.w > c.x && n.y < c.y + c.h && n.y + n.h > c.y) malos.push(`${f.name}: «${c.label}» abraza ${n.id}`);
+      }
+    }
   }
   assertEquals(malos, []);
 });
