@@ -233,28 +233,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "ctl-pojo",
-              "label": "TFileStorage",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TFileStorage]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ctl-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "C"
             }
           ]
         },
@@ -360,13 +345,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · INSERT"
+          "label": "HTTP POST /archivo"
         },
         {
           "from": "api",
@@ -377,7 +356,7 @@
           "from": "ctl",
           "to": "alm",
           "kind": "dashed",
-          "label": "klass · INSERT"
+          "label": "klass"
         },
         {
           "from": "ctl",
@@ -433,12 +412,6 @@
         },
         {
           "from": "reg",
-          "to": "tfile",
-          "kind": "dashed",
-          "label": "INSERT"
-        },
-        {
-          "from": "reg",
           "to": "ok"
         },
         {
@@ -449,6 +422,17 @@
           "from": "fin",
           "to": "api",
           "label": "respuesta"
+        },
+        {
+          "from": "reg",
+          "to": "ctl-C",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "ctl-C",
+          "to": "tfile",
+          "kind": "dashed"
         }
       ]
     }

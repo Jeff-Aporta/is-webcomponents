@@ -206,6 +206,13 @@
               }
             },
             {
+              "id": "ctl-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "R"
+            },
+            {
               "id": "dueno-TSysValueController",
               "label": "TSysValueController",
               "kind": "class",
@@ -219,43 +226,20 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "ctl-pojo",
-              "label": "TProvider",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TProvider]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "dueno-TSysValueController-pojo",
-              "label": "TSysValue",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TSysValue]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TSysValueController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TSysValueController",
+              "op": "R"
+            },
+            {
+              "id": "dueno-TSysValueController-U",
+              "label": "actualizar()",
+              "shape": "bridge",
+              "of": "dueno-TSysValueController",
+              "op": "U"
             }
           ]
         },
@@ -357,13 +341,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "HTTP GET · PUT /proveedor/{iproveedor}"
         },
         {
           "from": "api",
@@ -388,24 +366,6 @@
           "from": "d1",
           "to": "cfg",
           "label": "…/cfg"
-        },
-        {
-          "from": "get",
-          "to": "tprov",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
-          "from": "put",
-          "to": "tprov",
-          "kind": "dashed",
-          "label": "UPSERT"
-        },
-        {
-          "from": "cfg",
-          "to": "dueno-TSysValueController",
-          "kind": "dashed",
-          "label": "SELECT · UPDATE"
         },
         {
           "from": "cfg",
@@ -435,16 +395,43 @@
           "label": "respuesta"
         },
         {
-          "from": "dueno-TSysValueController",
-          "to": "dueno-TSysValueController-pojo",
+          "from": "get",
+          "to": "ctl-R",
           "kind": "dashed",
-          "label": "klass · SELECT, UPDATE"
+          "label": "SELECT"
         },
         {
-          "from": "dueno-TSysValueController",
-          "to": "tsys",
+          "from": "ctl-R",
+          "to": "tprov",
+          "kind": "dashed"
+        },
+        {
+          "from": "put",
+          "to": "ctl-R",
           "kind": "dashed",
-          "label": "SELECT · UPDATE"
+          "label": "SELECT UPSERT"
+        },
+        {
+          "from": "cfg",
+          "to": "dueno-TSysValueController-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "dueno-TSysValueController-R",
+          "to": "tsys",
+          "kind": "dashed"
+        },
+        {
+          "from": "cfg",
+          "to": "dueno-TSysValueController-U",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "dueno-TSysValueController-U",
+          "to": "tsys",
+          "kind": "dashed"
         }
       ]
     }

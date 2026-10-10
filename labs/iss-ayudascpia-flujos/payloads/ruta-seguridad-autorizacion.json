@@ -176,43 +176,6 @@
           ]
         },
         {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "base",
-              "label": "TBasePatyIA",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TBasePatyIA]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "perm-pojo",
-              "label": "TPermissionsObject",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TPermissionsObject]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
           "id": "P",
           "label": "PostgreSQL · seg_*",
           "tipo": "tablas",
@@ -368,28 +331,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "perm",
-          "to": "perm-pojo",
-          "kind": "dashed",
-          "label": "klass"
-        },
-        {
-          "from": "api",
-          "to": "base",
-          "label": "petición (con o sin Authorization)"
-        },
-        {
-          "from": "base",
-          "to": "perm",
-          "kind": "dashed",
-          "label": "klass"
-        },
-        {
-          "from": "base",
-          "to": "id"
+          "label": "HTTP"
         },
         {
           "from": "id",

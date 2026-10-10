@@ -320,21 +320,18 @@
               "shape": "vars",
               "vars": [
                 {
-                  "name": "openai",
-                  "alias": "ai",
+                  "name": "openaiCfg",
                   "value": "TSysValueController.getOpenaiCfg()",
                   "desc": "cliente del proveedor; null si está degradado"
                 },
                 {
-                  "name": "runtime.conversationModel",
-                  "alias": "mc",
-                  "value": "TConversacionController.runtimeOpenai()",
+                  "name": "convModel",
+                  "value": "TConversacionController.runtimeOpenai().conversationModel",
                   "desc": "modelo de la respuesta"
                 },
                 {
-                  "name": "runtime.operativeModel",
-                  "alias": "mo",
-                  "value": "TConversacionController.runtimeOpenai()",
+                  "name": "opModel",
+                  "value": "TConversacionController.runtimeOpenai().operativeModel",
                   "desc": "clasificar y titular"
                 }
               ]
@@ -346,7 +343,7 @@
             },
             {
               "id": "voz",
-              "label": "Transcribe cada nota con {{ai}} y valida el texto",
+              "label": "Transcribe cada nota con {{openaiCfg}} y valida el texto",
               "icon": "mdi:microphone-outline"
             },
             {
@@ -356,7 +353,7 @@
             },
             {
               "id": "clasif",
-              "label": "Clasifica la consulta con {{mo}} (tdconsulta) y elige vector stores",
+              "label": "Clasifica la consulta con {{opModel}} (tdconsulta) y elige vector stores",
               "icon": "mdi:tag-search-outline"
             },
             {
@@ -371,7 +368,7 @@
             },
             {
               "id": "resp",
-              "label": "Responses API en stream con {{mc}}, instrucciones y file_search",
+              "label": "Responses API en stream con {{convModel}}, instrucciones y file_search",
               "icon": "mdi:robot-outline"
             },
             {
@@ -397,8 +394,8 @@
               "vars": [
                 {
                   "name": "N",
-                  "value": "conversacion.recalcularTituloCadaMensajesUsuario",
-                  "desc": "sys value"
+                  "value": "TSysValueController.valor(\"conversacion\").recalcularTituloCadaMensajesUsuario",
+                  "desc": "cada cuántos mensajes se retitula"
                 }
               ]
             },
@@ -409,7 +406,7 @@
             },
             {
               "id": "titulo",
-              "label": "Regenera el título con {{mo}} (operativo 9999.1)",
+              "label": "Regenera el título con {{opModel}} (operativo 9999.1)",
               "icon": "mdi:format-title"
             },
             {
@@ -461,6 +458,20 @@
               }
             },
             {
+              "id": "ctl-U",
+              "label": "actualizar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "U"
+            },
+            {
+              "id": "ctl-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "C"
+            },
+            {
               "id": "dueno-TProviderController",
               "label": "TProviderController",
               "kind": "class",
@@ -474,6 +485,13 @@
                   }
                 }
               }
+            },
+            {
+              "id": "dueno-TProviderController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TProviderController",
+              "op": "R"
             },
             {
               "id": "dueno-TSysValueController",
@@ -491,6 +509,13 @@
               }
             },
             {
+              "id": "dueno-TSysValueController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TSysValueController",
+              "op": "R"
+            },
+            {
               "id": "dueno-TConsultaController",
               "label": "TConsultaController",
               "kind": "class",
@@ -506,6 +531,13 @@
               }
             },
             {
+              "id": "dueno-TConsultaController-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "dueno-TConsultaController",
+              "op": "C"
+            },
+            {
               "id": "dueno-TConversationLogController",
               "label": "TConversationLogController",
               "kind": "class",
@@ -519,88 +551,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "ctl-pojo",
-              "label": "TConversacion",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversacion]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "dueno-TProviderController-pojo",
-              "label": "TProvider",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TProvider]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "dueno-TSysValueController-pojo",
-              "label": "TSysValue",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TSysValue]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "dueno-TConsultaController-pojo",
-              "label": "TConsulta",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConsulta]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "dueno-TConversationLogController-pojo",
-              "label": "TConversationLog",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversationLog]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TConversationLogController-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "dueno-TConversationLogController",
+              "op": "C"
             }
           ]
         },
@@ -835,13 +792,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · UPDATE, INSERT"
+          "label": "HTTP POST /conversacion"
         },
         {
           "from": "api",
@@ -868,18 +819,6 @@
         },
         {
           "from": "sigue",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "UPDATE"
-        },
-        {
-          "from": "nueva",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "INSERT"
-        },
-        {
-          "from": "sigue",
           "to": "begin"
         },
         {
@@ -893,18 +832,6 @@
         {
           "from": "cfg",
           "to": "dvoz"
-        },
-        {
-          "from": "cfg",
-          "to": "dueno-TProviderController",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
-          "from": "cfg",
-          "to": "dueno-TSysValueController",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "dvoz",
@@ -964,12 +891,6 @@
         },
         {
           "from": "hilo",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "UPDATE"
-        },
-        {
-          "from": "hilo",
           "to": "resp"
         },
         {
@@ -995,12 +916,6 @@
           "from": "dok",
           "to": "hist",
           "label": "no"
-        },
-        {
-          "from": "vn",
-          "to": "dueno-TSysValueController",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "vn",
@@ -1034,19 +949,7 @@
         },
         {
           "from": "consultas",
-          "to": "dueno-TConsultaController",
-          "kind": "dashed",
-          "label": "INSERT"
-        },
-        {
-          "from": "consultas",
           "to": "hist"
-        },
-        {
-          "from": "hist",
-          "to": "dueno-TConversationLogController",
-          "kind": "dashed",
-          "label": "INSERT"
         },
         {
           "from": "hist",
@@ -1061,63 +964,93 @@
           "to": "fin"
         },
         {
-          "from": "cuenta",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "UPDATE"
-        },
-        {
           "from": "fin",
           "to": "api",
           "label": "respuesta (stream)"
         },
         {
-          "from": "dueno-TProviderController",
-          "to": "dueno-TProviderController-pojo",
+          "from": "sigue",
+          "to": "ctl-U",
           "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "UPDATE"
         },
         {
-          "from": "dueno-TProviderController",
+          "from": "ctl-U",
+          "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "nueva",
+          "to": "ctl-C",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "ctl-C",
+          "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "cfg",
+          "to": "dueno-TProviderController-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "dueno-TProviderController-R",
           "to": "tprov",
+          "kind": "dashed"
+        },
+        {
+          "from": "cfg",
+          "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
-          "from": "dueno-TSysValueController",
-          "to": "dueno-TSysValueController-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
-        },
-        {
-          "from": "dueno-TSysValueController",
+          "from": "dueno-TSysValueController-R",
           "to": "tsys",
+          "kind": "dashed"
+        },
+        {
+          "from": "hilo",
+          "to": "ctl-U",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "vn",
+          "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
-          "from": "dueno-TConsultaController",
-          "to": "dueno-TConsultaController-pojo",
+          "from": "consultas",
+          "to": "dueno-TConsultaController-C",
           "kind": "dashed",
-          "label": "klass · INSERT"
+          "label": "INSERT"
         },
         {
-          "from": "dueno-TConsultaController",
+          "from": "dueno-TConsultaController-C",
           "to": "tqry",
+          "kind": "dashed"
+        },
+        {
+          "from": "hist",
+          "to": "dueno-TConversationLogController-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
-          "from": "dueno-TConversationLogController",
-          "to": "dueno-TConversationLogController-pojo",
-          "kind": "dashed",
-          "label": "klass · INSERT"
-        },
-        {
-          "from": "dueno-TConversationLogController",
+          "from": "dueno-TConversationLogController-C",
           "to": "tlog",
+          "kind": "dashed"
+        },
+        {
+          "from": "cuenta",
+          "to": "ctl-U",
           "kind": "dashed",
-          "label": "INSERT"
+          "label": "UPDATE"
         }
       ]
     }

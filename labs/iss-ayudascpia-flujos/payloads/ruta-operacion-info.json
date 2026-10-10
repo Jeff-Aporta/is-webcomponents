@@ -188,6 +188,13 @@
               }
             },
             {
+              "id": "dueno-TErrorController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TErrorController",
+              "op": "R"
+            },
+            {
               "id": "dueno-TSysValueController",
               "label": "TSysValueController",
               "kind": "class",
@@ -201,58 +208,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "ctl-pojo",
-              "label": "TInfoObject",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TInfoObject]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "dueno-TErrorController-pojo",
-              "label": "TError_",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TError_]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "dueno-TSysValueController-pojo",
-              "label": "TSysValue",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TSysValue]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TSysValueController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TSysValueController",
+              "op": "R"
             }
           ]
         },
@@ -361,13 +323,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass"
+          "label": "HTTP GET /info"
         },
         {
           "from": "api",
@@ -411,18 +367,6 @@
           "to": "join"
         },
         {
-          "from": "err",
-          "to": "dueno-TErrorController",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
-          "from": "pat",
-          "to": "dueno-TSysValueController",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
           "from": "join",
           "to": "ok"
         },
@@ -436,28 +380,26 @@
           "label": "respuesta"
         },
         {
-          "from": "dueno-TErrorController",
-          "to": "dueno-TErrorController-pojo",
+          "from": "err",
+          "to": "dueno-TErrorController-R",
           "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "SELECT"
         },
         {
-          "from": "dueno-TErrorController",
+          "from": "dueno-TErrorController-R",
           "to": "terr",
+          "kind": "dashed"
+        },
+        {
+          "from": "pat",
+          "to": "dueno-TSysValueController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
-          "from": "dueno-TSysValueController",
-          "to": "dueno-TSysValueController-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
-        },
-        {
-          "from": "dueno-TSysValueController",
+          "from": "dueno-TSysValueController-R",
           "to": "tsys",
-          "kind": "dashed",
-          "label": "SELECT"
+          "kind": "dashed"
         }
       ]
     }

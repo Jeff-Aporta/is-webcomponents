@@ -161,28 +161,20 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "ctl-pojo",
-              "label": "TSysValue",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TSysValue]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ctl-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "R"
+            },
+            {
+              "id": "ctl-U",
+              "label": "actualizar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "U"
             }
           ]
         },
@@ -244,13 +236,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT, UPDATE"
+          "label": "HTTP GET · PUT /sistema/cfg"
         },
         {
           "from": "api",
@@ -276,20 +262,8 @@
           "label": "PUT"
         },
         {
-          "from": "lee",
-          "to": "tsys",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
           "from": "push",
           "to": "guarda"
-        },
-        {
-          "from": "guarda",
-          "to": "tsys",
-          "kind": "dashed",
-          "label": "UPDATE"
         },
         {
           "from": "lee",
@@ -307,6 +281,28 @@
           "from": "fin",
           "to": "api",
           "label": "respuesta"
+        },
+        {
+          "from": "lee",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "ctl-R",
+          "to": "tsys",
+          "kind": "dashed"
+        },
+        {
+          "from": "guarda",
+          "to": "ctl-U",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "ctl-U",
+          "to": "tsys",
+          "kind": "dashed"
         }
       ]
     }

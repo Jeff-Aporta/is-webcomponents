@@ -168,6 +168,20 @@
               }
             },
             {
+              "id": "ctl-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "R"
+            },
+            {
+              "id": "ctl-U",
+              "label": "actualizar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "U"
+            },
+            {
               "id": "dueno-TQualifiedMessageController",
               "label": "TQualifiedMessageController",
               "kind": "class",
@@ -181,6 +195,13 @@
                   }
                 }
               }
+            },
+            {
+              "id": "dueno-TQualifiedMessageController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TQualifiedMessageController",
+              "op": "R"
             },
             {
               "id": "dueno-TConversationTicketController",
@@ -198,6 +219,13 @@
               }
             },
             {
+              "id": "dueno-TConversationTicketController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TConversationTicketController",
+              "op": "R"
+            },
+            {
               "id": "dueno-TConversationLogController",
               "label": "TConversationLogController",
               "kind": "class",
@@ -211,73 +239,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "ctl-pojo",
-              "label": "TConversacion",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversacion]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "dueno-TQualifiedMessageController-pojo",
-              "label": "TQualifiedMessage",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TQualifiedMessage]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "dueno-TConversationTicketController-pojo",
-              "label": "TConversationTicket",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversationTicket]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "id": "dueno-TConversationLogController-pojo",
-              "label": "TConversationLog",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversationLog]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TConversationLogController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TConversationLogController",
+              "op": "R"
             }
           ]
         },
@@ -466,13 +434,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT, UPDATE"
+          "label": "HTTP GET /conversacion/{iconversacion}"
         },
         {
           "from": "api",
@@ -486,12 +448,6 @@
         {
           "from": "lee",
           "to": "d1"
-        },
-        {
-          "from": "lee",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "d1",
@@ -515,31 +471,7 @@
         },
         {
           "from": "cierra",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "UPDATE"
-        },
-        {
-          "from": "cierra",
           "to": "det"
-        },
-        {
-          "from": "ctl",
-          "to": "dueno-TQualifiedMessageController",
-          "kind": "dashed",
-          "label": "detalle MENSAJESCALIFICADOS (iconversacion) · SELECT"
-        },
-        {
-          "from": "ctl",
-          "to": "dueno-TConversationTicketController",
-          "kind": "dashed",
-          "label": "detalle TIQUETES (iconversacion) · SELECT"
-        },
-        {
-          "from": "log",
-          "to": "dueno-TConversationLogController",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "e401",
@@ -559,64 +491,79 @@
           "label": "respuesta"
         },
         {
-          "from": "dueno-TQualifiedMessageController",
-          "to": "dueno-TQualifiedMessageController-pojo",
+          "from": "lee",
+          "to": "ctl-R",
           "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "SELECT"
         },
         {
-          "from": "dueno-TQualifiedMessageController",
+          "from": "ctl-R",
+          "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "cierra",
+          "to": "ctl-U",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "ctl-U",
+          "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "det",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "ctl-R",
+          "to": "dueno-TQualifiedMessageController-R",
+          "kind": "dashed",
+          "label": "detalle MENSAJESCALIFICADOS"
+        },
+        {
+          "from": "dueno-TQualifiedMessageController-R",
           "to": "tmsg",
-          "kind": "dashed",
-          "label": "SELECT"
+          "kind": "dashed"
         },
         {
-          "from": "dueno-TConversationTicketController",
-          "to": "dueno-TConversationTicketController-pojo",
+          "from": "ctl-R",
+          "to": "dueno-TConversationTicketController-R",
           "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "detalle TIQUETES"
         },
         {
-          "from": "dueno-TConversationTicketController",
+          "from": "dueno-TConversationTicketController-R",
           "to": "ttiq",
+          "kind": "dashed"
+        },
+        {
+          "from": "log",
+          "to": "dueno-TConversationLogController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
-          "from": "dueno-TConversationLogController",
-          "to": "dueno-TConversationLogController-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
-        },
-        {
-          "from": "dueno-TConversationLogController",
+          "from": "dueno-TConversationLogController-R",
           "to": "tlog",
-          "kind": "dashed",
-          "label": "SELECT"
+          "kind": "dashed"
         },
         {
           "from": "tconv",
           "to": "tmsg",
           "kind": "dashed",
-          "label": "detalle MENSAJESCALIFICADOS (iconversacion)"
+          "label": "detalle MENSAJESCALIFICADOS",
+          "labelVertical": true
         },
         {
           "from": "tconv",
           "to": "ttiq",
           "kind": "dashed",
-          "label": "detalle TIQUETES (iconversacion)"
-        },
-        {
-          "from": "ctl-pojo",
-          "to": "dueno-TQualifiedMessageController-pojo",
-          "kind": "dashed",
-          "label": "detalle MENSAJESCALIFICADOS · SELECT"
-        },
-        {
-          "from": "ctl-pojo",
-          "to": "dueno-TConversationTicketController-pojo",
-          "kind": "dashed",
-          "label": "detalle TIQUETES · SELECT"
+          "label": "detalle TIQUETES",
+          "labelVertical": true
         }
       ]
     }

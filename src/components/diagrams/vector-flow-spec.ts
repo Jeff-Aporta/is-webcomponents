@@ -16,7 +16,7 @@ export const ACEPTA_POR_TIPO: Record<TTipoColumna, readonly TTipoVector[]> = {
   clientes: ['cliente', 'nota'],
   componentes: ['componente', 'fin', 'inicio', 'nota'],
   flujo: ['paso', 'decision', 'variables', 'barra', 'nota', 'anidado', 'inicio', 'fin'],
-  controllers: ['controller', 'nota'],
+  controllers: ['controller', 'puente', 'nota'],
   modelos: ['pojo', 'nota'],
   tablas: ['tabla', 'nota'],
   custom: [],
@@ -36,6 +36,7 @@ export function tipoVector(n: TNodoVector): TTipoVector {
   }
   switch (String(n.shape ?? '')) {
     case 'diamond': return 'decision';
+    case 'bridge': return 'puente';
     case 'vars': return 'variables';
     case 'bar': return 'barra';
     case 'start': return 'inicio';
@@ -92,5 +93,6 @@ export function vectorAFlujo(entrada: unknown): Record<string, unknown> {
     }
   }
   const { columns: _c, edges: _e, ...meta } = v;
-  return { ...meta, lanes: v.columns.map((c) => ({ id: c.id, label: c.label, ...(c.align ? { align: c.align } : {}) })), nodes, edges };
+  // Las columnas de entidades se apilan (aprovechan el alto); la del flujo sigue sus capas.
+  return { ...meta, lanes: v.columns.map((c) => ({ id: c.id, label: c.label, ...(c.align ? { align: c.align } : {}), ...(c.tipo !== 'flujo' ? { stack: true } : {}) })), nodes, edges };
 }

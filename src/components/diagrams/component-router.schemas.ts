@@ -169,6 +169,12 @@ export type RoutingCosts = z.infer<typeof RoutingCostsSchema>;
 export type RoutingCostsInput = { [K in keyof RoutingCosts]?: Partial<RoutingCosts[K]> };
 
 export const RouterOptsSchema = z.object({
+  /**
+   * Fecha límite (ms epoch): pasada, no se empiezan más iteraciones ni pasadas de unión, y las
+   * aristas aún sin rutear vuelven sin camino (el llamador conserva la ruta que tenía). Acota el
+   * tiempo en el navegador.
+   */
+  deadline: z.number().optional(),
   step: z.number().optional(),
   /** Distancia mínima arista↔entidad / conector / prohibido. */
   clearance: z.number().optional(),

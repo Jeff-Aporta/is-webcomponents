@@ -1,12 +1,13 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, columnasVars } from './flowchart-spec.js';
+import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, PUENTE, centroPuente } from './flowchart-spec.js';
 import type { FlowLayoutOptions, FlowPaint } from './flowchart-spec.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { pickThemeMode, themeToDiagramTheme, injectThemeCss } from './theme.js';
 import type { ErThemeJson } from './theme.schemas.js';
 import { cargarFuente } from '../_shared/diagram-text-wrap.js';
-import { pathEndDirection } from '../_shared/diagram-arrow.js';
+import { pathEndDirection, pathPoints } from '../_shared/diagram-arrow.js';
+import { tokenizeCode } from '../_shared/code-highlight.js';
 import { captureEmbeddedDiagram, embedSvgElement, resolveEmbedDiagram } from '../_shared/diagram-embed.js';
 import type { EmbedCapture, EmbedSize } from '../_shared/diagram-embed.schemas.js';
 import type {
@@ -65,6 +66,16 @@ import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./flowc
  * Propiedades: payload, spec, layout, turtle, hiddenGroups, animation
  * Eventos: iswc-render, iswc-turtle-state, iswc-open-viewer, iswc-toggle-group
  */
+
+/** Colores de VS Code (tema claro) por tipo de token del motor de <iswc-code>. */
+const COLOR_CODIGO: Record<string, string> = {
+  keyword: '#0000FF', function: '#795E26', property: '#001080', variable: '#001080', type: '#267F99',
+  builtin: '#267F99', string: '#A31515', number: '#098658', comment: '#008000', atom: '#0000FF',
+  operator: '#000000', punctuation: '#000000', plain: '#000000', meta: '#000000', tag: '#800000', attribute: '#E50000',
+};
+
+/** Layouts ya calculados por firma de su entrada (ver render). */
+const LAYOUTS = new Map<string, FlowLayout>();
 
 /** Relleno de la bola del `-(O-`: el mismo del lollipop del diagrama de componentes (insoft). */
 const LOLLIPOP_FILL = '#7ACFF4';
@@ -285,6 +296,8 @@ class IswcFlowchart extends DiagramElementBase {
     this.#visibleSpec = visible;
     this.syncThemeAttr();
 
+    // Medidas nuevas en cada render (la fuente pudo cargar entre renders).
+    this.#medidas.clear();
     const opts: FlowLayoutOptions = { embeds: this.#embedSizes(visible) };
     if (this.#paint) {
       const paint = this.#paint;
@@ -292,7 +305,18 @@ class IswcFlowchart extends DiagramElementBase {
       opts.fontSize = paint.fontSize;
       opts.measure = (t: string) => this.#measure(t, paint);
     }
-    const layout: FlowLayout = computeFlowchartLayout(visible, this.#overrides, opts);
+    // El layout es costoso (ruteo) y el elemento re-pinta varias veces con la misma entrada (fuente,
+    // tamaño, captura de incrustados): se memoriza por la firma exacta de la entrada. La medida de un
+    // texto de muestra entra en la firma: si la fuente cambia, se re-maqueta.
+    const muestra = opts.measure ? opts.measure('Hg Ññ 0123456789 abcdefghijklmnopqrstuvwxyz') : 0;
+    const firma = JSON.stringify([visible, this.#overrides, opts.embeds, opts.style, opts.fontSize, muestra]);
+    let layout: FlowLayout | undefined = LAYOUTS.get(firma);
+    if (!layout) {
+      layout = computeFlowchartLayout(visible, this.#overrides, opts);
+      LAYOUTS.set(firma, layout);
+      if (LAYOUTS.size > 8) LAYOUTS.delete(LAYOUTS.keys().next().value!);
+    }
+    layout = structuredClone(layout);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     if (styleTheme) {
@@ -340,7 +364,19 @@ class IswcFlowchart extends DiagramElementBase {
   }
 
   /** Ancho real del texto con la tipografía del tema (fuera de pantalla). */
+  /** Medidas ya tomadas en este render (texto + fuente → ancho): medir en el DOM fuerza un reflow. */
+  #medidas = new Map<string, number>();
+
   #measure(text: string, paint: FlowPaint): number {
+    const clave = `${paint.font}|${paint.fontSize}|${paint.fontWeight}|${text}`;
+    const previa = this.#medidas.get(clave);
+    if (previa != null) return previa;
+    const w = this.#medirEnDom(text, paint);
+    this.#medidas.set(clave, w);
+    return w;
+  }
+
+  #medirEnDom(text: string, paint: FlowPaint): number {
     if (!this.#probe?.isConnected) {
       const svg = svgEl('svg', { width: 10, height: 10 });
       const t = svgEl('text', { x: 0, y: 10 });
@@ -769,19 +805,73 @@ class IswcFlowchart extends DiagramElementBase {
       const bx = tip.x - dir.x * len;
       const by = tip.y - dir.y * len;
       const clave = `${tip.x},${tip.y}`;
-      if (e.socket) {
-        // Conector UML `-(O-`: el componente expone su interfaz (palo + bola desde su borde) y quien
-        // llega la toma con el socket `(` al final de su riel. Uno por punta (el abanico converge ahí).
+      if (e.puente === 'salida') {
+        // Salida de un puente `-(O=`: la flecha va cerca del O (a ~20 px), apuntando hacia afuera; sin
+        // punta en el destino.
+        const ps = pathPoints(e.path);
+        const a0 = ps[0]!;
+        const a1 = ps[1] ?? a0;
+        const largo = Math.hypot(a1.x - a0.x, a1.y - a0.y) || 1;
+        const d0 = { x: (a1.x - a0.x) / largo, y: (a1.y - a0.y) / largo };
+        const t = Math.min(PUENTE.flechaSalida, largo - 2);
+        const p = { x: a0.x + d0.x * t, y: a0.y + d0.y * t };
+        const bx0 = p.x - d0.x * len;
+        const by0 = p.y - d0.y * len;
+        // Triángulo sólido (las flechas de los puentes son de llegada/salida, no de lectura).
+        g.appendChild(svgEl('polygon', {
+          points: `${bx0 - d0.y * half},${by0 + d0.x * half} ${p.x},${p.y} ${bx0 + d0.y * half},${by0 - d0.x * half}`,
+          fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head flow-edge__head--salida',
+        }));
+      }
+      if (e.puente === 'salida' && e.socket) {
+        // La salida de un puente que llega a una tabla: el `-(O-` de la tabla y su punta de llegada.
+        const { palo, bola, socket } = SOCKET;
+        const c = { x: tip.x - dir.x * (palo + socket), y: tip.y - dir.y * (palo + socket) };
         if (!puntas.has(clave)) {
-          const { palo, bola, socket } = SOCKET;
-          const c = { x: tip.x - dir.x * (palo + bola), y: tip.y - dir.y * (palo + bola) };
           g.appendChild(svgEl('line', { x1: tip.x, y1: tip.y, x2: tip.x - dir.x * palo, y2: tip.y - dir.y * palo, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
-          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
-          // Semicírculo abierto hacia el componente.
           const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
           const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };
-          g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 1 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
+          g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 0 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
+          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
         }
+        const p2 = { x: c.x - dir.x * bola, y: c.y - dir.y * bola };
+        const qx = p2.x - dir.x * len;
+        const qy = p2.y - dir.y * len;
+        g.appendChild(svgEl('polygon', {
+          points: `${qx - dir.y * half},${qy + dir.x * half} ${p2.x},${p2.y} ${qx + dir.y * half},${qy - dir.x * half}`,
+          fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head',
+        }));
+        puntas.add(clave);
+      }
+      if (e.puente === 'salida') {
+        // (ya pintada arriba)
+      } else if (e.puente === 'entrada') {
+        // Entrada a un puente `-(O=`: triángulo sólido tocando el O.
+        g.appendChild(svgEl('polygon', {
+          points: `${bx - dir.y * half},${by + dir.x * half} ${tip.x},${tip.y} ${bx + dir.y * half},${by - dir.x * half}`,
+          fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head flow-edge__head--entrada',
+        }));
+      } else if (e.socket) {
+        // Conector `-(O-` (convención InSoft): el componente expone el socket `(` con su palo y quien
+        // consume llega a la bola O con su punta de flecha. Un socket por punta (el abanico converge).
+        const { palo, bola, socket } = SOCKET;
+        const c = { x: tip.x - dir.x * (palo + socket), y: tip.y - dir.y * (palo + socket) };
+        if (!puntas.has(clave)) {
+          g.appendChild(svgEl('line', { x1: tip.x, y1: tip.y, x2: tip.x - dir.x * palo, y2: tip.y - dir.y * palo, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
+          // Arco del lado del componente (abre hacia quien consume).
+          const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
+          const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };
+          g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 0 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
+          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
+        }
+        // Punta de llegada tocando la bola.
+        const p = { x: c.x - dir.x * bola, y: c.y - dir.y * bola };
+        const qx = p.x - dir.x * len;
+        const qy = p.y - dir.y * len;
+        g.appendChild(svgEl('polyline', {
+          points: `${qx - dir.y * half},${qy + dir.x * half} ${p.x},${p.y} ${qx + dir.y * half},${qy - dir.x * half}`,
+          fill: 'none', stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', 'stroke-linecap': 'butt', class: 'flow-edge__head',
+        }));
         puntas.add(clave);
       } else if (!puntas.has(clave)) g.appendChild(svgEl('polyline', {
         points: `${bx - dir.y * half},${by + dir.x * half} ${tip.x},${tip.y} ${bx + dir.y * half},${by - dir.x * half}`,
@@ -901,6 +991,22 @@ class IswcFlowchart extends DiagramElementBase {
       } else if (n.shape === 'diamond') {
         box = svgEl('path', { d: shapePath('diamond', n.x, n.y, n.w, n.h), fill: pinta(paint.decisionFill), 'stroke-linejoin': 'miter', ...stroke });
         g.appendChild(box);
+      } else if (n.shape === 'bridge' && n.bridge) {
+        // Puente `-(O=`: palo hasta el controller, socket `(` en la mitad de arriba, bola con la letra
+        // CRUD y, al lado, el ícono de BD y el nombre de la acción. Las aristas llegan y salen abajo.
+        const c = centroPuente(n);
+        const S = PUENTE.socket;
+        const tinta = paint.actionBorder;
+        box = svgEl('rect', { x: n.x, y: n.y, width: n.w, height: n.h, fill: 'none', stroke: 'none', class: 'flow-node__box' });
+        g.appendChild(box);
+        g.appendChild(svgEl('line', { x1: c.x, y1: n.y, x2: c.x, y2: c.y - S, stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__palo' }));
+        g.appendChild(svgEl('path', { d: `M${c.x - S},${c.y} A${S},${S} 0 0 1 ${c.x + S},${c.y}`, fill: 'none', stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__socket' }));
+        g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: PUENTE.bola, fill: LOLLIPOP_FILL, stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__bola' }));
+        const letra = svgEl('text', { x: c.x, y: c.y, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 11, 'font-weight': 700, 'font-family': paint.font, fill: tinta, class: 'flow-bridge__op' });
+        letra.textContent = n.bridge.op;
+        g.appendChild(letra);
+        const iconoOp = { C: 'mdi:database-plus-outline', R: 'mdi:database-search-outline', U: 'mdi:database-edit-outline', D: 'mdi:database-remove-outline' }[n.bridge.op];
+        g.appendChild(svgIconGroup(iconoOp, { x: c.x + S + 4, y: c.y - PUENTE.icono / 2, size: PUENTE.icono, color: tinta }));
       } else if (n.shape === 'vars') {
         // Declaración de variables (config que se lee y se usa más adelante): fondo blanco, esquina en
         // diagonal con su pliegue; la insignia lleva el ícono de variable.
@@ -916,32 +1022,47 @@ class IswcFlowchart extends DiagramElementBase {
         box = svgEl('path', { d: shapePath(n.shape, n.x, n.y, n.w, n.h), fill: pinta(paint.actionFill), 'stroke-linejoin': 'round', ...stroke });
         g.appendChild(box);
       }
-      if (n.shape === 'vars' && n.vars?.length && n.varsCols && n.varsBox) {
-        // Tabla de declaración: nombre (negrita) · alias (píldora punteada) · valor · desc (tenue).
-        const columnas = columnasVars(n.vars);
+      if (n.shape === 'bridge' && n.lines?.length && n.textBox) {
+        g.appendChild(insoftText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize - 0.5, fontWeight: 600 }, 'start'));
+      } else if (n.shape === 'vars' && n.vars?.length && n.varsCols && n.varsBox) {
+        // Tabla de declaración: título, encabezados y filas Variable · Valor (código, colores de VS
+        // Code claro) · Descripción.
         if (n.lines?.length && n.textBox) g.appendChild(insoftText(n.lines, n.textBox, { text: paint.actionText, muted: paint.muted, font: paint.font, fontSize: paint.fontSize, fontWeight: 700 }, 'start'));
         const { x, y, w } = n.varsBox;
+        const cols = n.varsCols;
+        const conDesc = cols.length > 2;
+        const mono = 'Consolas,Menlo,monospace';
+        g.appendChild(svgEl('rect', { x, y, width: w, height: VARS.fila, fill: '#F1F5F9', class: 'flow-vars__head' }));
+        let hx = x;
+        ['Variable', 'Valor', ...(conDesc ? ['Descripción'] : [])].forEach((t, c) => {
+          const th = svgEl('text', { x: hx + VARS.celda, y: y + VARS.fila / 2, 'dominant-baseline': 'central', 'font-size': paint.fontSize - 1, 'font-weight': 700, 'font-family': paint.font, fill: paint.muted });
+          th.textContent = t;
+          g.appendChild(th);
+          hx += cols[c]!;
+        });
+        let fy = y + VARS.fila;
         n.vars.forEach((v, i) => {
-          const fy = y + i * VARS.fila;
+          const alto = n.varsFilas?.[i] ?? VARS.fila;
           g.appendChild(svgEl('line', { x1: x, y1: fy, x2: x + w, y2: fy, stroke: paint.muted, 'stroke-opacity': 0.35, 'stroke-width': 1 }));
-          let cx = x;
-          columnas.forEach((col, c) => {
-            const texto = v[col] ?? '';
-            const desc = col === 'desc';
-            const t = svgEl('text', {
-              x: cx + VARS.celda, y: fy + VARS.fila / 2, 'dominant-baseline': 'central', 'font-size': paint.fontSize - 0.5,
-              'font-family': desc ? paint.font : 'Consolas,Menlo,monospace', 'font-weight': col === 'name' ? 700 : 400,
-              fill: desc ? paint.muted : paint.actionText, ...(desc ? { 'font-style': 'italic' } : {}), class: `flow-vars__${col}`,
-            });
-            if (col === 'alias' && texto) {
-              const ts = svgEl('tspan', { class: 'flow-var-ref' });
-              ts.dataset.var = texto;
-              ts.textContent = `\u2002${texto}\u2002`;
+          const y0 = fy + VARS.celda / 2 + VARS.lineaCodigo / 2;
+          const nombre = svgEl('text', { x: x + VARS.celda, y: y0, 'dominant-baseline': 'central', 'font-size': paint.fontSize - 0.5, 'font-weight': 700, 'font-family': mono, fill: '#001080', class: 'flow-vars__name' });
+          nombre.textContent = v.alias ?? v.name;
+          g.appendChild(nombre);
+          (n.varsValor?.[i] ?? [v.value]).forEach((linea, k) => {
+            const t = svgEl('text', { x: x + cols[0]! + VARS.celda, y: y0 + k * VARS.lineaCodigo, 'dominant-baseline': 'central', 'font-size': paint.fontSize - 0.5, 'font-family': mono, 'xml:space': 'preserve', class: 'flow-vars__value' });
+            for (const tok of tokenizeCode(linea, 'javascript').lines[0]?.tokens ?? [{ type: 'plain', text: linea }]) {
+              const ts = svgEl('tspan', { fill: COLOR_CODIGO[tok.type] ?? '#000000' });
+              ts.textContent = tok.text;
               t.appendChild(ts);
-            } else t.textContent = texto;
+            }
             g.appendChild(t);
-            cx += n.varsCols![c]!;
           });
+          if (conDesc && v.desc) {
+            const d = svgEl('text', { x: x + cols[0]! + cols[1]! + VARS.celda, y: y0, 'dominant-baseline': 'central', 'font-size': paint.fontSize - 0.5, 'font-style': 'italic', 'font-family': paint.font, fill: paint.muted, class: 'flow-vars__desc' });
+            d.textContent = v.desc;
+            g.appendChild(d);
+          }
+          fy += alto;
         });
         if (n.pill) g.appendChild(this.#pill(n, paint, tono));
       } else if (n.embed) {

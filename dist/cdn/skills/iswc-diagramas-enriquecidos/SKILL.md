@@ -10,6 +10,10 @@ description: >-
 
 # Diagramas enriquecidos — convenciones homogéneas
 
+> El formato es el **diagrama de flujo en vector** (`{ vectorFlow: { columns, edges } }`, doc
+> `src/components/diagrams/vector-flow.md`): cada columna es un contexto estricto y las aristas son
+> los puentes. Las reglas de abajo dicen qué columnas usar y cómo conectarlas.
+
 Un diagrama enriquecido cuenta **qué pasa en una acción** (un endpoint, una tarea) con todas sus
 piezas reales: quién llama, qué controller atiende, qué POJO usa, qué tablas toca y qué sistemas
 externos consulta. Todos los diagramas de todos los proyectos siguen estas mismas convenciones;

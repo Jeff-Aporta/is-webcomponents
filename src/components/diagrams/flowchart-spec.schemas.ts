@@ -15,7 +15,7 @@ export const FlowDirectionSchema = z.union([z.literal('TB'), z.literal('BT'), z.
 export type FlowDirection = z.infer<typeof FlowDirectionSchema>;
 
 
-export const FlowShapeSchema = z.union([z.literal('rect'), z.literal('round'), z.literal('stadium'), z.literal('circle'), z.literal('diamond'), z.literal('hexagon'), z.literal('parallelogram'), z.literal('cylinder'), z.literal('subroutine'), z.literal('start'), z.literal('end'), z.literal('bar'), z.literal('comment'), z.literal('vars')]);
+export const FlowShapeSchema = z.union([z.literal('rect'), z.literal('round'), z.literal('stadium'), z.literal('circle'), z.literal('diamond'), z.literal('hexagon'), z.literal('parallelogram'), z.literal('cylinder'), z.literal('subroutine'), z.literal('start'), z.literal('end'), z.literal('bar'), z.literal('comment'), z.literal('vars'), z.literal('bridge')]);
 export type FlowShape = z.infer<typeof FlowShapeSchema>;
 
 
@@ -54,6 +54,11 @@ export const FlowLaneSpecSchema = z.object({
   label: z.string(),
   /** `center`: los nodos del carril van centrados a lo largo del diagrama (p. ej. el controller de cliente solo en su columna). */
   align: z.literal('center').optional(),
+  /**
+   * Apilar: las entidades que comparten fila en este carril van una debajo de otra (no lado a lado),
+   * cada controller con sus puentes en fila debajo. Aprovecha el alto (columnas de entidades).
+   */
+  stack: z.boolean().optional(),
 });
 export type FlowLaneSpec = z.infer<typeof FlowLaneSpecSchema>;
 
@@ -70,6 +75,16 @@ export type FlowLaneDirection = z.infer<typeof FlowLaneDirectionSchema>;
 export const TipoEntidadSchema = z.enum(['cliente', 'componente', 'controller', 'pojo', 'tabla']);
 export type TipoEntidad = z.infer<typeof TipoEntidadSchema>;
 
+/**
+ * Puente `-(O=` de un controller: el consumo de una acción entra por el O y sale redirigido (p. ej. a
+ * la tabla). `of`: id del controller; `op`: letra CRUD del O (C insert, R select, U update, D delete).
+ */
+export const FlowBridgeSchema = z.object({
+  of: z.string().min(1),
+  op: z.enum(['C', 'R', 'U', 'D']),
+});
+export type FlowBridge = z.infer<typeof FlowBridgeSchema>;
+
 export const FlowVarSchema = z.object({
   name: z.string().min(1),
   /** Alias corto (pocas letras) para nombres o expresiones largas; el texto lo usa como `{{alias}}`. */
@@ -80,6 +95,8 @@ export const FlowVarSchema = z.object({
 export type FlowVar = z.infer<typeof FlowVarSchema>;
 
 export const FlowNodeSpecSchema = z.object({
+  /** `shape: "bridge"`: el controller al que pertenece y la letra CRUD. */
+  bridge: FlowBridgeSchema.optional(),
   /** `shape: "vars"`: las variables que declara (tabla nombre · valor · desc). */
   vars: z.array(FlowVarSchema).optional(),
   id: z.string(),
@@ -185,10 +202,14 @@ export const FlowLayoutNodeSchema = z.object({
   pill: EmbedBoxSchema.optional(),
   /** Insignia suelta (decisiones y nodos incrustados): número sobre fondo oscuro en la esquina. */
   pillFloat: z.boolean().optional(),
+  /** Puente `-(O=`: su controller y su letra CRUD. */
+  bridge: FlowBridgeSchema.optional(),
   /** Nodo de declaración: sus variables, el ancho de cada columna y la caja de la tabla (lienzo). */
   vars: z.array(FlowVarSchema).optional(),
   varsCols: z.array(z.number()).optional(),
   varsBox: EmbedBoxSchema.optional(),
+  varsValor: z.array(z.array(z.string())).optional(),
+  varsFilas: z.array(z.number()).optional(),
   /** Alineación horizontal del texto en su caja (rombo con pastilla: a la izquierda). */
   textAlign: z.literal('start').optional(),
   /** Comentario: nodo que señala y costado del globo donde va el triángulo indicador. */
@@ -199,6 +220,8 @@ export type FlowLayoutNode = z.infer<typeof FlowLayoutNodeSchema>;
 
 
 export const FlowLayoutEdgeSchema = z.object({
+  /** Arista de un puente `-(O=`: `entrada` (consumo que llega al O) o `salida` (lo que el O redirige). */
+  puente: z.enum(['entrada', 'salida']).optional(),
   /**
    * Llega a un componente que expone interfaz (`provides`): conector UML `-(O-`. El riel termina en
    * el socket `(`; la punta (`arrowTip*`) es el borde del componente, donde nace su lollipop `O-`.
@@ -333,9 +356,11 @@ export const FlowSizedNodeSchema = z.object({
   pill: EmbedBoxSchema.optional(),
   /** Alineación horizontal del texto en su caja (rombo con pastilla: a la izquierda). */
   textAlign: z.literal('start').optional(),
-  /** Nodo de declaración: ancho de cada columna y caja de la tabla (relativa al nodo). */
+  /** Nodo de declaración: ancho de cada columna, caja de la tabla (relativa al nodo), líneas del valor y alto de cada fila. */
   varsCols: z.array(z.number()).optional(),
   varsBox: EmbedBoxSchema.optional(),
+  varsValor: z.array(z.array(z.string())).optional(),
+  varsFilas: z.array(z.number()).optional(),
 });
 export type FlowSizedNode = z.infer<typeof FlowSizedNodeSchema>;
 

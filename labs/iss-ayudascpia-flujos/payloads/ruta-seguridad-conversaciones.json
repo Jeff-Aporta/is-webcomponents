@@ -185,28 +185,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "ctl-pojo",
-              "label": "TConversacion",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversacion]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ctl-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "R"
             }
           ]
         },
@@ -273,13 +258,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "HTTP GET · DELETE /conversacion/{iconversacion}"
         },
         {
           "from": "api",
@@ -293,12 +272,6 @@
         {
           "from": "lee",
           "to": "d1"
-        },
-        {
-          "from": "lee",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "d1",
@@ -374,6 +347,17 @@
           "from": "fin",
           "to": "api",
           "label": "respuesta"
+        },
+        {
+          "from": "lee",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "ctl-R",
+          "to": "tconv",
+          "kind": "dashed"
         }
       ]
     }

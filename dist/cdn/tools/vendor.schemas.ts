@@ -45,4 +45,6 @@ export interface TResultadoVendor {
   /** Fecha de la copia que ya había. */
   previa?: string | null;
   error?: string;
+  /** Imports relativos del archivo que no existen en el consumidor (no se vendorizaron). */
+  faltan?: string[];
 }

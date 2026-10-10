@@ -171,28 +171,6 @@
           ]
         },
         {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "ctl-pojo",
-              "label": "TPermissionsObject",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TPermissionsObject]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
           "id": "D",
           "label": "PostgreSQL · seg_*",
           "tipo": "tablas",
@@ -383,13 +361,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass"
+          "label": "HTTP"
         },
         {
           "from": "api",

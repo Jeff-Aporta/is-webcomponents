@@ -139,6 +139,13 @@
               }
             },
             {
+              "id": "cconv-U",
+              "label": "actualizar()",
+              "shape": "bridge",
+              "of": "cconv",
+              "op": "U"
+            },
+            {
               "id": "dueno-TSysValueController",
               "label": "TSysValueController",
               "kind": "class",
@@ -152,58 +159,20 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "cconv-pojo",
-              "label": "TConversacion",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversacion]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "clog-pojo",
-              "label": "TConversationLog",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversationLog]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TSysValueController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TSysValueController",
+              "op": "R"
             },
             {
-              "id": "dueno-TSysValueController-pojo",
-              "label": "TSysValue",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TSysValue]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "clog-D",
+              "label": "borrar()",
+              "shape": "bridge",
+              "of": "clog",
+              "op": "D"
             }
           ]
         },
@@ -351,18 +320,6 @@
       ],
       "edges": [
         {
-          "from": "cconv",
-          "to": "cconv-pojo",
-          "kind": "dashed",
-          "label": "klass · UPDATE"
-        },
-        {
-          "from": "clog",
-          "to": "clog-pojo",
-          "kind": "dashed",
-          "label": "klass · DELETE"
-        },
-        {
           "from": "ini",
           "to": "start"
         },
@@ -388,12 +345,6 @@
           "to": "fin-arranque"
         },
         {
-          "from": "barrido",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "UPDATE"
-        },
-        {
           "from": "fork",
           "to": "cconv",
           "label": "timers"
@@ -402,7 +353,7 @@
           "from": "cconv",
           "to": "clog",
           "kind": "dashed",
-          "label": "klass · UPDATE"
+          "label": "klass"
         },
         {
           "from": "cconv",
@@ -411,12 +362,6 @@
         {
           "from": "flag",
           "to": "d1"
-        },
-        {
-          "from": "flag",
-          "to": "dueno-TSysValueController",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "d1",
@@ -437,32 +382,47 @@
           "to": "fin"
         },
         {
-          "from": "cierra",
+          "from": "nada",
+          "to": "fin"
+        },
+        {
+          "from": "barrido",
+          "to": "cconv-U",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "cconv-U",
           "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "flag",
+          "to": "dueno-TSysValueController-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "dueno-TSysValueController-R",
+          "to": "tsys",
+          "kind": "dashed"
+        },
+        {
+          "from": "cierra",
+          "to": "cconv-U",
           "kind": "dashed",
           "label": "UPDATE"
         },
         {
           "from": "purga",
-          "to": "tlog",
+          "to": "clog-D",
           "kind": "dashed",
           "label": "DELETE"
         },
         {
-          "from": "nada",
-          "to": "fin"
-        },
-        {
-          "from": "dueno-TSysValueController",
-          "to": "dueno-TSysValueController-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
-        },
-        {
-          "from": "dueno-TSysValueController",
-          "to": "tsys",
-          "kind": "dashed",
-          "label": "SELECT"
+          "from": "clog-D",
+          "to": "tlog",
+          "kind": "dashed"
         }
       ]
     }

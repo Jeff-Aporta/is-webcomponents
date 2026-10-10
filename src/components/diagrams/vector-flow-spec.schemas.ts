@@ -13,6 +13,8 @@ export const ZTipoVector = z.enum([
   'cliente', 'componente', 'controller', 'pojo', 'tabla',
   // piezas del flujo
   'paso', 'decision', 'variables', 'barra', 'inicio', 'fin', 'nota', 'anidado',
+  // puente `-(O=` de un controller
+  'puente',
 ]);
 export type TTipoVector = z.infer<typeof ZTipoVector>;
 

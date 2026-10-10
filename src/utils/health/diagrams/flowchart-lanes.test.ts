@@ -549,9 +549,11 @@ Deno.test('combinado: U5 en las rutas reales, los usos a un mismo destino y cost
     const j = await editable(new URL(f.name, dir));
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     const puntas = new Map<string, Set<string>>();
-    for (const e of L.edges.filter((x) => x.kind === 'dashed')) {
+    // La entrada a un puente `-(O=` tiene su propio puerto en la bola (no converge con las demás).
+    for (const e of L.edges.filter((x) => x.kind === 'dashed' && x.puente !== 'entrada')) {
       const t = L.nodes.find((n) => n.id === e.to)!;
-      const fin = pathPoints(e.path).at(-1)!;
+      // La punta (no el fin del riel: con socket el riel termina antes, en el O).
+      const fin = { x: e.arrowTipX, y: e.arrowTipY };
       const lado = Math.abs(fin.x - t.x) < 1 ? 'izq' : Math.abs(fin.x - (t.x + t.w)) < 1 ? 'der' : Math.abs(fin.y - t.y) < 1 ? 'arr' : 'aba';
       const k = `${e.to}|${lado}`;
       puntas.set(k, (puntas.get(k) ?? new Set()).add(`${Math.round(fin.x)},${Math.round(fin.y)}`));
@@ -648,6 +650,57 @@ Deno.test('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un
       for (const n of L.nodes) {
         if (c.members?.includes(n.id) || n.shape === 'comment') continue;
         if (n.x < c.x + c.w && n.x + n.w > c.x && n.y < c.y + c.h && n.y + n.h > c.y) malos.push(`${f.name}: «${c.label}» abraza ${n.id}`);
+      }
+    }
+  }
+  assertEquals(malos, []);
+});
+
+Deno.test('combinado: X3 en las rutas reales ningún riel pasa por encima del título de un grupo', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const malos: string[] = [];
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = await editable(new URL(f.name, dir));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    for (const c of L.contexts ?? []) {
+      const t = { x: c.x, y: c.y, w: Math.ceil(c.label.length * 6.2) + 14, h: 18 };
+      for (const e of L.edges) {
+        const pts = pathPoints(e.path);
+        for (let k = 1; k < pts.length; k++) {
+          const [a, b] = [pts[k - 1]!, pts[k]!];
+          const x0 = Math.min(a.x, b.x), x1 = Math.max(a.x, b.x), y0 = Math.min(a.y, b.y), y1 = Math.max(a.y, b.y);
+          if (x1 > t.x && x0 < t.x + t.w && y1 > t.y && y0 < t.y + t.h) { malos.push(`${f.name}: ${e.from}→${e.to} sobre «${c.label}»`); break; }
+        }
+      }
+    }
+  }
+  assertEquals(malos, []);
+});
+
+Deno.test('combinado: X4 en las rutas reales ningún riel corre encima de otro (los que comparten ruta van separados por delta)', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const malos: string[] = [];
+  const solapa = (a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }, d: { x: number; y: number }): boolean => {
+    if (a.x === b.x && c.x === d.x && Math.abs(a.x - c.x) < 1) return Math.min(Math.max(a.y, b.y), Math.max(c.y, d.y)) - Math.max(Math.min(a.y, b.y), Math.min(c.y, d.y)) > 8;
+    if (a.y === b.y && c.y === d.y && Math.abs(a.y - c.y) < 1) return Math.min(Math.max(a.x, b.x), Math.max(c.x, d.x)) - Math.max(Math.min(a.x, b.x), Math.min(c.x, d.x)) > 8;
+    return false;
+  };
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = await editable(new URL(f.name, dir));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const es = L.edges.map((e) => ({ e, p: pathPoints(e.path) }));
+    for (let a = 0; a < es.length; a++) {
+      for (let b = a + 1; b < es.length; b++) {
+        const [A, B] = [es[a]!, es[b]!];
+        // Los que convergen a la misma punta o salen del mismo nodo comparten embudo (abanico).
+        if (A.e.to === B.e.to || A.e.from === B.e.from) continue;
+        // Todos los tramos (también los extremos: dos rieles no comparten salida ni llegada ajenas).
+        const int = (p: typeof A.p) => p.slice(1).map((q, k) => [p[k]!, q] as const);
+        let hit = false;
+        for (const [a1, a2] of int(A.p)) for (const [b1, b2] of int(B.p)) if (!hit && solapa(a1, a2!, b1, b2!)) hit = true;
+        if (hit) malos.push(`${f.name}: ${A.e.from}→${A.e.to} × ${B.e.from}→${B.e.to}`);
       }
     }
   }

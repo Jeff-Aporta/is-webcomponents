@@ -161,28 +161,27 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "ctl-pojo",
-              "label": "TError_",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TError_]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ctl-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "C"
+            },
+            {
+              "id": "ctl-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "R"
+            },
+            {
+              "id": "ctl-D",
+              "label": "borrar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "D"
             }
           ]
         },
@@ -250,13 +249,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · INSERT, SELECT, DELETE"
+          "label": "HTTP POST /error"
         },
         {
           "from": "api",
@@ -288,24 +281,6 @@
         },
         {
           "from": "ins",
-          "to": "terr",
-          "kind": "dashed",
-          "label": "INSERT"
-        },
-        {
-          "from": "lst",
-          "to": "terr",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
-          "from": "del",
-          "to": "terr",
-          "kind": "dashed",
-          "label": "DELETE"
-        },
-        {
-          "from": "ins",
           "to": "ok"
         },
         {
@@ -324,6 +299,39 @@
           "from": "fin",
           "to": "api",
           "label": "respuesta"
+        },
+        {
+          "from": "ins",
+          "to": "ctl-C",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "ctl-C",
+          "to": "terr",
+          "kind": "dashed"
+        },
+        {
+          "from": "lst",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "ctl-R",
+          "to": "terr",
+          "kind": "dashed"
+        },
+        {
+          "from": "del",
+          "to": "ctl-D",
+          "kind": "dashed",
+          "label": "DELETE"
+        },
+        {
+          "from": "ctl-D",
+          "to": "terr",
+          "kind": "dashed"
         }
       ]
     }

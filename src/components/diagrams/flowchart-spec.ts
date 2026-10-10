@@ -17,14 +17,14 @@ import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inl
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { wrapText } from '../_shared/diagram-text-wrap.js';
-import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad } from "./flowchart-spec.schemas.js";
+import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "./flowchart-spec.schemas.js";
 import type { ErThemeJson } from "./theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
 import { anchoDeComponente } from './component-spec.js';
 import { vectorAFlujo } from './vector-flow-spec.js';
 import { oklchToHex } from '../_shared/oklch.js';
-import { FlowVarSchema, TipoEntidadSchema } from './flowchart-spec.schemas.js';
+import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from './flowchart-spec.schemas.js';
 import type { RouterEdge, RouterPort } from './component-router.schemas.js';
 import type { Lado } from '../_shared/diagram-tipos.schemas.js';
 import type { EmbedBox } from "../_shared/diagram-embed.schemas.js";
@@ -50,7 +50,7 @@ const DIRECTIONS: Set<string> = new Set(['TB', 'BT', 'LR', 'RL']);
 /** Formas soportadas; el resto cae a 'rect'. */
 export const FLOW_SHAPES: Set<string> = new Set([
   'rect', 'round', 'stadium', 'circle', 'diamond', 'hexagon', 'parallelogram', 'cylinder', 'subroutine',
-  'start', 'end', 'bar', 'comment', 'vars',
+  'start', 'end', 'bar', 'comment', 'vars', 'bridge',
 ]);
 
 /**
@@ -151,7 +151,14 @@ function readNode(raw: Record<string, unknown>, i: number): FlowNodeSpec {
     ...(Number.isInteger(Number(raw.step)) && raw.step !== null && raw.step !== '' && Number(raw.step) >= 0 ? { step: Number(raw.step) } : {}),
     ...embedFields(raw),
     ...(shape === 'vars' ? leerVars(raw.vars) : {}),
+    ...(shape === 'bridge' ? leerPuente(raw) : {}),
   };
+}
+
+/** Puente `-(O=`: su controller (`of`) y su letra CRUD (`op`). */
+function leerPuente(raw: Record<string, unknown>): { bridge?: FlowBridge } {
+  const r = FlowBridgeSchema.safeParse({ of: String(raw.of ?? ''), op: String(raw.op ?? '').toUpperCase() });
+  return r.success ? { bridge: r.data } : {};
 }
 
 /** Variables de un nodo `vars`: solo las que traen nombre y valor (ambos obligatorios). */
@@ -208,7 +215,7 @@ function readLanes(src: Record<string, unknown>): FlowLaneSpec[] | undefined {
     const id = String(r.id ?? r.label ?? `carril-${i + 1}`);
     if (vistos.has(id)) continue;
     vistos.add(id);
-    out.push({ id, label: String(r.label ?? r.name ?? id), ...(r.align === 'center' ? { align: 'center' as const } : {}) });
+    out.push({ id, label: String(r.label ?? r.name ?? id), ...(r.align === 'center' ? { align: 'center' as const } : {}), ...(r.stack === true ? { stack: true } : {}) });
   }
   return out.length ? out : undefined;
 }
@@ -425,6 +432,8 @@ export function computeFlowchartLayout(
   overrides: FlowLayoutOverrides | null = null,
   opts: FlowLayoutOptions = {},
 ): FlowLayout {
+  // Presupuesto del layout (ms): las vueltas de etiquetas se detienen al agotarlo (el navegador no se cuelga).
+  const inicioLayout = Date.now();
   const insoft = opts.style === 'insoft';
   const title = spec.title ?? '';
   const subtitle = spec.subtitle ?? '';
@@ -506,6 +515,8 @@ export function computeFlowchartLayout(
 
   const byId = new Map<string, FlowPlacedNode>(placed.nodes.map((n) => [n.id, n]));
   const specById = new Map<string, FlowNodeSpec>(spec.nodes.map((n) => [n.id, n]));
+  // Controllers con puentes `-(O=` (cuelgan bajo él): su flujo sale por el costado.
+  const conPuentes = new Set(spec.nodes.filter((n) => n.bridge).map((n) => n.bridge!.of));
   const groupHue = new Map<string, number>((spec.groups ?? []).map((g) => [g.id, g.hue]));
 
   // Insoft: el margen respeta la rejilla de 8 px, así los centros y vértices
@@ -561,6 +572,14 @@ export function computeFlowchartLayout(
   for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
   // Segunda pasada: los textos de las aristas también son obstáculos para el A*.
   for (const t of textos.values()) blockRect(grid, t.x - 4, t.y - 4, t.w + 8, t.h + 8);
+  // Títulos de los grupos (posición final): ningún riel pasa por encima de ellos.
+  const titulosGrupo: EmbedBox[] = placed.contexts?.length
+    ? abrazar(placed.contexts, nodes, offsetX, offsetY).map((c) => ({ x: c.x - 4, y: c.y - 4, w: Math.ceil(c.label.length * 6.2) + 14 + 8, h: 18 + 8 }))
+    : [];
+  for (const t of titulosGrupo) blockRect(grid, t.x, t.y, t.w, t.h);
+  // Borde izquierdo del recuadro de grupo que contiene a un nodo (para rodearlo por fuera).
+  const cajasGrupo = placed.contexts?.length ? abrazar(placed.contexts, nodes, offsetX, offsetY) : [];
+  const grupoIzq = (n: FlowLayoutNode): number | undefined => cajasGrupo.find((c) => c.members?.includes(n.id))?.x;
   // Zonas de exclusión: ni nodos (ya nudgeados) ni aristas pueden cruzarlas.
   blockExclusionZones(grid, zones, offsetX, offsetY);
 
@@ -578,8 +597,10 @@ export function computeFlowchartLayout(
       return null;
     }
     const sides = insoft
-      ? insoftSides(fromMeta, toMeta, from, to, specById.get(e.from)?.shape, placed.primaryChild?.get(e.from), spec.direction)
+      ? insoftSides(fromMeta, toMeta, from, to, specById.get(e.from)?.shape, placed.primaryChild?.get(e.from), spec.direction, conPuentes.has(e.from))
       : pickSides(fromMeta, toMeta, spec.direction);
+    // La respuesta desde un fin siempre sale por abajo (por los costados llegan las ramas).
+    if (insoft && specById.get(e.from)?.shape === 'end') (sides as { fromSide: string }).fromSide = 'bottom';
     // `pickSides` devuelve `sides` con `fromSide`/`toSide` como `string` (no
     // tipado en el helper); los narrow explícitos aquí para mantener el
     // contrato BoxSide en el resto del pipeline.
@@ -624,7 +645,7 @@ export function computeFlowchartLayout(
       ? vueltaCorta(from, to, nodes, insoftSegs)
       : null;
     const vuelta = corta ?? (!lateral && lanesOn && spec.laneDirection !== 'horizontal' && toMeta.layer <= fromMeta.layer
-      ? rutaDeVuelta(from, to, Math.max(...nodes.map((n) => n.y + n.h)))
+      ? rutaDeVuelta(from, to, Math.max(...nodes.map((n) => n.y + n.h)), grupoIzq(to))
       : null);
     const direct = lateral ?? vuelta ?? (salida
       ? [salida, { x: topX, y: salida.y }, { x: topX, y: to.y }]
@@ -634,7 +655,7 @@ export function computeFlowchartLayout(
       : null);
     // Segunda pasada: los textos son muros. Una ruta de forma fija (abanico, uso de lado, vuelta) que
     // pase por encima de un texto ajeno se descarta y manda la rejilla, donde los textos están bloqueados.
-    const ajenos = [...textos].filter(([k]) => k !== i).map(([, t]) => t);
+    const ajenos = [...[...textos].filter(([k]) => k !== i).map(([, t]) => t), ...titulosGrupo];
     const tocaTexto = (pts: readonly FlowPoint[]): boolean =>
       pts.slice(1).some((q, k) => ajenos.some((t) => segHitsRect(pts[k]!, q, t, 2)));
     // Las cajas también son muros: una ruta fija que atraviese un nodo ajeno se descarta.
@@ -708,6 +729,9 @@ export function computeFlowchartLayout(
   }
   // Componentes que exponen interfaz: quien llega se conecta por `-(O-` (socket en el riel).
   if (final) socketsDeComponentes(routed, spec);
+  // Estándar de todos los rieles: ningún tramo interior corre encima del de otra arista (sólida o
+  // punteada); el que coincide se separa por un delta. Extremos intactos (puertos, puntas, sockets).
+  if (final) separarRielesGlobal(routed);
   const routedEdges: FlowLayoutEdge[] = routed.filter((e): e is FlowLayoutEdge => e !== null);
   if (insoft) separarEtiquetasCompartidas(routedEdges);
   return routedEdges;
@@ -723,7 +747,7 @@ export function computeFlowchartLayout(
     const intentadas = new Set<number>();
     for (let vuelta = 0; ; vuelta++) {
       const conflictos = resolverEtiquetas(routedEdges, nodes, fijos(), mide, { w: width, h: height });
-      if (!conflictos.length || vuelta >= 8) break;
+      if (!conflictos.length || vuelta >= 8 || Date.now() - inicioLayout > LAYOUT_PRESUPUESTO) break;
       // El primer conflicto aún no intentado (uno que no se resuelve no tapa a los demás).
       const c = conflictos.find((x) => !intentadas.has(x.edge));
       if (!c) break;
@@ -760,7 +784,8 @@ export function computeFlowchartLayout(
     // Cada vuelta atiende el primer conflicto que no se haya intentado: uno que abrir espacio no
     // resuelve no tapa a los demás.
     const intentadas2 = new Set<number>();
-    for (let vuelta = 0; vuelta < 8; vuelta++) {
+    // Cada vuelta re-rutea todo (lo más caro del layout): pocas vueltas bastan.
+    for (let vuelta = 0; vuelta < 3 && Date.now() - inicioLayout <= LAYOUT_PRESUPUESTO; vuelta++) {
       const c = pendientes.find((x) => !intentadas2.has(x.edge));
       if (!c) break;
       intentadas2.add(c.edge);
@@ -858,6 +883,14 @@ function ortogonalizar(pts: FlowPoint[]): FlowPoint[] {
   return simplifyOrthoPath(pts);
 }
 
+/** Presupuesto total (ms) de las vueltas de etiquetas de un layout. */
+const LAYOUT_PRESUPUESTO = 40000;
+
+/** Paso (px) de la rejilla del ruteo de usos. */
+const RUTEO_USOS_PASO = 16;
+/** Tiempo máximo (ms) de una llamada al router de usos: pasado, se conserva la ruta previa. */
+const RUTEO_USOS_PRESUPUESTO = 12000;
+
 /** Memoria del ruteo de usos por firma de su entrada (ver rutearUsos). */
 const RUTEO_USOS = new Map<string, ReturnType<typeof routeEdges>>();
 
@@ -867,6 +900,9 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
   if (!usos.length) return;
   const caja = (n: FlowLayoutNode) => ({ id: n.id, x: n.x, y: n.y, w: n.w, h: n.h });
   const lados = (a: FlowLayoutNode, b: FlowLayoutNode): [Lado, Lado] => {
+    // Dos tablas apiladas (propagación maestro → detalle): el riel rodea por la derecha, con largo
+    // suficiente para su texto, en vez de un tramo corto entre ellas.
+    if (a.kind === 'tableder' && b.kind === 'tableder' && b.x < a.x + a.w && a.x < b.x + b.w) return ['right', 'right'];
     if (b.x >= a.x + a.w) return ['right', 'left'];
     if (b.x + b.w <= a.x) return ['left', 'right'];
     return b.y >= a.y + a.h ? ['bottom', 'top'] : ['top', 'bottom'];
@@ -882,19 +918,34 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
     return ps.length ? ps : [{ ...edgeAnchor(n, lado), side: lado }];
   };
   const fijos = routed.flatMap((r, i) => (r && spec.edges[i]!.kind !== 'dashed' ? [pathPoints(r.path)] : []));
+  // Puentes `-(O=`: cada arista tiene su puerto en la mitad libre de la bola (ver puertosPuente).
+  const puertoDe = new Map<number, { x: number; yBola: number; yBorde: number; tipo: 'entrada' | 'salida' }>();
+  for (const n of nodes.filter((x) => x.shape === 'bridge')) {
+    const ent = usos.filter(({ e }) => e.to === n.id).sort((p, q) => (porId.get(q.e.from)!.x - porId.get(p.e.from)!.x));
+    const sal = usos.filter(({ e }) => e.from === n.id).sort((p, q) => (porId.get(q.e.to)!.x - porId.get(p.e.to)!.x));
+    // Un solo puerto de entrada (todas las que consumen convergen ahí); uno por salida.
+    const { puertos: ps } = puertosPuente(n, ent.length ? 1 : 0, sal.length);
+    sal.forEach(({ i }, k) => puertoDe.set(i, ps[k]!));
+    ent.forEach(({ i }) => puertoDe.set(i, ps[sal.length]!));
+  }
   const edges: RouterEdge[] = usos.map(({ e, i }) => {
     const a = porId.get(e.from)!;
     const b = porId.get(e.to)!;
-    const [ls, ll] = lados(a, b);
-    const fromC = puertos(a, ls);
-    const toC = puertos(b, ll);
+    let [ls, ll] = lados(a, b);
+    let fromC = puertos(a, ls);
+    let toC = puertos(b, ll);
+    const pp = puertoDe.get(i);
+    if (pp && b.shape === 'bridge') { ll = 'bottom'; toC = [{ x: pp.x, y: pp.yBorde, side: 'bottom' }]; }
+    if (pp && a.shape === 'bridge') { ls = 'bottom'; fromC = [{ x: pp.x, y: pp.yBorde, side: 'bottom' }]; }
     return {
       id: e.id ?? `e${i}`,
       from: { x: fromC[0]!.x, y: fromC[0]!.y }, fromSide: ls,
       to: { x: toC[0]!.x, y: toC[0]!.y }, toSide: ll,
       fromBox: caja(a), toBox: caja(b),
       fromPkgs: new Set<string>(), toPkgs: new Set<string>(),
-      shareKey: `${e.to}::${ll}`,
+      // Un puente tiene un puerto por arista: cada una con su propia clave (compartir punta entre
+      // puertos distintos dejaba al router sin salida).
+      shareKey: pp && b.shape === 'bridge' ? `${e.to}::${ll}::${pp.x}` : `${e.to}::${ll}`,
       fromCandidates: fromC, toCandidates: toC,
     };
   });
@@ -904,8 +955,12 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
   const firma = JSON.stringify([mundo.components, mundo.titles, fijos, edges.map((x) => [x.id, x.fromCandidates, x.toCandidates, x.shareKey])]);
   let res = RUTEO_USOS.get(firma);
   if (!res) {
-    res = routeEdges(mundo, edges, { step: 2 * U, clearance: 8, stub: U, iterations: 2 });
-    RUTEO_USOS.set(firma, res);
+    // Rejilla de 16 px: gruesa para que el ruteo sea rápido; con 2U (30 px) el router no termina
+    // con los puertos de los puentes `-(O=` (deuda del router, ver lessons).
+    const limite = Date.now() + RUTEO_USOS_PRESUPUESTO;
+    res = routeEdges(mundo, edges, { step: RUTEO_USOS_PASO, clearance: 8, stub: U, iterations: 2, deadline: limite });
+    // Solo se memoriza un ruteo completo (uno cortado por tiempo puede mejorar en otra pasada).
+    if (Date.now() <= limite) RUTEO_USOS.set(firma, res);
     if (RUTEO_USOS.size > 64) RUTEO_USOS.delete(RUTEO_USOS.keys().next().value!);
   }
   // Copia: lo que sigue ajusta las rutas y no debe tocar la memoria. La rejilla gruesa deja los
@@ -934,6 +989,15 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
     const pts = caminos[k];
     const r = routed[i];
     if (!pts || pts.length < 2 || !r) return;
+    // Puente: el riel sigue en vertical desde el borde de la caja hasta la bola (llega o sale del O).
+    const pp = puertoDe.get(i);
+    if (pp && pp.tipo === 'entrada') {
+      const u = pts[pts.length - 1]!;
+      pts.push({ x: u.x, y: pp.yBola });
+    } else if (pp) {
+      const p0 = pts[0]!;
+      pts.unshift({ x: p0.x, y: pp.yBola });
+    }
     const fin = pts[pts.length - 1]!;
     // La etiqueta arranca en el centro del tramo más largo; el solucionador la reubica.
     let largo = -1;
@@ -943,7 +1007,45 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
       const l = Math.abs(q.x - p.x) + Math.abs(q.y - p.y);
       if (l > largo) { largo = l; mitad = { x: (p.x + q.x) / 2, y: (p.y + q.y) / 2 }; }
     });
-    routed[i] = { ...r, path: polylinePath(pts), arrowTipX: fin.x, arrowTipY: fin.y, arrowAngle: 0, labelX: mitad.x, labelY: mitad.y };
+    const finReal = pts[pts.length - 1]!;
+    routed[i] = { ...r, path: polylinePath(simplifyOrthoPath(pts)), arrowTipX: finReal.x, arrowTipY: finReal.y, arrowAngle: 0, labelX: mitad.x, labelY: mitad.y, ...(pp ? { puente: pp.tipo } : {}) };
+    void fin;
+  });
+  // Puentes sin ruta nueva (el router no la dio a tiempo): igual entran y salen por su puerto, en
+  // vertical bajo la bola, nunca por el costado de la caja (donde va el nombre de la acción).
+  usos.forEach(({ i }, k) => {
+    const pp = puertoDe.get(i);
+    const r = routed[i];
+    if (!pp || !r || (caminos[k] && caminos[k]!.length >= 2)) return;
+    const prev = pathPoints(r.path);
+    if (prev.length < 2) return;
+    const y0 = pp.yBorde + 2 * U;
+    const pts = pp.tipo === 'entrada'
+      ? [...prev.slice(0, -1), { x: prev[prev.length - 2]!.x, y: y0 }, { x: pp.x, y: y0 }, { x: pp.x, y: pp.yBola }]
+      : [{ x: pp.x, y: pp.yBola }, { x: pp.x, y: y0 }, { x: prev[1]!.x, y: y0 }, ...prev.slice(1)];
+    const limpios = ortogonalizar(pts);
+    const t = limpios[limpios.length - 1]!;
+    routed[i] = { ...r, path: polylinePath(limpios), arrowTipX: t.x, arrowTipY: t.y, puente: pp.tipo };
+  });
+  // Una sola punta por destino y costado, también para las que no salieron del router: la que llega a
+  // otra altura baja o sube a la de la primera justo antes de entrar (como en el ruteo).
+  const primera = new Map<string, FlowPoint>();
+  usos.forEach(({ e, i }) => {
+    const r = routed[i];
+    if (!r || puertoDe.get(i)?.tipo === 'entrada') return;
+    const pts = pathPoints(r.path);
+    if (pts.length < 2) return;
+    const T = pts[pts.length - 1]!;
+    const P = pts[pts.length - 2]!;
+    const horizontal = P.y === T.y;
+    const clave = `${e.to}|${horizontal ? (P.x < T.x ? 'izq' : 'der') : (P.y < T.y ? 'arr' : 'aba')}`;
+    const T0 = primera.get(clave);
+    if (!T0) { primera.set(clave, T); return; }
+    if (Math.abs(T0.x - T.x) < 0.5 && Math.abs(T0.y - T.y) < 0.5) return;
+    const codo = horizontal ? { x: T0.x - Math.sign(T0.x - P.x || 1) * 2 * U, y: T.y } : { x: T.x, y: T0.y - Math.sign(T0.y - P.y || 1) * 2 * U };
+    const giro = horizontal ? { x: codo.x, y: T0.y } : { x: T0.x, y: codo.y };
+    const nuevos = simplifyOrthoPath([...pts.slice(0, -1), codo, giro, T0]);
+    routed[i] = { ...r, path: polylinePath(nuevos), arrowTipX: T0.x, arrowTipY: T0.y };
   });
 }
 
@@ -1007,12 +1109,15 @@ export const SOCKET = { palo: 10, bola: 5, socket: 8 } as const;
  */
 function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec): void {
   const expone = new Set(spec.nodes.filter((n) => {
+    // Las tablas del DER se consumen (a través de su controller): siempre exponen su `-(O-`.
+    if (n.embed?.kind === 'tableder') return true;
     const c = n.embed?.kind === 'component' ? (n.embed.component as Record<string, unknown> | undefined) : undefined;
     const p = c?.provides ?? c?.expose ?? c?.exposes;
     return Array.isArray(p) ? p.length > 0 : !!p;
   }).map((n) => n.id));
   if (!expone.size) return;
-  const largo = SOCKET.palo + SOCKET.bola * 2 + SOCKET.socket - SOCKET.bola;
+  // Convención InSoft: el componente expone el socket `(` (palo + arco) y el riel llega a la bola O.
+  const largo = SOCKET.palo + SOCKET.socket + SOCKET.bola;
   routed.forEach((r, i) => {
     if (!r || !expone.has(r.to) || r.from === r.to) return;
     const pts = pathPoints(r.path);
@@ -1065,6 +1170,51 @@ function abanicoDelFlujo(routed: Array<FlowLayoutEdge | null>, spec: FlowResolve
     if (!pts || pts.length < 2) return;
     const nuevo = polylinePath(pts);
     if (nuevo !== r.path) routed[i] = { ...r, path: nuevo };
+  });
+}
+
+/** Separación global por delta entre todas las aristas ya ruteadas (ver separarColineales). */
+function separarRielesGlobal(routed: Array<FlowLayoutEdge | null>): void {
+  const idx = routed.flatMap((r, i) => (r ? [i] : []));
+  const caminos = idx.map((i) => pathPoints(routed[i]!.path).map((q) => ({ ...q })));
+  const antes = caminos.map((c) => JSON.stringify(c));
+  separarColineales(caminos);
+  // Una llegada que entra por el mismo punto por donde sale otra arista de ese nodo: la llegada (y todo
+  // el abanico que converge a esa punta) se corre 2·delta a lo largo del costado; la punta sigue en el
+  // borde, así no comparten tramo. Se compara por la PUNTA (con socket el riel termina antes, en el O).
+  const movidas = new Set<number>();
+  idx.forEach((i, k) => {
+    const r = routed[i]!;
+    const pts = caminos[k];
+    if (movidas.has(i) || !pts || pts.length < 2) return;
+    const tip = { x: r.arrowTipX, y: r.arrowTipY };
+    const P = pts[pts.length - 2]!;
+    const T = pts[pts.length - 1]!;
+    const horizontal = P.y === T.y;
+    const choca = idx.some((j, m) => {
+      if (j === i || routed[j]!.from !== r.to) return false;
+      const S = caminos[m]?.[0];
+      return !!S && Math.abs(S.x - tip.x) < 1 && Math.abs(S.y - tip.y) < 1;
+    });
+    if (!choca) return;
+    const d = ABANICO.delta * 2;
+    // Todo el abanico de esa punta se mueve junto.
+    idx.forEach((j, m) => {
+      const rj = routed[j]!;
+      if (Math.abs(rj.arrowTipX - tip.x) > 0.5 || Math.abs(rj.arrowTipY - tip.y) > 0.5) return;
+      const q = caminos[m];
+      if (!q || q.length < 2) return;
+      const a = q[q.length - 2]!;
+      const b = q[q.length - 1]!;
+      if (horizontal) { a.y += d; b.y += d; } else { a.x += d; b.x += d; }
+      routed[j] = { ...rj, arrowTipX: rj.arrowTipX + (horizontal ? 0 : d), arrowTipY: rj.arrowTipY + (horizontal ? d : 0) };
+      movidas.add(j);
+    });
+  });
+  idx.forEach((i, k) => {
+    const pts = caminos[k];
+    if (!pts || JSON.stringify(pts) === antes[k]) return;
+    routed[i] = { ...routed[i]!, path: polylinePath(pts) };
   });
 }
 
@@ -1274,10 +1424,11 @@ function vueltaCorta(from: FlowLayoutNode, to: FlowLayoutNode, nodes: readonly F
  * debajo de todo, corre por fuera del lado izquierdo del destino y entra por su costado izquierdo.
  * Así no cruza el flujo que baja.
  */
-function rutaDeVuelta(from: FlowLayoutNode, to: FlowLayoutNode, fondo: number): FlowPoint[] {
+function rutaDeVuelta(from: FlowLayoutNode, to: FlowLayoutNode, fondo: number, izquierda?: number): FlowPoint[] {
   const a = { x: snap8(from.x + from.w / 2), y: from.y + from.h };
   const y = snap8(fondo + 24);
-  const x = snap8(to.x - 16);
+  // Sube por fuera del recuadro de grupo del destino (si lo tiene), nunca por su título.
+  const x = snap8(Math.min(to.x, izquierda ?? to.x) - 16);
   const cy = snap8(to.y + to.h / 2);
   return [a, { x: a.x, y }, { x, y }, { x, y: cy }, { x: to.x, y: cy }];
 }
@@ -1399,7 +1550,11 @@ function cajasFijas(
       ? { x: l.x + ox + 12, y: l.y + oy + l.h / 2 - 9, w, h: 18 }
       : { x: l.x + ox + l.w / 2 - w / 2, y: l.y + oy + 12, w, h: 18 });
   }
-  for (const c of contexts ?? []) out.push({ x: c.x + ox, y: c.y + oy, w: Math.ceil(c.label.length * 6.2) + 14, h: 18 });
+  // Títulos de los grupos en su posición FINAL (la misma caja que se dibuja: unión de sus miembros,
+  // partida para no abrazar ajenos). Ningún riel ni texto pasa por encima de ellos.
+  for (const c of contexts?.length ? abrazar(contexts, nodes, ox, oy) : []) {
+    out.push({ x: c.x - 4, y: c.y - 4, w: Math.ceil(c.label.length * 6.2) + 14 + 8, h: 18 + 8 });
+  }
   return out;
 }
 
@@ -1591,21 +1746,37 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
     return { id: n.id, w, h, lines: t.lines, textBox: { x: COMENTARIO.pad + COMENTARIO.comillas, y: 0, w: w - COMENTARIO.pad * 2 - COMENTARIO.comillas, h }, textAlign: 'start' };
   }
   const measure = measurer(opts);
+  if (n.shape === 'bridge') {
+    // Puente `-(O=`: palo, socket y bola; a la derecha el ícono CRUD y el nombre de la acción.
+    const texto = n.label.trim() && n.label !== n.id ? n.label.trim() : '';
+    const w = ceilTo(PUENTE.socket * 2 + 8 + PUENTE.icono + 6 + (texto ? measure(texto) + 6 : 0), 8);
+    const h = ceilTo(PUENTE.palo + PUENTE.socket * 2 + 6, 8);
+    return { id: n.id, w, h, ...(texto ? { lines: [texto], textBox: { x: PUENTE.socket * 2 + 8 + PUENTE.icono + 6, y: PUENTE.palo, w: measure(texto) + 6, h: PUENTE.socket * 2 }, textAlign: 'start' as const } : {}) };
+  }
   if (n.shape === 'vars' && n.vars?.length) {
-    // Tabla de declaración: título (la etiqueta) y una fila por variable: nombre · alias · valor · desc
-    // (alias y desc solo si alguna variable los trae).
-    const col = (xs: string[]) => ceilTo(Math.max(24, ...xs.map((x) => measure(x))) + VARS.celda * 2, 4);
-    const cols = columnasVars(n.vars).map((c) => col(n.vars!.map((v) => v[c] ?? '')));
+    // Tabla de declaración con encabezados: Variable (alias o nombre) · Valor (código, partido en la
+    // cadena de `.`) · Descripción (solo si alguna la trae). Cada fila mide lo que su valor.
+    const conDesc = n.vars.some((v) => v.desc);
+    const valor = n.vars.map((v) => partirCadena(v.value));
+    const mono = (t: string) => t.length * VARS.charMono;
+    const col = (xs: string[], m: (t: string) => number) => ceilTo(Math.max(...xs.map(m)) + VARS.celda * 2, 4);
+    const cols = [
+      col(['Variable', ...n.vars.map((v) => v.alias ?? v.name)], mono),
+      col(['Valor', ...valor.flat()], mono),
+      ...(conDesc ? [col(['Descripción', ...n.vars.map((v) => v.desc ?? '')], measure)] : []),
+    ];
+    const filas = valor.map((ls) => Math.max(1, ls.length) * VARS.lineaCodigo + VARS.celda);
     const titulo = n.label.trim() && n.label !== n.id ? n.label.trim() : '';
     const tituloH = titulo ? VARS.fila : 0;
     const tabla = cols.reduce((a, b) => a + b, 0);
+    const altoTabla = VARS.fila + filas.reduce((a, b) => a + b, 0);
     const w = ceilTo(Math.max(INSOFT.actionMinW, tabla + VARS.pad * 2, titulo ? measure(titulo) + VARS.pad * 2 + VARS.esquina : 0), 16);
-    const h = ceilTo(VARS.pad + tituloH + n.vars.length * VARS.fila + VARS.pad, 8);
+    const h = ceilTo(VARS.pad + tituloH + altoTabla + VARS.pad, 8);
     return {
       id: n.id, w, h,
       ...(titulo ? { lines: [titulo], textBox: { x: VARS.pad, y: VARS.pad, w: w - VARS.pad * 2 - VARS.esquina, h: tituloH }, textAlign: 'start' as const } : {}),
-      varsCols: cols,
-      varsBox: { x: VARS.pad, y: VARS.pad + tituloH, w: tabla, h: n.vars.length * VARS.fila },
+      varsCols: cols, varsValor: valor, varsFilas: filas,
+      varsBox: { x: VARS.pad, y: VARS.pad + tituloH, w: tabla, h: altoTabla },
     };
   }
   if (n.shape === 'diamond') {
@@ -1701,6 +1872,7 @@ export function iconoPorDefecto(n: FlowNodeSpec): string {
   if (n.kind === 'nested') return 'mdi:sitemap-outline';
   if (n.shape === 'diamond') return 'mdi:source-branch';
   if (n.shape === 'vars') return 'mdi:variable-box';
+  if (n.shape === 'bridge') return '';
   return 'mdi:play-circle-outline';
 }
 
@@ -1793,7 +1965,7 @@ function colocarComentarios(
 
 /** Cuenta para la numeración automática: todo menos inicio, fin, barras, comentarios y rombos de fusión vacíos. */
 function esNumerable(n: FlowNodeSpec): boolean {
-  if (n.shape === 'start' || n.shape === 'end' || n.shape === 'bar' || n.shape === 'comment') return false;
+  if (n.shape === 'start' || n.shape === 'end' || n.shape === 'bar' || n.shape === 'comment' || n.shape === 'bridge') return false;
   return !(n.shape === 'diamond' && !n.label.trim());
 }
 
@@ -1946,7 +2118,7 @@ export function indicesJerarquicos(
 function insignias(nodes: FlowLayoutNode[]): void {
   for (const n of nodes) {
     if (n.step == null && !n.icon) continue;
-    if (n.shape === 'start' || n.shape === 'end' || n.shape === 'bar' || n.shape === 'comment') continue;
+    if (n.shape === 'start' || n.shape === 'end' || n.shape === 'bar' || n.shape === 'comment' || n.shape === 'bridge') continue;
     const w = pillWidth(n.stepLabel ?? n.step, n.icon);
     n.pill = n.shape === 'diamond'
       ? { x: n.x + n.w / 4 - w / 2, y: n.y + n.h / 4 - FLOW_PILL_H / 2, w, h: FLOW_PILL_H }
@@ -1955,13 +2127,68 @@ function insignias(nodes: FlowLayoutNode[]): void {
   }
 }
 
+/**
+ * Geometría del puente `-(O=`: palo desde el controller, radio del socket `(` y de la bola `O`,
+ * separación mínima entre puertos, paso angular entre puertos (simétricos a los 90°) y distancia de
+ * la flecha de salida al O.
+ */
+export const PUENTE = { palo: 10, socket: 17, bola: 12, icono: 14, sep: 10, delta: 20, flechaSalida: 34 } as const;
+
+/** Centro de la bola de un puente colocado. */
+export const centroPuente = (n: { x: number; y: number }): FlowPoint => ({ x: n.x + PUENTE.socket + 4, y: n.y + PUENTE.palo + PUENTE.socket });
+
+/**
+ * Puertos de un puente en la mitad libre (abajo; el socket cubre la de arriba): simétricos a los 90°
+ * cada `delta` grados; las salidas a la derecha (hacia la BD) y las entradas a la izquierda. Si los
+ * puertos quedaran a menos de `sep` px, la bola crece. Cada puerto: x, el punto sobre la bola y su
+ * proyección al borde de la caja (donde el riel llega o sale en vertical).
+ */
+export function puertosPuente(n: { x: number; y: number; h: number }, entradas: number, salidas: number): { r: number; puertos: Array<{ tipo: 'entrada' | 'salida'; x: number; yBola: number; yBorde: number }> } {
+  const total = entradas + salidas;
+  const c = centroPuente(n);
+  const r = PUENTE.bola;
+  // Separación horizontal entre puertos: `sep`, o menos si no caben en la bola (siempre dentro).
+  const sep = total > 1 ? Math.min(PUENTE.sep, (2 * (r - 2)) / (total - 1)) : 0;
+  const puertos = Array.from({ length: total }, (_, k) => {
+    const dx = (k - (total - 1) / 2) * sep;
+    return {
+      // De derecha a izquierda: primero las salidas (hacia la BD), luego las entradas.
+      tipo: (k >= total - salidas ? 'salida' : 'entrada') as 'entrada' | 'salida',
+      x: c.x + dx,
+      yBola: c.y + Math.sqrt(r * r - dx * dx),
+      yBorde: n.y + n.h,
+    };
+  });
+  // Orden devuelto: salidas (derecha → izquierda) y luego entradas.
+  return { r, puertos: [...puertos.filter((p) => p.tipo === 'salida').reverse(), ...puertos.filter((p) => p.tipo === 'entrada').reverse()] };
+}
+
 /** Columnas de la tabla de declaración: nombre y valor siempre; alias y desc si alguna variable los trae. */
 export function columnasVars(vars: readonly FlowVar[]): Array<'name' | 'alias' | 'value' | 'desc'> {
   return ['name', ...(vars.some((v) => v.alias) ? ['alias' as const] : []), 'value', ...(vars.some((v) => v.desc) ? ['desc' as const] : [])];
 }
 
 /** Medidas de la tabla de un nodo de declaración de variables. */
-export const VARS = { pad: 10, fila: 18, celda: 6, esquina: 14 } as const;
+export const VARS = { pad: 10, fila: 18, celda: 6, esquina: 14, charMono: 6.1, lineaCodigo: 14, maxValor: 30 } as const;
+
+/**
+ * Valor de una variable en líneas: si es largo, se parte antes de cada `.` de la cadena (fuera de
+ * paréntesis), con sangría: `TSysValueController` / `  .getOpenaiCfg()`.
+ */
+export function partirCadena(valor: string): string[] {
+  if (valor.length <= VARS.maxValor) return [valor];
+  const partes: string[] = [];
+  let prof = 0;
+  let actual = '';
+  for (const ch of valor) {
+    if (ch === '(' || ch === '[') prof++;
+    if (ch === ')' || ch === ']') prof--;
+    if (ch === '.' && prof === 0 && actual) { partes.push(actual); actual = ''; }
+    actual += ch;
+  }
+  if (actual) partes.push(actual);
+  return partes.map((p, i) => (i === 0 ? p : `  ${p}`));
+}
 
 /** Campos extra del nodo colocado: kind/embed y cajas absolutas de texto/incrustado. */
 function placedExtras(s: FlowNodeSpec | undefined, z: FlowSizedNode | undefined, x: number, y: number): Partial<FlowLayoutNode> {
@@ -1974,9 +2201,12 @@ function placedExtras(s: FlowNodeSpec | undefined, z: FlowSizedNode | undefined,
   if (z?.lines) out.lines = z.lines;
   if (z?.textBox) out.textBox = { x: x + z.textBox.x, y: y + z.textBox.y, w: z.textBox.w, h: z.textBox.h };
   if (z?.embedBox) out.embedBox = { x: x + z.embedBox.x, y: y + z.embedBox.y, w: z.embedBox.w, h: z.embedBox.h };
+  if (s?.bridge) out.bridge = s.bridge;
   if (s?.vars?.length && z?.varsCols && z.varsBox) {
     out.vars = s.vars;
     out.varsCols = z.varsCols;
+    out.varsValor = z.varsValor;
+    out.varsFilas = z.varsFilas;
     out.varsBox = { x: x + z.varsBox.x, y: y + z.varsBox.y, w: z.varsBox.w, h: z.varsBox.h };
   }
   return out;
@@ -2203,7 +2433,13 @@ export function placeLanes(
   // Un nodo al que solo llegan punteadas (tabla, POJO) va a la altura de su primer usuario.
   const flujo = edges.filter((e) => e.kind !== 'dashed');
   const layers = assignLayers(sized, flujo);
-  const soloUsos = new Set(sized.map((n) => n.id).filter((id) => !flujo.some((e) => e.to === id || e.from === id) && edges.some((e) => e.to === id)));
+  // Puentes `-(O=`: en la fila siguiente a su controller (debajo de él).
+  const puenteDe = new Map(spec.nodes.filter((n) => n.bridge).map((n) => [n.id, n.bridge!.of]));
+  // En un carril apilado, el puente comparte la capa de su controller (va en su grupo, debajo de él).
+  const apilados = new Set((spec.lanes ?? []).filter((l) => l.stack).map((l) => l.id));
+  const carrilDe = new Map(spec.nodes.map((n) => [n.id, n.lane]));
+  for (const [id, of] of puenteDe) if (layers.has(of)) layers.set(id, (layers.get(of) ?? 0) + (apilados.has(carrilDe.get(of) ?? '') ? 0 : 1));
+  const soloUsos = new Set(sized.map((n) => n.id).filter((id) => !puenteDe.has(id) && !flujo.some((e) => e.to === id || e.from === id) && edges.some((e) => e.to === id)));
   // En cadena: un nodo de solo usos cuyo usuario también lo es (p. ej. el POJO o la tabla de un
   // controller que solo se usa) toma la altura de ese usuario cuando ya está resuelta.
   const resueltos = new Set<string>();
@@ -2265,27 +2501,68 @@ export function placeLanes(
     const g = globo(id);
     return horizontal ? n.w + extraX(id) + (g ? g.w + COMENTARIO.aire : 0) : Math.max(n.h, g?.h ?? 0) + extraY(id);
   };
-  const ancho = (ids: readonly string[]): number => ids.reduce((a, id) => a + cruz(id), 0) + nodeGap * Math.max(0, ids.length - 1);
+  const anchoFila = (ids: readonly string[]): number => ids.reduce((a, id) => a + cruz(id), 0) + nodeGap * Math.max(0, ids.length - 1);
+  // Carriles apilados (solo con el flujo hacia abajo): cada entidad en su propio renglón y sus puentes
+  // en fila debajo de ella; la celda mide lo ancho del grupo más ancho y lo alto de todos.
+  const apilar = (lane: string): boolean => !horizontal && apilados.has(lane);
+  const gruposDe = (ids: readonly string[]): Array<{ main: string; puentes: string[] }> => {
+    const out: Array<{ main: string; puentes: string[] }> = [];
+    for (const id of ids) if (!puenteDe.has(id)) out.push({ main: id, puentes: [] });
+    for (const id of ids) {
+      if (!puenteDe.has(id)) continue;
+      const g = out.find((x) => x.main === puenteDe.get(id));
+      if (g) g.puentes.push(id); else out.push({ main: id, puentes: [] });
+    }
+    return out;
+  };
+  const anchoGrupo = (g: { main: string; puentes: string[] }): number => Math.max(cruz(g.main), anchoFila(g.puentes));
+  const largoGrupo = (g: { main: string; puentes: string[] }): number => largo(g.main) + (g.puentes.length ? Math.max(...g.puentes.map(largo)) : 0);
+  const ancho = (ids: readonly string[], lane = ''): number => (apilar(lane) ? Math.max(0, ...gruposDe(ids).map(anchoGrupo)) : anchoFila(ids));
+  const largoCelda = (ids: readonly string[], lane: string): number => {
+    const gs = gruposDe(ids);
+    return gs.reduce((a, g) => a + largoGrupo(g), 0) + nodeGap * Math.max(0, gs.length - 1);
+  };
 
   // Ancho de cada carril (cruzado al flujo).
   const span = new Map<string, number>();
   for (const lane of lanes) {
     let m = 0;
-    for (let l = 0; l <= maxLayer; l++) m = Math.max(m, ancho(celda.get(key(lane.id, l)) ?? []));
+    for (let l = 0; l <= maxLayer; l++) m = Math.max(m, ancho(celda.get(key(lane.id, l)) ?? [], lane.id));
     const rotulo = horizontal ? 0 : etiqueta(lane) + LANES.pad;
     span.set(lane.id, ceilTo(Math.max(LANES.minSpan, m + LANES.pad * 2, rotulo), 16));
   }
   // Largo de cada capa (a lo largo del flujo) y su arranque, después de la banda del rótulo.
   const head = horizontal ? ceilTo(Math.max(LANES.headerMinW, ...lanes.map(etiqueta)) + LANES.pad, 16) : LANES.header;
   const capaLargo = new Map<number, number>();
-  for (const n of sized) capaLargo.set(layerOf(n.id), Math.max(capaLargo.get(layerOf(n.id)) ?? 0, largo(n.id)));
+  // Las columnas apiladas no empujan a las demás: no cuentan en el largo de las capas (cada una lleva
+  // su propio cursor, ver más abajo); solo el flujo define las capas.
+  for (const n of sized) {
+    if (apilar(laneOf.get(n.id) ?? '')) continue;
+    capaLargo.set(layerOf(n.id), Math.max(capaLargo.get(layerOf(n.id)) ?? 0, largo(n.id)));
+  }
   const capaIni = new Map<number, number>();
   let cursor = head + LANES.pad;
   for (let l = 0; l <= maxLayer; l++) {
     capaIni.set(l, cursor);
     cursor += (capaLargo.get(l) ?? 0) + layerGap;
   }
-  const total = snap8(cursor - layerGap + LANES.pad);
+  // Columnas apiladas: cada celda arranca en su capa o, si la anterior de ESA columna aún no termina,
+  // debajo de ella (el empuje solo viene de la misma columna).
+  const inicioApilado = new Map<string, number>();
+  let fondoApilado = 0;
+  for (const lane of lanes) {
+    if (!apilar(lane.id)) continue;
+    let cursorCarril = 0;
+    for (let l = 0; l <= maxLayer; l++) {
+      const ids = celda.get(key(lane.id, l)) ?? [];
+      if (!ids.length) continue;
+      const y = Math.max(capaIni.get(l)!, cursorCarril);
+      inicioApilado.set(key(lane.id, l), y);
+      cursorCarril = y + largoCelda(ids, lane.id) + nodeGap;
+      fondoApilado = Math.max(fondoApilado, cursorCarril - nodeGap);
+    }
+  }
+  const total = snap8(Math.max(cursor - layerGap, fondoApilado) + LANES.pad);
 
   // Carriles uno tras otro; nodos centrados en su carril y en su capa.
   const out: FlowPlacedNode[] = [];
@@ -2298,6 +2575,29 @@ export function placeLanes(
       : { id: lane.id, label: lane.label, x: pos, y: 0, w: sp, h: total });
     for (let l = 0; l <= maxLayer; l++) {
       const ids = celda.get(key(lane.id, l)) ?? [];
+      if (apilar(lane.id) && ids.length) {
+        // Apilado: un grupo debajo del otro, centrados en el carril; los puentes en fila bajo su entidad.
+        let y = inicioApilado.get(key(lane.id, l)) ?? capaIni.get(l)!;
+        for (const g of gruposDe(ids)) {
+          const fila = [g.main];
+          let filaY = y;
+          for (const [k, idsFila] of [fila, g.puentes].entries()) {
+            if (!idsFila.length) continue;
+            let c = pos + sp / 2 - anchoFila(idsFila) / 2;
+            for (const id of idsFila) {
+              const n = byId.get(id)!;
+              const across = snap8(c + cruz(id) / 2) - cruz(id) / 2;
+              const dx = ctx.has(id) ? CTX.pad : 0;
+              const dy = ctx.has(id) ? CTX.pad + CTX.title : 0;
+              out.push({ id, x: across + dx, y: snap8(filaY) + dy, w: n.w, h: n.h, layer: l });
+              c += cruz(id) + nodeGap;
+            }
+            if (k === 0) filaY += largo(g.main);
+          }
+          y += largoGrupo(g) + nodeGap;
+        }
+        continue;
+      }
       let c = pos + sp / 2 - ancho(ids) / 2;
       for (const id of ids) {
         const n = byId.get(id)!;
@@ -2324,6 +2624,14 @@ export function placeLanes(
     const fin = Math.max(...ms.map((n) => a(n) + l(n)));
     const d = snap8(Math.max(head + LANES.pad - ini, Math.min(total - LANES.pad - fin, total / 2 - (ini + fin) / 2)));
     for (const n of ms) { if (horizontal) n.x += d; else n.y += d; }
+  }
+
+  // Puentes pegados a su controller: justo debajo de su borde (el palo los une).
+  for (const n of out) {
+    const of = puenteDe.get(n.id);
+    const ctl = of ? out.find((x) => x.id === of) : undefined;
+    if (!ctl) continue;
+    if (horizontal) n.x = ctl.x + ctl.w; else n.y = ctl.y + ctl.h;
   }
 
   // Hijo principal: el que sigue en el mismo carril; si ninguno, el del camino más largo (una
@@ -2444,7 +2752,8 @@ const CONTEXTO_POR_KIND: Record<string, string> = { class: 'Clases', tableder: '
  */
 function contextosDe(spec: FlowResolvedSpec, laneOf: ReadonlyMap<string, string>): Map<string, string> {
   const out = new Map<string, string>();
-  const esFlujo = (n: FlowNodeSpec): boolean => !n.kind && n.shape !== 'start' && n.shape !== 'end';
+  // Un puente `-(O=` es parte de su controller, no un paso del flujo.
+  const esFlujo = (n: FlowNodeSpec): boolean => !n.kind && n.shape !== 'start' && n.shape !== 'end' && n.shape !== 'bridge';
   const carrilConFlujo = new Set(spec.nodes.filter(esFlujo).map((n) => laneOf.get(n.id)));
   for (const n of spec.nodes) {
     if (n.context) out.set(n.id, n.context);
@@ -2466,8 +2775,14 @@ function insoftSides(
   fromShape: FlowShape | undefined,
   primary: string | undefined,
   direction: FlowDirection,
+  /** El origen es un controller con puentes `-(O=` colgando abajo: su flujo sale por el costado. */
+  conPuentes = false,
 ): { fromSide: string; toSide: string } {
   const base = pickSides(fromMeta, toMeta, direction);
+  if (conPuentes && direction === 'TB') {
+    const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
+    return { fromSide: dx < 0 ? 'left' : 'right', toSide: to.shape === 'diamond' || toMeta.layer > fromMeta.layer ? 'top' : base.toSide };
+  }
   // A una decisión se entra siempre por arriba: sus vértices laterales e inferior son salidas de rama
   // (entrar por un costado haría que la llegada y una rama compartan vértice).
   if (to.shape === 'diamond' && direction === 'TB' && fromShape !== 'end') return { fromSide: base.fromSide, toSide: 'top' };

@@ -1,4 +1,3 @@
-/// <reference types="node" />
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).
  *
@@ -20,6 +19,7 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawn } from 'node:child_process';
 import process from 'node:process';
+import type { Buffer } from 'node:buffer';
 import { formatMs, testCooldownFromEnv } from './test-cooldown.ts';
 import type { CtxPrueba, CuerpoT, HooksPruebas, ListaPruebas, OpcionesCarpeta, OpcionesCorrida, OpcionesT, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from './pruebas.schemas.ts';
 

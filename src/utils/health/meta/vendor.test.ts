@@ -41,3 +41,19 @@ Deno.test('vendor: V3 la configuración se valida', () => {
   assertThrows(() => ZConfigVendor.parse({ repo: 'a/b', archivos: [] }));
   assertEquals(ZConfigVendor.parse({ repo: 'a/b', archivos: [{ desde: 'a', hacia: 'b' }], extra: 1 }).rama, 'main');
 });
+
+Deno.test('vendor: V4 un archivo vendorizado que importa algo no vendorizado se reporta en `faltan`', async () => {
+  const kit = await Deno.makeTempDir();
+  const app = await Deno.makeTempDir();
+  git(kit, 'init', '-q');
+  git(kit, 'config', 'user.email', 't@t'); git(kit, 'config', 'user.name', 't');
+  await Deno.mkdir(join(kit, 'b'), { recursive: true });
+  await Deno.writeTextFile(join(kit, 'b/a.ts'), '/** } from "./doc.js" */\nimport type { T } from "./a.schemas.js";\nexport const a: T = 1;\n');
+  await Deno.writeTextFile(join(kit, 'b/a.schemas.ts'), 'export type T = number;\n');
+  git(kit, 'add', '.'); git(kit, 'commit', '-q', '-m', 'v1');
+  const solo = { repo: 'nadie/no-existe-iswc-test', local: kit, raiz: app, archivos: [{ desde: 'b/a.ts', hacia: 'v/a.ts' }] };
+  const [r1] = await vendorizar(solo);
+  assertEquals(r1!.faltan, ['./a.schemas.js'], 'falta el hermano .schemas; el import en comentario no cuenta');
+  const res = await vendorizar({ ...solo, archivos: [...solo.archivos, { desde: 'b/a.schemas.ts', hacia: 'v/a.schemas.ts' }] });
+  assert(res.every((r) => !r.faltan), JSON.stringify(res));
+});

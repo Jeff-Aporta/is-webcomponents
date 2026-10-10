@@ -16,11 +16,17 @@
  *   // @vendor <ISO> <repo>@<sha|local> <desde>
  *   // @doc <url o ruta de su documentación>
  *
+ * GUARDIÁN DE IMPORTS: al final, cada archivo de código vendorizado se revisa en el consumidor; si
+ * importa un relativo (`./x.schemas.js`, `../lib/obj.ts`…) que no existe junto a él, su resultado
+ * trae `faltan` y la CLI sale con 1. Todo hermano `.schemas` (y cualquier relativo) va en la lista.
+ *
  * Doc: skills/iswc-foundation/references/06-pines-y-vendor.md
  */
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { execFileSync } from "node:child_process";
+import process from "node:process";
+import { pathToFileURL } from "node:url";
 import { ZConfigVendor, type TConfigVendor, type TResultadoVendor } from "./vendor.schemas.ts";
 
 export type * from "./vendor.schemas.ts";
@@ -64,6 +70,20 @@ function fechaCopia(archivo: string): string | null {
 
 /** Quita una cabecera `@vendor`/`@doc` previa (al copiar desde un consumidor o reescribir). */
 const sinCabecera = (t: string): string => t.replace(/^(\/\/ @(vendor|doc) [^\n]*\n)+/, "");
+
+/** Relativos (`./`, `../`) que importa `archivo` y no existen junto a él (`.js` y `.ts` se aceptan entre sí). */
+export function importsFaltantes(archivo: string): string[] {
+  if (!existsSync(archivo)) return [];
+  // ponytail: regex sobre el texto sin comentarios; un `from './x'` dentro de un string daría falso positivo.
+  const texto = readFileSync(archivo, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const faltan = new Set<string>();
+  for (const m of texto.matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*)["'](\.\.?\/[^"']+)["']/g)) {
+    const ruta = resolve(dirname(archivo), m[1]!);
+    const alternas = [ruta, ruta.replace(/\.js$/, ".ts"), ruta.replace(/\.ts$/, ".js"), ruta.replace(/\.mjs$/, ".mts")];
+    if (!alternas.some((r) => existsSync(r))) faltan.add(m[1]!);
+  }
+  return [...faltan];
+}
 
 /** Actualiza los archivos de la configuración. No lanza por archivo: cada uno trae su estado. */
 export async function vendorizar(entrada: unknown, opciones: { raiz?: string } = {}): Promise<TResultadoVendor[]> {
@@ -111,20 +131,29 @@ export async function vendorizar(entrada: unknown, opciones: { raiz?: string } =
       out.push({ ...base, ...gana, error: `escritura: ${e instanceof Error ? e.message : String(e)}` });
     }
   }
+  for (const r of out) {
+    if (!/\.(m?[jt]s)$/.test(r.hacia)) continue;
+    const faltan = importsFaltantes(isAbsolute(r.hacia) ? r.hacia : join(raiz, r.hacia));
+    if (faltan.length) r.faltan = faltan;
+  }
   return out;
 }
 
 // CLI: deno run -A vendor.ts <config.json>
-if (import.meta.main) {
-  const ruta = Deno.args[0];
+// Sin `Deno.*` ni `import.meta.main`: compila igual con lib DOM (ISW) que con deno.ns.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const ruta = process.argv[2];
   if (!ruta) {
     console.error("uso: deno run -A vendor.ts <config.json>");
-    Deno.exit(2);
+    process.exit(2);
   }
   const res = await vendorizar(JSON.parse(readFileSync(ruta, "utf8")));
   for (const r of res) {
     const que = r.estado === "actualizado" ? `actualizado (${r.fuente} ${r.fecha})` : r.estado === "al-dia" ? `al día (${r.previa})` : `AVISO ${r.error}`;
     console.log(`[vendor] ${r.hacia}: ${que}`);
+    if (r.faltan) console.error(`[vendor] ERROR ${r.hacia} importa lo que no se vendoriza: ${r.faltan.join(", ")} (agrégalo a ${ruta})`);
   }
   // Un aviso no rompe el build: la copia existente se conserva (sin red, por ejemplo).
+  // Un import sin vendorizar sí: ese archivo no compila en el consumidor.
+  if (res.some((r) => r.faltan)) process.exit(1);
 }

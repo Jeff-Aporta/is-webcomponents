@@ -162,28 +162,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "dueno-TErrorController-pojo",
-              "label": "TError_",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TError_]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TErrorController-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "dueno-TErrorController",
+              "op": "C"
             }
           ]
         },
@@ -250,7 +235,7 @@
         {
           "from": "cliente",
           "to": "pg",
-          "label": "fetch"
+          "label": "HTTP"
         },
         {
           "from": "ini",
@@ -312,25 +297,18 @@
         },
         {
           "from": "x",
-          "to": "dueno-TErrorController",
-          "kind": "dashed",
-          "label": "INSERT"
-        },
-        {
-          "from": "x",
           "to": "fin"
         },
         {
-          "from": "dueno-TErrorController",
-          "to": "dueno-TErrorController-pojo",
-          "kind": "dashed",
-          "label": "klass · INSERT"
-        },
-        {
-          "from": "dueno-TErrorController",
-          "to": "terr",
+          "from": "x",
+          "to": "dueno-TErrorController-C",
           "kind": "dashed",
           "label": "INSERT"
+        },
+        {
+          "from": "dueno-TErrorController-C",
+          "to": "terr",
+          "kind": "dashed"
         }
       ]
     }

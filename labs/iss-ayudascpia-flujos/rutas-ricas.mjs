@@ -138,31 +138,48 @@ export function ruta(meta, componer) {
     cadena: (...ids) => ids.slice(1).forEach((to, i) => arista({ from: ids[i], to })),
   };
   componer(b);
-  // Toda tabla se toca por el controller que la gobierna (y su POJO): si el dueño no está en la ruta,
-  // el paso le habla a él y él a la tabla, con la misma operación. Así ningún controller aparenta
-  // conectarse a tablas ajenas.
+  // Puentes `-(O=`: ningún paso toca una tabla directo. Cada acceso entra al puente de la acción
+  // (letra CRUD) del controller que gobierna la tabla y el puente lo redirige a la tabla. El detalle
+  // de un maestro sale del puente del maestro hacia el del detalle. Los POJOs no aportan: se retiran.
+  const VERBO = { SELECT: 'R', INSERT: 'C', UPDATE: 'U', DELETE: 'D' };
+  const ACCION = { R: 'leer()', C: 'insertar()', U: 'actualizar()', D: 'borrar()' };
+  const puente = (controller, op, lane) => {
+    const ctlId = porClase.get(controller) ?? b.clase(`dueno-${controller}`, controller, lane);
+    const id = `${ctlId}-${op}`;
+    if (!nodes.some((x) => x.id === id)) n({ id, label: ACCION[op], shape: 'bridge', of: ctlId, op, lane: nodes.find((x) => x.id === ctlId)?.lane ?? lane });
+    return id;
+  };
   for (const e of [...edges]) {
     const tabla = e.kind === 'dashed' ? tablaDe.get(e.to) : null;
     const dueno = tabla && duenoDe.get(tabla);
-    // Si el dueño ya está en la ruta (la clase principal), el paso habla con la tabla directo: ese
-    // controller ya aparece con su tabla.
-    const yaEsta = dueno && porClase.has(dueno) && porClase.get(dueno) !== `dueno-${dueno}`;
-    if (!dueno || yaEsta) continue;
-    const desde = nodes.find((x) => x.id === e.from);
-    const ctl = b.clase(`dueno-${dueno}`, dueno, desde?.lane);
-    const t = e.to;
-    // Detalle de un maestro que está en la ruta: lo trae el `sqlDetalle` del maestro, así que la
-    // relación sale del controller maestro (no del paso) y nombra el arreglo y la columna que los une.
-    const det = detalleDe.get(tabla);
-    if (det && porClase.has(det.maestro)) {
-      e.from = porClase.get(det.maestro);
-      e.label = `detalle ${det.arreglo}${det.clave ? ` (${det.clave})` : ''} · ${e.label}`;
+    if (!dueno) continue;
+    edges.splice(edges.indexOf(e), 1);
+    const texto = String(e.label ?? '');
+    const verbos = [...new Set(texto.match(/SELECT|INSERT|UPDATE|DELETE/g) ?? ['SELECT'])];
+    const resto = texto.replace(/SELECT|INSERT|UPDATE|DELETE|·/g, ' ').replace(/\s+/g, ' ').trim();
+    const lane = nodes.find((x) => x.id === e.from)?.lane;
+    for (const verbo of verbos) {
+      const op = VERBO[verbo];
+      const p = puente(dueno, op, lane);
+      const det = detalleDe.get(tabla);
+      if (det && porClase.has(det.maestro) && det.maestro !== dueno) {
+        const maestro = puente(det.maestro, op, lane);
+        arista({ from: e.from, to: maestro, kind: 'dashed', label: verbo });
+        // La columna que une maestro y detalle ya está en el DER: aquí basta el arreglo.
+        arista({ from: maestro, to: p, kind: 'dashed', label: `detalle ${det.arreglo}` });
+      } else {
+        // La acción de BD (con su ícono) y, si la ruta la nombra, qué pide (p. ej. «patchdb»).
+        arista({ from: e.from, to: p, kind: 'dashed', label: [verbo, resto].filter(Boolean).join(' ') });
+      }
+      // Salida del puente a su tabla: sin texto (la letra CRUD y el ícono del puente ya dicen la acción).
+      arista({ from: p, to: e.to, kind: 'dashed' });
     }
-    e.to = ctl;
-    const previa = edges.find((y) => y.from === ctl && y.to === t && y.kind === 'dashed');
-    if (previa) { if (!previa.label.split(' · ').includes(e.label)) previa.label += ` · ${e.label}`; }
-    else edges.push({ from: ctl, to: t, kind: 'dashed', label: e.label.replace(/^detalle .* · /, '') });
   }
+  // Sin POJOs (ni sus aristas): el controller es el puente con la BD.
+  const esPojo = (x) => x.kind === 'class' && !/Controller$/.test(x.label) && !/Client$/.test(x.label);
+  const pojos = new Set(nodes.filter(esPojo).map((x) => x.id));
+  for (const id of pojos) nodes.splice(nodes.findIndex((x) => x.id === id), 1);
+  for (let k = edges.length - 1; k >= 0; k--) if (pojos.has(edges[k].from) || pojos.has(edges[k].to)) edges.splice(k, 1);
   // Paralelismo: un nodo que no decide (ni es barra) y reparte su flujo continuo a varios procesos
   // lo hace por una barra negra; nunca salen dos caminos del mismo riel.
   for (const nd of [...nodes]) {
@@ -187,6 +204,8 @@ export function ruta(meta, componer) {
     const i = lanes.findIndex((l) => l.id === servicio);
     lanes.splice(i + 1, 0, { id: 'controllers', label: 'Controllers' }, { id: 'modelos', label: 'Modelos' });
     for (const c of clasesEn) c.lane = /Controller$/.test(c.label) ? 'controllers' : 'modelos';
+    // Los puentes van con su controller.
+    for (const pz of nodes.filter((x) => x.shape === 'bridge')) pz.lane = 'controllers';
   }
   // Columna de componentes: la primera si inicia con un componente; si no y hay componentes, una
   // propia al frente; sin componentes, no hay (el proceso arranca en el flujo).
@@ -206,7 +225,8 @@ export function ruta(meta, componer) {
     if (!det) continue;
     const maestroTabla = codigo.pares.find((p) => p.controller === det.maestro)?.nTbl;
     const maestro = [...tablaDe].find(([, nombre]) => nombre === maestroTabla)?.[0];
-    if (maestro) arista({ from: maestro, to: tid, kind: 'dashed', label: `detalle ${det.arreglo}${det.clave ? ` (${det.clave})` : ''}` });
+    // Entre tablas apiladas el riel corre en vertical: su texto también.
+    if (maestro) arista({ from: maestro, to: tid, kind: 'dashed', label: `detalle ${det.arreglo}`, labelVertical: true });
   }
   // Qué hace la ruta con cada tabla (verbos SQL de sus punteadas): así ningún «uses» queda vago.
   const opsDe = (tabla) => {
@@ -226,7 +246,7 @@ export function ruta(meta, componer) {
     for (const d of p.detalles ?? []) {
       const m = porClase.get(p.pojo);
       const det = porClase.get(codigo.pares.find((x) => x.controller === d.controller)?.pojo);
-      if (!m || !det) continue;
+      if (!m || !det || !nodes.some((x) => x.id === m) || !nodes.some((x) => x.id === det)) continue;
       const ops = opsDe(d.nTbl);
       arista({ from: m, to: det, kind: 'dashed', label: `detalle ${d.arreglo}${ops.length ? ` · ${ops.join(', ')}` : ''}` });
     }
@@ -244,7 +264,10 @@ export function ruta(meta, componer) {
   if (cliente && componenteInicial) {
     lanes.unshift({ id: 'cliente', label: 'Cliente', align: 'center' });
     nodes.unshift({ id: 'cliente', label: cliente, kind: 'class', lane: 'cliente', class: refClase(cliente) });
-    edges.unshift({ from: 'cliente', to: componenteInicial.id, label: 'fetch' });
+    // El llamado del cliente dice qué es: «HTTP POST /conversacion» (el primer ítem del componente).
+    const items = componenteInicial.component?.actions?.find((x) => x.op === 'push')?.valor?.items ?? [];
+    const llamado = items[0] ? `HTTP ${String(items[0]).replace(/\|/g, ' · ')}` : 'HTTP';
+    edges.unshift({ from: 'cliente', to: componenteInicial.id, label: llamado });
   }
   return {
     slug: `ruta-${meta.slug}`,
@@ -266,6 +289,7 @@ function aVector(title, lanes, nodes, edges, llamador) {
     if (n.kind === 'component') return 'componente';
     if (n.kind === 'tableder') return 'tabla';
     if (n.kind === 'class') return /Client$/.test(n.label) ? 'cliente' : /Controller$/.test(n.label) ? 'controller' : 'pojo';
+    if (n.shape === 'bridge') return 'puente';
     return 'flujo';
   };
   const tipoColumna = (l, ns) => {
@@ -355,9 +379,9 @@ RUTAS.push(ruta({
   b.paso('begin', '200 text/event-stream · begin y los log que esperaban', 'T', 'mdi:broadcast');
   // Config del turno: se lee una vez y se usa más adelante (modelos, topes, cada cuánto el título).
   b.vars('cfg', 'Config del turno', 'T', [
-    { name: 'openai', alias: 'ai', value: 'TSysValueController.getOpenaiCfg()', desc: 'cliente del proveedor; null si está degradado' },
-    { name: 'runtime.conversationModel', alias: 'mc', value: 'TConversacionController.runtimeOpenai()', desc: 'modelo de la respuesta' },
-    { name: 'runtime.operativeModel', alias: 'mo', value: 'TConversacionController.runtimeOpenai()', desc: 'clasificar y titular' },
+    { name: 'openaiCfg', value: 'TSysValueController.getOpenaiCfg()', desc: 'cliente del proveedor; null si está degradado' },
+    { name: 'convModel', value: 'TConversacionController.runtimeOpenai().conversationModel', desc: 'modelo de la respuesta' },
+    { name: 'opModel', value: 'TConversacionController.runtimeOpenai().operativeModel', desc: 'clasificar y titular' },
   ]);
   b.tabla('tprov', 'patyia_providers', 'P');
   b.tabla('tsys', 'patyia_sys_values', 'P');
@@ -367,18 +391,18 @@ RUTAS.push(ruta({
   b.componente('ai-hilo', 'openai-conversations', 'O');
   b.componente('ai-resp', 'openai-responses', 'O');
   b.decision('dvoz', '¿Trae notas de voz?', 'T');
-  b.paso('voz', 'Transcribe cada nota con {{ai}} y valida el texto', 'T', 'mdi:microphone-outline');
+  b.paso('voz', 'Transcribe cada nota con {{openaiCfg}} y valida el texto', 'T', 'mdi:microphone-outline');
   b.decision('dctx', '¿Modo libre o contexto forzado?', 'T');
-  b.paso('clasif', 'Clasifica la consulta con {{mo}} (tdconsulta) y elige vector stores', 'T', 'mdi:tag-search-outline');
+  b.paso('clasif', 'Clasifica la consulta con {{opModel}} (tdconsulta) y elige vector stores', 'T', 'mdi:tag-search-outline');
   b.decision('dhilo', '¿La conversación ya tiene hilo de OpenAI?', 'T');
   b.paso('hilo', 'Crea el hilo y lo guarda en la conversación', 'T', 'mdi:forum-outline');
-  b.paso('resp', 'Responses API en stream con {{mc}}, instrucciones y file_search', 'T', 'mdi:robot-outline');
+  b.paso('resp', 'Responses API en stream con {{convModel}}, instrucciones y file_search', 'T', 'mdi:robot-outline');
   b.paso('delta', 'Reenvía cada delta al cliente (message)', 'T', 'mdi:message-arrow-right-outline');
   b.nota('n-delta', 'delta', 'Se repite por cada fragmento del stream');
   b.decision('dok', '¿El turno salió bien?', 'T');
-  b.vars('vn', 'Título', 'T', [{ name: 'N', value: 'conversacion.recalcularTituloCadaMensajesUsuario', desc: 'sys value' }]);
+  b.vars('vn', 'Título', 'T', [{ name: 'N', value: 'TSysValueController.valor("conversacion").recalcularTituloCadaMensajesUsuario', desc: 'cada cuántos mensajes se retitula' }]);
   b.decision('dtit', '¿(qmensajes − 1) % {{N}} = 0?', 'T');
-  b.paso('titulo', 'Regenera el título con {{mo}} (operativo 9999.1)', 'T', 'mdi:format-title');
+  b.paso('titulo', 'Regenera el título con {{opModel}} (operativo 9999.1)', 'T', 'mdi:format-title');
   b.paso('consultas', 'Extrae y clasifica las consultas del mensaje', 'T', 'mdi:text-search');
   b.tabla('tqry', 'patyia_consultas', 'P');
   b.paso('hist', 'Guarda el historial del turno, bajo bloqueo', 'T', 'mdi:database-lock-outline');

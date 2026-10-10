@@ -190,43 +190,34 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "ctl-pojo",
-              "label": "TConversationTicket",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversationTicket]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "dueno-TConversacionController-pojo",
-              "label": "TConversacion",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversacion]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TConversacionController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TConversacionController",
+              "op": "R"
+            },
+            {
+              "id": "ctl-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "C"
+            },
+            {
+              "id": "dueno-TConversacionController-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "dueno-TConversacionController",
+              "op": "C"
+            },
+            {
+              "id": "dueno-TConversacionController-U",
+              "label": "actualizar()",
+              "shape": "bridge",
+              "of": "dueno-TConversacionController",
+              "op": "U"
             }
           ]
         },
@@ -334,13 +325,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · INSERT"
+          "label": "HTTP POST /tiquete"
         },
         {
           "from": "api",
@@ -358,12 +343,6 @@
         {
           "from": "lee",
           "to": "dec"
-        },
-        {
-          "from": "lee",
-          "to": "dueno-TConversacionController",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "dec",
@@ -387,12 +366,6 @@
         },
         {
           "from": "ins",
-          "to": "ttiq",
-          "kind": "dashed",
-          "label": "INSERT"
-        },
-        {
-          "from": "ins",
           "to": "cierra"
         },
         {
@@ -402,12 +375,6 @@
         {
           "from": "ok",
           "to": "fin"
-        },
-        {
-          "from": "cierra",
-          "to": "dueno-TConversacionController",
-          "kind": "dashed",
-          "label": "UPDATE"
         },
         {
           "from": "e401",
@@ -427,28 +394,50 @@
           "label": "respuesta"
         },
         {
-          "from": "dueno-TConversacionController",
-          "to": "dueno-TConversacionController-pojo",
+          "from": "lee",
+          "to": "dueno-TConversacionController-R",
           "kind": "dashed",
-          "label": "klass · SELECT, UPDATE"
+          "label": "SELECT"
         },
         {
-          "from": "dueno-TConversacionController",
+          "from": "dueno-TConversacionController-R",
           "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "ins",
+          "to": "dueno-TConversacionController-C",
           "kind": "dashed",
-          "label": "SELECT · UPDATE"
+          "label": "INSERT"
+        },
+        {
+          "from": "dueno-TConversacionController-C",
+          "to": "ctl-C",
+          "kind": "dashed",
+          "label": "detalle TIQUETES"
+        },
+        {
+          "from": "ctl-C",
+          "to": "ttiq",
+          "kind": "dashed"
+        },
+        {
+          "from": "cierra",
+          "to": "dueno-TConversacionController-U",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "dueno-TConversacionController-U",
+          "to": "tconv",
+          "kind": "dashed"
         },
         {
           "from": "tconv",
           "to": "ttiq",
           "kind": "dashed",
-          "label": "detalle TIQUETES (iconversacion)"
-        },
-        {
-          "from": "dueno-TConversacionController-pojo",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "detalle TIQUETES · INSERT"
+          "label": "detalle TIQUETES",
+          "labelVertical": true
         }
       ]
     }

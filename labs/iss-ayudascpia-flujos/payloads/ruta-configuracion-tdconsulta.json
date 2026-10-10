@@ -153,28 +153,27 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "ctl-pojo",
-              "label": "TTdConsulta",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TTdConsulta]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ctl-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "R"
+            },
+            {
+              "id": "ctl-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "C"
+            },
+            {
+              "id": "ctl-U",
+              "label": "actualizar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "U"
             }
           ]
         },
@@ -234,12 +233,6 @@
       ],
       "edges": [
         {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT, INSERT, UPDATE"
-        },
-        {
           "from": "api",
           "to": "ctl",
           "label": "petición con token"
@@ -259,12 +252,6 @@
           "label": "POST · PUT"
         },
         {
-          "from": "lista",
-          "to": "ttd",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
           "from": "valida",
           "to": "d2"
         },
@@ -280,23 +267,11 @@
         },
         {
           "from": "anc",
-          "to": "ttd",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
-          "from": "anc",
           "to": "push"
         },
         {
           "from": "push",
           "to": "guarda"
-        },
-        {
-          "from": "guarda",
-          "to": "ttd",
-          "kind": "dashed",
-          "label": "INSERT · UPDATE"
         },
         {
           "from": "guarda",
@@ -314,6 +289,45 @@
           "from": "fin",
           "to": "api",
           "label": "respuesta"
+        },
+        {
+          "from": "lista",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "ctl-R",
+          "to": "ttd",
+          "kind": "dashed"
+        },
+        {
+          "from": "anc",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "guarda",
+          "to": "ctl-C",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "ctl-C",
+          "to": "ttd",
+          "kind": "dashed"
+        },
+        {
+          "from": "guarda",
+          "to": "ctl-U",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "ctl-U",
+          "to": "ttd",
+          "kind": "dashed"
         }
       ]
     }

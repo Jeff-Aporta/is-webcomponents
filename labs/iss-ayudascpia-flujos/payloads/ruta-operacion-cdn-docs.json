@@ -143,43 +143,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "kcdn-pojo",
-              "label": "TCdnObject",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TCdnObject]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "ksys-pojo",
-              "label": "TSysValue",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TSysValue]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ksys-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ksys",
+              "op": "R"
             }
           ]
         },
@@ -251,18 +221,6 @@
       ],
       "edges": [
         {
-          "from": "kcdn",
-          "to": "kcdn-pojo",
-          "kind": "dashed",
-          "label": "klass"
-        },
-        {
-          "from": "ksys",
-          "to": "ksys-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
-        },
-        {
           "from": "api",
           "to": "d1",
           "label": "GET (pública)"
@@ -295,12 +253,6 @@
           "label": "klass"
         },
         {
-          "from": "doc",
-          "to": "tsys",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
           "from": "front",
           "to": "ok"
         },
@@ -320,6 +272,17 @@
           "from": "fin",
           "to": "api",
           "label": "respuesta sin sobre"
+        },
+        {
+          "from": "doc",
+          "to": "ksys-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "ksys-R",
+          "to": "tsys",
+          "kind": "dashed"
         }
       ]
     }

@@ -184,28 +184,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "err-pojo",
-              "label": "TError_",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TError_]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "err-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "err",
+              "op": "C"
             }
           ]
         },
@@ -303,13 +288,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "err",
-          "to": "err-pojo",
-          "kind": "dashed",
-          "label": "klass · INSERT"
+          "label": "HTTP cualquier ruta propia"
         },
         {
           "from": "api",
@@ -357,15 +336,20 @@
           "to": "fin"
         },
         {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        },
+        {
           "from": "guarda",
-          "to": "terr",
+          "to": "err-C",
           "kind": "dashed",
           "label": "INSERT"
         },
         {
-          "from": "fin",
-          "to": "api",
-          "label": "respuesta"
+          "from": "err-C",
+          "to": "terr",
+          "kind": "dashed"
         }
       ]
     }

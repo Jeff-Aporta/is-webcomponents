@@ -171,28 +171,13 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
+            },
             {
-              "id": "ctl-pojo",
-              "label": "TConversacion",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversacion]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ctl-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "R"
             }
           ]
         },
@@ -261,13 +246,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "HTTP GET /conversaciones"
         },
         {
           "from": "api",
@@ -293,12 +272,6 @@
           "to": "prop"
         },
         {
-          "from": "prop",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
           "from": "seg",
           "to": "d2"
         },
@@ -311,18 +284,6 @@
           "from": "d2",
           "to": "flt",
           "label": "no"
-        },
-        {
-          "from": "grp",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
-          "from": "flt",
-          "to": "tconv",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "prop",
@@ -344,6 +305,29 @@
           "from": "fin",
           "to": "api",
           "label": "respuesta"
+        },
+        {
+          "from": "prop",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "ctl-R",
+          "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "grp",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "flt",
+          "to": "ctl-R",
+          "kind": "dashed",
+          "label": "SELECT"
         }
       ]
     }

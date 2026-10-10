@@ -212,6 +212,13 @@
               }
             },
             {
+              "id": "dueno-TConversacionController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TConversacionController",
+              "op": "R"
+            },
+            {
               "id": "dueno-TConversationLogController",
               "label": "TConversationLogController",
               "kind": "class",
@@ -225,58 +232,27 @@
                   }
                 }
               }
-            }
-          ]
-        },
-        {
-          "id": "modelos",
-          "label": "Modelos",
-          "tipo": "modelos",
-          "nodes": [
-            {
-              "id": "ctl-pojo",
-              "label": "TQualifiedMessage",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TQualifiedMessage]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
             },
             {
-              "id": "dueno-TConversacionController-pojo",
-              "label": "TConversacion",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversacion]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "dueno-TConversationLogController-R",
+              "label": "leer()",
+              "shape": "bridge",
+              "of": "dueno-TConversationLogController",
+              "op": "R"
             },
             {
-              "id": "dueno-TConversationLogController-pojo",
-              "label": "TConversationLog",
-              "kind": "class",
-              "class": {
-                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-                "query": {
-                  "clases": {
-                    "[name=TConversationLog]": {
-                      "uml": true
-                    }
-                  }
-                }
-              }
+              "id": "ctl-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "ctl",
+              "op": "C"
+            },
+            {
+              "id": "dueno-TConversacionController-C",
+              "label": "insertar()",
+              "shape": "bridge",
+              "of": "dueno-TConversacionController",
+              "op": "C"
             }
           ]
         },
@@ -423,13 +399,7 @@
         {
           "from": "cliente",
           "to": "api",
-          "label": "fetch"
-        },
-        {
-          "from": "ctl",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "klass · INSERT"
+          "label": "HTTP POST /mensaje"
         },
         {
           "from": "api",
@@ -449,12 +419,6 @@
           "from": "d1",
           "to": "lee",
           "label": "sí"
-        },
-        {
-          "from": "lee",
-          "to": "dueno-TConversacionController",
-          "kind": "dashed",
-          "label": "SELECT"
         },
         {
           "from": "lee",
@@ -497,12 +461,6 @@
         },
         {
           "from": "d5",
-          "to": "dueno-TConversationLogController",
-          "kind": "dashed",
-          "label": "SELECT"
-        },
-        {
-          "from": "d5",
           "to": "r6",
           "label": "no"
         },
@@ -510,12 +468,6 @@
           "from": "d5",
           "to": "ins",
           "label": "sí"
-        },
-        {
-          "from": "ins",
-          "to": "tmsg",
-          "kind": "dashed",
-          "label": "INSERT"
         },
         {
           "from": "r1",
@@ -551,40 +503,50 @@
           "label": "respuesta"
         },
         {
-          "from": "dueno-TConversacionController",
-          "to": "dueno-TConversacionController-pojo",
+          "from": "lee",
+          "to": "dueno-TConversacionController-R",
           "kind": "dashed",
-          "label": "klass · SELECT"
+          "label": "SELECT"
         },
         {
-          "from": "dueno-TConversacionController",
+          "from": "dueno-TConversacionController-R",
           "to": "tconv",
+          "kind": "dashed"
+        },
+        {
+          "from": "d5",
+          "to": "dueno-TConversationLogController-R",
           "kind": "dashed",
           "label": "SELECT"
         },
         {
-          "from": "dueno-TConversationLogController",
-          "to": "dueno-TConversationLogController-pojo",
-          "kind": "dashed",
-          "label": "klass · SELECT"
-        },
-        {
-          "from": "dueno-TConversationLogController",
+          "from": "dueno-TConversationLogController-R",
           "to": "tlog",
+          "kind": "dashed"
+        },
+        {
+          "from": "ins",
+          "to": "dueno-TConversacionController-C",
           "kind": "dashed",
-          "label": "SELECT"
+          "label": "INSERT"
+        },
+        {
+          "from": "dueno-TConversacionController-C",
+          "to": "ctl-C",
+          "kind": "dashed",
+          "label": "detalle MENSAJESCALIFICADOS"
+        },
+        {
+          "from": "ctl-C",
+          "to": "tmsg",
+          "kind": "dashed"
         },
         {
           "from": "tconv",
           "to": "tmsg",
           "kind": "dashed",
-          "label": "detalle MENSAJESCALIFICADOS (iconversacion)"
-        },
-        {
-          "from": "dueno-TConversacionController-pojo",
-          "to": "ctl-pojo",
-          "kind": "dashed",
-          "label": "detalle MENSAJESCALIFICADOS · INSERT"
+          "label": "detalle MENSAJESCALIFICADOS",
+          "labelVertical": true
         }
       ]
     }

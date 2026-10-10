@@ -749,7 +749,10 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       heap.push(h(s0 >> 2), s0);
     }
     let goal = -1;
+    let expandidos = 0;
     while (heap.size) {
+      // Fecha límite (opts.deadline): una arista muy cara no bloquea el hilo; vuelve sin camino.
+      if (opts.deadline && (++expandidos & 1023) === 0 && Date.now() > opts.deadline) break;
       const s = heap.pop();
       const k = s >> 2;
       const d = s & 3;
@@ -893,6 +896,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     const pf = 1 + it * 0.25;
     let changed = false;
     for (const ei of order) {
+      if (opts.deadline && Date.now() > opts.deadline && states[ei]) continue;
+      if (opts.deadline && Date.now() > opts.deadline) break;
       mark(ei, -1);
       const r = route(ei, pf);
       const st = r.st;
@@ -920,11 +925,13 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     // detiene cuando todos quedan estáticos (o al tope `grid.iterations`).
     void conflicts;
     if (!changed) break;
+    if (opts.deadline && Date.now() > opts.deadline) break;
   }
 
   // Uniones vigentes: el anfitrión tiene que seguir pasando por el nodo de
   // unión (pudo re-rutearse después). Si no, la arista vuelve a su punta propia.
   for (let pass = 0; pass < 4; pass++) {
+    if (opts.deadline && Date.now() > opts.deadline) break;
     let fixed = false;
     for (let ei = 0; ei < edges.length; ei++) {
       const j = joinOf[ei];
