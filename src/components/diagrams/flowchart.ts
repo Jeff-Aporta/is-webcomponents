@@ -114,7 +114,7 @@ function insoftText(lines: string[], tb: { x: number; y: number; w: number; h: n
       if (ref) {
         ts.setAttribute('class', 'flow-var-ref');
         ts.dataset.var = ref[1]!.trim();
-        ts.textContent = `\u2009${ref[1]!.trim()}\u2009`;
+        ts.textContent = `\u2002${ref[1]!.trim()}\u2002`;
       } else ts.textContent = p;
       t.appendChild(ts);
     });
@@ -839,11 +839,14 @@ class IswcFlowchart extends DiagramElementBase {
         const a = ts.getStartPositionOfChar(0);
         const b = ts.getEndPositionOfChar(n - 1);
         const fs = Number(t.getAttribute('font-size') ?? 11);
-        const h = fs * 1.35;
+        // Aire alrededor del texto: la píldora no lo aprieta.
+        const h = fs * 1.7;
+        // El aire lo dan los espacios (en) del propio texto: la píldora no invade lo de al lado.
+        const aireX = 0;
         // La posición del carácter es la línea base; con `dominant-baseline: central` es el centro.
-        const y = t.getAttribute('dominant-baseline') === 'central' ? a.y - h / 2 : a.y - fs * 0.98;
+        const y = t.getAttribute('dominant-baseline') === 'central' ? a.y - h / 2 : a.y - fs * 0.36 - h / 2;
         const r = svgEl('rect', {
-          x: a.x, y, width: Math.max(4, b.x - a.x), height: h, rx: h / 2, ry: h / 2,
+          x: a.x - aireX, y, width: Math.max(4, b.x - a.x) + aireX * 2, height: h, rx: h / 2, ry: h / 2,
           fill: 'none', stroke: t.getAttribute('fill') ?? '#334155', 'stroke-width': 0.9, 'stroke-dasharray': '2 2', class: 'flow-var-ref__pill',
         });
         t.parentNode?.insertBefore(r, t);
@@ -933,7 +936,7 @@ class IswcFlowchart extends DiagramElementBase {
             if (col === 'alias' && texto) {
               const ts = svgEl('tspan', { class: 'flow-var-ref' });
               ts.dataset.var = texto;
-              ts.textContent = `\u2009${texto}\u2009`;
+              ts.textContent = `\u2002${texto}\u2002`;
               t.appendChild(ts);
             } else t.textContent = texto;
             g.appendChild(t);

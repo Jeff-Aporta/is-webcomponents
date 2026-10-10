@@ -7,306 +7,317 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Token de servidor (POST /JWT)",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "ContaPyme / ISW"
-      },
-      {
-        "id": "I",
-        "label": "ISS · TIdentityController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TIdentityClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TIdentityClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-identidad]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Token de servidor (POST /JWT)",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TIdentityClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TIdentityClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-identidad]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "C",
+          "label": "ContaPyme / ISW",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            },
+            {
+              "id": "externos",
+              "label": "Externos"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-identidad]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-identidad]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-identidad",
+              "group": "propios-patyia-api"
+            },
+            {
+              "id": "ds",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=ds-login]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=ds-login]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "ds-login",
+              "group": "externos"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-identidad",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TIdentityController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TIdentityController]": {
-                "uml": true
-              }
+        {
+          "id": "I",
+          "label": "ISS · TIdentityController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "d1",
+              "label": "¿Llegan controlKey, iapp e idmaquina?",
+              "shape": "diamond"
+            },
+            {
+              "id": "e400",
+              "label": "400",
+              "icon": "mdi:form-textbox"
+            },
+            {
+              "id": "login",
+              "label": "Consulta la sesión en DataSnap",
+              "icon": "mdi:server-network"
+            },
+            {
+              "id": "d2",
+              "label": "¿Qué responde DataSnap?",
+              "shape": "diamond"
+            },
+            {
+              "id": "e503",
+              "label": "503 · reintentar",
+              "icon": "mdi:cloud-alert-outline"
+            },
+            {
+              "id": "e401",
+              "label": "401 · volver a iniciar sesión",
+              "icon": "mdi:account-cancel-outline"
+            },
+            {
+              "id": "firma",
+              "label": "Firma HS384, 24 h, con el secreto del código",
+              "icon": "mdi:key-chain-variant"
+            },
+            {
+              "id": "token",
+              "label": "{ respuesta: { token } }",
+              "icon": "mdi:reply-outline"
             }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TIdentityObject",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TIdentityObject]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "d1",
-        "label": "¿Llegan controlKey, iapp e idmaquina?",
-        "shape": "diamond",
-        "lane": "I"
-      },
-      {
-        "id": "e400",
-        "label": "400",
-        "lane": "I",
-        "icon": "mdi:form-textbox"
-      },
-      {
-        "id": "login",
-        "label": "Consulta la sesión en DataSnap",
-        "lane": "I",
-        "icon": "mdi:server-network"
-      },
-      {
-        "id": "ds",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=ds-login]": {
-                    "name": true
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TIdentityController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TIdentityController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=ds-login]": true
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
+            {
+              "id": "ctl-pojo",
+              "label": "TIdentityObject",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TIdentityObject]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
             }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
-            }
           ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
         },
-        "ref": "ds-login",
-        "context": "Externos"
-      },
-      {
-        "id": "d2",
-        "label": "¿Qué responde DataSnap?",
-        "shape": "diamond",
-        "lane": "I"
-      },
-      {
-        "id": "e503",
-        "label": "503 · reintentar",
-        "lane": "I",
-        "icon": "mdi:cloud-alert-outline"
-      },
-      {
-        "id": "e401",
-        "label": "401 · volver a iniciar sesión",
-        "lane": "I",
-        "icon": "mdi:account-cancel-outline"
-      },
-      {
-        "id": "firma",
-        "label": "Firma HS384, 24 h, con el secreto del código",
-        "lane": "I",
-        "icon": "mdi:key-chain-variant"
-      },
-      {
-        "id": "token",
-        "label": "{ respuesta: { token } }",
-        "lane": "I",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "POST /JWT"
-      },
-      {
-        "from": "ctl",
-        "to": "d1"
-      },
-      {
-        "from": "d1",
-        "to": "e400",
-        "label": "falta un dato"
-      },
-      {
-        "from": "d1",
-        "to": "login",
-        "label": "completos"
-      },
-      {
-        "from": "login",
-        "to": "ds",
-        "kind": "dashed",
-        "label": "LogInContacto"
-      },
-      {
-        "from": "login",
-        "to": "d2"
-      },
-      {
-        "from": "d2",
-        "to": "e503",
-        "label": "no responde o vacía"
-      },
-      {
-        "from": "d2",
-        "to": "e401",
-        "label": "rechaza la llave"
-      },
-      {
-        "from": "d2",
-        "to": "firma",
-        "label": "identidad válida"
-      },
-      {
-        "from": "firma",
-        "to": "token"
-      },
-      {
-        "from": "token",
-        "to": "fin"
-      },
-      {
-        "from": "e400",
-        "to": "fin"
-      },
-      {
-        "from": "e503",
-        "to": "fin"
-      },
-      {
-        "from": "e401",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass"
+        },
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "POST /JWT"
+        },
+        {
+          "from": "ctl",
+          "to": "d1"
+        },
+        {
+          "from": "d1",
+          "to": "e400",
+          "label": "falta un dato"
+        },
+        {
+          "from": "d1",
+          "to": "login",
+          "label": "completos"
+        },
+        {
+          "from": "login",
+          "to": "ds",
+          "kind": "dashed",
+          "label": "LogInContacto"
+        },
+        {
+          "from": "login",
+          "to": "d2"
+        },
+        {
+          "from": "d2",
+          "to": "e503",
+          "label": "no responde o vacía"
+        },
+        {
+          "from": "d2",
+          "to": "e401",
+          "label": "rechaza la llave"
+        },
+        {
+          "from": "d2",
+          "to": "firma",
+          "label": "identidad válida"
+        },
+        {
+          "from": "firma",
+          "to": "token"
+        },
+        {
+          "from": "token",
+          "to": "fin"
+        },
+        {
+          "from": "e400",
+          "to": "fin"
+        },
+        {
+          "from": "e503",
+          "to": "fin"
+        },
+        {
+          "from": "e401",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        }
+      ]
+    }
   }
 }

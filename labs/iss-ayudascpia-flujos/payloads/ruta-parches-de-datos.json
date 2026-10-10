@@ -7,312 +7,332 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Parches de datos",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "R",
-        "label": "Runner de parches · ZPatch"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TErrorsClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TErrorsClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "ini",
-        "label": "Inicio",
-        "shape": "start",
-        "lane": "R"
-      },
-      {
-        "id": "a",
-        "label": "El parche .sql.ts devuelve un TPatch",
-        "lane": "R",
-        "icon": "mdi:file-code-outline"
-      },
-      {
-        "id": "b",
-        "label": "¿ZPatch valida el objeto completo?",
-        "shape": "diamond",
-        "lane": "R"
-      },
-      {
-        "id": "x",
-        "label": "Falla sin escribir: va a la bandeja de errores",
-        "lane": "R",
-        "icon": "mdi:alert-octagon-outline"
-      },
-      {
-        "id": "terr",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": true
-                }
-              }
-            }
-          },
-          "actions": [
+    "vectorFlow": {
+      "title": "Parches de datos",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=ierror]": true,
-                  "[name=jerror]": true,
-                  "[name=referencia]": true,
-                  "[name=resumen]": true
+              "id": "cliente",
+              "label": "TErrorsClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TErrorsClient]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
             }
           ]
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "c",
-        "label": "Pasada 1: solo lee y planifica, tabla por tabla",
-        "lane": "R",
-        "icon": "mdi:clipboard-search-outline"
-      },
-      {
-        "id": "pg",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=db-pg]": {
-                    "name": true
+        {
+          "id": "componentes",
+          "label": "Componentes",
+          "tipo": "componentes",
+          "groups": [
+            {
+              "id": "propios-clientesis",
+              "label": "Propios (clientesis)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "pg",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=db-pg]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=db-pg]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "db-pg",
+              "group": "propios-clientesis"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
+            }
+          ]
+        },
+        {
+          "id": "R",
+          "label": "Runner de parches · ZPatch",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "ini",
+              "label": "Inicio",
+              "shape": "start"
+            },
+            {
+              "id": "a",
+              "label": "El parche .sql.ts devuelve un TPatch",
+              "icon": "mdi:file-code-outline"
+            },
+            {
+              "id": "b",
+              "label": "¿ZPatch valida el objeto completo?",
+              "shape": "diamond"
+            },
+            {
+              "id": "x",
+              "label": "Falla sin escribir: va a la bandeja de errores",
+              "icon": "mdi:alert-octagon-outline"
+            },
+            {
+              "id": "c",
+              "label": "Pasada 1: solo lee y planifica, tabla por tabla",
+              "icon": "mdi:clipboard-search-outline"
+            },
+            {
+              "id": "d",
+              "label": "¿Hay bloqueos?",
+              "shape": "diamond"
+            },
+            {
+              "id": "f",
+              "label": "Pasada 2: aplica y cada operación vuelve a leer",
+              "icon": "mdi:database-sync-outline"
+            },
+            {
+              "id": "g",
+              "label": "Registra el parche en patchdb",
+              "icon": "mdi:database-check-outline"
+            }
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "dueno-TErrorController",
+              "label": "TErrorController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TErrorController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "R",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=db-pg]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
+              "id": "dueno-TErrorController-pojo",
+              "label": "TError_",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TError_]": {
+                      "uml": true
+                    }
+                  }
+                }
               }
             }
           ]
         },
-        "ref": "db-pg",
-        "context": "Propios (clientesis)"
-      },
-      {
-        "id": "d",
-        "label": "¿Hay bloqueos?",
-        "shape": "diamond",
-        "lane": "R"
-      },
-      {
-        "id": "f",
-        "label": "Pasada 2: aplica y cada operación vuelve a leer",
-        "lane": "R",
-        "icon": "mdi:database-sync-outline"
-      },
-      {
-        "id": "g",
-        "label": "Registra el parche en patchdb",
-        "lane": "R",
-        "icon": "mdi:database-check-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "R"
-      },
-      {
-        "id": "dueno-TErrorController",
-        "label": "TErrorController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TErrorController]": {
-                "uml": true
-              }
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
             }
-          }
-        }
-      },
-      {
-        "id": "dueno-TErrorController-pojo",
-        "label": "TError_",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TError_]": {
-                "uml": true
-              }
+          ],
+          "nodes": [
+            {
+              "id": "terr",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=ierror]": true,
+                        "[name=jerror]": true,
+                        "[name=referencia]": true,
+                        "[name=resumen]": true
+                      }
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
             }
-          }
+          ]
         }
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "pg",
-        "label": "fetch"
-      },
-      {
-        "from": "ini",
-        "to": "a"
-      },
-      {
-        "from": "a",
-        "to": "b"
-      },
-      {
-        "from": "b",
-        "to": "x",
-        "label": "no"
-      },
-      {
-        "from": "b",
-        "to": "c",
-        "label": "sí"
-      },
-      {
-        "from": "c",
-        "to": "pg",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "c",
-        "to": "d"
-      },
-      {
-        "from": "d",
-        "to": "x",
-        "label": "sí"
-      },
-      {
-        "from": "d",
-        "to": "f",
-        "label": "no"
-      },
-      {
-        "from": "f",
-        "to": "pg",
-        "kind": "dashed",
-        "label": "INSERT · UPDATE"
-      },
-      {
-        "from": "f",
-        "to": "g"
-      },
-      {
-        "from": "g",
-        "to": "fin"
-      },
-      {
-        "from": "g",
-        "to": "pg",
-        "kind": "dashed",
-        "label": "INSERT patchdb"
-      },
-      {
-        "from": "x",
-        "to": "dueno-TErrorController",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "x",
-        "to": "fin"
-      },
-      {
-        "from": "dueno-TErrorController",
-        "to": "dueno-TErrorController-pojo",
-        "kind": "dashed",
-        "label": "klass · INSERT"
-      },
-      {
-        "from": "dueno-TErrorController",
-        "to": "terr",
-        "kind": "dashed",
-        "label": "INSERT"
-      }
-    ]
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "pg",
+          "label": "fetch"
+        },
+        {
+          "from": "ini",
+          "to": "a"
+        },
+        {
+          "from": "a",
+          "to": "b"
+        },
+        {
+          "from": "b",
+          "to": "x",
+          "label": "no"
+        },
+        {
+          "from": "b",
+          "to": "c",
+          "label": "sí"
+        },
+        {
+          "from": "c",
+          "to": "pg",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "c",
+          "to": "d"
+        },
+        {
+          "from": "d",
+          "to": "x",
+          "label": "sí"
+        },
+        {
+          "from": "d",
+          "to": "f",
+          "label": "no"
+        },
+        {
+          "from": "f",
+          "to": "pg",
+          "kind": "dashed",
+          "label": "INSERT · UPDATE"
+        },
+        {
+          "from": "f",
+          "to": "g"
+        },
+        {
+          "from": "g",
+          "to": "fin"
+        },
+        {
+          "from": "g",
+          "to": "pg",
+          "kind": "dashed",
+          "label": "INSERT patchdb"
+        },
+        {
+          "from": "x",
+          "to": "dueno-TErrorController",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "x",
+          "to": "fin"
+        },
+        {
+          "from": "dueno-TErrorController",
+          "to": "dueno-TErrorController-pojo",
+          "kind": "dashed",
+          "label": "klass · INSERT"
+        },
+        {
+          "from": "dueno-TErrorController",
+          "to": "terr",
+          "kind": "dashed",
+          "label": "INSERT"
+        }
+      ]
+    }
   }
 }

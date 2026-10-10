@@ -7,290 +7,308 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Configuración en caliente (CFG)",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "Consola / ISW"
-      },
-      {
-        "id": "S",
-        "label": "ISS · TSysValueController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TSysValueClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValueClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-config]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Configuración en caliente (CFG)",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TSysValueClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValueClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-config]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "C",
+          "label": "Consola / ISW",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-config]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-config]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "GET|PUT /sistema/cfg",
+                        "GET|PUT /docs/cfg"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-config",
+              "group": "propios-patyia-api"
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "GET|PUT /sistema/cfg",
-                  "GET|PUT /docs/cfg"
-                ]
-              }
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-config",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TSysValueController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValueController]": {
-                "uml": true
-              }
+        {
+          "id": "S",
+          "label": "ISS · TSysValueController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "seg",
+              "label": "Puerta SEG: el id CFG:/<ruta> elige la fila (runtime o doc)",
+              "icon": "mdi:shield-check-outline"
+            },
+            {
+              "id": "d1",
+              "label": "¿Lee o escribe?",
+              "shape": "diamond"
+            },
+            {
+              "id": "lee",
+              "label": "Lee la fila; si no existe, sus defaults",
+              "icon": "mdi:database-search-outline"
+            },
+            {
+              "id": "push",
+              "label": "Push parcial validado con el schema de la clave (400)",
+              "icon": "mdi:code-json"
+            },
+            {
+              "id": "guarda",
+              "label": "Guarda la fila; el próximo uso ya la ve",
+              "icon": "mdi:content-save-outline"
+            },
+            {
+              "id": "ok",
+              "label": "{ isystemkey, jvalue, fhultact }",
+              "icon": "mdi:reply-outline"
             }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TSysValue",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValue]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "seg",
-        "label": "Puerta SEG: el id CFG:/<ruta> elige la fila (runtime o doc)",
-        "lane": "S",
-        "icon": "mdi:shield-check-outline"
-      },
-      {
-        "id": "d1",
-        "label": "¿Lee o escribe?",
-        "shape": "diamond",
-        "lane": "S"
-      },
-      {
-        "id": "lee",
-        "label": "Lee la fila; si no existe, sus defaults",
-        "lane": "S",
-        "icon": "mdi:database-search-outline"
-      },
-      {
-        "id": "push",
-        "label": "Push parcial validado con el schema de la clave (400)",
-        "lane": "S",
-        "icon": "mdi:code-json"
-      },
-      {
-        "id": "guarda",
-        "label": "Guarda la fila; el próximo uso ya la ve",
-        "lane": "S",
-        "icon": "mdi:content-save-outline"
-      },
-      {
-        "id": "tsys",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": {
-                    "name": true
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TSysValueController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValueController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
+              "id": "ctl-pojo",
+              "label": "TSysValue",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValue]": {
+                      "uml": true
+                    }
+                  }
+                }
               }
             }
           ]
         },
-        "context": "PatyIA · Configuración"
-      },
-      {
-        "id": "ok",
-        "label": "{ isystemkey, jvalue, fhultact }",
-        "lane": "S",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT, UPDATE"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "GET|PUT <ruta>/cfg"
-      },
-      {
-        "from": "ctl",
-        "to": "seg"
-      },
-      {
-        "from": "seg",
-        "to": "d1"
-      },
-      {
-        "from": "d1",
-        "to": "lee",
-        "label": "GET"
-      },
-      {
-        "from": "d1",
-        "to": "push",
-        "label": "PUT"
-      },
-      {
-        "from": "lee",
-        "to": "tsys",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "push",
-        "to": "guarda"
-      },
-      {
-        "from": "guarda",
-        "to": "tsys",
-        "kind": "dashed",
-        "label": "UPDATE"
-      },
-      {
-        "from": "lee",
-        "to": "ok"
-      },
-      {
-        "from": "guarda",
-        "to": "ok"
-      },
-      {
-        "from": "ok",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-configuracion",
+              "label": "PatyIA · Configuración"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "tsys",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-configuracion"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
+        },
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT, UPDATE"
+        },
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "GET|PUT <ruta>/cfg"
+        },
+        {
+          "from": "ctl",
+          "to": "seg"
+        },
+        {
+          "from": "seg",
+          "to": "d1"
+        },
+        {
+          "from": "d1",
+          "to": "lee",
+          "label": "GET"
+        },
+        {
+          "from": "d1",
+          "to": "push",
+          "label": "PUT"
+        },
+        {
+          "from": "lee",
+          "to": "tsys",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "push",
+          "to": "guarda"
+        },
+        {
+          "from": "guarda",
+          "to": "tsys",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "lee",
+          "to": "ok"
+        },
+        {
+          "from": "guarda",
+          "to": "ok"
+        },
+        {
+          "from": "ok",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        }
+      ]
+    }
   }
 }

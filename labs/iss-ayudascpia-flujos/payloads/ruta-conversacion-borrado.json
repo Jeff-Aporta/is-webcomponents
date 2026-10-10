@@ -7,294 +7,312 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Borrado de una conversación",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "Portal"
-      },
-      {
-        "id": "T",
-        "label": "ISS · TConversacionController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TConversationClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-conv-portal]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Borrado de una conversación",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TConversationClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-conv-portal]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "C",
+          "label": "Portal",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-conv-portal]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-conv-portal]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "DELETE /conversacion/{iconversacion}"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-conv-portal",
+              "group": "propios-patyia-api"
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "DELETE /conversacion/{iconversacion}"
-                ]
-              }
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-conv-portal",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TConversacionController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversacionController]": {
-                "uml": true
-              }
+        {
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "val",
+              "label": "PK válida (400); JWT y SEG «Eliminar»",
+              "icon": "mdi:shield-check-outline"
+            },
+            {
+              "id": "lee",
+              "label": "Lee la fila (404)",
+              "icon": "mdi:database-search-outline"
+            },
+            {
+              "id": "d1",
+              "label": "¿Es el dueño estricto?",
+              "shape": "diamond"
+            },
+            {
+              "id": "e401",
+              "label": "401",
+              "icon": "mdi:account-cancel-outline"
+            },
+            {
+              "id": "baja",
+              "label": "Baja lógica: itdestado = 2 (la fila no se borra)",
+              "icon": "mdi:archive-remove-outline"
+            },
+            {
+              "id": "ok",
+              "label": "La fila releída",
+              "icon": "mdi:reply-outline"
             }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TConversacion",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversacion]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "val",
-        "label": "PK válida (400); JWT y SEG «Eliminar»",
-        "lane": "T",
-        "icon": "mdi:shield-check-outline"
-      },
-      {
-        "id": "lee",
-        "label": "Lee la fila (404)",
-        "lane": "T",
-        "icon": "mdi:database-search-outline"
-      },
-      {
-        "id": "d1",
-        "label": "¿Es el dueño estricto?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "e401",
-        "label": "401",
-        "lane": "T",
-        "icon": "mdi:account-cancel-outline"
-      },
-      {
-        "id": "baja",
-        "label": "Baja lógica: itdestado = 2 (la fila no se borra)",
-        "lane": "T",
-        "icon": "mdi:archive-remove-outline"
-      },
-      {
-        "id": "tconv",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversaciones]": {
-                    "name": true
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TConversacionController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversacionController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversaciones]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=iconversacion]": true,
-                  "[name=itercero]": true,
-                  "[name=icontacto]": true,
-                  "[name=itdestado]": true
+              "id": "ctl-pojo",
+              "label": "TConversacion",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversacion]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
             }
           ]
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "ok",
-        "label": "La fila releída",
-        "lane": "T",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT, UPDATE"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "DELETE"
-      },
-      {
-        "from": "ctl",
-        "to": "val"
-      },
-      {
-        "from": "val",
-        "to": "lee"
-      },
-      {
-        "from": "lee",
-        "to": "d1"
-      },
-      {
-        "from": "lee",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "d1",
-        "to": "e401",
-        "label": "no"
-      },
-      {
-        "from": "d1",
-        "to": "baja",
-        "label": "sí"
-      },
-      {
-        "from": "baja",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "UPDATE"
-      },
-      {
-        "from": "baja",
-        "to": "ok"
-      },
-      {
-        "from": "ok",
-        "to": "fin"
-      },
-      {
-        "from": "e401",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "tconv",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversaciones]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversaciones]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=iconversacion]": true,
+                        "[name=itercero]": true,
+                        "[name=icontacto]": true,
+                        "[name=itdestado]": true
+                      }
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
+        },
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT, UPDATE"
+        },
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "DELETE"
+        },
+        {
+          "from": "ctl",
+          "to": "val"
+        },
+        {
+          "from": "val",
+          "to": "lee"
+        },
+        {
+          "from": "lee",
+          "to": "d1"
+        },
+        {
+          "from": "lee",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "d1",
+          "to": "e401",
+          "label": "no"
+        },
+        {
+          "from": "d1",
+          "to": "baja",
+          "label": "sí"
+        },
+        {
+          "from": "baja",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "baja",
+          "to": "ok"
+        },
+        {
+          "from": "ok",
+          "to": "fin"
+        },
+        {
+          "from": "e401",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        }
+      ]
+    }
   }
 }

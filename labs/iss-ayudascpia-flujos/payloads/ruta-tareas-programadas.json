@@ -7,458 +7,464 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Tareas programadas",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "H",
-        "label": "Host (func start)"
-      },
-      {
-        "id": "R",
-        "label": "Runner de parches"
-      },
-      {
-        "id": "T",
-        "label": "Timers"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "ini",
-        "label": "Inicio",
-        "shape": "start",
-        "lane": "H"
-      },
-      {
-        "id": "start",
-        "label": "app.hook.appStart, sin esperar el trabajo",
-        "lane": "H",
-        "icon": "mdi:rocket-launch-outline"
-      },
-      {
-        "id": "fork",
-        "label": "",
-        "shape": "bar",
-        "lane": "H"
-      },
-      {
-        "id": "runner",
-        "label": "applyPendingPatches(): patchdb y parches pendientes, por controllers",
-        "lane": "R",
-        "icon": "mdi:database-cog-outline"
-      },
-      {
-        "id": "estado",
-        "label": "Publica el estado del runner (/api/info)",
-        "lane": "H",
-        "icon": "mdi:information-outline"
-      },
-      {
-        "id": "barrido",
-        "label": "Barrido de cierre inmediato",
-        "lane": "H",
-        "icon": "mdi:broom"
-      },
-      {
-        "id": "fin-arranque",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "H"
-      },
-      {
-        "id": "cconv",
-        "label": "TConversacionController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversacionController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "cconv-pojo",
-        "label": "TConversacion",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversacion]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "clog",
-        "label": "TConversationLogController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationLogController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "clog-pojo",
-        "label": "TConversationLog",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationLog]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "flag",
-        "label": "Lee runtime.timers (flag ausente = encendido)",
-        "lane": "T",
-        "icon": "mdi:timer-cog-outline"
-      },
-      {
-        "id": "n-cada",
-        "label": "Cada 30 minutos, los dos timers en paralelo",
-        "shape": "comment",
-        "about": "flag"
-      },
-      {
-        "id": "tsys",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": true
-                }
-              }
-            }
-          },
-          "actions": [
+    "vectorFlow": {
+      "title": "Tareas programadas",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "H",
+          "label": "Host (func start)",
+          "tipo": "flujo",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
+              "id": "ini",
+              "label": "Inicio",
+              "shape": "start"
+            },
+            {
+              "id": "start",
+              "label": "app.hook.appStart, sin esperar el trabajo",
+              "icon": "mdi:rocket-launch-outline"
+            },
+            {
+              "id": "fork",
+              "label": "",
+              "shape": "bar"
+            },
+            {
+              "id": "estado",
+              "label": "Publica el estado del runner (/api/info)",
+              "icon": "mdi:information-outline"
+            },
+            {
+              "id": "barrido",
+              "label": "Barrido de cierre inmediato",
+              "icon": "mdi:broom"
+            },
+            {
+              "id": "fin-arranque",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "context": "PatyIA · Configuración"
-      },
-      {
-        "id": "d1",
-        "label": "¿Flag encendido?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "nada",
-        "label": "Sale sin hacer nada",
-        "lane": "T",
-        "icon": "mdi:skip-next-outline"
-      },
-      {
-        "id": "cierra",
-        "label": "Cierra las conversaciones inactivas",
-        "lane": "T",
-        "icon": "mdi:archive-lock-outline"
-      },
-      {
-        "id": "purga",
-        "label": "Purga el log de conversaciones",
-        "lane": "T",
-        "icon": "mdi:delete-sweep-outline"
-      },
-      {
-        "id": "tconv",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversaciones]": {
-                    "name": true
+        {
+          "id": "R",
+          "label": "Runner de parches",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "runner",
+              "label": "applyPendingPatches(): patchdb y parches pendientes, por controllers",
+              "icon": "mdi:database-cog-outline"
+            }
+          ]
+        },
+        {
+          "id": "T",
+          "label": "Timers",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "flag",
+              "label": "Lee runtime.timers (flag ausente = encendido)",
+              "icon": "mdi:timer-cog-outline"
+            },
+            {
+              "id": "n-cada",
+              "label": "Cada 30 minutos, los dos timers en paralelo",
+              "shape": "comment",
+              "about": "flag"
+            },
+            {
+              "id": "d1",
+              "label": "¿Flag encendido?",
+              "shape": "diamond"
+            },
+            {
+              "id": "nada",
+              "label": "Sale sin hacer nada",
+              "icon": "mdi:skip-next-outline"
+            },
+            {
+              "id": "cierra",
+              "label": "Cierra las conversaciones inactivas",
+              "icon": "mdi:archive-lock-outline"
+            },
+            {
+              "id": "purga",
+              "label": "Purga el log de conversaciones",
+              "icon": "mdi:delete-sweep-outline"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
+            }
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "cconv",
+              "label": "TConversacionController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversacionController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversaciones]": true
+            },
+            {
+              "id": "clog",
+              "label": "TConversationLogController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationLogController]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
-            }
-          },
-          "actions": [
+            },
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=iconversacion]": true,
-                  "[name=itdestado]": true,
-                  "[name=fhultact]": true
+              "id": "dueno-TSysValueController",
+              "label": "TSysValueController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValueController]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
             }
           ]
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "tlog",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversacion_log]": {
-                    "name": true
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
+            {
+              "id": "cconv-pojo",
+              "label": "TConversacion",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversacion]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "clog-pojo",
+              "label": "TConversationLog",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationLog]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TSysValueController-pojo",
+              "label": "TSysValue",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValue]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversacion_log]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
-            }
           ]
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "H"
-      },
-      {
-        "id": "dueno-TSysValueController",
-        "label": "TSysValueController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValueController]": {
-                "uml": true
-              }
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-configuracion",
+              "label": "PatyIA · Configuración"
+            },
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
             }
-          }
-        }
-      },
-      {
-        "id": "dueno-TSysValueController-pojo",
-        "label": "TSysValue",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValue]": {
-                "uml": true
-              }
+          ],
+          "nodes": [
+            {
+              "id": "tsys",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-configuracion"
+            },
+            {
+              "id": "tconv",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversaciones]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversaciones]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=iconversacion]": true,
+                        "[name=itdestado]": true,
+                        "[name=fhultact]": true
+                      }
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
+            },
+            {
+              "id": "tlog",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversacion_log]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversacion_log]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
             }
-          }
+          ]
         }
-      }
-    ],
-    "edges": [
-      {
-        "from": "cconv",
-        "to": "cconv-pojo",
-        "kind": "dashed",
-        "label": "klass · UPDATE"
-      },
-      {
-        "from": "clog",
-        "to": "clog-pojo",
-        "kind": "dashed",
-        "label": "klass · DELETE"
-      },
-      {
-        "from": "ini",
-        "to": "start"
-      },
-      {
-        "from": "start",
-        "to": "fork"
-      },
-      {
-        "from": "fork",
-        "to": "runner",
-        "label": "trabajo de arranque en segundo plano"
-      },
-      {
-        "from": "runner",
-        "to": "estado"
-      },
-      {
-        "from": "estado",
-        "to": "barrido"
-      },
-      {
-        "from": "barrido",
-        "to": "fin-arranque"
-      },
-      {
-        "from": "barrido",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "UPDATE"
-      },
-      {
-        "from": "fork",
-        "to": "cconv",
-        "label": "timers"
-      },
-      {
-        "from": "cconv",
-        "to": "clog",
-        "kind": "dashed",
-        "label": "klass · UPDATE"
-      },
-      {
-        "from": "cconv",
-        "to": "flag"
-      },
-      {
-        "from": "flag",
-        "to": "d1"
-      },
-      {
-        "from": "flag",
-        "to": "dueno-TSysValueController",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "d1",
-        "to": "nada",
-        "label": "false"
-      },
-      {
-        "from": "d1",
-        "to": "cierra",
-        "label": "encendido"
-      },
-      {
-        "from": "cierra",
-        "to": "purga"
-      },
-      {
-        "from": "purga",
-        "to": "fin"
-      },
-      {
-        "from": "cierra",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "UPDATE"
-      },
-      {
-        "from": "purga",
-        "to": "tlog",
-        "kind": "dashed",
-        "label": "DELETE"
-      },
-      {
-        "from": "nada",
-        "to": "fin"
-      },
-      {
-        "from": "dueno-TSysValueController",
-        "to": "dueno-TSysValueController-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT"
-      },
-      {
-        "from": "dueno-TSysValueController",
-        "to": "tsys",
-        "kind": "dashed",
-        "label": "SELECT"
-      }
-    ]
+      ],
+      "edges": [
+        {
+          "from": "cconv",
+          "to": "cconv-pojo",
+          "kind": "dashed",
+          "label": "klass · UPDATE"
+        },
+        {
+          "from": "clog",
+          "to": "clog-pojo",
+          "kind": "dashed",
+          "label": "klass · DELETE"
+        },
+        {
+          "from": "ini",
+          "to": "start"
+        },
+        {
+          "from": "start",
+          "to": "fork"
+        },
+        {
+          "from": "fork",
+          "to": "runner",
+          "label": "trabajo de arranque en segundo plano"
+        },
+        {
+          "from": "runner",
+          "to": "estado"
+        },
+        {
+          "from": "estado",
+          "to": "barrido"
+        },
+        {
+          "from": "barrido",
+          "to": "fin-arranque"
+        },
+        {
+          "from": "barrido",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "fork",
+          "to": "cconv",
+          "label": "timers"
+        },
+        {
+          "from": "cconv",
+          "to": "clog",
+          "kind": "dashed",
+          "label": "klass · UPDATE"
+        },
+        {
+          "from": "cconv",
+          "to": "flag"
+        },
+        {
+          "from": "flag",
+          "to": "d1"
+        },
+        {
+          "from": "flag",
+          "to": "dueno-TSysValueController",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "d1",
+          "to": "nada",
+          "label": "false"
+        },
+        {
+          "from": "d1",
+          "to": "cierra",
+          "label": "encendido"
+        },
+        {
+          "from": "cierra",
+          "to": "purga"
+        },
+        {
+          "from": "purga",
+          "to": "fin"
+        },
+        {
+          "from": "cierra",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "purga",
+          "to": "tlog",
+          "kind": "dashed",
+          "label": "DELETE"
+        },
+        {
+          "from": "nada",
+          "to": "fin"
+        },
+        {
+          "from": "dueno-TSysValueController",
+          "to": "dueno-TSysValueController-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT"
+        },
+        {
+          "from": "dueno-TSysValueController",
+          "to": "tsys",
+          "kind": "dashed",
+          "label": "SELECT"
+        }
+      ]
+    }
   }
 }

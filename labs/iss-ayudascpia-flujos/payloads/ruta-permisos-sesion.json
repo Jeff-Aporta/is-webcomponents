@@ -7,465 +7,477 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Permisos de la sesión (/permisos)",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "Portal / ISW"
-      },
-      {
-        "id": "P",
-        "label": "ISS · TPermissionsController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "D",
-        "label": "PostgreSQL · seg_*"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TPermissionsClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TPermissionsClient]": {
-                "uml": true
+    "vectorFlow": {
+      "title": "Permisos de la sesión (/permisos)",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TPermissionsClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TPermissionsClient]": {
+                      "uml": true
+                    }
+                  }
+                }
               }
             }
-          }
+          ]
+        },
+        {
+          "id": "C",
+          "label": "Portal / ISW",
+          "tipo": "componentes",
+          "groups": [
+            {
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-permisos]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-permisos]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-permisos",
+              "group": "propios-patyia-api"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
+            }
+          ]
+        },
+        {
+          "id": "P",
+          "label": "ISS · TPermissionsController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "jwt",
+              "label": "Verifica el JWT (HS384)",
+              "icon": "mdi:key-chain-variant"
+            },
+            {
+              "id": "d1",
+              "label": "¿Token válido?",
+              "shape": "diamond"
+            },
+            {
+              "id": "anon",
+              "label": "Anónimo: USR sin permisos (si pidió irol, 401)",
+              "icon": "mdi:incognito"
+            },
+            {
+              "id": "owner",
+              "label": "Dueño del grupo PATYIA (caché 90 s)",
+              "icon": "mdi:domain"
+            },
+            {
+              "id": "rol",
+              "label": "Rol vigente del contacto (bprincipal primero)",
+              "icon": "mdi:shield-account-outline"
+            },
+            {
+              "id": "d2",
+              "label": "¿Pide simular otro rol?",
+              "shape": "diamond"
+            },
+            {
+              "id": "sw",
+              "label": "Exige capacidad auditoría (401) y que el rol exista (400)",
+              "icon": "mdi:account-switch-outline"
+            },
+            {
+              "id": "perms",
+              "label": "Permisos efectivos: USR sin lo del rol, más lo del rol",
+              "icon": "mdi:scale-balance"
+            },
+            {
+              "id": "ok",
+              "label": "{ irol, perms, roles, roleSwitch, username }",
+              "icon": "mdi:reply-outline"
+            }
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TPermissionsController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TPermissionsController]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
+            {
+              "id": "ctl-pojo",
+              "label": "TPermissionsObject",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TPermissionsObject]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "D",
+          "label": "PostgreSQL · seg_*",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "clientesis-seguridad",
+              "label": "ClientesIS · Seguridad"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "tgr",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_grupos]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_grupos]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "clientesis-seguridad"
+            },
+            {
+              "id": "trc",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_rolescontacto]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_rolescontacto]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=itercero]": true,
+                        "[name=igrupo]": true,
+                        "[name=irol]": true,
+                        "[name=icontacto]": true,
+                        "[name=ffinal]": true,
+                        "[name=bprincipal]": true
+                      }
+                    }
+                  }
+                ]
+              },
+              "group": "clientesis-seguridad"
+            },
+            {
+              "id": "trol",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_roles]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_roles]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "clientesis-seguridad"
+            },
+            {
+              "id": "tacc",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_accionesxrol]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=seg_accionesxrol]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=itercero]": true,
+                        "[name=isysrecurso]": true,
+                        "[name=iaccion]": true,
+                        "[name=irol]": true,
+                        "[name=valor]": true
+                      }
+                    }
+                  }
+                ]
+              },
+              "group": "clientesis-seguridad"
+            }
+          ]
         }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-permisos]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-permisos]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
-            }
-          ]
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass"
         },
-        "ref": "grp-permisos",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TPermissionsController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TPermissionsController]": {
-                "uml": true
-              }
-            }
-          }
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "GET|POST /permisos"
+        },
+        {
+          "from": "ctl",
+          "to": "jwt"
+        },
+        {
+          "from": "jwt",
+          "to": "d1"
+        },
+        {
+          "from": "d1",
+          "to": "anon",
+          "label": "no"
+        },
+        {
+          "from": "d1",
+          "to": "owner",
+          "label": "sí"
+        },
+        {
+          "from": "owner",
+          "to": "tgr",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "owner",
+          "to": "rol"
+        },
+        {
+          "from": "rol",
+          "to": "d2"
+        },
+        {
+          "from": "rol",
+          "to": "trc",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "d2",
+          "to": "sw",
+          "label": "sí"
+        },
+        {
+          "from": "d2",
+          "to": "perms",
+          "label": "no"
+        },
+        {
+          "from": "sw",
+          "to": "trol",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "sw",
+          "to": "perms"
+        },
+        {
+          "from": "perms",
+          "to": "tacc",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "perms",
+          "to": "ok"
+        },
+        {
+          "from": "ok",
+          "to": "fin"
+        },
+        {
+          "from": "anon",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
         }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TPermissionsObject",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TPermissionsObject]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "jwt",
-        "label": "Verifica el JWT (HS384)",
-        "lane": "P",
-        "icon": "mdi:key-chain-variant"
-      },
-      {
-        "id": "d1",
-        "label": "¿Token válido?",
-        "shape": "diamond",
-        "lane": "P"
-      },
-      {
-        "id": "anon",
-        "label": "Anónimo: USR sin permisos (si pidió irol, 401)",
-        "lane": "P",
-        "icon": "mdi:incognito"
-      },
-      {
-        "id": "owner",
-        "label": "Dueño del grupo PATYIA (caché 90 s)",
-        "lane": "P",
-        "icon": "mdi:domain"
-      },
-      {
-        "id": "tgr",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_grupos]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "D",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_grupos]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
-            }
-          ]
-        },
-        "context": "ClientesIS · Seguridad"
-      },
-      {
-        "id": "rol",
-        "label": "Rol vigente del contacto (bprincipal primero)",
-        "lane": "P",
-        "icon": "mdi:shield-account-outline"
-      },
-      {
-        "id": "trc",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_rolescontacto]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "D",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_rolescontacto]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=itercero]": true,
-                  "[name=igrupo]": true,
-                  "[name=irol]": true,
-                  "[name=icontacto]": true,
-                  "[name=ffinal]": true,
-                  "[name=bprincipal]": true
-                }
-              }
-            }
-          ]
-        },
-        "context": "ClientesIS · Seguridad"
-      },
-      {
-        "id": "d2",
-        "label": "¿Pide simular otro rol?",
-        "shape": "diamond",
-        "lane": "P"
-      },
-      {
-        "id": "sw",
-        "label": "Exige capacidad auditoría (401) y que el rol exista (400)",
-        "lane": "P",
-        "icon": "mdi:account-switch-outline"
-      },
-      {
-        "id": "trol",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_roles]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "D",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_roles]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
-            }
-          ]
-        },
-        "context": "ClientesIS · Seguridad"
-      },
-      {
-        "id": "perms",
-        "label": "Permisos efectivos: USR sin lo del rol, más lo del rol",
-        "lane": "P",
-        "icon": "mdi:scale-balance"
-      },
-      {
-        "id": "tacc",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_accionesxrol]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "D",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=seg_accionesxrol]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=itercero]": true,
-                  "[name=isysrecurso]": true,
-                  "[name=iaccion]": true,
-                  "[name=irol]": true,
-                  "[name=valor]": true
-                }
-              }
-            }
-          ]
-        },
-        "context": "ClientesIS · Seguridad"
-      },
-      {
-        "id": "ok",
-        "label": "{ irol, perms, roles, roleSwitch, username }",
-        "lane": "P",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "GET|POST /permisos"
-      },
-      {
-        "from": "ctl",
-        "to": "jwt"
-      },
-      {
-        "from": "jwt",
-        "to": "d1"
-      },
-      {
-        "from": "d1",
-        "to": "anon",
-        "label": "no"
-      },
-      {
-        "from": "d1",
-        "to": "owner",
-        "label": "sí"
-      },
-      {
-        "from": "owner",
-        "to": "tgr",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "owner",
-        "to": "rol"
-      },
-      {
-        "from": "rol",
-        "to": "d2"
-      },
-      {
-        "from": "rol",
-        "to": "trc",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "d2",
-        "to": "sw",
-        "label": "sí"
-      },
-      {
-        "from": "d2",
-        "to": "perms",
-        "label": "no"
-      },
-      {
-        "from": "sw",
-        "to": "trol",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "sw",
-        "to": "perms"
-      },
-      {
-        "from": "perms",
-        "to": "tacc",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "perms",
-        "to": "ok"
-      },
-      {
-        "from": "ok",
-        "to": "fin"
-      },
-      {
-        "from": "anon",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+      ]
+    }
   }
 }

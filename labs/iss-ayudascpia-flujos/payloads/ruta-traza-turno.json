@@ -7,249 +7,266 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Traza del turno",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "C",
-        "label": "Portal (SSE)"
-      },
-      {
-        "id": "T",
-        "label": "ISS · TConversacionController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "H",
-        "label": "Historial"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-conv-portal]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Traza del turno",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "C",
+          "label": "Portal (SSE)",
+          "tipo": "componentes",
+          "groups": [
+            {
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-conv-portal]": {
+                          "name": true
+                        }
+                      }
+                    }
                   }
                 }
-              }
-            }
-          }
-        },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-conv-portal]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-conv-portal]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "POST /conversacion"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-conv-portal",
+              "group": "propios-patyia-api"
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "POST /conversacion"
-                ]
-              }
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-conv-portal",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "begin",
-        "label": "Emite begin",
-        "lane": "T",
-        "icon": "mdi:broadcast"
-      },
-      {
-        "id": "ev",
-        "label": "Emite un event log (seq, ms, nivel, etapa, mensaje)",
-        "lane": "T",
-        "icon": "mdi:text-box-search-outline"
-      },
-      {
-        "id": "n-ev",
-        "label": "Se repite en cada paso del pipeline",
-        "shape": "comment",
-        "about": "ev"
-      },
-      {
-        "id": "guarda",
-        "label": "Guarda el mensaje assistant con others.traza hasta ese momento",
-        "lane": "T",
-        "icon": "mdi:database-plus-outline"
-      },
-      {
-        "id": "tlog",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversacion_log]": {
-                    "name": true
+        {
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "begin",
+              "label": "Emite begin",
+              "icon": "mdi:broadcast"
+            },
+            {
+              "id": "ev",
+              "label": "Emite un event log (seq, ms, nivel, etapa, mensaje)",
+              "icon": "mdi:text-box-search-outline"
+            },
+            {
+              "id": "n-ev",
+              "label": "Se repite en cada paso del pipeline",
+              "shape": "comment",
+              "about": "ev"
+            },
+            {
+              "id": "guarda",
+              "label": "Guarda el mensaje assistant con others.traza hasta ese momento",
+              "icon": "mdi:database-plus-outline"
+            },
+            {
+              "id": "termina",
+              "label": "Emite event log · Turno terminado (con dur)",
+              "icon": "mdi:timer-check-outline"
+            },
+            {
+              "id": "end",
+              "label": "Emite end con meta.traza = la traza completa",
+              "icon": "mdi:flag-checkered"
+            }
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "dueno-TConversationLogController",
+              "label": "TConversationLogController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationLogController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "tableder",
-        "lane": "H",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversacion_log]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
+              "id": "dueno-TConversationLogController-pojo",
+              "label": "TConversationLog",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationLog]": {
+                      "uml": true
+                    }
+                  }
+                }
               }
             }
           ]
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "termina",
-        "label": "Emite event log · Turno terminado (con dur)",
-        "lane": "T",
-        "icon": "mdi:timer-check-outline"
-      },
-      {
-        "id": "end",
-        "label": "Emite end con meta.traza = la traza completa",
-        "lane": "T",
-        "icon": "mdi:flag-checkered"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      },
-      {
-        "id": "dueno-TConversationLogController",
-        "label": "TConversationLogController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationLogController]": {
-                "uml": true
-              }
+        {
+          "id": "H",
+          "label": "Historial",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
             }
-          }
-        }
-      },
-      {
-        "id": "dueno-TConversationLogController-pojo",
-        "label": "TConversationLog",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationLog]": {
-                "uml": true
-              }
+          ],
+          "nodes": [
+            {
+              "id": "tlog",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversacion_log]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversacion_log]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
             }
-          }
+          ]
         }
-      }
-    ],
-    "edges": [
-      {
-        "from": "api",
-        "to": "begin",
-        "label": "POST /conversacion"
-      },
-      {
-        "from": "begin",
-        "to": "ev"
-      },
-      {
-        "from": "ev",
-        "to": "guarda"
-      },
-      {
-        "from": "guarda",
-        "to": "termina"
-      },
-      {
-        "from": "termina",
-        "to": "end"
-      },
-      {
-        "from": "end",
-        "to": "fin"
-      },
-      {
-        "from": "guarda",
-        "to": "dueno-TConversationLogController",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "eventos SSE"
-      },
-      {
-        "from": "dueno-TConversationLogController",
-        "to": "dueno-TConversationLogController-pojo",
-        "kind": "dashed",
-        "label": "klass · INSERT"
-      },
-      {
-        "from": "dueno-TConversationLogController",
-        "to": "tlog",
-        "kind": "dashed",
-        "label": "INSERT"
-      }
-    ]
+      ],
+      "edges": [
+        {
+          "from": "api",
+          "to": "begin",
+          "label": "POST /conversacion"
+        },
+        {
+          "from": "begin",
+          "to": "ev"
+        },
+        {
+          "from": "ev",
+          "to": "guarda"
+        },
+        {
+          "from": "guarda",
+          "to": "termina"
+        },
+        {
+          "from": "termina",
+          "to": "end"
+        },
+        {
+          "from": "end",
+          "to": "fin"
+        },
+        {
+          "from": "guarda",
+          "to": "dueno-TConversationLogController",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "eventos SSE"
+        },
+        {
+          "from": "dueno-TConversationLogController",
+          "to": "dueno-TConversationLogController-pojo",
+          "kind": "dashed",
+          "label": "klass · INSERT"
+        },
+        {
+          "from": "dueno-TConversationLogController",
+          "to": "tlog",
+          "kind": "dashed",
+          "label": "INSERT"
+        }
+      ]
+    }
   }
 }

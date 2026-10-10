@@ -7,307 +7,325 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Rutas de la bandeja de errores",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "Front / agente"
-      },
-      {
-        "id": "E",
-        "label": "ISS · TErrorController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TErrorsClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TErrorsClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-ops]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Rutas de la bandeja de errores",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TErrorsClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TErrorsClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-ops]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "C",
+          "label": "Front / agente",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-ops]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-ops]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "POST /error",
+                        "GET|DELETE /errores"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-ops",
+              "group": "propios-patyia-api"
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "POST /error",
-                  "GET|DELETE /errores"
-                ]
-              }
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-ops",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TErrorController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TErrorController]": {
-                "uml": true
-              }
+        {
+          "id": "E",
+          "label": "ISS · TErrorController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "d1",
+              "label": "¿Qué ruta?",
+              "shape": "diamond"
+            },
+            {
+              "id": "norm",
+              "label": "Normaliza el reporte y censura secretos; tope de tamaño",
+              "icon": "mdi:eye-off-outline"
+            },
+            {
+              "id": "ins",
+              "label": "Registra o devuelve la abierta con esa referencia",
+              "icon": "mdi:database-plus-outline"
+            },
+            {
+              "id": "lst",
+              "label": "Las abiertas, más antiguas primero, con el instructivo",
+              "icon": "mdi:inbox-outline"
+            },
+            {
+              "id": "del",
+              "label": "Borra el lote: atender es borrar",
+              "icon": "mdi:delete-sweep-outline"
+            },
+            {
+              "id": "ok",
+              "label": "Respuesta",
+              "icon": "mdi:reply-outline"
             }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TError_",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TError_]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "d1",
-        "label": "¿Qué ruta?",
-        "shape": "diamond",
-        "lane": "E"
-      },
-      {
-        "id": "norm",
-        "label": "Normaliza el reporte y censura secretos; tope de tamaño",
-        "lane": "E",
-        "icon": "mdi:eye-off-outline"
-      },
-      {
-        "id": "ins",
-        "label": "Registra o devuelve la abierta con esa referencia",
-        "lane": "E",
-        "icon": "mdi:database-plus-outline"
-      },
-      {
-        "id": "lst",
-        "label": "Las abiertas, más antiguas primero, con el instructivo",
-        "lane": "E",
-        "icon": "mdi:inbox-outline"
-      },
-      {
-        "id": "del",
-        "label": "Borra el lote: atender es borrar",
-        "lane": "E",
-        "icon": "mdi:delete-sweep-outline"
-      },
-      {
-        "id": "terr",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": {
-                    "name": true
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TErrorController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TErrorController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=ierror]": true,
-                  "[name=jerror]": true,
-                  "[name=fhcre]": true,
-                  "[name=referencia]": true,
-                  "[name=resumen]": true
+              "id": "ctl-pojo",
+              "label": "TError_",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TError_]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
             }
           ]
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "ok",
-        "label": "Respuesta",
-        "lane": "E",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass · INSERT, SELECT, DELETE"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "petición"
-      },
-      {
-        "from": "ctl",
-        "to": "d1"
-      },
-      {
-        "from": "d1",
-        "to": "norm",
-        "label": "POST /error"
-      },
-      {
-        "from": "d1",
-        "to": "lst",
-        "label": "GET /errores"
-      },
-      {
-        "from": "d1",
-        "to": "del",
-        "label": "DELETE /errores"
-      },
-      {
-        "from": "norm",
-        "to": "ins"
-      },
-      {
-        "from": "ins",
-        "to": "terr",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "lst",
-        "to": "terr",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "del",
-        "to": "terr",
-        "kind": "dashed",
-        "label": "DELETE"
-      },
-      {
-        "from": "ins",
-        "to": "ok"
-      },
-      {
-        "from": "lst",
-        "to": "ok"
-      },
-      {
-        "from": "del",
-        "to": "ok"
-      },
-      {
-        "from": "ok",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "terr",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=ierror]": true,
+                        "[name=jerror]": true,
+                        "[name=fhcre]": true,
+                        "[name=referencia]": true,
+                        "[name=resumen]": true
+                      }
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
+        },
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass · INSERT, SELECT, DELETE"
+        },
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "petición"
+        },
+        {
+          "from": "ctl",
+          "to": "d1"
+        },
+        {
+          "from": "d1",
+          "to": "norm",
+          "label": "POST /error"
+        },
+        {
+          "from": "d1",
+          "to": "lst",
+          "label": "GET /errores"
+        },
+        {
+          "from": "d1",
+          "to": "del",
+          "label": "DELETE /errores"
+        },
+        {
+          "from": "norm",
+          "to": "ins"
+        },
+        {
+          "from": "ins",
+          "to": "terr",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "lst",
+          "to": "terr",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "del",
+          "to": "terr",
+          "kind": "dashed",
+          "label": "DELETE"
+        },
+        {
+          "from": "ins",
+          "to": "ok"
+        },
+        {
+          "from": "lst",
+          "to": "ok"
+        },
+        {
+          "from": "del",
+          "to": "ok"
+        },
+        {
+          "from": "ok",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        }
+      ]
+    }
   }
 }

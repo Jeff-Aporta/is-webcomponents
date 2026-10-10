@@ -7,313 +7,324 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Login del portal (POST /auth/portal-login)",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "P",
-        "label": "Portal / ISW"
-      },
-      {
-        "id": "I",
-        "label": "ISS · TIdentityController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TIdentityClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TIdentityClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-login]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Login del portal (POST /auth/portal-login)",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TIdentityClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TIdentityClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "P",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-login]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "P",
+          "label": "Portal / ISW",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            },
+            {
+              "id": "externos",
+              "label": "Externos"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-login]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-login]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-login",
+              "group": "propios-patyia-api"
+            },
+            {
+              "id": "ds",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=ds-login]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=ds-login]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "ds-login",
+              "group": "externos"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-login",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TIdentityController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TIdentityController]": {
-                "uml": true
-              }
+        {
+          "id": "I",
+          "label": "ISS · TIdentityController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "norm",
+              "label": "Normaliza el correo (sin @ → @contapyme.com) y cifra la contraseña (MD5)",
+              "icon": "mdi:email-edit-outline"
+            },
+            {
+              "id": "existe",
+              "label": "¿Existe el contacto y tiene acceso web?",
+              "icon": "mdi:account-search-outline"
+            },
+            {
+              "id": "n-ds",
+              "label": "DataSnap se consulta antes de validar las credenciales",
+              "shape": "comment",
+              "about": "existe"
+            },
+            {
+              "id": "empresas",
+              "label": "Empresas a las que pertenece el contacto",
+              "icon": "mdi:domain"
+            },
+            {
+              "id": "d1",
+              "label": "¿Cuántas empresas?",
+              "shape": "diamond"
+            },
+            {
+              "id": "multi",
+              "label": "409 MULTI_EMPRESA · lista de empresas para que el portal pregunte y reintente",
+              "icon": "mdi:office-building-cog-outline"
+            },
+            {
+              "id": "valida",
+              "label": "Valida las credenciales",
+              "icon": "mdi:account-key-outline"
+            },
+            {
+              "id": "firma",
+              "label": "Firma el token (HS384, 24 h)",
+              "icon": "mdi:key-chain-variant"
+            },
+            {
+              "id": "entrega",
+              "label": "Entrega el token con usuario, nombre, vencimiento y claims",
+              "icon": "mdi:reply-outline"
             }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TIdentityObject",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TIdentityObject]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "norm",
-        "label": "Normaliza el correo (sin @ → @contapyme.com) y cifra la contraseña (MD5)",
-        "lane": "I",
-        "icon": "mdi:email-edit-outline"
-      },
-      {
-        "id": "existe",
-        "label": "¿Existe el contacto y tiene acceso web?",
-        "lane": "I",
-        "icon": "mdi:account-search-outline"
-      },
-      {
-        "id": "ds",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=ds-login]": {
-                    "name": true
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TIdentityController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TIdentityController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "P",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=ds-login]": true
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
+            {
+              "id": "ctl-pojo",
+              "label": "TIdentityObject",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TIdentityObject]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
             }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
-            }
           ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
         },
-        "ref": "ds-login",
-        "context": "Externos"
-      },
-      {
-        "id": "n-ds",
-        "label": "DataSnap se consulta antes de validar las credenciales",
-        "shape": "comment",
-        "about": "existe"
-      },
-      {
-        "id": "empresas",
-        "label": "Empresas a las que pertenece el contacto",
-        "lane": "I",
-        "icon": "mdi:domain"
-      },
-      {
-        "id": "d1",
-        "label": "¿Cuántas empresas?",
-        "shape": "diamond",
-        "lane": "I"
-      },
-      {
-        "id": "multi",
-        "label": "409 MULTI_EMPRESA · lista de empresas para que el portal pregunte y reintente",
-        "lane": "I",
-        "icon": "mdi:office-building-cog-outline"
-      },
-      {
-        "id": "valida",
-        "label": "Valida las credenciales",
-        "lane": "I",
-        "icon": "mdi:account-key-outline"
-      },
-      {
-        "id": "firma",
-        "label": "Firma el token (HS384, 24 h)",
-        "lane": "I",
-        "icon": "mdi:key-chain-variant"
-      },
-      {
-        "id": "entrega",
-        "label": "Entrega el token con usuario, nombre, vencimiento y claims",
-        "lane": "I",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "P"
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "correo y contraseña (y empresa)"
-      },
-      {
-        "from": "ctl",
-        "to": "norm"
-      },
-      {
-        "from": "norm",
-        "to": "existe"
-      },
-      {
-        "from": "existe",
-        "to": "empresas"
-      },
-      {
-        "from": "empresas",
-        "to": "d1"
-      },
-      {
-        "from": "existe",
-        "to": "ds",
-        "kind": "dashed",
-        "label": "contacto"
-      },
-      {
-        "from": "empresas",
-        "to": "ds",
-        "kind": "dashed",
-        "label": "empresas"
-      },
-      {
-        "from": "d1",
-        "to": "multi",
-        "label": "varias, sin itercero"
-      },
-      {
-        "from": "d1",
-        "to": "valida",
-        "label": "una, o itercero elegido"
-      },
-      {
-        "from": "valida",
-        "to": "ds",
-        "kind": "dashed",
-        "label": "LogInContacto"
-      },
-      {
-        "from": "valida",
-        "to": "firma"
-      },
-      {
-        "from": "firma",
-        "to": "entrega"
-      },
-      {
-        "from": "entrega",
-        "to": "fin"
-      },
-      {
-        "from": "multi",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass"
+        },
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "correo y contraseña (y empresa)"
+        },
+        {
+          "from": "ctl",
+          "to": "norm"
+        },
+        {
+          "from": "norm",
+          "to": "existe"
+        },
+        {
+          "from": "existe",
+          "to": "empresas"
+        },
+        {
+          "from": "empresas",
+          "to": "d1"
+        },
+        {
+          "from": "existe",
+          "to": "ds",
+          "kind": "dashed",
+          "label": "contacto"
+        },
+        {
+          "from": "empresas",
+          "to": "ds",
+          "kind": "dashed",
+          "label": "empresas"
+        },
+        {
+          "from": "d1",
+          "to": "multi",
+          "label": "varias, sin itercero"
+        },
+        {
+          "from": "d1",
+          "to": "valida",
+          "label": "una, o itercero elegido"
+        },
+        {
+          "from": "valida",
+          "to": "ds",
+          "kind": "dashed",
+          "label": "LogInContacto"
+        },
+        {
+          "from": "valida",
+          "to": "firma"
+        },
+        {
+          "from": "firma",
+          "to": "entrega"
+        },
+        {
+          "from": "entrega",
+          "to": "fin"
+        },
+        {
+          "from": "multi",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        }
+      ]
+    }
   }
 }

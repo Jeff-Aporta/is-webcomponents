@@ -7,301 +7,315 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Catálogo de instrucciones (/tdconsulta)",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "C",
-        "label": "Consola"
-      },
-      {
-        "id": "T",
-        "label": "ISS · TTdConsultationController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-config]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Catálogo de instrucciones (/tdconsulta)",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "C",
+          "label": "Consola",
+          "tipo": "componentes",
+          "groups": [
+            {
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-config]": {
+                          "name": true
+                        }
+                      }
+                    }
                   }
                 }
-              }
-            }
-          }
-        },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-config]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-config]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "GET|POST|PUT /tdconsulta"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-config",
+              "group": "propios-patyia-api"
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "GET|POST|PUT /tdconsulta"
-                ]
-              }
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-config",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TTdConsultationController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TTdConsultationController]": {
-                "uml": true
-              }
+        {
+          "id": "T",
+          "label": "ISS · TTdConsultationController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "d1",
+              "label": "¿Lee o escribe?",
+              "shape": "diamond"
+            },
+            {
+              "id": "lista",
+              "label": "Todo el catálogo con canEdit para la consola",
+              "icon": "mdi:file-tree-outline"
+            },
+            {
+              "id": "valida",
+              "label": "PK en mayúsculas, ruta d(.d)*, instrucción no vacía (400)",
+              "icon": "mdi:form-textbox"
+            },
+            {
+              "id": "d2",
+              "label": "¿Crea?",
+              "shape": "diamond"
+            },
+            {
+              "id": "anc",
+              "label": "La PK no existe y todos sus ancestros sí (400)",
+              "icon": "mdi:family-tree"
+            },
+            {
+              "id": "push",
+              "label": "jconfig y jpermisos: push parcial sobre lo vigente",
+              "icon": "mdi:code-json"
+            },
+            {
+              "id": "guarda",
+              "label": "Guarda con la auditoría de la sesión",
+              "icon": "mdi:content-save-outline"
+            },
+            {
+              "id": "ok",
+              "label": "{ ok, key, updatedBy, mode, itdconsulta }",
+              "icon": "mdi:reply-outline"
+            },
+            {
+              "id": "n-op",
+              "label": "Los operativos 9999.x no se borran desde la consola",
+              "shape": "comment",
+              "about": "guarda"
             }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TTdConsulta",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TTdConsulta]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "d1",
-        "label": "¿Lee o escribe?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "lista",
-        "label": "Todo el catálogo con canEdit para la consola",
-        "lane": "T",
-        "icon": "mdi:file-tree-outline"
-      },
-      {
-        "id": "valida",
-        "label": "PK en mayúsculas, ruta d(.d)*, instrucción no vacía (400)",
-        "lane": "T",
-        "icon": "mdi:form-textbox"
-      },
-      {
-        "id": "d2",
-        "label": "¿Crea?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "anc",
-        "label": "La PK no existe y todos sus ancestros sí (400)",
-        "lane": "T",
-        "icon": "mdi:family-tree"
-      },
-      {
-        "id": "push",
-        "label": "jconfig y jpermisos: push parcial sobre lo vigente",
-        "lane": "T",
-        "icon": "mdi:code-json"
-      },
-      {
-        "id": "guarda",
-        "label": "Guarda con la auditoría de la sesión",
-        "lane": "T",
-        "icon": "mdi:content-save-outline"
-      },
-      {
-        "id": "ttd",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_tdconsultas]": {
-                    "name": true
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TTdConsultationController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TTdConsultationController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_tdconsultas]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
+              "id": "ctl-pojo",
+              "label": "TTdConsulta",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TTdConsulta]": {
+                      "uml": true
+                    }
+                  }
+                }
               }
             }
           ]
         },
-        "context": "PatyIA · Configuración"
-      },
-      {
-        "id": "ok",
-        "label": "{ ok, key, updatedBy, mode, itdconsulta }",
-        "lane": "T",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      },
-      {
-        "id": "n-op",
-        "label": "Los operativos 9999.x no se borran desde la consola",
-        "shape": "comment",
-        "about": "guarda"
-      }
-    ],
-    "edges": [
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT, INSERT, UPDATE"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "petición con token"
-      },
-      {
-        "from": "ctl",
-        "to": "d1"
-      },
-      {
-        "from": "d1",
-        "to": "lista",
-        "label": "GET"
-      },
-      {
-        "from": "d1",
-        "to": "valida",
-        "label": "POST · PUT"
-      },
-      {
-        "from": "lista",
-        "to": "ttd",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "valida",
-        "to": "d2"
-      },
-      {
-        "from": "d2",
-        "to": "anc",
-        "label": "sí"
-      },
-      {
-        "from": "d2",
-        "to": "push",
-        "label": "no"
-      },
-      {
-        "from": "anc",
-        "to": "ttd",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "anc",
-        "to": "push"
-      },
-      {
-        "from": "push",
-        "to": "guarda"
-      },
-      {
-        "from": "guarda",
-        "to": "ttd",
-        "kind": "dashed",
-        "label": "INSERT · UPDATE"
-      },
-      {
-        "from": "guarda",
-        "to": "ok"
-      },
-      {
-        "from": "lista",
-        "to": "fin"
-      },
-      {
-        "from": "ok",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-configuracion",
+              "label": "PatyIA · Configuración"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "ttd",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_tdconsultas]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_tdconsultas]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-configuracion"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT, INSERT, UPDATE"
+        },
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "petición con token"
+        },
+        {
+          "from": "ctl",
+          "to": "d1"
+        },
+        {
+          "from": "d1",
+          "to": "lista",
+          "label": "GET"
+        },
+        {
+          "from": "d1",
+          "to": "valida",
+          "label": "POST · PUT"
+        },
+        {
+          "from": "lista",
+          "to": "ttd",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "valida",
+          "to": "d2"
+        },
+        {
+          "from": "d2",
+          "to": "anc",
+          "label": "sí"
+        },
+        {
+          "from": "d2",
+          "to": "push",
+          "label": "no"
+        },
+        {
+          "from": "anc",
+          "to": "ttd",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "anc",
+          "to": "push"
+        },
+        {
+          "from": "push",
+          "to": "guarda"
+        },
+        {
+          "from": "guarda",
+          "to": "ttd",
+          "kind": "dashed",
+          "label": "INSERT · UPDATE"
+        },
+        {
+          "from": "guarda",
+          "to": "ok"
+        },
+        {
+          "from": "lista",
+          "to": "fin"
+        },
+        {
+          "from": "ok",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        }
+      ]
+    }
   }
 }

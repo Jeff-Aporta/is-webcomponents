@@ -7,246 +7,234 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Gate del entregable",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "S",
-        "label": "sync:entregable"
-      },
-      {
-        "id": "G",
-        "label": "Gate (pruebas)"
-      },
-      {
-        "id": "E",
-        "label": "Entregable y mirror"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "ini",
-        "label": "Inicio",
-        "shape": "start",
-        "lane": "S"
-      },
-      {
-        "id": "s",
-        "label": "npm run sync:entregable",
-        "lane": "S",
-        "icon": "mdi:console"
-      },
-      {
-        "id": "v",
-        "label": "¿Remotos del mirror y dependencias del compilado en orden?",
-        "shape": "diamond",
-        "lane": "S"
-      },
-      {
-        "id": "x",
-        "label": "Exit 4 · el entregable no se toca",
-        "lane": "S",
-        "icon": "mdi:cancel"
-      },
-      {
-        "id": "g1",
-        "label": "pre:vendor: vendor del kit, build y bundle",
-        "lane": "S",
-        "icon": "mdi:package-variant-closed"
-      },
-      {
-        "id": "g2",
-        "label": "docs:diagramas y docs:publicar",
-        "lane": "S",
-        "icon": "mdi:file-document-multiple-outline"
-      },
-      {
-        "id": "g3",
-        "label": "mirror-guardian",
-        "lane": "S",
-        "icon": "mdi:shield-sync-outline"
-      },
-      {
-        "id": "g4",
-        "label": "check-inbox-cero: local, staging y prod",
-        "lane": "S",
-        "icon": "mdi:inbox-outline"
-      },
-      {
-        "id": "g5",
-        "label": "patch-cleanup",
-        "lane": "S",
-        "icon": "mdi:broom"
-      },
-      {
-        "id": "h",
-        "label": "¿Hay otro host en el puerto del gate?",
-        "shape": "diamond",
-        "lane": "G"
-      },
-      {
-        "id": "h2",
-        "label": "Arranca su propio host y espera /api/info",
-        "lane": "G",
-        "icon": "mdi:server-plus"
-      },
-      {
-        "id": "t1",
-        "label": "oxlint",
-        "lane": "G",
-        "icon": "mdi:format-list-checks"
-      },
-      {
-        "id": "t2",
-        "label": "test:all",
-        "lane": "G",
-        "icon": "mdi:test-tube"
-      },
-      {
-        "id": "t3",
-        "label": "tsc --noEmit",
-        "lane": "G",
-        "icon": "mdi:language-typescript"
-      },
-      {
-        "id": "baja",
-        "label": "Baja el host siempre",
-        "lane": "G",
-        "icon": "mdi:server-off"
-      },
-      {
-        "id": "q",
-        "label": "¿Todo en verde?",
-        "shape": "diamond",
-        "lane": "G"
-      },
-      {
-        "id": "w",
-        "label": "Escribe en el entregable solo lo que cambió",
-        "lane": "E",
-        "icon": "mdi:content-save-move-outline"
-      },
-      {
-        "id": "p",
-        "label": "Post: dependencias en package.json, renombres de mayúsculas y estado",
-        "lane": "E",
-        "icon": "mdi:cog-transfer-outline"
-      },
-      {
-        "id": "c",
-        "label": "Checkpoint: commit y push del mirror",
-        "lane": "E",
-        "icon": "mdi:source-commit"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "S"
-      },
-      {
-        "id": "fin-x",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "S"
-      }
-    ],
-    "edges": [
-      {
-        "from": "ini",
-        "to": "s"
-      },
-      {
-        "from": "s",
-        "to": "v"
-      },
-      {
-        "from": "v",
-        "to": "x",
-        "label": "falla"
-      },
-      {
-        "from": "v",
-        "to": "g1",
-        "label": "ok"
-      },
-      {
-        "from": "g1",
-        "to": "g2"
-      },
-      {
-        "from": "g2",
-        "to": "g3"
-      },
-      {
-        "from": "g3",
-        "to": "g4"
-      },
-      {
-        "from": "g4",
-        "to": "g5"
-      },
-      {
-        "from": "g5",
-        "to": "h"
-      },
-      {
-        "from": "h",
-        "to": "x",
-        "label": "sí"
-      },
-      {
-        "from": "h",
-        "to": "h2",
-        "label": "no"
-      },
-      {
-        "from": "h2",
-        "to": "t1"
-      },
-      {
-        "from": "t1",
-        "to": "t2"
-      },
-      {
-        "from": "t2",
-        "to": "t3"
-      },
-      {
-        "from": "t3",
-        "to": "baja"
-      },
-      {
-        "from": "baja",
-        "to": "q"
-      },
-      {
-        "from": "q",
-        "to": "x",
-        "label": "no"
-      },
-      {
-        "from": "q",
-        "to": "w",
-        "label": "sí"
-      },
-      {
-        "from": "w",
-        "to": "p"
-      },
-      {
-        "from": "p",
-        "to": "c"
-      },
-      {
-        "from": "c",
-        "to": "fin"
-      },
-      {
-        "from": "x",
-        "to": "fin-x"
-      }
-    ]
+    "vectorFlow": {
+      "title": "Gate del entregable",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "S",
+          "label": "sync:entregable",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "ini",
+              "label": "Inicio",
+              "shape": "start"
+            },
+            {
+              "id": "s",
+              "label": "npm run sync:entregable",
+              "icon": "mdi:console"
+            },
+            {
+              "id": "v",
+              "label": "¿Remotos del mirror y dependencias del compilado en orden?",
+              "shape": "diamond"
+            },
+            {
+              "id": "x",
+              "label": "Exit 4 · el entregable no se toca",
+              "icon": "mdi:cancel"
+            },
+            {
+              "id": "g1",
+              "label": "pre:vendor: vendor del kit, build y bundle",
+              "icon": "mdi:package-variant-closed"
+            },
+            {
+              "id": "g2",
+              "label": "docs:diagramas y docs:publicar",
+              "icon": "mdi:file-document-multiple-outline"
+            },
+            {
+              "id": "g3",
+              "label": "mirror-guardian",
+              "icon": "mdi:shield-sync-outline"
+            },
+            {
+              "id": "g4",
+              "label": "check-inbox-cero: local, staging y prod",
+              "icon": "mdi:inbox-outline"
+            },
+            {
+              "id": "g5",
+              "label": "patch-cleanup",
+              "icon": "mdi:broom"
+            },
+            {
+              "id": "fin-x",
+              "label": "Fin",
+              "shape": "end"
+            }
+          ]
+        },
+        {
+          "id": "G",
+          "label": "Gate (pruebas)",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "h",
+              "label": "¿Hay otro host en el puerto del gate?",
+              "shape": "diamond"
+            },
+            {
+              "id": "h2",
+              "label": "Arranca su propio host y espera /api/info",
+              "icon": "mdi:server-plus"
+            },
+            {
+              "id": "t1",
+              "label": "oxlint",
+              "icon": "mdi:format-list-checks"
+            },
+            {
+              "id": "t2",
+              "label": "test:all",
+              "icon": "mdi:test-tube"
+            },
+            {
+              "id": "t3",
+              "label": "tsc --noEmit",
+              "icon": "mdi:language-typescript"
+            },
+            {
+              "id": "baja",
+              "label": "Baja el host siempre",
+              "icon": "mdi:server-off"
+            },
+            {
+              "id": "q",
+              "label": "¿Todo en verde?",
+              "shape": "diamond"
+            }
+          ]
+        },
+        {
+          "id": "E",
+          "label": "Entregable y mirror",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "w",
+              "label": "Escribe en el entregable solo lo que cambió",
+              "icon": "mdi:content-save-move-outline"
+            },
+            {
+              "id": "p",
+              "label": "Post: dependencias en package.json, renombres de mayúsculas y estado",
+              "icon": "mdi:cog-transfer-outline"
+            },
+            {
+              "id": "c",
+              "label": "Checkpoint: commit y push del mirror",
+              "icon": "mdi:source-commit"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "ini",
+          "to": "s"
+        },
+        {
+          "from": "s",
+          "to": "v"
+        },
+        {
+          "from": "v",
+          "to": "x",
+          "label": "falla"
+        },
+        {
+          "from": "v",
+          "to": "g1",
+          "label": "ok"
+        },
+        {
+          "from": "g1",
+          "to": "g2"
+        },
+        {
+          "from": "g2",
+          "to": "g3"
+        },
+        {
+          "from": "g3",
+          "to": "g4"
+        },
+        {
+          "from": "g4",
+          "to": "g5"
+        },
+        {
+          "from": "g5",
+          "to": "h"
+        },
+        {
+          "from": "h",
+          "to": "x",
+          "label": "sí"
+        },
+        {
+          "from": "h",
+          "to": "h2",
+          "label": "no"
+        },
+        {
+          "from": "h2",
+          "to": "t1"
+        },
+        {
+          "from": "t1",
+          "to": "t2"
+        },
+        {
+          "from": "t2",
+          "to": "t3"
+        },
+        {
+          "from": "t3",
+          "to": "baja"
+        },
+        {
+          "from": "baja",
+          "to": "q"
+        },
+        {
+          "from": "q",
+          "to": "x",
+          "label": "no"
+        },
+        {
+          "from": "q",
+          "to": "w",
+          "label": "sí"
+        },
+        {
+          "from": "w",
+          "to": "p"
+        },
+        {
+          "from": "p",
+          "to": "c"
+        },
+        {
+          "from": "c",
+          "to": "fin"
+        },
+        {
+          "from": "x",
+          "to": "fin-x"
+        }
+      ]
+    }
   },
   "oficial": false
 }

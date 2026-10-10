@@ -43,6 +43,13 @@ Un diagrama puede tomar una pieza (clase, tabla, componente) de otro JSON con
 `{ path, query, actions }`: `query` siempre resuelve un valor; si da `null`, el diagrama falla con
 error visible (nunca dibuja un hueco).
 
+### S-D5b Diagrama de flujo en vector
+
+Un vector de columnas: cada columna es un sub-diagrama restringido a los tipos de entidad que acepta
+(clientes, componentes, flujo, controllers, modelos, tablas, o los que defina el consumidor) y las
+aristas son los puentes entre columnas. Una entidad en una columna que no la acepta es un error
+visible. Doc: `src/components/diagrams/vector-flow.md`.
+
 ### S-D5 Un diagrama general; los demás son vistas restringidas *(plan)*
 
 Existe un diagrama **general enriquecido** abierto a cualquier entidad (acción, decisión, clase,
@@ -98,4 +105,6 @@ para agentes es el skill `skills/iswc-diagramas-enriquecidos/SKILL.md`.
 | Lab visual de estilos | S-D2 | `labs/rieles-curvos/` (`render.mjs` + `index.html`) |
 | `-(O-` a componentes con interfaz | S-D6 | `src/utils/health/diagrams/flowchart-lanes.test.ts` (K1) |
 | Ningún riel sobre una caja ajena | S-D6 | `src/utils/health/diagrams/flowchart-lanes.test.ts` (X1) |
+| Vector estricto por columnas | S-D5b | `src/utils/health/diagrams/vector-flow.test.ts` |
+| Índices jerárquicos automáticos | S-D6 | `src/utils/health/diagrams/flowchart-indices.test.ts` |
 | Clases resumidas (N más) | S-D6 | `src/utils/health/diagrams/class-miembros.test.ts` (M5) |

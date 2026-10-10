@@ -7,1125 +7,1119 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Turno de conversación",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "Portal"
-      },
-      {
-        "id": "T",
-        "label": "ISS · TConversacionController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TConversationClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-conv-portal]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Turno de conversación",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TConversationClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-conv-portal]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "C",
+          "label": "Portal",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            },
+            {
+              "id": "openai",
+              "label": "OpenAI"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-conv-portal]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-conv-portal]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "POST /conversacion"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-conv-portal",
+              "group": "propios-patyia-api"
+            },
+            {
+              "id": "ai-voz",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-whisper]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-whisper]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "openai-whisper",
+              "group": "openai"
+            },
+            {
+              "id": "ai-op",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-completions]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-completions]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "openai-completions",
+              "group": "openai"
+            },
+            {
+              "id": "ai-hilo",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-conversations]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-conversations]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "openai-conversations",
+              "group": "openai"
+            },
+            {
+              "id": "ai-resp",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-responses]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=openai-responses]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  }
+                ]
+              },
+              "ref": "openai-responses",
+              "group": "openai"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
+            }
+          ]
+        },
+        {
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "seg",
+              "label": "Puerta SEG, body estricto, contexto, prompt o adjuntos, modo libre",
+              "icon": "mdi:shield-check-outline"
+            },
+            {
+              "id": "dec",
+              "label": "¿Continúa una conversación?",
+              "shape": "diamond"
+            },
+            {
+              "id": "sigue",
+              "label": "Valida que es del dueño y está abierta; fhultact = ahora",
+              "icon": "mdi:database-edit-outline"
+            },
+            {
+              "id": "nueva",
+              "label": "Alta: título e hilo provisionales, qmensajes = 1",
+              "icon": "mdi:database-plus-outline"
+            },
+            {
+              "id": "begin",
+              "label": "200 text/event-stream · begin y los log que esperaban",
+              "icon": "mdi:broadcast"
+            },
+            {
+              "id": "cfg",
+              "label": "Config del turno",
+              "shape": "vars",
+              "vars": [
+                {
+                  "name": "openai",
+                  "alias": "ai",
+                  "value": "TSysValueController.getOpenaiCfg()",
+                  "desc": "cliente del proveedor; null si está degradado"
+                },
+                {
+                  "name": "runtime.conversationModel",
+                  "alias": "mc",
+                  "value": "TConversacionController.runtimeOpenai()",
+                  "desc": "modelo de la respuesta"
+                },
+                {
+                  "name": "runtime.operativeModel",
+                  "alias": "mo",
+                  "value": "TConversacionController.runtimeOpenai()",
+                  "desc": "clasificar y titular"
+                }
+              ]
+            },
+            {
+              "id": "dvoz",
+              "label": "¿Trae notas de voz?",
+              "shape": "diamond"
+            },
+            {
+              "id": "voz",
+              "label": "Transcribe cada nota con {{ai}} y valida el texto",
+              "icon": "mdi:microphone-outline"
+            },
+            {
+              "id": "dctx",
+              "label": "¿Modo libre o contexto forzado?",
+              "shape": "diamond"
+            },
+            {
+              "id": "clasif",
+              "label": "Clasifica la consulta con {{mo}} (tdconsulta) y elige vector stores",
+              "icon": "mdi:tag-search-outline"
+            },
+            {
+              "id": "dhilo",
+              "label": "¿La conversación ya tiene hilo de OpenAI?",
+              "shape": "diamond"
+            },
+            {
+              "id": "hilo",
+              "label": "Crea el hilo y lo guarda en la conversación",
+              "icon": "mdi:forum-outline"
+            },
+            {
+              "id": "resp",
+              "label": "Responses API en stream con {{mc}}, instrucciones y file_search",
+              "icon": "mdi:robot-outline"
+            },
+            {
+              "id": "delta",
+              "label": "Reenvía cada delta al cliente (message)",
+              "icon": "mdi:message-arrow-right-outline"
+            },
+            {
+              "id": "n-delta",
+              "label": "Se repite por cada fragmento del stream",
+              "shape": "comment",
+              "about": "delta"
+            },
+            {
+              "id": "dok",
+              "label": "¿El turno salió bien?",
+              "shape": "diamond"
+            },
+            {
+              "id": "vn",
+              "label": "Título",
+              "shape": "vars",
+              "vars": [
+                {
+                  "name": "N",
+                  "value": "conversacion.recalcularTituloCadaMensajesUsuario",
+                  "desc": "sys value"
+                }
+              ]
+            },
+            {
+              "id": "dtit",
+              "label": "¿(qmensajes − 1) % {{N}} = 0?",
+              "shape": "diamond"
+            },
+            {
+              "id": "titulo",
+              "label": "Regenera el título con {{mo}} (operativo 9999.1)",
+              "icon": "mdi:format-title"
+            },
+            {
+              "id": "consultas",
+              "label": "Extrae y clasifica las consultas del mensaje",
+              "icon": "mdi:text-search"
+            },
+            {
+              "id": "hist",
+              "label": "Guarda el historial del turno, bajo bloqueo",
+              "icon": "mdi:database-lock-outline"
+            },
+            {
+              "id": "cuenta",
+              "label": "Actualiza qmensajes, qtokens, hilo, título y fhultact",
+              "icon": "mdi:database-edit-outline"
+            },
+            {
+              "id": "end",
+              "label": "end · meta con traza, imensaje y stream_ok",
+              "icon": "mdi:flag-checkered"
+            },
+            {
+              "id": "n-log",
+              "label": "Cada paso emite además un evento log",
+              "shape": "comment",
+              "about": "begin"
+            }
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TConversacionController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversacionController]": {
+                      "uml": true
+                    }
+                  }
+                }
               }
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "POST /conversacion"
+              "id": "dueno-TProviderController",
+              "label": "TProviderController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TProviderController]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TSysValueController",
+              "label": "TSysValueController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValueController]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TConsultaController",
+              "label": "TConsultaController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConsultaController]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TConversationLogController",
+              "label": "TConversationLogController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationLogController]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
+            {
+              "id": "ctl-pojo",
+              "label": "TConversacion",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversacion]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TProviderController-pojo",
+              "label": "TProvider",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TProvider]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TSysValueController-pojo",
+              "label": "TSysValue",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValue]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TConsultaController-pojo",
+              "label": "TConsulta",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConsulta]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TConversationLogController-pojo",
+              "label": "TConversationLog",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TConversationLog]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
+            },
+            {
+              "id": "patyia-configuracion",
+              "label": "PatyIA · Configuración"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "tconv",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversaciones]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversaciones]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=iconversacion]": true,
+                        "[name=itercero]": true,
+                        "[name=icontacto]": true,
+                        "[name=titulo]": true,
+                        "[name=hilo]": true,
+                        "[name=qmensajes]": true,
+                        "[name=qtokens]": true,
+                        "[name=fhultact]": true
+                      }
+                    }
+                  }
                 ]
-              }
-            }
-          ]
-        },
-        "ref": "grp-conv-portal",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TConversacionController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversacionController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TConversacion",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversacion]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "seg",
-        "label": "Puerta SEG, body estricto, contexto, prompt o adjuntos, modo libre",
-        "lane": "T",
-        "icon": "mdi:shield-check-outline"
-      },
-      {
-        "id": "dec",
-        "label": "¿Continúa una conversación?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "sigue",
-        "label": "Valida que es del dueño y está abierta; fhultact = ahora",
-        "lane": "T",
-        "icon": "mdi:database-edit-outline"
-      },
-      {
-        "id": "nueva",
-        "label": "Alta: título e hilo provisionales, qmensajes = 1",
-        "lane": "T",
-        "icon": "mdi:database-plus-outline"
-      },
-      {
-        "id": "tconv",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversaciones]": {
-                    "name": true
+              },
+              "group": "patyia-operativa"
+            },
+            {
+              "id": "tprov",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_providers]": {
+                          "name": true
+                        }
+                      }
+                    }
                   }
                 }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversaciones]": true
-                }
-              }
-            }
-          },
-          "actions": [
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_providers]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-configuracion"
+            },
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=iconversacion]": true,
-                  "[name=itercero]": true,
-                  "[name=icontacto]": true,
-                  "[name=titulo]": true,
-                  "[name=hilo]": true,
-                  "[name=qmensajes]": true,
-                  "[name=qtokens]": true,
-                  "[name=fhultact]": true
-                }
-              }
-            }
-          ]
-        },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "begin",
-        "label": "200 text/event-stream · begin y los log que esperaban",
-        "lane": "T",
-        "icon": "mdi:broadcast"
-      },
-      {
-        "id": "cfg",
-        "label": "Config del turno",
-        "shape": "vars",
-        "lane": "T",
-        "vars": [
-          {
-            "name": "openai",
-            "alias": "ai",
-            "value": "TSysValueController.getOpenaiCfg()",
-            "desc": "cliente del proveedor; null si está degradado"
-          },
-          {
-            "name": "runtime.conversationModel",
-            "alias": "mc",
-            "value": "TConversacionController.runtimeOpenai()",
-            "desc": "modelo de la respuesta"
-          },
-          {
-            "name": "runtime.operativeModel",
-            "alias": "mo",
-            "value": "TConversacionController.runtimeOpenai()",
-            "desc": "clasificar y titular"
-          }
-        ]
-      },
-      {
-        "id": "tprov",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_providers]": {
-                    "name": true
+              "id": "tsys",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": {
+                          "name": true
+                        }
+                      }
+                    }
                   }
                 }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_providers]": true
-                }
-              }
-            }
-          },
-          "actions": [
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-configuracion"
+            },
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
-            }
-          ]
-        },
-        "context": "PatyIA · Configuración"
-      },
-      {
-        "id": "tsys",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": {
-                    "name": true
+              "id": "tqry",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_consultas]": {
+                          "name": true
+                        }
+                      }
+                    }
                   }
                 }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": true
-                }
-              }
-            }
-          },
-          "actions": [
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_consultas]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
+            },
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
-            }
-          ]
-        },
-        "context": "PatyIA · Configuración"
-      },
-      {
-        "id": "ai-voz",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-whisper]": {
-                    "name": true
+              "id": "tlog",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversacion_log]": {
+                          "name": true
+                        }
+                      }
+                    }
                   }
                 }
-              }
-            }
-          }
-        },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-whisper]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
-            }
-          ]
-        },
-        "ref": "openai-whisper",
-        "context": "OpenAI"
-      },
-      {
-        "id": "ai-op",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-completions]": {
-                    "name": true
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_conversacion_log]": true
+                      }
+                    }
                   }
-                }
-              }
-            }
-          }
-        },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-completions]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
-            }
-          ]
-        },
-        "ref": "openai-completions",
-        "context": "OpenAI"
-      },
-      {
-        "id": "ai-hilo",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-conversations]": {
-                    "name": true
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
                   }
-                }
-              }
-            }
-          }
-        },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-conversations]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+                ]
+              },
+              "group": "patyia-operativa"
             }
           ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
         },
-        "ref": "openai-conversations",
-        "context": "OpenAI"
-      },
-      {
-        "id": "ai-resp",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-responses]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass · UPDATE, INSERT"
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=openai-responses]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
-            }
-          ]
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "POST /conversacion"
         },
-        "ref": "openai-responses",
-        "context": "OpenAI"
-      },
-      {
-        "id": "dvoz",
-        "label": "¿Trae notas de voz?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "voz",
-        "label": "Transcribe cada nota con {{ai}} y valida el texto",
-        "lane": "T",
-        "icon": "mdi:microphone-outline"
-      },
-      {
-        "id": "dctx",
-        "label": "¿Modo libre o contexto forzado?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "clasif",
-        "label": "Clasifica la consulta con {{mo}} (tdconsulta) y elige vector stores",
-        "lane": "T",
-        "icon": "mdi:tag-search-outline"
-      },
-      {
-        "id": "dhilo",
-        "label": "¿La conversación ya tiene hilo de OpenAI?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "hilo",
-        "label": "Crea el hilo y lo guarda en la conversación",
-        "lane": "T",
-        "icon": "mdi:forum-outline"
-      },
-      {
-        "id": "resp",
-        "label": "Responses API en stream con {{mc}}, instrucciones y file_search",
-        "lane": "T",
-        "icon": "mdi:robot-outline"
-      },
-      {
-        "id": "delta",
-        "label": "Reenvía cada delta al cliente (message)",
-        "lane": "T",
-        "icon": "mdi:message-arrow-right-outline"
-      },
-      {
-        "id": "n-delta",
-        "label": "Se repite por cada fragmento del stream",
-        "shape": "comment",
-        "about": "delta"
-      },
-      {
-        "id": "dok",
-        "label": "¿El turno salió bien?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "vn",
-        "label": "Título",
-        "shape": "vars",
-        "lane": "T",
-        "vars": [
-          {
-            "name": "N",
-            "value": "conversacion.recalcularTituloCadaMensajesUsuario",
-            "desc": "sys value"
-          }
-        ]
-      },
-      {
-        "id": "dtit",
-        "label": "¿(qmensajes − 1) % {{N}} = 0?",
-        "shape": "diamond",
-        "lane": "T"
-      },
-      {
-        "id": "titulo",
-        "label": "Regenera el título con {{mo}} (operativo 9999.1)",
-        "lane": "T",
-        "icon": "mdi:format-title"
-      },
-      {
-        "id": "consultas",
-        "label": "Extrae y clasifica las consultas del mensaje",
-        "lane": "T",
-        "icon": "mdi:text-search"
-      },
-      {
-        "id": "tqry",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_consultas]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
+        {
+          "from": "ctl",
+          "to": "seg"
         },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_consultas]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
-            }
-          ]
+        {
+          "from": "seg",
+          "to": "dec"
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "hist",
-        "label": "Guarda el historial del turno, bajo bloqueo",
-        "lane": "T",
-        "icon": "mdi:database-lock-outline"
-      },
-      {
-        "id": "tlog",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversacion_log]": {
-                    "name": true
-                  }
-                }
-              }
-            }
-          }
+        {
+          "from": "dec",
+          "to": "sigue",
+          "label": "continúa"
         },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_conversacion_log]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
-            }
-          ]
+        {
+          "from": "dec",
+          "to": "nueva",
+          "label": "nueva"
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "cuenta",
-        "label": "Actualiza qmensajes, qtokens, hilo, título y fhultact",
-        "lane": "T",
-        "icon": "mdi:database-edit-outline"
-      },
-      {
-        "id": "end",
-        "label": "end · meta con traza, imensaje y stream_ok",
-        "lane": "T",
-        "icon": "mdi:flag-checkered"
-      },
-      {
-        "id": "n-log",
-        "label": "Cada paso emite además un evento log",
-        "shape": "comment",
-        "about": "begin"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      },
-      {
-        "id": "dueno-TProviderController",
-        "label": "TProviderController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TProviderController]": {
-                "uml": true
-              }
-            }
-          }
+        {
+          "from": "sigue",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "nueva",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "sigue",
+          "to": "begin"
+        },
+        {
+          "from": "nueva",
+          "to": "begin"
+        },
+        {
+          "from": "begin",
+          "to": "cfg"
+        },
+        {
+          "from": "cfg",
+          "to": "dvoz"
+        },
+        {
+          "from": "cfg",
+          "to": "dueno-TProviderController",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "cfg",
+          "to": "dueno-TSysValueController",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "dvoz",
+          "to": "voz",
+          "label": "sí"
+        },
+        {
+          "from": "dvoz",
+          "to": "dctx",
+          "label": "no"
+        },
+        {
+          "from": "voz",
+          "to": "ai-voz",
+          "kind": "dashed",
+          "label": "transcribe"
+        },
+        {
+          "from": "voz",
+          "to": "dctx"
+        },
+        {
+          "from": "dctx",
+          "to": "clasif",
+          "label": "no"
+        },
+        {
+          "from": "dctx",
+          "to": "dhilo",
+          "label": "sí"
+        },
+        {
+          "from": "clasif",
+          "to": "ai-op",
+          "kind": "dashed",
+          "label": "clasifica"
+        },
+        {
+          "from": "clasif",
+          "to": "dhilo"
+        },
+        {
+          "from": "dhilo",
+          "to": "hilo",
+          "label": "no"
+        },
+        {
+          "from": "dhilo",
+          "to": "resp",
+          "label": "sí"
+        },
+        {
+          "from": "hilo",
+          "to": "ai-hilo",
+          "kind": "dashed",
+          "label": "create"
+        },
+        {
+          "from": "hilo",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "hilo",
+          "to": "resp"
+        },
+        {
+          "from": "resp",
+          "to": "ai-resp",
+          "kind": "dashed",
+          "label": "stream"
+        },
+        {
+          "from": "resp",
+          "to": "delta"
+        },
+        {
+          "from": "delta",
+          "to": "dok"
+        },
+        {
+          "from": "dok",
+          "to": "vn",
+          "label": "sí"
+        },
+        {
+          "from": "dok",
+          "to": "hist",
+          "label": "no"
+        },
+        {
+          "from": "vn",
+          "to": "dueno-TSysValueController",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "vn",
+          "to": "dtit"
+        },
+        {
+          "from": "dtit",
+          "to": "titulo",
+          "label": "sí"
+        },
+        {
+          "from": "dtit",
+          "to": "consultas",
+          "label": "no"
+        },
+        {
+          "from": "titulo",
+          "to": "ai-op",
+          "kind": "dashed",
+          "label": "generarTitulo"
+        },
+        {
+          "from": "titulo",
+          "to": "consultas"
+        },
+        {
+          "from": "consultas",
+          "to": "ai-op",
+          "kind": "dashed",
+          "label": "extrae y clasifica"
+        },
+        {
+          "from": "consultas",
+          "to": "dueno-TConsultaController",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "consultas",
+          "to": "hist"
+        },
+        {
+          "from": "hist",
+          "to": "dueno-TConversationLogController",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "hist",
+          "to": "cuenta"
+        },
+        {
+          "from": "cuenta",
+          "to": "end"
+        },
+        {
+          "from": "end",
+          "to": "fin"
+        },
+        {
+          "from": "cuenta",
+          "to": "tconv",
+          "kind": "dashed",
+          "label": "UPDATE"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta (stream)"
+        },
+        {
+          "from": "dueno-TProviderController",
+          "to": "dueno-TProviderController-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT"
+        },
+        {
+          "from": "dueno-TProviderController",
+          "to": "tprov",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "dueno-TSysValueController",
+          "to": "dueno-TSysValueController-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT"
+        },
+        {
+          "from": "dueno-TSysValueController",
+          "to": "tsys",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "dueno-TConsultaController",
+          "to": "dueno-TConsultaController-pojo",
+          "kind": "dashed",
+          "label": "klass · INSERT"
+        },
+        {
+          "from": "dueno-TConsultaController",
+          "to": "tqry",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "dueno-TConversationLogController",
+          "to": "dueno-TConversationLogController-pojo",
+          "kind": "dashed",
+          "label": "klass · INSERT"
+        },
+        {
+          "from": "dueno-TConversationLogController",
+          "to": "tlog",
+          "kind": "dashed",
+          "label": "INSERT"
         }
-      },
-      {
-        "id": "dueno-TProviderController-pojo",
-        "label": "TProvider",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TProvider]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TSysValueController",
-        "label": "TSysValueController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValueController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TSysValueController-pojo",
-        "label": "TSysValue",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValue]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TConsultaController",
-        "label": "TConsultaController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConsultaController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TConsultaController-pojo",
-        "label": "TConsulta",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConsulta]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TConversationLogController",
-        "label": "TConversationLogController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationLogController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TConversationLogController-pojo",
-        "label": "TConversationLog",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TConversationLog]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass · UPDATE, INSERT"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "POST /conversacion"
-      },
-      {
-        "from": "ctl",
-        "to": "seg"
-      },
-      {
-        "from": "seg",
-        "to": "dec"
-      },
-      {
-        "from": "dec",
-        "to": "sigue",
-        "label": "continúa"
-      },
-      {
-        "from": "dec",
-        "to": "nueva",
-        "label": "nueva"
-      },
-      {
-        "from": "sigue",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "UPDATE"
-      },
-      {
-        "from": "nueva",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "sigue",
-        "to": "begin"
-      },
-      {
-        "from": "nueva",
-        "to": "begin"
-      },
-      {
-        "from": "begin",
-        "to": "cfg"
-      },
-      {
-        "from": "cfg",
-        "to": "dvoz"
-      },
-      {
-        "from": "cfg",
-        "to": "dueno-TProviderController",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "cfg",
-        "to": "dueno-TSysValueController",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "dvoz",
-        "to": "voz",
-        "label": "sí"
-      },
-      {
-        "from": "dvoz",
-        "to": "dctx",
-        "label": "no"
-      },
-      {
-        "from": "voz",
-        "to": "ai-voz",
-        "kind": "dashed",
-        "label": "transcribe"
-      },
-      {
-        "from": "voz",
-        "to": "dctx"
-      },
-      {
-        "from": "dctx",
-        "to": "clasif",
-        "label": "no"
-      },
-      {
-        "from": "dctx",
-        "to": "dhilo",
-        "label": "sí"
-      },
-      {
-        "from": "clasif",
-        "to": "ai-op",
-        "kind": "dashed",
-        "label": "clasifica"
-      },
-      {
-        "from": "clasif",
-        "to": "dhilo"
-      },
-      {
-        "from": "dhilo",
-        "to": "hilo",
-        "label": "no"
-      },
-      {
-        "from": "dhilo",
-        "to": "resp",
-        "label": "sí"
-      },
-      {
-        "from": "hilo",
-        "to": "ai-hilo",
-        "kind": "dashed",
-        "label": "create"
-      },
-      {
-        "from": "hilo",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "UPDATE"
-      },
-      {
-        "from": "hilo",
-        "to": "resp"
-      },
-      {
-        "from": "resp",
-        "to": "ai-resp",
-        "kind": "dashed",
-        "label": "stream"
-      },
-      {
-        "from": "resp",
-        "to": "delta"
-      },
-      {
-        "from": "delta",
-        "to": "dok"
-      },
-      {
-        "from": "dok",
-        "to": "vn",
-        "label": "sí"
-      },
-      {
-        "from": "dok",
-        "to": "hist",
-        "label": "no"
-      },
-      {
-        "from": "vn",
-        "to": "dueno-TSysValueController",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "vn",
-        "to": "dtit"
-      },
-      {
-        "from": "dtit",
-        "to": "titulo",
-        "label": "sí"
-      },
-      {
-        "from": "dtit",
-        "to": "consultas",
-        "label": "no"
-      },
-      {
-        "from": "titulo",
-        "to": "ai-op",
-        "kind": "dashed",
-        "label": "generarTitulo"
-      },
-      {
-        "from": "titulo",
-        "to": "consultas"
-      },
-      {
-        "from": "consultas",
-        "to": "ai-op",
-        "kind": "dashed",
-        "label": "extrae y clasifica"
-      },
-      {
-        "from": "consultas",
-        "to": "dueno-TConsultaController",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "consultas",
-        "to": "hist"
-      },
-      {
-        "from": "hist",
-        "to": "dueno-TConversationLogController",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "hist",
-        "to": "cuenta"
-      },
-      {
-        "from": "cuenta",
-        "to": "end"
-      },
-      {
-        "from": "end",
-        "to": "fin"
-      },
-      {
-        "from": "cuenta",
-        "to": "tconv",
-        "kind": "dashed",
-        "label": "UPDATE"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta (stream)"
-      },
-      {
-        "from": "dueno-TProviderController",
-        "to": "dueno-TProviderController-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT"
-      },
-      {
-        "from": "dueno-TProviderController",
-        "to": "tprov",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "dueno-TSysValueController",
-        "to": "dueno-TSysValueController-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT"
-      },
-      {
-        "from": "dueno-TSysValueController",
-        "to": "tsys",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "dueno-TConsultaController",
-        "to": "dueno-TConsultaController-pojo",
-        "kind": "dashed",
-        "label": "klass · INSERT"
-      },
-      {
-        "from": "dueno-TConsultaController",
-        "to": "tqry",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "dueno-TConversationLogController",
-        "to": "dueno-TConversationLogController-pojo",
-        "kind": "dashed",
-        "label": "klass · INSERT"
-      },
-      {
-        "from": "dueno-TConversationLogController",
-        "to": "tlog",
-        "kind": "dashed",
-        "label": "INSERT"
-      }
-    ]
+      ]
+    }
   }
 }

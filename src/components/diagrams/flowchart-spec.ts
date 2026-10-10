@@ -22,6 +22,7 @@ import type { ErThemeJson } from "./theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
 import { anchoDeComponente } from './component-spec.js';
+import { vectorAFlujo } from './vector-flow-spec.js';
 import { oklchToHex } from '../_shared/oklch.js';
 import { FlowVarSchema, TipoEntidadSchema } from './flowchart-spec.schemas.js';
 import type { RouterEdge, RouterPort } from './component-router.schemas.js';
@@ -228,7 +229,9 @@ function readGroups(src: Record<string, unknown>): FlowGroupSpec[] | undefined {
 
 /** payload → spec normalizada, o null si no hay nodos. */
 export function flowchartSpecFromPayload(payload: unknown): FlowResolvedSpec | null {
-  const p = asRecord(payload);
+  const p0 = asRecord(payload);
+  // Diagrama de flujo en vector: se valida (cada columna restringida a sus tipos) y se compila aquí.
+  const p = p0.vectorFlow ? vectorAFlujo(p0.vectorFlow) : p0;
   const src = asRecord(p.flowchart ?? p.flow ?? p);
   const rawNodes = src.nodes;
   if (!Array.isArray(rawNodes) || !rawNodes.length) return null;
@@ -1849,6 +1852,7 @@ export function indicesJerarquicos(
   const adelante = flujo.filter((e) => !atras.has(`${e.from}>${e.to}`));
   const grado = new Map<string, number>();
   for (const e of adelante) grado.set(e.to, (grado.get(e.to) ?? 0) + 1);
+  const gradoInicial = new Map(grado);
 
   /** Lo que un padre le pasa a su hijo: la base en la que sigue, o la cabeza de una rama nueva. */
   type Propuesta = { base: number[]; cabeza?: number[] };
@@ -1915,9 +1919,14 @@ export function indicesJerarquicos(
       cabezaHijos = cabeza;
     }
     const hs = [...new Set((hijos.get(id) ?? []).filter((h) => !atras.has(`${id}>${h}`)))].sort((a, b) => lectura(a) - lectura(b));
-    hs.forEach((h, k) => {
+    // Solo abren rama (y consumen su número p.k) los hijos que de verdad son ramas: no un fin ni un
+    // nodo donde ya se reúnen varias (esos siguen en el nivel de quien bifurca).
+    const esRama = (h: string): boolean => specById.get(h)?.shape !== 'end' && (gradoInicial.get(h) ?? 0) <= 1;
+    const ramas = hs.filter(esRama);
+    hs.forEach((h) => {
+      const k = ramas.indexOf(h);
       const p: Propuesta = hs.length > 1 && previo.length
-        ? { base: baseHijos, cabeza: [...previo, k + 1] }
+        ? (k >= 0 ? { base: baseHijos, cabeza: [...previo, k + 1] } : { base: previo })
         : { base: baseHijos, ...(cabezaHijos ? { cabeza: cabezaHijos } : {}) };
       propuestas.set(h, [...(propuestas.get(h) ?? []), p]);
       if (previo.length) ultimo.set(h, previo);

@@ -7,346 +7,367 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Captura de errores 5xx",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "Cliente"
-      },
-      {
-        "id": "W",
-        "label": "Host · makeDispatchHandler"
-      },
-      {
-        "id": "E",
-        "label": "ISS · TErrorController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "H",
-        "label": "Controller de la ruta"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TErrorsClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TErrorsClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-ops]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Captura de errores 5xx",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TErrorsClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TErrorsClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-ops]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "C",
+          "label": "Cliente",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
-              }
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-ops]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-ops]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "cualquier ruta propia"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-ops",
+              "group": "propios-patyia-api"
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "cualquier ruta propia"
-                ]
-              }
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
             }
           ]
         },
-        "ref": "grp-ops",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "llega",
-        "label": "Llega la petición y pasa la puerta SEG",
-        "lane": "W",
-        "icon": "mdi:door-open"
-      },
-      {
-        "id": "err",
-        "label": "TErrorController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TErrorController]": {
-                "uml": true
-              }
+        {
+          "id": "W",
+          "label": "Host · makeDispatchHandler",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "llega",
+              "label": "Llega la petición y pasa la puerta SEG",
+              "icon": "mdi:door-open"
+            },
+            {
+              "id": "responde",
+              "label": "Responde 500 (o 503 si era una Rst503_)",
+              "icon": "mdi:reply-outline"
+            },
+            {
+              "id": "n-stack",
+              "label": "Rutas montadas por el stack: capturarRespuesta ancla la 5xx (salvo 503)",
+              "shape": "comment",
+              "about": "responde"
             }
-          }
-        }
-      },
-      {
-        "id": "err-pojo",
-        "label": "TError_",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TError_]": {
-                "uml": true
-              }
+          ]
+        },
+        {
+          "id": "E",
+          "label": "ISS · TErrorController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "envuelve",
+              "label": "Envuelve el controller con la captura de errores",
+              "icon": "mdi:shield-bug-outline"
+            },
+            {
+              "id": "n-timer",
+              "label": "Los timers pasan por la misma envoltura: referencia TIMER:/<nombre> y el host sigue",
+              "shape": "comment",
+              "about": "envuelve"
+            },
+            {
+              "id": "excluye",
+              "label": "Excluye 503 y 4xx; también POST /error y GET|DELETE /errores",
+              "icon": "mdi:filter-remove-outline"
+            },
+            {
+              "id": "censura",
+              "label": "Censura tokens, hashes, claves de API y bearer del cuerpo",
+              "icon": "mdi:eye-off-outline"
+            },
+            {
+              "id": "guarda",
+              "label": "Registra el error (referencia METHOD:/ruta)",
+              "icon": "mdi:database-plus-outline"
+            },
+            {
+              "id": "relanza",
+              "label": "Vuelve a lanzar el error para el envelope",
+              "icon": "mdi:replay"
             }
-          }
-        }
-      },
-      {
-        "id": "envuelve",
-        "label": "Envuelve el controller con la captura de errores",
-        "lane": "E",
-        "icon": "mdi:shield-bug-outline"
-      },
-      {
-        "id": "n-timer",
-        "label": "Los timers pasan por la misma envoltura: referencia TIMER:/<nombre> y el host sigue",
-        "shape": "comment",
-        "about": "envuelve"
-      },
-      {
-        "id": "ejecuta",
-        "label": "Ejecuta el método del controller",
-        "lane": "H",
-        "icon": "mdi:cog-play-outline"
-      },
-      {
-        "id": "lanza",
-        "label": "Lanza un 5xx inesperado (sin status o ≥ 500)",
-        "lane": "H",
-        "icon": "mdi:alert-octagon-outline"
-      },
-      {
-        "id": "n-4xx",
-        "label": "Los 4xx son errores del cliente: no se persisten",
-        "shape": "comment",
-        "about": "lanza"
-      },
-      {
-        "id": "excluye",
-        "label": "Excluye 503 y 4xx; también POST /error y GET|DELETE /errores",
-        "lane": "E",
-        "icon": "mdi:filter-remove-outline"
-      },
-      {
-        "id": "censura",
-        "label": "Censura tokens, hashes, claves de API y bearer del cuerpo",
-        "lane": "E",
-        "icon": "mdi:eye-off-outline"
-      },
-      {
-        "id": "guarda",
-        "label": "Registra el error (referencia METHOD:/ruta)",
-        "lane": "E",
-        "icon": "mdi:database-plus-outline"
-      },
-      {
-        "id": "terr",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": {
-                    "name": true
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "err",
+              "label": "TErrorController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TErrorController]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=ierror]": true,
-                  "[name=jerror]": true,
-                  "[name=batendido]": true,
-                  "[name=fhcre]": true,
-                  "[name=referencia]": true,
-                  "[name=resumen]": true
+              "id": "err-pojo",
+              "label": "TError_",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TError_]": {
+                      "uml": true
+                    }
+                  }
                 }
               }
             }
           ]
         },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "n-dup",
-        "label": "Índice único parcial por referencia: el mismo fallo no se duplica",
-        "shape": "comment",
-        "about": "terr"
-      },
-      {
-        "id": "relanza",
-        "label": "Vuelve a lanzar el error para el envelope",
-        "lane": "E",
-        "icon": "mdi:replay"
-      },
-      {
-        "id": "responde",
-        "label": "Responde 500 (o 503 si era una Rst503_)",
-        "lane": "W",
-        "icon": "mdi:reply-outline"
-      },
-      {
-        "id": "n-stack",
-        "label": "Rutas montadas por el stack: capturarRespuesta ancla la 5xx (salvo 503)",
-        "shape": "comment",
-        "about": "responde"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "err",
-        "to": "err-pojo",
-        "kind": "dashed",
-        "label": "klass · INSERT"
-      },
-      {
-        "from": "api",
-        "to": "llega",
-        "label": "petición"
-      },
-      {
-        "from": "llega",
-        "to": "err"
-      },
-      {
-        "from": "err",
-        "to": "envuelve"
-      },
-      {
-        "from": "envuelve",
-        "to": "ejecuta"
-      },
-      {
-        "from": "ejecuta",
-        "to": "lanza"
-      },
-      {
-        "from": "lanza",
-        "to": "excluye"
-      },
-      {
-        "from": "excluye",
-        "to": "censura"
-      },
-      {
-        "from": "censura",
-        "to": "guarda"
-      },
-      {
-        "from": "guarda",
-        "to": "relanza"
-      },
-      {
-        "from": "relanza",
-        "to": "responde"
-      },
-      {
-        "from": "responde",
-        "to": "fin"
-      },
-      {
-        "from": "guarda",
-        "to": "terr",
-        "kind": "dashed",
-        "label": "INSERT"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      }
-    ]
+        {
+          "id": "H",
+          "label": "Controller de la ruta",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "ejecuta",
+              "label": "Ejecuta el método del controller",
+              "icon": "mdi:cog-play-outline"
+            },
+            {
+              "id": "lanza",
+              "label": "Lanza un 5xx inesperado (sin status o ≥ 500)",
+              "icon": "mdi:alert-octagon-outline"
+            },
+            {
+              "id": "n-4xx",
+              "label": "Los 4xx son errores del cliente: no se persisten",
+              "shape": "comment",
+              "about": "lanza"
+            }
+          ]
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "terr",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=ierror]": true,
+                        "[name=jerror]": true,
+                        "[name=batendido]": true,
+                        "[name=fhcre]": true,
+                        "[name=referencia]": true,
+                        "[name=resumen]": true
+                      }
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-operativa"
+            },
+            {
+              "id": "n-dup",
+              "label": "Índice único parcial por referencia: el mismo fallo no se duplica",
+              "shape": "comment",
+              "about": "terr"
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
+        },
+        {
+          "from": "err",
+          "to": "err-pojo",
+          "kind": "dashed",
+          "label": "klass · INSERT"
+        },
+        {
+          "from": "api",
+          "to": "llega",
+          "label": "petición"
+        },
+        {
+          "from": "llega",
+          "to": "err"
+        },
+        {
+          "from": "err",
+          "to": "envuelve"
+        },
+        {
+          "from": "envuelve",
+          "to": "ejecuta"
+        },
+        {
+          "from": "ejecuta",
+          "to": "lanza"
+        },
+        {
+          "from": "lanza",
+          "to": "excluye"
+        },
+        {
+          "from": "excluye",
+          "to": "censura"
+        },
+        {
+          "from": "censura",
+          "to": "guarda"
+        },
+        {
+          "from": "guarda",
+          "to": "relanza"
+        },
+        {
+          "from": "relanza",
+          "to": "responde"
+        },
+        {
+          "from": "responde",
+          "to": "fin"
+        },
+        {
+          "from": "guarda",
+          "to": "terr",
+          "kind": "dashed",
+          "label": "INSERT"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        }
+      ]
+    }
   }
 }

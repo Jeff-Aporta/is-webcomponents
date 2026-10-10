@@ -7,443 +7,459 @@
     "diagram-style": "insoft"
   },
   "payload": {
-    "title": "Salud del servidor (GET /info)",
-    "steps": "auto",
-    "lanes": [
-      {
-        "id": "cliente",
-        "label": "Cliente",
-        "align": "center"
-      },
-      {
-        "id": "C",
-        "label": "Monitor / agente"
-      },
-      {
-        "id": "I",
-        "label": "ISS · TInfoController"
-      },
-      {
-        "id": "controllers",
-        "label": "Controllers"
-      },
-      {
-        "id": "modelos",
-        "label": "Modelos"
-      },
-      {
-        "id": "P",
-        "label": "PostgreSQL"
-      }
-    ],
-    "nodes": [
-      {
-        "id": "cliente",
-        "label": "TInfoClient",
-        "kind": "class",
-        "lane": "cliente",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TInfoClient]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "api",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-ops]": {
-                    "name": true
+    "vectorFlow": {
+      "title": "Salud del servidor (GET /info)",
+      "steps": "auto",
+      "columns": [
+        {
+          "id": "cliente",
+          "label": "Cliente",
+          "tipo": "clientes",
+          "align": "center",
+          "nodes": [
+            {
+              "id": "cliente",
+              "label": "TInfoClient",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TInfoClient]": {
+                      "uml": true
+                    }
                   }
                 }
               }
             }
-          }
+          ]
         },
-        "kind": "component",
-        "lane": "C",
-        "component": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
-          "query": {
-            "payload": {
-              "componentDiagram": {
-                "components": {
-                  "[id=grp-ops]": true
-                }
-              }
-            }
-          },
-          "actions": [
+        {
+          "id": "C",
+          "label": "Monitor / agente",
+          "tipo": "componentes",
+          "groups": [
             {
-              "op": "get",
-              "query": {
-                "name": true,
-                "stereotype": true,
-                "items": true,
-                "provides": true,
-                "icon": true
+              "id": "propios-patyia-api",
+              "label": "Propios (PatyIA API)"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "api",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-ops]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "component",
+              "component": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+                "query": {
+                  "payload": {
+                    "componentDiagram": {
+                      "components": {
+                        "[id=grp-ops]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "stereotype": true,
+                      "items": true,
+                      "provides": true,
+                      "icon": true
+                    }
+                  },
+                  {
+                    "op": "push",
+                    "valor": {
+                      "items": [
+                        "GET /info"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ref": "grp-ops",
+              "group": "propios-patyia-api"
+            },
+            {
+              "id": "fin",
+              "label": "Fin",
+              "shape": "end"
+            }
+          ]
+        },
+        {
+          "id": "I",
+          "label": "ISS · TInfoController",
+          "tipo": "flujo",
+          "nodes": [
+            {
+              "id": "fork",
+              "label": "",
+              "shape": "bar"
+            },
+            {
+              "id": "db",
+              "label": "SELECT 1 con tiempo de conexión",
+              "icon": "mdi:database-clock-outline"
+            },
+            {
+              "id": "err",
+              "label": "¿Hay errores abiertos en la bandeja?",
+              "icon": "mdi:inbox-outline"
+            },
+            {
+              "id": "pat",
+              "label": "Parches aplicados, fallidos y el último",
+              "icon": "mdi:database-cog-outline"
+            },
+            {
+              "id": "geo",
+              "label": "Ubicación del servidor",
+              "icon": "mdi:map-marker-outline"
+            },
+            {
+              "id": "join",
+              "label": "",
+              "shape": "bar"
+            },
+            {
+              "id": "ok",
+              "label": "200 siempre: versión, sello, BD, parches, runner, erroresPorAtender",
+              "icon": "mdi:heart-pulse"
+            },
+            {
+              "id": "n-200",
+              "label": "Un fallo de una lectura queda en su campo; nunca 5xx",
+              "shape": "comment",
+              "about": "ok"
+            }
+          ]
+        },
+        {
+          "id": "controllers",
+          "label": "Controllers",
+          "tipo": "controllers",
+          "nodes": [
+            {
+              "id": "ctl",
+              "label": "TInfoController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TInfoController]": {
+                      "uml": true
+                    }
+                  }
+                }
               }
             },
             {
-              "op": "push",
-              "valor": {
-                "items": [
-                  "GET /info"
+              "id": "dueno-TErrorController",
+              "label": "TErrorController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TErrorController]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TSysValueController",
+              "label": "TSysValueController",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValueController]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "modelos",
+          "label": "Modelos",
+          "tipo": "modelos",
+          "nodes": [
+            {
+              "id": "ctl-pojo",
+              "label": "TInfoObject",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TInfoObject]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TErrorController-pojo",
+              "label": "TError_",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TError_]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "dueno-TSysValueController-pojo",
+              "label": "TSysValue",
+              "kind": "class",
+              "class": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+                "query": {
+                  "clases": {
+                    "[name=TSysValue]": {
+                      "uml": true
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "tipo": "tablas",
+          "groups": [
+            {
+              "id": "patyia-operativa",
+              "label": "PatyIA · Operativa"
+            },
+            {
+              "id": "patyia-configuracion",
+              "label": "PatyIA · Configuración"
+            }
+          ],
+          "nodes": [
+            {
+              "id": "terr",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": {
+                          "name": true
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_errores]": true
+                      }
+                    }
+                  }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": {
+                        "[name=ierror]": true,
+                        "[name=batendido]": true
+                      }
+                    }
+                  }
                 ]
-              }
-            }
-          ]
-        },
-        "ref": "grp-ops",
-        "context": "Propios (PatyIA API)"
-      },
-      {
-        "id": "ctl",
-        "label": "TInfoController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TInfoController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "ctl-pojo",
-        "label": "TInfoObject",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TInfoObject]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "fork",
-        "label": "",
-        "shape": "bar",
-        "lane": "I"
-      },
-      {
-        "id": "db",
-        "label": "SELECT 1 con tiempo de conexión",
-        "lane": "I",
-        "icon": "mdi:database-clock-outline"
-      },
-      {
-        "id": "err",
-        "label": "¿Hay errores abiertos en la bandeja?",
-        "lane": "I",
-        "icon": "mdi:inbox-outline"
-      },
-      {
-        "id": "pat",
-        "label": "Parches aplicados, fallidos y el último",
-        "lane": "I",
-        "icon": "mdi:database-cog-outline"
-      },
-      {
-        "id": "geo",
-        "label": "Ubicación del servidor",
-        "lane": "I",
-        "icon": "mdi:map-marker-outline"
-      },
-      {
-        "id": "join",
-        "label": "",
-        "shape": "bar",
-        "lane": "I"
-      },
-      {
-        "id": "terr",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": {
-                    "name": true
+              },
+              "group": "patyia-operativa"
+            },
+            {
+              "id": "tsys",
+              "label": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": {
+                          "name": true
+                        }
+                      }
+                    }
                   }
                 }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_errores]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": {
-                  "[name=ierror]": true,
-                  "[name=batendido]": true
-                }
-              }
-            }
-          ]
-        },
-        "context": "PatyIA · Operativa"
-      },
-      {
-        "id": "tsys",
-        "label": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": {
-                    "name": true
+              },
+              "kind": "tableder",
+              "table": {
+                "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+                "query": {
+                  "payload": {
+                    "erDiagram": {
+                      "entities": {
+                        "[name=patyia_sys_values]": true
+                      }
+                    }
                   }
-                }
-              }
-            }
-          }
-        },
-        "kind": "tableder",
-        "lane": "P",
-        "table": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
-          "query": {
-            "payload": {
-              "erDiagram": {
-                "entities": {
-                  "[name=patyia_sys_values]": true
-                }
-              }
-            }
-          },
-          "actions": [
-            {
-              "op": "get",
-              "query": {
-                "name": true,
-                "attributes": true
-              }
+                },
+                "actions": [
+                  {
+                    "op": "get",
+                    "query": {
+                      "name": true,
+                      "attributes": true
+                    }
+                  }
+                ]
+              },
+              "group": "patyia-configuracion"
             }
           ]
+        }
+      ],
+      "edges": [
+        {
+          "from": "cliente",
+          "to": "api",
+          "label": "fetch"
         },
-        "context": "PatyIA · Configuración"
-      },
-      {
-        "id": "ok",
-        "label": "200 siempre: versión, sello, BD, parches, runner, erroresPorAtender",
-        "lane": "I",
-        "icon": "mdi:heart-pulse"
-      },
-      {
-        "id": "fin",
-        "label": "Fin",
-        "shape": "end",
-        "lane": "C"
-      },
-      {
-        "id": "n-200",
-        "label": "Un fallo de una lectura queda en su campo; nunca 5xx",
-        "shape": "comment",
-        "about": "ok"
-      },
-      {
-        "id": "dueno-TErrorController",
-        "label": "TErrorController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TErrorController]": {
-                "uml": true
-              }
-            }
-          }
+        {
+          "from": "ctl",
+          "to": "ctl-pojo",
+          "kind": "dashed",
+          "label": "klass"
+        },
+        {
+          "from": "api",
+          "to": "ctl",
+          "label": "GET /info"
+        },
+        {
+          "from": "ctl",
+          "to": "fork"
+        },
+        {
+          "from": "fork",
+          "to": "db"
+        },
+        {
+          "from": "db",
+          "to": "join"
+        },
+        {
+          "from": "fork",
+          "to": "err"
+        },
+        {
+          "from": "err",
+          "to": "join"
+        },
+        {
+          "from": "fork",
+          "to": "pat"
+        },
+        {
+          "from": "pat",
+          "to": "join"
+        },
+        {
+          "from": "fork",
+          "to": "geo"
+        },
+        {
+          "from": "geo",
+          "to": "join"
+        },
+        {
+          "from": "err",
+          "to": "dueno-TErrorController",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "pat",
+          "to": "dueno-TSysValueController",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "join",
+          "to": "ok"
+        },
+        {
+          "from": "ok",
+          "to": "fin"
+        },
+        {
+          "from": "fin",
+          "to": "api",
+          "label": "respuesta"
+        },
+        {
+          "from": "dueno-TErrorController",
+          "to": "dueno-TErrorController-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT"
+        },
+        {
+          "from": "dueno-TErrorController",
+          "to": "terr",
+          "kind": "dashed",
+          "label": "SELECT"
+        },
+        {
+          "from": "dueno-TSysValueController",
+          "to": "dueno-TSysValueController-pojo",
+          "kind": "dashed",
+          "label": "klass · SELECT"
+        },
+        {
+          "from": "dueno-TSysValueController",
+          "to": "tsys",
+          "kind": "dashed",
+          "label": "SELECT"
         }
-      },
-      {
-        "id": "dueno-TErrorController-pojo",
-        "label": "TError_",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TError_]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TSysValueController",
-        "label": "TSysValueController",
-        "kind": "class",
-        "lane": "controllers",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValueController]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "dueno-TSysValueController-pojo",
-        "label": "TSysValue",
-        "kind": "class",
-        "lane": "modelos",
-        "class": {
-          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
-          "query": {
-            "clases": {
-              "[name=TSysValue]": {
-                "uml": true
-              }
-            }
-          }
-        }
-      }
-    ],
-    "edges": [
-      {
-        "from": "cliente",
-        "to": "api",
-        "label": "fetch"
-      },
-      {
-        "from": "ctl",
-        "to": "ctl-pojo",
-        "kind": "dashed",
-        "label": "klass"
-      },
-      {
-        "from": "api",
-        "to": "ctl",
-        "label": "GET /info"
-      },
-      {
-        "from": "ctl",
-        "to": "fork"
-      },
-      {
-        "from": "fork",
-        "to": "db"
-      },
-      {
-        "from": "db",
-        "to": "join"
-      },
-      {
-        "from": "fork",
-        "to": "err"
-      },
-      {
-        "from": "err",
-        "to": "join"
-      },
-      {
-        "from": "fork",
-        "to": "pat"
-      },
-      {
-        "from": "pat",
-        "to": "join"
-      },
-      {
-        "from": "fork",
-        "to": "geo"
-      },
-      {
-        "from": "geo",
-        "to": "join"
-      },
-      {
-        "from": "err",
-        "to": "dueno-TErrorController",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "pat",
-        "to": "dueno-TSysValueController",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "join",
-        "to": "ok"
-      },
-      {
-        "from": "ok",
-        "to": "fin"
-      },
-      {
-        "from": "fin",
-        "to": "api",
-        "label": "respuesta"
-      },
-      {
-        "from": "dueno-TErrorController",
-        "to": "dueno-TErrorController-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT"
-      },
-      {
-        "from": "dueno-TErrorController",
-        "to": "terr",
-        "kind": "dashed",
-        "label": "SELECT"
-      },
-      {
-        "from": "dueno-TSysValueController",
-        "to": "dueno-TSysValueController-pojo",
-        "kind": "dashed",
-        "label": "klass · SELECT"
-      },
-      {
-        "from": "dueno-TSysValueController",
-        "to": "tsys",
-        "kind": "dashed",
-        "label": "SELECT"
-      }
-    ]
+      ]
+    }
   }
 }

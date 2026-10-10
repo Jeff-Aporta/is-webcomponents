@@ -188,8 +188,11 @@ export function ruta(meta, componer) {
     lanes.splice(i + 1, 0, { id: 'controllers', label: 'Controllers' }, { id: 'modelos', label: 'Modelos' });
     for (const c of clasesEn) c.lane = /Controller$/.test(c.label) ? 'controllers' : 'modelos';
   }
-  // Los fines van en la columna del componente que inicia (abajo); el componente, arriba.
-  const llamador = lanes[0]?.id;
+  // Columna de componentes: la primera si inicia con un componente; si no y hay componentes, una
+  // propia al frente; sin componentes, no hay (el proceso arranca en el flujo).
+  const hayComponentes = nodes.some((x) => x.kind === 'component');
+  let llamador = nodes.some((x) => x.kind === 'component' && x.lane === lanes[0]?.id) ? lanes[0].id : null;
+  if (!llamador && hayComponentes) { llamador = 'componentes'; lanes.unshift({ id: 'componentes', label: 'Componentes' }); }
   // Todos los componentes (propios y de terceros) en la columna de componentes, agrupados.
   for (const c of nodes.filter((x) => x.kind === 'component')) {
     c.lane = llamador;
@@ -232,7 +235,8 @@ export function ruta(meta, componer) {
   lanes = lanes.filter((l) => l.id === llamador || nodes.some((x) => x.lane === l.id) || l.id === 'cliente');
   // El cliente va solo en su columna: sin recuadro de grupo.
   for (const c of nodes.filter((x) => x.lane === 'cliente')) c.context = '';
-  for (const f of nodes.filter((x) => x.shape === 'end')) f.lane = llamador;
+  // Los fines van en la columna del componente que inicia (abajo); el componente, arriba.
+  if (llamador) for (const f of nodes.filter((x) => x.shape === 'end')) f.lane = llamador;
   // Controller de cliente: el que declara la ruta o el del POJO del controller principal.
   const pojoPrincipal = principal ? pojoDe.get(principal.label) : null;
   const cliente = meta.cliente ?? codigo.clientes?.find((c) => c.pojo === pojoPrincipal && c.client !== 'TBasePatyIA')?.client;
@@ -248,8 +252,54 @@ export function ruta(meta, componer) {
     tag: 'iswc-flowchart',
     script: 'diagrams/flowchart.min.js',
     attrs: { 'diagram-style': 'insoft' },
-    payload: { title: meta.title, steps: 'auto', lanes, nodes, edges },
+    payload: { vectorFlow: aVector(meta.title, lanes, nodes, edges, llamador) },
   };
+}
+
+/**
+ * Ruta → «diagrama de flujo en vector»: cada carril es una columna con su tipo (clientes,
+ * componentes, flujo, controllers, modelos, tablas), los contextos son sus grupos y cada nodo vive en
+ * su columna. El kit valida que nada quede donde no corresponde.
+ */
+function aVector(title, lanes, nodes, edges, llamador) {
+  const tipoDeNodo = (n) => {
+    if (n.kind === 'component') return 'componente';
+    if (n.kind === 'tableder') return 'tabla';
+    if (n.kind === 'class') return /Client$/.test(n.label) ? 'cliente' : /Controller$/.test(n.label) ? 'controller' : 'pojo';
+    return 'flujo';
+  };
+  const tipoColumna = (l, ns) => {
+    if (l.id === 'cliente') return 'clientes';
+    if (l.id === llamador) return 'componentes';
+    if (l.id === 'controllers') return 'controllers';
+    if (l.id === 'modelos') return 'modelos';
+    const tipos = new Set(ns.filter((n) => n.shape !== 'comment').map(tipoDeNodo));
+    if (tipos.size === 1 && tipos.has('tabla')) return 'tablas';
+    if ([...tipos].every((t) => t === 'flujo')) return 'flujo';
+    return 'custom';
+  };
+  const slug = (t) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  // Una nota va en la columna de lo que comenta.
+  for (const n of nodes) if (n.shape === 'comment' && !n.lane) n.lane = nodes.find((x) => x.id === n.about)?.lane;
+  const columns = lanes.map((l) => {
+    const ns = nodes.filter((n) => n.lane === l.id);
+    const tipo = tipoColumna(l, ns);
+    const contextos = [...new Set(ns.map((n) => n.context).filter(Boolean))];
+    const custom = tipo === 'custom'
+      ? { accepts: [...new Set(ns.map((n) => {
+        const t = tipoDeNodo(n);
+        if (t !== 'flujo') return t;
+        return n.shape === 'diamond' ? 'decision' : n.shape === 'vars' ? 'variables' : n.shape === 'bar' ? 'barra' : n.shape === 'end' ? 'fin' : n.shape === 'start' ? 'inicio' : n.shape === 'comment' ? 'nota' : n.kind === 'nested' ? 'anidado' : 'paso';
+      }))] }
+      : {};
+    return {
+      id: l.id, label: l.label, tipo, ...custom,
+      ...(l.align ? { align: l.align } : {}),
+      ...(contextos.length ? { groups: contextos.map((c) => ({ id: slug(c), label: c })) } : {}),
+      nodes: ns.map(({ lane: _l, context, ...n }) => ({ ...n, ...(context ? { group: slug(context) } : {}) })),
+    };
+  });
+  return { title, steps: 'auto', columns, edges };
 }
 
 const RUTAS = [];
