@@ -602,7 +602,7 @@ iswc-dialog.iswc-view-sources {
 }
 .vs-open {
   font-size: 0.8rem;
-  color: var(--iswc-accent, var(--iswc-brand));
+  color: var(--iswc-accent, var(--iswc-color-brand));
   text-decoration: none;
 
   &:hover { text-decoration: underline; }

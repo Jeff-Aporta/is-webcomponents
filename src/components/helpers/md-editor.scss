@@ -258,7 +258,7 @@
 
 /* Render híbrido MD + HTML + iswc-code / diagramas (alineado a iswc-md-render). */
 .prompt-md-preview {
-  --_brand: var(--iswc-color-brand, var(--iswc-brand));
+  --_brand: var(--iswc-color-brand, var(--iswc-color-brand));
 
   /* Diagramas iswc-* y atajo de clase — mismo bloque visual. */
   .md-iswc-diagram,

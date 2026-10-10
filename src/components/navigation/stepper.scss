@@ -1,6 +1,6 @@
 :host {
   display: block;
-  --iswc-stepper-accent: var(--iswc-brand);
+  --iswc-stepper-accent: var(--iswc-color-brand);
   --iswc-stepper-on-accent: var(--iswc-brand-fg);
   --iswc-stepper-text: var(--iswc-text);
   --iswc-stepper-muted: color-mix(in srgb, var(--iswc-stepper-text) 65%, transparent);

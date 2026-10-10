@@ -3,8 +3,8 @@
   --iswc-tree-indent: 1rem;
   --iswc-tree-row-padding-y: 0.25rem;
   --iswc-tree-row-padding-x: 0.5rem;
-  --iswc-tree-row-hover: color-mix(in srgb, var(--iswc-brand) 8%, transparent);
-  --iswc-tree-row-selected-bg: color-mix(in srgb, var(--iswc-brand) 18%, transparent);
+  --iswc-tree-row-hover: color-mix(in srgb, var(--iswc-color-brand) 8%, transparent);
+  --iswc-tree-row-selected-bg: color-mix(in srgb, var(--iswc-color-brand) 18%, transparent);
   --iswc-tree-row-selected-text: var(--iswc-text);
 }
 

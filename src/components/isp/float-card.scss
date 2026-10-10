@@ -58,10 +58,10 @@
 
 /* Default claro; el dark override ajusta tanto el outline como la sombra. */
 :host(:focus-visible) {
-  outline-color: var(--iswc-brand);
+  outline-color: var(--iswc-color-brand);
 
   @media (prefers-color-scheme: dark) {
-    outline-color: var(--iswc-brand);
+    outline-color: var(--iswc-color-brand);
   }
 }
 

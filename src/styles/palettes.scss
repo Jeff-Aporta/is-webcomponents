@@ -39,6 +39,8 @@
 :root,
 [data-palette] {
   --iswc-color-brand: hsl(calc(var(--iswc-brand-h) * 1deg) var(--iswc-brand-s) var(--iswc-brand-b));
+  /* Alias heredado: hojas y consumidores que aún piden --iswc-brand. */
+  --iswc-brand: var(--iswc-color-brand);
   --iswc-color-brand-strong: hsl(from var(--iswc-color-brand) h s calc(l * 0.88));
   --iswc-color-brand-stronger: hsl(from var(--iswc-color-brand) h s calc(l * 0.72));
   --iswc-color-brand-strongest: hsl(from var(--iswc-color-brand) h s calc(l * 0.56));

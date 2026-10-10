@@ -263,6 +263,7 @@ export function brandRampRules(): string[] {
 export function brandFamilyBlock(selector: string): string {
   const lines = [
     '  --iswc-color-brand: hsl(calc(var(--iswc-brand-h) * 1deg) var(--iswc-brand-s) var(--iswc-brand-b));',
+    '  --iswc-brand: var(--iswc-color-brand);',
     ...brandRampRules(),
   ];
   return `${selector} {\n${lines.join('\n')}\n}`;

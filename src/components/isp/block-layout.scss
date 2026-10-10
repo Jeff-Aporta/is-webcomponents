@@ -32,9 +32,9 @@
 
 /* Default para esquema claro; el dark override añade el color lavanda. */
 :host(:focus-visible) {
-  outline-color: var(--iswc-brand);
+  outline-color: var(--iswc-color-brand);
 
   @media (prefers-color-scheme: dark) {
-    outline-color: var(--iswc-brand);
+    outline-color: var(--iswc-color-brand);
   }
 }

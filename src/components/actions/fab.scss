@@ -105,13 +105,13 @@
 
 @keyframes fab-pulse {
   0% {
-    box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-brand) 55%, transparent);
+    box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-color-brand) 55%, transparent);
   }
   70% {
-    box-shadow: var(--iswc-fab-shadow), 0 0 0 14px color-mix(in srgb, var(--iswc-brand) 0%, transparent);
+    box-shadow: var(--iswc-fab-shadow), 0 0 0 14px color-mix(in srgb, var(--iswc-color-brand) 0%, transparent);
   }
   100% {
-    box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-brand) 0%, transparent);
+    box-shadow: var(--iswc-fab-shadow), 0 0 0 0 color-mix(in srgb, var(--iswc-color-brand) 0%, transparent);
   }
 }
 .icon {

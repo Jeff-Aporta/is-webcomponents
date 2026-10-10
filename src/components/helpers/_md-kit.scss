@@ -4,7 +4,7 @@
  * no está definido (`:not(:defined)`), su contenido de respaldo se ve igual. */
 
 .prompt-md-preview {
-  --_brand: var(--iswc-color-brand, var(--iswc-brand));
+  --_brand: var(--iswc-color-brand, var(--iswc-color-brand));
 
   /* —— Código en bloque: iswc-code + iswc-copy-button —— */
   .md-codeblock {

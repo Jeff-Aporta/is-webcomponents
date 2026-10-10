@@ -30,9 +30,9 @@
 
 /* Default claro; dark override aplica el lavanda al outline de foco. */
 :host(:focus-visible), .toolbar > *:focus-visible {
-  outline-color: var(--iswc-brand);
+  outline-color: var(--iswc-color-brand);
 
   @media (prefers-color-scheme: dark) {
-    outline-color: var(--iswc-brand);
+    outline-color: var(--iswc-color-brand);
   }
 }
