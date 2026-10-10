@@ -10,7 +10,25 @@
  * ese mismo origen. Mezclar orígenes a medias no aplica: cada `load`
  * prueba la cadena hasta que uno responde.
  */
-export const GH_REPO = 'Jeff-Aporta/iswc-root';
+/** Repo por defecto (nombre del kit). */
+const GH_REPO_DEFAULT = 'Jeff-Aporta/iswc-root';
+
+/**
+ * `dueño/repo` de la URL desde la que corre el módulo (jsDelivr `gh/<dueño>/<repo>@…`, githack o
+ * Pages). Manda sobre el nombre por defecto: un loader servido desde el repo con su nombre anterior
+ * (`is-webcomponents`) pide sus piezas a ese mismo repo, y no a uno que todavía no existe.
+ */
+export function repoDeUrl(url: string): string | null {
+  const u = String(url);
+  const gh = u.match(/cdn\.jsdelivr\.net\/gh\/([^/]+)\/([^/@]+)@/i) ?? u.match(/raw\.githack\.com\/([^/]+)\/([^/]+)\//i);
+  if (gh) return `${gh[1]}/${gh[2]}`;
+  const pages = u.match(/\/\/([^./]+)\.github\.io\/([^/]+)\//i);
+  return pages ? `${pages[1]}/${pages[2]}` : null;
+}
+
+export const GH_REPO = (() => {
+  try { return repoDeUrl(import.meta.url) ?? GH_REPO_DEFAULT; } catch { return GH_REPO_DEFAULT; }
+})();
 
 const REF_KEY = 'iswc-wc:cdn-ref';
 const MIRROR_KEY = 'iswc-wc:cdn-mirror';
@@ -41,8 +59,10 @@ export const jsdelivrBase = (ref = 'main') =>
 export const githackBase = (ref = 'main') =>
   `https://raw.githack.com/${GH_REPO}/${ref}/dist/cdn`;
 
-export const pagesBase = () =>
-  'https://jeff-aporta.github.io/iswc-root/dist/cdn';
+export const pagesBase = () => {
+  const [duenio, repo] = GH_REPO.split('/');
+  return `https://${duenio!.toLowerCase()}.github.io/${repo}/dist/cdn`;
+};
 
 /**
  * Espejos en orden de fallback.

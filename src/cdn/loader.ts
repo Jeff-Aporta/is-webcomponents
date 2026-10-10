@@ -90,7 +90,8 @@ const HASHES: Record<string, string> = __IS_ASSET_HASHES__;
 
 /** Plantilla del host. configure({ sha }) sustituye {{cdnUrl}} y {{sha}}. */
 const HOST_DEFAULT = '{{cdnUrl}}@{{sha}}/dist/cdn';
-const CDN_URL_DEFAULT = 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root';
+// El repo sale de la URL del propio loader (ver repoDeUrl en cdn-ref): sirve con el nombre viejo o el nuevo.
+const CDN_URL_DEFAULT = `https://cdn.jsdelivr.net/gh/${GH_REPO}`;
 /**
  * Pin por defecto de ESTE loader:
  * 1) SHA de la URL (`@abc…/loader.min.js`) si viene pinneada
