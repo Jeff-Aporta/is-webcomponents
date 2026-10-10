@@ -20,6 +20,9 @@ import { wrapText } from '../_shared/diagram-text-wrap.js';
 import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext } from "./flowchart-spec.schemas.js";
 import type { ErThemeJson } from "./theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
+import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
+import type { RouterEdge, RouterPort } from './component-router.schemas.js';
+import type { Lado } from '../_shared/diagram-tipos.schemas.js';
 import type { EmbedBox } from "../_shared/diagram-embed.schemas.js";
 
 /**
@@ -486,7 +489,7 @@ export function computeFlowchartLayout(
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
   /** Rutea todas las aristas sobre las posiciones actuales de los nodos (se repite si se abre espacio). */
-  const rutear = (textos: ReadonlyMap<number, EmbedBox> = new Map(), anclas: ReadonlyMap<number, [FlowPoint, FlowPoint]> = new Map()): FlowLayoutEdge[] => {
+  const rutear = (textos: ReadonlyMap<number, EmbedBox> = new Map(), anclas: ReadonlyMap<number, [FlowPoint, FlowPoint]> = new Map(), final = false): FlowLayoutEdge[] => {
   // Rejilla de costos: las cajas se bloquean para que el A* las rodee.
   const grid = makeCostGrid(width, height);
   const posById = new Map<string, FlowLayoutNode>(nodes.map((n) => [n.id, n]));
@@ -549,7 +552,10 @@ export function computeFlowchartLayout(
     const salida = abanico.get(i);
     const topX = snap8(to.x + to.w / 2);
     const lateral = lanesOn && e.kind === 'dashed' ? rutaDeUso(from, to, rielesUso, nodes) : null;
-    const corta = !lateral && lanesOn && spec.laneDirection !== 'horizontal' && toMeta.layer <= fromMeta.layer
+    // Desde un fin (la respuesta al componente) nunca por el costado: ahí llegan las ramas que
+    // terminan y quedarían dos puntas enfrentadas. Sale por abajo (rutaDeVuelta).
+    const desdeFin = specById.get(e.from)?.shape === 'end';
+    const corta = !lateral && !desdeFin && lanesOn && spec.laneDirection !== 'horizontal' && toMeta.layer <= fromMeta.layer
       ? vueltaCorta(from, to, nodes, insoftSegs)
       : null;
     const vuelta = corta ?? (!lateral && lanesOn && spec.laneDirection !== 'horizontal' && toMeta.layer <= fromMeta.layer
@@ -611,6 +617,14 @@ export function computeFlowchartLayout(
     };
   });
 
+  // Carriles: los usos (punteadas) los rutea en lote el router compartido (el de clases y
+  // componentes), con el flujo ya trazado como rieles fijos. Si no halla ruta, queda la de arriba.
+  // Solo en la pasada final (la que se dibuja): la primera, que abre espacio, usa el ruteo rápido.
+  if (lanesOn && final) {
+    const mideFijos = (t: string): number => measurer(opts)(t) * (10.5 / (opts.fontSize ?? INSOFT.fontSize));
+    const muros = [...cajasFijas(nodes, placed.lanes, placed.contexts, offsetX, offsetY, spec.laneDirection === 'horizontal', mideFijos), ...textos.values()];
+    rutearUsos(routed, spec, nodes, muros);
+  }
   const routedEdges: FlowLayoutEdge[] = routed.filter((e): e is FlowLayoutEdge => e !== null);
   if (insoft) separarEtiquetasCompartidas(routedEdges);
   return routedEdges;
@@ -623,14 +637,14 @@ export function computeFlowchartLayout(
     const fijos = (): EmbedBox[] => cajasFijas(nodes, placed.lanes, placed.contexts, offsetX, offsetY, spec.laneDirection === 'horizontal', mide);
     // Primera pasada: textos y espaciados. Lo que no cabe abre espacio en la dirección de su tramo
     // (horizontal → a la derecha; vertical → hacia abajo); si empujar no lo resuelve, se deja de empujar.
-    let previo = '';
+    const intentadas = new Set<number>();
     for (let vuelta = 0; ; vuelta++) {
       const conflictos = resolverEtiquetas(routedEdges, nodes, fijos(), mide, { w: width, h: height });
-      if (!conflictos.length || vuelta >= 6) break;
-      const c = conflictos[0]!;
-      const firma = `${c.edge}|${conflictos.length}`;
-      if (firma === previo) break;
-      previo = firma;
+      if (!conflictos.length || vuelta >= 8) break;
+      // El primer conflicto aún no intentado (uno que no se resuelve no tapa a los demás).
+      const c = conflictos.find((x) => !intentadas.has(x.edge));
+      if (!c) break;
+      intentadas.add(c.edge);
       const derecha = c.tramo === 'h';
       const extra = abrirEspacio(c.caja, nodes, byId, placed, offsetX, offsetY, derecha, spec.laneDirection === 'horizontal');
       if (derecha) width += extra; else height += extra;
@@ -652,7 +666,7 @@ export function computeFlowchartLayout(
         const an = anclasDeEtiqueta(r);
         if (an) anclas.set(i, an);
       });
-      routedEdges = rutear(textos, anclas);
+      routedEdges = rutear(textos, anclas, true);
       for (const e of routedEdges) {
         const p = previos.get(e.id);
         if (p?.labelBox) e.labelBox = p.labelBox;
@@ -660,8 +674,13 @@ export function computeFlowchartLayout(
       return resolverEtiquetas(routedEdges, nodes, fijos(), mide, { w: width, h: height });
     };
     let pendientes = segundaPasada();
-    for (let vuelta = 0; pendientes.length && vuelta < 6; vuelta++) {
-      const c = pendientes[0]!;
+    // Cada vuelta atiende el primer conflicto que no se haya intentado: uno que abrir espacio no
+    // resuelve no tapa a los demás.
+    const intentadas2 = new Set<number>();
+    for (let vuelta = 0; vuelta < 8; vuelta++) {
+      const c = pendientes.find((x) => !intentadas2.has(x.edge));
+      if (!c) break;
+      intentadas2.add(c.edge);
       const derecha = c.tramo === 'h';
       const extra = abrirEspacio(c.caja, nodes, byId, placed, offsetX, offsetY, derecha, spec.laneDirection === 'horizontal');
       if (derecha) width += extra; else height += extra;
@@ -723,6 +742,200 @@ export function costoGiros(pts: readonly FlowPoint[], giro: { radio: number; pes
     costo += cerca(total - recorrido) + giro.partida * cerca(recorrido);
   }
   return costo;
+}
+
+/**
+ * Usos (punteadas) en lote con el router compartido (`routeEdges`, el de clases y componentes):
+ *   - puertos del perímetro en el costado que mira al destino (rombo: su vértice), así ninguna
+ *     sale por una esquina ni por el lado del flujo;
+ *   - `shareKey` por destino: los que llegan a la misma entidad convergen en abanico a una punta;
+ *   - cajas, comentarios, insignias, títulos y textos como muros; el flujo trazado, como rieles
+ *     fijos (cruzarlo o correr encima cuesta lo de cualquier riel ajeno).
+ * Muta `routed` (alineado con `spec.edges`); una arista sin ruta conserva la que traía.
+ */
+function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec, nodes: readonly FlowLayoutNode[], muros: readonly EmbedBox[]): void {
+  const porId = new Map(nodes.map((n) => [n.id, n]));
+  const usos = spec.edges.map((e, i) => ({ e, i })).filter(({ e, i }) => e.kind === 'dashed' && routed[i] && porId.has(e.from) && porId.has(e.to) && e.from !== e.to);
+  if (!usos.length) return;
+  const caja = (n: FlowLayoutNode) => ({ id: n.id, x: n.x, y: n.y, w: n.w, h: n.h });
+  const lados = (a: FlowLayoutNode, b: FlowLayoutNode): [Lado, Lado] => {
+    if (b.x >= a.x + a.w) return ['right', 'left'];
+    if (b.x + b.w <= a.x) return ['left', 'right'];
+    return b.y >= a.y + a.h ? ['bottom', 'top'] : ['top', 'bottom'];
+  };
+  const puertos = (n: FlowLayoutNode, lado: Lado): RouterPort[] => {
+    if (n.shape === 'diamond') {
+      const cx = n.x + n.w / 2;
+      const cy = n.y + n.h / 2;
+      const v = { left: { x: n.x, y: cy }, right: { x: n.x + n.w, y: cy }, top: { x: cx, y: n.y }, bottom: { x: cx, y: n.y + n.h } }[lado];
+      return [{ ...v, side: lado }];
+    }
+    const ps = perimeterPorts(caja(n), U, [lado]);
+    return ps.length ? ps : [{ ...edgeAnchor(n, lado), side: lado }];
+  };
+  const fijos = routed.flatMap((r, i) => (r && spec.edges[i]!.kind !== 'dashed' ? [pathPoints(r.path)] : []));
+  const edges: RouterEdge[] = usos.map(({ e, i }) => {
+    const a = porId.get(e.from)!;
+    const b = porId.get(e.to)!;
+    const [ls, ll] = lados(a, b);
+    const fromC = puertos(a, ls);
+    const toC = puertos(b, ll);
+    return {
+      id: e.id ?? `e${i}`,
+      from: { x: fromC[0]!.x, y: fromC[0]!.y }, fromSide: ls,
+      to: { x: toC[0]!.x, y: toC[0]!.y }, toSide: ll,
+      fromBox: caja(a), toBox: caja(b),
+      fromPkgs: new Set<string>(), toPkgs: new Set<string>(),
+      shareKey: `${e.to}::${ll}`,
+      fromCandidates: fromC, toCandidates: toC,
+    };
+  });
+  const res = routeEdges(
+    { components: nodes.map(caja), packages: [], titles: [...muros], rings: [], fixedRails: fijos },
+    edges,
+    { step: U, clearance: 8, stub: U, iterations: 3 },
+  );
+  // Abanico con separación por delta: quien se unió a la punta de otro corre paralelo a su tramo.
+  const vias = new Map<string, number>();
+  // Por punta: el primero es el anfitrión; cada otro se corta donde se monta sobre él (lo haya
+  // «unido» el router o lo haya llevado al mismo riel el incentivo de la clave) y sigue en su vía.
+  const anfitrion = new Map<string, number>();
+  // Una sola punta por destino y costado (obligatoria, no solo incentivo): la que llegue a otra
+  // altura baja o sube a la del primero justo antes de entrar.
+  const puntaDe = new Map<string, FlowPoint>();
+  usos.forEach(({ e }, k) => {
+    const pts = res.paths[k];
+    if (!pts || pts.length < 2) return;
+    const clave = edges[k]!.shareKey!;
+    const T = pts[pts.length - 1]!;
+    const T0 = puntaDe.get(clave);
+    if (!T0) { puntaDe.set(clave, T); return; }
+    if (Math.abs(T0.x - T.x) < 1 && Math.abs(T0.y - T.y) < 1) return;
+    const P = pts[pts.length - 2]!;
+    const horizontal = P.y === T.y;
+    const codo = horizontal ? { x: T0.x - Math.sign(T0.x - P.x || 1) * 2 * U, y: T.y } : { x: T.x, y: T0.y - Math.sign(T0.y - P.y || 1) * 2 * U };
+    const giro = horizontal ? { x: codo.x, y: T0.y } : { x: T0.x, y: codo.y };
+    res.paths[k] = simplifyOrthoPath([...pts.slice(0, -1), codo, giro, T0]);
+    void e;
+  });
+  const caminos = usos.map((_, k) => {
+    const pts = res.paths[k];
+    if (!pts || pts.length < 2) return pts;
+    const punta = `${Math.round(pts[pts.length - 1]!.x)},${Math.round(pts[pts.length - 1]!.y)}`;
+    const h = anfitrion.get(punta);
+    if (h == null) { anfitrion.set(punta, k); return pts; }
+    const host = res.paths[h]!;
+    const sobre = (q: FlowPoint): boolean => host.slice(1).some((r, i) => tramoContiene(host[i]!, r, q));
+    // Primer vértice desde el que todo el resto va sobre el anfitrión.
+    let t = pts.length - 1;
+    while (t > 1 && sobre(pts[t - 1]!) && sobre({ x: (pts[t - 1]!.x + pts[t]!.x) / 2, y: (pts[t - 1]!.y + pts[t]!.y) / 2 })) t--;
+    return enVia(pts.slice(0, t + 1), host, vias, h) ?? pts;
+  });
+  separarColineales(caminos);
+  usos.forEach(({ i }, k) => {
+    const pts = caminos[k];
+    const r = routed[i];
+    if (!pts || pts.length < 2 || !r) return;
+    const fin = pts[pts.length - 1]!;
+    // La etiqueta arranca en el centro del tramo más largo; el solucionador la reubica.
+    let largo = -1;
+    let mitad = pts[0]!;
+    pts.slice(1).forEach((q, j) => {
+      const p = pts[j]!;
+      const l = Math.abs(q.x - p.x) + Math.abs(q.y - p.y);
+      if (l > largo) { largo = l; mitad = { x: (p.x + q.x) / 2, y: (p.y + q.y) / 2 }; }
+    });
+    routed[i] = { ...r, path: polylinePath(pts), arrowTipX: fin.x, arrowTipY: fin.y, arrowAngle: 0, labelX: mitad.x, labelY: mitad.y };
+  });
+}
+
+/**
+ * Dentro de un grupo de punta, ningún tramo interior corre encima del de otra arista: el que
+ * coincide (colineal y solapado) se corre `ABANICO.delta` hacia el lado del que viene, hasta quedar
+ * libre. Los tramos extremos (salida y llegada) no se mueven: están anclados a sus puertos.
+ */
+function separarColineales(caminos: Array<FlowPoint[] | null | undefined>): void {
+  const hechos: FlowPoint[][] = [];
+  const solapa = (a: FlowPoint, b: FlowPoint, c: FlowPoint, d: FlowPoint): boolean => {
+    if (a.x === b.x && c.x === d.x && Math.abs(a.x - c.x) < 1) {
+      return Math.min(Math.max(a.y, b.y), Math.max(c.y, d.y)) - Math.max(Math.min(a.y, b.y), Math.min(c.y, d.y)) > 1;
+    }
+    if (a.y === b.y && c.y === d.y && Math.abs(a.y - c.y) < 1) {
+      return Math.min(Math.max(a.x, b.x), Math.max(c.x, d.x)) - Math.max(Math.min(a.x, b.x), Math.min(c.x, d.x)) > 1;
+    }
+    return false;
+  };
+  const ocupado = (a: FlowPoint, b: FlowPoint): boolean =>
+    hechos.some((h) => h.slice(1).some((q, i) => solapa(a, b, h[i]!, q)));
+  for (const pts of caminos) {
+    if (!pts) continue;
+    // Tramos interiores: del 1 al penúltimo (el primero y el último tocan puertos).
+    for (let i = 1; i < pts.length - 2; i++) {
+      for (let n = 0; n < 8 && ocupado(pts[i]!, pts[i + 1]!); n++) {
+        const a = pts[i]!;
+        const b = pts[i + 1]!;
+        const prev = pts[i - 1]!;
+        if (a.x === b.x) {
+          const dx = prev.x < a.x ? -ABANICO.delta : ABANICO.delta;
+          pts[i] = { x: a.x + dx, y: a.y };
+          pts[i + 1] = { x: b.x + dx, y: b.y };
+        } else {
+          const dy = prev.y < a.y ? -ABANICO.delta : ABANICO.delta;
+          pts[i] = { x: a.x, y: a.y + dy };
+          pts[i + 1] = { x: b.x, y: b.y + dy };
+        }
+      }
+    }
+    hechos.push(pts);
+  }
+}
+
+/**
+ * Lleva a una arista unida a otra (misma punta) por una VÍA paralela al tramo compartido: desde el
+ * punto de unión corre a `ABANICO.delta · n` del anfitrión, del lado por el que llega, y se
+ * reincorpora escalonada justo antes de la punta (embudo + delta · n). `null` si la geometría no
+ * da (llega en línea con el anfitrión, o los tramos son demasiado cortos).
+ */
+function enVia(pts: readonly FlowPoint[], host: readonly FlowPoint[], vias: Map<string, number>, raiz: number): FlowPoint[] | null {
+  const J = pts[pts.length - 1]!;
+  const P = pts[pts.length - 2];
+  if (!P) return null;
+  // Tramo del anfitrión que contiene el punto de unión.
+  const k = host.slice(1).findIndex((q, i) => tramoContiene(host[i]!, q, J));
+  if (k < 0) return null;
+  const cola = [J, ...host.slice(k + 1)].filter((q, i, a) => i === 0 || q.x !== a[i - 1]!.x || q.y !== a[i - 1]!.y);
+  if (cola.length < 2) return null;
+  const dir = (a: FlowPoint, b: FlowPoint) => ({ x: Math.sign(b.x - a.x), y: Math.sign(b.y - a.y) });
+  const perp = (d: { x: number; y: number }) => ({ x: -d.y, y: d.x });
+  // Lado: hacia donde viene la arista (opuesto a su último tramo), perpendicular al primer tramo de la cola.
+  const llega = dir(P, J);
+  const n = { x: -llega.x, y: -llega.y };
+  const d0 = dir(cola[0]!, cola[1]!);
+  const p0 = perp(d0);
+  if (p0.x * n.x + p0.y * n.y === 0) return null;
+  const s = p0.x * n.x + p0.y * n.y > 0 ? 1 : -1;
+  const clave = `${raiz}|${s}`;
+  const v = (vias.get(clave) ?? 0) + 1;
+  const o = ABANICO.delta * v;
+  if (Math.abs(J.x - P.x) + Math.abs(J.y - P.y) <= o + 1) return null;
+  const ds = cola.slice(1).map((q, i) => dir(cola[i]!, q));
+  const desplazado = cola.map((q, i) => {
+    const a = perp(ds[Math.max(0, i - 1)]!);
+    const b = perp(ds[Math.min(ds.length - 1, i)]!);
+    const m = i === 0 ? perp(ds[0]!) : i === cola.length - 1 ? perp(ds[ds.length - 1]!) : { x: a.x + b.x, y: a.y + b.y };
+    return { x: q.x + s * o * m.x, y: q.y + s * o * m.y };
+  });
+  // Reincorporación antes de la punta: el último tramo tiene que dar para el embudo.
+  const T = cola[cola.length - 1]!;
+  const dl = ds[ds.length - 1]!;
+  const ultimo = cola[cola.length - 2]!;
+  const largo = Math.abs(T.x - ultimo.x) + Math.abs(T.y - ultimo.y);
+  const atras = ABANICO.embudo + o;
+  if (largo <= atras + o) return null;
+  const E = { x: T.x - dl.x * atras, y: T.y - dl.y * atras };
+  const Ev = { x: E.x + s * o * perp(dl).x, y: E.y + s * o * perp(dl).y };
+  vias.set(clave, v);
+  return simplifyOrthoPath([...pts.slice(0, -1), ...desplazado.slice(0, -1), Ev, E, T]);
 }
 
 /**
@@ -1774,10 +1987,14 @@ function insoftSides(
 ): { fromSide: string; toSide: string } {
   const base = pickSides(fromMeta, toMeta, direction);
   if (direction !== 'TB' || toMeta.layer <= fromMeta.layer) return base;
-  if (fromShape === 'diamond' && primary && primary !== to.id) {
+  // Rombo: el vértice inferior es para la rama cuyo destino queda alineado debajo; cualquier otra
+  // (sea o no la principal) sale por el vértice que mira a su destino. Así dos ramas nunca
+  // comparten el primer tramo.
+  if (fromShape === 'diamond') {
     const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
     if (Math.abs(dx) > 8) return { fromSide: dx > 0 ? 'right' : 'left', toSide: 'top' };
   }
+  void primary;
   // Un rectángulo de flujo sale por cualquiera de sus lados (nunca por una esquina): si el destino está
   // en otra columna, sale por el lado que lo mira y baja en L a su cara superior.
   // Solo si el destino está claramente en otra columna (y no es un fin ni una barra: a esos se llega

@@ -134,7 +134,7 @@ export const ErThemeJsonSchema = z.object({
    * ángulo áureo, con la misma luminosidad y croma (el texto conserva el contraste).
    */
   hueRotate: z.boolean().optional(),
-  /** Fondo de la insignia (número + ícono): `entity` = el tono de su entidad a L 0,25 (OKLCH), o un color. */
+  /** Fondo de la insignia (número + ícono): `entity` = el tono de su entidad oscurecido (L 0,42 en OKLCH), o un color. */
   pillTone: z.string().optional(),
   /** Rieles punteados con movimiento suave hacia su destino (animación SVG nativa). */
   dashFlow: z.boolean().optional(),

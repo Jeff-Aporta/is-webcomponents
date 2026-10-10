@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).
  *
@@ -289,12 +290,12 @@ function correrAislado(o: OpcionesCorrida, archivo: string, log: (l: string) => 
   const [cmd, ...flags] = o.aislar?.comando ?? [];
   if (!cmd) return Promise.reject(new Error('pruebas: `aislar.comando` vacío; se necesita el ejecutable (p. ej. ["node", "--import", "tsx"])'));
   return new Promise((resolver) => {
-    const p = spawn(cmd, [...flags, hijo, JSON.stringify(opciones)], { cwd: o.raiz, env: process.env, stdio: ['ignore', 'pipe', 'pipe'] as const });
+    const p = spawn(cmd, [...flags, hijo, JSON.stringify(opciones)], { cwd: o.raiz, env: process.env, stdio: ['ignore', 'pipe', 'pipe'] });
     // En un objeto: el narrowing de TS no sigue asignaciones hechas dentro de los callbacks.
     const estado: { reporte: ReportePruebas | null } = { reporte: null };
     let resto = '';
     let errores = '';
-    p.stdout.on('data', (d) => {
+    p.stdout.on('data', (d: Buffer | string) => {
       const lineas = (resto + String(d)).split(/\r?\n/);
       resto = lineas.pop() ?? '';
       for (const l of lineas) {
@@ -302,8 +303,8 @@ function correrAislado(o: OpcionesCorrida, archivo: string, log: (l: string) => 
         else if (l.trim()) log(l);
       }
     });
-    p.stderr.on('data', (d) => { errores = (errores + String(d)).slice(-4000); });
-    p.on('close', (codigo) => {
+    p.stderr.on('data', (d: Buffer | string) => { errores = (errores + String(d)).slice(-4000); });
+    p.on('close', (codigo: number | null) => {
       if (resto.startsWith(MARCA)) estado.reporte = leerReporte(resto.slice(MARCA.length));
       const r = estado.reporte;
       if (r) { resolver(r.resultados); return; }

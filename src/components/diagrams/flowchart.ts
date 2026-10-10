@@ -107,10 +107,15 @@ function insoftText(lines: string[], tb: { x: number; y: number; w: number; h: n
   return t;
 }
 
-/** El tono de un color con luminosidad 0,25 (OKLCH): la insignia oscura «del color de su entidad». */
+/**
+ * Insignia «del color de su entidad»: el mismo tono, oscurecido a luminosidad PILL_L (OKLCH) y con
+ * croma suficiente para que el color se lea (a 0,25 se percibía negro). El texto blanco conserva el
+ * contraste.
+ */
+const PILL_L = 0.42;
 function oscuro(hex: string): string {
   const o = hexToOklch(hex);
-  return o ? oklchToHex(0.25, Math.min(o[1], 0.12), o[2]) : hex;
+  return o ? oklchToHex(PILL_L, Math.min(Math.max(o[1] * 1.4, 0.08), 0.16), o[2]) : hex;
 }
 
 /** Color de una entidad incrustada: el primer relleno con color (ni blanco, ni gris, ni transparente) de su dibujo. */
@@ -123,6 +128,12 @@ function colorDeEntidad(g: Element): string {
   }
   return '';
 }
+
+/** Puntos que recorren los rieles continuos: separación (px) y velocidad (px/s). */
+const PUNTOS_PASO = 100;
+const PUNTOS_VEL = 60;
+/** Cuánto más gruesos que la línea son los puntos (px). */
+const PUNTOS_GROSOR = 4;
 
 /** Preferencia de movimiento reducido del sistema (sin `matchMedia`, p. ej. al exportar: animar). */
 function movimientoReducido(): boolean {
@@ -703,7 +714,8 @@ class IswcFlowchart extends DiagramElementBase {
           ? { x1: l.x, y1: l.y + l.h, x2: l.x + l.w, y2: l.y + l.h }
           : { x1: l.x + l.w, y1: l.y, x2: l.x + l.w, y2: l.y + l.h }));
         const sep = lane.lastElementChild!;
-        for (const [k, v] of Object.entries({ stroke: paint.laneLine, 'stroke-width': 1.2, 'stroke-dasharray': '6 4', class: 'flow-lane__sep' })) sep.setAttribute(k, String(v));
+        // Separador de carril: línea continua celeste (los grupos sí van punteados).
+        for (const [k, v] of Object.entries({ stroke: paint.laneLine, 'stroke-width': 1.2, class: 'flow-lane__sep' })) sep.setAttribute(k, String(v));
       }
       g.appendChild(lane);
     });
@@ -740,6 +752,19 @@ class IswcFlowchart extends DiagramElementBase {
         }));
       }
       g.appendChild(path);
+      // Riel continuo: el mismo movimiento, más sutil. Encima, una segunda línea PUNTOS_GROSOR más gruesa hecha
+      // de puntos (trazo de largo 0 con remate redondo) separados por PUNTOS_PASO, que avanza hacia
+      // el destino.
+      if (e.kind !== 'dashed' && paint.dashFlow && !movimientoReducido()) {
+        const puntos = svgEl('path', {
+          d: e.path, fill: 'none', stroke: color, 'stroke-width': wdt + PUNTOS_GROSOR, 'stroke-linecap': 'round',
+          'stroke-dasharray': `0 ${PUNTOS_PASO}`, class: 'flow-edge__dots',
+        });
+        puntos.appendChild(svgEl('animate', {
+          attributeName: 'stroke-dashoffset', values: `${PUNTOS_PASO};0`, dur: `${PUNTOS_PASO / PUNTOS_VEL}s`, repeatCount: 'indefinite',
+        }));
+        g.appendChild(puntos);
+      }
       // Punta abierta (dos trazos), orientada por el último tramo real.
       const dir = pathEndDirection(e.path, { x: 0, y: 1 });
       const tip = { x: e.arrowTipX, y: e.arrowTipY };
@@ -865,7 +890,7 @@ class IswcFlowchart extends DiagramElementBase {
     const p = n.pill!;
     const g = svgEl('g', { class: 'flow-node__pill' }) as SVGGElement;
     // Suelta (decisión, nodo incrustado): fondo oscuro y número claro, como los pasos de la secuencia.
-    // Con `pillTone: entity` (insoft), el fondo es el tono de su entidad oscurecido (L 0,25 en OKLCH).
+    // Con `pillTone: entity` (insoft), el fondo es el tono de su entidad oscurecido (ver PILL_L).
     const suelta = !!n.pillFloat;
     const fondo = paint.pillTone !== 'entity' ? paint.pillTone : entidad ? oscuro(entidad) : paint.startFill;
     g.appendChild(svgEl('rect', {

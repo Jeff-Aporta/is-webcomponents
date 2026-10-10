@@ -46,6 +46,13 @@
 /* Celular: barra más compacta para que quepan los toggles y las acciones. */
 :host([data-movil]) .bar { gap: 6px; padding: 0 8px; }
 :host([data-movil]) .actions { gap: 4px; }
+/* Teléfono: a 390 px las acciones ocupaban ~270 px y la marca quedaba en ~14 px.
+   Las acciones se compactan (escalan por em, lo slotted hereda) y la marca
+   conserva un mínimo legible; lo que no quepa lo recorta con elipsis el consumidor. */
+@media (max-width: 480px) {
+  .actions { font-size: 0.85em; gap: 3px; }
+  .brand { min-width: min(4.5em, 20vw); }
+}
 .toggle {
   display: inline-grid;
   place-items: center;

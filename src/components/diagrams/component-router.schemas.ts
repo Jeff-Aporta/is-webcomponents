@@ -28,6 +28,11 @@ export const RouterWorldSchema = z.object({
   titles: z.array(CajaSchema),
   /** Hitbox de cada conector -(O- (glifo + aire). Muro salvo para su propia llegada. */
   rings: z.array(RouterBoxSchema),
+  /**
+   * Rieles ya trazados por fuera del router (p. ej. el flujo principal del flowchart): cuentan como
+   * rieles ajenos permanentes (encima, pegado o cruzando cuesta lo de siempre) y no se re-rutean.
+   */
+  fixedRails: z.array(z.array(PuntoSchema)).optional(),
 });
 export type RouterWorld = z.infer<typeof RouterWorldSchema>;
 

@@ -1,0 +1,145 @@
+{
+  "slug": "configuracion-proveedor",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Proveedor del modelo (/proveedor)",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Consola / ISW",
+          "kind": "participant"
+        },
+        {
+          "id": "V",
+          "label": "ISS · TProviderController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        },
+        {
+          "id": "O",
+          "label": "OpenAI",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "V",
+          "to": "P",
+          "label": "lee la fila (404 si no existe)",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "V",
+          "to": "C",
+          "label": "fila con los secretos de jcuenta enmascarados",
+          "kind": "reply",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "V",
+          "to": "V",
+          "label": "body estricto (400); merge sobre la fila: un secreto enmascarado no pisa el real",
+          "kind": "self",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "V",
+          "to": "P",
+          "label": "guarda solo las columnas que cambian",
+          "kind": "sync",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "V",
+          "to": "C",
+          "label": "fila con la cuenta enmascarada",
+          "kind": "reply",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "V",
+          "to": "V",
+          "label": "solo OPENAI, activo en patyia_providers (400)",
+          "kind": "self",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "V",
+          "to": "P",
+          "label": "fila OPENAI de patyia_sys_values (PUT: push parcial)",
+          "kind": "sync",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "V",
+          "to": "O",
+          "label": "modelos de la cuenta (caché 90 s)",
+          "kind": "sync",
+          "step": 8
+        },
+        {
+          "id": "m9",
+          "from": "V",
+          "to": "C",
+          "label": "configuración + modelos disponibles y no disponibles",
+          "kind": "reply",
+          "step": 9
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m1",
+            "m2"
+          ],
+          "condition": "GET /proveedor/{iproveedor}"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m3",
+            "m4",
+            "m5"
+          ],
+          "condition": "PUT /proveedor/{iproveedor}"
+        },
+        {
+          "id": "f3",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m6",
+            "m7",
+            "m8",
+            "m9"
+          ],
+          "condition": "GET|PUT /proveedor/{iproveedor}/cfg"
+        }
+      ]
+    }
+  }
+}

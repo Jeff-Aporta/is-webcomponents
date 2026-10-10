@@ -1,0 +1,132 @@
+{
+  "slug": "conversacion-detalle",
+  "module": "020-Conversaciones",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Detalle e historial de una conversación",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Portal",
+          "kind": "participant"
+        },
+        {
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "T",
+          "label": "GET /conversacion/{iconversacion}",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "T",
+          "to": "P",
+          "label": "lee la fila con sus calificados y tiquetes (404)",
+          "kind": "sync",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "T",
+          "to": "T",
+          "label": "alcance por fila: dueño, auditor o bautoriza_visualizacion (401)",
+          "kind": "self",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "T",
+          "to": "P",
+          "label": "dueño y vencida la inactividad: la cierra",
+          "kind": "sync",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "T",
+          "to": "C",
+          "label": "fila + detalle (mensajes calificados, tiquete)",
+          "kind": "reply",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "C",
+          "to": "T",
+          "label": "GET /conversacion/{iconversacion}/logs",
+          "kind": "sync",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "T",
+          "to": "T",
+          "label": "mismo acceso que el detalle (de otros: capacidad logsAjenos)",
+          "kind": "self",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "T",
+          "to": "P",
+          "label": "historial de la conversación",
+          "kind": "sync",
+          "step": 8
+        },
+        {
+          "id": "m9",
+          "from": "T",
+          "to": "C",
+          "label": "mensajes con meta (adjuntos enmascarados) + convLog ordenado",
+          "kind": "reply",
+          "step": 9
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m1",
+            "m2",
+            "m3",
+            "m4",
+            "m5"
+          ],
+          "condition": "GET /conversacion/{iconversacion}"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m6",
+            "m7",
+            "m8",
+            "m9"
+          ],
+          "condition": "GET /conversacion/{iconversacion}/logs"
+        }
+      ]
+    }
+  }
+}

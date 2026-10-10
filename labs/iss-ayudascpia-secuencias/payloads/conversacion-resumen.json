@@ -1,0 +1,107 @@
+{
+  "slug": "conversacion-resumen",
+  "module": "020-Conversaciones",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Resumen para soporte",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Soporte",
+          "kind": "participant"
+        },
+        {
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        },
+        {
+          "id": "O",
+          "label": "OpenAI",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "T",
+          "label": "GET /resumen_conversacion/{iconversacion}",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "T",
+          "to": "P",
+          "label": "lee la conversación: mismas reglas de lectura que el detalle",
+          "kind": "sync",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "T",
+          "to": "P",
+          "label": "últimos maxMensajesHistorial mensajes visibles",
+          "kind": "sync",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "T",
+          "to": "C",
+          "label": "400",
+          "kind": "reply",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "T",
+          "to": "O",
+          "label": "operativo 9999.2, sin streaming",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "T",
+          "to": "C",
+          "label": "resumen + engine, model, tokens y latencia (texto por defecto si el proveedor falla)",
+          "kind": "reply",
+          "step": 6
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m4"
+          ],
+          "condition": "sin mensajes"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m5",
+            "m6"
+          ],
+          "condition": "con mensajes"
+        }
+      ]
+    }
+  }
+}

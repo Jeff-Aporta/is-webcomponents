@@ -1,0 +1,132 @@
+{
+  "slug": "configuracion-tdconsulta",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Catálogo de instrucciones (/tdconsulta)",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Consola",
+          "kind": "participant"
+        },
+        {
+          "id": "T",
+          "label": "ISS · TTdConsultationController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "T",
+          "label": "GET /tdconsulta",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "T",
+          "to": "P",
+          "label": "todo el catálogo, activo o no",
+          "kind": "sync",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "T",
+          "to": "C",
+          "label": "{ key, storage, rows, canEdit }",
+          "kind": "reply",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "C",
+          "to": "T",
+          "label": "POST|PUT /tdconsulta",
+          "kind": "sync",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "T",
+          "to": "T",
+          "label": "PK en mayúsculas, ruta d(.d)*, instrucción no vacía (400)",
+          "kind": "self",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "T",
+          "to": "T",
+          "label": "crear: la PK no existe y sus ancestros sí (7.1 exige 7)",
+          "kind": "self",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "T",
+          "to": "T",
+          "label": "jconfig y jpermisos: push parcial sobre lo vigente (schema estricto)",
+          "kind": "self",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "T",
+          "to": "P",
+          "label": "INSERT o UPDATE con auditoría de la sesión (nombre único: 400)",
+          "kind": "sync",
+          "step": 8
+        },
+        {
+          "id": "m9",
+          "from": "T",
+          "to": "C",
+          "label": "{ ok, key, updatedBy, mode, itdconsulta }",
+          "kind": "reply",
+          "step": 9
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m1",
+            "m2",
+            "m3"
+          ],
+          "condition": "GET /tdconsulta"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9"
+          ],
+          "condition": "POST (crear) · PUT (guardar)"
+        }
+      ]
+    }
+  }
+}

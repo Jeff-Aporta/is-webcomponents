@@ -292,6 +292,18 @@ export default {
     "json": "../../dist/previews/feedback/theme-toggle.json",
     "category": "feedback"
   },
+  "iswc-pager": {
+    "json": "../../dist/previews/navigation/pager.json",
+    "category": "navigation"
+  },
+  "iswc-figure": {
+    "json": "../../dist/previews/media/figure.json",
+    "category": "media"
+  },
+  "iswc-meta-list": {
+    "json": "../../dist/previews/data/meta-list.json",
+    "category": "data"
+  },
   "iswc-prefs-clear": {
     "json": "../../dist/previews/feedback/prefs-clear.json",
     "category": "feedback"

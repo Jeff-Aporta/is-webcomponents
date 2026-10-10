@@ -134,6 +134,13 @@ class MinHeap {
 }
 
 /** Quita puntos repetidos y colineales. */
+/** Índice de la línea de la grilla más cercana a `v`. */
+function lineIndexOf(arr: readonly number[], v: number): number {
+  let best = 0;
+  for (let i = 1; i < arr.length; i++) if (Math.abs(arr[i]! - v) < Math.abs(arr[best]! - v)) best = i;
+  return best;
+}
+
 export function simplifyOrthoPath(pts: readonly Punto[]): Punto[] {
   const out: Punto[] = [];
   for (const p of pts) {
@@ -308,6 +315,13 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
       if (c.side === 'left' || c.side === 'right') extraY.push(c.y); else extraX.push(c.x);
     }
   }
+  // Rieles fijos: su línea existe en la grilla (así su ocupación cae exacta).
+  for (const rail of world.fixedRails ?? []) {
+    rail.slice(1).forEach((q, k) => {
+      const p = rail[k]!;
+      if (p.y === q.y) extraY.push(p.y); else if (p.x === q.x) extraX.push(p.x);
+    });
+  }
   const xs = gridLines(minX, maxX, step, extraX);
   const ys = gridLines(minY, maxY, step, extraY);
   const nx = xs.length;
@@ -452,6 +466,19 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   // ── Ocupación compartida ───────────────────────────────────────────────
   const occ = [new Int16Array(N), new Int16Array(N)];
   const hist = new Float32Array(N);
+  // Rieles fijos: ocupación ajena que nunca se suelta (bit 0 = paso H, bit 1 = paso V).
+  for (const rail of world.fixedRails ?? []) {
+    rail.slice(1).forEach((q, k) => {
+      const p = rail[k]!;
+      if (p.y === q.y) {
+        const j = lineIndexOf(ys, p.y);
+        for (let i = 0; i < nx; i++) if (xs[i]! >= Math.min(p.x, q.x) && xs[i]! <= Math.max(p.x, q.x)) occ[0]![idx(i, j)] += 1;
+      } else if (p.x === q.x) {
+        const i = lineIndexOf(xs, p.x);
+        for (let j = 0; j < ny; j++) if (ys[j]! >= Math.min(p.y, q.y) && ys[j]! <= Math.max(p.y, q.y)) occ[1]![idx(i, j)] += 1;
+      }
+    });
+  }
   const groupOf = edges.map((e) => `${Math.round(e.to.x)},${Math.round(e.to.y)}`);
   const groupOcc = new Map<string, Int16Array[]>();
   for (const g of new Set(groupOf)) groupOcc.set(g, [new Int16Array(N), new Int16Array(N)]);

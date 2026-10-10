@@ -1,0 +1,122 @@
+{
+  "slug": "configuracion-cfg",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Configuración en caliente (CFG)",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Consola / ISW",
+          "kind": "participant"
+        },
+        {
+          "id": "S",
+          "label": "ISS · TSysValueController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "S",
+          "to": "S",
+          "label": "la puerta SEG decide por el id CFG:/<ruta> (sistema → runtime, docs → doc)",
+          "kind": "self",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "C",
+          "to": "S",
+          "label": "GET /sistema/cfg · /docs/cfg",
+          "kind": "sync",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "S",
+          "to": "P",
+          "label": "lee la fila (sin fila: sus defaults, nunca 404)",
+          "kind": "sync",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "S",
+          "to": "C",
+          "label": "{ isystemkey, jvalue (texto JSON), fhultact }",
+          "kind": "reply",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "C",
+          "to": "S",
+          "label": "PUT … { jvalue: fragmento }",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "S",
+          "to": "S",
+          "label": "push parcial validado con el schema de la clave (400); null quita una clave",
+          "kind": "self",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "S",
+          "to": "P",
+          "label": "guarda la fila",
+          "kind": "sync",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "S",
+          "to": "C",
+          "label": "la fila vigente",
+          "kind": "reply",
+          "step": 8
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m2",
+            "m3",
+            "m4"
+          ],
+          "condition": "GET <ruta>/cfg"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m5",
+            "m6",
+            "m7",
+            "m8"
+          ],
+          "condition": "PUT <ruta>/cfg"
+        }
+      ]
+    }
+  }
+}

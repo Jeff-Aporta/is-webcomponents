@@ -1,0 +1,82 @@
+{
+  "slug": "conversacion-borrado",
+  "module": "020-Conversaciones",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Borrado de una conversación",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Portal",
+          "kind": "participant"
+        },
+        {
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "T",
+          "label": "DELETE /conversacion/{iconversacion}",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "T",
+          "to": "T",
+          "label": "PK de la ruta válida (400); JWT y SEG Eliminar",
+          "kind": "self",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "T",
+          "to": "P",
+          "label": "lee la fila (404)",
+          "kind": "sync",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "T",
+          "to": "T",
+          "label": "dueño estricto (401)",
+          "kind": "self",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "T",
+          "to": "P",
+          "label": "itdestado = 2: baja lógica, la fila no se borra",
+          "kind": "sync",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "T",
+          "to": "C",
+          "label": "la fila releída",
+          "kind": "reply",
+          "step": 6
+        }
+      ],
+      "fragments": []
+    }
+  }
+}

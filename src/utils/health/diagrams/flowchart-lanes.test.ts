@@ -452,20 +452,19 @@ Deno.test('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de l
   assertEquals(anchos.size, 1, `anchos: ${[...anchos].join(' ')}`);
 });
 
-Deno.test('combinado: U4 abanico con separación por delta: las que se suman a una punta corren por su vía y convergen al final', async () => {
-  const j = JSON.parse(await Deno.readTextFile(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-parches-de-datos.json', import.meta.url)));
+Deno.test('combinado: U4 abanico: los usos a un mismo destino comparten punta y corren por vías paralelas propias', async () => {
+  const j = JSON.parse(await Deno.readTextFile(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url)));
   const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
-  const alPg = L.edges.filter((e) => e.to === 'pg').map((e) => pathPoints(e.path));
-  assert(alPg.length >= 3, 'tres usos al mismo destino');
-  const punta = JSON.stringify(alPg[0]!.at(-1));
-  assert(alPg.every((p) => JSON.stringify(p.at(-1)) === punta), 'una sola punta');
-  const tipY = alPg[0]!.at(-1)!.y;
-  // Vías paralelas: cada una a k·4 px del tronco (distintas entre sí), hasta el embudo final.
-  const vias = alPg.filter((p) => p.length === 6).map((p) => p[3]!.y - tipY);
-  assert(vias.length >= 1, 'al menos una vía en abanico');
-  assertEquals(new Set(vias).size, vias.length, `vías distintas: ${vias.join(' ')}`);
-  for (const d of vias) assertEquals(Math.abs(d) % 4, 0, `delta múltiplo de 4: ${d}`);
+  const alAi = L.edges.filter((e) => e.to === 'ai').map((e) => pathPoints(e.path));
+  assert(alAi.length >= 4, 'varios usos a OpenAI');
+  const puntas = new Set(alAi.map((p) => JSON.stringify(p.at(-1))));
+  assertEquals(puntas.size, 1, 'una sola punta');
+  // Vías propias: ningún par de usos comparte el tramo vertical por el que baja o sube.
+  const verticales = alAi.map((p) => p.slice(1).flatMap((q, k) => (q.x === p[k]!.x && q.y !== p[k]!.y ? [q.x] : [])));
+  const xs = verticales.map((v) => v.join(','));
+  assertEquals(new Set(xs).size, xs.length, `vías: ${xs.join(' | ')}`);
 });
+
 
 Deno.test('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se monta sobre otro', async () => {
   const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
@@ -483,4 +482,57 @@ Deno.test('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se 
     }
   }
   assertEquals(choques, []);
+});
+
+Deno.test('combinado: F1 la respuesta desde el fin sale por abajo (no por un costado donde llegan ramas)', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    for (const e of L.edges) {
+      const fin = L.nodes.find((n) => n.id === e.from && n.shape === 'end');
+      if (!fin) continue;
+      const p0 = pathPoints(e.path)[0]!;
+      assert(Math.abs(p0.y - (fin.y + fin.h)) < 1, `${f.name}: ${e.from}→${e.to} sale por abajo`);
+    }
+  }
+});
+
+Deno.test('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo un nodo', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const choques: string[] = [];
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    for (const e of L.edges) {
+      const b = e.labelBox;
+      if (!b) continue;
+      for (const n of L.nodes) {
+        if (b.x < n.x + n.w - 1 && n.x < b.x + b.w - 1 && b.y < n.y + n.h - 1 && n.y < b.y + b.h - 1) choques.push(`${f.name}: «${e.label}» bajo ${n.id}`);
+      }
+    }
+  }
+  assertEquals(choques, []);
+});
+
+Deno.test('combinado: U5 en las rutas reales, los usos a un mismo destino y costado llegan a UNA sola punta', async () => {
+  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+  const malos: string[] = [];
+  for await (const f of Deno.readDir(dir)) {
+    if (!f.name.startsWith('ruta-')) continue;
+    const j = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
+    const puntas = new Map<string, Set<string>>();
+    for (const e of L.edges.filter((x) => x.kind === 'dashed')) {
+      const t = L.nodes.find((n) => n.id === e.to)!;
+      const fin = pathPoints(e.path).at(-1)!;
+      const lado = Math.abs(fin.x - t.x) < 1 ? 'izq' : Math.abs(fin.x - (t.x + t.w)) < 1 ? 'der' : Math.abs(fin.y - t.y) < 1 ? 'arr' : 'aba';
+      const k = `${e.to}|${lado}`;
+      puntas.set(k, (puntas.get(k) ?? new Set()).add(`${Math.round(fin.x)},${Math.round(fin.y)}`));
+    }
+    for (const [k, s] of puntas) if (s.size > 1) malos.push(`${f.name}: ${k} (${[...s].join(' ')})`);
+  }
+  assertEquals(malos, []);
 });

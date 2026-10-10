@@ -1,0 +1,140 @@
+{
+  "slug": "archivo-subida",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "payload": {
+    "sequence": {
+      "title": "Subida de archivos (POST /archivo)",
+      "actors": [
+        {
+          "id": "C",
+          "label": "Portal / app",
+          "kind": "participant"
+        },
+        {
+          "id": "F",
+          "label": "ISS · TFileStorageController",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "kind": "participant"
+        },
+        {
+          "id": "R",
+          "label": "Cloudflare R2",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "F",
+          "label": "POST /archivo (dataUrl | base64 | url, mime, iconversacion?)",
+          "kind": "sync",
+          "step": 1
+        },
+        {
+          "id": "m2",
+          "from": "F",
+          "to": "F",
+          "label": "body estricto (400); JWT y SEG ya los resolvió la puerta",
+          "kind": "self",
+          "step": 2
+        },
+        {
+          "id": "m3",
+          "from": "F",
+          "to": "F",
+          "label": "resuelve los bytes: decodifica o descarga",
+          "kind": "self",
+          "step": 3
+        },
+        {
+          "id": "m4",
+          "from": "F",
+          "to": "P",
+          "label": "cuenta de almacenamiento (gen_almacenamientos; sin cuenta: 503)",
+          "kind": "sync",
+          "step": 4
+        },
+        {
+          "id": "m5",
+          "from": "F",
+          "to": "F",
+          "label": "variantes thumb, med y original (jpeg, lado máximo 1280)",
+          "kind": "self",
+          "step": 5
+        },
+        {
+          "id": "m6",
+          "from": "F",
+          "to": "R",
+          "label": "sube los tres objetos",
+          "kind": "sync",
+          "step": 6
+        },
+        {
+          "id": "m7",
+          "from": "F",
+          "to": "F",
+          "label": "duración por ffprobe",
+          "kind": "self",
+          "step": 7
+        },
+        {
+          "id": "m8",
+          "from": "F",
+          "to": "R",
+          "label": "sube el original",
+          "kind": "sync",
+          "step": 8
+        },
+        {
+          "id": "m9",
+          "from": "F",
+          "to": "P",
+          "label": "ifile = seq_patyia_ifile en base 36; registra el archivo",
+          "kind": "sync",
+          "step": 9
+        },
+        {
+          "id": "m10",
+          "from": "F",
+          "to": "C",
+          "label": "{ ifile, jfile (variantes con URL firmada 7 días), fhcre }",
+          "kind": "reply",
+          "step": 10
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m5",
+            "m6"
+          ],
+          "condition": "imagen (hasta 5 MB)"
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m7",
+            "m8"
+          ],
+          "condition": "audio (hasta 25 MB)"
+        }
+      ]
+    }
+  }
+}

@@ -207,7 +207,9 @@ export function resolverEtiquetas(
         ...candidatas(pts, w, h, false).map((caja) => ({ caja, vertical: false })),
         ...candidatas(pts, ETIQUETA_LINE_H, w, true).map((caja) => ({ caja, vertical: true })),
       ];
-      const sinChoque = cands.find((c) => sinTexto(c.caja));
+      // Primero sin texto ni nodo encima; si no hay, al menos sin texto.
+      const sinNodo = (c: EmbedBox): boolean => !nodes.some((n) => corta(c, { x: n.x, y: n.y, w: n.w, h: n.h }, 2));
+      const sinChoque = cands.find((c) => sinTexto(c.caja) && sinNodo(c.caja)) ?? cands.find((c) => sinTexto(c.caja));
       if (sinChoque) preferida = sinChoque;
       const caja = preferida?.caja ?? { x: ref.x + U, y: ref.y - PEGADA - h, w, h };
       conflictos.push({ caja, edge: i, tramo });

@@ -354,8 +354,18 @@ export async function writeDiagramOutputs(
     await writeFile(tmp, data);
     await rename(tmp, file);
   };
-  await atomic(outSvg, result.svg);
+  await atomic(outSvg, sinInyeccion(result.svg));
   if (outPng && result.png) await atomic(outPng, result.png);
+}
+
+/**
+ * Cierra cada `</svg>` como `</svg >` (XML equivalente). Live Server (live-server) inyecta su script
+ * de recarga antes del primer `</svg>` que encuentra, también en un .svg servido como imagen: ese
+ * script rompe el XML («Comment not terminated») y la imagen sale rota. Con el espacio el patrón no
+ * coincide y el archivo llega intacto.
+ */
+export function sinInyeccion(svg: string): string {
+  return svg.replace(/<\/svg>/g, '</svg >');
 }
 
 /** Resuelve ruta de script relativa a un CDN root (local o URL). */
