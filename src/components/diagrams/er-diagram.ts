@@ -401,7 +401,7 @@ class IswcErDiagram extends DiagramElementBase {
       // Flujo estándar del lado N al 1 (`reverse` ya resuelto en el layout).
       if (flujo) {
         const puntos = animarRiel(path, { punteado: !!dashAttr, reverse: !!r.reverse });
-        if (puntos) g.appendChild(puntos);
+        if (puntos) g.insertBefore(puntos, path);
       }
 
       g.appendChild(this.#buildMark(r.fromMark, color));

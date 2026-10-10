@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T18:28:11.913Z",
+  "generatedAt": "2026-10-10T19:28:00.277Z",
   "count": 118,
   "modules": [
     {
@@ -590,7 +590,7 @@
       "id": "diagram-flow",
       "path": "src/components/_shared/diagram-flow.ts",
       "summary": "diagram-flow — Estándar: cada riel muestra hacia dónde va lo que transporta.",
-      "bytes": 3869,
+      "bytes": 4038,
       "exports": [
         "FLUJO",
         "flujoActivo",

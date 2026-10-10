@@ -310,7 +310,7 @@ class IswcClassDiagram extends DiagramElementBase {
       // Flujo estándar: herencia y realización fluyen del padre al hijo (al revés del trazo).
       if (flujoActivo(this)) {
         const puntos = animarRiel(path, { punteado: dashed, reverse: sentidoFlujoClase(e.kind) !== !!e.reverse });
-        if (puntos) g.appendChild(puntos);
+        if (puntos) g.insertBefore(puntos, path);
       }
 
       switch (e.noTip ? 'none' : e.kind) {

@@ -204,6 +204,8 @@ export const FlowLayoutNodeSchema = z.object({
   pillFloat: z.boolean().optional(),
   /** Puente `-(O=`: su controller y su letra CRUD. */
   bridge: FlowBridgeSchema.optional(),
+  /** Puente `-(O=`: lado del controller del que cuelga (abajo por defecto). */
+  lado: z.enum(['bottom', 'right', 'left', 'top']).optional(),
   /** Nodo de declaración: sus variables, el ancho de cada columna y la caja de la tabla (lienzo). */
   vars: z.array(FlowVarSchema).optional(),
   varsCols: z.array(z.number()).optional(),
@@ -361,6 +363,8 @@ export const FlowSizedNodeSchema = z.object({
   varsBox: EmbedBoxSchema.optional(),
   varsValor: z.array(z.array(z.string())).optional(),
   varsFilas: z.array(z.number()).optional(),
+  /** Puente `-(O=`: lado del controller del que cuelga (abajo por defecto). */
+  lado: z.enum(['bottom', 'right', 'left', 'top']).optional(),
 });
 export type FlowSizedNode = z.infer<typeof FlowSizedNodeSchema>;
 

@@ -774,7 +774,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       g.appendChild(path);
       if (flujoActivo(this)) {
         const puntos = animarRiel(path, { punteado: !!path.getAttribute('stroke-dasharray'), reverse: !!m.reverse });
-        if (puntos) g.appendChild(puntos);
+        if (puntos) g.insertBefore(puntos, path);
       }
 
       // La orientación sale del ÚLTIMO TRAMO REAL del path: cuando el router

@@ -378,7 +378,7 @@ class IswcComponentDiagram extends DiagramElementBase {
       g.appendChild(path);
       if (flujoActivo(this)) {
         const puntos = animarRiel(path, { punteado: !!path.getAttribute('stroke-dasharray'), reverse: !!e.reverse });
-        if (puntos) g.appendChild(puntos);
+        if (puntos) g.insertBefore(puntos, path);
       }
       // Flecha unida a otra `->`: la punta la pinta la raíz.
       if (!ballSocket && !(e as { sharedTip?: boolean }).sharedTip) {

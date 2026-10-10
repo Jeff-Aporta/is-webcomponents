@@ -79,6 +79,12 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
 - Los POJOs no se dibujan: el paso nunca toca una tabla directo; siempre paso → puente → tabla.
 - Tablas del DER y componentes que se consumen exponen `-(O-` (convención InSoft): el expositor pone
   el socket `(` y quien consume llega a la bola O con su punta de flecha.
+- **Nada en el aire**: toda arista parte y llega a una entidad. El palo del puente siempre toca su
+  controller, por cualquiera de sus 4 lados: abajo mientras la fila quepa en su ancho, luego derecha,
+  izquierda y arriba (si aun sobran, el controller se ensancha). Los otros rieles del controller usan
+  un lado libre de puentes, y al abrir espacio el controller y sus puentes se mueven como un bloque.
+- Animación: los puntos de las líneas continuas van en color secundario (skyblue `#7ACFF4`) y
+  **detrás** del riel (el trazo negro queda encima).
 - Las columnas de entidades se **apilan** (una debajo de otra, cada controller con sus puentes) y no
   empujan a las otras columnas: cada columna solo se empuja a sí misma.
 - En los md, las pestañas de un EP son **Seq** (secuencia) y **Seq in Vec** (secuencia en vector).

@@ -68,6 +68,27 @@ POJO, tabla. Lo fija `config.entityColors` del diagrama; si no, rotación de ton
 330° (330°–360° se omite: se confunde con 0°). Solo los pasos del flujo varían de color. El
 generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
 
+## 3c. Puentes `-(O=` y sockets `-(O-`
+
+- Un controller es el **puente** entre el flujo y la BD: expone un puente `-(O=` por acción
+  (`shape: "bridge"`, `of: <controller>`, `op: C|R|U|D`) colgando debajo de él: socket del lado del
+  controller, bola con la letra CRUD, ícono de BD y nombre de la acción.
+- Un único puerto de **entrada** (todas las que consumen convergen ahí, triángulo sólido tocando el
+  O) y un puerto por **salida** (triángulo sólido a ~34 px del O). Las entradas llevan la acción de BD
+  (`SELECT`, `INSERT`…, con su ícono); la salida a su tabla no lleva texto.
+- Los POJOs no se dibujan: el paso nunca toca una tabla directo; siempre paso → puente → tabla.
+- Tablas del DER y componentes que se consumen exponen `-(O-` (convención InSoft): el expositor pone
+  el socket `(` y quien consume llega a la bola O con su punta de flecha.
+- **Nada en el aire**: toda arista parte y llega a una entidad. El palo del puente siempre toca su
+  controller, por cualquiera de sus 4 lados: abajo mientras la fila quepa en su ancho, luego derecha,
+  izquierda y arriba (si aun sobran, el controller se ensancha). Los otros rieles del controller usan
+  un lado libre de puentes, y al abrir espacio el controller y sus puentes se mueven como un bloque.
+- Animación: los puntos de las líneas continuas van en color secundario (skyblue `#7ACFF4`) y
+  **detrás** del riel (el trazo negro queda encima).
+- Las columnas de entidades se **apilan** (una debajo de otra, cada controller con sus puentes) y no
+  empujan a las otras columnas: cada columna solo se empuja a sí misma.
+- En los md, las pestañas de un EP son **Seq** (secuencia) y **Seq in Vec** (secuencia en vector).
+
 ## 4. Tablas: siempre por su controller dueño
 
 - Una tabla se toca **solo a través del controller que la gobierna** (su `nTbl`) y su POJO. Si un

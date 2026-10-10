@@ -3,8 +3,8 @@
  *
  * Estándar: cada riel muestra hacia dónde va lo que transporta.
  *   - Riel punteado: el patrón de trazos avanza (SMIL `stroke-dashoffset`).
- *   - Riel continuo: encima, una segunda línea de puntos (trazo de largo 0, remate redondo) más
- *     gruesa y espaciada, que avanza; un efecto sutil.
+ *   - Riel continuo: detrás, una segunda línea de puntos color cielo (trazo de largo 0, remate
+ *     redondo) más gruesa y espaciada, que avanza; el riel queda encima: un efecto sutil.
  *   - `reverse`: el movimiento va de la punta al origen (p. ej. herencia en clases, o el lado N→1
  *     en el DER cuando la arista se dibuja del 1 al N).
  *
@@ -19,7 +19,7 @@ export const FLUJO = {
   /** Periodo del patrón punteado (trazo + hueco) y su duración. */
   punteado: { periodo: 9, dur: 0.9 },
   /** Puntos de los rieles continuos: separación, velocidad (px/s) y grosor extra sobre el riel. */
-  puntos: { paso: 100, velocidad: 60, grosorExtra: 3 },
+  puntos: { paso: 100, velocidad: 60, grosorExtra: 3, color: '#7ACFF4' },
 } as const;
 
 import type { TOpcionesFlujo } from './diagram-flow.schemas.js';
@@ -58,7 +58,9 @@ export function animarRiel(path: SVGElement, op: TOpcionesFlujo): SVGElement | n
   const p = document.createElementNS(SVG_NS, 'path');
   p.setAttribute('d', d);
   p.setAttribute('fill', 'none');
-  p.setAttribute('stroke', op.color ?? path.getAttribute('stroke') ?? 'currentColor');
+  // Color secundario (cielo) y DETRÁS del riel (el llamador lo inserta antes): el riel continuo
+  // queda encima y los puntos no invaden.
+  p.setAttribute('stroke', op.color ?? FLUJO.puntos.color);
   p.setAttribute('stroke-width', String((op.ancho ?? Number(path.getAttribute('stroke-width') ?? 1)) + grosorExtra));
   p.setAttribute('stroke-linecap', 'round');
   p.setAttribute('stroke-dasharray', `0 ${paso}`);
