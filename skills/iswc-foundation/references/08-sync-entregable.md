@@ -4,7 +4,7 @@ Para apps con par `_experimental/<app>` (mirror de trabajo, remoto personal) y `
 (lo que se publica, remoto del equipo).
 
 - **Única vía**: `deno task sync:entregable` (`scripts/gate/sync-to-entregable.mjs` sobre el motor del
-  kit `tools/sync-entregable.ts`). Nunca se edita el entregable a mano.
+  kit `tools/ISSyncEntregable.ts`). Nunca se edita el entregable a mano.
 - **Única autorización**: el gate en verde (`scripts/gate/sync-protocolo.mjs` → `run-test-all.mjs` con
   cooldown). No existen `--skip-gate` ni `--aprobado-por` (exit 2). Unidireccional.
 - **Modos**: real (gate → copia → checkpoint), `--check` (drift por contenido, exit 1 si hay), `--dry-run` (plan, sin gate).

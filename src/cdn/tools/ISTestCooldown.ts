@@ -1,4 +1,4 @@
-// test-cooldown.ts — Cooldown de tests proporcional a su duración, con
+// ISTestCooldown.ts — Cooldown de tests proporcional a su duración, con
 // memoria en un JSON.
 //
 // Regla: un test que pasa en verde no se vuelve a correr durante
@@ -13,7 +13,7 @@
 // `node:process`. Cada proyecto lo adapta con las opciones (ruta del JSON,
 // factor, desactivarlo, reloj).
 //
-// Vendor: copiar `dist/cdn/tools/test-cooldown.ts` al proyecto (ISS, ISW)
+// Vendor: copiar `dist/cdn/tools/ISTestCooldown.ts` al proyecto (ISS, ISW)
 // e importar desde ahi; no tiene imports relativos.
 //
 //   const cd = createTestCooldown({ dbPath: ".tmp/test-cooldown.json" });
@@ -24,8 +24,8 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "
 import { dirname, join } from "node:path";
 import process from "node:process";
 
-export type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
-import type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
+export type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./ISTestCooldown.schemas.ts";
+import type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./ISTestCooldown.schemas.ts";
 
 /** Factor estándar: 600 min (10 h) de cooldown por cada minuto de ejecución. */
 export const COOLDOWN_FACTOR = 600;

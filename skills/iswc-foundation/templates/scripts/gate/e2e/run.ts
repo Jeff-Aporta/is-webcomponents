@@ -7,7 +7,7 @@
  * Sin archivos e2e todavía: verde con total 0 (la app recién creada no trae pruebas).
  */
 import { join } from 'node:path';
-import { archivosDePrueba, codigoSalida, correrPruebas, opcionesDeArgv, resumirReporte } from '../../../src/vendor/iswc-root/tools/pruebas.ts';
+import { archivosDePrueba, codigoSalida, correrPruebas, opcionesDeArgv, resumirReporte } from '../../../src/vendor/iswc-root/tools/ISPruebas.ts';
 import { asegurarServidor } from './servidor.ts';
 
 const raiz = Deno.cwd();

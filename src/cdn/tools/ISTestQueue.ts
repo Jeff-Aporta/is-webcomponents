@@ -1,8 +1,8 @@
-// test-queue.ts — Cola estándar de tests de los proyectos is-*: N trabajadores
+// ISTestQueue.ts — Cola estándar de tests de los proyectos is-*: N trabajadores
 // (3 por defecto) toman la siguiente tarea apenas terminan la anterior.
 //
 // Transversal (Node y Deno), sin dependencias ni imports relativos.
-// Vendor: copiar `dist/cdn/tools/test-queue.ts` al proyecto (ISS, ISW).
+// Vendor: copiar `dist/cdn/tools/ISTestQueue.ts` al proyecto (ISS, ISW).
 //
 //   const res = await runQueue(tests, (t) => correr(t));      // 3 a la vez
 //   const res = await runQueue(tests, correr, { concurrency: testConcurrency(env.X) });

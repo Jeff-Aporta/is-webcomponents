@@ -7,7 +7,7 @@
  *
  * Uso en `tests/e2e/<NN>.<tema>.test.ts`:
  *
- *   import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
+ *   import { definirPruebas } from '../../src/vendor/iswc-root/tools/ISPruebas.ts';
  *   import { abrir, enSombra } from '../../scripts/gate/e2e/harness.ts';
  *   let s: Awaited<ReturnType<typeof abrir>>;
  *   export default definirPruebas([

@@ -1,4 +1,4 @@
-// test-cooldown.test.ts — garantías del cooldown de tests (src/cdn/tools/test-cooldown.ts).
+// test-cooldown.test.ts — garantías del cooldown de tests (src/cdn/tools/ISTestCooldown.ts).
 //   C1 verde de 1 min -> 10 h de skip; a los 601 min vuelve a correr.
 //   C2 un rojo guarda until -1 (auditado, sin cooldown) y se relanza.
 //   C3 la memoria persiste en el JSON.
@@ -7,7 +7,7 @@
 import { assert, assertEquals, assertRejects } from 'jsr:@std/assert@1';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { COOLDOWN_FACTOR, cooldownMs, createTestCooldown, testId } from '../../../cdn/tools/test-cooldown.ts';
+import { COOLDOWN_FACTOR, cooldownMs, createTestCooldown, testId } from '../../../cdn/tools/ISTestCooldown.ts';
 
 const MIN = 60_000;
 const HORA = 60 * MIN;

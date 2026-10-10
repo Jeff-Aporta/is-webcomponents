@@ -1,5 +1,5 @@
 /**
- * Contratos del sistema comun de pruebas (`pruebas.ts`), compartido por las
+ * Contratos del sistema comun de pruebas (`ISPruebas.ts`), compartido por las
  * apps del kit (ISS en Node, ISW en Deno). W54: los tipos viven en *.schemas.ts.
  *
  * Convencion de las apps: TODAS las pruebas viven en una carpeta `tests/`; cada
@@ -126,5 +126,5 @@ export interface TPrueba {
 export type CuerpoT = (t: TPrueba) => unknown;
 export type OpcionesT = { timeout?: number; skip?: boolean | string };
 
-/** Lo que el padre le pasa a `pruebas-hijo.ts` (un archivo, sin funciones). */
+/** Lo que el padre le pasa a `ISPruebasHijo.ts` (un archivo, sin funciones). */
 export type OpcionesHijo = Omit<OpcionesCorrida, 'archivos' | 'aislar' | 'importar' | 'log'> & { archivo: string };

@@ -1,5 +1,5 @@
 /**
- * Guardianes WHAT de `Obj` (src/core/obj.ts): operaciones parciales sobre objetos JSON y
+ * Guardianes WHAT de `Obj` (src/cdn/lib/ISUtils.ts): operaciones parciales sobre objetos JSON y
  * referencias `{ path, query, actions }` a fuentes de verdad.
  *   Q1 get: la estructura con lo marcado (truthy), `*` y `[campo=valor]`.
  *   Q2 getValue: el valor exacto (sin estructura) de la única hoja truthy; `null` si no existe;
@@ -12,7 +12,7 @@
  */
 import { assert, assertEquals, assertRejects, assertThrows } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { z } from 'zod';
-import { Obj, ObjError, resolverUrl } from '../../../cdn/lib/obj.ts';
+import { Obj, ObjError, resolverUrl } from '../../../cdn/lib/ISUtils.ts';
 
 const DER = {
   erDiagram: {

@@ -541,20 +541,21 @@ try {
 
 // ── lib/: utilidades comunes (Obj: operaciones sobre objetos y referencias) ──
 // Dos formas: la fuente .ts (vendor de ISS/ISW con su propio zod) y un bundle ESM para el navegador
-// (zod incluido): `import { Obj } from '<cdn>/lib/obj.min.js'`.
+// (zod incluido): `import { Obj } from '<cdn>/lib/ISUtils.min.js'`. Prefijo IS*: los archivos que
+// otros proyectos vendorizan no chocan con los propios del proyecto.
 const libOut = join(dist, 'lib');
 await mkdir(libOut, { recursive: true });
-for (const name of ['obj.ts', 'obj.schemas.ts', 'obj.md']) await copyFile(join(root, 'src', 'cdn', 'lib', name), join(libOut, name));
+for (const name of ['ISUtils.ts', 'ISUtils.schemas.ts', 'ISUtils.md']) await copyFile(join(root, 'src', 'cdn', 'lib', name), join(libOut, name));
 await build({
-  entryPoints: [join(root, 'src', 'cdn', 'lib', 'obj.ts')],
-  outfile: join(libOut, 'obj.min.js'),
+  entryPoints: [join(root, 'src', 'cdn', 'lib', 'ISUtils.ts')],
+  outfile: join(libOut, 'ISUtils.min.js'),
   bundle: true,
   minify: true,
   format: 'esm',
   target: 'es2022',
   legalComments: 'none',
 });
-console.log(`  ${'lib/'.padEnd(18)} obj.ts (vendor) + obj.min.js (navegador)`);
+console.log(`  ${'lib/'.padEnd(18)} ISUtils.ts (vendor) + ISUtils.min.js (navegador)`);
 
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
@@ -622,10 +623,24 @@ const toolsSrc = join(root, 'src', 'cdn', 'tools');
 const toolsOut = join(dist, 'tools');
 await mkdir(toolsOut, { recursive: true });
 for (const name of await readdir(toolsSrc)) {
-  if (!name.endsWith('.ts')) continue;
+  if (!name.endsWith('.ts') && !name.endsWith('.mjs')) continue;
   await copyFile(join(toolsSrc, name), join(toolsOut, name));
 }
-console.log(`  ${'tools/'.padEnd(18)} ts vendor (render-diagram)`);
+// Los archivos que otros proyectos vendorizan llevan prefijo IS* (no chocan con los del proyecto).
+// Transición: también se publican con su nombre anterior, con los imports internos a esos nombres,
+// para que un consumidor que aún no migró (p. ej. el ISW) siga funcionando. Retirar al migrar todos.
+const ANTERIORES = { ISPruebasHijo: 'pruebas-hijo', ISDenoTest: 'deno-test', ISPinUpdate: 'pin-update', ISPruebas: 'pruebas', ISSyncEntregable: 'sync-entregable', ISTestCooldown: 'test-cooldown', ISTestQueue: 'test-queue' };
+const aAnterior = (texto) => texto.replace(/\b(ISPruebasHijo|ISDenoTest|ISPinUpdate|ISPruebas|ISSyncEntregable|ISTestCooldown|ISTestQueue)((?:\.schemas)?\.(?:ts|js|mjs))\b/g, (_m, n, ext) => ANTERIORES[n] + ext);
+let anteriores = 0;
+for (const name of await readdir(toolsSrc)) {
+  const m = name.match(/^(IS[A-Za-z]+)((?:\.schemas)?\.(?:ts|mjs))$/);
+  if (!m || !ANTERIORES[m[1]]) continue;
+  const texto = await readFile(join(toolsSrc, name), 'utf8');
+  await writeFile(join(toolsOut, ANTERIORES[m[1]] + m[2]), `// OBSOLETO: nombre anterior de ${name} (vendorice ${name}).
+${aAnterior(texto)}`);
+  anteriores++;
+}
+console.log(`  ${'tools/'.padEnd(18)} ts vendor IS* (+${anteriores} con el nombre anterior, transición)`);
 
 // Estilos de diagrama (diagram-styles.ts): los temas JSON no van dentro de
 // los bundles; se descargan bajo demanda junto a ellos, en diagrams/themes/.

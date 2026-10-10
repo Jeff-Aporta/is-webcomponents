@@ -1,5 +1,5 @@
 /**
- * Sistema comun de pruebas (`cdn/tools/pruebas.ts`): contrato que comparten ISS e ISW.
+ * Sistema comun de pruebas (`cdn/tools/ISPruebas.ts`): contrato que comparten ISS e ISW.
  *
  *   P1 definirPruebas rechaza ids vacios o repetidos, sin correr(), y categoria/nivel invalidos
  *   P2 correrPruebas: verde, rojo por expect, por excepcion y por timeout; nivel `aviso` no pone rojo
@@ -15,8 +15,8 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { archivosDePrueba, codigoSalida, coleccionPruebas, correrPruebas, definirPruebas, esSaltada } from '../../../cdn/tools/pruebas.ts';
-import type { ListaPruebas, Prueba } from '../../../cdn/tools/pruebas.ts';
+import { archivosDePrueba, codigoSalida, coleccionPruebas, correrPruebas, definirPruebas, esSaltada } from '../../../cdn/tools/ISPruebas.ts';
+import type { ListaPruebas, Prueba } from '../../../cdn/tools/ISPruebas.ts';
 
 const raiz = mkdtempSync(join(tmpdir(), 'pruebas-'));
 const db = join(raiz, 'cooldown.json');
@@ -161,7 +161,7 @@ test('P9 aislar: cada archivo en su proceso, globales no se pisan, cooldown en e
   rmSync(db, { force: true });
   const dir = join(raiz, 'aislar');
   mkdirSync(dir, { recursive: true });
-  const kit = pathToFileURL(join(Deno.cwd(), 'src', 'cdn', 'tools', 'pruebas.ts')).href;
+  const kit = pathToFileURL(join(Deno.cwd(), 'src', 'cdn', 'tools', 'ISPruebas.ts')).href;
   writeFileSync(join(dir, 'a.test.ts'), `import { definirPruebas } from '${kit}';\nexport default definirPruebas([{ nombre: 'P9 pone global', async correr({ expect }) { (globalThis as Record<string, unknown>).marca = 'a'; expect('pone', true); await new Promise((r) => setTimeout(r, 20)); } }]);\n`);
   writeFileSync(join(dir, 'b.test.ts'), `import { definirPruebas } from '${kit}';\nexport default definirPruebas([{ nombre: 'P9 no ve global', correr({ eq }) { eq('limpio', (globalThis as Record<string, unknown>).marca, undefined); } }, { nombre: 'P9 rojo hijo', correr({ expect }) { expect('cae', false); } }]);\n`);
   writeFileSync(join(dir, 'c.test.ts'), `throw new Error('rompe al cargar');\n`);

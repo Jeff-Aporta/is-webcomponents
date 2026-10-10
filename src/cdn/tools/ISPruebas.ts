@@ -3,14 +3,14 @@
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).
  *
  *   // tests/chat/traza.test.ts
- *   import { definirPruebas } from '<vendor>/tools/pruebas.ts';
+ *   import { definirPruebas } from '<vendor>/tools/ISPruebas.ts';
  *   export default definirPruebas([
  *     { nombre: 'traza: filtra por nivel', categoria: 'what', correr({ eq }) { ... } },
  *   ], { antes: abrirNavegador, despues: cerrarNavegador });
  *
  * `correrCarpeta` recorre `tests/`, toma SOLO los `*.test.ts`, importa cada uno,
  * toma la lista que exporta por defecto y corre las pruebas UNA POR UNA, todas
- * con el mismo envoltorio: cooldown proporcional (`test-cooldown.ts`), timeout,
+ * con el mismo envoltorio: cooldown proporcional (`ISTestCooldown.ts`), timeout,
  * nivel `error`/`aviso` y reporte JSON homogeneo. El `nombre` es el id de la
  * prueba: unico en toda la corrida (un repetido aborta antes de correr nada) y
  * llave de su cooldown. Solo `node:*`: corre igual en Node (tsx) y en Deno.
@@ -20,10 +20,10 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawn } from 'node:child_process';
 import process from 'node:process';
-import { formatMs, testCooldownFromEnv } from './test-cooldown.ts';
-import type { CtxPrueba, CuerpoT, HooksPruebas, ListaPruebas, OpcionesCarpeta, OpcionesCorrida, OpcionesT, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from './pruebas.schemas.ts';
+import { formatMs, testCooldownFromEnv } from './ISTestCooldown.ts';
+import type { CtxPrueba, CuerpoT, HooksPruebas, ListaPruebas, OpcionesCarpeta, OpcionesCorrida, OpcionesT, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from './ISPruebas.schemas.ts';
 
-export type { CategoriaPrueba, CtxPrueba, HooksPruebas, ListaPruebas, NivelPrueba, OpcionesCarpeta, OpcionesCorrida, OpcionesPrueba, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from './pruebas.schemas.ts';
+export type { CategoriaPrueba, CtxPrueba, HooksPruebas, ListaPruebas, NivelPrueba, OpcionesCarpeta, OpcionesCorrida, OpcionesPrueba, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from './ISPruebas.schemas.ts';
 
 const TIMEOUT_DEFAULT = 30_000;
 
@@ -269,7 +269,7 @@ export async function correrPruebas(o: OpcionesCorrida): Promise<ReportePruebas>
 
 const MARCA = '@@iswc.pruebas@@';
 
-/** Reporte que entrega `pruebas-hijo.ts`; `null` si la línea no trae uno válido. */
+/** Reporte que entrega `ISPruebasHijo.ts`; `null` si la línea no trae uno válido. */
 function leerReporte(json: string): ReportePruebas | null {
   let v: unknown;
   try { v = JSON.parse(json); } catch { return null; }
@@ -282,10 +282,10 @@ function esReporte(v: unknown): v is ReportePruebas {
   return Array.isArray(Reflect.get(v, 'resultados')) && typeof resumen === 'object' && resumen !== null;
 }
 
-/** Corre un archivo en un proceso hijo (`pruebas-hijo.ts`) y devuelve sus resultados. */
+/** Corre un archivo en un proceso hijo (`ISPruebasHijo.ts`) y devuelve sus resultados. */
 function correrAislado(o: OpcionesCorrida, archivo: string, log: (l: string) => void): Promise<ResultadoPrueba[]> {
   // Sin `new URL`: un archivo de pruebas puede reemplazar el URL global al importarse.
-  const hijo = join(dirname(fileURLToPath(import.meta.url)), 'pruebas-hijo.ts');
+  const hijo = join(dirname(fileURLToPath(import.meta.url)), 'ISPruebasHijo.ts');
   const opciones = { archivo: join(o.raiz, archivo), raiz: o.raiz, solo: o.solo, categoria: o.categoria, sinCooldown: o.sinCooldown, cooldownDb: o.cooldownDb };
   const [cmd, ...flags] = o.aislar?.comando ?? [];
   if (!cmd) return Promise.reject(new Error('pruebas: `aislar.comando` vacío; se necesita el ejecutable (p. ej. ["node", "--import", "tsx"])'));
@@ -315,7 +315,7 @@ function correrAislado(o: OpcionesCorrida, archivo: string, log: (l: string) => 
   });
 }
 
-/** Linea con la que `pruebas-hijo.ts` entrega su reporte al padre. */
+/** Linea con la que `ISPruebasHijo.ts` entrega su reporte al padre. */
 export function lineaReporte(r: ReportePruebas): string {
   return MARCA + JSON.stringify(r);
 }

@@ -1,4 +1,4 @@
-// pin-update.test.ts — QUÉ reporta el inventario de pines del kit (src/cdn/tools/pin-update.mjs), como caja
+// pin-update.test.ts — QUÉ reporta el inventario de pines del kit (src/cdn/tools/ISPinUpdate.mjs), como caja
 // negra: una app en disco → salida y código de salida. Sin red (el inventario no la usa).
 //   P1 un único SHA de 40 hex en todas sus formas (@sha y raw por SHA) → verde.
 //   P2 refs mutables del KIT (rama, @latest, SHA corto, GitHub Pages del kit) → rojo y se listan.
@@ -8,7 +8,7 @@ import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const TOOL = join(Deno.cwd(), 'src/cdn/tools/pin-update.mjs');
+const TOOL = join(Deno.cwd(), 'src/cdn/tools/ISPinUpdate.mjs');
 const A = 'a'.repeat(40);
 const B = 'b'.repeat(40);
 

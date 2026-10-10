@@ -1,4 +1,4 @@
-// deno-test.ts — `deno test` estándar de los proyectos is-*: cola de
+// ISDenoTest.ts — `deno test` estándar de los proyectos is-*: cola de
 // `testConcurrency()` archivos a la vez (3 por defecto) y cooldown de iswc.
 //
 // Unidad = archivo `.test.ts`: `deno test` con varios archivos no deja saltar
@@ -17,11 +17,11 @@ import { existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import process from "node:process";
-import { formatMs, testCooldownFromEnv, testId, type TestCooldown } from "./test-cooldown.ts";
-import { testConcurrency } from "./test-queue.ts";
+import { formatMs, testCooldownFromEnv, testId, type TestCooldown } from "./ISTestCooldown.ts";
+import { testConcurrency } from "./ISTestQueue.ts";
 
-export type { DenoTestOptions } from "./deno-test.schemas.ts";
-import type { DenoTestOptions } from "./deno-test.schemas.ts";
+export type { DenoTestOptions } from "./ISDenoTest.schemas.ts";
+import type { DenoTestOptions } from "./ISDenoTest.schemas.ts";
 
 /** `{ "./ruta/x.test.ts": { ms, ok } }` desde un reporte JUnit de Deno. */
 export function readDenoJunit(path: string): Record<string, { ms: number; ok: boolean }> {

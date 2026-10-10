@@ -26,7 +26,7 @@ ejecutable: si `src/` y `view/` se reconstruyen, el catálogo de la sección 6 d
 - [HS-PRU-02] Pruebas en `tests/<area>/*.test.ts`, cada archivo `export default definirPruebas([...])`; `nombre` único (incluye el `[W-*]`), `categoria: 'what'|'how'`.
 - [HS-PRU-03] `test:all` = `scripts/gate/run-test-all.mjs` (build → check → pin → test:health → test:e2e) con `gate-cooldown.mjs` (huella de entradas en `.tmp/gate-huellas.json`).
 - [HS-PRU-04] E2E: `scripts/gate/e2e/run.ts` (autoservidor 8851+, reusa uno vivo) + `harness.ts` (Stagehand 4.1, atraviesa shadow roots, sin LLM en el gate).
-- [HS-SYNC-01] `deno task sync:entregable` (`--check` drift, `--dry-run` plan) sobre `sync-entregable.ts`; gate `sync-protocolo.mjs`; checkpoint commit+push del mirror; el entregable nunca recibe commits automáticos.
+- [HS-SYNC-01] `deno task sync:entregable` (`--check` drift, `--dry-run` plan) sobre `ISSyncEntregable.ts`; gate `sync-protocolo.mjs`; checkpoint commit+push del mirror; el entregable nunca recibe commits automáticos.
 
 ## 5. Casos borde y errores
 

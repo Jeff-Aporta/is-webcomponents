@@ -70,12 +70,12 @@ function tieneRefs(v: unknown, n = 0): boolean {
 }
 
 /**
- * Resuelve las referencias con `Obj.resolver` de la biblioteca común (`lib/obj.min.js`, junto a
+ * Resuelve las referencias con `Obj.resolver` de la biblioteca común (`lib/ISUtils.min.js`, junto a
  * este bundle en el CDN). Se importa solo cuando hay referencias: los diagramas sin ellas no la
  * cargan.
  */
 async function resolverRefs(payload: unknown, base: string): Promise<unknown> {
-  const url = new URL('../lib/obj.min.js', import.meta.url).href;
+  const url = new URL('../lib/ISUtils.min.js', import.meta.url).href;
   const { Obj } = await import(/* @vite-ignore */ url) as { Obj: { resolver: (v: unknown, o: { base: string; cargar: (u: string) => Promise<unknown> }) => Promise<unknown> } };
   return Obj.resolver(payload, {
     base,

@@ -13,7 +13,7 @@
 // `docs-experimental/diagramas` del ISS (la fuente de los docs). Exporta `ruta()` para `eps-iss.mjs`.
 // Uso: deno run -A --no-check labs/iss-ayudascpia-flujos/rutas-ricas.mjs [--iss]
 
-import { dirname, join } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFile, writeFile } from 'node:fs/promises';
 
@@ -24,39 +24,79 @@ const leer = async (f) => JSON.parse(await readFile(join(ISS, f), 'utf8')).paylo
 const componentes = new Map((await leer('componentes.json')).componentDiagram.components.map((c) => [c.id, c]));
 const clases = new Map((await leer('clases.json')).classDiagram.classes.map((c) => [c.id, c]));
 const tablas = new Map((await leer('der.json')).erDiagram.entities.map((e) => [e.name, e]));
+/** Fuente de verdad de las clases, generada desde el código del ISS (codigo-a-fuentes.mjs). */
+const codigo = JSON.parse(await readFile(join(ISS, '..', 'fuentes', 'codigo.json'), 'utf8'));
+const enCodigo = new Set(codigo.clases.map((c) => c.name));
+const pojoDe = new Map(codigo.pares.map((p) => [p.controller, p.pojo]));
+
+/*
+ * Referencias { path, query, actions } (ver `Obj` del kit): los nodos no copian datos, citan su
+ * fuente de verdad. Las rutas son relativas a docs-experimental/diagramas del ISS; el lab las
+ * reescribe hacia allá al escribir (ver `escribir`).
+ */
+const refComponente = (ref, campo) => ({ path: './componentes.json', query: { payload: { componentDiagram: { components: { [`[id=${ref}]`]: campo ? { [campo]: true } : true } } } } });
+const refTabla = (nombre, campo) => ({ path: './der.json', query: { payload: { erDiagram: { entities: { [`[name=${nombre}]`]: campo ? { [campo]: true } : true } } } } });
+const refClase = (nombre, campo) => ({ path: '../fuentes/codigo.json', query: { clases: { [`[name=${nombre}]`]: campo ? { uml: { [campo]: true } } : { uml: true } } } });
 
 /** Arma una ruta: lanes + nodos + aristas con atajos para cada pieza del ISS. */
 export function ruta(meta, componer) {
   const nodes = [];
   const edges = [];
+  /** Clase ya presente → id de su nodo (una clase aparece una sola vez por ruta). */
+  const porClase = new Map();
+  /** id pedido por el generador → id real (cuando la clase ya estaba, p. ej. el POJO automático). */
+  const alias = new Map();
+  const real = (id) => alias.get(id) ?? id;
   const n = (x) => (nodes.push(x), x.id);
+  const arista = (e) => {
+    const x = { ...e, from: real(e.from), to: real(e.to) };
+    if (!edges.some((y) => y.from === x.from && y.to === x.to && (y.kind ?? '') === (x.kind ?? ''))) edges.push(x);
+  };
+  const nombreDe = (ref) => {
+    const c = clases.get(ref);
+    const name = c ? c.name.replace(/<.*>$/, '') : ref;
+    if (!enCodigo.has(name)) throw new Error(`clase ${ref} (${name}) no está en fuentes/codigo.json`);
+    return name;
+  };
   const b = {
     componente(id, ref, lane, items) {
-      const c = componentes.get(ref);
-      if (!c) throw new Error(`componente ${ref} no está en componentes.json`);
-      return n({ id, label: c.name, kind: 'component', lane, component: { name: c.name, stereotype: c.stereotype, items: items ?? c.items ?? [] } });
+      if (!componentes.has(ref)) throw new Error(`componente ${ref} no está en componentes.json`);
+      // Nombre, estereotipo e ítems desde componentes.json; los ítems propios de la ruta, si los hay, los pisan.
+      const component = { ...refComponente(ref), actions: [{ op: 'get', query: { name: true, stereotype: true, items: true } }, ...(items ? [{ op: 'push', valor: { items } }] : [])] };
+      return n({ id, label: refComponente(ref, 'name'), kind: 'component', lane, component });
     },
     clase(id, ref, lane, fill) {
-      const c = clases.get(ref);
-      if (!c) throw new Error(`clase ${ref} no está en clases.json`);
-      const { name, stereotype, attributes, methods } = c;
-      return n({ id, label: name, kind: 'class', lane, class: { name, stereotype, attributes, methods, ...(fill ? { fill } : {}) } });
+      const name = nombreDe(ref);
+      if (porClase.has(name)) { alias.set(id, porClase.get(name)); return porClase.get(name); }
+      porClase.set(name, id);
+      n({ id, label: name, kind: 'class', lane, class: { ...refClase(name), ...(fill ? { actions: [{ op: 'push', valor: { fill } }] } : {}) } });
+      // Todo controller va con su POJO (fuente: los pares de codigo.json), unidos por «uses».
+      const pojo = pojoDe.get(name);
+      if (pojo && !porClase.has(pojo)) {
+        const pid = `${id}-pojo`;
+        porClase.set(pojo, pid);
+        n({ id: pid, label: pojo, kind: 'class', lane, class: { ...refClase(pojo), actions: [{ op: 'push', valor: { fill: 'leaf' } }] } });
+        arista({ from: id, to: pid, kind: 'dashed', label: '«uses»' });
+      }
+      return id;
     },
     tabla(id, nombre, lane, columnas) {
       const t = tablas.get(nombre);
       if (!t) throw new Error(`tabla ${nombre} no está en der.json`);
-      const attributes = columnas ? t.attributes.filter((a) => columnas.includes(a.name)) : t.attributes;
-      return n({ id, label: nombre, kind: 'tableder', lane, table: { name: nombre, attributes } });
+      for (const c of columnas ?? []) if (!t.attributes.some((a) => a.name === c)) throw new Error(`columna ${c} no está en ${nombre} (der.json)`);
+      // La tabla del DER; con `columnas`, solo esas (get conserva la estructura { name, attributes }).
+      const table = { ...refTabla(nombre), actions: [{ op: 'get', query: { name: true, attributes: columnas ? Object.fromEntries(columnas.map((c) => [`[name=${c}]`, true])) : true } }] };
+      return n({ id, label: refTabla(nombre, 'name'), kind: 'tableder', lane, table });
     },
     paso: (id, label, lane, icon) => n({ id, label, lane, ...(icon ? { icon } : {}) }),
     decision: (id, label, lane) => n({ id, label, shape: 'diamond', lane }),
     inicio: (id, lane) => n({ id, label: 'Inicio', shape: 'start', lane }),
     fin: (id, lane) => n({ id, label: 'Fin', shape: 'end', lane }),
     barra: (id, lane) => n({ id, label: '', shape: 'bar', lane }),
-    nota: (id, about, label) => n({ id, label, shape: 'comment', about }),
-    flujo: (from, to, label) => edges.push({ from, to, ...(label ? { label } : {}) }),
-    uso: (from, to, label) => edges.push({ from, to, kind: 'dashed', label }),
-    cadena: (...ids) => ids.slice(1).forEach((to, i) => edges.push({ from: ids[i], to })),
+    nota: (id, about, label) => n({ id, label, shape: 'comment', about: real(about) }),
+    flujo: (from, to, label) => arista({ from, to, ...(label ? { label } : {}) }),
+    uso: (from, to, label) => arista({ from, to, kind: 'dashed', label }),
+    cadena: (...ids) => ids.slice(1).forEach((to, i) => arista({ from: ids[i], to })),
   };
   componer(b);
   return {
@@ -503,8 +543,14 @@ RUTAS.push(ruta({
 /** Escribe cada editable en el lab y, con `--iss`, en los editables del ISS. */
 export async function escribir(editables) {
   const destinos = [join(LAB, 'payloads'), ...(process.argv.includes('--iss') ? [ISS] : [])];
+  // En el lab, las referencias apuntan a la carpeta del ISS (las fuentes de verdad viven allá).
+  const haciaIss = relative(join(LAB, 'payloads'), ISS).split(sep).join('/');
+  const paraLab = (v) => Array.isArray(v) ? v.map(paraLab)
+    : v && typeof v === 'object'
+      ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, k === 'path' && typeof x === 'string' && x.startsWith('.') ? `${haciaIss}/${x}`.replace(/\/\.\//g, '/') : paraLab(x)]))
+      : v;
   for (const r of editables) {
-    for (const d of destinos) await writeFile(join(d, `${r.slug}.json`), `${JSON.stringify(r, null, 2)}
+    for (const d of destinos) await writeFile(join(d, `${r.slug}.json`), `${JSON.stringify(d === ISS ? r : paraLab(r), null, 2)}
 `);
     console.log(`OK ${r.slug}`);
   }

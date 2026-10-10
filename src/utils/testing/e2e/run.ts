@@ -3,7 +3,7 @@
 // empezar, corre `deno test` sobre los *.test.ts y apaga el servidor al
 // terminar (pase o falle). Para apuntar a un host externo:
 //   E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:8391/index.html deno task test:e2e
-import { denoTest } from '../../../cdn/tools/deno-test.ts';
+import { denoTest } from '../../../cdn/tools/ISDenoTest.ts';
 import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -99,7 +99,7 @@ process.once('SIGTERM', () => { apagarSync(); process.exit(143); });
 // vendor DL con timestamp — nunca vuelve a una versión más vieja que la local.
 await descargarConfigE2E();
 
-// Runner estándar is-*: cola de 3 archivos a la vez + cooldown (src/cdn/tools/deno-test.ts).
+// Runner estándar is-*: cola de 3 archivos a la vez + cooldown (src/cdn/tools/ISDenoTest.ts).
 const codigo: number | null = await denoTest(archivos, {
   args: ['-A', '--no-check'],
   env: { ...process.env, E2E_BASE_URL: String(base) },

@@ -16,9 +16,9 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import process from 'node:process';
-import type { CambioSync, ConfigSync, CtxSync, EntradaSync, ModoSync, ResumenEntrada, ResumenSync } from './sync-entregable.schemas.ts';
+import type { CambioSync, ConfigSync, CtxSync, EntradaSync, ModoSync, ResumenEntrada, ResumenSync } from './ISSyncEntregable.schemas.ts';
 
-export type { AccionSync, CambioSync, CheckpointSync, ConfigSync, CtxSync, EntradaSync, GateSync, ModoSync, ResumenEntrada, ResumenSync } from './sync-entregable.schemas.ts';
+export type { AccionSync, CambioSync, CheckpointSync, ConfigSync, CtxSync, EntradaSync, GateSync, ModoSync, ResumenEntrada, ResumenSync } from './ISSyncEntregable.schemas.ts';
 
 /**
  * Glob minimo con globstar estandar: `**\/` = cero o mas carpetas, `/**` final =

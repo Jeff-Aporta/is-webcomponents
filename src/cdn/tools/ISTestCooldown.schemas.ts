@@ -1,8 +1,8 @@
 /**
- * Contratos (tipos) del cooldown de tests (`test-cooldown.ts`). W54: los
+ * Contratos (tipos) del cooldown de tests (`ISTestCooldown.ts`). W54: los
  * tipos top-level viven en *.schemas.ts.
  */
-import type { createTestCooldown } from "./test-cooldown.ts";
+import type { createTestCooldown } from "./ISTestCooldown.ts";
 
 export interface TestCooldownEntry {
     /** Duración de la última corrida (verde o roja), en ms. */

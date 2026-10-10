@@ -3,8 +3,8 @@
  * entrega su reporte al padre en una linea marcada. Lo lanza el kit; no se usa a mano.
  */
 import process from 'node:process';
-import { correrPruebas, lineaReporte } from './pruebas.ts';
-import type { OpcionesHijo } from './pruebas.schemas.ts';
+import { correrPruebas, lineaReporte } from './ISPruebas.ts';
+import type { OpcionesHijo } from './ISPruebas.schemas.ts';
 
 // Sin top-level await: el ISS carga los .ts como CommonJS (tsx).
 async function main(): Promise<void> {

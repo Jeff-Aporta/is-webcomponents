@@ -1,17 +1,17 @@
-// pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
+// ISPinUpdate.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
 // Regla (WT-2026-10-07, Jeff): el kit NO escribe en los consumidores. Cada consumidor
-// vendoriza este script (dist/cdn/tools/pin-update.mjs) y actualiza sus propios pines.
+// vendoriza este script (dist/cdn/tools/ISPinUpdate.mjs) y actualiza sus propios pines.
 // Todo lo externo apunta a un SHA de 40 hex ya publicado (jsDelivr / raw.githack):
 // nunca @main, @master, @latest, SHA corto ni GitHub Pages (siempre sirve la última versión).
 //
 // Transversal (Node y Deno): solo `node:fs`/`node:path`/`node:process` y fetch.
 //
 // USO (desde la raíz del consumidor)
-//   pin-update.mjs                                   inventario: pines por SHA + refs mutables (exit 1 si hay)
-//   pin-update.mjs --nuevo=<sha40>                   reemplaza TODOS los pines por <sha40>
-//   pin-update.mjs --nuevo=ultimo                    resuelve el HEAD de la rama (--rama, default main) a su SHA y lo fija
-//   pin-update.mjs --nuevo=<sha40> --viejo=<sha40>   reemplaza solo esa cadena exacta
+//   ISPinUpdate.mjs                                   inventario: pines por SHA + refs mutables (exit 1 si hay)
+//   ISPinUpdate.mjs --nuevo=<sha40>                   reemplaza TODOS los pines por <sha40>
+//   ISPinUpdate.mjs --nuevo=ultimo                    resuelve el HEAD de la rama (--rama, default main) a su SHA y lo fija
+//   ISPinUpdate.mjs --nuevo=<sha40> --viejo=<sha40>   reemplaza solo esa cadena exacta
 //   --repo=Owner/nombre        paquete gh (default Jeff-Aporta/iswc-root)
 //   --raices=a,b,c             rutas a barrer (default: front típico, ver RAICES)
 //   --saltar=a,b               carpetas a ignorar (default node_modules,vendor,dist,.tmp-scss,.git)
