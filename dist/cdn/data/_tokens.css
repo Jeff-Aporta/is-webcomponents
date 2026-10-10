@@ -1,1 +1,1 @@
-@charset "UTF-8";:host{--bg: var(--iswc-bg-elev);--fg: var(--iswc-text);--muted: color-mix(in srgb, var(--fg) 65%, transparent);--border: var(--iswc-border);--brand: var(--iswc-brand);--success: var(--iswc-success);--warning: var(--iswc-warning);--danger: var(--iswc-danger)}
+@charset "UTF-8";:host{--bg: var(--iswc-bg-elev);--fg: var(--iswc-text);--muted: color-mix(in srgb, var(--fg) 65%, transparent);--border: var(--iswc-border);--brand: var(--iswc-color-brand);--success: var(--iswc-success);--warning: var(--iswc-warning);--danger: var(--iswc-danger)}
