@@ -25,7 +25,7 @@ const html = mdToHtml('# Hola\n\n```iswc-flowchart\n{"nodes":[]}\n```');
 
 | Export | Uso |
 | --- | --- |
-| `mdToHtml(src)` | String MD â†’ HTML. Fences de cÃ³digo â†’ `.md-iswc-code`. Fences `iswc-*` â†’ tag diagrama + JSON en `<script type="application/json">`. |
+| `mdToHtml(src, { renderers?, componentes?, tags? })` | String MD → HTML. Por defecto monta componentes del kit (código → `iswc-code` + `iswc-copy-button`, tabla → `iswc-scroller`, aviso → `iswc-callout`, `---` → `iswc-divider`, imagen → `iswc-theme-img`, tarea → `iswc-checkbox`) y anota sus tags en `tags`; `componentes: false` da HTML plano. Fences `iswc-*` → tag diagrama + JSON en `<script type="application/json">`. |
 
 
 ## Eventos
@@ -47,6 +47,21 @@ el.addEventListener('click', (e) => {
 ```
 
 </details>
+
+## Tabs de imágenes
+
+Un bloque entre dos `---` que solo trae imágenes (dos o más) se pinta como `iswc-tab-group`: una pestaña por imagen, con su `alt` como nombre y en el mismo orden. Los dos `---` no se pintan. En markdown plano (GitHub, Obsidian) el mismo texto se lee como separadores con imágenes, así que la nota sigue siendo legible fuera del kit.
+
+```md
+---
+
+![Secuencia](../999-Adjuntos/010-Diagramas/conversacion-turno.svg)
+![Secuencia enriquecida](../999-Adjuntos/010-Diagramas/ruta-conversacion-turno.svg)
+
+---
+```
+
+Con una sola imagen, o con texto entre los `---`, son separadores normales. Con `componentes: false` sale una figura por imagen con su nombre (`figcaption`). El hook de `renderers` es `tabs` (`DatosTabsMd`).
 
 ## Cadena con hydrate
 

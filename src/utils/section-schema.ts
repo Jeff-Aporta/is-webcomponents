@@ -22,6 +22,7 @@
  *   - zod v4.4.3 (ver `deno.json` imports).
  */
 import { z } from "zod";
+import { TextLikeSchema } from "../previews/_kit/component.schemas.ts";
 import type { SectionId, ContentBlock, SectionTableRow, SectionTable, AtributosRow, PropRow, StateRow, EventoRow, SlotRow, PartRow, ApiJsRow, Example, Examples, SectionsMap, ExcludeList, FichaWarning, FichaInspection, Ficha } from "./section-schema.schemas.js";
 
 /* --------------------------------------------------------------------------
@@ -52,7 +53,11 @@ export const SECTION_IDS = [
  * el contenido, sólo garantiza que sea string no vacío.
  */
 export const ContentBlockSchema = z.object({
-  content: z.string().min(1, "el bloque de markdown no puede estar vacío"),
+  // TextLike (W43): los JSON guardan el markdown multi-línea como string[] (una línea por item).
+  content: TextLikeSchema.refine(
+    (v) => (Array.isArray(v) ? v.join("\n") : v).length > 0,
+    "el bloque de markdown no puede estar vacío",
+  ),
 });
 
 /**
@@ -173,14 +178,14 @@ export const ApiJsSectionSchema = z.object({
     z
       .object({
         metodo: z.string().min(1, "método sin nombre"),
-        descripcion: z.string().optional(),
-        desc: z.string().optional(),
+        descripcion: TextLikeSchema.optional(),
+        desc: TextLikeSchema.optional(),
         /** Snippet HTML/JS copiable (celda Ejemplo → iswc-code en disclosure). */
         ejemplo: z.union([
-          z.string(),
+          TextLikeSchema,
           z.object({
             kind: z.literal("code-ejemplo"),
-            code: z.string(),
+            code: TextLikeSchema,
             lang: z.string().optional(),
             summary: z.string().optional(),
           }),

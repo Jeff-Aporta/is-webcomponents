@@ -1,4 +1,5 @@
 import components from '../manifest.js';
+import { leerAppCfg } from '../core/app-cfg.js';
 import { PALETTES, type PaletteConfig } from '../styles/palette-build.js';
 import type { ComponentManifestItem } from '../manifest.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
@@ -272,13 +273,14 @@ for (const key of categoryOrder) {
 // --- initial state ---
 const stateFromUrl = readStateParam();
 const themeFromUrl = typeof stateFromUrl?.theme === 'string' ? stateFromUrl.theme : null;
-const themeStored = localStorage.getItem('iswc-theme');
+const appCfg = leerAppCfg();
+const themeStored = appCfg.theme ?? null;
 let theme: ThemeName = themes.has(themeFromUrl as ThemeName)
   ? (themeFromUrl as ThemeName)
   : (themes.has(themeStored as ThemeName) ? (themeStored as ThemeName) : 'dark');
 
 const paletteFromUrl = typeof stateFromUrl?.palette === 'string' ? stateFromUrl.palette : null;
-const paletteStored = localStorage.getItem('iswc-palette');
+const paletteStored = appCfg.palette ?? null;
 let palette: PaletteName = palettes.has(paletteFromUrl as PaletteName)
   ? (paletteFromUrl as PaletteName)
   : (palettes.has(paletteStored as PaletteName) ? (paletteStored as PaletteName) : 'contapyme');
@@ -490,8 +492,6 @@ function renderContext({ navSmooth = false }: { navSmooth?: boolean } = {}): voi
   scheduleScrollNavToCurrent({ smooth: navSmooth });
   const brandData = brands[palette] ?? brands.contapyme;
   document.title = `${component.title} | ${brandData.label}`;
-  localStorage.setItem('iswc-theme', theme);
-  localStorage.setItem('iswc-palette', palette);
   updateUrl();
   sendContext();
 }

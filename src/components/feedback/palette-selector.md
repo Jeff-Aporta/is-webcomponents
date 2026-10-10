@@ -52,7 +52,6 @@ import './palette-selector.js';
 | --- | --- | --- |
 | `palettes` | string JSON | Array de `{ value, label, h, s, b, css?, lead?, accentLabel?, leadColor?, accentColor?, bg?, fg?, accent? }`. `h` `s` `b` arman el swatch; `accent` (hex) solo si no hay HSB. |
 | `value` | string/segÃºn contrato | Paleta activa; se refleja en `data-palette` de `<html>`. |
-| `storage-key` | string/segÃºn contrato | Clave de `localStorage` (default `iswc-palette`). |
 | `aria-label` | string/segÃºn contrato | Etiqueta del trigger (default "Elegir paleta"). |
 
 #### Propiedades pÃºblicas
@@ -151,7 +150,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >                                              lead?, leadColor?,
 >                                              accentColor?, bg?, fg? }.
 >   value         string â€” la paleta activa. Reflect â†’ data-palette en <html>.
->   storage-key   string â€” clave de localStorage (default 'iswc-palette')
+>   (persistencia) la elección del usuario sobre <html> queda en iswc-app-cfg.palette
 >   aria-label    string â€” etiqueta del botÃ³n trigger (default "Elegir paleta")
 > Slots
 >   trigger    opcional â€” sustituye el botÃ³n trigger interno.
@@ -192,7 +191,7 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado:
 ## Ejemplo avanzado
 
 ```html
-<iswc-palette-selector storage-key="mi-app-paleta"
+<iswc-palette-selector
   palettes='[{"value":"azul","label":"Azul","h":210,"s":"100%","b":"56%","css":"/css/azul.css"}]'>
 </iswc-palette-selector>
 ```

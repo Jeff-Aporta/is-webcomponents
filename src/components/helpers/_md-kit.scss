@@ -1,0 +1,139 @@
+/* Componentes del kit que montan los renders por defecto de md-lite
+ * (<iswc-md-render> y la vista previa de <iswc-md-editor>).
+ * Cada bloque viste el componente con la estética de la hoja y, mientras el tag
+ * no está definido (`:not(:defined)`), su contenido de respaldo se ve igual. */
+
+.prompt-md-preview {
+  --_brand: var(--iswc-color-brand, var(--iswc-brand));
+
+  /* —— Código en bloque: iswc-code + iswc-copy-button —— */
+  .md-codeblock {
+    position: relative;
+    max-inline-size: 100%;
+    margin: 0 0 1.1em;
+
+    > iswc-code.md-code { margin: 0; }
+    > iswc-code:not(:defined) > pre.md-iswc-code { margin: 0; }
+  }
+  .md-copy {
+    position: absolute;
+    inset-block-start: 0.35em;
+    inset-inline-end: 0.35em;
+    z-index: 1;
+    border-radius: var(--iswc-radius-sm);
+    background: color-mix(in srgb, var(--iswc-bg) 85%, transparent);
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+  .md-codeblock:hover .md-copy,
+  .md-copy:focus-within { opacity: 1; }
+  @media (hover: none) {
+    .md-copy { opacity: 1; }
+  }
+
+  /* Código inline antes de que iswc-code se defina: pastilla con el texto. */
+  iswc-code.md-code--inline:not(:defined) {
+    padding: 0.1em 0.4em;
+    border: 1px solid color-mix(in srgb, var(--_brand) 20%, transparent);
+    border-radius: 0.35em;
+    background: color-mix(in srgb, var(--_brand) 9%, transparent);
+    font-family: var(--iswc-font-mono, var(--iswc-mono, ui-monospace, SFMono-Regular, Consolas, monospace));
+    font-size: 0.86em;
+  }
+
+  /* —— Tablas: iswc-scroller (el marco va en el viewport; los botones quedan fuera) —— */
+  iswc-scroller.md-table-wrap {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    margin: 0 0 1.15em;
+
+    &::part(viewport) {
+      border: 1px solid var(--iswc-border);
+      border-radius: 0.6em;
+      background: var(--iswc-bg);
+    }
+    &:not(:defined) {
+      overflow-x: auto;
+      border: 1px solid var(--iswc-border);
+      border-radius: 0.6em;
+      background: var(--iswc-bg);
+    }
+    /* El viewport del scroller no parte líneas; las celdas sí. */
+    > table { white-space: normal; }
+    /* En pantallas angostas las columnas no se aplastan hasta una palabra por línea:
+       la tabla gana scroll horizontal (gesto o rueda; sin botones que roben ancho). */
+    > table :is(th, td) { min-inline-size: 6em; }
+    > table .md-col-prosa { min-inline-size: 16em; }
+  }
+
+  /* —— Avisos `> [!NOTE]`…: iswc-callout con el tono del tipo —— */
+  .md-callout { --_tono: var(--iswc-color-info); }
+  .md-callout--tip { --_tono: var(--iswc-color-success); }
+  .md-callout--important { --_tono: var(--_brand); }
+  .md-callout--warning { --_tono: var(--iswc-color-warning); }
+  .md-callout--caution { --_tono: var(--iswc-color-danger, var(--iswc-color-error)); }
+  .md-callout > :last-child { margin-block-end: 0; }
+  iswc-callout.md-callout {
+    display: block;
+    --iswc-callout-accent: var(--_tono);
+    --iswc-callout-text: var(--iswc-text);
+    --iswc-callout-bg: color-mix(in srgb, var(--_tono) 8%, transparent);
+    --iswc-callout-border: color-mix(in srgb, var(--_tono) 35%, transparent);
+
+    &::part(base) {
+      padding: 0.8em 1em 0.85em;
+      border: 1px solid var(--iswc-callout-border);
+      border-inline-start-width: 4px;
+      border-radius: 0.55em;
+      background: var(--iswc-callout-bg);
+      box-shadow: none;
+      line-height: inherit;
+    }
+    &::part(icon) { font-size: 1.15em; padding-block-start: 0.15em; }
+  }
+
+  /* —— Separador `---`: iswc-divider con el degradado de marca —— */
+  iswc-divider.md-hr {
+    display: block;
+    margin: 2em 0;
+    --iswc-divider-spacing: 0;
+
+    &::part(divider) {
+      block-size: 1px;
+      opacity: 1;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_brand) 35%, var(--iswc-border)), transparent);
+    }
+    &:not(:defined) {
+      block-size: 1px;
+      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_brand) 35%, var(--iswc-border)), transparent);
+    }
+  }
+
+  /* —— Imágenes: iswc-theme-img al tamaño natural, sin pasar del ancho ——
+     El host ocupa la línea (como un <img> suelto en un párrafo): un SVG sin
+     ancho propio llena el ancho disponible en vez de colapsar a 0. */
+  iswc-theme-img.md-img {
+    display: block;
+    inline-size: auto;
+    block-size: auto;
+    max-inline-size: 100%;
+
+    &::part(image) {
+      inline-size: auto;
+      max-inline-size: 100%;
+      block-size: auto;
+      border-radius: var(--iswc-radius-sm);
+    }
+  }
+
+  /* —— Tareas `- [x]`: iswc-checkbox de solo lectura con el texto como etiqueta —— */
+  li.md-task > iswc-checkbox.md-check {
+    display: block;
+    color: inherit;
+    font: inherit;
+
+    &::part(label) { color: inherit; opacity: 1; }
+    &::part(control) { opacity: 1; }
+  }
+}

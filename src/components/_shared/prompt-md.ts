@@ -1,4 +1,5 @@
 import { mdToHtml } from '../helpers/md-lite.js';
+import type { OpcionesMdLite } from '../helpers/md-lite.schemas.js';
 import type { BodySegment, VarPlaceholder } from "./prompt-md.schemas.js";
 
 /**
@@ -109,7 +110,7 @@ export function varChipHtml(name: string): string {
 }
 
 /** Sustituye {{vars}} por tokens, renderiza MD+HTML una vez y reemplaza por chips. */
-function renderBodyWithVarChips(body: unknown): string {
+function renderBodyWithVarChips(body: unknown, opts: OpcionesMdLite = {}): string {
   const src = repairPromptVarBraces(body);
   if (!src) return '';
 
@@ -122,7 +123,7 @@ function renderBodyWithVarChips(body: unknown): string {
     return token;
   });
 
-  let html = mdToHtml(mdSrc);
+  let html = mdToHtml(mdSrc, opts);
   for (const { token, name } of placeholders) {
     html = html.split(token).join(varChipHtml(name));
   }
@@ -130,15 +131,16 @@ function renderBodyWithVarChips(body: unknown): string {
 }
 
 /** Vista previa de solo lectura: markdown + HTML + chips de variable inline. */
-export function bodyPreviewHtml(body: unknown): string {
+export function bodyPreviewHtml(body: unknown, opts: OpcionesMdLite = {}): string {
   const src = String(body ?? '');
   if (!src) return '';
-  return renderBodyWithVarChips(src);
+  return renderBodyWithVarChips(src, opts);
 }
 
 /** HTML editable para contenteditable (mismo render, chips no editables inline). */
 export function bodyToEditorHtml(body: unknown): string {
-  const html = renderBodyWithVarChips(body);
+  // HTML plano: la superficie editable se vuelve a serializar a markdown.
+  const html = renderBodyWithVarChips(body, { componentes: false });
   return html || '<p><br></p>';
 }
 

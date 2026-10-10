@@ -4,19 +4,13 @@
  * Side-effect al importar, o `applyDocDemoBoot(opts)`.
  * Carga vía module / `L.loadPageModules(['iswc-doc-demo-boot'])` (type module).
  *
- * Lee attrs del primer `<iswc-doc-demo>` si no vienen en opts
- * (`theme-storage-key`, `palette-storage-key`).
+ * Tema y paleta: `?s=` / `?theme=` / `?palette=` de la URL, si no la elección del
+ * usuario (config de la app, `iswc-app-cfg`), si no el `<html>` o el default.
  */
 
 import type { DocDemoBootOpts } from "./doc-demo-boot.schemas.js";
+import { leerAppCfg } from "../../core/app-cfg.js";
 export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
-  const host = document.querySelector('iswc-doc-demo');
-  const themeKey = opts.themeKey
-    || host?.getAttribute('theme-storage-key')
-    || 'iswc-theme';
-  const paletteKey = opts.paletteKey
-    || host?.getAttribute('palette-storage-key')
-    || 'iswc-palette';
   const defaultTheme = opts.defaultTheme || 'dark';
   const defaultPalette = opts.defaultPalette || 'contapyme';
 
@@ -50,14 +44,9 @@ export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
 
   let theme = themeParam && THEMES[themeParam] ? themeParam : null;
   let palette = paletteParam && PALETTES[paletteParam] ? paletteParam : null;
-  if (!theme) {
-    const lsT = localStorage.getItem(themeKey);
-    theme = lsT && THEMES[lsT] ? lsT : (root.dataset.theme || defaultTheme);
-  }
-  if (!palette) {
-    const lsP = localStorage.getItem(paletteKey);
-    palette = lsP && PALETTES[lsP] ? lsP : (root.dataset.palette || defaultPalette);
-  }
+  const cfg = leerAppCfg();
+  if (!theme) theme = cfg.theme ?? (root.dataset.theme || defaultTheme);
+  if (!palette) palette = cfg.palette && PALETTES[cfg.palette] ? cfg.palette : (root.dataset.palette || defaultPalette);
   root.dataset.theme = theme;
   root.dataset.palette = palette;
   if (embed) root.dataset.embed = '1';

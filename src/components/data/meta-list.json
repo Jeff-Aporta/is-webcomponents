@@ -1,0 +1,57 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-meta-list",
+  "category": "data",
+  "title": "&lt;iswc-meta-list&gt;",
+  "titleHtml": false,
+  "description": "Lista de metadatos clave → valor agrupada.",
+  "storageKey": "docs-iswc-meta-list",
+  "loads": [
+    "iswc-tag"
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Metadatos clave → valor por grupos (ubicación, autor, etiquetas, ruta). Sustituye los <code class=\"code\">dl/dt/dd</code> armados a mano.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-meta-list id=\"meta\" heading=\"Seguridad\">",
+            "  <script type=\"application/json\">[{\"title\":\"Ubicación\",\"rows\":[{\"label\":\"Módulo\",\"value\":\"Chat\"},{\"label\":\"Sección\",\"value\":\"Procesos\"},{\"label\":\"Posición\",\"value\":\"Hoja 3 de 12\"}]},{\"title\":\"Nota\",\"rows\":[{\"label\":\"Estado\",\"value\":\"en revisión\"},{\"label\":\"Autor\",\"empty\":\"Sin registrar\"}]},{\"title\":\"Clasificación\",\"rows\":[{\"label\":\"Tags\",\"tags\":[\"#seguridad\",\"#jwt\"]}]},{\"title\":\"Archivo\",\"rows\":[{\"label\":\"Ruta\",\"value\":\"020-Chat/040-Procesos/010-Seguridad.md\",\"mono\":true}]}]</script>",
+            "</iswc-meta-list>"
+          ],
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:heading",
+              "label": "heading"
+            },
+            {
+              "control": "select",
+              "prop": "attr:layout",
+              "label": "layout",
+              "options": [
+                "grid",
+                "stacked"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "ejemplos": {
+        "content": [
+          "```js",
+          "lista.groups = [{ title: \"Nota\", rows: [{ label: \"Autor\", empty: \"Sin registrar\" }] }];",
+          "```"
+        ]
+      }
+    },
+    "exclude": []
+  }
+}

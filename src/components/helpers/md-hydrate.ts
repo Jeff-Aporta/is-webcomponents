@@ -1,81 +1,118 @@
 /**
- * Tras pintar el HTML del MD: lazy-load de is-* y upgrade de marcadores
- * `.md-iswc-code` a `<iswc-code>` (solo si hace falta iswc-code).
+ * md-hydrate — carga perezosa de los componentes del kit que pintó el markdown.
+ *
+ * Recibe los tags que anotaron los renders por defecto de md-lite (no los de los hooks
+ * del consumidor) y pide al loader solo los que siguen en el árbol:
+ *   - livianos (aviso, separador, tabla, casilla, copiar, imagen): al pintar;
+ *   - pesados (código, diagramas, HTML embebido): cuando el elemento se acerca a la pantalla.
+ * Un tag ya definido no se pide; el loader, además, no repite cargas.
  */
 
-import type { LoaderLike } from "./md-hydrate.schemas.js";
+import type { CrearVigiaMd, HidratacionMd, LoaderLike, NodoMd, RaizMd } from './md-hydrate.schemas.js';
+
+export type * from './md-hydrate.schemas.js';
+
+/** Se piden apenas se pinta: pesan poco y casi siempre están a la vista. */
+const AL_PINTAR: ReadonlySet<string> = new Set([
+  'iswc-callout', 'iswc-divider', 'iswc-scroller', 'iswc-checkbox', 'iswc-copy-button', 'iswc-theme-img', 'iswc-icon',
+]);
+
+/** Componentes que usan otro en su shadow sin importarlo (p. ej. el ícono del aviso). */
+const DEPENDENCIAS: Readonly<Record<string, readonly string[]>> = {
+  'iswc-callout': ['iswc-icon'],
+  'iswc-scroller': ['iswc-icon'],
+  'iswc-checkbox': ['iswc-icon'],
+};
+
+/** Margen para pedir un componente pesado antes de que llegue a la pantalla. */
+const MARGEN_VISTA = '400px 0px';
+
 function loader(): LoaderLike | null {
-  const L = (globalThis as { ISWebComponentsLoader?: LoaderLike }).ISWebComponentsLoader;
-  return L && typeof L.ensure === 'function' ? L : null;
+  const L = (globalThis as { ISWebComponentsLoader?: Partial<LoaderLike> }).ISWebComponentsLoader;
+  return L && typeof L.ensure === 'function' ? { ensure: (tag: string) => L.ensure!(tag) } : null;
 }
 
-/** Tags is-* presentes en el árbol (marcadores de código cuentan como iswc-code). */
-export function collectNeededTags(root: ParentNode): string[] {
-  const tags = new Set<string>();
-  if (root.querySelector?.('.md-iswc-code')) tags.add('iswc-code');
-  const all = root.querySelectorAll?.('*') ?? [];
-  for (const el of all) {
-    const name = el.localName;
-    if (name?.startsWith('iswc-')) tags.add(name);
-  }
-  return [...tags].sort();
+function definido(tag: string): boolean {
+  return typeof customElements !== 'undefined' && Boolean(customElements.get(tag));
 }
 
-/** Carga solo lo que el contenido pide. El loader no repite si ya está. */
-export async function ensureNeededTags(root: ParentNode): Promise<string[]> {
+/** Pide un tag al loader; si ya está definido no lo toca. */
+function pedir(tag: string): Promise<boolean> {
+  if (definido(tag)) return Promise.resolve(true);
   const L = loader();
-  const needed = collectNeededTags(root);
-  if (!L || !needed.length) return [];
-  const loaded: string[] = [];
-  for (const tag of needed) {
-    if (L.has?.(tag)) continue;
-    try {
-      const ok = await L.ensure!(tag);
-      if (ok) loaded.push(tag);
-    } catch (err) {
-      console.warn('[iswc-md-render] ensure', tag, err);
-    }
-  }
-  return loaded;
+  if (!L) return Promise.resolve(false);
+  return L.ensure(tag).catch((err: unknown) => {
+    console.warn('[md-hydrate] ensure', tag, err);
+    return false;
+  });
 }
+
+/** De los `candidatos`, los que siguen presentes en `root` (orden alfabético). */
+export function tagsPresentes<N extends NodoMd>(root: RaizMd<N>, candidatos: Iterable<string>): string[] {
+  const out = new Set<string>();
+  for (const tag of candidatos) {
+    const t = String(tag).toLowerCase();
+    if (/^iswc-[a-z0-9-]+$/.test(t) && root.querySelector(t)) out.add(t);
+  }
+  return [...out].sort();
+}
+
+/** Reparte los tags presentes en "al pintar" (con dependencias) y "en vista". */
+export function planHidratacion(presentes: readonly string[]): { alPintar: string[]; enVista: string[] } {
+  const alPintar = new Set<string>();
+  const enVista: string[] = [];
+  for (const tag of presentes) {
+    if (!AL_PINTAR.has(tag)) { enVista.push(tag); continue; }
+    alPintar.add(tag);
+    for (const dep of DEPENDENCIAS[tag] ?? []) alPintar.add(dep);
+  }
+  return { alPintar: [...alPintar].sort(), enVista };
+}
+
+/** Vigía por defecto: IntersectionObserver contra la pantalla, con margen para adelantarse. */
+const vigiaPantalla: CrearVigiaMd<Element> = (alVer) => {
+  if (typeof IntersectionObserver === 'undefined') return null;
+  const io = new IntersectionObserver((entradas) => {
+    for (const e of entradas) if (e.isIntersecting) alVer(e.target);
+  }, { rootMargin: MARGEN_VISTA });
+  return { observar: (n) => io.observe(n), dejar: (n) => io.unobserve(n), cancelar: () => io.disconnect() };
+};
 
 /**
- * Sustituye `.md-iswc-code` por `<iswc-code>`.
- * Inline → brand-mono sin fondo (fluye en el texto).
- * Bloque (```lang) → theme completo del preset dark/light.
+ * Carga los componentes que `root` necesita de entre `candidatos` (los tags que anotaron los
+ * renders por defecto). `crearVigia` decide cuándo un pesado "entra en vista".
+ * Llamar `cancelar()` al volver a pintar o al desconectar el host.
  */
-export function upgradeCodeMarkers(root: ParentNode): number {
-  const nodes = [...(root.querySelectorAll?.('.md-iswc-code') ?? [])];
-  if (!nodes.length) return 0;
-  let n = 0;
-  for (const el of nodes) {
-    if (!(el instanceof HTMLElement)) continue;
-    const mode = el.getAttribute('data-mode') === 'inline' ? 'inline' : 'block';
-    const lang = el.getAttribute('data-lang') || '';
-    const text = el.tagName === 'PRE'
-      ? (el.querySelector('code')?.textContent ?? el.textContent ?? '')
-      : (el.textContent ?? '');
-    const ed = document.createElement('iswc-code');
-    ed.className = mode === 'inline' ? 'md-code md-code--inline' : 'md-code';
-    ed.setAttribute('readonly', '');
-    if (mode === 'inline') {
-      ed.setAttribute('mode', 'inline');
-      ed.setAttribute('theme', 'brand-mono');
-    } else {
-      ed.setAttribute('compact', '');
-      ed.setAttribute('wrap', '');
-      ed.setAttribute('line-numbers', 'false');
-    }
-    if (lang) ed.setAttribute('lang', lang);
-    ed.setAttribute('value', text);
-    el.replaceWith(ed);
-    n += 1;
+export function hidratarMd<N extends NodoMd>(
+  root: RaizMd<N>,
+  candidatos: Iterable<string>,
+  crearVigia: CrearVigiaMd<N>,
+): HidratacionMd {
+  const { alPintar, enVista } = planHidratacion(tagsPresentes(root, candidatos));
+  const listo = Promise.all(alPintar.map(async (t) => ((await pedir(t)) ? t : ''))).then((xs) => xs.filter(Boolean));
+  const nada = (): void => {};
+
+  const pendientes = enVista.filter((t) => !definido(t));
+  if (!pendientes.length) return { listo, enEspera: [], cancelar: nada };
+
+  const enEspera = new Set(pendientes);
+  const vigia = crearVigia((nodo) => {
+    const tag = nodo.localName;
+    if (!enEspera.has(tag)) return;
+    enEspera.delete(tag);
+    for (const el of root.querySelectorAll(tag)) vigia?.dejar(el);
+    void pedir(tag);
+    if (!enEspera.size) vigia?.cancelar();
+  });
+  if (!vigia) {
+    for (const t of pendientes) void pedir(t);
+    return { listo, enEspera: [], cancelar: nada };
   }
-  return n;
+  for (const tag of pendientes) for (const el of root.querySelectorAll(tag)) vigia.observar(el);
+  return { listo, enEspera: pendientes, cancelar: () => vigia.cancelar() };
 }
 
-/** ensure + upgrade en un solo paso. */
-export async function hydrateMdEmbeds(root: ParentNode): Promise<void> {
-  await ensureNeededTags(root);
-  upgradeCodeMarkers(root);
+/** `hidratarMd` sobre el DOM real: los pesados se piden al acercarse a la pantalla. */
+export function hydrateMdEmbeds(root: RaizMd<Element>, candidatos: Iterable<string>): HidratacionMd {
+  return hidratarMd(root, candidatos, vigiaPantalla);
 }

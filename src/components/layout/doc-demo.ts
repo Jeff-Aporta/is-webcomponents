@@ -75,8 +75,6 @@ class IswcDocDemo extends HTMLElement {
       'nav-label',
       'drawer-label',
       'storage-key-nav',
-      'palette-storage-key',
-      'theme-storage-key',
       'tools-label',
       'page-styles',
       'page-modules',
@@ -122,7 +120,6 @@ class IswcDocDemo extends HTMLElement {
     const navLabel = this.getAttribute('nav-label') || 'Componentes';
     const drawerLabel = this.getAttribute('drawer-label') || navLabel;
     const storageNav = this.getAttribute('storage-key-nav') || 'iswc-doc-nav';
-    const paletteKey = this.getAttribute('palette-storage-key') || 'iswc-palette';
     const toolsLabel = this.getAttribute('tools-label') || 'Herramientas';
 
     this.innerHTML = /* html */ `
@@ -138,7 +135,7 @@ class IswcDocDemo extends HTMLElement {
           <iswc-icon slot="start" icon="mdi:menu"></iswc-icon>
         </iswc-button>
 
-        <iswc-palette-selector id="brandPalette" scope="root" storage-key="${escapeAttr(paletteKey)}" aria-label="Elegir paleta"></iswc-palette-selector>
+        <iswc-palette-selector id="brandPalette" scope="root" aria-label="Elegir paleta"></iswc-palette-selector>
 
         <div class="shell-tools" role="toolbar" aria-label="${escapeAttr(toolsLabel)}">
           <iswc-button class="shell-icon-btn shell-tool-btn" id="panelsCompactBtn" color="text" variant="plain" pill type="button"
@@ -187,10 +184,6 @@ class IswcDocDemo extends HTMLElement {
     const storageNav = this.getAttribute('storage-key-nav');
     if (storageNav != null) {
       this.querySelector('#mainSplit')?.setAttribute('storage-key', storageNav);
-    }
-    const paletteKey = this.getAttribute('palette-storage-key');
-    if (paletteKey != null) {
-      this.querySelector('#brandPalette')?.setAttribute('storage-key', paletteKey);
     }
     const toolsLabel = this.getAttribute('tools-label');
     if (toolsLabel != null) {

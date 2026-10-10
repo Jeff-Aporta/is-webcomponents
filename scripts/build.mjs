@@ -635,7 +635,7 @@ const indexPrev = await readFile(indexPath, 'utf8');
 const indexNext = applyHashToHtml(indexPrev, hashes);
 if (indexNext !== indexPrev) await writeFile(indexPath, indexNext);
 const htmlTouched = await rewriteHtmlTree(join(root, 'demos'), hashes) + (indexNext !== indexPrev ? 1 : 0);
-console.log(`  html                 ${htmlTouched} con ?h=`);
+console.log(`  html                 ${htmlTouched} con ?v=`);
 
 // Pin de auto-reload: el snippet embebido en cada HTML hace polling de este
 // endpoint y recarga el browser al cambiar. Lo escribimos también al build

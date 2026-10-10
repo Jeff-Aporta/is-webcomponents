@@ -256,6 +256,28 @@ export const SectionSchema = z
  * ──────────────────────────────────────────────────────────────────────── */
 
 /**
+ * Marcador de reuso: un componente de una APP (prefijo propio, p. ej. `paty-*`) que es
+ * general y se evalúa periódicamente para subirlo al kit (`iswc-*`). Los componentes del
+ * kit no lo llevan; lo llevan los candidatos de las apps en su `.json` iswc-preview/v1.
+ *
+ *   "reuso": { "candidato": "iswc-root", "motivo": "Paginador genérico sin dominio", "propuesta": "iswc-pagination" }
+ */
+export const ReusoCandidatoSchema = z
+  .object({
+    /** Destino del reuso: siempre el kit. */
+    candidato: z.literal("iswc-root"),
+    /** Por qué es general (qué lo hace útil a otras apps). */
+    motivo: z.string().trim().min(10),
+    /** Tag propuesto en el kit, si ya se sabe. */
+    propuesta: z.string().regex(/^iswc-[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
+    /** Tag del kit que ya lo cubre en parte, si existe (para fusionar en vez de duplicar). */
+    cubre: z.string().regex(/^iswc-[a-z0-9]+(?:-[a-z0-9]+)*$/).optional(),
+  })
+  .strict();
+
+export type ReusoCandidato = z.infer<typeof ReusoCandidatoSchema>;
+
+/**
  * Definición raíz de un componente (un archivo `src/components/.../*.json`).
  * Esta es la SCHEMA CANÓNICA: todo JSON de demo debe pasar por aquí.
  *
@@ -303,6 +325,8 @@ export const ComponentJsonSchema = z
      * callouts).
      */
     loads: z.array(z.string()).optional(),
+    /** Candidato a subir al kit (solo componentes de apps); ver `ReusoCandidatoSchema`. */
+    reuso: ReusoCandidatoSchema.optional(),
     /** Sub-objeto ficha-bridge (sections + exclude + playground). */
     ficha: z
       .object({

@@ -254,6 +254,8 @@
   &:empty { display: none; }
 }
 
+@import 'md-kit';
+
 /* Render híbrido MD + HTML + iswc-code / diagramas (alineado a iswc-md-render). */
 .prompt-md-preview {
   --_brand: var(--iswc-color-brand, var(--iswc-brand));
@@ -367,9 +369,11 @@
     max-inline-size: 100%;
     margin: 0 0 1em;
   }
+  /* inline-flex (el del componente): con `inline` su caja interna partía la línea. */
   iswc-code.md-code--inline {
-    display: inline;
+    display: inline-flex;
     inline-size: auto;
+    max-inline-size: 100%;
     margin: 0 0.05em;
     vertical-align: baseline;
     --iswc-code-bg: transparent;
@@ -396,7 +400,7 @@
     border-radius: var(--iswc-radius-sm);
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--_brand) 12%, transparent);
   }
-  .md-table-wrap {
+  div.md-table-wrap {
     display: block;
     inline-size: 100%;
     max-inline-size: 100%;

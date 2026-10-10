@@ -17,6 +17,7 @@ import {
   parseApiConfig,
 } from './md-editor-api.js';
 import { hydrateMdEmbeds } from './md-hydrate.js';
+import type { HidratacionMd } from './md-hydrate.schemas.js';
 // Tipos del contrato — declarados aquí localmente (en lugar de re-exportarlos
 // desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo
 // sigue siendo la documentación canónica del consumidor externo.
@@ -262,7 +263,8 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
     #document: IsMdEditorDocument = { content: '' };
     #api: IsMdEditorApiConfig | null = null;
     #actions: IsMdEditorActions | null = null;
-    #hydrateGen = 0;
+    /** Hidratación vigente por superficie de lectura (vista previa y diálogo). */
+    #hidrataciones = new Map<HTMLElement, HidratacionMd>();
 
     constructor() {
       super();
@@ -370,6 +372,8 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
 
     override onDisconnected(): void {
       this.#releaseScopeAnchor();
+      for (const h of this.#hidrataciones.values()) h.cancelar();
+      this.#hidrataciones.clear();
     }
 
     #hydrateValueFromChild(): void {
@@ -644,28 +648,24 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
       this.open();
     }
 
-    /** Lazy-load is-* del preview (mismo pipeline que iswc-md-render). */
-    async #hydrateEmbeds(root: HTMLElement): Promise<void> {
-      const gen = ++this.#hydrateGen;
-      try {
-        await hydrateMdEmbeds(root);
-      } catch (err) {
-        console.warn('[iswc-md-editor] hydrate', err);
-      }
-      if (gen !== this.#hydrateGen) return;
+    /** Pinta la vista previa y carga solo los componentes del kit que quedaron en ella. */
+    #pintarPreview(root: HTMLElement, value: string): boolean {
+      this.#hidrataciones.get(root)?.cancelar();
+      this.#hidrataciones.delete(root);
+      const tags = new Set<string>();
+      const html = bodyPreviewHtml(value, { tags });
+      root.innerHTML = html || '<p></p>';
+      if (html) this.#hidrataciones.set(root, hydrateMdEmbeds(root, tags));
+      return !!html;
     }
 
     #renderPreview(): void {
       const value = this.value;
-      const html = bodyPreviewHtml(value);
       this.#copyBtn.value = value;
-      const hasContent = !!html;
+      const hasContent = this.#pintarPreview(this.#previewBody, value);
       this.#previewBody.hidden = !hasContent;
       this.#previewEmpty.hidden = hasContent;
-      if (hasContent) {
-        this.#previewBody.innerHTML = html;
-        void this.#hydrateEmbeds(this.#previewBody);
-      } else {
+      if (!hasContent) {
         this.#previewEmpty.textContent = this.placeholder || 'Sin contenido. Haz clic para editar…';
       }
       this.#preview.title = this.canEdit
@@ -833,14 +833,14 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
       if (canEdit) {
         this.#surface.innerHTML = bodyToEditorHtml(this.#draft);
       } else {
-        this.#surface.innerHTML = bodyPreviewHtml(this.#draft) || '<p></p>';
-        void this.#hydrateEmbeds(this.#surface);
+        this.#pintarPreview(this.#surface, this.#draft);
       }
     }
 
     #setPlainMode(on: boolean): void {
       if (on === this.#plain) return;
-      if (on) this.#draft = editorHtmlToBody(this.#surface);
+      // Solo la superficie editable es HTML plano serializable; la de lectura monta componentes.
+      if (on && this.canEdit) this.#draft = editorHtmlToBody(this.#surface);
       this.#plain = on && this.canEdit;
       this.#plainSwitch.checked = this.#plain;
       this.#renderSurfaceFromDraft();

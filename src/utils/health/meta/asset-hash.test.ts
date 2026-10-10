@@ -1,5 +1,5 @@
 /**
- * Hash de 6 caracteres y sello `?h=` entre archivos.
+ * Hash de 6 caracteres y sello `?v=` entre archivos.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -23,7 +23,7 @@ test('stampHashTexts: el padre lleva el hash del hijo y el suyo cambia si el hij
     'actions/button.min.js': 'import"../media/icon.min.js";\nexport const button = 1;\n',
   });
   assert.equal(first.hashes['media/icon.min.js'].length, 6);
-  assert.match(first.texts['actions/button.min.js'], new RegExp(`icon\\.min\\.js\\?h=${first.hashes['media/icon.min.js']}`));
+  assert.match(first.texts['actions/button.min.js'], new RegExp(`icon\\.min\\.js\\?v=${first.hashes['media/icon.min.js']}`));
   assert.notEqual(first.hashes['actions/button.min.js'], first.hashes['media/icon.min.js']);
 
   const second = stampHashTexts({
@@ -43,7 +43,7 @@ test('stampHashTexts: en un ciclo de imports todos los importadores usan la MISM
     'view/chat.js': "import { s } from '../js/sesion.js'; import { api } from '../js/api.js';",
     'view/cabecera.js': "import { s } from '../js/sesion.js';",
   });
-  const urls = (archivo: string) => new Set(Object.values(texts).flatMap((t) => t.split(`${archivo}?h=`).slice(1).map((resto) => resto.slice(0, 6))));
+  const urls = (archivo: string) => new Set(Object.values(texts).flatMap((t) => t.split(`${archivo}?v=`).slice(1).map((resto) => resto.slice(0, 6))));
   for (const archivo of ['sesion.js', 'api.js']) {
     const vistas = urls(archivo);
     assert.equal(vistas.size, 1, `${archivo}: una sola URL (${[...vistas].join(', ')})`);
@@ -63,6 +63,7 @@ test('lookupHash prefiere el sufijo mas largo', () => {
   };
   assert.equal(lookupHash(files, 'https://x/dist/cdn/actions/host-base.css'), 'bbbbbb');
   assert.equal(lookupHash(files, 'actions/button.min.js'), null);
-  assert.equal(withAssetHash('../media/icon.min.js', 'abc123'), '../media/icon.min.js?h=abc123');
-  assert.equal(withAssetHash('../media/icon.min.js?h=old', 'abc123'), '../media/icon.min.js?h=abc123');
+  assert.equal(withAssetHash('../media/icon.min.js', 'abc123'), '../media/icon.min.js?v=abc123');
+  assert.equal(withAssetHash('../media/icon.min.js?h=old', 'abc123'), '../media/icon.min.js?v=abc123', 'el ?h= legado se reemplaza por ?v=');
+  assert.equal(withAssetHash('../media/icon.min.js?v=old', 'abc123'), '../media/icon.min.js?v=abc123');
 });

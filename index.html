@@ -26,7 +26,7 @@
   </script>
   <link rel="icon" href="dist/assets/favicon.svg" type="image/svg+xml">
   <script type="module">
-    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?h=xeqyi1';
+    import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js?v=5c7teg';
     // Alias en fuente; register por si el dist aún no lo trae.
     if (!L.getPageModules()['iswc-gallery-app']) {
       L.registerPageModule('iswc-gallery-app', 'dist/gallery-app.min.js');
@@ -45,7 +45,6 @@
     dev
     sheets-cache="iswc-gallery-sheets"
     storage-key-nav="gallery-nav"
-    palette-storage-key="iswc-palette"
   ></iswc-doc-demo>
 </body>
 </html>

@@ -1,6 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/check-icon-button.js';
 import { findThemeContainer } from '../_shared/theme-scope.js';
+import { guardarAppCfg } from '../../core/app-cfg.js';
 
 /**
  * <iswc-theme-toggle> — Web Component (vanilla).
@@ -11,7 +12,9 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
  *      (fallback: document.documentElement)
  *   2. Alterna data-theme en ese contenedor
  *   3. Refleja `dark` en el host
- *   4. Emite `iswc-theme-change` { detail: { theme, dark, container } }
+ *   4. Si el contenedor es <html>, guarda la elección en la config de la app
+ *      (`iswc-app-cfg`, ver core/app-cfg.ts): sobrevive al F5 y la lee `initApp`.
+ *   5. Emite `iswc-theme-change` { detail: { theme, dark, container } }
  *
  * Attributes
  *   dark   boolean (reflected) — tema actual (dark=true → icono de sol / próximo click a light)
@@ -135,6 +138,7 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
       this.dark = next === 'dark';
       this.#applying = false;
       this.#render();
+      if (container === document.documentElement) guardarAppCfg({ theme: next });
       emit(this, 'iswc-theme-change', { theme: next, dark: next === 'dark', container });
       if (container === document.documentElement && window.parent !== window) {
         window.parent.postMessage({ type: 'iswc-shell-sync', theme: next }, location.origin);

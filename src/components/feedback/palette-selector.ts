@@ -1,3 +1,4 @@
+import { guardarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
 import '../isp/text.js';
@@ -29,8 +30,8 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
  *   value         string — la paleta activa. La escribe en el target del scope.
  *   scope         root | closest. root escribe <html>. closest escribe el
  *                 primer ancestro con data-palette (si no hay, <html>).
- *   storage-key   string — clave de localStorage (default 'iswc-palette').
- *                 Solo persiste cuando el target es <html>.
+ *   (persistencia) la paleta elegida para <html> se guarda en la config de la
+ *                 app (`iswc-app-cfg`, ver core/app-cfg.ts); un scope=closest no persiste.
  *   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
  *
  * Slots
@@ -49,7 +50,7 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
  *
  * Mutaciones que produce
  *   data-palette en el target del scope (html o el ancestro)
- *   localStorage[storageKey]  — solo si el target es <html>
+ *   iswc-app-cfg.palette     — solo si el target es <html>
  *   Dos selectores con el mismo target y la misma paleta en su lista
  *   se siguen: observan data-palette y adoptan el valor.
  *
@@ -99,7 +100,7 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
     </div>
   `;
 
-  const OBSERVED = ['palettes', 'value', 'storage-key', 'aria-label', 'scope'];
+  const OBSERVED = ['palettes', 'value', 'aria-label', 'scope'];
 
   // Primer ancestro con data-palette. No cuenta el host: el host lleva
   // data-palette solo para pintar la pastilla con los tokens de ESA marca.
@@ -269,12 +270,6 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
       return document.documentElement;
     }
 
-    #storageKey(): string {
-      const key = this.getAttribute('storage-key');
-      if (key === '') return '';
-      return key || 'iswc-palette';
-    }
-
     #known(value: string): boolean {
       return !!value && this.#palettes.some((p) => p.value === value);
     }
@@ -298,11 +293,7 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
     #loadInitial(): void {
       const target = this.#scopeTarget();
       const onRoot = target === document.documentElement;
-      let stored = '';
-      const key = this.#storageKey();
-      if (onRoot && key) {
-        try { stored = localStorage.getItem(key) || ''; } catch { /* ignore */ }
-      }
+      const stored = onRoot ? leerAppCfg().palette ?? '' : '';
       const fromDom = target.dataset.palette || '';
       const initial = (onRoot && this.#known(stored))
         ? stored
@@ -479,12 +470,7 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
         document.head.appendChild(link);
         this.#loadedCSS.add(palette.css);
       }
-      // Persistir solo el target de pagina: un scope=closest no pisa iswc-palette.
       const onRoot = target === document.documentElement;
-      const key = this.#storageKey();
-      if (onRoot && key) {
-        try { localStorage.setItem(key, value); } catch { /* ignore */ }
-      }
       emit(this, 'iswc-palette-change', { value, palette, container: target });
       for (const opt of this.#menu.querySelectorAll<HTMLElement>('[role="option"]')) {
         opt.setAttribute('aria-selected', opt.dataset.palette === value ? 'true' : 'false');
@@ -512,6 +498,9 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
       if (opt && this.#menu.contains(opt)) {
         const paletteValue = opt instanceof HTMLElement ? opt.dataset.palette ?? null : null;
         this.#apply(paletteValue);
+        // Elección del usuario sobre la página: queda en la config de la app. La carga
+        // inicial, un scope=closest o un cambio que llega de fuera no se guardan.
+        if (paletteValue && this.#known(paletteValue) && this.#scopeTarget() === document.documentElement) guardarAppCfg({ palette: paletteValue });
         this.#setOpen(false);
         return;
       }

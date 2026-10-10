@@ -69,8 +69,6 @@ IDs estables: `shellBar`, `shellBrand`, `shellNav`, `previewHost`, `previewFrame
 | `dev` | — | Opt-in `dev-reload` |
 | `sheets-cache` | — | `L.sheets.install({ cacheName })` |
 | `storage-key-nav` | `iswc-doc-nav` | Split nav |
-| `palette-storage-key` | `iswc-palette` | Selector + boot |
-| `theme-storage-key` | `iswc-theme` | Boot lee del CE |
 | `page-styles` | palettes+shell+presentation | JSON array o CSV de aliases |
 | `page-modules` | chrome docs (sin dev-reload) | JSON array o CSV |
 

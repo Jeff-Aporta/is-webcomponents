@@ -7,8 +7,6 @@
 import { z } from "zod";
 
 export const DocDemoBootOptsSchema = z.object({
-  themeKey: z.string().optional(),
-  paletteKey: z.string().optional(),
   defaultTheme: z.string().optional(),
   defaultPalette: z.string().optional(),
 });

@@ -8,11 +8,17 @@ import {
   surfaceHasRawVarTokens,
 } from '../_shared/prompt-md.js';
 import { hydrateMdEmbeds } from './md-hydrate.js';
+import type { HidratacionMd } from './md-hydrate.schemas.js';
+import type { RenderersMd } from './md-lite.schemas.js';
+
+export type * from './md-lite.schemas.js';
 
 /**
  * <iswc-md-render> — render inline de markdown/HTML + chips {{var}}.
  * Sin toolbar, diálogo ni API. Con `can-edit` edita in-place (contenteditable).
- * Tras pintar: lazy-load de iswc-* (código, diagramas, HTML embebido) vía loader.
+ * Los renders por defecto usan componentes del kit (código, tablas, avisos, separador,
+ * imágenes, tareas, diagramas). Tras pintar pide al loader solo los que quedaron en la
+ * hoja: los livianos al pintar y los pesados al acercarse a la pantalla (`md-hydrate`).
  *
  * Host: display block + width 100% (también en light DOM; style="" lo pisa).
  */
@@ -94,7 +100,8 @@ import { hydrateMdEmbeds } from './md-hydrate.js';
     #body!: HTMLElement;
     #empty!: HTMLElement;
     #dirty = false;
-    #hydrateGen = 0;
+    #hidratacion: HidratacionMd | null = null;
+    #renderers: RenderersMd = {};
 
     constructor() {
       super();
@@ -112,6 +119,11 @@ import { hydrateMdEmbeds } from './md-hydrate.js';
     onConnected() {
       this.#hydrateValueFromChild();
       this.#render();
+    }
+
+    onDisconnected() {
+      this.#hidratacion?.cancelar();
+      this.#hidratacion = null;
     }
 
     onAttributeChanged(name: string): void {
@@ -152,6 +164,19 @@ import { hydrateMdEmbeds } from './md-hydrate.js';
     get placeholder() { return this.getAttribute('placeholder') ?? ''; }
     set placeholder(v) { setStringAttr(this, 'placeholder', v); }
 
+    /**
+     * Hooks de render por tipo de elemento del markdown (`heading`, `paragraph`,
+     * `image`, `link`, `code`, `codeblock`, `table`, `list`, `blockquote`,
+     * `callout`, `hr`, `html`, `diagram`). Cada uno recibe los datos extraídos y
+     * `porDefecto()`, y devuelve el HTML a montar (o nada para el estándar).
+     * Asignarlo vuelve a pintar. Ver `md-lite.schemas.ts`.
+     */
+    get renderers(): RenderersMd { return this.#renderers; }
+    set renderers(v: RenderersMd) {
+      this.#renderers = v && typeof v === 'object' ? v : {};
+      if (this.isConnected) this.#render();
+    }
+
     /** Fuerza re-render desde `value` (útil tras mutaciones externas). */
     refresh() {
       this.#dirty = false;
@@ -159,6 +184,8 @@ import { hydrateMdEmbeds } from './md-hydrate.js';
     }
 
     #render() {
+      this.#hidratacion?.cancelar();
+      this.#hidratacion = null;
       const canEdit = this.canEdit;
       const value = this.value;
       this.toggleAttribute('editable', canEdit);
@@ -174,27 +201,17 @@ import { hydrateMdEmbeds } from './md-hydrate.js';
         return;
       }
 
-      const html = bodyPreviewHtml(value);
+      const tags = new Set<string>();
+      const html = bodyPreviewHtml(value, { renderers: this.#renderers, tags });
       const hasContent = !!html;
       this.#body.hidden = !hasContent;
       this.#empty.hidden = hasContent;
       if (hasContent) {
         this.#body.innerHTML = html;
-        void this.#hydrate();
+        this.#hidratacion = hydrateMdEmbeds(this.#body, tags);
       } else {
         this.#empty.textContent = this.placeholder || 'Sin contenido';
       }
-    }
-
-    /** Solo carga is-* que el MD pide; el loader no duplica. */
-    async #hydrate(): Promise<void> {
-      const gen = ++this.#hydrateGen;
-      try {
-        await hydrateMdEmbeds(this.#body);
-      } catch (err) {
-        console.warn('[iswc-md-render] hydrate', err);
-      }
-      if (gen !== this.#hydrateGen) return;
     }
 
     #onInput() {

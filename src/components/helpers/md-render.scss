@@ -1,6 +1,8 @@
 /* <iswc-md-render> — vista MD/HTML inline (sin toolbar ni diálogo).
  * Host block a ancho disponible; el consumidor lo estrecha con style="" si quiere. */
 
+@import 'md-kit';
+
 :host {
   display: block;
   inline-size: 100%;
@@ -9,7 +11,7 @@
   box-sizing: border-box;
   color: var(--iswc-text, inherit);
   font-family: var(--iswc-font-sans, var(--iswc-sans, inherit));
-  font-size: 0.9375rem;
+  font-size: var(--md-render-font-size, 1em);
   line-height: 1.65;
 }
 
@@ -63,76 +65,106 @@
   > :first-child { margin-block-start: 0; }
   > :last-child  { margin-block-end: 0; }
 
-  p { margin: 0 0 0.75em; }
+  /* Ritmo de lectura: párrafos con aire, sin pasar de ~75 caracteres si el host no lo limita. */
+  p { margin: 0 0 var(--md-render-gap, 0.95em); }
+  strong { font-weight: 650; color: var(--md-render-strong, var(--iswc-text)); }
+  del { color: var(--iswc-text-dim); }
 
+  /* Encabezados: jerarquía por tamaño y peso; el color de marca solo en el acento. */
   h1, h2, h3, h4, h5, h6 {
-    margin: 1.15em 0 0.45em;
+    margin: 1.9em 0 0.6em;
     line-height: 1.25;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
     font-weight: 700;
-    color: color-mix(in srgb, var(--_brand) 72%, var(--iswc-text, inherit));
+    color: var(--md-render-heading, var(--iswc-text));
+    scroll-margin-top: var(--md-render-anchor-offset, 1.25rem);
+    text-wrap: balance;
   }
   h1 {
-    font-size: 1.7em;
-    padding-block-end: 0.28em;
-    border-block-end: 2px solid color-mix(in srgb, var(--_brand) 70%, transparent);
-    color: var(--_brand);
+    margin-block-start: 0.2em;
+    font-size: 2em;
+    letter-spacing: -0.025em;
+    padding-block-end: 0.35em;
+    border-block-end: 3px solid var(--_brand);
   }
   h2 {
-    font-size: 1.38em;
-    padding-block-end: 0.18em;
-    border-block-end: 1px solid color-mix(in srgb, var(--_brand) 38%, transparent);
-    color: color-mix(in srgb, var(--_brand) 82%, var(--iswc-text, inherit));
+    font-size: 1.45em;
+    padding-block-end: 0.3em;
+    border-block-end: 1px solid color-mix(in srgb, var(--_brand) 30%, var(--iswc-border));
   }
-  h3 {
-    font-size: 1.18em;
-    font-weight: 650;
-    color: color-mix(in srgb, var(--_brand) 68%, var(--iswc-text, inherit));
-  }
-  h4 {
-    font-size: 1.05em;
-    font-weight: 650;
-    color: color-mix(in srgb, var(--_brand) 58%, var(--iswc-text, inherit));
-  }
+  h3 { font-size: 1.2em; font-weight: 650; margin-block-start: 1.6em; }
+  h4 { font-size: 1.05em; font-weight: 650; margin-block-start: 1.4em; }
   h5, h6 {
-    font-size: 0.95em;
-    font-weight: 650;
+    font-size: 0.85em;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: color-mix(in srgb, var(--_brand) 52%, var(--iswc-text-soft, var(--iswc-text)));
+    letter-spacing: 0.06em;
+    color: var(--iswc-text-soft, var(--iswc-text));
   }
+  h1 + h2, h2 + h3, h3 + h4 { margin-block-start: 0.6em; }
 
-  ul, ol { margin: 0 0 0.75em; padding-inline-start: 1.4em; }
-  li { margin: 0.2em 0; }
-  li::marker { color: color-mix(in srgb, var(--_brand) 55%, var(--iswc-text-dim)); }
+  ul, ol { margin: 0 0 var(--md-render-gap, 0.95em); padding-inline-start: 1.5em; }
+  li { margin: 0.3em 0; padding-inline-start: 0.15em; }
+  li > ul, li > ol { margin: 0.3em 0 0; }
+  li::marker { color: color-mix(in srgb, var(--_brand) 70%, var(--iswc-text-dim)); }
+  ol > li::marker { font-variant-numeric: tabular-nums; font-weight: 600; }
+  ul.md-task-list { list-style: none; padding-inline-start: 0.2em; }
+  li.md-task {
+    display: flex;
+    gap: 0.55em;
+    align-items: baseline;
+
+    input { margin: 0; accent-color: var(--_brand); transform: translateY(0.1em); }
+  }
 
   blockquote {
-    margin: 0 0 0.85em;
-    padding: 0.35em 0.95em;
+    margin: 0 0 var(--md-render-gap, 0.95em);
+    padding: 0.6em 1em;
     border-inline-start: 3px solid color-mix(in srgb, var(--_brand) 70%, transparent);
-    background: color-mix(in srgb, var(--_brand) 7%, transparent);
+    background: color-mix(in srgb, var(--_brand) 6%, transparent);
     color: var(--iswc-text-soft, inherit);
-    border-radius: 0 0.35em 0.35em 0;
+    border-radius: 0 0.5em 0.5em 0;
+
+    > :last-child { margin-block-end: 0; }
   }
 
-  /* Antes del upgrade a iswc-code (flash mínimo). Inline: sin fondo. */
-  code.md-iswc-code {
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: color-mix(in srgb, var(--_brand) 58%, var(--iswc-text));
-    font-family: var(--iswc-font-mono, var(--iswc-mono));
+  /* Avisos `> [!NOTE]` … `[!CAUTION]` (caja propia solo en HTML plano o antes del upgrade). */
+  .md-callout { margin: 0 0 1.1em; }
+  :is(div.md-callout, iswc-callout.md-callout:not(:defined)) {
+    display: block;
+    padding: 0.8em 1em 0.85em;
+    border: 1px solid color-mix(in srgb, var(--_tono) 35%, transparent);
+    border-inline-start-width: 4px;
+    border-radius: 0.55em;
+    background: color-mix(in srgb, var(--_tono) 8%, transparent);
+  }
+  .md-callout__title {
+    margin: 0 0 0.35em;
+    font-weight: 700;
     font-size: 0.92em;
+    color: color-mix(in srgb, var(--_tono) 75%, var(--iswc-text));
+  }
+
+  /* Código inline en HTML plano (superficie editable). */
+  code.md-iswc-code,
+  code:not([class]) {
+    padding: 0.1em 0.4em;
+    border: 1px solid color-mix(in srgb, var(--_brand) 20%, transparent);
+    border-radius: 0.35em;
+    background: color-mix(in srgb, var(--_brand) 9%, transparent);
+    color: var(--md-render-code, var(--iswc-text));
+    font-family: var(--iswc-font-mono, var(--iswc-mono, ui-monospace, SFMono-Regular, Consolas, monospace));
+    font-size: 0.86em;
     white-space: break-spaces;
+    overflow-wrap: anywhere;
   }
   pre.md-iswc-code {
-    margin: 0 0 1em;
+    margin: 0 0 1.1em;
     max-inline-size: 100%;
-    padding: 0.85em 1em;
-    border: 1px solid color-mix(in srgb, var(--_brand) 18%, transparent);
+    padding: 0.9em 1.1em;
+    border: 1px solid color-mix(in srgb, var(--_brand) 18%, var(--iswc-border));
     border-radius: var(--iswc-radius);
-    background: color-mix(in srgb, var(--_brand) 8%, var(--iswc-bg));
+    background: color-mix(in srgb, var(--_brand) 5%, var(--iswc-bg-soft, var(--iswc-bg)));
     overflow-x: auto;
     line-height: 1.55;
 
@@ -141,7 +173,7 @@
       border: 0;
       background: none;
       white-space: pre;
-      font-size: inherit;
+      font-size: 0.88em;
     }
   }
 
@@ -149,11 +181,13 @@
     display: block;
     inline-size: 100%;
     max-inline-size: 100%;
-    margin: 0 0 1em;
+    margin: 0 0 1.1em;
   }
+  /* inline-flex (el del componente): con `inline` su caja interna partía la línea. */
   iswc-code.md-code--inline {
-    display: inline;
+    display: inline-flex;
     inline-size: auto;
+    max-inline-size: 100%;
     margin: 0 0.05em;
     vertical-align: baseline;
     --iswc-code-bg: transparent;
@@ -163,50 +197,75 @@
     box-shadow: none;
   }
 
-  a {
-    color: var(--_brand);
-    text-underline-offset: 0.15em;
-    text-decoration-color: color-mix(in srgb, var(--_brand) 45%, transparent);
+  kbd {
+    padding: 0.05em 0.45em;
+    border: 1px solid var(--iswc-border);
+    border-block-end-width: 2px;
+    border-radius: 0.3em;
+    background: var(--iswc-bg-soft);
+    font-family: var(--iswc-font-mono, var(--iswc-mono, monospace));
+    font-size: 0.82em;
+  }
 
-    &:hover { text-decoration-thickness: 2px; }
+  a {
+    color: var(--md-render-link, var(--_brand));
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, var(--_brand) 40%, transparent);
+    transition: text-decoration-color 0.15s;
+
+    &:hover { text-decoration-color: currentColor; }
+    &:focus-visible { outline: 2px solid var(--_brand); outline-offset: 2px; border-radius: 2px; }
   }
   hr {
     border: none;
-    border-block-start: 1px solid color-mix(in srgb, var(--_brand) 25%, var(--iswc-border));
-    margin: 1.25em 0;
+    block-size: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_brand) 35%, var(--iswc-border)), transparent);
+    margin: 2em 0;
   }
   img {
     max-inline-size: 100%;
+    block-size: auto;
     border-radius: var(--iswc-radius-sm);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--_brand) 12%, transparent);
   }
-  .md-table-wrap {
+
+  /* Tablas: legibles en móvil (scroll propio), cabecera marcada, cebra suave. */
+  div.md-table-wrap {
     display: block;
     inline-size: 100%;
     max-inline-size: 100%;
     overflow-x: auto;
-    margin: 0 0 0.95em;
-    border-radius: var(--iswc-radius-sm);
-    border: 1px solid color-mix(in srgb, var(--_brand) 14%, var(--iswc-border-soft));
+    margin: 0 0 1.15em;
+    border-radius: 0.6em;
+    border: 1px solid var(--iswc-border);
+    background: var(--iswc-bg);
   }
   table {
     border-collapse: collapse;
     inline-size: 100%;
     min-inline-size: 100%;
-    font-size: 0.92em;
+    font-size: 0.9em;
+    line-height: 1.5;
   }
   th, td {
-    padding: 0.55em 0.8em;
-    border-block-end: 1px solid color-mix(in srgb, var(--_brand) 10%, var(--iswc-border-soft));
+    padding: 0.65em 0.9em;
+    border-block-end: 1px solid var(--iswc-border-soft, var(--iswc-border));
     text-align: start;
     vertical-align: top;
   }
   th {
-    background: color-mix(in srgb, var(--_brand) 12%, var(--iswc-bg-elev, var(--iswc-bg-soft)));
-    color: color-mix(in srgb, var(--_brand) 35%, var(--iswc-text));
+    background: color-mix(in srgb, var(--_brand) 9%, var(--iswc-bg-soft, var(--iswc-bg)));
+    color: var(--iswc-text);
     font-weight: 650;
+    font-size: 0.92em;
+    white-space: nowrap;
   }
+  tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--iswc-text) 2.5%, transparent); }
+  tbody tr:hover td { background: color-mix(in srgb, var(--_brand) 5%, transparent); }
   tr:last-child td { border-block-end: 0; }
+  td:first-child { font-weight: 550; }
 }
 
 .prompt-var-chip {

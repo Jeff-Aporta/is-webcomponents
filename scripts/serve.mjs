@@ -16,14 +16,43 @@
  */
 
 import { createServer } from 'node:http';
-import { createReadStream } from 'node:fs';
+import { createReadStream, existsSync } from 'node:fs';
 import { stat, readFile } from 'node:fs/promises';
-import { extname, join, normalize, sep } from 'node:path';
+import { extname, join, normalize, relative, sep } from 'node:path';
 
 const ROOT = process.env.SERVE_ROOT
   ? join(process.env.SERVE_ROOT)
   : join(import.meta.dirname, '..');
 const PORT = Number(process.argv[2]) || 8391;
+/** Raíz del kit (node_modules, .tmp-scss), independiente de SERVE_ROOT. */
+const REPO = join(import.meta.dirname, '..');
+/** Prefijo URL de las dependencias npm empaquetadas al vuelo (p. ej. `zod`). */
+const NPM_PREFIX = '/__npm/';
+const npmCache = new Map();
+
+/** El navegador no resuelve specifiers desnudos (`import { z } from "zod"`):
+ *  se reescriben a `/__npm/<pkg>.js`, que sirve el paquete empaquetado con esbuild. */
+const reescribirBare = (code) =>
+  code.replace(/(\bfrom\s*|\bimport\s*\(?\s*)(["'])([^"'./][^"':]*)\2/g,
+    (m, pre, q, spec) => esPaqueteNpm(spec) ? `${pre}${q}${NPM_PREFIX}${spec}.js${q}` : m);
+
+/** Solo paquetes instalados: evita tocar un `from "x"` que sea texto dentro de un string. */
+const esPaqueteNpm = (spec) => {
+  const partes = spec.split('/');
+  const nombre = spec.startsWith('@') ? partes.slice(0, 2).join('/') : partes[0];
+  return existsSync(join(REPO, 'node_modules', nombre, 'package.json'));
+};
+
+async function npmBundle(spec) {
+  if (!npmCache.has(spec)) {
+    const { build } = await import('esbuild');
+    npmCache.set(spec, build({
+      stdin: { contents: `export * from ${JSON.stringify(spec)};`, resolveDir: REPO },
+      bundle: true, format: 'esm', target: 'es2020', write: false,
+    }).then((r) => r.outputFiles[0].text));
+  }
+  return npmCache.get(spec);
+}
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -56,6 +85,12 @@ async function resolveFile(urlPath) {
     const ts = target.replace(/\.js$/, '.ts');
     if ((await stat(ts).catch(() => null))?.isFile()) return ts;
   }
+  // `.css` compilado desde `.scss`: build:scss lo deja en `.tmp-scss/<mismo path>`
+  // (no en src/). El navegador lo pide junto al fuente → se sirve el staging.
+  if (/\.css$/.test(target) && !info) {
+    const staged = join(REPO, '.tmp-scss', relative(REPO, target));
+    if (!relative(REPO, target).startsWith('..') && (await stat(staged).catch(() => null))?.isFile()) return staged;
+  }
   if (info?.isDirectory()) {
     const index = join(target, 'index.html');
     return (await stat(index).catch(() => null))?.isFile() ? index : null;
@@ -64,6 +99,20 @@ async function resolveFile(urlPath) {
 }
 
 createServer(async (req, res) => {
+  const url = req.url || '/';
+  if (url.startsWith(NPM_PREFIX)) {
+    const spec = decodeURIComponent(url.slice(NPM_PREFIX.length).split('?')[0]).replace(/\.js$/, '');
+    try {
+      const code = await npmBundle(spec);
+      res.writeHead(200, { 'content-type': 'text/javascript; charset=utf-8', 'cache-control': 'no-store' });
+      res.end(code);
+    } catch (e) {
+      npmCache.delete(spec);
+      res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
+      res.end(`npm ${spec}: ${e?.message ?? e}`);
+    }
+    return;
+  }
   const file = await resolveFile(req.url || '/');
   if (!file) {
     res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
@@ -84,7 +133,7 @@ createServer(async (req, res) => {
         'content-type': 'text/javascript; charset=utf-8',
         'cache-control': 'no-store',
       });
-      res.end(salida.code);
+      res.end(reescribirBare(salida.code));
     } catch (e) {
       res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
       res.end(`error transpilando ${file}

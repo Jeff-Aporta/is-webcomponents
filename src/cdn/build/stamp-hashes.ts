@@ -1,5 +1,5 @@
 /**
- * Sella `?h=` en los import relativos y devuelve el mapa de hashes.
+ * Sella `?v=` en los import relativos y devuelve el mapa de hashes.
  * El hash es del archivo ya sellado, en orden de dependencias: si cambia
  * un hijo, cambia el hash del padre y el loader pide la URL nueva.
  */
@@ -67,11 +67,11 @@ export function stampHashTexts(input: Record<string, string>): { texts: Record<s
   if (pending.size) {
     // Ciclo de imports (y lo que depende de el): un hash de contenido no puede
     // ser autoconsistente dentro del ciclo. Recalcularlo tras sellar dejaba a
-    // cada importador con un `?h=` distinto del mismo archivo, y el navegador
+    // cada importador con un `?v=` distinto del mismo archivo, y el navegador
     // cargaba VARIAS instancias del modulo (estado duplicado, p. ej. la sesion).
-    // Todo lo pendiente comparte un sello de grupo (su contenido sin `?h=`) y
+    // Todo lo pendiente comparte un sello de grupo (su contenido sin `?v=`) y
     // cada archivo recibe uno fijo: la misma URL para todos sus importadores.
-    const grupo = contentHash([...pending].sort().map((k) => `${k}\n${texts[k].replace(/\?h=[0-9a-z]+/gi, '')}`).join('\n--\n'));
+    const grupo = contentHash([...pending].sort().map((k) => `${k}\n${texts[k].replace(/[?&][vh]=[0-9a-z]+/gi, '')}`).join('\n--\n'));
     for (const key of pending) hashes.set(key, contentHash(`${grupo}:${key}`));
     for (const key of pending) texts[key] = stampText(key, texts[key], hashes, known);
   }

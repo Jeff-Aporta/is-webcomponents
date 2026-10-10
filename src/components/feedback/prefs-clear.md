@@ -46,6 +46,7 @@ import './prefs-clear.js';
 | --- | --- | --- |
 | `confirm` | boolean | `false` = no pide confirmaciÃ³n (default true) |
 | `reload` | boolean | `false` = no recarga tras limpiar (default true) |
+| `scope` | `prefs` \| `cache` \| `all` | `prefs` (default): la config de la app (`iswc-app-cfg`: tema, paleta…) y la memoria de los is-* (`iswc-root`). `cache`: además Cache Storage, IndexedDB y sessionStorage. `all`: además todo el localStorage del origen (preferencias y sesión). |
 | `variant` / `color` / `shape` | string | Se reenvÃ­an al `iswc-button` interno |
 | `title` / `aria-label` | string | Tooltip y nombre accesible (default â€œLimpiar memoria UIâ€) |
 

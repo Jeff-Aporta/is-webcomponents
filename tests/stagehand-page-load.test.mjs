@@ -312,8 +312,8 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
     .map((e) => e.name);
   const criticals = [
     /\/dist\/cdn\/(?:core\/)?loader\.min\.js(\?|$)/,
-    /\/dist\/cdn\/preview\/doc-demo-boot\.min\.js\?h=/,
-    /\/dist\/cdn\/preview\/doc-demo\.min\.js\?h=/,
+    /\/dist\/cdn\/preview\/doc-demo-boot\.min\.js\?[vh]=/,
+    /\/dist\/cdn\/preview\/doc-demo\.min\.js\?[vh]=/,
   ];
   for (const pat of criticals) {
     const hit = names.find((n) => pat.test(n));

@@ -136,6 +136,6 @@ test('iswc-doc-demo transversal: defaults sin gallery/dev-reload; API whenReady'
   assert.match(docDemoTs, /storage-key-nav['"]\s*\)\s*\|\|\s*['"]iswc-doc-nav['"]/);
   assert.doesNotMatch(docDemoTs, /DEFAULT_PAGE_MODULES\s*=\s*\[[^\]]*dev-reload/s);
   assert.match(docDemoTs, /hasAttribute\(\s*['"]dev['"]\s*\)/);
-  assert.match(bootTs, /theme-storage-key|palette-storage-key/);
+  assert.match(bootTs, /leerAppCfg\(\)/);
   assert.match(hostTs, /CDN|cdn\.jsdelivr|cualquier app|reutilizable/i);
 });

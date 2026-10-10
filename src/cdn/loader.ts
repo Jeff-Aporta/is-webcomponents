@@ -6,7 +6,7 @@
  * - registerApp / ensure — tags de app + lazy ensure de custom elements
  * - Fallbacks entre espejos (jsDelivr → githack → Pages)
  * - Registro persistente: si ya cargaste `actions`, `load('iswc-button')` no re-fetch
- * - `?h=` sale del mapa de build: si el archivo cambia, la URL cambia
+ * - `?v=` sale del mapa de build: si el archivo cambia, la URL cambia
  *
  * Docs: ./loader.md (también en dist/cdn/core/loader.md)
  * Build sustituye __IS_LOADER_CATALOG__, __IS_ASSET_HASHES__ y __IS_BUILD_SHA__.
@@ -33,7 +33,7 @@ import {
 import type { LoadJob } from "./load-plan.schemas.js";
 import { installSheetCache, getSheetCache, type SheetCacheApi } from './sheet-cache.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
-import { lookupHash, withAssetHash } from './build/asset-url.js';
+import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, lookupHash, withAssetHash } from './build/asset-url.js';
 import { readBody, writeBody, syncHashMemory } from './asset-store.js';
 
 export { planLoads, commitLoads, createRegistry, tagKey } from './load-plan.js';
@@ -168,7 +168,7 @@ const state: LoaderState = {
     ['iswc-diagram-theme',   { href: 'cdn:diagrams/theme.min.js', type: 'module' }],
   ]),
   pageStyles: new Map<string, string>([
-    // Kit CDN (respeta host/local/`?h=`). Reemplaza la antigua API de palettes.
+    // Kit CDN (respeta host/local/`?v=`). Reemplaza la antigua API de palettes.
     ['iswc-palettes-default', 'cdn:palettes.min.css'],
     ['iswc-doc-shell', 'cdn:preview/doc-shell.min.css'],
     ['iswc-doc-presentation', 'cdn:preview/doc-presentation.min.css'],
@@ -207,7 +207,7 @@ function rememberBase(base: string): void {
 
 /**
  * Resuelve un input de `loadPageStyles` a CDN del kit o URL de página.
- * - Alias `iswc-palettes-default` → `cdn:palettes.min.css` (host/`?h=`)
+ * - Alias `iswc-palettes-default` → `cdn:palettes.min.css` (host/`?v=`)
  * - Path literal / absoluto → hoja relativa a la página
  */
 function resolvePageStyle(input: string): { cdn: string } | { href: string } {
@@ -239,7 +239,7 @@ function resolvePageStyle(input: string): { cdn: string } | { href: string } {
  *
  * - Alias de la tabla (`'demo-code'`, `'iswc-doc-demo-boot'`)
  * - Prefijo `classic:` → script clásico
- * - Prefijo `cdn:` en el href del spec → asset del kit (host/`?h=`)
+ * - Prefijo `cdn:` en el href del spec → asset del kit (host/`?v=`)
  * - Path literal / URL → module por defecto
  */
 function resolvePageModule(input: string): PageModuleSpec {
@@ -348,7 +348,7 @@ function withQuery(href: string): string {
   return u.href;
 }
 
-/** Ruta publicada + `?h=` del mapa. Si no hay hash, deja el href. */
+/** Ruta publicada + `?v=` del mapa. Si no hay hash, deja el href. */
 function routeHref(href: string): string {
   if (!href) return href;
   let abs = href;
@@ -360,8 +360,9 @@ function routeHref(href: string): string {
   if (!hash) return href;
   if (/^https?:/i.test(href) || href.startsWith('//')) {
     const u = new URL(abs);
-    if (u.searchParams.get('h') === hash) return u.href;
-    u.searchParams.set('h', hash);
+    if (u.searchParams.get(ASSET_HASH_PARAM) === hash && !u.searchParams.has(ASSET_HASH_PARAM_LEGADO)) return u.href;
+    u.searchParams.delete(ASSET_HASH_PARAM_LEGADO);
+    u.searchParams.set(ASSET_HASH_PARAM, hash);
     return u.href;
   }
   return withAssetHash(href, hash);
@@ -642,7 +643,7 @@ export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
   get catalog(): Catalog { return CATALOG; },
   /** Mapa de hashes del build (`ruta` → 6 caracteres). */
   get hashes(): Record<string, string> { return HASHES; },
-  /** Pega `?h=` si la ruta esta en el mapa. Lo usan adoptCss y las apps. */
+  /** Pega `?v=` si la ruta esta en el mapa. Lo usan adoptCss y las apps. */
   assetUrl(href: string): string { return routeHref(href); },
   get repo(): string { return GH_REPO; },
   get mirrors(): Mirror[] { return state.mirrors.slice(); },
@@ -866,7 +867,7 @@ export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
   /**
    * Alias de CSS para `loadPageStyles`.
    * - `href` normal → relativa a la página
-   * - `cdn:palettes.min.css` → hoja del kit (host/`?h=`)
+   * - `cdn:palettes.min.css` → hoja del kit (host/`?v=`)
    */
   registerPageStyle(alias: string, href: string) {
     if (typeof alias !== 'string' || alias === '') throw new TypeError('registerPageStyle: alias required');
@@ -932,12 +933,12 @@ export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
   },
 
   /**
-   * Asegura que el custom element esté definido: load(tag) si hace falta + whenDefined.
+   * Deja el custom element definido (load(tag) + whenDefined). Pedirlo N veces cuesta una
+   * carga: ya definido → promesa resuelta compartida; en vuelo o ya cargado → la misma promesa
+   * (`ensureElement`). Un tag desconocido para el catálogo y sin `href` responde `false`.
    */
-  async ensure(tag: string, opts: { href?: string } = {}): Promise<boolean> {
+  ensure(tag: string, opts: { href?: string } = {}): Promise<boolean> {
     const name = normTag(tag);
-    if (isElementReady(name)) return true;
-
     if (appComponents.has(name) || resolveTagId(tag, CATALOG) || CATALOG.categories[CATALOG.aliases[name] || name]) {
       return ensureElement(name, {
         load: async () => {
@@ -946,18 +947,7 @@ export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
         href: opts.href,
       });
     }
-
-    if (opts.href) {
-      return ensureElement(name, { href: opts.href });
-    }
-
-    try {
-      await this.load(tag);
-      await customElements.whenDefined(name);
-      return isElementReady(name);
-    } catch {
-      return false;
-    }
+    return ensureElement(name, { href: opts.href });
   },
 
   isReady: isElementReady,

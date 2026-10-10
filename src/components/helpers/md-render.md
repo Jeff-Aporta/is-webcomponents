@@ -122,21 +122,30 @@ No es form-associated.
 
 Solo lectura por defecto. Con `can-edit`: surface contenteditable, chips `{{var}}` al escribir el token completo, atajos Ctrl/Cmd+B/I. Sin toolbar ni modal.
 
-Tras pintar el HTML:
+Los renders por defecto usan componentes del kit (el contenido queda legible dentro mientras el tag no está definido):
 
-1. Detecta tags `is-*` y marcadores `.md-iswc-code` en el contenido.
-2. Llama `ISWebComponentsLoader.ensure(tag)` **solo** para lo que hace falta (si `has(tag)` ya, no pide red).
-3. Sustituye fences/inline por `<iswc-code>`:
-   - inline (`tono`) â†’ `theme="brand-mono"` (sin fondo, un tono)
-   - bloque (```lang) â†’ preset dark/light completo (sintaxis coloreada)
-4. Fences ` ```iswc-<diagrama> ` + JSON â†’ `<iswc-flowchart|â€¦ color="viewer">` en solo lectura.
+| Elemento | Componente |
+| --- | --- |
+| Código en bloque | `<iswc-code readonly compact>` + `<iswc-copy-button>` |
+| Código inline | `<iswc-code mode="inline" theme="brand-mono">` |
+| Tabla | `<table>` nativa dentro de `<iswc-scroller>` |
+| Aviso `> [!NOTE]`… | `<iswc-callout variant="accent">` con color e ícono por tipo |
+| `---` | `<iswc-divider>` |
+| Imagen | `<iswc-theme-img>` |
+| Tarea `- [x]` | `<iswc-checkbox readonly>` con el texto como etiqueta |
+| Fence ` ```iswc-<diagrama> ` | `<iswc-flowchart|… color="viewer">` |
 
-El loader deduplica mÃ³dulos (`importOnce` + Cache Storage) y cachea CSS en IndexedDB (`iswc-wc-assets`).
+Encabezados, párrafos, listas, enlaces y citas siguen nativos (ids de encabezado para el índice).
+
+Tras pintar, pide al loader **solo** los tags que pusieron esos renders y siguen en la hoja
+(`md-hydrate`): los livianos al pintar y `iswc-code` / diagramas al acercarse a la pantalla.
+Lo que monten los hooks `renderers` del consumidor lo carga el consumidor. El loader es
+idempotente: un tag ya definido o en vuelo no se vuelve a pedir.
 
 ## Dependencias y componentes relacionados
 
 - [`./md-lite.js`](./md-lite.js) â€” vÃ­a `prompt-md` (MD â†’ HTML + fences).
-- [`./md-hydrate.js`](./md-hydrate.js) â€” lazy ensure + upgrade iswc-code.
+- [`./md-hydrate.js`](./md-hydrate.js) â€” carga perezosa de los componentes de la hoja.
 - [`./md-iswc-fences.js`](./md-iswc-fences.js) â€” mapa `iswc-*` â†’ tag.
 - [`../_shared/prompt-md.js`](../_shared/prompt-md.js)
 - [`./md-editor.md`](./md-editor.md) â€” editor completo con herramientas y API.

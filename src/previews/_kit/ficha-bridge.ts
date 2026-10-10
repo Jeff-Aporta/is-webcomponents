@@ -155,17 +155,18 @@ function filaToCeldas(
     if (col === 'Ejemplo' || clave === 'ejemplo') {
       if (v == null || v === '') return '';
       if (typeof v === 'object' && v && (v as { kind?: string }).kind === 'code-ejemplo') {
-        return v as { kind: 'code-ejemplo'; code: string; lang?: string; summary?: string };
+        const celda = v as { kind: 'code-ejemplo'; code: unknown; lang?: string; summary?: string };
+        return { ...celda, code: asText(celda.code) };
       }
       return {
         kind: 'code-ejemplo' as const,
-        code: String(v),
+        code: asText(v),
         lang: typeof fila.ejemploLang === 'string' ? fila.ejemploLang : 'html',
         summary: typeof fila.ejemploSummary === 'string' ? fila.ejemploSummary : 'Ejemplo',
       };
     }
     if (v == null) return '';
-    return String(v);
+    return asText(v);
   });
 }
 
@@ -176,7 +177,7 @@ function convertirSeccionFicha(id: SectionId, raw: unknown): PreviewBlock[] {
   const bloques: PreviewBlock[] = [];
 
   if (id === 'anatomia' || id === 'ejemplos') {
-    const content = typeof seccion.content === 'string' ? seccion.content : '';
+    const content = asText(seccion.content);
     if (content) bloques.push({ kind: 'lede', html: content } as PreviewBlock);
     return bloques;
   }
