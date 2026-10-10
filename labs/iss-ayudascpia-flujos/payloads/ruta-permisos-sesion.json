@@ -26,15 +26,42 @@
     "nodes": [
       {
         "id": "api",
-        "label": "permisos",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-permisos]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "permisos",
-          "stereotype": "SEG",
-          "items": [
-            "GET|POST /permisos",
-            "GET /permisos/{filtro}"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-permisos]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            }
           ]
         }
       },
@@ -44,14 +71,46 @@
         "kind": "class",
         "lane": "P",
         "class": {
-          "name": "TPermissionsController",
-          "methods": [
-            "+ me(): perfil SEG",
-            "+ rolPrincipal(icontacto) «static»",
-            "+ decidir(irol, id, metodo) «static»",
-            "+ capacidad(irol, id) · permsDeRol(irol) «static»"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TPermissionsController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ctl-pojo",
+        "label": "TPermissionsObject",
+        "kind": "class",
+        "lane": "P",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TPermissionsObject]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -80,34 +139,40 @@
       },
       {
         "id": "tgr",
-        "label": "seg_grupos",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_grupos]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "D",
         "table": {
-          "name": "seg_grupos",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_grupos]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "itercero",
-              "type": "varchar(30)",
-              "key": "PK"
-            },
-            {
-              "name": "igrupo",
-              "type": "varchar(20)",
-              "key": "PK"
-            },
-            {
-              "name": "itdgrupo",
-              "type": "smallint"
-            },
-            {
-              "name": "igrupopadre",
-              "type": "varchar(20)",
-              "key": "FK"
-            },
-            {
-              "name": "nombre",
-              "type": "varchar(50)"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -120,39 +185,47 @@
       },
       {
         "id": "trc",
-        "label": "seg_rolescontacto",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_rolescontacto]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "D",
         "table": {
-          "name": "seg_rolescontacto",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_rolescontacto]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "itercero",
-              "type": "varchar(30)",
-              "key": "PK"
-            },
-            {
-              "name": "igrupo",
-              "type": "varchar(20)",
-              "key": "PK"
-            },
-            {
-              "name": "irol",
-              "type": "varchar(20)",
-              "key": "PK"
-            },
-            {
-              "name": "icontacto",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "ffinal",
-              "type": "date"
-            },
-            {
-              "name": "bprincipal",
-              "type": "boolean"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": {
+                  "[name=itercero]": true,
+                  "[name=igrupo]": true,
+                  "[name=irol]": true,
+                  "[name=icontacto]": true,
+                  "[name=ffinal]": true,
+                  "[name=bprincipal]": true
+                }
+              }
             }
           ]
         }
@@ -171,42 +244,40 @@
       },
       {
         "id": "trol",
-        "label": "seg_roles",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_roles]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "D",
         "table": {
-          "name": "seg_roles",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_roles]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "itercero",
-              "type": "varchar(30)",
-              "key": "PK"
-            },
-            {
-              "name": "igrupo",
-              "type": "varchar(20)",
-              "key": "PK"
-            },
-            {
-              "name": "irol",
-              "type": "varchar(20)",
-              "key": "PK"
-            },
-            {
-              "name": "nombre",
-              "type": "varchar(50)"
-            },
-            {
-              "name": "telefono",
-              "type": "varchar(50)"
-            },
-            {
-              "name": "email",
-              "type": "varchar(100)"
-            },
-            {
-              "name": "bactivo",
-              "type": "boolean"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -219,35 +290,46 @@
       },
       {
         "id": "tacc",
-        "label": "seg_accionesxrol",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_accionesxrol]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "D",
         "table": {
-          "name": "seg_accionesxrol",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=seg_accionesxrol]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "itercero",
-              "type": "varchar(30)",
-              "key": "PK"
-            },
-            {
-              "name": "isysrecurso",
-              "type": "varchar(50)",
-              "key": "PK"
-            },
-            {
-              "name": "iaccion",
-              "type": "varchar(50)",
-              "key": "PK"
-            },
-            {
-              "name": "irol",
-              "type": "varchar(20)",
-              "key": "PK"
-            },
-            {
-              "name": "valor",
-              "type": "varchar(255)"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": {
+                  "[name=itercero]": true,
+                  "[name=isysrecurso]": true,
+                  "[name=iaccion]": true,
+                  "[name=irol]": true,
+                  "[name=valor]": true
+                }
+              }
             }
           ]
         }
@@ -266,6 +348,12 @@
       }
     ],
     "edges": [
+      {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
       {
         "from": "api",
         "to": "ctl",

@@ -26,14 +26,50 @@
     "nodes": [
       {
         "id": "api",
-        "label": "conversación (portal)",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-conv-portal]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "conversación (portal)",
-          "stereotype": "Chat",
-          "items": [
-            "POST /conversacion"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-conv-portal]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "POST /conversacion"
+                ]
+              }
+            }
           ]
         }
       },
@@ -63,23 +99,40 @@
       },
       {
         "id": "tlog",
-        "label": "patyia_conversacion_log",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversacion_log]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "H",
         "table": {
-          "name": "patyia_conversacion_log",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversacion_log]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "iconversacion",
-              "type": "bigint"
-            },
-            {
-              "name": "content",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamptz"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }

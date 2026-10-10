@@ -26,14 +26,50 @@
     "nodes": [
       {
         "id": "api",
-        "label": "configuración",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-config]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "configuración",
-          "stereotype": "Config",
-          "items": [
-            "GET|POST|PUT /tdconsulta"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-config]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "GET|POST|PUT /tdconsulta"
+                ]
+              }
+            }
           ]
         }
       },
@@ -43,31 +79,46 @@
         "kind": "class",
         "lane": "T",
         "class": {
-          "name": "TTdConsultationController",
-          "attributes": [
-            "- nTbl = patyia_tdconsultas"
-          ],
-          "methods": [
-            "+ listado() · crear() · guardar()",
-            "+ instruccion(ntdconsulta)"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TTdConsultationController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
         }
       },
       {
-        "id": "pojo",
+        "id": "ctl-pojo",
         "label": "TTdConsulta",
         "kind": "class",
         "lane": "T",
         "class": {
-          "name": "TTdConsulta",
-          "stereotype": "patyia_tdconsultas",
-          "attributes": [
-            "+ itdconsulta «PK»",
-            "+ instruccion · jconfig",
-            "+ jpermisos"
-          ],
-          "fill": "leaf"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TTdConsulta]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -114,80 +165,40 @@
       },
       {
         "id": "ttd",
-        "label": "patyia_tdconsultas",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_tdconsultas]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_tdconsultas",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_tdconsultas]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "itdconsulta",
-              "type": "varchar(64)",
-              "key": "PK"
-            },
-            {
-              "name": "ntdconsulta",
-              "type": "varchar(255)"
-            },
-            {
-              "name": "instruccion",
-              "type": "text"
-            },
-            {
-              "name": "descripcion",
-              "type": "text"
-            },
-            {
-              "name": "bactivo",
-              "type": "boolean"
-            },
-            {
-              "name": "jconfig",
-              "type": "jsonb"
-            },
-            {
-              "name": "jpermisos",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhcre",
-              "type": "timestamptz",
-              "key": "AUDIT_CRE"
-            },
-            {
-              "name": "itercerocre",
-              "type": "varchar(30)",
-              "key": "AUDIT_CRE"
-            },
-            {
-              "name": "irolcre",
-              "type": "varchar(20)",
-              "key": "AUDIT_CRE"
-            },
-            {
-              "name": "icontactocre",
-              "type": "bigint",
-              "key": "AUDIT_CRE"
-            },
-            {
-              "name": "fhult",
-              "type": "timestamptz",
-              "key": "AUDIT_ULT"
-            },
-            {
-              "name": "iterceroult",
-              "type": "varchar(30)",
-              "key": "AUDIT_ULT"
-            },
-            {
-              "name": "irolult",
-              "type": "varchar(20)",
-              "key": "AUDIT_ULT"
-            },
-            {
-              "name": "icontactoult",
-              "type": "bigint",
-              "key": "AUDIT_ULT"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -213,15 +224,15 @@
     ],
     "edges": [
       {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
         "from": "api",
         "to": "ctl",
         "label": "petición con token"
-      },
-      {
-        "from": "ctl",
-        "to": "pojo",
-        "kind": "dashed",
-        "label": "«uses»"
       },
       {
         "from": "ctl",

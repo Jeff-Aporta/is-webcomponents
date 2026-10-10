@@ -15,10 +15,19 @@
  *   N1 el `nested` no lleva rótulo propio (el título lo trae su diagrama) y su lado máximo es 200.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
+import { fileURLToPath } from 'node:url';
+import { Obj } from '../../../cdn/lib/obj.ts';
 import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
 import { NESTED_DEFAULT_MAX } from '../../../components/_shared/diagram-embed.ts';
 import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';
 import type { FlowLayout, FlowLayoutNode } from '../../../components/diagrams/flowchart-spec.schemas.ts';
+
+/** Editable del lab con sus referencias { path, query, actions } resueltas (como al exportar). */
+async function editable(url: URL): Promise<{ payload: Record<string, unknown> }> {
+  const ruta = fileURLToPath(url);
+  const crudo = JSON.parse(await Deno.readTextFile(url));
+  return await Obj.resolver(crudo, { base: ruta, cargar: async (u) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
+}
 
 const LANES = [{ id: 'P', label: 'Pasajero' }, { id: 'V', label: 'Vendedor' }, { id: 'A', label: 'Aerolínea' }];
 const NODES = [
@@ -369,7 +378,7 @@ Deno.test('comentario: C2 con x/y fijados a mano manda esa posición', () => {
 });
 
 Deno.test('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) en sus posiciones finales', async () => {
-  const d = JSON.parse(await Deno.readTextFile(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-tiquete.json', import.meta.url)));
+  const d = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-tiquete.json', import.meta.url));
   const L = computeFlowchartLayout(resolveFlowchartSpec(d.payload)!, null, { style: 'insoft', embeds: { ctl: { w: 300, h: 110 }, pojo: { w: 230, h: 110 }, api: { w: 230, h: 80 } } });
   for (const g of L.contexts ?? []) {
     for (const id of g.members ?? []) {
@@ -453,7 +462,7 @@ Deno.test('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de l
 });
 
 Deno.test('combinado: U4 abanico: los usos a un mismo destino comparten punta y corren por vías paralelas propias', async () => {
-  const j = JSON.parse(await Deno.readTextFile(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url)));
+  const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
   const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
   const alAi = L.edges.filter((e) => e.to === 'ai').map((e) => pathPoints(e.path));
   assert(alAi.length >= 4, 'varios usos a OpenAI');
@@ -471,7 +480,7 @@ Deno.test('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se 
   const choques: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
-    const j = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    const j = await editable(new URL(f.name, dir));
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     const cajas = L.edges.filter((e) => e.labelBox).map((e) => ({ e: e.label, b: e.labelBox! }));
     for (let i = 0; i < cajas.length; i++) {
@@ -488,7 +497,7 @@ Deno.test('combinado: F1 la respuesta desde el fin sale por abajo (no por un cos
   const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
-    const j = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    const j = await editable(new URL(f.name, dir));
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     for (const e of L.edges) {
       const fin = L.nodes.find((n) => n.id === e.from && n.shape === 'end');
@@ -504,7 +513,7 @@ Deno.test('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo 
   const choques: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
-    const j = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    const j = await editable(new URL(f.name, dir));
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     for (const e of L.edges) {
       const b = e.labelBox;
@@ -522,7 +531,7 @@ Deno.test('combinado: U5 en las rutas reales, los usos a un mismo destino y cost
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
-    const j = JSON.parse(await Deno.readTextFile(new URL(f.name, dir)));
+    const j = await editable(new URL(f.name, dir));
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     const puntas = new Map<string, Set<string>>();
     for (const e of L.edges.filter((x) => x.kind === 'dashed')) {

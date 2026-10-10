@@ -26,14 +26,42 @@
     "nodes": [
       {
         "id": "api",
-        "label": "identidad",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-identidad]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "identidad",
-          "stereotype": "Auth",
-          "items": [
-            "POST /JWT"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-identidad]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            }
           ]
         }
       },
@@ -43,12 +71,46 @@
         "kind": "class",
         "lane": "I",
         "class": {
-          "name": "TIdentityController",
-          "methods": [
-            "+ bootstrapJwt(): token",
-            "+ portalLogin(): token | 409"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TIdentityController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ctl-pojo",
+        "label": "TIdentityObject",
+        "kind": "class",
+        "lane": "I",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TIdentityObject]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -71,13 +133,43 @@
       },
       {
         "id": "ds",
-        "label": "TCatContactos · TBasicoGeneral",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=ds-login]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "D",
         "component": {
-          "name": "TCatContactos · TBasicoGeneral",
-          "stereotype": "DataSnap InSoft · DSCLIENTES",
-          "items": []
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=ds-login]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            }
+          ]
         }
       },
       {
@@ -118,6 +210,12 @@
       }
     ],
     "edges": [
+      {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
       {
         "from": "api",
         "to": "ctl",

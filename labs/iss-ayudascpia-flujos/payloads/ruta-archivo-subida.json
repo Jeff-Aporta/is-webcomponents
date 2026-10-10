@@ -30,14 +30,50 @@
     "nodes": [
       {
         "id": "api",
-        "label": "operación",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-ops]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "operación",
-          "stereotype": "Ops",
-          "items": [
-            "POST /archivo"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-ops]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "POST /archivo"
+                ]
+              }
+            }
           ]
         }
       },
@@ -47,14 +83,46 @@
         "kind": "class",
         "lane": "F",
         "class": {
-          "name": "TFileStorageController",
-          "attributes": [
-            "- nTbl = patyia_files_storage"
-          ],
-          "methods": [
-            "+ upload(): archivo en R2"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TFileStorageController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ctl-pojo",
+        "label": "TFileStorage",
+        "kind": "class",
+        "lane": "F",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TFileStorage]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -63,14 +131,22 @@
         "kind": "class",
         "lane": "F",
         "class": {
-          "name": "TGenAlmacenamientoController",
-          "attributes": [
-            "- nTbl = gen_almacenamientos (solo lectura)"
-          ],
-          "methods": [
-            "+ cuentaPatyIA() · cliente() «static»"
-          ],
-          "fill": "service"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TGenAlmacenamientoController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "service"
+              }
+            }
+          ]
         }
       },
       {
@@ -93,36 +169,40 @@
       },
       {
         "id": "talm",
-        "label": "gen_almacenamientos",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=gen_almacenamientos]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "gen_almacenamientos",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=gen_almacenamientos]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "icuenta",
-              "type": "smallint",
-              "key": "PK"
-            },
-            {
-              "name": "ncuenta",
-              "type": "varchar"
-            },
-            {
-              "name": "itdcuenta",
-              "type": "smallint"
-            },
-            {
-              "name": "dominio",
-              "type": "varchar"
-            },
-            {
-              "name": "bpublico",
-              "type": "boolean"
-            },
-            {
-              "name": "jsonkeys",
-              "type": "jsonb"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -147,13 +227,43 @@
       },
       {
         "id": "r2",
-        "label": "Cloudflare R2",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=r2-bucket]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "R",
         "component": {
-          "name": "Cloudflare R2",
-          "stereotype": "S3",
-          "items": []
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=r2-bucket]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            }
+          ]
         }
       },
       {
@@ -164,24 +274,40 @@
       },
       {
         "id": "tfile",
-        "label": "patyia_files_storage",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_files_storage]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_files_storage",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_files_storage]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "ifile",
-              "type": "varchar(32)",
-              "key": "PK"
-            },
-            {
-              "name": "jfile",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhcre",
-              "type": "timestamptz"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -200,6 +326,12 @@
       }
     ],
     "edges": [
+      {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
       {
         "from": "api",
         "to": "ctl",

@@ -30,15 +30,51 @@
     "nodes": [
       {
         "id": "api",
-        "label": "operación",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-ops]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "operación",
-          "stereotype": "Ops",
-          "items": [
-            "GET /cdn/{file}",
-            "GET /docs"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-ops]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "GET /cdn/{file}",
+                  "GET /docs"
+                ]
+              }
+            }
           ]
         }
       },
@@ -48,11 +84,46 @@
         "kind": "class",
         "lane": "K",
         "class": {
-          "name": "TCdnController",
-          "methods": [
-            "+ file(): front.ts"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TCdnController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "kcdn-pojo",
+        "label": "TCdnObject",
+        "kind": "class",
+        "lane": "K",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TCdnObject]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -61,18 +132,46 @@
         "kind": "class",
         "lane": "S",
         "class": {
-          "name": "TSysValueController",
-          "attributes": [
-            "- nTbl = patyia_sys_values"
-          ],
-          "methods": [
-            "+ leer() · escribir()",
-            "+ leerCfg() · escribirCfg()",
-            "+ leerProveedor() · escribirProveedor()",
-            "+ docs()",
-            "+ valor(clave) · getOpenaiCfg() «static»"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValueController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ksys-pojo",
+        "label": "TSysValue",
+        "kind": "class",
+        "lane": "S",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValue]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -101,24 +200,40 @@
       },
       {
         "id": "tsys",
-        "label": "patyia_sys_values",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_sys_values",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "isystemkey",
-              "type": "varchar(128)",
-              "key": "PK"
-            },
-            {
-              "name": "jvalue",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamptz"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -137,6 +252,18 @@
       }
     ],
     "edges": [
+      {
+        "from": "kcdn",
+        "to": "kcdn-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "ksys",
+        "to": "ksys-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
       {
         "from": "api",
         "to": "d1",

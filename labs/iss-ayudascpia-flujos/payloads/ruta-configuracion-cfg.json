@@ -26,15 +26,51 @@
     "nodes": [
       {
         "id": "api",
-        "label": "configuración",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-config]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "configuración",
-          "stereotype": "Config",
-          "items": [
-            "GET|PUT /sistema/cfg",
-            "GET|PUT /docs/cfg"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-config]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "GET|PUT /sistema/cfg",
+                  "GET|PUT /docs/cfg"
+                ]
+              }
+            }
           ]
         }
       },
@@ -44,33 +80,46 @@
         "kind": "class",
         "lane": "S",
         "class": {
-          "name": "TSysValueController",
-          "attributes": [
-            "- nTbl = patyia_sys_values"
-          ],
-          "methods": [
-            "+ leer() · escribir()",
-            "+ leerCfg() · escribirCfg()",
-            "+ leerProveedor() · escribirProveedor()",
-            "+ docs()",
-            "+ valor(clave) · getOpenaiCfg() «static»"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValueController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
         }
       },
       {
-        "id": "pojo",
+        "id": "ctl-pojo",
         "label": "TSysValue",
         "kind": "class",
         "lane": "S",
         "class": {
-          "name": "TSysValue",
-          "stereotype": "patyia_sys_values",
-          "attributes": [
-            "+ isystemkey «PK»",
-            "+ jvalue: jsonb"
-          ],
-          "fill": "leaf"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TSysValue]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -105,24 +154,40 @@
       },
       {
         "id": "tsys",
-        "label": "patyia_sys_values",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_sys_values",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "isystemkey",
-              "type": "varchar(128)",
-              "key": "PK"
-            },
-            {
-              "name": "jvalue",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamptz"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -142,15 +207,15 @@
     ],
     "edges": [
       {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
         "from": "api",
         "to": "ctl",
         "label": "GET|PUT <ruta>/cfg"
-      },
-      {
-        "from": "ctl",
-        "to": "pojo",
-        "kind": "dashed",
-        "label": "«uses»"
       },
       {
         "from": "ctl",

@@ -34,14 +34,50 @@
     "nodes": [
       {
         "id": "api",
-        "label": "operación",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-ops]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "operación",
-          "stereotype": "Ops",
-          "items": [
-            "cualquier ruta propia"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-ops]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "cualquier ruta propia"
+                ]
+              }
+            }
           ]
         }
       },
@@ -57,34 +93,46 @@
         "kind": "class",
         "lane": "E",
         "class": {
-          "name": "TErrorController",
-          "attributes": [
-            "- nTbl = patyia_errores"
-          ],
-          "methods": [
-            "+ insert() · registrar()",
-            "+ listSimple() · deleteBatch()",
-            "+ purgarErroresAtendidos()",
-            "+ applyEndpointWithErrorCapture() «static»",
-            "+ capturarRespuesta() «static»"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TErrorController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
         }
       },
       {
-        "id": "pojo",
-        "label": "TError",
+        "id": "err-pojo",
+        "label": "TError_",
         "kind": "class",
         "lane": "E",
         "class": {
-          "name": "TError",
-          "stereotype": "patyia_errores",
-          "attributes": [
-            "+ ierror «PK»",
-            "+ jerror: jsonb",
-            "+ batendido · referencia"
-          ],
-          "fill": "leaf"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TError_]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -137,36 +185,47 @@
       },
       {
         "id": "terr",
-        "label": "patyia_errores",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_errores]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_errores",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_errores]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "ierror",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "jerror",
-              "type": "jsonb"
-            },
-            {
-              "name": "batendido",
-              "type": "boolean"
-            },
-            {
-              "name": "fhcre",
-              "type": "timestamp"
-            },
-            {
-              "name": "referencia",
-              "type": "varchar(200)"
-            },
-            {
-              "name": "resumen",
-              "type": "varchar(500)"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": {
+                  "[name=ierror]": true,
+                  "[name=jerror]": true,
+                  "[name=batendido]": true,
+                  "[name=fhcre]": true,
+                  "[name=referencia]": true,
+                  "[name=resumen]": true
+                }
+              }
             }
           ]
         }
@@ -204,6 +263,12 @@
     ],
     "edges": [
       {
+        "from": "err",
+        "to": "err-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
         "from": "api",
         "to": "llega",
         "label": "petición"
@@ -211,12 +276,6 @@
       {
         "from": "llega",
         "to": "err"
-      },
-      {
-        "from": "err",
-        "to": "pojo",
-        "kind": "dashed",
-        "label": "«uses»"
       },
       {
         "from": "err",

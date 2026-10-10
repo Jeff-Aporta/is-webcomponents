@@ -46,28 +46,45 @@
       },
       {
         "id": "terr",
-        "label": "patyia_errores",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_errores]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_errores",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_errores]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "ierror",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "jerror",
-              "type": "jsonb"
-            },
-            {
-              "name": "referencia",
-              "type": "varchar(200)"
-            },
-            {
-              "name": "resumen",
-              "type": "varchar(500)"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": {
+                  "[name=ierror]": true,
+                  "[name=jerror]": true,
+                  "[name=referencia]": true,
+                  "[name=resumen]": true
+                }
+              }
             }
           ]
         }
@@ -80,13 +97,43 @@
       },
       {
         "id": "pg",
-        "label": "clientesis",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=db-pg]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "P",
         "component": {
-          "name": "clientesis",
-          "stereotype": "PG",
-          "items": []
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=db-pg]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            }
+          ]
         }
       },
       {

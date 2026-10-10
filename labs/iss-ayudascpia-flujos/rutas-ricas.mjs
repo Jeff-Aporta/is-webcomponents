@@ -54,9 +54,15 @@ export function ruta(meta, componer) {
   };
   const nombreDe = (ref) => {
     const c = clases.get(ref);
-    const name = c ? c.name.replace(/<.*>$/, '') : ref;
-    if (!enCodigo.has(name)) throw new Error(`clase ${ref} (${name}) no está en fuentes/codigo.json`);
-    return name;
+    // En clases.json el nombre es una referencia a codigo.json ({ query: { clases: { "[name=X]": … } } }) o un texto.
+    const crudo = c ? (typeof c.name === 'string' ? c.name : Object.keys(c.name.query.clases)[0].slice(6, -1)) : ref;
+    const name = crudo.replace(/<.*>$/, '');
+    // El nombre manda el código: si clases.json lo escribe distinto (p. ej. TError vs TError_), se
+    // usa el real y se avisa para corregir clases.json.
+    const real = enCodigo.has(name) ? name : [`${name}_`].find((x) => enCodigo.has(x));
+    if (!real) throw new Error(`clase ${ref} (${name}) no está en fuentes/codigo.json`);
+    if (real !== name) console.warn(`[rutas] clases.json dice ${name}; en el código es ${real}`);
+    return real;
   };
   const b = {
     componente(id, ref, lane, items) {

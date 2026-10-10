@@ -26,15 +26,51 @@
     "nodes": [
       {
         "id": "api",
-        "label": "conversación",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-conversacion]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "conversación",
-          "stereotype": "Chat",
-          "items": [
-            "GET /conversaciones",
-            "GET /conversaciones/{filtro}"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-conversacion]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "GET /conversaciones",
+                  "GET /conversaciones/{filtro}"
+                ]
+              }
+            }
           ]
         }
       },
@@ -44,19 +80,46 @@
         "kind": "class",
         "lane": "T",
         "class": {
-          "name": "TConversacionController",
-          "attributes": [
-            "- nTbl = patyia_conversaciones"
-          ],
-          "methods": [
-            "+ insert(): SSE",
-            "+ get() · delete()",
-            "+ getLogs() · getResumen()",
-            "+ listSimple() · list(filtro) · auditar()",
-            "+ leerCfg() · escribirCfg()",
-            "+ timerCerrarConversaciones()"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversacionController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "ctl-pojo",
+        "label": "TConversacion",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversacion]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -103,38 +166,47 @@
       },
       {
         "id": "tconv",
-        "label": "patyia_conversaciones",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversaciones]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_conversaciones",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversaciones]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "iconversacion",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "itercero",
-              "type": "varchar(50)",
-              "key": "FK"
-            },
-            {
-              "name": "icontacto",
-              "type": "bigint",
-              "key": "FK"
-            },
-            {
-              "name": "titulo",
-              "type": "varchar(100)"
-            },
-            {
-              "name": "itdestado",
-              "type": "smallint"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamp"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": {
+                  "[name=iconversacion]": true,
+                  "[name=itercero]": true,
+                  "[name=icontacto]": true,
+                  "[name=titulo]": true,
+                  "[name=itdestado]": true,
+                  "[name=fhultact]": true
+                }
+              }
             }
           ]
         }
@@ -153,6 +225,12 @@
       }
     ],
     "edges": [
+      {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
       {
         "from": "api",
         "to": "ctl",

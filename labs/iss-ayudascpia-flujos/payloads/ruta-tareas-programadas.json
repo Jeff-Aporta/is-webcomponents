@@ -76,19 +76,46 @@
         "kind": "class",
         "lane": "T",
         "class": {
-          "name": "TConversacionController",
-          "attributes": [
-            "- nTbl = patyia_conversaciones"
-          ],
-          "methods": [
-            "+ insert(): SSE",
-            "+ get() · delete()",
-            "+ getLogs() · getResumen()",
-            "+ listSimple() · list(filtro) · auditar()",
-            "+ leerCfg() · escribirCfg()",
-            "+ timerCerrarConversaciones()"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversacionController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "cconv-pojo",
+        "label": "TConversacion",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversacion]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -97,16 +124,46 @@
         "kind": "class",
         "lane": "T",
         "class": {
-          "name": "TConversationLogController",
-          "attributes": [
-            "- nTbl = patyia_conversacion_log"
-          ],
-          "methods": [
-            "+ mensajes(iconversacion)",
-            "+ contenido(iconversacion)",
-            "+ purgarLogConversaciones()"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLogController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "clog-pojo",
+        "label": "TConversationLog",
+        "kind": "class",
+        "lane": "T",
+        "class": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationLog]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -123,24 +180,40 @@
       },
       {
         "id": "tsys",
-        "label": "patyia_sys_values",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_sys_values",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "isystemkey",
-              "type": "varchar(128)",
-              "key": "PK"
-            },
-            {
-              "name": "jvalue",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamptz"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -171,47 +244,84 @@
       },
       {
         "id": "tconv",
-        "label": "patyia_conversaciones",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversaciones]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_conversaciones",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversaciones]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "iconversacion",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "itdestado",
-              "type": "smallint"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamp"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": {
+                  "[name=iconversacion]": true,
+                  "[name=itdestado]": true,
+                  "[name=fhultact]": true
+                }
+              }
             }
           ]
         }
       },
       {
         "id": "tlog",
-        "label": "patyia_conversacion_log",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversacion_log]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_conversacion_log",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversacion_log]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "iconversacion",
-              "type": "bigint"
-            },
-            {
-              "name": "content",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamptz"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -224,6 +334,18 @@
       }
     ],
     "edges": [
+      {
+        "from": "cconv",
+        "to": "cconv-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
+        "from": "clog",
+        "to": "clog-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
       {
         "from": "ini",
         "to": "start"

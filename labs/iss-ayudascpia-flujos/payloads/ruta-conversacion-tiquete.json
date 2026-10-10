@@ -26,14 +26,50 @@
     "nodes": [
       {
         "id": "api",
-        "label": "mensaje · tiquete",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-mensaje-tiquete]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "P",
         "component": {
-          "name": "mensaje · tiquete",
-          "stereotype": "Calificación",
-          "items": [
-            "POST /tiquete"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-mensaje-tiquete]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "POST /tiquete"
+                ]
+              }
+            }
           ]
         }
       },
@@ -43,31 +79,46 @@
         "kind": "class",
         "lane": "T",
         "class": {
-          "name": "TConversationTicketController",
-          "attributes": [
-            "- nTbl = patyia_tiquetesconversacion"
-          ],
-          "methods": [
-            "+ insert(): 201",
-            "+ porConversacion(iconversacion)"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationTicketController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
         }
       },
       {
-        "id": "pojo",
+        "id": "ctl-pojo",
         "label": "TConversationTicket",
         "kind": "class",
         "lane": "T",
         "class": {
-          "name": "TConversationTicket",
-          "stereotype": "patyia_tiquetesconversacion",
-          "attributes": [
-            "+ itiquete «PK»",
-            "+ iconversacion «PK»",
-            "+ itema · iclasificador"
-          ],
-          "fill": "leaf"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TConversationTicket]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -84,34 +135,46 @@
       },
       {
         "id": "tconv",
-        "label": "patyia_conversaciones",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversaciones]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "D",
         "table": {
-          "name": "patyia_conversaciones",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_conversaciones]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "iconversacion",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "itercero",
-              "type": "varchar(50)",
-              "key": "FK"
-            },
-            {
-              "name": "icontacto",
-              "type": "bigint",
-              "key": "FK"
-            },
-            {
-              "name": "itdestado",
-              "type": "smallint"
-            },
-            {
-              "name": "bautoriza_visualizacion",
-              "type": "boolean"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": {
+                  "[name=iconversacion]": true,
+                  "[name=itercero]": true,
+                  "[name=icontacto]": true,
+                  "[name=itdestado]": true,
+                  "[name=bautoriza_visualizacion]": true
+                }
+              }
             }
           ]
         }
@@ -148,29 +211,40 @@
       },
       {
         "id": "ttiq",
-        "label": "patyia_tiquetesconversacion",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_tiquetesconversacion]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "D",
         "table": {
-          "name": "patyia_tiquetesconversacion",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_tiquetesconversacion]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "itiquete",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "iconversacion",
-              "type": "bigint",
-              "key": "PK"
-            },
-            {
-              "name": "itema",
-              "type": "varchar(50)"
-            },
-            {
-              "name": "iclasificador",
-              "type": "varchar(50)"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
@@ -196,15 +270,15 @@
     ],
     "edges": [
       {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
         "from": "api",
         "to": "ctl",
         "label": "POST /tiquete"
-      },
-      {
-        "from": "ctl",
-        "to": "pojo",
-        "kind": "dashed",
-        "label": "«uses»"
       },
       {
         "from": "ctl",

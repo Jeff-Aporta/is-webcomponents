@@ -30,15 +30,51 @@
     "nodes": [
       {
         "id": "api",
-        "label": "configuración",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-config]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "C",
         "component": {
-          "name": "configuración",
-          "stereotype": "Config",
-          "items": [
-            "GET|PUT /proveedor/{iproveedor}",
-            "GET|PUT /proveedor/{iproveedor}/cfg"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=grp-config]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            },
+            {
+              "op": "push",
+              "valor": {
+                "items": [
+                  "GET|PUT /proveedor/{iproveedor}",
+                  "GET|PUT /proveedor/{iproveedor}/cfg"
+                ]
+              }
+            }
           ]
         }
       },
@@ -48,33 +84,46 @@
         "kind": "class",
         "lane": "V",
         "class": {
-          "name": "TProviderController",
-          "attributes": [
-            "- nTbl = patyia_providers"
-          ],
-          "methods": [
-            "+ get() · update()",
-            "+ leerCfg() · escribirCfg()",
-            "+ getCuenta(iproveedor)",
-            "+ activo(iproveedor)"
-          ],
-          "fill": "app"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TProviderController]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "app"
+              }
+            }
+          ]
         }
       },
       {
-        "id": "pojo",
+        "id": "ctl-pojo",
         "label": "TProvider",
         "kind": "class",
         "lane": "V",
         "class": {
-          "name": "TProvider",
-          "stereotype": "patyia_providers",
-          "attributes": [
-            "+ iproveedor «PK»",
-            "+ jcuenta: jsonb",
-            "+ bactivo"
-          ],
-          "fill": "leaf"
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/../fuentes/codigo.json",
+          "query": {
+            "clases": {
+              "[name=TProvider]": {
+                "uml": true
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "push",
+              "valor": {
+                "fill": "leaf"
+              }
+            }
+          ]
         }
       },
       {
@@ -103,69 +152,123 @@
       },
       {
         "id": "tprov",
-        "label": "patyia_providers",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_providers]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_providers",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_providers]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "iproveedor",
-              "type": "varchar(64)",
-              "key": "PK"
-            },
-            {
-              "name": "nproveedor",
-              "type": "varchar(160)"
-            },
-            {
-              "name": "descripcion",
-              "type": "text"
-            },
-            {
-              "name": "bactivo",
-              "type": "boolean"
-            },
-            {
-              "name": "jcuenta",
-              "type": "jsonb"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
       },
       {
         "id": "tsys",
-        "label": "patyia_sys_values",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "tableder",
         "lane": "P",
         "table": {
-          "name": "patyia_sys_values",
-          "attributes": [
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/der.json",
+          "query": {
+            "payload": {
+              "erDiagram": {
+                "entities": {
+                  "[name=patyia_sys_values]": true
+                }
+              }
+            }
+          },
+          "actions": [
             {
-              "name": "isystemkey",
-              "type": "varchar(128)",
-              "key": "PK"
-            },
-            {
-              "name": "jvalue",
-              "type": "jsonb"
-            },
-            {
-              "name": "fhultact",
-              "type": "timestamptz"
+              "op": "get",
+              "query": {
+                "name": true,
+                "attributes": true
+              }
             }
           ]
         }
       },
       {
         "id": "ai",
-        "label": "Responses · Conversations",
+        "label": {
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-chat]": {
+                    "name": true
+                  }
+                }
+              }
+            }
+          }
+        },
         "kind": "component",
         "lane": "O",
         "component": {
-          "name": "Responses · Conversations",
-          "stereotype": "OpenAI",
-          "items": []
+          "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+          "query": {
+            "payload": {
+              "componentDiagram": {
+                "components": {
+                  "[id=openai-chat]": true
+                }
+              }
+            }
+          },
+          "actions": [
+            {
+              "op": "get",
+              "query": {
+                "name": true,
+                "stereotype": true,
+                "items": true
+              }
+            }
+          ]
         }
       },
       {
@@ -183,15 +286,15 @@
     ],
     "edges": [
       {
+        "from": "ctl",
+        "to": "ctl-pojo",
+        "kind": "dashed",
+        "label": "«uses»"
+      },
+      {
         "from": "api",
         "to": "ctl",
         "label": "petición con token"
-      },
-      {
-        "from": "ctl",
-        "to": "pojo",
-        "kind": "dashed",
-        "label": "«uses»"
       },
       {
         "from": "ctl",
