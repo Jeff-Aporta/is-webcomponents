@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-10T05:11:23.251Z",
+  "generatedAt": "2026-10-10T05:15:09.688Z",
   "count": 116,
   "modules": [
     {
@@ -31,8 +31,9 @@
       "id": "cdn-ref",
       "path": "src/components/_shared/cdn-ref.ts",
       "summary": "cdn-ref — Orden de fallback al cargar assets:",
-      "bytes": 3535,
+      "bytes": 4468,
       "exports": [
+        "repoDeUrl",
         "GH_REPO",
         "resolveRef",
         "jsdelivrBase",
@@ -43,8 +44,7 @@
         "readMirrorId",
         "writeMirrorId",
         "resolvedBase",
-        "fallbackBases",
-        "fillHostTemplate"
+        "fallbackBases"
       ]
     },
     {
