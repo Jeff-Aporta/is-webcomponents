@@ -61,7 +61,7 @@ Un bloque entre dos `---` que solo trae imágenes (dos o más) se pinta como `is
 ---
 ```
 
-Con una sola imagen, o con texto entre los `---`, son separadores normales. Con `componentes: false` sale una figura por imagen con su nombre (`figcaption`). El hook de `renderers` es `tabs` (`DatosTabsMd`).
+Cada bloque es un grupo con `id` estable por documento (`md-tabs-1`, `md-tabs-2`…) y `state`: la pestaña elegida queda en `?s=` y al recargar se conserva. Con una sola imagen, o con texto entre los `---`, son separadores normales. Con `componentes: false` sale una figura por imagen con su nombre (`figcaption`). El hook de `renderers` es `tabs` (`DatosTabsMd`).
 
 ## Cadena con hydrate
 

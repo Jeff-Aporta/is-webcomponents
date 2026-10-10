@@ -358,10 +358,12 @@ function renderTabs(tabs: TabImagenMd[]): string {
     if (!componentesActivos) {
       return `<div class="md-tabs">${tabs.map((t) => `<figure class="md-tabs__panel"><figcaption>${escapeHtml(t.label)}</figcaption>${t.html}</figure>`).join('')}</div>`;
     }
-    const base = `md-tab-${++tabsN}`;
+    // Id estable por documento (la cuenta se reinicia en cada mdToHtml): `state` recuerda la pestaña
+    // en `?s=` (tabs[id]) y al recargar la página vuelve a la misma.
+    const base = `md-tabs-${++tabsN}`;
     const nav = tabs.map((t, k) => `<iswc-tab slot="nav" panel="${base}-${k}">${escapeHtml(t.label)}</iswc-tab>`).join('');
     const panels = tabs.map((t, k) => `<iswc-tab-panel name="${base}-${k}">${t.html}</iswc-tab-panel>`).join('');
-    return `<iswc-tab-group class="md-tabs" active="${base}-0">${nav}${panels}</iswc-tab-group>`;
+    return `<iswc-tab-group class="md-tabs" id="${base}" state active="${base}-0">${nav}${panels}</iswc-tab-group>`;
   }, conKit('iswc-tab-group', 'iswc-tab', 'iswc-tab-panel'));
 }
 
@@ -372,6 +374,7 @@ function renderTabs(tabs: TabImagenMd[]): string {
 export function mdToHtml(src: string, opts: OpcionesMdLite = {}): string {
   const previos = { renderers: renderersActivos, componentes: componentesActivos, tags: tagsActivos };
   renderersActivos = opts.renderers ?? {};
+  tabsN = 0;
   componentesActivos = opts.componentes !== false;
   tagsActivos = opts.tags ?? null;
   try {

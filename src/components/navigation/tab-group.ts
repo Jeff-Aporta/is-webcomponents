@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
+import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from '../_shared/url-nav.js';
 
 /**
  * <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> — Web Components (vanilla, zero dependencies).
@@ -23,6 +23,11 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
  *   url-key       string   — opt-in: persiste el tab activo en `?s=` como
  *                            `{ [url-key]: panel }` (b64url JSON). Vacío = off.
  *                            Nunca crea query params sueltos.
+ *   state         boolean  — recuerda la pestaña activa en `?s=` como `{ tabs: { [id]: índice } }`
+ *                            (requiere `id`): al recargar (F5) vuelve a esa pestaña.
+ *   history       boolean  — con `state`, cada cambio de pestaña entra al historial (atrás/adelante
+ *                            la recorren; para pestañas que cambian la vista). Sin él, el cambio
+ *                            solo reemplaza la entrada actual.
  *
  * Atributos <iswc-tab>
  *   panel         string   — nombre del panel al que apunta (required).
@@ -84,7 +89,8 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
   const VALID_PLACEMENT = ['top', 'bottom', 'start', 'end'];
   const VALID_ACTIVATION = ['auto', 'manual'];
 
-  class IswcTabGroup extends withStyleAttrs(HTMLElement) {
+  class IswcTabGroup extends withStyleAttrs(HTMLElement) {
+
 
     static get observedAttributes(): string[] { return [...TG_OBSERVED]; }
     #mounted = false;
@@ -124,11 +130,15 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       if (!this.hasAttribute('placement')) this.setAttribute('placement', 'top');
       if (!this.hasAttribute('activation')) this.setAttribute('activation', 'auto');
       this.#restoreFromUrl();
+      this.#restaurarEstado();
       this.#syncPanels();
       this.#syncScrollUI();
+      this.#inicial = this.#indiceActivo();
+      if (this.hasAttribute('state')) window.addEventListener('popstate', this.#alVolver);
     }
 
     disconnectedCallback(): void {
+      window.removeEventListener('popstate', this.#alVolver);
       this.#mounted = false;
       this.#scrollRo?.disconnect();
       this.#scrollRo = null;
@@ -147,6 +157,7 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       if (name === 'active') {
         this.#syncPanels();
         this.#persistToUrl();
+        this.#guardarEstado();
       }
       if (name === 'url-key') {
         this.#restoreFromUrl();
@@ -220,6 +231,38 @@ import { readUrlNav, writeUrlNav } from '../_shared/url-nav.js';
       this.#restoringUrl = true;
       this.active = fromUrl;
       this.#restoringUrl = false;
+    }
+
+    /** Índice inicial (el del HTML o el restaurado): no se escribe en la URL si no cambia. */
+    #inicial = -1;
+    #restaurando = false;
+    #alVolver = (): void => this.#restaurarEstado();
+
+    #indiceActivo(): number {
+      const activo = this.active;
+      return this.#allTabs().findIndex((t) => t.getAttribute('panel') === activo);
+    }
+
+    /** `state`: activa la pestaña guardada en `?s=` (`tabs[id]`), si la hay y existe. */
+    #restaurarEstado(): void {
+      if (!this.hasAttribute('state') || !this.id) return;
+      const i = readUrlTabs()[this.id];
+      const tab = i === undefined ? null : this.#allTabs()[i];
+      const panel = tab?.getAttribute('panel');
+      if (!panel || panel === this.active) return;
+      this.#restaurando = true;
+      this.active = panel;
+      this.#restaurando = false;
+    }
+
+    /** `state`: guarda el índice activo en `?s=`; con `history`, como entrada nueva del historial. */
+    #guardarEstado(): void {
+      if (!this.#mounted || this.#restaurando || !this.hasAttribute('state') || !this.id) return;
+      const i = this.#indiceActivo();
+      if (i < 0) return;
+      const guardado = readUrlTabs()[this.id];
+      if (guardado === i || (guardado === undefined && i === this.#inicial)) return;
+      writeUrlTab(this.id, i, this.hasAttribute('history'));
     }
 
     #persistToUrl() {

@@ -63,7 +63,7 @@ export function readUrlState() {
  * @param {Record<string, unknown>} state
  * @param {string[]} [dropLoose]
  */
-export function writeUrlState(state: Record<string, unknown>, dropLoose: string[] = []) {
+export function writeUrlState(state: Record<string, unknown>, dropLoose: string[] = [], push = false) {
   if (typeof globalThis.history === 'undefined' || typeof globalThis.location === 'undefined') {
     return;
   }
@@ -86,7 +86,8 @@ export function writeUrlState(state: Record<string, unknown>, dropLoose: string[
       }
     }
     if (!changed) return;
-    globalThis.history.replaceState(globalThis.history.state, '', url);
+    if (push) globalThis.history.pushState(globalThis.history.state, '', url);
+    else globalThis.history.replaceState(globalThis.history.state, '', url);
   } catch {
     /* ignore */
   }
@@ -128,4 +129,38 @@ export function writeUrlNav(key: string, value: string | null | undefined) {
   if (!k) return;
   const next = value == null || value === '' ? null : String(value);
   patchUrlState({ [k]: next });
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+ * Estado de pestañas en `?s=`: `{ tabs: { [id del grupo]: índice } }`.
+ * Lo usan los grupos con `state` (recuerdan la pestaña al recargar) y, si además
+ * tienen `history`, cada cambio entra al historial (atrás/adelante lo recorren);
+ * sin `history` el cambio solo reemplaza la entrada actual.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+/** Clave de `?s=` donde viven las pestañas. */
+export const URL_TABS_KEY = 'tabs';
+
+/** Índices de pestaña guardados en `?s=` (`{}` si no hay). */
+export function readUrlTabs(): Record<string, number> {
+  const t = readUrlState()[URL_TABS_KEY];
+  if (!t || typeof t !== 'object' || Array.isArray(t)) return {};
+  const out: Record<string, number> = {};
+  for (const [k, v] of Object.entries(t as Record<string, unknown>)) {
+    const n = Number(v);
+    if (k && Number.isInteger(n) && n >= 0) out[k] = n;
+  }
+  return out;
+}
+
+/**
+ * Guarda el índice de la pestaña del grupo `id`. `push`: el cambio entra al historial
+ * (pestañas que cambian la vista); si no, reemplaza la entrada actual.
+ */
+export function writeUrlTab(id: string, indice: number, push = false): void {
+  const k = String(id || '').trim();
+  if (!k || !Number.isInteger(indice) || indice < 0) return;
+  const actual = readUrlState();
+  const tabs = { ...readUrlTabs(), [k]: indice };
+  writeUrlState({ ...actual, [URL_TABS_KEY]: tabs }, [], push);
 }

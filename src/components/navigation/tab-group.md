@@ -240,3 +240,12 @@ Preservar semÃ¡ntica, foco, teclado, labels y ARIA. ARIA detectado: `aria-labe
 - [CSS](./tab-group.css)
 - [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./tab-group.json)
+
+## Estado en la URL (`state`, `history`)
+
+Con `state` (y un `id`), el grupo recuerda la pestaña activa en `?s=` como `{ tabs: { [id]: índice } }`: al recargar (F5) vuelve a ella. Con `history`, además, cada cambio de pestaña entra al historial del navegador (atrás/adelante las recorren; útil cuando la pestaña cambia la vista). Sin `history`, el cambio solo reemplaza la entrada actual y no ensucia la navegación. `url-key` sigue funcionando como antes.
+
+```html
+<iswc-tab-group id="detalle" state active="resumen">…</iswc-tab-group>
+<iswc-tab-group id="vista" state history active="lista">…</iswc-tab-group>
+```

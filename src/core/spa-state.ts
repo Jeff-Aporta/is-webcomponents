@@ -90,10 +90,14 @@ export function createSpaState(opts: OpcionesSpaState = {}): SpaState {
 
   function actualizarUrl(forzar?: 'push' | 'replace') {
     try {
-      const url = urlDe(estado);
-      if (!url) return;
       const vista = vistaDe(estado);
       const empuja = forzar === 'push' || (forzar !== 'replace' && Boolean(vista) && vista !== vistaEnHistorial);
+      // Pestañas recordadas (`tabs`, las escribe url-nav por cada iswc-tab-group con `state`): se
+      // conservan mientras la vista no cambie; una vista nueva arranca sin ellas.
+      const enUrl = leerUrl();
+      const tabs = !empuja && esObjeto(enUrl) && esObjeto(enUrl.tabs) && !('tabs' in estado) ? { tabs: enUrl.tabs } : {};
+      const url = urlDe({ ...estado, ...tabs });
+      if (!url) return;
       escribir(url, empuja ? 'push' : 'replace');
       if (vista) vistaEnHistorial = vista;
     } catch (e) {
