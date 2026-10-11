@@ -180,3 +180,22 @@ test('P9 aislar: cada archivo en su proceso, globales no se pisan, cooldown en e
 });
 
 test('limpieza', () => { rmSync(raiz, { recursive: true, force: true }); });
+
+test('P9 un rojo se reintenta una vez: intermitente queda verde con aviso; un fallo real sigue rojo', async () => {
+  let llamadas = 0;
+  const r = await correr({
+    'r.test.ts': definirPruebas([
+      { nombre: 'P9 intermitente', correr({ expect }) { llamadas++; expect('la segunda pasa', llamadas > 1); } },
+      { nombre: 'P9 siempre rojo', correr({ expect }) { expect('nunca', false); } },
+    ]),
+  }, { sinCooldown: true });
+  const por = Object.fromEntries(r.resultados.map((x) => [x.nombre, x]));
+  assert.equal(por['P9 intermitente'].ok, true, 'pasa al reintentar');
+  assert.ok(por['P9 intermitente'].avisos.some((a) => a.startsWith('intermitente')), 'queda marcada como intermitente');
+  assert.equal(por['P9 siempre rojo'].ok, false, 'un fallo real falla las dos veces');
+  let otra = 0;
+  const sin = await correr({
+    's.test.ts': definirPruebas([{ nombre: 'P9 sin reintento', correr({ expect }) { otra++; expect('primera', otra > 1); } }]),
+  }, { sinCooldown: true, reintentos: 0 });
+  assert.equal(sin.resultados[0].ok, false, 'reintentos: 0 la deja roja a la primera');
+});

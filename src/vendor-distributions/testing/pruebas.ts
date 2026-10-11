@@ -178,6 +178,8 @@ export async function correrPruebas(o: OpcionesCorrida): Promise<ReportePruebas>
   const importar = o.importar ?? ((url: string) => import(url));
   // Sin `sinCooldown` manda el entorno (`TEST_COOLDOWN=0`, `--sin-cooldown`).
   const cooldown = testCooldownFromEnv({ ...(o.sinCooldown ? { disabled: true } : {}), ...(o.cooldownDb ? { dbPath: o.cooldownDb } : {}) });
+  const envReintentos = process.env.TEST_REINTENTOS;
+  const reintentos = Math.max(0, o.reintentos ?? (envReintentos ? Number(envReintentos) || 0 : 1));
   const grupos: Array<{ archivo: string; lista: ListaPruebas }> = [];
   const resultados: ResultadoPrueba[] = [];
 
@@ -237,7 +239,14 @@ export async function correrPruebas(o: OpcionesCorrida): Promise<ReportePruebas>
         }
         preparado = true;
         const t = Date.now();
-        const r = await ejecutar(prueba);
+        let r = await ejecutar(prueba);
+        // Rojo a la primera: se reintenta (red, LLM, streaming). Si pasa, queda como aviso `intermitente`.
+        for (let k = 0; r.error && !r.saltada && base.nivel === 'error' && k < reintentos; k++) {
+          const primero = r.error;
+          log(`↻ ${prueba.nombre}: rojo a la primera, se reintenta — ${primero.slice(0, 200)}`);
+          r = await ejecutar(prueba);
+          if (!r.error) r = { ...r, avisos: [`intermitente: falló a la primera (${primero.slice(0, 300)})`, ...r.avisos] };
+        }
         const durationMs = Date.now() - t;
         if (r.saltada) { resultados.push({ ...base, ok: true, durationMs, saltada: r.saltada, avisos: r.avisos, diag: r.diag }); log(`- ${prueba.nombre} (saltada: ${r.saltada})`); continue; }
         // Una prueba de nivel `aviso` nunca pone rojo: su falla queda como aviso.
@@ -290,7 +299,7 @@ function esReporte(v: unknown): v is ReportePruebas {
 function correrAislado(o: OpcionesCorrida, archivo: string, log: (l: string) => void): Promise<ResultadoPrueba[]> {
   // Sin `new URL`: un archivo de pruebas puede reemplazar el URL global al importarse.
   const hijo = join(dirname(fileURLToPath(import.meta.url)), 'pruebas-hijo.ts');
-  const opciones = { archivo: join(o.raiz, archivo), raiz: o.raiz, solo: o.solo, categoria: o.categoria, sinCooldown: o.sinCooldown, cooldownDb: o.cooldownDb };
+  const opciones = { archivo: join(o.raiz, archivo), raiz: o.raiz, solo: o.solo, categoria: o.categoria, sinCooldown: o.sinCooldown, cooldownDb: o.cooldownDb, reintentos: o.reintentos };
   const [cmd, ...flags] = o.aislar?.comando ?? [];
   if (!cmd) return Promise.reject(new Error('pruebas: `aislar.comando` vacío; se necesita el ejecutable (p. ej. ["node", "--import", "tsx"])'));
   return new Promise((resolver) => {

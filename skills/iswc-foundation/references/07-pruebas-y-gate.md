@@ -14,6 +14,7 @@ fallback) y el destino por protocolo: [11-stagehand.md](11-stagehand.md).
 - Corren una por una; un id repetido aborta antes de correr; un archivo que no carga es rojo.
 - **Cooldown x600**: verde de 1 min → 10 h sin repetirse; rojo corre siempre. `TEST_COOLDOWN=0` o
   `--sin-cooldown` solo para diagnóstico (nunca en el sync). Memoria en `.tmp/`.
+- **Reintento**: una prueba roja se re-corre una vez (`reintentos`, default 1; `TEST_REINTENTOS=0` lo apaga). Si pasa queda verde con el aviso `intermitente` en el reporte (red, LLM, streaming); un fallo real falla las dos veces y bloquea.
 
 ## Capas (caja negra)
 

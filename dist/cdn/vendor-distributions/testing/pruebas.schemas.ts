@@ -97,6 +97,12 @@ export interface OpcionesCorrida {
   sinCooldown?: boolean;
   /** Ruta del JSON de cooldown. Default `.tmp/test-cooldown.json` de la raiz. */
   cooldownDb?: string;
+  /**
+   * Reintentos de una prueba roja antes de darla por roja (default 1; `TEST_REINTENTOS` lo cambia).
+   * Si pasa al reintentar queda verde con el aviso `intermitente`: una prueba de red o de LLM
+   * inestable no tumba el gate, pero queda a la vista. Un fallo real falla las dos veces.
+   */
+  reintentos?: number;
   /** Importador inyectable (tests del runner y adaptadores). Default `import(url)`. */
   importar?: (url: string) => Promise<unknown>;
   log?: (linea: string) => void;
