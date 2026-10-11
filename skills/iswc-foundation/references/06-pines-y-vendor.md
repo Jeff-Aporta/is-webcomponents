@@ -36,19 +36,22 @@ deno task build && deno task test:all
 
 ## Descarga de vendor: `tools/vendor.ts` (pin por fecha ISO)
 
-Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/tools/vendor.ts`, con Deno, a partir de un JSON del proyecto (ver `vendor.schemas.ts`):
+Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendor-distributions/tools/vendor.ts`, con Deno, a partir de un JSON del proyecto (ver `vendor.schemas.ts`):
 
 ```json
 {
   "repo": "Jeff-Aporta/is-webcomponents",
   "local": "C:/ContaPyme/Personal/apps/is-webcomponents",
   "archivos": [
-    { "desde": "dist/cdn/lib/obj.ts", "hacia": "src/sources/000 Base/ISU/obj.ts", "doc": "dist/cdn/lib/obj.md" }
+    { "desde": "dist/cdn/vendor-distributions/lib/obj.ts", "hacia": "src/sources/000 Base/ISU/obj.ts", "doc": "src/vendor-distributions/lib/obj.md" }
   ]
 }
 ```
 
+- **Qué hay para vendorizar**: todo vive en `dist/cdn/vendor-distributions/` por paquete (`lib/` obj, zod · `testing/`
+  pruebas, cooldown, cola, deno-test, stagehand · `tools/` vendor, pin-update, sync-entregable, render-*, download-iconify).
+  Índice con propósito y doc de cada archivo: `dist/cdn/vendor-distributions/README.md`.
 - **Carpeta `ISU/`**: lo vendorizado conserva su nombre normal y vive en una carpeta `ISU/` del proyecto, así no choca con los archivos propios.
 - **Pin por fecha ISO**: por archivo compiten el checkout local del kit (fecha del último commit que lo tocó, o «ahora» si tiene cambios sin commitear) y el HEAD remoto; gana el más reciente y solo se escribe si es más nuevo que la copia (`// @vendor <ISO>`). Nunca hay regresiones.
-- **Cabecera**: `// @vendor <ISO> <repo>@<sha|local> <desde>` y `// @doc <documentación>`.
+- **Cabecera**: `// @vendor <ISO> <repo>@<sha|local> <desde>` y `// @doc <URL jsDelivr de su .md>`. La doc va SIEMPRE por CDN (nunca ruta local): sale de `doc` en `vendor.json` o, si falta, de la `// @doc` con que la fuente abre (todo archivo de `vendor-distributions/` la trae; guardián `meta/vendor-distributions-doc.test.ts`), fijada al SHA ganador (a la rama si ganó el checkout local).
 - **Dónde se corre**: el comando vive solo en el `package.json` del mirror `_experimental` (el del entregable no lo define), y el sync al entregable siempre descarga antes de copiar.

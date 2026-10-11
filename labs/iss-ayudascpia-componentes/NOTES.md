@@ -21,7 +21,7 @@ agrupadores `#7ACFF4/#FFFFC1/#BCFFBB/#EAB6B0/#81FF81/#01C000`, O/C `#7ACFF4`.
 ## Observaciones
 
 - Lab **persiste en el repo**; no se documenta en demos/galería.
-- El render usa `src/cdn/tools` (vendor `dist/cdn/tools`) + CDN **local**
+- El render usa `src/vendor-distributions/tools` (vendor `dist/cdn/vendor-distributions/tools`) + CDN **local**
   (`dist/cdn`). Playwright se inyecta; el lab solo arma payloads. Mismo
   contrato que puede consumir el ISS desde Deno/vendor.
 - Theme InSoft CD: `theme="insoft-cd"` (paleta CD + `invertAssembly`).
@@ -51,7 +51,7 @@ deno run -A --no-check labs/iss-ayudascpia-componentes/render.mjs
 # preview: deno task dev → /labs/iss-ayudascpia-componentes/preview.html
 ```
 
-Vendor / Deno (otro repo): copiar `dist/cdn/tools/*.ts` e inyectar Playwright:
+Vendor / Deno (otro repo): copiar `dist/cdn/vendor-distributions/tools/*.ts` (+ `lib/obj*.ts`) e inyectar Playwright:
 
 ```js
 import { createRequire } from 'node:module';

@@ -2,7 +2,11 @@
 
 Cómo se escriben specs y pruebas WHAT: [especificar-what.md](../templates/specs/especificar-what.md).
 
-## Sistema común del kit (`tools/pruebas.ts`)
+## Sistema común del kit (`testing/pruebas.ts`)
+
+Todo lo de esta referencia se vendoriza desde `dist/cdn/vendor-distributions/testing/` (`pruebas`, `pruebas-hijo`,
+`test-cooldown`, `test-queue`, `deno-test` y sus `.schemas`). El LLM de Stagehand (proveedores en orden, barrido,
+fallback) y el destino por protocolo: [11-stagehand.md](11-stagehand.md).
 
 - Todas las pruebas en `tests/<area>/*.test.ts`; cada archivo `export default definirPruebas([...], hooks?)`.
 - Prueba: `{ nombre (id único, incluye su [W-*]), categoria: 'what'|'how', correr(ctx), timeoutMs?, nivel?: 'error'|'aviso', saltar? }`.

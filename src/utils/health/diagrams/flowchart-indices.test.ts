@@ -13,7 +13,7 @@
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../cdn/lib/obj.ts';
+import { Obj } from '../../../vendor-distributions/lib/obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
 
 type N = { id: string; label?: string; shape?: string };

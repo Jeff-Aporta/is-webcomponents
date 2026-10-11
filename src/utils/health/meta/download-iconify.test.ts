@@ -1,4 +1,4 @@
-// download-iconify.test.ts — QUÉ hace la herramienta de íconos de las apps (src/cdn/tools/download-iconify.ts),
+// download-iconify.test.ts — QUÉ hace la herramienta de íconos de las apps (src/vendor-distributions/tools/download-iconify.ts),
 // como caja negra: una app en disco + una API de Iconify simulada → `assets/iconify.json` y los SVG.
 //   I1 descarga los ids reales que la app usa; `host` sale de deno.json (`iswc.host`).
 //   I2 descarta lo que no es un ícono (`node:fs`, set inexistente) y los ejemplos en comentarios.
@@ -10,7 +10,7 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { descargarIconos, mapaDelKit } from '../../../cdn/tools/download-iconify.ts';
+import { descargarIconos, mapaDelKit } from '../../../vendor-distributions/tools/download-iconify.ts';
 
 const SETS: Record<string, Record<string, string>> = {
   mdi: { home: '<path d="H"/>', close: '<path d="C"/>', 'chevron-down': '<path d="V"/>', star: '<path d="S"/>' },
@@ -126,10 +126,10 @@ Deno.test('download-iconify: I7 sin red conserva lo que hay y avisa; offline no 
 Deno.test('download-iconify: el mapa del kit por defecto es el del mismo SHA (o checkout) que la herramienta', () => {
   const sha = 'a'.repeat(40);
   assertEquals(
-    mapaDelKit(`https://raw.githubusercontent.com/o/iswc-root/${sha}/src/cdn/tools/download-iconify.ts`),
+    mapaDelKit(`https://raw.githubusercontent.com/o/iswc-root/${sha}/src/vendor-distributions/tools/download-iconify.ts`),
     `https://raw.githubusercontent.com/o/iswc-root/${sha}/assets/iconify.json`,
   );
-  assertEquals(mapaDelKit('file:///c/kit/src/cdn/tools/download-iconify.ts'), 'file:///c/kit/assets/iconify.json');
+  assertEquals(mapaDelKit('file:///c/kit/src/vendor-distributions/tools/download-iconify.ts'), 'file:///c/kit/assets/iconify.json');
   assertEquals(mapaDelKit('https://example.com/otra/cosa.ts'), null);
 });
 

@@ -89,7 +89,7 @@ Los `import` relativos entre `.min.js` llevan el mismo `?v=`, sellado en el buil
 
 Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `contentHash`). El build los publica en `dist/cdn/build/`.
 
-Render headless de diagramas (SVG/PNG): `src/cdn/tools/` (`renderDiagram`, `renderDiagramBatch`, `writeDiagramOutputs`). El build los publica en `dist/cdn/tools/`. Playwright **no** va en el vendor: el consumidor lo inyecta (`createRequire(…​)('playwright').chromium`). Sirve para labs ISWC y para generadores Deno de otros repos (ISS, etc.) con el mismo contrato.
+Render headless de diagramas (SVG/PNG): `src/vendor-distributions/tools/` (`renderDiagram`, `renderDiagramBatch`, `writeDiagramOutputs`). El build los publica en `dist/cdn/vendor-distributions/tools/`. Playwright **no** va en el vendor: el consumidor lo inyecta (`createRequire(…​)('playwright').chromium`). Sirve para labs ISWC y para generadores Deno de otros repos (ISS, etc.) con el mismo contrato.
 
 ## Sheet cache (apps)
 

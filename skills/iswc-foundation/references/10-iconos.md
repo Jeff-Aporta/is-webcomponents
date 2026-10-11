@@ -23,7 +23,7 @@ el registro de consumos.
 descargar nada); `deno task pin` la incluye en el inventario y `pin --nuevo` la sube con el resto:
 
 ```js
-import { descargarIconos } from 'https://raw.githubusercontent.com/<owner>/<repo>/<sha40>/src/cdn/tools/download-iconify.ts';
+import { descargarIconos } from 'https://raw.githubusercontent.com/<owner>/<repo>/<sha40>/src/vendor-distributions/tools/download-iconify.ts';
 await descargarIconos({ raiz: new URL('..', import.meta.url), roots: ['index.html', 'src', 'view'] });
 ```
 
@@ -42,7 +42,7 @@ await descargarIconos({ raiz: new URL('..', import.meta.url), roots: ['index.htm
 
 Sin red no rompe el build: conserva lo que hay en disco, no poda y avisa.
 
-## `iconify.json` (contrato: `IconifyMapSchema`, `src/cdn/tools/download-iconify.schemas.ts`)
+## `iconify.json` (contrato: `IconifyMapSchema`, `src/vendor-distributions/tools/download-iconify.schemas.ts`)
 
 ```json
 {

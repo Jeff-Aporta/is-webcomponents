@@ -20,7 +20,7 @@ const MAX_KB = 200;
 async function bundlesDeComponentes(): Promise<string[]> {
   const out: string[] = [];
   for (const carpeta of await readdir(CDN, { withFileTypes: true })) {
-    if (!carpeta.isDirectory() || carpeta.name === 'lib' || carpeta.name === 'tools' || carpeta.name === 'skills' || carpeta.name === 'build') continue;
+    if (!carpeta.isDirectory() || carpeta.name === 'lib' || carpeta.name === 'vendor-distributions' || carpeta.name === 'skills' || carpeta.name === 'build') continue;
     for (const f of await readdir(join(CDN, carpeta.name))) {
       if (f.endsWith('.min.js')) out.push(join(CDN, carpeta.name, f));
     }

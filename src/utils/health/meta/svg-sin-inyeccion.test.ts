@@ -5,7 +5,7 @@
  *   S1 ningún `</svg>` sin espacio en lo exportado; S2 el resultado sigue siendo XML equivalente.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { sinInyeccion } from '../../../cdn/tools/render-diagram.ts';
+import { sinInyeccion } from '../../../vendor-distributions/tools/render-diagram.ts';
 
 Deno.test('svg: S1 el exportador no deja un </svg> que live-server pueda usar para inyectar', () => {
   const out = sinInyeccion('<svg xmlns="http://www.w3.org/2000/svg"><g><svg><rect/></svg></g></svg>');

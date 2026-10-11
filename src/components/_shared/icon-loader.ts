@@ -7,7 +7,7 @@
  *   2. API de Iconify (`https://api.iconify.design/<set>/<nombre>.svg`): todo lo demás, y también
  *      si el archivo local no responde.
  *
- * El mapa lo genera `deno task icons` (`assets/dl.js` → `src/cdn/tools/download-iconify.ts`) con los
+ * El mapa lo genera `deno task icons` (`assets/dl.js` → `src/vendor-distributions/tools/download-iconify.ts`) con los
  * íconos de la app y los de todo lo que consume (kit y otras apps): no se enlazan rutas de otras apps
  * en ejecución. El registrador del build (`<prefijo>Loader.min.js`) lo registra empujando su URL a la
  * cola global `globalThis.__ISWC_ICONS__` (antes o después de que cargue este módulo); desde código,

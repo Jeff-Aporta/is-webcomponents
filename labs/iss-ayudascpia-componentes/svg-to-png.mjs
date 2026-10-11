@@ -7,7 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { tmpdir } from 'node:os';
 import { mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { sanitizeSvgRoot, staticSvgWrapper } from '../../src/cdn/tools/sanitize-svg.ts';
+import { sanitizeSvgRoot, staticSvgWrapper } from '../../src/vendor-distributions/tools/sanitize-svg.ts';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');

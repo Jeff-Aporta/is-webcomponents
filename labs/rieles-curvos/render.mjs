@@ -7,7 +7,7 @@
 
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { labDir, renderLab } from '../../src/cdn/tools/render-lab.ts';
+import { labDir, renderLab } from '../../src/vendor-distributions/tools/render-lab.ts';
 
 const LAB = labDir(import.meta.url);
 const labs = (p) => join(LAB, '..', p);

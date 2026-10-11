@@ -3,7 +3,7 @@
 // Uso: deno run -A --no-check labs/iss-ayudascpia-der/render.mjs
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { labDir, renderLab } from '../../src/cdn/tools/render-lab.ts';
+import { labDir, renderLab } from '../../src/vendor-distributions/tools/render-lab.ts';
 
 const LAB = labDir(import.meta.url);
 const payload = JSON.parse(await readFile(join(LAB, 'payload.json'), 'utf8'));

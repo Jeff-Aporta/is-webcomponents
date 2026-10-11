@@ -3,7 +3,7 @@
 // Uso: deno run -A --no-check labs/iss-ayudascpia-componentes/render.mjs [v1|v2|all]
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { labDir, renderLab } from '../../src/cdn/tools/render-lab.ts';
+import { labDir, renderLab } from '../../src/vendor-distributions/tools/render-lab.ts';
 
 const LAB = labDir(import.meta.url);
 const arg = (process.argv[2] || 'all').toLowerCase();

@@ -3,7 +3,7 @@
 // Baja a assets/iconify/<set>/<nombre>.svg los íconos que usa la app y TODOS los de lo que consume
 // (el kit por defecto; otras apps iswc se suman en `mapas`, por SHA), y escribe assets/iconify.json
 // (con `host` de deno.json → iswc.host). En ejecución: si el ícono está en el mapa → local; si no → API.
-import { descargarIconos } from 'https://raw.githubusercontent.com/__REPO__/__SHA__/src/cdn/tools/download-iconify.ts';
+import { descargarIconos } from 'https://raw.githubusercontent.com/__REPO__/__SHA__/src/vendor-distributions/tools/download-iconify.ts';
 
 await descargarIconos({
   raiz: new URL('..', import.meta.url),

@@ -6,7 +6,7 @@
 //
 // Uso: deno run -A --no-check labs/iss-ayudascpia-flujos/render.mjs [slug…]
 import { join } from 'node:path';
-import { jobsDeEditables, labDir, renderLab } from '../../src/cdn/tools/render-lab.ts';
+import { jobsDeEditables, labDir, renderLab } from '../../src/vendor-distributions/tools/render-lab.ts';
 
 const LAB = labDir(import.meta.url);
 // Solo soporte de incrustación (`src` de secuencia-subproceso): no se dibuja como diagrama propio.

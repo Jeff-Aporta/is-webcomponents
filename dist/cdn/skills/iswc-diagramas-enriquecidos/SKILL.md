@@ -75,7 +75,10 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
 
 - Un controller es el **puente** entre el flujo y la BD: expone un puente `-(O=` por acción
   (`shape: "bridge"`, `of: <controller>`, `op: C|R|U|D`) colgando debajo de él: socket del lado del
-  controller, bola con la letra CRUD, ícono de BD y nombre de la acción.
+  controller y la bola con el ícono de su operación (sin letras), del color del método HTTP llevado a
+  SQL (SELECT↔GET azul `#61AFFE`, INSERT↔POST verde `#49CC90`, UPDATE↔PUT naranja `#FCA130`, DELETE
+  rojo `#F93E3E`). El `label` del puente es la **función del controller** que hace la operación
+  (`get()`, `list()`, `crear()`…), nunca un verbo genérico como `leer()`.
 - Un único puerto de **entrada** (todas las que consumen convergen ahí, triángulo sólido tocando el
   O) y un puerto por **salida** (triángulo sólido a ~34 px del O). Las entradas llevan la acción de BD
   (`SELECT`, `INSERT`…, con su ícono); la salida a su tabla no lleva texto.
@@ -86,8 +89,15 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
   controller, por cualquiera de sus 4 lados: abajo mientras la fila quepa en su ancho, luego derecha,
   izquierda y arriba (si aun sobran, el controller se ensancha). Los otros rieles del controller usan
   un lado libre de puentes, y al abrir espacio el controller y sus puentes se mueven como un bloque.
-- Animación: los puntos de las líneas continuas van en color secundario (skyblue `#7ACFF4`) y
-  **detrás** del riel (el trazo negro queda encima).
+- Animación: los puntos de las líneas continuas van por defecto **del color de la arista** (la
+  arista acepta `color`) y **detrás** del riel; el consumidor los personaliza con
+  `dots: { color, size }` en la arista.
+- **Paralelismo**: la arista que inicia una bifurcación llega **centrada** a su barra (en el costado
+  que le toque); la reunión de ramas (2+ entradas, una salida) es un **⦿ con pulso de radar**, no
+  una barra.
+- **Auto-cruce prohibido**: ninguna arista se corta ni se pisa a sí misma (se descarta el bucle).
+- **Proximidad**: pasar cerca de entidades, conectores y textos se desincentiva hasta 3U, más cuanto
+  más cerca (los `-(O` más que los demás conectores); fuera del radio no cuesta.
 - Las columnas de entidades se **apilan** (una debajo de otra, cada controller con sus puentes) y no
   empujan a las otras columnas: cada columna solo se empuja a sí misma.
 - En los md, las pestañas de un EP son **Seq** (secuencia) y **Seq in Vec** (secuencia en vector).

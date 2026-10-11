@@ -71,6 +71,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Zod y tipos | [05-zod-y-tipos.md](references/05-zod-y-tipos.md) |
 | Pines y vendor del kit | [06-pines-y-vendor.md](references/06-pines-y-vendor.md) · [actualizar-pin.md](templates/specs/iswc/actualizar-pin.md) |
 | Pruebas, Stagehand y gate | [07-pruebas-y-gate.md](references/07-pruebas-y-gate.md) |
+| Stagehand compartido: proveedores LLM, generador con fallback, destino por protocolo | [11-stagehand.md](references/11-stagehand.md) |
 | Specs y pruebas WHAT | [templates/specs/especificar-what.md](templates/specs/especificar-what.md) |
 | Sync a entregable (mirror) | [08-sync-entregable.md](references/08-sync-entregable.md) |
 | Alinear una app existente al estándar | [09-alinear-app.md](references/09-alinear-app.md) |

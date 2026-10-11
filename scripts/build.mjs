@@ -550,15 +550,16 @@ try {
 // y nadie llegaba a esas 177 paginas. Para agentes el canal es `skills/`,
 // que este mismo build publica en `dist/cdn/skills/`.
 
-// ── lib/: utilidades comunes (Obj: operaciones sobre objetos y referencias) ──
-// Dos formas: la fuente .ts (vendor de ISS/ISW con su propio zod) y un bundle ESM para el navegador
-// (zod incluido): `import { Obj } from '<cdn>/lib/obj.min.js'`. Los consumidores depositan lo
-// vendorizado en su carpeta ISU/ (no choca con sus archivos).
+// ── lib/: bundles para el navegador (obj.min.js con Zod incluido; zod.min.js compartido) ──
+// Las FUENTES vendorizables (obj.ts, obj.schemas.ts, obj.md, zod.ts) viven en
+// src/vendor-distributions/lib y se publican en dist/cdn/vendor-distributions/lib (más abajo).
+// Los bundles quedan en dist/cdn/lib porque los de componentes importan `../lib/zod.min.js`
+// (resolver `zod-externo`; guardián meta/zod-compartido.test.ts).
+const vendorSrc = join(root, 'src', 'vendor-distributions');
 const libOut = join(dist, 'lib');
 await mkdir(libOut, { recursive: true });
-for (const name of ['obj.ts', 'obj.schemas.ts', 'obj.md']) await copyFile(join(root, 'src', 'cdn', 'lib', name), join(libOut, name));
 await build({
-  entryPoints: [join(root, 'src', 'cdn', 'lib', 'obj.ts')],
+  entryPoints: [join(vendorSrc, 'lib', 'obj.ts')],
   outfile: join(libOut, 'obj.min.js'),
   bundle: true,
   minify: true,
@@ -567,7 +568,7 @@ await build({
   legalComments: 'none',
 });
 await build({
-  entryPoints: [join(root, 'src', 'cdn', 'lib', 'zod.ts')],
+  entryPoints: [join(vendorSrc, 'lib', 'zod.ts')],
   outfile: join(libOut, 'zod.min.js'),
   bundle: true,
   minify: true,
@@ -575,7 +576,7 @@ await build({
   target: 'es2022',
   legalComments: 'none',
 });
-console.log(`  ${'lib/'.padEnd(18)} obj.ts (vendor) + obj.min.js (navegador) + zod.min.js (compartido por los bundles)`);
+console.log(`  ${'lib/'.padEnd(18)} obj.min.js (navegador) + zod.min.js (compartido por los bundles)`);
 
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
@@ -638,15 +639,24 @@ for (const name of await readdir(buildSrc)) {
 await copyFile(join(root, 'src', 'cdn', 'asset-store.ts'), join(buildOut, 'asset-store.ts'));
 console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 
-// tools/: render headless de diagramas (Playwright inyectado por el consumidor).
-const toolsSrc = join(root, 'src', 'cdn', 'tools');
-const toolsOut = join(dist, 'tools');
-await mkdir(toolsOut, { recursive: true });
-for (const name of await readdir(toolsSrc)) {
-  if (!name.endsWith('.ts') && !name.endsWith('.mjs')) continue;
-  await copyFile(join(toolsSrc, name), join(toolsOut, name));
+// vendor-distributions/: TODO lo que un consumidor trae por vendor (tools/vendor.ts), por paquete:
+//   lib/ (obj, zod) · testing/ (pruebas, cooldown, cola, deno-test, stagehand) · tools/ (vendor,
+//   pin-update, sync-entregable, render-diagram, render-lab, download-iconify…) + README.md índice.
+// Se copian fuentes (.ts/.mjs) y docs (.md); los consumidores las depositan en su carpeta ISU/.
+const vendorOut = join(dist, 'vendor-distributions');
+await rm(vendorOut, { recursive: true, force: true });
+let nVendor = 0;
+for (const paquete of ['', 'lib', 'testing', 'tools']) {
+  const srcDir = join(vendorSrc, paquete);
+  const outDir = join(vendorOut, paquete);
+  await mkdir(outDir, { recursive: true });
+  for (const name of await readdir(srcDir, { withFileTypes: true })) {
+    if (!name.isFile() || !/\.(ts|mjs|md)$/.test(name.name)) continue;
+    await copyFile(join(srcDir, name.name), join(outDir, name.name));
+    nVendor++;
+  }
 }
-console.log(`  ${'tools/'.padEnd(18)} ts vendor (los consumidores los depositan en su carpeta ISU/)`);
+console.log(`  ${'vendor-distrib./'.padEnd(18)} ${nVendor} archivos (lib, testing, tools) para vendorizar`);
 
 // Estilos de diagrama (diagram-styles.ts): los temas JSON no van dentro de
 // los bundles; se descargan bajo demanda junto a ellos, en diagrams/themes/.
