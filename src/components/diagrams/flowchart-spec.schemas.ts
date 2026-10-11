@@ -5,6 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import { ZPuntosRiel } from "../_shared/diagram-flow.schemas.js";
 import { DiagramNodeKindSchema, NodeEmbedSpecSchema, EmbedBoxSchema, EmbedSizeSchema } from "../_shared/diagram-embed.schemas.js";
 
 export const AnchorSideSchema = z.union([z.literal('left'), z.literal('right'), z.literal('top'), z.literal('bottom')]);
@@ -139,6 +140,10 @@ export const FlowEdgeSpecSchema = z.object({
   icon: z.string().optional(),
   /** Flujo animado al revés: de la punta al origen (ver _shared/diagram-flow.ts). */
   reverse: z.boolean().optional(),
+  /** Color de la arista (riel, punta y, por defecto, sus puntos animados). */
+  color: z.string().optional(),
+  /** Puntos animados del riel continuo: color y tamaño (por defecto, el color y el ancho de la arista). */
+  dots: ZPuntosRiel.optional(),
 });
 export type FlowEdgeSpec = z.infer<typeof FlowEdgeSpecSchema>;
 
@@ -204,6 +209,8 @@ export const FlowLayoutNodeSchema = z.object({
   pillFloat: z.boolean().optional(),
   /** Puente `-(O=`: su controller y su letra CRUD. */
   bridge: FlowBridgeSchema.optional(),
+  /** Barra que reúne ramas paralelas (2+ entradas, una salida): se dibuja como ⦿ con pulso de radar. */
+  union: z.boolean().optional(),
   /** Puente `-(O=`: lado del controller del que cuelga (abajo por defecto). */
   lado: z.enum(['bottom', 'right', 'left', 'top']).optional(),
   /** Nodo de declaración: sus variables, el ancho de cada columna y la caja de la tabla (lienzo). */
@@ -253,6 +260,9 @@ export const FlowLayoutEdgeSchema = z.object({
   labelIcon: z.string().optional(),
   /** Flujo animado al revés (de la punta al origen). */
   reverse: z.boolean().optional(),
+  /** Color de la arista y puntos animados personalizados (del spec). */
+  color: z.string().optional(),
+  dots: ZPuntosRiel.optional(),
   hue: z.number().optional(),
 });
 export type FlowLayoutEdge = z.infer<typeof FlowLayoutEdgeSchema>;

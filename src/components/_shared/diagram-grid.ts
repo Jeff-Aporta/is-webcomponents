@@ -291,3 +291,30 @@ export function nudgeRectFromZones<T extends GridRect>(rect: T, zones: readonly 
 export function blockExclusionZones(g: CostGrid, zones: readonly ExclusionZone[], offsetX: number = 0, offsetY: number = 0): void {
   for (const z of zones) blockRect(g, z.x + offsetX, z.y + offsetY, z.w, z.h);
 }
+
+/**
+ * Costo RADIAL alrededor de un rectángulo (px): dentro de `radio` px de su borde, cada celda lleva su
+ * costo al máximo entre el que tenía y `1 + pico·(1 − d/radio)` — más caro cuanto más cerca; fuera
+ * del radio no cambia. Se combina por MÁXIMO (dos obstáculos cercanos no se suman), así deja un
+ * margen sin encerrar pasillos. El interior no se toca (lo bloquea quien lo necesite).
+ */
+export function applyRadialCost(g: CostGrid, rect: GridRect, radio: number, pico: number): void {
+  if (radio <= 0 || pico <= 0) return;
+  const c0 = Math.max(0, Math.floor((rect.x - radio) / g.grid));
+  const r0 = Math.max(0, Math.floor((rect.y - radio) / g.grid));
+  const c1 = Math.min(g.cols - 1, Math.ceil((rect.x + rect.w + radio) / g.grid));
+  const r1 = Math.min(g.rows - 1, Math.ceil((rect.y + rect.h + radio) / g.grid));
+  for (let r = r0; r <= r1; r++) {
+    for (let c = c0; c <= c1; c++) {
+      const px = c * g.grid;
+      const py = r * g.grid;
+      const dx = Math.max(rect.x - px, 0, px - (rect.x + rect.w));
+      const dy = Math.max(rect.y - py, 0, py - (rect.y + rect.h));
+      const d = Math.hypot(dx, dy);
+      if (d >= radio) continue;
+      const i = r * g.cols + c;
+      const v = 1 + pico * (1 - d / radio);
+      if (g.cost[i]! < v) g.cost[i] = v;
+    }
+  }
+}

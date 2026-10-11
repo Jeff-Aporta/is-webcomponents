@@ -275,6 +275,8 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const stub = Math.max(clearance, opts.stub ?? C.grid.stub);
   const shareRadius = opts.shareRadius ?? C.share.radius;
   const entityGlowR = opts.entityGlow ?? C.entity.radius;
+  const TEXT_GLOW_R = C.text.radius;
+  const TEXT_GLOW_MUL = C.text.glow;
   const OVERLAP_MUL = C.rail.overlap;
   const MERGE_RADIUS_PITCHES = C.rail.mergePitches;
   // Embudo final del mismo destino (donde compartir riel no se cobra): acotado
@@ -370,6 +372,13 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
           const ddy = Math.max(c.y - clearance - y, 0, y - (c.y + c.h + clearance));
           const d = Math.max(ddx, ddy);
           if (d < entityGlowR) glow = Math.max(glow, 1 + ENTITY_GLOW_MUL * (1 - d / entityGlowR));
+        }
+      }
+      // Brillo de los textos: el mismo degradado, medido desde su caja.
+      if (!blocked[k] && TEXT_GLOW_R > 0 && TEXT_GLOW_MUL > 0) {
+        for (const t of world.titles) {
+          const d = Math.hypot(Math.max(t.x - x, 0, x - (t.x + t.w)), Math.max(t.y - y, 0, y - (t.y + t.h)));
+          if (d < TEXT_GLOW_R) glow = Math.max(glow, 1 + TEXT_GLOW_MUL * (1 - d / TEXT_GLOW_R));
         }
       }
       for (let r = 0; r < world.rings.length; r++) {
@@ -653,6 +662,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
     }
     const prohAllowed = prohibited.map((p) => e.fromPkgs.has(p.id));
     const ownRing = e.toRing ? world.rings.findIndex((r) => r.id === e.toRing!.id) : -1;
+    const propios = new Set((e.ownRings ?? []).map((id) => world.rings.findIndex((r) => r.id === id)).filter((r) => r >= 0));
     const free = (k: number): boolean =>
       !blocked[k]
       && (ringOwner[k] < 0)
@@ -785,7 +795,7 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
         const sameFunnel = merge && !(ko && enIncentivo && ko[o]![nk]! > 0) ? go[o]![nk]! : 0;
         // ── Campo de factores: producto de brillos; cada nodo parte de 1 ──
         let mul = baseMul[nk]! * borderMul[o]![nk]! * (1 + hist[nk]! * HISTORY_MUL);
-        if (ringGlowOwner[nk]! >= 0 && ringGlowOwner[nk] !== ownRing) mul *= ringGlow[nk]!;
+        if (ringGlowOwner[nk]! >= 0 && ringGlowOwner[nk] !== ownRing && !propios.has(ringGlowOwner[nk]!)) mul *= ringGlow[nk]!;
         if (behind(xs[ni]!, ys[nj]!)) mul *= 1 + RETREAT_MUL;
         if (others > 0) mul *= 1 + OVERLAP_MUL * others * pf;
         if (sameFunnel > 0) mul *= SAME_FUNNEL_MUL;

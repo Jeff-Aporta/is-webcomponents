@@ -1,6 +1,6 @@
 import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers } from '../_shared/node-link-layout.js';
 import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from '../_shared/diagram-embed.js';
-import { pathPoints } from '../_shared/diagram-arrow.js';
+import { pathPoints, pathSinAutoCruces } from '../_shared/diagram-arrow.js';
 import type { BoxSide } from './diagram-types.js';
 
 // `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
@@ -9,7 +9,7 @@ import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import {
-  makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, ceilDiagramGrid, rectsOverlap,
+  makeCostGrid, blockRect, applyRectCost, applyRadialCost, snapDiagramGrid, ceilDiagramGrid, rectsOverlap,
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
 } from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
@@ -19,6 +19,7 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
 import { estimateTextWidth, wrapText } from '../_shared/diagram-text-wrap.js';
 import { grafoDirigido } from '../_shared/diagram-graph.js';
 import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "./flowchart-spec.schemas.js";
+import type { TPuntosRiel } from "../_shared/diagram-flow.schemas.js";
 import type { ErThemeJson } from "./theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
@@ -203,7 +204,18 @@ function readEdge(raw: Record<string, unknown>, i: number): FlowEdgeSpec {
     ...(raw.labelVertical === true || raw.labelDirection === 'vertical' ? { labelVertical: true } : {}),
     ...(typeof raw.icon === 'string' && raw.icon.includes(':') ? { icon: raw.icon.trim() } : {}),
     ...(raw.reverse === true ? { reverse: true } : {}),
+    ...(typeof raw.color === 'string' && raw.color.trim() ? { color: raw.color.trim() } : {}),
+    ...(leerPuntos(raw.dots) ?? {}),
   };
+}
+
+/** `dots: { color, size }` de una arista: los puntos animados personalizados (ver diagram-flow). */
+function leerPuntos(raw: unknown): { dots: TPuntosRiel } | null {
+  const r = asRecord(raw);
+  const color = typeof r.color === 'string' && r.color.trim() ? r.color.trim() : undefined;
+  const size = Number(r.size);
+  const dots = { ...(color ? { color } : {}), ...(Number.isFinite(size) && size > 0 ? { size } : {}) };
+  return Object.keys(dots).length ? { dots } : null;
 }
 
 /** Carriles de contexto: `lanes: [{ id, label }]` (o `["Cliente", …]`, id = label). */
@@ -351,6 +363,8 @@ export function flowchartSpecToJson(spec: FlowResolvedSpec): Record<string, unkn
     if (e.labelVertical) row.labelVertical = true;
     if (e.icon) row.icon = e.icon;
     if (e.reverse) row.reverse = true;
+    if (e.color) row.color = e.color;
+    if (e.dots) row.dots = e.dots;
     return row;
   });
   return out;
@@ -492,6 +506,9 @@ export function computeFlowchartLayout(
   if (spec.direction === 'LR' || spec.direction === 'RL') {
     for (const z of sized) if (specByIdPre.get(z.id)?.shape === 'bar') [z.w, z.h] = [z.h, z.w];
   }
+  // Punto de convergencia (barra con 2+ entradas y una sola salida): un ⦿, no una barra.
+  const uniones = insoft ? unionesDe(spec) : new Set<string>();
+  for (const z of sized) if (uniones.has(z.id)) [z.w, z.h] = [FLOW_TERMINAL_D, FLOW_TERMINAL_D];
   const hasEdgeLabels = spec.edges.some((e) => e.label);
   const lanesOn = insoft && !!spec.lanes?.length;
   // Comentarios: no son pasos del flujo; van pegados al nodo que señalan (su espacio se reserva ahí).
@@ -547,6 +564,7 @@ export function computeFlowchartLayout(
       description: s?.description,
       hue: ov?.hue ?? s?.hue ?? (s?.group ? groupHue.get(s.group) : undefined),
       group: s?.group,
+      ...(uniones.has(n.id) ? { union: true } : {}),
       ...placedExtras(s, sizedById.get(n.id), (ov?.x ?? auto.x) + offsetX, (ov?.y ?? auto.y) + offsetY),
     };
   });
@@ -570,10 +588,12 @@ export function computeFlowchartLayout(
   // Rejilla de costos: las cajas se bloquean para que el A* las rodee.
   const grid = makeCostGrid(width, height);
   const posById = new Map<string, FlowLayoutNode>(nodes.map((n) => [n.id, n]));
-  // Capas de costo: (1) brillo de entidad, 2U alrededor de cada caja, ×1.05, combinado por MÁXIMO
-  // (dos cajas cercanas no se suman); (2) la caja bloqueada; (3) rieles quemados, ADITIVOS (ver
+  // Capas de costo: (1) proximidad RADIAL, 3U alrededor de cada entidad, conector y texto, más cara
+  // cuanto más cerca (los `-(O` más que los demás conectores), combinada por MÁXIMO (dos cercanos no
+  // se suman; ver PROXIMIDAD); (2) cajas y textos bloqueados; (3) rieles quemados, ADITIVOS (ver
   // costearRiel), que se suman sobre todo lo anterior a medida que se rutea.
-  for (const n of nodes) brilloMax(grid, n.x - BRILLO_ENTIDAD.radio, n.y - BRILLO_ENTIDAD.radio, n.w + BRILLO_ENTIDAD.radio * 2, n.h + BRILLO_ENTIDAD.radio * 2, BRILLO_ENTIDAD.factor);
+  for (const n of nodes) proximidad(grid, n, specById.get(n.id)?.shape);
+  for (const t of textos.values()) applyRadialCost(grid, t, PROXIMIDAD.radio, PROXIMIDAD.texto);
   for (const n of nodes) blockRect(grid, n.x - 6, n.y - 6, n.w + 12, n.h + 12);
   // Segunda pasada: los textos de las aristas también son obstáculos para el A*.
   for (const t of textos.values()) blockRect(grid, t.x - 4, t.y - 4, t.w + 8, t.h + 8);
@@ -581,6 +601,7 @@ export function computeFlowchartLayout(
   const titulosGrupo: EmbedBox[] = placed.contexts?.length
     ? abrazar(placed.contexts, nodes, offsetX, offsetY).map((c) => ({ x: c.x - 4, y: c.y - 4, w: Math.ceil(c.label.length * 6.2) + 14 + 8, h: 18 + 8 }))
     : [];
+  for (const t of titulosGrupo) applyRadialCost(grid, t, PROXIMIDAD.radio, PROXIMIDAD.texto);
   for (const t of titulosGrupo) blockRect(grid, t.x, t.y, t.w, t.h);
   // Borde izquierdo del recuadro de grupo que contiene a un nodo (para rodearlo por fuera).
   const cajasGrupo = placed.contexts?.length ? abrazar(placed.contexts, nodes, offsetX, offsetY) : [];
@@ -591,6 +612,7 @@ export function computeFlowchartLayout(
   const insoftSegs: FlowSegment[] = [];
   const abanico = insoft ? salidasEnAbanico(spec.edges, posById, byId, placed.primaryChild, spec.direction) : new Map<number, FlowPoint>();
   const enBarra = insoft ? puntosEnBarras(spec.edges, posById) : new Map<string, FlowPoint>();
+  const consumeSocket = insoft ? predicadoSocket(spec) : () => false;
   /** Punta compartida y rieles de las aristas de uso que llegan a un mismo costado (abanico). */
   const rielesUso = new Map<string, { punta?: FlowPoint; rieles: number[] }>();
   /** Costados de salida y llegada de cada arista. */
@@ -621,8 +643,8 @@ export function computeFlowchartLayout(
       return null;
     }
     const { fromSide, toSide } = lados;
-    const a = enBarra.get(`${i}|from`) ?? puertoDeArista.get(`${i}|from`) ?? sobreBarra(edgeAnchor(from, fromSide), from, to, specById.get(e.from)?.shape);
-    const b = enBarra.get(`${i}|to`) ?? puertoDeArista.get(`${i}|to`) ?? sobreBarra(edgeAnchor(to, toSide), to, from, specById.get(e.to)?.shape);
+    const a = enBarra.get(`${i}|from`) ?? puertoDeArista.get(`${i}|from`) ?? sobreBarra(edgeAnchor(from, fromSide), from, to, specById.get(e.from)?.shape, spec.edges.filter((x) => x.from === e.from).length < 2);
+    const b = enBarra.get(`${i}|to`) ?? puertoDeArista.get(`${i}|to`) ?? sobreBarra(edgeAnchor(to, toSide), to, from, specById.get(e.to)?.shape, spec.edges.filter((x) => x.to === e.to).length < 2);
 
     // El anclaje cae sobre el borde bloqueado: se sale un paso antes de rutear.
     const out = stepOut(a, fromSide, 16);
@@ -677,12 +699,15 @@ export function computeFlowchartLayout(
     const tocaCaja = (pts: readonly FlowPoint[]): boolean =>
       pts.slice(1).some((q, k) => nodes.some((n) => n.id !== e.from && n.id !== e.to && specById.get(n.id)?.shape !== 'comment' && segHitsRect(pts[k]!, q, n, 2)));
     const limpia = direct && !tocaTexto(direct) && !tocaCaja(direct) ? direct : null;
-    const path = limpia ? polylinePath(limpia) : buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid);
+    // Auto-cruce prohibido: si la ruta se corta a sí misma, se descarta el bucle (ver quitarAutoCruces).
+    const path = pathSinAutoCruces(limpia ? polylinePath(limpia) : buildOrthogonalPath(a, b, aGrid, bGrid, points, grid.grid));
     const end = limpia?.[limpia.length - 1];
     const tip = end ? { x: end.x, y: end.y, angle: 0 } : arrowTip(b, toSide);
     if (insoft) rememberSegments(insoftSegs, path, e.to);
     // Capa aditiva de rieles quemados: la siguiente arista paga más cuantas más pasen cerca.
     costearRiel(grid, pathPoints(path));
+    // Un consumo de componente o tabla termina en `-(O-`: su bola irradia el costo de conector.
+    if (consumeSocket(e)) applyRadialCost(grid, { x: tip.x - SOCKET.bola, y: tip.y - SOCKET.bola, w: SOCKET.bola * 2, h: SOCKET.bola * 2 }, PROXIMIDAD.radio, PROXIMIDAD.socket);
     const mid = points.length
       ? { x: points[Math.floor(points.length / 2)].col * grid.grid, y: points[Math.floor(points.length / 2)].row * grid.grid }
       : { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
@@ -729,6 +754,8 @@ export function computeFlowchartLayout(
       ...(side ? { labelAnchor: side.anchor } : {}),
       ...(e.labelVertical ? { labelPide: 'vertical' as const } : {}),
       ...(e.reverse ? { reverse: true } : {}),
+      ...(e.color ? { color: e.color } : {}),
+      ...(e.dots ? { dots: e.dots } : {}),
       ...(insoft && (e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label)) ? { labelIcon: e.icon ?? iconoDeEtiqueta(eOv?.label ?? e.label) } : {}),
       hue: eOv?.hue ?? (e.group ? groupHue.get(e.group) : undefined),
     };
@@ -750,6 +777,8 @@ export function computeFlowchartLayout(
   // punteada); el que coincide se separa por un delta. Extremos intactos (puertos, puntas, sockets).
   if (final) separarRielesGlobal(routed);
   const routedEdges: FlowLayoutEdge[] = routed.filter((e): e is FlowLayoutEdge => e !== null);
+  // Ninguna pasada posterior puede dejar una arista que se corte a sí misma.
+  for (const e of routedEdges) e.path = pathSinAutoCruces(e.path);
   if (insoft) separarEtiquetasCompartidas(routedEdges);
   return routedEdges;
   };
@@ -905,6 +934,15 @@ const LAYOUT_PRESUPUESTO = 40000;
 
 /** Paso (px) de la rejilla del ruteo de usos. */
 const RUTEO_USOS_PASO = 16;
+/**
+ * Proximidad en el ruteo de usos (router compartido): entidades, textos y bolas `-(O=` irradian hasta
+ * 3U (PROXIMIDAD.radio), más cuanto más cerca; las bolas pesan más que entidades y textos.
+ */
+const costosUsos = () => ({
+  entity: { radius: PROXIMIDAD.radio, glow: 3 },
+  text: { radius: PROXIMIDAD.radio, glow: 3 },
+  connector: { radius: PROXIMIDAD.radio + PUENTE.bola, glow: 6 },
+});
 /** Tiempo máximo (ms) de una llamada al router de usos: pasado, se conserva la ruta previa. */
 const RUTEO_USOS_PRESUPUESTO = 12000;
 
@@ -974,18 +1012,25 @@ function rutearUsos(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec
       // puertos distintos dejaba al router sin salida).
       shareKey: pp && b.shape === 'bridge' ? `${e.to}::${ll}::${pp.bx},${pp.by}` : `${e.to}::${ll}`,
       fromCandidates: fromC, toCandidates: toC,
+      // La bola del puente del que sale o al que llega no le cobra su brillo de conector.
+      ownRings: [a, b].filter((n) => n.shape === 'bridge').map((n) => `bola:${n.id}`),
     };
+  });
+  // Bolas `-(O=` de los puentes: conectores con brillo radial (más caro que el de las entidades).
+  const anillos = nodes.filter((n) => n.shape === 'bridge').map((n) => {
+    const c = centroPuente(n);
+    return { id: `bola:${n.id}`, x: c.x - PUENTE.bola, y: c.y - PUENTE.bola, w: PUENTE.bola * 2, h: PUENTE.bola * 2 };
   });
   // El ruteo de usos es lo más caro del layout y las vueltas de etiquetas lo repiten con el mismo
   // mundo: se memoriza por la firma exacta de su entrada (determinista: misma entrada, misma salida).
-  const mundo = { components: nodes.map(caja), packages: [], titles: [...muros], rings: [], fixedRails: fijos };
-  const firma = JSON.stringify([mundo.components, mundo.titles, fijos, edges.map((x) => [x.id, x.fromCandidates, x.toCandidates, x.shareKey])]);
+  const mundo = { components: nodes.map(caja), packages: [], titles: [...muros], rings: anillos, fixedRails: fijos };
+  const firma = JSON.stringify([mundo.components, mundo.titles, anillos, fijos, edges.map((x) => [x.id, x.fromCandidates, x.toCandidates, x.shareKey])]);
   let res = RUTEO_USOS.get(firma);
   if (!res) {
     // Rejilla de 16 px: gruesa para que el ruteo sea rápido; con 2U (30 px) el router no termina
     // con los puertos de los puentes `-(O=` (deuda del router, ver lessons).
     const limite = Date.now() + RUTEO_USOS_PRESUPUESTO;
-    res = routeEdges(mundo, edges, { step: RUTEO_USOS_PASO, clearance: 8, stub: U, iterations: 2, deadline: limite });
+    res = routeEdges(mundo, edges, { step: RUTEO_USOS_PASO, clearance: 8, stub: U, iterations: 2, deadline: limite, costs: costosUsos() });
     // Solo se memoriza un ruteo completo (uno cortado por tiempo puede mejorar en otra pasada).
     if (Date.now() <= limite) RUTEO_USOS.set(firma, res);
     if (RUTEO_USOS.size > 64) RUTEO_USOS.delete(RUTEO_USOS.keys().next().value!);
@@ -1138,7 +1183,11 @@ export const SOCKET = { palo: 10, bola: 5, socket: 8 } as const;
  * el último tramo (palo + bola + socket) y se marca `socket`. La punta sigue en el borde del
  * componente, así las que llegan al mismo costado comparten un solo `-(O-`.
  */
-function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec): void {
+/**
+ * ¿La arista es un consumo que llega por `-(O-`? Todo consumo (punteada) de un componente, y toda
+ * llegada a lo que expone interfaz (tablas del DER, componentes con `provides`); entre dos tablas no.
+ */
+function predicadoSocket(spec: FlowResolvedSpec): (r: Pick<FlowEdgeSpec, 'from' | 'to' | 'kind'>) => boolean {
   const expone = new Set(spec.nodes.filter((n) => {
     // Las tablas del DER se consumen (a través de su controller): siempre exponen su `-(O-`.
     if (n.embed?.kind === 'tableder') return true;
@@ -1151,8 +1200,11 @@ function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowRe
   const componentes = new Set(spec.nodes.filter((n) => n.embed?.kind === 'component').map((n) => n.id));
   // Entre dos tablas (propagación maestro → detalle) no hay consumo: ninguna expone su `-(O-` a la otra.
   const tablas = new Set(spec.nodes.filter((n) => n.embed?.kind === 'tableder').map((n) => n.id));
-  const consume = (r: FlowLayoutEdge): boolean => !(tablas.has(r.from) && tablas.has(r.to)) && (expone.has(r.to) || (componentes.has(r.to) && r.kind === 'dashed'));
-  if (!expone.size && !componentes.size) return;
+  return (r) => !(tablas.has(r.from) && tablas.has(r.to)) && (expone.has(r.to) || (componentes.has(r.to) && r.kind === 'dashed'));
+}
+
+function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowResolvedSpec): void {
+  const consume = predicadoSocket(spec);
   // Convención InSoft: el componente expone el socket `(` (palo + arco) y el riel llega a la bola O.
   const largo = SOCKET.palo + SOCKET.socket + SOCKET.bola;
   routed.forEach((r, i) => {
@@ -1525,10 +1577,25 @@ function salidasEnAbanico(
  * Varias aristas que salen de (o llegan a) la misma barra: puntos repartidos a lo largo de la barra,
  * en el orden de sus otros extremos, para que ninguna comparta tramo. Clave `<índice>|from|to`.
  */
+/**
+ * Puntos de convergencia: barras con dos o más entradas y una sola salida (la reunión de ramas
+ * paralelas). Se dibujan como ⦿ con pulso de radar, no como barra.
+ */
+export function unionesDe(spec: Pick<FlowResolvedSpec, 'nodes' | 'edges'>): Set<string> {
+  const out = new Set<string>();
+  for (const n of spec.nodes) {
+    if (n.shape !== 'bar') continue;
+    const entran = spec.edges.filter((e) => e.to === n.id).length;
+    const salen = spec.edges.filter((e) => e.from === n.id).length;
+    if (entran >= 2 && salen <= 1) out.add(n.id);
+  }
+  return out;
+}
+
 function puntosEnBarras(edges: readonly FlowEdgeSpec[], pos: ReadonlyMap<string, FlowLayoutNode>): Map<string, FlowPoint> {
   const out = new Map<string, FlowPoint>();
   for (const bar of pos.values()) {
-    if (bar.shape !== 'bar') continue;
+    if (bar.shape !== 'bar' || bar.union) continue;
     const horizontal = bar.w >= bar.h;
     for (const lado of ['from', 'to'] as const) {
       const idxs = edges.map((e, i) => [e, i] as const).filter(([e]) => e[lado] === bar.id && pos.has(lado === 'from' ? e.to : e.from));
@@ -1553,10 +1620,12 @@ function puntosEnBarras(edges: readonly FlowEdgeSpec[], pos: ReadonlyMap<string,
 
 /**
  * Barra de sincronización: cada arista sale (bifurcación) o llega (unión) a la altura del nodo del
- * otro extremo, dentro del largo de la barra; así las ramas no se amontonan en el centro.
+ * otro extremo, dentro del largo de la barra; así las ramas no se amontonan en el centro. La arista
+ * ÚNICA de su costado (la que inicia el paralelismo, o la que sigue a la reunión) va centrada: de una
+ * salen varias. Un ⦿ de convergencia se toca en el centro de su costado.
  */
-function sobreBarra(p: FlowPoint, bar: FlowLayoutNode, otro: FlowLayoutNode, shape: FlowShape | undefined): FlowPoint {
-  if (shape !== 'bar') return p;
+function sobreBarra(p: FlowPoint, bar: FlowLayoutNode, otro: FlowLayoutNode, shape: FlowShape | undefined, unica = false): FlowPoint {
+  if (shape !== 'bar' || bar.union || unica) return p;
   const m = 8;
   if (bar.w >= bar.h) {
     const x = Math.min(bar.x + bar.w - m, Math.max(bar.x + m, snapDiagramGrid(otro.x + otro.w / 2)));
@@ -1788,11 +1857,12 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
   }
   const measure = measurer(opts);
   if (n.shape === 'bridge') {
-    // Puente `-(O=`: palo, socket y bola; a la derecha el ícono CRUD y el nombre de la acción.
+    // Puente `-(O=`: palo, socket y bola (con el ícono CRUD dentro); a la derecha la función del
+    // controller que hace la operación (`get()`, `list()`…).
     const texto = n.label.trim() && n.label !== n.id ? n.label.trim() : '';
-    const w = ceilDiagramGrid(PUENTE.socket * 2 + 8 + PUENTE.icono + 6 + (texto ? measure(texto) + 6 : 0), 8);
+    const w = ceilDiagramGrid(PUENTE.socket * 2 + 8 + (texto ? measure(texto) + 6 : 0), 8);
     const h = ceilDiagramGrid(PUENTE.palo + PUENTE.socket * 2 + 6, 8);
-    return { id: n.id, w, h, ...(texto ? { lines: [texto], textBox: { x: PUENTE.socket * 2 + 8 + PUENTE.icono + 6, y: PUENTE.palo, w: measure(texto) + 6, h: PUENTE.socket * 2 }, textAlign: 'start' as const } : {}) };
+    return { id: n.id, w, h, ...(texto ? { lines: [texto], textBox: { x: PUENTE.socket * 2 + 8, y: PUENTE.palo, w: measure(texto) + 6, h: PUENTE.socket * 2 }, textAlign: 'start' as const } : {}) };
   }
   if (n.shape === 'vars' && n.vars?.length) {
     // Tabla de declaración con encabezados: Variable (alias o nombre) · Valor (código, partido en la
@@ -2123,6 +2193,18 @@ function insignias(nodes: FlowLayoutNode[]): void {
  */
 export const PUENTE = { palo: 10, socket: 17, bola: 12, icono: 14, sep: 10, delta: 20, flechaSalida: 34 } as const;
 
+/**
+ * Operación CRUD de un puente llevada a SQL con los colores de los métodos HTTP (convención de
+ * Swagger): SELECT ↔ GET azul, INSERT ↔ POST verde, UPDATE ↔ PUT naranja, DELETE rojo. La bola va
+ * del color de su operación y lleva su ícono (sin letras).
+ */
+export const CRUD_SQL = {
+  R: { sql: 'SELECT', http: 'GET', color: '#61AFFE', icono: 'mdi:database-search-outline' },
+  C: { sql: 'INSERT', http: 'POST', color: '#49CC90', icono: 'mdi:database-plus-outline' },
+  U: { sql: 'UPDATE', http: 'PUT', color: '#FCA130', icono: 'mdi:database-edit-outline' },
+  D: { sql: 'DELETE', http: 'DELETE', color: '#F93E3E', icono: 'mdi:database-remove-outline' },
+} as const;
+
 
 /** Ejes de un puente según su lado: `d` sale del controller hacia la bola, `t` cruza el palo. */
 export const ejesPuente = (lado: LadoPuente = 'bottom'): { d: FlowPoint; t: FlowPoint } => ({
@@ -2151,7 +2233,7 @@ const ALTO_PUENTE_LADO = ceilDiagramGrid(PUENTE.socket * 2 + 8 + 16, 8);
 
 /** Cambia el tamaño y la caja de texto de un puente medido para colgarlo del lado dado. */
 function orientarPuente(z: FlowSizedNode, lado: LadoPuente): void {
-  const { palo: p, socket: S, icono: I } = PUENTE;
+  const { palo: p, socket: S } = PUENTE;
   z.lado = lado;
   if (lado === 'bottom') return;
   const tw = z.textBox?.w ?? 0;
@@ -2159,9 +2241,9 @@ function orientarPuente(z: FlowSizedNode, lado: LadoPuente): void {
     if (z.textBox) z.textBox = { ...z.textBox, y: z.h - p - S * 2 };
     return;
   }
-  z.w = ceilDiagramGrid(Math.max(p + S * 2 + 6, p + I + 6 + tw), 8);
+  z.w = ceilDiagramGrid(Math.max(p + S * 2 + 6, p + tw), 8);
   z.h = ALTO_PUENTE_LADO;
-  if (z.textBox) z.textBox = { x: lado === 'right' ? p + I + 6 : z.w - tw, y: S * 2 + 8, w: tw, h: 16 };
+  if (z.textBox) z.textBox = { x: lado === 'right' ? p : z.w - tw, y: S * 2 + 8, w: tw, h: 16 };
 }
 
 /**
@@ -3035,18 +3117,25 @@ function polylinePath(pts: readonly FlowPoint[]): string {
  * Los extremos (`libre` px junto a cada nodo) no se costean: las aristas que comparten partida o
  * llegada no se castigan entre sí donde convergen.
  */
-/** Brillo de entidad del A* del flujo: 2U (32 px) alrededor de cada caja, factor ×1.05. */
-const BRILLO_ENTIDAD = { radio: 32, factor: 1.05 } as const;
-/** Lleva cada celda del rectángulo al máximo entre su costo y `factor` (los brillos no se suman). */
-function brilloMax(grid: ReturnType<typeof makeCostGrid>, x: number, y: number, w: number, h: number, factor: number): void {
-  const c0 = Math.max(0, Math.floor(x / grid.grid));
-  const r0 = Math.max(0, Math.floor(y / grid.grid));
-  const c1 = Math.min(grid.cols - 1, Math.ceil((x + w) / grid.grid) - 1);
-  const r1 = Math.min(grid.rows - 1, Math.ceil((y + h) / grid.grid) - 1);
-  for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
-    const i = r * grid.cols + c;
-    grid.cost[i] = Math.max(grid.cost[i]!, factor);
+/**
+ * Proximidad (capa RADIAL del A* del flujo): pasar cerca de una entidad, un conector o un texto se
+ * desincentiva hasta `radio` (3U) de su borde, más cuanto más cerca; fuera del radio no cuesta. El
+ * `pico` es el costo extra pegado al borde: los `-(O` (puentes y sockets) pesan más que los demás
+ * conectores (⦿ de fin y de convergencia, inicio) y estos más que entidades y textos. Así los rieles
+ * dejan un margen cuando pueden.
+ */
+export const PROXIMIDAD = { radio: 3 * U, entidad: 1, texto: 1, conector: 1.5, socket: 3 } as const;
+
+/** Siembra la proximidad de un nodo colocado (un puente irradia desde su bola, como `-(O`). */
+function proximidad(grid: ReturnType<typeof makeCostGrid>, n: FlowLayoutNode, forma: FlowShape | undefined): void {
+  const { radio } = PROXIMIDAD;
+  if (forma === 'bridge') {
+    const c = centroPuente(n);
+    applyRadialCost(grid, { x: c.x - PUENTE.bola, y: c.y - PUENTE.bola, w: PUENTE.bola * 2, h: PUENTE.bola * 2 }, radio, PROXIMIDAD.socket);
+    return;
   }
+  const conector = forma === 'start' || forma === 'end' || !!n.union;
+  applyRadialCost(grid, n, radio, conector ? PROXIMIDAD.conector : PROXIMIDAD.entidad);
 }
 const RIEL_QUEMADO = { nucleo: 3, halo: 1.5, radio: 16, libre: 24 } as const;
 function costearRiel(grid: ReturnType<typeof makeCostGrid>, pts: readonly FlowPoint[]): void {

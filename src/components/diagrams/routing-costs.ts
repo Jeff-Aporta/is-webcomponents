@@ -28,6 +28,8 @@ export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
   // brillo radial (caída lineal desde el centro) para que los rieles no pasen
   // rozándolo. Las aristas que llegan a ESE conector no lo pagan.
   connector: { glow: 4, radius: 72 },
+  // Brillo de textos: apagado por defecto (el flowchart lo enciende: 3U alrededor de cada texto).
+  text: { glow: 0, radius: 0 },
   // Entrar/salir de un agrupador y girar son sumas fijas (no brillos).
   // Cruzar un borde de agrupador vale el doble que cruzar un riel ajeno
   // (rail.cross = ×8 en un paso de 20 px ≈ 140 px equivalentes → 280).

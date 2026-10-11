@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, PUENTE, centroPuente, ejesPuente } from './flowchart-spec.js';
+import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, PUENTE, CRUD_SQL, centroPuente, ejesPuente } from './flowchart-spec.js';
 import type { FlowLayoutOptions, FlowPaint } from './flowchart-spec.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { pickThemeMode, themeToDiagramTheme, injectThemeCss } from './theme.js';
@@ -533,7 +533,7 @@ class IswcFlowchart extends DiagramElementBase {
     const flowAnim = this.hasAnimation('flow');
     const estilo = edgeStyleFor(this, this.payload);
     for (const e of layout.edges) {
-      const color = edgeStrokeHex(e.hue, theme.accent);
+      const color = e.color ?? edgeStrokeHex(e.hue, theme.accent);
       const g = svgEl('g', { class: 'flow-edge' });
       g.dataset.edgeId = e.id;
 
@@ -563,7 +563,7 @@ class IswcFlowchart extends DiagramElementBase {
       });
       g.appendChild(path);
       if (!flowAnim && flujoActivo(this)) {
-        animarRielEn(g, path, { punteado: !!dash, reverse: !!e.reverse, ancho: wdt });
+        animarRielEn(g, path, { punteado: !!dash, reverse: !!e.reverse, ancho: wdt, color, puntos: e.dots });
       }
 
       const head = svgArrowHead({ d: e.path, tip: { x: e.arrowTipX, y: e.arrowTipY }, color, len: 8, halfWidth: 4, className: 'flow-edge__head' });
@@ -761,7 +761,7 @@ class IswcFlowchart extends DiagramElementBase {
     for (const e of layout.edges) {
       const g = svgEl('g', { class: 'flow-edge' });
       g.dataset.edgeId = e.id;
-      const color = paint.edgeStroke;
+      const color = e.color ?? paint.edgeStroke;
       const wdt = e.kind === 'thick' ? paint.edgeWidth * 2 : paint.edgeWidth;
       if (flowAnim && e.kind !== 'dashed') {
         g.appendChild(svgEl('path', {
@@ -779,7 +779,7 @@ class IswcFlowchart extends DiagramElementBase {
       // Flujo animado (estándar de todos los diagramas, ver _shared/diagram-flow.ts): la punteada
       // avanza; la continua lleva su línea de puntos. `reverse` lo invierte (de la punta al origen).
       if (paint.dashFlow && flujoActivo(this)) {
-        animarRielEn(g, path, { punteado: e.kind === 'dashed', reverse: !!e.reverse, ancho: wdt });
+        animarRielEn(g, path, { punteado: e.kind === 'dashed', reverse: !!e.reverse, ancho: wdt, color, puntos: e.dots });
       }
       // Punta abierta (dos trazos), orientada por el último tramo real.
       const dir = pathEndDirection(e.path, { x: 0, y: 1 });
@@ -938,6 +938,14 @@ class IswcFlowchart extends DiagramElementBase {
         });
         g.appendChild(box);
         g.appendChild(svgIconGroup('mdi:format-quote-open', { x: n.x + 8, y: n.y + 8, size: 16, color: paint.muted }));
+      } else if (n.shape === 'bar' && n.union) {
+        // Punto de convergencia de ramas paralelas: ⦿ (como el fin) con su pulso de radar.
+        const cx = n.x + n.w / 2;
+        const cy = n.y + n.h / 2;
+        box = svgEl('circle', { cx, cy, r: n.w / 2 - 0.75, fill: paint.background, stroke: paint.startFill, 'stroke-width': 1.5, class: 'flow-node__box flow-node__union' });
+        g.appendChild(box);
+        g.appendChild(svgEl('circle', { cx, cy, r: n.w / 2 - 5, fill: paint.startFill }));
+        if (flujoActivo(this)) g.insertBefore(pulsoRadar(cx, cy, n.w / 2, paint.startFill), box);
       } else if (n.shape === 'bar') {
         // Barra de sincronización (bifurcación / unión): sólida, del color del inicio.
         box = svgEl('path', { d: shapePath('bar', n.x, n.y, n.w, n.h), fill: paint.startFill, class: 'flow-node__box' });
@@ -947,8 +955,8 @@ class IswcFlowchart extends DiagramElementBase {
         g.appendChild(box);
       } else if (n.shape === 'bridge' && n.bridge) {
         // Puente `-(O=`: palo hasta el controller (por cualquiera de sus 4 lados), socket `(` en la
-        // mitad que mira al controller, bola con la letra CRUD y el ícono de BD con el nombre de la
-        // acción. Las aristas llegan y salen por la mitad libre.
+        // mitad que mira al controller y la bola del color de su operación SQL (colores HTTP) con su
+        // ícono dentro; al lado, la función del controller. Las aristas llegan y salen por la mitad libre.
         const c = centroPuente(n);
         const S = PUENTE.socket;
         const { d } = ejesPuente(n.lado);
@@ -957,14 +965,12 @@ class IswcFlowchart extends DiagramElementBase {
         g.appendChild(box);
         // El palo nace en el borde del controller (`c - d·(palo + S)`) y mira a la bola: `dir` = -d.
         const raiz = PUENTE.palo + S;
-        pintarSocket(g, { tip: { x: c.x - d.x * raiz, y: c.y - d.y * raiz }, dir: { x: -d.x, y: -d.y }, medidas: PUENTE, color: tinta, ancho: paint.borderWidth, pulso: flujoActivo(this), clase: 'flow-bridge' });
-        const letra = svgEl('text', { x: c.x, y: c.y, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 11, 'font-weight': 700, 'font-family': paint.font, fill: tinta, class: 'flow-bridge__op' });
-        letra.textContent = n.bridge.op;
-        g.appendChild(letra);
-        const iconoOp = { C: 'mdi:database-plus-outline', R: 'mdi:database-search-outline', U: 'mdi:database-edit-outline', D: 'mdi:database-remove-outline' }[n.bridge.op];
-        const tb = n.textBox;
-        const ico = tb ? { x: tb.x - PUENTE.icono - 6, y: tb.y + tb.h / 2 - PUENTE.icono / 2 } : { x: c.x + S + 4, y: c.y - PUENTE.icono / 2 };
-        g.appendChild(svgIconGroup(iconoOp, { ...ico, size: PUENTE.icono, color: tinta }));
+        const op = CRUD_SQL[n.bridge.op];
+        pintarSocket(g, { tip: { x: c.x - d.x * raiz, y: c.y - d.y * raiz }, dir: { x: -d.x, y: -d.y }, medidas: PUENTE, color: tinta, ancho: paint.borderWidth, relleno: op.color, pulso: flujoActivo(this), clase: 'flow-bridge' });
+        const ico = svgIconGroup(op.icono, { x: c.x - PUENTE.icono / 2, y: c.y - PUENTE.icono / 2, size: PUENTE.icono, color: tinta });
+        ico.classList.add('flow-bridge__op');
+        ico.dataset.op = op.sql;
+        g.appendChild(ico);
       } else if (n.shape === 'vars') {
         // Declaración de variables (config que se lee y se usa más adelante): fondo blanco, esquina en
         // diagonal con su pliegue; la insignia lleva el ícono de variable.

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-11T13:50:46.103Z",
+  "generatedAt": "2026-10-11T14:33:52.271Z",
   "count": 122,
   "modules": [
     {
@@ -346,14 +346,18 @@
       "id": "diagram-arrow",
       "path": "src/components/_shared/diagram-arrow.ts",
       "summary": "Puntas de flecha para diagramas. — El problema que resuelve: cada diagrama dibujaba su cabeza asumiendo que la",
-      "bytes": 4405,
+      "bytes": 8671,
       "exports": [
         "pathPoints",
         "pathEndDirection",
         "arrowHeadPoints",
         "openArrowHeadPoints",
         "svgArrowHead",
-        "crowFootPath"
+        "crowFootPath",
+        "quitarAutoCruces",
+        "tieneAutoCruce",
+        "polilineaPath",
+        "pathSinAutoCruces"
       ]
     },
     {
@@ -581,8 +585,9 @@
       "id": "diagram-flow.schemas",
       "path": "src/components/_shared/diagram-flow.schemas.ts",
       "summary": "diagram-flow.schemas",
-      "bytes": 720,
+      "bytes": 1200,
       "exports": [
+        "ZPuntosRiel",
         "ZOpcionesFlujo"
       ]
     },
@@ -591,7 +596,7 @@
       "id": "diagram-flow",
       "path": "src/components/_shared/diagram-flow.ts",
       "summary": "diagram-flow — Estándar: cada riel muestra hacia dónde va lo que transporta.",
-      "bytes": 6530,
+      "bytes": 6765,
       "exports": [
         "FLUJO",
         "flujoActivo",
@@ -642,7 +647,7 @@
       "id": "diagram-grid",
       "path": "src/components/_shared/diagram-grid.ts",
       "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 13562,
+      "bytes": 14864,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",

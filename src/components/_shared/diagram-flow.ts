@@ -3,8 +3,10 @@
  *
  * Estándar: cada riel muestra hacia dónde va lo que transporta.
  *   - Riel punteado: el patrón de trazos avanza (SMIL `stroke-dashoffset`).
- *   - Riel continuo: detrás, una segunda línea de puntos color cielo (trazo de largo 0, remate
- *     redondo) más gruesa y espaciada, que avanza; el riel queda encima: un efecto sutil.
+ *   - Riel continuo: detrás, una segunda línea de puntos (trazo de largo 0, remate redondo) más
+ *     gruesa y espaciada, que avanza; el riel queda encima: un efecto sutil. Por defecto los puntos
+ *     son del color de la arista y miden su ancho + `grosorExtra`; el consumidor los personaliza
+ *     con `dots: { color, size }` en la arista.
  *   - Pulsos: los puntos laten en alfa y cada O (`-(O-`, `-(O=`) y cada ⦿ de llegada emite un
  *     pulso de radar periódico. Todo pulso arranca transparente y empieza tras `FLUJO.pulso.inicio`:
  *     el PNG (captura estática) sale limpio; la animación solo se ve en el SVG vivo.
@@ -22,7 +24,7 @@ export const FLUJO = {
   /** Periodo del patrón punteado (trazo + hueco) y su duración. */
   punteado: { periodo: 9, dur: 0.9 },
   /** Puntos de los rieles continuos: separación, velocidad (px/s) y grosor extra sobre el riel. */
-  puntos: { paso: 100, velocidad: 60, grosorExtra: 3, color: '#7ACFF4' },
+  puntos: { paso: 100, velocidad: 120, grosorExtra: 3 },
   /** Pulsos (radar en las O y ⦿, alfa en los puntos): periodo, arranque diferido y crecimiento del radar. */
   pulso: { periodo: 3, inicio: 1.5, crece: 2.4, alfa: 0.55 },
 } as const;
@@ -63,10 +65,10 @@ export function animarRiel(path: SVGElement, op: TOpcionesFlujo): SVGElement | n
   const p = document.createElementNS(SVG_NS, 'path');
   p.setAttribute('d', d);
   p.setAttribute('fill', 'none');
-  // Color secundario (cielo) y DETRÁS del riel (el llamador lo inserta antes): el riel continuo
-  // queda encima y los puntos no invaden.
-  p.setAttribute('stroke', op.color ?? FLUJO.puntos.color);
-  p.setAttribute('stroke-width', String((op.ancho ?? Number(path.getAttribute('stroke-width') ?? 1)) + grosorExtra));
+  // Del color de la arista (o el que pida el consumidor) y DETRÁS del riel (el llamador lo inserta
+  // antes): el riel continuo queda encima y los puntos no invaden.
+  p.setAttribute('stroke', op.puntos?.color ?? op.color ?? path.getAttribute('stroke') ?? 'currentColor');
+  p.setAttribute('stroke-width', String(op.puntos?.size ?? (op.ancho ?? Number(path.getAttribute('stroke-width') ?? 1)) + grosorExtra));
   p.setAttribute('stroke-linecap', 'round');
   p.setAttribute('stroke-dasharray', `0 ${paso}`);
   p.setAttribute('class', 'iswc-flow__dots');

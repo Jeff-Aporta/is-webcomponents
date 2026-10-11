@@ -16,6 +16,10 @@
     "glow": 4,
     "radius": 72
   },
+  "text": {
+    "glow": 0,
+    "radius": 0
+  },
   "package": {
     "borderGlow": 10,
     "borderRadius": 64,

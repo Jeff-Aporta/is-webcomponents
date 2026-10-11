@@ -52,6 +52,8 @@ export const RouterEdgeSchema = z.object({
   toBox: RouterBoxSchema,
   /** Hitbox del conector destino (la punta B queda fuera de él). */
   toRing: RouterBoxSchema.optional(),
+  /** Conectores propios (ids de `rings`) cuyo brillo esta arista no paga: sale o llega a ellos. */
+  ownRings: z.array(z.string()).optional(),
   /** Agrupadores que contienen al origen: un prohibido aquí no es muro. */
   fromPkgs: SetDeTextoSchema,
   /** Agrupadores que contienen al destino: solo el stub final puede rozarlos. */
@@ -123,6 +125,14 @@ export const RoutingCostsSchema = z.object({
     /** Brillo máximo junto al hitbox de un conector -(O- ajeno (degradado radial). */
     glow: z.number().min(0),
     /** Radio del brillo medido desde el centro del conector (px). */
+    radius: z.number().min(0),
+  }),
+  /**
+   * Brillo de los textos (`titles`): pasar cerca de un texto cuesta más cuanto más cerca, hasta
+   * `radius` px de su caja. Apagado por defecto (radio 0); el flowchart lo enciende a 3U.
+   */
+  text: z.object({
+    glow: z.number().min(0),
     radius: z.number().min(0),
   }),
   package: z.object({
