@@ -105,7 +105,7 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
   ISS): cada paso → mensaje (a la BD o externo que usa, propio si no usa nada; lo que termina en el
   fin → respuesta), cada decisión → `alt`, cada barra → `par`, cada columna de flujo → un actor. Los
   textos son referencias `{ path, query }` a los nodos del vector y los índices (`stepLabel`) son los
-  mismos `x.y.z`: nunca se escribe una Seq a mano.
+  mismos `x.y.z`; si un paso produce varias flechas, cada una lleva su subíndice en orden (`1.3.1`, `1.3.2`…). Nunca se escribe una Seq a mano.
 
 ## 4. Tablas: siempre por su controller dueño
 
