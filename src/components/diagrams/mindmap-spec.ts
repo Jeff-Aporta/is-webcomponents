@@ -1,5 +1,4 @@
 import { buildTree, layoutTree, layoutRadialTree } from '../_shared/tree-layout.js';
-import type { RawNode, TreeNode as ImportedTreeNode } from '../_shared/tree-layout.js';
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
@@ -147,7 +146,7 @@ export function computeMindmapLayout(spec: MindmapSpec): MindmapLayout {
   const subtitle = spec.subtitle ?? '';
   const headerH = title ? (subtitle ? 54 : 36) : (subtitle ? 30 : 8);
 
-  const root = buildTree(spec.nodes as unknown as readonly RawNode[]) as unknown as TreeNode;
+  const root: TreeNode = buildTree(spec.nodes);
   annotateDepth(root, 0);
   annotateHue(root, 0, undefined, { i: 0 });
 
@@ -157,11 +156,11 @@ export function computeMindmapLayout(spec: MindmapSpec): MindmapLayout {
   });
 
   const placed = spec.layout === 'tree'
-    ? layoutTree(root as unknown as ImportedTreeNode, { direction: 'LR', levelGap: 44, siblingGap: 10, measure } as Record<string, unknown>)
+    ? layoutTree(root, { direction: 'LR', levelGap: 44, siblingGap: 10, measure })
     // `radiusStep` es aire ADEMÁS de la media caja de cada anillo, y el layout
     // ya crece solo si dos nodos del mismo anillo se solapan. Con 72 el mapa
     // ocupaba mucha más área de la necesaria.
-    : layoutRadialTree(root as unknown as ImportedTreeNode, { radiusStep: 40, measure } as Record<string, unknown>);
+    : layoutRadialTree(root, { radiusStep: 40, measure });
 
   const byId = new Map<string, TreeNode>();
   (function collect(node: TreeNode) {

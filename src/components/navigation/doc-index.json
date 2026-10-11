@@ -6,7 +6,7 @@
   "titleHtml": false,
   "description": "Índice documental agrupado con búsqueda de texto completo y fragmento resaltado.",
   "storageKey": "docs-iswc-doc-index",
-  "loads": [],
+  "loads": ["iswc-doc-index"],
   "sections": [
     {
       "id": "intro",

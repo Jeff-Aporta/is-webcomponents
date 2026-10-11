@@ -30,7 +30,5 @@ export function listDiagramKinds(): string[] {
 }
 
 if (typeof window !== 'undefined') {
-  (window as unknown as { __isDiagramKinds: unknown }).__isDiagramKinds = {
-    registerDiagramKind, getDiagramTag, listDiagramKinds,
-  };
+  Object.assign(window, { __isDiagramKinds: { registerDiagramKind, getDiagramTag, listDiagramKinds } });
 }

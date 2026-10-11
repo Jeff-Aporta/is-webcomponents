@@ -9,7 +9,7 @@ import { z } from "zod";
 export const TNodeSchema = z.object({
   flatPath: z.string(),
   pathInit: z.string().optional(),
-  childrens: z.array(TNodeSchema).optional(),
+  get childrens(): z.ZodOptional<z.ZodArray<typeof TNodeSchema>> { return z.array(TNodeSchema).optional(); },
   depth: z.number().optional(),
   topology: z.string().optional(),
   containment: z.string().optional(),

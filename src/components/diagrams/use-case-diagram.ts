@@ -255,14 +255,9 @@ class IswcUseCaseDiagram extends DiagramElementBase {
 
       // Asociación: sin punta (UML). Dependencias: punta simple. Generalización: hueca.
       if (dashed) {
-        const head = (svgArrowHead as unknown as (opts: {
-          d: string; tip: { x: number; y: number }; color: string;
-          len?: number; halfWidth?: number;
-        }) => SVGElement)({
-          d: l.path, tip: { x: l.x2, y: l.y2 }, color, len: 7, halfWidth: 3.5,
-        });
-        head.classList.add('uc-link__head');
-        g.appendChild(head);
+        g.appendChild(svgArrowHead({
+          d: l.path, tip: { x: l.x2, y: l.y2 }, color, len: 7, halfWidth: 3.5, className: 'uc-link__head',
+        }));
       } else if (l.kind === 'generalization') {
         g.appendChild(generalizationHead(l.x1, l.y1, l.x2, l.y2, color));
       }

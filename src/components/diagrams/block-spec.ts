@@ -2,7 +2,6 @@ import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGri
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
@@ -247,7 +246,7 @@ export function computeBlockLayout(spec: BlockSpec): BlockLayout {
     };
   });
 
-  assignEdgeHues(edges as unknown as readonly EdgeWithHue[]);
+  assignEdgeHues(edges);
   const layout: BlockLayout = {
     width,
     height,

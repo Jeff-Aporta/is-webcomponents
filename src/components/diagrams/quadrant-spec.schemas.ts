@@ -84,7 +84,8 @@ export const PlotRectSchema = z.object({
 export type PlotRect = z.infer<typeof PlotRectSchema>;
 
 
-export const QuadrantLayoutPointSchema = z.object({
+/** `computeQuadrantLayout` devuelve `{ ...pt, cx, cy, r, labelDy }`: el punto original más su geometría. */
+export const QuadrantLayoutPointSchema = QuadrantPointSchema.extend({
   cx: z.number(),
   cy: z.number(),
   r: z.number(),

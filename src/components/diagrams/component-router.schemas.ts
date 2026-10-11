@@ -78,8 +78,8 @@ export const RouterEdgeSchema = z.object({
    * multi-origen y multi-destino), y un puerto ya usado por una arista ajena
    * no se reutiliza.
    */
-  fromCandidates: z.array(RouterPortSchema).optional(),
-  toCandidates: z.array(RouterPortSchema).optional(),
+  get fromCandidates(): z.ZodOptional<z.ZodArray<typeof RouterPortSchema>> { return z.array(RouterPortSchema).optional(); },
+  get toCandidates(): z.ZodOptional<z.ZodArray<typeof RouterPortSchema>> { return z.array(RouterPortSchema).optional(); },
   /**
    * Clave de SALIDA compartible (p. ej. `origen::arrow`): alrededor del puerto
    * por donde ya salió otra arista de la misma clave el paso se abarata

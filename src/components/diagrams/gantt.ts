@@ -7,7 +7,6 @@ import type { GanttLayout, GanttSpec } from './gantt-spec.js';
 import { shapePath } from './flowchart-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { PathTurtle } from '../_shared/path-turtle.js';
-import type { TurtleTheme } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
@@ -143,12 +142,12 @@ class IswcGantt extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new PathTurtle(turtleGroup as unknown as HTMLElement);
+    this.#turtle = new PathTurtle(turtleGroup);
     this.#turtle.setData({
       messages: layout.arrows.map((a, i: number) => ({
         path: a.path, step: i + 1, log: '', groupHue: a.hue,
       })),
-      theme: theme as unknown as TurtleTheme,
+      theme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,

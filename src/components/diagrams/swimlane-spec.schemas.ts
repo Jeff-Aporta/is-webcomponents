@@ -5,6 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import { LabeledEdgeSchema } from "../_shared/diagram-edge-actors.schemas.js";
 
 export const SwimlaneStepKindSchema = z.union([z.literal('start'), z.literal('end'), z.literal('process'), z.literal('decision')]);
 export type SwimlaneStepKind = z.infer<typeof SwimlaneStepKindSchema>;
@@ -91,6 +92,8 @@ export const SwimlaneLayoutLinkSchema = z.object({
   labelX: z.number(),
   labelY: z.number(),
   hue: z.number().optional(),
+  /** Ancho medido del chip de la etiqueta; lo añade `applyEdgeActorLayout` (edge-actors). */
+  labelW: LabeledEdgeSchema.shape.labelW,
 });
 export type SwimlaneLayoutLink = z.infer<typeof SwimlaneLayoutLinkSchema>;
 

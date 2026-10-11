@@ -6,8 +6,9 @@
  */
 import { z } from "zod";
 
-export const TimeScaleSchema = z.function({ input: [z.function({ input: [z.number()], output: z.unknown() /* TODO: cannot convert */ })], output: z.unknown() /* TODO: cannot convert */ });
-export type TimeScale = z.infer<typeof TimeScaleSchema>;
+/** Escala lineal tiempo → píxel, invertible (`invert(px)` devuelve ms). */
+export type TimeScale = ((ms: number) => number) & { invert: (px: number) => number };
+export const TimeScaleSchema = z.custom<TimeScale>((v) => typeof v === 'function' && typeof Reflect.get(v, 'invert') === 'function');
 
 
 export const TickUnitSchema = z.union([z.literal('hour'), z.literal('day'), z.literal('month'), z.literal('year')]);

@@ -10,7 +10,7 @@ export const FiltroEntradaSchema = z.object({
   filterType: z.string().optional(),
   type: z.string().optional(),
   values: z.array(z.unknown()).optional(),
-  filterModels: z.array(z.union([FiltroEntradaSchema, z.null()])).optional(),
+  get filterModels(): z.ZodOptional<z.ZodArray<z.ZodUnion<[typeof FiltroEntradaSchema, z.ZodNull]>>> { return z.array(z.union([FiltroEntradaSchema, z.null()])).optional(); },
   /* TODO: member [extra: string]: unknown */
 });
 export type FiltroEntrada = z.infer<typeof FiltroEntradaSchema>;

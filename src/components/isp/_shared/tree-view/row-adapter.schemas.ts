@@ -34,7 +34,7 @@ export type _RowAdapter = z.infer<typeof _RowAdapterSchema>;
 
 
 export const TRAAccessibleSchema = z.object({
-  treeAdapter: z.intersection(TRAAccessibleSchema, _RowAdapterSchema),
+  get treeAdapter(): z.ZodIntersection<typeof TRAAccessibleSchema, typeof _RowAdapterSchema> { return z.intersection(TRAAccessibleSchema, _RowAdapterSchema); },
   mergedDisabled: z.boolean(),
   hasChildren: z.boolean(),
   isNodeOpen: z.boolean(),

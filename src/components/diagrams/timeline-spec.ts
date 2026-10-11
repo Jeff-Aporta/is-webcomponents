@@ -37,18 +37,10 @@ function asRecord(v: unknown): Record<string, unknown> {
 function compressedEventScale(sortedMs: number[], r0: number, maxGapPx: number): CompressedScale {
   const n = sortedMs.length;
   if (n === 0) {
-    const s = timeScale([0, 1], [r0, r0 + 1]) as unknown as CompressedScale;
-    s.span = 1;
-    return s;
+    return Object.assign(timeScale([0, 1], [r0, r0 + 1]), { span: 1 });
   }
   if (n === 1) {
-    const scale = ((): CompressedScale => {
-      const fn = ((_ms: number): number => r0) as CompressedScale;
-      fn.invert = ((): number => sortedMs[0]!);
-      fn.span = 0;
-      return fn;
-    })();
-    return scale;
+    return Object.assign((_ms: number): number => r0, { invert: (): number => sortedMs[0]!, span: 0 });
   }
   const rawGaps: number[] = [];
   for (let i = 1; i < n; i++) rawGaps.push(Math.max(1, sortedMs[i]! - sortedMs[i - 1]!));

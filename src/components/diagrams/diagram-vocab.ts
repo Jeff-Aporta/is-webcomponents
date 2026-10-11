@@ -143,7 +143,7 @@ export function applyDiagramPolicy<T extends { id: string }>(
  * Estilo de arista de un diagrama montado: el del payload si lo declara; si no, `look="sketch"`
  * (servilleta) usa `bezier` y el resto `orthogonal`.
  */
-export function edgeStyleFor(host: Element | null | undefined, payload: unknown): EdgeStyle {
+export function edgeStyleFor(host: Pick<Element, 'getAttribute'> | null | undefined, payload: unknown): EdgeStyle {
   const sketch = host?.getAttribute('look') === 'sketch';
   return readEdgeStyle(payload, sketch ? 'bezier' : 'orthogonal');
 }

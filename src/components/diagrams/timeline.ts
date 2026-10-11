@@ -7,7 +7,8 @@ import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { TlGroup, TlEvent, TlTick, TlLayout, EventEntry } from "./timeline.schemas.js";
+import type { TimelineLayout } from "./timeline-spec.schemas.js";
+import type { EventEntry } from "./timeline.schemas.js";
 
 /**
  * <iswc-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.
@@ -103,14 +104,14 @@ class IswcTimeline extends DiagramElementBase {
     const layout = computeTimelineLayout(visible, {
       now: Date.now(),
       width: availW > 80 ? Math.max(160, availW - 8) : undefined,
-    }) as unknown as TlLayout;
+    });
     this.#lastWidth = availW;
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
-  #buildSvg(layout: TlLayout, theme: DiagramTheme): void {
+  #buildSvg(layout: TimelineLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -136,7 +137,7 @@ class IswcTimeline extends DiagramElementBase {
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
-  #buildAxis(layout: TlLayout, theme: DiagramTheme): void {
+  #buildAxis(layout: TimelineLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'tl-axis' });
     const horizontal = layout.orientation === 'horizontal';
     if (horizontal) {
@@ -155,7 +156,8 @@ class IswcTimeline extends DiagramElementBase {
         ? svgEl('line', { x1: tk.pos, x2: tk.pos, y1: layout.axisY0 - 4, y2: layout.axisY0 + 4 })
         : svgEl('line', { x1: layout.axisX0 - 4, x2: layout.axisX0 + 4, y1: tk.pos, y2: tk.pos });
       line.setAttribute('stroke', theme.grid);
-      line.setAttribute('stroke-width', String(tk.major ? 1.4 : 1));
+      // Los ticks van uno por evento (eje comprimido): no hay ticks mayores.
+      line.setAttribute('stroke-width', '1');
       line.setAttribute('class', 'dg-grid-line');
       g.appendChild(line);
     }
@@ -171,7 +173,7 @@ class IswcTimeline extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildEvents(layout: TlLayout, theme: DiagramTheme): void {
+  #buildEvents(layout: TimelineLayout, theme: DiagramTheme): void {
     for (const e of layout.events) {
       const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
       const g = svgEl('g', { class: 'tl-event' });
@@ -230,11 +232,12 @@ class IswcTimeline extends DiagramElementBase {
     }
   }
 
-  #buildLegend(layout: TlLayout, theme: DiagramTheme): void {
+  #buildLegend(layout: TimelineLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'tl-legend' });
     const groups = layout.groups ?? [];
     groups.forEach((grp, gi: number) => {
-      const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
+      // El layout de timeline no lleva subtítulo: la leyenda cuelga del título.
+      const ly = (layout.titleY || 22) + 18 + gi * 16;
       const color = tkHueToHex(grp.hue) ?? theme.accent;
       const off = this.#hiddenGroups.has(grp.id);
       const item = svgEl('g', { class: 'tl-legend__item', opacity: off ? 0.4 : 1 });

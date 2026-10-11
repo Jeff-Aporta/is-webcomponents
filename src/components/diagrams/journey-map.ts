@@ -8,7 +8,8 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { JnLayoutStep, JnLayoutPhase, JnLayoutGridLine, JnLayout, StepEntry } from "./journey-map.schemas.js";
+import type { JourneyLayout } from "./journey-spec.schemas.js";
+import type { StepEntry } from "./journey-map.schemas.js";
 
 /**
  * <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.
@@ -81,13 +82,13 @@ class IswcJourneyMap extends DiagramElementBase {
     const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeJourneyLayout(visible) as unknown as JnLayout;
+    const layout = computeJourneyLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
-  #buildSvg(layout: JnLayout, theme: DiagramTheme): void {
+  #buildSvg(layout: JourneyLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -122,7 +123,7 @@ class IswcJourneyMap extends DiagramElementBase {
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
-  #buildGrid(layout: JnLayout, theme: DiagramTheme): void {
+  #buildGrid(layout: JourneyLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'jn-grid' });
     for (const line of layout.gridLines) {
       g.appendChild(svgEl('line', {
@@ -139,7 +140,7 @@ class IswcJourneyMap extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildPhases(layout: JnLayout, theme: DiagramTheme): void {
+  #buildPhases(layout: JourneyLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'jn-phases' });
     for (const f of layout.phases) {
       const color = tkHueToHex(f.hue) ?? theme.accent;
@@ -163,7 +164,8 @@ class IswcJourneyMap extends DiagramElementBase {
         maxHeight: f.h - 4,
         fontSize: 10.5,
         fontFamily: 'Tahoma,Arial,sans-serif',
-        overflow: (f.overflow ?? 'ellipsis') as 'grow' | 'ellipsis',
+        // `computeJourneyLayout` no produce `overflow` por fase: política fija.
+        overflow: 'ellipsis',
       });
       const ftspans = buildTspans(
         fresult.lines,
@@ -186,7 +188,7 @@ class IswcJourneyMap extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLine(layout: JnLayout, theme: DiagramTheme): void {
+  #buildLine(layout: JourneyLayout, theme: DiagramTheme): void {
     if (!layout.line) return;
     this.svg.appendChild(svgEl('path', {
       d: layout.line, fill: 'none', stroke: theme.accent, 'stroke-width': 1.6,
@@ -194,7 +196,7 @@ class IswcJourneyMap extends DiagramElementBase {
     }));
   }
 
-  #buildSteps(layout: JnLayout, theme: DiagramTheme): void {
+  #buildSteps(layout: JourneyLayout, theme: DiagramTheme): void {
     for (const s of layout.steps) {
       const color = (s.hue != null && tkHueToHex(s.hue)) || theme.accent;
       const g = svgEl('g', { class: 'jn-step' });
@@ -294,7 +296,7 @@ class IswcJourneyMap extends DiagramElementBase {
     title.innerHTML = inlineMdWeb(s.label);
     this.tooltipEl.appendChild(title);
     const parts = [];
-    if (s.hasScore) parts.push(`Satisfacción ${s.score} de ${(this.layout as JnLayout).scale.max}`);
+    if (s.hasScore) parts.push(`Satisfacción ${s.score} de ${(this.layout as JourneyLayout).scale.max}`);
     if (s.actor) parts.push(s.actor);
     if (s.description) parts.unshift(inlineMdWeb(s.description));
     if (parts.length) {

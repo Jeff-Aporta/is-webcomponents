@@ -10,7 +10,8 @@ import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
-import type { StepKind, SwLayoutStep, SwLayoutLink, SwLayoutLane, SwLayout, StepEntry, LinkEntry } from "./swimlane-diagram.schemas.js";
+import type { SwimlaneLayout, SwimlaneStepKind } from "./swimlane-spec.schemas.js";
+import type { StepEntry, LinkEntry } from "./swimlane-diagram.schemas.js";
 
 /**
  * <iswc-swimlane-diagram> — diagrama de carriles en SVG, sin Mermaid.
@@ -30,7 +31,7 @@ import type { StepKind, SwLayoutStep, SwLayoutLink, SwLayoutLane, SwLayout, Step
  */
 
 /** Contorno del paso según su tipo, con la misma gramática que el flowchart. */
-function stepPath(kind: StepKind, x: number, y: number, w: number, h: number): string {
+function stepPath(kind: SwimlaneStepKind, x: number, y: number, w: number, h: number): string {
   const cx = x + w / 2;
   const cy = y + h / 2;
   if (kind === 'decision') return `M${cx},${y} L${x + w},${cy} L${cx},${y + h} L${x},${cy} Z`;
@@ -104,13 +105,13 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
     const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeSwimlaneLayout(visible) as unknown as SwLayout;
+    const layout = computeSwimlaneLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
-  #buildSvg(layout: SwLayout, theme: DiagramTheme): void {
+  #buildSvg(layout: SwimlaneLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -145,7 +146,7 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
-  #buildLanes(layout: SwLayout, theme: DiagramTheme): void {
+  #buildLanes(layout: SwimlaneLayout, theme: DiagramTheme): void {
     layout.lanes.forEach((lane, i: number) => {
       const color = tkHueToHex(lane.hue) ?? theme.accent;
       const g = svgEl('g', { class: 'sw-lane' });
@@ -187,7 +188,7 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
     });
   }
 
-  #buildLinks(layout: SwLayout, theme: DiagramTheme): void {
+  #buildLinks(layout: SwimlaneLayout, theme: DiagramTheme): void {
     for (const l of layout.links) {
       const color = edgeStrokeHex(l.hue, theme.accent);
       const g = svgEl('g', { class: `sw-link${l.forward ? '' : ' sw-link--return'}` });
@@ -199,16 +200,14 @@ class IswcSwimlaneDiagram extends DiagramElementBase {
         'stroke-dasharray': l.forward ? null : '5 4',
         class: 'sw-link__path',
       }));
-      // `svgArrowHead` está en JS plano y su `className` por defecto es `null` (no `string`),
-// así que casteamos para no tocar un helper fuera de este scope.
-g.appendChild(svgArrowHead({
+      g.appendChild(svgArrowHead({
         d: l.path,
         tip: { x: l.arrowTipX, y: l.arrowTipY },
         color,
         len: 8,
         halfWidth: 4,
         className: 'sw-link__head',
-      } as unknown as Parameters<typeof svgArrowHead>[0]));
+      }));
 
       if (l.label) {
         const w = l.labelW ?? (l.label.length * 5.6 + 8);
@@ -229,7 +228,7 @@ g.appendChild(svgArrowHead({
     }
   }
 
-  #buildSteps(layout: SwLayout, theme: DiagramTheme): void {
+  #buildSteps(layout: SwimlaneLayout, theme: DiagramTheme): void {
     for (const s of layout.steps) {
       const color = (s.hue != null && tkHueToHex(s.hue)) || theme.accent;
       const g = svgEl('g', { class: `sw-step sw-step--${s.kind}` });
@@ -261,7 +260,8 @@ g.appendChild(svgArrowHead({
           maxHeight: s.h - 4,
           fontSize: 10.5,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: (s.overflow ?? 'grow') as 'grow' | 'ellipsis',
+          // `computeSwimlaneLayout` no produce `overflow` por paso: política fija.
+          overflow: 'grow',
         });
         const swtspans = buildTspans(
           swresult.lines,

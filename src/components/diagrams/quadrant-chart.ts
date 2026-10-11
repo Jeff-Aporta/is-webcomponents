@@ -8,7 +8,8 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { QdGroup, QdAxisLabel, QdAxes, QdLayoutPoint, QdLayoutQuadrant, QdLayout, PointEntry } from "./quadrant-chart.schemas.js";
+import type { QuadrantLayout, QuadrantLayoutAxisLabel } from "./quadrant-spec.schemas.js";
+import type { PointEntry } from "./quadrant-chart.schemas.js";
 
 /**
  * <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.
@@ -83,13 +84,13 @@ class IswcQuadrantChart extends DiagramElementBase {
     const theme = this.isDarkTheme ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeQuadrantLayout(visible) as unknown as QdLayout;
+    const layout = computeQuadrantLayout(visible);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
-  #buildSvg(layout: QdLayout, theme: DiagramTheme): void {
+  #buildSvg(layout: QuadrantLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -123,7 +124,7 @@ class IswcQuadrantChart extends DiagramElementBase {
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
-  #buildFrame(layout: QdLayout, theme: DiagramTheme): void {
+  #buildFrame(layout: QuadrantLayout, theme: DiagramTheme): void {
     const { plot, axes } = layout;
     const g = svgEl('g', { class: 'qd-frame' });
 
@@ -159,7 +160,7 @@ class IswcQuadrantChart extends DiagramElementBase {
       g.appendChild(t);
     }
 
-    const axisText = (spec: QdAxisLabel | undefined, anchor: 'start' | 'end' | 'middle', rotate: boolean): void => {
+    const axisText = (spec: QuadrantLayoutAxisLabel | undefined, anchor: 'start' | 'end' | 'middle', rotate: boolean): void => {
       if (!spec) return;
       const t = svgEl('text', {
         x: spec.x, y: spec.y, 'text-anchor': anchor, 'dominant-baseline': 'middle', fill: theme.muted,
@@ -178,7 +179,7 @@ class IswcQuadrantChart extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLegend(layout: QdLayout, theme: DiagramTheme): void {
+  #buildLegend(layout: QuadrantLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'qd-legend' });
     (layout.groups ?? []).forEach((grp, gi: number) => {
       const ly = layout.plot.y + 10 + gi * 16;
@@ -207,7 +208,7 @@ class IswcQuadrantChart extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildPoints(layout: QdLayout, theme: DiagramTheme): void {
+  #buildPoints(layout: QuadrantLayout, theme: DiagramTheme): void {
     const groupHue = new Map((layout.groups ?? []).map((grp) => [grp.id, grp.hue]));
     for (const pt of layout.points) {
       const hue = pt.hue ?? (pt.group ? groupHue.get(pt.group) : undefined);

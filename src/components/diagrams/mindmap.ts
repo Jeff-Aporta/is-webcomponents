@@ -9,7 +9,8 @@ import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { MindmapNodeKind, MmLayoutNode, MmLayoutEdge, MmLayout, NodeEntry, EdgeEntry } from "./mindmap.schemas.js";
+import type { MindmapLayout } from "./mindmap-spec.schemas.js";
+import type { NodeEntry, EdgeEntry } from "./mindmap.schemas.js";
 
 /**
  * <iswc-mindmap> — mapa mental en SVG, sin Mermaid.
@@ -70,13 +71,13 @@ class IswcMindmap extends DiagramElementBase {
     const theme = dark ? sequenceThemeDark() : sequenceThemeLight();
     this.syncThemeAttr();
 
-    const layout = computeMindmapLayout(spec) as unknown as MmLayout;
+    const layout = computeMindmapLayout(spec);
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
-  #buildSvg(layout: MmLayout, theme: DiagramTheme): void {
+  #buildSvg(layout: MindmapLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -110,7 +111,7 @@ class IswcMindmap extends DiagramElementBase {
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
-  #buildEdges(layout: MmLayout, theme: DiagramTheme): void {
+  #buildEdges(layout: MindmapLayout, theme: DiagramTheme): void {
     for (const e of layout.edges) {
       const color = (e.hue != null && tkHueToHex(e.hue)) || theme.accent;
       const path = svgEl('path', {
@@ -123,7 +124,7 @@ class IswcMindmap extends DiagramElementBase {
     }
   }
 
-  #buildNodes(layout: MmLayout, theme: DiagramTheme): void {
+  #buildNodes(layout: MindmapLayout, theme: DiagramTheme): void {
     // Las hojas van primero (por debajo visualmente no aplica en SVG, pero
     // mantener el orden del árbol favorece que el hover de un padre no tape
     // el subrayado de sus hijos).
@@ -194,7 +195,8 @@ class IswcMindmap extends DiagramElementBase {
           maxHeight: n.h - 4,
           fontSize,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: (n.overflow ?? 'grow') as 'ellipsis' | 'grow',
+          // `computeMindmapLayout` no produce `overflow` por nodo: política fija.
+          overflow: 'grow',
         });
         const mtspans = buildTspans(
           mresult.lines,

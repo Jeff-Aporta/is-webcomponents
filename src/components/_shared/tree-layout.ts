@@ -6,7 +6,7 @@
  */
 
 import { snapDiagramGrid } from './diagram-grid.js';
-import type { RawNode, TreeNode, TreeMeasure, LayoutEntry, LayoutTreeOpts, PositionedTreeNode, LayoutTreeResult, LayoutRadialOpts, LayoutRadialResult, SquarifyItem, SquarifyResult } from "./tree-layout.schemas.js";
+import type { RawNode, TreeNode, TreeNodeOf, TreeMeasure, TreeMeasureOf, LayoutEntry, LayoutTreeOpts, PositionedTreeNode, LayoutTreeResult, LayoutRadialOpts, LayoutRadialResult, SquarifyItem, SquarifyResult } from "./tree-layout.schemas.js";
 /** Nodo crudo del que parte `buildTree`. */
 
 /** Nodo del árbol construido por `buildTree`. */
@@ -17,11 +17,12 @@ import type { RawNode, TreeNode, TreeMeasure, LayoutEntry, LayoutTreeOpts, Posit
  * un `parent` que no existe (el nodo se vuelve raíz) y ciclos de parentesco
  * (se cortan por el primer back-edge detectado — nunca entra en loop infinito).
  */
-export function buildTree(nodes: readonly RawNode[]): TreeNode {
-  const map = new Map<string, TreeNode>();
+export function buildTree<T extends RawNode>(nodes: readonly T[]): TreeNodeOf<T> {
+  const map = new Map<string, TreeNodeOf<T>>();
   for (const raw of nodes ?? []) {
     const id = String(raw.id);
-    map.set(id, { ...raw, id, children: [] });
+    const { id: _id, parent, children: _children, ...resto } = raw;
+    map.set(id, { ...resto, id, parent, children: [] });
   }
 
   // Resuelve el padre "efectivo" de cada nodo con DFS coloreado (blanco/gris/negro),
@@ -49,7 +50,7 @@ export function buildTree(nodes: readonly RawNode[]): TreeNode {
   }
   for (const id of map.keys()) resolveParent(id);
 
-  const roots: TreeNode[] = [];
+  const roots: TreeNodeOf<T>[] = [];
   for (const [id, node] of map) {
     const p = effectiveParent.get(id);
     if (p) map.get(p)!.children.push(node);
@@ -57,7 +58,9 @@ export function buildTree(nodes: readonly RawNode[]): TreeNode {
   }
 
   if (roots.length === 1) return roots[0]!;
-  return { id: '__root__', synthetic: true, children: roots } as TreeNode;
+  // Raíz sintética: no trae los campos del crudo `T` (todos opcionales en `TreeNodeOf`); TS no
+  // puede probar la asignación a un `Partial<Omit<T, …>>` genérico, de ahí la aserción.
+  return { id: '__root__', synthetic: true, children: roots } as TreeNodeOf<T>;
 }
 
 /* ───────────────────────── layoutTree (tidy tree) ───────────────────────── */
@@ -67,10 +70,10 @@ const DEFAULT_MEASURE: TreeMeasure = () => ({ w: 80, h: 32 });
 /** Entrada intermedia del layout tidy: contiene su subárbol de hijos. */
 
 /** Construye la lista plana de entradas de layout (depth, tamaño medido, hijos). */
-function flattenForLayout(root: TreeNode, measure?: TreeMeasure): { entries: LayoutEntry[]; rootEntry: LayoutEntry | null } {
+function flattenForLayout<N extends { id: string; children: N[] }>(root: N, measure?: TreeMeasureOf<N>): { entries: LayoutEntry[]; rootEntry: LayoutEntry | null } {
   const entries: LayoutEntry[] = [];
   const visited = new Set<TreeNode>();
-  function build(node: TreeNode, depth: number): LayoutEntry | null {
+  function build(node: N, depth: number): LayoutEntry | null {
     if (visited.has(node)) return null; // defensivo: nunca debería ocurrir en un árbol
     visited.add(node);
     const size = measure ? measure(node) : DEFAULT_MEASURE(node);
@@ -91,7 +94,7 @@ function flattenForLayout(root: TreeNode, measure?: TreeMeasure): { entries: Lay
  * subárbol el máximo entre su propio tamaño y la suma de sus hijos, así los
  * hermanos nunca se solapan aunque el nodo padre sea más grande que sus hijos.
  */
-export function layoutTree(root: TreeNode, opts: LayoutTreeOpts = {}): LayoutTreeResult {
+export function layoutTree<N extends { id: string; children: N[] }>(root: N, opts: Omit<LayoutTreeOpts, 'measure'> & { measure?: TreeMeasureOf<N> } = {}): LayoutTreeResult {
   const { direction = 'LR', levelGap = 56, siblingGap = 16, measure } = opts;
   const swapAxes = direction === 'LR' || direction === 'RL';
   const mirrorMain = direction === 'BT' || direction === 'RL';
@@ -198,7 +201,7 @@ export function layoutTree(root: TreeNode, opts: LayoutTreeOpts = {}): LayoutTre
  * proporcional a la cantidad de hojas de cada subárbol (como un dendrograma
  * circular). Ideal para mindmaps.
  */
-export function layoutRadialTree(root: TreeNode, opts: LayoutRadialOpts = {}): LayoutRadialResult {
+export function layoutRadialTree<N extends { id: string; children: N[] }>(root: N, opts: Omit<LayoutRadialOpts, 'measure'> & { measure?: TreeMeasureOf<N> } = {}): LayoutRadialResult {
   const { radiusStep = 90, measure } = opts;
   const { entries, rootEntry } = flattenForLayout(root, measure);
   if (!rootEntry) return { nodes: [], width: 0, height: 0, cx: 0, cy: 0 };

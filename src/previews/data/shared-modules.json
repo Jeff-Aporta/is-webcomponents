@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-11T10:11:31.571Z",
+  "generatedAt": "2026-10-11T12:51:39.168Z",
   "count": 122,
   "modules": [
     {
@@ -514,7 +514,7 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 11125,
+      "bytes": 11219,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -801,7 +801,7 @@
       "id": "grid-data.schemas",
       "path": "src/components/_shared/grid-data.schemas.ts",
       "summary": "grid-data — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 3920,
+      "bytes": 3925,
       "exports": [
         "ResolvedColumnSchema",
         "NormalizeOptionsSchema",
@@ -1010,7 +1010,7 @@
       "id": "isp-record-utils.schemas",
       "path": "src/components/_shared/isp-record-utils.schemas.ts",
       "summary": "isp-record-utils — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 2487,
+      "bytes": 2509,
       "exports": [
         "IspRecordSchema",
         "GridRowSchema",
@@ -1073,7 +1073,7 @@
       "id": "lane-layout.schemas",
       "path": "src/components/_shared/lane-layout.schemas.ts",
       "summary": "lane-layout — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 2501,
+      "bytes": 2470,
       "exports": [
         "TimeScaleSchema",
         "TickUnitSchema",
@@ -1256,7 +1256,7 @@
       "id": "path-turtle.schemas",
       "path": "src/components/_shared/path-turtle.schemas.ts",
       "summary": "path-turtle — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 2131,
+      "bytes": 2021,
       "exports": [
         "TurtleMessageSchema",
         "TurtleThemeSchema",
@@ -1272,7 +1272,7 @@
       "id": "path-turtle",
       "path": "src/components/_shared/path-turtle.ts",
       "summary": "Módulo compartido `path-turtle.ts`.",
-      "bytes": 11119,
+      "bytes": 10759,
       "exports": [
         "PathTurtle",
         "TURTLE_AUTO_GAP",
@@ -1630,7 +1630,7 @@
       "id": "tree-layout.schemas",
       "path": "src/components/_shared/tree-layout.schemas.ts",
       "summary": "tree-layout — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 3164,
+      "bytes": 3749,
       "exports": [
         "RawNodeSchema",
         "TreeNodeSchema",
@@ -1650,7 +1650,7 @@
       "id": "tree-layout",
       "path": "src/components/_shared/tree-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 14967,
+      "bytes": 15498,
       "exports": [
         "buildTree",
         "layoutTree",

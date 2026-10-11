@@ -3,7 +3,6 @@ import { aristasDeRetorno, claveArista } from '../_shared/diagram-graph.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type { SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLinkSpec, SwimlaneResolvedSpec, SwimlaneLayoutLane, SwimlaneLayoutStep, SwimlaneLayoutLink, SwimlaneLayout } from "./swimlane-spec.schemas.js";
 
@@ -300,7 +299,7 @@ export function computeSwimlaneLayout(spec: SwimlaneResolvedSpec): SwimlaneLayou
     };
   });
 
-  assignEdgeHues(links as unknown as readonly EdgeWithHue[]);
+  assignEdgeHues(links);
   const layout: SwimlaneLayout = {
     width,
     height,

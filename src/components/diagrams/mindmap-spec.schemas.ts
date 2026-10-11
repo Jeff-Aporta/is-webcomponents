@@ -5,6 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { TreeNodeOf } from "../_shared/tree-layout.schemas.js";
 
 export const MindmapNodeSchema = z.object({
   id: z.string(),
@@ -34,18 +35,8 @@ export const LeadingIconSchema = z.object({
 export type LeadingIcon = z.infer<typeof LeadingIconSchema>;
 
 
-export const TreeNodeSchema = z.object({
-  id: z.string(),
-  depth: z.number().optional(),
-  label: z.string().optional(),
-  icon: z.string().optional(),
-  hue: z.number().optional(),
-  resolvedHue: z.number().optional(),
-  description: z.string().optional(),
-  synthetic: z.boolean().optional(),
-  children: z.array(TreeNodeSchema),
-});
-export type TreeNode = z.infer<typeof TreeNodeSchema>;
+/** Árbol de `buildTree` sobre los nodos del mapa, anotado con `depth` y `resolvedHue` por el layout. */
+export type TreeNode = TreeNodeOf<MindmapNode & { depth?: number; resolvedHue?: number }>;
 
 
 export const MindmapLayoutNodeSchema = z.object({

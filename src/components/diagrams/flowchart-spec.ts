@@ -814,7 +814,7 @@ export function computeFlowchartLayout(
     }
   }
 
-  assignEdgeHues(routedEdges as unknown as Parameters<typeof assignEdgeHues>[0]);
+  assignEdgeHues(routedEdges);
   const layout: FlowLayout = {
     width,
     height,

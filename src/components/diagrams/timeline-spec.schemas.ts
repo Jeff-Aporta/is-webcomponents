@@ -5,6 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import { TimeScaleSchema, type TimeScale } from "../_shared/lane-layout.schemas.js";
 
 export const TimelineOrientationSchema = z.union([z.literal('horizontal'), z.literal('vertical')]);
 export type TimelineOrientation = z.infer<typeof TimelineOrientationSchema>;
@@ -90,10 +91,7 @@ export const TimelineLayoutOptionsSchema = z.object({
 export type TimelineLayoutOptions = z.infer<typeof TimelineLayoutOptionsSchema>;
 
 
-export const CompressedScaleSchema = z.object({
-  /* TODO: parse fail (ms: number): number */
-  invert: z.function({ input: [z.number()], output: z.number() }),
-  span: z.number(),
-});
-export type CompressedScale = z.infer<typeof CompressedScaleSchema>;
+/** Escala de eventos con huecos comprimidos: una `TimeScale` más el largo en px que ocupa (`span`). */
+export type CompressedScale = TimeScale & { span: number };
+export const CompressedScaleSchema = z.custom<CompressedScale>((v) => typeof v === 'function' && TimeScaleSchema.safeParse(v).success && typeof Reflect.get(v, 'span') === 'number');
 

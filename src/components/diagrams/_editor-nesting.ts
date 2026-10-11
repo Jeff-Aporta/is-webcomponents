@@ -178,7 +178,7 @@ export function openNestingModal(host: HTMLElement, childSpec: unknown, opts: Ne
   try {
     const ctor = customElements.get(childTag);
     if (ctor) {
-      childEl = new (ctor as CustomElementConstructor)() as unknown as HTMLElement;
+      childEl = new ctor();
       // Si el child es un editor que respeta `payload`, lo asignamos por slot
       // JSON para que la subclase lo lea en `connectedCallback`.
       try {

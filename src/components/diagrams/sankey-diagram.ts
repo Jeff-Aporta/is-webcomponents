@@ -8,7 +8,8 @@ import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { SkGroup, SkLayoutNode, SkLayoutLink, SkLayout, NodeEntry, LinkEntry } from "./sankey-diagram.schemas.js";
+import type { SankeyLayout } from "./sankey-spec.schemas.js";
+import type { NodeEntry, LinkEntry } from "./sankey-diagram.schemas.js";
 
 /**
  * <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.
@@ -93,13 +94,13 @@ class IswcSankeyDiagram extends DiagramElementBase {
     this.syncThemeAttr();
 
     const height = Number(this.getAttribute('height')) || DEFAULT_HEIGHT;
-    const layout = computeSankeyLayout(visible, { height }) as unknown as SkLayout;
+    const layout = computeSankeyLayout(visible, { height });
     this.layout = layout;
     this.#buildSvg(layout, theme);
     this.wrap.classList.toggle('iswc-viewer', this.isViewer);
   }
 
-  #buildSvg(layout: SkLayout, theme: DiagramTheme): void {
+  #buildSvg(layout: SankeyLayout, theme: DiagramTheme): void {
     const { width: W, height: H } = layout;
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -134,7 +135,7 @@ class IswcSankeyDiagram extends DiagramElementBase {
     emit(this, 'iswc-render', { layout, svg: this.svg });
   }
 
-  #buildLegend(layout: SkLayout, theme: DiagramTheme): void {
+  #buildLegend(layout: SankeyLayout, theme: DiagramTheme): void {
     const g = svgEl('g', { class: 'sk-legend' });
     (layout.groups ?? []).forEach((grp, gi: number) => {
       const ly = (layout.subtitleY || layout.titleY || 22) + 18 + gi * 16;
@@ -163,7 +164,7 @@ class IswcSankeyDiagram extends DiagramElementBase {
     this.svg.appendChild(g);
   }
 
-  #buildLinks(layout: SkLayout, theme: DiagramTheme): void {
+  #buildLinks(layout: SankeyLayout, theme: DiagramTheme): void {
     for (const l of layout.links) {
       const color = (l.hue != null && tkHueToHex(l.hue)) || theme.accent;
       const g = svgEl('g', { class: 'sk-link' });
@@ -176,7 +177,7 @@ class IswcSankeyDiagram extends DiagramElementBase {
     }
   }
 
-  #buildNodes(layout: SkLayout, theme: DiagramTheme): void {
+  #buildNodes(layout: SankeyLayout, theme: DiagramTheme): void {
     for (const n of layout.nodes) {
       const color = (n.hue != null && tkHueToHex(n.hue)) || theme.accent;
       const g = svgEl('g', { class: 'sk-node' });
@@ -211,7 +212,8 @@ class IswcSankeyDiagram extends DiagramElementBase {
           maxHeight: 60,
           fontSize: 11,
           fontFamily: 'Tahoma,Arial,sans-serif',
-          overflow: (n.overflow ?? 'ellipsis') as 'grow' | 'ellipsis',
+          // `computeSankeyLayout` no produce `overflow` por nodo: política fija.
+          overflow: 'ellipsis',
         });
         const sktspans = buildTspans(
           skresult.lines,
@@ -314,7 +316,7 @@ class IswcSankeyDiagram extends DiagramElementBase {
     this.tooltipEl.appendChild(title);
     const desc = document.createElement('div');
     desc.className = 'dg-tooltip__desc';
-    const unit = (this.layout as SkLayout | null)?.unit ? ` ${(this.layout as SkLayout).unit}` : '';
+    const unit = (this.layout as SankeyLayout | null)?.unit ? ` ${(this.layout as SankeyLayout).unit}` : '';
     desc.innerHTML = n.description
       ? `${inlineMdWeb(n.description)} · ${n.value}${unit}`
       : `${n.value}${unit}`;

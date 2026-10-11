@@ -50,12 +50,12 @@ export type TurtleReport = z.infer<typeof TurtleReportSchema>;
 
 
 export const TurtleDataOptsSchema = z.object({
-  messages: z.array(z.unknown() /* TODO: cannot convert */).optional(),
+  messages: z.array(TurtleMessageSchema).optional(),
   theme: TurtleThemeSchema,
   viewW: z.number().optional(),
   viewH: z.number().optional(),
   autoLoop: z.boolean().optional(),
-  onState: z.function({ input: [z.unknown() /* TODO: ref TurtleReport */], output: z.void() }).optional(),
+  onState: z.function({ input: [TurtleReportSchema], output: z.void() }).optional(),
 });
 export type TurtleDataOpts = z.infer<typeof TurtleDataOptsSchema>;
 

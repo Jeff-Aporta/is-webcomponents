@@ -14,7 +14,6 @@ import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgIconBadge } from '../_shared/tk-icon-inline.js';
 import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./diagram-types.schemas.js";
-import type { TurtleTheme } from "../_shared/path-turtle.schemas.js";
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import type { ErThemeJson } from './theme.schemas.js';
 
@@ -210,13 +209,13 @@ class IswcClassDiagram extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
+    this.#turtle = new SequenceTurtle(turtleGroup);
     // La tortuga recorre las relaciones en orden; reutiliza el motor de secuencia.
     this.#turtle.setData({
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme: theme as unknown as TurtleTheme,
+      theme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,

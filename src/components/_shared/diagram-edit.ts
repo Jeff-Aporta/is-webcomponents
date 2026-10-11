@@ -144,15 +144,15 @@ export const snap = snapDiagramGrid;
  * El drag se activa con pointerdown sobre un nodo y termina en pointerup
  * global. Usa `setPointerCapture` para no perder el puntero fuera del nodo.
  */
-export function attachNodeDrag(el: HTMLElement, onMove: NodeDragMove, onEnd?: NodeDragEnd): NodeDragDestroy {
+export function attachNodeDrag(el: HTMLElement | SVGElement, onMove: NodeDragMove, onEnd?: NodeDragEnd): NodeDragDestroy {
   let startX = 0;
   let startY = 0;
   let lastX = 0;
   let lastY = 0;
   let active = false;
 
-  function down(evt: PointerEvent): void {
-    if (evt.button !== 0) return;
+  function down(evt: Event): void {
+    if (!(evt instanceof PointerEvent) || evt.button !== 0) return;
     active = true;
     startX = evt.clientX;
     startY = evt.clientY;
@@ -163,8 +163,8 @@ export function attachNodeDrag(el: HTMLElement, onMove: NodeDragMove, onEnd?: No
     evt.stopPropagation();
   }
 
-  function move(evt: PointerEvent): void {
-    if (!active) return;
+  function move(evt: Event): void {
+    if (!active || !(evt instanceof PointerEvent)) return;
     const dx = evt.clientX - lastX;
     const dy = evt.clientY - lastY;
     lastX = evt.clientX;
@@ -172,8 +172,8 @@ export function attachNodeDrag(el: HTMLElement, onMove: NodeDragMove, onEnd?: No
     onMove(dx, dy, evt.clientX - startX, evt.clientY - startY);
   }
 
-  function up(evt: PointerEvent): void {
-    if (!active) return;
+  function up(evt: Event): void {
+    if (!active || !(evt instanceof PointerEvent)) return;
     active = false;
     el.releasePointerCapture?.(evt.pointerId);
     el.classList.remove('iswc-dragging');

@@ -484,6 +484,6 @@ export const ErEditorStateSchema = z.object({
   direction: z.unknown() /* TODO: cannot convert */.optional(),
   ratio: z.number().optional(),
   theme: z.string().optional(),
-});
+}).extend({ direction: ErSpecSchema.shape.direction.optional(), meta: ErSpecSchema.shape.meta });
 export type ErEditorState = z.infer<typeof ErEditorStateSchema>;
 

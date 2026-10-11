@@ -1054,8 +1054,10 @@ export function computeErLayout(specIn: ErSpec): ErLayout {
   const routeViolations = routerIdx
     .map((ri, k) => ({ id: spec.relations[ri]!.id ?? `r${ri}`, rules: routed.violations[k]! }))
     .filter((v) => v.rules.length);
-  const relations: NonNullable<ErLayout['relations']> = (assignEdgeHues(ruteadas as unknown as Parameters<typeof assignEdgeHues>[0]) as unknown as NonNullable<ErLayout['relations']>)
-    .filter((e): e is NonNullable<ErLayout['relations']>[number] => e !== undefined);
+  // Cada relación recibe su `edge` en el forEach de arriba; el filtro solo descarta huecos defensivamente.
+  const relations: NonNullable<ErLayout['relations']> = assignEdgeHues(
+    ruteadas.filter((e): e is NonNullable<ErLayout['relations']>[number] => e !== undefined),
+  );
 
   const layout: ErLayout = {
     width,

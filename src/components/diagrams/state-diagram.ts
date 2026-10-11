@@ -10,7 +10,7 @@ import type {
 } from './state-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { SequenceTurtle } from './sequence-turtle.js';
-import type { PathTurtle, TurtleTheme } from '../_shared/path-turtle.js';
+import type { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import type { DiagramTheme } from './diagram-types.js';
@@ -166,13 +166,13 @@ class IswcStateDiagram extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
+    this.#turtle = new SequenceTurtle(turtleGroup);
     // La tortuga recorre las transiciones en orden; reutiliza el motor de secuencia.
     this.#turtle.setData({
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme: theme as unknown as TurtleTheme,
+      theme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,

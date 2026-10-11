@@ -105,7 +105,7 @@ export const IspControllerSchema = z.object({
   labelPk: z.string().optional(),
   sizePk: z.number().optional(),
   klass: z.unknown() /* TODO: cannot convert */,
-  CtxBtnRef: z.union([IspControllerSchema, z.null()]).optional(),
+  get CtxBtnRef(): z.ZodOptional<z.ZodUnion<[typeof IspControllerSchema, z.ZodNull]>> { return z.union([IspControllerSchema, z.null()]).optional(); },
   Lista: z.function({ input: [z.unknown() /* TODO: ref IspListaArgs */], output: z.promise(z.unknown() /* TODO: ref IspListaResult */) }),
   actCrear: z.function({ input: [z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.unknown() /* TODO: ref IspRecord */) }).optional(),
   actModificar: z.function({ input: [z.unknown() /* TODO: ref IspRecord */], output: z.promise(z.unknown() /* TODO: ref IspRecord */) }).optional(),

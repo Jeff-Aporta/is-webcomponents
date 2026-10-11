@@ -23,6 +23,7 @@ import '../media/icon.js';
 import '../actions/context-menu.js';
 import '../layout/split-panel.js';
 import { createPanZoom, type PanZoomController } from '../_shared/pan-zoom.js';
+import type { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 
 const SNAP = 8;
@@ -172,7 +173,7 @@ class IswcErEditor extends HTMLElement {
     return ['animation', 'theme'];
   }
 
-  #diagram: HTMLElement & { payload: unknown; svg: SVGElement } | null = null;
+  #diagram: DiagramElementBase | null = null;
   #state: ErEditorState | null = null;
   // Cada entrada de history lleva un `sig` opcional para coalescer cambios
   // rápidos en name/type de un atributo en una sola entrada de undo.
@@ -245,7 +246,8 @@ class IswcErEditor extends HTMLElement {
 
   exportJson(): string {
     if (!this.#state) return '';
-    return serializeErPayload(this.#state as unknown as ErSpec, { indent: 2 });
+    const spec: ErSpec = { ...this.#state, direction: this.#state.direction ?? 'LR', ratio: this.#state.ratio ?? 1.4 };
+    return serializeErPayload(spec, { indent: 2 });
   }
 
   exportSvg(): string {
@@ -288,7 +290,7 @@ class IswcErEditor extends HTMLElement {
   #ensureDiagram(): void {
     if (this.#diagram) return;
     const host = this.shadowRoot!.querySelector('[data-canvas-inner]')!;
-    const diagram = document.createElement('iswc-er-diagram') as unknown as HTMLElement & { payload: unknown; svg: SVGElement };
+    const diagram = document.createElement('iswc-er-diagram') as DiagramElementBase;
     diagram.setAttribute('animation', this.getAttribute('animation') ?? '');
     const theme = this.getAttribute('theme');
     if (theme) diagram.setAttribute('theme', theme);
@@ -1129,7 +1131,7 @@ class IswcErEditor extends HTMLElement {
       if (r) {
         if (key === 'route' || key === 'dashStyle' || key === 'variant' || key === 'width') {
           if (value == null || value === '') delete r[key as 'route'];
-          else (r as unknown as Record<string, unknown>)[key] = value;
+          else Object.assign(r, { [key]: value });
         } else apply(r);
       }
     }

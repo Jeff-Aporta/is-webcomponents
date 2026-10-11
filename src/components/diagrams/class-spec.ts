@@ -513,7 +513,7 @@ export function computeClassLayout(spec: ClassSpec): ClassLayout {
     }];
   });
 
-  assignEdgeHues(routed as unknown as Parameters<typeof assignEdgeHues>[0]);
+  assignEdgeHues(routed);
   const layout: ClassLayout = {
     width,
     height,

@@ -35,6 +35,11 @@ export function listErThemes(): string[] {
  * Resuelve un id (`"insoft"`), un objeto tema, o null.
  * Acepta también `{ theme: "insoft" }` / payload con `erDiagram.theme`.
  */
+/** Objeto tema completo: trae `id` y al menos una de las secciones `entity` / `cluster` / `diagramTheme`. */
+function esErThemeJson(o: Record<string, unknown>): o is ErThemeJson & Record<string, unknown> {
+  return typeof o.id === 'string' && Boolean(o.entity || o.cluster || o.diagramTheme);
+}
+
 export function resolveErTheme(input: unknown): ErThemeJson | null {
   if (input == null || input === '') return null;
   if (typeof input === 'string') {
@@ -45,9 +50,7 @@ export function resolveErTheme(input: unknown): ErThemeJson | null {
   if (typeof input === 'object') {
     const o = input as Record<string, unknown>;
     // Objeto tema completo
-    if (typeof o.id === 'string' && (o.entity || o.cluster || o.diagramTheme)) {
-      return o as unknown as ErThemeJson;
-    }
+    if (esErThemeJson(o)) return o;
     // Payload: erDiagram.theme | componentDiagram.theme | theme
     const nested = o.erDiagram ?? o.er ?? o.componentDiagram;
     if (nested && typeof nested === 'object') {

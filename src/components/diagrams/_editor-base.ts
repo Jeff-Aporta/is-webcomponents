@@ -137,7 +137,7 @@ export abstract class IsEditorBase<Spec extends EditorSpecLike> extends DiagramE
   protected emitStateChange(spec: Spec): void {
     const detail: IsStateChangeDetail<Spec> = {
       spec,
-      tag: (this.constructor as unknown as { tag?: string }).tag,
+      tag: 'tag' in this.constructor && typeof this.constructor.tag === 'string' ? this.constructor.tag : undefined,
     };
     emit(this, 'iswc-state-change', detail);
   }

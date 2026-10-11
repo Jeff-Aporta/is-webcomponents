@@ -58,8 +58,8 @@ export class PathTurtle {
   #st: TurtleState = { idx: 0, elapsed: 0, autoElapsed: 0, phase: 'idle', lastTs: 0, gapStart: 0, lastPct: -1 };
 
   /** @param group grupo donde se dibuja la tortuga (dentro del SVG). */
-  constructor(group: HTMLElement) {
-    this.#group = group as unknown as SVGGElement;
+  constructor(group: SVGGElement) {
+    this.#group = group;
     this.#group.setAttribute('class', 'seq-turtle');
     this.#group.setAttribute('pointer-events', 'none');
     this.#group.setAttribute('aria-hidden', 'true');

@@ -2,7 +2,6 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import type { EdgeWithHue } from '../_shared/diagram-edge-style.js';
 import type { UseCaseActorSide, UseCaseLinkKind, UseCaseActorSpec, UseCaseCaseSpec, UseCaseLinkSpec, UseCaseGroupSpec, UseCaseResolvedSpec, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseLayoutSystem, UseCaseLayout } from "./use-case-spec.schemas.js";
 
 /**
@@ -145,7 +144,7 @@ export function useCaseSpecToJson(spec: UseCaseResolvedSpec): Record<string, unk
     if (l.label) row.label = l.label;
     return row;
   });
-  if (!out.actors || !(out.actors as unknown[]).length) delete out.actors;
+  if (!Array.isArray(out.actors) || !out.actors.length) delete out.actors;
   return out;
 }
 
@@ -297,7 +296,7 @@ export function computeUseCaseLayout(spec: UseCaseResolvedSpec): UseCaseLayout {
   const height = originY + bodyH + MARGIN.bottom;
   const legendX = legendGroups ? Math.max(8, width - legendW - 8) : 0;
 
-  assignEdgeHues(links as unknown as readonly EdgeWithHue[]);
+  assignEdgeHues(links);
   const layout: UseCaseLayout = {
     width,
     height,

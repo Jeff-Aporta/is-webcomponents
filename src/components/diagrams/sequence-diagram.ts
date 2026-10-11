@@ -25,7 +25,7 @@ import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
 import type { EdgeStyle } from './diagram-vocab.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { SequenceTurtle } from './sequence-turtle.js';
-import type { PathTurtle, TurtleMessage, TurtleTheme } from '../_shared/path-turtle.js';
+import type { PathTurtle } from '../_shared/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
 import { svgIconGroup, svgIconBadge, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
 import { pathPoints } from '../_shared/diagram-arrow.js';
@@ -384,10 +384,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
     this.#turtleGroup = svgEl('g');
     this.svg.appendChild(this.#turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(this.#turtleGroup as unknown as HTMLElement);
+    this.#turtle = new SequenceTurtle(this.#turtleGroup);
     this.#turtle.setData({
-      messages: messages as unknown as readonly TurtleMessage[],
-      theme: theme as unknown as TurtleTheme,
+      messages,
+      theme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,

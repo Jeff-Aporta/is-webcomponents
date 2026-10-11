@@ -49,7 +49,7 @@ export function treemapSpecFromPayload(payload: unknown): TreemapSpec | null {
   const rawNodes = src.nodes;
   if (!Array.isArray(rawNodes) || !rawNodes.length) return null;
 
-  const rawNodesArr = rawNodes as unknown[];
+  const rawNodesArr: unknown[] = rawNodes;
   return {
     title: String(src.title ?? p.title ?? '') || undefined,
     subtitle: String(src.subtitle ?? p.subtitle ?? '') || undefined,
@@ -128,7 +128,7 @@ export function computeTreemapLayout(spec: TreemapSpec, opts: TreemapLayoutOpts 
   const subtitle = spec.subtitle ?? '';
   const headerH = title ? (subtitle ? 40 : 26) : (subtitle ? 20 : 4);
 
-  const root = buildTree(spec.nodes as unknown as ReadonlyArray<import('../_shared/tree-layout.js').RawNode>);
+  const root = buildTree(spec.nodes);
   annotateHue(root, undefined, { i: 0 }, 0, true);
 
   const W = Math.max(160, opts.width ?? DEFAULT_W);

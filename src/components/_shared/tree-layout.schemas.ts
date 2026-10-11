@@ -15,16 +15,27 @@ export const RawNodeSchema = z.object({
 export type RawNode = z.infer<typeof RawNodeSchema>;
 
 
+// Recursivo con getter (patrón de Zod 4): una referencia directa a sí mismo hace que TS infiera `any`.
 export const TreeNodeSchema = z.object({
   id: z.string(),
   parent: z.union([z.string(), z.number(), z.null()]).optional(),
-  children: z.array(TreeNodeSchema),
-  /* TODO: member [key: string]: unknown */
+  synthetic: z.boolean().optional(),
+  get children(): z.ZodArray<typeof TreeNodeSchema> { return z.array(TreeNodeSchema); },
 });
 export type TreeNode = z.infer<typeof TreeNodeSchema>;
 
+/**
+ * Nodo del árbol que arma `buildTree` a partir de nodos crudos `T`: conserva los campos
+ * del crudo (opcionales, porque la raíz sintética `__root__` no los trae), normaliza `id`
+ * a string y anida `children` del mismo tipo.
+ */
+export type TreeNodeOf<T extends RawNode> = Partial<Omit<T, 'id' | 'parent' | 'children'>> & TreeNode & { children: TreeNodeOf<T>[] };
 
-export const TreeMeasureSchema = z.function({ input: [z.unknown() /* TODO: ref TreeNode */], output: z.object({
+/** Medida de un nodo (ancho/alto) para los layouts de árbol. */
+export type TreeMeasureOf<N> = (node: N) => { w: number; h: number };
+
+
+export const TreeMeasureSchema = z.function({ input: [TreeNodeSchema], output: z.object({
   w: z.number(),
   h: z.number(),
 }) });
@@ -36,7 +47,7 @@ export const LayoutEntrySchema = z.object({
   depth: z.number(),
   w: z.number(),
   h: z.number(),
-  children: z.array(LayoutEntrySchema),
+  get children(): z.ZodArray<typeof LayoutEntrySchema> { return z.array(LayoutEntrySchema); },
   extent: z.number(),
   childrenExtent: z.number(),
   crossStart: z.number(),

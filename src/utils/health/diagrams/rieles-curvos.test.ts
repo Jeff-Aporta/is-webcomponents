@@ -26,7 +26,7 @@ Deno.test('rieles: C1-C3 curvas sobre el mismo recorrido', () => {
 });
 
 Deno.test('rieles: C4 la servilleta usa bezier salvo edgeStyle explícito', () => {
-  const host = (look?: string) => ({ getAttribute: (k: string) => (k === 'look' ? look ?? null : null) }) as unknown as Element;
+  const host = (look?: string) => ({ getAttribute: (k: string) => (k === 'look' ? look ?? null : null) });
   assertEquals(edgeStyleFor(host('sketch'), {}), 'bezier');
   assertEquals(edgeStyleFor(host(), {}), 'orthogonal');
   assertEquals(edgeStyleFor(host('sketch'), { edgeStyle: 'curved' }), 'curved');

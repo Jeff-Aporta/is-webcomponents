@@ -7,7 +7,7 @@
 import { z } from "zod";
 
 export const IspColumnSchema = z.object({
-  children: z.record(z.string(), IspColumnSchema).optional(),
+  get children(): z.ZodOptional<z.ZodRecord<z.ZodString, typeof IspColumnSchema>> { return z.record(z.string(), IspColumnSchema).optional(); },
   caption: z.string().optional(),
   align: z.unknown() /* TODO: ref AlignName */.optional(),
   type: z.string().optional(),

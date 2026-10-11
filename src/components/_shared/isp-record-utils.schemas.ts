@@ -32,7 +32,7 @@ export const IspColumnDefSchema = z.object({
   visible: z.boolean().optional(),
   filter: z.boolean().optional(),
   type: z.union([z.literal('number'), z.literal('currency'), z.literal('date'), z.literal('dateTime'), z.literal('bool'), z.string()]).optional(),
-  children: z.record(z.string(), IspColumnDefSchema).optional(),
+  get children(): z.ZodOptional<z.ZodRecord<z.ZodString, typeof IspColumnDefSchema>> { return z.record(z.string(), IspColumnDefSchema).optional(); },
 });
 export type IspColumnDef = z.infer<typeof IspColumnDefSchema>;
 

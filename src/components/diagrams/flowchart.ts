@@ -483,13 +483,13 @@ class IswcFlowchart extends DiagramElementBase {
     const turtleGroup = svgEl('g');
     this.svg.appendChild(turtleGroup);
     this.#turtle?.destroy();
-    this.#turtle = new SequenceTurtle(turtleGroup as unknown as HTMLElement);
+    this.#turtle = new SequenceTurtle(turtleGroup);
     // La tortuga recorre las aristas en orden; reutiliza el motor del secuencia.
     this.#turtle.setData({
       messages: layout.edges.map((e, i: number) => ({
         path: e.path, step: i + 1, log: e.label || '', groupHue: e.hue,
       })),
-      theme: theme as unknown as { accent: string; [key: string]: unknown },
+      theme,
       viewW: W,
       viewH: H,
       autoLoop: this.isViewer,
@@ -1144,14 +1144,8 @@ class IswcFlowchart extends DiagramElementBase {
       g.style.cursor = 'grab';
       const nodeId = g.dataset.nodeId;
       if (!nodeId) continue;
-      // Cast a HTMLElement: attachNodeDrag viene de `_shared/diagram-edit.js`
-      // con tipos heredados `any`; la SVGGElement es estructuralmente válida.
-      const detach = (attachNodeDrag as unknown as (
-        el: HTMLElement,
-        onMove: (dx: number, dy: number) => void,
-        onEnd: () => void,
-      ) => () => void)(
-        g as unknown as HTMLElement,
+      const detach = attachNodeDrag(
+        g,
         (dx: number, dy: number) => {
           // Preview: trasladamos el grupo en SVG coords. Como el viewBox
           // está en SVG coords (1:1 con layout interno), usamos dx/dy tal
@@ -1182,21 +1176,15 @@ class IswcFlowchart extends DiagramElementBase {
 
   #openEditorForNode(node: FlowLayoutNode): void {
     const rect = this.getBoundingClientRect();
-    // Cast: openInlineEditor viene de `_shared/diagram-edit.js` con tipos
-    // heredados `any`. Pasamos nuestro objeto tipado.
-    (openInlineEditor as unknown as (opts: {
-      anchor: { x: number; y: number };
-      initial: { label?: string; hue?: number };
-      onSave: (v: { label: string; hue: number }) => void;
-    }) => void)({
+    openInlineEditor({
       anchor: { x: rect.left + node.x, y: rect.top + node.y - 36 },
       initial: { label: node.label, hue: node.hue },
-      onSave: ({ label, hue }: { label: string; hue: number }) => {
+      onSave: ({ label, hue }) => {
         if (!this.#overrides) this.#overrides = { nodes: {}, edges: {} };
         if (!this.#overrides.nodes) this.#overrides.nodes = {};
         if (!this.#overrides.nodes[node.id]) this.#overrides.nodes[node.id] = {};
         if (label) this.#overrides.nodes[node.id].label = label;
-        if (Number.isFinite(hue)) this.#overrides.nodes[node.id].hue = hue;
+        if (hue != null && Number.isFinite(hue)) this.#overrides.nodes[node.id].hue = hue;
         saveOverrides(this, this.getAttribute('storage-key') ?? '', this.#overrides);
         emitLayoutChange(this, { nodeId: node.id, overrides: this.#overrides });
         this.queueRender();

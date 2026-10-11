@@ -112,7 +112,8 @@ Deno.test('carriles: L6 aristas ortogonales que no atraviesan cajas; sin solapes
 
 Deno.test('carriles: L7 lanes y lane sobreviven al JSON del editor', () => {
   const json = flowchartSpecToJson(resolveFlowchartSpec({ lanes: LANES, laneDirection: 'horizontal', nodes: NODES, edges: EDGES })!);
-  assertEquals((json.lanes as unknown[]).length, 3);
+  assert(Array.isArray(json.lanes), 'lanes es un array');
+  assertEquals(json.lanes.length, 3);
   assertEquals(json.laneDirection, 'horizontal');
   assertEquals((json.nodes as Array<{ id: string; lane?: string }>).find((n) => n.id === 'n2')?.lane, 'V');
 });
