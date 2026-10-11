@@ -190,9 +190,20 @@ const folderFor = (file) => {
 // asi que adoptCss pedia el CSS equivocado (iswc-icon acababa cargando
 // actions/button.min.css y perdia su tamano). Se marcan como externos y se
 // reescriben al hermano folderizado, que ya existe en dist.
+// Zod va UNA vez en el CDN (lib/zod.min.js): los schemas se usan en runtime (`.shape`,
+// `.extend`, `z.custom`) y cada bundle de componente o de core inlineaba ~300 KB de Zod.
+// Guardian: src/utils/health/meta/zod-compartido.test.ts.
+const zodExterno = {
+  name: 'zod-externo',
+  setup(pluginBuild) {
+    pluginBuild.onResolve({ filter: /^zod$/ }, () => ({ path: '../lib/zod.min.js', external: true }));
+  },
+};
+
 const externalComponents = {
   name: 'external-components',
   setup(pluginBuild) {
+    zodExterno.setup(pluginBuild);
     pluginBuild.onResolve({ filter: /\.(ts|js)$/ }, (args) => {
       if (args.kind === 'entry-point') return null;
       const abs = resolve(args.resolveDir, args.path);
@@ -294,7 +305,7 @@ for (const raw of localPartials) {
     await mkdir(outCore, { recursive: true });
     for (const f of await readdir(coreRoot)) {
       if (!f.endsWith('.ts')) continue;
-      await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')), [], kitDocsBanner([
+      await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')), [zodExterno], kitDocsBanner([
         `source: ${GH_BLOB}/src/core/${f}`,
       ]));
       await copyFile(join(coreRoot, f), join(outCore, f));
@@ -555,7 +566,16 @@ await build({
   target: 'es2022',
   legalComments: 'none',
 });
-console.log(`  ${'lib/'.padEnd(18)} obj.ts (vendor) + obj.min.js (navegador)`);
+await build({
+  entryPoints: [join(root, 'src', 'cdn', 'lib', 'zod.ts')],
+  outfile: join(libOut, 'zod.min.js'),
+  bundle: true,
+  minify: true,
+  format: 'esm',
+  target: 'es2022',
+  legalComments: 'none',
+});
+console.log(`  ${'lib/'.padEnd(18)} obj.ts (vendor) + obj.min.js (navegador) + zod.min.js (compartido por los bundles)`);
 
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
