@@ -359,7 +359,7 @@ for (const m of API_MODULES) {
 }
 apisLineas.push('');
 
-const skillPath = join(root, 'src', 'skills', 'iswc-root', 'SKILL.md');
+const skillPath = join(root, 'skills', 'iswc-root', 'SKILL.md');
 let skill = readFileSync(skillPath, 'utf8');
 if (!/<!-- apis:inicio -->/.test(skill)) {
   skill = skill.replace(
@@ -379,7 +379,7 @@ writeFileSync(skillPath, skill, 'utf8');
 console.log('catalogo', orden.length, 'tags;', API_MODULES.length, 'apis');
 
 // catalog.md — inventario completo (tags + APIs) para agentes
-const catPath = join(root, 'src', 'skills', 'iswc-root', 'catalog.md');
+const catPath = join(root, 'skills', 'iswc-root', 'catalog.md');
 const catOut = [
   '# Catálogo iswc-* (inventario completo)',
   '',

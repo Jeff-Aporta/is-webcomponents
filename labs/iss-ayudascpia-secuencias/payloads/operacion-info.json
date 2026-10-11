@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-operacion-info.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Salud del servidor (GET /info)",
@@ -13,72 +14,152 @@
         {
           "id": "C",
           "label": "Monitor / agente",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "I",
           "label": "ISS · TInfoController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
-          "kind": "participant"
-        },
-        {
-          "id": "G",
-          "label": "GeoIP",
+          "icon": "mdi:database",
           "kind": "participant"
         }
       ],
       "messages": [
         {
           "id": "m1",
-          "from": "C",
+          "from": "I",
           "to": "I",
-          "label": "GET /info (pública, sin JWT)",
-          "kind": "sync",
-          "step": 1
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=db]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 1,
+          "stepLabel": "1"
         },
         {
           "id": "m2",
           "from": "I",
           "to": "P",
-          "label": "SELECT 1 con tiempo de conexión",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=err]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 2
+          "step": 2,
+          "stepLabel": "2"
         },
         {
           "id": "m3",
           "from": "I",
           "to": "P",
-          "label": "¿hay errores abiertos en la bandeja?",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=pat]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 3
+          "step": 3,
+          "stepLabel": "3"
         },
         {
           "id": "m4",
           "from": "I",
-          "to": "P",
-          "label": "registro de parches (patchdb)",
-          "kind": "sync",
-          "step": 4
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=geo]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 4,
+          "stepLabel": "4"
         },
         {
           "id": "m5",
           "from": "I",
-          "to": "G",
-          "label": "ubicación del servidor",
-          "kind": "sync",
-          "step": 5
-        },
-        {
-          "id": "m6",
-          "from": "I",
           "to": "C",
-          "label": "200 siempre: versión, sello, BD, parches, runner, erroresPorAtender",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-info.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 6
+          "step": 5,
+          "stepLabel": "5"
         }
       ],
       "fragments": [
@@ -87,12 +168,32 @@
           "name": "par",
           "kind": "par",
           "messages": [
-            "m2",
-            "m3",
-            "m4",
-            "m5"
-          ],
-          "condition": "lecturas en paralelo; cada una puede fallar sola"
+            "m1"
+          ]
+        },
+        {
+          "id": "f2",
+          "name": "par",
+          "kind": "par",
+          "messages": [
+            "m2"
+          ]
+        },
+        {
+          "id": "f3",
+          "name": "par",
+          "kind": "par",
+          "messages": [
+            "m3"
+          ]
+        },
+        {
+          "id": "f4",
+          "name": "par",
+          "kind": "par",
+          "messages": [
+            "m4"
+          ]
         }
       ]
     }

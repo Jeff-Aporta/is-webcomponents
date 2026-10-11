@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-10T21:59:11.345Z",
-  "count": 118,
+  "generatedAt": "2026-10-11T10:11:31.571Z",
+  "count": 122,
   "modules": [
     {
       "file": "button-shape.schemas.ts",
@@ -346,11 +346,12 @@
       "id": "diagram-arrow",
       "path": "src/components/_shared/diagram-arrow.ts",
       "summary": "Puntas de flecha para diagramas. — El problema que resuelve: cada diagrama dibujaba su cabeza asumiendo que la",
-      "bytes": 3997,
+      "bytes": 4405,
       "exports": [
         "pathPoints",
         "pathEndDirection",
         "arrowHeadPoints",
+        "openArrowHeadPoints",
         "svgArrowHead",
         "crowFootPath"
       ]
@@ -423,7 +424,7 @@
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.ts",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 8352,
+      "bytes": 8165,
       "exports": [
         "EDGE_ACTOR_H",
         "parsePathPoints  from",
@@ -513,7 +514,7 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 11516,
+      "bytes": 11125,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -590,12 +591,35 @@
       "id": "diagram-flow",
       "path": "src/components/_shared/diagram-flow.ts",
       "summary": "diagram-flow — Estándar: cada riel muestra hacia dónde va lo que transporta.",
-      "bytes": 6217,
+      "bytes": 6530,
       "exports": [
         "FLUJO",
         "flujoActivo",
         "animarRiel",
+        "animarRielEn",
         "pulsoRadar"
+      ]
+    },
+    {
+      "file": "diagram-graph.schemas.ts",
+      "id": "diagram-graph.schemas",
+      "path": "src/components/_shared/diagram-graph.schemas.ts",
+      "summary": "diagram-graph.schemas",
+      "bytes": 1457,
+      "exports": [
+        "AristaDirigidaSchema"
+      ]
+    },
+    {
+      "file": "diagram-graph.ts",
+      "id": "diagram-graph",
+      "path": "src/components/_shared/diagram-graph.ts",
+      "summary": "diagram-graph — todos los motores que recorren el flujo: capas (node-link), reprocesos (swimlane), índices",
+      "bytes": 4526,
+      "exports": [
+        "claveArista",
+        "aristasDeRetorno",
+        "grafoDirigido"
       ]
     },
     {
@@ -618,20 +642,20 @@
       "id": "diagram-grid",
       "path": "src/components/_shared/diagram-grid.ts",
       "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 13092,
+      "bytes": 13562,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
         "snapDiagramGrid",
+        "ceilDiagramGrid",
+        "rectsOverlap",
+        "boundsOf",
         "diagramLabelWidth",
         "diagramGridCols",
         "diagramGridRows",
         "COST_BLOCKED",
         "makeCostGrid",
-        "cellCost",
-        "applyRectCost",
-        "blockRect",
-        "applyForbiddenRegions"
+        "cellCost"
       ]
     },
     {
@@ -642,6 +666,28 @@
       "bytes": 1144,
       "exports": [
         "diagramHeaderWidth"
+      ]
+    },
+    {
+      "file": "diagram-socket.schemas.ts",
+      "id": "diagram-socket.schemas",
+      "path": "src/components/_shared/diagram-socket.schemas.ts",
+      "summary": "diagram-socket.schemas",
+      "bytes": 1168,
+      "exports": [
+        "MedidasSocketSchema",
+        "OpcionesSocketSchema"
+      ]
+    },
+    {
+      "file": "diagram-socket.ts",
+      "id": "diagram-socket",
+      "path": "src/components/_shared/diagram-socket.ts",
+      "summary": "diagram-socket — El expositor (componente, tabla, controller) pone el palo y el socket `(`; quien consume llega a",
+      "bytes": 2032,
+      "exports": [
+        "SOCKET_FILL",
+        "pintarSocket"
       ]
     },
     {
@@ -662,8 +708,9 @@
       "id": "diagram-text-wrap",
       "path": "src/components/_shared/diagram-text-wrap.ts",
       "summary": "diagram-text-wrap — Tres funciones públicas:",
-      "bytes": 15636,
+      "bytes": 15894,
       "exports": [
+        "estimateTextWidth",
         "defaultMeasureTextWidth",
         "fuentesListas",
         "cargarFuente",
@@ -1045,7 +1092,7 @@
       "id": "lane-layout",
       "path": "src/components/_shared/lane-layout.ts",
       "summary": "Motor de layout puro (sin DOM) para diagramas de línea de tiempo (Gantt, — timeline). Resuelve fechas, escalas de tiempo, marcas de eje \"agradables\"",
-      "bytes": 10290,
+      "bytes": 9979,
       "exports": [
         "parseDate",
         "addDuration",
@@ -1160,7 +1207,7 @@
       "id": "node-link-layout",
       "path": "src/components/_shared/node-link-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para diagramas de nodos y — enlaces (flowchart, class, state, ER, C4, architecture, block).",
-      "bytes": 12781,
+      "bytes": 12058,
       "exports": [
         "assignLayers",
         "orderLayers",
@@ -1603,7 +1650,7 @@
       "id": "tree-layout",
       "path": "src/components/_shared/tree-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 15414,
+      "bytes": 14967,
       "exports": [
         "buildTree",
         "layoutTree",

@@ -87,6 +87,18 @@ export function arrowHeadPoints(tip: ArrowPoint, dir: ArrowPoint, len: number = 
 }
 
 /**
+ * Punta ABIERTA (dos trazos en V, sin relleno) con vértice en `tip`, apuntando según `dir`.
+ * @returns Atributo `points` de un `<polyline>` (base, vértice, base).
+ */
+export function openArrowHeadPoints(tip: ArrowPoint, dir: ArrowPoint, len: number = 9, halfWidth: number = 4.5): string {
+  const baseX = tip.x - dir.x * len;
+  const baseY = tip.y - dir.y * len;
+  const px = -dir.y * halfWidth;
+  const py = dir.x * halfWidth;
+  return `${baseX + px},${baseY + py} ${tip.x},${tip.y} ${baseX - px},${baseY - py}`;
+}
+
+/**
  * `<polygon>` de cabeza de flecha ya orientado contra el final del path.
  */
 export function svgArrowHead({

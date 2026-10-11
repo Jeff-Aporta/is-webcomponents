@@ -23,6 +23,7 @@ import '../media/icon.js';
 import '../actions/context-menu.js';
 import '../layout/split-panel.js';
 import { createPanZoom, type PanZoomController } from '../_shared/pan-zoom.js';
+import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 
 const SNAP = 8;
 const HISTORY_LIMIT = 200;
@@ -668,7 +669,7 @@ class IswcErEditor extends HTMLElement {
         for (const [sid, start] of startPositions) {
           if (!start) continue;
           const e = this.#state.entities.find((x) => x.id === sid);
-          if (e) e.pos = [snap8(start[0] + dx), snap8(start[1] + dy)];
+          if (e) e.pos = [snapDiagramGrid(start[0] + dx), snapDiagramGrid(start[1] + dy)];
         }
         this.#render();
       };
@@ -1186,7 +1187,6 @@ class IswcErEditor extends HTMLElement {
   }
 }
 
-function snap8(v: number): number { return Math.round(v / 8) * 8; }
 
 /** Acepta payload plano o envuelto `{ erDiagram | er: {...} }`. */
 function unwrapErSource(s: unknown): Record<string, unknown> | null {

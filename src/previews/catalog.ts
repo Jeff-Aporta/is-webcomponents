@@ -304,6 +304,18 @@ export default {
     "json": "../../dist/previews/data/meta-list.json",
     "category": "data"
   },
+  "iswc-docs-vault": {
+    "json": "../../dist/previews/layout/docs-vault.json",
+    "category": "layout"
+  },
+  "iswc-doc-layout": {
+    "json": "../../dist/previews/layout/doc-layout.json",
+    "category": "layout"
+  },
+  "iswc-doc-index": {
+    "json": "../../dist/previews/navigation/doc-index.json",
+    "category": "navigation"
+  },
   "iswc-prefs-clear": {
     "json": "../../dist/previews/feedback/prefs-clear.json",
     "category": "feedback"

@@ -27,7 +27,7 @@ import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-ed
 import type { DiagramTheme } from './diagram-types.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
-import { animarRiel, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
+import { animarRielEn, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { edgeStyleFor } from './diagram-vocab.js';
 import { ETIQUETA_ICONO, ETIQUETA_LINE_H } from './flowchart-labels.js';
@@ -35,7 +35,8 @@ import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import { arrowHeadPoints, openArrowHeadPoints, svgArrowHead } from '../_shared/diagram-arrow.js';
+import { pintarSocket } from '../_shared/diagram-socket.js';
 
 import {
   loadOverrides,
@@ -78,7 +79,6 @@ const COLOR_CODIGO: Record<string, string> = {
 const LAYOUTS = new Map<string, FlowLayout>();
 
 /** Relleno de la bola del `-(O-`: el mismo del lollipop del diagrama de componentes (insoft). */
-const LOLLIPOP_FILL = '#7ACFF4';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** Tokens de `animation` conocidos (otros se ignoran para no romper). */
@@ -563,25 +563,10 @@ class IswcFlowchart extends DiagramElementBase {
       });
       g.appendChild(path);
       if (!flowAnim && flujoActivo(this)) {
-        const puntos = animarRiel(path, { punteado: !!dash, reverse: !!e.reverse, ancho: wdt });
-        if (puntos) g.insertBefore(puntos, path);
+        animarRielEn(g, path, { punteado: !!dash, reverse: !!e.reverse, ancho: wdt });
       }
 
-      // Punta orientada por el último tramo REAL del path (no por el lado de
-      // entrada planificado, que el router puede no respetar).
-      // Cast: svgArrowHead tiene firma heredada con `any`; añadimos la clase
-      // CSS al resultado en vez de pasarla por el parámetro tipado a null.
-      const head = (svgArrowHead as unknown as (opts: {
-        d: string; tip: { x: number; y: number }; color: string;
-        len?: number; halfWidth?: number;
-      }) => SVGElement)({
-        d: e.path,
-        tip: { x: e.arrowTipX, y: e.arrowTipY },
-        color,
-        len: 8,
-        halfWidth: 4,
-      });
-      head.classList.add('flow-edge__head');
+      const head = svgArrowHead({ d: e.path, tip: { x: e.arrowTipX, y: e.arrowTipY }, color, len: 8, halfWidth: 4, className: 'flow-edge__head' });
       g.appendChild(head);
 
       if (e.label) {
@@ -794,17 +779,24 @@ class IswcFlowchart extends DiagramElementBase {
       // Flujo animado (estándar de todos los diagramas, ver _shared/diagram-flow.ts): la punteada
       // avanza; la continua lleva su línea de puntos. `reverse` lo invierte (de la punta al origen).
       if (paint.dashFlow && flujoActivo(this)) {
-        const puntos = animarRiel(path, { punteado: e.kind === 'dashed', reverse: !!e.reverse, ancho: wdt });
-        if (puntos) g.insertBefore(puntos, path);
+        animarRielEn(g, path, { punteado: e.kind === 'dashed', reverse: !!e.reverse, ancho: wdt });
       }
       // Punta abierta (dos trazos), orientada por el último tramo real.
       const dir = pathEndDirection(e.path, { x: 0, y: 1 });
       const tip = { x: e.arrowTipX, y: e.arrowTipY };
       const len = 9;
       const half = 4.5;
-      const bx = tip.x - dir.x * len;
-      const by = tip.y - dir.y * len;
       const clave = `${tip.x},${tip.y}`;
+      /** Punta abierta (dos trazos) con vértice en `p`, orientada por `dir`. */
+      const puntaAbierta = (p: { x: number; y: number }): SVGElement => svgEl('polyline', {
+        points: openArrowHeadPoints(p, dir, len, half), fill: 'none', stroke: color, 'stroke-width': wdt,
+        'stroke-linejoin': 'miter', 'stroke-linecap': 'butt', class: 'flow-edge__head',
+      });
+      /** `-(O-` en `t` (uno por punta: las aristas que convergen lo comparten); devuelve la bola. */
+      const socketEn = (t: { x: number; y: number }, d: { x: number; y: number }): { x: number; y: number } => {
+        if (puntas.has(clave)) return { x: t.x - d.x * (SOCKET.palo + SOCKET.socket), y: t.y - d.y * (SOCKET.palo + SOCKET.socket) };
+        return pintarSocket(g, { tip: t, dir: d, medidas: SOCKET, color, ancho: wdt, pulso: flujoActivo(this), clase: 'flow-edge' });
+      };
       if (e.puente === 'salida') {
         // Salida de un puente `-(O=`: la flecha va cerca del O (a ~20 px), apuntando hacia afuera; sin
         // punta en el destino.
@@ -815,71 +807,29 @@ class IswcFlowchart extends DiagramElementBase {
         const d0 = { x: (a1.x - a0.x) / largo, y: (a1.y - a0.y) / largo };
         const t = Math.min(PUENTE.flechaSalida, largo - 2);
         const p = { x: a0.x + d0.x * t, y: a0.y + d0.y * t };
-        const bx0 = p.x - d0.x * len;
-        const by0 = p.y - d0.y * len;
         // Triángulo sólido (las flechas de los puentes son de llegada/salida, no de lectura).
-        g.appendChild(svgEl('polygon', {
-          points: `${bx0 - d0.y * half},${by0 + d0.x * half} ${p.x},${p.y} ${bx0 + d0.y * half},${by0 - d0.x * half}`,
-          fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head flow-edge__head--salida',
-        }));
+        g.appendChild(svgEl('polygon', { points: arrowHeadPoints(p, d0, len, half), fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head flow-edge__head--salida' }));
       }
       if (e.puente === 'salida' && e.socket) {
         // La salida de un puente que llega a una tabla: el `-(O-` de la tabla y su punta de llegada.
-        const { palo, bola, socket } = SOCKET;
-        const c = { x: tip.x - dir.x * (palo + socket), y: tip.y - dir.y * (palo + socket) };
-        if (!puntas.has(clave)) {
-          g.appendChild(svgEl('line', { x1: tip.x, y1: tip.y, x2: tip.x - dir.x * palo, y2: tip.y - dir.y * palo, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
-          const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
-          const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };
-          g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 0 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
-          if (flujoActivo(this)) g.appendChild(pulsoRadar(c.x, c.y, bola, LOLLIPOP_FILL));
-          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
-        }
-        const p2 = { x: c.x - dir.x * bola, y: c.y - dir.y * bola };
-        const qx = p2.x - dir.x * len;
-        const qy = p2.y - dir.y * len;
-        g.appendChild(svgEl('polygon', {
-          points: `${qx - dir.y * half},${qy + dir.x * half} ${p2.x},${p2.y} ${qx + dir.y * half},${qy - dir.x * half}`,
-          fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head',
-        }));
+        const c = socketEn(tip, dir);
+        const p2 = { x: c.x - dir.x * SOCKET.bola, y: c.y - dir.y * SOCKET.bola };
+        g.appendChild(svgEl('polygon', { points: arrowHeadPoints(p2, dir, len, half), fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head' }));
         puntas.add(clave);
       }
       if (e.puente === 'salida') {
         // (ya pintada arriba)
       } else if (e.puente === 'entrada') {
         // Entrada a un puente `-(O=`: triángulo sólido tocando el O.
-        g.appendChild(svgEl('polygon', {
-          points: `${bx - dir.y * half},${by + dir.x * half} ${tip.x},${tip.y} ${bx + dir.y * half},${by - dir.x * half}`,
-          fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head flow-edge__head--entrada',
-        }));
+        g.appendChild(svgEl('polygon', { points: arrowHeadPoints(tip, dir, len, half), fill: color, stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', class: 'flow-edge__head flow-edge__head--entrada' }));
       } else if (e.socket) {
         // Conector `-(O-` (convención InSoft): el componente expone el socket `(` con su palo y quien
         // consume llega a la bola O con su punta de flecha. Un socket por punta (el abanico converge).
-        const { palo, bola, socket } = SOCKET;
-        const c = { x: tip.x - dir.x * (palo + socket), y: tip.y - dir.y * (palo + socket) };
-        if (!puntas.has(clave)) {
-          g.appendChild(svgEl('line', { x1: tip.x, y1: tip.y, x2: tip.x - dir.x * palo, y2: tip.y - dir.y * palo, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
-          // Arco del lado del componente (abre hacia quien consume).
-          const a1 = { x: c.x - dir.y * socket, y: c.y + dir.x * socket };
-          const a2 = { x: c.x + dir.y * socket, y: c.y - dir.x * socket };
-          g.appendChild(svgEl('path', { d: `M${a1.x},${a1.y} A${socket},${socket} 0 0 0 ${a2.x},${a2.y}`, fill: 'none', stroke: color, 'stroke-width': wdt, class: 'flow-edge__socket' }));
-          if (flujoActivo(this)) g.appendChild(pulsoRadar(c.x, c.y, bola, LOLLIPOP_FILL));
-          g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: bola, fill: LOLLIPOP_FILL, stroke: color, 'stroke-width': wdt, class: 'flow-edge__lollipop' }));
-        }
+        const c = socketEn(tip, dir);
         // Punta de llegada tocando la bola.
-        const p = { x: c.x - dir.x * bola, y: c.y - dir.y * bola };
-        const qx = p.x - dir.x * len;
-        const qy = p.y - dir.y * len;
-        g.appendChild(svgEl('polyline', {
-          points: `${qx - dir.y * half},${qy + dir.x * half} ${p.x},${p.y} ${qx + dir.y * half},${qy - dir.x * half}`,
-          fill: 'none', stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', 'stroke-linecap': 'butt', class: 'flow-edge__head',
-        }));
+        g.appendChild(puntaAbierta({ x: c.x - dir.x * SOCKET.bola, y: c.y - dir.y * SOCKET.bola }));
         puntas.add(clave);
-      } else if (!puntas.has(clave)) g.appendChild(svgEl('polyline', {
-        points: `${bx - dir.y * half},${by + dir.x * half} ${tip.x},${tip.y} ${bx + dir.y * half},${by - dir.x * half}`,
-        fill: 'none', stroke: color, 'stroke-width': wdt, 'stroke-linejoin': 'miter', 'stroke-linecap': 'butt',
-        class: 'flow-edge__head',
-      }));
+      } else if (!puntas.has(clave)) g.appendChild(puntaAbierta(tip));
       puntas.add(clave);
       if (e.label) {
         // Junto a la arista (no encima): halo del color del lienzo para que
@@ -1001,16 +951,13 @@ class IswcFlowchart extends DiagramElementBase {
         // acción. Las aristas llegan y salen por la mitad libre.
         const c = centroPuente(n);
         const S = PUENTE.socket;
-        const { d, t } = ejesPuente(n.lado);
-        const giro = t.x * d.y - t.y * d.x > 0 ? 1 : 0;
+        const { d } = ejesPuente(n.lado);
         const tinta = paint.actionBorder;
         box = svgEl('rect', { x: n.x, y: n.y, width: n.w, height: n.h, fill: 'none', stroke: 'none', class: 'flow-node__box' });
         g.appendChild(box);
+        // El palo nace en el borde del controller (`c - d·(palo + S)`) y mira a la bola: `dir` = -d.
         const raiz = PUENTE.palo + S;
-        g.appendChild(svgEl('line', { x1: c.x - d.x * raiz, y1: c.y - d.y * raiz, x2: c.x - d.x * S, y2: c.y - d.y * S, stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__palo' }));
-        g.appendChild(svgEl('path', { d: `M${c.x - t.x * S},${c.y - t.y * S} A${S},${S} 0 0 ${giro} ${c.x + t.x * S},${c.y + t.y * S}`, fill: 'none', stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__socket' }));
-        if (flujoActivo(this)) g.appendChild(pulsoRadar(c.x, c.y, PUENTE.bola, LOLLIPOP_FILL));
-        g.appendChild(svgEl('circle', { cx: c.x, cy: c.y, r: PUENTE.bola, fill: LOLLIPOP_FILL, stroke: tinta, 'stroke-width': paint.borderWidth, class: 'flow-bridge__bola' }));
+        pintarSocket(g, { tip: { x: c.x - d.x * raiz, y: c.y - d.y * raiz }, dir: { x: -d.x, y: -d.y }, medidas: PUENTE, color: tinta, ancho: paint.borderWidth, pulso: flujoActivo(this), clase: 'flow-bridge' });
         const letra = svgEl('text', { x: c.x, y: c.y, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 11, 'font-weight': 700, 'font-family': paint.font, fill: tinta, class: 'flow-bridge__op' });
         letra.textContent = n.bridge.op;
         g.appendChild(letra);

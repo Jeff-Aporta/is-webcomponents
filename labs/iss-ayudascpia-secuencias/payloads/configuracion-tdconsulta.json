@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-configuracion-tdconsulta.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Catálogo de instrucciones (/tdconsulta)",
@@ -13,16 +14,19 @@
         {
           "id": "C",
           "label": "Consola",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "T",
           "label": "ISS · TTdConsultationController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
+          "icon": "mdi:database",
           "kind": "participant"
         }
       ],
@@ -31,73 +35,253 @@
           "id": "m1",
           "from": "C",
           "to": "T",
-          "label": "GET /tdconsulta",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e1]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 1
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "T",
-          "to": "P",
-          "label": "todo el catálogo, activo o no",
-          "kind": "sync",
-          "step": 2
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "T",
           "to": "C",
-          "label": "{ key, storage, rows, canEdit }",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=lista]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 3
+          "step": 3,
+          "stepLabel": "1.1"
         },
         {
           "id": "m4",
-          "from": "C",
+          "from": "T",
           "to": "T",
-          "label": "POST|PUT /tdconsulta",
-          "kind": "sync",
-          "step": 4
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=valida]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 4,
+          "stepLabel": "1.2"
         },
         {
           "id": "m5",
           "from": "T",
           "to": "T",
-          "label": "PK en mayúsculas, ruta d(.d)*, instrucción no vacía (400)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d2]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 5
+          "step": 5,
+          "stepLabel": "1.3"
         },
         {
           "id": "m6",
           "from": "T",
-          "to": "T",
-          "label": "crear: la PK no existe y sus ancestros sí (7.1 exige 7)",
-          "kind": "self",
-          "step": 6
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=anc]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 6,
+          "stepLabel": "1.3.1"
         },
         {
           "id": "m7",
           "from": "T",
           "to": "T",
-          "label": "jconfig y jpermisos: push parcial sobre lo vigente (schema estricto)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=push]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 7
+          "step": 7,
+          "stepLabel": "1.4"
         },
         {
           "id": "m8",
           "from": "T",
           "to": "P",
-          "label": "INSERT o UPDATE con auditoría de la sesión (nombre único: 400)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=guarda]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 8
+          "step": 8,
+          "stepLabel": "1.5"
         },
         {
           "id": "m9",
           "from": "T",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e19]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 9,
+          "stepLabel": "1.5"
+        },
+        {
+          "id": "m10",
+          "from": "T",
           "to": "C",
-          "label": "{ ok, key, updatedBy, mode, itdconsulta }",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 9
+          "step": 10,
+          "stepLabel": "1.6"
         }
       ],
       "fragments": [
@@ -106,11 +290,22 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m1",
-            "m2",
             "m3"
           ],
-          "condition": "GET /tdconsulta"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e3]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
@@ -122,9 +317,45 @@
             "m6",
             "m7",
             "m8",
-            "m9"
+            "m9",
+            "m10"
           ],
-          "condition": "POST (crear) · PUT (guardar)"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e4]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f3",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m6"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-tdconsulta.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e6]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

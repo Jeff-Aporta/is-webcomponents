@@ -33,3 +33,22 @@ deno task build && deno task test:all
   re-vendorizan. `vendor:iswc` lee el SHA de `src/js/iswc.ts` (vendor = pin siempre); `--local` copia del
   checkout local del kit para probar cambios antes de publicarlos.
 - Fuente remota: raw por SHA (sin el límite de 50 MB de jsDelivr), jsDelivr de respaldo.
+
+## Descarga de vendor: `tools/vendor.ts` (pin por fecha ISO)
+
+Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/tools/vendor.ts`, con Deno, a partir de un JSON del proyecto (ver `vendor.schemas.ts`):
+
+```json
+{
+  "repo": "Jeff-Aporta/is-webcomponents",
+  "local": "C:/ContaPyme/Personal/apps/is-webcomponents",
+  "archivos": [
+    { "desde": "dist/cdn/lib/obj.ts", "hacia": "src/sources/000 Base/ISU/obj.ts", "doc": "dist/cdn/lib/obj.md" }
+  ]
+}
+```
+
+- **Carpeta `ISU/`**: lo vendorizado conserva su nombre normal y vive en una carpeta `ISU/` del proyecto, así no choca con los archivos propios.
+- **Pin por fecha ISO**: por archivo compiten el checkout local del kit (fecha del último commit que lo tocó, o «ahora» si tiene cambios sin commitear) y el HEAD remoto; gana el más reciente y solo se escribe si es más nuevo que la copia (`// @vendor <ISO>`). Nunca hay regresiones.
+- **Cabecera**: `// @vendor <ISO> <repo>@<sha|local> <desde>` y `// @doc <documentación>`.
+- **Dónde se corre**: el comando vive solo en el `package.json` del mirror `_experimental` (el del entregable no lo define), y el sync al entregable siempre descarga antes de copiar.

@@ -1,13 +1,10 @@
 import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/component-spec.ts';
 import { placeEdgeActors, pointAtFraction, parsePathPoints } from '../../../components/_shared/diagram-edge-actors.ts';
 import { spreadOrthogonalPaths } from '../../../components/_shared/diagram-edge-spread.ts';
+import { rectsOverlap as overlap } from '../../../components/_shared/diagram-grid.ts';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
-
-function overlap(a, b) {
-  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-}
 
 const boxes = [
   { x: 20, y: 40, w: 160, h: 80 },

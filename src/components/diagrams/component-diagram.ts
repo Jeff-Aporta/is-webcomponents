@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { animarRiel, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
+import { animarRielEn, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
 import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './component-spec.js';
 import type { ComponentLayout } from './component-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
@@ -377,8 +377,7 @@ class IswcComponentDiagram extends DiagramElementBase {
       });
       g.appendChild(path);
       if (flujoActivo(this)) {
-        const puntos = animarRiel(path, { punteado: !!path.getAttribute('stroke-dasharray'), reverse: !!e.reverse });
-        if (puntos) g.insertBefore(puntos, path);
+        animarRielEn(g, path, { punteado: !!path.getAttribute('stroke-dasharray'), reverse: !!e.reverse });
       }
       // Flecha unida a otra `->`: la punta la pinta la raíz.
       if (!ballSocket && !(e as { sharedTip?: boolean }).sharedTip) {

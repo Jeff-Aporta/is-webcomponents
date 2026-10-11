@@ -1,5 +1,6 @@
 import assert from 'node:assert';
 import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
+import { rectsOverlap } from '../_shared/diagram-grid.js';
 
 /**
  * Regresión: ninguna tarjeta de evento debe superponerse a otra.
@@ -12,10 +13,6 @@ import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
  * eventos muy juntos con etiquetas largas y verifica, por intersección real
  * de rectángulos (no una métrica indirecta), que ninguna tarjeta se toca.
  */
-
-function rectsOverlap(a, b) {
-  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-}
 
 function assertNoCardOverlap(layout, label) {
   const cards = layout.events.map((e) => ({ id: e.id, x: e.cardX, y: e.cardY, w: e.cardW, h: e.cardH }));

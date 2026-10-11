@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-configuracion-proveedor.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Proveedor del modelo (/proveedor)",
@@ -13,96 +14,237 @@
         {
           "id": "C",
           "label": "Consola / ISW",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "V",
           "label": "ISS · TProviderController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
+          "icon": "mdi:database",
           "kind": "participant"
         },
         {
-          "id": "O",
-          "label": "OpenAI",
+          "id": "X_ai",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "query": {
+              "payload": {
+                "componentDiagram": {
+                  "components": {
+                    "[id=openai-models]": {
+                      "name": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "icon": "mdi:cloud-outline",
           "kind": "participant"
         }
       ],
       "messages": [
         {
           "id": "m1",
-          "from": "V",
-          "to": "P",
-          "label": "lee la fila (404 si no existe)",
+          "from": "C",
+          "to": "V",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 1
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "V",
-          "to": "C",
-          "label": "fila con los secretos de jcuenta enmascarados",
-          "kind": "reply",
-          "step": 2
+          "to": "V",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=V]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "V",
-          "to": "V",
-          "label": "body estricto (400); merge sobre la fila: un secreto enmascarado no pisa el real",
-          "kind": "self",
-          "step": 3
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=V]": {
+                      "nodes": {
+                        "[id=get]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 3,
+          "stepLabel": "1.1"
         },
         {
           "id": "m4",
           "from": "V",
           "to": "P",
-          "label": "guarda solo las columnas que cambian",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=V]": {
+                      "nodes": {
+                        "[id=put]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 4
+          "step": 4,
+          "stepLabel": "1.2"
         },
         {
           "id": "m5",
           "from": "V",
-          "to": "C",
-          "label": "fila con la cuenta enmascarada",
-          "kind": "reply",
-          "step": 5
+          "to": "X_ai",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=V]": {
+                      "nodes": {
+                        "[id=cfg]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 5,
+          "stepLabel": "1.3"
         },
         {
           "id": "m6",
           "from": "V",
-          "to": "V",
-          "label": "solo OPENAI, activo en patyia_providers (400)",
-          "kind": "self",
-          "step": 6
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e16]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 6,
+          "stepLabel": "1.3"
         },
         {
           "id": "m7",
           "from": "V",
           "to": "P",
-          "label": "fila OPENAI de patyia_sys_values (PUT: push parcial)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e18]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 7
+          "step": 7,
+          "stepLabel": "1.3"
         },
         {
           "id": "m8",
           "from": "V",
-          "to": "O",
-          "label": "modelos de la cuenta (caché 90 s)",
-          "kind": "sync",
-          "step": 8
-        },
-        {
-          "id": "m9",
-          "from": "V",
           "to": "C",
-          "label": "configuración + modelos disponibles y no disponibles",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=V]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 9
+          "step": 8,
+          "stepLabel": "2"
         }
       ],
       "fragments": [
@@ -111,33 +253,68 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m1",
-            "m2"
+            "m3"
           ],
-          "condition": "GET /proveedor/{iproveedor}"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e4]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
           "name": "else",
           "kind": "alt",
           "messages": [
-            "m3",
-            "m4",
-            "m5"
+            "m4"
           ],
-          "condition": "PUT /proveedor/{iproveedor}"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f3",
           "name": "else",
           "kind": "alt",
           "messages": [
+            "m5",
             "m6",
-            "m7",
-            "m8",
-            "m9"
+            "m7"
           ],
-          "condition": "GET|PUT /proveedor/{iproveedor}/cfg"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-proveedor.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e6]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

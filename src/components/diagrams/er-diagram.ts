@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
+import { animarRielEn, flujoActivo } from '../_shared/diagram-flow.js';
 import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './er-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
@@ -400,8 +400,7 @@ class IswcErDiagram extends DiagramElementBase {
       g.appendChild(path);
       // Flujo estándar del lado N al 1 (`reverse` ya resuelto en el layout).
       if (flujo) {
-        const puntos = animarRiel(path, { punteado: !!dashAttr, reverse: !!r.reverse });
-        if (puntos) g.insertBefore(puntos, path);
+        animarRielEn(g, path, { punteado: !!dashAttr, reverse: !!r.reverse });
       }
 
       g.appendChild(this.#buildMark(r.fromMark, color));

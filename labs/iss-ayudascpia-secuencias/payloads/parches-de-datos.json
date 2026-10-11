@@ -1,0 +1,305 @@
+{
+  "slug": "parches-de-datos",
+  "module": "010-General",
+  "tag": "iswc-sequence-diagram",
+  "script": "diagrams/sequence-diagram.min.js",
+  "attrs": {
+    "diagram-style": "insoft"
+  },
+  "_fuente": "Derivado de ruta-parches-de-datos.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
+  "payload": {
+    "sequence": {
+      "title": "Parches de datos",
+      "actors": [
+        {
+          "id": "R",
+          "label": "Runner de parches · ZPatch",
+          "icon": "mdi:server",
+          "kind": "participant"
+        },
+        {
+          "id": "P",
+          "label": "PostgreSQL",
+          "icon": "mdi:database",
+          "kind": "participant"
+        },
+        {
+          "id": "X_pg",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "query": {
+              "payload": {
+                "componentDiagram": {
+                  "components": {
+                    "[id=db-pg]": {
+                      "name": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "icon": "mdi:cloud-outline",
+          "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "R",
+          "to": "R",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=R]": {
+                      "nodes": {
+                        "[id=a]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 1,
+          "stepLabel": "1"
+        },
+        {
+          "id": "m2",
+          "from": "R",
+          "to": "R",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=R]": {
+                      "nodes": {
+                        "[id=b]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "2"
+        },
+        {
+          "id": "m3",
+          "from": "R",
+          "to": "X_pg",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=R]": {
+                      "nodes": {
+                        "[id=c]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 3,
+          "stepLabel": "2.1"
+        },
+        {
+          "id": "m4",
+          "from": "R",
+          "to": "R",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=R]": {
+                      "nodes": {
+                        "[id=d]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 4,
+          "stepLabel": "2.2"
+        },
+        {
+          "id": "m5",
+          "from": "R",
+          "to": "X_pg",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=R]": {
+                      "nodes": {
+                        "[id=f]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 5,
+          "stepLabel": "2.2.1"
+        },
+        {
+          "id": "m6",
+          "from": "R",
+          "to": "X_pg",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=R]": {
+                      "nodes": {
+                        "[id=g]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 6,
+          "stepLabel": "2.2.2"
+        },
+        {
+          "id": "m7",
+          "from": "R",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=R]": {
+                      "nodes": {
+                        "[id=x]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 7,
+          "stepLabel": "3"
+        }
+      ],
+      "fragments": [
+        {
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m3",
+            "m4",
+            "m5",
+            "m6",
+            "m7"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f2",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m5",
+            "m6"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e9]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f3",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m7"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-parches-de-datos.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e8]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

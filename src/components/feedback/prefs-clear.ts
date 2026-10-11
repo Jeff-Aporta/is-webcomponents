@@ -3,6 +3,10 @@ import '../actions/button.js';
 import '../media/icon.js';
 import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs.js';
 import { borrarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
+// Solo tipos: el schema Zod no entra al bundle del CDN (sumaría ~330 KB al componente).
+import type { PrefsClearDetail, PrefsClearScope } from './prefs-clear.schemas.js';
+
+export type * from './prefs-clear.schemas.js';
 
 /**
  * <iswc-prefs-clear> — borra la memoria persistente de los is-* (localStorage).
@@ -99,11 +103,11 @@ import { borrarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
     }
 
     /** Alcance de la limpieza: `prefs` (default), `cache` o `all`. */
-    get scope(): 'prefs' | 'cache' | 'all' {
+    get scope(): PrefsClearScope {
       const v = this.getAttribute('scope');
       return v === 'cache' || v === 'all' ? v : 'prefs';
     }
-    set scope(v: 'prefs' | 'cache' | 'all') {
+    set scope(v: PrefsClearScope) {
       this.setAttribute('scope', v);
     }
 
@@ -158,7 +162,8 @@ import { borrarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
       const appCfg = Object.keys(borrarAppCfg());
       const result = clearAllComponentPrefs();
       const extra = this.scope === 'prefs' ? { caches: [], bases: [] } : await limpiarCaches(this.scope === 'all');
-      emit(this, 'iswc-prefs-clear', { tags: result.tags, appCfg, reloaded: this.reload, scope: this.scope, ...extra });
+      const detalle: PrefsClearDetail = { tags: result.tags, appCfg, reloaded: this.reload, scope: this.scope, ...extra };
+      emit(this, 'iswc-prefs-clear', detalle);
 
       if (this.reload) {
         location.reload();

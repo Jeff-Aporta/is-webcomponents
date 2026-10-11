@@ -9,15 +9,16 @@ import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import {
-  makeCostGrid, blockRect, applyRectCost, snapDiagramGrid,
+  makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, ceilDiagramGrid, rectsOverlap,
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
 } from '../_shared/diagram-grid.js';
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import { wrapText } from '../_shared/diagram-text-wrap.js';
-import type { AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "./flowchart-spec.schemas.js";
+import { estimateTextWidth, wrapText } from '../_shared/diagram-text-wrap.js';
+import { grafoDirigido } from '../_shared/diagram-graph.js';
+import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "./flowchart-spec.schemas.js";
 import type { ErThemeJson } from "./theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
@@ -521,8 +522,8 @@ export function computeFlowchartLayout(
 
   // Insoft: el margen respeta la rejilla de 8 px, así los centros y vértices
   // de los nodos son anclas exactas para el router ortogonal.
-  const offsetX = insoft ? ceilTo(MARGIN.left, 8) : MARGIN.left;
-  const offsetY = insoft ? ceilTo(MARGIN.top + headerH, 8) : MARGIN.top + headerH;
+  const offsetX = insoft ? ceilDiagramGrid(MARGIN.left, 8) : MARGIN.left;
+  const offsetY = insoft ? ceilDiagramGrid(MARGIN.top + headerH, 8) : MARGIN.top + headerH;
   const zones = spec.exclusionZones ?? [];
 
   const nodes: FlowLayoutNode[] = placed.nodes.map((n) => {
@@ -600,7 +601,7 @@ export function computeFlowchartLayout(
     const toMeta = byId.get(e.to);
     if (!from || !to || !fromMeta || !toMeta) return null;
     const sides = insoft
-      ? insoftSides(fromMeta, toMeta, from, to, specById.get(e.from)?.shape, placed.primaryChild?.get(e.from), spec.direction, conPuentes.has(e.from))
+      ? insoftSides(fromMeta, toMeta, from, to, specById.get(e.from)?.shape, placed.primaryChild?.get(e.from), spec.direction, conPuentes.has(e.from), nodes)
       : pickSides(fromMeta, toMeta, spec.direction);
     // La respuesta desde un fin siempre sale por abajo (por los costados llegan las ramas).
     if (insoft && specById.get(e.from)?.shape === 'end') (sides as { fromSide: string }).fromSide = 'bottom';
@@ -650,7 +651,7 @@ export function computeFlowchartLayout(
     // montan sobre otra arista; el A* queda de respaldo.
     // Ramas de una decisión que salen por el mismo costado: cada una con su riel (ver salidasEnAbanico).
     const salida = abanico.get(i);
-    const topX = snap8(to.x + to.w / 2);
+    const topX = snapDiagramGrid(to.x + to.w / 2);
     const lateral = lanesOn && e.kind === 'dashed' ? rutaDeUso(from, to, rielesUso, nodes) : null;
     // Desde un fin (la respuesta al componente) nunca por el costado: ahí llegan las ramas que
     // terminan y quedarían dos puntas enfrentadas. Sale por abajo (rutaDeVuelta).
@@ -1148,7 +1149,9 @@ function socketsDeComponentes(routed: Array<FlowLayoutEdge | null>, spec: FlowRe
   // Todo consumo (arista punteada) de un componente es `-(O-`, declare o no lo que expone; una arista
   // continua (consecuencia, p. ej. la llamada HTTP al login) llega normal.
   const componentes = new Set(spec.nodes.filter((n) => n.embed?.kind === 'component').map((n) => n.id));
-  const consume = (r: FlowLayoutEdge): boolean => expone.has(r.to) || (componentes.has(r.to) && r.kind === 'dashed');
+  // Entre dos tablas (propagación maestro → detalle) no hay consumo: ninguna expone su `-(O-` a la otra.
+  const tablas = new Set(spec.nodes.filter((n) => n.embed?.kind === 'tableder').map((n) => n.id));
+  const consume = (r: FlowLayoutEdge): boolean => !(tablas.has(r.from) && tablas.has(r.to)) && (expone.has(r.to) || (componentes.has(r.to) && r.kind === 'dashed'));
   if (!expone.size && !componentes.size) return;
   // Convención InSoft: el componente expone el socket `(` (palo + arco) y el riel llega a la bola O.
   const largo = SOCKET.palo + SOCKET.socket + SOCKET.bola;
@@ -1364,7 +1367,7 @@ function rutaDeUso(
   const clave = `${to.id}|${derecha ? 'izq' : 'der'}`;
   const tomado = usos.get(clave) ?? { rieles: [] };
   usos.set(clave, tomado);
-  const a = { x: derecha ? from.x + from.w : from.x, y: snap8(from.y + from.h / 2) };
+  const a = { x: derecha ? from.x + from.w : from.x, y: snapDiagramGrid(from.y + from.h / 2) };
   const choca = (pts: readonly FlowPoint[]): boolean => pts.slice(1).some((q, k) =>
     nodes.some((n) => n.id !== from.id && n.id !== to.id && segHitsRect(pts[k]!, q, n, 4)));
   const bx = derecha ? to.x : to.x + to.w;
@@ -1372,8 +1375,8 @@ function rutaDeUso(
   const alturas: number[] = [];
   if (tomado.punta) alturas.push(tomado.punta.y);
   else {
-    for (let y = snap8(to.y + 8); y <= to.y + to.h - 8; y += 8) alturas.push(y);
-    if (!alturas.length) alturas.push(snap8(to.y + to.h / 2));
+    for (let y = snapDiagramGrid(to.y + 8); y <= to.y + to.h - 8; y += 8) alturas.push(y);
+    if (!alturas.length) alturas.push(snapDiagramGrid(to.y + to.h / 2));
   }
   const recta = alturas.find((y) => y === a.y && !choca([a, { x: bx, y }]));
   if (recta != null) {
@@ -1393,7 +1396,7 @@ function rutaDeUso(
   let mejorX = 0;
   for (const y of alturas) {
     const b = { x: bx, y };
-    for (let xm = snap8(a.x + s * 16); (b.x - xm) * s >= 16; xm += s * 8) {
+    for (let xm = snapDiagramGrid(a.x + s * 16); (b.x - xm) * s >= 16; xm += s * 8) {
       if (tomado.rieles.some((r) => Math.abs(r - xm) < 8)) continue;
       const pts = [a, { x: xm, y: a.y }, { x: xm, y: b.y }, b];
       if (choca(pts)) continue;
@@ -1436,9 +1439,9 @@ function vueltaCorta(from: FlowLayoutNode, to: FlowLayoutNode, nodes: readonly F
     || (s.y1 === s.y2 && Math.abs(p.y - s.y1) <= 1 && p.x >= Math.min(s.x1, s.x2) - 1 && p.x <= Math.max(s.x1, s.x2) + 1));
   for (const lado of ['izquierda', 'derecha'] as const) {
     const izq = lado === 'izquierda';
-    const x = izq ? snap8(Math.min(from.x, to.x) - 24) : snap8(Math.max(from.x + from.w, to.x + to.w) + 24);
-    const a = { x: izq ? from.x : from.x + from.w, y: snap8(from.y + from.h / 2) };
-    const b = { x: izq ? to.x : to.x + to.w, y: snap8(to.y + to.h / 2) };
+    const x = izq ? snapDiagramGrid(Math.min(from.x, to.x) - 24) : snapDiagramGrid(Math.max(from.x + from.w, to.x + to.w) + 24);
+    const a = { x: izq ? from.x : from.x + from.w, y: snapDiagramGrid(from.y + from.h / 2) };
+    const b = { x: izq ? to.x : to.x + to.w, y: snapDiagramGrid(to.y + to.h / 2) };
     if (ocupado(a) || ocupado(b)) continue;
     const pts = [a, { x, y: a.y }, { x, y: b.y }, b];
     let choca = false;
@@ -1459,11 +1462,11 @@ function vueltaCorta(from: FlowLayoutNode, to: FlowLayoutNode, nodes: readonly F
  * Así no cruza el flujo que baja.
  */
 function rutaDeVuelta(from: FlowLayoutNode, to: FlowLayoutNode, fondo: number, izquierda?: number): FlowPoint[] {
-  const a = { x: snap8(from.x + from.w / 2), y: from.y + from.h };
-  const y = snap8(fondo + 24);
+  const a = { x: snapDiagramGrid(from.x + from.w / 2), y: from.y + from.h };
+  const y = snapDiagramGrid(fondo + 24);
   // Sube por fuera del recuadro de grupo del destino (si lo tiene), nunca por su título.
-  const x = snap8(Math.min(to.x, izquierda ?? to.x) - 16);
-  const cy = snap8(to.y + to.h / 2);
+  const x = snapDiagramGrid(Math.min(to.x, izquierda ?? to.x) - 16);
+  const cy = snapDiagramGrid(to.y + to.h / 2);
   return [a, { x: a.x, y }, { x, y }, { x, y: cy }, { x: to.x, y: cy }];
 }
 
@@ -1493,7 +1496,7 @@ function salidasEnAbanico(
     const fm = meta.get(e.from);
     const tm = meta.get(e.to);
     if (!from || !to || !fm || !tm || from.shape !== 'diamond' || tm.layer <= fm.layer) return;
-    const lado = insoftSides(fm, tm, from, to, from.shape, primary?.get(e.from), direction).fromSide;
+    const lado = insoftSides(fm, tm, from, to, from.shape, primary?.get(e.from), direction, false, [...pos.values()]).fromSide;
     if (lado !== 'left' && lado !== 'right') return;
     const k = `${e.from}|${lado}`;
     if (!grupos.has(k)) grupos.set(k, []);
@@ -1509,7 +1512,7 @@ function salidasEnAbanico(
     idxs.sort((a, b) => Math.abs(centro(b) - cx) - Math.abs(centro(a) - cx));
     idxs.forEach((i, j) => {
       // Sobre el borde inferior del costado: y baja RIEL_GAP por rama; x sigue el borde del rombo.
-      const y = snap8(cy + Math.min(j * RIEL_GAP, from.h / 2 - 8));
+      const y = snapDiagramGrid(cy + Math.min(j * RIEL_GAP, from.h / 2 - 8));
       const t = (y - cy) / (from.h / 2);
       const x = izquierda ? from.x + t * (from.w / 2) : from.x + from.w - t * (from.w / 2);
       out.set(i, { x, y });
@@ -1536,10 +1539,10 @@ function puntosEnBarras(edges: readonly FlowEdgeSpec[], pos: ReadonlyMap<string,
       idxs.forEach(([e, i], k) => {
         const t = (k + 1) / (idxs.length + 1);
         if (horizontal) {
-          const x = snap8(bar.x + t * bar.w);
+          const x = snapDiagramGrid(bar.x + t * bar.w);
           out.set(`${i}|${lado}`, { x, y: lado === 'from' ? bar.y + bar.h : bar.y });
         } else {
-          const y = snap8(bar.y + t * bar.h);
+          const y = snapDiagramGrid(bar.y + t * bar.h);
           out.set(`${i}|${lado}`, { x: lado === 'from' ? bar.x + bar.w : bar.x, y });
         }
       });
@@ -1556,10 +1559,10 @@ function sobreBarra(p: FlowPoint, bar: FlowLayoutNode, otro: FlowLayoutNode, sha
   if (shape !== 'bar') return p;
   const m = 8;
   if (bar.w >= bar.h) {
-    const x = Math.min(bar.x + bar.w - m, Math.max(bar.x + m, snap8(otro.x + otro.w / 2)));
+    const x = Math.min(bar.x + bar.w - m, Math.max(bar.x + m, snapDiagramGrid(otro.x + otro.w / 2)));
     return { x, y: p.y };
   }
-  const y = Math.min(bar.y + bar.h - m, Math.max(bar.y + m, snap8(otro.y + otro.h / 2)));
+  const y = Math.min(bar.y + bar.h - m, Math.max(bar.y + m, snapDiagramGrid(otro.y + otro.h / 2)));
   return { x: p.x, y };
 }
 
@@ -1607,7 +1610,7 @@ function abrirEspacio(
   haciaLaDerecha: boolean,
   lanesHorizontales = false,
 ): number {
-  const extra = snap8((haciaLaDerecha ? caja.w : caja.h) + U * 2);
+  const extra = snapDiagramGrid((haciaLaDerecha ? caja.w : caja.h) + U * 2);
   const corte = haciaLaDerecha ? caja.x : caja.y;
   const mover = (b: { x: number; y: number } | undefined): void => {
     if (!b) return;
@@ -1726,13 +1729,9 @@ const INSOFT = {
   nodeGap: 40,
 } as const;
 
-const ceilTo = (v: number, step: number): number => Math.ceil(v / step) * step;
-const snap8 = (v: number): number => Math.round(v / 8) * 8;
 
-/** Estimación de ancho sin DOM (Poppins 500 ≈ 0.6 em por carácter). */
-function estimateWidth(text: string, fontSize: number): number {
-  return text.length * fontSize * 0.6;
-}
+/** Estimación de ancho sin DOM (Poppins 500 ≈ 0,6 em por carácter). */
+const estimateWidth = (text: string, fontSize: number): number => estimateTextWidth(text, fontSize, 0.6);
 
 /** Parte `text` en líneas de como mucho `maxW` px (greedy por palabras). */
 export function wrapFlowLines(text: string, maxW: number, measure: (t: string) => number): { lines: string[]; width: number } {
@@ -1772,8 +1771,8 @@ export function decisionGeometry(textW: number, nLines: number, pastilla: { w: n
   const [dw, dh] = rh / rw >= q ? [rw * 2, rh * 2] : [rw + rh / q, (rw + rh / q) * q];
   // Múltiplos de 16: el centro cae en la rejilla de 8 y los vértices
   // laterales/inferior son anclas exactas de las aristas.
-  const w = ceilTo(dw, 16);
-  const h = ceilTo(dh, 16);
+  const w = ceilDiagramGrid(dw, 16);
+  const h = ceilDiagramGrid(dh, 16);
   return { w, h, rect: { x: (w - rw) / 2, y: (h - rh) / 2, w: rw, h: rh } };
 }
 
@@ -1783,16 +1782,16 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
   if (n.shape === 'comment') {
     // Globo: comillas a la izquierda y el texto (alineado a la izquierda) en el resto.
     const t = wrapFlowLines(n.label, COMENTARIO.texto, measurer(opts));
-    const w = ceilTo(t.width + COMENTARIO.pad * 2 + COMENTARIO.comillas, 8);
-    const h = ceilTo(Math.max(32, t.lines.length * INSOFT.lineH + COMENTARIO.pad * 2), 8);
+    const w = ceilDiagramGrid(t.width + COMENTARIO.pad * 2 + COMENTARIO.comillas, 8);
+    const h = ceilDiagramGrid(Math.max(32, t.lines.length * INSOFT.lineH + COMENTARIO.pad * 2), 8);
     return { id: n.id, w, h, lines: t.lines, textBox: { x: COMENTARIO.pad + COMENTARIO.comillas, y: 0, w: w - COMENTARIO.pad * 2 - COMENTARIO.comillas, h }, textAlign: 'start' };
   }
   const measure = measurer(opts);
   if (n.shape === 'bridge') {
     // Puente `-(O=`: palo, socket y bola; a la derecha el ícono CRUD y el nombre de la acción.
     const texto = n.label.trim() && n.label !== n.id ? n.label.trim() : '';
-    const w = ceilTo(PUENTE.socket * 2 + 8 + PUENTE.icono + 6 + (texto ? measure(texto) + 6 : 0), 8);
-    const h = ceilTo(PUENTE.palo + PUENTE.socket * 2 + 6, 8);
+    const w = ceilDiagramGrid(PUENTE.socket * 2 + 8 + PUENTE.icono + 6 + (texto ? measure(texto) + 6 : 0), 8);
+    const h = ceilDiagramGrid(PUENTE.palo + PUENTE.socket * 2 + 6, 8);
     return { id: n.id, w, h, ...(texto ? { lines: [texto], textBox: { x: PUENTE.socket * 2 + 8 + PUENTE.icono + 6, y: PUENTE.palo, w: measure(texto) + 6, h: PUENTE.socket * 2 }, textAlign: 'start' as const } : {}) };
   }
   if (n.shape === 'vars' && n.vars?.length) {
@@ -1801,7 +1800,7 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
     const conDesc = n.vars.some((v) => v.desc);
     const valor = n.vars.map((v) => partirCadena(v.value));
     const mono = (t: string) => t.length * VARS.charMono;
-    const col = (xs: string[], m: (t: string) => number) => ceilTo(Math.max(...xs.map(m)) + VARS.celda * 2, 4);
+    const col = (xs: string[], m: (t: string) => number) => ceilDiagramGrid(Math.max(...xs.map(m)) + VARS.celda * 2, 4);
     const cols = [
       col(['Variable', ...n.vars.map((v) => v.alias ?? v.name)], mono),
       col(['Valor', ...valor.flat()], mono),
@@ -1812,8 +1811,8 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
     const tituloH = titulo ? VARS.fila : 0;
     const tabla = cols.reduce((a, b) => a + b, 0);
     const altoTabla = VARS.fila + filas.reduce((a, b) => a + b, 0);
-    const w = ceilTo(Math.max(INSOFT.actionMinW, tabla + VARS.pad * 2, titulo ? measure(titulo) + VARS.pad * 2 + VARS.esquina : 0), 16);
-    const h = ceilTo(VARS.pad + tituloH + altoTabla + VARS.pad, 8);
+    const w = ceilDiagramGrid(Math.max(INSOFT.actionMinW, tabla + VARS.pad * 2, titulo ? measure(titulo) + VARS.pad * 2 + VARS.esquina : 0), 16);
+    const h = ceilDiagramGrid(VARS.pad + tituloH + altoTabla + VARS.pad, 8);
     return {
       id: n.id, w, h,
       ...(titulo ? { lines: [titulo], textBox: { x: VARS.pad, y: VARS.pad, w: w - VARS.pad * 2 - VARS.esquina, h: tituloH }, textAlign: 'start' as const } : {}),
@@ -1829,8 +1828,8 @@ function sizeInsoftNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode
   }
   const t = wrapFlowLines(n.label, INSOFT.actionText, measure);
   // El número y el ícono van en la insignia arriba a la izquierda (ver insignias()): el texto usa toda la caja.
-  const w = ceilTo(Math.max(INSOFT.actionMinW, t.width + INSOFT.actionPadX * 2), 16);
-  const h = ceilTo(Math.max(INSOFT.actionMinH, t.lines.length * INSOFT.lineH + INSOFT.actionPadY * 2), 8);
+  const w = ceilDiagramGrid(Math.max(INSOFT.actionMinW, t.width + INSOFT.actionPadX * 2), 16);
+  const h = ceilDiagramGrid(Math.max(INSOFT.actionMinH, t.lines.length * INSOFT.lineH + INSOFT.actionPadY * 2), 8);
   return {
     id: n.id, w, h, lines: t.lines,
     textBox: { x: INSOFT.actionPadX, y: 0, w: w - INSOFT.actionPadX * 2, h },
@@ -1859,8 +1858,8 @@ function sizeEmbedNode(n: FlowNodeSpec, opts: FlowLayoutOptions): FlowSizedNode 
   const t = { lines: [] as string[], width: 0 };
   const textH = 0;
   const gap = textH ? INSOFT.nestedGap : 0;
-  const w = ceilTo(Math.max(INSOFT.actionMinW, t.width + INSOFT.actionPadX * 2, inner.w + pad * 2), 16);
-  const h = ceilTo(pad + textH + gap + inner.h + pad, 8);
+  const w = ceilDiagramGrid(Math.max(INSOFT.actionMinW, t.width + INSOFT.actionPadX * 2, inner.w + pad * 2), 16);
+  const h = ceilDiagramGrid(pad + textH + gap + inner.h + pad, 8);
   return {
     id: n.id,
     w,
@@ -1947,7 +1946,7 @@ function pegarComentarios(nodes: FlowLayoutNode[], fijados: FlowLayoutOverrides[
     const t = nodes.find((n) => n.id === c.about);
     if (!t) continue;
     const x = c.pointer === 'right' ? t.x - COMENTARIO.aire - c.w : t.x + t.w + COMENTARIO.aire;
-    const y = snap8(t.y + t.h / 2 - c.h / 2);
+    const y = snapDiagramGrid(t.y + t.h / 2 - c.h / 2);
     if (c.textBox) c.textBox = { ...c.textBox, x: c.textBox.x + x - c.x, y: c.textBox.y + y - c.y };
     c.x = x;
     c.y = y;
@@ -1983,7 +1982,7 @@ function colocarComentarios(
       });
       continue;
     }
-    const y = snap8(t.y + t.h / 2 - z.h / 2);
+    const y = snapDiagramGrid(t.y + t.h / 2 - z.h / 2);
     const libre = (x: number): boolean => x >= 0 && x + z.w <= ancho + COMENTARIO.aire * 4
       && !nodes.some((n) => n.x < x + z.w + 8 && x - 8 < n.x + n.w && n.y < y + z.h + 8 && y - 8 < n.y + n.h);
     const der = t.x + t.w + COMENTARIO.aire;
@@ -2052,9 +2051,6 @@ export function indicesJerarquicos(
 ): Map<string, string> {
   const pos = new Map(nodes.map((n) => [n.id, n]));
   const flujo = edges.filter((e) => e.kind !== 'dashed' && e.from !== e.to && pos.has(e.from) && pos.has(e.to));
-  const hijos = new Map<string, string[]>();
-  for (const e of flujo) hijos.set(e.from, [...(hijos.get(e.from) ?? []), e.to]);
-  const conEntrada = new Set(flujo.map((e) => e.to));
   const esFin = (id: string): boolean => specById.get(id)?.shape === 'end';
   /** Paso numerable: lo numerable que no es una entidad incrustada (clase, componente, tabla). */
   const esPaso = (id: string): boolean => {
@@ -2062,45 +2058,10 @@ export function indicesJerarquicos(
     return !!s && esNumerable(s) && !(s.kind === 'class' || s.kind === 'component' || s.kind === 'tableder');
   };
   const lectura = (id: string): number => { const n = pos.get(id)!; return horizontal ? n.y : n.x; };
-
-  // Aristas de retorno (ciclos): fuera, para que el recorrido sea un DAG.
-  const atras = new Set<string>();
-  const estado = new Map<string, 1 | 2>();
-  const visitarDfs = (id: string): void => {
-    estado.set(id, 1);
-    for (const h of hijos.get(id) ?? []) {
-      if (estado.get(h) === 1) atras.add(`${id}>${h}`);
-      else if (!estado.has(h)) visitarDfs(h);
-    }
-    estado.set(id, 2);
-  };
-  for (const n of nodes) if (!conEntrada.has(n.id) && hijos.has(n.id)) visitarDfs(n.id);
-  for (const n of nodes) if (!estado.has(n.id) && hijos.has(n.id)) visitarDfs(n.id);
-  /** Hijos hacia adelante, en orden de lectura; el fin no se atraviesa (su respuesta vuelve al inicio). */
-  const siguientes = (id: string): string[] => (esFin(id) ? [] : [...new Set((hijos.get(id) ?? []).filter((h) => !atras.has(`${id}>${h}`)))].sort((a, b) => lectura(a) - lectura(b)));
-
-  const alcance = new Map<string, Set<string>>();
-  const alcanzables = (id: string): Set<string> => {
-    const m = alcance.get(id);
-    if (m) return m;
-    const vistos = new Set<string>();
-    const pila = [id];
-    while (pila.length) for (const h of siguientes(pila.pop()!)) if (!vistos.has(h)) { vistos.add(h); pila.push(h); }
-    alcance.set(id, vistos);
-    return vistos;
-  };
-  /** Donde se reúnen las ramas: el primer nodo (por cercanía) alcanzable desde todas; nunca el fin. */
-  const reunion = (ramas: readonly string[]): string | null => {
-    const orden: string[] = [];
-    const vistos = new Set<string>([ramas[0]!]);
-    const cola = [ramas[0]!];
-    while (cola.length) {
-      const x = cola.shift()!;
-      orden.push(x);
-      for (const h of siguientes(x)) if (!vistos.has(h)) { vistos.add(h); cola.push(h); }
-    }
-    return orden.find((x) => !esFin(x) && ramas.every((r) => r === x || alcanzables(r).has(x))) ?? null;
-  };
+  // Grafo del flujo sin retornos (ciclos): hijos en orden de lectura; el fin no se atraviesa (su
+  // respuesta vuelve al inicio).
+  const G = grafoDirigido(nodes.map((n) => n.id), flujo, { orden: (a, b) => lectura(a) - lectura(b), termina: esFin });
+  const { siguientes, reunion } = G;
 
   const out = new Map<string, string>();
   const visitados = new Set<string>();
@@ -2130,11 +2091,10 @@ export function indicesJerarquicos(
       id = hs[0];
     }
   };
-  const fuentes = nodes.filter((n) => !conEntrada.has(n.id) && hijos.has(n.id)).map((n) => n.id).sort((a, b) => lectura(a) - lectura(b));
   const raiz = { n: 0 };
-  for (const f of fuentes) recorrer(f, [], raiz, null);
+  for (const f of [...G.fuentes].sort((a, b) => lectura(a) - lectura(b))) recorrer(f, [], raiz, null);
   // Lo que solo se alcanza por un ciclo o sin fuente clara: en el nivel raíz, al final.
-  for (const n of nodes) if (!visitados.has(n.id) && hijos.has(n.id)) recorrer(n.id, [], raiz, null);
+  for (const n of nodes) if (!visitados.has(n.id) && G.conSalida(n.id)) recorrer(n.id, [], raiz, null);
   return out;
 }
 
@@ -2163,8 +2123,6 @@ function insignias(nodes: FlowLayoutNode[]): void {
  */
 export const PUENTE = { palo: 10, socket: 17, bola: 12, icono: 14, sep: 10, delta: 20, flechaSalida: 34 } as const;
 
-export type LadoPuente = 'bottom' | 'right' | 'left' | 'top';
-type CajaPuente = { x: number; y: number; w: number; h: number; lado?: LadoPuente };
 
 /** Ejes de un puente según su lado: `d` sale del controller hacia la bola, `t` cruza el palo. */
 export const ejesPuente = (lado: LadoPuente = 'bottom'): { d: FlowPoint; t: FlowPoint } => ({
@@ -2189,7 +2147,7 @@ export const centroPuente = (n: CajaPuente): FlowPoint => {
 };
 
 /** Alto de un puente a un costado del controller: bola y, debajo, el renglón del ícono y la acción. */
-const ALTO_PUENTE_LADO = ceilTo(PUENTE.socket * 2 + 8 + 16, 8);
+const ALTO_PUENTE_LADO = ceilDiagramGrid(PUENTE.socket * 2 + 8 + 16, 8);
 
 /** Cambia el tamaño y la caja de texto de un puente medido para colgarlo del lado dado. */
 function orientarPuente(z: FlowSizedNode, lado: LadoPuente): void {
@@ -2201,7 +2159,7 @@ function orientarPuente(z: FlowSizedNode, lado: LadoPuente): void {
     if (z.textBox) z.textBox = { ...z.textBox, y: z.h - p - S * 2 };
     return;
   }
-  z.w = ceilTo(Math.max(p + S * 2 + 6, p + I + 6 + tw), 8);
+  z.w = ceilDiagramGrid(Math.max(p + S * 2 + 6, p + I + 6 + tw), 8);
   z.h = ALTO_PUENTE_LADO;
   if (z.textBox) z.textBox = { x: lado === 'right' ? p + I + 6 : z.w - tw, y: S * 2 + 8, w: tw, h: 16 };
 }
@@ -2212,7 +2170,6 @@ function orientarPuente(z: FlowSizedNode, lado: LadoPuente): void {
  * puertos quedaran a menos de `sep` px, la bola crece. Cada puerto: x, el punto sobre la bola y su
  * proyección al borde de la caja (donde el riel llega o sale en vertical).
  */
-export type PuertoPuente = { tipo: 'entrada' | 'salida'; lado: LadoPuente; x: number; y: number; bx: number; by: number };
 export function puertosPuente(n: CajaPuente, entradas: number, salidas: number): { r: number; puertos: PuertoPuente[] } {
   const total = entradas + salidas;
   const c = centroPuente(n);
@@ -2413,7 +2370,7 @@ export function placeInsoft(sized: readonly FlowSizedNode[], edges: readonly Flo
     if (!placedIds.length) {
       const total = loose.reduce((acc, id) => acc + w(id), 0) + nodeGap * Math.max(0, loose.length - 1);
       let x = -total / 2;
-      for (const id of loose) { cx.set(id, snap8(x + w(id) / 2)); x += w(id) + nodeGap; }
+      for (const id of loose) { cx.set(id, snapDiagramGrid(x + w(id) / 2)); x += w(id) + nodeGap; }
       continue;
     }
     // Sin solapes: el ancla (columna principal) no se mueve; el resto se aparta.
@@ -2432,7 +2389,7 @@ export function placeInsoft(sized: readonly FlowSizedNode[], edges: readonly Flo
     let right = Math.max(...placedIds.map((id) => pos.get(id)! + w(id) / 2));
     for (const id of loose) { pos.set(id, right + nodeGap + w(id) / 2); right += nodeGap + w(id); }
     for (const [id, c] of pos) {
-      cx.set(id, snap8(c));
+      cx.set(id, snapDiagramGrid(c));
       const mp = mainParent.get(id);
       colRun.set(id, mp && cx.get(mp) === cx.get(id) ? (colRun.get(mp) ?? 1) + 1 : 1);
     }
@@ -2445,7 +2402,7 @@ export function placeInsoft(sized: readonly FlowSizedNode[], edges: readonly Flo
     return {
       id: n.id,
       x: cx.get(n.id)! + shift - n.w / 2,
-      y: (layerY.get(l) ?? 0) + snap8(((layerH.get(l) ?? n.h) - n.h) / 2),
+      y: (layerY.get(l) ?? 0) + snapDiagramGrid(((layerH.get(l) ?? n.h) - n.h) / 2),
       w: n.w,
       h: n.h,
       layer: l,
@@ -2599,7 +2556,7 @@ export function placeLanes(
       l[lado].push(id);
       orientarPuente(byId.get(id)!, lado);
     }
-    if (anchoFila(l.bottom) > ctl.w) ctl.w = ceilTo(anchoFila(l.bottom), 16);
+    if (anchoFila(l.bottom) > ctl.w) ctl.w = ceilDiagramGrid(anchoFila(l.bottom), 16);
     ladosDe.set(of, l);
   }
   /** Lugar de cada puente relativo a su controller y lo que el conjunto sobresale por cada lado. */
@@ -2611,7 +2568,7 @@ export function placeLanes(
       let x = Math.max(0, (ctl.w - anchoFila(ids)) / 2);
       for (const id of ids) {
         const z = byId.get(id)!;
-        rel.set(id, { x: snap8(x), y: arriba ? -z.h : ctl.h });
+        rel.set(id, { x: snapDiagramGrid(x), y: arriba ? -z.h : ctl.h });
         x += z.w + nodeGap;
       }
     };
@@ -2669,10 +2626,10 @@ export function placeLanes(
     let m = 0;
     for (let l = 0; l <= maxLayer; l++) m = Math.max(m, ancho(celda.get(key(lane.id, l)) ?? [], lane.id));
     const rotulo = horizontal ? 0 : etiqueta(lane) + LANES.pad;
-    span.set(lane.id, ceilTo(Math.max(LANES.minSpan, m + LANES.pad * 2, rotulo), 16));
+    span.set(lane.id, ceilDiagramGrid(Math.max(LANES.minSpan, m + LANES.pad * 2, rotulo), 16));
   }
   // Largo de cada capa (a lo largo del flujo) y su arranque, después de la banda del rótulo.
-  const head = horizontal ? ceilTo(Math.max(LANES.headerMinW, ...lanes.map(etiqueta)) + LANES.pad, 16) : LANES.header;
+  const head = horizontal ? ceilDiagramGrid(Math.max(LANES.headerMinW, ...lanes.map(etiqueta)) + LANES.pad, 16) : LANES.header;
   const capaLargo = new Map<number, number>();
   // Las columnas apiladas no empujan a las demás: no cuentan en el largo de las capas (cada una lleva
   // su propio cursor, ver más abajo); solo el flujo define las capas.
@@ -2702,7 +2659,7 @@ export function placeLanes(
       fondoApilado = Math.max(fondoApilado, cursorCarril - nodeGap);
     }
   }
-  const total = snap8(Math.max(cursor - layerGap, fondoApilado) + LANES.pad);
+  const total = snapDiagramGrid(Math.max(cursor - layerGap, fondoApilado) + LANES.pad);
 
   // Carriles uno tras otro; nodos centrados en su carril y en su capa.
   const out: FlowPlacedNode[] = [];
@@ -2724,10 +2681,10 @@ export function placeLanes(
             // Controller con sus puentes alrededor: el conjunto centrado en el carril (los puentes se
             // ubican abajo, pegados a él).
             const n = byId.get(g.main)!;
-            const across = snap8(pos + sp / 2 - anchoGrupo(g) / 2 + dp.izq);
+            const across = snapDiagramGrid(pos + sp / 2 - anchoGrupo(g) / 2 + dp.izq);
             const dx = ctx.has(g.main) ? CTX.pad : 0;
             const dy = ctx.has(g.main) ? CTX.pad + CTX.title : 0;
-            out.push({ id: g.main, x: across + dx, y: snap8(y + dp.arriba) + dy, w: n.w, h: n.h, layer: l });
+            out.push({ id: g.main, x: across + dx, y: snapDiagramGrid(y + dp.arriba) + dy, w: n.w, h: n.h, layer: l });
             for (const id of g.puentes) { const z = byId.get(id)!; out.push({ id, x: 0, y: 0, w: z.w, h: z.h, layer: l }); }
             y += largoGrupo(g) + nodeGap;
             continue;
@@ -2739,10 +2696,10 @@ export function placeLanes(
             let c = pos + sp / 2 - anchoFila(idsFila) / 2;
             for (const id of idsFila) {
               const n = byId.get(id)!;
-              const across = snap8(c + cruz(id) / 2) - cruz(id) / 2;
+              const across = snapDiagramGrid(c + cruz(id) / 2) - cruz(id) / 2;
               const dx = ctx.has(id) ? CTX.pad : 0;
               const dy = ctx.has(id) ? CTX.pad + CTX.title : 0;
-              out.push({ id, x: across + dx, y: snap8(filaY) + dy, w: n.w, h: n.h, layer: l });
+              out.push({ id, x: across + dx, y: snapDiagramGrid(filaY) + dy, w: n.w, h: n.h, layer: l });
               c += cruz(id) + nodeGap;
             }
             if (k === 0) filaY += largo(g.main);
@@ -2754,8 +2711,8 @@ export function placeLanes(
       let c = pos + sp / 2 - ancho(ids) / 2;
       for (const id of ids) {
         const n = byId.get(id)!;
-        const along = capaIni.get(l)! + snap8(((capaLargo.get(l) ?? largo(id)) - largo(id)) / 2);
-        const across = snap8(c + cruz(id) / 2) - cruz(id) / 2;
+        const along = capaIni.get(l)! + snapDiagramGrid(((capaLargo.get(l) ?? largo(id)) - largo(id)) / 2);
+        const across = snapDiagramGrid(c + cruz(id) / 2) - cruz(id) / 2;
         // Dentro de su recuadro de grupo, el nodo se corre por el aire y el título.
         const dx = (ctx.has(id) ? CTX.pad : 0) + (!horizontal && globo(id) ? globo(id)!.w + COMENTARIO.aire : 0);
         const dy = ctx.has(id) ? CTX.pad + CTX.title : 0;
@@ -2775,7 +2732,7 @@ export function placeLanes(
     const l = (n: FlowPlacedNode) => (horizontal ? n.w : n.h);
     const ini = Math.min(...ms.map(a));
     const fin = Math.max(...ms.map((n) => a(n) + l(n)));
-    const d = snap8(Math.max(head + LANES.pad - ini, Math.min(total - LANES.pad - fin, total / 2 - (ini + fin) / 2)));
+    const d = snapDiagramGrid(Math.max(head + LANES.pad - ini, Math.min(total - LANES.pad - fin, total / 2 - (ini + fin) / 2)));
     for (const n of ms) { if (horizontal) n.x += d; else n.y += d; }
   }
 
@@ -2931,6 +2888,8 @@ function insoftSides(
   direction: FlowDirection,
   /** El origen es un controller con puentes `-(O=` colgando abajo: su flujo sale por el costado. */
   conPuentes = false,
+  /** Todas las cajas colocadas: para elegir el costado libre de una rama lateral. */
+  nodes: readonly FlowLayoutNode[] = [],
 ): { fromSide: string; toSide: string } {
   const base = pickSides(fromMeta, toMeta, direction);
   if (conPuentes && direction === 'TB') {
@@ -2939,16 +2898,30 @@ function insoftSides(
   }
   // A una decisión se entra siempre por arriba: sus vértices laterales e inferior son salidas de rama
   // (entrar por un costado haría que la llegada y una rama compartan vértice).
-  if (to.shape === 'diamond' && direction === 'TB' && fromShape !== 'end') return { fromSide: base.fromSide, toSide: 'top' };
+  const aRombo = to.shape === 'diamond' && direction === 'TB' && fromShape !== 'end';
+  if (aRombo && (fromShape !== 'diamond' || toMeta.layer <= fromMeta.layer)) return { fromSide: base.fromSide, toSide: 'top' };
   if (direction !== 'TB' || toMeta.layer <= fromMeta.layer) return base;
   // Rombo: el vértice inferior es para la rama cuyo destino queda alineado debajo; cualquier otra
   // (sea o no la principal) sale por el vértice que mira a su destino. Así dos ramas nunca
-  // comparten el primer tramo.
+  // comparten el primer tramo. (También cuando el destino es otro rombo: se entra por arriba.)
   if (fromShape === 'diamond') {
     const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
     if (Math.abs(dx) > 8) return { fromSide: dx > 0 ? 'right' : 'left', toSide: 'top' };
+    // Destino alineado debajo pero la rama NO es la principal (p. ej. el «no» que va directo a la
+    // reunión): sale por el vértice lateral cuyo costado está libre hasta el destino, así nunca
+    // comparte el vértice inferior con la rama principal.
+    // Solo cuando el vértice inferior ya lo ocupa la principal (alineada debajo); si la principal
+    // sale por un costado, el inferior queda libre para esta rama.
+    const principal = primary ? nodes.find((n) => n.id === primary) : undefined;
+    const inferiorOcupado = !!principal && Math.abs((principal.x + principal.w / 2) - (from.x + from.w / 2)) <= 8;
+    if (primary && primary !== to.id && inferiorOcupado) {
+      const libre = (lado: 'right' | 'left'): boolean => {
+        const franja = { x: lado === 'right' ? from.x + from.w : from.x - 3 * U, y: from.y, w: 3 * U, h: Math.max(from.h, to.y - from.y) };
+        return !nodes.some((n) => n.id !== from.id && n.id !== to.id && n.shape !== 'comment' && rectsOverlap(n, franja));
+      };
+      return { fromSide: libre('right') ? 'right' : libre('left') ? 'left' : 'right', toSide: 'top' };
+    }
   }
-  void primary;
   // Un rectángulo de flujo sale por cualquiera de sus lados (nunca por una esquina): si el destino está
   // en otra columna, sale por el lado que lo mira y baja en L a su cara superior.
   // Solo si el destino está claramente en otra columna (y no es un fin ni una barra: a esos se llega
@@ -3197,7 +3170,7 @@ function puertosEnPerimetro(
     if (!salen.length || usos.length < 2) continue;
     const vertical = lado === 'left' || lado === 'right';
     const cands = perimeterPorts({ x: n.x, y: n.y, w: n.w, h: n.h }, 16, [lado])
-      .map((q) => ({ x: snap8(q.x), y: snap8(q.y) }))
+      .map((q) => ({ x: snapDiagramGrid(q.x), y: snapDiagramGrid(q.y) }))
       .filter((q) => (vertical ? q.y > n.y + 4 && q.y < n.y + n.h - 4 : q.x > n.x + 4 && q.x < n.x + n.w - 4));
     const eje = (q: FlowPoint) => (vertical ? q.y : q.x);
     const centroOtro = (u: Uso) => (vertical ? u.otro.y + u.otro.h / 2 : u.otro.x + u.otro.w / 2);
@@ -3233,12 +3206,12 @@ function routeInsoftEdge(
   /** Segunda pasada: dos vértices de la caja de la etiqueta propia; la ruta que pasa por ambos manda. */
   ancla?: readonly [FlowPoint, FlowPoint],
 ): FlowPoint[] | null {
-  const top = { x: entrada?.x ?? snap8(to.x + to.w / 2), y: to.y };
+  const top = { x: entrada?.x ?? snapDiagramGrid(to.x + to.w / 2), y: to.y };
   const cy = to.y + to.h / 2;
   const cands: FlowPoint[][] = [];
   if (fromSide === 'bottom') {
     if (a.x === top.x) cands.push([a, top]);
-    for (const ym of new Set([snap8((a.y + top.y) / 2), top.y - 16, a.y + 16, top.y - 24])) {
+    for (const ym of new Set([snapDiagramGrid((a.y + top.y) / 2), top.y - 16, a.y + 16, top.y - 24])) {
       if (ym > a.y + 4 && ym < top.y - 4) cands.push([a, { x: a.x, y: ym }, { x: top.x, y: ym }, top]);
     }
     // Baja y entra por el costado que mira al origen (nodos finales y de unión). A un rombo no:
@@ -3252,9 +3225,9 @@ function routeInsoftEdge(
     if ((top.x - a.x) * s > 8 && top.y > a.y) cands.push([a, { x: top.x, y: a.y }, top]);
     // Flujo hacia la derecha (carriles horizontales): recta o Z hasta la cara izquierda del destino.
     if (fromSide === 'right' && to.x > a.x + 8) {
-      const left = { x: to.x, y: entrada?.y ?? snap8(cy) };
+      const left = { x: to.x, y: entrada?.y ?? snapDiagramGrid(cy) };
       if (a.y === left.y) cands.push([a, left]);
-      for (const xm of new Set([snap8((a.x + left.x) / 2), left.x - 16, a.x + 16, left.x - 24])) {
+      for (const xm of new Set([snapDiagramGrid((a.x + left.x) / 2), left.x - 16, a.x + 16, left.x - 24])) {
         if (xm > a.x + 4 && xm < left.x - 4) cands.push([a, { x: xm, y: a.y }, { x: xm, y: left.y }, left]);
       }
     }

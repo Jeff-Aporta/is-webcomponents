@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-archivo-subida.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Subida de archivos (POST /archivo)",
@@ -13,21 +14,38 @@
         {
           "id": "C",
           "label": "Portal / app",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "F",
           "label": "ISS · TFileStorageController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
+          "icon": "mdi:database",
           "kind": "participant"
         },
         {
-          "id": "R",
-          "label": "Cloudflare R2",
+          "id": "X_r2",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "query": {
+              "payload": {
+                "componentDiagram": {
+                  "components": {
+                    "[id=r2-bucket]": {
+                      "name": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "icon": "mdi:cloud-outline",
           "kind": "participant"
         }
       ],
@@ -36,81 +54,231 @@
           "id": "m1",
           "from": "C",
           "to": "F",
-          "label": "POST /archivo (dataUrl | base64 | url, mime, iconversacion?)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 1
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "F",
           "to": "F",
-          "label": "body estricto (400); JWT y SEG ya los resolvió la puerta",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=val]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 2
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "F",
           "to": "F",
-          "label": "resuelve los bytes: decodifica o descarga",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=bytes]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 3
+          "step": 3,
+          "stepLabel": "2"
         },
         {
           "id": "m4",
           "from": "F",
           "to": "P",
-          "label": "cuenta de almacenamiento (gen_almacenamientos; sin cuenta: 503)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=cuenta]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 4
+          "step": 4,
+          "stepLabel": "3"
         },
         {
           "id": "m5",
           "from": "F",
           "to": "F",
-          "label": "variantes thumb, med y original (jpeg, lado máximo 1280)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 5
+          "step": 5,
+          "stepLabel": "4"
         },
         {
           "id": "m6",
           "from": "F",
-          "to": "R",
-          "label": "sube los tres objetos",
+          "to": "X_r2",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=img]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 6
+          "step": 6,
+          "stepLabel": "4.1"
         },
         {
           "id": "m7",
           "from": "F",
-          "to": "F",
-          "label": "duración por ffprobe",
-          "kind": "self",
-          "step": 7
+          "to": "X_r2",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=aud]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 7,
+          "stepLabel": "4.2"
         },
         {
           "id": "m8",
           "from": "F",
-          "to": "R",
-          "label": "sube el original",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=reg]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 8
+          "step": 8,
+          "stepLabel": "5"
         },
         {
           "id": "m9",
           "from": "F",
-          "to": "P",
-          "label": "ifile = seq_patyia_ifile en base 36; registra el archivo",
-          "kind": "sync",
-          "step": 9
-        },
-        {
-          "id": "m10",
-          "from": "F",
           "to": "C",
-          "label": "{ ifile, jfile (variantes con URL firmada 7 días), fhcre }",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=F]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 10
+          "step": 9,
+          "stepLabel": "6"
         }
       ],
       "fragments": [
@@ -119,20 +287,44 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m5",
             "m6"
           ],
-          "condition": "imagen (hasta 5 MB)"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e9]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
           "name": "else",
           "kind": "alt",
           "messages": [
-            "m7",
-            "m8"
+            "m7"
           ],
-          "condition": "audio (hasta 25 MB)"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-archivo-subida.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e10]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

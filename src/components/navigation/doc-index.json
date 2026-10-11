@@ -1,0 +1,57 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-doc-index",
+  "category": "navigation",
+  "title": "&lt;iswc-doc-index&gt;",
+  "titleHtml": false,
+  "description": "Índice documental agrupado con búsqueda de texto completo y fragmento resaltado.",
+  "storageKey": "docs-iswc-doc-index",
+  "loads": [],
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Ítems por grupo y subgrupo; al escribir busca en títulos, palabras clave y texto, por relevancia.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-doc-index placeholder=\"Buscar…\" current=\"010-General/040-Procesos/010-Seguridad.md\" style=\"max-width: 340px\">",
+            "  <script type=\"application/json\">[{\"id\":\"README.md\",\"title\":\"Portada\",\"icon\":\"📖\",\"pinned\":true,\"text\":\"Documentación modular del proyecto.\"},{\"id\":\"010-General/010-Planteamiento/010-Ficha.md\",\"title\":\"Ficha del proyecto\",\"group\":\"010 · General\",\"subgroup\":\"Planteamiento\",\"number\":\"010\",\"keywords\":[\"general\"],\"text\":\"Qué resuelve y para quién.\"},{\"id\":\"010-General/040-Procesos/010-Seguridad.md\",\"title\":\"Seguridad\",\"group\":\"010 · General\",\"subgroup\":\"Procesos\",\"number\":\"010\",\"keywords\":[\"jwt\",\"permisos\"],\"text\":\"Solo con una sesión vigente: el JWT se valida en cada petición.\"},{\"id\":\"020-Chat/040-Procesos/020-Turno.md\",\"title\":\"Turno de chat\",\"group\":\"020 · Chat\",\"subgroup\":\"Procesos\",\"number\":\"020\",\"text\":\"Cada mensaje abre un turno con su traza.\"}]</script>",
+            "</iswc-doc-index>"
+          ],
+          "controls": [
+            {
+              "control": "text",
+              "prop": "attr:placeholder",
+              "label": "placeholder"
+            },
+            {
+              "control": "select",
+              "prop": "attr:current",
+              "label": "current",
+              "options": [
+                "README.md",
+                "010-General/010-Planteamiento/010-Ficha.md",
+                "010-General/040-Procesos/010-Seguridad.md",
+                "020-Chat/040-Procesos/020-Turno.md"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "ejemplos": {
+        "content": [
+          "```js",
+          "idx.items = hojas.map((h) => ({ id: h.ruta, title: h.titulo, group: h.modulo, text: h.texto }));",
+          "```"
+        ]
+      }
+    },
+    "exclude": []
+  }
+}

@@ -6,23 +6,273 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-seguridad-jwt.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
+      "title": "Token de servidor (POST /JWT)",
       "actors": [
         {
           "id": "C",
           "label": "ContaPyme / ISW",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "I",
           "label": "ISS · TIdentityController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
-          "id": "D",
-          "label": "DataSnap DSCLIENTES",
+          "id": "X_ds",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "query": {
+              "payload": {
+                "componentDiagram": {
+                  "components": {
+                    "[id=ds-login]": {
+                      "name": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "icon": "mdi:cloud-outline",
           "kind": "participant"
+        }
+      ],
+      "messages": [
+        {
+          "id": "m1",
+          "from": "C",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 1,
+          "stepLabel": ""
+        },
+        {
+          "id": "m2",
+          "from": "I",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "1"
+        },
+        {
+          "id": "m3",
+          "from": "I",
+          "to": "C",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=e400]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 3,
+          "stepLabel": "1.1"
+        },
+        {
+          "id": "m4",
+          "from": "I",
+          "to": "X_ds",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=login]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 4,
+          "stepLabel": "1.2"
+        },
+        {
+          "id": "m5",
+          "from": "I",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=d2]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 5,
+          "stepLabel": "1.3"
+        },
+        {
+          "id": "m6",
+          "from": "I",
+          "to": "C",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=e503]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 6,
+          "stepLabel": "1.3.1"
+        },
+        {
+          "id": "m7",
+          "from": "I",
+          "to": "C",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=e401]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 7,
+          "stepLabel": "1.3.2"
+        },
+        {
+          "id": "m8",
+          "from": "I",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=firma]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 8,
+          "stepLabel": "1.3.3"
+        },
+        {
+          "id": "m9",
+          "from": "I",
+          "to": "C",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=token]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 9,
+          "stepLabel": "1.3.4"
         }
       ],
       "fragments": [
@@ -31,89 +281,118 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m2"
+            "m3"
           ],
-          "condition": "falta un dato"
-        }
-      ],
-      "messages": [
-        {
-          "id": "m1",
-          "from": "C",
-          "to": "I",
-          "label": "POST /JWT (controlKey, iapp, idmaquina)",
-          "kind": "sync",
-          "step": 1
-        },
-        {
-          "id": "m2",
-          "from": "I",
-          "to": "C",
-          "label": "400",
-          "kind": "reply",
-          "step": 2
-        },
-        {
-          "id": "m3",
-          "from": "I",
-          "to": "D",
-          "label": "TBasicoGeneral.LogInContacto",
-          "kind": "sync",
-          "step": 3
-        }
-      ],
-      "alt": {
-        "name": "alt",
-        "branches": [
-          {
-            "condition": "DataSnap no responde, no-2xx o respuesta vacía",
-            "messages": [
-              {
-                "id": "m4",
-                "from": "I",
-                "to": "C",
-                "label": "503 · reintentar",
-                "kind": "reply",
-                "step": 4
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e4]": {
+                      "label": true
+                    }
+                  }
+                }
               }
-            ]
-          },
-          {
-            "condition": "DataSnap rechaza la llave o no trae itercero / icontacto",
-            "messages": [
-              {
-                "id": "m5",
-                "from": "I",
-                "to": "C",
-                "label": "401 · volver a iniciar sesión",
-                "kind": "reply",
-                "step": 5
-              }
-            ]
-          },
-          {
-            "condition": "identidad válida",
-            "messages": [
-              {
-                "id": "m6",
-                "from": "I",
-                "to": "I",
-                "label": "firma HS384, 24 h, con el secreto del código",
-                "kind": "self",
-                "step": 6
-              },
-              {
-                "id": "m7",
-                "from": "I",
-                "to": "C",
-                "label": "{ respuesta: { token } }",
-                "kind": "reply",
-                "step": 7
-              }
-            ]
+            }
           }
-        ]
-      }
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m4",
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f3",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m6"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e8]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f4",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m7"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e9]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f5",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m8",
+            "m9"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-jwt.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e10]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

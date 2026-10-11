@@ -6,78 +6,185 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-traza-turno.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
+      "title": "Traza del turno",
       "actors": [
         {
-          "id": "T",
-          "label": "Turno (ISS)",
-          "kind": "participant"
-        },
-        {
           "id": "C",
-          "label": "Cliente (SSE)",
+          "label": "Portal (SSE)",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
-          "id": "P",
-          "label": "Historial",
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "icon": "mdi:server",
           "kind": "participant"
-        }
-      ],
-      "fragments": [
+        },
         {
-          "id": "f1",
-          "name": "loop",
-          "kind": "loop",
-          "messages": [
-            "m2"
-          ],
-          "condition": "cada paso del pipeline"
+          "id": "H",
+          "label": "Historial",
+          "icon": "mdi:database",
+          "kind": "participant"
         }
       ],
       "messages": [
         {
           "id": "m1",
-          "from": "T",
-          "to": "C",
-          "label": "begin",
-          "kind": "reply",
-          "step": 1
+          "from": "C",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e1]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "T",
-          "to": "C",
-          "label": "event log (seq, ms, nivel, etapa, mensaje)",
-          "kind": "reply",
-          "step": 2
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=begin]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "T",
-          "to": "P",
-          "label": "mensaje assistant con others.traza = traza hasta ese momento",
-          "kind": "sync",
-          "step": 3
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=ev]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 3,
+          "stepLabel": "2"
         },
         {
           "id": "m4",
           "from": "T",
-          "to": "C",
-          "label": "event log · Turno terminado (con dur)",
-          "kind": "reply",
-          "step": 4
+          "to": "H",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=guarda]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 4,
+          "stepLabel": "3"
         },
         {
           "id": "m5",
           "from": "T",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=termina]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 5,
+          "stepLabel": "4"
+        },
+        {
+          "id": "m6",
+          "from": "T",
           "to": "C",
-          "label": "end con meta.traza = la traza completa",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-traza-turno.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=end]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 5
+          "step": 6,
+          "stepLabel": "5"
         }
-      ]
+      ],
+      "fragments": []
     }
   }
 }

@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-bandeja-rutas.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Rutas de la bandeja de errores",
@@ -13,16 +14,19 @@
         {
           "id": "C",
           "label": "Front / agente",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "E",
           "label": "ISS · TErrorController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
+          "icon": "mdi:database",
           "kind": "participant"
         }
       ],
@@ -31,81 +35,179 @@
           "id": "m1",
           "from": "C",
           "to": "E",
-          "label": "POST /error (reporte)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 1
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "E",
           "to": "E",
-          "label": "normaliza dominio, contexto, referencia y resumen; censura MD5 y JWT; tope de tamaño",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 2
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "E",
-          "to": "P",
-          "label": "INSERT … ON CONFLICT por referencia abierta",
-          "kind": "sync",
-          "step": 3
+          "to": "E",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=norm]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 3,
+          "stepLabel": "1.1"
         },
         {
           "id": "m4",
           "from": "E",
-          "to": "C",
-          "label": "la fila nueva o la abierta con esa referencia",
-          "kind": "reply",
-          "step": 4
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=ins]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 4,
+          "stepLabel": "1.2"
         },
         {
           "id": "m5",
-          "from": "C",
-          "to": "E",
-          "label": "GET /errores",
+          "from": "E",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=lst]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 5
+          "step": 5,
+          "stepLabel": "1.3"
         },
         {
           "id": "m6",
           "from": "E",
           "to": "P",
-          "label": "las abiertas, más antiguas primero",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=del]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 6
+          "step": 6,
+          "stepLabel": "1.4"
         },
         {
           "id": "m7",
           "from": "E",
           "to": "C",
-          "label": "lista + instructivo de la bandeja",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 7
-        },
-        {
-          "id": "m8",
-          "from": "C",
-          "to": "E",
-          "label": "DELETE /errores [{ ierror }, …]",
-          "kind": "sync",
-          "step": 8
-        },
-        {
-          "id": "m9",
-          "from": "E",
-          "to": "P",
-          "label": "borra el lote: atender es borrar",
-          "kind": "sync",
-          "step": 9
-        },
-        {
-          "id": "m10",
-          "from": "E",
-          "to": "C",
-          "label": "ok",
-          "kind": "reply",
-          "step": 10
+          "step": 7,
+          "stepLabel": "2"
         }
       ],
       "fragments": [
@@ -114,34 +216,67 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m1",
-            "m2",
             "m3",
             "m4"
           ],
-          "condition": "POST /error"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e4]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
           "name": "else",
           "kind": "alt",
           "messages": [
-            "m5",
-            "m6",
-            "m7"
+            "m5"
           ],
-          "condition": "GET /errores"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f3",
           "name": "else",
           "kind": "alt",
           "messages": [
-            "m8",
-            "m9",
-            "m10"
+            "m6"
           ],
-          "condition": "DELETE /errores"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-bandeja-rutas.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e6]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

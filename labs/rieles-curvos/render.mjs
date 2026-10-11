@@ -5,20 +5,11 @@
 //
 // Uso: deno run -A --no-check labs/rieles-curvos/render.mjs [base…]
 
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { mkdir, readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
-import { renderDiagramBatch, writeDiagramOutputs } from '../../src/cdn/tools/index.ts';
+import { join } from 'node:path';
+import { readFile } from 'node:fs/promises';
+import { labDir, renderLab } from '../../src/cdn/tools/render-lab.ts';
 
-const require = createRequire(import.meta.url);
-const { chromium } = require('playwright');
-
-const LAB = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(LAB, '..', '..');
-const OUT = join(LAB, 'out');
-await mkdir(OUT, { recursive: true });
-
+const LAB = labDir(import.meta.url);
 const labs = (p) => join(LAB, '..', p);
 /** Bases: un diagrama real por tipo (editable con `tag/payload/attrs` o payload suelto). */
 const BASES = [
@@ -57,12 +48,4 @@ for (const b of BASES) {
   }
 }
 
-const results = await renderDiagramBatch(jobs, { chromium, serveRoot: ROOT, timeoutMs: 300_000, settleMs: 600, png: true });
-let failed = 0;
-for (const r of results) {
-  if (r.error || !r.result) { failed++; console.log(`FAIL ${r.id}: ${r.error}`); continue; }
-  const svg = join(OUT, `${r.id}.svg`);
-  await writeDiagramOutputs(r.result, svg, svg.replace(/\.svg$/, '.png'));
-  console.log(`OK ${r.id}.svg (${r.result.width}x${r.result.height})`);
-}
-process.exit(failed ? 1 : 0);
+process.exit(await renderLab(LAB, jobs));

@@ -1,10 +1,7 @@
 // Self-check plano (node:assert) para tree-layout.js. Sin framework.
 import assert from 'node:assert';
 import { buildTree, layoutTree, layoutRadialTree, squarify } from './tree-layout.js';
-
-function rectsOverlap(a, b) {
-  return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
-}
+import { rectsOverlap } from './diagram-grid.js';
 
 // 1) buildTree: ciclo de parentesco DEBE terminar (regresión crítica) y no perder nodos.
 {

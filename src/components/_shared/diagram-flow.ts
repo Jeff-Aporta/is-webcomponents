@@ -42,8 +42,8 @@ export function flujoActivo(host?: Element | null): boolean {
 
 /**
  * Anima un riel ya pintado. En un punteado agrega el `<animate>` a su `path`; en un continuo
- * devuelve la línea de puntos para insertarla después del riel (encima). `null` si no hay nada que
- * agregar fuera del path.
+ * devuelve la línea de puntos para insertarla ANTES del riel (detrás: el trazo queda encima). `null`
+ * si no hay nada que agregar fuera del path. Los pintores usan `animarRielEn`, que ya la coloca.
  */
 export function animarRiel(path: SVGElement, op: TOpcionesFlujo): SVGElement | null {
   if (op.punteado) {
@@ -81,6 +81,15 @@ export function animarRiel(path: SVGElement, op: TOpcionesFlujo): SVGElement | n
   a.setAttribute('repeatCount', 'indefinite');
   p.appendChild(a);
   return p;
+}
+
+/**
+ * Anima el riel `path` dentro de su grupo `g`: la línea de puntos de un continuo queda detrás del
+ * riel (estándar de todos los diagramas). Único punto de entrada de los pintores.
+ */
+export function animarRielEn(g: Element, path: SVGElement, op: TOpcionesFlujo): void {
+  const puntos = animarRiel(path, op);
+  if (puntos) g.insertBefore(puntos, path);
 }
 
 /**

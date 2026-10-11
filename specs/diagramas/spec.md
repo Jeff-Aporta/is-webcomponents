@@ -87,7 +87,13 @@ para agentes es el skill `skills/iswc-diagramas-enriquecidos/SKILL.md`.
 
 | Pieza | Contrato |
 |---|---|
-| `_shared/diagram-flow.ts` | `animarRiel(path, { punteado, reverse })` y `flujoActivo(host)`; un único helper para todos los diagramas |
+| `_shared/diagram-flow.ts` | `animarRielEn(g, path, { punteado, reverse })` (puntos DETRÁS del riel), `pulsoRadar(cx, cy, r, color)` y `flujoActivo(host)`; un único helper para todos los diagramas |
+| `_shared/diagram-socket.ts` | `pintarSocket(g, { tip, dir, medidas, color, ancho, pulso, clase })`: el único pintor de `-(O-` / `-(O=` (palo, socket, pulso, bola) |
+| `_shared/diagram-arrow.ts` | `arrowHeadPoints` (sólida) y `openArrowHeadPoints` (abierta): ninguna punta se calcula a mano en un pintor |
+| `_shared/diagram-grid.ts` | rejilla y geometría comunes: `snapDiagramGrid`, `ceilDiagramGrid`, `rectsOverlap(a, b, padX, padY)`, `boundsOf(rects)`; prohibido redefinir `snap8`/solapes por diagrama |
+| `_shared/diagram-graph.ts` | `aristasDeRetorno(ids, edges)` y `grafoDirigido(ids, edges, { orden, termina })` (`siguientes`, `alcanzables`, `reunion`, `fuentes`): todo recorrido del flujo (capas, reprocesos, índices, Seq derivada) usa este grafo |
+| `_shared/diagram-text-wrap.ts` | `estimateTextWidth(text, size, ratio)`: el único estimador sin DOM |
+| `cdn/tools/render-lab.ts` | `jobsDeEditables(dir, opts)` + `renderLab(lab, jobs, opts)`: todo `labs/*/render.mjs` es un wrapper de estas dos |
 | `_shared/diagram-curve.ts` | `styledEdgePath(d, estilo)`; no mueve tramos ni extremos; `BEZIER_MAX` = 40 |
 | `diagram-vocab.ts` | `edgeStyleFor(host, payload)`: el payload gana; la servilleta usa `bezier` |
 | `class-spec.ts` | `partirMiembro(row)` → `{ vis, firma, tipo }`; secciones con `members` |

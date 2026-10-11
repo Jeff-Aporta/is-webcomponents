@@ -19,8 +19,8 @@
 //   deno task labs:render --sin-iss  # solo labs del kit
 //   ISS_DIR=<ruta> deno task labs:render
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const KIT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -73,9 +73,13 @@ if (existsSync(editables) && existsSync(payloadsSec)) {
   // Todos los editables de secuencia del ISS (también los nuevos): el lab
   // renderiza el lote completo, no solo los que ya conocía.
   for (const f of readdirSync(editables).filter((x) => x.endsWith('.json'))) {
-    const spec = JSON.parse(readFileSync(join(editables, f), 'utf8'));
+    const texto = readFileSync(join(editables, f), 'utf8');
+    const spec = JSON.parse(texto);
     if (spec?.tag !== 'iswc-sequence-diagram') continue;
-    copyFileSync(join(editables, f), join(payloadsSec, f)); n++;
+    // La Seq se deriva del vector: sus textos son referencias `./ruta-<slug>.json`, `./componentes.json`…
+    // relativas al editable del ISS. En el lab se reescriben para que resuelvan contra el ISS.
+    const haciaIss = relative(payloadsSec, editables).replaceAll('\\', '/');
+    writeFileSync(join(payloadsSec, f), texto.replaceAll('"path": "./', `"path": "${haciaIss}/`)); n++;
   }
   resumen.push({ label: `payloads de secuencias sincronizados (${n})`, ok: true, ms: 0, intentos: 1 });
 }

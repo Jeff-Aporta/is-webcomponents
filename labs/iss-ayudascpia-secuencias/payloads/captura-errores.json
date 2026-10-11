@@ -6,212 +6,327 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-captura-errores.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
-      "title": "ISS PatyIA · Captura de errores 5xx",
+      "title": "Captura de errores 5xx",
       "actors": [
         {
-          "id": "c",
+          "id": "C",
           "label": "Cliente",
-          "kind": "actor",
-          "icon": "mdi:account"
+          "icon": "mdi:monitor-cellphone",
+          "kind": "participant"
         },
         {
-          "id": "w",
-          "label": "makeDispatchHandler",
-          "kind": "participant",
-          "icon": "mdi:api"
+          "id": "W",
+          "label": "Host · makeDispatchHandler",
+          "icon": "mdi:server",
+          "kind": "participant"
         },
         {
-          "id": "e",
-          "label": "applyEndpointWithErrorCapture",
-          "kind": "participant",
-          "icon": "mdi:shield-alert"
+          "id": "E",
+          "label": "ISS · TErrorController",
+          "icon": "mdi:server",
+          "kind": "participant"
         },
         {
-          "id": "h",
-          "label": "controller de la ruta",
-          "kind": "participant",
-          "icon": "mdi:cog-outline"
+          "id": "H",
+          "label": "Controller de la ruta",
+          "icon": "mdi:server",
+          "kind": "participant"
         },
         {
-          "id": "pg",
-          "label": "patyia_errores",
-          "kind": "participant",
-          "icon": "mdi:database"
-        }
-      ],
-      "groups": [
-        {
-          "id": "g-http",
-          "name": "Petición y respuesta",
-          "color": "stream",
-          "icon": "mdi:swap-horizontal"
-        },
-        {
-          "id": "g-cap",
-          "name": "Captura del error",
-          "color": "error",
-          "icon": "mdi:shield-alert"
-        },
-        {
-          "id": "g-db",
-          "name": "Persistencia en la bandeja",
-          "color": "data",
-          "icon": "mdi:database"
-        }
-      ],
-      "fragments": [
-        {
-          "id": "f-censura",
-          "kind": "region",
-          "name": "censura previa de secretos",
-          "messages": [
-            "m5",
-            "m6"
-          ],
-          "condition": "el cuerpo se escanea en busca de patrones que parecen JWT, MD5, apiKey, etc."
+          "id": "P",
+          "label": "PostgreSQL",
+          "icon": "mdi:database",
+          "kind": "participant"
         }
       ],
       "messages": [
         {
           "id": "m1",
-          "from": "c",
-          "to": "w",
-          "label": "llega una petición a una ruta propia y pasa la puerta SEG",
+          "from": "C",
+          "to": "W",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "group": "g-http"
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
-          "from": "w",
-          "to": "e",
-          "label": "envuelve el controller con la captura de errores",
-          "kind": "sync",
-          "group": "g-cap"
+          "from": "W",
+          "to": "W",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=W]": {
+                      "nodes": {
+                        "[id=llega]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
-          "from": "e",
-          "to": "h",
-          "label": "ejecuta el método del controller",
+          "from": "W",
+          "to": "E",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=envuelve]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "group": "g-http"
+          "step": 3,
+          "stepLabel": "2"
         },
         {
           "id": "m4",
-          "from": "h",
-          "to": "e",
-          "label": "lanza un 5xx inesperado (sin status, o status >= 500)",
-          "kind": "reply",
-          "group": "g-cap"
+          "from": "E",
+          "to": "H",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=H]": {
+                      "nodes": {
+                        "[id=ejecuta]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 4,
+          "stepLabel": "3"
         },
         {
           "id": "m5",
-          "from": "e",
-          "to": "e",
-          "label": "excluye 503 (dependencia caída) y 4xx (error del cliente); excluye POST /error, GET /errores y DELETE /errores",
+          "from": "H",
+          "to": "H",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=H]": {
+                      "nodes": {
+                        "[id=lanza]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "group": "g-cap"
+          "step": 5,
+          "stepLabel": "4"
         },
         {
           "id": "m6",
-          "from": "e",
-          "to": "e",
-          "label": "censura tokens, hashes, claves de API y bearer del cuerpo antes de guardar",
-          "kind": "self",
-          "group": "g-cap"
+          "from": "H",
+          "to": "E",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=excluye]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 6,
+          "stepLabel": "5"
         },
         {
           "id": "m7",
-          "from": "e",
-          "to": "pg",
-          "label": "INSERT patyia_errores (referencia = METHOD:/ruta, jerror, resumen, fhcre)",
-          "kind": "sync",
-          "group": "g-db"
+          "from": "E",
+          "to": "E",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=censura]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 7,
+          "stepLabel": "6"
         },
         {
           "id": "m8",
-          "from": "pg",
-          "to": "e",
-          "label": "índice único parcial por referencia evita duplicar el mismo fallo",
-          "kind": "reply",
-          "group": "g-db"
+          "from": "E",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=guarda]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 8,
+          "stepLabel": "7"
         },
         {
           "id": "m9",
-          "from": "e",
-          "to": "w",
-          "label": "vuelve a lanzar el error para que el envelope lo convierta en respuesta",
-          "kind": "reply",
-          "group": "g-cap"
+          "from": "E",
+          "to": "E",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=E]": {
+                      "nodes": {
+                        "[id=relanza]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 9,
+          "stepLabel": "8"
         },
         {
           "id": "m10",
-          "from": "w",
-          "to": "c",
-          "label": "responde 500 (o 503 si era una Rst503_); la fila ya quedó en la bandeja",
+          "from": "E",
+          "to": "W",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=W]": {
+                      "nodes": {
+                        "[id=responde]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 10,
+          "stepLabel": "9"
+        },
+        {
+          "id": "m11",
+          "from": "W",
+          "to": "C",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-captura-errores.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=W]": {
+                      "nodes": {
+                        "[id=responde]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "group": "g-http"
+          "step": 11,
+          "stepLabel": "9"
         }
       ],
-      "alt": {
-        "name": "otros orígenes y lo que NO se captura",
-        "branches": [
-          {
-            "condition": "timer que falla",
-            "messages": [
-              {
-                "id": "m11",
-                "from": "h",
-                "to": "e",
-                "label": "los timers pasan por la misma envoltura; la fila queda con referencia TIMER:/<nombre> y el host sigue",
-                "kind": "sync",
-                "group": "g-cap"
-              }
-            ]
-          },
-          {
-            "condition": "ruta montada por el stack",
-            "messages": [
-              {
-                "id": "m13",
-                "from": "w",
-                "to": "e",
-                "label": "el stack ya respondió con su envelope; capturarRespuesta ancla la 5xx (salvo 503) con referencia METHOD:/ruta",
-                "kind": "sync",
-                "group": "g-cap"
-              }
-            ]
-          },
-          {
-            "condition": "ruta 4xx",
-            "messages": [
-              {
-                "id": "m12",
-                "from": "h",
-                "to": "h",
-                "label": "los 4xx son errores del cliente, no del servidor; no se persisten",
-                "kind": "self",
-                "group": "g-cap"
-              }
-            ]
-          }
-        ]
-      },
-      "epilogue": [],
-      "boxes": [
-        {
-          "id": "iss",
-          "name": "ISS PatyIA",
-          "actors": [
-            "w",
-            "e",
-            "h"
-          ],
-          "color": "primary"
-        }
-      ]
+      "fragments": []
     }
   }
 }

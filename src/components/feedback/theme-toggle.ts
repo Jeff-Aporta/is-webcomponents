@@ -2,6 +2,9 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/check-icon-button.js';
 import { findThemeContainer } from '../_shared/theme-scope.js';
 import { guardarAppCfg } from '../../core/app-cfg.js';
+import type { IsCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './theme-toggle.schemas.js';
+
+export type * from './theme-toggle.schemas.js';
 
 /**
  * <iswc-theme-toggle> — Web Component (vanilla).
@@ -41,8 +44,6 @@ import { guardarAppCfg } from '../../core/app-cfg.js';
     ></iswc-check-icon-button>
   `;
 
-  type ThemeName = 'dark' | 'light';
-
   function readTheme(el: HTMLElement): ThemeName {
     if (!el) return 'dark';
     const dt = el.getAttribute?.('data-theme') || el.dataset?.theme;
@@ -54,8 +55,6 @@ import { guardarAppCfg } from '../../core/app-cfg.js';
     if (el.dataset) el.dataset.theme = theme;
     else el.setAttribute('data-theme', theme);
   }
-
-  interface IsCheckIconButtonEvent extends CustomEvent<{ checked: boolean }> {}
 
   class IswcThemeToggle extends HTMLElement {
     static get observedAttributes(): string[] { return ['dark', 'scope']; }
@@ -139,7 +138,8 @@ import { guardarAppCfg } from '../../core/app-cfg.js';
       this.#applying = false;
       this.#render();
       if (container === document.documentElement) guardarAppCfg({ theme: next });
-      emit(this, 'iswc-theme-change', { theme: next, dark: next === 'dark', container });
+      const cambio: ThemeChangeDetail = { theme: next, dark: next === 'dark', container };
+      emit(this, 'iswc-theme-change', cambio);
       if (container === document.documentElement && window.parent !== window) {
         window.parent.postMessage({ type: 'iswc-shell-sync', theme: next }, location.origin);
       }

@@ -25,10 +25,6 @@ import type {
 } from './diagram-types.js';
 import type { AnchorLike } from "./er-archify.schemas.js";
 
-function snap8(v: number): number {
-  return Math.round(v / 8) * 8;
-}
-
 /* ──────────────── allowlists de campos conocidos ──────────────── */
 
 const ENTITY_KEYS: Set<string> = new Set([
@@ -119,7 +115,7 @@ function readPos(raw: unknown): [number, number] | undefined {
   if (!Array.isArray(raw) || raw.length !== 2) return undefined;
   const [x, y] = raw;
   if (!Number.isFinite(x) || !Number.isFinite(y)) return undefined;
-  return [snap8(Number(x)), snap8(Number(y))];
+  return [snapDiagramGrid(Number(x)), snapDiagramGrid(Number(y))];
 }
 
 function readSize(raw: unknown): [number, number] | undefined {
@@ -127,7 +123,7 @@ function readSize(raw: unknown): [number, number] | undefined {
   const [w, h] = raw;
   if (!Number.isFinite(w) || !Number.isFinite(h)) return undefined;
   if (Number(w) < 40 || Number(h) < 24) return undefined;
-  return [snap8(Number(w)), snap8(Number(h))];
+  return [snapDiagramGrid(Number(w)), snapDiagramGrid(Number(h))];
 }
 
 function readEntity(raw: unknown, i: number, strict: boolean): ErSpecEntity {
@@ -161,7 +157,7 @@ function readVia(raw: unknown): [number, number][] | undefined {
   const out: [number, number][] = [];
   for (const p of raw) {
     if (Array.isArray(p) && p.length === 2 && Number.isFinite(p[0]) && Number.isFinite(p[1])) {
-      out.push([snap8(Number(p[0])), snap8(Number(p[1]))]);
+      out.push([snapDiagramGrid(Number(p[0])), snapDiagramGrid(Number(p[1]))]);
     }
   }
   return out.length ? out : undefined;
@@ -477,7 +473,7 @@ export function orthogonalVPath(a: { x: number; y: number }, b: { x: number; y: 
   return `M${a.x},${a.y} H${midY} V${b.x} L${b.x},${b.y}`;
 }
 
-export const SNAP = snap8;
+export const SNAP = snapDiagramGrid;
 
 // Re-exports para que consumers que ya importaban tipos desde diagram-types.js
 // puedan seguir importándolos desde aquí si lo desean.

@@ -17,6 +17,7 @@
  * `mode === "edit"`.
  */
 
+import { snapDiagramGrid } from './diagram-grid.js';
 import type { NodeOverride, EdgeOverride, NodeOverrideMap, EdgeOverrideMap, DiagramOverrides, EditorAnchor, DiagramPersist, LayoutChangeDetail, NodeLayoutEntry, EdgeLayoutEntry, LayoutLike, NodeDragMove, NodeDragEnd, NodeDragDestroy, InlineEditorInitial, InlineEditorSave, InlineEditorCancel, OpenInlineEditorOpts } from "./diagram-edit.schemas.js";
 const STORAGE_PREFIX = 'iswc-diagram:';
 
@@ -125,13 +126,8 @@ export function applyOverrides<T extends LayoutLike>(layout: T, overrides: Diagr
   return layout;
 }
 
-/**
- * Snapping de coordenadas al grid del diagrama (8px por defecto).
- * Importado dinámicamente para evitar dependencias circulares.
- */
-export function snap(value: number, grid: number = 8): number {
-  return Math.round(value / grid) * grid;
-}
+/** Snapping de coordenadas al grid del diagrama (8 px por defecto): la rejilla común de `diagram-grid`. */
+export const snap = snapDiagramGrid;
 
 /** Callback que recibe el delta desde el último move del drag. */
 

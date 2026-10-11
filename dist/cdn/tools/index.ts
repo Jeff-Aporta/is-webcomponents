@@ -24,6 +24,9 @@ export {
   startStaticServer,
 } from './render-diagram.js';
 
+export { jobDeEditable, jobsDeEditables, labDir, renderLab } from './render-lab.js';
+export type { Editable, LabJob, OpcionesEditables, OpcionesLab } from './render-lab.js';
+
 export type {
   HostAttrs,
   RenderDiagramOptions,

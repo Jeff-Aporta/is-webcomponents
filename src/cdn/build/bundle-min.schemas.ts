@@ -5,11 +5,12 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { Plugin } from "esbuild";
 
 export const BundleMinJsOptionsSchema = z.object({
   entry: z.string(),
   outfile: z.string(),
-  plugins: z.array(z.unknown() /* TODO: ref Plugin */).optional(),
+  plugins: z.array(z.custom<Plugin>()).optional(),
   banner: z.string().optional(),
   define: z.record(z.string(), z.string()).optional(),
   external: z.array(z.string()).optional(),
@@ -19,7 +20,9 @@ export const BundleMinJsOptionsSchema = z.object({
 export type BundleMinJsOptions = z.infer<typeof BundleMinJsOptionsSchema>;
 
 
-export const BundleLoaderOptionsSchema = z.object({
+export const BundleLoaderOptionsSchema = BundleMinJsOptionsSchema.pick({
+  entry: true, outfile: true, plugins: true, banner: true, external: true,
+}).extend({
   catalog: z.unknown(),
   hashes: z.record(z.string(), z.string()),
   sha: z.string().optional(),

@@ -226,20 +226,7 @@ class IswcStateDiagram extends DiagramElementBase {
       g.appendChild(path);
 
       // Punta orientada por el último tramo REAL del path.
-      // `svgArrowHead` está tipado en `_shared/diagram-arrow.js` con campos
-      // `any` (firma heredada); casteamos para pasar nuestro objeto tipado.
-      // `className` infiere `null | undefined`; añadimos la clase al resultado.
-      const head = (svgArrowHead as unknown as (opts: {
-        d: string; tip: { x: number; y: number }; color: string;
-        len?: number; halfWidth?: number;
-      }) => SVGElement)({
-        d: e.path,
-        tip: { x: e.arrowTipX, y: e.arrowTipY },
-        color,
-        len: 8,
-        halfWidth: 4,
-      });
-      head.classList.add('st-trans__head');
+      const head = svgArrowHead({ d: e.path, tip: { x: e.arrowTipX, y: e.arrowTipY }, color, len: 8, halfWidth: 4, className: 'st-trans__head' });
       g.appendChild(head);
 
       if (e.label) {

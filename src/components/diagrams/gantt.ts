@@ -268,21 +268,7 @@ class IswcGantt extends DiagramElementBase {
         'stroke-linejoin': 'round', 'stroke-linecap': 'round', class: 'gantt-arrow__path',
       });
       g.appendChild(path);
-      // Orientación tomada del último tramo REAL: el ángulo fijo del layout
-      // (90°) daba puntas de lado cuando el router llegaba en horizontal.
-      // Cast: svgArrowHead tiene firma heredada con `any`; añadimos la clase
-      // CSS al resultado en vez de pasarla por el parámetro tipado a null.
-      const head = (svgArrowHead as unknown as (opts: {
-        d: string; tip: { x: number; y: number }; color: string;
-        len?: number; halfWidth?: number;
-      }) => SVGElement)({
-        d: a.path,
-        tip: { x: a.arrowTipX, y: a.arrowTipY },
-        color,
-        len: 8,
-        halfWidth: 4,
-      });
-      head.classList.add('gantt-arrow__head');
+      const head = svgArrowHead({ d: a.path, tip: { x: a.arrowTipX, y: a.arrowTipY }, color, len: 8, halfWidth: 4, className: 'gantt-arrow__head' });
       g.appendChild(head);
       this.svg.appendChild(g);
       this.#arrowNodes.set(a.id, { a, g: g as SVGGElement });

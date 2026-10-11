@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-conversacion-listado.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Listados de conversaciones",
@@ -13,16 +14,19 @@
         {
           "id": "C",
           "label": "Portal / consola",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "T",
           "label": "ISS · TConversacionController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
+          "icon": "mdi:database",
           "kind": "participant"
         }
       ],
@@ -31,65 +35,231 @@
           "id": "m1",
           "from": "C",
           "to": "T",
-          "label": "GET /conversaciones",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 1
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "T",
           "to": "T",
-          "label": "body estricto, searchColumn de la lista blanca (400); limit de 1 a 200",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 2
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "T",
-          "to": "P",
-          "label": "las propias del token",
-          "kind": "sync",
-          "step": 3
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=val]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 3,
+          "stepLabel": "1.1"
         },
         {
           "id": "m4",
           "from": "T",
-          "to": "C",
-          "label": "{ pagina, qregistros, totalpaginas, totalregistros, datos }",
-          "kind": "reply",
-          "step": 4
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=prop]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 4,
+          "stepLabel": "1.2"
         },
         {
           "id": "m5",
-          "from": "C",
+          "from": "T",
           "to": "T",
-          "label": "GET /conversaciones/{filtro}",
-          "kind": "sync",
-          "step": 5
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=seg]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 5,
+          "stepLabel": "1.3"
         },
         {
           "id": "m6",
           "from": "T",
           "to": "T",
-          "label": "puerta SEG QUERY:/conversaciones (auditoría)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d2]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 6
+          "step": 6,
+          "stepLabel": "1.4"
         },
         {
           "id": "m7",
           "from": "T",
           "to": "P",
-          "label": "filtro, orden y paginación (agrupar = tercero: por tercero y contacto)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=grp]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 7
+          "step": 7,
+          "stepLabel": "1.4.1"
         },
         {
           "id": "m8",
           "from": "T",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=flt]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 8,
+          "stepLabel": "1.4.2"
+        },
+        {
+          "id": "m9",
+          "from": "T",
           "to": "C",
-          "label": "la misma lista paginada",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 8
+          "step": 9,
+          "stepLabel": "2"
         }
       ],
       "fragments": [
@@ -98,12 +268,23 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m1",
-            "m2",
             "m3",
             "m4"
           ],
-          "condition": "GET /conversaciones"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e4]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
@@ -115,7 +296,64 @@
             "m7",
             "m8"
           ],
-          "condition": "GET /conversaciones/{filtro}"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f3",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m7"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e8]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f4",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m8"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-conversacion-listado.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e9]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

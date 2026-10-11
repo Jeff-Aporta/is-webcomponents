@@ -14,7 +14,8 @@ export type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './doc-inde
  *   idx.current = '010-General/x.md';
  *   idx.addEventListener('iswc-doc-index-select', (e) => abrir(e.detail.id));
  *
- * Propiedades: `items`, `current` (id activo), `textos` (placeholder, sin resultados, resumen).
+ * Propiedades: `items` (o un `<script type="application/json">` hijo), `current` (id activo),
+ * `textos` (placeholder, sin resultados, resumen).
  * Atributos: `current`, `placeholder`.
  * Métodos: `focusSearch()`, `search(texto)`.
  * Evento: `iswc-doc-index-select` { id, item } al elegir un ítem o un resultado.
@@ -61,6 +62,11 @@ class IswcDocIndex extends HTMLElement {
 
   connectedCallback(): void {
     this.#input.placeholder = this.getAttribute('placeholder') || this.#textos.placeholder;
+    // Ítems declarativos: un `<script type="application/json">` hijo (si nadie asignó `items`).
+    const json = this.querySelector('script[type="application/json"]');
+    if (json && !this.#items.length) {
+      try { this.items = JSON.parse(json.textContent || '[]'); } catch { /* JSON inválido: se ignora */ }
+    }
     this.#pintar();
   }
 

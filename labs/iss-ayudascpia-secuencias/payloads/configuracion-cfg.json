@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-configuracion-cfg.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Configuración en caliente (CFG)",
@@ -13,83 +14,200 @@
         {
           "id": "C",
           "label": "Consola / ISW",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "S",
           "label": "ISS · TSysValueController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
+          "icon": "mdi:database",
           "kind": "participant"
         }
       ],
       "messages": [
         {
           "id": "m1",
-          "from": "S",
+          "from": "C",
           "to": "S",
-          "label": "la puerta SEG decide por el id CFG:/<ruta> (sistema → runtime, docs → doc)",
-          "kind": "self",
-          "step": 1
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
-          "from": "C",
+          "from": "S",
           "to": "S",
-          "label": "GET /sistema/cfg · /docs/cfg",
-          "kind": "sync",
-          "step": 2
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=S]": {
+                      "nodes": {
+                        "[id=seg]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "S",
-          "to": "P",
-          "label": "lee la fila (sin fila: sus defaults, nunca 404)",
-          "kind": "sync",
-          "step": 3
+          "to": "S",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=S]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 3,
+          "stepLabel": "2"
         },
         {
           "id": "m4",
           "from": "S",
-          "to": "C",
-          "label": "{ isystemkey, jvalue (texto JSON), fhultact }",
-          "kind": "reply",
-          "step": 4
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=S]": {
+                      "nodes": {
+                        "[id=lee]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 4,
+          "stepLabel": "2.1"
         },
         {
           "id": "m5",
-          "from": "C",
+          "from": "S",
           "to": "S",
-          "label": "PUT … { jvalue: fragmento }",
-          "kind": "sync",
-          "step": 5
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=S]": {
+                      "nodes": {
+                        "[id=push]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 5,
+          "stepLabel": "2.2"
         },
         {
           "id": "m6",
           "from": "S",
-          "to": "S",
-          "label": "push parcial validado con el schema de la clave (400); null quita una clave",
-          "kind": "self",
-          "step": 6
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=S]": {
+                      "nodes": {
+                        "[id=guarda]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 6,
+          "stepLabel": "2.3"
         },
         {
           "id": "m7",
           "from": "S",
-          "to": "P",
-          "label": "guarda la fila",
-          "kind": "sync",
-          "step": 7
-        },
-        {
-          "id": "m8",
-          "from": "S",
           "to": "C",
-          "label": "la fila vigente",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=S]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 8
+          "step": 7,
+          "stepLabel": "3"
         }
       ],
       "fragments": [
@@ -98,11 +216,22 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m2",
-            "m3",
             "m4"
           ],
-          "condition": "GET <ruta>/cfg"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
@@ -110,11 +239,22 @@
           "kind": "alt",
           "messages": [
             "m5",
-            "m6",
-            "m7",
-            "m8"
+            "m6"
           ],
-          "condition": "PUT <ruta>/cfg"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-configuracion-cfg.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e6]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

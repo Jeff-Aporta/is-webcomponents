@@ -435,3 +435,11 @@ export const FlowSegmentSchema = z.object({
   to: z.string(),
 });
 export type FlowSegment = z.infer<typeof FlowSegmentSchema>;
+
+/** Lado del controller del que cuelga un puente `-(O=`. */
+export const LadoPuenteSchema = z.enum(['bottom', 'right', 'left', 'top']);
+export type LadoPuente = z.infer<typeof LadoPuenteSchema>;
+/** Caja de un puente colocado (con su lado). */
+export type CajaPuente = { x: number; y: number; w: number; h: number; lado?: LadoPuente };
+/** Puerto de un puente: tipo, lado, punto sobre la bola y su proyección al borde de la caja. */
+export type PuertoPuente = { tipo: 'entrada' | 'salida'; lado: LadoPuente; x: number; y: number; bx: number; by: number };

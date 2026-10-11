@@ -42,6 +42,11 @@
 import type { WrapOpts, WrappedLine, WrapResult, TSpanSpec } from "./diagram-text-wrap.schemas.js";
 const APPROX_CHAR_WIDTH_RATIO = 0.55;
 
+/** Estimación de ancho sin DOM: `ratio` em por carácter (0,55 sans-serif genérica; Poppins 500 ≈ 0,6). */
+export function estimateTextWidth(text: string, fontSize: number, ratio: number = APPROX_CHAR_WIDTH_RATIO): number {
+  return text.length * fontSize * ratio;
+}
+
 /** Cache global de mediciones por (fontSize|fontFamily|text). */
 const measureCache = new Map<string, number>();
 
@@ -100,7 +105,7 @@ export function defaultMeasureTextWidth(
     width = probe.text.getComputedTextLength();
   } else {
     // Fallback heurístico: ~0.55 × fontSize por caracter para sans-serif.
-    width = text.length * fontSize * APPROX_CHAR_WIDTH_RATIO;
+    width = estimateTextWidth(text, fontSize);
   }
   // Solo se cachea con las fuentes ya cargadas: medir con la de respaldo
   // (más estrecha que Poppins) y guardarlo dejaba las notas cortas para siempre.

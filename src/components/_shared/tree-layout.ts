@@ -5,12 +5,8 @@
  * snap a 8px salvo cuando rompe el teselado exacto (squarify).
  */
 
-/** Redondea al múltiplo de 8px más cercano (misma rejilla que node-link-layout). */
+import { snapDiagramGrid } from './diagram-grid.js';
 import type { RawNode, TreeNode, TreeMeasure, LayoutEntry, LayoutTreeOpts, PositionedTreeNode, LayoutTreeResult, LayoutRadialOpts, LayoutRadialResult, SquarifyItem, SquarifyResult } from "./tree-layout.schemas.js";
-function snap8(v: number): number {
-  return Math.round(v / 8) * 8;
-}
-
 /** Nodo crudo del que parte `buildTree`. */
 
 /** Nodo del árbol construido por `buildTree`. */
@@ -183,7 +179,7 @@ export function layoutTree(root: TreeNode, opts: LayoutTreeOpts = {}): LayoutTre
     for (const n of outNodes) { n.x -= minX; n.y -= minY; }
   }
 
-  for (const n of outNodes) { n.x = snap8(n.x); n.y = snap8(n.y); }
+  for (const n of outNodes) { n.x = snapDiagramGrid(n.x); n.y = snapDiagramGrid(n.y); }
 
   let width = 0;
   let height = 0;
@@ -289,8 +285,8 @@ export function layoutRadialTree(root: TreeNode, opts: LayoutRadialOpts = {}): L
 
   const outNodes: PositionedTreeNode[] = entries.map((e) => {
     const r = radiusAtDepth[e.depth] ?? 0;
-    const x = snap8(cx + r * Math.cos(e.angle!) - e.w / 2);
-    const y = snap8(cy + r * Math.sin(e.angle!) - e.h / 2);
+    const x = snapDiagramGrid(cx + r * Math.cos(e.angle!) - e.w / 2);
+    const y = snapDiagramGrid(cy + r * Math.sin(e.angle!) - e.h / 2);
     return { id: e.id, x, y, w: e.w, h: e.h, depth: e.depth };
   });
 

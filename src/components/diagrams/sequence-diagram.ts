@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { animarRiel, flujoActivo } from '../_shared/diagram-flow.js';
+import { animarRielEn, flujoActivo } from '../_shared/diagram-flow.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
 import {
   computeSequenceLayout,
@@ -780,8 +780,7 @@ class IswcSequenceDiagram extends DiagramElementBase {
       });
       g.appendChild(path);
       if (flujoActivo(this)) {
-        const puntos = animarRiel(path, { punteado: !!path.getAttribute('stroke-dasharray'), reverse: !!m.reverse });
-        if (puntos) g.insertBefore(puntos, path);
+        animarRielEn(g, path, { punteado: !!path.getAttribute('stroke-dasharray'), reverse: !!m.reverse });
       }
 
       // La orientación sale del ÚLTIMO TRAMO REAL del path: cuando el router
@@ -792,18 +791,10 @@ class IswcSequenceDiagram extends DiagramElementBase {
       const tipX = m.arrowTipX;
       const tipY = m.arrowTipY ?? m.y;
       const wingLen = m.kind === 'async' || m.kind === 'reply' ? 9 : 7;
-      // `svgArrowHead` infiere `className` como `null | undefined` por el
-      // default; añadimos la clase CSS al elemento resultante para no
-      // depender del tipado del helper compartido (que vive en `_shared`).
       const arrow = svgArrowHead({
-        d: m.path,
-        tip: { x: tipX, y: tipY },
-        color,
-        len: wingLen,
-        halfWidth: 3.5,
-        fallbackDir: { x: m.arrowDir > 0 ? 1 : -1, y: 0 },
+        d: m.path, tip: { x: tipX, y: tipY }, color, len: wingLen, halfWidth: 3.5,
+        fallbackDir: { x: m.arrowDir > 0 ? 1 : -1, y: 0 }, className: 'seq-msg-head',
       });
-      arrow.classList.add('seq-msg-head');
       g.appendChild(arrow);
 
       // El índice va en el ARRANQUE real del trazo: en un self-loop el path

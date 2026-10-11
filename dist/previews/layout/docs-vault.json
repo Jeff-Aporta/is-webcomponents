@@ -1,0 +1,112 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-docs-vault",
+  "category": "layout",
+  "title": "&lt;iswc-docs-vault&gt;",
+  "titleHtml": false,
+  "description": "Lector de documentación modular como un libro: índice, búsqueda, hoja anterior/siguiente y enlaces compartibles.",
+  "storageKey": "docs-iswc-docs-vault",
+  "loads": [
+    "iswc-doc-layout",
+    "iswc-doc-index",
+    "iswc-md-render",
+    "iswc-pager",
+    "iswc-figure",
+    "iswc-meta-list",
+    "iswc-dialog",
+    "iswc-copy-button",
+    "iswc-button",
+    "iswc-button-group",
+    "iswc-icon",
+    "iswc-spinner",
+    "iswc-callout"
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "Cada <code class=\"code\">.md</code> es una hoja y el README es la portada. Aquí las hojas van embebidas (<code class=\"code\">script type=\"text/markdown\"</code>); en un proyecto se listan en un JSON y se leen de <code class=\"code\">docs/</code>.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-docs-vault main=\"README.md\" style=\"height: 560px\">",
+            "  <strong slot=\"brand\">Mi proyecto</strong>",
+            "  <script type=\"text/markdown\" data-path=\"README.md\">",
+            "    ---",
+            "    Titulo: Mi proyecto",
+            "    Estado: vigente",
+            "    tags: [portada]",
+            "    ---",
+            "    # Mi proyecto",
+            "",
+            "    Documentación modular: cada nota es una hoja. Empiece por la [ficha](010-General/010-Planteamiento/010-Ficha.md).",
+            "",
+            "    ## Cómo se lee",
+            "",
+            "    Use el índice de la izquierda, la búsqueda (`/`) o las flechas ← y →.",
+            "  </script>",
+            "  <script type=\"text/markdown\" data-path=\"010-General/010-Planteamiento/010-Ficha.md\">",
+            "    ---",
+            "    Titulo: Ficha del proyecto",
+            "    Estado: borrador",
+            "    Autor: Equipo",
+            "    tags: [general, planteamiento]",
+            "    ---",
+            "    # Ficha del proyecto",
+            "",
+            "    ## Qué resuelve",
+            "",
+            "    Un lector de documentación que se monta con una sola etiqueta.",
+            "",
+            "    ## Para quién",
+            "",
+            "    Para cualquier proyecto con una carpeta `docs/` de hojas markdown.",
+            "  </script>",
+            "  <script type=\"text/markdown\" data-path=\"010-General/040-Procesos/010-Seguridad.md\">",
+            "    ---",
+            "    Titulo: Seguridad",
+            "    Estado: en-revision",
+            "    tags: [seguridad, jwt]",
+            "    aliases: [permisos]",
+            "    ---",
+            "    # Seguridad",
+            "",
+            "    ## Quién entra",
+            "",
+            "    Solo con una sesión vigente. Vuelva a la [portada](../../README.md).",
+            "  </script>",
+            "</iswc-docs-vault>"
+          ],
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:main",
+              "label": "main (hoja abierta)",
+              "options": [
+                "README.md",
+                "010-General/010-Planteamiento/010-Ficha.md",
+                "010-General/040-Procesos/010-Seguridad.md"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "ejemplos": {
+        "content": [
+          "```html",
+          "<iswc-docs-vault main=\"README.md\">",
+          "  <strong slot=\"brand\">Mi proyecto</strong>",
+          "  <script type=\"application/json\">[\"README.md\", \"010-General/010-Planteamiento/010-Ficha-de-proyecto.md\"]</script>",
+          "</iswc-docs-vault>",
+          "```"
+        ]
+      }
+    },
+    "exclude": []
+  }
+}

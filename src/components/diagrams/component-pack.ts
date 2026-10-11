@@ -10,6 +10,7 @@
  * geométricos (`pathIllegal`, `segmentoCortaCaja`…) que usan los tests.
  */
 
+import { boundsOf } from '../_shared/diagram-grid.js';
 import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.js';
 import type { ClusterColumn, GroupConv } from "./component-pack.schemas.js";
 
@@ -503,16 +504,6 @@ function inferSources(components: readonly Componente[], edges: readonly Arista[
   return components.filter((c) => (out.get(c.id) ?? 0) > 0 && (inn.get(c.id) ?? 0) === 0);
 }
 
-function boundsOf(items: readonly Caja[]) {
-  const x = Math.min(...items.map((c) => c.x));
-  const y = Math.min(...items.map((c) => c.y));
-  return {
-    x,
-    y,
-    w: Math.max(...items.map((c) => c.x + c.w)) - x,
-    h: Math.max(...items.map((c) => c.y + c.h)) - y,
-  };
-}
 
 /**
  * Cada origen (consumidor) en un lado distinto del clúster destino:

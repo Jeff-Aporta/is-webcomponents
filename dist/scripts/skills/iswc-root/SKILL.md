@@ -348,6 +348,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-image-editor>` | Foto de perfil, logo de empresa, adjuntos que deban recortarse antes de | [media/image-editor.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/image-editor.md) |
 | `<iswc-icon-explorer>` | Ver la guía del módulo antes de crear otro control. | — |
 | `<iswc-qrcode>` | Enlaces cortos, datos de contacto, referencias de pago: cualquier carga que | [media/qrcode.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/qrcode.md) |
+| `<iswc-figure>` | Figura de contenido: una imagen (con variante dark/light opcional), su pie y, si se pide, un enlace «abrir en una pestaña nueva». | [media/figure.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/media/figure.md) |
 
 ### feedback
 
@@ -385,6 +386,8 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-demo>` | Caja de demostración de la galería. | [layout/demo.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/demo.md) |
 | `<iswc-dock>` | Barra compacta de accesos frecuentes (navegación secundaria, launcher de | [layout/dock.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dock.md) |
 | `<iswc-dock-item>` | Ítem de <iswc-dock>. | [layout/dock-item.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dock-item.md) |
+| `<iswc-doc-layout>` | Layout documental común: navegación a la izquierda, contenido al centro e índice de la página a la derecha, con scroll-spy entre ambos. | [layout/doc-layout.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/doc-layout.md) |
+| `<iswc-docs-vault>` | Lector de una documentación modular (norma documentacion-modular) como un libro: cada .md es una hoja, el README es la portada y se navega con índice, búsqueda, paso anterior/siguiente y enlaces compartibles. | [layout/docs-vault.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/docs-vault.md) |
 
 ### helpers
 
@@ -392,6 +395,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | --- | --- | --- |
 | `<iswc-popover>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/popover.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/popover.md) |
 | `<iswc-ui>` | Primitivas de render para apps consumidoras del kit. | [helpers/ui.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/ui.md) |
+| `<iswc-lightbox>` | Visor a pantalla completa para imágenes y diagramas renderizados por el kit. | [diagrams/lightbox.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/lightbox.md) |
 
 | `<iswc-relative-time>` | Formato, observación y posicionamiento reutilizable sobre APIs nativas. | [helpers/relative-time.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/relative-time.md) |
 | `<iswc-format>` | Web Component genérico de formateo con Intl. | [helpers/format.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/format.md) |
@@ -425,6 +429,8 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-stepper>` | Orientación, movimiento entre vistas y navegación jerárquica o secuencial. | [navigation/stepper.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/stepper.md) |
 | `<iswc-stepper-step>` | Paso de <iswc-stepper>. | [navigation/stepper-step.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/stepper-step.md) |
 | `<iswc-mega-menu>` | Cabeceras con muchas secciones que no caben en un dropdown de una columna. | [navigation/mega-menu.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/mega-menu.md) |
+| `<iswc-pager>` | Paso a la página anterior y a la siguiente, cada lado con un rótulo pequeño («← Anterior», «Siguiente →») y el título de la otra página. | [navigation/pager.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/pager.md) |
+| `<iswc-doc-index>` | Índice documental con búsqueda: lista páginas agrupadas (grupo → subgrupo → ítem) y, al escribir, busca en títulos, palabras clave y todo el texto, con los resultados por relevancia y el fragmento resaltado. | [navigation/doc-index.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/navigation/doc-index.md) |
 
 ### forms
 
@@ -487,6 +493,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-pivot-table>` | - Cruzar dos dimensiones de un mismo conjunto de datos (ventas por vendedor × | [data/pivot-table.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/pivot-table.md) |
 | `<iswc-spreadsheet>` | - Capturas rápidas de datos tabulares donde el usuario espera comportarse como | [data/spreadsheet.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/spreadsheet.md) |
 | `<iswc-ag-grid>` | Grillas densas con reorder/resize/pin/hide, filtros por columna, sidebar de columnas y estado | [data/ag-grid.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/ag-grid.md) |
+| `<iswc-meta-list>` | Lista de metadatos clave → valor, agrupada por secciones con título (ubicación, autor, estado, etiquetas, ruta…). | [data/meta-list.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/data/meta-list.md) |
 
 ### data-viz
 
@@ -515,7 +522,6 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | Tag | Resumen | Guía |
 | --- | --- | --- |
 | `<iswc-flowchart>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/flowchart.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/flowchart.md) |
-| `<iswc-lightbox>` | Visor a pantalla completa para imágenes y diagramas renderizados por el kit. | [diagrams/lightbox.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/lightbox.md) |
 | `<iswc-diagram-lightbox>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/diagram-lightbox.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/diagram-lightbox.md) |
 | `<iswc-class-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/class-diagram.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/class-diagram.md) |
 | `<iswc-state-diagram>` | Relaciones, flujos, estados, estructura o tiempo desde payloads declarativos. | [diagrams/state-diagram.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/state-diagram.md) |
@@ -535,6 +541,7 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-use-case-diagram>` | Cuando la pregunta es de alcance: qué puede hacer cada rol dentro de un | [diagrams/use-case-diagram.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/use-case-diagram.md) |
 | `<iswc-swimlane-diagram>` | Cuando el proceso cruza varias áreas y lo importante es quién hace cada | [diagrams/swimlane-diagram.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/swimlane-diagram.md) |
 | `<iswc-journey-map>` | Cuando además del orden hay una medida por paso: dónde se cae la | [diagrams/journey-map.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/journey-map.md) |
+| `<iswc-sequence-diagram>` | Diagrama de secuencia en SVG, sin Mermaid. | [diagrams/sequence-diagram.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/diagrams/sequence-diagram.md) |
 
 ### overlays
 
@@ -544,11 +551,29 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-pdf-viewer>` | Paleta de comandos, visor de documentos y ventanas flotantes. | [overlays/pdf-viewer.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/overlays/pdf-viewer.md) |
 | `<iswc-window>` | Paleta de comandos, visor de documentos y ventanas flotantes. | [overlays/window.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/overlays/window.md) |
 
+### files
+
+| Tag | Resumen | Guía |
+| --- | --- | --- |
+| `<iswc-txt-view>` | Vista de texto plano con src/content. | [files/txt-view.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/txt-view.md) |
+| `<iswc-txt-edit>` | Editor de texto con iswc-change. | [files/txt-edit.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/txt-edit.md) |
+| `<iswc-csv-view>` | Tabla CSV solo lectura. | [files/csv-view.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/csv-view.md) |
+| `<iswc-csv-edit>` | CSV editable + export. | [files/csv-edit.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/csv-edit.md) |
+| `<iswc-docx-view>` | DOCX view-only (mammoth CDN). | [files/docx-view.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/docx-view.md) |
+| `<iswc-pptx-view>` | PPTX view-only (JSZip / preview CDN). | [files/pptx-view.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/pptx-view.md) |
+| `<iswc-file-view>` | Shell view: despacha por MIME/nombre. | [files/file-view.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/file-view.md) |
+| `<iswc-file-edit>` | Shell edit: despacha por MIME/nombre. | [files/file-edit.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/files/file-edit.md) |
+
 ### preview
 
 | Tag | Resumen | Guía |
 | --- | --- | --- |
 | `<iswc-preview-component>` | Shell de la galería. | [layout/preview-component.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/preview-component.md) |
 | `<iswc-preview-controls>` | Panel de controles del playground. | [layout/preview-controls.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/preview-controls.md) |
+| `<iswc-doc-demo>` | Shell homogéneo de documentación/demo (barra, nav, preview, drawer). | [layout/doc-demo.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/doc-demo.md) |
+| `<iswc-playground>` | Playground homogeneo (stage + knobs) para galeria y apps. | [preview/playground.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/preview/playground.md) |
+| `<iswc-slots-pg>` | Playground de un componente con slots (estándar W11): dos tabs, atributos y slots, sobre el mismo ejemplo. | [preview/slots-pg.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/preview/slots-pg.md) |
+| `<iswc-examples-carousel>` | Estandar W15: cada playground debe incluir un carrusel de ejemplos predefinidos. | [preview/examples-carousel.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/preview/examples-carousel.md) |
+| `<iswc-demo-section>` | Sección de un demo de la galería (W32): el contenido va en una card; solo título y lede quedan a ancho completo. | — |
 
 <!-- catalogo:fin -->

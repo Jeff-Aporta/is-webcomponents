@@ -9,6 +9,7 @@
 
 import { spreadOrthogonalPaths } from './diagram-edge-spread.js';
 import { pathPoints as parsePathPoints } from './diagram-arrow.js';
+import { rectsOverlap } from './diagram-grid.js';
 import type { XYPoint, RectLike, LabeledEdge, PlaceEdgeActorsOpts, PlaceEdgeActorsResult, EdgeActorLayout } from "./diagram-edge-actors.schemas.js";
 
 export const EDGE_ACTOR_H = 16;
@@ -71,12 +72,8 @@ function densify(pts: readonly XYPoint[], step: number = 14): XYPoint[] {
   return out;
 }
 
-function overlap(a: RectLike, b: RectLike, padX = 4, padY = 6): boolean {
-  return a.x - padX < b.x + b.w
-    && a.x + a.w + padX > b.x
-    && a.y - padY < b.y + b.h
-    && a.y + a.h + padY > b.y;
-}
+/** Solape con el aire mínimo de las insignias (4 px a los lados, 6 arriba y abajo). */
+const overlap = (a: RectLike, b: RectLike, padX = 4, padY = 6): boolean => rectsOverlap(a, b, padX, padY);
 
 /** Empuja en Y hasta que ningún par de actores se pise. */
 function separateActors(placed: RectLike[], obstacles: readonly RectLike[], canvas: RectLike): void {

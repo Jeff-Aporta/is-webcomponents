@@ -1,4 +1,5 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
+import { aristasDeRetorno, claveArista } from '../_shared/diagram-graph.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
@@ -138,22 +139,8 @@ export function swimlaneSpecToJson(spec: SwimlaneResolvedSpec): Record<string, u
  * exactamente el error que este selfcheck pilló.
  */
 export function findBackEdges(steps: SwimlaneStepSpec[], links: SwimlaneLinkSpec[]): Set<string> {
-  const salidas = new Map<string, SwimlaneLinkSpec[]>(steps.map((s) => [s.id, []]));
-  for (const l of links) salidas.get(l.from)?.push(l);
-  const estado = new Map<string, number>(steps.map((s) => [s.id, 0])); // 0 nuevo · 1 en pila · 2 cerrado
-  const back = new Set<string>();
-
-  const visitar = (id: string): void => {
-    estado.set(id, 1);
-    for (const l of salidas.get(id) ?? []) {
-      const st = estado.get(l.to);
-      if (st === 1) back.add(l.id);
-      else if (st === 0) visitar(l.to);
-    }
-    estado.set(id, 2);
-  };
-  for (const s of steps) if (estado.get(s.id) === 0) visitar(s.id);
-  return back;
+  const atras = aristasDeRetorno(steps.map((s) => s.id), links);
+  return new Set(links.filter((l) => atras.has(claveArista(l))).map((l) => l.id));
 }
 
 /**

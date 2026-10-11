@@ -250,22 +250,7 @@ class IswcBlockDiagram extends DiagramElementBase {
       g.appendChild(halo);
       g.appendChild(path);
 
-      // La orientación sale del último tramo REAL del path: el ángulo del
-      // layout supone el lado de entrada planificado, que no siempre es por
-      // donde el A* acaba llegando.
-      // Cast: svgArrowHead tiene firma heredada con `any`; añadimos la clase
-      // CSS al resultado en vez de pasarla por el parámetro tipado a null.
-      const head = (svgArrowHead as unknown as (opts: {
-        d: string; tip: { x: number; y: number }; color: string;
-        len?: number; halfWidth?: number;
-      }) => SVGElement)({
-        d: e.path,
-        tip: { x: e.arrowTipX, y: e.arrowTipY },
-        color,
-        len: 9,
-        halfWidth: 4.5,
-      });
-      head.classList.add('block-edge__head');
+      const head = svgArrowHead({ d: e.path, tip: { x: e.arrowTipX, y: e.arrowTipY }, color, len: 9, halfWidth: 4.5, className: 'block-edge__head' });
       g.appendChild(head);
 
       if (e.label) {

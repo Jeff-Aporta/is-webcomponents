@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-operacion-cdn-docs.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "SDK y visor de documentación (/cdn, /docs)",
@@ -13,21 +14,25 @@
         {
           "id": "C",
           "label": "Navegador / SDK",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "K",
           "label": "ISS · TCdnController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "S",
           "label": "ISS · TSysValueController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "PostgreSQL",
+          "icon": "mdi:database",
           "kind": "participant"
         }
       ],
@@ -36,49 +41,175 @@
           "id": "m1",
           "from": "C",
           "to": "K",
-          "label": "GET /cdn/{file} (pública, sin sobre)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e1]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 1
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "K",
           "to": "K",
-          "label": "sin file: 400; front.ts: une front.ts y front.md (503 si no se ha generado)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=K]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 2
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "K",
-          "to": "C",
-          "label": "front.ts con su Content-Type · cualquier otro archivo: 404",
-          "kind": "reply",
-          "step": 3
+          "to": "K",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=K]": {
+                      "nodes": {
+                        "[id=front]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 3,
+          "stepLabel": "1.1"
         },
         {
           "id": "m4",
-          "from": "C",
-          "to": "S",
-          "label": "GET /docs (?v=json | md | routes)",
-          "kind": "sync",
-          "step": 4
+          "from": "K",
+          "to": "K",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=K]": {
+                      "nodes": {
+                        "[id=otro]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 4,
+          "stepLabel": "1.2"
         },
         {
           "id": "m5",
-          "from": "S",
-          "to": "P",
-          "label": "fila doc de patyia_sys_values (routes: ids SEG del registro)",
+          "from": "K",
+          "to": "S",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=S]": {
+                      "nodes": {
+                        "[id=doc]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 5
+          "step": 5,
+          "stepLabel": "1.3"
         },
         {
           "id": "m6",
           "from": "S",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e12]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 6,
+          "stepLabel": "1.3"
+        },
+        {
+          "id": "m7",
+          "from": "K",
           "to": "C",
-          "label": "html · json · md (503 si la fila no está)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=K]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 6
+          "step": 7,
+          "stepLabel": "2"
         }
       ],
       "fragments": [
@@ -87,22 +218,67 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m1",
-            "m2",
             "m3"
           ],
-          "condition": "GET /cdn/{file}"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
           "name": "else",
           "kind": "alt",
           "messages": [
-            "m4",
+            "m4"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e3]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f3",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
             "m5",
             "m6"
           ],
-          "condition": "GET /docs"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-operacion-cdn-docs.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e4]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

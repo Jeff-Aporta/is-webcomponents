@@ -51,6 +51,7 @@
 
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
+import { boundsOf } from '../_shared/diagram-grid.js';
 import { packDiagram, packRowGapKey, abrazarPaquetes, layoutPackageOutlines, outlineToPath, resolvePackingGaps, inflateTitleObstacle, EDGE_CLEARANCE, GRID_STEP, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
 import { routeEdges, pointsToPath, simplifyOrthoPath } from './component-router.js';
 import type { RouterEdge, RouterWorld } from './component-router.schemas.js';
@@ -600,17 +601,6 @@ export function enforceAssemblyEntityMargins(
   }
 }
 
-function boundsOfComps(comps: readonly Caja[]): Caja {
-  const x = Math.min(...comps.map((c) => c.x));
-  const y = Math.min(...comps.map((c) => c.y));
-  return {
-    x,
-    y,
-    w: Math.max(...comps.map((c) => c.x + c.w)) - x,
-    h: Math.max(...comps.map((c) => c.y + c.h)) - y,
-  };
-}
-
 /** Cara del rectángulo que mira al destino (o al origen). */
 function rankSides(from: Caja, to: Caja): Lado[] {
   const dx = (to.x + to.w / 2) - (from.x + from.w / 2);
@@ -1047,7 +1037,7 @@ function wireComponentDiagram(
     const sibs = comp.package
       ? components.filter((c) => c.package === comp.package)
       : [comp];
-    return sibs.length > 1 ? boundsOfComps(sibs) : { x: comp.x, y: comp.y, w: comp.w, h: comp.h };
+    return sibs.length > 1 ? boundsOf(sibs) : { x: comp.x, y: comp.y, w: comp.w, h: comp.h };
   };
 
   // W54: la heurística del brute-force ya estaba implementada (for fs / for

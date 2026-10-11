@@ -7,11 +7,9 @@
  */
 
 /** Redondea al múltiplo de 8px más cercano (misma rejilla que el resto de los diagramas). */
+import { snapDiagramGrid } from './diagram-grid.js';
+import { aristasDeRetorno, claveArista } from './diagram-graph.js';
 import type { GraphNode, GraphEdge, NodeRect, EdgeAnchorXY, PositionedNode, LayoutOpts, LayoutResult } from "./node-link-layout.schemas.js";
-function snap8(v: number): number {
-  return Math.round(v / 8) * 8;
-}
-
 /** Nodo de un grafo tipo node-link. Solo se necesitan id/w/h para `assignLayers`; el layout completo exige w/h. */
 
 /** Arista de un grafo tipo node-link. */
@@ -26,33 +24,13 @@ function snap8(v: number): number {
  */
 export function assignLayers(nodes: readonly GraphNode[], edges: readonly GraphEdge[]): Map<string, number> {
   const ids = new Set(nodes.map((n) => n.id));
-  const adj = new Map<string, string[]>();
-  for (const id of ids) adj.set(id, []);
-  for (const e of edges) {
-    if (!ids.has(e.from) || !ids.has(e.to)) continue;
-    adj.get(e.from)!.push(e.to);
-  }
-
-  // 1) Detectar y descartar back-edges vía DFS (WHITE/GRAY/BLACK).
-  const color = new Map<string, number>();
-  for (const id of ids) color.set(id, 0); // 0=blanco, 1=gris, 2=negro
+  // 1) Descartar los retornos (ciclos) con el detector común: queda un DAG.
+  const atras = aristasDeRetorno(nodes.map((n) => n.id), edges);
   const dagAdj = new Map<string, string[]>();
   for (const id of ids) dagAdj.set(id, []);
-
-  function dfs(u: string): void {
-    color.set(u, 1);
-    for (const v of adj.get(u)!) {
-      if (color.get(v) === 1) {
-        // back-edge (incluye self-loop): se descarta para el cálculo de capas
-        continue;
-      }
-      dagAdj.get(u)!.push(v);
-      if (color.get(v) === 0) dfs(v);
-    }
-    color.set(u, 2);
-  }
-  for (const id of ids) {
-    if (color.get(id) === 0) dfs(id);
+  for (const e of edges) {
+    if (!ids.has(e.from) || !ids.has(e.to) || atras.has(claveArista(e))) continue;
+    dagAdj.get(e.from)!.push(e.to);
   }
 
   // 2) Longest-path layering sobre el DAG (sin back-edges), iterativo.
@@ -182,14 +160,14 @@ export function edgeAnchor(node: NodeRect, side: 'top' | 'bottom' | 'left' | 'ri
   // en diagonal en vez de horizontal/vertical: el "torcido" que se ve en ER.
   switch (side) {
     case 'top':
-      return { x: snap8(node.x + node.w / 2), y: node.y };
+      return { x: snapDiagramGrid(node.x + node.w / 2), y: node.y };
     case 'bottom':
-      return { x: snap8(node.x + node.w / 2), y: node.y + node.h };
+      return { x: snapDiagramGrid(node.x + node.w / 2), y: node.y + node.h };
     case 'left':
-      return { x: node.x, y: snap8(node.y + node.h / 2) };
+      return { x: node.x, y: snapDiagramGrid(node.y + node.h / 2) };
     case 'right':
     default:
-      return { x: node.x + node.w, y: snap8(node.y + node.h / 2) };
+      return { x: node.x + node.w, y: snapDiagramGrid(node.y + node.h / 2) };
   }
 }
 
@@ -329,8 +307,8 @@ export function layoutNodeLink(nodes: readonly GraphNode[], edges: readonly Grap
 
   // Snap a rejilla de 8px.
   for (const n of outNodes) {
-    n.x = snap8(n.x);
-    n.y = snap8(n.y);
+    n.x = snapDiagramGrid(n.x);
+    n.y = snapDiagramGrid(n.y);
   }
 
   let width = 0;

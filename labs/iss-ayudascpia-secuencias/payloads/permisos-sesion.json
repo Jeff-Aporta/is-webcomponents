@@ -6,6 +6,7 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-permisos-sesion.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
       "title": "Permisos de la sesión (/permisos)",
@@ -13,16 +14,19 @@
         {
           "id": "C",
           "label": "Portal / ISW",
+          "icon": "mdi:monitor-cellphone",
           "kind": "participant"
         },
         {
           "id": "P",
           "label": "ISS · TPermissionsController",
+          "icon": "mdi:server",
           "kind": "participant"
         },
         {
           "id": "D",
           "label": "PostgreSQL · seg_*",
+          "icon": "mdi:database",
           "kind": "participant"
         }
       ],
@@ -31,65 +35,257 @@
           "id": "m1",
           "from": "C",
           "to": "P",
-          "label": "GET|POST /permisos (body opcional { irol })",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 1
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
           "from": "P",
           "to": "P",
-          "label": "verifica el JWT",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=jwt]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "step": 2
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
           "from": "P",
-          "to": "C",
-          "label": "{ irol: USR, perms: {} } · con irol pedido: 401",
-          "kind": "reply",
-          "step": 3
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 3,
+          "stepLabel": "2"
         },
         {
           "id": "m4",
           "from": "P",
-          "to": "D",
-          "label": "dueño del grupo PATYIA (seg_grupos, caché 90 s)",
-          "kind": "sync",
-          "step": 4
+          "to": "C",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=anon]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 4,
+          "stepLabel": "2.1"
         },
         {
           "id": "m5",
           "from": "P",
           "to": "D",
-          "label": "rol vigente del contacto (seg_rolescontacto)",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=owner]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "step": 5
+          "step": 5,
+          "stepLabel": "2.2"
         },
         {
           "id": "m6",
           "from": "P",
-          "to": "P",
-          "label": "irol pedido: exige capacidad auditoría (401) y que el rol exista (400)",
-          "kind": "self",
-          "step": 6
+          "to": "D",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=rol]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 6,
+          "stepLabel": "2.3"
         },
         {
           "id": "m7",
           "from": "P",
-          "to": "D",
-          "label": "filas de USR y del rol (seg_accionesxrol)",
-          "kind": "sync",
-          "step": 7
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=d2]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 7,
+          "stepLabel": "2.4"
         },
         {
           "id": "m8",
           "from": "P",
+          "to": "D",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=sw]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 8,
+          "stepLabel": "2.4.1"
+        },
+        {
+          "id": "m9",
+          "from": "P",
+          "to": "D",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=perms]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 9,
+          "stepLabel": "2.5"
+        },
+        {
+          "id": "m10",
+          "from": "P",
           "to": "C",
-          "label": "{ irol, perms, roles, roleSwitch, username }",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=P]": {
+                      "nodes": {
+                        "[id=ok]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "step": 8
+          "step": 10,
+          "stepLabel": "2.6"
         }
       ],
       "fragments": [
@@ -98,22 +294,71 @@
           "name": "alt",
           "kind": "alt",
           "messages": [
-            "m3"
+            "m4"
           ],
-          "condition": "sin token, inválido o vencido"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         },
         {
           "id": "f2",
           "name": "else",
           "kind": "alt",
           "messages": [
-            "m4",
             "m5",
             "m6",
             "m7",
+            "m8",
+            "m9",
+            "m10"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e6]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f3",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
             "m8"
           ],
-          "condition": "token válido"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-permisos-sesion.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e11]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

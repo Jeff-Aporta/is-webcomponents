@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 /**
  * Cache de texto por ruta+hash. IndexedDB guarda el cuerpo; localStorage
  * recuerda el mapa para borrar entradas cuando un archivo cambia.

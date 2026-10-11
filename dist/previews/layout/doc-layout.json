@@ -1,0 +1,73 @@
+{
+  "$schema": "iswc-preview/v1",
+  "tag": "iswc-doc-layout",
+  "category": "layout",
+  "title": "&lt;iswc-doc-layout&gt;",
+  "titleHtml": false,
+  "description": "Layout documental: navegación, contenido e índice de la página con scroll-spy; responsive y redimensionable.",
+  "storageKey": "docs-iswc-doc-layout",
+  "loads": [
+    "iswc-split-panel"
+  ],
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Uso",
+      "lede": "La app pone la navegación (<code class=\"code\">slot=\"start\"</code>) y el contenido; el índice de la página lo arma el layout con los encabezados.",
+      "blocks": [
+        {
+          "kind": "demo",
+          "html": [
+            "<iswc-doc-layout storage-key=\"demo-doc-layout\" toc-title=\"En esta página\" style=\"height: 420px\">",
+            "  <strong slot=\"brand\">Guía</strong>",
+            "  <nav slot=\"start\" style=\"padding: 12px; display: grid; gap: 6px\"><a href=\"#instalar\">Instalar</a><a href=\"#usar\">Usar</a><a href=\"#publicar\">Publicar</a></nav>",
+            "  <article style=\"padding: 16px 24px\">",
+            "    <h2 id=\"instalar\">Instalar</h2><p>Agregue el loader del kit y pida los tags que use.</p><p style=\"height: 160px\"></p>",
+            "    <h2 id=\"usar\">Usar</h2><p>Cada zona del layout es un slot.</p><p style=\"height: 160px\"></p>",
+            "    <h2 id=\"publicar\">Publicar</h2><p>Se sirve como sitio estático.</p><p style=\"height: 160px\"></p>",
+            "  </article>",
+            "</iswc-doc-layout>"
+          ],
+          "controls": [
+            {
+              "control": "select",
+              "prop": "attr:toc",
+              "label": "toc",
+              "options": [
+                "auto",
+                "off"
+              ]
+            },
+            {
+              "control": "text",
+              "prop": "attr:toc-title",
+              "label": "toc-title"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:no-bar",
+              "label": "no-bar"
+            },
+            {
+              "control": "boolean",
+              "prop": "attr:hide-start",
+              "label": "hide-start"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ficha": {
+    "sections": {
+      "ejemplos": {
+        "content": [
+          "```js",
+          "layout.addEventListener('iswc-doc-layout-navigate', (e) => { e.preventDefault(); layout.scrollToHeading(e.detail.id); });",
+          "```"
+        ]
+      }
+    },
+    "exclude": []
+  }
+}

@@ -6,175 +6,323 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-seguridad-portal-login.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
-      "title": "ISS PatyIA · Login del portal (POST /auth/portal-login)",
+      "title": "Login del portal (POST /auth/portal-login)",
       "actors": [
         {
-          "id": "p",
+          "id": "P",
           "label": "Portal / ISW",
-          "kind": "actor",
-          "icon": "mdi:monitor-dashboard"
+          "icon": "mdi:monitor-cellphone",
+          "kind": "participant"
         },
         {
-          "id": "i",
+          "id": "I",
           "label": "ISS · TIdentityController",
-          "kind": "participant",
-          "icon": "mdi:shield-key"
+          "icon": "mdi:server",
+          "kind": "participant"
         },
         {
-          "id": "d",
-          "label": "DataSnap DSCLIENTES",
-          "kind": "participant",
-          "icon": "mdi:server-network"
+          "id": "X_ds",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/componentes.json",
+            "query": {
+              "payload": {
+                "componentDiagram": {
+                  "components": {
+                    "[id=ds-login]": {
+                      "name": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "icon": "mdi:cloud-outline",
+          "kind": "participant"
         }
       ],
-      "groups": [
+      "messages": [
         {
-          "id": "g-http",
-          "name": "Petición y respuesta",
-          "color": "stream",
-          "icon": "mdi:swap-horizontal"
+          "id": "m1",
+          "from": "P",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 1,
+          "stepLabel": ""
         },
         {
-          "id": "g-ds",
-          "name": "Consulta a DataSnap",
-          "color": "data",
-          "icon": "mdi:server-network"
+          "id": "m2",
+          "from": "I",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=norm]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 2,
+          "stepLabel": "1"
         },
         {
-          "id": "g-jwt",
-          "name": "Normalización y firma",
-          "color": "auth",
-          "icon": "mdi:key-variant"
+          "id": "m3",
+          "from": "I",
+          "to": "X_ds",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=existe]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 3,
+          "stepLabel": "2"
         },
         {
-          "id": "g-err",
-          "name": "Salida de error",
-          "color": "error",
-          "icon": "mdi:alert-circle-outline"
+          "id": "m4",
+          "from": "I",
+          "to": "X_ds",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=empresas]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 4,
+          "stepLabel": "3"
+        },
+        {
+          "id": "m5",
+          "from": "I",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 5,
+          "stepLabel": "4"
+        },
+        {
+          "id": "m6",
+          "from": "I",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=multi]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 6,
+          "stepLabel": "4.1"
+        },
+        {
+          "id": "m7",
+          "from": "I",
+          "to": "X_ds",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=valida]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "sync",
+          "step": 7,
+          "stepLabel": "4.2"
+        },
+        {
+          "id": "m8",
+          "from": "I",
+          "to": "I",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=firma]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 8,
+          "stepLabel": "4.3"
+        },
+        {
+          "id": "m9",
+          "from": "I",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=I]": {
+                      "nodes": {
+                        "[id=entrega]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 9,
+          "stepLabel": "4.4"
         }
       ],
       "fragments": [
         {
-          "id": "f-contacto",
-          "kind": "region",
-          "name": "contacto y empresas",
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
           "messages": [
-            "m3",
-            "m4",
-            "m5",
             "m6"
           ],
-          "condition": "se consulta DataSnap antes de validar credenciales"
-        }
-      ],
-      "preamble": [
-        {
-          "id": "m1",
-          "from": "p",
-          "to": "i",
-          "label": "inicia sesión con correo y contraseña (y empresa, si la eligió)",
-          "kind": "sync",
-          "group": "g-http"
-        },
-        {
-          "id": "m2",
-          "from": "i",
-          "to": "i",
-          "label": "normaliza el correo (sin @ → @contapyme.com) y cifra la contraseña (MD5)",
-          "kind": "self",
-          "group": "g-jwt"
-        },
-        {
-          "id": "m3",
-          "from": "i",
-          "to": "d",
-          "label": "¿existe el contacto y tiene acceso web?",
-          "kind": "sync",
-          "group": "g-ds"
-        },
-        {
-          "id": "m4",
-          "from": "d",
-          "to": "i",
-          "label": "existe · acceso web",
-          "kind": "reply",
-          "group": "g-ds"
-        },
-        {
-          "id": "m5",
-          "from": "i",
-          "to": "d",
-          "label": "¿a qué empresas pertenece el contacto?",
-          "kind": "sync",
-          "group": "g-ds"
-        },
-        {
-          "id": "m6",
-          "from": "d",
-          "to": "i",
-          "label": "empresas del contacto",
-          "kind": "reply",
-          "group": "g-ds"
-        }
-      ],
-      "alt": {
-        "name": "según las empresas del contacto",
-        "branches": [
-          {
-            "condition": "varias empresas y sin itercero",
-            "messages": [
-              {
-                "id": "m7",
-                "from": "i",
-                "to": "p",
-                "label": "409 MULTI_EMPRESA · lista de empresas para que el portal pregunte y reintente",
-                "kind": "reply",
-                "group": "g-err"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e9]": {
+                      "label": true
+                    }
+                  }
+                }
               }
-            ]
-          },
-          {
-            "condition": "una empresa o itercero elegido",
-            "messages": [
-              {
-                "id": "m8",
-                "from": "i",
-                "to": "d",
-                "label": "valida las credenciales (LogInContacto)",
-                "kind": "sync",
-                "group": "g-ds"
-              },
-              {
-                "id": "m9",
-                "from": "d",
-                "to": "i",
-                "label": "llave de sesión e identidad (controlKey, empresa, contacto, nombres)",
-                "kind": "reply",
-                "group": "g-ds"
-              },
-              {
-                "id": "m10",
-                "from": "i",
-                "to": "i",
-                "label": "firma el token (HS384, 24 h)",
-                "kind": "self",
-                "group": "g-jwt"
-              },
-              {
-                "id": "m11",
-                "from": "i",
-                "to": "p",
-                "label": "entrega el token con usuario, nombre, vencimiento y claims",
-                "kind": "reply",
-                "group": "g-http"
-              }
-            ]
+            }
           }
-        ]
-      },
-      "epilogue": []
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m7",
+            "m8",
+            "m9"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-portal-login.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e10]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

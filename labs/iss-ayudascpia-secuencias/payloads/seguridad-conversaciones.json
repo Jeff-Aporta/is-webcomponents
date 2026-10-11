@@ -6,197 +6,555 @@
   "attrs": {
     "diagram-style": "insoft"
   },
+  "_fuente": "Derivado de ruta-seguridad-conversaciones.json por docs-experimental/gen/tools/seq-de-vec.mjs. No editar a mano: se edita el vector.",
   "payload": {
     "sequence": {
-      "title": "ISS PatyIA · Acceso a una conversación",
+      "title": "Acceso a una conversación",
       "actors": [
         {
-          "id": "c",
-          "label": "Cliente (token)",
-          "kind": "actor",
-          "icon": "mdi:account"
+          "id": "P",
+          "label": "Portal",
+          "icon": "mdi:monitor-cellphone",
+          "kind": "participant"
         },
         {
-          "id": "w",
-          "label": "makeDispatchHandler",
-          "kind": "participant",
-          "icon": "mdi:api"
+          "id": "T",
+          "label": "ISS · TConversacionController",
+          "icon": "mdi:server",
+          "kind": "participant"
         },
         {
-          "id": "b",
-          "label": "TBasePatyIA",
-          "kind": "participant",
-          "icon": "mdi:shield-key"
-        },
-        {
-          "id": "k",
-          "label": "controller de conversaciones",
-          "kind": "participant",
-          "icon": "mdi:cog-outline"
-        },
-        {
-          "id": "pg",
-          "label": "patyia_conversaciones",
-          "kind": "participant",
-          "icon": "mdi:database"
-        }
-      ],
-      "groups": [
-        {
-          "id": "g-http",
-          "name": "Petición y respuesta",
-          "color": "stream",
-          "icon": "mdi:swap-horizontal"
-        },
-        {
-          "id": "g-auth",
-          "name": "Token y SEG (si aplica)",
-          "color": "auth",
-          "icon": "mdi:shield-key"
-        },
-        {
-          "id": "g-own",
-          "name": "Decisión por dueño",
-          "color": "data",
-          "icon": "mdi:account-search"
-        },
-        {
-          "id": "g-db",
-          "name": "Lectura de la conversación",
-          "color": "data",
-          "icon": "mdi:database"
-        }
-      ],
-      "fragments": [
-        {
-          "id": "f-token",
-          "kind": "region",
-          "name": "puerta SEG: USR { protected: true }, solo JWT",
-          "messages": [
-            "m2"
-          ],
-          "condition": "POST /conversacion, GET /conversacion/{iconversacion}, etc. — la decisión la hace el dueño"
-        },
-        {
-          "id": "f-seg",
-          "kind": "region",
-          "name": "capacidad: valor efectivo en true",
-          "messages": [
-            "m3",
-            "m4"
-          ],
-          "condition": "QUERY:/conversaciones (auditoría) o GET:/conversacion/{iconversacion}/logs (historial ajeno)"
+          "id": "D",
+          "label": "PostgreSQL",
+          "icon": "mdi:database",
+          "kind": "participant"
         }
       ],
       "messages": [
         {
           "id": "m1",
-          "from": "c",
-          "to": "w",
-          "label": "pide una ruta de conversación con su token",
+          "from": "P",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e2]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "group": "g-http"
+          "step": 1,
+          "stepLabel": ""
         },
         {
           "id": "m2",
-          "from": "w",
-          "to": "b",
-          "label": "autorizarRuta(): verifica JWT (HS384); el valor { protected: true } exige token y pasa",
+          "from": "T",
+          "to": "D",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=lee]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "sync",
-          "group": "g-auth"
+          "step": 2,
+          "stepLabel": "1"
         },
         {
           "id": "m3",
-          "from": "w",
-          "to": "b",
-          "label": "para una capacidad: resuelve el rol del contacto en seg_rolescontacto",
-          "kind": "sync",
-          "group": "g-auth"
+          "from": "T",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d1]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 3,
+          "stepLabel": "2"
         },
         {
           "id": "m4",
-          "from": "b",
-          "to": "b",
-          "label": "valor efectivo de la capacidad (rol, si no USR); solo true la concede",
-          "kind": "self",
-          "group": "g-auth"
+          "from": "T",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=n404]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 4,
+          "stepLabel": "2.1"
         },
         {
           "id": "m5",
-          "from": "b",
-          "to": "k",
-          "label": "entrega el controller con el contexto resuelto",
-          "kind": "sync",
-          "group": "g-http"
+          "from": "T",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d2]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 5,
+          "stepLabel": "2.2"
         },
         {
           "id": "m6",
-          "from": "k",
-          "to": "pg",
-          "label": "lee la conversación (iconversacion de la ruta)",
-          "kind": "sync",
-          "group": "g-db"
+          "from": "T",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=duenio]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 6,
+          "stepLabel": "2.2.1"
         },
         {
           "id": "m7",
-          "from": "pg",
-          "to": "k",
-          "label": "fila: itercero, icontacto, itdestado, bautoriza_visualizacion",
-          "kind": "reply",
-          "group": "g-db"
+          "from": "T",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d3]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "self",
+          "step": 7,
+          "stepLabel": "2.2.2"
         },
         {
           "id": "m8",
-          "from": "k",
-          "to": "k",
-          "label": "dueño estricto: itercero e icontacto del token coinciden con la fila → sí",
-          "kind": "self",
-          "group": "g-own"
+          "from": "T",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=u401]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "kind": "reply",
+          "step": 8,
+          "stepLabel": "2.2.2.1"
         },
         {
           "id": "m9",
-          "from": "k",
-          "to": "k",
-          "label": "mismo tercero: itercero coincide y bautoriza_visualizacion = true → sí (lectura, calificar)",
+          "from": "T",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d4]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "group": "g-own"
+          "step": 9,
+          "stepLabel": "2.2.2.2"
         },
         {
           "id": "m10",
-          "from": "k",
-          "to": "k",
-          "label": "auditoría: QUERY:/conversaciones = true, o GET:/conversacion/{iconversacion}/logs = true para el historial, → sí (lectura, tiquete sin efectos)",
+          "from": "T",
+          "to": "T",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=d5]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "self",
-          "group": "g-own"
+          "step": 10,
+          "stepLabel": "2.2.2.2.1"
         },
         {
           "id": "m11",
-          "from": "k",
-          "to": "c",
-          "label": "si ninguna rama aplica → 401; si el estado es 2 (eliminada) → 404; si es 1 (cerrada) → reglas propias de cada ruta",
+          "from": "T",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=u401b]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "group": "g-http"
+          "step": 11,
+          "stepLabel": "2.2.2.2.1.1"
         },
         {
           "id": "m12",
-          "from": "k",
-          "to": "c",
-          "label": "caso dueño estricto: responde 200 con detalle, historial, cierre o continuación según la operación",
+          "from": "T",
+          "to": "P",
+          "label": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "columns": {
+                    "[id=T]": {
+                      "nodes": {
+                        "[id=lectura]": {
+                          "label": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "kind": "reply",
-          "group": "g-http"
+          "step": 12,
+          "stepLabel": "2.2.2.3"
         }
       ],
-      "epilogue": [],
-      "boxes": [
+      "fragments": [
         {
-          "id": "iss",
-          "name": "ISS PatyIA",
-          "actors": [
-            "w",
-            "b",
-            "k"
+          "id": "f1",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m4"
           ],
-          "color": "primary"
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e5]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f2",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m5",
+            "m6",
+            "m7",
+            "m8",
+            "m9",
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e6]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f3",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m6"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e7]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f4",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m7",
+            "m8",
+            "m9",
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e8]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f5",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m8"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e9]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f6",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m9",
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e10]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f7",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m10",
+            "m11",
+            "m12"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e12]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f8",
+          "name": "alt",
+          "kind": "alt",
+          "messages": [
+            "m11"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e14]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "f9",
+          "name": "else",
+          "kind": "alt",
+          "messages": [
+            "m12"
+          ],
+          "condition": {
+            "path": "../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/ruta-seguridad-conversaciones.json",
+            "query": {
+              "payload": {
+                "vectorFlow": {
+                  "edges": {
+                    "[id=e13]": {
+                      "label": true
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     }

@@ -5,14 +5,10 @@
  * Sin dependencias externas: se puede testear con Node puro.
  */
 
+import { snapDiagramGrid } from './diagram-grid.js';
 import type { TimeScale, TickUnit, TimeTick, LaneItem, PackedLaneItem, PackLanesOpts, LayoutLanesOpts, PositionedLaneItem, LayoutLane, LayoutLanesResult } from "./lane-layout.schemas.js";
 const HOUR_MS = 3600000;
 const DAY_MS = 86400000;
-
-/** Redondea al múltiplo de 8px más cercano (misma rejilla que node-link-layout). */
-function snap8(v: number): number {
-  return Math.round(v / 8) * 8;
-}
 
 /**
  * Convierte un valor de fecha a epoch ms. Acepta `YYYY-MM-DD`,
@@ -201,7 +197,7 @@ export function layoutLanes(items: readonly LaneItem[], opts: LayoutLanesOpts = 
 
   // Un único snap sobre el paso de carril evita que el redondeo por-fila
   // acumule error hasta solapar filas consecutivas.
-  const rowStep = Math.max(8, snap8(rowH + rowGap));
+  const rowStep = Math.max(8, snapDiagramGrid(rowH + rowGap));
 
   const laneKeys: number[] = [];
   const laneLabel = new Map<number, string>();
@@ -221,9 +217,9 @@ export function layoutLanes(items: readonly LaneItem[], opts: LayoutLanesOpts = 
     const x1 = scale(it.end ?? it.start);
     return {
       id: it.id,
-      x: snap8(x0),
+      x: snapDiagramGrid(x0),
       y: laneY.get(it.lane)!,
-      w: Math.max(8, snap8(x1 - x0)),
+      w: Math.max(8, snapDiagramGrid(x1 - x0)),
       h: rowH,
       lane: it.lane,
     };

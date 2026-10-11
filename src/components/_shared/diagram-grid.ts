@@ -11,6 +11,23 @@ export function snapDiagramGrid(value: number, grid: number = TK_DIAGRAM_GRID): 
   return Math.round(value / grid) * grid;
 }
 
+/** Sube al múltiplo de `grid` (8 px por defecto): tamaños que deben caber enteros en la rejilla. */
+export function ceilDiagramGrid(value: number, grid: number = TK_DIAGRAM_GRID): number {
+  return Math.ceil(value / grid) * grid;
+}
+
+/** ¿Dos rectángulos se tocan? `padX`/`padY` ensanchan `a` (aire mínimo exigido entre ambos). */
+export function rectsOverlap(a: GridRect, b: GridRect, padX: number = 0, padY: number = 0): boolean {
+  return a.x - padX < b.x + b.w && a.x + a.w + padX > b.x && a.y - padY < b.y + b.h && a.y + a.h + padY > b.y;
+}
+
+/** Caja envolvente de varios rectángulos (al menos uno). */
+export function boundsOf(items: readonly GridRect[]): GridRect {
+  const x = Math.min(...items.map((c) => c.x));
+  const y = Math.min(...items.map((c) => c.y));
+  return { x, y, w: Math.max(...items.map((c) => c.x + c.w)) - x, h: Math.max(...items.map((c) => c.y + c.h)) - y };
+}
+
 export function diagramLabelWidth(text: string, min: number = 120, max: number = 320): number {
   const plain = stripIconTokensPlain(text);
   const icons = countIconTokens(text);
@@ -214,10 +231,6 @@ export function readExclusionZones(raw: unknown): ExclusionZone[] {
       };
     })
     .filter((z) => z.w > 0 && z.h > 0);
-}
-
-function rectsOverlap(a: GridRect, b: GridRect): boolean {
-  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 }
 
 /**
