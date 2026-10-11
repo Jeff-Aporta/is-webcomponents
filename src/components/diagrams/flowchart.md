@@ -163,7 +163,9 @@ Documentación de cabecera preservada desde fuente:
 - `shape: "start"`: círculo relleno. `shape: "end"`: anillo con punto (bullseye). Funcionan también en el estilo clásico.
 - Decisión (`shape: "diamond"`): el texto (hasta 180 px por línea) se mide en un rect inscrito en el rombo. El rombo nunca queda aplanado: su alto es al menos la mitad de su ancho (vértices laterales de unos 53°).
 - Un tono por símbolo (`flow.hueRotate` del tema): cada acción y decisión rota el tono del relleno base en OKLCH por el ángulo áureo, con la misma luminosidad y croma.
-- `shape: "bar"`: barra de sincronización (bifurcación / unión de flujos paralelos). Cruza el flujo: horizontal si baja, vertical si avanza a la derecha; cada rama sale o llega a la altura de su nodo.
+- `shape: "bar"`: barra de sincronización (bifurcación de flujos paralelos). Cruza el flujo: horizontal si baja, vertical si avanza a la derecha; la arista que la inicia llega centrada y cada rama sale a la altura de su nodo. Una barra que REÚNE ramas (2+ entradas, una salida) se dibuja como ⦿ con pulso de radar.
+- Arista: `color` (riel, punta y puntos animados) y `dots: { color, size }` para personalizar los puntos del riel continuo (por defecto, el color y el ancho de la arista). Ninguna arista se corta a sí misma.
+- Puente `-(O=` (`shape: "bridge"`, `op: C|R|U|D`): bola con el ícono de su operación SQL y el color de su método HTTP (SELECT azul, INSERT verde, UPDATE naranja, DELETE rojo); su `label` es la función del controller (`get()`, `list()`…).
 - Layout TB con columna principal recta; las ramas salen por el vértice lateral del rombo y bajan a la cara superior del destino; flechas finas de punta abierta; etiquetas (`sí`/`no`) junto al arranque de la arista, sin taparla.
 - Los colores del bloque `flow` del tema son nombres de token (`cluster.palettes`, `fills`, `lines`) o colores literales. Oscuro: `primary` = `#3A8FB5` con texto `#0B1220`.
 - Sin `diagram-style` el flowchart se ve como siempre.

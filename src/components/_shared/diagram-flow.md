@@ -5,7 +5,7 @@ Estándar de **todos** los diagramas del kit: cada riel muestra hacia dónde va 
 | Riel | Efecto |
 |---|---|
 | Punteado | el patrón de trazos avanza (`stroke-dashoffset`, SMIL) |
-| Continuo | DETRÁS del riel, una línea de puntos celeste (`#7ACFF4`) más gruesa (+3 px) cada 100 px que avanza a 60 px/s; late en alfa (pulso de 3 s) |
+| Continuo | DETRÁS del riel, una línea de puntos del color de la arista (o `dots.color`), más gruesa (+3 px, o `dots.size` de diámetro) cada 100 px, que avanza a 120 px/s; late en alfa (pulso de 3 s) |
 | O y ⦿ | cada bola `-(O-`, `-(O=` y cada fin ⦿ emite un pulso de radar cada 3 s (`pulsoRadar`), detrás de la figura |
 
 Es animación SVG nativa: viaja con el SVG exportado. Se apaga con `prefers-reduced-motion` o con
