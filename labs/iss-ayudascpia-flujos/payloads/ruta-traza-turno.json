@@ -141,7 +141,7 @@
             },
             {
               "id": "dueno-TConversationLogController-C",
-              "label": "insertar()",
+              "label": "persistir()",
               "shape": "bridge",
               "of": "dueno-TConversationLogController",
               "op": "C"

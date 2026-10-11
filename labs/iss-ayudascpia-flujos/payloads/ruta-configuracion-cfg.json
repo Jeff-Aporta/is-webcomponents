@@ -164,14 +164,14 @@
             },
             {
               "id": "ctl-R",
-              "label": "leer()",
+              "label": "get()",
               "shape": "bridge",
               "of": "ctl",
               "op": "R"
             },
             {
               "id": "ctl-U",
-              "label": "actualizar()",
+              "label": "update()",
               "shape": "bridge",
               "of": "ctl",
               "op": "U"

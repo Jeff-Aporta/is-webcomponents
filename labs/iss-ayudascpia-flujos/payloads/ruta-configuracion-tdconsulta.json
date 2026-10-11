@@ -156,21 +156,21 @@
             },
             {
               "id": "ctl-R",
-              "label": "leer()",
+              "label": "find() · exists()",
               "shape": "bridge",
               "of": "ctl",
               "op": "R"
             },
             {
               "id": "ctl-C",
-              "label": "insertar()",
+              "label": "insert()",
               "shape": "bridge",
               "of": "ctl",
               "op": "C"
             },
             {
               "id": "ctl-U",
-              "label": "actualizar()",
+              "label": "update()",
               "shape": "bridge",
               "of": "ctl",
               "op": "U"

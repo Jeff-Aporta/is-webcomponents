@@ -164,21 +164,21 @@
             },
             {
               "id": "ctl-C",
-              "label": "insertar()",
+              "label": "registrar()",
               "shape": "bridge",
               "of": "ctl",
               "op": "C"
             },
             {
               "id": "ctl-R",
-              "label": "leer()",
+              "label": "listSimple()",
               "shape": "bridge",
               "of": "ctl",
               "op": "R"
             },
             {
               "id": "ctl-D",
-              "label": "borrar()",
+              "label": "deleteBatch()",
               "shape": "bridge",
               "of": "ctl",
               "op": "D"

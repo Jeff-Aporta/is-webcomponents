@@ -193,28 +193,28 @@
             },
             {
               "id": "dueno-TConversacionController-R",
-              "label": "leer()",
+              "label": "insertPortal()",
               "shape": "bridge",
               "of": "dueno-TConversacionController",
               "op": "R"
             },
             {
               "id": "ctl-C",
-              "label": "insertar()",
+              "label": "insert()",
               "shape": "bridge",
               "of": "ctl",
               "op": "C"
             },
             {
               "id": "dueno-TConversacionController-C",
-              "label": "insertar()",
+              "label": "insert()",
               "shape": "bridge",
               "of": "dueno-TConversacionController",
               "op": "C"
             },
             {
               "id": "dueno-TConversacionController-U",
-              "label": "actualizar()",
+              "label": "insertPortal()",
               "shape": "bridge",
               "of": "dueno-TConversacionController",
               "op": "U"

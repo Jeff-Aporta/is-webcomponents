@@ -213,7 +213,7 @@
             },
             {
               "id": "dueno-TConversacionController-R",
-              "label": "leer()",
+              "label": "verifyInsert()",
               "shape": "bridge",
               "of": "dueno-TConversacionController",
               "op": "R"
@@ -235,21 +235,21 @@
             },
             {
               "id": "dueno-TConversationLogController-R",
-              "label": "leer()",
+              "label": "leerLog()",
               "shape": "bridge",
               "of": "dueno-TConversationLogController",
               "op": "R"
             },
             {
               "id": "ctl-C",
-              "label": "insertar()",
+              "label": "insert()",
               "shape": "bridge",
               "of": "ctl",
               "op": "C"
             },
             {
               "id": "dueno-TConversacionController-C",
-              "label": "insertar()",
+              "label": "insert()",
               "shape": "bridge",
               "of": "dueno-TConversacionController",
               "op": "C"

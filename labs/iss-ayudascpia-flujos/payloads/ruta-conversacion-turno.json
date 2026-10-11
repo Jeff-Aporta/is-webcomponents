@@ -459,14 +459,14 @@
             },
             {
               "id": "ctl-U",
-              "label": "actualizar()",
+              "label": "insertPortal() · asegurarHiloOpenAI()",
               "shape": "bridge",
               "of": "ctl",
               "op": "U"
             },
             {
               "id": "ctl-C",
-              "label": "insertar()",
+              "label": "insertPortal()",
               "shape": "bridge",
               "of": "ctl",
               "op": "C"
@@ -488,7 +488,7 @@
             },
             {
               "id": "dueno-TProviderController-R",
-              "label": "leer()",
+              "label": "lookUp()",
               "shape": "bridge",
               "of": "dueno-TProviderController",
               "op": "R"
@@ -510,7 +510,7 @@
             },
             {
               "id": "dueno-TSysValueController-R",
-              "label": "leer()",
+              "label": "get()",
               "shape": "bridge",
               "of": "dueno-TSysValueController",
               "op": "R"
@@ -532,7 +532,7 @@
             },
             {
               "id": "dueno-TConsultaController-C",
-              "label": "insertar()",
+              "label": "insert()",
               "shape": "bridge",
               "of": "dueno-TConsultaController",
               "op": "C"
@@ -554,7 +554,7 @@
             },
             {
               "id": "dueno-TConversationLogController-C",
-              "label": "insertar()",
+              "label": "persistir()",
               "shape": "bridge",
               "of": "dueno-TConversationLogController",
               "op": "C"

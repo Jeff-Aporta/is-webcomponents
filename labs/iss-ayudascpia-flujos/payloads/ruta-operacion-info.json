@@ -189,7 +189,7 @@
             },
             {
               "id": "dueno-TErrorController-R",
-              "label": "leer()",
+              "label": "rowsByCriteria()",
               "shape": "bridge",
               "of": "dueno-TErrorController",
               "op": "R"
@@ -211,7 +211,7 @@
             },
             {
               "id": "dueno-TSysValueController-R",
-              "label": "leer()",
+              "label": "filaCrudaPorPk()",
               "shape": "bridge",
               "of": "dueno-TSysValueController",
               "op": "R"

@@ -188,7 +188,7 @@
             },
             {
               "id": "ctl-R",
-              "label": "leer()",
+              "label": "leerConversacion()",
               "shape": "bridge",
               "of": "ctl",
               "op": "R"

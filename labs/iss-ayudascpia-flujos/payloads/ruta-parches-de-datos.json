@@ -165,7 +165,7 @@
             },
             {
               "id": "dueno-TErrorController-C",
-              "label": "insertar()",
+              "label": "registrar()",
               "shape": "bridge",
               "of": "dueno-TErrorController",
               "op": "C"

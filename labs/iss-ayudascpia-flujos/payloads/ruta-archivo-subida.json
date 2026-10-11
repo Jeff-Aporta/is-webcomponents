@@ -236,7 +236,7 @@
             },
             {
               "id": "ctl-C",
-              "label": "insertar()",
+              "label": "upload()",
               "shape": "bridge",
               "of": "ctl",
               "op": "C"

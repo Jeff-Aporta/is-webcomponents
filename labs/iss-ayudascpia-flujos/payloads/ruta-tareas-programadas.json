@@ -140,7 +140,7 @@
             },
             {
               "id": "cconv-U",
-              "label": "actualizar()",
+              "label": "timerCerrarConversaciones()",
               "shape": "bridge",
               "of": "cconv",
               "op": "U"
@@ -162,14 +162,14 @@
             },
             {
               "id": "dueno-TSysValueController-R",
-              "label": "leer()",
+              "label": "get()",
               "shape": "bridge",
               "of": "dueno-TSysValueController",
               "op": "R"
             },
             {
               "id": "clog-D",
-              "label": "borrar()",
+              "label": "deleteBatch()",
               "shape": "bridge",
               "of": "clog",
               "op": "D"

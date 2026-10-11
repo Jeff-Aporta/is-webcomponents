@@ -144,7 +144,9 @@ export function ruta(meta, componer) {
   };
   componer(b);
   // Puentes `-(O=`: ningún paso toca una tabla directo. Cada acceso entra al puente de la acción
-  // (letra CRUD) del controller que gobierna la tabla y el puente lo redirige a la tabla. El detalle
+  // (CRUD) del controller que gobierna la tabla y el puente lo redirige a la tabla. Su texto es la
+  // FUNCIÓN del controller que hace la operación (`get()`, `list()`…): la curada en el editable del
+  // ISS se conserva al escribir (ver escribir); ACCION es solo el marcador de lo que falta curar. El detalle
   // de un maestro sale del puente del maestro hacia el del detalle. Los POJOs no aportan: se retiran.
   const VERBO = { SELECT: 'R', INSERT: 'C', UPDATE: 'U', DELETE: 'D' };
   const ACCION = { R: 'leer()', C: 'insertar()', U: 'actualizar()', D: 'borrar()' };
@@ -807,6 +809,28 @@ RUTAS.push(ruta({
   b.flujo('x', 'fin-x');
 }));
 
+/** Marcadores genéricos de los puentes (sin la función real del controller todavía). */
+const GENERICOS = new Set(['leer()', 'insertar()', 'actualizar()', 'borrar()']);
+
+/**
+ * El texto de cada puente es la función del controller que ejecuta la operación, curada a mano en
+ * el editable del ISS (leyendo el código): regenerar no la pisa. Un puente que siga con el marcador
+ * genérico se avisa.
+ */
+async function conservarFunciones(r) {
+  let previo = null;
+  try { previo = JSON.parse(await readFile(join(ISS, `${r.slug}.json`), 'utf8')); } catch { /* ruta nueva */ }
+  const curadas = new Map((previo?.payload?.vectorFlow?.columns ?? []).flatMap((c) => c.nodes).filter((x) => x.shape === 'bridge').map((x) => [x.id, x.label]));
+  for (const c of r.payload?.vectorFlow?.columns ?? []) {
+    for (const x of c.nodes) {
+      if (x.shape !== 'bridge') continue;
+      const f = curadas.get(x.id);
+      if (f && !GENERICOS.has(f)) x.label = f;
+      else console.warn(`[rutas] ${r.slug}: el puente ${x.id} no tiene la función del controller (queda ${x.label})`);
+    }
+  }
+}
+
 /** Escribe cada editable en el lab y, con `--iss`, en los editables del ISS. */
 export async function escribir(editables) {
   const destinos = [join(LAB, 'payloads'), ...(process.argv.includes('--iss') ? [ISS] : [])];
@@ -817,6 +841,7 @@ export async function escribir(editables) {
       ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, k === 'path' && typeof x === 'string' && x.startsWith('.') ? `${haciaIss}/${x}`.replace(/\/\.\//g, '/') : paraLab(x)]))
       : v;
   for (const r of editables) {
+    await conservarFunciones(r);
     for (const d of destinos) await writeFile(join(d, `${r.slug}.json`), `${JSON.stringify(d === ISS ? r : paraLab(r), null, 2)}
 `);
     console.log(`OK ${r.slug}`);

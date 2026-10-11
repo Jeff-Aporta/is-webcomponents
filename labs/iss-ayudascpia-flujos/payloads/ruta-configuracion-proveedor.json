@@ -207,7 +207,7 @@
             },
             {
               "id": "ctl-R",
-              "label": "leer()",
+              "label": "get()",
               "shape": "bridge",
               "of": "ctl",
               "op": "R"
@@ -229,14 +229,14 @@
             },
             {
               "id": "dueno-TSysValueController-R",
-              "label": "leer()",
+              "label": "get()",
               "shape": "bridge",
               "of": "dueno-TSysValueController",
               "op": "R"
             },
             {
               "id": "dueno-TSysValueController-U",
-              "label": "actualizar()",
+              "label": "update()",
               "shape": "bridge",
               "of": "dueno-TSysValueController",
               "op": "U"

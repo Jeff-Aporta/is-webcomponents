@@ -146,7 +146,7 @@
             },
             {
               "id": "ksys-R",
-              "label": "leer()",
+              "label": "get()",
               "shape": "bridge",
               "of": "ksys",
               "op": "R"

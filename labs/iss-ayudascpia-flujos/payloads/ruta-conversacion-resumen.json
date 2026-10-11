@@ -217,7 +217,7 @@
             },
             {
               "id": "ctl-R",
-              "label": "leer()",
+              "label": "leerConversacion()",
               "shape": "bridge",
               "of": "ctl",
               "op": "R"
@@ -239,7 +239,7 @@
             },
             {
               "id": "dueno-TConversationLogController-R",
-              "label": "leer()",
+              "label": "leerLog()",
               "shape": "bridge",
               "of": "dueno-TConversationLogController",
               "op": "R"
