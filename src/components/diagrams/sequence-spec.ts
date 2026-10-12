@@ -671,7 +671,9 @@ export function computeSequenceLayout(spec: SequenceResolvedSpec, opts: { labelC
   const titled = spec.legend === false && (spec.groups ?? []).some((gp) => gp.icon);
   const rowH = titled ? ROW_H_TITLED : ROW_H;
   const fragFoot = titled ? FRAG_FOOT_TITLED : FRAG_FOOT;
-  fragRows.forEach((x) => { headGap[x.first]! += FRAG_HEAD; footGap[x.last]! += fragFoot; });
+  // Cada nivel de anidación mete su marco 8 px hacia dentro (arriba y abajo): ese aire se RESERVA
+  // en la fila, si no la pestaña del fragmento más interno cae sobre su primer mensaje.
+  fragRows.forEach((x, k) => { const d = depthOf(k); headGap[x.first]! += FRAG_HEAD + 8 * d; footGap[x.last]! += fragFoot + 8 * d; });
   // Cada rama de `alt` (salvo la primera) abre aire para su condición: el
   // rótulo `[condición]` va entre el divisor y el chip de la primera fila.
   flat.forEach((f, i) => { if (f.branchFirst && i > 0 && i !== altStart) headGap[i]! += ALT_BRANCH_HEAD; });
