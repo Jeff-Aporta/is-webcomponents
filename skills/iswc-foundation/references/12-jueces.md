@@ -11,6 +11,18 @@ Capa EXTRA de control de calidad para las pruebas de todas las apps del kit (ISS
 5. **Cooldown de 24 h por llave.** Lo pone solo el fallo definitivo (saldo, key, cuota). Se reactiva a mano con `"cooldownHasta": -1`.
 6. **Nunca en el entregable.** Los jueces viven en `tests/` (o `src-experimental`) de cada app. Lo que el sync copia a `_entregable` no los importa ni los nombra. Cada app tiene un guardián que lo verifica.
 
+## Umbrales estándar
+
+Una probabilidad de juez (0..1) se lee con `veredictoProbabilidad(p)`:
+
+| p | Veredicto | Efecto |
+|---|---|---|
+| < 0,3 (`UMBRAL_RECHAZO`) | rechazo | la prueba falla |
+| 0,3 a 0,5 | dudoso | solo aviso, nunca rojo |
+| ≥ 0,5 (`UMBRAL_DUDA`) | cumple | pasa |
+
+Un veredicto incierto nunca tumba el gate: el juez refina, no decide solo.
+
 ## Piezas del kit (`src/vendor-distributions/testing/`)
 
 | Archivo | Qué da |

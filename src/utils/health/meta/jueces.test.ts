@@ -117,3 +117,10 @@ test('jueces: J7 Stagehand respeta el cooldown: leer lo salta, el barrido enfrí
     assert.ok(nada.proveedor === null && 'motivo' in nada && /ningún proveedor/.test(nada.motivo), 'J7 sin proveedores: motivo, sin lanzar');
   } finally { a.borrar(); }
 });
+
+test('jueces: J8 umbrales estándar: < 0.3 rechazo, 0.3-0.5 dudoso (solo aviso), >= 0.5 cumple', async () => {
+  const { veredictoProbabilidad, UMBRAL_RECHAZO, UMBRAL_DUDA } = await import('../../../vendor-distributions/testing/jueces.ts');
+  assert.equal(UMBRAL_RECHAZO, 0.3);
+  assert.equal(UMBRAL_DUDA, 0.5);
+  assert.deepEqual([0.1, 0.29, 0.3, 0.42, 0.5, 0.97].map(veredictoProbabilidad), ['rechazo', 'rechazo', 'dudoso', 'dudoso', 'cumple', 'cumple']);
+});
