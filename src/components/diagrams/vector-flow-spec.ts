@@ -69,6 +69,42 @@ export function validarVector(v: TVectorFlow): string[] {
   return errores;
 }
 
+/** Títulos de los agrupadores automáticos (A10), en el orden del recorrido típico. */
+export const GRUPOS_CRUD = { validacion: 'Validación', lectura: 'Lectura', escritura: 'Escritura', respuesta: 'Respuesta' } as const;
+const VERBO_ESCRITURA = /\b(INSERT|UPDATE|UPSERT|DELETE|MERGE)\b/i;
+const VERBO_LECTURA = /\bSELECT\b/i;
+const TEXTO_VALIDA = /valid|verific|puerta|\bseg\b|jwt|permis|exige|estricto|autoriz|token|alcance|acceso/i;
+
+/**
+ * Grupo automático de cada paso del flujo, decidido por el verbo CRUD de lo que usa (A10):
+ *   1 Escritura: usa un puente C/U/D o una arista de uso con INSERT, UPDATE, UPSERT, DELETE o MERGE.
+ *   2 Lectura: usa un puente R o una arista SELECT.
+ *   3 Respuesta: no usa nada y su salida va al fin (`end`).
+ *   4 Validación: no usa nada y su texto habla de validar, la puerta SEG, el JWT o permisos.
+ * Las decisiones, el inicio, el fin, las barras y los pasos con `group` propio no se agrupan.
+ */
+function gruposCrud(v: TVectorFlow): Map<string, string> {
+  const nodo = new Map(v.columns.flatMap((c) => c.nodes.map((n) => [n.id, n] as const)));
+  const forma = (id: string): string => String((nodo.get(id) as Record<string, unknown> | undefined)?.shape ?? '');
+  const out = new Map<string, string>();
+  for (const c of v.columns.filter((x) => x.tipo === 'flujo')) {
+    for (const n of c.nodes) {
+      const sh = forma(n.id);
+      if (n.group || ['diamond', 'start', 'end', 'bar', 'comment'].includes(sh)) continue;
+      const usos = v.edges.filter((e) => e.from === n.id && e.kind === 'dashed');
+      const ops = usos.map((e) => String((nodo.get(e.to) as Record<string, unknown> | undefined)?.op ?? ''));
+      const verbos = usos.map((e) => String(e.label ?? '')).join(' ');
+      const texto = typeof n.label === 'string' ? n.label : '';
+      if (ops.some((o) => /[CUD]/.test(o)) || VERBO_ESCRITURA.test(verbos)) out.set(n.id, GRUPOS_CRUD.escritura);
+      else if (ops.includes('R') || VERBO_LECTURA.test(verbos)) out.set(n.id, GRUPOS_CRUD.lectura);
+      else if (usos.length) continue;
+      else if (v.edges.some((e) => e.from === n.id && e.kind !== 'dashed' && forma(e.to) === 'end')) out.set(n.id, GRUPOS_CRUD.respuesta);
+      else if (TEXTO_VALIDA.test(texto)) out.set(n.id, GRUPOS_CRUD.validacion);
+    }
+  }
+  return out;
+}
+
 /**
  * Compila el vector al payload del flowchart: una columna = un carril (en orden), el grupo como
  * contexto del nodo y la arista `klass` de cada controller con su POJO (si ambos están). Lanza si el
@@ -78,8 +114,9 @@ export function vectorAFlujo(entrada: unknown): Record<string, unknown> {
   const v = ZVectorFlow.parse(entrada);
   const errores = validarVector(v);
   if (errores.length) throw new Error(`Diagrama de flujo en vector inválido:\n- ${errores.join('\n- ')}`);
+  const auto = v.agrupar === false ? new Map<string, string>() : gruposCrud(v);
   const nodes = v.columns.flatMap((c) => c.nodes.map((n) => {
-    const grupo = c.groups?.find((g) => g.id === n.group)?.label;
+    const grupo = c.groups?.find((g) => g.id === n.group)?.label ?? auto.get(n.id);
     const { group: _g, klass: _k, ...resto } = n;
     return { ...resto, lane: c.id, ...(grupo ? { context: grupo } : {}) };
   }));
@@ -91,7 +128,7 @@ export function vectorAFlujo(entrada: unknown): Record<string, unknown> {
       if (!edges.some((e) => e.from === n.id && e.to === n.klass)) edges.push({ from: n.id, to: n.klass, kind: 'dashed', label: 'klass' });
     }
   }
-  const { columns: _c, edges: _e, ...meta } = v;
+  const { columns: _c, edges: _e, agrupar: _a, ...meta } = v;
   // Las columnas de entidades se apilan (aprovechan el alto); la del flujo sigue sus capas.
   return { ...meta, lanes: v.columns.map((c) => ({ id: c.id, label: c.label, ...(c.align ? { align: c.align } : {}), ...(c.tipo !== 'flujo' ? { stack: true } : {}) })), nodes, edges };
 }

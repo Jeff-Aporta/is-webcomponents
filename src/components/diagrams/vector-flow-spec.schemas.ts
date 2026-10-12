@@ -57,6 +57,12 @@ export type TAristaVector = z.infer<typeof ZAristaVector>;
 export const ZVectorFlow = z.object({
   title: z.string().optional(),
   steps: z.union([z.literal('auto'), z.boolean()]).optional(),
+  /**
+   * Agrupadores automáticos de los pasos del flujo (A10), por defecto `'crud'`: cada paso sin
+   * `group` cae en Validación, Lectura, Escritura o Respuesta según lo que usa (ver `grupoCrud`).
+   * `false` los apaga.
+   */
+  agrupar: z.union([z.literal('crud'), z.literal(false)]).optional(),
   config: z.record(z.string(), z.unknown()).optional(),
   columns: z.array(ZColumnaVector).min(1),
   edges: z.array(ZAristaVector).default([]),

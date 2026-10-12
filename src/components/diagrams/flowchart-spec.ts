@@ -2895,7 +2895,13 @@ export function placeLanes(
 function abrazar(contexts: readonly FlowLayoutContext[], nodes: readonly FlowLayoutNode[], ox: number, oy: number): FlowLayoutContext[] {
   // Con las posiciones definitivas se vuelve a partir: un grupo que quedó abrazando un nodo ajeno
   // se separa en varias cajas (mismo título).
-  const partidos = contexts.flatMap((c) => {
+  // La nota (comentario) de un miembro va con él: queda dentro del recuadro, no pisada por su borde.
+  const conNotas = (ids: readonly string[] | undefined): string[] => {
+    const base = new Set(ids ?? []);
+    for (const n of nodes) if (n.shape === 'comment' && n.about && base.has(n.about)) base.add(n.id);
+    return [...base];
+  };
+  const partidos = contexts.map((c) => ({ ...c, members: conNotas(c.members) })).flatMap((c) => {
     const ms = nodes.filter((n) => c.members?.includes(n.id));
     return ms.length ? partirGrupo(ms, nodes).map((p) => ({ ...c, members: p.map((n) => n.id) })) : [c];
   });
