@@ -28,6 +28,19 @@ import { ZArchivoProveedores, ZProveedorLlm } from './stagehand.schemas.ts';
 export type * from './jueces.schemas.ts';
 
 const TIMEOUT_MS = 60_000;
+
+/**
+ * Umbrales estándar de una probabilidad de juez (0..1): por debajo de `UMBRAL_RECHAZO` el juez está
+ * SEGURO de que no se cumple y la prueba falla; entre `UMBRAL_RECHAZO` y `UMBRAL_DUDA` está dudoso y
+ * solo se avisa (nunca rojo por un veredicto incierto); desde `UMBRAL_DUDA` se cumple.
+ */
+export const UMBRAL_RECHAZO = 0.3;
+export const UMBRAL_DUDA = 0.5;
+
+/** Clasifica una probabilidad de juez con los umbrales estándar. */
+export function veredictoProbabilidad(p: number): 'cumple' | 'dudoso' | 'rechazo' {
+  return p >= UMBRAL_DUDA ? 'cumple' : p >= UMBRAL_RECHAZO ? 'dudoso' : 'rechazo';
+}
 const esObjeto = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 
 function leerArchivo(ruta: string): Record<string, unknown> | null {
