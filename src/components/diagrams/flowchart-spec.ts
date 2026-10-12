@@ -25,6 +25,7 @@ import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
 import { anchoDeComponente } from './component-spec.js';
 import { vectorAFlujo } from './vector-flow-spec.js';
+import { ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 import { oklchToHex } from '../_shared/oklch.js';
 import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from './flowchart-spec.schemas.js';
 import type { RouterEdge, RouterPort } from './component-router.schemas.js';
@@ -606,6 +607,10 @@ export function computeFlowchartLayout(
   // Borde izquierdo del recuadro de grupo que contiene a un nodo (para rodearlo por fuera).
   const cajasGrupo = placed.contexts?.length ? abrazar(placed.contexts, nodes, offsetX, offsetY) : [];
   const grupoIzq = (n: FlowLayoutNode): number | undefined => cajasGrupo.find((c) => c.members?.includes(n.id))?.x;
+  // (c) Entrar o salir de un grupo cuesta una suma fija (la misma del router de componentes): el borde
+  // es una franja de una celda con ese costo, así que un riel que no tiene nada adentro lo rodea y uno
+  // que sí lo paga una vez. Se aplica antes de los rieles para que la capa aditiva quede encima.
+  for (const c of cajasGrupo) costearBordeGrupo(grid, c);
   // Zonas de exclusión: ni nodos (ya nudgeados) ni aristas pueden cruzarlas.
   blockExclusionZones(grid, zones, offsetX, offsetY);
 
@@ -706,6 +711,9 @@ export function computeFlowchartLayout(
     if (insoft) rememberSegments(insoftSegs, path, e.to);
     // Capa aditiva de rieles quemados: la siguiente arista paga más cuantas más pasen cerca.
     costearRiel(grid, pathPoints(path));
+    // (d) Capa dinámica de giros: cada codo de esta ruta encarece su vecindad para las siguientes,
+    // así los giros no se apilan en el mismo punto (dos codos juntos se leen como un cruce).
+    costearCodos(grid, pathPoints(path));
     // Un consumo de componente o tabla termina en `-(O-`: su bola irradia el costo de conector.
     if (consumeSocket(e)) applyRadialCost(grid, { x: tip.x - SOCKET.bola, y: tip.y - SOCKET.bola, w: SOCKET.bola * 2, h: SOCKET.bola * 2 }, PROXIMIDAD.radio, PROXIMIDAD.socket);
     const mid = points.length
@@ -3136,6 +3144,27 @@ function proximidad(grid: ReturnType<typeof makeCostGrid>, n: FlowLayoutNode, fo
   }
   const conector = forma === 'start' || forma === 'end' || !!n.union;
   applyRadialCost(grid, n, radio, conector ? PROXIMIDAD.conector : PROXIMIDAD.entidad);
+}
+/**
+ * (c) Borde de un grupo: una franja de una celda en sus cuatro lados con la suma de entrar/salir de
+ * `routing-costs.ts` (`package.enter`, en px equivalentes) pasada a celdas de esta rejilla.
+ */
+function costearBordeGrupo(grid: ReturnType<typeof makeCostGrid>, c: { x: number; y: number; w: number; h: number }): void {
+  const v = ROUTING_COSTS_DEFAULTS.package.enter / ROUTING_COSTS_DEFAULTS.grid.step;
+  const t = grid.grid;
+  applyRectCost(grid, c.x, c.y, c.w, t, v, true);
+  applyRectCost(grid, c.x, c.y + c.h - t, c.w, t, v, true);
+  applyRectCost(grid, c.x, c.y + t, t, c.h - 2 * t, v, true);
+  applyRectCost(grid, c.x + c.w - t, c.y + t, t, c.h - 2 * t, v, true);
+}
+/** (d) Suma aditiva alrededor de cada codo ya trazado (`grid.turnPenalty` de routing-costs, en celdas). */
+const CODO = { radio: 2 * ROUTING_COSTS_DEFAULTS.grid.step, valor: ROUTING_COSTS_DEFAULTS.grid.turnPenalty / ROUTING_COSTS_DEFAULTS.grid.step / 4 } as const;
+function costearCodos(grid: ReturnType<typeof makeCostGrid>, pts: readonly FlowPoint[]): void {
+  for (let k = 1; k < pts.length - 1; k++) {
+    const p = pts[k - 1]!, q = pts[k]!, r = pts[k + 1]!;
+    const giro = (q.x - p.x) * (r.y - q.y) - (q.y - p.y) * (r.x - q.x) !== 0;
+    if (giro) applyRectCost(grid, q.x - CODO.radio, q.y - CODO.radio, CODO.radio * 2, CODO.radio * 2, CODO.valor, true);
+  }
 }
 const RIEL_QUEMADO = { nucleo: 3, halo: 1.5, radio: 16, libre: 24 } as const;
 function costearRiel(grid: ReturnType<typeof makeCostGrid>, pts: readonly FlowPoint[]): void {
