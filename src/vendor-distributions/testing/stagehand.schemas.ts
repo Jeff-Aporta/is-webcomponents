@@ -32,7 +32,7 @@ export interface SondaLlm {
   ok: boolean;
   causa: string;
   ms: number;
-  /** Falló por saldo, key o cuota: la llave entra en cooldown de 24 h (`llaves-cooldown.ts`). */
+  /** Falló por saldo, key o cuota: la llave entra en cooldown de 24 h (`test-cooldown.ts`). */
   definitivo?: boolean;
 }
 

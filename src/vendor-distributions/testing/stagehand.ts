@@ -38,14 +38,14 @@
  * entrada del archivo de llaves; `-1` a mano la reactiva). `elegirProveedorOpcional` no lanza: sin
  * proveedor devuelve el motivo para que el consumidor siga en modo determinista.
  *
- * Vendor: `dist/cdn/vendor-distributions/testing/stagehand.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./stagehand.schemas.ts`, `./llaves-cooldown.ts`, `./llaves-cooldown.schemas.ts`.
+ * Vendor: `dist/cdn/vendor-distributions/testing/stagehand.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./stagehand.schemas.ts`, `./test-cooldown.ts`, `./test-cooldown.schemas.ts`.
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import process from 'node:process';
 import { ZArchivoProveedores, ZCacheProveedor, ZProveedorLlm } from './stagehand.schemas.ts';
-import { estadoLlave, marcarCooldown } from './llaves-cooldown.ts';
+import { estadoLlave, marcarCooldown } from './test-cooldown.ts';
 import type {
   BloqueStagehand,
   ContextoDestino,

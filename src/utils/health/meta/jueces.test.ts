@@ -1,6 +1,6 @@
 /**
  * Guardián WHAT de los jueces opcionales (`vendor-distributions/testing/jueces.ts` y
- * `llaves-cooldown.ts`), con `fetch` simulado y un archivo de llaves temporal (nunca red):
+ * `test-cooldown.ts`), con `fetch` simulado y un archivo de llaves temporal (nunca red):
  *   J1 sin llave JEV → no evalúa y dice por qué (nunca lanza).
  *   J2 JEV responde → evalúa con sus respuestas.
  *   J3 JEV sin saldo (402) → no evalúa y su entrada queda con cooldownHasta = ahora + 24 h.
@@ -14,7 +14,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { capaOpcional, exigirJuez, juzgarConLlm, preguntarJev } from '../../../vendor-distributions/testing/jueces.ts';
-import { COOLDOWN_LLAVE_MS, olvidarCooldownsEnMemoria } from '../../../vendor-distributions/testing/llaves-cooldown.ts';
+import { COOLDOWN_LLAVE_MS, olvidarCooldownsEnMemoria } from '../../../vendor-distributions/testing/test-cooldown.ts';
 
 const AHORA = Date.parse('2026-10-12T12:00:00Z');
 const respuesta = (status: number, cuerpo: unknown) => Promise.resolve(new Response(JSON.stringify(cuerpo), { status, headers: { 'content-type': 'application/json' } }));

@@ -1,4 +1,4 @@
-// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 /**
  * jueces.schemas.ts — contratos de los jueces opcionales de las pruebas: JEV (TypeSafe, preguntas
  * sí/no, de opción y de escala sobre un texto) y un juez LLM (chat OpenAI-compatible).

@@ -136,25 +136,4 @@ protocolo y memo por proceso.
 
 ## Jueces opcionales y cooldown de llaves
 
-La base de toda prueba es determinista. Los jueces son una capa extra para lo abstracto: pertinencia de una respuesta, fidelidad de un resumen, calidad de un título, claridad de un error. Si un algoritmo simple lo resuelve, se usa el algoritmo.
-
-- `jueces.ts`
-  - `preguntarJev(o, texto, preguntas)`: preguntas JEV (TypeSafe, `POST {baseUrl}/systemone`) de tipo `noul` (sí/no, 0..1), `choice` (una de varias) y `score` (escala ordinal).
-  - `juzgarConLlm(o, instrucciones, texto)`: un JSON de la pila de proveedores (MiniMax, DeepSeek…), en orden.
-  - Ninguno lanza: devuelven `{ evaluado: false, motivo }` si no hay llave, si está en cooldown o si el servicio falla.
-  - `capaOpcional(t, nombre, veredicto, aplicar)`: sin veredicto deja un aviso con el motivo y la prueba sigue con sus aserciones deterministas.
-  - `exigirJuez(t, nombre, veredicto)`: para una prueba exclusiva de juez; sin veredicto la prueba se SALTA, nunca queda en rojo.
-- `llaves-cooldown.ts`
-  - Una llave que falla por saldo, key o cuota queda 24 h fuera: se escribe `cooldownHasta` (ISO) en su entrada del archivo de llaves.
-  - Para reactivarla tras recargar saldo o poner una llave vigente: editar a mano `"cooldownHasta": -1`.
-  - `leerProveedoresDeArchivo` salta las llaves en cooldown. El barrido y el generador ponen en cooldown a la que falla de forma definitiva.
-- `elegirProveedorOpcional`: como `elegirProveedor`, pero sin proveedor devuelve `{ proveedor: null, motivo }` para seguir en modo determinista.
-
-Archivo de llaves (fuera del repo):
-
-```json
-{
-  "proveedores": [{ "nombre": "minimax", "apiKey": "…", "model": "MiniMax-M3", "baseUrl": "https://api.minimax.io/v1" }],
-  "jev": { "apiKey": "…", "model": "jev-latest", "baseUrl": "https://api.typesafe.ai/v1" }
-}
-```
+La pila de proveedores respeta el cooldown de 24 h por llave (`test-cooldown.ts`) y `elegirProveedorOpcional` no lanza: sin proveedor, el consumidor sigue en modo determinista. Los jueces de calidad (JEV y LLM) y su estándar están en [12-jueces.md](12-jueces.md).

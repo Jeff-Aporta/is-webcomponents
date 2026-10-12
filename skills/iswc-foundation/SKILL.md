@@ -72,6 +72,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Pines y vendor del kit | [06-pines-y-vendor.md](references/06-pines-y-vendor.md) · [actualizar-pin.md](templates/specs/iswc/actualizar-pin.md) |
 | Pruebas, Stagehand y gate | [07-pruebas-y-gate.md](references/07-pruebas-y-gate.md) |
 | Stagehand compartido: proveedores LLM, generador con fallback, destino por protocolo | [11-stagehand.md](references/11-stagehand.md) |
+| Jueces de calidad JEV y LLM (capa extra de pruebas, aviso nunca error, cooldown 24 h por llave, nunca en el entregable) | [12-jueces.md](references/12-jueces.md) |
 | Specs y pruebas WHAT | [templates/specs/especificar-what.md](templates/specs/especificar-what.md) |
 | Sync a entregable (mirror) | [08-sync-entregable.md](references/08-sync-entregable.md) |
 | Alinear una app existente al estándar | [09-alinear-app.md](references/09-alinear-app.md) |

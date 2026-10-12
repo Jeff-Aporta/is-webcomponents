@@ -1,4 +1,4 @@
-// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 /**
  * jueces.ts — jueces OPCIONALES para refinar el criterio de las pruebas: JEV (TypeSafe) y un juez LLM
  * (la misma pila de proveedores de Stagehand: MiniMax, DeepSeek…).
@@ -8,7 +8,7 @@
  * fidelidad de un resumen, calidad de un título, claridad de un error). Si un juez falla (sin llave,
  * sin saldo, key vencida, caído) la prueba NO falla: la capa se salta con aviso y motivo, y se evalúa
  * con lo demás. Una prueba exclusiva de juez se SALTA (no se pone en rojo). Cada llave que falla por
- * saldo/key/cuota entra en cooldown de 24 h (`llaves-cooldown.ts`); `cooldownHasta: -1` la reactiva.
+ * saldo/key/cuota entra en cooldown de 24 h (`test-cooldown.ts`); `cooldownHasta: -1` la reactiva.
  *
  * Uso:
  *   const v = await preguntarJev({ rutaLlaves }, respuesta, {
@@ -16,12 +16,12 @@
  *   });
  *   capaOpcional(t, 'jev pertinencia', v, (r) => expect('pertinente', (r.pertinente?.noul ?? 0) >= 0.6));
  *
- * Vendor: `dist/cdn/vendor-distributions/testing/jueces.ts` → carpeta del consumidor junto a `stagehand.ts`. Imports relativos que deben viajar con él: `./jueces.schemas.ts`, `./llaves-cooldown.ts`, `./llaves-cooldown.schemas.ts`, `./stagehand.ts`, `./stagehand.schemas.ts`.
+ * Vendor: `dist/cdn/vendor-distributions/testing/jueces.ts` → carpeta del consumidor junto a `stagehand.ts`. Imports relativos que deben viajar con él: `./jueces.schemas.ts`, `./test-cooldown.ts`, `./test-cooldown.schemas.ts`, `./stagehand.ts`, `./stagehand.schemas.ts`.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { ZCuerpoJev, ZLlaveJev } from './jueces.schemas.ts';
 import type { ContextoCapa, OpcionesJuez, PreguntaJev, RespuestaJev, VeredictoJuez } from './jueces.schemas.ts';
-import { estadoLlave, marcarCooldown } from './llaves-cooldown.ts';
+import { estadoLlave, marcarCooldown } from './test-cooldown.ts';
 import { evaluarSondaLlm, normalizarJson } from './stagehand.ts';
 import { ZArchivoProveedores, ZProveedorLlm } from './stagehand.schemas.ts';
 
