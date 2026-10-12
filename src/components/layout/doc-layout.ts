@@ -120,7 +120,7 @@ function buscarProfundo(raiz: ParentNode, selector: string, out: HTMLElement[] =
 
 class IswcDocLayout extends HTMLElement {
   static get observedAttributes(): string[] {
-    return ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'hide-start', 'hide-end', 'toc-min'];
+    return ['storage-key', 'toc', 'toc-title', 'start-width', 'end-width', 'hide-start', 'hide-end', 'toc-min', 'no-bar'];
   }
 
   /** Fuente propia de encabezados; por defecto, búsqueda profunda de `toc-selector` en el contenido. */

@@ -90,6 +90,7 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `media/image-editor.md` | `<iswc-image-editor>` |
 | `iswc-icon-explorer` | `<iswc-icon-explorer>` |
 | `media/qrcode.md` | `<iswc-qrcode>` |
+| `media/figure.md` | `<iswc-figure>` |
 
 ### feedback
 
@@ -127,6 +128,8 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `layout/demo.md` | `<iswc-demo>` |
 | `layout/dock.md` | `<iswc-dock>` |
 | `layout/dock-item.md` | `<iswc-dock-item>` |
+| `layout/doc-layout.md` | `<iswc-doc-layout>` |
+| `layout/docs-vault.md` | `<iswc-docs-vault>` |
 
 ### helpers
 
@@ -165,6 +168,8 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `navigation/stepper.md` | `<iswc-stepper>` |
 | `navigation/stepper-step.md` | `<iswc-stepper-step>` |
 | `navigation/mega-menu.md` | `<iswc-mega-menu>` |
+| `navigation/pager.md` | `<iswc-pager>` |
+| `navigation/doc-index.md` | `<iswc-doc-index>` |
 
 ### forms
 
@@ -227,6 +232,7 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `data/pivot-table.md` | `<iswc-pivot-table>` |
 | `data/spreadsheet.md` | `<iswc-spreadsheet>` |
 | `data/ag-grid.md` | `<iswc-ag-grid>` |
+| `data/meta-list.md` | `<iswc-meta-list>` |
 
 ### data-viz
 
@@ -289,4 +295,21 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | --- | --- |
 | `layout/preview-component.md` | `<iswc-preview-component>` |
 | `layout/preview-controls.md` | `<iswc-preview-controls>` |
+| `layout/doc-demo.md` | `<iswc-doc-demo>` |
+| `preview/playground.md` | `<iswc-playground>` |
+| `preview/slots-pg.md` | `<iswc-slots-pg>` |
+| `preview/examples-carousel.md` | `<iswc-examples-carousel>` |
+| `preview/demo-section.md` | `<iswc-demo-section>` |
 
+### files
+
+| Doc | Tags |
+| --- | --- |
+| `files/txt-view.md` | `<iswc-txt-view>` |
+| `files/txt-edit.md` | `<iswc-txt-edit>` |
+| `files/csv-view.md` | `<iswc-csv-view>` |
+| `files/csv-edit.md` | `<iswc-csv-edit>` |
+| `files/docx-view.md` | `<iswc-docx-view>` |
+| `files/pptx-view.md` | `<iswc-pptx-view>` |
+| `files/file-view.md` | `<iswc-file-view>` |
+| `files/file-edit.md` | `<iswc-file-edit>` |
