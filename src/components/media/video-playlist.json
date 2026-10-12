@@ -373,5 +373,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Reproductor de video con lista de reproducción lateral al estilo YouTube."
 }

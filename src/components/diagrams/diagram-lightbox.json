@@ -186,5 +186,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Visor ampliado para diagramas: abre un diagrama a pantalla completa con zoom y desplazamiento."
 }

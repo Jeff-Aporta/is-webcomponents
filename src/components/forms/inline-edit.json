@@ -201,5 +201,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Texto que se convierte en campo editable al hacer clic y guarda o cancela el cambio en el sitio."
 }

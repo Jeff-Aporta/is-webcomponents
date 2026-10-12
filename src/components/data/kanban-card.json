@@ -4,7 +4,7 @@
   "category": "data",
   "title": "&lt;iswc-kanban-card&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-kanban-card de InSoft.",
+  "description": "Tarjeta de un tablero kanban que representa una tarea y se arrastra entre columnas.",
   "storageKey": "docs-iswc-kanban-card",
   "sections": [
     {

@@ -4,7 +4,7 @@
   "category": "data-viz",
   "title": "&lt;iswc-gauge&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-gauge de InSoft.",
+  "description": "Medidor circular que muestra un porcentaje o un valor dentro de un rango.",
   "styles": [
     ".gauge-grid {",
     "      display: grid;",

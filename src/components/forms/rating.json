@@ -580,5 +580,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Valoración con estrellas u otros íconos que participa en formularios."
 }

@@ -342,5 +342,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Muestra un tamaño en bytes en la unidad legible más adecuada (KB, MB, GB…)."
 }

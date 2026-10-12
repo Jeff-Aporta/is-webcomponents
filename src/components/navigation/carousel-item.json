@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-carousel-item&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-carousel-item de InSoft.",
+  "description": "Diapositiva individual de un iswc-carousel.",
   "styles": [
     ".slide { display:grid; place-items:center; height:180px; border-radius:.6rem;",
     "      background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg-elev)); font-weight:600; }"

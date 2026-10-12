@@ -843,5 +843,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Tabla de datos con columnas configurables, orden, filtro, paginación y selección de filas."
 }

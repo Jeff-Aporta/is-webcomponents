@@ -445,5 +445,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de flujo en SVG con carriles, decisiones y rutas ortogonales, sin Mermaid."
 }

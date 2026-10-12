@@ -98,5 +98,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de Venn de dos o tres conjuntos en SVG con sus intersecciones, sin Mermaid."
 }

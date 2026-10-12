@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-breadcrumb&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-breadcrumb e iswc-breadcrumb-item de InSoft.",
+  "description": "Ruta de migas de pan que muestra dónde está el usuario y permite volver a niveles anteriores.",
   "storageKey": "docs-iswc-breadcrumb",
   "sections": [
     {

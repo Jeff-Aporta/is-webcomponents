@@ -56,5 +56,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Editor de archivos que elige el editor adecuado según el tipo (texto, CSV…)."
 }

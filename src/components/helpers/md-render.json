@@ -372,5 +372,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Muestra markdown o HTML en línea con variables {{var}} como chips y edición en el sitio opcional."
 }

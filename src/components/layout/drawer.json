@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-drawer&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-drawer de InSoft.",
+  "description": "Panel lateral deslizable (izquierda, derecha, arriba o abajo) para navegación o formularios sin salir de la vista.",
   "storageKey": "docs-iswc-drawer",
   "sections": [
     {

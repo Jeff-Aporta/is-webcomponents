@@ -159,5 +159,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Campo para elegir archivos desde el equipo que participa en formularios, con lista de seleccionados."
 }

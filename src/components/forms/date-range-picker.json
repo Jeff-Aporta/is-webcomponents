@@ -156,5 +156,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Selector de rango de fechas con varios meses a la vista y atajos como «últimos 7 días»."
 }

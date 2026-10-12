@@ -475,5 +475,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Formatea un valor según su tipo (fecha, número, bytes o tiempo relativo) con la configuración regional."
 }

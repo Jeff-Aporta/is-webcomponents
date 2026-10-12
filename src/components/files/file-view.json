@@ -56,5 +56,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Visor de archivos que elige el visor adecuado según el tipo (texto, CSV, Word, PowerPoint…)."
 }

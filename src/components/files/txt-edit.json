@@ -56,5 +56,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Editor de archivos de texto plano."
 }

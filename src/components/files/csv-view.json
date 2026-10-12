@@ -56,5 +56,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Visor de archivos CSV como tabla de solo lectura."
 }

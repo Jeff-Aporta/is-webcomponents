@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-stepper&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-stepper / iswc-stepper-step de InSoft.",
+  "description": "Indicador de pasos de un proceso (asistente) que marca el paso actual y los completados.",
   "styles": [
     ".wizard-card {",
     "      margin-top: 1rem;",

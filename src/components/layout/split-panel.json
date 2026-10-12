@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-split-panel&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-split-panel de InSoft.",
+  "description": "Divide el espacio en dos paneles redimensionables con un separador arrastrable, horizontal o vertical.",
   "styles": [
     ".panel-demo {",
     "      display: grid;",

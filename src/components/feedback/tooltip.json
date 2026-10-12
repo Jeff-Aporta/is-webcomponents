@@ -284,5 +284,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Globo de ayuda contextual que aparece al pasar el puntero o enfocar el elemento al que está anclado."
 }

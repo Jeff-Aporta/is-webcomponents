@@ -171,5 +171,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Etiqueta compacta para categorías o filtros, con color y opción de quitarla."
 }

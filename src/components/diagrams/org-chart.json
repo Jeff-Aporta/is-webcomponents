@@ -168,5 +168,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Organigrama jerárquico de arriba hacia abajo a partir de un árbol de personas o áreas."
 }

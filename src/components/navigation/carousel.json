@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-carousel&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-carousel / iswc-carousel-item de InSoft.",
+  "description": "Carrusel de diapositivas con flechas, indicadores y avance automático opcional.",
   "styles": [
     ".slide {",
     "      width: 100%;",

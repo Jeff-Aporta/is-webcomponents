@@ -4,7 +4,7 @@
   "category": "isp",
   "title": "&lt;iswc-loading-overlay&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-loading-overlay de InSoft.",
+  "description": "Capa a pantalla completa con indicador de carga que bloquea la interacción mientras trabaja.",
   "storageKey": "docs-iswc-loading-overlay",
   "hasBehavior": true,
   "sections": [

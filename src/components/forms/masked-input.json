@@ -167,5 +167,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Campo con formato aplicado mientras se escribe (tarjeta, fecha, teléfono…) a partir de un patrón."
 }

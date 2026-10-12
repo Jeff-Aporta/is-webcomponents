@@ -208,5 +208,6 @@
       }
     },
     "exclude": []
-  }
+  },
+  "description": "Escenario de pruebas de un componente con controles para cambiar sus atributos en vivo."
 }

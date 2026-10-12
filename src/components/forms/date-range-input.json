@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-date-range-input&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-date-range-input de InSoft.",
+  "description": "Dos campos de fecha (inicio y fin) con un calendario de rango en un panel.",
   "storageKey": "docs-iswc-date-range-input",
   "sections": [
     {

@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-digital-clock&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-digital-clock de InSoft.",
+  "description": "Selector de hora en lista o en columnas de horas, minutos, segundos y AM/PM.",
   "storageKey": "docs-iswc-digital-clock",
   "sections": [
     {

@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-card&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-card de InSoft.",
+  "description": "Tarjeta contenedora con encabezado, cuerpo, pie e imagen opcionales para agrupar información relacionada.",
   "storageKey": "docs-iswc-card",
   "sections": [
     {

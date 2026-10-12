@@ -4,7 +4,7 @@
   "category": "helpers",
   "title": "&lt;iswc-floating&gt; (interno)",
   "titleHtml": false,
-  "description": "Building block interno. En producto usa iswc-popover o iswc-tooltip.",
+  "description": "Pieza interna que posiciona un panel flotante junto a su ancla (arriba, abajo o a los lados) y lo reubica si no cabe; en producto use iswc-popover o iswc-tooltip.",
   "sections": [
     {
       "id": "intro",

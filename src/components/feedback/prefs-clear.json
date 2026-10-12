@@ -51,5 +51,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Botón que borra la memoria persistente de los componentes (localStorage) para volver a los valores por defecto."
 }

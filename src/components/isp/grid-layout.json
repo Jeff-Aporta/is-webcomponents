@@ -215,5 +215,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Contenedor de rejilla con columnas, separación y comportamiento adaptable configurables."
 }

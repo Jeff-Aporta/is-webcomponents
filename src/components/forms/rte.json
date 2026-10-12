@@ -123,5 +123,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Editor de texto enriquecido con barra de formato (negrita, listas, enlaces…)."
 }

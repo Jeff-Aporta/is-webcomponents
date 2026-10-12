@@ -281,5 +281,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de área polar: sectores de igual ángulo cuyo radio indica el valor."
 }

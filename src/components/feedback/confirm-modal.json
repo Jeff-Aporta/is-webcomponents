@@ -4,7 +4,7 @@
   "category": "feedback",
   "title": "&lt;iswc-confirm-modal&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-confirm-modal de InSoft.",
+  "description": "Diálogo de confirmación con mensaje y botones de aceptar y cancelar que resuelve la decisión del usuario.",
   "storageKey": "docs-iswc-confirm-modal",
   "sections": [
     {

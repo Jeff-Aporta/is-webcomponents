@@ -265,5 +265,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de radar para comparar varias magnitudes de una o más series sobre ejes radiales."
 }

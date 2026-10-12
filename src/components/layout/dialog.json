@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-dialog&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-dialog de InSoft.",
+  "description": "Ventana modal con foco atrapado, cierre por Escape o clic fuera (opcional), y ranuras para título, contenido y acciones.",
   "storageKey": "docs-iswc-dialog",
   "loads": ["iswc-slots-pg"],
   "sections": [

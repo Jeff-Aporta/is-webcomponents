@@ -116,5 +116,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de casos de uso UML en SVG con actores, casos y relaciones, sin Mermaid."
 }

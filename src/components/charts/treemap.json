@@ -197,5 +197,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Mapa de árbol en SVG: rectángulos anidados cuyo área representa el peso de cada elemento de una jerarquía."
 }

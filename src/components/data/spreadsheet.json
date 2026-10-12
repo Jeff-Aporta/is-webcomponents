@@ -99,5 +99,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Hoja de cálculo mínima con edición por celda y fórmulas."
 }

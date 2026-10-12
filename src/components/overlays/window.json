@@ -189,5 +189,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Ventana flotante de estilo escritorio que se puede mover, redimensionar, minimizar y cerrar."
 }

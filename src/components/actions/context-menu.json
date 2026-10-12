@@ -283,5 +283,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Menú emergente que se abre con clic derecho sobre un elemento objetivo (o sobre el propio componente) y lista acciones."
 }

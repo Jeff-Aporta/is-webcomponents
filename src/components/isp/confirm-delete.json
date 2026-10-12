@@ -4,7 +4,7 @@
   "category": "isp",
   "title": "&lt;iswc-confirm-delete&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-confirm-delete de InSoft.",
+  "description": "Confirmación de borrado que exige escribir un texto para habilitar la acción destructiva.",
   "storageKey": "docs-iswc-confirm-delete",
   "sections": [
     {

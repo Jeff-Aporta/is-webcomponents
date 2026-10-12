@@ -371,5 +371,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Editor de código con resaltado nativo, temas, formateo y marcas, con API para pasar de código a JSON y viceversa."
 }

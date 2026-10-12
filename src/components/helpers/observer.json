@@ -435,5 +435,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Observa su contenido (intersección, cambios de tamaño o mutaciones del DOM) y emite eventos al detectarlos."
 }

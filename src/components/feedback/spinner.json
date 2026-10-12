@@ -160,5 +160,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Indicador giratorio de carga."
 }

@@ -56,5 +56,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Visor de presentaciones PowerPoint (.pptx) en el navegador."
 }

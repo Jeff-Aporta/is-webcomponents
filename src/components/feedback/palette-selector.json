@@ -335,5 +335,6 @@
       "props",
       "states"
     ]
-  }
+  },
+  "description": "Selector de la paleta de colores de la aplicación (InSoft, ContaPyme, AgroWin) que recuerda la elección."
 }

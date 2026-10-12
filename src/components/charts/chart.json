@@ -631,5 +631,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Motor de gráficas en SVG sin dependencias (barras, líneas, áreas…) a partir de series de datos declarativas."
 }

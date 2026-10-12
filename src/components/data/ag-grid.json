@@ -317,5 +317,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Rejilla de datos avanzada: ordenar, filtrar, agrupar, redimensionar columnas y editar celdas."
 }

@@ -104,5 +104,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Pad para firmar a mano con el dedo o el ratón que exporta la firma a PNG o SVG."
 }

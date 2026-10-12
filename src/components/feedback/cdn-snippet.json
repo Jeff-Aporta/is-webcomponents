@@ -234,5 +234,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Panel con el fragmento mínimo para usar un componente desde el CDN, listo para copiar."
 }

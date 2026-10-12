@@ -252,5 +252,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Genera un código de barras en SVG a partir de un texto."
 }

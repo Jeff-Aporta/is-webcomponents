@@ -180,5 +180,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Línea divisoria horizontal o vertical, con texto opcional en el centro."
 }

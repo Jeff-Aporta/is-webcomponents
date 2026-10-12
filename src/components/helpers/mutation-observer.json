@@ -281,5 +281,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Emite eventos cuando cambia el DOM de su contenido (alias de iswc-observer type=\"mutation\")."
 }

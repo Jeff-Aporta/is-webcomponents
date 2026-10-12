@@ -4,7 +4,7 @@
   "category": "isp",
   "title": "&lt;iswc-modal-verificacion&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-modal-verificacion de InSoft.",
+  "description": "Diálogo de verificación que pide confirmar o validar una operación antes de continuar.",
   "storageKey": "docs-iswc-modal-verificacion",
   "hasBehavior": true,
   "sections": [

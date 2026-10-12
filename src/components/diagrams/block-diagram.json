@@ -282,5 +282,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de bloques en SVG generado desde datos declarativos, sin Mermaid."
 }

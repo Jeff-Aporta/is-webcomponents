@@ -163,5 +163,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Contenedor principal desplazable de la página, equivalente a la etiqueta main."
 }

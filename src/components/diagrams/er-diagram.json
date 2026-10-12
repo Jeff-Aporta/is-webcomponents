@@ -380,5 +380,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama entidad-relación en SVG con tablas, columnas y cardinalidades, sin Mermaid."
 }

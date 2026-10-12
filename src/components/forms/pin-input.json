@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-pin-input&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-pin-input de InSoft.",
+  "description": "Campo de código PIN u OTP con una casilla por dígito y avance automático.",
   "storageKey": "docs-iswc-pin-input",
   "sections": [
     {

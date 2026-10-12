@@ -161,5 +161,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Menú amplio de varias columnas con encabezados y enlaces, para portales con mucho contenido."
 }

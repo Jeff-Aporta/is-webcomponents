@@ -4,7 +4,7 @@
   "category": "actions",
   "title": "&lt;iswc-dropdown-item&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-dropdown-item de InSoft.",
+  "description": "Opción de un menú desplegable: texto, ícono y estado deshabilitado; al elegirla emite su selección al menú.",
   "storageKey": "docs-iswc-dropdown-item",
   "sections": [
     {

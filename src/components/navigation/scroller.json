@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-scroller&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-scroller de InSoft.",
+  "description": "Contenedor desplazable con flechas y sombras que indican que hay más contenido a los lados.",
   "storageKey": "docs-iswc-scroller",
   "sections": [
     {

@@ -103,5 +103,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Editor de imagen para recortar, hacer zoom y rotar antes de guardar."
 }

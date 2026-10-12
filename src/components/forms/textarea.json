@@ -670,5 +670,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Área de texto de varias líneas que participa en formularios, con contador y auto-alto."
 }

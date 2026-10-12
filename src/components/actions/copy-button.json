@@ -4,7 +4,7 @@
   "category": "actions",
   "title": "&lt;iswc-copy-button&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-copy-button de InSoft.",
+  "description": "Botón que copia un texto al portapapeles y confirma el resultado con su propio mensaje de éxito o error.",
   "styles": [
     ".cluster { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }",
     "    .stack { display: flex; flex-direction: column; gap: 0.75rem; }",

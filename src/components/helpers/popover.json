@@ -628,5 +628,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Panel flotante con contenido interactivo anclado a un elemento."
 }

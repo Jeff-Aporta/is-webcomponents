@@ -595,5 +595,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Opción de radio dentro de un iswc-radio-group, que es quien publica el valor al formulario."
 }

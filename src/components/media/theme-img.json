@@ -64,5 +64,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Imagen que cambia de versión según el tema claro u oscuro activo."
 }

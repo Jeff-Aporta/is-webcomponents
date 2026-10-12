@@ -141,5 +141,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Genera un código QR en SVG a partir de un texto o enlace."
 }

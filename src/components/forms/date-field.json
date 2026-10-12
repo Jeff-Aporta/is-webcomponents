@@ -188,5 +188,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Campo de fecha editable por secciones (día, mes, año) con el teclado."
 }

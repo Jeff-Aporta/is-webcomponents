@@ -361,5 +361,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de clases UML en SVG con paquetes, atributos, métodos y relaciones, sin Mermaid."
 }

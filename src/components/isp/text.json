@@ -330,5 +330,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Texto con las variantes tipográficas, tamaños y colores del sistema de diseño."
 }

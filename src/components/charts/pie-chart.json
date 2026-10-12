@@ -57,5 +57,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica circular de torta que reparte un total en porciones proporcionales."
 }

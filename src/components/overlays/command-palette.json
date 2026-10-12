@@ -125,5 +125,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Paleta de comandos que se abre con Ctrl+K o Cmd+K para buscar y ejecutar acciones."
 }

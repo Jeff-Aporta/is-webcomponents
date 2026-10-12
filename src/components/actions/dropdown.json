@@ -251,5 +251,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Menú desplegable anclado a un botón disparador, con navegación por teclado y cierre al hacer clic fuera."
 }

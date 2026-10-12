@@ -124,5 +124,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Selector de duración en horas, minutos y segundos."
 }

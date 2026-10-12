@@ -156,5 +156,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Visor de PDF con el visor nativo del navegador y modo avanzado opcional."
 }

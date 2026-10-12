@@ -221,5 +221,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Muestra cuánto tiempo pasó o falta respecto a ahora («hace 5 minutos») y se actualiza solo."
 }

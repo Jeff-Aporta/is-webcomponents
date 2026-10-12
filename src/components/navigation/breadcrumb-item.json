@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-breadcrumb-item&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-breadcrumb-item de InSoft.",
+  "description": "Paso individual de una ruta de migas de pan, con enlace o como posición actual.",
   "storageKey": "docs-iswc-breadcrumb-item",
   "sections": [
     {

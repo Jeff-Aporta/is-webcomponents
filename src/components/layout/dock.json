@@ -156,5 +156,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Barra de íconos al estilo del Dock de macOS que agranda los elementos cercanos al puntero."
 }
