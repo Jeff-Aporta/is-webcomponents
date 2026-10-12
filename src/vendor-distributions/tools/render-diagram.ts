@@ -153,15 +153,22 @@ function absolutizeScript(scriptUrl: string, base: string): string {
   return base + scriptUrl.replace(/^\/+/, '');
 }
 
+/** Pixeles maximos del PNG (ancho x alto ya multiplicados por deviceScaleFactor). */
+export const PNG_MAX_PX = 36_000_000;
+
 async function capturePng(
   ctx: { newPage: () => Promise<RenderPage> },
   sano: { svg: string; width: number | null; height: number | null },
   hrefs: string[],
   id: string,
 ): Promise<Uint8Array> {
+  // Chromium no pinta capturas muy grandes: por encima de ~40 Mpx los tiles fuera del primero salen
+  // vacios o del color del fondo (el PNG de clases del ISS, 9262x9566 a escala 2, salia corrupto). El
+  // SVG es vectorial: se reduce su tamano CSS para que el raster (CSS x deviceScaleFactor 2) quepa.
+  const k = sano.width && sano.height ? Math.min(1, Math.sqrt(PNG_MAX_PX / (sano.width * sano.height * 4))) : 1;
   const wrap = staticSvgWrapper(sano.svg, {
-    width: sano.width,
-    height: sano.height,
+    width: sano.width ? Math.floor(sano.width * k) : sano.width,
+    height: sano.height ? Math.floor(sano.height * k) : sano.height,
     cssHrefs: hrefs,
   });
   const wrapPath = join(tmpdir(), `iswc-png-${id}-${Date.now()}.html`);
