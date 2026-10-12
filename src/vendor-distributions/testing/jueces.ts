@@ -132,8 +132,8 @@ export async function juzgarConLlm(o: OpcionesJuez, instrucciones: string, texto
  * motivo y sigue (la prueba queda con sus aserciones deterministas). Devuelve si la capa corrió.
  */
 export function capaOpcional<T>(t: ContextoCapa, nombre: string, v: VeredictoJuez<T>, aplicar: (r: T) => void): boolean {
-  if (v.evaluado) { aplicar(v.respuestas); return true; }
-  const msg = `[capa ${nombre}] saltada: ${v.motivo}`;
+  if ('respuestas' in v) { aplicar(v.respuestas); return true; }
+  const msg = `[capa ${nombre}] saltada: ${'motivo' in v ? v.motivo : 'sin motivo'}`;
   if (t.aviso) t.aviso(msg);
   else console.warn(msg);
   return false;
@@ -144,8 +144,8 @@ export function capaOpcional<T>(t: ContextoCapa, nombre: string, v: VeredictoJue
  * Con veredicto devuelve las respuestas.
  */
 export function exigirJuez<T>(t: ContextoCapa, nombre: string, v: VeredictoJuez<T>): T {
-  if (v.evaluado) return v.respuestas;
-  const motivo = `[${nombre}] sin juez disponible: ${v.motivo}`;
+  if ('respuestas' in v) return v.respuestas;
+  const motivo = `[${nombre}] sin juez disponible: ${'motivo' in v ? v.motivo : 'sin motivo'}`;
   if (t.saltar) t.saltar(motivo);
   if (t.skip) t.skip(motivo);
   throw new SaltoJuez(motivo);
