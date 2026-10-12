@@ -156,6 +156,25 @@ function absolutizeScript(scriptUrl: string, base: string): string {
 /** Pixeles maximos del PNG (ancho x alto ya multiplicados por deviceScaleFactor). */
 export const PNG_MAX_PX = 36_000_000;
 
+/**
+ * Tamano CSS del wrapper del PNG: el SVG es vectorial, asi que si el raster (CSS x `scale`) superaria
+ * `maxPx` se encoge en proporcion (mismo factor `k` en ambos ejes) hasta caber; uno pequeno no se toca
+ * (`k` = 1). Un eje desconocido (null) deja `k` = 1 y se devuelve tal cual.
+ */
+export function pngCanvasSize(
+  width: number | null,
+  height: number | null,
+  scale = 2,
+  maxPx = PNG_MAX_PX,
+): { k: number; width: number | null; height: number | null } {
+  const k = width && height ? Math.min(1, Math.sqrt(maxPx / (width * height * scale * scale))) : 1;
+  return {
+    k,
+    width: width ? Math.floor(width * k) : width,
+    height: height ? Math.floor(height * k) : height,
+  };
+}
+
 async function capturePng(
   ctx: { newPage: () => Promise<RenderPage> },
   sano: { svg: string; width: number | null; height: number | null },
@@ -165,12 +184,8 @@ async function capturePng(
   // Chromium no pinta capturas muy grandes: por encima de ~40 Mpx los tiles fuera del primero salen
   // vacios o del color del fondo (el PNG de clases del ISS, 9262x9566 a escala 2, salia corrupto). El
   // SVG es vectorial: se reduce su tamano CSS para que el raster (CSS x deviceScaleFactor 2) quepa.
-  const k = sano.width && sano.height ? Math.min(1, Math.sqrt(PNG_MAX_PX / (sano.width * sano.height * 4))) : 1;
-  const wrap = staticSvgWrapper(sano.svg, {
-    width: sano.width ? Math.floor(sano.width * k) : sano.width,
-    height: sano.height ? Math.floor(sano.height * k) : sano.height,
-    cssHrefs: hrefs,
-  });
+  const lienzo = pngCanvasSize(sano.width, sano.height, 2);
+  const wrap = staticSvgWrapper(sano.svg, { width: lienzo.width, height: lienzo.height, cssHrefs: hrefs });
   const wrapPath = join(tmpdir(), `iswc-png-${id}-${Date.now()}.html`);
   await writeFile(wrapPath, wrap, 'utf8');
   try {

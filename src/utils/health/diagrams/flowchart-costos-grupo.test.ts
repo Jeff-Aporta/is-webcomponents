@@ -4,6 +4,8 @@
  *      cuesta una suma fija, la misma del router de componentes, y no tiene nada que hacer adentro).
  *   G2 (c) un riel que llega a un miembro del grupo sí lo cruza, una sola vez.
  *   G3 (b) N aristas paralelas sin extremos comunes no comparten tramo (los rieles quemados son aditivos).
+ *   G4 (d) cada codo ya trazado encarece su vecindad (`costearCodos`): la arista siguiente no apila un
+ *      codo junto a uno ajeno ni hace un escalón corto para colarse al lado; toma el pasillo libre.
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
@@ -80,4 +82,54 @@ Deno.test('costos: G3 (b) aristas paralelas sin extremos comunes no comparten tr
     }
   }
   assert(solapes.length === 0, `comparten tramo: ${[...new Set(solapes)].join(' | ')}`);
+});
+
+/**
+ * G4 (d). Abanico a→b / a→c y un tronco a→e que baja hasta el destino de c. Sin la vecindad de
+ * codos, a→e escoge (por empate de longitud) salir pegada al codo de a→c y hacer un escalón de
+ * 8 px (dos codos consecutivos) para seguir en paralelo a su riel: dos codos juntos se leen como
+ * un cruce. Con la vecindad, ese pasillo cuesta más y a→e toma el pasillo exterior libre.
+ * Estilo por defecto (sin `insoft`): todas las aristas pasan por la rejilla A*.
+ */
+const FLUJO_CODOS = {
+  nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }, { id: 'c', label: 'C' }, { id: 'd', label: 'D' }, { id: 'e', label: 'E' }],
+  edges: [{ from: 'a', to: 'b' }, { from: 'a', to: 'c' }, { from: 'b', to: 'd' }, { from: 'c', to: 'e' }, { from: 'a', to: 'e' }],
+};
+/** Vecindad de un codo: 2U a cada lado (`CODO.radio` en flowchart-spec). */
+const RADIO_CODO = 30;
+const codosDe = (pts: readonly P[]): P[] =>
+  pts.slice(1, -1).filter((q, k) => { const p = pts[k]!, r = pts[k + 2]!; return (q.x - p.x) * (r.y - q.y) - (q.y - p.y) * (r.x - q.x) !== 0; });
+/**
+ * Fallas de vecindad de codos de un layout:
+ *   - un codo de una arista dentro de la vecindad de un codo de OTRA arista (se exceptúa el primer
+ *     codo de dos aristas que salen del mismo nodo: es el tronco compartido del abanico);
+ *   - un escalón corto: dos codos consecutivos de la misma arista a menos de `RADIO_CODO`.
+ */
+export function fallasVecindadCodos(edges: ReadonlyArray<{ from: string; to: string; path: string }>): string[] {
+  const fallas: string[] = [];
+  const todas = edges.map((e) => ({ e, codos: codosDe(pathPoints(e.path)) }));
+  const cerca = (p: P, q: P): boolean => Math.abs(p.x - q.x) <= RADIO_CODO && Math.abs(p.y - q.y) <= RADIO_CODO;
+  for (let i = 0; i < todas.length; i++) {
+    const A = todas[i]!;
+    A.codos.slice(1).forEach((q, k) => {
+      const p = A.codos[k]!;
+      if (cerca(p, q)) fallas.push(`${A.e.from}→${A.e.to} hace un escalón corto entre (${p.x},${p.y}) y (${q.x},${q.y})`);
+    });
+    for (let j = 0; j < i; j++) {
+      const B = todas[j]!;
+      A.codos.forEach((q, ka) => B.codos.forEach((p, kb) => {
+        if (ka === 0 && kb === 0 && A.e.from === B.e.from) return;
+        if (cerca(p, q)) fallas.push(`codo (${q.x},${q.y}) de ${A.e.from}→${A.e.to} apilado junto al codo (${p.x},${p.y}) de ${B.e.from}→${B.e.to}`);
+      }));
+    }
+  }
+  return fallas;
+}
+
+Deno.test('costos: G4 (d) un codo encarece su vecindad: la siguiente arista no apila codos ni hace escalón junto a uno ajeno', () => {
+  const L = computeFlowchartLayout(resolveFlowchartSpec(FLUJO_CODOS)!, null, {});
+  const ae = L.edges.find((e) => e.from === 'a' && e.to === 'e');
+  assert(ae && codosDe(pathPoints(ae.path)).length >= 2, 'precondición: a→e no es recta (tiene que esquivar a c y su rama)');
+  const fallas = fallasVecindadCodos(L.edges);
+  assert(fallas.length === 0, fallas.join('\n'));
 });
