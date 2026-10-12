@@ -32,6 +32,8 @@ export interface SondaLlm {
   ok: boolean;
   causa: string;
   ms: number;
+  /** Falló por saldo, key o cuota: la llave entra en cooldown de 24 h (`llaves-cooldown.ts`). */
+  definitivo?: boolean;
 }
 
 /** Cache del proveedor elegido por el barrido. */
@@ -63,6 +65,8 @@ export interface OpcionesElegirProveedor {
   /** Reloj inyectable (tests). */
   now?: () => number;
   log?: (linea: string) => void;
+  /** Archivo de llaves: un fallo definitivo de la sonda pone esa llave en cooldown de 24 h. */
+  rutaLlaves?: string;
 }
 
 /** Cómo se decidió el proveedor de la corrida. */
@@ -134,6 +138,8 @@ export interface OpcionesGenerador {
   esperar?: (ms: number) => Promise<void>;
   now?: () => number;
   log?: (linea: string) => void;
+  /** Archivo de llaves: un fallo definitivo durante la corrida pone esa llave en cooldown de 24 h. */
+  rutaLlaves?: string;
 }
 
 /** Estado observable del generador (round-robin con fallback). */

@@ -34,13 +34,18 @@
  *
  * Solo `node:*` + `fetch`: corre igual en Node y en Deno.
  *
- * Vendor: `dist/cdn/vendor-distributions/testing/stagehand.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./stagehand.schemas.ts`.
+ * Cooldown de llaves: una llave que falla por saldo, key o cuota queda 24 h fuera (`cooldownHasta` en su
+ * entrada del archivo de llaves; `-1` a mano la reactiva). `elegirProveedorOpcional` no lanza: sin
+ * proveedor devuelve el motivo para que el consumidor siga en modo determinista.
+ *
+ * Vendor: `dist/cdn/vendor-distributions/testing/stagehand.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./stagehand.schemas.ts`, `./llaves-cooldown.ts`, `./llaves-cooldown.schemas.ts`.
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import process from 'node:process';
 import { ZArchivoProveedores, ZCacheProveedor, ZProveedorLlm } from './stagehand.schemas.ts';
+import { estadoLlave, marcarCooldown } from './llaves-cooldown.ts';
 import type {
   BloqueStagehand,
   ContextoDestino,
@@ -91,11 +96,18 @@ export function validarProveedores(crudos: unknown[]): ProveedorLlm[] {
  * Lee `{ proveedores: [...] }` de un JSON fuera del repo (p. ej. `Personal/stagehand-keys.json`).
  * Ausente, ilegible o sin lista → `[]` (el que llama decide si eso es error).
  */
-export function leerProveedoresDeArchivo(ruta: string): ProveedorLlm[] {
+export function leerProveedoresDeArchivo(ruta: string, o: { now?: number; log?: (l: string) => void } = {}): ProveedorLlm[] {
   try {
     if (!existsSync(ruta)) return [];
     const doc = ZArchivoProveedores.safeParse(JSON.parse(readFileSync(ruta, 'utf8')));
-    return doc.success ? validarProveedores(doc.data.proveedores) : [];
+    if (!doc.success) return [];
+    // Las llaves en cooldown (fallaron por saldo/key/cuota hace < 24 h) no entran a la pila.
+    const vigentes = doc.data.proveedores.filter((c) => {
+      const e = estadoLlave(c, o.now ?? Date.now());
+      if (!e.disponible) (o.log ?? logConsola)(`[llm] ${e.motivo}`);
+      return e.disponible;
+    });
+    return validarProveedores(vigentes);
   } catch {
     return [];
   }
@@ -145,7 +157,7 @@ export async function sondearProveedor(p: ProveedorLlm, o: OpcionesSonda = {}): 
     });
     const cuerpo: unknown = await res.json().catch(() => ({}));
     const r = evaluarSondaLlm(res.status, cuerpo);
-    return { nombre: p.nombre, ok: r.ok, causa: r.causa, ms: Date.now() - t0 };
+    return { nombre: p.nombre, ok: r.ok, causa: r.causa, ms: Date.now() - t0, ...(r.definitivo && !r.ok ? { definitivo: true } : {}) };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     return { nombre: p.nombre, ok: false, causa: `sin respuesta (${msg.slice(0, 80)})`, ms: Date.now() - t0 };
@@ -212,6 +224,7 @@ export async function elegirProveedor(o: OpcionesElegirProveedor): Promise<Elecc
   }
   const { elegido, sondas } = await barrerProveedores(o.proveedores, o.sondear);
   for (const s of sondas) log(`[llm] sonda ${s.nombre}: ${s.ok ? 'OK' : `SALTADO — ${s.causa}`} (${s.ms} ms)`);
+  for (const s of sondas) if (!s.ok && s.definitivo) log(`[llm] ${marcarCooldown(o.rutaLlaves, s.nombre, s.causa, { now: now() })}`);
   if (!elegido) throw new Error(`Stagehand: ningún proveedor LLM funcional:\n${informeSondas(sondas)}`);
   if (o.rutaCache) {
     try {
@@ -221,6 +234,18 @@ export async function elegirProveedor(o: OpcionesElegirProveedor): Promise<Elecc
   }
   log(`[llm] proveedor elegido: ${elegido.nombre} (${elegido.model})`);
   return { proveedor: elegido, origen: 'barrido', sondas, orden: ordenDesde(o.proveedores, elegido, sondas) };
+}
+
+/**
+ * Como `elegirProveedor`, pero NUNCA lanza: sin proveedor funcional devuelve `{ proveedor: null, motivo }`
+ * para que el consumidor siga en modo determinista (el LLM es una capa extra, no la base).
+ */
+export async function elegirProveedorOpcional(o: OpcionesElegirProveedor): Promise<EleccionProveedor | { proveedor: null; motivo: string }> {
+  try {
+    return await elegirProveedor(o);
+  } catch (e) {
+    return { proveedor: null, motivo: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 // ── 3. Generador (Stagehand `model.generate`) ───────────────────────────────
@@ -370,7 +395,7 @@ export function crearGenerador(proveedores: ProveedorLlm[], o: OpcionesGenerador
         try {
           return await generarCon(p, params, o);
         } catch (e) {
-          if (e instanceof FalloProveedor && e.definitivo) { ultima = e.causa; intento = reintentos; break; }
+          if (e instanceof FalloProveedor && e.definitivo) { ultima = e.causa; intento = reintentos; log(`[llm] ${marcarCooldown(o.rutaLlaves, p.nombre, e.causa, { now: now() })}`); break; }
           ultima = e instanceof Error ? e.message : String(e);
           if (intento < reintentos) await esperar((e instanceof FalloProveedor ? 2000 : 1500) * intento);
         }

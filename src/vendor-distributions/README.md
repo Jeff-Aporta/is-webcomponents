@@ -34,6 +34,8 @@ Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` (Zod incluido) 
 | `test-queue.ts` | Cola estándar de N trabajadores (`TEST_CONCURRENCY`) | [07-pruebas-y-gate.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md) |
 | `deno-test.ts` + `deno-test.schemas.ts` | `deno test` por archivo con cola + cooldown (lee JUnit) | [07-pruebas-y-gate.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md) |
 | `stagehand.ts` + `stagehand.schemas.ts` | Controlador compartido de Stagehand: proveedores LLM en orden, barrido + cache, generador con fallback/round-robin, destino por protocolo, `prepararStagehand` | [11-stagehand.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md) |
+| `jueces.ts` + `jueces.schemas.ts` | Jueces OPCIONALES de las pruebas: JEV (TypeSafe, preguntas noul/choice/score) y juez LLM sobre la pila de proveedores; nunca lanzan (`{ evaluado:false, motivo }`), `capaOpcional` avisa y sigue, `exigirJuez` salta | [11-stagehand.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md) |
+| `llaves-cooldown.ts` + `llaves-cooldown.schemas.ts` | Cooldown de 24 h por llave (LLM o JEV) al fallar por saldo/key/cuota: `cooldownHasta` en el archivo de llaves; `-1` a mano la reactiva | [11-stagehand.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md) |
 
 ## `tools/` — herramientas de build, vendor, sync y render
 
