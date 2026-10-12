@@ -45,7 +45,19 @@ const segHits = (pts, c) => pts.slice(1).some((b, i) => {
     && Math.max(a.y, b.y) > c.y && Math.min(a.y, b.y) < c.y + c.h;
 });
 const inflate = (c, p) => ({ x: c.x - p, y: c.y - p, w: c.w + 2 * p, h: c.h + 2 * p });
-const turns = (pts) => Math.max(0, pts.length - 2);
+// Giros REALES (cambios de dirección), sin contar los de un escalón corto (< lanePitch): esos son
+// la separación por delta de rieles hermanos y el peine del embudo compartido, que son estándar.
+const turns = (pts) => {
+  let n = 0;
+  for (let i = 1; i + 1 < pts.length; i++) {
+    const a = pts[i - 1], b = pts[i], c = pts[i + 1];
+    if ((a.x === b.x) === (b.x === c.x)) continue;
+    const corto = (p, q) => Math.abs(p.x - q.x) + Math.abs(p.y - q.y) < 32;
+    if (corto(a, b) || corto(b, c)) continue;
+    n++;
+  }
+  return n;
+};
 
 // Escenario base: A (izq.) → B (der.) con una caja en medio.
 const A = box('A', 0, 200);
@@ -125,7 +137,7 @@ const AB = edge('ab', A, 'right', { x: 100, y: 230 }, B, 'left', { x: 600, y: 23
   check(P.every((p) => p.length >= 2), 'R10: todas las aristas tienen path');
   // ≤ 4 giros; +1 para el “peine” de una arista que se une tarde al embudo
   // de un conector compartido (en vez de compartir riel antes de tiempo).
-  check(P.every((p) => turns(p) <= 5), `R9: ≤ 5 giros por arista (máx ${Math.max(...P.map(turns))})`);
+  check(P.every((p) => turns(p) <= 4), `R9: ≤ 4 giros reales por arista (máx ${Math.max(...P.map(turns))})`);
   const tgt = (e) => `${Math.round(e.toX)},${Math.round(e.toY)}`;
   const funnel = 2 * 32 + 2 * 22 + 1;
   for (let i = 0; i < P.length; i++) {

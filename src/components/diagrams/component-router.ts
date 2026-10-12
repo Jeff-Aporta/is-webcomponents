@@ -165,6 +165,17 @@ export function pointsToPath(pts: readonly Punto[]): string {
   return `M${pts[0]!.x},${pts[0]!.y}` + pts.slice(1).map((p) => ` L${p.x},${p.y}`).join('');
 }
 
+/**
+ * Puntos colineales: dos tramos seguidos en la misma dirección se funden en uno. El escalón de
+ * unos px antes de un puerto compartido NO se toca: es la separación por delta del peine (W54–W69).
+ */
+function fundirColineales(pts: Punto[]): Punto[] {
+  return pts.filter((p, k) =>
+    k === 0 || k === pts.length - 1 ||
+    !((Math.abs(pts[k - 1]!.x - p.x) < 0.5 && Math.abs(p.x - pts[k + 1]!.x) < 0.5) ||
+      (Math.abs(pts[k - 1]!.y - p.y) < 0.5 && Math.abs(p.y - pts[k + 1]!.y) < 0.5)));
+}
+
 /** ¿El segmento ortogonal a→b toca el interior de la caja? */
 function segHitsBox(a: Punto, b: Punto, c: Caja): boolean {
   const x0 = Math.min(a.x, b.x);
@@ -1143,6 +1154,10 @@ export function routeEdges(world: RouterWorld, edges: readonly RouterEdge[], opt
   const joinedTo = edges.map((_, ei) => (joinOf[ei] ? rootOf(ei) : null));
   const fromPorts = edges.map((_, ei) => (paths[ei] ? fromOf(ei) : null));
   const toPorts = edges.map((_, ei) => (paths[ei] ? (joinOf[ei] ? toOf(rootOf(ei)) : toOf(ei)) : null));
+  for (let ei = 0; ei < paths.length; ei++) {
+    const p = paths[ei];
+    if (p && p.length >= 3) paths[ei] = fundirColineales(p);
+  }
   return { paths, violations, crowding, joinedTo, costs: costOf, fromPorts, toPorts };
 }
 
