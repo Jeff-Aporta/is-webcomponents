@@ -297,7 +297,7 @@
           },
           "kind": "sync",
           "step": 10,
-          "stepLabel": "9"
+          "stepLabel": "9.1"
         },
         {
           "id": "m11",
@@ -323,7 +323,7 @@
           },
           "kind": "reply",
           "step": 11,
-          "stepLabel": "9"
+          "stepLabel": "9.2"
         }
       ],
       "fragments": []

@@ -233,7 +233,7 @@
           },
           "kind": "sync",
           "step": 8,
-          "stepLabel": "1.5"
+          "stepLabel": "1.5.1"
         },
         {
           "id": "m9",
@@ -255,7 +255,7 @@
           },
           "kind": "sync",
           "step": 9,
-          "stepLabel": "1.5"
+          "stepLabel": "1.5.2"
         },
         {
           "id": "m10",

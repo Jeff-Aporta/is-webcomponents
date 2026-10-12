@@ -283,7 +283,7 @@
           },
           "kind": "sync",
           "step": 7,
-          "stepLabel": "4"
+          "stepLabel": "4.1"
         },
         {
           "id": "m8",
@@ -305,7 +305,7 @@
           },
           "kind": "sync",
           "step": 8,
-          "stepLabel": "4"
+          "stepLabel": "4.2"
         },
         {
           "id": "m9",
@@ -461,7 +461,7 @@
           },
           "kind": "sync",
           "step": 14,
-          "stepLabel": "7.1"
+          "stepLabel": "7.1.1"
         },
         {
           "id": "m15",
@@ -483,7 +483,7 @@
           },
           "kind": "sync",
           "step": 15,
-          "stepLabel": "7.1"
+          "stepLabel": "7.1.2"
         },
         {
           "id": "m16",
@@ -665,7 +665,7 @@
           },
           "kind": "sync",
           "step": 22,
-          "stepLabel": "10.3"
+          "stepLabel": "10.3.1"
         },
         {
           "id": "m23",
@@ -687,7 +687,7 @@
           },
           "kind": "sync",
           "step": 23,
-          "stepLabel": "10.3"
+          "stepLabel": "10.3.2"
         },
         {
           "id": "m24",
