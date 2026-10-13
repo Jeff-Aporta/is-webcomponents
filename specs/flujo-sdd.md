@@ -42,7 +42,7 @@ Por cada tarea:
 
 1. **Rojo primero.** Escribir o extender el guardián (caja negra, ver [testing.md](testing.md) S-T6) antes de la implementación.
 2. **Verde.** Diff mínimo en `src/` (o `src/manifest.ts` / `scripts/` si aplica).
-3. **Gate.** `node tests/run-all.ts` (y el guardián nuevo aislado).
+3. **Gate.** `deno task test:all` (y el guardián nuevo aislado: `deno test -A --no-check <archivo>`).
 4. **Diario.** Si el error fue nuevo, entrada en `specs/lessons.md`.
 
 Push solo si el usuario lo pide. Autor **Jeff-Aporta**. Sin `Co-authored-by`.

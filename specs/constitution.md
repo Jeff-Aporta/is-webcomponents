@@ -32,7 +32,7 @@ Flujo: [flujo-sdd.md](flujo-sdd.md).
 ## C-4 Guardianes
 
 - Los tests viven en `tests/*.test.mjs` y **se commitean**.
-- Gate local: `node tests/run-all.ts` (sin servidor por defecto; con `PORT=8391` incluye tests de red).
+- Gate local: `deno task test` (guardianes con cooldown; `-- --sin-cooldown` corre todo) y `deno task test:all` (typecheck + test + audit).
 - Ningún cambio de comportamiento entra sin spec y sin guardián que lo verifique. Detalle: [testing.md](testing.md).
 
 ## C-5 CDN

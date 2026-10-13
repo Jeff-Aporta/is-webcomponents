@@ -15,13 +15,13 @@ Spec de origen: `specs/<dominio>/spec.md`.
 - **Verificación:**
   ```bash
   node tests/<guardian>.test.ts
-  node tests/run-all.ts
+  deno task test:all
   ```
 - **Hecho cuando:** exit 0 y spec actualizado si cambió el contrato.
 
 ## Cierre
 
-- [ ] `node tests/run-all.ts` verde
+- [ ] `deno task test:all` verde
 - [ ] `specs/<dominio>/spec.md` actualizado
 - [ ] Lección en `specs/lessons.md` si hubo error nuevo
 - [ ] Commit solo si el usuario lo pide

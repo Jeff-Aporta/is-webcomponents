@@ -5,7 +5,7 @@ Prohibiciones y reglas transversales ya pagadas. Detalle por dominio: [`componen
 ## Proceso
 
 - No implementar comportamiento nuevo sin spec en `specs/` (o sección en el dominio).
-- No cerrar un cambio sin `node tests/run-all.ts` verde (al menos tests sin servidor).
+- No cerrar un cambio sin `deno task test:all` verde (toda prueba corre dentro del cooldown: [testing.md](testing.md) S-T7).
 - No aflojar un guardián para "que pase": se arregla código o spec.
 - No commitear `tests/` entero en gitignore — solo `*.tmp`, `coverage/`, `.cache/`.
 - **Reusar antes de inventar.** Si el kit ya tiene `is-*`, `IswcUi`, `_shared/*` o un preview controlado, úsalo. No rehacer la rueda (button/dialog/table/toast/icon).

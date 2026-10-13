@@ -9,7 +9,7 @@ Todo el kit es TypeScript (ver [typescript/spec.md](typescript/spec.md)), pero n
 ## S-T1 Ubicación
 
 - Gate (`deno task test`): las carpetas que lista `src/utils/testing/run-unit.ts` (`src/utils/health/{meta,diagrams,audit}`).
-- `src/utils/testing/**` guarda suites de dominio y e2e que se corren aparte (`test:e2e`, por archivo).
+- `src/utils/testing/**` guarda suites de dominio y e2e que se corren aparte, siempre con cooldown (S-T7): `test:e2e` y `deno run -A --no-check src/utils/testing/run-all.ts`.
 - Categorías: `meta/` (estructura), `diagrams/` (diagramas específicos), `domain/` (componentes individuales), `audit/` (motor auditor).
 - Selfchecks junto al módulo: `src/components/_shared/*.selfcheck.ts` (opcionales, no sustituyen guardianes de repo).
 
@@ -69,12 +69,46 @@ WHAT rompe el guardián, el guardián está mal escrito.
 Ideas de casos: `/deep-test-proposals`. Un caso que solo se explica leyendo el código es un HOW;
 si es contrato estricto, va como HOW fuerte en el spec y su guardián lo cita.
 
+## S-T7 Toda prueba corre dentro del cooldown
+
+**WHAT.** Ninguna prueba del kit se ejecuta por fuera del sistema de cooldown
+(`src/vendor-distributions/shared/testing/test-cooldown.ts`):
+
+- Cada tarea `test*` de `deno.json` es composición de otras tareas o lanza un runner que entra al cooldown
+  (`deno-test.ts`, `pruebas.ts` o `test-cooldown.ts` directo); ninguna corre `deno test` suelto.
+- Ningún script del kit lanza `deno test`/`node --test` sin pasar por el cooldown.
+- Un archivo verde no se repite durante duración × 1440; uno rojo no entra en cooldown (queda `until: -1`) y corre
+  en la siguiente corrida; `--sin-cooldown`/`TEST_COOLDOWN=0` corre todo y no registra.
+- Rojo a la primera: se reintenta una vez de a uno (`TEST_REINTENTOS`); si pasa, la corrida es verde y el archivo
+  entra en cooldown. Así un fallo de infraestructura (dos Chromium lanzados a la vez desde Deno en Windows,
+  `os error 6`) no tumba el gate, y un fallo real falla las dos veces.
+
+**HOW débil.** `deno task test` (`run-unit.ts`), `test:e2e` (`e2e/run.ts`), `run-all.ts` de `src/utils/testing/` y el
+exhaustivo usan `denoTest`; `test:demos` usa `runQueue` + `cooldown.run`; `test:foundation` registra la sonda completa
+con el id `skills/iswc-foundation/tools/probar-foundation.ts::*`.
+
+Guardián: [`src/utils/health/meta/cooldown-guardian.test.ts`](../src/utils/health/meta/cooldown-guardian.test.ts) (C1-C4).
+
+### Lluvia de casos (2026-10-13)
+
+| Caso propuesto | Estado | Motivo / guardián |
+|---|---|---|
+| Cada tarea `test*` entra al cooldown o compone otras | Implementado | C1 (encontró `test:foundation` fuera; ahora registra) |
+| Ningún script lanza `deno test` por fuera | Implementado | C2 (encontró `run-all.ts`, `exhaustive/run-all-tests.mjs`, `exhaustive/count.mjs` y `probes/diag-failures.mjs`: los dos primeros pasan por `denoTest`, los dos últimos eran código muerto y se borraron) |
+| Verde → cooldown; rojo → corre otra vez; sin cooldown → todo y sin registro | Implementado | C3 (caja negra con archivos temporales) |
+| Rojo intermitente → reintento verde; rojo persistente → rojo con `until: -1` | Implementado | C4 |
+| Una tarea compone una tarea inexistente | Implementado | C1 |
+| Las suites de `src/utils/testing/` (meta/domain/diagrams) entran al gate | Descartado | hoy se corren aparte (`run-all.ts`, con cooldown); 66 de sus casos están en rojo desde antes y no son parte del gate: migrarlas es una tarea propia |
+| El cooldown de una prueba cuyo archivo cambió se invalida solo | Descartado | decisión de Jeff: el cooldown es por tiempo; si hay que probarlo ya se pone `until: -1` a mano o `--sin-cooldown` |
+| `test:foundation` con id por SHA del pin | Descartado | el id fijo es predecible; un pin nuevo se prueba con `--sin-cooldown` |
+
 ## Contratos
 
 | Pieza | Contrato |
 |---|---|
 | Runner | `deno test -A --no-check src/utils/health/**/*.test.ts` |
 | Gate completo | `deno task test:all` (typecheck + test + audit) |
+| Cooldown | `src/utils/health/meta/cooldown-guardian.test.ts` |
 | Meta SDD | `src/utils/health/meta/specs-sdd.test.ts` |
 | Carta | `src/utils/testing/meta/llm-contract.test.ts` |
 | Auditor motor | `src/utils/health/audit/motor.test.ts` |

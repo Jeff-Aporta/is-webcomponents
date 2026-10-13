@@ -165,6 +165,39 @@ versiona**: sin él los dos scripts se deshacían el trabajo en bucle —uno pon
 en cada pasada justo lo que el otro acababa de quitar— y además señala dónde
 falla la heurística, que es información que merece conservarse.
 
+## S-TS9 Importar del archivo de origen (sin re-exports ni barriles)
+
+**WHAT.** Todo símbolo se importa del archivo que lo declara. En el código del kit (`src/`, `skills/` y
+`scripts/`) no hay barriles (`index.ts` que reúnen exports), ni re-exports (`export … from`), ni
+re-exportación de un nombre importado (`export { a }`, `export default a`, `export const b = a`). Lo que
+el kit publica en `dist/cdn/` resuelve sus imports relativos sin barriles: lo que un consumidor importa o
+vendoriza no apunta a un archivo inexistente.
+
+Única excepción declarada (y verificada): los módulos de copia única de Zod —
+`src/vendor-distributions/shared/lib/zod.ts` (entrada CDN `dist/cdn/lib/zod.min.js`) y `base/zod.ts` de
+la plantilla de apps—. Una excepción cuyo archivo ya no existe es un error.
+
+**HOW débil.** El guardián lee los fuentes sin comentarios ni plantillas de texto y busca las formas
+prohibidas; al publicar, `scripts/build.mjs` reescribe en los `.ts` de `dist/cdn/core/` la ruta
+`../cdn/build/` a `../build/` (el layout publicado).
+
+Guardián: [`src/utils/health/meta/no-reexports.test.ts`](../../src/utils/health/meta/no-reexports.test.ts) (X1-X7).
+
+### Lluvia de casos (2026-10-13)
+
+| Caso propuesto | Estado | Motivo / guardián |
+|---|---|---|
+| Cada forma prohibida (`export *`, `export * as`, `export {…} from`, `export type {…} from`, multilínea) se reporta | Implementado | X4 (casos en JSON) |
+| Re-export de un import con alias, de un tipo, de un namespace, `export default` de un import | Implementado | X4 |
+| Alias `export const b = a` (con y sin tipo anotado) | Implementado | X4 |
+| Formas legítimas no se reportan: declaración local, valor derivado (`z.object`), expresión, ejemplos en comentarios y plantillas | Implementado | X4 |
+| La regla cubre `skills/` y `scripts/`, no solo `src/` | Implementado | X5 (encontró `scripts/highlight-pre.js`, corregido) |
+| La excepción declarada existe y publica su entrada CDN | Implementado | X6 |
+| `dist/cdn/` sin imports relativos rotos | Implementado | X7 (encontró `dist/cdn/core/element.ts → ../cdn/build/`, corregido en el build) |
+| Ninguna página o demo cita un barril retirado (`core/index.min.js`) | Descartado | lo cubre X7 para módulos; las páginas se regeneran en el build y el gate e2e las abre |
+| ISS/ISW no importan barriles del kit | Descartado | fuera de este repo: lo verifica el re-vendor de cada app al nuevo pin |
+| `export =`/CommonJS (`module.exports = require(…)`) | Descartado | el kit es ESM; no hay CommonJS que vigilar |
+
 ## Fuera de alcance
 
 - El pipeline de `dist/cdn/` (ver [`cdn/spec.md`](../cdn.md)).
