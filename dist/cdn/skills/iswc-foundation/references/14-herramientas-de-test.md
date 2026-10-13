@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/references/14-herramientas-de-test.md -->
+<!-- @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/references/14-herramientas-de-test.md -->
 # 14 — Herramientas de test: qué usar y cuándo (guía para agentes)
 
 Fuente única para ISS, ISW, el kit y toda app iswc. Las apps NO copian este texto: enlazan aquí desde

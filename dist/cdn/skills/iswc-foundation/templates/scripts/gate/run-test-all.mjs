@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/scripts/gate/run-test-all.mjs
+// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/scripts/gate/run-test-all.mjs
 // run-test-all.mjs — bateria completa (`deno task test:all`; la usa tambien el gate del sync).
 //
 // Pasos, todos con el cooldown del kit (x600: un verde reciente no se repite, un rojo corre siempre):

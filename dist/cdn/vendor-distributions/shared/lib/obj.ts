@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/shared/lib/obj.ts
+// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/shared/lib/obj.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
 /**
  * obj.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).
@@ -31,9 +31,10 @@ import {
   nullable as zNullable, object as zObject, optional as zOptional, safeParse, ZodArray, ZodCatch, ZodDefault, ZodExactOptional, ZodLazy,
   ZodNonOptional, ZodNullable, ZodObject, ZodOptional, ZodPipe, ZodPrefault, ZodPromise, ZodReadonly, ZodRecord, ZodSuccess, ZodUnion, type z,
 } from "zod";
-import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "../schemas.ts";
+import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "../schemas.js";
 
-export type { TAccionObj, TCargarJson, TCodigoObj, TConsulta, TJson, TOpcionesResolver, TRefObj } from "../schemas.ts";
+// `.js` y no `.ts`: un consumidor Node (tsc sin allowImportingTsExtensions) lo exige; Deno resuelve `.js` -> `.ts`.
+export type { TAccionObj, TCargarJson, TCodigoObj, TConsulta, TJson, TOpcionesResolver, TRefObj } from "../schemas.js";
 
 /** Error de `Obj`: `codigo` dice qué falló y `ruta` dónde (claves separadas por punto). */
 export class ObjError extends Error {

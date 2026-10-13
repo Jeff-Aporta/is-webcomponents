@@ -358,12 +358,13 @@ Deno.test('vendor: V14 la web es el pin estático del proyecto (nunca el HEAD); 
   const app = await Deno.makeTempDir({ prefix: 'pin-' });
   await Deno.mkdir(join(app, 'src'), { recursive: true });
   await Deno.writeTextFile(join(app, 'src/pin.ts'), `import 'https://cdn.jsdelivr.net/gh/${F}@${pin}/dist/cdn/loader.min.js';\n`);
-  const { fetchFn, pedidas } = webFalsa(pin, { [`${VD}/shared/lib/a.ts`]: 'export const a = "web";\n' });
+  const { fetchFn, pedidas } = webFalsa(pin, { [`${VD}/shared/lib/a.ts`]: `/** Doc: https://cdn.jsdelivr.net/gh/${F}@main/x.md */\nexport const a = "web";\n` });
   // Sin local: baja del pin (fecha del archivo en el pin = 2030, más nueva que cualquier copia).
   const res = await vendorizar({ repo: F, raiz: app, archivos: [{ desde: `${VD}/shared/lib/a.ts`, hacia: 'ISU/a.ts' }] }, { raiz: app, fetchFn });
   assertEquals([res[0]!.estado, res[0]!.fuente, res[0]!.sha], ['actualizado', 'remoto', pin]);
   const t = await Deno.readTextFile(join(app, 'ISU/a.ts'));
   assert(t.startsWith(`// @vendor 2030-01-01T00:00:00.000Z ${F}@${pin} ${VD}/shared/lib/a.ts\n`) && t.endsWith('export const a = "web";\n'), t);
+  assert(t.includes(`Doc: https://cdn.jsdelivr.net/gh/${F}@${pin}/x.md`) && !t.includes('@main/'), 'toda URL jsDelivr @main queda fijada al pin');
   assert(pedidas.some((u) => u.includes(`@${pin}/${VD}/shared/lib/a.ts`)) && !pedidas.some((u) => u.includes('/commits/main')), `solo el pin: ${pedidas.join('\n')}`);
   // Con local y una skill que la web aún no tiene (404): se copia del checkout con el aviso.
   const res2 = await vendorizar({ repo: F, local: kit, raiz: app, archivos: [{ desde: 'skills/nueva', hacia: 'skills/nueva', carpeta: true }] }, { raiz: app, fetchFn });

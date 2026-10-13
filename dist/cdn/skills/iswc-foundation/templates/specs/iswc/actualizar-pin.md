@@ -2,7 +2,7 @@
 name: actualizar-pin
 description: Subir el kit iswc-root a otro SHA en una app iswc (pin congelado + vendor + gate). Úsala para alinear la app con la última versión del kit, periódicamente.
 ---
-<!-- @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/specs/iswc/actualizar-pin.md -->
+<!-- @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/specs/iswc/actualizar-pin.md -->
 
 # Actualizar el pin del kit
 

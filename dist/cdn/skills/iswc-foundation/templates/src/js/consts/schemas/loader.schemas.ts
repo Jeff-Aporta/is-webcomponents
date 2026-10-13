@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/src/js/consts/schemas/loader.schemas.ts
+// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/src/js/consts/schemas/loader.schemas.ts
 /**
  * loader.schemas.ts — lo que la app usa del loader del kit (`globalThis.ISWebComponentsLoader`).
  * La forma canónica completa vive en el kit (`@iswc/loader-schemas`, pineado en deno.json);

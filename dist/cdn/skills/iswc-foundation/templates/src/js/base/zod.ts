@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/src/js/base/zod.ts
+// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/src/js/base/zod.ts
 /**
  * zod.ts — el ÚNICO módulo que importa el paquete `zod`. Los schemas importan `z` de aquí.
  * El build lo empaqueta con zod dentro (el navegador no resuelve `import "zod"`).
