@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/lib/obj.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/lib/obj.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
 /**
  * obj.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).
@@ -34,7 +34,6 @@ import {
 import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "../schemas.js";
 
 // `.js` y no `.ts`: un consumidor Node (tsc sin allowImportingTsExtensions) lo exige; Deno resuelve `.js` -> `.ts`.
-export type { TAccionObj, TCargarJson, TCodigoObj, TConsulta, TJson, TOpcionesResolver, TRefObj } from "../schemas.js";
 
 /** Error de `Obj`: `codigo` dice qué falló y `ruta` dónde (claves separadas por punto). */
 export class ObjError extends Error {

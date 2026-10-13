@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/70-pruebas-gate-y-sync.md -->
+<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/70-pruebas-gate-y-sync.md -->
 # 70 — Pruebas, gate y sync
 
 > Alcance: el sistema común de pruebas del kit, la batería `test:all` y el sync al entregable.

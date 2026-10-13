@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/download-iconify.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/download-iconify.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md
 /**
  * download-iconify — descarga a la app los íconos Iconify que usa (SIN mapa: Jeff, 2026-10-13).
@@ -36,8 +36,6 @@ import { basename, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
 import type { IconId, IconifyJson, OpcionesDescarga, ResumenDescarga } from '../../shared/schemas.ts';
-
-export type { IconId, IconifyJson, OpcionesDescarga, ResumenDescarga } from '../../shared/schemas.ts';
 
 export const DEFAULTS = {
   salida: 'assets',

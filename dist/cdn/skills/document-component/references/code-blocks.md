@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/code-blocks.md -->
+<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/code-blocks.md -->
 # Bloques de código en las fichas iswc
 
 Los bloques de código son la **única** fuente de verdad operativa de

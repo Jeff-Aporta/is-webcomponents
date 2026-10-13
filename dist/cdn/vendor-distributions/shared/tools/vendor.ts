@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 /**
  * vendor.ts — mantiene al día, por BARRIDO, todo lo que un consumidor (ISS, ISW…) trae de un repo GitHub
@@ -78,9 +78,6 @@ import { execFileSync } from "node:child_process";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 import { PERFILES, ZConfigVendor, type FetchFn, type OpcionesVendorizar, type TCabeceraVendor, type TConfigVendor, type TPerfil, type TPerfilVendor, type TResultadoVendor, type TrabajoVendor as Trabajo } from "../schemas.ts";
-
-export type { FetchFn, OpcionesVendorizar, TArchivoVendor, TCabeceraVendor, TConfigVendor, TPerfil, TPerfilVendor, TPinVendor, TResultadoVendor, TrabajoVendor } from "../schemas.ts";
-export { PERFILES } from "../schemas.ts";
 
 /** Nombre del archivo único de contratos (se poda por secciones al vendorizar). */
 export const SCHEMAS = "schemas.ts";

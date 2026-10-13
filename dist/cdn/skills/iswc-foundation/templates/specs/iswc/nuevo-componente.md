@@ -2,7 +2,7 @@
 name: nuevo-componente
 description: Crear un componente __PREFIJO__-* en una app iswc. Úsala cada vez que nace una pieza visible nueva o se migra una existente al estándar.
 ---
-<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/nuevo-componente.md -->
+<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/nuevo-componente.md -->
 
 # Nuevo componente `__PREFIJO__-<x>`
 

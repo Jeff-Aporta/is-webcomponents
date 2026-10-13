@@ -93,3 +93,15 @@ Deno.test('pin-update: P6 las URL raw@main de los scripts online (vendor, pin-up
   const fuente = inventario({ ...SANO, 'src/e.ts': "const u = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/shared/tools/vendor.ts';" });
   assertEquals(fuente.code, 1, 'la FUENTE .ts por main tampoco: online va el bundle de dist/cdn');
 });
+
+// P7 La cabecera `@vendor … @main …` de lo vendorizado (ts, md, html) no es ref mutable; un import @main en el cuerpo sí.
+Deno.test('pin-update: P7 la cabecera @vendor @main no alerta; el mismo repo@main en el cuerpo sí', () => {
+  const r = inventario({
+    ...SANO,
+    'src/v.ts': '// @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-root@main dist/cdn/vendor-distributions/shared/testing/pruebas.ts\nexport const x = 1;',
+    'src/v.md': '<!-- @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-root@main dist/cdn/skills/x/SKILL.md -->\n# x',
+  });
+  assertEquals(r.code, 0, r.out);
+  const malo = inventario({ ...SANO, 'src/w.ts': "// @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-root@main x.ts\nimport 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';" });
+  assertEquals(malo.code, 1, 'un import @main bajo la cabecera sigue siendo mutable');
+});

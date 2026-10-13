@@ -1,18 +1,19 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
 // Bundle autocontenido de src/vendor-distributions/client/tools/render-lote.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/client/tools/render-lote.ts.
 
 // src/vendor-distributions/client/tools/render-lote.ts
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync as existsSync2 } from "node:fs";
-import { mkdir as mkdir2, readdir, readFile as readFile2, rename as rename2, writeFile as writeFile2 } from "node:fs/promises";
+import { mkdir as mkdir3, readdir, readFile as readFile3, rename as rename2, writeFile as writeFile3 } from "node:fs/promises";
 import { createRequire } from "node:module";
-import { dirname as dirname2, join as join3, relative as relative2, resolve as resolve2 } from "node:path";
+import { tmpdir as tmpdir2 } from "node:os";
+import { dirname as dirname3, join as join3, relative as relative2, resolve as resolve2 } from "node:path";
 import process2 from "node:process";
 import { pathToFileURL as pathToFileURL2 } from "node:url";
 
 // src/vendor-distributions/client/tools/render-diagram.ts
-import { mkdir, writeFile, rm, rename, readFile } from "node:fs/promises";
+import { mkdir as mkdir2, writeFile as writeFile2, rm, rename, readFile as readFile2 } from "node:fs/promises";
 
 // src/vendor-distributions/shared/lib/obj.ts
 import {
@@ -222,8 +223,12 @@ var OpcionesLoteDatosSchema = z.object({
   salidaPng: z.string().min(1),
   /** Archivo de caché; por defecto `<carpeta>/diagramas-iswc.cache.json`. */
   cache: z.string().optional(),
-  /** Raíz del checkout del kit (= `serveRoot`; de ahí salen `dist/cdn/…` y Playwright). */
-  kit: z.string().min(1),
+  /**
+   * Raíz de un checkout del kit (opcional): si está, `dist/cdn/…` y Playwright salen de ahí. Sin él (o para lo que
+   * falte), `dist/cdn/…` se pide a `https://raw.githubusercontent.com/<repo>/<pinKit|main>/` y Playwright sale del
+   * `package.json` del directorio actual (o de `npm:playwright`).
+   */
+  kit: z.string().min(1).optional(),
   /** Sello del kit que entra en la huella; por defecto `<kit>/PIN` o `dist/cdn/build-stamp.json`. */
   pinKit: z.string().optional(),
   /** Slugs a procesar (vacío = todos). */
@@ -613,14 +618,15 @@ function resolverUrl(path, base) {
 
 // src/vendor-distributions/client/tools/render-diagram.ts
 import process from "node:process";
-import { join as join2, dirname, isAbsolute, relative } from "node:path";
+import { join as join2, dirname as dirname2, isAbsolute, relative } from "node:path";
 import { tmpdir } from "node:os";
 import { pathToFileURL } from "node:url";
 
 // src/vendor-distributions/client/tools/static-server.ts
 import { createServer } from "node:http";
 import { createReadStream, existsSync } from "node:fs";
-import { join, extname, resolve } from "node:path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, join, extname, resolve } from "node:path";
 var TYPES = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -632,25 +638,69 @@ var TYPES = {
   ".map": "application/json",
   ".woff2": "font/woff2"
 };
-function startStaticServer(root) {
+function startStaticServer(root, remoto) {
   const absRoot = resolve(root);
+  const memoria = /* @__PURE__ */ new Map();
+  const inmutable = !!remoto && /\/[0-9a-f]{40}\/$/.test(remoto);
+  const traer = async (rel) => {
+    if (!remoto || !rel.startsWith("dist/cdn/")) return null;
+    const enMemoria = memoria.get(rel);
+    if (enMemoria !== void 0) return enMemoria;
+    const enDisco = join(absRoot, ".iswc-remoto", rel);
+    if (inmutable && existsSync(enDisco)) {
+      const b = new Uint8Array(await readFile(enDisco));
+      memoria.set(rel, b);
+      return b;
+    }
+    let cuerpo = null;
+    for (let i = 0; i < 3 && cuerpo === null; i++) {
+      try {
+        const r = await fetch(remoto + rel);
+        if (r.ok) cuerpo = new Uint8Array(await r.arrayBuffer());
+        else {
+          await r.body?.cancel();
+          if (r.status === 404) break;
+        }
+      } catch {
+      }
+    }
+    memoria.set(rel, cuerpo);
+    if (cuerpo && inmutable) {
+      await mkdir(dirname(enDisco), { recursive: true });
+      await writeFile(enDisco, cuerpo);
+    }
+    return cuerpo;
+  };
   return new Promise((resolvePromise) => {
     const server = createServer((req, res) => {
       const url = new URL(req.url || "/", "http://127.0.0.1");
       let rel = decodeURIComponent(url.pathname).replace(/^\/+/, "");
       if (!rel || rel.endsWith("/")) rel += "index.html";
       const abs = join(absRoot, rel);
-      if (!abs.startsWith(absRoot) || !existsSync(abs)) {
+      const cabeceras = (f) => ({
+        "Content-Type": TYPES[extname(f)] || "application/octet-stream",
+        "Cache-Control": "no-store",
+        "Access-Control-Allow-Origin": "*"
+      });
+      if (!abs.startsWith(absRoot)) {
         res.writeHead(404);
         res.end("not found");
         return;
       }
-      res.writeHead(200, {
-        "Content-Type": TYPES[extname(abs)] || "application/octet-stream",
-        "Cache-Control": "no-store",
-        "Access-Control-Allow-Origin": "*"
+      if (existsSync(abs)) {
+        res.writeHead(200, cabeceras(abs));
+        createReadStream(abs).pipe(res);
+        return;
+      }
+      void traer(rel.split("\\").join("/")).then((cuerpo) => {
+        if (!cuerpo) {
+          res.writeHead(404);
+          res.end("not found");
+          return;
+        }
+        res.writeHead(200, cabeceras(rel));
+        res.end(cuerpo);
       });
-      createReadStream(abs).pipe(res);
     });
     server.listen(0, "127.0.0.1", () => {
       const addr = server.address();
@@ -824,9 +874,9 @@ async function waitReady(page, timeoutMs) {
 }
 async function writeServedHtml(serveRoot, html, stem) {
   const dir = join2(serveRoot, TMP_DIR_NAME);
-  await mkdir(dir, { recursive: true });
+  await mkdir2(dir, { recursive: true });
   const abs = join2(dir, `${stem}-${Date.now()}.html`);
-  await writeFile(abs, html, "utf8");
+  await writeFile2(abs, html, "utf8");
   const rel = relative(serveRoot, abs).replace(/\\/g, "/");
   return { abs, rel };
 }
@@ -847,7 +897,7 @@ async function capturePng(ctx, sano, hrefs, id) {
   const lienzo = pngCanvasSize(sano.width, sano.height, 2);
   const wrap = staticSvgWrapper(sano.svg, { width: lienzo.width, height: lienzo.height, cssHrefs: hrefs });
   const wrapPath = join2(tmpdir(), `iswc-png-${id}-${Date.now()}.html`);
-  await writeFile(wrapPath, wrap, "utf8");
+  await writeFile2(wrapPath, wrap, "utf8");
   try {
     const page2 = await ctx.newPage();
     if (page2.emulateMedia) await page2.emulateMedia({ colorScheme: "light" });
@@ -923,7 +973,7 @@ async function renderDiagramBatch(jobs, opts) {
   try {
     let base = "";
     if (opts.serveRoot) {
-      server = await startStaticServer(opts.serveRoot);
+      server = await startStaticServer(opts.serveRoot, opts.remoteBase);
       base = server.base;
     }
     browser = await opts.chromium.launch({ headless: true });
@@ -965,9 +1015,9 @@ async function renderDiagramBatch(jobs, opts) {
 }
 async function writeDiagramOutputs(result, outSvg, outPng) {
   const atomic = async (file, data) => {
-    await mkdir(dirname(file), { recursive: true });
+    await mkdir2(dirname2(file), { recursive: true });
     const tmp = `${file}.tmp-${process.pid}`;
-    await writeFile(tmp, data);
+    await writeFile2(tmp, data);
     await rename(tmp, file);
   };
   await atomic(outSvg, sinInyeccion(result.svg));
@@ -980,7 +1030,7 @@ async function payloadResuelto(job) {
   if (!job.payloadBase) return job.payload;
   return Obj.resolver(job.payload, {
     base: job.payloadBase,
-    cargar: async (url) => JSON.parse(/^https?:/i.test(url) ? await (await fetch(url)).text() : await readFile(url.startsWith("file:") ? new URL(url) : url, "utf8"))
+    cargar: async (url) => JSON.parse(/^https?:/i.test(url) ? await (await fetch(url)).text() : await readFile2(url.startsWith("file:") ? new URL(url) : url, "utf8"))
   });
 }
 
@@ -995,8 +1045,9 @@ function canonico(v) {
 }
 var sha256 = (texto) => createHash("sha256").update(texto).digest("hex");
 async function pinDelKit(kit) {
+  if (!kit) return "";
   for (const f of [join3(kit, "PIN"), join3(kit, "dist", "cdn", "build-stamp.json")]) {
-    if (existsSync2(f)) return (await readFile2(f, "utf8")).trim();
+    if (existsSync2(f)) return (await readFile3(f, "utf8")).trim();
   }
   return "";
 }
@@ -1005,7 +1056,7 @@ async function leerCache(archivo) {
   const vacio = { version: VERSION, diagramas: {} };
   if (!existsSync2(archivo)) return vacio;
   try {
-    const c = CacheLoteSchema.parse(JSON.parse(await readFile2(archivo, "utf8")));
+    const c = CacheLoteSchema.parse(JSON.parse(await readFile3(archivo, "utf8")));
     return c.version === VERSION ? c : vacio;
   } catch {
     return vacio;
@@ -1014,12 +1065,12 @@ async function leerCache(archivo) {
 async function anotarCache(archivo, slug, entrada) {
   const c = await leerCache(archivo);
   c.diagramas[slug] = entrada;
-  await mkdir2(dirname2(archivo), { recursive: true });
+  await mkdir3(dirname3(archivo), { recursive: true });
   const tmp = `${archivo}.tmp-${process2.pid}`;
-  await writeFile2(tmp, JSON.stringify(c, null, 2) + "\n", "utf8");
+  await writeFile3(tmp, JSON.stringify(c, null, 2) + "\n", "utf8");
   await rename2(tmp, archivo);
 }
-var relPosix = (desde, a) => relative2(dirname2(desde), a).replaceAll("\\", "/");
+var relPosix = (desde, a) => relative2(dirname3(desde), a).replaceAll("\\", "/");
 async function planificarLote(op) {
   const o = OpcionesLoteDatosSchema.parse(op);
   const carpeta = resolve2(o.carpeta);
@@ -1035,7 +1086,7 @@ async function planificarLote(op) {
     let slug = f.replace(/\.json$/, "");
     const salidas = (s) => ({ svg: resolve2(o.salidaSvg, `${s}.svg`), png: png ? resolve2(o.salidaPng, `${s}.png`) : null });
     try {
-      const spec = EditableLoteSchema.parse(JSON.parse(await readFile2(archivo, "utf8")));
+      const spec = EditableLoteSchema.parse(JSON.parse(await readFile3(archivo, "utf8")));
       slug = spec.slug || slug;
       if (solo.size && !solo.has(slug)) continue;
       const payload = await payloadResuelto({ scriptUrl: "", payload: spec.payload, payloadBase: archivo });
@@ -1058,15 +1109,35 @@ async function planificarLote(op) {
   }
   return { carpeta, cache, pinKit, diagramas };
 }
-var chromiumDelKit = (kit) => createRequire(pathToFileURL2(join3(kit, "package.json")))("playwright").chromium;
+var REPO_KIT = import.meta.url.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\//)?.[1] ?? import.meta.url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^/@]+)@/)?.[1] ?? "Jeff-Aporta/is-webcomponents";
+var baseRemota = (pinKit) => `https://raw.githubusercontent.com/${REPO_KIT}/${pinKit && /^[0-9a-f]{40}$/.test(pinKit) ? pinKit : "main"}/`;
+var raizServida = (kit) => resolve2(kit ?? join3(tmpdir2(), "iswc-render-lote"));
+async function chromiumDisponible(kit) {
+  for (const base of [kit, process2.cwd()]) {
+    if (!base || !existsSync2(join3(base, "node_modules"))) continue;
+    try {
+      return createRequire(pathToFileURL2(join3(base, "package.json")))("playwright").chromium;
+    } catch {
+    }
+  }
+  const especificador = "npm:playwright@1.63.0";
+  const mod = await import(especificador);
+  if (!tieneChromium(mod)) throw new Error("render-lote: no hay Playwright (ni en el kit, ni en el proyecto, ni npm:playwright)");
+  return mod.chromium;
+}
+function tieneChromium(x) {
+  const c = x && typeof x === "object" ? Reflect.get(x, "chromium") : void 0;
+  return !!c && typeof c === "object" && typeof Reflect.get(c, "launch") === "function";
+}
 async function renderizarUno(op, slug) {
   const plan = await planificarLote({ ...op, solo: [slug], forzar: true });
   const d = plan.diagramas[0];
   if (!d) throw new Error(`ning\xFAn diagrama con slug ${slug}`);
   if (d.accion === "error" || !d.job) throw new Error(d.motivo);
   const [r] = await renderDiagramBatch([{ id: slug, job: d.job }], {
-    chromium: op.chromium ?? chromiumDelKit(op.kit),
-    serveRoot: resolve2(op.kit),
+    chromium: op.chromium ?? await chromiumDisponible(op.kit),
+    serveRoot: raizServida(op.kit),
+    remoteBase: baseRemota(plan.pinKit),
     timeoutMs: op.timeoutMs ?? 3e5,
     settleMs: op.settleMs ?? 500,
     png: op.png ?? true
@@ -1161,7 +1232,6 @@ function opcionesDeCli(argv) {
   const a = argumentos(argv);
   const texto = (k) => typeof a[k] === "string" ? a[k] : void 0;
   const kit = texto("kit") ?? process2.env.ISWC_KIT;
-  if (!kit) throw new Error("render-lote: hace falta --kit=<checkout del kit> o ISWC_KIT");
   return OpcionesLoteDatosSchema.parse({
     carpeta: texto("carpeta"),
     salidaSvg: texto("svg"),
@@ -1197,15 +1267,15 @@ var esPrincipal = import.meta.main ?? (process2.argv[1] ? process2.argv[1] === i
 if (esPrincipal) await cli();
 export {
   CACHE_NOMBRE,
-  CacheLoteSchema,
-  EditableLoteSchema,
-  OpcionesLoteDatosSchema,
+  REPO_KIT,
   VERSION,
   anotarCache,
+  baseRemota,
   canonico,
   leerCache,
   pinDelKit,
   planificarLote,
+  raizServida,
   renderizarLote,
   renderizarUno,
   rutaCache,

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/deno-test.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/deno-test.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 // deno-test.ts — `deno test` estándar de los proyectos is-*: cola de
 // `testConcurrency()` archivos a la vez (3 por defecto) y cooldown de iswc.
@@ -20,9 +20,9 @@ import { existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import process from "node:process";
-import { formatMs, testConcurrency, testCooldownFromEnv, testId, type TestCooldown } from "./test-cooldown.ts";
+import { formatMs, testConcurrency, testCooldownFromEnv, testId } from './test-cooldown.ts';
+import { type TestCooldown } from '../schemas.ts';
 
-export type { DenoTestOptions } from "../schemas.ts";
 import type { DenoTestOptions } from "../schemas.ts";
 
 /** `{ "./ruta/x.test.ts": { ms, ok } }` desde un reporte JUnit de Deno. */

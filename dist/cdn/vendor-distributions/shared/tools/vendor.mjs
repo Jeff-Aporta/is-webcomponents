@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.mjs
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.mjs
 // Bundle autocontenido de src/vendor-distributions/shared/tools/vendor.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/shared/tools/vendor.ts.
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -13,6 +13,7 @@ var __export = (target, all) => {
 // src/vendor-distributions/shared/tools/pin-update.mjs
 var pin_update_exports = {};
 __export(pin_update_exports, {
+  CABECERA_VENDOR: () => CABECERA_VENDOR,
   ONLINE: () => ONLINE,
   SHA: () => SHA,
   actualizarPines: () => actualizarPines,
@@ -102,7 +103,7 @@ function inventario(op = opciones()) {
       if (m[2] !== op.nombre) legados.add(rel(f));
     }
     t.split("\n").forEach((l, i) => {
-      if (reMutable.test(l) && !ONLINE.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`);
+      if (reMutable.test(l) && !ONLINE.test(l) && !CABECERA_VENDOR.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`);
     });
   }
   return { pines, mutables, legados };
@@ -249,7 +250,7 @@ function esPrincipal() {
     return false;
   }
 }
-var ALIAS, RAICES_DEFAULT, SALTAR_DEFAULT, EXT, ONLINE, SHA, auth, esc, log;
+var ALIAS, RAICES_DEFAULT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log;
 var init_pin_update = __esm({
   async "src/vendor-distributions/shared/tools/pin-update.mjs"() {
     ALIAS = { "is-webcomponents": ["iswc-root"], "iswc-root": ["is-webcomponents"] };
@@ -257,6 +258,7 @@ var init_pin_update = __esm({
     SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
     EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
     ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
+    CABECERA_VENDOR = /^\s*(?:\/\/|<!--|#|\*)\s*@vendor\s/;
     SHA = /^[0-9a-f]{40}$/;
     auth = () => process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
     esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
@@ -476,8 +478,12 @@ var OpcionesLoteDatosSchema = z.object({
   salidaPng: z.string().min(1),
   /** Archivo de caché; por defecto `<carpeta>/diagramas-iswc.cache.json`. */
   cache: z.string().optional(),
-  /** Raíz del checkout del kit (= `serveRoot`; de ahí salen `dist/cdn/…` y Playwright). */
-  kit: z.string().min(1),
+  /**
+   * Raíz de un checkout del kit (opcional): si está, `dist/cdn/…` y Playwright salen de ahí. Sin él (o para lo que
+   * falte), `dist/cdn/…` se pide a `https://raw.githubusercontent.com/<repo>/<pinKit|main>/` y Playwright sale del
+   * `package.json` del directorio actual (o de `npm:playwright`).
+   */
+  kit: z.string().min(1).optional(),
   /** Sello del kit que entra en la huella; por defecto `<kit>/PIN` o `dist/cdn/build-stamp.json`. */
   pinKit: z.string().optional(),
   /** Slugs a procesar (vacío = todos). */
@@ -1114,7 +1120,6 @@ if (esPrincipal2()) {
 }
 export {
   EXTENSIONES,
-  PERFILES,
   SALTAR,
   SCHEMAS,
   SECCION_COMUN,

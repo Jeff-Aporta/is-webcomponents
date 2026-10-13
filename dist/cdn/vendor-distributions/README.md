@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/README.md -->
+<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/README.md -->
 # `vendor-distributions/` — todo lo que un consumidor trae del kit por vendor, separado por perfil
 
 Fuente: `src/vendor-distributions/`. Publicado por `deno task build` en `dist/cdn/vendor-distributions/`
@@ -61,7 +61,7 @@ Guardián: `src/utils/health/meta/vendor-distributions-doc.test.ts`.
 
 ## `shared/` — sirve a server y a client
 
-`shared/index.ts` es el barrel del perfil (dentro del kit o para quien vendorice `shared/` completo).
+Sin barriles ni re-exports (regla InSoft): cada consumidor importa del archivo de origen; los tipos, de `schemas.ts`, y `z`, de `zod`.
 
 | Archivo | Propósito | Doc |
 | --- | --- | --- |
@@ -103,7 +103,7 @@ que es `shared/`. Aquí va lo que solo un server necesite (BD, colas, Azure Func
 
 ## `client/` — navegador, e2e y render visual
 
-`client/index.ts` es el barrel del perfil (labs del kit). Sus contratos son secciones de `shared/schemas.ts`.
+Sus contratos son secciones de `shared/schemas.ts` (se importan de ahí, no de los módulos).
 
 | Archivo | Propósito | Doc |
 | --- | --- | --- |
@@ -123,7 +123,7 @@ que es `shared/`. Aquí va lo que solo un server necesite (BD, colas, Azure Func
 | `vendor-distributions/testing/stagehand*.ts` (hasta 2026-10-12) | `vendor-distributions/client/testing/…` (la pila de proveedores LLM pasó a `shared/testing/proveedores-llm.ts`) |
 | `vendor-distributions/tools/{vendor,sync-entregable}*.ts`, `pin-update.mjs` (hasta 2026-10-12) | `vendor-distributions/shared/tools/…` |
 | `vendor-distributions/tools/{render-diagram,render-lab,download-iconify,static-server,hosts,sanitize-svg}*.ts` (hasta 2026-10-12) | `vendor-distributions/client/tools/…` |
-| `vendor-distributions/index.ts` | `vendor-distributions/shared/index.ts` + `vendor-distributions/client/index.ts` (el de la raíz queda como compat) |
+| `vendor-distributions/index.ts`, `shared/index.ts`, `client/index.ts` (barriles, hasta 2026-10-13) | sin barril: el archivo de origen (tipos de `shared/schemas.ts`) |
 | Todos los `*.schemas.ts` de `shared/` y `client/` (hasta 2026-10-13) | `shared/schemas.ts` (secciones podadas por `vendor.ts`) |
 | `shared/testing/test-queue.ts` (hasta 2026-10-13) | dentro de `shared/testing/test-cooldown.ts` |
 | `shared/testing/pruebas-hijo.ts` (hasta 2026-10-13) | `shared/testing/pruebas.ts --hijo <json>` |

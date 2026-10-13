@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/pin-update.mjs
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/pin-update.mjs
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
@@ -52,6 +52,9 @@ const EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 // Scripts ONLINE del kit (Jeff, 2026-10-13): CLI que los consumidores corren desde `@main` con `--reload` y que
 // nadie importa con tipos. Su URL por rama NO es una ref mutable prohibida (es la forma canónica).
 export const ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
+// Cabecera `@vendor <ISO> <repo>@main <desde>` que el vendor escribe en lo vendorizado: dice de dónde se actualiza el
+// archivo, no carga nada en tiempo de ejecución; no es una ref mutable (Jeff, 2026-10-13).
+export const CABECERA_VENDOR = /^\s*(?:\/\/|<!--|#|\*)\s*@vendor\s/;
 export const SHA = /^[0-9a-f]{40}$/;
 /** `GITHUB_TOKEN` (opcional) sube la cuota de la API de 60/h a 5000/h. */
 const auth = () => (process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {});
@@ -129,7 +132,7 @@ export function inventario(op = opciones()) {
       pines.set(m[3], (pines.get(m[3]) ?? new Set()).add(rel(f)));
       if (m[2] !== op.nombre) legados.add(rel(f));
     }
-    t.split('\n').forEach((l, i) => { if (reMutable.test(l) && !ONLINE.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`); });
+    t.split('\n').forEach((l, i) => { if (reMutable.test(l) && !ONLINE.test(l) && !CABECERA_VENDOR.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`); });
   }
   return { pines, mutables, legados };
 }

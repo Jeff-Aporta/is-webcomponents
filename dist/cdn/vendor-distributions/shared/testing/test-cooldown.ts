@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 // test-cooldown.ts — Cooldown de tests proporcional a su duración, con
 // memoria en un JSON.
@@ -44,8 +44,6 @@ import process from "node:process";
 
 import { ZEntradaLlave } from "../schemas.ts";
 import type { EstadoLlave, OpcionesCola, TEntradaLlave, TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "../schemas.ts";
-
-export type { EstadoLlave, OpcionesCola, TCooldownLlave, TEntradaLlave, TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "../schemas.ts";
 
 /** Factor estándar: 1440 min (24 h, un día) de cooldown por cada minuto de ejecución. */
 export const COOLDOWN_FACTOR = 1440;
@@ -131,7 +129,6 @@ export function createTestCooldown(opts: TestCooldownOptions): TestCooldown {
 
     return { check, record, run, entries: () => leer() };
 }
-
 
 /**
  * Cooldown con la configuración estándar de los proyectos is-*:

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/pin-update.mjs
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/pin-update.mjs
 // Bundle autocontenido de src/vendor-distributions/shared/tools/pin-update.mjs (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/shared/tools/pin-update.mjs.
 
 // src/vendor-distributions/shared/tools/pin-update.mjs
@@ -12,6 +12,7 @@ var RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manife
 var SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
 var EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 var ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
+var CABECERA_VENDOR = /^\s*(?:\/\/|<!--|#|\*)\s*@vendor\s/;
 var SHA = /^[0-9a-f]{40}$/;
 var auth = () => process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
 var esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
@@ -88,7 +89,7 @@ function inventario(op = opciones()) {
       if (m[2] !== op.nombre) legados.add(rel(f));
     }
     t.split("\n").forEach((l, i) => {
-      if (reMutable.test(l) && !ONLINE.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`);
+      if (reMutable.test(l) && !ONLINE.test(l) && !CABECERA_VENDOR.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`);
     });
   }
   return { pines, mutables, legados };
@@ -256,6 +257,7 @@ if (esPrincipal()) {
   process.exit(await protocolo(String(args.nuevo), op, args.viejo ? String(args.viejo) : ""));
 }
 export {
+  CABECERA_VENDOR,
   ONLINE,
   SHA,
   actualizarPines,

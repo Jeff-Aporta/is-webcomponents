@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/semantica.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/semantica.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 /**
  * semantica.ts — juez semántico DETERMINISTA de las pruebas (tercera capa, antes de JEV/LLM):
@@ -35,8 +35,6 @@ import { join } from 'node:path';
 import { homedir } from 'node:os';
 import process from 'node:process';
 import type { ExtractorSemantico, ResultadoCoincide, ResultadoMasCercana, ResultadoPrefiere, UbicacionModelo } from '../schemas.ts';
-
-export type { ExtractorSemantico, ResultadoCoincide, ResultadoMasCercana, ResultadoPrefiere, UbicacionModelo } from '../schemas.ts';
 
 export const MODELO = 'Xenova/multilingual-e5-base';
 /** Coseno mínimo para decir que dos textos hablan de lo mismo (calibrado: pares no relacionados quedan < 0,82). */

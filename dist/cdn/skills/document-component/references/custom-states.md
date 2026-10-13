@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/custom-states.md -->
+<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/custom-states.md -->
 # Custom states en las fichas iswc
 
 Los custom states (`ElementInternals.states`) son la **API declarativa**

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * schemas.ts — TODOS los contratos (Zod y tipos) de `vendor-distributions/`, en UN solo archivo por secciones.
@@ -27,7 +27,7 @@
 // Zod del consumidor (lo que importa `zod` usa el suyo); se reexporta para que un consumidor que solo
 // trae `schemas.ts` tenga el mismo `z` que los módulos.
 import { z } from "zod";
-export { z };
+
 // ===== @fin comun =====
 
 // ===== @seccion obj =====
@@ -1000,6 +1000,8 @@ export type RenderDiagramOptions = {
   };
   /** Raíz estática (repo iswc o vendor). Obligatorio si el job es sintético. */
   serveRoot?: string;
+  /** Respaldo remoto de `dist/cdn/…` que no esté bajo `serveRoot` (p. ej. `https://raw.githubusercontent.com/<repo>/<ref>/`): render sin checkout del kit. */
+  remoteBase?: string;
   /** Timeout hasta `__ISWC_RENDER_READY__` / SVG montado (ms). Default 90_000. */
   timeoutMs?: number;
   /** Espera extra tras ready antes de extraer (ms). Default 400. */
@@ -1123,8 +1125,12 @@ export const OpcionesLoteDatosSchema = z.object({
   salidaPng: z.string().min(1),
   /** Archivo de caché; por defecto `<carpeta>/diagramas-iswc.cache.json`. */
   cache: z.string().optional(),
-  /** Raíz del checkout del kit (= `serveRoot`; de ahí salen `dist/cdn/…` y Playwright). */
-  kit: z.string().min(1),
+  /**
+   * Raíz de un checkout del kit (opcional): si está, `dist/cdn/…` y Playwright salen de ahí. Sin él (o para lo que
+   * falte), `dist/cdn/…` se pide a `https://raw.githubusercontent.com/<repo>/<pinKit|main>/` y Playwright sale del
+   * `package.json` del directorio actual (o de `npm:playwright`).
+   */
+  kit: z.string().min(1).optional(),
   /** Sello del kit que entra en la huella; por defecto `<kit>/PIN` o `dist/cdn/build-stamp.json`. */
   pinKit: z.string().optional(),
   /** Slugs a procesar (vacío = todos). */

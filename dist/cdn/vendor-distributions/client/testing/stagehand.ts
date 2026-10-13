@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/testing/stagehand.ts
+// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/testing/stagehand.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
 /**
  * stagehand.ts — controlador de Stagehand para los e2e de navegador de los fronts del kit (ISW y los
@@ -52,23 +52,6 @@ import type {
   RespuestaGenerate,
   SondaDestino,
 } from '../../shared/schemas.ts';
-
-export type {
-  BloqueStagehand, CacheProveedor, ContextoDestino, ContextoStagehand, ControlGenerador, DestinoPruebas, EleccionProveedor, EstadoGenerador,
-  GeneradorStagehand, MensajeOpenAi, MensajeStagehand, OpcionesElegirProveedor, OpcionesGenerador, OpcionesPrepararStagehand, OpcionesResolverDestino,
-  OpcionesSonda, OrigenEleccion, ParamsGenerate, ParteOpenAi, ProveedorLlm, RespuestaGenerate, SondaDestino, SondaLlm,
-} from '../../shared/schemas.ts';
-export {
-  barrerProveedores,
-  CACHE_TTL_MS,
-  elegirProveedor,
-  elegirProveedorOpcional,
-  evaluarSondaLlm,
-  leerProveedoresDeArchivo,
-  normalizarJson,
-  sondearProveedor,
-  validarProveedores,
-} from '../../shared/testing/proveedores-llm.ts';
 
 const GENERAR_TIMEOUT_MS = 120_000;
 const REPOSO_MS = 5 * 60_000;
