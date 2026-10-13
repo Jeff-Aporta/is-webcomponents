@@ -16,7 +16,7 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/lib/obj.ts';
+import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
 import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
 import { NESTED_DEFAULT_MAX } from '../../../components/_shared/diagram-embed.ts';
 import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';

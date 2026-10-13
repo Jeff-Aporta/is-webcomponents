@@ -9,7 +9,7 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/lib/obj.ts';
+import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
 import { GRUPOS_CRUD, vectorAFlujo } from '../../../components/diagrams/vector-flow-spec.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
 

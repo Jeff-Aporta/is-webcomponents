@@ -1,0 +1,47 @@
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
+/**
+ * index.ts — barrel del perfil `client/`: lo que solo un proyecto client (front, e2e de navegador,
+ * render visual) necesita: render headless de diagramas (Playwright lo inyecta el consumidor), labs,
+ * íconos de la app y el controlador de Stagehand.
+ *
+ *   testing/  stagehand (generador para `Stagehand.create`, destino por protocolo, `prepararStagehand`)
+ *   tools/    render-diagram, render-lab, hosts, sanitize-svg, static-server, download-iconify
+ *
+ * Regla de perfiles: `client/` puede importar de `shared/`, nunca de `server/`. Lo neutro (pruebas,
+ * proveedores LLM, jueces, obj…) se importa de `../shared/index.ts`, no se reexporta aquí.
+ *
+ *   import { renderDiagramBatch, writeDiagramOutputs } from './index.ts';
+ *
+ * Perfil: client. Vendor: cada archivo se baja por separado (`dist/cdn/vendor-distributions/client/<paquete>/<archivo>`)
+ * con `tools/vendor.ts` (perfil `client` en el vendor.json); este barrel sirve dentro del kit (labs).
+ * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
+ */
+export {
+  renderDiagram,
+  renderDiagramBatch,
+  writeDiagramOutputs,
+  buildHostHtml,
+  resolveCdnScript,
+  DIAGRAM_HOSTS,
+  probeSvgExpression,
+  sanitizeSvgRoot,
+  staticSvgWrapper,
+  startStaticServer,
+} from './tools/render-diagram.ts';
+export type {
+  HostAttrs,
+  RenderDiagramOptions,
+  RenderDiagramResult,
+  SyntheticDiagramJob,
+  PageDiagramJob,
+  StaticServer,
+} from './tools/render-diagram.ts';
+
+export { jobDeEditable, jobsDeEditables, labDir, renderLab } from './tools/render-lab.ts';
+export type { Editable, LabJob, OpcionesEditables, OpcionesLab } from './tools/render-lab.ts';
+
+export { descargarIconos, mapaDelKit } from './tools/download-iconify.ts';
+export type { OpcionesDescarga, ResumenDescarga } from './tools/download-iconify.ts';
+
+export { aPartesOpenAi, crearGenerador, destinoPreferido, mensajesDe, prepararStagehand, resolverDestino, unaVezPorProceso } from './testing/stagehand.ts';
+export type { ContextoDestino, ContextoStagehand, ControlGenerador, DestinoPruebas, GeneradorStagehand, SondaDestino } from './testing/stagehand.ts';

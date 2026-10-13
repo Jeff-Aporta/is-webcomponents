@@ -6,7 +6,7 @@
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/lib/obj.ts';
+import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
 import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/sequence-spec.ts';
 import { parsePathPoints } from '../../../components/_shared/diagram-edge-actors.ts';
 

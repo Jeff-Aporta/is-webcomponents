@@ -1,22 +1,8 @@
-// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
- * Contratos (tipos) de `deno-test.ts`. W54: los tipos top-level viven en
- * *.schemas.ts.
- *
- * Vendor: `dist/cdn/vendor-distributions/testing/deno-test.schemas.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./test-cooldown.schemas.ts`.
- * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
+ * COMPAT TEMPORAL — `testing/deno-test.schemas.ts` se movió a `shared/testing/deno-test.schemas.ts` (perfiles shared/server/client, 2026-10-12).
+ * @deprecated 2026-10-12: importa `src/vendor-distributions/shared/testing/deno-test.schemas.ts`. Se borra cuando ISS e ISW migren
+ * (sus vendor.json y las herramientas de docs que importan `src/vendor-distributions/…` del kit local).
+ * Perfil: compat (fuera de los perfiles; no se vendoriza: `vendor.ts` bloquea rutas sin perfil).
  */
-import type { TestCooldown } from "./test-cooldown.schemas.ts";
-
-export interface DenoTestOptions {
-    /** Flags de `deno test` (p. ej. `-A`, `--no-check`). */
-    args?: string[];
-    /** Entorno del proceso hijo. Default `process.env`. */
-    env?: Record<string, string | undefined>;
-    /** `true`: un archivo a la vez (estado compartido). Default: cola de `testConcurrency()`. */
-    serial?: boolean;
-    /** Cooldown a usar. Default `testCooldownFromEnv()`. */
-    cooldown?: TestCooldown;
-    /** Ejecutable de Deno. Default `"deno"`. */
-    deno?: string;
-}
+export * from '../shared/testing/deno-test.schemas.ts';

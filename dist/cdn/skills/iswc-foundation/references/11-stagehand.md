@@ -1,7 +1,9 @@
 # 11 — Stagehand compartido: proveedores LLM, generador con fallback y destino por protocolo
 
 Guía para agentes que escriben o corren e2e de UI en un front del kit (ISW, ISS y los que vengan).
-Todo lo genérico vive en el kit, en `vendor-distributions/testing/stagehand.ts` (+ `.schemas.ts`);
+Todo lo genérico vive en el kit: el controlador en `vendor-distributions/client/testing/stagehand.ts` (+ `.schemas.ts`,
+perfil `client`) y la pila de proveedores LLM en `vendor-distributions/shared/testing/proveedores-llm.ts` (+ `.schemas.ts`,
+perfil `shared`: la usan también los jueces de un server, sin navegador);
 el consumidor pone solo lo suyo: dónde están las keys, las URLs de sus destinos, el JWT de la sonda y
 cómo fija el destino desde su UI. Sin dependencia dura de `@browserbasehq/stagehand`: son funciones
 puras + `fetch`, y el consumidor pasa el generador a `Stagehand.create`.
@@ -10,10 +12,17 @@ puras + `fetch`, y el consumidor pasa el generador a `Stagehand.create`.
 
 | Archivo | Hacia (sugerido) |
 | --- | --- |
-| `dist/cdn/vendor-distributions/testing/stagehand.ts` | `tests/e2e/ISU/stagehand.ts` |
-| `dist/cdn/vendor-distributions/testing/stagehand.schemas.ts` | `tests/e2e/ISU/stagehand.schemas.ts` |
+| `dist/cdn/vendor-distributions/client/testing/stagehand.ts` | `tests/e2e/ISU/stagehand.ts` |
+| `dist/cdn/vendor-distributions/client/testing/stagehand.schemas.ts` | `tests/e2e/ISU/stagehand.schemas.ts` |
+| `dist/cdn/vendor-distributions/shared/testing/proveedores-llm.ts` | `tests/e2e/ISU/proveedores-llm.ts` |
+| `dist/cdn/vendor-distributions/shared/testing/proveedores-llm.schemas.ts` | `tests/e2e/ISU/proveedores-llm.schemas.ts` |
+| `dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts` (+ `.schemas.ts`) | `tests/e2e/ISU/…` |
 
-`doc` de ambos en `vendor.json`: `skills/iswc-foundation/references/11-stagehand.md`. Necesita el `zod`
+El consumidor declara `"perfil": "client"`. `stagehand.ts` importa `../../shared/testing/…`; al aplanar en `ISU/`,
+`vendor.ts` reescribe esas rutas a `./…`. `stagehand.ts` reexporta la pila de proveedores (`leerProveedoresDeArchivo`,
+`elegirProveedor`, `elegirProveedorOpcional`, `evaluarSondaLlm`…); quien solo necesita la pila (sin generador ni
+destino) importa `proveedores-llm.ts` directamente y no vendoriza `stagehand.ts`.
+`doc` de todos en `vendor.json`: `skills/iswc-foundation/references/11-stagehand.md`. Necesita el `zod`
 del consumidor (como `obj.ts`).
 
 ## 1. Keys: array de proveedores FUERA del repo
@@ -133,3 +142,7 @@ cooldown (`test-cooldown.ts`) sigue aplicando por prueba: un e2e verde no se rep
 `src/utils/health/meta/stagehand.test.ts` (fetch simulado): lista/orden, causas de la sonda, barrido,
 forzado, cache/TTL, esquema en el prompt + normalización, fallback/round-robin/reposo, destino por
 protocolo y memo por proceso.
+
+## Jueces opcionales y cooldown de llaves
+
+La pila de proveedores respeta el cooldown de 24 h por llave (`test-cooldown.ts`) y `elegirProveedorOpcional` no lanza: sin proveedor, el consumidor sigue en modo determinista. Los jueces de calidad (JEV y LLM) y su estándar están en [12-jueces.md](12-jueces.md).

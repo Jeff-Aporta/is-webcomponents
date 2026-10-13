@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, readFile, readdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
-import { renderDiagramBatch, writeDiagramOutputs } from '../../src/vendor-distributions/index.ts';
+import { renderDiagramBatch, writeDiagramOutputs } from '../../src/vendor-distributions/client/index.ts';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');

@@ -10,8 +10,8 @@ import { spawn } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { formatMs, testCooldownFromEnv, testId } from '../../../../src/vendor-distributions/testing/test-cooldown.ts';
-import { runQueue } from '../../../../src/vendor-distributions/testing/test-queue.ts';
+import { formatMs, testCooldownFromEnv, testId } from '../../../../src/vendor-distributions/shared/testing/test-cooldown.ts';
+import { runQueue } from '../../../../src/vendor-distributions/shared/testing/test-queue.ts';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const repoRoot = join(here, '..', '..', '..', '..');
@@ -108,7 +108,7 @@ const all = [...testFiles, ...nested].filter((f) => !only || f.includes(only));
 console.log(`[demos-test] ${all.length} suite(s) a correr:`);
 all.forEach((f) => console.log('   -', f.replace(repoRoot, '')));
 
-// Runner estándar is-*: cola de 3 suites a la vez + cooldown (src/vendor-distributions/testing/).
+// Runner estándar is-*: cola de 3 suites a la vez + cooldown (src/vendor-distributions/shared/testing/).
 let failures = 0;
 process.env.DEMOS_BASE_URL = `http://${HOST}:${PORT}`;
 const cooldown = testCooldownFromEnv();

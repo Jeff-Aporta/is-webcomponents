@@ -1,22 +1,8 @@
-// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
- * Proceso hijo de `correrPruebas({ aislar })`: corre UN archivo de pruebas y
- * entrega su reporte al padre en una linea marcada. Lo lanza el kit; no se usa a mano.
- *
- * Vendor: `dist/cdn/vendor-distributions/testing/pruebas-hijo.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./pruebas.schemas.ts`, `./pruebas.ts`.
- * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
+ * COMPAT TEMPORAL — `testing/pruebas-hijo.ts` se movió a `shared/testing/pruebas-hijo.ts` (perfiles shared/server/client, 2026-10-12).
+ * @deprecated 2026-10-12: importa `src/vendor-distributions/shared/testing/pruebas-hijo.ts`. Se borra cuando ISS e ISW migren
+ * (sus vendor.json y las herramientas de docs que importan `src/vendor-distributions/…` del kit local).
+ * Perfil: compat (fuera de los perfiles; no se vendoriza: `vendor.ts` bloquea rutas sin perfil).
  */
-import process from 'node:process';
-import { correrPruebas, lineaReporte } from './pruebas.ts';
-import type { OpcionesHijo } from './pruebas.schemas.ts';
-
-// Sin top-level await: el ISS carga los .ts como CommonJS (tsx).
-async function main(): Promise<void> {
-  const o = JSON.parse(process.argv[process.argv.length - 1]) as OpcionesHijo;
-  const { archivo, ...resto } = o;
-  const reporte = await correrPruebas({ ...resto, archivos: [archivo] });
-  console.log(lineaReporte(reporte));
-}
-
-// Las pruebas pueden dejar timers o sockets vivos: el hijo termina al entregar.
-main().then(() => process.exit(0), (e) => { console.error(e); process.exit(1); });
+import '../shared/testing/pruebas-hijo.ts';

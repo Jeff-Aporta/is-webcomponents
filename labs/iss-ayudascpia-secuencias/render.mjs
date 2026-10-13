@@ -5,7 +5,7 @@
 //
 // Uso: deno run -A --no-check labs/iss-ayudascpia-secuencias/render.mjs [slug…]
 import { join } from 'node:path';
-import { jobsDeEditables, labDir, renderLab } from '../../src/vendor-distributions/tools/render-lab.ts';
+import { jobsDeEditables, labDir, renderLab } from '../../src/vendor-distributions/client/tools/render-lab.ts';
 
 const LAB = labDir(import.meta.url);
 const jobs = await jobsDeEditables(join(LAB, 'payloads'), {

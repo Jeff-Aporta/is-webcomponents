@@ -11,8 +11,8 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { renderDiagramBatch } from '../../../vendor-distributions/tools/render-diagram.ts';
-import type { RenderDiagramOptions } from '../../../vendor-distributions/tools/render-diagram.schemas.ts';
+import { renderDiagramBatch } from '../../../vendor-distributions/client/tools/render-diagram.ts';
+import type { RenderDiagramOptions } from '../../../vendor-distributions/client/tools/render-diagram.schemas.ts';
 
 const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';

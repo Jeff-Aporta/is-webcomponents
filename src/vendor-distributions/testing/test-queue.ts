@@ -1,49 +1,8 @@
-// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
-// test-queue.ts — Cola estándar de tests de los proyectos is-*: N trabajadores
-// (3 por defecto) toman la siguiente tarea apenas terminan la anterior.
-//
-// Transversal (Node y Deno), sin dependencias ni imports relativos.
-//
-//   const res = await runQueue(tests, (t) => correr(t));      // 3 a la vez
-//   const res = await runQueue(tests, correr, { concurrency: testConcurrency(env.X) });
-//
-// Para runners que delegan el paralelismo (p. ej. `deno test --parallel`),
-// `testConcurrency()` es el valor a pasar (DENO_JOBS). El entorno lo cambia
-// con TEST_CONCURRENCY=<n>.
-//
-// Vendor: `dist/cdn/vendor-distributions/testing/test-queue.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Sin imports relativos.
-// Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
-
-import process from "node:process";
-
-/** Tests a la vez por defecto en todos los proyectos is-*. */
-export const TEST_CONCURRENCY = 3;
-
-/** Concurrencia efectiva: el valor dado (o env TEST_CONCURRENCY) si es un entero >= 1; si no, 3. */
-export function testConcurrency(value: string | number | null | undefined = process.env.TEST_CONCURRENCY): number {
-    const n = Math.floor(Number(value));
-    return Number.isFinite(n) && n >= 1 ? n : TEST_CONCURRENCY;
-}
-
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
- * Corre `worker` sobre cada item con a lo sumo `concurrency` a la vez.
- * Devuelve los resultados en el orden de `items` (no en el de terminación).
- * Si un worker lanza, `runQueue` rechaza; captura dentro del worker para
- * seguir con el resto.
+ * COMPAT TEMPORAL — `testing/test-queue.ts` se movió a `shared/testing/test-queue.ts` (perfiles shared/server/client, 2026-10-12).
+ * @deprecated 2026-10-12: importa `src/vendor-distributions/shared/testing/test-queue.ts`. Se borra cuando ISS e ISW migren
+ * (sus vendor.json y las herramientas de docs que importan `src/vendor-distributions/…` del kit local).
+ * Perfil: compat (fuera de los perfiles; no se vendoriza: `vendor.ts` bloquea rutas sin perfil).
  */
-export async function runQueue<T, R>(
-    items: readonly T[],
-    worker: (item: T, index: number) => Promise<R>,
-    opts: { concurrency?: number } = {},
-): Promise<R[]> {
-    const out = new Array<R>(items.length);
-    let siguiente = 0;
-    const n = Math.min(testConcurrency(opts.concurrency), items.length);
-    await Promise.all(Array.from({ length: n }, async () => {
-        while (siguiente < items.length) {
-            const i = siguiente++;
-            out[i] = await worker(items[i], i);
-        }
-    }));
-    return out;
-}
+export * from '../shared/testing/test-queue.ts';

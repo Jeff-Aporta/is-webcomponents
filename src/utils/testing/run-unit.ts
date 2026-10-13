@@ -1,12 +1,12 @@
 // run-unit.ts — `deno task test`: tests unitarios de iswc con el runner
-// estándar (cola de 3 + cooldown, src/vendor-distributions/testing/deno-test.ts).
+// estándar (cola de 3 + cooldown, src/vendor-distributions/shared/testing/deno-test.ts).
 //
 //   deno task test                    # con cooldown
 //   deno task test -- --sin-cooldown  # todo
 import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import process from 'node:process';
-import { denoTest } from '../../vendor-distributions/testing/deno-test.ts';
+import { denoTest } from '../../vendor-distributions/shared/testing/deno-test.ts';
 
 const RAICES = [
   'src/utils/health/meta',

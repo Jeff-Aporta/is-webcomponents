@@ -1,8 +1,8 @@
-// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/05-zod-y-tipos.md
-// Una sola copia de Zod en el CDN: los bundles de componentes la importan como
-// `../lib/zod.min.js` (ver `external-components` en scripts/build.mjs) en vez de
-// inlinear ~300 KB cada uno.
-//
-// Vendor: `dist/cdn/vendor-distributions/lib/zod.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Sin imports relativos.
-// Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/05-zod-y-tipos.md
-export * from 'zod';
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
+/**
+ * COMPAT TEMPORAL — `lib/zod.ts` se movió a `shared/lib/zod.ts` (perfiles shared/server/client, 2026-10-12).
+ * @deprecated 2026-10-12: importa `src/vendor-distributions/shared/lib/zod.ts`. Se borra cuando ISS e ISW migren
+ * (sus vendor.json y las herramientas de docs que importan `src/vendor-distributions/…` del kit local).
+ * Perfil: compat (fuera de los perfiles; no se vendoriza: `vendor.ts` bloquea rutas sin perfil).
+ */
+export * from '../shared/lib/zod.ts';

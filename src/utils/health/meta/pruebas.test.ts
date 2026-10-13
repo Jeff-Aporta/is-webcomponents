@@ -1,5 +1,5 @@
 /**
- * Sistema comun de pruebas (`vendor-distributions/testing/pruebas.ts`): contrato que comparten ISS e ISW.
+ * Sistema comun de pruebas (`vendor-distributions/shared/testing/pruebas.ts`): contrato que comparten ISS e ISW.
  *
  *   P1 definirPruebas rechaza ids vacios o repetidos, sin correr(), y categoria/nivel invalidos
  *   P2 correrPruebas: verde, rojo por expect, por excepcion y por timeout; nivel `aviso` no pone rojo
@@ -15,8 +15,8 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { archivosDePrueba, codigoSalida, coleccionPruebas, correrPruebas, definirPruebas, esSaltada } from '../../../vendor-distributions/testing/pruebas.ts';
-import type { ListaPruebas, Prueba } from '../../../vendor-distributions/testing/pruebas.ts';
+import { archivosDePrueba, codigoSalida, coleccionPruebas, correrPruebas, definirPruebas, esSaltada } from '../../../vendor-distributions/shared/testing/pruebas.ts';
+import type { ListaPruebas, Prueba } from '../../../vendor-distributions/shared/testing/pruebas.ts';
 
 const raiz = mkdtempSync(join(tmpdir(), 'pruebas-'));
 const db = join(raiz, 'cooldown.json');

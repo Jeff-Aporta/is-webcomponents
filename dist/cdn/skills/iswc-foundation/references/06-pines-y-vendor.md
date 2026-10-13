@@ -34,23 +34,36 @@ deno task build && deno task test:all
   checkout local del kit para probar cambios antes de publicarlos.
 - Fuente remota: raw por SHA (sin el límite de 50 MB de jsDelivr), jsDelivr de respaldo.
 
-## Descarga de vendor: `tools/vendor.ts` (pin por fecha ISO)
+## Descarga de vendor: `shared/tools/vendor.ts` (pin por fecha ISO y perfil)
 
-Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendor-distributions/tools/vendor.ts`, con Deno, a partir de un JSON del proyecto (ver `vendor.schemas.ts`):
+Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendor-distributions/shared/tools/vendor.ts`, con Deno, a partir de un JSON del proyecto (ver `vendor.schemas.ts`):
 
 ```json
 {
   "repo": "Jeff-Aporta/is-webcomponents",
   "local": "C:/ContaPyme/Personal/apps/is-webcomponents",
+  "perfil": "server",
   "archivos": [
-    { "desde": "dist/cdn/vendor-distributions/lib/obj.ts", "hacia": "src/sources/000 Base/ISU/obj.ts", "doc": "src/vendor-distributions/lib/obj.md" }
+    { "desde": "dist/cdn/vendor-distributions/shared/lib/obj.ts", "hacia": "src/sources/000 Base/ISU/obj.ts", "doc": "src/vendor-distributions/shared/lib/obj.md" }
   ]
 }
 ```
 
-- **Qué hay para vendorizar**: todo vive en `dist/cdn/vendor-distributions/` por paquete (`lib/` obj, zod · `testing/`
-  pruebas, cooldown, cola, deno-test, stagehand · `tools/` vendor, pin-update, sync-entregable, render-*, download-iconify).
+- **Qué hay para vendorizar**: todo vive en `dist/cdn/vendor-distributions/` separado por **perfil**:
+  `shared/` (sin navegador: `lib/` obj, zod · `testing/` pruebas, cooldown, cola, deno-test, proveedores-llm, jueces ·
+  `tools/` vendor, pin-update, sync-entregable), `server/` (exclusivo de server; hoy vacío) y `client/` (`testing/`
+  stagehand · `tools/` render-diagram, render-lab, hosts, sanitize-svg, static-server, download-iconify).
   Índice con propósito y doc de cada archivo: `dist/cdn/vendor-distributions/README.md`.
+- **Perfil del consumidor** (`"perfil": "server" | "client"` en `vendor.json`): un server baja `shared/` + `server/` y
+  nunca tiene que instalar Playwright, Stagehand ni nada de navegador; un client baja `shared/` + `client/`. `vendor.ts`
+  BLOQUEA (no escribe, `ERROR … bloqueado por perfil`, sale con 1) lo de otro perfil, las rutas planas anteriores
+  (`vendor-distributions/{lib,testing,tools}/…`) y, en `server`, cualquier archivo que importe `playwright`,
+  `@browserbasehq/stagehand`, `puppeteer`… (también `createRequire(u)('playwright')`). Sin `perfil` baja todo con aviso.
+  En el kit, `shared/` nunca importa `client/` ni `server/`, y `server/` ↔ `client/` no se cruzan (guardián
+  `meta/vendor-perfiles.test.ts`).
+- **Aplanar entre perfiles**: si un archivo importa un relativo de otro perfil (`client/testing/stagehand.ts` →
+  `../../shared/testing/proveedores-llm.ts`) y la config trae los dos, `vendor.ts` reescribe el specifier a la ruta
+  entre los dos `hacia` (`./proveedores-llm.ts` si caen en la misma `ISU/`).
 - **Carpeta `ISU/`**: lo vendorizado conserva su nombre normal y vive en una carpeta `ISU/` del proyecto, así no choca con los archivos propios.
 - **Pin por fecha ISO**: por archivo compiten el checkout local del kit (fecha del último commit que lo tocó, o «ahora» si tiene cambios sin commitear) y el HEAD remoto; gana el más reciente y solo se escribe si es más nuevo que la copia (`// @vendor <ISO>`). Nunca hay regresiones.
 - **Cabecera**: `// @vendor <ISO> <repo>@<sha|local> <desde>` y `// @doc <URL jsDelivr de su .md>`. La doc va SIEMPRE por CDN (nunca ruta local): sale de `doc` en `vendor.json` o, si falta, de la `// @doc` con que la fuente abre (todo archivo de `vendor-distributions/` la trae; guardián `meta/vendor-distributions-doc.test.ts`), fijada al SHA ganador (a la rama si ganó el checkout local).

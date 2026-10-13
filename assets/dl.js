@@ -1,8 +1,8 @@
 // assets/dl.js — íconos del kit: SOLO configuración de rutas. La lógica vive en
-// src/vendor-distributions/tools/download-iconify.ts (las apps la importan por URL fijada al SHA del kit).
+// src/vendor-distributions/client/tools/download-iconify.ts (las apps la importan por URL fijada al SHA del kit).
 // Genera assets/iconify.json (los íconos que el kit sirve en local; las apps que lo consumen
 // se los descargan todos al construir) y assets/iconify/<set>/<nombre>.svg.
-import { descargarIconos } from '../src/vendor-distributions/tools/download-iconify.ts';
+import { descargarIconos } from '../src/vendor-distributions/client/tools/download-iconify.ts';
 
 await descargarIconos({
   raiz: new URL('..', import.meta.url),

@@ -10,7 +10,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { preguntarJev } from '../../../vendor-distributions/testing/jueces.ts';
+import { preguntarJev } from '../../../vendor-distributions/shared/testing/jueces.ts';
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const PLANTILLA = /^Documentaci[oó]n y demos del componente/i;

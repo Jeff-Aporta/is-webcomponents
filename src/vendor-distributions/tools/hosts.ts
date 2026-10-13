@@ -1,48 +1,8 @@
-// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
+// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
- * Hosts iswc-* que montan un <svg> de diagrama en shadow DOM.
- * Misma lista que usa el ISS al exportar docs.
- *
- * Vendor: `dist/cdn/vendor-distributions/tools/hosts.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Sin imports relativos.
- * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
+ * COMPAT TEMPORAL — `tools/hosts.ts` se movió a `client/tools/hosts.ts` (perfiles shared/server/client, 2026-10-12).
+ * @deprecated 2026-10-12: importa `src/vendor-distributions/client/tools/hosts.ts`. Se borra cuando ISS e ISW migren
+ * (sus vendor.json y las herramientas de docs que importan `src/vendor-distributions/…` del kit local).
+ * Perfil: compat (fuera de los perfiles; no se vendoriza: `vendor.ts` bloquea rutas sin perfil).
  */
-export const DIAGRAM_HOSTS = [
-  'iswc-er-diagram',
-  'iswc-sequence-diagram',
-  'iswc-flowchart',
-  'iswc-state-diagram',
-  'iswc-class-diagram',
-  'iswc-block-diagram',
-  'iswc-component-diagram',
-  'iswc-swimlane-diagram',
-  'iswc-use-case-diagram',
-  'iswc-timeline',
-  'iswc-gantt',
-  'iswc-sankey-diagram',
-  'iswc-quadrant-chart',
-  'iswc-venn-diagram',
-  'iswc-mindmap',
-  'iswc-org-chart',
-] as const;
-
-/** Expresión JS evaluable en página: primer SVG útil del kit. */
-export function probeSvgExpression(hosts: readonly string[] = DIAGRAM_HOSTS): string {
-  return `(() => {
-  const hosts = document.querySelectorAll(${JSON.stringify(hosts.join(', '))});
-  const vale = (s) => {
-    if (!s) return false;
-    const r = s.getBoundingClientRect();
-    return r.width > 10 && r.height > 10;
-  };
-  for (const h of hosts) {
-    if (h.shadowRoot) {
-      const s = h.shadowRoot.querySelector('svg');
-      if (vale(s)) return s;
-    }
-    const s = h.querySelector('svg');
-    if (vale(s)) return s;
-  }
-  for (const s of document.querySelectorAll('svg')) if (vale(s)) return s;
-  return null;
-})()`;
-}
+export * from '../client/tools/hosts.ts';

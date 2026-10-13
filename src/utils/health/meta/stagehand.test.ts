@@ -1,5 +1,6 @@
 /**
- * Guardián WHAT del controlador compartido de Stagehand (`vendor-distributions/testing/stagehand.ts`),
+ * Guardián WHAT de la pila de proveedores LLM (`vendor-distributions/shared/testing/proveedores-llm.ts`, S1-S5) y del
+ * controlador de Stagehand (`vendor-distributions/client/testing/stagehand.ts`, S6-S8),
  * con `fetch` simulado (nunca red):
  *   S1 la lista de proveedores se lee en orden; sin apiKey/model se descarta; baseUrl sin barra final.
  *   S2 la sonda interpreta 401/402/429, «insufficient balance» y respuesta vacía como SALTAR (con causa).
@@ -19,18 +20,15 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   barrerProveedores,
-  crearGenerador,
-  destinoPreferido,
   elegirProveedor,
   evaluarSondaLlm,
   leerProveedoresDeArchivo,
   normalizarJson,
-  resolverDestino,
   sondearProveedor,
-  unaVezPorProceso,
   validarProveedores,
-} from '../../../vendor-distributions/testing/stagehand.ts';
-import type { ProveedorLlm, SondaLlm } from '../../../vendor-distributions/testing/stagehand.ts';
+} from '../../../vendor-distributions/shared/testing/proveedores-llm.ts';
+import type { ProveedorLlm, SondaLlm } from '../../../vendor-distributions/shared/testing/proveedores-llm.ts';
+import { crearGenerador, destinoPreferido, resolverDestino, unaVezPorProceso } from '../../../vendor-distributions/client/testing/stagehand.ts';
 
 const P = (nombre: string): ProveedorLlm => ({ nombre, apiKey: `k-${nombre}`, model: `m-${nombre}`, baseUrl: `https://${nombre}.test/v1` });
 const sondaFija = (okPara: string[]) => (p: ProveedorLlm): Promise<SondaLlm> =>

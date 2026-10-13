@@ -23,13 +23,13 @@ Una probabilidad de juez (0..1) se lee con `veredictoProbabilidad(p)`:
 
 Un veredicto incierto nunca tumba el gate: el juez refina, no decide solo.
 
-## Piezas del kit (`src/vendor-distributions/testing/`)
+## Piezas del kit (`src/vendor-distributions/shared/testing/`, perfil `shared`: sin navegador, sirven a server y client)
 
 | Archivo | Qué da |
 |---|---|
 | `jueces.ts` + `jueces.schemas.ts` | `preguntarJev`, `juzgarConLlm`, `capaOpcional`, `exigirJuez` |
 | `test-cooldown.ts` + `test-cooldown.schemas.ts` | El cooldown de pruebas de siempre y, en el mismo sistema, el de llaves: `estadoLlave`, `marcarCooldown`, `COOLDOWN_LLAVE_MS` |
-| `stagehand.ts` | La pila de proveedores LLM respeta el mismo cooldown; `elegirProveedorOpcional` no lanza |
+| `proveedores-llm.ts` + `proveedores-llm.schemas.ts` | La pila de proveedores LLM (antes dentro de `stagehand.ts`) respeta el mismo cooldown; `elegirProveedorOpcional` no lanza |
 
 ### JEV (TypeSafe)
 
@@ -74,7 +74,7 @@ Cada app baja estos archivos con su `vendor.ts` (pin por fecha ISO). Compiten el
 | ISS | `tests/.audit/ISU/` | `tests/_shared/jueces.ts` (`probabilidadJuez`) |
 | ISW | `tests/vendor/is-webcomponents/tools/` (nunca `src/`: va al entregable) | `tests/e2e/lib/jueces.ts` (`probabilidadJuez`) |
 
-Los imports relativos viajan juntos: `jueces.ts` necesita `jueces.schemas.ts`, `test-cooldown.ts`, `test-cooldown.schemas.ts`, `stagehand.ts` y `stagehand.schemas.ts`.
+Los imports relativos viajan juntos: `jueces.ts` necesita `jueces.schemas.ts`, `test-cooldown.ts`, `test-cooldown.schemas.ts`, `proveedores-llm.ts` y `proveedores-llm.schemas.ts` (todos de `shared/testing/`). Ya no necesita `stagehand.ts`: un server (ISS) vendoriza los jueces sin nada de `client/`.
 
 ## Uso típico (adaptador de la app)
 

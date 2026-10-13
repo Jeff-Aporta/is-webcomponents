@@ -552,14 +552,14 @@ try {
 
 // ── lib/: bundles para el navegador (obj.min.js con Zod incluido; zod.min.js compartido) ──
 // Las FUENTES vendorizables (obj.ts, obj.schemas.ts, obj.md, zod.ts) viven en
-// src/vendor-distributions/lib y se publican en dist/cdn/vendor-distributions/lib (más abajo).
+// src/vendor-distributions/shared/lib y se publican en dist/cdn/vendor-distributions/shared/lib (más abajo).
 // Los bundles quedan en dist/cdn/lib porque los de componentes importan `../lib/zod.min.js`
 // (resolver `zod-externo`; guardián meta/zod-compartido.test.ts).
 const vendorSrc = join(root, 'src', 'vendor-distributions');
 const libOut = join(dist, 'lib');
 await mkdir(libOut, { recursive: true });
 await build({
-  entryPoints: [join(vendorSrc, 'lib', 'obj.ts')],
+  entryPoints: [join(vendorSrc, 'shared', 'lib', 'obj.ts')],
   outfile: join(libOut, 'obj.min.js'),
   bundle: true,
   minify: true,
@@ -568,7 +568,7 @@ await build({
   legalComments: 'none',
 });
 await build({
-  entryPoints: [join(vendorSrc, 'lib', 'zod.ts')],
+  entryPoints: [join(vendorSrc, 'shared', 'lib', 'zod.ts')],
   outfile: join(libOut, 'zod.min.js'),
   bundle: true,
   minify: true,
@@ -639,24 +639,27 @@ for (const name of await readdir(buildSrc)) {
 await copyFile(join(root, 'src', 'cdn', 'asset-store.ts'), join(buildOut, 'asset-store.ts'));
 console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 
-// vendor-distributions/: TODO lo que un consumidor trae por vendor (tools/vendor.ts), por paquete:
-//   lib/ (obj, zod) · testing/ (pruebas, cooldown, cola, deno-test, stagehand) · tools/ (vendor,
-//   pin-update, sync-entregable, render-diagram, render-lab, download-iconify…) + README.md índice.
-// Se copian fuentes (.ts/.mjs) y docs (.md); los consumidores las depositan en su carpeta ISU/.
+// vendor-distributions/: TODO lo que un consumidor trae por vendor (tools/vendor.ts), por PERFIL:
+//   shared/ (sin navegador: lib, testing, tools) · server/ (solo server) · client/ (Playwright,
+//   Stagehand, render, íconos) + README.md índice. Un consumidor declara su perfil en su vendor.json y
+//   baja shared/ + el suyo (guardián meta/vendor-perfiles.test.ts). Se copian fuentes (.ts/.mjs) y
+//   docs (.md) conservando el árbol; los consumidores las depositan en su carpeta ISU/.
 const vendorOut = join(dist, 'vendor-distributions');
 await rm(vendorOut, { recursive: true, force: true });
 let nVendor = 0;
-for (const paquete of ['', 'lib', 'testing', 'tools']) {
-  const srcDir = join(vendorSrc, paquete);
-  const outDir = join(vendorOut, paquete);
-  await mkdir(outDir, { recursive: true });
-  for (const name of await readdir(srcDir, { withFileTypes: true })) {
-    if (!name.isFile() || !/\.(ts|mjs|md)$/.test(name.name)) continue;
-    await copyFile(join(srcDir, name.name), join(outDir, name.name));
-    nVendor++;
+const copiarVendor = async (rel) => {
+  await mkdir(join(vendorOut, rel), { recursive: true });
+  for (const e of await readdir(join(vendorSrc, rel), { withFileTypes: true })) {
+    const sub = join(rel, e.name);
+    if (e.isDirectory()) await copiarVendor(sub);
+    else if (e.isFile() && /\.(ts|mjs|md)$/.test(e.name)) {
+      await copyFile(join(vendorSrc, sub), join(vendorOut, sub));
+      nVendor++;
+    }
   }
-}
-console.log(`  ${'vendor-distrib./'.padEnd(18)} ${nVendor} archivos (lib, testing, tools) para vendorizar`);
+};
+await copiarVendor('');
+console.log(`  ${'vendor-distrib./'.padEnd(18)} ${nVendor} archivos (shared, server, client) para vendorizar`);
 
 // Estilos de diagrama (diagram-styles.ts): los temas JSON no van dentro de
 // los bundles; se descargan bajo demanda junto a ellos, en diagrams/themes/.

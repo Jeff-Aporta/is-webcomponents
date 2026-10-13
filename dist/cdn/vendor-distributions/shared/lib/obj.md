@@ -7,8 +7,8 @@ Biblioteca común de iswc (sin dependencias de DOM). Lee y modifica **partes** d
 | Cómo | Qué |
 | --- | --- |
 | Navegador (CDN) | `import { Obj } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/lib/obj.min.js'` (Zod incluido) |
-| Vendor (ISS, ISW) | `dist/cdn/vendor-distributions/lib/obj.ts` + `obj.schemas.ts` (usan el `zod` del consumidor), depositados en la carpeta `ISU/` del consumidor por `tools/vendor.ts` (pin por fecha ISO: gana el más reciente) |
-| Dentro del kit | `src/vendor-distributions/lib/obj.ts` |
+| Vendor (ISS, ISW) | `dist/cdn/vendor-distributions/shared/lib/obj.ts` + `obj.schemas.ts` (usan el `zod` del consumidor), depositados en la carpeta `ISU/` del consumidor por `tools/vendor.ts` (pin por fecha ISO: gana el más reciente) |
+| Dentro del kit | `src/vendor-distributions/shared/lib/obj.ts` |
 
 ## Consulta (`query`)
 

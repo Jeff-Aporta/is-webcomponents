@@ -1,5 +1,5 @@
 /**
- * Guardián WHAT de los jueces opcionales (`vendor-distributions/testing/jueces.ts` y
+ * Guardián WHAT de los jueces opcionales (`vendor-distributions/shared/testing/jueces.ts` y
  * `test-cooldown.ts`), con `fetch` simulado y un archivo de llaves temporal (nunca red):
  *   J1 sin llave JEV → no evalúa y dice por qué (nunca lanza).
  *   J2 JEV responde → evalúa con sus respuestas.
@@ -13,8 +13,8 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { capaOpcional, exigirJuez, juzgarConLlm, preguntarJev } from '../../../vendor-distributions/testing/jueces.ts';
-import { COOLDOWN_LLAVE_MS, olvidarCooldownsEnMemoria } from '../../../vendor-distributions/testing/test-cooldown.ts';
+import { capaOpcional, exigirJuez, juzgarConLlm, preguntarJev } from '../../../vendor-distributions/shared/testing/jueces.ts';
+import { COOLDOWN_LLAVE_MS, olvidarCooldownsEnMemoria } from '../../../vendor-distributions/shared/testing/test-cooldown.ts';
 
 const AHORA = Date.parse('2026-10-12T12:00:00Z');
 const respuesta = (status: number, cuerpo: unknown) => Promise.resolve(new Response(JSON.stringify(cuerpo), { status, headers: { 'content-type': 'application/json' } }));
@@ -97,7 +97,7 @@ test('jueces: J6 capaOpcional avisa y no aplica; exigirJuez salta', () => {
 
 test('jueces: J7 Stagehand respeta el cooldown: leer lo salta, el barrido enfría al que falla, la elección opcional no lanza', async () => {
   olvidarCooldownsEnMemoria();
-  const { leerProveedoresDeArchivo, elegirProveedorOpcional } = await import('../../../vendor-distributions/testing/stagehand.ts');
+  const { leerProveedoresDeArchivo, elegirProveedorOpcional } = await import('../../../vendor-distributions/shared/testing/proveedores-llm.ts');
   const a = archivo({ proveedores: [
     { nombre: 'frio', apiKey: 'k1', model: 'm', cooldownHasta: new Date(Date.now() + 3600_000).toISOString() },
     { nombre: 'pobre', apiKey: 'k2', model: 'm' },
@@ -119,7 +119,7 @@ test('jueces: J7 Stagehand respeta el cooldown: leer lo salta, el barrido enfrí
 });
 
 test('jueces: J8 umbrales estándar: < 0.3 rechazo, 0.3-0.5 dudoso (solo aviso), >= 0.5 cumple', async () => {
-  const { veredictoProbabilidad, UMBRAL_RECHAZO, UMBRAL_DUDA } = await import('../../../vendor-distributions/testing/jueces.ts');
+  const { veredictoProbabilidad, UMBRAL_RECHAZO, UMBRAL_DUDA } = await import('../../../vendor-distributions/shared/testing/jueces.ts');
   assert.equal(UMBRAL_RECHAZO, 0.3);
   assert.equal(UMBRAL_DUDA, 0.5);
   assert.deepEqual([0.1, 0.29, 0.3, 0.42, 0.5, 0.97].map(veredictoProbabilidad), ['rechazo', 'rechazo', 'dudoso', 'dudoso', 'cumple', 'cumple']);

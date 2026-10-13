@@ -192,7 +192,7 @@ build(cdn): regenerar bundles despues de folderize
   no → https://api.iconify.design/X/Y.svg
 ```
 
-El mapa y los SVG los genera `deno task icons` (`assets/dl.js` → `src/vendor-distributions/tools/download-iconify.ts`,
+El mapa y los SVG los genera `deno task icons` (`assets/dl.js` → `src/vendor-distributions/client/tools/download-iconify.ts`,
 dentro de `build`) con los íconos de la app y TODOS los de lo que consume (kit, otras apps). El kit
 también tiene su `assets/` (235 íconos). Detalle: `skills/iswc-foundation/references/10-iconos.md`.
 Bench de raíces: `labs/icon-cdn-bench/NOTES.md`.
