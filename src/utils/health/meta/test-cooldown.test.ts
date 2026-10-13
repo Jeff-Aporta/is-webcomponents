@@ -4,10 +4,12 @@
 //   C3 la memoria persiste en el JSON.
 //   C4 `disabled` corre todo y no escribe.
 //   C5 proporcional (x1440): 1 min -> 24 h, 1 s -> 24 min, 13 ms -> 18.720 ms.
+//   C6 varias instancias sobre el mismo JSON: record() fusiona sobre el archivo fresco, nunca pisa (gate + runner).
+//   Q1-Q3 la cola estándar (runQueue, testConcurrency) vive en el mismo archivo.
 import { assert, assertEquals, assertRejects } from 'jsr:@std/assert@1';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { COOLDOWN_FACTOR, cooldownMs, createTestCooldown, testId } from '../../../vendor-distributions/shared/testing/test-cooldown.ts';
+import { COOLDOWN_FACTOR, cooldownMs, createTestCooldown, runQueue, TEST_CONCURRENCY, testConcurrency, testId } from '../../../vendor-distributions/shared/testing/test-cooldown.ts';
 
 const MIN = 60_000;
 const HORA = 60 * MIN;
@@ -49,4 +51,48 @@ Deno.test('test-cooldown: verde de 1 min -> 24 h de skip (x1440); rojo corre sie
   assertEquals(cooldownMs(1_000), 24 * MIN, 'C5 1 s -> 24 min');
   assertEquals(cooldownMs(13), 18_720, 'C5 13 ms -> 18.720 ms');
   assertEquals(cooldownMs(HORA, 0.5), 30 * MIN, 'C5 factor inyectable (x0,5 = regla vieja)');
+});
+
+Deno.test('test-cooldown: C6 dos instancias sobre el mismo JSON no se pisan (record fusiona sobre el archivo fresco)', async () => {
+  const dir = await Deno.makeTempDir({ prefix: 'cooldown-' });
+  const dbPath = join(dir, 'db.json');
+  let t = 1_000_000;
+  const now = () => t;
+  const A = createTestCooldown({ dbPath, now });
+  A.check('x'); // A carga (caché vacía) y se queda viva, como el gate del sync.
+  const B = createTestCooldown({ dbPath, now });
+  for (let i = 0; i < 5; i++) B.record(`B${i}`, 1000, true); // el runner (otro proceso) graba lo suyo.
+  A.record('A', 500, true); // la instancia vieja graba después: antes pisaba todo lo de B.
+  const fresco = createTestCooldown({ dbPath, now }).entries();
+  assertEquals(Object.keys(fresco).sort(), ['A', 'B0', 'B1', 'B2', 'B3', 'B4'], 'C6 el archivo conserva lo de ambas');
+  assertEquals(Object.keys(A.entries()).length, 6, 'C6 entries() también lee fresco');
+  assert(B.check('B0').skip, 'C6 la caché de check sigue sirviendo');
+  t += 1000 * 1440 + 1;
+  assert(!createTestCooldown({ dbPath, now }).check('B0').skip);
+});
+
+// Cola estándar (antes test-queue.test.ts):
+//   Q1 nunca más de `concurrency` a la vez (default 3) y llega a usarlos.
+//   Q2 resultados en el orden de entrada.
+//   Q3 testConcurrency: valor válido o 3.
+Deno.test('test-cooldown: Q1-Q3 cola estándar: 3 a la vez por defecto, orden de entrada, concurrencia configurable', async () => {
+  let activos = 0, pico = 0;
+  const items = [50, 10, 30, 5, 20, 1, 15];
+  const res = await runQueue(items, async (ms, i) => {
+    pico = Math.max(pico, ++activos);
+    await new Promise((r) => setTimeout(r, ms));
+    activos--;
+    return i;
+  });
+  assertEquals(pico, TEST_CONCURRENCY, 'Q1 usa exactamente 3 trabajadores');
+  assertEquals(res, [0, 1, 2, 3, 4, 5, 6], 'Q2 orden de entrada');
+
+  pico = 0;
+  await runQueue(items, async () => { pico = Math.max(pico, ++activos); await new Promise((r) => setTimeout(r, 5)); activos--; }, { concurrency: 1 });
+  assertEquals(pico, 1, 'Q1 concurrency 1 es serial');
+
+  assertEquals(testConcurrency('5'), 5);
+  assertEquals(testConcurrency(undefined), 3);
+  assertEquals(testConcurrency('x'), 3);
+  assertEquals(testConcurrency(0), 3);
 });

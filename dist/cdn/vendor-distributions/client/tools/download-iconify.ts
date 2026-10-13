@@ -27,16 +27,16 @@
  *
  * Solo `node:*`: corre igual en Node y en Deno.
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/download-iconify.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./download-iconify.schemas.ts`.
+ * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/download-iconify.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/schemas.ts` (sección `download-iconify`).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { basename, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
-import type { IconId, IconifyJson, IconifyMap, OpcionesDescarga, ResumenDescarga } from './download-iconify.schemas.ts';
+import type { IconId, IconifyJson, IconifyMap, OpcionesDescarga, ResumenDescarga } from '../../shared/schemas.ts';
 
-export type { IconId, IconifyJson, IconifyMap, OpcionesDescarga, ResumenDescarga } from './download-iconify.schemas.ts';
+export type { IconId, IconifyJson, IconifyMap, OpcionesDescarga, ResumenDescarga } from '../../shared/schemas.ts';
 
 export const DEFAULTS = {
   salida: 'assets',

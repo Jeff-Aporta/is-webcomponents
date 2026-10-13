@@ -8,7 +8,7 @@
  *   const jobs = await jobsDeEditables(join(LAB, 'payloads'), { only: process.argv.slice(2) });
  *   process.exit(await renderLab(LAB, jobs));
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-lab.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.js`, `./render-diagram.schemas.js`, `./render-lab.schemas.js`.
+ * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-lab.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.js`, `../../shared/schemas.ts` (secciones `render-lab`, `render-diagram`).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { createRequire } from 'node:module';
@@ -16,10 +16,9 @@ import { mkdir, readFile, readdir } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderDiagramBatch, writeDiagramOutputs } from './render-diagram.js';
-import type { RenderDiagramOptions, SyntheticDiagramJob } from './render-diagram.schemas.js';
-import type { Editable, LabJob, OpcionesEditables, OpcionesLab } from './render-lab.schemas.js';
+import type { Editable, LabJob, OpcionesEditables, OpcionesLab, RenderDiagramOptions, SyntheticDiagramJob } from '../../shared/schemas.ts';
 
-export type * from './render-lab.schemas.js';
+export type { Editable, LabJob, OpcionesEditables, OpcionesLab } from '../../shared/schemas.ts';
 
 /** Carpeta del lab a partir de `import.meta.url` de su `render.mjs`. */
 export const labDir = (metaUrl: string): string => dirname(fileURLToPath(metaUrl));

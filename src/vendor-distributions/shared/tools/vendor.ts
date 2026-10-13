@@ -13,12 +13,10 @@
  * escribe si es más nuevo que la copia del consumidor (cabecera `// @vendor <ISO>`). Así nunca hay
  * regresiones y siempre queda lo último. Sin red ni checkout, la copia existente se conserva.
  *
- * Cabecera que se escribe en cada archivo de código (.ts, .mjs, .js), exactamente:
- *   // @vendor <ISO>
+ * Cabecera que se escribe en cada archivo de código (.ts, .mjs, .js): el propio archivo dice desde dónde
+ * se actualiza (Jeff, 2026-10-13: así no hace falta un diccionario de rutas):
+ *   // @vendor <ISO> <repo>@<sha|local> <desde>
  *   // @doc <URL jsDelivr de su documentación, fijada al SHA> (opcional: de `doc` en la config o de la `// @doc` de la fuente)
- * El `desde` ya está en el `vendor.json` del consumidor y el SHA lo gobierna el protocolo de pines, así
- * que no van en la cabecera (hasta 2026-10-13 era `// @vendor <ISO> <repo>@<sha|local> <desde>`; las
- * cabeceras viejas se siguen leyendo: la fecha es el primer campo).
  *
  * SCHEMAS ÚNICO PODADO: todos los contratos de `vendor-distributions/` viven en `shared/schemas.ts`, en
  * secciones `// ===== @seccion <modulo> [requiere: a, b] =====` … `// ===== @fin <modulo> =====`. Al
@@ -67,7 +65,7 @@ import { PERFILES, ZConfigVendor, type TConfigVendor, type TPerfil, type TPerfil
 export type { TArchivoVendor, TConfigVendor, TPerfil, TPerfilVendor, TPinVendor, TResultadoVendor } from "../schemas.ts";
 export { PERFILES } from "../schemas.ts";
 
-/** Cabecera `@vendor`: el primer campo es la fecha ISO (las cabeceras anteriores traían más campos detrás). */
+/** Cabecera `@vendor <ISO> <repo>@<sha|local> <desde>`: el primer campo es la fecha ISO. */
 const CABECERA = /^\/\/ @vendor (\S+)/m;
 
 /** Nombre del archivo único de contratos (se poda por secciones al vendorizar). */
@@ -289,7 +287,8 @@ export async function vendorizar(entrada: unknown, opciones: { raiz?: string } =
     const doc = a.doc
       ? (/^https?:/.test(a.doc) ? a.doc : `https://cdn.jsdelivr.net/gh/${cfg.repo}@${ref}/${a.doc}`)
       : docFuente ? docFuente.replace(/(cdn\.jsdelivr\.net\/gh\/[^@/]+\/[^@/]+)@[^/]+\//, `$1@${ref}/`) : null;
-    const cabecera = codigo ? `// @vendor ${gana.fecha}\n${doc ? `// @doc ${doc}\n` : ""}` : "";
+    const origen = `${cfg.repo}@${gana.sha ?? "local"}`;
+    const cabecera = codigo ? `// @vendor ${gana.fecha} ${origen} ${a.desde}\n${doc ? `// @doc ${doc}\n` : ""}` : "";
     try {
       mkdirSync(dirname(destino), { recursive: true });
       const tmp = `${destino}.${Date.now()}.tmp`;

@@ -120,8 +120,14 @@ async function urlLocal(prefix: string, name: string): Promise<string | null> {
 
 // ── Resolución: local o API ───────────────────────────────────────────────────
 
-/** Cache de raw SVG: `${prefix}:${name}` -> texto SVG. */
-const rawCache = new Map<string, string>();
+/**
+ * Cache de raw SVG: `${prefix}:${name}` -> texto SVG, o `null` cuando NO se pudo resolver (ni local ni
+ * API: 404, CSP que bloquea `connect-src`, sin red). El fallo también se recuerda: cada ícono se intenta
+ * UNA vez por página. Sin esto, un componente que se repinta por timer (p. ej. una barra de estado que
+ * emite cada 120 ms) volvía a pedir el mismo ícono bloqueado en cada repintado y la consola entraba en
+ * bucle (ISW en Azure, 2026-10-13). Un abort no se cachea. `clearRawCache()` permite reintentar.
+ */
+const rawCache = new Map<string, string | null>();
 
 export async function hasIconLocal(prefix: string, name: string): Promise<boolean> {
   return (await urlLocal(prefix, name)) !== null;
@@ -141,7 +147,7 @@ export async function resolveIconRaw(prefix: string, name: string, signal?: Abor
   // abort para que <iswc-icon> pueda cancelar renders obsoletos.
   const local = await urlLocal(prefix, name);
   const text = (local ? await traerSvg(local, signal) : null) ?? await traerSvg(urlApi(prefix, name), signal);
-  if (text) rawCache.set(key, text);
+  rawCache.set(key, text); // también el fallo (null): nunca se vuelve a pedir en esta página
   return text;
 }
 

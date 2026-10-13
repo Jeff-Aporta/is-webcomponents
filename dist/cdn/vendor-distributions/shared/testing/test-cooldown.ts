@@ -15,11 +15,20 @@
 // `node:process`. Cada proyecto lo adapta con las opciones (ruta del JSON,
 // factor, desactivarlo, reloj).
 //
+// VARIAS INSTANCIAS SOBRE EL MISMO JSON (2026-10-13): `record()` y `entries()` releen el archivo justo
+// antes de usarlo y `record()` fusiona SOLO la entrada que graba (leer fresco -> una entrada -> tmp +
+// rename). Nunca se escribe la caché completa: antes, el gate del sync (cargado al inicio) pisaba al
+// grabar las 241 entradas que el runner de tests (proceso hijo) acababa de escribir. `check()` sigue
+// con caché: una lectura por proceso basta para decidir si se salta.
+//
+// COLA ESTÁNDAR (antes `test-queue.ts`): N trabajadores (3 por defecto, `TEST_CONCURRENCY`) toman la
+// siguiente tarea apenas terminan la anterior; `runQueue`, `testConcurrency`, `TEST_CONCURRENCY`.
+//
 //   const cd = createTestCooldown({ dbPath: ".tmp/test-cooldown.json" });
 //   const r = await cd.run("tests/x.test.ts::mi test", () => miTest());
 //   if (r.skipped) console.log(`skip ${formatMs(r.remainingMs)}`);
 //
-// Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./test-cooldown.schemas.ts`.
+// Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `test-cooldown`).
 //
 // COOLDOWN DE LLAVES (jueces LLM y JEV, estándar entre apps): una llave que falla por saldo, key
 // rechazada o cuota queda 24 h fuera (`cooldownHasta` ISO en su entrada del archivo de llaves); el
@@ -31,10 +40,10 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "
 import { dirname, join } from "node:path";
 import process from "node:process";
 
-export type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun, TCooldownLlave, TEntradaLlave, EstadoLlave } from "./test-cooldown.schemas.ts";
-import { ZEntradaLlave } from "./test-cooldown.schemas.ts";
-import type { EstadoLlave, TEntradaLlave } from "./test-cooldown.schemas.ts";
-import type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "./test-cooldown.schemas.ts";
+import { ZEntradaLlave } from "../schemas.ts";
+import type { EstadoLlave, OpcionesCola, TEntradaLlave, TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "../schemas.ts";
+
+export type { EstadoLlave, OpcionesCola, TCooldownLlave, TEntradaLlave, TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from "../schemas.ts";
 
 /** Factor estándar: 1440 min (24 h, un día) de cooldown por cada minuto de ejecución. */
 export const COOLDOWN_FACTOR = 1440;
@@ -56,27 +65,34 @@ export function testId(file: string, name: string): string {
     return `${file.replace(/\\/g, "/")}::${name}`;
 }
 
-export function createTestCooldown(opts: TestCooldownOptions) {
+export function createTestCooldown(opts: TestCooldownOptions): TestCooldown {
     const factor = opts.factor ?? COOLDOWN_FACTOR;
     const now = opts.now ?? Date.now;
     let db: Record<string, TestCooldownEntry> | null = null;
 
-    const load = (): Record<string, TestCooldownEntry> => {
-        if (db) return db;
+    /** Lectura FRESCA del archivo (JSON corrupto o ausente = vacío: nunca rompe la corrida). */
+    const leer = (): Record<string, TestCooldownEntry> => {
         try {
-            db = existsSync(opts.dbPath) ? JSON.parse(readFileSync(opts.dbPath, "utf8")) : {};
+            const v: unknown = existsSync(opts.dbPath) ? JSON.parse(readFileSync(opts.dbPath, "utf8")) : {};
+            return v && typeof v === "object" && !Array.isArray(v) ? v as Record<string, TestCooldownEntry> : {};
         } catch {
-            db = {}; // JSON corrupto: se empieza de cero, nunca rompe la corrida.
+            return {};
         }
-        return db!;
     };
 
-    // Escritura atómica: un lector nunca ve el JSON a medias.
-    const save = (): void => {
+    /** Caché por proceso: solo para `check` (decidir si se salta). */
+    const load = (): Record<string, TestCooldownEntry> => (db ??= leer());
+
+    // Escritura atómica de UNA entrada: se relee el archivo justo antes (otra instancia o proceso pudo
+    // grabar en medio), se aplica solo `id` y se escribe por tmp + rename. Nunca la caché completa.
+    const grabar = (id: string, entrada: TestCooldownEntry): void => {
+        const fresco = leer();
+        fresco[id] = entrada;
         mkdirSync(dirname(opts.dbPath), { recursive: true });
         const tmp = `${opts.dbPath}.${process.pid}.tmp`;
-        writeFileSync(tmp, JSON.stringify(load(), null, 2) + "\n", "utf8");
+        writeFileSync(tmp, JSON.stringify(fresco, null, 2) + "\n", "utf8");
         renameSync(tmp, opts.dbPath);
+        if (db) db[id] = entrada;
     };
 
     const check = (id: string): TestCooldownCheck => {
@@ -88,13 +104,11 @@ export function createTestCooldown(opts: TestCooldownOptions) {
 
     const record = (id: string, durationMs: number, ok: boolean): void => {
         if (opts.disabled) return;
-        const d = load();
         const t = now();
-        d[id] = ok
+        grabar(id, ok
             // `cooldownMin`: solo para quien lee el JSON (minutos entre okAt y until); el runner no lo usa.
             ? { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor), cooldownMin: Math.round(cooldownMs(durationMs, factor) / 600) / 100 }
-            : { durationMs, okAt: null, until: -1, failAt: t };
-        save();
+            : { durationMs, okAt: null, until: -1, failAt: t });
     };
 
     /** Corre `fn` si no está en cooldown; mide, registra y relanza si falla. */
@@ -113,7 +127,7 @@ export function createTestCooldown(opts: TestCooldownOptions) {
         }
     };
 
-    return { check, record, run, entries: () => ({ ...load() }) };
+    return { check, record, run, entries: () => leer() };
 }
 
 
@@ -128,6 +142,46 @@ export function testCooldownFromEnv(opts: Partial<TestCooldownOptions> = {}): Te
         disabled: process.env.TEST_COOLDOWN === "0" || process.argv.includes("--sin-cooldown"),
         ...opts,
     });
+}
+
+// ── Cola estándar de tests (antes `test-queue.ts`) ───────────────────────────
+//
+//   const res = await runQueue(tests, (t) => correr(t));      // 3 a la vez
+//   const res = await runQueue(tests, correr, { concurrency: testConcurrency(env.X) });
+//
+// Para runners que delegan el paralelismo (p. ej. `deno test --parallel`), `testConcurrency()` es el
+// valor a pasar (DENO_JOBS). El entorno lo cambia con TEST_CONCURRENCY=<n>.
+
+/** Tests a la vez por defecto en todos los proyectos is-*. */
+export const TEST_CONCURRENCY = 3;
+
+/** Concurrencia efectiva: el valor dado (o env TEST_CONCURRENCY) si es un entero >= 1; si no, 3. */
+export function testConcurrency(value: string | number | null | undefined = process.env.TEST_CONCURRENCY): number {
+    const n = Math.floor(Number(value));
+    return Number.isFinite(n) && n >= 1 ? n : TEST_CONCURRENCY;
+}
+
+/**
+ * Corre `worker` sobre cada item con a lo sumo `concurrency` a la vez.
+ * Devuelve los resultados en el orden de `items` (no en el de terminación).
+ * Si un worker lanza, `runQueue` rechaza; captura dentro del worker para
+ * seguir con el resto.
+ */
+export async function runQueue<T, R>(
+    items: readonly T[],
+    worker: (item: T, index: number) => Promise<R>,
+    opts: OpcionesCola = {},
+): Promise<R[]> {
+    const out = new Array<R>(items.length);
+    let siguiente = 0;
+    const n = Math.min(testConcurrency(opts.concurrency), items.length);
+    await Promise.all(Array.from({ length: n }, async () => {
+        while (siguiente < items.length) {
+            const i = siguiente++;
+            out[i] = await worker(items[i]!, i);
+        }
+    }));
+    return out;
 }
 
 // ── Cooldown de llaves de los jueces (LLM y JEV) ─────────────────────────────

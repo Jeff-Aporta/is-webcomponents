@@ -21,8 +21,7 @@ if (!pin) {
 
 /** Herramientas comunes de las apps del kit (pruebas, cooldown, sync, pines) y del build (hashes). */
 export const ARCHIVOS = [
-  ...['test-cooldown.ts', 'test-cooldown.schemas.ts', 'test-queue.ts', 'pruebas.ts', 'pruebas.schemas.ts', 'pruebas-hijo.ts',
-    'sync-entregable.ts', 'sync-entregable.schemas.ts', 'pin-update.mjs'].map((f) => `tools/${f}`),
+  ...['schemas.ts', 'test-cooldown.ts', 'pruebas.ts', 'sync-entregable.ts', 'pin-update.mjs'].map((f) => `tools/${f}`),
   ...['index.ts', 'content-hash.ts', 'asset-url.ts', 'asset-url.schemas.ts', 'stamp-hashes.ts', 'bundle-min.ts',
     'bundle-min.schemas.ts', 'asset-store.ts'].map((f) => `build/${f}`),
 ];

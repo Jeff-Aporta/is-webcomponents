@@ -42,7 +42,7 @@ await descargarIconos({ raiz: new URL('..', import.meta.url), roots: ['index.htm
 
 Sin red no rompe el build: conserva lo que hay en disco, no poda y avisa.
 
-## `iconify.json` (contrato: `IconifyMapSchema`, `src/vendor-distributions/client/tools/download-iconify.schemas.ts`)
+## `iconify.json` (contrato: `IconifyMapSchema`, sección `download-iconify` de `src/vendor-distributions/shared/schemas.ts`)
 
 ```json
 {

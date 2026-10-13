@@ -4,6 +4,7 @@
 //   P2 refs mutables del KIT (rama, @latest, SHA corto, GitHub Pages del kit) → rojo y se listan.
 //   P3 el sitio propio de la app (`iswc.host` en github.io) no es un pin del kit → no alerta.
 //   P4 dos SHA distintos → rojo (heterogéneo).
+//   P5 `verificarLocal` (protocolo --nuevo=ultimo --local): el checkout local se omite con motivo, nunca falla.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -57,4 +58,20 @@ Deno.test('pin-update: P4 dos SHA distintos → rojo', () => {
   const r = inventario({ ...SANO, 'src/b.ts': `import 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@${B}/x.js';` });
   assertEquals(r.code, 1, r.out);
   assert(r.out.includes(A) && r.out.includes(B));
+});
+
+// P5 PROTOCOLO (`--nuevo=ultimo --local=<ruta>`, lo corre vendor.ts al terminar): el checkout local es solo
+//    información y NUNCA falla: ruta inexistente o sin git → `accesible: false` con motivo; un repo real → su HEAD
+//    y si tiene (o no) el SHA pedido. Sin red aquí: se importa la función (importar el .mjs no barre nada).
+Deno.test('pin-update: P5 verificarLocal nunca falla: sin ruta, ruta inexistente, sin git y repo real', async () => {
+  const { verificarLocal, SHA } = await import('../../../vendor-distributions/shared/tools/pin-update.mjs');
+  assertEquals(verificarLocal('').accesible, false);
+  const noExiste = verificarLocal(join(Deno.makeTempDirSync(), 'nada'));
+  assert(!noExiste.accesible && /no accesible|no existe/.test(noExiste.motivo), JSON.stringify(noExiste));
+  const sinGit = verificarLocal(Deno.makeTempDirSync({ prefix: 'singit-' }));
+  assert(!sinGit.accesible && /repo git/.test(sinGit.motivo), JSON.stringify(sinGit));
+  const real = verificarLocal(Deno.cwd(), A);
+  assert(real.accesible && SHA.test(real.head), JSON.stringify(real));
+  assertEquals(real.tieneSha, false, 'un SHA inventado no está en el checkout');
+  assertEquals(verificarLocal(Deno.cwd(), real.head).tieneSha, true, 'su propio HEAD sí');
 });

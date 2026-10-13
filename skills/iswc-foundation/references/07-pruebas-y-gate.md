@@ -5,15 +5,20 @@ Cómo se escriben specs y pruebas WHAT: [especificar-what.md](../templates/specs
 ## Sistema común del kit (`shared/testing/pruebas.ts`)
 
 Todo lo de esta referencia se vendoriza desde `dist/cdn/vendor-distributions/shared/testing/` (perfil `shared`: lo
-baja un server o un client; `pruebas`, `pruebas-hijo`, `test-cooldown`, `test-queue`, `deno-test` y sus `.schemas`). El LLM de Stagehand (proveedores en orden, barrido,
-fallback) y el destino por protocolo: [11-stagehand.md](11-stagehand.md).
+baja un server o un client): `pruebas.ts` (incluye el modo hijo `--hijo <json>` que antes era `pruebas-hijo.ts`),
+`test-cooldown.ts` (incluye la cola estándar `runQueue`/`testConcurrency` que antes era `test-queue.ts`), `deno-test.ts`,
+y sus contratos en el `shared/schemas.ts` único (secciones `pruebas`, `test-cooldown`, `deno-test`; `vendor.ts` lo poda).
+El LLM de Stagehand (proveedores en orden, barrido, fallback) y el destino por protocolo: [11-stagehand.md](11-stagehand.md).
+Los jueces opcionales (semántica local, JEV, LLM): [12-jueces.md](12-jueces.md).
 
 - Todas las pruebas en `tests/<area>/*.test.ts`; cada archivo `export default definirPruebas([...], hooks?)`.
 - Prueba: `{ nombre (id único, incluye su [W-*]), categoria: 'what'|'how', correr(ctx), timeoutMs?, nivel?: 'error'|'aviso', saltar? }`.
 - `ctx`: `expect(etiqueta, ok, detalle?)`, `eq(etiqueta, actual, esperado)`, `aviso`, `diag`, `saltar(motivo)`, `signal`.
 - Corren una por una; un id repetido aborta antes de correr; un archivo que no carga es rojo.
 - **Cooldown x1440** (un día por minuto, 2026-10-12): verde de 1 min → 24 h sin repetirse, 30 s → 12 h; rojo corre siempre. `TEST_COOLDOWN=0` o
-  `--sin-cooldown` solo para diagnóstico (nunca en el sync). Memoria en `.tmp/`.
+  `--sin-cooldown` solo para diagnóstico (nunca en el sync). Memoria en `.tmp/`. Varias instancias sobre el mismo
+  JSON (el gate del sync y el runner como paso hijo) no se pisan: `record()` relee el archivo y fusiona solo su entrada.
+- **Aislar** (`aislar: { comando }`): cada archivo en su proceso; el hijo es el mismo `pruebas.ts` con `--hijo <json>`.
 - **Reintento**: una prueba roja se re-corre una vez (`reintentos`, default 1; `TEST_REINTENTOS=0` lo apaga). Si pasa queda verde con el aviso `intermitente` en el reporte (red, LLM, streaming); un fallo real falla las dos veces y bloquea.
 
 ## Capas (caja negra)

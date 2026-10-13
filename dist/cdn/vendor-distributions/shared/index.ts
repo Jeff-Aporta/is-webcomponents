@@ -1,11 +1,12 @@
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * index.ts — barrel del perfil `shared/`: lo que sirve igual a un proyecto server (ISS) y a uno client
- * (ISW), sin navegador: obj, pruebas, cooldown, cola, deno-test, proveedores LLM, jueces, vendor, sync.
+ * (ISW), sin navegador: obj, pruebas, cooldown + cola, deno-test, proveedores LLM, jueces, semántica, vendor, sync.
  *
- *   lib/      obj (operaciones sobre objetos JSON y referencias), zod (bundle único del CDN)
- *   testing/  pruebas, pruebas-hijo, test-cooldown, test-queue, deno-test, proveedores-llm, jueces
- *   tools/    vendor, pin-update, sync-entregable
+ *   schemas.ts  TODOS los contratos, por secciones (`vendor.ts` lo poda a lo que cada consumidor usa)
+ *   lib/        obj (operaciones sobre objetos JSON y referencias), zod (bundle único del CDN)
+ *   testing/    pruebas (con su modo hijo `--hijo`), test-cooldown (con la cola estándar), deno-test, proveedores-llm, jueces, semantica
+ *   tools/      vendor (con el protocolo de pines), pin-update, sync-entregable
  *
  * Regla de perfiles: nada de `shared/` importa de `client/` ni de `server/`, ni dependencias de
  * navegador (guardián `src/utils/health/meta/vendor-perfiles.test.ts`).
@@ -15,10 +16,8 @@
  * conservando la estructura.
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
  */
-export { cooldownMs, createTestCooldown, formatMs, testCooldownFromEnv, testId } from './testing/test-cooldown.ts';
-export type { TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from './testing/test-cooldown.ts';
-
-export { runQueue, TEST_CONCURRENCY, testConcurrency } from './testing/test-queue.ts';
+export { cooldownMs, createTestCooldown, formatMs, runQueue, TEST_CONCURRENCY, testConcurrency, testCooldownFromEnv, testId } from './testing/test-cooldown.ts';
+export type { OpcionesCola, TestCooldown, TestCooldownCheck, TestCooldownEntry, TestCooldownOptions, TestCooldownRun } from './testing/test-cooldown.ts';
 
 export { denoTest, readDenoJunit } from './testing/deno-test.ts';
 export type { DenoTestOptions } from './testing/deno-test.ts';
@@ -42,10 +41,13 @@ export type { EleccionProveedor, ProveedorLlm, SondaLlm } from './testing/provee
 
 export { capaOpcional, exigirJuez, juzgarConLlm, preguntarJev, SaltoJuez, UMBRAL_DUDA, UMBRAL_RECHAZO, veredictoProbabilidad } from './testing/jueces.ts';
 
+export { coincide, coseno, embed, MARGEN_PREFIERE, masCercana, MODELO, MOTIVO_SIN_MODELO, prefiere, semanticaDisponible, similitud, ubicacionModelo, UMBRAL_COINCIDE } from './testing/semantica.ts';
+export type { ExtractorSemantico, ResultadoCoincide, ResultadoMasCercana, ResultadoPrefiere, UbicacionModelo } from './testing/semantica.ts';
+
 export { checkpointGit, codigoSync, coincideGlob, correrSync, modoDeArgv } from './tools/sync-entregable.ts';
 export type { AccionSync, CambioSync, CheckpointSync, ConfigSync, CtxSync, EntradaSync, GateSync, ModoSync, ResumenEntrada, ResumenSync } from './tools/sync-entregable.ts';
 
-export { dependenciasDeNavegador, importsFaltantes, PERFILES, perfilDeRuta, vendorizar } from './tools/vendor.ts';
-export type { TArchivoVendor, TConfigVendor, TPerfil, TPerfilVendor, TResultadoVendor } from './tools/vendor.ts';
+export { dependenciasDeNavegador, importsFaltantes, PERFILES, perfilDeRuta, podarSchemas, protocoloPines, seccionesDeSchemas, vendorizar } from './tools/vendor.ts';
+export type { TArchivoVendor, TConfigVendor, TPerfil, TPerfilVendor, TPinVendor, TResultadoVendor } from './tools/vendor.ts';
 
 export { Obj, ObjError, resolverUrl } from './lib/obj.ts';

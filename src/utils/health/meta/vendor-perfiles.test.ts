@@ -59,7 +59,8 @@ const GLOBALES = /\b(?:document|window|navigator|customElements|localStorage|ses
 
 Deno.test('vendor-perfiles: P1 shared/ y server/ sin dependencias ni globales de navegador', () => {
   const sinNavegador = codigo.filter((f) => perfil(f) === 'shared' || perfil(f) === 'server');
-  assert(sinNavegador.length >= 15, `muy pocos módulos shared/server: ${sinNavegador.length}`);
+  // 2026-10-13: los `*.schemas.ts` se fundieron en `shared/schemas.ts` y test-queue/pruebas-hijo en sus módulos.
+  assert(sinNavegador.length >= 10, `muy pocos módulos shared/server: ${sinNavegador.length}`);
   const malos: string[] = [];
   for (const f of sinNavegador) {
     const deps = dependenciasDeNavegador(texto(f));
@@ -110,7 +111,7 @@ Deno.test('vendor-perfiles: P4 el vendor resuelto de un server no alcanza client
     if (deps.length) malos.push(`${f}: ${deps.join(', ')}`);
     for (const { destino } of relativos(f)) if (destino && !vistos.has(destino)) pendientes.push(destino);
   }
-  assert(vistos.size >= 15, `resolución sospechosamente corta: ${vistos.size}`);
+  assert(vistos.size >= 10, `resolución sospechosamente corta: ${vistos.size}`);
   assertEquals(malos, [], malos.join('\n'));
 });
 

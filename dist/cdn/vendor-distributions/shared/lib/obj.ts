@@ -18,20 +18,20 @@
  *                                     en su JSON (fuente de verdad), recursivo.
  *
  * Consulta: copia la forma del dato y marca con truthy (`!!x`) lo pedido; `"*"` = todos, y
- * `"[campo=valor]"` = el primer elemento con ese campo (ver obj.schemas.ts). Nada muta: cada
+ * `"[campo=valor]"` = el primer elemento con ese campo (ver la sección `obj` de `shared/schemas.ts`). Nada muta: cada
  * operación devuelve un objeto nuevo. Fuente vendorizable en `dist/cdn/vendor-distributions/shared/lib/`;
  * bundle `obj.min.js` (Zod incluido) para el navegador en `dist/cdn/lib/`.
  *
- * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/lib/obj.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./obj.schemas.js`.
+ * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/lib/obj.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `obj`; `vendor.ts` lo poda a lo que la carpeta usa).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
  */
 import {
   nullable as zNullable, object as zObject, optional as zOptional, safeParse, ZodArray, ZodCatch, ZodDefault, ZodExactOptional, ZodLazy,
   ZodNonOptional, ZodNullable, ZodObject, ZodOptional, ZodPipe, ZodPrefault, ZodPromise, ZodReadonly, ZodRecord, ZodSuccess, ZodUnion, type z,
 } from "zod";
-import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "./obj.schemas.js";
+import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "../schemas.ts";
 
-export type * from "./obj.schemas.js";
+export type { TAccionObj, TCargarJson, TCodigoObj, TConsulta, TJson, TOpcionesResolver, TRefObj } from "../schemas.ts";
 
 /** Error de `Obj`: `codigo` dice qué falló y `ruta` dónde (claves separadas por punto). */
 export class ObjError extends Error {

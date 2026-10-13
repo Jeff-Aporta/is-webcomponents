@@ -1,9 +1,10 @@
 # 11 — Stagehand compartido: proveedores LLM, generador con fallback y destino por protocolo
 
 Guía para agentes que escriben o corren e2e de UI en un front del kit (ISW, ISS y los que vengan).
-Todo lo genérico vive en el kit: el controlador en `vendor-distributions/client/testing/stagehand.ts` (+ `.schemas.ts`,
-perfil `client`) y la pila de proveedores LLM en `vendor-distributions/shared/testing/proveedores-llm.ts` (+ `.schemas.ts`,
-perfil `shared`: la usan también los jueces de un server, sin navegador);
+Todo lo genérico vive en el kit: el controlador en `vendor-distributions/client/testing/stagehand.ts` (perfil `client`)
+y la pila de proveedores LLM en `vendor-distributions/shared/testing/proveedores-llm.ts` (perfil `shared`: la usan
+también los jueces de un server, sin navegador); sus contratos son las secciones `stagehand` y `proveedores-llm` del
+`shared/schemas.ts` único (que `vendor.ts` poda a esas secciones);
 el consumidor pone solo lo suyo: dónde están las keys, las URLs de sus destinos, el JWT de la sonda y
 cómo fija el destino desde su UI. Sin dependencia dura de `@browserbasehq/stagehand`: son funciones
 puras + `fetch`, y el consumidor pasa el generador a `Stagehand.create`.
@@ -13,10 +14,9 @@ puras + `fetch`, y el consumidor pasa el generador a `Stagehand.create`.
 | Archivo | Hacia (sugerido) |
 | --- | --- |
 | `dist/cdn/vendor-distributions/client/testing/stagehand.ts` | `tests/e2e/ISU/stagehand.ts` |
-| `dist/cdn/vendor-distributions/client/testing/stagehand.schemas.ts` | `tests/e2e/ISU/stagehand.schemas.ts` |
 | `dist/cdn/vendor-distributions/shared/testing/proveedores-llm.ts` | `tests/e2e/ISU/proveedores-llm.ts` |
-| `dist/cdn/vendor-distributions/shared/testing/proveedores-llm.schemas.ts` | `tests/e2e/ISU/proveedores-llm.schemas.ts` |
-| `dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts` (+ `.schemas.ts`) | `tests/e2e/ISU/…` |
+| `dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts` | `tests/e2e/ISU/test-cooldown.ts` |
+| `dist/cdn/vendor-distributions/shared/schemas.ts` (podado a `comun`, `stagehand`, `proveedores-llm`, `test-cooldown`) | `tests/e2e/ISU/schemas.ts` |
 
 El consumidor declara `"perfil": "client"`. `stagehand.ts` importa `../../shared/testing/…`; al aplanar en `ISU/`,
 `vendor.ts` reescribe esas rutas a `./…`. `stagehand.ts` reexporta la pila de proveedores (`leerProveedoresDeArchivo`,

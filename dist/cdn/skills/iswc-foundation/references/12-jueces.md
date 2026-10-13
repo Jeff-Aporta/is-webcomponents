@@ -27,9 +27,24 @@ Un veredicto incierto nunca tumba el gate: el juez refina, no decide solo.
 
 | Archivo | Qué da |
 |---|---|
-| `jueces.ts` + `jueces.schemas.ts` | `preguntarJev`, `juzgarConLlm`, `capaOpcional`, `exigirJuez` |
-| `test-cooldown.ts` + `test-cooldown.schemas.ts` | El cooldown de pruebas de siempre y, en el mismo sistema, el de llaves: `estadoLlave`, `marcarCooldown`, `COOLDOWN_LLAVE_MS` |
-| `proveedores-llm.ts` + `proveedores-llm.schemas.ts` | La pila de proveedores LLM (antes dentro de `stagehand.ts`) respeta el mismo cooldown; `elegirProveedorOpcional` no lanza |
+| `semantica.ts` | Juez semántico DETERMINISTA (embeddings locales, sin red ni llaves): `semanticaDisponible`, `similitud`, `coincide`, `prefiere`, `masCercana` |
+| `jueces.ts` | `preguntarJev`, `juzgarConLlm`, `capaOpcional`, `exigirJuez` |
+| `test-cooldown.ts` | El cooldown de pruebas de siempre y, en el mismo sistema, el de llaves: `estadoLlave`, `marcarCooldown`, `COOLDOWN_LLAVE_MS` |
+| `proveedores-llm.ts` | La pila de proveedores LLM (antes dentro de `stagehand.ts`) respeta el mismo cooldown; `elegirProveedorOpcional` no lanza |
+| `../schemas.ts` | Contratos de todos (secciones `semantica`, `jueces`, `proveedores-llm`, `test-cooldown`; `vendor.ts` lo poda) |
+
+### Tres capas de juicio, en este orden (todas opcionales, ninguna obligatoria)
+
+1. **Lo simple primero**: igualdad, regex, `expect`/`eq` sobre lo observable. Determinista, sin dependencias.
+2. **Semántica local** (`semantica.ts`): embeddings deterministas con `multilingual-e5-base` (ONNX cuantizado) vía
+   `@huggingface/transformers` (devDependency del consumidor; en Deno `npm:@huggingface/transformers`). El modelo sale
+   SOLO del cache de Hugging Face del equipo (`~/.cache/huggingface/hub`) o de `TEST_E5_MODEL_DIR`; **nunca se descarga**.
+   Sin modelo, `semanticaDisponible()` es `false`, las funciones lanzan un error claro y la prueba que las use se
+   salta con ese motivo (nunca verde por omisión). Umbrales calibrados (`UMBRAL_COINCIDE` 0,84; `MARGEN_PREFIERE` 0,02):
+   `coincide` (umbral absoluto) y `prefiere` (contraste: la orientación deseada le gana a la contraria; la forma robusta
+   para respuestas largas). Las orientaciones se escriben como textos PLAUSIBLES del asistente, nunca meta-descripciones.
+   Calibración: ISS `tests/unit/74-semantica-what.test.ts` y kit `meta/semantica.test.ts` (se salta con motivo sin modelo).
+3. **JEV / LLM** (`jueces.ts`): red, llaves, cooldown de 24 h; refinan, no deciden solos.
 
 ### JEV (TypeSafe)
 
@@ -74,7 +89,7 @@ Cada app baja estos archivos con su `vendor.ts` (pin por fecha ISO). Compiten el
 | ISS | `tests/.audit/ISU/` | `tests/_shared/jueces.ts` (`probabilidadJuez`) |
 | ISW | `tests/vendor/is-webcomponents/tools/` (nunca `src/`: va al entregable) | `tests/e2e/lib/jueces.ts` (`probabilidadJuez`) |
 
-Los imports relativos viajan juntos: `jueces.ts` necesita `jueces.schemas.ts`, `test-cooldown.ts`, `test-cooldown.schemas.ts`, `proveedores-llm.ts` y `proveedores-llm.schemas.ts` (todos de `shared/testing/`). Ya no necesita `stagehand.ts`: un server (ISS) vendoriza los jueces sin nada de `client/`.
+Los imports relativos viajan juntos: `jueces.ts` necesita `test-cooldown.ts`, `proveedores-llm.ts` (ambos de `shared/testing/`) y el `schemas.ts` único (que `vendor.ts` poda a `comun`, `jueces`, `proveedores-llm`, `test-cooldown`); `semantica.ts` solo necesita `schemas.ts` (sección `semantica`). Ya no necesita `stagehand.ts`: un server (ISS) vendoriza los jueces sin nada de `client/`.
 
 ## Uso típico (adaptador de la app)
 
@@ -87,5 +102,5 @@ El adaptador prueba JEV primero y el LLM de respaldo. Sin ninguno, deja el aviso
 
 ## Guardianes
 
-- Kit `src/utils/health/meta/jueces.test.ts`: J1-J7 (sin llave, JEV OK, sin saldo con cooldown, `-1` reactiva, pila LLM con cooldown, capa y salto, Stagehand con cooldown).
+- Kit `src/utils/health/meta/jueces.test.ts`: J1-J7 (sin llave, JEV OK, sin saldo con cooldown, `-1` reactiva, pila LLM con cooldown, capa y salto, Stagehand con cooldown); `meta/semantica.test.ts`: S1-S6 (calibración e5, salto con motivo sin modelo).
 - ISS `tests/health/95-jueces-fuera-del-entregable-what.test.ts` e ISW `tests/plataforma/jueces-fuera-del-entregable.test.ts`: nada entregable importa o cita los jueces.

@@ -10,7 +10,7 @@
 //   const code = await denoTest(archivos, { args: ['-A', '--no-check'] });
 //   const code = await denoTest(serie, { args: [...], serial: true }); // de a uno
 //
-// Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/deno-test.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./deno-test.schemas.ts`, `./test-cooldown.ts`, `./test-queue.ts`.
+// Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/deno-test.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `deno-test`), `./test-cooldown.ts` (cooldown + cola).
 // Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 
 import { spawn } from "node:child_process";
@@ -18,11 +18,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import process from "node:process";
-import { formatMs, testCooldownFromEnv, testId, type TestCooldown } from "./test-cooldown.ts";
-import { testConcurrency } from "./test-queue.ts";
+import { formatMs, testConcurrency, testCooldownFromEnv, testId, type TestCooldown } from "./test-cooldown.ts";
 
-export type { DenoTestOptions } from "./deno-test.schemas.ts";
-import type { DenoTestOptions } from "./deno-test.schemas.ts";
+export type { DenoTestOptions } from "../schemas.ts";
+import type { DenoTestOptions } from "../schemas.ts";
 
 /** `{ "./ruta/x.test.ts": { ms, ok } }` desde un reporte JUnit de Deno. */
 export function readDenoJunit(path: string): Record<string, { ms: number; ok: boolean }> {
