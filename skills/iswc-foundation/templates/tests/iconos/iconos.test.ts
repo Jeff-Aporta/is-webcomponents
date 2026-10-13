@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/tests/iconos/iconos.test.ts
+// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/tests/iconos/iconos.test.ts
 // iconos.test.ts — íconos de la app (sin navegador), sobre lo que deja `deno task build`. Sin mapa.
 //
 //   W-ICO-01  cada ícono que la app pinta está en local: assets/iconify/<set>/<n>.svg (y no queda assets/iconify.json)
@@ -6,7 +6,6 @@
 //   W-ICO-03  el registrador publicado declara <html data-icons> = iswc.host + assets/iconify/
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { definirPruebas } from '../../src/vendor/iswc-root/tools/pruebas.ts';
 import { PREFIJO } from '../../src/js/kit-tags.ts';
 
@@ -65,19 +64,13 @@ export default definirPruebas([
   {
     nombre: 'iconos W-ICO-03 el registrador declara <html data-icons> con la web publicada',
     categoria: 'what',
-    async correr({ eq }) {
-      const g = globalThis as { ISWebComponentsLoader?: { registerApp(): unknown }; document?: { documentElement: { dataset: Record<string, string> } } };
-      const previo = g.document;
-      const html = { dataset: {} as Record<string, string> };
-      g.ISWebComponentsLoader = { registerApp() { return this; } };
-      g.document = { documentElement: html };
-      try {
-        await import(pathToFileURL(join(RAIZ, 'dist', 'cdn', `${PREFIJO}Loader.min.js`)).href);
-      } finally {
-        g.document = previo;
-      }
+    correr({ expect }) {
+      // Se lee el registrador publicado (no se importa: un import queda en caché del proceso y no se re-ejecuta).
+      const loader = leer(join('dist', 'cdn', `${PREFIJO}Loader.min.js`));
       const h = host() ?? '';
-      eq('data-icons', html.dataset.icons, new URL('assets/iconify/', h.endsWith('/') ? h : `${h}/`).href);
+      const base = new URL('assets/iconify/', h.endsWith('/') ? h : `${h}/`).href;
+      expect('declara dataset.icons', /\.dataset\.icons/.test(loader), loader.slice(-300));
+      expect(`con la base ${base}`, loader.includes(JSON.stringify(base)), loader.slice(-300));
     },
   },
 ]);

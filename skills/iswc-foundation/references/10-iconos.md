@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/10-iconos.md -->
+<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/10-iconos.md -->
 # 10 — Íconos: localStorage, web publicada o API (sin mapa)
 
 Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13). No hay mapa (`iconify.json` ya no
@@ -50,7 +50,9 @@ initApp({
 - Sin `initApp`, el atributo va directo en el HTML, junto a los otros dos: `<html data-theme="dark"
   data-palette="contapyme" data-icons="https://mi-app…/assets/iconify/">`.
 - Apps de `create-iswc-app`: el registrador `<prefijo>Loader.min.js` que genera el build lo declara solo
-  desde `deno.json` → `iswc.host` (si la página no trae otro `data-icons`). No hay nada que repetir.
+  desde `deno.json` → `iswc.host` (si la página no trae otro `data-icons`). No hay nada que repetir. Si la
+  página se sirve desde otro origen (dev en localhost, e2e), usa la carpeta `assets/iconify/` de ese mismo
+  servidor (URL absoluta derivada del registrador): sin CORS contra el sitio publicado.
 - El sitio publicado debe servir los SVG con CORS si la app se abre desde otro origen (dev en localhost
   contra el host publicado): en Azure Static Web Apps, `globalHeaders` con `Access-Control-Allow-Origin`
   para `/assets/iconify/*`. Sin CORS el fetch falla, sale el aviso y el ícono viene de la API.

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/pruebas.ts
+// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/pruebas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).
@@ -382,5 +382,8 @@ async function correrComoHijo(): Promise<void> {
   console.log(lineaReporte(reporte));
 }
 
-// Las pruebas pueden dejar timers o sockets vivos: el hijo termina al entregar.
-if (esHijo()) correrComoHijo().then(() => process.exit(0), (e) => { console.error(e); process.exit(1); });
+// Las pruebas pueden dejar timers o sockets vivos: el hijo termina al entregar. Una sola vez por proceso:
+// si el archivo de pruebas importa este módulo por otra URL (ruta corta 8.3 de Windows, symlink), la
+// segunda copia también se vería «hijo» y correría el archivo dos veces sobre la misma página.
+const G_HIJO = globalThis as typeof globalThis & { __iswcPruebasHijo?: boolean };
+if (esHijo() && !G_HIJO.__iswcPruebasHijo && (G_HIJO.__iswcPruebasHijo = true)) correrComoHijo().then(() => process.exit(0), (e) => { console.error(e); process.exit(1); });

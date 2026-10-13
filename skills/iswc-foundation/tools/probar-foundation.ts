@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/probar-foundation.ts
+// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/probar-foundation.ts
 /**
  * probar-foundation.ts — guardián del estándar: crea una app con create-iswc-app y le corre el gate.
  *
@@ -46,9 +46,9 @@ async function herramientaDeIconosLocal(app: string): Promise<number> {
   if (!url) return 1;
   const ok = await fetch(url, { method: 'HEAD' }).then((r) => r.ok).catch(() => false);
   if (ok) return 0;
-  const local = pathToFileURL(join(AQUI, '..', '..', '..', 'src', 'cdn', 'tools', 'download-iconify.ts')).href;
+  const local = pathToFileURL(join(AQUI, '..', '..', '..', 'src', 'vendor-distributions', 'client', 'tools', 'download-iconify.ts')).href;
   await Deno.writeTextFile(dl, texto.replace(url, local));
-  console.log(`[probar-foundation] el pin aún no publica download-iconify.ts → assets/dl.js usa ${local}`);
+  console.log(`[probar-foundation] la herramienta online no responde → assets/dl.js usa ${local}`);
   return 0;
 }
 

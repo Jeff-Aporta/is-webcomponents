@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/utils/build.ts
+// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/utils/build.ts
 /**
  * build.ts — `src/js/**` y `view/**` → `dist/cdn/` (estándar iswc-foundation). Lo corre `deno task build`
  * DESPUÉS de `build:scss`.
@@ -80,14 +80,17 @@ async function compilar(): Promise<number> {
 
 /**
  * Base de íconos de la app (una sola declaración: `deno.json` → `iswc.host`): el registrador la deja en
- * `<html data-icons>` si la página no trae otra. URL absoluta del sitio publicado, nunca relativa.
+ * `<html data-icons>` si la página no trae otra. Siempre URL absoluta: la del sitio publicado o, si la página
+ * se sirve desde otro origen (dev, e2e), la de su propio servidor.
  */
 function iconos(): string[] {
   const deno: { iswc?: { host?: unknown } } = JSON.parse(readFileSync(join(ROOT, 'deno.json'), 'utf8'));
   const host = deno.iswc?.host;
   if (typeof host !== 'string' || !/^https?:\/\//.test(host)) return [];
   const base = new URL('assets/iconify/', host.endsWith('/') ? host : `${host}/`).href;
-  return [`{const h=document.documentElement;if(!h.dataset.icons)h.dataset.icons=${JSON.stringify(base)};}`];
+  // En el sitio publicado, esa base; servida desde otro origen (dev, e2e) la carpeta de ESTE mismo servidor
+  // (absoluta, junto al registrador: dist/cdn/ → ../../assets/iconify/), sin CORS contra el publicado.
+  return [`{const h=document.documentElement,p=${JSON.stringify(base)};if(!h.dataset.icons)h.dataset.icons=location.origin===new URL(p).origin?p:new URL("../../assets/iconify/",raiz).href;}`];
 }
 
 /** `?v=<hash>` en todos los imports propios + registrador de componentes + metadatos. */

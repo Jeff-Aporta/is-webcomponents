@@ -54,7 +54,7 @@
     "core/is-base.min.css": "lzjggg",
     "core/iswc-storage.min.js": "tj39i7",
     "core/iswc-storage.schemas.min.js": "iz9q9d",
-    "core/loader.min.js": "awgs54",
+    "core/loader.min.js": "0irfw1",
     "core/palettes.min.css": "o3iv67",
     "core/scrollbars.css": "hv74i7",
     "core/spa-state.min.js": "nf9bab",
@@ -451,7 +451,7 @@
     "layout/split-panel.min.js": "t49024",
     "lib/obj.min.js": "kfv7uh",
     "lib/zod.min.js": "l8hg26",
-    "loader.min.js": "awgs54",
+    "loader.min.js": "0irfw1",
     "media/avatar.min.css": "2vs463",
     "media/avatar.min.js": "vu7gob",
     "media/barcode-scanner.min.css": "8xi9cc",
@@ -529,13 +529,13 @@
     "preview/scrollbars.css": "hv74i7",
     "preview/slots-pg.min.css": "3oig3c",
     "preview/slots-pg.min.js": "pajcl1",
-    "skills/iswc-foundation/templates/assets/dl.js": "m9i8k2",
+    "skills/iswc-foundation/templates/assets/dl.js": "zs4uz6",
     "skills/iswc-foundation/templates/scripts/build/build-scss.mjs": "cipxz8",
     "skills/iswc-foundation/templates/scripts/gate/gate-cooldown.mjs": "uulxll",
     "skills/iswc-foundation/templates/scripts/gate/run-test-all.mjs": "oysux4",
     "skills/iswc-foundation/templates/scripts/gate/sync-protocolo.mjs": "g87kav",
     "skills/iswc-foundation/templates/scripts/gate/sync-to-entregable.mjs": "e59xm7",
     "skills/iswc-foundation/templates/scripts/gate/test-health.mjs": "lx1zk0",
-    "skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs": "peyv1r"
+    "skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs": "2ed8b7"
   }
 }

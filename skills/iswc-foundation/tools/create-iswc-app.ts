@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/create-iswc-app.ts
+// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/create-iswc-app.ts
 /**
  * create-iswc-app — crea una app iswc nueva con el estándar iswc-foundation (el «create-react-app» del kit).
  *
@@ -53,9 +53,20 @@ async function leer(url: URL): Promise<string> {
   return r.text();
 }
 
-function shaPorDefecto(): string {
+/** `dueño/repo` del kit: `--repo`, o el de la URL desde la que corre (raw/jsDelivr), o el nombre por defecto. */
+const REPO_KIT = args.repo ?? import.meta.url.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\//)?.[1]
+  ?? import.meta.url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^/@]+)@/)?.[1] ?? 'Jeff-Aporta/iswc-root';
+
+async function shaPorDefecto(): Promise<string> {
   const deUrl = import.meta.url.match(/@([0-9a-f]{40})\//)?.[1] ?? import.meta.url.match(/\/([0-9a-f]{40})\//)?.[1];
   if (deUrl) return deUrl;
+  if (remoto) {
+    // Online desde `@main`: el último commit PUBLICADO de la rama, como lo resuelven vendor y pin-update (jsDelivr).
+    const { opciones, ultimoPublicado } = await import('../../../src/vendor-distributions/shared/tools/pin-update.mjs');
+    const u = await ultimoPublicado(opciones({ repo: REPO_KIT, rama: 'main' }));
+    if (u.sha) return u.sha;
+    throw new Error(`create-iswc-app: no pude resolver el último commit publicado de ${REPO_KIT}@main (¿sin red?); pasa --sha=<sha40>`);
+  }
   // Checkout local: el último SHA PUBLICADO (origin/main); el PIN local puede ir por delante del remoto.
   try {
     const r = new Deno.Command('git', { args: ['-C', fileURLToPath(KIT), 'rev-parse', 'origin/main'] }).outputSync();
@@ -75,7 +86,7 @@ if (!/^[a-z][a-z0-9]*$/.test(prefijo)) {
   console.error(`create-iswc-app: prefijo inválido "${prefijo}" (minúsculas y dígitos, empieza por letra, sin guiones).`);
   Deno.exit(2);
 }
-const sha = args.sha ?? shaPorDefecto();
+const sha = args.sha ?? await shaPorDefecto();
 if (!/^[0-9a-f]{40}$/.test(sha)) {
   console.error(`create-iswc-app: --sha debe ser un SHA de 40 hex (pines fijos), no "${sha}".`);
   Deno.exit(2);
@@ -86,7 +97,7 @@ const MARCAS: Record<string, string> = {
   __CLASE__: prefijo[0]!.toUpperCase() + prefijo.slice(1),
   __TITULO__: args.titulo ?? nombre,
   __SHA__: sha,
-  __REPO__: args.repo ?? 'Jeff-Aporta/iswc-root',
+  __REPO__: REPO_KIT,
   __PUERTO__: args.puerto ?? '4200',
 };
 const host = args.host ?? `https://${MARCAS.__REPO__!.split('/')[0]!.toLowerCase()}.github.io/${nombre}/`;
@@ -100,55 +111,25 @@ const marcar = (s: string) => s.replace(/__(APP|PREFIJO|CLASE|TITULO|SHA|REPO|PU
 // 1) Plantillas
 const manifest = JSON.parse(await leer(new URL('../templates/manifest.json', AQUI))) as { archivos: string[] };
 for (const rel of manifest.archivos) {
-  const texto = await leer(new URL(`../templates/${rel}`, AQUI));
+  // La cabecera `@vendor <ISO> <kit>@main …` es del kit (barrido de skills): la app nace sin ella (y sin ref @main).
+  const texto = (await leer(new URL(`../templates/${rel}`, AQUI))).replace(/^[ \t]*(?:\/\/|<!--|#)[ \t]*@vendor \d{4}-\d\d-\d\dT[^\n]*\r?\n/m, '');
   const salida = join(destino, marcar(rel));
   mkdirSync(dirname(salida), { recursive: true });
   writeFileSync(salida, marcar(texto));
 }
 
-// 2) Tools del kit, vendorizadas desde ESTA versión del kit (vendor = pin desde el día 0)
-const VENDOR = [
-  ...['schemas.ts', 'test-cooldown.ts', 'pruebas.ts', 'sync-entregable.ts', 'pin-update.mjs'].map((f) => `tools/${f}`),
-  ...['index.ts', 'content-hash.ts', 'asset-url.ts', 'asset-url.schemas.ts', 'stamp-hashes.ts', 'bundle-min.ts',
-    'bundle-min.schemas.ts', 'asset-store.ts'].map((f) => `build/${f}`),
-];
-let etiqueta = sha;
-for (const rel of VENDOR) {
-  let texto: string;
-  if (remoto) {
-    // raw: KIT = raíz del repo (fuente en src/cdn/); jsDelivr: KIT = …/dist/cdn/.
-    texto = await leer(new URL(`src/cdn/${rel}`, KIT)).catch(() => leer(new URL(rel, KIT)));
-  } else {
-    const raiz = fileURLToPath(KIT);
-    const origen = [join(raiz, 'src', 'cdn', rel), join(raiz, 'dist', 'cdn', rel)].find(existsSync);
-    if (!origen) throw new Error(`create-iswc-app: falta ${rel} en el kit local ${raiz}`);
-    texto = readFileSync(origen, 'utf8');
-    etiqueta = `${sha}+local`;
-  }
-  texto = texto.replace(/^\/\/ @vendor [^\n]*\n\/\/ No editar[^\n]*\n/, '');
-  const salida = join(destino, 'src', 'vendor', 'iswc-root', rel);
-  mkdirSync(dirname(salida), { recursive: true });
-  writeFileSync(salida, `// @vendor iswc-root@${etiqueta} dist/cdn/${rel}\n// No editar: se cambia en el kit y se descarga con \`deno task vendor:iswc\`.\n${texto}`);
-}
-
-// 3) Skill general del kit (índice de TODOS los componentes) en specs/iswc/kit/, fijada al pin:
-//    el agente sabe qué componente usar sin salir del repo y lo que lee es la versión que usa la app.
-const SKILL_KIT = ['SKILL.md', 'catalog.md', 'reference.md', 'PROMPT.md', 'tools/build.md', 'tools/local.md', 'tools/migrate.md', 'tools/runtime.md'];
-const repoKit = MARCAS.__REPO__!;
-const fijar = (md: string) => md
-  .replaceAll('Jeff-Aporta/iswc-root', repoKit)
-  .replace(new RegExp(`(github\.com/${repoKit}/(?:blob|tree))/main/`, 'g'), `$1/${sha}/`)
-  .replace(new RegExp(`(raw\.githubusercontent\.com/${repoKit})/main/`, 'g'), `$1/${sha}/`)
-  .replace(/\]\(\.\.\/((?!catalog\.md|reference\.md|SKILL\.md|PROMPT\.md)[a-z0-9-]+\/[^)]*)\)/g, `](https://raw.githubusercontent.com/${repoKit}/${sha}/skills/$1)`);
-for (const rel of SKILL_KIT) {
-  try {
-    const texto = await leer(new URL(`../../iswc-root/${rel}`, AQUI));
-    const salida = join(destino, 'specs', 'iswc', 'kit', rel);
-    mkdirSync(dirname(salida), { recursive: true });
-    writeFileSync(salida, `<!-- Copia de skills/iswc-root/${rel} del kit ${repoKit}@${sha}. No editar: se refresca con \`deno task vendor:iswc\`. -->\n${fijar(texto)}`);
-  } catch (e) {
-    console.warn(`create-iswc-app: no pude copiar skills/iswc-root/${rel}: ${e instanceof Error ? e.message : e}`);
-  }
+// 2) Tools del kit al MISMO SHA del pin: las baja el propio `scripts/vendor/vendor-iswc-tools.mjs` de la app
+//    (una sola lista de archivos). Desde un checkout local, `--local` con ISWC_LOCAL = este kit (cabecera +local).
+const etiqueta = remoto ? sha : `${sha}+local`;
+{
+  const r = await new Deno.Command(Deno.execPath(), {
+    args: ['run', '-A', join('scripts', 'vendor', 'vendor-iswc-tools.mjs'), ...(remoto ? [] : ['--local'])],
+    cwd: destino,
+    env: remoto ? {} : { ISWC_LOCAL: fileURLToPath(KIT) },
+    stdout: 'inherit',
+    stderr: 'inherit',
+  }).output();
+  if (r.code) throw new Error(`create-iswc-app: vendor-iswc-tools.mjs falló (${r.code})`);
 }
 
 console.log(`

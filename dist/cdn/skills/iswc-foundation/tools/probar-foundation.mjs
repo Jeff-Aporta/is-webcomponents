@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs
+// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs
 // Bundle autocontenido de skills/iswc-foundation/tools/probar-foundation.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es skills/iswc-foundation/tools/probar-foundation.ts.
 
 // skills/iswc-foundation/tools/probar-foundation.ts
@@ -30,9 +30,9 @@ async function herramientaDeIconosLocal(app2) {
   if (!url) return 1;
   const ok = await fetch(url, { method: "HEAD" }).then((r) => r.ok).catch(() => false);
   if (ok) return 0;
-  const local = pathToFileURL(join(AQUI, "..", "..", "..", "src", "cdn", "tools", "download-iconify.ts")).href;
+  const local = pathToFileURL(join(AQUI, "..", "..", "..", "src", "vendor-distributions", "client", "tools", "download-iconify.ts")).href;
   await Deno.writeTextFile(dl, texto.replace(url, local));
-  console.log(`[probar-foundation] el pin a\xFAn no publica download-iconify.ts \u2192 assets/dl.js usa ${local}`);
+  console.log(`[probar-foundation] la herramienta online no responde \u2192 assets/dl.js usa ${local}`);
   return 0;
 }
 if (await correr([Deno.execPath(), "run", "-A", join(AQUI, "manifest.ts"), "--check"], AQUI)) Deno.exit(1);

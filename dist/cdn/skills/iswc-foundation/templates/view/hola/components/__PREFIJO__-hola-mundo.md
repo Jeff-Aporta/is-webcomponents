@@ -2,7 +2,7 @@
 name: __PREFIJO__-hola-mundo
 description: Título «Hola mundo». Referencia mínima de un componente del estándar iswc-foundation; úsalo como molde.
 ---
-<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/components/__PREFIJO__-hola-mundo.md -->
+<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/components/__PREFIJO__-hola-mundo.md -->
 
 # `<__PREFIJO__-hola-mundo>`
 

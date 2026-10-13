@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/catalog.md -->
+<!-- @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/catalog.md -->
 # Catálogo iswc-* (inventario completo)
 
 Fuente viva: regenerar con `node scripts/sync-skill-catalog.mjs`.
