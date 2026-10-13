@@ -34,7 +34,7 @@ import {
   crearEstado, auditarCatalogo, MOTOR_VERSION, resumenMotor,
   prepararSesionBrowser,
 } from './auditor.js';
-import type { OpcionesRunner } from './types.js';
+import type { OpcionesRunner } from './types.schemas.js';
 import { aJson, aMarkdown, imprimirConsola, imprimirResumenUnaLinea } from './reporter.js';
 import { enumerarCatalogo, resumirCatalogo } from './catalog.js';
 
@@ -200,7 +200,4 @@ main().then(
 );
 
 // Re-exports para consumo programático.
-export { enumerarCatalogo } from './catalog.js';
-export { aJson, aMarkdown } from './reporter.js';
-export { MOTOR_VERSION } from './auditor.js';
-export type { ReporteAuditoria, Hallazgo } from './types.js';
+

@@ -35,14 +35,8 @@ import { join } from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import catalog from '../../../previews/catalog.ts';
-import {
-  asegurarServidor,
-  abrirGaleria as abrirGaleriaHarness,
-  esperarMs,
-  baseUrlResuelta,
-  faltanRequisitos,
-  crearTestE2E,
-} from './lib/harness.ts';
+import { asegurarServidor, abrirGaleria as abrirGaleriaHarness, esperarMs, baseUrlResuelta, crearTestE2E } from './lib/harness.ts';
+import { faltanRequisitos } from './lib/env.ts';
 import { repoDir } from './lib/env.ts';
 import type { Browser, Page } from 'playwright';
 import type { CtxE2E } from './lib/tipos.d.ts';

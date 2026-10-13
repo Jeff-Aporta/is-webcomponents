@@ -1,19 +1,19 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './block-spec.js';
-import type { BlockLayout, BlockSpec } from './block-spec.js';
+import type { BlockLayout, BlockSpec } from './block-spec.schemas.js';
 // Tipos internos del spec (no exportados) que el renderer necesita; los
 // redefinimos localmente para no tocar la firma del spec.
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import { SequenceTurtle } from './sequence-turtle.js';
+import { PathTurtle as SequenceTurtle } from '../_shared/path-turtle.js';
 import type { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import type { DiagramTheme } from './diagram-types.js';
+import type { DiagramTheme } from './diagram-types.schemas.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
-import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';

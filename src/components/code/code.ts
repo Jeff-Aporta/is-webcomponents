@@ -40,15 +40,15 @@ import {
 } from '../_shared/code-langs.js';
 import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
 import { applyThemeConfig, brandMonoTheme, parseThemeConfig } from '../_shared/code-theme.js';
-import type { CodeThemeConfig } from '../_shared/code-theme.js';
+import type { CodeThemeConfig } from '../_shared/code-theme.schemas.js';
 import { softFormat, softFormatMode } from '../_shared/code-text.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
 } from '../_shared/code-model.js';
-import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from '../_shared/code-model.js';
+import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from '../_shared/code-model.schemas.js';
 import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '../_shared/code-highlight.js';
-import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../_shared/code-highlight.js';
-import type { CodeFormatConfig as CodeFmtConfigShared } from '../_shared/code-format.js';
+import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../_shared/code-highlight.schemas.js';
+import type { CodeFormatConfig as CodeFmtConfigShared } from '../_shared/code-format.schemas.js';
 import '../feedback/tooltip.js';
 import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IsTooltipEl, HighlightLine, HighlightResult } from "./code.schemas.js";
 
@@ -97,7 +97,6 @@ function editRange(oldText: string, newText: string): [number, number, number] {
 }
 
 class IswcCode extends ElementBase {
-  
 
   static formAssociated = true;
   static get observedAttributes(): string[] {
@@ -1015,15 +1014,5 @@ class IswcCode extends ElementBase {
 
 defineElement('iswc-code', IswcCode, 'IswcCode');
 
-export {
-  IswcCode,
-  registerLanguage,
-  listLanguages,
-  inferLanguage,
-  code2json,
-  json2code,
-  formatCode,
-  normalizeFormatConfig,
-  applyThemeConfig,
-};
+export { IswcCode };
 export default IswcCode;

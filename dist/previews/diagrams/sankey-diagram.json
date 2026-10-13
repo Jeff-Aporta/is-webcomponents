@@ -118,5 +118,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de Sankey en SVG que muestra flujos entre nodos con grosor proporcional al valor, sin Mermaid."
 }

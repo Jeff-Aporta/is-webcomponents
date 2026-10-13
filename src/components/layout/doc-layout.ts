@@ -4,8 +4,6 @@ import './split-panel.js';
 import { readIswc, writeIswc } from '../../core/iswc-storage.js';
 import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout, SplitPanelDocLayout } from './doc-layout.schemas.js';
 
-export type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout } from './doc-layout.schemas.js';
-
 /**
  * <iswc-doc-layout> — layout documental común: navegación a la izquierda, contenido
  * al centro e índice de la página a la derecha, con scroll-spy entre ambos.

@@ -5,7 +5,7 @@
 // tiene que salir con O/C y path, o el PNG solo enseña cajas.
 
 import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_GAP, assemblyEntityMargin, parseHttpEndpoint } from '../../../components/diagrams/component-spec.ts';
-import { parsePathPoints } from '../../../components/_shared/diagram-edge-actors.ts';
+import { pathPoints as parsePathPoints } from '../../../components/_shared/diagram-arrow.ts';
 import { COL_GUTTER, EDGE_CLEARANCE, orthoPolysOverlap, pathHasDiagonal, pathIllegal, pathShareLen, pointInOrtho, segsFromPath, segmentoCortaCaja } from '../../../components/diagrams/component-pack.ts';
 
 const failures = [];

@@ -9,13 +9,11 @@
  */
 import "../../flex-options.js";
 import "../../float-card.js";
-import type { TreeActionEntry, TreeActionSpec, TNode } from "./_types.js";
+import type { TreeActionEntry, TreeActionSpec, TNode } from './_types.schemas.js';
 import { HandlerStoreSchema, ControllerWithLockSchema, type HandlerStore, type ControllerWithLock } from "./render-rows.schemas.js";
 import type { RenderOpts, RenderAdapter, RowController } from "./render-rows.schemas.js";
 
 /** Opciones que recibe `paintForest` para customizar el pintado. */
-
-export type { RenderOpts };
 
 /** Forma mínima que `paintRow` espera del adapter (`TreeRowAdapter.getOrCreateRowAdapter`). */
 

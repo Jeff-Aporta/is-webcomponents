@@ -18,13 +18,7 @@
  * - Las firmas se ajustan a los tipos concretos para evitar `any`.
  */
 import { TAView } from "./05-view.js";
-import {
-  DropPosition,
-  MoveDirection,
-  PendingDeleteSnapshot,
-  TNode,
-  TRecord,
-} from "./_types.js";
+import { DropPosition, MoveDirection, PendingDeleteSnapshot, TNode, TRecord } from './_types.schemas.js';
 import type { MutationResult } from "./06-mutations.schemas.js";
 
 /** Resultado de las operaciones async de mutación. */

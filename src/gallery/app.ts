@@ -1,7 +1,8 @@
 import components from '../manifest.js';
 import { leerAppCfg } from '../core/app-cfg.js';
-import { PALETTES, type PaletteConfig } from '../styles/palette-build.js';
-import type { ComponentManifestItem } from '../manifest.js';
+import { PALETTES } from '../styles/palette-build.js';
+import { type PaletteConfig } from '../styles/palette-build.schemas.js';
+import type { ComponentManifestItem } from '../manifest.schemas.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
 import {

@@ -25,14 +25,8 @@
 import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import {
-  arrancar,
-  abrirGaleria,
-  esperarMs,
-  evidencia,
-  faltanRequisitos,
-  crearTestE2E,
-} from './lib/harness.ts';
+import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from './lib/harness.ts';
+import { faltanRequisitos } from './lib/env.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;

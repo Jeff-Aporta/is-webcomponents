@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T16:16:16.613Z",
+  "generatedAt": "2026-10-13T19:15:08.036Z",
   "count": 122,
   "modules": [
     {
@@ -428,10 +428,9 @@
       "id": "diagram-edge-actors",
       "path": "src/components/_shared/diagram-edge-actors.ts",
       "summary": "Etiquetas de arista = actores rectangulares. — En PNG las chips se pintaban en el punto medio de la arista y acababan",
-      "bytes": 8165,
+      "bytes": 8097,
       "exports": [
         "EDGE_ACTOR_H",
-        "parsePathPoints  from",
         "edgeActorWidth",
         "pointAtFraction",
         "placeEdgeActors",
@@ -518,14 +517,13 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 11108,
+      "bytes": 10908,
       "exports": [
         "loadOverrides",
         "saveOverrides",
         "clearOverrides",
         "emitLayoutChange",
         "applyOverrides",
-        "snap",
         "attachNodeDrag",
         "openInlineEditor",
         "closeInlineEditor"
@@ -596,7 +594,7 @@
       "id": "diagram-flow",
       "path": "src/components/_shared/diagram-flow.ts",
       "summary": "diagram-flow — Estándar: cada riel muestra hacia dónde va lo que transporta.",
-      "bytes": 6765,
+      "bytes": 6715,
       "exports": [
         "FLUJO",
         "flujoActivo",
@@ -620,7 +618,7 @@
       "id": "diagram-graph",
       "path": "src/components/_shared/diagram-graph.ts",
       "summary": "diagram-graph — todos los motores que recorren el flujo: capas (node-link), reprocesos (swimlane), índices",
-      "bytes": 4526,
+      "bytes": 4476,
       "exports": [
         "claveArista",
         "aristasDeRetorno",
@@ -689,7 +687,7 @@
       "id": "diagram-socket",
       "path": "src/components/_shared/diagram-socket.ts",
       "summary": "diagram-socket — El expositor (componente, tabla, controller) pone el palo y el socket `(`; quien consume llega a",
-      "bytes": 2032,
+      "bytes": 1981,
       "exports": [
         "SOCKET_FILL",
         "pintarSocket"
@@ -746,7 +744,7 @@
       "id": "diagram-tipos",
       "path": "src/components/_shared/diagram-tipos.ts",
       "summary": "diagram-tipos — POR QUÉ AQUÍ. `component-pack.ts` y `component-spec.ts` se pasan los mismos",
-      "bytes": 1114,
+      "bytes": 961,
       "exports": []
     },
     {
@@ -826,7 +824,7 @@
       "id": "grid-data",
       "path": "src/components/_shared/grid-data.ts",
       "summary": "Pipeline de datos del data grid: normalización de columnas, obtención y — formateo de valores, filtrado, ordenación, agrupación (row grouping y tree",
-      "bytes": 17854,
+      "bytes": 17862,
       "exports": [
         "normalizeColumns",
         "resolveWidths",
@@ -901,7 +899,7 @@
       "id": "grid-ui",
       "path": "src/components/_shared/grid-ui.ts",
       "summary": "Popovers del data grid: menú de columna, panel de columnas, panel de filtros, — menús de densidad y exportación.",
-      "bytes": 13058,
+      "bytes": 13066,
       "exports": [
         "createPopover",
         "showPopover",
@@ -929,13 +927,8 @@
       "id": "highlight-code",
       "path": "src/components/_shared/highlight-code.ts",
       "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
-      "bytes": 8551,
+      "bytes": 8468,
       "exports": [
-        "dedent",
-        "unwrapHandHighlight",
-        "prettyHtml",
-        "softFormat",
-        "softFormatMode",
         "resolveMode",
         "modeToLang",
         "paint",

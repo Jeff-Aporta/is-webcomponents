@@ -160,5 +160,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Tabla dinámica que agrupa una colección por filas y columnas y agrega una medida, todo en el cliente."
 }

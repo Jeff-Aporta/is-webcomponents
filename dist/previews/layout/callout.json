@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-callout&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-callout de InSoft.",
+  "description": "Recuadro destacado para avisos dentro del contenido (marca, neutro, éxito, advertencia o peligro), con ícono, título y cuerpo.",
   "storageKey": "docs-iswc-callout",
   "loads": ["iswc-slots-pg"],
   "sections": [

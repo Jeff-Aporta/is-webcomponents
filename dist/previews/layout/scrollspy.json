@@ -113,5 +113,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Resalta en un índice la sección que está visible mientras se desplaza la página."
 }

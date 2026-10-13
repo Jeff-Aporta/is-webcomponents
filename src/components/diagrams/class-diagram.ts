@@ -5,7 +5,7 @@ import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveClassSpec, computeClassLayout, sentidoFlujoClase } from './class-spec.js';
 import { animarRielEn, flujoActivo } from '../_shared/diagram-flow.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import { SequenceTurtle } from './sequence-turtle.js';
+import { PathTurtle as SequenceTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
@@ -556,7 +556,6 @@ class IswcClassDiagram extends DiagramElementBase {
     }
   }
 
-
   /**
    * Paquetes estilo Visual Paradigm / InSoft: carpeta con pestaña corta a la
    * izquierda, borde negro fino y rótulo centrado en la franja superior.
@@ -652,7 +651,6 @@ class IswcClassDiagram extends DiagramElementBase {
       this.#nodeNodes.set(n.id, { n, g, box });
     }
   }
-
 
   /* ── hover ── */
 

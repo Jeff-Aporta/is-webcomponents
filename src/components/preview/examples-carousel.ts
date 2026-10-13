@@ -511,5 +511,5 @@ export function defineExamplesCarousel(): void {
 
 if (typeof customElements !== 'undefined') defineExamplesCarousel();
 
-export { IswcExamplesCarousel, type ExampleSpec };
+export { IswcExamplesCarousel };
 export default IswcExamplesCarousel;

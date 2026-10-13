@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-date-time-input&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-date-time-input de InSoft.",
+  "description": "Campo de fecha y hora con calendario y reloj lado a lado en un panel.",
   "storageKey": "docs-iswc-date-time-input",
   "sections": [
     {

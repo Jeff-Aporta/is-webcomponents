@@ -1,5 +1,5 @@
 import { TRADrag } from "./row-adapter-drag.js";
-import type { TNode, TreeActionEntry } from "./_types.js";
+import type { TNode, TreeActionEntry } from './_types.schemas.js';
 import type { _SummaryEvent, _RowAdapter, TRAAccessible } from "./row-adapter.schemas.js";
 
 /** Detalle con un evento custom del row-adapter (summary/pointer). */

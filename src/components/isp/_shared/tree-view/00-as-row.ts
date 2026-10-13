@@ -18,26 +18,8 @@
 import { resolveColor } from "./helpers.js";
 import { TreeRowAdapter } from "./row-adapter.js";
 import { TARoles } from "./07-roles.js";
-import {
-  asActionSpec,
-  asNumber,
-  asRecord,
-  CustomsRuntime,
-  DropPosition,
-  FloatCardConfig,
-  IconConfig,
-  MoveDirection,
-  PendingDeleteSnapshot,
-  RowConfig,
-  RowAdapterBridge,
-  SiblingPosition,
-  TreeActionEntry,
-  TreeActionSpec,
-  TreeContext,
-  TreeCustoms,
-  TNode,
-  TRecord,
-} from "./_types.js";
+import { asActionSpec, asNumber, asRecord } from './_types.js';
+import { CustomsRuntime, DropPosition, FloatCardConfig, IconConfig, MoveDirection, PendingDeleteSnapshot, RowConfig, RowAdapterBridge, SiblingPosition, TreeActionEntry, TreeActionSpec, TreeContext, TreeCustoms, TNode, TRecord } from './_types.schemas.js';
 import type { BridgeCallStat, AdapterConfig, HotkeyClickHandler, HotkeyList } from "./00-as-row.schemas.js";
 
 /** Stats de invocación de `getOrCreateRowAdapter` para rate-limit. */
@@ -824,4 +806,4 @@ class TARowBase extends TARoles {
 
 export { TARowBase };
 // Re-exports para callers downstream.
-export { asActionSpec, asRecord, asNumber };
+

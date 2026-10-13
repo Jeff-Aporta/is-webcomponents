@@ -4,7 +4,7 @@
   "category": "data",
   "title": "&lt;iswc-stat&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-stat (KPI Card) de InSoft.",
+  "description": "Tarjeta de indicador (KPI) con valor, etiqueta, variación y tendencia.",
   "styles": [
     ".stats-grid {",
     "      display: grid;",

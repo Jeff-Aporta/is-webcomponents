@@ -15,7 +15,7 @@
  * nodo con `iplan` / `idrow` opcional).
  */
 import { TTreeAdapterContract } from "./01-contract.js";
-import { TNode, TRecord, TreeActionSpec } from "./_types.js";
+import { TNode, TRecord, TreeActionSpec } from './_types.schemas.js';
 import type { ActionResult, AfterCatalogFn, DeleteConfirmedFn, HistoryPushFn, CloseEditFormFn, RebuildFlatTreeFn } from "./02-model.schemas.js";
 
 /** Resultado de las acciones `ActInsertar` / `actEliminar` / etc. */

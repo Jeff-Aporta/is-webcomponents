@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-tab-panel&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-tab-panel de InSoft.",
+  "description": "Panel de contenido asociado a una pestaña de un iswc-tab-group.",
   "storageKey": "docs-iswc-tab-panel",
   "sections": [
     {

@@ -19,7 +19,7 @@
  *     `<script type="application/json">` dentro del host).
  */
 
-import type { Hallazgo } from '../types.js';
+import type { Hallazgo } from '../types.schemas.js';
 import { DefSchema, BloqueSchema, type Def, type Bloque } from "./json-contenido.schemas.js";
 import type { OpcionesContenido } from "./json-contenido.schemas.js";
 

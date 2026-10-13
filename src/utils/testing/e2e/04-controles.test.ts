@@ -10,15 +10,8 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Page } from '@browserbasehq/stagehand';
-import {
-  arrancar,
-  abrirGaleria,
-  esperarMs,
-  evidencia,
-  problemasDeConsola,
-  faltanRequisitos,
-  crearTestE2E,
-} from './lib/harness.ts';
+import { arrancar, abrirGaleria, esperarMs, evidencia, problemasDeConsola, crearTestE2E } from './lib/harness.ts';
+import { faltanRequisitos } from './lib/env.ts';
 import { repoDir } from './lib/env.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 

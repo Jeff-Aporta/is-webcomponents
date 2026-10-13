@@ -9,16 +9,8 @@
 import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import {
-  arrancar,
-  abrirGaleria,
-  esperarMs,
-  rastroCodeMirror,
-  problemasDeConsola,
-  faltanRequisitos,
-  evidencia,
-  crearTestE2E,
-} from './lib/harness.ts';
+import { arrancar, abrirGaleria, esperarMs, rastroCodeMirror, problemasDeConsola, evidencia, crearTestE2E } from './lib/harness.ts';
+import { faltanRequisitos } from './lib/env.ts';
 import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/tipos.d.ts';
 import { cargarToon, textoDe } from '../../system/toons.ts';
 

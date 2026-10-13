@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/utils/build.ts
 /**
  * build.ts — `src/js/**` y `view/**` → `dist/cdn/` (estándar iswc-foundation). Lo corre `deno task build`
  * DESPUÉS de `build:scss`.
@@ -14,13 +15,15 @@
  *
  * Después: cache busting `?v=<hash de contenido>` con las tools vendorizadas del kit (una URL por
  * módulo), `asset-hashes.json`, el registrador `__PREFIJO__Loader.min.js` (tag → URL hasheada vía
- * `L.registerApp`; además encadena `assets/iconify.json` en `globalThis.__ISWC_ICONS__` para que
- * `<iswc-icon>` busque primero los íconos de la app) y `build-stamp.json`.
+ * `L.registerApp`; además declara `<html data-icons>` = `deno.json` → `iswc.host` + `assets/iconify/`,
+ * la web publicada de la app, para que `<iswc-icon>` busque ahí antes que en la API) y `build-stamp.json`.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, sep } from 'node:path';
 import esbuild from 'esbuild';
-import { contentHash, hashesJson, stampDirectory, withAssetHash } from '../vendor/iswc-root/build/index.ts';
+import { contentHash } from '../vendor/iswc-root/build/content-hash.ts';
+import { withAssetHash } from '../vendor/iswc-root/build/asset-url.ts';
+import { hashesJson, stampDirectory } from '../vendor/iswc-root/build/stamp-hashes.ts';
 import { mapaRutas, PREFIJO } from '../js/kit-tags.ts';
 
 const ROOT = join(import.meta.dirname!, '..', '..');
@@ -78,14 +81,18 @@ async function compilar(): Promise<number> {
 }
 
 /**
- * Mapa de íconos de la app (`assets/iconify.json`, lo escribe `deno task icons`): el registrador lo empuja
- * a la cola global de `<iswc-icon>` con su `?v=<hash>`. dist/cdn/ → ../../assets/.
+ * Base de íconos de la app (una sola declaración: `deno.json` → `iswc.host`): el registrador la deja en
+ * `<html data-icons>` si la página no trae otra. Siempre URL absoluta: la del sitio publicado o, si la página
+ * se sirve desde otro origen (dev, e2e), la de su propio servidor.
  */
 function iconos(): string[] {
-  const mapa = join(ROOT, 'assets', 'iconify.json');
-  if (!existsSync(mapa)) return [];
-  const href = withAssetHash('../../assets/iconify.json', contentHash(readFileSync(mapa, 'utf8')));
-  return [`(globalThis.__ISWC_ICONS__??=[]).push(new URL(${JSON.stringify(href)},raiz).href);`];
+  const deno: { iswc?: { host?: unknown } } = JSON.parse(readFileSync(join(ROOT, 'deno.json'), 'utf8'));
+  const host = deno.iswc?.host;
+  if (typeof host !== 'string' || !/^https?:\/\//.test(host)) return [];
+  const base = new URL('assets/iconify/', host.endsWith('/') ? host : `${host}/`).href;
+  // En el sitio publicado, esa base; servida desde otro origen (dev, e2e) la carpeta de ESTE mismo servidor
+  // (absoluta, junto al registrador: dist/cdn/ → ../../assets/iconify/), sin CORS contra el publicado.
+  return [`{const h=document.documentElement,p=${JSON.stringify(base)};if(!h.dataset.icons)h.dataset.icons=location.origin===new URL(p).origin?p:new URL("../../assets/iconify/",raiz).href;}`];
 }
 
 /** `?v=<hash>` en todos los imports propios + registrador de componentes + metadatos. */

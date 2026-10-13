@@ -27,8 +27,6 @@ import '../feedback/spinner.js';
 import './dialog.js';
 import './callout.js';
 
-export type * from './docs-vault.schemas.js';
-
 /**
  * <iswc-docs-vault> — lector de una documentación modular (norma `documentacion-modular`) como un
  * libro: cada `.md` es una hoja y el README es la portada. Se monta sobre `<iswc-doc-layout>`
@@ -68,7 +66,6 @@ TEMPLATE.innerHTML = /* html */ `
   </iswc-doc-layout>
   <iswc-dialog class="info-hoja" label="Información de la hoja" light-dismiss backdrop-variant="basic"><iswc-meta-list class="info-cuerpo"></iswc-meta-list></iswc-dialog>
 `;
-
 
 /** Quita el prefijo `NNN-`, la extensión y cambia guiones por espacios. */
 const humano = (segmento: string): string => segmento.replace(/\.md$/i, '').replace(/^\d{3}-/, '').replace(/-/g, ' ');

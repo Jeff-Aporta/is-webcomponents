@@ -15,8 +15,6 @@
 import { iswcKey, readIswc, removeIswc, writeIswc } from './iswc-storage.js';
 import type { AppCfg, PaletaApp, TemaApp, ValorCfgApp } from './app-cfg.schemas.js';
 
-export type { AppCfg, PaletaApp, TemaApp, ValorCfgApp } from './app-cfg.schemas.js';
-
 const NOMBRE_CFG = 'app-cfg';
 /** Llave completa en localStorage. */
 export const APP_CFG_KEY = iswcKey(NOMBRE_CFG);

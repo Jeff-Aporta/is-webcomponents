@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-time-field&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-time-field de InSoft.",
+  "description": "Campo de hora editable por secciones con el teclado.",
   "storageKey": "docs-iswc-time-field",
   "sections": [
     {

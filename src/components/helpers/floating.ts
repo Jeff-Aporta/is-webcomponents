@@ -1,13 +1,8 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import {
-  computePosition,
-  PLACEMENTS,
-  isVirtualElement,
-  type AnchorLike,
-  type ComputePositionResult,
-} from '../_shared/position.js';
+import { computePosition, PLACEMENTS, isVirtualElement } from '../_shared/position.js';
+import { type AnchorLike, type ComputePositionResult } from '../_shared/position.schemas.js';
 
 /**
  * <iswc-floating> — building block interno de posicionamiento anclado.

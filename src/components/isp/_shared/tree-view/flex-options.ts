@@ -8,7 +8,6 @@
 /** Spec mínima que necesitamos de cada acción para construir el botón. */
 
 import type { FlexHost, FlexActionSpec, FlexActionEntry, CompactOpts, MoreOpts } from "./flex-options.schemas.js";
-export type { FlexActionSpec, FlexActionEntry };
 
 function mkIcon(name: string): HTMLElement {
   const ic = document.createElement("iswc-icon");

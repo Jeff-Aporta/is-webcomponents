@@ -31,7 +31,7 @@
  * decidir re-empaque y el audit del lab).
  */
 
-import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.js';
+import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.schemas.js';
 import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from './component-router.schemas.js';
 import { resolveRoutingCosts, readConsolidate, ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 
@@ -43,7 +43,6 @@ const SIDE_DIR: Record<Lado, number> = { right: 0, bottom: 1, left: 2, top: 3 };
 const PERP: Record<Lado, [Lado, Lado]> = {
   left: ['top', 'bottom'], right: ['top', 'bottom'], top: ['left', 'right'], bottom: ['left', 'right'],
 };
-
 
 const inside = (x: number, y: number, c: Caja, pad: number): boolean =>
   x > c.x - pad && x < c.x + c.w + pad && y > c.y - pad && y < c.y + c.h + pad;

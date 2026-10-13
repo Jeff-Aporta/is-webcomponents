@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-lab.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-lab.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lab.ts — lo común de los `render.mjs` de `labs/`: arma los jobs desde los editables de una
@@ -19,8 +19,6 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderDiagramBatch, writeDiagramOutputs } from './render-diagram.js';
 import type { Editable, LabJob, OpcionesEditables, OpcionesLab, RenderDiagramOptions, SyntheticDiagramJob } from '../../shared/schemas.ts';
-
-export type { Editable, LabJob, OpcionesEditables, OpcionesLab } from '../../shared/schemas.ts';
 
 /** Carpeta del lab a partir de `import.meta.url` de su `render.mjs`. */
 export const labDir = (metaUrl: string): string => dirname(fileURLToPath(metaUrl));

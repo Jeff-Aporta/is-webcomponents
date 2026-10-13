@@ -88,48 +88,21 @@ import {
   getComponentPrefs, removeComponentPrefs, replaceComponentPrefs,
 } from '../_shared/prefs.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
-import type { PrefsEntry } from '../_shared/prefs.js';
+import type { PrefsEntry } from '../_shared/prefs.schemas.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
 import '../forms/checkbox.js';
 import '../forms/select.js';
 import '../forms/option.js';
-import './datagrid-core/index.js';
 
-import {
-  ColumnType,
-  Density,
-  SelectionMode,
-  PinSide,
-  HeaderCheckboxState,
-  DEFAULT_PAGE_SIZE,
-  DEFAULT_HEADER_HEIGHT,
-  DENSITY_ROW_HEIGHT,
-  toggleRowSelection as toggleRowSelectionCore,
-  selectAll as selectAllCore,
-  clearSelection as clearSelectionCore,
-  headerCheckboxState as headerCheckboxStateCore,
-  rowWindow,
-  applyFlex,
-  orderedForLayout,
-  getCellValue,
-  rowsToCsv,
-  createGridModel,
-} from './datagrid-core/index.js';
-import type {
-  ColumnDef,
-  ColumnState,
-  RowData,
-  RowNode,
-  SortDirName,
-  PinSideName,
-  DensityName,
-  GridState,
-  GridApi,
-  ColumnFilter,
-  SelectionModeName,
-  TextFilterOp,
-} from './datagrid-core/types.js';
+import { ColumnType, Density, SelectionMode, PinSide, HeaderCheckboxState, DEFAULT_PAGE_SIZE, DEFAULT_HEADER_HEIGHT, DENSITY_ROW_HEIGHT } from './datagrid-core/types.js';
+import { toggleRowSelection as toggleRowSelectionCore, selectAll as selectAllCore, clearSelection as clearSelectionCore, headerCheckboxState as headerCheckboxStateCore } from './datagrid-core/selection.js';
+import { rowWindow, applyFlex } from './datagrid-core/viewport.js';
+import { orderedForLayout } from './datagrid-core/column-state.js';
+import { getCellValue } from './datagrid-core/value-formatter.js';
+import { rowsToCsv } from './datagrid-core/csv-export.js';
+import { createGridModel } from './datagrid-core/grid-model.js';
+import type { ColumnDef, ColumnState, RowData, RowNode, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './datagrid-core/types.schemas.js';
 import type { ColumnDefWithActions, ActionDef, ColumnStateWithSticky, CellEditDetail, CellClickDetail, RowSelectDetail, SortChangeDetail, FilterChangeDetail, ActionEventDetail, ColumnPinDetail, PageChangeDetail, StateSavedDetail } from "./ag-grid.schemas.js";
 
 const TEMPLATE = document.createElement('template');

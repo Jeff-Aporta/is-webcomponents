@@ -14,8 +14,6 @@
  */
 import type { EstadoSpa, OpcionesSpaState, SpaState } from './spa-state.schemas.js';
 
-export type { EstadoSpa, OpcionesSpaState, SpaState } from './spa-state.schemas.js';
-
 /** Base64 URL-safe (sin `+`, `/` ni `=`) de un texto UTF-8. */
 export function b64urlEncode(texto: string): string {
   const bytes = new TextEncoder().encode(texto);

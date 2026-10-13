@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/proveedores-llm.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/proveedores-llm.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
 /**
  * proveedores-llm.ts — pila de proveedores LLM OpenAI-compatible (MiniMax, DeepSeek, OpenAI…) en
@@ -24,8 +24,6 @@ import process from 'node:process';
 import { ZArchivoProveedores, ZCacheProveedor, ZProveedorLlm } from '../schemas.ts';
 import { estadoLlave, marcarCooldown } from './test-cooldown.ts';
 import type { EleccionProveedor, OpcionesElegirProveedor, OpcionesSonda, ProveedorLlm, SondaLlm } from '../schemas.ts';
-
-export type { CacheProveedor, EleccionProveedor, OpcionesElegirProveedor, OpcionesSonda, OrigenEleccion, ProveedorLlm, SondaLlm } from '../schemas.ts';
 
 /** Vigencia por defecto de la cache del barrido. */
 export const CACHE_TTL_MS = 30 * 60_000;
@@ -203,7 +201,6 @@ export async function elegirProveedorOpcional(o: OpcionesElegirProveedor): Promi
     return { proveedor: null, motivo: e instanceof Error ? e.message : String(e) };
   }
 }
-
 
 /** Quita cercos ```json``` y prosa alrededor y parsea el primer objeto/array balanceado. Lanza si no hay JSON. */
 export function normalizarJson(texto: string): unknown {

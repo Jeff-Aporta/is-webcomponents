@@ -116,5 +116,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Matriz de cuatro cuadrantes en SVG para clasificar elementos según dos ejes, sin Mermaid."
 }

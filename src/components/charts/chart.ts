@@ -860,4 +860,4 @@ if (typeof window !== 'undefined') {
   window.__isDefineTypedChart = defineTypedChart;
 }
 
-export { IswcChart, defineTypedChart, formatValue, type ChartCtx, type ChartConfig, type ChartDataset, type ChartDataPoint, type ResolvedOptions, type HitRecord };
+export { IswcChart, defineTypedChart, formatValue };

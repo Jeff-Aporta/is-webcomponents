@@ -4,7 +4,7 @@
   "category": "feedback",
   "title": "&lt;iswc-toast-item&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-toast-item de InSoft.",
+  "description": "Notificación emergente individual con color, mensaje, acción opcional y cierre automático.",
   "storageKey": "docs-iswc-toast-item",
   "sections": [
     {

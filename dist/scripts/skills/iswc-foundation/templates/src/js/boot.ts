@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/boot.ts
 /**
  * boot.ts — tema y paleta ANTES del primer pintado. Script plano (IIFE), síncrono en <head>.
  *

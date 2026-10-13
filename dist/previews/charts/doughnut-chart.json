@@ -57,5 +57,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de dona que muestra la proporción de cada parte respecto al total, con hueco central."
 }

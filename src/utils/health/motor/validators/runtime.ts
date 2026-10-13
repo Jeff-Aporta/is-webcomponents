@@ -20,7 +20,7 @@
 
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import type { Hallazgo } from '../types.js';
+import type { Hallazgo } from '../types.schemas.js';
 import type { OpcionesRuntime } from "./runtime.schemas.js";
 
 /**

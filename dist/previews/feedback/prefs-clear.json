@@ -9,7 +9,7 @@
     {
       "id": "intro",
       "title": "Uso",
-      "lede": "Borra <code>localStorage['iswc-root']</code> (splits, scrolls, grids) para auditar la carga inicial limpia.",
+      "lede": "Deja la app como en su primera carga: borra todas las llaves <code>iswc:</code> (config, splits, scrolls, grids, íconos) con <code>clearIswcStorage()</code> y vacía las cachés en memoria del kit.",
       "blocks": [
         {
           "kind": "demo",
@@ -31,7 +31,7 @@
   "ficha": {
     "sections": {
       "anatomia": {
-        "content": "Borra <code>localStorage['iswc-root']</code> (splits, scrolls, grids) para auditar la carga inicial limpia."
+        "content": "Deja la app como en su primera carga: borra todas las llaves <code>iswc:</code> (config, splits, scrolls, grids, íconos) con <code>clearIswcStorage()</code> y vacía las cachés en memoria del kit."
       },
       "ejemplos": {
         "content": [
@@ -51,5 +51,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Botón que deja la app como en su primera carga: borra todo lo que el kit guarda (llaves iswc:) y sus cachés en memoria."
 }

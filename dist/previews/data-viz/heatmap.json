@@ -169,5 +169,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Mapa de calor: matriz de celdas coloreadas según su valor numérico."
 }

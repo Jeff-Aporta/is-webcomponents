@@ -4,7 +4,7 @@
   "category": "isp",
   "title": "&lt;iswc-accordion-group&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-accordion-group de InSoft.",
+  "description": "Coordina varios iswc-details como acordeón: abrir uno puede cerrar los demás.",
   "storageKey": "docs-iswc-accordion-group",
   "sections": [
     {

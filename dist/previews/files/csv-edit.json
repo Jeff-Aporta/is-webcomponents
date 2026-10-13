@@ -56,5 +56,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Editor de archivos CSV en forma de tabla: editar celdas, agregar o quitar filas y columnas."
 }

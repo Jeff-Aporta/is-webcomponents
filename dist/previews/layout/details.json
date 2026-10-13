@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-details&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-details de InSoft.",
+  "description": "Bloque plegable con un resumen siempre visible que muestra u oculta su contenido, con animación y control por teclado.",
   "storageKey": "docs-iswc-details",
   "sections": [
     {

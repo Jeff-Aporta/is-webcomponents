@@ -11,7 +11,9 @@
   ],
   "storageKey": "docs-iswc-select",
   "hasBehavior": true,
-  "loads": ["iswc-slots-pg"],
+  "loads": [
+    "iswc-slots-pg"
+  ],
   "sections": [
     {
       "id": "intro",
@@ -918,5 +920,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Lista desplegable de opciones que participa en formularios y nunca queda recortada por el contenedor."
 }

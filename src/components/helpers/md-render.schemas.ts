@@ -6,8 +6,6 @@
  */
 import { z } from 'zod';
 
-export type * from './md-lite.schemas.js';
-
 /** Detalle de `iswc-input`, `iswc-change` e `iswc-persist`: el markdown actual de la hoja. */
 export const MdRenderValueDetailSchema = z.object({ value: z.string() });
 export type MdRenderValueDetail = z.infer<typeof MdRenderValueDetailSchema>;

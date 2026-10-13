@@ -1,8 +1,9 @@
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/13-crear-app.md -->
 # 13 — `create-iswc-app` en detalle
 
 ```bash
-deno run -A https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/skills/iswc-foundation/tools/create-iswc-app.ts <carpeta> [opciones]
-deno run -A <kit>/skills/iswc-foundation/tools/create-iswc-app.ts <carpeta> [opciones]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs <carpeta> [opciones]
+# (dentro del kit: deno run -A skills/iswc-foundation/tools/create-iswc-app.ts <carpeta> [opciones])
 ```
 
 Deno ejecuta la URL directamente: el agente no descarga ni clona nada. El script lee sus plantillas

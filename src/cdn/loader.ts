@@ -22,23 +22,15 @@ import {
   GH_REPO,
   fillHostTemplate,
 } from '../components/_shared/cdn-ref.js';
-import {
-  createRegistry,
-  planLoads,
-  commitLoads,
-  resolveTagId,
-  isTagCovered,
-  type Catalog,
-} from './load-plan.js';
+import { createRegistry, planLoads, commitLoads, resolveTagId, isTagCovered } from './load-plan.js';
+import { type Catalog } from './load-plan.schemas.js';
 import type { LoadJob } from "./load-plan.schemas.js";
-import { installSheetCache, getSheetCache, type SheetCacheApi } from './sheet-cache.js';
+import { installSheetCache, getSheetCache } from './sheet-cache.js';
+import { type SheetCacheApi } from './sheet-cache.schemas.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
 import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, lookupHash, withAssetHash } from './build/asset-url.js';
 import { readBody, writeBody, syncHashMemory } from './asset-store.js';
 
-export { planLoads, commitLoads, createRegistry, tagKey } from './load-plan.js';
-export { installSheetCache, getSheetCache, createSheetCache } from './sheet-cache.js';
-export { ensureElement, isElementReady } from './ensure-element.js';
 import {
   type AppComponentEntry,
   type ConfigureOpts,

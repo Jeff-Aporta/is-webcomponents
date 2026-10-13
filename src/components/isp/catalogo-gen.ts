@@ -11,7 +11,7 @@ import './form.js';
 import './heading.js';
 import './controller-from-config.js';
 
-import type { IspRecord, IspController } from './controller-from-config.js';
+import type { IspRecord, IspController } from './controller-from-config.schemas.js';
 import {
   asStr,
   cloneRecord,

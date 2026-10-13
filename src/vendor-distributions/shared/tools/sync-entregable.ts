@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/sync-entregable.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/sync-entregable.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/08-sync-entregable.md
 /**
  * Sync comun `_experimental` -> `_entregable` de las apps del kit (ISS, ISW).
@@ -23,8 +23,6 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, wri
 import { dirname, join, relative } from 'node:path';
 import process from 'node:process';
 import type { CambioSync, ConfigSync, CtxSync, EntradaSync, ModoSync, ResumenEntrada, ResumenSync } from '../schemas.ts';
-
-export type { AccionSync, CambioSync, CheckpointSync, ConfigSync, CtxSync, EntradaSync, GateSync, ModoSync, ResumenEntrada, ResumenSync } from '../schemas.ts';
 
 /**
  * Glob minimo con globstar estandar: `**\/` = cero o mas carpetas, `/**` final =

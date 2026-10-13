@@ -4,7 +4,7 @@
   "category": "data",
   "title": "&lt;iswc-kanban-column&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-kanban-column de InSoft.",
+  "description": "Columna de un tablero kanban: título, contador y la lista de tarjetas que contiene.",
   "storageKey": "docs-iswc-kanban-column",
   "sections": [
     {

@@ -17,13 +17,7 @@
 import { TObject } from "./helpers.js";
 import { objRootsToNodes } from "./tree-data.js";
 import { TATreeShape } from "./03-tree-shape.js";
-import {
-  DropPosition,
-  MoveDirection,
-  TNode,
-  TRecord,
-  TreeCustoms,
-} from "./_types.js";
+import { DropPosition, MoveDirection, TNode, TRecord, TreeCustoms } from './_types.schemas.js';
 import type { CursorHook } from "./04-tree-flow.schemas.js";
 
 /** Comparador estable por la última sección numérica del `flatPath`. */

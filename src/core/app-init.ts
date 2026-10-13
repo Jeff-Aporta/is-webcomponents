@@ -21,9 +21,8 @@
  * lo antes posible.
  */
 import { esPaleta, leerAppCfg } from './app-cfg.js';
-import type { EstadoInitApp, IconosApp, OpcionesInitApp, PaletaApp, TemaApp } from './app-init.schemas.js';
-
-export type { EstadoInitApp, IconosApp, OpcionesInitApp, PaletaApp, TemaApp } from './app-init.schemas.js';
+import type { EstadoInitApp, IconosApp, OpcionesInitApp } from './app-init.schemas.js';
+import type { PaletaApp, TemaApp } from './app-cfg.schemas.js';
 
 /** Carpeta de íconos por defecto dentro del sitio publicado (la de `deno task icons`). */
 export const ICONS_FOLDER_DEFAULT = 'assets/iconify/';

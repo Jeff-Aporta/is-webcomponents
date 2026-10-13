@@ -2,6 +2,7 @@
 name: __PREFIJO__-hola
 description: Pantalla de bienvenida de __TITULO__ (shell de la vista `hola`). Úsala como referencia de un shell de vista hecho con piezas del kit, con un modal.
 ---
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/view/hola/components/__PREFIJO__-hola.md -->
 
 # `<__PREFIJO__-hola>`
 

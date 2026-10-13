@@ -9,35 +9,30 @@ import {
   sequenceThemeDark,
   sequenceThemeLight,
 } from './sequence-spec.js';
-import type {
-  SequenceLayout,
-  SequenceLayoutAltBox,
-  SequenceLayoutMessage,
-  SequenceResolvedSpec,
-} from './sequence-spec.js';
+import type { SequenceLayout, SequenceLayoutAltBox, SequenceLayoutMessage, SequenceResolvedSpec } from './sequence-spec.schemas.js';
 import type { SequenceLayoutFragment, SequenceNestedSpec } from './sequence-spec.schemas.js';
 import { captureNodeEmbed, embedStage, embedSvgElement } from '../_shared/diagram-embed.js';
 import type { EmbedCapture, EmbedSize } from '../_shared/diagram-embed.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './theme.js';
-import type { ErThemeJson } from './theme.js';
+import type { ErThemeJson } from './theme.schemas.js';
 import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
-import type { EdgeStyle } from './diagram-vocab.js';
+import type { EdgeStyle } from './diagram-vocab.schemas.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';
-import { SequenceTurtle } from './sequence-turtle.js';
+import { PathTurtle as SequenceTurtle } from '../_shared/path-turtle.js';
 import type { PathTurtle } from '../_shared/path-turtle.js';
 import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
 import { svgIconGroup, svgIconBadge, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
 import { pathPoints } from '../_shared/diagram-arrow.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
-import type { DiagramTheme } from './diagram-types.js';
+import type { DiagramTheme } from './diagram-types.schemas.js';
 import { contrastFontColor, pastelColor } from '../_shared/tk-color.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans, defaultMeasureTextWidth } from '../_shared/diagram-text-wrap.js';
-import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { SequenceMessageSpec } from './sequence-spec.js';
+import type { SequenceMessageSpec } from './sequence-spec.schemas.js';
 import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./sequence-diagram.schemas.js";
 
 /**

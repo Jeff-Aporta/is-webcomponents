@@ -15,7 +15,7 @@ import {
   stringComparator,
   typeOf,
 } from './grid-types.js';
-import type { CellValue, ColumnDef, ColumnType, Comparator, Operator, Row } from './grid-types.js';
+import type { CellValue, ColumnDef, ColumnType, Comparator, Operator, Row } from './grid-types.schemas.js';
 import type { ResolvedColumn, NormalizeOptions, PivotModel, SortModelItem, FilterModel, AggregationModel, BuildTreeOpts, FilterCtx, ApplyFiltersOpts, TreeNode, PivotResult } from "./grid-data.schemas.js";
 
 /** Columna con los defaults aplicados: misma forma que `ColumnDef` pero mutable,

@@ -10,6 +10,7 @@
     "npm:esbuild@*": "0.25.0",
     "npm:esbuild@0.25": "0.25.0",
     "npm:esbuild@0.25.0": "0.25.0",
+    "npm:playwright@1.63.0": "1.63.0",
     "npm:playwright@^1.62.1": "1.63.0",
     "npm:sass@*": "1.105.1",
     "npm:sass@^1.105.0": "1.105.1",

@@ -346,5 +346,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de estados en SVG con transiciones etiquetadas entre estados, sin Mermaid."
 }

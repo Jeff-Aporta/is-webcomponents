@@ -560,5 +560,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de secuencia en SVG con participantes, mensajes numerados y fragmentos alt, loop y par, sin Mermaid."
 }

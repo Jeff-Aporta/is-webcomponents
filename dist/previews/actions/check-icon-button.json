@@ -4,7 +4,7 @@
   "category": "actions",
   "title": "&lt;iswc-check-icon-button&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-check-icon-button de InSoft.",
+  "description": "Botón de ícono que alterna entre marcado y desmarcado (como un interruptor compacto), con estado accesible y evento de cambio.",
   "styles": [
     ".cluster { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }",
     "    .stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }",

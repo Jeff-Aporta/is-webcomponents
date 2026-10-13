@@ -90,5 +90,3 @@ export function previewCatalogEntry(tag: string): CatalogEntry | null {
   return (catalog as Record<string, CatalogEntry | undefined>)[tag] ?? null;
 }
 
-export { catalog };
-export default catalog;

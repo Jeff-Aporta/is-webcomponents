@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/base/componente.ts
 /**
  * componente.ts — base común de los componentes `__PREFIJO__-*` (estándar iswc-foundation).
  *

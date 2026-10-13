@@ -18,8 +18,6 @@
  */
 import type { AreaIswc, GlobalIswcStorage, LimpiezaIswc, MigracionIswc } from './iswc-storage.schemas.js';
 
-export type { AreaIswc, LimpiezaIswc, MigracionIswc } from './iswc-storage.schemas.js';
-
 export const ISWC_PREFIX = 'iswc:';
 
 const G: GlobalIswcStorage = globalThis;

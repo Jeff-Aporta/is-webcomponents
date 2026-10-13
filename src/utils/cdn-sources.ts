@@ -23,8 +23,6 @@ const RAW = (ref: string = 'main') => `https://raw.githubusercontent.com/${GH_RE
 export const baseFor = (ref: string) => jsdelivrBase(ref);
 export const docsBase = (ref: string = 'main') => RAW(ref);
 
-export { resolveRef, resolvedBase, jsdelivrBase, pagesBase, MIRRORS, fallbackBases };
-
 /** Orígenes ofrecibles en la UI. */
 export const listSources = (ref: string = 'main') =>
   MIRRORS.map((m) => ({

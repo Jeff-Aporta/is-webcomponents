@@ -305,5 +305,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Mini gráfica de tendencia sin ejes, para incrustar junto a un número o en una tabla."
 }

@@ -36,8 +36,6 @@ import type {
   VocabStore,
 } from './diagram-vocab.schemas.js';
 
-export type { DiagramKindId, DiagramPolicy, EdgeFamily, EdgeKindDef, EdgeStyle, NodeStructureDef, PolicyReport };
-
 // Un registro por página: cada bundle trae su copia del módulo.
 const GLOBAL_KEY = '__iswcDiagramVocab';
 const raiz = globalThis as typeof globalThis & { [GLOBAL_KEY]?: VocabStore };

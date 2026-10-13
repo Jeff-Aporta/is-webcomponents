@@ -787,5 +787,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Vista previa de markdown con diálogo a pantalla completa para editarlo y revisarlo."
 }

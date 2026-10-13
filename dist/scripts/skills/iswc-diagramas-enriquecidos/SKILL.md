@@ -7,6 +7,7 @@ description: >-
   (ISS, ISW…), al agregar una ruta/EP a la documentación, al conectar un paso con una tabla, una
   clase o un sistema externo, o al revisar que un diagrama siga las convenciones homogéneas.
 ---
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-diagramas-enriquecidos/SKILL.md -->
 
 # Diagramas enriquecidos — convenciones homogéneas
 
@@ -75,7 +76,10 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
 
 - Un controller es el **puente** entre el flujo y la BD: expone un puente `-(O=` por acción
   (`shape: "bridge"`, `of: <controller>`, `op: C|R|U|D`) colgando debajo de él: socket del lado del
-  controller, bola con la letra CRUD, ícono de BD y nombre de la acción.
+  controller y la bola con el ícono de su operación (sin letras), del color del método HTTP llevado a
+  SQL (SELECT↔GET azul `#61AFFE`, INSERT↔POST verde `#49CC90`, UPDATE↔PUT naranja `#FCA130`, DELETE
+  rojo `#F93E3E`). El `label` del puente es la **función del controller** que hace la operación
+  (`get()`, `list()`, `crear()`…), nunca un verbo genérico como `leer()`.
 - Un único puerto de **entrada** (todas las que consumen convergen ahí, triángulo sólido tocando el
   O) y un puerto por **salida** (triángulo sólido a ~34 px del O). Las entradas llevan la acción de BD
   (`SELECT`, `INSERT`…, con su ícono); la salida a su tabla no lleva texto.
@@ -86,8 +90,15 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
   controller, por cualquiera de sus 4 lados: abajo mientras la fila quepa en su ancho, luego derecha,
   izquierda y arriba (si aun sobran, el controller se ensancha). Los otros rieles del controller usan
   un lado libre de puentes, y al abrir espacio el controller y sus puentes se mueven como un bloque.
-- Animación: los puntos de las líneas continuas van en color secundario (skyblue `#7ACFF4`) y
-  **detrás** del riel (el trazo negro queda encima).
+- Animación: los puntos de las líneas continuas van por defecto **del color de la arista** (la
+  arista acepta `color`) y **detrás** del riel; el consumidor los personaliza con
+  `dots: { color, size }` en la arista.
+- **Paralelismo**: la arista que inicia una bifurcación llega **centrada** a su barra (en el costado
+  que le toque); la reunión de ramas (2+ entradas, una salida) es un **⦿ con pulso de radar**, no
+  una barra.
+- **Auto-cruce prohibido**: ninguna arista se corta ni se pisa a sí misma (se descarta el bucle).
+- **Proximidad**: pasar cerca de entidades, conectores y textos se desincentiva hasta 3U, más cuanto
+  más cerca (los `-(O` más que los demás conectores); fuera del radio no cuesta.
 - Las columnas de entidades se **apilan** (una debajo de otra, cada controller con sus puentes) y no
   empujan a las otras columnas: cada columna solo se empuja a sí misma.
 - En los md, las pestañas de un EP son **Seq** (secuencia) y **Seq in Vec** (secuencia en vector).
@@ -95,7 +106,7 @@ generador no pone `fill` a las clases (guardián `flowchart-colores.test.ts`).
   ISS): cada paso → mensaje (a la BD o externo que usa, propio si no usa nada; lo que termina en el
   fin → respuesta), cada decisión → `alt`, cada barra → `par`, cada columna de flujo → un actor. Los
   textos son referencias `{ path, query }` a los nodos del vector y los índices (`stepLabel`) son los
-  mismos `x.y.z`: nunca se escribe una Seq a mano.
+  mismos `x.y.z`; si un paso produce varias flechas, cada una lleva su subíndice en orden (`1.3.1`, `1.3.2`…). Nunca se escribe una Seq a mano.
 
 ## 4. Tablas: siempre por su controller dueño
 
@@ -163,3 +174,23 @@ qué caso** se usa cada una (decisiones con la condición real del código: «¿
 2. Guardianes del kit verdes (`flowchart-lanes.test.ts`: U4 abanico, U5 una punta, D1 rombo,
    K1 `-(O-`, X1 sin cruces, E2/E3 etiquetas; `class-miembros.test.ts`).
 3. Mirar el PNG: si algo se lee mal y no hay regla, se agrega aquí y un guardián en el kit.
+
+## Scripts online (Deno, siempre `@main` con `--reload`)
+
+Regla (Jeff, 2026-10-13): los scripts de `tools/` de una skill y los CLI de `vendor-distributions/` (`vendor.ts`,
+`pin-update.mjs`, `download-iconify.ts`, `render-lote.ts`) NO se descargan nunca al consumidor: se ejecutan online con
+Deno desde `@main` del kit, y lo que se ejecuta es un BUNDLE autocontenido en `dist/cdn/…` (`scripts/build-online.mjs`:
+schemas y pin-update inlineados, `zod` como `npm:`; sin imports relativos). `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`
+es obligatorio (Deno cachea los módulos remotos para siempre). Nunca una ruta local del checkout ni un SHA en estos
+comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
+
+### `render-lote` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --carpeta=<dir editables> --svg=<dir> [--png=<dir>] --kit=<checkout del kit> [--cache=<archivo>] [--forzar] [--solo=a,b]
+```
+
+- **Qué hace y cuándo**: renderiza el LOTE de diagramas de la documentación (editables `<slug>.json` → SVG/PNG) con caché por hash: solo repinta lo que cambió. Es el `docs:diagramas` de ISS/ISW (envoltorio fino o el comando tal cual). Añadir `--no-check --sloppy-imports` al `deno run`.
+- **Entradas**: la carpeta de editables (`--carpeta`), `--kit` o env `ISWC_KIT` (obligatorio online: de ahí salen `dist/cdn/…` y Playwright del `node_modules` del kit), `--pinKit` opcional (sello que entra en la huella; default `<kit>/PIN`), el caché `diagramas-iswc.cache.json` junto a los editables.
+- **Escribe**: `<slug>.svg` en `--svg`, `<slug>.png` en `--png` (default igual a `--svg`), y el caché atómico por diagrama OK.
+- **Salida y errores típicos**: 0 ok · 1 si algún diagrama falló (`lote · N renderizados · M sin cambios · K fallidos`) · lanza «corriendo online hace falta --kit=… o ISWC_KIT» · un editable inválido o una referencia `{ path, query }` sin resolver sale como `error` con su motivo; Chromium que no arranca se reintenta 5 veces.

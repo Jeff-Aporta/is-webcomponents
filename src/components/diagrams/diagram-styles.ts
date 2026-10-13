@@ -20,7 +20,7 @@
  *   styleThemeFor(nombre, tipo) — el tema ya cargado para un tipo.
  */
 import { registerErTheme } from './theme.js';
-import type { ErThemeJson } from './theme.js';
+import type { ErThemeJson } from './theme.schemas.js';
 import { ErThemeJsonSchema } from './theme.schemas.js';
 import type { DiagramStyleKind, DiagramStyleRegistry, DiagramStyleStore } from './diagram-styles.schemas.js';
 

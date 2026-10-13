@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-tab-group&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-tab-group / iswc-tab / iswc-tab-panel de InSoft.",
+  "description": "Grupo de pestañas que muestra un panel a la vez, con navegación por teclado.",
   "storageKey": "docs-iswc-tab-group",
   "sections": [
     {

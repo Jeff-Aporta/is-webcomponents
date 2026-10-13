@@ -11,7 +11,9 @@
   ],
   "storageKey": "docs-iswc-input",
   "hasBehavior": true,
-  "loads": ["iswc-slots-pg"],
+  "loads": [
+    "iswc-slots-pg"
+  ],
   "sections": [
     {
       "id": "intro",
@@ -720,5 +722,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Campo de texto que participa en formularios, con etiqueta, ayuda, error, prefijos y sufijos."
 }

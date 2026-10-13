@@ -72,5 +72,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de barras verticales u horizontales, agrupadas o apiladas, en SVG."
 }

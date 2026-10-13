@@ -1,4 +1,4 @@
-﻿// 03-problemas.test.ts: barrido detector (el "ataque") por las vistas del
+// 03-problemas.test.ts: barrido detector (el "ataque") por las vistas del
 // catalogo. Abre cada tag con ?s= y exige: sin errores de consola
 // (console.error), sin patrones de peligro en el arbol de accesibilidad y sin
 // rastro de CodeMirror. Cada hallazgo se reporta con la vista, el texto y una
@@ -7,17 +7,8 @@
 import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import {
-  arrancar,
-  abrirGaleria,
-  arbolTexto,
-  evidencia,
-  problemasDeConsola,
-  rastroCodeMirror,
-  faltanRequisitos,
-  ENV,
-  crearTestE2E,
-} from './lib/harness.ts';
+import { arrancar, abrirGaleria, arbolTexto, evidencia, problemasDeConsola, rastroCodeMirror, crearTestE2E } from './lib/harness.ts';
+import { faltanRequisitos, ENV } from './lib/env.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;

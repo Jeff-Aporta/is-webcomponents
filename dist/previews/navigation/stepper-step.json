@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-stepper-step&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-stepper-step de InSoft.",
+  "description": "Paso individual de un iswc-stepper con número, título y estado.",
   "storageKey": "docs-iswc-stepper-step",
   "sections": [
     {

@@ -265,5 +265,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Anillo de progreso circular con el porcentaje en el centro."
 }

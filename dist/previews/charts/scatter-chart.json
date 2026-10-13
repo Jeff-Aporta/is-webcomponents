@@ -268,5 +268,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de dispersión de puntos en dos ejes para ver correlaciones."
 }

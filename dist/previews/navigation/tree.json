@@ -4,7 +4,7 @@
   "category": "navigation",
   "title": "&lt;iswc-tree&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-tree / iswc-tree-item de InSoft.",
+  "description": "Árbol jerárquico de elementos que se expanden y contraen, con selección.",
   "storageKey": "docs-iswc-tree",
   "sections": [
     {

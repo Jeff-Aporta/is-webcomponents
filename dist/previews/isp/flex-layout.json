@@ -474,5 +474,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Contenedor flex con dirección, separación, alineación y ajuste configurables."
 }

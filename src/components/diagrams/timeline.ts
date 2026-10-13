@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import type { DiagramTheme } from './diagram-types.js';
+import type { DiagramTheme } from './diagram-types.schemas.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';

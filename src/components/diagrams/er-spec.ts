@@ -3,28 +3,14 @@ import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath } from './component-router.js';
 import { readRoutingOverride } from './routing-costs.js';
 import type { RouterEdge, RouterWorld } from './component-router.schemas.js';
-import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.js';
+import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.schemas.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { countIconTokens, stripIconTokensPlain } from '../_shared/tk-icon-inline.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
 import { wrapLabel } from './component-spec.js';
 import { normalizeErPayload as _archifyNormalize } from './er-archify.js';
-import type {
-  BoxSide,
-  DiagramGroup,
-  EdgeStyleOverride,
-  ErCardinality,
-  ErDashStyle,
-  ErRouteKind,
-  ErSpec,
-  ErSpecAttribute,
-  ErSpecEntity,
-  ErSpecRelation,
-  ErLayout,
-  EdgeVariant,
-  NodeStyleOverride,
-} from './diagram-types.js';
+import type { BoxSide, DiagramGroup, EdgeStyleOverride, ErCardinality, ErDashStyle, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErLayout, EdgeVariant, NodeStyleOverride } from './diagram-types.schemas.js';
 import type { ClusterBox, ClusterRaw } from "./er-spec.schemas.js";
 
 /**

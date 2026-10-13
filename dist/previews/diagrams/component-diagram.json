@@ -112,5 +112,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de componentes UML en SVG con paquetes y conexiones ruteadas, sin Mermaid."
 }

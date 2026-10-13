@@ -566,5 +566,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Control deslizante para elegir un valor o un rango numérico que participa en formularios."
 }

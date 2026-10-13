@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/pruebas.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/pruebas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).
@@ -29,8 +29,6 @@ import type { Buffer } from 'node:buffer';
 import { formatMs, testCooldownFromEnv } from './test-cooldown.ts';
 import type { CtxPrueba, CuerpoT, HooksPruebas, ListaPruebas, OpcionesCarpeta, OpcionesCorrida, OpcionesHijo, OpcionesT, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from '../schemas.ts';
 
-export type { CategoriaPrueba, CtxPrueba, HooksPruebas, ListaPruebas, NivelPrueba, OpcionesCarpeta, OpcionesCorrida, OpcionesHijo, OpcionesPrueba, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from '../schemas.ts';
-
 const TIMEOUT_DEFAULT = 30_000;
 
 /** Señal interna de `ctx.saltar(motivo)`. */
@@ -56,7 +54,6 @@ export function definirPruebas(lista: Prueba[], hooks?: HooksPruebas): ListaPrue
 export function esSaltada(e: unknown): boolean {
   return e instanceof PruebaSaltada;
 }
-
 
 /**
  * Registrador con la forma de `node:test` (`test(nombre, [opciones], fn)`,

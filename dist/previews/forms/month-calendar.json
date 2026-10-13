@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-month-calendar&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-month-calendar de InSoft.",
+  "description": "Rejilla de los 12 meses de un año para elegir un mes.",
   "storageKey": "docs-iswc-month-calendar",
   "sections": [
     {

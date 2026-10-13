@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/04-estilos.md -->
 # 04 — Estilos SCSS
 
 - **Fuente canónica `.scss`**, hermana del componente; el build la compila (`.tmp-scss/`) y publica la

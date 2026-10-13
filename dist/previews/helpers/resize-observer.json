@@ -217,5 +217,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Emite eventos cuando cambia el tamaño de su contenido (alias de iswc-observer type=\"resize\")."
 }

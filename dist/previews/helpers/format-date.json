@@ -351,5 +351,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Muestra una fecha con el formato y la configuración regional indicados."
 }

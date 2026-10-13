@@ -31,8 +31,6 @@ export const FLUJO = {
 
 import type { TOpcionesFlujo } from './diagram-flow.schemas.js';
 
-export type * from './diagram-flow.schemas.js';
-
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /** ¿El host permite la animación? (atributo `flow-anim="off"` o movimiento reducido la apagan). */
@@ -40,7 +38,6 @@ export function flujoActivo(host?: Element | null): boolean {
   if (host?.getAttribute('flow-anim') === 'off') return false;
   return !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches);
 }
-
 
 /**
  * Anima un riel ya pintado. En un punteado agrega el `<animate>` a su `path`; en un continuo

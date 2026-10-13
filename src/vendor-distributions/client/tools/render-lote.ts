@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-lote.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-lote.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lote.ts — render de un LOTE de diagramas con caché por hash (lo que ISS e ISW hacían cada uno
@@ -29,15 +29,13 @@ import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { mkdir, readdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 import { payloadResuelto, renderDiagramBatch, writeDiagramOutputs } from './render-diagram.js';
 import { CacheLoteSchema, EditableLoteSchema, OpcionesLoteDatosSchema } from '../../shared/schemas.ts';
 import type { CacheLote, DiagramaPlan, EntradaCache, OpcionesLote, OpcionesLoteDatos, PlanLote, RenderDiagramOptions, ResultadoLote } from '../../shared/schemas.ts';
-
-export type { CacheLote, DiagramaPlan, EditableLote, EntradaCache, OpcionesLote, OpcionesLoteDatos, PlanLote, ResultadoLote } from '../../shared/schemas.ts';
-export { CacheLoteSchema, EditableLoteSchema, OpcionesLoteDatosSchema } from '../../shared/schemas.ts';
 
 /** Versión del formato de la huella y del caché: súbela cuando cambie qué entra en la huella. */
 export const VERSION = 1;
@@ -58,7 +56,8 @@ export function canonico(v: unknown): string {
 export const sha256 = (texto: string): string => createHash('sha256').update(texto).digest('hex');
 
 /** Sello del kit por defecto: `<kit>/PIN`, si no `dist/cdn/build-stamp.json`, si no vacío. */
-export async function pinDelKit(kit: string): Promise<string> {
+export async function pinDelKit(kit: string | undefined): Promise<string> {
+  if (!kit) return '';
   for (const f of [join(kit, 'PIN'), join(kit, 'dist', 'cdn', 'build-stamp.json')]) {
     if (existsSync(f)) return (await readFile(f, 'utf8')).trim();
   }
@@ -143,8 +142,34 @@ export async function planificarLote(op: OpcionesLote): Promise<PlanLote> {
   return { carpeta, cache, pinKit, diagramas };
 }
 
-const chromiumDelKit = (kit: string): RenderDiagramOptions['chromium'] =>
-  (createRequire(pathToFileURL(join(kit, 'package.json')))('playwright') as { chromium: RenderDiagramOptions['chromium'] }).chromium;
+/** Repo del kit: el de la URL desde la que corre (raw/jsDelivr) o el nombre publicado. */
+export const REPO_KIT = import.meta.url.match(/raw\.githubusercontent\.com\/([^/]+\/[^/]+)\//)?.[1]
+  ?? import.meta.url.match(/cdn\.jsdelivr\.net\/gh\/([^/]+\/[^/@]+)@/)?.[1] ?? 'Jeff-Aporta/is-webcomponents';
+
+/** Respaldo remoto de `dist/cdn/…`: raw del repo al SHA del pin (si `pinKit` es un SHA) o a `main`. */
+export const baseRemota = (pinKit: string | undefined): string =>
+  `https://raw.githubusercontent.com/${REPO_KIT}/${pinKit && /^[0-9a-f]{40}$/.test(pinKit) ? pinKit : 'main'}/`;
+
+/** Raíz servida: el checkout del kit, o una carpeta temporal (HTML sintéticos + caché de lo remoto) sin él. */
+export const raizServida = (kit: string | undefined): string => resolve(kit ?? join(tmpdir(), 'iswc-render-lote'));
+
+/** Playwright del kit, si no el del proyecto que corre (`node_modules` del cwd), si no `npm:playwright`. */
+async function chromiumDisponible(kit: string | undefined): Promise<RenderDiagramOptions['chromium']> {
+  for (const base of [kit, process.cwd()]) {
+    if (!base || !existsSync(join(base, 'node_modules'))) continue;
+    try { return (createRequire(pathToFileURL(join(base, 'package.json')))('playwright') as { chromium: RenderDiagramOptions['chromium'] }).chromium; } catch { /* siguiente */ }
+  }
+  // Especificador en variable: el bundle lo deja externo y TS no impone los tipos completos de Playwright.
+  const especificador = 'npm:playwright@1.63.0';
+  const mod: unknown = await import(especificador);
+  if (!tieneChromium(mod)) throw new Error('render-lote: no hay Playwright (ni en el kit, ni en el proyecto, ni npm:playwright)');
+  return mod.chromium;
+}
+
+function tieneChromium(x: unknown): x is { chromium: RenderDiagramOptions['chromium'] } {
+  const c: unknown = x && typeof x === 'object' ? Reflect.get(x, 'chromium') : undefined;
+  return !!c && typeof c === 'object' && typeof Reflect.get(c, 'launch') === 'function';
+}
 
 /** Un diagrama en ESTE proceso (lo que corre el hijo `--one`): render + salidas. Devuelve la línea `OK …`. */
 export async function renderizarUno(op: OpcionesLote, slug: string): Promise<{ ancho: number | null; alto: number | null }> {
@@ -153,8 +178,9 @@ export async function renderizarUno(op: OpcionesLote, slug: string): Promise<{ a
   if (!d) throw new Error(`ningún diagrama con slug ${slug}`);
   if (d.accion === 'error' || !d.job) throw new Error(d.motivo);
   const [r] = await renderDiagramBatch([{ id: slug, job: d.job }], {
-    chromium: op.chromium ?? chromiumDelKit(op.kit),
-    serveRoot: resolve(op.kit),
+    chromium: op.chromium ?? await chromiumDisponible(op.kit),
+    serveRoot: raizServida(op.kit),
+    remoteBase: baseRemota(plan.pinKit),
     timeoutMs: op.timeoutMs ?? 300_000,
     settleMs: op.settleMs ?? 500,
     png: op.png ?? true,
@@ -248,9 +274,8 @@ function argumentos(argv: readonly string[]): Record<string, string | true> {
 function opcionesDeCli(argv: readonly string[]): OpcionesLoteDatos {
   const a = argumentos(argv);
   const texto = (k: string): string | undefined => (typeof a[k] === 'string' ? (a[k] as string) : undefined);
-  // `--kit` o `ISWC_KIT` son obligatorios (Playwright y dist/cdn salen de ahí): el script no se localiza a sí mismo por ruta.
+  // `--kit` o `ISWC_KIT` son opcionales: sin checkout, `dist/cdn/…` sale de raw (pin o main) y Playwright del proyecto.
   const kit = texto('kit') ?? process.env.ISWC_KIT;
-  if (!kit) throw new Error('render-lote: hace falta --kit=<checkout del kit> o ISWC_KIT');
   return OpcionesLoteDatosSchema.parse({
     carpeta: texto('carpeta'),
     salidaSvg: texto('svg'),

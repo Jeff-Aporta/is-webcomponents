@@ -11,7 +11,7 @@
  */
 
 import { boundsOf } from '../_shared/diagram-grid.js';
-import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.js';
+import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.schemas.js';
 import type { ClusterColumn, GroupConv } from "./component-pack.schemas.js";
 
 export const COL_GUTTER = 52;
@@ -503,7 +503,6 @@ function inferSources(components: readonly Componente[], edges: readonly Arista[
   }
   return components.filter((c) => (out.get(c.id) ?? 0) > 0 && (inn.get(c.id) ?? 0) === 0);
 }
-
 
 /**
  * Cada origen (consumidor) en un lado distinto del clúster destino:

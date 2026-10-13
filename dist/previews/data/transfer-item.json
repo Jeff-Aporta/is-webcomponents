@@ -4,7 +4,7 @@
   "category": "data",
   "title": "&lt;iswc-transfer-item&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-transfer-item de InSoft.",
+  "description": "Elemento de una lista de iswc-transfer que se puede seleccionar y mover.",
   "storageKey": "docs-iswc-transfer-item",
   "sections": [
     {

@@ -4,7 +4,7 @@
   "category": "data-viz",
   "title": "&lt;iswc-map-marker&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-map-marker de InSoft.",
+  "description": "Marcador posicionado por coordenadas dentro de un iswc-maps, con contenido emergente.",
   "storageKey": "docs-iswc-map-marker",
   "sections": [
     {

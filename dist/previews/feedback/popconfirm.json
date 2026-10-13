@@ -4,7 +4,7 @@
   "category": "feedback",
   "title": "&lt;iswc-popconfirm&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-popconfirm de InSoft.",
+  "description": "Confirmación ligera en un globo anclado al botón que la dispara, con aceptar y cancelar.",
   "storageKey": "docs-iswc-popconfirm",
   "sections": [
     {

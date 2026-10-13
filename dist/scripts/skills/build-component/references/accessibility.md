@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/accessibility.md -->
 # Accesibilidad
 
 Cómo hacer que un componente del kit sea accesible: semántica,

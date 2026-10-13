@@ -1,9 +1,6 @@
 import palettes from './palettes.json' with { type: 'json' };
-import {
-  brandRampRules,
-  ISWC_COLOR_VARIANTS,
-  type IswcColorVariant,
-} from './color-tokens.ts';
+import { brandRampRules, ISWC_COLOR_VARIANTS } from './color-tokens.ts';
+import { type IswcColorVariant } from './color-tokens.schemas.ts';
 import type { PaletteConfig } from "./palette-build.schemas.js";
 
 /** Config de una paleta: el usuario declara h, s y b. El CSS deriva la rampa. */

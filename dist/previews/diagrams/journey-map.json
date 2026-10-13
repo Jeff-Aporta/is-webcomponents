@@ -104,5 +104,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Mapa de recorrido de usuario en SVG: etapas, acciones y nivel de satisfacción, sin Mermaid."
 }

@@ -22,7 +22,8 @@ import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelati
 import '../media/icon.js';
 import '../actions/context-menu.js';
 import '../layout/split-panel.js';
-import { createPanZoom, type PanZoomController } from '../_shared/pan-zoom.js';
+import { createPanZoom } from '../_shared/pan-zoom.js';
+import { type PanZoomController } from '../_shared/pan-zoom.schemas.js';
 import type { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 
@@ -1188,7 +1189,6 @@ class IswcErEditor extends HTMLElement {
     setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
   }
 }
-
 
 /** Acepta payload plano o envuelto `{ erDiagram | er: {...} }`. */
 function unwrapErSource(s: unknown): Record<string, unknown> | null {

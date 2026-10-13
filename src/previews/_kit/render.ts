@@ -535,13 +535,6 @@ export function renderSection(section: PreviewSection): HTMLElement {
  * de entrada.
  * ------------------------------------------------------------------------*/
 
-export {
-  loadFor,
-  normalizeLoads,
-  type LoadForResult,
-  type LoaderLike,
-} from './load-for.ts';
-
 /**
  * @param def
  * @param targets

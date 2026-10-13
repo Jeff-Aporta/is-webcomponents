@@ -67,5 +67,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de cascada que muestra cómo aumentos y disminuciones llevan de un valor inicial a uno final."
 }

@@ -10,7 +10,7 @@ import {
   computeComponentLayout,
   resolveComponentSpec,
 } from '../../src/components/diagrams/component-spec.ts';
-import { parsePathPoints } from '../../src/components/_shared/diagram-edge-actors.ts';
+import { pathPoints as parsePathPoints } from '../../src/components/_shared/diagram-arrow.ts';
 
 const LAB = dirname(fileURLToPath(import.meta.url));
 const file = process.argv[2] || 'payload.json';

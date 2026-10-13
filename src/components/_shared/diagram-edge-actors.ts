@@ -16,7 +16,6 @@ export const EDGE_ACTOR_H = 16;
 
 // API pública conservada: parsePathPoints era export de este módulo y la usan
 // specs (component-spec) y utilidades. Ahora delega en diagram-arrow (H/V-aware).
-export { pathPoints as parsePathPoints } from './diagram-arrow.js';
 
 /** Punto en píxeles (x, y). */
 

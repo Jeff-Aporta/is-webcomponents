@@ -200,5 +200,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Selector de color que participa en formularios, con paleta, entrada hexadecimal y vista previa."
 }

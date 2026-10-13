@@ -1,7 +1,7 @@
 import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers } from '../_shared/node-link-layout.js';
 import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from '../_shared/diagram-embed.js';
 import { pathPoints, pathSinAutoCruces } from '../_shared/diagram-arrow.js';
-import type { BoxSide } from './diagram-types.js';
+import type { BoxSide } from './diagram-types.schemas.js';
 
 // `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
 // una dirección cardinal. Estrechamos para satisfacer la firma del helper.
@@ -1806,7 +1806,6 @@ const INSOFT = {
   nodeGap: 40,
 } as const;
 
-
 /** Estimación de ancho sin DOM (Poppins 500 ≈ 0,6 em por carácter). */
 const estimateWidth = (text: string, fontSize: number): number => estimateTextWidth(text, fontSize, 0.6);
 
@@ -2176,7 +2175,6 @@ export function indicesJerarquicos(
   return out;
 }
 
-
 /**
  * Insignia estándar de cada paso (número + ícono, fondo oscuro): arriba a la izquierda, montando la
  * esquina del nodo (casi toda por encima del borde: no tapa títulos ni texto). En el rombo, centrada
@@ -2212,7 +2210,6 @@ export const CRUD_SQL = {
   U: { sql: 'UPDATE', http: 'PUT', color: '#FCA130', icono: 'mdi:database-edit-outline' },
   D: { sql: 'DELETE', http: 'DELETE', color: '#F93E3E', icono: 'mdi:database-remove-outline' },
 } as const;
-
 
 /** Ejes de un puente según su lado: `d` sale del controller hacia la bola, `t` cruza el palo. */
 export const ejesPuente = (lado: LadoPuente = 'bottom'): { d: FlowPoint; t: FlowPoint } => ({

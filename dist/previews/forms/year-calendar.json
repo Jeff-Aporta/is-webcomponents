@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-year-calendar&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-year-calendar de InSoft.",
+  "description": "Rejilla desplazable de años para elegir un año.",
   "storageKey": "docs-iswc-year-calendar",
   "sections": [
     {

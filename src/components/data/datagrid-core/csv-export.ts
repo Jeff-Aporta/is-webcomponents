@@ -1,4 +1,4 @@
-import type { ColumnState, RowNode } from './types.js';
+import type { ColumnState, RowNode } from './types.schemas.js';
 import type { CsvOptions } from "./csv-export.schemas.js";
 /**
  * datagrid-core/csv-export — Exportar filas a CSV.

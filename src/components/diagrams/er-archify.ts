@@ -5,24 +5,7 @@
 // Validación STRICT: cualquier campo desconocido lanza error (en consola, sin
 // romper render para no boicotear demos legacy que pasen por aquí).
 import { snapDiagramGrid } from '../_shared/diagram-grid.js';
-import type {
-  DiagramGroup,
-  DiagramTheme,
-  EdgeStyleOverride,
-  ErRouteKind,
-  ErSpec,
-  ErSpecAttribute,
-  ErSpecEntity,
-  ErSpecRelation,
-  ErCardinality,
-  ErDashStyle,
-  ErLayout,
-  ErLayoutEdge,
-  ErLayoutEntity,
-  BoxSide,
-  EdgeVariant,
-  NodeStyleOverride,
-} from './diagram-types.js';
+import type { DiagramGroup, DiagramTheme, EdgeStyleOverride, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErCardinality, ErDashStyle, ErLayout, ErLayoutEdge, ErLayoutEntity, BoxSide, EdgeVariant, NodeStyleOverride } from './diagram-types.schemas.js';
 import type { AnchorLike } from "./er-archify.schemas.js";
 
 /* ──────────────── allowlists de campos conocidos ──────────────── */
@@ -473,21 +456,6 @@ export function orthogonalVPath(a: { x: number; y: number }, b: { x: number; y: 
   return `M${a.x},${a.y} H${midY} V${b.x} L${b.x},${b.y}`;
 }
 
-export const SNAP = snapDiagramGrid;
-
 // Re-exports para que consumers que ya importaban tipos desde diagram-types.js
 // puedan seguir importándolos desde aquí si lo desean.
-export type { DiagramTheme };
-export {
-  resolveErTheme,
-  themeToDiagramTheme,
-  json2css,
-  clusterPalette,
-  entityPaint,
-  edgePaint,
-  findOrphanEntityIds,
-  injectThemeCss,
-  registerErTheme,
-  listErThemes,
-} from './theme.js';
-export type { ErThemeJson } from './theme.js';
+

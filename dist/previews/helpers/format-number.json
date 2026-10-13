@@ -339,5 +339,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Muestra un número con separadores, decimales, moneda o porcentaje según la configuración regional."
 }

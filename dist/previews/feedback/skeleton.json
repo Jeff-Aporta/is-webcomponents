@@ -118,5 +118,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Bloque de carga (esqueleto) que ocupa el lugar del contenido mientras llega."
 }

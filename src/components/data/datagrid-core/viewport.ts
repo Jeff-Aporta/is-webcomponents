@@ -1,4 +1,4 @@
-import type { ColumnState } from './types.js';
+import type { ColumnState } from './types.schemas.js';
 import type { ColLayout } from "./viewport.schemas.js";
 /**
  * datagrid-core/viewport — Matemática de virtualización (filas y columnas).

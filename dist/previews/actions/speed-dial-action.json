@@ -4,7 +4,7 @@
   "category": "actions",
   "title": "&lt;iswc-speed-dial-action&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-speed-dial-action de InSoft.",
+  "description": "Acción individual del abanico de un iswc-speed-dial, con ícono y etiqueta.",
   "styles": [
     ".sd-stage { position:relative; transform:translateZ(0); height:320px;",
     "      border:1px dashed var(--iswc-border); border-radius:.6rem; }"

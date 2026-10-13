@@ -41,8 +41,6 @@
 import type { PreviewDefinition } from './types.d.ts';
 import type { LoadForResult, LoaderLike } from './load-for.schemas.ts';
 
-export type { LoadForResult, LoaderLike } from './load-for.schemas.ts';
-
 /** Filtra `def.loads` quedándose solo con strings no-vacíos. */
 export function normalizeLoads(def: PreviewDefinition): string[] {
   if (!def || !Array.isArray(def.loads)) return [];

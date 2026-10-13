@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-date-time-field&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-date-time-field de InSoft.",
+  "description": "Campo de fecha y hora editable por secciones con el teclado.",
   "storageKey": "docs-iswc-date-time-field",
   "sections": [
     {

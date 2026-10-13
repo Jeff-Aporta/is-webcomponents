@@ -586,5 +586,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Interruptor de encendido y apagado que participa en formularios."
 }

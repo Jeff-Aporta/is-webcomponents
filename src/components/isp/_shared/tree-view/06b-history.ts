@@ -19,7 +19,7 @@
  *   tipar las operaciones.
  */
 import { TAMutations } from "./06-mutations.js";
-import { TNode, TRecord } from "./_types.js";
+import { TNode, TRecord } from './_types.schemas.js';
 
 /** Límite máximo de snapshots en el stack de undo. */
 const HISTORY_LIMIT = 50;

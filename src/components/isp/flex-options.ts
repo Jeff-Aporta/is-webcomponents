@@ -7,7 +7,8 @@ import '../actions/dropdown.js';
 import '../actions/dropdown-item.js';
 import '../layout/divider.js';
 import '../media/icon.js';
-import { paintFlexOptions, type FlexActionEntry } from './_shared/tree-view/flex-options.js';
+import { paintFlexOptions } from './_shared/tree-view/flex-options.js';
+import { type FlexActionEntry } from './_shared/tree-view/flex-options.schemas.js';
 
 /**
  * g11 — UX/UI proposals sobre la toolbar:
@@ -18,9 +19,6 @@ import { paintFlexOptions, type FlexActionEntry } from './_shared/tree-view/flex
  *     reasignan la pestaña activa. Home/End saltan al primero/último.
  *   - prefers-reduced-motion: anula transiciones heredadas (en CSS).
  */
-
-export { paintFlexOptions };
-export type { FlexActionEntry };
 
 /**
  * <iswc-flex-options> — port de FlexOptions.svelte (ClientesIS).

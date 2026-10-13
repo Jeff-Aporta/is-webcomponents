@@ -57,5 +57,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de líneas para series a lo largo de un eje continuo, con puntos y área opcional."
 }

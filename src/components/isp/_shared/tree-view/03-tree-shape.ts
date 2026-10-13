@@ -15,16 +15,7 @@
  */
 import { TObject, capitalizar } from "./helpers.js";
 import { TAModel } from "./02-model.js";
-import {
-  CustomsRuntime,
-  IconConfig,
-  LevelNameArgs,
-  NodeIconArgs,
-  SiblingPosition,
-  TreeCustoms,
-  TNode,
-  TRecord,
-} from "./_types.js";
+import { CustomsRuntime, IconConfig, LevelNameArgs, NodeIconArgs, SiblingPosition, TreeCustoms, TNode, TRecord } from './_types.schemas.js';
 
 class TATreeShape extends TAModel {
   // ── Estado interno ─────────────────────────────────────────────────────

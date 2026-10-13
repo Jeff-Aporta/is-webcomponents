@@ -154,5 +154,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Campo de texto con lista de opciones filtrable mientras se escribe."
 }

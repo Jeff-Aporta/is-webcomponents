@@ -10,8 +10,6 @@
 
 import type { CrearVigiaMd, HidratacionMd, LoaderLike, NodoMd, RaizMd } from './md-hydrate.schemas.js';
 
-export type * from './md-hydrate.schemas.js';
-
 /** Se piden apenas se pinta: pesan poco y casi siempre están a la vista. */
 const AL_PINTAR: ReadonlySet<string> = new Set([
   'iswc-callout', 'iswc-divider', 'iswc-scroller', 'iswc-checkbox', 'iswc-copy-button', 'iswc-theme-img', 'iswc-icon',

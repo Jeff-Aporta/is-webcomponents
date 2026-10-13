@@ -27,7 +27,7 @@ import {
   sondearProveedor,
   validarProveedores,
 } from '../../../vendor-distributions/shared/testing/proveedores-llm.ts';
-import type { ProveedorLlm, SondaLlm } from '../../../vendor-distributions/shared/testing/proveedores-llm.ts';
+import type { ProveedorLlm, SondaLlm } from '../../../vendor-distributions/shared/schemas.ts';
 import { crearGenerador, destinoPreferido, resolverDestino, unaVezPorProceso } from '../../../vendor-distributions/client/testing/stagehand.ts';
 
 const P = (nombre: string): ProveedorLlm => ({ nombre, apiKey: `k-${nombre}`, model: `m-${nombre}`, baseUrl: `https://${nombre}.test/v1` });

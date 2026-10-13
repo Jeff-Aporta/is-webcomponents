@@ -197,5 +197,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Reloj analógico para elegir la hora con las manecillas."
 }

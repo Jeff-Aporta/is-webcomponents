@@ -167,5 +167,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Ícono por nombre (colecciones de Iconify o propias) que hereda el color del texto."
 }

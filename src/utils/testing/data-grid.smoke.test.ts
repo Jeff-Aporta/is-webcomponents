@@ -18,13 +18,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import type {
-  CellValue,
-  ColumnDef,
-  FilterRule,
-  Operator,
-  Row,
-} from '../../components/_shared/grid-types.ts';
+import type { CellValue, ColumnDef, FilterRule, Operator, Row } from '../../components/_shared/grid-types.schemas.ts';
 import {
   AGGREGATION_FNS,
   COLUMN_TYPES,

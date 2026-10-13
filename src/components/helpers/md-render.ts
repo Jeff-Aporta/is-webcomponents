@@ -11,8 +11,6 @@ import { hydrateMdEmbeds } from './md-hydrate.js';
 import type { HidratacionMd } from './md-hydrate.schemas.js';
 import type { RenderersMd } from './md-lite.schemas.js';
 
-export type * from './md-render.schemas.js';
-
 /**
  * <iswc-md-render> — render inline de markdown/HTML + chips {{var}}.
  * Sin toolbar, diálogo ni API. Con `can-edit` edita in-place (contenteditable).

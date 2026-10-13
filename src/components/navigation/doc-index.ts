@@ -2,8 +2,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './doc-index.schemas.js';
 
-export type { ItemDocIndex, ResultadoDocIndex, TextosDocIndex } from './doc-index.schemas.js';
-
 /**
  * <iswc-doc-index> — índice documental con búsqueda: lista páginas agrupadas
  * (grupo → subgrupo → ítem) y, al escribir, busca en títulos, palabras clave y

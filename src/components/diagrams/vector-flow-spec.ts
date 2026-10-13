@@ -8,8 +8,6 @@
 import { ZVectorFlow } from './vector-flow-spec.schemas.js';
 import type { TColumnaVector, TNodoVector, TTipoColumna, TTipoVector, TVectorFlow } from './vector-flow-spec.schemas.js';
 
-export type * from './vector-flow-spec.schemas.js';
-
 /** Lo que acepta cada tipo de columna por defecto (una nota puede comentar cualquier entidad). */
 export const ACEPTA_POR_TIPO: Record<TTipoColumna, readonly TTipoVector[]> = {
   clientes: ['cliente', 'nota'],

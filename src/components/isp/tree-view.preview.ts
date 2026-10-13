@@ -1,9 +1,5 @@
-import { TreeCustomsBase } from './tree-view.js';
-import type {
-  CustomsRuntime,
-  LevelNameArgs,
-  TNode,
-} from './_shared/tree-view/_types.js';
+import { TreeCustomsBase } from './_shared/tree-view/customs-base.js';
+import type { CustomsRuntime, LevelNameArgs, TNode } from './_shared/tree-view/_types.schemas.js';
 import type { DemoNode, IsTreeViewEl } from "./tree-view.preview.schemas.js";
 
 class DemoCustoms extends TreeCustomsBase {

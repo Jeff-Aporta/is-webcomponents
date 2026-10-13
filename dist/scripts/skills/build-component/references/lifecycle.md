@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/lifecycle.md -->
 # Lifecycle
 
 Ciclo de vida de un componente del kit: hooks, shadow, upgrade de

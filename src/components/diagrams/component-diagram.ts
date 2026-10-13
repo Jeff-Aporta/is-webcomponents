@@ -2,28 +2,20 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
 import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './component-spec.js';
-import type { ComponentLayout } from './component-spec.js';
+import type { ComponentLayout } from './component-spec.schemas.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import {
   edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite, RECEIVER_COLOR,
 } from '../_shared/diagram-edge-style.js';
-import type { DiagramTheme } from './diagram-types.js';
+import type { DiagramTheme } from './diagram-types.schemas.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgIconGroup, svgIconBadge } from '../_shared/tk-icon-inline.js';
 import { svgArrowHead, pathEndDirection } from '../_shared/diagram-arrow.js';
-import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.js';
-import {
-  resolveErTheme,
-  pickThemeMode,
-  themeToDiagramTheme,
-  clusterPalette,
-  componentBoxPaint,
-  edgePaint,
-  injectThemeCss,
-  type ErThemeJson,
-} from './theme.js';
+import type { Caja, Lado, Paquete, Punto } from '../_shared/diagram-tipos.schemas.js';
+import { resolveErTheme, pickThemeMode, themeToDiagramTheme, clusterPalette, componentBoxPaint, edgePaint, injectThemeCss } from './theme.js';
+import { type ErThemeJson } from './theme.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
 import { styledEdgePath } from '../_shared/diagram-curve.js';

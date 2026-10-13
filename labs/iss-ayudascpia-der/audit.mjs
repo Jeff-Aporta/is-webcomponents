@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { computeErLayout, resolveErSpec } from '../../src/components/diagrams/er-spec.ts';
-import { parsePathPoints } from '../../src/components/_shared/diagram-edge-actors.ts';
+import { pathPoints as parsePathPoints } from '../../src/components/_shared/diagram-arrow.ts';
 
 const LAB = dirname(fileURLToPath(import.meta.url));
 const payload = JSON.parse(readFileSync(join(LAB, 'payload.json'), 'utf8'));

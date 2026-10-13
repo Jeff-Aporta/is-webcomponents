@@ -4,7 +4,7 @@
   "category": "actions",
   "title": "&lt;iswc-button&gt;",
   "titleHtml": false,
-  "description": "Documentación y playground del componente iswc-button de InSoft.",
+  "description": "Botón de acción con variantes, colores, tamaños, íconos al inicio o al final, estado de carga y modo enlace.",
   "styles": [
     "#customSpinnerBtn::part(spinner) svg {",
     "            stroke: #ff6b6b;",

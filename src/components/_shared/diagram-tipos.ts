@@ -17,13 +17,4 @@
  *
  * Tipos canónicos: `diagram-tipos.schemas.ts` (Zod). Aquí solo re-export.
  */
-export type {
-  Caja,
-  Componente,
-  Paquete,
-  Arista,
-  Lado,
-  OpcionesEmpaque,
-  Punto,
-  InterfazUml,
-} from './diagram-tipos.schemas.js';
+

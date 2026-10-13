@@ -4,8 +4,6 @@ import { findThemeContainer } from '../_shared/theme-scope.js';
 import { guardarAppCfg } from '../../core/app-cfg.js';
 import type { IsCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './theme-toggle.schemas.js';
 
-export type * from './theme-toggle.schemas.js';
-
 /**
  * <iswc-theme-toggle> — Web Component (vanilla).
  *

@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveJourneySpec, computeJourneyLayout } from './journey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import type { DiagramTheme } from './diagram-types.js';
+import type { DiagramTheme } from './diagram-types.schemas.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';

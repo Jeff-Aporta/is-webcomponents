@@ -42,7 +42,7 @@ class IswcTreemap extends HTMLElement {
   #mounted = false;
   #mo: MutationObserver | null = null; #themeObs: MutationObserver | null = null;
   #renderQueued: Promise<void> | false = false;
-  #nodeNodes = new Map<string, { n: import('./treemap-spec.js').TreemapLayoutNode; g: SVGElement }>();
+  #nodeNodes = new Map<string, { n: import('./treemap-spec.schemas.js').TreemapLayoutNode; g: SVGElement }>();
   #hoverId: string | null = null;
   #ownLightbox: HTMLElement | null = null;
   #ro: ResizeObserver | null = null;

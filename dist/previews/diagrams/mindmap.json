@@ -262,5 +262,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Mapa mental en SVG que parte de una idea central y se ramifica en subtemas, sin Mermaid."
 }

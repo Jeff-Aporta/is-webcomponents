@@ -239,5 +239,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Línea de tiempo de hitos en SVG, ordenados por fecha, sin Mermaid."
 }

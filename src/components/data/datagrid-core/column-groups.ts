@@ -24,7 +24,7 @@
  */
 
 import { ColumnType, FilterType } from './types.js';
-import type { AlignName, ColumnDef, ColumnTypeName, SortDirName } from './types.js';
+import type { AlignName, ColumnDef, ColumnTypeName, SortDirName } from './types.schemas.js';
 import type { IspColumn, IspColumnDef, GroupNode, LeafNode, TreeNode } from "./column-groups.schemas.js";
 
 let uid = 0;

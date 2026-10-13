@@ -1,5 +1,6 @@
 import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/component-spec.ts';
-import { placeEdgeActors, pointAtFraction, parsePathPoints } from '../../../components/_shared/diagram-edge-actors.ts';
+import { placeEdgeActors, pointAtFraction } from '../../../components/_shared/diagram-edge-actors.ts';
+import { pathPoints as parsePathPoints } from '../../../components/_shared/diagram-arrow.ts';
 import { spreadOrthogonalPaths } from '../../../components/_shared/diagram-edge-spread.ts';
 import { rectsOverlap as overlap } from '../../../components/_shared/diagram-grid.ts';
 

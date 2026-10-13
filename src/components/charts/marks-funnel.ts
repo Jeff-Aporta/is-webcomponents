@@ -1,5 +1,5 @@
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { ChartCtx } from './chart.js';
+import type { ChartCtx } from './chart.schemas.js';
 import type { FunnelBand } from "./marks-funnel.schemas.js";
 
 /**

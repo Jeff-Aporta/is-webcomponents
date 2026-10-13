@@ -267,5 +267,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Reproductor de video con controles propios del sistema de diseño."
 }

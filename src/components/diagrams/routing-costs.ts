@@ -15,8 +15,6 @@
 import { RoutingCostsSchema } from './component-router.schemas.js';
 import type { RoutingCosts, RoutingCostsInput } from './component-router.schemas.js';
 
-export type { RoutingCosts, RoutingCostsInput };
-
 /** Valores por defecto del kit (los publica el build como routing-costs.json). */
 export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({
   // 1U = 15 px (calibrado 2026-10-09; antes 20): paso de la rejilla, aire mínimo y tramo recto en los extremos.

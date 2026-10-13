@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-diagram.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-diagram.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Render headless de diagramas iswc-* → SVG (y opcional PNG).
@@ -35,18 +35,6 @@ import type {
   RenderDiagramOptions,
   RenderDiagramResult,
   RenderPage,
-  SyntheticDiagramJob,
-  PageDiagramJob,
-  StaticServer,
-} from '../../shared/schemas.ts';
-
-export { DIAGRAM_HOSTS, probeSvgExpression } from './hosts.js';
-export { sanitizeSvgRoot, staticSvgWrapper } from './sanitize-svg.js';
-export { startStaticServer } from './static-server.js';
-export type {
-  HostAttrs,
-  RenderDiagramOptions,
-  RenderDiagramResult,
   SyntheticDiagramJob,
   PageDiagramJob,
   StaticServer,
@@ -291,14 +279,14 @@ export async function renderDiagram(
     if (isPageJob(job)) {
       pageUrl = job.pageUrl;
       if (opts.serveRoot && pageUrl.startsWith('/')) {
-        server = await startStaticServer(opts.serveRoot);
+        server = await startStaticServer(opts.serveRoot, opts.remoteBase);
         pageUrl = server.base.replace(/\/$/, '') + pageUrl;
       }
     } else {
       if (!opts.serveRoot) {
         throw new Error('renderDiagram sintético requiere serveRoot (raíz del kit / vendor CDN)');
       }
-      server = await startStaticServer(opts.serveRoot);
+      server = await startStaticServer(opts.serveRoot, opts.remoteBase);
       const scriptUrl = absolutizeScript(job.scriptUrl, server.base);
       const html = buildHostHtml({
         scriptUrl,
@@ -334,7 +322,7 @@ export async function renderDiagramBatch(
   try {
     let base = '';
     if (opts.serveRoot) {
-      server = await startStaticServer(opts.serveRoot);
+      server = await startStaticServer(opts.serveRoot, opts.remoteBase);
       base = server.base;
     }
 

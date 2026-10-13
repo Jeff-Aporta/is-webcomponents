@@ -258,5 +258,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Interruptor entre tema claro y oscuro que aplica el tema a la página y lo recuerda."
 }

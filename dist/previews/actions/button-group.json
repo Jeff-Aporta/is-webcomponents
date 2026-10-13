@@ -4,7 +4,7 @@
   "category": "actions",
   "title": "&lt;iswc-button-group&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos del componente iswc-button-group de InSoft.",
+  "description": "Agrupa botones relacionados en una barra (unidos, segmentados o separados), con orientación horizontal o vertical y una etiqueta accesible para el grupo.",
   "styles": [
     "",
     "  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }",

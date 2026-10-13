@@ -6,7 +6,8 @@ import {
   readTheme,
   watchThemeContainer,
 } from '../_shared/theme-scope.js';
-import { MEDIA_SHAPE, type MediaShape } from '../_shared/media-shape.js';
+import { MEDIA_SHAPE } from '../_shared/media-shape.js';
+import { type MediaShape } from '../_shared/media-shape.schemas.js';
 
 /**
  * <iswc-theme-img> — una sola imagen que cambia dark ↔ light según el tema.
@@ -60,7 +61,6 @@ import { MEDIA_SHAPE, type MediaShape } from '../_shared/media-shape.js';
   }
 
   class IswcThemeImg extends ElementBase {
-    
 
     static get observedAttributes(): string[] {
       return [...OBSERVED];

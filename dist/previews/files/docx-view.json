@@ -56,5 +56,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Visor de documentos Word (.docx) en el navegador."
 }

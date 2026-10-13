@@ -14,14 +14,10 @@ import './float-card.js';
 import { TreeRowViewAdapter } from './_shared/tree-view/adapter.js';
 import { TreeCustomsBase } from './_shared/tree-view/customs-base.js';
 import { paintForest } from './_shared/tree-view/render-rows.js';
-import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './_shared/tree-view/_types.js';
+import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './_shared/tree-view/_types.schemas.js';
 import type { _AdapterLike, _DrawerLike, _ModalDeleteLike, _DialogLike } from "./tree-view.schemas.js";
 
 /** Subset del adapter que `IswcTreeView` consume (no necesita el tipo completo). */
-
-export { TreeRowViewAdapter, TreeRowViewAdapter as TreeAdapter, TreeCustomsBase };
-export { objRootsToNodes, TreeNode, groupedWithSeparators } from './_shared/tree-view/tree-data.js';
-export { TreeRowAdapter } from './_shared/tree-view/row-adapter.js';
 
 /**
  * <iswc-tree-view> — port de TreeRowView.svelte (ClientesIS / cursos).

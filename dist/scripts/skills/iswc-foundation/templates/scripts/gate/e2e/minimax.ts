@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/scripts/gate/e2e/minimax.ts
 /**
  * minimax.ts — modelo para `act()`/`extract()` de Stagehand (bring-your-own-LLM), SOLO fuera del gate.
  *

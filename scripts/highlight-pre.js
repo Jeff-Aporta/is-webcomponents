@@ -13,12 +13,8 @@
  *
  * Ya no hay puentes en `window`: quien necesite pintar importa `paint`.
  */
-import {
-  paint,
-  repaint,
-  softFormat,
-  watchDom,
-} from '../src/components/_shared/highlight-code.js';
+import { paint, repaint, watchDom } from '../src/components/_shared/highlight-code.js';
+import { softFormat } from '../src/components/_shared/code-text.js';
 
 export { paint, repaint, softFormat };
 

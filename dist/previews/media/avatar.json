@@ -445,5 +445,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Avatar de usuario con imagen, iniciales o ícono, y estado opcional."
 }

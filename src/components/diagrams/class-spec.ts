@@ -6,20 +6,11 @@ import { snapDiagramGrid } from '../_shared/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts } from './component-router.js';
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
 import { assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
-import type { Componente, Paquete } from '../_shared/diagram-tipos.js';
+import type { Componente, Paquete } from '../_shared/diagram-tipos.schemas.js';
 import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection } from './diagram-types.schemas.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type {
-  ClassSpec,
-  ClassSpecClass,
-  ClassSpecRelation,
-  ClassLayout,
-  ClassLayoutNode,
-  ClassLayoutEdge,
-  ClassRelationKind,
-  DiagramGroup,
-} from './diagram-types.js';
+import type { ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind, DiagramGroup } from './diagram-types.schemas.js';
 import type { Point2D } from "./class-spec.schemas.js";
 
 /**
@@ -273,7 +264,6 @@ export function accentFromPalette(hex: string): string {
   const to = (v: number): string => Math.round((v + mm) * 255).toString(16).padStart(2, '0');
   return `#${to(r1)}${to(g1)}${to(b1)}`.toUpperCase();
 }
-
 
 /**
  * Geometría de compartimentos de una clase: nombre (+estereotipo), atributos,

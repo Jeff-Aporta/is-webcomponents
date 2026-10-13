@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/utils/build.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/utils/build.ts
 /**
  * build.ts — `src/js/**` y `view/**` → `dist/cdn/` (estándar iswc-foundation). Lo corre `deno task build`
  * DESPUÉS de `build:scss`.
@@ -21,7 +21,9 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, sep } from 'node:path';
 import esbuild from 'esbuild';
-import { contentHash, hashesJson, stampDirectory, withAssetHash } from '../vendor/iswc-root/build/index.ts';
+import { contentHash } from '../vendor/iswc-root/build/content-hash.ts';
+import { withAssetHash } from '../vendor/iswc-root/build/asset-url.ts';
+import { hashesJson, stampDirectory } from '../vendor/iswc-root/build/stamp-hashes.ts';
 import { mapaRutas, PREFIJO } from '../js/kit-tags.ts';
 
 const ROOT = join(import.meta.dirname!, '..', '..');

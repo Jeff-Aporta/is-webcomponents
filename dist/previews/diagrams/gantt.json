@@ -265,5 +265,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de Gantt en SVG con tareas, fechas, dependencias e hitos, sin Mermaid."
 }

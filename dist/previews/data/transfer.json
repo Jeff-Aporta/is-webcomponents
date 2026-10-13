@@ -4,7 +4,7 @@
   "category": "data",
   "title": "&lt;iswc-transfer&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-transfer / iswc-transfer-item de InSoft.",
+  "description": "Doble lista para pasar elementos de una lista disponible a una seleccionada y viceversa.",
   "storageKey": "docs-iswc-transfer",
   "sections": [
     {

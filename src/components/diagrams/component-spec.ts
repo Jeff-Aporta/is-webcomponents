@@ -55,12 +55,10 @@ import { boundsOf } from '../_shared/diagram-grid.js';
 import { packDiagram, packRowGapKey, abrazarPaquetes, layoutPackageOutlines, outlineToPath, resolvePackingGaps, inflateTitleObstacle, EDGE_CLEARANCE, GRID_STEP, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
 import { routeEdges, pointsToPath, simplifyOrthoPath } from './component-router.js';
 import type { RouterEdge, RouterWorld } from './component-router.schemas.js';
-import { parsePathPoints } from '../_shared/diagram-edge-actors.js';
+import { pathPoints as parsePathPoints } from '../_shared/diagram-arrow.js';
 import { assignEdgeHues, assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
 import { layoutNodeLink } from '../_shared/node-link-layout.js';
-import type {
-  Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto,
-} from '../_shared/diagram-tipos.js';
+import type { Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.schemas.js';
 import type { HttpEndpoint, EdgeKind, SpecEdge, LayoutMode, ComponentSpecResult, WireResult, LayoutComponent, LayoutInterface, LayoutEdge, ComponentLayout } from "./component-spec.schemas.js";
 
 const TAB_W = 56;

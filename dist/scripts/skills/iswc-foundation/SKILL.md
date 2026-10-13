@@ -8,6 +8,7 @@ description: >-
   alinear una app existente (ISW, iswc-docs…) con el estándar. Todas las apps iswc deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
+<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/SKILL.md -->
 
 # iswc-foundation — el estándar de las apps iswc
 
@@ -22,9 +23,9 @@ Se ejecuta **directo desde la URL** (Deno no necesita descargar ni clonar nada) 
 local del kit. Pin = SHA de 40 hex publicado (el mismo que quedará fijo en la app):
 
 ```bash
-deno run -A https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/skills/iswc-foundation/tools/create-iswc-app.ts mi-app --prefijo=mia --titulo="Mi App"
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs mi-app --prefijo=mia --titulo="Mi App"
 # o, con el kit clonado:
-deno run -A <kit>/skills/iswc-foundation/tools/create-iswc-app.ts mi-app --prefijo=mia
+# (dentro del kit, para probar plantillas sin publicar: deno run -A skills/iswc-foundation/tools/create-iswc-app.ts ../mi-app --prefijo=mia)
 cd mi-app && deno install && deno task build && deno task serve
 ```
 
@@ -49,9 +50,9 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 8 | **Zod** para todos los tipos; schemas en `src/js/consts/schemas/*.schemas.ts`; datos externos con `safeParse`, nunca `as` |
 | 9 | **SCSS** anidado con `_tokens`/`_mixins`; build → `.css` hermana del módulo; hojas adoptadas (sin flicker) |
 | 10 | **Cache busting** `?v=<hash de contenido>`; una sola URL por módulo |
-| 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x600) |
+| 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x1440) |
 | 12 | **Gate** `deno task test:all` en verde = hecho; sync a entregable solo con el gate en verde |
-| 13 | **Íconos: local o API**: `assets/dl.js` (solo rutas) → `assets/iconify.json` + `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`), incluidos los íconos de todo lo que la app consume; lo que no está en el mapa sale de la API de Iconify. `host` en `deno.json` → `iswc.host`; ids `set:nombre` literales |
+| 13 | **Íconos: localStorage → web publicada → API (sin mapa)**: `assets/dl.js` (rutas y `extra`) → `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`); `<html data-icons>` = `deno.json` → `iswc.host` + `assets/iconify/` (lo declara el registrador; `initApp({ icons: { host } })`); lo que falta sale de la API con el aviso `[iswc-icon] falta en local: <id>`; ids `set:nombre` literales |
 | 14 | **Toda estructura es un componente**: toda pieza de UI, por pequeña que sea (figura, fila de metadatos, pie, paginador, caja vacía, fila de acciones), es un web component: `iswc-*` del catálogo o `<prefijo>-*` propio. Prohibido armar HTML suelto en renders, vistas, `index.html` o visores (`innerHTML`/plantillas con estructura, `createElement('div')` que compone UI); solo cabe el markup interno mínimo dentro del shadow de un componente |
 | 15 | **Todo componente tiene demo con playground**: su `.json` `iswc-preview/v1` trae ≥1 bloque `demo` con `controls` y está en la galería de la app (`view/demo/manifest.json`); un `iswc-*` además en la galería del kit (`src/manifest.ts`). Un guardián falla si un tag registrado no tiene demo |
 | 16 | **Candidatos a iswc-root**: un componente de app sin dominio (útil a otras apps) se marca en su `.json` con `"reuso": { "candidato": "iswc-root", "motivo": "…", "propuesta": "iswc-…" }` (validado por `ReusoCandidatoSchema`). Se revisan periódicamente y se suben al kit; el kit es el sistema de reuso entre apps |
@@ -67,14 +68,17 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Demos: playground `.json` y galería | [templates/specs/iswc/demo-componente.md](templates/specs/iswc/demo-componente.md) |
 | Crear una vista | [templates/specs/iswc/nueva-vista.md](templates/specs/iswc/nueva-vista.md) |
 | Estilos SCSS | [04-estilos.md](references/04-estilos.md) |
-| Íconos: `assets/dl.js`, `iconify.json`, registro de consumos, local o API | [10-iconos.md](references/10-iconos.md) |
+| Íconos: `assets/dl.js`, `data-icons` (web publicada), localStorage `iswc:`, aviso «falta en local», API | [10-iconos.md](references/10-iconos.md) |
 | Zod y tipos | [05-zod-y-tipos.md](references/05-zod-y-tipos.md) |
 | Pines y vendor del kit | [06-pines-y-vendor.md](references/06-pines-y-vendor.md) · [actualizar-pin.md](templates/specs/iswc/actualizar-pin.md) |
 | Pruebas, Stagehand y gate | [07-pruebas-y-gate.md](references/07-pruebas-y-gate.md) |
+| Stagehand compartido: proveedores LLM, generador con fallback, destino por protocolo | [11-stagehand.md](references/11-stagehand.md) |
+| Jueces de calidad JEV y LLM (capa extra de pruebas, aviso nunca error, cooldown 24 h por llave, nunca en el entregable) | [12-jueces.md](references/12-jueces.md) |
 | Specs y pruebas WHAT | [templates/specs/especificar-what.md](templates/specs/especificar-what.md) |
 | Sync a entregable (mirror) | [08-sync-entregable.md](references/08-sync-entregable.md) |
 | Alinear una app existente al estándar | [09-alinear-app.md](references/09-alinear-app.md) |
 | `create-iswc-app` en detalle | [13-crear-app.md](references/13-crear-app.md) |
+| Herramientas de test: qué usar y cuándo (guía única para agentes) | [14-herramientas-de-test.md](references/14-herramientas-de-test.md) |
 
 ## 4. Flujo de trabajo de un agente en una app iswc
 
@@ -90,3 +94,44 @@ verdad ejecutable: lo que dicen las referencias, las plantillas lo cumplen y `cr
 siembra. Al cambiar una regla: plantilla + referencia en el mismo commit, `deno run -A
 skills/iswc-foundation/tools/manifest.ts` y regenerar una app de prueba con `deno task test:all` en
 verde. Las apps existentes se alinean con [09-alinear-app.md](references/09-alinear-app.md).
+## Scripts online (Deno, siempre `@main` con `--reload`)
+
+Regla (Jeff, 2026-10-13): los scripts de `tools/` de una skill y los CLI de `vendor-distributions/` (`vendor.ts`,
+`pin-update.mjs`, `download-iconify.ts`, `render-lote.ts`) NO se descargan nunca al consumidor: se ejecutan online con
+Deno desde `@main` del kit, y lo que se ejecuta es un BUNDLE autocontenido en `dist/cdn/…` (`scripts/build-online.mjs`:
+schemas y pin-update inlineados, `zod` como `npm:`; sin imports relativos). `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`
+es obligatorio (Deno cachea los módulos remotos para siempre). Nunca una ruta local del checkout ni un SHA en estos
+comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
+
+### `create-iswc-app` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs <carpeta> [--prefijo=<p>] [--titulo=<t>] [--puerto=<n>] [--sha=<sha40>] [--repo=<o/n>] [--host=<url>]
+```
+
+- **Qué hace y cuándo**: crea una app iswc nueva con el estándar (shell, registro de tags, base de componentes, Zod, SCSS, build, galería, vista `hola`, gate de pruebas, sync, specs WHAT). Al fundar un proyecto front; para alinear uno existente ver 09-alinear-app.
+- **Entradas**: argumento `<carpeta>` (se crea); flags de arriba (`--sha` default: el pin publicado del kit, `--repo` default `Jeff-Aporta/iswc-root`, `--host` default GitHub Pages del dueño). Lee `templates/manifest.json` y `templates/**` del kit por HTTPS; no lee nada del consumidor.
+- **Escribe**: el árbol completo de la app bajo `<carpeta>` (sin `deno install`); deja la app lista para `deno install` + `deno task build`.
+- **Salida y errores típicos**: 0 ok · lanza (exit 1) si la carpeta existe y no está vacía, si `--sha` no es un sha40 o si una plantilla no se puede bajar (sin red). Siguiente paso: `deno install && deno task build && deno task test:all`.
+
+### `probar-foundation` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs [--sha=<sha40>] [--repo=<o/n>] [--conservar]
+```
+
+- **Qué hace y cuándo**: guardián del estándar: crea una app temporal con create-iswc-app y le corre el gate completo. Se usa en el kit (`deno task test:foundation`) tras cambiar plantillas o referencias; un consumidor no lo necesita.
+- **Entradas**: flags; sin `--sha` usa `origin/main` del checkout del kit (necesita git): online conviene pasar `--sha=<sha40 publicado>`. Env `TEST_COOLDOWN=0` dentro de la app temporal.
+- **Escribe**: una app en un directorio temporal (se borra salvo `--conservar`).
+- **Salida y errores típicos**: 0 verde · 1 si `templates/manifest.json` está desactualizado o el gate de la app falla · lanza si no puede leer `origin/main` sin `--sha`.
+
+### `manifest` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/manifest.mjs [--check]
+```
+
+- **Qué hace y cuándo**: regenera `templates/manifest.json` (la lista de plantillas que copia create-iswc-app; por HTTPS no se puede listar una carpeta). SOLO tiene sentido dentro del checkout del kit, tras tocar `templates/`; online solo sirve `--check` contra la copia local.
+- **Entradas**: la carpeta `templates/` junto al script (`new URL("../templates/", import.meta.url)`).
+- **Escribe**: `templates/manifest.json`.
+- **Salida y errores típicos**: 0 ok · 1 con `--check` si está desactualizado (mensaje con el comando para regenerarlo).

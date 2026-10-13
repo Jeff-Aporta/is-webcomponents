@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/static-server.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/static-server.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Servidor estático mínimo (Node http) para servir dist/cdn + labs.
@@ -10,7 +10,8 @@
  */
 import { createServer, type Server } from 'node:http';
 import { createReadStream, existsSync } from 'node:fs';
-import { join, extname, resolve } from 'node:path';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { dirname, join, extname, resolve } from 'node:path';
 import type { StaticServer } from '../../shared/schemas.ts';
 
 const TYPES: Record<string, string> = {
@@ -25,25 +26,51 @@ const TYPES: Record<string, string> = {
   '.woff2': 'font/woff2',
 };
 
-export function startStaticServer(root: string): Promise<StaticServer> {
+/**
+ * Sirve `root`. Con `remoto` (p. ej. `https://raw.githubusercontent.com/<repo>/<ref>/`), lo que no esté en disco
+ * bajo `dist/cdn/` se pide ahí y se sirve con su MIME (raw no da `text/javascript`): así el render funciona sin
+ * checkout del kit. Lo traído se guarda en memoria y, si `ref` es un SHA (inmutable), en `<root>/.iswc-remoto/`.
+ */
+export function startStaticServer(root: string, remoto?: string): Promise<StaticServer> {
   const absRoot = resolve(root);
+  const memoria = new Map<string, Uint8Array | null>();
+  const inmutable = !!remoto && /\/[0-9a-f]{40}\/$/.test(remoto);
+  const traer = async (rel: string): Promise<Uint8Array | null> => {
+    if (!remoto || !rel.startsWith('dist/cdn/')) return null;
+    const enMemoria = memoria.get(rel);
+    if (enMemoria !== undefined) return enMemoria;
+    const enDisco = join(absRoot, '.iswc-remoto', rel);
+    if (inmutable && existsSync(enDisco)) { const b = new Uint8Array(await readFile(enDisco)); memoria.set(rel, b); return b; }
+    let cuerpo: Uint8Array | null = null;
+    for (let i = 0; i < 3 && cuerpo === null; i++) {
+      try {
+        const r = await fetch(remoto + rel);
+        if (r.ok) cuerpo = new Uint8Array(await r.arrayBuffer());
+        else { await r.body?.cancel(); if (r.status === 404) break; }
+      } catch { /* red: reintento */ }
+    }
+    memoria.set(rel, cuerpo);
+    if (cuerpo && inmutable) { await mkdir(dirname(enDisco), { recursive: true }); await writeFile(enDisco, cuerpo); }
+    return cuerpo;
+  };
   return new Promise((resolvePromise) => {
     const server: Server = createServer((req, res) => {
       const url = new URL(req.url || '/', 'http://127.0.0.1');
       let rel = decodeURIComponent(url.pathname).replace(/^\/+/, '');
       if (!rel || rel.endsWith('/')) rel += 'index.html';
       const abs = join(absRoot, rel);
-      if (!abs.startsWith(absRoot) || !existsSync(abs)) {
-        res.writeHead(404);
-        res.end('not found');
-        return;
-      }
-      res.writeHead(200, {
-        'Content-Type': TYPES[extname(abs)] || 'application/octet-stream',
+      const cabeceras = (f: string) => ({
+        'Content-Type': TYPES[extname(f)] || 'application/octet-stream',
         'Cache-Control': 'no-store',
         'Access-Control-Allow-Origin': '*',
       });
-      createReadStream(abs).pipe(res);
+      if (!abs.startsWith(absRoot)) { res.writeHead(404); res.end('not found'); return; }
+      if (existsSync(abs)) { res.writeHead(200, cabeceras(abs)); createReadStream(abs).pipe(res); return; }
+      void traer(rel.split('\\').join('/')).then((cuerpo) => {
+        if (!cuerpo) { res.writeHead(404); res.end('not found'); return; }
+        res.writeHead(200, cabeceras(rel));
+        res.end(cuerpo);
+      });
     });
     server.listen(0, '127.0.0.1', () => {
       const addr = server.address();

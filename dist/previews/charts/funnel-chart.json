@@ -67,5 +67,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de embudo para etapas sucesivas de un proceso y su caída entre una y otra."
 }

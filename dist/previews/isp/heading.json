@@ -468,5 +468,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Título de sección (h1 a h6) con la tipografía y los tamaños del sistema de diseño."
 }

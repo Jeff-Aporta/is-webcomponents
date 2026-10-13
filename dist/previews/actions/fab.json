@@ -4,7 +4,7 @@
   "category": "actions",
   "title": "&lt;iswc-fab&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-fab (Floating Action Button) de InSoft.",
+  "description": "Botón de acción flotante (FAB) fijo en una esquina de la pantalla para la acción principal de la vista.",
   "styles": [
     ".fab-stage {",
     "      /* `position: relative` NO contiene hijos `position: fixed` — solo lo",

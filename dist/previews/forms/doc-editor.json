@@ -112,5 +112,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Editor de documentos por bloques al estilo Notion: párrafos, títulos, listas y más."
 }

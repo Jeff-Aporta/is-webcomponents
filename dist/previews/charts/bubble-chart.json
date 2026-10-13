@@ -57,5 +57,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Gráfica de burbujas: puntos en dos ejes cuyo tamaño representa una tercera magnitud."
 }

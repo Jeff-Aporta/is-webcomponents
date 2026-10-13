@@ -134,5 +134,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Calendario completo con vistas de día, semana y mes para ver y gestionar eventos."
 }

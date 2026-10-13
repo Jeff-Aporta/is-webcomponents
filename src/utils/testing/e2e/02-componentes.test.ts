@@ -1,18 +1,12 @@
-﻿// 02-componentes.test.ts: visita representativa por categorias del catalogo.
+// 02-componentes.test.ts: visita representativa por categorias del catalogo.
 // Para cada tag: el preview controlado monta contenido real (no placeholder),
 // el componente esta definido y el docs usa instancias del kit. Las vistas
 // pesadas (diagramas/graficos) exigen ademas senal de render (svg/canvas).
 import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import {
-  arrancar,
-  abrirGaleria,
-  esperarMs,
-  evidencia,
-  faltanRequisitos,
-  crearTestE2E,
-} from './lib/harness.ts';
+import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from './lib/harness.ts';
+import { faltanRequisitos } from './lib/env.ts';
 import type { CtxE2E } from './lib/tipos.d.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;

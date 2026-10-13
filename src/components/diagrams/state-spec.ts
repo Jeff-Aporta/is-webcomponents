@@ -6,7 +6,7 @@ import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayF
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { BoxSide } from './diagram-types.js';
+import type { BoxSide } from './diagram-types.schemas.js';
 import type { StateKind, StateDirection, AnchorSide, StateSpec, StateTransitionSpec, StateGroupSpec, StateResolvedSpec, StateLayoutNode, StateLayoutTransition, StateLayout } from "./state-spec.schemas.js";
 
 /**
@@ -295,4 +295,3 @@ export function computeStateLayout(spec: StateResolvedSpec): StateLayout {
 }
 
 // Tipo importado para mantener el contrato (evita noUnusedLocals en strict).
-export type { BoxSide };

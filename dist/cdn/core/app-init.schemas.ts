@@ -1,8 +1,6 @@
 /** Contratos de `app-init.ts` (W54: los tipos viven en *.schemas.ts). */
 import type { PaletaApp, TemaApp } from './app-cfg.schemas.js';
 
-export type { PaletaApp, TemaApp } from './app-cfg.schemas.js';
-
 export interface OpcionesInitApp {
   /** Tema inicial: aplica solo mientras el usuario no haya elegido. Default `light`. */
   theme?: TemaApp;

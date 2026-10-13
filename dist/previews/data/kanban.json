@@ -4,8 +4,11 @@
   "category": "data",
   "title": "&lt;iswc-kanban&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-kanban / iswc-kanban-column / iswc-kanban-card de InSoft.",
-  "loads": ["iswc-kanban-card", "iswc-kanban-column"],
+  "description": "Tablero kanban con columnas y tarjetas que se arrastran entre columnas para cambiar su estado.",
+  "loads": [
+    "iswc-kanban-card",
+    "iswc-kanban-column"
+  ],
   "storageKey": "docs-iswc-kanban",
   "sections": [
     {

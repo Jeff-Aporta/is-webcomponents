@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/jueces.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/jueces.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 /**
  * jueces.ts — jueces OPCIONALES para refinar el criterio de las pruebas: JEV (TypeSafe) y un juez LLM
@@ -25,8 +25,6 @@ import { ZArchivoProveedores, ZCuerpoJev, ZLlaveJev, ZProveedorLlm } from '../sc
 import type { ContextoCapa, OpcionesJuez, PreguntaJev, RespuestaJev, VeredictoJuez } from '../schemas.ts';
 import { estadoLlave, marcarCooldown } from './test-cooldown.ts';
 import { evaluarSondaLlm, normalizarJson } from './proveedores-llm.ts';
-
-export type { ContextoCapa, LlaveJev, OpcionesJuez, PreguntaJev, RespuestaJev, VeredictoJuez } from '../schemas.ts';
 
 const TIMEOUT_MS = 60_000;
 

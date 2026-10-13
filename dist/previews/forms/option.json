@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-option&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-option de InSoft.",
+  "description": "Opción de una lista de iswc-select o iswc-combobox, con valor y etiqueta.",
   "storageKey": "docs-iswc-option",
   "sections": [
     {

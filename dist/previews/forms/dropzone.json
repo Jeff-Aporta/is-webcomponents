@@ -120,5 +120,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Zona para arrastrar y soltar archivos, con vista previa, cola y progreso por archivo."
 }

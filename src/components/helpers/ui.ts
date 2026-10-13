@@ -308,11 +308,6 @@ export const crearComponente = <P extends Record<string, unknown>>(
   }
 };
 
-export {
-  INTENT, DEFAULT_INTENT, normalizeIntent, setEnumAttr, ensureDefaultColor,
-  TONE, DEFAULT_TONE, normalizeTone, setEnumToneAttr,
-};
-
 export const IswcUi = {
   css, adoptCss, el, html, raw, esc, rec, fecha, jsonScript, define, crearComponente,
   region, dialog,

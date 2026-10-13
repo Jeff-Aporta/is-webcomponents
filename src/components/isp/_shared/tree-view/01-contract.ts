@@ -2,7 +2,8 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj: object, key: PropertyKey, value: unknown) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : (obj as Record<PropertyKey, unknown>)[key] = value;
 var __publicField = (obj: object, key: PropertyKey, value: unknown) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { TTreeAdapterContext } from "./00-context.js";
-import { asRecord, type TNode } from "./_types.js";
+import { asRecord } from './_types.js';
+import { type TNode } from './_types.schemas.js';
 
 /**
  * TTreeAdapterContract — contrato vacío sobre `_TTreeAdapterContext`.

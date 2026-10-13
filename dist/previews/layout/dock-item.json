@@ -4,7 +4,7 @@
   "category": "layout",
   "title": "&lt;iswc-dock-item&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-dock-item de InSoft.",
+  "description": "Elemento de un iswc-dock con ícono y etiqueta que crece al acercar el puntero.",
   "styles": [
     ".dock-stage { position:relative; transform:translateZ(0); height:200px;",
     "      border:1px dashed var(--iswc-border); border-radius:.6rem; }"

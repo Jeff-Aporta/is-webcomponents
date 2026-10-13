@@ -122,5 +122,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Diagrama de carriles en SVG que reparte los pasos de un proceso por responsable, sin Mermaid."
 }

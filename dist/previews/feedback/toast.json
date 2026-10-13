@@ -152,5 +152,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Contenedor de notificaciones emergentes temporales apiladas en una esquina de la pantalla."
 }

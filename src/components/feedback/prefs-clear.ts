@@ -7,8 +7,6 @@ import { clearIswcStorage, listIswcKeys } from '../../core/iswc-storage.js';
 // Solo tipos: el schema Zod no entra al bundle del CDN (sumaría ~330 KB al componente).
 import type { PrefsClearDetail, PrefsClearScope } from './prefs-clear.schemas.js';
 
-export type * from './prefs-clear.schemas.js';
-
 /**
  * <iswc-prefs-clear> — deja la app como en su PRIMERA carga.
  *

@@ -1,5 +1,5 @@
 import { pathArc, polarToCartesian, svgEl } from '../_shared/svg-chart-engine.js';
-import type { ChartCtx, ChartDataset } from './chart.js';
+import type { ChartCtx, ChartDataset } from './chart.schemas.js';
 import type { RadialDataset, Slice } from "./marks-radial.schemas.js";
 
 /**

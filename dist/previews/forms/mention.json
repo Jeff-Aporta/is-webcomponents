@@ -130,5 +130,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Campo de texto que sugiere usuarios o etiquetas al escribir @ o #."
 }

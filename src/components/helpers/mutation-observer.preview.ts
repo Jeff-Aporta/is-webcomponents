@@ -1,4 +1,5 @@
-import { prettyHtml, repaint } from '../_shared/highlight-code.js';
+import { repaint } from '../_shared/highlight-code.js';
+import { prettyHtml } from '../_shared/code-text.js';
 import type { CodeLike, DescribePart } from "./mutation-observer.preview.schemas.js";
 
 /**

@@ -1,11 +1,4 @@
-import type {
-  FloatCardConfig,
-  IconConfig,
-  RowAdapterBridge,
-  RowConfig,
-  TNode,
-  TreeActionEntry,
-} from "./_types.js";
+import type { FloatCardConfig, IconConfig, RowAdapterBridge, RowConfig, TNode, TreeActionEntry } from './_types.schemas.js';
 import { TRAContextSchema, type TRAContext } from "./row-adapter-base.schemas.js";
 import type { TreeAdapterLike } from "./row-adapter-base.schemas.js";
 

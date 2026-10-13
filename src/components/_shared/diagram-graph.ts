@@ -12,8 +12,6 @@
 
 import type { AristaDirigida, GrafoDirigido, OpcionesGrafo } from './diagram-graph.schemas.js';
 
-export type * from './diagram-graph.schemas.js';
-
 /** Clave estable de una arista (para marcar retornos sin depender de ids opcionales). */
 export const claveArista = (e: AristaDirigida): string => `${e.from}>${e.to}`;
 

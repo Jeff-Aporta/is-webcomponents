@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs
 // vendor-iswc-tools.mjs — copia las herramientas del kit iswc-root al MISMO SHA del pin de la app.
 //
 //   deno task vendor:iswc            # al SHA de src/js/iswc.ts (pin canonico): raw por SHA, jsDelivr de respaldo
@@ -31,7 +31,7 @@ export const ARCHIVOS = [
   ['tools/pruebas.ts', 'vendor-distributions/shared/testing/pruebas.ts'],
   ['tools/sync-entregable.ts', 'vendor-distributions/shared/tools/sync-entregable.ts'],
   ['tools/pin-update.mjs', 'vendor-distributions/shared/tools/pin-update.mjs'],
-  ...['index.ts', 'content-hash.ts', 'asset-url.ts', 'asset-url.schemas.ts', 'stamp-hashes.ts', 'bundle-min.ts', 'bundle-min.schemas.ts']
+  ...['content-hash.ts', 'asset-url.ts', 'asset-url.schemas.ts', 'stamp-hashes.ts', 'bundle-min.ts', 'bundle-min.schemas.ts']
     .map((f) => [`build/${f}`, `build/${f}`]),
 ];
 const fuenteEnKit = (kit) => (kit.startsWith('vendor-distributions/') ? `src/${kit}` : `src/cdn/${kit}`);

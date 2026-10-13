@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-radio-group&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-radio-group de InSoft.",
+  "description": "Grupo de opciones de radio que participa en formularios: guarda el valor de la opción elegida.",
   "storageKey": "docs-iswc-radio-group",
   "sections": [
     {

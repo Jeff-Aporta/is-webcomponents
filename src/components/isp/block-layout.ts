@@ -56,8 +56,6 @@ export function lerpFor(width: number, b0: string = 'sm', b1: string = 'xl'): nu
   return w1 === w0 ? 0 : (width - w0) / (w1 - w0);
 }
 
-export { SCROLL_MEMORY_ATTRS };
-
 /** Callback que `lerpw` entrega dentro del evento `iswc-breakpoint`. */
 
 /**

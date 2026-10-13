@@ -184,5 +184,6 @@
       "slots",
       "states"
     ]
-  }
+  },
+  "description": "Barra de progreso lineal, determinada (con porcentaje) o indeterminada."
 }

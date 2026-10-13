@@ -17,6 +17,7 @@ import { formatCode } from '../../../components/_shared/code-format.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const hl = await import(pathToFileURL(join(root, 'src/components/_shared/highlight-code.ts')).href);
+const ct = await import(pathToFileURL(join(root, 'src/components/_shared/code-text.ts')).href);
 const typesOf = (tokens) => tokens.map((t) => t.type);
 
 test('normalizeLang mapea alias legacy', () => {
@@ -155,12 +156,12 @@ test('formatCode no reescribe un cURL', () => {
 
 test('unwrapHandHighlight quita el coloreado a mano de la migración', () => {
   const dirty = '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span><span class="tag">></span>';
-  assert.equal(hl.unwrapHandHighlight(dirty), '<button part="button">');
+  assert.equal(ct.unwrapHandHighlight(dirty), '<button part="button">');
 });
 
 test('softFormat expande anidación HTML en la misma línea', () => {
   const src = '<button class="btn"><span part="start"><slot name="start"></slot></span></button>';
-  const out = hl.softFormat(src, 'htmlmixed');
+  const out = ct.softFormat(src, 'htmlmixed');
   const lines = out.split('\n');
   assert.ok(lines.length >= 5, `esperaba varias líneas, got:\n${out}`);
   assert.match(lines[0], /^<button/);
@@ -171,7 +172,7 @@ test('softFormat expande anidación HTML en la misma línea', () => {
 
 test('softFormat no aplana HTML ya bien indentado sin anidación inline', () => {
   const src = '<div>\n  <p>hola</p>\n</div>';
-  assert.equal(hl.softFormat(src, 'htmlmixed'), src);
+  assert.equal(ct.softFormat(src, 'htmlmixed'), src);
 });
 
 test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
@@ -180,7 +181,7 @@ test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
     '  <span class="tag"><span</span> <span class="attr">part</span>=<span class="val">"start"</span> <span class="attr">class</span>=<span class="val">"btn__prefix"</span><span class="tag">></span><span class="tag"><slot</span> <span class="attr">name</span>=<span class="val">"start"</span><span class="tag">></slot></span></span>',
     '<span class="tag"></button></span>',
   ].join('\n');
-  const out = hl.softFormat(dirty, 'htmlmixed');
+  const out = ct.softFormat(dirty, 'htmlmixed');
   assert.doesNotMatch(out, /class="tag"/);
   assert.match(out, /<button part="button" class="btn">/);
   assert.match(out, /^\s+<span part="start"/m);

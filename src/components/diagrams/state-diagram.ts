@@ -1,22 +1,16 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveStateSpec, computeStateLayout } from './state-spec.js';
-import type {
-  StateLayout,
-  StateLayoutNode,
-  StateLayoutTransition,
-  StateResolvedSpec,
-  StateSpec,
-} from './state-spec.js';
+import type { StateLayout, StateLayoutNode, StateLayoutTransition, StateResolvedSpec, StateSpec } from './state-spec.schemas.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import { SequenceTurtle } from './sequence-turtle.js';
+import { PathTurtle as SequenceTurtle } from '../_shared/path-turtle.js';
 import type { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import type { DiagramTheme } from './diagram-types.js';
+import type { DiagramTheme } from './diagram-types.schemas.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
-import type { TSpanSpec } from '../_shared/diagram-text-wrap.js';
+import type { TSpanSpec } from '../_shared/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';

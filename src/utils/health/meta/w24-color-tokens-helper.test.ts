@@ -40,21 +40,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import {
-  assertColorMixContract,
-  ISWC_COLOR_VARIANTS,
-  ISWC_COLOR_MIX,
-  ISWC_COLOR_MIX_FAMILIES,
-  ISWC_COLOR_FAMILIES,
-  iswcColorTokenName,
-  colorMixRule,
-  colorMixFamilyBlock,
-  colorMixVariantMap,
-  brandVariantRule,
-  brandFamilyBlock,
-  ISWC_BRAND_LIGHTNESS,
-  type IswcColorVariant,
-} from '../../../styles/color-tokens.ts';
+import { assertColorMixContract, ISWC_COLOR_VARIANTS, ISWC_COLOR_MIX, ISWC_COLOR_MIX_FAMILIES, ISWC_COLOR_FAMILIES, iswcColorTokenName, colorMixRule, colorMixFamilyBlock, colorMixVariantMap, brandVariantRule, brandFamilyBlock, ISWC_BRAND_LIGHTNESS } from '../../../styles/color-tokens.ts';
+import { type IswcColorVariant } from '../../../styles/color-tokens.schemas.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');

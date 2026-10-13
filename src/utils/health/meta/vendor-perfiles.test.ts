@@ -19,7 +19,8 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, posix, relative } from 'node:path';
-import { dependenciasDeNavegador, PERFILES, perfilDeRuta } from '../../../vendor-distributions/shared/tools/vendor.ts';
+import { dependenciasDeNavegador, perfilDeRuta } from '../../../vendor-distributions/shared/tools/vendor.ts';
+import { PERFILES } from '../../../vendor-distributions/shared/schemas.ts';
 
 const SRC = 'src/vendor-distributions';
 

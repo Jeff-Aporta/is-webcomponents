@@ -4,7 +4,7 @@
   "category": "forms",
   "title": "&lt;iswc-time-input&gt;",
   "titleHtml": false,
-  "description": "Documentación y demos de iswc-time-input de InSoft.",
+  "description": "Campo de hora que abre un panel para elegir horas y minutos.",
   "storageKey": "docs-iswc-time-input",
   "sections": [
     {

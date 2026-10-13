@@ -17,7 +17,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import process from 'node:process';
 import { codigoSync, coincideGlob, correrSync } from '../../../vendor-distributions/shared/tools/sync-entregable.ts';
-import type { ConfigSync } from '../../../vendor-distributions/shared/tools/sync-entregable.ts';
+import type { ConfigSync } from '../../../vendor-distributions/shared/schemas.ts';
 
 const silencio = () => undefined;
 function arbol(raiz: string, archivos: Record<string, string>) {

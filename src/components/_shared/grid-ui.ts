@@ -8,7 +8,7 @@
 
 import { computePosition } from './position.js';
 import { AGGREGATION_FNS, operatorNeedsInput } from './grid-types.js';
-import type { ColumnDef, FilterRule, Operator } from './grid-types.js';
+import type { ColumnDef, FilterRule, Operator } from './grid-types.schemas.js';
 import type { GridPopoverEl, MenuItem, RenderColumnsPanelOpts, FilterPanelModel, RenderFilterPanelOpts } from "./grid-ui.schemas.js";
 
 const SUPPORTS_POPOVER = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;

@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/AGENTS.md -->
 # AGENTS.md — __TITULO__
 
 Punto de entrada para cualquier agente. App de web components sobre el kit **iswc-root**, creada con
@@ -15,7 +16,7 @@ todas las apps iswc.
 
 ```bash
 deno install                 # dependencias (npm: por deno.json; sin package.json)
-deno task icons              # íconos usados → assets/iconify.json + assets/iconify/ (va dentro de build)
+deno task icons              # íconos usados (+ extra de dl.js) → assets/iconify/<set>/<n>.svg (va dentro de build)
 deno task build              # icons + src/ + view/ → dist/cdn/ (SCSS, ?v=<hash>, registrador)
 deno task dev                # build en vigilancia
 deno task serve              # http://127.0.0.1:__PUERTO__/
@@ -47,7 +48,7 @@ deno task sync:entregable    # solo si existe el par _entregable: gate en verde 
 __APP__/
 ├── index.html                  ← shell (<__PREFIJO__-app>)
 ├── deno.json · tsconfig.json   ← `iswc.host`: dónde se publica la app
-├── assets/                     ← dl.js (rutas) · iconify.json · iconify/<set>/<n>.svg
+├── assets/                     ← dl.js (rutas) · iconify/<set>/<n>.svg
 ├── src/
 │   ├── js/
 │   │   ├── iswc.ts             ← pin canónico del kit

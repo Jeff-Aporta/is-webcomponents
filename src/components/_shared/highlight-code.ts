@@ -19,8 +19,6 @@ import { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode } f
 import { inferLanguage } from './code-langs.js';
 import type { CodeEditor } from "./highlight-code.schemas.js";
 
-export { dedent, unwrapHandHighlight, prettyHtml, softFormat, softFormatMode };
-
 /** data-lang / heurística → mode legacy (softFormat) + lang del editor. */
 export const resolveMode = (el: HTMLElement, text: string): string => {
   const raw = ((el.getAttribute?.('data-lang') || el.getAttribute?.('data-language') || el.dataset?.lang) ?? '').toLowerCase();
