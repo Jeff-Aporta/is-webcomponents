@@ -1,11 +1,18 @@
-# 10 — Íconos: local o API
+# 10 — Íconos: localStorage, local o API
 
-Un ícono se carga de **dos** sitios, nada más:
+Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13):
 
-1. **Local**: si está en el mapa de la app (`assets/iconify.json`), se pide a `assets/iconify/<set>/<nombre>.svg`
+0. **Memoria** de la página (`rawCache`): un id se pide una sola vez por página, incluido el fallo
+   (caché negativo: un ícono irresoluble no se vuelve a pedir aunque el componente se repinte por timer).
+1. **localStorage** (`iswc-icon:<set>:<nombre>` → texto SVG): sin ningún fetch. Todo SVG resuelto por
+   cualquier vía se guarda aquí (tope 32 KB por ícono), también el que vino de la API: así la API es
+   solo el fallback de la primera vez y después el ícono se pinta directo. Un fallo nunca se persiste.
+   `clearPersistedIcons()` lo vacía.
+2. **Local**: si está en el mapa de la app (`assets/iconify.json`), se pide a `assets/iconify/<set>/<nombre>.svg`
    de la propia app (en dev y desplegada es un fetch al mismo sitio: rápido).
-2. **API de Iconify** (`https://api.iconify.design/<set>/<nombre>.svg`): todo lo que no está en el mapa,
-   y también si el archivo local no responde.
+3. **API de Iconify** (`https://api.iconify.design/<set>/<nombre>.svg`): todo lo que no está en el mapa,
+   y también si el archivo local no responde. Una CSP de producción que no la permita (ISW en Azure)
+   convierte este paso en fallo: por eso `deno task icons` dentro de `build` debe dejar TODO en local.
 
 No se enlazan rutas de otras apps en ejecución. Lo que otras apps aportan se resuelve **al construir**:
 el registro de consumos.
@@ -73,7 +80,8 @@ de `_shared/icon-loader`. El json se pide una vez, al resolver el primer ícono.
 - `tests/iconos/iconos.test.ts`: [W-ICO-01] todo ícono usado está en el mapa y como archivo;
   [W-ICO-02] `host` = `deno.json`; [W-ICO-03] el registrador publicado registra el mapa con `?v=`.
 - `tests/e2e/00.bienvenida.test.ts`: [W-ICO-04] la bienvenida pide sus íconos a `assets/iconify/` y
-  nada a la API.
+  nada a la API; [W-ICO-05] la consola no registra violaciones de CSP (el servidor local de e2e aplica
+  las cabeceras de producción de `staticwebapp.config.json`).
 
 ## Cuándo NO
 

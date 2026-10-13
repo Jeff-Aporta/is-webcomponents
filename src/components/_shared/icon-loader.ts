@@ -138,16 +138,72 @@ export async function resolveIconSvg(prefix: string, name: string): Promise<stri
   return (await urlLocal(prefix, name)) ?? urlApi(prefix, name);
 }
 
+// ── localStorage: el SVG ya resuelto se queda en el navegador ─────────────────
+// Cadena de resolución (Jeff, 2026-10-13): memoria → localStorage → carpeta local de la app (mapa
+// `iconify.json`) → API de Iconify. Todo SVG que llega por cualquier vía se guarda en localStorage,
+// también el que vino de la API: así la API es solo fallback de la primera vez y después el ícono se
+// "quema" directo sin fetch. Un fallo nunca se persiste (solo memoria, por página).
+const LS_PREFIJO = 'iswc-icon:';
+/** Tope por SVG en localStorage (los íconos pesan ~1 KB; uno enorme no vale el espacio). */
+const LS_MAX_BYTES = 32 * 1024;
+
+function almacen(): Storage | null {
+  try {
+    const ls = (globalThis as { localStorage?: Storage }).localStorage;
+    return ls && typeof ls.getItem === 'function' ? ls : null;
+  } catch {
+    return null; // acceso bloqueado (privado, iframe sin permiso)
+  }
+}
+
+function leerPersistido(key: string): string | null {
+  try {
+    const v = almacen()?.getItem(LS_PREFIJO + key);
+    return v && v.includes('<svg') ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistir(key: string, svg: string): void {
+  if (svg.length > LS_MAX_BYTES) return;
+  try {
+    almacen()?.setItem(LS_PREFIJO + key, svg);
+  } catch {
+    // cuota llena o storage bloqueado: la memoria basta para esta página
+  }
+}
+
+/** Borra los SVG persistidos en localStorage (todos los `iswc-icon:*`). */
+export function clearPersistedIcons(): void {
+  const ls = almacen();
+  if (!ls) return;
+  try {
+    const claves: string[] = [];
+    for (let i = 0; i < ls.length; i++) {
+      const k = ls.key(i);
+      if (k && k.startsWith(LS_PREFIJO)) claves.push(k);
+    }
+    for (const k of claves) ls.removeItem(k);
+  } catch {
+    // nada
+  }
+}
+
 export async function resolveIconRaw(prefix: string, name: string, signal?: AbortSignal): Promise<string | null> {
   if (!prefix || !name) return null;
   const key = `${prefix}:${name}`;
   const cached = rawCache.get(key);
   if (cached !== undefined) return cached;
-  // Local si el mapa lo tiene; si el archivo no responde, la API. El fetch respeta la señal de
-  // abort para que <iswc-icon> pueda cancelar renders obsoletos.
+  // 1) localStorage: sin fetch.
+  const persistido = leerPersistido(key);
+  if (persistido) { rawCache.set(key, persistido); return persistido; }
+  // 2) Local si el mapa lo tiene; 3) si no está o el archivo no responde, la API. El fetch respeta
+  // la señal de abort para que <iswc-icon> pueda cancelar renders obsoletos.
   const local = await urlLocal(prefix, name);
   const text = (local ? await traerSvg(local, signal) : null) ?? await traerSvg(urlApi(prefix, name), signal);
   rawCache.set(key, text); // también el fallo (null): nunca se vuelve a pedir en esta página
+  if (text) persistir(key, text); // venga de local o de la API: la próxima vez no hay fetch
   return text;
 }
 
