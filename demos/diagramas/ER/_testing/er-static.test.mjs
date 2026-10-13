@@ -67,18 +67,20 @@ tests.push({
 });
 
 tests.push({
-  name: 'animation: las aristas dashed llevan la clase iswc-anim-edge-dashed',
+  name: 'animation: las aristas dashed se animan (clase iswc-anim-edge-dashed o flujo estándar)',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-er-static-ready');
     const classes = await page.evaluate(() => {
       const ortho = document.querySelectorAll('iswc-er-diagram')[0];
-      const dashedRel = [...ortho.shadowRoot.querySelectorAll('.er-rel')]
-        .find((g) => g.querySelector('path[stroke-dasharray]'));
-      return dashedRel?.querySelector('path')?.getAttribute('class') ?? null;
+      // El riel es `.er-rel__path`; con el flujo estándar activo (diagram-flow) la animación es su `<animate>`,
+      // sin él (flow-anim="off") la clase CSS de `animation="trace"`. Lo observable: el riel dashed se anima.
+      const riel = ortho.shadowRoot.querySelector('.er-rel path.er-rel__path[stroke-dasharray]');
+      if (!riel) return null;
+      return { clase: riel.getAttribute('class') ?? '', animate: !!riel.querySelector('animate') };
     });
     assert.ok(classes, 'debe haber al menos una relación con stroke-dasharray');
-    assert.match(classes, /iswc-anim-edge-dashed/, 'la clase de animación debe estar presente');
+    assert.ok(/iswc-anim-edge-dashed/.test(classes.clase) || classes.animate, 'el riel dashed debe animarse (clase CSS o <animate>)');
   },
 });
 
@@ -150,8 +152,9 @@ tests.push({
     await waitReady(page, 'data-er-static-ready');
     const strokes = await page.evaluate(() => {
       const mix = document.querySelectorAll('iswc-er-diagram')[1];
-      const r1 = mix.shadowRoot.querySelector('.er-rel[data-rel-id="r1"] path');
-      const r3 = mix.shadowRoot.querySelector('.er-rel[data-rel-id="r3"] path');
+      // El riel (`.er-rel__path`), no la línea de puntos del flujo que va detrás.
+      const r1 = mix.shadowRoot.querySelector('.er-rel[data-rel-id="r1"] path.er-rel__path');
+      const r3 = mix.shadowRoot.querySelector('.er-rel[data-rel-id="r3"] path.er-rel__path');
       return {
         r1: r1?.getAttribute('stroke'),
         r1Width: r1?.getAttribute('stroke-width'),

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/07-pruebas-y-gate.md -->
+<!-- @vendor 2026-10-13T21:35:30.252Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/07-pruebas-y-gate.md -->
 # 07 — Pruebas, Stagehand y gate
 
 Cómo se escriben specs y pruebas WHAT: [especificar-what.md](../templates/specs/especificar-what.md).
@@ -21,6 +21,8 @@ Los jueces opcionales (semántica local, JEV, LLM): [12-jueces.md](12-jueces.md)
   JSON (el gate del sync y el runner como paso hijo) no se pisan: `record()` relee el archivo y fusiona solo su entrada.
 - **Aislar** (`aislar: { comando }`): cada archivo en su proceso; el hijo es el mismo `pruebas.ts` con `--hijo <json>`.
 - **Reintento**: una prueba roja se re-corre una vez (`reintentos`, default 1; `TEST_REINTENTOS=0` lo apaga). Si pasa queda verde con el aviso `intermitente` en el reporte (red, LLM, streaming); un fallo real falla las dos veces y bloquea.
+  `deno-test.ts` (`denoTest`, unidad = archivo) hace lo mismo: los archivos rojos a la primera se re-corren de a uno
+  (`reintentos`/`TEST_REINTENTOS`); solo el verde final entra en cooldown.
 
 ## Capas (caja negra)
 

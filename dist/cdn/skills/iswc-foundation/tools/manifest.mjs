@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T21:35:08.165Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/manifest.mjs
+// @vendor 2026-10-13T21:35:30.252Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/manifest.mjs
 // Bundle autocontenido de skills/iswc-foundation/tools/manifest.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es skills/iswc-foundation/tools/manifest.ts.
 
 // skills/iswc-foundation/tools/manifest.ts

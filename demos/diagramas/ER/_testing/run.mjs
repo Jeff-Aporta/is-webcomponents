@@ -109,27 +109,48 @@ console.log(`[demos-test] ${all.length} suite(s) a correr:`);
 all.forEach((f) => console.log('   -', f.replace(repoRoot, '')));
 
 // Runner estándar is-*: cola de 3 suites a la vez + cooldown (src/vendor-distributions/shared/testing/).
-let failures = 0;
+// Rojo a la primera: se reintenta de a uno (TEST_REINTENTOS, 1 por defecto), como deno-test.ts y pruebas.ts:
+// dos Chromium lanzados a la vez desde Deno en Windows pueden caer con "os error 6" sin que el demo esté mal.
 process.env.DEMOS_BASE_URL = `http://${HOST}:${PORT}`;
 const cooldown = testCooldownFromEnv();
+const reintentos = Math.max(0, Number(process.env.TEST_REINTENTOS ?? 1) || 0);
+const relDe = (f) => relative(repoRoot, f).replace(/\\/g, '/');
+async function correrSuite(f) {
+  const proc = spawn(process.execPath, ['run', '-A', '--no-check', f], {
+    cwd: repoRoot,
+    stdio: 'inherit',
+    env: { ...process.env, DEMOS_BASE_URL: process.env.DEMOS_BASE_URL },
+  });
+  const code = await new Promise((r) => proc.once('exit', r));
+  if (code !== 0) throw new Error(`exit ${code}`);
+}
+let rojos = [];
 await runQueue(all, async (f) => {
-  const rel = relative(repoRoot, f).replace(/\\/g, '/');
   try {
-    const r = await cooldown.run(testId(rel, '*'), async () => {
-      console.log(`\n[demos-test] corriendo ${rel} ...`);
-      const proc = spawn(process.execPath, ['run', '-A', '--no-check', f], {
-        cwd: repoRoot,
-        stdio: 'inherit',
-        env: { ...process.env, DEMOS_BASE_URL: process.env.DEMOS_BASE_URL },
-      });
-      const code = await new Promise((r) => proc.once('exit', r));
-      if (code !== 0) throw new Error(`exit ${code}`);
+    const r = await cooldown.run(testId(relDe(f), '*'), async () => {
+      console.log(`\n[demos-test] corriendo ${relDe(f)} ...`);
+      await correrSuite(f);
     });
-    if (r.skipped) console.log(`[cooldown] ~ ${rel} (faltan ${formatMs(r.remainingMs)})`);
+    if (r.skipped) console.log(`[cooldown] ~ ${relDe(f)} (faltan ${formatMs(r.remainingMs)})`);
   } catch {
-    failures++;
+    rojos.push(f);
   }
 });
+for (let k = 0; k < reintentos && rojos.length; k++) {
+  const pendientes = rojos;
+  rojos = [];
+  for (const f of pendientes) {
+    try {
+      await cooldown.run(testId(relDe(f), '*'), async () => {
+        console.log(`\n[demos-test] ↻ ${relDe(f)}: rojo a la primera, se reintenta de a uno`);
+        await correrSuite(f);
+      });
+    } catch {
+      rojos.push(f);
+    }
+  }
+}
+const failures = rojos.length;
 
 console.log(`\n[demos-test] ${failures === 0 ? 'OK' : `${failures} suite(s) fallaron`}`);
 await killServer().catch(() => {});

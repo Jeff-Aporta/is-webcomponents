@@ -58,8 +58,11 @@ async function checkDeterministic(page, demo) {
         text: (t.textContent ?? '').trim(),
         fontSize: t.getAttribute('font-size'),
       }));
-      const animated = shadow.querySelectorAll('.er-rel path.iswc-anim-edge-dashed').length;
-      const dashed = shadow.querySelectorAll('.er-rel path[stroke-dasharray]').length;
+      // El riel es `.er-rel__path` (la línea de puntos del flujo estándar también lleva dasharray y no cuenta).
+      // Animado = clase CSS de `animation="trace"` o el `<animate>` del flujo estándar (diagram-flow).
+      const rieles = [...shadow.querySelectorAll('.er-rel path.er-rel__path[stroke-dasharray]')];
+      const animated = rieles.filter((p) => p.classList.contains('iswc-anim-edge-dashed') || !!p.querySelector('animate')).length;
+      const dashed = rieles.length;
       const traceAttr = d.getAttribute('animation') === 'trace';
       return { idx, svgRect, entities, rels, texts, animated, dashed, traceAttr };
     });
