@@ -53,17 +53,17 @@ tests.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-prefs-clear-ready');
     await page.waitForTimeout(150);
-    // Sembrar prefs en el ROOT_KEY ('iswc-root') con la estructura
+    // Sembrar prefs en el ROOT_KEY ('iswc:root') con la estructura
     // esperada por parseRoot: un objeto con keys que son tags. clearAllComponentPrefs
     // solo borra ROOT_KEY (no otros prefijos).
     await page.evaluate(() => {
-      localStorage.setItem('iswc-root', JSON.stringify({
+      localStorage.setItem('iswc:root', JSON.stringify({
         'iswc-split-panel:size': { v: 200 },
         'iswc-grid:scroll': { v: 100 },
       }));
     });
     const before = await page.evaluate(() => {
-      return localStorage.getItem('iswc-root');
+      return localStorage.getItem('iswc:root');
     });
     assert.ok(before, `esperaba prefs sembradas en ROOT_KEY, vi ${before}`);
 
@@ -84,7 +84,7 @@ tests.push({
     assert.ok(result.events[0].tags.length >= 2,
       `evento.tags debe listar los tags limpiados (esperaba >=2, vi ${JSON.stringify(result.events[0].tags)})`);
     const after = await page.evaluate(() => {
-      return localStorage.getItem('iswc-root');
+      return localStorage.getItem('iswc:root');
     });
     assert.equal(after, null, `ROOT_KEY debe haber sido borrada por clear (vimos "${after}")`);
   },

@@ -150,7 +150,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >                                              lead?, leadColor?,
 >                                              accentColor?, bg?, fg? }.
 >   value         string â€” la paleta activa. Reflect â†’ data-palette en <html>.
->   (persistencia) la elección del usuario sobre <html> queda en iswc-app-cfg.palette
+>   (persistencia) la elección del usuario sobre <html> queda en iswc:app-cfg.palette
 >   aria-label    string â€” etiqueta del botÃ³n trigger (default "Elegir paleta")
 > Slots
 >   trigger    opcional â€” sustituye el botÃ³n trigger interno.

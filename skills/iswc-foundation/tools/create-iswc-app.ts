@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/create-iswc-app.ts
+// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/create-iswc-app.ts
 /**
  * create-iswc-app — crea una app iswc nueva con el estándar iswc-foundation (el «create-react-app» del kit).
  *
@@ -14,7 +14,7 @@
  *   --sha=<sha40>   pin del kit. Default: la versión del kit desde la que corre esta herramienta
  *                   (el SHA de su URL, o `origin/main` del checkout local: siempre publicado).
  *   --repo=<o/n>    repo del kit. Default Jeff-Aporta/iswc-root.
- *   --host=<url>    sitio donde se publica la app (`deno.json` → `iswc.host`; lo copia `assets/iconify.json`).
+ *   --host=<url>    sitio donde se publica la app (`deno.json` → `iswc.host`; base de `<html data-icons>`).
  *                   Default GitHub Pages del dueño del repo del kit: https://<owner>.github.io/<carpeta>/.
  *
  * Crea el esqueleto COMPLETO (shell, registro de tags, base de componentes, Zod, SCSS, build con

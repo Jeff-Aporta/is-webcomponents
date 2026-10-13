@@ -13,25 +13,17 @@ export const IconFamilySchema = z.object({
 export type IconFamily = z.infer<typeof IconFamilySchema>;
 
 
-/** Mapa de íconos de la app listo para resolver: carpeta de los SVG y ids `set:nombre` que tiene. */
-export const MapaListoSchema = z.object({
-  base: z.string(),
-  ids: z.set(z.string()),
-});
-export type MapaListo = z.infer<typeof MapaListoSchema>;
+/**
+ * Estado en memoria del resolvedor, compartido en `globalThis.__iswcIcons` por todas las copias del
+ * módulo: SVG resueltos (`null` = falló, no se reintenta en la página), fetches en vuelo (uno por
+ * ícono) e íconos ya avisados como «falta en local».
+ */
+export interface EstadoIconos {
+  svg: Map<string, string | null>;
+  enVuelo: Map<string, Promise<string | null>>;
+  avisados: Set<string>;
+}
 
-/** Carga perezosa de un mapa (el json se pide la primera vez que se resuelve un ícono). */
-export const MapaPerezosoSchema = z.function({ input: [], output: z.promise(MapaListoSchema.nullable()) });
-export type MapaPerezoso = z.infer<typeof MapaPerezosoSchema>;
-
-/** Cola global `globalThis.__ISWC_ICONS__`: URLs de `iconify.json` registradas y las copias del módulo suscritas. */
-export const ColaIconosSchema = z.object({
-  items: z.array(z.string()),
-  oyentes: z.set(z.function({ input: [z.string()], output: z.void() })),
-  push: z.function({ input: z.tuple([], z.string()), output: z.number() }),
-});
-export type ColaIconos = z.infer<typeof ColaIconosSchema>;
-
-/** Formato persistido en localStorage: `{ t: <ms de guardado>, s: <svg> }` (TTL 15 días). */
+/** Formato persistido en localStorage (`iswc:icon:<set>:<nombre>`): `{ t: <ms de guardado>, s: <svg> }` (TTL 15 días). */
 export const PersistidoSchema = z.object({ t: z.number(), s: z.string() });
 export type Persistido = z.infer<typeof PersistidoSchema>;

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/schemas.ts
+// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/schemas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * schemas.ts — TODOS los contratos (Zod y tipos) de `vendor-distributions/`, en UN solo archivo por secciones.
@@ -881,13 +881,9 @@ export interface ContextoStagehand<Id extends string = string> {
 
 // ===== @seccion download-iconify =====
 /**
- * Contratos (Zod) del mapa de íconos de una app y de la herramienta que lo genera (`download-iconify.ts`).
- *
- * `assets/iconify.json` es el CONTRATO entre la herramienta (que lo escribe al descargar) y
- * `<iswc-icon>` (que lo lee al registrarlo): qué íconos tiene la app en local
- * (`assets/iconify/<set>/<n>.svg`; lo que no esté se pide a la API) y dónde está publicada
- * (`host`, copiado de `deno.json` → `iswc.host`). Otras apps lo leen al construir para bajarse
- * esos mismos íconos (registro de consumos).
+ * Contratos (Zod) de la herramienta que baja los íconos de una app (`download-iconify.ts`). Sin mapa
+ * (Jeff, 2026-10-13): los SVG van a `<salida>/iconify/<set>/<n>.svg` y `<iswc-icon>` los pide a la web
+ * publicada de la app (`<html data-icons>`, `initApp({ icons })`), luego a la API.
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md
  */
 
@@ -895,43 +891,23 @@ export interface ContextoStagehand<Id extends string = string> {
 export const IconIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*$/);
 export type IconId = z.infer<typeof IconIdSchema>;
 
-export const IconifyMapSchema = z.object({
-  /** Versión del formato. */
-  v: z.literal(1),
-  /** Nombre de la app que publica el mapa. */
-  app: z.string().min(1),
-  /** Sitio publicado de la app (`deno.json` → `iswc.host`); `null` si no está declarado. */
-  host: z.string().url().nullable(),
-  /** Ruta del propio `iconify.json` desde la raíz publicada (`host`): `assets/iconify.json`. */
-  ruta: z.string().min(1),
-  /** Carpeta de los SVG, relativa al propio `iconify.json`. */
-  base: z.string().min(1),
-  /** set → nombres descargados (ordenados). */
-  icons: z.record(z.string(), z.array(z.string())),
-});
-export type IconifyMap = z.infer<typeof IconifyMapSchema>;
-
 /** Opciones de `descargarIconos`. Los valores por defecto viven en `DEFAULTS` de la herramienta (corre sin dependencias). */
 export const OpcionesDescargaSchema = z.object({
   /** Raíz de la app (carpeta o URL `file:`). */
   raiz: z.union([z.string(), z.instanceof(URL)]),
   /** Archivos o carpetas a barrer, relativos a la raíz. */
   roots: z.array(z.string()).min(1),
-  /** Carpeta de salida, relativa a la raíz: ahí van `iconify.json` e `iconify/`. */
+  /** Carpeta de salida, relativa a la raíz: ahí va `iconify/`. */
   salida: z.string().optional(),
-  /** Ids que el barrido no puede ver (armados en tiempo de ejecución). */
+  /** Ids que el barrido no puede ver (armados en ejecución, o los que pintan los componentes del kit: el aviso `[iswc-icon] falta en local:` los nombra). */
   extra: z.array(IconIdSchema).optional(),
   /** Nombres de carpeta que no se barren. */
   ignorar: z.array(z.string()).optional(),
   /** Extensiones barridas. */
   extensiones: z.array(z.string()).optional(),
-  /** Registro de consumos: `iconify.json` del kit y de las apps que consume; TODOS sus íconos se descargan en esta app. Por defecto el del kit al SHA de la herramienta. */
-  mapas: z.array(z.string()).optional(),
-  /** Sitio publicado; por defecto `deno.json` → `iswc.host`. */
-  host: z.string().url().optional(),
   /** Borrar SVG de `iconify/` que ya nadie usa. */
   podar: z.boolean().optional(),
-  /** Sin red: solo reescribe el mapa con lo que ya está en disco. */
+  /** Sin red: conserva lo que ya está en disco. */
   offline: z.boolean().optional(),
   /** API de Iconify. */
   api: z.string().url().optional(),
@@ -950,7 +926,8 @@ export const ResumenDescargaSchema = z.object({
   inexistentes: z.array(IconIdSchema),
   podados: z.array(IconIdSchema),
   avisos: z.array(z.string()),
-  mapa: IconifyMapSchema,
+  /** Carpeta de los SVG, relativa a la raíz (`assets/iconify`). */
+  carpeta: z.string(),
 });
 export type ResumenDescarga = z.infer<typeof ResumenDescargaSchema>;
 

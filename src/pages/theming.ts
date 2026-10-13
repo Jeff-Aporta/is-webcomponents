@@ -2,12 +2,13 @@
  * Behavior del taller de Personalización.
  *
  * Persistencia:
- *   - localStorage `iswc-theming-seeds`: nombre + seeds de los inputs (F5 los
+ *   - localStorage `iswc:theming-seeds` (core/iswc-storage): nombre + seeds de los inputs (F5 los
  *     conserva).
  *   - "Aplicar a toda la página" es SOLO de sesión: no se guarda; F5 limpia
  *     los --iswc-* inline del <html> y deja el switch en off.
  *   - "Restaurar defaults" borra el LS y vuelve a DEFAULTS.
  */
+import { readIswc, removeIswc, writeIswc } from '../core/iswc-storage.js';
 import type {
   PreviewMountContext,
   ISComponentPreviewLike,
@@ -29,7 +30,7 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
   const signal = preview.signal;
   const opts = signal ? { signal } : undefined;
 
-  const LS_KEY = 'iswc-theming-seeds';
+  const LS_KEY = 'theming-seeds';
 
   const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
 
@@ -268,17 +269,15 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
   };
 
   const persistSeeds = (): void => {
-    try {
-      localStorage.setItem(LS_KEY, JSON.stringify({
-        name: (nameInput?.value || DEFAULT_NAME).trim() || DEFAULT_NAME,
-        seeds: readSeeds(),
-      }));
-    } catch { /* quota / private */ }
+    writeIswc(LS_KEY, JSON.stringify({
+      name: (nameInput?.value || DEFAULT_NAME).trim() || DEFAULT_NAME,
+      seeds: readSeeds(),
+    }));
   };
 
   const loadPersisted = (): PersistedData | null => {
     try {
-      const raw = localStorage.getItem(LS_KEY);
+      const raw = readIswc(LS_KEY);
       if (!raw) return null;
       return JSON.parse(raw) as PersistedData;
     } catch {
@@ -436,7 +435,7 @@ ${block(`.theme-light[data-palette="${safe}"]`, t.light)}
   }, opts);
 
   root.querySelector<HTMLElement>('#btnReset')?.addEventListener('click', () => {
-    try { localStorage.removeItem(LS_KEY); } catch { /* */ }
+    removeIswc(LS_KEY);
     for (const p of pickers) {
       const key = p.dataset.seed;
       if (!key) continue;

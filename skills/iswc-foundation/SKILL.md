@@ -8,7 +8,7 @@ description: >-
   alinear una app existente (ISW, iswc-docs…) con el estándar. Todas las apps iswc deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/SKILL.md -->
+<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/SKILL.md -->
 
 # iswc-foundation — el estándar de las apps iswc
 
@@ -52,7 +52,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 10 | **Cache busting** `?v=<hash de contenido>`; una sola URL por módulo |
 | 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x1440) |
 | 12 | **Gate** `deno task test:all` en verde = hecho; sync a entregable solo con el gate en verde |
-| 13 | **Íconos: local o API**: `assets/dl.js` (solo rutas) → `assets/iconify.json` + `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`), incluidos los íconos de todo lo que la app consume; lo que no está en el mapa sale de la API de Iconify. `host` en `deno.json` → `iswc.host`; ids `set:nombre` literales |
+| 13 | **Íconos: localStorage → web publicada → API (sin mapa)**: `assets/dl.js` (rutas y `extra`) → `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`); `<html data-icons>` = `deno.json` → `iswc.host` + `assets/iconify/` (lo declara el registrador; `initApp({ icons: { host } })`); lo que falta sale de la API con el aviso `[iswc-icon] falta en local: <id>`; ids `set:nombre` literales |
 | 14 | **Toda estructura es un componente**: toda pieza de UI, por pequeña que sea (figura, fila de metadatos, pie, paginador, caja vacía, fila de acciones), es un web component: `iswc-*` del catálogo o `<prefijo>-*` propio. Prohibido armar HTML suelto en renders, vistas, `index.html` o visores (`innerHTML`/plantillas con estructura, `createElement('div')` que compone UI); solo cabe el markup interno mínimo dentro del shadow de un componente |
 | 15 | **Todo componente tiene demo con playground**: su `.json` `iswc-preview/v1` trae ≥1 bloque `demo` con `controls` y está en la galería de la app (`view/demo/manifest.json`); un `iswc-*` además en la galería del kit (`src/manifest.ts`). Un guardián falla si un tag registrado no tiene demo |
 | 16 | **Candidatos a iswc-root**: un componente de app sin dominio (útil a otras apps) se marca en su `.json` con `"reuso": { "candidato": "iswc-root", "motivo": "…", "propuesta": "iswc-…" }` (validado por `ReusoCandidatoSchema`). Se revisan periódicamente y se suben al kit; el kit es el sistema de reuso entre apps |
@@ -68,7 +68,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Demos: playground `.json` y galería | [templates/specs/iswc/demo-componente.md](templates/specs/iswc/demo-componente.md) |
 | Crear una vista | [templates/specs/iswc/nueva-vista.md](templates/specs/iswc/nueva-vista.md) |
 | Estilos SCSS | [04-estilos.md](references/04-estilos.md) |
-| Íconos: `assets/dl.js`, `iconify.json`, registro de consumos, local o API | [10-iconos.md](references/10-iconos.md) |
+| Íconos: `assets/dl.js`, `data-icons` (web publicada), localStorage `iswc:`, aviso «falta en local», API | [10-iconos.md](references/10-iconos.md) |
 | Zod y tipos | [05-zod-y-tipos.md](references/05-zod-y-tipos.md) |
 | Pines y vendor del kit | [06-pines-y-vendor.md](references/06-pines-y-vendor.md) · [actualizar-pin.md](templates/specs/iswc/actualizar-pin.md) |
 | Pruebas, Stagehand y gate | [07-pruebas-y-gate.md](references/07-pruebas-y-gate.md) |

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/FOUNDATION.md -->
+<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/FOUNDATION.md -->
 # FOUNDATION — reconstruir __TITULO__ desde las specs
 
 > Prompt guía para lanzar agentes HOW «ciegos» que reconstruyan `src/` y `view/` SOLO a partir de

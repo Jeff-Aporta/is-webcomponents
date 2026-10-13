@@ -12,8 +12,10 @@ preview: ./prefs-clear.json
 
 ## PropÃ³sito
 
-Borra la memoria persistente de los componentes del kit
-(`localStorage['iswc-root']`: splits, scrolls, gridsâ€¦).
+Deja la app como en su primera carga: `clearIswcStorage()` (core/iswc-storage) borra
+todas las llaves `iswc:` de localStorage y sessionStorage (config de la app `iswc:app-cfg`,
+`iswc:root` con splits/scrolls/grids, SVG de iconos `iswc:icon:*`, overrides de diagramas)
+y vacia las caches en memoria del kit. `listIswcKeys()` lista lo que hay.
 Ãštil para auditar la carga inicial sin prefs viejas que deformen el layout.
 
 Este mÃ³dulo registra `<iswc-prefs-clear>`.
@@ -46,7 +48,7 @@ import './prefs-clear.js';
 | --- | --- | --- |
 | `confirm` | boolean | `false` = no pide confirmaciÃ³n (default true) |
 | `reload` | boolean | `false` = no recarga tras limpiar (default true) |
-| `scope` | `prefs` \| `cache` \| `all` | `prefs` (default): la config de la app (`iswc-app-cfg`: tema, paleta…) y la memoria de los is-* (`iswc-root`). `cache`: además Cache Storage, IndexedDB y sessionStorage. `all`: además todo el localStorage del origen (preferencias y sesión). |
+| `scope` | `prefs` \| `cache` \| `all` | `prefs` (default): todas las llaves `iswc:` (local y session) y las caches en memoria del kit (`clearIswcStorage()`). `cache`: ademas Cache Storage, IndexedDB y sessionStorage. `all`: ademas todo el localStorage del origen (preferencias y sesion). |
 | `variant` / `color` / `shape` | string | Se reenvÃ­an al `iswc-button` interno |
 | `title` / `aria-label` | string | Tooltip y nombre accesible (default â€œLimpiar memoria UIâ€) |
 

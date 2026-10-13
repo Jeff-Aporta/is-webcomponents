@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/README.md -->
+<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/README.md -->
 # `vendor-distributions/` — todo lo que un consumidor trae del kit por vendor, separado por perfil
 
 Fuente: `src/vendor-distributions/`. Publicado por `deno task build` en `dist/cdn/vendor-distributions/`
@@ -112,7 +112,7 @@ que es `shared/`. Aquí va lo que solo un server necesite (BD, colas, Azure Func
 | `tools/render-lab.ts` | Lo común de los `labs/*/render.mjs`: jobs desde editables + lote | [loader.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md) |
 | `tools/render-lote.ts` | Lote de editables `<slug>.json` con caché por hash (`diagramas-iswc.cache.json`): `planificarLote` (puro: huella sha256 del spec resuelto + pin del kit) y `renderizarLote` (un proceso hijo por diagrama con reintentos, caché atómico por diagrama OK). CLI para el `docs:diagramas` de ISS/ISW | [loader.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md) |
 | `tools/static-server.ts`, `tools/hosts.ts`, `tools/sanitize-svg.ts` | Dependencias de `render-diagram` (servidor estático, hosts de diagrama, limpieza del SVG) | [loader.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md) |
-| `tools/download-iconify.ts` | Descarga de íconos Iconify de la app y su `iconify.json` | [10-iconos.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md) |
+| `tools/download-iconify.ts` | Descarga de íconos Iconify de la app a `assets/iconify/` (sin mapa) | [10-iconos.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md) |
 
 ## Mapa de rutas (anterior → actual)
 

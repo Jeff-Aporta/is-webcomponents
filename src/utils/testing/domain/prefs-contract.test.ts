@@ -10,7 +10,7 @@
 //      y sin handlers — el consumidor pedía checks show/hide y no había UI
 //
 // Reglas:
-//   - Un solo JSON: localStorage['iswc-root'][tag][storage-key]
+//   - Un solo JSON: localStorage['iswc:root'][tag][storage-key]
 //   - API en components/_shared/prefs.ts
 //   - Consumidores (ag-grid, main, split-panel) importan prefs y no setItem directo
 //
@@ -49,8 +49,8 @@ const splitSrc = readFileSync(splitPath, 'utf8');
 
 // ── 1. prefs.ts: raíz y API ─────────────────────────────────────────────
 check(
-  /const\s+ROOT_KEY\s*=\s*['"]iswc-root['"]/.test(prefs),
-  'prefs.ts: ROOT_KEY debe ser exactamente "iswc-root"',
+  /const\s+ROOT_NOMBRE\s*=\s*['"]root['"]/.test(prefs) && /const\s+ROOT_KEY\s*=\s*iswcKey\(ROOT_NOMBRE\)/.test(prefs),
+  'prefs.ts: ROOT_KEY debe ser exactamente "iswc:root" (iswcKey("root"))',
 );
 check(
   /LEGACY_ROOT_KEYS\s*=\s*\[\s*['"]is-webcomponents['"]/.test(prefs), // root previo a iswc-root
@@ -110,11 +110,11 @@ const agGridNoComments = agGrid
 const flatSetItem = [...agGridNoComments.matchAll(/localStorage\.setItem\(\s*([^,]+)/g)];
 for (const m of flatSetItem) {
   const arg = m[1].trim();
-  // Solo se permite si el primer arg es claramente getPrefsRootKey / ROOT / 'iswc-root'
+  // Solo se permite si el primer arg es claramente getPrefsRootKey / ROOT / 'iswc:root'
   // ag-grid no debería llamar setItem en absoluto (delegado a prefs).
-  if (!/getPrefsRootKey|ROOT_KEY|['"]iswc-root['"]/.test(arg)) {
+  if (!/getPrefsRootKey|ROOT_KEY|['"]iswc:root['"]/.test(arg)) {
     failures.push(
-      `ag-grid.ts: localStorage.setItem(${arg}, …) — estado debe ir vía prefs.ts (root iswc-root)`,
+      `ag-grid.ts: localStorage.setItem(${arg}, …) — estado debe ir vía prefs.ts (root iswc:root)`,
     );
   }
 }
@@ -126,7 +126,7 @@ if (/#savePersistedState[\s\S]*?sessionStorage\.setItem/.test(agGridNoComments))
 
 // ── 4. Docs coherentes ──────────────────────────────────────────────────
 const md = existsSync(agGridMdPath) ? readFileSync(agGridMdPath, 'utf8') : '';
-check(md.includes('iswc-root'), 'ag-grid.md: debe documentar localStorage iswc-root');
+check(md.includes('iswc:root'), 'ag-grid.md: debe documentar localStorage iswc:root');
 check(md.includes('replaceComponentPrefs') || md.includes('prefs.ts'), 'ag-grid.md: debe apuntar a prefs.ts');
 check(/Qué no hacer|no hacer/i.test(md), 'ag-grid.md: debe tener sección de anti-patrones');
 
@@ -139,8 +139,8 @@ check(
   'specs/componentes.md: debe listar iswc-ag-grid',
 );
 check(
-  componentesSrc.includes('iswc-root'),
-  'specs/componentes.md: debe mencionar root iswc-root',
+  componentesSrc.includes('iswc:root'),
+  'specs/componentes.md: debe mencionar root iswc:root',
 );
 
 // Docs canónicas no deben decir que el root actual ES is-components

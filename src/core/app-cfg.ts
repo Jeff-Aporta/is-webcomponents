@@ -1,6 +1,7 @@
 /// <reference lib="dom" />
 /**
- * Configuración persistente de una app iswc en UNA sola llave: `iswc-app-cfg`.
+ * Configuración persistente de una app iswc en UNA sola llave: `iswc:app-cfg` (core/iswc-storage;
+ * la vieja `iswc-app-cfg` se migra sola).
  *
  *   leerAppCfg()                 // { theme: 'dark', palette: 'insoft', … } (vacío si nadie eligió)
  *   guardarAppCfg({ theme: 'dark' })
@@ -11,11 +12,14 @@
  * Todas las apps del origen leen la misma llave, así quedan coherentes entre sí.
  * Las llaves sueltas anteriores (`iswc-theme`, `iswc-palette`) se migran una vez y se borran.
  */
+import { iswcKey, readIswc, removeIswc, writeIswc } from './iswc-storage.js';
 import type { AppCfg, PaletaApp, TemaApp, ValorCfgApp } from './app-cfg.schemas.js';
 
 export type { AppCfg, PaletaApp, TemaApp, ValorCfgApp } from './app-cfg.schemas.js';
 
-export const APP_CFG_KEY = 'iswc-app-cfg';
+const NOMBRE_CFG = 'app-cfg';
+/** Llave completa en localStorage. */
+export const APP_CFG_KEY = iswcKey(NOMBRE_CFG);
 const LEGADO = { theme: 'iswc-theme', palette: 'iswc-palette' } as const;
 const TEMAS: readonly TemaApp[] = ['light', 'dark'];
 const PALETAS: readonly PaletaApp[] = ['insoft', 'contapyme', 'agrowin'];
@@ -39,16 +43,15 @@ function parsear(raw: string | null): AppCfg {
 }
 
 function escribir(cfg: AppCfg): void {
-  try {
-    if (Object.keys(cfg).length) localStorage.setItem(APP_CFG_KEY, JSON.stringify(cfg));
-    else localStorage.removeItem(APP_CFG_KEY);
-  } catch { /* sin storage: la elección vive hasta recargar */ }
+  // Sin storage: la elección vive hasta recargar.
+  if (Object.keys(cfg).length) writeIswc(NOMBRE_CFG, JSON.stringify(cfg));
+  else removeIswc(NOMBRE_CFG);
 }
 
 /** Config guardada por el usuario (vacía si nunca eligió nada). */
 export function leerAppCfg(): AppCfg {
   let cfg: AppCfg;
-  try { cfg = parsear(localStorage.getItem(APP_CFG_KEY)); } catch { return {}; }
+  cfg = parsear(readIswc(NOMBRE_CFG));
   // Migración de las llaves sueltas: se absorben (sin pisar lo nuevo) y se retiran.
   try {
     const tema = localStorage.getItem(LEGADO.theme);
@@ -79,6 +82,6 @@ export function guardarAppCfg(cambio: AppCfg): AppCfg {
 /** Borra toda la config guardada: la app vuelve a su config inicial (`initApp`). */
 export function borrarAppCfg(): AppCfg {
   const antes = leerAppCfg();
-  try { localStorage.removeItem(APP_CFG_KEY); } catch { /* sin storage */ }
+  removeIswc(NOMBRE_CFG);
   return antes;
 }

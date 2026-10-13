@@ -61,7 +61,7 @@ Opt-in estricto: `remember-state` + `storage-key` (keyid).
 Todo va a **un solo JSON** en localStorage:
 
 ```text
-localStorage['iswc-root'] = {
+localStorage['iswc:root'] = {
   "iswc-ag-grid": {
     "<storage-key>": { columns, sortModel, filterModel, quickFilter, page, pageSize, rowGroupCols, â€¦ }
   },
@@ -78,7 +78,7 @@ API compartida: [`_shared/prefs.js`](../_shared/prefs.js)
 | `replaceComponentPrefs(tag, key, value)` | Reemplazar estado completo (grid) |
 | `setComponentPrefs(tag, key, patch)` | Merge shallow (layout/main) |
 | `removeComponentPrefs(tag, key)` | Borrar keyid (botÃ³n Reiniciar) |
-| `getPrefsRootKey()` | Siempre `'iswc-root'` |
+| `getPrefsRootKey()` | Siempre `'iswc:root'` |
 
 Tag del bucket = nombre del custom element (`iswc-ag-grid`). Keyid = valor de `storage-key`.
 
@@ -228,7 +228,7 @@ su propio valor y lo devuelven al modelo del core.
 - Las columnas y filas se leen de los `<script type="application/json">` hijos
   o de los atributos correspondientes.
 - Con `remember-state` y `storage-key`, el snapshot se guarda mediante
-  `_shared/prefs.js` bajo `localStorage['iswc-root']['iswc-ag-grid'][keyid]`.
+  `_shared/prefs.js` bajo `localStorage['iswc:root']['iswc-ag-grid'][keyid]`.
 - El panel lateral de columnas se abre con `api.openColumnsPanel()` y refleja
   la visibilidad del modelo.
 
@@ -260,7 +260,7 @@ su propio valor y lo devuelven al modelo del core.
 | Persistencia en `sessionStorage` o key plana | Usar `prefs.js`; test falla si `ag-grid.js` hace `setItem` directo de estado |
 | Root `is-components` tratado como canÃ³nico | CanÃ³nico = `iswc-root`; legacy solo en migraciÃ³n |
 | `setComponentPrefs` merge deja basura en estado de grid | Usar `replaceComponentPrefs` al guardar snapshot |
-| Documentar persistencia sin mencionar el root Ãºnico | MD + preview deben decir `localStorage['iswc-root'][tag][key]` |
+| Documentar persistencia sin mencionar el root Ãºnico | MD + preview deben decir `localStorage['iswc:root'][tag][key]` |
 | Olvidar botÃ³n Reiniciar cuando hay `remember-state` | Toolbar `.mim-dg__reset-btn` + `api.resetPersistedState` |
 
 ## Dependencias y componentes relacionados

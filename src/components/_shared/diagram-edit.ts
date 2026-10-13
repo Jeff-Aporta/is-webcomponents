@@ -18,8 +18,9 @@
  */
 
 import { snapDiagramGrid } from './diagram-grid.js';
+import { readIswc, removeIswc, writeIswc } from '../../core/iswc-storage.js';
 import type { NodeOverride, EdgeOverride, NodeOverrideMap, EdgeOverrideMap, DiagramOverrides, EditorAnchor, DiagramPersist, LayoutChangeDetail, NodeLayoutEntry, EdgeLayoutEntry, LayoutLike, NodeDragMove, NodeDragEnd, NodeDragDestroy, InlineEditorInitial, InlineEditorSave, InlineEditorCancel, OpenInlineEditorOpts } from "./diagram-edit.schemas.js";
-const STORAGE_PREFIX = 'iswc-diagram:';
+const STORAGE_PREFIX = 'diagram:';
 
 /** Override parcial por nodo (posición / label / hue). */
 
@@ -37,8 +38,7 @@ export function loadOverrides(host: HTMLElement, key: string): DiagramOverrides 
   const persist = host.getAttribute('persist') || 'none';
   if (persist === 'none') return null;
   try {
-    const store = persist === 'session' ? sessionStorage : localStorage;
-    const raw = store.getItem(STORAGE_PREFIX + key);
+    const raw = readIswc(STORAGE_PREFIX + key, persist === 'session' ? 'session' : 'local');
     return raw ? JSON.parse(raw) as DiagramOverrides : null;
   } catch (err) {
     console.warn('[diagram-edit] override load failed', err);
@@ -50,24 +50,14 @@ export function saveOverrides(host: HTMLElement, key: string, data: DiagramOverr
   if (!key) return;
   const persist = host.getAttribute('persist') || 'none';
   if (persist === 'none') return;
-  try {
-    const store = persist === 'session' ? sessionStorage : localStorage;
-    store.setItem(STORAGE_PREFIX + key, JSON.stringify(data));
-  } catch (err) {
-    console.warn('[diagram-edit] override save failed', err);
-  }
+  if (!writeIswc(STORAGE_PREFIX + key, JSON.stringify(data), persist === 'session' ? 'session' : 'local')) console.warn('[diagram-edit] override save failed');
 }
 
 export function clearOverrides(host: HTMLElement, key: string): void {
   if (!key) return;
   const persist = host.getAttribute('persist') || 'none';
   if (persist === 'none') return;
-  try {
-    const store = persist === 'session' ? sessionStorage : localStorage;
-    store.removeItem(STORAGE_PREFIX + key);
-  } catch (err) {
-    /* ignore */
-  }
+  removeIswc(STORAGE_PREFIX + key, persist === 'session' ? 'session' : 'local');
 }
 
 /** Detalle del evento `iswc-layout-change`. */

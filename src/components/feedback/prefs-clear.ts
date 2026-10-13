@@ -2,24 +2,27 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/button.js';
 import '../media/icon.js';
 import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs.js';
-import { borrarAppCfg, leerAppCfg } from '../../core/app-cfg.js';
+import { leerAppCfg } from '../../core/app-cfg.js';
+import { clearIswcStorage, listIswcKeys } from '../../core/iswc-storage.js';
 // Solo tipos: el schema Zod no entra al bundle del CDN (sumaría ~330 KB al componente).
 import type { PrefsClearDetail, PrefsClearScope } from './prefs-clear.schemas.js';
 
 export type * from './prefs-clear.schemas.js';
 
 /**
- * <iswc-prefs-clear> — borra la memoria persistente de los is-* (localStorage).
+ * <iswc-prefs-clear> — deja la app como en su PRIMERA carga.
  *
- * Limpia la config de la app (`iswc-app-cfg`: tema, paleta y demás valores que
- * eligió el usuario; la app vuelve a su config inicial de `initApp`) y `iswc-root`
- * (y el legacy `is-components`): tamaños de iswc-split-panel, scroll remember,
- * snapshots de grid, etc. Sirve para auditar la carga inicial limpia.
+ * Usa `clearIswcStorage()` (core/iswc-storage): borra TODAS las llaves `iswc:` de
+ * localStorage y sessionStorage —config de la app (`iswc:app-cfg`: tema, paleta…; la app
+ * vuelve a su config inicial de `initApp`), memoria de los is-* (`iswc:root`: splits,
+ * scrolls, grids), SVG de íconos (`iswc:icon:*`), overrides de diagramas…— y vacía las
+ * cachés en memoria del kit (SVG de íconos resueltos). Un clic y los íconos se vuelven a
+ * pedir: así lo usa el e2e para verificar la carga inicial limpia.
  *
  * Attributes
  *   confirm   boolean — pide window.confirm antes (default true)
  *   reload    boolean — recarga la página tras limpiar (default true)
- *   scope     prefs (default) — config de la app y memoria de los is-* (`iswc-app-cfg` + `iswc-root`).
+ *   scope     prefs (default) — todo lo `iswc:` (local y session) + cachés en memoria del kit.
  *             cache — además Cache Storage (módulos del loader), las bases IndexedDB
  *                     (hojas del kit, cachés HTTP de la app) y sessionStorage.
  *             all   — además TODO el localStorage del origen (preferencias, sesión).
@@ -27,7 +30,7 @@ export type * from './prefs-clear.schemas.js';
  *   Sin hijos en el slot → solo icono (aria-label / title dan el nombre).
  *
  * Events
- *   iswc-prefs-clear  detail: { tags: string[], appCfg: string[], reloaded: boolean, scope, caches: string[], bases: string[] }
+ *   iswc-prefs-clear  detail: { tags: string[], keys: string[], appCfg: string[], reloaded: boolean, scope, caches: string[], bases: string[] }
  */
 
 (() => {
@@ -80,7 +83,7 @@ export type * from './prefs-clear.schemas.js';
     connectedCallback(): void {
       this.#syncAttrs();
       if (!this.hasAttribute('title')) {
-        this.#btn.title = this.scope === 'prefs' ? 'Borra la configuración guardada (tema, paleta, paneles…) y recarga' : 'Borra la configuración guardada y la caché del navegador, y recarga';
+        this.#btn.title = this.scope === 'prefs' ? 'Borra todo lo guardado por el kit (tema, paleta, paneles, íconos…) y recarga' : 'Borra la configuración guardada y la caché del navegador, y recarga';
       }
     }
 
@@ -142,10 +145,12 @@ export type * from './prefs-clear.schemas.js';
       if (this.#busy) return null;
       const tags = Object.keys(peekComponentPrefsRoot() || {});
       const cfg = Object.keys(leerAppCfg());
+      const iconos = listIswcKeys().filter((k) => k.startsWith('iswc:icon:')).length;
       if (this.confirm) {
         const partes = [
           cfg.length ? `• Configuración de la app: ${cfg.join(', ')}` : '',
           tags.length ? `• Memoria de componentes: ${tags.join(', ')}` : '',
+          iconos ? `• Íconos guardados: ${iconos}` : '',
           this.scope !== 'prefs' ? '• Caché del navegador (módulos, bases locales, sesión)' : '',
           this.scope === 'all' ? '• Todo el localStorage del sitio' : '',
         ].filter(Boolean);
@@ -159,10 +164,12 @@ export type * from './prefs-clear.schemas.js';
       }
 
       this.#busy = true;
-      const appCfg = Object.keys(borrarAppCfg());
-      const result = clearAllComponentPrefs();
+      const appCfg = cfg;
+      const result = clearAllComponentPrefs(); // también los roots legacy (is-components…)
+      const limpieza = clearIswcStorage();
+      const keys = [...limpieza.local, ...limpieza.session];
       const extra = this.scope === 'prefs' ? { caches: [], bases: [] } : await limpiarCaches(this.scope === 'all');
-      const detalle: PrefsClearDetail = { tags: result.tags, appCfg, reloaded: this.reload, scope: this.scope, ...extra };
+      const detalle: PrefsClearDetail = { tags: result.tags, keys, appCfg, reloaded: this.reload, scope: this.scope, ...extra };
       emit(this, 'iswc-prefs-clear', detalle);
 
       if (this.reload) {

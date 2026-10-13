@@ -1,6 +1,7 @@
 /// <reference lib="dom" />
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import './split-panel.js';
+import { readIswc, writeIswc } from '../../core/iswc-storage.js';
 import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout, SplitPanelDocLayout } from './doc-layout.schemas.js';
 
 export type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout } from './doc-layout.schemas.js';
@@ -410,7 +411,7 @@ class IswcDocLayout extends HTMLElement {
     const key = this.getAttribute('storage-key');
     if (!key) return {};
     try {
-      const crudo: unknown = JSON.parse(localStorage.getItem(`${key}:paneles`) || '{}');
+      const crudo: unknown = JSON.parse(readIswc(`${key}:paneles`) || '{}');
       if (typeof crudo !== 'object' || crudo === null) return {};
       const prefs: PrefsDocLayout = {};
       for (const k of ['start', 'end', 'endTableta'] as const) {
@@ -425,7 +426,7 @@ class IswcDocLayout extends HTMLElement {
 
   #guardarPrefs(): void {
     const key = this.getAttribute('storage-key');
-    if (key) { try { localStorage.setItem(`${key}:paneles`, JSON.stringify(this.#prefs)); } catch { /* sin storage */ } }
+    if (key) writeIswc(`${key}:paneles`, JSON.stringify(this.#prefs));
     this.#aplicarPaneles();
   }
 }

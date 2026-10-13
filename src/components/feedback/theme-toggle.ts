@@ -16,7 +16,7 @@ export type * from './theme-toggle.schemas.js';
  *   2. Alterna data-theme en ese contenedor
  *   3. Refleja `dark` en el host
  *   4. Si el contenedor es <html>, guarda la elección en la config de la app
- *      (`iswc-app-cfg`, ver core/app-cfg.ts): sobrevive al F5 y la lee `initApp`.
+ *      (`iswc:app-cfg`, ver core/app-cfg.ts): sobrevive al F5 y la lee `initApp`.
  *   5. Emite `iswc-theme-change` { detail: { theme, dark, container } }
  *
  * Attributes

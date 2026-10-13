@@ -241,7 +241,7 @@
           "html": [
             "<ul>",
             "          <li><code>&lt;html data-palette=\"X\"&gt;</code> — aplica la paleta activa</li>",
-            "          <li><code>localStorage[\"iswc-palette\"] = X</code> — persiste la elección</li>",
+            "          <li><code>localStorage[\"iswc:app-cfg\"].palette = X</code> — persiste la elección</li>",
             "        </ul>"
           ]
         }

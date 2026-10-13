@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/index.ts
+// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/index.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * index.ts — barrel del perfil `client/`: lo que solo un proyecto client (front, e2e de navegador,
@@ -46,7 +46,7 @@ export type { Editable, LabJob, OpcionesEditables, OpcionesLab } from './tools/r
 export { anotarCache, CACHE_NOMBRE, leerCache, pinDelKit, planificarLote, renderizarLote, renderizarUno, rutaCache, VERSION as RENDER_LOTE_VERSION } from './tools/render-lote.ts';
 export type { CacheLote, DiagramaPlan, EditableLote, EntradaCache, OpcionesLote, PlanLote, ResultadoLote } from './tools/render-lote.ts';
 
-export { descargarIconos, mapaDelKit } from './tools/download-iconify.ts';
+export { descargarIconos } from './tools/download-iconify.ts';
 export type { OpcionesDescarga, ResumenDescarga } from './tools/download-iconify.ts';
 
 export { aPartesOpenAi, crearGenerador, destinoPreferido, mensajesDe, prepararStagehand, resolverDestino, unaVezPorProceso } from './testing/stagehand.ts';

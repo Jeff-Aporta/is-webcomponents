@@ -10,6 +10,8 @@
  * ese mismo origen. Mezclar orígenes a medias no aplica: cada `load`
  * prueba la cadena hasta que uno responde.
  */
+import { readIswc, writeIswc } from '../../core/iswc-storage.js';
+
 /** Repo por defecto (nombre del kit). */
 const GH_REPO_DEFAULT = 'Jeff-Aporta/iswc-root';
 
@@ -30,14 +32,14 @@ export const GH_REPO = (() => {
   try { return repoDeUrl(import.meta.url) ?? GH_REPO_DEFAULT; } catch { return GH_REPO_DEFAULT; }
 })();
 
-const REF_KEY = 'iswc-wc:cdn-ref';
-const MIRROR_KEY = 'iswc-wc:cdn-mirror';
+const REF_KEY = 'cdn-ref';
+const MIRROR_KEY = 'cdn-mirror';
 let refPromise: Promise<string> | null = null;
 
 export const resolveRef = () => {
   if (refPromise) return refPromise;
   let cached = null;
-  try { cached = globalThis.sessionStorage?.getItem(REF_KEY); } catch { /* modo privado */ }
+  cached = readIswc(REF_KEY, 'session');
   if (cached) { refPromise = Promise.resolve(cached); return refPromise; }
   refPromise = fetch(`https://api.github.com/repos/${GH_REPO}/commits/main`, {
     headers: { Accept: 'application/vnd.github.sha' },
@@ -45,7 +47,7 @@ export const resolveRef = () => {
     .then((r) => (r.ok ? r.text() : ''))
     .then((sha: string) => {
       const ref = /^[0-9a-f]{40}$/i.test(sha.trim()) ? sha.trim() : 'main';
-      try { globalThis.sessionStorage?.setItem(REF_KEY, ref); } catch { /* modo privado */ }
+      writeIswc(REF_KEY, ref, 'session');
       return ref;
     })
     .catch(() => 'main');
@@ -96,16 +98,14 @@ export const mirrorById = (id: string) =>
   MIRRORS.find((m) => m.id === id) || MIRRORS[0];
 
 export const readMirrorId = () => {
-  try {
-    const id = globalThis.sessionStorage?.getItem(MIRROR_KEY);
-    if (id && MIRRORS.some((m) => m.id === id)) return id;
-  } catch { /* modo privado */ }
+  const id = readIswc(MIRROR_KEY, 'session');
+  if (id && MIRRORS.some((m) => m.id === id)) return id;
   return 'jsdelivr';
 };
 
 export const writeMirrorId = (id: string): void => {
   if (!MIRRORS.some((m) => m.id === id)) return;
-  try { globalThis.sessionStorage?.setItem(MIRROR_KEY, id); } catch { /* modo privado */ }
+  writeIswc(MIRROR_KEY, id, 'session');
 };
 
 /** Base ya congelada al último commit (jsDelivr). */

@@ -1,18 +1,35 @@
 // icon-registry.test.ts — QUÉ hace <iswc-icon> para resolver un ícono (src/components/_shared/icon-loader.ts),
-// como caja negra sobre `resolveIconRaw` con la red simulada. Dos fuentes: local o API.
-//   R1 el ícono está en el mapa registrado de la app → se pide a su carpeta local (junto al json).
-//   R2 la cola global `__ISWC_ICONS__` llenada ANTES de cargar el módulo se respeta (registrador del build).
-//   R3 el ícono no está en el mapa → API de Iconify, sin tocar la carpeta local.
-//   R4 está en el mapa pero el archivo local no responde → API de Iconify.
-//   R5 un mapa registrado dos veces se pide una sola vez, y solo cuando hace falta.
-import { assert, assertEquals } from 'jsr:@std/assert@1';
+// como caja negra sobre `resolveIconRaw` con la red simulada. Sin mapa: localStorage → web publicada
+// de la app (`<html data-icons>`, URL absoluta) → API de Iconify.
+//   R1 con `data-icons` el ícono se pide a `<base><set>/<n>.svg` (la web publicada de la app).
+//   R2 no está publicado (404) → API, y UN aviso por ícono `[iswc-icon] falta en local: <set>:<n>`
+//      aunque lo pidan muchos a la vez; un solo fetch en vuelo por ícono.
+//   R3 el archivo publicado no responde (red/CORS) → API con el mismo aviso.
+//   R4 sin `data-icons` → API directo: ni pedido local ni aviso.
+//   R5 un `data-icons` relativo no se usa (la base es siempre absoluta).
+//   R6 abortar a un llamador no cancela el fetch compartido de los demás.
+import { assert, assertEquals, assertRejects } from 'jsr:@std/assert@1';
 
 type Ruta = (url: string) => Response | Promise<Response>;
 const rutas = new Map<string, Ruta>();
 const pedidos: string[] = [];
+const avisos: string[] = [];
 const svg = (marca: string) => `<svg viewBox="0 0 24 24"><path d="${marca}"/></svg>`;
-const mapa = (icons: Record<string, string[]>) => ({ v: 1, app: 'x', host: null, ruta: 'assets/iconify.json', base: 'iconify/', icons });
+const BASE = 'https://app.example/assets/iconify/';
 
+/** localStorage en memoria: el real de Deno se comparte entre archivos de test en paralelo. */
+function storageEnMemoria(): Storage {
+  const m = new Map<string, string>();
+  return {
+    get length() { return m.size; },
+    key: (i: number) => [...m.keys()][i] ?? null,
+    getItem: (k: string) => m.get(k) ?? null,
+    setItem: (k: string, v: string) => { m.set(k, String(v)); },
+    removeItem: (k: string) => { m.delete(k); },
+    clear: () => m.clear(),
+  };
+}
+Object.defineProperty(globalThis, 'localStorage', { configurable: true, writable: true, value: storageEnMemoria() });
 globalThis.fetch = (async (input: string | URL | Request) => {
   const url = String(input instanceof Request ? input.url : input);
   pedidos.push(url);
@@ -21,42 +38,82 @@ globalThis.fetch = (async (input: string | URL | Request) => {
   if (url.startsWith('https://api.iconify.design/')) return new Response(svg(`api:${url.slice(27)}`));
   return new Response('', { status: 404 });
 }) as typeof fetch;
+const warnOriginal = console.warn;
+console.warn = (...xs: unknown[]) => { avisos.push(xs.map(String).join(' ')); };
 
-// R2: el registrador de la app corrió antes que el kit.
-rutas.set('https://app.example/assets/iconify.json', () => Response.json(mapa({ mdi: ['home', 'roto'], tabler: ['bolt'] })));
-rutas.set('https://app.example/assets/iconify/mdi/home.svg', () => new Response(svg('local-home')));
-rutas.set('https://app.example/assets/iconify/tabler/bolt.svg', () => new Response(svg('local-bolt')));
-rutas.set('https://app.example/assets/iconify/mdi/roto.svg', () => { throw new TypeError('sin red'); });
-(globalThis as Record<string, unknown>).__ISWC_ICONS__ = ['https://app.example/assets/iconify.json'];
+// `<html data-icons>` simulado (en Deno no hay DOM).
+const html = { dataset: {} as Record<string, string | undefined> };
+const g = globalThis as { document?: { documentElement: typeof html } };
+g.document = { documentElement: html };
 
-const { registerIcons, resolveIconRaw, resolveIconSvg, hasIconLocal } = await import('../../../components/_shared/icon-loader.ts');
+rutas.set(`${BASE}mdi/home.svg`, () => new Response(svg('local-home')));
+rutas.set(`${BASE}mdi/roto.svg`, () => { throw new TypeError('sin red'); });
+rutas.set(`${BASE}mdi/lento.svg`, () => new Promise((ok) => setTimeout(() => ok(new Response(svg('lento'))), 20)));
 
-Deno.test('icon-registry: R1/R2 en el mapa → archivo local de la app', async () => {
-  assert((await resolveIconRaw('mdi', 'home'))?.includes('local-home'), 'R1');
-  assert((await resolveIconRaw('tabler', 'bolt'))?.includes('local-bolt'), 'R1 otro set');
-  assertEquals(await resolveIconSvg('mdi', 'home'), 'https://app.example/assets/iconify/mdi/home.svg');
-  assert(await hasIconLocal('mdi', 'home'));
+const { resolveIconRaw, resolveIconSvg, resolveIconBase, clearRawCache, AVISO_FALTA_LOCAL } = await import('../../../components/_shared/icon-loader.ts');
+
+const reiniciar = (base: string | undefined) => {
+  html.dataset.icons = base;
+  clearRawCache();
+  localStorage.clear();
+  pedidos.length = 0;
+  avisos.length = 0;
+};
+
+Deno.test('icon-registry: R1 data-icons → web publicada de la app', async () => {
+  reiniciar(BASE);
+  assertEquals(resolveIconBase(), BASE);
+  assert((await resolveIconRaw('mdi', 'home'))?.includes('local-home'));
+  assertEquals(pedidos, [`${BASE}mdi/home.svg`]);
+  assertEquals(await resolveIconSvg('mdi', 'home'), `${BASE}mdi/home.svg`);
+  assertEquals(avisos, []);
 });
 
-Deno.test('icon-registry: R3 fuera del mapa → API, sin buscar en local', async () => {
-  assert((await resolveIconRaw('fluent', 'cat-24-regular'))?.includes('api:fluent/cat-24-regular.svg'), 'R3');
-  assertEquals(pedidos.filter((p) => p.includes('app.example/assets/iconify/fluent')), [], 'R3 cero pedidos locales');
-  assertEquals(await resolveIconSvg('fluent', 'x'), 'https://api.iconify.design/fluent/x.svg');
-  assert(!(await hasIconLocal('fluent', 'x')));
+Deno.test('icon-registry: R2 no publicado → API con UN aviso y un solo fetch en vuelo', async () => {
+  reiniciar(BASE);
+  const rs = await Promise.all([1, 2, 3].map(() => resolveIconRaw('fluent', 'cat-24-regular')));
+  for (const r of rs) assert(r?.includes('api:fluent/cat-24-regular.svg'));
+  assertEquals(pedidos, [`${BASE}fluent/cat-24-regular.svg`, 'https://api.iconify.design/fluent/cat-24-regular.svg']);
+  assertEquals(avisos, [`${AVISO_FALTA_LOCAL} fluent:cat-24-regular`]);
+  assertEquals(AVISO_FALTA_LOCAL, '[iswc-icon] falta en local:');
+  await resolveIconRaw('fluent', 'cat-24-regular');
+  assertEquals(avisos.length, 1, 'no se repite');
 });
 
-Deno.test('icon-registry: R4 en el mapa pero el archivo no responde → API', async () => {
-  assert((await resolveIconRaw('mdi', 'roto'))?.includes('api:mdi/roto.svg'), 'R4');
+Deno.test('icon-registry: R3 el archivo publicado no responde → API con aviso', async () => {
+  reiniciar(BASE);
+  assert((await resolveIconRaw('mdi', 'roto'))?.includes('api:mdi/roto.svg'));
+  assertEquals(avisos, ['[iswc-icon] falta en local: mdi:roto']);
 });
 
-Deno.test('icon-registry: R5 mismo mapa dos veces → un solo pedido, y no antes de resolver un ícono', async () => {
-  const url = 'https://otra.example/assets/iconify.json';
-  rutas.set(url, () => Response.json(mapa({ mdi: ['six'] })));
-  rutas.set('https://otra.example/assets/iconify/mdi/six.svg', () => new Response(svg('six')));
-  registerIcons(url);
-  registerIcons(url);
-  assertEquals(pedidos.filter((p) => p === url).length, 0, 'R5 perezoso');
-  assert((await resolveIconRaw('mdi', 'six'))?.includes('six'));
-  await resolveIconRaw('mdi', 'otro-six');
-  assertEquals(pedidos.filter((p) => p === url).length, 1, 'R5 un solo pedido');
+Deno.test('icon-registry: R4 sin data-icons → API directo, sin aviso', async () => {
+  reiniciar(undefined);
+  assertEquals(resolveIconBase(), null);
+  assert((await resolveIconRaw('mdi', 'home'))?.includes('api:mdi/home.svg'));
+  assertEquals(pedidos, ['https://api.iconify.design/mdi/home.svg']);
+  assertEquals(await resolveIconSvg('mdi', 'x'), 'https://api.iconify.design/mdi/x.svg');
+  assertEquals(avisos, []);
+});
+
+Deno.test('icon-registry: R5 data-icons relativo no se usa', async () => {
+  reiniciar('assets/iconify/');
+  assertEquals(resolveIconBase(), null);
+  assert((await resolveIconRaw('mdi', 'home'))?.includes('api:mdi/home.svg'));
+  assertEquals(avisos, []);
+});
+
+Deno.test('icon-registry: R6 abortar a uno no cancela a los demás', async () => {
+  reiniciar(BASE);
+  const ctrl = new AbortController();
+  const a = resolveIconRaw('mdi', 'lento', ctrl.signal);
+  const b = resolveIconRaw('mdi', 'lento');
+  ctrl.abort();
+  await assertRejects(() => a, DOMException);
+  assert((await b)?.includes('lento'));
+  assertEquals(pedidos.filter((p) => p.endsWith('mdi/lento.svg')).length, 1, 'un solo fetch');
+});
+
+Deno.test('icon-registry: fin (restaura console.warn)', () => {
+  console.warn = warnOriginal;
+  localStorage.clear();
 });

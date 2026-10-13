@@ -182,20 +182,21 @@ build(cdn): regenerar bundles despues de folderize
 
 ## 5. Sistema de iconos (la pieza más frágil)
 
-### 5.1 Local o API (desde 2026-10-09)
+### 5.1 localStorage → web publicada → API (sin mapa, desde 2026-10-13)
 
-`src/components/_shared/icon-loader.ts` resuelve cada `<iswc-icon icon="X:Y">` con UNA pregunta:
+`src/components/_shared/icon-loader.ts` resuelve cada `<iswc-icon icon="X:Y">` así:
 
 ```
-¿X:Y está en el mapa de la app (assets/iconify.json, registrado en globalThis.__ISWC_ICONS__)?
-  sí → assets/iconify/X/Y.svg de la app (si el archivo falla → API)
-  no → https://api.iconify.design/X/Y.svg
+localStorage iswc:icon:X:Y            → sin fetch
+<html data-icons>X/Y.svg              → web PUBLICADA de la app (URL absoluta: initApp({ icons: { host } })
+                                        o el registrador del build desde deno.json → iswc.host)
+https://api.iconify.design/X/Y.svg    → si había data-icons, aviso único: `[iswc-icon] falta en local: X:Y`
 ```
 
-El mapa y los SVG los genera `deno task icons` (`assets/dl.js` → `src/vendor-distributions/client/tools/download-iconify.ts`,
-dentro de `build`) con los íconos de la app y TODOS los de lo que consume (kit, otras apps). El kit
-también tiene su `assets/` (235 íconos). Detalle: `skills/iswc-foundation/references/10-iconos.md`.
-Bench de raíces: `labs/icon-cdn-bench/NOTES.md`.
+Los SVG los baja `deno task icons` (`assets/dl.js` → `download-iconify`, dentro de `build`) a
+`assets/iconify/<set>/<n>.svg`; no hay `iconify.json`. Todo lo que el kit guarda en el navegador lleva el
+prefijo `iswc:` (`src/core/iswc-storage.ts`; `clearIswcStorage()` lo usa `<iswc-prefs-clear>`).
+Detalle: `skills/iswc-foundation/references/10-iconos.md`. Bench de raíces: `labs/icon-cdn-bench/NOTES.md`.
 
 Del set completo solo viajan `dist/assets/icons/{mdi,tabler}/` y el catálogo (`index.json`,
 `collections.json`): los usan el explorador y los diagramas, no `<iswc-icon>`.
@@ -578,8 +579,8 @@ Si estás escribiendo uno de estos, para y reconsidera:
   inyecta **inline** con `innerHTML` en su Shadow DOM. Ademas, hay una
   funcion `#normalizeInlineSvg()` que fuerza `fill: currentColor` y
   `stroke: currentColor` en el `<svg>` y sus hijos, para que SVGs con
-  `fill="#000"` del CDN hereden el color del host. Fuente del raw: el
-  mapa local de la app (`assets/iconify/`) o la API de Iconify (ver §5.1).
+  `fill="#000"` del CDN hereden el color del host. Fuente del raw: localStorage,
+  la web publicada de la app (`data-icons`) o la API de Iconify (ver §5.1).
 
 ## 10. Cuando algo falla y no sabes por qué
 

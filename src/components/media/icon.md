@@ -122,11 +122,12 @@ Documentación de cabecera preservada desde fuente:
 > ni de ningun script externo: el SVG se trae por fetch del sistema de
 > iconos propio y se inyecta INLINE en el Shadow DOM, para que
 > `currentColor` del contexto se propague al fill del path.
-> Dos fuentes (ver _shared/icon-loader.ts):
->   1. LOCAL: si el ícono está en el mapa de la app (`assets/iconify.json`,
->      registrado por su `<prefijo>Loader.min.js` o `registerIcons`), se pide
->      a `assets/iconify/<set>/<nombre>.svg` de la app.
->   2. API de Iconify: lo que no está en el mapa o si el archivo local falla.
+> Cadena (ver _shared/icon-loader.ts):
+>   1. localStorage `iswc:icon:<set>:<nombre>` (TTL 15 días): sin fetch.
+>   2. Web PUBLICADA de la app: `<html data-icons>` (URL absoluta, p. ej.
+>      `initApp({ icons: { host } })`) + `<set>/<nombre>.svg`.
+>   3. API de Iconify; si había `data-icons`, un aviso por ícono:
+>      `[iswc-icon] falta en local: <set>:<nombre>`.
 > Estados: `data-loading` mientras resuelve, `data-missing` si el icono no
 > existe en ninguna base (hueco del tamano del icono, sin caja rota).
 > Atributos

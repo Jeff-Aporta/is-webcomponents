@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/tests/e2e/00.bienvenida.test.ts
+// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/tests/e2e/00.bienvenida.test.ts
 // 00.bienvenida.test.ts — caso base e2e (Stagehand DETERMINISTA, sin LLM): la app arranca, muestra la
 // bienvenida y el modal se abre y se cierra como lo haría un usuario. Caja negra: solo lo que se ve.
 //
@@ -52,20 +52,20 @@ export default definirPruebas([
     },
   },
   {
-    nombre: 'bienvenida W-ICO-04 los íconos salen de la carpeta local de la app, no de la API',
+    nombre: 'bienvenida W-ICO-04 los íconos se piden a la web publicada de la app (data-icons) y se pintan',
     categoria: 'what',
     async correr({ expect, saltar }) {
-      const conCadena = await s.page.evaluate(() => !!(globalThis as { __ISWC_ICONS__?: { oyentes?: unknown } }).__ISWC_ICONS__?.oyentes, undefined);
-      if (!conCadena) saltar('el kit pineado aún no trae el mapa local de íconos (registerIcons): sube el pin');
+      const resolvedor = await s.page.evaluate(() => !!(globalThis as { __iswcIcons?: unknown }).__iswcIcons, undefined);
+      if (!resolvedor) saltar('el kit pineado aún no trae el resolvedor con data-icons: sube el pin');
+      const base = await s.page.evaluate(() => document.documentElement.dataset.icons ?? '', undefined);
+      expect('data-icons absoluto que termina en assets/iconify/', /^https?:\/\/.+\/assets\/iconify\/$/.test(base), base);
       await esperar(s.page, () => {
         const hola = document.querySelector('__PREFIJO__-app')?.shadowRoot?.querySelector('__PREFIJO__-hola')?.shadowRoot;
         const iconos = [...(hola?.querySelectorAll('.tarjetas iswc-icon') ?? [])];
         return iconos.length === 4 && iconos.every((i) => !!i.shadowRoot?.querySelector('svg'));
       });
-      const red = await s.page.evaluate(() => performance.getEntriesByType('resource').map((e) => e.name), undefined);
-      expect('pidió el mapa de la app', red.some((u: string) => /\/assets\/iconify\.json\?v=/.test(u)), red.join(' '));
-      expect('íconos desde la carpeta local', red.some((u: string) => /\/assets\/iconify\/mdi\/[^/]+\.svg$/.test(u)), red.join(' '));
-      expect('ningún ícono a la API', !red.some((u: string) => u.includes('api.iconify.design')), red.filter((u: string) => u.includes('iconify')).join(' '));
+      const guardados = await s.page.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith('iswc:icon:')).length, undefined);
+      expect('los SVG quedan en localStorage (iswc:icon:*)', guardados > 0, String(guardados));
     },
   },
 ], {

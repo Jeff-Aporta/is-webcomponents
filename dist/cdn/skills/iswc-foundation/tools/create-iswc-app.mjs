@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs
+// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs
 // Bundle autocontenido de skills/iswc-foundation/tools/create-iswc-app.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es skills/iswc-foundation/tools/create-iswc-app.ts.
 
 // skills/iswc-foundation/tools/create-iswc-app.ts

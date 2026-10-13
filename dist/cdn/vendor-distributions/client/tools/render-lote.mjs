@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
+// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
 // Bundle autocontenido de src/vendor-distributions/client/tools/render-lote.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/client/tools/render-lote.ts.
 
 // src/vendor-distributions/client/tools/render-lote.ts
@@ -141,40 +141,22 @@ var ZConfigVendor = z.object({
   archivos: z.array(ZArchivoVendor).default([])
 });
 var IconIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*$/);
-var IconifyMapSchema = z.object({
-  /** Versión del formato. */
-  v: z.literal(1),
-  /** Nombre de la app que publica el mapa. */
-  app: z.string().min(1),
-  /** Sitio publicado de la app (`deno.json` → `iswc.host`); `null` si no está declarado. */
-  host: z.string().url().nullable(),
-  /** Ruta del propio `iconify.json` desde la raíz publicada (`host`): `assets/iconify.json`. */
-  ruta: z.string().min(1),
-  /** Carpeta de los SVG, relativa al propio `iconify.json`. */
-  base: z.string().min(1),
-  /** set → nombres descargados (ordenados). */
-  icons: z.record(z.string(), z.array(z.string()))
-});
 var OpcionesDescargaSchema = z.object({
   /** Raíz de la app (carpeta o URL `file:`). */
   raiz: z.union([z.string(), z.instanceof(URL)]),
   /** Archivos o carpetas a barrer, relativos a la raíz. */
   roots: z.array(z.string()).min(1),
-  /** Carpeta de salida, relativa a la raíz: ahí van `iconify.json` e `iconify/`. */
+  /** Carpeta de salida, relativa a la raíz: ahí va `iconify/`. */
   salida: z.string().optional(),
-  /** Ids que el barrido no puede ver (armados en tiempo de ejecución). */
+  /** Ids que el barrido no puede ver (armados en ejecución, o los que pintan los componentes del kit: el aviso `[iswc-icon] falta en local:` los nombra). */
   extra: z.array(IconIdSchema).optional(),
   /** Nombres de carpeta que no se barren. */
   ignorar: z.array(z.string()).optional(),
   /** Extensiones barridas. */
   extensiones: z.array(z.string()).optional(),
-  /** Registro de consumos: `iconify.json` del kit y de las apps que consume; TODOS sus íconos se descargan en esta app. Por defecto el del kit al SHA de la herramienta. */
-  mapas: z.array(z.string()).optional(),
-  /** Sitio publicado; por defecto `deno.json` → `iswc.host`. */
-  host: z.string().url().optional(),
   /** Borrar SVG de `iconify/` que ya nadie usa. */
   podar: z.boolean().optional(),
-  /** Sin red: solo reescribe el mapa con lo que ya está en disco. */
+  /** Sin red: conserva lo que ya está en disco. */
   offline: z.boolean().optional(),
   /** API de Iconify. */
   api: z.string().url().optional(),
@@ -191,7 +173,8 @@ var ResumenDescargaSchema = z.object({
   inexistentes: z.array(IconIdSchema),
   podados: z.array(IconIdSchema),
   avisos: z.array(z.string()),
-  mapa: IconifyMapSchema
+  /** Carpeta de los SVG, relativa a la raíz (`assets/iconify`). */
+  carpeta: z.string()
 });
 var CajaIconifySchema = { width: z.number().optional(), height: z.number().optional(), left: z.number().optional(), top: z.number().optional() };
 var IconifyJsonSchema = z.object({

@@ -5,7 +5,7 @@
  * Carga vía module / `L.loadPageModules(['iswc-doc-demo-boot'])` (type module).
  *
  * Tema y paleta: `?s=` / `?theme=` / `?palette=` de la URL, si no la elección del
- * usuario (config de la app, `iswc-app-cfg`), si no el `<html>` o el default.
+ * usuario (config de la app, `iswc:app-cfg`), si no el `<html>` o el default.
  */
 
 import type { DocDemoBootOpts } from "./doc-demo-boot.schemas.js";

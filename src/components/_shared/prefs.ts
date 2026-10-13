@@ -8,8 +8,8 @@
  *   "iswc-ag-grid": { "mi-tabla": { … snapshot del grid … } }
  * }
  *
- * ROOT_KEY = "iswc-root". `is-webcomponents` (nombre del kit antes de iswc-root) e
- * `is-components` son SOLO legacy: se leen una vez para migrar y se borran; nunca se escriben.
+ * ROOT_KEY = "iswc:root" (core/iswc-storage migra la vieja `iswc-root`). `is-webcomponents` (nombre del
+ * kit antes de iswc-root) e `is-components` son SOLO legacy: se leen una vez para migrar y se borran; nunca se escriben.
  */
 
 /** Forma del root de prefs: mapa de `tag -> key -> prefs`. */
@@ -17,7 +17,9 @@
 /** Entrada individual: objeto plano `{ clave: valor }`. */
 
 import type { PrefsRoot, PrefsEntry, ClearAllPrefsResult } from "./prefs.schemas.js";
-const ROOT_KEY = 'iswc-root';
+import { iswcKey, readIswc, removeIswc, writeIswc } from '../../core/iswc-storage.js';
+const ROOT_NOMBRE = 'root';
+const ROOT_KEY = iswcKey(ROOT_NOMBRE);
 const LEGACY_ROOT_KEY = 'is-components';
 /** Roots anteriores, del más reciente al más viejo. */
 const LEGACY_ROOT_KEYS = ['is-webcomponents', LEGACY_ROOT_KEY] as const; // antes de iswc-root
@@ -34,7 +36,7 @@ function parseRoot(raw: string | null): PrefsRoot | null {
 
 function readRoot(): PrefsRoot {
   try {
-    const current = parseRoot(localStorage.getItem(ROOT_KEY));
+    const current = parseRoot(readIswc(ROOT_NOMBRE));
     if (current) return current;
     // Migración desde el root legacy: se copia tal cual y se retira el viejo,
     // así la siguiente lectura ya sale por el camino corto.
@@ -54,11 +56,7 @@ function readRoot(): PrefsRoot {
 }
 
 function writeRoot(data: PrefsRoot): void {
-  try {
-    localStorage.setItem(ROOT_KEY, JSON.stringify(data));
-  } catch {
-    /* quota / private mode */
-  }
+  writeIswc(ROOT_NOMBRE, JSON.stringify(data)); // quota / private mode: false, sin más
 }
 
 /** Devuelve la entrada prefs de `(tag, key)`, o `null` si no existe. */
@@ -113,14 +111,14 @@ export function peekComponentPrefsRoot(): PrefsRoot {
 }
 
 /**
- * Limpia TODA la memoria de componentes (`iswc-root` + legacy).
+ * Limpia TODA la memoria de componentes (`iswc:root` + legacy).
  * Splits, scrolls, grids, etc. Vuelve a los defaults del markup.
  */
 export function clearAllComponentPrefs(): ClearAllPrefsResult {
   const before = readRoot();
   const tags = Object.keys(before || {});
   try {
-    localStorage.removeItem(ROOT_KEY);
+    removeIswc(ROOT_NOMBRE);
     for (const k of LEGACY_ROOT_KEYS) localStorage.removeItem(k);
   } catch {
     /* quota / private */

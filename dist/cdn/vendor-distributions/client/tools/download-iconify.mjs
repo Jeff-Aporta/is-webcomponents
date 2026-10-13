@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/download-iconify.mjs
+// @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/download-iconify.mjs
 // Bundle autocontenido de src/vendor-distributions/client/tools/download-iconify.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/client/tools/download-iconify.ts.
 
 // src/vendor-distributions/client/tools/download-iconify.ts
@@ -15,7 +15,6 @@ var DEFAULTS = {
   api: "https://api.iconify.design/",
   concurrencia: 8
 };
-var ARCHIVO_MAPA = "iconify.json";
 var CARPETA_SVG = "iconify";
 var LOTE = 80;
 var RE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9]+(?:[-_][a-z0-9]+)*$/;
@@ -27,26 +26,6 @@ function extraerIconos(texto) {
   return [...out];
 }
 var sinComentarios = (codigo) => codigo.replace(/\/\*\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
-function leerDeno(raiz) {
-  for (const f of ["deno.json", "deno.jsonc"]) {
-    const p = join(raiz, f);
-    if (!existsSync(p)) continue;
-    try {
-      return JSON.parse(readFileSync(p, "utf8").replace(/^\s*\/\/.*$/gm, ""));
-    } catch {
-      return null;
-    }
-  }
-  return null;
-}
-function leerHost(raiz) {
-  const h = leerDeno(raiz)?.iswc?.host;
-  return typeof h === "string" && /^https?:\/\//.test(h) ? h.endsWith("/") ? h : `${h}/` : null;
-}
-function nombreApp(raiz) {
-  const n = leerDeno(raiz)?.name;
-  return typeof n === "string" && n ? n : basename(resolve(raiz));
-}
 function listar(raiz, roots, ignorar, exts, excluir) {
   const out = [];
   const visitar = (p) => {
@@ -67,19 +46,6 @@ var agrupar = (ids) => {
   }
   return out;
 };
-function mapaDelKit(urlHerramienta = import.meta.url) {
-  const m = urlHerramienta.match(/^((?:https?|file):.*?)\/(?:src|dist\/cdn)\/vendor-distributions\/(?:client\/)?tools\/[^/]+$/);
-  return m ? new URL(`${m[1]}/assets/${ARCHIVO_MAPA}`).href : null;
-}
-async function leerMapa(ref, raiz, f) {
-  const texto = /^https?:/.test(ref) ? await f(ref).then((r) => {
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    return r.text();
-  }) : readFileSync(ref.startsWith("file:") ? fileURLToPath(ref) : join(raiz, ref), "utf8");
-  const m = JSON.parse(texto);
-  if (m?.v !== 1 || typeof m.icons !== "object") throw new Error("no es un iconify.json v1");
-  return m;
-}
 function svgDe(datos, nombre) {
   const i = datos.icons?.[nombre];
   if (!i) return null;
@@ -127,22 +93,6 @@ async function descargarIconos(opciones) {
   for (const a of archivos) {
     const texto = readFileSync(a, "utf8");
     for (const i of extraerIconos(/\.(ts|js|mjs)$/.test(a) ? sinComentarios(texto) : texto)) candidatos.add(i);
-  }
-  const refs = o.mapas ?? [mapaDelKit()].filter((x) => !!x);
-  let consumidos = 0;
-  for (const ref of refs) {
-    if (o.offline && /^https?:/.test(ref)) continue;
-    try {
-      const m = await leerMapa(ref, raiz, f);
-      for (const [set, nombres] of Object.entries(m.icons)) {
-        for (const n of nombres) {
-          candidatos.add(`${set}:${n}`);
-          consumidos++;
-        }
-      }
-    } catch (e) {
-      avisar(`mapa ${ref} inaccesible (${e.message}): sus \xEDconos no se suman`);
-    }
   }
   const enDisco = (id) => {
     const [s, n] = id.split(":");
@@ -214,20 +164,15 @@ async function descargarIconos(opciones) {
     }
   }
   podados.sort();
-  const mapa = {
-    v: 1,
-    app: nombreApp(raiz),
-    host: o.host ?? leerHost(raiz),
-    ruta: relative(raiz, join(salida, ARCHIVO_MAPA)).replace(/\\/g, "/"),
-    base: `${CARPETA_SVG}/`,
-    icons: agrupar(finales)
-  };
-  if (!mapa.host) avisar('deno.json sin "iswc": { "host": "https://\u2026/" }: el mapa sale con host null');
-  mkdirSync(salida, { recursive: true });
-  writeFileSync(join(salida, ARCHIVO_MAPA), `${JSON.stringify(mapa, null, 2)}
-`);
-  log(`${archivos.length} archivos \xB7 ${finales.size} \xEDconos (${consumidos} de consumos; ${descargados.length} nuevos, ${existentes} ya estaban, ${podados.length} podados, ${inexistentes.length} inexistentes) \u2192 ${mapa.ruta}`);
-  return { archivos: archivos.length, encontrados: finales.size, descargados, existentes, inexistentes, podados, avisos, mapa };
+  const mapaViejo = join(salida, "iconify.json");
+  const rel = (p) => relative(raiz, p).split("\\").join("/");
+  if (existsSync(mapaViejo)) {
+    rmSync(mapaViejo);
+    log(`${rel(mapaViejo)} retirado (sin mapa: <iswc-icon> usa data-icons)`);
+  }
+  const carpeta = rel(dirSvg);
+  log(`${archivos.length} archivos \xB7 ${finales.size} \xEDconos (${descargados.length} nuevos, ${existentes} ya estaban, ${podados.length} podados, ${inexistentes.length} inexistentes) \u2192 ${carpeta}/`);
+  return { archivos: archivos.length, encontrados: finales.size, descargados, existentes, inexistentes, podados, avisos, carpeta };
 }
 if (import.meta.main) {
   const arg = (k) => process.argv.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
@@ -237,20 +182,16 @@ if (import.meta.main) {
     roots: lista("roots") ?? ["index.html", "src", "view"],
     salida: arg("salida"),
     extra: lista("extra"),
-    mapas: lista("mapas"),
     offline: process.argv.includes("--offline")
   });
   if (r.inexistentes.length) process.exitCode = 1;
 }
 export {
-  ARCHIVO_MAPA,
   CARPETA_SVG,
   DEFAULTS,
   descargarIconos,
   esIdIcono,
   extraerIconos,
-  leerHost,
-  mapaDelKit,
   sinComentarios,
   svgDe
 };

@@ -151,7 +151,7 @@ function galleryUrl(tag) {
 async function readActiveAnchorPref(page, storageKey) {
   return await page.evaluate((key) => {
     try {
-      const raw = localStorage.getItem('iswc-root');
+      const raw = localStorage.getItem('iswc:root');
       if (!raw) return null;
       const data = JSON.parse(raw);
       const bucket = data && data['iswc-scrollspy'];
@@ -167,12 +167,12 @@ async function readActiveAnchorPref(page, storageKey) {
 async function clearAllScrollspyPrefs(page) {
   await page.evaluate(() => {
     try {
-      const raw = localStorage.getItem('iswc-root');
+      const raw = localStorage.getItem('iswc:root');
       if (!raw) return;
       const data = JSON.parse(raw);
       if (data && data['iswc-scrollspy']) {
         delete data['iswc-scrollspy'];
-        localStorage.setItem('iswc-root', JSON.stringify(data));
+        localStorage.setItem('iswc:root', JSON.stringify(data));
       }
     } catch { /* noop */ }
   });

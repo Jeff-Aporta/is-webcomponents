@@ -31,7 +31,7 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
  *   scope         root | closest. root escribe <html>. closest escribe el
  *                 primer ancestro con data-palette (si no hay, <html>).
  *   (persistencia) la paleta elegida para <html> se guarda en la config de la
- *                 app (`iswc-app-cfg`, ver core/app-cfg.ts); un scope=closest no persiste.
+ *                 app (`iswc:app-cfg`, ver core/app-cfg.ts); un scope=closest no persiste.
  *   aria-label    string — etiqueta del botón trigger (default "Elegir paleta")
  *
  * Slots
@@ -50,7 +50,7 @@ import type { Palette, PaletteCruda } from "./palette-selector.schemas.js";
  *
  * Mutaciones que produce
  *   data-palette en el target del scope (html o el ancestro)
- *   iswc-app-cfg.palette     — solo si el target es <html>
+ *   iswc:app-cfg.palette     — solo si el target es <html>
  *   Dos selectores con el mismo target y la misma paleta en su lista
  *   se siguen: observan data-palette y adoptan el valor.
  *

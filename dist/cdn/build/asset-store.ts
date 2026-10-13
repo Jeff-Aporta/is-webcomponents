@@ -4,10 +4,11 @@
  * recuerda el mapa para borrar entradas cuando un archivo cambia.
  * La clave incluye el hash: un hit es el contenido de ese build.
  */
+import { readIswc, writeIswc } from '../core/iswc-storage.js';
 
 const DB_NAME = 'iswc-wc-assets';
 const STORE = 'bodies';
-const LS_KEY = 'iswc-wc-asset-hashes';
+const LS_KEY = 'asset-hashes';
 
 function db(): Promise<IDBDatabase | null> {
   if (typeof indexedDB === 'undefined') return Promise.resolve(null);
@@ -69,13 +70,12 @@ async function dropKeys(keys: string[]): Promise<void> {
 export function syncHashMemory(files: Record<string, string>): void {
   if (typeof localStorage === 'undefined') return;
   let prev: Record<string, string> = {};
-  try { prev = JSON.parse(localStorage.getItem(LS_KEY) || '{}') as Record<string, string>; }
+  try { prev = JSON.parse(readIswc(LS_KEY) || '{}') as Record<string, string>; }
   catch { prev = {}; }
   const stale: string[] = [];
   for (const [path, hash] of Object.entries(prev)) {
     if (files[path] && files[path] !== hash) stale.push(rowKey(path, hash));
   }
-  try { localStorage.setItem(LS_KEY, JSON.stringify(files)); }
-  catch { /* cuota o modo privado */ }
+  writeIswc(LS_KEY, JSON.stringify(files)); // cuota o modo privado: false, sin más
   if (stale.length) void dropKeys(stale);
 }

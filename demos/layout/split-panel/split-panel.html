@@ -40,7 +40,7 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/split-panel.min.js?v=qu3cuo');
+  await import('../../../dist/cdn/layout/split-panel.min.js?v=t49024');
   await customElements.whenDefined('iswc-split-panel');
 
   // (1) Split-panel horizontal básico, posición por defecto (50%).
@@ -130,9 +130,9 @@
   });
   document.getElementById('btn-reset-storage').addEventListener('click', () => {
     try {
-      const root = JSON.parse(localStorage.getItem('iswc-root') || '{}');
+      const root = JSON.parse(localStorage.getItem('iswc:root') || '{}');
       if (root['iswc-split-panel']?.['demo-sp-3']) delete root['iswc-split-panel']['demo-sp-3'];
-      localStorage.setItem('iswc-root', JSON.stringify(root));
+      localStorage.setItem('iswc:root', JSON.stringify(root));
       append('storage-key=demo-sp-3 prefs borradas');
     } catch {}
   });

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T14:41:58.552Z",
+  "generatedAt": "2026-10-13T15:50:30.321Z",
   "count": 122,
   "modules": [
     {
@@ -31,7 +31,7 @@
       "id": "cdn-ref",
       "path": "src/components/_shared/cdn-ref.ts",
       "summary": "cdn-ref — Orden de fallback al cargar assets:",
-      "bytes": 4468,
+      "bytes": 4181,
       "exports": [
         "repoDeUrl",
         "GH_REPO",
@@ -518,7 +518,7 @@
       "id": "diagram-edit",
       "path": "src/components/_shared/diagram-edit.ts",
       "summary": "Helpers de edición para diagramas SVG (modo lectura / edición). — API común a todos los diagramas:",
-      "bytes": 11219,
+      "bytes": 11108,
       "exports": [
         "loadOverrides",
         "saveOverrides",
@@ -948,12 +948,9 @@
       "id": "icon-loader.schemas",
       "path": "src/components/_shared/icon-loader.schemas.ts",
       "summary": "icon-loader — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 1552,
+      "bytes": 1070,
       "exports": [
         "IconFamilySchema",
-        "MapaListoSchema",
-        "MapaPerezosoSchema",
-        "ColaIconosSchema",
         "PersistidoSchema"
       ]
     },
@@ -961,15 +958,16 @@
       "file": "icon-loader.ts",
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.ts",
-      "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component `<iconify-icon>` ni su — script de CDN. Dos fuentes, nada más:",
-      "bytes": 12235,
+      "summary": "Módulo compartido `icon-loader.ts`.",
+      "bytes": 10631,
       "exports": [
-        "registerIcons",
-        "hasIconLocal",
-        "resolveIconSvg",
+        "AVISO_FALTA_LOCAL",
+        "baseAbsoluta",
+        "resolveIconBase",
         "LS_TTL_MS",
         "purgarIconosVencidos",
         "clearPersistedIcons",
+        "resolveIconSvg",
         "resolveIconRaw",
         "clearRawCache",
         "listIconFamilies"
@@ -1379,7 +1377,7 @@
       "id": "prefs",
       "path": "src/components/_shared/prefs.ts",
       "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"iswc-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 4629,
+      "bytes": 4757,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -1463,10 +1461,10 @@
       "id": "scroll-memory",
       "path": "src/components/_shared/scroll-memory.ts",
       "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
-      "bytes": 8567,
+      "bytes": 8311,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
-        "ScrollMemory \r\n  host",
+        "ScrollMemory \n  host",
         "bindScrollMemoryApi"
       ]
     },

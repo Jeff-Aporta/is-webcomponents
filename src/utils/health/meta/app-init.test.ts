@@ -9,10 +9,13 @@
  *   A5 tema, paleta y demás valores de la app viven en UNA sola llave (iswc-app-cfg)
  *   A6 las llaves sueltas viejas (iswc-theme / iswc-palette) se migran y se borran
  *   A7 borrar la config devuelve la app a sus valores iniciales
+ *   A8 `icons: { host, folder? }` deja `<html data-icons>` como URL ABSOLUTA (host publicado + carpeta);
+ *      un host relativo lanza; sin `icons` no se toca un `data-icons` que ya traiga la página
+ *   A9 la config vive bajo el prefijo `iswc:` (`iswc:app-cfg`)
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { initApp } from '../../../core/app-init.ts';
+import { ICONS_FOLDER_DEFAULT, iconsBase, initApp } from '../../../core/app-init.ts';
 import { APP_CFG_KEY, borrarAppCfg, guardarAppCfg, leerAppCfg } from '../../../core/app-cfg.ts';
 
 function entorno(guardado: Record<string, string> = {}) {
@@ -74,4 +77,22 @@ test('A7 borrar vuelve a la config inicial', () => {
   assert.deepEqual(borrarAppCfg(), { theme: 'dark' });
   initApp({ theme: 'light', root: e.root });
   assert.equal(e.dataset.theme, 'light');
+});
+
+test('A8 icons: base absoluta en data-icons, una sola declaración', () => {
+  const e = entorno();
+  const r = initApp({ icons: { host: 'https://mi-app.azurestaticapps.net' }, root: e.root });
+  assert.equal(e.dataset.icons, 'https://mi-app.azurestaticapps.net/assets/iconify/');
+  assert.equal(r.icons, e.dataset.icons);
+  assert.equal(ICONS_FOLDER_DEFAULT, 'assets/iconify/');
+  assert.equal(iconsBase({ host: 'https://cdn.example/app/', folder: 'img/iconos' }), 'https://cdn.example/app/img/iconos/');
+  assert.throws(() => iconsBase({ host: 'assets/iconify/' }), TypeError, 'relativo: nunca');
+  assert.throws(() => iconsBase({ host: 'file:///c:/x/' }), TypeError, 'solo http(s)');
+  const f = entorno();
+  f.dataset.icons = 'https://pagina.example/assets/iconify/';
+  assert.equal(initApp({ root: f.root }).icons, 'https://pagina.example/assets/iconify/', 'sin icons no se pisa');
+});
+
+test('A9 la config de la app vive en iswc:app-cfg', () => {
+  assert.equal(APP_CFG_KEY, 'iswc:app-cfg');
 });

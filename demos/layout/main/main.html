@@ -32,7 +32,7 @@
   footer code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; font: 11px ui-monospace, Menlo, Consolas, monospace; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/layout/main.min.js?v=5owjqp');
+  await import('../../../dist/cdn/layout/main.min.js?v=1xd3a6');
   await customElements.whenDefined('iswc-main');
 
   // (1) iswc-main básico: role="main" auto-puesto. Sin persistencia.
@@ -116,7 +116,7 @@
 
   function readPrefs() {
     try {
-      const root = JSON.parse(localStorage.getItem('iswc-root') ?? '{}');
+      const root = JSON.parse(localStorage.getItem('iswc:root') ?? '{}');
       return root['iswc-main']?.['demo-main-interactive'] ?? null;
     } catch { return null; }
   }
@@ -156,7 +156,7 @@
   </section>
 </main>
 <footer>
-  Estado: <code>customElements.whenDefined('iswc-main')</code> resuelto. Persistencia en <code>localStorage['iswc-root']</code>.
+  Estado: <code>customElements.whenDefined('iswc-main')</code> resuelto. Persistencia en <code>localStorage['iswc:root']</code>.
 </footer>
 <script>
 /* iswc-auto-rereload v2: backoff — polling client agnóstico del static server

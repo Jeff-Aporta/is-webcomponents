@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/20-componentes-y-vistas.md -->
+<!-- @vendor 2026-10-13T15:51:18.306Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/20-componentes-y-vistas.md -->
 # 20 — Componentes, vistas y kit
 
 > Alcance: cómo se define un componente `__PREFIJO__-*`, cómo se registra, cómo se define una vista
@@ -44,7 +44,7 @@ ejemplo vivo en la galería.
 - [HS-COMP-01] Cuatro archivos hermanos por componente: `<tag>.ts`, `<tag>.scss`, `<tag>.md` (H2 exactos: Anatomía, Atributos observados, Props, Eventos, Slots, Ejemplos; excluir con `<!-- exclude: X -->`, Anatomía nunca), `<tag>.json` (`iswc-preview/v1`).
 - [HS-COMP-02] Registro: el tag se declara una vez en `src/js/kit-tags.ts` (`APP_TAGS` transversales en `src/js/components/__PREFIJO__/`; `VIEW_TAGS.<vista>` en `view/<vista>/components/`), su línea en `view/demo/manifest.json` y, si tiene `props`, su schema Zod en `componentes.schemas.ts` registrado en `props-registro.ts`.
 - [HS-COMP-03] Base: `crearComponente`/`define`/`emitir`/`html`/`adoptCss`/`precargarCss`/`adoptarPropsTardias` de `src/js/base/componente.ts`.
-- [HS-ICO-01] Íconos: ids Iconify literales `set:nombre` en el código (`icon="mdi:home"`, `icono: 'mdi:home'`); un id armado en ejecución va en `extra` de `assets/dl.js`. `deno task icons` (dentro de `build`) escribe `assets/iconify.json` (`IconifyMap` v1: `host` = `deno.json` → `iswc.host`, `ruta`, `base`, `icons`) y `assets/iconify/<set>/<nombre>.svg`, con los íconos de la app y TODOS los de los mapas que consume (`mapas`; por defecto el del kit). El registrador del build empuja el mapa a `globalThis.__ISWC_ICONS__`. `assets/dl.js` solo lleva rutas e importa la herramienta del kit al SHA del pin.
+- [HS-ICO-01] Íconos: ids Iconify literales `set:nombre` en el código (`icon="mdi:home"`, `icono: 'mdi:home'`); un id armado en ejecución va en `extra` de `assets/dl.js`. `deno task icons` (dentro de `build`) baja a `assets/iconify/<set>/<nombre>.svg` los íconos de la app (sin mapa; los que pintan por dentro los componentes del kit van en `extra`). El registrador del build declara `<html data-icons>` = `deno.json` → `iswc.host` + `assets/iconify/` (URL absoluta): `<iswc-icon>` resuelve localStorage → esa base → API, y si un ícono no estaba publicado avisa `[iswc-icon] falta en local: <id>`. `assets/dl.js` solo lleva rutas e importa la herramienta online del kit (@main).
 - [HS-VIEW-01] Vista: `index.html`, `README.md`, `demo/index.html`, `components/` (+ `all.ts`), `utils/`.
 
 ## 5. Casos borde y errores
@@ -57,7 +57,7 @@ ejemplo vivo en la galería.
 
 - [W-COMP-08] Cada componente registrado tiene sus 4 archivos, su `.md` declara las 6 secciones y su `.json` valida contra `iswc-preview/v1`.
 - [W-COMP-09] El dominio de la bienvenida cumple [W-CAT-02] y [W-CAT-03] sin navegador (`tests/vistas/bienvenida`).
-- [W-ICO-04] Los íconos de la app están en local [W-ICO-01], el mapa lleva el `host` [W-ICO-02] y el registrador lo registra (`tests/iconos`); en e2e, la bienvenida pide sus íconos a `assets/iconify/` y nada a la API (`tests/e2e/00.bienvenida`).
+- [W-ICO-04] Los íconos de la app están en `assets/iconify/` [W-ICO-01], `deno.json` declara `iswc.host` [W-ICO-02] y el registrador declara `<html data-icons>` (`tests/iconos`); en e2e, la bienvenida tiene `data-icons` absoluto, pinta sus íconos y los deja en localStorage `iswc:icon:*` (`tests/e2e/00.bienvenida`).
 - [W-COMP-10] E2E: la bienvenida arranca, muestra el título y las tarjetas, y el modal se abre y se cierra como lo haría un usuario (`tests/e2e/00.bienvenida`).
 
 ## 7. Notas
