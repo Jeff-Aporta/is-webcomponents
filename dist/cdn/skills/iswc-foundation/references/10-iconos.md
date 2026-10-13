@@ -1,14 +1,21 @@
-<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/references/10-iconos.md -->
+<!-- @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/references/10-iconos.md -->
 # 10 — Íconos: localStorage, local o API
 
 Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13):
 
 0. **Memoria** de la página (`rawCache`): un id se pide una sola vez por página, incluido el fallo
    (caché negativo: un ícono irresoluble no se vuelve a pedir aunque el componente se repinte por timer).
-1. **localStorage** (`iswc-icon:<set>:<nombre>` → texto SVG): sin ningún fetch. Todo SVG resuelto por
-   cualquier vía se guarda aquí (tope 32 KB por ícono), también el que vino de la API: así la API es
-   solo el fallback de la primera vez y después el ícono se pinta directo. Un fallo nunca se persiste.
-   `clearPersistedIcons()` lo vacía.
+1. **localStorage** (`iswc-icon:<set>:<nombre>` → `{ t, s }`: fecha de guardado y texto SVG): sin ningún
+   fetch. Todo SVG resuelto por cualquier vía se guarda aquí (tope 32 KB por ícono), también el que vino
+   de la API: así la API es solo el fallback de la primera vez y después el ícono se pinta directo. Vida
+   máxima 15 días (`LS_TTL_MS`): vencido se vuelve a pedir y se renueva; un barrido perezoso a los 60 s de
+   cargar la página retira lo vencido (`purgarIconosVencidos()`). Un fallo nunca se persiste.
+   `clearPersistedIcons()` lo vacía. Por qué localStorage y no IndexedDB: textos de ~1 KB, lectura
+   síncrona al pintar, sin esquema; IndexedDB no aporta nada aquí. Y por qué NO se cachea así el JS/CSS
+   de los componentes: los pines inmutables ya viven en la caché HTTP del navegador (y en el service
+   worker de la app); un `<script>` inline desde storage pierde compilación en streaming y caché de
+   bytecode, rompe los `import` de módulos ES y obliga a abrir la CSP. Para arranque offline/rápido, lo
+   correcto es un service worker con Cache API precargando el pin.
 2. **Local**: si está en el mapa de la app (`assets/iconify.json`), se pide a `assets/iconify/<set>/<nombre>.svg`
    de la propia app (en dev y desplegada es un fetch al mismo sitio: rápido).
 3. **API de Iconify** (`https://api.iconify.design/<set>/<nombre>.svg`): todo lo que no está en el mapa,

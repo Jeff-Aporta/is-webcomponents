@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/vendor.ts
+// @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/vendor.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 /**
  * vendor.ts — mantiene al día, por BARRIDO, todo lo que un consumidor (ISS, ISW…) trae de un repo GitHub
@@ -43,7 +43,8 @@
  * La línea `Skill: skills/…md` del docblock de cada .ts se reescribe a la ruta local del consumidor si tiene esa
  * skill, o a la URL jsDelivr del pin si no.
  *
- * GUARDIÁN DE IMPORTS, RUTAS AL APLANAR y PERFILES: como siempre. Un relativo que no existe junto al archivo
+ * GUARDIÁN DE IMPORTS, RUTAS AL APLANAR y PERFILES: como siempre (las plantillas de `skills/` quedan fuera del
+ * guardián de imports y del de navegador: son docs, no código que el consumidor compile). Un relativo que no existe junto al archivo
  * → `faltan` y la CLI sale con 1; los relativos entre archivos vendorizados se reescriben a la ruta entre
  * destinos (se prefiere la copia de la misma carpeta); un consumidor `server` nunca recibe `client/` ni
  * dependencias de navegador (`bloqueado`).
@@ -244,6 +245,9 @@ const claveKit = (ruta: string): string => posix.normalize(ruta.replaceAll("\\",
 
 /** Nombre de módulo de una ruta (basename sin extensión): la clave de su sección en `schemas.ts`. */
 export const moduloDe = (ruta: string): string => basename(ruta.replaceAll("\\", "/")).replace(RE_CODIGO, "");
+
+/** `true` si viene de `skills/`: docs y plantillas, no código que el consumidor compile (sin guardián de imports ni de navegador). */
+export const esSkill = (ruta: string): boolean => /^skills\//.test(ruta.replaceAll("\\", "/"));
 
 /** `true` si la ruta es el archivo único de contratos. */
 export const esSchemas = (ruta: string): boolean => basename(ruta.replaceAll("\\", "/")) === SCHEMAS;
@@ -643,7 +647,7 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
       continue;
     }
     const codigo = RE_CODIGO.test(t.desde);
-    const deps = codigo && cfg.perfil === "server" ? dependenciasDeNavegador(texto) : [];
+    const deps = codigo && !esSkill(t.desde) && cfg.perfil === "server" ? dependenciasDeNavegador(texto) : [];
     if (deps.length) {
       const motivo = `importa dependencias de navegador (${deps.join(", ")}) y el consumidor es server`;
       out.push({ ...base, ...gana, error: motivo, bloqueado: motivo });
@@ -659,6 +663,8 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
     if (codigo) {
       texto = reescribirRelativos(texto, t.desde, t.destino, destinos);
       texto = reescribirSkill(texto, t.destino, raiz, altasRutas, cfg.repo, ref);
+      // Toda URL jsDelivr del repo por rama (`@main/`, docblocks `Doc:`…) queda fijada al pin: nada mutable en el consumidor.
+      if (/^[0-9a-f]{40}$/.test(ref)) texto = texto.replaceAll(`cdn.jsdelivr.net/gh/${cfg.repo}@${cfg.rama}/`, `cdn.jsdelivr.net/gh/${cfg.repo}@${ref}/`);
     }
     // La doc SIEMPRE por CDN (nunca ruta local): `doc` del alta, la `@doc` de la fuente o la de la copia previa, fijada al pin.
     const docFuente = docDeCabecera(texto, t.destino) ?? t.previa?.doc ?? null;
@@ -681,7 +687,7 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
 
   // 4. Guardián de imports y de navegador sobre las copias (también las al día).
   for (const r of out) {
-    if (!RE_CODIGO.test(r.hacia) || r.bloqueado) continue;
+    if (!RE_CODIGO.test(r.hacia) || r.bloqueado || esSkill(r.desde)) continue;
     const archivo = destinoDe(r.hacia);
     const faltan = importsFaltantes(archivo);
     if (faltan.length) r.faltan = faltan;

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/specs/foundation/10-plataforma.md -->
+<!-- @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/specs/foundation/10-plataforma.md -->
 # 10 — Plataforma, build y pines
 
 > Alcance: qué es __TITULO__, cómo arranca la página, las tareas de Deno, el build a `dist/cdn/` y los

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/tests/e2e/00.bienvenida.test.ts
+// @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/tests/e2e/00.bienvenida.test.ts
 // 00.bienvenida.test.ts — caso base e2e (Stagehand DETERMINISTA, sin LLM): la app arranca, muestra la
 // bienvenida y el modal se abre y se cierra como lo haría un usuario. Caja negra: solo lo que se ve.
 //

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/specs/README.md -->
+<!-- @vendor 2026-10-13T13:38:40.106Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/specs/README.md -->
 # specs/ — __TITULO__
 
 **Normativo**: [`FOUNDATION.md`](FOUNDATION.md), [`W2H.md`](W2H.md) y [`foundation/`](foundation/README.md).

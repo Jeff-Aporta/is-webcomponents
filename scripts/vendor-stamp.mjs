@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * vendor-stamp.mjs — estampa la cabecera de origen `@vendor <ISO> <repo>@local <ruta-en-el-kit>` en lo que el
- * kit distribuye por vendor: `src/vendor-distributions/**` y `skills/**` (Jeff, 2026-10-13). Así el `vendor.ts`
+ * kit distribuye por vendor: `src/vendor-distributions/**` y `skills/**` y sus copias en `dist/cdn/` (Jeff, 2026-10-13). Así el `vendor.ts`
  * de cada consumidor compara fechas reales leyendo la cabecera, sin consultar git. El sha es `local` porque al
  * estampar aún no está commiteado; el consumidor, al bajar desde la web, escribe el sha del pin.
  *
@@ -23,7 +23,8 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const CARPETAS = ['src/vendor-distributions', 'skills'];
+// También las copias publicadas (el build las copia antes del commit; así dist y src llevan la misma fecha).
+const CARPETAS = ['src/vendor-distributions', 'skills', 'dist/cdn/vendor-distributions', 'dist/cdn/skills'];
 const args = process.argv.slice(2);
 const flag = (k) => args.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
 const repo = flag('repo') || 'Jeff-Aporta/is-webcomponents';
