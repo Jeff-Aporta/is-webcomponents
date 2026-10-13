@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/semantica.ts
+// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/semantica.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 /**
  * semantica.ts — juez semántico DETERMINISTA de las pruebas (tercera capa, antes de JEV/LLM):

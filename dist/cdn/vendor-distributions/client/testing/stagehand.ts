@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/testing/stagehand.ts
+// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/testing/stagehand.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
 /**
  * stagehand.ts — controlador de Stagehand para los e2e de navegador de los fronts del kit (ISW y los

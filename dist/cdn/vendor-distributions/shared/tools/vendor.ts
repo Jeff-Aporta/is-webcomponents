@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
+// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 /**
  * vendor.ts — mantiene al día, por BARRIDO, todo lo que un consumidor (ISS, ISW…) trae de un repo GitHub
@@ -380,14 +380,25 @@ function cabecerasApi(): Record<string, string> {
   return h;
 }
 
-/** Commit HEAD de la rama en GitHub (sha y fecha), o null sin red. */
-async function cabezaRemota(repo: string, rama: string, fetchFn: FetchFn): Promise<{ sha: string; fecha: string } | null> {
+/**
+ * Commit HEAD de la rama: sha y fecha por la API de GitHub; sin API (cuota 60/h, sin token) el sha lo resuelve
+ * jsDelivr (`data.jsdelivr.com/v1/package/resolve/gh/<repo>@<rama>`) y la fecha queda null (se usa `Last-Modified`
+ * por archivo). `null` solo sin red.
+ */
+async function cabezaRemota(repo: string, rama: string, fetchFn: FetchFn): Promise<{ sha: string; fecha: string | null } | null> {
   try {
     const r = await fetchFn(`https://api.github.com/repos/${repo}/commits/${rama}`, { headers: cabecerasApi() });
+    if (r.ok) {
+      const c = await r.json() as { sha?: string; commit?: { author?: { date?: string }; committer?: { date?: string } } };
+      const fecha = c.commit?.committer?.date ?? c.commit?.author?.date;
+      if (c.sha && fecha) return { sha: c.sha, fecha: new Date(fecha).toISOString() };
+    }
+  } catch { /* sin API: respaldo */ }
+  try {
+    const r = await fetchFn(`https://data.jsdelivr.com/v1/package/resolve/gh/${repo}@${rama}`);
     if (!r.ok) return null;
-    const c = await r.json() as { sha?: string; commit?: { author?: { date?: string }; committer?: { date?: string } } };
-    const fecha = c.commit?.committer?.date ?? c.commit?.author?.date;
-    return c.sha && fecha ? { sha: c.sha, fecha: new Date(fecha).toISOString() } : null;
+    const j = await r.json() as { version?: string };
+    return j.version && /^[0-9a-f]{40}$/.test(j.version) ? { sha: j.version, fecha: null } : null;
   } catch {
     return null;
   }
@@ -567,7 +578,7 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
   // El CANAL que se sigue es la rama (`main`): HEAD en GitHub (sha + fecha) si hay red y cuota.
   const cabeza = await cabezaRemota(cfg.repo, cfg.rama, fetchFn);
   if (cfg.local && !local) log(`[vendor] checkout local omitido: no existe o no es legible (${cfg.local})`);
-  log(`[vendor] fuentes: ${local ? `local ${local}` : "sin local"} · web ${cfg.repo}@${cfg.rama}${cabeza ? ` (HEAD ${cabeza.sha.slice(0, 12)})` : " (sin API: respaldo jsDelivr)"}${pin ? ` · pin ${pin.slice(0, 12)}${pinBarrido ? ` (${pines.get(pinBarrido)} referencias)` : " (de la config)"}` : " · sin pin"}`);
+  log(`[vendor] fuentes: ${local ? `local ${local}` : "sin local"} · web ${cfg.repo}@${cfg.rama}${cabeza ? ` (HEAD ${cabeza.sha.slice(0, 12)}${cabeza.fecha ? "" : ", sin API de GitHub: fechas por jsDelivr"})` : " (sin red)"}${pin ? ` · pin ${pin.slice(0, 12)}${pinBarrido ? ` (${pines.get(pinBarrido)} referencias)` : " (de la config)"}` : " · sin pin"}`);
   const fechas = cacheFechas(raiz);
   /** Fecha del archivo en un sha (API, cacheada: un sha es inmutable), o la del commit si la API no responde. */
   const fechaEnSha = async (sha: string, desde: string, fechaCommit: string | null): Promise<string | null> => {
@@ -592,7 +603,7 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
   /** La web: main (API o respaldo jsDelivr) y, si el consumidor tiene pin, también el pin; gana la más reciente. */
   const fechaWeb = async (desde: string): Promise<{ fecha: string; ref: string } | null> => {
     const candidatos: { fecha: string; ref: string }[] = [];
-    const fMain = cabeza ? await fechaEnSha(cabeza.sha, desde, cabeza.fecha) : await fechaJsDelivrMain(desde);
+    const fMain = (cabeza ? await fechaEnSha(cabeza.sha, desde, cabeza.fecha) : null) ?? await fechaJsDelivrMain(desde);
     if (fMain) candidatos.push({ fecha: fMain, ref: cabeza?.sha ?? cfg.rama });
     if (pin && pin !== cabeza?.sha) {
       const fPin = await fechaEnSha(pin, desde, null);
@@ -606,7 +617,8 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
   const altasRutas = new Set<string>();
   for (const a of cfg.archivos ?? []) {
     if (a.carpeta) {
-      const lista = local ? listarEnLocal(local, a.desde) : (pin ? await listarEnWeb(cfg.repo, pin, a.desde, fetchFn) : null);
+      // Listado: checkout local; si no, jsDelivr en el HEAD (o el pin, o la rama).
+      const lista = local ? listarEnLocal(local, a.desde) : await listarEnWeb(cfg.repo, cabeza?.sha ?? pin ?? cfg.rama, a.desde, fetchFn);
       if (!lista) { out.push({ desde: a.desde, hacia: a.hacia, estado: "error", previa: null, error: "carpeta: no se pudo listar (sin checkout local ni red)" }); continue; }
       for (const f of archivosDeSkill(a.desde, lista)) {
         const rel = f.slice(a.desde.replace(/\/$/, "").length + 1);

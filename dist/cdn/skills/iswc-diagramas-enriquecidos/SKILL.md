@@ -7,7 +7,7 @@ description: >-
   (ISS, ISW…), al agregar una ruta/EP a la documentación, al conectar un paso con una tabla, una
   clase o un sistema externo, o al revisar que un diagrama siga las convenciones homogéneas.
 ---
-<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-diagramas-enriquecidos/SKILL.md -->
+<!-- @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-diagramas-enriquecidos/SKILL.md -->
 
 # Diagramas enriquecidos — convenciones homogéneas
 

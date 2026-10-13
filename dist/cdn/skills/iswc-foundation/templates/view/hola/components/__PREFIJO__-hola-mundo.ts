@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/components/__PREFIJO__-hola-mundo.ts
+// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/components/__PREFIJO__-hola-mundo.ts
 /**
  * <__PREFIJO__-hola-mundo> — el componente más simple posible: un título «Hola mundo».
  *

@@ -7,7 +7,7 @@ description: >-
   IswcUi / md-hydrate / response-cache, apps tipo frontend-webcomponents / tk-*,
   migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
 ---
-<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/SKILL.md -->
+<!-- @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/SKILL.md -->
 
 # ISWC — stack obligatorio
 

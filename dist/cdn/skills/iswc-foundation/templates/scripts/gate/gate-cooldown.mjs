@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/scripts/gate/gate-cooldown.mjs
+// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/scripts/gate/gate-cooldown.mjs
 // scripts/gate/gate-cooldown.mjs
 //
 // Pasos del gate (guardianes, vigilantes, build, tests) con el MISMO cooldown

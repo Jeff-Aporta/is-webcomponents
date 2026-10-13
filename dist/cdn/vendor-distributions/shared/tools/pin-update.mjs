@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/pin-update.mjs
+// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/pin-update.mjs
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
@@ -146,8 +146,15 @@ export async function publicado(sha, op = opciones()) {
 export async function ultimoSha(op = opciones()) {
   const u = `https://api.github.com/repos/${op.repo}/commits/${op.rama}`;
   const r = await fetch(u, { headers: { Accept: 'application/vnd.github.sha', 'User-Agent': 'iswc-pin', ...auth() }, signal: AbortSignal.timeout(20_000) }).catch(() => null);
-  const t = r?.ok ? (await r.text()).trim() : '';
-  log(`HEAD de ${op.repo}@${op.rama} → ${t || `sin respuesta (${r?.status ?? 'red'})`}`);
+  let t = r?.ok ? (await r.text()).trim() : '';
+  if (!SHA.test(t)) {
+    // Sin API (cuota 60/h sin token): jsDelivr resuelve la rama a su sha.
+    const j = await fetch(`https://data.jsdelivr.com/v1/package/resolve/gh/${op.repo}@${op.rama}`, { signal: AbortSignal.timeout(20_000) }).then((x) => (x.ok ? x.json() : null)).catch(() => null);
+    t = SHA.test(String(j?.version ?? '')) ? String(j.version) : '';
+    if (t) log(`HEAD de ${op.repo}@${op.rama} → ${t} (resuelto por jsDelivr; API de GitHub ${r?.status ?? 'sin red'})`);
+  }
+  if (!t) log(`HEAD de ${op.repo}@${op.rama} → sin respuesta (${r?.status ?? 'red'})`);
+  else if (r?.ok) log(`HEAD de ${op.repo}@${op.rama} → ${t}`);
   return SHA.test(t) ? t : '';
 }
 

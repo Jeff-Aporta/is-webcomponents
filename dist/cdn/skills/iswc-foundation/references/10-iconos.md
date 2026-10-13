@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/10-iconos.md -->
+<!-- @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/10-iconos.md -->
 # 10 — Íconos: localStorage, local o API
 
 Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13):
