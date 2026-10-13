@@ -308,7 +308,9 @@ for (const raw of localPartials) {
       await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')), [zodExterno], kitDocsBanner([
         `source: ${GH_BLOB}/src/core/${f}`,
       ]));
-      await copyFile(join(coreRoot, f), join(outCore, f));
+      // En dist `src/cdn/build/` se publica como `build/` (ver más abajo): el .ts publicado importa de ahí.
+      const fuente = await readFile(join(coreRoot, f), 'utf8');
+      await writeFile(join(outCore, f), fuente.replaceAll("'../cdn/build/", "'../build/"));
     }
     // `adoptCss` resuelve `./host-base.css` y `./scrollbars.css` contra la URL
     // de su propio modulo. Con el core inlineado eso cae en la carpeta del

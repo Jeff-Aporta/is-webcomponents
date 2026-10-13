@@ -11,12 +11,10 @@
  * los resuelve el propio `<iswc-code>` con su motor nativo (code-highlight) y
  * las custom properties --iswc-code-* (reacciona a iswc-theme-change).
  *
- * Ya no hay puentes en `window`: quien necesite pintar importa `paint`.
+ * Ya no hay puentes en `window` ni re-exports: quien necesite pintar importa `paint` de
+ * `src/components/_shared/highlight-code.js` (el archivo de origen).
  */
-import { paint, repaint, watchDom } from '../src/components/_shared/highlight-code.js';
-import { softFormat } from '../src/components/_shared/code-text.js';
-
-export { paint, repaint, softFormat };
+import { paint, watchDom } from '../src/components/_shared/highlight-code.js';
 
 /**
  * El docs ya no es HTML estático: `<iswc-preview-component>` monta cada preview
