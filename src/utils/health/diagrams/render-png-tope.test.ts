@@ -16,7 +16,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { PNG_MAX_PX, pngCanvasSize, renderDiagramBatch } from '../../../vendor-distributions/client/tools/render-diagram.ts';
-import type { RenderDiagramOptions } from '../../../vendor-distributions/client/tools/render-diagram.schemas.ts';
+import type { RenderDiagramOptions } from '../../../vendor-distributions/shared/schemas.ts';
 
 const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';

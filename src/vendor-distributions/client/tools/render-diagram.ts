@@ -15,7 +15,7 @@
  *
  * Modos: sintético (tag+scriptUrl+payload) o pageUrl (HTML ya armado).
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-diagram.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/lib/obj.js` (vendor.ts reescribe la ruta al aplanar), `./hosts.js`, `./render-diagram.schemas.js`, `./sanitize-svg.js`, `./static-server.js`.
+ * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-diagram.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/lib/obj.js` (vendor.ts reescribe la ruta al aplanar), `./hosts.js`, `../../shared/schemas.ts` (secciones `render-diagram`, `static-server`, `obj`), `./sanitize-svg.js`, `./static-server.js`.
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { mkdir, writeFile, rm, rename, readFile } from 'node:fs/promises';
@@ -36,7 +36,7 @@ import type {
   SyntheticDiagramJob,
   PageDiagramJob,
   StaticServer,
-} from './render-diagram.schemas.js';
+} from '../../shared/schemas.ts';
 
 export { DIAGRAM_HOSTS, probeSvgExpression } from './hosts.js';
 export { sanitizeSvgRoot, staticSvgWrapper } from './sanitize-svg.js';
@@ -48,7 +48,7 @@ export type {
   SyntheticDiagramJob,
   PageDiagramJob,
   StaticServer,
-} from './render-diagram.schemas.js';
+} from '../../shared/schemas.ts';
 
 const READY_FLAG = '__ISWC_RENDER_READY__';
 const ERR_FLAG = '__ISWC_RENDER_ERR__';

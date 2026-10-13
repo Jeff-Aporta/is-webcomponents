@@ -18,8 +18,7 @@ import { fileURLToPath } from 'node:url';
 import {
   anotarCache, CACHE_NOMBRE, leerCache, planificarLote, renderizarLote, VERSION,
 } from '../../../vendor-distributions/client/tools/render-lote.ts';
-import type { OpcionesLote, PlanLote } from '../../../vendor-distributions/client/tools/render-lote.schemas.ts';
-import type { RenderDiagramOptions } from '../../../vendor-distributions/client/tools/render-diagram.schemas.ts';
+import type { OpcionesLote, PlanLote, RenderDiagramOptions } from '../../../vendor-distributions/shared/schemas.ts';
 
 const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';

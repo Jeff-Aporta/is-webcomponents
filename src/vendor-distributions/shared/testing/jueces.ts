@@ -16,16 +16,15 @@
  *   });
  *   capaOpcional(t, 'jev pertinencia', v, (r) => expect('pertinente', (r.pertinente?.noul ?? 0) >= 0.6));
  *
- * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/jueces.ts` → carpeta `ISU/` del consumidor (server o client). Imports relativos que deben viajar con él: `./jueces.schemas.ts`, `./test-cooldown.ts`, `./test-cooldown.schemas.ts`, `./proveedores-llm.ts`, `./proveedores-llm.schemas.ts`.
+ * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/jueces.ts` → carpeta `ISU/` del consumidor (server o client). Imports relativos que deben viajar con él: `../schemas.ts` (secciones `jueces`, `proveedores-llm`, `test-cooldown`), `./test-cooldown.ts`, `./proveedores-llm.ts`.
  */
 import { existsSync, readFileSync } from 'node:fs';
-import { ZCuerpoJev, ZLlaveJev } from './jueces.schemas.ts';
-import type { ContextoCapa, OpcionesJuez, PreguntaJev, RespuestaJev, VeredictoJuez } from './jueces.schemas.ts';
+import { ZArchivoProveedores, ZCuerpoJev, ZLlaveJev, ZProveedorLlm } from '../schemas.ts';
+import type { ContextoCapa, OpcionesJuez, PreguntaJev, RespuestaJev, VeredictoJuez } from '../schemas.ts';
 import { estadoLlave, marcarCooldown } from './test-cooldown.ts';
 import { evaluarSondaLlm, normalizarJson } from './proveedores-llm.ts';
-import { ZArchivoProveedores, ZProveedorLlm } from './proveedores-llm.schemas.ts';
 
-export type * from './jueces.schemas.ts';
+export type { ContextoCapa, LlaveJev, OpcionesJuez, PreguntaJev, RespuestaJev, VeredictoJuez } from '../schemas.ts';
 
 const TIMEOUT_MS = 60_000;
 

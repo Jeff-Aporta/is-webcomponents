@@ -29,7 +29,7 @@
  *   const ctx = await sh.obtener();
  *   const stagehand = await Stagehand.create({ browser, model: { generate: ctx.generate } });
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/testing/stagehand.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./stagehand.schemas.ts`, `../../shared/testing/proveedores-llm.ts`, `../../shared/testing/proveedores-llm.schemas.ts`, `../../shared/testing/test-cooldown.ts`, `../../shared/testing/test-cooldown.schemas.ts` (vendor.ts reescribe las rutas al aplanar).
+ * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/testing/stagehand.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/schemas.ts` (secciones `stagehand`, `proveedores-llm`, `test-cooldown`), `../../shared/testing/proveedores-llm.ts`, `../../shared/testing/test-cooldown.ts` (vendor.ts reescribe las rutas al aplanar).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
  */
 import { contenidoDe, elegirProveedor, evaluarSondaLlm, normalizarJson } from '../../shared/testing/proveedores-llm.ts';
@@ -49,9 +49,13 @@ import type {
   ProveedorLlm,
   RespuestaGenerate,
   SondaDestino,
-} from './stagehand.schemas.ts';
+} from '../../shared/schemas.ts';
 
-export type * from './stagehand.schemas.ts';
+export type {
+  BloqueStagehand, CacheProveedor, ContextoDestino, ContextoStagehand, ControlGenerador, DestinoPruebas, EleccionProveedor, EstadoGenerador,
+  GeneradorStagehand, MensajeOpenAi, MensajeStagehand, OpcionesElegirProveedor, OpcionesGenerador, OpcionesPrepararStagehand, OpcionesResolverDestino,
+  OpcionesSonda, OrigenEleccion, ParamsGenerate, ParteOpenAi, ProveedorLlm, RespuestaGenerate, SondaDestino, SondaLlm,
+} from '../../shared/schemas.ts';
 export {
   barrerProveedores,
   CACHE_TTL_MS,

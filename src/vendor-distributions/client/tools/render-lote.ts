@@ -19,7 +19,7 @@
  *   const plan = await planificarLote({ carpeta, salidaSvg, salidaPng, kit });   // puro, sin navegador
  *   const r = await renderizarLote({ carpeta, salidaSvg, salidaPng, kit });        // hijos + caché
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-lote.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.js` (y lo que este trae: `../../shared/lib/obj.js`, `./hosts.js`, `./sanitize-svg.js`, `./static-server.js`, `./render-diagram.schemas.js`; vendor.ts reescribe las rutas al aplanar), `./render-lote.schemas.js`.
+ * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-lote.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.js` (y lo que este trae: `../../shared/lib/obj.js`, `./hosts.js`, `./sanitize-svg.js`, `./static-server.js`; vendor.ts reescribe las rutas al aplanar), `../../shared/schemas.ts` (secciones `render-lote`, `render-diagram`).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { spawnSync } from 'node:child_process';
@@ -31,12 +31,11 @@ import { dirname, join, relative, resolve } from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { payloadResuelto, renderDiagramBatch, writeDiagramOutputs } from './render-diagram.js';
-import type { RenderDiagramOptions } from './render-diagram.schemas.js';
-import { CacheLoteSchema, EditableLoteSchema, OpcionesLoteDatosSchema } from './render-lote.schemas.js';
-import type { CacheLote, DiagramaPlan, EntradaCache, OpcionesLote, OpcionesLoteDatos, PlanLote, ResultadoLote } from './render-lote.schemas.js';
+import { CacheLoteSchema, EditableLoteSchema, OpcionesLoteDatosSchema } from '../../shared/schemas.ts';
+import type { CacheLote, DiagramaPlan, EntradaCache, OpcionesLote, OpcionesLoteDatos, PlanLote, RenderDiagramOptions, ResultadoLote } from '../../shared/schemas.ts';
 
-export type * from './render-lote.schemas.js';
-export { CacheLoteSchema, EditableLoteSchema, OpcionesLoteDatosSchema } from './render-lote.schemas.js';
+export type { CacheLote, DiagramaPlan, EditableLote, EntradaCache, OpcionesLote, OpcionesLoteDatos, PlanLote, ResultadoLote } from '../../shared/schemas.ts';
+export { CacheLoteSchema, EditableLoteSchema, OpcionesLoteDatosSchema } from '../../shared/schemas.ts';
 
 /** Versión del formato de la huella y del caché: súbela cuando cambie qué entra en la huella. */
 export const VERSION = 1;

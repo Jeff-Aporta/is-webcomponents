@@ -161,7 +161,7 @@ test('P9 aislar: cada archivo en su proceso, globales no se pisan, cooldown en e
   rmSync(db, { force: true });
   const dir = join(raiz, 'aislar');
   mkdirSync(dir, { recursive: true });
-  const kit = pathToFileURL(join(Deno.cwd(), 'src', 'vendor-distributions', 'testing', 'pruebas.ts')).href;
+  const kit = pathToFileURL(join(Deno.cwd(), 'src', 'vendor-distributions', 'shared', 'testing', 'pruebas.ts')).href;
   writeFileSync(join(dir, 'a.test.ts'), `import { definirPruebas } from '${kit}';\nexport default definirPruebas([{ nombre: 'P9 pone global', async correr({ expect }) { (globalThis as Record<string, unknown>).marca = 'a'; expect('pone', true); await new Promise((r) => setTimeout(r, 20)); } }]);\n`);
   writeFileSync(join(dir, 'b.test.ts'), `import { definirPruebas } from '${kit}';\nexport default definirPruebas([{ nombre: 'P9 no ve global', correr({ eq }) { eq('limpio', (globalThis as Record<string, unknown>).marca, undefined); } }, { nombre: 'P9 rojo hijo', correr({ expect }) { expect('cae', false); } }]);\n`);
   writeFileSync(join(dir, 'c.test.ts'), `throw new Error('rompe al cargar');\n`);

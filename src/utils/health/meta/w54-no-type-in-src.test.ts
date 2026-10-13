@@ -21,7 +21,8 @@ test('W54: src/**/*.ts no debe tener type/interface top-level (deben vivir en *.
   const offenders: { file: string; types: number; ifs: number }[] = [];
   for await (const p of walk(join(RAIZ, 'src'))) {
     if (!p.endsWith('.ts')) continue;
-    if (p.endsWith('.schemas.ts') || p.endsWith('.d.ts')) continue;
+    // `vendor-distributions/shared/schemas.ts`: el único de contratos del vendor (secciones), cuenta como schemas.
+    if (p.endsWith('.schemas.ts') || p.endsWith('.d.ts') || /[\\/]schemas\.ts$/.test(p)) continue;
     if (p.includes('/_testing/') || p.includes('.test.')) continue;
     const content = await readFile(p, 'utf-8');
     // Top-level type/interface (not indented)

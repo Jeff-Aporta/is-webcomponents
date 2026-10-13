@@ -15,19 +15,19 @@
  * prueba: unico en toda la corrida (un repetido aborta antes de correr nada) y
  * llave de su cooldown. Solo `node:*`: corre igual en Node (tsx) y en Deno.
  *
- * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/pruebas.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./pruebas.schemas.ts`, `./test-cooldown.ts`.
+ * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/pruebas.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `pruebas`), `./test-cooldown.ts`. El modo hijo de `aislar` es este mismo archivo con `--hijo <json>` (antes `pruebas-hijo.ts`).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
  */
 import { existsSync, readdirSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawn } from 'node:child_process';
 import process from 'node:process';
 import type { Buffer } from 'node:buffer';
 import { formatMs, testCooldownFromEnv } from './test-cooldown.ts';
-import type { CtxPrueba, CuerpoT, HooksPruebas, ListaPruebas, OpcionesCarpeta, OpcionesCorrida, OpcionesT, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from './pruebas.schemas.ts';
+import type { CtxPrueba, CuerpoT, HooksPruebas, ListaPruebas, OpcionesCarpeta, OpcionesCorrida, OpcionesHijo, OpcionesT, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from '../schemas.ts';
 
-export type { CategoriaPrueba, CtxPrueba, HooksPruebas, ListaPruebas, NivelPrueba, OpcionesCarpeta, OpcionesCorrida, OpcionesPrueba, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from './pruebas.schemas.ts';
+export type { CategoriaPrueba, CtxPrueba, HooksPruebas, ListaPruebas, NivelPrueba, OpcionesCarpeta, OpcionesCorrida, OpcionesHijo, OpcionesPrueba, Prueba, ReportePruebas, ResultadoPrueba, TPrueba } from '../schemas.ts';
 
 const TIMEOUT_DEFAULT = 30_000;
 
@@ -282,7 +282,7 @@ export async function correrPruebas(o: OpcionesCorrida): Promise<ReportePruebas>
 
 const MARCA = '@@iswc.pruebas@@';
 
-/** Reporte que entrega `pruebas-hijo.ts`; `null` si la línea no trae uno válido. */
+/** Reporte que entrega el hijo (`pruebas.ts --hijo`); `null` si la línea no trae uno válido. */
 function leerReporte(json: string): ReportePruebas | null {
   let v: unknown;
   try { v = JSON.parse(json); } catch { return null; }
@@ -295,15 +295,15 @@ function esReporte(v: unknown): v is ReportePruebas {
   return Array.isArray(Reflect.get(v, 'resultados')) && typeof resumen === 'object' && resumen !== null;
 }
 
-/** Corre un archivo en un proceso hijo (`pruebas-hijo.ts`) y devuelve sus resultados. */
+/** Corre un archivo en un proceso hijo (este mismo `pruebas.ts` con `--hijo <json>`) y devuelve sus resultados. */
 function correrAislado(o: OpcionesCorrida, archivo: string, log: (l: string) => void): Promise<ResultadoPrueba[]> {
   // Sin `new URL`: un archivo de pruebas puede reemplazar el URL global al importarse.
-  const hijo = join(dirname(fileURLToPath(import.meta.url)), 'pruebas-hijo.ts');
-  const opciones = { archivo: join(o.raiz, archivo), raiz: o.raiz, solo: o.solo, categoria: o.categoria, sinCooldown: o.sinCooldown, cooldownDb: o.cooldownDb, reintentos: o.reintentos };
+  const hijo = fileURLToPath(import.meta.url);
+  const opciones: OpcionesHijo = { archivo: join(o.raiz, archivo), raiz: o.raiz, solo: o.solo, categoria: o.categoria, sinCooldown: o.sinCooldown, cooldownDb: o.cooldownDb, reintentos: o.reintentos };
   const [cmd, ...flags] = o.aislar?.comando ?? [];
   if (!cmd) return Promise.reject(new Error('pruebas: `aislar.comando` vacío; se necesita el ejecutable (p. ej. ["node", "--import", "tsx"])'));
   return new Promise((resolver) => {
-    const p = spawn(cmd, [...flags, hijo, JSON.stringify(opciones)], { cwd: o.raiz, env: process.env, stdio: ['ignore', 'pipe', 'pipe'] });
+    const p = spawn(cmd, [...flags, hijo, '--hijo', JSON.stringify(opciones)], { cwd: o.raiz, env: process.env, stdio: ['ignore', 'pipe', 'pipe'] });
     // En un objeto: el narrowing de TS no sigue asignaciones hechas dentro de los callbacks.
     const estado: { reporte: ReportePruebas | null } = { reporte: null };
     let resto = '';
@@ -328,7 +328,7 @@ function correrAislado(o: OpcionesCorrida, archivo: string, log: (l: string) => 
   });
 }
 
-/** Linea con la que `pruebas-hijo.ts` entrega su reporte al padre. */
+/** Línea con la que el hijo entrega su reporte al padre. */
 export function lineaReporte(r: ReportePruebas): string {
   return MARCA + JSON.stringify(r);
 }
@@ -362,3 +362,23 @@ export function opcionesDeArgv(argv: string[] = process.argv.slice(2)): Pick<Opc
     sinCooldown: argv.includes('--sin-cooldown'),
   };
 }
+
+// ── Modo hijo de `correrPruebas({ aislar })` (antes `pruebas-hijo.ts`) ──────────────────────────
+// `<runtime> pruebas.ts --hijo <json>`: corre UN archivo de pruebas y entrega su reporte al padre en
+// una línea marcada. Lo lanza `correrAislado`; no se usa a mano. Sin `Deno.*` ni top-level await:
+// compila igual con lib DOM (ISW) que con deno.ns, y el ISS carga los .ts como CommonJS (tsx).
+function esHijo(): boolean {
+  const i = process.argv.indexOf('--hijo');
+  if (i < 0 || !process.argv[i + 1] || !process.argv[1]) return false;
+  try { return resolve(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; }
+}
+
+async function correrComoHijo(): Promise<void> {
+  const o = JSON.parse(process.argv[process.argv.indexOf('--hijo') + 1]!) as OpcionesHijo;
+  const { archivo, ...resto } = o;
+  const reporte = await correrPruebas({ ...resto, archivos: [archivo] });
+  console.log(lineaReporte(reporte));
+}
+
+// Las pruebas pueden dejar timers o sockets vivos: el hijo termina al entregar.
+if (esHijo()) correrComoHijo().then(() => process.exit(0), (e) => { console.error(e); process.exit(1); });

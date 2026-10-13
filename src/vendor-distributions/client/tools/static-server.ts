@@ -3,13 +3,13 @@
  * Servidor estático mínimo (Node http) para servir dist/cdn + labs.
  * Deno lo usa vía node:http (compat).
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/static-server.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.schemas.js`.
+ * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/static-server.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/schemas.ts` (sección `static-server`).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { createServer, type Server } from 'node:http';
 import { createReadStream, existsSync } from 'node:fs';
 import { join, extname, resolve } from 'node:path';
-import type { StaticServer } from './render-diagram.schemas.js';
+import type { StaticServer } from '../../shared/schemas.ts';
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',

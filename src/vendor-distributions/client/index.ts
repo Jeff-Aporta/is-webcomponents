@@ -5,6 +5,7 @@
  * íconos de la app y el controlador de Stagehand.
  *
  *   testing/  stagehand (generador para `Stagehand.create`, destino por protocolo, `prepararStagehand`)
+ *   (contratos: secciones `stagehand`, `render-*`, `download-iconify`, `static-server` de `../shared/schemas.ts`)
  *   tools/    render-diagram, render-lab, render-lote (lote con caché por hash), hosts, sanitize-svg, static-server, download-iconify
  *
  * Regla de perfiles: `client/` puede importar de `shared/`, nunca de `server/`. Lo neutro (pruebas,

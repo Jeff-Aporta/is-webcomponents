@@ -13,16 +13,16 @@
  *     (entregable) nunca recibe commits ni push automaticos.
  * Solo `node:*`: corre igual en Node y en Deno.
  *
- * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./sync-entregable.schemas.ts`.
+ * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `sync-entregable`).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/08-sync-entregable.md
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import process from 'node:process';
-import type { CambioSync, ConfigSync, CtxSync, EntradaSync, ModoSync, ResumenEntrada, ResumenSync } from './sync-entregable.schemas.ts';
+import type { CambioSync, ConfigSync, CtxSync, EntradaSync, ModoSync, ResumenEntrada, ResumenSync } from '../schemas.ts';
 
-export type { AccionSync, CambioSync, CheckpointSync, ConfigSync, CtxSync, EntradaSync, GateSync, ModoSync, ResumenEntrada, ResumenSync } from './sync-entregable.schemas.ts';
+export type { AccionSync, CambioSync, CheckpointSync, ConfigSync, CtxSync, EntradaSync, GateSync, ModoSync, ResumenEntrada, ResumenSync } from '../schemas.ts';
 
 /**
  * Glob minimo con globstar estandar: `**\/` = cero o mas carpetas, `/**` final =

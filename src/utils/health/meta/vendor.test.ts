@@ -1,18 +1,23 @@
 /**
  * Guardián WHAT de `tools/vendor.ts` (vendor strategy por pin de fecha ISO).
- *   V1 trae el archivo a `hacia` con cabecera `@vendor <ISO>` y `@doc` por CDN (nunca ruta local).
+ *   V1 trae el archivo a `hacia` con cabecera EXACTA `// @vendor <ISO>` (solo la fecha) y `@doc` por CDN (nunca ruta local).
  *   V2 si la copia ya es la más reciente, no la toca (al día); un cambio más nuevo en la fuente
  *      (sin commitear cuenta como «ahora») la actualiza: gana siempre el más reciente.
  *   V3 la configuración se valida (repo dueño/repo, al menos un archivo).
  *   V4 un import relativo no vendorizado se reporta en `faltan`.
  *   V5 sin `doc` en la config, la `// @doc` por CDN que trae la fuente se conserva (una sola vez).
+ *   V9 una cabecera anterior (`// @vendor <ISO> <repo>@<sha> <desde>`) se sigue leyendo (fecha) y al re-vendorizar
+ *      queda la nueva, sin restos.
+ *   V10 CALIBRACIÓN DE LA PODA: para cada módulo de `vendor-distributions/`, la config que trae solo ese módulo (y
+ *      sus relativos) deja un `schemas.ts` podado que compila junto al módulo (`deno check`), y el resultado dice
+ *      qué secciones quedaron; una copia de `schemas.ts` en otra carpeta se poda a lo que ESA carpeta usa.
  */
 import { assert, assertEquals, assertThrows } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { bloqueoDePerfil, dependenciasDeNavegador, vendorizar } from '../../../vendor-distributions/shared/tools/vendor.ts';
-import { ZConfigVendor } from '../../../vendor-distributions/shared/tools/vendor.schemas.ts';
+import { ZConfigVendor } from '../../../vendor-distributions/shared/schemas.ts';
 
 const git = (cwd: string, ...a: string[]) => execFileSync('git', ['-C', cwd, ...a], { encoding: 'utf8' });
 
@@ -29,7 +34,7 @@ Deno.test('vendor: V1-V2 trae con cabecera ISO, queda al día y gana siempre lo 
   const [r1] = await vendorizar(cfg);
   assertEquals(r1!.estado, 'actualizado');
   const t1 = await Deno.readTextFile(join(app, 'ISU/obj.ts'));
-  assert(/^\/\/ @vendor \d{4}-\d\d-\d\dT/.test(t1), t1);
+  assert(/^\/\/ @vendor \d{4}-\d\d-\d\dT[^ \n]+\n\/\/ @doc /.test(t1), `cabecera exacta «// @vendor <ISO>»: ${t1.slice(0, 120)}`);
   assert(t1.includes('// @doc https://cdn.jsdelivr.net/gh/nadie/no-existe-iswc-test@main/dist/cdn/vendor-distributions/shared/lib/obj.md') && t1.endsWith('export const v = 1;\n'), t1);
   const [r2] = await vendorizar(cfg);
   assertEquals(r2!.estado, 'al-dia', 'la copia ya es la más reciente');
@@ -51,13 +56,13 @@ Deno.test('vendor: V4 un archivo vendorizado que importa algo no vendorizado se 
   git(kit, 'init', '-q');
   git(kit, 'config', 'user.email', 't@t'); git(kit, 'config', 'user.name', 't');
   await Deno.mkdir(join(kit, 'b'), { recursive: true });
-  await Deno.writeTextFile(join(kit, 'b/a.ts'), '/** } from "./doc.js" */\nimport type { T } from "./a.schemas.js";\nexport const a: T = 1;\n');
-  await Deno.writeTextFile(join(kit, 'b/a.schemas.ts'), 'export type T = number;\n');
+  await Deno.writeTextFile(join(kit, 'b/a.ts'), '/** } from "./doc.js" */\nimport type { T } from "./schemas.js";\nexport const a: T = 1;\n');
+  await Deno.writeTextFile(join(kit, 'b/schemas.ts'), 'export type T = number;\n');
   git(kit, 'add', '.'); git(kit, 'commit', '-q', '-m', 'v1');
   const solo = { repo: 'nadie/no-existe-iswc-test', local: kit, raiz: app, archivos: [{ desde: 'b/a.ts', hacia: 'v/a.ts' }] };
   const [r1] = await vendorizar(solo);
-  assertEquals(r1!.faltan, ['./a.schemas.js'], 'falta el hermano .schemas; el import en comentario no cuenta');
-  const res = await vendorizar({ ...solo, archivos: [...solo.archivos, { desde: 'b/a.schemas.ts', hacia: 'v/a.schemas.ts' }] });
+  assertEquals(r1!.faltan, ['./schemas.js'], 'falta el schemas.ts; el import en comentario no cuenta');
+  const res = await vendorizar({ ...solo, archivos: [...solo.archivos, { desde: 'b/schemas.ts', hacia: 'v/schemas.ts' }] });
   assert(res.every((r) => !r.faltan), JSON.stringify(res));
 });
 
@@ -71,7 +76,7 @@ Deno.test('vendor: V5 sin doc en la config se conserva la @doc por CDN de la fue
   git(kit, 'add', '.'); git(kit, 'commit', '-q', '-m', 'v1');
   await vendorizar({ repo: 'nadie/no-existe-iswc-test', local: kit, raiz: app, archivos: [{ desde: 'a.ts', hacia: 'ISU/a.ts' }] });
   const t = await Deno.readTextFile(join(app, 'ISU/a.ts'));
-  assert(/^\/\/ @vendor \S+ nadie\/no-existe-iswc-test@local a\.ts\n\/\/ @doc https:\/\/cdn\.jsdelivr\.net\//.test(t), t);
+  assert(/^\/\/ @vendor \S+\n\/\/ @doc https:\/\/cdn\.jsdelivr\.net\//.test(t), t);
   assertEquals(t.split('// @doc ').length, 2, 'una sola @doc');
   assert(t.endsWith('export const a = 1;\n'), t);
 });

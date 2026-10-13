@@ -11,7 +11,7 @@ import { readdirSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { formatMs, testCooldownFromEnv, testId } from '../../../../src/vendor-distributions/shared/testing/test-cooldown.ts';
-import { runQueue } from '../../../../src/vendor-distributions/shared/testing/test-queue.ts';
+import { runQueue } from '../../../../src/vendor-distributions/shared/testing/test-cooldown.ts';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const repoRoot = join(here, '..', '..', '..', '..');

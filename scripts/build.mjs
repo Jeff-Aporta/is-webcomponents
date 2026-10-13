@@ -551,7 +551,7 @@ try {
 // que este mismo build publica en `dist/cdn/skills/`.
 
 // ── lib/: bundles para el navegador (obj.min.js con Zod incluido; zod.min.js compartido) ──
-// Las FUENTES vendorizables (obj.ts, obj.schemas.ts, obj.md, zod.ts) viven en
+// Las FUENTES vendorizables (obj.ts, obj.md, zod.ts; contratos en shared/schemas.ts) viven en
 // src/vendor-distributions/shared/lib y se publican en dist/cdn/vendor-distributions/shared/lib (más abajo).
 // Los bundles quedan en dist/cdn/lib porque los de componentes importan `../lib/zod.min.js`
 // (resolver `zod-externo`; guardián meta/zod-compartido.test.ts).
@@ -643,7 +643,8 @@ console.log(`  ${'build/'.padEnd(18)} ts vendor (hash + bundle)`);
 //   shared/ (sin navegador: lib, testing, tools) · server/ (solo server) · client/ (Playwright,
 //   Stagehand, render, íconos) + README.md índice. Un consumidor declara su perfil en su vendor.json y
 //   baja shared/ + el suyo (guardián meta/vendor-perfiles.test.ts). Se copian fuentes (.ts/.mjs) y
-//   docs (.md) conservando el árbol; los consumidores las depositan en su carpeta ISU/.
+//   docs (.md) conservando el árbol; los consumidores las depositan en su carpeta ISU/. Los contratos van
+//   en UN solo shared/schemas.ts por secciones que vendor.ts poda al vendorizar.
 const vendorOut = join(dist, 'vendor-distributions');
 await rm(vendorOut, { recursive: true, force: true });
 let nVendor = 0;

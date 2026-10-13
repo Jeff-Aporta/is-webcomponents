@@ -20,7 +20,7 @@ async function* walk(dir: string): AsyncGenerator<string> {
     if (entry.isDirectory()) {
       if (entry.name === 'node_modules' || entry.name === 'dist' || entry.name.startsWith('.')) continue;
       yield* walk(p);
-    } else if (entry.name.endsWith('.schemas.ts')) {
+    } else if (entry.name.endsWith('.schemas.ts') || entry.name === 'schemas.ts') {
       yield p;
     }
   }

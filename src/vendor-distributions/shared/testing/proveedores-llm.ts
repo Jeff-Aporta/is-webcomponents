@@ -13,17 +13,17 @@
  *
  * Solo `node:*` + `fetch`: corre igual en Node y en Deno, sin navegador.
  *
- * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/proveedores-llm.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./proveedores-llm.schemas.ts`, `./test-cooldown.ts`, `./test-cooldown.schemas.ts`.
+ * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/proveedores-llm.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (secciones `proveedores-llm`, `test-cooldown`), `./test-cooldown.ts`.
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import process from 'node:process';
-import { ZArchivoProveedores, ZCacheProveedor, ZProveedorLlm } from './proveedores-llm.schemas.ts';
+import { ZArchivoProveedores, ZCacheProveedor, ZProveedorLlm } from '../schemas.ts';
 import { estadoLlave, marcarCooldown } from './test-cooldown.ts';
-import type { EleccionProveedor, OpcionesElegirProveedor, OpcionesSonda, ProveedorLlm, SondaLlm } from './proveedores-llm.schemas.ts';
+import type { EleccionProveedor, OpcionesElegirProveedor, OpcionesSonda, ProveedorLlm, SondaLlm } from '../schemas.ts';
 
-export type * from './proveedores-llm.schemas.ts';
+export type { CacheProveedor, EleccionProveedor, OpcionesElegirProveedor, OpcionesSonda, OrigenEleccion, ProveedorLlm, SondaLlm } from '../schemas.ts';
 
 /** Vigencia por defecto de la cache del barrido. */
 export const CACHE_TTL_MS = 30 * 60_000;
