@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/README.md -->
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/README.md -->
 # `vendor-distributions/` — todo lo que un consumidor trae del kit por vendor, separado por perfil
 
 Fuente: `src/vendor-distributions/`. Publicado por `deno task build` en `dist/cdn/vendor-distributions/`
@@ -24,6 +24,13 @@ que no corresponde (otro perfil, ruta plana anterior a los perfiles y, en `serve
 perfiles (`../../shared/testing/x.ts`) se reescriben a la ruta entre destinos. Guardián:
 `src/utils/health/meta/vendor-perfiles.test.ts` (P1-P6).
 
+## Scripts online (desde 2026-10-13)
+
+`shared/tools/vendor.ts`, `shared/tools/pin-update.mjs`, `client/tools/download-iconify.ts` y `client/tools/render-lote.ts`
+NO se vendorizan: son CLI que corre Deno y cuyos tipos nadie importa; los consumidores los ejecutan desde `@main` con
+`--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`. Ver «Scripts online» en
+[06-pines-y-vendor.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md).
+
 ## Un solo `schemas.ts` (desde 2026-10-13)
 
 TODOS los contratos (Zod y tipos, regla W54) viven en `shared/schemas.ts`, por secciones delimitadas con marcadores
@@ -43,11 +50,11 @@ Una config puede traer `schemas.ts` a varias carpetas y cada copia se poda a lo 
 V10 (cada módulo compila con su copia podada, `deno check`) y V11 (dos carpetas, dos podas). Los módulos importan de
 `../schemas.ts` (o `../../shared/schemas.ts` desde `client/`) y reexportan sus tipos.
 
-Cada archivo de código abre con la cabecera `// @vendor <ISO> Jeff-Aporta/is-webcomponents@local <ruta>` (la estampa el
+Cada archivo de código abre con la cabecera `// @vendor <ISO> Jeff-Aporta/is-webcomponents@main <ruta>` (la estampa el
 hook pre-commit del kit, `scripts/vendor-stamp.mjs`) y `// @doc <URL CDN de su .md>`, y lleva en su docblock **qué es**,
 **Perfil:**, **Vendor:** (ruta publicada e imports relativos que deben viajar con él), **Skill:** (la skill que lo
 explica) y **Doc:** (la misma URL). Al vendorizar, `vendor.ts` reescribe la cabecera `@vendor` con la fecha de la fuente
-ganadora y el pin (el propio archivo dice desde dónde se actualiza) y fija la `// @doc` al SHA. `vendor.ts` falla si falta un import relativo. Lo que importa `zod` usa el del consumidor.
+ganadora (siempre `@main`: el canal es la rama, portable; el sha vive en el pin del proyecto) y fija la `// @doc` al pin. `vendor.ts` falla si falta un import relativo. Lo que importa `zod` usa el del consumidor.
 
 Las docs se enlazan SIEMPRE por CDN (jsDelivr; `vendor.ts` fija el SHA en la `// @doc` del consumidor), nunca por ruta local.
 Guardián: `src/utils/health/meta/vendor-distributions-doc.test.ts`.
@@ -85,7 +92,7 @@ Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` (Zod incluido) 
 
 | Archivo | Propósito | Doc |
 | --- | --- | --- |
-| `vendor.ts` | Vendor por BARRIDO: recorre el consumidor, lee la cabecera `@vendor <ISO> <repo>@<sha> <desde>` de cada archivo (ts/js/mjs/cjs/md/css/html/json) y lo actualiza desde el checkout local o la web en el pin estático del proyecto; `vendor.json` es solo bootstrap (altas, `carpeta: true` para skills). Perfiles, poda de `schemas.ts`, reescritura de relativos y de `Skill:`, guardián de imports, `skills/README.md` del consumidor y, antes de barrer, el protocolo de pines (`pin-update.mjs --nuevo=ultimo --local=…`) | [06-pines-y-vendor.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md) |
+| `vendor.ts` | Vendor por BARRIDO: recorre el consumidor, lee la cabecera `@vendor <ISO> <repo>@main <desde>` de cada archivo (ts/js/mjs/cjs/md/css/html/json) y lo actualiza desde el checkout local (si está) o la web (main y el pin del proyecto), gana la más reciente; `vendor.json` es solo bootstrap (altas, `carpeta: true` para skills). Perfiles, poda de `schemas.ts`, reescritura de relativos y de `Skill:`, guardián de imports, `skills/README.md` del consumidor y, antes de barrer, el protocolo de pines (`pin-update.mjs --nuevo=ultimo --local=…`) | [06-pines-y-vendor.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md) |
 | `pin-update.mjs` | Inventario y actualización de pines por SHA del consumidor; `--nuevo=ultimo --local=<ruta>`: último SHA publicado de la rama (jsDelivr), checkout local solo informativo (si no es accesible se omite y se sigue). Va junto a `vendor.ts` | [06-pines-y-vendor.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md) |
 | `sync-entregable.ts` | Sync `_experimental` → `_entregable` con gate, bloqueados y checkpoint | [08-sync-entregable.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/08-sync-entregable.md) |
 

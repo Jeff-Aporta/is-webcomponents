@@ -1,6 +1,6 @@
 /**
  * Guardián WHAT de `tools/vendor.ts` (vendor strategy por pin de fecha ISO).
- *   V1 trae el archivo a `hacia` con cabecera `// @vendor <ISO> <repo>@<sha|local> <desde>` y `@doc` por CDN (nunca ruta local).
+ *   V1 trae el archivo a `hacia` con cabecera `// @vendor <ISO> <repo>@main <desde>` (portable: ni @local ni sha) y `@doc` por CDN.
  *   V2 si la copia ya es la más reciente, no la toca (al día); un cambio más nuevo en la fuente
  *      (sin commitear cuenta como «ahora») la actualiza: gana siempre el más reciente.
  *   V3 la configuración se valida (repo dueño/repo; `archivos` opcional: solo bootstrap).
@@ -33,7 +33,7 @@ Deno.test('vendor: V1-V2 trae con cabecera ISO, queda al día y gana siempre lo 
   const [r1] = await vendorizar(cfg);
   assertEquals(r1!.estado, 'actualizado');
   const t1 = await Deno.readTextFile(join(app, 'ISU/obj.ts'));
-  assert(/^\/\/ @vendor \d{4}-\d\d-\d\dT\S+ nadie\/no-existe-iswc-test@local dist\/cdn\/vendor-distributions\/shared\/lib\/obj\.ts\n\/\/ @doc /.test(t1), `cabecera «// @vendor <ISO> <repo>@<sha|local> <desde>»: ${t1.slice(0, 160)}`);
+  assert(/^\/\/ @vendor \d{4}-\d\d-\d\dT\S+ nadie\/no-existe-iswc-test@main dist\/cdn\/vendor-distributions\/shared\/lib\/obj\.ts\n\/\/ @doc /.test(t1), `cabecera «// @vendor <ISO> <repo>@main <desde>»: ${t1.slice(0, 160)}`);
   assert(t1.includes('// @doc https://cdn.jsdelivr.net/gh/nadie/no-existe-iswc-test@main/dist/cdn/vendor-distributions/shared/lib/obj.md') && t1.endsWith('export const v = 1;\n'), t1);
   const [r2] = await vendorizar(cfg);
   assertEquals(r2!.estado, 'al-dia', 'la copia ya es la más reciente');
@@ -76,7 +76,7 @@ Deno.test('vendor: V5 sin doc en la config se conserva la @doc por CDN de la fue
   git(kit, 'add', '.'); git(kit, 'commit', '-q', '-m', 'v1');
   await vendorizar({ repo: 'nadie/no-existe-iswc-test', local: kit, raiz: app, archivos: [{ desde: 'a.ts', hacia: 'ISU/a.ts' }] });
   const t = await Deno.readTextFile(join(app, 'ISU/a.ts'));
-  assert(/^\/\/ @vendor \S+ nadie\/no-existe-iswc-test@local a\.ts\n\/\/ @doc https:\/\/cdn\.jsdelivr\.net\//.test(t), t);
+  assert(/^\/\/ @vendor \S+ nadie\/no-existe-iswc-test@main a\.ts\n\/\/ @doc https:\/\/cdn\.jsdelivr\.net\//.test(t), t);
   assertEquals(t.split('// @doc ').length, 2, 'una sola @doc');
   assert(t.endsWith('export const a = 1;\n'), t);
 });
@@ -162,7 +162,7 @@ Deno.test('vendor: V9 la cabecera se lee por su fecha (primer campo) y al re-ven
   assertEquals(r2!.estado, 'actualizado');
   const t = await Deno.readTextFile(join(app, 'ISU/a.ts'));
   const lineas = t.split('\n');
-  assert(/^\/\/ @vendor \d{4}-\d\d-\d\dT[\d:.]+Z nadie\/no-existe-iswc-test@local a\.ts$/.test(lineas[0]!), `primera línea: ${lineas[0]}`);
+  assert(/^\/\/ @vendor \d{4}-\d\d-\d\dT[\d:.]+Z nadie\/no-existe-iswc-test@main a\.ts$/.test(lineas[0]!), `primera línea: ${lineas[0]} (una cabecera vieja @abc migra a @main)`);
   assert(lineas[1]!.startsWith('// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/'), lineas[1]);
   assertEquals(lineas[2], 'export const a = 1;');
   assert(!t.includes('@abc') && !t.includes('https://x/y.md'), 'sin restos de la cabecera vieja');
@@ -266,7 +266,7 @@ Deno.test('vendor: V11 el mismo schemas.ts en dos carpetas se poda a lo que cada
 //   V15 una skill (carpeta) se da de alta con `carpeta: true`, nunca se pisa una skill propia (sin cabecera) y
 //       skills/README.md se genera con propias y comunes.
 //   V16 `Skill:` del docblock se reescribe a la ruta local si el consumidor tiene la skill, o a la URL del pin si no.
-//   V17 el hook del kit (scripts/vendor-stamp.mjs) estampa `@vendor <ISO> <repo>@local <ruta>` en todos los formatos.
+//   V17 el hook del kit (scripts/vendor-stamp.mjs) estampa `@vendor <ISO> <repo>@main <ruta>` en todos los formatos.
 
 const F = 'nadie/no-existe-iswc-test';
 
@@ -324,7 +324,8 @@ Deno.test('vendor: V13 el barrido actualiza lo más viejo que el checkout (sin v
   const res = await vendorizar({ repo: F, local: kit, raiz: app, perfil: 'server' }, { raiz: app });
   const por = Object.fromEntries(res.map((r) => [r.hacia, r]));
   assertEquals(por['ISU/a.ts']!.estado, 'actualizado', 'más viejo que el checkout: se actualiza');
-  assert((await Deno.readTextFile(join(app, 'ISU/a.ts'))).endsWith('export const a = 2;\n'));
+  const a = await Deno.readTextFile(join(app, 'ISU/a.ts'));
+  assert(a.endsWith('export const a = 2;\n') && a.startsWith(`// @vendor `) && a.includes(` ${F}@main ${VD}/shared/lib/a.ts\n`), `la cabecera vieja @local migra a @main:\n${a}`);
   assertEquals(por['ISU/b.ts']!.estado, 'al-dia', 'más nuevo: no se toca');
   assert(por['ISU/c.ts']!.bloqueado, 'client en server: bloqueado también en el barrido');
   assertEquals(por['skills/s/SKILL.md']!.estado, 'actualizado');
@@ -363,9 +364,9 @@ Deno.test('vendor: V14 la web es el pin estático del proyecto (nunca el HEAD); 
   const res = await vendorizar({ repo: F, raiz: app, archivos: [{ desde: `${VD}/shared/lib/a.ts`, hacia: 'ISU/a.ts' }] }, { raiz: app, fetchFn });
   assertEquals([res[0]!.estado, res[0]!.fuente, res[0]!.sha], ['actualizado', 'remoto', pin]);
   const t = await Deno.readTextFile(join(app, 'ISU/a.ts'));
-  assert(t.startsWith(`// @vendor 2030-01-01T00:00:00.000Z ${F}@${pin} ${VD}/shared/lib/a.ts\n`) && t.endsWith('export const a = "web";\n'), t);
+  assert(t.startsWith(`// @vendor 2030-01-01T00:00:00.000Z ${F}@main ${VD}/shared/lib/a.ts\n`) && t.endsWith('export const a = "web";\n'), `cabecera @main aunque se bajó del pin:\n${t}`);
   assert(t.includes(`Doc: https://cdn.jsdelivr.net/gh/${F}@${pin}/x.md`) && !t.includes('@main/'), 'toda URL jsDelivr @main queda fijada al pin');
-  assert(pedidas.some((u) => u.includes(`@${pin}/${VD}/shared/lib/a.ts`)) && !pedidas.some((u) => u.includes('/commits/main')), `solo el pin: ${pedidas.join('\n')}`);
+  assert(pedidas.some((u) => u.includes(`@${pin}/${VD}/shared/lib/a.ts`)), `se baja del sha (pin/HEAD), no de @main: ${pedidas.join('\n')}`);
   // Con local y una skill que la web aún no tiene (404): se copia del checkout con el aviso.
   const res2 = await vendorizar({ repo: F, local: kit, raiz: app, archivos: [{ desde: 'skills/nueva', hacia: 'skills/nueva', carpeta: true }] }, { raiz: app, fetchFn });
   const s = res2.find((r) => r.hacia === 'skills/nueva/SKILL.md')!;
@@ -389,7 +390,7 @@ Deno.test('vendor: V15 skills por carpeta, nunca se pisa una skill propia y skil
   const res = await vendorizar(cfg, { raiz: app });
   assertEquals(res.map((r) => [r.hacia, r.estado]).sort(), [['skills/comun/SKILL.md', 'actualizado'], ['skills/comun/references/01.md', 'actualizado'], ['skills/comun/templates/x.json', 'actualizado']]);
   const j = JSON.parse(await Deno.readTextFile(join(app, 'skills/comun/templates/x.json')));
-  assert(String(j.$vendor).includes(`${F}@local skills/comun/templates/x.json`) && j.a === 1 && Object.keys(j)[0] === '$vendor', JSON.stringify(j));
+  assert(String(j.$vendor).includes(`${F}@main skills/comun/templates/x.json`) && j.a === 1 && Object.keys(j)[0] === '$vendor', JSON.stringify(j));
   const readme = await Deno.readTextFile(join(app, 'skills/README.md'));
   assert(readme.includes('[propia](propia/SKILL.md)') && readme.includes('[comun](comun/SKILL.md)') && readme.includes('skills/comun/SKILL.md'), readme);
   // Alta sobre una skill propia (sin cabecera): error claro, no se pisa.
@@ -418,9 +419,9 @@ Deno.test('vendor: V16 la línea Skill: del docblock apunta a la copia local si 
   await Deno.remove(app, { recursive: true });
 });
 
-Deno.test('vendor: V17 el hook del kit estampa @vendor <ISO> <repo>@local <ruta> en todos los formatos (y respeta el front matter)', async () => {
+Deno.test('vendor: V17 el hook del kit estampa @vendor <ISO> <repo>@main <ruta> en todos los formatos (y respeta el front matter)', async () => {
   const { estampar } = await import('../../../../scripts/vendor-stamp.mjs');
-  const c = '2026-10-13T00:00:00.000Z Jeff-Aporta/is-webcomponents@local skills/x/SKILL.md';
+  const c = '2026-10-13T00:00:00.000Z Jeff-Aporta/is-webcomponents@main skills/x/SKILL.md';
   assertEquals(estampar('---\nname: x\n---\n# x\n', 'skills/x/SKILL.md', c), `---\nname: x\n---\n<!-- @vendor ${c} -->\n# x\n`);
   assertEquals(estampar(`<!-- @vendor viejo -->\n# x\n`, 'a.md', c), `<!-- @vendor ${c} -->\n# x\n`, 'reemplaza la anterior');
   assertEquals(estampar('// @doc https://x\nexport const a = 1;\n', 'a.ts', c), `// @vendor ${c}\n// @doc https://x\nexport const a = 1;\n`);
@@ -442,12 +443,21 @@ Deno.test('vendor: V17 el hook del kit estampa @vendor <ISO> <repo>@local <ruta>
   const salida = new TextDecoder().decode(r.stdout) + new TextDecoder().decode(r.stderr);
   assertEquals(r.code, 0, salida);
   const a = await Deno.readTextFile(join(kit, 'src/vendor-distributions/shared/lib/a.ts'));
-  assert(a.startsWith('// @vendor 2026-10-13T00:00:00.000Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/lib/a.ts\n'), `${a}\n--- salida del hook:\n${salida}`);
-  assert((await Deno.readTextFile(join(kit, 'skills/s/SKILL.md'))).startsWith('<!-- @vendor 2026-10-13T00:00:00.000Z Jeff-Aporta/is-webcomponents@local skills/s/SKILL.md -->\n'));
+  assert(a.startsWith('// @vendor 2026-10-13T00:00:00.000Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/lib/a.ts\n'), `${a}\n--- salida del hook:\n${salida}`);
+  assert((await Deno.readTextFile(join(kit, 'skills/s/SKILL.md'))).startsWith('<!-- @vendor 2026-10-13T00:00:00.000Z Jeff-Aporta/is-webcomponents@main skills/s/SKILL.md -->\n'));
   assertEquals(await Deno.readTextFile(join(kit, 'otro.ts')), 'export const o = 2;\n', 'fuera de las carpetas no se toca');
   assert(git(kit, 'diff', '--cached', '--', 'skills/s/SKILL.md').includes('@vendor'), 're-añadido al stage');
   // Y `fechaLocal` prefiere esa cabecera (sin git log) cuando el archivo está limpio.
   git(kit, 'commit', '-q', '-m', 'v2');
   const { fechaLocal } = await import('../../../vendor-distributions/shared/tools/vendor.ts');
   assertEquals(fechaLocal(kit, 'skills/s/SKILL.md'), '2026-10-13T00:00:00.000Z');
+});
+
+Deno.test('vendor: V18 la guarda de CLI reconoce el main local (ruta) y el remoto (URL en argv[1])', async () => {
+  const { esPrincipal } = await import('../../../vendor-distributions/shared/tools/vendor.ts');
+  const url = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts';
+  assertEquals(esPrincipal(url, url), true, 'online: argv[1] es la URL');
+  assertEquals(esPrincipal(url, 'C:\\x\\vendor.ts'), false);
+  assertEquals(esPrincipal('file:///C:/x/vendor.ts', 'C:\\x\\vendor.ts'), true, 'local: argv[1] es la ruta');
+  assertEquals(esPrincipal('file:///C:/x/vendor.ts', undefined), false);
 });

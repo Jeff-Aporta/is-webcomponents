@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/tools/create-iswc-app.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/create-iswc-app.ts
 /**
  * create-iswc-app — crea una app iswc nueva con el estándar iswc-foundation (el «create-react-app» del kit).
  *

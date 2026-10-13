@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/references/09-alinear-app.md -->
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/09-alinear-app.md -->
 # 09 — Alinear una app existente al estándar
 
 Para apps anteriores a `create-iswc-app` (ISW-TestPatyIA, iswc-docs…). Referencia viva: genera una app

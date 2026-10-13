@@ -7,7 +7,7 @@ description: >-
   usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
-<!-- @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/is-cdn-install/SKILL.md -->
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/is-cdn-install/SKILL.md -->
 
 # ISWC — instalación por CDN
 

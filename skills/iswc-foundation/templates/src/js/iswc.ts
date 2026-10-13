@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/src/js/iswc.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/iswc.ts
 /**
  * iswc.ts — pin canónico del kit: SOLO la URL del loader.
  *

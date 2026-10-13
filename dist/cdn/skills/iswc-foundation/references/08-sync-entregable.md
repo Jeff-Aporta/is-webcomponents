@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/references/08-sync-entregable.md -->
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/08-sync-entregable.md -->
 # 08 — Sync a entregable (mirror → entregable)
 
 Para apps con par `_experimental/<app>` (mirror de trabajo, remoto personal) y `_entregable/<app>`

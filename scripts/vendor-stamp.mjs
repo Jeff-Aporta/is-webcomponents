@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * vendor-stamp.mjs — estampa la cabecera de origen `@vendor <ISO> <repo>@local <ruta-en-el-kit>` en lo que el
+ * vendor-stamp.mjs — estampa la cabecera de origen `@vendor <ISO> <repo>@main <ruta-en-el-kit>` en lo que el
  * kit distribuye por vendor: `src/vendor-distributions/**` y `skills/**` y sus copias en `dist/cdn/` (Jeff, 2026-10-13). Así el `vendor.ts`
- * de cada consumidor compara fechas reales leyendo la cabecera, sin consultar git. El sha es `local` porque al
- * estampar aún no está commiteado; el consumidor, al bajar desde la web, escribe el sha del pin.
+ * de cada consumidor compara fechas reales leyendo la cabecera, sin consultar git. El canal es `main` (portable:
+ * ni `@local` ni un sha; Jeff 2026-10-13).
  *
  *   node scripts/vendor-stamp.mjs                 archivos STAGED (lo llama el hook pre-commit; los re-añade al stage)
  *   node scripts/vendor-stamp.mjs --todos         todos los archivos de las dos carpetas (primera vez / reparar)
@@ -98,14 +98,14 @@ if (esPrincipal()) {
     if (!CARPETAS.some((c) => rel.startsWith(`${c}/`))) continue;
     if (!existsSync(abs) || !statSync(abs).isFile()) continue;
     const antes = readFileSync(abs, 'utf8');
-    const despues = estampar(antes, abs, `${fecha} ${repo}@local ${rel}`);
+    const despues = estampar(antes, abs, `${fecha} ${repo}@main ${rel}`);
     if (despues === null || despues === antes) continue;
     n++;
     tocados.push(rel);
     if (!dry) writeFileSync(abs, despues);
   }
   if (!dry && !sinAdd && tocados.length && !sueltos.length && !todos) git('add', '--', ...tocados);
-  console.log(`[vendor-stamp] ${n} archivos estampados con @vendor ${fecha} ${repo}@local${dry ? ' (dry-run)' : ''}`);
+  console.log(`[vendor-stamp] ${n} archivos estampados con @vendor ${fecha} ${repo}@main${dry ? ' (dry-run)' : ''}`);
   for (const t of tocados.slice(0, 40)) console.log(`  ${t}`);
   if (tocados.length > 40) console.log(`  … y ${tocados.length - 40} más`);
 }

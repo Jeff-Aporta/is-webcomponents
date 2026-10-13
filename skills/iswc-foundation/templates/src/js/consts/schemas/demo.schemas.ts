@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/src/js/consts/schemas/demo.schemas.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/consts/schemas/demo.schemas.ts
 /**
  * demo.schemas.ts — playground `iswc-preview/v1` de cada componente (`<tag>.json`) y el índice de la
  * galería (`view/demo/manifest.json`). La forma canónica completa vive en el kit

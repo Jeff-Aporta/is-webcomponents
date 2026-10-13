@@ -31,3 +31,7 @@ export const ColaIconosSchema = z.object({
   push: z.function({ input: z.tuple([], z.string()), output: z.number() }),
 });
 export type ColaIconos = z.infer<typeof ColaIconosSchema>;
+
+/** Formato persistido en localStorage: `{ t: <ms de guardado>, s: <svg> }` (TTL 15 días). */
+export const PersistidoSchema = z.object({ t: z.number(), s: z.string() });
+export type Persistido = z.infer<typeof PersistidoSchema>;

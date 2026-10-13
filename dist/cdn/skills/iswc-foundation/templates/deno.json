@@ -21,7 +21,7 @@
   },
   "tasks": {
     "build:scss": "deno run -A scripts/build/build-scss.mjs",
-    "icons": "deno run -A assets/dl.js",
+    "icons": "deno run -A --reload=https://raw.githubusercontent.com/__REPO__/ assets/dl.js",
     "build": "deno task icons ; deno task build:scss && deno run -A src/utils/build.ts",
     "dev": "deno run -A src/utils/build.ts --watch",
     "serve": "deno run -A jsr:@std/http@1/file-server -p __PUERTO__ --host 127.0.0.1",

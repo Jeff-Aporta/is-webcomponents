@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/vendor.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/vendor.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 /**
  * vendor.ts — mantiene al día, por BARRIDO, todo lo que un consumidor (ISS, ISW…) trae de un repo GitHub
@@ -16,21 +16,24 @@
  * existe en el consumidor, `desde → hacia`; `carpeta: true` trae un árbol completo). Una vez bajado, el
  * archivo se mantiene por su cabecera.
  *
- * FORMATO DE CABECERA POR TIPO DE ARCHIVO (siempre `<ISO> <repo>@<sha|local> <desde>`; opcional `@doc <url>`):
+ * FORMATO DE CABECERA POR TIPO DE ARCHIVO (siempre `<ISO> <repo>@main <desde>`: el CANAL es la rama, portable entre
+ * máquinas; ni `@local` ni un sha. Las cabeceras anteriores con `@local`/`@<sha40>` se leen igual y migran al reescribir.
+ * Opcional `@doc <url>`):
  *   .ts .js .mjs .cjs   // @vendor <ISO> <repo>@<sha> <desde>        // @doc <url>
  *   .md .html           <!-- @vendor <ISO> <repo>@<sha> <desde> -->   <!-- @doc <url> -->
  *   .css                /* @vendor <ISO> <repo>@<sha> <desde> *​/     /* @doc <url> *​/
  *   .json               "$vendor": "<ISO> <repo>@<sha> <desde>"       "$doc": "<url>"   (primeras claves del objeto)
- * `<sha>` es el pin del proyecto si vino de la web, o `local` si vino del checkout.
  *
- * FUENTES. Local: `<local>/<desde>` (fecha: la cabecera `@vendor` que el hook pre-commit del kit estampa; si
- * falta, `git log -1`; «ahora» si tiene cambios sin commitear). Web: `https://cdn.jsdelivr.net/gh/<repo>@<pin>/<desde>`
- * donde `<pin>` es el SHA pineado del proyecto (el `<repo>@<sha40>` más usado en el barrido; si el consumidor
- * no tiene pines, `pin.sha` de la config; si tampoco, el HEAD de la rama con aviso); la fecha del archivo en
- * ese pin sale de la API de GitHub (`commits?path=&sha=`, cacheada en `.tmp/vendor-fechas.json` porque un
- * pin es inmutable) y, si la API no responde, de la fecha del commit del pin. Gana la fuente más reciente y
- * solo se escribe si es más nueva que la cabecera. Un archivo que aún no está en la web (404, p. ej. una skill
- * recién creada) se copia del checkout local con el aviso «copiado de local, aún no publicado».
+ * FUENTES (ambas se verifican y gana la más reciente; se baja solo si es más nueva que la cabecera):
+ *   (1) checkout `local` SOLO si está en la config, existe y es legible (si no, una línea de log y se sigue; nunca
+ *       falla): fecha = la cabecera `@vendor` que el hook pre-commit del kit estampa; «ahora» si tiene cambios sin
+ *       commitear; `git log -1` si no hay cabecera.
+ *   (2) la web: `main` (fecha del último commit del archivo vía API de GitHub, cacheada por sha en
+ *       `.tmp/vendor-fechas.json`; sin red/cuota, `Last-Modified` de jsDelivr `@main` como respaldo) y, si el
+ *       consumidor tiene pin estático (el `<repo>@<sha40>` más citado en el barrido, o `pin.sha`), también el pin.
+ *       Se baja de `https://cdn.jsdelivr.net/gh/<repo>@<sha>/<desde>` (sha del HEAD o del pin; `@main` solo sin API).
+ * Un archivo que aún no está en la web (404, p. ej. una skill recién creada) se copia del checkout local con el
+ * aviso «copiado de local, aún no publicado».
  *
  * SCHEMAS ÚNICO PODADO: `shared/schemas.ts` se vendoriza una vez por carpeta y se PODA a `comun` + las
  * secciones de los módulos presentes en esa carpeta (archivos con cabecera `@vendor` + altas) + sus
@@ -53,11 +56,17 @@
  * destinos (se prefiere la copia de la misma carpeta); un consumidor `server` nunca recibe `client/` ni
  * dependencias de navegador (`bloqueado`).
  *
- * PROTOCOLO DE PINES: la CLI corre PRIMERO `pin-update.mjs --nuevo=ultimo --local=<local>` (el vendorizado
- * junto a este archivo) para que el pin del proyecto sea el último SHA publicado, y luego barre con ese pin.
+ * ONLINE (Jeff, 2026-10-13): este script NO se vendoriza; los consumidores lo corren desde `@main` del kit con
+ * `--reload` del origen (Deno cachea los módulos remotos para siempre). Igual `pin-update.mjs`, `download-iconify.ts`
+ * y `render-lote.ts`: CLI que corre Deno y cuyos tipos ningún código del consumidor importa. Lo que los tests o el
+ * código importan con tipos (pruebas, cooldown, jueces, semantica, proveedores-llm, stagehand, schemas, sync, build/*)
+ * sí se vendoriza.
+ *
+ * PROTOCOLO DE PINES: la CLI corre PRIMERO `pin-update.mjs --nuevo=ultimo --local=<local>` (el que está junto a
+ * este archivo, ruta o URL) para que el pin del proyecto sea el último SHA publicado, y luego barre con ese pin.
  * Códigos del protocolo: 0 ok · 1 refs mutables · 2 uso · 3 nada publicado · 4 sin red (aviso).
  *
- * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/tools/vendor.ts` → carpeta `ISU/` del consumidor. Imports relativos que deben viajar con él: `../schemas.ts` (sección `vendor`) y, para el protocolo de pines, `./pin-update.mjs` (misma carpeta).
+ * Perfil: shared. Vendor: NO se vendoriza: se corre online desde `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts` (con `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`); `../schemas.ts` y `./pin-update.mjs` resuelven por URL.
  * Skill: skills/iswc-foundation/references/06-pines-y-vendor.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
  */
@@ -66,9 +75,9 @@ import { basename, dirname, extname, isAbsolute, join, posix, relative, resolve 
 import { execFileSync, spawnSync } from "node:child_process";
 import process from "node:process";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { PERFILES, ZConfigVendor, type TCabeceraVendor, type TConfigVendor, type TPerfil, type TPerfilVendor, type TResultadoVendor } from "../schemas.ts";
+import { PERFILES, ZConfigVendor, type FetchFn, type OpcionesVendorizar, type TCabeceraVendor, type TConfigVendor, type TPerfil, type TPerfilVendor, type TResultadoVendor, type TrabajoVendor as Trabajo } from "../schemas.ts";
 
-export type { TArchivoVendor, TCabeceraVendor, TConfigVendor, TPerfil, TPerfilVendor, TPinVendor, TResultadoVendor } from "../schemas.ts";
+export type { FetchFn, OpcionesVendorizar, TArchivoVendor, TCabeceraVendor, TConfigVendor, TPerfil, TPerfilVendor, TPinVendor, TResultadoVendor, TrabajoVendor } from "../schemas.ts";
 export { PERFILES } from "../schemas.ts";
 
 /** Nombre del archivo único de contratos (se poda por secciones al vendorizar). */
@@ -362,8 +371,6 @@ export function fechaLocal(checkout: string, ruta: string): string | null {
   }
 }
 
-type FetchFn = typeof fetch;
-
 /** Cabeceras de la API de GitHub; `GITHUB_TOKEN` (opcional) sube la cuota de 60/h a 5000/h. */
 function cabecerasApi(): Record<string, string> {
   const h: Record<string, string> = { "User-Agent": "iswc-vendor", Accept: "application/vnd.github+json" };
@@ -496,7 +503,7 @@ export function generarReadmeSkills(raiz: string, log: (l: string) => void = () 
     const skill = join(dir, e.name, "SKILL.md");
     const cab = existsSync(skill) ? leerCabecera(readFileSync(skill, "utf8"), skill) : null;
     const n = listarEnLocal(dir, e.name).length;
-    if (cab) comunes.push(`| [${e.name}](${e.name}/SKILL.md) | ${cab.repo ?? "?"}@${(cab.sha ?? "local").slice(0, 12)} · \`${cab.desde ?? ""}\` | ${cab.fecha} | ${n} |`);
+    if (cab) comunes.push(`| [${e.name}](${e.name}/SKILL.md) | ${cab.repo ?? "?"}@main · \`${cab.desde ?? ""}\` | ${cab.fecha} | ${n} |`);
     else propias.push(`| [${e.name}](${existsSync(skill) ? `${e.name}/SKILL.md` : e.name}) | ${n} |`);
   }
   const texto = [
@@ -528,24 +535,6 @@ export function generarReadmeSkills(raiz: string, log: (l: string) => void = () 
 
 // ── Vendorizar ─────────────────────────────────────────────────────────────────
 
-export interface OpcionesVendorizar {
-  raiz?: string;
-  /** `fetch` inyectable (pruebas). */
-  fetchFn?: FetchFn;
-  log?: (linea: string) => void;
-}
-
-/** Un trabajo del barrido o un alta: de dónde viene y a dónde va. */
-interface Trabajo {
-  desde: string;
-  hacia: string;
-  destino: string;
-  doc?: string;
-  /** Cabecera de la copia actual (null si es un alta sin archivo). */
-  previa: (TCabeceraVendor & { doc: string | null }) | null;
-  alta: boolean;
-}
-
 /**
  * Barre el consumidor y aplica las altas de la configuración. No lanza por archivo: cada uno trae su estado.
  * Devuelve un resultado por archivo (primero las altas, luego lo barrido).
@@ -562,29 +551,42 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
   // 1. Barrido: cabeceras existentes y pin del proyecto.
   const { vendorizados, pines } = inventariar(raiz, barrer(raiz, cfg.raices ?? ["."], [...SALTAR, ...(cfg.saltar ?? [])]), cfg.repo);
   const pinBarrido = [...pines.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
-  let pin = pinBarrido ?? cfg.pin?.sha ?? null;
-  let remotoFecha: string | null = null;
-  if (!pin) {
-    const cabeza = await cabezaRemota(cfg.repo, cfg.rama, fetchFn);
-    if (cabeza) { pin = cabeza.sha; remotoFecha = cabeza.fecha; log(`[vendor] AVISO sin pin en el proyecto ni en la config: la web se lee del HEAD de ${cfg.rama} (${pin.slice(0, 12)})`); }
-    else log("[vendor] AVISO sin pin y sin red: solo cuenta el checkout local");
-  } else {
-    log(`[vendor] pin del proyecto: ${cfg.repo}@${pin.slice(0, 12)}${pinBarrido ? ` (${pines.get(pinBarrido)} referencias)` : " (de la config)"}${local ? ` · local: ${local}` : " · sin checkout local"}`);
-  }
+  const pin = pinBarrido ?? cfg.pin?.sha ?? null;
+  // El CANAL que se sigue es la rama (`main`): HEAD en GitHub (sha + fecha) si hay red y cuota.
+  const cabeza = await cabezaRemota(cfg.repo, cfg.rama, fetchFn);
+  if (cfg.local && !local) log(`[vendor] checkout local omitido: no existe o no es legible (${cfg.local})`);
+  log(`[vendor] fuentes: ${local ? `local ${local}` : "sin local"} · web ${cfg.repo}@${cfg.rama}${cabeza ? ` (HEAD ${cabeza.sha.slice(0, 12)})` : " (sin API: respaldo jsDelivr)"}${pin ? ` · pin ${pin.slice(0, 12)}${pinBarrido ? ` (${pines.get(pinBarrido)} referencias)` : " (de la config)"}` : " · sin pin"}`);
   const fechas = cacheFechas(raiz);
-  const fechaWeb = async (desde: string): Promise<string | null> => {
-    if (!pin) return null;
-    const k = `${cfg.repo}@${pin}:${desde}`;
+  /** Fecha del archivo en un sha (API, cacheada: un sha es inmutable), o la del commit si la API no responde. */
+  const fechaEnSha = async (sha: string, desde: string, fechaCommit: string | null): Promise<string | null> => {
+    const k = `${cfg.repo}@${sha}:${desde}`;
     const c = fechas.leer(k);
     if (c !== undefined) return c;
-    let f = await fechaEnPin(cfg.repo, pin, desde, fetchFn);
-    if (!f) {
-      // Sin API (cuota, sin red): la fecha del commit del pin, si se puede.
-      remotoFecha ??= (await cabezaRemota(cfg.repo, pin, fetchFn))?.fecha ?? null;
-      f = remotoFecha;
-    }
+    const f = (await fechaEnPin(cfg.repo, sha, desde, fetchFn)) ?? fechaCommit;
     if (f) fechas.guardar(k, f);
     return f;
+  };
+  /** Respaldo sin API: `Last-Modified` de jsDelivr `@main` (puede ir horas por detrás del commit). */
+  const fechaJsDelivrMain = async (desde: string): Promise<string | null> => {
+    try {
+      const r = await fetchFn(`https://cdn.jsdelivr.net/gh/${cfg.repo}@${cfg.rama}/${desde}`, { method: "HEAD" });
+      const lm = r.ok ? r.headers.get("last-modified") : null;
+      const d = lm ? new Date(lm) : null;
+      return d && !isNaN(d.getTime()) ? d.toISOString() : null;
+    } catch {
+      return null;
+    }
+  };
+  /** La web: main (API o respaldo jsDelivr) y, si el consumidor tiene pin, también el pin; gana la más reciente. */
+  const fechaWeb = async (desde: string): Promise<{ fecha: string; ref: string } | null> => {
+    const candidatos: { fecha: string; ref: string }[] = [];
+    const fMain = cabeza ? await fechaEnSha(cabeza.sha, desde, cabeza.fecha) : await fechaJsDelivrMain(desde);
+    if (fMain) candidatos.push({ fecha: fMain, ref: cabeza?.sha ?? cfg.rama });
+    if (pin && pin !== cabeza?.sha) {
+      const fPin = await fechaEnSha(pin, desde, null);
+      if (fPin) candidatos.push({ fecha: fPin, ref: pin });
+    }
+    return candidatos.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())[0] ?? null;
   };
 
   // 2. Trabajos: altas (expandiendo `carpeta: true`) + barridos.
@@ -634,10 +636,11 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
       continue;
     }
     const fl = local ? fechaLocal(local, t.desde) : null;
-    const fw = pin ? await fechaWeb(t.desde) : null;
-    const gana: { fuente: "local" | "remoto"; fecha: string; sha: string | null } | null = fl && (!fw || new Date(fl) >= new Date(fw))
-      ? { fuente: "local", fecha: fl, sha: null }
-      : fw ? { fuente: "remoto", fecha: fw, sha: pin } : null;
+    const fw = await fechaWeb(t.desde);
+    // `ref`: de dónde se baja (sha del HEAD o del pin; `main` solo como respaldo sin API). No va en la cabecera.
+    const gana: { fuente: "local" | "remoto"; fecha: string; sha: string | null; ref: string } | null = fl && (!fw || new Date(fl) >= new Date(fw.fecha))
+      ? { fuente: "local", fecha: fl, sha: null, ref: "" }
+      : fw ? { fuente: "remoto", fecha: fw.fecha, sha: /^[0-9a-f]{40}$/.test(fw.ref) ? fw.ref : null, ref: fw.ref } : null;
     if (!gana) { out.push({ ...base, error: "ni checkout local ni web disponibles (¿sin red?): se conserva la copia" }); continue; }
     if (t.previa && new Date(t.previa.fecha) >= new Date(gana.fecha)) { out.push({ ...base, estado: "al-dia", ...gana }); continue; }
     // Sin formato de cabecera (.scss, .gitignore…): no hay fecha que comparar; igual al origen = al día, distinto = se reescribe.
@@ -648,12 +651,12 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
       if (gana.fuente === "local") {
         texto = readFileSync(join(local!, t.desde), "utf8");
       } else {
-        const r = await fetchFn(`https://cdn.jsdelivr.net/gh/${cfg.repo}@${gana.sha}/${t.desde}`);
+        const r = await fetchFn(`https://cdn.jsdelivr.net/gh/${cfg.repo}@${gana.ref}/${t.desde}`);
         if (r.ok) texto = await r.text();
         else if (local && existsSync(join(local, t.desde))) {
           texto = readFileSync(join(local, t.desde), "utf8");
           gana.sha = null;
-          aviso = `copiado de local, aún no publicado en ${cfg.repo}@${pin!.slice(0, 12)} (jsDelivr ${r.status})`;
+          aviso = `copiado de local, aún no publicado en ${cfg.repo}@${gana.ref.slice(0, 12)} (jsDelivr ${r.status})`;
         } else { out.push({ ...base, ...gana, error: `jsDelivr ${r.status} y sin checkout local` }); continue; }
       }
     } catch (e) {
@@ -675,7 +678,8 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
       texto = p.texto;
       secciones = p.secciones;
     }
-    const ref = gana.sha ?? pin ?? cfg.rama;
+    // Las URL del contenido (`@doc`, docblocks `Doc:`) se fijan al pin del proyecto (nada mutable); sin pin, al sha bajado o a la rama.
+    const ref = pin ?? gana.sha ?? cfg.rama;
     if (codigo) {
       texto = reescribirRelativos(texto, t.desde, t.destino, destinos);
       texto = reescribirSkill(texto, t.destino, raiz, altasRutas, cfg.repo, ref);
@@ -688,7 +692,9 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
     const doc = docCfg
       ? (/^https?:/.test(docCfg) ? docCfg : `https://cdn.jsdelivr.net/gh/${cfg.repo}@${ref}/${docCfg}`)
       : docFuente ? docFuente.replace(/(cdn\.jsdelivr\.net\/gh\/[^@/]+\/[^@/]+)@[^/]+\//, `$1@${ref}/`) : null;
-    const cuerpo = `${gana.fecha} ${cfg.repo}@${gana.sha ?? "local"} ${t.desde}`;
+    // Cabecera PORTABLE (Jeff, 2026-10-13): siempre `<ISO> <repo>@<rama> <desde>`; ni `@local` (ruta de esta máquina) ni un
+    // sha (ya está en el pin y en git). Las cabeceras anteriores con `@local`/`@<sha>` se leen igual y migran aquí.
+    const cuerpo = `${gana.fecha} ${cfg.repo}@${cfg.rama} ${t.desde}`;
     try {
       const final = estiloDe(t.destino) ? conCabecera(texto, t.destino, cuerpo, doc) : texto;
       mkdirSync(dirname(t.destino), { recursive: true });
@@ -725,8 +731,12 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
  */
 export function protocoloPines(cfg: TConfigVendor, raiz: string, log: (l: string) => void = console.log): number | null {
   if (cfg.pin?.activo === false) { log("[vendor] pines: desactivado en la config (pin.activo: false)"); return null; }
-  const script = join(dirname(fileURLToPath(import.meta.url)), "pin-update.mjs");
-  if (!existsSync(script)) { log(`[vendor] AVISO pines: falta ${script} (da de alta shared/tools/pin-update.mjs junto a vendor.ts); no se actualizan pines`); return null; }
+  // Junto a este archivo: ruta si es `file:`, URL si este módulo corre ONLINE (Deno acepta URLs; `--reload` del mismo
+  // origen para no quedarse con la caché de módulos remotos).
+  const url = new URL("./pin-update.mjs", import.meta.url);
+  const remoto = url.protocol === "http:" || url.protocol === "https:";
+  const script = remoto ? url.href : fileURLToPath(url);
+  if (!remoto && !existsSync(script)) { log(`[vendor] AVISO pines: falta ${script} junto a vendor.ts; no se actualizan pines`); return null; }
   const args = [script, "--nuevo=ultimo", `--repo=${cfg.repo}`, `--rama=${cfg.rama}`];
   if (cfg.local) args.push(`--local=${cfg.local}`);
   if (cfg.pin?.raices?.length) args.push(`--raices=${cfg.pin.raices.join(",")}`);
@@ -734,13 +744,25 @@ export function protocoloPines(cfg: TConfigVendor, raiz: string, log: (l: string
   if (cfg.pin?.verificar) args.push(`--verificar=${cfg.pin.verificar}`);
   // Sin `Deno.*`: el runtime se detecta por el global; `process.execPath` es deno o node según quien corra.
   const esDeno = "Deno" in globalThis;
-  const r = spawnSync(process.execPath, esDeno ? ["run", "-A", ...args] : args, { cwd: raiz, stdio: "inherit" });
+  const reload = remoto ? [`--reload=${url.origin}${url.pathname.split("/").slice(0, 3).join("/")}/`] : [];
+  const r = spawnSync(process.execPath, esDeno ? ["run", "-A", ...reload, ...args] : args, { cwd: raiz, stdio: "inherit" });
   return r.status ?? 1;
 }
 
-// CLI: deno run -A vendor.ts <config.json>
-// Sin `Deno.*` ni `import.meta.main`: compila igual con lib DOM (ISW) que con deno.ns.
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+/**
+ * ¿Este módulo es el programa principal? Sin `Deno.*` ni `import.meta.main` (compila igual con lib DOM que con
+ * deno.ns). Local: `argv[1]` es la ruta; ONLINE (`deno run -A https://raw.githubusercontent.com/…/vendor.ts`):
+ * `argv[1]` es la propia URL.
+ */
+export function esPrincipal(url: string = import.meta.url, argv1: string | undefined = process.argv[1]): boolean {
+  if (!argv1) return false;
+  if (url === argv1) return true;
+  try { return url === pathToFileURL(argv1).href; } catch { return false; }
+}
+
+// CLI: deno run -A vendor.ts <config.json>   (o, ONLINE y siempre con --reload del origen:
+//   deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts <config.json>)
+if (esPrincipal()) {
   const ruta = process.argv[2];
   if (!ruta) {
     console.error("uso: deno run -A vendor.ts <config.json>");

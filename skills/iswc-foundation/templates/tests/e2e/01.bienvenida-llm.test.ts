@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/tests/e2e/01.bienvenida-llm.test.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/tests/e2e/01.bienvenida-llm.test.ts
 // 01.bienvenida-llm.test.ts — el mismo flujo del modal pero dicho en lenguaje natural con Stagehand
 // `act()` (modelo MiniMax). Muestra cómo se usa el LLM cuando un paso es difícil de localizar; el gate
 // no depende de él: sin `dev-token.json` (ignorado por git; formato en dev-token.example.json) se salta.

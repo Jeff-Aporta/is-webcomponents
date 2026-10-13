@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/scripts/gate/test-health.mjs
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/scripts/gate/test-health.mjs
 // test-health.mjs — pruebas de salud: TODO `tests/` menos `tests/e2e` (eso lo corre test:e2e).
 // Sistema comun del kit: recorre la carpeta, toma solo los *.test.ts, importa la lista que cada uno
 // exporta por defecto (`definirPruebas`) y corre las pruebas UNA POR UNA, con cooldown (x600: un

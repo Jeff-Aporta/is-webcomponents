@@ -75,3 +75,18 @@ Deno.test('pin-update: P5 verificarLocal nunca falla: sin ruta, ruta inexistente
   assertEquals(real.tieneSha, false, 'un SHA inventado no está en el checkout');
   assertEquals(verificarLocal(Deno.cwd(), real.head).tieneSha, true, 'su propio HEAD sí');
 });
+
+// P6 Los scripts ONLINE del kit se citan desde raw@main con --reload (forma canónica, Jeff 2026-10-13): no son refs mutables.
+Deno.test('pin-update: P6 las URL raw@main de los scripts online (vendor, pin-update, download-iconify, render-lote) y el --reload no alertan', () => {
+  const r = inventario({
+    ...SANO,
+    'src/c.ts': [
+      "import { descargarIconos } from 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/client/tools/download-iconify.ts';",
+      '// deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/ https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/shared/tools/vendor.ts x.json',
+      "const lote = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/client/tools/render-lote.ts';",
+    ].join('\n'),
+  });
+  assertEquals(r.code, 0, r.out);
+  const malo = inventario({ ...SANO, 'src/d.ts': "import 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/shared/testing/pruebas.ts';" });
+  assertEquals(malo.code, 1, 'lo que se vendoriza (pruebas.ts) sigue sin poder ir por main');
+});

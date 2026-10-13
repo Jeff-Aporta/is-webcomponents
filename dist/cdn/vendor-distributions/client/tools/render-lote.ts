@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/client/tools/render-lote.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lote.ts — render de un LOTE de diagramas con caché por hash (lo que ISS e ISW hacían cada uno
@@ -20,7 +20,7 @@
  *   const plan = await planificarLote({ carpeta, salidaSvg, salidaPng, kit });   // puro, sin navegador
  *   const r = await renderizarLote({ carpeta, salidaSvg, salidaPng, kit });        // hijos + caché
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-lote.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.js` (y lo que este trae: `../../shared/lib/obj.js`, `./hosts.js`, `./sanitize-svg.js`, `./static-server.js`; vendor.ts reescribe las rutas al aplanar), `../../shared/schemas.ts` (secciones `render-lote`, `render-diagram`).
+ * Perfil: client. Vendor: NO se vendoriza (CLI online, Jeff 2026-10-13): `deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/render-lote.ts --kit=<checkout> …`; también importable por esa URL (`renderizarLote`). Antes: `dist/cdn/vendor-distributions/client/tools/render-lote.ts` → `ISU/`. Imports relativos que deben viajar con él: `./render-diagram.js` (y lo que este trae: `../../shared/lib/obj.js`, `./hosts.js`, `./sanitize-svg.js`, `./static-server.js`; vendor.ts reescribe las rutas al aplanar), `../../shared/schemas.ts` (secciones `render-lote`, `render-diagram`).
  * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
@@ -168,8 +168,11 @@ const lineaOk = (slug: string, m: { ancho: number | null; alto: number | null })
 
 /** Lanza el hijo `--one <slug>` con las mismas opciones (JSON por env). Devuelve la línea `OK …` o el error. */
 function renderizarEnHijo(op: OpcionesLoteDatos, slug: string): { ok: string | null; detalle: string; status: number | null } {
+  // ONLINE (`deno run -A https://…/render-lote.ts`): el hijo es la misma URL, con --reload del origen.
+  const remoto = /^https?:/.test(import.meta.url);
+  const reload = remoto ? [`--reload=${new URL(import.meta.url).origin}${new URL(import.meta.url).pathname.split('/').slice(0, 3).join('/')}/`] : [];
   const r = spawnSync(process.execPath, [
-    'run', '-A', '--no-check', '--sloppy-imports', fileURLToPath(import.meta.url), '--one', slug,
+    'run', '-A', '--no-check', '--sloppy-imports', ...reload, remoto ? import.meta.url : fileURLToPath(import.meta.url), '--one', slug,
   ], {
     encoding: 'utf8',
     input: '', // stdin propio (pipe vacío): un handle heredado o 'ignore' daba os error 6 al lanzar el navegador
@@ -245,7 +248,9 @@ function argumentos(argv: readonly string[]): Record<string, string | true> {
 function opcionesDeCli(argv: readonly string[]): OpcionesLoteDatos {
   const a = argumentos(argv);
   const texto = (k: string): string | undefined => (typeof a[k] === 'string' ? (a[k] as string) : undefined);
-  const kit = texto('kit') ?? process.env.ISWC_KIT ?? resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  // Online no hay checkout junto al script: `--kit` o `ISWC_KIT` son obligatorios (Playwright y dist/cdn salen de ahí).
+  const kit = texto('kit') ?? process.env.ISWC_KIT ?? (/^https?:/.test(import.meta.url) ? undefined : resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..'));
+  if (!kit) throw new Error('render-lote: corriendo online hace falta --kit=<checkout del kit> o ISWC_KIT');
   return OpcionesLoteDatosSchema.parse({
     carpeta: texto('carpeta'),
     salidaSvg: texto('svg'),
@@ -280,6 +285,7 @@ async function cli(): Promise<void> {
   process.exit(r.fallidos.length ? 1 : 0);
 }
 
-const esPrincipal = (import.meta as { main?: boolean }).main ?? (process.argv[1] ? resolve(process.argv[1]) === fileURLToPath(import.meta.url) : false);
+const esPrincipal = (import.meta as { main?: boolean }).main ??
+  (process.argv[1] ? (process.argv[1] === import.meta.url || (!/^https?:/.test(import.meta.url) && resolve(process.argv[1]) === fileURLToPath(import.meta.url))) : false);
 if (esPrincipal) await cli();
 

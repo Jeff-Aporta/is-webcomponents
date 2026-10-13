@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-13T13:42:57.273Z",
+  "generatedAt": "2026-10-13T14:13:02.874Z",
   "count": 122,
   "modules": [
     {
@@ -948,12 +948,13 @@
       "id": "icon-loader.schemas",
       "path": "src/components/_shared/icon-loader.schemas.ts",
       "summary": "icon-loader — Generado por `scripts/migrate-zod.py`. Refinar manualmente las",
-      "bytes": 1354,
+      "bytes": 1552,
       "exports": [
         "IconFamilySchema",
         "MapaListoSchema",
         "MapaPerezosoSchema",
-        "ColaIconosSchema"
+        "ColaIconosSchema",
+        "PersistidoSchema"
       ]
     },
     {
@@ -961,7 +962,7 @@
       "id": "icon-loader",
       "path": "src/components/_shared/icon-loader.ts",
       "summary": "icon-loader — resuelve el SVG de un icono Iconify SIN el web component `<iconify-icon>` ni su — script de CDN. Dos fuentes, nada más:",
-      "bytes": 12610,
+      "bytes": 12235,
       "exports": [
         "registerIcons",
         "hasIconLocal",

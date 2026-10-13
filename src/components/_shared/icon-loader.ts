@@ -22,7 +22,7 @@
  *   hasIconLocal(prefix, name)           -> Promise<boolean>  ¿está en un mapa registrado?
  *   listIconFamilies()                   -> Promise<Array<{prefix, count}>>  (catálogo del kit)
  */
-import type { ColaIconos, IconFamily, MapaListo, MapaPerezoso } from "./icon-loader.schemas.js";
+import type { ColaIconos, IconFamily, MapaListo, MapaPerezoso, Persistido } from "./icon-loader.schemas.js";
 
 const API_ICONOS = 'https://api.iconify.design/';
 const urlApi = (prefix: string, name: string): string =>
@@ -148,8 +148,6 @@ const LS_PREFIJO = 'iswc-icon:';
 const LS_MAX_BYTES = 32 * 1024;
 /** Vida máxima de un SVG persistido: 15 días. Después se vuelve a pedir (y se renueva). */
 export const LS_TTL_MS = 15 * 24 * 60 * 60 * 1000;
-/** Formato persistido: `{ t: <ms de guardado>, s: <svg> }`. */
-type Persistido = { t: number; s: string };
 
 function almacen(): Storage | null {
   try {

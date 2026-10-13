@@ -1,11 +1,13 @@
-// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/pin-update.mjs
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/pin-update.mjs
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
 // Regla (WT-2026-10-07, Jeff): el kit NO escribe en los consumidores. Cada consumidor
 // vendoriza este script (dist/cdn/vendor-distributions/shared/tools/pin-update.mjs) y actualiza sus propios pines.
 // Todo lo externo apunta a un SHA de 40 hex ya publicado (jsDelivr / raw.githack):
-// nunca @main, @master, @latest, SHA corto ni GitHub Pages (siempre sirve la última versión).
+// nunca @main, @master, @latest, SHA corto ni GitHub Pages (siempre sirve la última versión). Excepción: los
+// scripts ONLINE del kit (vendor.ts, pin-update.mjs, download-iconify.ts, render-lote.ts) se corren desde raw@main
+// con --reload: esa URL no se cuenta como mutable (ver ONLINE).
 //
 // Transversal (Node y Deno): solo `node:fs`/`node:path`/`node:process`/`node:child_process` y fetch.
 // Exporta sus funciones (`inventario`, `ultimoSha`, `ultimoPublicado`, `publicado`, `verificarLocal`,
@@ -30,7 +32,7 @@
 // Salida: 0 ok · 1 heterogéneo o refs mutables · 2 uso inválido · 3 pin no publicado (nada se tocó) ·
 //         4 sin red (no se pudo resolver `ultimo`; nada se tocó).
 //
-// Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/tools/pin-update.mjs` → carpeta `ISU/` del consumidor, junto a `vendor.ts` (`tools/vendor.ts`, pin por fecha ISO). Sin imports relativos.
+// Perfil: shared. Vendor: NO se vendoriza: `vendor.ts` lo lanza online desde `@main` (junto a él, por URL); también `deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/pin-update.mjs`. Sin imports relativos.
 // Skill: skills/iswc-foundation/references/06-pines-y-vendor.md
 // Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -47,6 +49,9 @@ const ALIAS = { 'is-webcomponents': ['iswc-root'], 'iswc-root': ['is-webcomponen
 const RAICES_DEFAULT = ['index.html', 'sw.js', 'staticwebapp.config.json', 'manifest.json', 'src', 'view', 'demo', 'public'];
 const SALTAR_DEFAULT = ['node_modules', 'vendor', 'dist', '.tmp-scss', '.git'];
 const EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
+// Scripts ONLINE del kit (Jeff, 2026-10-13): CLI que los consumidores corren desde `@main` con `--reload` y que
+// nadie importa con tipos. Su URL por rama NO es una ref mutable prohibida (es la forma canónica).
+export const ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/src\/vendor-distributions\/(?:shared\/tools\/(?:vendor\.ts|pin-update\.mjs)|client\/tools\/(?:download-iconify|render-lote)\.ts)\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
 export const SHA = /^[0-9a-f]{40}$/;
 /** `GITHUB_TOKEN` (opcional) sube la cuota de la API de 60/h a 5000/h. */
 const auth = () => (process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {});
@@ -124,7 +129,7 @@ export function inventario(op = opciones()) {
       pines.set(m[3], (pines.get(m[3]) ?? new Set()).add(rel(f)));
       if (m[2] !== op.nombre) legados.add(rel(f));
     }
-    t.split('\n').forEach((l, i) => { if (reMutable.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`); });
+    t.split('\n').forEach((l, i) => { if (reMutable.test(l) && !ONLINE.test(l)) mutables.push(`${rel(f)}:${i + 1}: ${l.trim().slice(0, 140)}`); });
   }
   return { pines, mutables, legados };
 }
@@ -254,8 +259,16 @@ export async function protocolo(nuevoPedido, op = opciones(), viejo = '') {
   return 0;
 }
 
+/** Programa principal: `argv[1]` es la ruta (local) o la propia URL (online, `deno run -A https://…/pin-update.mjs`). */
+function esPrincipal() {
+  const a = process.argv[1];
+  if (!a) return false;
+  if (import.meta.url === a) return true;
+  try { return import.meta.url === pathToFileURL(a).href; } catch { return false; }
+}
+
 // CLI solo al ejecutarse directamente (importarlo no barre nada).
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (esPrincipal()) {
   const args = Object.fromEntries(process.argv.slice(2).map((a) => {
     const [k, ...v] = a.replace(/^--/, '').split('=');
     return [k, v.length ? v.join('=') : true];

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/view/hola/utils/bienvenida.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/utils/bienvenida.ts
 /**
  * bienvenida.ts — dominio de la vista `hola`, sin DOM (importable y probable sin navegador).
  * El componente solo pinta lo que esto devuelve; los datos y las reglas viven aquí.

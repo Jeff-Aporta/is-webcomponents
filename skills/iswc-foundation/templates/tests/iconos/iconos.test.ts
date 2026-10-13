@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/tests/iconos/iconos.test.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/tests/iconos/iconos.test.ts
 // iconos.test.ts — íconos de la app (sin navegador), sobre lo que deja `deno task build`.
 //
 //   W-ICO-01  cada ícono que la app pinta está en local: listado en assets/iconify.json y como archivo

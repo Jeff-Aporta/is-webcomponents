@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/references/10-iconos.md -->
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/10-iconos.md -->
 # 10 — Íconos: localStorage, local o API
 
 Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13):
@@ -34,12 +34,18 @@ el registro de consumos.
 | `assets/iconify/<set>/<nombre>.svg` | Un SVG por ícono (con `currentColor`) | `deno task icons` |
 | `deno.json` → `"iswc": { "host": "https://…/" }` | Sitio donde se publica la app | La persona (`create-iswc-app --host`) |
 
-`assets/dl.js` importa la herramienta del kit **por URL fijada al SHA del pin** (Deno la corre sin
-descargar nada); `deno task pin` la incluye en el inventario y `pin --nuevo` la sube con el resto:
+`assets/dl.js` importa la herramienta del kit **online, siempre desde `@main`** (Jeff, 2026-10-13: es un CLI que corre
+Deno y cuyos tipos nadie importa; ver «Scripts online» en [06-pines-y-vendor.md](06-pines-y-vendor.md)). Como Deno
+cachea los módulos remotos para siempre, la tarea `icons` lleva `--reload` del origen; `deno task pin` no cuenta esa
+URL como ref mutable (es la forma canónica):
 
 ```js
-import { descargarIconos } from 'https://raw.githubusercontent.com/<owner>/<repo>/<sha40>/src/vendor-distributions/client/tools/download-iconify.ts';
+import { descargarIconos } from 'https://raw.githubusercontent.com/<owner>/<repo>/main/src/vendor-distributions/client/tools/download-iconify.ts';
 await descargarIconos({ raiz: new URL('..', import.meta.url), roots: ['index.html', 'src', 'view'] });
+```
+
+```json
+"icons": "deno run -A --reload=https://raw.githubusercontent.com/<owner>/<repo>/ assets/dl.js"
 ```
 
 ## Qué hace `deno task icons` (dentro de `deno task build`)
@@ -48,7 +54,7 @@ await descargarIconos({ raiz: new URL('..', import.meta.url), roots: ['index.htm
    **entre comillas** (`icon="mdi:home"`, `icono: 'mdi:home'`). Los ejemplos en comentarios no cuentan.
    Un id armado en ejecución va en `extra`.
 2. **Registro de consumos**: suma **todos** los íconos de los `iconify.json` de lo que la app consume
-   (`mapas`; por defecto el del kit al mismo SHA). Son conjuntos mínimos: que sobren unos pocos no
+   (`mapas`; por defecto el del kit en `main`, junto a la herramienta). Son conjuntos mínimos: que sobren unos pocos no
    importa, y así los componentes del kit u otras apps también pintan en local.
 3. **Filtra** con la lista de colecciones de Iconify: `node:fs` o `z-index:1` no son íconos.
 4. **Descarga en lote** lo que falta (`<set>.json?icons=a,b,…`, 80 por petición, reintentos ante 429/5xx);
