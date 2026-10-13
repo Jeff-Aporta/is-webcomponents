@@ -89,7 +89,20 @@ Los `import` relativos entre `.min.js` llevan el mismo `?v=`, sellado en el buil
 
 Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `contentHash`). El build los publica en `dist/cdn/build/`.
 
-Render headless de diagramas (SVG/PNG): `src/vendor-distributions/client/tools/` (`renderDiagram`, `renderDiagramBatch`, `writeDiagramOutputs`). El build los publica en `dist/cdn/vendor-distributions/tools/`. Playwright **no** va en el vendor: el consumidor lo inyecta (`createRequire(…​)('playwright').chromium`). Sirve para labs ISWC y para generadores Deno de otros repos (ISS, etc.) con el mismo contrato.
+Render headless de diagramas (SVG/PNG): `src/vendor-distributions/client/tools/` (`renderDiagram`, `renderDiagramBatch`, `writeDiagramOutputs`). El build los publica en `dist/cdn/vendor-distributions/client/tools/`. Playwright **no** va en el vendor: el consumidor lo inyecta (`createRequire(…​)('playwright').chromium`). Sirve para labs ISWC y para generadores Deno de otros repos (ISS, etc.) con el mismo contrato.
+
+### Lote con caché por hash (`render-lote.ts`)
+
+Lo que ISS e ISW corren en `deno task docs:diagramas`: una carpeta de editables `<slug>.json` `{ slug?, module, tag, script, attrs?, payload }` → `<svg>/<slug>.svg` + `<png>/<slug>.png`, renderizando solo lo que cambió.
+
+```
+deno run -A --no-check --sloppy-imports ISU/render-lote.ts --carpeta=<dir> --svg=<dir> --png=<dir> [--cache=<archivo>] [--kit=<dir>] [--forzar] [--solo=a,b]
+```
+
+- **Huella** (`planificarLote`, puro): sha256 del JSON canónico de `{ version, pinKit, module, tag, script, attrs, payload }` con el payload YA RESUELTO (`Obj.resolver` sobre las referencias `{ path, query, actions }` relativas al editable). Así un value de `../fuentes/codigo.json` que entra al diagrama cambia su huella; uno que no entra, no. `pinKit` = `<kit>/PIN` (o `dist/cdn/build-stamp.json`) salvo que el consumidor lo pase; `version` es la constante del módulo (sube cuando cambie el formato). Una referencia que no resuelve deja el diagrama en `error` con el motivo.
+- **Decisión por diagrama**: `render` si la huella difiere, no está en caché, falta el SVG/PNG o `--forzar`; `skip` si todo coincide. `_*.json` (fuentes de solo soporte) y el caché no son diagramas.
+- **Caché** `diagramas-iswc.cache.json` (junto a los editables, o `--cache`): `{ version, diagramas: { [slug]: { huella, svg, png, fecha, ancho, alto } } }`, rutas relativas al caché. Se escribe atómico tras cada diagrama OK, así un lote interrumpido conserva lo logrado.
+- **Render** (`renderizarLote`): un proceso hijo por diagrama (`--one <slug>`, mismas opciones por env) con hasta 5 intentos (Chromium a veces no arranca en Windows, os error 6). Líneas `OK <slug>.svg (WxH)` / `SKIP <slug> (sin cambios)` / `reintento…` / `FAIL …` y resumen `lote · N renderizados · M sin cambios · K fallidos`; exit 1 si hay fallidos.
 
 ## Sheet cache (apps)
 

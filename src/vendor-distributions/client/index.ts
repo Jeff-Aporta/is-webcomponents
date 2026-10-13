@@ -5,7 +5,7 @@
  * íconos de la app y el controlador de Stagehand.
  *
  *   testing/  stagehand (generador para `Stagehand.create`, destino por protocolo, `prepararStagehand`)
- *   tools/    render-diagram, render-lab, hosts, sanitize-svg, static-server, download-iconify
+ *   tools/    render-diagram, render-lab, render-lote (lote con caché por hash), hosts, sanitize-svg, static-server, download-iconify
  *
  * Regla de perfiles: `client/` puede importar de `shared/`, nunca de `server/`. Lo neutro (pruebas,
  * proveedores LLM, jueces, obj…) se importa de `../shared/index.ts`, no se reexporta aquí.
@@ -39,6 +39,9 @@ export type {
 
 export { jobDeEditable, jobsDeEditables, labDir, renderLab } from './tools/render-lab.ts';
 export type { Editable, LabJob, OpcionesEditables, OpcionesLab } from './tools/render-lab.ts';
+
+export { anotarCache, CACHE_NOMBRE, leerCache, pinDelKit, planificarLote, renderizarLote, renderizarUno, rutaCache, VERSION as RENDER_LOTE_VERSION } from './tools/render-lote.ts';
+export type { CacheLote, DiagramaPlan, EditableLote, EntradaCache, OpcionesLote, PlanLote, ResultadoLote } from './tools/render-lote.ts';
 
 export { descargarIconos, mapaDelKit } from './tools/download-iconify.ts';
 export type { OpcionesDescarga, ResumenDescarga } from './tools/download-iconify.ts';

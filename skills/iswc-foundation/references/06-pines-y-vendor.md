@@ -52,7 +52,7 @@ Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendo
 - **Qué hay para vendorizar**: todo vive en `dist/cdn/vendor-distributions/` separado por **perfil**:
   `shared/` (sin navegador: `lib/` obj, zod · `testing/` pruebas, cooldown, cola, deno-test, proveedores-llm, jueces ·
   `tools/` vendor, pin-update, sync-entregable), `server/` (exclusivo de server; hoy vacío) y `client/` (`testing/`
-  stagehand · `tools/` render-diagram, render-lab, hosts, sanitize-svg, static-server, download-iconify).
+  stagehand · `tools/` render-diagram, render-lab, render-lote, hosts, sanitize-svg, static-server, download-iconify).
   Índice con propósito y doc de cada archivo: `dist/cdn/vendor-distributions/README.md`.
 - **Perfil del consumidor** (`"perfil": "server" | "client"` en `vendor.json`): un server baja `shared/` + `server/` y
   nunca tiene que instalar Playwright, Stagehand ni nada de navegador; un client baja `shared/` + `client/`. `vendor.ts`
@@ -68,3 +68,24 @@ Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendo
 - **Pin por fecha ISO**: por archivo compiten el checkout local del kit (fecha del último commit que lo tocó, o «ahora» si tiene cambios sin commitear) y el HEAD remoto; gana el más reciente y solo se escribe si es más nuevo que la copia (`// @vendor <ISO>`). Nunca hay regresiones.
 - **Cabecera**: `// @vendor <ISO> <repo>@<sha|local> <desde>` y `// @doc <URL jsDelivr de su .md>`. La doc va SIEMPRE por CDN (nunca ruta local): sale de `doc` en `vendor.json` o, si falta, de la `// @doc` con que la fuente abre (todo archivo de `vendor-distributions/` la trae; guardián `meta/vendor-distributions-doc.test.ts`), fijada al SHA ganador (a la rama si ganó el checkout local).
 - **Dónde se corre**: el comando vive solo en el `package.json` del mirror `_experimental` (el del entregable no lo define), y el sync al entregable siempre descarga antes de copiar.
+
+### Lote de diagramas con caché por hash (`client/tools/render-lote.ts`)
+
+El `deno task docs:diagramas` de ISS e ISW es el módulo vendorizado tal cual (sin wrapper), sobre los editables
+`docs-experimental/diagramas/<slug>.json` `{ slug?, module, tag, script, attrs?, payload }`:
+
+```
+deno run -A --no-check --sloppy-imports <ISU>/render-lote.ts --carpeta=docs-experimental/diagramas --svg=docs-experimental/gen/diagrams/iswc/svg --png=docs-experimental/gen/diagrams/iswc/png --kit=../../../Personal/apps/is-webcomponents [--forzar] [--solo=a,b]
+```
+
+- **Huella**: sha256 del spec RESUELTO (`module`, `tag`, `script`, `attrs`, payload con sus referencias
+  `{ path, query, actions }` ya resueltas por `Obj.resolver`, relativas al editable) + `pinKit` (`<kit>/PIN`) +
+  `version` del módulo. Un value de `../fuentes/codigo.json` que entra al diagrama cambia su huella; uno que no entra, no.
+- **Caché** `diagramas-iswc.cache.json` junto a los editables (o `--cache`):
+  `{ version, diagramas: { [slug]: { huella, svg, png, fecha, ancho, alto } } }`; atómico tras cada diagrama OK.
+  Ni el caché ni los `_*.json` (fuentes de solo soporte) son diagramas.
+- **Decisión**: `render` si la huella difiere, falta en caché, faltan el SVG/PNG o `--forzar`; `skip` si coincide.
+  Cada render va en un proceso hijo (`--one <slug>`) con 5 intentos; `lote · N renderizados · M sin cambios · K fallidos`, exit 1 si hay fallidos.
+- Viaja con `render-diagram.ts` y sus relativos (`obj`, `hosts`, `sanitize-svg`, `static-server`, `*.schemas`); el
+  perfil es `client` (Playwright lo carga del `node_modules` del kit por `--kit`). Detalle:
+  [loader.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md).
