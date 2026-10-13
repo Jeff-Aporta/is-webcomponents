@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
+// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 /**
  * vendor.ts — mantiene al día, por BARRIDO, todo lo que un consumidor (ISS, ISW…) trae de un repo GitHub
@@ -57,9 +57,9 @@
  * destinos (se prefiere la copia de la misma carpeta); un consumidor `server` nunca recibe `client/` ni
  * dependencias de navegador (`bloqueado`).
  *
- * ONLINE (Jeff, 2026-10-13): este script NO se vendoriza; los consumidores lo corren desde `@main` del kit con
- * `--reload` del origen (Deno cachea los módulos remotos para siempre) y `--import-map=<raw>/main/deno.json` (el
- * import map del kit resuelve `zod` para `../schemas.ts`; un consumidor Deno con `zod` en su propio deno.json no lo necesita). Igual `pin-update.mjs`, `download-iconify.ts`
+ * ONLINE (Jeff, 2026-10-13): este script NO se vendoriza; los consumidores corren su BUNDLE autocontenido
+ * (`dist/cdn/vendor-distributions/shared/tools/vendor.mjs`, scripts/build-online.mjs: schemas y pin-update inlineados,
+ * `zod` como `npm:`) desde `@main` del kit con `--reload` del origen (Deno cachea los módulos remotos para siempre). Igual `pin-update.mjs`, `download-iconify.ts`
  * y `render-lote.ts`: CLI que corre Deno y cuyos tipos ningún código del consumidor importa. Lo que los tests o el
  * código importan con tipos (pruebas, cooldown, jueces, semantica, proveedores-llm, stagehand, schemas, sync, build/*)
  * sí se vendoriza.
@@ -68,15 +68,15 @@
  * este archivo, ruta o URL) para que el pin del proyecto sea el último SHA publicado, y luego barre con ese pin.
  * Códigos del protocolo: 0 ok · 1 refs mutables · 2 uso · 3 nada publicado · 4 sin red (aviso).
  *
- * Perfil: shared. Vendor: NO se vendoriza: se corre online desde `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts` (con `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`); `../schemas.ts` y `./pin-update.mjs` resuelven por URL.
+ * Perfil: shared. Vendor: NO se vendoriza: se corre online el bundle `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/vendor.mjs` (con `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`); schemas y pin-update van inlineados.
  * Skill: skills/iswc-foundation/references/06-pines-y-vendor.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, isAbsolute, join, posix, relative, resolve } from "node:path";
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import process from "node:process";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 import { PERFILES, ZConfigVendor, type FetchFn, type OpcionesVendorizar, type TCabeceraVendor, type TConfigVendor, type TPerfil, type TPerfilVendor, type TResultadoVendor, type TrabajoVendor as Trabajo } from "../schemas.ts";
 
 export type { FetchFn, OpcionesVendorizar, TArchivoVendor, TCabeceraVendor, TConfigVendor, TPerfil, TPerfilVendor, TPinVendor, TResultadoVendor, TrabajoVendor } from "../schemas.ts";
@@ -749,28 +749,15 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
 // ── Protocolo de pines (CLI) ───────────────────────────────────────────────────
 
 /**
- * `pin-update.mjs --nuevo=ultimo --local=<local>` (el que está junto a este archivo), con el runtime actual
- * (Deno o Node) y `cwd` en la raíz del consumidor. Devuelve el código del protocolo (`null` si no se corrió:
- * `pin.activo: false` o falta el script).
+ * El protocolo de `pin-update.mjs` (`--nuevo=ultimo --local=<local>`) llamado como función, con la raíz del
+ * consumidor como `root`. Devuelve el código del protocolo (`null` si no se corrió: `pin.activo: false`).
  */
-export function protocoloPines(cfg: TConfigVendor, raiz: string, log: (l: string) => void = console.log): number | null {
+export async function protocoloPines(cfg: TConfigVendor, raiz: string, log: (l: string) => void = console.log): Promise<number | null> {
   if (cfg.pin?.activo === false) { log("[vendor] pines: desactivado en la config (pin.activo: false)"); return null; }
-  // Junto a este archivo: ruta si es `file:`, URL si este módulo corre ONLINE (Deno acepta URLs; `--reload` del mismo
-  // origen para no quedarse con la caché de módulos remotos).
-  const url = new URL("./pin-update.mjs", import.meta.url);
-  const remoto = url.protocol === "http:" || url.protocol === "https:";
-  const script = remoto ? url.href : fileURLToPath(url);
-  if (!remoto && !existsSync(script)) { log(`[vendor] AVISO pines: falta ${script} junto a vendor.ts; no se actualizan pines`); return null; }
-  const args = [script, "--nuevo=ultimo", `--repo=${cfg.repo}`, `--rama=${cfg.rama}`];
-  if (cfg.local) args.push(`--local=${cfg.local}`);
-  if (cfg.pin?.raices?.length) args.push(`--raices=${cfg.pin.raices.join(",")}`);
-  if (cfg.pin?.saltar?.length) args.push(`--saltar=${cfg.pin.saltar.join(",")}`);
-  if (cfg.pin?.verificar) args.push(`--verificar=${cfg.pin.verificar}`);
-  // Sin `Deno.*`: el runtime se detecta por el global; `process.execPath` es deno o node según quien corra.
-  const esDeno = "Deno" in globalThis;
-  const reload = remoto ? [`--reload=${url.origin}${url.pathname.split("/").slice(0, 3).join("/")}/`] : [];
-  const r = spawnSync(process.execPath, esDeno ? ["run", "-A", ...reload, ...args] : args, { cwd: raiz, stdio: "inherit" });
-  return r.status ?? 1;
+  // `pin-update.mjs` se llama como función (en el bundle online va inlineado: nada de localizar hermanos por ruta).
+  const { opciones, protocolo } = await import("./pin-update.mjs");
+  const op = opciones({ root: raiz, repo: cfg.repo, rama: cfg.rama, local: cfg.local, raices: cfg.pin?.raices, saltar: cfg.pin?.saltar, verificar: cfg.pin?.verificar });
+  return await protocolo("ultimo", op);
 }
 
 /**
@@ -786,9 +773,8 @@ export function esPrincipal(url: string = import.meta.url, argv1: string | undef
   try { return url === pathToFileURL(argv1).href; } catch { return false; }
 }
 
-// CLI: deno run -A vendor.ts <config.json>   (o, ONLINE, siempre con --reload del origen y el import map del kit,
-// que resuelve `zod` para ../schemas.ts:
-//   deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts <config.json>)
+// CLI: deno run -A vendor.ts <config.json>   (o, ONLINE, el bundle y siempre con --reload del origen:
+//   deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/vendor.mjs <config.json>)
 if (esPrincipal()) {
   const ruta = process.argv[2];
   if (!ruta) {
@@ -800,7 +786,7 @@ if (esPrincipal()) {
   const raiz = resolve(cfg.raiz ?? ".");
   if (!cfg.perfil) console.warn(`[vendor] AVISO ${ruta} no declara "perfil" ("server" o "client"): se baja sin filtrar por perfil`);
   // Primero los pines (el barrido lee la web del pin del proyecto): 4 (sin red) es aviso; 1, 2 y 3 rompen al final.
-  const pin = protocoloPines(cfg, raiz);
+  const pin = await protocoloPines(cfg, raiz);
   if (pin === 4) console.warn("[vendor] AVISO pines: sin red, los pines se conservan");
   const res = await vendorizar(config, { raiz, log: console.log });
   for (const r of res) {

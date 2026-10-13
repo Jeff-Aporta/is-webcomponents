@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/README.md -->
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/README.md -->
 # Referencias de `iswc-foundation`
 
 Cada archivo documenta un tema del estándar; lo que una app vendoriza del kit (`dist/cdn/vendor-distributions/…`)

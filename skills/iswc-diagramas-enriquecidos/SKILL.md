@@ -7,7 +7,7 @@ description: >-
   (ISS, ISW…), al agregar una ruta/EP a la documentación, al conectar un paso con una tabla, una
   clase o un sistema externo, o al revisar que un diagrama siga las convenciones homogéneas.
 ---
-<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main skills/iswc-diagramas-enriquecidos/SKILL.md -->
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-diagramas-enriquecidos/SKILL.md -->
 
 # Diagramas enriquecidos — convenciones homogéneas
 
@@ -179,15 +179,15 @@ qué caso** se usa cada una (decisiones con la condición real del código: «¿
 
 Regla (Jeff, 2026-10-13): los scripts de `tools/` de una skill y los CLI de `vendor-distributions/` (`vendor.ts`,
 `pin-update.mjs`, `download-iconify.ts`, `render-lote.ts`) NO se descargan nunca al consumidor: se ejecutan online con
-Deno desde `@main` del kit. `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/` es obligatorio
-(Deno cachea los módulos remotos para siempre) y `--import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json`
-resuelve las dependencias del kit (`zod`…) cuando el consumidor no las tiene en su propio `deno.json`. Nunca una ruta
-local del checkout ni un SHA en estos comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
+Deno desde `@main` del kit, y lo que se ejecuta es un BUNDLE autocontenido en `dist/cdn/…` (`scripts/build-online.mjs`:
+schemas y pin-update inlineados, `zod` como `npm:`; sin imports relativos). `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`
+es obligatorio (Deno cachea los módulos remotos para siempre). Nunca una ruta local del checkout ni un SHA en estos
+comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
 
 ### `render-lote` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/render-lote.ts --carpeta=<dir editables> --svg=<dir> [--png=<dir>] --kit=<checkout del kit> [--cache=<archivo>] [--forzar] [--solo=a,b]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --carpeta=<dir editables> --svg=<dir> [--png=<dir>] --kit=<checkout del kit> [--cache=<archivo>] [--forzar] [--solo=a,b]
 ```
 
 - **Qué hace y cuándo**: renderiza el LOTE de diagramas de la documentación (editables `<slug>.json` → SVG/PNG) con caché por hash: solo repinta lo que cambió. Es el `docs:diagramas` de ISS/ISW (envoltorio fino o el comando tal cual). Añadir `--no-check --sloppy-imports` al `deno run`.

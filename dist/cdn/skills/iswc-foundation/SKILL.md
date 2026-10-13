@@ -8,7 +8,7 @@ description: >-
   alinear una app existente (ISW, iswc-docs…) con el estándar. Todas las apps iswc deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
-<!-- @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/SKILL.md -->
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/SKILL.md -->
 
 # iswc-foundation — el estándar de las apps iswc
 
@@ -23,7 +23,7 @@ Se ejecuta **directo desde la URL** (Deno no necesita descargar ni clonar nada) 
 local del kit. Pin = SHA de 40 hex publicado (el mismo que quedará fijo en la app):
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/tools/create-iswc-app.ts mi-app --prefijo=mia --titulo="Mi App"
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs mi-app --prefijo=mia --titulo="Mi App"
 # o, con el kit clonado:
 # (dentro del kit, para probar plantillas sin publicar: deno run -A skills/iswc-foundation/tools/create-iswc-app.ts ../mi-app --prefijo=mia)
 cd mi-app && deno install && deno task build && deno task serve
@@ -98,15 +98,15 @@ verde. Las apps existentes se alinean con [09-alinear-app.md](references/09-alin
 
 Regla (Jeff, 2026-10-13): los scripts de `tools/` de una skill y los CLI de `vendor-distributions/` (`vendor.ts`,
 `pin-update.mjs`, `download-iconify.ts`, `render-lote.ts`) NO se descargan nunca al consumidor: se ejecutan online con
-Deno desde `@main` del kit. `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/` es obligatorio
-(Deno cachea los módulos remotos para siempre) y `--import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json`
-resuelve las dependencias del kit (`zod`…) cuando el consumidor no las tiene en su propio `deno.json`. Nunca una ruta
-local del checkout ni un SHA en estos comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
+Deno desde `@main` del kit, y lo que se ejecuta es un BUNDLE autocontenido en `dist/cdn/…` (`scripts/build-online.mjs`:
+schemas y pin-update inlineados, `zod` como `npm:`; sin imports relativos). `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`
+es obligatorio (Deno cachea los módulos remotos para siempre). Nunca una ruta local del checkout ni un SHA en estos
+comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
 
 ### `create-iswc-app` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/tools/create-iswc-app.ts <carpeta> [--prefijo=<p>] [--titulo=<t>] [--puerto=<n>] [--sha=<sha40>] [--repo=<o/n>] [--host=<url>]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs <carpeta> [--prefijo=<p>] [--titulo=<t>] [--puerto=<n>] [--sha=<sha40>] [--repo=<o/n>] [--host=<url>]
 ```
 
 - **Qué hace y cuándo**: crea una app iswc nueva con el estándar (shell, registro de tags, base de componentes, Zod, SCSS, build, galería, vista `hola`, gate de pruebas, sync, specs WHAT). Al fundar un proyecto front; para alinear uno existente ver 09-alinear-app.
@@ -117,7 +117,7 @@ deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcompone
 ### `probar-foundation` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/tools/probar-foundation.ts [--sha=<sha40>] [--repo=<o/n>] [--conservar]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs [--sha=<sha40>] [--repo=<o/n>] [--conservar]
 ```
 
 - **Qué hace y cuándo**: guardián del estándar: crea una app temporal con create-iswc-app y le corre el gate completo. Se usa en el kit (`deno task test:foundation`) tras cambiar plantillas o referencias; un consumidor no lo necesita.
@@ -128,7 +128,7 @@ deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcompone
 ### `manifest` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/tools/manifest.ts [--check]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/skills/iswc-foundation/tools/manifest.mjs [--check]
 ```
 
 - **Qué hace y cuándo**: regenera `templates/manifest.json` (la lista de plantillas que copia create-iswc-app; por HTTPS no se puede listar una carpeta). SOLO tiene sentido dentro del checkout del kit, tras tocar `templates/`; online solo sirve `--check` contra la copia local.

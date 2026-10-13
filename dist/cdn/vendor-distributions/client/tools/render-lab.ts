@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lab.ts
+// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lab.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lab.ts — lo común de los `render.mjs` de `labs/`: arma los jobs desde los editables de una

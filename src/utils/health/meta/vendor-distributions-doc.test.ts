@@ -63,7 +63,9 @@ Deno.test('vendor-distributions: D3 el README nombra cada archivo de código', (
 
 Deno.test('vendor-distributions: D4 dist publica el mismo conjunto que src', () => {
   if (!existsSync(DIST)) return; // sin build no hay nada que comparar
-  assertEquals(listar(DIST).sort(), archivos.filter((f) => /\.(ts|mjs|md)$/.test(f)).sort(), 'corre `deno task build`');
+  // Los bundles online (`scripts/build-online.mjs`) son extra en dist: `<ruta>.mjs` junto a una fuente `.ts`/`.mjs` del mismo nombre.
+  const esBundle = (f: string) => f.endsWith('.mjs') && archivos.some((s) => s === f.replace(/\.mjs$/, '.ts')) && !archivos.includes(f);
+  assertEquals(listar(DIST).filter((f) => !esBundle(f)).sort(), archivos.filter((f) => /\.(ts|mjs|md)$/.test(f)).sort(), 'corre `deno task build`');
 });
 
 Deno.test('vendor-distributions: D5 cada archivo de código dice su Skill: y la ruta existe en el repo', () => {

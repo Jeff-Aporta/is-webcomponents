@@ -6,7 +6,7 @@
  *   node scripts/sync-pins.mjs
  *   node scripts/sync-pins.mjs <sha>
  *   node scripts/sync-pins.mjs --remote
- *   node scripts/sync-pins.mjs --install-hook   (post-commit: PIN y pines · pre-commit: estampa @vendor, scripts/vendor-stamp.mjs)
+ *   node scripts/sync-pins.mjs --install-hook   (post-commit: PIN y pines · pre-commit: bundles online si cambian las fuentes + estampa @vendor)
  *   node scripts/sync-pins.mjs --dry-run
  *   deno task sync:pins
  *
@@ -54,6 +54,10 @@ exec deno run -A "$ROOT/scripts/sync-pins.mjs"
   const bodyPre = `#!/usr/bin/env bash
 # Generado por scripts/sync-pins.mjs --install-hook
 ROOT="$(git rev-parse --show-toplevel)"
+# Si cambió una fuente de los scripts online, regenerar sus bundles en dist/cdn y añadirlos al commit.
+if git diff --cached --name-only | grep -qE '^(src/vendor-distributions/|skills/[^/]+/tools/)'; then
+  (cd "$ROOT" && deno run -A scripts/build-online.mjs && git add dist/cdn/vendor-distributions dist/cdn/skills) || exit 1
+fi
 if command -v deno >/dev/null 2>&1; then
   exec deno run -A "$ROOT/scripts/vendor-stamp.mjs"
 fi

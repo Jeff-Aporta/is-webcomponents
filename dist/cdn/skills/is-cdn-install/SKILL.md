@@ -7,7 +7,7 @@ description: >-
   usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
-<!-- @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/is-cdn-install/SKILL.md -->
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/is-cdn-install/SKILL.md -->
 
 # ISWC — instalación por CDN
 
@@ -165,17 +165,17 @@ No inventar props/eventos que no están en el MD.
 
 Regla (Jeff, 2026-10-13): los scripts de `tools/` de una skill y los CLI de `vendor-distributions/` (`vendor.ts`,
 `pin-update.mjs`, `download-iconify.ts`, `render-lote.ts`) NO se descargan nunca al consumidor: se ejecutan online con
-Deno desde `@main` del kit. `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/` es obligatorio
-(Deno cachea los módulos remotos para siempre) y `--import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json`
-resuelve las dependencias del kit (`zod`…) cuando el consumidor no las tiene en su propio `deno.json`. Nunca una ruta
-local del checkout ni un SHA en estos comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
+Deno desde `@main` del kit, y lo que se ejecuta es un BUNDLE autocontenido en `dist/cdn/…` (`scripts/build-online.mjs`:
+schemas y pin-update inlineados, `zod` como `npm:`; sin imports relativos). `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`
+es obligatorio (Deno cachea los módulos remotos para siempre). Nunca una ruta local del checkout ni un SHA en estos
+comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
 
 Para una app que consume el kit por CDN los scripts que toca correr son `vendor.ts` y `pin-update.mjs` (ver
 `skills/iswc-server/SKILL.md` y [06-pines-y-vendor.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/references/06-pines-y-vendor.md))
 y `download-iconify.ts` desde `assets/dl.js` (ver [10-iconos.md](https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/references/10-iconos.md)):
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts scripts/vendor/vendor.json
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/pin-update.mjs --raices=index.html,src,view
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ assets/dl.js   # importa https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/download-iconify.ts
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/vendor.mjs scripts/vendor/vendor.json
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs --raices=index.html,src,view
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ assets/dl.js   # importa https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/download-iconify.mjs
 ```

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
 # 06 — Pines y vendor del kit
 
 ## Pin fijo
@@ -14,7 +14,7 @@
 
 ```bash
 # <online> = https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools
-# <reload> = --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json
+# <reload> = --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/
 deno run -A <reload> <online>/vendor.ts vendor.json       # primero el protocolo (pin-update.mjs --nuevo=ultimo --local=<local>), luego el barrido
 deno run -A <reload> <online>/pin-update.mjs              # inventario: exit 1 si hay >1 SHA, refs mutables o nombre viejo del repo
 deno run -A <reload> <online>/pin-update.mjs --nuevo=<sha40|ultimo> [--local=<ruta>] [--viejo=<sha40>] [--dry-run]
@@ -55,19 +55,22 @@ importa NO se vendorizan: se corren online desde `@main` del kit. Como Deno cach
 forma canónica lleva `--reload` del origen:
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/<ruta> …
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/<ruta> …
 ```
 
-`--import-map` apunta al `deno.json` del kit: resuelve `zod` (y lo demás) para `schemas.ts` cuando el consumidor no tiene
-esas dependencias en su propio `deno.json` (ISS no es Deno; en ISW es opcional). Error típico sin él:
-«Import "zod" not a dependency».
+Lo que se ejecuta online es un BUNDLE autocontenido en `dist/cdn/…` (`scripts/build-online.mjs`, parte de `deno task build`
+y del hook pre-commit cuando cambian las fuentes): sin imports relativos (schemas y pin-update inlineados), `node:*`/`npm:*`
+externos, `zod` como `npm:zod`, y sin `fileURLToPath(import.meta.url)` para localizar hermanos (guardián
+`meta/skills-online.test.ts`). Las fuentes `.ts` siguen en `src/vendor-distributions/` (y en `dist/cdn/` como copia para
+lo que sí se vendoriza).
 
 | Online desde `@main` | Por qué |
 | --- | --- |
-| `shared/tools/vendor.ts` (el dl mismo; lanza `pin-update.mjs` junto a él por URL) | CLI; nadie importa sus tipos |
-| `shared/tools/pin-update.mjs` | CLI |
-| `client/tools/download-iconify.ts` (`assets/dl.js` la importa desde main; tarea `icons` con `--reload`) | CLI |
-| `client/tools/render-lote.ts` (`docs:diagramas` de ISS/ISW; `--kit=<checkout>` o `ISWC_KIT` obligatorio online) | CLI |
+| `shared/tools/vendor.ts` → bundle `dist/cdn/vendor-distributions/shared/tools/vendor.mjs` (pin-update inlineado) | CLI; nadie importa sus tipos |
+| `shared/tools/pin-update.mjs` → bundle `dist/cdn/vendor-distributions/shared/tools/pin-update.mjs` | CLI |
+| `client/tools/download-iconify.ts` → bundle `dist/cdn/vendor-distributions/client/tools/download-iconify.mjs` (`assets/dl.js` lo importa; tarea `icons` con `--reload`) | CLI |
+| `client/tools/render-lote.ts` → bundle `dist/cdn/vendor-distributions/client/tools/render-lote.mjs` (`docs:diagramas` de ISS/ISW; `--kit=<checkout>` o `ISWC_KIT` obligatorio) | CLI |
+| `skills/<skill>/tools/*.ts` → bundles `dist/cdn/skills/<skill>/tools/*.mjs` | CLI de las skills |
 
 | Se vendoriza (barrido por cabecera) | Por qué |
 | --- | --- |
@@ -80,9 +83,9 @@ Las carpetas `scripts/vendor/ISU` (ISW) y `src-experimental/vendor/ISU` (ISS) de
 `pin-update.mjs` ni `schemas.ts` vendorizados ahí. Tareas de un consumidor:
 
 ```json
-"vendor": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts scripts/vendor/vendor.json",
-"pin": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/pin-update.mjs --raices=index.html,src,view",
-"docs:diagramas": "deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/render-lote.ts --carpeta=… --svg=… --png=… --kit=../../../Personal/apps/is-webcomponents"
+"vendor": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/vendor.mjs scripts/vendor/vendor.json",
+"pin": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs --raices=index.html,src,view",
+"docs:diagramas": "deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --carpeta=… --svg=… --png=… --kit=../../../Personal/apps/is-webcomponents"
 ```
 
 ## Vendor por BARRIDO: `shared/tools/vendor.ts` (cabecera `@vendor` en cada archivo, perfil, pin estático)
@@ -225,7 +228,7 @@ deno run -A --no-check --sloppy-imports <ISU>/render-lote.ts --carpeta=docs-expe
 ### `vendor` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts <vendor.json>
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/vendor.mjs <vendor.json>
 ```
 
 - **Qué hace y cuándo**: barrido + altas + protocolo de pines (arriba). `npm run vendor` / `deno task vendor` y `presync:entregable`.
@@ -236,7 +239,7 @@ deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcompone
 ### `pin-update` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/pin-update.mjs [--nuevo=<sha40|ultimo>] [--local=<ruta>] [--viejo=<sha40>] [--raices=a,b] [--saltar=a,b] [--verificar=<ruta>] [--dry-run]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs [--nuevo=<sha40|ultimo>] [--local=<ruta>] [--viejo=<sha40>] [--raices=a,b] [--saltar=a,b] [--verificar=<ruta>] [--dry-run]
 ```
 
 - **Qué hace y cuándo**: inventario de pines y refs mutables; con `--nuevo` fija todos los pines al SHA dado o al último publicado.

@@ -81,12 +81,15 @@ Deno.test('pin-update: P6 las URL raw@main de los scripts online (vendor, pin-up
   const r = inventario({
     ...SANO,
     'src/c.ts': [
-      "import { descargarIconos } from 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/client/tools/download-iconify.ts';",
-      '// deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/ https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/shared/tools/vendor.ts x.json',
-      "const lote = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/client/tools/render-lote.ts';",
+      "import { descargarIconos } from 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/dist/cdn/vendor-distributions/client/tools/download-iconify.mjs';",
+      '// deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/ https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/dist/cdn/vendor-distributions/shared/tools/vendor.mjs x.json',
+      "const lote = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs';",
+      "const app = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs';",
     ].join('\n'),
   });
   assertEquals(r.code, 0, r.out);
   const malo = inventario({ ...SANO, 'src/d.ts': "import 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/shared/testing/pruebas.ts';" });
   assertEquals(malo.code, 1, 'lo que se vendoriza (pruebas.ts) sigue sin poder ir por main');
+  const fuente = inventario({ ...SANO, 'src/e.ts': "const u = 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/vendor-distributions/shared/tools/vendor.ts';" });
+  assertEquals(fuente.code, 1, 'la FUENTE .ts por main tampoco: online va el bundle de dist/cdn');
 });

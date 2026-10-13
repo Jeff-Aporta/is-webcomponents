@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/pin-update.mjs
+// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/pin-update.mjs
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
@@ -32,7 +32,7 @@
 // Salida: 0 ok · 1 heterogéneo o refs mutables · 2 uso inválido · 3 pin no publicado (nada se tocó) ·
 //         4 sin red (no se pudo resolver `ultimo`; nada se tocó).
 //
-// Perfil: shared. Vendor: NO se vendoriza: `vendor.ts` lo lanza online desde `@main` (junto a él, por URL); también `deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/pin-update.mjs`. Sin imports relativos.
+// Perfil: shared. Vendor: NO se vendoriza: `vendor.ts` lo llama como función (inlineado en su bundle); a mano, el bundle `deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/shared/tools/pin-update.mjs`. Sin imports relativos.
 // Skill: skills/iswc-foundation/references/06-pines-y-vendor.md
 // Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -51,7 +51,7 @@ const SALTAR_DEFAULT = ['node_modules', 'vendor', 'dist', '.tmp-scss', '.git'];
 const EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 // Scripts ONLINE del kit (Jeff, 2026-10-13): CLI que los consumidores corren desde `@main` con `--reload` y que
 // nadie importa con tipos. Su URL por rama NO es una ref mutable prohibida (es la forma canónica).
-export const ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/src\/vendor-distributions\/(?:shared\/tools\/(?:vendor\.ts|pin-update\.mjs)|client\/tools\/(?:download-iconify|render-lote)\.ts)\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
+export const ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
 export const SHA = /^[0-9a-f]{40}$/;
 /** `GITHUB_TOKEN` (opcional) sube la cuota de la API de 60/h a 5000/h. */
 const auth = () => (process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {});
@@ -268,6 +268,8 @@ export async function protocolo(nuevoPedido, op = opciones(), viejo = '') {
 
 /** Programa principal: `argv[1]` es la ruta (local) o la propia URL (online, `deno run -A https://…/pin-update.mjs`). */
 function esPrincipal() {
+  // Inlineado en el bundle de `vendor.mjs`, `import.meta` es el de vendor: solo es CLI si el módulo se llama pin-update.
+  if (!/\/pin-update\.m?[jt]s(?:[?#].*)?$/.test(import.meta.url)) return false;
   if (import.meta.main === true) return true; // Deno (online, argv[1] es un relleno)
   const a = process.argv[1];
   if (!a) return false;

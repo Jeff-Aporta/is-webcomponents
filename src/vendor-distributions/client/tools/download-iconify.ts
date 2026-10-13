@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/download-iconify.ts
+// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/download-iconify.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md
 /**
  * download-iconify — descarga a la app los íconos Iconify que usa y escribe su mapa.
@@ -28,7 +28,7 @@
  *
  * Solo `node:*`: corre igual en Node y en Deno.
  *
- * Perfil: client. Vendor: NO se vendoriza (CLI online, Jeff 2026-10-13): `assets/dl.js` de cada app la importa desde `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/download-iconify.ts` y la tarea `icons` corre con `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`. Imports relativos que deben viajar con él: `../../shared/schemas.ts` (sección `download-iconify`).
+ * Perfil: client. Vendor: NO se vendoriza (CLI online, Jeff 2026-10-13): `assets/dl.js` de cada app importa el bundle `https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/download-iconify.mjs` y la tarea `icons` corre con `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/`. Imports relativos que deben viajar con él: `../../shared/schemas.ts` (sección `download-iconify`).
  * Skill: skills/iswc-foundation/references/10-iconos.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md
  */
@@ -123,8 +123,8 @@ const agrupar = (ids: Iterable<string>): Record<string, string[]> => {
  * checkout (`file:`). El propio kit pasa `mapas: []` en su dl.js para no leerse a sí mismo.
  */
 export function mapaDelKit(urlHerramienta: string = import.meta.url): string | null {
-  // `client/tools/` desde los perfiles (2026-10-12); `tools/` en SHAs anteriores.
-  const m = urlHerramienta.match(/^((?:https?|file):.*)\/src\/vendor-distributions\/(?:client\/)?tools\/[^/]+$/);
+  // `client/tools/` desde los perfiles (2026-10-12); `tools/` en SHAs anteriores. Fuente (`src/…`) o bundle online (`dist/cdn/…`).
+  const m = urlHerramienta.match(/^((?:https?|file):.*?)\/(?:src|dist\/cdn)\/vendor-distributions\/(?:client\/)?tools\/[^/]+$/);
   return m ? new URL(`${m[1]}/assets/${ARCHIVO_MAPA}`).href : null;
 }
 

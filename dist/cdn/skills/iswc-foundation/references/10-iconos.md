@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:26:11.226Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/10-iconos.md -->
+<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/10-iconos.md -->
 # 10 — Íconos: localStorage, local o API
 
 Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13):
@@ -40,7 +40,7 @@ cachea los módulos remotos para siempre, la tarea `icons` lleva `--reload` del 
 URL como ref mutable (es la forma canónica):
 
 ```js
-import { descargarIconos } from 'https://raw.githubusercontent.com/<owner>/<repo>/main/src/vendor-distributions/client/tools/download-iconify.ts';
+import { descargarIconos } from 'https://raw.githubusercontent.com/<owner>/<repo>/main/dist/cdn/vendor-distributions/client/tools/download-iconify.mjs';
 await descargarIconos({ raiz: new URL('..', import.meta.url), roots: ['index.html', 'src', 'view'] });
 ```
 
@@ -108,7 +108,7 @@ de `_shared/icon-loader`. El json se pide una vez, al resolver el primer ícono.
 ### `download-iconify` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/download-iconify.ts (se importa desde `assets/dl.js`; la tarea es `deno run -A --reload=… assets/dl.js`)
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/download-iconify.mjs (se importa desde `assets/dl.js`; la tarea es `deno run -A --reload=… assets/dl.js`)
 ```
 
 - **Qué hace y cuándo**: descarga a `assets/iconify/<set>/<n>.svg` los íconos que la app usa (y los de los `iconify.json` que consume) y escribe `assets/iconify.json`. Dentro de `deno task build` (`icons`); a mano tras añadir íconos.

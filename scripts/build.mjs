@@ -661,6 +661,11 @@ const copiarVendor = async (rel) => {
 };
 await copiarVendor('');
 console.log(`  ${'vendor-distrib./'.padEnd(18)} ${nVendor} archivos (shared, server, client) para vendorizar`);
+// Bundles autocontenidos de los scripts ONLINE (vendor, pin-update, download-iconify, render-lote, skills/*/tools).
+{
+  const { construirOnline } = await import(pathToFileURL(join(root, 'scripts', 'build-online.mjs')).href);
+  await construirOnline();
+}
 
 // Estilos de diagrama (diagram-styles.ts): los temas JSON no van dentro de
 // los bundles; se descargan bajo demanda junto a ellos, en diagrams/themes/.

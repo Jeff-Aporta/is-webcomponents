@@ -1,11 +1,11 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/assets/dl.js
+// @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/assets/dl.js
 // assets/dl.js — íconos de la app: SOLO configuración de rutas (`deno task icons`, corre dentro de `build`).
 // La herramienta vive en el kit, fijada al MISMO SHA del pin (`deno task pin` la sube con el resto).
 // Baja a assets/iconify/<set>/<nombre>.svg los íconos que usa la app y TODOS los de lo que consume
 // (el kit por defecto; otras apps iswc se suman en `mapas`, por SHA), y escribe assets/iconify.json
 // (con `host` de deno.json → iswc.host). En ejecución: si el ícono está en el mapa → local; si no → API.
 // Herramienta ONLINE del kit, siempre @main (la tarea `icons` lleva --reload del origen: Deno cachea los módulos remotos).
-import { descargarIconos } from 'https://raw.githubusercontent.com/__REPO__/main/src/vendor-distributions/client/tools/download-iconify.ts';
+import { descargarIconos } from 'https://raw.githubusercontent.com/__REPO__/main/dist/cdn/vendor-distributions/client/tools/download-iconify.mjs';
 
 await descargarIconos({
   raiz: new URL('..', import.meta.url),
