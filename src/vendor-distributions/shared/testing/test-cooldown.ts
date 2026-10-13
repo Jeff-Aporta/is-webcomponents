@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/testing/test-cooldown.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 // test-cooldown.ts — Cooldown de tests proporcional a su duración, con
 // memoria en un JSON.
@@ -33,6 +34,7 @@
 // COOLDOWN DE LLAVES (jueces LLM y JEV, estándar entre apps): una llave que falla por saldo, key
 // rechazada o cuota queda 24 h fuera (`cooldownHasta` ISO en su entrada del archivo de llaves); el
 // mismo `-1` a mano la reactiva. Un juez caído NUNCA es error: solo aviso (ver `jueces.ts`).
+// Skill: skills/iswc-foundation/references/07-pruebas-y-gate.md
 // Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 // Doc (jueces): https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 

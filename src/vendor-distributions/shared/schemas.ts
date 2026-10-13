@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/schemas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * schemas.ts — TODOS los contratos (Zod y tipos) de `vendor-distributions/`, en UN solo archivo por secciones.
@@ -18,6 +19,7 @@
  * (esta cabecera) siempre se conserva.
  *
  * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/schemas.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO; podado por secciones). Sin imports relativos.
+ * Skill: skills/iswc-foundation/references/05-zod-y-tipos.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
  */
 
@@ -634,23 +636,26 @@ export type TPerfil = (typeof PERFILES)[number];
 export const ZPerfilVendor = z.enum(["server", "client"]);
 export type TPerfilVendor = z.infer<typeof ZPerfilVendor>;
 
-/** Un archivo del kit que el consumidor trae. */
+/** Un ALTA: archivo (o carpeta) del repo que el consumidor aún no tiene. Una vez bajado, se mantiene por su cabecera. */
 export const ZArchivoVendor = z.object({
-  /** Ruta en el repo del kit (p. ej. `dist/cdn/vendor-distributions/shared/lib/obj.ts`). */
+  /** Ruta en el repo (p. ej. `dist/cdn/vendor-distributions/shared/lib/obj.ts` o `skills/iswc-foundation`). */
   desde: z.string().min(1),
-  /** Ruta en el consumidor, relativa a `raiz` (p. ej. `src/sources/000 Base/ISU/obj.ts`). */
+  /** Ruta en el consumidor, relativa a `raiz` (p. ej. `src/sources/000 Base/ISU/obj.ts` o `skills/iswc-foundation`). */
   hacia: z.string().min(1),
-  /** Documentación del archivo en el repo del kit (va como comentario `@doc` en la cabecera). */
+  /** Documentación del archivo en el repo (va como `@doc` en la cabecera). */
   doc: z.string().min(1).optional(),
+  /** `true`: `desde` es una carpeta; se trae el árbol completo bajo `hacia` (listado del checkout local o de jsDelivr). */
+  carpeta: z.boolean().optional(),
 });
 export type TArchivoVendor = z.infer<typeof ZArchivoVendor>;
 
 /**
- * Protocolo de pines que la CLI de `vendor.ts` corre al terminar (`pin-update.mjs --nuevo=ultimo`):
- * todo `is-webcomponents@<sha40>` del consumidor pasa al último SHA PUBLICADO de la rama.
+ * Protocolo de pines que la CLI de `vendor.ts` corre ANTES de barrer (`pin-update.mjs --nuevo=ultimo`):
+ * todo `is-webcomponents@<sha40>` del consumidor pasa al último SHA PUBLICADO de la rama, y el barrido
+ * lee la web de ese pin.
  */
 export const ZPinVendor = z.object({
-  /** `false` no corre el protocolo de pines tras vendorizar. Default `true`. */
+  /** `false` no corre el protocolo de pines. Default `true`. */
   activo: z.boolean().default(true),
   /** Rutas (relativas a `raiz`) a barrer en busca de pines. Default: las de `pin-update.mjs` (front típico). */
   raices: z.array(z.string().min(1)).optional(),
@@ -658,16 +663,18 @@ export const ZPinVendor = z.object({
   saltar: z.array(z.string().min(1)).optional(),
   /** Archivo que debe existir en el pin para darlo por publicado. Default `dist/cdn/core/loader.min.js`. */
   verificar: z.string().min(1).optional(),
+  /** Pin a usar como fuente web cuando el consumidor no cita ningún `<repo>@<sha40>` (p. ej. un server sin front). */
+  sha: z.string().regex(/^[0-9a-f]{40}$/).optional(),
 });
 export type TPinVendor = z.infer<typeof ZPinVendor>;
 
-/** El JSON que recibe `vendor.ts`. Claves extra se ignoran. */
+/** El JSON que recibe `vendor.ts`: BOOTSTRAP (repo, perfil, local, raíces a barrer) + altas. Claves extra se ignoran. */
 export const ZConfigVendor = z.object({
-  /** `dueño/repo` del kit en GitHub. */
+  /** `dueño/repo` en GitHub (el kit u otro: el barrido sirve para cualquier repo). */
   repo: z.string().regex(/^[^/\s]+\/[^/\s]+$/),
-  /** Rama que se sigue. */
+  /** Rama que se sigue (para el protocolo de pines y como respaldo sin pin). */
   rama: z.string().min(1).default("main"),
-  /** Checkout local del kit (opcional): compite por fecha con el remoto; si no existe, se omite. */
+  /** Checkout local del repo (opcional): compite por fecha con la web; si no existe, se omite. */
   local: z.string().optional(),
   /**
    * Perfil del consumidor (`server` o `client`): solo se bajan `vendor-distributions/shared/` y
@@ -675,13 +682,26 @@ export const ZConfigVendor = z.object({
    * navegador. Sin perfil se baja todo (modo anterior) con aviso.
    */
   perfil: ZPerfilVendor.optional(),
-  /** Raíz del consumidor (base de `hacia`). Por defecto, el directorio desde el que se corre. */
+  /** Raíz del consumidor (base de `hacia` y del barrido). Por defecto, el directorio desde el que se corre. */
   raiz: z.string().optional(),
-  /** Protocolo de pines tras vendorizar (ver `ZPinVendor`). */
+  /** Carpetas a barrer en busca de cabeceras `@vendor` (relativas a `raiz`). Default: toda la raíz. */
+  raices: z.array(z.string().min(1)).optional(),
+  /** Carpetas que el barrido no entra, además de `node_modules, .git, dist, _entregable, .tmp*`. */
+  saltar: z.array(z.string().min(1)).optional(),
+  /** Protocolo de pines y pin de respaldo (ver `ZPinVendor`). */
   pin: ZPinVendor.optional(),
-  archivos: z.array(ZArchivoVendor).min(1),
+  /** Altas: lo que aún no existe en el consumidor. Vacío = solo barrido. */
+  archivos: z.array(ZArchivoVendor).default([]),
 });
 export type TConfigVendor = z.infer<typeof ZConfigVendor>;
+
+/** Lo que dice una cabecera `@vendor <ISO> <repo>@<sha|local> <desde>` (la forma corta solo trae la fecha). */
+export interface TCabeceraVendor {
+  fecha: string;
+  repo: string | null;
+  sha: string | null;
+  desde: string | null;
+}
 
 /** Resultado por archivo. */
 export interface TResultadoVendor {
@@ -696,6 +716,8 @@ export interface TResultadoVendor {
   /** Fecha de la copia que ya había. */
   previa?: string | null;
   error?: string;
+  /** Se actualizó, pero con algo que decir (p. ej. copiado de local porque aún no está publicado). */
+  aviso?: string;
   /** Imports relativos del archivo que no existen en el consumidor (no se vendorizaron). */
   faltan?: string[];
   /** El perfil del consumidor no admite el archivo (otro perfil, ruta sin perfil o dependencia de navegador en server): no se bajó. */

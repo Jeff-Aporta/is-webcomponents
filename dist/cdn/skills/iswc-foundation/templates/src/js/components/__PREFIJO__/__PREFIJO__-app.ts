@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/src/js/components/__PREFIJO__/__PREFIJO__-app.ts
 /**
  * <__PREFIJO__-app> — shell de la app: barra (marca + tema) y la vista activa.
  *

@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/references/02-deno-y-build.md -->
 # 02 — Deno, tareas y build
 
 ## `deno.json`

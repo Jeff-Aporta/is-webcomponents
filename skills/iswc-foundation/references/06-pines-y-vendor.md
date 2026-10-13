@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/references/06-pines-y-vendor.md -->
 # 06 — Pines y vendor del kit
 
 ## Pin fijo
@@ -45,17 +46,22 @@ deno task build && deno task test:all
   `vendor.ts` (pin por fecha ISO: compiten el checkout `local` y el HEAD remoto); el protocolo de pines deja el SHA
   del consumidor en el último publicado.
 
-## Descarga de vendor: `shared/tools/vendor.ts` (pin por fecha ISO y perfil)
+## Vendor por BARRIDO: `shared/tools/vendor.ts` (cabecera `@vendor` en cada archivo, perfil, pin estático)
 
-Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendor-distributions/shared/tools/vendor.ts`, con Deno, a partir de un JSON del proyecto (sección `vendor` de `shared/schemas.ts`):
+Todo lo que un proyecto trae de un repo GitHub (el kit u otro) por vendor strategy lo mantiene
+`dist/cdn/vendor-distributions/shared/tools/vendor.ts`, con Deno (`deno task vendor` / `npm run vendor`: el ÚNICO punto;
+para estos archivos no se usan imports remotos, ni en un consumidor Deno como el ISW), a partir de un JSON del
+proyecto (sección `vendor` de `shared/schemas.ts`) que es solo BOOTSTRAP:
 
 ```json
 {
   "repo": "Jeff-Aporta/is-webcomponents",
   "local": "C:/ContaPyme/Personal/apps/is-webcomponents",
   "perfil": "server",
+  "raices": ["src", "tests", "scripts", "skills"],
   "pin": { "raices": ["index.html", "src", "demo", "docs"] },
   "archivos": [
+    { "desde": "skills/iswc-foundation", "hacia": "skills/iswc-foundation", "carpeta": true },
     { "desde": "dist/cdn/vendor-distributions/shared/lib/obj.ts", "hacia": "src/sources/000 Base/ISU/obj.ts", "doc": "src/vendor-distributions/shared/lib/obj.md" },
     { "desde": "dist/cdn/vendor-distributions/shared/schemas.ts", "hacia": "src/sources/000 Base/ISU/schemas.ts" },
     { "desde": "dist/cdn/vendor-distributions/shared/tools/vendor.ts", "hacia": "scripts/vendor/ISU/vendor.ts" },
@@ -64,6 +70,62 @@ Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendo
   ]
 }
 ```
+
+### Barrido: cada archivo dice de dónde se actualiza
+
+`vendor.ts` recorre el consumidor (`raices`, por defecto la raíz; salta `node_modules`, `.git`, `dist`, `_entregable`,
+`.tmp*` y `saltar`), encuentra todo archivo con cabecera `@vendor` (extensiones ts, js, mjs, cjs, md, css, html, json)
+y, para cada uno, resuelve su origen DESDE LA PROPIA CABECERA (`<repo>` y `<desde>`): compara la fecha de la cabecera
+con la del checkout `local` (si está configurado y existe) y con la web, y si hay una fuente más reciente la baja y
+reescribe la cabecera. Una vez bajado, el archivo se mantiene por su cabecera: `vendor.json` NO lo lista. El propio
+`vendor.ts` del consumidor lleva cabecera: cuando cambia en el kit se actualiza solo al correr `vendor`
+(autoactualización); `pin-update.mjs` y `schemas.ts` igual. El perfil se sigue aplicando en el barrido (un server
+nunca baja `client/`). Un archivo con cabecera de OTRO repo no se toca (cada corrida es de un `repo`).
+
+### `vendor.json` es solo bootstrap
+
+`repo`, `rama`, `perfil`, `local`, `raices` (a barrer), `saltar`, `pin` y las ALTAS (`archivos`: lo que aún no existe en
+el consumidor, `desde → hacia`; `carpeta: true` trae un árbol completo, p. ej. una skill). Un alta cuyo `hacia` ya
+existe SIN cabecera `@vendor` (archivo o skill PROPIA) es un error claro y no se pisa. Las altas ya bajadas pueden
+quedarse en el JSON (sirven de documentación) o borrarse: da igual, el barrido las mantiene.
+
+### Formato de cabecera por tipo de archivo
+
+Siempre `<ISO> <repo>@<sha|local> <desde>` (+ opcional `@doc <url>`); `<sha>` es el pin del proyecto si vino de la
+web y `local` si vino del checkout:
+
+| Extensión | Cabecera |
+| --- | --- |
+| `.ts .js .mjs .cjs` | `// @vendor <ISO> <repo>@<sha> <desde>` y `// @doc <url>` |
+| `.md .html` | `<!-- @vendor <ISO> <repo>@<sha> <desde> -->` y `<!-- @doc <url> -->` (en un `.md` con front matter YAML, justo después del `---` de cierre: los parsers de skills siguen viendo el front matter primero) |
+| `.css` | `/* @vendor <ISO> <repo>@<sha> <desde> */` y `/* @doc <url> */` |
+| `.json` | `"$vendor": "<ISO> <repo>@<sha> <desde>"` y `"$doc": "<url>"` como PRIMERAS claves del objeto |
+
+En el kit, el hook `pre-commit` (`scripts/vendor-stamp.mjs`, instalado por `scripts/sync-pins.mjs --install-hook` junto
+al post-commit; `deno task vendor:stamp` lo aplica a todo) estampa `@vendor <ISO> Jeff-Aporta/is-webcomponents@local <ruta>`
+en lo staged de `src/vendor-distributions/**` y `skills/**` con la hora del commit y lo re-añade al stage; así el
+consumidor compara fechas reales leyendo la cabecera (`fechaLocal` prefiere la cabecera del checkout y cae a
+`git log -1` solo si falta; «ahora» si hay cambios sin commitear). Los `.json` bajo `templates/` no se estampan.
+
+### Fuente web = pin estático del proyecto (nunca el HEAD)
+
+La web se lee de `https://cdn.jsdelivr.net/gh/<repo>@<pin>/<desde>` donde `<pin>` es el SHA que el proyecto ya usa (el
+`<repo>@<sha40>` más citado en el barrido; sin pines, `pin.sha` de `vendor.json`; sin nada, el HEAD de la rama con
+aviso): misma ruta que en el checkout. La fecha del archivo en ese pin sale de la API de GitHub (`commits?path=&sha=`)
+y se cachea en `.tmp/vendor-fechas.json` (un pin es inmutable); si la API no responde, cuenta la fecha del commit del
+pin. Cuando el pin cambia (`pin-update.mjs --nuevo=ultimo`, que la CLI corre ANTES de barrer), el mismo barrido busca
+en el nuevo pin si hubo cambios. Lo que aún no existe en la web (404, p. ej. una skill recién creada) se copia del
+checkout local con el aviso «copiado de local, aún no publicado». `skills/**` del kit se sirve tal cual desde el repo
+(jsDelivr sirve cualquier ruta; el build además lo copia a `dist/cdn/skills/`): en las altas se usa `skills/<nombre>`.
+
+### Skills como vendor transversal
+
+El consumidor tiene `skills/`: (1) sus skills PROPIAS y (2) las COMUNES del kit, dadas de alta con `carpeta: true`
+(`skills/iswc-foundation → skills/iswc-foundation`, `skills/is-cdn-install`, `skills/iswc-diagramas-enriquecidos`…).
+`skills/README.md` del consumidor lo genera/actualiza el vendor (marca `generado por vendor.ts`): índice de propias (sin
+cabecera) y comunes (con su `@vendor`); un README propio sin la marca no se toca. Cada `.ts` vendorizable del kit lleva
+en su docblock `Skill: skills/…md` (la skill que lo explica; guardián `meta/vendor-distributions-doc.test.ts` D5) y al
+vendorizar esa línea se reescribe a la ruta local del consumidor si tiene la skill, o a la URL jsDelivr del pin si no.
 
 - **Qué hay para vendorizar**: todo vive en `dist/cdn/vendor-distributions/` separado por **perfil**:
   `shared/` (sin navegador: `schemas.ts` único · `lib/` obj, zod · `testing/` pruebas (con su modo hijo), test-cooldown
@@ -86,12 +148,12 @@ Todo lo que un proyecto trae del kit por vendor strategy lo baja `dist/cdn/vendo
   `../../shared/testing/proveedores-llm.ts`) y la config trae los dos, `vendor.ts` reescribe el specifier a la ruta
   entre los dos `hacia` (`./proveedores-llm.ts` si caen en la misma `ISU/`).
 - **Carpeta `ISU/`**: lo vendorizado conserva su nombre normal y vive en una carpeta `ISU/` del proyecto, así no choca con los archivos propios.
-- **Pin por fecha ISO**: por archivo compiten el checkout local del kit (fecha del último commit que lo tocó, o «ahora» si tiene cambios sin commitear) y el HEAD remoto; gana el más reciente y solo se escribe si es más nuevo que la copia (`// @vendor <ISO>`). Nunca hay regresiones.
+- **Pin por fecha ISO**: por archivo compiten el checkout local del kit (cabecera estampada, o «ahora» si tiene cambios sin commitear) y la web en el pin del proyecto; gana el más reciente y solo se escribe si es más nuevo que la copia (`@vendor <ISO>`). Nunca hay regresiones.
 - **Cabecera**: `// @vendor <ISO> <repo>@<sha|local> <desde>` (el propio archivo dice desde dónde se actualiza: no hace
   falta un diccionario de rutas) y, opcional, `// @doc <URL jsDelivr de su .md>`. La doc va SIEMPRE por CDN (nunca ruta local): sale de `doc` en `vendor.json` o, si falta, de la `// @doc` con que la fuente abre (todo archivo de `vendor-distributions/` la trae; guardián `meta/vendor-distributions-doc.test.ts`), fijada al SHA ganador (a la rama si ganó el checkout local).
 - **Dónde se corre**: el comando vive solo en el `package.json` del mirror `_experimental` (el del entregable no lo define), y el sync al entregable siempre descarga antes de copiar.
-- **Pines al terminar**: la CLI de `vendor.ts` corre el protocolo de pines (arriba) con el `pin-update.mjs` vendorizado
-  junto a ella: `vendor.ts` y `pin-update.mjs` van siempre a la misma carpeta.
+- **Pines primero**: la CLI de `vendor.ts` corre el protocolo de pines (arriba) con el `pin-update.mjs` vendorizado
+  junto a ella ANTES de barrer, para leer la web del pin nuevo: `vendor.ts` y `pin-update.mjs` van siempre a la misma carpeta.
 
 ### Lote de diagramas con caché por hash (`client/tools/render-lote.ts`)
 

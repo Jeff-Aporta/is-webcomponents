@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/testing/pruebas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).
@@ -16,6 +17,7 @@
  * llave de su cooldown. Solo `node:*`: corre igual en Node (tsx) y en Deno.
  *
  * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/pruebas.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `pruebas`), `./test-cooldown.ts`. El modo hijo de `aislar` es este mismo archivo con `--hijo <json>` (antes `pruebas-hijo.ts`).
+ * Skill: skills/iswc-foundation/references/07-pruebas-y-gate.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
  */
 import { existsSync, readdirSync } from 'node:fs';

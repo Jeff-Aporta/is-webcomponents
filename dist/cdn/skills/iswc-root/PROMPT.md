@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-root/PROMPT.md -->
 # ISWC (Instrucciones para LLM)
 
 Utiliza **ISWC** exclusivamente mediante **CDN** (o copia local vía `/iswc-root:local`).

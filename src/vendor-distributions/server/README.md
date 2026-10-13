@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/server/README.md -->
 # `vendor-distributions/server/` — exclusivo de proyectos server
 
 Perfil `server`: lo baja solo un consumidor con `"perfil": "server"` en su `vendor.json` (junto con `shared/`).

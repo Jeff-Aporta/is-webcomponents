@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/tools/download-iconify.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md
 /**
  * download-iconify — descarga a la app los íconos Iconify que usa y escribe su mapa.
@@ -28,6 +29,7 @@
  * Solo `node:*`: corre igual en Node y en Deno.
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/download-iconify.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/schemas.ts` (sección `download-iconify`).
+ * Skill: skills/iswc-foundation/references/10-iconos.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/10-iconos.md
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';

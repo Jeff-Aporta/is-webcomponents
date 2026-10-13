@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/specs/foundation/20-componentes-y-vistas.md -->
 # 20 — Componentes, vistas y kit
 
 > Alcance: cómo se define un componente `__PREFIJO__-*`, cómo se registra, cómo se define una vista

@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/lib/obj.md -->
 # `Obj` — operaciones sobre objetos y referencias a fuentes de verdad
 
 Biblioteca común de iswc (sin dependencias de DOM). Lee y modifica **partes** de un objeto JSON sin tocar el resto, y resuelve referencias `{ path, query, actions }` a otros JSON. Ningún método muta: todos devuelven un objeto nuevo.

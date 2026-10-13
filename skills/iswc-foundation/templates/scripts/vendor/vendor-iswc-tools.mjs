@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/scripts/vendor/vendor-iswc-tools.mjs
 // vendor-iswc-tools.mjs — copia las herramientas del kit iswc-root al MISMO SHA del pin de la app.
 //
 //   deno task vendor:iswc            # al SHA de src/js/iswc.ts (pin canonico): raw por SHA, jsDelivr de respaldo

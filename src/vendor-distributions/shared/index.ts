@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/index.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * index.ts — barrel del perfil `shared/`: lo que sirve igual a un proyecto server (ISS) y a uno client
@@ -14,6 +15,7 @@
  * Perfil: shared. Vendor: cada archivo se baja por separado (`dist/cdn/vendor-distributions/shared/<paquete>/<archivo>`)
  * con `tools/vendor.ts`; este barrel sirve dentro del kit y a quien vendorice `shared/` completo
  * conservando la estructura.
+ * Skill: skills/iswc-foundation/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
  */
 export { cooldownMs, createTestCooldown, formatMs, runQueue, TEST_CONCURRENCY, testConcurrency, testCooldownFromEnv, testId } from './testing/test-cooldown.ts';

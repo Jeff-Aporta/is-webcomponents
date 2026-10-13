@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/testing/stagehand.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
 /**
  * stagehand.ts — controlador de Stagehand para los e2e de navegador de los fronts del kit (ISW y los
@@ -30,6 +31,7 @@
  *   const stagehand = await Stagehand.create({ browser, model: { generate: ctx.generate } });
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/testing/stagehand.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/schemas.ts` (secciones `stagehand`, `proveedores-llm`, `test-cooldown`), `../../shared/testing/proveedores-llm.ts`, `../../shared/testing/test-cooldown.ts` (vendor.ts reescribe las rutas al aplanar).
+ * Skill: skills/iswc-foundation/references/11-stagehand.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
  */
 import { contenidoDe, elegirProveedor, evaluarSondaLlm, normalizarJson } from '../../shared/testing/proveedores-llm.ts';

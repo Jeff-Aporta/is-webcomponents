@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/pin-update.mjs
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
@@ -30,6 +31,7 @@
 //         4 sin red (no se pudo resolver `ultimo`; nada se tocó).
 //
 // Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/tools/pin-update.mjs` → carpeta `ISU/` del consumidor, junto a `vendor.ts` (`tools/vendor.ts`, pin por fecha ISO). Sin imports relativos.
+// Skill: skills/iswc-foundation/references/06-pines-y-vendor.md
 // Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';

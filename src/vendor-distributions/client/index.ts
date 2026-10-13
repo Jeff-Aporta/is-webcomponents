@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/index.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * index.ts — barrel del perfil `client/`: lo que solo un proyecto client (front, e2e de navegador,
@@ -15,6 +16,7 @@
  *
  * Perfil: client. Vendor: cada archivo se baja por separado (`dist/cdn/vendor-distributions/client/<paquete>/<archivo>`)
  * con `tools/vendor.ts` (perfil `client` en el vendor.json); este barrel sirve dentro del kit (labs).
+ * Skill: skills/iswc-foundation/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
  */
 export {

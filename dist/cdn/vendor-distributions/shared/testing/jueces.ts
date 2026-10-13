@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/testing/jueces.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 /**
  * jueces.ts — jueces OPCIONALES para refinar el criterio de las pruebas: JEV (TypeSafe) y un juez LLM
@@ -16,6 +17,7 @@
  *   });
  *   capaOpcional(t, 'jev pertinencia', v, (r) => expect('pertinente', (r.pertinente?.noul ?? 0) >= 0.6));
  *
+ * Skill: skills/iswc-foundation/references/12-jueces.md
  * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/jueces.ts` → carpeta `ISU/` del consumidor (server o client). Imports relativos que deben viajar con él: `../schemas.ts` (secciones `jueces`, `proveedores-llm`, `test-cooldown`), `./test-cooldown.ts`, `./proveedores-llm.ts`.
  */
 import { existsSync, readFileSync } from 'node:fs';

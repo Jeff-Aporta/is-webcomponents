@@ -49,6 +49,7 @@
     "postpush": "deno task tour:remote",
     "sync:pins": "deno run -A scripts/sync-pins.mjs",
     "sync:pins:remote": "deno run -A scripts/sync-pins.mjs --remote",
-    "sync:pins:hook": "deno run -A scripts/sync-pins.mjs --install-hook"
+    "sync:pins:hook": "deno run -A scripts/sync-pins.mjs --install-hook",
+    "vendor:stamp": "deno run -A scripts/vendor-stamp.mjs --todos"
   }
 }

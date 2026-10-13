@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/scripts/build/build-scss.mjs
 // build-scss.mjs — compila cada `src/**/*.scss` y `view/**/*.scss` a `.tmp-scss/<misma ruta>.css`.
 //
 // La fuente canonica es el `.scss` hermano; el `.css` es artefacto (staging gitignored) y el build lo

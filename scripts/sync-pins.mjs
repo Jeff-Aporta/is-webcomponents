@@ -6,7 +6,7 @@
  *   node scripts/sync-pins.mjs
  *   node scripts/sync-pins.mjs <sha>
  *   node scripts/sync-pins.mjs --remote
- *   node scripts/sync-pins.mjs --install-hook
+ *   node scripts/sync-pins.mjs --install-hook   (post-commit: PIN y pines · pre-commit: estampa @vendor, scripts/vendor-stamp.mjs)
  *   node scripts/sync-pins.mjs --dry-run
  *   deno task sync:pins
  *
@@ -48,6 +48,20 @@ exec deno run -A "$ROOT/scripts/sync-pins.mjs"
   writeFileSync(hook, body.replace(/\r\n/g, '\n'));
   try { chmodSync(hook, 0o755); } catch { /* Windows */ }
   console.log('hook instalado:', hook);
+  // pre-commit: estampa `@vendor <ISO> <repo>@local <ruta>` en lo staged de src/vendor-distributions/** y skills/**
+  // (scripts/vendor-stamp.mjs) y lo re-añade al stage: el vendor.ts de los consumidores compara fechas reales.
+  const pre = join(ROOT, '.git', 'hooks', 'pre-commit');
+  const bodyPre = `#!/usr/bin/env bash
+# Generado por scripts/sync-pins.mjs --install-hook
+ROOT="$(git rev-parse --show-toplevel)"
+if command -v deno >/dev/null 2>&1; then
+  exec deno run -A "$ROOT/scripts/vendor-stamp.mjs"
+fi
+exec node "$ROOT/scripts/vendor-stamp.mjs"
+`;
+  writeFileSync(pre, bodyPre.replace(/\r\n/g, '\n'));
+  try { chmodSync(pre, 0o755); } catch { /* Windows */ }
+  console.log('hook instalado:', pre);
   process.exit(0);
 }
 

@@ -146,6 +146,10 @@ export async function resolveIconSvg(prefix: string, name: string): Promise<stri
 const LS_PREFIJO = 'iswc-icon:';
 /** Tope por SVG en localStorage (los íconos pesan ~1 KB; uno enorme no vale el espacio). */
 const LS_MAX_BYTES = 32 * 1024;
+/** Vida máxima de un SVG persistido: 15 días. Después se vuelve a pedir (y se renueva). */
+export const LS_TTL_MS = 15 * 24 * 60 * 60 * 1000;
+/** Formato persistido: `{ t: <ms de guardado>, s: <svg> }`. */
+type Persistido = { t: number; s: string };
 
 function almacen(): Storage | null {
   try {
@@ -156,22 +160,51 @@ function almacen(): Storage | null {
   }
 }
 
-function leerPersistido(key: string): string | null {
+function leerPersistido(key: string, ahora = Date.now()): string | null {
+  const ls = almacen();
+  if (!ls) return null;
   try {
-    const v = almacen()?.getItem(LS_PREFIJO + key);
-    return v && v.includes('<svg') ? v : null;
+    const v = ls.getItem(LS_PREFIJO + key);
+    if (!v) return null;
+    const p = JSON.parse(v) as Partial<Persistido>;
+    if (typeof p?.s !== 'string' || !p.s.includes('<svg') || typeof p.t !== 'number') { ls.removeItem(LS_PREFIJO + key); return null; }
+    if (ahora - p.t > LS_TTL_MS) { ls.removeItem(LS_PREFIJO + key); return null; } // vencido: se renueva
+    return p.s;
   } catch {
+    try { ls.removeItem(LS_PREFIJO + key); } catch { /* nada */ }
     return null;
   }
 }
 
-function persistir(key: string, svg: string): void {
+function persistir(key: string, svg: string, ahora = Date.now()): void {
   if (svg.length > LS_MAX_BYTES) return;
   try {
-    almacen()?.setItem(LS_PREFIJO + key, svg);
+    almacen()?.setItem(LS_PREFIJO + key, JSON.stringify({ t: ahora, s: svg } satisfies Persistido));
   } catch {
     // cuota llena o storage bloqueado: la memoria basta para esta página
   }
+}
+
+/** Borra los SVG persistidos vencidos (más de `LS_TTL_MS`). Devuelve cuántos quitó. */
+export function purgarIconosVencidos(ahora = Date.now()): number {
+  const ls = almacen();
+  if (!ls) return 0;
+  let n = 0;
+  try {
+    const claves: string[] = [];
+    for (let i = 0; i < ls.length; i++) { const k = ls.key(i); if (k && k.startsWith(LS_PREFIJO)) claves.push(k); }
+    for (const k of claves) {
+      let vencido = true;
+      try { const p = JSON.parse(ls.getItem(k) ?? '') as Partial<Persistido>; vencido = typeof p?.t !== 'number' || ahora - p.t > LS_TTL_MS; } catch { /* corrupto: fuera */ }
+      if (vencido) { ls.removeItem(k); n++; }
+    }
+  } catch { /* nada */ }
+  return n;
+}
+
+// Barrido perezoso: una vez por página, 60 s después de cargar, fuera del arranque.
+if (typeof setTimeout === 'function' && typeof document !== 'undefined') {
+  setTimeout(() => { try { purgarIconosVencidos(); } catch { /* nada */ } }, 60_000);
 }
 
 /** Borra los SVG persistidos en localStorage (todos los `iswc-icon:*`). */

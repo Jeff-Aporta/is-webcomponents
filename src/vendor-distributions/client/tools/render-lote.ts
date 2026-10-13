@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/tools/render-lote.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lote.ts — render de un LOTE de diagramas con caché por hash (lo que ISS e ISW hacían cada uno
@@ -20,6 +21,7 @@
  *   const r = await renderizarLote({ carpeta, salidaSvg, salidaPng, kit });        // hijos + caché
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-lote.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.js` (y lo que este trae: `../../shared/lib/obj.js`, `./hosts.js`, `./sanitize-svg.js`, `./static-server.js`; vendor.ts reescribe las rutas al aplanar), `../../shared/schemas.ts` (secciones `render-lote`, `render-diagram`).
+ * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { spawnSync } from 'node:child_process';

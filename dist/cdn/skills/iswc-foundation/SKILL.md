@@ -8,6 +8,7 @@ description: >-
   alinear una app existente (ISW, iswc-docs…) con el estándar. Todas las apps iswc deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
+<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/SKILL.md -->
 
 # iswc-foundation — el estándar de las apps iswc
 
@@ -77,6 +78,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | Sync a entregable (mirror) | [08-sync-entregable.md](references/08-sync-entregable.md) |
 | Alinear una app existente al estándar | [09-alinear-app.md](references/09-alinear-app.md) |
 | `create-iswc-app` en detalle | [13-crear-app.md](references/13-crear-app.md) |
+| Herramientas de test: qué usar y cuándo (guía única para agentes) | [14-herramientas-de-test.md](references/14-herramientas-de-test.md) |
 
 ## 4. Flujo de trabajo de un agente en una app iswc
 

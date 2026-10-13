@@ -1,9 +1,11 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/tools/static-server.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Servidor estático mínimo (Node http) para servir dist/cdn + labs.
  * Deno lo usa vía node:http (compat).
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/static-server.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/schemas.ts` (sección `static-server`).
+ * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { createServer, type Server } from 'node:http';

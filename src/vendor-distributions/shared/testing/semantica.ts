@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/testing/semantica.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
 /**
  * semantica.ts — juez semántico DETERMINISTA de las pruebas (tercera capa, antes de JEV/LLM):
@@ -26,6 +27,7 @@
  * meta-descripción que nombra el tema empata con la respuesta útil.
  *
  * Perfil: shared (sin navegador). Vendor: `dist/cdn/vendor-distributions/shared/testing/semantica.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `semantica`).
+ * Skill: skills/iswc-foundation/references/12-jueces.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/12-jueces.md
  */
 import { existsSync, readdirSync } from 'node:fs';

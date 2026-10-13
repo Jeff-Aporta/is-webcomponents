@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/scripts/gate/sync-to-entregable.mjs
 // sync-to-entregable.mjs — mirror (`_experimental/<app>`) -> entregable (`_entregable/<app>`), sobre el
 // motor comun del kit (`src/vendor/iswc-root/tools/sync-entregable.ts`).
 //

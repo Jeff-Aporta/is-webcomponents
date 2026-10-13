@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-root/tools/migrate.md -->
 # `/iswc-root:migrate`
 
 Convertir un frontend con framework (React, MUI, Svelte, Vue, Angular, etc.)

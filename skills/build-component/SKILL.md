@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/build-component/SKILL.md -->
 ﻿---
 name: build-component
 description: >-

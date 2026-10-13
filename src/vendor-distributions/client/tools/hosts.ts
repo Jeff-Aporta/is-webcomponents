@@ -1,9 +1,11 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/tools/hosts.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Hosts iswc-* que montan un <svg> de diagrama en shadow DOM.
  * Misma lista que usa el ISS al exportar docs.
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/hosts.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Sin imports relativos.
+ * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 export const DIAGRAM_HOSTS = [

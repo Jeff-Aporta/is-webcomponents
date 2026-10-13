@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-root/tools/local.md -->
 # `/iswc-root:local`
 
 Preferir copias **locales** del kit (JS + CSS) sobre CDN para una app

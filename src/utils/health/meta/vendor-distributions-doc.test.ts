@@ -1,7 +1,10 @@
 /**
  * Guardián WHAT de la documentación de `src/vendor-distributions/` (todo lo que viaja por vendor):
- *   D1 todo archivo de código (.ts/.mjs) empieza con `// @doc <URL CDN>` (jsDelivr o GitHub Pages) que
- *      apunta a un .md que existe en el repo; nunca una ruta local.
+ *   D1 todo archivo de código (.ts/.mjs) abre con `// @doc <URL CDN>` (jsDelivr o GitHub Pages) que apunta a un .md
+ *      que existe en el repo; nunca una ruta local. Delante puede ir la cabecera `// @vendor …` que estampa el hook
+ *      pre-commit del kit (scripts/vendor-stamp.mjs).
+ *   D5 todo archivo de código lleva en su cabecera `Skill: <ruta .md>` (la skill, común o particular, que lo explica)
+ *      y esa ruta existe en el repo; al vendorizar, `vendor.ts` la reescribe a la copia local del consumidor o a la URL del pin.
  *   D2 los .md de la carpeta enlazan otros .md SOLO por CDN (sin rutas relativas ni locales).
  *   D3 el README índice nombra cada archivo de código.
  *   D4 lo publicado en `dist/cdn/vendor-distributions/` (si hay build) es el mismo conjunto de archivos.
@@ -30,7 +33,8 @@ Deno.test('vendor-distributions: D1 todo archivo de código abre con // @doc por
   assert(codigo.length >= 20, `muy pocos archivos de código: ${codigo.length}`);
   const malos: string[] = [];
   for (const f of codigo) {
-    const primera = readFileSync(join(SRC, f), 'utf8').split('\n', 1)[0]!.trim();
+    const lineas = readFileSync(join(SRC, f), 'utf8').split('\n', 2);
+    const primera = (lineas[0]!.startsWith('// @vendor ') ? lineas[1] ?? '' : lineas[0]!).trim();
     const m = primera.match(/^\/\/ @doc (\S+)$/)?.[1]?.match(CDN);
     if (!m) { malos.push(`${f}: primera línea «${primera.slice(0, 90)}»`); continue; }
     // GitHub Pages publica dist/ en la raíz; jsDelivr sirve el repo tal cual.
@@ -60,4 +64,14 @@ Deno.test('vendor-distributions: D3 el README nombra cada archivo de código', (
 Deno.test('vendor-distributions: D4 dist publica el mismo conjunto que src', () => {
   if (!existsSync(DIST)) return; // sin build no hay nada que comparar
   assertEquals(listar(DIST).sort(), archivos.filter((f) => /\.(ts|mjs|md)$/.test(f)).sort(), 'corre `deno task build`');
+});
+
+Deno.test('vendor-distributions: D5 cada archivo de código dice su Skill: y la ruta existe en el repo', () => {
+  const malos: string[] = [];
+  for (const f of codigo) {
+    const m = readFileSync(join(SRC, f), 'utf8').match(/^\s*(?:\*|\/\/)\s*Skill:\s*(\S+)/m);
+    if (!m) { malos.push(`${f}: sin línea «Skill: <ruta .md>» en la cabecera`); continue; }
+    if (!/\.md$/.test(m[1]!) || !existsSync(m[1]!)) malos.push(`${f}: la skill ${m[1]} no existe en el repo`);
+  }
+  assertEquals(malos, [], malos.join('\n'));
 });

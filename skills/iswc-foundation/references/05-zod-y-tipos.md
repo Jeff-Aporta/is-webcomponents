@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/references/05-zod-y-tipos.md -->
 # 05 — Zod y tipos
 
 - `src/js/base/zod.ts` es el **único** módulo que importa `zod`; el build lo empaqueta. Los schemas

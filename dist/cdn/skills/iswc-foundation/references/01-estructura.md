@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/references/01-estructura.md -->
 # 01 — Estructura de una app iswc
 
 ```

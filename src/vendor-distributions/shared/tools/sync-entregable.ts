@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/sync-entregable.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/08-sync-entregable.md
 /**
  * Sync comun `_experimental` -> `_entregable` de las apps del kit (ISS, ISW).
@@ -14,6 +15,7 @@
  * Solo `node:*`: corre igual en Node y en Deno.
  *
  * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `sync-entregable`).
+ * Skill: skills/iswc-foundation/references/08-sync-entregable.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/08-sync-entregable.md
  */
 import { spawnSync } from 'node:child_process';

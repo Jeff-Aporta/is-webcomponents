@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/lib/obj.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
 /**
  * obj.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).
@@ -23,6 +24,7 @@
  * bundle `obj.min.js` (Zod incluido) para el navegador en `dist/cdn/lib/`.
  *
  * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/lib/obj.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `obj`; `vendor.ts` lo poda a lo que la carpeta usa).
+ * Skill: src/vendor-distributions/shared/lib/obj.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
  */
 import {

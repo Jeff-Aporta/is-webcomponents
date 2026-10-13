@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/src/js/base/props-registro.ts
 /**
  * props-registro.ts — qué claves de `.props` reconoce cada tag. Lo que no está aquí se avisa.
  *

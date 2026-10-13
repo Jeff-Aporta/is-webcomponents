@@ -2,6 +2,7 @@
 name: especificar-what
 description: Cómo se escriben specs y pruebas en una app iswc (estándar común). Úsala antes de escribir o cambiar una spec, una prueba o un comportamiento observable.
 ---
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-foundation/templates/specs/especificar-what.md -->
 
 # Specs y pruebas WHAT (estándar iswc)
 

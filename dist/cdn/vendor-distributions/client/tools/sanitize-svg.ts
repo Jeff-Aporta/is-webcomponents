@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/tools/sanitize-svg.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Limpia size 100% del <svg> raíz (rompe PNG) y conserva fondo blanco.
@@ -5,6 +6,7 @@
  * al exportar docs el fondo DEBE quedar en el markup (no solo CSS var).
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/sanitize-svg.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Sin imports relativos.
+ * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 export function sanitizeSvgRoot(svgOuter: string): {

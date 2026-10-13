@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/tools/render-lab.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lab.ts — lo común de los `render.mjs` de `labs/`: arma los jobs desde los editables de una
@@ -9,6 +10,7 @@
  *   process.exit(await renderLab(LAB, jobs));
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-lab.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `./render-diagram.js`, `../../shared/schemas.ts` (secciones `render-lab`, `render-diagram`).
+ * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { createRequire } from 'node:module';

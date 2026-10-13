@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:28:49.065Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/client/tools/render-diagram.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Render headless de diagramas iswc-* → SVG (y opcional PNG).
@@ -16,6 +17,7 @@
  * Modos: sintético (tag+scriptUrl+payload) o pageUrl (HTML ya armado).
  *
  * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-diagram.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/lib/obj.js` (vendor.ts reescribe la ruta al aplanar), `./hosts.js`, `../../shared/schemas.ts` (secciones `render-diagram`, `static-server`, `obj`), `./sanitize-svg.js`, `./static-server.js`.
+ * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { mkdir, writeFile, rm, rename, readFile } from 'node:fs/promises';

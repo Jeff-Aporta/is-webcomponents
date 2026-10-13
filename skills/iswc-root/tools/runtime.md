@@ -1,3 +1,4 @@
+<!-- @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local skills/iswc-root/tools/runtime.md -->
 # `/iswc-root:runtime` — APIs sin custom element
 
 Herramientas del kit que **no** son tags `iswc-*`. Los agentes deben conocerlas

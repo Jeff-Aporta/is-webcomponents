@@ -1,3 +1,4 @@
+// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/testing/deno-test.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 // deno-test.ts — `deno test` estándar de los proyectos is-*: cola de
 // `testConcurrency()` archivos a la vez (3 por defecto) y cooldown de iswc.
@@ -11,6 +12,7 @@
 //   const code = await denoTest(serie, { args: [...], serial: true }); // de a uno
 //
 // Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/testing/deno-test.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `deno-test`), `./test-cooldown.ts` (cooldown + cola).
+// Skill: skills/iswc-foundation/references/07-pruebas-y-gate.md
 // Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 
 import { spawn } from "node:child_process";
