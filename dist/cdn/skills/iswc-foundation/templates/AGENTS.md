@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/AGENTS.md -->
+<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/AGENTS.md -->
 # AGENTS.md — __TITULO__
 
 Punto de entrada para cualquier agente. App de web components sobre el kit **iswc-root**, creada con

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/assets/dl.js
+// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/assets/dl.js
 // assets/dl.js — íconos de la app: SOLO configuración de rutas (`deno task icons`, corre dentro de `build`).
 // La herramienta vive en el kit, fijada al MISMO SHA del pin (`deno task pin` la sube con el resto).
 // Baja a assets/iconify/<set>/<nombre>.svg los íconos que usa la app y TODOS los de lo que consume

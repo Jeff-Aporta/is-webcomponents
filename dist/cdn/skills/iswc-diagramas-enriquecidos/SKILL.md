@@ -7,7 +7,7 @@ description: >-
   (ISS, ISW…), al agregar una ruta/EP a la documentación, al conectar un paso con una tabla, una
   clase o un sistema externo, o al revisar que un diagrama siga las convenciones homogéneas.
 ---
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-diagramas-enriquecidos/SKILL.md -->
+<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-diagramas-enriquecidos/SKILL.md -->
 
 # Diagramas enriquecidos — convenciones homogéneas
 
@@ -174,3 +174,23 @@ qué caso** se usa cada una (decisiones con la condición real del código: «¿
 2. Guardianes del kit verdes (`flowchart-lanes.test.ts`: U4 abanico, U5 una punta, D1 rombo,
    K1 `-(O-`, X1 sin cruces, E2/E3 etiquetas; `class-miembros.test.ts`).
 3. Mirar el PNG: si algo se lee mal y no hay regla, se agrega aquí y un guardián en el kit.
+
+## Scripts online (Deno, siempre `@main` con `--reload`)
+
+Regla (Jeff, 2026-10-13): los scripts de `tools/` de una skill y los CLI de `vendor-distributions/` (`vendor.ts`,
+`pin-update.mjs`, `download-iconify.ts`, `render-lote.ts`) NO se descargan nunca al consumidor: se ejecutan online con
+Deno desde `@main` del kit. `--reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/` es obligatorio
+(Deno cachea los módulos remotos para siempre) y `--import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json`
+resuelve las dependencias del kit (`zod`…) cuando el consumidor no las tiene en su propio `deno.json`. Nunca una ruta
+local del checkout ni un SHA en estos comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
+
+### `render-lote` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/render-lote.ts --carpeta=<dir editables> --svg=<dir> [--png=<dir>] --kit=<checkout del kit> [--cache=<archivo>] [--forzar] [--solo=a,b]
+```
+
+- **Qué hace y cuándo**: renderiza el LOTE de diagramas de la documentación (editables `<slug>.json` → SVG/PNG) con caché por hash: solo repinta lo que cambió. Es el `docs:diagramas` de ISS/ISW (envoltorio fino o el comando tal cual). Añadir `--no-check --sloppy-imports` al `deno run`.
+- **Entradas**: la carpeta de editables (`--carpeta`), `--kit` o env `ISWC_KIT` (obligatorio online: de ahí salen `dist/cdn/…` y Playwright del `node_modules` del kit), `--pinKit` opcional (sello que entra en la huella; default `<kit>/PIN`), el caché `diagramas-iswc.cache.json` junto a los editables.
+- **Escribe**: `<slug>.svg` en `--svg`, `<slug>.png` en `--png` (default igual a `--svg`), y el caché atómico por diagrama OK.
+- **Salida y errores típicos**: 0 ok · 1 si algún diagrama falló (`lote · N renderizados · M sin cambios · K fallidos`) · lanza «corriendo online hace falta --kit=… o ISWC_KIT» · un editable inválido o una referencia `{ path, query }` sin resolver sale como `error` con su motivo; Chromium que no arranca se reintenta 5 veces.

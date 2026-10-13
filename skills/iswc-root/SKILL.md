@@ -7,7 +7,7 @@ description: >-
   IswcUi / md-hydrate / response-cache, apps tipo frontend-webcomponents / tk-*,
   migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
 ---
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/SKILL.md -->
+<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/SKILL.md -->
 
 # ISWC — stack obligatorio
 
@@ -44,7 +44,7 @@ Stagehand, gate y sync. Una app nueva se crea con `create-iswc-app`, que se ejec
 URL (sin descargar nada):
 
 ```bash
-deno run -A https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/skills/iswc-foundation/tools/create-iswc-app.ts mi-app --prefijo=mia
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/skills/iswc-foundation/tools/create-iswc-app.ts mi-app --prefijo=mia
 ```
 
 Deja el esqueleto completo con un hola mundo, el pin fijo, las specs y skills sembradas

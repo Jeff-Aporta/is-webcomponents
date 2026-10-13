@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/visual-style.md -->
+<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/visual-style.md -->
 # Estilo visual y consistencia en las fichas iswc
 
 Las guías de componentes son lo que un agente lee antes de usar el tag.

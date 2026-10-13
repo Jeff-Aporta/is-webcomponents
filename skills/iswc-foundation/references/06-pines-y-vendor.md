@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
+<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
 # 06 — Pines y vendor del kit
 
 ## Pin fijo
@@ -14,7 +14,7 @@
 
 ```bash
 # <online> = https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools
-# <reload> = --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/
+# <reload> = --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json
 deno run -A <reload> <online>/vendor.ts vendor.json       # primero el protocolo (pin-update.mjs --nuevo=ultimo --local=<local>), luego el barrido
 deno run -A <reload> <online>/pin-update.mjs              # inventario: exit 1 si hay >1 SHA, refs mutables o nombre viejo del repo
 deno run -A <reload> <online>/pin-update.mjs --nuevo=<sha40|ultimo> [--local=<ruta>] [--viejo=<sha40>] [--dry-run]
@@ -55,8 +55,12 @@ importa NO se vendorizan: se corren online desde `@main` del kit. Como Deno cach
 forma canónica lleva `--reload` del origen:
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/<ruta> …
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/<ruta> …
 ```
+
+`--import-map` apunta al `deno.json` del kit: resuelve `zod` (y lo demás) para `schemas.ts` cuando el consumidor no tiene
+esas dependencias en su propio `deno.json` (ISS no es Deno; en ISW es opcional). Error típico sin él:
+«Import "zod" not a dependency».
 
 | Online desde `@main` | Por qué |
 | --- | --- |
@@ -76,9 +80,9 @@ Las carpetas `scripts/vendor/ISU` (ISW) y `src-experimental/vendor/ISU` (ISS) de
 `pin-update.mjs` ni `schemas.ts` vendorizados ahí. Tareas de un consumidor:
 
 ```json
-"vendor": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts scripts/vendor/vendor.json",
+"vendor": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts scripts/vendor/vendor.json",
 "pin": "deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/pin-update.mjs --raices=index.html,src,view",
-"docs:diagramas": "deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/render-lote.ts --carpeta=… --svg=… --png=… --kit=../../../Personal/apps/is-webcomponents"
+"docs:diagramas": "deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/render-lote.ts --carpeta=… --svg=… --png=… --kit=../../../Personal/apps/is-webcomponents"
 ```
 
 ## Vendor por BARRIDO: `shared/tools/vendor.ts` (cabecera `@vendor` en cada archivo, perfil, pin estático)
@@ -215,3 +219,27 @@ deno run -A --no-check --sloppy-imports <ISU>/render-lote.ts --carpeta=docs-expe
 - Viaja con `render-diagram.ts` y sus relativos (`obj`, `hosts`, `sanitize-svg`, `static-server`, `schemas.ts`); el
   perfil es `client` (Playwright lo carga del `node_modules` del kit por `--kit`). Detalle:
   [loader.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md).
+
+## Fichas de los scripts online de esta referencia
+
+### `vendor` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts <vendor.json>
+```
+
+- **Qué hace y cuándo**: barrido + altas + protocolo de pines (arriba). `npm run vendor` / `deno task vendor` y `presync:entregable`.
+- **Entradas**: `vendor.json`; checkout `local` si existe; red (API de GitHub, jsDelivr; `GITHUB_TOKEN` opcional); archivos con cabecera `@vendor` bajo `raices`.
+- **Escribe**: archivos vendorizados, `schemas.ts` podado, `skills/README.md`, `.tmp/vendor-fechas.json`, pines (vía pin-update).
+- **Salida y errores típicos**: 0 ok · 1 `faltan`/bloqueado por perfil/«no se pisa»/pines 1-3 · sin red: aviso y se conserva (pines 4) · «Import "zod" not a dependency»: falta `--import-map`.
+
+### `pin-update` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/pin-update.mjs [--nuevo=<sha40|ultimo>] [--local=<ruta>] [--viejo=<sha40>] [--raices=a,b] [--saltar=a,b] [--verificar=<ruta>] [--dry-run]
+```
+
+- **Qué hace y cuándo**: inventario de pines y refs mutables; con `--nuevo` fija todos los pines al SHA dado o al último publicado.
+- **Entradas**: flags (`--repo`, `--rama`); raíces del consumidor; red; `--local` solo informativo.
+- **Escribe**: los archivos de las raíces (reemplazo de `@<sha>`); nada con `--dry-run`.
+- **Salida y errores típicos**: 0 · 1 heterogéneo/mutables · 2 uso · 3 no publicado · 4 sin red.

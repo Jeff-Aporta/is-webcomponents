@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/CLAUDE.md -->
+<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/CLAUDE.md -->
 # CLAUDE.md — __TITULO__
 
 Contrato completo en [`AGENTS.md`](AGENTS.md). Estándar común de las apps iswc:

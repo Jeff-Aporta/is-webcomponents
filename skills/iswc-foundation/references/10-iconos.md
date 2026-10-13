@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/10-iconos.md -->
+<!-- @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/10-iconos.md -->
 # 10 — Íconos: localStorage, local o API
 
 Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13):
@@ -102,3 +102,16 @@ de `_shared/icon-loader`. El json se pide una vez, al resolver el primer ícono.
 - No commitear sets enteros: solo lo que la app usa y lo que consume (el barrido lo decide).
 - No pedir íconos por `fetch` a mano ni usar `<iconify-icon>`: siempre `<iswc-icon icon="set:nombre">`.
 - No editar `assets/iconify.json` a mano: se regenera.
+
+## Ficha del script online
+
+### `download-iconify` (online, desde `@main`)
+
+```bash
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/client/tools/download-iconify.ts (se importa desde `assets/dl.js`; la tarea es `deno run -A --reload=… assets/dl.js`)
+```
+
+- **Qué hace y cuándo**: descarga a `assets/iconify/<set>/<n>.svg` los íconos que la app usa (y los de los `iconify.json` que consume) y escribe `assets/iconify.json`. Dentro de `deno task build` (`icons`); a mano tras añadir íconos.
+- **Entradas**: la config de `assets/dl.js` (`raiz`, `roots`, `extra`, `mapas`, `salida`, `podar`, `offline`…), `deno.json` → `iswc.host`, la API de Iconify (red) y el `iconify.json` del kit en `main`. `--import-map` del kit solo si la app no tiene `zod` en su `deno.json`.
+- **Escribe**: `assets/iconify.json` (determinista) y los SVG; poda los que nadie usa.
+- **Salida y errores típicos**: sin red no rompe: conserva lo que hay, no poda y avisa; un id inexistente se reporta y no entra al mapa; `descargarIconos` lanza si `roots` está vacío o `raiz` no existe.

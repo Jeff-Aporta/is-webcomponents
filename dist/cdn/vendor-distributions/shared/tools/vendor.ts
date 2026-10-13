@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
+// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 /**
  * vendor.ts — mantiene al día, por BARRIDO, todo lo que un consumidor (ISS, ISW…) trae de un repo GitHub
@@ -43,7 +43,8 @@
  * no cuenta y solo compite el checkout local; las fechas ya resueltas por pin quedan en caché.
  *
  * SKILLS: una skill del kit (`skills/<nombre>/**`) se trae a `skills/<nombre>/**` del consumidor (alta con
- * `carpeta: true`); cada .md lleva su cabecera HTML. `skills/README.md` del consumidor lo genera/actualiza el
+ * `carpeta: true`): SOLO su documentación; `tools/**` y cualquier script .ts/.mjs/.js de la skill no se descargan
+ * (se ejecutan online desde `@main`, y cada SKILL.md muestra el comando con su URL). Cada .md lleva su cabecera HTML. `skills/README.md` del consumidor lo genera/actualiza el
  * vendor: índice de skills propias (sin cabecera `@vendor`) y comunes (con su fecha). Nunca se vendoriza
  * encima de un archivo que ya existe SIN cabecera `@vendor` (skill o archivo propio): error claro, no se pisa. Lo que no
  * admite cabecera (.scss, .gitignore…) no tiene fecha: igual al origen = al día; distinto = se reescribe con aviso.
@@ -57,7 +58,8 @@
  * dependencias de navegador (`bloqueado`).
  *
  * ONLINE (Jeff, 2026-10-13): este script NO se vendoriza; los consumidores lo corren desde `@main` del kit con
- * `--reload` del origen (Deno cachea los módulos remotos para siempre). Igual `pin-update.mjs`, `download-iconify.ts`
+ * `--reload` del origen (Deno cachea los módulos remotos para siempre) y `--import-map=<raw>/main/deno.json` (el
+ * import map del kit resuelve `zod` para `../schemas.ts`; un consumidor Deno con `zod` en su propio deno.json no lo necesita). Igual `pin-update.mjs`, `download-iconify.ts`
  * y `render-lote.ts`: CLI que corre Deno y cuyos tipos ningún código del consumidor importa. Lo que los tests o el
  * código importan con tipos (pruebas, cooldown, jueces, semantica, proveedores-llm, stagehand, schemas, sync, build/*)
  * sí se vendoriza.
@@ -418,6 +420,16 @@ function cacheFechas(raiz: string): { leer: (k: string) => string | null | undef
   };
 }
 
+/**
+ * Lo que de una skill (`skills/<nombre>/**`) viaja al consumidor: SOLO documentación (.md, .json, .html…). `tools/**` y
+ * cualquier .ts/.mjs/.js/.cjs de la skill NUNCA se descargan: se ejecutan online con Deno desde `@main` (Jeff, 2026-10-13).
+ * Fuera de `skills/` no se filtra nada.
+ */
+export function archivosDeSkill(desde: string, lista: readonly string[]): string[] {
+  if (!esSkill(desde)) return [...lista];
+  return lista.filter((f) => !/\/tools\//.test(f) && !/\.(m?[jt]s|cjs)$/.test(f));
+}
+
 /** Archivos bajo `prefijo` en `repo@sha` (listado plano de jsDelivr), o null sin red. */
 async function listarEnWeb(repo: string, sha: string, prefijo: string, fetchFn: FetchFn): Promise<string[] | null> {
   try {
@@ -596,7 +608,7 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
     if (a.carpeta) {
       const lista = local ? listarEnLocal(local, a.desde) : (pin ? await listarEnWeb(cfg.repo, pin, a.desde, fetchFn) : null);
       if (!lista) { out.push({ desde: a.desde, hacia: a.hacia, estado: "error", previa: null, error: "carpeta: no se pudo listar (sin checkout local ni red)" }); continue; }
-      for (const f of lista) {
+      for (const f of archivosDeSkill(a.desde, lista)) {
         const rel = f.slice(a.desde.replace(/\/$/, "").length + 1);
         const hacia = posix.join(a.hacia.replaceAll("\\", "/"), rel);
         trabajos.push({ desde: f, hacia, destino: destinoDe(hacia), doc: a.doc, previa: null, alta: true });
@@ -752,16 +764,19 @@ export function protocoloPines(cfg: TConfigVendor, raiz: string, log: (l: string
 /**
  * ¿Este módulo es el programa principal? Sin `Deno.*` ni `import.meta.main` (compila igual con lib DOM que con
  * deno.ns). Local: `argv[1]` es la ruta; ONLINE (`deno run -A https://raw.githubusercontent.com/…/vendor.ts`):
- * `argv[1]` es la propia URL.
+ * `argv[1]` es un relleno y manda `import.meta.main`.
  */
-export function esPrincipal(url: string = import.meta.url, argv1: string | undefined = process.argv[1]): boolean {
+export function esPrincipal(url: string = import.meta.url, argv1: string | undefined = process.argv[1], main: boolean | undefined = (import.meta as { main?: boolean }).main): boolean {
+  // Deno: `import.meta.main` es la verdad (online, `argv[1]` es un `$deno$node.mjs` de relleno). Node no lo define.
+  if (main === true) return true;
   if (!argv1) return false;
   if (url === argv1) return true;
   try { return url === pathToFileURL(argv1).href; } catch { return false; }
 }
 
-// CLI: deno run -A vendor.ts <config.json>   (o, ONLINE y siempre con --reload del origen:
-//   deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts <config.json>)
+// CLI: deno run -A vendor.ts <config.json>   (o, ONLINE, siempre con --reload del origen y el import map del kit,
+// que resuelve `zod` para ../schemas.ts:
+//   deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ --import-map=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/deno.json https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts <config.json>)
 if (esPrincipal()) {
   const ruta = process.argv[2];
   if (!ruta) {

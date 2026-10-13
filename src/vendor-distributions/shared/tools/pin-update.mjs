@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/pin-update.mjs
+// @vendor 2026-10-13T14:22:09.366Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/tools/pin-update.mjs
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
@@ -261,6 +261,7 @@ export async function protocolo(nuevoPedido, op = opciones(), viejo = '') {
 
 /** Programa principal: `argv[1]` es la ruta (local) o la propia URL (online, `deno run -A https://…/pin-update.mjs`). */
 function esPrincipal() {
+  if (import.meta.main === true) return true; // Deno (online, argv[1] es un relleno)
   const a = process.argv[1];
   if (!a) return false;
   if (import.meta.url === a) return true;
