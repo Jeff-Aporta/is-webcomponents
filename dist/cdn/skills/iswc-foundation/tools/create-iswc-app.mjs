@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs
+// @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/create-iswc-app.mjs
 // Bundle autocontenido de skills/iswc-foundation/tools/create-iswc-app.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es skills/iswc-foundation/tools/create-iswc-app.ts.
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -258,7 +258,7 @@ var init_pin_update = __esm({
     SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];
     EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
     ONLINE = /raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/main\/(?:dist\/cdn\/)?(?:vendor-distributions\/(?:shared\/tools\/(?:vendor|pin-update)|client\/tools\/(?:download-iconify|render-lote))\.(?:ts|mjs)|skills\/[^/\s]+\/tools\/[^/\s]+\.(?:ts|mjs))\b|--reload=https:\/\/raw\.githubusercontent\.com\/[^/\s]+\/[^/\s]+\/(?![\w-])/;
-    CABECERA_VENDOR = /^\s*(?:\/\/|<!--|#|\*)\s*@vendor\s/;
+    CABECERA_VENDOR = /^\s*(?:(?:\/\/|<!--|#|\/?\*)\s*@vendor\s|"\$vendor"\s*:)/;
     SHA = /^[0-9a-f]{40}$/;
     auth = () => process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {};
     esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");

@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
+// @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * schemas.ts — TODOS los contratos (Zod y tipos) de `vendor-distributions/`, en UN solo archivo por secciones.
@@ -197,6 +197,8 @@ export interface DenoTestOptions {
   cooldown?: TestCooldown;
   /** Ejecutable de Deno. Default `"deno"`. */
   deno?: string;
+  /** Reintentos (de a uno) de los archivos rojos a la primera. Default 1, o `TEST_REINTENTOS`. */
+  reintentos?: number;
 }
 // ===== @fin deno-test =====
 

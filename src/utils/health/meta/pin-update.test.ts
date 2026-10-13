@@ -5,9 +5,13 @@
 //   P3 el sitio propio de la app (`iswc.host` en github.io) no es un pin del kit → no alerta.
 //   P4 dos SHA distintos → rojo (heterogéneo).
 //   P5 `verificarLocal` (protocolo --nuevo=ultimo --local): el checkout local se omite con motivo, nunca falla.
+//   P6 scripts ONLINE por raw@main con --reload → no alertan. P7 cabecera @vendor @main → no alerta.
+//   P8 ida y vuelta: lo que el vendor escribe (`conCabecera`, cada estilo: ts, md, html, css, json) nunca alerta.
+//   P9 una ref @main del kit en una línea que NO es la cabecera (aunque lleve un comentario `@vendor` al final) → rojo.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { conCabecera } from '../../../vendor-distributions/shared/tools/vendor.ts';
 
 const TOOL = join(Deno.cwd(), 'src/vendor-distributions/shared/tools/pin-update.mjs');
 const A = 'a'.repeat(40);
@@ -105,3 +109,43 @@ Deno.test('pin-update: P7 la cabecera @vendor @main no alerta; el mismo repo@mai
   const malo = inventario({ ...SANO, 'src/w.ts': "// @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-root@main x.ts\nimport 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';" });
   assertEquals(malo.code, 1, 'un import @main bajo la cabecera sigue siendo mutable');
 });
+
+// P8 Contrato entre el vendor y el inventario: la cabecera PORTABLE `<ISO> <repo>@main <desde>` que `vendor.ts` escribe en
+//    cualquier estilo que soporta no es una ref mutable. Casos en JSON: archivo destino y contenido original.
+const CABECERA = `2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-root@main dist/cdn/vendor-distributions/shared/x`;
+const DOC = `https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@${A}/skills/iswc-foundation/references/07-pruebas-y-gate.md`;
+const P8 = [
+  { estilo: 'ts', archivo: 'src/v.ts', texto: 'export const x = 1;\n' },
+  { estilo: 'mjs', archivo: 'src/v.mjs', texto: 'export const x = 1;\n' },
+  { estilo: 'md', archivo: 'src/v.md', texto: '# Título\n' },
+  { estilo: 'md con front matter', archivo: 'src/s.md', texto: '---\nname: x\n---\n# Skill\n' },
+  { estilo: 'html', archivo: 'src/v.html', texto: '<!doctype html>\n<p>x</p>\n' },
+  { estilo: 'css', archivo: 'src/v.css', texto: ':root { --x: 1; }\n' },
+  { estilo: 'json', archivo: 'src/v.json', texto: '{ "a": 1 }\n' },
+] as const;
+
+for (const c of P8) {
+  for (const doc of [null, DOC]) {
+    Deno.test(`pin-update: P8 la cabecera que escribe el vendor en ${c.estilo}${doc ? ' (con @doc al pin)' : ''} no alerta`, () => {
+      const vendorizado = conCabecera(c.texto, c.archivo, CABECERA, doc);
+      assert(vendorizado.includes('@vendor') || vendorizado.includes('$vendor'), vendorizado);
+      const r = inventario({ ...SANO, [c.archivo]: vendorizado });
+      assertEquals(r.code, 0, `${vendorizado}\n${r.out}`);
+    });
+  }
+}
+
+// P9 La exención es de la CABECERA (línea que empieza con el comentario `@vendor`), no de cualquier línea que lo mencione.
+const P9 = [
+  { caso: 'import @main con comentario @vendor al final', linea: "import 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/x.js'; // @vendor" },
+  { caso: 'raw por rama dentro de un objeto $vendor que no es cabecera', linea: "const o = { u: 'https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/x.ts', k: '$vendor' };" },
+  { caso: 'GitHub Pages del kit tras un @vendor en medio de la línea', linea: "const p = 'x @vendor y'; fetch('https://jeff-aporta.github.io/iswc-root/dist/cdn/x.js');" },
+] as const;
+
+for (const c of P9) {
+  Deno.test(`pin-update: P9 ${c.caso} → rojo`, () => {
+    const r = inventario({ ...SANO, 'src/z.ts': `export const a = 1;\n${c.linea}\n` });
+    assertEquals(r.code, 1, r.out);
+    assert(r.out.includes('src/z.ts'), r.out);
+  });
+}

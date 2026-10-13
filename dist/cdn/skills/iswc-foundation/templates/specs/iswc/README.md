@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/README.md -->
+<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/README.md -->
 # specs/iswc — skills del kit iswc-root para esta app
 
 Copias sembradas por `create-iswc-app` desde el kit (`iswc-root/skills/iswc-foundation`). Son el

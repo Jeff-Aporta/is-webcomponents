@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/tools/build.md -->
+<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/tools/build.md -->
 # `/iswc-root:build`
 
 Fundar una app nueva o extender una existente reusando el kit `is-*` por

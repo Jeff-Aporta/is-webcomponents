@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/js/kit-tags.ts
+// @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/js/kit-tags.ts
 /**
  * kit-tags.ts — REGISTRO ÚNICO de tags de la app (estándar iswc-foundation).
  *

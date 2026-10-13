@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts
+// @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/08-sync-entregable.md
 /**
  * Sync comun `_experimental` -> `_entregable` de las apps del kit (ISS, ISW).
@@ -11,7 +11,9 @@
  *   - `replace` borra en el destino lo que no esta en el origen; `push` nunca borra.
  *   - Lo `bloqueado` en el destino no se escribe ni se borra.
  *   - Checkpoint: commit en el ORIGEN (mirror) y push sin forzar. El destino
- *     (entregable) nunca recibe commits ni push automaticos.
+ *     (entregable) nunca recibe commits ni push automaticos. Es obligatorio:
+ *     si el commit o el push (con `push: true`) fallan, `correrSync` LANZA
+ *     (el entregable ya quedo copiado y el mensaje lo dice).
  * Solo `node:*`: corre igual en Node y en Deno.
  *
  * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `sync-entregable`).
@@ -145,6 +147,12 @@ export async function correrSync(cfg: ConfigSync, modo: ModoSync, log: (l: strin
     resumen.checkpoint = checkpointGit(cfg.origen, cfg.checkpoint.mensaje, cfg.checkpoint.push);
     const k = resumen.checkpoint;
     log(k.error ? `[sync] checkpoint: ${k.error}` : `[sync] checkpoint: ${k.commit ? `commit ${k.commit}` : 'sin cambios'}${k.push ? ', push hecho' : ''}`);
+    // El checkpoint ES parte del sync (Jeff, 2026-10-13): un sync real en verde deja commit (si hay cambios) y, con
+    // `push: true`, push del mirror. Si falla, el sync falla, diciendo que el entregable YA quedó copiado.
+    if (k.error) {
+      throw new Error(`checkpoint del mirror FALLÓ (${k.error}). El entregable YA quedó copiado (${resumen.cambios} cambios en ${cfg.destino}); `
+        + `${k.commit ? `el commit ${k.commit} quedó en el mirror; ` : ''}corrige la causa y haz el commit/push del mirror (${cfg.origen}) o vuelve a correr el sync.`);
+    }
   }
   return resumen;
 }

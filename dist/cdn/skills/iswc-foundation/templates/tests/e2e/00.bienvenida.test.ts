@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/tests/e2e/00.bienvenida.test.ts
+// @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/tests/e2e/00.bienvenida.test.ts
 // 00.bienvenida.test.ts — caso base e2e (Stagehand DETERMINISTA, sin LLM): la app arranca, muestra la
 // bienvenida y el modal se abre y se cierra como lo haría un usuario. Caja negra: solo lo que se ve.
 //
@@ -18,6 +18,9 @@ export default definirPruebas([
     nombre: 'bienvenida W-PLAT-12 la app arranca lista y sin errores de consola',
     categoria: 'what',
     async correr({ expect }) {
+      // Con el CDN en frío (primer pedido de un SHA recién publicado) el watchdog de 6 s puede marcar la
+      // página como lista antes de montar el shell: se espera a que monte (afirmado abajo), no se asume.
+      await esperar(s.page, () => !!document.querySelector('__PREFIJO__-app')?.shadowRoot?.querySelector('.barra'), 30_000).catch(() => undefined);
       expect('marcada como lista', await s.page.evaluate(() => document.documentElement.hasAttribute('data-app-ready'), undefined));
       expect('shell montado', (await enSombra(s.page, ['__PREFIJO__-app', '.barra'])) === true);
       expect('sin errores de consola', s.errores().length === 0, s.errores().join(' | '));

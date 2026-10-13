@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/08-sync-entregable.md -->
+<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/08-sync-entregable.md -->
 # 08 — Sync a entregable (mirror → entregable)
 
 Para apps con par `_experimental/<app>` (mirror de trabajo, remoto personal) y `_entregable/<app>`
@@ -14,7 +14,9 @@ Para apps con par `_experimental/<app>` (mirror de trabajo, remoto personal) y `
 - **Nunca se toca**: `.git`, `node_modules`, `.gitignore`, `deno.json`/`deno.lock` del entregable (si
   hace falta, un hook `despues` alinea solo los imports que el artefacto necesita).
 - **Checkpoint**: commit + push (sin forzar) del MIRROR. El entregable nunca recibe commits ni push
-  automáticos: los hace la persona.
+  automáticos: los hace la persona. Es **obligatorio**: un sync real en verde deja commit (si hubo cambios) y,
+  con `push: true`, push del mirror (sin cambios igual intenta el push; al día no falla). Si el commit o el push
+  fallan (p. ej. mirror sin remoto), el sync **falla** con la causa y avisa que el entregable YA quedó copiado.
 - **Guardián de mirrors** (si aplica): el remoto del mirror apunta al repo personal y el del entregable
   al del equipo; nunca cruzados (paso `guardian` del gate).
 - Destino por defecto `../../_entregable/<carpeta del mirror>` o `ENTREGABLE=<ruta>`; si no existe, exit 2.

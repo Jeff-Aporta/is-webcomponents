@@ -7,7 +7,7 @@ description: >-
   (ISS, ISW…), al agregar una ruta/EP a la documentación, al conectar un paso con una tabla, una
   clase o un sistema externo, o al revisar que un diagrama siga las convenciones homogéneas.
 ---
-<!-- @vendor 2026-10-13T19:16:11.068Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-diagramas-enriquecidos/SKILL.md -->
+<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-diagramas-enriquecidos/SKILL.md -->
 
 # Diagramas enriquecidos — convenciones homogéneas
 
@@ -187,10 +187,10 @@ comandos: el pin del proyecto gobierna lo vendorizado, no los scripts.
 ### `render-lote` (online, desde `@main`)
 
 ```bash
-deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --carpeta=<dir editables> --svg=<dir> [--png=<dir>] --kit=<checkout del kit> [--cache=<archivo>] [--forzar] [--solo=a,b]
+deno run -A --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --carpeta=<dir editables> --svg=<dir> [--png=<dir>] [--pin=<sha40>] [--kit=<checkout del kit>] [--cache=<archivo>] [--forzar] [--solo=a,b]
 ```
 
 - **Qué hace y cuándo**: renderiza el LOTE de diagramas de la documentación (editables `<slug>.json` → SVG/PNG) con caché por hash: solo repinta lo que cambió. Es el `docs:diagramas` de ISS/ISW (envoltorio fino o el comando tal cual). Añadir `--no-check --sloppy-imports` al `deno run`.
-- **Entradas**: la carpeta de editables (`--carpeta`), `--kit` o env `ISWC_KIT` (obligatorio online: de ahí salen `dist/cdn/…` y Playwright del `node_modules` del kit), `--pinKit` opcional (sello que entra en la huella; default `<kit>/PIN`), el caché `diagramas-iswc.cache.json` junto a los editables.
+- **Entradas**: la carpeta de editables (`--carpeta`), `--pin=<sha40>` (recomendado: el pin del proyecto; entra en la huella y fija de dónde salen los bundles), el caché `diagramas-iswc.cache.json` junto a los editables. `--kit`/`ISWC_KIT` son OPCIONALES: sin checkout se sirve una carpeta temporal y `dist/cdn/…` se trae de raw al SHA del pin (o de `main` sin pin), con caché en disco solo si la ref es un SHA; Playwright sale del kit, del `node_modules` del proyecto o de `npm:playwright` (spec del kit: `specs/herramientas/spec.md` S-H2).
 - **Escribe**: `<slug>.svg` en `--svg`, `<slug>.png` en `--png` (default igual a `--svg`), y el caché atómico por diagrama OK.
-- **Salida y errores típicos**: 0 ok · 1 si algún diagrama falló (`lote · N renderizados · M sin cambios · K fallidos`) · lanza «corriendo online hace falta --kit=… o ISWC_KIT» · un editable inválido o una referencia `{ path, query }` sin resolver sale como `error` con su motivo; Chromium que no arranca se reintenta 5 veces.
+- **Salida y errores típicos**: 0 ok · 1 si algún diagrama falló (`lote · N renderizados · M sin cambios · K fallidos`) · un editable inválido o una referencia `{ path, query }` sin resolver sale como `error` con su motivo; Chromium que no arranca se reintenta 5 veces.
