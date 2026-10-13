@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/specs/W2H.md -->
+<!-- @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/specs/W2H.md -->
 # W2H — mantener las specs fundación al día (What → How)
 
 > Pasos que sigue el agente que cambia __TITULO__ para dejar `specs/foundation/` al día, con foco en

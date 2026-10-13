@@ -252,7 +252,7 @@ Deno.test('vendor: V11 el mismo schemas.ts en dos carpetas se poda a lo que cada
   assertEquals(res[1]!.secciones, ['comun', 'obj']);
   assertEquals(res[4]!.secciones, ['comun', 'test-cooldown', 'deno-test']);
   const obj = await Deno.readTextFile(join(app, 'base/ISU/obj.ts'));
-  assert(obj.includes('from "./schemas.ts"'), 'obj importa la copia de SU carpeta');
+  assert(obj.includes('from "./schemas.js"'), 'obj importa la copia de SU carpeta (.js: tsc de Node)');
   await Deno.remove(app, { recursive: true });
 });
 

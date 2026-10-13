@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/shared/testing/deno-test.ts
+// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/shared/testing/deno-test.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 // deno-test.ts — `deno test` estándar de los proyectos is-*: cola de
 // `testConcurrency()` archivos a la vez (3 por defecto) y cooldown de iswc.

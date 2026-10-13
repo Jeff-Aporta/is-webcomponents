@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/README.md -->
+<!-- @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/README.md -->
 # __TITULO__
 
 App de web components (vanilla, sin framework) sobre el kit

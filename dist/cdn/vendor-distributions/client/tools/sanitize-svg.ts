@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/client/tools/sanitize-svg.ts
+// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/client/tools/sanitize-svg.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Limpia size 100% del <svg> raíz (rompe PNG) y conserva fondo blanco.

@@ -6,7 +6,7 @@ description: >-
   documentación de uno existente. Cubre estructura, secciones obligatorias,
   tono, convenciones de bloques de código, tablas y cross-linking.
 ---
-<!-- @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/document-component/SKILL.md -->
+<!-- @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/document-component/SKILL.md -->
 
 # Cómo documentar componentes iswc
 

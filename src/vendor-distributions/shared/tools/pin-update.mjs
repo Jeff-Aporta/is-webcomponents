@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:32:46.844Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/pin-update.mjs
+// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local src/vendor-distributions/shared/tools/pin-update.mjs
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 // pin-update.mjs — Protocolo de actualización y verificación de pines CDN, del lado del CONSUMIDOR.
 //
@@ -48,6 +48,8 @@ const RAICES_DEFAULT = ['index.html', 'sw.js', 'staticwebapp.config.json', 'mani
 const SALTAR_DEFAULT = ['node_modules', 'vendor', 'dist', '.tmp-scss', '.git'];
 const EXT = /\.(html|ts|js|mjs|json|css|scss|md)$/;
 export const SHA = /^[0-9a-f]{40}$/;
+/** `GITHUB_TOKEN` (opcional) sube la cuota de la API de 60/h a 5000/h. */
+const auth = () => (process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {});
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 const log = (m) => console.log(`[pin] ${m}`);
 
@@ -138,7 +140,7 @@ export async function publicado(sha, op = opciones()) {
 /** SHA del HEAD de la rama en GitHub, o `''` sin red. */
 export async function ultimoSha(op = opciones()) {
   const u = `https://api.github.com/repos/${op.repo}/commits/${op.rama}`;
-  const r = await fetch(u, { headers: { Accept: 'application/vnd.github.sha', 'User-Agent': 'iswc-pin' }, signal: AbortSignal.timeout(20_000) }).catch(() => null);
+  const r = await fetch(u, { headers: { Accept: 'application/vnd.github.sha', 'User-Agent': 'iswc-pin', ...auth() }, signal: AbortSignal.timeout(20_000) }).catch(() => null);
   const t = r?.ok ? (await r.text()).trim() : '';
   log(`HEAD de ${op.repo}@${op.rama} → ${t || `sin respuesta (${r?.status ?? 'red'})`}`);
   return SHA.test(t) ? t : '';
@@ -147,7 +149,7 @@ export async function ultimoSha(op = opciones()) {
 /** Últimos SHA de la rama (el HEAD primero), o `[]` sin red. */
 export async function ultimosShas(op = opciones(), n = 30) {
   const u = `https://api.github.com/repos/${op.repo}/commits?sha=${encodeURIComponent(op.rama)}&per_page=${n}`;
-  const r = await fetch(u, { headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'iswc-pin' }, signal: AbortSignal.timeout(20_000) }).catch(() => null);
+  const r = await fetch(u, { headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'iswc-pin', ...auth() }, signal: AbortSignal.timeout(20_000) }).catch(() => null);
   if (!r?.ok) return [];
   const lista = await r.json().catch(() => []);
   return Array.isArray(lista) ? lista.map((c) => String(c?.sha ?? '')).filter((s) => SHA.test(s)) : [];

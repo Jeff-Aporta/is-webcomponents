@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/shared/tools/vendor.ts
+// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/vendor-distributions/shared/tools/vendor.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/06-pines-y-vendor.md
 /**
  * vendor.ts — mantiene al día, por BARRIDO, todo lo que un consumidor (ISS, ISW…) trae de un repo GitHub
@@ -36,10 +36,14 @@
  * secciones de los módulos presentes en esa carpeta (archivos con cabecera `@vendor` + altas) + sus
  * `requiere` transitivos. El resultado trae `secciones`.
  *
+ * Sin red o con la API de GitHub agotada (60 peticiones/h sin token; `GITHUB_TOKEN` en el entorno sube la cuota) la web
+ * no cuenta y solo compite el checkout local; las fechas ya resueltas por pin quedan en caché.
+ *
  * SKILLS: una skill del kit (`skills/<nombre>/**`) se trae a `skills/<nombre>/**` del consumidor (alta con
  * `carpeta: true`); cada .md lleva su cabecera HTML. `skills/README.md` del consumidor lo genera/actualiza el
  * vendor: índice de skills propias (sin cabecera `@vendor`) y comunes (con su fecha). Nunca se vendoriza
- * encima de un archivo que ya existe SIN cabecera `@vendor` (skill o archivo propio): error claro, no se pisa.
+ * encima de un archivo que ya existe SIN cabecera `@vendor` (skill o archivo propio): error claro, no se pisa. Lo que no
+ * admite cabecera (.scss, .gitignore…) no tiene fecha: igual al origen = al día; distinto = se reescribe con aviso.
  * La línea `Skill: skills/…md` del docblock de cada .ts se reescribe a la ruta local del consumidor si tiene esa
  * skill, o a la URL jsDelivr del pin si no.
  *
@@ -360,10 +364,17 @@ export function fechaLocal(checkout: string, ruta: string): string | null {
 
 type FetchFn = typeof fetch;
 
+/** Cabeceras de la API de GitHub; `GITHUB_TOKEN` (opcional) sube la cuota de 60/h a 5000/h. */
+function cabecerasApi(): Record<string, string> {
+  const h: Record<string, string> = { "User-Agent": "iswc-vendor", Accept: "application/vnd.github+json" };
+  if (process.env.GITHUB_TOKEN) h.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  return h;
+}
+
 /** Commit HEAD de la rama en GitHub (sha y fecha), o null sin red. */
 async function cabezaRemota(repo: string, rama: string, fetchFn: FetchFn): Promise<{ sha: string; fecha: string } | null> {
   try {
-    const r = await fetchFn(`https://api.github.com/repos/${repo}/commits/${rama}`, { headers: { "User-Agent": "iswc-vendor", Accept: "application/vnd.github+json" } });
+    const r = await fetchFn(`https://api.github.com/repos/${repo}/commits/${rama}`, { headers: cabecerasApi() });
     if (!r.ok) return null;
     const c = await r.json() as { sha?: string; commit?: { author?: { date?: string }; committer?: { date?: string } } };
     const fecha = c.commit?.committer?.date ?? c.commit?.author?.date;
@@ -376,7 +387,7 @@ async function cabezaRemota(repo: string, rama: string, fetchFn: FetchFn): Promi
 /** Fecha del último commit que tocó `ruta` en `sha` (API de GitHub), o null. */
 async function fechaEnPin(repo: string, sha: string, ruta: string, fetchFn: FetchFn): Promise<string | null> {
   try {
-    const r = await fetchFn(`https://api.github.com/repos/${repo}/commits?sha=${sha}&path=${encodeURIComponent(ruta)}&per_page=1`, { headers: { "User-Agent": "iswc-vendor", Accept: "application/vnd.github+json" } });
+    const r = await fetchFn(`https://api.github.com/repos/${repo}/commits?sha=${sha}&path=${encodeURIComponent(ruta)}&per_page=1`, { headers: cabecerasApi() });
     if (!r.ok) return null;
     const l = await r.json() as { commit?: { committer?: { date?: string }; author?: { date?: string } } }[];
     const fecha = l[0]?.commit?.committer?.date ?? l[0]?.commit?.author?.date;
@@ -617,7 +628,8 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
     const base: TResultadoVendor = { desde: t.desde, hacia: t.hacia, estado: "error", previa: t.previa?.fecha ?? null };
     const bloqueo = cfg.perfil ? bloqueoDePerfil(t.desde, cfg.perfil) : null;
     if (bloqueo) { out.push({ ...base, error: bloqueo, bloqueado: bloqueo }); continue; }
-    if (existsSync(t.destino) && !t.previa) {
+    // Un archivo cuya extensión admite cabecera y no la tiene es PROPIO del consumidor: no se pisa.
+    if (existsSync(t.destino) && !t.previa && estiloDe(t.destino)) {
       out.push({ ...base, error: `ya existe sin cabecera @vendor (archivo o skill PROPIA del consumidor): no se pisa; renómbralo o quita el alta` });
       continue;
     }
@@ -628,6 +640,8 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
       : fw ? { fuente: "remoto", fecha: fw, sha: pin } : null;
     if (!gana) { out.push({ ...base, error: "ni checkout local ni web disponibles (¿sin red?): se conserva la copia" }); continue; }
     if (t.previa && new Date(t.previa.fecha) >= new Date(gana.fecha)) { out.push({ ...base, estado: "al-dia", ...gana }); continue; }
+    // Sin formato de cabecera (.scss, .gitignore…): no hay fecha que comparar; igual al origen = al día, distinto = se reescribe.
+    const sinFormato = !estiloDe(t.destino) && existsSync(t.destino);
     let texto: string;
     let aviso: string | undefined;
     try {
@@ -646,6 +660,8 @@ export async function vendorizar(entrada: unknown, opciones: OpcionesVendorizar 
       out.push({ ...base, ...gana, error: `descarga: ${e instanceof Error ? e.message : String(e)}` });
       continue;
     }
+    if (sinFormato && readFileSync(t.destino, "utf8") === texto) { out.push({ ...base, estado: "al-dia", ...gana }); continue; }
+    if (sinFormato) aviso = `${aviso ? `${aviso} · ` : ""}sin formato de cabecera: se reescribe desde el origen (igual al origen = al día)`;
     const codigo = RE_CODIGO.test(t.desde);
     const deps = codigo && !esSkill(t.desde) && cfg.perfil === "server" ? dependenciasDeNavegador(texto) : [];
     if (deps.length) {

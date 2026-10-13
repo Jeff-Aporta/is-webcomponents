@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T13:41:30.061Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/scripts/gate/e2e/harness.ts
+// @vendor 2026-10-13T13:43:10.250Z Jeff-Aporta/is-webcomponents@local dist/cdn/skills/iswc-foundation/templates/scripts/gate/e2e/harness.ts
 /**
  * harness.ts — Stagehand estándar de las apps iswc (UI como caja negra, DETERMINISTA).
  *
