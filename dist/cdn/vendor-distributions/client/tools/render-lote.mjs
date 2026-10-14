@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
+// @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
 // Bundle autocontenido de src/vendor-distributions/client/tools/render-lote.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/client/tools/render-lote.ts.
 
 // src/vendor-distributions/client/tools/render-lote.ts
@@ -259,11 +259,13 @@ var CacheLoteSchema = z.object({
 
 // src/vendor-distributions/shared/lib/obj.ts
 var ObjError = class extends Error {
+  codigo;
+  ruta;
   constructor(codigo, mensaje, ruta = "") {
     super(ruta ? `${mensaje} (en ${ruta})` : mensaje);
+    this.name = "ObjError";
     this.codigo = codigo;
     this.ruta = ruta;
-    this.name = "ObjError";
   }
 };
 var esPlano = (v) => {

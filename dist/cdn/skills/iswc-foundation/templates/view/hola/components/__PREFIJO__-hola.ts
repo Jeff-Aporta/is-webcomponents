@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/components/__PREFIJO__-hola.ts
+// @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/components/__PREFIJO__-hola.ts
 /**
  * <__PREFIJO__-hola> — pantalla de bienvenida (shell de la vista `hola`).
  *

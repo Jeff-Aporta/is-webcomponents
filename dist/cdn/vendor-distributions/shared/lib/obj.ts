@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/lib/obj.ts
+// @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/lib/obj.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
 /**
  * obj.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).
@@ -36,10 +36,15 @@ import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, t
 // `.js` y no `.ts`: un consumidor Node (tsc sin allowImportingTsExtensions) lo exige; Deno resuelve `.js` -> `.ts`.
 
 /** Error de `Obj`: `codigo` dice qué falló y `ruta` dónde (claves separadas por punto). */
+/** Campos declarados (sin parameter properties): el modulo se carga tambien con Node en modo strip-only. */
 export class ObjError extends Error {
-  constructor(readonly codigo: TCodigoObj, mensaje: string, readonly ruta = "") {
+  readonly codigo: TCodigoObj;
+  readonly ruta: string;
+  constructor(codigo: TCodigoObj, mensaje: string, ruta = "") {
     super(ruta ? `${mensaje} (en ${ruta})` : mensaje);
     this.name = "ObjError";
+    this.codigo = codigo;
+    this.ruta = ruta;
   }
 }
 

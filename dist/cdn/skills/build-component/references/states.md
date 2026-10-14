@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/states.md -->
+<!-- @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/states.md -->
 # States
 
 Cómo declarar y exponer **custom states** (`ElementInternals.states`)

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/reference.md -->
+<!-- @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/reference.md -->
 # Intención → componente is-*
 
 Usar este mapa al elegir tag. API exacta: MD del módulo en el repo.
