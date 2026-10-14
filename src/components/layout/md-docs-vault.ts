@@ -1,18 +1,18 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { createSpaState } from '../../core/spa-state.js';
 import type { EstadoSpa, SpaState } from '../../core/spa-state.schemas.js';
-// Solo tipos: el schema Zod (`DocsVaultListaSchema`) queda para tests y consumidores; en el bundle
+// Solo tipos: el schema Zod (`MdDocsVaultListaSchema`) queda para tests y consumidores; en el bundle
 // del CDN sumaría ~330 KB al lector, así que la lista se valida aquí con un guard equivalente.
 import type {
-  DocsVaultHoja as Hoja,
-  DocsVaultIndice as Indice,
-  DocsVaultLayout as Layout,
-  DocsVaultListaMeta as ListaMeta,
-  DocsVaultMeta,
-  DocsVaultPageDetail,
-  DocsVaultRender as Render,
-  DocsVaultRenderers,
-} from './docs-vault.schemas.js';
+  MdDocsVaultHoja as Hoja,
+  MdDocsVaultIndice as Indice,
+  MdDocsVaultLayout as Layout,
+  MdDocsVaultListaMeta as ListaMeta,
+  MdDocsVaultMeta,
+  MdDocsVaultPageDetail,
+  MdDocsVaultRender as Render,
+  MdDocsVaultRenderers,
+} from './md-docs-vault.schemas.js';
 import './doc-layout.js';
 import '../navigation/doc-index.js';
 import '../navigation/pager.js';
@@ -28,7 +28,7 @@ import './dialog.js';
 import './callout.js';
 
 /**
- * <iswc-docs-vault> — lector de una documentación modular (norma `documentacion-modular`) como un
+ * <iswc-md-docs-vault> — lector de una documentación modular (norma `documentacion-modular`) como un
  * libro: cada `.md` es una hoja y el README es la portada. Se monta sobre `<iswc-doc-layout>`
  * (navegación | hoja | índice de la hoja con scroll-spy).
  *
@@ -42,7 +42,7 @@ import './callout.js';
  *   base   carpeta de las rutas (default la de la página)
  *
  * Slots: brand (marca de la barra), actions (acciones de la app: tema, paleta, escoba).
- * Eventos: `iswc-docs-vault-page` { ruta, titulo, meta } al abrir una hoja.
+ * Eventos: `iswc-md-docs-vault-page` { ruta, titulo, meta } al abrir una hoja.
  * Propiedades: `renderers` (se suman a los del lector), `layout` (el `<iswc-doc-layout>`), `irA(ruta, ancla?)`.
  * CSS parts (re-exportados del layout): bar, toc, content.
  */
@@ -54,7 +54,7 @@ code.vault-code { font: 0.86em/1.4 ui-monospace, SFMono-Regular, Consolas, "Libe
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `
-  <iswc-doc-layout storage-key="iswc-docs-vault" toc-title="En esta hoja" exportparts="bar, toc, content">
+  <iswc-doc-layout storage-key="iswc-md-docs-vault" toc-title="En esta hoja" exportparts="bar, toc, content">
     <slot name="brand" slot="brand"></slot>
     <iswc-button-group class="acciones-hoja" slot="actions" variant="separated" label="Acciones de la hoja">
       <iswc-copy-button class="copiar" copy-label="Copiar enlace a esta hoja" success-label="Enlace copiado" tooltip="Copiar enlace"></iswc-copy-button>
@@ -73,14 +73,14 @@ const numero = (segmento: string): string => (segmento.match(/^(\d{3})-/) ?? [])
 const escapar = (s: unknown): string => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] ?? c));
 const esExterno = (url: string): boolean => /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(url);
 const lista = (v: unknown): string[] => (Array.isArray(v) ? v.map(String) : v == null || v === '' ? [] : [String(v)]);
-/** Lista de hojas del libro (mismo contrato que `DocsVaultListaSchema`): rutas `.md` en orden de lectura. */
+/** Lista de hojas del libro (mismo contrato que `MdDocsVaultListaSchema`): rutas `.md` en orden de lectura. */
 const esListaHojas = (v: unknown): v is string[] => Array.isArray(v) && v.every((r) => typeof r === 'string' && /\.md$/i.test(r));
 
 /** Frontmatter YAML simple (clave: valor, listas `[a, b]`) y cuerpo. */
-export function separarFrontmatter(texto: string): { meta: DocsVaultMeta; cuerpo: string } {
+export function separarFrontmatter(texto: string): { meta: MdDocsVaultMeta; cuerpo: string } {
   const m = texto.replace(/^﻿/, '').match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
   if (!m) return { meta: {}, cuerpo: texto };
-  const meta: DocsVaultMeta = {};
+  const meta: MdDocsVaultMeta = {};
   for (const linea of m[1]!.split(/\r?\n/)) {
     const kv = linea.match(/^([A-Za-z_][\w-]*):\s*(.*)$/);
     if (!kv) continue;
@@ -103,7 +103,7 @@ export function resolverRuta(desde: string, rel: string): string {
   return partes.join('/');
 }
 
-class IswcDocsVault extends HTMLElement {
+class IswcMdDocsVault extends HTMLElement {
   #raiz: ShadowRoot;
   #hojas: Hoja[] = [];
   #textos = new Map<string, string>();
@@ -111,7 +111,7 @@ class IswcDocsVault extends HTMLElement {
   #nav: SpaState | null = null;
   #layout: Layout | null = null;
   /** Renderers extra del consumidor (se suman a los del lector; ver `iswc-md-render.renderers`). */
-  renderers: DocsVaultRenderers | null = null;
+  renderers: MdDocsVaultRenderers | null = null;
 
   static get observedAttributes(): string[] {
     return ['main'];
@@ -293,7 +293,7 @@ class IswcDocsVault extends HTMLElement {
    * - link: los `.md` del libro y las anclas navegan dentro de la SPA (`?s=`); el resto, a su URL.
    * - code: código inline como `<code>` en línea.
    */
-  #renderers(ruta: string): DocsVaultRenderers {
+  #renderers(ruta: string): MdDocsVaultRenderers {
     const url = (rel: string): string => (esExterno(rel) ? rel : new URL(resolverRuta(ruta, rel), this.#base).href);
     const nav = this.#nav!;
     return {
@@ -345,8 +345,8 @@ class IswcDocsVault extends HTMLElement {
       });
       this.#pintarInfo(ruta, meta, cuerpo, idx);
       const titulo = (typeof meta.Titulo === 'string' && meta.Titulo) || humano(partes[partes.length - 1]!);
-      const detail: DocsVaultPageDetail = { ruta, titulo, meta };
-      this.dispatchEvent(new CustomEvent('iswc-docs-vault-page', { detail, bubbles: true, composed: true }));
+      const detail: MdDocsVaultPageDetail = { ruta, titulo, meta };
+      this.dispatchEvent(new CustomEvent('iswc-md-docs-vault-page', { detail, bubbles: true, composed: true }));
       this.#marcarActual();
       this.#layout.scrollContentTo(0);
       await customElements.whenDefined('iswc-md-render').catch(() => undefined);
@@ -359,7 +359,7 @@ class IswcDocsVault extends HTMLElement {
   }
 
   /** Datos de la hoja (frontmatter + ubicación) en el modal de info y enlace del botón copiar. */
-  #pintarInfo(ruta: string, meta: DocsVaultMeta, cuerpo: string, idx: number): void {
+  #pintarInfo(ruta: string, meta: MdDocsVaultMeta, cuerpo: string, idx: number): void {
     const partes = ruta.split('/');
     const tags = lista(meta.tags);
     const alias = lista(meta.aliases).filter(Boolean);
@@ -409,4 +409,4 @@ class IswcDocsVault extends HTMLElement {
   }
 }
 
-defineElement('iswc-docs-vault', IswcDocsVault, 'IswcDocsVault');
+defineElement('iswc-md-docs-vault', IswcMdDocsVault, 'IswcMdDocsVault');

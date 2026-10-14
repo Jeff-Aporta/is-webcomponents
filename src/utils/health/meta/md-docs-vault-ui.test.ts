@@ -1,9 +1,9 @@
 /**
- * Guardián WHAT de UI (E4) del lector `<iswc-docs-vault>` en un navegador real (Chromium de Playwright)
+ * Guardián WHAT de UI (E4) del lector `<iswc-md-docs-vault>` en un navegador real (Chromium de Playwright)
  * con el bundle de `dist/cdn` y el libro embebido de su demo. Lo que ve y hace un lector:
  *   U1 sin `?s=` abre la portada (main = README.md) y su título.
  *   U2 un enlace a otra hoja la abre sin recargar, deja `?s=` compartible en la URL y emite
- *      `iswc-docs-vault-page` con su ruta.
+ *      `iswc-md-docs-vault-page` con su ruta.
  *   U3 las flechas → y ← pasan a la hoja siguiente y vuelven a la anterior en el orden del libro.
  *   U4 abrir la URL compartida (con su `?s=`) muestra esa misma hoja.
  *   U5 sin errores de consola ni de página en todo el recorrido.
@@ -19,18 +19,18 @@ import { fileURLToPath } from 'node:url';
 
 const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
 const BUNDLES = [
-  'layout/docs-vault', 'layout/doc-layout', 'navigation/doc-index', 'helpers/md-render', 'navigation/pager',
+  'layout/md-docs-vault', 'layout/doc-layout', 'navigation/doc-index', 'helpers/md-render', 'navigation/pager',
   'media/figure', 'data/meta-list', 'layout/dialog', 'actions/copy-button', 'actions/button',
   'actions/button-group', 'media/icon', 'feedback/spinner', 'layout/callout',
 ].map((b) => `dist/cdn/${b}.min.js`);
 
-/** El libro del demo (`docs-vault.json`): portada, ficha y seguridad, en ese orden. */
+/** El libro del demo (`md-docs-vault.json`): portada, ficha y seguridad, en ese orden. */
 async function paginaDemo(): Promise<string> {
-  const ficha = JSON.parse(await readFile(join(RAIZ, 'src/components/layout/docs-vault.json'), 'utf8')) as {
+  const ficha = JSON.parse(await readFile(join(RAIZ, 'src/components/layout/md-docs-vault.json'), 'utf8')) as {
     sections: Array<{ blocks: Array<{ kind: string; html?: string[] }> }>;
   };
-  const demo = ficha.sections.flatMap((s) => s.blocks).find((b) => b.kind === 'demo' && b.html?.some((l) => l.includes('<iswc-docs-vault')));
-  assert(demo?.html, 'el demo de docs-vault no tiene libro embebido');
+  const demo = ficha.sections.flatMap((s) => s.blocks).find((b) => b.kind === 'demo' && b.html?.some((l) => l.includes('<iswc-md-docs-vault')));
+  assert(demo?.html, 'el demo de md-docs-vault no tiene libro embebido');
   return `<!doctype html><html lang="es" data-theme="light"><head><meta charset="utf-8">
 <link rel="stylesheet" href="/dist/cdn/is-base.min.css"><link rel="stylesheet" href="/dist/cdn/palettes.min.css">
 ${BUNDLES.map((b) => `<script type="module" src="/${b}"></script>`).join('\n')}
@@ -62,7 +62,7 @@ const H1 = `(() => {
 })()`;
 
 Deno.test({
-  name: 'docs-vault UI: E4 portada, enlace entre hojas con ?s=, flechas y URL compartida (navegador real)',
+  name: 'md-docs-vault UI: E4 portada, enlace entre hojas con ?s=, flechas y URL compartida (navegador real)',
   ignore: !chromium || BUNDLES.some((b) => !existsSync(join(RAIZ, b))),
   sanitizeResources: false,
   sanitizeOps: false,
@@ -93,14 +93,14 @@ Deno.test({
       assertEquals(new URL(page.url()).searchParams.get('s'), null, 'U1 la portada no lleva ?s=');
 
       // U2
-      await page.evaluate(`(window.__hojas = [], document.addEventListener('iswc-docs-vault-page', (e) => window.__hojas.push(e.detail.ruta)), window.__marca = 1)`);
+      await page.evaluate(`(window.__hojas = [], document.addEventListener('iswc-md-docs-vault-page', (e) => window.__hojas.push(e.detail.ruta)), window.__marca = 1)`);
       await page.locator('text=ficha').first().click();
       assert(await tituloEs('Ficha del proyecto'), `U2 el enlace no abrió la ficha (h1 = «${await page.evaluate<string>(H1)}»)`);
       const compartida = page.url();
       assert(new URL(compartida).searchParams.get('s'), `U2 la URL no guarda la hoja en ?s= (${compartida})`);
       assertEquals(await page.evaluate<number>('window.__marca'), 1, 'U2 abrir la hoja recargó la página');
       const hojas = await page.evaluate<string[]>('window.__hojas');
-      assert(hojas.some((r) => r.includes('010-Ficha.md')), `U2 iswc-docs-vault-page no informó la ficha: ${JSON.stringify(hojas)}`);
+      assert(hojas.some((r) => r.includes('010-Ficha.md')), `U2 iswc-md-docs-vault-page no informó la ficha: ${JSON.stringify(hojas)}`);
 
       // U3 (el foco fuera de campos: clic en un área neutra de la página)
       await page.mouse.click(5, 5);

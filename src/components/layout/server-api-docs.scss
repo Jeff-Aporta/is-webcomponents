@@ -1,0 +1,280 @@
+// <iswc-server-api-docs> — documentación interactiva de la API de un server (ver server-api-docs.md).
+:host {
+  display: block;
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  color: var(--iswc-text);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+iswc-doc-layout {
+  height: 100%;
+}
+
+// Marca de la barra (la del documento si la app no pone la suya)
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  .marca-titulo {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.indice {
+  display: block;
+  min-height: 100%;
+}
+
+// Página (portada u operación)
+.pagina {
+  padding: clamp(14px, 2vw, 28px) clamp(14px, 2.2vw, 32px) 56px;
+
+  h1 {
+    margin: 0.2em 0 0.3em;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    line-height: 1.2;
+  }
+
+  h2 {
+    margin: 2em 0 0.6em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--iswc-border);
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 1.4em 0 0.5em;
+    font-size: 1.05rem;
+  }
+
+  code {
+    font: 0.88em/1.4 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  }
+
+  .lede {
+    margin: 0 0 0.8em;
+    color: var(--iswc-text-dim);
+  }
+
+  .req {
+    color: var(--iswc-color-danger);
+    font-weight: 700;
+  }
+
+  iswc-md-render {
+    display: block;
+  }
+
+  iswc-code {
+    display: block;
+    margin: 0.4em 0 1em;
+  }
+}
+
+.cabecera {
+  .linea,
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .ruta {
+    font-size: 1.05rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+}
+
+// Diagnóstico del documento
+.avisos,
+.errores {
+  display: block;
+  margin: 1em 0;
+
+  ul {
+    margin: 0.4em 0 0;
+    padding-left: 1.2em;
+    max-height: 18em;
+    overflow: auto;
+  }
+}
+
+// Lista de operaciones de la portada
+.ops {
+  list-style: none;
+  margin: 0 0 1em;
+  padding: 0;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      background: color-mix(in srgb, var(--iswc-color-brand) 9%, transparent);
+    }
+  }
+
+  .metodo {
+    flex: none;
+    min-width: 4.6em;
+    text-align: center;
+  }
+
+  .ruta {
+    flex: none;
+    font-weight: 600;
+  }
+
+  .resumen {
+    flex: 1;
+    min-width: 0;
+    color: var(--iswc-text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .candado {
+    flex: none;
+    color: var(--iswc-text-dim);
+  }
+}
+
+// Parámetros
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+
+  th,
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--iswc-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--iswc-text-dim);
+    font-weight: 600;
+  }
+
+  .ej {
+    color: var(--iswc-text-dim);
+  }
+}
+
+// «Probar»
+.probar {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--iswc-border);
+  border-radius: 12px;
+  background: var(--iswc-bg-soft);
+
+  .servidores,
+  .enviar-linea {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .etiqueta,
+  .adjunto {
+    display: grid;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .sesion-aviso {
+    color: var(--iswc-text-dim);
+    font-size: 0.9rem;
+  }
+}
+
+.respuesta {
+  margin-top: 12px;
+
+  .estado-linea {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .tiempo {
+    color: var(--iswc-text-dim);
+    font-size: 0.9rem;
+  }
+}
+
+.pager {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--iswc-border);
+}
+
+.cargando {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 32px 0;
+  color: var(--iswc-text-dim);
+}
+
+// Diálogo de sesión
+iswc-dialog.login {
+  --width: min(460px, 92vw);
+
+  .login-cuerpo {
+    display: grid;
+    gap: 12px;
+  }
+
+  .login-estado {
+    margin: 0;
+    color: var(--iswc-text-dim);
+  }
+
+  .login-pie {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

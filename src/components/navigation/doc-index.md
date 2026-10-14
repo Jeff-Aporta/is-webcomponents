@@ -18,7 +18,7 @@ resaltado.
 
 ## Cuándo usarlo
 
-- La navegación de un lector de documentación (`iswc-docs-vault` lo usa en su lateral).
+- La navegación de un lector de documentación (`iswc-md-docs-vault` lo usa en su lateral).
 - Temarios, manuales o catálogos de páginas con búsqueda de texto completo.
 
 ## Cuándo no usarlo
@@ -101,7 +101,7 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
 
 ## Dependencias y componentes relacionados
 
-Lo usa `iswc-docs-vault`; convive con `iswc-doc-layout` (va en su slot `start`).
+Lo usa `iswc-md-docs-vault`; convive con `iswc-doc-layout` (va en su slot `start`).
 
 ## Accesibilidad
 

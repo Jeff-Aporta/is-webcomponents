@@ -6,7 +6,7 @@ description: >-
   estilos, íconos ni build de front. Usar al alinear o mantener una API/backend que trae piezas del kit
   por vendor (perfil `server`).
 ---
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-server/SKILL.md -->
+<!-- @vendor 2026-10-14T00:24:49.822Z Jeff-Aporta/is-webcomponents@main skills/iswc-server/SKILL.md -->
 
 # iswc-server — el kit para un proyecto server (perfil `server`)
 
@@ -34,7 +34,7 @@ vendoriza.
   tests (ISS: `tests/.audit/ISU/`), con el `shared/schemas.ts` único (podado a esas secciones).
 - `shared/tools/sync-entregable.ts` (lo importa el sync con tsx) y `shared/lib/obj.ts` + `schemas.ts` (sección `obj`) si
   el código lo usa.
-- Skills: `skills/iswc-server` (esta) y, si renderiza docs con diagramas del kit, `skills/iswc-diagramas-enriquecidos`.
+- Skills: `skills/iswc-server` (esta) y, si renderiza docs con diagramas del kit, `skills/iswc-diagramas-enriquecidos`; si sirve la documentación de su API (`GET /api/docs`), `skills/iswc-server-api-docs` (componente `<iswc-server-api-docs>` del kit por CDN, sin vendor).
 - Online, nunca vendorizados: `vendor.ts`, `pin-update.mjs` (y `render-lote.ts` para docs), desde `@main` con `--reload`.
 
 `vendor.json` de un server: `"perfil": "server"` (bloquea `client/` y cualquier dependencia de navegador), `raices` =

@@ -1,14 +1,14 @@
 ---
-tag: iswc-docs-vault
+tag: iswc-md-docs-vault
 tags:
-  - iswc-docs-vault
+  - iswc-md-docs-vault
 category: layout
 status: public
-source: ./docs-vault.ts
-style: ./docs-vault.css
-preview: ./docs-vault.json
+source: ./md-docs-vault.ts
+style: ./md-docs-vault.css
+preview: ./md-docs-vault.json
 ---
-# `<iswc-docs-vault>`
+# `<iswc-md-docs-vault>`
 
 ## Propósito
 
@@ -26,20 +26,21 @@ compartibles. Es el `docs/index.html` de cualquier proyecto: la app solo pone la
 
 - Una sola página de markdown: usa `iswc-md-render`.
 - Un layout documental con contenido propio (no markdown): usa `iswc-doc-layout`.
+- La documentación de la API de un server (`GET /api/docs`): usa `iswc-server-api-docs`.
 
 ## Importación
 
 ```js
-import './docs-vault.js'; // o, por el loader: ISWebComponentsLoader.ensure('iswc-docs-vault')
+import './md-docs-vault.js'; // o, por el loader: ISWebComponentsLoader.ensure('iswc-md-docs-vault')
 ```
 
 ## Ejemplo mínimo
 
 ```html
-<iswc-docs-vault main="README.md">
+<iswc-md-docs-vault main="README.md">
   <strong slot="brand">Mi proyecto</strong>
   <script type="application/json">["README.md", "010-General/010-Planteamiento/010-Ficha-de-proyecto.md"]</script>
-</iswc-docs-vault>
+</iswc-md-docs-vault>
 ```
 
 ## API
@@ -76,7 +77,7 @@ lista JSON, su orden es el del libro.
 
 | Evento | Detalle | Cuándo |
 | --- | --- | --- |
-| `iswc-docs-vault-page` | `{ ruta, titulo, meta }` | Al abrir una hoja (también la primera). |
+| `iswc-md-docs-vault-page` | `{ ruta, titulo, meta }` | Al abrir una hoja (también la primera). |
 
 ### Métodos y propiedades públicas
 
@@ -126,10 +127,10 @@ Usa los tokens del kit (`--iswc-text`, `--iswc-text-dim`, `--iswc-border`, `--is
 ## Ejemplo avanzado
 
 ```js
-const vault = document.querySelector('iswc-docs-vault');
+const vault = document.querySelector('iswc-md-docs-vault');
 // Imágenes en un lightbox propio en lugar de una pestaña nueva.
 vault.renderers = { image: ({ src, alt }) => `<mi-lightbox src="${src}" alt="${alt}"></mi-lightbox>` };
-vault.addEventListener('iswc-docs-vault-page', (e) => { document.title = `${e.detail.titulo} · Docs`; });
+vault.addEventListener('iswc-md-docs-vault-page', (e) => { document.title = `${e.detail.titulo} · Docs`; });
 ```
 
 ## Errores comunes
@@ -146,4 +147,4 @@ vault.addEventListener('iswc-docs-vault-page', (e) => { document.title = `${e.de
 
 ## Fuentes
 
-- `src/components/layout/docs-vault.ts`, `docs-vault.scss`, `docs-vault.schemas.ts`.
+- `src/components/layout/md-docs-vault.ts`, `md-docs-vault.scss`, `md-docs-vault.schemas.ts`.

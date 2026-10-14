@@ -23,7 +23,8 @@ paneles redimensionables y el índice los resuelve el layout.
 
 ## Cuándo no usarlo
 
-- Un libro de hojas markdown completo: usa `iswc-docs-vault` (ya lo monta sobre este layout).
+- Un libro de hojas markdown completo: usa `iswc-md-docs-vault` (ya lo monta sobre este layout).
+- La documentación de la API de un server: usa `iswc-server-api-docs` (también sobre este layout).
 - Una app con su propio shell de navegación: usa `iswc-main` / `iswc-split-panel`.
 
 ## Importación
@@ -122,7 +123,7 @@ Usa los tokens del kit (`--iswc-bg`, `--iswc-surface`, `--iswc-border`, `--iswc-
 
 ## Dependencias y componentes relacionados
 
-`iswc-split-panel` (laterales redimensionables); lo usan `iswc-docs-vault` y las demos documentales.
+`iswc-split-panel` (laterales redimensionables); lo usan `iswc-md-docs-vault`, `iswc-server-api-docs` y las demos documentales.
 
 ## Accesibilidad
 

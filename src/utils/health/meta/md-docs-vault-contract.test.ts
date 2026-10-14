@@ -1,6 +1,6 @@
 /**
- * docs-vault-contract.test.ts — contrato del lector de documentación y sus satélites
- * (`<iswc-docs-vault>`, `<iswc-doc-layout>`, `<iswc-doc-index>`): 4 archivos hermanos, ruta en el
+ * md-docs-vault-contract.test.ts — contrato del lector de documentación y sus satélites
+ * (`<iswc-md-docs-vault>`, `<iswc-doc-layout>`, `<iswc-doc-index>`): 4 archivos hermanos, ruta en el
  * manifest (de ahí sale el catálogo del loader), demo con playground y datos declarativos válidos.
  *
  * Los satélites que el lector muestra (figura, ficha de metadatos, paginador, markdown) y los que
@@ -12,11 +12,11 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
-import { DocsVaultListaSchema } from '../../../components/layout/docs-vault.schemas.ts';
+import { MdDocsVaultListaSchema } from '../../../components/layout/md-docs-vault.schemas.ts';
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const COMPONENTES = [
-  { tag: 'iswc-docs-vault', base: ['layout', 'docs-vault'], categoria: 'layout' },
+  { tag: 'iswc-md-docs-vault', base: ['layout', 'md-docs-vault'], categoria: 'layout' },
   { tag: 'iswc-doc-layout', base: ['layout', 'doc-layout'], categoria: 'layout' },
   { tag: 'iswc-doc-index', base: ['navigation', 'doc-index'], categoria: 'navigation' },
 ];
@@ -75,8 +75,8 @@ for (const c of SATELITES) {
   });
 }
 
-test('iswc-docs-vault: la hoja se compone con piezas del kit (índice, markdown, figuras, paginador, ficha de metadatos)', () => {
-  const lector = readFileSync(join(RAIZ, 'src', 'components', 'layout', 'docs-vault.ts'), 'utf8');
+test('iswc-md-docs-vault: la hoja se compone con piezas del kit (índice, markdown, figuras, paginador, ficha de metadatos)', () => {
+  const lector = readFileSync(join(RAIZ, 'src', 'components', 'layout', 'md-docs-vault.ts'), 'utf8');
   // Lo que el lector muestra: navegación del libro, la hoja en markdown, imágenes como figuras,
   // anterior/siguiente y el modal de información. Nada de esto se reimplementa en el lector.
   for (const tag of ['iswc-doc-layout', 'iswc-doc-index', 'iswc-md-render', 'iswc-figure', 'iswc-pager', 'iswc-meta-list', 'iswc-dialog', 'iswc-copy-button']) {
@@ -89,8 +89,8 @@ test('iswc-docs-vault: la hoja se compone con piezas del kit (índice, markdown,
   }
 });
 
-test('iswc-docs-vault: lo que el lector ofrece (hojas embebidas, main reactivo, ?s= compartible, info, búsqueda, flechas, evento de hoja)', () => {
-  const lector = readFileSync(join(RAIZ, 'src', 'components', 'layout', 'docs-vault.ts'), 'utf8');
+test('iswc-md-docs-vault: lo que el lector ofrece (hojas embebidas, main reactivo, ?s= compartible, info, búsqueda, flechas, evento de hoja)', () => {
+  const lector = readFileSync(join(RAIZ, 'src', 'components', 'layout', 'md-docs-vault.ts'), 'utf8');
   assert.ok(lector.includes('script[type="text/markdown"][data-path]'), 'hojas embebidas sin red');
   assert.match(lector, /observedAttributes[\s\S]*\['main'\]/, '`main` observado: cambiarlo abre esa hoja');
   assert.ok(lector.includes('createSpaState('), 'navegación SPA en la URL (?s=) con atrás/adelante');
@@ -98,16 +98,16 @@ test('iswc-docs-vault: lo que el lector ofrece (hojas embebidas, main reactivo, 
   assert.ok(lector.includes('label="Información de la hoja"'), 'modal de información de la hoja');
   assert.ok(lector.includes("e.key === '/'") && lector.includes('focusSearch()'), 'tecla / enfoca la búsqueda');
   assert.ok(lector.includes("'ArrowRight'") && lector.includes("'ArrowLeft'"), 'flechas: hoja anterior/siguiente');
-  assert.ok(lector.includes("'iswc-docs-vault-page'"), 'evento iswc-docs-vault-page al abrir una hoja');
+  assert.ok(lector.includes("'iswc-md-docs-vault-page'"), 'evento iswc-md-docs-vault-page al abrir una hoja');
   assert.ok(lector.includes("cache: 'reload'"), 'imágenes revalidadas (un SVG regenerado no se queda en caché)');
-  assert.match(lector, /renderers: DocsVaultRenderers \| null/, 'renderers del consumidor se suman a los del lector');
+  assert.match(lector, /renderers: MdDocsVaultRenderers \| null/, 'renderers del consumidor se suman a los del lector');
 });
 
-test('iswc-docs-vault: el demo es un libro embebido válido (hojas .md con frontmatter, README como portada)', () => {
-  const { html } = demoDe(join(RAIZ, 'src', 'components', 'layout', 'docs-vault.json'));
+test('iswc-md-docs-vault: el demo es un libro embebido válido (hojas .md con frontmatter, README como portada)', () => {
+  const { html } = demoDe(join(RAIZ, 'src', 'components', 'layout', 'md-docs-vault.json'));
   const hojas = [...html.matchAll(/<script type="text\/markdown" data-path="([^"]+)">([\s\S]*?)<\/script>/g)];
   assert.ok(hojas.length >= 2, 'varias hojas embebidas');
-  assert.ok(DocsVaultListaSchema.safeParse(hojas.map((h) => h[1])).success, 'rutas .md');
+  assert.ok(MdDocsVaultListaSchema.safeParse(hojas.map((h) => h[1])).success, 'rutas .md');
   assert.equal(hojas[0]![1], 'README.md', 'la portada va primero');
   for (const [, ruta, cuerpo] of hojas) assert.match(cuerpo!.trim(), /^---\s*\n[\s\S]*?Titulo:[\s\S]*?\n\s*---/, `${ruta}: frontmatter con Titulo`);
 });

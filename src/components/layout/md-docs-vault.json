@@ -1,11 +1,11 @@
 {
   "$schema": "iswc-preview/v1",
-  "tag": "iswc-docs-vault",
+  "tag": "iswc-md-docs-vault",
   "category": "layout",
-  "title": "&lt;iswc-docs-vault&gt;",
+  "title": "&lt;iswc-md-docs-vault&gt;",
   "titleHtml": false,
   "description": "Lector de documentación modular como un libro: índice, búsqueda, hoja anterior/siguiente y enlaces compartibles.",
-  "storageKey": "docs-iswc-docs-vault",
+  "storageKey": "docs-iswc-md-docs-vault",
   "loads": [
     "iswc-doc-layout",
     "iswc-doc-index",
@@ -30,7 +30,7 @@
         {
           "kind": "demo",
           "html": [
-            "<iswc-docs-vault main=\"README.md\" style=\"height: 560px\">",
+            "<iswc-md-docs-vault main=\"README.md\" style=\"height: 560px\">",
             "  <strong slot=\"brand\">Mi proyecto</strong>",
             "  <script type=\"text/markdown\" data-path=\"README.md\">",
             "    ---",
@@ -76,7 +76,7 @@
             "",
             "    Solo con una sesión vigente. Vuelva a la [portada](../../README.md).",
             "  </script>",
-            "</iswc-docs-vault>"
+            "</iswc-md-docs-vault>"
           ],
           "controls": [
             {
@@ -99,10 +99,10 @@
       "ejemplos": {
         "content": [
           "```html",
-          "<iswc-docs-vault main=\"README.md\">",
+          "<iswc-md-docs-vault main=\"README.md\">",
           "  <strong slot=\"brand\">Mi proyecto</strong>",
           "  <script type=\"application/json\">[\"README.md\", \"010-General/010-Planteamiento/010-Ficha-de-proyecto.md\"]</script>",
-          "</iswc-docs-vault>",
+          "</iswc-md-docs-vault>",
           "```"
         ]
       }

@@ -18,7 +18,7 @@ artículo o de un paso de tutorial, en lugar de armar el par de botones a mano.
 
 ## Cuándo usarlo
 
-- Pie de cada hoja en un lector de documentación (`iswc-docs-vault`).
+- Pie de cada hoja en un lector de documentación (`iswc-md-docs-vault`).
 - Secuencias lineales de páginas o pasos donde importa ver a dónde se va.
 
 ## Cuándo no usarlo

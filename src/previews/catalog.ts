@@ -304,8 +304,12 @@ export default {
     "json": "../../dist/previews/data/meta-list.json",
     "category": "data"
   },
-  "iswc-docs-vault": {
-    "json": "../../dist/previews/layout/docs-vault.json",
+  "iswc-server-api-docs": {
+    "json": "../../dist/previews/layout/server-api-docs.json",
+    "category": "layout"
+  },
+  "iswc-md-docs-vault": {
+    "json": "../../dist/previews/layout/md-docs-vault.json",
     "category": "layout"
   },
   "iswc-doc-layout": {
