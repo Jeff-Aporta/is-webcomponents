@@ -1,5 +1,5 @@
 // icon-negative-cache.test.ts — QUÉ hace <iswc-icon> con un ícono que NO se puede resolver
-// (src/components/_shared/icon-loader.ts), caja negra sobre `resolveIconRaw` con la red simulada.
+// (src/core/icon-loader.ts), caja negra sobre `resolveIconRaw` con la red simulada.
 //   N1 un ícono que falla en local y en la API devuelve null y se pide UNA sola vez: el segundo
 //      `resolveIconRaw` del mismo id no genera ningún fetch (caché negativo; evita el bucle de consola
 //      cuando un componente se repinta por timer y la CSP bloquea la API).
@@ -15,7 +15,7 @@ globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) =>
   return new Response('', { status: 404 }); // nada resuelve: ni local ni API
 }) as typeof fetch;
 
-const { resolveIconRaw, clearRawCache } = await import('../../../components/_shared/icon-loader.ts');
+const { resolveIconRaw, clearRawCache } = await import('../../../core/icon-loader.ts');
 
 Deno.test('N1 un ícono irresoluble se pide una sola vez por página', async () => {
   pedidos.length = 0;

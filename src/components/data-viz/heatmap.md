@@ -192,7 +192,7 @@ Notas de la cabecera del mÃ³dulo que no coinciden con el cÃ³digo:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js) (`niceTicks`, `svgEl`; `scaleLinear` se importa pero no se usa)
+- [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js) (`niceTicks`, `svgEl`; `scaleLinear` se importa pero no se usa)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 - Relacionados: [`../charts/bar-chart.md`](../charts/bar-chart.md), [`./maps.md`](./maps.md)

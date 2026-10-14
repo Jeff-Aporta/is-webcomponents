@@ -119,7 +119,7 @@ No es form-associated.
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/web-share.js`](../_shared/web-share.js)
+- [`../_shared/web-share.js`](./utils/web-share.js)
 
 ## Accesibilidad
 

@@ -5,12 +5,12 @@ import {
   html2json,
   hostToJson,
   json2html,
-} from '../_shared/json-html.js';
+} from '../../core/json-html.js';
 import {
   SCROLL_MEMORY_ATTRS,
   ScrollMemory,
   bindScrollMemoryApi,
-} from '../_shared/scroll-memory.js';
+} from '../../core/scroll-memory.js';
 import type { Breakpoint, BreakpointFlags, LerpwFn } from "./schemas/block-layout.schemas.js";
 
 /**

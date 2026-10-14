@@ -1,4 +1,4 @@
-import { escapeHtml } from '../_shared/dom-utils.js';
+import { escapeHtml } from '../../core/dom-utils.js';
 import { escapeJsonForScript, resolveIswcFenceTag } from './md-iswc-fences.js';
 import type { DatosCalloutMd, DatosHeadingMd, DatosPorTipoMd, ItemListaMd, OpcionesMdLite, RendererMd, RenderersMd, TabImagenMd, TipoElementoMd } from './schemas/md-lite.schemas.js';
 

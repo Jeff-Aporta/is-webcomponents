@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { TONE } from '../_shared/tone.js';
+import { TONE } from '../../core/tone.js';
 
 /**
  * <iswc-details> — Web Component (vanilla, zero dependencies).

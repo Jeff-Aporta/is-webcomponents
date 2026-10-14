@@ -150,15 +150,15 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/diagram-element-base.js`](../_shared/diagram-element-base.js)
+- [`../_shared/diagram-element-base.js`](./utils/diagram-element-base.js)
 - [`./journey-spec.js`](./journey-spec.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
-- [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
+- [`../_shared/tk-hue.js`](../../core/tk-hue.js)
+- [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
+- [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 
 Tags del mÃ³dulo: `<iswc-journey-map>`.
 

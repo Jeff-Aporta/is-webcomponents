@@ -38,7 +38,7 @@ import './time-input.js';
 
 ## API
 
-Wrapper de factory: hereda contrato completo de [`definePickerInput`](../_shared/picker-element.js) y compone field/paneles importados. Cabecera de fuente enumera atributos, eventos y mÃ©todos efectivos; tablas siguientes muestran solo declaraciones locales.
+Wrapper de factory: hereda contrato completo de [`definePickerInput`](./utils/picker-element.js) y compone field/paneles importados. Cabecera de fuente enumera atributos, eventos y mÃ©todos efectivos; tablas siguientes muestran solo declaraciones locales.
 
 ### Atributos y propiedades
 
@@ -129,7 +129,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/picker-element.js`](../_shared/picker-element.js)
+- [`../_shared/picker-element.js`](./utils/picker-element.js)
 - [`./time-field.js`](./time-field.js)
 - [`./time-clock.js`](./time-clock.js)
 - [`./digital-clock.js`](./digital-clock.js)

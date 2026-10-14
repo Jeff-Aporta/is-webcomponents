@@ -7,7 +7,7 @@
  *   N4 los tabs de imágenes del markdown tienen id estable por documento y recuerdan su estado.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { b64urlDecode, b64urlEncode, readUrlTabs, writeUrlTab } from '../../../components/_shared/url-nav.ts';
+import { b64urlDecode, b64urlEncode, readUrlTabs, writeUrlTab } from '../../../components/navigation/utils/url-nav.ts';
 import { mdToHtml } from '../../../components/helpers/md-lite.ts';
 
 function navegador(inicial: Record<string, unknown>) {

@@ -72,7 +72,7 @@ test('view-sources: chrome de galerÃ­a incluye iswc-tab-group', () => {
 });
 
 test('highlight-code: paintOne asigna value siempre (no fiarse del getter)', () => {
-  const src = read('src/components/_shared/highlight-code.ts');
+  const src = read('src/core/highlight-code.ts');
   assert.match(src, /el\.value = text/);
   assert.doesNotMatch(src, /if \(el\.value !== text\) el\.value = text/);
 });
@@ -102,7 +102,7 @@ test('iswc-code preserva scroll del iswc-main (evita F5 al final)', () => {
 
 test('iswc-main: restore window amplio + scroll-behavior auto en CSS', () => {
   // RESTORE_WINDOW vive en _shared/scroll-memory.ts (refactor desde main.ts).
-  const memory = read('src/components/_shared/scroll-memory.ts');
+  const memory = read('src/core/scroll-memory.ts');
   assert.match(memory, /RESTORE_WINDOW\s*=\s*4_?500/);
   const css = read('src/styles/presentation.scss');
   assert.match(css, /iswc-main\.main\s*\{[\s\S]*?scroll-behavior:\s*auto/);

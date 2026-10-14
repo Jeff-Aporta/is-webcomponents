@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import { createPopupDismiss } from '../../core/popup-dismiss.js';
 
 /**
  * <iswc-context-menu> — Menú emergente anclado al clic derecho del ratón sobre

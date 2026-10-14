@@ -1,11 +1,11 @@
-// oklch.test.ts — rotar el tono en OKLCH (src/components/_shared/oklch.ts), usado para dar a cada
+// oklch.test.ts — rotar el tono en OKLCH (src/components/diagrams/utils/oklch.ts), usado para dar a cada
 // símbolo del flowchart insoft su propio color.
 //   K1 0° devuelve el mismo color; ida y vuelta hex → OKLCH → hex es exacta.
 //   K2 rotar conserva la luminosidad (el texto encima mantiene el contraste).
 //   K3 los primeros tonos por ángulo áureo son todos distintos entre sí.
 //   K4 lo que no es hex se devuelve tal cual.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
-import { ANGULO_AUREO, hexToOklch, rotarTono } from '../../../components/_shared/oklch.ts';
+import { ANGULO_AUREO, hexToOklch, rotarTono } from '../../../components/diagrams/utils/oklch.ts';
 
 const BASE = '#7acff4';
 

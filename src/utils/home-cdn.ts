@@ -5,7 +5,7 @@
 // Sin literales `</script>` en este archivo: se construye con fromCharCode
 // para evitar que el lexer HTML cierre el `<script>` de este módulo.
 
-import { paint } from '../components/_shared/highlight-code.js';
+import { paint } from '../core/highlight-code.js';
 
 const LOADER =
   'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';

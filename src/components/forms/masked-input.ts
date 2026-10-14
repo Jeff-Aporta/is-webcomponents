@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { attachFormInternals, setCustomState, setFormValue } from '../_shared/form-associated.js';
+import { attachFormInternals, setCustomState, setFormValue } from '../../core/form-associated.js';
 import { apply, isComplete } from './masks-tokens.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 
 /**
  * <iswc-masked-input> — Input con formato aplicado (tarjeta de crédito, fecha,

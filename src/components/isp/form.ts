@@ -13,7 +13,7 @@ import {
   html2json,
   hostToJson,
   json2html,
-} from '../_shared/json-html.js';
+} from '../../core/json-html.js';
 import { getValues, setValues } from './form-json.js';
 
 /**

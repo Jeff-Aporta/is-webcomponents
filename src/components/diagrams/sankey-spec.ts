@@ -1,6 +1,6 @@
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { SankeyNodeSpec, SankeyLinkSpec, SankeyGroupSpec, SankeyResolvedSpec, SankeyLayoutNode, SankeyLayoutLink, SankeyLayout, SankeyLayoutOptions } from "./schemas/sankey-spec.schemas.js";
 
 /**

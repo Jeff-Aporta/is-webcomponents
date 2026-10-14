@@ -161,7 +161,7 @@ No es form-associated: es una vista de agenda, no un campo.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/dom-utils.js`](../_shared/dom-utils.js)
+- [`../_shared/dom-utils.js`](../../core/dom-utils.js)
 
 Tags del mÃ³dulo: `<iswc-full-calendar>`.
 

@@ -338,7 +338,7 @@ delante del rótulo. Entre agrupadores hermanos apilados hay al menos 3U
 
 - [`./component-spec.js`](./component-spec.js)
 - [`./sequence-spec.js`](./sequence-spec.js) â€” temas claro/oscuro
-- [`../_shared/diagram-element-base.js`](../_shared/diagram-element-base.js)
+- [`../_shared/diagram-element-base.js`](./utils/diagram-element-base.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
 ## Accesibilidad

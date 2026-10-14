@@ -1,9 +1,9 @@
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { aristasDeRetorno, claveArista } from '../_shared/diagram-graph.js';
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { aristasDeRetorno, claveArista } from './utils/diagram-graph.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { applyEdgeActorLayout } from './utils/diagram-edge-actors.js';
+import { assignEdgeHues } from './utils/diagram-edge-style.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { SwimlaneStepKind, SwimlaneLaneSpec, SwimlaneStepSpec, SwimlaneLinkSpec, SwimlaneResolvedSpec, SwimlaneLayoutLane, SwimlaneLayoutStep, SwimlaneLayoutLink, SwimlaneLayout } from "./schemas/swimlane-spec.schemas.js";
 
 /**

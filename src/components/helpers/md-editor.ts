@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
 import {
   bodyPreviewHtml,
   bodyToEditorHtml,
@@ -8,7 +8,7 @@ import {
   extractPromptVariables,
   surfaceHasRawVarTokens,
   varToneStyleAttr,
-} from '../_shared/prompt-md.js';
+} from './utils/prompt-md.js';
 import {
   apiRequest,
   byteLength,

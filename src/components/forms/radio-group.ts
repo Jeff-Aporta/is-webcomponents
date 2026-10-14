@@ -7,9 +7,9 @@ import {
   setCustomState,
   setFormValue,
   setValidity,
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
+import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
 import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
 /**
  * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño

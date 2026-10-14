@@ -7,10 +7,10 @@
 // monta los paneles por demo, escucha sus cambios y aplica el valor al host.
 
 import { iconForSelectOption } from './control-select-icons.js';
-import { DEFAULT_BUTTON_SHAPE } from '../../components/_shared/button-shape.js';
-import { DEFAULT_MEDIA_SHAPE } from '../../components/_shared/media-shape.js';
-import { DEFAULT_INTENT } from '../../components/_shared/intent.js';
-import { DEFAULT_TONE } from '../../components/_shared/tone.js';
+import { DEFAULT_BUTTON_SHAPE } from '../../core/button-shape.js';
+import { DEFAULT_MEDIA_SHAPE } from '../../core/media-shape.js';
+import { DEFAULT_INTENT } from '../../core/intent.js';
+import { DEFAULT_TONE } from '../../core/tone.js';
 import type { TipoControl, OpcionSelect, PanelInfoDef, ControlDef, ControlesDeDemo, BloqueConControles, PanelConSpec, PreviewDefinitionShallow, PreviewMountCtxShallow } from "./schemas/controles.schemas.js";
 
 /** Tipos de control soportados por el panel. */

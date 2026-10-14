@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr, setStringAttr } from '../_shared/reflect.js';
+import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { resolveDispatch } from './_shared/mime-map.js';
 
 (() => {

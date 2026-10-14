@@ -188,7 +188,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../media/icon.js`](../media/icon.js)
-- [`../_shared/form-associated.js`](../_shared/form-associated.js)
+- [`../_shared/form-associated.js`](../../core/form-associated.js)
 
 Tags del mÃ³dulo: `<iswc-color-picker>`.
 

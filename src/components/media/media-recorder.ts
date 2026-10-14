@@ -1,6 +1,6 @@
 import '../actions/button.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 
 /**
  * <iswc-media-recorder> — getUserMedia / getDisplayMedia + MediaRecorder.

@@ -1,7 +1,7 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { INTENT } from '../_shared/intent.js';
-import { TONE } from '../_shared/tone.js';
+import { INTENT } from '../../core/intent.js';
+import { TONE } from '../../core/tone.js';
 
 /**
  * <iswc-callout> — Web Component (vanilla, zero dependencies).

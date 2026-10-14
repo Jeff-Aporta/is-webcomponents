@@ -1,7 +1,7 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import '../media/icon.js';
 import '../actions/button.js';
-import { ModalBase } from '../_shared/modal-base.js';
+import { ModalBase } from './utils/modal-base.js';
 
 /**
  * <iswc-dialog> — Web Component (vanilla, zero dependencies).

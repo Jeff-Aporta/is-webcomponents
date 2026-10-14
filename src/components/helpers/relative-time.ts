@@ -1,7 +1,7 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
-import { resolveLocale } from '../_shared/resolve-locale.js';
+import { setStringAttr } from '../../core/reflect.js';
+import { resolveLocale } from '../../core/resolve-locale.js';
 import { parseLooseDate } from './format-date.js';
 
 /**

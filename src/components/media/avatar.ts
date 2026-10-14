@@ -1,9 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import './icon.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
-import { DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '../_shared/media-shape.js';
-import { type MediaShape } from '../_shared/media-shape.schemas.js';
+import { setStringAttr } from '../../core/reflect.js';
+import { DEFAULT_MEDIA_SHAPE, MEDIA_SHAPE, normalizeMediaShape } from '../../core/media-shape.js';
+import { type MediaShape } from '../../core/schemas/media-shape.schemas.js';
 
 /**
  * <iswc-avatar> — Web Component (vanilla).

@@ -23,8 +23,8 @@ import {
   fitContain,
   NESTED_DEFAULT_MAX,
   readNodeEmbed,
-} from '../../../components/_shared/diagram-embed.ts';
-import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';
+} from '../../../components/diagrams/utils/diagram-embed.ts';
+import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 // Fixtures: payloads de flujo estables (copias de los primeros labs), independientes de lo que el lab regenere.

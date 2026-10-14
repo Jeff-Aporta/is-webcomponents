@@ -8,7 +8,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const loader = readFileSync(join(root, 'src/components/_shared/icon-loader.ts'), 'utf8');
+const loader = readFileSync(join(root, 'src/core/icon-loader.ts'), 'utf8');
 const preview = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
 
 test('icon-loader: data-icons o API de Iconify, sin prefetch de índices, sin mapa ni CDN del kit', () => {

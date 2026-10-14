@@ -304,13 +304,14 @@ for (const raw of localPartials) {
     const outCore = join(dist, 'core');
     await mkdir(outCore, { recursive: true });
     for (const f of await readdir(coreRoot)) {
-      if (!f.endsWith('.ts')) continue;
+      if (!f.endsWith('.ts') || f.includes('.selfcheck.')) continue;
       await bundleJs(join(coreRoot, f), join(outCore, f.replace(/\.ts$/, '.min.js')), [zodExterno], kitDocsBanner([
         `source: ${GH_BLOB}/src/core/${f}`,
       ]));
       // En dist `src/cdn/build/` se publica como `build/` (ver más abajo): el .ts publicado importa de ahí.
       const fuente = await readFile(join(coreRoot, f), 'utf8');
-      await writeFile(join(outCore, f), fuente.replaceAll("'../cdn/build/", "'../build/"));
+      // Un common que carga un componente lo pide a su bundle publicado (dist/cdn/<grupo>/<tag>.min.js).
+      await writeFile(join(outCore, f), fuente.replaceAll("'../cdn/build/", "'../build/").replace(/'\.\.\/components\/([^/']+)\/([^/']+)\.js'/g, "'../$1/$2.min.js'"));
     }
     // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.
     const coreSchemas = join(coreRoot, 'schemas');

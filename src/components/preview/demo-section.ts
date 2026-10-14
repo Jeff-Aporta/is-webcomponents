@@ -37,7 +37,7 @@
  */
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 
 (() => {
   const TEMPLATE = document.createElement('template');

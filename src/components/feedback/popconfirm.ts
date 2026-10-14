@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { computePosition } from '../_shared/position.js';
-import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import { computePosition } from '../../core/position.js';
+import { createPopupDismiss } from '../../core/popup-dismiss.js';
 import '../actions/button.js';
 
 /**

@@ -196,7 +196,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/modal-base.js`](../_shared/modal-base.js) â€” clase base con el ciclo
+- [`../_shared/modal-base.js`](./utils/modal-base.js) â€” clase base con el ciclo
   completo del modal (focus-trap, `Escape`, backdrop light-dismiss, restore de foco,
   `data-*="close"`, eventos). AquÃ­ sÃ³lo queda el chrome y las animaciones.
 

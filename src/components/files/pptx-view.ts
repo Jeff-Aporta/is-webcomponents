@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr, setStringAttr } from '../_shared/reflect.js';
-import { escapeHtml } from '../_shared/dom-utils.js';
+import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
+import { escapeHtml } from '../../core/dom-utils.js';
 import { loadArrayBuffer, resolveFileSource } from './_shared/file-source.js';
 import { JSZIP_CDN, loadCdnScript, PPTX_PREVIEW_CDN } from './_shared/load-cdn.js';
 import type { ZipLike } from "./schemas/pptx-view.schemas.js";

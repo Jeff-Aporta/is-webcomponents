@@ -16,7 +16,7 @@
 // Si alguien refactoriza `routeSequenceSelf` y vuelve al A* (o pierde
 // una esquina), el test detecta cuál invariante se rompió.
 
-import { routeSequenceSelf } from '../../../components/_shared/diagram-astar.ts';
+import { routeSequenceSelf } from '../../../components/diagrams/utils/diagram-astar.ts';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

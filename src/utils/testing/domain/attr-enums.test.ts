@@ -53,10 +53,10 @@ const componentFiles = await walk(join(root, 'src', 'components'), /\.ts$/);
 
 /** Vocabulario compartido, leído de su fuente real para que no se duplique aquí. */
 const SHARED = {
-  INTENT: [...(await readFile(join(root, 'src/components/_shared/intent.ts'), 'utf8'))
+  INTENT: [...(await readFile(join(root, 'src/core/intent.ts'), 'utf8'))
     .match(/export const INTENT = Object\.freeze\(\[([\s\S]*?)\]\)/)[1]
     .matchAll(/'([^']+)'/g)].map((m) => m[1]),
-  TONE: [...(await readFile(join(root, 'src/components/_shared/tone.ts'), 'utf8'))
+  TONE: [...(await readFile(join(root, 'src/core/tone.ts'), 'utf8'))
     .match(/export const TONE = Object\.freeze\(\[([\s\S]*?)\]\)/)[1]
     .matchAll(/'([^']+)'/g)].map((m) => m[1]),
 };

@@ -1,14 +1,14 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { DiagramElementBase } from '../_shared/diagram-element-base.js';
+import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { resolveMindmapSpec, computeMindmapLayout } from './mindmap-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { tkHueToHex } from '../_shared/tk-hue.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
-import { svgIconGroup } from '../_shared/tk-icon-inline.js';
+import { tkHueToHex } from '../../core/tk-hue.js';
+import { inlineMdWeb } from '../../core/tk-inline-md.js';
+import { svgIconGroup } from '../../core/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
-import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
-import { svgEl } from '../_shared/svg-chart-engine.js';
+import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
+import { svgEl } from '../../core/svg-chart-engine.js';
 import type { MindmapLayout } from "./schemas/mindmap-spec.schemas.js";
 import type { NodeEntry, EdgeEntry } from "./schemas/mindmap.schemas.js";
 

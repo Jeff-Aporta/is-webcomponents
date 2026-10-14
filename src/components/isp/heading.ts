@@ -4,7 +4,7 @@ import {
   classifyColor,
   normalizeMix,
   syncIspColor,
-} from '../_shared/isp-color.js';
+} from './utils/isp-color.js';
 
 /**
  * <iswc-heading> — port de ISP `typography/H1.svelte` … `H6.svelte`.

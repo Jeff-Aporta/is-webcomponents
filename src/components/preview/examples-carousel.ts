@@ -58,7 +58,7 @@
  */
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 // W19 reuso: cada bloque de UI del carrusel se monta con un componente del kit.
 // Estos imports son side-effect: registran los CE si el bundle los necesita.
 import '../layout/card.js';

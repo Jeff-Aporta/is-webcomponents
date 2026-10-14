@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/check-icon-button.js';
-import { findThemeContainer } from '../_shared/theme-scope.js';
+import { findThemeContainer } from '../../core/theme-scope.js';
 import { guardarAppCfg } from '../../core/app-cfg.js';
 import type { IsCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './schemas/theme-toggle.schemas.js';
 

@@ -182,7 +182,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/prefs.js`](../_shared/prefs.js)
+- [`../_shared/prefs.js`](../../core/prefs.js)
 
 Tags del mÃ³dulo: `<iswc-split-panel>`.
 

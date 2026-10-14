@@ -38,7 +38,7 @@ import './date-time-field.js';
 
 ## API
 
-Wrapper de factory: hereda contrato completo de [`defineDateField`](../_shared/date-field-element.js). Cabecera de fuente enumera atributos, slots y eventos efectivos; tablas siguientes muestran solo declaraciones locales del wrapper.
+Wrapper de factory: hereda contrato completo de [`defineDateField`](./utils/date-field-element.js). Cabecera de fuente enumera atributos, slots y eventos efectivos; tablas siguientes muestran solo declaraciones locales del wrapper.
 
 ### Atributos y propiedades
 
@@ -87,7 +87,7 @@ No expone.
 
 ### Custom states
 
-Hereda de la factory [`defineDateField`](../_shared/date-field-element.js), que aplica los siguientes states en el host:
+Hereda de la factory [`defineDateField`](./utils/date-field-element.js), que aplica los siguientes states en el host:
 
 | Estado | Uso |
 | --- | --- |
@@ -126,7 +126,7 @@ Documentación de cabecera preservada desde fuente:
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/date-field-element.js`](../_shared/date-field-element.js)
+- [`../_shared/date-field-element.js`](./utils/date-field-element.js)
 
 Tags del módulo: `<iswc-date-time-field>`.
 

@@ -160,10 +160,10 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/position.js`](../_shared/position.js)
+- [`../_shared/position.js`](../../core/position.js)
 - [`./dropdown-item.js`](./dropdown-item.js)
 - [`../layout/divider.js`](../layout/divider.js)
-- [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js) â€” ciclo de escucha
+- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js) â€” ciclo de escucha
   mientras el panel esta abierto (teclado, scroll), compartido con `iswc-context-menu`.
 
 Tags del mÃ³dulo: `<iswc-dropdown>`.

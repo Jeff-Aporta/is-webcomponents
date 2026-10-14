@@ -9,7 +9,7 @@
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
-import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';
+import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 
 type P = { x: number; y: number };
 type Caja = { x: number; y: number; w: number; h: number };

@@ -21,7 +21,7 @@ import {
   SCROLL_MEMORY_ATTRS,
   ScrollMemory,
   bindScrollMemoryApi,
-} from '../_shared/scroll-memory.js';
+} from '../../core/scroll-memory.js';
 
 (() => {
   const TAG = 'iswc-main';

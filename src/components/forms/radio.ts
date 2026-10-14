@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { attachFormInternals, setCustomState } from '../_shared/form-associated.js';
+import { attachFormInternals, setCustomState } from '../../core/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr } from '../_shared/reflect.js';
+import { setOptionalAttr } from '../../core/reflect.js';
 
 /**
  * <iswc-radio> — Opción de radio. NO es form-associated a propósito: el valor lo

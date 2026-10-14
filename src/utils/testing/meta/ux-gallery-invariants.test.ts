@@ -37,7 +37,7 @@ test('ISComponentPreview.on no crashea con target null', () => {
 });
 
 test('url-nav escribe solo dentro de ?s= (STATE_PARAM s)', () => {
-  const src = read('src/components/_shared/url-nav.ts');
+  const src = read('src/components/navigation/utils/url-nav.ts');
   assert.match(src, /STATE_PARAM\s*=\s*['"]s['"]/);
   assert.match(src, /b64urlEncode|b64urlDecode/);
   assert.match(src, /patchUrlState|writeUrlState/);
@@ -99,7 +99,7 @@ test('iswc-data-grid page-size no usa .options nativo de iswc-select', () => {
   const src = read('src/components/data/data-grid.ts');
   assert.doesNotMatch(src, /#pageSizeSelect\.options/);
   assert.match(src, /querySelectorAll(?:<[^>]+>)?\(['"]iswc-option, option['"]\)/);
-  const ui = read('src/components/_shared/grid-ui.ts');
+  const ui = read('src/components/data/utils/grid-ui.ts');
   assert.doesNotMatch(ui, /iswc-select-option/);
   assert.match(ui, /createElement\(['"]iswc-option['"]\)/);
 });

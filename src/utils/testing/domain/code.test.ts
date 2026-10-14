@@ -10,14 +10,14 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   tokenizeCode, normalizeLang, diffLineClass, lineToHtml, emptyState, tokensToText,
-} from '../../../components/_shared/code-highlight.ts';
-import { inferLanguage, resolveLanguage } from '../../../components/_shared/code-langs.ts';
-import { softFormat, softFormatMode } from '../../../components/_shared/code-text.ts';
-import { formatCode } from '../../../components/_shared/code-format.ts';
+} from '../../../core/code-highlight.ts';
+import { inferLanguage, resolveLanguage } from '../../../core/code-langs.ts';
+import { softFormat, softFormatMode } from '../../../core/code-text.ts';
+import { formatCode } from '../../../components/code/utils/code-format.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const hl = await import(pathToFileURL(join(root, 'src/components/_shared/highlight-code.ts')).href);
-const ct = await import(pathToFileURL(join(root, 'src/components/_shared/code-text.ts')).href);
+const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
+const ct = await import(pathToFileURL(join(root, 'src/core/code-text.ts')).href);
 const typesOf = (tokens) => tokens.map((t) => t.type);
 
 test('normalizeLang mapea alias legacy', () => {
@@ -197,7 +197,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.equal(typeof hl.watchDom, 'function', 'falta watchDom');
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
-  const src = readFileSync(join(root, 'src/components/_shared/highlight-code.ts'), 'utf8');
+  const src = readFileSync(join(root, 'src/core/highlight-code.ts'), 'utf8');
   assert.match(src, /el\.value\s*!==\s*el\.dataset\.cmSource/);
   assert.match(src, /if\s*\(pintando\)\s*return/);
   assert.match(src, /childList:\s*true/);

@@ -24,7 +24,7 @@ import {
   wrapText,
   buildTspans,
   defaultMeasureTextWidth,
-} from '../../../components/_shared/diagram-text-wrap.js';
+} from '../../../components/diagrams/utils/diagram-text-wrap.js';
 
 describe('wrapText', () => {
   test('label corto en 1 línea: no trunca, requiredHeight <= maxHeight', () => {

@@ -7,9 +7,9 @@ import {
   BUTTON_SHAPE,
   DEFAULT_BUTTON_SHAPE,
   normalizeButtonShape,
-} from '../_shared/button-shape.js';
-import { setCustomState } from '../_shared/form-associated.js';
-import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
+} from '../../core/button-shape.js';
+import { setCustomState } from '../../core/form-associated.js';
+import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
 
 /**
  * <iswc-button> — Web Component (vanilla).

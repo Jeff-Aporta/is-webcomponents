@@ -1,7 +1,7 @@
-import { buildTree, squarify } from '../_shared/tree-layout.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { TreeNode } from '../_shared/tree-layout.schemas.js';
+import { buildTree, squarify } from '../../core/tree-layout.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
+import type { TreeNode } from '../../core/schemas/tree-layout.schemas.js';
 import type { Rect, RawSpecNode, SpecNode, TreemapSpec, TreemapLayout, TreemapLayoutNode, TreemapLayoutOpts } from "./schemas/treemap-spec.schemas.js";
 
 /**

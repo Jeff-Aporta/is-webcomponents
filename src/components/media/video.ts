@@ -4,7 +4,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import '../actions/button.js';
 import '../actions/check-icon-button.js';
 import './icon.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
 
 /**

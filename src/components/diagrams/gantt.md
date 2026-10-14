@@ -151,9 +151,9 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`./gantt-spec.js`](./gantt-spec.js)
 - [`./flowchart-spec.js`](./flowchart-spec.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`../_shared/path-turtle.js`](../_shared/path-turtle.js)
-- [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
-- [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
+- [`../_shared/path-turtle.js`](../../core/path-turtle.js)
+- [`../_shared/tk-hue.js`](../../core/tk-hue.js)
+- [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
 Tags del mÃ³dulo: `<iswc-gantt>`.

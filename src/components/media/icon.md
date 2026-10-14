@@ -139,7 +139,7 @@ Documentación de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
+- [`../_shared/icon-loader.js`](../../core/icon-loader.js)
 
 Tags del módulo: `<iswc-icon>`.
 

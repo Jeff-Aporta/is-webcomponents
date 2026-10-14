@@ -163,7 +163,7 @@ No declara integraciÃ³n form-associated.
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/position.js`](../_shared/position.js) â€” `computePosition`, `PLACEMENTS`, `isVirtualElement`.
+- [`../_shared/position.js`](../../core/position.js) â€” `computePosition`, `PLACEMENTS`, `isVirtualElement`.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)

@@ -237,7 +237,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`./option.js`](./option.js)
 - [`../media/icon.js`](../media/icon.js)
 - [`../feedback/tag.js`](../feedback/tag.js)
-- [`../_shared/form-associated.js`](../_shared/form-associated.js)
+- [`../_shared/form-associated.js`](../../core/form-associated.js)
 
 Tags del mÃ³dulo: `<iswc-select>`.
 

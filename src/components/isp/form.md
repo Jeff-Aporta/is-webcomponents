@@ -183,7 +183,7 @@ controles (`<iswc-input>`, `<iswc-switch>`, â€¦), que sÃ­ son form-associa
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/json-html.js`](../_shared/json-html.js) â€” codec compartido.
+- [`../_shared/json-html.js`](../../core/json-html.js) â€” codec compartido.
 - [`block-layout.md`](block-layout.md) â€” misma gramÃ¡tica JSON.
 - [`catalogo-gen.md`](catalogo-gen.md) â€” consumidor habitual de la ficha.
 
@@ -240,6 +240,6 @@ console.log(form.html2json());
 
 - [JavaScript](./form.ts)
 - [CSS](./form.css)
-- [Codec](../_shared/json-html.js)
+- [Codec](../../core/json-html.js)
 - [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./form.json)

@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { daysInMonth, isoOf, monthLabels, pad } from '../_shared/date-utils.js';
+import { daysInMonth, isoOf, monthLabels, pad } from './utils/date-utils.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**

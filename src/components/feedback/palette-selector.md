@@ -177,7 +177,7 @@ aplica, la primera del array. El menu pinta swatch, label y check desde ese JSON
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/element-base.js`](../_shared/element-base.js) â€” la clase
   extiende `ElementBase` (`onConnected`, `onDisconnected`, `onAttributeChanged`).
-- [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js)
+- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js)
 - [`../media/icon.js`](../media/icon.js)
 
 Tags del mÃ³dulo: `<iswc-palette-selector>`.

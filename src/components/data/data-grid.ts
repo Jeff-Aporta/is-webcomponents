@@ -1,9 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { escapeHtml } from '../_shared/dom-utils.js';
-import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from '../_shared/grid-types.js';
-import type { CellValue, FilterRule, Operator, Row } from "../_shared/grid-types.schemas.js";
+import { escapeHtml } from '../../core/dom-utils.js';
+import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from './utils/grid-types.js';
+import type { CellValue, FilterRule, Operator, Row } from "./schemas/grid-types.schemas.js";
 import type { ColumnDef } from "./datagrid-core/types.schemas.js";
 
 import {
@@ -22,7 +22,7 @@ import {
   resolveWidths,
   toDelimited,
   toSpreadsheetXml,
-} from '../_shared/grid-data.js';
+} from './utils/grid-data.js';
 import {
   aggregationItems,
   createPopover,
@@ -32,11 +32,11 @@ import {
   renderFilterPanel,
   renderMenu,
   showPopover,
-} from '../_shared/grid-ui.js';
-import type { FilterPanelModel } from "../_shared/grid-ui.schemas.js";
-import type { ResolvedColumn } from "../_shared/grid-data.schemas.js";
+} from './utils/grid-ui.js';
+import type { FilterPanelModel } from "./schemas/grid-ui.schemas.js";
+import type { ResolvedColumn } from "./schemas/grid-data.schemas.js";
 import type { FilterModel, SortModelItem } from "./datagrid-core/types.schemas.js";
-import type { GridPopoverEl } from "../_shared/grid-ui.schemas.js";
+import type { GridPopoverEl } from "./schemas/grid-ui.schemas.js";
 import '../actions/button.js';
 import '../forms/input.js';
 import '../forms/select.js';

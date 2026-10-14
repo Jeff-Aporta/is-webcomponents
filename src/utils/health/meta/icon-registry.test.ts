@@ -1,4 +1,4 @@
-// icon-registry.test.ts — QUÉ hace <iswc-icon> para resolver un ícono (src/components/_shared/icon-loader.ts),
+// icon-registry.test.ts — QUÉ hace <iswc-icon> para resolver un ícono (src/core/icon-loader.ts),
 // como caja negra sobre `resolveIconRaw` con la red simulada. Sin mapa: localStorage → web publicada
 // de la app (`<html data-icons>`, URL absoluta) → API de Iconify.
 //   R1 con `data-icons` el ícono se pide a `<base><set>/<n>.svg` (la web publicada de la app).
@@ -50,7 +50,7 @@ rutas.set(`${BASE}mdi/home.svg`, () => new Response(svg('local-home')));
 rutas.set(`${BASE}mdi/roto.svg`, () => { throw new TypeError('sin red'); });
 rutas.set(`${BASE}mdi/lento.svg`, () => new Promise((ok) => setTimeout(() => ok(new Response(svg('lento'))), 20)));
 
-const { resolveIconRaw, resolveIconSvg, resolveIconBase, clearRawCache, AVISO_FALTA_LOCAL } = await import('../../../components/_shared/icon-loader.ts');
+const { resolveIconRaw, resolveIconSvg, resolveIconBase, clearRawCache, AVISO_FALTA_LOCAL } = await import('../../../core/icon-loader.ts');
 
 const reiniciar = (base: string | undefined) => {
   html.dataset.icons = base;

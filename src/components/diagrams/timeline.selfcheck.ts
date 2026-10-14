@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
-import { rectsOverlap } from '../_shared/diagram-grid.js';
+import { rectsOverlap } from '../../core/diagram-grid.js';
 
 /**
  * Regresión: ninguna tarjeta de evento debe superponerse a otra.

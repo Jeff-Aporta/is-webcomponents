@@ -70,7 +70,7 @@ localStorage['iswc:root'] = {
 }
 ```
 
-API compartida: [`_shared/prefs.js`](../_shared/prefs.js)
+API compartida: [`_shared/prefs.js`](../../core/prefs.js)
 
 | FunciÃ³n | Uso |
 | --- | --- |

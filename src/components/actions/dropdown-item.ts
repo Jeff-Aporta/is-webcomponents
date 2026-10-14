@@ -1,9 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { computePosition } from '../_shared/position.js';
+import { computePosition } from '../../core/position.js';
 import '../media/icon.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 
 /**
  * <iswc-dropdown-item> — ítem de menú para iswc-dropdown.

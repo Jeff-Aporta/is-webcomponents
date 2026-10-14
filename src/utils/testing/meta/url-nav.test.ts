@@ -8,10 +8,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const navHref = pathToFileURL(join(raiz, 'src/components/_shared/url-nav.ts')).href;
+const navHref = pathToFileURL(join(raiz, 'src/components/navigation/utils/url-nav.ts')).href;
 
 test('url-nav.ts solo toca ?s= (sin storage ni params sueltos)', async () => {
-  const raw = await readFile(join(raiz, 'src/components/_shared/url-nav.ts'), 'utf8');
+  const raw = await readFile(join(raiz, 'src/components/navigation/utils/url-nav.ts'), 'utf8');
   const src = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   assert.match(src, /export function readUrlNav/);
   assert.match(src, /export function writeUrlNav/);

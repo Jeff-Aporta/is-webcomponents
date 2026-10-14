@@ -1,12 +1,12 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import '../media/icon.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
-import { hasSlotted } from '../_shared/dom-utils.js';
-import { clampTo, tidyToStep } from '../_shared/misc-utils.js';
+import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
+import { hasSlotted } from '../../core/dom-utils.js';
+import { clampTo, tidyToStep } from '../../core/misc-utils.js';
 /**
  * <iswc-rating> — Valoración form-associated (vanilla + Shadow DOM).
  *

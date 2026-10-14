@@ -282,12 +282,12 @@ acción inicia: el mismo nodo `kind: "nested"` de los flujos
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`../_shared/diagram-grid.js`](../_shared/diagram-grid.js)
-- [`../_shared/tk-icon-inline.js`](../_shared/tk-icon-inline.js)
-- [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
-- [`../_shared/tk-color.js`](../_shared/tk-color.js)
-- [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
-- [`../_shared/icon-loader.js`](../_shared/icon-loader.js)
+- [`../_shared/diagram-grid.js`](../../core/diagram-grid.js)
+- [`../_shared/tk-icon-inline.js`](../../core/tk-icon-inline.js)
+- [`../_shared/tk-hue.js`](../../core/tk-hue.js)
+- [`../_shared/tk-color.js`](../../core/tk-color.js)
+- [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
+- [`../_shared/icon-loader.js`](../../core/icon-loader.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
 
 Tags del mÃ³dulo: `<iswc-sequence-diagram>`.

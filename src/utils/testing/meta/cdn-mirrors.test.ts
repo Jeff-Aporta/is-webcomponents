@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
 test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
-  const src = await readFile(join(raiz, 'src/components/_shared/cdn-ref.ts'), 'utf8');
+  const src = await readFile(join(raiz, 'src/core/cdn-ref.ts'), 'utf8');
   assert.match(src, /export const MIRRORS/);
   assert.match(src, /id:\s*['"]jsdelivr['"]/);
   assert.match(src, /id:\s*['"]pages['"]/);

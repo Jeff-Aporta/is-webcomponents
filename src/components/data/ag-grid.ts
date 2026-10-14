@@ -86,9 +86,9 @@
 import { ElementBase } from '../../core/element-base.js';
 import {
   getComponentPrefs, removeComponentPrefs, replaceComponentPrefs,
-} from '../_shared/prefs.js';
-import { escapeHtml } from '../_shared/dom-utils.js';
-import type { PrefsEntry } from '../_shared/prefs.schemas.js';
+} from '../../core/prefs.js';
+import { escapeHtml } from '../../core/dom-utils.js';
+import type { PrefsEntry } from '../../core/schemas/prefs.schemas.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
 import '../forms/checkbox.js';

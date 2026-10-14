@@ -180,8 +180,8 @@ campo espejo.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/form-associated.js`](../_shared/form-associated.js)
-- [`../_shared/reflect.js`](../_shared/reflect.js)
+- [`../_shared/form-associated.js`](../../core/form-associated.js)
+- [`../_shared/reflect.js`](../../core/reflect.js)
 
 Tags del mÃ³dulo: `<iswc-masked-input>`.
 

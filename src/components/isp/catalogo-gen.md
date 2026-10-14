@@ -189,7 +189,7 @@ slot `frm` y gestiona su propio envÃ­o.
 - [`../layout/drawer.js`](../layout/drawer.js) â€” ficha.
 - [`../layout/dialog.js`](../layout/dialog.js) â€” modales de acciÃ³n.
 - [`./confirm-delete.js`](./confirm-delete.js), [`./modal-verificacion.js`](./modal-verificacion.js)
-- [`../_shared/isp-record-utils.js`](../_shared/isp-record-utils.js)
+- [`../_shared/isp-record-utils.js`](./utils/isp-record-utils.js)
 - Consumidor: [`btn-ref.md`](btn-ref.md).
 
 Tags del mÃ³dulo: `<iswc-catalogo-gen>`.

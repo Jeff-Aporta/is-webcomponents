@@ -5,13 +5,13 @@ import {
   ensureDefaultColor,
   normalizeIntent,
   setEnumAttr,
-} from '../_shared/intent.js';
+} from '../../core/intent.js';
 import {
   DEFAULT_TONE,
   TONE,
   normalizeTone,
   setEnumToneAttr,
-} from '../_shared/tone.js';
+} from '../../core/tone.js';
 import type { ElChild, ElAttrs, Crudo, HandlerEntry } from "./schemas/ui.schemas.js";
 
 /**

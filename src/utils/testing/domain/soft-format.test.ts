@@ -10,8 +10,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import test from 'node:test';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const hl = await import(pathToFileURL(join(root, 'src/components/_shared/highlight-code.ts')).href);
-const ct = await import(pathToFileURL(join(root, 'src/components/_shared/code-text.ts')).href);
+const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
+const ct = await import(pathToFileURL(join(root, 'src/core/code-text.ts')).href);
 
 test('unwrapHandHighlight quita el coloreado a mano de la migración', () => {
   const dirty = '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span><span class="tag">></span>';
@@ -69,7 +69,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.equal(typeof hl.watchDom, 'function', 'falta watchDom');
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
-  const src = readFileSync(join(root, 'src/components/_shared/highlight-code.ts'), 'utf8');
+  const src = readFileSync(join(root, 'src/core/highlight-code.ts'), 'utf8');
   // Tras migrar a <iswc-code>, el criterio de “contenido cambió” es value.
   assert.match(src, /el\.value\s*!==\s*el\.dataset\.cmSource/);
   // paintOne muta el DOM (replaceWith): sin esta guarda el observer se

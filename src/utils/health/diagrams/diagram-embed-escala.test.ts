@@ -9,7 +9,7 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 (globalThis as Record<string, unknown>).document ??= {
   createElementNS: () => ({ attrs: {} as Record<string, string>, html: '', setAttribute(k: string, v: string) { this.attrs[k] = v; }, getAttribute(k: string) { return this.attrs[k] ?? null; }, set innerHTML(v: string) { this.html = v; }, get innerHTML() { return this.html; } }),
 };
-const { embedSvgElement } = await import('../../../components/_shared/diagram-embed.ts');
+const { embedSvgElement } = await import('../../../components/diagrams/utils/diagram-embed.ts');
 
 Deno.test('embed: E1 escala por viewBox y E2 sin non-scaling-stroke', () => {
   const svg = embedSvgElement(

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
-const modUrl = `file:///${join(root, 'src/components/_shared/intent.ts').replace(/\\/g, '/')}`;
+const modUrl = `file:///${join(root, 'src/core/intent.ts').replace(/\\/g, '/')}`;
 const {
   DEFAULT_INTENT,
   INTENT,

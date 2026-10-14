@@ -1,5 +1,5 @@
-import { paint } from '../_shared/highlight-code.js';
-import type { ColumnDef, Row } from '../_shared/grid-types.schemas.js';
+import { paint } from '../../core/highlight-code.js';
+import type { ColumnDef, Row } from './schemas/grid-types.schemas.js';
 import type { DataGridElement } from "./schemas/data-grid.preview.schemas.js";
 
 /** El componente `iswc-data-grid` visto desde fuera: HTMLElement con API extendida. */

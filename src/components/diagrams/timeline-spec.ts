@@ -1,5 +1,5 @@
-import { parseDate, timeScale, packLanes } from '../_shared/lane-layout.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { parseDate, timeScale, packLanes } from './utils/lane-layout.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { TimelineOrientation, TimelineEventSpec, TimelineGroupSpec, TimelineResolvedSpec, TimelineLayoutEvent, TimelineTick, TimelineLayout, TimelineLayoutOptions, CompressedScale } from "./schemas/timeline-spec.schemas.js";
 
 /**

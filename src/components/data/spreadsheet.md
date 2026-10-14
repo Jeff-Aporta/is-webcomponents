@@ -234,7 +234,7 @@ escucha `iswc-change`, mantÃ©n tu propia matriz y serialÃ­zala en un
 - [`../_shared/element-base.js`](../_shared/element-base.js) â€” ciclo de vida y
   hooks `onConnected` / `onDisconnected` / `onAttributeChanged`.
 - [`../_shared/emit.js`](../_shared/emit.js) â€” emisiÃ³n de `iswc-change`.
-- [`../_shared/dom-utils.js`](../_shared/dom-utils.js) â€” `escapeHtml` para el
+- [`../_shared/dom-utils.js`](../../core/dom-utils.js) â€” `escapeHtml` para el
   contenido de las celdas.
 - [`./_sticky.css`](./_sticky.css) â€” cabeceras pegadas, compartido con
   [`<iswc-pivot-table>`](./pivot-table.md).

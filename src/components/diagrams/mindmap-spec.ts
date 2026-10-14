@@ -1,18 +1,18 @@
-import { buildTree, layoutTree, layoutRadialTree } from '../_shared/tree-layout.js';
-import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { buildTree, layoutTree, layoutRadialTree } from '../../core/tree-layout.js';
+import { countIconTokens, extractLeadingIconToken } from '../../core/tk-icon-inline.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 
 import {
   makeCostGrid,
   snapDiagramGrid,
   snapPointAwayFromSide,
-} from '../_shared/diagram-grid.js';
+} from '../../core/diagram-grid.js';
 import {
   routeOrthogonal,
   pixelToGrid,
   buildOrthogonalPath,
-} from '../_shared/diagram-astar.js';
+} from './utils/diagram-astar.js';
 import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode, MindmapLayoutEdge, MindmapLayout } from "./schemas/mindmap-spec.schemas.js";
 
 /**

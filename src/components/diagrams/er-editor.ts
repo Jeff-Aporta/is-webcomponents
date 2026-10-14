@@ -22,10 +22,10 @@ import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelati
 import '../media/icon.js';
 import '../actions/context-menu.js';
 import '../layout/split-panel.js';
-import { createPanZoom } from '../_shared/pan-zoom.js';
-import { type PanZoomController } from '../_shared/pan-zoom.schemas.js';
-import type { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { createPanZoom } from './utils/pan-zoom.js';
+import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
+import type { DiagramElementBase } from './utils/diagram-element-base.js';
+import { snapDiagramGrid } from '../../core/diagram-grid.js';
 
 const SNAP = 8;
 const HISTORY_LIMIT = 200;

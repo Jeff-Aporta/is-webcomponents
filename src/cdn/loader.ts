@@ -21,7 +21,7 @@ import {
   fallbackBases,
   GH_REPO,
   fillHostTemplate,
-} from '../components/_shared/cdn-ref.js';
+} from '../core/cdn-ref.js';
 import { createRegistry, planLoads, commitLoads, resolveTagId, isTagCovered } from './load-plan.js';
 import { type Catalog } from './schemas/load-plan.schemas.js';
 import type { LoadJob } from "./schemas/load-plan.schemas.js";

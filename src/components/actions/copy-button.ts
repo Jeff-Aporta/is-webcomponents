@@ -4,9 +4,9 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
 import '../media/icon.js';
 import '../feedback/tooltip.js';
-import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
-import { setCustomState } from '../_shared/form-associated.js';
-import { copyText } from '../_shared/dom-utils.js';
+import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
+import { setCustomState } from '../../core/form-associated.js';
+import { copyText } from '../../core/dom-utils.js';
 
 /**
  * <iswc-copy-button> — Web Component (vanilla).

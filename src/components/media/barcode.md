@@ -129,7 +129,7 @@ calcula si falta.
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
+- [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
 
 Tags del mÃ³dulo: `<iswc-barcode>`.
 

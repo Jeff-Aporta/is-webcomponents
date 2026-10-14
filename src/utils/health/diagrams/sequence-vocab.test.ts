@@ -13,8 +13,8 @@ import {
   readEdgeStyle,
   recommendationFor,
 } from '../../../components/diagrams/diagram-vocab.ts';
-import { roundOrthogonalPath, styledEdgePath } from '../../../components/_shared/diagram-curve.ts';
-import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';
+import { roundOrthogonalPath, styledEdgePath } from '../../../components/diagrams/utils/diagram-curve.ts';
+import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/sequence-spec.ts';
 import { lineColor, paletteColor, pickThemeMode, sequencePaint } from '../../../components/diagrams/theme.ts';
 import { ErThemeJsonSchema } from '../../../components/diagrams/schemas/theme.schemas.ts';

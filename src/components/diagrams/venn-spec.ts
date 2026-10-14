@@ -1,5 +1,5 @@
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { VennSet, VennRegion, VennSpec, VennJsonOut, VennLayoutCircle, VennLayoutRegion, VennLayout } from "./schemas/venn-spec.schemas.js";
 
 /**

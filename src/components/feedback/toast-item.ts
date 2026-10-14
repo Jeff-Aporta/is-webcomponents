@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
-import { INTENT, normalizeIntent } from '../_shared/intent.js';
+import { INTENT, normalizeIntent } from '../../core/intent.js';
 import '../actions/button.js';
 
 /**

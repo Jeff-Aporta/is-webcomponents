@@ -1,11 +1,11 @@
-import { layoutNodeLink, edgeAnchor, pickSides } from '../_shared/node-link-layout.js';
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { layoutNodeLink, edgeAnchor, pickSides } from './utils/node-link-layout.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { applyEdgeActorLayout } from './utils/diagram-edge-actors.js';
+import { assignEdgeHues } from './utils/diagram-edge-style.js';
+import { makeCostGrid, blockRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../../core/diagram-grid.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './utils/diagram-astar.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { BoxSide } from './schemas/diagram-types.schemas.js';
 import type { StateKind, StateDirection, AnchorSide, StateSpec, StateTransitionSpec, StateGroupSpec, StateResolvedSpec, StateLayoutNode, StateLayoutTransition, StateLayout } from "./schemas/state-spec.schemas.js";
 

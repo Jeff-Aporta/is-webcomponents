@@ -3,7 +3,7 @@ import './option.js';
 import '../media/icon.js';
 import '../actions/button.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 
 /**
  * <iswc-combobox> — Input + listbox filtrable.

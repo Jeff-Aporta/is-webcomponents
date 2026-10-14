@@ -1,11 +1,11 @@
-import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../_shared/diagram-grid.js';
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
-import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { makeCostGrid, blockRect as blockGridRect, applyRectCost, snapDiagramGrid, snapPointAwayFromSide} from '../../core/diagram-grid.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { applyEdgeActorLayout } from './utils/diagram-edge-actors.js';
+import { assignEdgeHues } from './utils/diagram-edge-style.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './utils/diagram-astar.js';
+import { countIconTokens, extractLeadingIconToken } from '../../core/tk-icon-inline.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockSpec, LeadingIcon, BlockPlacement, BlockLayoutBlock, BlockLayoutEdge, BlockLayout, BlockRect, Side } from "./schemas/block-spec.schemas.js";
 
 /**

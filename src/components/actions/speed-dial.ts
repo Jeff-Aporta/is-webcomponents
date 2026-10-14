@@ -2,8 +2,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import './check-icon-button.js';
-import { clampTo } from '../_shared/misc-utils.js';
-import { createPopupDismiss } from '../_shared/popup-dismiss.js';
+import { clampTo } from '../../core/misc-utils.js';
+import { createPopupDismiss } from '../../core/popup-dismiss.js';
 
 /**
  * <iswc-speed-dial> — FAB que despliega un abanico de acciones.

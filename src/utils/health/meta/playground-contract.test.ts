@@ -16,7 +16,7 @@ const pgCss = readFileSync(join(root, 'src/components/preview/playground.scss'),
 const controlsTs = readFileSync(join(root, 'src/components/layout/preview-controls.ts'), 'utf8');
 const galeria = readFileSync(join(root, 'specs/galeria/spec.md'), 'utf8');
 const pgSpec = readFileSync(join(root, 'specs/playground/spec.md'), 'utf8');
-const intent = readFileSync(join(root, 'src/components/_shared/intent.ts'), 'utf8');
+const intent = readFileSync(join(root, 'src/core/intent.ts'), 'utf8');
 const ui = readFileSync(join(root, 'src/components/helpers/ui.ts'), 'utf8');
 
 test('S-PG1: iswc-playground en manifest con paths preview/', () => {

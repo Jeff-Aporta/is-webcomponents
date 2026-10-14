@@ -214,7 +214,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/date-utils.js`](../_shared/date-utils.js)
+- [`../_shared/date-utils.js`](./utils/date-utils.js)
 - [`../actions/dropdown.js`](../actions/dropdown.js)
 - [`./month-calendar.js`](./month-calendar.js)
 - [`./year-calendar.js`](./year-calendar.js)

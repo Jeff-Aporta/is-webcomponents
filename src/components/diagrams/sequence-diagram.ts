@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
-import { DiagramElementBase } from '../_shared/diagram-element-base.js';
-import { animarRielEn, flujoActivo } from '../_shared/diagram-flow.js';
-import { svgArrowHead } from '../_shared/diagram-arrow.js';
+import { DiagramElementBase } from './utils/diagram-element-base.js';
+import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
+import { svgArrowHead } from './utils/diagram-arrow.js';
 import {
   computeSequenceLayout,
   resolveSequenceSpec,
@@ -11,27 +11,27 @@ import {
 } from './sequence-spec.js';
 import type { SequenceLayout, SequenceLayoutAltBox, SequenceLayoutMessage, SequenceResolvedSpec } from './schemas/sequence-spec.schemas.js';
 import type { SequenceLayoutFragment, SequenceNestedSpec } from './schemas/sequence-spec.schemas.js';
-import { captureNodeEmbed, embedStage, embedSvgElement } from '../_shared/diagram-embed.js';
-import type { EmbedCapture, EmbedSize } from '../_shared/diagram-embed.schemas.js';
+import { captureNodeEmbed, embedStage, embedSvgElement } from './utils/diagram-embed.js';
+import type { EmbedCapture, EmbedSize } from './schemas/diagram-embed.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './theme.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
 import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
 import type { EdgeStyle } from './schemas/diagram-vocab.schemas.js';
-import { styledEdgePath } from '../_shared/diagram-curve.js';
-import { PathTurtle as SequenceTurtle } from '../_shared/path-turtle.js';
-import type { PathTurtle } from '../_shared/path-turtle.js';
-import { TK_DIAGRAM_RADIUS_PX } from '../_shared/diagram-grid.js';
-import { svgIconGroup, svgIconBadge, hasIconJsonSugar } from '../_shared/tk-icon-inline.js';
-import { pathPoints } from '../_shared/diagram-arrow.js';
-import { tkHueToHex } from '../_shared/tk-hue.js';
+import { styledEdgePath } from './utils/diagram-curve.js';
+import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
+import type { PathTurtle } from '../../core/path-turtle.js';
+import { TK_DIAGRAM_RADIUS_PX } from '../../core/diagram-grid.js';
+import { svgIconGroup, svgIconBadge, hasIconJsonSugar } from '../../core/tk-icon-inline.js';
+import { pathPoints } from './utils/diagram-arrow.js';
+import { tkHueToHex } from '../../core/tk-hue.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { contrastFontColor, pastelColor } from '../_shared/tk-color.js';
-import { inlineMdWeb } from '../_shared/tk-inline-md.js';
-import { wrapText, buildTspans, defaultMeasureTextWidth } from '../_shared/diagram-text-wrap.js';
-import type { TSpanSpec } from '../_shared/diagram-text-wrap.schemas.js';
+import { contrastFontColor, pastelColor } from '../../core/tk-color.js';
+import { inlineMdWeb } from '../../core/tk-inline-md.js';
+import { wrapText, buildTspans, defaultMeasureTextWidth } from './utils/diagram-text-wrap.js';
+import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './diagram-kinds.js';
-import { svgEl } from '../_shared/svg-chart-engine.js';
+import { svgEl } from '../../core/svg-chart-engine.js';
 import type { SequenceMessageSpec } from './schemas/sequence-spec.schemas.js';
 import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./schemas/sequence-diagram.schemas.js";
 

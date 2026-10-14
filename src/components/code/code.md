@@ -272,12 +272,12 @@ Documento JSON (`iswc-code-doc/v1`):
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/code-highlight.ts`](../_shared/code-highlight.ts) â€” motor nativo de resaltado (tokens)
-- [`../_shared/code-langs.js`](../_shared/code-langs.js)
-- [`../_shared/code-format.js`](../_shared/code-format.js)
-- [`../_shared/code-theme.js`](../_shared/code-theme.js)
-- [`../_shared/code-model.js`](../_shared/code-model.js)
-- [`../_shared/highlight-code.js`](../_shared/highlight-code.js)
+- [`../_shared/code-highlight.ts`](../../core/code-highlight.ts) â€” motor nativo de resaltado (tokens)
+- [`../_shared/code-langs.js`](../../core/code-langs.js)
+- [`../_shared/code-format.js`](./utils/code-format.js)
+- [`../_shared/code-theme.js`](./utils/code-theme.js)
+- [`../_shared/code-model.js`](./utils/code-model.js)
+- [`../_shared/highlight-code.js`](../../core/highlight-code.js)
 - [`../feedback/tooltip.js`](../feedback/tooltip.js) â€” tooltips de marks
 
 Tags del mÃ³dulo: `<iswc-code>`.

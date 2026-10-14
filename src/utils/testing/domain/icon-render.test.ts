@@ -31,7 +31,7 @@ const assetsIcons = join(root, 'dist', 'assets', 'icons');
 
 const iconJs = await readFile(join(root, 'src/components/media/icon.ts'), 'utf8');
 const iconCss = await readFile(join(root, 'src/components/media/icon.scss'), 'utf8');
-const loaderJs = await readFile(join(root, 'src/components/_shared/icon-loader.ts'), 'utf8');
+const loaderJs = await readFile(join(root, 'src/core/icon-loader.ts'), 'utf8');
 
 // --- BUG 1: nada de force-cache -------------------------------------------
 

@@ -32,23 +32,23 @@
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
 import {
   attachFormInternals, setFormValue, setCustomState,
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 import {
   listLanguages, registerLanguage, resolveLanguage, inferLanguage,
-} from '../_shared/code-langs.js';
-import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from '../_shared/code-format.js';
-import { applyThemeConfig, brandMonoTheme, parseThemeConfig } from '../_shared/code-theme.js';
-import type { CodeThemeConfig } from '../_shared/code-theme.schemas.js';
-import { softFormat, softFormatMode } from '../_shared/code-text.js';
+} from '../../core/code-langs.js';
+import { formatCode, normalizeFormatConfig, DEFAULT_FORMAT } from './utils/code-format.js';
+import { applyThemeConfig, brandMonoTheme, parseThemeConfig } from './utils/code-theme.js';
+import type { CodeThemeConfig } from './schemas/code-theme.schemas.js';
+import { softFormat, softFormatMode } from '../../core/code-text.js';
 import {
   code2json, json2code, parseCodeDocument, normalizeMark, rebaseMarks,
-} from '../_shared/code-model.js';
-import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from '../_shared/code-model.schemas.js';
-import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '../_shared/code-highlight.js';
-import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../_shared/code-highlight.schemas.js';
-import type { CodeFormatConfig as CodeFmtConfigShared } from '../_shared/code-format.schemas.js';
+} from './utils/code-model.js';
+import type { CodeDocument as CodeDocModel, CodeMark as CodeMarkModel } from './schemas/code-model.schemas.js';
+import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '../../core/code-highlight.js';
+import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../../core/schemas/code-highlight.schemas.js';
+import type { CodeFormatConfig as CodeFmtConfigShared } from './schemas/code-format.schemas.js';
 import '../feedback/tooltip.js';
 import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IsTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
 

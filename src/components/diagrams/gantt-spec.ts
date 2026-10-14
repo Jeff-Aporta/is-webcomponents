@@ -1,8 +1,8 @@
-import { parseDate, addDuration, timeScale, niceTimeTicks } from '../_shared/lane-layout.js';
-import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { parseDate, addDuration, timeScale, niceTimeTicks } from './utils/lane-layout.js';
+import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from '../../core/diagram-grid.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './utils/diagram-astar.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { GridPoint } from './schemas/diagram-types.schemas.js';
 import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "./schemas/gantt-spec.schemas.js";
 

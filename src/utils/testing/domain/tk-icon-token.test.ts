@@ -6,7 +6,7 @@ import {
   iconInlineHtmlWeb,
   resolveIconToken,
   splitIconRuns,
-} from '../../../components/_shared/tk-icon-inline.ts';
+} from '../../../core/tk-icon-inline.ts';
 
 test('{{"iswc-icon": {attrs}}} resuelve icono, color y el tag', () => {
   const raw = '{{"iswc-icon": {icon: mdi:key-variant, color: #e11}}} nombre_de_la_col';

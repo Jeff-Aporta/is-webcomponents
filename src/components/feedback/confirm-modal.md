@@ -154,7 +154,7 @@ No declara integraciÃ³n form-associated propia en este mÃ³dulo.
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js)
+- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js)
 - [`../actions/button.js`](../actions/button.js)
 - [`./popconfirm.md`](./popconfirm.md) â€” la variante anclada, sin backdrop.
 

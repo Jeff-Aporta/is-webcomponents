@@ -171,7 +171,7 @@ item.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/popup-dismiss.js`](../_shared/popup-dismiss.js) â€” mismo ciclo
+- [`../_shared/popup-dismiss.js`](../../core/popup-dismiss.js) â€” mismo ciclo
   de cierre (Escape, click fuera, scroll) que usa `<iswc-dropdown>`.
 
 Tags del mÃ³dulo: `<iswc-context-menu>`.

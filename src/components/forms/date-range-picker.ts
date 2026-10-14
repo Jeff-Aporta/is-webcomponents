@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { addMonths, monthKey, parseISO, startOfMonth, toISO } from '../_shared/date-utils.js';
+import { addMonths, monthKey, parseISO, startOfMonth, toISO } from './utils/date-utils.js';
 import '../actions/button.js';
 import './date-picker.js';
 import { ElementBase } from '../../core/element-base.js';

@@ -1,6 +1,6 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 
 /**
  * <iswc-option> — Opción para iswc-combobox / iswc-select (listboxes).

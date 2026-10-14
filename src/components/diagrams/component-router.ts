@@ -31,7 +31,7 @@
  * decidir re-empaque y el audit del lab).
  */
 
-import type { Caja, Lado, Punto } from '../_shared/diagram-tipos.schemas.js';
+import type { Caja, Lado, Punto } from './schemas/diagram-tipos.schemas.js';
 import type { RouterBox, RouterPackage, RouterWorld, RouterEdge, RouterOpts, RouteResult, PortLink, PortPlan, RouterPort } from './schemas/component-router.schemas.js';
 import { resolveRoutingCosts, readConsolidate, ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 

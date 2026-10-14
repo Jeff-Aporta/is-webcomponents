@@ -4,7 +4,7 @@ import {
   normalizeMix,
   resolveMixWith,
   SEMANTIC_COLORS,
-} from '../../../components/_shared/isp-color.ts';
+} from '../../../components/isp/utils/isp-color.ts';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

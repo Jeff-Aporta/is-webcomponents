@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { escapeHtml } from '../_shared/dom-utils.js';
-import { attachFormInternals, setCustomState, setFormValue } from '../_shared/form-associated.js';
-import { setOptionalAttr } from '../_shared/reflect.js';
+import { escapeHtml } from '../../core/dom-utils.js';
+import { attachFormInternals, setCustomState, setFormValue } from '../../core/form-associated.js';
+import { setOptionalAttr } from '../../core/reflect.js';
 
 /**
  * <iswc-inline-edit> — "Inplace" / "Inline edit".

@@ -1,4 +1,4 @@
-// icon-localstorage.test.ts — QUÉ hace <iswc-icon> con localStorage (src/components/_shared/icon-loader.ts),
+// icon-localstorage.test.ts — QUÉ hace <iswc-icon> con localStorage (src/core/icon-loader.ts),
 // caja negra sobre `resolveIconRaw` con red simulada. Cadena: memoria → localStorage → web publicada de
 // la app (`data-icons`) → API de Iconify; todo SVG resuelto se persiste bajo `iswc:icon:`.
 //   P1 un ícono resuelto por la API queda en localStorage y la siguiente página (memoria vacía) lo lee
@@ -42,7 +42,7 @@ g.document = { documentElement: { dataset: { icons: 'https://app.example/assets/
 const warnOriginal = console.warn;
 console.warn = () => {}; // los avisos «falta en local» los cubre icon-registry
 
-const { resolveIconRaw, clearRawCache, clearPersistedIcons, purgarIconosVencidos, LS_TTL_MS } = await import('../../../components/_shared/icon-loader.ts');
+const { resolveIconRaw, clearRawCache, clearPersistedIcons, purgarIconosVencidos, LS_TTL_MS } = await import('../../../core/icon-loader.ts');
 const { clearIswcStorage } = await import('../../../core/iswc-storage.ts');
 
 Deno.test('P1 lo que vino de la API queda en localStorage y luego no hay fetch', async () => {

@@ -6,7 +6,7 @@
  *
  * Primario: jsDelivr sobre el repo (`@<ref>/dist/cdn`).
  * Espejo: GitHub Pages (`jeff-aporta.github.io/.../dist/cdn`).
- * Ver `src/components/_shared/cdn-ref.ts` → `MIRRORS`.
+ * Ver `src/core/cdn-ref.ts` → `MIRRORS`.
  */
 import {
   resolveRef,
@@ -15,7 +15,7 @@ import {
   pagesBase,
   MIRRORS,
   fallbackBases,
-} from '../components/_shared/cdn-ref.js';
+} from '../core/cdn-ref.js';
 
 const GH_REPO = 'Jeff-Aporta/iswc-root';
 const RAW = (ref: string = 'main') => `https://raw.githubusercontent.com/${GH_REPO}/${ref}`;

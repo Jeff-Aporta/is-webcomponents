@@ -1,36 +1,36 @@
-import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers } from '../_shared/node-link-layout.js';
-import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from '../_shared/diagram-embed.js';
-import { pathPoints, pathSinAutoCruces } from '../_shared/diagram-arrow.js';
+import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers } from './utils/node-link-layout.js';
+import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from './utils/diagram-embed.js';
+import { pathPoints, pathSinAutoCruces } from './utils/diagram-arrow.js';
 import type { BoxSide } from './schemas/diagram-types.schemas.js';
 
 // `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
 // una dirección cardinal. Estrechamos para satisfacer la firma del helper.
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { applyEdgeActorLayout } from './utils/diagram-edge-actors.js';
+import { assignEdgeHues } from './utils/diagram-edge-style.js';
 import {
   makeCostGrid, blockRect, applyRectCost, applyRadialCost, snapDiagramGrid, ceilDiagramGrid, rectsOverlap,
   readExclusionZones, nudgeRectFromZones, blockExclusionZones, snapPointAwayFromSide,
-} from '../_shared/diagram-grid.js';
-import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
-import { countIconTokens, extractLeadingIconToken } from '../_shared/tk-icon-inline.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
-import { estimateTextWidth, wrapText } from '../_shared/diagram-text-wrap.js';
-import { grafoDirigido } from '../_shared/diagram-graph.js';
+} from '../../core/diagram-grid.js';
+import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from './utils/diagram-astar.js';
+import { countIconTokens, extractLeadingIconToken } from '../../core/tk-icon-inline.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
+import { estimateTextWidth, wrapText } from './utils/diagram-text-wrap.js';
+import { grafoDirigido } from './utils/diagram-graph.js';
 import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "./schemas/flowchart-spec.schemas.js";
-import type { TPuntosRiel } from "../_shared/diagram-flow.schemas.js";
+import type { TPuntosRiel } from "./schemas/diagram-flow.schemas.js";
 import type { ErThemeJson } from "./schemas/theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
 import { anchoDeComponente } from './component-spec.js';
 import { vectorAFlujo } from './vector-flow-spec.js';
 import { ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
-import { oklchToHex } from '../_shared/oklch.js';
+import { oklchToHex } from './utils/oklch.js';
 import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from './schemas/flowchart-spec.schemas.js';
 import type { RouterEdge, RouterPort } from './schemas/component-router.schemas.js';
-import type { Lado } from '../_shared/diagram-tipos.schemas.js';
-import type { EmbedBox } from "../_shared/diagram-embed.schemas.js";
+import type { Lado } from './schemas/diagram-tipos.schemas.js';
+import type { EmbedBox } from "./schemas/diagram-embed.schemas.js";
 
 /**
  * Especificación y layout de diagramas de flujo (sin Mermaid).

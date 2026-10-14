@@ -1,4 +1,4 @@
-import { defineDateField } from '../_shared/date-field-element.js';
+import { defineDateField } from './utils/date-field-element.js';
 
 /**
  * <iswc-date-field> — Campo de fecha editable por secciones (MUI DateField).

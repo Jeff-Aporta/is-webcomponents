@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from '../_shared/url-nav.js';
+import { readUrlNav, readUrlTabs, writeUrlNav, writeUrlTab } from './utils/url-nav.js';
 
 /**
  * <iswc-tab-group>, <iswc-tab>, <iswc-tab-panel> — Web Components (vanilla, zero dependencies).

@@ -10,9 +10,9 @@ import {
   setCustomState,
   setFormValue,
   setValidity,
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 /**
  * <iswc-select> — Select form-associated con listbox en <dialog modal> (top layer),
  * así el desplegable nunca se pierde por overflow/clipping de ancestros.

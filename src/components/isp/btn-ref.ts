@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import {
   attachFormInternals, setFormValue, setValidity, clearValidity,
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import '../actions/button.js';
 import '../forms/input.js';
 import '../media/icon.js';
@@ -9,7 +9,7 @@ import '../layout/dialog.js';
 import './catalogo-gen.js';
 import {
   asStr, getProp, isPresent,
-} from '../_shared/isp-record-utils.js';
+} from './utils/isp-record-utils.js';
 
 /** Catálogo genérico (subset mínimo que necesitamos del controller). */
 

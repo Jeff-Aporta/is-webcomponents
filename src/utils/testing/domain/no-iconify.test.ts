@@ -34,12 +34,12 @@ const ALLOWED_API_FILES = new Set([
   // Respaldo de runtime para los sets que no viajan en el kit (decisión 2026-10-09: el repo debe
   // quedar bajo el límite de 50 MB de jsDelivr). SVG suelto por ícono; el web component y el
   // script de iconify siguen prohibidos.
-  'src/components/_shared/icon-loader.ts',
+  'src/core/icon-loader.ts',
   'scripts/download-iconify.ts',
   // Herramienta de las apps (assets/dl.js): descarga en build, no en runtime.
   'src/vendor-distributions/client/tools/download-iconify.ts',
   // HTML para correo: se abre fuera de la app, sin sus assets.
-  'src/components/_shared/tk-icon-inline.ts',
+  'src/core/tk-icon-inline.ts',
   // Explorador del catálogo: la lista de nombres de cada set y los SVG que no viajan en el kit.
   'src/components/media/icon-explorer.preview.ts',
   'scripts/download-icons.ts',
@@ -88,7 +88,7 @@ for (const file of files) {
 }
 
 // El loader debe seguir exponiendo la resolucion propia.
-const loader = readFileSync(join(root, 'src/components/_shared/icon-loader.ts'), 'utf8');
+const loader = readFileSync(join(root, 'src/core/icon-loader.ts'), 'utf8');
 if (!/export async function resolveIconRaw/.test(loader)) {
   failures.push('icon-loader.ts: falta resolveIconRaw (iswc-icon depende de él)');
 }

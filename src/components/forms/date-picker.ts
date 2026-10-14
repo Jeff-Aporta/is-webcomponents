@@ -15,7 +15,7 @@ import {
   todayISO,
   toISO,
   weekdayLabels,
-} from '../_shared/date-utils.js';
+} from './utils/date-utils.js';
 import '../actions/dropdown.js';
 import './month-calendar.js';
 import './year-calendar.js';

@@ -18,7 +18,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import type { CellValue, ColumnDef, FilterRule, Operator, Row } from '../../components/_shared/grid-types.schemas.ts';
+import type { CellValue, ColumnDef, FilterRule, Operator, Row } from '../../components/data/schemas/grid-types.schemas.ts';
 import {
   AGGREGATION_FNS,
   COLUMN_TYPES,
@@ -37,7 +37,7 @@ import {
   dateComparator,
   booleanComparator,
   toDate,
-} from '../../components/_shared/grid-types.ts';
+} from '../../components/data/utils/grid-types.ts';
 import {
   aggregateRows,
   applyFilters,
@@ -53,7 +53,7 @@ import {
   resolveWidths,
   toDelimited,
   toSpreadsheetXml,
-} from '../../components/_shared/grid-data.ts';
+} from '../../components/data/utils/grid-data.ts';
 
 /* ── Columnas ─────────────────────────────────────────────────────────── */
 

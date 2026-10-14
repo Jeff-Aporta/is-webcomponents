@@ -14,8 +14,8 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, unionesDe } from '../../../components/diagrams/flowchart-spec.ts';
-import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../../components/_shared/diagram-arrow.ts';
-import { applyRadialCost, makeCostGrid } from '../../../components/_shared/diagram-grid.ts';
+import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../../components/diagrams/utils/diagram-arrow.ts';
+import { applyRadialCost, makeCostGrid } from '../../../core/diagram-grid.ts';
 import { U } from '../../../components/diagrams/flowchart-labels.ts';
 import type { FlowLayout } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
 
@@ -143,7 +143,7 @@ function domFalso(): void {
 
 Deno.test('conectores: C5 los puntos toman el color de la arista y se personalizan', async () => {
   domFalso();
-  const { animarRiel, FLUJO } = await import('../../../components/_shared/diagram-flow.ts');
+  const { animarRiel, FLUJO } = await import('../../../components/diagrams/utils/diagram-flow.ts');
   const riel = document.createElementNS('http://www.w3.org/2000/svg', 'path') as unknown as SVGElement;
   riel.setAttribute('d', 'M0,0 L100,0');
   riel.setAttribute('stroke', '#112233');

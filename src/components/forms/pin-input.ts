@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { isOtpAutocomplete, listenWebOtp } from '../_shared/web-otp.js';
+import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
 import { ElementBase } from '../../core/element-base.js';
 
 /**

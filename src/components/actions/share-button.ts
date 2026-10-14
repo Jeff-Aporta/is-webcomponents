@@ -1,8 +1,8 @@
 import '../media/icon.js';
 import './button.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { setStringAttr } from '../_shared/reflect.js';
-import { sharePayload } from '../_shared/web-share.js';
+import { setStringAttr } from '../../core/reflect.js';
+import { sharePayload } from './utils/web-share.js';
 
 /**
  * <iswc-share-button> — Web Share API; si el SO no tiene share, copia al portapapeles.

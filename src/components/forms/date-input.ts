@@ -1,4 +1,4 @@
-import { definePickerInput } from '../_shared/picker-element.js';
+import { definePickerInput } from './utils/picker-element.js';
 import './date-field.js';
 import './date-picker.js';
 

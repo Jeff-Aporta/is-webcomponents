@@ -9,7 +9,7 @@ import {
   getComponentPrefs,
   removeComponentPrefs,
   setComponentPrefs,
-} from '../components/_shared/prefs.js';
+} from '../core/prefs.js';
 import type { GalleryState, ThemeName, PaletteName, CategoryMeta, CatalogItem, ThemeToggleElement, PaletteSelectorElement, PreviewLike, PreviewHostElement, SplitPanelElement, FrameElement, DrawerElement, LoaderLike } from "./schemas/app.schemas.js";
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */

@@ -4,7 +4,7 @@
 //   relations[].route/fromSide/toSide/via/labelAt/dashStyle/style/variant.
 // Validación STRICT: cualquier campo desconocido lanza error (en consola, sin
 // romper render para no boicotear demos legacy que pasen por aquí).
-import { snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { snapDiagramGrid } from '../../core/diagram-grid.js';
 import type { DiagramGroup, DiagramTheme, EdgeStyleOverride, ErRouteKind, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, ErCardinality, ErDashStyle, ErLayout, ErLayoutEdge, ErLayoutEntity, BoxSide, EdgeVariant, NodeStyleOverride } from './schemas/diagram-types.schemas.js';
 import type { AnchorLike } from "./schemas/er-archify.schemas.js";
 

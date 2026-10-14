@@ -3,7 +3,7 @@ import {
   getComponentPrefs,
   removeComponentPrefs,
   setComponentPrefs,
-} from '../_shared/prefs.js';
+} from '../../core/prefs.js';
 
 /**
  * <iswc-scrollspy> — Web Component (vanilla, zero dependencies).

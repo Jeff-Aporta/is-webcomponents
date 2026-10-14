@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
-import { fillHostTemplate } from '../../../components/_shared/cdn-ref.ts';
+import { fillHostTemplate } from '../../../core/cdn-ref.ts';
 
 const root = dirname(dirname(dirname(dirname(dirname(fileURLToPath(import.meta.url))))));
 const src = join(root, 'src', 'cdn', 'loader.ts');

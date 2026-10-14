@@ -11,7 +11,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..
 const block = readFileSync(join(ROOT, 'src/components/isp/block-layout.ts'), 'utf8');
 const flex = readFileSync(join(ROOT, 'src/components/isp/flex-layout.ts'), 'utf8');
 const grid = readFileSync(join(ROOT, 'src/components/isp/grid-layout.ts'), 'utf8');
-const shared = readFileSync(join(ROOT, 'src/components/_shared/scroll-memory.ts'), 'utf8');
+const shared = readFileSync(join(ROOT, 'src/core/scroll-memory.ts'), 'utf8');
 const main = readFileSync(join(ROOT, 'src/components/layout/main.ts'), 'utf8');
 
 test('scroll-memory compartido entre iswc-main y layouts', () => {

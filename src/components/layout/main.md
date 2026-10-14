@@ -139,7 +139,7 @@ Detalle de la restauraciÃ³n:
 
 ## Dependencias y componentes relacionados
 
-- [`../_shared/prefs.js`](../_shared/prefs.js)
+- [`../_shared/prefs.js`](../../core/prefs.js)
 
 Tags del mÃ³dulo: `<iswc-main>`.
 

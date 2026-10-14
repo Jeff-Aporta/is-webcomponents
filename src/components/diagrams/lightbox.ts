@@ -3,8 +3,8 @@ import { withStyleAttrs } from '../../core/attrs.js';
 
 import '../media/icon.js';
 import '../actions/share-button.js';
-import { createPanZoom } from '../_shared/pan-zoom.js';
-import { type PanZoomController } from '../_shared/pan-zoom.schemas.js';
+import { createPanZoom } from './utils/pan-zoom.js';
+import { type PanZoomController } from './schemas/pan-zoom.schemas.js';
 import type { ViewTransform } from "./schemas/lightbox.schemas.js";
 
 /**

@@ -1,7 +1,7 @@
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
-import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
+import { applyEdgeActorLayout } from './utils/diagram-edge-actors.js';
+import { assignEdgeHues } from './utils/diagram-edge-style.js';
 import type { UseCaseActorSide, UseCaseLinkKind, UseCaseActorSpec, UseCaseCaseSpec, UseCaseLinkSpec, UseCaseGroupSpec, UseCaseResolvedSpec, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseLayoutSystem, UseCaseLayout } from "./schemas/use-case-spec.schemas.js";
 
 /**

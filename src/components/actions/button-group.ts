@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 

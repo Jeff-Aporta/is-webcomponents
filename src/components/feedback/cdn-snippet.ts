@@ -1,15 +1,15 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { copyText } from '../_shared/dom-utils.js';
+import { copyText } from '../../core/dom-utils.js';
 
 import {
   resolveRef,
   jsdelivrBase,
-} from '../_shared/cdn-ref.js';
-import { paint } from '../_shared/highlight-code.js';
-import { SKILL_DOCS } from '../_shared/llm-agent-prompt.js';
-import type { SkillDoc } from "../_shared/llm-agent-prompt.schemas.js";
+} from '../../core/cdn-ref.js';
+import { paint } from '../../core/highlight-code.js';
+import { SKILL_DOCS } from './utils/llm-agent-prompt.js';
+import type { SkillDoc } from "./schemas/llm-agent-prompt.schemas.js";
 import '../media/icon.js';
 import '../actions/button.js';
 import '../code/code.js';

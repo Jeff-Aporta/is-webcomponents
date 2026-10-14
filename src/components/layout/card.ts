@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, upgradeProperties } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { TONE } from '../_shared/tone.js';
+import { TONE } from '../../core/tone.js';
 
 /**
  * <iswc-card> — Web Component (vanilla, zero dependencies).

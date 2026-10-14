@@ -7,11 +7,11 @@ import {
   setCustomState,
   setFormValue,
   setValidity,
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
-import { hasSlotted } from '../_shared/dom-utils.js';
-import { DEFAULT_INTENT, ensureDefaultColor } from '../_shared/intent.js';
+import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
+import { hasSlotted } from '../../core/dom-utils.js';
+import { DEFAULT_INTENT, ensureDefaultColor } from '../../core/intent.js';
 /**
  * <iswc-switch> — Interruptor form-associated (track + thumb).
  *

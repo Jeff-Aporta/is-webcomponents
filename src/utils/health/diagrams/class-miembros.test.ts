@@ -55,7 +55,7 @@ Deno.test('miembros: M5 toda clase muestra 5 por defecto y un renglón «K más�
   assertEquals(con.members![6]!.mas, 9);
   assertEquals(con.members![6]!.firma, ['9 más']);
   assert(con.h < sin.h, 'la caja se acorta');
-  const { embedDiagramOf } = await import('../../../components/_shared/diagram-embed.ts');
+  const { embedDiagramOf } = await import('../../../components/diagrams/utils/diagram-embed.ts');
   const tope = (spec: unknown) => (embedDiagramOf(spec as never)!.payload as { classDiagram: { layout: { maxMembers: number } } }).classDiagram.layout.maxMembers;
   assertEquals(tope({ kind: 'class', class: { name: 'A', methods: metodos } }), 5, 'por defecto 5 y el sexto renglón es «N más»');
   // La config del diagrama anfitrión fija el tope de sus clases.

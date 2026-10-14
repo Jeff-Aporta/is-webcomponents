@@ -211,7 +211,7 @@ un `<form>`. Para enviar una coordenada seleccionada hay que escucharla en
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js) (solo `svgEl`)
+- [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js) (solo `svgEl`)
 - Relacionados: [`./heatmap.md`](./heatmap.md), [`../charts/bubble-chart.md`](../charts/bubble-chart.md)
 
 Tags del mÃ³dulo: `<iswc-maps>`, `<iswc-map-marker>`.

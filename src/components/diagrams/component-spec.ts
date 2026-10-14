@@ -49,16 +49,16 @@
  *   - sin auto-layout: la posición la pone el autor del payload.
  */
 
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { boundsOf } from '../_shared/diagram-grid.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { applyEdgeActorLayout } from './utils/diagram-edge-actors.js';
+import { boundsOf } from '../../core/diagram-grid.js';
 import { packDiagram, packRowGapKey, abrazarPaquetes, layoutPackageOutlines, outlineToPath, resolvePackingGaps, inflateTitleObstacle, EDGE_CLEARANCE, GRID_STEP, TITLE_CLEARANCE, PKG_BORDER_CLEARANCE, LANE_PITCH } from './component-pack.js';
 import { routeEdges, pointsToPath, simplifyOrthoPath } from './component-router.js';
 import type { RouterEdge, RouterWorld } from './schemas/component-router.schemas.js';
-import { pathPoints as parsePathPoints } from '../_shared/diagram-arrow.js';
-import { assignEdgeHues, assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
-import { layoutNodeLink } from '../_shared/node-link-layout.js';
-import type { Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.schemas.js';
+import { pathPoints as parsePathPoints } from './utils/diagram-arrow.js';
+import { assignEdgeHues, assignEmitterReceiverPalette } from './utils/diagram-edge-style.js';
+import { layoutNodeLink } from './utils/node-link-layout.js';
+import type { Caja, Componente, InterfazUml, Lado, OpcionesEmpaque, Paquete, Punto } from './schemas/diagram-tipos.schemas.js';
 import type { HttpEndpoint, EdgeKind, SpecEdge, LayoutMode, ComponentSpecResult, WireResult, LayoutComponent, LayoutInterface, LayoutEdge, ComponentLayout } from "./schemas/component-spec.schemas.js";
 
 const TAB_W = 56;

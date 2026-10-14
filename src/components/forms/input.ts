@@ -1,14 +1,14 @@
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
 import {
   attachFormInternals, setCustomState, setFormValue, setValidity, clearValidity
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import '../media/icon.js';
 import '../actions/button.js';
 import '../actions/check-icon-button.js';
-import { isOtpAutocomplete, listenWebOtp } from '../_shared/web-otp.js';
+import { isOtpAutocomplete, listenWebOtp } from './utils/web-otp.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
-import { hasSlotted } from '../_shared/dom-utils.js';
+import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
+import { hasSlotted } from '../../core/dom-utils.js';
 /**
  * <iswc-input> — Campo de texto form-associated (vanilla + Shadow DOM).
  *

@@ -1,6 +1,6 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { resolveLocale } from '../_shared/resolve-locale.js';
+import { resolveLocale } from '../../core/resolve-locale.js';
 import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';
 import type { NumberPreset, CurrencyPreset, AccountingPreset, FractionPreset, TextPreset, DatePreset, ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./schemas/format.schemas.js";

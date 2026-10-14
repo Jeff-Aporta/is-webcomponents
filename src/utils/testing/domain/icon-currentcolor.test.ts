@@ -27,7 +27,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 
 const iconJsPath = join(root, 'src/components/media/icon.ts');
 const iconCssPath = join(root, 'src/components/media/icon.scss');
-const loaderJsPath = join(root, 'src/components/_shared/icon-loader.ts');
+const loaderJsPath = join(root, 'src/core/icon-loader.ts');
 
 const iconJs = await readFile(iconJsPath, 'utf8');
 const iconCss = await readFile(iconCssPath, 'utf8');

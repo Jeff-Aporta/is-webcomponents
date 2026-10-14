@@ -145,8 +145,8 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./treemap-spec.js`](./treemap-spec.js)
 - [`../diagrams/sequence-spec.js`](../diagrams/sequence-spec.js)
-- [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
-- [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
+- [`../_shared/tk-hue.js`](../../core/tk-hue.js)
+- [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
 - [`../diagrams/diagram-kinds.js`](../diagrams/diagram-kinds.js)
 
 Tags del mÃ³dulo: `<iswc-treemap>`.

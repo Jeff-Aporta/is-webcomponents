@@ -162,8 +162,8 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`./chart.js`](./chart.js)
 - [`./chart.md`](./chart.md)
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/svg-chart-engine.js`](../_shared/svg-chart-engine.js)
-- [`../_shared/chart-palette.js`](../_shared/chart-palette.js) (vÃ­a `chart.js` y `getStatusColor` en `marks-waterfall.js`)
+- [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
+- [`../_shared/chart-palette.js`](./utils/chart-palette.js) (vÃ­a `chart.js` y `getStatusColor` en `marks-waterfall.js`)
 
 Tags del mÃ³dulo: `<iswc-waterfall-chart>`.
 

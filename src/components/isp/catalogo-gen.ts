@@ -21,7 +21,7 @@ import {
   lowerCase,
   setProp,
   toGridRow,
-} from '../_shared/isp-record-utils.js';
+} from './utils/isp-record-utils.js';
 import type { ActionLabel, BAllowed, IconKind, FrmMode, InputElement, ButtonElement, AgGridElement, VerifyModalElement, ConfirmDeleteElement, DialogElement, DrawerElement, GridRowSelectDetail, GridCellClickDetail, PkModalField, PkModalCfg } from "./schemas/catalogo-gen.schemas.js";
 /**
  * <iswc-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).

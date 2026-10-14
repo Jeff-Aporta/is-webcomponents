@@ -143,7 +143,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/date-utils.js`](../_shared/date-utils.js)
+- [`../_shared/date-utils.js`](./utils/date-utils.js)
 
 Tags del mÃ³dulo: `<iswc-month-calendar>`.
 

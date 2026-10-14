@@ -9,10 +9,10 @@ import {
   setCustomState,
   setFormValue,
   setValidity,
-} from '../_shared/form-associated.js';
+} from '../../core/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
-import { computePosition } from '../_shared/position.js';
+import { setStringAttr } from '../../core/reflect.js';
+import { computePosition } from '../../core/position.js';
 import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
 /**
  * <iswc-color-picker> — Selector de color form-associated.

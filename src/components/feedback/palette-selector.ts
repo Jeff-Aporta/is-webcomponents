@@ -3,8 +3,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../media/icon.js';
 import '../isp/text.js';
 import { ElementBase } from '../../core/element-base.js';
-import { createPopupDismiss } from '../_shared/popup-dismiss.js';
-import { json2html } from '../_shared/json-html.js';
+import { createPopupDismiss } from '../../core/popup-dismiss.js';
+import { json2html } from '../../core/json-html.js';
 import { PALETTES } from '../../styles/palette-build.js';
 import type { Palette, PaletteCruda } from "./schemas/palette-selector.schemas.js";
 

@@ -1,5 +1,5 @@
-import { roundedBarRect, svgEl } from '../_shared/svg-chart-engine.js';
-import { getStatusColor } from '../_shared/chart-palette.js';
+import { roundedBarRect, svgEl } from '../../core/svg-chart-engine.js';
+import { getStatusColor } from './utils/chart-palette.js';
 import type { ChartCtx, ChartDataset } from './schemas/chart.schemas.js';
 import type { WaterfallKind, WaterfallBar, WaterfallDataset } from "./schemas/marks-waterfall.schemas.js";
 

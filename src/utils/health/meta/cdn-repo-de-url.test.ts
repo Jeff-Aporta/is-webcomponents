@@ -4,7 +4,7 @@
  * todos los componentes del consumidor.
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { repoDeUrl } from '../../../components/_shared/cdn-ref.ts';
+import { repoDeUrl } from '../../../core/cdn-ref.ts';
 
 Deno.test('cdn: R1 dueño/repo desde jsDelivr, githack y Pages; null fuera de ellos', () => {
   assertEquals(repoDeUrl('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc123/dist/cdn/core/loader.min.js'), 'Jeff-Aporta/is-webcomponents');

@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { INTENT } from '../_shared/intent.js';
+import { INTENT } from '../../core/intent.js';
 import './button.js';
 
 /**

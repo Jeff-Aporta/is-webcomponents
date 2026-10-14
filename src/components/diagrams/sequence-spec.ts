@@ -5,18 +5,18 @@ import {
   blockRect,
   makeCostGrid,
   snapDiagramGrid,
-} from '../_shared/diagram-grid.js';
-import { routeSequenceHorizontal, routeSequenceSelf } from '../_shared/diagram-astar.js';
+} from '../../core/diagram-grid.js';
+import { routeSequenceHorizontal, routeSequenceSelf } from './utils/diagram-astar.js';
 import {
   countIconTokens,
   extractLeadingIconToken,
   hasIconJsonSugar,
-} from '../_shared/tk-icon-inline.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { fitContain, nestedMaxSize, readNodeEmbed } from '../_shared/diagram-embed.js';
-import type { EmbedBox, EmbedSize } from '../_shared/diagram-embed.schemas.js';
+} from '../../core/tk-icon-inline.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { fitContain, nestedMaxSize, readNodeEmbed } from './utils/diagram-embed.js';
+import type { EmbedBox, EmbedSize } from './schemas/diagram-embed.schemas.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import type { SequenceNestedSpec, SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "./schemas/sequence-spec.schemas.js";
 import { SequenceFragmentSpecSchema } from "./schemas/sequence-spec.schemas.js";

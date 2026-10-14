@@ -206,7 +206,7 @@ El **preview** (y la superficie readonly del diÃ¡logo) usa el mismo hydrate qu
 - [`../media/icon.js`](../media/icon.js) (`<iswc-icon>`)
 - [`./md-lite.js`](./md-lite.js) â€” `mdToHtml()`, markdown ligero sin dependencias npm.
 - [`./md-editor-api.js`](./md-editor-api.js) + [`./md-editor-api.d.ts`](./md-editor-api.d.ts)
-- [`../_shared/prompt-md.js`](../_shared/prompt-md.js) â€” variables `{{nombre}}` + render MD/HTML hÃ­brido.
+- [`../_shared/prompt-md.js`](./utils/prompt-md.js) â€” variables `{{nombre}}` + render MD/HTML hÃ­brido.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 
 Tags del mÃ³dulo: `<iswc-md-editor>`.

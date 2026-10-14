@@ -10,8 +10,8 @@
  * geométricos (`pathIllegal`, `segmentoCortaCaja`…) que usan los tests.
  */
 
-import { boundsOf } from '../_shared/diagram-grid.js';
-import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.schemas.js';
+import { boundsOf } from '../../core/diagram-grid.js';
+import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from './schemas/diagram-tipos.schemas.js';
 import type { ClusterColumn, GroupConv } from "./schemas/component-pack.schemas.js";
 
 export const COL_GUTTER = 52;

@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/button.js';
 import '../media/icon.js';
-import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../_shared/prefs.js';
+import { clearAllComponentPrefs, peekComponentPrefsRoot } from '../../core/prefs.js';
 import { leerAppCfg } from '../../core/app-cfg.js';
 import { clearIswcStorage, listIswcKeys } from '../../core/iswc-storage.js';
 // Solo tipos: el schema Zod no entra al bundle del CDN (sumaría ~330 KB al componente).

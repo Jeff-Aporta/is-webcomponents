@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { resolveFlowchartSpec, computeFlowchartLayout } from './flowchart-spec.js';
-import { pathPoints as parsePathPoints } from '../_shared/diagram-arrow.js';
+import { pathPoints as parsePathPoints } from './utils/diagram-arrow.js';
 
 /**
  * Regresión: ninguna arista debe contener un segmento en diagonal.

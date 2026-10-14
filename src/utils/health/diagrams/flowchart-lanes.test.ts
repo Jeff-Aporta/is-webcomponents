@@ -18,8 +18,8 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
 import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
-import { NESTED_DEFAULT_MAX } from '../../../components/_shared/diagram-embed.ts';
-import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';
+import { NESTED_DEFAULT_MAX } from '../../../components/diagrams/utils/diagram-embed.ts';
+import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 import type { FlowLayout, FlowLayoutNode } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
 
 /** Editable del lab con sus referencias { path, query, actions } resueltas (como al exportar). */
@@ -158,7 +158,7 @@ Deno.test('decisión: R1 ramas por el mismo costado no comparten riel (cada una 
 });
 
 // ── Diagramas combinados: usos punteados, vuelta al origen, clase e íconos ──────────────
-import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../../components/_shared/diagram-embed.ts';
+import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../../components/diagrams/utils/diagram-embed.ts';
 import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/class-spec.ts';
 import { flowPaint } from '../../../components/diagrams/flowchart-spec.ts';
 

@@ -17,7 +17,7 @@
  */
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setStringAttr } from '../_shared/reflect.js';
+import { setStringAttr } from '../../core/reflect.js';
 import { definePreviewControls } from '../layout/preview-controls.js';
 import '../code/code.js';
 import '../actions/button.js';

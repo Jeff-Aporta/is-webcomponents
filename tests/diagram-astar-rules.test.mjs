@@ -23,7 +23,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { routeEdges, validateRoute } from '../src/components/diagrams/component-router.ts';
 import { computeComponentLayout, resolveComponentSpec } from '../src/components/diagrams/component-spec.ts';
-import { pathPoints as parsePathPoints } from '../src/components/_shared/diagram-arrow.ts';
+import { pathPoints as parsePathPoints } from '../src/components/diagrams/utils/diagram-arrow.ts';
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 let assertions = 0;

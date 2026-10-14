@@ -6,7 +6,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   tokenizeCode, normalizeLang, diffLineClass, lineToHtml, emptyState, tokensToText,
-} from '../../../components/_shared/code-highlight.ts';
+} from '../../../core/code-highlight.ts';
 
 const typesOf = (tokens) => tokens.map((t) => t.type);
 

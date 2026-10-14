@@ -208,7 +208,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/form-associated.js`](../_shared/form-associated.js)
+- [`../_shared/form-associated.js`](../../core/form-associated.js)
 - [`../media/icon.js`](../media/icon.js)
 
 Tags del mÃ³dulo: `<iswc-rating>`.

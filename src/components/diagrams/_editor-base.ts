@@ -41,7 +41,7 @@
  *     timers DEBEN overridearlo.
  */
 
-import { DiagramElementBase } from '../_shared/diagram-element-base.js';
+import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { emit } from '../../core/element.js';
 import type { EditorMode, EditorSpecLike, IsStateChangeDetail, IsEditorConstructor, EditorSpecGet } from "./schemas/_editor-base.schemas.js";
 

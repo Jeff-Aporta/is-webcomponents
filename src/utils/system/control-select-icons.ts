@@ -3,8 +3,8 @@
  * Enrichment en runtime: el JSON puede omitir `icon` y se completa aquí.
  */
 
-import { BUTTON_SHAPE_ICON } from '../../components/_shared/button-shape.js';
-import { MEDIA_SHAPE_ICON } from '../../components/_shared/media-shape.js';
+import { BUTTON_SHAPE_ICON } from '../../core/button-shape.js';
+import { MEDIA_SHAPE_ICON } from '../../core/media-shape.js';
 
 /** Por valor de opción (compartido entre attrs). */
 const BY_VALUE: Record<string, string> = {

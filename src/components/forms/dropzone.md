@@ -224,7 +224,7 @@ await fetch('/api/soportes', { method: 'POST', body: form });
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
-- [`../_shared/dom-utils.js`](../_shared/dom-utils.js)
+- [`../_shared/dom-utils.js`](../../core/dom-utils.js)
 - [`../media/icon.js`](../media/icon.js) â€” importado por el mÃ³dulo, no hace
   falta importarlo aparte.
 

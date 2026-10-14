@@ -1,8 +1,8 @@
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
-import { getComponentPrefs, setComponentPrefs } from '../_shared/prefs.js';
-import { clampTo } from '../_shared/misc-utils.js';
+import { getComponentPrefs, setComponentPrefs } from '../../core/prefs.js';
+import { clampTo } from '../../core/misc-utils.js';
 
 /**
  * <iswc-split-panel> — Web Component (vanilla, zero dependencies).

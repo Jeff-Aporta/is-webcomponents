@@ -376,9 +376,9 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`../_shared/grid-types.js`](../_shared/grid-types.js)
-- [`../_shared/grid-data.js`](../_shared/grid-data.js)
-- [`../_shared/grid-ui.js`](../_shared/grid-ui.js)
+- [`../_shared/grid-types.js`](./utils/grid-types.js)
+- [`../_shared/grid-data.js`](./utils/grid-data.js)
+- [`../_shared/grid-ui.js`](./utils/grid-ui.js)
 
 Tags del mÃ³dulo: `<iswc-data-grid>`.
 

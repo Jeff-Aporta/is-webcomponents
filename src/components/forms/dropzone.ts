@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { escapeHtml } from '../_shared/dom-utils.js';
+import { escapeHtml } from '../../core/dom-utils.js';
 import '../media/icon.js';
 import '../actions/button.js';
 

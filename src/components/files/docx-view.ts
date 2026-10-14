@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import { setOptionalAttr, setStringAttr } from '../_shared/reflect.js';
+import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { loadArrayBuffer, resolveFileSource } from './_shared/file-source.js';
 import { loadCdnScript, MAMMOTH_CDN } from './_shared/load-cdn.js';
 import type { MammothApi } from "./schemas/docx-view.schemas.js";

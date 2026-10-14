@@ -29,7 +29,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 const {
   classifyDiffLine, diffLineClass, parseStatLine, formatDiff,
   DIFF_LINE_CLASS, DIFF_LINE_CLASSES,
-} = await import(`file:///${join(root, 'src/components/_shared/code-diff.ts').replace(/\\/g, '/')}`);
+} = await import(`file:///${join(root, 'src/core/code-diff.ts').replace(/\\/g, '/')}`);
 
 const failures = [];
 let checks = 0;
@@ -99,8 +99,8 @@ ok(
 
 // —— 6. Bandas nativas ⇄ CSS ⇄ tema (sin modos de CodeMirror) ——
 const css = await readFile(join(root, 'src/components/code/code.css'), 'utf8');
-const theme = await readFile(join(root, 'src/components/_shared/code-theme.ts'), 'utf8');
-const src = await readFile(join(root, 'src/components/_shared/code-diff.ts'), 'utf8');
+const theme = await readFile(join(root, 'src/components/code/utils/code-theme.ts'), 'utf8');
+const src = await readFile(join(root, 'src/core/code-diff.ts'), 'utf8');
 
 for (const cls of DIFF_LINE_CLASSES) {
   ok(css.includes(`.${cls}`), `falta regla CSS para la banda \`.${cls}\``);

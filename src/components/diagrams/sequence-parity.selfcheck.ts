@@ -114,7 +114,7 @@ assert.strictEqual(
 const HTML_SRC = 'C:/ContaPyme/Personal/apps/jagudeloe/frontend/dist/js/ui/tkHtml.js';
 if (existsSync(HTML_SRC)) {
   const origHtml = await import(pathToFileURL(HTML_SRC).href);
-  const myMd = await import('../_shared/tk-inline-md.js');
+  const myMd = await import('../../core/tk-inline-md.js');
   const samples = [
     'texto plano',
     '**negrilla** y `código`',
@@ -129,7 +129,7 @@ if (existsSync(HTML_SRC)) {
   }
 
   const origIcon = await import(pathToFileURL('C:/ContaPyme/Personal/apps/jagudeloe/frontend/dist/js/core/tk-icon-inline.js').href);
-  const myIcon = await import('../_shared/tk-icon-inline.js');
+  const myIcon = await import('../../core/tk-icon-inline.js');
   for (const s of samples) {
     assert.strictEqual(myIcon.stripIconTokensPlain(s), origIcon.stripIconTokensPlain(s), `strip difiere: ${s}`);
     assert.strictEqual(myIcon.countIconTokens(s), origIcon.countIconTokens(s), `count difiere: ${s}`);

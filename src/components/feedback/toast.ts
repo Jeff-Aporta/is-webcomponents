@@ -1,7 +1,7 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import './toast-item.js';
 import { ElementBase } from '../../core/element-base.js';
-import { normalizeIntent } from '../_shared/intent.js';
+import { normalizeIntent } from '../../core/intent.js';
 
 /**
  * <iswc-toast> — Web Component (vanilla).

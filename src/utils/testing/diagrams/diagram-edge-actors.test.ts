@@ -1,8 +1,8 @@
 import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/component-spec.ts';
-import { placeEdgeActors, pointAtFraction } from '../../../components/_shared/diagram-edge-actors.ts';
-import { pathPoints as parsePathPoints } from '../../../components/_shared/diagram-arrow.ts';
-import { spreadOrthogonalPaths } from '../../../components/_shared/diagram-edge-spread.ts';
-import { rectsOverlap as overlap } from '../../../components/_shared/diagram-grid.ts';
+import { placeEdgeActors, pointAtFraction } from '../../../components/diagrams/utils/diagram-edge-actors.ts';
+import { pathPoints as parsePathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
+import { spreadOrthogonalPaths } from '../../../components/diagrams/utils/diagram-edge-spread.ts';
+import { rectsOverlap as overlap } from '../../../core/diagram-grid.ts';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

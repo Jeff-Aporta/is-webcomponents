@@ -3,9 +3,9 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { inferLanguage, resolveLanguage } from '../../../components/_shared/code-langs.ts';
-import { softFormat, softFormatMode } from '../../../components/_shared/code-text.ts';
-import { formatCode } from '../../../components/_shared/code-format.ts';
+import { inferLanguage, resolveLanguage } from '../../../core/code-langs.ts';
+import { softFormat, softFormatMode } from '../../../core/code-text.ts';
+import { formatCode } from '../../../components/code/utils/code-format.ts';
 
 test('HTML de demos se infiere como html (no javascript)', () => {
   const snippet = '<iswc-button color="success">Aprobado</iswc-button>\n'

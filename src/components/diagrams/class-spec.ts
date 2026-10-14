@@ -1,15 +1,15 @@
-import { layoutNodeLink } from '../_shared/node-link-layout.js';
-import { diagramHeaderWidth } from '../_shared/diagram-header.js';
-import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
-import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import { snapDiagramGrid } from '../_shared/diagram-grid.js';
+import { layoutNodeLink } from './utils/node-link-layout.js';
+import { diagramHeaderWidth } from './utils/diagram-header.js';
+import { applyEdgeActorLayout } from './utils/diagram-edge-actors.js';
+import { assignEdgeHues } from './utils/diagram-edge-style.js';
+import { snapDiagramGrid } from '../../core/diagram-grid.js';
 import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts } from './component-router.js';
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
-import { assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
-import type { Componente, Paquete } from '../_shared/diagram-tipos.schemas.js';
+import { assignEmitterReceiverPalette } from './utils/diagram-edge-style.js';
+import type { Componente, Paquete } from './schemas/diagram-tipos.schemas.js';
 import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection } from './schemas/diagram-types.schemas.js';
-import { richTextPlain } from '../_shared/tk-rich-text.js';
-import { resolveTkHue } from '../_shared/tk-hue.js';
+import { richTextPlain } from '../../core/tk-rich-text.js';
+import { resolveTkHue } from '../../core/tk-hue.js';
 import type { ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind, DiagramGroup } from './schemas/diagram-types.schemas.js';
 import type { Point2D } from "./schemas/class-spec.schemas.js";
 

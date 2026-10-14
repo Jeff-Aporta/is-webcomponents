@@ -4,7 +4,7 @@ import {
   classifyColor,
   normalizeMix,
   syncIspColor,
-} from '../_shared/isp-color.js';
+} from './utils/isp-color.js';
 
 /**
  * <iswc-text> — port de ISP `typography/Text.svelte`.
