@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/README.md -->
+<!-- @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/README.md -->
 # `vendor-distributions/` — todo lo que un consumidor trae del kit por vendor, separado por perfil
 
 Fuente: `src/vendor-distributions/`. Publicado por `deno task build` en `dist/cdn/vendor-distributions/`
@@ -15,7 +15,7 @@ vive en exactamente una:
 | Raíz | Qué va | Puede importar | Lo baja |
 | --- | --- | --- | --- |
 | `shared/` | Neutro: sin navegador ni dependencias de UI (`node:*`, `fetch`, `zod`) | solo `shared/` | todos |
-| `server/` | Exclusivo de proyectos server (hoy vacío: todo lo neutro lo usan ambos) | `shared/`, `server/` | perfil `server` |
+| `server/` | Exclusivo de proyectos server (hoy no existe: todo lo neutro lo usan ambos) | `shared/`, `server/` | perfil `server` |
 | `client/` | Navegador: Playwright/Stagehand, DOM, render visual, íconos de UI | `shared/`, `client/` | perfil `client` |
 
 El consumidor declara `"perfil": "server"` o `"perfil": "client"` en su `vendor.json`; `vendor.ts` BLOQUEA lo
@@ -98,7 +98,7 @@ Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` (Zod incluido) 
 
 ## `server/` — exclusivo de proyectos server
 
-Vacío hoy (ver `server/README.md`): lo que usa ISS (pruebas, jueces, sync, vendor, obj) también lo usa ISW, así
+Hoy no existe la carpeta (no hay nada exclusivo de server): lo que usa ISS (pruebas, jueces, sync, vendor, obj) también lo usa ISW, así
 que es `shared/`. Aquí va lo que solo un server necesite (BD, colas, Azure Functions…), sin navegador.
 
 ## `client/` — navegador, e2e y render visual

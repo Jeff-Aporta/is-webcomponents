@@ -582,10 +582,10 @@ console.log(`  ${'lib/'.padEnd(18)} obj.min.js (navegador) + zod.min.js (compart
 
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.
-// El entry vive en src/gallery/app.ts; el runtime solo carga dist/.
+// El entry vive en src/app/app.ts; el runtime solo carga dist/.
 const galleryOut = join(root, 'dist', 'gallery-app.min.js');
 await build({
-  entryPoints: [join(root, 'src', 'gallery', 'app.ts')],
+  entryPoints: [join(root, 'src', 'app', 'app.ts')],
   outfile: galleryOut,
   bundle: true,
   minify: true,

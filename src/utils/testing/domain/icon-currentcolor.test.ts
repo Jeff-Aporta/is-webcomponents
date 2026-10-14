@@ -80,11 +80,11 @@ const PORT = process.env.PORT;
 // web) NO debe disparar este fetch — solo si PORT coincide con el puerto
 // esperado del dev server del kit.
 // Consolidación 2026-09-07: no hay previews HTML individuales; la galería es
-// una SPA (src/gallery/) que carga los JSON desde components/. El fetch de
+// una SPA (src/app/) que carga los JSON desde components/. El fetch de
 // smoke apunta a la raíz del kit (el _shell.html ya no se sirve por ruta).
 if (PORT && PORT === '8391') {
   try {
-    const res = await fetch(`http://localhost:${PORT}/src/gallery/?tag=iswc-icon`, {
+    const res = await fetch(`http://localhost:${PORT}/src/app/?tag=iswc-icon`, {
       signal: AbortSignal.timeout(2000),
     });
     assert.equal(res.status, 200, 'galería debe responder 200');

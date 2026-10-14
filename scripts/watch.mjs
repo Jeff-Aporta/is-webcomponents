@@ -103,7 +103,7 @@ async function rebuildComponent(inFile) {
 async function rebuildGallery() {
   const outfile = join(root, 'dist', 'gallery-app.min.js');
   await build({
-    entryPoints: [join(root, 'src', 'gallery', 'app.ts')],
+    entryPoints: [join(root, 'src', 'app', 'app.ts')],
     outfile,
     bundle: true,
     minify: true,
@@ -126,7 +126,7 @@ async function rebuildPreviewShell() {
 function classify(rel) {
   const n = rel.replace(/\\/g, '/');
   if (n.startsWith('src/styles/')) return { kind: 'css-src' };
-  if (n.startsWith('src/gallery/')) return { kind: 'gallery' };
+  if (n.startsWith('src/app/')) return { kind: 'gallery' };
   if (n.startsWith('src/previews/_kit/') || n.includes('preview-component') || n.includes('scrollspy')) {
     return { kind: 'preview-shell' };
   }

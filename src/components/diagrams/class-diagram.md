@@ -178,7 +178,6 @@ Con `classDiagram.packages` las clases se agrupan como en el diagrama de compone
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./class-spec.js`](./class-spec.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`./sequence-turtle.js`](./sequence-turtle.js)
 - [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)

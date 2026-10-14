@@ -34,7 +34,7 @@ import type { SesionStagehand, ReportePagina } from "./stagehand.schemas.js";
 
 /**
  * Genera la URL del preview de un tag para un servidor de docs dado.
- * (Mirror del formato ?s=<base64url> que usa gallery/app.ts.)
+ * (Mirror del formato ?s=<base64url> que usa app/app.ts.)
  */
 export function urlPreview(baseUrl: string, tag: string, opts: { theme?: string; palette?: string } = {}): string {
   const state: { component: string; theme?: string; palette?: string } = { component: tag };

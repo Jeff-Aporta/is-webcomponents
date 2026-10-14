@@ -56,10 +56,10 @@ test('format-bytes autofit', () => {
 });
 
 test('galería mergea keys de ?s= al cambiar component', () => {
-  // La lógica del state vive en el bundle del SPA (gallery/app.ts), no inline
+  // La lógica del state vive en el bundle del SPA (app/app.ts), no inline
   // en index.html (la migración del inline JS al bundle cambió dónde están
   // los marcadores — el guardián se actualiza al nuevo contrato).
-  const gallery = read('src/gallery/app.ts');
+  const gallery = read('src/app/app.ts');
   assert.match(gallery, /readStateParam\(\)\s*\|\|\s*\{\}/);
   assert.match(gallery, /\.\.\.prev,\s*component:/);
 });

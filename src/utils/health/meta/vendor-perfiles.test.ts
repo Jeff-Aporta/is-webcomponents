@@ -124,7 +124,7 @@ Deno.test('vendor-perfiles: P5 perfilDeRuta coincide con la carpeta de cada arch
   assertEquals(malos, [], malos.join('\n'));
   assertEquals(perfilDeRuta('dist/cdn/vendor-distributions/testing/jueces.ts'), 'sin-perfil', 'ruta plana anterior');
   assertEquals(perfilDeRuta('dist/cdn/build/bundle-min.ts'), null, 'fuera de vendor-distributions');
-  assert(existsSync(join(SRC, 'server', 'README.md')), 'la raíz server/ existe (aunque hoy no tenga código)');
+  assertEquals(perfilDeRuta('dist/cdn/vendor-distributions/server/x.ts'), 'server', 'server/ es perfil aunque hoy no exista la carpeta');
   assert(dirname(SRC) === 'src');
 });
 

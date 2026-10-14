@@ -14,7 +14,7 @@ import { faltanRequisitos } from './lib/env.ts';
 import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/tipos.d.ts';
 import { cargarToon, textoDe } from '../../system/toons.ts';
 
-// Textos de test SIEMPRE desde los toons (src/utils/system/toons/*.json).
+// Textos de test SIEMPRE desde los toons (src/utils/system/*.toon.json).
 const TOON_CODE = cargarToon('iswc-code');
 const TEXTO_ESCRITURA = textoDe(TOON_CODE, 'escribirEnEditor') || '// e2e nativo';
 const TITULO_TOOLTIP = textoDe(TOON_CODE, 'tooltipMarks') || 'add(a, b)';

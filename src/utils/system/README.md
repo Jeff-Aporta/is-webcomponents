@@ -5,9 +5,9 @@ tests (unit + e2e/attack) sean altamente coherentes y **siempre por JSON**:
 
 | Carpeta / archivo | Qué vive aquí |
 | --- | --- |
-| `toons/*.toon.json` | **Toons** (dev-only): textos/labels de tests por componente y configuración de testers (expectativas, strings, ejemplos). Los consumen los e2e/attack vía `cargarToon(tag)` |
+| `*.toon.json` | **Toons** (dev-only): textos/labels de tests por componente y configuración de testers (expectativas, strings, ejemplos). Los consumen los e2e/attack vía `cargarToon(tag)` |
 | `toons.ts` | Tipos + cargador tipado de toons (lee el JSON, valida esquema) |
-| `controls/` | Esquema canónico (`controls.schema.json`) de los **controles de demo** tipo Storybook declarados en cada preview JSON (`src/previews/<cat>/<tag>.json`, iswc-preview/v1) |
+| `controls.schema.json` | Esquema canónico de los **controles de demo** tipo Storybook declarados en cada preview JSON (`src/previews/<cat>/<tag>.json`, iswc-preview/v1) |
 
 ## Reglas
 

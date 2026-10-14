@@ -85,10 +85,10 @@ test('iswc-cdn-snippet carga solo el tag, sin radio ni url-key', async () => {
 });
 
 test('galería mergea nav keys al actualizar component en ?s=', async () => {
-  // La lógica del state vive en el bundle del SPA (gallery/app.ts), no inline
+  // La lógica del state vive en el bundle del SPA (app/app.ts), no inline
   // en index.html (la migración del inline JS al bundle cambió dónde están
   // los marcadores — el guardián se actualiza al nuevo contrato).
-  const gallery = await readFile(join(raiz, 'src/gallery/app.ts'), 'utf8');
+  const gallery = await readFile(join(raiz, 'src/app/app.ts'), 'utf8');
   assert.match(gallery, /readStateParam\(\)\s*\|\|\s*\{\}/);
   assert.match(gallery, /\.\.\.prev,\s*component:/);
   assert.match(gallery, /delete next\.theme/);

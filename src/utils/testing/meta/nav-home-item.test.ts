@@ -24,7 +24,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 
 const index = await readFile(join(root, 'index.html'), 'utf8');
-const galleryApp = await readFile(join(root, 'src', 'gallery', 'app.ts'), 'utf8');
+const galleryApp = await readFile(join(root, 'src', 'app', 'app.ts'), 'utf8');
 const shellCss = await readFile(join(root, 'src', 'styles', 'shell.scss'), 'utf8');
 
 const failures = [];
@@ -38,7 +38,7 @@ const check = (cond, msg) => { if (!cond) failures.push(msg); };
 //   - el title.textContent es 'Inicio'
 //   - NO anade un <span class="shell-nav__tag">
 
-// Aislamos el bloque { const btn = ... } del home en gallery/app.ts
+// Aislamos el bloque { const btn = ... } del home en app/app.ts
 // (el cÃ³digo que construye los items del nav vive en el bundle de la
 // galerÃ­a, no en index.html â€” esto cambiÃ³ al pasar de inline JS a bundle).
 const homeBlockMatch = (() => {
@@ -71,12 +71,12 @@ if (homeBlockMatch) {
     'index.html: el bloque del home no debe crear un <span class="shell-nav__tag"> (no debe haber tag duplicado)');
 }
 
-// Estos chequeos sobre el bundle de la galerÃ­a: gallery/app.ts debe
+// Estos chequeos sobre el bundle de la galerÃ­a: app/app.ts debe
 // contener una sola asignaciÃ³n `textContent = 'Inicio'` (solo el title).
 const homeTitleCount = (galleryApp.match(/textContent\s*=\s*['"]Inicio['"]/g) || []).length;
 const homeTagCount = (galleryApp.match(/<span\s+class="shell-nav__tag"[^>]*>\s*Inicio\s*<\/span>/g) || []).length;
-check(homeTitleCount === 1, `gallery/app.ts: esperaba 1 'textContent="Inicio"' (solo el title), encontre ${homeTitleCount}`);
-check(homeTagCount === 0, `gallery/app.ts: el item home NO debe tener un <span class="shell-nav__tag">Inicio</span> duplicado, encontre ${homeTagCount}`);
+check(homeTitleCount === 1, `app/app.ts: esperaba 1 'textContent="Inicio"' (solo el title), encontre ${homeTitleCount}`);
+check(homeTagCount === 0, `app/app.ts: el item home NO debe tener un <span class="shell-nav__tag">Inicio</span> duplicado, encontre ${homeTagCount}`);
 
 // Estas pruebas contra el archivo completo ya estan cubiertas por el
 // bloque aislado arriba, asi que las omitimos para evitar falsos negativos

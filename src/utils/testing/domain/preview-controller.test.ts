@@ -64,15 +64,15 @@ assert.equal(bg.tag, 'iswc-button-group');
 assert.ok(Array.isArray(bg.sections) && bg.sections.length > 0);
 
 const index = readFileSync(join(root, 'index.html'), 'utf8');
-const galleryApp = readFileSync(join(root, 'src/gallery/app.ts'), 'utf8');
-// index.html solo monta el host; la lógica vive en gallery/app.ts (bundle
+const galleryApp = readFileSync(join(root, 'src/app/app.ts'), 'utf8');
+// index.html solo monta el host; la lógica vive en app/app.ts (bundle
 // del SPA — la migración del inline JS al bundle cambió dónde están los
 // nombres de las funciones).
 if (!/previewHost/.test(index)) {
   failures.push('index.html debe montar el host <iswc-preview-component id="previewHost">');
 }
 if (!/hasControlledPreview/.test(galleryApp) || !/loadPreview/.test(galleryApp) || !/hasCachedPreview/.test(galleryApp)) {
-  failures.push('gallery/app.ts debe usar hasControlledPreview + loadPreview + hasCachedPreview del registry');
+  failures.push('app/app.ts debe usar hasControlledPreview + loadPreview + hasCachedPreview del registry');
 }
 
 const { hasControlledPreview, hasCachedPreview, controlledPreviewTags, loadPreview, clearPreviewCache } = await import('../../../previews/registry.ts');
@@ -94,7 +94,7 @@ const again = await loadPreview('iswc-button-group');
 // que sí debe cumplirse es que la definición salga de la caché y sea la misma.
 assert.equal(hasCachedPreview('iswc-button-group'), true, 'la definición debe seguir cacheada');
 assert.deepEqual(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
-assert.ok(/hasCachedPreview/.test(galleryApp), 'gallery/app.ts debe evitar vaciar el host si el JSON ya está en caché');
+assert.ok(/hasCachedPreview/.test(galleryApp), 'app/app.ts debe evitar vaciar el host si el JSON ya está en caché');
 assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'iswc-preview-component debe invalidar mounts en vuelo');
 
 if (failures.length) {

@@ -1,5 +1,5 @@
 /**
- * Genera src/previews/data/shared-modules.json con TODOS los módulos de
+ * Genera src/previews/shared-modules.json con TODOS los módulos de
  * src/components/_shared/ (sin ocultar ninguno). Lo consume el preview
  * «Ecosistema JS».
  *
@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const dir = path.join(root, 'src/components/_shared');
-const outDir = path.join(root, 'src/previews/data');
+const outDir = path.join(root, 'src/previews');
 const outFile = path.join(outDir, 'shared-modules.json');
 
 /** Primera frase útil del bloque de comentario inicial. */
@@ -56,13 +56,13 @@ fs.writeFileSync(outFile, payload);
 console.log(`shared-modules.json: ${modules.length} módulos → ${path.relative(root, outFile)}`);
 
 // Espejo en dist/: `ecosystem.ts` lo pide con
-// `new URL('../previews/data/shared-modules.json', import.meta.url)`, que al
-// bundlearse resuelve a `dist/previews/data/`. Sin esta copia la página
+// `new URL('../previews/shared-modules.json', import.meta.url)`, que al
+// bundlearse resuelve a `dist/previews/`. Sin esta copia la página
 // ecosystem recibe un 404 y pinta el fallback "No se pudo cargar
 // shared-modules.json" en vez del catálogo. Se escribe aquí (y no en
 // bundle-scripts.mjs) porque `deno task build` corre DESPUÉS de `bundle`:
 // copiar en bundle dejaría en dist/ la versión del build anterior.
-const distDir = path.join(root, 'dist/previews/data');
+const distDir = path.join(root, 'dist/previews');
 const distFile = path.join(distDir, 'shared-modules.json');
 try {
   fs.mkdirSync(distDir, { recursive: true });

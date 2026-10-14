@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-14T01:15:52.106Z",
-  "count": 122,
+  "generatedAt": "2026-10-14T13:12:08.713Z",
+  "count": 121,
   "modules": [
     {
       "file": "button-shape.schemas.ts",
@@ -738,14 +738,6 @@
         "PuntoSchema",
         "InterfazUmlSchema"
       ]
-    },
-    {
-      "file": "diagram-tipos.ts",
-      "id": "diagram-tipos",
-      "path": "src/components/_shared/diagram-tipos.ts",
-      "summary": "diagram-tipos — POR QUÉ AQUÍ. `component-pack.ts` y `component-spec.ts` se pasan los mismos",
-      "bytes": 961,
-      "exports": []
     },
     {
       "file": "dom-utils.ts",

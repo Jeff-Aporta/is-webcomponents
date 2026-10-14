@@ -243,7 +243,6 @@ Contrato común en `_shared/diagram-embed.schemas.ts` (reutilizable por otros di
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./flowchart-spec.js`](./flowchart-spec.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`./sequence-turtle.js`](./sequence-turtle.js)
 - [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`../_shared/tk-icon-inline.js`](../_shared/tk-icon-inline.js)

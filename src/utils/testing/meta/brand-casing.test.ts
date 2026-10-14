@@ -74,19 +74,19 @@ const catalog = JSON.parse(await readFile(join(root, 'src/styles/palettes.json')
 const insoft = catalog.find((p) => p.value === 'insoft');
 assert.equal(insoft?.accentLabel, 'Soft', 'palettes.json debe componer el wordmark con "Soft"');
 
-// Verificación 2: gallery/app.ts pinta el accent del wordmark leyendo
+// Verificación 2: app/app.ts pinta el accent del wordmark leyendo
 // brandData.accent (lo que garantiza que las mayúsculas del data se
 // trasladan al DOM en tiempo de ejecución, no inline en index.html).
-const galleryApp = await readFile(join(root, 'src/gallery/app.ts'), 'utf8');
+const galleryApp = await readFile(join(root, 'src/app/app.ts'), 'utf8');
 assert.match(
   galleryApp,
   /brandAccent\.textContent\s*=\s*brandData\.accentLabel/,
-  'gallery/app.ts debe pintar el accent del wordmark desde brandData.accent (S mayúscula del data)',
+  'app/app.ts debe pintar el accent del wordmark desde brandData.accent (S mayúscula del data)',
 );
 assert.match(
   galleryApp,
   /brandLead\.textContent\s*=\s*brandData\.lead/,
-  'gallery/app.ts debe pintar el lead del wordmark desde brandData.lead',
+  'app/app.ts debe pintar el lead del wordmark desde brandData.lead',
 );
 
 // El identificador de paleta sigue en minúsculas: es API, no texto.

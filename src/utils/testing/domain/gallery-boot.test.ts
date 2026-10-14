@@ -101,17 +101,17 @@ test('no reimportar preview-component ni icon-loader desde src/', () => {
 test('SPA de galeria vía loader alias iswc-gallery-app', () => {
   assert.match(indexHtml, /iswc-gallery-app/);
   assert.match(loaderTs, /iswc-gallery-app[\s\S]*dist\/gallery-app\.min\.js/);
-  assert.ok(existsSync(join(root, 'src', 'gallery', 'app.ts')));
+  assert.ok(existsSync(join(root, 'src', 'app', 'app.ts')));
 });
 
 test('fuente gallery app usa setHostPreview + whenDefined', () => {
-  const body = read('src/gallery/app.ts');
+  const body = read('src/app/app.ts');
   assert.match(body, /function\s+setHostPreview\s*\(/);
   assert.match(body, /customElements\.whenDefined\(\s*['"]iswc-preview-component['"]\s*\)/);
 });
 
 test('gallery-app espera shell iswc-doc-demo antes de tocar #shellNav', () => {
-  const body = read('src/gallery/app.ts');
+  const body = read('src/app/app.ts');
   assert.match(body, /waitForGalleryShell/);
   assert.match(body, /await\s+waitForGalleryShell\s*\(/);
   assert.match(body, /whenDefined\(\s*['"]iswc-doc-demo['"]\s*\)/);

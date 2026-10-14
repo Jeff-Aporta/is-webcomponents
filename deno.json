@@ -1,6 +1,7 @@
 {
   "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/", "typecheckBaseline": 4263 },
   "nodeModulesDir": "auto",
+  "compilerOptions": { "strict": true },
   "unstable": ["sloppy-imports"],
   "imports": {
     "esbuild": "npm:esbuild@^0.25.0",

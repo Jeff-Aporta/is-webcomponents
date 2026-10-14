@@ -147,7 +147,6 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./state-spec.js`](./state-spec.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`./sequence-turtle.js`](./sequence-turtle.js)
 - [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)

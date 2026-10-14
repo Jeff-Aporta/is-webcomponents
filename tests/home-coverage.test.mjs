@@ -8,7 +8,7 @@
 //   - El guardián de paths valida archivos en disco; este test valida que la
 //     SPA de la galería (`dist/gallery-app.min.js`) realmente pinta cada
 //     componente del manifest como un item navegable del catálogo.
-//   - Es el canario que detecta regressions en `src/gallery/app.ts` (p.ej. un
+//   - Es el canario que detecta regressions en `src/app/app.ts` (p.ej. un
 //     `navSkip` que filtra de más, o un `categoryMeta` sin el `id` de la
 //     categoría de un componente recién añadido).
 //

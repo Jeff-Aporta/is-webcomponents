@@ -14,13 +14,13 @@ import type { ToonTexto, ToonControl, ToonDoc } from "./toons.schemas.js";
 const aqui = dirname(fileURLToPath(import.meta.url));
 
 /**
- * Carga el toon de un tag (src/utils/system/toons/<tag>.toon.json).
+ * Carga el toon de un tag (src/utils/system/<tag>.toon.json).
  * Dev-only: los tests (unit/e2e/attack) consumen aquí sus strings; nunca se
  * empaqueta a dist.
  * @param {string} tag
  */
 export function cargarToon(tag: string): ToonDoc {
-  const archivo = join(aqui, 'toons', `${tag}.toon.json`);
+  const archivo = join(aqui, `${tag}.toon.json`);
   const raw = readFileSync(archivo, 'utf8');
   const doc = JSON.parse(raw) as ToonDoc;
   if (doc.$schema !== 'toon/v1') throw new Error(`toon ${tag}: $schema debe ser toon/v1`);

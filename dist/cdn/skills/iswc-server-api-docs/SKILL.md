@@ -7,7 +7,7 @@ description: >-
   server, al cambiar el documento `doc`, al migrar del visor viejo <docs-viewer> (isc-swagger / iswc-docs) o al
   depurar por qué la documentación de la API no se ve.
 ---
-<!-- @vendor 2026-10-14T12:43:33.701Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
+<!-- @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
 
 # iswc-server-api-docs — los endpoints de la API de un server
 

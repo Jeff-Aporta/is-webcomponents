@@ -282,7 +282,6 @@ acción inicia: el mismo nodo `kind: "nested"` de los flujos
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`./sequence-turtle.js`](./sequence-turtle.js)
 - [`../_shared/diagram-grid.js`](../_shared/diagram-grid.js)
 - [`../_shared/tk-icon-inline.js`](../_shared/tk-icon-inline.js)
 - [`../_shared/tk-hue.js`](../_shared/tk-hue.js)

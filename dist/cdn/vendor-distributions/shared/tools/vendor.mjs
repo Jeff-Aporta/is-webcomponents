@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.mjs
+// @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.mjs
 // Bundle autocontenido de src/vendor-distributions/shared/tools/vendor.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/shared/tools/vendor.ts.
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -253,6 +253,7 @@ function esPrincipal() {
 var ALIAS, RAICES_DEFAULT, SALTAR_DEFAULT, EXT, ONLINE, CABECERA_VENDOR, SHA, auth, esc, log;
 var init_pin_update = __esm({
   async "src/vendor-distributions/shared/tools/pin-update.mjs"() {
+    "use strict";
     ALIAS = { "is-webcomponents": ["iswc-root"], "iswc-root": ["is-webcomponents"] };
     RAICES_DEFAULT = ["index.html", "sw.js", "staticwebapp.config.json", "manifest.json", "src", "view", "demo", "public"];
     SALTAR_DEFAULT = ["node_modules", "vendor", "dist", ".tmp-scss", ".git"];

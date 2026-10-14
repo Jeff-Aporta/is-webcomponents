@@ -198,7 +198,6 @@ El consumidor no define colores ni temas: elige un estilo por atributo.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./er-spec.js`](./er-spec.js)
 - [`./sequence-spec.js`](./sequence-spec.js)
-- [`./sequence-turtle.js`](./sequence-turtle.js)
 - [`../_shared/tk-hue.js`](../_shared/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../_shared/tk-inline-md.js)
 - [`./diagram-kinds.js`](./diagram-kinds.js)
