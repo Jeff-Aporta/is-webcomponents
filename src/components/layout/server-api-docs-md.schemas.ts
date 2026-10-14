@@ -14,8 +14,8 @@ import { z } from 'zod';
  * con este schema dice si el documento admite el parse estricto (`validarEstricto` de `server-api-docs-md`).
  */
 
-/** Métodos HTTP que admite el documento estricto. */
-export const ApiDocsMetodoSchema = z.enum(['get', 'post', 'put', 'patch', 'delete']);
+/** Métodos HTTP que admite el documento estricto (`query`: listado con el filtro en el cuerpo). */
+export const ApiDocsMetodoSchema = z.enum(['get', 'post', 'put', 'patch', 'delete', 'query']);
 export type ApiDocsMetodo = z.infer<typeof ApiDocsMetodoSchema>;
 
 /** Id de catálogo, tag de subgrupo o plantilla: kebab-case en minúsculas. */
@@ -208,7 +208,6 @@ export const ApiDocsDocumentoSchema = z.object({
     nombres.add(t.name);
   });
   const subgrupos = new Map(d.tags.map((t) => [t.name, new Set(t.subgroups.map((s) => s.id))]));
-  const permisos = new Map<string, string>();
   for (const [ruta, ops] of Object.entries(d.paths)) {
     const enRuta = [...ruta.matchAll(/\{([^}]+)\}/g)].map((m) => m[1] ?? '').sort();
     if (!Object.keys(ops).length) falta(['paths', ruta], 'ruta sin métodos');
@@ -221,11 +220,6 @@ export const ApiDocsDocumentoSchema = z.object({
       else if (!delTag.has(op.subgroup)) falta([...p, 'subgroup'], `subgrupo «${op.subgroup}» no existe en el tag «${tag}»`);
       const declarados = (op.parameters ?? []).filter((x) => x.in === 'path').map((x) => x.name).sort();
       if (JSON.stringify(declarados) !== JSON.stringify(enRuta)) falta([...p, 'parameters'], `parámetros de ruta ${JSON.stringify(declarados)} ≠ ${JSON.stringify(enRuta)}`);
-      if (op.permission) {
-        const otro = permisos.get(op.permission);
-        if (otro && otro !== `${metodo} ${ruta}` && !op.permission.startsWith('CFG:')) falta([...p, 'permission'], `permiso «${op.permission}» ya lo declara ${otro}`);
-        permisos.set(op.permission, `${metodo} ${ruta}`);
-      }
       if (op.requestBody) {
         usar('requestBodies', op.requestBody.bodyKey, [...p, 'requestBody', 'bodyKey']);
         refs(op.requestBody.schema, [...p, 'requestBody', 'schema']);

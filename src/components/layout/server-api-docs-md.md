@@ -41,7 +41,7 @@ sys values lo aplica al escribir la fila `doc`.
 Todo objeto es `.strict()`; los JSON Schema son un subconjunto recursivo estricto (`type`, `properties`,
 `items`, `required`, `enum`, `format`, `minimum`, `maximum`, `default`, `example`, `description`); los
 ejemplos son JSON. La integridad referencial se cierra en `superRefine`: cada id nombra algo que existe,
-los parámetros de ruta coinciden con los `{x}` de la ruta, un permiso no se repite y nada del catálogo
+los parámetros de ruta coinciden con los `{x}` de la ruta y nada del catálogo
 queda huérfano.
 
 ## API

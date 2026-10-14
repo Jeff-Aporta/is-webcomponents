@@ -158,6 +158,10 @@ test('server-api-docs S7: parse estricto InSoft v2 (el demo lo admite; lo que no
   const huerfano = clon(doc);
   (huerfano.catalog as { payloads: Record<string, unknown> }).payloads['sin-uso'] = {};
   assert.ok(validarEstricto(huerfano).errores.some((e) => e.includes('sin-uso')), 'nada del catálogo queda huérfano');
+  const conQuery = clon(doc);
+  const pathsQ = conQuery.paths as Record<string, Record<string, unknown>>;
+  pathsQ['/sistema/cfg']!.query = { ...(pathsQ['/sistema/cfg']!.get as Record<string, unknown>), summary: 'Listar con filtro en el cuerpo' };
+  assert.equal(validarEstricto(conQuery).ok, true, 'el verbo QUERY (filtro en el cuerpo) es parte del contrato y un permiso puede repetirse');
   const oa = aOpenApi(normalizarDocumentoApi(doc));
   assert.deepEqual(validarEstricto(oa), { aplica: false, ok: false, errores: [] }, 'OpenAPI 3 no aplica');
 });
