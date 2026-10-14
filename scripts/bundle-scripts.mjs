@@ -38,7 +38,7 @@ await mkdir('dist/pages', { recursive: true });
 // Antes: invisible el 404 (solo HEAD checks no los capturaban). Stagehand
 // lo descubrió.
 for (const css of ['host-base.css', 'scrollbars.css']) {
-  const src = join('src/components/_shared', css);
+  const src = join('.tmp-scss/src/core', css);
   const dst = join('dist/scripts', css);
   try {
     await copyFile(src, dst);
@@ -233,7 +233,7 @@ const sharedCss = ['host-base.css', 'scrollbars.css'];
 for (const cat of await readdir(previewsOut, { withFileTypes: true })) {
   if (!cat.isDirectory()) continue;
   for (const css of sharedCss) {
-    const src = join('src/components/_shared', css);
+    const src = join('.tmp-scss/src/core', css);
     const dst = join(previewsOut, cat.name, css);
     try {
       await copyFile(src, dst);

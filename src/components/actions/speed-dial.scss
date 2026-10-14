@@ -1,6 +1,5 @@
-@charset "UTF-8";
+@use '../../core/focus-ring';
 /* iswc-speed-dial */
-@import url("../_shared/focus-ring.css");
 :host {
   display: inline-flex;
   position: relative;

@@ -1,4 +1,4 @@
-@import url('../_shared/focus-ring.css');
+@use '../../core/focus-ring';
 
 :host {
   --iswc-focus-fallback: currentColor;
@@ -100,7 +100,7 @@
   transition: background 160ms ease, border-color 160ms ease,
               color 160ms ease, transform 120ms ease;
 
-  /* el foco lo pone .iswc-focus-ring (_shared/focus-ring.css) */
+  /* el foco lo pone .iswc-focus-ring (core/focus-ring.scss) */
   &:hover {
     background: color-mix(in srgb, var(--iswc-accent) 14%, var(--iswc-bg));
     border-color: color-mix(in srgb, var(--iswc-accent) 38%, transparent);

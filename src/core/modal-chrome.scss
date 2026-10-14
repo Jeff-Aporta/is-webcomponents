@@ -1,6 +1,5 @@
-@charset "UTF-8";
 /* Chrome común de superficies modales (dialog / drawer): header, título,
-   body y footer. Se consume con `@import url('../_shared/modal-chrome.css');`
+   body y footer. Se consume con `@use '../../core/modal-chrome';`
    en la PRIMERA línea del CSS del componente, para que lo propio (close-btn,
    header-actions, variantes) quede después y pueda sobreescribir. */
 :host .header {

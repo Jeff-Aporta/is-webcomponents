@@ -198,7 +198,7 @@ test('W55: el theme JSON usa iswc-diagram-theme/v1 (excluido del validator)', as
   // El theme `insoft.json` debe seguir usando su propio $schema y NO
   // iswc-preview/v1; si cambia a preview/v1, el validator anterior lo
   // capturaría y fallaría porque su shape es distinto.
-  const themePath = join(SRC_COMPONENTS, 'diagrams', 'themes', 'insoft.json');
+  const themePath = join(SRC_COMPONENTS, 'diagrams', 'utils', 'themes', 'insoft.json');
   const d = JSON.parse(await readFile(themePath, 'utf8'));
   assert.equal(d.$schema, 'iswc-diagram-theme/v1', 'insoft.json debe mantener su $schema de diagram-theme');
 });

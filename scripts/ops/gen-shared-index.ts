@@ -1,6 +1,6 @@
 /**
  * Genera src/previews/shared-modules.json con TODOS los módulos de
- * src/components/_shared/ (sin ocultar ninguno). Lo consume el preview
+ * src/core/ (los commons del kit, sin ocultar ninguno). Lo consume el preview
  * «Ecosistema JS».
  *
  * Uso: deno run -A --no-check scripts/gen-shared-index.ts
@@ -10,7 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const dir = path.join(root, 'src/components/_shared');
+const dir = path.join(root, 'src/core');
 const outDir = path.join(root, 'src/previews');
 const outFile = path.join(outDir, 'shared-modules.json');
 
@@ -42,7 +42,7 @@ const modules = files.map((file) => {
   return {
     file,
     id: file.replace(/\.ts$/, ''),
-    path: `src/components/_shared/${file}`,
+    path: `src/core/${file}`,
     summary: summarize(src, file),
     bytes: Buffer.byteLength(src, 'utf8'),
     exports: [...new Set(exports)],

@@ -42,7 +42,6 @@ async function walk(dir) {
   for (const name of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, name.name);
     if (name.isDirectory()) {
-      if (name.name === '_shared') continue;
       await walk(p);
     } else if (/\.(ts|js)$/.test(name.name) && !name.name.endsWith('.d.ts')
       && !name.name.includes('.preview.') && !name.name.includes('.selfcheck.')
@@ -63,7 +62,6 @@ const externalComponents = {
         return { path: '../_shared/base-sheets.min.js', external: true };
       }
       if (!abs.startsWith(compRoot)) return null;
-      if (abs.includes(`${sep}_shared${sep}`)) return null;
       const tag = basename(abs).replace(/\.(ts|js)$/, '');
       if (!tagToFile.has(tag)) return null;
       return { path: `../${folderFor(abs)}/${tag}.min.js`, external: true };

@@ -1,5 +1,5 @@
 @use 'utils/surface-bar';
-@import url('../_shared/popover-panel.css');
+@use '../../core/popover-panel';
 
 /* iswc-pdf-viewer */
 :host {

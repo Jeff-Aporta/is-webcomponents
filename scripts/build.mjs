@@ -130,7 +130,6 @@ async function walk(dir, out = []) {
   for (const name of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, name.name);
     if (name.isDirectory()) {
-      if (name.name === '_shared') continue;
       await walk(p, out);
     } else if (/\.(ts|js)$/.test(name.name) && !/^index\.(ts|js)$/.test(name.name)
                && !name.name.endsWith('.d.ts')
@@ -215,12 +214,6 @@ const externalComponents = {
         return { path: '../_shared/base-sheets.min.js', external: true };
       }
       if (!abs.startsWith(compRoot)) return null;
-      // `decors` es la excepcion al inlinado de _shared: lleva el runtime de
-      // decoradores de esbuild (~2 KB) y con 155 componentes serian ~310 KB
-      // duplicados en el CDN. Va externo, como los componentes entre si.
-
-      // Los demas helpers de _shared no registran custom elements: se inlinean.
-      if (abs.includes(`${sep}_shared${sep}`)) return null;
       const tag = basename(abs).replace(/\.(ts|js)$/, '');
       if (!tagToComponent.has(tag)) return null;
       return { path: `../${folderFor(abs)}/${tag}.min.js`, external: true };
@@ -228,42 +221,8 @@ const externalComponents = {
   },
 };
 
-// Los CSS de componente hacen `@import url('../_shared/<x>.css')`. Ese import
-// se resuelve EN EL NAVEGADOR contra la ruta del .css publicado, asi que el
-// archivo tiene que existir tambien en dist. Sin esto, chart y los 9 diagramas
-// perdian entero el kit compartido (diagram-kit.css) en el bundle: entre otras
-// cosas, `.dg-tooltip { position: absolute }`, y el tooltip pasaba a ocupar
-// espacio en el flujo y empujaba el grafico al hacer hover.
-const sharedImports = new Set();
-// Igual que los de `../_shared/`, los parciales locales de carpeta
-// (`@import './_tokens.css'`) se resuelven en el navegador contra el .css
-// publicado: hay que emitirlos por carpeta o dan 404 en silencio.
-const localPartials = new Set();
-for (const file of entries) {
-  // El .css fuente vive en el staging, NO en `src/`. `build-scss.mjs` lo
-  // pone ahi espejando la estructura. Si no existe, el componente va sin
-  // CSS (igual que antes, cuando el .css no se habia regenerado).
-  const cssFile = join(cssRoot, relative(join(root, 'src'), file).replace(/\.(ts|js)$/i, '.css'));
-  let css = '';
-  try { css = await readFile(cssFile, 'utf8'); } catch { continue; }
-  for (const m of css.matchAll(/@import\s+(?:url\(\s*)?['"]\.\.\/_shared\/([\w.-]+\.css)['"]/g)) {
-    sharedImports.add(m[1]);
-  }
-  for (const m of css.matchAll(/@import\s+(?:url\(\s*)?['"]\.\/([\w.-]+\.css)['"]/g)) {
-    // Origen: el .css fuente esta en el staging, junto al resto.
-    // Destino: la carpeta de publicacion, que para algunos tags no coincide
-    // (chart.js vive en charts/ y se publica en data-viz/ segun el manifest).
-    localPartials.add(JSON.stringify({
-      from: join(dirname(cssFile), m[1]),
-      to: `${folderFor(file)}/${m[1]}`,
-    }));
-  }
-}
-for (const name of sharedImports) {
-  await mkdir(join(dist, '_shared'), { recursive: true });
-  await bundleCss(join(cssRoot, 'components', '_shared', name), join(dist, '_shared', name));
-  console.log(`  ${('_shared/' + name).padEnd(28)} css (destino de @import)`);
-}
+// Los SCSS comunes (src/core/*.scss) y los parciales de grupo se incrustan con @use de Sass:
+// no quedan @import que el navegador tenga que resolver contra dist.
 
 // base-sheets: host-base + scrollbars incrustados, externo y compartido por
 // toda la pagina. Sustituye a los dos <link> que adoptCss ponia en CADA
@@ -275,8 +234,8 @@ for (const name of sharedImports) {
   // Se minifican a un temporal para incrustar exactamente lo que se publicaria.
   const tmpBase = join(dist, '_shared', '_tmp-host-base.css');
   const tmpScroll = join(dist, '_shared', '_tmp-scrollbars.css');
-  await bundleCss(join(cssRoot, 'components', '_shared', 'host-base.css'), tmpBase);
-  await bundleCss(join(cssRoot, 'components', '_shared', 'scrollbars.css'), tmpScroll);
+  await bundleCss(join(cssRoot, 'core', 'host-base.css'), tmpBase);
+  await bundleCss(join(cssRoot, 'core', 'scrollbars.css'), tmpScroll);
   await bundleJs(join(coreRoot, 'base-sheets.ts'), outBase, [], kitDocsBanner(), {
     __IS_HOST_BASE_CSS__: JSON.stringify(await readFile(tmpBase, 'utf8')),
     __IS_SCROLLBARS_CSS__: JSON.stringify(await readFile(tmpScroll, 'utf8')),
@@ -286,12 +245,6 @@ for (const name of sharedImports) {
   console.log(`  ${'_shared/base-sheets.min.js'.padEnd(28)} js  (hojas base compartidas)`);
 }
 
-for (const raw of localPartials) {
-  const { from, to } = JSON.parse(raw);
-  await mkdir(join(dist, dirname(to)), { recursive: true });
-  await bundleCss(from, join(dist, to));
-  console.log(`  ${to.padEnd(28)} css (parcial de carpeta)`);
-}
 
 // `src/core/` se publica en las DOS formas, y no es redundancia:
 //   .js  para quien lo ejecute (lo importan los componentes minificados).
@@ -322,14 +275,14 @@ for (const raw of localPartials) {
     // `adoptCss` resuelve `./host-base.css` y `./scrollbars.css` contra la URL
     // de su propio modulo. Con el core inlineado eso cae en la carpeta del
     // componente; emitirlas tambien aqui cubre el consumo directo del core.
-    await bundleCss(join(cssRoot, 'components', '_shared', 'scrollbars.css'), join(outCore, 'scrollbars.css'));
-    await bundleCss(join(cssRoot, 'components', '_shared', 'host-base.css'), join(outCore, 'host-base.css'));
+    await bundleCss(join(cssRoot, 'core', 'scrollbars.css'), join(outCore, 'scrollbars.css'));
+    await bundleCss(join(cssRoot, 'core', 'host-base.css'), join(outCore, 'host-base.css'));
     console.log('  core/                     .js + .ts (base para extender)');
   }
 }
 
-const scrollbarsIn = join(cssRoot, 'components', '_shared', 'scrollbars.css');
-const hostBaseIn = join(cssRoot, 'components', '_shared', 'host-base.css');
+const scrollbarsIn = join(cssRoot, 'core', 'scrollbars.css');
+const hostBaseIn = join(cssRoot, 'core', 'host-base.css');
 const emittedFolders = new Set();
 
 for (const inFile of entries) {

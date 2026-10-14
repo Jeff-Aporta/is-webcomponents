@@ -1,4 +1,4 @@
-@import url('../_shared/modal-chrome.css');
+@use '../../core/modal-chrome';
 
 /* <iswc-dialog> — modal accesible. */
 
@@ -72,7 +72,7 @@
   outline: none;
 }
 
-/* .header / .title / .body / .footer → _shared/modal-chrome.css */
+/* .header / .title / .body / .footer → core/modal-chrome.scss */
 
 .header-actions {
   display: flex;

@@ -1,7 +1,7 @@
 /* <iswc-confirm-delete> — confirmación destructiva que se desbloquea sólo
    cuando el usuario re-escribe la clave del registro. El backdrop, la caja,
    el radio, la sombra y el scroll los pone el <iswc-dialog> interno (y
-   _shared/modal-chrome.css a través de él). Aquí sólo queda lo propio del
+   core/modal-chrome.scss a través de él). Aquí sólo queda lo propio del
    contenido. */
 
 :host {

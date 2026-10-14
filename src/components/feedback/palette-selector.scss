@@ -1,3 +1,4 @@
+@use '../../core/focus-ring';
 /* <iswc-palette-selector> — wrapper ligero + trigger slot-friendly.
  *
  * Convenciones:
@@ -13,7 +14,6 @@
  * - Dropdown: theme-aware via tokens --iswc-*.
  */
 
-@import url('../_shared/focus-ring.css');
 
 :host {
   display: inline-flex;
@@ -70,7 +70,7 @@
   min-height: 0;
   min-width: 6.8em;
 
-  /* el foco lo pone .iswc-focus-ring (_shared/focus-ring.css) */
+  /* el foco lo pone .iswc-focus-ring (core/focus-ring.scss) */
   &:hover { filter: brightness(1.05); }
   &:active { transform: translateY(1px); }
   &[hidden] { display: none !important; }

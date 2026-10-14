@@ -1,4 +1,4 @@
-@import url("../_shared/popover-panel.css");
+@use '../../core/popover-panel';
 :host {
   /* Perillas del componente: nombre completo `--iswc-dropdown-item-*` para que
      no colisionen por herencia con las de otros componentes. */

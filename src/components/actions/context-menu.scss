@@ -1,12 +1,11 @@
-@charset "UTF-8";
+@use '../../core/popover-panel';
 /* iswc-context-menu */
-@import url("../_shared/popover-panel.css");
 :host {
   display: contents;
 }
 
 /* Mismo chrome de superficie flotante que iswc-dropdown / iswc-dropdown-item
-   (ver _shared/popover-panel.css): borde, radio y sombra vía los tokens
+   (ver core/popover-panel.scss): borde, radio y sombra vía los tokens
    --iswc-popover-radius / --iswc-popover-shadow. */
 .panel {
   border: 1px solid var(--iswc-border);
