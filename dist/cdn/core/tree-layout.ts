@@ -1,0 +1,381 @@
+/**
+ * Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de
+ * parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).
+ * Mismo estilo que `node-link-layout.js`: entrada/salida en objetos planos,
+ * snap a 8px salvo cuando rompe el teselado exacto (squarify).
+ */
+
+import { snapDiagramGrid } from './diagram-grid.js';
+import type { RawNode, TreeNode, TreeNodeOf, TreeMeasure, TreeMeasureOf, LayoutEntry, LayoutTreeOpts, PositionedTreeNode, LayoutTreeResult, LayoutRadialOpts, LayoutRadialResult, SquarifyItem, SquarifyResult } from "./schemas/tree-layout.schemas.js";
+/** Nodo crudo del que parte `buildTree`. */
+
+/** Nodo del árbol construido por `buildTree`. */
+
+/**
+ * Arma un árbol a partir de un array plano `[{id, parent, ...}]`.
+ * Tolera: múltiples raíces (se envuelven en una raíz sintética `__root__`),
+ * un `parent` que no existe (el nodo se vuelve raíz) y ciclos de parentesco
+ * (se cortan por el primer back-edge detectado — nunca entra en loop infinito).
+ */
+export function buildTree<T extends RawNode>(nodes: readonly T[]): TreeNodeOf<T> {
+  const map = new Map<string, TreeNodeOf<T>>();
+  for (const raw of nodes ?? []) {
+    const id = String(raw.id);
+    const { id: _id, parent, children: _children, ...resto } = raw;
+    map.set(id, { ...resto, id, parent, children: [] });
+  }
+
+  // Resuelve el padre "efectivo" de cada nodo con DFS coloreado (blanco/gris/negro),
+  // igual que assignLayers en node-link-layout: un back-edge (padre en curso, gris)
+  // es un ciclo y se corta ahí, tratando al nodo como raíz.
+  const color = new Map<string, number>();
+  for (const id of map.keys()) color.set(id, 0);
+  const effectiveParent = new Map<string, string | null>();
+
+  function resolveParent(id: string): string | null {
+    if (color.get(id) === 2) return effectiveParent.get(id) ?? null;
+    color.set(id, 1);
+    const node = map.get(id)!;
+    const rawParent = node.parent != null ? String(node.parent) : null;
+    let parentId: string | null = rawParent && rawParent !== id && map.has(rawParent) ? rawParent : null;
+    if (parentId && color.get(parentId) === 1) {
+      // back-edge: cerraría un ciclo -> se descarta, este nodo pasa a ser raíz.
+      parentId = null;
+    } else if (parentId) {
+      resolveParent(parentId);
+    }
+    effectiveParent.set(id, parentId);
+    color.set(id, 2);
+    return parentId;
+  }
+  for (const id of map.keys()) resolveParent(id);
+
+  const roots: TreeNodeOf<T>[] = [];
+  for (const [id, node] of map) {
+    const p = effectiveParent.get(id);
+    if (p) map.get(p)!.children.push(node);
+    else roots.push(node);
+  }
+
+  if (roots.length === 1) return roots[0]!;
+  // Raíz sintética: no trae los campos del crudo `T` (todos opcionales en `TreeNodeOf`); TS no
+  // puede probar la asignación a un `Partial<Omit<T, …>>` genérico, de ahí la aserción.
+  return { id: '__root__', synthetic: true, children: roots } as TreeNodeOf<T>;
+}
+
+/* ───────────────────────── layoutTree (tidy tree) ───────────────────────── */
+
+const DEFAULT_MEASURE: TreeMeasure = () => ({ w: 80, h: 32 });
+
+/** Entrada intermedia del layout tidy: contiene su subárbol de hijos. */
+
+/** Construye la lista plana de entradas de layout (depth, tamaño medido, hijos). */
+function flattenForLayout<N extends { id: string; children: N[] }>(root: N, measure?: TreeMeasureOf<N>): { entries: LayoutEntry[]; rootEntry: LayoutEntry | null } {
+  const entries: LayoutEntry[] = [];
+  const visited = new Set<TreeNode>();
+  function build(node: N, depth: number): LayoutEntry | null {
+    if (visited.has(node)) return null; // defensivo: nunca debería ocurrir en un árbol
+    visited.add(node);
+    const size = measure ? measure(node) : DEFAULT_MEASURE(node);
+    const entry: LayoutEntry = { id: node.id, depth, w: size.w, h: size.h, children: [], extent: 0, childrenExtent: 0, crossStart: 0 };
+    entries.push(entry);
+    for (const c of node.children || []) {
+      const ce = build(c, depth + 1);
+      if (ce) entry.children.push(ce);
+    }
+    return entry;
+  }
+  const rootEntry = build(root, 0);
+  return { entries, rootEntry };
+}
+
+/**
+ * Layout de árbol "tidy" (estilo Reingold–Tilford simplificado): reserva por
+ * subárbol el máximo entre su propio tamaño y la suma de sus hijos, así los
+ * hermanos nunca se solapan aunque el nodo padre sea más grande que sus hijos.
+ */
+export function layoutTree<N extends { id: string; children: N[] }>(root: N, opts: Omit<LayoutTreeOpts, 'measure'> & { measure?: TreeMeasureOf<N> } = {}): LayoutTreeResult {
+  const { direction = 'LR', levelGap = 56, siblingGap = 16, measure } = opts;
+  const swapAxes = direction === 'LR' || direction === 'RL';
+  const mirrorMain = direction === 'BT' || direction === 'RL';
+
+  const { entries, rootEntry } = flattenForLayout(root, measure);
+  if (!rootEntry) return { nodes: [], width: 0, height: 0 };
+
+  const mainSize = (e: LayoutEntry) => (swapAxes ? e.w : e.h);
+  const crossSize = (e: LayoutEntry) => (swapAxes ? e.h : e.w);
+
+  const maxDepth = entries.reduce((m: number, e) => Math.max(m, e.depth), 0);
+  const depthMain = new Array<number>(maxDepth + 1).fill(0);
+  for (const e of entries) depthMain[e.depth] = Math.max(depthMain[e.depth]!, mainSize(e));
+  const depthOffset = new Array<number>(maxDepth + 1).fill(0);
+  let cursor = 0;
+  for (let d = 0; d <= maxDepth; d++) {
+    depthOffset[d] = cursor;
+    cursor += depthMain[d]! + levelGap;
+  }
+  const totalMain = Math.max(0, cursor - levelGap);
+
+  // Reserva por subárbol (extent): el mayor entre el tamaño propio y la suma
+  // de las reservas de los hijos (+ huecos). Garantiza que ningún hermano,
+  // ni sus descendientes, se solape con otro aunque el padre sea "gordo".
+  function computeExtent(entry: LayoutEntry): number {
+    if (!entry.children.length) {
+      entry.childrenExtent = 0;
+      entry.extent = crossSize(entry);
+      return entry.extent;
+    }
+    let sum = 0;
+    entry.children.forEach((c: LayoutEntry, i: number) => {
+      sum += computeExtent(c);
+      if (i > 0) sum += siblingGap;
+    });
+    entry.childrenExtent = sum;
+    entry.extent = Math.max(crossSize(entry), sum);
+    return entry.extent;
+  }
+  computeExtent(rootEntry);
+
+  function assignPositions(entry: LayoutEntry, offset: number): void {
+    if (!entry.children.length) {
+      entry.crossStart = offset + (entry.extent - crossSize(entry)) / 2;
+      return;
+    }
+    const childrenStart = offset + (entry.extent - entry.childrenExtent) / 2;
+    let childCursor = childrenStart;
+    for (const c of entry.children) {
+      assignPositions(c, childCursor);
+      childCursor += c.extent + siblingGap;
+    }
+    const first = entry.children[0]!;
+    const last = entry.children[entry.children.length - 1]!;
+    const firstCenter = first.crossStart + crossSize(first) / 2;
+    const lastCenter = last.crossStart + crossSize(last) / 2;
+    entry.crossStart = (firstCenter + lastCenter) / 2 - crossSize(entry) / 2;
+  }
+  assignPositions(rootEntry, 0);
+
+  const outNodes: PositionedTreeNode[] = entries.map((e) => {
+    const mainStart = depthOffset[e.depth] ?? 0;
+    let x: number;
+    let y: number;
+    if (!swapAxes) { x = e.crossStart; y = mainStart; } else { x = mainStart; y = e.crossStart; }
+    return { id: e.id, x, y, w: e.w, h: e.h, depth: e.depth };
+  });
+
+  if (mirrorMain) {
+    for (const n of outNodes) {
+      if (!swapAxes) n.y = totalMain - n.y - n.h;
+      else n.x = totalMain - n.x - n.w;
+    }
+  }
+
+  // Normaliza a coordenadas no negativas (el centrado de padres puede desplazar
+  // ligeramente hacia negativos cuando un nodo hoja es más chico que su padre).
+  let minX = 0;
+  let minY = 0;
+  for (const n of outNodes) {
+    minX = Math.min(minX, n.x);
+    minY = Math.min(minY, n.y);
+  }
+  if (minX < 0 || minY < 0) {
+    for (const n of outNodes) { n.x -= minX; n.y -= minY; }
+  }
+
+  for (const n of outNodes) { n.x = snapDiagramGrid(n.x); n.y = snapDiagramGrid(n.y); }
+
+  let width = 0;
+  let height = 0;
+  for (const n of outNodes) {
+    width = Math.max(width, n.x + n.w);
+    height = Math.max(height, n.y + n.h);
+  }
+
+  return { nodes: outNodes, width, height };
+}
+
+/* ───────────────────────── layoutRadialTree ───────────────────────── */
+
+/**
+ * Layout radial: anillos concéntricos por profundidad, ángulo repartido
+ * proporcional a la cantidad de hojas de cada subárbol (como un dendrograma
+ * circular). Ideal para mindmaps.
+ */
+export function layoutRadialTree<N extends { id: string; children: N[] }>(root: N, opts: Omit<LayoutRadialOpts, 'measure'> & { measure?: TreeMeasureOf<N> } = {}): LayoutRadialResult {
+  const { radiusStep = 90, measure } = opts;
+  const { entries, rootEntry } = flattenForLayout(root, measure);
+  if (!rootEntry) return { nodes: [], width: 0, height: 0, cx: 0, cy: 0 };
+
+  function countLeaves(entry: LayoutEntry): number {
+    if (!entry.children.length) { entry.leaves = 1; return 1; }
+    entry.leaves = entry.children.reduce((s: number, c: LayoutEntry) => s + countLeaves(c), 0);
+    return entry.leaves;
+  }
+  countLeaves(rootEntry);
+
+  function assignAngle(entry: LayoutEntry, a0: number, a1: number): void {
+    if (!entry.children.length) {
+      entry.angle = (a0 + a1) / 2;
+      return;
+    }
+    let cur = a0;
+    const span = a1 - a0;
+    for (const c of entry.children) {
+      const share = (c.leaves! / entry.leaves!) * span;
+      assignAngle(c, cur, cur + share);
+      cur += share;
+    }
+    const first = entry.children[0]!;
+    const last = entry.children[entry.children.length - 1]!;
+    entry.angle = (first.angle! + last.angle!) / 2;
+  }
+  assignAngle(rootEntry, 0, Math.PI * 2);
+
+  const maxDepth = entries.reduce((m: number, e) => Math.max(m, e.depth), 0);
+
+  // Radio por profundidad, calculado anillo por anillo: un radio fijo
+  // (depth * radiusStep) ignora el tamaño real de las etiquetas — un anillo
+  // con texto largo puede chocar contra el anterior, y la asignación angular
+  // (proporcional a hojas, no a ancho tangencial) puede dejar dos hermanos
+  // encimados en el mismo anillo. Cada anillo parte de radiusStep + la mitad
+  // del nodo más grande del anillo anterior y de sí mismo, y si aun así se
+  // solapa entre sí, crece hasta que no.
+  const byDepth = new Map<number, LayoutEntry[]>();
+  for (const e of entries) {
+    if (!byDepth.has(e.depth)) byDepth.set(e.depth, []);
+    byDepth.get(e.depth)!.push(e);
+  }
+
+  function maxHalfExtent(ring: readonly LayoutEntry[]): number {
+    return ring.reduce((m: number, e) => Math.max(m, Math.max(e.w, e.h) / 2), 0);
+  }
+
+  function ringOverlapsAt(ring: readonly LayoutEntry[], r: number): boolean {
+    const boxes = ring.map((e) => ({
+      x: r * Math.cos(e.angle!) - e.w / 2, y: r * Math.sin(e.angle!) - e.h / 2, w: e.w, h: e.h,
+    }));
+    for (let i = 0; i < boxes.length; i++) {
+      for (let j = i + 1; j < boxes.length; j++) {
+        const a = boxes[i]!;
+        const b = boxes[j]!;
+        if (a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y) return true;
+      }
+    }
+    return false;
+  }
+
+  const radiusAtDepth: number[] = [0];
+  for (let d = 1; d <= maxDepth; d++) {
+    const ring = byDepth.get(d) ?? [];
+    const prevHalf = maxHalfExtent(byDepth.get(d - 1) ?? []);
+    const curHalf = maxHalfExtent(ring);
+    let r = (radiusAtDepth[d - 1] ?? 0) + radiusStep + prevHalf + curHalf;
+    let guard = 0;
+    while (ringOverlapsAt(ring, r) && guard < 32) {
+      r += radiusStep / 2;
+      guard += 1;
+    }
+    radiusAtDepth[d] = r;
+  }
+
+  // El lienzo parte del centro del anillo MÁS externo + la mitad de la DIAGONAL
+  // del nodo más grande: antes solo sumaba 60 px al centro del anillo y un nodo
+  // largo del anillo exterior (o de cualquier anillo) se salía del viewBox por
+  // el lado que apuntara (p. ej. hojas ~150 px en ángulo π quedaban a x negativa).
+  const maxDiagHalf = entries.reduce((m: number, e) => Math.max(m, Math.hypot(e.w, e.h) / 2), 0);
+  const cx = Math.max(radiusStep, (radiusAtDepth[maxDepth] ?? 0) + maxDiagHalf + 48);
+  const cy = cx;
+
+  const outNodes: PositionedTreeNode[] = entries.map((e) => {
+    const r = radiusAtDepth[e.depth] ?? 0;
+    const x = snapDiagramGrid(cx + r * Math.cos(e.angle!) - e.w / 2);
+    const y = snapDiagramGrid(cy + r * Math.sin(e.angle!) - e.h / 2);
+    return { id: e.id, x, y, w: e.w, h: e.h, depth: e.depth };
+  });
+
+  return { nodes: outNodes, width: cx * 2, height: cy * 2, cx, cy };
+}
+
+/* ───────────────────────── squarify (treemap) ───────────────────────── */
+
+/** Peor aspect-ratio (más alejado de 1) de una fila candidata. Bruls/Huizing/van Wijk. */
+function worst(rowAreas: readonly number[], rowSum: number, shortSide: number): number {
+  const rowMax = Math.max(...rowAreas);
+  const rowMin = Math.min(...rowAreas);
+  const s2 = rowSum * rowSum;
+  const w2 = shortSide * shortSide;
+  return Math.max((w2 * rowMax) / s2, s2 / (w2 * rowMin));
+}
+
+/** Item crudo del squarify: id + valor numérico. */
+
+/** Rectángulo teselado por squarify. */
+
+/**
+ * Treemap "squarified" (Bruls/Huizing/van Wijk): tesela exactamente la caja
+ * dada con rectángulos de aspect-ratio cercano a 1. `items` deben venir
+ * ordenados descendente por `value` (se re-ordenan igual por seguridad).
+ */
+export function squarify(items: readonly SquarifyItem[], x: number, y: number, w: number, h: number): SquarifyResult[] {
+  const sorted = [...(items ?? [])]
+    .filter((it) => Number(it.value) > 0)
+    .sort((a, b) => b.value - a.value);
+  if (!sorted.length || w <= 0 || h <= 0) return [];
+
+  const total = sorted.reduce((s, it) => s + it.value, 0);
+  const scale = (w * h) / total;
+  type Remaining = { item: SquarifyItem; area: number };
+  let remaining: Remaining[] = sorted.map((item) => ({ item, area: item.value * scale }));
+
+  const results: SquarifyResult[] = [];
+  let rx = x;
+  let ry = y;
+  let rw = w;
+  let rh = h;
+
+  while (remaining.length) {
+    const shortSide = Math.min(rw, rh);
+    let row: Remaining[] = [remaining[0]!];
+    let rowSum = remaining[0]!.area;
+    let i = 1;
+    while (i < remaining.length) {
+      const candidate = remaining[i]!;
+      const nextSum = rowSum + candidate.area;
+      const currentWorst = worst(row.map((r) => r.area), rowSum, shortSide);
+      const nextWorst = worst([...row.map((r) => r.area), candidate.area], nextSum, shortSide);
+      if (nextWorst <= currentWorst) {
+        row.push(candidate);
+        rowSum = nextSum;
+        i++;
+      } else {
+        break;
+      }
+    }
+
+    const rowLen = rowSum / shortSide;
+    if (rw >= rh) {
+      // Fila = columna vertical de ancho `rowLen`, apilada dentro de la altura rh.
+      let cy = ry;
+      for (const r of row) {
+        const itemH = r.area / rowLen;
+        results.push({ ...r.item, x: rx, y: cy, w: rowLen, h: itemH });
+        cy += itemH;
+      }
+      rx += rowLen;
+      rw -= rowLen;
+    } else {
+      // Fila = banda horizontal de alto `rowLen`, apilada dentro del ancho rw.
+      let cx = rx;
+      for (const r of row) {
+        const itemW = r.area / rowLen;
+        results.push({ ...r.item, x: cx, y: ry, w: itemW, h: rowLen });
+        cx += itemW;
+      }
+      ry += rowLen;
+      rh -= rowLen;
+    }
+    remaining = remaining.slice(row.length);
+  }
+
+  return results;
+}

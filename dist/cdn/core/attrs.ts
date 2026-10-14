@@ -12,7 +12,7 @@
 /** Una entrada del mapa: la custom property, o la property con condicion. */
 
 /** Nombres CSS con los que un consumidor puede pintar de verdad. */
-import type { StyleAttrDef, StyleAttrMap, Constructor, Ctx } from "./attrs.schemas.js";
+import type { StyleAttrDef, StyleAttrMap, Constructor, Ctx } from "./schemas/attrs.schemas.js";
 const NAMED_COLORS = new Set([
   'currentcolor', 'transparent', 'black', 'white', 'red', 'green', 'blue',
   'yellow', 'orange', 'purple', 'pink', 'gray', 'grey', 'brown', 'cyan',

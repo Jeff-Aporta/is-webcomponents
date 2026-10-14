@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/14-herramientas-de-test.md -->
+<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/14-herramientas-de-test.md -->
 # 14 — Herramientas de test: qué usar y cuándo (guía para agentes)
 
 Fuente única para ISS, ISW, el kit y toda app iswc. Las apps NO copian este texto: enlazan aquí desde
@@ -20,6 +20,8 @@ Fijado por Jeff el 2026-10-13.
 4. **Todo con cooldown, por test atómico.** Ningún procedimiento de salud corre fuera del runner común
    del kit ([07](07-pruebas-y-gate.md)): verde de 1 min = 24 h sin repetirse (x1440), un rojo corre
    siempre, memoria en `.tmp/test-cooldown.json` por id de test (nunca por lote ni por archivo). La
+   Las que gastan tokens de OpenAI se penalizan con `factorCooldown: FACTOR_OPENAI` (x3: 1 min = 72 h);
+   si el test puede inyectar el cliente, se migra a MiniMax (llave y base URL solo en el test) y queda x1.
    única puerta es `test:all` y es exactamente lo que ejecuta el sync al entregable.
 5. **Los jueces son opcionales.** Embeddings, JEV y LLM refinan donde traen ventaja real y ayudan a
    expresar un WHAT con semántica en vez de con regex/hardcode. Nunca son obligatorios, nunca

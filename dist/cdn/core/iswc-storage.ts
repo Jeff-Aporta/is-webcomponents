@@ -16,7 +16,7 @@
  * `iswc-theming-seeds`, `<clave>:paneles` de iswc-doc-layout) se copian a `iswc:<nombre>` (sin pisar
  * una nueva que ya exista) y la vieja se borra. `iswc-theme`/`iswc-palette` las absorbe `app-cfg.ts`.
  */
-import type { AreaIswc, GlobalIswcStorage, LimpiezaIswc, MigracionIswc } from './iswc-storage.schemas.js';
+import type { AreaIswc, GlobalIswcStorage, LimpiezaIswc, MigracionIswc } from './schemas/iswc-storage.schemas.js';
 
 export const ISWC_PREFIX = 'iswc:';
 
