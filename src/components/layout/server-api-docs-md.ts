@@ -331,7 +331,7 @@ export function curlDe(base: string, op: Pick<ServerApiDocsOperacion, 'ruta' | '
 }
 
 /** Color del kit por método HTTP (la única tabla: chips del índice, cabecera y botón «Enviar»). */
-export const COLOR_METODO: Readonly<Record<string, string>> = { get: 'info', post: 'success', put: 'warning', patch: 'brand', delete: 'danger' };
+export const COLOR_METODO: Readonly<Record<string, string>> = { get: 'info', post: 'success', put: 'warning', patch: 'brand', delete: 'danger', query: 'brand' };
 
 /** Color del kit por código de respuesta (401/403 se distinguen del resto de 4xx por el texto, no el color). */
 export const colorDeCodigo = (codigo: string | number): 'success' | 'warning' | 'danger' | 'neutral' => {

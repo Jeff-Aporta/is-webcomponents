@@ -20,6 +20,7 @@ import { join } from 'node:path';
 import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
 import {
   aOpenApi,
+  COLOR_METODO,
   curlDe,
   envolverClave,
   esMaterializable,
@@ -162,6 +163,7 @@ test('server-api-docs S7: parse estricto InSoft v2 (el demo lo admite; lo que no
   const pathsQ = conQuery.paths as Record<string, Record<string, unknown>>;
   pathsQ['/sistema/cfg']!.query = { ...(pathsQ['/sistema/cfg']!.get as Record<string, unknown>), summary: 'Listar con filtro en el cuerpo' };
   assert.equal(validarEstricto(conQuery).ok, true, 'el verbo QUERY (filtro en el cuerpo) es parte del contrato y un permiso puede repetirse');
+  assert.notEqual(COLOR_METODO.query ?? 'neutral', 'neutral', 'QUERY con color propio (el neutral relleno no da contraste)');
   const oa = aOpenApi(normalizarDocumentoApi(doc));
   assert.deepEqual(validarEstricto(oa), { aplica: false, ok: false, errores: [] }, 'OpenAPI 3 no aplica');
 });
