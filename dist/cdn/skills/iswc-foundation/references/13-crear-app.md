@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/13-crear-app.md -->
+<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/13-crear-app.md -->
 # 13 — `create-iswc-app` en detalle
 
 ```bash

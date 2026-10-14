@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts
+// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/sync-entregable.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/08-sync-entregable.md
 /**
  * Sync comun `_experimental` -> `_entregable` de las apps del kit (ISS, ISW).

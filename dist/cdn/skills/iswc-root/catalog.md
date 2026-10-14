@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/catalog.md -->
+<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/catalog.md -->
 # Catálogo iswc-* (inventario completo)
 
 Fuente viva: regenerar con `node scripts/sync-skill-catalog.mjs`.
@@ -130,7 +130,8 @@ Skill general: [SKILL.md](SKILL.md) · Runtime sin tag: [tools/runtime.md](tools
 | `layout/dock.md` | `<iswc-dock>` |
 | `layout/dock-item.md` | `<iswc-dock-item>` |
 | `layout/doc-layout.md` | `<iswc-doc-layout>` |
-| `layout/docs-vault.md` | `<iswc-docs-vault>` |
+| `layout/md-docs-vault.md` | `<iswc-md-docs-vault>` |
+| `layout/server-api-docs.md` | `<iswc-server-api-docs>` |
 
 ### helpers
 

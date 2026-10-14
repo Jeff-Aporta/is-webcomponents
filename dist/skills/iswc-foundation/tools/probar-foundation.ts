@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/probar-foundation.ts
+// @vendor 2026-10-13T21:35:30.252Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/tools/probar-foundation.ts
 /**
  * probar-foundation.ts — guardián del estándar: crea una app con create-iswc-app y le corre el gate.
  *
@@ -8,11 +8,22 @@
  * 2. Crea la app en un directorio temporal (tools del checkout local), `deno install`, `deno task test:all`
  *    con TEST_COOLDOWN=0. Verde = las plantillas cumplen el estándar que documentan.
  * Por defecto pinea al `PIN` del kit; `--repo`/`--sha` permiten probar contra otro repo/SHA publicado.
+ * Corre dentro del cooldown estándar (id `skills/iswc-foundation/tools/probar-foundation.ts::*`): un verde se salta
+ * duración × 1440; `--sin-cooldown` o `TEST_COOLDOWN=0` lo fuerzan.
  */
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { formatMs, testCooldownFromEnv, testId } from '../../../src/vendor-distributions/shared/testing/test-cooldown.ts';
 
 const AQUI = fileURLToPath(new URL('./', import.meta.url));
+const COOLDOWN = testCooldownFromEnv();
+const ID = testId('skills/iswc-foundation/tools/probar-foundation.ts', '*');
+const enCooldown = COOLDOWN.check(ID);
+if (enCooldown.skip) {
+  console.log(`[cooldown] ~ probar-foundation (faltan ${formatMs(enCooldown.remainingMs)}); --sin-cooldown para forzar`);
+  Deno.exit(0);
+}
+const INICIO = Date.now();
 const pasar = Deno.args.filter((a) => a.startsWith('--sha=') || a.startsWith('--repo='));
 // Pin = un SHA PUBLICADO: sin --sha se usa origin/main del kit (el PIN local puede ir por delante del remoto).
 if (!pasar.some((a) => a.startsWith('--sha='))) {
@@ -52,7 +63,10 @@ async function herramientaDeIconosLocal(app: string): Promise<number> {
   return 0;
 }
 
-if (await correr([Deno.execPath(), 'run', '-A', join(AQUI, 'manifest.ts'), '--check'], AQUI)) Deno.exit(1);
+if (await correr([Deno.execPath(), 'run', '-A', join(AQUI, 'manifest.ts'), '--check'], AQUI)) {
+  COOLDOWN.record(ID, Date.now() - INICIO, false);
+  Deno.exit(1);
+}
 const tmp = await Deno.makeTempDir({ prefix: 'iswc-foundation-' });
 const app = join(tmp, 'app-prueba');
 let code = await correr([Deno.execPath(), 'run', '-A', join(AQUI, 'create-iswc-app.ts'), app, '--prefijo=prueba', '--titulo=App de prueba', ...pasar], AQUI);
@@ -60,5 +74,6 @@ if (!code) code = await herramientaDeIconosLocal(app);
 if (!code) code = await correr([Deno.execPath(), 'install'], app);
 if (!code) code = await correr([Deno.execPath(), 'task', 'test:all'], app, { TEST_COOLDOWN: '0' });
 console.log(`\n[probar-foundation] ${code ? `ROJO (rc=${code})` : 'VERDE'} · app en ${app}`);
+COOLDOWN.record(ID, Date.now() - INICIO, !code);
 if (!Deno.args.includes('--conservar') && !code) await Deno.remove(tmp, { recursive: true });
 Deno.exit(code);

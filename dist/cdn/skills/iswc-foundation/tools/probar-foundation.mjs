@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T21:35:30.252Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs
+// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs
 // Bundle autocontenido de skills/iswc-foundation/tools/probar-foundation.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es skills/iswc-foundation/tools/probar-foundation.ts.
 
 // skills/iswc-foundation/tools/probar-foundation.ts

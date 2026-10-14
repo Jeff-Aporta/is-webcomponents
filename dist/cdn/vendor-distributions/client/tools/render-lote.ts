@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.ts
+// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lote.ts — render de un LOTE de diagramas con caché por hash (lo que ISS e ISW hacían cada uno

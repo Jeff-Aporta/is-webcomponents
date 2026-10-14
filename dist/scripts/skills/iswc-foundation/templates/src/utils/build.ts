@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T16:24:33.496Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/utils/build.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/utils/build.ts
 /**
  * build.ts — `src/js/**` y `view/**` → `dist/cdn/` (estándar iswc-foundation). Lo corre `deno task build`
  * DESPUÉS de `build:scss`.

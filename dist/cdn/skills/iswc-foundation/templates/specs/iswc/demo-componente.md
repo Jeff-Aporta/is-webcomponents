@@ -2,7 +2,7 @@
 name: demo-componente
 description: Escribir el playground .json (iswc-preview/v1) y registrar un componente en la galería de la app. Úsala al crear un componente o al cambiar su API pública.
 ---
-<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/demo-componente.md -->
+<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/demo-componente.md -->
 
 # Demo de componente (`<tag>.json` + galería)
 

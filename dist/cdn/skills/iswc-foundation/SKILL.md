@@ -5,16 +5,16 @@ description: >-
   iswc, vanilla + web components + Deno). Usar al crear una app nueva (create-iswc-app), al añadir
   componentes, vistas o demos a una app iswc, al escribir sus specs y pruebas WHAT, al actualizar
   pines o vendor del kit, al configurar build, gate de pruebas (Stagehand) o sync a entregable, o al
-  alinear una app existente (ISW, iswc-docs…) con el estándar. Todas las apps iswc deben ser
+  alinear una app existente (ISW…) con el estándar. Todas las apps iswc deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
-<!-- @vendor 2026-10-13T21:34:50.004Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/SKILL.md -->
+<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/SKILL.md -->
 
 # iswc-foundation — el estándar de las apps iswc
 
 Una app iswc es una app estática (HTML + módulos ES servidos tal cual) hecha con el kit **iswc-root**
 (`iswc-*`) y componentes propios `<prefijo>-*`, en **Deno**, sin framework ni bundler en runtime.
-Este estándar es el que siguen todas (ISW-TestPatyIA, iswc-docs, las nuevas) para que se mantengan,
+Este estándar es el que siguen todas (ISW-TestPatyIA y las nuevas) para que se mantengan,
 actualicen y escalen igual, por cualquier agente en cualquier sesión.
 
 ## 1. Crear una app: `create-iswc-app`

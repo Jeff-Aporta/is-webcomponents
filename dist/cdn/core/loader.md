@@ -149,6 +149,17 @@ await L.ensure('iswc-code', { href }); // href explícito
 L.isReady('iswc-code');                // sync
 ```
 
+## Componentes documentales
+
+Los tres viven en `layout/` y se piden por su tag: el bundle trae sus dependencias (índice, markdown,
+código, paginador, diálogo), sin listas de tags ni un segundo CDN.
+
+| Tag | Para | Ejemplo |
+| --- | --- | --- |
+| `iswc-doc-layout` | Layout documental común (navegación \| contenido \| índice) | `await L.ensure('iswc-doc-layout')` |
+| `iswc-md-docs-vault` | `docs/index.html` de un proyecto (hojas markdown como un libro) | `await L.ensure('iswc-md-docs-vault')` |
+| `iswc-server-api-docs` | `GET /api/docs` de un server (documento InSoft u OpenAPI 3, «Probar») | `await L.ensure('iswc-server-api-docs')` |
+
 ## Anti-redundancia
 
 Registro **persistente** en la página:

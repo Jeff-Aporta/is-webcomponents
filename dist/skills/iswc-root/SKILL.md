@@ -7,7 +7,7 @@ description: >-
   IswcUi / md-hydrate / response-cache, apps tipo frontend-webcomponents / tk-*,
   migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
 ---
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/SKILL.md -->
+<!-- @vendor 2026-10-14T00:34:42.553Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/SKILL.md -->
 
 # ISWC — stack obligatorio
 
@@ -37,7 +37,7 @@ Comandos tipo slash, uno por archivo en [`tools/`](tools/):
 
 ## Apps sobre el kit: estándar `iswc-foundation` (obligatorio)
 
-Toda **app** construida sobre iswc (no un componente del kit, una app: ISW, iswc-docs, las nuevas)
+Toda **app** construida sobre iswc (no un componente del kit, una app: ISW, las nuevas)
 sigue la skill [`../iswc-foundation/SKILL.md`](../iswc-foundation/SKILL.md): misma estructura, mismas
 tareas Deno, registro único de tags, vistas, demos, SCSS, Zod, pines fijos, pruebas WHAT con
 Stagehand, gate y sync. Una app nueva se crea con `create-iswc-app`, que se ejecuta directo desde la
@@ -388,7 +388,8 @@ Cada `.min.js` enlaza la guía de su fila y esta skill.
 | `<iswc-dock>` | Barra compacta de accesos frecuentes (navegación secundaria, launcher de | [layout/dock.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dock.md) |
 | `<iswc-dock-item>` | Ítem de <iswc-dock>. | [layout/dock-item.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/dock-item.md) |
 | `<iswc-doc-layout>` | Layout documental común: navegación a la izquierda, contenido al centro e índice de la página a la derecha, con scroll-spy entre ambos. | [layout/doc-layout.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/doc-layout.md) |
-| `<iswc-docs-vault>` | Lector de una documentación modular (norma documentacion-modular) como un libro: cada .md es una hoja, el README es la portada y se navega con índice, búsqueda, paso anterior/siguiente y enlaces compartibles. | [layout/docs-vault.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/docs-vault.md) |
+| `<iswc-md-docs-vault>` | Lector de una documentación modular (norma documentacion-modular) como un libro: cada .md es una hoja, el README es la portada y se navega con índice, búsqueda, paso anterior/siguiente y enlaces compartibles. | [layout/md-docs-vault.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/md-docs-vault.md) |
+| `<iswc-server-api-docs>` | Documentación interactiva de la API de un SERVER (solo servers; el ISS la sirve en GET /api/docs): valida el documento InSoft kind:"config" u OpenAPI 3 con Zod, lo pinta sobre iswc-doc-layout y deja probar cada operación con sesión. | [layout/server-api-docs.md](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/layout/server-api-docs.md) |
 
 ### helpers
 
