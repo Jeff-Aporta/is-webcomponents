@@ -3,7 +3,7 @@
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-import type { ResizeObserverEntryLike, ResizeDetail, BoxSize } from "./resize-observer.preview.schemas.js";
+import type { ResizeObserverEntryLike, ResizeDetail, BoxSize } from "./schemas/resize-observer.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 

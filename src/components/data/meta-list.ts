@@ -1,7 +1,7 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import type { MetaGroup, MetaListLayout, MetaRow } from './meta-list.schemas.js';
+import type { MetaGroup, MetaListLayout, MetaRow } from './schemas/meta-list.schemas.js';
 import '../feedback/tag.js';
 
 /**

@@ -1,18 +1,18 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveUseCaseSpec, computeUseCaseLayout } from './use-case-spec.js';
-import type { UseCaseLayout, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseResolvedSpec } from './use-case-spec.schemas.js';
+import type { UseCaseLayout, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseResolvedSpec } from './schemas/use-case-spec.schemas.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
-import type { NodeNodeEntry, LinkNodeEntry } from "./use-case-diagram.schemas.js";
+import type { NodeNodeEntry, LinkNodeEntry } from "./schemas/use-case-diagram.schemas.js";
 
 /**
  * <iswc-use-case-diagram> — diagrama de casos de uso UML en SVG, sin Mermaid.

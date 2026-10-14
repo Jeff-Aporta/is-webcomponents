@@ -17,7 +17,7 @@ import { roundOrthogonalPath, styledEdgePath } from '../../../components/_shared
 import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';
 import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/sequence-spec.ts';
 import { lineColor, paletteColor, pickThemeMode, sequencePaint } from '../../../components/diagrams/theme.ts';
-import { ErThemeJsonSchema } from '../../../components/diagrams/theme.schemas.ts';
+import { ErThemeJsonSchema } from '../../../components/diagrams/schemas/theme.schemas.ts';
 import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/diagram-styles.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');

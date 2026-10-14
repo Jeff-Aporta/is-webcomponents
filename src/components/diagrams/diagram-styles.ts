@@ -20,9 +20,9 @@
  *   styleThemeFor(nombre, tipo) — el tema ya cargado para un tipo.
  */
 import { registerErTheme } from './theme.js';
-import type { ErThemeJson } from './theme.schemas.js';
-import { ErThemeJsonSchema } from './theme.schemas.js';
-import type { DiagramStyleKind, DiagramStyleRegistry, DiagramStyleStore } from './diagram-styles.schemas.js';
+import type { ErThemeJson } from './schemas/theme.schemas.js';
+import { ErThemeJsonSchema } from './schemas/theme.schemas.js';
+import type { DiagramStyleKind, DiagramStyleRegistry, DiagramStyleStore } from './schemas/diagram-styles.schemas.js';
 
 const GLOBAL_KEY = '__iswcDiagramStyles';
 const raiz = globalThis as typeof globalThis & { [GLOBAL_KEY]?: DiagramStyleStore };

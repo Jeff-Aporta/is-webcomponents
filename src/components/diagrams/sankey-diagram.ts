@@ -2,14 +2,14 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveSankeySpec, computeSankeyLayout } from './sankey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { SankeyLayout } from "./sankey-spec.schemas.js";
-import type { NodeEntry, LinkEntry } from "./sankey-diagram.schemas.js";
+import type { SankeyLayout } from "./schemas/sankey-spec.schemas.js";
+import type { NodeEntry, LinkEntry } from "./schemas/sankey-diagram.schemas.js";
 
 /**
  * <iswc-sankey-diagram> — diagrama de Sankey en SVG, sin Mermaid.

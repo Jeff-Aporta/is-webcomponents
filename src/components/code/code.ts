@@ -50,7 +50,7 @@ import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '
 import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../_shared/code-highlight.schemas.js';
 import type { CodeFormatConfig as CodeFmtConfigShared } from '../_shared/code-format.schemas.js';
 import '../feedback/tooltip.js';
-import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IsTooltipEl, HighlightLine, HighlightResult } from "./code.schemas.js";
+import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IsTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).
 

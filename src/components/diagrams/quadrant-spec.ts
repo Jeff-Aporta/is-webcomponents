@@ -1,6 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, QuadrantSpec, QuadrantJsonOut, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxisLabel, QuadrantLayoutAxes, QuadrantLayout } from "./quadrant-spec.schemas.js";
+import type { QuadrantPoint, QuadrantGroup, QuadrantAxes, QuadrantQuadrants, QuadrantSpec, QuadrantJsonOut, PlotRect, QuadrantLayoutPoint, QuadrantLayoutQuadrant, QuadrantLayoutAxisLabel, QuadrantLayoutAxes, QuadrantLayout } from "./schemas/quadrant-spec.schemas.js";
 
 /**
  * Especificación y layout de matrices 2×2 (quadrant chart), sin Mermaid.

@@ -56,7 +56,7 @@
 /* ───────────────────────────── helpers puros ──────────────────────────── */
 
 /** Pluralización ES mínima (curso→cursos, z→ces). */
-import type { IspRecord, IspActionKey, IspColumnDef, IspServerConfig, IspConnection, IspEndpoints, IspToken, IspListaArgs, IspListaResult, IspControllerConfig, IspController, IspHttpEnvelope, MutableIspController } from "./controller-from-config.schemas.js";
+import type { IspRecord, IspActionKey, IspColumnDef, IspServerConfig, IspConnection, IspEndpoints, IspToken, IspListaArgs, IspListaResult, IspControllerConfig, IspController, IspHttpEnvelope, MutableIspController } from "./schemas/controller-from-config.schemas.js";
 export function pluralizeEs(s: string): string {
   if (!s) return s;
   const last = s.slice(-1).toLowerCase();

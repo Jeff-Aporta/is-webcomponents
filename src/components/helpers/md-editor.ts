@@ -17,7 +17,7 @@ import {
   parseApiConfig,
 } from './md-editor-api.js';
 import { hydrateMdEmbeds } from './md-hydrate.js';
-import type { HidratacionMd } from './md-hydrate.schemas.js';
+import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 // Tipos del contrato — declarados aquí localmente (en lugar de re-exportarlos
 // desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo
 // sigue siendo la documentación canónica del consumidor externo.
@@ -26,7 +26,7 @@ import '../actions/button.js';
 import '../actions/copy-button.js';
 import '../forms/switch.js';
 import '../media/icon.js';
-import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./md-editor.schemas.js";
+import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./schemas/md-editor.schemas.js";
 
 /**
  * <iswc-md-editor> — preview MD + diálogo fullscreen (edición / revisión).

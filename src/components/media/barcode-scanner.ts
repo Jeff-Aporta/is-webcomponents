@@ -2,7 +2,7 @@ import '../actions/button.js';
 import '../media/icon.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import type { BarcodeDetectorCtor, BarcodeDetectorInstance, DetectedBarcode } from "./barcode-scanner.schemas.js";
+import type { BarcodeDetectorCtor, BarcodeDetectorInstance, DetectedBarcode } from "./schemas/barcode-scanner.schemas.js";
 
 /**
  * <iswc-barcode-scanner> — BarcodeDetector sobre cámara o <img>/canvas.

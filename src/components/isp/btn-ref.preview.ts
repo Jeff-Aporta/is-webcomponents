@@ -1,5 +1,5 @@
 import { createBtnRefController } from './controller-from-config.js';
-import type { _BtnRefLike, _SelectedDetail } from "./btn-ref.preview.schemas.js";
+import type { _BtnRefLike, _SelectedDetail } from "./schemas/btn-ref.preview.schemas.js";
 
 /** `<iswc-btn-ref>` con `controller` y eventos `iswc-selected-record`. */
 

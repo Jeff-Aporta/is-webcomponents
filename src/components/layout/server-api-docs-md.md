@@ -23,7 +23,7 @@ import { validarEstricto, validarDocumentoApi, normalizarDocumentoApi } from
 ```
 
 El schema estricto vive aparte, solo con `zod`, para que un server lo vendorice tal cual:
-`src/components/layout/server-api-docs-md.schemas.ts` (`ApiDocsDocumentoSchema` y sus piezas, con sus tipos
+`src/components/layout/schemas/server-api-docs-md.schemas.ts` (`ApiDocsDocumentoSchema` y sus piezas, con sus tipos
 `z.infer`). El ISS lo baja a `src/sources/000 Base/ISU/server-api-docs-md.schemas.ts` y su controller de
 sys values lo aplica al escribir la fila `doc`.
 

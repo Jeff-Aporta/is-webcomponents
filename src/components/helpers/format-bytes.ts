@@ -1,7 +1,7 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { resolveLocale } from '../_shared/resolve-locale.js';
-import type { ByteUnit, FormatBytesOptions } from "./format-bytes.schemas.js";
+import type { ByteUnit, FormatBytesOptions } from "./schemas/format-bytes.schemas.js";
 
 /**
  * <iswc-format-bytes> — Web Component (vanilla).

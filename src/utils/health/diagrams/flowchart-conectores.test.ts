@@ -17,7 +17,7 @@ import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, uni
 import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../../components/_shared/diagram-arrow.ts';
 import { applyRadialCost, makeCostGrid } from '../../../components/_shared/diagram-grid.ts';
 import { U } from '../../../components/diagrams/flowchart-labels.ts';
-import type { FlowLayout } from '../../../components/diagrams/flowchart-spec.schemas.ts';
+import type { FlowLayout } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
 
 const DIR = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
 

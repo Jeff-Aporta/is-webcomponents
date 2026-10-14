@@ -42,10 +42,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
 
 const CTRL_TS = join(root, 'src/components/layout/preview-controls.ts');
-const CTRL_SCHEMAS_TS = join(root, 'src/components/layout/preview-controls.schemas.ts');
+const CTRL_SCHEMAS_TS = join(root, 'src/components/layout/schemas/preview-controls.schemas.ts');
 const CTLS_TS = join(root, 'src/utils/system/controles.ts');
-const CTLS_SCHEMAS_TS = join(root, 'src/utils/system/controles.schemas.ts');
-const SCHEMA = join(root, 'src/utils/system/controls/controls.schema.json');
+const CTLS_SCHEMAS_TS = join(root, 'src/utils/system/schemas/controles.schemas.ts');
+const SCHEMA = join(root, 'src/utils/system/controls.schema.json');
 
 const ctrlTs = readFileSync(CTRL_TS, 'utf8');
 const ctrlSchemasTs = readFileSync(CTRL_SCHEMAS_TS, 'utf8');

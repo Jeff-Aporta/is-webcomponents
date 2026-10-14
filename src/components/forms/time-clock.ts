@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { formatTime, from12Hour, pad, parseTime, to12Hour, toTime, uses12Hour } from '../_shared/date-utils.js';
 import { ElementBase } from '../../core/element-base.js';
-import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from "./time-clock.schemas.js";
+import type { ParsedTime, RingItem, View, Meridiem, CommitOpts, PickOpts } from "./schemas/time-clock.schemas.js";
 
 /**
  * <iswc-time-clock> — Reloj analógico para elegir hora (MUI TimeClock).

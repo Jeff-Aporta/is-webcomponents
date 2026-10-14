@@ -11,7 +11,7 @@ import './form.js';
 import './heading.js';
 import './controller-from-config.js';
 
-import type { IspRecord, IspController } from './controller-from-config.schemas.js';
+import type { IspRecord, IspController } from './schemas/controller-from-config.schemas.js';
 import {
   asStr,
   cloneRecord,
@@ -22,7 +22,7 @@ import {
   setProp,
   toGridRow,
 } from '../_shared/isp-record-utils.js';
-import type { ActionLabel, BAllowed, IconKind, FrmMode, InputElement, ButtonElement, AgGridElement, VerifyModalElement, ConfirmDeleteElement, DialogElement, DrawerElement, GridRowSelectDetail, GridCellClickDetail, PkModalField, PkModalCfg } from "./catalogo-gen.schemas.js";
+import type { ActionLabel, BAllowed, IconKind, FrmMode, InputElement, ButtonElement, AgGridElement, VerifyModalElement, ConfirmDeleteElement, DialogElement, DrawerElement, GridRowSelectDetail, GridCellClickDetail, PkModalField, PkModalCfg } from "./schemas/catalogo-gen.schemas.js";
 /**
  * <iswc-catalogo-gen> — port de `src/lib/base/CatalogoGen.svelte` (ISP).
  *

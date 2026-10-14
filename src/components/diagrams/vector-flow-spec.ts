@@ -5,8 +5,8 @@
  *
  * Doc: vector-flow.md
  */
-import { ZVectorFlow } from './vector-flow-spec.schemas.js';
-import type { TColumnaVector, TNodoVector, TTipoColumna, TTipoVector, TVectorFlow } from './vector-flow-spec.schemas.js';
+import { ZVectorFlow } from './schemas/vector-flow-spec.schemas.js';
+import type { TColumnaVector, TNodoVector, TTipoColumna, TTipoVector, TVectorFlow } from './schemas/vector-flow-spec.schemas.js';
 
 /** Lo que acepta cada tipo de columna por defecto (una nota puede comentar cualquier entidad). */
 export const ACEPTA_POR_TIPO: Record<TTipoColumna, readonly TTipoVector[]> = {

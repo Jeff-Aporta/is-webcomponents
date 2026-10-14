@@ -33,4 +33,4 @@
 
 // ──────────────────────────────── Diagram Editor ────────────────────────────────
 
-import type { DiagramTheme, DiagramGroup, Point, Rect, GridPoint, BoxSide, EdgeVariant, NodeStyleOverride, EdgeStyleOverride, ComponentType, ClassSpecClass, ClassRelationKind, ClassSpecRelation, ClassSpec, ClassLayoutSection, ClassLayoutNode, ClassLayoutEdge, ClassLayout, ErCardinality, ErSpecAttribute, ErSpecEntity, ErRouteKind, ErDashStyle, ErSpecRelation, ErSpec, ErLayoutEntity, ErLayoutEdgeMark, ErLayoutEdge, ErLayout, ErEditorState } from "./diagram-types.schemas.js";
+import type { DiagramTheme, DiagramGroup, Point, Rect, GridPoint, BoxSide, EdgeVariant, NodeStyleOverride, EdgeStyleOverride, ComponentType, ClassSpecClass, ClassRelationKind, ClassSpecRelation, ClassSpec, ClassLayoutSection, ClassLayoutNode, ClassLayoutEdge, ClassLayout, ErCardinality, ErSpecAttribute, ErSpecEntity, ErRouteKind, ErDashStyle, ErSpecRelation, ErSpec, ErLayoutEntity, ErLayoutEdgeMark, ErLayoutEdge, ErLayout, ErEditorState } from "./schemas/diagram-types.schemas.js";

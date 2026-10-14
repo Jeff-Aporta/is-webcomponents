@@ -33,7 +33,7 @@ const SANO = {
   'src/a.ts': `import 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@${A}/dist/cdn/loader.min.js';`,
   'deno.json': JSON.stringify({
     iswc: { host: 'https://jeff-aporta.github.io/mi-app/' },
-    imports: { '@iswc/x': `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/${A}/src/cdn/loader.schemas.ts` },
+    imports: { '@iswc/x': `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/${A}/src/cdn/schemas/loader.schemas.ts` },
   }),
 };
 

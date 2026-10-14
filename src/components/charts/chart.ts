@@ -6,7 +6,7 @@ import { getCategoricalColors, getFillColors } from '../_shared/chart-palette.js
 import { PathTurtle } from '../_shared/path-turtle.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, DrawMarksFn, ChartCtx } from "./chart.schemas.js";
+import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, DrawMarksFn, ChartCtx } from "./schemas/chart.schemas.js";
 
 /**
  * <iswc-chart> — motor de charts en SVG, sin dependencias.

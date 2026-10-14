@@ -1,7 +1,7 @@
 import { roundedBarRect, svgEl } from '../_shared/svg-chart-engine.js';
 import { getStatusColor } from '../_shared/chart-palette.js';
-import type { ChartCtx, ChartDataset } from './chart.schemas.js';
-import type { WaterfallKind, WaterfallBar, WaterfallDataset } from "./marks-waterfall.schemas.js";
+import type { ChartCtx, ChartDataset } from './schemas/chart.schemas.js';
+import type { WaterfallKind, WaterfallBar, WaterfallDataset } from "./schemas/marks-waterfall.schemas.js";
 
 /**
  * Marca de cascada (waterfall): cada punto es un delta sobre el acumulado,
@@ -40,7 +40,7 @@ export function waterfallBars(values: readonly (number | null | undefined)[], to
  * Adaptador: el `data` de un dataset Chart.js es `ChartDataPoint[]`
  * (números o `{x,y}`); la cascada sólo entiende escalares.
  */
-function toWaterfallInput(points: readonly import('./chart.schemas.js').ChartDataPoint[]): number[] {
+function toWaterfallInput(points: readonly import('./schemas/chart.schemas.js').ChartDataPoint[]): number[] {
   return points.map((p) => {
     if (typeof p === 'number') return p;
     if (p && typeof p === 'object' && 'y' in p) return Number(p.y);

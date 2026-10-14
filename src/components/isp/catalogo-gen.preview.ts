@@ -1,5 +1,5 @@
 import { createCatalogController } from './controller-from-config.js';
-import type { CatalogEl } from "./catalogo-gen.preview.schemas.js";
+import type { CatalogEl } from "./schemas/catalogo-gen.preview.schemas.js";
 
 /**
  * Demo <iswc-catalogo-gen> con controller JSON (acciones CRUD completas).

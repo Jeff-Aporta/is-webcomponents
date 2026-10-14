@@ -1,6 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { VennSet, VennRegion, VennSpec, VennJsonOut, VennLayoutCircle, VennLayoutRegion, VennLayout } from "./venn-spec.schemas.js";
+import type { VennSet, VennRegion, VennSpec, VennJsonOut, VennLayoutCircle, VennLayoutRegion, VennLayout } from "./schemas/venn-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de Venn, sin Mermaid.

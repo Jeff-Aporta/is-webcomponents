@@ -11,7 +11,7 @@ import {
   ScrollMemory,
   bindScrollMemoryApi,
 } from '../_shared/scroll-memory.js';
-import type { Breakpoint, BreakpointFlags, LerpwFn } from "./block-layout.schemas.js";
+import type { Breakpoint, BreakpointFlags, LerpwFn } from "./schemas/block-layout.schemas.js";
 
 /**
  * <iswc-block-layout> — port de ISP `layout/BlockLayout.svelte`.

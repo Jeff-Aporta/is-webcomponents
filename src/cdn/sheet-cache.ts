@@ -8,7 +8,7 @@
  * Uso vía loader: `L.sheets.install({ cacheName })` antes de `L.load(...)`.
  */
 
-import type { SheetCacheOpts, SheetCacheManifestOpts, SheetCacheApi } from "./sheet-cache.schemas.js";
+import type { SheetCacheOpts, SheetCacheManifestOpts, SheetCacheApi } from "./schemas/sheet-cache.schemas.js";
 const GLOBAL_KEY = '__isSheetCache';
 
 let prependInstalled = false;

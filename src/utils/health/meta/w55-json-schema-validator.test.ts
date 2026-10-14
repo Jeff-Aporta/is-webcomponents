@@ -5,7 +5,7 @@
  * Goals:
  *   - Walk every JSON under `src/components/`.
  *   - For each one, parse it against `ComponentJsonSchema` from
- *     `src/previews/_kit/component.schemas.ts`.
+ *     `src/previews/_kit/schemas/component.schemas.ts`.
  *   - Skip JSONs that use a different `$schema` (currently only the
  *     diagram theme `iswc-diagram-theme/v1`). Log them in a separate
  *     bucket so we can detect drift.
@@ -26,7 +26,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
+import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
 import { FichaSchema } from '../../section-schema.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));

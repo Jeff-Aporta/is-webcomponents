@@ -11,7 +11,7 @@
  * CDN: …/dist/cdn/helpers/response-cache.min.js
  */
 
-import type { CreateResponseCacheOpts, ClaveDeInput, CachedRow, VivoAviso, VivoOpts, ResponseCache } from "./response-cache.schemas.js";
+import type { CreateResponseCacheOpts, ClaveDeInput, CachedRow, VivoAviso, VivoOpts, ResponseCache } from "./schemas/response-cache.schemas.js";
 const LIMITE_MS_DEFAULT = 1500;
 const VIDA_MS_DEFAULT = 24 * 60 * 60 * 1000;
 

@@ -10,7 +10,7 @@ import {
 } from '../_shared/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../_shared/reflect.js';
-import type { IsRadioElement } from "./radio-group.schemas.js";
+import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
 /**
  * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño
  * del valor: los radios solo avisan con `iswc-radio-select`.

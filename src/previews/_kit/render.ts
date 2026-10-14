@@ -8,7 +8,7 @@ import type {
 } from './types.d.ts';
 import { asText } from './text-like.ts';
 import '../../components/preview/demo-section.js';
-import type { StandardTocEntry } from "./render.schemas.js";
+import type { StandardTocEntry } from "./schemas/render.schemas.js";
 
 /**
  * Base de `dist/assets/` para el token `{assets}`.

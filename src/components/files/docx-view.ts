@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../_shared/reflect.js';
 import { loadArrayBuffer, resolveFileSource } from './_shared/file-source.js';
 import { loadCdnScript, MAMMOTH_CDN } from './_shared/load-cdn.js';
-import type { MammothApi } from "./docx-view.schemas.js";
+import type { MammothApi } from "./schemas/docx-view.schemas.js";
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];

@@ -5,7 +5,7 @@ import '../actions/button.js';
 import '../actions/check-icon-button.js';
 import './icon.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import type { IswcCheckIconButton } from "./video.schemas.js";
+import type { IswcCheckIconButton } from "./schemas/video.schemas.js";
 
 /**
  * <iswc-video> — Web Component (vanilla).

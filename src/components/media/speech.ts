@@ -2,7 +2,7 @@ import '../actions/button.js';
 import '../media/icon.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import type { SpeechRecognitionEvent, SpeechRecognitionResultList, SpeechRecognitionResult, SpeechRecognitionAlternative, SpeechRecognitionErrorEvent, SpeechRecognitionInstance, SpeechRecognitionCtor, SpeechRecognitionConstructorBag } from "./speech.schemas.js";
+import type { SpeechRecognitionEvent, SpeechRecognitionResultList, SpeechRecognitionResult, SpeechRecognitionAlternative, SpeechRecognitionErrorEvent, SpeechRecognitionInstance, SpeechRecognitionCtor, SpeechRecognitionConstructorBag } from "./schemas/speech.schemas.js";
 
 /**
  * <iswc-speech> — SpeechRecognition (dictado) + SpeechSynthesis (lectura).

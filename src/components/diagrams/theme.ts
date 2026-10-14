@@ -8,8 +8,8 @@
 //   import { json2css, resolveErTheme } from '…/diagrams/theme.min.js'
 //   fetch('…/diagrams/themes/insoft.json')  // fuente editable
 
-import type { DiagramTheme } from './diagram-types.schemas.js';
-import type { ErThemeJson } from "./theme.schemas.js";
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { ErThemeJson } from "./schemas/theme.schemas.js";
 
 /** Contrato del JSON de tema ER (iswc-diagram-theme/v1). */
 

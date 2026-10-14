@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
-import type { RteCommandDef } from "./rte.schemas.js";
+import type { RteCommandDef } from "./schemas/rte.schemas.js";
 
 /**
  * <iswc-rte> — Editor de texto enriquecido basado en contentEditable.

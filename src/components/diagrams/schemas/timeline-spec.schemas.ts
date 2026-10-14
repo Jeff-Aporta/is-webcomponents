@@ -5,7 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { TimeScaleSchema, type TimeScale } from "../_shared/lane-layout.schemas.js";
+import { TimeScaleSchema, type TimeScale } from "../../_shared/lane-layout.schemas.js";
 
 export const TimelineOrientationSchema = z.union([z.literal('horizontal'), z.literal('vertical')]);
 export type TimelineOrientation = z.infer<typeof TimelineOrientationSchema>;

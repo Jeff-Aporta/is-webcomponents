@@ -18,7 +18,7 @@ import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
 import { mdToHtml } from '../../../components/helpers/md-lite.ts';
 import { hidratarMd, planHidratacion, tagsPresentes } from '../../../components/helpers/md-hydrate.ts';
-import type { CrearVigiaMd, NodoMd, RaizMd } from '../../../components/helpers/md-hydrate.schemas.ts';
+import type { CrearVigiaMd, NodoMd, RaizMd } from '../../../components/helpers/schemas/md-hydrate.schemas.ts';
 import { ensureElement } from '../../../cdn/ensure-element.ts';
 
 // ── Registro de custom elements mínimo (Deno no trae DOM) ──────────────────────

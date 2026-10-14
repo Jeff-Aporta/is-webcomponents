@@ -8,7 +8,7 @@
  */
 import { assert, assertEquals, assertThrows } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { validarVector, vectorAFlujo } from '../../../components/diagrams/vector-flow-spec.ts';
-import { ZVectorFlow } from '../../../components/diagrams/vector-flow-spec.schemas.ts';
+import { ZVectorFlow } from '../../../components/diagrams/schemas/vector-flow-spec.schemas.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
 
 const base = () => ({

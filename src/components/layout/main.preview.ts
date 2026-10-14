@@ -4,7 +4,7 @@
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-import type { MainEl } from "./main.preview.schemas.js";
+import type { MainEl } from "./schemas/main.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const main = document.querySelector<MainEl>('iswc-main');

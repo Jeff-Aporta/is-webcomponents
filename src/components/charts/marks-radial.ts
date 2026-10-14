@@ -1,6 +1,6 @@
 import { pathArc, polarToCartesian, svgEl } from '../_shared/svg-chart-engine.js';
-import type { ChartCtx, ChartDataset } from './chart.schemas.js';
-import type { RadialDataset, Slice } from "./marks-radial.schemas.js";
+import type { ChartCtx, ChartDataset } from './schemas/chart.schemas.js';
+import type { RadialDataset, Slice } from "./schemas/marks-radial.schemas.js";
 
 /**
  * Marks radiales (pie, doughnut, polarArea, radar).

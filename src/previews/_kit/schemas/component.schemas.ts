@@ -1,5 +1,5 @@
 /**
- * src/previews/_kit/component.schemas.ts — Canonical Zod schema for component JSONs.
+ * src/previews/_kit/schemas/component.schemas.ts — Canonical Zod schema for component JSONs.
  *
  * This is the SINGLE SOURCE OF TRUTH for the structure of every
  * `src/components/.../*.json` file (component preview definitions under

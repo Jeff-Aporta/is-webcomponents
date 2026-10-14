@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { Viewport, DragState, TileCfg } from "./maps.schemas.js";
+import type { Viewport, DragState, TileCfg } from "./schemas/maps.schemas.js";
 
 /** Viewport geográfico (lon/lat) usado por <iswc-maps>. */
 

@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import { niceTicks, scaleLinear, svgEl } from '../_shared/svg-chart-engine.js';
-import type { HeatmapCfg } from "./heatmap.schemas.js";
+import type { HeatmapCfg } from "./schemas/heatmap.schemas.js";
 
 /** Config leída del slot JSON. */
 

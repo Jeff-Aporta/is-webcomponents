@@ -5,7 +5,7 @@
  * Este módulo sirve como helper suelto si la app no quiere el loader completo.
  */
 
-import type { EnsureElementOpts } from "./ensure-element.schemas.js";
+import type { EnsureElementOpts } from "./schemas/ensure-element.schemas.js";
 
 /** Pedidos por `tag|href`: en vuelo o ya resueltos con éxito (nunca se repite una carga lograda). */
 const inflight = new Map<string, Promise<boolean>>();

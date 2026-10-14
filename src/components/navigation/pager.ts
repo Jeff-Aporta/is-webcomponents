@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emitCancelable } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import type { PagerDirection, PagerNavigateDetail } from './pager.schemas.js';
+import type { PagerDirection, PagerNavigateDetail } from './schemas/pager.schemas.js';
 
 /**
  * <iswc-pager> — paso a la página anterior / siguiente con el título de cada una

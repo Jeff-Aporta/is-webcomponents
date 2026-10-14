@@ -1,6 +1,6 @@
 import { roundedBarRect, pathLine, pathArea, svgEl } from '../_shared/svg-chart-engine.js';
-import type { ChartCtx, ChartDataset } from './chart.schemas.js';
-import type { MarksDataset, ProjectedPoint, XYPoint, CurveKind } from "./marks-cartesian.schemas.js";
+import type { ChartCtx, ChartDataset } from './schemas/chart.schemas.js';
+import type { MarksDataset, ProjectedPoint, XYPoint, CurveKind } from "./schemas/marks-cartesian.schemas.js";
 
 /**
  * Marks cartesianas (bar, line, scatter, bubble).

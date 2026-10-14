@@ -1,6 +1,6 @@
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonOut, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "./journey-spec.schemas.js";
+import type { JourneyPhase, JourneyStep, JourneyScale, JourneySpec, JourneyJsonOut, JourneyPlotRect, JourneyLayoutStep, JourneyLayoutPhase, JourneyLayoutGridLine, JourneyLayout } from "./schemas/journey-spec.schemas.js";
 
 /**
  * Especificación y layout de mapas de recorrido (user journey), sin Mermaid.

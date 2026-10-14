@@ -39,7 +39,7 @@
  * overlays).
  */
 import type { PreviewDefinition } from './types.d.ts';
-import type { LoadForResult, LoaderLike } from './load-for.schemas.ts';
+import type { LoadForResult, LoaderLike } from './schemas/load-for.schemas.ts';
 
 /** Filtra `def.loads` quedándose solo con strings no-vacíos. */
 export function normalizeLoads(def: PreviewDefinition): string[] {

@@ -1,7 +1,7 @@
 import components from '../manifest.js';
 import { leerAppCfg } from '../core/app-cfg.js';
 import { PALETTES } from '../styles/palette-build.js';
-import { type PaletteConfig } from '../styles/palette-build.schemas.js';
+import { type PaletteConfig } from '../styles/schemas/palette-build.schemas.js';
 import type { ComponentManifestItem } from '../manifest.schemas.js';
 import { hasControlledPreview, hasCachedPreview, loadPreview } from '../previews/registry.js';
 import { collectIsTags, GALLERY_CHROME_TAGS } from '../cdn/collect-iswc-tags.js';
@@ -10,7 +10,7 @@ import {
   removeComponentPrefs,
   setComponentPrefs,
 } from '../components/_shared/prefs.js';
-import type { GalleryState, ThemeName, PaletteName, CategoryMeta, CatalogItem, ThemeToggleElement, PaletteSelectorElement, PreviewLike, PreviewHostElement, SplitPanelElement, FrameElement, DrawerElement, LoaderLike } from "./app.schemas.js";
+import type { GalleryState, ThemeName, PaletteName, CategoryMeta, CatalogItem, ThemeToggleElement, PaletteSelectorElement, PreviewLike, PreviewHostElement, SplitPanelElement, FrameElement, DrawerElement, LoaderLike } from "./schemas/app.schemas.js";
 
 /* ──────────────────────────── Tipos locales ───────────────────────────── */
 

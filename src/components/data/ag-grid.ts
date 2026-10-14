@@ -103,7 +103,7 @@ import { getCellValue } from './datagrid-core/value-formatter.js';
 import { rowsToCsv } from './datagrid-core/csv-export.js';
 import { createGridModel } from './datagrid-core/grid-model.js';
 import type { ColumnDef, ColumnState, RowData, RowNode, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './datagrid-core/types.schemas.js';
-import type { ColumnDefWithActions, ActionDef, ColumnStateWithSticky, CellEditDetail, CellClickDetail, RowSelectDetail, SortChangeDetail, FilterChangeDetail, ActionEventDetail, ColumnPinDetail, PageChangeDetail, StateSavedDetail } from "./ag-grid.schemas.js";
+import type { ColumnDefWithActions, ActionDef, ColumnStateWithSticky, CellEditDetail, CellClickDetail, RowSelectDetail, SortChangeDetail, FilterChangeDetail, ActionEventDetail, ColumnPinDetail, PageChangeDetail, StateSavedDetail } from "./schemas/ag-grid.schemas.js";
 
 const TEMPLATE = document.createElement('template');
 TEMPLATE.innerHTML = /* html */ `

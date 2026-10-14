@@ -2,14 +2,14 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveQuadrantSpec, computeQuadrantLayout } from './quadrant-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { QuadrantLayout, QuadrantLayoutAxisLabel } from "./quadrant-spec.schemas.js";
-import type { PointEntry } from "./quadrant-chart.schemas.js";
+import type { QuadrantLayout, QuadrantLayoutAxisLabel } from "./schemas/quadrant-spec.schemas.js";
+import type { PointEntry } from "./schemas/quadrant-chart.schemas.js";
 
 /**
  * <iswc-quadrant-chart> — matriz 2×2 en SVG, sin Mermaid.

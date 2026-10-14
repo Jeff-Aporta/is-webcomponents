@@ -1,6 +1,6 @@
 import { escapeHtml } from '../_shared/dom-utils.js';
 import { escapeJsonForScript, resolveIswcFenceTag } from './md-iswc-fences.js';
-import type { DatosCalloutMd, DatosHeadingMd, DatosPorTipoMd, ItemListaMd, OpcionesMdLite, RendererMd, RenderersMd, TabImagenMd, TipoElementoMd } from './md-lite.schemas.js';
+import type { DatosCalloutMd, DatosHeadingMd, DatosPorTipoMd, ItemListaMd, OpcionesMdLite, RendererMd, RenderersMd, TabImagenMd, TipoElementoMd } from './schemas/md-lite.schemas.js';
 
 /**
  * md-lite.js — Markdown → HTML minimalista, sin dependencias npm.

@@ -1,6 +1,6 @@
 import { TreeCustomsBase } from './_shared/tree-view/customs-base.js';
 import type { CustomsRuntime, LevelNameArgs, TNode } from './_shared/tree-view/_types.schemas.js';
-import type { DemoNode, IsTreeViewEl } from "./tree-view.preview.schemas.js";
+import type { DemoNode, IsTreeViewEl } from "./schemas/tree-view.preview.schemas.js";
 
 class DemoCustoms extends TreeCustomsBase {
   entrie = 'contenido';

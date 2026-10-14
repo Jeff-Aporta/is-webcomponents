@@ -12,7 +12,7 @@
  * - Atrás/adelante del navegador vuelven a leer `?s=` y notifican.
  * - Funciona en cualquier hosting estático (Live Server, Pages, SWA): no usa rutas del servidor.
  */
-import type { EstadoSpa, OpcionesSpaState, SpaState } from './spa-state.schemas.js';
+import type { EstadoSpa, OpcionesSpaState, SpaState } from './schemas/spa-state.schemas.js';
 
 /** Base64 URL-safe (sin `+`, `/` ni `=`) de un texto UTF-8. */
 export function b64urlEncode(texto: string): string {

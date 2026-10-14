@@ -3,7 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 
-import type { LightboxLike } from "./lightbox.preview.schemas.js";
+import type { LightboxLike } from "./schemas/lightbox.preview.schemas.js";
 function asLightbox(el: HTMLElement | null): LightboxLike | null {
   return (el as LightboxLike | null);
 }

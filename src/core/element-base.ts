@@ -31,8 +31,8 @@ import { upgradeProperties } from './element.js';
 // `attrs.ts` por si alguna subclase las necesita explícitamente.
 // import { syncStyleAttrs, styleAttrNames } from './attrs.js';
 import { styleAttrNames } from './attrs.js';
-import type { StyleAttrMap } from './attrs.schemas.js';
-import type { ElementBaseConstructor } from "./element-base.schemas.js";
+import type { StyleAttrMap } from './schemas/attrs.schemas.js';
+import type { ElementBaseConstructor } from "./schemas/element-base.schemas.js";
 
 /** Lo que la subclase puede declarar como estático. */
 

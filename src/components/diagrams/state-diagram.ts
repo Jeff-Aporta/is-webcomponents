@@ -1,20 +1,20 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveStateSpec, computeStateLayout } from './state-spec.js';
-import type { StateLayout, StateLayoutNode, StateLayoutTransition, StateResolvedSpec, StateSpec } from './state-spec.schemas.js';
+import type { StateLayout, StateLayoutNode, StateLayoutTransition, StateResolvedSpec, StateSpec } from './schemas/state-spec.schemas.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../_shared/path-turtle.js';
 import type { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import type { TSpanSpec } from '../_shared/diagram-text-wrap.schemas.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgArrowHead } from '../_shared/diagram-arrow.js';
-import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./state-diagram.schemas.js";
+import type { TurtleState, NodeNodeEntry, EdgeNodeEntry } from "./schemas/state-diagram.schemas.js";
 
 /**
  * <iswc-state-diagram> — diagrama de estados en SVG, sin Mermaid.

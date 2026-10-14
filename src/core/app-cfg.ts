@@ -13,7 +13,7 @@
  * Las llaves sueltas anteriores (`iswc-theme`, `iswc-palette`) se migran una vez y se borran.
  */
 import { iswcKey, readIswc, removeIswc, writeIswc } from './iswc-storage.js';
-import type { AppCfg, PaletaApp, TemaApp, ValorCfgApp } from './app-cfg.schemas.js';
+import type { AppCfg, PaletaApp, TemaApp, ValorCfgApp } from './schemas/app-cfg.schemas.js';
 
 const NOMBRE_CFG = 'app-cfg';
 /** Llave completa en localStorage. */

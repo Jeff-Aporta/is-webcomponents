@@ -5,7 +5,7 @@ import '../media/icon.js';
 import '../actions/share-button.js';
 import { createPanZoom } from '../_shared/pan-zoom.js';
 import { type PanZoomController } from '../_shared/pan-zoom.schemas.js';
-import type { ViewTransform } from "./lightbox.schemas.js";
+import type { ViewTransform } from "./schemas/lightbox.schemas.js";
 
 /**
  * <iswc-lightbox> — visor a pantalla completa para cualquier contenido.

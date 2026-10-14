@@ -13,9 +13,9 @@ import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { resolveErTheme, themeToDiagramTheme, clusterPalette, entityPaint, edgePaint, findOrphanEntityIds, injectThemeCss, pickThemeMode } from './theme.js';
-import { type ErThemeJson } from './theme.schemas.js';
+import { type ErThemeJson } from './schemas/theme.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
-import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./diagram-types.schemas.js";
+import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./schemas/diagram-types.schemas.js";
 
 /**
  * <iswc-er-diagram> — diagrama entidad-relación en SVG, sin Mermaid.

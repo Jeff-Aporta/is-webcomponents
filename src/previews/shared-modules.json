@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T13:12:08.713Z",
+  "generatedAt": "2026-10-14T13:52:25.561Z",
   "count": 121,
   "modules": [
     {
@@ -1390,7 +1390,7 @@
       "id": "prompt-md",
       "path": "src/components/_shared/prompt-md.ts",
       "summary": "Módulo compartido `prompt-md.ts`.",
-      "bytes": 11121,
+      "bytes": 11129,
       "exports": [
         "PROMPT_VAR_PATTERN",
         "MALFORMED_PROMPT_VAR_PATTERN",

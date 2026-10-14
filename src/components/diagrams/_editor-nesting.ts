@@ -33,7 +33,7 @@
  */
 
 import { emit } from '../../core/element.js';
-import type { NestingOpenDetail, NestingCloseDetail, NestingOptions } from "./_editor-nesting.schemas.js";
+import type { NestingOpenDetail, NestingCloseDetail, NestingOptions } from "./schemas/_editor-nesting.schemas.js";
 
 /** Profundidad máxima permitida (handoff §0, decisión cerrada). */
 export const NESTING_DEFAULT_MAX_DEPTH = 5;

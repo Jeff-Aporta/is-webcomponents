@@ -5,7 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import type { TreeNodeOf } from "../_shared/tree-layout.schemas.js";
+import type { TreeNodeOf } from "../../_shared/tree-layout.schemas.js";
 
 export const MindmapNodeSchema = z.object({
   id: z.string(),

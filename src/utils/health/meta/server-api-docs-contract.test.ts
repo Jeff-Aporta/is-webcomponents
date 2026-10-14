@@ -16,8 +16,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
+import { basename, dirname, join } from 'node:path';
+import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
 import {
   aOpenApi,
   COLOR_METODO,
@@ -31,7 +31,7 @@ import {
   validarDocumentoApi,
   validarEstricto,
 } from '../../../components/layout/server-api-docs-md.ts';
-import { ServerApiDocsModeloSchema } from '../../../components/layout/server-api-docs.schemas.ts';
+import { ServerApiDocsModeloSchema } from '../../../components/layout/schemas/server-api-docs.schemas.ts';
 
 const RAIZ = join(import.meta.dirname!, '..', '..', '..', '..');
 const BASE = join(RAIZ, 'src', 'components', 'layout', 'server-api-docs');
@@ -187,15 +187,15 @@ test('server-api-docs S8: secuencia de cada endpoint (cliente → server → per
 
 test('server-api-docs-md: módulo de dominio con su ficha y su schema estricto (solo zod, vendorizable)', () => {
   const md = join(RAIZ, 'src', 'components', 'layout', 'server-api-docs-md');
-  for (const ext of ['.ts', '.md', '.schemas.ts']) assert.ok(existsSync(md + ext), `falta server-api-docs-md${ext}`);
+  for (const ext of ['.ts', '.md', '.schemas.ts']) assert.ok(existsSync((ext === '.schemas.ts' ? join(dirname(md), "schemas", basename(md)) : md) + ext), `falta server-api-docs-md${ext}`);
   assert.match(readFileSync(`${md}.md`, 'utf8'), /^---[\s\S]*tag: iswc-server-api-docs-md[\s\S]*---/);
-  const imports = [...readFileSync(`${md}.schemas.ts`, 'utf8').matchAll(/^import .* from '([^']+)';$/gm)].map((x) => x[1]);
+  const imports = [...readFileSync(`${join(dirname(md), "schemas", basename(md))}.schemas.ts`, 'utf8').matchAll(/^import .* from '([^']+)';$/gm)].map((x) => x[1]);
   assert.deepEqual(imports, ['zod'], 'el schema estricto solo depende de zod');
   assert.ok(!existsSync(join(RAIZ, 'src', 'components', 'layout', 'server-api-docs-model.ts')), 'el nombre viejo no queda');
 });
 
 test('iswc-server-api-docs: hermanos .ts/.scss/.md/.json/.schemas.ts, ficha con frontmatter, manifest y skill', () => {
-  for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync(BASE + ext), `falta server-api-docs${ext}`);
+  for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync((ext === '.schemas.ts' ? join(dirname(BASE), "schemas", basename(BASE)) : BASE) + ext), `falta server-api-docs${ext}`);
   const ficha = readFileSync(`${BASE}.md`, 'utf8');
   assert.match(ficha, /^---[\s\S]*tag: iswc-server-api-docs[\s\S]*category: layout[\s\S]*---/);
   for (const s of ['## Propósito', '## API', '### Eventos', '## Accesibilidad', '## Reglas para LLM']) assert.ok(ficha.includes(s), `ficha: ${s}`);

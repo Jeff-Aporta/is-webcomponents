@@ -1,6 +1,6 @@
 import { adoptCss, defineElement } from '../../core/element.js';
 import { createSpaState } from '../../core/spa-state.js';
-import type { EstadoSpa, SpaState } from '../../core/spa-state.schemas.js';
+import type { EstadoSpa, SpaState } from '../../core/schemas/spa-state.schemas.js';
 // Solo tipos: el schema Zod (`MdDocsVaultListaSchema`) queda para tests y consumidores; en el bundle
 // del CDN sumaría ~330 KB al lector, así que la lista se valida aquí con un guard equivalente.
 import type {
@@ -12,7 +12,7 @@ import type {
   MdDocsVaultPageDetail,
   MdDocsVaultRender as Render,
   MdDocsVaultRenderers,
-} from './md-docs-vault.schemas.js';
+} from './schemas/md-docs-vault.schemas.js';
 import './doc-layout.js';
 import '../navigation/doc-index.js';
 import '../navigation/pager.js';

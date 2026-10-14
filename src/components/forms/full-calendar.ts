@@ -1,7 +1,7 @@
 import '../actions/button.js';
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { escapeHtml } from '../_shared/dom-utils.js';
-import type { CalEvent, View } from "./full-calendar.schemas.js";
+import type { CalEvent, View } from "./schemas/full-calendar.schemas.js";
 
 /**
  * <iswc-full-calendar> — Vista día/semana/mes con eventos.

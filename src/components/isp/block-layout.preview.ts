@@ -5,7 +5,7 @@
 
 /** `<iswc-block-layout>` con APIs específicas. */
 
-import type { _BlockLayoutLike } from "./block-layout.preview.schemas.js";
+import type { _BlockLayoutLike } from "./schemas/block-layout.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 

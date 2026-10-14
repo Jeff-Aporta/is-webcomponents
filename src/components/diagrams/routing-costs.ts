@@ -12,8 +12,8 @@
  * Convención del campo: cada nodo parte de 1; un brillo > 1 desincentiva,
  * uno < 1 incentiva; `radius` es hasta dónde llega (px) con caída lineal.
  */
-import { RoutingCostsSchema } from './component-router.schemas.js';
-import type { RoutingCosts, RoutingCostsInput } from './component-router.schemas.js';
+import { RoutingCostsSchema } from './schemas/component-router.schemas.js';
+import type { RoutingCosts, RoutingCostsInput } from './schemas/component-router.schemas.js';
 
 /** Valores por defecto del kit (los publica el build como routing-costs.json). */
 export const ROUTING_COSTS_DEFAULTS: RoutingCosts = RoutingCostsSchema.parse({

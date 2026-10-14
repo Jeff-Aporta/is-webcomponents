@@ -23,10 +23,10 @@ import {
   fillHostTemplate,
 } from '../components/_shared/cdn-ref.js';
 import { createRegistry, planLoads, commitLoads, resolveTagId, isTagCovered } from './load-plan.js';
-import { type Catalog } from './load-plan.schemas.js';
-import type { LoadJob } from "./load-plan.schemas.js";
+import { type Catalog } from './schemas/load-plan.schemas.js';
+import type { LoadJob } from "./schemas/load-plan.schemas.js";
 import { installSheetCache, getSheetCache } from './sheet-cache.js';
-import { type SheetCacheApi } from './sheet-cache.schemas.js';
+import { type SheetCacheApi } from './schemas/sheet-cache.schemas.js';
 import { ensureElement, isElementReady } from './ensure-element.js';
 import { ASSET_HASH_PARAM, ASSET_HASH_PARAM_LEGADO, lookupHash, withAssetHash } from './build/asset-url.js';
 import { readBody, writeBody, syncHashMemory } from './asset-store.js';
@@ -42,7 +42,7 @@ import {
   type Mirror,
   type PageModuleKind,
   type PageModuleSpec,
-} from './loader.schemas.js';
+} from './schemas/loader.schemas.js';
 
 declare const __IS_LOADER_CATALOG__: Catalog;
 declare const __IS_ASSET_HASHES__: Record<string, string>;

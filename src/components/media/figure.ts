@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emitCancelable } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
-import type { FigureFit, FigureOpenDetail, FigureVariant } from './figure.schemas.js';
+import type { FigureFit, FigureOpenDetail, FigureVariant } from './schemas/figure.schemas.js';
 import './theme-img.js';
 
 /**

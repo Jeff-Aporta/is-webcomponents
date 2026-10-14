@@ -24,7 +24,7 @@ import '../media/icon.js';
 import '../feedback/theme-toggle.js';
 import '../feedback/palette-selector.js';
 import '../code/code.js';
-import type { LoaderLike } from "./doc-demo.schemas.js";
+import type { LoaderLike } from "./schemas/doc-demo.schemas.js";
 
 /** CSS del shell vía aliases del loader (apps pueden override con `page-styles`). */
 const DEFAULT_PAGE_STYLES = [

@@ -3,7 +3,7 @@
  * registra el comando elegido.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-import type { PaletteEl, SelectDetail } from "./command-palette.preview.schemas.js";
+import type { PaletteEl, SelectDetail } from "./schemas/command-palette.preview.schemas.js";
 
 let paleta: PaletteEl | null = null;
 let boton: HTMLElement | null = null;

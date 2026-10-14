@@ -3,8 +3,8 @@ import { makeCostGrid, blockRect, snapPointAwayFromSide, snapDiagramGrid } from 
 import { routeOrthogonal, pixelToGrid, gridPathToSvg, buildOrthogonalPath } from '../_shared/diagram-astar.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { GridPoint } from './diagram-types.schemas.js';
-import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "./gantt-spec.schemas.js";
+import type { GridPoint } from './schemas/diagram-types.schemas.js';
+import type { GanttGroup, GanttTask, GanttSpec, GanttRow, GanttArrow, GanttTick, GanttLayout, GanttOpts } from "./schemas/gantt-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas Gantt (sin Mermaid).

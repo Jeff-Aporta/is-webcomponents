@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import type { QRInstance, QRLib } from "./qrcode.schemas.js";
+import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
 
 /**
  * <iswc-qrcode> — Generador de QR en SVG.

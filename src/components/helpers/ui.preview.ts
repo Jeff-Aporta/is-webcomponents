@@ -4,7 +4,7 @@
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
 import type { html as HtmlFn, esc as EscFn } from './ui.js';
-import type { IsUiApi } from "./ui.preview.schemas.js";
+import type { IsUiApi } from "./schemas/ui.preview.schemas.js";
 
 declare global {
   interface Window {

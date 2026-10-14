@@ -3,7 +3,7 @@
  * El cuerpo del formulario se define con html2json / json2html (`_shared/json-html.js`).
  */
 
-import type { ControlEl, ControlValue } from "./form-json.schemas.js";
+import type { ControlEl, ControlValue } from "./schemas/form-json.schemas.js";
 const CONTROL_SELECTOR = [
   'iswc-input[name]',
   'iswc-textarea[name]',

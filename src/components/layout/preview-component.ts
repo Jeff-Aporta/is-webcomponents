@@ -21,7 +21,7 @@ import type {
   ISComponentPreviewLike,
   PreviewMountContext,
 } from '../../previews/_kit/types.d.ts';
-import type { DrawerEl } from "./preview-component.schemas.js";
+import type { DrawerEl } from "./schemas/preview-component.schemas.js";
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
 const COMPACT_QUERY = '(max-width: 900px)';

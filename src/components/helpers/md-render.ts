@@ -8,8 +8,8 @@ import {
   surfaceHasRawVarTokens,
 } from '../_shared/prompt-md.js';
 import { hydrateMdEmbeds } from './md-hydrate.js';
-import type { HidratacionMd } from './md-hydrate.schemas.js';
-import type { RenderersMd } from './md-lite.schemas.js';
+import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
+import type { RenderersMd } from './schemas/md-lite.schemas.js';
 
 /**
  * <iswc-md-render> — render inline de markdown/HTML + chips {{var}}.

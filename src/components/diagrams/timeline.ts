@@ -2,13 +2,13 @@ import { adoptCss, defineElement, emit, emitCancelable } from '../../core/elemen
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { TimelineLayout } from "./timeline-spec.schemas.js";
-import type { EventEntry } from "./timeline.schemas.js";
+import type { TimelineLayout } from "./schemas/timeline-spec.schemas.js";
+import type { EventEntry } from "./schemas/timeline.schemas.js";
 
 /**
  * <iswc-timeline> — línea de tiempo de hitos en SVG, sin Mermaid.

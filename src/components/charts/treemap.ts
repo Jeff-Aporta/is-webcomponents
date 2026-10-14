@@ -1,9 +1,9 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { resolveTreemapSpec, computeTreemapLayout } from './treemap-spec.js';
-import type { TreemapSpec, TreemapLayout } from "./treemap-spec.schemas.js";
+import type { TreemapSpec, TreemapLayout } from "./schemas/treemap-spec.schemas.js";
 import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/sequence-spec.js';
-import type { DiagramTheme } from "../diagrams/diagram-types.schemas.js";
+import type { DiagramTheme } from "../diagrams/schemas/diagram-types.schemas.js";
 import { tkHueToCss } from '../_shared/tk-hue.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
@@ -42,7 +42,7 @@ class IswcTreemap extends HTMLElement {
   #mounted = false;
   #mo: MutationObserver | null = null; #themeObs: MutationObserver | null = null;
   #renderQueued: Promise<void> | false = false;
-  #nodeNodes = new Map<string, { n: import('./treemap-spec.schemas.js').TreemapLayoutNode; g: SVGElement }>();
+  #nodeNodes = new Map<string, { n: import('./schemas/treemap-spec.schemas.js').TreemapLayoutNode; g: SVGElement }>();
   #hoverId: string | null = null;
   #ownLightbox: HTMLElement | null = null;
   #ro: ResizeObserver | null = null;

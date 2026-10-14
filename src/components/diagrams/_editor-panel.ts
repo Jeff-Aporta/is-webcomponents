@@ -29,7 +29,7 @@
  */
 
 import { emit } from '../../core/element.js';
-import type { EditorPanelNodeLite, EditorPanelOptions } from "./_editor-panel.schemas.js";
+import type { EditorPanelNodeLite, EditorPanelOptions } from "./schemas/_editor-panel.schemas.js";
 
 /** Tipos compartidos por cualquier editor. La subclase los strecha. */
 

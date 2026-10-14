@@ -8,7 +8,7 @@
  * usuario (config de la app, `iswc:app-cfg`), si no el `<html>` o el default.
  */
 
-import type { DocDemoBootOpts } from "./doc-demo-boot.schemas.js";
+import type { DocDemoBootOpts } from "./schemas/doc-demo-boot.schemas.js";
 import { leerAppCfg } from "../../core/app-cfg.js";
 export function applyDocDemoBoot(opts: DocDemoBootOpts = {}): void {
   const defaultTheme = opts.defaultTheme || 'dark';

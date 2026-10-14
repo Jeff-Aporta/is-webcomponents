@@ -1,6 +1,6 @@
 import './flex-options.js';
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-import type { FloatCardLike, FlexOptionsLike } from "./float-card.preview.schemas.js";
+import type { FloatCardLike, FlexOptionsLike } from "./schemas/float-card.preview.schemas.js";
 
 export function mount(ctx: PreviewMountContext): void {
   const root = ctx.main;

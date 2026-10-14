@@ -14,7 +14,7 @@ import type {
   ISComponentPreviewLike,
 } from '../previews/_kit/types.d.ts';
 import { BRAND_DERIVE, applyBrandVars, seedCss } from '../styles/palette-build.js';
-import type { Rgb, Oklab, Seed, OklchTriplet, PersistedData, TokenMap, BuildTokensResult, ColorPicker, TextEditor, CheckboxEl } from "./theming.schemas.js";
+import type { Rgb, Oklab, Seed, OklchTriplet, PersistedData, TokenMap, BuildTokensResult, ColorPicker, TextEditor, CheckboxEl } from "./schemas/theming.schemas.js";
 
 /** Tripleta RGB lineal (0..1). */
 /** Tripleta OKLab (L, a, b). */

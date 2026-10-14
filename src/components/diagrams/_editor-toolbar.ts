@@ -28,7 +28,7 @@
  */
 
 import { emit } from '../../core/element.js';
-import type { EditorAction, EditorActionDetail, EditorToolbarOptions, ButtonDef } from "./_editor-toolbar.schemas.js";
+import type { EditorAction, EditorActionDetail, EditorToolbarOptions, ButtonDef } from "./schemas/_editor-toolbar.schemas.js";
 
 /** Acción emitida por la toolbar; el editor decide qué hacer con ella. */
 

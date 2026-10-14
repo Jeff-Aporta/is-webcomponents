@@ -2,7 +2,7 @@
  * w56-json-loads.test.ts — W56: campo `loads` para lazy loading en JSONs.
  *
  * Phase W56 introduce el campo `loads?: string[]` en
- * `ComponentJsonSchema` (src/previews/_kit/component.schemas.ts). Cada
+ * `ComponentJsonSchema` (src/previews/_kit/schemas/component.schemas.ts). Cada
  * JSON de preview declara qué otros componentes `iswc-*` necesita
  * además del propio `tag`; el render los carga con
  * `ISWebComponentsLoader.load(...loads)` antes de pintar el primer
@@ -34,7 +34,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
+import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
 import { loadFor, normalizeLoads } from '../../../previews/_kit/load-for.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));

@@ -7,11 +7,11 @@ import { routeEdges, planPorts, pointsToPath, simplifyOrthoPath, perimeterPorts 
 import { packDiagram, resolvePackingGaps, EDGE_CLEARANCE, GRID_STEP } from './component-pack.js';
 import { assignEmitterReceiverPalette } from '../_shared/diagram-edge-style.js';
 import type { Componente, Paquete } from '../_shared/diagram-tipos.schemas.js';
-import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection } from './diagram-types.schemas.js';
+import type { ClassPackage, ClassLayoutOpts, ClassLayoutSection } from './schemas/diagram-types.schemas.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind, DiagramGroup } from './diagram-types.schemas.js';
-import type { Point2D } from "./class-spec.schemas.js";
+import type { ClassSpec, ClassSpecClass, ClassSpecRelation, ClassLayout, ClassLayoutNode, ClassLayoutEdge, ClassRelationKind, DiagramGroup } from './schemas/diagram-types.schemas.js';
+import type { Point2D } from "./schemas/class-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de clases (sin Mermaid).

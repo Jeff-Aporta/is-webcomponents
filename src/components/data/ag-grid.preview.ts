@@ -3,7 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-import type { AgGridApi, IsAgGridEl } from "./ag-grid.preview.schemas.js";
+import type { AgGridApi, IsAgGridEl } from "./schemas/ag-grid.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

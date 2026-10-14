@@ -5,7 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { LabeledEdgeSchema } from "../_shared/diagram-edge-actors.schemas.js";
+import { LabeledEdgeSchema } from "../../_shared/diagram-edge-actors.schemas.js";
 
 export const SwimlaneStepKindSchema = z.union([z.literal('start'), z.literal('end'), z.literal('process'), z.literal('decision')]);
 export type SwimlaneStepKind = z.infer<typeof SwimlaneStepKindSchema>;

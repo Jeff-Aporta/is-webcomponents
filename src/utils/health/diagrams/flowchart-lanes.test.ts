@@ -20,7 +20,7 @@ import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
 import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
 import { NESTED_DEFAULT_MAX } from '../../../components/_shared/diagram-embed.ts';
 import { pathPoints } from '../../../components/_shared/diagram-arrow.ts';
-import type { FlowLayout, FlowLayoutNode } from '../../../components/diagrams/flowchart-spec.schemas.ts';
+import type { FlowLayout, FlowLayoutNode } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
 
 /** Editable del lab con sus referencias { path, query, actions } resueltas (como al exportar). */
 async function editable(url: URL): Promise<{ payload: Record<string, unknown> }> {

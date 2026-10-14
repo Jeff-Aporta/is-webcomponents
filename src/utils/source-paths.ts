@@ -8,7 +8,7 @@
  * falla (404), cae a raw.githubusercontent.
  */
 import { docsBase } from './cdn-sources.js';
-import type { ManifestEntry, SourceFile, CdnMinPaths, FetchedSource } from "./source-paths.schemas.js";
+import type { ManifestEntry, SourceFile, CdnMinPaths, FetchedSource } from "./schemas/source-paths.schemas.js";
 
 /**
  * `../../components/actions/button.js` → `components/actions/button.js`

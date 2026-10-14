@@ -3,7 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { ToonTexto, ToonControl, ToonDoc } from "./toons.schemas.js";
+import type { ToonTexto, ToonControl, ToonDoc } from "./schemas/toons.schemas.js";
 
 /** Texto/label de test con variantes (sin acentos vs con acentos). */
 

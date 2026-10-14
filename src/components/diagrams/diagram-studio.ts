@@ -5,7 +5,7 @@
  * Edit mode: iswc-split-panel + iswc-tab-group + iswc-code + iswc-share-button.
  */
 
-import type { DiagramKind, Host, CodeEl, ShareEl } from "./diagram-studio.schemas.js";
+import type { DiagramKind, Host, CodeEl, ShareEl } from "./schemas/diagram-studio.schemas.js";
 export const DIAGRAM_KINDS: readonly DiagramKind[] = [
   { kind: 'flowchart', title: 'Flujo', tag: 'iswc-flowchart', file: 'flowchart', preview: 'flowchart.json' },
   { kind: 'sequence', title: 'Secuencia', tag: 'iswc-sequence-diagram', file: 'sequence-diagram', preview: 'sequence-diagram.json' },

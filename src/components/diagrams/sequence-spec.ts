@@ -17,9 +17,9 @@ import { resolveTkHue } from '../_shared/tk-hue.js';
 import { diagramHeaderWidth } from '../_shared/diagram-header.js';
 import { fitContain, nestedMaxSize, readNodeEmbed } from '../_shared/diagram-embed.js';
 import type { EmbedBox, EmbedSize } from '../_shared/diagram-embed.schemas.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
-import type { SequenceNestedSpec, SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "./sequence-spec.schemas.js";
-import { SequenceFragmentSpecSchema } from "./sequence-spec.schemas.js";
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
+import type { SequenceNestedSpec, SequenceActorSpec, SequenceMessageSpec, SequenceAltSpec, SequenceResolvedSpec, LeadingIconToken, FlatMessage, SequenceLayoutActor, SequenceLayoutLifeline, SequenceLayoutMessage, SequenceLayoutAltBox, SequenceLayout, SequenceGroupSpec, SequenceFragmentSpec, SequenceLayoutFragment } from "./schemas/sequence-spec.schemas.js";
+import { SequenceFragmentSpecSchema } from "./schemas/sequence-spec.schemas.js";
 
 /** Ancho px estimado de una etiqueta, descontando tokens {{icon}} y sumando su ancho. */
 const ICON_INLINE_W = 16;

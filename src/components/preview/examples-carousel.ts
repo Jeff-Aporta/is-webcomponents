@@ -65,7 +65,7 @@ import '../layout/card.js';
 import '../actions/button.js';
 import '../media/icon.js';
 import '../navigation/tab-group.js';
-import type { ExampleSpec } from "./examples-carousel.schemas.js";
+import type { ExampleSpec } from "./schemas/examples-carousel.schemas.js";
 
 const OBSERVED = ['tag', 'target', 'label', 'lede', 'default-index', 'category-field'];
 

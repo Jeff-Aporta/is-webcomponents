@@ -3,7 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-import type { CustomEventWithDetail } from "./speed-dial.preview.schemas.js";
+import type { CustomEventWithDetail } from "./schemas/speed-dial.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

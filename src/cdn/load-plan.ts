@@ -3,7 +3,7 @@
  * Cada job es un `<cat>/<file>.min.js`. Categoría / `all` se expanden a tags.
  */
 
-import type { TagEntry, Catalog, LoadRegistry, LoadJob, PlanLoadsResult } from "./load-plan.schemas.js";
+import type { TagEntry, Catalog, LoadRegistry, LoadJob, PlanLoadsResult } from "./schemas/load-plan.schemas.js";
 export function resolveCategoryId(id: string, catalog: Catalog): string | null {
   const raw = String(id || '').trim().toLowerCase();
   if (!raw) return null;

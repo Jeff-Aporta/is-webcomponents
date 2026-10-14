@@ -3,7 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 
-import type { LightboxLike, PresetLike } from "./diagram-lightbox.preview.schemas.js";
+import type { LightboxLike, PresetLike } from "./schemas/diagram-lightbox.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const lb = document.getElementById('lb') as LightboxLike | null;

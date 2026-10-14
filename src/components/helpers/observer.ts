@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import type { ObserverType } from "./observer.schemas.js";
+import type { ObserverType } from "./schemas/observer.schemas.js";
 
 /**
  * <iswc-observer type="…"> — Web Component genérico para envolver

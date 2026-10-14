@@ -1,6 +1,6 @@
 import { ElementBase } from '../../core/element-base.js';
 import { adoptCss, defineElement } from '../../core/element.js';
-import type { LinearTransform } from "./float-card.schemas.js";
+import type { LinearTransform } from "./schemas/float-card.schemas.js";
 
 /**
  * g11 — UX/UI proposals:

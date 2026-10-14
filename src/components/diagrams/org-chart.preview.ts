@@ -3,7 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 
-import type { OrgSelectDetail, OrgToggleDetail } from "./org-chart.preview.schemas.js";
+import type { OrgSelectDetail, OrgToggleDetail } from "./schemas/org-chart.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const log = document.getElementById('log');

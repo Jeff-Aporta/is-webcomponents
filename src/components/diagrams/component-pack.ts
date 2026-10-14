@@ -12,7 +12,7 @@
 
 import { boundsOf } from '../_shared/diagram-grid.js';
 import type { Arista, Caja, Componente, Lado, OpcionesEmpaque, Paquete, Punto } from '../_shared/diagram-tipos.schemas.js';
-import type { ClusterColumn, GroupConv } from "./component-pack.schemas.js";
+import type { ClusterColumn, GroupConv } from "./schemas/component-pack.schemas.js";
 
 export const COL_GUTTER = 52;
 export const PKG_CORRIDOR = 72;

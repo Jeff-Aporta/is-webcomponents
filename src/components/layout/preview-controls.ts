@@ -12,7 +12,7 @@
  * Atributos:
  *   label   string — header del panel (default: "Atributos").
  */
-import type { OpcionPanel, PanelInfo, ControlPanel } from "./preview-controls.schemas.js";
+import type { OpcionPanel, PanelInfo, ControlPanel } from "./schemas/preview-controls.schemas.js";
 const CSS = `
 :host {
   display: block;

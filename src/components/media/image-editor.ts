@@ -1,5 +1,5 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import type { CropRect, DragHandle, DragState } from "./image-editor.schemas.js";
+import type { CropRect, DragHandle, DragState } from "./schemas/image-editor.schemas.js";
 
 /**
  * <iswc-image-editor> — Editor de imagen con crop, zoom y rotación.

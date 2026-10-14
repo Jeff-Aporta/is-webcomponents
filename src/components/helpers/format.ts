@@ -3,7 +3,7 @@ import { ElementBase } from '../../core/element-base.js';
 import { resolveLocale } from '../_shared/resolve-locale.js';
 import { formatBytes, toBytes } from './format-bytes.js';
 import { parseLooseDate } from './format-date.js';
-import type { NumberPreset, CurrencyPreset, AccountingPreset, FractionPreset, TextPreset, DatePreset, ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./format.schemas.js";
+import type { NumberPreset, CurrencyPreset, AccountingPreset, FractionPreset, TextPreset, DatePreset, ExcelPreset, RelativeUnit, NumberFormatKind, RelativeStyle, RelativeNumeric, TextCase, FormatType, FormatBytesOpts } from "./schemas/format.schemas.js";
 
 /**
  * <iswc-format type="…" value="…"> — Formateo con Intl + presets estilo Excel.

@@ -5,7 +5,7 @@ import type {
   PreviewMountContext,
   ISComponentPreviewLike,
 } from '../previews/_kit/types.d.ts';
-import type { LoaderCatalog, LoaderModule, SharedModuleEntry, SharedCatalogJSON, SnippetEditor } from "./ecosystem.schemas.js";
+import type { LoaderCatalog, LoaderModule, SharedModuleEntry, SharedCatalogJSON, SnippetEditor } from "./schemas/ecosystem.schemas.js";
 
 /** Snippet editable: <iswc-code>, <textarea> o <input>. */
 

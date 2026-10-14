@@ -2,14 +2,14 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveJourneySpec, computeJourneyLayout } from './journey-spec.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { inlineMdWeb, applySvgTextContent } from '../_shared/tk-inline-md.js';
 import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { JourneyLayout } from "./journey-spec.schemas.js";
-import type { StepEntry } from "./journey-map.schemas.js";
+import type { JourneyLayout } from "./schemas/journey-spec.schemas.js";
+import type { StepEntry } from "./schemas/journey-map.schemas.js";
 
 /**
  * <iswc-journey-map> — mapa de recorrido (user journey) en SVG, sin Mermaid.

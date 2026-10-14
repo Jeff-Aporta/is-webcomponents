@@ -1,7 +1,7 @@
 import { layoutNodeLink, edgeAnchor, pickSides, assignLayers, orderLayers } from '../_shared/node-link-layout.js';
 import { readNodeEmbed, embedIsNatural, fitContain, nestedMaxSize, EMBED_FALLBACK_SIZE } from '../_shared/diagram-embed.js';
 import { pathPoints, pathSinAutoCruces } from '../_shared/diagram-arrow.js';
-import type { BoxSide } from './diagram-types.schemas.js';
+import type { BoxSide } from './schemas/diagram-types.schemas.js';
 
 // `BoxSide` admite `'auto'`; los anclajes efectivos del router son siempre
 // una dirección cardinal. Estrechamos para satisfacer la firma del helper.
@@ -18,17 +18,17 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { estimateTextWidth, wrapText } from '../_shared/diagram-text-wrap.js';
 import { grafoDirigido } from '../_shared/diagram-graph.js';
-import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "./flowchart-spec.schemas.js";
+import type { CajaPuente, LadoPuente, PuertoPuente, AnchorSide, FlowDirection, FlowShape, FlowEdgeKind, FlowOverflow, LeadingIconToken, FlowExclusionZone, FlowNodeSpec, FlowEdgeSpec, FlowGroupSpec, FlowResolvedSpec, FlowLayoutNode, FlowLayoutEdge, FlowLayout, FlowLayoutOverrides, FlowLayoutOptions, FlowSizedNode, FlowPlacement, FlowPlacedNode, FlowPaint, FlowSegment, FlowPoint, FlowLaneSpec, FlowLaneDirection, FlowLayoutLane, FlowLayoutContext, FlowVar, TipoEntidad, FlowBridge } from "./schemas/flowchart-spec.schemas.js";
 import type { TPuntosRiel } from "../_shared/diagram-flow.schemas.js";
-import type { ErThemeJson } from "./theme.schemas.js";
+import type { ErThemeJson } from "./schemas/theme.schemas.js";
 import { resolverEtiquetas, U } from './flowchart-labels.js';
 import { perimeterPorts, routeEdges, simplifyOrthoPath } from './component-router.js';
 import { anchoDeComponente } from './component-spec.js';
 import { vectorAFlujo } from './vector-flow-spec.js';
 import { ROUTING_COSTS_DEFAULTS } from './routing-costs.js';
 import { oklchToHex } from '../_shared/oklch.js';
-import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from './flowchart-spec.schemas.js';
-import type { RouterEdge, RouterPort } from './component-router.schemas.js';
+import { FlowBridgeSchema, FlowVarSchema, TipoEntidadSchema } from './schemas/flowchart-spec.schemas.js';
+import type { RouterEdge, RouterPort } from './schemas/component-router.schemas.js';
 import type { Lado } from '../_shared/diagram-tipos.schemas.js';
 import type { EmbedBox } from "../_shared/diagram-embed.schemas.js";
 

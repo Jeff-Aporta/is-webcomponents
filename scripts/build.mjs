@@ -312,6 +312,12 @@ for (const raw of localPartials) {
       const fuente = await readFile(join(coreRoot, f), 'utf8');
       await writeFile(join(outCore, f), fuente.replaceAll("'../cdn/build/", "'../build/"));
     }
+    // Los tipos del core (`core/schemas/`) viajan con el .ts publicado que los importa.
+    const coreSchemas = join(coreRoot, 'schemas');
+    if (existsSync(coreSchemas)) {
+      await mkdir(join(outCore, 'schemas'), { recursive: true });
+      for (const f of await readdir(coreSchemas)) await copyFile(join(coreSchemas, f), join(outCore, 'schemas', f));
+    }
     // `adoptCss` resuelve `./host-base.css` y `./scrollbars.css` contra la URL
     // de su propio modulo. Con el core inlineado eso cae en la carpeta del
     // componente; emitirlas tambien aqui cubre el consumo directo del core.

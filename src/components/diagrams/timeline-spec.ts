@@ -1,6 +1,6 @@
 import { parseDate, timeScale, packLanes } from '../_shared/lane-layout.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
-import type { TimelineOrientation, TimelineEventSpec, TimelineGroupSpec, TimelineResolvedSpec, TimelineLayoutEvent, TimelineTick, TimelineLayout, TimelineLayoutOptions, CompressedScale } from "./timeline-spec.schemas.js";
+import type { TimelineOrientation, TimelineEventSpec, TimelineGroupSpec, TimelineResolvedSpec, TimelineLayoutEvent, TimelineTick, TimelineLayout, TimelineLayoutOptions, CompressedScale } from "./schemas/timeline-spec.schemas.js";
 
 /**
  * Especificación y layout de líneas de tiempo (sin Mermaid).

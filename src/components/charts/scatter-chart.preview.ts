@@ -3,7 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.d.ts';
-import type { ScatterChartLike } from "./scatter-chart.preview.schemas.js";
+import type { ScatterChartLike } from "./schemas/scatter-chart.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

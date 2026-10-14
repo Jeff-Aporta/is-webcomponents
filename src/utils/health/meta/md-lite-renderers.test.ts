@@ -11,7 +11,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mdToHtml } from '../../../components/helpers/md-lite.ts';
-import type { DatosPorTipoMd } from '../../../components/helpers/md-lite.schemas.ts';
+import type { DatosPorTipoMd } from '../../../components/helpers/schemas/md-lite.schemas.ts';
 
 const MD = [
   '# Título uno',

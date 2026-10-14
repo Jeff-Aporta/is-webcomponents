@@ -15,7 +15,7 @@ import type {
   PreviewBehaviorModule,
   PreviewDefinition,
 } from './_kit/types.d.ts';
-import type { CatalogEntry } from "./registry.schemas.js";
+import type { CatalogEntry } from "./schemas/registry.schemas.js";
 
 /** Mirror of an entry in catalog.ts (auto-generated). */
 

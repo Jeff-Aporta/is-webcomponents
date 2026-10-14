@@ -2,7 +2,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import './split-panel.js';
 import { readIswc, writeIswc } from '../../core/iswc-storage.js';
-import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout, SplitPanelDocLayout } from './doc-layout.schemas.js';
+import type { EntradaTocDocLayout, FuenteTocDocLayout, PanelesDocLayout, PrefsDocLayout, SplitPanelDocLayout } from './schemas/doc-layout.schemas.js';
 
 /**
  * <iswc-doc-layout> — layout documental común: navegación a la izquierda, contenido

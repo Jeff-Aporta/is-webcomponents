@@ -1,5 +1,5 @@
 import { mdToHtml } from '../helpers/md-lite.js';
-import type { OpcionesMdLite } from '../helpers/md-lite.schemas.js';
+import type { OpcionesMdLite } from '../helpers/schemas/md-lite.schemas.js';
 import type { BodySegment, VarPlaceholder } from "./prompt-md.schemas.js";
 
 /**

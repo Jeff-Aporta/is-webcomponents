@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { withStyleAttrs } from '../../core/attrs.js';
 
 import './floating.js';
-import type { FloatingElement } from "./popover.schemas.js";
+import type { FloatingElement } from "./schemas/popover.schemas.js";
 
 /**
  * <iswc-popover> — panel flotante con contenido interactivo, anclado vía `for`.

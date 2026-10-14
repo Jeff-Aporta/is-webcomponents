@@ -8,7 +8,7 @@
  * Un tag ya definido no se pide; el loader, además, no repite cargas.
  */
 
-import type { CrearVigiaMd, HidratacionMd, LoaderLike, NodoMd, RaizMd } from './md-hydrate.schemas.js';
+import type { CrearVigiaMd, HidratacionMd, LoaderLike, NodoMd, RaizMd } from './schemas/md-hydrate.schemas.js';
 
 /** Se piden apenas se pinta: pesan poco y casi siempre están a la vista. */
 const AL_PINTAR: ReadonlySet<string> = new Set([

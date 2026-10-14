@@ -4,7 +4,7 @@ import { computePosition, PLACEMENTS } from '../_shared/position.js';
 import './dropdown-item.js';
 import '../layout/divider.js';
 import { createPopupDismiss } from '../_shared/popup-dismiss.js';
-import type { Placement, DropdownItemEl } from "./dropdown.schemas.js";
+import type { Placement, DropdownItemEl } from "./schemas/dropdown.schemas.js";
 
 /** Colocacion del panel respecto al trigger. `position.js` es la fuente. */
 

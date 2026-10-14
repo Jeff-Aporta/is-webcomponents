@@ -13,9 +13,9 @@ import { wrapText, buildTspans } from '../_shared/diagram-text-wrap.js';
 import { registerDiagramKind } from './diagram-kinds.js';
 import { svgEl } from '../_shared/svg-chart-engine.js';
 import { svgIconBadge } from '../_shared/tk-icon-inline.js';
-import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./diagram-types.schemas.js";
+import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./schemas/diagram-types.schemas.js";
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
-import type { ErThemeJson } from './theme.schemas.js';
+import type { ErThemeJson } from './schemas/theme.schemas.js';
 
 /**
  * <iswc-class-diagram> — diagrama de clases UML en SVG, sin Mermaid.

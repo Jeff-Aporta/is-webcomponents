@@ -46,14 +46,14 @@
  * el bundle de producción (visible en la consola del navegador).
  */
 import { FichaSchema, inspectFicha, SECTION_IDS } from '../../utils/section-schema.ts';
-import { type Ficha, type SectionId } from '../../utils/section-schema.schemas.ts';
+import { type Ficha, type SectionId } from '../../utils/schemas/section-schema.schemas.ts';
 import type {
   PreviewDefinition,
   PreviewSection,
   PreviewBlock,
 } from './types.d.ts';
 import { asText } from './text-like.ts';
-import type { FichaPlayground, FichaSubObject, FichaLikeDefinition } from "./ficha-bridge.schemas.js";
+import type { FichaPlayground, FichaSubObject, FichaLikeDefinition } from "./schemas/ficha-bridge.schemas.js";
 
 /** Tag del schema ficha dedicado. */
 export const FICHA_SCHEMA = 'iswc-ficha/v1';

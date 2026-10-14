@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit, upgradeProperties } from '../../core/element.js';
 import { createSpaState } from '../../core/spa-state.js';
 import { readIswc, removeIswc, writeIswc } from '../../core/iswc-storage.js';
-import type { EstadoSpa, SpaState } from '../../core/spa-state.schemas.js';
+import type { EstadoSpa, SpaState } from '../../core/schemas/spa-state.schemas.js';
 import {
   ServerApiDocsLoginRespuestaSchema,
   ServerApiDocsSesionSchema,
@@ -15,7 +15,7 @@ import {
   type ServerApiDocsResponseDetail,
   type ServerApiDocsSesion,
   type ServerApiDocsValidacion,
-} from './server-api-docs.schemas.js';
+} from './schemas/server-api-docs.schemas.js';
 import {
   aOpenApi,
   COLOR_METODO,

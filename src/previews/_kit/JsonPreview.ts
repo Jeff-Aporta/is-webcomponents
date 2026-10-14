@@ -21,7 +21,7 @@ import { montarControles } from '../../utils/system/controles.js';
 import { loadFichaLikeDefinition } from './ficha-bridge.ts';
 
 import type { PreviewDefinition, PreviewMountContext } from './types.d.ts';
-import type { DefinicionPreview, CtxMontaje, ModuloBehavior, ConDefinicion } from "./JsonPreview.schemas.js";
+import type { DefinicionPreview, CtxMontaje, ModuloBehavior, ConDefinicion } from "./schemas/JsonPreview.schemas.js";
 
 /** Forma mínima de la definición (iswc-preview/v1 o ficha via sub-objeto). */
 

@@ -5,7 +5,7 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
-import { EmbedBoxSchema, NodeEmbedSpecSchema } from "../_shared/diagram-embed.schemas.js";
+import { EmbedBoxSchema, NodeEmbedSpecSchema } from "../../_shared/diagram-embed.schemas.js";
 
 export const SequenceActorSpecSchema = z.object({
   id: z.string(),

@@ -3,7 +3,7 @@
  * @param {import('../../previews/_kit/types.d.ts').PreviewMountContext} ctx
  */
 
-import type { InputLike } from "./flex-layout.preview.schemas.js";
+import type { InputLike } from "./schemas/flex-layout.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const flex = root.querySelector<HTMLElement>('#fxPlay');

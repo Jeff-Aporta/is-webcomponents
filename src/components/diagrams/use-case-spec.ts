@@ -2,7 +2,7 @@ import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import { applyEdgeActorLayout } from '../_shared/diagram-edge-actors.js';
 import { assignEdgeHues } from '../_shared/diagram-edge-style.js';
-import type { UseCaseActorSide, UseCaseLinkKind, UseCaseActorSpec, UseCaseCaseSpec, UseCaseLinkSpec, UseCaseGroupSpec, UseCaseResolvedSpec, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseLayoutSystem, UseCaseLayout } from "./use-case-spec.schemas.js";
+import type { UseCaseActorSide, UseCaseLinkKind, UseCaseActorSpec, UseCaseCaseSpec, UseCaseLinkSpec, UseCaseGroupSpec, UseCaseResolvedSpec, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseLayoutSystem, UseCaseLayout } from "./schemas/use-case-spec.schemas.js";
 
 /**
  * Especificación y layout de diagramas de casos de uso (UML), sin Mermaid.

@@ -1,6 +1,6 @@
 import { svgEl } from '../_shared/svg-chart-engine.js';
-import type { ChartCtx } from './chart.schemas.js';
-import type { FunnelBand } from "./marks-funnel.schemas.js";
+import type { ChartCtx } from './schemas/chart.schemas.js';
+import type { FunnelBand } from "./schemas/marks-funnel.schemas.js";
 
 /**
  * Marca de embudo (funnel): bandas horizontales apiladas, cada una centrada

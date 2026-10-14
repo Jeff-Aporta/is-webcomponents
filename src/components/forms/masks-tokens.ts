@@ -7,7 +7,7 @@
  *  *  alfanumérico
  *  Cualquier otro carácter cuenta como literal (se imprime tal cual).
  */
-import type { MaskTokenDef, SlotToken, SlotLiteral, Slot } from "./masks-tokens.schemas.js";
+import type { MaskTokenDef, SlotToken, SlotLiteral, Slot } from "./schemas/masks-tokens.schemas.js";
 export const MASK_TOKENS: Record<string, MaskTokenDef> = {
   '0': { re: /\d/,       transform: (c: string) => c, required: true  },
   '9': { re: /\d/,       transform: (c: string) => c, required: false },

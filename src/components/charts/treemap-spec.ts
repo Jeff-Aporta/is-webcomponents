@@ -2,7 +2,7 @@ import { buildTree, squarify } from '../_shared/tree-layout.js';
 import { richTextPlain } from '../_shared/tk-rich-text.js';
 import { resolveTkHue } from '../_shared/tk-hue.js';
 import type { TreeNode } from '../_shared/tree-layout.schemas.js';
-import type { Rect, RawSpecNode, SpecNode, TreemapSpec, TreemapLayout, TreemapLayoutNode, TreemapLayoutOpts } from "./treemap-spec.schemas.js";
+import type { Rect, RawSpecNode, SpecNode, TreemapSpec, TreemapLayout, TreemapLayoutNode, TreemapLayoutOpts } from "./schemas/treemap-spec.schemas.js";
 
 /**
  * Especificación y layout de treemaps (Chart.js-ish, sin dependencias).

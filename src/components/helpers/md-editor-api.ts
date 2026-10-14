@@ -6,7 +6,7 @@
  * El `.d.ts` paralelo sigue siendo la documentación canónica del consumidor externo.
  */
 
-import type { IsMdEditorDocument, IsMdEditorEndpoints, IsMdEditorApiConfig, CanonKey, SrcMap } from "./md-editor-api.schemas.js";
+import type { IsMdEditorDocument, IsMdEditorEndpoints, IsMdEditorApiConfig, CanonKey, SrcMap } from "./schemas/md-editor-api.schemas.js";
 const DEFAULT_MAP: Record<CanonKey, readonly string[]> = {
   content: ['content', 'body', 'markdown', 'text', 'value'],
   filename: ['filename', 'fileName', 'name', 'title'],

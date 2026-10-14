@@ -7,7 +7,7 @@
 
 /** Input/select con `value`/`checked`/`disabled` y `textContent`. */
 
-import type { _TextLike, _InputLike } from "./text.preview.schemas.js";
+import type { _TextLike, _InputLike } from "./schemas/text.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const el = root.querySelector<HTMLElement>('#txLive') as _TextLike | null;

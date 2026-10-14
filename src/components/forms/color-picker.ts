@@ -13,7 +13,7 @@ import {
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr } from '../_shared/reflect.js';
 import { computePosition } from '../_shared/position.js';
-import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, WindowWithEyeDropper } from "./color-picker.schemas.js";
+import type { EyeDropperOpenResult, EyeDropperInterface, EyeDropperConstructor, WindowWithEyeDropper } from "./schemas/color-picker.schemas.js";
 /**
  * <iswc-color-picker> — Selector de color form-associated.
  *

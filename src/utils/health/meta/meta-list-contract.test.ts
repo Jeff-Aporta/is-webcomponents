@@ -6,8 +6,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
-import { MetaGroupSchema } from '../../../components/data/meta-list.schemas.ts';
+import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
+import { MetaGroupSchema } from '../../../components/data/schemas/meta-list.schemas.ts';
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const BASE = join(RAIZ, 'src', 'components', 'data', 'meta-list');

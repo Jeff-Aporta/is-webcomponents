@@ -7,8 +7,8 @@
  * necesita: URL, cURL, la petición de login del proveedor y el diagrama de secuencia de cada endpoint.
  * Todo es determinista: lo prueban los tests de caja negra del kit.
  */
-import { ApiDocsDocumentoSchema } from './server-api-docs-md.schemas.js';
-import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '../diagrams/sequence-spec.schemas.js';
+import { ApiDocsDocumentoSchema } from './schemas/server-api-docs-md.schemas.js';
+import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '../diagrams/schemas/sequence-spec.schemas.js';
 import {
   InsoftDocumentoSchema,
   METODOS_API,
@@ -26,7 +26,7 @@ import {
   type ServerApiDocsValidacion,
   type ServerApiDocsValores,
   type ServerApiDocsObjeto as Obj,
-} from './server-api-docs.schemas.js';
+} from './schemas/server-api-docs.schemas.js';
 
 const obj = (v: unknown): Obj => (v && typeof v === 'object' && !Array.isArray(v) ? { ...v } : {});
 const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);

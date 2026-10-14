@@ -7,7 +7,7 @@
 
 /** Input element con `value`/`checked`/`disabled` y `textContent`. */
 
-import type { _HeadingLike, _InputLike } from "./heading.preview.schemas.js";
+import type { _HeadingLike, _InputLike } from "./schemas/heading.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const el = root.querySelector<HTMLElement>('#hdLive') as _HeadingLike | null;

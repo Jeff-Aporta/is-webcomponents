@@ -1,6 +1,6 @@
 import { repaint } from '../_shared/highlight-code.js';
 import { prettyHtml } from '../_shared/code-text.js';
-import type { CodeLike, DescribePart } from "./mutation-observer.preview.schemas.js";
+import type { CodeLike, DescribePart } from "./schemas/mutation-observer.preview.schemas.js";
 
 /**
  * Behavior migrado desde HTML inline de iswc-mutation-observer.

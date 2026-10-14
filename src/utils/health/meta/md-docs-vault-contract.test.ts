@@ -10,9 +10,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { ComponentJsonSchema } from '../../../previews/_kit/component.schemas.ts';
-import { MdDocsVaultListaSchema } from '../../../components/layout/md-docs-vault.schemas.ts';
+import { basename, dirname, join } from 'node:path';
+import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
+import { MdDocsVaultListaSchema } from '../../../components/layout/schemas/md-docs-vault.schemas.ts';
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const COMPONENTES = [
@@ -32,7 +32,7 @@ const demoDe = (ruta: string) => {
 for (const c of COMPONENTES) {
   const base = join(RAIZ, 'src', 'components', ...c.base);
   test(`${c.tag}: .ts + .scss + .md + .json hermanos, ficha con frontmatter y ruta en el manifest`, () => {
-    for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync(base + ext), `falta ${c.base.join('/')}${ext}`);
+    for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync((ext === '.schemas.ts' ? join(dirname(base), "schemas", basename(base)) : base) + ext), `falta ${c.base.join('/')}${ext}`);
     const ficha = readFileSync(base + '.md', 'utf8');
     assert.match(ficha, new RegExp(`^---[\\s\\S]*tag: ${c.tag}[\\s\\S]*category: ${c.categoria}[\\s\\S]*---`), 'frontmatter de la ficha');
     for (const s of ['## Propósito', '## API', '### Eventos', '## Accesibilidad', '## Reglas para LLM']) assert.ok(ficha.includes(s), `ficha: ${s}`);
@@ -61,7 +61,7 @@ const SATELITES = [
 for (const c of SATELITES) {
   const base = join(RAIZ, 'src', 'components', ...c.base);
   test(`${c.tag}: satélite del lector con .ts + .scss + .md + .json + .schemas.ts, ficha con frontmatter y ruta en el manifest`, () => {
-    for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync(base + ext), `falta ${c.base.join('/')}${ext}`);
+    for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync((ext === '.schemas.ts' ? join(dirname(base), "schemas", basename(base)) : base) + ext), `falta ${c.base.join('/')}${ext}`);
     const ficha = readFileSync(base + '.md', 'utf8').replace(/^﻿/, '');
     assert.match(ficha, new RegExp(`^---[\\s\\S]*tag: ${c.tag}[\\s\\S]*category: ${c.categoria}[\\s\\S]*---`), 'frontmatter de la ficha');
     const manifest = readFileSync(join(RAIZ, 'src', 'manifest.ts'), 'utf8');

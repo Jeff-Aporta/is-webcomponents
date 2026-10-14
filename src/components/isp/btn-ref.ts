@@ -14,8 +14,8 @@ import {
 /** Catálogo genérico (subset mínimo que necesitamos del controller). */
 
 /** Columna y datos arbitrarios que devuelve el controller. */
-import { _RecordLikeSchema, type _RecordLike } from "./btn-ref.schemas.js";
-import type { _CatalogLike, _FieldLike, _DialogLike, _CatalogEl } from "./btn-ref.schemas.js";
+import { _RecordLikeSchema, type _RecordLike } from "./schemas/btn-ref.schemas.js";
+import type { _CatalogLike, _FieldLike, _DialogLike, _CatalogEl } from "./schemas/btn-ref.schemas.js";
 
 /** Input field con attrs custom (label/name/value/etc.). */
 

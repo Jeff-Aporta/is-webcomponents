@@ -12,7 +12,7 @@ import {
   normalizeTone,
   setEnumToneAttr,
 } from '../_shared/tone.js';
-import type { ElChild, ElAttrs, Crudo, HandlerEntry } from "./ui.schemas.js";
+import type { ElChild, ElAttrs, Crudo, HandlerEntry } from "./schemas/ui.schemas.js";
 
 /**
  * helpers/ui.js — primitivas de render para apps consumidoras del kit.

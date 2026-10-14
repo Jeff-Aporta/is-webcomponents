@@ -6,7 +6,7 @@
 
 // Tipo mínimo del `<iswc-video-playlist>` para acceder a `placement`.
 
-import type { IswcVideoPlaylist } from "./video-playlist.preview.schemas.js";
+import type { IswcVideoPlaylist } from "./schemas/video-playlist.preview.schemas.js";
 export async function mount(ctx: import('../../previews/_kit/types.d.ts').PreviewMountContext) {
   const root = ctx.main;
   void root;

@@ -1,23 +1,23 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from '../_shared/diagram-element-base.js';
 import { resolveFlowchartSpec, computeFlowchartLayout, shapePath, flowPaint, FLOW_LINE_H, FLOW_PILL_ICON, pillStepW, SOCKET, VARS, PUENTE, CRUD_SQL, centroPuente, ejesPuente } from './flowchart-spec.js';
-import type { FlowLayoutOptions, FlowPaint } from './flowchart-spec.schemas.js';
+import type { FlowLayoutOptions, FlowPaint } from './schemas/flowchart-spec.schemas.js';
 import { hostStyleName, styleThemeFor } from './diagram-styles.js';
 import { pickThemeMode, themeToDiagramTheme, injectThemeCss } from './theme.js';
-import type { ErThemeJson } from './theme.schemas.js';
+import type { ErThemeJson } from './schemas/theme.schemas.js';
 import { cargarFuente } from '../_shared/diagram-text-wrap.js';
 import { pathEndDirection, pathPoints } from '../_shared/diagram-arrow.js';
 import { tokenizeCode } from '../_shared/code-highlight.js';
 import { captureEmbeddedDiagram, embedSvgElement, resolveEmbedDiagram } from '../_shared/diagram-embed.js';
 import type { EmbedCapture, EmbedSize } from '../_shared/diagram-embed.schemas.js';
-import type { FlowLayout, FlowLayoutNode, FlowLayoutEdge, FlowLayoutOverrides, FlowResolvedSpec, FlowNodeSpec } from './flowchart-spec.schemas.js';
+import type { FlowLayout, FlowLayoutNode, FlowLayoutEdge, FlowLayoutOverrides, FlowResolvedSpec, FlowNodeSpec } from './schemas/flowchart-spec.schemas.js';
 import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../_shared/path-turtle.js';
 import type { PathTurtle } from '../_shared/path-turtle.js';
 import { tkHueToHex } from '../_shared/tk-hue.js';
 import { ANGULO_AUREO, hexToOklch, oklchToHex, rotarTono } from '../_shared/oklch.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from '../_shared/diagram-edge-style.js';
-import type { DiagramTheme } from './diagram-types.schemas.js';
+import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb } from '../_shared/tk-inline-md.js';
 import { svgIconGroup } from '../_shared/tk-icon-inline.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from '../_shared/diagram-flow.js';
@@ -40,7 +40,7 @@ import {
 } from '../_shared/diagram-edit.js';
 import { snapDiagramGrid as snapToGrid } from '../_shared/diagram-grid.js';
 import type { DiagramOverrides } from '../_shared/diagram-edit.schemas.js';
-import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./flowchart.schemas.js";
+import type { TurtleState, NodeNodeEntry, EdgeNodeEntry, FlowInk } from "./schemas/flowchart.schemas.js";
 /**
  * <iswc-flowchart> — diagrama de flujo en SVG, sin Mermaid.
  *

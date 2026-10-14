@@ -4,7 +4,7 @@ import '../forms/input.js';
 import '../media/icon.js';
 import '../layout/dialog.js';
 import { ElementBase } from '../../core/element-base.js';
-import type { InputLike } from "./confirm-delete.schemas.js";
+import type { InputLike } from "./schemas/confirm-delete.schemas.js";
 
 /** Custom input-like element con label, value, y errores. */
 

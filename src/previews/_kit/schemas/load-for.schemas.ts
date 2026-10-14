@@ -1,5 +1,5 @@
 /**
- * src/previews/_kit/load-for.schemas.ts — Tipos del helper `loadFor`.
+ * src/previews/_kit/schemas/load-for.schemas.ts — Tipos del helper `loadFor`.
  *
  * Phase W56. Vivir en `*.schemas.ts` cumple el guardián W54 (no type/
  * interface top-level en `*.ts` plain). Los tipos se re-exportan desde

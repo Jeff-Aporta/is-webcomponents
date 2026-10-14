@@ -3,7 +3,7 @@ import { IswcLightbox } from './lightbox.js';
 import { getDiagramTag } from './diagram-kinds.js';
 import { expandSequencePayloadForJson } from './sequence-spec.js';
 import '../media/icon.js';
-import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./diagram-lightbox.schemas.js";
+import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./schemas/diagram-lightbox.schemas.js";
 
 /**
  * <iswc-diagram-lightbox> — colore del lightbox para diagramas.

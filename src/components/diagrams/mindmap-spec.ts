@@ -13,7 +13,7 @@ import {
   pixelToGrid,
   buildOrthogonalPath,
 } from '../_shared/diagram-astar.js';
-import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode, MindmapLayoutEdge, MindmapLayout } from "./mindmap-spec.schemas.js";
+import type { MindmapNode, MindmapSpec, LeadingIcon, TreeNode, MindmapLayoutNode, MindmapLayoutEdge, MindmapLayout } from "./schemas/mindmap-spec.schemas.js";
 
 /**
  * Especificación y layout de mindmaps (sin Mermaid).

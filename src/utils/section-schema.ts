@@ -22,8 +22,8 @@
  *   - zod v4.4.3 (ver `deno.json` imports).
  */
 import { z } from "zod";
-import { TextLikeSchema } from "../previews/_kit/component.schemas.ts";
-import type { SectionId, ContentBlock, SectionTableRow, SectionTable, AtributosRow, PropRow, StateRow, EventoRow, SlotRow, PartRow, ApiJsRow, Example, Examples, SectionsMap, ExcludeList, FichaWarning, FichaInspection, Ficha } from "./section-schema.schemas.js";
+import { TextLikeSchema } from "../previews/_kit/schemas/component.schemas.ts";
+import type { SectionId, ContentBlock, SectionTableRow, SectionTable, AtributosRow, PropRow, StateRow, EventoRow, SlotRow, PartRow, ApiJsRow, Example, Examples, SectionsMap, ExcludeList, FichaWarning, FichaInspection, Ficha } from "./schemas/section-schema.schemas.js";
 
 /* --------------------------------------------------------------------------
  * IDs y constantes

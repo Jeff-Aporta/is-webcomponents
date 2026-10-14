@@ -4,7 +4,7 @@
  */
 import type { PreviewMountContext } from '../../previews/_kit/types.js';
 import type { IswcChart } from './chart.js';
-import type { IsChartElement } from "./chart.preview.schemas.js";
+import type { IsChartElement } from "./schemas/chart.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;

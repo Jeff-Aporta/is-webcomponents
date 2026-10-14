@@ -6,7 +6,7 @@
  * “appearance” = variant real del componente.
  */
 import '../media/icon.js';
-import type { MountCtx } from "./button.preview.schemas.js";
+import type { MountCtx } from "./schemas/button.preview.schemas.js";
 
 const START_ICONS: Record<string, string> = {
   'i-floppy': 'mdi:content-save-outline',
