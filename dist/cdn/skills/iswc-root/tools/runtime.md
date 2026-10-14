@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/tools/runtime.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/tools/runtime.md -->
 # `/iswc-root:runtime` — APIs sin custom element
 
 Herramientas del kit que **no** son tags `iswc-*`. Los agentes deben conocerlas
@@ -61,14 +61,14 @@ Guía: [`helpers/ui.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/
 | `md-editor-api` | `helpers/md-editor-api.min.js` | CRUD del editor |
 
 Tags de producto: `<iswc-md-render>`, `<iswc-md-editor>`.  
-Guías: `helpers/md-lite.md`, `md-iswc-fences.md`, `md-hydrate.md`, `md-editor-api.md`.
+Guías: `helpers/utils/md-lite.md`, `md-iswc-fences.md`, `md-hydrate.md`, `md-editor-api.md`.
 
 ---
 
 ## 4. `response-cache` — `helpers/response-cache.min.js`
 
 SWR en IndexedDB (`createResponseCache`, `IsResponseCache`, `canonico`).  
-Guía: [`helpers/response-cache.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/response-cache.md).
+Guía: [`helpers/utils/response-cache.md`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/response-cache.md).
 
 ---
 
@@ -86,7 +86,7 @@ Apps consumidoras **no** reimplementan esta capa; extienden vía `IswcUi.define`
 
 ## 6. Build de apps (hashes)
 
-Cuando la app emite `dist/cdn` como el kit: `contentHash`, `withAssetHash`, `stampDirectory`
+Cuando la app emite `dist/cdn` como el kit: `hashPorRuta`, `withAssetHash`, `stampDirectory`
 en el vendor de build del kit (Paty ya lo importa). El loader pega `?h=` con `L.assetUrl`.
 
 ---

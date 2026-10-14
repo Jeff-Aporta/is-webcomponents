@@ -87,7 +87,7 @@ Cada build deja un mapa de 6 caracteres en el loader (`__IS_ASSET_HASHES__`) y e
 
 Los `import` relativos entre `.min.js` llevan el mismo `?v=`, sellado en el build en orden de dependencias. El CSS de documento que no usa `url()` relativo se guarda en IndexedDB con la clave ruta+hash; localStorage recuerda el mapa para tirar los cuerpos viejos.
 
-Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `contentHash`). El build los publica en `dist/cdn/build/`.
+Generadores para otros proyectos (CDN o vendor): `src/cdn/build/` (`bundleMinJs`, `bundleLoader`, `stampHashTexts`, `hashBase`/`hashJs`/`hashCss`/`hashHtml`). El build los publica en `dist/cdn/build/`.
 
 Render headless de diagramas (SVG/PNG): `src/vendor-distributions/client/tools/` (`renderDiagram`, `renderDiagramBatch`, `writeDiagramOutputs`). El build los publica en `dist/cdn/vendor-distributions/client/tools/`. Playwright **no** va en el vendor: el consumidor lo inyecta (`createRequire(…​)('playwright').chromium`). Sirve para labs ISWC y para generadores Deno de otros repos (ISS, etc.) con el mismo contrato.
 

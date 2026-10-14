@@ -7,6 +7,8 @@ import { join, dirname, basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { bundleMinJs, bundleMinCss, docsBanner, bundleLoader } from '../src/cdn/build/bundle-min.ts';
+import { barrerHashes } from '../src/cdn/build/sync-hashes.ts';
+import { hashesRepetidos } from '../src/cdn/build/hash.ts';
 import { stampDirectory, hashFile, rewriteHtmlTree, hashesJson, applyHashToHtml, ASSET_HASHES_NAME } from '../src/cdn/build/stamp-hashes.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -63,6 +65,10 @@ const PRESERVAR = new Set();
  * assets/iconify/. Quedar por debajo significa que alguien borro material publicado.
  */
 const MIN_ICONOS = 13_000;
+
+// Mapa de hashes del build anterior: se lee ANTES de limpiar dist/ para el barrido ?v= del final.
+const hashesPath = join(dist, ASSET_HASHES_NAME);
+const hashesPrevios = existsSync(hashesPath) ? JSON.parse(await readFile(hashesPath, 'utf8')).files : {};
 
 await mkdir(dist, { recursive: true });
 for (const entry of await readdir(dist, { withFileTypes: true })) {
@@ -562,7 +568,7 @@ console.log(`  ${'gallery-app'.padEnd(18)} js ${String(galleryStat.size).padStar
 // ── hashes: sellar imports y embeber el mapa en el loader ────────
 const hashes = await stampDirectory(dist);
 const addHash = async (key, abs) => {
-  try { hashes[key] = await hashFile(abs); } catch { /* todavia no existe */ }
+  try { hashes[key] = await hashFile(abs, key); } catch { /* todavia no existe */ }
 };
 await addHash('dist/gallery-app.min.js', galleryOut);
 for (const bucket of ['scripts', 'pages']) {
@@ -582,11 +588,16 @@ await bundleLoader({
   hashes,
   sha: shaDelBuild(),
 });
-const loaderHash = await hashFile(loaderOut);
+const loaderHash = await hashFile(loaderOut, 'core/loader.min.js');
 hashes['core/loader.min.js'] = loaderHash;
 hashes['loader.min.js'] = loaderHash;
 await copyFile(loaderOut, join(dist, 'loader.min.js'));
-await writeFile(join(dist, ASSET_HASHES_NAME), hashesJson(hashes));
+// Cada hash debe nombrar un solo archivo: el barrido ?v=viejo → ?v=nuevo depende de ello.
+const repetidos = hashesRepetidos(hashes);
+if (repetidos.length) throw new Error(`hashes repetidos (subir HASH_LEN en src/cdn/build/hash.ts):\n${repetidos.join('\n')}`);
+await writeFile(hashesPath, hashesJson(hashes));
+// Barrido determinista: todo ?v=<hash viejo> del repo pasa al hash nuevo (html, md, json, js…).
+console.log(`  ${'?v= barrido'.padEnd(18)} ${barrerHashes(hashesPrevios, hashes, [root])} archivos`);
 const loaderStat = await stat(loaderOut);
 console.log(`  ${'loader.min'.padEnd(18)} js ${String(loaderStat.size).padStart(6)}  (${Object.keys(loaderCatalog.categories).length} cats, ${Object.keys(hashes).length} hashes)`);
 console.log(`  ${'loader.min'.padEnd(18)} alias raíz (compat)`);

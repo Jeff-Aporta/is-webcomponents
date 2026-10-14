@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T15:02:33.985Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/06-pines-y-vendor.md -->
 # 06 — Pines y vendor del kit
 
 ## Pin fijo
@@ -42,7 +42,7 @@ deno task build && deno task test:all
 | Carpeta | Archivos |
 | --- | --- |
 | `tools/` | `schemas.ts` (podado), `pruebas.ts` (con `--hijo`), `test-cooldown.ts` (con la cola), `sync-entregable.ts` (`vendor.ts` y `pin-update.mjs` van online, no aquí) |
-| `build/` | `index.ts`, `content-hash.ts`, `asset-url(.schemas).ts`, `stamp-hashes.ts`, `bundle-min(.schemas).ts`, `asset-store.ts` |
+| `build/` | `index.ts`, `hash.ts`, `asset-url(.schemas).ts`, `stamp-hashes.ts`, `bundle-min(.schemas).ts`, `asset-store.ts` |
 
 - Cabecera `// @vendor <ISO> <repo>@<sha|local> <desde>` (+ `// @doc <url>`) y «No editar». Se cambian en el kit y se re-vendorizan con
   `vendor.ts` (pin por fecha ISO: compiten el checkout `local` y el HEAD remoto); el protocolo de pines deja el SHA

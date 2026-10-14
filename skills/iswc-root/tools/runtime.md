@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/tools/runtime.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/tools/runtime.md -->
 # `/iswc-root:runtime` — APIs sin custom element
 
 Herramientas del kit que **no** son tags `iswc-*`. Los agentes deben conocerlas
@@ -86,7 +86,7 @@ Apps consumidoras **no** reimplementan esta capa; extienden vía `IswcUi.define`
 
 ## 6. Build de apps (hashes)
 
-Cuando la app emite `dist/cdn` como el kit: `contentHash`, `withAssetHash`, `stampDirectory`
+Cuando la app emite `dist/cdn` como el kit: `hashPorRuta`, `withAssetHash`, `stampDirectory`
 en el vendor de build del kit (Paty ya lo importa). El loader pega `?h=` con `L.assetUrl`.
 
 ---

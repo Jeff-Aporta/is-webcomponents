@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/states.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/states.md -->
 # States
 
 Cómo declarar y exponer **custom states** (`ElementInternals.states`)
@@ -35,7 +35,7 @@ class IswcButton extends ElementBase {
 
 Un custom state se activa cuando la condición booleana se cumple. El
 patrón recomendado usa el helper
-[`setCustomState`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/_shared/form-associated.ts)
+[`setCustomState`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/core/form-associated.ts)
 de `_shared/form-associated.ts`:
 
 ```ts

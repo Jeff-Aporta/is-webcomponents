@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/pruebas.ts
+// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/pruebas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).

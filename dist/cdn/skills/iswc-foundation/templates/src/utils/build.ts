@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/utils/build.ts
+// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/utils/build.ts
 /**
  * build.ts — `src/js/**` y `view/**` → `dist/cdn/` (estándar iswc-foundation). Lo corre `deno task build`
  * DESPUÉS de `build:scss`.
@@ -21,7 +21,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, sep } from 'node:path';
 import esbuild from 'esbuild';
-import { contentHash } from '../vendor/iswc-root/build/content-hash.ts';
+import { hashPorRuta } from '../vendor/iswc-root/build/hash.ts';
 import { withAssetHash } from '../vendor/iswc-root/build/asset-url.ts';
 import { hashesJson, stampDirectory } from '../vendor/iswc-root/build/stamp-hashes.ts';
 import { mapaRutas, PREFIJO } from '../js/kit-tags.ts';
@@ -111,7 +111,7 @@ async function sellar(): Promise<void> {
   ].join('');
   const loader = (await esbuild.transform(fuente, { minify: true, format: 'esm', target: 'es2022' })).code;
   writeFileSync(join(OUT, `${PREFIJO}Loader.min.js`), loader);
-  hashes[`${PREFIJO}Loader.min.js`] = contentHash(loader);
+  hashes[`${PREFIJO}Loader.min.js`] = hashPorRuta(`${PREFIJO}Loader.min.js`, loader);
   writeFileSync(join(OUT, 'asset-hashes.json'), hashesJson(hashes));
   const git = (args: string[]) => {
     try {

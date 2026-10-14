@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/_BRIEF.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/_BRIEF.md -->
 # Brief de redacción de `specs/foundation/`
 
 Objetivo: specs AUTOSUFICIENTES. Si `src/` y `view/` se borran, agentes HOW «ciegos» deben poder

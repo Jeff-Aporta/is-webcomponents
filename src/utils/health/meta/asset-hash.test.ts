@@ -3,18 +3,40 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { contentHash, ASSET_HASH_LEN } from '../../../cdn/build/content-hash.ts';
+import { hashBase, hashCss, hashHtml, hashJs, hashPorRuta, hashesRepetidos, HASH_LEN } from '../../../cdn/build/hash.ts';
+import { cambiosDeHash, reemplazarHashes } from '../../../cdn/build/sync-hashes.ts';
 import { stampHashTexts } from '../../../cdn/build/stamp-hashes.ts';
 import { withAssetHash, lookupHash } from '../../../cdn/build/asset-url.ts';
 
-test('contentHash: 6 chars y cambia con el contenido', () => {
-  const a = contentHash('hola');
-  const b = contentHash('hola');
-  const c = contentHash('holb');
-  assert.equal(a.length, ASSET_HASH_LEN);
-  assert.equal(a, b);
-  assert.notEqual(a, c);
+test('hashBase: 6 chars y cambia con el contenido', () => {
+  const a = hashBase('hola');
+  assert.equal(a.length, HASH_LEN);
+  assert.equal(a, hashBase('hola'));
+  assert.notEqual(a, hashBase('holb'));
   assert.match(a, /^[0-9a-z]{6}$/);
+});
+
+test('hashJs/hashCss/hashHtml: solo cambian con lo ejecutable', () => {
+  const js = 'const a = 1; // nota\nexport { a };';
+  assert.equal(hashJs(js), hashJs('/* doc */\n\tconst  a = 1;\n\n export { a };'), 'comentarios y blanco no cuentan');
+  assert.notEqual(hashJs(js), hashJs('const a = 2; export { a };'), 'el código sí');
+  assert.notEqual(hashJs("const u = 'http://x//y';"), hashJs("const u = 'http://x//z';"), 'un // dentro de una cadena es código');
+  assert.equal(hashCss('a { color: red; }'), hashCss('/* x */ a {\n  color: red;\n}'));
+  assert.notEqual(hashCss('a { color: red; }'), hashCss('a { color: blue; }'));
+  assert.equal(hashHtml('<p>x</p>'), hashHtml('<!-- c --><p>x</p>\n'));
+  assert.notEqual(hashPorRuta('a/x.css', ''), hashPorRuta('b/x.css', ''), 'la ruta entra al hash');
+});
+
+test('hashesRepetidos: dos archivos con el mismo hash, salvo alias del mismo nombre', () => {
+  assert.deepEqual(hashesRepetidos({ 'loader.min.js': 'aaaaaa', 'core/loader.min.js': 'aaaaaa', 'x.css': 'bbbbbb' }), []);
+  assert.equal(hashesRepetidos({ 'a.js': 'cccccc', 'b.js': 'cccccc' }).length, 1);
+});
+
+test('sync-hashes: ?v=viejo → ?v=nuevo, sin tocar otras cadenas ni hashes ambiguos', () => {
+  const cambios = cambiosDeHash({ 'a.js': 'aaaaaa', 'b.js': 'bbbbbb' }, { 'a.js': 'a2a2a2', 'b.js': 'bbbbbb' });
+  const html = '<script src="a.js?v=aaaaaa"></script><link href="b.css?x=1&v=bbbbbb"> aaaaaa ?v=aaaaaax';
+  assert.equal(reemplazarHashes(html, cambios), '<script src="a.js?v=a2a2a2"></script><link href="b.css?x=1&v=bbbbbb"> aaaaaa ?v=aaaaaax');
+  assert.equal(cambiosDeHash({ 'x.js': 'dddddd', 'y.js': 'dddddd' }, { 'x.js': '111111', 'y.js': '222222' }).size, 0, 'ambiguo: no se toca');
 });
 
 test('stampHashTexts: el padre lleva el hash del hijo y el suyo cambia si el hijo cambia', () => {

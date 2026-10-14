@@ -7,7 +7,7 @@ description: >-
   server, al cambiar el documento `doc`, al migrar del visor viejo <docs-viewer> (isc-swagger / iswc-docs) o al
   depurar por qué la documentación de la API no se ve.
 ---
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
 
 # iswc-server-api-docs — los endpoints de la API de un server
 
@@ -17,7 +17,7 @@ la API que el server expone. No es documentación en prosa. Vive en el kit (`src
 (`iswc-doc-layout`) que los demos del kit y que `iswc-md-docs-vault` (la documentación en prosa de un proyecto).
 Ficha completa: [`src/components/layout/server-api-docs.md`](../../src/components/layout/server-api-docs.md).
 Dominio puro y documento estricto (validar, parse estricto, normalizar, secuencia, cURL, login, OpenAPI):
-[`server-api-docs-md.md`](../../src/components/layout/server-api-docs-md.md).
+[`server-api-docs-md.md`](../../src/components/layout/utils/server-api-docs-md.md).
 
 ## Qué distingue a cada componente documental
 

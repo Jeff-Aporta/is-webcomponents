@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/is-cdn-install/reference.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/is-cdn-install/reference.md -->
 # is-cdn-install — referencia de espejos
 
 ## Orígenes oficiales

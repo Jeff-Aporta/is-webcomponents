@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/lifecycle.md -->
+<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/lifecycle.md -->
 # Lifecycle
 
 Ciclo de vida de un componente del kit: hooks, shadow, upgrade de
@@ -92,7 +92,7 @@ combobox, date-picker, etc.). Pasos:
 
 1. Marcar la clase con `static formAssociated = true;`.
 2. En el constructor, llamar a `attachFormInternals(this)` desde
-   [`_shared/form-associated.ts`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/_shared/form-associated.ts).
+   [`_shared/form-associated.ts`](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/core/form-associated.ts).
 3. Implementar `formResetCallback()` para restaurar valores iniciales
    (capturar en el constructor con un `Map`).
 4. Implementar `formDisabledCallback(disabled)` para reflejar el estado

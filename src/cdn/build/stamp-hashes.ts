@@ -5,7 +5,7 @@
  */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { join, posix } from 'node:path';
-import { contentHash } from './content-hash.js';
+import { hashBase, hashPorRuta } from './hash.js';
 import { lookupHash, withAssetHash } from './asset-url.js';
 
 export const ASSET_HASHES_NAME = 'asset-hashes.json';
@@ -60,7 +60,7 @@ export function stampHashTexts(input: Record<string, string>): { texts: Record<s
     for (const key of ready) {
       const text = stampText(key, texts[key], hashes, known);
       texts[key] = text;
-      hashes.set(key, contentHash(text));
+      hashes.set(key, hashPorRuta(key, text));
       pending.delete(key);
     }
   }
@@ -71,8 +71,8 @@ export function stampHashTexts(input: Record<string, string>): { texts: Record<s
     // cargaba VARIAS instancias del modulo (estado duplicado, p. ej. la sesion).
     // Todo lo pendiente comparte un sello de grupo (su contenido sin `?v=`) y
     // cada archivo recibe uno fijo: la misma URL para todos sus importadores.
-    const grupo = contentHash([...pending].sort().map((k) => `${k}\n${texts[k].replace(/[?&][vh]=[0-9a-z]+/gi, '')}`).join('\n--\n'));
-    for (const key of pending) hashes.set(key, contentHash(`${grupo}:${key}`));
+    const grupo = hashBase([...pending].sort().map((k) => `${k}\n${texts[k].replace(/[?&][vh]=[0-9a-z]+/gi, '')}`).join('\n--\n'));
+    for (const key of pending) hashes.set(key, hashBase(`${grupo}:${key}`));
     for (const key of pending) texts[key] = stampText(key, texts[key], hashes, known);
   }
   return { texts, hashes: Object.fromEntries(hashes) };
@@ -109,8 +109,9 @@ export async function stampDirectory(dir: string, skip?: (rel: string) => boolea
   return hashes;
 }
 
-export async function hashFile(abs: string): Promise<string> {
-  return contentHash(await readFile(abs));
+/** Hash de un archivo suelto; `clave` es su ruta publicada (como en `stampHashTexts`). */
+export async function hashFile(abs: string, clave: string): Promise<string> {
+  return hashPorRuta(clave, await readFile(abs, 'utf8'));
 }
 
 /** Reescribe href, src, import() y from de un HTML con el mapa ya cerrado. */

@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/scripts/gate/run-test-all.mjs
+// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/scripts/gate/run-test-all.mjs
 // run-test-all.mjs — bateria completa (`deno task test:all`; la usa tambien el gate del sync).
 //
 // Pasos, todos con el cooldown del kit (x600: un verde reciente no se repite, un rojo corre siempre):
@@ -12,7 +12,7 @@
 // Por defecto corre TODO y sale con el peor exit (todos los rojos de una vez); `--halt` corta en el
 // primer rojo. `TEST_COOLDOWN=0` o `--sin-cooldown` corren todo (diagnostico; el sync nunca los usa).
 import process from 'node:process';
-import { crearGate } from './gate-cooldown.mjs?v=uulxll';
+import { crearGate } from './gate-cooldown.mjs?v=jawpww';
 
 const RAIZ = process.cwd();
 const halt = process.argv.includes('--halt');
