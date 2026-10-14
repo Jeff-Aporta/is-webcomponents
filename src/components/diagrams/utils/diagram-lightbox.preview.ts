@@ -4,7 +4,7 @@
  */
 
 import type { LightboxLike, PresetLike } from "../schemas/diagram-lightbox.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const lb = document.getElementById('lb') as LightboxLike | null;
   const preset = document.getElementById('preset') as PresetLike | null;

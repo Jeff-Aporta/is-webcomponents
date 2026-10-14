@@ -19,7 +19,7 @@
   iswc-toast:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  await import('../../../dist/cdn/feedback/toast.min.js?v=ntf3b6');
+  await import('../../../dist/cdn/feedback/toast.min.js?v=cnh3sj');
 
   await customElements.whenDefined('iswc-toast');
   document.documentElement.dataset.toastReady = '1';
@@ -28,7 +28,7 @@
 <body>
 <header>
   <h1>iswc-toast</h1>
-  <p>Contenedor fijo de toasts. Placement por defecto <code>bottom-end</code>. API: <code>create(msg, opts)</code>, estáticas <code>IsToast.success/error/loading/promise</code>. <strong>Seguridad:</strong> <code>allowHtml: true</code> usa <code>insertAdjacentHTML</code> sin sanitizar (gap 18).</p>
+  <p>Contenedor fijo de toasts. Placement por defecto <code>bottom-end</code>. API: <code>create(msg, opts)</code>, estáticas <code>IswcToast.success/error/loading/promise</code>. <strong>Seguridad:</strong> <code>allowHtml: true</code> usa <code>insertAdjacentHTML</code> sin sanitizar (gap 18).</p>
 </header>
 
 <section>
@@ -53,19 +53,19 @@
   </div>
   <script type="module">
     document.getElementById('btn-info').addEventListener('click', () => {
-      IsToast.host().create('Información genérica', { variant: 'brand', duration: 3000 });
+      IswcToast.host().create('Información genérica', { variant: 'brand', duration: 3000 });
     });
     document.getElementById('btn-success').addEventListener('click', () => {
-      IsToast.success('¡Cambios guardados!');
+      IswcToast.success('¡Cambios guardados!');
     });
     document.getElementById('btn-error').addEventListener('click', () => {
-      IsToast.error('No se pudo conectar con el servidor.');
+      IswcToast.error('No se pudo conectar con el servidor.');
     });
     document.getElementById('btn-loading').addEventListener('click', () => {
-      IsToast.loading('Procesando…');
+      IswcToast.loading('Procesando…');
     });
     document.getElementById('btn-promise').addEventListener('click', () => {
-      IsToast.promise(
+      IswcToast.promise(
         new Promise((r) => setTimeout(() => r('OK'), 600)),
         {
           loading: 'Cargando datos…',
@@ -91,11 +91,11 @@
       log.textContent = msg + '\n' + log.textContent;
     }
     document.getElementById('btn-safe').addEventListener('click', () => {
-      IsToast.host().create('<img src=x onerror="window.__xssFired=true">Hola');
+      IswcToast.host().create('<img src=x onerror="window.__xssFired=true">Hola');
       record('safe: el HTML debe verse como texto literal');
     });
     document.getElementById('btn-unsafe').addEventListener('click', () => {
-      IsToast.host().create('<img src=x onerror="window.__xssFired=true">Hola', { allowHtml: true });
+      IswcToast.host().create('<img src=x onerror="window.__xssFired=true">Hola', { allowHtml: true });
       record('unsafe: allowHtml=true inserta HTML sin sanitizar (gap 18)');
     });
     window.addEventListener('error', () => { window.__xssFired = true; });

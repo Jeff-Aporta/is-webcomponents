@@ -31,7 +31,7 @@ compartibles. Es el `docs/index.html` de cualquier proyecto: la app solo pone la
 ## Importación
 
 ```js
-import './md-docs-vault.js'; // o, por el loader: ISWebComponentsLoader.ensure('iswc-md-docs-vault')
+import './md-docs-vault.js'; // o, por el loader: iswcLoader.ensure('iswc-md-docs-vault')
 ```
 
 ## Ejemplo mínimo

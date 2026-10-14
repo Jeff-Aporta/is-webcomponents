@@ -26,7 +26,7 @@ export const CodeDocSchema = z.object({
 export type CodeDoc = z.infer<typeof CodeDocSchema>;
 
 
-export const IsCodeElSchema = z.object({
+export const IswcCodeElSchema = z.object({
   lang: z.string(),
   mode: z.union([z.literal('inline'), z.literal('block')]),
   value: z.string(),
@@ -41,11 +41,11 @@ export const IsCodeElSchema = z.object({
   format: z.function({ input: [], output: z.void() }),
   refresh: z.function({ input: [], output: z.void() }),
 });
-export type IsCodeEl = z.infer<typeof IsCodeElSchema>;
+export type IswcCodeEl = z.infer<typeof IswcCodeElSchema>;
 
 
-export const IsFormatElSchema = z.object({
+export const IswcFormatElSchema = z.object({
   format: z.function({ input: [], output: z.void() }),
 });
-export type IsFormatEl = z.infer<typeof IsFormatElSchema>;
+export type IswcFormatEl = z.infer<typeof IswcFormatElSchema>;
 

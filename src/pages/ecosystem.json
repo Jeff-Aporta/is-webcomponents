@@ -127,7 +127,7 @@
           "html": [
             "<p class=\"eco-lede\">Flujo recomendado para cualquier HTML de producto:</p>",
             "          <ol class=\"eco-steps\">",
-            "            <li>Importá <code>ISWebComponentsLoader</code> desde el CDN (mismo pin/ref que el resto del kit).</li>",
+            "            <li>Importá <code>iswcLoader</code> desde el CDN (mismo pin/ref que el resto del kit).</li>",
             "            <li>Llamá <code>loadPageStyles(['iswc-palettes-default'])</code> (temas + marca; <code>is-base</code> se auto-inyecta).</li>",
             "            <li>Llamá <code>load(...)</code> con tags (<code>iswc-button</code>) o categorías (<code>actions</code>, <code>data-viz</code>; alias <code>charts</code> → <code>data-viz</code>).</li>",
             "            <li>El CSS de cada componente lo trae su propio <code>.min.js</code> vía <code>adoptCss</code> en el shadow — no hace falta listarlo a mano.</li>",

@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/utils/build.ts
+// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/utils/build.ts
 /**
  * build.ts — `src/js/**` y `view/**` → `dist/cdn/` (estándar iswc-foundation). Lo corre `deno task build`
  * DESPUÉS de `build:scss`.
@@ -103,8 +103,8 @@ async function sellar(): Promise<void> {
     return `${JSON.stringify(tag)}:new URL(${JSON.stringify(href)},raiz).href`;
   });
   const fuente = [
-    'const L=globalThis.ISWebComponentsLoader;',
-    `if(!L)throw new Error("${PREFIJO}Loader: falta ISWebComponentsLoader (carga antes el loader del kit)");`,
+    'const L=globalThis.iswcLoader;',
+    `if(!L)throw new Error("${PREFIJO}Loader: falta iswcLoader (carga antes el loader del kit)");`,
     'const raiz=new URL("./",import.meta.url);',
     `L.registerApp({${pares.join(',')}},{installSheets:false});`,
     ...iconos(),

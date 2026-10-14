@@ -84,7 +84,7 @@ import { normalizeIntent } from '../../core/intent.js';
     options: ToastCreateOptions;
   }
 
-  interface IsToastItemEl extends HTMLElement {
+  interface IswcToastItemEl extends HTMLElement {
     color?: string;
     duration?: number;
     log?: unknown;
@@ -122,9 +122,9 @@ import { normalizeIntent } from '../../core/intent.js';
       this.setAttribute('placement', (VALID_PLACEMENT as readonly string[]).includes(v) ? v : 'bottom-end');
     }
 
-    async create(message: string, options: ToastCreateOptions = {}): Promise<IsToastItemEl> {
+    async create(message: string, options: ToastCreateOptions = {}): Promise<IswcToastItemEl> {
       await customElements.whenDefined('iswc-toast-item');
-      const item = document.createElement('iswc-toast-item') as IsToastItemEl;
+      const item = document.createElement('iswc-toast-item') as IswcToastItemEl;
       const color = normalizeIntent(options.color ?? options.variant, 'neutral') as ToastColor;
       item.color = color;
 
@@ -196,7 +196,7 @@ import { normalizeIntent } from '../../core/intent.js';
       return { message: String(cb ?? fallback), options: {} };
     }
 
-    #writeCopy(item: IsToastItemEl, message: string, options: ToastCreateOptions = {}): void {
+    #writeCopy(item: IswcToastItemEl, message: string, options: ToastCreateOptions = {}): void {
       for (const n of [...item.childNodes]) {
         if (n.nodeType === Node.TEXT_NODE || (n instanceof HTMLElement && n.slot !== 'icon')) n.remove();
       }
@@ -213,7 +213,7 @@ import { normalizeIntent } from '../../core/intent.js';
     }
 
     /** Actualiza un toast vivo: mensaje, color, icono y relanza el timer. */
-    #update(item: IsToastItemEl, message: string, options: ToastCreateOptions = {}): void {
+    #update(item: IswcToastItemEl, message: string, options: ToastCreateOptions = {}): void {
       if (!item?.isConnected) return;
       const color = normalizeIntent(
         options.color ?? options.variant ?? item.color,
@@ -250,21 +250,21 @@ import { normalizeIntent } from '../../core/intent.js';
       return el;
     }
 
-    static error(message: string, duration: number | ToastCreateOptions = 5000): Promise<IsToastItemEl> {
+    static error(message: string, duration: number | ToastCreateOptions = 5000): Promise<IswcToastItemEl> {
       const extra = duration && typeof duration === 'object' ? duration : { duration };
       return IswcToast.host().create(message, { variant: 'danger', ...extra });
     }
 
-    static success(message: string, duration: number = 3000): Promise<IsToastItemEl> {
+    static success(message: string, duration: number = 3000): Promise<IswcToastItemEl> {
       return IswcToast.host().create(message, { variant: 'success', duration });
     }
 
     /** Sin duración: se cierra con IswcToast.remove(item). */
-    static loading(message: string): Promise<IsToastItemEl> {
+    static loading(message: string): Promise<IswcToastItemEl> {
       return IswcToast.host().create(message, { variant: 'neutral', icon: 'mdi:loading', duration: 0 });
     }
 
-    static remove(item: IsToastItemEl | HTMLElement | null | undefined): void {
+    static remove(item: IswcToastItemEl | HTMLElement | null | undefined): void {
       (item as { remove?: () => void } | null)?.remove?.();
     }
 

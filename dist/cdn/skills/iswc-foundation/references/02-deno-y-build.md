@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/02-deno-y-build.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/02-deno-y-build.md -->
 # 02 — Deno, tareas y build
 
 ## `deno.json`
@@ -49,7 +49,7 @@
 - Imports de vistas `../../../src/js/…` → `../../../js/…` en dist; del shell hacia `view/`, un `../` menos.
 - **Sellado**: `stampDirectory(dist/cdn)` del kit reescribe cada import propio con `?v=<hash>` (FNV-1a,
   6 caracteres; ciclos con sello de grupo: una URL por módulo) → `asset-hashes.json`.
-- **Registrador** `dist/cdn/<p>Loader.min.js`: exige `ISWebComponentsLoader` y llama
+- **Registrador** `dist/cdn/<p>Loader.min.js`: exige `iswcLoader` y llama
   `L.registerApp({ tag: new URL('<ruta>?v=<hash>', raiz).href, … }, { installSheets: false })`.
 - `build-stamp.json`: `{ build, lastbuild, gitCommit, gitBranch }`.
 - El HTML versionado nunca lleva `?v=`: el hash solo vive en dist y en el registrador.

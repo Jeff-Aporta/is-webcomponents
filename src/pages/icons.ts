@@ -2,7 +2,7 @@
  * Behavior del catálogo de componentes (`#icons` / tag `icons`).
  * Cada categoría = <iswc-demo-section>: título flotante + card neon-glass.
  */
-import type { PreviewMountContext, ISComponentPreviewLike } from '../previews/_kit/types.d.ts';
+import type { PreviewMountContext, IswcComponentPreviewLike } from '../previews/_kit/schemas/preview.schemas.ts';
 import components from '../manifest.js';
 import type { ComponentManifestItem } from "../manifest.schemas.js";
 
@@ -144,7 +144,7 @@ function wireFilter(raiz: HTMLElement): void {
   input.addEventListener('input', apply);
 }
 
-export async function mount(ctx: PreviewMountContext, _preview: ISComponentPreviewLike) {
+export async function mount(ctx: PreviewMountContext, _preview: IswcComponentPreviewLike) {
   const raiz = ctx.main;
   const host = raiz.querySelector<HTMLElement>('#iconsMap');
   if (!host) return;

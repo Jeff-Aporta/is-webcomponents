@@ -1,6 +1,6 @@
 /**
  * Playground <iswc-text>: color / mix / lines / texto.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
 /** `<iswc-text>` con `color`, `mix`, `mixWith`, `lines`. */
@@ -8,7 +8,7 @@
 /** Input/select con `value`/`checked`/`disabled` y `textContent`. */
 
 import type { _TextLike, _InputLike } from "../schemas/text.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const el = root.querySelector<HTMLElement>('#txLive') as _TextLike | null;
   if (!el) return;

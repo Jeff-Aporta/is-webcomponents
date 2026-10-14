@@ -7,7 +7,7 @@ description: >-
   server, al cambiar el documento `doc`, al migrar del visor viejo <docs-viewer> (isc-swagger / iswc-docs) o al
   depurar por qué la documentación de la API no se ve.
 ---
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
 
 # iswc-server-api-docs — los endpoints de la API de un server
 
@@ -41,7 +41,7 @@ Un solo CDN: el kit, pineado por SHA de 40 (nunca `@main`). Nada de `isc-swagger
 <title>Mi API · Documentación</title>
 <style>html, body { margin: 0; height: 100%; } iswc-server-api-docs { display: block; height: 100dvh; }</style>
 <script type="module">
-  const { ISWebComponentsLoader: L } = await import("https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js");
+  const { iswcLoader: L } = await import("https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js");
   await L.loadPageStyles(["iswc-palettes-default"]);
   await L.load("iswc-server-api-docs", "iswc-theme-toggle");
 </script>

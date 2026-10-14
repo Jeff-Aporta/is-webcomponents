@@ -17,8 +17,8 @@
  * (TLA del host no bloquea siblings module).
  */
 const loaderHref = new URL('../core/loader.min.js', import.meta.url).href;
-const { ISWebComponentsLoader: L } = await import(/* @vite-ignore */ loaderHref) as {
-  ISWebComponentsLoader: {
+const { iswcLoader: L } = await import(/* @vite-ignore */ loaderHref) as {
+  iswcLoader: {
     configure(opts: Record<string, unknown>): unknown;
     sheets: { install(opts: { cacheName: string }): unknown };
     load(...ids: string[]): Promise<unknown>;

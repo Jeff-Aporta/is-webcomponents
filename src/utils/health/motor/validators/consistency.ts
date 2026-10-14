@@ -130,9 +130,9 @@ export async function extraerMetaComponente(rutaModulo: string | null): Promise<
       for (const s of m[2].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) atributosObservados.add(s[1]);
     }
   }
-  // 1e. Patrón `IsFoo.styleAttrNames` (definido en `ElementBase`):
+  // 1e. Patrón `IswcFoo.styleAttrNames` (definido en `ElementBase`):
   //     el componente declara `static styleAttrs = { 'attr-name': {...}, ... }`
-  //     y combina sus keys via `...IsFoo.styleAttrNames` en observedAttributes.
+  //     y combina sus keys via `...IswcFoo.styleAttrNames` en observedAttributes.
   //     Extraer las keys del `styleAttrs` literal del propio archivo.
   {
     const styleStart = src.search(/static\s+styleAttrs\s*(?::\s*[A-Za-z_$<>[\]|. ,]+\s*)?=\s*\{/);

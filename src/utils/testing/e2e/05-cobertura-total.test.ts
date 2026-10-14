@@ -39,7 +39,7 @@ import { asegurarServidor, abrirGaleria as abrirGaleriaHarness, esperarMs, baseU
 import { faltanRequisitos } from './lib/env.ts';
 import { repoDir } from './lib/env.ts';
 import type { Browser, Page } from 'playwright';
-import type { CtxE2E } from './lib/tipos.d.ts';
+import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
 
 type EntradaCatalogo = {
   json: string;

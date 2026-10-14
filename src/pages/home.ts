@@ -11,10 +11,10 @@
  * y resize van con el `signal` del preview: al desmontar se cortan solos en vez
  * de seguir midiendo un DOM que ya es de otro componente.
  *
- * @typedef {import('../previews/_kit/types.d.ts').PreviewMountContext} PreviewMountContext
- * @typedef {import('../previews/_kit/types.d.ts').ISComponentPreviewLike} ISComponentPreviewLike
+ * @typedef {import('../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} PreviewMountContext
+ * @typedef {import('../previews/_kit/schemas/preview.schemas.ts').IswcComponentPreviewLike} IswcComponentPreviewLike
  */
-import type { PreviewMountContext, ISComponentPreviewLike } from '../previews/_kit/types.d.ts';
+import type { PreviewMountContext, IswcComponentPreviewLike } from '../previews/_kit/schemas/preview.schemas.ts';
 import { init as pintarConsumoCdn } from '../utils/home-cdn.js';
 
 /**
@@ -194,10 +194,10 @@ function cintasEnBucle(raiz: HTMLElement) {
 
 /**
  * @param ctx Mount context del preview.
- * @param preview Preview concreto (ISComponentPreview). Se accede a `signal`
+ * @param preview Preview concreto (IswcComponentPreview). Se accede a `signal`
  *              que es AbortSignal compartido para listeners/observers.
  */
-export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike) {
+export async function mount(ctx: PreviewMountContext, preview: IswcComponentPreviewLike) {
   const raiz = ctx.main;
   const signal = preview.signal ?? new AbortController().signal;
   const menosMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -216,6 +216,6 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
 }
 
 export function unmount() {
-  /* El corte lo hace el `signal` del preview: ISComponentPreview.unmount()
+  /* El corte lo hace el `signal` del preview: IswcComponentPreview.unmount()
      aborta el controller y con él todos los listeners y observers. */
 }

@@ -6,7 +6,7 @@ description: >-
   estilos, íconos ni build de front. Usar al alinear o mantener una API/backend que trae piezas del kit
   por vendor (perfil `server`).
 ---
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server/SKILL.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server/SKILL.md -->
 
 # iswc-server — el kit para un proyecto server (perfil `server`)
 

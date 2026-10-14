@@ -551,8 +551,8 @@ TPL.innerHTML = `<style>${CSS}</style><div class="panel">
  *  Nunca cuelga el panel: timeout 2.5s por widget. */
 async function asegurarWidgets(): Promise<void> {
   const L = (globalThis as {
-    ISWebComponentsLoader?: { ensure?: (tag: string) => Promise<boolean> };
-  }).ISWebComponentsLoader;
+    iswcLoader?: { ensure?: (tag: string) => Promise<boolean> };
+  }).iswcLoader;
   if (!L?.ensure) return;
   const conTope = (tag: string) => Promise.race([
     L.ensure!(tag).catch(() => false),

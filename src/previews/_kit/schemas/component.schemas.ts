@@ -9,7 +9,7 @@
  *
  * ### Provenance
  *
- * - `PreviewDefinition` in `src/previews/_kit/types.d.ts` is the de-facto
+ * - `PreviewDefinition` in `src/previews/_kit/schemas/preview.schemas.ts` is the de-facto
  *   TS contract for these JSONs. This file expresses the same contract
  *   in Zod so we can run it at parse time (build, tests, audit).
  * - The structural rules in `src/utils/health/motor/validators/json-schema.ts`
@@ -347,7 +347,7 @@ export const ComponentJsonSchema = z
   .passthrough();
 
 /* ──────────────────────────────────────────────────────────────────────────
- * Tipos inferidos (compat con types.d.ts)
+ * Tipos inferidos (compat con schemas/preview.schemas.ts)
  * ──────────────────────────────────────────────────────────────────────── */
 
 export type ComponentJson = z.infer<typeof ComponentJsonSchema>;
@@ -363,7 +363,7 @@ export type ControlJson = z.infer<typeof ControlSchema>;
 export type TextLike = z.infer<typeof TextLikeSchema>;
 
 /* ──────────────────────────────────────────────────────────────────────────
- * Tipos derivados (compat con PreviewDefinition de types.d.ts)
+ * Tipos derivados (compat con PreviewDefinition de schemas/preview.schemas.ts)
  * ──────────────────────────────────────────────────────────────────────── */
 
 /** El `kind` de bloque aceptado por la spec `iswc-preview/v1`. */

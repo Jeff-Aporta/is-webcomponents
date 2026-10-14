@@ -1,7 +1,7 @@
 /**
  * Behavior de iswc-format-date: locales dinámicos + reloj en vivo (1 s).
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
 
 let liveTimer: ReturnType<typeof setInterval> | null = null;
 let mainRoot: HTMLElement | null = null;

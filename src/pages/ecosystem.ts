@@ -3,13 +3,13 @@
  */
 import type {
   PreviewMountContext,
-  ISComponentPreviewLike,
-} from '../previews/_kit/types.d.ts';
+  IswcComponentPreviewLike,
+} from '../previews/_kit/schemas/preview.schemas.ts';
 import type { LoaderCatalog, LoaderModule, SharedModuleEntry, SharedCatalogJSON, SnippetEditor } from "./schemas/ecosystem.schemas.js";
 
 /** Snippet editable: <iswc-code>, <textarea> o <input>. */
 
-export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
+export async function mount(ctx: PreviewMountContext, preview: IswcComponentPreviewLike): Promise<void> {
   const root = ctx.main;
   const signal = preview.signal;
   const opts = signal ? { signal } : undefined;
@@ -17,15 +17,15 @@ export async function mount(ctx: PreviewMountContext, preview: ISComponentPrevie
   const getStarted = root.querySelector<HTMLElement>('#ecoGetStarted');
   if (getStarted) {
     const snip = `<script type="module">
-  import { ISWebComponentsLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';
+  import { iswcLoader } from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js';
 
   // Pin a un commit (inmutable) o unpin() / sin pin → tip de main
-  // ISWebComponentsLoader.pin('abcdef0123456789…');
-  ISWebComponentsLoader.configure({ mirrors: ['jsdelivr', 'pages'] });
+  // iswcLoader.pin('abcdef0123456789…');
+  iswcLoader.configure({ mirrors: ['jsdelivr', 'pages'] });
 
   // is-base.min.css se auto-carga al inicializar el loader (W52).
-  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);
-  await ISWebComponentsLoader.load('iswc-button', 'iswc-button-group');
+  await iswcLoader.loadPageStyles(['iswc-palettes-default']);
+  await iswcLoader.load('iswc-button', 'iswc-button-group');
   // Categorías: load('actions', 'data-viz')  // alias: charts → data-viz
   // Todo el kit: load('all')
 </script>
@@ -63,8 +63,8 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
   try {
     // El bundle del loader se genera con `deno task build` (dist/cdn/core/loader.min.js).
     // En dev / lint no existe: el catch muestra el mensaje y sale.
-    const mod = (await import('../../dist/cdn/core/loader.min.js')) as { ISWebComponentsLoader: LoaderModule };
-    catalog = mod.ISWebComponentsLoader.catalog;
+    const mod = (await import('../../dist/cdn/core/loader.min.js')) as { iswcLoader: LoaderModule };
+    catalog = mod.iswcLoader.catalog;
   } catch {
     catsEl.innerHTML = '<p class="lede">Corré <code>deno task build</code> para generar <code>loader.min.js</code>.</p>';
     return;
@@ -96,12 +96,12 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
     const { cats, tags } = selected();
     const args = [...cats, ...tags].map((x) => `'${x}'`).join(', ');
     const body = args
-      ? `await ISWebComponentsLoader.load(${args});`
-      : `await ISWebComponentsLoader.load('iswc-button'); // elegí arriba`;
+      ? `await iswcLoader.load(${args});`
+      : `await iswcLoader.load('iswc-button'); // elegí arriba`;
     const snip = `<script type="module">
-  import { ISWebComponentsLoader } from '../previews/behaviors/dist/cdn/core/loader.min.js';
+  import { iswcLoader } from '../previews/behaviors/dist/cdn/core/loader.min.js';
   // is-base.min.css se auto-carga al inicializar el loader (W52).
-  await ISWebComponentsLoader.loadPageStyles(['iswc-palettes-default']);
+  await iswcLoader.loadPageStyles(['iswc-palettes-default']);
   ${body}
 </script>`;
     if (snipEl) setEditorValue(snipEl, snip);
@@ -120,8 +120,8 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
     }
     try {
       // @ts-expect-error — generado en build, no presente en strict-audit.
-      const mod = (await import('../../dist/cdn/core/loader.min.js')) as { ISWebComponentsLoader: LoaderModule };
-      await mod.ISWebComponentsLoader.load(...ids);
+      const mod = (await import('../../dist/cdn/core/loader.min.js')) as { iswcLoader: LoaderModule };
+      await mod.iswcLoader.load(...ids);
       if (liveEl) {
         liveEl.replaceChildren();
         if (ids.some((id) => id === 'iswc-button' || id === 'actions' || catalog.tags[id]?.file === 'button')) {
@@ -146,7 +146,7 @@ async function mountPlayground(root: ParentNode, opts: AddEventListenerOptions |
  */
 async function mountSharedCatalog(
   root: ParentNode,
-  preview: ISComponentPreviewLike,
+  preview: IswcComponentPreviewLike,
   opts: AddEventListenerOptions | undefined,
 ): Promise<void> {
   const list = root.querySelector<HTMLElement>('#ecoList');

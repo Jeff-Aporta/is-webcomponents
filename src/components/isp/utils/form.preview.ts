@@ -1,10 +1,10 @@
 /**
  * Demo <iswc-form> con cuerpo JSON compacto (json2html / html2json).
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
-import type { IsFormEl, SubmitDetail } from "../schemas/form.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+import type { IswcFormEl, SubmitDetail } from "../schemas/form.preview.schemas.js";
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   const out = root.querySelector<HTMLElement>('#fJsonOut');
   const bodyOut = root.querySelector<HTMLElement>('#fBodyOut');
@@ -41,7 +41,7 @@ export async function mount(ctx: import('../../../previews/_kit/types.d.ts').Pre
     values: { icurso: 'C001', ncurso: 'Nómina electrónica', activo: true },
   };
 
-  const demo = root.querySelector<HTMLElement>('#fDemo') as IsFormEl | null;
+  const demo = root.querySelector<HTMLElement>('#fDemo') as IswcFormEl | null;
   if (demo) {
     demo.fromJSON(schema);
     paint(out, demo.toJSON());
@@ -70,7 +70,7 @@ export async function mount(ctx: import('../../../previews/_kit/types.d.ts').Pre
     paintLog('setValues(demo)');
   });
 
-  const round = root.querySelector<HTMLElement>('#fRound') as IsFormEl | null;
+  const round = root.querySelector<HTMLElement>('#fRound') as IswcFormEl | null;
   paint(bodyOut, schema.body);
 
   const remount = (): void => {

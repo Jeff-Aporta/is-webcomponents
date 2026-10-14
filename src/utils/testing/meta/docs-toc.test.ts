@@ -40,7 +40,7 @@ const root = dirname(dirname(dirname(dirname(here))));
 // ─── Imports estáticos: leer el módulo y verificar símbolos exportados ────
 
 const renderSrc = readFileSync(join(root, 'src', 'previews', '_kit', 'render.ts'), 'utf8');
-const typesSrc = readFileSync(join(root, 'src', 'previews', '_kit', 'types.d.ts'), 'utf8');
+const typesSrc = readFileSync(join(root, 'src', 'previews', '_kit', 'schemas', 'preview.schemas.ts'), 'utf8');
 
 assert.match(
   renderSrc,
@@ -185,7 +185,7 @@ assert.match(
   'matchStandardToc debe tipar su param como PreviewSection',
 );
 
-// types.d.ts debe seguir declarando PreviewSection con `id` y `title`,
+// schemas/preview.schemas.ts debe seguir declarando PreviewSection con `id` y `title`,
 // que son los campos que el detector lee.
 assert.match(typesSrc, /id:\s*string/);
 assert.match(typesSrc, /title:\s*string/);

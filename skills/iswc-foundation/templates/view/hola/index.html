@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/view/hola/index.html -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/view/hola/index.html -->
 <!doctype html>
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
@@ -12,7 +12,7 @@
 <script type="module" src="../../dist/cdn/__PREFIJO__Loader.min.js"></script>
 <script type="module">
   // Mismo arranque que la app: marca `data-app-ready` al terminar (watchdog de 6 s).
-  const L = globalThis.ISWebComponentsLoader;
+  const L = globalThis.iswcLoader;
   const listo = () => document.documentElement.setAttribute('data-app-ready', '');
   const watchdog = setTimeout(listo, 6000);
   try {

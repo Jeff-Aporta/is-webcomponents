@@ -1,7 +1,7 @@
 /**
  * Carga un PreviewDefinition desde JSON (fetch en browser, fs en Node).
  * @param {string | URL} url
- * @returns {Promise<import('./types.d.ts').PreviewDefinition>}
+ * @returns {Promise<import('./schemas/preview.schemas.ts').PreviewDefinition>}
  */
 export async function loadDefinitionJson(url: string | URL) {
   const href = typeof url === 'string' ? url : url.href;

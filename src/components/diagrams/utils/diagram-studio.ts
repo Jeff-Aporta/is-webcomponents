@@ -65,7 +65,7 @@ export function buildShareUrl(pageHref: string, kind: string, value: unknown): s
 function moduleHref(stem: string): string {
   const name = import.meta.url.includes('.min.js') ? `${stem}.min.js` : `${stem}.ts`;
   const href = new URL(`./${name}`, import.meta.url).href;
-  const loader = (globalThis as { ISWebComponentsLoader?: { assetUrl?: (h: string) => string } }).ISWebComponentsLoader;
+  const loader = (globalThis as { iswcLoader?: { assetUrl?: (h: string) => string } }).iswcLoader;
   return loader?.assetUrl ? loader.assetUrl(href) : href;
 }
 
@@ -74,7 +74,7 @@ function kitHref(category: string, stem: string): string {
   // Desde dist/cdn/diagrams/ → ../{cat}/{stem}.min.js
   // Desde src/components/diagrams/ → ../{cat}/{stem}.ts
   const href = new URL(`../${category}/${name}`, import.meta.url).href;
-  const loader = (globalThis as { ISWebComponentsLoader?: { assetUrl?: (h: string) => string } }).ISWebComponentsLoader;
+  const loader = (globalThis as { iswcLoader?: { assetUrl?: (h: string) => string } }).iswcLoader;
   return loader?.assetUrl ? loader.assetUrl(href) : href;
 }
 

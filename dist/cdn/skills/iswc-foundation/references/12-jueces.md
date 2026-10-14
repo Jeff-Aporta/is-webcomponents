@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/12-jueces.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/12-jueces.md -->
 # Jueces de calidad: JEV y LLM (estándar entre apps)
 
 Capa EXTRA de control de calidad para las pruebas de todas las apps del kit (ISS, ISW, el propio kit). La base de toda prueba es determinista. Los jueces solo refinan lo que un algoritmo no puede juzgar bien.

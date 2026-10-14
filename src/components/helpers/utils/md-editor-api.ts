@@ -6,7 +6,7 @@
  * El `.d.ts` paralelo sigue siendo la documentación canónica del consumidor externo.
  */
 
-import type { IsMdEditorDocument, IsMdEditorEndpoints, IsMdEditorApiConfig, CanonKey, SrcMap } from "../schemas/md-editor-api.schemas.js";
+import type { IswcMdEditorDocument, IswcMdEditorEndpoints, IswcMdEditorApiConfig, CanonKey, SrcMap } from "../schemas/md-editor-api.schemas.js";
 const DEFAULT_MAP: Record<CanonKey, readonly string[]> = {
   content: ['content', 'body', 'markdown', 'text', 'value'],
   filename: ['filename', 'fileName', 'name', 'title'],
@@ -20,7 +20,7 @@ const DEFAULT_MAP: Record<CanonKey, readonly string[]> = {
 function pickCanonKey(
   src: SrcMap,
   canon: CanonKey,
-  map: Partial<Record<string, keyof IsMdEditorDocument>>,
+  map: Partial<Record<string, keyof IswcMdEditorDocument>>,
 ): unknown {
   const overridden = map[canon];
   if (overridden != null && src[overridden] != null) return src[overridden];
@@ -30,7 +30,7 @@ function pickCanonKey(
   return undefined;
 }
 
-export function normalizeDocument(raw: unknown, cfg: IsMdEditorApiConfig = {}): IsMdEditorDocument {
+export function normalizeDocument(raw: unknown, cfg: IswcMdEditorApiConfig = {}): IswcMdEditorDocument {
   const src = unwrapData(raw);
   if (src == null) return { content: '' };
   if (typeof src === 'string') return { content: src };
@@ -39,7 +39,7 @@ export function normalizeDocument(raw: unknown, cfg: IsMdEditorApiConfig = {}): 
   const obj = src as SrcMap;
 
   const content = String(pickCanonKey(obj, 'content', map) ?? '');
-  const doc: IsMdEditorDocument = { content };
+  const doc: IswcMdEditorDocument = { content };
   const id = pickCanonKey(obj, 'id', map);
   const filename = pickCanonKey(obj, 'filename', map);
   const updatedAt = pickCanonKey(obj, 'updatedAt', map);
@@ -54,7 +54,7 @@ export function normalizeDocument(raw: unknown, cfg: IsMdEditorApiConfig = {}): 
   if (sizeBytes != null && Number.isFinite(Number(sizeBytes))) doc.sizeBytes = Number(sizeBytes);
   else doc.sizeBytes = byteLength(content);
   const metaSrc = obj['meta'];
-  if (metaSrc && typeof metaSrc === 'object') doc.meta = { ...(metaSrc as IsMdEditorDocument['meta']) };
+  if (metaSrc && typeof metaSrc === 'object') doc.meta = { ...(metaSrc as IswcMdEditorDocument['meta']) };
   return doc;
 }
 
@@ -84,7 +84,7 @@ function unwrapData(raw: unknown): unknown {
   return raw;
 }
 
-function authHeaders(cfg: IsMdEditorApiConfig): Record<string, string> {
+function authHeaders(cfg: IswcMdEditorApiConfig): Record<string, string> {
   const h: Record<string, string> = { Accept: 'application/json' };
   const extra = typeof cfg.headers === 'function' ? cfg.headers() : cfg.headers;
   if (extra) Object.assign(h, extra);
@@ -96,7 +96,7 @@ function authHeaders(cfg: IsMdEditorApiConfig): Record<string, string> {
   return h;
 }
 
-function resolveUrl(cfg: IsMdEditorApiConfig, path: string): string {
+function resolveUrl(cfg: IswcMdEditorApiConfig, path: string): string {
   if (!path) return '';
   if (/^https?:\/\//i.test(path)) return path;
   const base = (cfg.baseUrl || '').replace(/\/$/, '');
@@ -105,10 +105,10 @@ function resolveUrl(cfg: IsMdEditorApiConfig, path: string): string {
 }
 
 export async function apiRequest(
-  cfg: IsMdEditorApiConfig,
+  cfg: IswcMdEditorApiConfig,
   method: 'get' | 'put' | 'post' | 'delete',
-  doc?: IsMdEditorDocument,
-): Promise<IsMdEditorDocument | null> {
+  doc?: IswcMdEditorDocument,
+): Promise<IswcMdEditorDocument | null> {
   const ep = cfg.endpoints || {};
   const path = ep[method];
   if (!path) throw new Error(`Sin endpoint "${method}" en api.endpoints`);
@@ -138,13 +138,13 @@ export async function apiRequest(
 }
 
 export function parseApiConfig(
-  raw: string | IsMdEditorApiConfig | null | undefined,
-): IsMdEditorApiConfig | null {
+  raw: string | IswcMdEditorApiConfig | null | undefined,
+): IswcMdEditorApiConfig | null {
   if (!raw) return null;
   if (typeof raw === 'object') return raw;
   try {
     const j = JSON.parse(String(raw));
-    return j && typeof j === 'object' ? (j as IsMdEditorApiConfig) : null;
+    return j && typeof j === 'object' ? (j as IswcMdEditorApiConfig) : null;
   } catch {
     return null;
   }

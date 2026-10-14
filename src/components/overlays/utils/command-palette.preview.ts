@@ -2,7 +2,7 @@
  * Behavior de iswc-command-palette: abre la paleta desde el botón del demo y
  * registra el comando elegido.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
 import type { PaletteEl, SelectDetail } from "../schemas/command-palette.preview.schemas.js";
 
 let paleta: PaletteEl | null = null;

@@ -11,16 +11,16 @@
  *   `render.ts` arrastra dependencias del DOM (HTMLElement, customElements,
  *   document, etc.) y por tanto no se puede importar desde tests en
  *   Node. `loadFor` no toca el DOM: solo habla con
- *   `ISWebComponentsLoader` (vía `globalThis`). Aislado aquí, los
+ *   `iswcLoader` (vía `globalThis`). Aislado aquí, los
  *   tests de W56 lo pueden importar y mockear sin pasar por el bundle
  *   del chrome.
  *
  * Contrato:
  *   - Si `def.loads` está ausente o vacío → `null` (cero fetches).
- *   - Si tiene tags → `ISWebComponentsLoader.load(...loads)`. El
+ *   - Si tiene tags → `iswcLoader.load(...loads)`. El
  *     loader ya es idempotente: tags ya cargados se reportan en
  *     `skipped`.
- *   - Sin `ISWebComponentsLoader` en `globalThis` (caso de tests en
+ *   - Sin `iswcLoader` en `globalThis` (caso de tests en
  *     Node o de previews que se montan sin loader), `loadFor` degrada
  *     a un no-op: `{ loaded: [], skipped: [], requested: true }`.
  *
@@ -38,7 +38,7 @@
  * `iswc-button-group`, o un `<iswc-pdf-viewer>` en un preview de
  * overlays).
  */
-import type { PreviewDefinition } from './types.d.ts';
+import type { PreviewDefinition } from './schemas/preview.schemas.ts';
 import type { LoadForResult, LoaderLike } from './schemas/load-for.schemas.ts';
 
 /** Filtra `def.loads` quedándose solo con strings no-vacíos. */
@@ -68,7 +68,7 @@ export async function loadFor(
   // Resolver loader: override (tests) → globalThis (runtime).
   let loader: LoaderLike | null = loaderOverride ?? null;
   if (!loader && typeof globalThis !== 'undefined') {
-    const g = (globalThis as { ISWebComponentsLoader?: unknown }).ISWebComponentsLoader;
+    const g = (globalThis as { iswcLoader?: unknown }).iswcLoader;
     if (g && typeof g === 'object' && 'load' in g) {
       loader = g as LoaderLike;
     }

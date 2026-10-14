@@ -86,6 +86,6 @@ test('guard: JsonPreview.ts hace spread de `...converted` antes de overrides (pr
   assert.ok(
     /\{\s*\.\.\.(?:converted|definition)/.test(src),
     'JsonPreview.ts debe hacer spread de la definition (o converted post-ficha-bridge) antes de cualquier override; ' +
-      'sin él, los campos del JSON (sections, prelude, etc.) no llegan al constructor de ISComponentPreview.',
+      'sin él, los campos del JSON (sections, prelude, etc.) no llegan al constructor de IswcComponentPreview.',
   );
 });

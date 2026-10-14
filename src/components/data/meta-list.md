@@ -32,7 +32,7 @@ lugar de armar `<dl><dt><dd>` a mano.
 
 ```html
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js"></script>
-<!-- o: await ISWebComponentsLoader.ensure('iswc-meta-list') -->
+<!-- o: await iswcLoader.ensure('iswc-meta-list') -->
 ```
 
 ## Ejemplo mínimo

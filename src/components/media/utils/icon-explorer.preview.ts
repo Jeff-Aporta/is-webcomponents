@@ -3,7 +3,7 @@
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param ctx Contexto de montaje (root, main, aside, definition).
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
 
@@ -70,7 +70,7 @@ export async function mount(ctx: import('../../../previews/_kit/types.d.ts').Pre
   }
 
   /** Detail de los eventos `iswc-input` / `iswc-change` que disparan los `<is-*>` con `value`. */
-  interface IsInputDetail {
+  interface IswcInputDetail {
     value: string;
   }
 
@@ -414,7 +414,7 @@ export async function mount(ctx: import('../../../previews/_kit/types.d.ts').Pre
     el.addEventListener('iswc-input', sync);
   }
   F.colorPick.addEventListener('iswc-input', (e: Event): void => {
-    const detail = (e as CustomEvent<IsInputDetail>).detail;
+    const detail = (e as CustomEvent<IswcInputDetail>).detail;
     F.color.value = detail.value;
     sync();
   });
@@ -772,7 +772,7 @@ export async function mount(ctx: import('../../../previews/_kit/types.d.ts').Pre
       paint();
     });
     scopeGroup.addEventListener('iswc-change', (e: Event): void => {
-      const detail = (e as CustomEvent<IsInputDetail>).detail;
+      const detail = (e as CustomEvent<IswcInputDetail>).detail;
       scope = detail.value === 'icon' ? 'icon' : 'fam';
       q.setAttribute(
         'placeholder',

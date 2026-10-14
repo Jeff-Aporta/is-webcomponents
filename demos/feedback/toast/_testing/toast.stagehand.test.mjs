@@ -57,7 +57,7 @@ checks.push({
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
-    // Limpiar iswc-toast previos que pueda haber creado IsToast.host() en tests
+    // Limpiar iswc-toast previos que pueda haber creado IswcToast.host() en tests
     // anteriores (data-default-toaster) y verificar el primer iswc-toast del DOM.
     await page.evaluate(() => {
       document.querySelectorAll('iswc-toast').forEach((t) => {
@@ -67,7 +67,7 @@ checks.push({
     await page.click('#btn-info');
     await page.waitForTimeout(200);
     const info = await page.evaluate(() => {
-      const host = IsToast.host();
+      const host = IswcToast.host();
       const stack = host.shadowRoot.querySelector('[part="stack"]');
       const rect = stack.getBoundingClientRect();
       return {
@@ -78,7 +78,7 @@ checks.push({
         placement: host.getAttribute('placement'),
       };
     });
-    assert.equal(info.placement, 'bottom-end', `IsToast.host() debe tener placement bottom-end (vimos "${info.placement}")`);
+    assert.equal(info.placement, 'bottom-end', `IswcToast.host() debe tener placement bottom-end (vimos "${info.placement}")`);
     assert.ok(info.y > info.vh / 2, `bottom-end debe estar en mitad inferior del viewport (y=${info.y}, vh=${info.vh})`);
   },
 });
@@ -92,7 +92,7 @@ checks.push({
     await page.click('#btn-loading');
     await page.waitForTimeout(300);
     const data = await page.evaluate(() => {
-      const host = IsToast.host();
+      const host = IswcToast.host();
       const items = [...host.querySelectorAll('iswc-toast-item')];
       const last = items[items.length - 1];
       const progress = last?.shadowRoot?.querySelector('.progress');

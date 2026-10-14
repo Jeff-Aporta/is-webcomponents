@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/lib/obj.ts
+// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/lib/obj.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
 /**
  * obj.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).

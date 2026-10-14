@@ -6,7 +6,7 @@
  */
 import { z } from "zod";
 
-export const IsMdEditorDocumentSchema = z.object({
+export const IswcMdEditorDocumentSchema = z.object({
   id: z.string().optional(),
   filename: z.string().optional(),
   content: z.string(),
@@ -16,10 +16,10 @@ export const IsMdEditorDocumentSchema = z.object({
   sizeBytes: z.number().optional(),
   meta: z.record(z.string(), z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
 });
-export type IsMdEditorDocument = z.infer<typeof IsMdEditorDocumentSchema>;
+export type IswcMdEditorDocument = z.infer<typeof IswcMdEditorDocumentSchema>;
 
 
-export const IsMdEditorApiConfigSchema = z.object({
+export const IswcMdEditorApiConfigSchema = z.object({
   baseUrl: z.string().optional(),
   endpoints: z.object({
   get: z.string().optional(),
@@ -31,15 +31,15 @@ export const IsMdEditorApiConfigSchema = z.object({
   token: z.union([z.string(), z.function({ input: [], output: z.string() })]).optional(),
   fieldMap: z.record(z.string(), z.unknown() /* TODO: cannot convert */).optional(),
 });
-export type IsMdEditorApiConfig = z.infer<typeof IsMdEditorApiConfigSchema>;
+export type IswcMdEditorApiConfig = z.infer<typeof IswcMdEditorApiConfigSchema>;
 
 
-export const IsMdEditorActionsSchema = z.object({
-  load: z.function({ input: [], output: z.promise(z.union([z.unknown() /* TODO: ref IsMdEditorDocument */, z.string()])) }).optional(),
-  persist: z.function({ input: [z.unknown() /* TODO: ref IsMdEditorDocument */], output: z.promise(z.union([z.unknown() /* TODO: ref IsMdEditorDocument */, z.void()])) }).optional(),
-  delete: z.function({ input: [z.unknown() /* TODO: ref IsMdEditorDocument */], output: z.promise(z.void()) }).optional(),
+export const IswcMdEditorActionsSchema = z.object({
+  load: z.function({ input: [], output: z.promise(z.union([z.unknown() /* TODO: ref IswcMdEditorDocument */, z.string()])) }).optional(),
+  persist: z.function({ input: [z.unknown() /* TODO: ref IswcMdEditorDocument */], output: z.promise(z.union([z.unknown() /* TODO: ref IswcMdEditorDocument */, z.void()])) }).optional(),
+  delete: z.function({ input: [z.unknown() /* TODO: ref IswcMdEditorDocument */], output: z.promise(z.void()) }).optional(),
 });
-export type IsMdEditorActions = z.infer<typeof IsMdEditorActionsSchema>;
+export type IswcMdEditorActions = z.infer<typeof IswcMdEditorActionsSchema>;
 
 
 export const DialogElementSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({

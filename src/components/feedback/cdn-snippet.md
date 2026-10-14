@@ -62,7 +62,7 @@ import './cdn-snippet.js';
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@REF/dist/cdn/core/loader.min.js"></script>
 <!-- si hay deps (p. ej. patyLoader), van aquÃ­ en el mismo bloque -->
 <script type="module">
-  const L = globalThis.ISWebComponentsLoader;
+  const L = globalThis.iswcLoader;
   // is-base.min.css se auto-carga al importar el loader (W52).
   await L.loadPageStyles(['iswc-palettes-default']);
   await L.load('iswc-button');

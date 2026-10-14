@@ -59,7 +59,7 @@ import './md-editor.js';
 | `placeholder` | string | Texto cuando la vista previa estÃ¡ vacÃ­a. |
 | `edit-block-reason` | string | Tooltip de la vista previa cuando no se puede editar. |
 | `open` | boolean | DiÃ¡logo abierto (reflejado); ver `open()`/`close()`. |
-| `api` | string (JSON) | Config `IsMdEditorApiConfig` (endpoints HTTP). |
+| `api` | string (JSON) | Config `IswcMdEditorApiConfig` (endpoints HTTP). |
 | `src` | string | Atajo GET: equivale a `api.endpoints.get`. |
 | `filename` | string | Nombre de archivo en el header del diÃ¡logo. |
 | `fullscreen-scope` | `global` \| `local` | Ãmbito del diÃ¡logo fullscreen. |
@@ -75,8 +75,8 @@ import './md-editor.js';
 | `label` | lectura/escritura | Refleja `label`. |
 | `placeholder` | lectura/escritura | Refleja `placeholder`. |
 | `editBlockReason` | lectura/escritura | Refleja `edit-block-reason`. |
-| `api` | lectura/escritura | `IsMdEditorApiConfig` â€” persistencia por fetch. |
-| `actions` | lectura/escritura | `IsMdEditorActions` â€” callbacks custom (JS only; prioridad sobre `api`/`src`). |
+| `api` | lectura/escritura | `IswcMdEditorApiConfig` â€” persistencia por fetch. |
+| `actions` | lectura/escritura | `IswcMdEditorActions` â€” callbacks custom (JS only; prioridad sobre `api`/`src`). |
 | `document` | lectura/escritura | Documento canÃ³nico (meta + content). |
 | `src` / `filename` / `fullscreenScope` | lectura/escritura | Reflejan atributos. |
 
@@ -190,7 +190,7 @@ El **preview** (y la superficie readonly del diÃ¡logo) usa el mismo hydrate qu
 
 **Persistencia:** elige una vÃ­a.
 
-1. **API HTTP** â€” `api` / `src` con `IsMdEditorApiConfig.endpoints`.
+1. **API HTTP** â€” `api` / `src` con `IswcMdEditorApiConfig.endpoints`.
 2. **Actions custom** â€” `el.actions = { load, persist, delete }` (prioridad sobre HTTP; Ãºtil sin app URL).
 3. **Solo local** â€” sin `api` ni `actions`: Guardar emite `iswc-persist` y el host decide.
 

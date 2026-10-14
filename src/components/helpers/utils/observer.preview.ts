@@ -1,8 +1,8 @@
 /**
  * Behavior del preview <iswc-observer>.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext) {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
   const root = ctx.main;
 
   const pushLog = (logEl: HTMLElement | null, cls: string, text: string): void => {

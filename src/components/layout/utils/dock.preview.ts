@@ -2,7 +2,7 @@
  * Behavior migrado desde HTML inline de iswc-dock.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext) {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
   const root = ctx.main;
   void root;
   const log = document.getElementById('log') as HTMLElement | null;

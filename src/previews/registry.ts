@@ -11,10 +11,10 @@ import catalog from './catalog.js';
 import { JsonPreview } from './_kit/JsonPreview.js';
 import { loadDefinitionJson } from './_kit/load-json.js';
 import type {
-  ISComponentPreviewLike,
+  IswcComponentPreviewLike,
   PreviewBehaviorModule,
   PreviewDefinition,
-} from './_kit/types.d.ts';
+} from './_kit/schemas/preview.schemas.ts';
 import type { CatalogEntry } from "./schemas/registry.schemas.js";
 
 /** Mirror of an entry in catalog.ts (auto-generated). */
@@ -45,7 +45,7 @@ export function hasCachedPreview(tag: string): boolean {
   return definitionCache.has(tag);
 }
 
-export async function loadPreview(tag: string): Promise<ISComponentPreviewLike | null> {
+export async function loadPreview(tag: string): Promise<IswcComponentPreviewLike | null> {
   const entry = (catalog as Record<string, CatalogEntry | undefined>)[tag];
   if (!entry) return null;
 

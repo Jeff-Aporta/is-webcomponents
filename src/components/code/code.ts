@@ -50,7 +50,7 @@ import { tokenizeCode, lineToHtml, tokenClass, escapeHtml, tokensToText } from '
 import type { Token as HighlightToken, HighlightLine as CodeHighlightLine } from '../../core/schemas/code-highlight.schemas.js';
 import type { CodeFormatConfig as CodeFmtConfigShared } from './schemas/code-format.schemas.js';
 import '../feedback/tooltip.js';
-import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IsTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
+import type { CodeMarkKind, CodeMarkTone, CodeMark, CodeDocument, CodeFormatConfig, CodeLangDef, IswcTooltipEl, HighlightLine, HighlightResult } from "./schemas/code.schemas.js";
 
 // Tipos locales (los _shared sólo los declaran vía JSDoc; replicamos forma).
 
@@ -106,7 +106,7 @@ class IswcCode extends ElementBase {
   #internals: ElementInternals | null = null;
   #textarea: HTMLTextAreaElement | null = null;
   #host: HTMLElement | null = null;
-  #tooltip: IsTooltipEl | null = null;
+  #tooltip: IswcTooltipEl | null = null;
   #native: boolean = false;
   #nativeRoot: HTMLPreElement | null = null;
   #nativeText: string | null = null;
@@ -131,7 +131,7 @@ class IswcCode extends ElementBase {
     shadow.appendChild(TEMPLATE.content.cloneNode(true));
     this.#textarea = shadow.querySelector<HTMLTextAreaElement>('.seed');
     this.#host = shadow.querySelector<HTMLElement>('.editor-host');
-    this.#tooltip = shadow.querySelector<HTMLElement>('iswc-tooltip') as IsTooltipEl | null;
+    this.#tooltip = shadow.querySelector<HTMLElement>('iswc-tooltip') as IswcTooltipEl | null;
     this.#internals = attachFormInternals(this);
   }
 

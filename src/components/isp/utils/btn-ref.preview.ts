@@ -7,9 +7,9 @@ import type { _BtnRefLike, _SelectedDetail } from "../schemas/btn-ref.preview.sc
 
 /**
  * Demo <iswc-btn-ref> single + multi con controller JSON (sin acciones CRUD).
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
 
   const datos: Array<{ app: string }> = [

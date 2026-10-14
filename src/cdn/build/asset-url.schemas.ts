@@ -7,7 +7,7 @@
 import { z } from "zod";
 
 export const LoaderGlobalSchema = z.object({
-  ISWebComponentsLoader: z.object({
+  iswcLoader: z.object({
   assetUrl: z.function({ input: [z.string()], output: z.string() }).optional(),
 }).optional(),
 });

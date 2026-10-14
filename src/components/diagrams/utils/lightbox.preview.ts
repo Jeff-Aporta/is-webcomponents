@@ -8,7 +8,7 @@ function asLightbox(el: HTMLElement | null): LightboxLike | null {
   return (el as LightboxLike | null);
 }
 
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const lb1 = asLightbox(document.getElementById('lb1'));
   const lb1Solid = asLightbox(document.getElementById('lb1-solid'));

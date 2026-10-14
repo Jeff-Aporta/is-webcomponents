@@ -6,10 +6,10 @@
  */
 import { z } from "zod";
 
-export const IsToastElSchema = z.object({
+export const IswcToastElSchema = z.object({
   create: z.function({ input: [z.string(), z.record(z.string(), z.unknown())], output: z.promise(z.unknown() /* TODO: ref HTMLElement */) }),
   /* TODO: parse fail promise<T>(p: Promise<T>, callbacks: {;    loading?: string; */
   placement: z.string(),
 });
-export type IsToastEl = z.infer<typeof IsToastElSchema>;
+export type IswcToastEl = z.infer<typeof IswcToastElSchema>;
 

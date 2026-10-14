@@ -37,7 +37,7 @@ pinea dos CDN, solo el kit.
 ## Importación
 
 ```js
-import './server-api-docs.js'; // o, por el loader: ISWebComponentsLoader.ensure('iswc-server-api-docs')
+import './server-api-docs.js'; // o, por el loader: iswcLoader.ensure('iswc-server-api-docs')
 ```
 
 ## Ejemplo mínimo

@@ -34,7 +34,7 @@ test('galería: CSS del kit vía loader aliases (sin <link> is-base/palettes)', 
 
 test('index.html: loader module + iswc-doc-demo (boot vía aliases; sin index.js/mjs/css)', () => {
   assert.doesNotMatch(indexHtml, /doc-demo-boot\.min\.js/);
-  assert.match(indexHtml, /ISWebComponentsLoader|from ['"].*loader\.min\.js['"]/);
+  assert.match(indexHtml, /iswcLoader|from ['"].*loader\.min\.js['"]/);
   assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-doc-demo-host/);
   assert.match(indexHtml, /loadPageModules\s*\(\s*\[[\s\S]*iswc-gallery-app/);
   assert.doesNotMatch(indexHtml, /<script[^>]+src=["'][^"']*doc-demo-host\.min\.js/);

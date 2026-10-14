@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
 import { arrancar, abrirGaleria, clicTagNav, esperarMs, esperarTexto, esperarContenido, arbolTexto, evidencia, problemasDeConsola, crearTestE2E } from './lib/harness.ts';
 import { faltanRequisitos } from './lib/env.ts';
-import type { CtxE2E } from './lib/tipos.d.ts';
+import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;

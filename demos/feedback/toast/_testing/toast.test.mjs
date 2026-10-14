@@ -53,15 +53,15 @@ tests.push({
 });
 
 tests.push({
-  name: 'API estática: IsToast.success() lanza un toast success',
+  name: 'API estática: IswcToast.success() lanza un toast success',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(async () => {
-      const item = await IsToast.success('¡Bien!');
+      const item = await IswcToast.success('¡Bien!');
       await new Promise((r) => requestAnimationFrame(() => r()));
-      const t = IsToast.host();
+      const t = IswcToast.host();
       const all = [...t.querySelectorAll('iswc-toast-item')];
       const success = all.find((i) => i.textContent.includes('¡Bien!'));
       return {
@@ -69,19 +69,19 @@ tests.push({
         itemColor: success?.getAttribute('color') || success?.color,
       };
     });
-    assert.ok(data.hostOk, 'IsToast.host() debe devolver un toaster');
+    assert.ok(data.hostOk, 'IswcToast.host() debe devolver un toaster');
     assert.equal(data.itemColor, 'success', `toast.success debe tener color=success (vimos "${data.itemColor}")`);
   },
 });
 
 tests.push({
-  name: 'API estática: IsToast.error() crea un toast danger con duración 5000ms',
+  name: 'API estática: IswcToast.error() crea un toast danger con duración 5000ms',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(async () => {
-      const item = await IsToast.error('Boom!');
+      const item = await IswcToast.error('Boom!');
       await new Promise((r) => requestAnimationFrame(() => r()));
       return {
         color: item.color,
@@ -94,13 +94,13 @@ tests.push({
 });
 
 tests.push({
-  name: 'API estática: IsToast.loading() crea un toast persistente (duration=0)',
+  name: 'API estática: IswcToast.loading() crea un toast persistente (duration=0)',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(async () => {
-      const item = await IsToast.loading('Cargando…');
+      const item = await IswcToast.loading('Cargando…');
       await new Promise((r) => requestAnimationFrame(() => r()));
       return { duration: item.duration };
     }).catch((e) => ({ duration: null, err: String(e) }));
@@ -135,7 +135,7 @@ tests.push({
     await page.waitForTimeout(150);
     const result = await page.evaluate(async () => {
       window.__xssFired = false;
-      const t = IsToast.host();
+      const t = IswcToast.host();
       const item = await t.create('<img src=x onerror="window.__xssFired=true">PWN', { duration: 0 });
       await new Promise((r) => requestAnimationFrame(() => r()));
       // Verificar:
@@ -145,7 +145,7 @@ tests.push({
       const text = item.textContent;
       //  3) No se ejecutó el onerror
       const xssFired = window.__xssFired;
-      IsToast.remove(item);
+      IswcToast.remove(item);
       return { imgsInToast, textIncludesLiteral: text.includes('<img'), xssFired };
     });
     assert.equal(result.imgsInToast, 0, `modo seguro NO debe crear <img> dentro del item (creó ${result.imgsInToast})`);
@@ -161,14 +161,14 @@ tests.push({
     await page.waitForTimeout(150);
     const result = await page.evaluate(async () => {
       window.__xssFired = false;
-      const t = IsToast.host();
+      const t = IswcToast.host();
       // Usamos un tag inocuo que NO dispare eventos, sólo para verificar que
       // el HTML se inserta como nodo (NO como texto).
       const item = await t.create('<b data-xss="1">safe-mark</b>', { duration: 0, allowHtml: true });
       await new Promise((r) => requestAnimationFrame(() => r()));
       const bold = item.querySelector('b[data-xss]');
       const text = item.textContent;
-      IsToast.remove(item);
+      IswcToast.remove(item);
       return { boldFound: !!bold, text };
     });
     // Documenta el comportamiento actual (gap 18): allowHtml=true permite HTML.
@@ -187,12 +187,12 @@ tests.push({
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const hasCaption = await page.evaluate(async () => {
-      const t = IsToast.host();
+      const t = IswcToast.host();
       const item = await t.create('Título', { duration: 0, caption: 'detalle menor' });
       await new Promise((r) => requestAnimationFrame(() => r()));
       const cap = item.querySelector('[slot="caption"]');
       const got = !!cap && cap.textContent.includes('detalle menor');
-      IsToast.remove(item);
+      IswcToast.remove(item);
       return got;
     });
     assert.ok(hasCaption, 'caption debe aparecer como slot caption en el item');
@@ -200,15 +200,15 @@ tests.push({
 });
 
 tests.push({
-  name: 'funcional: IsToast.promise() reusa el mismo item en success',
+  name: 'funcional: IswcToast.promise() reusa el mismo item en success',
   run: async (page) => {
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
     await waitReady(page, 'data-toast-ready');
     await page.waitForTimeout(150);
     const data = await page.evaluate(async () => {
-      const t = IsToast.host();
+      const t = IswcToast.host();
       const before = t.querySelectorAll('iswc-toast-item').length;
-      await IsToast.promise(
+      await IswcToast.promise(
         new Promise((r) => setTimeout(() => r(42), 50)),
         {
           loading: 'Cargando',

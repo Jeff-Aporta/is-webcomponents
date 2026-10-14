@@ -1,5 +1,5 @@
 /**
- * tests/cdn-loader.test.ts — contrato del ISWebComponentsLoader.
+ * tests/cdn-loader.test.ts — contrato del iswcLoader.
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -16,7 +16,7 @@ const indexHtml = readFileSync(join(root, 'index.html'), 'utf8');
 
 test('src/cdn/loader.ts expone API pública + mirrors/pin + has/getLoaded', () => {
   const code = readFileSync(src, 'utf8');
-  assert.match(code, /export const ISWebComponentsLoader/);
+  assert.match(code, /export const iswcLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   // Palettes: alias iswc-palettes-default vía loadPageStyles (no loadCSSPalettesDefault).
   assert.doesNotMatch(code, /loadCSSPalettesDefault\s*\(/);
@@ -50,7 +50,7 @@ test('dist/cdn/core/loader.min.js y loader.md existen; banner con docs', () => {
   assert.ok(existsSync(join(root, 'dist', 'cdn', 'core', 'loader.md')), 'falta dist/cdn/core/loader.md');
   const code = readFileSync(dist, 'utf8');
   assert.ok(code.length < 120_000, `loader.min.js demasiado grande (${code.length} B)`);
-  assert.match(code, /ISWebComponentsLoader/);
+  assert.match(code, /iswcLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   assert.match(code, /jsdelivr|Jeff-Aporta\/iswc-root/);
   assert.match(code, /"iswc-button"/);
@@ -107,8 +107,8 @@ test('specs/cdn.md documenta pin/mirrors (consolidación 2026-09-07)', () => {
   // specs/cdn.md § "Detalle operativo". El guardián migró.
   const cdn = readFileSync(join(root, 'specs', 'cdn.md'), 'utf8');
   assert.match(cdn, /loader\.min\.js/);
-  // W52: loadCSSBase se elimino del loader; ISWebComponentsLoader es el contrato.
-  assert.match(cdn, /ISWebComponentsLoader/);
+  // W52: loadCSSBase se elimino del loader; iswcLoader es el contrato.
+  assert.match(cdn, /iswcLoader/);
   assert.match(cdn, /pin|SHA|branch/i);
   assert.match(cdn, /mirrors|jsDelivr|Pages/i);
   assert.ok(!existsSync(join(root, 'dist', 'cdn', 'README.txt')), 'README.txt retirado — specs/cdn.md es el índice');

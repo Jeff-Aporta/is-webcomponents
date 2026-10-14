@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 
-/** Lo que md-hydrate usa del loader del kit (`globalThis.ISWebComponentsLoader`). */
+/** Lo que md-hydrate usa del loader del kit (`globalThis.iswcLoader`). */
 export const LoaderLikeSchema = z.object({
   ensure: z.function({ input: [z.string()], output: z.promise(z.boolean()) }),
 });

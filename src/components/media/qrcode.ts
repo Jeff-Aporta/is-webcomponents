@@ -29,7 +29,7 @@ import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
 (() => {
   const OBSERVED = ['value', 'level', 'cell', 'margin', 'fg', 'bg'];
 
-  class IsQrCode extends HTMLElement {
+  class IswcQrCode extends HTMLElement {
     static get observedAttributes(): string[] { return OBSERVED; }
     #mounted = false;
     #lib: QRLib | null = null;
@@ -155,5 +155,5 @@ import type { QRInstance, QRLib } from "./schemas/qrcode.schemas.js";
     }
   }
 
-  defineElement('iswc-qrcode', IsQrCode);
+  defineElement('iswc-qrcode', IswcQrCode);
 })();

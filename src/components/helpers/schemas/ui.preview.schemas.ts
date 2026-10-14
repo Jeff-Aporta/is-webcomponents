@@ -6,11 +6,11 @@
  */
 import { z } from "zod";
 
-export const IsUiApiSchema = z.object({
+export const IswcUiApiSchema = z.object({
   html: z.unknown() /* TODO: cannot convert */,
   esc: z.unknown() /* TODO: cannot convert */,
   define: z.function({ input: [z.string(), z.unknown() /* TODO: ref CustomElementConstructor */], output: z.void() }),
   css: z.function({ input: [z.unknown() /* TODO: ref ShadowRoot */, z.string()], output: z.void() }),
 });
-export type IsUiApi = z.infer<typeof IsUiApiSchema>;
+export type IswcUiApi = z.infer<typeof IswcUiApiSchema>;
 

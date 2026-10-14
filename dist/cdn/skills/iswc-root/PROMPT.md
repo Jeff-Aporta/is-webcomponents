@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/PROMPT.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-root/PROMPT.md -->
 # ISWC (Instrucciones para LLM)
 
 Utiliza **ISWC** exclusivamente mediante **CDN** (o copia local vía `/iswc-root:local`).
@@ -124,7 +124,7 @@ Sustituye `{{SHA}}` por el tip de `main` (referencia: `ca31ad04be5bba79c8ef4652b
 ```html
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@{{SHA}}/dist/cdn/core/loader.min.js"></script>
 <script type="module">
-  const L = globalThis.ISWebComponentsLoader;
+  const L = globalThis.iswcLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();
   await L.load("iswc-button");
@@ -161,7 +161,7 @@ const css=u=>new Promise((ok,err)=>{
 for(const base of MIRRORS){
  try{
   await import(`${base}/core/loader.min.js`);
-  const L = globalThis.ISWebComponentsLoader;
+  const L = globalThis.iswcLoader;
   await L.loadCSSBase();
   await L.loadCSSPalettesDefault();
   await L.load("iswc-button");

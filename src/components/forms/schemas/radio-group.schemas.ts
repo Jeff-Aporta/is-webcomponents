@@ -6,11 +6,11 @@
  */
 import { z } from "zod";
 
-export const IsRadioElementSchema = z.object({
+export const IswcRadioElementSchema = z.object({
   value: z.string(),
   checked: z.boolean(),
   disabled: z.boolean(),
   syncFromGroup: z.function({ input: [], output: z.void() }).optional(),
 });
-export type IsRadioElement = z.infer<typeof IsRadioElementSchema>;
+export type IswcRadioElement = z.infer<typeof IswcRadioElementSchema>;
 

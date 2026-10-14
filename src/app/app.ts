@@ -37,7 +37,7 @@ import type { GalleryState, ThemeName, PaletteName, CategoryMeta, CatalogItem, T
 
 /** Subset del `<iswc-drawer>` con `show` / `hide` cancelables. */
 
-/** Subset del ISWebComponentsLoader (subset usado por la galería). */
+/** Subset del iswcLoader (subset usado por la galería). */
 
 /* ─────────────── asRecord: helper común del WT-ROOT ─────────────────── */
 
@@ -354,7 +354,7 @@ function setHostPreview(value: PreviewLike | null): void {
  */
 async function ensurePreviewDeps(tag: string, preview: PreviewLike): Promise<void> {
   await customElements.whenDefined('iswc-preview-component');
-  const L = (globalThis as Record<string, unknown>).ISWebComponentsLoader as LoaderLike | undefined;
+  const L = (globalThis as Record<string, unknown>).iswcLoader as LoaderLike | undefined;
   if (!L) return;
   let tags: string[] = [...new Set<string>([
     ...GALLERY_CHROME_TAGS,

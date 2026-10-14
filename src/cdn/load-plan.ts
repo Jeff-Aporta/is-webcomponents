@@ -104,7 +104,7 @@ export function planLoads(ids: readonly string[], reg: LoadRegistry, catalog: Ca
     }
 
     throw new Error(
-      `ISWebComponentsLoader.load: desconocido "${id}". Usa tag o categoría.`,
+      `iswcLoader.load: desconocido "${id}". Usa tag o categoría.`,
     );
   }
 

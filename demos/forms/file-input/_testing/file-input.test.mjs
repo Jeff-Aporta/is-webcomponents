@@ -25,7 +25,7 @@ tests.push({
     });
     assert.equal(info.defined, true, 'iswc-file-input debe estar definido');
     assert.equal(info.count, 4, `esperaba 4 elementos, hay ${info.count}`);
-    assert.equal(info.definedClass, 'IsFileInput', 'clase esperada IsFileInput');
+    assert.equal(info.definedClass, 'IswcFileInput', 'clase esperada IswcFileInput');
     for (let i = 0; i < 4; i++) {
       assert.ok(info.dropzones[i], `dropzone ${i} debe existir en shadow DOM`);
     }

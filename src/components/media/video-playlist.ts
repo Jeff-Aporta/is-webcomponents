@@ -35,7 +35,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import '../actions/button.js';
 import './video.js';
 import './icon.js';
-import type { IsVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";
+import type { IswcVideoLike, IswcVideo, VideoList, MediaObsBag, ActivateOptions, ApplyActiveOptions } from "./schemas/video-playlist.schemas.js";
 
 // Tipo mínimo del <iswc-video> hijo. Sólo accedemos a `media`, `play`, `pause`
 // y atributos — no hace falta arrastrar todo el componente.

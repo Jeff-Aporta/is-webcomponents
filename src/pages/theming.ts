@@ -11,8 +11,8 @@
 import { readIswc, removeIswc, writeIswc } from '../core/iswc-storage.js';
 import type {
   PreviewMountContext,
-  ISComponentPreviewLike,
-} from '../previews/_kit/types.d.ts';
+  IswcComponentPreviewLike,
+} from '../previews/_kit/schemas/preview.schemas.ts';
 import { BRAND_DERIVE, applyBrandVars, seedCss } from '../styles/palette-build.js';
 import type { Rgb, Oklab, Seed, OklchTriplet, PersistedData, TokenMap, BuildTokensResult, ColorPicker, TextEditor, CheckboxEl } from "./schemas/theming.schemas.js";
 
@@ -25,7 +25,7 @@ import type { Rgb, Oklab, Seed, OklchTriplet, PersistedData, TokenMap, BuildToke
 
 /** Toggle / checkbox (Aplicar a toda la página). */
 
-export async function mount(ctx: PreviewMountContext, preview: ISComponentPreviewLike): Promise<void> {
+export async function mount(ctx: PreviewMountContext, preview: IswcComponentPreviewLike): Promise<void> {
   const root = ctx.main;
   const signal = preview.signal;
   const opts = signal ? { signal } : undefined;

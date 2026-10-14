@@ -2,15 +2,15 @@
  * Behavior migrado desde HTML inline de iswc-chart.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.js';
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
 import type { IswcChart } from '../chart.js';
-import type { IsChartElement } from "../schemas/chart.preview.schemas.js";
+import type { IswcChartElement } from "../schemas/chart.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
   await customElements.whenDefined('iswc-chart');
-  const el = document.querySelector<HTMLElement>('#jsChart') as IsChartElement | null;
+  const el = document.querySelector<HTMLElement>('#jsChart') as IswcChartElement | null;
   if (!el) return;
   el.config = {
     data: {

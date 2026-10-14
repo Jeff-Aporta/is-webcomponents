@@ -51,7 +51,7 @@ import type {
   PreviewDefinition,
   PreviewSection,
   PreviewBlock,
-} from './types.d.ts';
+} from './schemas/preview.schemas.ts';
 import { asText } from './text-like.ts';
 import type { FichaPlayground, FichaSubObject, FichaLikeDefinition } from "./schemas/ficha-bridge.schemas.js";
 

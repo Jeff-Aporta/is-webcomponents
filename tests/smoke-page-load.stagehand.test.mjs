@@ -108,7 +108,7 @@ test('smoke: la página home carga sin errores de red', async () => {
     docReady: document.querySelector('iswc-doc-demo')?.dataset?.ready === '1',
     hasShellBar: Boolean(document.querySelector('.shell-bar')),
     hasNav: Boolean(document.querySelector('.shell-nav, [id="shellNav"]')),
-    hasLoader: Boolean(globalThis.ISWebComponentsLoader),
+    hasLoader: Boolean(globalThis.iswcLoader),
   }));
 
   await page.close();
@@ -117,7 +117,7 @@ test('smoke: la página home carga sin errores de red', async () => {
   assert.equal(state.docReady, true, 'iswc-doc-demo debe tener data-ready="1"');
   assert.equal(state.hasShellBar, true, 'debe existir el chrome .shell-bar');
   assert.equal(state.hasNav, true, 'debe existir el nav del shell');
-  assert.equal(state.hasLoader, true, 'ISWebComponentsLoader debe estar en globalThis');
+  assert.equal(state.hasLoader, true, 'iswcLoader debe estar en globalThis');
 
   // Filtra requests a `api.github.com` (red externa, fuera de scope).
   const localFailures = failed.filter((f) => !f.url.includes('api.github.com'));

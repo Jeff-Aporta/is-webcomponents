@@ -117,9 +117,9 @@ test('WT-0052 / md-editor: archivo existe y registra iswc-md-editor', () => {
 
 test('WT-0052 / md-editor: tipos del contrato declarados inline', () => {
   const src = readFileSync(MD_EDITOR, 'utf8');
-  assert.match(src, /interface\s+IsMdEditorDocument\b/, 'declara IsMdEditorDocument inline');
-  assert.match(src, /interface\s+IsMdEditorApiConfig\b/, 'declara IsMdEditorApiConfig inline');
-  assert.match(src, /interface\s+IsMdEditorActions\b/, 'declara IsMdEditorActions inline');
+  assert.match(src, /interface\s+IswcMdEditorDocument\b/, 'declara IswcMdEditorDocument inline');
+  assert.match(src, /interface\s+IswcMdEditorApiConfig\b/, 'declara IswcMdEditorApiConfig inline');
+  assert.match(src, /interface\s+IswcMdEditorActions\b/, 'declara IswcMdEditorActions inline');
 });
 
 test('WT-0052 / md-editor: subset tipado de wrappers (Dialog, Switch, Copy, Textarea)', () => {

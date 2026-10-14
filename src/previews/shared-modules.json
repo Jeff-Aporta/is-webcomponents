@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T15:02:29.448Z",
+  "generatedAt": "2026-10-14T15:06:30.245Z",
   "count": 40,
   "modules": [
     {
@@ -34,7 +34,7 @@
       "id": "attrs",
       "path": "src/core/attrs.ts",
       "summary": "attrs — Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado",
-      "bytes": 13517,
+      "bytes": 13521,
       "exports": [
         "isCssColorValue",
         "syncStyleAttr",
@@ -196,7 +196,7 @@
       "id": "element-base",
       "path": "src/core/element-base.ts",
       "summary": "element-base — Centraliza el patrón que se repetía en ~150 componentes: shadow más template,",
-      "bytes": 6357,
+      "bytes": 6359,
       "exports": [
         "ElementBase extends HTMLElement"
       ]

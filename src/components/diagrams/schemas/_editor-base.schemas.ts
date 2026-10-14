@@ -17,18 +17,18 @@ export const EditorSpecLikeSchema = z.object({
 export type EditorSpecLike = z.infer<typeof EditorSpecLikeSchema>;
 
 
-export const IsStateChangeDetailSchema = z.object({
+export const IswcStateChangeDetailSchema = z.object({
   spec: z.unknown() /* TODO: ref Spec */,
   tag: z.string().optional(),
 });
-export type IsStateChangeDetail = z.infer<typeof IsStateChangeDetailSchema>;
+export type IswcStateChangeDetail = z.infer<typeof IswcStateChangeDetailSchema>;
 
 
-export const IsEditorConstructorSchema = z.object({
+export const IswcEditorConstructorSchema = z.object({
   /* TODO: parse fail readonly observedAttributes: string[] */
   /* TODO: parse fail new (...args: ConstructorParameters<typeof HTMLElement>): HT */
 });
-export type IsEditorConstructor = z.infer<typeof IsEditorConstructorSchema>;
+export type IswcEditorConstructor = z.infer<typeof IswcEditorConstructorSchema>;
 
 
 export const EditorSpecGetSchema = z.object({

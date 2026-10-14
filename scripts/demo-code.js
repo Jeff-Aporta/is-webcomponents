@@ -221,7 +221,7 @@ import manifest from '../src/manifest.js';
     const args = tags.map((t) => JSON.stringify(`is-${t}`)).join(', ');
     lines.push(`<script type="module" src="${CDN}/core/loader.min.js"><\/script>`);
     lines.push('<script type="module">');
-    lines.push('  const L = globalThis.ISWebComponentsLoader;');
+    lines.push('  const L = globalThis.iswcLoader;');
     lines.push('  // is-base.min.css se auto-carga al inicializar el loader (W52).');
     lines.push("  await L.loadPageStyles(['iswc-palettes-default']);");
     if (args) lines.push(`  await L.load(${args});`);

@@ -1,5 +1,5 @@
 /**
- * ISComponentPreview — controlador tipado de un preview de componente.
+ * IswcComponentPreview — controlador tipado de un preview de componente.
  *
  * La definición (secciones/bloques) es datos. El comportamiento se escribe en
  * `mount` / `unmount` como métodos reales (addEventListener, whenDefined, …).
@@ -9,18 +9,18 @@
 import type {
   PreviewDefinition,
   PreviewMountContext,
-  ISComponentPreviewLike,
-} from './types.d.ts';
+  IswcComponentPreviewLike,
+} from './schemas/preview.schemas.ts';
 
-/** Implementación concreta de ISComponentPreviewLike. */
-export class ISComponentPreview implements ISComponentPreviewLike {
+/** Implementación concreta de IswcComponentPreviewLike. */
+export class IswcComponentPreview implements IswcComponentPreviewLike {
   readonly definition: PreviewDefinition;
   #ac: AbortController | null = null;
 
   constructor(definition: PreviewDefinition) {
-    if (!definition?.tag) throw new Error('ISComponentPreview: falta definition.tag');
+    if (!definition?.tag) throw new Error('IswcComponentPreview: falta definition.tag');
     if (!Array.isArray(definition.sections)) {
-      throw new Error(`ISComponentPreview(${definition.tag}): sections[] obligatorio`);
+      throw new Error(`IswcComponentPreview(${definition.tag}): sections[] obligatorio`);
     }
     this.definition = Object.freeze({
       ...definition,
@@ -61,4 +61,4 @@ export class ISComponentPreview implements ISComponentPreviewLike {
   }
 }
 
-export default ISComponentPreview;
+export default IswcComponentPreview;

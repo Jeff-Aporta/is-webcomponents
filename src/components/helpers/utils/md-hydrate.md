@@ -17,7 +17,7 @@ y pide al loader solo los que siguen en el árbol:
 | Al pintar (livianos) | `iswc-callout`, `iswc-divider`, `iswc-scroller`, `iswc-checkbox`, `iswc-copy-button`, `iswc-theme-img` (+ `iswc-icon` que usan en su shadow) |
 | Al acercarse a la pantalla (pesados) | `iswc-code`, diagramas `iswc-*`, tags `iswc-*` escritos en HTML embebido |
 
-Un tag ya definido no se pide. El loader (`ISWebComponentsLoader.ensure`) es idempotente:
+Un tag ya definido no se pide. El loader (`iswcLoader.ensure`) es idempotente:
 pedir el mismo tag N veces cuesta una carga.
 
 ## Importación
@@ -33,7 +33,7 @@ const hidratacion = hydrateMdEmbeds(root, tags);
 hidratacion.cancelar();
 ```
 
-Requiere `globalThis.ISWebComponentsLoader` (el loader del CDN); sin él, el contenido
+Requiere `globalThis.iswcLoader` (el loader del CDN); sin él, el contenido
 de respaldo de cada componente queda visible.
 
 ## API

@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/anatomy-section.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/document-component/references/anatomy-section.md -->
 ﻿# Anatomía de la ficha de un componente iswc
 
 La sección de anatomía es la **primera** que aparece en

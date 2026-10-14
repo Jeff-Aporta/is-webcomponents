@@ -26,7 +26,7 @@ const DEPENDENCIAS: Readonly<Record<string, readonly string[]>> = {
 const MARGEN_VISTA = '400px 0px';
 
 function loader(): LoaderLike | null {
-  const L = (globalThis as { ISWebComponentsLoader?: Partial<LoaderLike> }).ISWebComponentsLoader;
+  const L = (globalThis as { iswcLoader?: Partial<LoaderLike> }).iswcLoader;
   return L && typeof L.ensure === 'function' ? { ensure: (tag: string) => L.ensure!(tag) } : null;
 }
 

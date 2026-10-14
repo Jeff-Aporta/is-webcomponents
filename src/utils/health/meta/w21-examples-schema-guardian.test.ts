@@ -224,10 +224,10 @@ test('W21: JsonPreview preserva `examples` en la PreviewDefinition normalizada',
 });
 
 test('W21: PreviewDefinition declara `examples` opcional', () => {
-  const src = readFileSync(join(root, 'src/previews/_kit/types.d.ts'), 'utf8');
+  const src = readFileSync(join(root, 'src/previews/_kit/schemas/preview.schemas.ts'), 'utf8');
   assert.match(
     src,
     /examples\?:\s*unknown\[\]/,
-    'types.d.ts debe declarar `examples?: unknown[]` en PreviewDefinition',
+    'schemas/preview.schemas.ts debe declarar `examples?: unknown[]` en PreviewDefinition',
   );
 });

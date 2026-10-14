@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/manifest.ts
+// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/manifest.ts
 /**
  * manifest.ts — regenera `templates/manifest.json` (la lista de plantillas que copia create-iswc-app).
  * Por HTTPS no se puede listar una carpeta: la herramienta lee esta lista.

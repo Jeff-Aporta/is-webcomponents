@@ -1,7 +1,7 @@
 /**
  * helpers/response-cache.js — caché de lecturas en IndexedDB (SWR).
  *
- * NO es un custom element. Expone `createResponseCache` / `IsResponseCache`.
+ * NO es un custom element. Expone `createResponseCache` / `IswcResponseCache`.
  *
  * Contrato (Muéstralo + PatyIA):
  *   - Pinta al instante lo último conocido; repinta solo si la red difiere.
@@ -198,9 +198,9 @@ export function createResponseCache(opts: CreateResponseCacheOpts = {}): Respons
 }
 
 /** Instancia por defecto del kit (apps pueden createResponseCache con su dbName). */
-export const IsResponseCache: ResponseCache = createResponseCache();
+export const IswcResponseCache: ResponseCache = createResponseCache();
 
 if (typeof globalThis !== 'undefined') {
-  (globalThis as Record<string, unknown>).IsResponseCache = IsResponseCache;
+  (globalThis as Record<string, unknown>).IswcResponseCache = IswcResponseCache;
   (globalThis as Record<string, unknown>).createResponseCache = createResponseCache;
 }

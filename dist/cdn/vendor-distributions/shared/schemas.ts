@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
+// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * schemas.ts — TODOS los contratos (Zod y tipos) de `vendor-distributions/`, en UN solo archivo por secciones.

@@ -2,15 +2,15 @@
  * Behavior migrado desde HTML inline de iswc-toast.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
-import type { IsToastEl } from "../schemas/toast.preview.schemas.js";
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
+import type { IswcToastEl } from "../schemas/toast.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   // El JSON de demos solo trae botones; el contenedor vive a nivel de página.
-  let toaster = document.getElementById('toaster') as IsToastEl | null;
+  let toaster = document.getElementById('toaster') as IswcToastEl | null;
   if (!toaster) {
-    toaster = document.createElement('iswc-toast') as IsToastEl;
+    toaster = document.createElement('iswc-toast') as IswcToastEl;
     toaster.id = 'toaster';
     toaster.setAttribute('placement', 'top-end');
     (document.body || root).append(toaster);

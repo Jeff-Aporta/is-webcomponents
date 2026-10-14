@@ -1,8 +1,8 @@
 /**
  * Cablea el iframe del explorador de iconos dentro del preview iswc-icon.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext) {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
   const frame = ctx.main.querySelector<HTMLIFrameElement>('#xpFrame');
   const openBtn = ctx.main.querySelector<HTMLElement>('#xpOpen');
   if (!frame) return;

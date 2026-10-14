@@ -16,8 +16,8 @@ export const AgGridApiSchema = z.object({
 export type AgGridApi = z.infer<typeof AgGridApiSchema>;
 
 
-export const IsAgGridElSchema = z.object({
+export const IswcAgGridElSchema = z.object({
   api: AgGridApiSchema.optional(),
 });
-export type IsAgGridEl = z.infer<typeof IsAgGridElSchema>;
+export type IswcAgGridEl = z.infer<typeof IswcAgGridElSchema>;
 

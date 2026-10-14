@@ -47,7 +47,7 @@ const DEFAULT_PAGE_MODULES = [
 ];
 
 function loader(): LoaderLike | null {
-  const L = (globalThis as unknown as { ISWebComponentsLoader?: LoaderLike }).ISWebComponentsLoader;
+  const L = (globalThis as unknown as { iswcLoader?: LoaderLike }).iswcLoader;
   return L || null;
 }
 
@@ -196,7 +196,7 @@ class IswcDocDemo extends HTMLElement {
     this.#booted = true;
     const L = loader();
     if (!L) {
-      console.warn('[iswc-doc-demo] ISWebComponentsLoader no disponible');
+      console.warn('[iswc-doc-demo] iswcLoader no disponible');
       return;
     }
 

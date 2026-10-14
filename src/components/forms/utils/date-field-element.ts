@@ -49,7 +49,7 @@ const OBSERVED = [
 /** Opciones de `defineDateField`. */
 
 export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typeof HTMLElement {
-  class IsDateFieldBase extends HTMLElement {
+  class IswcDateFieldBase extends HTMLElement {
     static formAssociated = true;
     static get observedAttributes(): string[] { return OBSERVED; }
 
@@ -310,6 +310,6 @@ export function defineDateField({ tag, kind, cssUrl }: DefineDateFieldOpts): typ
     }
   }
 
-  defineElement(tag, IsDateFieldBase, true);
-  return IsDateFieldBase;
+  defineElement(tag, IswcDateFieldBase, true);
+  return IswcDateFieldBase;
 }

@@ -7,7 +7,7 @@
  * volcado del mapa `styleAttrs`, y tres hooks para que la subclase añada lo suyo
  * sin reescribir el ciclo de vida.
  *
- *   class IsFoo extends ElementBase {
+ *   class IswcFoo extends ElementBase {
  *     static TEMPLATE = TEMPLATE;
  *     static override get observedAttributes(): string[] { return ['color']; }
  *

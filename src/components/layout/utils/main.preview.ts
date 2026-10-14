@@ -1,11 +1,11 @@
 /**
  * Behavior migrado desde HTML inline de iswc-main.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 
 import type { MainEl } from "../schemas/main.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const main = document.querySelector<MainEl>('iswc-main');
   const log = document.getElementById('scrollLog');

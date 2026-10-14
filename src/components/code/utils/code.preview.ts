@@ -1,8 +1,8 @@
 /**
  * Behavior preview: <iswc-code>
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
-import type { CodeMark, CodeDoc, IsCodeEl, IsFormatEl } from "../schemas/code.preview.schemas.js";
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
+import type { CodeMark, CodeDoc, IswcCodeEl, IswcFormatEl } from "../schemas/code.preview.schemas.js";
 
 const SAMPLES: Record<string, string> = {
   javascript: `function greet(name) {\n  return \`Hola, \${name}\`;\n}\n\nconsole.log(greet('IS'));`,
@@ -33,17 +33,17 @@ export function mount(preview: PreviewMountContext): void {
   }
 
   root.querySelector<HTMLElement>('#btn-format')?.addEventListener('click', () => {
-    (root.querySelector<IsFormatEl>('#demo-format'))?.format();
+    (root.querySelector<IswcFormatEl>('#demo-format'))?.format();
   });
 
   // El --stat del demo llega adrede desalineado (barras partidas, columnas
   // irregulares) para que se vea qué hace `format()` sobre un diff: no toca el
   // contenido, solo devuelve la rejilla.
   root.querySelector<HTMLElement>('#diff-format')?.addEventListener('click', () => {
-    (root.querySelector<IsFormatEl>('#demo-diff-stat'))?.format();
+    (root.querySelector<IswcFormatEl>('#demo-diff-stat'))?.format();
   });
 
-  const themeEd = root.querySelector<IsCodeEl>('#demo-theme');
+  const themeEd = root.querySelector<IswcCodeEl>('#demo-theme');
   root.querySelector<HTMLElement>('#theme-ocean')?.addEventListener('click', () => {
     if (!themeEd) return;
     themeEd.themeConfig = {
@@ -67,7 +67,7 @@ export function mount(preview: PreviewMountContext): void {
     themeEd.themeConfig = null;
   });
 
-  const marksEd = root.querySelector<IsCodeEl>('#demo-marks');
+  const marksEd = root.querySelector<IswcCodeEl>('#demo-marks');
   const applyMarksDemo = (): void => {
     if (!marksEd) return;
     const value = `function add(a, b) {\n  return a + b;\n}\n\nadd(1, 2);`;
@@ -107,7 +107,7 @@ export function mount(preview: PreviewMountContext): void {
     else marksEd.addEventListener('iswc-ready', applyMarksDemo, { once: true });
   }
 
-  const jsonEd = root.querySelector<IsCodeEl>('#demo-json');
+  const jsonEd = root.querySelector<IswcCodeEl>('#demo-json');
   const out = root.querySelector<HTMLElement>('#json-out');
   let lastDoc: CodeDoc | null = null;
   root.querySelector<HTMLElement>('#btn-to-json')?.addEventListener('click', () => {
@@ -134,7 +134,7 @@ export function mount(preview: PreviewMountContext): void {
 }
 
 function mountPlayground(root: ParentNode, samples: Record<string, string>): void {
-  const ed = root.querySelector<IsCodeEl>('#pgCode');
+  const ed = root.querySelector<IswcCodeEl>('#pgCode');
   if (!ed) return;
 
   const stage = root.querySelector<HTMLElement>('#pgStage');

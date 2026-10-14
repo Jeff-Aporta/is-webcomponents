@@ -1,4 +1,4 @@
-# `ISWebComponentsLoader` (`loader.min.js`)
+# `iswcLoader` (`loader.min.js`)
 
 Entry CDN liviano del kit. Carga solo lo pedido, con pin, mirrors y anti-redundancia.
 
@@ -18,7 +18,7 @@ Skill de instalación: [`skills/is-cdn-install/SKILL.md`](../../skills/is-cdn-in
 ## Bootstrap
 
 ```js
-import { ISWebComponentsLoader as L } from
+import { iswcLoader as L } from
   'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@REF/dist/cdn/core/loader.min.js';
 
 // Sin configure: el loader ya trae quemado el SHA de ESTE build (o el de @REF
@@ -210,7 +210,7 @@ Misma pieza para la galería ISWC y para **cualquier app** de docs/demos.
 ```html
 <!-- Galería local (self-test) — solo loader; sin ?v= ni script src de bundles -->
 <script type="module">
-  import { ISWebComponentsLoader as L } from './dist/cdn/core/loader.min.js';
+  import { iswcLoader as L } from './dist/cdn/core/loader.min.js';
   await L.loadPageModules(['iswc-doc-demo-host']);
   await L.loadPageModules(['iswc-gallery-app']);
 </script>

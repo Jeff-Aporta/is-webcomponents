@@ -49,7 +49,7 @@ export function definePickerInput({
   // Todos los pickers (date/time/date-time y sus rangos) comparten la
   // personalización por atributo: se declara aquí una vez, no en cada tag.
 
-  class IsPickerInput extends withStyleAttrs(HTMLElement) {
+  class IswcPickerInput extends withStyleAttrs(HTMLElement) {
 
     static get observedAttributes(): string[] {
       // Phase V5: STYLE_ATTRS removido. El consumer define los tokens vía class
@@ -503,6 +503,6 @@ export function definePickerInput({
     };
   }
 
-  defineElement(tag, IsPickerInput, true);
-  return IsPickerInput;
+  defineElement(tag, IswcPickerInput, true);
+  return IswcPickerInput;
 }

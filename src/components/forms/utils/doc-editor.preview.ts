@@ -1,11 +1,11 @@
 /**
  * Behavior de iswc-doc-editor: refleja el JSON vivo del editor en el `<pre>`.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 let sync: (() => void) | null = null;
 let editor: HTMLElement | null = null;
 
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const doc = ctx.main.querySelector<HTMLElement>('#doc');
   const out = ctx.main.querySelector<HTMLElement>('#out');
   if (!doc || !out) return;

@@ -9,7 +9,7 @@ import type { DataGridElement } from "../schemas/data-grid.preview.schemas.js";
  * Se ejecuta en mount() tras pintar la definition JSON.
  * @param ctx Contexto de montaje (root, main, aside, definition).
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
   /* ── Datos de ejemplo ─────────────────────────────────────────────── */

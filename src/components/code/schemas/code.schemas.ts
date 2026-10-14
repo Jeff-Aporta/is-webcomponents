@@ -36,10 +36,10 @@ export const CodeLangDefSchema = z.object({
 export type CodeLangDef = z.infer<typeof CodeLangDefSchema>;
 
 
-export const IsTooltipElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
+export const IswcTooltipElSchema = z.intersection(z.unknown() /* TODO: ref HTMLElement */, z.object({
   open: z.boolean(),
 }));
-export type IsTooltipEl = z.infer<typeof IsTooltipElSchema>;
+export type IswcTooltipEl = z.infer<typeof IswcTooltipElSchema>;
 
 
 export const HighlightLineSchema = z.unknown() /* TODO: ref CodeHighlightLine */;

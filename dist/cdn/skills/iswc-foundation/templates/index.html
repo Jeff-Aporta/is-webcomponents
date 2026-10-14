@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/index.html -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/index.html -->
 <!doctype html>
 <html lang="es" data-theme="dark" data-palette="contapyme">
 <head>
@@ -18,11 +18,11 @@
 <script type="module" src="./dist/cdn/__PREFIJO__Loader.min.js"></script>
 <!-- 3) Arranque: estilos del kit, tags del kit y de la app, marca de lista con watchdog. -->
 <script type="module">
-  const L = globalThis.ISWebComponentsLoader;
+  const L = globalThis.iswcLoader;
   const listo = () => document.documentElement.setAttribute('data-app-ready', '');
   const watchdog = setTimeout(() => { console.warn('[__PREFIJO__] el arranque excedió 6 s; se revela la página'); listo(); }, 6000);
   try {
-    if (!L) throw new Error('falta ISWebComponentsLoader');
+    if (!L) throw new Error('falta iswcLoader');
     await L.loadPageStyles(['iswc-palettes-default']);
     const { KIT_TAGS, tagsArranque } = await import('./dist/cdn/js/kit-tags.js');
     await L.load(...KIT_TAGS, ...tagsArranque());

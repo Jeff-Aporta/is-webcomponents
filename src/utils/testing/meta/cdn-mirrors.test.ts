@@ -31,7 +31,7 @@ test('cdn-snippet: loader copy-paste; L.load del tag (sin radio de alcance, sin 
   assert.match(src, /#buildLoaderSnippet/);
   assert.match(src, /loader\.min\.js/);
   assert.match(src, /type="module" src=/);
-  assert.match(src, /ISWebComponentsLoader/);
+  assert.match(src, /iswcLoader/);
   // W52: loadCSSBase se elimino; el loader auto-carga is-base.min.css.
   // Palettes: alias iswc-palettes-default vía loadPageStyles.
   assert.match(src, /iswc-palettes-default|loadPageStyles/);

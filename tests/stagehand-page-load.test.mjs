@@ -225,7 +225,7 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
     docReady: document.querySelector('iswc-doc-demo')?.dataset?.ready === '1',
     hasShellBar: Boolean(document.querySelector('.shell-bar')),
     hasNav: Boolean(document.querySelector('.shell-nav, [id="shellNav"]')),
-    hasLoader: Boolean(globalThis.ISWebComponentsLoader),
+    hasLoader: Boolean(globalThis.iswcLoader),
     log: window.__networkLog || [],
   }));
 
@@ -250,7 +250,7 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
   assert.equal(state.hasNav, true,
     'debe existir el nav del shell');
   assert.equal(state.hasLoader, true,
-    'ISWebComponentsLoader debe estar en globalThis');
+    'iswcLoader debe estar en globalThis');
 
   // ===== Aserciones de red (lo que el bug original rompía) =====
   // 1) Recursos con status >= 400. PerformanceObserver expone

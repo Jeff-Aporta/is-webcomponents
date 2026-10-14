@@ -5,7 +5,7 @@ import type {
   PreviewDefinition,
   PreviewSection,
   PreviewBlock,
-} from './types.d.ts';
+} from './schemas/preview.schemas.ts';
 import { asText } from './text-like.ts';
 import '../../components/preview/demo-section.js';
 import type { StandardTocEntry } from "./schemas/render.schemas.js";

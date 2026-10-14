@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
 test('tipos aún declaran equivHtml / equivNote / equivFlow (opcionales)', async () => {
-  const src = await readFile(join(raiz, 'src/previews/_kit/types.d.ts'), 'utf8');
+  const src = await readFile(join(raiz, 'src/previews/_kit/schemas/preview.schemas.ts'), 'utf8');
   assert.match(src, /equivHtml\?:/);
   assert.match(src, /equivNote\?:/);
   assert.match(src, /equivFlow\?:/);

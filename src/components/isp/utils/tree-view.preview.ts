@@ -1,6 +1,6 @@
 import { TreeCustomsBase } from './tree-view/customs-base.js';
 import type { CustomsRuntime, LevelNameArgs, TNode } from '../schemas/tree-view-types.schemas.js';
-import type { DemoNode, IsTreeViewEl } from "../schemas/tree-view.preview.schemas.js";
+import type { DemoNode, IswcTreeViewEl } from "../schemas/tree-view.preview.schemas.js";
 
 class DemoCustoms extends TreeCustomsBase {
   entrie = 'contenido';
@@ -39,11 +39,11 @@ class DemoCustoms extends TreeCustomsBase {
 
 /**
  * Demo <iswc-tree-view> con lista plana iplan + TreeCustomsBase.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
-  const tv = (root.querySelector<HTMLElement>('#tvDemo') || root.querySelector<HTMLElement>('iswc-tree-view')) as IsTreeViewEl | null;
+  const tv = (root.querySelector<HTMLElement>('#tvDemo') || root.querySelector<HTMLElement>('iswc-tree-view')) as IswcTreeViewEl | null;
   if (!tv) return;
 
   tv.customs = new DemoCustoms();

@@ -49,7 +49,7 @@ function parseSectionInner(inner) {
   let title = '';
   let titleHtml = false;
   let lede = '';
-  /** @type {import('../src/previews/_kit/types.d.ts').PreviewBlock[]} */
+  /** @type {import('../src/previews/_kit/schemas/preview.schemas.ts').PreviewBlock[]} */
   const blocks = [];
 
   const h2 = inner.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
@@ -113,7 +113,7 @@ function parseSectionInner(inner) {
 
   for (const p of pieces) {
     if (p.type === 'demo') {
-      /** @type {import('../src/previews/_kit/types.d.ts').PreviewDemoBlock} */
+      /** @type {import('../src/previews/_kit/schemas/preview.schemas.ts').PreviewDemoBlock} */
       const block = { kind: 'demo', html: p.html };
       if (p.heading) block.heading = p.heading;
       if (p.contain) block.contain = true;
@@ -201,7 +201,7 @@ function convertFile(html, filePath) {
     mainInner = mainInner.replace(/<script[\s\S]*?<\/script>/gi, '');
   }
 
-  /** @type {import('../src/previews/_kit/types.d.ts').PreviewSection[]} */
+  /** @type {import('../src/previews/_kit/schemas/preview.schemas.ts').PreviewSection[]} */
   const sections = [];
   const secRe = /<section\b([^>]*)>([\s\S]*?)<\/section>/gi;
   let sm;
@@ -257,7 +257,7 @@ function convertFile(html, filePath) {
   const previewJsPath = filePath.replace(/\.html$/, '.preview.js');
   let hasBehavior = behaviorScripts.length > 0;
 
-  /** @type {import('../src/previews/_kit/types.d.ts').PreviewDefinition} */
+  /** @type {import('../src/previews/_kit/schemas/preview.schemas.ts').PreviewDefinition} */
   const def = {
     $schema: 'iswc-preview/v1',
     tag,
@@ -308,7 +308,7 @@ function wrapBehavior(tag, scriptBodies) {
   return `${importLines.join('\n')}${importLines.length ? '\n\n' : ''}/**
  * Behavior migrado desde HTML inline de ${tag}.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
 export async function mount(ctx) {
   const root = ctx.main;
@@ -330,8 +330,8 @@ export function unmount() {
 function wrapPreviewClassBehavior(tag, previewJsRel) {
   return `/**
  * Behavior adapter: reusa mount() de la clase legacy ${tag}.preview.js
- * @param {import('../_kit/types.d.ts').PreviewMountContext} ctx
- * @param {import('../_kit/types.d.ts').ISComponentPreviewLike} preview
+ * @param {import('../_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
+ * @param {import('../_kit/schemas/preview.schemas.ts').IswcComponentPreviewLike} preview
  */
 import PreviewClass from '${previewJsRel}';
 

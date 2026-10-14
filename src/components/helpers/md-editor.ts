@@ -26,7 +26,7 @@ import '../actions/button.js';
 import '../actions/copy-button.js';
 import '../forms/switch.js';
 import '../media/icon.js';
-import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./schemas/md-editor.schemas.js";
+import type { IswcMdEditorDocument, IswcMdEditorApiConfig, IswcMdEditorActions, DialogElement, SwitchElement, CopyButtonElement, TextareaElement, EditorHistory } from "./schemas/md-editor.schemas.js";
 
 /**
  * <iswc-md-editor> — preview MD + diálogo fullscreen (edición / revisión).
@@ -216,13 +216,13 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
 
   // ── Detalle del evento `iswc-load` ──────────────────────────────────────
   interface LoadDetail {
-    document: IsMdEditorDocument;
+    document: IswcMdEditorDocument;
   }
 
   // ── Detalle de `iswc-persist` ───────────────────────────────────────────
   interface PersistDetail {
     value: string;
-    document: IsMdEditorDocument;
+    document: IswcMdEditorDocument;
   }
 
   // ── Detalle de `iswc-download` ──────────────────────────────────────────
@@ -260,9 +260,9 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
     #plain = false;
     #history: EditorHistory = { past: [], future: [] };
     #scopeAnchor: HTMLElement | null = null;
-    #document: IsMdEditorDocument = { content: '' };
-    #api: IsMdEditorApiConfig | null = null;
-    #actions: IsMdEditorActions | null = null;
+    #document: IswcMdEditorDocument = { content: '' };
+    #api: IswcMdEditorApiConfig | null = null;
+    #actions: IswcMdEditorActions | null = null;
     /** Hidratación vigente por superficie de lectura (vista previa y diálogo). */
     #hidrataciones = new Map<HTMLElement, HidratacionMd>();
 
@@ -450,8 +450,8 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
     get src(): string { return this.getAttribute('src') || ''; }
     set src(v) { setOptionalAttr(this, 'src', v); }
 
-    get api(): IsMdEditorApiConfig | null { return this.#api; }
-    set api(v: IsMdEditorApiConfig | null | undefined) {
+    get api(): IswcMdEditorApiConfig | null { return this.#api; }
+    set api(v: IswcMdEditorApiConfig | null | undefined) {
       this.#api = parseApiConfig(v ?? null);
       if (this.#api) {
         this.setAttribute('api', JSON.stringify({
@@ -464,13 +464,13 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
     /**
      * Callbacks custom (JS only). Prioridad sobre `api`/`src`.
      */
-    get actions(): IsMdEditorActions | null { return this.#actions; }
-    set actions(v: IsMdEditorActions | null) {
+    get actions(): IswcMdEditorActions | null { return this.#actions; }
+    set actions(v: IswcMdEditorActions | null) {
       this.#actions = v && typeof v === 'object' ? v : null;
     }
 
     /** Documento canónico (meta + content). */
-    get document(): IsMdEditorDocument {
+    get document(): IswcMdEditorDocument {
       return {
         ...this.#document,
         content: this.value,
@@ -478,7 +478,7 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
         filename: this.filename || this.#document.filename || '',
       };
     }
-    set document(doc: IsMdEditorDocument | string) {
+    set document(doc: IswcMdEditorDocument | string) {
       this.setDocument(doc);
     }
 
@@ -497,8 +497,8 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
       this.#leaveTopLayer();
     }
 
-    setDocument(doc: IsMdEditorDocument | string): this {
-      const normalized = normalizeDocument(doc, this.#api || {}) as IsMdEditorDocument;
+    setDocument(doc: IswcMdEditorDocument | string): this {
+      const normalized = normalizeDocument(doc, this.#api || {}) as IswcMdEditorDocument;
       this.#document = normalized;
       this.value = normalized.content || '';
       if (normalized.filename) this.setAttribute('filename', normalized.filename);
@@ -517,7 +517,7 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
      * Carga: `actions.load` → `src` / `api.endpoints.get`.
      * Sin ninguna fuente remota → no-op (`null`).
      */
-    async load(): Promise<IsMdEditorDocument | null> {
+    async load(): Promise<IswcMdEditorDocument | null> {
       try {
         if (typeof this.#actions?.load === 'function') {
           const raw = await this.#actions.load();
@@ -542,7 +542,7 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
      * Persiste: `actions.persist` → PUT/POST de `api.endpoints`.
      * Sin handler remoto lanza (el guardado local ya emitió `iswc-persist` en `#save`).
      */
-    async persistRemote(): Promise<IsMdEditorDocument> {
+    async persistRemote(): Promise<IswcMdEditorDocument> {
       const doc = this.document;
       try {
         if (typeof this.#actions?.persist === 'function') {
@@ -610,7 +610,7 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
 
     // ---- private helpers ----
 
-    #resolveApiForGet(): IsMdEditorApiConfig | null {
+    #resolveApiForGet(): IswcMdEditorApiConfig | null {
       if (this.#api?.endpoints?.get) return this.#api;
       if (this.src) {
         return {
@@ -622,7 +622,7 @@ import type { IsMdEditorDocument, IsMdEditorApiConfig, IsMdEditorActions, Dialog
     }
 
     #syncDocumentFromValue(): void {
-      const next: IsMdEditorDocument = {
+      const next: IswcMdEditorDocument = {
         ...this.#document,
         content: this.value,
         sizeBytes: byteLength(this.value),

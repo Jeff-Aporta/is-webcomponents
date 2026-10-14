@@ -2,7 +2,7 @@
  * Behavior migrado desde HTML inline de iswc-sequence-diagram.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const lb = document.getElementById('lb') as HTMLElement & { payload: unknown; open: boolean } | null;
   const openBtn = document.getElementById('openViewer');

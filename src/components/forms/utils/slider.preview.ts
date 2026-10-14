@@ -1,9 +1,9 @@
 /**
  * Behavior migrado desde HTML inline de iswc-slider.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
   const demo = document.getElementById('demo') as HTMLElement | null;

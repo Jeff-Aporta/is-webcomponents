@@ -2,39 +2,39 @@
  * Behavior migrado desde HTML inline de iswc-ui.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
 import type { html as HtmlFn, esc as EscFn } from '../ui.js';
-import type { IsUiApi } from "../schemas/ui.preview.schemas.js";
+import type { IswcUiApi } from "../schemas/ui.preview.schemas.js";
 
 declare global {
   interface Window {
-    IswcUi?: IsUiApi;
-    Ui?: IsUiApi;
+    IswcUi?: IswcUiApi;
+    Ui?: IswcUiApi;
   }
 }
 
-const getIsUi = (): IsUiApi | undefined => {
+const getIsUi = (): IswcUiApi | undefined => {
   if (typeof globalThis === 'undefined') return undefined;
-  const w = globalThis as { IswcUi?: IsUiApi };
+  const w = globalThis as { IswcUi?: IswcUiApi };
   return w.IswcUi;
 };
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
   void root;
-  const ready = (): IsUiApi | undefined => {
+  const ready = (): IswcUiApi | undefined => {
     const ui = getIsUi();
     return ui && typeof ui.html === 'function' ? ui : undefined;
   };
 
-  const paintIntro = (IswcUi: IsUiApi): void => {
+  const paintIntro = (IswcUi: IswcUiApi): void => {
     const stage = document.getElementById('introStage');
     if (!stage) return;
     const { html, esc } = IswcUi;
     stage.replaceChildren(html`
       <div class="ui-stage__meta">
         <code>typeof IswcUi.html</code> = <strong>${typeof IswcUi.html}</strong>
-        · alias <code>Ui</code> = <strong>${(globalThis as { Ui?: IsUiApi }).Ui === IswcUi ? 'mismo objeto' : '—'}</strong>
+        · alias <code>Ui</code> = <strong>${(globalThis as { Ui?: IswcUiApi }).Ui === IswcUi ? 'mismo objeto' : '—'}</strong>
       </div>
       <iswc-button color="brand" variant="soft">
         <iswc-icon slot="start" icon="mdi:check"></iswc-icon>
@@ -44,7 +44,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     `);
   };
 
-  const paintHtml = (IswcUi: IsUiApi): void => {
+  const paintHtml = (IswcUi: IswcUiApi): void => {
     const stage = document.getElementById('htmlStage');
     if (!stage) return;
     const { html } = IswcUi;
@@ -64,7 +64,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     `);
   };
 
-  const registerDemoCard = (IswcUi: IsUiApi): void => {
+  const registerDemoCard = (IswcUi: IswcUiApi): void => {
     const { define, html, css } = IswcUi;
     define('demo-card', class extends HTMLElement {
       #root = this.attachShadow({ mode: 'open' });

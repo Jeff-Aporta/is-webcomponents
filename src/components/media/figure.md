@@ -32,7 +32,7 @@ pinta por cada imagen, en lugar de armar `<figure><a><img><figcaption>` a mano.
 
 ```html
 <script type="module" src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@<sha40>/dist/cdn/core/loader.min.js"></script>
-<!-- o con el loader ya presente: await ISWebComponentsLoader.ensure('iswc-figure') -->
+<!-- o con el loader ya presente: await iswcLoader.ensure('iswc-figure') -->
 ```
 
 ## Ejemplo mínimo

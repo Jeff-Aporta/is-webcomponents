@@ -43,7 +43,7 @@
 
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { emit } from '../../core/element.js';
-import type { EditorMode, EditorSpecLike, IsStateChangeDetail, IsEditorConstructor, EditorSpecGet } from "./schemas/_editor-base.schemas.js";
+import type { EditorMode, EditorSpecLike, IswcStateChangeDetail, IswcEditorConstructor, EditorSpecGet } from "./schemas/_editor-base.schemas.js";
 
 /** Modo de operación del editor. 'edit' muestra toolbar + panel; 'view' los oculta. */
 
@@ -58,7 +58,7 @@ import type { EditorMode, EditorSpecLike, IsStateChangeDetail, IsEditorConstruct
 const BASE_OBSERVED: readonly string[] = ['mode', 'allow-self-loop', 'max-depth'];
 
 /**
- * IsEditorBase — base abstracta para `<is-X-editor>`.
+ * IswcEditorBase — base abstracta para `<is-X-editor>`.
  *
  * Las 16 subclases implementan acciones concretas (add/delete/connect/undo/
  * redo/zoom-in-out/fit/onNodeDoubleClick) y strechan el tipo de `spec`.
@@ -66,7 +66,7 @@ const BASE_OBSERVED: readonly string[] = ['mode', 'allow-self-loop', 'max-depth'
  * Esta clase no se registra en `customElements` por sí sola; cada subclase
  * llama a `defineElement(tag, SubClass)` en su IIFE de registro.
  */
-export abstract class IsEditorBase<Spec extends EditorSpecLike> extends DiagramElementBase {
+export abstract class IswcEditorBase<Spec extends EditorSpecLike> extends DiagramElementBase {
   static get observedAttributes(): readonly string[] {
     return [...DiagramElementBase.observedAttributes, ...BASE_OBSERVED];
   }
@@ -135,7 +135,7 @@ export abstract class IsEditorBase<Spec extends EditorSpecLike> extends DiagramE
   /** Emite el evento `iswc-state-change` con el spec actual. La subclase lo llama
    *  tras CADA mutación lógica (add/delete/connect/undo/redo). */
   protected emitStateChange(spec: Spec): void {
-    const detail: IsStateChangeDetail<Spec> = {
+    const detail: IswcStateChangeDetail<Spec> = {
       spec,
       tag: 'tag' in this.constructor && typeof this.constructor.tag === 'string' ? this.constructor.tag : undefined,
     };

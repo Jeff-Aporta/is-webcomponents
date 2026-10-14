@@ -6,7 +6,7 @@ import type { CodeLike, DescribePart } from "../schemas/mutation-observer.previe
  * Behavior migrado desde HTML inline de iswc-mutation-observer.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext) {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
   const root = ctx.main;
   const target = root.querySelector<HTMLElement>('#moTarget');
   const htmlPre = root.querySelector<HTMLElement>('#moHtml');

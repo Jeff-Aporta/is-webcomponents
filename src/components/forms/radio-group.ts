@@ -10,7 +10,7 @@ import {
 } from '../../core/form-associated.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setStringAttr, setOptionalAttr } from '../../core/reflect.js';
-import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
+import type { IswcRadioElement } from "./schemas/radio-group.schemas.js";
 /**
  * <iswc-radio-group> — Grupo form-associated de <iswc-radio>. El grupo es el dueño
  * del valor: los radios solo avisan con `iswc-radio-select`.
@@ -166,7 +166,7 @@ import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
       else this.removeAttribute('label-placement');
     }
 
-    get radios(): IsRadioElement[] { return this.#radios(); }
+    get radios(): IswcRadioElement[] { return this.#radios(); }
 
     get form(): HTMLFormElement | null { return this.#internals?.form ?? null; }
     get validity(): ValidityState | null { return this.#internals?.validity ?? null; }
@@ -202,8 +202,8 @@ import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
     get #isInert(): boolean { return this.#isDisabled || this.readonly; }
 
     /** Radios propios: ignora los de un grupo anidado. */
-    #radios(): IsRadioElement[] {
-      return [...this.querySelectorAll<HTMLElement>('iswc-radio')].filter((r) => r.closest('iswc-radio-group') === this) as IsRadioElement[];
+    #radios(): IswcRadioElement[] {
+      return [...this.querySelectorAll<HTMLElement>('iswc-radio')].filter((r) => r.closest('iswc-radio-group') === this) as IswcRadioElement[];
     }
 
     /** Muestra el texto del atributo salvo que el slot homónimo traiga contenido. */
@@ -251,7 +251,7 @@ import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
     #syncRadios(): void {
       const radios = this.#radios();
       const value = this.value;
-      let focusable: IsRadioElement | null = null;
+      let focusable: IswcRadioElement | null = null;
       for (const r of radios) {
         const on = value !== '' && r.value === value;
         if (r.checked !== on) r.checked = on;
@@ -282,7 +282,7 @@ import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
     }
 
     /** Mueve foco (y selección, salvo readonly) al radio habilitado vecino, con wrap. */
-    #move(from: IsRadioElement, delta: number): void {
+    #move(from: IswcRadioElement, delta: number): void {
       const usable = this.#radios().filter((r) => !r.disabled);
       if (!usable.length) return;
       let idx = usable.indexOf(from);
@@ -291,7 +291,7 @@ import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
       if (next) this.#focusRadio(next);
     }
 
-    #focusRadio(radio: IsRadioElement | undefined): void {
+    #focusRadio(radio: IswcRadioElement | undefined): void {
       if (!radio) return;
       this.#select(radio.value);
       radio.focus();
@@ -303,7 +303,7 @@ import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
 
     #onRadioSelect = (e: Event): void => {
       const target = e.target as HTMLElement | null;
-      const radio = target?.closest('iswc-radio') as IsRadioElement | null;
+      const radio = target?.closest('iswc-radio') as IswcRadioElement | null;
       if (!radio || radio.closest('iswc-radio-group') !== this) return;
       e.stopPropagation();
       this.#select(radio.value);
@@ -312,7 +312,7 @@ import type { IsRadioElement } from "./schemas/radio-group.schemas.js";
     #onKey = (e: KeyboardEvent): void => {
       if (this.#isDisabled) return;
       const target = e.target as HTMLElement | null;
-      const radio = target?.closest('iswc-radio') as IsRadioElement | null;
+      const radio = target?.closest('iswc-radio') as IswcRadioElement | null;
       if (!radio || radio.closest('iswc-radio-group') !== this) return;
       if (NEXT_KEYS.includes(e.key)) {
         e.preventDefault();

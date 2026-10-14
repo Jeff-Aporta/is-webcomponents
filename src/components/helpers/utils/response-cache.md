@@ -16,7 +16,7 @@ repintar solo si el servidor trae algo distinto. Compartido por apps del kit
 ## ImportaciÃ³n
 
 ```js
-import { createResponseCache, IsResponseCache, canonico } from
+import { createResponseCache, IswcResponseCache, canonico } from
   'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@SHA/dist/cdn/helpers/response-cache.min.js';
 ```
 

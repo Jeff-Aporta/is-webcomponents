@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/07-pruebas-y-gate.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/07-pruebas-y-gate.md -->
 # 07 — Pruebas, Stagehand y gate
 
 Cómo se escriben specs y pruebas WHAT: [especificar-what.md](../templates/specs/especificar-what.md).

@@ -4,7 +4,7 @@ import type { CatalogEl } from "../schemas/catalogo-gen.preview.schemas.js";
 /**
  * Demo <iswc-catalogo-gen> con controller JSON (acciones CRUD completas).
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext) {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
   const root = ctx.main;
   const cat = (root.querySelector<CatalogEl>('#catDemo') || root.querySelector<CatalogEl>('iswc-catalogo-gen'));
   if (!cat) return;

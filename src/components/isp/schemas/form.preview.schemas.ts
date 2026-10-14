@@ -6,14 +6,14 @@
  */
 import { z } from "zod";
 
-export const IsFormElSchema = z.object({
+export const IswcFormElSchema = z.object({
   fromJSON: z.function({ input: [z.unknown()], output: z.unknown() }),
   toJSON: z.function({ input: [], output: z.unknown() }),
   setValues: z.function({ input: [z.record(z.string(), z.unknown())], output: z.void() }),
   getValues: z.function({ input: [], output: z.record(z.string(), z.unknown()) }),
   html2json: z.function({ input: [], output: z.unknown() }),
 });
-export type IsFormEl = z.infer<typeof IsFormElSchema>;
+export type IswcFormEl = z.infer<typeof IswcFormElSchema>;
 
 
 export const SubmitDetailSchema = z.object({

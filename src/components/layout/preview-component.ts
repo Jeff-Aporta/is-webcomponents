@@ -1,7 +1,7 @@
 /**
  * <iswc-preview-component> — shell homogéneo de documentación/demo.
  *
- * Recibe una instancia de ISComponentPreview (propiedad `.preview`) y:
+ * Recibe una instancia de IswcComponentPreview (propiedad `.preview`) y:
  * 1. Pinta split-panel + main + TOC desde `preview.definition`
  * 2. Llama `preview.mount({ root, main, aside, definition })` con lógica real
  * 3. En disconnect / cambio de preview llama `unmount`
@@ -18,9 +18,9 @@ import '../actions/button.js';
 import '../media/icon.js';
 import { defineElement } from '../../core/element.js';
 import type {
-  ISComponentPreviewLike,
+  IswcComponentPreviewLike,
   PreviewMountContext,
-} from '../../previews/_kit/types.d.ts';
+} from '../../previews/_kit/schemas/preview.schemas.ts';
 import type { DrawerEl } from "./schemas/preview-component.schemas.js";
 
 /** Ancho a partir del cual el TOC deja de caber al lado del contenido. */
@@ -42,7 +42,7 @@ TEMPLATE.innerHTML = /* html */ `
 
 class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
 
-  #preview: ISComponentPreviewLike | null = null;
+  #preview: IswcComponentPreviewLike | null = null;
   #ctx: PreviewMountContext | null = null;
   #styleEl: HTMLStyleElement | null = null;
   #mounted = false;
@@ -98,11 +98,11 @@ class IswcPreviewComponent extends withStyleAttrs(HTMLElement) {
     this.#mounted = false;
   }
 
-  get preview(): ISComponentPreviewLike | null {
+  get preview(): IswcComponentPreviewLike | null {
     return this.#preview;
   }
 
-  set preview(value: ISComponentPreviewLike | null) {
+  set preview(value: IswcComponentPreviewLike | null) {
     this.#teardown();
     this.#preview = value;
     if (!value) {

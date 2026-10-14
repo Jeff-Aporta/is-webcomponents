@@ -77,7 +77,7 @@ test('runtime: open en observedAttributes dispara ACC tras define', async () => 
       // Simula lo que hace el decorador al evaluar la clase
       PENDIENTES.push('open');
 
-      class IsProbe extends HTMLElement {
+      class IswcProbe extends HTMLElement {
         static get observedAttributes() {
           return [...atributosDeclarados(this)];
         }
@@ -96,13 +96,13 @@ test('runtime: open en observedAttributes dispara ACC tras define', async () => 
       // El bug viejo: new antes del define → Illegal constructor
       let illegal = false;
       try {
-        new IsProbe();
+        new IswcProbe();
       } catch {
         illegal = true;
       }
 
-      defineElement('iswc-probe-attr', IsProbe);
-      const frozen = IsProbe.observedAttributes.slice();
+      defineElement('iswc-probe-attr', IswcProbe);
+      const frozen = IswcProbe.observedAttributes.slice();
       const el = document.createElement('iswc-probe-attr');
       document.body.appendChild(el);
       el.open = true;

@@ -1,7 +1,7 @@
 /**
  * ensure-element — asegura que un custom element esté definido (lazy CDN).
  *
- * Preferir `ISWebComponentsLoader.ensure(tag)`: usa catálogo + app registry.
+ * Preferir `iswcLoader.ensure(tag)`: usa catálogo + app registry.
  * Este módulo sirve como helper suelto si la app no quiere el loader completo.
  */
 

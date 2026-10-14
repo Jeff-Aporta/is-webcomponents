@@ -1,9 +1,9 @@
 /**
  * Behavior migrado desde HTML inline de iswc-video.
  * Se ejecuta en mount() tras pintar la definition JSON.
- * @param {import('../../../previews/_kit/types.d.ts').PreviewMountContext} ctx
+ * @param {import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext} ctx
  */
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext) {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext) {
   const root = ctx.main;
   void root;
   const v = document.getElementById('v1');

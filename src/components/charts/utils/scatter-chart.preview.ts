@@ -2,7 +2,7 @@
  * Behavior migrado desde HTML inline de iswc-scatter-chart.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
 import type { ScatterChartLike } from "../schemas/scatter-chart.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {

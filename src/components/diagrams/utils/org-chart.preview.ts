@@ -4,7 +4,7 @@
  */
 
 import type { OrgSelectDetail, OrgToggleDetail } from "../schemas/org-chart.preview.schemas.js";
-export async function mount(ctx: import('../../../previews/_kit/types.d.ts').PreviewMountContext): Promise<void> {
+export async function mount(ctx: import('../../../previews/_kit/schemas/preview.schemas.ts').PreviewMountContext): Promise<void> {
   void ctx.main;
   const log = document.getElementById('log');
   for (const org of document.querySelectorAll<HTMLElement>('iswc-org-chart')) {

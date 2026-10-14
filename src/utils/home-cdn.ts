@@ -26,7 +26,7 @@ const DEMO_TAGS = [
 /** Bloque module: import loader + palettes + load(...tags). */
 const buildLoaderBoot = (tags: readonly string[]): string => [
   `${open}script type="module"${close}`,
-  `  import { ISWebComponentsLoader as L } from '${LOADER}';`,
+  `  import { iswcLoader as L } from '${LOADER}';`,
   `  // is-base.min.css se auto-carga al importar el loader (W52).`,
   `  await L.loadPageStyles(['iswc-palettes-default']);`,
   tags.length === 1
@@ -92,7 +92,7 @@ const buildDemoHtml = (variant: string): string => {
 
   const moduleBoot = [
     `${open}script type="module"${close}`,
-    `  import { ISWebComponentsLoader as L } from '${LOADER}';`,
+    `  import { iswcLoader as L } from '${LOADER}';`,
     `  await L.loadPageStyles(['iswc-palettes-default']);`,
     loadLine,
     `${open}${slash}script${close}`,
@@ -268,12 +268,12 @@ ${chartTile('doughnut-chart', '{ "data": { "labels": ["Inventario","Cartera","Ba
 
     <pre class="code">${variant === 'bundle'
   ? `&lt;script type="module"&gt;
-  import { ISWebComponentsLoader as L } from '${LOADER}';
+  import { iswcLoader as L } from '${LOADER}';
   await L.loadPageStyles(['iswc-palettes-default']);
   await L.load('all');
 &lt;/script&gt;`
   : `&lt;script type="module"&gt;
-  import { ISWebComponentsLoader as L } from '${LOADER}';
+  import { iswcLoader as L } from '${LOADER}';
   await L.loadPageStyles(['iswc-palettes-default']);
   await L.load('iswc-button', /* …tags */);
 &lt;/script&gt;`

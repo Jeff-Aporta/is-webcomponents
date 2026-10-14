@@ -4,7 +4,7 @@
  * Contrato:
  * - La ESTRUCTURA es `PreviewDefinition` serializable en JSON (un archivo por tag).
  * - El COMPORTAMIENTO nunca va en el JSON: vive en `behaviors/<tag>.js` (mount/unmount)
- *   o en una clase que extiende ISComponentPreview. Sin eval / new Function.
+ *   o en una clase que extiende IswcComponentPreview. Sin eval / new Function.
  */
 
 export type PreviewBlockKind = 'demo' | 'callout' | 'code' | 'html' | 'table' | 'lede';
@@ -201,20 +201,19 @@ export interface PreviewMountContext {
  * Módulo opcional de comportamiento (archivo behaviors/<tag>.js).
  */
 export interface PreviewBehaviorModule {
-  mount?(ctx: PreviewMountContext, preview: ISComponentPreviewLike): void | Promise<void>;
-  unmount?(ctx: PreviewMountContext, preview: ISComponentPreviewLike): void;
+  mount?(ctx: PreviewMountContext, preview: IswcComponentPreviewLike): void | Promise<void>;
+  unmount?(ctx: PreviewMountContext, preview: IswcComponentPreviewLike): void;
 }
 
 /**
  * Contrato de una clase de preview. Implementar mount/unmount con funciones reales.
  */
-export interface ISComponentPreviewLike {
+export interface IswcComponentPreviewLike {
   readonly definition: PreviewDefinition;
-  /** Signal para listeners (se aborta en unmount). Lo expone ISComponentPreview
+  /** Signal para listeners (se aborta en unmount). Lo expone IswcComponentPreview
    *  concreto; las behaviors lo reciben como `preview.signal`. */
   readonly signal?: AbortSignal;
   mount(ctx: PreviewMountContext): void | Promise<void>;
   unmount?(ctx: PreviewMountContext): void;
 }
 
-export {};

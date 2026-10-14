@@ -8,7 +8,7 @@
  *   K4 md-hydrate pide solo los tags anotados que siguen en el árbol: livianos al pintar
  *      (con sus dependencias), pesados al entrar en vista
  *   K5 ensureElement: N pedidos del mismo tag = 1 carga; ya definido → respuesta inmediata compartida
- *   K6 ISWebComponentsLoader.ensure: N pedidos = 1 load(); ya definido → no vuelve a cargar
+ *   K6 iswcLoader.ensure: N pedidos = 1 load(); ya definido → no vuelve a cargar
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -130,8 +130,8 @@ test('K4 md-hydrate pide solo lo presente; livianos al pintar, pesados en vista'
   });
 
   const pedidos: string[] = [];
-  const g = globalThis as { ISWebComponentsLoader?: { ensure(t: string): Promise<boolean> } };
-  g.ISWebComponentsLoader = { ensure: (t) => { pedidos.push(t); return Promise.resolve(true); } };
+  const g = globalThis as { iswcLoader?: { ensure(t: string): Promise<boolean> } };
+  g.iswcLoader = { ensure: (t) => { pedidos.push(t); return Promise.resolve(true); } };
   let alVer: ((n: NodoMd) => void) | null = null;
   const observados: string[] = [];
   const vigia: CrearVigiaMd<NodoMd> = (cb) => {
@@ -156,7 +156,7 @@ test('K4 md-hydrate pide solo lo presente; livianos al pintar, pesados en vista'
     await hidratarMd(arbol(['iswc-divider']), ['iswc-divider'], vigia).listo;
     assert.deepEqual(pedidos, []);
   } finally {
-    delete g.ISWebComponentsLoader;
+    delete g.iswcLoader;
   }
 });
 
@@ -174,7 +174,7 @@ test('K5 ensureElement: N pedidos = 1 carga; definido → inmediato', async () =
   assert.equal(cargas, 1, 'nunca recarga');
 });
 
-test('K6 ISWebComponentsLoader.ensure: N pedidos = 1 load()', async () => {
+test('K6 iswcLoader.ensure: N pedidos = 1 load()', async () => {
   const g = globalThis as Record<string, unknown>;
   g.__IS_LOADER_CATALOG__ = { tags: {}, categories: {}, aliases: {} };
   g.__IS_ASSET_HASHES__ = {};
@@ -182,7 +182,7 @@ test('K6 ISWebComponentsLoader.ensure: N pedidos = 1 load()', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'iswc-k6-'));
   const modulo = join(dir, 'x-k6.js');
   writeFileSync(modulo, 'globalThis.__cargasK6 = (globalThis.__cargasK6 ?? 0) + 1; customElements.define("x-k6", class extends EventTarget {});\n');
-  const { ISWebComponentsLoader: L } = await import('../../../cdn/loader.ts');
+  const { iswcLoader: L } = await import('../../../cdn/loader.ts');
   L.registerApp({ 'x-k6': pathToFileURL(modulo).href }, { installSheets: false });
   let loads = 0;
   const original = L.load.bind(L);

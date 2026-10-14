@@ -1,5 +1,5 @@
 /**
- * ISWebComponentsLoader — entry CDN liviano + mirrors + pin + anti-redundancia.
+ * iswcLoader — entry CDN liviano + mirrors + pin + anti-redundancia.
  *
  * - loadPageStyles / loadPageModules (galería + aliases CDN)
  * - sheets.install / warm* — Cache Storage + adoptedStyleSheets (apps)
@@ -34,7 +34,7 @@ import { readBody, writeBody, syncHashMemory } from './asset-store.js';
 import {
   type AppComponentEntry,
   type ConfigureOpts,
-  type ISWebComponentsLoaderShape,
+  type iswcLoaderShape,
   type LoadedSnapshot,
   type LoadResult,
   type LoaderSheets,
@@ -513,7 +513,7 @@ async function injectCdnStylesheet(rel: string): Promise<string> {
       }
     }
   }
-  throw last || new Error(`ISWebComponentsLoader: no hay espejo para ${rel}`);
+  throw last || new Error(`iswcLoader: no hay espejo para ${rel}`);
 }
 
 function importOnce(href: string): Promise<void> {
@@ -552,7 +552,7 @@ async function importCdn(rel: string): Promise<string> {
       last = e instanceof Error ? e : new Error(String(e));
     }
   }
-  throw last || new Error(`ISWebComponentsLoader: no hay espejo para ${rel}`);
+  throw last || new Error(`iswcLoader: no hay espejo para ${rel}`);
 }
 
 function parseArgs(...args: (string | Record<string, unknown>)[]): {
@@ -632,7 +632,7 @@ async function warmEntryCss(entry: AppComponentEntry): Promise<void> {
   if (list.length) await sheets.calentar(list.map((href) => routeHref(href)));
 }
 
-export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
+export const iswcLoader: iswcLoaderShape = {
   get catalog(): Catalog { return CATALOG; },
   /** Mapa de hashes del build (`ruta` → 6 caracteres). */
   get hashes(): Record<string, string> { return HASHES; },
@@ -729,7 +729,7 @@ export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
   },
 
   pin(ref: string) {
-    if (!ref) throw new Error('ISWebComponentsLoader.pin: ref requerido');
+    if (!ref) throw new Error('iswcLoader.pin: ref requerido');
     state.ref = String(ref);
     return this;
   },
@@ -946,14 +946,14 @@ export const ISWebComponentsLoader: ISWebComponentsLoaderShape = {
   isReady: isElementReady,
 };
 
-if (typeof globalThis !== 'undefined' && !(globalThis as Record<string, unknown>).ISWebComponentsLoader) {
+if (typeof globalThis !== 'undefined' && !(globalThis as Record<string, unknown>).iswcLoader) {
   // Idempotente: si el loader ya está registrado (caso típico: un page bundle
   // bundleó el loader dentro y se ejecuta después del boot canónico desde
   // `dist/cdn/core/loader.min.js`), la primera instancia gana. Si tomáramos la
   // del bundle, su SELF_BASE/CDN_ROOT sería la ruta del bundle (`dist/pages/…`)
   // y `L.load(tag)` pediría URLs tipo `dist/pages/{cat}/{tag}.min.js` → 48× 404
   // en cada nav-click posterior. Guardian: tests/loader-global-guardian.test.ts.
-  (globalThis as Record<string, unknown>).ISWebComponentsLoader = ISWebComponentsLoader;
+  (globalThis as Record<string, unknown>).iswcLoader = iswcLoader;
 }
 
 syncHashMemory(HASHES);
@@ -970,4 +970,4 @@ if (typeof document !== 'undefined') {
   void injectCdnStylesheet('is-base.min.css');
 }
 
-export default ISWebComponentsLoader;
+export default iswcLoader;

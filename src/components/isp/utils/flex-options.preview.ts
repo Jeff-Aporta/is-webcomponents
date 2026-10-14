@@ -1,5 +1,5 @@
 import type { FlexActionEntry } from '../schemas/tree-view-flex-options.schemas.js';
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
 import type { FlexOptionsLike } from "../schemas/flex-options.preview.schemas.js";
 
 export function mount(ctx: PreviewMountContext): void {

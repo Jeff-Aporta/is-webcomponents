@@ -5,7 +5,7 @@
  * `ComponentJsonSchema` (src/previews/_kit/schemas/component.schemas.ts). Cada
  * JSON de preview declara qué otros componentes `iswc-*` necesita
  * además del propio `tag`; el render los carga con
- * `ISWebComponentsLoader.load(...loads)` antes de pintar el primer
+ * `iswcLoader.load(...loads)` antes de pintar el primer
  * `iswc-demo` para que el upgrade de los custom elements ocurra sin
  * parpadeos.
  *
@@ -294,14 +294,14 @@ test('W56: loadFor filtra strings vacíos antes de llamar al loader', async () =
 });
 
 test('W56: loadFor degrada a no-op si no hay loader en globalThis', async () => {
-  // En Node no hay globalThis.ISWebComponentsLoader. loadFor debe
+  // En Node no hay globalThis.iswcLoader. loadFor debe
   // devolver requested:true con arrays vacíos, no throw.
-  // (No podemos unsetear globalThis.ISWebComponentsLoader aquí porque
+  // (No podemos unsetear globalThis.iswcLoader aquí porque
   // en este proceso de test podría estar poblado por otro test que
   // carga el loader; pero si no lo está, la rama es trivial.)
-  const before = (globalThis as { ISWebComponentsLoader?: unknown }).ISWebComponentsLoader;
+  const before = (globalThis as { iswcLoader?: unknown }).iswcLoader;
   try {
-    (globalThis as { ISWebComponentsLoader?: unknown }).ISWebComponentsLoader = undefined;
+    (globalThis as { iswcLoader?: unknown }).iswcLoader = undefined;
     const result = await loadFor(
       { tag: 'iswc-x', sections: [], loads: ['iswc-foo'] } as never,
     );
@@ -310,7 +310,7 @@ test('W56: loadFor degrada a no-op si no hay loader en globalThis', async () => 
     assert.deepEqual(result!.loaded, []);
     assert.deepEqual(result!.skipped, []);
   } finally {
-    (globalThis as { ISWebComponentsLoader?: unknown }).ISWebComponentsLoader = before;
+    (globalThis as { iswcLoader?: unknown }).iswcLoader = before;
   }
 });
 

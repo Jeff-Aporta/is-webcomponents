@@ -3,7 +3,7 @@
  *
  * Caza regresiones de la auditoría UX (6-ago-2026):
  *  - toast.preview.ts debe crear #toaster si el JSON no lo trae
- *  - ISComponentPreview.on tolera target null
+ *  - IswcComponentPreview.on tolera target null
  *  - url-nav solo escribe ?s= (no params sueltos)
  *  - format-bytes tiene autofit
  *
@@ -30,8 +30,8 @@ test('iswc-toast behavior crea #toaster si falta (no create-on-null)', () => {
   );
 });
 
-test('ISComponentPreview.on no crashea con target null', () => {
-  const src = read('src/previews/_kit/ISComponentPreview.ts');
+test('IswcComponentPreview.on no crashea con target null', () => {
+  const src = read('src/previews/_kit/component-preview.ts');
   assert.match(src, /on\(target/);
   assert.match(src, /!target|target\s*==\s*null|typeof target\.addEventListener/);
 });

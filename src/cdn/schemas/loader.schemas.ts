@@ -200,7 +200,7 @@ export const LoaderSheetsSchema = z.object({
 export type LoaderSheets = z.infer<typeof LoaderSheetsSchema>;
 
 /* --------------------------------------------------------------------------
- * ISWebComponentsLoader — superficie pública del loader.
+ * iswcLoader — superficie pública del loader.
  *
  * Modelamos sólo la forma tipada (lo que `L.*` expone). Las funciones de
  * carga usan `z.function({ input, output })` para preservar firmas.
@@ -227,7 +227,7 @@ const RegisterPageModuleOptsSchema = z
   .object({ type: PageModuleKindSchema.optional() })
   .optional();
 
-export const ISWebComponentsLoaderSchema = z.object({
+export const iswcLoaderSchema = z.object({
   catalog: z.any(),
   hashes: z.record(z.string(), z.string()),
   assetUrl: z.function({ input: [z.string()], output: z.string() }),
@@ -301,11 +301,11 @@ export const ISWebComponentsLoaderSchema = z.object({
   isReady: z.function({ input: [z.string()], output: z.boolean() }),
 });
 /**
- * Forma inferida del loader. Se importa como `ISWebComponentsLoaderShape`
- * para evitar conflicto con el `const ISWebComponentsLoader` exportado por
+ * Forma inferida del loader. Se importa como `iswcLoaderShape`
+ * para evitar conflicto con el `const iswcLoader` exportado por
  * `loader.ts` (TypeScript no permite que un type y un value con el mismo
  * nombre se declaren en un mismo archivo sin una declaración merge explícita).
  */
-export type ISWebComponentsLoaderShape = z.infer<typeof ISWebComponentsLoaderSchema>;
-/** Alias público: `ISWebComponentsLoader` (para consumidores externos). */
-export type ISWebComponentsLoader = ISWebComponentsLoaderShape;
+export type iswcLoaderShape = z.infer<typeof iswcLoaderSchema>;
+/** Alias público: `iswcLoader` (para consumidores externos). */
+export type iswcLoader = iswcLoaderShape;

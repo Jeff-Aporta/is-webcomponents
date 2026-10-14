@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/scripts/gate/e2e/servidor.ts
+// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/scripts/gate/e2e/servidor.ts
 /**
  * servidor.ts — autoservidor estático de la app para los e2e (convención de puertos del kit).
  *

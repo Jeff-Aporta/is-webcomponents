@@ -11,4 +11,4 @@ export type ThemeName = z.infer<typeof ThemeNameSchema>;
 export type ThemeChangeDetail = { theme: ThemeName; dark: boolean; container: HTMLElement };
 
 /** Evento del `<iswc-check-icon-button>` interno (noche ↔ sol). */
-export interface IsCheckIconButtonEvent extends CustomEvent<{ checked: boolean }> {}
+export interface IswcCheckIconButtonEvent extends CustomEvent<{ checked: boolean }> {}

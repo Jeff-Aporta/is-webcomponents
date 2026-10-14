@@ -296,7 +296,7 @@ for (const [category, items] of grupos) {
 /** Módulos / APIs públicas que no son custom elements (contexto obligatorio para agentes). */
 const API_MODULES = [
   {
-    id: 'ISWebComponentsLoader',
+    id: 'iswcLoader',
     cdn: 'core/loader.min.js',
     guia: 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/cdn/loader.md',
     resumen: 'Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado.',
@@ -332,7 +332,7 @@ const API_MODULES = [
     resumen: 'CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token).',
   },
   {
-    id: 'IsResponseCache',
+    id: 'IswcResponseCache',
     cdn: 'helpers/response-cache.min.js',
     guia: `${gh}/helpers/utils/response-cache.md`,
     resumen: 'SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado.',

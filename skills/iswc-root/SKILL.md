@@ -7,7 +7,7 @@ description: >-
   IswcUi / md-hydrate / response-cache, apps tipo frontend-webcomponents / tk-*,
   migraciones desde React/MUI/Svelte, o cuando se pueda reinventar UI del catálogo.
 ---
-<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/SKILL.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/iswc-root/SKILL.md -->
 
 # ISWC — stack obligatorio
 
@@ -139,7 +139,7 @@ Excepción: apps que declaran seguimiento continuo (por ejemplo `jagudeloe/front
   <script type="module"
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@{{SHA}}/dist/cdn/core/loader.min.js"></script>
   <script type="module">
-    const L = globalThis.ISWebComponentsLoader;
+    const L = globalThis.iswcLoader;
     await L.loadCSSBase();
     await L.loadCSSPalettesDefault();
     await L.load("iswc-toast");
@@ -216,7 +216,7 @@ Base raw: `https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/main/src/comp
 - Asumir submit nativo de `<iswc-button type="submit">` en forms de light DOM sin el cableado del kit (`requestSubmit`).
 - Usar `iswc-split-panel` con un porcentaje alto como sidebar fijo de app (preferir grid CSS).
 - Buscar fuentes del kit en la raíz del repo (`components/`, `styles/`): viven en **`src/`**.
-- Lógica de preview como string o `eval`: en el kit, `ISComponentPreview.mount()` más el registry.
+- Lógica de preview como string o `eval`: en el kit, `IswcComponentPreview.mount()` más el registry.
 - Ignorar `tests/` en git: los `*.test.mjs` se commitean (solo los artefactos van en gitignore).
 - Usar `npm`, `npx` o un bundler para instalar o servir el kit en la app consumidora.
 
@@ -253,13 +253,13 @@ Detalle operativo: [`tools/runtime.md`](tools/runtime.md).
 
 | API / módulo | CDN o ruta | Resumen | Guía |
 | --- | --- | --- | --- |
-| `ISWebComponentsLoader` | `core/loader.min.js` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/cdn/loader.md) |
+| `iswcLoader` | `core/loader.min.js` | Entry CDN: loadCSS*, load/ensure/has, pin, configure, espejos jsDelivr -> githack -> Pages, sheets, registerApp, SHA quemado. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/cdn/loader.md) |
 | `IswcUi / Ui` | `helpers/ui.min.js` | html, adoptCss, define, css, el: primitivas de apps dominio. No es CE. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/ui.md) |
 | `mdToHtml` | `helpers/md-lite.min.js` | Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-lite.md) |
 | `resolveIswcFenceTag` | `helpers/md-iswc-fences.min.js` | Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-iswc-fences.md) |
 | `hydrateMdEmbeds` | `helpers/md-hydrate.min.js` | Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-hydrate.md) |
 | `md-editor-api` | `helpers/md-editor-api.min.js` | CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/md-editor-api.md) |
-| `IsResponseCache` | `helpers/response-cache.min.js` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/response-cache.md) |
+| `IswcResponseCache` | `helpers/response-cache.min.js` | SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado. | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components/helpers/utils/response-cache.md) |
 | `sync-pins` | `scripts/sync-pins.mjs (repo)` | Tras commit del kit: propaga SHA a kit-pin / ISS / PIN (deno task sync:pins). | [docs](https://github.com/Jeff-Aporta/iswc-root/blob/main/scripts/sync-pins.mjs) |
 
 <!-- apis:fin -->

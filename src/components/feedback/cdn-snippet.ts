@@ -280,7 +280,7 @@ const normalizeIswcTag = (tag: string): string => {
         `<script type="module" src="${href}"><\/script>`,
         ...depLines,
         `<script type="module">`,
-        `  const L = globalThis.ISWebComponentsLoader;`,
+        `  const L = globalThis.iswcLoader;`,
         `  // is-base.min.css se auto-carga al inicializar el loader (W52).`,
         `  await L.loadPageStyles(['iswc-palettes-default']);`,
         loadLine,

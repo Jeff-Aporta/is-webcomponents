@@ -495,7 +495,7 @@ ElementBase              (shadow + lifecycle + observed + hooks)
   ↑ extends
 MixinFormControl(ElementBase)  (form-control attributes + aria sync)
   ↑ extends
-IsInput                  (props/attrs específicos del input: type, value, etc.)
+IswcInput                  (props/attrs específicos del input: type, value, etc.)
 ```
 
 ```

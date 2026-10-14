@@ -28,7 +28,7 @@
             "### JavaScript",
             "",
             "```js",
-            "const L = globalThis.ISWebComponentsLoader;",
+            "const L = globalThis.iswcLoader;",
             "await L.loadCSSBase();",
             "await L.load(\"iswc-md-render\");",
             "const saludo = (nombre) => `Hola ${nombre}`;",
@@ -255,7 +255,7 @@
             "### JavaScript",
             "",
             "```js",
-            "const L = globalThis.ISWebComponentsLoader;",
+            "const L = globalThis.iswcLoader;",
             "await L.loadCSSBase();",
             "await L.load(\"iswc-md-render\");",
             "const saludo = (nombre) => `Hola ${nombre}`;",
@@ -531,7 +531,7 @@
             ],
             [
               "<code>el.api</code> / <code>src</code>",
-              "IsMdEditorApiConfig"
+              "IswcMdEditorApiConfig"
             ],
             [
               "<code>setDocument(doc)</code>",
@@ -567,7 +567,7 @@
           },
           {
             "metodo": "<code>el.api</code> / <code>src</code>",
-            "desc": "IsMdEditorApiConfig"
+            "desc": "IswcMdEditorApiConfig"
           },
           {
             "metodo": "<code>setDocument(doc)</code>",
@@ -599,7 +599,7 @@
           "### JavaScript",
           "",
           "```js",
-          "const L = globalThis.ISWebComponentsLoader;",
+          "const L = globalThis.iswcLoader;",
           "await L.loadCSSBase();",
           "await L.load(\"iswc-md-render\");",
           "const saludo = (nombre) => `Hola ${nombre}`;",

@@ -13,10 +13,10 @@ export const DemoNodeSchema = z.object({
 export type DemoNode = z.infer<typeof DemoNodeSchema>;
 
 
-export const IsTreeViewElSchema = z.object({
+export const IswcTreeViewElSchema = z.object({
   customs: z.union([z.unknown() /* TODO: ref TreeCustomsBase */, z.null()]),
   list: z.array(z.unknown()),
   addEventListener: z.function({ input: [z.string(), z.unknown() /* TODO: ref EventListener */], output: z.void() }),
 });
-export type IsTreeViewEl = z.infer<typeof IsTreeViewElSchema>;
+export type IswcTreeViewEl = z.infer<typeof IswcTreeViewElSchema>;
 

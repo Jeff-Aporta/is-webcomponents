@@ -16,11 +16,11 @@
  * el futuro el bundle se vuelve problema, mover el bridge a un chunk aparte
  * con `external: ['zod']` en la build de gallery-app.
  */
-import { ISComponentPreview } from './ISComponentPreview.js';
+import { IswcComponentPreview } from './component-preview.js';
 import { montarControles } from '../../utils/system/controles.js';
 import { loadFichaLikeDefinition } from './ficha-bridge.ts';
 
-import type { PreviewDefinition, PreviewMountContext } from './types.d.ts';
+import type { PreviewDefinition, PreviewMountContext } from './schemas/preview.schemas.ts';
 import type { DefinicionPreview, CtxMontaje, ModuloBehavior, ConDefinicion } from "./schemas/JsonPreview.schemas.js";
 
 /** Forma mínima de la definición (iswc-preview/v1 o ficha via sub-objeto). */
@@ -31,7 +31,7 @@ import type { DefinicionPreview, CtxMontaje, ModuloBehavior, ConDefinicion } fro
 
 /** Vista del preview con su definición (la base la expone congelada). */
 
-export class JsonPreview extends ISComponentPreview {
+export class JsonPreview extends IswcComponentPreview {
   #behavior: ModuloBehavior | null = null;
 
   constructor(definition: DefinicionPreview, behavior: ModuloBehavior | null = null) {

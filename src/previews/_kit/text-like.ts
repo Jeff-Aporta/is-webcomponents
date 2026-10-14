@@ -11,7 +11,7 @@
  * Los consumidores (render, audit, tests) deben pasar por `asText()` para
  * obtener el string original.
  *
- * El tipo `TextLike` está declarado en `types.d.ts` para que esté visible
+ * El tipo `TextLike` está declarado en `schemas/preview.schemas.ts` para que esté visible
  * desde todos los consumidores sin necesidad de un import runtime.
  */
 

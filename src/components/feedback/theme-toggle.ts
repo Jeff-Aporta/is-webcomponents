@@ -2,7 +2,7 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import '../actions/check-icon-button.js';
 import { findThemeContainer } from '../../core/theme-scope.js';
 import { guardarAppCfg } from '../../core/app-cfg.js';
-import type { IsCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './schemas/theme-toggle.schemas.js';
+import type { IswcCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './schemas/theme-toggle.schemas.js';
 
 /**
  * <iswc-theme-toggle> — Web Component (vanilla).
@@ -127,7 +127,7 @@ import type { IsCheckIconButtonEvent, ThemeChangeDetail, ThemeName } from './sch
     }
 
     #onChange = (e: Event): void => {
-      const detail = (e as IsCheckIconButtonEvent).detail;
+      const detail = (e as IswcCheckIconButtonEvent).detail;
       const next: ThemeName = detail?.checked ? 'dark' : 'light';
       const container = this.themeContainer;
       this.#applying = true;

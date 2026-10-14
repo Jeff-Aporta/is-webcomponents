@@ -2,8 +2,8 @@
  * Behavior migrado desde HTML inline de iswc-ag-grid.
  * Se ejecuta en mount() tras pintar la definition JSON.
  */
-import type { PreviewMountContext } from '../../../previews/_kit/types.d.ts';
-import type { AgGridApi, IsAgGridEl } from "../schemas/ag-grid.preview.schemas.js";
+import type { PreviewMountContext } from '../../../previews/_kit/schemas/preview.schemas.ts';
+import type { AgGridApi, IswcAgGridEl } from "../schemas/ag-grid.preview.schemas.js";
 
 export async function mount(ctx: PreviewMountContext): Promise<void> {
   const root = ctx.main;
@@ -14,7 +14,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
     log.scrollTop = 0;
   };
 
-  function attach(g: IsAgGridEl | null | undefined): void {
+  function attach(g: IswcAgGridEl | null | undefined): void {
     if (!g) return;
     g.addEventListener('iswc-cell-click', (e: Event) =>
       append(`cell-click ${(e as CustomEvent<{ column?: { field?: string }; value?: unknown }>).detail?.column?.field}=${(e as CustomEvent<{ column?: { field?: string }; value?: unknown }>).detail?.value}`));
@@ -42,11 +42,11 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
       append(`hide ${(e as CustomEvent<{ colId?: string }>).detail?.colId}`));
   }
 
-  const g = (root.querySelector<HTMLElement>('#grid') || document.getElementById('grid')) as IsAgGridEl | null;
+  const g = (root.querySelector<HTMLElement>('#grid') || document.getElementById('grid')) as IswcAgGridEl | null;
   attach(g);
-  attach((root.querySelector<HTMLElement>('#grid-density') || document.getElementById('grid-density')) as IsAgGridEl | null);
-  attach((root.querySelector<HTMLElement>('#grid-grouping') || document.getElementById('grid-grouping')) as IsAgGridEl | null);
-  attach((root.querySelector<HTMLElement>('#grid-filters') || document.getElementById('grid-filters')) as IsAgGridEl | null);
+  attach((root.querySelector<HTMLElement>('#grid-density') || document.getElementById('grid-density')) as IswcAgGridEl | null);
+  attach((root.querySelector<HTMLElement>('#grid-grouping') || document.getElementById('grid-grouping')) as IswcAgGridEl | null);
+  attach((root.querySelector<HTMLElement>('#grid-filters') || document.getElementById('grid-filters')) as IswcAgGridEl | null);
 
   const on = (id: string, fn: () => void): void => {
     const el = root.querySelector<HTMLElement>(`#${id}`) || document.getElementById(id);
@@ -58,7 +58,7 @@ export async function mount(ctx: PreviewMountContext): Promise<void> {
   on('btnCSV', () => g?.api?.exportCSV?.('catalogo.csv'));
   on('btnPage2', () => g?.api?.goToPage?.(2));
 
-  const gDensity = (root.querySelector<HTMLElement>('#grid-density') || document.getElementById('grid-density')) as IsAgGridEl | null;
+  const gDensity = (root.querySelector<HTMLElement>('#grid-density') || document.getElementById('grid-density')) as IswcAgGridEl | null;
   on('btnCompact', () => gDensity?.api?.setDensity?.('compact'));
   on('btnNormal', () => gDensity?.api?.setDensity?.('normal'));
   on('btnComfy', () => gDensity?.api?.setDensity?.('comfortable'));

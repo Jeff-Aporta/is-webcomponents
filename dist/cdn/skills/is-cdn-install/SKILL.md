@@ -7,7 +7,7 @@ description: >-
   usuario pida instalar is-*, enlaces CDN, loader.min.js, L.load,
   mirrors, o copiar el panel Consumo por CDN.
 ---
-<!-- @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/is-cdn-install/SKILL.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/is-cdn-install/SKILL.md -->
 
 # ISWC — instalación por CDN
 
@@ -54,7 +54,7 @@ Skill general del kit (reuso de tags, arquitectura, prompt, herramientas): [`isw
   <script type="module"
     src="https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/cdn/core/loader.min.js"></script>
   <script type="module">
-    const L = globalThis.ISWebComponentsLoader;
+    const L = globalThis.iswcLoader;
     await L.loadCSSBase();
     await L.loadCSSPalettesDefault();
     await L.load('iswc-button'); // o 'actions' | 'all'

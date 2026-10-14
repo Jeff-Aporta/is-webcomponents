@@ -6,15 +6,15 @@
  */
 import { z } from "zod";
 
-export const IsVideoLikeSchema = z.object({
+export const IswcVideoLikeSchema = z.object({
   media: z.unknown() /* TODO: ref HTMLVideoElement */,
   play: z.function({ input: [], output: z.promise(z.void()) }),
   pause: z.function({ input: [], output: z.void() }),
 });
-export type IsVideoLike = z.infer<typeof IsVideoLikeSchema>;
+export type IswcVideoLike = z.infer<typeof IswcVideoLikeSchema>;
 
 
-export const IswcVideoSchema = IsVideoLikeSchema;
+export const IswcVideoSchema = IswcVideoLikeSchema;
 export type IswcVideo = z.infer<typeof IswcVideoSchema>;
 
 

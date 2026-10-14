@@ -18,7 +18,7 @@ import type { ServidorE2E } from './server.schemas.ts';
 import type { EstadoE2E } from './e2e-config.schemas.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
-} from './tipos.d.ts';
+} from './schemas/tipos.schemas.ts';
 import { OpcionesEsperaSchema, type OpcionesEspera } from './harness.schemas.js';
 import type { BotonVisible } from "./harness.schemas.js";
 

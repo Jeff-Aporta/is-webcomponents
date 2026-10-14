@@ -44,6 +44,6 @@ export function lookupHash(files: Record<string, string>, href: string): string 
 
 /** Si el loader ya esta en la pagina, enruta por el. Si no, deja el href. */
 export function routeThroughLoader(href: string): string {
-  const fn = (globalThis as LoaderGlobal).ISWebComponentsLoader?.assetUrl;
+  const fn = (globalThis as LoaderGlobal).iswcLoader?.assetUrl;
   return typeof fn === 'function' ? fn(href) : href;
 }

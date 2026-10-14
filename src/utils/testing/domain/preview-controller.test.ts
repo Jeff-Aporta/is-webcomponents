@@ -15,8 +15,8 @@ const previews = join(root, 'src', 'previews');
 const failures = [];
 
 const kitFiles = [
-  'src/previews/_kit/types.d.ts',
-  'src/previews/_kit/ISComponentPreview.ts',
+  'src/previews/_kit/schemas/preview.schemas.ts',
+  'src/previews/_kit/component-preview.ts',
   'src/previews/_kit/JsonPreview.ts',
   'src/previews/_kit/render.ts',
   'src/previews/_kit/load-json.ts',
@@ -51,8 +51,8 @@ if (htmls.length !== 1) {
   failures.push(`debe quedar exactamente 1 HTML (_shell.html), hay ${htmls.length}`);
 }
 
-const types = readFileSync(join(root, 'src/previews/_kit/types.d.ts'), 'utf8');
-if (!/iswc-preview\/v1/.test(types)) failures.push('types.d.ts debe declarar $schema iswc-preview/v1');
+const types = readFileSync(join(root, 'src/previews/_kit/schemas/preview.schemas.ts'), 'utf8');
+if (!/iswc-preview\/v1/.test(types)) failures.push('schemas/preview.schemas.ts debe declarar $schema iswc-preview/v1');
 if (!/PreviewDefinition/.test(types)) failures.push('falta PreviewDefinition');
 
 const host = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
@@ -68,8 +68,8 @@ const galleryApp = readFileSync(join(root, 'src/app/app.ts'), 'utf8');
 // index.html solo monta el host; la lógica vive en app/app.ts (bundle
 // del SPA — la migración del inline JS al bundle cambió dónde están los
 // nombres de las funciones).
-if (!/previewHost/.test(index)) {
-  failures.push('index.html debe montar el host <iswc-preview-component id="previewHost">');
+if (!/<iswc-doc-demo\b/.test(index)) {
+  failures.push('index.html debe montar el shell <iswc-doc-demo> (es quien crea #previewHost)');
 }
 if (!/hasControlledPreview/.test(galleryApp) || !/loadPreview/.test(galleryApp) || !/hasCachedPreview/.test(galleryApp)) {
   failures.push('app/app.ts debe usar hasControlledPreview + loadPreview + hasCachedPreview del registry');

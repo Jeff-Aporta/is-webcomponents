@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T15:03:31.623Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/demo/components/__PREFIJO__-galeria.ts
+// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/demo/components/__PREFIJO__-galeria.ts
 /**
  * Galería de componentes `__PREFIJO__-*` (estándar iswc-foundation).
  *
@@ -15,8 +15,8 @@ import {
   type ConProps, type ControlDemo, type DefinicionDemo, DefinicionDemoSchema, type LoaderGaleria, ManifestDemoSchema,
 } from '../../../src/js/consts/schemas/demo.schemas.js';
 
-const L = (globalThis as { ISWebComponentsLoader?: LoaderGaleria }).ISWebComponentsLoader;
-if (!L) throw new Error('galería: falta ISWebComponentsLoader');
+const L = (globalThis as { iswcLoader?: LoaderGaleria }).iswcLoader;
+if (!L) throw new Error('galería: falta iswcLoader');
 const cdn = new URL('../', L.selfBase).href; // …/dist/cdn/ del kit
 await Promise.all([
   L.load('iswc-preview-controls', 'iswc-callout', ...KIT_TAGS, ...tagsArranque()),
