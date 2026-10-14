@@ -127,9 +127,9 @@ export function applyToneRamp(el: HTMLElement, color: string | null, opts: { pre
  * Mixin para componentes que NO extienden `ElementBase` (los que siguen
  * heredando de `HTMLElement` directamente).
  *
- *   class IsFoo extends withStyleAttrs(HTMLElement) {
+ *   class IswcFoo extends withStyleAttrs(HTMLElement) {
  *     static styleAttrs = { radius: '--iswc-foo-radius' };
- *     static get observedAttributes() { return [...OBSERVED, ...IsFoo.styleAttrNames]; }
+ *     static get observedAttributes() { return [...OBSERVED, ...IswcFoo.styleAttrNames]; }
  *   }
  *
  * Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado
