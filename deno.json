@@ -1,5 +1,5 @@
 {
-  "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/" },
+  "iswc": { "host": "https://jeff-aporta.github.io/is-webcomponents/", "typecheckBaseline": 4263 },
   "nodeModulesDir": "auto",
   "unstable": ["sloppy-imports"],
   "imports": {
@@ -20,7 +20,7 @@
     "dev:demos": "deno run -A --no-check scripts/serve-demos.mjs",
     "icons:download": "deno run -A --no-check scripts/download-icons.ts",
     "labs:render": "deno run -A --no-check --sloppy-imports scripts/render-labs.mjs",
-    "typecheck": "deno run -A --no-check npm:typescript@5.9.3/lib/tsc.js -p tsconfig.json",
+    "typecheck": "deno run -A scripts/typecheck.mjs",
     "test": "deno run -A --no-check src/utils/testing/run-unit.ts",
     "test:e2e": "deno run -A --no-check src/utils/testing/e2e/run.ts",
     "test:demos": "deno run -A --no-check demos/diagramas/ER/_testing/run.mjs",
