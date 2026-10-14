@@ -2,11 +2,14 @@
  * code-highlight.test.ts — invariantes del motor nativo de resaltado
  * (sustituto de CodeMirror en <iswc-code>). No toca DOM ni CM: puro Node.
  */
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   tokenizeCode, normalizeLang, diffLineClass, lineToHtml, emptyState, tokensToText,
-} from '../../../core/code-highlight.ts';
+} from '../../src/core/code-highlight.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const typesOf = (tokens) => tokens.map((t) => t.type);
 
@@ -143,3 +146,5 @@ test('estado vacío no se muta entre llamadas', () => {
 });
 
 console.log('code-highlight.test.ts: PASS — motor nativo');
+
+export default lista();

@@ -20,69 +20,76 @@ import { readdirSync } from 'node:fs';
 import { join, dirname, basename, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
-const previewsRoot = join(root, 'src', 'previews');
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-const manifest = (await import('../../../manifest.js')).default;
-
-const previews = [];
-for (const cat of readdirSync(previewsRoot, { withFileTypes: true })) {
-  if (!cat.isDirectory()) continue;
-  const dir = join(previewsRoot, cat.name);
-  for (const file of readdirSync(dir)) {
-    if (!/^is-[a-z0-9-]+\.json$/i.test(file)) continue;
-    previews.push({ cat: cat.name, file });
+test('gobernanza/cdn-snippet-match', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
+  const previewsRoot = join(root, 'src', 'previews');
+  
+  const manifest = (await import('../../src/manifest.js')).default;
+  
+  const previews = [];
+  for (const cat of readdirSync(previewsRoot, { withFileTypes: true })) {
+    if (!cat.isDirectory()) continue;
+    const dir = join(previewsRoot, cat.name);
+    for (const file of readdirSync(dir)) {
+      if (!/^is-[a-z0-9-]+\.json$/i.test(file)) continue;
+      previews.push({ cat: cat.name, file });
+    }
   }
-}
-
-const matchByBasename = (components, file) =>
-  components.filter((c) => (c.page || '').split('/').pop() === file);
-
-const failures = [];
-let checked = 0;
-
-for (const { cat, file } of previews) {
-  const matches = matchByBasename(manifest, file);
-  checked += 1;
-  if (!matches.length) {
-    failures.push(`${cat}/${file}: sin match en el manifest`);
-    continue;
+  
+  const matchByBasename = (components, file) =>
+    components.filter((c) => (c.page || '').split('/').pop() === file);
+  
+  const failures = [];
+  let checked = 0;
+  
+  for (const { cat, file } of previews) {
+    const matches = matchByBasename(manifest, file);
+    checked += 1;
+    if (!matches.length) {
+      failures.push(`${cat}/${file}: sin match en el manifest`);
+      continue;
+    }
+    for (const m of matches) {
+      assert.ok(m.tag, `${cat}/${file}: match sin tag (manifest roto)`);
+    }
   }
-  for (const m of matches) {
-    assert.ok(m.tag, `${cat}/${file}: match sin tag (manifest roto)`);
+  
+  // Sanity: la lógica debe aceptar también un page sin prefijo de categoría,
+  // porque algunos manifest antiguos o entries auxiliares pueden guardarlo así.
+  const fakeManifest = [{ tag: 'iswc-foo', page: 'iswc-foo.json' }];
+  assert.deepEqual(
+    matchByBasename(fakeManifest, 'iswc-foo.json').map((c) => c.tag),
+    ['iswc-foo'],
+    'match por basename debe funcionar también con page sin prefijo de categoría'
+  );
+  
+  // Sanity: un componente que NO existe en el manifest no debe matchear.
+  assert.deepEqual(
+    matchByBasename(fakeManifest, 'iswc-bar.json').map((c) => c.tag),
+    [],
+    'un componente ausente no debe matchear'
+  );
+  
+  // Resumen
+  console.log(`✔ cdn-snippet-match: ${checked} previews folderizados verificados`);
+  if (failures.length) {
+    console.error('✘ Fallos:');
+    for (const f of failures) console.error(`  - ${f}`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
   }
-}
-
-// Sanity: la lógica debe aceptar también un page sin prefijo de categoría,
-// porque algunos manifest antiguos o entries auxiliares pueden guardarlo así.
-const fakeManifest = [{ tag: 'iswc-foo', page: 'iswc-foo.json' }];
-assert.deepEqual(
-  matchByBasename(fakeManifest, 'iswc-foo.json').map((c) => c.tag),
-  ['iswc-foo'],
-  'match por basename debe funcionar también con page sin prefijo de categoría'
-);
-
-// Sanity: un componente que NO existe en el manifest no debe matchear.
-assert.deepEqual(
-  matchByBasename(fakeManifest, 'iswc-bar.json').map((c) => c.tag),
-  [],
-  'un componente ausente no debe matchear'
-);
-
-// Resumen
-console.log(`✔ cdn-snippet-match: ${checked} previews folderizados verificados`);
-if (failures.length) {
-  console.error('✘ Fallos:');
-  for (const f of failures) console.error(`  - ${f}`);
-  process.exit(1);
-}
-
-// Imprime una muestra para que un humano vea qué matchéa con qué.
-const sample = previews.slice(0, 5).map(({ cat, file }) => {
-  const tags = matchByBasename(manifest, file).map((m) => m.tag);
-  return `  ${cat}/${file}  →  [${tags.join(', ')}]`;
+  
+  // Imprime una muestra para que un humano vea qué matchéa con qué.
+  const sample = previews.slice(0, 5).map(({ cat, file }) => {
+    const tags = matchByBasename(manifest, file).map((m) => m.tag);
+    return `  ${cat}/${file}  →  [${tags.join(', ')}]`;
+  });
+  console.log('Muestra:');
+  for (const line of sample) console.log(line);
 });
-console.log('Muestra:');
-for (const line of sample) console.log(line);
+
+export default lista();

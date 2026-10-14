@@ -7,9 +7,16 @@
  *   VF4 el flowchart lo dibuja tal cual (`{ vectorFlow }`), con índices automáticos.
  */
 import { assert, assertEquals, assertThrows } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { validarVector, vectorAFlujo } from '../../../components/diagrams/utils/vector-flow-spec.ts';
-import { ZVectorFlow } from '../../../components/diagrams/schemas/vector-flow-spec.schemas.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
+import { validarVector, vectorAFlujo } from '../../src/components/diagrams/utils/vector-flow-spec.ts';
+import { ZVectorFlow } from '../../src/components/diagrams/schemas/vector-flow-spec.schemas.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 const base = () => ({
   steps: 'auto' as const,
@@ -27,14 +34,14 @@ const base = () => ({
   ],
 });
 
-Deno.test('vector: VF1 compila columnas a carriles y grupos a contextos', () => {
+denoTest('vector: VF1 compila columnas a carriles y grupos a contextos', () => {
   const f = vectorAFlujo(base()) as { lanes: Array<{ id: string }>; nodes: Array<{ id: string; lane: string; context?: string }> };
   assertEquals(f.lanes.map((l) => l.id), ['cli', 'cmp', 'flu', 'ctl', 'mod', 'db']);
   const api = f.nodes.find((n) => n.id === 'api')!;
   assertEquals([api.lane, api.context], ['cmp', 'Propios (API)']);
 });
 
-Deno.test('vector: VF2 cada columna es estricta', () => {
+denoTest('vector: VF2 cada columna es estricta', () => {
   const v = base();
   v.columns[4]!.nodes.push({ id: 'y', kind: 'class', class: { name: 'TYController' } } as never);
   v.columns[2]!.nodes.push({ id: 'z', label: 'otro', group: 'nada' } as never);
@@ -48,13 +55,13 @@ Deno.test('vector: VF2 cada columna es estricta', () => {
   assertThrows(() => vectorAFlujo(v), Error, 'Diagrama de flujo en vector inválido');
 });
 
-Deno.test('vector: VF3 controller con su POJO recibe la arista klass sola', () => {
+denoTest('vector: VF3 controller con su POJO recibe la arista klass sola', () => {
   const f = vectorAFlujo(base()) as { edges: Array<{ from: string; to: string; label?: string; kind?: string }> };
   const k = f.edges.find((e) => e.from === 'x' && e.to === 'p');
   assertEquals([k?.label, k?.kind], ['klass', 'dashed']);
 });
 
-Deno.test('vector: VF4 el flowchart lo dibuja con índices automáticos', () => {
+denoTest('vector: VF4 el flowchart lo dibuja con índices automáticos', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({ vectorFlow: base() })!, null, { style: 'insoft' });
   const idx = Object.fromEntries(L.nodes.map((n) => [n.id, n.stepLabel]));
   // Solo los pasos llevan índice: cliente, componente y controller de la entrada, solo su ícono.
@@ -62,3 +69,5 @@ Deno.test('vector: VF4 el flowchart lo dibuja con índices automáticos', () => 
   assertEquals([idx.a, idx.d, idx.b], ['1', '2', '2.1']);
   assertEquals(idx.t, undefined, 'la tabla solo se usa');
 });
+
+export default lista();

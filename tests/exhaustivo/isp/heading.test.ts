@@ -4,11 +4,14 @@
  * Tipografía jerárquica con level (1-6), color semántico, mix y mix-with.
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -32,7 +35,7 @@ test('3. JSON existe y respeta iswc-preview/v1', async () => {
 });
 
 test('4. OBSERVED incluye level, color, mix, mix-with, size', async () => {
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const list = extraerObservados(TS);
   for (const a of ['level', 'color', 'mix', 'mix-with', 'size']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
@@ -49,7 +52,7 @@ test('5. level cubre 1-6', async () => {
 test('6. color cubre brand | neutral | info | success | warning | danger | current', async () => {
   // Los colores viven en `intent.ts` (import compartido). Usar leerConBase
   // para que los imports se concatenen.
-  const { leerConBase } = await import('../_helpers.js');
+  const { leerConBase } = await import('../../_shared/exhaustivo.js');
   const src = leerConBase(TS);
   for (const c of ['brand', 'neutral', 'info', 'success', 'warning', 'danger', 'current']) {
     assert.ok(src.includes(`'${c}'`) || src.includes(`"${c}"`), `color="${c}"`);
@@ -87,3 +90,5 @@ test('10. preview.ts existe', async () => {
   }
   assert.ok(found, 'heading.preview.ts debe existir');
 });
+
+export default lista();

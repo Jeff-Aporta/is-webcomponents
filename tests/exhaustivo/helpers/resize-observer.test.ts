@@ -4,11 +4,14 @@
  * Wrapper legacy que delega en createObserverElement('resize').
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -75,3 +78,5 @@ test('12. preview.ts existe (el componente tiene demo)', () => {
   const preview = join(ROOT, 'src', 'components', 'helpers', 'resize-observer.preview.ts');
   assert.ok(existsSync(preview), 'resize-observer.preview.ts debe existir');
 });
+
+export default lista();

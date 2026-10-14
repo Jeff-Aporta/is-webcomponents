@@ -20,86 +20,93 @@ import { execFileSync, spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const PORT = Number(process.env.SMOKE_PORT) || 8391;
-const URL_SMOKE = `http://localhost:${PORT}/tests/smoke-runtime.html`;
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-const CHROMES = [
-  process.env.CHROME_PATH,
-  'C:/Program Files/Google/Chrome/Application/chrome.exe',
-  'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
-  '/usr/bin/google-chrome',
-  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-].filter(Boolean);
-
-const chrome = CHROMES.find((p) => existsSync(p));
-if (!chrome) {
-  console.log('SKIP smoke-runtime — no se encontró Chrome (define CHROME_PATH)');
-  process.exit(0);
-}
-
-/** Arranca el servidor de previews si no hay uno escuchando ya. */
-async function ensureServer() {
-  const responde = await fetch(`http://localhost:${PORT}/`, { method: 'HEAD' })
-    .then(() => true).catch(() => false);
-  if (responde) return null;
-  const proc = spawn(process.execPath, [join(root, 'scripts', 'serve.mjs'), String(PORT)], {
-    stdio: 'ignore', detached: false,
-  });
-  for (let i = 0; i < 40; i++) {
-    await new Promise((r) => setTimeout(r, 100));
-    const ok = await fetch(`http://localhost:${PORT}/`, { method: 'HEAD' }).then(() => true).catch(() => false);
-    if (ok) return proc;
+test('gobernanza/smoke-runtime', async () => {
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const PORT = Number(process.env.SMOKE_PORT) || 8391;
+  const URL_SMOKE = `http://localhost:${PORT}/tests/smoke-runtime.html`;
+  
+  const CHROMES = [
+    process.env.CHROME_PATH,
+    'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+    '/usr/bin/google-chrome',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  ].filter(Boolean);
+  
+  const chrome = CHROMES.find((p) => existsSync(p));
+  if (!chrome) {
+    console.log('SKIP smoke-runtime — no se encontró Chrome (define CHROME_PATH)');
+    return;
   }
-  proc.kill();
-  return undefined; // no levantó
-}
+  
+  /** Arranca el servidor de previews si no hay uno escuchando ya. */
+  async function ensureServer() {
+    const responde = await fetch(`http://localhost:${PORT}/`, { method: 'HEAD' })
+      .then(() => true).catch(() => false);
+    if (responde) return null;
+    const proc = spawn(process.execPath, [join(root, 'scripts', 'serve.mjs'), String(PORT)], {
+      stdio: 'ignore', detached: false,
+    });
+    for (let i = 0; i < 40; i++) {
+      await new Promise((r) => setTimeout(r, 100));
+      const ok = await fetch(`http://localhost:${PORT}/`, { method: 'HEAD' }).then(() => true).catch(() => false);
+      if (ok) return proc;
+    }
+    proc.kill();
+    return undefined; // no levantó
+  }
+  
+  const server = await ensureServer();
+  if (server === undefined) {
+    console.log(`SKIP smoke-runtime — no hay servidor en :${PORT} y no se pudo levantar`);
+    return;
+  }
+  
+  let dom;
+  try {
+    dom = execFileSync(chrome, [
+      '--headless=new', '--disable-gpu', '--no-sandbox',
+      '--virtual-time-budget=60000', '--dump-dom', URL_SMOKE,
+    ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] });
+  } finally {
+    server?.kill();
+  }
+  
+  const bloque = dom.match(/<pre id="out">([\s\S]*?)<\/pre>/);
+  if (!bloque || bloque[1].trim() === 'PENDIENTE') {
+    // El smoke runtime necesita Chrome + dev server + red (los componentes
+    // hacen fetch de iconos desde la CDN). Si la página queda PENDIENTE, las
+    // causas típicas son: (a) no hay red, (b) Chrome no terminó en el
+    // virtual-time-budget, (c) algún componente se colgó. En cualquier caso,
+    // esto es infraestructura — no debe romper la batería principal.
+    console.log(`SKIP smoke-runtime — la página quedó PENDIENTE (Chrome=${chrome}, server=${PORT})`);
+    console.log('  Causas típicas: red inestable / componente colgado / virtual-time-budget corto.');
+    console.log('  Diagnóstico manual: deno run -A --no-check scripts/serve.mjs 8391 & node tests/smoke-runtime.test.ts');
+    return;
+  }
+  
+  const crudo = bloque[1]
+    .replaceAll('&quot;', '"').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
+  const { filas } = JSON.parse(crudo);
+  
+  // Se comprueba lo que un fallo de verdad rompe: cargar y registrarse. Lo
+  // demás (avisos de "sin shadowRoot") es informativo: hay componentes de
+  // light DOM y helpers que legítimamente no montan nada.
+  const rotos = filas.filter((f) => !f.ok);
+  const avisos = filas.filter((f) => f.ok && f.notas.length);
+  
+  for (const f of rotos) console.log(`  ✗ ${f.tag}: ${f.notas.join('; ')}`);
+  for (const f of avisos) console.log(`  · ${f.tag}: ${f.notas.join('; ')}`);
+  
+  if (rotos.length) {
+    console.log(`\nFAIL smoke-runtime — ${rotos.length} de ${filas.length} componentes no arrancan`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  console.log(`OK smoke-runtime — ${filas.length} componentes montan, aceptan un atributo y sobreviven a moverse de padre`);
+});
 
-const server = await ensureServer();
-if (server === undefined) {
-  console.log(`SKIP smoke-runtime — no hay servidor en :${PORT} y no se pudo levantar`);
-  process.exit(0);
-}
-
-let dom;
-try {
-  dom = execFileSync(chrome, [
-    '--headless=new', '--disable-gpu', '--no-sandbox',
-    '--virtual-time-budget=60000', '--dump-dom', URL_SMOKE,
-  ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] });
-} finally {
-  server?.kill();
-}
-
-const bloque = dom.match(/<pre id="out">([\s\S]*?)<\/pre>/);
-if (!bloque || bloque[1].trim() === 'PENDIENTE') {
-  // El smoke runtime necesita Chrome + dev server + red (los componentes
-  // hacen fetch de iconos desde la CDN). Si la página queda PENDIENTE, las
-  // causas típicas son: (a) no hay red, (b) Chrome no terminó en el
-  // virtual-time-budget, (c) algún componente se colgó. En cualquier caso,
-  // esto es infraestructura — no debe romper la batería principal.
-  console.log(`SKIP smoke-runtime — la página quedó PENDIENTE (Chrome=${chrome}, server=${PORT})`);
-  console.log('  Causas típicas: red inestable / componente colgado / virtual-time-budget corto.');
-  console.log('  Diagnóstico manual: deno run -A --no-check scripts/serve.mjs 8391 & node tests/smoke-runtime.test.ts');
-  process.exit(0);
-}
-
-const crudo = bloque[1]
-  .replaceAll('&quot;', '"').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
-const { filas } = JSON.parse(crudo);
-
-// Se comprueba lo que un fallo de verdad rompe: cargar y registrarse. Lo
-// demás (avisos de "sin shadowRoot") es informativo: hay componentes de
-// light DOM y helpers que legítimamente no montan nada.
-const rotos = filas.filter((f) => !f.ok);
-const avisos = filas.filter((f) => f.ok && f.notas.length);
-
-for (const f of rotos) console.log(`  ✗ ${f.tag}: ${f.notas.join('; ')}`);
-for (const f of avisos) console.log(`  · ${f.tag}: ${f.notas.join('; ')}`);
-
-if (rotos.length) {
-  console.log(`\nFAIL smoke-runtime — ${rotos.length} de ${filas.length} componentes no arrancan`);
-  process.exit(1);
-}
-console.log(`OK smoke-runtime — ${filas.length} componentes montan, aceptan un atributo y sobreviven a moverse de padre`);
+export default lista();

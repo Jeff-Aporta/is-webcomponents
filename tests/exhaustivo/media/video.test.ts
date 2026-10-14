@@ -4,11 +4,14 @@
  * (Nombre en la consigna era "video-player"; el componente real es `<iswc-video>`).
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -34,7 +37,7 @@ test('3. JSON existe y respeta iswc-preview/v1', async () => {
 test('4. OBSERVED incluye src, poster, muted, loop, autoplay, playsinline', async () => {
   // Pasa la ruta RELATIVA a la raíz del repo (no absoluta), porque
   // `extraerObservados` usa `readFileSync(join(ROOT, ruta))` internamente.
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
   const list = extraerObservados(REL_TS);
   for (const a of ['src', 'poster', 'muted', 'loop', 'autoplay', 'playsinline']) {
@@ -90,3 +93,5 @@ test('12. preview.ts existe (componente complejo)', async () => {
   const preview = join(ROOT, 'src', 'components', 'media', 'video.preview.ts');
   assert.ok(existsSync(preview));
 });
+
+export default lista();

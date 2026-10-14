@@ -34,14 +34,17 @@
  * Si cualquier check falla, el guardian apunta al archivo y la linea para
  * que el refactor sea de un solo lugar (el helper) y no de N bloques dispersos.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { assertColorMixContract, ISWC_COLOR_VARIANTS, ISWC_COLOR_MIX, ISWC_COLOR_MIX_FAMILIES, ISWC_COLOR_FAMILIES, iswcColorTokenName, colorMixRule, colorMixFamilyBlock, colorMixVariantMap, brandVariantRule, brandFamilyBlock, ISWC_BRAND_LIGHTNESS } from '../../../styles/color-tokens.ts';
-import { type IswcColorVariant } from '../../../styles/schemas/color-tokens.schemas.ts';
+import { assertColorMixContract, ISWC_COLOR_VARIANTS, ISWC_COLOR_MIX, ISWC_COLOR_MIX_FAMILIES, ISWC_COLOR_FAMILIES, iswcColorTokenName, colorMixRule, colorMixFamilyBlock, colorMixVariantMap, brandVariantRule, brandFamilyBlock, ISWC_BRAND_LIGHTNESS } from '../../src/styles/color-tokens.ts';
+import { type IswcColorVariant } from '../../src/styles/schemas/color-tokens.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
@@ -410,3 +413,5 @@ test('W24: summary Ã¢â‚¬â€ 7 familias Ãƒâ€” 5 variantes = 35 t
   console.log(`  ISWC_COLOR_VARIANTS = ${[...ISWC_COLOR_VARIANTS].join(', ')}`);
   console.log(`  ISWC_COLOR_MIX = 12/28/82/62/45 (white/black)`);
 });
+
+export default lista();

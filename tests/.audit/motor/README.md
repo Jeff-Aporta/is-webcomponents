@@ -146,8 +146,8 @@ del editor o de la galería no lo incluya.
 ## Uso programático
 
 ```ts
-import { crearEstado, auditarCatalogo } from './src/utils/health/motor/auditor.js';
-import { aJson, aMarkdown, imprimirConsola } from './src/utils/health/motor/reporter.js';
+import { crearEstado, auditarCatalogo } from './tests/.audit/motor/auditor.js';
+import { aJson, aMarkdown, imprimirConsola } from './tests/.audit/motor/reporter.js';
 
 // Modo JSON (sin browser, ~100ms para el catálogo completo)
 const estado = crearEstado('/path/a/iswc-root', {

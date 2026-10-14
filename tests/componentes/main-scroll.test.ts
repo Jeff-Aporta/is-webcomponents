@@ -11,9 +11,12 @@
 //   3. Cambiar storage-key (= cambiar de componente) → reset a top y olvida la
 //      lectura previa de esa vista.
 
-import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { setTimeout as wait } from 'node:timers/promises';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 // Root canonico de `_shared/prefs.ts`. `is-components` es solo legacy: prefs
 // lo lee una vez para migrarlo y lo borra.
@@ -100,7 +103,7 @@ async function mountMain({ navType, saved }) {
   if (saved) localStorage.setItem(ROOT_KEY, JSON.stringify({ 'iswc-main': saved }));
 
   // cache-buster: cada caso necesita su propia evaluación del IIFE.
-  await import(`../../../components/layout/main.ts?case=${navType}-${Math.random()}`);
+  await import(`../../src/components/layout/main.ts?case=${navType}-${Math.random()}`);
   const main = new globalThis.IswcMain();
   main.setAttribute('remember-scroll', '');
   main.connectedCallback();
@@ -176,3 +179,5 @@ test('el gesto del usuario aborta la restauración pendiente', async () => {
   await wait(300);
   assert.equal(main.scrollTop, 0, 'no debe saltar bajo el dedo del usuario');
 });
+
+export default lista();

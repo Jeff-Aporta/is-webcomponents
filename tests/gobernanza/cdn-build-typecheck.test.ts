@@ -6,9 +6,12 @@
  *   B1 src/cdn/build/*.ts sin errores de tipos
  *   B2 dist/cdn/build/*.ts sin errores de tipos
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync } from 'node:fs';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 function check(dir: string): void {
   const files = readdirSync(dir).filter((n) => n.endsWith('.ts')).map((n) => `${dir}/${n}`);
@@ -18,3 +21,5 @@ function check(dir: string): void {
 
 test('B1 src/cdn/build typecheck', () => check('src/cdn/build'));
 test('B2 dist/cdn/build typecheck', () => check('dist/cdn/build'));
+
+export default lista();

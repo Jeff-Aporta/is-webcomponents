@@ -3,11 +3,14 @@
  *
  *   deno test -A --no-check tests/skills-cdn.test.ts
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
@@ -46,3 +49,5 @@ test('cdn-panel solo aporta el MD del módulo (skill general vive en SKILL_DOCS)
   assert.match(src, /label:\s*'Módulo'/);
   assert.doesNotMatch(src, /is-cdn-install|Índice global|specs\/componentes/);
 });
+
+export default lista();

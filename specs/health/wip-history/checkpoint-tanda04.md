@@ -55,7 +55,7 @@
 
 1. **`grid-shared.ts`** (`a7eee18284`) — extracción de `grid-types.ts` + `grid-data.ts` a archivo único compartido entre `data-grid` y `ag-grid` para evitar duplicación de tipos. Marcado como read-only al cierre de T4.
 2. **`Intl.* locale cast`** (ag-grid 15→0) — `Intl.Collator().resolvedOptions().locale` retorna `string | undefined`. Cast explícito a `string` cuando sabemos que el locale está resuelto (caso común en runtime).
-3. **`AgGridApi` + `IsAgGridEl`** (ag-grid.preview) — patrón estándar de previews: typedef local + CustomEvent cast para `.detail`.
+3. **`AgGridApi` + `IswcAgGridEl`** (ag-grid.preview) — patrón estándar de previews: typedef local + CustomEvent cast para `.detail`.
 4. **`PrefsEntry/TextFilterOp/MouseEvent/ColumnState|undefined`** (ag-grid cascading) — type guards con `instanceof MouseEvent`, narrowing para `ColumnState | undefined`.
 
 ## Lock permanente respetado

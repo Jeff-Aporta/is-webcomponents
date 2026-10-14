@@ -16,10 +16,13 @@
 //   3. (precondición) Verifican que el módulo loader expone `iswcLoader`
 //      (sanity: si cambias la forma del export, este test lo dice).
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(new URL(import.meta.url).pathname.replace(/^\//, ''), '..', '..', '..', '..', '..');
 const LOADER_TS = join(RAIZ, 'src', 'cdn', 'loader.ts');
@@ -52,7 +55,7 @@ test('runtime: el módulo loader expone iswcLoader (sanity de export)', async ()
   // definido (esbuild define). Si falla, saltamos con t.skip equivalente.
   let mod;
   try {
-    mod = await import('../../../cdn/loader.ts' as string).catch(() => null);
+    mod = await import('../../src/cdn/loader.ts' as string).catch(() => null);
   } catch { mod = null; }
   if (!mod) {
     // El loader TS usa `declare const __IS_LOADER_CATALOG__` que esbuild define.
@@ -64,3 +67,5 @@ test('runtime: el módulo loader expone iswcLoader (sanity de export)', async ()
   assert.ok(mod.iswcLoader, 'Falta export iswcLoader');
   assert.equal(typeof mod.iswcLoader.load, 'function');
 });
+
+export default lista();

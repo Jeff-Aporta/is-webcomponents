@@ -1,11 +1,14 @@
 /**
  * icon-loader sin prefetch de índices ni mapa: localStorage → web publicada de la app (`data-icons`) → API de Iconify.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const loader = readFileSync(join(root, 'src/core/icon-loader.ts'), 'utf8');
@@ -35,3 +38,5 @@ test('preview-component fuente declara dependencia de icon (por eso Pages no deb
   // el prefetch de icon-loader corre con bases src/assets → 404.
   assert.match(preview, /import\s+['"]\.\.\/media\/icon\.js['"]/);
 });
+
+export default lista();

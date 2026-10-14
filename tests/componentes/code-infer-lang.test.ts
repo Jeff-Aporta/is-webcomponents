@@ -1,11 +1,14 @@
 /**
  * Inferencia de lang + softFormat para snippets de demos.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { inferLanguage, resolveLanguage } from '../../../core/code-langs.ts';
-import { softFormat, softFormatMode } from '../../../core/code-text.ts';
-import { formatCode } from '../../../components/code/utils/code-format.ts';
+import { inferLanguage, resolveLanguage } from '../../src/core/code-langs.ts';
+import { softFormat, softFormatMode } from '../../src/core/code-text.ts';
+import { formatCode } from '../../src/components/code/utils/code-format.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 test('HTML de demos se infiere como html (no javascript)', () => {
   const snippet = '<iswc-button color="success">Aprobado</iswc-button>\n'
@@ -45,3 +48,5 @@ test('formatCode no reescribe un cURL', () => {
   assert.equal(formatCode(curl, 'curl'), curl);
   assert.equal(formatCode(curl, 'shell'), curl);
 });
+
+export default lista();

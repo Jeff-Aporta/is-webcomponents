@@ -8,10 +8,13 @@
 // `pages` en bundle-scripts.mjs. Si añades un script o page nuevo en
 // cualquier lugar, este guardian falla con un mensaje claro.
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const __filename = new URL(import.meta.url).pathname.replace(/^\//, '');
 const RAIZ = join(__filename, '..', '..', '..', '..', '..');
@@ -108,3 +111,5 @@ test('guard: catalog.ts referencia dist/previews/ para behaviors y JSONs', () =>
   const newPattern = (catalogSrc.match(/dist\/previews\//g) ?? []).length;
   assert.ok(newPattern > 50, `catalog.ts debería tener >50 paths 'dist/previews/', tiene ${newPattern}`);
 });
+
+export default lista();

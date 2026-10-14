@@ -4,9 +4,9 @@
 
 | Archivo | Locked desde | Notas |
 |---|---|---|
-| `src/components/diagrams/diagram-types.ts` | baseline | READ-ONLY (lock permanente heredado de types-strong-2026) |
-| `src/components/_shared/svg-chart-engine.ts` | baseline | READ-ONLY |
-| `src/components/_shared/diagram-element-base.ts` | baseline | READ-ONLY |
+| `src/components/diagrams/utils/diagram-types.ts` | baseline | READ-ONLY (lock permanente heredado de types-strong-2026) |
+| `src/core/svg-chart-engine.ts` | baseline | READ-ONLY |
+| `src/components/diagrams/utils/diagram-element-base.ts` | baseline | READ-ONLY |
 | `src/components/diagrams/diagram-edit.ts` | baseline | READ-ONLY (motor de edición compartido) |
 | `src/previews/_shell.html` | baseline | READ-ONLY |
 
@@ -15,10 +15,10 @@
 | Archivo | WT que lo lockea | Notas |
 |---|---|---|
 | `src/components/diagrams/er-editor.ts` | WT-0001 | refactor al contrato canónico (§5) |
-| `src/components/diagrams/_editor-base.ts` (NUEVO) | WT-0001 | clase base `IsEditorBase<Spec>` para los 16 wrappers |
-| `src/components/diagrams/_editor-toolbar.ts` (NUEVO) | WT-0001 | toolbar unificada |
-| `src/components/diagrams/_editor-panel.ts` (NUEVO) | WT-0001 | panel lateral |
-| `src/components/diagrams/_editor-nesting.ts` (NUEVO) | WT-0001 | modal overlay recursivo |
+| `src/components/diagrams/_editor-base.ts` (NUEVO) | WT-0001 | clase base `IswcEditorBase<Spec>` para los 16 wrappers |
+| `src/components/diagrams/utils/_editor-toolbar.ts` (NUEVO) | WT-0001 | toolbar unificada |
+| `src/components/diagrams/utils/_editor-panel.ts` (NUEVO) | WT-0001 | panel lateral |
+| `src/components/diagrams/utils/_editor-nesting.ts` (NUEVO) | WT-0001 | modal overlay recursivo |
 
 ## Locks de T3 — WT-0012 / WT-0001 (UML editores)
 

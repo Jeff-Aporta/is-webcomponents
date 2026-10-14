@@ -5,7 +5,6 @@
  * pero invoca drawLineMarks (marks-cartesian) con tipo 'line'.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -15,7 +14,11 @@ import {
   estaRegistrado,
   usaResizeObserver,
   tieneEdgeCaseGuards,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/line-chart.ts';
 const WRAPPER = 'src/components/charts/chart.ts';
@@ -57,3 +60,5 @@ test('iswc-line-chart: registrado como custom element', () => {
 test('iswc-line-chart: tiene guards contra null en data', () => {
   assert.ok(tieneEdgeCaseGuards(read(WRAPPER)));
 });
+
+export default lista();

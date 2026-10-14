@@ -13,10 +13,13 @@
  *      un host relativo lanza; sin `icons` no se toca un `data-icons` que ya traiga la página
  *   A9 la config vive bajo el prefijo `iswc:` (`iswc:app-cfg`)
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ICONS_FOLDER_DEFAULT, iconsBase, initApp } from '../../../core/app-init.ts';
-import { APP_CFG_KEY, borrarAppCfg, guardarAppCfg, leerAppCfg } from '../../../core/app-cfg.ts';
+import { ICONS_FOLDER_DEFAULT, iconsBase, initApp } from '../../src/core/app-init.ts';
+import { APP_CFG_KEY, borrarAppCfg, guardarAppCfg, leerAppCfg } from '../../src/core/app-cfg.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 function entorno(guardado: Record<string, string> = {}) {
   const datos = new Map(Object.entries(guardado));
@@ -96,3 +99,5 @@ test('A8 icons: base absoluta en data-icons, una sola declaración', () => {
 test('A9 la config de la app vive en iswc:app-cfg', () => {
   assert.equal(APP_CFG_KEY, 'iswc:app-cfg');
 });
+
+export default lista();

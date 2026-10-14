@@ -2,11 +2,14 @@
  * demo-equiv.test.ts — el bloque «HTML puro equivalente» ya no se pinta.
  * Los campos equiv* pueden seguir en el JSON (datos), pero render no los muestra.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
@@ -49,7 +52,7 @@ test('demo-code excluye chrome de galería del snippet copiable', async () => {
 });
 
 test('demo-snippet-styles incluye CSS de matrix cuando hay cell-label', async () => {
-  const { buildDemoSnippetStyles } = await import('../../../previews/_kit/demo-snippet-styles.ts');
+  const { buildDemoSnippetStyles } = await import('../../src/previews/_kit/demo-snippet-styles.ts');
   const html = '<div class="matrix"><span class="cell-label">Fill</span></div>';
   const css = buildDemoSnippetStyles(html, '');
   assert.match(css, /\.matrix\s*\{/);
@@ -57,7 +60,7 @@ test('demo-snippet-styles incluye CSS de matrix cuando hay cell-label', async ()
 });
 
 test('demo-snippet-styles incluye styles del preview cuando aplica', async () => {
-  const { buildDemoSnippetStyles } = await import('../../../previews/_kit/demo-snippet-styles.ts');
+  const { buildDemoSnippetStyles } = await import('../../src/previews/_kit/demo-snippet-styles.ts');
   const previewStyles = '.panel-demo { height: 100%; }\n.panel-demo--alt { opacity: 0.9; }';
   const html = '<div class="panel-demo panel-demo--alt">A</div>';
   const css = buildDemoSnippetStyles(html, previewStyles);
@@ -80,3 +83,5 @@ test('demo-code NO inyecta bloque style en el snippet (Phase E: minimal)', async
   // El título del popover debe decir "snippet" (no "loader.min.js")
   assert.match(raw, /demo-code-pop__hint">snippet</);
 });
+
+export default lista();

@@ -13,7 +13,6 @@
  *          iswc-row-click, iswc-edit-start, iswc-edit-stop, iswc-row-update, …
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -26,7 +25,11 @@ import {
   adoptaCss,
   estaRegistrado,
   cleanupCompleto,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/data/data-grid.ts';
 
@@ -95,3 +98,5 @@ test('iswc-data-grid: performance — cleanup en disconnectedCallback', () => {
   const c = cleanupCompleto(read(MOD));
   assert.ok(c.listeners, 'debe limpiar listeners');
 });
+
+export default lista();

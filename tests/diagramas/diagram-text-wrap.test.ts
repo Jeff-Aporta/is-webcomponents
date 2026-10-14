@@ -18,13 +18,18 @@
 // paddingX, devuelve coords de tspan mal calculadas, no detecta tokens
 // `{{icon}}`, deja de truncar con `…`, etc.), los tests señalan cuál.
 
-import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   wrapText,
   buildTspans,
   defaultMeasureTextWidth,
-} from '../../../components/diagrams/utils/diagram-text-wrap.js';
+} from '../../src/components/diagrams/utils/diagram-text-wrap.js';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const describe = (_grupo: string, cuerpo: () => void): void => cuerpo();
+
 
 describe('wrapText', () => {
   test('label corto en 1 línea: no trunca, requiredHeight <= maxHeight', () => {
@@ -187,3 +192,5 @@ describe('defaultMeasureTextWidth', () => {
     assert.ok(w2 > w1, `w2 (${w2}) debe ser > w1 (${w1})`);
   });
 });
+
+export default lista();

@@ -10,15 +10,18 @@
  *   S7 checkpoint: commit en el origen (repo git temporal), sin push
  *   S8 checkpoint obligatorio: sin remoto el sync lanza (entregable ya copiado); con remoto bare commit+push; sin cambios push al día
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import process from 'node:process';
-import { codigoSync, coincideGlob, correrSync } from '../../../vendor-distributions/shared/tools/sync-entregable.ts';
-import type { ConfigSync } from '../../../vendor-distributions/shared/schemas.ts';
+import { codigoSync, coincideGlob, correrSync } from '../../src/vendor-distributions/shared/tools/sync-entregable.ts';
+import type { ConfigSync } from '../../src/vendor-distributions/shared/schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const silencio = () => undefined;
 function arbol(raiz: string, archivos: Record<string, string>) {
@@ -172,3 +175,5 @@ for (const c of S8) {
     }
   });
 }
+
+export default lista();

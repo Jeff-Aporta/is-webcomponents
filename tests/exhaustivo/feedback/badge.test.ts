@@ -3,7 +3,6 @@
  *
  * Etiqueta compacta semántica con color/variant/pill/attention.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -14,7 +13,11 @@ import {
   extraerObservados,
   extraerParts,
   tieneJsDoc,
-} from '../_helpers.js';
+} from '../../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -25,7 +28,7 @@ const CSS = join(ROOT, 'src/components/feedback/badge.css');
 
 void async function () {
   // Pre-cargar el módulo del componente para que customElements lo registre.
-  await import('../../../../components/feedback/badge.ts').catch(() => {});
+  await import('../../../src/components/feedback/badge.ts').catch(() => {});
 }();
 
 test('1. módulo existe', () => {
@@ -92,3 +95,5 @@ test('10. custom element registrado', () => {
 test('11. JSDoc de cabecera', () => {
   assert.ok(tieneJsDoc(leerConBase(TS)));
 });
+
+export default lista();

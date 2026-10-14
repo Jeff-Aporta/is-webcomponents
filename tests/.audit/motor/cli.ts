@@ -4,7 +4,7 @@
  *
  * Uso:
  *   deno task audit
- *   deno run -A --no-check src/utils/health/motor/cli.ts [opciones]
+ *   deno run -A --no-check tests/.audit/motor/cli.ts [opciones]
  *
  * Opciones (todas con --):
  *   --solo <tags>         Filtra por tag (coma-separado). Vacío = todos.
@@ -26,7 +26,7 @@
  *   2 = error del motor (Stagehand no arranca, JSON no parsea, etc.)
  */
 
-import type { ArgSpec } from "./cli.schemas.js";
+import type { ArgSpec } from "./schemas/cli.schemas.js";
 import { writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,7 +34,7 @@ import {
   crearEstado, auditarCatalogo, MOTOR_VERSION, resumenMotor,
   prepararSesionBrowser,
 } from './auditor.js';
-import type { OpcionesRunner } from './types.schemas.js';
+import type { OpcionesRunner } from './schemas/types.schemas.js';
 import { aJson, aMarkdown, imprimirConsola, imprimirResumenUnaLinea } from './reporter.js';
 import { enumerarCatalogo, resumirCatalogo } from './catalog.js';
 
@@ -90,7 +90,7 @@ function mostrarAyuda(): void {
   console.log(`iswc-audit v${MOTOR_VERSION} — auditor del kit iswc (iswc-root).`);
   console.log('');
   console.log('Uso:');
-  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts [opciones]');
+  console.log('  deno run -A --no-check tests/.audit/motor/cli.ts [opciones]');
   console.log('');
   console.log('Opciones:');
   for (const s of ESPECES) {
@@ -100,13 +100,13 @@ function mostrarAyuda(): void {
   console.log('');
   console.log('Ejemplos:');
   console.log('  # Auditoría completa del catálogo (sin browser)');
-  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --solo-json');
+  console.log('  deno run -A --no-check tests/.audit/motor/cli.ts --solo-json');
   console.log('');
   console.log('  # Auditoría de un tag puntual con E2E');
-  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --solo iswc-button --puerto 8391');
+  console.log('  deno run -A --no-check tests/.audit/motor/cli.ts --solo iswc-button --puerto 8391');
   console.log('');
   console.log('  # Solo la categoría de charts');
-  console.log('  deno run -A --no-check src/utils/health/motor/cli.ts --categoria data-viz --solo-json');
+  console.log('  deno run -A --no-check tests/.audit/motor/cli.ts --categoria data-viz --solo-json');
   console.log('');
   console.log('Exit codes:');
   console.log('  0 = sin hallazgos fatales/errores');

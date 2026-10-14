@@ -1,8 +1,11 @@
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const exec = promisify(execFile);
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
@@ -27,3 +30,5 @@ test('W54: src/ no debe contener archivos .css versionados (solo .scss)', async 
       trackedCss.slice(0, 5).join('\n  '),
   );
 });
+
+export default lista();

@@ -28,14 +28,17 @@
  *      Sin loader disponible, devuelve un result `requested: true`
  *      con `loaded: []`. Sin `loads` declarado, devuelve `null`.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
-import { loadFor, normalizeLoads } from '../../../previews/_kit/load-for.ts';
+import { ComponentJsonSchema } from '../../src/previews/_kit/schemas/component.schemas.ts';
+import { loadFor, normalizeLoads } from '../../src/previews/_kit/load-for.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const RAIZ = join(here, '..', '..', '..', '..');
@@ -373,3 +376,5 @@ test('W56: normalizeLoads filtra entradas inválidas', () => {
   // Con loads = null
   assert.deepEqual(normalizeLoads({ tag: 'iswc-x', sections: [], loads: null as never } as never), []);
 });
+
+export default lista();

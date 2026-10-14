@@ -4,7 +4,6 @@
  * Diagrama de estados UML en SVG. Config por JSON.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 
 
 import {
@@ -23,7 +22,11 @@ import {
   estaRegistrado,
   cleanupCompleto,
   tieneJsDoc,
-} from '../_helpers.js';
+} from '../../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 const MOD = 'src/components/diagrams/state-diagram.ts';
 
 test('iswc-state-diagram: archivo existe', () => {
@@ -73,3 +76,5 @@ test('iswc-state-diagram: registrado', () => {
   const src = leerConBase(MOD);
   assert.match(src, /defineElement\s*\(\s*['"`]iswc-state-diagram['"`]/);
 });
+
+export default lista();

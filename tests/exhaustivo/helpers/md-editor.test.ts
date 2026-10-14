@@ -5,11 +5,14 @@
  * eventos, label, placeholder, filename attr, slot para acciones, registro.
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -33,7 +36,7 @@ test('3. JSON existe y respeta iswc-preview/v1', async () => {
 });
 
 test('4. OBSERVED incluye label, placeholder, filename, value', async () => {
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const list = extraerObservados(TS);
   for (const a of ['label', 'placeholder']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
@@ -92,3 +95,5 @@ test('12. el template expone partes CSS para customización externa', async () =
   const partsCount = (src.match(/\bpart\s*=\s*['"][a-z-]+['"]/g) || []).length;
   assert.ok(partsCount >= 2, `debe exponer al menos 2 partes CSS para theming, hay ${partsCount}`);
 });
+
+export default lista();

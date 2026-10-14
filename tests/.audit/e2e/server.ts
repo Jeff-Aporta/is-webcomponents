@@ -9,7 +9,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, resolve, sep } from 'node:path';
 import { repoDir } from './env.ts';
 import type { Server } from 'node:http';
-import type { ServidorE2E } from "./server.schemas.js";
+import type { ServidorE2E } from "./schemas/server.schemas.js";
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',

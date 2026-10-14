@@ -6,13 +6,16 @@
 //     repinta (valor, lineas, linea activa)
 //   - las marks se pintan nativas y el tooltip se abre por caret
 //   - el tema reacciona a data-theme/iswc-theme-change sin recargar nada de CM
-import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import { arrancar, abrirGaleria, esperarMs, rastroCodeMirror, problemasDeConsola, evidencia, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos } from './lib/env.ts';
-import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from './lib/schemas/tipos.schemas.ts';
-import { cargarToon, textoDe } from '../../system/toons.ts';
+import { arrancar, abrirGaleria, esperarMs, rastroCodeMirror, problemasDeConsola, evidencia, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos } from '../.audit/e2e/env.ts';
+import type { CtxE2E, EditorIsCode, ContadoresEventos, FasesMarks, RastroCodeMirror } from '../.audit/e2e/schemas/tipos.schemas.ts';
+import { cargarToon, textoDe } from '../../src/utils/system/toons.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 // Textos de test SIEMPRE desde los toons (src/utils/system/*.toon.json).
 const TOON_CODE = cargarToon('iswc-code');
@@ -231,3 +234,5 @@ testE2E('sin errores de consola en la profundidad de iswc-code', { timeout: 3000
     t.diagnostic(`consola con avisos (ver 03-problemas): ${unicos.join(' | ')}`);
   }
 });
+
+export default lista();

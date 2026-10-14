@@ -6,6 +6,13 @@
 //   N2 un abort NO se cachea: la siguiente petición sí vuelve a salir.
 //   N3 `clearRawCache()` olvida el fallo y permite reintentar.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const pedidos: string[] = [];
 globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
@@ -15,9 +22,9 @@ globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) =>
   return new Response('', { status: 404 }); // nada resuelve: ni local ni API
 }) as typeof fetch;
 
-const { resolveIconRaw, clearRawCache } = await import('../../../core/icon-loader.ts');
+const { resolveIconRaw, clearRawCache } = await import('../../src/core/icon-loader.ts');
 
-Deno.test('N1 un ícono irresoluble se pide una sola vez por página', async () => {
+denoTest('N1 un ícono irresoluble se pide una sola vez por página', async () => {
   pedidos.length = 0;
   assertEquals(await resolveIconRaw('solar', 'no-existe'), null);
   const primera = pedidos.length;
@@ -27,7 +34,7 @@ Deno.test('N1 un ícono irresoluble se pide una sola vez por página', async () 
   assertEquals(pedidos.length, primera, 'las siguientes no generan fetch');
 });
 
-Deno.test('N2 un abort no se cachea como fallo', async () => {
+denoTest('N2 un abort no se cachea como fallo', async () => {
   pedidos.length = 0;
   const ac = new AbortController();
   ac.abort();
@@ -37,7 +44,7 @@ Deno.test('N2 un abort no se cachea como fallo', async () => {
   assert(pedidos.length > antes, 'tras un abort, la siguiente petición vuelve a salir');
 });
 
-Deno.test('N3 clearRawCache permite reintentar', async () => {
+denoTest('N3 clearRawCache permite reintentar', async () => {
   pedidos.length = 0;
   await resolveIconRaw('mdi', 'tampoco');
   const n = pedidos.length;
@@ -47,3 +54,5 @@ Deno.test('N3 clearRawCache permite reintentar', async () => {
   await resolveIconRaw('mdi', 'tampoco');
   assert(pedidos.length > n);
 });
+
+export default lista();

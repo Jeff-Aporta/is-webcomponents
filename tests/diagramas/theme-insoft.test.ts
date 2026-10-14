@@ -8,13 +8,20 @@ import {
   edgePaint,
   findOrphanEntityIds,
   themeToDiagramTheme,
-} from '../../../components/diagrams/utils/theme.ts';
-import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/utils/diagram-styles.ts';
+} from '../../src/components/diagrams/utils/theme.ts';
+import { loadStylesDiagram, styleThemeFor } from '../../src/components/diagrams/utils/diagram-styles.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 // Los temas se cargan bajo demanda (diagram-style); el test carga el estilo InSoft.
 await loadStylesDiagram('insoft');
 
-Deno.test('estilo insoft trae un tema por tipo, y el de clases sin naranja', () => {
+denoTest('estilo insoft trae un tema por tipo, y el de clases sin naranja', () => {
   assertEquals(styleThemeFor('insoft', 'er')?.id, 'insoft');
   assertEquals(styleThemeFor('insoft', 'component')?.id, 'insoft-cd');
   const cls = styleThemeFor('insoft', 'class');
@@ -22,7 +29,7 @@ Deno.test('estilo insoft trae un tema por tipo, y el de clases sin naranja', () 
   assertEquals(Object.values(cls?.fills ?? {}).includes('#F4B67B'), false);
 });
 
-Deno.test('insoft theme resolves and matches der.svg palette', () => {
+denoTest('insoft theme resolves and matches der.svg palette', () => {
   const t = resolveErTheme('insoft');
   assertEquals(t?.id, 'insoft');
   assertEquals(entityPaint(t!, false).fill, '#F4B67B');
@@ -39,14 +46,14 @@ Deno.test('insoft theme resolves and matches der.svg palette', () => {
   assertEquals(themeToDiagramTheme(t!).text, '#0F172A');
 });
 
-Deno.test('json2css emits Poppins + CSS vars', () => {
+denoTest('json2css emits Poppins + CSS vars', () => {
   const css = json2css(resolveErTheme('insoft')!);
   assertEquals(css.includes('Poppins'), true);
   assertEquals(css.includes('--er-entity-fill: #F4B67B'), true);
   assertEquals(css.includes('@import url('), true);
 });
 
-Deno.test('findOrphanEntityIds', () => {
+denoTest('findOrphanEntityIds', () => {
   const orphans = findOrphanEntityIds(
     [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
     [{ from: 'a', to: 'b' }],
@@ -54,7 +61,9 @@ Deno.test('findOrphanEntityIds', () => {
   assertEquals([...orphans], ['c']);
 });
 
-Deno.test('payload theme resolution', () => {
+denoTest('payload theme resolution', () => {
   const t = resolveErTheme({ erDiagram: { theme: 'insoft', entities: [] } });
   assertEquals(t?.id, 'insoft');
 });
+
+export default lista();

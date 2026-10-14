@@ -2,13 +2,16 @@
  * date-time-input.test.ts — Tests exhaustivos de <iswc-date-time-input>.
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   leerComponente, leerPreview, existeCss, esFactoryWrapper,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const FACTORY = readFileSync(join(RAIZ, 'components', '_shared', 'picker-element.ts'), 'utf8');
@@ -35,3 +38,5 @@ test('date-time-input: preview JSON', () => {
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });
+
+export default lista();

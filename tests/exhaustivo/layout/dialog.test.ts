@@ -5,12 +5,15 @@
  * Delega ciclo de vida en ModalBase.
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { leerConBase } from '../_helpers.js';
+import { leerConBase } from '../../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -42,7 +45,7 @@ test('5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-v
   // El dialog delega lifecycle en ModalBase. Buscamos en el wrapper
   // los atributos que efectivamente declara (open/label/light-dismiss
   // vienen de la base; backdrop-variant del wrapper).
-  const { extraerObservados, leerConBase } = await import('../_helpers.js');
+  const { extraerObservados, leerConBase } = await import('../../_shared/exhaustivo.js');
   const REL = 'src/components/layout/dialog.ts';
   const src = leerConBase(REL);
   const obs = extraerObservados(REL);
@@ -56,7 +59,7 @@ test('5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-v
 
 test('6. emite iswc-show, iswc-after-show, iswc-hide, iswc-after-hide', async () => {
   // Los eventos se emiten desde ModalBase; leerConBase los concatena.
-  const { leerConBase } = await import('../_helpers.js');
+  const { leerConBase } = await import('../../_shared/exhaustivo.js');
   const src = leerConBase('src/components/layout/dialog.ts');
   for (const ev of ['iswc-show', 'iswc-after-show', 'iswc-hide', 'iswc-after-hide']) {
     assert.ok(src.includes(`'${ev}'`) || src.includes(`"${ev}"`), `debe emitir ${ev}`);
@@ -91,7 +94,7 @@ test('10. soporta slot default y header-actions, footer, label', async () => {
 
 test('11. atributo open es reflected (getter/setter + toggleAttribute)', async () => {
   // El getter/setter `open` está en ModalBase.
-  const { leerConBase } = await import('../_helpers.js');
+  const { leerConBase } = await import('../../_shared/exhaustivo.js');
   const src = leerConBase('src/components/layout/dialog.ts');
   assert.ok(
     /setBooleanAttr|toggleAttribute|get\s+open\s*\(\s*\)|set\s+open\s*\(/.test(src),
@@ -103,3 +106,5 @@ test('12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/defineElement\s*\(\s*['"]iswc-dialog['"]/.test(src));
 });
+
+export default lista();

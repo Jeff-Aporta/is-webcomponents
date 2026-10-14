@@ -1,8 +1,11 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
@@ -76,3 +79,5 @@ test('Documentación (.md) refleja default brand en componentes migrados', () =>
     assert.ok(!wrong, `${mdPath} NO debe seguir diciendo "default neutral"`);
   }
 });
+
+export default lista();

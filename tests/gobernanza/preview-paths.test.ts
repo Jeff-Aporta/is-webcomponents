@@ -8,47 +8,54 @@
 import { readFile, stat } from 'node:fs/promises';
 import { join, dirname, relative, resolve as resolvePath, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
-const shell = join(root, 'src', 'previews', '_shell.html');
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-const SRC_RE = /<(?:script|link)\b[^>]*?\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
-
-const SKIP = (url) => {
-  if (!url || url.startsWith('//')) return true;
-  if (/^(?:https?|data|blob|mailto|tel|javascript):/i.test(url)) return true;
-  if (url.includes('{{')) return true;
-  return false;
-};
-
-const body = await readFile(shell, 'utf8');
-const baseDir = dirname(shell);
-let checked = 0;
-const failures = [];
-
-let m;
-SRC_RE.lastIndex = 0;
-while ((m = SRC_RE.exec(body)) !== null) {
-  const url = m[1];
-  if (SKIP(url)) continue;
-  if (isAbsolute(url)) continue;
-  const target = resolvePath(baseDir, url);
-  try {
-    const s = await stat(target);
-    if (s.isDirectory()) {
-      failures.push(`_shell.html: ${url} -> directorio`);
+test('gobernanza/preview-paths', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
+  const shell = join(root, 'src', 'previews', '_shell.html');
+  
+  const SRC_RE = /<(?:script|link)\b[^>]*?\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
+  
+  const SKIP = (url) => {
+    if (!url || url.startsWith('//')) return true;
+    if (/^(?:https?|data|blob|mailto|tel|javascript):/i.test(url)) return true;
+    if (url.includes('{{')) return true;
+    return false;
+  };
+  
+  const body = await readFile(shell, 'utf8');
+  const baseDir = dirname(shell);
+  let checked = 0;
+  const failures = [];
+  
+  let m;
+  SRC_RE.lastIndex = 0;
+  while ((m = SRC_RE.exec(body)) !== null) {
+    const url = m[1];
+    if (SKIP(url)) continue;
+    if (isAbsolute(url)) continue;
+    const target = resolvePath(baseDir, url);
+    try {
+      const s = await stat(target);
+      if (s.isDirectory()) {
+        failures.push(`_shell.html: ${url} -> directorio`);
+      }
+    } catch {
+      failures.push(`_shell.html: ${url} -> no existe (${relative(root, target)})`);
     }
-  } catch {
-    failures.push(`_shell.html: ${url} -> no existe (${relative(root, target)})`);
+    checked++;
   }
-  checked++;
-}
+  
+  if (failures.length) {
+    console.log('FAIL:');
+    for (const f of failures) console.log(`  - ${f}`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  
+  console.log(`preview-paths.test.ts: PASS — _shell.html OK (${checked} refs)`);
+});
 
-if (failures.length) {
-  console.log('FAIL:');
-  for (const f of failures) console.log(`  - ${f}`);
-  process.exit(1);
-}
-
-console.log(`preview-paths.test.ts: PASS — _shell.html OK (${checked} refs)`);
+export default lista();

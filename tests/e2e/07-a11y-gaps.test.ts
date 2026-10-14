@@ -14,12 +14,15 @@
 //
 // Estos tests son el "contrato a11y" del proyecto: si se rompe uno, hay regresión.
 // Hasta que se arreglen, son la documentación viva del trabajo pendiente.
-import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos } from './lib/env.ts';
-import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
+import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos } from '../.audit/e2e/env.ts';
+import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -278,3 +281,5 @@ testE2E(
     await evidencia(page, '07-progress-bar-reduced-motion');
   },
 );
+
+export default lista();

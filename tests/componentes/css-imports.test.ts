@@ -16,59 +16,66 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
-const dist = join(root, 'dist', 'cdn');
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-const failures = [];
-const check = (cond, msg) => { if (!cond) failures.push(msg); };
-
-if (!existsSync(dist)) {
-  console.log('css-imports.test.ts: SKIP — dist/cdn no existe (corre `deno run -A --no-check scripts/build.mjs`)');
-  process.exit(0);
-}
-
-const walk = (dir, out = []) => {
-  for (const name of readdirSync(dir)) {
-    const full = join(dir, name);
-    if (statSync(full).isDirectory()) { if (name !== 'assets') walk(full, out); }
-    else if (name.endsWith('.css')) out.push(full);
+test('componentes/css-imports', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
+  const dist = join(root, 'dist', 'cdn');
+  
+  const failures = [];
+  const check = (cond, msg) => { if (!cond) failures.push(msg); };
+  
+  if (!existsSync(dist)) {
+    console.log('css-imports.test.ts: SKIP — dist/cdn no existe (corre `deno run -A --no-check scripts/build.mjs`)');
+    return;
   }
-  return out;
-};
-
-const files = walk(dist);
-let imports = 0;
-
-for (const file of files) {
-  const src = readFileSync(file, 'utf8');
-  // Formas minificadas: @import"x.css"; y @import url("x.css");
-  const found = [
-    ...src.matchAll(/@import\s+url\(\s*["']([^"')]+)["']\s*\)/g),
-    ...src.matchAll(/@import\s*["']([^"']+)["']/g),
-  ];
-  for (const m of found) {
-    const spec = m[1];
-    if (/^(https?:)?\/\//.test(spec)) continue;   // remoto: fuera de alcance
-    imports += 1;
-    const target = resolve(dirname(file), spec);
-    const rel = relative(root, file).split(sep).join('/');
-    check(existsSync(target),
-      `${rel}: @import "${spec}" no existe en dist (${relative(root, target).split(sep).join('/')}) `
-      + '— el navegador lo pedira y dara 404 en silencio');
+  
+  const walk = (dir, out = []) => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) { if (name !== 'assets') walk(full, out); }
+      else if (name.endsWith('.css')) out.push(full);
+    }
+    return out;
+  };
+  
+  const files = walk(dist);
+  let imports = 0;
+  
+  for (const file of files) {
+    const src = readFileSync(file, 'utf8');
+    // Formas minificadas: @import"x.css"; y @import url("x.css");
+    const found = [
+      ...src.matchAll(/@import\s+url\(\s*["']([^"')]+)["']\s*\)/g),
+      ...src.matchAll(/@import\s*["']([^"']+)["']/g),
+    ];
+    for (const m of found) {
+      const spec = m[1];
+      if (/^(https?:)?\/\//.test(spec)) continue;   // remoto: fuera de alcance
+      imports += 1;
+      const target = resolve(dirname(file), spec);
+      const rel = relative(root, file).split(sep).join('/');
+      check(existsSync(target),
+        `${rel}: @import "${spec}" no existe en dist (${relative(root, target).split(sep).join('/')}) `
+        + '— el navegador lo pedira y dara 404 en silencio');
+    }
   }
-}
+  
+  // El kit compartido debe emitirse: es el que trae .dg-tooltip posicionado.
+  check(existsSync(join(dist, '_shared', 'diagram-kit.css')),
+    'falta dist/cdn/_shared/diagram-kit.css — charts y diagramas pierden el kit compartido');
+  
+  if (failures.length) {
+    console.log('FAIL:');
+    for (const f of failures) console.log(`  - ${f}`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  
+  console.log(`css-imports.test.ts: PASS — ${imports} @import locales del CSS publicado resuelven a un archivo real`);
+  return;
+});
 
-// El kit compartido debe emitirse: es el que trae .dg-tooltip posicionado.
-check(existsSync(join(dist, '_shared', 'diagram-kit.css')),
-  'falta dist/cdn/_shared/diagram-kit.css — charts y diagramas pierden el kit compartido');
-
-if (failures.length) {
-  console.log('FAIL:');
-  for (const f of failures) console.log(`  - ${f}`);
-  process.exit(1);
-}
-
-console.log(`css-imports.test.ts: PASS — ${imports} @import locales del CSS publicado resuelven a un archivo real`);
-process.exit(0);
+export default lista();

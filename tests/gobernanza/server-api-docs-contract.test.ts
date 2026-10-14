@@ -13,11 +13,10 @@
  *   S6 exporta OpenAPI 3.0.3 con las mismas operaciones; un OpenAPI 3 de entrada también se pinta.
  * Contrato de kit (guardián de estructura, marcado como tal): hermanos, ficha, manifest, demo con playground y skill.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
-import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
+import { ComponentJsonSchema } from '../../src/previews/_kit/schemas/component.schemas.ts';
 import {
   aOpenApi,
   COLOR_METODO,
@@ -30,8 +29,12 @@ import {
   urlDeOperacion,
   validarDocumentoApi,
   validarEstricto,
-} from '../../../components/layout/utils/server-api-docs-md.ts';
-import { ServerApiDocsModeloSchema } from '../../../components/layout/schemas/server-api-docs.schemas.ts';
+} from '../../src/components/layout/utils/server-api-docs-md.ts';
+import { ServerApiDocsModeloSchema } from '../../src/components/layout/schemas/server-api-docs.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname!, '..', '..', '..', '..');
 const BASE = join(RAIZ, 'src', 'components', 'layout', 'server-api-docs');
@@ -215,3 +218,5 @@ test('iswc-server-api-docs: se compone con piezas del kit sobre el layout docume
   assert.doesNotMatch(src, /iswc-md-render/, 'sin prosa documental: nada de markdown');
   assert.doesNotMatch(src, /isc-swagger|iswc-docs@|docs-viewer/, 'sin rastro del visor externo');
 });
+
+export default lista();

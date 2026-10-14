@@ -19,8 +19,15 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, posix, relative } from 'node:path';
-import { dependenciasDeNavegador, perfilDeRuta } from '../../../vendor-distributions/shared/tools/vendor.ts';
-import { PERFILES } from '../../../vendor-distributions/shared/schemas.ts';
+import { dependenciasDeNavegador, perfilDeRuta } from '../../src/vendor-distributions/shared/tools/vendor.ts';
+import { PERFILES } from '../../src/vendor-distributions/shared/schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const SRC = 'src/vendor-distributions';
 
@@ -58,7 +65,7 @@ const esCompat = (f: string): boolean =>
 
 const GLOBALES = /\b(?:document|window|navigator|customElements|localStorage|sessionStorage)\s*[.[]/;
 
-Deno.test('vendor-perfiles: P1 shared/ y server/ sin dependencias ni globales de navegador', () => {
+denoTest('vendor-perfiles: P1 shared/ y server/ sin dependencias ni globales de navegador', () => {
   const sinNavegador = codigo.filter((f) => perfil(f) === 'shared' || perfil(f) === 'server');
   // 2026-10-13: los `*.schemas.ts` se fundieron en `shared/schemas.ts` y test-queue/pruebas-hijo en sus módulos.
   assert(sinNavegador.length >= 10, `muy pocos módulos shared/server: ${sinNavegador.length}`);
@@ -72,7 +79,7 @@ Deno.test('vendor-perfiles: P1 shared/ y server/ sin dependencias ni globales de
   assertEquals(malos, [], `mueve a client/ o quita la dependencia:\n${malos.join('\n')}`);
 });
 
-Deno.test('vendor-perfiles: P2 shared solo importa shared; server y client nunca se cruzan', () => {
+denoTest('vendor-perfiles: P2 shared solo importa shared; server y client nunca se cruzan', () => {
   const admite: Record<string, string[]> = { shared: ['shared'], server: ['shared', 'server'], client: ['shared', 'client'] };
   const malos: string[] = [];
   for (const f of codigo.filter((x) => !esCompat(x))) {
@@ -85,7 +92,7 @@ Deno.test('vendor-perfiles: P2 shared solo importa shared; server y client nunca
   assertEquals(malos, [], malos.join('\n'));
 });
 
-Deno.test('vendor-perfiles: P3 cada archivo en exactamente un perfil, sin nombres repetidos entre perfiles', () => {
+denoTest('vendor-perfiles: P3 cada archivo en exactamente un perfil, sin nombres repetidos entre perfiles', () => {
   const sueltos = archivos.filter((f) => f !== 'README.md' && !esCompat(f) && !(PERFILES as readonly string[]).includes(perfil(f)));
   assertEquals(sueltos, [], `fuera de shared/|server/|client/: ${sueltos.join(', ')}`);
   // Los barrels (`index.ts`) y los README no se aplanan; el resto sí, así que su nombre es único.
@@ -99,7 +106,7 @@ Deno.test('vendor-perfiles: P3 cada archivo en exactamente un perfil, sin nombre
   assertEquals(repetidos, [], `el mismo módulo en dos lugares:\n${repetidos.join('\n')}`);
 });
 
-Deno.test('vendor-perfiles: P4 el vendor resuelto de un server no alcanza client/ ni navegador', () => {
+denoTest('vendor-perfiles: P4 el vendor resuelto de un server no alcanza client/ ni navegador', () => {
   const pendientes = codigo.filter((f) => perfil(f) === 'shared' || perfil(f) === 'server');
   const vistos = new Set<string>();
   const malos: string[] = [];
@@ -116,7 +123,7 @@ Deno.test('vendor-perfiles: P4 el vendor resuelto de un server no alcanza client
   assertEquals(malos, [], malos.join('\n'));
 });
 
-Deno.test('vendor-perfiles: P5 perfilDeRuta coincide con la carpeta de cada archivo', () => {
+denoTest('vendor-perfiles: P5 perfilDeRuta coincide con la carpeta de cada archivo', () => {
   const malos = archivos
     .filter((f) => f !== 'README.md' && !esCompat(f))
     .filter((f) => perfilDeRuta(`dist/cdn/vendor-distributions/${f}`) !== perfil(f))
@@ -128,7 +135,7 @@ Deno.test('vendor-perfiles: P5 perfilDeRuta coincide con la carpeta de cada arch
   assert(dirname(SRC) === 'src');
 });
 
-Deno.test('vendor-perfiles: P6 la compat temporal es solo reexport @deprecated y ningún perfil la usa', () => {
+denoTest('vendor-perfiles: P6 la compat temporal es solo reexport @deprecated y ningún perfil la usa', () => {
   const compat = codigo.filter((f) => !(PERFILES as readonly string[]).includes(perfil(f)));
   const malos: string[] = [];
   for (const f of compat) {
@@ -142,3 +149,5 @@ Deno.test('vendor-perfiles: P6 la compat temporal es solo reexport @deprecated y
   }
   assertEquals(malos, [], malos.join('\n'));
 });
+
+export default lista();

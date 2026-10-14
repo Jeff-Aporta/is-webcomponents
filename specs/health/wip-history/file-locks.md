@@ -4,10 +4,10 @@
 
 | Archivo | WT que lo lockea | Locked desde | Notas |
 |---|---|---|---|
-| `src/components/_shared/svg-chart-engine.ts` | WT-0001 (cerrado, lock permanente) | T1 | Solo lectura |
-| `src/components/_shared/diagram-element-base.ts` | WT-0001 (cerrado, lock permanente) | T1 | Solo lectura |
-| `src/components/diagrams/diagram-types.ts` | (read-only permanente) | baseline | Solo añadir al final |
-| `src/components/_shared/grid-types.ts` | (read-only post-T4) | T4 | Solo lectura |
+| `src/core/svg-chart-engine.ts` | WT-0001 (cerrado, lock permanente) | T1 | Solo lectura |
+| `src/components/diagrams/utils/diagram-element-base.ts` | WT-0001 (cerrado, lock permanente) | T1 | Solo lectura |
+| `src/components/diagrams/utils/diagram-types.ts` | (read-only permanente) | baseline | Solo añadir al final |
+| `src/components/data/utils/grid-types.ts` | (read-only post-T4) | T4 | Solo lectura |
 
 ## Locks activos
 

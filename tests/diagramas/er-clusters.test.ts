@@ -11,9 +11,12 @@
  *      columna (el bug de la tira vertical de 14 tablas).
  *   5. Las etiquetas de relación caen dentro del lienzo (antes se cortaban).
  */
-import test from 'node:test';
 import assert from 'node:assert';
-import { resolveErSpec, computeErLayout } from '../../../components/diagrams/utils/er-spec.ts';
+import { resolveErSpec, computeErLayout } from '../../src/components/diagrams/utils/er-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 /** Entidad mínima con n atributos. */
 function entidad(id, group, n = 2) {
@@ -135,3 +138,5 @@ test('las etiquetas de relación caen dentro del lienzo', () => {
     );
   }
 });
+
+export default lista();

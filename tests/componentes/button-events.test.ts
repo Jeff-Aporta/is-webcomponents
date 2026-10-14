@@ -14,8 +14,11 @@
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
 import assert from 'node:assert';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const src = readFileSync(join(root, 'src', 'components', 'actions', 'button.ts'), 'utf8');
@@ -54,3 +57,5 @@ test('#syncTag vuelve a enganchar los listeners al cambiar de <button> a <a>', (
     );
   }
 });
+
+export default lista();

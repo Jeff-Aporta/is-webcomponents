@@ -10,7 +10,14 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { descargarIconos } from '../../../vendor-distributions/client/tools/download-iconify.ts';
+import { descargarIconos } from '../../src/vendor-distributions/client/tools/download-iconify.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const SETS: Record<string, Record<string, string>> = {
   mdi: { home: '<path d="H"/>', close: '<path d="C"/>', 'chevron-down': '<path d="V"/>', star: '<path d="S"/>' },
@@ -71,7 +78,7 @@ const enDisco = (raiz: string): Record<string, string[]> => {
 };
 const TODOS = { mdi: ['chevron-down', 'close', 'home'], tabler: ['heart'] };
 
-Deno.test('download-iconify: I1-I3 lo usado + extra, sin ruido y sin mapa', async () => {
+denoTest('download-iconify: I1-I3 lo usado + extra, sin ruido y sin mapa', async () => {
   const raiz = app({ ...BASE, 'assets/iconify.json': '{"v":1}' });
   const r = await descargarIconos(opciones(raiz, apiFalsa().f));
   assertEquals(enDisco(raiz), TODOS, 'I1 propios + extra; sin mdi:alert (comentario), sin node:fs ni nope:thing');
@@ -83,7 +90,7 @@ Deno.test('download-iconify: I1-I3 lo usado + extra, sin ruido y sin mapa', asyn
   assert(!existsSync(join(raiz, 'assets/iconify.json')), 'I3 sin mapa: el viejo se retira');
 });
 
-Deno.test('download-iconify: I4 no re-pide lo que hay; I5 poda lo que ya no se usa', async () => {
+denoTest('download-iconify: I4 no re-pide lo que hay; I5 poda lo que ya no se usa', async () => {
   const raiz = app(BASE);
   await descargarIconos(opciones(raiz, apiFalsa().f));
   const api2 = apiFalsa();
@@ -98,7 +105,7 @@ Deno.test('download-iconify: I4 no re-pide lo que hay; I5 poda lo que ya no se u
   assertEquals(enDisco(raiz).tabler, undefined);
 });
 
-Deno.test('download-iconify: I6 429 se reintenta; un nombre inexistente se reporta y no entra al mapa', async () => {
+denoTest('download-iconify: I6 429 se reintenta; un nombre inexistente se reporta y no entra al mapa', async () => {
   const raiz = app({ ...BASE, 'src/ap-x.ts': "const a = 'mdi:no-existe';" });
   const r = await descargarIconos(opciones(raiz, apiFalsa({ limitar: 2 }).f));
   assertEquals(r.inexistentes, ['mdi:no-existe'], 'I6 inexistente reportado');
@@ -106,7 +113,7 @@ Deno.test('download-iconify: I6 429 se reintenta; un nombre inexistente se repor
   assertEquals(enDisco(raiz), TODOS, 'I6 los 429 no se pierden: se reintentó');
 });
 
-Deno.test('download-iconify: I7 sin red conserva lo que hay y avisa; offline no toca la red', async () => {
+denoTest('download-iconify: I7 sin red conserva lo que hay y avisa; offline no toca la red', async () => {
   const raiz = app(BASE);
   await descargarIconos(opciones(raiz, apiFalsa().f));
   const r = await descargarIconos(opciones(raiz, apiFalsa({ caida: true }).f));
@@ -119,7 +126,9 @@ Deno.test('download-iconify: I7 sin red conserva lo que hay y avisa; offline no 
   assertEquals(muda.pedidos, [], 'I7 offline: cero pedidos');
 });
 
-Deno.test('download-iconify: el kit sirve sus íconos en assets/iconify (sin mapa)', () => {
+denoTest('download-iconify: el kit sirve sus íconos en assets/iconify (sin mapa)', () => {
   assert(!existsSync('assets/iconify.json'), 'el mapa ya no existe');
   assert(existsSync('assets/iconify/mdi/close.svg'), 'el kit tiene mdi:close en local (iswc-dialog)');
 });
+
+export default lista();

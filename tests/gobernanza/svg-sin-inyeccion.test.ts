@@ -5,15 +5,24 @@
  *   S1 ningún `</svg>` sin espacio en lo exportado; S2 el resultado sigue siendo XML equivalente.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { sinInyeccion } from '../../../vendor-distributions/client/tools/render-diagram.ts';
+import { sinInyeccion } from '../../src/vendor-distributions/client/tools/render-diagram.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-Deno.test('svg: S1 el exportador no deja un </svg> que live-server pueda usar para inyectar', () => {
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
+
+denoTest('svg: S1 el exportador no deja un </svg> que live-server pueda usar para inyectar', () => {
   const out = sinInyeccion('<svg xmlns="http://www.w3.org/2000/svg"><g><svg><rect/></svg></g></svg>');
   assert(!out.includes('</svg>'), out);
   assertEquals((out.match(/<\/svg >/g) ?? []).length, 2);
 });
 
-Deno.test('svg: S2 la salida sigue siendo el mismo documento (solo cambia el espacio del cierre)', () => {
+denoTest('svg: S2 la salida sigue siendo el mismo documento (solo cambia el espacio del cierre)', () => {
   const src = '<svg><text>a</text></svg>';
   assertEquals(sinInyeccion(src).replace(/<\/svg >/g, '</svg>'), src);
 });
+
+export default lista();

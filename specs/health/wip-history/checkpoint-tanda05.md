@@ -42,7 +42,7 @@
 1. **`_types.ts` (nuevo, shared infra)**: tipos `TNode`, `TreeCustoms`, `CustomsRuntime`, `RowConfig`, helpers `asRecord/asString/asNumber/asBool/asActionSpec`. Module augmentation para reabrir `TTreeAdapterContext/TTreeAdapterContract` y declarar campos heredados vía `__publicField`.
 2. **`01-contract.ts` modificado (sin lock)**: −14 errores extra con tipos concretos en stubs para que las subclases puedan overridear sin incompatibilidades TS2416.
 3. **Bypass del setter heredado `focusedNode`/`selectedNode`**: setter con `any` narrowing rechaza `TNode | null`. Solución: escribir `_focusedFlatPath` / `_selectedFlatPath` directamente.
-4. **MD-editor tipos inline**: declaración local de `IsMdEditorDocument/ApiConfig/Actions` para evitar alias circular con `md-editor-api.js`.
+4. **MD-editor tipos inline**: declaración local de `IswcMdEditorDocument/ApiConfig/Actions` para evitar alias circular con `md-editor-api.js`.
 
 ## Lock permanente respetado
 

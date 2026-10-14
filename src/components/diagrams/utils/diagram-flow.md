@@ -37,5 +37,5 @@ g.appendChild(pulsoRadar(cx, cy, r, color)); // antes de pintar la O: el anillo 
 Los conectores `-(O-` / `-(O=` se pintan con `pintarSocket` (`_shared/diagram-socket.ts`): palo,
 socket `(`, pulso y bola, en ese orden; todos los diagramas usan el mismo pintor.
 
-Guardianes: `src/utils/health/diagrams/flow-anim-sentido.test.ts` (sentido) y
+Guardianes: `tests/diagramas/flow-anim-sentido.test.ts` (sentido) y
 `flowchart-lanes.test.ts` A1 (activo por defecto).

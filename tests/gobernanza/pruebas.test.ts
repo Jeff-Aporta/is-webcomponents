@@ -16,8 +16,8 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { archivosDePrueba, codigoSalida, coleccionPruebas, correrPruebas, definirPruebas, esSaltada } from '../../../vendor-distributions/shared/testing/pruebas.ts';
-import type { ListaPruebas, Prueba } from '../../../vendor-distributions/shared/schemas.ts';
+import { archivosDePrueba, codigoSalida, coleccionPruebas, correrPruebas, definirPruebas, esSaltada } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import type { ListaPruebas, Prueba } from '../../src/vendor-distributions/shared/schemas.ts';
 
 const raiz = mkdtempSync(join(tmpdir(), 'pruebas-'));
 const db = join(raiz, 'cooldown.json');

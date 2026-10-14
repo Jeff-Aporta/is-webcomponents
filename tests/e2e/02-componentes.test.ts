@@ -2,12 +2,15 @@
 // Para cada tag: el preview controlado monta contenido real (no placeholder),
 // el componente esta definido y el docs usa instancias del kit. Las vistas
 // pesadas (diagramas/graficos) exigen ademas senal de render (svg/canvas).
-import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos } from './lib/env.ts';
-import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
+import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos } from '../.audit/e2e/env.ts';
+import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -88,3 +91,5 @@ testE2E('cada vista representativa monta contenido real con su componente defini
   }
   assert.deepEqual(fallos, [], `FALLOS DE RENDER:\n${fallos.join('\n')}`);
 });
+
+export default lista();

@@ -5,12 +5,19 @@
  *   S3 `reverse` por arista invierte el sentido estándar (clases, DER, componentes, secuencia).
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { computeClassLayout, resolveClassSpec, sentidoFlujoClase } from '../../../components/diagrams/utils/class-spec.ts';
-import { computeErLayout, resolveErSpec, sentidoFlujoEr } from '../../../components/diagrams/utils/er-spec.ts';
-import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/utils/component-spec.ts';
-import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/utils/sequence-spec.ts';
+import { computeClassLayout, resolveClassSpec, sentidoFlujoClase } from '../../src/components/diagrams/utils/class-spec.ts';
+import { computeErLayout, resolveErSpec, sentidoFlujoEr } from '../../src/components/diagrams/utils/er-spec.ts';
+import { computeComponentLayout, resolveComponentSpec } from '../../src/components/diagrams/utils/component-spec.ts';
+import { computeSequenceLayout, resolveSequenceSpec } from '../../src/components/diagrams/utils/sequence-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-Deno.test('flujo: S1 clases — herencia y realización al revés; S3 reverse lo invierte', () => {
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+denoTest('flujo: S1 clases — herencia y realización al revés; S3 reverse lo invierte', () => {
   assertEquals(['inheritance', 'realization', 'association', 'dependency', 'composition'].map(sentidoFlujoClase), [true, true, false, false, false]);
   const L = computeClassLayout(resolveClassSpec({
     classes: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }, { id: 'c', name: 'C' }],
@@ -21,7 +28,7 @@ Deno.test('flujo: S1 clases — herencia y realización al revés; S3 reverse lo
   assertEquals(rev.get('u'), true);
 });
 
-Deno.test('flujo: S2 DER — de N a 1, y en 1:1 del opcional al obligatorio; S3 reverse lo invierte', () => {
+denoTest('flujo: S2 DER — de N a 1, y en 1:1 del opcional al obligatorio; S3 reverse lo invierte', () => {
   assertEquals(sentidoFlujoEr('one', 'many'), true, '1→N se anima al revés (de N a 1)');
   assertEquals(sentidoFlujoEr('zeroOrMany', 'one'), false, 'N→1 con el trazo');
   assertEquals(sentidoFlujoEr('one', 'zeroOrOne'), true, '1:1 del opcional al obligatorio');
@@ -36,7 +43,7 @@ Deno.test('flujo: S2 DER — de N a 1, y en 1:1 del opcional al obligatorio; S3 
   assertEquals(rev.get('r2'), false, 'reverse invierte el estándar');
 });
 
-Deno.test('flujo: S3 componentes y secuencia llevan el reverse de su arista', () => {
+denoTest('flujo: S3 componentes y secuencia llevan el reverse de su arista', () => {
   const C = computeComponentLayout(resolveComponentSpec({
     components: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }],
     links: [{ id: 'l', from: 'a', to: 'b', reverse: true }],
@@ -48,3 +55,5 @@ Deno.test('flujo: S3 componentes y secuencia llevan el reverse de su arista', ()
   }));
   assertEquals(S.messages.map((m) => !!m.reverse), [true, false]);
 });
+
+export default lista();

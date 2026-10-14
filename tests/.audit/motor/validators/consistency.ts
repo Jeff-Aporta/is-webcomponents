@@ -24,9 +24,9 @@
 
 import { readFileSync, existsSync } from 'node:fs';
 import { basename } from 'node:path';
-import type { Hallazgo } from '../types.schemas.js';
-import { DefSchema, type Def } from "./consistency.schemas.js";
-import type { MetaComponente, OpcionesConsistencia } from "./consistency.schemas.js";
+import type { Hallazgo } from '../schemas/types.schemas.js';
+import { DefSchema, type Def } from "./schemas/consistency.schemas.js";
+import type { MetaComponente, OpcionesConsistencia } from "./schemas/consistency.schemas.js";
 
 /**
  * Lee el módulo del componente y devuelve un mapa de metadata útil:

@@ -23,10 +23,10 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Hallazgo } from '../motor/types.schemas.js';
-import type { EntradaCatalogo } from '../motor/catalog.schemas.js';
+import type { Hallazgo } from '../motor/schemas/types.schemas.js';
+import type { EntradaCatalogo } from '../motor/schemas/catalog.schemas.js';
 import { leerDefinicion } from './cargar.js';
-import type { SesionStagehand, ReportePagina } from "./stagehand.schemas.js";
+import type { SesionStagehand, ReportePagina } from "./schemas/stagehand.schemas.js";
 
 /** Estado del browser que supervisa el motor. */
 

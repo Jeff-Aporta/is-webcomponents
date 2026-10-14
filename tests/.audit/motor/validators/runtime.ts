@@ -20,8 +20,8 @@
 
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import type { Hallazgo } from '../types.schemas.js';
-import type { OpcionesRuntime } from "./runtime.schemas.js";
+import type { Hallazgo } from '../schemas/types.schemas.js';
+import type { OpcionesRuntime } from "./schemas/runtime.schemas.js";
 
 /**
  * Revisa el módulo del componente en busca de patrones problemáticos.

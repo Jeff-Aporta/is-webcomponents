@@ -12,6 +12,13 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const SRC = 'src/vendor-distributions';
 const DIST = 'dist/cdn/vendor-distributions';
@@ -29,7 +36,7 @@ const archivos = listar(SRC);
 const codigo = archivos.filter((f) => /\.(ts|mjs)$/.test(f));
 const mds = archivos.filter((f) => f.endsWith('.md'));
 
-Deno.test('vendor-distributions: D1 todo archivo de código abre con // @doc por CDN a un .md existente', () => {
+denoTest('vendor-distributions: D1 todo archivo de código abre con // @doc por CDN a un .md existente', () => {
   assert(codigo.length >= 20, `muy pocos archivos de código: ${codigo.length}`);
   const malos: string[] = [];
   for (const f of codigo) {
@@ -44,7 +51,7 @@ Deno.test('vendor-distributions: D1 todo archivo de código abre con // @doc por
   assertEquals(malos, [], malos.join('\n'));
 });
 
-Deno.test('vendor-distributions: D2 los .md enlazan otros .md solo por CDN', () => {
+denoTest('vendor-distributions: D2 los .md enlazan otros .md solo por CDN', () => {
   const malos: string[] = [];
   for (const f of mds) {
     const t = readFileSync(join(SRC, f), 'utf8');
@@ -55,20 +62,20 @@ Deno.test('vendor-distributions: D2 los .md enlazan otros .md solo por CDN', () 
   assertEquals(malos, [], malos.join('\n'));
 });
 
-Deno.test('vendor-distributions: D3 el README nombra cada archivo de código', () => {
+denoTest('vendor-distributions: D3 el README nombra cada archivo de código', () => {
   const readme = readFileSync(join(SRC, 'README.md'), 'utf8');
   const faltan = codigo.filter((f) => !readme.includes(f.split('/').pop()!));
   assertEquals(faltan, [], `sin documentar en README.md: ${faltan.join(', ')}`);
 });
 
-Deno.test('vendor-distributions: D4 dist publica el mismo conjunto que src', () => {
+denoTest('vendor-distributions: D4 dist publica el mismo conjunto que src', () => {
   if (!existsSync(DIST)) return; // sin build no hay nada que comparar
   // Los bundles online (`scripts/build-online.mjs`) son extra en dist: `<ruta>.mjs` junto a una fuente `.ts`/`.mjs` del mismo nombre.
   const esBundle = (f: string) => f.endsWith('.mjs') && archivos.some((s) => s === f.replace(/\.mjs$/, '.ts')) && !archivos.includes(f);
   assertEquals(listar(DIST).filter((f) => !esBundle(f)).sort(), archivos.filter((f) => /\.(ts|mjs|md)$/.test(f)).sort(), 'corre `deno task build`');
 });
 
-Deno.test('vendor-distributions: D5 cada archivo de código dice su Skill: y la ruta existe en el repo', () => {
+denoTest('vendor-distributions: D5 cada archivo de código dice su Skill: y la ruta existe en el repo', () => {
   const malos: string[] = [];
   for (const f of codigo) {
     const m = readFileSync(join(SRC, f), 'utf8').match(/^\s*(?:\*|\/\/)\s*Skill:\s*(\S+)/m);
@@ -77,3 +84,5 @@ Deno.test('vendor-distributions: D5 cada archivo de código dice su Skill: y la 
   }
   assertEquals(malos, [], malos.join('\n'));
 });
+
+export default lista();

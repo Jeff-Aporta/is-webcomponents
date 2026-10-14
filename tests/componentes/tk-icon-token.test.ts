@@ -1,12 +1,15 @@
 import assert from 'node:assert/strict';
-import { test } from 'node:test';
 import {
   extractLeadingIconToken,
   hasIconJsonSugar,
   iconInlineHtmlWeb,
   resolveIconToken,
   splitIconRuns,
-} from '../../../core/tk-icon-inline.ts';
+} from '../../src/core/tk-icon-inline.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 test('{{"iswc-icon": {attrs}}} resuelve icono, color y el tag', () => {
   const raw = '{{"iswc-icon": {icon: mdi:key-variant, color: #e11}}} nombre_de_la_col';
@@ -40,3 +43,5 @@ test('una fila parte icono y texto', () => {
   }
   assert.equal(runs[1]?.kind, 'text');
 });
+
+export default lista();

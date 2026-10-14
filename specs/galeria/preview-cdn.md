@@ -7,7 +7,7 @@ Stagehand/Playwright (iswc-root@60be5643d6).
 ## 1. Cargar el loader y los componentes de preview
 ```html
 <script type="module">
-  import { ISWebComponentsLoader as L }
+  import { iswcLoader as L }
     from 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@<sha>/dist/cdn/core/loader.min.js';
   L.configure({ mirrors: ['jsdelivr', 'pages'], preferSelf: false });
   await L.load('iswc-preview-component', 'iswc-preview-controls', /* …tags del demo… */);

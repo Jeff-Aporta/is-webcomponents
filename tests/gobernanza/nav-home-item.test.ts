@@ -19,121 +19,128 @@
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-const index = await readFile(join(root, 'index.html'), 'utf8');
-const galleryApp = await readFile(join(root, 'src', 'app', 'app.ts'), 'utf8');
-const shellCss = await readFile(join(root, 'src', 'styles', 'shell.scss'), 'utf8');
+test('gobernanza/nav-home-item', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
 
-const failures = [];
-const check = (cond, msg) => { if (!cond) failures.push(msg); };
+  const index = await readFile(join(root, 'index.html'), 'utf8');
+  const galleryApp = await readFile(join(root, 'src', 'app', 'app.ts'), 'utf8');
+  const shellCss = await readFile(join(root, 'src', 'styles', 'shell.scss'), 'utf8');
 
-// â”€â”€â”€ HTML: el item home esta construido con la misma estructura â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// Hay un bloque de creacion del boton home que:
-//   - usa .shell-nav__item (reusa el styling)
-//   - tiene data-tag = HOME.tag (== 'home')
-//   - aria-label ="Inicio â€” home"
-//   - el title.textContent es 'Inicio'
-//   - NO anade un <span class="shell-nav__tag">
+  const failures = [];
+  const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-// Aislamos el bloque { const btn = ... } del home en app/app.ts
-// (el cÃ³digo que construye los items del nav vive en el bundle de la
-// galerÃ­a, no en index.html â€” esto cambiÃ³ al pasar de inline JS a bundle).
-const homeBlockMatch = (() => {
-  const homeDecl = galleryApp.indexOf("HOME = { tag: 'home'");
-  if (homeDecl < 0) return null;
-  const fromHome = galleryApp.slice(homeDecl);
-  const appendEnd = fromHome.indexOf('shellNav.appendChild(btn);');
-  if (appendEnd < 0) return null;
-  return fromHome.slice(0, appendEnd + 'shellNav.appendChild(btn);'.length);
-})();
+  // â”€â”€â”€ HTML: el item home esta construido con la misma estructura â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // Hay un bloque de creacion del boton home que:
+  //   - usa .shell-nav__item (reusa el styling)
+  //   - tiene data-tag = HOME.tag (== 'home')
+  //   - aria-label ="Inicio â€” home"
+  //   - el title.textContent es 'Inicio'
+  //   - NO anade un <span class="shell-nav__tag">
 
-check(!!homeBlockMatch, 'index.html: no se encuentra el bloque de creacion del item home');
+  // Aislamos el bloque { const btn = ... } del home en app/app.ts
+  // (el cÃ³digo que construye los items del nav vive en el bundle de la
+  // galerÃ­a, no en index.html â€” esto cambiÃ³ al pasar de inline JS a bundle).
+  const homeBlockMatch = (() => {
+    const homeDecl = galleryApp.indexOf("HOME = { tag: 'home'");
+    if (homeDecl < 0) return null;
+    const fromHome = galleryApp.slice(homeDecl);
+    const appendEnd = fromHome.indexOf('shellNav.appendChild(btn);');
+    if (appendEnd < 0) return null;
+    return fromHome.slice(0, appendEnd + 'shellNav.appendChild(btn);'.length);
+  })();
 
-// El bloque aislado debe contener los marcadores clave aunque no
-// pueda buscarse el HTML literal (porque se construye con fromCharCode).
-if (homeBlockMatch) {
-  check(/className\s*=\s*['"]shell-nav__item\s+shell-nav__item--home['"]/.test(homeBlockMatch),
-    'index.html: el item home debe usar className "shell-nav__item shell-nav__item--home"');
-  check(/dataset\.tag\s*=\s*HOME\.tag/.test(homeBlockMatch),
-    'index.html: el data-tag del home debe venir de HOME.tag');
-  check(/aria-label["']\s*,\s*['"]Inicio â€” home['"]/.test(homeBlockMatch),
-    'index.html: el aria-label del home debe ser "Inicio â€” home"');
-  check(/title\.textContent\s*=\s*['"]Inicio['"]/.test(homeBlockMatch),
-    'index.html: el title del home debe ser el texto "Inicio"');
-  // El bloque del home no debe crear un <span class="shell-nav__tag"> al final.
-  // (El constructor decide literalmente si anade el tag: lo verificamos
-  // contando quantas veces se crea un tag con HOME.tag despues del home)
-  const tagCount = (homeBlockMatch.match(/className\s*=\s*['"]shell-nav__tag['"]/g) || []).length;
-  check(tagCount === 0,
-    'index.html: el bloque del home no debe crear un <span class="shell-nav__tag"> (no debe haber tag duplicado)');
-}
+  check(!!homeBlockMatch, 'index.html: no se encuentra el bloque de creacion del item home');
 
-// Estos chequeos sobre el bundle de la galerÃ­a: app/app.ts debe
-// contener una sola asignaciÃ³n `textContent = 'Inicio'` (solo el title).
-const homeTitleCount = (galleryApp.match(/textContent\s*=\s*['"]Inicio['"]/g) || []).length;
-const homeTagCount = (galleryApp.match(/<span\s+class="shell-nav__tag"[^>]*>\s*Inicio\s*<\/span>/g) || []).length;
-check(homeTitleCount === 1, `app/app.ts: esperaba 1 'textContent="Inicio"' (solo el title), encontre ${homeTitleCount}`);
-check(homeTagCount === 0, `app/app.ts: el item home NO debe tener un <span class="shell-nav__tag">Inicio</span> duplicado, encontre ${homeTagCount}`);
+  // El bloque aislado debe contener los marcadores clave aunque no
+  // pueda buscarse el HTML literal (porque se construye con fromCharCode).
+  if (homeBlockMatch) {
+    check(/className\s*=\s*['"]shell-nav__item\s+shell-nav__item--home['"]/.test(homeBlockMatch),
+      'index.html: el item home debe usar className "shell-nav__item shell-nav__item--home"');
+    check(/dataset\.tag\s*=\s*HOME\.tag/.test(homeBlockMatch),
+      'index.html: el data-tag del home debe venir de HOME.tag');
+    check(/aria-label["']\s*,\s*['"]Inicio â€” home['"]/.test(homeBlockMatch),
+      'index.html: el aria-label del home debe ser "Inicio â€” home"');
+    check(/title\.textContent\s*=\s*['"]Inicio['"]/.test(homeBlockMatch),
+      'index.html: el title del home debe ser el texto "Inicio"');
+    // El bloque del home no debe crear un <span class="shell-nav__tag"> al final.
+    // (El constructor decide literalmente si anade el tag: lo verificamos
+    // contando quantas veces se crea un tag con HOME.tag despues del home)
+    const tagCount = (homeBlockMatch.match(/className\s*=\s*['"]shell-nav__tag['"]/g) || []).length;
+    check(tagCount === 0,
+      'index.html: el bloque del home no debe crear un <span class="shell-nav__tag"> (no debe haber tag duplicado)');
+  }
 
-// Estas pruebas contra el archivo completo ya estan cubiertas por el
-// bloque aislado arriba, asi que las omitimos para evitar falsos negativos
-// debidos al pre-procesado con fromCharCode del script.
+  // Estos chequeos sobre el bundle de la galerÃ­a: app/app.ts debe
+  // contener una sola asignaciÃ³n `textContent = 'Inicio'` (solo el title).
+  const homeTitleCount = (galleryApp.match(/textContent\s*=\s*['"]Inicio['"]/g) || []).length;
+  const homeTagCount = (galleryApp.match(/<span\s+class="shell-nav__tag"[^>]*>\s*Inicio\s*<\/span>/g) || []).length;
+  check(homeTitleCount === 1, `app/app.ts: esperaba 1 'textContent="Inicio"' (solo el title), encontre ${homeTitleCount}`);
+  check(homeTagCount === 0, `app/app.ts: el item home NO debe tener un <span class="shell-nav__tag">Inicio</span> duplicado, encontre ${homeTagCount}`);
 
-// â”€â”€â”€ CSS: NO debe haber un bloque horizontal de "home" ni highlight propio â”€â”€
+  // Estas pruebas contra el archivo completo ya estan cubiertas por el
+  // bloque aislado arriba, asi que las omitimos para evitar falsos negativos
+  // debidos al pre-procesado con fromCharCode del script.
 
-// Antes el .shell-nav__item--home tenia su propio display: flex (horizontal)
-// y su propio width: 100%. Si vuelve a aparecer, rompio la consistencia.
-const homeCssBlock = (() => {
-  const m = shellCss.match(/&\.shell-nav__item--home\s*\{[\s\S]*?\n\s*\}/);
-  return m ? m[0] : '';
-})();
+  // â”€â”€â”€ CSS: NO debe haber un bloque horizontal de "home" ni highlight propio â”€â”€
 
-check(homeCssBlock.length === 0,
-  'shell.css: NO debe existir un bloque &.shell-nav__item--home { ... } con estilos propios (debe reusar .shell-nav__item)');
+  // Antes el .shell-nav__item--home tenia su propio display: flex (horizontal)
+  // y su propio width: 100%. Si vuelve a aparecer, rompio la consistencia.
+  const homeCssBlock = (() => {
+    const m = shellCss.match(/&\.shell-nav__item--home\s*\{[\s\S]*?\n\s*\}/);
+    return m ? m[0] : '';
+  })();
 
-// â”€â”€â”€ CSS: el highlight de aria-current existe para .shell-nav__item â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  check(homeCssBlock.length === 0,
+    'shell.css: NO debe existir un bloque &.shell-nav__item--home { ... } con estilos propios (debe reusar .shell-nav__item)');
 
-// El bloque se llama &[aria-current="true"] (sin repetir .shell-nav__item,
-// porque ya esta dentro de `& .shell-nav__item { ... }`).
-const itemCurrentBlock = (() => {
-  const m = shellCss.match(/&\[aria-current="true"\]\s*\{[\s\S]*?\n\s*\}/);
-  return m ? m[0] : '';
-})();
-check(itemCurrentBlock.length > 0,
-  'shell.css: .shell-nav__item[aria-current="true"] debe tener su propio bloque de highlight');
+  // â”€â”€â”€ CSS: el highlight de aria-current existe para .shell-nav__item â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-check(/--iswc-brand-soft/.test(itemCurrentBlock),
-  'shell.css: el highlight del item activo debe usar --iswc-brand-soft');
+  // El bloque se llama &[aria-current="true"] (sin repetir .shell-nav__item,
+  // porque ya esta dentro de `& .shell-nav__item { ... }`).
+  const itemCurrentBlock = (() => {
+    const m = shellCss.match(/&\[aria-current="true"\]\s*\{[\s\S]*?\n\s*\}/);
+    return m ? m[0] : '';
+  })();
+  check(itemCurrentBlock.length > 0,
+    'shell.css: .shell-nav__item[aria-current="true"] debe tener su propio bloque de highlight');
 
-// â”€â”€â”€ Sanity: el bloque eliminado deja el highlighting por cascada â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-//
-// Si el item home solo lleva .shell-nav__item (no --home), hereda
-// el selector &[aria-current="true"] del padre, que debe estar al
-// nivel `.shell-nav { & .shell-nav__item { ... } }` (no anidado en
-// un selector de categoria).
-//
-// Buscamos el selector de partida (`.shell-nav`) y la primera
-// aparicion de `& .shell-nav__item` y `[aria-current="true"]` en orden.
-const parentWrapper = (() => {
-  const navIdx = shellCss.indexOf('& .shell-nav');
-  if (navIdx < 0) return '';
-  const itemIdx = shellCss.indexOf('& .shell-nav__item', navIdx);
-  if (itemIdx < 0) return '';
-  const currentIdx = shellCss.indexOf('[aria-current="true"]', itemIdx);
-  if (currentIdx < 0) return '';
-  return shellCss.slice(navIdx, currentIdx);
-})();
-check(parentWrapper.length > 0,
-  'shell.css: el highlight &[aria-current="true"] debe estar dentro de .shell-nav { & .shell-nav__item { ... } } para que aplique tanto a items regulares como al home');
+  check(/--iswc-brand-soft/.test(itemCurrentBlock),
+    'shell.css: el highlight del item activo debe usar --iswc-brand-soft');
 
-if (failures.length) {
-  console.log('FAIL:');
-  for (const f of failures) console.log(`  - ${f}`);
-  process.exit(1);
-}
+  // â”€â”€â”€ Sanity: el bloque eliminado deja el highlighting por cascada â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //
+  // Si el item home solo lleva .shell-nav__item (no --home), hereda
+  // el selector &[aria-current="true"] del padre, que debe estar al
+  // nivel `.shell-nav { & .shell-nav__item { ... } }` (no anidado en
+  // un selector de categoria).
+  //
+  // Buscamos el selector de partida (`.shell-nav`) y la primera
+  // aparicion de `& .shell-nav__item` y `[aria-current="true"]` en orden.
+  const parentWrapper = (() => {
+    const navIdx = shellCss.indexOf('& .shell-nav');
+    if (navIdx < 0) return '';
+    const itemIdx = shellCss.indexOf('& .shell-nav__item', navIdx);
+    if (itemIdx < 0) return '';
+    const currentIdx = shellCss.indexOf('[aria-current="true"]', itemIdx);
+    if (currentIdx < 0) return '';
+    return shellCss.slice(navIdx, currentIdx);
+  })();
+  check(parentWrapper.length > 0,
+    'shell.css: el highlight &[aria-current="true"] debe estar dentro de .shell-nav { & .shell-nav__item { ... } } para que aplique tanto a items regulares como al home');
 
-console.log('nav-home-item.test.ts: PASS â€” item "Inicio" reusa .shell-nav__item, sin highlight propio, mismo patron que el resto');
-process.exit(0);
+  if (failures.length) {
+    console.log('FAIL:');
+    for (const f of failures) console.log(`  - ${f}`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+
+  console.log('nav-home-item.test.ts: PASS â€” item "Inicio" reusa .shell-nav__item, sin highlight propio, mismo patron que el resto');
+  return;
+});
+
+export default lista();

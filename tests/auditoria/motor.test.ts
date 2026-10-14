@@ -14,7 +14,6 @@
  * Se ejecutan con `deno test -A --no-check` (mismo runner que el resto de la suite).
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -25,13 +24,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const RAIZ = join(__dirname, '..', '..', '..', '..');
 
-import { enumerarCatalogo, resumirCatalogo } from '../motor/catalog.js';
-import { validarEsquema } from '../motor/validators/json-schema.js';
-import { ejecutarValidacionContenido } from '../motor/validators/json-contenido.js';
-import { extraerMetaComponente, ejecutarValidacionConsistencia } from '../motor/validators/consistency.js';
-import { auditarRuntimeComponente } from '../motor/validators/runtime.js';
-import { aJson, aMarkdown } from '../motor/reporter.js';
-import { MOTOR_VERSION } from '../motor/auditor.js';
+import { enumerarCatalogo, resumirCatalogo } from '../.audit/motor/catalog.js';
+import { validarEsquema } from '../.audit/motor/validators/json-schema.js';
+import { ejecutarValidacionContenido } from '../.audit/motor/validators/json-contenido.js';
+import { extraerMetaComponente, ejecutarValidacionConsistencia } from '../.audit/motor/validators/consistency.js';
+import { auditarRuntimeComponente } from '../.audit/motor/validators/runtime.js';
+import { aJson, aMarkdown } from '../.audit/motor/reporter.js';
+import { MOTOR_VERSION } from '../.audit/motor/auditor.js';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 test('catalog: enumera componentes del manifest + catalog + pages', () => {
   const cats = enumerarCatalogo(RAIZ);
@@ -376,7 +379,7 @@ test('motor: MOTOR_VERSION es string semver', () => {
 
 test('integration: auditar 3 componentes reales no produce crashes', async () => {
   // Import dinámico del orquestador
-  const { crearEstado, auditarCatalogo } = await import('../motor/auditor.js');
+  const { crearEstado, auditarCatalogo } = await import('../.audit/motor/auditor.js');
   const estado = crearEstado(RAIZ, { solo: ['iswc-button', 'iswc-button-group', 'iswc-accordion-group'], soloJson: true });
   const reporte = await auditarCatalogo(estado);
   assert.equal(reporte.totalComponentes, 3);
@@ -385,3 +388,5 @@ test('integration: auditar 3 componentes reales no produce crashes', async () =>
     assert.ok(['iswc-button', 'iswc-button-group', 'iswc-accordion-group'].includes(c.tag));
   }
 });
+
+export default lista();

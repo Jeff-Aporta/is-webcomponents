@@ -1,12 +1,15 @@
 /**
  * Hash de 6 caracteres y sello `?v=` entre archivos.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { hashBase, hashCss, hashHtml, hashJs, hashPorRuta, hashesRepetidos, HASH_LEN } from '../../../cdn/build/hash.ts';
-import { cambiosDeHash, reemplazarHashes } from '../../../cdn/build/sync-hashes.ts';
-import { stampHashTexts } from '../../../cdn/build/stamp-hashes.ts';
-import { withAssetHash, lookupHash } from '../../../cdn/build/asset-url.ts';
+import { hashBase, hashCss, hashHtml, hashJs, hashPorRuta, hashesRepetidos, HASH_LEN } from '../../src/cdn/build/hash.ts';
+import { cambiosDeHash, reemplazarHashes } from '../../src/cdn/build/sync-hashes.ts';
+import { stampHashTexts } from '../../src/cdn/build/stamp-hashes.ts';
+import { withAssetHash, lookupHash } from '../../src/cdn/build/asset-url.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 test('hashBase: 6 chars y cambia con el contenido', () => {
   const a = hashBase('hola');
@@ -89,3 +92,5 @@ test('lookupHash prefiere el sufijo mas largo', () => {
   assert.equal(withAssetHash('../media/icon.min.js?h=old', 'abc123'), '../media/icon.min.js?v=abc123', 'el ?h= legado se reemplaza por ?v=');
   assert.equal(withAssetHash('../media/icon.min.js?v=old', 'abc123'), '../media/icon.min.js?v=abc123');
 });
+
+export default lista();

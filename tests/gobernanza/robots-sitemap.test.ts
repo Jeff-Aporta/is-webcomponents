@@ -11,7 +11,11 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const pages = 'https://jeff-aporta.github.io/iswc-root';
@@ -34,3 +38,5 @@ test('index.html invita a indexar (bots que no ejecutan JS)', () => {
   assert.match(indexHtml, /<meta\s+name="robots"\s+content="index,\s*follow"/);
   assert.match(indexHtml, new RegExp(`<link\\s+rel="canonical"\\s+href="${pages}/"`));
 });
+
+export default lista();

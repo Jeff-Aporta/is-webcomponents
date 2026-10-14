@@ -17,60 +17,67 @@
 // Si alguien refactoriza la función y vuelve al comportamiento viejo,
 // el test falla y señala exactamente qué invariante se rompió.
 
-import { resolveSequenceSpec, computeSequenceLayout } from '../../../components/diagrams/utils/sequence-spec.ts';
+import { resolveSequenceSpec, computeSequenceLayout } from '../../src/components/diagrams/utils/sequence-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const failures = [];
-const check = (cond, msg) => { if (!cond) failures.push(msg); };
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-// Spec mínima con 5 grupos y 3 actores — el caso que rompía la leyenda.
-const spec5 = {
-  title: 'test',
-  groups: [
-    { id: 'g1', name: 'Alpha' },
-    { id: 'g2', name: 'Beta' },
-    { id: 'g3', name: 'Gamma' },
-    { id: 'g4', name: 'Delta' },
-    { id: 'g5', name: 'Epsilon' },
-  ],
-  actors: [
-    { id: 'A', label: 'Actor A' },
-    { id: 'B', label: 'Actor B' },
-    { id: 'C', label: 'Actor C' },
-  ],
-  messages: [
-    { id: 'm1', from: 'A', to: 'B', label: 'hola' },
-  ],
-};
+test('diagramas/sequence-legend-grid', async () => {
+  const failures = [];
+  const check = (cond, msg) => { if (!cond) failures.push(msg); };
+  
+  // Spec mínima con 5 grupos y 3 actores — el caso que rompía la leyenda.
+  const spec5 = {
+    title: 'test',
+    groups: [
+      { id: 'g1', name: 'Alpha' },
+      { id: 'g2', name: 'Beta' },
+      { id: 'g3', name: 'Gamma' },
+      { id: 'g4', name: 'Delta' },
+      { id: 'g5', name: 'Epsilon' },
+    ],
+    actors: [
+      { id: 'A', label: 'Actor A' },
+      { id: 'B', label: 'Actor B' },
+      { id: 'C', label: 'Actor C' },
+    ],
+    messages: [
+      { id: 'm1', from: 'A', to: 'B', label: 'hola' },
+    ],
+  };
+  
+  const layout = computeSequenceLayout(resolveSequenceSpec(spec5));
+  
+  check(
+    layout.legendMaxRows === 3,
+    `legendMaxRows debe ser 3 (era undefined antes del fix); salió ${layout.legendMaxRows}`,
+  );
+  check(
+    Array.isArray(layout.legendColX) && layout.legendColX.length >= 2,
+    `legendColX debe tener >=2 columnas para 5 grupos con maxRows=3; salió ${JSON.stringify(layout.legendColX)}`,
+  );
+  
+  // Calcular el borde derecho del último actor y compararlo con legendX.
+  // El invariante: legendX > (último actor x + boxW/2).
+  const lastActor = layout.actors[layout.actors.length - 1];
+  // boxW no se expone en layout.actors; usamos la heurística conservadora de
+  // `actorWidth` por si cambia la implementación: ancho = max(88, label.length*7 + 32).
+  const approxBoxW = Math.max(88, lastActor.label.length * 7 + 32);
+  const lastActorRightEdge = lastActor.x + approxBoxW / 2;
+  
+  check(
+    layout.legendX > lastActorRightEdge,
+    `legendX=${layout.legendX} debe estar a la derecha del borde del último actor (${lastActorRightEdge.toFixed(1)}); la leyenda solaparía el actor si esto falla`,
+  );
+  
+  if (failures.length) {
+    console.error('sequence-legend-grid.test.ts: FAIL');
+    for (const f of failures) console.error('  -', f);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  
+  console.log(`sequence-legend-grid.test.ts: PASS — leyenda grid OK, ${layout.legendColX.length} columnas, legendX=${layout.legendX} > ${lastActorRightEdge.toFixed(1)}`);
+  return;
+});
 
-const layout = computeSequenceLayout(resolveSequenceSpec(spec5));
-
-check(
-  layout.legendMaxRows === 3,
-  `legendMaxRows debe ser 3 (era undefined antes del fix); salió ${layout.legendMaxRows}`,
-);
-check(
-  Array.isArray(layout.legendColX) && layout.legendColX.length >= 2,
-  `legendColX debe tener >=2 columnas para 5 grupos con maxRows=3; salió ${JSON.stringify(layout.legendColX)}`,
-);
-
-// Calcular el borde derecho del último actor y compararlo con legendX.
-// El invariante: legendX > (último actor x + boxW/2).
-const lastActor = layout.actors[layout.actors.length - 1];
-// boxW no se expone en layout.actors; usamos la heurística conservadora de
-// `actorWidth` por si cambia la implementación: ancho = max(88, label.length*7 + 32).
-const approxBoxW = Math.max(88, lastActor.label.length * 7 + 32);
-const lastActorRightEdge = lastActor.x + approxBoxW / 2;
-
-check(
-  layout.legendX > lastActorRightEdge,
-  `legendX=${layout.legendX} debe estar a la derecha del borde del último actor (${lastActorRightEdge.toFixed(1)}); la leyenda solaparía el actor si esto falla`,
-);
-
-if (failures.length) {
-  console.error('sequence-legend-grid.test.ts: FAIL');
-  for (const f of failures) console.error('  -', f);
-  process.exit(1);
-}
-
-console.log(`sequence-legend-grid.test.ts: PASS — leyenda grid OK, ${layout.legendColX.length} columnas, legendX=${layout.legendX} > ${lastActorRightEdge.toFixed(1)}`);
-process.exit(0);
+export default lista();

@@ -15,6 +15,13 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const RAW = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents';
 const RELOAD = `--reload=${RAW}/`;
@@ -28,10 +35,10 @@ function listar(dir: string, out: string[] = []): string[] {
   return out;
 }
 const mds = listar('skills').filter((f) => f.endsWith('.md')).map((f) => ({ f, t: readFileSync(f, 'utf8') }));
-const { entradasOnline } = await import('../../../../scripts/build-online.mjs');
+const { entradasOnline } = await import('../../scripts/build-online.mjs');
 const entradas = await entradasOnline();
 
-Deno.test('skills-online: O1 cada bundle online existe, es autocontenido y no se localiza por ruta', () => {
+denoTest('skills-online: O1 cada bundle online existe, es autocontenido y no se localiza por ruta', () => {
   assert(entradas.length >= 5, `pocas entradas online: ${entradas.length}`);
   const malos: string[] = [];
   for (const [desde, hacia] of entradas) {
@@ -50,7 +57,7 @@ Deno.test('skills-online: O1 cada bundle online existe, es autocontenido y no se
   assertEquals(malos, [], malos.join('\n'));
 });
 
-Deno.test('skills-online: O2 cada script de tools/ y cada CLI online está documentado con la URL @main de su bundle y --reload', () => {
+denoTest('skills-online: O2 cada script de tools/ y cada CLI online está documentado con la URL @main de su bundle y --reload', () => {
   const malos: string[] = [];
   for (const [desde, hacia] of entradas) {
     const url = `${RAW}/main/dist/cdn/${hacia}`;
@@ -61,7 +68,7 @@ Deno.test('skills-online: O2 cada script de tools/ y cada CLI online está docum
   assertEquals(malos, [], malos.join('\n'));
 });
 
-Deno.test('skills-online: O3 ninguna skill invoca un tools/ o CLI online por ruta local, por SHA ni por la fuente .ts', () => {
+denoTest('skills-online: O3 ninguna skill invoca un tools/ o CLI online por ruta local, por SHA ni por la fuente .ts', () => {
   const malos: string[] = [];
   for (const { f, t } of mds) {
     for (const [i, l] of t.split('\n').entries()) {
@@ -73,9 +80,11 @@ Deno.test('skills-online: O3 ninguna skill invoca un tools/ o CLI online por rut
   assertEquals(malos, [], malos.join('\n'));
 });
 
-Deno.test('skills-online: O4 vendor.ts al traer una skill salta tools/** y los scripts', async () => {
-  const { archivosDeSkill } = await import('../../../vendor-distributions/shared/tools/vendor.ts');
+denoTest('skills-online: O4 vendor.ts al traer una skill salta tools/** y los scripts', async () => {
+  const { archivosDeSkill } = await import('../../src/vendor-distributions/shared/tools/vendor.ts');
   const lista = ['skills/x/SKILL.md', 'skills/x/references/01.md', 'skills/x/tools/a.ts', 'skills/x/tools/b.md', 'skills/x/templates/c.ts', 'skills/x/templates/d.json', 'skills/x/e.mjs'];
   assertEquals(archivosDeSkill('skills/x', lista), ['skills/x/SKILL.md', 'skills/x/references/01.md', 'skills/x/templates/d.json']);
   assertEquals(archivosDeSkill('dist/cdn/x', ['dist/cdn/x/a.ts']), ['dist/cdn/x/a.ts'], 'fuera de skills/ no se filtra');
 });
+
+export default lista();

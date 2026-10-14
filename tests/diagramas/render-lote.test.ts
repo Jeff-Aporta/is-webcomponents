@@ -17,10 +17,17 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   anotarCache, CACHE_NOMBRE, leerCache, planificarLote, renderizarLote, VERSION,
-} from '../../../vendor-distributions/client/tools/render-lote.ts';
-import type { OpcionesLote, PlanLote, RenderDiagramOptions } from '../../../vendor-distributions/shared/schemas.ts';
+} from '../../src/vendor-distributions/client/tools/render-lote.ts';
+import type { OpcionesLote, PlanLote, RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 
 const json = (f: string, v: unknown) => writeFileSync(f, JSON.stringify(v, null, 2));
@@ -54,7 +61,7 @@ async function simularRender(plan: PlanLote, op: OpcionesLote): Promise<void> {
   }
 }
 
-Deno.test('render-lote: L1 el plan decide render/skip por huella del spec resuelto, salidas y pinKit', async () => {
+denoTest('render-lote: L1 el plan decide render/skip por huella del spec resuelto, salidas y pinKit', async () => {
   const { op, dir, fuentes, cache } = fixtures();
   try {
     let plan = await planificarLote(op);
@@ -105,7 +112,7 @@ Deno.test('render-lote: L1 el plan decide render/skip por huella del spec resuel
   }
 });
 
-Deno.test('render-lote: L2 la huella ignora el orden de claves y cambia con module/attrs', async () => {
+denoTest('render-lote: L2 la huella ignora el orden de claves y cambia con module/attrs', async () => {
   const { op, dir } = fixtures();
   try {
     const base = (await planificarLote(op)).diagramas[1]!.huella;
@@ -128,7 +135,7 @@ try {
   chromium = (createRequire(import.meta.url)('playwright') as { chromium: RenderDiagramOptions['chromium'] }).chromium;
 } catch { chromium = null; }
 
-Deno.test({
+denoTest({
   name: 'render-lote: L3 caja negra, un flujo mínimo renderiza en hijo, la segunda corrida hace SKIP y no toca el SVG',
   ignore: !chromium || !existsSync(`${RAIZ}${BUNDLE}`),
   sanitizeResources: false,
@@ -167,3 +174,5 @@ Deno.test({
     }
   },
 });
+
+export default lista();

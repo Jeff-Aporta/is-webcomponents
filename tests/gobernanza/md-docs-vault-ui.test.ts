@@ -16,8 +16,15 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
+
+const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
 const BUNDLES = [
   'layout/md-docs-vault', 'layout/doc-layout', 'navigation/doc-index', 'helpers/md-render', 'navigation/pager',
   'media/figure', 'data/meta-list', 'layout/dialog', 'actions/copy-button', 'actions/button',
@@ -61,7 +68,7 @@ const H1 = `(() => {
   return buscar(document);
 })()`;
 
-Deno.test({
+denoTest({
   name: 'md-docs-vault UI: E4 portada, enlace entre hojas con ?s=, flechas y URL compartida (navegador real)',
   ignore: !chromium || BUNDLES.some((b) => !existsSync(join(RAIZ, b))),
   sanitizeResources: false,
@@ -125,3 +132,5 @@ Deno.test({
     }
   },
 });
+
+export default lista();

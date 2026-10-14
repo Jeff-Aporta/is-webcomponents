@@ -3,17 +3,20 @@
  * inferencia de lenguaje y softFormat. Consolidación de code-highlight, code-infer-lang
  * y soft-format en un solo archivo robusto.
  */
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   tokenizeCode, normalizeLang, diffLineClass, lineToHtml, emptyState, tokensToText,
-} from '../../../core/code-highlight.ts';
-import { inferLanguage, resolveLanguage } from '../../../core/code-langs.ts';
-import { softFormat, softFormatMode } from '../../../core/code-text.ts';
-import { formatCode } from '../../../components/code/utils/code-format.ts';
+} from '../../src/core/code-highlight.ts';
+import { inferLanguage, resolveLanguage } from '../../src/core/code-langs.ts';
+import { softFormat, softFormatMode } from '../../src/core/code-text.ts';
+import { formatCode } from '../../src/components/code/utils/code-format.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
@@ -230,3 +233,5 @@ test('el panel CDN no embebe prompt LLM como MD editor', () => {
   assert.doesNotMatch(src, /data-slot="llm-prompt"/);
   assert.doesNotMatch(src, /iswc-md-editor/);
 });
+
+export default lista();

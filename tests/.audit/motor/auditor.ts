@@ -19,9 +19,9 @@
  */
 
 import { enumerarCatalogo, filtrarCatalogo, resumirCatalogo, walkComponentes } from './catalog.js';
-import type { EntradaCatalogo } from './catalog.schemas.js';
+import type { EntradaCatalogo } from './schemas/catalog.schemas.js';
 import { cargarDefinicion } from '../engine/cargar.js';
-import type { Hallazgo, ReporteAuditoria, ReporteComponente, Severidad, OpcionesRunner, ContextoPrueba } from './types.schemas.js';
+import type { Hallazgo, ReporteAuditoria, ReporteComponente, Severidad, OpcionesRunner, ContextoPrueba } from './schemas/types.schemas.js';
 import { validarEsquema } from './validators/json-schema.js';
 import { ejecutarValidacionContenido } from './validators/json-contenido.js';
 import {
@@ -35,8 +35,8 @@ import {
 import {
   crearSesion, urlPreview, inspeccionarSinBrowser,
 } from '../engine/stagehand.js';
-import type { SesionStagehand } from '../engine/stagehand.schemas.js';
-import type { EstadoMotor } from "./auditor.schemas.js";
+import type { SesionStagehand } from '../engine/schemas/stagehand.schemas.js';
+import type { EstadoMotor } from "./schemas/auditor.schemas.js";
 
 /** Versión del motor (en header de cada reporte). */
 export const MOTOR_VERSION = '1.0.0';

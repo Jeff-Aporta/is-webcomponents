@@ -4,12 +4,15 @@
 // observedAttributes en ese instante. materializarAtributos debe volcar la cola
 // al REGISTRO *sin* `new Clase()` (Illegal constructor antes del define).
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { chromium } from 'playwright';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
@@ -122,3 +125,5 @@ test('runtime: open en observedAttributes dispara ACC tras define', async () => 
     await browser.close();
   }
 });
+
+export default lista();

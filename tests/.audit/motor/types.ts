@@ -40,4 +40,4 @@
  * Opciones del runner (CLI). Todos los campos son opcionales: defaults
  * razonables permiten correr `deno task audit` sin args.
  */
-import type { Severidad, CategoriaHallazgo, Hallazgo, ReporteComponente, ReporteAuditoria, Prueba, ContextoPrueba, OpcionesRunner } from "./types.schemas.js";
+import type { Severidad, CategoriaHallazgo, Hallazgo, ReporteComponente, ReporteAuditoria, Prueba, ContextoPrueba, OpcionesRunner } from "./schemas/types.schemas.js";

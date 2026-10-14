@@ -5,7 +5,6 @@
  * propiedad `data = [...]`. Variantes: type=line|bar, variant=gradient|solid.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -16,7 +15,11 @@ import {
   tieneEdgeCaseGuards,
   adoptaCss,
   cleanupCompleto,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/sparkline.ts';
 
@@ -60,3 +63,5 @@ test('iswc-sparkline: registrado como custom element', () => {
   const src = read(MOD);
   assert.match(src, /defineElement\s*\(\s*['"`]iswc-sparkline['"`]/);
 });
+
+export default lista();

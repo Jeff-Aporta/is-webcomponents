@@ -6,9 +6,9 @@
 
 ## Archivos tocados
 
-- `src/components/_shared/svg-chart-engine.ts` — 8 → 0 errores
-- `src/components/_shared/diagram-element-base.ts` — 1 → 0 errores
-- `src/components/diagrams/class-spec.ts` — 8 → 0 errores
+- `src/core/svg-chart-engine.ts` — 8 → 0 errores
+- `src/components/diagrams/utils/diagram-element-base.ts` — 1 → 0 errores
+- `src/components/diagrams/utils/class-spec.ts` — 8 → 0 errores
 
 ## Cambios aplicados
 

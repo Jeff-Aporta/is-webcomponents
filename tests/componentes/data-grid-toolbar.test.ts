@@ -7,11 +7,14 @@
  *
  *   deno test -A --no-check tests/data-grid-toolbar.test.ts
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
@@ -42,3 +45,5 @@ test('specs/componentes.md recuerda no ocultar tools con CSS', async () => {
   assert.match(md, /toolbar-tools/, 'specs debe mencionar toolbar-tools');
   assert.match(md, /No ocultar|no ocultar|CSS/i, 'specs debe prohibir ocultar tools con CSS');
 });
+
+export default lista();

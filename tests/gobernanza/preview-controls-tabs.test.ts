@@ -4,11 +4,14 @@
  * El tab Code / anatomía Shadow DOM se descartó. Si alguien lo reintroduce
  * (nav tablist, data-tab="code", data-role="anatomy", getter anatomy), falla.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
@@ -64,3 +67,5 @@ test('controles.ts: label Atributos, sin tag→Code', () => {
     'controles.ts no debe pasar tag al panel (era para Code)',
   );
 });
+
+export default lista();

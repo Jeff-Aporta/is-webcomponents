@@ -10,7 +10,6 @@
  * viven en la base. Usamos `leerConBase` para verlas en los tests.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   leerConBase,
@@ -29,7 +28,11 @@ import {
   tieneJsDoc,
   tieneSvg,
   tieneCanvas,
-} from '../_helpers.js';
+} from '../../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/diagrams/flowchart.ts';
 
@@ -103,3 +106,5 @@ test('iswc-flowchart: cleanup de observers en disconnect', () => {
 test('iswc-flowchart: JSDoc de cabecera', () => {
   assert.ok(tieneJsDoc(leerConBase(MOD)));
 });
+
+export default lista();

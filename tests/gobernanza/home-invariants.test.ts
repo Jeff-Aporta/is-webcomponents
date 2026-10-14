@@ -6,12 +6,15 @@
 //
 // Migrar a .ts + tsx si el proyecto agrega TypeScript.
 
-import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const __dirname = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const homePath = join(__dirname, 'pages', 'home.json');
@@ -343,3 +346,5 @@ test('el override light del titular no depende solo de min() en color relativo',
     'el fallback debe devolver el relleno del texto a currentColor, no dejarlo transparente',
   );
 });
+
+export default lista();

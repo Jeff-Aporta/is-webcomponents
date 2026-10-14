@@ -13,6 +13,13 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const KIT = join(import.meta.dirname!, '..', '..', '..', '..');
 const RAICES = ['src', 'skills', 'scripts'];
@@ -89,7 +96,7 @@ function hallazgos(fuente: string): Hallazgo[] {
   return out;
 }
 
-Deno.test('no-reexports: X1-X3 y X5 sin re-exports, barriles ni alias en src/, skills/ y scripts/', () => {
+denoTest('no-reexports: X1-X3 y X5 sin re-exports, barriles ni alias en src/, skills/ y scripts/', () => {
   const excepciones = new Set(ENTRADAS_CDN.map((e) => e.fuente));
   const malos: string[] = [];
   for (const r of RAICES) {
@@ -126,19 +133,19 @@ const CASOS: { caso: string; fuente: string; reglas: Hallazgo['regla'][] }[] = [
 ];
 
 for (const c of CASOS) {
-  Deno.test(`no-reexports: X4 detector — ${c.caso} → ${c.reglas.length ? c.reglas.join(',') : 'legítimo'}`, () => {
+  denoTest(`no-reexports: X4 detector — ${c.caso} → ${c.reglas.length ? c.reglas.join(',') : 'legítimo'}`, () => {
     assertEquals(hallazgos(c.fuente).map((h) => h.regla), c.reglas);
   });
 }
 
-Deno.test('no-reexports: X6 la excepción declarada existe en src y publica su entrada CDN', () => {
+denoTest('no-reexports: X6 la excepción declarada existe en src y publica su entrada CDN', () => {
   for (const e of ENTRADAS_CDN) {
     assert(existsSync(join(KIT, e.fuente)), `excepción huérfana: ${e.fuente} no existe; quítala de ENTRADAS_CDN`);
     if (e.publicado) assert(existsSync(join(KIT, e.publicado)), `${e.publicado} no está publicado (deno task build)`);
   }
 });
 
-Deno.test({
+denoTest({
   name: 'no-reexports: X7 dist/cdn sin imports relativos rotos (fuera skills/)',
   ignore: !existsSync(join(KIT, 'dist', 'cdn')),
   fn() {
@@ -155,3 +162,5 @@ Deno.test({
     assertEquals(rotos, [], `imports rotos en lo publicado:\n${rotos.join('\n')}`);
   },
 });
+
+export default lista();

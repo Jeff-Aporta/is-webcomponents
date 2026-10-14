@@ -17,33 +17,40 @@
 import { execFileSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
-let out = '';
-try {
-  out = execFileSync(process.execPath, [join(root, 'scripts', 'audits', 'components.ts')], {
-    cwd: root,
-    encoding: 'utf8',
-  });
-} catch (e) {
-  console.error('audit-components.ts no pudo ejecutarse:', e.message);
-  process.exit(1);
-}
+test('gobernanza/component-audit', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
+  
+  let out = '';
+  try {
+    out = execFileSync(process.execPath, [join(root, 'scripts', 'audits', 'components.ts')], {
+      cwd: root,
+      encoding: 'utf8',
+    });
+  } catch (e) {
+    console.error('audit-components.ts no pudo ejecutarse:', e.message);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  
+  const m = /(\d+) componentes con hallazgos de (\d+)/.exec(out);
+  if (!m) {
+    console.error('Salida inesperada del audit:\n' + out);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  
+  const [, hallazgos, total] = m;
+  if (Number(hallazgos) > 0) {
+    console.error(out.trim());
+    console.error(`\ncomponent-audit.test.mjs: FAIL — ${hallazgos} componentes con problemas de higiene`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  
+  console.log(`component-audit.test.ts: PASS — ${total} componentes sin fugas de listeners/observers ni registros rotos`);
+  return;
+});
 
-const m = /(\d+) componentes con hallazgos de (\d+)/.exec(out);
-if (!m) {
-  console.error('Salida inesperada del audit:\n' + out);
-  process.exit(1);
-}
-
-const [, hallazgos, total] = m;
-if (Number(hallazgos) > 0) {
-  console.error(out.trim());
-  console.error(`\ncomponent-audit.test.mjs: FAIL — ${hallazgos} componentes con problemas de higiene`);
-  process.exit(1);
-}
-
-console.log(`component-audit.test.ts: PASS — ${total} componentes sin fugas de listeners/observers ni registros rotos`);
-process.exit(0);
+export default lista();

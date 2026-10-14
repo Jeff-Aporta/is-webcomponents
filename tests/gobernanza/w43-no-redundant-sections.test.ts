@@ -1,7 +1,10 @@
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 
@@ -47,3 +50,5 @@ async function findJson(dir) {
   await rec(dir);
   return out;
 }
+
+export default lista();

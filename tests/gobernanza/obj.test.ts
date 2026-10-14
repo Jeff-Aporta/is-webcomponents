@@ -12,7 +12,14 @@
  */
 import { assert, assertEquals, assertRejects, assertThrows } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { z } from 'zod';
-import { Obj, ObjError, resolverUrl } from '../../../vendor-distributions/shared/lib/obj.ts';
+import { Obj, ObjError, resolverUrl } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const DER = {
   erDiagram: {
@@ -23,14 +30,14 @@ const DER = {
   },
 };
 
-Deno.test('obj: Q1 get con claves, comodín y selector', () => {
+denoTest('obj: Q1 get con claves, comodín y selector', () => {
   assertEquals(Obj.get({ a: 1, b: { c: 2, d: 3 } }, { b: { c: true } }), { b: { c: 2 } });
   assertEquals(Obj.get(DER, { erDiagram: { entities: { '*': { name: 1 } } } }), { erDiagram: { entities: [{ name: 'patyia_conversaciones' }, { name: 'patyia_errores' }] } });
   assertEquals(Obj.get(DER, { erDiagram: { entities: { '[name=patyia_errores]': true } } }), { erDiagram: { entities: [DER.erDiagram.entities[1]] } });
   assertEquals(Obj.get({ a: 1, b: 2 }, { a: true, b: false }), { a: 1 }, 'falsy no se pide');
 });
 
-Deno.test('obj: Q2 getValue trae el valor exacto; null si no existe; la consulta debe marcar una hoja', () => {
+denoTest('obj: Q2 getValue trae el valor exacto; null si no existe; la consulta debe marcar una hoja', () => {
   assertEquals(Obj.getValue(DER, { erDiagram: { entities: { '[name=patyia_conversaciones]': { attributes: { '[name=titulo]': { type: 1 } } } } } }), 'varchar');
   assertEquals(Obj.getValue({ a: { b: { c: [1, 2] } } }, { a: { b: { c: true } } }), [1, 2], 'sin la estructura que lo contiene');
   assertEquals(Obj.getValue({ a: 1 }, { x: true }), null, 'no existe: null');
@@ -41,7 +48,7 @@ Deno.test('obj: Q2 getValue trae el valor exacto; null si no existe; la consulta
   assertEquals(Obj.get({ a: { b: 1, c: 2 } }, { a: { b: true } }), { a: { b: 1 } }, 'get conserva la estructura desde la raíz');
 });
 
-Deno.test('obj: M1 update, insert y delete parciales; nada muta', () => {
+denoTest('obj: M1 update, insert y delete parciales; nada muta', () => {
   const base = { a: 1, b: { c: 2 }, l: [{ id: 'x', v: 1 }, { id: 'y', v: 2 }] };
   const congelado = JSON.stringify(base);
   assertEquals(Obj.update(base, { a: 9, z: 1, b: { c: 3, q: 1 } }), { a: 9, b: { c: 3 }, l: base.l });
@@ -51,14 +58,14 @@ Deno.test('obj: M1 update, insert y delete parciales; nada muta', () => {
   assertEquals(JSON.stringify(base), congelado, 'la base no cambió');
 });
 
-Deno.test('obj: M2 push profundo; null quita según el schema', () => {
+denoTest('obj: M2 push profundo; null quita según el schema', () => {
   const S = z.object({ a: z.number().optional(), b: z.number().default(5), c: z.object({ d: z.string() }).optional() });
   assertEquals(Obj.push({ a: 1, b: 2, c: { d: 'x' } }, { a: null, b: null, c: { d: 'y' } }, S), { b: 5, c: { d: 'y' } });
   assertEquals(Obj.pushZod(S, { b: 1 }, { a: 3 }), { a: 3, b: 1 });
   assertEquals(Obj.push({ x: { y: 1, z: 2 } }, { x: { y: 3 } }), { x: { y: 3, z: 2 } }, 'lo no mencionado se conserva');
 });
 
-Deno.test('obj: A1 aplicar ejecuta las acciones en orden', () => {
+denoTest('obj: A1 aplicar ejecuta las acciones en orden', () => {
   const r = Obj.aplicar({ x: 1, y: 2, s: { a: 1 } }, [
     { op: 'delete', query: { y: true } },
     { op: 'update', valor: { x: 10 } },
@@ -76,7 +83,7 @@ const archivos: Record<string, unknown> = {
 };
 const cargar = (url: string) => (url in archivos ? Promise.resolve(structuredClone(archivos[url])) : Promise.reject(new Error('404')));
 
-Deno.test('obj: R1 resolver referencias anidadas, relativas y con acciones', async () => {
+denoTest('obj: R1 resolver referencias anidadas, relativas y con acciones', async () => {
   const diagrama = {
     nodos: [
       { id: 't', table: { path: './der.json', query: { erDiagram: { entities: { '[name=patyia_conversaciones]': true } } }, actions: [{ op: 'update', valor: { attributes: { '[name=titulo]': { type: 'text' } } } }] } },
@@ -89,7 +96,7 @@ Deno.test('obj: R1 resolver referencias anidadas, relativas y con acciones', asy
   assertEquals(resolverUrl('../a.json', 'x/y/b.json'), 'x/a.json');
 });
 
-Deno.test('obj: R2 ciclos, refs mal formadas y consultas sin resultado lanzan; props extra avisan', async () => {
+denoTest('obj: R2 ciclos, refs mal formadas y consultas sin resultado lanzan; props extra avisan', async () => {
   await assertRejects(() => Obj.resolver({ v: { path: './ciclo-a.json', query: { v: true } } }, { base: 'docs/x.json', cargar }), ObjError, 'circular');
   await assertRejects(() => Obj.resolver({ v: { path: './der.json', query: { no: { existe: true } } } }, { base: 'docs/x.json', cargar }), ObjError, 'el valor no existe');
   await assertRejects(() => Obj.resolver({ v: { path: './der.json', query: { x: true }, actions: [{ op: 'nada' }] } }, { base: 'docs/x.json', cargar }), ObjError, 'mal formada');
@@ -99,7 +106,7 @@ Deno.test('obj: R2 ciclos, refs mal formadas y consultas sin resultado lanzan; p
   assert(avisos.some((m) => m.includes('extra')), avisos.join(' | '));
 });
 
-Deno.test('obj: S1 esquemaPush valida fragmentos y restaurarClaves recupera las mayúsculas del schema', () => {
+denoTest('obj: S1 esquemaPush valida fragmentos y restaurarClaves recupera las mayúsculas del schema', () => {
   const S = z.object({ maxMensajes: z.number(), sub: z.object({ aB: z.string() }) });
   const F = Obj.esquemaPush(S);
   assert(F.safeParse({ maxMensajes: null }).success, 'null = quitar');
@@ -107,3 +114,5 @@ Deno.test('obj: S1 esquemaPush valida fragmentos y restaurarClaves recupera las 
   assert(!F.safeParse({ otra: 1 }).success, 'clave desconocida: error');
   assertEquals(Obj.restaurarClaves({ maxmensajes: 3, sub: { ab: 'x' }, libre: 1 }, S), { maxMensajes: 3, sub: { aB: 'x' }, libre: 1 });
 });
+
+export default lista();

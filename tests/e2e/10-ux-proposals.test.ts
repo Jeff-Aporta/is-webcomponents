@@ -26,18 +26,21 @@
 //   las ESPECIFICAS unicas por demo se documentan en .audit/proposals/demo-gNN.md
 //   y se priorizan en tandas siguientes.
 
-import { after, before } from 'node:test';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
-import catalog from '../../../previews/catalog.ts';
+import catalog from '../../src/previews/catalog.ts';
 import {
   baseUrlResuelta,
-} from './lib/harness.ts';
-import { b64urlDe } from './lib/estados.ts';
-import { esperarMs } from './lib/harness.ts';
+} from '../.audit/e2e/harness.ts';
+import { b64urlDe } from '../.audit/e2e/estados.ts';
+import { esperarMs } from '../.audit/e2e/harness.ts';
 import type { Browser, Page } from 'playwright';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 // Este test NO usa MiniMax: no requiere la key. Saltamos el gate global.
 const DISPONIBLE = true;
@@ -73,7 +76,6 @@ type Resultado = {
   rejections: number;
 };
 
-const test = (await import('node:test')).test;
 let browser: Browser | null = null;
 let activePage: Page | null = null;
 let serverReady: Promise<string> | null = null;
@@ -5615,3 +5617,5 @@ test('g02 charts: marks con aria-label + tabindex=0 + tooltip role=status (Cat 2
     activePage = null;
   }
 });
+
+export default lista();

@@ -6,11 +6,14 @@
  *      Las preguntas van en lotes en una sola llamada por lote. Sin juez (sin llave, sin saldo,
  *      cooldown de 24 h) la capa se salta con aviso y la prueba queda con D1.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { preguntarJev } from '../../../vendor-distributions/shared/testing/jueces.ts';
+import { preguntarJev } from '../../src/vendor-distributions/shared/testing/jueces.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const PLANTILLA = /^Documentaci[oó]n y demos del componente/i;
@@ -69,3 +72,5 @@ test('fichas: D2 (juez JEV opcional) cada descripción dice qué hace el compone
   }
   assert.deepEqual(flojas, [], `descripciones que no dicen qué hace el componente:\n${flojas.join('\n')}`);
 });
+
+export default lista();

@@ -8,10 +8,13 @@
  *   R4 avisos `> [!NOTE]` llegan como `callout` con su tipo y título
  *   R5 un renderer que lanza no rompe el documento (cae al estándar)
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mdToHtml } from '../../../components/helpers/utils/md-lite.ts';
-import type { DatosPorTipoMd } from '../../../components/helpers/schemas/md-lite.schemas.ts';
+import { mdToHtml } from '../../src/components/helpers/utils/md-lite.ts';
+import type { DatosPorTipoMd } from '../../src/components/helpers/schemas/md-lite.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const MD = [
   '# Título uno',
@@ -96,3 +99,5 @@ test('R5 renderer roto cae al estándar', () => {
   const html = mdToHtml('# Hola', { renderers: { heading: () => { throw new Error('x'); } } });
   assert.match(html, /<h1 id="hola">Hola<\/h1>/);
 });
+
+export default lista();

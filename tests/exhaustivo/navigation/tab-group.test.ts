@@ -5,11 +5,14 @@
  * `<iswc-tab>` y `<iswc-tab-panel>`).
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -35,7 +38,7 @@ test('3. JSON existe y respeta iswc-preview/v1', async () => {
 test('4. OBSERVED incluye active, placement, activation', async () => {
   // Pasa la ruta RELATIVA a la raíz del repo (no absoluta), porque
   // `extraerObservados` usa `readFileSync(join(ROOT, ruta))` internamente.
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
   const list = extraerObservados(REL_TS);
   for (const a of ['active', 'placement', 'activation', 'url-key']) {
@@ -61,7 +64,7 @@ test('7. persiste active en URL via url-key (readUrlNav/writeUrlNav)', async () 
 });
 
 test('8. emite iswc-tab-show / iswc-tab-close cuando cambia el active', async () => {
-  const { extraerEventos } = await import('../_helpers.js');
+  const { extraerEventos } = await import('../../_shared/exhaustivo.js');
   const evs = extraerEventos(readFileSync(TS, 'utf8'));
   assert.ok(evs.includes('iswc-tab-show'), 'debe emitir iswc-tab-show al activar');
   assert.ok(evs.includes('iswc-tab-close'), 'debe emitir iswc-tab-close al cerrar');
@@ -92,3 +95,5 @@ test('12. JSON tiene demo(s) y reference', async () => {
   );
   assert.ok(hasDemo, 'debe haber al menos 1 demo');
 });
+
+export default lista();

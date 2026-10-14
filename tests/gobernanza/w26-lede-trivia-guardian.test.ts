@@ -32,11 +32,14 @@
  * refactorizas el wording de un lede), actualiza este test junto con el
  * cambio: el guardián es contrato, no sugerencia.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
@@ -147,3 +150,5 @@ test('W26: barrido cubre los 3 archivos del brief (button, split-panel, card) co
     );
   }
 });
+
+export default lista();

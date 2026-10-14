@@ -10,7 +10,11 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const read = (rel: string) => readFileSync(join(root, rel), 'utf8');
@@ -139,3 +143,5 @@ test('iswc-doc-demo transversal: defaults sin gallery/dev-reload; API whenReady'
   assert.match(bootTs, /leerAppCfg\(\)/);
   assert.match(hostTs, /CDN|cdn\.jsdelivr|cualquier app|reutilizable/i);
 });
+
+export default lista();

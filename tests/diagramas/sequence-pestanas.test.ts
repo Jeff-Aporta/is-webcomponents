@@ -6,11 +6,18 @@
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/utils/sequence-spec.ts';
-import { pathPoints as parsePathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
+import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { computeSequenceLayout, resolveSequenceSpec } from '../../src/components/diagrams/utils/sequence-spec.ts';
+import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const DIR = new URL('../../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas', import.meta.url);
 /** Alto de la pestaña y ancho mínimo que ocupa (título + condición); etiqueta de modo a la derecha. */
 const TAB_H = 18;
 const TAB_W_MIN = 60;
@@ -23,7 +30,7 @@ const cruza = (a: { x: number; y: number }, b: { x: number; y: number }, c: Caja
   return x1 > c.x - MARGEN && x0 < c.x + c.w + MARGEN && y1 > c.y - MARGEN && y0 < c.y + c.h + MARGEN;
 };
 
-Deno.test('secuencia: A16 ningún mensaje pasa sobre una pestaña de fragmento o del alt', async () => {
+denoTest('secuencia: A16 ningún mensaje pasa sobre una pestaña de fragmento o del alt', async () => {
   const fallas: string[] = [];
   let diagramas = 0;
   let pestanas = 0;
@@ -57,3 +64,5 @@ Deno.test('secuencia: A16 ningún mensaje pasa sobre una pestaña de fragmento o
   assert(pestanas >= 10, `pocas pestañas: ${pestanas}`);
   assert(fallas.length === 0, `mensajes sobre pestañas:\n${[...new Set(fallas)].join('\n')}`);
 });
+
+export default lista();

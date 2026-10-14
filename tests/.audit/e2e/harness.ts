@@ -14,13 +14,13 @@ import { levantarServidor } from './server.ts';
 import { titulo, marcar, tituloDe, lineaDe, EMOJIS } from './e2e-config.ts';
 import type { Page, Locator, StagehandCreateOptions } from '@browserbasehq/stagehand';
 import type { TestContext } from 'node:test';
-import type { ServidorE2E } from './server.schemas.ts';
-import type { EstadoE2E } from './e2e-config.schemas.ts';
+import type { ServidorE2E } from './schemas/server.schemas.ts';
+import type { EstadoE2E } from './schemas/e2e-config.schemas.ts';
 import type {
   CtxE2E, RegistroConsola, RastroCodeMirror, EditorIsCode,
 } from './schemas/tipos.schemas.ts';
-import { OpcionesEsperaSchema, type OpcionesEspera } from './harness.schemas.js';
-import type { BotonVisible } from "./harness.schemas.js";
+import { OpcionesEsperaSchema, type OpcionesEspera } from './schemas/harness.schemas.js';
+import type { BotonVisible } from "./schemas/harness.schemas.js";
 
 /**
  * Wrapper de `node:test` que aplica la NORMA de título de pestaña a cada test:

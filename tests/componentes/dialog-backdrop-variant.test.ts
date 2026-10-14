@@ -1,9 +1,12 @@
 // tests/dialog-backdrop-variant.test.ts
-import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const js = readFileSync(join(ROOT, 'src/components/layout/dialog.ts'), 'utf8');
@@ -26,3 +29,5 @@ test('basic: oscuridad + blur', () => {
   assert.match(css, /backdrop-filter:\s*blur/);
   assert.match(css, /rgba\(0,\s*0,\s*0,\s*0\.55\)/);
 });
+
+export default lista();

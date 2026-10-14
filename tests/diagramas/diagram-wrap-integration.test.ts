@@ -8,21 +8,24 @@
 // Si alguien refactoriza un renderer y vuelve al <text> plano de una
 // sola línea, este test lo detecta.
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { window as jsdomWindow } from '../_jsdom-shim.ts';
+import { window as jsdomWindow } from '../_shared/jsdom-shim.ts';
 import {
   computeFlowchartLayout,
   resolveFlowchartSpec,
-} from '../../../components/diagrams/utils/flowchart-spec.ts';
+} from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import {
   computeSequenceLayout,
   resolveSequenceSpec,
-} from '../../../components/diagrams/utils/sequence-spec.ts';
+} from '../../src/components/diagrams/utils/sequence-spec.ts';
 import {
   computeBlockLayout,
   resolveBlockSpec,
-} from '../../../components/diagrams/utils/block-spec.ts';
+} from '../../src/components/diagrams/utils/block-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const LONG_LABEL = 'Este es un label muy largo que definitivamente no cabe en una sola línea y debería hacer wrap con múltiples tspans';
 
@@ -181,3 +184,5 @@ test('block-diagram: layout con label largo no rompe', () => {
   assert.ok(a.w > 0 && a.h > 0);
   assert.ok(b.w > 0 && b.h > 0);
 });
+
+export default lista();

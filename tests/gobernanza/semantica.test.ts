@@ -8,7 +8,14 @@
 //   S5 `masCercana` clasifica respuestas típicas del asistente.
 //   S6 `TEST_E5_MODEL_DIR` sin `config.json` se ignora (cae al cache de Hugging Face) y el motivo del salto es claro.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
-import { coincide, MARGEN_PREFIERE, masCercana, MOTIVO_SIN_MODELO, prefiere, semanticaDisponible, similitud, ubicacionModelo, UMBRAL_COINCIDE } from '../../../vendor-distributions/shared/testing/semantica.ts';
+import { coincide, MARGEN_PREFIERE, masCercana, MOTIVO_SIN_MODELO, prefiere, semanticaDisponible, similitud, ubicacionModelo, UMBRAL_COINCIDE } from '../../src/vendor-distributions/shared/testing/semantica.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const disponible = semanticaDisponible();
 const motivo = disponible ? '' : ` [SALTADA: ${MOTIVO_SIN_MODELO}]`;
@@ -29,7 +36,7 @@ const NO_RELACIONADOS: Array<[string, string]> = [
   ['¿cómo liquido la nómina?', 'Te recomiendo revisar el certificado digital de la DIAN para facturar.'],
 ];
 
-Deno.test({
+denoTest({
   name: `semantica: S1-S5 calibración del verificador e5 local (umbrales de los tests QA)${motivo}`,
   ignore: !disponible,
   async fn() {
@@ -70,9 +77,11 @@ Deno.test({
   },
 });
 
-Deno.test('semantica: S6 una TEST_E5_MODEL_DIR sin modelo se ignora y el motivo del salto es claro (nunca se descarga)', () => {
+denoTest('semantica: S6 una TEST_E5_MODEL_DIR sin modelo se ignora y el motivo del salto es claro (nunca se descarga)', () => {
   const vacia = Deno.makeTempDirSync({ prefix: 'sin-modelo-' });
   assertEquals(ubicacionModelo({ TEST_E5_MODEL_DIR: vacia }), ubicacionModelo({}), 'una carpeta sin config.json no es un modelo: se cae al cache (o null)');
   assert(/multilingual-e5-base/.test(MOTIVO_SIN_MODELO) && /nunca se descarga/.test(MOTIVO_SIN_MODELO), MOTIVO_SIN_MODELO);
   assertEquals(typeof disponible, 'boolean');
 });
+
+export default lista();

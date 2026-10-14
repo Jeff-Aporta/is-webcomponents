@@ -7,7 +7,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
@@ -106,3 +110,5 @@ test('el panel CDN no embebe prompt LLM como MD editor', () => {
   assert.doesNotMatch(src, /data-slot="llm-prompt"/);
   assert.doesNotMatch(src, /iswc-md-editor/);
 });
+
+export default lista();

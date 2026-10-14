@@ -5,11 +5,14 @@
  * adapters. Reexporta TreeAdapter, TreeRowAdapter, TreeCustomsBase.
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -101,3 +104,5 @@ test('15. preview.ts existe (componente complejo → behavior obligatorio)', asy
   const preview = join(ROOT, 'src', 'components', 'isp', 'tree-view.preview.ts');
   assert.ok(existsSync(preview));
 });
+
+export default lista();

@@ -12,7 +12,7 @@
  * - `PreviewDefinition` in `src/previews/_kit/schemas/preview.schemas.ts` is the de-facto
  *   TS contract for these JSONs. This file expresses the same contract
  *   in Zod so we can run it at parse time (build, tests, audit).
- * - The structural rules in `src/utils/health/motor/validators/json-schema.ts`
+ * - The structural rules in `tests/.audit/motor/validators/json-schema.ts`
  *   are the previous (hand-rolled) validation pass; the goal of W55 is to
  *   unify everything here so that there is only ONE schema definition.
  * - Fields appearing in real JSON files were inventoried with

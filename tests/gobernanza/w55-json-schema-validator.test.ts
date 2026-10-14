@@ -20,14 +20,17 @@
  * Output convention: `console.log('w55-json-schema-validator.test.ts: PASS — <summary>')`
  * so the runner can enumerate it (see AGENTS.md §7.3).
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
-import { FichaSchema } from '../../section-schema.ts';
+import { ComponentJsonSchema } from '../../src/previews/_kit/schemas/component.schemas.ts';
+import { FichaSchema } from '../../src/utils/section-schema.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const RAIZ = join(here, '..', '..', '..', '..');
@@ -266,3 +269,5 @@ test('W55: reuso rechaza destino distinto, motivo vacío o campos desconocidos',
     assert.equal(ComponentJsonSchema.safeParse({ ...base, reuso }).success, false, JSON.stringify(reuso));
   }
 });
+
+export default lista();

@@ -16,11 +16,11 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
-import { NESTED_DEFAULT_MAX } from '../../../components/diagrams/utils/diagram-embed.ts';
-import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
-import type { FlowLayout, FlowLayoutNode } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
+import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { NESTED_DEFAULT_MAX } from '../../src/components/diagrams/utils/diagram-embed.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import type { FlowLayout, FlowLayoutNode } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
 
 /** Editable del lab con sus referencias { path, query, actions } resueltas (como al exportar). */
 async function editable(url: URL): Promise<{ payload: Record<string, unknown> }> {
@@ -158,9 +158,16 @@ Deno.test('decisión: R1 ramas por el mismo costado no comparten riel (cada una 
 });
 
 // ── Diagramas combinados: usos punteados, vuelta al origen, clase e íconos ──────────────
-import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../../components/diagrams/utils/diagram-embed.ts';
-import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/utils/class-spec.ts';
-import { flowPaint } from '../../../components/diagrams/utils/flowchart-spec.ts';
+import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../src/components/diagrams/utils/diagram-embed.ts';
+import { computeClassLayout, resolveClassSpec } from '../../src/components/diagrams/utils/class-spec.ts';
+import { flowPaint } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 const COMBINADO = {
   lanes: [{ id: 'P', label: 'Portal' }, { id: 'T', label: 'Controlador' }, { id: 'D', label: 'PostgreSQL' }],
@@ -182,7 +189,7 @@ const COMBINADO = {
   ],
 };
 
-Deno.test('combinado: U1 lo que solo se usa (tabla) va a la altura de su primer usuario y no empuja el flujo', () => {
+denoTest('combinado: U1 lo que solo se usa (tabla) va a la altura de su primer usuario y no empuja el flujo', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
   const N = byId(L);
   const [lee, tabla] = [N.get('lee')!, N.get('tabla')!];
@@ -190,7 +197,7 @@ Deno.test('combinado: U1 lo que solo se usa (tabla) va a la altura de su primer 
   assert(N.get('cierra')!.y > lee.y, 'el flujo sigue bajando sin hueco por la tabla');
 });
 
-Deno.test('combinado: U2 los usos salen de lado; al mismo costado de un destino comparten punta en abanico', () => {
+denoTest('combinado: U2 los usos salen de lado; al mismo costado de un destino comparten punta en abanico', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
   const usos = L.edges.filter((e) => e.kind === 'dashed');
   for (const e of usos) {
@@ -216,7 +223,7 @@ Deno.test('combinado: U2 los usos salen de lado; al mismo costado de un destino 
   }
 });
 
-Deno.test('combinado: U3 la vuelta al origen va por fuera, sin atravesar cajas, y entra por el costado', () => {
+denoTest('combinado: U3 la vuelta al origen va por fuera, sin atravesar cajas, y entra por el costado', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
   const e = L.edges.find((x) => x.to === 'api')!;
   const pts = pathPoints(e.path);
@@ -232,7 +239,7 @@ Deno.test('combinado: U3 la vuelta al origen va por fuera, sin atravesar cajas, 
   }
 });
 
-Deno.test('combinado: K1 nodo `class` = una clase del diagrama de clases, a tamaño natural', () => {
+denoTest('combinado: K1 nodo `class` = una clase del diagrama de clases, a tamaño natural', () => {
   const spec = readNodeEmbed({ kind: 'class', class: { name: 'TConversationTicket', attributes: ['+ itiquete'] } })!;
   assert(embedIsNatural(spec));
   const d = embedDiagramOf(spec)!;
@@ -240,14 +247,14 @@ Deno.test('combinado: K1 nodo `class` = una clase del diagrama de clases, a tama
   assertEquals((d.payload as { classDiagram: { classes: Array<{ name: string }> } }).classDiagram.classes[0]!.name, 'TConversationTicket');
 });
 
-Deno.test('combinado: I1 una acción con `icon` lleva su insignia arriba a la izquierda y el texto usa toda la caja', () => {
+denoTest('combinado: I1 una acción con `icon` lleva su insignia arriba a la izquierda y el texto usa toda la caja', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(COMBINADO)!, null, { style: 'insoft' });
   const val = byId(L).get('val')!;
   assert(val.pill && val.pillFloat, 'insignia suelta');
   assert(val.pill.x < val.x && val.pill.y < val.y, 'montando la esquina superior izquierda');
   assert(val.textBox!.x - val.x < 24, 'el texto no reserva hueco para la insignia');
 });
-Deno.test('combinado: K2 la clase incrustada sale rellena (caja VP con su `fill`), no transparente', () => {
+denoTest('combinado: K2 la clase incrustada sale rellena (caja VP con su `fill`), no transparente', () => {
   const d = embedDiagramOf(readNodeEmbed({ kind: 'class', class: { name: 'TConversationTicket', fill: 'leaf' } })!)!;
   const p = d.payload as { classDiagram: Record<string, unknown> };
   const L = computeClassLayout(resolveClassSpec(p)!);
@@ -255,12 +262,12 @@ Deno.test('combinado: K2 la clase incrustada sale rellena (caja VP con su `fill`
   assertEquals(L.nodes[0]!.fill, 'leaf');
 });
 
-Deno.test('carriles: L8 los separadores tienen color propio (no el de flujos ni usos)', () => {
+denoTest('carriles: L8 los separadores tienen color propio (no el de flujos ni usos)', () => {
   const paint = flowPaint({ flow: {} } as never);
   assert(paint.laneLine && paint.laneLine !== paint.edgeStroke, `laneLine ${paint.laneLine}`);
 });
 
-Deno.test('combinado: P1 la insignia lleva el paso y el ícono; crece con el número y sobrevive al JSON', () => {
+denoTest('combinado: P1 la insignia lleva el paso y el ícono; crece con el número y sobrevive al JSON', () => {
   const spec = resolveFlowchartSpec({
     nodes: [
       { id: 'a', label: 'Valida', step: 2, icon: 'mdi:shield-check-outline' },
@@ -277,7 +284,7 @@ Deno.test('combinado: P1 la insignia lleva el paso y el ícono; crece con el nú
   const json = flowchartSpecToJson(spec) as { nodes: Array<{ id: string; step?: number; icon?: string }> };
   assertEquals(json.nodes.find((n) => n.id === 'a'), { id: 'a', label: 'Valida', step: 2, icon: 'mdi:shield-check-outline' });
 });
-Deno.test('combinado: S1 steps:auto numera los pasos del flujo sin saltos; lo que solo se usa lleva solo ícono', () => {
+denoTest('combinado: S1 steps:auto numera los pasos del flujo sin saltos; lo que solo se usa lleva solo ícono', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({ ...COMBINADO, steps: 'auto', nodes: [{ id: 'ini', shape: 'start', lane: 'P' }, ...COMBINADO.nodes, { id: 'fin', shape: 'end', lane: 'T' }], edges: [{ from: 'ini', to: 'api' }, ...COMBINADO.edges, { from: 'resp', to: 'fin' }] })!, null, { style: 'insoft' });
   const pasos = L.nodes.filter((n) => n.step != null).map((n) => n.step!).sort((a, b) => a - b);
   assertEquals(pasos, Array.from({ length: pasos.length }, (_, i) => i + 1), 'sin saltos');
@@ -291,7 +298,7 @@ Deno.test('combinado: S1 steps:auto numera los pasos del flujo sin saltos; lo qu
   assert(L.nodes.filter((n) => n.step != null).every((n) => n.pill && n.pillFloat), 'todo paso lleva su insignia (estándar)');
 });
 
-Deno.test('combinado: G1 un carril que mezcla flujo y clases encierra las clases en un grupo «Clases»', () => {
+denoTest('combinado: G1 un carril que mezcla flujo y clases encierra las clases en un grupo «Clases»', () => {
   const spec = {
     lanes: [{ id: 'T', label: 'Controlador' }, { id: 'D', label: 'BD' }],
     nodes: [
@@ -311,7 +318,7 @@ Deno.test('combinado: G1 un carril que mezcla flujo y clases encierra las clases
   assert(!(v.x < g.x + g.w && g.x < v.x + v.w && v.y < g.y + g.h && g.y < v.y + v.h), 'el flujo queda fuera del grupo');
 });
 
-Deno.test('combinado: G2 `context` explícito agrupa por título dentro del carril y sobrevive al JSON', () => {
+denoTest('combinado: G2 `context` explícito agrupa por título dentro del carril y sobrevive al JSON', () => {
   const spec = resolveFlowchartSpec({
     lanes: [{ id: 'T', label: 'T' }],
     nodes: [{ id: 'a', label: 'A', lane: 'T', context: 'Validación' }, { id: 'b', label: 'B', lane: 'T', context: 'Validación' }, { id: 'c', label: 'C', lane: 'T' }],
@@ -322,7 +329,7 @@ Deno.test('combinado: G2 `context` explícito agrupa por título dentro del carr
   assertEquals((flowchartSpecToJson(spec).nodes as Array<{ id: string; context?: string }>).find((n) => n.id === 'a')?.context, 'Validación');
 });
 
-Deno.test('combinado: B1 las ramas de una barra salen de puntos distintos aunque sus destinos queden lejos', () => {
+denoTest('combinado: B1 las ramas de una barra salen de puntos distintos aunque sus destinos queden lejos', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     lanes: [{ id: 'A', label: 'A' }, { id: 'B', label: 'B' }, { id: 'C', label: 'C' }],
     nodes: [{ id: 'x', label: 'X', lane: 'A' }, { id: 'f', shape: 'bar', lane: 'A' }, { id: 'y', label: 'Y', lane: 'B' }, { id: 'z', label: 'Z', lane: 'C' }],
@@ -332,7 +339,7 @@ Deno.test('combinado: B1 las ramas de una barra salen de puntos distintos aunque
   assertEquals(new Set(salidas).size, 2, salidas.join(' '));
 });
 
-Deno.test('combinado: S2 insignia estándar: arriba a la izquierda en todo paso; en el rombo, sobre su lado superior izquierdo; todos con ícono', () => {
+denoTest('combinado: S2 insignia estándar: arriba a la izquierda en todo paso; en el rombo, sobre su lado superior izquierdo; todos con ícono', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     steps: 'auto',
     nodes: [
@@ -353,7 +360,7 @@ Deno.test('combinado: S2 insignia estándar: arriba a la izquierda en todo paso;
   assert(a.pill!.x < a.x && a.pill!.y < a.y, 'acción: montando la esquina superior izquierda');
   assertEquals([N.get('t')!.icon, d.icon, a.icon], ['mdi:table', 'mdi:source-branch', 'mdi:play-circle-outline'], 'ícono por defecto junto a cada número');
 });
-Deno.test('comentario: C1 globo pegado al nodo que comenta, sin número, sin empujar la columna; texto a la izquierda', () => {
+denoTest('comentario: C1 globo pegado al nodo que comenta, sin número, sin empujar la columna; texto a la izquierda', () => {
   const spec = {
     steps: 'auto', lanes: [{ id: 'A', label: 'A' }],
     nodes: [
@@ -374,7 +381,7 @@ Deno.test('comentario: C1 globo pegado al nodo que comenta, sin número, sin emp
   assertEquals(N.get('a')!.textAlign, 'start', 'texto de las acciones a la izquierda');
 });
 
-Deno.test('comentario: C2 con x/y fijados a mano manda esa posición', () => {
+denoTest('comentario: C2 con x/y fijados a mano manda esa posición', () => {
   const spec = resolveFlowchartSpec({ nodes: [{ id: 'a', label: 'A' }, { id: 'n', label: 'nota', shape: 'comment', about: 'a' }], edges: [] })!;
   const L0 = computeFlowchartLayout(spec, null, { style: 'insoft' });
   const L = computeFlowchartLayout(spec, { nodes: { n: { x: 300, y: 200 } } }, { style: 'insoft' });
@@ -383,10 +390,10 @@ Deno.test('comentario: C2 con x/y fijados a mano manda esa posición', () => {
   assert(n.x !== n0.x || n.y !== n0.y, 'se movió a la posición fijada');
 });
 
-Deno.test('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) en sus posiciones finales', async () => {
+denoTest('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) en sus posiciones finales', async () => {
   // Ruta de un solo controller: sus clases comparten carril con los pasos y van en un grupo «Clases»
   // (con más de un controller, las clases tienen su propia columna y no hace falta recuadro).
-  const d = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-borrado.json', import.meta.url));
+  const d = await editable(new URL('../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-borrado.json', import.meta.url));
   const L = computeFlowchartLayout(resolveFlowchartSpec(d.payload)!, null, { style: 'insoft', embeds: { ctl: { w: 300, h: 110 }, 'ctl-pojo': { w: 230, h: 110 }, api: { w: 230, h: 80 } } });
   for (const g of L.contexts ?? []) {
     for (const id of g.members ?? []) {
@@ -401,7 +408,7 @@ Deno.test('combinado: G3 el grupo abraza a TODOS sus miembros (y sus insignias) 
   assertEquals(resolveFlowchartSpec(d.payload)!.nodes.find((n) => n.id === 'ctl')?.lane, 'controllers', 'el controller va en su columna');
 });
 
-Deno.test('etiquetas: E1 ícono de BD por defecto en verbos SQL, ícono propio del spec y caja que lo reserva', () => {
+denoTest('etiquetas: E1 ícono de BD por defecto en verbos SQL, ícono propio del spec y caja que lo reserva', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     lanes: [{ id: 'T', label: 'Controller' }, { id: 'D', label: 'PostgreSQL' }],
     nodes: [
@@ -427,7 +434,7 @@ Deno.test('etiquetas: E1 ícono de BD por defecto en verbos SQL, ícono propio d
   assertEquals((json.edges as Array<Record<string, unknown>>)[0]!.icon, 'mdi:bell-outline');
 });
 
-Deno.test('ruteo: R2 radio de proximidad de giros (llegada pesa el doble que la partida; fuera del radio no cuesta)', () => {
+denoTest('ruteo: R2 radio de proximidad de giros (llegada pesa el doble que la partida; fuera del radio no cuesta)', () => {
   const z = (x: number) => [{ x: 0, y: 0 }, { x, y: 0 }, { x, y: 30 }, { x: 300, y: 30 }];
   // Codo a 15 px de la llegada vs. a 15 px de la partida: la llegada cuesta el doble.
   const llegada = costoGiros(z(285));
@@ -449,15 +456,15 @@ Deno.test('ruteo: R2 radio de proximidad de giros (llegada pesa el doble que la 
   if (sale > t.y + 8 && sale < t.y + t.h - 8) assertEquals(pts.length, 2, 'recta si la altura cabe');
 });
 
-Deno.test('ruteo: A1 el flujo animado es el estándar (activo por defecto; un tema lo puede apagar)', async () => {
-  const tema = JSON.parse(await Deno.readTextFile(new URL('../../../components/diagrams/utils/themes/insoft-flow.json', import.meta.url)));
+denoTest('ruteo: A1 el flujo animado es el estándar (activo por defecto; un tema lo puede apagar)', async () => {
+  const tema = JSON.parse(await Deno.readTextFile(new URL('../../src/components/diagrams/utils/themes/insoft-flow.json', import.meta.url)));
   assertEquals(flowPaint(tema).dashFlow, true, 'insoft: rieles punteados en movimiento');
   assertEquals(flowPaint(tema).pillTone, 'entity', 'insoft: insignia del tono de su entidad, oscuro');
   assertEquals(flowPaint({ flow: {} } as never).dashFlow, true, 'estándar: activo sin flag');
   assertEquals(flowPaint({ flow: { dashFlow: false } } as never).dashFlow, false, 'un tema lo apaga');
 });
 
-Deno.test('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de la más ancha)', () => {
+denoTest('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de la más ancha)', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     nodes: [
       { id: 'a', label: 'Emite begin' },
@@ -472,8 +479,8 @@ Deno.test('combinado: H1 las acciones insoft tienen un ancho homogéneo (el de l
   assertEquals(anchos.size, 1, `anchos: ${[...anchos].join(' ')}`);
 });
 
-Deno.test('combinado: U4 abanico: los usos a un mismo destino comparten punta y corren por vías paralelas propias', async () => {
-  const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
+denoTest('combinado: U4 abanico: los usos a un mismo destino comparten punta y corren por vías paralelas propias', async () => {
+  const j = await editable(new URL('../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
   const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
   // El destino con más usos de la ruta (hoy Chat Completions: clasifica y título).
   const usos = L.edges.filter((e) => e.kind === 'dashed');
@@ -492,8 +499,8 @@ Deno.test('combinado: U4 abanico: los usos a un mismo destino comparten punta y 
 });
 
 
-Deno.test('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se monta sobre otro', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se monta sobre otro', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const choques: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -510,8 +517,8 @@ Deno.test('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se 
   assertEquals(choques, []);
 });
 
-Deno.test('combinado: F1 la respuesta desde el fin sale por abajo (no por un costado donde llegan ramas)', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('combinado: F1 la respuesta desde el fin sale por abajo (no por un costado donde llegan ramas)', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
@@ -525,8 +532,8 @@ Deno.test('combinado: F1 la respuesta desde el fin sale por abajo (no por un cos
   }
 });
 
-Deno.test('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo un nodo', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo un nodo', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const choques: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -543,8 +550,8 @@ Deno.test('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo 
   assertEquals(choques, []);
 });
 
-Deno.test('combinado: U5 en las rutas reales, los usos a un mismo destino y costado llegan a UNA sola punta', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('combinado: U5 en las rutas reales, los usos a un mismo destino y costado llegan a UNA sola punta', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -565,8 +572,8 @@ Deno.test('combinado: U5 en las rutas reales, los usos a un mismo destino y cost
   assertEquals(malos, []);
 });
 
-Deno.test('combinado: D1 en las rutas reales, a un rombo se entra por arriba (sus costados son salidas de rama)', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('combinado: D1 en las rutas reales, a un rombo se entra por arriba (sus costados son salidas de rama)', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const malas: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -582,8 +589,8 @@ Deno.test('combinado: D1 en las rutas reales, a un rombo se entra por arriba (su
   assertEquals(malas, []);
 });
 
-Deno.test('combinado: K1 a un componente que expone interfaz se llega por -(O- (socket), nunca con flecha', async () => {
-  const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
+denoTest('combinado: K1 a un componente que expone interfaz se llega por -(O- (socket), nunca con flecha', async () => {
+  const j = await editable(new URL('../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
   const spec = resolveFlowchartSpec(j.payload)!;
   const L = computeFlowchartLayout(spec, null, { style: 'insoft' });
   const expone = new Set(spec.nodes.filter((n) => {
@@ -617,8 +624,8 @@ function crucesDeFlujo(L: FlowLayout): string[] {
   return out;
 }
 
-Deno.test('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa una caja ajena', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa una caja ajena', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -629,8 +636,8 @@ Deno.test('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa 
   assertEquals(malos, []);
 });
 
-Deno.test('combinado: H2 los componentes de un mismo carril tienen un ancho homogéneo (el del más ancho)', async () => {
-  const j = await editable(new URL('../../../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
+denoTest('combinado: H2 los componentes de un mismo carril tienen un ancho homogéneo (el del más ancho)', async () => {
+  const j = await editable(new URL('../../labs/iss-ayudascpia-flujos/payloads/ruta-conversacion-turno.json', import.meta.url));
   const spec = resolveFlowchartSpec(j.payload)!;
   // Todos los componentes (propios y de terceros) comparten la columna de componentes.
   const carril = spec.nodes.find((n) => n.id === 'ai-op')!.lane;
@@ -641,8 +648,8 @@ Deno.test('combinado: H2 los componentes de un mismo carril tienen un ancho homo
   assert([...anchos][0]! > 0);
 });
 
-Deno.test('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un nodo que no es suyo', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un nodo que no es suyo', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -658,8 +665,8 @@ Deno.test('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un
   assertEquals(malos, []);
 });
 
-Deno.test('combinado: X3 en las rutas reales ningún riel pasa por encima del título de un grupo', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('combinado: X3 en las rutas reales ningún riel pasa por encima del título de un grupo', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -680,8 +687,8 @@ Deno.test('combinado: X3 en las rutas reales ningún riel pasa por encima del t�
   assertEquals(malos, []);
 });
 
-Deno.test('combinado: X4 en las rutas reales ningún riel corre encima de otro (los que comparten ruta van separados por delta)', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('combinado: X4 en las rutas reales ningún riel corre encima de otro (los que comparten ruta van separados por delta)', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const malos: string[] = [];
   const solapa = (a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }, d: { x: number; y: number }): boolean => {
     if (a.x === b.x && c.x === d.x && Math.abs(a.x - c.x) < 1) return Math.min(Math.max(a.y, b.y), Math.max(c.y, d.y)) - Math.max(Math.min(a.y, b.y), Math.min(c.y, d.y)) > 8;
@@ -708,3 +715,5 @@ Deno.test('combinado: X4 en las rutas reales ningún riel corre encima de otro (
   }
   assertEquals(malos, []);
 });
+
+export default lista();

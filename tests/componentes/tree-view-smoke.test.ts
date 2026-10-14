@@ -21,10 +21,13 @@
  */
 
 import assert from 'node:assert/strict';
-import test from 'node:test';
 
-import { asActionSpec, asBool, asNumber, asRecord, asString } from '../../components/isp/utils/tree-view/_types.ts';
-import { type IconConfig, type TNode, type TreeActionSpec } from '../../components/isp/schemas/tree-view-types.schemas.ts';
+import { asActionSpec, asBool, asNumber, asRecord, asString } from '../../src/components/isp/utils/tree-view/_types.ts';
+import { type IconConfig, type TNode, type TreeActionSpec } from '../../src/components/isp/schemas/tree-view-types.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 // ── Helpers de casteo ────────────────────────────────────────────────────
 
@@ -401,3 +404,5 @@ test('TNode: flatPath + childrens + flags opcionales', () => {
   assert.equal(node.isGroupActor, true);
   assert.equal(hasChildren(node), true);
 });
+
+export default lista();

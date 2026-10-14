@@ -15,10 +15,17 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { existsSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { PNG_MAX_PX, pngCanvasSize, renderDiagramBatch } from '../../../vendor-distributions/client/tools/render-diagram.ts';
-import type { RenderDiagramOptions } from '../../../vendor-distributions/shared/schemas.ts';
+import { PNG_MAX_PX, pngCanvasSize, renderDiagramBatch } from '../../src/vendor-distributions/client/tools/render-diagram.ts';
+import type { RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 const CLASES_PNG = 'labs/iss-ayudascpia-clases/out/clases.png';
 const ESCALA = 2;
@@ -30,7 +37,7 @@ function medidasPng(png: Uint8Array): { w: number; h: number } {
   return { w: dv.getUint32(16), h: dv.getUint32(20) };
 }
 
-Deno.test('png-tope: T1 un lienzo grande se encoge en proporción hasta el tope de 36 Mpx', () => {
+denoTest('png-tope: T1 un lienzo grande se encoge en proporción hasta el tope de 36 Mpx', () => {
   assertEquals(PNG_MAX_PX, 36_000_000, 'el tope documentado');
   for (const [w, h] of [[20000, 20000], [9262, 9566], [30000, 5000]] as const) {
     const r = pngCanvasSize(w, h, ESCALA);
@@ -42,7 +49,7 @@ Deno.test('png-tope: T1 un lienzo grande se encoge en proporción hasta el tope 
   }
 });
 
-Deno.test('png-tope: T2 un lienzo pequeño o con un eje desconocido no se toca', () => {
+denoTest('png-tope: T2 un lienzo pequeño o con un eje desconocido no se toca', () => {
   assertEquals(pngCanvasSize(1200, 800, ESCALA), { k: 1, width: 1200, height: 800 });
   // Justo en el tope (3000x3000 a escala 2 = 36 Mpx) tampoco se encoge.
   assertEquals(pngCanvasSize(3000, 3000, ESCALA), { k: 1, width: 3000, height: 3000 });
@@ -50,7 +57,7 @@ Deno.test('png-tope: T2 un lienzo pequeño o con un eje desconocido no se toca',
   assertEquals(pngCanvasSize(null, null, ESCALA), { k: 1, width: null, height: null });
 });
 
-Deno.test({
+denoTest({
   name: 'png-tope: T3 el PNG de clases del ISS (labs) mide ≤ 36 Mpx',
   ignore: !existsSync(`${RAIZ}${CLASES_PNG}`),
   fn() {
@@ -64,7 +71,7 @@ try {
   chromium = (createRequire(import.meta.url)('playwright') as { chromium: RenderDiagramOptions['chromium'] }).chromium;
 } catch { chromium = null; }
 
-Deno.test({
+denoTest({
   name: 'png-tope: T4 caja negra, un flujo pequeño a PNG sale con contenido y con las medidas anunciadas',
   ignore: !chromium || !existsSync(`${RAIZ}${BUNDLE}`),
   sanitizeResources: false,
@@ -92,3 +99,5 @@ Deno.test({
     assert(densidad > 10, `PNG casi vacío: ${png.length} bytes para ${w}x${h} (${densidad.toFixed(1)} B/kpx)`);
   },
 });
+
+export default lista();

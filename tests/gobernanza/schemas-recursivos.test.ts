@@ -7,10 +7,13 @@
  *   get children(): z.ZodArray<typeof NodoSchema> { return z.array(NodoSchema); }
  *   R1 ningún `*.schemas.ts` de src/ tiene un z.object que mencione su propio nombre fuera de un getter.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 
@@ -68,3 +71,5 @@ test('schemas: R1 el detector distingue referencia directa de getter', () => {
   const getter = objetosZod('export const NodoSchema = z.object({\n  id: z.string(),\n  get children(): z.ZodArray<typeof NodoSchema> { return z.array(NodoSchema); },\n});\n')[0]!;
   assert.deepEqual(autorreferenciasDirectas(getter.nombre, getter.cuerpo), []);
 });
+
+export default lista();

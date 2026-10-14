@@ -5,11 +5,14 @@
  * geometría API y scroll memory.
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -73,7 +76,7 @@ test('10. soporta scroll memory opt-in (remember-scroll + storage-key)', async (
 });
 
 test('11. OBSERVED incluye atributos principales', async () => {
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const list = extraerObservados(TS);
   for (const a of ['inline', 'cscroll', 'remember-scroll', 'storage-key']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
@@ -103,3 +106,5 @@ test('15. preview.ts existe (componente complejo → tiene behavior)', async () 
   const preview = join(ROOT, 'src', 'components', 'isp', 'block-layout.preview.ts');
   assert.ok(existsSync(preview));
 });
+
+export default lista();

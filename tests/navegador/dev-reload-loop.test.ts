@@ -1,4 +1,4 @@
-// tests/dev-reload-loop.test.mjs — Regresión: dev-reload no debe spammear
+// tests/navegador/dev-reload-loop.test.ts — Regresión: dev-reload no debe spammear
 // `reload-pin` cuando la pestaña está idle.
 //
 // Por qué este test existe: en una sesión de desarrollo larga (23+ min)
@@ -11,11 +11,14 @@
 //   - Hay un IDLE_TIMEOUT_MS que detiene el polling tras inactividad.
 //   - El backoff por idle sube el interval hasta MAX_INTERVAL.
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repo = dirname(here);
@@ -94,3 +97,5 @@ test('dev-reload: la rama `!visible()` cancela el fetch', async () => {
 });
 
 console.log('dev-reload-loop.test.mjs: ready');
+
+export default lista();

@@ -19,8 +19,15 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
+
+const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
 const BUNDLE = 'dist/cdn/layout/server-api-docs.min.js';
 
 /** El documento del demo de la ficha (`server-api-docs.json`). */
@@ -66,7 +73,7 @@ const AYUDA = `(() => {
 
 const espera = (p: Pagina, cond: string) => p.waitForFunction(cond, undefined, { timeout: 20_000 }).then(() => true, () => false);
 
-Deno.test({
+denoTest({
   name: 'server-api-docs UI: portada, operación con ?s=, Probar contra el host, .doc por propiedad y documento inválido (navegador real)',
   ignore: !chromium || !existsSync(join(RAIZ, BUNDLE)),
   sanitizeResources: false,
@@ -162,3 +169,5 @@ Deno.test({
     }
   },
 });
+
+export default lista();

@@ -1,7 +1,6 @@
 /**
  * tests/load-plan.test.ts — anti-redundancia del planificador CDN.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   createRegistry,
@@ -9,7 +8,11 @@ import {
   commitLoads,
   isTagCovered,
   tagKey,
-} from '../../../cdn/load-plan.ts';
+} from '../../src/cdn/load-plan.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const catalog = {
   aliases: { charts: 'data-viz' },
@@ -58,3 +61,5 @@ test('all cubre todo', () => {
 test('tagKey estable', () => {
   assert.equal(tagKey(catalog.tags['iswc-button']), 'actions/button');
 });
+
+export default lista();

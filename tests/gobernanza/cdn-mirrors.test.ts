@@ -3,11 +3,14 @@
  *
  *   deno test -A --no-check tests/cdn-mirrors.test.ts
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
@@ -45,3 +48,5 @@ test('listSources expone ambos espejos', async () => {
   assert.match(src, /MIRRORS/);
   assert.match(src, /listSources/);
 });
+
+export default lista();

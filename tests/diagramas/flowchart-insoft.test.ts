@@ -9,22 +9,29 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/utils/diagram-styles.ts';
-import { pickThemeMode } from '../../../components/diagrams/utils/theme.ts';
+import { loadStylesDiagram, styleThemeFor } from '../../src/components/diagrams/utils/diagram-styles.ts';
+import { pickThemeMode } from '../../src/components/diagrams/utils/theme.ts';
 import {
   computeFlowchartLayout,
   decisionGeometry,
   flowchartSpecToJson,
   flowPaint,
   resolveFlowchartSpec,
-} from '../../../components/diagrams/utils/flowchart-spec.ts';
+} from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import {
   embedDiagramOf,
   fitContain,
   NESTED_DEFAULT_MAX,
   readNodeEmbed,
-} from '../../../components/diagrams/utils/diagram-embed.ts';
-import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
+} from '../../src/components/diagrams/utils/diagram-embed.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 // Fixtures: payloads de flujo estables (copias de los primeros labs), independientes de lo que el lab regenere.
@@ -50,7 +57,7 @@ await loadStylesDiagram('insoft');
 
 // ── Tema ───────────────────────────────────────────────────────────────
 
-Deno.test('estilo insoft trae tema flowchart y sus colores salen de los tokens de la paleta', () => {
+denoTest('estilo insoft trae tema flowchart y sus colores salen de los tokens de la paleta', () => {
   const t = styleThemeFor('insoft', 'flowchart');
   assertEquals(t?.kind, 'flowchart');
   const p = flowPaint(t!);
@@ -60,7 +67,7 @@ Deno.test('estilo insoft trae tema flowchart y sus colores salen de los tokens d
   assert(!p.actionFill.startsWith('primary') && p.actionBorder.startsWith('#'), 'tokens sin resolver');
 });
 
-Deno.test('contraste AA del texto de acciones y etiquetas en claro y oscuro', () => {
+denoTest('contraste AA del texto de acciones y etiquetas en claro y oscuro', () => {
   const t = styleThemeFor('insoft', 'flowchart')!;
   for (const dark of [false, true]) {
     const p = flowPaint(pickThemeMode(t, dark));
@@ -72,7 +79,7 @@ Deno.test('contraste AA del texto de acciones y etiquetas en claro y oscuro', ()
 
 // ── Rombo por el rect del texto ────────────────────────────────────────
 
-Deno.test('decisión: el rect del texto queda inscrito y el rombo no queda aplanado (vértices laterales no agudos)', () => {
+denoTest('decisión: el rect del texto queda inscrito y el rombo no queda aplanado (vértices laterales no agudos)', () => {
   for (const [w, n] of [[120, 1], [200, 1], [150, 2]] as const) {
     const g = decisionGeometry(w, n);
     const r = g.rect;
@@ -92,7 +99,7 @@ Deno.test('decisión: el rect del texto queda inscrito y el rombo no queda aplan
 
 const parches = () => computeFlowchartLayout(resolveFlowchartSpec(labPayload('parches-de-datos'))!, null, { style: 'insoft' });
 
-Deno.test('insoft: columna principal recta, sin solapes y aristas ortogonales que no atraviesan cajas', () => {
+denoTest('insoft: columna principal recta, sin solapes y aristas ortogonales que no atraviesan cajas', () => {
   const L = parches();
   const by = new Map(L.nodes.map((n) => [n.id, n]));
   const cx = (id: string): number => by.get(id)!.x + by.get(id)!.w / 2;
@@ -113,7 +120,7 @@ Deno.test('insoft: columna principal recta, sin solapes y aristas ortogonales qu
   }
 });
 
-Deno.test('insoft: las ramas de una decisión salen por el vértice lateral y la etiqueta va pegada a su riel, por su lado largo, sin taparlo', () => {
+denoTest('insoft: las ramas de una decisión salen por el vértice lateral y la etiqueta va pegada a su riel, por su lado largo, sin taparlo', () => {
   const L = parches();
   const B = L.nodes.find((n) => n.id === 'B')!;
   const no = L.edges.find((e) => e.from === 'B' && e.to === 'X')!;
@@ -138,7 +145,7 @@ Deno.test('insoft: las ramas de una decisión salen por el vértice lateral y la
   }
 });
 
-Deno.test('insoft: if sin else (desvío corto) deja la columna en el punto de unión', () => {
+denoTest('insoft: if sin else (desvío corto) deja la columna en el punto de unión', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(labPayload('datos-y-componentes'))!, null, { style: 'insoft' });
   const by = new Map(L.nodes.map((n) => [n.id, n]));
   const cx = (id: string): number => by.get(id)!.x + by.get(id)!.w / 2;
@@ -146,7 +153,7 @@ Deno.test('insoft: if sin else (desvío corto) deja la columna en el punto de un
   assert(cx('crea') !== cx('valida'), 'el desvío va al costado');
 });
 
-Deno.test('estilo clásico intacto: sin opciones no hay etiquetas laterales ni texto pre-partido', () => {
+denoTest('estilo clásico intacto: sin opciones no hay etiquetas laterales ni texto pre-partido', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(labPayload('parches-de-datos'))!);
   assert(L.edges.every((e) => e.labelAnchor === undefined));
   assert(L.nodes.every((n) => n.lines === undefined));
@@ -154,7 +161,7 @@ Deno.test('estilo clásico intacto: sin opciones no hay etiquetas laterales ni t
 
 // ── Nodos especiales (kind) ────────────────────────────────────────────
 
-Deno.test('kind: contrato de nested / tableder / component y kinds inválidos', () => {
+denoTest('kind: contrato de nested / tableder / component y kinds inválidos', () => {
   const nested = readNodeEmbed({ kind: 'nested', src: 'a.json', diagram: { tag: 'iswc-sequence-diagram', payload: {} }, maxH: 80, bg: '#fff' });
   assertEquals(nested?.kind, 'nested');
   assertEquals(nested?.maxH, 80);
@@ -167,7 +174,7 @@ Deno.test('kind: contrato de nested / tableder / component y kinds inválidos', 
   assertEquals(c?.tag, 'iswc-component-diagram');
 });
 
-Deno.test('kind nested: contain dentro de NESTED_DEFAULT_MAX por defecto, ajustable por nodo, sin deformar', () => {
+denoTest('kind nested: contain dentro de NESTED_DEFAULT_MAX por defecto, ajustable por nodo, sin deformar', () => {
   const f = fitContain({ w: 900, h: 600 }, { w: NESTED_DEFAULT_MAX, h: NESTED_DEFAULT_MAX });
   assert(f.w <= NESTED_DEFAULT_MAX && f.h <= NESTED_DEFAULT_MAX);
   assert(Math.abs(f.w / f.h - 1.5) < 1e-9, 'proporción');
@@ -196,7 +203,7 @@ Deno.test('kind nested: contain dentro de NESTED_DEFAULT_MAX por defecto, ajusta
   assertEquals([nat.nodes[0]!.w, nat.nodes[0]!.h], [210, 130]);
 });
 
-Deno.test('kind se conserva al serializar la spec (editor / persistencia)', () => {
+denoTest('kind se conserva al serializar la spec (editor / persistencia)', () => {
   const spec = resolveFlowchartSpec({
     nodes: [{ id: 'a', label: 'Sub', kind: 'nested', src: 'x.json', bg: '#FFFFFF' }, { id: 'i', label: 'Inicio', shape: 'start' }],
     edges: [],
@@ -207,3 +214,5 @@ Deno.test('kind se conserva al serializar la spec (editor / persistencia)', () =
   assertEquals(again.nodes[0]!.embed?.src, 'x.json');
   assertEquals(again.nodes[1]!.shape, 'start');
 });
+
+export default lista();

@@ -5,7 +5,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
@@ -21,3 +25,5 @@ test('iswc-cdn-snippet no inventa pesos CDN en el panel', () => {
   assert.doesNotMatch(src, /sizes\.json|totalCdnSize|cdn-sizes/);
   assert.doesNotMatch(src, /data-slot="size-loader"/);
 });
+
+export default lista();

@@ -8,7 +8,6 @@
  * 10 dimensiones completas.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -26,7 +25,11 @@ import {
   tieneAccesibilidad,
   adoptaCss,
   cleanupCompleto,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/chart.ts';
 
@@ -103,3 +106,5 @@ test('iswc-chart: cleanup — disconnectedCallback desconecta observers', () => 
 test('iswc-chart: adopta CSS', () => {
   assert.ok(adoptaCss(read(MOD)));
 });
+
+export default lista();

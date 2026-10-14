@@ -1,8 +1,11 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
@@ -65,3 +68,5 @@ test('sidebar responsive: en mÃ³vil el accent pasa a border-top', () => {
     'En mÃ³vil el accent debe pasar a border-top 1px teÃ±ido con var(--iswc-accent)',
   );
 });
+
+export default lista();

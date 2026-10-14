@@ -11,10 +11,17 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import { renderDiagramBatch } from '../../../vendor-distributions/client/tools/render-diagram.ts';
-import type { RenderDiagramOptions } from '../../../vendor-distributions/shared/schemas.ts';
+import { renderDiagramBatch } from '../../src/vendor-distributions/client/tools/render-diagram.ts';
+import type { RenderDiagramOptions } from '../../src/vendor-distributions/shared/schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const RAIZ = fileURLToPath(new URL('../../../../', import.meta.url));
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 
 /** Un fin ⦿, una reunión de ramas ⦿, un consumo `-(O-` de tabla y rieles continuos con puntos. */
@@ -45,7 +52,7 @@ try {
   chromium = (createRequire(import.meta.url)('playwright') as { chromium: RenderDiagramOptions['chromium'] }).chromium;
 } catch { chromium = null; }
 
-Deno.test({
+denoTest({
   name: 'png: A8 el PNG con animación de flujo es idéntico al PNG sin ella (sin radares ni puntos)',
   ignore: !chromium || !existsSync(`${RAIZ}${BUNDLE}`),
   sanitizeResources: false,
@@ -66,3 +73,5 @@ Deno.test({
     assert(vivo.result.png.every((b, i) => b === quieto.result!.png![i]), 'mismo PNG (bytes): ningún pulso queda en la captura');
   },
 });
+
+export default lista();

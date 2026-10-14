@@ -4,10 +4,13 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
-import { fillHostTemplate } from '../../../core/cdn-ref.ts';
+import { fillHostTemplate } from '../../src/core/cdn-ref.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const root = dirname(dirname(dirname(dirname(dirname(fileURLToPath(import.meta.url))))));
 const src = join(root, 'src', 'cdn', 'loader.ts');
@@ -150,3 +153,5 @@ test('fallback CDN: jsDelivr → githack → Pages + stickyBase', () => {
   assert.match(code, /DEFAULT_MIRRORS/);
   assert.match(code, /jsDelivr → githack → Pages/);
 });
+
+export default lista();

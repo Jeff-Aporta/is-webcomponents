@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/README.md -->
+<!-- @vendor 2026-10-14T17:01:21.991Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/README.md -->
 # `vendor-distributions/` — todo lo que un consumidor trae del kit por vendor, separado por perfil
 
 Fuente: `src/vendor-distributions/`. Publicado por `deno task build` en `dist/cdn/vendor-distributions/`
@@ -22,7 +22,7 @@ El consumidor declara `"perfil": "server"` o `"perfil": "client"` en su `vendor.
 que no corresponde (otro perfil, ruta plana anterior a los perfiles y, en `server`, cualquier archivo que importe
 `playwright`, `@browserbasehq/stagehand`, `puppeteer`…). Al aplanar en una carpeta `ISU/`, los relativos entre
 perfiles (`../../shared/testing/x.ts`) se reescriben a la ruta entre destinos. Guardián:
-`src/utils/health/meta/vendor-perfiles.test.ts` (P1-P6).
+`tests/gobernanza/vendor-perfiles.test.ts` (P1-P6).
 
 ## Scripts online (desde 2026-10-13)
 
@@ -57,7 +57,7 @@ explica) y **Doc:** (la misma URL). Al vendorizar, `vendor.ts` reescribe la cabe
 ganadora (siempre `@main`: el canal es la rama, portable; el sha vive en el pin del proyecto) y fija la `// @doc` al pin. `vendor.ts` falla si falta un import relativo. Lo que importa `zod` usa el del consumidor.
 
 Las docs se enlazan SIEMPRE por CDN (jsDelivr; `vendor.ts` fija el SHA en la `// @doc` del consumidor), nunca por ruta local.
-Guardián: `src/utils/health/meta/vendor-distributions-doc.test.ts`.
+Guardián: `tests/gobernanza/vendor-distributions-doc.test.ts`.
 
 ## `shared/` — sirve a server y a client
 

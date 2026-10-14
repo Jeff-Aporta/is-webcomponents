@@ -4,7 +4,6 @@
  * Hoja de cálculo con celdas editables. Datos vía property assignment.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -13,7 +12,11 @@ import {
   tieneEdgeCaseGuards,
   adoptaCss,
   estaRegistrado,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/data/spreadsheet.ts';
 
@@ -48,3 +51,5 @@ test('iswc-spreadsheet: tiene tabla (o similar) en shadow DOM', () => {
   const src = read(MOD);
   assert.match(src, /<table\b|<tbody\b|<th\b|<td\b/, 'spreadsheet debe usar <table>');
 });
+
+export default lista();

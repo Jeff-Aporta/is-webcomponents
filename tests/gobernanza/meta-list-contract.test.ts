@@ -2,12 +2,15 @@
  * meta-list-contract.test.ts — contrato de `<iswc-meta-list>`: 4 archivos hermanos, manifest,
  * demo con playground y render seguro (texto, nunca HTML de los datos).
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
-import { MetaGroupSchema } from '../../../components/data/schemas/meta-list.schemas.ts';
+import { ComponentJsonSchema } from '../../src/previews/_kit/schemas/component.schemas.ts';
+import { MetaGroupSchema } from '../../src/components/data/schemas/meta-list.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const BASE = join(RAIZ, 'src', 'components', 'data', 'meta-list');
@@ -34,3 +37,5 @@ test('iswc-meta-list: pinta con textContent (sin innerHTML de datos)', () => {
   assert.ok(!/innerHTML/.test(sinTemplate), 'los datos no entran como HTML');
   for (const part of ['heading', 'group', 'group-title', 'list', 'label', 'value']) assert.ok(ts.includes(`'${part}'`) || ts.includes(`part="${part}"`), `part ${part}`);
 });
+
+export default lista();

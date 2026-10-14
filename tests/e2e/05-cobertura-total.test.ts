@@ -23,7 +23,6 @@
 // (tag + categoría + descripción + lede + ruta a la captura) agrupadas por
 // categoría, y verifica que NINGÚN componente del catálogo quede sin demo.
 
-import { after, before } from 'node:test';
 import {
   existsSync,
   mkdirSync,
@@ -34,12 +33,12 @@ import {
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
-import catalog from '../../../previews/catalog.ts';
-import { asegurarServidor, abrirGaleria as abrirGaleriaHarness, esperarMs, baseUrlResuelta, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos } from './lib/env.ts';
-import { repoDir } from './lib/env.ts';
+import catalog from '../../src/previews/catalog.ts';
+import { asegurarServidor, abrirGaleria as abrirGaleriaHarness, esperarMs, baseUrlResuelta, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos } from '../.audit/e2e/env.ts';
+import { repoDir } from '../.audit/e2e/env.ts';
 import type { Browser, Page } from 'playwright';
-import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
+import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
 
 type EntradaCatalogo = {
   json: string;
@@ -170,7 +169,11 @@ async function abrirPreview(page: Page, tag: string): Promise<void> {
   // Si llegamos aquí, igual devolvemos — el caller marcará motivo si falla.
 }
 
-import { b64urlDe } from './lib/estados.ts';
+import { b64urlDe } from '../.audit/e2e/estados.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 function estadoDe(tag: string): string {
   return b64urlDe({ component: tag });
 }
@@ -347,3 +350,5 @@ testE2E(
     );
   },
 );
+
+export default lista();

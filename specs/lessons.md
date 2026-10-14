@@ -77,7 +77,7 @@ Lecciones pagadas, agrupadas por tema. Cada fila: síntoma → regla/fix → gua
 | `demo-code.js` snippet sin `data-theme`/`data-palette` → al pegarlo no hereda contexto | `withSnippetContext`/`stampContext` sella la raíz | `palette-and-snippet-contract` |
 | Bloque «HTML puro equivalente» bajo demos → ruido | No llamar `renderDemoEquiv`; `equivHtml` opcional en JSON, no se pinta | `demo-equiv` |
 | Lógica de preview en strings/`eval` → rompe tipado/debug/seguridad | Solo markup/CSS/código en el JSON; listeners en `behaviors/` | — |
-| `#toaster`/`#grid` ausentes en el JSON → `TypeError` silencioso al montar | El `mount` crea el host o falla el UX; `ISComponentPreview.on(null,…)` no-op | `ux-gallery-invariants` |
+| `#toaster`/`#grid` ausentes en el JSON → `TypeError` silencioso al montar | El `mount` crea el host o falla el UX; `IswcComponentPreview.on(null,…)` no-op | `ux-gallery-invariants` |
 | F5 al final del docs por `scrollIntoView` de CM | Paths `.min` en `<code>` (no `<iswc-code>`); editor nativo sin scrollIntoView | `gallery-sources-meta` |
 | Visor de fuentes "vacío" con texto en el atributo | `dlg.show()` antes de `loadKind`; `refreshEditor` en `iswc-after-show`/`iswc-tab-show`; `paintOne` siempre `el.value=text`; chrome con `iswc-tab-group` | `gallery-sources-meta` |
 | Modal de fuentes no full-page (`min(96vw)`/`70vh`) | `width="100vw"` `spacing="0"` + `::part(dialog)` stretch | `gallery-sources-meta` |

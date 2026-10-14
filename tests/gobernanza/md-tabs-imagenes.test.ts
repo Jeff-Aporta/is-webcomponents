@@ -8,11 +8,18 @@
  *   T4 anota los tags que necesita (para que md-hydrate los cargue).
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { mdToHtml } from '../../../components/helpers/utils/md-lite.ts';
+import { mdToHtml } from '../../src/components/helpers/utils/md-lite.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const BLOQUE = '---\n\n![Secuencia](a.svg)\n![Secuencia enriquecida](b.svg "Ruta ilustrada")\n\n---';
 
-Deno.test('md tabs: T1 bloque de imágenes entre --- → tabs con el alt como nombre', () => {
+denoTest('md tabs: T1 bloque de imágenes entre --- → tabs con el alt como nombre', () => {
   const html = mdToHtml(`Antes\n\n${BLOQUE}\n\nDespués`);
   assert(html.includes('<iswc-tab-group'), html);
   const nombres = [...html.matchAll(/<iswc-tab slot="nav"[^>]*>([^<]*)<\/iswc-tab>/g)].map((m) => m[1]);
@@ -21,18 +28,20 @@ Deno.test('md tabs: T1 bloque de imágenes entre --- → tabs con el alt como no
   assert(!html.includes('iswc-divider'), 'los --- del bloque no se pintan');
 });
 
-Deno.test('md tabs: T2 una imagen sola o texto entre --- no son tabs', () => {
+denoTest('md tabs: T2 una imagen sola o texto entre --- no son tabs', () => {
   assert(!mdToHtml('---\n\n![Sola](a.svg)\n\n---').includes('iswc-tab-group'));
   assert(!mdToHtml('---\n\n![A](a.svg)\nTexto\n![B](b.svg)\n\n---').includes('iswc-tab-group'));
 });
 
-Deno.test('md tabs: T3 sin componentes: figuras con su nombre', () => {
+denoTest('md tabs: T3 sin componentes: figuras con su nombre', () => {
   const html = mdToHtml(BLOQUE, { componentes: false });
   assert(html.includes('<figcaption>Secuencia</figcaption>') && html.includes('<figcaption>Secuencia enriquecida</figcaption>'), html);
 });
 
-Deno.test('md tabs: T4 anota los tags del kit que necesita', () => {
+denoTest('md tabs: T4 anota los tags del kit que necesita', () => {
   const tags = new Set<string>();
   mdToHtml(BLOQUE, { tags });
   for (const t of ['iswc-tab-group', 'iswc-tab', 'iswc-tab-panel']) assert(tags.has(t), t);
 });
+
+export default lista();

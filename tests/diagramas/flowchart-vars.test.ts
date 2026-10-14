@@ -5,7 +5,14 @@
  *   V3 lleva insignia con ícono de variable (y su índice si es paso del flujo).
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 const layout = (vars: unknown[]) => computeFlowchartLayout(resolveFlowchartSpec({
   steps: 'auto',
@@ -13,7 +20,7 @@ const layout = (vars: unknown[]) => computeFlowchartLayout(resolveFlowchartSpec(
   edges: [{ from: 'a', to: 'v' }, { from: 'v', to: 'd' }],
 })!, null, { style: 'insoft' });
 
-Deno.test('vars: V1-V3 tabla nombre · valor, desc opcional, insignia de variable', () => {
+denoTest('vars: V1-V3 tabla nombre · valor, desc opcional, insignia de variable', () => {
   const sin = layout([{ name: 'N', value: 'conversacion.recalcularTituloCadaMensajesUsuario' }, { name: 'solo-nombre' }, { value: 'solo-valor' }]).nodes.find((n) => n.id === 'v')!;
   assertEquals(sin.vars?.map((v) => v.name), ['N'], 'V1 nombre y valor obligatorios');
   assertEquals(sin.varsCols?.length, 2, 'V2 sin desc, dos columnas');
@@ -25,9 +32,9 @@ Deno.test('vars: V1-V3 tabla nombre · valor, desc opcional, insignia de variabl
   assertEquals(con.stepLabel, '2', 'V3 es paso del flujo');
 });
 
-Deno.test('vars: V4 en las rutas reales la tabla queda dentro de su nodo (también tras abrir espacio)', async () => {
-  const { Obj } = await import('../../../vendor-distributions/shared/lib/obj.ts');
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('vars: V4 en las rutas reales la tabla queda dentro de su nodo (también tras abrir espacio)', async () => {
+  const { Obj } = await import('../../src/vendor-distributions/shared/lib/obj.ts');
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const ruta = new URL(f.name, dir);
@@ -39,3 +46,5 @@ Deno.test('vars: V4 en las rutas reales la tabla queda dentro de su nodo (tambi�
     }
   }
 });
+
+export default lista();

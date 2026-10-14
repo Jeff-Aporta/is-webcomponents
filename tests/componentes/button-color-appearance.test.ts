@@ -15,8 +15,11 @@
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
 import assert from 'node:assert';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const cssPath = join(root, 'src/components/actions/button.css');
@@ -105,3 +108,5 @@ test('filled y outlined del mismo color comparten la misma familia de tono', () 
   assert.match(afterOutlined, /--_tone-text/, 'outlined debe usar --_tone-text (misma familia que filled)');
   assert.match(afterOutlined, /--_border:\s*var\(--_tone\)/, 'outlined debe bordear con --_tone');
 });
+
+export default lista();

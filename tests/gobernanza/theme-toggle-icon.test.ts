@@ -23,11 +23,14 @@
 //     desde fuera (p.ej. cuando llega un postMessage `iswc-context` y
 //     data-theme ya estaba en el mismo valor, sin disparar el observer).
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
@@ -159,3 +162,5 @@ test('preview-chrome ya no re-asigna toggle.dark en applyTheme (rompia la cadena
     'applyTheme() debe llamar a toggle.forceSync() en su lugar',
   );
 });
+
+export default lista();

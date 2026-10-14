@@ -7,7 +7,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { e2eDir } from './env.ts';
-import type { ResultadoVendor } from "./vendor-e2e-config.schemas.js";
+import type { ResultadoVendor } from "./schemas/vendor-e2e-config.schemas.js";
 
 const CDN_BASE = 'https://muestralo-api.jeffaporta.workers.dev/cdn';
 const FILE = 'e2e-config.ts';

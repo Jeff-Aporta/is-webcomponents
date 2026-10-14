@@ -19,9 +19,9 @@
  *     `<script type="application/json">` dentro del host).
  */
 
-import type { Hallazgo } from '../types.schemas.js';
-import { DefSchema, BloqueSchema, type Def, type Bloque } from "./json-contenido.schemas.js";
-import type { OpcionesContenido } from "./json-contenido.schemas.js";
+import type { Hallazgo } from '../schemas/types.schemas.js';
+import { DefSchema, BloqueSchema, type Def, type Bloque } from "./schemas/json-contenido.schemas.js";
+import type { OpcionesContenido } from "./schemas/json-contenido.schemas.js";
 
 /** Une `string | string[] | undefined` en un string. Si es array, lo une con `\n`. */
 function asText(v: unknown): string {

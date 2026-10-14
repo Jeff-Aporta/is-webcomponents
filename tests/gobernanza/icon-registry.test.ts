@@ -9,6 +9,13 @@
 //   R5 un `data-icons` relativo no se usa (la base es siempre absoluta).
 //   R6 abortar a un llamador no cancela el fetch compartido de los demás.
 import { assert, assertEquals, assertRejects } from 'jsr:@std/assert@1';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 type Ruta = (url: string) => Response | Promise<Response>;
 const rutas = new Map<string, Ruta>();
@@ -50,7 +57,7 @@ rutas.set(`${BASE}mdi/home.svg`, () => new Response(svg('local-home')));
 rutas.set(`${BASE}mdi/roto.svg`, () => { throw new TypeError('sin red'); });
 rutas.set(`${BASE}mdi/lento.svg`, () => new Promise((ok) => setTimeout(() => ok(new Response(svg('lento'))), 20)));
 
-const { resolveIconRaw, resolveIconSvg, resolveIconBase, clearRawCache, AVISO_FALTA_LOCAL } = await import('../../../core/icon-loader.ts');
+const { resolveIconRaw, resolveIconSvg, resolveIconBase, clearRawCache, AVISO_FALTA_LOCAL } = await import('../../src/core/icon-loader.ts');
 
 const reiniciar = (base: string | undefined) => {
   html.dataset.icons = base;
@@ -60,7 +67,7 @@ const reiniciar = (base: string | undefined) => {
   avisos.length = 0;
 };
 
-Deno.test('icon-registry: R1 data-icons → web publicada de la app', async () => {
+denoTest('icon-registry: R1 data-icons → web publicada de la app', async () => {
   reiniciar(BASE);
   assertEquals(resolveIconBase(), BASE);
   assert((await resolveIconRaw('mdi', 'home'))?.includes('local-home'));
@@ -69,7 +76,7 @@ Deno.test('icon-registry: R1 data-icons → web publicada de la app', async () =
   assertEquals(avisos, []);
 });
 
-Deno.test('icon-registry: R2 no publicado → API con UN aviso y un solo fetch en vuelo', async () => {
+denoTest('icon-registry: R2 no publicado → API con UN aviso y un solo fetch en vuelo', async () => {
   reiniciar(BASE);
   const rs = await Promise.all([1, 2, 3].map(() => resolveIconRaw('fluent', 'cat-24-regular')));
   for (const r of rs) assert(r?.includes('api:fluent/cat-24-regular.svg'));
@@ -80,13 +87,13 @@ Deno.test('icon-registry: R2 no publicado → API con UN aviso y un solo fetch e
   assertEquals(avisos.length, 1, 'no se repite');
 });
 
-Deno.test('icon-registry: R3 el archivo publicado no responde → API con aviso', async () => {
+denoTest('icon-registry: R3 el archivo publicado no responde → API con aviso', async () => {
   reiniciar(BASE);
   assert((await resolveIconRaw('mdi', 'roto'))?.includes('api:mdi/roto.svg'));
   assertEquals(avisos, ['[iswc-icon] falta en local: mdi:roto']);
 });
 
-Deno.test('icon-registry: R4 sin data-icons → API directo, sin aviso', async () => {
+denoTest('icon-registry: R4 sin data-icons → API directo, sin aviso', async () => {
   reiniciar(undefined);
   assertEquals(resolveIconBase(), null);
   assert((await resolveIconRaw('mdi', 'home'))?.includes('api:mdi/home.svg'));
@@ -95,14 +102,14 @@ Deno.test('icon-registry: R4 sin data-icons → API directo, sin aviso', async (
   assertEquals(avisos, []);
 });
 
-Deno.test('icon-registry: R5 data-icons relativo no se usa', async () => {
+denoTest('icon-registry: R5 data-icons relativo no se usa', async () => {
   reiniciar('assets/iconify/');
   assertEquals(resolveIconBase(), null);
   assert((await resolveIconRaw('mdi', 'home'))?.includes('api:mdi/home.svg'));
   assertEquals(avisos, []);
 });
 
-Deno.test('icon-registry: R6 abortar a uno no cancela a los demás', async () => {
+denoTest('icon-registry: R6 abortar a uno no cancela a los demás', async () => {
   reiniciar(BASE);
   const ctrl = new AbortController();
   const a = resolveIconRaw('mdi', 'lento', ctrl.signal);
@@ -113,7 +120,9 @@ Deno.test('icon-registry: R6 abortar a uno no cancela a los demás', async () =>
   assertEquals(pedidos.filter((p) => p.endsWith('mdi/lento.svg')).length, 1, 'un solo fetch');
 });
 
-Deno.test('icon-registry: fin (restaura console.warn)', () => {
+denoTest('icon-registry: fin (restaura console.warn)', () => {
   console.warn = warnOriginal;
   localStorage.clear();
 });
+
+export default lista();

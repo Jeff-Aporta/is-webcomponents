@@ -42,7 +42,7 @@ El kit se consume desde jsDelivr/GitHub Pages como módulos por tag. La galería
 | `core/is-base.min.css` | Themes + paletas de marca (`<link>` en la app host) |
 | `core/palettes.min.css` | Paletas de marca |
 | `is-base.min.css` / `palettes.min.css` | Alias estables (= `core/…`) pre-folderizado |
-| `core/loader.min.js` | `ISWebComponentsLoader` (carga selectiva + pin/mirrors) |
+| `core/loader.min.js` | `iswcLoader` (carga selectiva + pin/mirrors) |
 | `core/loader.md` | Docs del loader (API) |
 | `<categoria>/<name>.min.js` | Componente individual (carga su `.min.css` hermano en el shadow) |
 | `<categoria>/<name>.min.css` | Estilos del componente (junto al `.min.js`) |
@@ -54,14 +54,14 @@ Iconos: `dist/assets/icons/` (fuera de `dist/cdn/`; única copia versionada). **
 
 ```html
 <script type="module">
-  import { ISWebComponentsLoader } from '…/dist/cdn/core/loader.min.js';
+  import { iswcLoader } from '…/dist/cdn/core/loader.min.js';
   // Pin opcional (SHA o branch). Sin pin → tip de main (API GitHub).
-  // ISWebComponentsLoader.pin('abcdef0123…');
+  // iswcLoader.pin('abcdef0123…');
   // Fallback canónico (si no configuras mirrors): jsDelivr → githack → Pages.
-  // ISWebComponentsLoader.configure({ mirrors: ['jsdelivr', 'githack', 'pages'] });
-  await ISWebComponentsLoader.loadCSSBase();
-  await ISWebComponentsLoader.loadCSSPalettesDefault();
-  await ISWebComponentsLoader.load('iswc-button', 'iswc-button-group');
+  // iswcLoader.configure({ mirrors: ['jsdelivr', 'githack', 'pages'] });
+  await iswcLoader.loadCSSBase();
+  await iswcLoader.loadCSSPalettesDefault();
+  await iswcLoader.load('iswc-button', 'iswc-button-group');
   // o: load('actions') expande a cada tag.min.js (sin bundle de categoría)
 </script>
 ```

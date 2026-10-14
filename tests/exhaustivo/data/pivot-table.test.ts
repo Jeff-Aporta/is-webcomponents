@@ -5,7 +5,6 @@
  * assignment (rows/columns/measures) o JSON.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -14,7 +13,11 @@ import {
   tieneEdgeCaseGuards,
   adoptaCss,
   estaRegistrado,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/data/pivot-table.ts';
 
@@ -53,3 +56,5 @@ test('iswc-pivot-table: usa shadow DOM (no requiere importar otros is-*)', () =>
   const src = read(MOD);
   assert.match(src, /attachShadow\s*\(\s*\{\s*mode\s*:\s*['"]open['"]\s*\}/);
 });
+
+export default lista();

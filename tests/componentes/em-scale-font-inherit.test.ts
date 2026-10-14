@@ -10,11 +10,14 @@
  *
  *   deno task test -- tests/em-scale-font-inherit.test.ts
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const comps = join(raiz, 'src', 'components');
@@ -136,3 +139,5 @@ test('specs/componentes.md documenta escala em + font inherit', async () => {
     'specs/componentes.md debe recordar escala por font-size/em',
   );
 });
+
+export default lista();

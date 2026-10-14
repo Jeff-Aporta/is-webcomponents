@@ -8,7 +8,6 @@
  * JSON payload, accesibilidad, edge cases, integración, performance.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   ROOT,
   exists,
@@ -22,7 +21,11 @@ import {
   tieneEdgeCaseGuards,
   estaRegistrado,
   usaResizeObserver,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/bar-chart.ts';
 const WRAPPER = 'src/components/charts/chart.ts';
@@ -69,3 +72,5 @@ test('iswc-bar-chart: registrado vía customElements (indirecto via chart.ts)', 
 test('iswc-bar-chart: tiene edge case guards (null/undefined en data)', () => {
   assert.ok(tieneEdgeCaseGuards(read(WRAPPER)));
 });
+
+export default lista();

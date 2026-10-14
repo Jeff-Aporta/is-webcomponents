@@ -21,82 +21,89 @@ import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-const iconJsPath = join(root, 'src/components/media/icon.ts');
-const iconCssPath = join(root, 'src/components/media/icon.scss');
-const loaderJsPath = join(root, 'src/core/icon-loader.ts');
+test('componentes/icon-currentcolor', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
 
-const iconJs = await readFile(iconJsPath, 'utf8');
-const iconCss = await readFile(iconCssPath, 'utf8');
-const loaderJs = await readFile(loaderJsPath, 'utf8');
+  const iconJsPath = join(root, 'src/components/media/icon.ts');
+  const iconCssPath = join(root, 'src/components/media/icon.scss');
+  const loaderJsPath = join(root, 'src/core/icon-loader.ts');
 
-// --- Reglas estaticas ------------------------------------------------------
+  const iconJs = await readFile(iconJsPath, 'utf8');
+  const iconCss = await readFile(iconCssPath, 'utf8');
+  const loaderJs = await readFile(loaderJsPath, 'utf8');
 
-assert.ok(
-  /resolveIconRaw/.test(iconJs),
-  'icon.ts debe importar `resolveIconRaw` (no `resolveIconSvg`)'
-);
-assert.ok(
-  !/resolveIconSvg/.test(iconJs),
-  'icon.ts ya no debe usar resolveIconSvg: el SVG debe inyectarse inline'
-);
-assert.ok(
-  /class="inline"/.test(iconJs),
-  'icon.ts debe declarar `<span class="inline">` en el template'
-);
-assert.ok(
-  !/<img class="img"/.test(iconJs),
-  'icon.ts no debe usar <img class="img"> para cargar SVGs (rompe currentColor)'
-);
-assert.ok(
-  /#normalizeInlineSvg|#normalizeSvg/.test(iconJs),
-  'icon.ts debe tener una funcion que fuerce fill/stroke a currentColor'
-);
-assert.ok(
-  /\.inline/.test(iconCss),
-  'icon.css debe tener estilos para .inline'
-);
+  // --- Reglas estaticas ------------------------------------------------------
 
-assert.ok(
-  /export\s+(async\s+)?function\s+resolveIconRaw/.test(loaderJs),
-  'icon-loader.ts debe exportar resolveIconRaw(prefix, name, signal)'
-);
-assert.ok(
-  /rawCache/.test(loaderJs),
-  'icon-loader.ts debe cachear el raw SVG por icono'
-);
-assert.ok(
-  /export\s+function\s+clearRawCache/.test(loaderJs),
-  'icon-loader.ts debe exportar clearRawCache (util para tests)'
-);
+  assert.ok(
+    /resolveIconRaw/.test(iconJs),
+    'icon.ts debe importar `resolveIconRaw` (no `resolveIconSvg`)'
+  );
+  assert.ok(
+    !/resolveIconSvg/.test(iconJs),
+    'icon.ts ya no debe usar resolveIconSvg: el SVG debe inyectarse inline'
+  );
+  assert.ok(
+    /class="inline"/.test(iconJs),
+    'icon.ts debe declarar `<span class="inline">` en el template'
+  );
+  assert.ok(
+    !/<img class="img"/.test(iconJs),
+    'icon.ts no debe usar <img class="img"> para cargar SVGs (rompe currentColor)'
+  );
+  assert.ok(
+    /#normalizeInlineSvg|#normalizeSvg/.test(iconJs),
+    'icon.ts debe tener una funcion que fuerce fill/stroke a currentColor'
+  );
+  assert.ok(
+    /\.inline/.test(iconCss),
+    'icon.css debe tener estilos para .inline'
+  );
 
-// --- Test opcional contra el dev server ------------------------------------
+  assert.ok(
+    /export\s+(async\s+)?function\s+resolveIconRaw/.test(loaderJs),
+    'icon-loader.ts debe exportar resolveIconRaw(prefix, name, signal)'
+  );
+  assert.ok(
+    /rawCache/.test(loaderJs),
+    'icon-loader.ts debe cachear el raw SVG por icono'
+  );
+  assert.ok(
+    /export\s+function\s+clearRawCache/.test(loaderJs),
+    'icon-loader.ts debe exportar clearRawCache (util para tests)'
+  );
 
-const PORT = process.env.PORT;
-// PORT=8391 (el dev server del kit). El PORT genérico del entorno (3081 DSH
-// web) NO debe disparar este fetch — solo si PORT coincide con el puerto
-// esperado del dev server del kit.
-// Consolidación 2026-09-07: no hay previews HTML individuales; la galería es
-// una SPA (src/app/) que carga los JSON desde components/. El fetch de
-// smoke apunta a la raíz del kit (el _shell.html ya no se sirve por ruta).
-if (PORT && PORT === '8391') {
-  try {
-    const res = await fetch(`http://localhost:${PORT}/src/app/?tag=iswc-icon`, {
-      signal: AbortSignal.timeout(2000),
-    });
-    assert.equal(res.status, 200, 'galería debe responder 200');
-    console.log(`✔ galería iswc-icon respondio 200 en :${PORT}`);
-  } catch (e) {
-    // Servidor no responde — omitir el test runtime (las reglas estáticas
-    // arriba ya cubren el contrato).
-    console.log(`⚠ dev server no responde en :${PORT} — saltando verificación runtime (${e.code || e.message})`);
+  // --- Test opcional contra el dev server ------------------------------------
+
+  const PORT = process.env.PORT;
+  // PORT=8391 (el dev server del kit). El PORT genérico del entorno (3081 DSH
+  // web) NO debe disparar este fetch — solo si PORT coincide con el puerto
+  // esperado del dev server del kit.
+  // Consolidación 2026-09-07: no hay previews HTML individuales; la galería es
+  // una SPA (src/app/) que carga los JSON desde components/. El fetch de
+  // smoke apunta a la raíz del kit (el _shell.html ya no se sirve por ruta).
+  if (PORT && PORT === '8391') {
+    try {
+      const res = await fetch(`http://localhost:${PORT}/src/app/?tag=iswc-icon`, {
+        signal: AbortSignal.timeout(2000),
+      });
+      assert.equal(res.status, 200, 'galería debe responder 200');
+      console.log(`✔ galería iswc-icon respondio 200 en :${PORT}`);
+    } catch (e) {
+      // Servidor no responde — omitir el test runtime (las reglas estáticas
+      // arriba ya cubren el contrato).
+      console.log(`⚠ dev server no responde en :${PORT} — saltando verificación runtime (${e.code || e.message})`);
+    }
   }
-}
 
-console.log('✔ icon-currentcolor: <iswc-icon> usa SVG inline + currentColor');
+  console.log('✔ icon-currentcolor: <iswc-icon> usa SVG inline + currentColor');
 
-// Sugerencia viva: ejecutar este test junto al resto.
-//   $ PORT=8391 node tests/run-all.mjs
+  // Sugerencia viva: ejecutar este test junto al resto.
+  //   $ PORT=8391 node tests/run-all.mjs
+});
+
+export default lista();

@@ -4,12 +4,21 @@
  * todos los componentes del consumidor.
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { repoDeUrl } from '../../../core/cdn-ref.ts';
+import { repoDeUrl } from '../../src/core/cdn-ref.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-Deno.test('cdn: R1 dueño/repo desde jsDelivr, githack y Pages; null fuera de ellos', () => {
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
+
+denoTest('cdn: R1 dueño/repo desde jsDelivr, githack y Pages; null fuera de ellos', () => {
   assertEquals(repoDeUrl('https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@abc123/dist/cdn/core/loader.min.js'), 'Jeff-Aporta/is-webcomponents');
   assertEquals(repoDeUrl('https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@abc123/dist/cdn/core/loader.min.js'), 'Jeff-Aporta/iswc-root');
   assertEquals(repoDeUrl('https://raw.githack.com/Jeff-Aporta/is-webcomponents/abc123/dist/cdn/core/loader.min.js'), 'Jeff-Aporta/is-webcomponents');
   assertEquals(repoDeUrl('https://jeff-aporta.github.io/is-webcomponents/dist/cdn/core/loader.min.js'), 'jeff-aporta/is-webcomponents');
   assertEquals(repoDeUrl('http://localhost:8391/dist/cdn/core/loader.min.js'), null);
 });
+
+export default lista();

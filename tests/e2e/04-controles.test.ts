@@ -5,15 +5,18 @@
 // range/color/json) y verifica que el host del componente reacciona
 // (prop/attr) — el cambio SIEMPRE viaja JSON -> prop/attr, nunca otro sistema.
 // Filtro opcional: E2E_TAGS=iswc-button,iswc-code (coma separada).
-import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Page } from '@browserbasehq/stagehand';
-import { arrancar, abrirGaleria, esperarMs, evidencia, problemasDeConsola, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos } from './lib/env.ts';
-import { repoDir } from './lib/env.ts';
-import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
+import { arrancar, abrirGaleria, esperarMs, evidencia, problemasDeConsola, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos } from '../.audit/e2e/env.ts';
+import { repoDir } from '../.audit/e2e/env.ts';
+import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -279,3 +282,5 @@ testE2E('controles data-driven: cada control del panel reacciona en el host', { 
   const resumen = fallos.map((f) => `[${f.tag}] ${f.control}: ${f.detalle}`).join('\n');
   assert.deepEqual(fallos, [], `CONTROLES CON FALLOS:\n${resumen}`);
 });
+
+export default lista();

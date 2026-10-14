@@ -5,11 +5,18 @@
 //   K3 los primeros tonos por ángulo áureo son todos distintos entre sí.
 //   K4 lo que no es hex se devuelve tal cual.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
-import { ANGULO_AUREO, hexToOklch, rotarTono } from '../../../components/diagrams/utils/oklch.ts';
+import { ANGULO_AUREO, hexToOklch, rotarTono } from '../../src/components/diagrams/utils/oklch.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const BASE = '#7acff4';
 
-Deno.test('oklch: K1 identidad y K2 misma luminosidad al rotar', () => {
+denoTest('oklch: K1 identidad y K2 misma luminosidad al rotar', () => {
   assertEquals(rotarTono(BASE, 0), BASE);
   assertEquals(rotarTono('#3a8fb5', 360), '#3a8fb5');
   const L0 = hexToOklch(BASE)![0];
@@ -19,8 +26,10 @@ Deno.test('oklch: K1 identidad y K2 misma luminosidad al rotar', () => {
   }
 });
 
-Deno.test('oklch: K3 tonos distintos y K4 no-hex intacto', () => {
+denoTest('oklch: K3 tonos distintos y K4 no-hex intacto', () => {
   const tonos = Array.from({ length: 8 }, (_, i) => rotarTono(BASE, ANGULO_AUREO * i));
   assertEquals(new Set(tonos).size, 8, tonos.join(' '));
   assertEquals(rotarTono('var(--x)', 90), 'var(--x)');
 });
+
+export default lista();

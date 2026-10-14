@@ -22,12 +22,15 @@
 //   - page.locator(...).click() interactúa con elementos (penetra shadow)
 //   - page.keyboard.press(...) simula teclado
 //   - esperarMs + reintentos absorben animaciones (default ~220ms open / ~180ms close)
-import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos } from './lib/env.ts';
-import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
+import { arrancar, abrirGaleria, esperarMs, evidencia, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos } from '../.audit/e2e/env.ts';
+import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -513,3 +516,5 @@ testE2E(
     await evidencia(page, '06j-drawer-data-close');
   },
 );
+
+export default lista();

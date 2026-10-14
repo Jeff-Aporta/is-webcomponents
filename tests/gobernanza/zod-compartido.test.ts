@@ -6,10 +6,13 @@
  *   Z2 ningún bundle de componente (dist/cdn/<carpeta>/*.min.js) inlinea Zod; el que lo usa lo importa de `../lib/zod.min.js`.
  *   Z3 ningún bundle de componente pasa de 200 KB (el runtime de Zod duplicado volvería a dispararlos).
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const CDN = join(RAIZ, 'dist', 'cdn');
@@ -54,3 +57,5 @@ test(`zod: Z3 ningún bundle de componente pasa de ${MAX_KB} KB`, async () => {
   }
   assert.deepEqual(gordos, [], `bundles por encima de ${MAX_KB} KB:\n${gordos.join('\n')}`);
 });
+
+export default lista();

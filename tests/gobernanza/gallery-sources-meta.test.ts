@@ -14,7 +14,11 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const read = (rel) => readFileSync(join(root, rel), 'utf8');
@@ -143,3 +147,5 @@ test('specs/lessons.md + code.md documentan contrato y errores de fuentes/meta',
   assert.match(ambos, /visor de fuentes|openViewSources|file-meta/i);
   assert.match(ambos, /gallery-sources-meta/);
 });
+
+export default lista();

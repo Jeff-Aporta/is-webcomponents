@@ -5,7 +5,6 @@
  * y radio variable según valor.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -15,7 +14,11 @@ import {
   estaRegistrado,
   usaResizeObserver,
   tieneEdgeCaseGuards,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/polar-area-chart.ts';
 const WRAPPER = 'src/components/charts/chart.ts';
@@ -58,3 +61,5 @@ test('iswc-polar-area-chart: registrado', () => {
 test('iswc-polar-area-chart: edge case guards', () => {
   assert.ok(tieneEdgeCaseGuards(read(WRAPPER)));
 });
+
+export default lista();

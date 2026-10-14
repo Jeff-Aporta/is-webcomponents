@@ -16,11 +16,14 @@
  * Tambien verifica que el click aplica props al target (comportamiento W15
  * que W19 hereda) y que el prev/next existe.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
@@ -154,3 +157,5 @@ test('W19: JSON declara seccion de tabs con categoria (3 categorias) y de reuse'
       `seccion "reuse" debe documentar el reuso de ${comp}`);
   }
 });
+
+export default lista();

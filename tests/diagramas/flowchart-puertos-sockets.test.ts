@@ -10,12 +10,19 @@
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
-import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
-import type { FlowLayout, FlowResolvedSpec } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
+import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import type { FlowLayout, FlowResolvedSpec } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const DIR = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
 
 /** Cada ruta real del lab: su spec resuelto y su layout. */
 async function rutas(): Promise<Array<{ nombre: string; spec: FlowResolvedSpec; L: FlowLayout }>> {
@@ -33,7 +40,7 @@ async function rutas(): Promise<Array<{ nombre: string; spec: FlowResolvedSpec; 
 
 const clave = (p: { x: number; y: number }): string => `${Math.round(p.x)},${Math.round(p.y)}`;
 
-Deno.test('puertos: P1 una entrada y una salida nunca comparten puerto; P2 las salidas no comparten arranque', async () => {
+denoTest('puertos: P1 una entrada y una salida nunca comparten puerto; P2 las salidas no comparten arranque', async () => {
   const malos: string[] = [];
   for (const { nombre, spec, L } of await rutas()) {
     const kindDe = new Map(spec.edges.map((e) => [e.id, e.kind]));
@@ -64,7 +71,7 @@ Deno.test('puertos: P1 una entrada y una salida nunca comparten puerto; P2 las s
   assertEquals(malos, []);
 });
 
-Deno.test('sockets: K2 todo consumo de un componente o tabla llega por -(O-', async () => {
+denoTest('sockets: K2 todo consumo de un componente o tabla llega por -(O-', async () => {
   const sinSocket: string[] = [];
   for (const { nombre, spec, L } of await rutas()) {
     const expone = new Set(spec.nodes.filter((n) => n.embed?.kind === 'component' || n.embed?.kind === 'tableder').map((n) => n.id));
@@ -78,3 +85,5 @@ Deno.test('sockets: K2 todo consumo de un componente o tabla llega por -(O-', as
   }
   assertEquals(sinSocket, []);
 });
+
+export default lista();

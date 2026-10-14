@@ -9,100 +9,107 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const previews = join(root, 'src', 'previews');
-const failures = [];
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-const kitFiles = [
-  'src/previews/_kit/schemas/preview.schemas.ts',
-  'src/previews/_kit/component-preview.ts',
-  'src/previews/_kit/JsonPreview.ts',
-  'src/previews/_kit/render.ts',
-  'src/previews/_kit/load-json.ts',
-  'src/previews/registry.ts',
-  'src/previews/catalog.ts',
-  'src/components/layout/preview-component.ts',
-  'src/previews/_shell.html',
-  'src/components/actions/button-group.json',
-];
-for (const f of kitFiles) {
-  if (!existsSync(join(root, f))) failures.push(`falta ${f}`);
-}
+test('componentes/preview-controller', async () => {
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const previews = join(root, 'src', 'previews');
+  const failures = [];
 
-/** Solo _shell.html bajo previews/ */
-function walkHtml(dir, acc = []) {
-  for (const name of readdirSync(dir)) {
-    const p = join(dir, name);
-    if (statSync(p).isDirectory()) {
-      if (name === '_kit' || name === 'behaviors') continue;
-      walkHtml(p, acc);
-    } else if (name.endsWith('.html')) acc.push(p);
+  const kitFiles = [
+    'src/previews/_kit/schemas/preview.schemas.ts',
+    'src/previews/_kit/component-preview.ts',
+    'src/previews/_kit/JsonPreview.ts',
+    'src/previews/_kit/render.ts',
+    'src/previews/_kit/load-json.ts',
+    'src/previews/registry.ts',
+    'src/previews/catalog.ts',
+    'src/components/layout/preview-component.ts',
+    'src/previews/_shell.html',
+    'src/components/actions/button-group.json',
+  ];
+  for (const f of kitFiles) {
+    if (!existsSync(join(root, f))) failures.push(`falta ${f}`);
   }
-  return acc;
-}
-const htmls = walkHtml(previews);
-for (const h of htmls) {
-  if (!h.endsWith(`${join('previews', '_shell.html')}`) && !h.replace(/\\/g, '/').endsWith('previews/_shell.html')) {
-    failures.push(`HTML prohibido (usar JSON): ${h.slice(root.length + 1)}`);
+
+  /** Solo _shell.html bajo previews/ */
+  function walkHtml(dir, acc = []) {
+    for (const name of readdirSync(dir)) {
+      const p = join(dir, name);
+      if (statSync(p).isDirectory()) {
+        if (name === '_kit' || name === 'behaviors') continue;
+        walkHtml(p, acc);
+      } else if (name.endsWith('.html')) acc.push(p);
+    }
+    return acc;
   }
-}
-if (htmls.length !== 1) {
-  failures.push(`debe quedar exactamente 1 HTML (_shell.html), hay ${htmls.length}`);
-}
+  const htmls = walkHtml(previews);
+  for (const h of htmls) {
+    if (!h.endsWith(`${join('previews', '_shell.html')}`) && !h.replace(/\\/g, '/').endsWith('previews/_shell.html')) {
+      failures.push(`HTML prohibido (usar JSON): ${h.slice(root.length + 1)}`);
+    }
+  }
+  if (htmls.length !== 1) {
+    failures.push(`debe quedar exactamente 1 HTML (_shell.html), hay ${htmls.length}`);
+  }
 
-const types = readFileSync(join(root, 'src/previews/_kit/schemas/preview.schemas.ts'), 'utf8');
-if (!/iswc-preview\/v1/.test(types)) failures.push('schemas/preview.schemas.ts debe declarar $schema iswc-preview/v1');
-if (!/PreviewDefinition/.test(types)) failures.push('falta PreviewDefinition');
+  const types = readFileSync(join(root, 'src/previews/_kit/schemas/preview.schemas.ts'), 'utf8');
+  if (!/iswc-preview\/v1/.test(types)) failures.push('schemas/preview.schemas.ts debe declarar $schema iswc-preview/v1');
+  if (!/PreviewDefinition/.test(types)) failures.push('falta PreviewDefinition');
 
-const host = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
-if (/eval\s*\(/.test(host)) failures.push('iswc-preview-component no debe usar eval');
+  const host = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
+  if (/eval\s*\(/.test(host)) failures.push('iswc-preview-component no debe usar eval');
 
-const bg = JSON.parse(readFileSync(join(root, 'src/components/actions/button-group.json'), 'utf8'));
-assert.equal(bg.$schema, 'iswc-preview/v1');
-assert.equal(bg.tag, 'iswc-button-group');
-assert.ok(Array.isArray(bg.sections) && bg.sections.length > 0);
+  const bg = JSON.parse(readFileSync(join(root, 'src/components/actions/button-group.json'), 'utf8'));
+  assert.equal(bg.$schema, 'iswc-preview/v1');
+  assert.equal(bg.tag, 'iswc-button-group');
+  assert.ok(Array.isArray(bg.sections) && bg.sections.length > 0);
 
-const index = readFileSync(join(root, 'index.html'), 'utf8');
-const galleryApp = readFileSync(join(root, 'src/app/app.ts'), 'utf8');
-// index.html solo monta el host; la lógica vive en app/app.ts (bundle
-// del SPA — la migración del inline JS al bundle cambió dónde están los
-// nombres de las funciones).
-if (!/<iswc-doc-demo\b/.test(index)) {
-  failures.push('index.html debe montar el shell <iswc-doc-demo> (es quien crea #previewHost)');
-}
-if (!/hasControlledPreview/.test(galleryApp) || !/loadPreview/.test(galleryApp) || !/hasCachedPreview/.test(galleryApp)) {
-  failures.push('app/app.ts debe usar hasControlledPreview + loadPreview + hasCachedPreview del registry');
-}
+  const index = readFileSync(join(root, 'index.html'), 'utf8');
+  const galleryApp = readFileSync(join(root, 'src/app/app.ts'), 'utf8');
+  // index.html solo monta el host; la lógica vive en app/app.ts (bundle
+  // del SPA — la migración del inline JS al bundle cambió dónde están los
+  // nombres de las funciones).
+  if (!/<iswc-doc-demo\b/.test(index)) {
+    failures.push('index.html debe montar el shell <iswc-doc-demo> (es quien crea #previewHost)');
+  }
+  if (!/hasControlledPreview/.test(galleryApp) || !/loadPreview/.test(galleryApp) || !/hasCachedPreview/.test(galleryApp)) {
+    failures.push('app/app.ts debe usar hasControlledPreview + loadPreview + hasCachedPreview del registry');
+  }
 
-const { hasControlledPreview, hasCachedPreview, controlledPreviewTags, loadPreview, clearPreviewCache } = await import('../../../previews/registry.ts');
-assert.equal(hasControlledPreview('iswc-button-group'), true);
-assert.equal(hasControlledPreview('iswc-button'), true);
-assert.equal(hasControlledPreview('home'), true);
-assert.ok(controlledPreviewTags().length >= 100);
+  const { hasControlledPreview, hasCachedPreview, controlledPreviewTags, loadPreview, clearPreviewCache } = await import('../../src/previews/registry.ts');
+  assert.equal(hasControlledPreview('iswc-button-group'), true);
+  assert.equal(hasControlledPreview('iswc-button'), true);
+  assert.equal(hasControlledPreview('home'), true);
+  assert.ok(controlledPreviewTags().length >= 100);
 
-clearPreviewCache();
-assert.equal(hasCachedPreview('iswc-button-group'), false);
-const preview = await loadPreview('iswc-button-group');
-assert.ok(preview);
-assert.equal(preview.definition.tag, 'iswc-button-group');
-assert.equal(preview.definition.$schema, 'iswc-preview/v1');
-assert.equal(hasCachedPreview('iswc-button-group'), true);
-const again = await loadPreview('iswc-button-group');
-// `JsonPreview` normaliza la definición al construirse (spread + defaults), así
-// que cada carga devuelve un objeto propio: la identidad no es observable. Lo
-// que sí debe cumplirse es que la definición salga de la caché y sea la misma.
-assert.equal(hasCachedPreview('iswc-button-group'), true, 'la definición debe seguir cacheada');
-assert.deepEqual(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
-assert.ok(/hasCachedPreview/.test(galleryApp), 'app/app.ts debe evitar vaciar el host si el JSON ya está en caché');
-assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'iswc-preview-component debe invalidar mounts en vuelo');
+  clearPreviewCache();
+  assert.equal(hasCachedPreview('iswc-button-group'), false);
+  const preview = await loadPreview('iswc-button-group');
+  assert.ok(preview);
+  assert.equal(preview.definition.tag, 'iswc-button-group');
+  assert.equal(preview.definition.$schema, 'iswc-preview/v1');
+  assert.equal(hasCachedPreview('iswc-button-group'), true);
+  const again = await loadPreview('iswc-button-group');
+  // `JsonPreview` normaliza la definición al construirse (spread + defaults), así
+  // que cada carga devuelve un objeto propio: la identidad no es observable. Lo
+  // que sí debe cumplirse es que la definición salga de la caché y sea la misma.
+  assert.equal(hasCachedPreview('iswc-button-group'), true, 'la definición debe seguir cacheada');
+  assert.deepEqual(again.definition, preview.definition, 'segunda carga debe reutilizar la definición en memoria');
+  assert.ok(/hasCachedPreview/.test(galleryApp), 'app/app.ts debe evitar vaciar el host si el JSON ya está en caché');
+  assert.ok(/#paintGen/.test(host) || /paintGen/.test(host), 'iswc-preview-component debe invalidar mounts en vuelo');
 
-if (failures.length) {
-  console.error(`preview-controller.test.ts: FAIL — ${failures.length}\n`);
-  for (const f of failures) console.error(`  - ${f}`);
-  process.exit(1);
-}
+  if (failures.length) {
+    console.error(`preview-controller.test.ts: FAIL — ${failures.length}\n`);
+    for (const f of failures) console.error(`  - ${f}`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
 
-console.log(
-  `preview-controller.test.ts: PASS — JSON v1 + shell único (${controlledPreviewTags().length} tags)`,
-);
+  console.log(
+    `preview-controller.test.ts: PASS — JSON v1 + shell único (${controlledPreviewTags().length} tags)`,
+  );
+});
+
+export default lista();

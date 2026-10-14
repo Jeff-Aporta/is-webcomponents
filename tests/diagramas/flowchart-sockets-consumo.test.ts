@@ -5,10 +5,17 @@
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
+import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const DIR = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
 
 async function rutas(): Promise<Array<{ nombre: string; payload: Record<string, unknown> }>> {
   const out: Array<{ nombre: string; payload: Record<string, unknown> }> = [];
@@ -22,7 +29,7 @@ async function rutas(): Promise<Array<{ nombre: string; payload: Record<string, 
   return out;
 }
 
-Deno.test('sockets: A7 todo consumo punteado de un componente o tabla termina en -(O-', async () => {
+denoTest('sockets: A7 todo consumo punteado de un componente o tabla termina en -(O-', async () => {
   const fallas: string[] = [];
   let consumos = 0;
   for (const r of await rutas()) {
@@ -42,3 +49,5 @@ Deno.test('sockets: A7 todo consumo punteado de un componente o tabla termina en
   assert(consumos >= 20, `pocos consumos encontrados: ${consumos}`);
   assert(fallas.length === 0, `consumos sin -(O-:\n${fallas.join('\n')}`);
 });
+
+export default lista();

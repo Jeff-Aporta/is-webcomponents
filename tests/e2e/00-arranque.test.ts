@@ -1,12 +1,15 @@
 // 00-arranque.test.ts: arranque de la galeria iswc-root, deep link por
 // componente y navegacion por el nav. Port del esquema de PatyIA 00-sesion
 // sin login/ISS: aqui el "estado" es el tag del componente (?s={component}).
-import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import { arrancar, abrirGaleria, clicTagNav, esperarMs, esperarTexto, esperarContenido, arbolTexto, evidencia, problemasDeConsola, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos } from './lib/env.ts';
-import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
+import { arrancar, abrirGaleria, clicTagNav, esperarMs, esperarTexto, esperarContenido, arbolTexto, evidencia, problemasDeConsola, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos } from '../.audit/e2e/env.ts';
+import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -108,3 +111,5 @@ testE2E('sin errores de consola en arranque/navegacion', { timeout: 30000 }, asy
     t.diagnostic(`consola con avisos (ver 03-problemas): ${unicos.join(' | ')}`);
   }
 });
+
+export default lista();

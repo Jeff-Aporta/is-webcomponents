@@ -7,7 +7,6 @@
  * Eventos: iswc-turtle-state, iswc-open-viewer, iswc-toggle-group.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 
 
 import {
@@ -26,7 +25,11 @@ import {
   estaRegistrado,
   cleanupCompleto,
   tieneJsDoc,
-} from '../_helpers.js';
+} from '../../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 const MOD = 'src/components/diagrams/sequence-diagram.ts';
 
 test('iswc-sequence-diagram: archivo existe', () => {
@@ -78,3 +81,5 @@ test('iswc-sequence-diagram: registrado', () => {
   const src = leerConBase(MOD);
   assert.match(src, /defineElement\s*\(\s*['"`]iswc-sequence-diagram['"`]/);
 });
+
+export default lista();

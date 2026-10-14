@@ -7,12 +7,15 @@
  * una app documental pone en su barra (tema, paleta, escoba) también viven en el kit con sus
  * hermanos y su ruta: así ningún consumidor necesita una copia local (`docs/lab/*.js`).
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
-import { ComponentJsonSchema } from '../../../previews/_kit/schemas/component.schemas.ts';
-import { MdDocsVaultListaSchema } from '../../../components/layout/schemas/md-docs-vault.schemas.ts';
+import { ComponentJsonSchema } from '../../src/previews/_kit/schemas/component.schemas.ts';
+import { MdDocsVaultListaSchema } from '../../src/components/layout/schemas/md-docs-vault.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const COMPONENTES = [
@@ -120,3 +123,5 @@ test('iswc-doc-index: los ítems declarativos del demo tienen id y título únic
   assert.ok(items.length >= 3 && items.every((i) => i.id && i.title), 'ítems con id y título');
   assert.equal(new Set(items.map((i) => i.id)).size, items.length, 'ids únicos');
 });
+
+export default lista();

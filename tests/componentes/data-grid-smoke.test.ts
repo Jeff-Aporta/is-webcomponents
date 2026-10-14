@@ -16,9 +16,8 @@
  * explícitos añadidos al tipar el módulo no rompen las firmas.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 
-import type { CellValue, ColumnDef, FilterRule, Operator, Row } from '../../components/data/schemas/grid-types.schemas.ts';
+import type { CellValue, ColumnDef, FilterRule, Operator, Row } from '../../src/components/data/schemas/grid-types.schemas.ts';
 import {
   AGGREGATION_FNS,
   COLUMN_TYPES,
@@ -37,7 +36,7 @@ import {
   dateComparator,
   booleanComparator,
   toDate,
-} from '../../components/data/utils/grid-types.ts';
+} from '../../src/components/data/utils/grid-types.ts';
 import {
   aggregateRows,
   applyFilters,
@@ -53,7 +52,11 @@ import {
   resolveWidths,
   toDelimited,
   toSpreadsheetXml,
-} from '../../components/data/utils/grid-data.ts';
+} from '../../src/components/data/utils/grid-data.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 /* ── Columnas ─────────────────────────────────────────────────────────── */
 
@@ -299,3 +302,5 @@ test('ColumnDef / FilterRule / Operator: campos esperados', () => {
   const op: Operator = NUMBER_OPERATORS[0]!;
   assert.equal(typeof op.test, 'function');
 });
+
+export default lista();

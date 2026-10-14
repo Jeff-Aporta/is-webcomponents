@@ -7,7 +7,6 @@
  * Eventos: iswc-transfer-change.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -20,7 +19,11 @@ import {
   adoptaCss,
   estaRegistrado,
   tieneAccesibilidad,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/data/transfer.ts';
 
@@ -74,3 +77,5 @@ test('iswc-transfer-item: registrado', () => {
   const src = read(MOD);
   assert.match(src, /defineElement\s*\(\s*['"`]iswc-transfer-item['"`]/);
 });
+
+export default lista();

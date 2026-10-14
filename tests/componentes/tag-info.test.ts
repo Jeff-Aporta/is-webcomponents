@@ -1,8 +1,11 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
@@ -138,3 +141,5 @@ test('preview de iswc-tag muestra la colore info', () => {
     assert.ok(html.includes(needle), `Preview debe demostrar la colore ${v}`);
   }
 });
+
+export default lista();

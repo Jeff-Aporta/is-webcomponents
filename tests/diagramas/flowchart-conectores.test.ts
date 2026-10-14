@@ -12,14 +12,21 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, unionesDe } from '../../../components/diagrams/utils/flowchart-spec.ts';
-import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../../components/diagrams/utils/diagram-arrow.ts';
-import { applyRadialCost, makeCostGrid } from '../../../core/diagram-grid.ts';
-import { U } from '../../../components/diagrams/utils/flowchart-labels.ts';
-import type { FlowLayout } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
+import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, unionesDe } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { applyRadialCost, makeCostGrid } from '../../src/core/diagram-grid.ts';
+import { U } from '../../src/components/diagrams/utils/flowchart-labels.ts';
+import type { FlowLayout } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const DIR = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
 
 async function rutas(): Promise<Array<{ nombre: string; L: FlowLayout }>> {
   const out: Array<{ nombre: string; L: FlowLayout }> = [];
@@ -54,7 +61,7 @@ const PARALELO = {
   ],
 };
 
-Deno.test('conectores: C1 la arista que inicia el paralelismo llega centrada; la reunión es un ⦿', () => {
+denoTest('conectores: C1 la arista que inicia el paralelismo llega centrada; la reunión es un ⦿', () => {
   const spec = resolveFlowchartSpec(PARALELO)!;
   assertEquals([...unionesDe(spec)], ['u'], 'solo la barra que reúne es punto de convergencia');
   const L = computeFlowchartLayout(spec, null, { style: 'insoft' });
@@ -70,7 +77,7 @@ Deno.test('conectores: C1 la arista que inicia el paralelismo llega centrada; la
   assertEquals(p0.x, u.x + u.w / 2, 'lo que sigue a la reunión sale del centro del ⦿');
 });
 
-Deno.test('conectores: C1 rutas reales — toda bifurcación recibe su arista centrada', async () => {
+denoTest('conectores: C1 rutas reales — toda bifurcación recibe su arista centrada', async () => {
   const malos: string[] = [];
   for (const { nombre, L } of await rutas()) {
     for (const bar of L.nodes.filter((n) => n.shape === 'bar' && !n.union)) {
@@ -85,7 +92,7 @@ Deno.test('conectores: C1 rutas reales — toda bifurcación recibe su arista ce
   assertEquals(malos, []);
 });
 
-Deno.test('conectores: C2 auto-cruce — se corta el bucle y ninguna arista real se cruza a sí misma', async () => {
+denoTest('conectores: C2 auto-cruce — se corta el bucle y ninguna arista real se cruza a sí misma', async () => {
   // Baja, va a la izquierda, baja, vuelve a la derecha cruzando su propia bajada y sube a la punta.
   const bucle = [{ x: 100, y: 0 }, { x: 100, y: 100 }, { x: 60, y: 100 }, { x: 60, y: 140 }, { x: 140, y: 140 }, { x: 140, y: 60 }, { x: 80, y: 60 }];
   assert(tieneAutoCruce(bucle));
@@ -103,7 +110,7 @@ Deno.test('conectores: C2 auto-cruce — se corta el bucle y ninguna arista real
   assertEquals(malos, []);
 });
 
-Deno.test('conectores: C3 proximidad radial a 3U, decreciente, y los -(O pesan más', () => {
+denoTest('conectores: C3 proximidad radial a 3U, decreciente, y los -(O pesan más', () => {
   assertEquals(PROXIMIDAD.radio, 3 * U);
   assert(PROXIMIDAD.socket > PROXIMIDAD.conector && PROXIMIDAD.conector >= PROXIMIDAD.entidad, 'socket > conector ≥ entidad');
   const g = makeCostGrid(400, 80);
@@ -117,7 +124,7 @@ Deno.test('conectores: C3 proximidad radial a 3U, decreciente, y los -(O pesan m
   assert(costo(88) < 1 + PROXIMIDAD.entidad + 0.01, 'se combina por máximo, no se suma');
 });
 
-Deno.test('conectores: C4 puentes CRUD con colores HTTP llevados a SQL e ícono propio', () => {
+denoTest('conectores: C4 puentes CRUD con colores HTTP llevados a SQL e ícono propio', () => {
   assertEquals(Object.fromEntries(Object.entries(CRUD_SQL).map(([k, v]) => [k, [v.sql, v.http]])), {
     R: ['SELECT', 'GET'], C: ['INSERT', 'POST'], U: ['UPDATE', 'PUT'], D: ['DELETE', 'DELETE'],
   });
@@ -141,9 +148,9 @@ function domFalso(): void {
   (globalThis as unknown as { document: unknown }).document = { createElementNS: (_: string, tag: string) => new El(tag) };
 }
 
-Deno.test('conectores: C5 los puntos toman el color de la arista y se personalizan', async () => {
+denoTest('conectores: C5 los puntos toman el color de la arista y se personalizan', async () => {
   domFalso();
-  const { animarRiel, FLUJO } = await import('../../../components/diagrams/utils/diagram-flow.ts');
+  const { animarRiel, FLUJO } = await import('../../src/components/diagrams/utils/diagram-flow.ts');
   const riel = document.createElementNS('http://www.w3.org/2000/svg', 'path') as unknown as SVGElement;
   riel.setAttribute('d', 'M0,0 L100,0');
   riel.setAttribute('stroke', '#112233');
@@ -161,3 +168,5 @@ Deno.test('conectores: C5 los puntos toman el color de la arista y se personaliz
   })!, null, { style: 'insoft' });
   assertEquals([L.edges[0]!.color, L.edges[0]!.dots], ['#0A7', { color: '#F00', size: 6 }], 'la arista lleva su color y sus puntos al layout');
 });
+
+export default lista();

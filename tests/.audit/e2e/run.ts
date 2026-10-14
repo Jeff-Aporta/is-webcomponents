@@ -3,14 +3,14 @@
 // empezar, corre `deno test` sobre los *.test.ts y apaga el servidor al
 // terminar (pase o falle). Para apuntar a un host externo:
 //   E2E_AUTOSERVE=0 E2E_BASE_URL=http://127.0.0.1:8391/index.html deno task test:e2e
-import { denoTest } from '../../../vendor-distributions/shared/testing/deno-test.ts';
+import { denoTest } from '../../../src/vendor-distributions/shared/testing/deno-test.ts';
 import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { levantarServidor } from './lib/server.ts';
-import { ENV } from './lib/env.ts';
-import { descargarConfigE2E } from './lib/vendor-e2e-config.ts';
-import type { ServidorE2E } from "./lib/server.schemas.js";
+import { levantarServidor } from './server.ts';
+import { ENV } from './env.ts';
+import { descargarConfigE2E } from './vendor-e2e-config.ts';
+import type { ServidorE2E } from "./schemas/server.schemas.js";
 
 const e2eDir = dirname(fileURLToPath(import.meta.url));
 

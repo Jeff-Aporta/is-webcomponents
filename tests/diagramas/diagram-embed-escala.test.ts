@@ -4,14 +4,21 @@
  * sus guiones se reducen con el diagrama en vez de quedar con el grosor de pantalla del original.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 // Documento mínimo: lo único que usa embedSvgElement es crear el <svg>, atributos e innerHTML.
 (globalThis as Record<string, unknown>).document ??= {
   createElementNS: () => ({ attrs: {} as Record<string, string>, html: '', setAttribute(k: string, v: string) { this.attrs[k] = v; }, getAttribute(k: string) { return this.attrs[k] ?? null; }, set innerHTML(v: string) { this.html = v; }, get innerHTML() { return this.html; } }),
 };
-const { embedSvgElement } = await import('../../../components/diagrams/utils/diagram-embed.ts');
+const { embedSvgElement } = await import('../../src/components/diagrams/utils/diagram-embed.ts');
 
-Deno.test('embed: E1 escala por viewBox y E2 sin non-scaling-stroke', () => {
+denoTest('embed: E1 escala por viewBox y E2 sin non-scaling-stroke', () => {
   const svg = embedSvgElement(
     { box: { x: 0, y: 0, w: 1200, h: 900 }, scope: 's1', markup: '<path d="M0 0H10" stroke-width="1.15" vector-effect="non-scaling-stroke"/><line x2="5"/>' } as never,
     { x: 10, y: 20, w: 200, h: 150 },
@@ -21,3 +28,5 @@ Deno.test('embed: E1 escala por viewBox y E2 sin non-scaling-stroke', () => {
   assert(!svg.innerHTML.includes('non-scaling-stroke'), svg.innerHTML);
   assert(svg.innerHTML.includes('stroke-width="1.15"'), 'el resto del trazo queda igual');
 });
+
+export default lista();

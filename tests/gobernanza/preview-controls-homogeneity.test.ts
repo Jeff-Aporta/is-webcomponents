@@ -6,10 +6,17 @@
  */
 import { assertEquals } from 'jsr:@std/assert@1';
 import { dirname, fromFileUrl, join } from 'jsr:@std/path@1';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const root = join(dirname(fromFileUrl(import.meta.url)), '../../../..');
 
-Deno.test('preview controls: auditoría homogénea sin hallazgos', async () => {
+denoTest('preview controls: auditoría homogénea sin hallazgos', async () => {
   const script = join(root, 'scripts/audits/preview-controls.mjs');
   const cmd = new Deno.Command('node', {
     args: [script],
@@ -24,3 +31,5 @@ Deno.test('preview controls: auditoría homogénea sin hallazgos', async () => {
   const report = JSON.parse(out);
   assertEquals(report.total, 0, JSON.stringify(report.findings?.slice(0, 20), null, 2));
 });
+
+export default lista();

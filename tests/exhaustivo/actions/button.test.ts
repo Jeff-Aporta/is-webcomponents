@@ -15,13 +15,16 @@
  *  10. Performance / lifecycle — disconnectedCallback, cleanup de listeners
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { extraerMetaComponente } from '../../motor/validators/consistency.js';
+import { extraerMetaComponente } from '../../.audit/motor/validators/consistency.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -150,3 +153,5 @@ test('iswc-button: implementa lifecycle (connectedCallback / disconnectedCallbac
     'debe limpiar listeners o tener un mecanismo de re-entrada idempotente',
   );
 });
+
+export default lista();

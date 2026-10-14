@@ -5,13 +5,16 @@
  * <dialog> (top layer). Wrapper de `definePickerInput`.
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   leerComponente, leerPreview, existeCss, esFactoryWrapper,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const FACTORY = readFileSync(join(RAIZ, 'components', '_shared', 'picker-element.ts'), 'utf8');
@@ -84,3 +87,5 @@ test('date-input: shortcuts (preset buttons en action-bar)', () => {
 test('date-input: action-bar configurable', () => {
   assert.ok(/action-bar/.test(FACTORY));
 });
+
+export default lista();

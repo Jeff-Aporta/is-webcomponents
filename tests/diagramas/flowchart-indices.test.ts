@@ -13,8 +13,15 @@
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
+import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 type N = { id: string; label?: string; shape?: string };
 const indices = (nodes: N[], edges: Array<{ from: string; to: string; kind?: string }>): Record<string, string | undefined> => {
@@ -23,12 +30,12 @@ const indices = (nodes: N[], edges: Array<{ from: string; to: string; kind?: str
 };
 const porIndice = (a: string, b: string): number => a.localeCompare(b, 'es', { numeric: true });
 
-Deno.test('índices: I1 sin ramas son 1, 2, 3', () => {
+denoTest('índices: I1 sin ramas son 1, 2, 3', () => {
   const r = indices([{ id: 'a' }, { id: 'b' }, { id: 'c' }], [{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }]);
   assertEquals([r.a, r.b, r.c], ['1', '2', '3']);
 });
 
-Deno.test('índices: I2 lo de una bifurcación es p.1, p.2… rama tras rama y la reunión es p+1', () => {
+denoTest('índices: I2 lo de una bifurcación es p.1, p.2… rama tras rama y la reunión es p+1', () => {
   const r = indices(
     [{ id: 'a' }, { id: 'd', shape: 'diamond' }, { id: 'x' }, { id: 'x2' }, { id: 'y' }, { id: 'y2' }, { id: 'm' }],
     [{ from: 'a', to: 'd' }, { from: 'd', to: 'x' }, { from: 'x', to: 'x2' }, { from: 'd', to: 'y' }, { from: 'y', to: 'y2' }, { from: 'x2', to: 'm' }, { from: 'y2', to: 'm' }],
@@ -39,7 +46,7 @@ Deno.test('índices: I2 lo de una bifurcación es p.1, p.2… rama tras rama y l
   assertEquals(ramas, [['2.1', '2.2'], ['2.3', '2.4']]);
 });
 
-Deno.test('índices: I3 bifurcación anidada y rama directa a la reunión', () => {
+denoTest('índices: I3 bifurcación anidada y rama directa a la reunión', () => {
   const r = indices(
     [{ id: 'd1', shape: 'diamond' }, { id: 'v' }, { id: 'd2', shape: 'diamond' }, { id: 'p' }, { id: 'q' }, { id: 'm' }],
     [{ from: 'd1', to: 'v' }, { from: 'd1', to: 'm' }, { from: 'v', to: 'd2' }, { from: 'd2', to: 'p' }, { from: 'd2', to: 'q' }, { from: 'p', to: 'm' }, { from: 'q', to: 'm' }],
@@ -49,7 +56,7 @@ Deno.test('índices: I3 bifurcación anidada y rama directa a la reunión', () =
   assertEquals(r.m, '2');
 });
 
-Deno.test('índices: I4 barras, inicio y fin transparentes; ciclos sin romper', () => {
+denoTest('índices: I4 barras, inicio y fin transparentes; ciclos sin romper', () => {
   const r = indices(
     [{ id: 'i', shape: 'start' }, { id: 'a' }, { id: 'f', shape: 'bar' }, { id: 'x' }, { id: 'y' }, { id: 'j', shape: 'bar' }, { id: 'z' }, { id: 'e', shape: 'end' }],
     [{ from: 'i', to: 'a' }, { from: 'a', to: 'f' }, { from: 'f', to: 'x' }, { from: 'f', to: 'y' }, { from: 'x', to: 'j' }, { from: 'y', to: 'j' }, { from: 'j', to: 'z' }, { from: 'z', to: 'e' }, { from: 'z', to: 'a' }],
@@ -60,12 +67,12 @@ Deno.test('índices: I4 barras, inicio y fin transparentes; ciclos sin romper', 
   assertEquals(r.z, '2');
 });
 
-Deno.test('índices: I5 lo que solo se usa no lleva índice', () => {
+denoTest('índices: I5 lo que solo se usa no lleva índice', () => {
   const r = indices([{ id: 'a' }, { id: 'b' }, { id: 't' }], [{ from: 'a', to: 'b' }, { from: 'b', to: 't', kind: 'dashed' }]);
   assertEquals([r.a, r.b, r.t], ['1', '2', undefined]);
 });
 
-Deno.test('índices: I6 una reunión dentro de una rama vuelve solo al nivel de quien bifurcó', () => {
+denoTest('índices: I6 una reunión dentro de una rama vuelve solo al nivel de quien bifurcó', () => {
   // ok(1) → sí: n(1.1) → d(1.2) → [t(1.2.1), (no)] → c(1.3); ok no → h; c → h(2)
   const r = indices(
     [{ id: 'ok', shape: 'diamond' }, { id: 'n' }, { id: 'd', shape: 'diamond' }, { id: 't' }, { id: 'c' }, { id: 'h' }],
@@ -76,7 +83,7 @@ Deno.test('índices: I6 una reunión dentro de una rama vuelve solo al nivel de 
   assertEquals(r.h, '2', 'la reunión de ok vuelve al nivel de ok');
 });
 
-Deno.test('índices: I7 caso real de la ruta de parches', () => {
+denoTest('índices: I7 caso real de la ruta de parches', () => {
   const r = indices(
     [{ id: 'ini', shape: 'start' }, { id: 'a' }, { id: 'b', shape: 'diamond' }, { id: 'x' }, { id: 'c' }, { id: 'd', shape: 'diamond' }, { id: 'f' }, { id: 'g' }, { id: 'fin', shape: 'end' }],
     [
@@ -87,7 +94,7 @@ Deno.test('índices: I7 caso real de la ruta de parches', () => {
   assertEquals([r.a, r.b, r.c, r.d, r.f, r.g, r.x], ['1', '2', '2.1', '2.2', '2.2.1', '2.2.2', '3']);
 });
 
-Deno.test('índices: I8 las entidades de la entrada no llevan número', () => {
+denoTest('índices: I8 las entidades de la entrada no llevan número', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     steps: 'auto',
     nodes: [
@@ -103,8 +110,8 @@ Deno.test('índices: I8 las entidades de la entrada no llevan número', () => {
   assertEquals([r.cli, r.api, r.ctl, r.a, r.b], [undefined, undefined, undefined, '1', '2']);
 });
 
-Deno.test('índices: I9 sin huecos en ningún nivel (rutas reales)', async () => {
-  const dir = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
+denoTest('índices: I9 sin huecos en ningún nivel (rutas reales)', async () => {
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
   const huecos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -126,3 +133,5 @@ Deno.test('índices: I9 sin huecos en ningún nivel (rutas reales)', async () =>
   }
   assertEquals(huecos, []);
 });
+
+export default lista();

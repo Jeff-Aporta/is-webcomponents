@@ -5,7 +5,6 @@
  * propiedad .value o atributo `value`. Eventos: iswc-change.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -17,7 +16,11 @@ import {
   tieneEdgeCaseGuards,
   adoptaCss,
   estaRegistrado,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/data/gauge.ts';
 
@@ -66,3 +69,5 @@ test('iswc-gauge: registrado', () => {
   const src = read(MOD);
   assert.match(src, /defineElement\s*\(\s*['"`]iswc-gauge['"`]/);
 });
+
+export default lista();

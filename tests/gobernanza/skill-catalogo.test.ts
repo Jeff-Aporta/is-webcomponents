@@ -3,10 +3,13 @@
  * fila en `skills/iswc-root/catalog.md` (así un agente sabe qué componente usar) y la ficha `.md`
  * que esa fila nombra existe en `src/components/`.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const catalogo = readFileSync(join(RAIZ, 'skills', 'iswc-root', 'catalog.md'), 'utf8');
@@ -23,3 +26,5 @@ test('skill: toda ficha que nombra catalog.md existe', () => {
   const rotas = fichas.filter((f) => !existsSync(join(RAIZ, 'src', 'components', f)));
   assert.deepEqual(rotas, [], `fichas que no existen:\n${rotas.join('\n')}`);
 });
+
+export default lista();

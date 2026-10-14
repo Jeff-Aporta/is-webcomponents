@@ -93,31 +93,39 @@ check(!WA_RE.test(html), 'index.html contiene Web Awesome');
 
 // Verifica todos los previews contra Web Awesome.
 import { readdir } from 'node:fs/promises';
-async function walk(dir) {
-  const out = [];
-  for (const e of await readdir(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) out.push(...await walk(p));
-    else if (e.isFile() && (e.name.endsWith('.html') || e.name.endsWith('.json'))) out.push(p);
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+test('gobernanza/theme-contract', async () => {
+  async function walk(dir) {
+    const out = [];
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) out.push(...await walk(p));
+      else if (e.isFile() && (e.name.endsWith('.html') || e.name.endsWith('.json'))) out.push(p);
+    }
+    return out;
   }
-  return out;
-}
-const previewsDir = join(root, 'src', 'previews');
-const previews = await walk(previewsDir);
-let previewCount = 0;
-for (const f of previews) {
-  previewCount++;
-  const body = await readFile(f, 'utf8');
-  if (WA_RE.test(body)) failures.push(`Web Awesome en preview: ${f.replace(root + '\\', '')}`);
-}
+  const previewsDir = join(root, 'src', 'previews');
+  const previews = await walk(previewsDir);
+  let previewCount = 0;
+  for (const f of previews) {
+    previewCount++;
+    const body = await readFile(f, 'utf8');
+    if (WA_RE.test(body)) failures.push(`Web Awesome en preview: ${f.replace(root + '\\', '')}`);
+  }
+  
+  console.log(`previews escaneados: ${previewCount}`);
+  
+  if (failures.length) {
+    console.log('\nFAIL:');
+    for (const f of failures.slice(0, 20)) console.log(`  - ${f}`);
+    if (failures.length > 20) console.log(`  ... y ${failures.length - 20} mas`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  
+  console.log(`theme-contract.test.ts: PASS Ã¢â‚¬â€ 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);
+});
 
-console.log(`previews escaneados: ${previewCount}`);
-
-if (failures.length) {
-  console.log('\nFAIL:');
-  for (const f of failures.slice(0, 20)) console.log(`  - ${f}`);
-  if (failures.length > 20) console.log(`  ... y ${failures.length - 20} mas`);
-  process.exit(1);
-}
-
-console.log(`theme-contract.test.ts: PASS Ã¢â‚¬â€ 2 temas, 3 paletas, tokens --iswc-*, sin Web Awesome`);
+export default lista();

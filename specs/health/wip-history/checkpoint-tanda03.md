@@ -60,9 +60,9 @@
 ## Lock permanente respetado
 
 NO se tocaron:
-- `src/components/_shared/svg-chart-engine.ts`
-- `src/components/_shared/diagram-element-base.ts`
-- `src/components/diagrams/diagram-types.ts`
+- `src/core/svg-chart-engine.ts`
+- `src/components/diagrams/utils/diagram-element-base.ts`
+- `src/components/diagrams/utils/diagram-types.ts`
 
 ## Lección aprendida (estrategia)
 

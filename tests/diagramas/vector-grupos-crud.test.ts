@@ -9,11 +9,18 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { GRUPOS_CRUD, vectorAFlujo } from '../../../components/diagrams/utils/vector-flow-spec.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
+import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { GRUPOS_CRUD, vectorAFlujo } from '../../src/components/diagrams/utils/vector-flow-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
 
-const DIR = new URL('../../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
+
+const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas', import.meta.url);
 type Caja = { x: number; y: number; w: number; h: number };
 const dentro = (n: Caja, c: Caja): boolean => n.x >= c.x && n.y >= c.y && n.x + n.w <= c.x + c.w && n.y + n.h <= c.y + c.h;
 const toca = (n: Caja, c: Caja): boolean => n.x < c.x + c.w && c.x < n.x + n.w && n.y < c.y + c.h && c.y < n.y + n.h;
@@ -30,7 +37,7 @@ async function rutas(): Promise<Array<{ nombre: string; vector: Record<string, u
   return out;
 }
 
-Deno.test('vector: A10 K1/K2 los pasos se agrupan por verbo CRUD y cada recuadro abraza solo a su grupo', async () => {
+denoTest('vector: A10 K1/K2 los pasos se agrupan por verbo CRUD y cada recuadro abraza solo a su grupo', async () => {
   const fallas: string[] = [];
   let agrupados = 0;
   const vistos = new Set<string>();
@@ -62,9 +69,11 @@ Deno.test('vector: A10 K1/K2 los pasos se agrupan por verbo CRUD y cada recuadro
   assert(fallas.length === 0, fallas.join('\n'));
 });
 
-Deno.test('vector: A10 K3 agrupar: false apaga los agrupadores automáticos', async () => {
+denoTest('vector: A10 K3 agrupar: false apaga los agrupadores automáticos', async () => {
   const [{ vector }] = await rutas();
   const flujo = vectorAFlujo({ ...vector, agrupar: false }) as { nodes: Array<{ context?: string }> };
   const titulos = new Set<string>(Object.values(GRUPOS_CRUD));
   assertEquals(flujo.nodes.filter((n) => n.context && titulos.has(n.context)).length, 0);
 });
+
+export default lista();

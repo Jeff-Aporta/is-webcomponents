@@ -1,7 +1,10 @@
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 
@@ -37,3 +40,5 @@ test('W54: src/**/*.ts no debe tener type/interface top-level (deben vivir en *.
     assert.fail(`src/**/*.ts debe tener 0 type/interface top-level, pero hay ${offenders.length} ofenders:\n${summary}\n\nMigrar a *.schemas.ts con Zod.`);
   }
 });
+
+export default lista();

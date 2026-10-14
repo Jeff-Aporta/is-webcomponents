@@ -11,8 +11,15 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { startStaticServer } from '../../../vendor-distributions/client/tools/static-server.ts';
-import { baseRemota } from '../../../vendor-distributions/client/tools/render-lote.ts';
+import { startStaticServer } from '../../src/vendor-distributions/client/tools/static-server.ts';
+import { baseRemota } from '../../src/vendor-distributions/client/tools/render-lote.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const SHA = 'c'.repeat(40);
 const SIN_SANITIZAR = { sanitizeResources: false, sanitizeOps: false };
@@ -58,7 +65,7 @@ const CASOS: Caso[] = [
 ];
 
 for (const c of CASOS) {
-  Deno.test({
+  denoTest({
     name: `static-server remoto: ${c.id}`,
     ...SIN_SANITIZAR,
     async fn() {
@@ -86,7 +93,7 @@ const R7 = [
 ];
 
 for (const c of R7) {
-  Deno.test({
+  denoTest({
     name: `static-server remoto: R7 ref ${c.inmutable ? 'SHA: lo traído sirve con el remoto caído' : 'de rama: con el remoto caído ya no está'}`,
     ...SIN_SANITIZAR,
     async fn() {
@@ -123,10 +130,12 @@ const R8: { pin: string | undefined; ref: string }[] = [
   { pin: `${SHA}x`, ref: 'main' },
 ];
 
-Deno.test('static-server remoto: R8 baseRemota fija el SHA del pin o cae a main', () => {
+denoTest('static-server remoto: R8 baseRemota fija el SHA del pin o cae a main', () => {
   for (const c of R8) {
     const base = baseRemota(c.pin);
     assert(/^https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/$/.test(base), base);
     assert(base.endsWith(`/${c.ref}/`), `${String(c.pin)} → ${base}`);
   }
 });
+
+export default lista();

@@ -9,11 +9,14 @@
 //   2. El keyframe oculto se calculaba con el signo invertido al cerrar, así
 //      que el cierre generaba transformaciones inválidas o hacia el lado malo.
 
-import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const __dirname = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const read = (...p) => readFileSync(join(__dirname, '..', ...p), 'utf8');
@@ -170,3 +173,5 @@ test('galería: header sticky con herramienta para compactar paneles (TTL 1h)', 
     'preview-component debe respetar body.dataset.panelsCompact',
   );
 });
+
+export default lista();

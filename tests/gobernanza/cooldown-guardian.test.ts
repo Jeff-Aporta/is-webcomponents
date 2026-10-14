@@ -9,8 +9,15 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { denoTest } from '../../../vendor-distributions/shared/testing/deno-test.ts';
-import { createTestCooldown, testId } from '../../../vendor-distributions/shared/testing/test-cooldown.ts';
+import { denoTest } from '../../src/vendor-distributions/shared/testing/deno-test.ts';
+import { createTestCooldown, testId } from '../../src/vendor-distributions/shared/testing/test-cooldown.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const KIT = join(import.meta.dirname!, '..', '..', '..', '..');
 const ESTE = relative(KIT, import.meta.filename!).replaceAll('\\', '/');
@@ -35,7 +42,7 @@ function archivos(dir: string, out: string[] = []): string[] {
   return out;
 }
 
-Deno.test('cooldown: C1 cada tarea test* de deno.json es composición o un runner que entra al cooldown', () => {
+denoTest('cooldown: C1 cada tarea test* de deno.json es composición o un runner que entra al cooldown', () => {
   const tareas: Record<string, string> = JSON.parse(readFileSync(join(KIT, 'deno.json'), 'utf8')).tasks;
   const malas: string[] = [];
   for (const [nombre, comando] of Object.entries(tareas)) {
@@ -57,7 +64,7 @@ Deno.test('cooldown: C1 cada tarea test* de deno.json es composición o un runne
   assertEquals(malas, []);
 });
 
-Deno.test('cooldown: C2 ningún script lanza pruebas sin pasar por el cooldown', () => {
+denoTest('cooldown: C2 ningún script lanza pruebas sin pasar por el cooldown', () => {
   const malos: string[] = [];
   for (const r of RAICES) {
     for (const p of archivos(join(KIT, r))) {
@@ -77,7 +84,7 @@ const C3 = [
 ] as const;
 
 for (const c of C3) {
-  Deno.test({
+  denoTest({
     name: `cooldown: C3 denoTest ${c.caso}: verde ${c.corridas.verde.join('/')} · rojo ${c.corridas.rojo.join('/')}`,
     sanitizeResources: false,
     sanitizeOps: false,
@@ -89,7 +96,7 @@ for (const c of C3) {
         const contador = join(dir, 'corridas.txt');
         const escribir = (nombre: string, cuerpo: string) => {
           const f = join(dir, `${nombre}.test.ts`);
-          writeFileSync(f, `Deno.test('${nombre}', async () => {\n  Deno.writeTextFileSync(${JSON.stringify(contador)}, '${nombre}\\n', { append: true });\n${cuerpo}\n});\n`);
+          writeFileSync(f, `denoTest('${nombre}', async () => {\n  Deno.writeTextFileSync(${JSON.stringify(contador)}, '${nombre}\\n', { append: true });\n${cuerpo}\n});\n`);
           return f;
         };
         // El verde dura >= 50 ms: su cooldown (× 1440) supera de sobra la duración de esta prueba.
@@ -129,7 +136,7 @@ const C4 = [
 ] as const;
 
 for (const c of C4) {
-  Deno.test({
+  denoTest({
     name: `cooldown: C4 denoTest reintenta de a uno — ${c.caso}`,
     sanitizeResources: false,
     sanitizeOps: false,
@@ -141,7 +148,7 @@ for (const c of C4) {
         writeFileSync(contador, '');
         const f = join(dir, 'intermitente.test.ts');
         writeFileSync(f, [
-          "Deno.test('intermitente', async () => {",
+          "denoTest('intermitente', async () => {",
           `  const previas = Deno.readTextFileSync(${JSON.stringify(contador)}).split('\\n').filter(Boolean).length;`,
           `  Deno.writeTextFileSync(${JSON.stringify(contador)}, 'x\\n', { append: true });`,
           '  await new Promise((r) => setTimeout(r, 60));',
@@ -162,3 +169,5 @@ for (const c of C4) {
     },
   });
 }
+
+export default lista();

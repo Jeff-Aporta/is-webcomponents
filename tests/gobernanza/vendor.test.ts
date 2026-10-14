@@ -15,12 +15,19 @@ import { assert, assertEquals, assertThrows } from 'https://deno.land/std@0.224.
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { bloqueoDePerfil, dependenciasDeNavegador, vendorizar } from '../../../vendor-distributions/shared/tools/vendor.ts';
-import { ZConfigVendor } from '../../../vendor-distributions/shared/schemas.ts';
+import { bloqueoDePerfil, dependenciasDeNavegador, vendorizar } from '../../src/vendor-distributions/shared/tools/vendor.ts';
+import { ZConfigVendor } from '../../src/vendor-distributions/shared/schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const git = (cwd: string, ...a: string[]) => execFileSync('git', ['-C', cwd, ...a], { encoding: 'utf8' });
 
-Deno.test('vendor: V1-V2 trae con cabecera ISO, queda al día y gana siempre lo más reciente', async () => {
+denoTest('vendor: V1-V2 trae con cabecera ISO, queda al día y gana siempre lo más reciente', async () => {
   const kit = await Deno.makeTempDir();
   const app = await Deno.makeTempDir();
   git(kit, 'init', '-q');
@@ -43,14 +50,14 @@ Deno.test('vendor: V1-V2 trae con cabecera ISO, queda al día y gana siempre lo 
   assert((await Deno.readTextFile(join(app, 'ISU/obj.ts'))).endsWith('export const v = 2;\n'));
 });
 
-Deno.test('vendor: V3 la configuración se valida', () => {
+denoTest('vendor: V3 la configuración se valida', () => {
   assertThrows(() => ZConfigVendor.parse({ repo: 'sin-barra', archivos: [{ desde: 'a', hacia: 'b' }] }));
   assertEquals(ZConfigVendor.parse({ repo: 'a/b' }).archivos, [], 'sin altas: solo barrido (vendor.json es bootstrap)');
   assertThrows(() => ZConfigVendor.parse({ repo: 'a/b', pin: { sha: 'abc' } }), undefined, undefined, 'pin.sha debe ser sha40');
   assertEquals(ZConfigVendor.parse({ repo: 'a/b', archivos: [{ desde: 'a', hacia: 'b' }], extra: 1 }).rama, 'main');
 });
 
-Deno.test('vendor: V4 un archivo vendorizado que importa algo no vendorizado se reporta en `faltan`', async () => {
+denoTest('vendor: V4 un archivo vendorizado que importa algo no vendorizado se reporta en `faltan`', async () => {
   const kit = await Deno.makeTempDir();
   const app = await Deno.makeTempDir();
   git(kit, 'init', '-q');
@@ -66,7 +73,7 @@ Deno.test('vendor: V4 un archivo vendorizado que importa algo no vendorizado se 
   assert(res.every((r) => !r.faltan), JSON.stringify(res));
 });
 
-Deno.test('vendor: V5 sin doc en la config se conserva la @doc por CDN de la fuente, sin duplicar', async () => {
+denoTest('vendor: V5 sin doc en la config se conserva la @doc por CDN de la fuente, sin duplicar', async () => {
   const kit = await Deno.makeTempDir();
   const app = await Deno.makeTempDir();
   git(kit, 'init', '-q');
@@ -95,7 +102,7 @@ async function kitCon(archivos: Record<string, string>): Promise<string> {
 }
 const VD = 'dist/cdn/vendor-distributions';
 
-Deno.test('vendor: V6 el perfil filtra: server baja shared/server, nunca client ni rutas sin perfil', async () => {
+denoTest('vendor: V6 el perfil filtra: server baja shared/server, nunca client ni rutas sin perfil', async () => {
   const kit = await kitCon({
     [`${VD}/shared/lib/a.ts`]: 'export const a = 1;\n',
     [`${VD}/server/tools/s.ts`]: 'export const s = 1;\n',
@@ -118,7 +125,7 @@ Deno.test('vendor: V6 el perfil filtra: server baja shared/server, nunca client 
   assertEquals(bloqueoDePerfil('dist/cdn/build/bundle-min.ts', 'server'), null, 'fuera de vendor-distributions no se filtra por ruta');
 });
 
-Deno.test('vendor: V7 un consumidor server nunca recibe un archivo con dependencias de navegador', async () => {
+denoTest('vendor: V7 un consumidor server nunca recibe un archivo con dependencias de navegador', async () => {
   const kit = await kitCon({ [`${VD}/shared/testing/x.ts`]: "import { chromium } from 'npm:playwright@1';\nexport const x = chromium;\n" });
   const app = await Deno.makeTempDir();
   const archivos = [{ desde: `${VD}/shared/testing/x.ts`, hacia: 'ISU/x.ts' }];
@@ -130,7 +137,7 @@ Deno.test('vendor: V7 un consumidor server nunca recibe un archivo con dependenc
   assertEquals(dependenciasDeNavegador("/* import 'playwright' */\nimport { z } from 'zod';\nconst m = createRequire(u)('@browserbasehq/stagehand');"), ['@browserbasehq/stagehand']);
 });
 
-Deno.test('vendor: V8 al aplanar se reescriben los relativos entre perfiles', async () => {
+denoTest('vendor: V8 al aplanar se reescriben los relativos entre perfiles', async () => {
   const kit = await kitCon({
     [`${VD}/shared/testing/p.ts`]: 'export const p = 1;\n',
     [`${VD}/client/testing/c.ts`]: "import { p } from '../../shared/testing/p.ts';\nexport type * from '../../shared/testing/p.js';\nexport const c = p;\n",
@@ -145,7 +152,7 @@ Deno.test('vendor: V8 al aplanar se reescriben los relativos entre perfiles', as
   assert(t.includes("from './p.ts'") && t.includes("from './p.js'") && !t.includes('shared/'), t);
 });
 
-Deno.test('vendor: V9 la cabecera se lee por su fecha (primer campo) y al re-vendorizar se reescribe entera', async () => {
+denoTest('vendor: V9 la cabecera se lee por su fecha (primer campo) y al re-vendorizar se reescribe entera', async () => {
   const kit = await kitCon({ 'a.ts': '// @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/x.md\nexport const a = 1;\n' });
   const app = await Deno.makeTempDir();
   await Deno.mkdir(join(app, 'ISU'), { recursive: true });
@@ -198,7 +205,7 @@ function modulosDelKit(): { modulo: string; archivos: string[] }[] {
   });
 }
 
-Deno.test('vendor: V10 calibración de la poda: cada módulo compila con su schemas.ts podado y el resultado dice las secciones', async () => {
+denoTest('vendor: V10 calibración de la poda: cada módulo compila con su schemas.ts podado y el resultado dice las secciones', async () => {
   const kit = Deno.cwd();
   const app = await Deno.makeTempDir({ prefix: 'poda-' });
   const modulos = modulosDelKit();
@@ -234,7 +241,7 @@ Deno.test('vendor: V10 calibración de la poda: cada módulo compila con su sche
   await Deno.remove(app, { recursive: true });
 });
 
-Deno.test('vendor: V11 el mismo schemas.ts en dos carpetas se poda a lo que cada carpeta usa', async () => {
+denoTest('vendor: V11 el mismo schemas.ts en dos carpetas se poda a lo que cada carpeta usa', async () => {
   const kit = Deno.cwd();
   const app = await Deno.makeTempDir({ prefix: 'poda2-' });
   const VDS = 'src/vendor-distributions/shared';
@@ -270,7 +277,7 @@ Deno.test('vendor: V11 el mismo schemas.ts en dos carpetas se poda a lo que cada
 
 const F = 'nadie/no-existe-iswc-test';
 
-Deno.test('vendor: V12 el barrido lee cabeceras en las 8 extensiones y no toca lo que no tiene', async () => {
+denoTest('vendor: V12 el barrido lee cabeceras en las 8 extensiones y no toca lo que no tiene', async () => {
   const app = await Deno.makeTempDir({ prefix: 'barrido-' });
   const viejo = '2020-01-01T00:00:00.000Z';
   const archivos: Record<string, string> = {
@@ -288,7 +295,7 @@ Deno.test('vendor: V12 el barrido lee cabeceras en las 8 extensiones y no toca l
     'node_modules/m/x.ts': `// @vendor ${viejo} ${F}@local k/x.ts\n`,
   };
   for (const [r, t] of Object.entries(archivos)) { await Deno.mkdir(join(app, r, '..'), { recursive: true }); await Deno.writeTextFile(join(app, r), t); }
-  const { barrer, inventariar, leerCabecera } = await import('../../../vendor-distributions/shared/tools/vendor.ts');
+  const { barrer, inventariar, leerCabecera } = await import('../../src/vendor-distributions/shared/tools/vendor.ts');
   const lista = barrer(app);
   assert(!lista.some((f) => f.startsWith('node_modules/')), 'node_modules no se barre');
   const inv = inventariar(app, lista, F);
@@ -307,7 +314,7 @@ Deno.test('vendor: V12 el barrido lee cabeceras en las 8 extensiones y no toca l
   await Deno.remove(app, { recursive: true });
 });
 
-Deno.test('vendor: V13 el barrido actualiza lo más viejo que el checkout (sin vendor.json) y el perfil bloquea client en server', async () => {
+denoTest('vendor: V13 el barrido actualiza lo más viejo que el checkout (sin vendor.json) y el perfil bloquea client en server', async () => {
   const kit = await kitCon({
     [`${VD}/shared/lib/a.ts`]: 'export const a = 2;\n',
     [`${VD}/client/tools/c.ts`]: 'export const c = 2;\n',
@@ -353,7 +360,7 @@ function webFalsa(pin: string, archivos: Record<string, string>, fechaPin = '203
   return { fetchFn, pedidas };
 }
 
-Deno.test('vendor: V14 la web es el pin estático del proyecto (nunca el HEAD); lo no publicado se copia del local con aviso', async () => {
+denoTest('vendor: V14 la web es el pin estático del proyecto (nunca el HEAD); lo no publicado se copia del local con aviso', async () => {
   const pin = 'c'.repeat(40);
   const kit = await kitCon({ [`${VD}/shared/lib/a.ts`]: 'export const a = "local";\n', 'skills/nueva/SKILL.md': '# nueva\n' });
   const app = await Deno.makeTempDir({ prefix: 'pin-' });
@@ -377,7 +384,7 @@ Deno.test('vendor: V14 la web es el pin estático del proyecto (nunca el HEAD); 
   await Deno.remove(app, { recursive: true });
 });
 
-Deno.test('vendor: V15 skills por carpeta, nunca se pisa una skill propia y skills/README.md se genera', async () => {
+denoTest('vendor: V15 skills por carpeta, nunca se pisa una skill propia y skills/README.md se genera', async () => {
   const kit = await kitCon({
     'skills/comun/SKILL.md': '---\nname: comun\n---\n# común\n',
     'skills/comun/references/01.md': '# ref\n',
@@ -404,7 +411,7 @@ Deno.test('vendor: V15 skills por carpeta, nunca se pisa una skill propia y skil
   await Deno.remove(app, { recursive: true });
 });
 
-Deno.test('vendor: V16 la línea Skill: del docblock apunta a la copia local si el consumidor tiene la skill, o a la URL del pin', async () => {
+denoTest('vendor: V16 la línea Skill: del docblock apunta a la copia local si el consumidor tiene la skill, o a la URL del pin', async () => {
   const kit = await kitCon({
     [`${VD}/shared/lib/a.ts`]: '/**\n * a\n * Skill: skills/k/references/01.md\n */\nexport const a = 1;\n',
     'skills/k/references/01.md': '# 01\n',
@@ -419,8 +426,8 @@ Deno.test('vendor: V16 la línea Skill: del docblock apunta a la copia local si 
   await Deno.remove(app, { recursive: true });
 });
 
-Deno.test('vendor: V17 el hook del kit estampa @vendor <ISO> <repo>@main <ruta> en todos los formatos (y respeta el front matter)', async () => {
-  const { estampar } = await import('../../../../scripts/vendor-stamp.mjs');
+denoTest('vendor: V17 el hook del kit estampa @vendor <ISO> <repo>@main <ruta> en todos los formatos (y respeta el front matter)', async () => {
+  const { estampar } = await import('../../scripts/vendor-stamp.mjs');
   const c = '2026-10-13T00:00:00.000Z Jeff-Aporta/is-webcomponents@main skills/x/SKILL.md';
   assertEquals(estampar('---\nname: x\n---\n# x\n', 'skills/x/SKILL.md', c), `---\nname: x\n---\n<!-- @vendor ${c} -->\n# x\n`);
   assertEquals(estampar(`<!-- @vendor viejo -->\n# x\n`, 'a.md', c), `<!-- @vendor ${c} -->\n# x\n`, 'reemplaza la anterior');
@@ -449,15 +456,17 @@ Deno.test('vendor: V17 el hook del kit estampa @vendor <ISO> <repo>@main <ruta> 
   assert(git(kit, 'diff', '--cached', '--', 'skills/s/SKILL.md').includes('@vendor'), 're-añadido al stage');
   // Y `fechaLocal` prefiere esa cabecera (sin git log) cuando el archivo está limpio.
   git(kit, 'commit', '-q', '-m', 'v2');
-  const { fechaLocal } = await import('../../../vendor-distributions/shared/tools/vendor.ts');
+  const { fechaLocal } = await import('../../src/vendor-distributions/shared/tools/vendor.ts');
   assertEquals(fechaLocal(kit, 'skills/s/SKILL.md'), '2026-10-13T00:00:00.000Z');
 });
 
-Deno.test('vendor: V18 la guarda de CLI reconoce el main local (ruta) y el remoto (URL en argv[1])', async () => {
-  const { esPrincipal } = await import('../../../vendor-distributions/shared/tools/vendor.ts');
+denoTest('vendor: V18 la guarda de CLI reconoce el main local (ruta) y el remoto (URL en argv[1])', async () => {
+  const { esPrincipal } = await import('../../src/vendor-distributions/shared/tools/vendor.ts');
   const url = 'https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/tools/vendor.ts';
   assertEquals(esPrincipal(url, url), true, 'online: argv[1] es la URL');
   assertEquals(esPrincipal(url, 'C:\\x\\vendor.ts'), false);
   assertEquals(esPrincipal('file:///C:/x/vendor.ts', 'C:\\x\\vendor.ts'), true, 'local: argv[1] es la ruta');
   assertEquals(esPrincipal('file:///C:/x/vendor.ts', undefined), false);
 });
+
+export default lista();

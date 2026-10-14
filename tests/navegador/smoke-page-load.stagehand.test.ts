@@ -1,4 +1,4 @@
-// tests/smoke-page-load.stagehand.test.mjs — Regresión: la página home debe
+// tests/navegador/smoke-page-load.stagehand.test.ts — Regresión: la página home debe
 // cargar sin errores de red y registrar `<iswc-doc-demo>`.
 //
 // Por qué este test existe: en W54/W55/W56 hubo reportes de "carga eterna"
@@ -17,11 +17,14 @@
 // Si esto falla en CI o en local, el build de dist/ está roto o el loader
 // no logra registrar los módulos críticos.
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { chromium } from 'playwright';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const SERVE_ROOT = process.env.SERVE_ROOT || 'C:\\ContaPyme\\Personal';
 const REPO = 'C:\\ContaPyme\\Personal\\apps\\iswc-root';
@@ -150,3 +153,5 @@ test('smoke: doc-demo.min.js existe y es servible', async () => {
     'doc-demo.min.js debe contener una llamada a customElements.define',
   );
 });
+
+export default lista();

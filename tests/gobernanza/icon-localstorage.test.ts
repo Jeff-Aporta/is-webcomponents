@@ -11,6 +11,13 @@
 //   P6 `clearIswcStorage()` (lo que usa <iswc-prefs-clear>) borra los íconos guardados Y la memoria:
 //      la siguiente resolución vuelve a la red, como en la primera carga.
 import { assert, assertEquals } from 'jsr:@std/assert@1';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 
 /** localStorage en memoria: el real de Deno se comparte entre archivos de test en paralelo. */
@@ -42,10 +49,10 @@ g.document = { documentElement: { dataset: { icons: 'https://app.example/assets/
 const warnOriginal = console.warn;
 console.warn = () => {}; // los avisos «falta en local» los cubre icon-registry
 
-const { resolveIconRaw, clearRawCache, clearPersistedIcons, purgarIconosVencidos, LS_TTL_MS } = await import('../../../core/icon-loader.ts');
-const { clearIswcStorage } = await import('../../../core/iswc-storage.ts');
+const { resolveIconRaw, clearRawCache, clearPersistedIcons, purgarIconosVencidos, LS_TTL_MS } = await import('../../src/core/icon-loader.ts');
+const { clearIswcStorage } = await import('../../src/core/iswc-storage.ts');
 
-Deno.test('P1 lo que vino de la API queda en localStorage y luego no hay fetch', async () => {
+denoTest('P1 lo que vino de la API queda en localStorage y luego no hay fetch', async () => {
   pedidos.length = 0;
   const a = await resolveIconRaw('solar', 'bolt');
   assert(a?.includes('api:solar/bolt.svg'));
@@ -56,13 +63,13 @@ Deno.test('P1 lo que vino de la API queda en localStorage y luego no hay fetch',
   assertEquals(pedidos, [], 'sin ningún fetch: sale de localStorage');
 });
 
-Deno.test('P2 lo de la web publicada también se persiste', async () => {
+denoTest('P2 lo de la web publicada también se persiste', async () => {
   const a = await resolveIconRaw('mdi', 'home');
   assert(a?.includes('local-home'));
   assertEquals(JSON.parse(localStorage.getItem('iswc:icon:mdi:home')!).s, a);
 });
 
-Deno.test('P3 un fallo no se persiste', async () => {
+denoTest('P3 un fallo no se persiste', async () => {
   assertEquals(await resolveIconRaw('mdi', 'no-existe'), null);
   assertEquals(localStorage.getItem('iswc:icon:mdi:no-existe'), null);
   clearRawCache();
@@ -71,7 +78,7 @@ Deno.test('P3 un fallo no se persiste', async () => {
   assert(pedidos.length > 0, 'otra página vuelve a intentarlo');
 });
 
-Deno.test('P4 clearPersistedIcons borra solo iswc:icon:*', () => {
+denoTest('P4 clearPersistedIcons borra solo iswc:icon:*', () => {
   localStorage.setItem('otra:clave', 'x');
   localStorage.setItem('iswc:app-cfg', '{}');
   clearPersistedIcons();
@@ -80,7 +87,7 @@ Deno.test('P4 clearPersistedIcons borra solo iswc:icon:*', () => {
   assertEquals(localStorage.getItem('iswc:app-cfg'), '{}');
 });
 
-Deno.test('P5 vida máxima de 15 días y purga', async () => {
+denoTest('P5 vida máxima de 15 días y purga', async () => {
   clearRawCache();
   const viejo = Date.now() - LS_TTL_MS - 24 * 60 * 60 * 1000; // 16 días
   localStorage.setItem('iswc:icon:solar:viejo', JSON.stringify({ t: viejo, s: svg('viejo') }));
@@ -95,7 +102,7 @@ Deno.test('P5 vida máxima de 15 días y purga', async () => {
   assert(localStorage.getItem('iswc:icon:solar:fresco') !== null, 'lo fresco se queda');
 });
 
-Deno.test('P6 clearIswcStorage deja los íconos como en la primera carga', async () => {
+denoTest('P6 clearIswcStorage deja los íconos como en la primera carga', async () => {
   await resolveIconRaw('solar', 'sol');
   assert(localStorage.getItem('iswc:icon:solar:sol') !== null);
   const r = clearIswcStorage();
@@ -109,3 +116,5 @@ Deno.test('P6 clearIswcStorage deja los íconos como en la primera carga', async
   console.warn = warnOriginal;
   localStorage.clear();
 });
+
+export default lista();

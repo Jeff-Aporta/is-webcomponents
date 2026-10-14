@@ -4,14 +4,17 @@
  * Selector de color form-associated. Panel en <dialog modal> (top layer).
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, existeCss,
   atributosObservados, eventosEmitidos,
   slotsDeclarados, partsDeclaradas,
   esFormAssociated, usaShadowDom,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const TAG = 'iswc-color-picker';
 const src = leerComponente(TAG);
@@ -97,3 +100,5 @@ test('color-picker: edge case — hex inválido (no rompe)', () => {
   // El fallback al DEFAULT_VALUE lo cubre.
   assert.ok(/DEFAULT_VALUE|#808080/.test(src));
 });
+
+export default lista();

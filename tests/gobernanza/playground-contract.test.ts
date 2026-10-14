@@ -1,11 +1,14 @@
 /**
  * GuardiÃ¡n S-PG1â€¦S-PG3 â€” playground canonico + chrome sin clip.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
@@ -64,13 +67,13 @@ test('S-PG: intent default brand helper + CDN ui', () => {
 });
 
 test('S-PG3: auditor cargar.ts conoce category preview (y files)', () => {
-  const cargar = readFileSync(join(root, 'src/utils/health/engine/cargar.ts'), 'utf8');
+  const cargar = readFileSync(join(root, 'tests/.audit/engine/cargar.ts'), 'utf8');
   assert.match(cargar, /'preview'/);
   assert.match(cargar, /'files'/);
 });
 
 test('auditor: toda category del manifest tiene candidato en cargar.ts', () => {
-  const cargar = readFileSync(join(root, 'src/utils/health/engine/cargar.ts'), 'utf8');
+  const cargar = readFileSync(join(root, 'tests/.audit/engine/cargar.ts'), 'utf8');
   const cats = new Set(
     [...manText.matchAll(/category:\s*'([^']+)'/g)].map((m) => m[1]),
   );
@@ -81,3 +84,5 @@ test('auditor: toda category del manifest tiene candidato en cargar.ts', () => {
     );
   }
 });
+
+export default lista();

@@ -16,7 +16,7 @@
  *     detecta specs más nuevas y avisa.
  */
 
-import type { Hallazgo } from "../types.schemas.js";
+import type { Hallazgo } from "../schemas/types.schemas.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Definición estructural del esquema iswc-preview/v1 (single source of truth).

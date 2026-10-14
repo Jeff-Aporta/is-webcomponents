@@ -19,7 +19,11 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const assets = join(root, 'dist', 'assets');
@@ -83,3 +87,5 @@ test('el mínimo del test y el del build no divergen', () => {
     'MIN_ICONOS difiere entre build.mjs y este test: subir uno sin el otro deja un guardián ciego',
   );
 });
+
+export default lista();

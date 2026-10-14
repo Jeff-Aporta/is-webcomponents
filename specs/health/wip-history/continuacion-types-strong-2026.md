@@ -337,7 +337,7 @@ Si `write` falla con "file no longer exists — re-read the file, then retry" pa
 | **Commits en español** | Conventional commits |
 | **1 commit por archivo** | `feat(<nombre>): tipado explícito N→0 errores` |
 | **Worktrees limpios** | `git worktree list` == [main, wt-root] al cierre de cada tanda |
-| **Archivos LOCKED (permanente)** | `src/components/_shared/svg-chart-engine.ts`, `src/components/_shared/diagram-element-base.ts`, `src/components/diagrams/diagram-types.ts` — NO TOCAR |
+| **Archivos LOCKED (permanente)** | `src/core/svg-chart-engine.ts`, `src/components/diagrams/utils/diagram-element-base.ts`, `src/components/diagrams/utils/diagram-types.ts` — NO TOCAR |
 | **`grid-types.ts`** | Cerrado en T4, solo lectura |
 | **File partitioning** | Respetar `file-locks.md` |
 | **Canal entre agentes** | `WIP-wt-root-types-strong-2026.md` sección "Mensajes recientes con hermanas" |

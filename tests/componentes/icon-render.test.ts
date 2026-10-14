@@ -22,127 +22,134 @@ import { existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
-// Los iconos viven SOLO en dist/assets/icons (src/assets/ se elimino en el
-// refactor de layout CDN; ver el doc-block de _shared/icon-loader.ts).
-const assetsIcons = join(root, 'dist', 'assets', 'icons');
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-const iconJs = await readFile(join(root, 'src/components/media/icon.ts'), 'utf8');
-const iconCss = await readFile(join(root, 'src/components/media/icon.scss'), 'utf8');
-const loaderJs = await readFile(join(root, 'src/core/icon-loader.ts'), 'utf8');
-
-// --- BUG 1: nada de force-cache -------------------------------------------
-
-// Se ignoran las menciones dentro de comentarios: lo que importa es que no
-// quede ninguna llamada real a fetch con force-cache.
-const sinComentarios = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-
-for (const [nombre, src] of [['icon-loader.ts', loaderJs], ['icon.ts', iconJs]]) {
-  assert.ok(
-    !/cache:\s*'force-cache'/.test(sinComentarios(src)),
-    `${nombre} no debe pedir recursos con \`cache: 'force-cache'\`: congela bytes obsoletos ` +
-      'en el navegador y un icono reparado sigue viendose roto para siempre',
-  );
-}
-assert.ok(
-  /fetch\(url, \{ signal, cache: 'default' \}\)/.test(loaderJs),
-  'el fetch del SVG debe usar `cache: \'default\'` (revalida contra el ETag del servidor)',
-);
-// El cache en memoria sigue siendo el que evita requests repetidos por sesion.
-assert.ok(/rawCache\.set\(key, text\)/.test(loaderJs), 'rawCache debe seguir cacheando en memoria');
-
-// Dev no debe pedir src/components/assets/icons (no existe; los índices van en src/assets/icons).
-assert.ok(
-  /\/dist\/cdn\//.test(loaderJs) && /src\/assets\/icons|assets\/icons\//.test(loaderJs),
-  'ICON_BASES debe distinguir dist/cdn vs fuente',
-);
-assert.ok(
-  !/new URL\('\.\.\/assets\/icons\/'/.test(sinComentarios(loaderJs).split('ICON_BASES')[1]?.split('LOCAL_INDEX')[0] ?? '')
-    || /\/dist\/cdn\//.test(loaderJs),
-  'la base ../assets/icons solo aplica bajo dist/cdn',
-);
-// Garantía explícita: en modo fuente la ruta relativa es ../../assets/icons/
-assert.match(
-  loaderJs,
-  /new URL\('\.\.\/\.\.\/assets\/icons\/'/,
-  'desde _shared la base local debe ser ../../assets/icons/ → src/assets/icons/',
-);
-
-// --- BUG 2: los multicolor conservan su paleta -----------------------------
-
-assert.ok(/#isMulticolor/.test(iconJs), 'icon.ts debe detectar iconos con paleta propia');
-assert.ok(
-  /linearGradient|radialGradient/.test(iconJs),
-  'la detección debe tratar degradados/patrones/imágenes como multicolor',
-);
-assert.ok(
-  /#isMulticolor\(svg\)\)\s*\{[\s\S]{0,160}return;/.test(iconJs),
-  'si el icono es multicolor, #normalizeInlineSvg debe salir ANTES de aplastar los fills',
-);
-assert.ok(
-  /iswc-multicolor/.test(iconCss),
-  'icon.scss debe neutralizar el `fill: currentColor` heredado para .iswc-multicolor',
-);
-// El viewBox nativo no se toca: reescribirlo es el bug de los iconos vacios.
-assert.ok(
-  !/svg\.setAttribute\('viewBox'/.test(iconJs),
-  'iswc-icon no debe reescribir el viewBox: cada colección tiene su grid nativo',
-);
-
-// --- Premisa de la heurística sobre los assets reales ----------------------
-// Si esto falla, la heurística de color dejó de reflejar los datos.
-
-const NEUTRAL = new Set(['currentcolor', '#000', '#000000', 'black', 'none']);
-const colorsOf = (svg) =>
-  [...svg.matchAll(/(?:fill|stroke)="([^"]+)"/g)]
-    .map((m) => m[1].trim().toLowerCase())
-    .filter((v) => !NEUTRAL.has(v));
-
-// Sets fuera del repo desde 2026-10-09 (solo mdi/solar/tabler viajan; el resto llega por API): si no
-// están en disco no hay muestra que revisar.
-const enDisco = (prefix) => existsSync(join(assetsIcons, prefix));
-const sample = async (prefix, n = 6) => {
-  if (!enDisco(prefix)) return [];
-  const files = (await readdir(join(assetsIcons, prefix))).filter((f) => f.endsWith('.svg'));
-  const stepSize = Math.max(1, Math.floor(files.length / n));
-  const out = [];
-  for (let i = 0; i < files.length && out.length < n; i += stepSize) {
-    out.push({ file: files[i], svg: await readFile(join(assetsIcons, prefix, files[i]), 'utf8') });
-  }
-  return out;
-};
-
-const MULTICOLOR = ['cif', 'circle-flags', 'logos', 'twemoji'];
-const MONOTONE = ['mdi', 'tabler', 'academicons'];
-
-// La deteccion es POR ICONO, no por coleccion: `logos` es mixta (la mayoria
-// traen su paleta, pero p.ej. logos/game-analytics-icon es una silueta negra
-// sin ningun fill, y tenirla con currentColor es lo correcto). Por eso se exige
-// mayoria, no unanimidad.
-for (const prefix of MULTICOLOR) {
-  const muestras = await sample(prefix);
-  const conPaleta = muestras.filter(
-    ({ svg }) => colorsOf(svg).length > 0 || /<(linearGradient|radialGradient|pattern|image)\b/.test(svg),
-  );
-  if (!muestras.length) continue;
-  assert.ok(
-    conPaleta.length > muestras.length / 2,
-    `${prefix}: solo ${conPaleta.length}/${muestras.length} muestras declaran paleta propia; ` +
-      'la heurística de color dejó de reflejar los assets',
-  );
-}
-
-for (const prefix of MONOTONE) {
-  for (const { file, svg } of await sample(prefix)) {
-    assert.equal(
-      colorsOf(svg).length,
-      0,
-      `${prefix}/${file} declara colores propios (${colorsOf(svg).join(', ')}): ` +
-        'se detectaria como multicolor y dejaria de responder a `color`',
+test('componentes/icon-render', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
+  // Los iconos viven SOLO en dist/assets/icons (src/assets/ se elimino en el
+  // refactor de layout CDN; ver el doc-block de _shared/icon-loader.ts).
+  const assetsIcons = join(root, 'dist', 'assets', 'icons');
+  
+  const iconJs = await readFile(join(root, 'src/components/media/icon.ts'), 'utf8');
+  const iconCss = await readFile(join(root, 'src/components/media/icon.scss'), 'utf8');
+  const loaderJs = await readFile(join(root, 'src/core/icon-loader.ts'), 'utf8');
+  
+  // --- BUG 1: nada de force-cache -------------------------------------------
+  
+  // Se ignoran las menciones dentro de comentarios: lo que importa es que no
+  // quede ninguna llamada real a fetch con force-cache.
+  const sinComentarios = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  
+  for (const [nombre, src] of [['icon-loader.ts', loaderJs], ['icon.ts', iconJs]]) {
+    assert.ok(
+      !/cache:\s*'force-cache'/.test(sinComentarios(src)),
+      `${nombre} no debe pedir recursos con \`cache: 'force-cache'\`: congela bytes obsoletos ` +
+        'en el navegador y un icono reparado sigue viendose roto para siempre',
     );
   }
-}
+  assert.ok(
+    /fetch\(url, \{ signal, cache: 'default' \}\)/.test(loaderJs),
+    'el fetch del SVG debe usar `cache: \'default\'` (revalida contra el ETag del servidor)',
+  );
+  // El cache en memoria sigue siendo el que evita requests repetidos por sesion.
+  assert.ok(/rawCache\.set\(key, text\)/.test(loaderJs), 'rawCache debe seguir cacheando en memoria');
+  
+  // Dev no debe pedir src/components/assets/icons (no existe; los índices van en src/assets/icons).
+  assert.ok(
+    /\/dist\/cdn\//.test(loaderJs) && /src\/assets\/icons|assets\/icons\//.test(loaderJs),
+    'ICON_BASES debe distinguir dist/cdn vs fuente',
+  );
+  assert.ok(
+    !/new URL\('\.\.\/assets\/icons\/'/.test(sinComentarios(loaderJs).split('ICON_BASES')[1]?.split('LOCAL_INDEX')[0] ?? '')
+      || /\/dist\/cdn\//.test(loaderJs),
+    'la base ../assets/icons solo aplica bajo dist/cdn',
+  );
+  // Garantía explícita: en modo fuente la ruta relativa es ../../assets/icons/
+  assert.match(
+    loaderJs,
+    /new URL\('\.\.\/\.\.\/assets\/icons\/'/,
+    'desde _shared la base local debe ser ../../assets/icons/ → src/assets/icons/',
+  );
+  
+  // --- BUG 2: los multicolor conservan su paleta -----------------------------
+  
+  assert.ok(/#isMulticolor/.test(iconJs), 'icon.ts debe detectar iconos con paleta propia');
+  assert.ok(
+    /linearGradient|radialGradient/.test(iconJs),
+    'la detección debe tratar degradados/patrones/imágenes como multicolor',
+  );
+  assert.ok(
+    /#isMulticolor\(svg\)\)\s*\{[\s\S]{0,160}return;/.test(iconJs),
+    'si el icono es multicolor, #normalizeInlineSvg debe salir ANTES de aplastar los fills',
+  );
+  assert.ok(
+    /iswc-multicolor/.test(iconCss),
+    'icon.scss debe neutralizar el `fill: currentColor` heredado para .iswc-multicolor',
+  );
+  // El viewBox nativo no se toca: reescribirlo es el bug de los iconos vacios.
+  assert.ok(
+    !/svg\.setAttribute\('viewBox'/.test(iconJs),
+    'iswc-icon no debe reescribir el viewBox: cada colección tiene su grid nativo',
+  );
+  
+  // --- Premisa de la heurística sobre los assets reales ----------------------
+  // Si esto falla, la heurística de color dejó de reflejar los datos.
+  
+  const NEUTRAL = new Set(['currentcolor', '#000', '#000000', 'black', 'none']);
+  const colorsOf = (svg) =>
+    [...svg.matchAll(/(?:fill|stroke)="([^"]+)"/g)]
+      .map((m) => m[1].trim().toLowerCase())
+      .filter((v) => !NEUTRAL.has(v));
+  
+  // Sets fuera del repo desde 2026-10-09 (solo mdi/solar/tabler viajan; el resto llega por API): si no
+  // están en disco no hay muestra que revisar.
+  const enDisco = (prefix) => existsSync(join(assetsIcons, prefix));
+  const sample = async (prefix, n = 6) => {
+    if (!enDisco(prefix)) return [];
+    const files = (await readdir(join(assetsIcons, prefix))).filter((f) => f.endsWith('.svg'));
+    const stepSize = Math.max(1, Math.floor(files.length / n));
+    const out = [];
+    for (let i = 0; i < files.length && out.length < n; i += stepSize) {
+      out.push({ file: files[i], svg: await readFile(join(assetsIcons, prefix, files[i]), 'utf8') });
+    }
+    return out;
+  };
+  
+  const MULTICOLOR = ['cif', 'circle-flags', 'logos', 'twemoji'];
+  const MONOTONE = ['mdi', 'tabler', 'academicons'];
+  
+  // La deteccion es POR ICONO, no por coleccion: `logos` es mixta (la mayoria
+  // traen su paleta, pero p.ej. logos/game-analytics-icon es una silueta negra
+  // sin ningun fill, y tenirla con currentColor es lo correcto). Por eso se exige
+  // mayoria, no unanimidad.
+  for (const prefix of MULTICOLOR) {
+    const muestras = await sample(prefix);
+    const conPaleta = muestras.filter(
+      ({ svg }) => colorsOf(svg).length > 0 || /<(linearGradient|radialGradient|pattern|image)\b/.test(svg),
+    );
+    if (!muestras.length) continue;
+    assert.ok(
+      conPaleta.length > muestras.length / 2,
+      `${prefix}: solo ${conPaleta.length}/${muestras.length} muestras declaran paleta propia; ` +
+        'la heurística de color dejó de reflejar los assets',
+    );
+  }
+  
+  for (const prefix of MONOTONE) {
+    for (const { file, svg } of await sample(prefix)) {
+      assert.equal(
+        colorsOf(svg).length,
+        0,
+        `${prefix}/${file} declara colores propios (${colorsOf(svg).join(', ')}): ` +
+          'se detectaria como multicolor y dejaria de responder a `color`',
+      );
+    }
+  }
+  
+  console.log('OK icon-render — sin force-cache, multicolor preservado, viewBox intacto');
+});
 
-console.log('OK icon-render — sin force-cache, multicolor preservado, viewBox intacto');
+export default lista();

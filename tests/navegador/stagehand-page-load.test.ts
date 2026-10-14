@@ -1,4 +1,4 @@
-// tests/stagehand-page-load.test.mjs — Regresión Stagehand de la página home.
+// tests/navegador/stagehand-page-load.test.ts — Regresión Stagehand de la página home.
 //
 // Por qué este test existe:
 //
@@ -42,7 +42,6 @@
 //   `dist/cdn/preview/doc-demo.min.js` quedará 404 (Live Server no
 //   transpila TS) y el test fallará con un mensaje claro.
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -50,6 +49,10 @@ import { mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const REPO = join(here, '..');
@@ -320,3 +323,5 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
     assert.ok(hit, `recurso crítico no descargado: ${pat}`);
   }
 });
+
+export default lista();

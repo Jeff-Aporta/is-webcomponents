@@ -5,7 +5,6 @@
  * icon, color. Slots: label, value, helper, trend, icon. Events: ninguno.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -18,7 +17,11 @@ import {
   adoptaCss,
   estaRegistrado,
   tieneAccesibilidad,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/data/stat.ts';
 
@@ -76,3 +79,5 @@ test('iswc-stat: registrado vía defineElement', () => {
   assert.match(src, /defineElement\s*\(\s*['"`]iswc-stat['"`]/);
   assert.ok(estaRegistrado(src, 'iswc-stat'));
 });
+
+export default lista();

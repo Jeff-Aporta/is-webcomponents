@@ -5,11 +5,14 @@
  * `<iswc-media-recorder>` — soporta source=camera|mic|display).
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -35,7 +38,7 @@ test('3. JSON existe y respeta iswc-preview/v1', async () => {
 test('4. OBSERVED incluye source, disabled', async () => {
   // Pasa la ruta RELATIVA a la raíz del repo (no absoluta), porque
   // `extraerObservados` usa `readFileSync(join(ROOT, ruta))` internamente.
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
   const list = extraerObservados(REL_TS);
   for (const a of ['source', 'disabled']) {
@@ -59,7 +62,7 @@ test('7. usa MediaRecorder API', async () => {
 });
 
 test('8. emite iswc-start, iswc-stop, iswc-error', async () => {
-  const { extraerEventos } = await import('../_helpers.js');
+  const { extraerEventos } = await import('../../_shared/exhaustivo.js');
   const REL_TS = TS.slice(ROOT.length + 1).replace(/\\/g, '/');
   const evs = extraerEventos(readFileSync(TS, 'utf8'));
   for (const ev of ['iswc-start', 'iswc-stop', 'iswc-error']) {
@@ -81,7 +84,7 @@ test('10. atributo source acepta "camera" | "mic" | "display"', async () => {
 });
 
 test('11. expone parte preview y download', async () => {
-  const { extraerParts } = await import('../_helpers.js');
+  const { extraerParts } = await import('../../_shared/exhaustivo.js');
   const parts = extraerParts(readFileSync(TS, 'utf8'));
   for (const p of ['preview', 'download']) {
     assert.ok(parts.includes(p), `debe exponer part="${p}"`);
@@ -93,3 +96,5 @@ test('12. custom element registrado', async () => {
   assert.ok(/customElements\.define\s*\(\s*['"]iswc-media-recorder['"]/.test(src) ||
              /defineElement\s*\(\s*['"]iswc-media-recorder['"]/.test(src));
 });
+
+export default lista();

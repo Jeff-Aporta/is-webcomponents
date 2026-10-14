@@ -1,11 +1,14 @@
 /**
  * url-nav.test.ts — memoria de tabs solo dentro de ?s= (b64url JSON).
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const navHref = pathToFileURL(join(raiz, 'src/components/navigation/utils/url-nav.ts')).href;
@@ -93,3 +96,5 @@ test('galería mergea nav keys al actualizar component en ?s=', async () => {
   assert.match(gallery, /\.\.\.prev,\s*component:/);
   assert.match(gallery, /delete next\.theme/);
 });
+
+export default lista();

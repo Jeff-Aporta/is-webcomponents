@@ -7,7 +7,7 @@
 /** Estados soportados por el estándar. */
 
 /** Emojis por estado — el estado va SIEMPRE al inicio del título. */
-import type { EstadoE2E } from "./e2e-config.schemas.js";
+import type { EstadoE2E } from "./schemas/e2e-config.schemas.js";
 export const EMOJIS: Record<EstadoE2E, string> = {
   success: '✅',
   error: '❌',

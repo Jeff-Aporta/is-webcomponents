@@ -15,12 +15,15 @@
 // Si reintroduces `sections: []` en JsonPreview.ts, el test #2 falla con un
 // mensaje claro. Si eliminas el spread, el test #3 falla.
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { JsonPreview } from '../../../previews/_kit/JsonPreview.js';
+import { JsonPreview } from '../../src/previews/_kit/JsonPreview.js';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const __filename = new URL(import.meta.url).pathname.replace(/^\//, '');
 const RAIZ = join(__filename, '..', '..', '..', '..', '..');
@@ -89,3 +92,5 @@ test('guard: JsonPreview.ts hace spread de `...converted` antes de overrides (pr
       'sin él, los campos del JSON (sections, prelude, etc.) no llegan al constructor de IswcComponentPreview.',
   );
 });
+
+export default lista();

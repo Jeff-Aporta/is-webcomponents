@@ -4,7 +4,7 @@
 // MiniMax acepta response_format pero lo ignora: la rigurosidad JSON se pide en
 // el system prompt y el texto se normaliza antes de parsear. Tipado estricto.
 
-import type { ResultadoGenerador, OpcionesGenerador, ParamsGenerador, ParteContenido } from "./minimax.schemas.js";
+import type { ResultadoGenerador, OpcionesGenerador, ParamsGenerador, ParteContenido } from "./schemas/minimax.schemas.js";
 const MINIMAX_TIMEOUT_MS = 120_000;
 
 function esperarMs(ms: number): Promise<void> {

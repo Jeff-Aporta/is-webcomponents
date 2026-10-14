@@ -5,7 +5,11 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const read = (rel) => readFileSync(join(root, rel), 'utf8');
@@ -39,3 +43,5 @@ test('behavior aplica color/variant/pill al #pgBtn', () => {
   assert.match(src, /setAttribute\(\s*['"]slot['"]/);
   assert.match(src, /makeIcon\([^,]+,\s*['"]start['"]\)/);
 });
+
+export default lista();

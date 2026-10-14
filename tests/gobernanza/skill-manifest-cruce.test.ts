@@ -3,12 +3,15 @@
  * TODOS los componentes del manifest: un agente que lea la skill encuentra cada tag publicado con su
  * guía. Un tag nuevo en `src/manifest.ts` sin fila en la skill rompe aquí.
  *
- *   deno test -A --no-check src/utils/health/meta/skill-manifest-cruce.test.ts
+ *   deno test -A --no-check tests/gobernanza/skill-manifest-cruce.test.ts
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
 const manifest = readFileSync(join(RAIZ, 'src', 'manifest.ts'), 'utf8');
@@ -61,3 +64,5 @@ test('el catálogo no lista tags que ya no están en el manifest', () => {
   const huerfanos = [...filas.keys()].filter((t) => !vivos.has(t));
   assert.deepEqual(huerfanos, [], 'filas huérfanas (componente retirado del manifest)');
 });
+
+export default lista();

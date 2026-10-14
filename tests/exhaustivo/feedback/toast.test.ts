@@ -4,7 +4,6 @@
  * Notificaciones apilables con placement, helpers estáticos,
  * atajo .promise(), singleton host(), normalizeIntent.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -14,7 +13,11 @@ import {
   leerConBase,
   extraerObservados,
   tieneJsDoc,
-} from '../_helpers.js';
+} from '../../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -22,7 +25,7 @@ const TS = 'src/components/feedback/toast.ts';
 const JSON_PATH = join(ROOT, 'src/components/feedback/toast.json');
 
 void async function () {
-  await import('../../../../components/feedback/toast.ts').catch(() => {});
+  await import('../../../src/components/feedback/toast.ts').catch(() => {});
 }();
 
 test('1. módulo existe', () => {
@@ -96,3 +99,5 @@ test('12. custom element registrado y preview.ts existe', () => {
 test('13. JSDoc de cabecera', () => {
   assert.ok(tieneJsDoc(leerConBase(TS)));
 });
+
+export default lista();

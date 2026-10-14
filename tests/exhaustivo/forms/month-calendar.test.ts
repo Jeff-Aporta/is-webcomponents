@@ -2,13 +2,16 @@
  * month-calendar.test.ts — Tests exhaustivos de <iswc-month-calendar>.
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, existeCss,
   atributosObservados, eventosEmitidos,
   partsDeclaradas, extiendeElementBase,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const TAG = 'iswc-month-calendar';
 const src = leerComponente(TAG);
@@ -62,3 +65,5 @@ test('month-calendar: preview JSON', () => {
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });
+
+export default lista();

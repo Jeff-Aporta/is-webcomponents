@@ -13,7 +13,6 @@
  *   S8 destino por protocolo: preferido si su sonda pasa; si no, el siguiente con motivo; sin ninguno, error;
  *      `unaVezPorProceso` decide una sola vez.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -26,9 +25,13 @@ import {
   normalizarJson,
   sondearProveedor,
   validarProveedores,
-} from '../../../vendor-distributions/shared/testing/proveedores-llm.ts';
-import type { ProveedorLlm, SondaLlm } from '../../../vendor-distributions/shared/schemas.ts';
-import { crearGenerador, destinoPreferido, resolverDestino, unaVezPorProceso } from '../../../vendor-distributions/client/testing/stagehand.ts';
+} from '../../src/vendor-distributions/shared/testing/proveedores-llm.ts';
+import type { ProveedorLlm, SondaLlm } from '../../src/vendor-distributions/shared/schemas.ts';
+import { crearGenerador, destinoPreferido, resolverDestino, unaVezPorProceso } from '../../src/vendor-distributions/client/testing/stagehand.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const P = (nombre: string): ProveedorLlm => ({ nombre, apiKey: `k-${nombre}`, model: `m-${nombre}`, baseUrl: `https://${nombre}.test/v1` });
 const sondaFija = (okPara: string[]) => (p: ProveedorLlm): Promise<SondaLlm> =>
@@ -237,3 +240,5 @@ test('stagehand: S8 destino por protocolo: preferido si responde, si no el sigui
   memo.olvidar();
   assert.equal(await memo.obtener(), 2);
 });
+
+export default lista();

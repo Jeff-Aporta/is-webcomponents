@@ -4,17 +4,20 @@
  * Dropzone + input file nativo oculto. Lista de archivos con quitar.
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, existeCss,
   atributosObservados, eventosEmitidos,
   slotsDeclarados,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
 // `partsDeclaradas` solo captura `part="x"` estáticos; el file-input además
 // define `file` / `remove-button` dinámicamente vía `setAttribute('part', …)`,
 // así que usamos el helper del root `_helpers.ts` que cubre ambos casos.
-import { extraerParts } from '../_helpers.js';
+import { extraerParts } from '../../_shared/exhaustivo.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const TAG = 'iswc-file-input';
 const src = leerComponente(TAG);
@@ -93,3 +96,5 @@ test('file-input: preview JSON', () => {
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });
+
+export default lista();

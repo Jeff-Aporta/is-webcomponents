@@ -2,14 +2,17 @@
  * textarea.test.ts — Tests exhaustivos de <iswc-textarea>.
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, leerDoc, existeCss,
   atributosObservados, eventosEmitidos,
   slotsDeclarados, partsDeclaradas, tokensCss,
   esFormAssociated, extiendeElementBase, usaShadowDom,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const TAG = 'iswc-textarea';
 const src = leerComponente(TAG);
@@ -80,3 +83,5 @@ test('textarea: edge case — rows default 3', () => {
   assert.ok(/rows\s*=\s*['"]3['"]/.test(src) || /rows:\s*3\b/.test(src),
     '<iswc-textarea> rows default debe ser 3');
 });
+
+export default lista();

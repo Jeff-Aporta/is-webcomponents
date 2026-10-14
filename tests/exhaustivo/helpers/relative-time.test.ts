@@ -6,11 +6,14 @@
  * shadow DOM, registro custom element, getter/setter, partes CSS.
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -35,7 +38,7 @@ test('3. JSON existe y respeta iswc-preview/v1', async () => {
 });
 
 test('4. OBSERVED incluye date, sync, locale, format', async () => {
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const list = extraerObservados(TS);
   for (const a of ['date', 'sync', 'locale', 'format']) {
     assert.ok(list.includes(a), `OBSERVED debe incluir "${a}"`);
@@ -89,3 +92,5 @@ test('12. atributo locale es BCP 47 y delega en resolveLocale', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/resolveLocale/.test(src), 'locale debe resolverse via helper compartido');
 });
+
+export default lista();

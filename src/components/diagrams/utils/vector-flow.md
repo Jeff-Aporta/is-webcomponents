@@ -38,5 +38,5 @@ declarado en su columna o una arista a un nodo inexistente → error visible con
 columna (no se dibuja). **Automático:** un controller con `klass` y su POJO presente recibe la arista
 `klass`.
 
-Guardián: `src/utils/health/diagrams/vector-flow.test.ts`. Convenciones de uso: skill
+Guardián: `tests/diagramas/vector-flow.test.ts`. Convenciones de uso: skill
 `iswc-diagramas-enriquecidos`.

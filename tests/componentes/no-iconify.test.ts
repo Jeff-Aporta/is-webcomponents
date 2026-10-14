@@ -18,115 +18,122 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-const SCAN_DIRS = ['components', 'scripts', 'previews', 'styles'];
-const SCAN_EXT = /\.(js|mjs|css|html)$/;
-// Herramienta offline: descarga los SVG desde la API para poblar assets/.
-// Mismo caso que download-icons.ts: herramientas offline de mantenimiento del
-// catalogo, se corren a mano y dejan el resultado en assets/. Nada de esto se
-// ejecuta en runtime ni entra al bundle.
-// Herramientas de build/CLI: se ejecutan a mano en Node para llenar
-// `assets/icons`, nunca en el navegador. La regla es sobre RUNTIME.
-const ALLOWED_API_FILES = new Set([
-  // Respaldo de runtime para los sets que no viajan en el kit (decisión 2026-10-09: el repo debe
-  // quedar bajo el límite de 50 MB de jsDelivr). SVG suelto por ícono; el web component y el
-  // script de iconify siguen prohibidos.
-  'src/core/icon-loader.ts',
-  'scripts/download-iconify.ts',
-  // Herramienta de las apps (assets/dl.js): descarga en build, no en runtime.
-  'src/vendor-distributions/client/tools/download-iconify.ts',
-  // HTML para correo: se abre fuera de la app, sin sus assets.
-  'src/core/tk-icon-inline.ts',
-  // Explorador del catálogo: la lista de nombres de cada set y los SVG que no viajan en el kit.
-  'src/components/media/utils/icon-explorer.preview.ts',
-  'scripts/download-icons.ts',
-  'scripts/fixes/icon-viewbox.ts',
-  'scripts/sync-icon-collections.ts',
-]);
+test('componentes/no-iconify', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
 
-const walk = (dir, out = []) => {
-  for (const name of readdirSync(dir)) {
-    const full = join(dir, name);
-    if (statSync(full).isDirectory()) walk(full, out);
-    else if (SCAN_EXT.test(name)) out.push(full);
+  const SCAN_DIRS = ['components', 'scripts', 'previews', 'styles'];
+  const SCAN_EXT = /\.(js|mjs|css|html)$/;
+  // Herramienta offline: descarga los SVG desde la API para poblar assets/.
+  // Mismo caso que download-icons.ts: herramientas offline de mantenimiento del
+  // catalogo, se corren a mano y dejan el resultado en assets/. Nada de esto se
+  // ejecuta en runtime ni entra al bundle.
+  // Herramientas de build/CLI: se ejecutan a mano en Node para llenar
+  // `assets/icons`, nunca en el navegador. La regla es sobre RUNTIME.
+  const ALLOWED_API_FILES = new Set([
+    // Respaldo de runtime para los sets que no viajan en el kit (decisión 2026-10-09: el repo debe
+    // quedar bajo el límite de 50 MB de jsDelivr). SVG suelto por ícono; el web component y el
+    // script de iconify siguen prohibidos.
+    'src/core/icon-loader.ts',
+    'scripts/download-iconify.ts',
+    // Herramienta de las apps (assets/dl.js): descarga en build, no en runtime.
+    'src/vendor-distributions/client/tools/download-iconify.ts',
+    // HTML para correo: se abre fuera de la app, sin sus assets.
+    'src/core/tk-icon-inline.ts',
+    // Explorador del catálogo: la lista de nombres de cada set y los SVG que no viajan en el kit.
+    'src/components/media/utils/icon-explorer.preview.ts',
+    'scripts/download-icons.ts',
+    'scripts/fixes/icon-viewbox.ts',
+    'scripts/sync-icon-collections.ts',
+  ]);
+
+  const walk = (dir, out = []) => {
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      if (statSync(full).isDirectory()) walk(full, out);
+      else if (SCAN_EXT.test(name)) out.push(full);
+    }
+    return out;
+  };
+
+  const files = [];
+  for (const d of SCAN_DIRS) {
+    try { walk(join(root, d), files); } catch { /* carpeta ausente */ }
   }
-  return out;
-};
+  files.push(join(root, 'index.html'));
 
-const files = [];
-for (const d of SCAN_DIRS) {
-  try { walk(join(root, d), files); } catch { /* carpeta ausente */ }
-}
-files.push(join(root, 'index.html'));
+  /** Quita comentarios de bloque, de linea y JSDoc para no leer prosa. */
+  const stripComments = (src) => src
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '')
+    .replace(/<!--[\s\S]*?-->/g, '');
 
-/** Quita comentarios de bloque, de linea y JSDoc para no leer prosa. */
-const stripComments = (src) => src
-  .replace(/\/\*[\s\S]*?\*\//g, '')
-  .replace(/^\s*\/\/.*$/gm, '')
-  .replace(/<!--[\s\S]*?-->/g, '');
+  const failures = [];
 
-const failures = [];
+  for (const file of files) {
+    let src;
+    try { src = readFileSync(file, 'utf8'); } catch { continue; }
+    const rel = relative(root, file).replaceAll('\\', '/');
+    const code = stripComments(src);
 
-for (const file of files) {
-  let src;
-  try { src = readFileSync(file, 'utf8'); } catch { continue; }
-  const rel = relative(root, file).replaceAll('\\', '/');
-  const code = stripComments(src);
-
-  if (/<iconify-icon|iconify-icon['"\s.,)>]|customElements\.get\(\s*['"]iconify-icon/.test(code)) {
-    failures.push(`${rel}: usa el web component <iconify-icon> — el kit usa <iswc-icon>`);
-  }
-  if (/code\.iconify\.design/.test(code)) {
-    failures.push(`${rel}: carga el script de iconify desde CDN — eliminado del proyecto`);
-  }
-  if (/api\.iconify\.design/.test(code) && !ALLOWED_API_FILES.has(rel)) {
-    failures.push(`${rel}: pega a api.iconify.design en runtime — usa el sistema propio de iconos`);
-  }
-}
-
-// El loader debe seguir exponiendo la resolucion propia.
-const loader = readFileSync(join(root, 'src/core/icon-loader.ts'), 'utf8');
-if (!/export async function resolveIconRaw/.test(loader)) {
-  failures.push('icon-loader.ts: falta resolveIconRaw (iswc-icon depende de él)');
-}
-if (/export function ensureIconify/.test(loader)) {
-  failures.push('icon-loader.ts: ensureIconify debe estar eliminado (cargaba el CDN de iconify)');
-}
-
-
-// Nomenclatura: los modulos y exports ya no se llaman "iconify". Se permite la
-// palabra solo en prosa (comentarios/md) y en el alias legacy del token
-// `{{iconify:}}`, que sigue aceptandose por compatibilidad de specs.
-const BANNED_IDENTIFIERS = [
-  'iconify-loader.js',
-  'tk-iconify-inline.js',
-  'iconifyApiPath',
-  'iconifyInlineHtmlWeb',
-  'replaceIconifyTokens',
-  'hasIconifyJsonSugar',
-  'tk-inline-iconify',
-  'ensureIconify',
-];
-for (const file of files) {
-  let src;
-  try { src = readFileSync(file, 'utf8'); } catch { continue; }
-  const rel = relative(root, file).split(sep).join('/');
-  if (rel === 'tests/no-iconify.test.ts') continue;
-  for (const id of BANNED_IDENTIFIERS) {
-    if (src.includes(id)) {
-      failures.push(`${rel}: referencia el identificador obsoleto "${id}"`);
+    if (/<iconify-icon|iconify-icon['"\s.,)>]|customElements\.get\(\s*['"]iconify-icon/.test(code)) {
+      failures.push(`${rel}: usa el web component <iconify-icon> — el kit usa <iswc-icon>`);
+    }
+    if (/code\.iconify\.design/.test(code)) {
+      failures.push(`${rel}: carga el script de iconify desde CDN — eliminado del proyecto`);
+    }
+    if (/api\.iconify\.design/.test(code) && !ALLOWED_API_FILES.has(rel)) {
+      failures.push(`${rel}: pega a api.iconify.design en runtime — usa el sistema propio de iconos`);
     }
   }
-}
 
-if (failures.length) {
-  console.log('FAIL:');
-  for (const f of failures) console.log(`  - ${f}`);
-  process.exit(1);
-}
+  // El loader debe seguir exponiendo la resolucion propia.
+  const loader = readFileSync(join(root, 'src/core/icon-loader.ts'), 'utf8');
+  if (!/export async function resolveIconRaw/.test(loader)) {
+    failures.push('icon-loader.ts: falta resolveIconRaw (iswc-icon depende de él)');
+  }
+  if (/export function ensureIconify/.test(loader)) {
+    failures.push('icon-loader.ts: ensureIconify debe estar eliminado (cargaba el CDN de iconify)');
+  }
 
-console.log(`no-iconify.test.ts: PASS — ${files.length} archivos sin <iconify-icon> ni CDN de Iconify en runtime`);
-process.exit(0);
+
+  // Nomenclatura: los modulos y exports ya no se llaman "iconify". Se permite la
+  // palabra solo en prosa (comentarios/md) y en el alias legacy del token
+  // `{{iconify:}}`, que sigue aceptandose por compatibilidad de specs.
+  const BANNED_IDENTIFIERS = [
+    'iconify-loader.js',
+    'tk-iconify-inline.js',
+    'iconifyApiPath',
+    'iconifyInlineHtmlWeb',
+    'replaceIconifyTokens',
+    'hasIconifyJsonSugar',
+    'tk-inline-iconify',
+    'ensureIconify',
+  ];
+  for (const file of files) {
+    let src;
+    try { src = readFileSync(file, 'utf8'); } catch { continue; }
+    const rel = relative(root, file).split(sep).join('/');
+    if (rel === 'tests/no-iconify.test.ts') continue;
+    for (const id of BANNED_IDENTIFIERS) {
+      if (src.includes(id)) {
+        failures.push(`${rel}: referencia el identificador obsoleto "${id}"`);
+      }
+    }
+  }
+
+  if (failures.length) {
+    console.log('FAIL:');
+    for (const f of failures) console.log(`  - ${f}`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+
+  console.log(`no-iconify.test.ts: PASS — ${files.length} archivos sin <iconify-icon> ni CDN de Iconify en runtime`);
+  return;
+});
+
+export default lista();

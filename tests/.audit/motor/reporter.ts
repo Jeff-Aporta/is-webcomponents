@@ -9,8 +9,8 @@
  * del runner. Solo los presenta.
  */
 
-import type { ReporteAuditoria, Hallazgo, Severidad } from './types.schemas.js';
-import type { ReporteJson, ReporteJsonComponente } from "./reporter.schemas.js";
+import type { ReporteAuditoria, Hallazgo, Severidad } from './schemas/types.schemas.js';
+import type { ReporteJson, ReporteJsonComponente } from "./schemas/reporter.schemas.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // JSON: wrapper estable para integraciones.

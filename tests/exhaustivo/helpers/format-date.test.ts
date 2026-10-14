@@ -7,14 +7,17 @@
  *
  * Cómo correr:
  *   deno test -A --no-check \
- *     src/utils/health/exhaustive/helpers/format-date.test.ts
+ *     tests/exhaustivo/helpers/format-date.test.ts
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -42,7 +45,7 @@ test('3. JSON existe, declara el tag y respeta el esquema iswc-preview/v1', asyn
 });
 
 test('4. static observedAttributes incluye TODOS los atributos documentados en JSDoc', async () => {
-  const helpers = await import('../_helpers.js');
+  const helpers = await import('../../_shared/exhaustivo.js');
   console.log('DEBUG helpers keys:', Object.keys(helpers).filter(k => k.includes('extraer')));
   console.log('DEBUG helpers.extraerObservados type:', typeof helpers.extraerObservados);
   const list = helpers.extraerObservados(TS);
@@ -124,3 +127,5 @@ test('15. OPT_ATTRS mapea kebab-case a camelCase para Intl.DateTimeFormat', asyn
   assert.ok(/['"]time-zone['"]\s*:\s*['"]timeZone['"]/.test(src), 'time-zone → timeZone');
   assert.ok(/['"]time-zone-name['"]\s*:\s*['"]timeZoneName['"]/.test(src), 'time-zone-name → timeZoneName');
 });
+
+export default lista();

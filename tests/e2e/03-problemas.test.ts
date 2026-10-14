@@ -4,12 +4,15 @@
 // rastro de CodeMirror. Cada hallazgo se reporta con la vista, el texto y una
 // captura como evidencia. Este test queda ROJO mientras existan problemas
 // reales en la galeria/componentes.
-import { before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import type { Page } from '@browserbasehq/stagehand';
-import { arrancar, abrirGaleria, arbolTexto, evidencia, problemasDeConsola, rastroCodeMirror, crearTestE2E } from './lib/harness.ts';
-import { faltanRequisitos, ENV } from './lib/env.ts';
-import type { CtxE2E } from './lib/schemas/tipos.schemas.ts';
+import { arrancar, abrirGaleria, arbolTexto, evidencia, problemasDeConsola, rastroCodeMirror, crearTestE2E } from '../.audit/e2e/harness.ts';
+import { faltanRequisitos, ENV } from '../.audit/e2e/env.ts';
+import type { CtxE2E } from '../.audit/e2e/schemas/tipos.schemas.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
+
 
 const DISPONIBLE = faltanRequisitos().length === 0;
 let ctx: CtxE2E | null = null;
@@ -84,3 +87,5 @@ testE2E('sin rastro de CodeMirror tras el barrido (motor nativo)', { timeout: 60
   const rastro = await rastroCodeMirror(page);
   assert.equal(rastro.total, 0, `no debe quedar rastro de codemirror tras el barrido (${JSON.stringify(rastro)})`);
 });
+
+export default lista();

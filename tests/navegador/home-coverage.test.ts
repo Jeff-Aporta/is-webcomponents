@@ -1,4 +1,4 @@
-// tests/home-coverage.test.mjs
+// tests/navegador/home-coverage.test.ts
 //
 // Cobertura del home doc de la galería: navega a `http://localhost:8391/`
 // con Playwright, captura los tags del catálogo renderizado en
@@ -29,89 +29,96 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(here);
-const MANIFEST_PATH = join(root, 'src', 'manifest.ts');
-const HOME_URL = 'http://localhost:8391/';
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-// ─── 1. Extraer tags del manifest ──────────────────────────────────────────
-const manifestSrc = await readFile(MANIFEST_PATH, 'utf8');
-// `tag: 'iswc-...'` con cualquier indentación y separadores antes/después.
-const manifestTags = [...manifestSrc.matchAll(/tag:\s*['"](iswc-[a-z0-9-]+)['"]/g)]
-  .map((m) => m[1]);
-assert.ok(manifestTags.length > 0, `no se encontraron tags en ${MANIFEST_PATH}`);
-const manifestSet = new Set(manifestTags);
+test('navegador/home-coverage', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(here);
+  const MANIFEST_PATH = join(root, 'src', 'manifest.ts');
+  const HOME_URL = 'http://localhost:8391/';
 
-// ─── 2. Verificar dev server arriba ───────────────────────────────────────
-async function fetchWithTimeout(url, ms) {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), ms);
+  // ─── 1. Extraer tags del manifest ──────────────────────────────────────────
+  const manifestSrc = await readFile(MANIFEST_PATH, 'utf8');
+  // `tag: 'iswc-...'` con cualquier indentación y separadores antes/después.
+  const manifestTags = [...manifestSrc.matchAll(/tag:\s*['"](iswc-[a-z0-9-]+)['"]/g)]
+    .map((m) => m[1]);
+  assert.ok(manifestTags.length > 0, `no se encontraron tags en ${MANIFEST_PATH}`);
+  const manifestSet = new Set(manifestTags);
+
+  // ─── 2. Verificar dev server arriba ───────────────────────────────────────
+  async function fetchWithTimeout(url, ms) {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), ms);
+    try {
+      const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
+      return res;
+    } finally {
+      clearTimeout(t);
+    }
+  }
+  {
+    const r = await fetchWithTimeout(HOME_URL, 3000);
+    assert.equal(r.status, 200, `dev server no responde 200 en ${HOME_URL} (status=${r.status})`);
+  }
+
+  // ─── 3. Playwright: navegar y extraer tags del catálogo ───────────────────
+  const browser = await chromium.launch();
+  let exitCode = 0;
+  let summary = '';
   try {
-    const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store' });
-    return res;
-  } finally {
-    clearTimeout(t);
-  }
-}
-{
-  const r = await fetchWithTimeout(HOME_URL, 3000);
-  assert.equal(r.status, 200, `dev server no responde 200 en ${HOME_URL} (status=${r.status})`);
-}
+    const page = await browser.newPage();
+    await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
+    // La galería monta el nav de forma asíncrona tras el loader. Espera al
+    // primer item antes de hacer el sweep completo.
+    await page.waitForSelector('.shell-nav__item[data-tag]', { timeout: 20000 });
+    // Margen extra: hay componentes `module: true` que se hidratan por chunks.
+    await page.waitForTimeout(2000);
 
-// ─── 3. Playwright: navegar y extraer tags del catálogo ───────────────────
-const browser = await chromium.launch();
-let exitCode = 0;
-let summary = '';
-try {
-  const page = await browser.newPage();
-  await page.goto(HOME_URL, { waitUntil: 'domcontentloaded' });
-  // La galería monta el nav de forma asíncrona tras el loader. Espera al
-  // primer item antes de hacer el sweep completo.
-  await page.waitForSelector('.shell-nav__item[data-tag]', { timeout: 20000 });
-  // Margen extra: hay componentes `module: true` que se hidratan por chunks.
-  await page.waitForTimeout(2000);
+    const catalogTags = await page.evaluate(() => {
+      const items = document.querySelectorAll('.shell-nav__item[data-tag]');
+      const tags = [];
+      for (const el of items) {
+        const t = el.getAttribute('data-tag') || '';
+        if (t.startsWith('iswc-')) tags.push(t);
+      }
+      return tags;
+    });
+    const catalogSet = new Set(catalogTags);
 
-  const catalogTags = await page.evaluate(() => {
-    const items = document.querySelectorAll('.shell-nav__item[data-tag]');
-    const tags = [];
-    for (const el of items) {
-      const t = el.getAttribute('data-tag') || '';
-      if (t.startsWith('iswc-')) tags.push(t);
+    const covered = [...manifestSet].filter((t) => catalogSet.has(t)).sort();
+    const missing = [...manifestSet].filter((t) => !catalogSet.has(t)).sort();
+    const extras = [...catalogSet].filter((t) => !manifestSet.has(t)).sort();
+
+    const total = manifestSet.size;
+    const n = covered.length;
+    const m = total;
+
+    if (missing.length === 0) {
+      summary = `home-coverage.test.mjs: PASS — ${n}/${m} componentes`;
+      console.log(summary);
+      if (extras.length > 0) {
+        console.log(`(nota: ${extras.length} tags en el home no están en el manifest: ${extras.join(', ')})`);
+      }
+      exitCode = 0;
+    } else {
+      console.log(`home-coverage.test.mjs: FAIL — ${n}/${m} componentes cubiertos, ${missing.length} faltantes:`);
+      for (const t of missing) console.log(`  - ${t}`);
+      if (extras.length > 0) {
+        console.log(`(extras en home, no en manifest: ${extras.join(', ')})`);
+      }
+      exitCode = 1;
     }
-    return tags;
-  });
-  const catalogSet = new Set(catalogTags);
-
-  const covered = [...manifestSet].filter((t) => catalogSet.has(t)).sort();
-  const missing = [...manifestSet].filter((t) => !catalogSet.has(t)).sort();
-  const extras = [...catalogSet].filter((t) => !manifestSet.has(t)).sort();
-
-  const total = manifestSet.size;
-  const n = covered.length;
-  const m = total;
-
-  if (missing.length === 0) {
-    summary = `home-coverage.test.mjs: PASS — ${n}/${m} componentes`;
-    console.log(summary);
-    if (extras.length > 0) {
-      console.log(`(nota: ${extras.length} tags en el home no están en el manifest: ${extras.join(', ')})`);
-    }
-    exitCode = 0;
-  } else {
-    console.log(`home-coverage.test.mjs: FAIL — ${n}/${m} componentes cubiertos, ${missing.length} faltantes:`);
-    for (const t of missing) console.log(`  - ${t}`);
-    if (extras.length > 0) {
-      console.log(`(extras en home, no en manifest: ${extras.join(', ')})`);
-    }
+  } catch (err) {
+    console.error('home-coverage.test.mjs: FAIL — error durante la navegación Playwright');
+    console.error(err?.stack || err);
     exitCode = 1;
+  } finally {
+    await browser.close().catch(() => {});
   }
-} catch (err) {
-  console.error('home-coverage.test.mjs: FAIL — error durante la navegación Playwright');
-  console.error(err?.stack || err);
-  exitCode = 1;
-} finally {
-  await browser.close().catch(() => {});
-}
 
-process.exit(exitCode);
+  { const salida = exitCode; if (salida) throw new Error(`salida ${salida}`); return; }
+});
+
+export default lista();

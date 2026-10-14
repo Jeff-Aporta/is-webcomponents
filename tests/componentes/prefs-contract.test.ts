@@ -19,153 +19,160 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
-const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
-const failures = [];
-const check = (cond, msg) => { if (!cond) failures.push(msg); };
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-const prefsPath = join(root, 'src', 'components', '_shared', 'prefs.ts');
-const agGridPath = join(root, 'src', 'components', 'data', 'ag-grid.ts');
-const agGridMdPath = join(root, 'src', 'components', 'data', 'ag-grid.md');
-const mainPath = join(root, 'src', 'components', 'layout', 'main.ts');
-const scrollMemoryPath = join(root, 'src', 'components', '_shared', 'scroll-memory.ts');
-const splitPath = join(root, 'src', 'components', 'layout', 'split-panel.ts');
-// Consolidación 2026-09-07: data/LLM.md y components/LLM.md eliminados.
-// El catálogo de componentes vive ahora en specs/componentes.md (índice
-// global) y en el .md por componente (p.ej. src/components/data/ag-grid.md).
-const componentesSpec = join(root, 'specs', 'componentes.md');
+test('componentes/prefs-contract', async () => {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const root = dirname(dirname(dirname(dirname(here))));
+  const failures = [];
+  const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-check(existsSync(prefsPath), 'falta components/_shared/prefs.ts');
-check(existsSync(scrollMemoryPath), 'falta components/_shared/scroll-memory.ts');
-check(existsSync(agGridPath), 'falta components/data/ag-grid.ts');
-check(existsSync(agGridMdPath), 'falta components/data/ag-grid.md — documentar el tag para LLM');
+  const prefsPath = join(root, 'src', 'components', '_shared', 'prefs.ts');
+  const agGridPath = join(root, 'src', 'components', 'data', 'ag-grid.ts');
+  const agGridMdPath = join(root, 'src', 'components', 'data', 'ag-grid.md');
+  const mainPath = join(root, 'src', 'components', 'layout', 'main.ts');
+  const scrollMemoryPath = join(root, 'src', 'components', '_shared', 'scroll-memory.ts');
+  const splitPath = join(root, 'src', 'components', 'layout', 'split-panel.ts');
+  // Consolidación 2026-09-07: data/LLM.md y components/LLM.md eliminados.
+  // El catálogo de componentes vive ahora en specs/componentes.md (índice
+  // global) y en el .md por componente (p.ej. src/components/data/ag-grid.md).
+  const componentesSpec = join(root, 'specs', 'componentes.md');
 
-const prefs = readFileSync(prefsPath, 'utf8');
-const agGrid = readFileSync(agGridPath, 'utf8');
-const mainSrc = readFileSync(mainPath, 'utf8');
-const scrollMemorySrc = readFileSync(scrollMemoryPath, 'utf8');
-const splitSrc = readFileSync(splitPath, 'utf8');
+  check(existsSync(prefsPath), 'falta components/_shared/prefs.ts');
+  check(existsSync(scrollMemoryPath), 'falta components/_shared/scroll-memory.ts');
+  check(existsSync(agGridPath), 'falta components/data/ag-grid.ts');
+  check(existsSync(agGridMdPath), 'falta components/data/ag-grid.md — documentar el tag para LLM');
 
-// ── 1. prefs.ts: raíz y API ─────────────────────────────────────────────
-check(
-  /const\s+ROOT_NOMBRE\s*=\s*['"]root['"]/.test(prefs) && /const\s+ROOT_KEY\s*=\s*iswcKey\(ROOT_NOMBRE\)/.test(prefs),
-  'prefs.ts: ROOT_KEY debe ser exactamente "iswc:root" (iswcKey("root"))',
-);
-check(
-  /LEGACY_ROOT_KEYS\s*=\s*\[\s*['"]is-webcomponents['"]/.test(prefs), // root previo a iswc-root
-  'prefs.ts: debe migrar desde el root previo "is-webcomponents" (antes de iswc-root)',
-);
-check(
-  /LEGACY_ROOT_KEY\s*=\s*['"]is-components['"]/.test(prefs),
-  'prefs.ts: debe migrar desde legacy "is-components"',
-);
-for (const fn of [
-  'getComponentPrefs',
-  'setComponentPrefs',
-  'replaceComponentPrefs',
-  'removeComponentPrefs',
-  'getPrefsRootKey',
-]) {
-  check(prefs.includes(`export function ${fn}`), `prefs.ts: falta export function ${fn}`);
-}
-check(
-  !/localStorage\.setItem\(\s*['"]is-components['"]/.test(prefs),
-  'prefs.ts: no debe escribir el root legacy is-components (solo leer/migrar)',
-);
+  const prefs = readFileSync(prefsPath, 'utf8');
+  const agGrid = readFileSync(agGridPath, 'utf8');
+  const mainSrc = readFileSync(mainPath, 'utf8');
+  const scrollMemorySrc = readFileSync(scrollMemoryPath, 'utf8');
+  const splitSrc = readFileSync(splitPath, 'utf8');
 
-// ── 2. Consumidores importan prefs ──────────────────────────────────────
-for (const [label, src] of [
-  ['ag-grid.ts', agGrid],
-  ['scroll-memory.ts', scrollMemorySrc],
-  ['split-panel.ts', splitSrc],
-]) {
+  // ── 1. prefs.ts: raíz y API ─────────────────────────────────────────────
   check(
-    /from\s+['"][^'"]*prefs\.js['"]/.test(src),
-    `${label}: debe importar _shared/prefs.ts (no reinventar store)`,
+    /const\s+ROOT_NOMBRE\s*=\s*['"]root['"]/.test(prefs) && /const\s+ROOT_KEY\s*=\s*iswcKey\(ROOT_NOMBRE\)/.test(prefs),
+    'prefs.ts: ROOT_KEY debe ser exactamente "iswc:root" (iswcKey("root"))',
   );
-}
-check(
-  /from\s+['"][^'"]*scroll-memory\.js['"]/.test(mainSrc),
-  'main.ts: debe delegar scroll a _shared/scroll-memory.ts',
-);
+  check(
+    /LEGACY_ROOT_KEYS\s*=\s*\[\s*['"]is-webcomponents['"]/.test(prefs), // root previo a iswc-root
+    'prefs.ts: debe migrar desde el root previo "is-webcomponents" (antes de iswc-root)',
+  );
+  check(
+    /LEGACY_ROOT_KEY\s*=\s*['"]is-components['"]/.test(prefs),
+    'prefs.ts: debe migrar desde legacy "is-components"',
+  );
+  for (const fn of [
+    'getComponentPrefs',
+    'setComponentPrefs',
+    'replaceComponentPrefs',
+    'removeComponentPrefs',
+    'getPrefsRootKey',
+  ]) {
+    check(prefs.includes(`export function ${fn}`), `prefs.ts: falta export function ${fn}`);
+  }
+  check(
+    !/localStorage\.setItem\(\s*['"]is-components['"]/.test(prefs),
+    'prefs.ts: no debe escribir el root legacy is-components (solo leer/migrar)',
+  );
 
-// ── 3. ag-grid: API de persistencia + UI columnas ───────────────────────
-check(agGrid.includes('replaceComponentPrefs'), 'ag-grid.ts: guardar snapshot con replaceComponentPrefs');
-check(agGrid.includes('removeComponentPrefs'), 'ag-grid.ts: reset debe usar removeComponentPrefs');
-check(agGrid.includes('getComponentPrefs'), 'ag-grid.ts: load debe usar getComponentPrefs');
-check(agGrid.includes('resetPersistedState'), 'ag-grid.ts: falta api.resetPersistedState');
-check(agGrid.includes('remember-state'), 'ag-grid.ts: falta atributo remember-state');
-check(agGrid.includes('storage-key'), 'ag-grid.ts: falta atributo storage-key');
-check(agGrid.includes('mim-dg__sidebar'), 'ag-grid.ts: falta sidebar de columnas');
-check(agGrid.includes('mim-dg__col-check') || agGrid.includes('data-col-id'), 'ag-grid.ts: faltan checks de visibilidad de columnas');
-check(agGrid.includes('mim-dg__reset-btn') || /Reiniciar/.test(agGrid), 'ag-grid.ts: falta botón Reiniciar persistencia');
-check(/#renderColumnsPanel|#toggleSidePanel/.test(agGrid), 'ag-grid.ts: sidebar sin cablear (#renderColumnsPanel / #toggleSidePanel)');
-
-// No escribir estado canónico en keys planas ni sessionStorage (migración OK)
-const agGridNoComments = agGrid
-  .replace(/\/\*[\s\S]*?\*\//g, '')
-  .replace(/^\s*\/\/.*$/gm, '');
-
-const flatSetItem = [...agGridNoComments.matchAll(/localStorage\.setItem\(\s*([^,]+)/g)];
-for (const m of flatSetItem) {
-  const arg = m[1].trim();
-  // Solo se permite si el primer arg es claramente getPrefsRootKey / ROOT / 'iswc:root'
-  // ag-grid no debería llamar setItem en absoluto (delegado a prefs).
-  if (!/getPrefsRootKey|ROOT_KEY|['"]iswc:root['"]/.test(arg)) {
-    failures.push(
-      `ag-grid.ts: localStorage.setItem(${arg}, …) — estado debe ir vía prefs.ts (root iswc:root)`,
+  // ── 2. Consumidores importan prefs ──────────────────────────────────────
+  for (const [label, src] of [
+    ['ag-grid.ts', agGrid],
+    ['scroll-memory.ts', scrollMemorySrc],
+    ['split-panel.ts', splitSrc],
+  ]) {
+    check(
+      /from\s+['"][^'"]*prefs\.js['"]/.test(src),
+      `${label}: debe importar _shared/prefs.ts (no reinventar store)`,
     );
   }
-}
+  check(
+    /from\s+['"][^'"]*scroll-memory\.js['"]/.test(mainSrc),
+    'main.ts: debe delegar scroll a _shared/scroll-memory.ts',
+  );
 
-// sessionStorage.setItem solo permitido en migración hacia prefs (no como destino final de save)
-if (/#savePersistedState[\s\S]*?sessionStorage\.setItem/.test(agGridNoComments)) {
-  failures.push('ag-grid.ts: #savePersistedState no debe escribir en sessionStorage');
-}
+  // ── 3. ag-grid: API de persistencia + UI columnas ───────────────────────
+  check(agGrid.includes('replaceComponentPrefs'), 'ag-grid.ts: guardar snapshot con replaceComponentPrefs');
+  check(agGrid.includes('removeComponentPrefs'), 'ag-grid.ts: reset debe usar removeComponentPrefs');
+  check(agGrid.includes('getComponentPrefs'), 'ag-grid.ts: load debe usar getComponentPrefs');
+  check(agGrid.includes('resetPersistedState'), 'ag-grid.ts: falta api.resetPersistedState');
+  check(agGrid.includes('remember-state'), 'ag-grid.ts: falta atributo remember-state');
+  check(agGrid.includes('storage-key'), 'ag-grid.ts: falta atributo storage-key');
+  check(agGrid.includes('mim-dg__sidebar'), 'ag-grid.ts: falta sidebar de columnas');
+  check(agGrid.includes('mim-dg__col-check') || agGrid.includes('data-col-id'), 'ag-grid.ts: faltan checks de visibilidad de columnas');
+  check(agGrid.includes('mim-dg__reset-btn') || /Reiniciar/.test(agGrid), 'ag-grid.ts: falta botón Reiniciar persistencia');
+  check(/#renderColumnsPanel|#toggleSidePanel/.test(agGrid), 'ag-grid.ts: sidebar sin cablear (#renderColumnsPanel / #toggleSidePanel)');
 
-// ── 4. Docs coherentes ──────────────────────────────────────────────────
-const md = existsSync(agGridMdPath) ? readFileSync(agGridMdPath, 'utf8') : '';
-check(md.includes('iswc:root'), 'ag-grid.md: debe documentar localStorage iswc:root');
-check(md.includes('replaceComponentPrefs') || md.includes('prefs.ts'), 'ag-grid.md: debe apuntar a prefs.ts');
-check(/Qué no hacer|no hacer/i.test(md), 'ag-grid.md: debe tener sección de anti-patrones');
+  // No escribir estado canónico en keys planas ni sessionStorage (migración OK)
+  const agGridNoComments = agGrid
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
 
-// Consolidación 2026-09-07: data/LLM.md y components/LLM.md ya no existen.
-// El catálogo de componentes vive ahora en specs/componentes.md (índice
-// global). Verificamos allí que iswc-ag-grid esté documentado.
-const componentesSrc = existsSync(componentesSpec) ? readFileSync(componentesSpec, 'utf8') : '';
-check(
-  componentesSrc.includes('iswc-ag-grid') || componentesSrc.includes('ag-grid.md'),
-  'specs/componentes.md: debe listar iswc-ag-grid',
-);
-check(
-  componentesSrc.includes('iswc:root'),
-  'specs/componentes.md: debe mencionar root iswc:root',
-);
-
-// Docs canónicas no deben decir que el root actual ES is-components
-// (mencionar legacy/migración sí está bien).
-const docsToScan = [
-  join(root, 'specs', 'componentes.md'),
-  join(root, 'src', 'components', 'data', 'ag-grid.md'),
-  join(root, 'src', 'previews', 'data', 'iswc-ag-grid.json'),
-].filter(existsSync);
-
-for (const f of docsToScan) {
-  const text = readFileSync(f, 'utf8');
-  // Frases que afirman canonicidad del legacy
-  if (/ROOT_KEY\s*=\s*["']is-components["']/.test(text)) {
-    failures.push(`${f.replace(root, '').slice(1)}: declara ROOT_KEY=is-components como canónico`);
+  const flatSetItem = [...agGridNoComments.matchAll(/localStorage\.setItem\(\s*([^,]+)/g)];
+  for (const m of flatSetItem) {
+    const arg = m[1].trim();
+    // Solo se permite si el primer arg es claramente getPrefsRootKey / ROOT / 'iswc:root'
+    // ag-grid no debería llamar setItem en absoluto (delegado a prefs).
+    if (!/getPrefsRootKey|ROOT_KEY|['"]iswc:root['"]/.test(arg)) {
+      failures.push(
+        `ag-grid.ts: localStorage.setItem(${arg}, …) — estado debe ir vía prefs.ts (root iswc:root)`,
+      );
+    }
   }
-  if (/localStorage\[['"]is-components['"]\]\s*=/.test(text) && !/legacy|migr/i.test(text)) {
-    failures.push(`${f.replace(root, '').slice(1)}: documenta is-components como store activo sin marcar legacy`);
-  }
-}
 
-// ── Resultado ───────────────────────────────────────────────────────────
-if (failures.length) {
-  console.error(`prefs-contract: ${failures.length} fallo(s)\n`);
-  for (const f of failures) console.error(`  ✗ ${f}`);
-  process.exit(1);
-}
-console.log('prefs-contract: ok');
+  // sessionStorage.setItem solo permitido en migración hacia prefs (no como destino final de save)
+  if (/#savePersistedState[\s\S]*?sessionStorage\.setItem/.test(agGridNoComments)) {
+    failures.push('ag-grid.ts: #savePersistedState no debe escribir en sessionStorage');
+  }
+
+  // ── 4. Docs coherentes ──────────────────────────────────────────────────
+  const md = existsSync(agGridMdPath) ? readFileSync(agGridMdPath, 'utf8') : '';
+  check(md.includes('iswc:root'), 'ag-grid.md: debe documentar localStorage iswc:root');
+  check(md.includes('replaceComponentPrefs') || md.includes('prefs.ts'), 'ag-grid.md: debe apuntar a prefs.ts');
+  check(/Qué no hacer|no hacer/i.test(md), 'ag-grid.md: debe tener sección de anti-patrones');
+
+  // Consolidación 2026-09-07: data/LLM.md y components/LLM.md ya no existen.
+  // El catálogo de componentes vive ahora en specs/componentes.md (índice
+  // global). Verificamos allí que iswc-ag-grid esté documentado.
+  const componentesSrc = existsSync(componentesSpec) ? readFileSync(componentesSpec, 'utf8') : '';
+  check(
+    componentesSrc.includes('iswc-ag-grid') || componentesSrc.includes('ag-grid.md'),
+    'specs/componentes.md: debe listar iswc-ag-grid',
+  );
+  check(
+    componentesSrc.includes('iswc:root'),
+    'specs/componentes.md: debe mencionar root iswc:root',
+  );
+
+  // Docs canónicas no deben decir que el root actual ES is-components
+  // (mencionar legacy/migración sí está bien).
+  const docsToScan = [
+    join(root, 'specs', 'componentes.md'),
+    join(root, 'src', 'components', 'data', 'ag-grid.md'),
+    join(root, 'src', 'previews', 'data', 'iswc-ag-grid.json'),
+  ].filter(existsSync);
+
+  for (const f of docsToScan) {
+    const text = readFileSync(f, 'utf8');
+    // Frases que afirman canonicidad del legacy
+    if (/ROOT_KEY\s*=\s*["']is-components["']/.test(text)) {
+      failures.push(`${f.replace(root, '').slice(1)}: declara ROOT_KEY=is-components como canónico`);
+    }
+    if (/localStorage\[['"]is-components['"]\]\s*=/.test(text) && !/legacy|migr/i.test(text)) {
+      failures.push(`${f.replace(root, '').slice(1)}: documenta is-components como store activo sin marcar legacy`);
+    }
+  }
+
+  // ── Resultado ───────────────────────────────────────────────────────────
+  if (failures.length) {
+    console.error(`prefs-contract: ${failures.length} fallo(s)\n`);
+    for (const f of failures) console.error(`  ✗ ${f}`);
+    { const salida = 1; if (salida) throw new Error(`salida ${salida}`); return; }
+  }
+  console.log('prefs-contract: ok');
+});
+
+export default lista();

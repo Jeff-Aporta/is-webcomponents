@@ -5,7 +5,6 @@
  * + polígono por dataset (marks-radial.ts).
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -15,7 +14,11 @@ import {
   estaRegistrado,
   usaResizeObserver,
   tieneEdgeCaseGuards,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/radar-chart.ts';
 const WRAPPER = 'src/components/charts/chart.ts';
@@ -59,3 +62,5 @@ test('iswc-radar-chart: registrado', () => {
 test('iswc-radar-chart: edge case guards', () => {
   assert.ok(tieneEdgeCaseGuards(read(WRAPPER)));
 });
+
+export default lista();

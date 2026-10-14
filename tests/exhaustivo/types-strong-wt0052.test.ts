@@ -12,14 +12,17 @@
  *
  * Cómo correr:
  *   deno test -A --no-check \
- *     src/utils/health/exhaustive/types-strong-wt0052.test.ts
+ *     tests/exhaustivo/types-strong-wt0052.test.ts
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..');
@@ -278,3 +281,5 @@ test('WT-0052 / total: los 5 archivos tienen clases y usan tipos explícitos', (
     assert.ok(exportsClass || registersElement, `${f} debe exportar una clase o registrar un custom element`);
   }
 });
+
+export default lista();

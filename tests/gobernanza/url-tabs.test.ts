@@ -7,8 +7,15 @@
  *   N4 los tabs de imágenes del markdown tienen id estable por documento y recuerdan su estado.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { b64urlDecode, b64urlEncode, readUrlTabs, writeUrlTab } from '../../../components/navigation/utils/url-nav.ts';
-import { mdToHtml } from '../../../components/helpers/utils/md-lite.ts';
+import { b64urlDecode, b64urlEncode, readUrlTabs, writeUrlTab } from '../../src/components/navigation/utils/url-nav.ts';
+import { mdToHtml } from '../../src/components/helpers/utils/md-lite.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 function navegador(inicial: Record<string, unknown>) {
   const g = globalThis as unknown as { location: { href: string }; history: unknown };
@@ -25,7 +32,7 @@ function navegador(inicial: Record<string, unknown>) {
   return { entradas, estado, restaurar: () => Object.assign(g, prev) };
 }
 
-Deno.test('url tabs: N1-N3 guarda la pestaña, conserva el estado y decide historial', () => {
+denoTest('url tabs: N1-N3 guarda la pestaña, conserva el estado y decide historial', () => {
   const nav = navegador({ p: 'README.md' });
   try {
     writeUrlTab('md-tabs-1', 1);
@@ -40,7 +47,7 @@ Deno.test('url tabs: N1-N3 guarda la pestaña, conserva el estado y decide histo
   } finally { nav.restaurar(); }
 });
 
-Deno.test('url tabs: N4 los tabs del markdown tienen id estable por documento y state', () => {
+denoTest('url tabs: N4 los tabs del markdown tienen id estable por documento y state', () => {
   const md = '---\n\n![A](a.svg)\n![B](b.svg)\n\n---\n\n---\n\n![C](c.svg)\n![D](d.svg)\n\n---';
   const a = mdToHtml(md);
   const b = mdToHtml(md);
@@ -49,3 +56,5 @@ Deno.test('url tabs: N4 los tabs del markdown tienen id estable por documento y 
   assertEquals(ids(b), ids(a), 'mismo documento, mismos ids (sobreviven a F5)');
   assert(/<iswc-tab-group[^>]*\bstate\b/.test(a), 'recuerdan su pestaña');
 });
+
+export default lista();

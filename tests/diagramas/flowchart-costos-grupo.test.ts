@@ -8,8 +8,15 @@
  *      codo junto a uno ajeno ni hace un escalón corto para colarse al lado; toma el pasillo libre.
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
-import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 type P = { x: number; y: number };
 type Caja = { x: number; y: number; w: number; h: number };
@@ -43,7 +50,7 @@ const FLUJO = {
   edges: [{ from: 'x', to: 'v1' }, { from: 'v1', to: 'v2' }, { from: 'v2', to: 'y' }, { from: 'x', to: 'y', label: 'atajo' }],
 };
 
-Deno.test('costos: G1/G2 (c) un riel ajeno rodea el grupo; uno que llega a un miembro lo cruza una vez', () => {
+denoTest('costos: G1/G2 (c) un riel ajeno rodea el grupo; uno que llega a un miembro lo cruza una vez', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(FLUJO)!, null, { style: 'insoft' });
   const g = L.contexts?.find((c) => c.label === 'Validación');
   assert(g, `sin grupo Validación: ${JSON.stringify(L.contexts?.map((c) => c.label))}`);
@@ -57,7 +64,7 @@ Deno.test('costos: G1/G2 (c) un riel ajeno rodea el grupo; uno que llega a un mi
   assert(fallas.length === 0, fallas.join('\n'));
 });
 
-Deno.test('costos: G3 (b) aristas paralelas sin extremos comunes no comparten tramo', () => {
+denoTest('costos: G3 (b) aristas paralelas sin extremos comunes no comparten tramo', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec({
     lanes: [{ id: 'A', label: 'A' }, { id: 'B', label: 'B' }],
     nodes: [
@@ -126,10 +133,12 @@ export function fallasVecindadCodos(edges: ReadonlyArray<{ from: string; to: str
   return fallas;
 }
 
-Deno.test('costos: G4 (d) un codo encarece su vecindad: la siguiente arista no apila codos ni hace escalón junto a uno ajeno', () => {
+denoTest('costos: G4 (d) un codo encarece su vecindad: la siguiente arista no apila codos ni hace escalón junto a uno ajeno', () => {
   const L = computeFlowchartLayout(resolveFlowchartSpec(FLUJO_CODOS)!, null, {});
   const ae = L.edges.find((e) => e.from === 'a' && e.to === 'e');
   assert(ae && codosDe(pathPoints(ae.path)).length >= 2, 'precondición: a→e no es recta (tiene que esquivar a c y su rama)');
   const fallas = fallasVecindadCodos(L.edges);
   assert(fallas.length === 0, fallas.join('\n'));
 });
+
+export default lista();

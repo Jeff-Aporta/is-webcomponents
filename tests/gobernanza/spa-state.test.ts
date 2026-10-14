@@ -12,9 +12,12 @@
  *      externos, _blank, modificadores y data-spa="off" no se interceptan
  *   S8 navigate reemplaza el estado completo (no mezcla)
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { b64urlDecode, b64urlEncode, createSpaState, recortarPorValor } from '../../../core/spa-state.ts';
+import { b64urlDecode, b64urlEncode, createSpaState, recortarPorValor } from '../../src/core/spa-state.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 type Entrada = { url: string };
 function navegador(inicio: string) {
@@ -134,3 +137,5 @@ test('S8 navigate reemplaza', () => {
   assert.deepEqual(s.get(), { p: 'b.md' });
   s.destroy();
 });
+
+export default lista();

@@ -5,11 +5,14 @@
  * en localStorage, slots start/end/divider, CSS parts, snap points.
  */
 
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..', '..', '..', '..');
@@ -36,7 +39,7 @@ test('4. OBSERVED incluye atributos principales (position, orientation, primary,
   // Usa el motor para extraer observados. Algunos wrappers (split-panel)
   // declaran OBSERVED = [...] + spread con attrs adicionales. El motor
   // resuelve el spread y concatena con el base class.
-  const { extraerObservados } = await import('../_helpers.js');
+  const { extraerObservados } = await import('../../_shared/exhaustivo.js');
   const REL = 'src/components/layout/split-panel.ts';
   const obs = extraerObservados(REL);
   for (const a of ['position', 'orientation', 'primary', 'collapse', 'snap']) {
@@ -119,3 +122,5 @@ test('15. CSS hermano tiene estilos para el divisor (.divider)', () => {
   assert.ok(/\.divider[^\w-]/.test(css) || /\[part=['"]divider['"]\]/.test(css),
     'debe estilizar el divisor');
 });
+
+export default lista();

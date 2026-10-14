@@ -25,14 +25,17 @@
  *      cada `<iswc-examples-carousel>` del main cuando el JSON declara
  *      `examples`. Esto cierra el contrato "el carrusel lee del JSON".
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { ExampleSchema, ExamplesSchema } from '../../../utils/section-schema.ts';
-import { validarEsquema } from '../motor/validators/json-schema.ts';
+import { ExampleSchema, ExamplesSchema } from '../../src/utils/section-schema.ts';
+import { validarEsquema } from '../.audit/motor/validators/json-schema.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
@@ -160,7 +163,7 @@ test('W21: json-schema no reporta hallazgo fatal si `examples` está mal formado
 test('W21: RAIZ_PROPS contiene `examples` en el código fuente del validador', () => {
   // Defensa adicional: si alguien borra `examples` de RAIZ_PROPS, este
   // test falla antes de que los JSON reales empiecen a warnear.
-  const src = readFileSync(join(root, 'src/utils/health/motor/validators/json-schema.ts'), 'utf8');
+  const src = readFileSync(join(root, 'tests/.audit/motor/validators/json-schema.ts'), 'utf8');
   assert.match(
     src,
     /RAIZ_PROPS[\s\S]*?'examples'/,
@@ -231,3 +234,5 @@ test('W21: PreviewDefinition declara `examples` opcional', () => {
     'schemas/preview.schemas.ts debe declarar `examples?: unknown[]` en PreviewDefinition',
   );
 });
+
+export default lista();

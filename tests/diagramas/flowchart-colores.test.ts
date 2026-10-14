@@ -5,8 +5,15 @@
  *   C2 `config.entityColors` del consumidor manda por tipo.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { coloresDeEntidad, resolveFlowchartSpec, TIPOS_ENTIDAD } from '../../../components/diagrams/utils/flowchart-spec.ts';
-import { hexToOklch } from '../../../components/diagrams/utils/oklch.ts';
+import { coloresDeEntidad, resolveFlowchartSpec, TIPOS_ENTIDAD } from '../../src/components/diagrams/utils/flowchart-spec.ts';
+import { hexToOklch } from '../../src/components/diagrams/utils/oklch.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 const spec = (config?: unknown) => resolveFlowchartSpec({
   ...(config ? { config } : {}),
@@ -25,7 +32,7 @@ const spec = (config?: unknown) => resolveFlowchartSpec({
 const fill = (n: { embed?: { kind?: string; class?: Record<string, unknown>; component?: Record<string, unknown>; table?: Record<string, unknown> } }): string =>
   String(n.embed?.class?.fill ?? n.embed?.component?.fill ?? (n.embed?.table?.style as { fill?: string } | undefined)?.fill ?? '');
 
-Deno.test('colores: C1 uno por tipo y sin repetir entre tipos', () => {
+denoTest('colores: C1 uno por tipo y sin repetir entre tipos', () => {
   const N = new Map(spec().nodes.map((n) => [n.id, fill(n)]));
   assertEquals(N.get('c1'), N.get('c2'), 'mismos controllers, mismo color');
   assertEquals(N.get('api'), N.get('ext'), 'componentes propios y externos, mismo color');
@@ -36,7 +43,9 @@ Deno.test('colores: C1 uno por tipo y sin repetir entre tipos', () => {
   assertEquals(TIPOS_ENTIDAD.length, 5);
 });
 
-Deno.test('colores: C2 el consumidor fija el color de un tipo', () => {
+denoTest('colores: C2 el consumidor fija el color de un tipo', () => {
   const N = new Map(spec({ entityColors: { tabla: '#F4B67B' } }).nodes.map((n) => [n.id, fill(n)]));
   assertEquals(N.get('t1'), '#F4B67B');
 });
+
+export default lista();

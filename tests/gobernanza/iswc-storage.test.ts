@@ -10,6 +10,13 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 /** Storage en memoria: el localStorage real de Deno se comparte entre archivos de test en paralelo. */
 function storageEnMemoria(inicial: Record<string, string> = {}): Storage {
@@ -43,9 +50,9 @@ const local = storageEnMemoria({
 });
 const session = storageEnMemoria({ 'iswc-wc:cdn-ref': 'abc', 'iswc-wc:cdn-mirror': 'jsdelivr', 'token': 't' });
 instalar(local, session);
-const { clearIswcStorage, listIswcKeys, readIswc, registerMemoryCache, writeIswc, migrateIswcStorage } = await import('../../../core/iswc-storage.ts');
+const { clearIswcStorage, listIswcKeys, readIswc, registerMemoryCache, writeIswc, migrateIswcStorage } = await import('../../src/core/iswc-storage.ts');
 
-Deno.test('iswc-storage: S1 ningún módulo del kit escribe storage sin pasar por writeIswc (prefijo iswc:)', () => {
+denoTest('iswc-storage: S1 ningún módulo del kit escribe storage sin pasar por writeIswc (prefijo iswc:)', () => {
   const raiz = join(import.meta.dirname!, '..', '..', '..');
   const malos: string[] = [];
   const visitar = (d: string) => {
@@ -63,7 +70,7 @@ Deno.test('iswc-storage: S1 ningún módulo del kit escribe storage sin pasar po
   assertEquals(malos, [], `escribir con writeIswc(nombre, valor) de core/iswc-storage:\n${malos.join('\n')}`);
 });
 
-Deno.test('iswc-storage: S3 migra el formato viejo a iswc: y borra lo viejo', () => {
+denoTest('iswc-storage: S3 migra el formato viejo a iswc: y borra lo viejo', () => {
   assertEquals(llaves(local), [
     'ajena',
     'iswc:app-cfg', 'iswc:asset-hashes', 'iswc:diagram:d1', 'iswc:docs:paneles', 'iswc:icon:mdi:home', 'iswc:root', 'iswc:theming-seeds',
@@ -74,7 +81,7 @@ Deno.test('iswc-storage: S3 migra el formato viejo a iswc: y borra lo viejo', ()
   assertEquals(migrateIswcStorage(), [], 'idempotente');
 });
 
-Deno.test('iswc-storage: S2 listar y limpiar todo lo iswc: (más la memoria)', () => {
+denoTest('iswc-storage: S2 listar y limpiar todo lo iswc: (más la memoria)', () => {
   assert(writeIswc('x', '1'));
   assertEquals(local.getItem('iswc:x'), '1');
   assertEquals(readIswc('x'), '1');
@@ -94,10 +101,12 @@ Deno.test('iswc-storage: S2 listar y limpiar todo lo iswc: (más la memoria)', (
   assertEquals(llaves(session), ['token']);
 });
 
-Deno.test('iswc-storage: S4 <iswc-prefs-clear> limpia con clearIswcStorage', () => {
+denoTest('iswc-storage: S4 <iswc-prefs-clear> limpia con clearIswcStorage', () => {
   const fuente = readFileSync(join(import.meta.dirname!, '..', '..', '..', 'components', 'feedback', 'prefs-clear.ts'), 'utf8');
   assert(/import \{[^}]*\bclearIswcStorage\b[^}]*\} from '\.\.\/\.\.\/core\/iswc-storage\.js'/.test(fuente), 'importa clearIswcStorage');
   const run = fuente.slice(fuente.indexOf('async #run()'));
   assert(/clearIswcStorage\(\)/.test(run), '#run llama a clearIswcStorage()');
   assert(/keys,/.test(run), 'el detalle del evento lleva las llaves borradas');
 });
+
+export default lista();

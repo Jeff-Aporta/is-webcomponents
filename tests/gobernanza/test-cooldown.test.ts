@@ -10,12 +10,19 @@
 import { assert, assertEquals, assertRejects } from 'jsr:@std/assert@1';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { COOLDOWN_FACTOR, cooldownMs, createTestCooldown, runQueue, TEST_CONCURRENCY, testConcurrency, testId } from '../../../vendor-distributions/shared/testing/test-cooldown.ts';
+import { COOLDOWN_FACTOR, cooldownMs, createTestCooldown, runQueue, TEST_CONCURRENCY, testConcurrency, testId } from '../../src/vendor-distributions/shared/testing/test-cooldown.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const MIN = 60_000;
 const HORA = 60 * MIN;
 
-Deno.test('test-cooldown: verde de 1 min -> 24 h de skip (x1440); rojo corre siempre; memoria en JSON', async () => {
+denoTest('test-cooldown: verde de 1 min -> 24 h de skip (x1440); rojo corre siempre; memoria en JSON', async () => {
   const dir = await Deno.makeTempDir({ prefix: 'cooldown-' });
   const dbPath = join(dir, 'db.json');
   let t = 1_000_000;
@@ -54,7 +61,7 @@ Deno.test('test-cooldown: verde de 1 min -> 24 h de skip (x1440); rojo corre sie
   assertEquals(cooldownMs(HORA, 0.5), 30 * MIN, 'C5 factor inyectable (x0,5 = regla vieja)');
 });
 
-Deno.test('test-cooldown: C6 dos instancias sobre el mismo JSON no se pisan (record fusiona sobre el archivo fresco)', async () => {
+denoTest('test-cooldown: C6 dos instancias sobre el mismo JSON no se pisan (record fusiona sobre el archivo fresco)', async () => {
   const dir = await Deno.makeTempDir({ prefix: 'cooldown-' });
   const dbPath = join(dir, 'db.json');
   let t = 1_000_000;
@@ -72,7 +79,7 @@ Deno.test('test-cooldown: C6 dos instancias sobre el mismo JSON no se pisan (rec
   assert(!createTestCooldown({ dbPath, now }).check('B0').skip);
 });
 
-Deno.test('test-cooldown: C7 factorCooldown x3 -> 1 min verde = 72 h; sin factor sigue en 24 h', async () => {
+denoTest('test-cooldown: C7 factorCooldown x3 -> 1 min verde = 72 h; sin factor sigue en 24 h', async () => {
   const dir = await Deno.makeTempDir({ prefix: 'cooldown-' });
   const dbPath = join(dir, 'db.json');
   let t = 1_000_000;
@@ -99,7 +106,7 @@ Deno.test('test-cooldown: C7 factorCooldown x3 -> 1 min verde = 72 h; sin factor
 //   Q1 nunca más de `concurrency` a la vez (default 3) y llega a usarlos.
 //   Q2 resultados en el orden de entrada.
 //   Q3 testConcurrency: valor válido o 3.
-Deno.test('test-cooldown: Q1-Q3 cola estándar: 3 a la vez por defecto, orden de entrada, concurrencia configurable', async () => {
+denoTest('test-cooldown: Q1-Q3 cola estándar: 3 a la vez por defecto, orden de entrada, concurrencia configurable', async () => {
   let activos = 0, pico = 0;
   const items = [50, 10, 30, 5, 20, 1, 15];
   const res = await runQueue(items, async (ms, i) => {
@@ -120,3 +127,5 @@ Deno.test('test-cooldown: Q1-Q3 cola estándar: 3 a la vez por defecto, orden de
   assertEquals(testConcurrency('x'), 3);
   assertEquals(testConcurrency(0), 3);
 });
+
+export default lista();

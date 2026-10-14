@@ -10,16 +10,19 @@
  *   K5 ensureElement: N pedidos del mismo tag = 1 carga; ya definido → respuesta inmediata compartida
  *   K6 iswcLoader.ensure: N pedidos = 1 load(); ya definido → no vuelve a cargar
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { writeFileSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { pathToFileURL } from 'node:url';
-import { mdToHtml } from '../../../components/helpers/utils/md-lite.ts';
-import { hidratarMd, planHidratacion, tagsPresentes } from '../../../components/helpers/utils/md-hydrate.ts';
-import type { CrearVigiaMd, NodoMd, RaizMd } from '../../../components/helpers/schemas/md-hydrate.schemas.ts';
-import { ensureElement } from '../../../cdn/ensure-element.ts';
+import { mdToHtml } from '../../src/components/helpers/utils/md-lite.ts';
+import { hidratarMd, planHidratacion, tagsPresentes } from '../../src/components/helpers/utils/md-hydrate.ts';
+import type { CrearVigiaMd, NodoMd, RaizMd } from '../../src/components/helpers/schemas/md-hydrate.schemas.ts';
+import { ensureElement } from '../../src/cdn/ensure-element.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 // ── Registro de custom elements mínimo (Deno no trae DOM) ──────────────────────
 const definidos = new Map<string, object>();
@@ -182,7 +185,7 @@ test('K6 iswcLoader.ensure: N pedidos = 1 load()', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'iswc-k6-'));
   const modulo = join(dir, 'x-k6.js');
   writeFileSync(modulo, 'globalThis.__cargasK6 = (globalThis.__cargasK6 ?? 0) + 1; customElements.define("x-k6", class extends EventTarget {});\n');
-  const { iswcLoader: L } = await import('../../../cdn/loader.ts');
+  const { iswcLoader: L } = await import('../../src/cdn/loader.ts');
   L.registerApp({ 'x-k6': pathToFileURL(modulo).href }, { installSheets: false });
   let loads = 0;
   const original = L.load.bind(L);
@@ -201,3 +204,5 @@ test('K6 iswcLoader.ensure: N pedidos = 1 load()', async () => {
     L.load = original;
   }
 });
+
+export default lista();

@@ -22,8 +22,11 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
 import assert from 'node:assert';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const TEMA = ['is-base.css', 'palettes.css'].map(f => join(root, 'src', 'styles', f));
@@ -86,3 +89,5 @@ test('el vocabulario de color no mezcla escala numerica con modificadores', () =
     `a la vez: ${num.slice(0, 3).join(', ')} vs ${rel.slice(0, 3).join(', ')}`,
   );
 });
+
+export default lista();

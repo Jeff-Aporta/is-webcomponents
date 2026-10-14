@@ -23,7 +23,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
-// _helpers.ts está en src/utils/health/exhaustive/forms/_helpers.ts.
+// _helpers.ts está en tests/_shared/exhaustivo-forms.ts.
 // Tres niveles arriba llegan a src/ (raíz del kit).
 export const RAIZ = join(dirname(__filename), '..', '..', '..', '..');
 

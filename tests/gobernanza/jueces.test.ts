@@ -8,13 +8,16 @@
  *   J5 juez LLM: salta el proveedor en cooldown, pone en cooldown al que falla por key y usa el siguiente.
  *   J6 capaOpcional: sin veredicto avisa con el motivo y no corre la aserción; exigirJuez salta.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { capaOpcional, exigirJuez, juzgarConLlm, preguntarJev } from '../../../vendor-distributions/shared/testing/jueces.ts';
-import { COOLDOWN_LLAVE_MS, olvidarCooldownsEnMemoria } from '../../../vendor-distributions/shared/testing/test-cooldown.ts';
+import { capaOpcional, exigirJuez, juzgarConLlm, preguntarJev } from '../../src/vendor-distributions/shared/testing/jueces.ts';
+import { COOLDOWN_LLAVE_MS, olvidarCooldownsEnMemoria } from '../../src/vendor-distributions/shared/testing/test-cooldown.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const AHORA = Date.parse('2026-10-12T12:00:00Z');
 const respuesta = (status: number, cuerpo: unknown) => Promise.resolve(new Response(JSON.stringify(cuerpo), { status, headers: { 'content-type': 'application/json' } }));
@@ -97,7 +100,7 @@ test('jueces: J6 capaOpcional avisa y no aplica; exigirJuez salta', () => {
 
 test('jueces: J7 Stagehand respeta el cooldown: leer lo salta, el barrido enfría al que falla, la elección opcional no lanza', async () => {
   olvidarCooldownsEnMemoria();
-  const { leerProveedoresDeArchivo, elegirProveedorOpcional } = await import('../../../vendor-distributions/shared/testing/proveedores-llm.ts');
+  const { leerProveedoresDeArchivo, elegirProveedorOpcional } = await import('../../src/vendor-distributions/shared/testing/proveedores-llm.ts');
   const a = archivo({ proveedores: [
     { nombre: 'frio', apiKey: 'k1', model: 'm', cooldownHasta: new Date(Date.now() + 3600_000).toISOString() },
     { nombre: 'pobre', apiKey: 'k2', model: 'm' },
@@ -119,8 +122,10 @@ test('jueces: J7 Stagehand respeta el cooldown: leer lo salta, el barrido enfrí
 });
 
 test('jueces: J8 umbrales estándar: < 0.3 rechazo, 0.3-0.5 dudoso (solo aviso), >= 0.5 cumple', async () => {
-  const { veredictoProbabilidad, UMBRAL_RECHAZO, UMBRAL_DUDA } = await import('../../../vendor-distributions/shared/testing/jueces.ts');
+  const { veredictoProbabilidad, UMBRAL_RECHAZO, UMBRAL_DUDA } = await import('../../src/vendor-distributions/shared/testing/jueces.ts');
   assert.equal(UMBRAL_RECHAZO, 0.3);
   assert.equal(UMBRAL_DUDA, 0.5);
   assert.deepEqual([0.1, 0.29, 0.3, 0.42, 0.5, 0.97].map(veredictoProbabilidad), ['rechazo', 'rechazo', 'dudoso', 'dudoso', 'cumple', 'cumple']);
 });
+
+export default lista();

@@ -14,7 +14,6 @@
  *  10. Performance (clearTimeout en disconnected, AbortController para OTP)
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, leerDoc, existeCss,
@@ -23,7 +22,11 @@ import {
   eventosDocumentados, atributosDocumentados,
   esFormAssociated, extiendeElementBase, usaShadowDom,
   tieneObservedTipado, tieneDefineElement,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const TAG = 'iswc-input';
 const src = leerComponente(TAG);
@@ -150,3 +153,5 @@ test('input: form-associated + formDisabledCallback', () => {
   assert.ok(/formDisabledCallback\s*\(/.test(src),
     '<iswc-input> debe implementar formDisabledCallback (fieldset disabled)');
 });
+
+export default lista();

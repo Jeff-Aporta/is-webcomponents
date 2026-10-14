@@ -16,11 +16,14 @@
  * equipo decide endurecer el criterio en un futuro, este archivo es el
  * sitio donde se documenta.
  */
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../..');
@@ -207,3 +210,5 @@ test('W23: --iswc-color-neutral aparece en las fuentes canonicas de tokens', () 
     'styles/is-base.scss debe declarar --iswc-color-neutral en :root o .theme-dark',
   );
 });
+
+export default lista();

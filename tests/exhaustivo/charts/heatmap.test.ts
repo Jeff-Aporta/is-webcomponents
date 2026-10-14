@@ -4,8 +4,11 @@
  * NOTA: buscando <iswc-heatmap> en components/charts/.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
-import { exists, read } from '../_helpers.ts';
+import { exists, read } from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/heatmap.ts';
 
@@ -14,3 +17,5 @@ test('iswc-heatmap: archivo existe en charts/', () => {
   // Lo registramos y reportamos si falta.
   assert.ok(exists(MOD) || true, 'verificamos si existe heatmap.ts como módulo separado');
 });
+
+export default lista();

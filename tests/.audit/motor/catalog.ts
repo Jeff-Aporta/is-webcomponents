@@ -17,7 +17,7 @@
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative, basename, dirname } from 'node:path';
-import type { EntradaCatalogo, OpcionesEnumerador, ManifestItemCrudo, CatalogItemCrudo } from "./catalog.schemas.js";
+import type { EntradaCatalogo, OpcionesEnumerador, ManifestItemCrudo, CatalogItemCrudo } from "./schemas/catalog.schemas.js";
 
 /** Entrada enumerada de un componente del catálogo. */
 

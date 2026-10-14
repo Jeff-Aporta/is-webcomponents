@@ -11,7 +11,14 @@
 import { assert, assertEquals } from 'jsr:@std/assert@1';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { conCabecera } from '../../../vendor-distributions/shared/tools/vendor.ts';
+import { conCabecera } from '../../src/vendor-distributions/shared/tools/vendor.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
+const denoTest = denoTestCon(test);
+
 
 const TOOL = join(Deno.cwd(), 'src/vendor-distributions/shared/tools/pin-update.mjs');
 const A = 'a'.repeat(40);
@@ -37,14 +44,14 @@ const SANO = {
   }),
 };
 
-Deno.test('pin-update: P1/P3 un SHA en @sha y raw, con el host propio de la app en github.io → verde', () => {
+denoTest('pin-update: P1/P3 un SHA en @sha y raw, con el host propio de la app en github.io → verde', () => {
   const r = inventario(SANO);
   assertEquals(r.code, 0, r.out);
   assert(r.out.includes(A));
   assert(!/ALERTA/.test(r.out), r.out);
 });
 
-Deno.test('pin-update: P2 refs mutables del kit → rojo y listadas', () => {
+denoTest('pin-update: P2 refs mutables del kit → rojo y listadas', () => {
   for (const mala of [
     'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/x.js',
     'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@latest/x.js',
@@ -58,7 +65,7 @@ Deno.test('pin-update: P2 refs mutables del kit → rojo y listadas', () => {
   }
 });
 
-Deno.test('pin-update: P4 dos SHA distintos → rojo', () => {
+denoTest('pin-update: P4 dos SHA distintos → rojo', () => {
   const r = inventario({ ...SANO, 'src/b.ts': `import 'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@${B}/x.js';` });
   assertEquals(r.code, 1, r.out);
   assert(r.out.includes(A) && r.out.includes(B));
@@ -67,8 +74,8 @@ Deno.test('pin-update: P4 dos SHA distintos → rojo', () => {
 // P5 PROTOCOLO (`--nuevo=ultimo --local=<ruta>`, lo corre vendor.ts al terminar): el checkout local es solo
 //    información y NUNCA falla: ruta inexistente o sin git → `accesible: false` con motivo; un repo real → su HEAD
 //    y si tiene (o no) el SHA pedido. Sin red aquí: se importa la función (importar el .mjs no barre nada).
-Deno.test('pin-update: P5 verificarLocal nunca falla: sin ruta, ruta inexistente, sin git y repo real', async () => {
-  const { verificarLocal, SHA } = await import('../../../vendor-distributions/shared/tools/pin-update.mjs');
+denoTest('pin-update: P5 verificarLocal nunca falla: sin ruta, ruta inexistente, sin git y repo real', async () => {
+  const { verificarLocal, SHA } = await import('../../src/vendor-distributions/shared/tools/pin-update.mjs');
   assertEquals(verificarLocal('').accesible, false);
   const noExiste = verificarLocal(join(Deno.makeTempDirSync(), 'nada'));
   assert(!noExiste.accesible && /no accesible|no existe/.test(noExiste.motivo), JSON.stringify(noExiste));
@@ -81,7 +88,7 @@ Deno.test('pin-update: P5 verificarLocal nunca falla: sin ruta, ruta inexistente
 });
 
 // P6 Los scripts ONLINE del kit se citan desde raw@main con --reload (forma canónica, Jeff 2026-10-13): no son refs mutables.
-Deno.test('pin-update: P6 las URL raw@main de los scripts online (vendor, pin-update, download-iconify, render-lote) y el --reload no alertan', () => {
+denoTest('pin-update: P6 las URL raw@main de los scripts online (vendor, pin-update, download-iconify, render-lote) y el --reload no alertan', () => {
   const r = inventario({
     ...SANO,
     'src/c.ts': [
@@ -99,7 +106,7 @@ Deno.test('pin-update: P6 las URL raw@main de los scripts online (vendor, pin-up
 });
 
 // P7 La cabecera `@vendor … @main …` de lo vendorizado (ts, md, html) no es ref mutable; un import @main en el cuerpo sí.
-Deno.test('pin-update: P7 la cabecera @vendor @main no alerta; el mismo repo@main en el cuerpo sí', () => {
+denoTest('pin-update: P7 la cabecera @vendor @main no alerta; el mismo repo@main en el cuerpo sí', () => {
   const r = inventario({
     ...SANO,
     'src/v.ts': '// @vendor 2026-10-13T19:09:09.250Z Jeff-Aporta/iswc-root@main dist/cdn/vendor-distributions/shared/testing/pruebas.ts\nexport const x = 1;',
@@ -126,7 +133,7 @@ const P8 = [
 
 for (const c of P8) {
   for (const doc of [null, DOC]) {
-    Deno.test(`pin-update: P8 la cabecera que escribe el vendor en ${c.estilo}${doc ? ' (con @doc al pin)' : ''} no alerta`, () => {
+    denoTest(`pin-update: P8 la cabecera que escribe el vendor en ${c.estilo}${doc ? ' (con @doc al pin)' : ''} no alerta`, () => {
       const vendorizado = conCabecera(c.texto, c.archivo, CABECERA, doc);
       assert(vendorizado.includes('@vendor') || vendorizado.includes('$vendor'), vendorizado);
       const r = inventario({ ...SANO, [c.archivo]: vendorizado });
@@ -143,9 +150,11 @@ const P9 = [
 ] as const;
 
 for (const c of P9) {
-  Deno.test(`pin-update: P9 ${c.caso} → rojo`, () => {
+  denoTest(`pin-update: P9 ${c.caso} → rojo`, () => {
     const r = inventario({ ...SANO, 'src/z.ts': `export const a = 1;\n${c.linea}\n` });
     assertEquals(r.code, 1, r.out);
     assert(r.out.includes('src/z.ts'), r.out);
   });
 }
+
+export default lista();

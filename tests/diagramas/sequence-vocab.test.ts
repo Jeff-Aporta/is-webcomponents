@@ -12,17 +12,24 @@ import {
   listEdgeKinds,
   readEdgeStyle,
   recommendationFor,
-} from '../../../components/diagrams/utils/diagram-vocab.ts';
-import { roundOrthogonalPath, styledEdgePath } from '../../../components/diagrams/utils/diagram-curve.ts';
-import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
-import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/utils/sequence-spec.ts';
-import { lineColor, paletteColor, pickThemeMode, sequencePaint } from '../../../components/diagrams/utils/theme.ts';
-import { ErThemeJsonSchema } from '../../../components/diagrams/schemas/theme.schemas.ts';
-import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/utils/diagram-styles.ts';
+} from '../../src/components/diagrams/utils/diagram-vocab.ts';
+import { roundOrthogonalPath, styledEdgePath } from '../../src/components/diagrams/utils/diagram-curve.ts';
+import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
+import { computeSequenceLayout, resolveSequenceSpec } from '../../src/components/diagrams/utils/sequence-spec.ts';
+import { lineColor, paletteColor, pickThemeMode, sequencePaint } from '../../src/components/diagrams/utils/theme.ts';
+import { ErThemeJsonSchema } from '../../src/components/diagrams/schemas/theme.schemas.ts';
+import { loadStylesDiagram, styleThemeFor } from '../../src/components/diagrams/utils/diagram-styles.ts';
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { denoTestCon } from '../_shared/deno-test.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
+const denoTest = denoTestCon(test);
+
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
-Deno.test('vocabulario: cada familia tiene tipos y cada tipo dice dónde se recomienda', () => {
+denoTest('vocabulario: cada familia tiene tipos y cada tipo dice dónde se recomienda', () => {
   for (const fam of ['connector', 'relational', 'signal', 'flow', 'structural'] as const) {
     assert(listEdgeKinds(fam).length > 0, `familia ${fam} vacía`);
   }
@@ -38,7 +45,7 @@ Deno.test('vocabulario: cada familia tiene tipos y cada tipo dice dónde se reco
   assertEquals(recommendationFor('no-existe', 'sequence'), 'unknown');
 });
 
-Deno.test('política: sin política todo pasa; con allow/deny se rechaza con motivo', () => {
+denoTest('política: sin política todo pasa; con allow/deny se rechaza con motivo', () => {
   const edges = [
     { id: 'a', kind: 'assembly' },
     { id: 'b', kind: 'message-sync' },
@@ -56,7 +63,7 @@ Deno.test('política: sin política todo pasa; con allow/deny se rechaza con mot
   assertEquals(readEdgeStyle({ sequence: {} }), 'orthogonal');
 });
 
-Deno.test('curva: conserva extremos y vértices del recorrido ortogonal, es determinista y no toca rectas', () => {
+denoTest('curva: conserva extremos y vértices del recorrido ortogonal, es determinista y no toca rectas', () => {
   const d = 'M10,10 H100 V60 H200';
   const c = roundOrthogonalPath(d, 12);
   assert(c.includes('Q100,10'), 'el giro usa el vértice como control');
@@ -90,7 +97,7 @@ const SEQ = {
   },
 };
 
-Deno.test('secuencia: grupos con color por nombre y regiones acotadas a sus filas y lifelines', () => {
+denoTest('secuencia: grupos con color por nombre y regiones acotadas a sus filas y lifelines', () => {
   const spec = resolveSequenceSpec(SEQ)!;
   assertEquals(spec.groups?.[0]?.color, 'auth');
   assertEquals(spec.fragments?.length, 3);
@@ -124,7 +131,7 @@ Deno.test('secuencia: grupos con color por nombre y regiones acotadas a sus fila
   assert(L.height > sin.height);
 });
 
-Deno.test('secuencia: alt tras una región no se monta sobre ella', () => {
+denoTest('secuencia: alt tras una región no se monta sobre ella', () => {
   const spec = resolveSequenceSpec({
     sequence: {
       actors: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }],
@@ -141,7 +148,7 @@ Deno.test('secuencia: alt tras una región no se monta sobre ella', () => {
   assert(L.altBox!.y >= f.y + f.h, `alt (${L.altBox!.y}) monta la región (${f.y + f.h})`);
 });
 
-Deno.test('estilo insoft: trae tema de secuencia con tipografía, líneas por nombre y pintura completa', async () => {
+denoTest('estilo insoft: trae tema de secuencia con tipografía, líneas por nombre y pintura completa', async () => {
   const file = join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', 'insoft-seq.json');
   assert(existsSync(file), 'falta themes/insoft-seq.json');
   const raw = ErThemeJsonSchema.passthrough().parse(JSON.parse(readFileSync(file, 'utf8')));
@@ -168,7 +175,7 @@ Deno.test('estilo insoft: trae tema de secuencia con tipografía, líneas por no
   assert(existsSync(join(ROOT, 'dist', 'cdn', 'diagrams', 'themes', 'insoft-seq.json')), 'el build no publicó insoft-seq.json');
 });
 
-Deno.test('nested en secuencia: recuadro junto a la punta, contain, sin pisar lifelines ajenas ni la fila siguiente', () => {
+denoTest('nested en secuencia: recuadro junto a la punta, contain, sin pisar lifelines ajenas ni la fila siguiente', () => {
   const spec = resolveSequenceSpec({
     sequence: {
       actors: [{ id: 'P', label: 'Portal' }, { id: 'S', label: 'ISS' }, { id: 'D', label: 'BD' }],
@@ -199,3 +206,5 @@ Deno.test('nested en secuencia: recuadro junto a la punta, contain, sin pisar li
   assert(m2!.labelY > m1!.nestedBox!.y + m1!.nestedBox!.h, 'la fila siguiente pisa el recuadro');
   assert(L.height > m3!.nestedBox!.y + m3!.nestedBox!.h, 'el lienzo no crece para el último recuadro');
 });
+
+export default lista();

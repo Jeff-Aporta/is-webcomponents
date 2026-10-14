@@ -197,7 +197,7 @@ const folderFor = (file) => {
 // reescriben al hermano folderizado, que ya existe en dist.
 // Zod va UNA vez en el CDN (lib/zod.min.js): los schemas se usan en runtime (`.shape`,
 // `.extend`, `z.custom`) y cada bundle de componente o de core inlineaba ~300 KB de Zod.
-// Guardian: src/utils/health/meta/zod-compartido.test.ts.
+// Guardian: tests/gobernanza/zod-compartido.test.ts.
 const zodExterno = {
   name: 'zod-externo',
   setup(pluginBuild) {

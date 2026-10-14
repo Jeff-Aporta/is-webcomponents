@@ -10,7 +10,6 @@
  * Eventos: iswc-render, iswc-open-viewer.
  */
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import {
   exists,
   read,
@@ -26,7 +25,11 @@ import {
   adoptaCss,
   cleanupCompleto,
   estaRegistrado,
-} from '../_helpers.ts';
+} from '../../_shared/exhaustivo.ts';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const MOD = 'src/components/charts/treemap.ts';
 
@@ -95,3 +98,5 @@ test('iswc-treemap: registrado', () => {
   assert.match(src, /defineElement\s*\(\s*['"`]iswc-treemap['"`]/);
   assert.ok(estaRegistrado(src, 'iswc-treemap'));
 });
+
+export default lista();

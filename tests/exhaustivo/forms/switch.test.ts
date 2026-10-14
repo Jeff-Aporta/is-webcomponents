@@ -2,14 +2,17 @@
  * switch.test.ts — Tests exhaustivos de <iswc-switch>.
  */
 
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   leerComponente, leerPreview, existeCss,
   atributosObservados, eventosEmitidos,
   slotsDeclarados, partsDeclaradas, customStates,
   esFormAssociated,
-} from './_helpers.js';
+} from '../../_shared/exhaustivo-forms.js';
+import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'what' });
+
 
 const TAG = 'iswc-switch';
 const src = leerComponente(TAG);
@@ -70,3 +73,5 @@ test('switch: preview JSON', () => {
   assert.ok(prev);
   assert.equal(prev!['$schema'], 'iswc-preview/v1');
 });
+
+export default lista();

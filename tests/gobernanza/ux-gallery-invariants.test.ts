@@ -13,7 +13,11 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import test from 'node:test';
+
+import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const read = (rel) => readFileSync(join(root, rel), 'utf8');
@@ -109,3 +113,5 @@ test('iswc-speed-dial behavior garantiza #logTable o no querySelector-on-null', 
   assert.match(src, /logTable/);
   assert.match(src, /if\s*\(!logBody\)|!logBody\)\s*return/);
 });
+
+export default lista();
