@@ -1,21 +1,23 @@
 ---
 name: iswc-server-api-docs
 description: >-
-  Cómo un SERVER (ISS u otro backend InSoft) publica la documentación interactiva de su API con el kit iswc:
-  el documento InSoft kind:"config" (u OpenAPI 3) validado con Zod y pintado por <iswc-server-api-docs> en
-  GET /api/docs, cargando SOLO el kit por CDN con pin por SHA. Usar al crear o tocar la página /api/docs de un
+  Cómo un SERVER (ISS u otro backend InSoft) expone los endpoints de su API al estilo Swagger con el kit iswc:
+  el documento InSoft kind:"config" v2 (u OpenAPI 3) validado con Zod (estricto: server-api-docs-md.schemas.ts,
+  vendorizable) y pintado por <iswc-server-api-docs> en GET /api/docs, cargando SOLO el kit por CDN con pin por SHA. Usar al crear o tocar la página /api/docs de un
   server, al cambiar el documento `doc`, al migrar del visor viejo <docs-viewer> (isc-swagger / iswc-docs) o al
   depurar por qué la documentación de la API no se ve.
 ---
-<!-- @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
+<!-- @vendor 2026-10-14T12:27:27.437Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-server-api-docs/SKILL.md -->
 
-# iswc-server-api-docs — la documentación de la API de un server
+# iswc-server-api-docs — los endpoints de la API de un server
 
-`<iswc-server-api-docs>` es un componente **solo para servers**: documenta y deja probar la API que el server
-expone. Vive en el kit (`src/components/layout/server-api-docs.*`) sobre el mismo layout documental
+`<iswc-server-api-docs>` es un componente **solo para servers**: expone al estilo Swagger (tabla de endpoints,
+detalle con método, ruta, sesión, permiso, parámetros, cuerpo y respuestas con schema y ejemplo) y deja probar
+la API que el server expone. No es documentación en prosa. Vive en el kit (`src/components/layout/server-api-docs.*`) sobre el mismo layout documental
 (`iswc-doc-layout`) que los demos del kit y que `iswc-md-docs-vault` (la documentación en prosa de un proyecto).
 Ficha completa: [`src/components/layout/server-api-docs.md`](../../src/components/layout/server-api-docs.md).
-Dominio puro (validar, normalizar, cURL, login, OpenAPI): [`server-api-docs-model.md`](../../src/components/layout/server-api-docs-model.md).
+Dominio puro y documento estricto (validar, parse estricto, normalizar, secuencia, cURL, login, OpenAPI):
+[`server-api-docs-md.md`](../../src/components/layout/server-api-docs-md.md).
 
 ## Qué distingue a cada componente documental
 
@@ -63,14 +65,18 @@ Un solo CDN: el kit, pineado por SHA de 40 (nunca `@main`). Nada de `isc-swagger
 
 ## El documento
 
-- Lo valida `server-api-docs.schemas.ts` (Zod, tolerante `.loose()` + integridad referencial). El server
-  aplica además su schema estricto (ISS: `ZDocJValue` en `010 Objetos/schemas/sysValue.ts`).
+- Contrato: `server-api-docs-md.schemas.ts` (InSoft v2, todo `.strict()`, integridad referencial, solo `zod`).
+  El server lo **vendoriza** y lo aplica al escribir el documento (ISS: `src/sources/000 Base/ISU/server-api-docs-md.schemas.ts`,
+  fila `doc` de `patyia_sys_values` por el controller de sys values). El visor dice si el documento lo admite
+  (`estricto`) y, si no, muestra cada error con su ruta.
+- Para pintar, el visor también acepta documentos tolerantes (`server-api-docs.schemas.ts`, `.loose()`).
 - Sin `kind:"config"`/`openapi` o sin `paths`: el visor muestra cada error con su ruta JSON y no pinta.
   Con problemas pero materializable: pinta y los lista en la portada (y en consola).
 - Templates de respuesta InSoft: `ok`, `auth`, `authForbidden`, `authNotFound`, `deleteEnvelope`, `raw`
   (el visor los expande a 200/401/403/404 con el sobre `encabezado`/`respuesta`).
-- Markdown (`info.description`, `catalog.docs[*]`): `iswc-md-render`, así que admite componentes del kit
-  (`<iswc-callout>`, `<iswc-er-diagram>` con su JSON hijo, …).
+- Nada documental en el documento: `info.description` es una línea; sin `catalog.docs` ni markdown por
+  endpoint. Cada endpoint declara `permission` (con sesión) y `controller`; el visor genera su diagrama de
+  secuencia con `diagram-style="insoft"`.
 
 ## Migrar desde el visor viejo (`<docs-viewer>` de isc-swagger / iswc-docs)
 
@@ -78,7 +84,7 @@ Un solo CDN: el kit, pineado por SHA de 40 (nunca `@main`). Nada de `isc-swagger
    `all.min.js` y `DOCS_KIT_TAGS`.
 2. Cargar solo el loader del kit y `L.load("iswc-server-api-docs")`.
 3. `<docs-viewer>` → `<iswc-server-api-docs>`; el documento como script hijo (o `.doc = obj`, igual que antes).
-4. Verificar: la portada lista las operaciones y `validacion.ok` es `true` (o los avisos esperados).
+4. Verificar: la portada es la tabla de endpoints, `validacion.ok` es `true` y `estricto.ok` también.
 
 ## Reglas
 

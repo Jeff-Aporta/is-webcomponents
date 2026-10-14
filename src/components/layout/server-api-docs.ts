@@ -6,12 +6,12 @@ import {
   ServerApiDocsLoginRespuestaSchema,
   ServerApiDocsSesionSchema,
   type ServerApiDocsCampo,
+  type ServerApiDocsEstricto,
   type ServerApiDocsIndice,
   type ServerApiDocsLayout,
   type ServerApiDocsModelo,
   type ServerApiDocsOperacion,
   type ServerApiDocsPageDetail,
-  type ServerApiDocsRender,
   type ServerApiDocsResponseDetail,
   type ServerApiDocsSesion,
   type ServerApiDocsValidacion,
@@ -25,13 +25,15 @@ import {
   ITERCERO_POR_DEFECTO,
   normalizarDocumentoApi,
   peticionLogin,
+  secuenciaDeOperacion,
   urlDeOperacion,
   validarDocumentoApi,
-} from './server-api-docs-model.js';
+  validarEstricto,
+} from './server-api-docs-md.js';
 import './doc-layout.js';
 import '../navigation/doc-index.js';
 import '../navigation/pager.js';
-import '../helpers/md-render.js';
+import '../diagrams/sequence-diagram.js';
 import '../code/code.js';
 import '../feedback/tag.js';
 import '../feedback/spinner.js';
@@ -44,11 +46,13 @@ import './dialog.js';
 import './callout.js';
 
 /**
- * <iswc-server-api-docs> — documentación interactiva de la API de un SERVER (solo para servers: el
- * ISS la sirve en `GET /api/docs`). Recibe el documento que el server publica (InSoft `kind:"config"`
- * u OpenAPI 3), lo valida con Zod y lo pinta sobre `<iswc-doc-layout>` (el mismo layout documental
- * de los demos y de `<iswc-md-docs-vault>`): operaciones a la izquierda, una operación por página al
- * centro e índice de la página a la derecha. «Probar» ejecuta la petición real con sesión.
+ * <iswc-server-api-docs> — endpoints de la API de un SERVER al estilo Swagger (solo para servers: el
+ * ISS la sirve en `GET /api/docs`). No es documentación en prosa: expone cada endpoint con su método,
+ * ruta, sesión y permiso, parámetros, cuerpo y respuestas con sus schemas y ejemplos. Recibe el documento
+ * que el server publica (InSoft `kind:"config"` u OpenAPI 3), lo valida con Zod, dice si admite el parse
+ * estricto (InSoft v2, `server-api-docs-md.schemas.ts`) y lo pinta sobre `<iswc-doc-layout>`: la portada
+ * es la tabla de endpoints con filtro, cada endpoint abre su detalle (con su diagrama de secuencia en
+ * estilo InSoft) y «Probar» ejecuta la petición real con sesión.
  *
  * Entrada (la primera que haya): propiedad `doc` (`el.doc = obj`), `<script type="application/json">`
  * hijo, o atributo `src` (URL del JSON, p. ej. `/api/docs?v=json`).
@@ -60,7 +64,7 @@ import './callout.js';
  * Slots: brand (marca; default la del documento), actions (acciones de la app: tema, paleta).
  * Eventos: `iswc-server-api-docs-page` { id, titulo, metodo, ruta }, `iswc-server-api-docs-response`
  *   { id, url, status, ms }.
- * Propiedades: `doc`, `validacion` (solo lectura), `modelo` (solo lectura), `layout`, `irA(id)`.
+ * Propiedades: `doc`, `validacion` y `estricto` (solo lectura), `modelo` (solo lectura), `layout`, `irA(id)`.
  * CSS parts (del layout): bar, toc, content.
  */
 
@@ -75,7 +79,7 @@ TEMPLATE.innerHTML = /* html */ `
       <iswc-button class="sesion" variant="plain" color="brand" pill aria-label="Sesión para Probar" title="Sesión para Probar"><iswc-icon slot="start" icon="mdi:account-key-outline"></iswc-icon><span class="sesion-texto">Sesión</span></iswc-button>
     </iswc-button-group>
     <slot name="actions" slot="actions"></slot>
-    <iswc-doc-index class="indice" slot="start" placeholder="Buscar operación…  ( / )"></iswc-doc-index>
+    <iswc-doc-index class="indice" slot="start" placeholder="Buscar endpoint…  ( / )"></iswc-doc-index>
     <article class="pagina" aria-live="polite"><p class="cargando" role="status"><iswc-spinner></iswc-spinner>Esperando el documento…</p></article>
   </iswc-doc-layout>
   <iswc-dialog class="login" label="Sesión para «Probar»" light-dismiss backdrop-variant="basic">
@@ -112,6 +116,7 @@ class IswcServerApiDocs extends HTMLElement {
   #doc: unknown = null;
   #modelo: ServerApiDocsModelo | null = null;
   #validacion: ServerApiDocsValidacion | null = null;
+  #estricto: ServerApiDocsEstricto | null = null;
   #nav: SpaState | null = null;
   #layout: ServerApiDocsLayout | null = null;
   #actual: string | null = null;
@@ -136,6 +141,9 @@ class IswcServerApiDocs extends HTMLElement {
 
   /** Resultado de validar el documento con Zod (`null` sin documento). */
   get validacion(): ServerApiDocsValidacion | null { return this.#validacion; }
+
+  /** ¿Admite el parse estricto (InSoft v2)? `null` sin documento; `aplica: false` para OpenAPI 3. */
+  get estricto(): ServerApiDocsEstricto | null { return this.#estricto; }
 
   /** Modelo normalizado que se está pintando (`null` si el documento no se pudo materializar). */
   get modelo(): ServerApiDocsModelo | null { return this.#modelo; }
@@ -194,11 +202,13 @@ class IswcServerApiDocs extends HTMLElement {
 
   #cargar(doc: unknown): void {
     this.#validacion = validarDocumentoApi(doc);
+    this.#estricto = validarEstricto(doc);
     if (!esMaterializable(doc)) {
       this.#modelo = null;
       return this.#mostrarErrores(this.#validacion.errores);
     }
     if (!this.#validacion.ok) console.warn(`[iswc-server-api-docs] el documento trae ${this.#validacion.errores.length} problema(s):\n${this.#validacion.errores.join('\n')}`);
+    else if (this.#estricto.aplica && !this.#estricto.ok) console.warn(`[iswc-server-api-docs] el documento no admite el parse estricto (${this.#estricto.errores.length} error(es)):\n${this.#estricto.errores.join('\n')}`);
     this.#modelo = normalizarDocumentoApi(doc);
     this.#base = this.#baseInicial();
     this.#pintarMarca();
@@ -247,8 +257,8 @@ class IswcServerApiDocs extends HTMLElement {
     const indice = this.#raiz.querySelector<ServerApiDocsIndice>('iswc-doc-index');
     const m = this.#modelo;
     if (!indice || !m) return;
-    indice.textos = { sinResultados: 'Ninguna operación coincide.', resumen: `${m.operaciones.length} operaciones · {grupos} grupos` };
-    const portada = { id: '', title: 'Portada', pinned: true, icon: '📘', text: m.descripcion, hint: m.titulo };
+    indice.textos = { sinResultados: 'Ningún endpoint coincide.', resumen: `${m.operaciones.length} endpoints · {grupos} grupos` };
+    const portada = { id: '', title: 'Endpoints', pinned: true, icon: '📋', text: m.descripcion, hint: m.titulo };
     indice.items = [portada, ...m.grupos.flatMap((g) => g.subgrupos.flatMap((s) => s.operaciones.flatMap((id) => {
       const op = this.#op(id);
       return op ? [{
@@ -258,7 +268,7 @@ class IswcServerApiDocs extends HTMLElement {
         subgroup: g.subgrupos.length > 1 || s.id ? s.nombre : '',
         number: corto(op.metodo),
         keywords: [op.metodo, op.ruta, op.tag],
-        text: `${op.ruta} ${op.descripcion} ${op.doc}`,
+        text: `${op.ruta} ${op.descripcion} ${op.permiso} ${op.controller}`,
         hint: `${op.metodo.toUpperCase()} ${op.ruta}`,
       }] : [];
     })))];
@@ -274,8 +284,8 @@ class IswcServerApiDocs extends HTMLElement {
     if (!pagina || !m) return;
     const op = this.#op(id);
     pagina.innerHTML = op ? this.#htmlOperacion(op) : this.#htmlPortada(m);
-    for (const r of pagina.querySelectorAll<ServerApiDocsRender>('iswc-md-render[data-md]')) r.value = (op ? { desc: op.descripcion, doc: op.doc } : { desc: m.descripcion })[r.dataset.md === 'doc' ? 'doc' : 'desc'] ?? '';
     if (op) this.#cablearProbar(pagina, op);
+    else this.#cablearFiltro(pagina);
     const indice = this.#raiz.querySelector<ServerApiDocsIndice>('iswc-doc-index');
     if (indice) indice.current = id;
     this.#raiz.querySelector('.acciones .copiar')?.setAttribute('value', new URL(this.#nav?.hrefFor(op ? { p: id } : {}) ?? location.href, location.href).href);
@@ -286,29 +296,81 @@ class IswcServerApiDocs extends HTMLElement {
     setTimeout(() => this.#layout?.refreshToc(), 600);
   }
 
+  /** Estado del parse estricto: etiqueta en la cabecera y, si no lo admite, el error con su ruta JSON. */
+  #htmlEstricto(): { tag: string; callout: string } {
+    const e = this.#estricto;
+    if (!e?.aplica) return { tag: '', callout: '' };
+    if (e.ok) return { tag: '<iswc-tag class="estricto" color="success"><iswc-icon slot="start" icon="mdi:check-decagram-outline"></iswc-icon>Parse estricto</iswc-tag>', callout: '' };
+    return {
+      tag: '<iswc-tag class="estricto" color="danger"><iswc-icon slot="start" icon="mdi:alert-decagram-outline"></iswc-icon>Sin parse estricto</iswc-tag>',
+      callout: `<iswc-callout class="estricto-errores" color="danger" icon="mdi:alert-decagram-outline"><strong>El documento no admite el parse estricto (${e.errores.length} error(es))</strong>: se muestra en modo tolerante.<ul>${e.errores.slice(0, 40).map((x) => `<li><code>${escapar(x)}</code></li>`).join('')}</ul></iswc-callout>`,
+    };
+  }
+
+  /** Portada: la tabla de endpoints (método, ruta, resumen, grupo, sesión y permiso) con filtro y enlace al detalle. */
   #htmlPortada(m: ServerApiDocsModelo): string {
     const v = this.#validacion;
+    const estricto = this.#htmlEstricto();
     const avisos = v && !v.ok
       ? `<iswc-callout class="avisos" color="warning" icon="mdi:alert-outline"><strong>El documento trae ${v.errores.length} aviso(s) de validación</strong> (se muestra igual):<ul>${v.errores.slice(0, 40).map((e) => `<li><code>${escapar(e)}</code></li>`).join('')}</ul></iswc-callout>`
       : '';
-    const grupos = m.grupos.map((g) => `
-      <section class="grupo">
-        <h2 id="g-${idHtml(g.nombre)}">${escapar(g.nombre)}</h2>
-        ${g.descripcion ? `<p class="lede">${escapar(g.descripcion)}</p>` : ''}
-        ${g.subgrupos.map((s) => `
-          ${s.id || g.subgrupos.length > 1 ? `<h3 id="s-${idHtml(g.nombre)}-${idHtml(s.id || 'general')}">${s.icono ? `<iswc-icon icon="${escapar(s.icono)}"></iswc-icon>` : ''}${escapar(s.nombre)}</h3>${s.descripcion ? `<p class="lede">${escapar(s.descripcion)}</p>` : ''}` : ''}
-          <ul class="ops">${s.operaciones.map((id) => this.#op(id)).filter((o): o is ServerApiDocsOperacion => !!o).map((o) => `
-            <li><a href="${escapar(this.#nav?.hrefFor({ p: o.id }) ?? '#')}">${tagMetodo(o.metodo)}<code class="ruta">${escapar(o.ruta)}</code><span class="resumen">${escapar(o.resumen)}</span>${o.sesion ? '<iswc-icon class="candado" icon="mdi:lock-outline" title="Requiere sesión"></iswc-icon>' : ''}</a></li>`).join('')}
-          </ul>`).join('')}
-      </section>`).join('');
+    const filas = this.#orden().map((id) => this.#op(id)).filter((o): o is ServerApiDocsOperacion => !!o).map((o) => {
+      const buscable = [o.metodo, o.ruta, o.resumen, o.tag, o.permiso, o.controller].join(' ').toLowerCase();
+      return `<tr data-buscar="${escapar(buscable)}">
+          <td class="col-metodo">${tagMetodo(o.metodo)}</td>
+          <td class="col-ruta"><a class="enlace" href="${escapar(this.#nav?.hrefFor({ p: o.id }) ?? '#')}" data-id="${escapar(o.id)}"><code class="ruta">${escapar(o.ruta).replace(/\//g, '/<wbr>')}</code></a></td>
+          <td class="col-resumen">${escapar(o.resumen)}</td>
+          <td class="col-grupo">${escapar(o.tag)}</td>
+          <td class="col-auth">${o.sesion ? `<iswc-icon class="candado" icon="mdi:lock-outline" title="Requiere sesión"></iswc-icon><code class="permiso">${escapar(o.permiso || 'Bearer')}</code>` : '<span class="publico">Pública</span>'}</td>
+        </tr>`;
+    }).join('');
     return `
       <header class="cabecera">
-        <h1 id="portada">${escapar(m.titulo)}</h1>
-        <p class="meta">${m.version ? `<iswc-tag color="neutral">v${escapar(m.version)}</iswc-tag>` : ''}<iswc-tag color="brand">${m.operaciones.length} operaciones</iswc-tag><iswc-tag color="neutral">${m.formato === 'insoft' ? 'Documento InSoft' : 'OpenAPI 3'}</iswc-tag></p>
+        <h1 id="endpoints">${escapar(m.titulo)}</h1>
+        <p class="meta">${m.version ? `<iswc-tag color="neutral">v${escapar(m.version)}</iswc-tag>` : ''}<iswc-tag color="brand">${m.operaciones.length} endpoints</iswc-tag><iswc-tag color="neutral">${m.formato === 'insoft' ? 'Documento InSoft' : 'OpenAPI 3'}</iswc-tag>${estricto.tag}</p>
+        ${m.descripcion ? `<p class="lede">${escapar(m.descripcion)}</p>` : ''}
       </header>
+      ${estricto.callout}
       ${avisos}
-      <iswc-md-render class="md" data-md="desc"></iswc-md-render>
-      ${grupos}`;
+      <h2 id="tabla-endpoints">Endpoints</h2>
+      <div class="filtro-linea">
+        <iswc-input class="filtro" type="search" label="Filtrar endpoints" placeholder="Método, ruta, resumen, grupo o permiso"></iswc-input>
+        <span class="conteo" role="status">${m.operaciones.length} de ${m.operaciones.length}</span>
+      </div>
+      <div class="tabla-envoltura">
+        <table class="tabla endpoints">
+          <thead><tr><th scope="col">Método</th><th scope="col">Ruta</th><th scope="col">Resumen</th><th scope="col">Grupo</th><th scope="col">Sesión · permiso</th></tr></thead>
+          <tbody>${filas}</tbody>
+        </table>
+      </div>
+      <p class="sin-resultados" hidden>Ningún endpoint coincide con el filtro.</p>`;
+  }
+
+  #cablearFiltro(pagina: HTMLElement): void {
+    const filtro = pagina.querySelector<ServerApiDocsCampo>('iswc-input.filtro');
+    const conteo = pagina.querySelector('.conteo');
+    const vacio = pagina.querySelector<HTMLElement>('.sin-resultados');
+    const filas = [...pagina.querySelectorAll<HTMLElement>('table.endpoints tbody tr')];
+    const aplicar = () => {
+      const q = String(filtro?.value ?? '').trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let visibles = 0;
+      for (const f of filas) {
+        const ok = q.every((t) => (f.dataset.buscar ?? '').includes(t));
+        f.hidden = !ok;
+        if (ok) visibles++;
+      }
+      if (conteo) conteo.textContent = `${visibles} de ${filas.length}`;
+      if (vacio) vacio.hidden = visibles > 0;
+    };
+    filtro?.addEventListener('input', aplicar);
+    filtro?.addEventListener('change', aplicar);
+    for (const a of pagina.querySelectorAll<HTMLAnchorElement>('table.endpoints a.enlace')) {
+      a.addEventListener('click', (e) => {
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        this.irA(a.dataset.id ?? '');
+      });
+    }
   }
 
   #htmlOperacion(op: ServerApiDocsOperacion): string {
@@ -325,26 +387,37 @@ class IswcServerApiDocs extends HTMLElement {
     const cuerpo = op.cuerpo ? `
       <h2 id="cuerpo">Cuerpo de la petición${op.cuerpo.requerido ? ' <span class="req" title="Requerido">*</span>' : ''}</h2>
       <p>${escapar(op.cuerpo.descripcion)}</p>
-      ${op.cuerpo.ejemplo !== undefined ? `<h3 id="cuerpo-ejemplo">Ejemplo</h3>${codigo(op.cuerpo.ejemplo)}` : ''}
-      ${op.cuerpo.schema !== undefined ? `<h3 id="cuerpo-schema">Schema</h3>${codigo(op.cuerpo.schema)}` : ''}` : '';
+      ${op.cuerpo.schema !== undefined ? `<h3 id="cuerpo-schema">Schema</h3>${codigo(op.cuerpo.schema)}` : ''}
+      ${op.cuerpo.ejemplo !== undefined ? `<h3 id="cuerpo-ejemplo">Ejemplo</h3>${codigo(op.cuerpo.ejemplo)}` : ''}` : '';
     const respuestas = op.respuestas.map((r) => `
       <h3 id="r-${escapar(r.codigo)}"><iswc-tag color="${colorDeCodigo(r.codigo)}">${escapar(r.codigo)}</iswc-tag> ${escapar(r.descripcion)}</h3>
-      ${r.ejemplo !== undefined ? codigo(r.ejemplo, typeof r.ejemplo === 'string' ? 'plaintext' : 'json') : ''}`).join('');
+      ${r.schema !== undefined ? `<p class="etiqueta-bloque">Schema</p>${codigo(r.schema)}` : ''}
+      ${r.ejemplo !== undefined ? `<p class="etiqueta-bloque">Ejemplo</p>${codigo(r.ejemplo, typeof r.ejemplo === 'string' ? 'plaintext' : 'json')}` : ''}`).join('');
+    const secuencia = JSON.stringify(secuenciaDeOperacion(op, this.#modelo?.marca.titulo ?? 'API')).replace(/</g, '\\u003c');
     const campo = (en: string, p: { nombre: string; requerido: boolean; descripcion: string; ejemplo?: unknown }) =>
       `<iswc-input class="campo" data-en="${en}" data-nombre="${escapar(p.nombre)}" label="${escapar(p.nombre)}${p.requerido ? ' *' : ''}" hint="${escapar(p.descripcion)}" value="${p.ejemplo !== undefined ? escapar(typeof p.ejemplo === 'string' ? p.ejemplo : JSON.stringify(p.ejemplo)) : ''}"></iswc-input>`;
     const servidores = this.#modelo?.servidores ?? [];
     return `
       <header class="cabecera">
-        <p class="linea">${tagMetodo(op.metodo)}<code class="ruta">${escapar(op.ruta)}</code>${op.sesion ? '<iswc-tag color="warning"><iswc-icon slot="start" icon="mdi:lock-outline"></iswc-icon>Requiere sesión</iswc-tag>' : ''}</p>
+        <p class="linea">${tagMetodo(op.metodo)}<code class="ruta">${escapar(op.ruta)}</code></p>
         <h1 id="operacion">${escapar(op.resumen)}</h1>
-        <p class="meta"><iswc-tag color="neutral">${escapar(op.tag)}</iswc-tag></p>
+        ${op.descripcion ? `<p class="lede">${escapar(op.descripcion)}</p>` : ''}
       </header>
-      <iswc-md-render class="md" data-md="desc"></iswc-md-render>
-      ${op.doc ? '<h2 id="documentacion">Documentación</h2><iswc-md-render class="md" data-md="doc"></iswc-md-render>' : ''}
+      <h2 id="acceso">Acceso</h2>
+      <table class="tabla ficha">
+        <tbody>
+          <tr><th scope="row">Grupo</th><td>${escapar(op.tag)}</td></tr>
+          <tr><th scope="row">Sesión</th><td>${op.sesion ? '<iswc-tag color="warning"><iswc-icon slot="start" icon="mdi:lock-outline"></iswc-icon>Bearer JWT</iswc-tag>' : '<iswc-tag color="success"><iswc-icon slot="start" icon="mdi:lock-open-variant-outline"></iswc-icon>Pública</iswc-tag>'}</td></tr>
+          ${op.permiso ? `<tr><th scope="row">Permiso</th><td><code>${escapar(op.permiso)}</code></td></tr>` : ''}
+          ${op.controller ? `<tr><th scope="row">Controller</th><td><code>${escapar(op.controller)}</code></td></tr>` : ''}
+        </tbody>
+      </table>
       ${tabla}
       ${cuerpo}
       <h2 id="respuestas">Respuestas</h2>
       ${respuestas}
+      <h2 id="flujo">Flujo</h2>
+      <div class="lienzo-insoft" data-theme="light"><iswc-sequence-diagram class="secuencia" diagram-style="insoft" open-on-click><script type="application/json">${secuencia}</script></iswc-sequence-diagram></div>
       <h2 id="probar">Probar</h2>
       <form class="probar" onsubmit="return false">
         <iswc-input class="base" label="Servidor (base de la API)" value="${escapar(this.#base)}"></iswc-input>

@@ -1,10 +1,14 @@
 /**
- * server-api-docs-model.ts — dominio puro de `<iswc-server-api-docs>` (sin DOM ni red).
+ * server-api-docs-md.ts — dominio puro de `<iswc-server-api-docs>` (sin DOM ni red).
  *
- * Valida el documento que publica un server (InSoft `kind:"config"` u OpenAPI 3) con Zod, lo normaliza
- * al modelo que el visor pinta (`ServerApiDocsModelo`) y arma lo que «Probar» necesita: URL, cURL y la
- * petición de login del proveedor. Todo es determinista: lo prueban los tests de caja negra del kit.
+ * Valida el documento que publica un server (InSoft `kind:"config"` u OpenAPI 3) con Zod, dice si admite
+ * el parse ESTRICTO del documento v2 (`server-api-docs-md.schemas.ts`, el que los servers vendorizan), lo
+ * normaliza al modelo Swagger-like que el visor pinta (`ServerApiDocsModelo`) y arma lo que «Probar»
+ * necesita: URL, cURL, la petición de login del proveedor y el diagrama de secuencia de cada endpoint.
+ * Todo es determinista: lo prueban los tests de caja negra del kit.
  */
+import { ApiDocsDocumentoSchema } from './server-api-docs-md.schemas.js';
+import type { SequenceActorSpec, SequenceFragmentSpec, SequenceMessageSpec } from '../diagrams/sequence-spec.schemas.js';
 import {
   InsoftDocumentoSchema,
   METODOS_API,
@@ -12,6 +16,7 @@ import {
   ServerApiDocsMetodoSchema,
   type ServerApiDocsAdjunto,
   type ServerApiDocsAuth,
+  type ServerApiDocsEstricto,
   type ServerApiDocsGrupo,
   type ServerApiDocsLogin,
   type ServerApiDocsModelo,
@@ -53,6 +58,17 @@ export function validarDocumentoApi(doc: unknown): ServerApiDocsValidacion {
   return { ok: false, formato, errores: r.error.issues.map((i) => `${i.path.length ? i.path.map(String).join(' › ') : '(raíz)'}: ${i.message}`) };
 }
 
+/**
+ * ¿Admite el parse estricto (InSoft `kind:"config"` v2, `ApiDocsDocumentoSchema`)? Cada error con su ruta
+ * JSON. Un OpenAPI 3 no aplica (el estricto es el contrato InSoft); un InSoft v1 aplica y no lo admite.
+ */
+export function validarEstricto(doc: unknown): ServerApiDocsEstricto {
+  if (formatoDe(doc) !== 'insoft') return { aplica: false, ok: false, errores: [] };
+  const r = ApiDocsDocumentoSchema.safeParse(doc);
+  if (r.success) return { aplica: true, ok: true, errores: [] };
+  return { aplica: true, ok: false, errores: r.error.issues.map((i) => `${i.path.length ? i.path.map(String).join(' › ') : '(raíz)'}: ${i.message}`) };
+}
+
 /** Id estable de la operación: `operationId` o método + ruta (`get_conversacion_by_iconversacion`). */
 export const idDeOperacion = (metodo: string, ruta: string, operationId?: unknown): string =>
   typeof operationId === 'string' && operationId ? operationId : `${metodo}_${ruta.replace(/\{(\w+)\}/g, 'by_$1').replace(/[^\w]+/g, '_').replace(/^_|_$/g, '')}`;
@@ -73,11 +89,23 @@ const R401: ServerApiDocsRespuesta = { codigo: '401', descripcion: 'No autorizad
 const R403: ServerApiDocsRespuesta = { codigo: '403', descripcion: 'Sin permisos', schema: SOBRE_ERROR, ejemplo: error(403010, 'No tiene permisos para acceder a este recurso.') };
 const R404: ServerApiDocsRespuesta = { codigo: '404', descripcion: 'No encontrado', schema: SOBRE_ERROR, ejemplo: error(404010, 'No se ha encontrado el recurso solicitado.') };
 
+/** JSON Schema deducido de un ejemplo (lo que el endpoint devuelve cuando el documento no trae schema). */
+export function schemaDeEjemplo(v: unknown): Obj {
+  if (Array.isArray(v)) return { type: 'array', items: v.length ? schemaDeEjemplo(v[0]) : { type: 'object' } };
+  if (v === null || v === undefined) return { type: 'object' };
+  if (typeof v === 'object') return { type: 'object', properties: Object.fromEntries(Object.entries(obj(v)).map(([k, x]) => [k, schemaDeEjemplo(x)])) };
+  if (typeof v === 'number') return { type: Number.isInteger(v) ? 'integer' : 'number' };
+  if (typeof v === 'boolean') return { type: 'boolean' };
+  return /^\d{4}-\d{2}-\d{2}T/.test(String(v)) ? { type: 'string', format: 'date-time' } : { type: 'string' };
+}
+
 function respuestasInsoft(cat: Obj, def: unknown): ServerApiDocsRespuesta[] {
   const r = obj(def);
   const payloads = obj(cat.payloads);
   const payload = (k: unknown): unknown => (typeof k === 'string' && k in payloads ? payloads[k] : {});
-  const ok = (schema: unknown = SOBRE): ServerApiDocsRespuesta => ({ codigo: '200', descripcion: str(r.description, 'OK'), schema, ejemplo: payload(r.payload) });
+  const contenido = esObjeto(r.schema) ? schemaDeCatalogo(cat, r.schema) : schemaDeEjemplo(payload(r.payload));
+  const sobre = { ...SOBRE, properties: { ...SOBRE.properties, respuesta: contenido } };
+  const ok = (schema: unknown = sobre): ServerApiDocsRespuesta => ({ codigo: '200', descripcion: str(r.description, 'OK'), schema, ejemplo: payload(r.payload) });
   switch (str(r.template)) {
     case 'auth':
     case 'authForbidden': return [ok(), R401, R403];
@@ -89,7 +117,8 @@ function respuestasInsoft(cat: Obj, def: unknown): ServerApiDocsRespuesta[] {
     case 'raw': {
       const items = Object.entries(obj(r.items)).map(([codigo, v]): ServerApiDocsRespuesta => {
         const it = obj(v);
-        return { codigo, descripcion: str(it.description, 'OK'), schema: it.schema ?? { type: 'object' }, ejemplo: it.example ?? (it.payload ? payload(it.payload) : undefined) };
+        const ejemplo = it.example ?? (it.payload ? payload(it.payload) : undefined);
+        return { codigo, descripcion: str(it.description, 'OK'), schema: it.schema ?? (ejemplo !== undefined ? schemaDeEjemplo(ejemplo) : { type: 'object' }), ejemplo };
       });
       return items.length ? items : [{ codigo: '200', descripcion: 'OK', schema: { type: 'object' } }];
     }
@@ -156,7 +185,8 @@ function operacionInsoft(cat: Obj, metodo: ServerApiDocsOperacion['metodo'], rut
     tag: str(arr(def.tags)[0], 'General'),
     subgrupo: str(def.subgroup),
     sesion: def.security === 'bearer' || def.security === 'Bearer',
-    doc: str(obj(cat.docs)[str(def.doc)]).replace(/\\+`/g, '`'),
+    permiso: str(def.permission),
+    controller: str(def.controller),
     parametros: params.filter((p) => !enCuerpo.includes(p)).map(parametro),
     cuerpo,
     respuestas: respuestasInsoft(cat, def.responses),
@@ -182,7 +212,8 @@ function operacionOpenApi(doc: Obj, metodo: ServerApiDocsOperacion['metodo'], ru
     tag: str(arr(def.tags)[0], 'General'),
     subgrupo: str(def['x-isa-subgroup']),
     sesion: seguridad.some((s) => Object.keys(obj(s)).length > 0),
-    doc: str(def['x-iss-doc-md']),
+    permiso: str(def['x-permission']),
+    controller: str(def['x-controller']),
     parametros: [...comunes, ...arr(def.parameters)].map(obj).filter((p) => p.name).map(parametro),
     cuerpo: Object.keys(rb).length ? { requerido: rb.required === true, descripcion: str(rb.description, 'Cuerpo de la petición'), schema: mrb.schema, ejemplo: ejemplo(mrb) } : null,
     respuestas: Object.entries(obj(def.responses)).map(([codigo, v]) => {
@@ -342,7 +373,9 @@ export function aOpenApi(m: ServerApiDocsModelo, base = ''): Obj {
     paths[op.ruta]![op.metodo] = {
       operationId: op.id,
       summary: op.resumen,
-      ...(op.descripcion || op.doc ? { description: [op.descripcion, op.doc].filter(Boolean).join('\n\n') } : {}),
+      ...(op.descripcion ? { description: op.descripcion } : {}),
+      ...(op.permiso ? { 'x-permission': op.permiso } : {}),
+      ...(op.controller ? { 'x-controller': op.controller } : {}),
       tags: [op.tag],
       ...(op.sesion ? { security: [{ Bearer: [] }] } : {}),
       ...(op.parametros.length ? { parameters: op.parametros.map((p) => ({ name: p.nombre, in: p.en, required: p.requerido, description: p.descripcion, schema: { type: p.tipo.replace(/[[\] (].*$/, '') || 'string' }, ...(p.ejemplo !== undefined ? { example: p.ejemplo } : {}) })) } : {}),
@@ -358,4 +391,39 @@ export function aOpenApi(m: ServerApiDocsModelo, base = ''): Obj {
     paths,
     components: { securitySchemes: { Bearer: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } } },
   };
+}
+
+// ── Diagrama de secuencia por endpoint ───────────────────────────────────────
+
+/** Payload de `<iswc-sequence-diagram>` (el visor lo pinta con `diagram-style="insoft"`). */
+export type ServerApiDocsSecuencia = { sequence: { title: string; actors: SequenceActorSpec[]; messages: SequenceMessageSpec[]; fragments: SequenceFragmentSpec[] } };
+
+/**
+ * Secuencia del endpoint: cliente → server (con Bearer si exige sesión) → permiso → controller → respuesta;
+ * las respuestas que no son 2xx van en un fragmento `alt`. Se arma solo con lo que declara el documento.
+ */
+export function secuenciaDeOperacion(op: ServerApiDocsOperacion, server = 'API'): ServerApiDocsSecuencia {
+  const [clase, metodo] = op.controller.split('.');
+  const actors: SequenceActorSpec[] = [
+    { id: 'C', label: 'Cliente', icon: 'mdi:monitor-cellphone', kind: 'participant' },
+    { id: 'S', label: server, icon: 'mdi:server', kind: 'participant' },
+    ...(clase ? [{ id: 'K', label: clase, icon: 'mdi:cog-outline', kind: 'participant' as const }] : []),
+  ];
+  const messages: SequenceMessageSpec[] = [];
+  const msg = (from: string, to: string, label: string, kind: string): string => {
+    const id = `m${messages.length + 1}`;
+    messages.push({ id, from, to, label, kind, step: messages.length + 1, stepLabel: String(messages.length + 1) });
+    return id;
+  };
+  msg('C', 'S', `${op.metodo.toUpperCase()} ${op.ruta}${op.sesion ? ' · Bearer JWT' : ''}`, 'sync');
+  if (op.sesion) msg('S', 'S', op.permiso ? `Permiso ${op.permiso}` : 'Valida la sesión', 'self');
+  if (clase) {
+    msg('S', 'K', `${metodo || 'atender'}()`, 'sync');
+    msg('K', 'S', 'resultado', 'reply');
+  }
+  const exito = op.respuestas.filter((r) => /^2/.test(r.codigo));
+  for (const r of exito.length ? exito : [{ codigo: '200', descripcion: 'OK' }]) msg('S', 'C', `${r.codigo} ${r.descripcion}`, 'reply');
+  const errores = op.respuestas.filter((r) => !/^2/.test(r.codigo)).map((r) => msg('S', 'C', `${r.codigo} ${r.descripcion}`, 'reply'));
+  const fragments: SequenceFragmentSpec[] = errores.length ? [{ id: 'f1', name: 'alt', kind: 'alt', messages: errores, span: 'actors', condition: 'si falla' }] : [];
+  return { sequence: { title: `${op.resumen} (${op.metodo.toUpperCase()} ${op.ruta})`, actors, messages, fragments } };
 }

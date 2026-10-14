@@ -185,6 +185,10 @@ export const ServerApiDocsValidacionSchema = z.object({
 });
 export type ServerApiDocsValidacion = z.infer<typeof ServerApiDocsValidacionSchema>;
 
+/** ¿El documento admite el parse estricto (InSoft v2)? `aplica: false` para OpenAPI 3. */
+export const ServerApiDocsEstrictoSchema = z.object({ aplica: z.boolean(), ok: z.boolean(), errores: z.array(z.string()) });
+export type ServerApiDocsEstricto = z.infer<typeof ServerApiDocsEstrictoSchema>;
+
 // ── Modelo normalizado (lo que el visor pinta) ───────────────────────────────
 
 export const ServerApiDocsParametroSchema = z.object({
@@ -219,8 +223,10 @@ export const ServerApiDocsOperacionSchema = z.object({
   subgrupo: z.string(),
   /** Exige `Authorization: Bearer`. */
   sesion: z.boolean(),
-  /** Markdown largo de la operación (`catalog.docs[op.doc]` o `x-iss-doc-md`). */
-  doc: z.string(),
+  /** Permiso que exige (`permission` InSoft o `x-permission` OpenAPI; `''` si no lo declara). */
+  permiso: z.string(),
+  /** Controller que lo atiende (`TClase.metodo`; `''` si no lo declara). */
+  controller: z.string(),
   parametros: z.array(ServerApiDocsParametroSchema),
   cuerpo: z.object({ requerido: z.boolean(), descripcion: z.string(), schema: z.unknown().optional(), ejemplo: z.unknown().optional() }).nullable(),
   respuestas: z.array(ServerApiDocsRespuestaSchema),

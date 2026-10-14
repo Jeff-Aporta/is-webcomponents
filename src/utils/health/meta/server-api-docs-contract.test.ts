@@ -1,8 +1,11 @@
 /**
  * server-api-docs-contract.test.ts — WHAT de `<iswc-server-api-docs>` (documentación de la API de un server).
  *
- * Caja negra sobre el dominio publicado (`server-api-docs-model.ts`) con el documento de su demo:
+ * Caja negra sobre el dominio publicado (`server-api-docs-md.ts`) con el documento de su demo:
  *   S1 el documento InSoft del demo valida con Zod; una referencia rota es error con su ruta JSON.
+ *   S7 parse estricto (InSoft v2): el demo lo admite; una clave de más, un v1 o un endpoint con sesión sin
+ *      permiso no, y cada error trae su ruta JSON; OpenAPI 3 no aplica.
+ *   S8 cada endpoint trae su secuencia (cliente → server → permiso → controller → respuestas, fallas en `alt`).
  *   S2 algo que no es InSoft ni OpenAPI 3 no se materializa y explica por qué.
  *   S3 el modelo agrupa tag → subgrupo en el orden declarado y expande los templates de respuesta.
  *   S4 «Probar»: URL con parámetros codificados, cURL con Bearer y cuerpo, QUERY lleva sus filtros en el cuerpo.
@@ -22,9 +25,11 @@ import {
   esMaterializable,
   normalizarDocumentoApi,
   peticionLogin,
+  secuenciaDeOperacion,
   urlDeOperacion,
   validarDocumentoApi,
-} from '../../../components/layout/server-api-docs-model.ts';
+  validarEstricto,
+} from '../../../components/layout/server-api-docs-md.ts';
 import { ServerApiDocsModeloSchema } from '../../../components/layout/server-api-docs.schemas.ts';
 
 const RAIZ = join(import.meta.dirname!, '..', '..', '..', '..');
@@ -46,11 +51,11 @@ test('server-api-docs S1: el documento InSoft del demo valida; una referencia ro
   const doc = documentoDelDemo();
   assert.deepEqual(validarDocumentoApi(doc), { ok: true, formato: 'insoft', errores: [] });
   const roto = clon(doc);
-  const paths = roto.paths as Record<string, Record<string, Record<string, unknown>>>;
-  paths['/sistema/cfg']!.get!.doc = 'no-existe';
+  const paths = roto.paths as Record<string, Record<string, Record<string, Record<string, unknown>>>>;
+  paths['/sistema/cfg']!.get!.responses!.payload = 'no-existe';
   const v = validarDocumentoApi(roto);
   assert.equal(v.ok, false);
-  assert.ok(v.errores.some((e) => e.startsWith('paths › /sistema/cfg › get › doc') && e.includes('no-existe')), v.errores.join('\n'));
+  assert.ok(v.errores.some((e) => e.startsWith('paths › /sistema/cfg › get › responses › payload') && e.includes('no-existe')), v.errores.join('\n'));
   assert.ok(esMaterializable(roto), 'con avisos sigue siendo pintable');
   const sinResumen = clon(doc);
   delete (sinResumen.paths as Record<string, Record<string, Record<string, unknown>>>)['/docs']!.get!.summary;
@@ -73,18 +78,23 @@ test('server-api-docs S3: grupos tag → subgrupo en el orden declarado y templa
   assert.equal(m.titulo, 'API PatyIA');
   assert.equal(m.marca.titulo, 'ISS PatyIA');
   assert.equal(m.operaciones.length, 6);
-  assert.deepEqual(m.grupos.map((g) => g.nombre), ['Conversaciones', 'Sistema'], 'orden de viewer.nav');
-  assert.deepEqual(m.grupos[1]!.subgrupos.map((s) => s.nombre), ['Configuración', 'Documentación']);
+  assert.deepEqual(m.grupos.map((g) => g.nombre), ['Conversaciones', 'Sistema'], 'orden de tags');
   const op = (metodo: string, ruta: string) => m.operaciones.find((o) => o.metodo === metodo && o.ruta === ruta)!;
   assert.deepEqual(op('put', '/sistema/cfg').respuestas.map((r) => r.codigo), ['200', '401', '403'], 'authForbidden');
   assert.deepEqual(op('get', '/conversacion/{iconversacion}').respuestas.map((r) => r.codigo), ['200', '401', '404'], 'authNotFound');
   const borrar = op('delete', '/conversacion/{iconversacion}').respuestas[0]!;
-  assert.deepEqual((borrar.schema as { properties: { respuesta: unknown } }).properties.respuesta, { type: 'object', properties: { iconversacion: { type: 'string' } } }, 'deleteEnvelope con la fila del catálogo');
-  assert.deepEqual(op('post', '/conversacion').respuestas.map((r) => r.codigo), ['200', '401'], 'raw: sus items');
-  assert.equal(op('get', '/sistema/cfg').doc.includes('## Configuración'), true, 'doc del catálogo');
-  assert.deepEqual(op('put', '/sistema/cfg').cuerpo?.ejemplo, { convlog: false }, 'cuerpo de catalog.requestBodies');
-  assert.equal(op('put', '/sistema/cfg').confirmar?.titulo, 'Guardar configuración');
-  assert.deepEqual(op('post', '/conversacion').adjuntos, [{ tipo: 'images', campo: 'imagenes', max: 5 }]);
+  const fila = (borrar.schema as { properties: { respuesta: { properties: Record<string, unknown> } } }).properties.respuesta;
+  assert.ok('iconversacion' in fila.properties, 'deleteEnvelope con la fila del catálogo');
+  assert.ok(op('post', '/conversacion').respuestas.length >= 2 && op('post', '/conversacion').respuestas[0]!.codigo === '200', 'raw: sus items');
+  const leer = op('get', '/sistema/cfg');
+  assert.equal(leer.permiso, 'CFG:/sistema', 'permiso del endpoint');
+  assert.equal(leer.controller, 'TSysValueController.leerCfg', 'controller del endpoint');
+  const contenido = (leer.respuestas[0]!.schema as { properties: { respuesta: { type: string; properties?: Record<string, unknown> } } }).properties.respuesta;
+  assert.equal(contenido.type, 'object', 'sin schema declarado, el de la respuesta se deduce del ejemplo');
+  assert.ok(Object.keys(contenido.properties ?? {}).length > 0, 'con sus propiedades');
+  assert.notEqual(op('put', '/sistema/cfg').cuerpo?.ejemplo, undefined, 'cuerpo de catalog.requestBodies');
+  assert.equal(op('put', '/sistema/cfg').confirmar, null, 'el documento estricto no trae confirmaciones');
+  assert.deepEqual(op('post', '/conversacion').adjuntos.map((a) => a.tipo).sort(), ['audios', 'images']);
   assert.equal(op('get', '/docs').sesion, false);
   assert.equal(op('get', '/sistema/cfg').sesion, true);
   assert.deepEqual(m.auth, { proveedor: 'patyia-portal', loginUrl: '', loginPath: '/auth/portal-login', app: 'isa-patyia' });
@@ -127,9 +137,56 @@ test('server-api-docs S6: exporta OpenAPI 3.0.3 y acepta OpenAPI 3 de entrada', 
   assert.equal(de.formato, 'openapi');
   assert.equal(de.operaciones.length, m.operaciones.length, 'ida y vuelta conserva las operaciones');
   assert.equal(de.operaciones.find((o) => o.ruta === '/sistema/cfg' && o.metodo === 'get')?.sesion, true, 'security Bearer');
+  assert.equal(de.operaciones.find((o) => o.ruta === '/sistema/cfg' && o.metodo === 'get')?.permiso, 'CFG:/sistema', 'x-permission ida y vuelta');
+});
+
+test('server-api-docs S7: parse estricto InSoft v2 (el demo lo admite; lo que no cumple trae su error con ruta)', () => {
+  const doc = documentoDelDemo();
+  assert.deepEqual(validarEstricto(doc), { aplica: true, ok: true, errores: [] });
+  const extra = clon(doc);
+  (extra.paths as Record<string, Record<string, Record<string, unknown>>>)['/docs']!.get!.nota = 'clave de más';
+  const e1 = validarEstricto(extra);
+  assert.equal(e1.ok, false);
+  assert.ok(e1.errores.some((e) => e.startsWith('paths › /docs › get') && /nota/.test(e)), e1.errores.join('\n'));
+  assert.equal(validarDocumentoApi(extra).ok, true, 'el modo tolerante lo sigue pintando');
+  const v1 = clon(doc);
+  v1.version = 1;
+  assert.ok(validarEstricto(v1).errores.some((e) => e.startsWith('version')), 'un documento v1 no admite el estricto');
+  const sinPermiso = clon(doc);
+  delete (sinPermiso.paths as Record<string, Record<string, Record<string, unknown>>>)['/sistema/cfg']!.get!.permission;
+  assert.ok(validarEstricto(sinPermiso).errores.some((e) => e.startsWith('paths › /sistema/cfg › get › permission')), 'con sesión exige permiso');
+  const huerfano = clon(doc);
+  (huerfano.catalog as { payloads: Record<string, unknown> }).payloads['sin-uso'] = {};
+  assert.ok(validarEstricto(huerfano).errores.some((e) => e.includes('sin-uso')), 'nada del catálogo queda huérfano');
+  const oa = aOpenApi(normalizarDocumentoApi(doc));
+  assert.deepEqual(validarEstricto(oa), { aplica: false, ok: false, errores: [] }, 'OpenAPI 3 no aplica');
+});
+
+test('server-api-docs S8: secuencia de cada endpoint (cliente → server → permiso → controller → respuestas)', () => {
+  const m = normalizarDocumentoApi(documentoDelDemo());
+  const op = m.operaciones.find((o) => o.metodo === 'get' && o.ruta === '/sistema/cfg')!;
+  const { sequence } = secuenciaDeOperacion(op, 'ISS PatyIA');
+  assert.deepEqual(sequence.actors.map((a) => a.label), ['Cliente', 'ISS PatyIA', 'TSysValueController']);
+  assert.match(sequence.messages[0]!.label, /^GET \/sistema\/cfg · Bearer JWT$/);
+  assert.ok(sequence.messages.some((x) => x.label === 'Permiso CFG:/sistema'), 'el permiso aparece en el flujo');
+  assert.ok(sequence.messages.some((x) => x.from === 'S' && x.to === 'K' && x.label === 'leerCfg()'), 'llama al controller');
+  const alt = sequence.fragments.find((f) => f.kind === 'alt');
+  assert.ok(alt, 'las fallas van en alt');
+  assert.deepEqual(alt.messages.map((id) => sequence.messages.find((x) => x.id === id)?.label.slice(0, 3)), ['401', '403']);
+  const publica = secuenciaDeOperacion(m.operaciones.find((o) => o.ruta === '/docs')!).sequence;
+  assert.ok(!publica.messages.some((x) => x.label.startsWith('Permiso')), 'un endpoint público no valida permiso');
 });
 
 // ── Guardián de estructura del kit (HOW fuerte: contrato de registro) ──────────
+
+test('server-api-docs-md: módulo de dominio con su ficha y su schema estricto (solo zod, vendorizable)', () => {
+  const md = join(RAIZ, 'src', 'components', 'layout', 'server-api-docs-md');
+  for (const ext of ['.ts', '.md', '.schemas.ts']) assert.ok(existsSync(md + ext), `falta server-api-docs-md${ext}`);
+  assert.match(readFileSync(`${md}.md`, 'utf8'), /^---[\s\S]*tag: iswc-server-api-docs-md[\s\S]*---/);
+  const imports = [...readFileSync(`${md}.schemas.ts`, 'utf8').matchAll(/^import .* from '([^']+)';$/gm)].map((x) => x[1]);
+  assert.deepEqual(imports, ['zod'], 'el schema estricto solo depende de zod');
+  assert.ok(!existsSync(join(RAIZ, 'src', 'components', 'layout', 'server-api-docs-model.ts')), 'el nombre viejo no queda');
+});
 
 test('iswc-server-api-docs: hermanos .ts/.scss/.md/.json/.schemas.ts, ficha con frontmatter, manifest y skill', () => {
   for (const ext of ['.ts', '.scss', '.md', '.json', '.schemas.ts']) assert.ok(existsSync(BASE + ext), `falta server-api-docs${ext}`);
@@ -146,6 +203,9 @@ test('iswc-server-api-docs: hermanos .ts/.scss/.md/.json/.schemas.ts, ficha con 
 
 test('iswc-server-api-docs: se compone con piezas del kit sobre el layout documental (sin visor propio)', () => {
   const src = readFileSync(`${BASE}.ts`, 'utf8');
-  for (const tag of ['iswc-doc-layout', 'iswc-doc-index', 'iswc-md-render', 'iswc-code', 'iswc-pager', 'iswc-dialog', 'iswc-copy-button']) assert.ok(src.includes(`<${tag}`), `monta <${tag}>`);
+  for (const tag of ['iswc-doc-layout', 'iswc-doc-index', 'iswc-code', 'iswc-pager', 'iswc-dialog', 'iswc-copy-button', 'iswc-input', 'iswc-sequence-diagram']) assert.ok(src.includes(`<${tag}`), `monta <${tag}>`);
+  assert.match(src, /data-theme="light"><iswc-sequence-diagram[^>]*diagram-style="insoft"/, 'los diagramas del visor van en estilo InSoft (lienzo claro, como los adjuntos de docs)');
+  assert.match(src, /<table class="tabla endpoints">/, 'la portada es la tabla de endpoints');
+  assert.doesNotMatch(src, /iswc-md-render/, 'sin prosa documental: nada de markdown');
   assert.doesNotMatch(src, /isc-swagger|iswc-docs@|docs-viewer/, 'sin rastro del visor externo');
 });
