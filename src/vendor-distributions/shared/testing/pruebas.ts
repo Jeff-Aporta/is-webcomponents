@@ -1,4 +1,4 @@
-// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/pruebas.ts
+// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/testing/pruebas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 /**
  * Sistema comun de pruebas de las apps del kit (ISS en Node, ISW en Deno).
@@ -43,6 +43,7 @@ export function definirPruebas(lista: Prueba[], hooks?: HooksPruebas): ListaPrue
     if (vistos.has(p.nombre)) throw new Error(`definirPruebas: id repetido "${p.nombre}"`);
     if (p.categoria && p.categoria !== 'what' && p.categoria !== 'how') throw new Error(`definirPruebas: "${p.nombre}" categoria invalida`);
     if (p.nivel && p.nivel !== 'error' && p.nivel !== 'aviso') throw new Error(`definirPruebas: "${p.nombre}" nivel invalido`);
+    if (p.factorCooldown !== undefined && !(Number.isFinite(p.factorCooldown) && p.factorCooldown > 0)) throw new Error(`definirPruebas: "${p.nombre}" factorCooldown invalido (numero > 0)`);
     vistos.add(p.nombre);
   }
   const salida = lista as ListaPruebas;
@@ -251,7 +252,7 @@ export async function correrPruebas(o: OpcionesCorrida): Promise<ReportePruebas>
         // Una prueba de nivel `aviso` nunca pone rojo: su falla queda como aviso.
         const ok = !r.error || base.nivel === 'aviso';
         const avisos = r.error && base.nivel === 'aviso' ? [r.error, ...r.avisos] : r.avisos;
-        cooldown.record(prueba.nombre, durationMs, !r.error);
+        cooldown.record(prueba.nombre, durationMs, !r.error, prueba.factorCooldown);
         const res: ResultadoPrueba = { ...base, ok, durationMs, avisos, diag: r.diag, ...(r.error && base.nivel === 'error' ? { error: r.error } : {}) };
         log(`${ok ? (avisos.length ? '!' : '✓') : '✗'} ${prueba.nombre} (${formatMs(durationMs)})${res.error ? ` — ${res.error.slice(0, 300)}` : ''}`);
         resultados.push(res);

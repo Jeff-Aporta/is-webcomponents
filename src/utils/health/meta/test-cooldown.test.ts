@@ -5,6 +5,7 @@
 //   C4 `disabled` corre todo y no escribe.
 //   C5 proporcional (x1440): 1 min -> 24 h, 1 s -> 24 min, 13 ms -> 18.720 ms.
 //   C6 varias instancias sobre el mismo JSON: record() fusiona sobre el archivo fresco, nunca pisa (gate + runner).
+//   C7 factorCooldown por prueba estira la ventana: x3 -> 1 min verde = 72 h (la entrada lo anota); el rojo no cambia.
 //   Q1-Q3 la cola estándar (runQueue, testConcurrency) vive en el mismo archivo.
 import { assert, assertEquals, assertRejects } from 'jsr:@std/assert@1';
 import { existsSync } from 'node:fs';
@@ -69,6 +70,29 @@ Deno.test('test-cooldown: C6 dos instancias sobre el mismo JSON no se pisan (rec
   assert(B.check('B0').skip, 'C6 la caché de check sigue sirviendo');
   t += 1000 * 1440 + 1;
   assert(!createTestCooldown({ dbPath, now }).check('B0').skip);
+});
+
+Deno.test('test-cooldown: C7 factorCooldown x3 -> 1 min verde = 72 h; sin factor sigue en 24 h', async () => {
+  const dir = await Deno.makeTempDir({ prefix: 'cooldown-' });
+  const dbPath = join(dir, 'db.json');
+  let t = 1_000_000;
+  const now = () => t;
+  const cd = createTestCooldown({ dbPath, now });
+  cd.record('openai', MIN, true, 3);
+  cd.record('normal', MIN, true);
+  const e = createTestCooldown({ dbPath, now }).entries();
+  assertEquals(e.openai.until - t, 72 * HORA, 'C7 x3: 1 min -> 72 h');
+  assertEquals(e.openai.cooldownMin, 3 * 1440, 'C7 cooldownMin anota la ventana estirada');
+  assertEquals(e.openai.factorCooldown, 3, 'C7 la entrada anota el factor');
+  assertEquals(e.normal.until - t, 24 * HORA, 'C7 sin factor: 24 h');
+  assertEquals(e.normal.factorCooldown, undefined, 'C7 factor 1 no se anota');
+  t += 25 * HORA;
+  const d = createTestCooldown({ dbPath, now });
+  assert(d.check('openai').skip && !d.check('normal').skip, 'C7 a las 25 h la x3 sigue en cooldown y la normal ya corre');
+  t += 48 * HORA;
+  assert(!createTestCooldown({ dbPath, now }).check('openai').skip, 'C7 a las 73 h la x3 vuelve a correr');
+  cd.record('openai', MIN, false, 3);
+  assertEquals(createTestCooldown({ dbPath, now }).entries().openai.until, -1, 'C7 el rojo no tiene cooldown aunque traiga factor');
 });
 
 // Cola estándar (antes test-queue.test.ts):

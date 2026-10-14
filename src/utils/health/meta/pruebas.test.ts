@@ -4,6 +4,7 @@
  *   P1 definirPruebas rechaza ids vacios o repetidos, sin correr(), y categoria/nivel invalidos
  *   P2 correrPruebas: verde, rojo por expect, por excepcion y por timeout; nivel `aviso` no pone rojo
  *   P3 cooldown SIEMPRE, con el id de la prueba como llave; sinCooldown corre todo
+ *   P3b `factorCooldown` en la prueba estira su ventana de cooldown (x3 = 72 h por minuto); valor invalido se rechaza
  *   P4 ids repetidos entre archivos: la corrida aborta con error antes de correr nada
  *   P5 orden secuencial, filtros `solo`/`categoria`, `saltar` (opcion y ctx.saltar), archivo que no carga = rojo
  *   P6 hooks: `antes` solo si algo corre (no si todo esta en cooldown) y `despues` siempre que `antes` corrio
@@ -11,7 +12,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -77,6 +78,21 @@ test('P3 cooldown siempre, por id', async () => {
   assert.ok(r2.resultados[0].cooldown);
   await correr(mod, { sinCooldown: true });
   assert.equal(n, 2, 'sinCooldown corre todo');
+});
+
+test('P3b factorCooldown estira la ventana de la prueba', async () => {
+  rmSync(db, { force: true });
+  assert.throws(() => definirPruebas([{ nombre: 'x', factorCooldown: 0, correr() {} }]), /factorCooldown/);
+  const mod = { 'f.test.ts': definirPruebas([
+    { nombre: 'P3b x3', factorCooldown: 3, correr: () => dormir(20) },
+    { nombre: 'P3b x1', correr: () => dormir(20) },
+  ]) };
+  await correr(mod);
+  const e = JSON.parse(readFileSync(db, 'utf8')) as Record<string, { durationMs: number; okAt: number; until: number; factorCooldown?: number }>;
+  const x3 = e['P3b x3'], x1 = e['P3b x1'];
+  assert.equal(x3.until - x3.okAt, Math.round(x3.durationMs * 1440 * 3), 'x3: duracion x 1440 x 3');
+  assert.equal(x3.factorCooldown, 3);
+  assert.equal(x1.until - x1.okAt, Math.round(x1.durationMs * 1440), 'sin factor: duracion x 1440');
 });
 
 test('P4 ids repetidos entre archivos abortan la corrida', async () => {

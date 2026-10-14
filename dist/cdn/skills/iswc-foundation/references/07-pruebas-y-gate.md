@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/07-pruebas-y-gate.md -->
+<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/07-pruebas-y-gate.md -->
 # 07 — Pruebas, Stagehand y gate
 
 Cómo se escriben specs y pruebas WHAT: [especificar-what.md](../templates/specs/especificar-what.md).
@@ -19,6 +19,11 @@ Los jueces opcionales (semántica local, JEV, LLM): [12-jueces.md](12-jueces.md)
 - **Cooldown x1440** (un día por minuto, 2026-10-12): verde de 1 min → 24 h sin repetirse, 30 s → 12 h; rojo corre siempre. `TEST_COOLDOWN=0` o
   `--sin-cooldown` solo para diagnóstico (nunca en el sync). Memoria en `.tmp/`. Varias instancias sobre el mismo
   JSON (el gate del sync y el runner como paso hijo) no se pisan: `record()` relee el archivo y fusiona solo su entrada.
+- **`factorCooldown`** (opcional en la `Prueba`, default 1, número > 0): multiplica la ventana del verde de ESA prueba.
+  Con 3, 1 min verde = 72 h en vez de 24 h; la entrada del JSON anota `factorCooldown`. Uso estándar: las pruebas que
+  gastan tokens de OpenAI (directo o a través del host) llevan `factorCooldown: FACTOR_OPENAI` (= 3, constante en
+  `tests/_shared/` de cada app); las que pueden apuntar a MiniMax (cliente OpenAI-compatible armado en el test) van
+  x1. El override de proveedor vive solo en los tests, nunca en `src/`.
 - **Aislar** (`aislar: { comando }`): cada archivo en su proceso; el hijo es el mismo `pruebas.ts` con `--hijo <json>`.
 - **Reintento**: una prueba roja se re-corre una vez (`reintentos`, default 1; `TEST_REINTENTOS=0` lo apaga). Si pasa queda verde con el aviso `intermitente` en el reporte (red, LLM, streaming); un fallo real falla las dos veces y bloquea.
   `deno-test.ts` (`denoTest`, unidad = archivo) hace lo mismo: los archivos rojos a la primera se re-corren de a uno

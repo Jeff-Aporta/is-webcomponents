@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs
+// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs
 // Bundle autocontenido de skills/iswc-foundation/tools/probar-foundation.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es skills/iswc-foundation/tools/probar-foundation.ts.
 
 // skills/iswc-foundation/tools/probar-foundation.ts
@@ -269,10 +269,11 @@ function createTestCooldown(opts) {
     const t = now();
     return e && e.until > t ? { skip: true, until: e.until, remainingMs: e.until - t } : { skip: false };
   };
-  const record = (id, durationMs, ok) => {
+  const record = (id, durationMs, ok, factorCooldown = 1) => {
     if (opts.disabled) return;
     const t = now();
-    grabar(id, ok ? { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor), cooldownMin: Math.round(cooldownMs(durationMs, factor) / 600) / 100 } : { durationMs, okAt: null, until: -1, failAt: t });
+    const ms = cooldownMs(durationMs, factor * factorCooldown);
+    grabar(id, ok ? { durationMs, okAt: t, until: t + ms, cooldownMin: Math.round(ms / 600) / 100, ...factorCooldown !== 1 ? { factorCooldown } : {} } : { durationMs, okAt: null, until: -1, failAt: t });
   };
   const run = async (id, fn) => {
     const c = check(id);

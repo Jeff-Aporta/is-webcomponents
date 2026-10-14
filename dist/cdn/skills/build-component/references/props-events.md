@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/props-events.md -->
+<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/props-events.md -->
 # Props & Events
 
 Cómo declarar **atributos observados**, **propiedades públicas** y

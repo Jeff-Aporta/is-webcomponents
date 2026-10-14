@@ -2,7 +2,7 @@
 name: nueva-vista
 description: Crear una vista view/<v>/ en una app iswc (shell, página aislada, demo, utils y registro). Úsala cuando nace un dominio nuevo de la app.
 ---
-<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/nueva-vista.md -->
+<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/iswc/nueva-vista.md -->
 
 # Nueva vista `view/<v>/`
 

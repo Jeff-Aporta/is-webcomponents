@@ -8,7 +8,7 @@ description: >-
   alinear una app existente (ISW…) con el estándar. Todas las apps iswc deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
-<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/SKILL.md -->
+<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/SKILL.md -->
 
 # iswc-foundation — el estándar de las apps iswc
 
@@ -50,7 +50,7 @@ pin. Opciones: `--prefijo`, `--titulo`, `--puerto`, `--sha`, `--repo`. Detalle: 
 | 8 | **Zod** para todos los tipos; schemas en `src/js/consts/schemas/*.schemas.ts`; datos externos con `safeParse`, nunca `as` |
 | 9 | **SCSS** anidado con `_tokens`/`_mixins`; build → `.css` hermana del módulo; hojas adoptadas (sin flicker) |
 | 10 | **Cache busting** `?v=<hash de contenido>`; una sola URL por módulo |
-| 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x1440) |
+| 11 | **Specs WHAT** (`specs/foundation/NN-*.md`, 7 secciones, IDs `[W-|HW-|HS-]`) y **pruebas de caja negra** (`definirPruebas`, cooldown x1440; `factorCooldown` x3 a las que gastan OpenAI, MiniMax x1 cuando el test inyecta el cliente) |
 | 12 | **Gate** `deno task test:all` en verde = hecho; sync a entregable solo con el gate en verde |
 | 13 | **Íconos: localStorage → web publicada → API (sin mapa)**: `assets/dl.js` (rutas y `extra`) → `assets/iconify/<set>/<n>.svg` con `deno task icons` (dentro de `build`); `<html data-icons>` = `deno.json` → `iswc.host` + `assets/iconify/` (lo declara el registrador; `initApp({ icons: { host } })`); lo que falta sale de la API con el aviso `[iswc-icon] falta en local: <id>`; ids `set:nombre` literales |
 | 14 | **Toda estructura es un componente**: toda pieza de UI, por pequeña que sea (figura, fila de metadatos, pie, paginador, caja vacía, fila de acciones), es un web component: `iswc-*` del catálogo o `<prefijo>-*` propio. Prohibido armar HTML suelto en renders, vistas, `index.html` o visores (`innerHTML`/plantillas con estructura, `createElement('div')` que compone UI); solo cabe el markup interno mínimo dentro del shadow de un componente |

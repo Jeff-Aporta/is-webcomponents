@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/demo/components/__PREFIJO__-galeria.ts
+// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/demo/components/__PREFIJO__-galeria.ts
 /**
  * Galería de componentes `__PREFIJO__-*` (estándar iswc-foundation).
  *

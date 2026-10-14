@@ -2,7 +2,7 @@
 name: __PREFIJO__-app
 description: Shell de __TITULO__. Úsalo una sola vez, en index.html; monta la barra y el shell de la vista activa.
 ---
-<!-- @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/js/components/__PREFIJO__/__PREFIJO__-app.md -->
+<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/js/components/__PREFIJO__/__PREFIJO__-app.md -->
 
 # `<__PREFIJO__-app>`
 

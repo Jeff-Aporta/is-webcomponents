@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/js/consts/schemas/componentes.schemas.ts
+// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/js/consts/schemas/componentes.schemas.ts
 /**
  * componentes.schemas.ts — forma de las `props` de cada componente y tipos auxiliares de la base.
  *

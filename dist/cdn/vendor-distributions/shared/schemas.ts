@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
+// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/schemas.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/README.md
 /**
  * schemas.ts — TODOS los contratos (Zod y tipos) de `vendor-distributions/`, en UN solo archivo por secciones.
@@ -125,6 +125,8 @@ export interface TestCooldownEntry {
   cooldownMin?: number;
   /** Epoch ms del último rojo (solo cuando `until === -1`). */
   failAt?: number;
+  /** Multiplicador por prueba aplicado a este verde (solo si no es 1; p. ej. 3 para las que gastan tokens de OpenAI). */
+  factorCooldown?: number;
 }
 
 export interface TestCooldownOptions {
@@ -148,8 +150,8 @@ export type TestCooldownRun<T> =
 export interface TestCooldown {
   /** ¿Se salta `id`? Con `until` y lo que falta si sí. */
   check(id: string): TestCooldownCheck;
-  /** Registra una corrida: el verde fija el cooldown proporcional; el rojo guarda `until: -1`. */
-  record(id: string, durationMs: number, ok: boolean): void;
+  /** Registra una corrida: el verde fija el cooldown proporcional (`× factorCooldown`, default 1); el rojo guarda `until: -1`. */
+  record(id: string, durationMs: number, ok: boolean, factorCooldown?: number): void;
   /** Corre `fn` si no está en cooldown; mide, registra y relanza si falla. */
   run<T>(id: string, fn: () => T | Promise<T>): Promise<TestCooldownRun<T>>;
   /** Copia de la memoria. */
@@ -246,6 +248,8 @@ export interface OpcionesPrueba {
   nivel?: NivelPrueba;
   /** Si trae texto, la prueba se salta con ese motivo. */
   saltar?: string;
+  /** Estira la ventana de cooldown del verde (default 1). Con 3: 1 min verde = 72 h en vez de 24 h (p. ej. pruebas que gastan tokens de OpenAI). */
+  factorCooldown?: number;
 }
 
 export interface Prueba extends OpcionesPrueba {

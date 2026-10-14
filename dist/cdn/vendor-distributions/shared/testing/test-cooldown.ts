@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T00:35:24.801Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts
+// @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/test-cooldown.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/07-pruebas-y-gate.md
 // test-cooldown.ts — Cooldown de tests proporcional a su duración, con
 // memoria en un JSON.
@@ -102,12 +102,13 @@ export function createTestCooldown(opts: TestCooldownOptions): TestCooldown {
         return e && e.until > t ? { skip: true, until: e.until, remainingMs: e.until - t } : { skip: false };
     };
 
-    const record = (id: string, durationMs: number, ok: boolean): void => {
+    const record = (id: string, durationMs: number, ok: boolean, factorCooldown = 1): void => {
         if (opts.disabled) return;
         const t = now();
+        const ms = cooldownMs(durationMs, factor * factorCooldown);
         grabar(id, ok
             // `cooldownMin`: solo para quien lee el JSON (minutos entre okAt y until); el runner no lo usa.
-            ? { durationMs, okAt: t, until: t + cooldownMs(durationMs, factor), cooldownMin: Math.round(cooldownMs(durationMs, factor) / 600) / 100 }
+            ? { durationMs, okAt: t, until: t + ms, cooldownMin: Math.round(ms / 600) / 100, ...(factorCooldown !== 1 ? { factorCooldown } : {}) }
             : { durationMs, okAt: null, until: -1, failAt: t });
     };
 
