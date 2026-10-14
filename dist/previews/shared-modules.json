@@ -1,5 +1,587 @@
 {
-  "generatedAt": "2026-10-14T14:16:22.232Z",
-  "count": 0,
-  "modules": []
+  "generatedAt": "2026-10-14T15:02:29.448Z",
+  "count": 40,
+  "modules": [
+    {
+      "file": "app-cfg.ts",
+      "id": "app-cfg",
+      "path": "src/core/app-cfg.ts",
+      "summary": "Módulo compartido `app-cfg.ts`.",
+      "bytes": 3608,
+      "exports": [
+        "APP_CFG_KEY",
+        "esTema",
+        "esPaleta",
+        "leerAppCfg",
+        "guardarAppCfg",
+        "borrarAppCfg"
+      ]
+    },
+    {
+      "file": "app-init.ts",
+      "id": "app-init",
+      "path": "src/core/app-init.ts",
+      "summary": "Módulo compartido `app-init.ts`.",
+      "bytes": 3014,
+      "exports": [
+        "ICONS_FOLDER_DEFAULT",
+        "iconsBase",
+        "initApp"
+      ]
+    },
+    {
+      "file": "attrs.ts",
+      "id": "attrs",
+      "path": "src/core/attrs.ts",
+      "summary": "attrs — Phase V5: el volcado automático del mapa `styleAttrs` quedó deshabilitado",
+      "bytes": 13517,
+      "exports": [
+        "isCssColorValue",
+        "syncStyleAttr",
+        "syncStyleAttrs",
+        "syncPresentStyleAttrs",
+        "styleAttrNames",
+        "describeStyleAttrs",
+        "applyToneRamp",
+        "withStyleAttrs",
+        "aAtributo",
+        "atributosDeclarados",
+        "materializarAtributos",
+        "attrBool"
+      ]
+    },
+    {
+      "file": "base-sheets.ts",
+      "id": "base-sheets",
+      "path": "src/core/base-sheets.ts",
+      "summary": "base-sheets — creadas una sola vez y compartidas por todos los ShadowRoot de la página.",
+      "bytes": 2461,
+      "exports": [
+        "soportaHojasAdoptadas",
+        "sheetsBase"
+      ]
+    },
+    {
+      "file": "button-shape.ts",
+      "id": "button-shape",
+      "path": "src/core/button-shape.ts",
+      "summary": "button-shape — Compartido por: iswc-button (y quien reenvía `shape` al botón, p. ej. prefs-clear).",
+      "bytes": 1385,
+      "exports": [
+        "BUTTON_SHAPE",
+        "DEFAULT_BUTTON_SHAPE",
+        "BUTTON_SHAPE_ICON",
+        "normalizeButtonShape",
+        "buttonShapeSelectOptions"
+      ]
+    },
+    {
+      "file": "cdn-ref.ts",
+      "id": "cdn-ref",
+      "path": "src/core/cdn-ref.ts",
+      "summary": "cdn-ref — Orden de fallback al cargar assets:",
+      "bytes": 4172,
+      "exports": [
+        "repoDeUrl",
+        "GH_REPO",
+        "resolveRef",
+        "jsdelivrBase",
+        "githackBase",
+        "pagesBase",
+        "MIRRORS",
+        "mirrorById",
+        "readMirrorId",
+        "writeMirrorId",
+        "resolvedBase",
+        "fallbackBases"
+      ]
+    },
+    {
+      "file": "code-diff.ts",
+      "id": "code-diff",
+      "path": "src/core/code-diff.ts",
+      "summary": "code-diff — commit para el motor nativo de `<iswc-code>`.",
+      "bytes": 6945,
+      "exports": [
+        "DIFF_LINE_CLASS",
+        "DIFF_LINE_CLASSES",
+        "classifyDiffLine",
+        "diffLineClass",
+        "parseStatLine",
+        "formatDiff"
+      ]
+    },
+    {
+      "file": "code-highlight.ts",
+      "id": "code-highlight",
+      "path": "src/core/code-highlight.ts",
+      "summary": "code-highlight — Sustituye a CM5 (runMode / fromTextArea): tokeniza con un escáner por",
+      "bytes": 21232,
+      "exports": [
+        "normalizeLang",
+        "emptyState",
+        "diffLineClass",
+        "tokenizeCode",
+        "tokenClass",
+        "escapeHtml",
+        "lineToHtml",
+        "tokensToText"
+      ]
+    },
+    {
+      "file": "code-langs.ts",
+      "id": "code-langs",
+      "path": "src/core/code-langs.ts",
+      "summary": "code-langs — El resaltado lo hace el motor NATIVO (code-highlight): aquí solo vive el",
+      "bytes": 4581,
+      "exports": [
+        "registerLanguage",
+        "resolveLanguage",
+        "inferLanguage",
+        "listLanguages",
+        "ensureLanguage"
+      ]
+    },
+    {
+      "file": "code-text.ts",
+      "id": "code-text",
+      "path": "src/core/code-text.ts",
+      "summary": "code-text — Extraído para evitar ciclos highlight-code ↔ code ↔ code-format.",
+      "bytes": 4557,
+      "exports": [
+        "dedent",
+        "unwrapHandHighlight",
+        "prettyHtml",
+        "softFormatMode",
+        "softFormat"
+      ]
+    },
+    {
+      "file": "diagram-grid.ts",
+      "id": "diagram-grid",
+      "path": "src/core/diagram-grid.ts",
+      "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
+      "bytes": 14872,
+      "exports": [
+        "TK_DIAGRAM_GRID",
+        "TK_DIAGRAM_RADIUS_PX",
+        "snapDiagramGrid",
+        "ceilDiagramGrid",
+        "rectsOverlap",
+        "boundsOf",
+        "diagramLabelWidth",
+        "diagramGridCols",
+        "diagramGridRows",
+        "COST_BLOCKED",
+        "makeCostGrid",
+        "cellCost"
+      ]
+    },
+    {
+      "file": "dom-utils.ts",
+      "id": "dom-utils",
+      "path": "src/core/dom-utils.ts",
+      "summary": "dom-utils — Sustituye copias dispersas en iswc-checkbox, iswc-switch, iswc-input,",
+      "bytes": 2979,
+      "exports": [
+        "hasSlotted",
+        "assignedNodes",
+        "assignedElements",
+        "escapeHtml",
+        "copyText"
+      ]
+    },
+    {
+      "file": "element-base.ts",
+      "id": "element-base",
+      "path": "src/core/element-base.ts",
+      "summary": "element-base — Centraliza el patrón que se repetía en ~150 componentes: shadow más template,",
+      "bytes": 6357,
+      "exports": [
+        "ElementBase extends HTMLElement"
+      ]
+    },
+    {
+      "file": "element.ts",
+      "id": "element",
+      "path": "src/core/element.ts",
+      "summary": "element — Consolida cuatro módulos que estaban sueltos en `_shared/` y que ningún",
+      "bytes": 9688,
+      "exports": [
+        "globalNameFor",
+        "defineElement",
+        "siblingCssHref",
+        "adoptCss",
+        "emit",
+        "emitCancelable",
+        "upgradeProperties"
+      ]
+    },
+    {
+      "file": "form-associated.ts",
+      "id": "form-associated",
+      "path": "src/core/form-associated.ts",
+      "summary": "Utilidades mínimas para form-associated custom elements. — No es un mixin de clase: cada CE llama helpers sobre su ElementInternals.",
+      "bytes": 1807,
+      "exports": [
+        "attachFormInternals",
+        "setCustomState",
+        "setFormValue",
+        "setValidity",
+        "clearValidity"
+      ]
+    },
+    {
+      "file": "form-control-mixin.ts",
+      "id": "form-control-mixin",
+      "path": "src/core/form-control-mixin.ts",
+      "summary": "form-control-mixin — Muchos componentes de formulario (checkbox, input, select, etc.) repiten",
+      "bytes": 7621,
+      "exports": [
+        "formControlTemplate",
+        "getFormControlTemplate",
+        "FORM_CONTROL_PROPS",
+        "MixinFormControl"
+      ]
+    },
+    {
+      "file": "highlight-code.ts",
+      "id": "highlight-code",
+      "path": "src/core/highlight-code.ts",
+      "summary": "highlight-code — `<pre class=\"code\">` de la documentación (antes se coloreaban con",
+      "bytes": 8487,
+      "exports": [
+        "resolveMode",
+        "modeToLang",
+        "paint",
+        "repaint",
+        "watchDom"
+      ]
+    },
+    {
+      "file": "icon-loader.ts",
+      "id": "icon-loader",
+      "path": "src/core/icon-loader.ts",
+      "summary": "Módulo compartido `icon-loader.ts`.",
+      "bytes": 10626,
+      "exports": [
+        "AVISO_FALTA_LOCAL",
+        "baseAbsoluta",
+        "resolveIconBase",
+        "LS_TTL_MS",
+        "purgarIconosVencidos",
+        "clearPersistedIcons",
+        "resolveIconSvg",
+        "resolveIconRaw",
+        "clearRawCache",
+        "listIconFamilies"
+      ]
+    },
+    {
+      "file": "intent.ts",
+      "id": "intent",
+      "path": "src/core/intent.ts",
+      "summary": "intent — Un \"intent\" describe EL SIGNIFICADO del color que aplica el componente,",
+      "bytes": 2882,
+      "exports": [
+        "INTENT",
+        "DEFAULT_INTENT",
+        "normalizeIntent",
+        "setEnumAttr",
+        "ensureDefaultColor"
+      ]
+    },
+    {
+      "file": "iswc-storage.ts",
+      "id": "iswc-storage",
+      "path": "src/core/iswc-storage.ts",
+      "summary": "iswc-storage — TODO lo que el kit guarda en el navegador lleva UN prefijo: `iswc:`. — readIswc('app-cfg')                    // localStorage['iswc:app-cfg']",
+      "bytes": 5958,
+      "exports": [
+        "ISWC_PREFIX",
+        "iswcKey",
+        "readIswc",
+        "writeIswc",
+        "removeIswc",
+        "listIswcKeys",
+        "registerMemoryCache",
+        "clearIswcStorage",
+        "nombreMigrado",
+        "migrateIswcStorage"
+      ]
+    },
+    {
+      "file": "json-html.ts",
+      "id": "json-html",
+      "path": "src/core/json-html.ts",
+      "summary": "Codec compacto HTML ↔ JSON (lenguaje de definición del kit). — Node     = string | [tag, attrs?, ...children]",
+      "bytes": 9533,
+      "exports": [
+        "json2html",
+        "html2json",
+        "json2dom",
+        "json2xml",
+        "applyJsonBody",
+        "hostToJson"
+      ]
+    },
+    {
+      "file": "media-shape.ts",
+      "id": "media-shape",
+      "path": "src/core/media-shape.ts",
+      "summary": "media-shape — Compartido por: iswc-avatar, iswc-theme-img.",
+      "bytes": 1097,
+      "exports": [
+        "MEDIA_SHAPE",
+        "DEFAULT_MEDIA_SHAPE",
+        "MEDIA_SHAPE_ICON",
+        "normalizeMediaShape",
+        "mediaShapeSelectOptions"
+      ]
+    },
+    {
+      "file": "misc-utils.ts",
+      "id": "misc-utils",
+      "path": "src/core/misc-utils.ts",
+      "summary": "misc-utils — Sustituye copias dispersas en iswc-slider, iswc-rating, iswc-split-panel,",
+      "bytes": 2153,
+      "exports": [
+        "tidy",
+        "tidyToStep",
+        "clampTo",
+        "isValidNumber"
+      ]
+    },
+    {
+      "file": "path-turtle.ts",
+      "id": "path-turtle",
+      "path": "src/core/path-turtle.ts",
+      "summary": "Módulo compartido `path-turtle.ts`.",
+      "bytes": 10767,
+      "exports": [
+        "PathTurtle",
+        "TURTLE_AUTO_GAP",
+        "SequenceTurtle"
+      ]
+    },
+    {
+      "file": "popup-dismiss.ts",
+      "id": "popup-dismiss",
+      "path": "src/core/popup-dismiss.ts",
+      "summary": "popup-dismiss — Todo panel flotante del kit (iswc-dropdown, iswc-context-menu, y cualquiera que",
+      "bytes": 4408,
+      "exports": [
+        "createPopupDismiss"
+      ]
+    },
+    {
+      "file": "position.ts",
+      "id": "position",
+      "path": "src/core/position.ts",
+      "summary": "Motor de posicionamiento anclado (flip / shift / arrow). — Sin dependencias — usa getBoundingClientRect + flip/shift.",
+      "bytes": 14849,
+      "exports": [
+        "PLACEMENTS",
+        "computePosition",
+        "isVirtualElement"
+      ]
+    },
+    {
+      "file": "prefs.ts",
+      "id": "prefs",
+      "path": "src/core/prefs.ts",
+      "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"iswc-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
+      "bytes": 4756,
+      "exports": [
+        "getComponentPrefs",
+        "setComponentPrefs",
+        "replaceComponentPrefs",
+        "removeComponentPrefs",
+        "peekComponentPrefsRoot",
+        "clearAllComponentPrefs",
+        "getPrefsRootKey",
+        "getLegacyPrefsRootKey"
+      ]
+    },
+    {
+      "file": "reflect.ts",
+      "id": "reflect",
+      "path": "src/core/reflect.ts",
+      "summary": "reflect — El kit escribía la MISMA operación de siete maneras distintas repartidas",
+      "bytes": 2777,
+      "exports": [
+        "setStringAttr",
+        "setOptionalAttr",
+        "getNumberAttr"
+      ]
+    },
+    {
+      "file": "resolve-locale.ts",
+      "id": "resolve-locale",
+      "path": "src/core/resolve-locale.ts",
+      "summary": "resolve-locale — Orden (sin attr `locale`):",
+      "bytes": 1679,
+      "exports": [
+        "FALLBACK_LOCALE",
+        "resolveLocale",
+        "applyDocumentLocaleFromSystem"
+      ]
+    },
+    {
+      "file": "scroll-memory.ts",
+      "id": "scroll-memory",
+      "path": "src/core/scroll-memory.ts",
+      "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
+      "bytes": 8319,
+      "exports": [
+        "SCROLL_MEMORY_ATTRS",
+        "ScrollMemory \n  host",
+        "bindScrollMemoryApi"
+      ]
+    },
+    {
+      "file": "spa-state.ts",
+      "id": "spa-state",
+      "path": "src/core/spa-state.ts",
+      "summary": "Módulo compartido `spa-state.ts`.",
+      "bytes": 9983,
+      "exports": [
+        "b64urlEncode",
+        "b64urlDecode",
+        "recortarPorValor",
+        "createSpaState"
+      ]
+    },
+    {
+      "file": "svg-chart-engine.ts",
+      "id": "svg-chart-engine",
+      "path": "src/core/svg-chart-engine.ts",
+      "summary": "Módulo compartido `svg-chart-engine.ts`.",
+      "bytes": 6701,
+      "exports": [
+        "svgEl",
+        "scaleLinear",
+        "scaleBand",
+        "niceTicks",
+        "pathLine",
+        "pathArea",
+        "polarToCartesian",
+        "pathArc",
+        "roundedBarRect",
+        "measureText"
+      ]
+    },
+    {
+      "file": "theme-scope.ts",
+      "id": "theme-scope",
+      "path": "src/core/theme-scope.ts",
+      "summary": "Contenedor de tema del kit — misma cascada que iswc-theme-toggle. — Atraviesa Shadow DOM (Element.closest se corta en el shadow root).",
+      "bytes": 1963,
+      "exports": [
+        "THEME_SCOPE",
+        "findThemeContainer",
+        "readTheme",
+        "watchThemeContainer"
+      ]
+    },
+    {
+      "file": "tk-color.ts",
+      "id": "tk-color",
+      "path": "src/core/tk-color.ts",
+      "summary": "Contraste de fuente por luminancia OKLCH — todo en JS (sin CSS), para que el — flujo lo resuelva antes de pintar. Equivale a:",
+      "bytes": 3538,
+      "exports": [
+        "pastelColor",
+        "oklchLightness",
+        "BG2FONT_L_THRESHOLD",
+        "contrastFontColor",
+        "bg2fontColor"
+      ]
+    },
+    {
+      "file": "tk-hue.ts",
+      "id": "tk-hue",
+      "path": "src/core/tk-hue.ts",
+      "summary": "Tono HSL en BD (0–360) → CSS/hex solo al renderizar.",
+      "bytes": 1503,
+      "exports": [
+        "normalizeTkHue",
+        "tkHueToCss",
+        "tkHueToHex",
+        "resolveTkHue"
+      ]
+    },
+    {
+      "file": "tk-icon-inline.ts",
+      "id": "tk-icon-inline",
+      "path": "src/core/tk-icon-inline.ts",
+      "summary": "Iconos inline en MD/HTML TK. El SVG lo resuelve el sistema propio de — iconos (_shared/icon-loader.js); no hay dependencia de terceros.",
+      "bytes": 17448,
+      "exports": [
+        "TK_ICON_TOKEN_RE",
+        "iconAssetPath",
+        "resolveIconId",
+        "resolveIconToken",
+        "hasIconJsonSugar",
+        "svgIconGroup",
+        "svgIconBadge",
+        "iconAttrsHtml",
+        "iconInlineHtmlWeb",
+        "iconInlineHtmlEmail",
+        "replaceIconTokensWeb",
+        "replaceIconTokensEmail"
+      ]
+    },
+    {
+      "file": "tk-inline-md.ts",
+      "id": "tk-inline-md",
+      "path": "src/core/tk-inline-md.ts",
+      "summary": "Módulo compartido `tk-inline-md.ts`.",
+      "bytes": 4238,
+      "exports": [
+        "inlineMdWeb",
+        "applySvgTextContent"
+      ]
+    },
+    {
+      "file": "tk-rich-text.ts",
+      "id": "tk-rich-text",
+      "path": "src/core/tk-rich-text.ts",
+      "summary": "Módulo compartido `tk-rich-text.ts`.",
+      "bytes": 2206,
+      "exports": [
+        "esc",
+        "splitRichTextSegments",
+        "richTextInline",
+        "richTextPlain",
+        "richTextEsc"
+      ]
+    },
+    {
+      "file": "tone.ts",
+      "id": "tone",
+      "path": "src/core/tone.ts",
+      "summary": "tone — Un \"tone\" describe EL GRADO DE PESO VISUAL: outlined (sin relleno, sólo",
+      "bytes": 1753,
+      "exports": [
+        "TONE",
+        "DEFAULT_TONE",
+        "normalizeTone",
+        "setEnumToneAttr"
+      ]
+    },
+    {
+      "file": "tree-layout.ts",
+      "id": "tree-layout",
+      "path": "src/core/tree-layout.ts",
+      "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
+      "bytes": 15506,
+      "exports": [
+        "buildTree",
+        "layoutTree",
+        "layoutRadialTree",
+        "squarify"
+      ]
+    }
+  ]
 }
