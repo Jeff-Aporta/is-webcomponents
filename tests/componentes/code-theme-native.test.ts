@@ -23,14 +23,14 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/code-theme-native', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   // La lógica del highlighter vive en components/_shared/highlight-code.ts
   // (para que <iswc-cdn-snippet> pueda importarla sin depender de scripts/);
   // scripts/highlight-pre.js es solo el arranque en las paginas del docs.
   // El contrato se verifica sobre los dos juntos + el motor en code.ts.
   const highlight = [
-    await readFile(join(root, 'src', 'components', '_shared', 'highlight-code.ts'), 'utf8'),
+    await readFile(join(root, 'src', 'core', 'highlight-code.ts'), 'utf8'),
     await readFile(join(root, 'scripts', 'highlight-pre.js'), 'utf8'),
   ].join(String.fromCharCode(10));
   const isCode = await readFile(join(root, 'src', 'components', 'code', 'code.ts'), 'utf8');

@@ -12,10 +12,10 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/palette-dropdown', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const html = await readFile(join(root, 'index.html'), 'utf8');
-  const css = await readFile(join(root, 'src', 'components', 'feedback', 'palette-selector.css'), 'utf8');
+  const css = await readFile(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'palette-selector.css'), 'utf8');
   const src = await readFile(join(root, 'src', 'components', 'feedback', 'palette-selector.ts'), 'utf8');
   
   const failures = [];

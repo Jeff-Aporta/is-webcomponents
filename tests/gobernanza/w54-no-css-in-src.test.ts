@@ -8,7 +8,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const exec = promisify(execFile);
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 
 /**
  * W54 (migracion CSS→SCSS): el codigo fuente de `src/` debe ser solo `.scss`

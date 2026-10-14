@@ -13,8 +13,8 @@ import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testi
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
-const FACTORY = readFileSync(join(RAIZ, 'components', '_shared', 'picker-element.ts'), 'utf8');
+const RAIZ = join(import.meta.dirname, '..', '..');
+const FACTORY = readFileSync(join(import.meta.dirname!, '..', '..', '..', 'src', 'components', 'forms', 'utils', 'picker-element.ts'), 'utf8');
 
 const TAG = 'iswc-date-time-input';
 const src = leerComponente(TAG);

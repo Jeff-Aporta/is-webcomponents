@@ -17,7 +17,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = (...p) => join(raiz, 'src', 'components', ...p);
 
 test('context-menu: cierra al scroll por defecto', async () => {
@@ -27,7 +27,7 @@ test('context-menu: cierra al scroll por defecto', async () => {
   // iswc-dropdown. El contrato es el mismo; lo que cambia es dónde se cumple:
   // context-menu.ts aporta el QUÉ (su #onScroll y el modo scroll-lock) y el
   // módulo compartido el CÓMO (capture, overflow hidden).
-  const dismiss = await readFile(src('_shared', 'popup-dismiss.ts'), 'utf8');
+  const dismiss = await readFile(join(raiz, 'src', 'core', 'popup-dismiss.ts'), 'utf8');
 
   assert.match(
     js,

@@ -29,7 +29,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/diagram-astar-rules', async () => {
-  const root = dirname(dirname(fileURLToPath(import.meta.url)));
+  const root = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
   let assertions = 0;
   const check = (cond, msg) => {
     assertions++;

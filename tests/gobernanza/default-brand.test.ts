@@ -8,7 +8,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const root = dirname(dirname(here));
 
 /* El "default brand" es la convención de esta app: cuando un componente
    tiene atributo `color`, el default debe ser 'brand' (color de marca),

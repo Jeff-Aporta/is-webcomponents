@@ -28,7 +28,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/icon-render', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   // Los iconos viven SOLO en dist/assets/icons (src/assets/ se elimino en el
   // refactor de layout CDN; ver el doc-block de _shared/icon-loader.ts).
   const assetsIcons = join(root, 'dist', 'assets', 'icons');

@@ -22,7 +22,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
 
 /** Cada ruta real del lab: su spec resuelto y su layout. */
 async function rutas(): Promise<Array<{ nombre: string; spec: FlowResolvedSpec; L: FlowLayout }>> {

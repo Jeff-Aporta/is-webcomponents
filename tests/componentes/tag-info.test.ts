@@ -8,7 +8,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const root = dirname(dirname(here));
 
 test('iswc-tag declara color="info" en VALID_COLOR', () => {
   const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.ts'), 'utf8');
@@ -27,7 +27,7 @@ test('iswc-tag actualiza doc-block con la colore info', () => {
 });
 
 test('iswc-tag.css define los tokens de color=info', () => {
-  const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
+  const css = readFileSync(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'tag.css'), 'utf8');
   const m = /:host\(\[\s*color\s*=\s*["']info["']\s*\]\)\s*\{([\s\S]*?)\}/m.exec(css);
   assert.ok(m, 'Debe existir el bloque :host([color="info"]) { ... }');
   const block = m[1];
@@ -41,7 +41,7 @@ test('iswc-tag.css define los tokens de color=info', () => {
 });
 
 test('iswc-tag.css NO anida selectores con atributos del host dentro de :host', () => {
-  const css = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.css'), 'utf8');
+  const css = readFileSync(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'tag.css'), 'utf8');
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en tag.css');
   const start = css.indexOf('{', idx);
@@ -73,7 +73,7 @@ test('iswc-tag.css NO anida selectores con atributos del host dentro de :host', 
 });
 
 test('callout.css NO anida selectores con atributos del host dentro de :host', () => {
-  const css = readFileSync(join(root, 'src', 'components', 'layout', 'callout.css'), 'utf8');
+  const css = readFileSync(join(root, '.tmp-scss', 'src', 'components', 'layout', 'callout.css'), 'utf8');
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en callout.css');
   const start = css.indexOf('{', idx);
@@ -105,7 +105,7 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
 });
 
 test('Las 3 paletas definen --iswc-color-info', () => {
-  const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
+  const css = readFileSync(join(root, '.tmp-scss', 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
     const re = new RegExp(`\\[data-palette=["']${pal}["']\\][\\s\\S]*?--iswc-color-info\\s*:`);
     assert.ok(re.test(css), `La paleta "${pal}" debe definir --iswc-color-info`);
@@ -113,7 +113,7 @@ test('Las 3 paletas definen --iswc-color-info', () => {
 });
 
 test('Las 3 paletas definen la rampa relativa completa de info', () => {
-  const css = readFileSync(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
+  const css = readFileSync(join(root, '.tmp-scss', 'src', 'styles', 'palettes.css'), 'utf8');
   for (const pal of ['insoft', 'contapyme', 'agrowin']) {
     const re = new RegExp(`\\[data-palette=["']${pal}["']\\]([\\s\\S]*?)\\}`, 'm');
     const blockMatch = re.exec(css);

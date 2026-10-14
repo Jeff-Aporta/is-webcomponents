@@ -26,7 +26,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '../../../..');
+const root = join(here, '../..');
 
 const IS_BASE = join(root, 'src', 'styles', 'is-base.scss');
 const css = readFileSync(IS_BASE, 'utf8');

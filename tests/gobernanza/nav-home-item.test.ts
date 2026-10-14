@@ -25,7 +25,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/nav-home-item', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
 
   const index = await readFile(join(root, 'index.html'), 'utf8');
   const galleryApp = await readFile(join(root, 'src', 'app', 'app.ts'), 'utf8');

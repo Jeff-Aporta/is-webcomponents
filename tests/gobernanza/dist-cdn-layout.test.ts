@@ -14,7 +14,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/dist-cdn-layout', async () => {
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
   const dist = join(root, 'dist');
   const failures = [];
   

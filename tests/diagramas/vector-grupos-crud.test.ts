@@ -20,7 +20,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas', import.meta.url);
+const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
 type Caja = { x: number; y: number; w: number; h: number };
 const dentro = (n: Caja, c: Caja): boolean => n.x >= c.x && n.y >= c.y && n.x + n.w <= c.x + c.w && n.y + n.h <= c.y + c.h;
 const toca = (n: Caja, c: Caja): boolean => n.x < c.x + c.w && c.x < n.x + n.w && n.y < c.y + c.h && c.y < n.y + n.h;

@@ -12,7 +12,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 test('existe skill is-cdn-install en fuente', async () => {
   const skill = join(raiz, 'skills/is-cdn-install/SKILL.md');

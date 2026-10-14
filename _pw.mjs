@@ -1,0 +1,13 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch();
+const p = await b.newPage();
+const errs = [];
+p.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+p.on('pageerror', (e) => errs.push('PAGEERROR ' + e.message));
+p.on('requestfailed', (r) => errs.push('FAIL ' + r.url()));
+p.on('response', (r) => { if (r.status() >= 400) errs.push(r.status() + ' ' + r.url()); });
+await p.goto('http://localhost:8399/', { waitUntil: 'load' });
+await p.waitForTimeout(6000);
+console.log('ready=', await p.evaluate(() => document.querySelector('iswc-doc-demo')?.getAttribute('data-ready')));
+console.log(errs.slice(0, 15).join('\n'));
+await b.close();

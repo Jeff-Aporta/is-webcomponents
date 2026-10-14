@@ -21,7 +21,7 @@ test('diagramas/usecase-swimlane-journey', async () => {
   
   const ucSpec = resolveUseCaseSpec({
     useCase: {
-      system: { name: 'Portal' },
+      system: { name: 'usecase-swimlane-journey: Portal' },
       actors: [
         { id: 'qa', label: 'QA', side: 'left' },
         { id: 'ing', label: 'Ingeniería', side: 'right' },
@@ -116,7 +116,7 @@ test('diagramas/usecase-swimlane-journey', async () => {
   
   const jnSpec = resolveJourneySpec({
     journey: {
-      phases: [{ id: 'in', name: 'Entrada' }, { id: 'out', name: 'Salida' }],
+      phases: [{ id: 'in', name: 'usecase-swimlane-journey: Entrada' }, { id: 'out', name: 'Salida' }],
       steps: [
         { id: 's1', phase: 'in', label: 'Graba', score: 5 },
         { id: 's2', phase: 'in', label: 'Sube', score: 9 },      // fuera de escala: se recorta

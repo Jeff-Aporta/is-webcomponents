@@ -29,7 +29,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/scrollspy-fallback', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(here);
+  const root = dirname(dirname(here));
   
   const src = readFileSync(
     join(root, 'src', 'components', 'layout', 'scrollspy.ts'),

@@ -20,7 +20,7 @@ const denoTest = denoTestCon(test);
 denoTest('flujo: S1 clases — herencia y realización al revés; S3 reverse lo invierte', () => {
   assertEquals(['inheritance', 'realization', 'association', 'dependency', 'composition'].map(sentidoFlujoClase), [true, true, false, false, false]);
   const L = computeClassLayout(resolveClassSpec({
-    classes: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }, { id: 'c', name: 'C' }],
+    classes: [{ id: 'a', name: 'flow-anim-sentido: A' }, { id: 'b', name: 'flow-anim-sentido: B' }, { id: 'c', name: 'flow-anim-sentido: C' }],
     relations: [{ id: 'h', from: 'b', to: 'a', kind: 'inheritance' }, { id: 'u', from: 'a', to: 'c', kind: 'dependency', reverse: true }],
   }));
   const rev = new Map(L.edges.map((e) => [e.id, !!e.reverse]));
@@ -45,7 +45,7 @@ denoTest('flujo: S2 DER — de N a 1, y en 1:1 del opcional al obligatorio; S3 r
 
 denoTest('flujo: S3 componentes y secuencia llevan el reverse de su arista', () => {
   const C = computeComponentLayout(resolveComponentSpec({
-    components: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }],
+    components: [{ id: 'a', name: 'flow-anim-sentido: A' }, { id: 'b', name: 'flow-anim-sentido: B' }],
     links: [{ id: 'l', from: 'a', to: 'b', reverse: true }],
   }));
   assertEquals(C.edges.find((e) => e.id === 'l')?.reverse, true);

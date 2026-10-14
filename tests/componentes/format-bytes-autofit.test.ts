@@ -11,7 +11,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 test('iswc-format-bytes declara autofit (unidad ≥ 1)', () => {
   const src = readFileSync(join(root, 'src/components/helpers/format-bytes.ts'), 'utf8');

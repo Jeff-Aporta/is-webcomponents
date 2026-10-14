@@ -23,7 +23,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('diagramas/er-features', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const repoRoot = join(here, '..', '..', '..');
+  const repoRoot = join(here, '..', '..');
 
   /* ─────────────────────── 1. Iconos PK/FK ─────────────────────── */
 
@@ -51,7 +51,7 @@ test('diagramas/er-features', async () => {
   // viejo `<text>PK</text>`. Verificamos el source del componente (estático):
   // cualquier reescritura que vuelva a texto rompería el contrato visual.
   {
-    const erSrc = readFileSync(join(here, 'er-diagram.ts'), 'utf8');
+    const erSrc = readFileSync(join(here, '..', '..', 'src', 'components', 'diagrams', 'er-diagram.ts'), 'utf8');
     // svgIconGroup está importado y referenciado.
     assert.match(erSrc, /import\s*\{[^}]*svgIconGroup[^}]*\}\s*from\s*['"][^'"]*tk-icon-inline/, 'er-diagram.ts debe importar svgIconGroup');
     assert.match(erSrc, /svgIconGroup\s*\(\s*iconId/, 'er-diagram.ts debe invocar svgIconGroup para los marcadores PK/FK');
@@ -68,8 +68,8 @@ test('diagramas/er-features', async () => {
     const spec = resolveErSpec({
       erDiagram: {
         entities: [
-          { id: 'A', name: 'A', attributes: [
-            { name: 'id', key: 'PK' },
+          { id: 'A', name: 'er-features: A', attributes: [
+            { name: 'er-features: id', key: 'PK' },
             { name: 'other', type: 'int' },
             { name: 'fk_a', key: 'FK' },
           ] },
@@ -101,10 +101,10 @@ test('diagramas/er-features', async () => {
           { id: 'right', name: 'Right' },
         ],
         entities: [
-          { id: 'L1', name: 'L1', group: 'left', attributes: [{ name: 'id', key: 'PK' }] },
-          { id: 'L2', name: 'L2', group: 'left', attributes: [{ name: 'id', key: 'PK' }] },
-          { id: 'R1', name: 'R1', group: 'right', attributes: [{ name: 'id', key: 'PK' }] },
-          { id: 'R2', name: 'R2', group: 'right', attributes: [{ name: 'id', key: 'PK' }] },
+          { id: 'L1', name: 'L1', group: 'left', attributes: [{ name: 'er-features: id', key: 'PK' }] },
+          { id: 'L2', name: 'L2', group: 'left', attributes: [{ name: 'er-features: id', key: 'PK' }] },
+          { id: 'R1', name: 'R1', group: 'right', attributes: [{ name: 'er-features: id', key: 'PK' }] },
+          { id: 'R2', name: 'R2', group: 'right', attributes: [{ name: 'er-features: id', key: 'PK' }] },
         ],
         relations: [
           { from: 'L1', to: 'R1', fromCard: 'one', toCard: 'many', identifying: true },
@@ -148,8 +148,8 @@ test('diagramas/er-features', async () => {
           { id: 'bottom', name: 'Bottom' },
         ],
         entities: [
-          { id: 'A', name: 'A', group: 'top', attributes: [{ name: 'id', key: 'PK' }] },
-          { id: 'B', name: 'B', group: 'bottom', attributes: [{ name: 'id', key: 'PK' }] },
+          { id: 'A', name: 'er-features: A', group: 'top', attributes: [{ name: 'er-features: id', key: 'PK' }] },
+          { id: 'B', name: 'er-features: B', group: 'bottom', attributes: [{ name: 'er-features: id', key: 'PK' }] },
         ],
         relations: [
           { from: 'A', to: 'B', fromCard: 'one', toCard: 'many', identifying: true },
@@ -173,11 +173,11 @@ test('diagramas/er-features', async () => {
     const spec = resolveErSpec({
       erDiagram: {
         groups: [
-          { id: 'a', name: 'A' },
-          { id: 'b', name: 'B' },
+          { id: 'a', name: 'er-features: A' },
+          { id: 'b', name: 'er-features: B' },
         ],
         entities: [
-          { id: 'x', name: 'X', group: 'a', attributes: [{ name: 'id', key: 'PK' }] },
+          { id: 'x', name: 'X', group: 'a', attributes: [{ name: 'er-features: id', key: 'PK' }] },
         ],
         relations: [],
       },
@@ -196,8 +196,8 @@ test('diagramas/er-features', async () => {
           { id: 'inner', name: 'Inner', parent: 'outer' },
         ],
         entities: [
-          { id: 'A', name: 'A', group: 'outer', attributes: [{ name: 'id', key: 'PK' }] },
-          { id: 'B', name: 'B', group: 'inner', attributes: [{ name: 'id', key: 'PK' }] },
+          { id: 'A', name: 'er-features: A', group: 'outer', attributes: [{ name: 'er-features: id', key: 'PK' }] },
+          { id: 'B', name: 'er-features: B', group: 'inner', attributes: [{ name: 'er-features: id', key: 'PK' }] },
         ],
         relations: [],
       },
@@ -251,11 +251,11 @@ test('diagramas/er-features', async () => {
     const spec = resolveErSpec({
       erDiagram: {
         groups: [
-          { id: 'a', name: 'A', parent: 'b' },
-          { id: 'b', name: 'B', parent: 'a' },
+          { id: 'a', name: 'er-features: A', parent: 'b' },
+          { id: 'b', name: 'er-features: B', parent: 'a' },
         ],
         entities: [
-          { id: 'x', name: 'X', group: 'a', attributes: [{ name: 'id', key: 'PK' }] },
+          { id: 'x', name: 'X', group: 'a', attributes: [{ name: 'er-features: id', key: 'PK' }] },
         ],
         relations: [],
       },
@@ -284,7 +284,7 @@ test('diagramas/er-features', async () => {
           { id: 'g', name: 'G', parent: 'fantasma' },
         ],
         entities: [
-          { id: 'x', name: 'X', group: 'g', attributes: [{ name: 'id', key: 'PK' }] },
+          { id: 'x', name: 'X', group: 'g', attributes: [{ name: 'er-features: id', key: 'PK' }] },
         ],
         relations: [],
       },
@@ -305,14 +305,14 @@ test('diagramas/er-features', async () => {
     const spec = resolveErSpec({
       erDiagram: {
         groups: [
-          { id: 'a', name: 'A' },
-          { id: 'b', name: 'B', parent: 'a' },
-          { id: 'c', name: 'C', parent: 'b' },
+          { id: 'a', name: 'er-features: A' },
+          { id: 'b', name: 'er-features: B', parent: 'a' },
+          { id: 'c', name: 'er-features: C', parent: 'b' },
         ],
         entities: [
-          { id: 'ea', name: 'EA', group: 'a', attributes: [{ name: 'id', key: 'PK' }] },
-          { id: 'eb', name: 'EB', group: 'b', attributes: [{ name: 'id', key: 'PK' }] },
-          { id: 'ec', name: 'EC', group: 'c', attributes: [{ name: 'id', key: 'PK' }] },
+          { id: 'ea', name: 'EA', group: 'a', attributes: [{ name: 'er-features: id', key: 'PK' }] },
+          { id: 'eb', name: 'EB', group: 'b', attributes: [{ name: 'er-features: id', key: 'PK' }] },
+          { id: 'ec', name: 'EC', group: 'c', attributes: [{ name: 'er-features: id', key: 'PK' }] },
         ],
         relations: [],
       },

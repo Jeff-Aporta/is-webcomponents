@@ -25,14 +25,14 @@ const DER = {
   erDiagram: {
     entities: [
       { name: 'patyia_conversaciones', attributes: [{ name: 'iconversacion', type: 'bigint' }, { name: 'titulo', type: 'varchar' }] },
-      { name: 'patyia_errores', attributes: [{ name: 'ierror', type: 'bigint' }] },
+      { name: 'obj: patyia_errores', attributes: [{ name: 'obj: ierror', type: 'bigint' }] },
     ],
   },
 };
 
 denoTest('obj: Q1 get con claves, comodín y selector', () => {
   assertEquals(Obj.get({ a: 1, b: { c: 2, d: 3 } }, { b: { c: true } }), { b: { c: 2 } });
-  assertEquals(Obj.get(DER, { erDiagram: { entities: { '*': { name: 1 } } } }), { erDiagram: { entities: [{ name: 'patyia_conversaciones' }, { name: 'patyia_errores' }] } });
+  assertEquals(Obj.get(DER, { erDiagram: { entities: { '*': { name: 1 } } } }), { erDiagram: { entities: [{ name: 'patyia_conversaciones' }, { name: 'obj: patyia_errores' }] } });
   assertEquals(Obj.get(DER, { erDiagram: { entities: { '[name=patyia_errores]': true } } }), { erDiagram: { entities: [DER.erDiagram.entities[1]] } });
   assertEquals(Obj.get({ a: 1, b: 2 }, { a: true, b: false }), { a: 1 }, 'falsy no se pide');
 });

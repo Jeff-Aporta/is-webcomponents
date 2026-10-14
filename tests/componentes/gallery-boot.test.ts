@@ -16,7 +16,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const read = (rel: string) => readFileSync(join(root, rel), 'utf8');
 const indexHtml = read('index.html');
 const loaderTs = read('src/cdn/loader.ts');
@@ -64,7 +64,7 @@ test('boot ESM + host module fuentes', () => {
   assert.match(docDemoTs, /defineElement\s*\(\s*['"]iswc-doc-demo['"]/);
   assert.match(docDemoTs, /id=["']shellNav["']/);
   assert.match(docDemoTs, /id=["']previewHost["']/);
-  assert.match(read('src/components/layout/doc-demo.css'), /display:\s*contents/);
+  assert.match(read('.tmp-scss/src/components/layout/doc-demo.css'), /display:\s*contents/);
 });
 
 test('loader: pageModules classic vs module', () => {

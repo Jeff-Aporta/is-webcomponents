@@ -29,7 +29,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/attr-enums', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   /** Atributos que son enums cerrados. Ampliar con cuidado. */
   const ENUM_ATTRS = new Set([
@@ -170,7 +170,7 @@ test('componentes/attr-enums', async () => {
   // Regresión concreta: `ghost` existe de verdad en iswc-button (CSS + JSDoc).
   // Si alguien lo quita del CSS pero lo deja en el JSDoc, el test de arriba deja
   // de proteger y las previews que lo usan se rompen en silencio.
-  const buttonCss = await readFile(join(root, 'src/components/actions/button.css'), 'utf8');
+  const buttonCss = await readFile(join(root, '.tmp-scss/src/components/actions/button.css'), 'utf8');
   const buttonJs = await readFile(join(root, 'src/components/actions/button.ts'), 'utf8');
   if (/variant\s+[^\n]*\bghost\b/.test(buttonJs)) {
     assert.match(

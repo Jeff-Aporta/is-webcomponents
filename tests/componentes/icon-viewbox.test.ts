@@ -28,7 +28,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/icon-viewbox', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   const assetsIcons = join(root, 'src', 'assets', 'icons');
   
   const readJson = async (f) => JSON.parse(await readFile(join(assetsIcons, f), 'utf8'));

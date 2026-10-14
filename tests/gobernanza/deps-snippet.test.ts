@@ -14,7 +14,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/deps-snippet', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const csJs = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.ts'), 'utf8');
   const prevJson = await readFile(join(root, 'src', 'components', 'feedback', 'cdn-snippet.json'), 'utf8');

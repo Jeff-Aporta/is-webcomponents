@@ -14,7 +14,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 const CDN = join(RAIZ, 'dist', 'cdn');
 /** Marca del runtime de Zod minificado (no aparece en código que solo lo importa). */
 const MARCA_ZOD = 'Invalid input';

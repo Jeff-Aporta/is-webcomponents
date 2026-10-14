@@ -33,9 +33,9 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 // Fixtures: payloads de flujo estables (copias de los primeros labs), independientes de lo que el lab regenere.
-const LAB = join(ROOT, 'src', 'utils', 'health', 'diagrams', 'fixtures');
+const LAB = join(ROOT, 'tests', '_shared', 'fixtures');
 const labPayload = (slug: string): unknown => JSON.parse(readFileSync(join(LAB, `${slug}.json`), 'utf8')).payload;
 
 type Caja = { x: number; y: number; w: number; h: number };
@@ -167,7 +167,7 @@ denoTest('kind: contrato de nested / tableder / component y kinds inválidos', (
   assertEquals(nested?.maxH, 80);
   assertEquals(readNodeEmbed({ kind: 'otro' }), undefined);
   assertEquals(readNodeEmbed({ kind: 'nested', diagram: { tag: 'div', payload: {} } }), undefined, 'tag fuera del kit');
-  const t = embedDiagramOf(readNodeEmbed({ kind: 'tableder', table: { name: 't1', attributes: [{ name: 'id', type: 'int' }] } })!);
+  const t = embedDiagramOf(readNodeEmbed({ kind: 'tableder', table: { name: 't1', attributes: [{ name: 'flowchart-insoft: id', type: 'int' }] } })!);
   assertEquals(t?.tag, 'iswc-er-diagram');
   assertEquals(JSON.stringify(t?.payload).includes('"orphans":false'), true, 'la tabla suelta no se pinta como huérfana');
   const c = embedDiagramOf(readNodeEmbed({ kind: 'component', component: { name: 'API' } })!);

@@ -12,7 +12,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 test('cdn-ref declara jsDelivr + GitHub Pages', async () => {
   const src = await readFile(join(raiz, 'src/core/cdn-ref.ts'), 'utf8');

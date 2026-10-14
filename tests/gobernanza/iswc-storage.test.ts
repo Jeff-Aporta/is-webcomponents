@@ -53,7 +53,7 @@ instalar(local, session);
 const { clearIswcStorage, listIswcKeys, readIswc, registerMemoryCache, writeIswc, migrateIswcStorage } = await import('../../src/core/iswc-storage.ts');
 
 denoTest('iswc-storage: S1 ningún módulo del kit escribe storage sin pasar por writeIswc (prefijo iswc:)', () => {
-  const raiz = join(import.meta.dirname!, '..', '..', '..');
+  const raiz = join(import.meta.dirname!, '..');
   const malos: string[] = [];
   const visitar = (d: string) => {
     for (const n of readdirSync(d)) {
@@ -102,7 +102,7 @@ denoTest('iswc-storage: S2 listar y limpiar todo lo iswc: (más la memoria)', ()
 });
 
 denoTest('iswc-storage: S4 <iswc-prefs-clear> limpia con clearIswcStorage', () => {
-  const fuente = readFileSync(join(import.meta.dirname!, '..', '..', '..', 'components', 'feedback', 'prefs-clear.ts'), 'utf8');
+  const fuente = readFileSync(join(import.meta.dirname!, '..', '..', 'src', 'components', 'feedback', 'prefs-clear.ts'), 'utf8');
   assert(/import \{[^}]*\bclearIswcStorage\b[^}]*\} from '\.\.\/\.\.\/core\/iswc-storage\.js'/.test(fuente), 'importa clearIswcStorage');
   const run = fuente.slice(fuente.indexOf('async #run()'));
   assert(/clearIswcStorage\(\)/.test(run), '#run llama a clearIswcStorage()');

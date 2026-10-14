@@ -13,7 +13,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 const manifest = readFileSync(join(RAIZ, 'src', 'manifest.ts'), 'utf8');
 const skill = readFileSync(join(RAIZ, 'skills', 'iswc-root', 'SKILL.md'), 'utf8');
 /** Tags del manifest con su categoría, en orden de aparición. */

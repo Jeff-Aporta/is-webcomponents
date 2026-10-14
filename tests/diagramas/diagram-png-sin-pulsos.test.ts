@@ -21,7 +21,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
+const RAIZ = fileURLToPath(new URL('./', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 
 /** Un fin ⦿, una reunión de ramas ⦿, un consumo `-(O-` de tabla y rieles continuos con puntos. */

@@ -24,7 +24,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const NARANJA_DER = '#F4B67B';
 
 type Caja = { x: number; y: number; w: number; h: number };
@@ -105,7 +105,7 @@ const capas = (extra: Record<string, unknown> = {}) => resolveComponentSpec({
     ],
     components: [
       { id: 'x', name: 'Directo', package: 'a', w: 180, h: 56 },
-      { id: 'p', name: 'P', package: 'a1', w: 180, h: 56 },
+      { id: 'p', name: 'diagram-styles-layout: P', package: 'a1', w: 180, h: 56 },
       { id: 'q1', name: 'Q1', package: 'a2', w: 180, h: 56 },
       { id: 'q2', name: 'Q2', package: 'a2', w: 180, h: 56 },
       { id: 'q3', name: 'Q3', package: 'a2', w: 180, h: 56 },
@@ -151,10 +151,10 @@ denoTest('defaults: sin w el componente ajusta su ancho al contenido; sin x/y y 
   const spec = resolveComponentSpec({
     componentDiagram: {
       components: [
-        { id: 'a', name: 'A', items: ['GET /ruta/muy/larga/para/probar/el/ancho'] },
-        { id: 'b', name: 'B' },
-        { id: 'c', name: 'C' },
-        { id: 'd', name: 'D' },
+        { id: 'a', name: 'diagram-styles-layout: A', items: ['GET /ruta/muy/larga/para/probar/el/ancho'] },
+        { id: 'b', name: 'diagram-styles-layout: B' },
+        { id: 'c', name: 'diagram-styles-layout: C' },
+        { id: 'd', name: 'diagram-styles-layout: D' },
       ],
       links: [{ from: 'a', to: 'b' }, { from: 'a', to: 'c' }, { from: 'b', to: 'd' }, { from: 'c', to: 'd' }],
     },

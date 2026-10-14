@@ -10,7 +10,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const loader = readFileSync(join(root, 'src/core/icon-loader.ts'), 'utf8');
 const preview = readFileSync(join(root, 'src/components/layout/preview-component.ts'), 'utf8');
 

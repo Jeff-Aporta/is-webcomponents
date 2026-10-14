@@ -15,7 +15,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/preview-json-contract', async () => {
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
   const previews = join(root, 'src', 'previews');
   // Consolidación 2026-09-07: los paths del catalog ahora son relativos a src/
   // ("./home.json" → src/previews/home.json; "../components/x.json" → src/components/x.json;

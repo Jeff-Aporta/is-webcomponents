@@ -25,7 +25,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
+const RAIZ = fileURLToPath(new URL('./', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 const CLASES_PNG = 'labs/iss-ayudascpia-clases/out/clases.png';
 const ESCALA = 2;

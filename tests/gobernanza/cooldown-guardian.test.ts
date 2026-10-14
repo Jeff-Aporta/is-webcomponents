@@ -19,7 +19,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const denoTest = denoTestCon(test);
 
 
-const KIT = join(import.meta.dirname!, '..', '..', '..', '..');
+const KIT = join(import.meta.dirname!, '..', '..');
 const ESTE = relative(KIT, import.meta.filename!).replaceAll('\\', '/');
 /** Módulos del sistema de cooldown: importar cualquiera de ellos es "entrar al cooldown". */
 const COOLDOWN = /from\s+['"][^'"]*\/(?:deno-test|test-cooldown|pruebas)\.(?:ts|js|mjs)['"]/;

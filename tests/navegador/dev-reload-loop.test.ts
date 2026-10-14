@@ -21,7 +21,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const repo = dirname(here);
+const repo = dirname(dirname(here));
 const scriptPath = join(repo, 'scripts', 'dev-reload.js');
 
 test('dev-reload: interval por defecto >= 3000ms (era 1500ms)', async () => {

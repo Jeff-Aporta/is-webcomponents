@@ -18,19 +18,19 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const __dirname = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const read = (...p) => readFileSync(join(__dirname, '..', ...p), 'utf8');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const read = (...p) => readFileSync(join(__dirname, '..', '..', ...p), 'utf8');
 
-const drawerCss = read('src', 'components', 'layout', 'drawer.css');
+const drawerCss = read('.tmp-scss', 'src', 'components', 'layout', 'drawer.css');
 const drawerJs = read('src', 'components', 'layout', 'drawer.ts');
 // `iswc-drawer` extiende ModalBase: el ciclo de apertura/cierre vive ahí.
-const modalBaseJs = read('src', 'components', '_shared', 'modal-base.ts');
+const modalBaseJs = read('src', 'components', 'layout', 'utils', 'modal-base.ts');
 const splitJs = read('src', 'components', 'layout', 'split-panel.ts');
-const splitCss = read('src', 'components', 'layout', 'split-panel.css');
+const splitCss = read('.tmp-scss', 'src', 'components', 'layout', 'split-panel.css');
 const previewJs = read('src', 'components', 'layout', 'preview-component.ts');
-const previewCss = read('src', 'components', 'layout', 'preview-component.css');
+const previewCss = read('.tmp-scss', 'src', 'components', 'layout', 'preview-component.css');
 const indexHtml = read('index.html');
-const shellCss = read('src', 'styles', 'shell.css');
+const shellCss = read('.tmp-scss', 'src', 'styles', 'shell.css');
 
 const PLACEMENTS = ['start', 'end', 'top', 'bottom'];
 

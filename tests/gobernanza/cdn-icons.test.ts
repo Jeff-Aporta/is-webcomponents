@@ -18,7 +18,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/cdn-icons', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   // PORT del dev server del kit (no del DSH web). Para que este test se
   // ejecute, hay que pasar PORT=8391 explícito o levantar `scripts/serve.mjs 8391`.

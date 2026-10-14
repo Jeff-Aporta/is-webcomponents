@@ -33,7 +33,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/w29-shape-icons', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(here);
+  const root = dirname(dirname(here));
   const COMPONENTS_ROOT = join(root, 'src', 'components');
   const SHARED = join(COMPONENTS_ROOT, '_shared');
   

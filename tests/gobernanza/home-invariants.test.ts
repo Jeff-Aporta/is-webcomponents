@@ -16,7 +16,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const __dirname = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const __dirname = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'src');
 const homePath = join(__dirname, 'pages', 'home.json');
 const homeBeh = join(__dirname, 'pages', 'home.ts');
 const homeDef = JSON.parse(readFileSync(homePath, 'utf8'));
@@ -250,8 +250,8 @@ test('la definición declara los envoltorios de página (wrapper + main)', () =>
 
 test('home no reserva el panel TOC a la derecha', () => {
   assert.equal(homeDef.withoutToc, true, 'withoutToc debe colapsar el índice en el hero');
-  const renderSrc = readFileSync(join(__dirname, '..', 'src/previews/_kit/render.ts'), 'utf8');
-  const previewSrc = readFileSync(join(__dirname, '..', 'src/components/layout/preview-component.ts'), 'utf8');
+  const renderSrc = readFileSync(join(__dirname, 'previews/_kit/render.ts'), 'utf8');
+  const previewSrc = readFileSync(join(__dirname, 'components/layout/preview-component.ts'), 'utf8');
   assert.ok(/def\.withoutToc/.test(renderSrc), 'renderDefinition debe respetar withoutToc');
   assert.ok(/withoutToc/.test(previewSrc) && /dataset\.layout = 'full'/.test(previewSrc),
     'iswc-preview-component debe colapsar el end cuando withoutToc');

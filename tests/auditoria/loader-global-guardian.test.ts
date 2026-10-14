@@ -24,7 +24,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(new URL(import.meta.url).pathname.replace(/^\//, ''), '..', '..', '..', '..', '..');
+const RAIZ = join(new URL(import.meta.url).pathname.replace(/^\//, ''), '..', '..', '..');
 const LOADER_TS = join(RAIZ, 'src', 'cdn', 'loader.ts');
 
 test('loader.ts: el guardado `!globalThis.iswcLoader` sigue presente', () => {

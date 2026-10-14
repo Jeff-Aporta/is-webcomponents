@@ -12,7 +12,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 const BASE = join(RAIZ, 'src', 'components', 'data', 'meta-list');
 
 test('iswc-meta-list: .ts + .scss + .md + .json hermanos y manifest', () => {

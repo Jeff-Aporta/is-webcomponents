@@ -15,7 +15,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 
 async function* walk(dir: string): AsyncGenerator<string> {
   for (const entry of await readdir(dir, { withFileTypes: true })) {

@@ -53,11 +53,11 @@ test('diagramas/diagram-edge-actors', async () => {
     componentDiagram: {
       components: [
         {
-          id: 'a', name: 'Portal', x: 20, y: 40, w: 160, h: 70,
+          id: 'a', name: 'diagram-edge-actors: Portal', x: 20, y: 40, w: 160, h: 70,
           items: ['GET /api/iswc-swagger'],
         },
         {
-          id: 'b', name: 'auth', x: 360, y: 40, w: 220, h: 90,
+          id: 'b', name: 'diagram-edge-actors: auth', x: 360, y: 40, w: 220, h: 90,
           items: ['POST /api/jwt', 'POST /api/auth/portal-login'],
         },
       ],

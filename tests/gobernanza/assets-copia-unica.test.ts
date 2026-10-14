@@ -25,7 +25,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const assets = join(root, 'dist', 'assets');
 
 /**

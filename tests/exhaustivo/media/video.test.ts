@@ -14,21 +14,21 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-video';
 const TS  = join(ROOT, 'src', 'components', 'media', 'video.ts');
-const CSS = join(ROOT, 'src', 'components', 'media', 'video.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'media', 'video.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'media', 'video.json');
 
-test('1. módulo existe', async () => {
+test('video: 1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', async () => {
+test('video: 2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', async () => {
+test('video: 3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
@@ -90,7 +90,7 @@ test('11. custom element registrado', async () => {
 });
 
 test('12. preview.ts existe (componente complejo)', async () => {
-  const preview = join(ROOT, 'src', 'components', 'media', 'video.preview.ts');
+  const preview = join(ROOT, 'src', 'components', 'media', 'utils', 'video.preview.ts');
   assert.ok(existsSync(preview));
 });
 

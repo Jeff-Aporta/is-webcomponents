@@ -24,7 +24,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/preview-blocks', async () => {
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
   // Consolidación 2026-09-07: los JSON de preview viven en src/components/** (junto al
   // componente) y las pages en src/pages/. Se escanean ambos (no src/previews/, que solo
   // tiene catalog/registry/_kit).

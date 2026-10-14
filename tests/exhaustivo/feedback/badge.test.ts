@@ -20,11 +20,11 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-badge';
 const TS = 'src/components/feedback/badge.ts';
 const JSON_PATH = join(ROOT, 'src/components/feedback/badge.json');
-const CSS = join(ROOT, 'src/components/feedback/badge.css');
+const CSS = join(ROOT, '.tmp-scss/src/components/feedback/badge.css');
 
 void async function () {
   // Pre-cargar el módulo del componente para que customElements lo registre.

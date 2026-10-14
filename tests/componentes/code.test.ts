@@ -18,12 +18,12 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
 const ct = await import(pathToFileURL(join(root, 'src/core/code-text.ts')).href);
 const typesOf = (tokens) => tokens.map((t) => t.type);
 
-test('normalizeLang mapea alias legacy', () => {
+test('code: normalizeLang mapea alias legacy', () => {
   assert.equal(normalizeLang('htmlmixed'), 'html');
   assert.equal(normalizeLang('js'), 'javascript');
   assert.equal(normalizeLang('ts'), 'typescript');
@@ -36,7 +36,7 @@ test('normalizeLang mapea alias legacy', () => {
   assert.equal(normalizeLang('patata'), 'javascript');
 });
 
-test('javascript: keywords, strings, números, comentarios y operadores', () => {
+test('code: javascript: keywords, strings, números, comentarios y operadores', () => {
   const { lines, lang } = tokenizeCode('const n = 42; // tope\nlet s = "hola";', 'javascript');
   assert.equal(lang, 'javascript');
   assert.equal(lines.length, 2);
@@ -49,7 +49,7 @@ test('javascript: keywords, strings, números, comentarios y operadores', () => 
   assert.equal(tokensToText(lines[0].tokens), 'const n = 42; // tope');
 });
 
-test('javascript: template literal y comentario bloque multilínea cruzan líneas', () => {
+test('code: javascript: template literal y comentario bloque multilínea cruzan líneas', () => {
   const a = tokenizeCode('const t = `linea', 'javascript');
   assert.ok(typesOf(a.lines[0].tokens).includes('string'), 'apertura template = string');
   assert.equal(a.state.template, true, 'el estado guarda el template abierto');
@@ -64,7 +64,7 @@ test('javascript: template literal y comentario bloque multilínea cruzan línea
   assert.equal(d.state.inComment, false);
 });
 
-test('html: tag + atributo + string; regiones script/style tokenizadas como js/css', () => {
+test('code: html: tag + atributo + string; regiones script/style tokenizadas como js/css', () => {
   const { lines } = tokenizeCode('<button class="x" @click="go">OK</button>', 'html');
   const flat = lines.flatMap((l) => l.tokens);
   const types = typesOf(flat);
@@ -80,14 +80,14 @@ test('html: tag + atributo + string; regiones script/style tokenizadas como js/c
   assert.ok(typesOf(css.lines[1].tokens).includes('variable'), 'selector css');
 });
 
-test('css: propiedad, atom y comentario', () => {
+test('code: css: propiedad, atom y comentario', () => {
   const { lines } = tokenizeCode('a {\n  color: red;\n  /* nota */\n}', 'css');
   const t1 = typesOf(lines[1].tokens);
   assert.ok(t1.includes('property') || t1.includes('atom'), 'valor de propiedad');
   assert.ok(typesOf(lines[2].tokens).includes('comment'), 'comentario css');
 });
 
-test('diff: clase de línea por banda y tokens', () => {
+test('code: diff: clase de línea por banda y tokens', () => {
   assert.equal(diffLineClass('@@ -1,3 +1,4 @@'), 'iswc-diff-line-hunk');
   assert.equal(diffLineClass('+hola'), 'iswc-diff-line-add');
   assert.equal(diffLineClass('-chau'), 'iswc-diff-line-del');
@@ -98,13 +98,13 @@ test('diff: clase de línea por banda y tokens', () => {
   assert.equal(lines[2].lineClass, null);
 });
 
-test('shell: comentario y variable', () => {
+test('code: shell: comentario y variable', () => {
   const { lines } = tokenizeCode('#!/bin/sh\nNAME="x"\necho $NAME # nota', 'shell');
   assert.ok(typesOf(lines[0].tokens).includes('comment'), 'shebang = comentario');
   assert.ok(typesOf(lines[2].tokens).includes('atom'), '$NAME variable');
 });
 
-test('seguridad: lineToHtml escapa y reconstruye el texto', () => {
+test('code: seguridad: lineToHtml escapa y reconstruye el texto', () => {
   const { lines } = tokenizeCode('if (a < b && c > "&") { x = 1; }', 'javascript');
   const html = lines.map((l) => lineToHtml(l.tokens)).join('\n');
   assert.ok(!html.includes('<b &&'), 'no debe quedar < crudo');
@@ -112,46 +112,46 @@ test('seguridad: lineToHtml escapa y reconstruye el texto', () => {
   assert.equal(tokensToText(lines[0].tokens), 'if (a < b && c > "&") { x = 1; }');
 });
 
-test('estado vacío no se muta entre llamadas', () => {
+test('code: estado vacío no se muta entre llamadas', () => {
   const st = emptyState();
   tokenizeCode('/* x', 'javascript', st);
   assert.equal(st.inComment, false, 'tokenizeCode clona el estado de entrada');
 });
 
-test('HTML de demos se infiere como html (no javascript)', () => {
+test('code: HTML de demos se infiere como html (no javascript)', () => {
   const snippet = '<iswc-button color="success">Aprobado</iswc-button>\n'
     + '<iswc-button color="danger" variant="outlined">Eliminar</iswc-button>';
   assert.equal(inferLanguage(snippet), 'html');
 });
 
-test('curl se infiere como shell', () => {
+test('code: curl se infiere como shell', () => {
   assert.equal(
     inferLanguage('curl -X PUT \'https://api.example/api/x\' \\\n  -H \'Authorization: Bearer TOKEN\''),
     'shell',
   );
 });
 
-test('JS se sigue infiriendo como javascript', () => {
+test('code: JS se sigue infiriendo como javascript', () => {
   assert.equal(inferLanguage('const x = 1;\nexport function f() {}'), 'javascript');
 });
 
-test('CSS se infiere como css', () => {
+test('code: CSS se infiere como css', () => {
   assert.equal(inferLanguage(':root { --x: 1; }\n.foo { color: red; }'), 'css');
 });
 
-test('softFormat separa tags HTML en líneas', () => {
+test('code: softFormat separa tags HTML en líneas', () => {
   const raw = '<iswc-button color="success">Aprobado</iswc-button> <iswc-button color="danger">X</iswc-button>';
   const out = softFormat(raw, softFormatMode('html'));
   assert.match(out, /\n/);
   assert.match(out, /iswc-button/);
 });
 
-test('alias curl resuelve al lenguaje shell', () => {
+test('code: alias curl resuelve al lenguaje shell', () => {
   assert.equal(resolveLanguage('curl')?.id, 'shell');
   assert.equal(resolveLanguage('bash')?.id, 'shell');
 });
 
-test('formatCode no reescribe un cURL', () => {
+test('code: formatCode no reescribe un cURL', () => {
   const curl = 'curl -X PUT \'https://x/api\' \\\n  -d \'{"a":1}\'';
   assert.equal(formatCode(curl, 'curl'), curl);
   assert.equal(formatCode(curl, 'shell'), curl);
@@ -192,7 +192,7 @@ test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
 });
 
 test('sin cm-error en el docs: el rojo de CodeMirror ya no existe (motor nativo)', () => {
-  const css = readFileSync(join(root, 'src/styles/presentation.css'), 'utf8');
+  const css = readFileSync(join(root, '.tmp-scss/src/styles/presentation.css'), 'utf8');
   assert.doesNotMatch(css, /\.cm-error/);
 });
 

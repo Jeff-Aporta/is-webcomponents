@@ -16,7 +16,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas', import.meta.url);
+const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
 type Caja = { x: number; y: number; w: number; h: number };
 const MARGEN = 4;
 const solapan = (a: Caja, b: Caja): boolean => a.x < b.x + b.w - MARGEN && b.x < a.x + a.w - MARGEN && a.y < b.y + b.h - MARGEN && b.y < a.y + a.h - MARGEN;

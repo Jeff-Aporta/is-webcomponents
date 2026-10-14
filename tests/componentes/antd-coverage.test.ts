@@ -8,9 +8,9 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const root = dirname(dirname(here));
 
-const manifestMod = await import(pathToFileURL(join(root, 'src', 'manifest.js')).href);
+const manifestMod = await import(pathToFileURL(join(root, 'src', 'manifest.ts')).href);
 const manifest = manifestMod.default;
 
 const ourTags = new Set(manifest.map((c) => c.tag));

@@ -22,7 +22,7 @@ import { dirname } from 'node:path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const RAIZ = join(__dirname, '..', '..', '..', '..');
+const RAIZ = join(__dirname, '..', '..');
 
 import { enumerarCatalogo, resumirCatalogo } from '../.audit/motor/catalog.js';
 import { validarEsquema } from '../.audit/motor/validators/json-schema.js';

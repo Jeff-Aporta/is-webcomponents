@@ -29,7 +29,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 // .../src/utils/health/exhaustive/actions/ → raíz del proyecto
-const RAIZ = join(__dirname, '..', '..', '..', '..', '..');
+const RAIZ = join(__dirname, '..', '..', '..');
 
 const TAG = 'iswc-button';
 const RUTA_COMPONENTE = join(RAIZ, 'src/components/actions/button.ts');

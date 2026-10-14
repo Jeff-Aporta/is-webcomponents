@@ -9,17 +9,23 @@
 //   deno task test -- --solo=hash,vendor    # por id
 //
 // category: "how"
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import process from 'node:process';
 import { codigoSalida, correrCarpeta, opcionesDeArgv, resumirReporte } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const raiz = join(import.meta.dirname ?? '.', '..', '..');
+// Un archivo de pruebas puede reemplazar console.log al importarse: el resumen sale por la copia original.
+const escribir = console.log.bind(console);
 const reporte = await correrCarpeta({
   carpeta: join(raiz, 'tests'),
   excluir: ['e2e', '_shared'],
   raiz,
+  log: escribir,
   aislar: { comando: [Deno.execPath(), 'run', '-A', '--no-check'] },
   ...opcionesDeArgv(),
 });
-console.log(resumirReporte(reporte));
+mkdirSync(join(raiz, '.tmp'), { recursive: true });
+writeFileSync(join(raiz, '.tmp', 'tests-reporte.json'), JSON.stringify(reporte, null, 1));
+escribir(resumirReporte(reporte));
 process.exit(codigoSalida(reporte));

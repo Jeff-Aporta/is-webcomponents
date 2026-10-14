@@ -42,7 +42,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 // El motor vive en src/utils/health/motor/. La raíz del proyecto está
 // tres niveles arriba.
-const raizProyecto = resolve(__dirname, '..', '..', '..', '..');
+const raizProyecto = resolve(__dirname, '..', '..', '..');
 
 const ESPECES: ArgSpec[] = [
   { nombre: 'solo', descripcion: 'Tags a auditar (coma-separado)', tipo: 'string' },

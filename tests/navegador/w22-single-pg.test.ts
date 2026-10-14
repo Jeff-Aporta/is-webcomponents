@@ -25,7 +25,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/w22-single-pg', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(here);
+  const root = dirname(dirname(here));
   const COMPONENTS_ROOT = join(root, 'src', 'components');
   
   async function walk(dir, results = []) {

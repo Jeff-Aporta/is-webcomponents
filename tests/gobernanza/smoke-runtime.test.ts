@@ -25,7 +25,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/smoke-runtime', async () => {
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
   const PORT = Number(process.env.SMOKE_PORT) || 8391;
   const URL_SMOKE = `http://localhost:${PORT}/tests/smoke-runtime.html`;
   

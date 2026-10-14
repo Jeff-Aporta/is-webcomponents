@@ -25,7 +25,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/icon-explorer', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   const html = [
     await readFile(join(root, 'src/components/media/icon-explorer.json'), 'utf8'),
     await readFile(join(root, 'src/components/media/utils/icon-explorer.preview.ts'), 'utf8'),

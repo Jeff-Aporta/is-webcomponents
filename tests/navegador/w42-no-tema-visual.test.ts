@@ -43,7 +43,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/w42-no-tema-visual', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(here);
+  const root = dirname(dirname(here));
   const SRC_ROOT = join(root, 'src', 'components');
   const DIST_ROOT = join(root, 'dist', 'previews');
   

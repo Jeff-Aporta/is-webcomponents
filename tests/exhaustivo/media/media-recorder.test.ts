@@ -15,21 +15,21 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-media-recorder';
 const TS  = join(ROOT, 'src', 'components', 'media', 'media-recorder.ts');
-const CSS = join(ROOT, 'src', 'components', 'media', 'media-recorder.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'media', 'media-recorder.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'media', 'media-recorder.json');
 
-test('1. módulo existe', async () => {
+test('media-recorder: 1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', async () => {
+test('media-recorder: 2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', async () => {
+test('media-recorder: 3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json['$schema'], 'iswc-preview/v1');
@@ -91,7 +91,7 @@ test('11. expone parte preview y download', async () => {
   }
 });
 
-test('12. custom element registrado', async () => {
+test('media-recorder: 12. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/customElements\.define\s*\(\s*['"]iswc-media-recorder['"]/.test(src) ||
              /defineElement\s*\(\s*['"]iswc-media-recorder['"]/.test(src));

@@ -500,7 +500,7 @@ denoTest('combinado: U4 abanico: los usos a un mismo destino comparten punta y c
 
 
 denoTest('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se monta sobre otro', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const choques: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -518,7 +518,7 @@ denoTest('etiquetas: E2 en las rutas reales del ISS ningún texto de arista se m
 });
 
 denoTest('combinado: F1 la respuesta desde el fin sale por abajo (no por un costado donde llegan ramas)', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const j = await editable(new URL(f.name, dir));
@@ -533,7 +533,7 @@ denoTest('combinado: F1 la respuesta desde el fin sale por abajo (no por un cost
 });
 
 denoTest('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo un nodo', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const choques: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -551,7 +551,7 @@ denoTest('etiquetas: E3 en las rutas reales ningún texto de arista queda bajo u
 });
 
 denoTest('combinado: U5 en las rutas reales, los usos a un mismo destino y costado llegan a UNA sola punta', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -573,7 +573,7 @@ denoTest('combinado: U5 en las rutas reales, los usos a un mismo destino y costa
 });
 
 denoTest('combinado: D1 en las rutas reales, a un rombo se entra por arriba (sus costados son salidas de rama)', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const malas: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -625,7 +625,7 @@ function crucesDeFlujo(L: FlowLayout): string[] {
 }
 
 denoTest('combinado: X1 en las rutas reales ninguna arista del flujo atraviesa una caja ajena', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -649,7 +649,7 @@ denoTest('combinado: H2 los componentes de un mismo carril tienen un ancho homog
 });
 
 denoTest('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un nodo que no es suyo', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -666,7 +666,7 @@ denoTest('combinado: X2 en las rutas reales ningún recuadro de grupo abraza un 
 });
 
 denoTest('combinado: X3 en las rutas reales ningún riel pasa por encima del título de un grupo', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const malos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
@@ -688,7 +688,7 @@ denoTest('combinado: X3 en las rutas reales ningún riel pasa por encima del tí
 });
 
 denoTest('combinado: X4 en las rutas reales ningún riel corre encima de otro (los que comparten ruta van separados por delta)', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const malos: string[] = [];
   const solapa = (a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }, d: { x: number; y: number }): boolean => {
     if (a.x === b.x && c.x === d.x && Math.abs(a.x - c.x) < 1) return Math.min(Math.max(a.y, b.y), Math.max(c.y, d.y)) - Math.max(Math.min(a.y, b.y), Math.min(c.y, d.y)) > 8;

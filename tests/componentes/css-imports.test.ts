@@ -22,7 +22,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/css-imports', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   const dist = join(root, 'dist', 'cdn');
   
   const failures = [];
@@ -64,9 +64,10 @@ test('componentes/css-imports', async () => {
     }
   }
   
-  // El kit compartido debe emitirse: es el que trae .dg-tooltip posicionado.
-  check(existsSync(join(dist, '_shared', 'diagram-kit.css')),
-    'falta dist/cdn/_shared/diagram-kit.css — charts y diagramas pierden el kit compartido');
+  // El kit compartido (src/core/diagram-kit.scss) va incrustado con @use: el bundle del
+  // diagrama trae .dg-tooltip posicionado sin pedir otro archivo.
+  check(readFileSync(join(dist, 'diagrams', 'flowchart.min.js'), 'utf8').includes('dg-tooltip'),
+    'el bundle de flowchart no trae el kit compartido (.dg-tooltip) — charts y diagramas lo pierden');
   
   if (failures.length) {
     console.log('FAIL:');

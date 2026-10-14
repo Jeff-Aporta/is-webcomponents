@@ -26,7 +26,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const __filename = new URL(import.meta.url).pathname.replace(/^\//, '');
-const RAIZ = join(__filename, '..', '..', '..', '..', '..');
+const RAIZ = join(__filename, '..', '..', '..');
 
 test('JsonPreview preserva las sections del definition (runtime)', () => {
   const definition = {

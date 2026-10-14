@@ -24,7 +24,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
+const RAIZ = fileURLToPath(new URL('./', import.meta.url));
 const BUNDLES = [
   'layout/md-docs-vault', 'layout/doc-layout', 'navigation/doc-index', 'helpers/md-render', 'navigation/pager',
   'media/figure', 'data/meta-list', 'layout/dialog', 'actions/copy-button', 'actions/button',

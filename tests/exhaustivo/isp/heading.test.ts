@@ -14,21 +14,21 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-heading';
 const TS  = join(ROOT, 'src', 'components', 'isp', 'heading.ts');
-const CSS = join(ROOT, 'src', 'components', 'isp', 'heading.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'isp', 'heading.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'heading.json');
 
-test('1. módulo existe', async () => {
+test('heading: 1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', async () => {
+test('heading: 2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', async () => {
+test('heading: 3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
@@ -71,7 +71,7 @@ test('8. extiende ElementBase (cambios de atributo se procesan)', async () => {
   assert.ok(/extends\s+ElementBase/.test(src));
 });
 
-test('9. custom element registrado', async () => {
+test('heading: 9. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(/defineElement\s*\(\s*['"]iswc-heading['"]/.test(src));
 });
@@ -81,7 +81,7 @@ test('10. preview.ts existe', async () => {
   // una ruta relativa robusta. Si no existe, es fail legítimo.
   const { join: pJoin } = await import('node:path');
   const possiblePaths = [
-    pJoin(ROOT, 'src', 'components', 'isp', 'heading.preview.ts'),
+    pJoin(ROOT, 'src', 'components', 'isp', 'utils', 'heading.preview.ts'),
     'src/components/isp/utils/heading.preview.ts',
   ];
   let found = false;

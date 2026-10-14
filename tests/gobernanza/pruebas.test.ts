@@ -19,6 +19,8 @@ import { pathToFileURL } from 'node:url';
 import { archivosDePrueba, codigoSalida, coleccionPruebas, correrPruebas, definirPruebas, esSaltada } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import type { ListaPruebas, Prueba } from '../../src/vendor-distributions/shared/schemas.ts';
 
+const { test, lista } = coleccionPruebas({ categoria: 'how' });
+
 const raiz = mkdtempSync(join(tmpdir(), 'pruebas-'));
 const db = join(raiz, 'cooldown.json');
 const correr = (modulos: Record<string, ListaPruebas | Error>, extra: Partial<Parameters<typeof correrPruebas>[0]> = {}) =>
@@ -215,3 +217,5 @@ test('P9 un rojo se reintenta una vez: intermitente queda verde con aviso; un fa
   }, { sinCooldown: true, reintentos: 0 });
   assert.equal(sin.resultados[0].ok, false, 'reintentos: 0 la deja roja a la primera');
 });
+
+export default lista();

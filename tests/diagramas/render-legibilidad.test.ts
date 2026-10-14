@@ -46,7 +46,7 @@ test('diagramas/render-legibilidad', async () => {
   const anchoMinimo = subtituloLargo.length * 5.5;
   
   const claseAncha = computeClassLayout(resolveClassSpec({
-    classDiagram: { title: tituloLargo, subtitle: subtituloLargo, classes: [{ id: 'c', name: 'A' }] },
+    classDiagram: { title: tituloLargo, subtitle: subtituloLargo, classes: [{ id: 'c', name: 'render-legibilidad: A' }] },
   }));
   assert.ok(claseAncha.width >= anchoMinimo,
     `class: el lienzo (${claseAncha.width}) no cabe el subtítulo (~${Math.round(anchoMinimo)}): se corta en el PNG`);
@@ -111,7 +111,7 @@ test('diagramas/render-legibilidad', async () => {
     'state-diagram.ts', 'swimlane-diagram.ts', 'use-case-diagram.ts',
   ];
   for (const archivo of conChip) {
-    const src = readFileSync(new URL(`./${archivo}`, import.meta.url), 'utf8');
+    const src = readFileSync(new URL(`../../src/components/diagrams/${archivo}`, import.meta.url), 'utf8');
     assert.ok(src.includes('edgeChipFill') || src.includes('edgeChipFromStroke'),
       `${archivo}: el chip de arista debe usar edgeChipFill/edgeChipFromStroke (bg = color arista)`);
   }
@@ -144,7 +144,7 @@ test('diagramas/render-legibilidad', async () => {
   // inexistente deja el avatar vacío (le pasó a simple-icons:openai).
   // Los iconos viven en dist/assets/icons (src/assets ya no existe).
   const { readdirSync, existsSync } = await import('node:fs');
-  const raizIconos = new URL('../../dist/assets/icons', import.meta.url);
+  const raizIconos = new URL('../../dist/assets/icons/', import.meta.url);
   for (const actor of sec.actors) {
     const [prefijo, nombre] = actor.icon.split(':');
     const ruta = new URL(`${prefijo}/${nombre}.svg`, raizIconos);
@@ -179,7 +179,7 @@ test('diagramas/render-legibilidad', async () => {
     'swimlane-spec.ts', 'use-case-spec.ts',
   ];
   for (const archivo of specActors) {
-    const src = readFileSync(new URL(`./${archivo}`, import.meta.url), 'utf8');
+    const src = readFileSync(new URL(`../../src/components/diagrams/${archivo}`, import.meta.url), 'utf8');
     assert.ok(src.includes('applyEdgeActorLayout'),
       `${archivo}: las etiquetas de arista deben colocarse como actores (applyEdgeActorLayout)`);
   }

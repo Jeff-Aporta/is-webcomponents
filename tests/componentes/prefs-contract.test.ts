@@ -25,15 +25,15 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/prefs-contract', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   const failures = [];
   const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-  const prefsPath = join(root, 'src', 'components', '_shared', 'prefs.ts');
+  const prefsPath = join(root, 'src', 'core', 'prefs.ts');
   const agGridPath = join(root, 'src', 'components', 'data', 'ag-grid.ts');
   const agGridMdPath = join(root, 'src', 'components', 'data', 'ag-grid.md');
   const mainPath = join(root, 'src', 'components', 'layout', 'main.ts');
-  const scrollMemoryPath = join(root, 'src', 'components', '_shared', 'scroll-memory.ts');
+  const scrollMemoryPath = join(root, 'src', 'core', 'scroll-memory.ts');
   const splitPath = join(root, 'src', 'components', 'layout', 'split-panel.ts');
   // Consolidación 2026-09-07: data/LLM.md y components/LLM.md eliminados.
   // El catálogo de componentes vive ahora en specs/componentes.md (índice

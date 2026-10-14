@@ -41,7 +41,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/toc-render', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(here);
+  const root = dirname(dirname(here));
   
   const AUDIT_TAGS = [
     'iswc-button',

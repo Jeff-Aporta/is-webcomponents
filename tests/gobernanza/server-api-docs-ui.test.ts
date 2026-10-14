@@ -27,7 +27,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
+const RAIZ = fileURLToPath(new URL('./', import.meta.url));
 const BUNDLE = 'dist/cdn/layout/server-api-docs.min.js';
 
 /** El documento del demo de la ficha (`server-api-docs.json`). */

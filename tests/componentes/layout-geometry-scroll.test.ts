@@ -10,7 +10,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const block = readFileSync(join(ROOT, 'src/components/isp/block-layout.ts'), 'utf8');
 const flex = readFileSync(join(ROOT, 'src/components/isp/flex-layout.ts'), 'utf8');
 const grid = readFileSync(join(ROOT, 'src/components/isp/grid-layout.ts'), 'utf8');
@@ -44,7 +44,7 @@ test('BreakpointHost expone getWidth getHeight rect', () => {
 
 test('flex admite cscroll como block/grid', () => {
   assert.match(flex, /cscroll/);
-  const css = readFileSync(join(ROOT, 'src/components/isp/flex-layout.css'), 'utf8');
+  const css = readFileSync(join(ROOT, '.tmp-scss/src/components/isp/flex-layout.css'), 'utf8');
   assert.match(css, /:host\(\[cscroll\]\)/);
 });
 

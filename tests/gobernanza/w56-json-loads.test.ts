@@ -41,7 +41,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const RAIZ = join(here, '..', '..', '..', '..');
+const RAIZ = join(here, '..', '..');
 const SRC_COMPONENTS = join(RAIZ, 'src', 'components');
 
 /* ──────────────────────────────────────────────────────────────────────────

@@ -26,7 +26,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+const DIR = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
 
 async function rutas(): Promise<Array<{ nombre: string; L: FlowLayout }>> {
   const out: Array<{ nombre: string; L: FlowLayout }> = [];

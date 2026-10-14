@@ -20,7 +20,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = readFileSync(join(root, 'src', 'components', 'actions', 'button.ts'), 'utf8');
 
 const EVENTOS = ['iswc-focus', 'iswc-blur', 'iswc-click', 'iswc-invalid'];

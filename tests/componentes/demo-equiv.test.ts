@@ -11,7 +11,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 test('tipos aún declaran equivHtml / equivNote / equivFlow (opcionales)', async () => {
   const src = await readFile(join(raiz, 'src/previews/_kit/schemas/preview.schemas.ts'), 'utf8');

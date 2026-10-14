@@ -24,7 +24,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/viewer-opt-in', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const walk = (dir, out = []) => {
     for (const name of readdirSync(dir)) {

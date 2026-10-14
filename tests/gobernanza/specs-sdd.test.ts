@@ -18,7 +18,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const denoTest = denoTestCon(test);
 
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const SPECS = join(ROOT, 'specs');
 const md = (dir: string): string[] => readdirSync(dir).flatMap((f) => {
   const p = join(dir, f);

@@ -11,7 +11,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 const catalogo = readFileSync(join(RAIZ, 'skills', 'iswc-root', 'catalog.md'), 'utf8');
 const manifest = readFileSync(join(RAIZ, 'src', 'manifest.ts'), 'utf8');
 const tags = [...new Set([...manifest.matchAll(/tag:\s*'(iswc-[a-z0-9-]+)'/g)].map((m) => m[1]))];

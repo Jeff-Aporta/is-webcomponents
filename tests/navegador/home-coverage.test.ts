@@ -35,7 +35,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/home-coverage', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(here);
+  const root = dirname(dirname(here));
   const MANIFEST_PATH = join(root, 'src', 'manifest.ts');
   const HOME_URL = 'http://localhost:8391/';
 

@@ -7,8 +7,8 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/file-preview', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
-  const shared = join(root, 'src/components/files/_shared').replace(/\\/g, '/');
+  const root = dirname(dirname(here));
+  const shared = join(root, 'src/components/files/utils').replace(/\\/g, '/');
   
   const { resolveFileSource } = await import(`file:///${shared}/file-source.ts`);
   const { resolveDispatch, resolveFileKind, extOf } = await import(`file:///${shared}/mime-map.ts`);

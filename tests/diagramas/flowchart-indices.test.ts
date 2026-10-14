@@ -99,7 +99,7 @@ denoTest('índices: I8 las entidades de la entrada no llevan número', () => {
     steps: 'auto',
     nodes: [
       { id: 'cli', kind: 'class', label: 'TClient', class: { name: 'TClient' } },
-      { id: 'api', kind: 'component', label: 'api', component: { name: 'api' } },
+      { id: 'api', kind: 'component', label: 'api', component: { name: 'flowchart-indices: api' } },
       { id: 'ctl', kind: 'class', label: 'TCtl', class: { name: 'TCtl' } },
       { id: 'a', label: 'a' },
       { id: 'b', label: 'b' },
@@ -111,7 +111,7 @@ denoTest('índices: I8 las entidades de la entrada no llevan número', () => {
 });
 
 denoTest('índices: I9 sin huecos en ningún nivel (rutas reales)', async () => {
-  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads', import.meta.url);
+  const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   const huecos: string[] = [];
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;

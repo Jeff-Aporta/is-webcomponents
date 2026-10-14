@@ -33,7 +33,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const root = dirname(dirname(here));
 const themeToggleSrc = readFileSync(
   join(root, 'src/components/feedback/theme-toggle.ts'),
   'utf8',

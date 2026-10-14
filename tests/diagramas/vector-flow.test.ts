@@ -21,8 +21,8 @@ const denoTest = denoTestCon(test);
 const base = () => ({
   steps: 'auto' as const,
   columns: [
-    { id: 'cli', label: 'Clientes', tipo: 'clientes', nodes: [{ id: 'c', kind: 'class', class: { name: 'TXClient' } }] },
-    { id: 'cmp', label: 'Componentes', tipo: 'componentes', groups: [{ id: 'own', label: 'Propios (API)' }], nodes: [{ id: 'api', kind: 'component', component: { name: 'api' }, group: 'own' }, { id: 'fin', shape: 'end' }] },
+    { id: 'cli', label: 'Clientes', tipo: 'clientes', nodes: [{ id: 'c', kind: 'class', class: { name: 'vector-flow: TXClient' } }] },
+    { id: 'cmp', label: 'Componentes', tipo: 'componentes', groups: [{ id: 'own', label: 'Propios (API)' }], nodes: [{ id: 'api', kind: 'component', component: { name: 'vector-flow: api' }, group: 'own' }, { id: 'fin', shape: 'end' }] },
     { id: 'flu', label: 'Flujo', tipo: 'flujo', nodes: [{ id: 'a', label: 'Valida' }, { id: 'd', label: '¿Ok?', shape: 'diamond' }, { id: 'b', label: 'Guarda' }] },
     { id: 'ctl', label: 'Controllers', tipo: 'controllers', nodes: [{ id: 'x', kind: 'class', class: { name: 'TXController' }, klass: 'p' }] },
     { id: 'mod', label: 'Modelos', tipo: 'modelos', nodes: [{ id: 'p', kind: 'class', class: { name: 'TX' } }] },

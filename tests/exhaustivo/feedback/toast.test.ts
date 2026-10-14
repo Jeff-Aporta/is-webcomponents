@@ -20,7 +20,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TS = 'src/components/feedback/toast.ts';
 const JSON_PATH = join(ROOT, 'src/components/feedback/toast.json');
 
@@ -28,7 +28,7 @@ void async function () {
   await import('../../../src/components/feedback/toast.ts').catch(() => {});
 }();
 
-test('1. módulo existe', () => {
+test('toast: 1. módulo existe', () => {
   assert.ok(exists(TS));
 });
 
@@ -39,7 +39,7 @@ test('2. JSON existe y respeta iswc-preview/v1', () => {
 });
 
 test('3. CSS hermano existe', () => {
-  assert.ok(existsSync(join(ROOT, 'src/components/feedback/toast.css')));
+  assert.ok(existsSync(join(ROOT, '.tmp-scss/src/components/feedback/toast.css')));
 });
 
 test('4. integra con iswc-toast-item (light DOM o shadow)', () => {

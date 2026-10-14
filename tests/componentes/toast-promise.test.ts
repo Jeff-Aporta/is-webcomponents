@@ -21,11 +21,11 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/toast-promise', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const toastJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast.ts'), 'utf8');
   const toastItemJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.ts'), 'utf8');
-  const toastCss = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.css'), 'utf8');
+  const toastCss = await readFile(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'toast-item.css'), 'utf8');
   const preview = await readFile(join(root, 'src', 'components', 'feedback', 'toast.json'), 'utf8');
   
   const failures = [];

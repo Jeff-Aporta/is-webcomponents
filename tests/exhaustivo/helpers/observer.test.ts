@@ -17,21 +17,21 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-observer';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'observer.ts');
-const CSS = join(ROOT, 'src', 'components', 'helpers', 'observer.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'observer.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'observer.json');
 
-test('1. módulo existe', () => {
+test('observer: 1. módulo existe', () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', () => {
+test('observer: 2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', () => {
+test('observer: 3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');

@@ -21,8 +21,8 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const cssPath = join(root, 'src/components/actions/button.css');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const cssPath = join(root, '.tmp-scss/src/components/actions/button.css');
 const css = readFileSync(cssPath, 'utf8');
 
 const COLORS = ['brand', 'success', 'warning', 'danger', 'info', 'error', 'neutral'];

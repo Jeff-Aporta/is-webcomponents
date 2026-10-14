@@ -27,7 +27,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 denoTest('vocabulario: cada familia tiene tipos y cada tipo dice dónde se recomienda', () => {
   for (const fam of ['connector', 'relational', 'signal', 'flow', 'structural'] as const) {

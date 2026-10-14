@@ -17,7 +17,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas', import.meta.url);
+const DIR = new URL('../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
 /** Alto de la pestaña y ancho mínimo que ocupa (título + condición); etiqueta de modo a la derecha. */
 const TAB_H = 18;
 const TAB_W_MIN = 60;

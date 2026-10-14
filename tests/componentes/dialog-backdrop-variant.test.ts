@@ -8,9 +8,9 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const js = readFileSync(join(ROOT, 'src/components/layout/dialog.ts'), 'utf8');
-const css = readFileSync(join(ROOT, 'src/components/layout/dialog.css'), 'utf8');
+const css = readFileSync(join(ROOT, '.tmp-scss/src/components/layout/dialog.css'), 'utf8');
 
 test('iswc-dialog observa backdrop-variant', () => {
   assert.match(js, /backdrop-variant/);

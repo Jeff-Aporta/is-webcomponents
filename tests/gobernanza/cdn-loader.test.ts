@@ -12,7 +12,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const root = dirname(dirname(dirname(dirname(dirname(fileURLToPath(import.meta.url))))));
+const root = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const src = join(root, 'src', 'cdn', 'loader.ts');
 const dist = join(root, 'dist', 'cdn', 'core', 'loader.min.js');
 const indexHtml = readFileSync(join(root, 'index.html'), 'utf8');
@@ -119,7 +119,7 @@ test('specs/cdn.md documenta pin/mirrors (consolidación 2026-09-07)', () => {
 
 test('configure acepta host + local + v/query (cache-bust)', () => {
   const code = readFileSync(src, 'utf8');
-  const schemas = readFileSync(join(root, 'src', 'cdn', 'loader.schemas.ts'), 'utf8');
+  const schemas = readFileSync(join(root, 'src', 'cdn', 'schemas', 'loader.schemas.ts'), 'utf8');
   // Los campos del shape migran a loader.schemas.ts (Zod); el comportamiento
   // runtime sigue en loader.ts.
   assert.match(schemas, /host:\s*z\.string\(\)\.nullable\(\)/);
@@ -136,7 +136,7 @@ test('configure acepta host + local + v/query (cache-bust)', () => {
 test('fallback CDN: jsDelivr → githack → Pages + stickyBase', () => {
   const code = readFileSync(src, 'utf8');
   const ref = readFileSync(
-    join(root, 'src', 'components', '_shared', 'cdn-ref.ts'),
+    join(root, 'src', 'core', 'cdn-ref.ts'),
     'utf8',
   );
   // Orden canónico en MIRRORS

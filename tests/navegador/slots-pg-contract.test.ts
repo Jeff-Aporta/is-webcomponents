@@ -27,10 +27,10 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('navegador/slots-pg-contract', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(here);
+  const root = dirname(dirname(here));
   const MANIFEST = join(root, 'src', 'manifest.ts');
   const SLOTS_PG_TS = join(root, 'src', 'components', 'preview', 'slots-pg.ts');
-  const SLOTS_PG_CSS = join(root, 'src', 'components', 'preview', 'slots-pg.css');
+  const SLOTS_PG_CSS = join(root, '.tmp-scss', 'src', 'components', 'preview', 'slots-pg.css');
   const SLOTS_PG_JSON = join(root, 'src', 'components', 'preview', 'slots-pg.json');
   const SLOTS_PG_MD = join(root, 'src', 'components', 'preview', 'slots-pg.md');
   const COMPONENTS_ROOT = join(root, 'src', 'components');

@@ -10,7 +10,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const navHref = pathToFileURL(join(raiz, 'src/components/navigation/utils/url-nav.ts')).href;
 
 test('url-nav.ts solo toca ?s= (sin storage ni params sueltos)', async () => {

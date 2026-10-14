@@ -20,10 +20,10 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-format-date';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'format-date.ts');
-const CSS = join(ROOT, 'src', 'components', 'helpers', 'format-date.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'format-date.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'format-date.json');
 
 test('1. el módulo .ts existe y es legible', async () => {

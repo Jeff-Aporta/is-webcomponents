@@ -42,7 +42,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '../../../..');
+const root = join(here, '../..');
 const COMPONENTS = join(root, 'src', 'components');
 
 /** Patrones de párrafo trivial. Multi-línea; toleran CRLF y escapes \r\n. */

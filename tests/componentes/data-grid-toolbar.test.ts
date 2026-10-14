@@ -16,7 +16,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 test('data-grid.ts expone toolbarTools y observa toolbar-tools', async () => {
   const js = await readFile(join(root, 'src/components/data/data-grid.ts'), 'utf8');

@@ -20,18 +20,18 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/palette-and-snippet-contract', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const failures = [];
   const check = (cond, msg) => { if (!cond) failures.push(msg); };
   
-  const isBase = await readFile(join(root, 'src', 'styles', 'is-base.css'), 'utf8');
-  const palettes = await readFile(join(root, 'src', 'styles', 'palettes.css'), 'utf8');
+  const isBase = await readFile(join(root, '.tmp-scss', 'src', 'styles', 'is-base.css'), 'utf8');
+  const palettes = await readFile(join(root, '.tmp-scss', 'src', 'styles', 'palettes.css'), 'utf8');
   const indexHtml = await readFile(join(root, 'index.html'), 'utf8');
   const previewBoot = await readFile(join(root, 'scripts', 'preview-boot.js'), 'utf8');
   const previewChrome = await readFile(join(root, 'scripts', 'preview-chrome.js'), 'utf8');
   const demoCode = await readFile(join(root, 'scripts', 'demo-code.js'), 'utf8');
-  const chartPalette = await readFile(join(root, 'src', 'components', '_shared', 'chart-palette.ts'), 'utf8');
+  const chartPalette = await readFile(join(root, 'src', 'components', 'charts', 'utils', 'chart-palette.ts'), 'utf8');
   const paletteSelector = await readFile(join(root, 'src', 'components', 'feedback', 'palette-selector.ts'), 'utf8');
   
   // ─── 1. Default = contapyme ─────────────────────────────────────────────────

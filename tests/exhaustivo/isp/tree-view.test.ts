@@ -15,21 +15,21 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-tree-view';
 const TS  = join(ROOT, 'src', 'components', 'isp', 'tree-view.ts');
-const CSS = join(ROOT, 'src', 'components', 'isp', 'tree-view.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'isp', 'tree-view.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'isp', 'tree-view.json');
 
-test('1. módulo existe', async () => {
+test('tree-view: 1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', async () => {
+test('tree-view: 2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', async () => {
+test('tree-view: 3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
@@ -101,7 +101,7 @@ test('14. JSON tiene secciones de demo (no es solo tabla de referencia)', async 
 });
 
 test('15. preview.ts existe (componente complejo → behavior obligatorio)', async () => {
-  const preview = join(ROOT, 'src', 'components', 'isp', 'tree-view.preview.ts');
+  const preview = join(ROOT, 'src', 'components', 'isp', 'utils', 'tree-view.preview.ts');
   assert.ok(existsSync(preview));
 });
 

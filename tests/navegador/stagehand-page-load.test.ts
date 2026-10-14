@@ -55,7 +55,7 @@ const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const REPO = join(here, '..');
+const REPO = join(here, '..', '..');
 const SERVE_ROOT = process.env.SERVE_ROOT || 'C:\\ContaPyme\\Personal';
 // Rango de puertos efímeros: igual que `smoke-page-load.stagehand.test.mjs`,
 // probamos varios y nos quedamos con el primero libre. Si todos están
@@ -120,7 +120,7 @@ async function startDevServer() {
   throw new Error(`No free port in ${PORT_CANDIDATES.join(', ')}`);
 }
 
-test.before(async () => {
+before(async () => {
   const res = await startDevServer();
   server = res.proc;
   serverPort = res.port;
@@ -205,7 +205,7 @@ test.before(async () => {
   `);
 });
 
-test.after(async () => {
+after(async () => {
   try { await stagehand?.close(); } catch {}
   try { server?.kill(); } catch {}
   await sleep(200);

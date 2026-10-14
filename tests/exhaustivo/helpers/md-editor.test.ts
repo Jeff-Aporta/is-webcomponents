@@ -15,21 +15,21 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-md-editor';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'md-editor.ts');
-const CSS = join(ROOT, 'src', 'components', 'helpers', 'md-editor.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'md-editor.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'md-editor.json');
 
-test('1. módulo existe', async () => {
+test('md-editor: 1. módulo existe', async () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', async () => {
+test('md-editor: 2. CSS hermano existe', async () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', async () => {
+test('md-editor: 3. JSON existe y respeta iswc-preview/v1', async () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
@@ -73,7 +73,7 @@ test('9. shadow DOM expone parte label/input/footer', async () => {
   assert.ok(partsCount >= 2, `debe haber al menos 2 partes CSS, hay ${partsCount}`);
 });
 
-test('10. custom element registrado', async () => {
+test('md-editor: 10. custom element registrado', async () => {
   const src = readFileSync(TS, 'utf8');
   assert.ok(
     /customElements\.define\s*\(\s*['"]iswc-md-editor['"]/.test(src) ||

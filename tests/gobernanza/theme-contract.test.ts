@@ -18,7 +18,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = dirname(dirname(dirname(dirname(here))));
+const root = dirname(dirname(here));
 
 const html = await readFile(join(root, 'index.html'), 'utf8');
 const isBase = await readFile(join(root, 'src', 'styles', 'is-base.scss'), 'utf8');

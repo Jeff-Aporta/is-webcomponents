@@ -15,21 +15,21 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(HERE, '..', '..', '..', '..', '..');
+const ROOT = join(HERE, '..', '..', '..');
 const TAG = 'iswc-md-render';
 const TS  = join(ROOT, 'src', 'components', 'helpers', 'md-render.ts');
-const CSS = join(ROOT, 'src', 'components', 'helpers', 'md-render.css');
+const CSS = join(ROOT, '.tmp-scss', 'src', 'components', 'helpers', 'md-render.css');
 const JSON_PATH = join(ROOT, 'src', 'components', 'helpers', 'md-render.json');
 
 test('1. módulo .ts existe', () => {
   assert.ok(existsSync(TS));
 });
 
-test('2. CSS hermano existe', () => {
+test('md-render: 2. CSS hermano existe', () => {
   assert.ok(existsSync(CSS));
 });
 
-test('3. JSON existe y respeta iswc-preview/v1', () => {
+test('md-render: 3. JSON existe y respeta iswc-preview/v1', () => {
   const json = JSON.parse(readFileSync(JSON_PATH, 'utf8'));
   assert.equal(json.tag, TAG);
   assert.equal(json.$schema, 'iswc-preview/v1');
@@ -46,8 +46,8 @@ test('4. lee markdown desde <script type="text/markdown"> hijo', () => {
 test('5. tiene su propio parser md (md-lite) — no dependencia externa', () => {
   // Acepta import directo de md-lite o indirecto via prompt-md.
   const mdRenderSrc = readFileSync(TS, 'utf8');
-  const promptMdSrc = readFileSync(join(ROOT, 'src', 'components', '_shared', 'prompt-md.ts'), 'utf8');
-  const mdLiteSrc = readFileSync(join(ROOT, 'src', 'components', 'helpers', 'md-lite.ts'), 'utf8');
+  const promptMdSrc = readFileSync(join(ROOT, 'src', 'components', 'helpers', 'utils', 'prompt-md.ts'), 'utf8');
+  const mdLiteSrc = readFileSync(join(ROOT, 'src', 'components', 'helpers', 'utils', 'md-lite.ts'), 'utf8');
   const usaMdLite =
     /from\s*['"][./]+md-lite/.test(mdRenderSrc) ||
     /from\s*['"][./]+md-lite/.test(promptMdSrc) ||
@@ -59,7 +59,7 @@ test('5. tiene su propio parser md (md-lite) — no dependencia externa', () => 
 });
 
 test('6. escapa HTML del usuario (anti-XSS)', () => {
-  const mdLiteSrc = readFileSync(join(ROOT, 'src', 'components', 'helpers', 'md-lite.ts'), 'utf8');
+  const mdLiteSrc = readFileSync(join(ROOT, 'src', 'components', 'helpers', 'utils', 'md-lite.ts'), 'utf8');
   const hasEscape =
     /escapeHtml\s*\(/.test(mdLiteSrc) ||
     /escape\s*\(/.test(mdLiteSrc) ||

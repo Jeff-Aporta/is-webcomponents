@@ -21,7 +21,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const denoTest = denoTestCon(test);
 
 
-const KIT = join(import.meta.dirname!, '..', '..', '..', '..');
+const KIT = join(import.meta.dirname!, '..', '..');
 const RAICES = ['src', 'skills', 'scripts'];
 /** Excepciones: módulos de copia ÚNICA de Zod (no barriles); `publicado` = entrada CDN que debe existir, o null. */
 const ENTRADAS_CDN: { fuente: string; publicado: string | null }[] = [

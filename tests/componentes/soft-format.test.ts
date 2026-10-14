@@ -13,16 +13,16 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const hl = await import(pathToFileURL(join(root, 'src/core/highlight-code.ts')).href);
 const ct = await import(pathToFileURL(join(root, 'src/core/code-text.ts')).href);
 
-test('unwrapHandHighlight quita el coloreado a mano de la migración', () => {
+test('soft-format: unwrapHandHighlight quita el coloreado a mano de la migración', () => {
   const dirty = '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span><span class="tag">></span>';
   assert.equal(ct.unwrapHandHighlight(dirty), '<button part="button">');
 });
 
-test('softFormat expande anidación HTML en la misma línea', () => {
+test('soft-format: softFormat expande anidación HTML en la misma línea', () => {
   const src = '<button class="btn"><span part="start"><slot name="start"></slot></span></button>';
   const out = ct.softFormat(src, 'htmlmixed');
   const lines = out.split('\n');
@@ -33,7 +33,7 @@ test('softFormat expande anidación HTML en la misma línea', () => {
   assert.match(lines.at(-1), /^<\/button>/);
 });
 
-test('softFormat no aplana HTML ya bien indentado sin anidación inline', () => {
+test('soft-format: softFormat no aplana HTML ya bien indentado sin anidación inline', () => {
   const src = '<div>\n  <p>hola</p>\n</div>';
   assert.equal(ct.softFormat(src, 'htmlmixed'), src);
 });
@@ -49,7 +49,7 @@ test('softFormat conserva el json indentado dentro de un atributo multilínea', 
   assert.equal(ct.softFormat(src, 'htmlmixed'), src);
 });
 
-test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
+test('soft-format: softFormat repara el markup a mano de anatomy y lo indenta', () => {
   const dirty = [
     '<span class="tag"><button</span> <span class="attr">part</span>=<span class="val">"button"</span> <span class="attr">class</span>=<span class="val">"btn"</span><span class="tag">></span>',
     '  <span class="tag"><span</span> <span class="attr">part</span>=<span class="val">"start"</span> <span class="attr">class</span>=<span class="val">"btn__prefix"</span><span class="tag">></span><span class="tag"><slot</span> <span class="attr">name</span>=<span class="val">"start"</span><span class="tag">></slot></span></span>',
@@ -62,14 +62,14 @@ test('softFormat repara el markup a mano de anatomy y lo indenta', () => {
   assert.match(out, /^\s+<slot name="start">/m);
 });
 
-test('sin cm-error en el docs: el rojo de CodeMirror ya no existe (motor nativo)', () => {
-  const css = readFileSync(join(root, 'src/styles/presentation.css'), 'utf8');
+test('soft-format: sin cm-error en el docs: el rojo de CodeMirror ya no existe (motor nativo)', () => {
+  const css = readFileSync(join(root, '.tmp-scss/src/styles/presentation.css'), 'utf8');
   // El docs ya no estiliza tramos .cm-error (no hay runMode); el coloreado a
   // mano se limpia con unwrapHandHighlight/softFormat antes de montar <iswc-code>.
   assert.doesNotMatch(css, /\.cm-error/);
 });
 
-test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
+test('soft-format: el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.equal(typeof hl.watchDom, 'function', 'falta watchDom');
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
@@ -85,7 +85,7 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.match(boot, /watchDom\(\)/, 'highlight-pre.js debe arrancar el observer');
 });
 
-test('las salidas vivas del docs son pre.code o iswc-code (paint → editor)', () => {
+test('soft-format: las salidas vivas del docs son pre.code o iswc-code (paint → editor)', () => {
   const casos = [
     ['src/pages/theming.json', 'cssOut', 'css'],
     ['src/components/forms/rte.json', 'outHTML', 'html'],
@@ -103,7 +103,7 @@ test('las salidas vivas del docs son pre.code o iswc-code (paint → editor)', (
   }
 });
 
-test('el panel CDN no embebe prompt LLM como MD editor', () => {
+test('soft-format: el panel CDN no embebe prompt LLM como MD editor', () => {
   const src = readFileSync(join(root, 'src/components/feedback/cdn-snippet.ts'), 'utf8');
   // Skill simple: lista + ojo. Sin iswc-md-editor de prompt.
   assert.match(src, /data-slot="skills"/);

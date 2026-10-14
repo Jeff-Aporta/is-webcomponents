@@ -47,7 +47,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '../../../..');
+const root = join(here, '../..');
 
 const HELPER_TS = join(root, 'src/styles/color-tokens.ts');
 const IS_BASE_CSS = join(root, 'src/styles/is-base.scss');

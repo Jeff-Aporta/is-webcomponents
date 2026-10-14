@@ -21,7 +21,7 @@ test('diagramas/component-diagram-ifaces', async () => {
         { id: 'p1', name: 'Pkg', x: 0, y: 0, w: 600, h: 400 },
       ],
       components: [
-        { id: 'a', package: 'p1', name: 'A', stereotype: 'component', x: 50, y: 50, w: 200, h: 60 },
+        { id: 'a', package: 'p1', name: 'component-diagram-ifaces: A', stereotype: 'component', x: 50, y: 50, w: 200, h: 60 },
         { id: 'b', package: 'p1', name: 'B', stereotype: 'component', x: 350, y: 50, w: 200, h: 60 },
       ],
       interfaces: [
@@ -138,7 +138,7 @@ test('diagramas/component-diagram-ifaces', async () => {
     componentDiagram: {
       components: [
         { id: 'src', name: 'Portal', x: 40, y: 200, w: 160, h: 80 },
-        { id: 'a', name: 'A', x: 400, y: 40, w: 120, h: 48 },
+        { id: 'a', name: 'component-diagram-ifaces: A', x: 400, y: 40, w: 120, h: 48 },
         { id: 'b', name: 'B', x: 400, y: 120, w: 120, h: 48 },
         { id: 'c', name: 'C', x: 400, y: 200, w: 120, h: 48 },
         { id: 'd', name: 'D', x: 400, y: 280, w: 120, h: 48 },
@@ -319,7 +319,7 @@ test('diagramas/component-diagram-ifaces', async () => {
         layout: { minGap: 40 },
         packages: [{ id: 'p', name: 'P', x: 0, y: 0, w: 200, h: 400 }],
         components: [
-          { id: 'a', name: 'A', package: 'p', x: 20, y: 40, w: 120, h: 48 },
+          { id: 'a', name: 'component-diagram-ifaces: A', package: 'p', x: 20, y: 40, w: 120, h: 48 },
           { id: 'b', name: 'B', package: 'p', x: 20, y: 200, w: 120, h: 48 },
         ],
       },
@@ -329,7 +329,7 @@ test('diagramas/component-diagram-ifaces', async () => {
         layout: { minGap: 120 },
         packages: [{ id: 'p', name: 'P', x: 0, y: 0, w: 200, h: 400 }],
         components: [
-          { id: 'a', name: 'A', package: 'p', x: 20, y: 40, w: 120, h: 48 },
+          { id: 'a', name: 'component-diagram-ifaces: A', package: 'p', x: 20, y: 40, w: 120, h: 48 },
           { id: 'b', name: 'B', package: 'p', x: 20, y: 200, w: 120, h: 48 },
         ],
       },
@@ -345,7 +345,7 @@ test('diagramas/component-diagram-ifaces', async () => {
       componentDiagram: {
         packages: [{ id: 'p', name: 'P', x: 0, y: 0, w: 200, h: 400 }],
         components: [
-          { id: 'a', name: 'A', package: 'p', x: 20, y: 40, w: 120, h: 48 },
+          { id: 'a', name: 'component-diagram-ifaces: A', package: 'p', x: 20, y: 40, w: 120, h: 48 },
           { id: 'b', name: 'B', package: 'p', x: 20, y: 200, w: 120, h: 48 },
         ],
       },

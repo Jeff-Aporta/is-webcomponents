@@ -25,7 +25,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 // _helpers.ts está en tests/_shared/exhaustivo-forms.ts.
 // Tres niveles arriba llegan a src/ (raíz del kit).
-export const RAIZ = join(dirname(__filename), '..', '..', '..', '..');
+export const RAIZ = join(dirname(__filename), '..', '..', 'src');
 
 export const FORMS_DIR = join(RAIZ, 'components', 'forms');
 
@@ -47,9 +47,9 @@ export function leerPreview(tag: string): Record<string, unknown> | null {
   return JSON.parse(readFileSync(ruta, 'utf8'));
 }
 
-/** Lee el .css del componente si existe. */
+/** El componente tiene su .scss. */
 export function existeCss(tag: string): boolean {
-  return existsSync(join(FORMS_DIR, `${tag.replace(/^iswc-/, '')}.css`));
+  return existsSync(join(FORMS_DIR, `${tag.replace(/^iswc-/, '')}.scss`));
 }
 
 /** Lee el .md (documentación) si existe. */

@@ -24,7 +24,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 /** Raíz del repo (5 niveles arriba desde _helpers.ts → src/utils/health/exhaustive). */
-export const ROOT = join(__dirname, '..', '..', '..', '..');
+export const ROOT = join(__dirname, '..', '..');
 
 export function read(rel: string): string {
   if (isAbsolute(rel)) return readFileSync(rel, 'utf8');

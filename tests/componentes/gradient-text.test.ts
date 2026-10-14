@@ -30,7 +30,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/gradient-text', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const SCAN = ['previews', 'styles', 'components'];
   const EXT = /\.(css|html)$/;

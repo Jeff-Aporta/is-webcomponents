@@ -14,17 +14,17 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/browser-native-apis', async () => {
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
   const src = (...p) => readFileSync(join(root, 'src', 'components', ...p), 'utf8');
   
   const checks = [
     ['media/speech.ts', ['SpeechRecognition', 'webkitSpeechRecognition', 'speechSynthesis', 'SpeechSynthesisUtterance']],
     ['forms/color-picker.ts', ['EyeDropper', 'sRGBHex']],
-    ['_shared/web-share.ts', ['navigator.share', 'AbortError']],
+    ['actions/utils/web-share.ts', ['navigator.share', 'AbortError']],
     ['actions/share-button.ts', ['sharePayload', 'share-title']],
     ['media/barcode-scanner.ts', ['BarcodeDetector', 'getUserMedia']],
     ['media/media-recorder.ts', ['getDisplayMedia', 'MediaRecorder', 'getUserMedia']],
-    ['_shared/web-otp.ts', ['OTPCredential', "transport: ['sms']"]],
+    ['forms/utils/web-otp.ts', ['OTPCredential', "transport: ['sms']"]],
     ['forms/input.ts', ['listenWebOtp', 'iswc-otp']],
     ['forms/pin-input.ts', ['listenWebOtp', 'one-time-code']],
     ['helpers/wake-lock.ts', ["wakeLock.request('screen')", 'visibilitychange']],

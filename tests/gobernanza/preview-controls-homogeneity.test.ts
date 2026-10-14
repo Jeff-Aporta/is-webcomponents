@@ -14,7 +14,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 const denoTest = denoTestCon(test);
 
 
-const root = join(dirname(fromFileUrl(import.meta.url)), '../../../..');
+const root = join(dirname(fromFileUrl(import.meta.url)), '../..');
 
 denoTest('preview controls: auditoría homogénea sin hallazgos', async () => {
   const script = join(root, 'scripts/audits/preview-controls.mjs');

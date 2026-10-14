@@ -28,7 +28,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 // __dirname = .../src/utils/health/exhaustive/_template/
 // Subimos 5 niveles para llegar a la raíz del proyecto.
-const RAIZ = join(__dirname, '..', '..', '..', '..', '..');
+const RAIZ = join(__dirname, '..', '..');
 
 const TAG = 'iswc-button';
 const RUTA_COMPONENTE = join(RAIZ, 'src/components/actions/button.ts');

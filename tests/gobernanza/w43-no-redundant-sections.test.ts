@@ -6,7 +6,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 
 test('W43: button.json no debe tener appearances-matrix (consolidada con Variantes)', async () => {
   const src = await readFile(join(RAIZ, 'src/components/actions/button.json'), 'utf8');

@@ -77,12 +77,12 @@ async function isPortFree(port) {
 let server;
 let browser;
 
-test.before(async () => {
+before(async () => {
   server = await startDevServer();
   browser = await chromium.launch();
 });
 
-test.after(async () => {
+after(async () => {
   await browser?.close();
   server?.proc?.kill();
   await sleep(200);

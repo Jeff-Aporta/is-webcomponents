@@ -23,7 +23,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/component-audit', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   let out = '';
   try {

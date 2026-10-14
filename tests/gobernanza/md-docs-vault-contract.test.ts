@@ -17,7 +17,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 const COMPONENTES = [
   { tag: 'iswc-md-docs-vault', base: ['layout', 'md-docs-vault'], categoria: 'layout' },
   { tag: 'iswc-doc-layout', base: ['layout', 'doc-layout'], categoria: 'layout' },

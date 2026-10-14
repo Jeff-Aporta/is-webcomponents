@@ -6,7 +6,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 
 test('W54: src/**/*.ts no debe tener type/interface top-level (deben vivir en *.schemas.ts)', async () => {
   // Recursive walk

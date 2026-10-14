@@ -27,7 +27,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const denoTest = denoTestCon(test);
 
 
-const RAIZ = fileURLToPath(new URL('../..', import.meta.url));
+const RAIZ = fileURLToPath(new URL('./', import.meta.url));
 const BUNDLE = 'dist/cdn/diagrams/flowchart.min.js';
 
 const json = (f: string, v: unknown) => writeFileSync(f, JSON.stringify(v, null, 2));

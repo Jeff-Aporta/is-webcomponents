@@ -11,7 +11,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
+const RAIZ = join(import.meta.dirname, '..', '..');
 const BASE = join(RAIZ, 'src', 'components', 'media', 'figure');
 
 test('iswc-figure: .ts + .scss + .md + .json hermanos', () => {

@@ -22,7 +22,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/docs-toc-integration', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const renderSrc = readFileSync(join(root, 'src', 'previews', '_kit', 'render.ts'), 'utf8');
   

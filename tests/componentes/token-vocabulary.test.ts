@@ -28,9 +28,9 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const TEMA = ['is-base.css', 'palettes.css'].map(f => join(root, 'src', 'styles', f));
-const COMPONENTES = join(root, 'src', 'components');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const TEMA = ['is-base.css', 'palettes.css'].map(f => join(root, '.tmp-scss', 'src', 'styles', f));
+const COMPONENTES = join(root, '.tmp-scss', 'src', 'components');
 
 const cssBajo = (dir) => readdirSync(dir).flatMap((n) => {
   const p = join(dir, n);

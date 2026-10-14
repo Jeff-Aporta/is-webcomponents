@@ -11,7 +11,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '../../../..');
+const root = join(here, '../..');
 
 const manText = readFileSync(join(root, 'src/manifest.ts'), 'utf8');
 const pgTs = readFileSync(join(root, 'src/components/preview/playground.ts'), 'utf8');

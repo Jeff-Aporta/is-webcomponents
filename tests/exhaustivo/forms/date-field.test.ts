@@ -18,8 +18,8 @@ import { coleccionPruebas } from '../../../src/vendor-distributions/shared/testi
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
-const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
-const FACTORY = join(RAIZ, 'components', 'forms', 'utils', 'date-field-element.ts');
+const RAIZ = join(import.meta.dirname, '..', '..');
+const FACTORY = join(import.meta.dirname!, '..', '..', '..', 'src', 'components', 'forms', 'utils', 'date-field-element.ts');
 const factorySrc = readFileSync(FACTORY, 'utf8');
 
 const TAG = 'iswc-date-field';
@@ -75,8 +75,8 @@ test('date-field: se compone con iswc-date-picker para el panel (en date-input)'
 test('date-field: usa Intl nativo para locale (delegado en date-utils/date-field-core)', () => {
   // El factory delega el formateo a date-field-core / date-utils,
   // que son quienes usan Intl directamente. Verificamos la cadena.
-  const core = readFileSync(join(RAIZ, 'components', '_shared', 'date-field-core.ts'), 'utf8');
-  const utils = readFileSync(join(RAIZ, 'components', '_shared', 'date-utils.ts'), 'utf8');
+  const core = readFileSync(join(import.meta.dirname!, '..', '..', '..', 'src', 'components', 'forms', 'utils', 'date-field-core.ts'), 'utf8');
+  const utils = readFileSync(join(import.meta.dirname!, '..', '..', '..', 'src', 'components', 'forms', 'utils', 'date-utils.ts'), 'utf8');
   assert.ok(/Intl\./.test(core) || /Intl\./.test(utils),
     'date-field-core o date-utils deben usar Intl.* para formatear locale-aware');
   assert.ok(/resolveLocale/.test(factorySrc),

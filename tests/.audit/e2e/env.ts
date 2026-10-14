@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { ConfigE2E } from "./schemas/env.schemas.js";
 
-const e2eDir: string = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const e2eDir: string = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '.');
 
 function subirHastaRaiz(inicio: string): string {
   let d = inicio;

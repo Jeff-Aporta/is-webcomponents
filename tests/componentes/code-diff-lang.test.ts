@@ -28,7 +28,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 test('componentes/code-diff-lang', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   
   const {
     classifyDiffLine, diffLineClass, parseStatLine, formatDiff,
@@ -102,7 +102,7 @@ test('componentes/code-diff-lang', async () => {
   );
   
   // —— 6. Bandas nativas ⇄ CSS ⇄ tema (sin modos de CodeMirror) ——
-  const css = await readFile(join(root, 'src/components/code/code.css'), 'utf8');
+  const css = await readFile(join(root, '.tmp-scss/src/components/code/code.css'), 'utf8');
   const theme = await readFile(join(root, 'src/components/code/utils/code-theme.ts'), 'utf8');
   const src = await readFile(join(root, 'src/core/code-diff.ts'), 'utf8');
   

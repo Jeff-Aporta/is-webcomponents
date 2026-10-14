@@ -14,7 +14,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '../../../..');
+const root = join(here, '../..');
 
 const CTRL_TS = join(root, 'src/components/layout/preview-controls.ts');
 const PG_TS = join(root, 'src/components/preview/playground.ts');

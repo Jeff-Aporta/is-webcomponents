@@ -17,7 +17,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 
 const __filename = new URL(import.meta.url).pathname.replace(/^\//, '');
-const RAIZ = join(__filename, '..', '..', '..', '..', '..');
+const RAIZ = join(__filename, '..', '..', '..');
 
 function extractArrayLiteral(src: string, name: string): string[] {
   // Busca `const NAME = [\n  'a',\n  'b',\n]` y captura cada string entre comillas.

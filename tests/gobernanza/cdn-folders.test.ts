@@ -24,7 +24,7 @@ const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/cdn-folders', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const root = dirname(dirname(dirname(dirname(here))));
+  const root = dirname(dirname(here));
   const dist = join(root, 'dist', 'cdn');
   const core = join(dist, 'core');
   
@@ -81,7 +81,7 @@ test('gobernanza/cdn-folders', async () => {
   // Cada tag del manifest es alcanzable desde su carpeta de categoría: o bien
   // tiene su propio <tag>.min.js, o lo registra un módulo hermano (los hijos
   // comparten archivo con su padre, p.ej. iswc-tab vive en tab-group.ts).
-  const { default: manifest } = await import(new URL('../../src/manifest.js', import.meta.url));
+  const { default: manifest } = await import(new URL('../../src/manifest.ts', import.meta.url));
   const bundleSourceByCat = new Map();
   const sourcesOf = (cat) => {
     if (!bundleSourceByCat.has(cat)) {

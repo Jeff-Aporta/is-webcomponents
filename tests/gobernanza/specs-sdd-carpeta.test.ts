@@ -14,7 +14,7 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 const { test, lista } = coleccionPruebas({ categoria: 'how' });
 
 test('gobernanza/specs-sdd-carpeta', async () => {
-  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
+  const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
   const SPECS = join(root, 'specs');
   const HEALTH = join(root, 'src', 'utils', 'health');
   const failures = [];
