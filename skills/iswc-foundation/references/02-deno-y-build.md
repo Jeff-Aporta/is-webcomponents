@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/02-deno-y-build.md -->
+<!-- @vendor 2026-10-14T14:46:42.343Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/02-deno-y-build.md -->
 # 02 — Deno, tareas y build
 
 ## `deno.json`
@@ -12,8 +12,8 @@
   "zod": "npm:zod@4.4.3",
   "sass": "npm:sass@^1.105.0",
   "@std/http/file-server": "jsr:@std/http@1/file-server",
-  "@iswc/component-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/src/previews/_kit/component.schemas.ts",
-  "@iswc/loader-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/src/cdn/loader.schemas.ts"
+  "@iswc/component-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/src/previews/_kit/schemas/component.schemas.ts",
+  "@iswc/loader-schemas": "https://raw.githubusercontent.com/Jeff-Aporta/iswc-root/<sha40>/src/cdn/schemas/loader.schemas.ts"
 }
 ```
 

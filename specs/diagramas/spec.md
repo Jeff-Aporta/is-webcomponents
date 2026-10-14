@@ -48,7 +48,7 @@ error visible (nunca dibuja un hueco).
 Un vector de columnas: cada columna es un sub-diagrama restringido a los tipos de entidad que acepta
 (clientes, componentes, flujo, controllers, modelos, tablas, o los que defina el consumidor) y las
 aristas son los puentes entre columnas. Una entidad en una columna que no la acepta es un error
-visible. Doc: `src/components/diagrams/vector-flow.md`.
+visible. Doc: `src/components/diagrams/utils/vector-flow.md`.
 
 ### S-D5 Un diagrama general; los demás son vistas restringidas *(plan)*
 
