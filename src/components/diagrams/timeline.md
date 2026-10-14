@@ -144,11 +144,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`./timeline-spec.js`](./timeline-spec.js)
-- [`./sequence-spec.js`](./sequence-spec.js)
+- [`./timeline-spec.js`](./utils/timeline-spec.js)
+- [`./sequence-spec.js`](./utils/sequence-spec.js)
 - [`../_shared/tk-hue.js`](../../core/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
-- [`./diagram-kinds.js`](./diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
 
 Tags del mÃ³dulo: `<iswc-timeline>`.
 

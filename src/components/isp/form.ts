@@ -14,7 +14,7 @@ import {
   hostToJson,
   json2html,
 } from '../../core/json-html.js';
-import { getValues, setValues } from './form-json.js';
+import { getValues, setValues } from './utils/form-json.js';
 
 /**
  * <iswc-form> — Ficha con header / content / footer (Aceptar · Cancelar).

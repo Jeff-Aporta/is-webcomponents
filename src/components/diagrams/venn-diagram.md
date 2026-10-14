@@ -148,11 +148,11 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/diagram-element-base.js`](./utils/diagram-element-base.js)
-- [`./venn-spec.js`](./venn-spec.js)
-- [`./sequence-spec.js`](./sequence-spec.js)
+- [`./venn-spec.js`](./utils/venn-spec.js)
+- [`./sequence-spec.js`](./utils/sequence-spec.js)
 - [`../_shared/tk-hue.js`](../../core/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
-- [`./diagram-kinds.js`](./diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js)
@@ -188,7 +188,7 @@ Ver el preview de la galerÃ­a, que trae el payload completo con grupos y estil
 
 - [JavaScript](./venn-diagram.ts)
 - [CSS](./venn-diagram.css)
-- [Spec y layout](./venn-spec.js)
+- [Spec y layout](./utils/venn-spec.js)
 - [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./venn-diagram.json)
 

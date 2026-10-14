@@ -13,7 +13,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert';
-import { resolveErSpec, computeErLayout } from '../../../components/diagrams/er-spec.ts';
+import { resolveErSpec, computeErLayout } from '../../../components/diagrams/utils/er-spec.ts';
 
 /** Entidad mínima con n atributos. */
 function entidad(id, group, n = 2) {

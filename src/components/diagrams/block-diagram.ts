@@ -1,10 +1,10 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './block-spec.js';
+import { resolveBlockSpec, computeBlockLayout, blockShapePath } from './utils/block-spec.js';
 import type { BlockLayout, BlockSpec } from './schemas/block-spec.schemas.js';
 // Tipos internos del spec (no exportados) que el renderer necesita; los
 // redefinimos localmente para no tocar la firma del spec.
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
 import type { PathTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
@@ -14,7 +14,7 @@ import { inlineMdWeb } from '../../core/tk-inline-md.js';
 import { svgIconGroup } from '../../core/tk-icon-inline.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { BlockSpecGroup, BlockSpecBlock, BlockSpecEdge, BlockLayoutBlock, BlockLayoutEdge, TurtleState, BlockNodeEntry, EdgeNodeEntry } from "./schemas/block-diagram.schemas.js";

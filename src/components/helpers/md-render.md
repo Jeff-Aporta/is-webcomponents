@@ -144,9 +144,9 @@ idempotente: un tag ya definido o en vuelo no se vuelve a pedir.
 
 ## Dependencias y componentes relacionados
 
-- [`./md-lite.js`](./md-lite.js) â€” vÃ­a `prompt-md` (MD â†’ HTML + fences).
-- [`./md-hydrate.js`](./md-hydrate.js) â€” carga perezosa de los componentes de la hoja.
-- [`./md-iswc-fences.js`](./md-iswc-fences.js) â€” mapa `iswc-*` â†’ tag.
+- [`./md-lite.js`](./utils/md-lite.js) â€” vÃ­a `prompt-md` (MD â†’ HTML + fences).
+- [`./md-hydrate.js`](./utils/md-hydrate.js) â€” carga perezosa de los componentes de la hoja.
+- [`./md-iswc-fences.js`](./utils/md-iswc-fences.js) â€” mapa `iswc-*` â†’ tag.
 - [`../_shared/prompt-md.js`](./utils/prompt-md.js)
 - [`./md-editor.md`](./md-editor.md) â€” editor completo con herramientas y API.
 

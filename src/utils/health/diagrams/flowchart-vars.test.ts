@@ -5,7 +5,7 @@
  *   V3 lleva insignia con ícono de variable (y su índice si es paso del flujo).
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
 
 const layout = (vars: unknown[]) => computeFlowchartLayout(resolveFlowchartSpec({
   steps: 'auto',

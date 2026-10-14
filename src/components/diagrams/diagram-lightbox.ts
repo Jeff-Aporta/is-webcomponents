@@ -1,7 +1,7 @@
 import { defineElement, siblingCssHref } from '../../core/element.js';
 import { IswcLightbox } from './lightbox.js';
-import { getDiagramTag } from './diagram-kinds.js';
-import { expandSequencePayloadForJson } from './sequence-spec.js';
+import { getDiagramTag } from './utils/diagram-kinds.js';
+import { expandSequencePayloadForJson } from './utils/sequence-spec.js';
 import '../media/icon.js';
 import type { TurtleStateDetail, ToggleGroupDetail, TurtleApi, DiagramHost } from "./schemas/diagram-lightbox.schemas.js";
 

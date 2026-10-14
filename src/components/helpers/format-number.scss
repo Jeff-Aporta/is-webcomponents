@@ -1,4 +1,4 @@
-@import './_inline-host.css';
+@use 'utils/inline-host';
 
 :host {
   .number {

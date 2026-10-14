@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/README.md -->
+<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/view/hola/README.md -->
 # view/hola — vista de ejemplo
 
 Vista autocontenida del estándar iswc-foundation. Reemplázala por la primera vista real de

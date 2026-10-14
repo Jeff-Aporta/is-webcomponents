@@ -1,7 +1,7 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
-import { loadText, resolveFileSource } from './_shared/file-source.js';
+import { loadText, resolveFileSource } from './utils/file-source.js';
 
 (() => {
   const OBSERVED = ['src', 'content', 'height'];

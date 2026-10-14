@@ -24,7 +24,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = dirname(dirname(dirname(dirname(here))));
 const html = [
   await readFile(join(root, 'src/components/media/icon-explorer.json'), 'utf8'),
-  await readFile(join(root, 'src/components/media/icon-explorer.preview.ts'), 'utf8'),
+  await readFile(join(root, 'src/components/media/utils/icon-explorer.preview.ts'), 'utf8'),
 ].join('\n');
 
 // --- 1. Scroll propio ------------------------------------------------------

@@ -79,7 +79,7 @@ test('10. preview.ts existe', async () => {
   const { join: pJoin } = await import('node:path');
   const possiblePaths = [
     pJoin(ROOT, 'src', 'components', 'isp', 'heading.preview.ts'),
-    'src/components/isp/heading.preview.ts',
+    'src/components/isp/utils/heading.preview.ts',
   ];
   let found = false;
   for (const p of possiblePaths) {

@@ -1,7 +1,7 @@
 /**
  * highlight-pre.js — arranca el highlighter de `<pre class="code">` en el docs.
  *
- * La lógica vive en `components/_shared/highlight-code.js` para que
+ * La lógica vive en `core/highlight-code.js` para que
  * `<iswc-cdn-snippet>` (un componente, que NO puede importar de `scripts/`)
  * pueda usarla con un import estático. Aquí solo queda el arranque de la
  * página: pintar (montando `<iswc-code readonly compact>`) y re-pintar cuando
@@ -12,9 +12,9 @@
  * las custom properties --iswc-code-* (reacciona a iswc-theme-change).
  *
  * Ya no hay puentes en `window` ni re-exports: quien necesite pintar importa `paint` de
- * `src/components/_shared/highlight-code.js` (el archivo de origen).
+ * `src/core/highlight-code.js` (el archivo de origen).
  */
-import { paint, watchDom } from '../src/components/_shared/highlight-code.js';
+import { paint, watchDom } from '../src/core/highlight-code.js';
 
 /**
  * El docs ya no es HTML estático: `<iswc-preview-component>` monta cada preview

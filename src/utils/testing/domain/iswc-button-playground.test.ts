@@ -13,7 +13,7 @@ const read = (rel) => readFileSync(join(root, rel), 'utf8');
 test('catalog registra behavior de iswc-button', () => {
   const cat = read('src/previews/catalog.ts');
   assert.match(cat, /"iswc-button"[\s\S]*?\.\.\/components\/actions\/button\.preview\.js/);
-  assert.ok(existsSync(join(root, 'src/components/actions/button.preview.ts')));
+  assert.ok(existsSync(join(root, 'src/components/actions/utils/button.preview.ts')));
 });
 
 test('playground usa color/variant (no appearance legacy) y pgOut', () => {
@@ -31,7 +31,7 @@ test('playground usa color/variant (no appearance legacy) y pgOut', () => {
 });
 
 test('behavior aplica color/variant/pill al #pgBtn', () => {
-  const src = read('src/components/actions/button.preview.ts');
+  const src = read('src/components/actions/utils/button.preview.ts');
   assert.match(src, /setAttribute\(\s*['"]color['"]/);
   assert.match(src, /setAttribute\(\s*['"]variant['"]/);
   assert.match(src, /toggleAttribute\(\s*['"]pill['"]/);

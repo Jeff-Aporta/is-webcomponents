@@ -7,7 +7,7 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { BEZIER_MAX, styledEdgePath } from '../../../components/diagrams/utils/diagram-curve.ts';
-import { edgeStyleFor } from '../../../components/diagrams/diagram-vocab.ts';
+import { edgeStyleFor } from '../../../components/diagrams/utils/diagram-vocab.ts';
 
 const D = 'M0,0 L0,200 L300,200 L300,220';
 

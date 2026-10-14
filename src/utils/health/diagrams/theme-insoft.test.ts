@@ -8,8 +8,8 @@ import {
   edgePaint,
   findOrphanEntityIds,
   themeToDiagramTheme,
-} from '../../../components/diagrams/theme.ts';
-import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/diagram-styles.ts';
+} from '../../../components/diagrams/utils/theme.ts';
+import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/utils/diagram-styles.ts';
 
 // Los temas se cargan bajo demanda (diagram-style); el test carga el estilo InSoft.
 await loadStylesDiagram('insoft');

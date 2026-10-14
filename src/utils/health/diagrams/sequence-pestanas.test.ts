@@ -7,7 +7,7 @@
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/sequence-spec.ts';
+import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/utils/sequence-spec.ts';
 import { pathPoints as parsePathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 
 const DIR = new URL('../../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);

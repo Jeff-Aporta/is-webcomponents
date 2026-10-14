@@ -9,7 +9,7 @@ import './confirm-delete.js';
 import './modal-verificacion.js';
 import './form.js';
 import './heading.js';
-import './controller-from-config.js';
+import './utils/controller-from-config.js';
 
 import type { IspRecord, IspController } from './schemas/controller-from-config.schemas.js';
 import {

@@ -26,8 +26,8 @@ import '../src/components/media/icon.js';
 import '../src/components/actions/dropdown.js';
 import '../src/components/actions/copy-button.js';
 import './highlight-pre.js';
-import { paint } from '../src/components/_shared/highlight-code.js';
-import { resolveRef, jsdelivrBase } from '../src/components/_shared/cdn-ref.js';
+import { paint } from '../src/core/highlight-code.js';
+import { resolveRef, jsdelivrBase } from '../src/core/cdn-ref.js';
 import manifest from '../src/manifest.js';
 
 {

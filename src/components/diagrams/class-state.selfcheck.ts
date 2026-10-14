@@ -1,7 +1,7 @@
 // @ts-nocheck
 import assert from 'node:assert';
-import { resolveClassSpec, computeClassLayout } from './class-spec.js';
-import { resolveStateSpec, computeStateLayout } from './state-spec.js';
+import { resolveClassSpec, computeClassLayout } from './utils/class-spec.js';
+import { resolveStateSpec, computeStateLayout } from './utils/state-spec.js';
 
 /* ───────────────────────── class diagram ───────────────────────── */
 

@@ -17,8 +17,8 @@ const read = (rel: string) => readFileSync(join(root, rel), 'utf8');
 const indexHtml = read('index.html');
 const loaderTs = read('src/cdn/loader.ts');
 const docDemoTs = read('src/components/layout/doc-demo.ts');
-const bootTs = read('src/components/layout/doc-demo-boot.ts');
-const hostTs = read('src/components/layout/doc-demo-host.ts');
+const bootTs = read('src/components/layout/utils/doc-demo-boot.ts');
+const hostTs = read('src/components/layout/utils/doc-demo-host.ts');
 const cdnPanel = read('scripts/cdn-panel.js');
 
 test('galería: CSS del kit vía loader aliases (sin <link> is-base/palettes)', () => {

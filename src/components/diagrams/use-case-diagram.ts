@@ -1,15 +1,15 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { resolveUseCaseSpec, computeUseCaseLayout } from './use-case-spec.js';
+import { resolveUseCaseSpec, computeUseCaseLayout } from './utils/use-case-spec.js';
 import type { UseCaseLayout, UseCaseLayoutActor, UseCaseLayoutCase, UseCaseLayoutLink, UseCaseResolvedSpec } from './schemas/use-case-spec.schemas.js';
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { NodeNodeEntry, LinkNodeEntry } from "./schemas/use-case-diagram.schemas.js";

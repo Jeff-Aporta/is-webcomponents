@@ -58,7 +58,7 @@
 
 import { ElementBase } from '../../../core/element-base.js';
 import { findThemeContainer, readTheme } from '../../../core/theme-scope.js';
-import { hostStyleName, loadStylesDiagram } from '../diagram-styles.js';
+import { hostStyleName, loadStylesDiagram } from './diagram-styles.js';
 
 /** ¿Hay alguna referencia `{ path, query }` en el payload? (recorrido liviano, sin dependencias). */
 function tieneRefs(v: unknown, n = 0): boolean {

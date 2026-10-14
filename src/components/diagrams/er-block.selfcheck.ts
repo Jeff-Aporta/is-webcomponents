@@ -3,8 +3,8 @@
  * No depende de DOM: solo geometría pura.
  */
 import assert from 'node:assert';
-import { resolveErSpec, computeErLayout } from './er-spec.js';
-import { computeBlockGrid, resolveBlockSpec, computeBlockLayout } from './block-spec.js';
+import { resolveErSpec, computeErLayout } from './utils/er-spec.js';
+import { computeBlockGrid, resolveBlockSpec, computeBlockLayout } from './utils/block-spec.js';
 
 /* ───────────────────────── ER ───────────────────────── */
 

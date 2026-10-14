@@ -17,7 +17,7 @@
 //     export JSON/SVG) + determinismo (round-trip idéntico).
 //   Stagehand: validación visual (cajas no se solapan, aristas legibles).
 import { adoptCss, defineElement, emit } from '../../core/element.js';
-import { serializeErPayload, renderErSvg as renderErSvgString } from './er-archify.js';
+import { serializeErPayload, renderErSvg as renderErSvgString } from './utils/er-archify.js';
 import type { ErEditorState, ErSpec, ErSpecAttribute, ErSpecEntity, ErSpecRelation, EdgeStyleOverride, ErRouteKind, ErDashStyle, EdgeVariant } from "./schemas/diagram-types.schemas.js";
 import '../media/icon.js';
 import '../actions/context-menu.js';

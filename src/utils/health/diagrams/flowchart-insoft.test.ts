@@ -9,15 +9,15 @@ import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.t
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/diagram-styles.ts';
-import { pickThemeMode } from '../../../components/diagrams/theme.ts';
+import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/utils/diagram-styles.ts';
+import { pickThemeMode } from '../../../components/diagrams/utils/theme.ts';
 import {
   computeFlowchartLayout,
   decisionGeometry,
   flowchartSpecToJson,
   flowPaint,
   resolveFlowchartSpec,
-} from '../../../components/diagrams/flowchart-spec.ts';
+} from '../../../components/diagrams/utils/flowchart-spec.ts';
 import {
   embedDiagramOf,
   fitContain,

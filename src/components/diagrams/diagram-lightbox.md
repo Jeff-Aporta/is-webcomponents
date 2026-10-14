@@ -159,8 +159,8 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`./lightbox.js`](./lightbox.js)
-- [`./diagram-kinds.js`](./diagram-kinds.js)
-- [`./sequence-spec.js`](./sequence-spec.js)
+- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
+- [`./sequence-spec.js`](./utils/sequence-spec.js)
 - [`../media/icon.js`](../media/icon.js)
 
 Tags del mÃ³dulo: `<iswc-diagram-lightbox>`.

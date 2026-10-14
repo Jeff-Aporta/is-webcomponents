@@ -1,7 +1,7 @@
 import assert from 'node:assert';
-import { resolveSankeySpec, computeSankeyLayout } from './sankey-spec.js';
-import { resolveQuadrantSpec, computeQuadrantLayout } from './quadrant-spec.js';
-import { resolveVennSpec, computeVennLayout } from './venn-spec.js';
+import { resolveSankeySpec, computeSankeyLayout } from './utils/sankey-spec.js';
+import { resolveQuadrantSpec, computeQuadrantLayout } from './utils/quadrant-spec.js';
+import { resolveVennSpec, computeVennLayout } from './utils/venn-spec.js';
 
 /**
  * Invariantes de los tres diagramas de magnitud/posición.

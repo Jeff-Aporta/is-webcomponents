@@ -11,7 +11,7 @@
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
 import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 import type { FlowLayout, FlowResolvedSpec } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
 

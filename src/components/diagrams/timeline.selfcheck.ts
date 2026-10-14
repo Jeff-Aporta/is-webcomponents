@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
+import { resolveTimelineSpec, computeTimelineLayout } from './utils/timeline-spec.js';
 import { rectsOverlap } from '../../core/diagram-grid.js';
 
 /**

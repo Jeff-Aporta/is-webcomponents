@@ -1,4 +1,4 @@
-@import './_sticky.css';
+@use 'utils/sticky';
 
 /* iswc-spreadsheet */
 :host {
@@ -39,7 +39,7 @@ table.grid {
     z-index: 1;
   }
 
-  /* position/inset-inline-start/background/font-weight vienen de _sticky.css */
+  /* position/inset-inline-start/background/font-weight vienen de utils/_sticky.scss */
   & .corner { z-index: 2; }
 
   & .row-head {

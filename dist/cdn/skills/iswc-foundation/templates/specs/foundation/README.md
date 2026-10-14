@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/README.md -->
+<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/specs/foundation/README.md -->
 # specs/foundation — specs fundación de __TITULO__ (normativas)
 
 Desde estas specs se reconstruye la app ([`../FOUNDATION.md`](../FOUNDATION.md)); se mantienen con

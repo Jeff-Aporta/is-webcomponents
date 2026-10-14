@@ -255,7 +255,7 @@ layout cuando carga), así ningún texto se sale de su caja.
 `"policy": { "edgeStyle": "curved" }` (o `edgeStyle` en la raíz del payload)
 redondea los giros de cada mensaje con Bézier sobre el **mismo** recorrido
 ortogonal: el router no cambia, solo la pintura. Ver el vocabulario común en
-[`diagram-vocab.ts`](./diagram-vocab.ts).
+[`diagram-vocab.ts`](./utils/diagram-vocab.ts).
 
 ## Subproceso en la llegada de un mensaje (`nested`)
 
@@ -281,14 +281,14 @@ acción inicia: el mismo nodo `kind: "nested"` de los flujos
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`./sequence-spec.js`](./sequence-spec.js)
+- [`./sequence-spec.js`](./utils/sequence-spec.js)
 - [`../_shared/diagram-grid.js`](../../core/diagram-grid.js)
 - [`../_shared/tk-icon-inline.js`](../../core/tk-icon-inline.js)
 - [`../_shared/tk-hue.js`](../../core/tk-hue.js)
 - [`../_shared/tk-color.js`](../../core/tk-color.js)
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
 - [`../_shared/icon-loader.js`](../../core/icon-loader.js)
-- [`./diagram-kinds.js`](./diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
 
 Tags del mÃ³dulo: `<iswc-sequence-diagram>`.
 

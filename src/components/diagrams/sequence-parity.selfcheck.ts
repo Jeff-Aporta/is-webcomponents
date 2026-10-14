@@ -11,7 +11,7 @@ import { pathToFileURL } from 'node:url';
 
 const ORIG = 'C:/ContaPyme/Personal/apps/jagudeloe/frontend/dist/js/core/tk-sequence.js';
 
-const mine = await import('./sequence-spec.js');
+const mine = await import('./utils/sequence-spec.js');
 
 if (!existsSync(ORIG)) {
   console.log('sequence parity: SKIP (original dist no encontrado)');

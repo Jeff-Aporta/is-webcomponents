@@ -1,4 +1,4 @@
-import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/component-spec.ts';
+import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/utils/component-spec.ts';
 import { placeEdgeActors, pointAtFraction } from '../../../components/diagrams/utils/diagram-edge-actors.ts';
 import { pathPoints as parsePathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 import { spreadOrthogonalPaths } from '../../../components/diagrams/utils/diagram-edge-spread.ts';

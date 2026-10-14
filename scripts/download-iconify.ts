@@ -38,7 +38,7 @@ const NON_ICON_COLLECTIONS = new Set([
   'xml', 'xlink',
 ]);
 
-/** Bases CDN del kit (mismo orden que `components/_shared/icon-loader.js`). */
+/** Bases CDN del kit (mismo orden que `core/icon-loader.js`). */
 const OWN_CDN_BASES = [
   'https://jeff-aporta.github.io/iswc-root/dist/assets/icons/',
   'https://cdn.jsdelivr.net/gh/Jeff-Aporta/iswc-root@main/dist/assets/icons/',

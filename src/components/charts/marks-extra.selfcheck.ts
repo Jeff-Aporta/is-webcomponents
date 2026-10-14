@@ -1,6 +1,6 @@
 import assert from 'node:assert';
-import { waterfallBars } from './marks-waterfall.js';
-import { funnelBands } from './marks-funnel.js';
+import { waterfallBars } from './utils/marks-waterfall.js';
+import { funnelBands } from './utils/marks-funnel.js';
 
 // --- waterfallBars -----------------------------------------------------
 const bars = waterfallBars([1200, 850, -420, -180, null], [0, 4]);

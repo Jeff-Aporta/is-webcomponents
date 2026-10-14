@@ -6,7 +6,7 @@ import {
   buildShareUrl,
   decodeJsonParam,
   encodeJsonParam,
-} from '../../../components/diagrams/diagram-studio.ts';
+} from '../../../components/diagrams/utils/diagram-studio.ts';
 
 test('el parámetro json sobrevive acentos y no reescribe la dirección de origen', () => {
   const abierta = 'https://jeff-aporta.github.io/iswc-root/demos/diagramas/app/edit.html?kind=er&json=VIEJO';
@@ -26,6 +26,6 @@ test('hay un kind por cada diagrama publicado', () => {
 });
 
 test('el estudio no reescribe la URL al mutar el diagrama', () => {
-  const src = readFileSync(new URL('../../../components/diagrams/diagram-studio.ts', import.meta.url), 'utf8');
+  const src = readFileSync(new URL('../../../components/diagrams/utils/diagram-studio.ts', import.meta.url), 'utf8');
   assert.doesNotMatch(src, /history\.(replaceState|pushState)|location\.(assign|replace)\(|location\.href\s*=/);
 });

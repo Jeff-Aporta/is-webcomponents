@@ -1,13 +1,13 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { resolveSwimlaneSpec, computeSwimlaneLayout } from './swimlane-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { resolveSwimlaneSpec, computeSwimlaneLayout } from './utils/swimlane-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { SwimlaneLayout, SwimlaneStepKind } from "./schemas/swimlane-spec.schemas.js";

@@ -14,7 +14,7 @@
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
 
 type N = { id: string; label?: string; shape?: string };
 const indices = (nodes: N[], edges: Array<{ from: string; to: string; kind?: string }>): Record<string, string | undefined> => {

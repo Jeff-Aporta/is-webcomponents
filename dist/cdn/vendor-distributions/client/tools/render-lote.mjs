@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
+// @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
 // Bundle autocontenido de src/vendor-distributions/client/tools/render-lote.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/client/tools/render-lote.ts.
 
 // src/vendor-distributions/client/tools/render-lote.ts

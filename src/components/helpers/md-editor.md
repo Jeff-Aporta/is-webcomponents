@@ -197,15 +197,15 @@ El **preview** (y la superficie readonly del diÃ¡logo) usa el mismo hydrate qu
 ## Dependencias y componentes relacionados
 
 - [`./md-render.md`](./md-render.md) (`<iswc-md-render>`) â€” render inline sin tools
-- [`./md-hydrate.js`](./md-hydrate.js) â€” lazy ensure + upgrade iswc-code / diagramas
-- [`./md-iswc-fences.js`](./md-iswc-fences.js) â€” mapa `iswc-*` â†’ tag
+- [`./md-hydrate.js`](./utils/md-hydrate.js) â€” lazy ensure + upgrade iswc-code / diagramas
+- [`./md-iswc-fences.js`](./utils/md-iswc-fences.js) â€” mapa `iswc-*` â†’ tag
 - [`../layout/dialog.js`](../layout/dialog.js) (`<iswc-dialog>`)
 - [`../actions/button.js`](../actions/button.js) (`<iswc-button>`)
 - [`../actions/copy-button.js`](../actions/copy-button.js) (`<iswc-copy-button>`)
 - [`../forms/switch.js`](../forms/switch.js) (`<iswc-switch>`)
 - [`../media/icon.js`](../media/icon.js) (`<iswc-icon>`)
-- [`./md-lite.js`](./md-lite.js) â€” `mdToHtml()`, markdown ligero sin dependencias npm.
-- [`./md-editor-api.js`](./md-editor-api.js) + [`./md-editor-api.d.ts`](./md-editor-api.d.ts)
+- [`./md-lite.js`](./utils/md-lite.js) â€” `mdToHtml()`, markdown ligero sin dependencias npm.
+- [`./md-editor-api.js`](./utils/md-editor-api.js) + [`./md-editor-api.d.ts`](./md-editor-api.d.ts)
 - [`../_shared/prompt-md.js`](./utils/prompt-md.js) â€” variables `{{nombre}}` + render MD/HTML hÃ­brido.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 

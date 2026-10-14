@@ -1,0 +1,26 @@
+---
+tag: iswc-tab
+tags:
+  - iswc-tab
+category: navigation
+status: public
+---
+# `<iswc-tab>`
+
+## Propósito
+
+Pestaña de `<iswc-tab-group>`. Elige el panel; no sustituye al grupo.
+
+## Cuándo usarlo
+
+Cuando el componente padre ya está en la pantalla y este tag es la pieza que le falta.
+
+## Cuándo no usarlo
+
+No lo reimplementes ni lo uses para sustituir al padre. La guía del padre documenta el conjunto.
+
+## Ejemplo mínimo
+
+```html
+<iswc-tab></iswc-tab>
+```

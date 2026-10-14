@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { resolveMindmapSpec, computeMindmapLayout } from './mindmap-spec.js';
+import { resolveMindmapSpec, computeMindmapLayout } from './utils/mindmap-spec.js';
 
 /**
  * Regresión: conectores ortogonales (nunca curvas) en ambos modos de layout,

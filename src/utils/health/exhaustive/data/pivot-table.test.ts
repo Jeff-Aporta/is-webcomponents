@@ -40,8 +40,8 @@ test('iswc-pivot-table: edge cases', () => {
 });
 
 test('iswc-pivot-table: behavior — preview asigna properties o config', () => {
-  const preview = exists('src/components/data/pivot-table.preview.ts')
-    ? read('src/components/data/pivot-table.preview.ts') : '';
+  const preview = exists('src/components/data/utils/pivot-table.preview.ts')
+    ? read('src/components/data/utils/pivot-table.preview.ts') : '';
   if (preview) {
     // pivot-table.preview debe asignar data via property o .config =
     assert.ok(preview.length > 0, 'preview existe');

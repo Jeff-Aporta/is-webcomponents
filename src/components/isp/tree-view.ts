@@ -11,10 +11,10 @@ import '../layout/divider.js';
 import './confirm-delete.js';
 import './flex-options.js';
 import './float-card.js';
-import { TreeRowViewAdapter } from './_shared/tree-view/adapter.js';
-import { TreeCustomsBase } from './_shared/tree-view/customs-base.js';
-import { paintForest } from './_shared/tree-view/render-rows.js';
-import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './_shared/tree-view/_types.schemas.js';
+import { TreeRowViewAdapter } from './utils/tree-view/adapter.js';
+import { TreeCustomsBase } from './utils/tree-view/customs-base.js';
+import { paintForest } from './utils/tree-view/render-rows.js';
+import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './schemas/tree-view-types.schemas.js';
 import type { _AdapterLike, _DrawerLike, _ModalDeleteLike, _DialogLike } from "./schemas/tree-view.schemas.js";
 
 /** Subset del adapter que `IswcTreeView` consume (no necesita el tipo completo). */

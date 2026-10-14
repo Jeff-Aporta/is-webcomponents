@@ -23,8 +23,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { asActionSpec, asBool, asNumber, asRecord, asString } from '../../components/isp/_shared/tree-view/_types.ts';
-import { type IconConfig, type TNode, type TreeActionSpec } from '../../components/isp/_shared/tree-view/_types.schemas.ts';
+import { asActionSpec, asBool, asNumber, asRecord, asString } from '../../components/isp/utils/tree-view/_types.ts';
+import { type IconConfig, type TNode, type TreeActionSpec } from '../../components/isp/schemas/tree-view-types.schemas.ts';
 
 // ── Helpers de casteo ────────────────────────────────────────────────────
 

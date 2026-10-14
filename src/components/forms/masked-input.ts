@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { attachFormInternals, setCustomState, setFormValue } from '../../core/form-associated.js';
-import { apply, isComplete } from './masks-tokens.js';
+import { apply, isComplete } from './utils/masks-tokens.js';
 import { setStringAttr } from '../../core/reflect.js';
 
 /**

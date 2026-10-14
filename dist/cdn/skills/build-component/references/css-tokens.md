@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/css-tokens.md -->
+<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/css-tokens.md -->
 # CSS tokens
 
 Cómo usar **tokens `--iswc-*`** (tema, paletas, espaciado, radio,

@@ -19,7 +19,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..
 const read = (rel) => readFileSync(join(root, rel), 'utf8');
 
 test('iswc-toast behavior crea #toaster si falta (no create-on-null)', () => {
-  const src = read('src/components/feedback/toast.preview.ts');
+  const src = read('src/components/feedback/utils/toast.preview.ts');
   assert.match(src, /getElementById\(['"]toaster['"]\)/);
   assert.match(src, /createElement\(['"]iswc-toast['"]\)/);
   assert.match(src, /id\s*=\s*['"]toaster['"]|setAttribute\(['"]id['"],\s*['"]toaster['"]\)/);
@@ -105,7 +105,7 @@ test('iswc-data-grid page-size no usa .options nativo de iswc-select', () => {
 });
 
 test('iswc-speed-dial behavior garantiza #logTable o no querySelector-on-null', () => {
-  const src = read('src/components/actions/speed-dial.preview.ts');
+  const src = read('src/components/actions/utils/speed-dial.preview.ts');
   assert.match(src, /logTable/);
   assert.match(src, /if\s*\(!logBody\)|!logBody\)\s*return/);
 });

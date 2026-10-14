@@ -430,8 +430,8 @@ await copyFile(palettesOut, join(dist, 'palettes.min.css'));
 {
   const previewDist = join(dist, 'preview');
   await mkdir(previewDist, { recursive: true });
-  const bootIn = join(compRoot, 'layout', 'doc-demo-boot.ts');
-  const hostIn = join(compRoot, 'layout', 'doc-demo-host.ts');
+  const bootIn = join(compRoot, 'layout', 'utils', 'doc-demo-boot.ts');
+  const hostIn = join(compRoot, 'layout', 'utils', 'doc-demo-host.ts');
   const bootOut = join(previewDist, 'doc-demo-boot.min.js');
   const hostOut = join(previewDist, 'doc-demo-host.min.js');
   const shellOut = join(previewDist, 'doc-shell.min.css');
@@ -678,7 +678,7 @@ console.log(`  ${'vendor-distrib./'.padEnd(18)} ${nVendor} archivos (shared, ser
 
 // Estilos de diagrama (diagram-styles.ts): los temas JSON no van dentro de
 // los bundles; se descargan bajo demanda junto a ellos, en diagrams/themes/.
-const themesSrc = join(root, 'src', 'components', 'diagrams', 'themes');
+const themesSrc = join(root, 'src', 'components', 'diagrams', 'utils', 'themes');
 const themesOut = join(dist, 'diagrams', 'themes');
 await mkdir(themesOut, { recursive: true });
 let nTemas = 0;
@@ -691,7 +691,7 @@ console.log(`  ${'diagrams/themes/'.padEnd(18)} ${nTemas} temas (carga diferida 
 // Campo de costos del router: los defaults del kit se publican como JSON
 // para consumidores y auditoría (la fuente es routing-costs.ts).
 {
-  const { ROUTING_COSTS_DEFAULTS } = await import(pathToFileURL(join(root, 'src', 'components', 'diagrams', 'routing-costs.ts')).href);
+  const { ROUTING_COSTS_DEFAULTS } = await import(pathToFileURL(join(root, 'src', 'components', 'diagrams', 'utils', 'routing-costs.ts')).href);
   await writeFile(join(dist, 'diagrams', 'routing-costs.json'), JSON.stringify(ROUTING_COSTS_DEFAULTS, null, 2) + '\n', 'utf8');
   console.log(`  ${'diagrams/'.padEnd(18)} routing-costs.json (campo de costos compartido)`);
 }

@@ -8,7 +8,7 @@
  *      codo junto a uno ajeno ni hace un escalón corto para colarse al lado; toma el pasillo libre.
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
 import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 
 type P = { x: number; y: number };

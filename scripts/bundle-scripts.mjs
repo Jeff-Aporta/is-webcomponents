@@ -6,7 +6,7 @@
 // del registry cargan rutas dist/... que sí están publicadas.
 import { build } from 'esbuild';
 import { mkdir, copyFile, readdir, writeFile, rm, cp } from 'node:fs/promises';
-import { readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { readFileSync } from 'node:fs';
 
@@ -158,7 +158,9 @@ await mkdir(previewsOut, { recursive: true });
 const allPreviews = [];
 for (const cat of await readdir(componentsRoot, { withFileTypes: true })) {
   if (!cat.isDirectory() || cat.name.startsWith('_')) continue;
-  const catDir = join(componentsRoot, cat.name);
+  // Los *.preview.ts viven en <grupo>/utils/ (no son parte del componente).
+  const catDir = join(componentsRoot, cat.name, 'utils');
+  if (!existsSync(catDir)) continue;
   for (const entry of await readdir(catDir, { withFileTypes: true })) {
     if (!entry.isFile()) continue;
     if (!entry.name.endsWith('.preview.ts')) continue;
@@ -170,7 +172,7 @@ for (const cat of await readdir(componentsRoot, { withFileTypes: true })) {
 console.log(`\n${allPreviews.length} componentes con *.preview.ts detectados:`);
 
 for (const { category, name } of allPreviews) {
-  const src = join(componentsRoot, category, `${name}.preview.ts`);
+  const src = join(componentsRoot, category, 'utils', `${name}.preview.ts`);
   const dstFolder = join(previewsOut, category);
   const dstFile = join(dstFolder, `${name}.preview.min.js`);
   try {

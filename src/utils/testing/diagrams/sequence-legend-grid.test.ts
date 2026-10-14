@@ -17,7 +17,7 @@
 // Si alguien refactoriza la función y vuelve al comportamiento viejo,
 // el test falla y señala exactamente qué invariante se rompió.
 
-import { resolveSequenceSpec, computeSequenceLayout } from '../../../components/diagrams/sequence-spec.ts';
+import { resolveSequenceSpec, computeSequenceLayout } from '../../../components/diagrams/utils/sequence-spec.ts';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

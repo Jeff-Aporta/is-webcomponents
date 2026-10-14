@@ -5,10 +5,10 @@
  *   S3 `reverse` por arista invierte el sentido estándar (clases, DER, componentes, secuencia).
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { computeClassLayout, resolveClassSpec, sentidoFlujoClase } from '../../../components/diagrams/class-spec.ts';
-import { computeErLayout, resolveErSpec, sentidoFlujoEr } from '../../../components/diagrams/er-spec.ts';
-import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/component-spec.ts';
-import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/sequence-spec.ts';
+import { computeClassLayout, resolveClassSpec, sentidoFlujoClase } from '../../../components/diagrams/utils/class-spec.ts';
+import { computeErLayout, resolveErSpec, sentidoFlujoEr } from '../../../components/diagrams/utils/er-spec.ts';
+import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/utils/component-spec.ts';
+import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/utils/sequence-spec.ts';
 
 Deno.test('flujo: S1 clases — herencia y realización al revés; S3 reverse lo invierte', () => {
   assertEquals(['inheritance', 'realization', 'association', 'dependency', 'composition'].map(sentidoFlujoClase), [true, true, false, false, false]);

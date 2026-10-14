@@ -34,7 +34,10 @@ function archivos(dir: string, out: string[] = []): string[] {
 function resolver(desde: string, spec: string, scss: boolean): { real: string; forma: (nuevo: string) => string } | null {
   const base = posix(normalize(join(dirname(desde), spec)));
   const cands: [string, (n: string) => string][] = [[base, (n) => n]];
-  if (base.endsWith('.js')) cands.push([base.slice(0, -3) + '.ts', (n) => n.replace(/\.ts$/, '.js')]);
+  if (base.endsWith('.js')) {
+    cands.push([base.slice(0, -3) + '.ts', (n) => n.replace(/\.ts$/, '.js')]);
+    cands.push([base.slice(0, -3) + '.d.ts', (n) => n.replace(/\.d\.ts$/, '.js')]);
+  }
   if (!/\.\w+$/.test(base)) {
     cands.push([base + '.ts', (n) => n.replace(/\.ts$/, '')], [base + '.js', (n) => n.replace(/\.js$/, '')]);
     if (scss) {

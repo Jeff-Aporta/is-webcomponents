@@ -148,13 +148,13 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 ## Dependencias y componentes relacionados
 
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
-- [`./block-spec.js`](./block-spec.js)
-- [`./sequence-spec.js`](./sequence-spec.js)
+- [`./block-spec.js`](./utils/block-spec.js)
+- [`./sequence-spec.js`](./utils/sequence-spec.js)
 - [`../_shared/tk-hue.js`](../../core/tk-hue.js)
 - [`../_shared/tk-inline-md.js`](../../core/tk-inline-md.js)
 - [`../_shared/tk-icon-inline.js`](../../core/tk-icon-inline.js)
 - [`../_shared/icon-loader.js`](../../core/icon-loader.js)
-- [`./diagram-kinds.js`](./diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
 
 Tags del mÃ³dulo: `<iswc-block-diagram>`.
 

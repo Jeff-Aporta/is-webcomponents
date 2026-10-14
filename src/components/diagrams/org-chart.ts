@@ -1,6 +1,6 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { escapeHtml } from '../../core/dom-utils.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 
 /**

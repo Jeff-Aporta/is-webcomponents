@@ -30,7 +30,7 @@ import {
   urlDeOperacion,
   validarDocumentoApi,
   validarEstricto,
-} from '../../../components/layout/server-api-docs-md.ts';
+} from '../../../components/layout/utils/server-api-docs-md.ts';
 import { ServerApiDocsModeloSchema } from '../../../components/layout/schemas/server-api-docs.schemas.ts';
 
 const RAIZ = join(import.meta.dirname!, '..', '..', '..', '..');
@@ -186,10 +186,10 @@ test('server-api-docs S8: secuencia de cada endpoint (cliente → server → per
 // ── Guardián de estructura del kit (HOW fuerte: contrato de registro) ──────────
 
 test('server-api-docs-md: módulo de dominio con su ficha y su schema estricto (solo zod, vendorizable)', () => {
-  const md = join(RAIZ, 'src', 'components', 'layout', 'server-api-docs-md');
-  for (const ext of ['.ts', '.md', '.schemas.ts']) assert.ok(existsSync((ext === '.schemas.ts' ? join(dirname(md), "schemas", basename(md)) : md) + ext), `falta server-api-docs-md${ext}`);
+  const md = join(RAIZ, 'src', 'components', 'layout', 'utils', 'server-api-docs-md');
+  for (const ext of ['.ts', '.md', '.schemas.ts']) assert.ok(existsSync((ext === '.schemas.ts' ? join(dirname(md), '..', 'schemas', basename(md)) : md) + ext), `falta server-api-docs-md${ext}`);
   assert.match(readFileSync(`${md}.md`, 'utf8'), /^---[\s\S]*tag: iswc-server-api-docs-md[\s\S]*---/);
-  const imports = [...readFileSync(`${join(dirname(md), "schemas", basename(md))}.schemas.ts`, 'utf8').matchAll(/^import .* from '([^']+)';$/gm)].map((x) => x[1]);
+  const imports = [...readFileSync(`${join(dirname(md), "..", "schemas", basename(md))}.schemas.ts`, 'utf8').matchAll(/^import .* from '([^']+)';$/gm)].map((x) => x[1]);
   assert.deepEqual(imports, ['zod'], 'el schema estricto solo depende de zod');
   assert.ok(!existsSync(join(RAIZ, 'src', 'components', 'layout', 'server-api-docs-model.ts')), 'el nombre viejo no queda');
 });

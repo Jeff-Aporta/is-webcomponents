@@ -184,7 +184,7 @@ build(cdn): regenerar bundles despues de folderize
 
 ### 5.1 localStorage → web publicada → API (sin mapa, desde 2026-10-13)
 
-`src/components/_shared/icon-loader.ts` resuelve cada `<iswc-icon icon="X:Y">` así:
+`src/core/icon-loader.ts` resuelve cada `<iswc-icon icon="X:Y">` así:
 
 ```
 localStorage iswc:icon:X:Y            → sin fetch

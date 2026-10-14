@@ -4,7 +4,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import { escapeHtml } from '../../core/dom-utils.js';
 import { AGGREGATION_FNS, LOGIC, filterTest, operatorNeedsInput, toDate } from './utils/grid-types.js';
 import type { CellValue, FilterRule, Operator, Row } from "./schemas/grid-types.schemas.js";
-import type { ColumnDef } from "./datagrid-core/types.schemas.js";
+import type { ColumnDef } from "./schemas/datagrid-types.schemas.js";
 
 import {
   aggregateRows,
@@ -35,7 +35,7 @@ import {
 } from './utils/grid-ui.js';
 import type { FilterPanelModel } from "./schemas/grid-ui.schemas.js";
 import type { ResolvedColumn } from "./schemas/grid-data.schemas.js";
-import type { FilterModel, SortModelItem } from "./datagrid-core/types.schemas.js";
+import type { FilterModel, SortModelItem } from "./schemas/datagrid-types.schemas.js";
 import type { GridPopoverEl } from "./schemas/grid-ui.schemas.js";
 import '../actions/button.js';
 import '../forms/input.js';

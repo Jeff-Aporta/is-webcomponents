@@ -14,15 +14,15 @@ import { window as jsdomWindow } from '../_jsdom-shim.ts';
 import {
   computeFlowchartLayout,
   resolveFlowchartSpec,
-} from '../../../components/diagrams/flowchart-spec.ts';
+} from '../../../components/diagrams/utils/flowchart-spec.ts';
 import {
   computeSequenceLayout,
   resolveSequenceSpec,
-} from '../../../components/diagrams/sequence-spec.ts';
+} from '../../../components/diagrams/utils/sequence-spec.ts';
 import {
   computeBlockLayout,
   resolveBlockSpec,
-} from '../../../components/diagrams/block-spec.ts';
+} from '../../../components/diagrams/utils/block-spec.ts';
 
 const LONG_LABEL = 'Este es un label muy largo que definitivamente no cabe en una sola línea y debería hacer wrap con múltiples tspans';
 

@@ -17,7 +17,7 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
+import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
 import { NESTED_DEFAULT_MAX } from '../../../components/diagrams/utils/diagram-embed.ts';
 import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
 import type { FlowLayout, FlowLayoutNode } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
@@ -159,8 +159,8 @@ Deno.test('decisión: R1 ramas por el mismo costado no comparten riel (cada una 
 
 // ── Diagramas combinados: usos punteados, vuelta al origen, clase e íconos ──────────────
 import { embedDiagramOf, embedIsNatural, readNodeEmbed } from '../../../components/diagrams/utils/diagram-embed.ts';
-import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/class-spec.ts';
-import { flowPaint } from '../../../components/diagrams/flowchart-spec.ts';
+import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/utils/class-spec.ts';
+import { flowPaint } from '../../../components/diagrams/utils/flowchart-spec.ts';
 
 const COMBINADO = {
   lanes: [{ id: 'P', label: 'Portal' }, { id: 'T', label: 'Controlador' }, { id: 'D', label: 'PostgreSQL' }],
@@ -450,7 +450,7 @@ Deno.test('ruteo: R2 radio de proximidad de giros (llegada pesa el doble que la 
 });
 
 Deno.test('ruteo: A1 el flujo animado es el estándar (activo por defecto; un tema lo puede apagar)', async () => {
-  const tema = JSON.parse(await Deno.readTextFile(new URL('../../../components/diagrams/themes/insoft-flow.json', import.meta.url)));
+  const tema = JSON.parse(await Deno.readTextFile(new URL('../../../components/diagrams/utils/themes/insoft-flow.json', import.meta.url)));
   assertEquals(flowPaint(tema).dashFlow, true, 'insoft: rieles punteados en movimiento');
   assertEquals(flowPaint(tema).pillTone, 'entity', 'insoft: insignia del tono de su entidad, oscuro');
   assertEquals(flowPaint({ flow: {} } as never).dashFlow, true, 'estándar: activo sin flag');

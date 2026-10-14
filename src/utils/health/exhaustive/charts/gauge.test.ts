@@ -48,8 +48,8 @@ test('iswc-gauge: eventos emitidos (BUG: docs declaran iswc-gauge-change pero c�
 
 test('iswc-gauge: data vía setAttribute (no JSON config)', () => {
   // gauge.preview.ts usa setAttribute('value', ...) — no JSON config.
-  const preview = exists('src/components/data/gauge.preview.ts')
-    ? read('src/components/data/gauge.preview.ts') : '';
+  const preview = exists('src/components/data/utils/gauge.preview.ts')
+    ? read('src/components/data/utils/gauge.preview.ts') : '';
   assert.ok(preview.length > 0, 'gauge.preview.ts existe');
   assert.match(preview, /setAttribute\(\s*['"]value['"]/);
 });

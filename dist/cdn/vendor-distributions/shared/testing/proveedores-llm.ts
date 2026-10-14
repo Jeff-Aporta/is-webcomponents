@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/proveedores-llm.ts
+// @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/testing/proveedores-llm.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/11-stagehand.md
 /**
  * proveedores-llm.ts — pila de proveedores LLM OpenAI-compatible (MiniMax, DeepSeek, OpenAI…) en

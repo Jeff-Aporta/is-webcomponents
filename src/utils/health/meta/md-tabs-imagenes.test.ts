@@ -8,7 +8,7 @@
  *   T4 anota los tags que necesita (para que md-hydrate los cargue).
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { mdToHtml } from '../../../components/helpers/md-lite.ts';
+import { mdToHtml } from '../../../components/helpers/utils/md-lite.ts';
 
 const BLOQUE = '---\n\n![Secuencia](a.svg)\n![Secuencia enriquecida](b.svg "Ruta ilustrada")\n\n---';
 

@@ -15,8 +15,8 @@ import {
   formatBytes,
   normalizeDocument,
   parseApiConfig,
-} from './md-editor-api.js';
-import { hydrateMdEmbeds } from './md-hydrate.js';
+} from './utils/md-editor-api.js';
+import { hydrateMdEmbeds } from './utils/md-hydrate.js';
 import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 // Tipos del contrato — declarados aquí localmente (en lugar de re-exportarlos
 // desde md-editor-api.js, que sigue siendo JSDoc-only). El `.d.ts` paralelo

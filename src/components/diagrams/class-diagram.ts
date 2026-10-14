@@ -1,20 +1,20 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
-import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
+import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { resolveClassSpec, computeClassLayout, sentidoFlujoClase } from './class-spec.js';
+import { resolveClassSpec, computeClassLayout, sentidoFlujoClase } from './utils/class-spec.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFill, edgeChipText } from './utils/diagram-edge-style.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import { svgIconBadge } from '../../core/tk-icon-inline.js';
 import type { ClassLayout, ClassLayoutEdge, ClassLayoutNode, ClassLayoutSection, DiagramGroup, DiagramTheme } from "./schemas/diagram-types.schemas.js";
-import { hostStyleName, styleThemeFor } from './diagram-styles.js';
+import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
 
 /**

@@ -4,9 +4,9 @@
 // síntesis de lollipops: un payload con `links` y sin `interfaces`
 // tiene que salir con O/C y path, o el PNG solo enseña cajas.
 
-import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_GAP, assemblyEntityMargin, parseHttpEndpoint } from '../../../components/diagrams/component-spec.ts';
+import { computeComponentLayout, resolveComponentSpec, LOLLI_R, LOLLI_GAP, assemblyEntityMargin, parseHttpEndpoint } from '../../../components/diagrams/utils/component-spec.ts';
 import { pathPoints as parsePathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
-import { COL_GUTTER, EDGE_CLEARANCE, orthoPolysOverlap, pathHasDiagonal, pathIllegal, pathShareLen, pointInOrtho, segsFromPath, segmentoCortaCaja } from '../../../components/diagrams/component-pack.ts';
+import { COL_GUTTER, EDGE_CLEARANCE, orthoPolysOverlap, pathHasDiagonal, pathIllegal, pathShareLen, pointInOrtho, segsFromPath, segmentoCortaCaja } from '../../../components/diagrams/utils/component-pack.ts';
 
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };

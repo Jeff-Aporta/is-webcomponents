@@ -176,7 +176,7 @@ campo espejo.
 
 ## Dependencias y componentes relacionados
 
-- [`./masks-tokens.js`](./masks-tokens.js) â€” tokenizado y `apply()` / `isComplete()`.
+- [`./masks-tokens.js`](./utils/masks-tokens.js) â€” tokenizado y `apply()` / `isComplete()`.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)
 - [`../_shared/define.js`](../_shared/define.js)
 - [`../_shared/emit.js`](../_shared/emit.js)

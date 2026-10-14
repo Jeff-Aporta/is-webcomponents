@@ -59,7 +59,7 @@
  * ### Out of scope
  *
  * - Diagram themes (`iswc-diagram-theme/v1`, currently only
- *   `src/components/diagrams/themes/insoft.json`) use a different
+ *   `src/components/diagrams/utils/themes/insoft.json`) use a different
  *   `$schema` and a different shape. They're validated by the
  *   diagram-theme path, not by `ComponentJsonSchema`.
  */

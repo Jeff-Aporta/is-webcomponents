@@ -29,7 +29,7 @@ import {
   urlDeOperacion,
   validarDocumentoApi,
   validarEstricto,
-} from './server-api-docs-md.js';
+} from './utils/server-api-docs-md.js';
 import './doc-layout.js';
 import '../navigation/doc-index.js';
 import '../navigation/pager.js';

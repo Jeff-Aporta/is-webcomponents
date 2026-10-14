@@ -95,14 +95,14 @@ import '../forms/checkbox.js';
 import '../forms/select.js';
 import '../forms/option.js';
 
-import { ColumnType, Density, SelectionMode, PinSide, HeaderCheckboxState, DEFAULT_PAGE_SIZE, DEFAULT_HEADER_HEIGHT, DENSITY_ROW_HEIGHT } from './datagrid-core/types.js';
-import { toggleRowSelection as toggleRowSelectionCore, selectAll as selectAllCore, clearSelection as clearSelectionCore, headerCheckboxState as headerCheckboxStateCore } from './datagrid-core/selection.js';
-import { rowWindow, applyFlex } from './datagrid-core/viewport.js';
-import { orderedForLayout } from './datagrid-core/column-state.js';
-import { getCellValue } from './datagrid-core/value-formatter.js';
-import { rowsToCsv } from './datagrid-core/csv-export.js';
-import { createGridModel } from './datagrid-core/grid-model.js';
-import type { ColumnDef, ColumnState, RowData, RowNode, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './datagrid-core/types.schemas.js';
+import { ColumnType, Density, SelectionMode, PinSide, HeaderCheckboxState, DEFAULT_PAGE_SIZE, DEFAULT_HEADER_HEIGHT, DENSITY_ROW_HEIGHT } from './utils/datagrid-core/types.js';
+import { toggleRowSelection as toggleRowSelectionCore, selectAll as selectAllCore, clearSelection as clearSelectionCore, headerCheckboxState as headerCheckboxStateCore } from './utils/datagrid-core/selection.js';
+import { rowWindow, applyFlex } from './utils/datagrid-core/viewport.js';
+import { orderedForLayout } from './utils/datagrid-core/column-state.js';
+import { getCellValue } from './utils/datagrid-core/value-formatter.js';
+import { rowsToCsv } from './utils/datagrid-core/csv-export.js';
+import { createGridModel } from './utils/datagrid-core/grid-model.js';
+import type { ColumnDef, ColumnState, RowData, RowNode, SortDirName, PinSideName, DensityName, GridState, GridApi, ColumnFilter, SelectionModeName, TextFilterOp } from './schemas/datagrid-types.schemas.js';
 import type { ColumnDefWithActions, ActionDef, ColumnStateWithSticky, CellEditDetail, CellClickDetail, RowSelectDetail, SortChangeDetail, FilterChangeDetail, ActionEventDetail, ColumnPinDetail, PageChangeDetail, StateSavedDetail } from "./schemas/ag-grid.schemas.js";
 
 const TEMPLATE = document.createElement('template');

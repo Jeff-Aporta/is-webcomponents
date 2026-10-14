@@ -1,7 +1,7 @@
 import assert from 'node:assert';
-import { resolveUseCaseSpec, computeUseCaseLayout } from './use-case-spec.js';
-import { resolveSwimlaneSpec, computeSwimlaneLayout } from './swimlane-spec.js';
-import { resolveJourneySpec, computeJourneyLayout } from './journey-spec.js';
+import { resolveUseCaseSpec, computeUseCaseLayout } from './utils/use-case-spec.js';
+import { resolveSwimlaneSpec, computeSwimlaneLayout } from './utils/swimlane-spec.js';
+import { resolveJourneySpec, computeJourneyLayout } from './utils/journey-spec.js';
 
 /**
  * Invariantes de los tres diagramas de proceso y alcance.

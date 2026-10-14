@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T13:21:59.537Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/10-iconos.md -->
+<!-- @vendor 2026-10-14T14:46:24.593Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/10-iconos.md -->
 # 10 — Íconos: localStorage, web publicada o API (sin mapa)
 
 Un ícono se resuelve por esta **cadena**, en orden (Jeff, 2026-10-13). No hay mapa (`iconify.json` ya no

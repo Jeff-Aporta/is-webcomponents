@@ -13,10 +13,10 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, unionesDe } from '../../../components/diagrams/flowchart-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, unionesDe } from '../../../components/diagrams/utils/flowchart-spec.ts';
 import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../../components/diagrams/utils/diagram-arrow.ts';
 import { applyRadialCost, makeCostGrid } from '../../../core/diagram-grid.ts';
-import { U } from '../../../components/diagrams/flowchart-labels.ts';
+import { U } from '../../../components/diagrams/utils/flowchart-labels.ts';
 import type { FlowLayout } from '../../../components/diagrams/schemas/flowchart-spec.schemas.ts';
 
 const DIR = new URL('../../../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);

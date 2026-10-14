@@ -163,7 +163,7 @@ No declara integraciÃ³n form-associated.
 
 ## Dependencias y componentes relacionados
 
-- [`./diagram-kinds.js`](./diagram-kinds.js) â€” registro de tipos de diagrama.
+- [`./diagram-kinds.js`](./utils/diagram-kinds.js) â€” registro de tipos de diagrama.
 - [`./diagram-lightbox.js`](./diagram-lightbox.js) â€” visor a pantalla completa.
 - [`../_shared/svg-chart-engine.js`](../../core/svg-chart-engine.js) â€” creaciÃ³n de nodos SVG.
 - [`../_shared/adopt-css.js`](../_shared/adopt-css.js)

@@ -1,18 +1,18 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { resolveGanttSpec, computeGanttLayout } from './gantt-spec.js';
+import { resolveGanttSpec, computeGanttLayout } from './utils/gantt-spec.js';
 import type { GanttLayout, GanttSpec } from './schemas/gantt-spec.schemas.js';
 // Tipos internos del spec (no exportados) que el renderer necesita; los
 // redefinimos localmente para no tocar la firma del spec.
-import { shapePath } from './flowchart-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { shapePath } from './utils/flowchart-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { PathTurtle } from '../../core/path-turtle.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { inlineMdWeb } from '../../core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import { svgArrowHead } from './utils/diagram-arrow.js';
 import type { GanttRow, GanttArrow, GanttTick, TurtleState, RowNodeEntry, ArrowNodeEntry } from "./schemas/gantt.schemas.js";

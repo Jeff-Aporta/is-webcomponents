@@ -1,12 +1,12 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
-import { resolveQuadrantSpec, computeQuadrantLayout } from './quadrant-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { resolveQuadrantSpec, computeQuadrantLayout } from './utils/quadrant-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import type { QuadrantLayout, QuadrantLayoutAxisLabel } from "./schemas/quadrant-spec.schemas.js";
 import type { PointEntry } from "./schemas/quadrant-chart.schemas.js";

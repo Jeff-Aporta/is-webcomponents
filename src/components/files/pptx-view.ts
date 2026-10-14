@@ -2,8 +2,8 @@ import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { ElementBase } from '../../core/element-base.js';
 import { setOptionalAttr, setStringAttr } from '../../core/reflect.js';
 import { escapeHtml } from '../../core/dom-utils.js';
-import { loadArrayBuffer, resolveFileSource } from './_shared/file-source.js';
-import { JSZIP_CDN, loadCdnScript, PPTX_PREVIEW_CDN } from './_shared/load-cdn.js';
+import { loadArrayBuffer, resolveFileSource } from './utils/file-source.js';
+import { JSZIP_CDN, loadCdnScript, PPTX_PREVIEW_CDN } from './utils/load-cdn.js';
 import type { ZipLike } from "./schemas/pptx-view.schemas.js";
 
 (() => {

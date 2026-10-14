@@ -1,20 +1,20 @@
 import { adoptCss, defineElement, emit, emitCancelable } from '../../core/element.js';
-import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
+import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo } from './utils/diagram-flow.js';
-import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './er-spec.js';
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { resolveErSpec, computeErLayout, entityBoxPath, ER_HEADER_H, ER_ROW_H, ER_KEY_ICON_IDS } from './utils/er-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import { edgeStrokeHex, edgeChipFromStroke } from './utils/diagram-edge-style.js';
 import { inlineMdWeb, applySvgTextContent } from '../../core/tk-inline-md.js';
 import { wrapText, buildTspans } from './utils/diagram-text-wrap.js';
 import { svgIconGroup } from '../../core/tk-icon-inline.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
-import { resolveErTheme, themeToDiagramTheme, clusterPalette, entityPaint, edgePaint, findOrphanEntityIds, injectThemeCss, pickThemeMode } from './theme.js';
+import { resolveErTheme, themeToDiagramTheme, clusterPalette, entityPaint, edgePaint, findOrphanEntityIds, injectThemeCss, pickThemeMode } from './utils/theme.js';
 import { type ErThemeJson } from './schemas/theme.schemas.js';
-import { hostStyleName, styleThemeFor } from './diagram-styles.js';
+import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
 import type { DiagramGroup, DiagramTheme, ErLayout, ErLayoutEdge, ErLayoutEdgeMark, ErLayoutEntity } from "./schemas/diagram-types.schemas.js";
 
 /**

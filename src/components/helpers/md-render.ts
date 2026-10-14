@@ -7,7 +7,7 @@ import {
   editorHtmlToBody,
   surfaceHasRawVarTokens,
 } from './utils/prompt-md.js';
-import { hydrateMdEmbeds } from './md-hydrate.js';
+import { hydrateMdEmbeds } from './utils/md-hydrate.js';
 import type { HidratacionMd } from './schemas/md-hydrate.schemas.js';
 import type { RenderersMd } from './schemas/md-lite.schemas.js';
 

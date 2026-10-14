@@ -6,7 +6,7 @@
  *   M4 la sección tiene alto para todos sus renglones.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { computeClassLayout, partirMiembro, resolveClassSpec } from '../../../components/diagrams/class-spec.ts';
+import { computeClassLayout, partirMiembro, resolveClassSpec } from '../../../components/diagrams/utils/class-spec.ts';
 
 const LARGO = 'cargar(contexto: Array<Record<string, unknown>>, opciones: { reintentos: number; tiempo: number }): Promise<Array<Record<string, TResultadoDeCargaMuyLargo>>>';
 const spec = resolveClassSpec({
@@ -59,7 +59,7 @@ Deno.test('miembros: M5 toda clase muestra 5 por defecto y un renglón «K más�
   const tope = (spec: unknown) => (embedDiagramOf(spec as never)!.payload as { classDiagram: { layout: { maxMembers: number } } }).classDiagram.layout.maxMembers;
   assertEquals(tope({ kind: 'class', class: { name: 'A', methods: metodos } }), 5, 'por defecto 5 y el sexto renglón es «N más»');
   // La config del diagrama anfitrión fija el tope de sus clases.
-  const { flowchartSpecFromPayload } = await import('../../../components/diagrams/flowchart-spec.ts');
+  const { flowchartSpecFromPayload } = await import('../../../components/diagrams/utils/flowchart-spec.ts');
   const f = flowchartSpecFromPayload({ config: { classMaxMembers: 3 }, nodes: [{ id: 'c', kind: 'class', class: { name: 'A', methods: metodos } }, { id: 'x', label: 'x' }], edges: [] })!;
   assertEquals(tope(f.nodes[0]!.embed), 3);
 });

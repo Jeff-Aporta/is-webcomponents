@@ -1,7 +1,7 @@
 /* <iswc-md-render> — vista MD/HTML inline (sin toolbar ni diálogo).
  * Host block a ancho disponible; el consumidor lo estrecha con style="" si quiere. */
 
-@import 'md-kit';
+@import 'utils/md-kit';
 
 :host {
   display: block;

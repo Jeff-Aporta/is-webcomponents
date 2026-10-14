@@ -1,5 +1,5 @@
 // tests/diagram-astar-rules.test.mjs — Guardián de las reglas del router de
-// aristas del `<iswc-component-diagram>` (src/components/diagrams/component-router.ts).
+// aristas del `<iswc-component-diagram>` (src/components/diagrams/utils/component-router.ts).
 //
 // Por qué existe: las reglas visuales que pidió el equipo (W54–W69) se cumplen
 // POR CONSTRUCCIÓN en el router; este test las verifica con comportamiento
@@ -21,8 +21,8 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { routeEdges, validateRoute } from '../src/components/diagrams/component-router.ts';
-import { computeComponentLayout, resolveComponentSpec } from '../src/components/diagrams/component-spec.ts';
+import { routeEdges, validateRoute } from '../src/components/diagrams/utils/component-router.ts';
+import { computeComponentLayout, resolveComponentSpec } from '../src/components/diagrams/utils/component-spec.ts';
 import { pathPoints as parsePathPoints } from '../src/components/diagrams/utils/diagram-arrow.ts';
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));

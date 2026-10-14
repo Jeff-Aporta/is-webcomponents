@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { resolveFlowchartSpec, computeFlowchartLayout } from './flowchart-spec.js';
+import { resolveFlowchartSpec, computeFlowchartLayout } from './utils/flowchart-spec.js';
 import { pathPoints as parsePathPoints } from './utils/diagram-arrow.js';
 
 /**

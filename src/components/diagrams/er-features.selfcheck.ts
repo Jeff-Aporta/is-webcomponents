@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
   resolveErSpec, computeErLayout, ER_KEY_ICON_IDS,
-} from './er-spec.js';
+} from './utils/er-spec.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, '..', '..', '..');

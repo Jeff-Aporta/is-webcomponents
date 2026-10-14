@@ -5,7 +5,7 @@ import {
   blobUrlFromBuffer,
   loadArrayBuffer,
   resolveFileSource,
-} from '../files/_shared/file-source.js';
+} from '../files/utils/file-source.js';
 
 /**
  * <iswc-pdf-viewer> — Visor de PDF. Por defecto usa el visor nativo del navegador

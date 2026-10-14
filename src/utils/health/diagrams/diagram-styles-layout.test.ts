@@ -13,9 +13,9 @@ import {
   loadStylesDiagram,
   registerStyleDiagram,
   styleThemeFor,
-} from '../../../components/diagrams/diagram-styles.ts';
-import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/component-spec.ts';
-import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/class-spec.ts';
+} from '../../../components/diagrams/utils/diagram-styles.ts';
+import { computeComponentLayout, resolveComponentSpec } from '../../../components/diagrams/utils/component-spec.ts';
+import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/utils/class-spec.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 const NARANJA_DER = '#F4B67B';
@@ -80,7 +80,7 @@ Deno.test('el build publica los temas junto a los bundles (carga diferida)', () 
   const dist = join(ROOT, 'dist', 'cdn', 'diagrams', 'themes');
   if (!existsSync(dist)) return; // sin build local no hay qué verificar
   for (const f of ['insoft.json', 'insoft-cd.json', 'insoft-class.json']) {
-    const src = readFileSync(join(ROOT, 'src', 'components', 'diagrams', 'themes', f), 'utf8');
+    const src = readFileSync(join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', f), 'utf8');
     assertEquals(readFileSync(join(dist, f), 'utf8'), src, `${f} desactualizado en dist`);
   }
 });
@@ -197,7 +197,7 @@ Deno.test('remate arrow: sin lollipops, cada flecha termina en la cara de su des
 });
 
 Deno.test('router: las `->` de la misma clave comparten punta si les sale barato; el `-(O-` nunca', async () => {
-  const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
+  const { routeEdges } = await import('../../../components/diagrams/utils/component-router.ts');
   const D = { id: 'D', x: 600, y: 180, w: 120, h: 80 };
   const A = { id: 'A', x: 40, y: 120, w: 120, h: 60 };
   const B = { id: 'B', x: 40, y: 240, w: 120, h: 60 };
@@ -220,7 +220,7 @@ Deno.test('router: las `->` de la misma clave comparten punta si les sale barato
 });
 
 Deno.test('router: unirse no es obligatorio; fuera del radio de incentivo la flecha hace su propia punta', async () => {
-  const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
+  const { routeEdges } = await import('../../../components/diagrams/utils/component-router.ts');
   const D = { id: 'D', x: 400, y: 100, w: 200, h: 200 };
   const A = { id: 'A', x: 40, y: 170, w: 120, h: 60 };
   const C = { id: 'C', x: 440, y: 520, w: 120, h: 60 };
@@ -233,7 +233,7 @@ Deno.test('router: unirse no es obligatorio; fuera del radio de incentivo la fle
 });
 
 Deno.test('router: con candidatos elige la pareja de puertos más barata, no repite puerto entre aristas ajenas y guarda el costo', async () => {
-  const { routeEdges, perimeterPorts } = await import('../../../components/diagrams/component-router.ts');
+  const { routeEdges, perimeterPorts } = await import('../../../components/diagrams/utils/component-router.ts');
   const A = { id: 'A', x: 40, y: 100, w: 120, h: 80 };
   const B = { id: 'B', x: 400, y: 100, w: 120, h: 80 };
   const C = { id: 'C', x: 40, y: 400, w: 120, h: 80 };
@@ -262,7 +262,7 @@ Deno.test('router: con candidatos elige la pareja de puertos más barata, no rep
 });
 
 Deno.test('routing-costs: defaults válidos, sobreescritura parcial profunda y valor inválido ignorado', async () => {
-  const { ROUTING_COSTS_DEFAULTS, resolveRoutingCosts } = await import('../../../components/diagrams/routing-costs.ts');
+  const { ROUTING_COSTS_DEFAULTS, resolveRoutingCosts } = await import('../../../components/diagrams/utils/routing-costs.ts');
   assertEquals(ROUTING_COSTS_DEFAULTS.share.radius, 200);
   const r = resolveRoutingCosts({ share: { radius: 260 }, rail: { overlap: 50 } });
   assertEquals(r.share.radius, 260);
@@ -274,7 +274,7 @@ Deno.test('routing-costs: defaults válidos, sobreescritura parcial profunda y v
 });
 
 Deno.test('router: campo de factores; dos rieles ajenos no corren pegados (< lanePitch) en un tramo largo', async () => {
-  const { routeEdges } = await import('../../../components/diagrams/component-router.ts');
+  const { routeEdges } = await import('../../../components/diagrams/utils/component-router.ts');
   // A→D y B→E en filas a 60 px: si el brillo de riel vecino no actuara,
   // los rieles irían pegados; con él se separan al menos un carril.
   const A = { id: 'A', x: 40, y: 170, w: 100, h: 60 };

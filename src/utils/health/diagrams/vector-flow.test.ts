@@ -7,9 +7,9 @@
  *   VF4 el flowchart lo dibuja tal cual (`{ vectorFlow }`), con índices automáticos.
  */
 import { assert, assertEquals, assertThrows } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { validarVector, vectorAFlujo } from '../../../components/diagrams/vector-flow-spec.ts';
+import { validarVector, vectorAFlujo } from '../../../components/diagrams/utils/vector-flow-spec.ts';
 import { ZVectorFlow } from '../../../components/diagrams/schemas/vector-flow-spec.schemas.ts';
-import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/flowchart-spec.ts';
+import { computeFlowchartLayout, resolveFlowchartSpec } from '../../../components/diagrams/utils/flowchart-spec.ts';
 
 const base = () => ({
   steps: 'auto' as const,

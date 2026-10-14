@@ -1,10 +1,10 @@
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
-import { resolveClassSpec, computeClassLayout } from './class-spec.js';
-import { resolveTimelineSpec, computeTimelineLayout } from './timeline-spec.js';
-import { resolveStateSpec, computeStateLayout } from './state-spec.js';
-import { resolveVennSpec, computeVennLayout } from './venn-spec.js';
-import { sequenceThemeLight, sequenceThemeDark } from './sequence-spec.js';
+import { resolveClassSpec, computeClassLayout } from './utils/class-spec.js';
+import { resolveTimelineSpec, computeTimelineLayout } from './utils/timeline-spec.js';
+import { resolveStateSpec, computeStateLayout } from './utils/state-spec.js';
+import { resolveVennSpec, computeVennLayout } from './utils/venn-spec.js';
+import { sequenceThemeLight, sequenceThemeDark } from './utils/sequence-spec.js';
 
 /**
  * Defectos de LEGIBILIDAD que solo aparecen al exportar el diagrama a PNG.
@@ -116,7 +116,7 @@ console.log('render-legibilidad.selfcheck: OK');
 
 /* ── 5. Actores de secuencia: nombre real y avatar siempre pintado ── */
 
-const { resolveSequenceSpec } = await import('./sequence-spec.js');
+const { resolveSequenceSpec } = await import('./utils/sequence-spec.js');
 
 const sec = resolveSequenceSpec({
   sequence: {

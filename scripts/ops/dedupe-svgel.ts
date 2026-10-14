@@ -7,7 +7,7 @@ import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const engine = join(root, 'src/components/_shared/svg-chart-engine.js');
+const engine = join(root, 'src/core/svg-chart-engine.js');
 
 const FILES = [
   'src/components/diagrams/mindmap.js',
@@ -20,7 +20,7 @@ const FILES = [
   'src/components/diagrams/org-chart.js',
   'src/components/diagrams/timeline.js',
   'src/components/diagrams/state-diagram.js',
-  'src/components/_shared/path-turtle.js',
+  'src/core/path-turtle.js',
   'src/components/media/barcode.js',
 ];
 

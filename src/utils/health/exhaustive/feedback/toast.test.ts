@@ -90,7 +90,7 @@ test('11. usa normalizeIntent para mapear colores', () => {
 test('12. custom element registrado y preview.ts existe', () => {
   const src = leerConBase(TS);
   assert.ok(/defineElement\s*\(\s*['"]iswc-toast['"]/.test(src));
-  assert.ok(existsSync(join(ROOT, 'src/components/feedback/toast.preview.ts')));
+  assert.ok(existsSync(join(ROOT, 'src/components/feedback/utils/toast.preview.ts')));
 });
 
 test('13. JSDoc de cabecera', () => {

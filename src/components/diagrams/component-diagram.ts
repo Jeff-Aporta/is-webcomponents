@@ -1,23 +1,23 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { DiagramElementBase } from './utils/diagram-element-base.js';
 import { animarRielEn, flujoActivo, pulsoRadar } from './utils/diagram-flow.js';
-import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './component-spec.js';
+import { resolveComponentSpec, computeComponentLayout, packageShapePath, LOLLI_R, HTTP_METHOD_BADGE, CARD_TEXT_X, CARD_STEREO_DY } from './utils/component-spec.js';
 import type { ComponentLayout } from './schemas/component-spec.schemas.js';
-import { sequenceThemeDark, sequenceThemeLight } from './sequence-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from './utils/sequence-spec.js';
 import { tkHueToHex } from '../../core/tk-hue.js';
 import {
   edgeStrokeHex, edgeChipFill, edgeChipText, hexMixWhite, RECEIVER_COLOR,
 } from './utils/diagram-edge-style.js';
 import type { DiagramTheme } from './schemas/diagram-types.schemas.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import { svgIconGroup, svgIconBadge } from '../../core/tk-icon-inline.js';
 import { svgArrowHead, pathEndDirection } from './utils/diagram-arrow.js';
 import type { Caja, Lado, Paquete, Punto } from './schemas/diagram-tipos.schemas.js';
-import { resolveErTheme, pickThemeMode, themeToDiagramTheme, clusterPalette, componentBoxPaint, edgePaint, injectThemeCss } from './theme.js';
+import { resolveErTheme, pickThemeMode, themeToDiagramTheme, clusterPalette, componentBoxPaint, edgePaint, injectThemeCss } from './utils/theme.js';
 import { type ErThemeJson } from './schemas/theme.schemas.js';
-import { hostStyleName, styleThemeFor } from './diagram-styles.js';
-import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
+import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
+import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 
 import type { InterfaceStemPoint, LayoutPackage, AnchorPoint } from "./schemas/component-diagram.schemas.js";

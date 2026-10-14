@@ -31,7 +31,7 @@ console.log('OK er-editor.min.js');
 
 // Utils puros (json2css, resolveErTheme, INSOFT_THEME) — Deno/vendor/CDN.
 await build({
-  entryPoints: [join(ROOT, 'src/components/diagrams/theme.ts')],
+  entryPoints: [join(ROOT, 'src/components/diagrams/utils/theme.ts')],
   bundle: true, format: 'esm', target: 'es2020',
   outfile: join(OUT, 'theme.min.js'),
   minify: true, sourcemap: false, treeShaking: true,
@@ -49,7 +49,7 @@ for (const name of readdirSync(themesSrc)) {
 
 // Fuentes TS para vendor Deno (extender sin minificar).
 copyFileSync(
-  join(ROOT, 'src/components/diagrams/theme.ts'),
+  join(ROOT, 'src/components/diagrams/utils/theme.ts'),
   join(OUT, 'theme.ts'),
 );
 console.log('OK theme.ts (vendor)');

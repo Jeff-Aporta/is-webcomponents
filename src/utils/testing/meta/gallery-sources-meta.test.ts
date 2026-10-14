@@ -28,7 +28,7 @@ test('manifest usa iswc-code (no iswc-code-editor)', () => {
   assert.match(src, /tag:\s*['"]iswc-code['"]/);
   assert.doesNotMatch(src, /iswc-code-editor/);
   assert.ok(existsSync(join(root, 'src/components/code/code.json')));
-  assert.ok(existsSync(join(root, 'src/components/code/code.preview.ts')));
+  assert.ok(existsSync(join(root, 'src/components/code/utils/code.preview.ts')));
   assert.ok(!existsSync(join(root, 'src/components/code/code-editor.json')));
 });
 

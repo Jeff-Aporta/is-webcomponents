@@ -2,7 +2,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
-const root = join(import.meta.dirname, '..');
+const root = join(import.meta.dirname, '..', '..');
 const comp = join(root, 'src', 'components');
 const gh = 'https://github.com/Jeff-Aporta/iswc-root/blob/main/src/components';
 
@@ -310,31 +310,31 @@ const API_MODULES = [
   {
     id: 'mdToHtml',
     cdn: 'helpers/md-lite.min.js',
-    guia: `${gh}/helpers/md-lite.md`,
+    guia: `${gh}/helpers/utils/md-lite.md`,
     resumen: 'Markdown -> HTML sin npm; fences codigo e iswc-* (diagramas).',
   },
   {
     id: 'resolveIswcFenceTag',
     cdn: 'helpers/md-iswc-fences.min.js',
-    guia: `${gh}/helpers/md-iswc-fences.md`,
+    guia: `${gh}/helpers/utils/md-iswc-fences.md`,
     resumen: 'Lang fence iswc-* -> tag de diagrama (flowchart, er, sequence, ...).',
   },
   {
     id: 'hydrateMdEmbeds',
     cdn: 'helpers/md-hydrate.min.js',
-    guia: `${gh}/helpers/md-hydrate.md`,
+    guia: `${gh}/helpers/utils/md-hydrate.md`,
     resumen: 'Carga perezosa de los iswc-* que pusieron los renders por defecto del markdown.',
   },
   {
     id: 'md-editor-api',
     cdn: 'helpers/md-editor-api.min.js',
-    guia: `${gh}/helpers/md-editor-api.md`,
+    guia: `${gh}/helpers/utils/md-editor-api.md`,
     resumen: 'CRUD/normalizacion para iswc-md-editor (endpoints, fieldMap, token).',
   },
   {
     id: 'IsResponseCache',
     cdn: 'helpers/response-cache.min.js',
-    guia: `${gh}/helpers/response-cache.md`,
+    guia: `${gh}/helpers/utils/response-cache.md`,
     resumen: 'SWR IndexedDB: vivo/leer/guardar/invalidar; no bloquea el pintado.',
   },
   {

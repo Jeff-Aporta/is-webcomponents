@@ -6,8 +6,8 @@
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
 import { Obj } from '../../../vendor-distributions/shared/lib/obj.ts';
-import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/class-spec.ts';
-import { computeErLayout, resolveErSpec } from '../../../components/diagrams/er-spec.ts';
+import { computeClassLayout, resolveClassSpec } from '../../../components/diagrams/utils/class-spec.ts';
+import { computeErLayout, resolveErSpec } from '../../../components/diagrams/utils/er-spec.ts';
 
 const DIR = new URL('../../../../../../../PatyIA/_experimental/ISS-AyudasCPIA/docs-experimental/diagramas/', import.meta.url);
 type Caja = { x: number; y: number; w: number; h: number };

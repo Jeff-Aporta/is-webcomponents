@@ -5,7 +5,7 @@
  *   C2 `config.entityColors` del consumidor manda por tipo.
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { coloresDeEntidad, resolveFlowchartSpec, TIPOS_ENTIDAD } from '../../../components/diagrams/flowchart-spec.ts';
+import { coloresDeEntidad, resolveFlowchartSpec, TIPOS_ENTIDAD } from '../../../components/diagrams/utils/flowchart-spec.ts';
 import { hexToOklch } from '../../../components/diagrams/utils/oklch.ts';
 
 const spec = (config?: unknown) => resolveFlowchartSpec({

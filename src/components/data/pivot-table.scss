@@ -1,4 +1,4 @@
-@import './_sticky.css';
+@use 'utils/sticky';
 
 /* iswc-pivot-table */
 :host { display: block; font: inherit; color: var(--iswc-text); }
@@ -29,7 +29,7 @@ table.pivot {
     white-space: nowrap;
     vertical-align: middle;
   }
-  /* position/inset-inline-start/font-weight vienen de _sticky.css. El `background` se repite
+  /* position/inset-inline-start/font-weight vienen de utils/_sticky.scss. El `background` se repite
    * aquí a propósito: `.pivot thead th` (0,1,2) le gana en especificidad al
    * `.corner` (0,1,0) del partial y le pisaría el color-mix. */
   :is(th.corner, td.row-head) {

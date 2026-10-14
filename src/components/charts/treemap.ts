@@ -1,12 +1,12 @@
 import { adoptCss, defineElement, emit } from '../../core/element.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
-import { resolveTreemapSpec, computeTreemapLayout } from './treemap-spec.js';
+import { resolveTreemapSpec, computeTreemapLayout } from './utils/treemap-spec.js';
 import type { TreemapSpec, TreemapLayout } from "./schemas/treemap-spec.schemas.js";
-import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/sequence-spec.js';
+import { sequenceThemeDark, sequenceThemeLight } from '../diagrams/utils/sequence-spec.js';
 import type { DiagramTheme } from "../diagrams/schemas/diagram-types.schemas.js";
 import { tkHueToCss } from '../../core/tk-hue.js';
 import { inlineMdWeb } from '../../core/tk-inline-md.js';
-import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
+import { registerDiagramKind } from '../diagrams/utils/diagram-kinds.js';
 
 /**
  * <iswc-treemap> — treemap anidado en SVG (algoritmo squarified), sin librerías.

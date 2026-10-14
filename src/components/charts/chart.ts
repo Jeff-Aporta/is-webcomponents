@@ -4,7 +4,7 @@ import { withStyleAttrs } from '../../core/attrs.js';
 import { scaleLinear, scaleBand, niceTicks, svgEl } from '../../core/svg-chart-engine.js';
 import { getCategoricalColors, getFillColors } from './utils/chart-palette.js';
 import { PathTurtle } from '../../core/path-turtle.js';
-import { registerDiagramKind } from '../diagrams/diagram-kinds.js';
+import { registerDiagramKind } from '../diagrams/utils/diagram-kinds.js';
 import { setStringAttr } from '../../core/reflect.js';
 import type { TypedChartFactory, ChartDataPoint, ChartDataset, ChartConfig, LegendEntry, HitRecord, ResolvedOptions, DrawMarksFn, ChartCtx } from "./schemas/chart.schemas.js";
 

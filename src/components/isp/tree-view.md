@@ -165,7 +165,7 @@ No es form-associated. El formulario de ficha vive en el slot `frm`.
 - **Roles 3D** por nodo: tres ejes (`topology`, `containment`, `mobility`) mÃ¡s
   `freeze` puntual. Los getters (`isAtom`, `isPrison`, â€¦) son solo lectura.
   GuÃ­a ilustrativa completa con casos de uso y matriz de efectos:
-  **[tree-view-roles.md](./tree-view-roles.md)**.
+  **[tree-view-roles.md](./utils/tree-view-roles.md)**.
 - Toolbar default: extender `TreeCustomsBase` (agregar, expandir, undo/protecciÃ³n/redo).
 - Drag: reorder entre hermanos y nest `into` en agrupadores. `canDrop` combina roles
   (`hermetic`, `freezer`, anti-ciclos). Ver guÃ­a de roles.
@@ -188,7 +188,7 @@ El body es `role="tree"`; cada summary es `role="treeitem"` con teclado
 
 ## Ejemplo avanzado
 
-Ver tambiÃ©n **[Roles 3D](./tree-view-roles.md)** para cuÃ¡ndo usar `atom`,
+Ver tambiÃ©n **[Roles 3D](./utils/tree-view-roles.md)** para cuÃ¡ndo usar `atom`,
 `hermetic`, `prison`, `freezer`, etc.
 
 ```html
@@ -236,7 +236,7 @@ Ver tambiÃ©n **[Roles 3D](./tree-view-roles.md)** para cuÃ¡ndo usar `atom`,
 - Reusar componente y dependencias antes de implementaciÃ³n paralela.
 - Mantener nombres exactos de tags y API.
 - Booleano se activa por presencia; no usar `attr="false"` salvo `draggable="false"`.
-- **Roles:** leer [tree-view-roles.md](./tree-view-roles.md) antes de modelar nodos;
+- **Roles:** leer [tree-view-roles.md](./utils/tree-view-roles.md) antes de modelar nodos;
   asignar `topology` / `containment` / `mobility` en `updateNode`, nunca getters.
 - Leer callers/shared antes de cambiar; corregir raÃ­z comÃºn.
 - No modificar API basÃ¡ndose solo en preview.
@@ -246,7 +246,7 @@ Ver tambiÃ©n **[Roles 3D](./tree-view-roles.md)** para cuÃ¡ndo usar `atom`,
 
 - [JavaScript](./tree-view.ts)
 - [CSS](./tree-view.css)
-- [Roles 3D â€” guÃ­a ilustrativa](./tree-view-roles.md)
+- [Roles 3D â€” guÃ­a ilustrativa](./utils/tree-view-roles.md)
 - [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./tree-view.json)
 

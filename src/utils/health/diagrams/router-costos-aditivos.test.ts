@@ -9,7 +9,7 @@
  * Solo se mira lo que el router entrega (`paths`, `costs`), no cómo lo calcula.
  */
 import { assert, assertAlmostEquals, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
-import { routeEdges } from '../../../components/diagrams/component-router.ts';
+import { routeEdges } from '../../../components/diagrams/utils/component-router.ts';
 
 const A = { id: 'A', x: 40, y: 60, w: 120, h: 80 };
 const B = { id: 'B', x: 520, y: 60, w: 120, h: 80 };

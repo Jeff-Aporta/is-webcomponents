@@ -16,7 +16,7 @@ import {
 } from './_helpers.js';
 
 const RAIZ = join(import.meta.dirname, '..', '..', '..', '..');
-const FACTORY = join(RAIZ, 'components', '_shared', 'date-field-element.ts');
+const FACTORY = join(RAIZ, 'components', 'forms', 'utils', 'date-field-element.ts');
 const factorySrc = readFileSync(FACTORY, 'utf8');
 
 const TAG = 'iswc-date-field';

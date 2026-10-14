@@ -8,15 +8,15 @@ import {
   sequenceMessageTooltipText,
   sequenceThemeDark,
   sequenceThemeLight,
-} from './sequence-spec.js';
+} from './utils/sequence-spec.js';
 import type { SequenceLayout, SequenceLayoutAltBox, SequenceLayoutMessage, SequenceResolvedSpec } from './schemas/sequence-spec.schemas.js';
 import type { SequenceLayoutFragment, SequenceNestedSpec } from './schemas/sequence-spec.schemas.js';
 import { captureNodeEmbed, embedStage, embedSvgElement } from './utils/diagram-embed.js';
 import type { EmbedCapture, EmbedSize } from './schemas/diagram-embed.schemas.js';
-import { hostStyleName, styleThemeFor } from './diagram-styles.js';
-import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './theme.js';
+import { hostStyleName, styleThemeFor } from './utils/diagram-styles.js';
+import { injectThemeCss, lineColor, paletteColor, pickThemeMode, resolveErTheme, sequencePaint, themeToDiagramTheme } from './utils/theme.js';
 import type { ErThemeJson } from './schemas/theme.schemas.js';
-import { readEdgeStyle, edgeStyleFor } from './diagram-vocab.js';
+import { readEdgeStyle, edgeStyleFor } from './utils/diagram-vocab.js';
 import type { EdgeStyle } from './schemas/diagram-vocab.schemas.js';
 import { styledEdgePath } from './utils/diagram-curve.js';
 import { PathTurtle as SequenceTurtle } from '../../core/path-turtle.js';
@@ -30,7 +30,7 @@ import { contrastFontColor, pastelColor } from '../../core/tk-color.js';
 import { inlineMdWeb } from '../../core/tk-inline-md.js';
 import { wrapText, buildTspans, defaultMeasureTextWidth } from './utils/diagram-text-wrap.js';
 import type { TSpanSpec } from './schemas/diagram-text-wrap.schemas.js';
-import { registerDiagramKind } from './diagram-kinds.js';
+import { registerDiagramKind } from './utils/diagram-kinds.js';
 import { svgEl } from '../../core/svg-chart-engine.js';
 import type { SequenceMessageSpec } from './schemas/sequence-spec.schemas.js';
 import type { TurtleState, MsgNode, LifelineNode, ActorNode, PartBox } from "./schemas/sequence-diagram.schemas.js";

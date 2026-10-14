@@ -12,13 +12,13 @@ import {
   listEdgeKinds,
   readEdgeStyle,
   recommendationFor,
-} from '../../../components/diagrams/diagram-vocab.ts';
+} from '../../../components/diagrams/utils/diagram-vocab.ts';
 import { roundOrthogonalPath, styledEdgePath } from '../../../components/diagrams/utils/diagram-curve.ts';
 import { pathPoints } from '../../../components/diagrams/utils/diagram-arrow.ts';
-import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/sequence-spec.ts';
-import { lineColor, paletteColor, pickThemeMode, sequencePaint } from '../../../components/diagrams/theme.ts';
+import { computeSequenceLayout, resolveSequenceSpec } from '../../../components/diagrams/utils/sequence-spec.ts';
+import { lineColor, paletteColor, pickThemeMode, sequencePaint } from '../../../components/diagrams/utils/theme.ts';
 import { ErThemeJsonSchema } from '../../../components/diagrams/schemas/theme.schemas.ts';
-import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/diagram-styles.ts';
+import { loadStylesDiagram, styleThemeFor } from '../../../components/diagrams/utils/diagram-styles.ts';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
@@ -142,7 +142,7 @@ Deno.test('secuencia: alt tras una región no se monta sobre ella', () => {
 });
 
 Deno.test('estilo insoft: trae tema de secuencia con tipografía, líneas por nombre y pintura completa', async () => {
-  const file = join(ROOT, 'src', 'components', 'diagrams', 'themes', 'insoft-seq.json');
+  const file = join(ROOT, 'src', 'components', 'diagrams', 'utils', 'themes', 'insoft-seq.json');
   assert(existsSync(file), 'falta themes/insoft-seq.json');
   const raw = ErThemeJsonSchema.passthrough().parse(JSON.parse(readFileSync(file, 'utf8')));
   assertEquals(raw.kind, 'sequence');

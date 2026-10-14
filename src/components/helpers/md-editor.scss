@@ -254,7 +254,7 @@
   &:empty { display: none; }
 }
 
-@import 'md-kit';
+@import 'utils/md-kit';
 
 /* Render híbrido MD + HTML + iswc-code / diagramas (alineado a iswc-md-render). */
 .prompt-md-preview {

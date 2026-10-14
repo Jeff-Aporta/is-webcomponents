@@ -253,7 +253,7 @@ El consumidor no define colores ni temas: elige un estilo por atributo.
 ## Vocabulario común y estilo de arista
 
 Las aristas de todos los diagramas se nombran en un vocabulario compartido
-([`diagram-vocab.ts`](./diagram-vocab.ts)): familias `connector` (ensamble
+([`diagram-vocab.ts`](./utils/diagram-vocab.ts)): familias `connector` (ensamble
 -(O-, dependencia, realización, asociación), `relational` (relación con
 cardinalidad, consulta, entrega), `signal` (señal sin flechas, mensajes de
 secuencia), `flow` y `structural` (herencia, composición, agregación). Cada
@@ -336,10 +336,10 @@ delante del rótulo. Entre agrupadores hermanos apilados hay al menos 3U
 
 ## Dependencias y componentes relacionados
 
-- [`./component-spec.js`](./component-spec.js)
-- [`./sequence-spec.js`](./sequence-spec.js) â€” temas claro/oscuro
+- [`./component-spec.js`](./utils/component-spec.js)
+- [`./sequence-spec.js`](./utils/sequence-spec.js) â€” temas claro/oscuro
 - [`../_shared/diagram-element-base.js`](./utils/diagram-element-base.js)
-- [`./diagram-kinds.js`](./diagram-kinds.js)
+- [`./diagram-kinds.js`](./utils/diagram-kinds.js)
 
 ## Accesibilidad
 
@@ -371,7 +371,7 @@ provided/required:
 
 - [JavaScript](./component-diagram.ts)
 - [CSS](./component-diagram.css)
-- [Spec y layout](./component-spec.js)
+- [Spec y layout](./utils/component-spec.js)
 - [Ãndice de categorÃ­a](../../specs/componentes.md)
 - [Preview](./component-diagram.json)
 
