@@ -32,7 +32,7 @@ import { z } from "zod";
 
 // ===== @seccion obj =====
 /**
- * Tipos de `Obj` (operaciones sobre objetos JSON) y de las referencias `{ path, query, actions }`.
+ * Tipos de `Obj` (operaciones VIRTUALES sobre objetos JSON) y de `RefObj` (referencias FÍSICAS `{ path, query, actions }`).
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
  *
  * Consulta (`query`): un objeto que copia la forma del dato y marca con un valor TRUTHY (`!!x`) lo
@@ -56,18 +56,20 @@ export const ZJson: z.ZodType<TJson> = z.lazy(() =>
 );
 
 /**
- * Acciones que se aplican en orden sobre el valor (`Obj.aplicar`):
- *   - `push`: upsert profundo (lo no mencionado se conserva; `null` quita);
+ * Acciones VIRTUALES (en memoria) que se aplican en orden sobre el valor (`Obj.aplicar`):
+ *   - `insert`: upsert profundo (lo no mencionado se conserva; `null` quita);
+ *   - `insertIgnore`: agrega solo lo que NO existe (no pisa);
  *   - `update`: cambia solo lo que YA existe (no crea claves);
- *   - `insert`: agrega solo lo que NO existe (no pisa);
+ *   - `replace`: reemplazo directo (lo que aplica sin molde Zod);
  *   - `delete`: quita lo que marque la consulta;
  *   - `get`: la estructura desde la raíz con solo lo que marque la consulta (varias claves);
  *   - `getValue`: el valor exacto de la única hoja marcada, sin estructura (`null` si no existe).
  */
 export const ZAccionObj = z.discriminatedUnion("op", [
-  z.object({ op: z.literal("push"), valor: ZJson }),
-  z.object({ op: z.literal("update"), valor: ZJson }),
   z.object({ op: z.literal("insert"), valor: ZJson }),
+  z.object({ op: z.literal("insertIgnore"), valor: ZJson }),
+  z.object({ op: z.literal("update"), valor: ZJson }),
+  z.object({ op: z.literal("replace"), valor: ZJson }),
   z.object({ op: z.literal("delete"), query: ZConsulta }),
   z.object({ op: z.literal("get"), query: ZConsulta }),
   z.object({ op: z.literal("getValue"), query: ZConsulta }),
@@ -75,7 +77,7 @@ export const ZAccionObj = z.discriminatedUnion("op", [
 export type TAccionObj = z.infer<typeof ZAccionObj>;
 
 /**
- * Referencia a un valor de otro JSON (fuente de verdad): `path` (relativo al documento que la
+ * Referencia FÍSICA (`RefObj.resolver`) a un valor de otro JSON (fuente de verdad): `path` (relativo al documento que la
  * contiene), `query` (SIEMPRE un `getValue`: marca exactamente una hoja y trae ese valor exacto) y
  * `actions` opcionales que adaptan lo traído. Sirve para cualquier valor: texto, número, booleano,
  * objeto, arreglo. Si el valor no existe es un error (hay que definirlo o ajustar path/query). Las
@@ -91,7 +93,7 @@ export type TRefObj = z.infer<typeof ZRefObj>;
 /** Cómo leer un `path` (fetch en el navegador, fs en Node/Deno). */
 export type TCargarJson = (url: string) => Promise<unknown>;
 
-/** Opciones de `Obj.resolver`. */
+/** Opciones de `RefObj.resolver`. */
 export interface TOpcionesResolver {
   /** Lector del JSON de cada `path` (ya resuelto contra `base`). */
   cargar: TCargarJson;
@@ -103,8 +105,8 @@ export interface TOpcionesResolver {
   profundidad?: number;
 }
 
-/** Códigos de error de `Obj`. */
-export type TCodigoObj = "consulta" | "no-existe" | "varios" | "ninguno" | "ref" | "ciclo" | "carga" | "accion";
+/** Códigos de error: virtuales de `Obj` (consulta, varios, ninguno) y físicos de `RefObj` (no-existe, ref, ciclo, carga). */
+export type TCodigoObj = "consulta" | "no-existe" | "varios" | "ninguno" | "ref" | "ciclo" | "carga";
 // ===== @fin obj =====
 
 // ===== @seccion test-cooldown =====
@@ -979,7 +981,7 @@ export type SyntheticDiagramJob = {
   /**
    * Ruta (o URL) del documento del que sale el payload. Con ella, cada referencia
    * `{ path, query, actions }` del payload se resuelve (relativa a ese documento) antes de pintar;
-   * un valor que no existe hace fallar el render con el error (ver `Obj.resolver`).
+   * un valor que no existe hace fallar el render con el error (ver `RefObj.resolver`).
    */
   payloadBase?: string;
   /** Atributos del host (`theme="insoft-cd"`, `min-gap="72"`…). */

@@ -10,7 +10,7 @@
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
 import type { FlowLayout, FlowResolvedSpec } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
@@ -31,7 +31,7 @@ async function rutas(): Promise<Array<{ nombre: string; spec: FlowResolvedSpec; 
     if (!f.name.startsWith('ruta-')) continue;
     const url = new URL(f.name, DIR);
     const crudo = JSON.parse(await Deno.readTextFile(url));
-    const j = await Obj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
+    const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
     const spec = resolveFlowchartSpec(j.payload)!;
     out.push({ nombre: f.name, spec, L: computeFlowchartLayout(spec, null, { style: 'insoft' }) });
   }

@@ -518,8 +518,8 @@ try {
 // y nadie llegaba a esas 177 paginas. Para agentes el canal es `skills/`,
 // que este mismo build publica en `dist/cdn/skills/`.
 
-// ── lib/: bundles para el navegador (obj.min.js con Zod incluido; zod.min.js compartido) ──
-// Las FUENTES vendorizables (obj.ts, obj.md, zod.ts; contratos en shared/schemas.ts) viven en
+// ── lib/: bundles para el navegador (obj.min.js = Obj virtual y ref-obj.min.js = RefObj físico, con Zod incluido; zod.min.js compartido) ──
+// Las FUENTES vendorizables (obj.ts, ref-obj.ts, obj.md, zod.ts; contratos en shared/schemas.ts) viven en
 // src/vendor-distributions/shared/lib y se publican en dist/cdn/vendor-distributions/shared/lib (más abajo).
 // Los bundles quedan en dist/cdn/lib porque los de componentes importan `../lib/zod.min.js`
 // (resolver `zod-externo`; guardián meta/zod-compartido.test.ts).
@@ -536,6 +536,15 @@ await build({
   legalComments: 'none',
 });
 await build({
+  entryPoints: [join(vendorSrc, 'shared', 'lib', 'ref-obj.ts')],
+  outfile: join(libOut, 'ref-obj.min.js'),
+  bundle: true,
+  minify: true,
+  format: 'esm',
+  target: 'es2022',
+  legalComments: 'none',
+});
+await build({
   entryPoints: [join(vendorSrc, 'shared', 'lib', 'zod.ts')],
   outfile: join(libOut, 'zod.min.js'),
   bundle: true,
@@ -544,7 +553,7 @@ await build({
   target: 'es2022',
   legalComments: 'none',
 });
-console.log(`  ${'lib/'.padEnd(18)} obj.min.js (navegador) + zod.min.js (compartido por los bundles)`);
+console.log(`  ${'lib/'.padEnd(18)} obj.min.js + ref-obj.min.js (navegador) + zod.min.js (compartido por los bundles)`);
 
 // ── gallery-app.min.js ───────────────────────────────────────────
 // Consumo de la SPA: Live Server / Pages no transpilan src/*.ts.

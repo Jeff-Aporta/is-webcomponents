@@ -6,7 +6,7 @@
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeSequenceLayout, resolveSequenceSpec } from '../../src/components/diagrams/utils/sequence-spec.ts';
 import { pathPoints as parsePathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
@@ -39,7 +39,7 @@ denoTest('secuencia: A16 ningún mensaje pasa sobre una pestaña de fragmento o 
     const url = new URL(f.name, DIR);
     const crudo = JSON.parse(await Deno.readTextFile(url)) as { tag?: string };
     if (crudo.tag !== 'iswc-sequence-diagram') continue;
-    const j = await Obj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: unknown };
+    const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: unknown };
     const spec = resolveSequenceSpec(j.payload);
     if (!spec) continue;
     const L = computeSequenceLayout(spec);

@@ -71,11 +71,12 @@ Sin barriles ni re-exports (regla InSoft): cada consumidor importa del archivo d
 
 | Archivo | Propósito | Doc |
 | --- | --- | --- |
-| `obj.ts` | `Obj`: operaciones parciales sobre objetos JSON (`push`/`update`/`insert`/`delete`/`get`/`getValue`/`aplicar`) y resolución de referencias `{ path, query, actions }` (sección `obj` de `schemas.ts`) | [obj.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md) |
+| `obj.ts` | `Obj`: operaciones VIRTUALES (en memoria) sobre objetos JSON (`insert`/`insertIgnore`/`update`/`replace`/`delete`/`get`/`getValue`/`aplicar`) |
+| `ref-obj.ts` | `RefObj`: operaciones FÍSICAS: referencias `{ path, query, actions }` a otros JSON (`resolver`, `esRef`, `resolverUrl`) |
 | `obj.md` | Documentación de `Obj` | — |
 | `zod.ts` | Reexporta Zod; es la fuente del bundle único `dist/cdn/lib/zod.min.js` que comparten los componentes | [05-zod-y-tipos.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/05-zod-y-tipos.md) |
 
-Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` (Zod incluido) y `dist/cdn/lib/zod.min.js`.
+Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` y `dist/cdn/lib/ref-obj.min.js` (Zod incluido) y `dist/cdn/lib/zod.min.js`.
 
 ### `shared/testing/` — sistema común de pruebas, proveedores LLM y jueces
 

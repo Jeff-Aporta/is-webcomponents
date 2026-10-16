@@ -12,7 +12,7 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec, CRUD_SQL, PROXIMIDAD, unionesDe } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { pathPoints, quitarAutoCruces, tieneAutoCruce } from '../../src/components/diagrams/utils/diagram-arrow.ts';
 import { applyRadialCost, makeCostGrid } from '../../src/core/diagram-grid.ts';
@@ -34,7 +34,7 @@ async function rutas(): Promise<Array<{ nombre: string; L: FlowLayout }>> {
     if (!f.name.startsWith('ruta-')) continue;
     const url = new URL(f.name, DIR);
     const crudo = JSON.parse(await Deno.readTextFile(url));
-    const j = await Obj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
+    const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
     out.push({ nombre: f.name, L: computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' }) });
   }
   return out;

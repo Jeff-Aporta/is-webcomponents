@@ -16,7 +16,7 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { costoGiros, computeFlowchartLayout, flowchartSpecToJson, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { NESTED_DEFAULT_MAX } from '../../src/components/diagrams/utils/diagram-embed.ts';
 import { pathPoints } from '../../src/components/diagrams/utils/diagram-arrow.ts';
@@ -26,7 +26,7 @@ import type { FlowLayout, FlowLayoutNode } from '../../src/components/diagrams/s
 async function editable(url: URL): Promise<{ payload: Record<string, unknown> }> {
   const ruta = fileURLToPath(url);
   const crudo = JSON.parse(await Deno.readTextFile(url));
-  return await Obj.resolver(crudo, { base: ruta, cargar: async (u) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
+  return await RefObj.resolver(crudo, { base: ruta, cargar: async (u) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
 }
 
 const LANES = [{ id: 'P', label: 'Pasajero' }, { id: 'V', label: 'Vendedor' }, { id: 'A', label: 'Aerolínea' }];

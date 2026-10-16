@@ -13,7 +13,7 @@
  */
 import { assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
@@ -117,7 +117,7 @@ denoTest('índices: I9 sin huecos en ningún nivel (rutas reales)', async () => 
     if (!f.name.startsWith('ruta-')) continue;
     const url = new URL(f.name, dir);
     const crudo = JSON.parse(await Deno.readTextFile(url));
-    const j = await Obj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
+    const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: Record<string, unknown> };
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     const porNivel = new Map<string, number[]>();
     for (const n of L.nodes) {

@@ -33,12 +33,12 @@ denoTest('vars: V1-V3 tabla nombre · valor, desc opcional, insignia de variable
 });
 
 denoTest('vars: V4 en las rutas reales la tabla queda dentro de su nodo (también tras abrir espacio)', async () => {
-  const { Obj } = await import('../../src/vendor-distributions/shared/lib/obj.ts');
+  const { RefObj } = await import('../../src/vendor-distributions/shared/lib/ref-obj.ts');
   const dir = new URL('../../labs/iss-ayudascpia-flujos/payloads/', import.meta.url);
   for await (const f of Deno.readDir(dir)) {
     if (!f.name.startsWith('ruta-')) continue;
     const ruta = new URL(f.name, dir);
-    const j = await Obj.resolver(JSON.parse(await Deno.readTextFile(ruta)), { base: ruta.pathname.replace(/^\/(\w:)/, '$1'), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: unknown };
+    const j = await RefObj.resolver(JSON.parse(await Deno.readTextFile(ruta)), { base: ruta.pathname.replace(/^\/(\w:)/, '$1'), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: unknown };
     const L = computeFlowchartLayout(resolveFlowchartSpec(j.payload)!, null, { style: 'insoft' });
     for (const n of L.nodes.filter((x) => x.varsBox)) {
       const b = n.varsBox!;

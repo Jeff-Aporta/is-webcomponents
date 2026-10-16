@@ -5,7 +5,7 @@
  */
 import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeClassLayout, resolveClassSpec } from '../../src/components/diagrams/utils/class-spec.ts';
 import { computeErLayout, resolveErSpec } from '../../src/components/diagrams/utils/er-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
@@ -25,7 +25,7 @@ const contiene = (g: Caja, m: Caja): boolean => m.x >= g.x - 0.5 && m.y >= g.y -
 async function editable(nombre: string): Promise<unknown> {
   const url = new URL(nombre, DIR);
   const crudo = JSON.parse(await Deno.readTextFile(url));
-  const j = await Obj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: unknown };
+  const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: unknown };
   return j.payload;
 }
 

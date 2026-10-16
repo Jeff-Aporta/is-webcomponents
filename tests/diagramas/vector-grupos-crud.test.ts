@@ -9,7 +9,7 @@
  */
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { fileURLToPath } from 'node:url';
-import { Obj } from '../../src/vendor-distributions/shared/lib/obj.ts';
+import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { GRUPOS_CRUD, vectorAFlujo } from '../../src/components/diagrams/utils/vector-flow-spec.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
@@ -31,7 +31,7 @@ async function rutas(): Promise<Array<{ nombre: string; vector: Record<string, u
     if (!f.name.startsWith('ruta-') || !f.name.endsWith('.json')) continue;
     const url = new URL(f.name, DIR);
     const crudo = JSON.parse(await Deno.readTextFile(url));
-    const j = await Obj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: { vectorFlow?: Record<string, unknown> } };
+    const j = await RefObj.resolver(crudo, { base: fileURLToPath(url), cargar: async (u: string) => JSON.parse(await Deno.readTextFile(u)) }) as { payload: { vectorFlow?: Record<string, unknown> } };
     if (j.payload.vectorFlow) out.push({ nombre: f.name, vector: j.payload.vectorFlow });
   }
   return out;

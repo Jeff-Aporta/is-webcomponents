@@ -212,7 +212,7 @@ deno run -A --no-check --sloppy-imports <ISU>/render-lote.ts --carpeta=docs-expe
 ```
 
 - **Huella**: sha256 del spec RESUELTO (`module`, `tag`, `script`, `attrs`, payload con sus referencias
-  `{ path, query, actions }` ya resueltas por `Obj.resolver`, relativas al editable) + `pinKit` (`<kit>/PIN`) +
+  `{ path, query, actions }` ya resueltas por `RefObj.resolver`, relativas al editable) + `pinKit` (`<kit>/PIN`) +
   `version` del módulo. Un value de `../fuentes/codigo.json` que entra al diagrama cambia su huella; uno que no entra, no.
 - **Caché** `diagramas-iswc.cache.json` junto a los editables (o `--cache`):
   `{ version, diagramas: { [slug]: { huella, svg, png, fecha, ancho, alto } } }`; atómico tras cada diagrama OK.
