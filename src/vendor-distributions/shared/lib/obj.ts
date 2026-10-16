@@ -95,7 +95,7 @@ function objetoInterno(schema: z.core.$ZodType | undefined): z.ZodObject | z.Zod
   }
   return undefined;
 }
-function campoDe(schema: z.core.$ZodType | undefined, k: string): { campo?: z.core.$ZodType; libre: boolean } {
+function campoDe(schema: z.core.$ZodType | undefined, k: string): { campo?: z.core.$ZodType | undefined; libre: boolean } {
   const o = objetoInterno(schema);
   if (o instanceof ZodObject) {
     const declarado = (o.shape as Record<string, z.core.$ZodType>)[k];
@@ -105,7 +105,7 @@ function campoDe(schema: z.core.$ZodType | undefined, k: string): { campo?: z.co
   return { libre: true };
 }
 /** Un `null` en la propiedad: borrarla, ponerle su valor «sin valor» o no tocarla. */
-function nullDe({ campo, libre }: { campo?: z.core.$ZodType; libre: boolean }): { borrar: true } | { valor: unknown } | { nada: true } {
+function nullDe({ campo, libre }: { campo?: z.core.$ZodType | undefined; libre: boolean }): { borrar: true } | { valor: unknown } | { nada: true } {
   if (libre || !campo) return { borrar: true };
   const sinValor = safeParse(campo, undefined);
   if (sinValor.success) return sinValor.data === undefined ? { borrar: true } : { valor: sinValor.data };
