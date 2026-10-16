@@ -1,4 +1,3 @@
-// @vendor 2026-10-14T17:01:21.991Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.mjs
 // Bundle autocontenido de src/vendor-distributions/client/tools/render-lote.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/client/tools/render-lote.ts.
 
 // src/vendor-distributions/client/tools/render-lote.ts
@@ -15,30 +14,6 @@ import { pathToFileURL as pathToFileURL2 } from "node:url";
 // src/vendor-distributions/client/tools/render-diagram.ts
 import { mkdir as mkdir2, writeFile as writeFile2, rm, rename, readFile as readFile2 } from "node:fs/promises";
 
-// src/vendor-distributions/shared/lib/obj.ts
-import {
-  nullable as zNullable,
-  object as zObject,
-  optional as zOptional,
-  safeParse,
-  ZodArray,
-  ZodCatch,
-  ZodDefault,
-  ZodExactOptional,
-  ZodLazy,
-  ZodNonOptional,
-  ZodNullable,
-  ZodObject,
-  ZodOptional,
-  ZodPipe,
-  ZodPrefault,
-  ZodPromise,
-  ZodReadonly,
-  ZodRecord,
-  ZodSuccess,
-  ZodUnion
-} from "npm:zod@^4.4.3";
-
 // src/vendor-distributions/shared/schemas.ts
 import { z } from "npm:zod@^4.4.3";
 var ZConsulta = z.lazy(
@@ -48,9 +23,10 @@ var ZJson = z.lazy(
   () => z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(ZJson), z.record(z.string(), ZJson)])
 );
 var ZAccionObj = z.discriminatedUnion("op", [
-  z.object({ op: z.literal("push"), valor: ZJson }),
-  z.object({ op: z.literal("update"), valor: ZJson }),
   z.object({ op: z.literal("insert"), valor: ZJson }),
+  z.object({ op: z.literal("insertIgnore"), valor: ZJson }),
+  z.object({ op: z.literal("update"), valor: ZJson }),
+  z.object({ op: z.literal("replace"), valor: ZJson }),
   z.object({ op: z.literal("delete"), query: ZConsulta }),
   z.object({ op: z.literal("get"), query: ZConsulta }),
   z.object({ op: z.literal("getValue"), query: ZConsulta })
@@ -258,6 +234,28 @@ var CacheLoteSchema = z.object({
 });
 
 // src/vendor-distributions/shared/lib/obj.ts
+import {
+  nullable as zNullable,
+  object as zObject,
+  optional as zOptional,
+  safeParse,
+  ZodArray,
+  ZodCatch,
+  ZodDefault,
+  ZodExactOptional,
+  ZodLazy,
+  ZodNonOptional,
+  ZodNullable,
+  ZodObject,
+  ZodOptional,
+  ZodPipe,
+  ZodPrefault,
+  ZodPromise,
+  ZodReadonly,
+  ZodRecord,
+  ZodSuccess,
+  ZodUnion
+} from "npm:zod@^4.4.3";
 var ObjError = class extends Error {
   codigo;
   ruta;
@@ -332,7 +330,7 @@ var Obj = class _Obj {
    * con default → el default; obligatoria → el primer vacío que acepte; si ninguno, no se toca;
    * sin schema → se borra). Una clave `[campo=valor]` apunta a un elemento de un arreglo.
    */
-  static push(base, cambios, schema) {
+  static insert(base, cambios, schema) {
     if (!esPlano(cambios)) return cambios === void 0 ? base : cambios;
     const out = esPlano(base) || Array.isArray(base) ? copia(base) : {};
     for (const [k, v] of Object.entries(cambios)) {
@@ -349,26 +347,26 @@ var Obj = class _Obj {
         continue;
       }
       const actual = out[destino];
-      out[destino] = esPlano(v) && (esPlano(actual) || Array.isArray(actual)) ? _Obj.push(actual, v, campo.campo) : v;
+      out[destino] = esPlano(v) && (esPlano(actual) || Array.isArray(actual)) ? _Obj.insert(actual, v, campo.campo) : v;
     }
     return out;
   }
-  /** `push` + validación del resultado con el schema (lanza el ZodError si queda fuera). */
-  static pushZod(schema, base, cambios) {
-    return schema.parse(_Obj.push(esPlano(base) ? base : {}, esPlano(cambios) ? cambios : {}, schema));
+  /** `insert` + validación del resultado con el schema (lanza el ZodError si queda fuera). */
+  static insertZod(schema, base, cambios) {
+    return schema.parse(_Obj.insert(esPlano(base) ? base : {}, esPlano(cambios) ? cambios : {}, schema));
   }
   /**
-   * Schema de un FRAGMENTO de push para `schema` (un objeto): cada clave declarada es opcional y
+   * Schema de un FRAGMENTO de insert para `schema` (un objeto): cada clave declarada es opcional y
    * acepta `null` («quitar»); un objeto anidado también se valida como fragmento. Cliente y
    * servidor validan así el mismo fragmento.
    */
-  static esquemaPush(schema) {
+  static esquemaInsert(schema) {
     const o = objetoInterno(schema);
     if (!(o instanceof ZodObject)) return schema;
     const declarado = o.shape;
     const shape = Object.fromEntries(Object.entries(declarado).map(([k, campo]) => {
       const interno = objetoInterno(campo);
-      return [k, zOptional(zNullable(interno instanceof ZodObject ? _Obj.esquemaPush(interno) : campo))];
+      return [k, zOptional(zNullable(interno instanceof ZodObject ? _Obj.esquemaInsert(interno) : campo))];
     }));
     const fragmento = zObject(shape);
     return o.def.catchall ? fragmento.catchall(zNullable(o.def.catchall)) : fragmento.strict();
@@ -419,8 +417,12 @@ var Obj = class _Obj {
     }
     return out;
   }
+  /** Reemplazo directo: `valor` sustituye a `base` (`undefined` = no tocar). Es lo que aplica sin molde Zod. */
+  static replace(base, valor) {
+    return valor === void 0 ? base : valor;
+  }
   /** Agrega solo lo que NO existe en `base` (profundo); nunca pisa un valor. */
-  static insert(base, nuevos) {
+  static insertIgnore(base, nuevos) {
     if (!esPlano(nuevos)) return base;
     const out = esPlano(base) || Array.isArray(base) ? copia(base) : {};
     for (const [k, v] of Object.entries(nuevos)) {
@@ -431,7 +433,7 @@ var Obj = class _Obj {
       }
       for (const c of existentes) {
         const actual = out[c];
-        if (esPlano(v) && (esPlano(actual) || Array.isArray(actual))) out[c] = _Obj.insert(actual, v);
+        if (esPlano(v) && (esPlano(actual) || Array.isArray(actual))) out[c] = _Obj.insertIgnore(actual, v);
       }
     }
     return out;
@@ -499,14 +501,17 @@ var Obj = class _Obj {
     acciones.forEach((a, i) => {
       try {
         switch (a.op) {
-          case "push":
-            v = _Obj.push(v, a.valor);
+          case "insert":
+            v = _Obj.insert(v, a.valor);
+            break;
+          case "insertIgnore":
+            v = _Obj.insertIgnore(v, a.valor);
             break;
           case "update":
             v = _Obj.update(v, a.valor);
             break;
-          case "insert":
-            v = _Obj.insert(v, a.valor);
+          case "replace":
+            v = _Obj.replace(v, a.valor);
             break;
           case "delete":
             v = _Obj.delete(v, a.query);
@@ -525,67 +530,6 @@ var Obj = class _Obj {
     });
     return v;
   }
-  /** `true` si `v` tiene forma de referencia (`path` + `query`). */
-  static esRef(v) {
-    return esPlano(v) && typeof v.path === "string" && "query" in v && ZRefObj.safeParse(v).success;
-  }
-  /**
-   * Resuelve cada referencia `{ path, query, actions }` que haya en `valor` (a cualquier
-   * profundidad): carga el JSON de `path` (relativo a `base`), toma con `getValue` el valor exacto
-   * que marque la consulta (si no existe, error) y aplica las acciones. Lo traído puede tener a
-   * su vez referencias (relativas a su propio archivo). Las props extra de una referencia se
-   * ignoran con un aviso; una referencia mal formada, un `path` que no carga o una consulta sin
-   * resultado lanzan `ObjError` con la ruta.
-   */
-  static async resolver(valor, opciones) {
-    const avisar = opciones.avisar ?? ((m) => console.warn(`[Obj] ${m}`));
-    const tope = opciones.profundidad ?? 16;
-    const cache = /* @__PURE__ */ new Map();
-    const cargar = (url) => {
-      if (!cache.has(url)) {
-        cache.set(url, opciones.cargar(url).catch((e) => {
-          throw new ObjError("carga", `no se pudo leer ${url}: ${e instanceof Error ? e.message : String(e)}`);
-        }));
-      }
-      return cache.get(url);
-    };
-    const visitar = async (v, base, ruta, pila) => {
-      if (Array.isArray(v)) return Promise.all(v.map((x, i) => visitar(x, base, unir(ruta, String(i)), pila)));
-      if (!esPlano(v)) return v;
-      if (typeof v.path === "string" && "query" in v) {
-        const r = ZRefObj.safeParse(v);
-        if (!r.success) throw new ObjError("ref", `referencia mal formada: ${r.error.issues.map((x) => `${x.path.join(".")} ${x.message}`).join("; ")}`, ruta);
-        const extra = Object.keys(v).filter((k) => k !== "path" && k !== "query" && k !== "actions");
-        if (extra.length) avisar(`${ruta || "(ra\xEDz)"}: claves ignoradas en la referencia: ${extra.join(", ")}`);
-        const url = resolverUrl(r.data.path, base);
-        const id = `${url}#${JSON.stringify(r.data.query)}`;
-        if (pila.includes(id)) throw new ObjError("ciclo", `referencia circular: ${[...pila, id].join(" \u2192 ")}`, ruta);
-        if (pila.length >= tope) throw new ObjError("ciclo", `m\xE1s de ${tope} referencias anidadas`, ruta);
-        const doc = await cargar(url);
-        let traido;
-        try {
-          traido = _Obj.getValue(doc, r.data.query);
-        } catch (e) {
-          if (e instanceof ObjError) throw new ObjError(e.codigo, `${r.data.path}: ${e.message}`, ruta);
-          throw e;
-        }
-        if (traido === null) {
-          throw new ObjError("no-existe", `${r.data.path}: el valor no existe (${_Obj.caminoUnico(r.data.query).join(".")}); def\xEDnalo en la fuente o ajuste path/query`, ruta);
-        }
-        const resuelto = await visitar(traido, url, ruta, [...pila, id]);
-        try {
-          return _Obj.aplicar(resuelto, r.data.actions);
-        } catch (e) {
-          if (e instanceof ObjError) throw new ObjError(e.codigo, e.message, ruta);
-          throw e;
-        }
-      }
-      const out = {};
-      for (const [k, x] of Object.entries(v)) out[k] = await visitar(x, base, unir(ruta, k), pila);
-      return out;
-    };
-    return visitar(valor, opciones.base, "", []);
-  }
   /** Caminos de las hojas truthy de una consulta (claves tal cual, `*` y selectores incluidos). */
   static hojas(query, prefijo = []) {
     if (!esPlano(query)) return query ? [prefijo] : [];
@@ -602,6 +546,73 @@ var Obj = class _Obj {
   static validarConsulta(query) {
     const r = ZConsulta.safeParse(query);
     if (!r.success) throw new ObjError("consulta", `consulta inv\xE1lida: ${r.error.issues[0]?.message ?? ""}`);
+  }
+};
+
+// src/vendor-distributions/shared/lib/ref-obj.ts
+var esPlano2 = (v) => Obj.esPlano(v);
+var unir2 = (ruta, k) => ruta ? `${ruta}.${k}` : k;
+var RefObj = class {
+  /** `true` si `v` tiene forma de referencia (`path` + `query`). */
+  static esRef(v) {
+    return esPlano2(v) && typeof v.path === "string" && "query" in v && ZRefObj.safeParse(v).success;
+  }
+  /**
+   * Resuelve cada referencia `{ path, query, actions }` que haya en `valor` (a cualquier
+   * profundidad): carga el JSON de `path` (relativo a `base`), toma con `getValue` el valor exacto
+   * que marque la consulta (si no existe, error) y aplica las acciones. Lo traído puede tener a
+   * su vez referencias (relativas a su propio archivo). Las props extra de una referencia se
+   * ignoran con un aviso; una referencia mal formada, un `path` que no carga o una consulta sin
+   * resultado lanzan `ObjError` con la ruta.
+   */
+  static async resolver(valor, opciones) {
+    const avisar = opciones.avisar ?? ((m) => console.warn(`[RefObj] ${m}`));
+    const tope = opciones.profundidad ?? 16;
+    const cache = /* @__PURE__ */ new Map();
+    const cargar = (url) => {
+      if (!cache.has(url)) {
+        cache.set(url, opciones.cargar(url).catch((e) => {
+          throw new ObjError("carga", `no se pudo leer ${url}: ${e instanceof Error ? e.message : String(e)}`);
+        }));
+      }
+      return cache.get(url);
+    };
+    const visitar = async (v, base, ruta, pila) => {
+      if (Array.isArray(v)) return Promise.all(v.map((x, i) => visitar(x, base, unir2(ruta, String(i)), pila)));
+      if (!esPlano2(v)) return v;
+      if (typeof v.path === "string" && "query" in v) {
+        const r = ZRefObj.safeParse(v);
+        if (!r.success) throw new ObjError("ref", `referencia mal formada: ${r.error.issues.map((x) => `${x.path.join(".")} ${x.message}`).join("; ")}`, ruta);
+        const extra = Object.keys(v).filter((k) => k !== "path" && k !== "query" && k !== "actions");
+        if (extra.length) avisar(`${ruta || "(ra\xEDz)"}: claves ignoradas en la referencia: ${extra.join(", ")}`);
+        const url = resolverUrl(r.data.path, base);
+        const id = `${url}#${JSON.stringify(r.data.query)}`;
+        if (pila.includes(id)) throw new ObjError("ciclo", `referencia circular: ${[...pila, id].join(" \u2192 ")}`, ruta);
+        if (pila.length >= tope) throw new ObjError("ciclo", `m\xE1s de ${tope} referencias anidadas`, ruta);
+        const doc = await cargar(url);
+        let traido;
+        try {
+          traido = Obj.getValue(doc, r.data.query);
+        } catch (e) {
+          if (e instanceof ObjError) throw new ObjError(e.codigo, `${r.data.path}: ${e.message}`, ruta);
+          throw e;
+        }
+        if (traido === null) {
+          throw new ObjError("no-existe", `${r.data.path}: el valor no existe (${Obj.caminoUnico(r.data.query).join(".")}); def\xEDnalo en la fuente o ajuste path/query`, ruta);
+        }
+        const resuelto = await visitar(traido, url, ruta, [...pila, id]);
+        try {
+          return Obj.aplicar(resuelto, r.data.actions);
+        } catch (e) {
+          if (e instanceof ObjError) throw new ObjError(e.codigo, e.message, ruta);
+          throw e;
+        }
+      }
+      const out = {};
+      for (const [k, x] of Object.entries(v)) out[k] = await visitar(x, base, unir2(ruta, k), pila);
+      return out;
+    };
+    return visitar(valor, opciones.base, "", []);
   }
 };
 function resolverUrl(path, base) {
@@ -1030,7 +1041,7 @@ function sinInyeccion(svg) {
 }
 async function payloadResuelto(job) {
   if (!job.payloadBase) return job.payload;
-  return Obj.resolver(job.payload, {
+  return RefObj.resolver(job.payload, {
     base: job.payloadBase,
     cargar: async (url) => JSON.parse(/^https?:/i.test(url) ? await (await fetch(url)).text() : await readFile2(url.startsWith("file:") ? new URL(url) : url, "utf8"))
   });

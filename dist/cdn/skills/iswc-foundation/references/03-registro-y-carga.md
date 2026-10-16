@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/03-registro-y-carga.md -->
+<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/03-registro-y-carga.md -->
 # 03 — Registro y carga de componentes
 
 ## Registro único: `src/js/kit-tags.ts`

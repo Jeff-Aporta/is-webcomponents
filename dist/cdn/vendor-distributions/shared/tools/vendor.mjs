@@ -1,4 +1,3 @@
-// @vendor 2026-10-14T17:01:21.991Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/vendor.mjs
 // Bundle autocontenido de src/vendor-distributions/shared/tools/vendor.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/shared/tools/vendor.ts.
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -303,9 +302,10 @@ var ZJson = z.lazy(
   () => z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(ZJson), z.record(z.string(), ZJson)])
 );
 var ZAccionObj = z.discriminatedUnion("op", [
-  z.object({ op: z.literal("push"), valor: ZJson }),
-  z.object({ op: z.literal("update"), valor: ZJson }),
   z.object({ op: z.literal("insert"), valor: ZJson }),
+  z.object({ op: z.literal("insertIgnore"), valor: ZJson }),
+  z.object({ op: z.literal("update"), valor: ZJson }),
+  z.object({ op: z.literal("replace"), valor: ZJson }),
   z.object({ op: z.literal("delete"), query: ZConsulta }),
   z.object({ op: z.literal("get"), query: ZConsulta }),
   z.object({ op: z.literal("getValue"), query: ZConsulta })

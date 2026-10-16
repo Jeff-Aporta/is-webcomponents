@@ -8,7 +8,7 @@ description: >-
   alinear una app existente (ISW…) con el estándar. Todas las apps iswc deben ser
   homogéneas: misma estructura, mismas tareas, mismas reglas.
 ---
-<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/SKILL.md -->
+<!-- @vendor 2026-10-14T01:16:34.698Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/SKILL.md -->
 
 # iswc-foundation — el estándar de las apps iswc
 

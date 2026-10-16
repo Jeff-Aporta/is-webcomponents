@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/README.md -->
+<!-- @vendor 2026-10-14T17:01:21.991Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/README.md -->
 # `vendor-distributions/` — todo lo que un consumidor trae del kit por vendor, separado por perfil
 
 Fuente: `src/vendor-distributions/`. Publicado por `deno task build` en `dist/cdn/vendor-distributions/`
@@ -22,7 +22,7 @@ El consumidor declara `"perfil": "server"` o `"perfil": "client"` en su `vendor.
 que no corresponde (otro perfil, ruta plana anterior a los perfiles y, en `server`, cualquier archivo que importe
 `playwright`, `@browserbasehq/stagehand`, `puppeteer`…). Al aplanar en una carpeta `ISU/`, los relativos entre
 perfiles (`../../shared/testing/x.ts`) se reescriben a la ruta entre destinos. Guardián:
-`src/utils/health/meta/vendor-perfiles.test.ts` (P1-P6).
+`tests/gobernanza/vendor-perfiles.test.ts` (P1-P6).
 
 ## Scripts online (desde 2026-10-13)
 
@@ -57,7 +57,7 @@ explica) y **Doc:** (la misma URL). Al vendorizar, `vendor.ts` reescribe la cabe
 ganadora (siempre `@main`: el canal es la rama, portable; el sha vive en el pin del proyecto) y fija la `// @doc` al pin. `vendor.ts` falla si falta un import relativo. Lo que importa `zod` usa el del consumidor.
 
 Las docs se enlazan SIEMPRE por CDN (jsDelivr; `vendor.ts` fija el SHA en la `// @doc` del consumidor), nunca por ruta local.
-Guardián: `src/utils/health/meta/vendor-distributions-doc.test.ts`.
+Guardián: `tests/gobernanza/vendor-distributions-doc.test.ts`.
 
 ## `shared/` — sirve a server y a client
 
@@ -71,11 +71,12 @@ Sin barriles ni re-exports (regla InSoft): cada consumidor importa del archivo d
 
 | Archivo | Propósito | Doc |
 | --- | --- | --- |
-| `obj.ts` | `Obj`: operaciones parciales sobre objetos JSON (`push`/`update`/`insert`/`delete`/`get`/`getValue`/`aplicar`) y resolución de referencias `{ path, query, actions }` (sección `obj` de `schemas.ts`) | [obj.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md) |
+| `obj.ts` | `Obj`: operaciones VIRTUALES (en memoria) sobre objetos JSON (`insert`/`insertIgnore`/`update`/`replace`/`delete`/`get`/`getValue`/`aplicar`) |
+| `ref-obj.ts` | `RefObj`: operaciones FÍSICAS: referencias `{ path, query, actions }` a otros JSON (`resolver`, `esRef`, `resolverUrl`) |
 | `obj.md` | Documentación de `Obj` | — |
 | `zod.ts` | Reexporta Zod; es la fuente del bundle único `dist/cdn/lib/zod.min.js` que comparten los componentes | [05-zod-y-tipos.md](https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/skills/iswc-foundation/references/05-zod-y-tipos.md) |
 
-Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` (Zod incluido) y `dist/cdn/lib/zod.min.js`.
+Bundles para el navegador (no vendor): `dist/cdn/lib/obj.min.js` y `dist/cdn/lib/ref-obj.min.js` (Zod incluido) y `dist/cdn/lib/zod.min.js`.
 
 ### `shared/testing/` — sistema común de pruebas, proveedores LLM y jueces
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T15:06:30.245Z",
+  "generatedAt": "2026-10-16T04:04:30.800Z",
   "count": 40,
   "modules": [
     {
@@ -7,7 +7,7 @@
       "id": "app-cfg",
       "path": "src/core/app-cfg.ts",
       "summary": "Módulo compartido `app-cfg.ts`.",
-      "bytes": 3608,
+      "bytes": 3693,
       "exports": [
         "APP_CFG_KEY",
         "esTema",
@@ -22,7 +22,7 @@
       "id": "app-init",
       "path": "src/core/app-init.ts",
       "summary": "Módulo compartido `app-init.ts`.",
-      "bytes": 3014,
+      "bytes": 3064,
       "exports": [
         "ICONS_FOLDER_DEFAULT",
         "iconsBase",
@@ -55,7 +55,7 @@
       "id": "base-sheets",
       "path": "src/core/base-sheets.ts",
       "summary": "base-sheets — creadas una sola vez y compartidas por todos los ShadowRoot de la página.",
-      "bytes": 2461,
+      "bytes": 2524,
       "exports": [
         "soportaHojasAdoptadas",
         "sheetsBase"
@@ -80,7 +80,7 @@
       "id": "cdn-ref",
       "path": "src/core/cdn-ref.ts",
       "summary": "cdn-ref — Orden de fallback al cargar assets:",
-      "bytes": 4172,
+      "bytes": 4296,
       "exports": [
         "repoDeUrl",
         "GH_REPO",
@@ -161,7 +161,7 @@
       "id": "diagram-grid",
       "path": "src/core/diagram-grid.ts",
       "summary": "Rejilla de alineación para diagramas SVG (secuencia / flujo).",
-      "bytes": 14872,
+      "bytes": 15192,
       "exports": [
         "TK_DIAGRAM_GRID",
         "TK_DIAGRAM_RADIUS_PX",
@@ -263,7 +263,7 @@
       "id": "icon-loader",
       "path": "src/core/icon-loader.ts",
       "summary": "Módulo compartido `icon-loader.ts`.",
-      "bytes": 10626,
+      "bytes": 10848,
       "exports": [
         "AVISO_FALTA_LOCAL",
         "baseAbsoluta",
@@ -296,7 +296,7 @@
       "id": "iswc-storage",
       "path": "src/core/iswc-storage.ts",
       "summary": "iswc-storage — TODO lo que el kit guarda en el navegador lleva UN prefijo: `iswc:`. — readIswc('app-cfg')                    // localStorage['iswc:app-cfg']",
-      "bytes": 5958,
+      "bytes": 6105,
       "exports": [
         "ISWC_PREFIX",
         "iswcKey",
@@ -357,7 +357,7 @@
       "id": "path-turtle",
       "path": "src/core/path-turtle.ts",
       "summary": "Módulo compartido `path-turtle.ts`.",
-      "bytes": 10767,
+      "bytes": 11101,
       "exports": [
         "PathTurtle",
         "TURTLE_AUTO_GAP",
@@ -391,7 +391,7 @@
       "id": "prefs",
       "path": "src/core/prefs.ts",
       "summary": "Preferencias compartidas de Web Components (un solo JSON en localStorage). — \"iswc-split-panel\": { \"gallery-nav\": { \"positionInPixels\": 200 } },",
-      "bytes": 4756,
+      "bytes": 4891,
       "exports": [
         "getComponentPrefs",
         "setComponentPrefs",
@@ -408,7 +408,7 @@
       "id": "reflect",
       "path": "src/core/reflect.ts",
       "summary": "reflect — El kit escribía la MISMA operación de siete maneras distintas repartidas",
-      "bytes": 2777,
+      "bytes": 2850,
       "exports": [
         "setStringAttr",
         "setOptionalAttr",
@@ -432,10 +432,10 @@
       "id": "scroll-memory",
       "path": "src/core/scroll-memory.ts",
       "summary": "ScrollMemory — persistencia opt-in de scrollTop para cualquier host scrolleable. — Requiere remember-scroll + storage-key. Sin ambos no lee ni escribe.",
-      "bytes": 8319,
+      "bytes": 8575,
       "exports": [
         "SCROLL_MEMORY_ATTRS",
-        "ScrollMemory \n  host",
+        "ScrollMemory \r\n  host",
         "bindScrollMemoryApi"
       ]
     },
@@ -489,7 +489,7 @@
       "id": "tk-color",
       "path": "src/core/tk-color.ts",
       "summary": "Contraste de fuente por luminancia OKLCH — todo en JS (sin CSS), para que el — flujo lo resuelva antes de pintar. Equivale a:",
-      "bytes": 3538,
+      "bytes": 3629,
       "exports": [
         "pastelColor",
         "oklchLightness",
@@ -575,7 +575,7 @@
       "id": "tree-layout",
       "path": "src/core/tree-layout.ts",
       "summary": "Motor de layout puro (sin DOM, sin globals) para jerarquías: árbol de — parentesco (mindmap, tree), radial (mindmap) y treemap (squarify).",
-      "bytes": 15506,
+      "bytes": 15887,
       "exports": [
         "buildTree",
         "layoutTree",

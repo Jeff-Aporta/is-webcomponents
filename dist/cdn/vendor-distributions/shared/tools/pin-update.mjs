@@ -1,4 +1,3 @@
-// @vendor 2026-10-14T17:01:21.991Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/tools/pin-update.mjs
 // Bundle autocontenido de src/vendor-distributions/shared/tools/pin-update.mjs (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/shared/tools/pin-update.mjs.
 
 // src/vendor-distributions/shared/tools/pin-update.mjs

@@ -1,4 +1,3 @@
-// @vendor 2026-10-14T17:01:21.991Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/tools/probar-foundation.mjs
 // Bundle autocontenido de skills/iswc-foundation/tools/probar-foundation.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es skills/iswc-foundation/tools/probar-foundation.ts.
 
 // skills/iswc-foundation/tools/probar-foundation.ts
@@ -19,9 +18,10 @@ var ZJson = z.lazy(
   () => z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(ZJson), z.record(z.string(), ZJson)])
 );
 var ZAccionObj = z.discriminatedUnion("op", [
-  z.object({ op: z.literal("push"), valor: ZJson }),
-  z.object({ op: z.literal("update"), valor: ZJson }),
   z.object({ op: z.literal("insert"), valor: ZJson }),
+  z.object({ op: z.literal("insertIgnore"), valor: ZJson }),
+  z.object({ op: z.literal("update"), valor: ZJson }),
+  z.object({ op: z.literal("replace"), valor: ZJson }),
   z.object({ op: z.literal("delete"), query: ZConsulta }),
   z.object({ op: z.literal("get"), query: ZConsulta }),
   z.object({ op: z.literal("getValue"), query: ZConsulta })

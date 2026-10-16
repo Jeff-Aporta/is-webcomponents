@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/references/11-stagehand.md -->
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/references/11-stagehand.md -->
 # 11 — Stagehand compartido: proveedores LLM, generador con fallback y destino por protocolo
 
 Guía para agentes que escriben o corren e2e de UI en un front del kit (ISW, ISS y los que vengan).

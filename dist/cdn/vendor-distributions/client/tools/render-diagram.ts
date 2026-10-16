@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-diagram.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-diagram.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * Render headless de diagramas iswc-* → SVG (y opcional PNG).
@@ -16,12 +16,12 @@
  *
  * Modos: sintético (tag+scriptUrl+payload) o pageUrl (HTML ya armado).
  *
- * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-diagram.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/lib/obj.js` (vendor.ts reescribe la ruta al aplanar), `./hosts.js`, `../../shared/schemas.ts` (secciones `render-diagram`, `static-server`, `obj`), `./sanitize-svg.js`, `./static-server.js`.
+ * Perfil: client. Vendor: `dist/cdn/vendor-distributions/client/tools/render-diagram.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../../shared/lib/ref-obj.ts` y `./obj.ts` (vendor.ts reescribe la ruta al aplanar), `./hosts.js`, `../../shared/schemas.ts` (secciones `render-diagram`, `static-server`, `obj`), `./sanitize-svg.js`, `./static-server.js`.
  * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */
 import { mkdir, writeFile, rm, rename, readFile } from 'node:fs/promises';
-import { Obj } from '../../shared/lib/obj.js';
+import { RefObj } from '../../shared/lib/ref-obj.ts';
 import process from 'node:process';
 import { join, dirname, isAbsolute, relative } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -398,7 +398,7 @@ export function sinInyeccion(svg: string): string {
  */
 export async function payloadResuelto(job: SyntheticDiagramJob): Promise<unknown> {
   if (!job.payloadBase) return job.payload;
-  return Obj.resolver(job.payload, {
+  return RefObj.resolver(job.payload, {
     base: job.payloadBase,
     cargar: async (url) => JSON.parse(/^https?:/i.test(url) ? await (await fetch(url)).text() : await readFile(url.startsWith('file:') ? new URL(url) : url, 'utf8')),
   });

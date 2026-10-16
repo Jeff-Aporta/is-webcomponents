@@ -1,9 +1,9 @@
-// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/render-lote.ts
+// @vendor 2026-10-13T19:16:35.461Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/client/tools/render-lote.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
 /**
  * render-lote.ts — render de un LOTE de diagramas con caché por hash (lo que ISS e ISW hacían cada uno
  * en su `render-docs-iswc.mjs`). Cada editable `<carpeta>/<slug>.json` `{ slug?, module, tag, script,
- * attrs?, payload }` se resuelve (referencias `{ path, query, actions }` con `Obj.resolver`, relativas al
+ * attrs?, payload }` se resuelve (referencias `{ path, query, actions }` con `RefObj.resolver`, relativas al
  * editable) y se le calcula una huella sha256 del spec RESUELTO + `pinKit` + `VERSION`. Si la huella
  * coincide con la del caché y las salidas existen, `SKIP`; si no, `render` en un proceso hijo (este
  * mismo módulo con `--one <slug>`) con reintentos: Chromium a veces no arranca en Windows (os error 6)
@@ -20,7 +20,7 @@
  *   const plan = await planificarLote({ carpeta, salidaSvg, salidaPng, kit });   // puro, sin navegador
  *   const r = await renderizarLote({ carpeta, salidaSvg, salidaPng, kit });        // hijos + caché
  *
- * Perfil: client. Vendor: NO se vendoriza (CLI online, Jeff 2026-10-13): el bundle `deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --kit=<checkout> …`; también importable por esa URL (`renderizarLote`). Antes: `dist/cdn/vendor-distributions/client/tools/render-lote.ts` → `ISU/`. Imports relativos que deben viajar con él: `./render-diagram.js` (y lo que este trae: `../../shared/lib/obj.js`, `./hosts.js`, `./sanitize-svg.js`, `./static-server.js`; vendor.ts reescribe las rutas al aplanar), `../../shared/schemas.ts` (secciones `render-lote`, `render-diagram`).
+ * Perfil: client. Vendor: NO se vendoriza (CLI online, Jeff 2026-10-13): el bundle `deno run -A --no-check --sloppy-imports --reload=https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/ https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/dist/cdn/vendor-distributions/client/tools/render-lote.mjs --kit=<checkout> …`; también importable por esa URL (`renderizarLote`). Antes: `dist/cdn/vendor-distributions/client/tools/render-lote.ts` → `ISU/`. Imports relativos que deben viajar con él: `./render-diagram.js` (y lo que este trae: `../../shared/lib/ref-obj.ts` + `obj.ts`, `./hosts.js`, `./sanitize-svg.js`, `./static-server.js`; vendor.ts reescribe las rutas al aplanar), `../../shared/schemas.ts` (secciones `render-lote`, `render-diagram`).
  * Skill: skills/iswc-diagramas-enriquecidos/SKILL.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/cdn/loader.md
  */

@@ -1,29 +1,29 @@
-// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/shared/lib/obj.ts
+// @vendor 2026-10-14T06:21:55.173Z Jeff-Aporta/is-webcomponents@main src/vendor-distributions/shared/lib/obj.ts
 // @doc https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
 /**
- * obj.ts — operaciones sobre objetos JSON, comunes a todo iswc y a sus consumidores (ISS, ISW).
+ * obj.ts — operaciones VIRTUALES sobre objetos JSON (en memoria), comunes a todo iswc y a sus
+ * consumidores (ISS, ISW, DER). Las FÍSICAS (leer otros JSON por `path`) viven en `ref-obj.ts`.
  *
  * `Obj` reúne, como métodos estáticos (sin tocar el `Object` global), lo que un consumidor necesita
- * para leer y modificar PARTES de un objeto sin afectar el resto:
+ * para leer y modificar PARTES de un objeto sin afectar el resto. Nada lee archivos ni la red:
  *
- *   Obj.push(base, cambios, schema?)  upsert profundo: lo no mencionado se conserva; `null` quita (lo
- *                                     resuelve el schema de la propiedad, ver `push`).
- *   Obj.update(base, cambios)         cambia solo lo que YA existe (no crea).
- *   Obj.insert(base, nuevos)          agrega solo lo que NO existe (no pisa).
- *   Obj.delete(base, query)           quita lo que marque la consulta.
- *   Obj.get(base, query)              (ver arriba) conserva la estructura desde la raíz.
- *   Obj.getValue(base, query)         el valor EXACTO de la única hoja truthy (sin estructura); `null`
- *                                     si no existe (el que llama decide qué hacer).
- *   Obj.aplicar(base, acciones)       las anteriores en orden (`TAccionObj[]`).
- *   Obj.resolver(valor, opciones)     cambia cada `{ path, query, actions }` por el valor que señala
- *                                     en su JSON (fuente de verdad), recursivo.
+ *   Obj.insert(base, cambios, schema?)  upsert profundo: lo no mencionado se conserva; `null` quita (lo
+ *                                       resuelve el schema de la propiedad, ver `insert`).
+ *   Obj.insertIgnore(base, nuevos)      agrega solo lo que NO existe (no pisa).
+ *   Obj.update(base, cambios)           cambia solo lo que YA existe (no crea).
+ *   Obj.replace(base, valor)            reemplazo directo (lo que aplica cuando no hay molde Zod).
+ *   Obj.delete(base, query)             quita lo que marque la consulta.
+ *   Obj.get(base, query)                la estructura desde la raíz con solo lo marcado.
+ *   Obj.getValue(base, query)           el valor EXACTO de la única hoja truthy (sin estructura); `null`
+ *                                       si no existe (el que llama decide qué hacer).
+ *   Obj.aplicar(base, acciones)         las anteriores en orden (`TAccionObj[]`).
  *
  * Consulta: copia la forma del dato y marca con truthy (`!!x`) lo pedido; `"*"` = todos, y
  * `"[campo=valor]"` = el primer elemento con ese campo (ver la sección `obj` de `shared/schemas.ts`). Nada muta: cada
- * operación devuelve un objeto nuevo. Fuente vendorizable en `dist/cdn/vendor-distributions/shared/lib/`;
- * bundle `obj.min.js` (Zod incluido) para el navegador en `dist/cdn/lib/`.
+ * operación devuelve un objeto nuevo. Importable por URL desde Deno (`zod` en el import map del consumidor):
+ * https://raw.githubusercontent.com/Jeff-Aporta/is-webcomponents/main/src/vendor-distributions/shared/lib/obj.ts
+ * Bundle `obj.min.js` (Zod incluido) para el navegador en `dist/cdn/lib/`.
  *
- * Perfil: shared. Vendor: `dist/cdn/vendor-distributions/shared/lib/obj.ts` → carpeta `ISU/` del consumidor (`tools/vendor.ts`, pin por fecha ISO). Imports relativos que deben viajar con él: `../schemas.ts` (sección `obj`; `vendor.ts` lo poda a lo que la carpeta usa).
  * Skill: src/vendor-distributions/shared/lib/obj.md
  * Doc: https://cdn.jsdelivr.net/gh/Jeff-Aporta/is-webcomponents@main/src/vendor-distributions/shared/lib/obj.md
  */
@@ -31,9 +31,9 @@ import {
   nullable as zNullable, object as zObject, optional as zOptional, safeParse, ZodArray, ZodCatch, ZodDefault, ZodExactOptional, ZodLazy,
   ZodNonOptional, ZodNullable, ZodObject, ZodOptional, ZodPipe, ZodPrefault, ZodPromise, ZodReadonly, ZodRecord, ZodSuccess, ZodUnion, type z,
 } from "zod";
-import { ZConsulta, ZRefObj, type TAccionObj, type TCodigoObj, type TConsulta, type TOpcionesResolver, type TRefObj } from "../schemas.js";
+import { ZConsulta, type TAccionObj, type TCodigoObj, type TConsulta } from "../schemas.ts";
 
-// `.js` y no `.ts`: un consumidor Node (tsc sin allowImportingTsExtensions) lo exige; Deno resuelve `.js` -> `.ts`.
+// `.ts` explícito: así el módulo se importa tal cual por URL (Deno remoto no adivina extensiones).
 
 /** Error de `Obj`: `codigo` dice qué falló y `ruta` dónde (claves separadas por punto). */
 /** Campos declarados (sin parameter properties): el modulo se carga tambien con Node en modo strip-only. */
@@ -78,7 +78,7 @@ const leer = (dato: unknown, k: string): unknown => (dato as Record<string, unkn
 /** Copia superficial del contenedor (arreglo u objeto). */
 const copia = (v: unknown): Record<string, unknown> | unknown[] => (Array.isArray(v) ? [...v] : { ...(v as object) });
 
-/* ── push con schema (los `null` los resuelve el schema de la propiedad) ─────────────────────── */
+/* ── insert con schema (los `null` los resuelve el schema de la propiedad) ─────────────────────── */
 
 function envueltoDe(s: z.core.$ZodType): z.core.$ZodType | undefined {
   if (s instanceof ZodOptional || s instanceof ZodExactOptional || s instanceof ZodNullable || s instanceof ZodDefault || s instanceof ZodPrefault
@@ -125,7 +125,7 @@ export class Obj {
    * con default → el default; obligatoria → el primer vacío que acepte; si ninguno, no se toca;
    * sin schema → se borra). Una clave `[campo=valor]` apunta a un elemento de un arreglo.
    */
-  static push<T>(base: T, cambios: unknown, schema?: z.core.$ZodType): T {
+  static insert<T>(base: T, cambios: unknown, schema?: z.core.$ZodType): T {
     if (!esPlano(cambios)) return (cambios === undefined ? base : cambios) as T;
     const out = (esPlano(base) || Array.isArray(base) ? copia(base) : {}) as Record<string, unknown>;
     for (const [k, v] of Object.entries(cambios)) {
@@ -141,28 +141,28 @@ export class Obj {
         continue;
       }
       const actual = out[destino];
-      out[destino] = esPlano(v) && (esPlano(actual) || Array.isArray(actual)) ? Obj.push(actual, v, campo.campo) : v;
+      out[destino] = esPlano(v) && (esPlano(actual) || Array.isArray(actual)) ? Obj.insert(actual, v, campo.campo) : v;
     }
     return out as T;
   }
 
-  /** `push` + validación del resultado con el schema (lanza el ZodError si queda fuera). */
-  static pushZod<S extends z.ZodType>(schema: S, base: z.infer<S> | null | undefined, cambios: unknown): z.infer<S> {
-    return schema.parse(Obj.push(esPlano(base) ? base : {}, esPlano(cambios) ? cambios : {}, schema));
+  /** `insert` + validación del resultado con el schema (lanza el ZodError si queda fuera). */
+  static insertZod<S extends z.ZodType>(schema: S, base: z.infer<S> | null | undefined, cambios: unknown): z.infer<S> {
+    return schema.parse(Obj.insert(esPlano(base) ? base : {}, esPlano(cambios) ? cambios : {}, schema));
   }
 
   /**
-   * Schema de un FRAGMENTO de push para `schema` (un objeto): cada clave declarada es opcional y
+   * Schema de un FRAGMENTO de insert para `schema` (un objeto): cada clave declarada es opcional y
    * acepta `null` («quitar»); un objeto anidado también se valida como fragmento. Cliente y
    * servidor validan así el mismo fragmento.
    */
-  static esquemaPush(schema: z.ZodType): z.ZodType {
+  static esquemaInsert(schema: z.ZodType): z.ZodType {
     const o = objetoInterno(schema);
     if (!(o instanceof ZodObject)) return schema;
     const declarado = o.shape as Record<string, z.core.$ZodType>;
     const shape = Object.fromEntries(Object.entries(declarado).map(([k, campo]) => {
       const interno = objetoInterno(campo);
-      return [k, zOptional(zNullable(interno instanceof ZodObject ? Obj.esquemaPush(interno) : campo))];
+      return [k, zOptional(zNullable(interno instanceof ZodObject ? Obj.esquemaInsert(interno) : campo))];
     }));
     const fragmento = zObject(shape);
     return o.def.catchall ? fragmento.catchall(zNullable(o.def.catchall)) : fragmento.strict();
@@ -217,8 +217,13 @@ export class Obj {
     return out as T;
   }
 
+  /** Reemplazo directo: `valor` sustituye a `base` (`undefined` = no tocar). Es lo que aplica sin molde Zod. */
+  static replace<T>(base: T, valor: unknown): T {
+    return (valor === undefined ? base : valor) as T;
+  }
+
   /** Agrega solo lo que NO existe en `base` (profundo); nunca pisa un valor. */
-  static insert<T>(base: T, nuevos: unknown): T {
+  static insertIgnore<T>(base: T, nuevos: unknown): T {
     if (!esPlano(nuevos)) return base;
     const out = (esPlano(base) || Array.isArray(base) ? copia(base) : {}) as Record<string, unknown>;
     for (const [k, v] of Object.entries(nuevos)) {
@@ -229,7 +234,7 @@ export class Obj {
       }
       for (const c of existentes) {
         const actual = out[c];
-        if (esPlano(v) && (esPlano(actual) || Array.isArray(actual))) out[c] = Obj.insert(actual, v);
+        if (esPlano(v) && (esPlano(actual) || Array.isArray(actual))) out[c] = Obj.insertIgnore(actual, v);
       }
     }
     return out as T;
@@ -300,9 +305,10 @@ export class Obj {
     acciones.forEach((a, i) => {
       try {
         switch (a.op) {
-          case "push": v = Obj.push(v, a.valor); break;
-          case "update": v = Obj.update(v, a.valor); break;
           case "insert": v = Obj.insert(v, a.valor); break;
+          case "insertIgnore": v = Obj.insertIgnore(v, a.valor); break;
+          case "update": v = Obj.update(v, a.valor); break;
+          case "replace": v = Obj.replace(v, a.valor); break;
           case "delete": v = Obj.delete(v, a.query); break;
           case "get": v = Obj.get(v, a.query); break;
           case "getValue": v = Obj.getValue(v, a.query); break;
@@ -313,70 +319,6 @@ export class Obj {
       }
     });
     return v;
-  }
-
-  /** `true` si `v` tiene forma de referencia (`path` + `query`). */
-  static esRef(v: unknown): v is TRefObj {
-    return esPlano(v) && typeof v.path === "string" && "query" in v && ZRefObj.safeParse(v).success;
-  }
-
-  /**
-   * Resuelve cada referencia `{ path, query, actions }` que haya en `valor` (a cualquier
-   * profundidad): carga el JSON de `path` (relativo a `base`), toma con `getValue` el valor exacto
-   * que marque la consulta (si no existe, error) y aplica las acciones. Lo traído puede tener a
-   * su vez referencias (relativas a su propio archivo). Las props extra de una referencia se
-   * ignoran con un aviso; una referencia mal formada, un `path` que no carga o una consulta sin
-   * resultado lanzan `ObjError` con la ruta.
-   */
-  static async resolver(valor: unknown, opciones: TOpcionesResolver): Promise<unknown> {
-    const avisar = opciones.avisar ?? ((m: string) => console.warn(`[Obj] ${m}`));
-    const tope = opciones.profundidad ?? 16;
-    const cache = new Map<string, Promise<unknown>>();
-    const cargar = (url: string): Promise<unknown> => {
-      if (!cache.has(url)) {
-        cache.set(url, opciones.cargar(url).catch((e) => {
-          throw new ObjError("carga", `no se pudo leer ${url}: ${e instanceof Error ? e.message : String(e)}`);
-        }));
-      }
-      return cache.get(url)!;
-    };
-    const visitar = async (v: unknown, base: string, ruta: string, pila: readonly string[]): Promise<unknown> => {
-      if (Array.isArray(v)) return Promise.all(v.map((x, i) => visitar(x, base, unir(ruta, String(i)), pila)));
-      if (!esPlano(v)) return v;
-      if (typeof v.path === "string" && "query" in v) {
-        const r = ZRefObj.safeParse(v);
-        if (!r.success) throw new ObjError("ref", `referencia mal formada: ${r.error.issues.map((x) => `${x.path.join(".")} ${x.message}`).join("; ")}`, ruta);
-        const extra = Object.keys(v).filter((k) => k !== "path" && k !== "query" && k !== "actions");
-        if (extra.length) avisar(`${ruta || "(raíz)"}: claves ignoradas en la referencia: ${extra.join(", ")}`);
-        const url = resolverUrl(r.data.path, base);
-        const id = `${url}#${JSON.stringify(r.data.query)}`;
-        if (pila.includes(id)) throw new ObjError("ciclo", `referencia circular: ${[...pila, id].join(" → ")}`, ruta);
-        if (pila.length >= tope) throw new ObjError("ciclo", `más de ${tope} referencias anidadas`, ruta);
-        const doc = await cargar(url);
-        // La consulta de una referencia es SIEMPRE un getValue: el valor exacto, o error si no existe.
-        let traido: unknown;
-        try {
-          traido = Obj.getValue(doc, r.data.query);
-        } catch (e) {
-          if (e instanceof ObjError) throw new ObjError(e.codigo, `${r.data.path}: ${e.message}`, ruta);
-          throw e;
-        }
-        if (traido === null) {
-          throw new ObjError("no-existe", `${r.data.path}: el valor no existe (${Obj.caminoUnico(r.data.query).join(".")}); defínalo en la fuente o ajuste path/query`, ruta);
-        }
-        const resuelto = await visitar(traido, url, ruta, [...pila, id]);
-        try {
-          return Obj.aplicar(resuelto, r.data.actions);
-        } catch (e) {
-          if (e instanceof ObjError) throw new ObjError(e.codigo, e.message, ruta);
-          throw e;
-        }
-      }
-      const out: Record<string, unknown> = {};
-      for (const [k, x] of Object.entries(v)) out[k] = await visitar(x, base, unir(ruta, k), pila);
-      return out;
-    };
-    return visitar(valor, opciones.base, "", []);
   }
 
   /** Caminos de las hojas truthy de una consulta (claves tal cual, `*` y selectores incluidos). */
@@ -398,19 +340,4 @@ export class Obj {
     const r = ZConsulta.safeParse(query);
     if (!r.success) throw new ObjError("consulta", `consulta inválida: ${r.error.issues[0]?.message ?? ""}`);
   }
-}
-
-/** `path` relativo a `base` (URL o ruta de archivo, con `/` o `\`). */
-export function resolverUrl(path: string, base: string): string {
-  if (/^[a-z][a-z0-9+.-]*:/i.test(path) && !/^[a-z]:[\\/]/i.test(path)) return path;
-  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(base) || base.startsWith("file:")) return new URL(path, base).href;
-  const sep = base.replace(/\\/g, "/");
-  const dir = sep.slice(0, sep.lastIndexOf("/") + 1);
-  const partes = (path.startsWith("/") || /^[a-z]:\//i.test(path.replace(/\\/g, "/")) ? path.replace(/\\/g, "/") : dir + path).split("/");
-  const out: string[] = [];
-  for (const p of partes) {
-    if (p === "..") out.pop();
-    else if (p !== ".") out.push(p);
-  }
-  return out.join("/");
 }

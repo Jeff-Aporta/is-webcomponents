@@ -1,4 +1,4 @@
-<!-- @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/build-component/references/parts-slots.md -->
+<!-- @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/build-component/references/parts-slots.md -->
 # Parts & Slots
 
 Cómo exponer **CSS parts** y declarar **slots semánticos** en un

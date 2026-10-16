@@ -1,4 +1,3 @@
-// @vendor 2026-10-14T17:01:21.991Z Jeff-Aporta/is-webcomponents@main dist/cdn/vendor-distributions/client/tools/download-iconify.mjs
 // Bundle autocontenido de src/vendor-distributions/client/tools/download-iconify.ts (scripts/build-online.mjs): se ejecuta online con Deno desde @main. No editar: la fuente es src/vendor-distributions/client/tools/download-iconify.ts.
 
 // src/vendor-distributions/client/tools/download-iconify.ts

@@ -1,4 +1,4 @@
-// @vendor 2026-10-14T16:13:19.844Z Jeff-Aporta/is-webcomponents@main dist/cdn/skills/iswc-foundation/templates/src/js/components/__PREFIJO__/all.ts
+// @vendor 2026-10-13T14:13:48.240Z Jeff-Aporta/is-webcomponents@main skills/iswc-foundation/templates/src/js/components/__PREFIJO__/all.ts
 /**
  * all.ts — barril de compatibilidad → `dist/cdn/all.min.js` (todos los componentes en un módulo).
  * La carga normal es el registrador (`__PREFIJO__Loader.min.js`); este bundle es para hosts que
