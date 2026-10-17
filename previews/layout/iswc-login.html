@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" class="theme-dark" data-theme="dark" data-palette="insoft">
+<head>
+  <meta charset="UTF-8" />
+  <script src="../../scripts/preview-boot.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iswc-login · ISWC</title>
+  <meta name="description" content="Documentación y demos de iswc-login de Insoft." />
+  <link rel="stylesheet" href="../../styles/is-base.css" />
+  <link rel="stylesheet" href="../../styles/presentation.css" />
+  <script type="module" src="../../components/actions/button.js"></script>
+  <script type="module" src="../../components/layout/split-panel.js"></script>
+  <script type="module" src="../../components/layout/main.js"></script>
+  <script type="module" src="../../components/layout/scrollspy.js"></script>
+  <script type="module" src="../../components/layout/login.js"></script>
+  <script type="module" src="../../components/feedback/toast.js"></script>
+  <script src="../../scripts/demo-code.js" defer></script>
+  <script src="../../scripts/docs-chrome.js" defer></script>
+  <script type="module" src="../../scripts/preview-chrome.js"></script>
+</head>
+<body>
+  <iswc-split-panel class="page" orientation="horizontal" position-in-pixels="220" primary="end" storage-key="docs-toc">
+    <iswc-main class="main" slot="start" remember-scroll storage-key="docs-iswc-login">
+
+      <section class="section" id="intro">
+        <h2>&lt;iswc-login&gt;</h2>
+        <p class="lede">
+          Puerta de acceso reutilizable: modo single y multi-cuenta, cambio de contraseña,
+          cierre global de sesiones y auditoría visible (IP, dispositivo, SO, navegador y último acceso).
+        </p>
+        <div class="demo">
+          <iswc-login
+            id="demoSingle"
+            heading="Iniciar sesión"
+            subtitle="Accede a tu panel"
+            provider="ContaPyme"
+            show-password
+            allow-logout-all
+          ></iswc-login>
+        </div>
+      </section>
+
+      <section class="section" id="multi">
+        <h2>Modo multi-cuenta</h2>
+        <p class="lede">
+          Selector de cuentas con avatar, añadir y quitar. La cuenta activa se marca con
+          <code>selected</code>. Abre "Cambiar contraseña" o "Cerrar en todos los dispositivos".
+        </p>
+        <div class="demo">
+          <iswc-login
+            id="demoMulti"
+            mode="multi"
+            heading="Tus cuentas"
+            subtitle="Elige una cuenta o añade otra"
+            providers="[{&quot;id&quot;:&quot;contapyme&quot;,&quot;name&quot;:&quot;ContaPyme&quot;},{&quot;id&quot;:&quot;agrowin&quot;,&quot;name&quot;:&quot;Agrowin&quot;}]"
+            selected="ana"
+            show-password
+            allow-logout-all
+          ></iswc-login>
+        </div>
+      </section>
+
+    </iswc-main>
+  </iswc-split-panel>
+
+  <iswc-toast placement="bottom-end"></iswc-toast>
+
+  <script type="module">
+    const demoMulti = document.getElementById("demoMulti");
+    demoMulti.accounts = [
+      { id: "ana", name: "Ana Torres", email: "ana@contapyme.co", provider: "ContaPyme", lastUsed: "hace 2 min" },
+      { id: "luis", name: "Luis Pérez", email: "luis@agrowin.co", provider: "Agrowin", lastUsed: "ayer" },
+    ];
+    demoMulti.sessions = [
+      { id: "s1", ip: "190.85.12.44", device: "MacBook Pro", os: "macOS 15", browser: "Safari 18", lastAccess: "ahora", current: true },
+      { id: "s2", ip: "181.49.20.10", device: "Windows 11", os: "Windows", browser: "Chrome 141", lastAccess: "hace 3 h" },
+    ];
+
+    const toast = document.querySelector("iswc-toast");
+    const notify = (msg, color = "brand") => toast?.create?.(msg, { color });
+
+    for (const el of document.querySelectorAll("iswc-login")) {
+      el.addEventListener("iswc-login-submit", (e) => {
+        notify("submit · " + e.detail.username + " · remember=" + e.detail.remember);
+        el.setAttribute("busy", "");
+        setTimeout(() => el.removeAttribute("busy"), 900);
+      });
+      el.addEventListener("iswc-account-select", (e) => notify("cuenta · " + e.detail.account.name));
+      el.addEventListener("iswc-add-account", () => notify("añadir cuenta"));
+      el.addEventListener("iswc-remove-account", (e) => notify("quitar · " + e.detail.account.id, "warning"));
+      el.addEventListener("iswc-logout-all", () => notify("cerrar en todos los dispositivos", "danger"));
+      el.addEventListener("iswc-password-change", () => {
+        notify("contraseña actualizada", "success");
+        el.closePassword();
+      });
+      el.addEventListener("iswc-sessions-refresh", () => notify("sesiones actualizadas"));
+      el.addEventListener("iswc-session-revoke", (e) => notify("sesión cerrada · " + e.detail.sessionId, "warning"));
+      el.addEventListener("iswc-forgot", () => notify("recuperar contraseña"));
+    }
+  </script>
+</body>
+</html>
