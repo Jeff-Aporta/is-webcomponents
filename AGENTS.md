@@ -1,4 +1,6 @@
 # AGENTS.md — Cerebro de agentes para ISWC
+> **Norma única:** [ESTANDAR — ecosistema VPS](https://github.com/Jeff-Aporta/dev-vps/blob/main/ESTANDAR.md). Gana sobre este archivo si hay conflicto.
+
 
 > **Lee este archivo ANTES de tocar nada.** Resume lo que ya descubrimos a base
 > de errores. Si haces algo que está en "Errores a NO repetir" y lo rompes de
