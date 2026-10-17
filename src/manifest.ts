@@ -69,6 +69,7 @@ const manifest: ComponentManifestItem[] = [
   { tag: 'iswc-dialog', title: 'Dialog', category: 'layout', script: 'components/layout/dialog.js', style: 'components/layout/dialog.css', page: 'components/layout/dialog.json' },
   { tag: 'iswc-drawer', title: 'Drawer', category: 'layout', script: 'components/layout/drawer.js', style: 'components/layout/drawer.css', page: 'components/layout/drawer.json' },
   { tag: 'iswc-login', title: 'Login', category: 'layout', script: 'components/layout/login.js', style: 'components/layout/login.css', page: 'components/layout/login.json' },
+  { tag: 'iswc-login-gate', title: 'Login Gate', category: 'layout', script: 'components/layout/login-gate.js', style: 'components/layout/login-gate.css', page: 'components/layout/login-gate.json' },
   { tag: 'iswc-divider', title: 'Divider', category: 'layout', script: 'components/layout/divider.js', style: 'components/layout/divider.css', page: 'components/layout/divider.json' },
   { tag: 'iswc-scrollspy', title: 'Scrollspy', category: 'layout', script: 'components/layout/scrollspy.js', style: 'components/layout/scrollspy.css', page: 'components/layout/scrollspy.json' },
   { tag: 'iswc-demo', title: 'Demo', category: 'layout', script: 'components/layout/demo.js', page: 'components/layout/demo.json' },
