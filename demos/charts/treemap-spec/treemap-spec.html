@@ -18,7 +18,7 @@
   iswc-treemap:not(:defined) { visibility: hidden; }
 </style>
 <script type="module">
-  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.js?v=tnsawj';
+  import { iswcLoader as L } from '../../../dist/cdn/core/loader.min.js?v=vlxgam';
   L.configure({ local: true });
   const [__base] = await L.listBases();
   const lib = await import(L.assetUrl(new URL('charts/treemap-spec.min.js', __base.endsWith('/') ? __base : __base + '/').href));
