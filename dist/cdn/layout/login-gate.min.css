@@ -1,0 +1,1 @@
+:host{--iswc-gate-gap: var(--iswc-space-m, .85rem);display:block;box-sizing:border-box}:host *{box-sizing:border-box}[hidden]{display:none!important}#curtain{display:flex;flex-direction:column;align-items:center;gap:var(--iswc-gate-gap);padding-block:var(--iswc-space-l, 1.35rem)}#protected{display:block}
