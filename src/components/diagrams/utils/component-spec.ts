@@ -433,6 +433,9 @@ export function resolveComponentSpec(payload: unknown, host: Record<string, unkn
     // W58: O/C lejos de bordes de agrupador y fuera de paquetes prohibidos.
     enforceLollipopPackageClearance(packages, wired.components, wired.interfaces);
   }
+  // Invariante dura: ninguna caja pisa a otra. Tras los empujes, los solapes
+  // que queden se resuelven por el eje de menor penetración.
+  if (layout.mode !== 'manual') separarSolapes(wired.components, resolvePackingGaps(layout).nestedRowGap);
   // Los agrupadores siempre abrazan a todos sus integrantes (tras cualquier empuje).
   if (layout.mode !== 'manual') abrazarPaquetes(packages, wired.components);
 
@@ -577,7 +580,16 @@ export function enforceAssemblyEntityMargins(
       if (!a || !b || a === b) continue;
       const fi = e.fromInterface ? ifById.get(e.fromInterface) : undefined;
       const ti = e.toInterface ? ifById.get(e.toInterface) : undefined;
-      const axis = assemblyAxis(fi?.side, ti?.side, a, b);
+      // El hueco solo se exige entre VECINOS en ese eje: dos cajas apiladas
+      // (comparten columna) no necesitan aire horizontal aunque el -(O- salga
+      // por left/right (la arista las rodea). Empujar en el eje equivocado
+      // sacaba la caja de su columna y la montaba sobre una tercera.
+      const xOver = a.x < b.x + b.w && b.x < a.x + a.w;
+      const yOver = a.y < b.y + b.h && b.y < a.y + a.h;
+      let axis = assemblyAxis(fi?.side, ti?.side, a, b);
+      if (xOver && !yOver) axis = 'v';
+      else if (yOver && !xOver) axis = 'h';
+      else if (!xOver && !yOver) continue;
       if (axis === 'h') {
         const left = a.x <= b.x ? a : b;
         const right = a.x <= b.x ? b : a;
@@ -596,6 +608,35 @@ export function enforceAssemblyEntityMargins(
         }
       }
     }
+  }
+}
+
+/**
+ * Separa cajas solapadas: en orden de lectura, la caja posterior se aparta de la
+ * anterior por el eje donde la penetración es menor, dejando `gap`. Itera hasta
+ * que no quede solape (tope de vueltas).
+ */
+export function separarSolapes(components: Componente[], gap: number): void {
+  const orden = components.slice().sort((a, b) => a.y - b.y || a.x - b.x);
+  for (let vuelta = 0; vuelta < 24; vuelta++) {
+    let movido = false;
+    for (let i = 0; i < orden.length; i++) {
+      for (let k = 0; k < i; k++) {
+        const a = orden[k]!;
+        const b = orden[i]!;
+        const px = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+        const py = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+        if (px <= -gap || py <= -gap) continue;
+        if (px <= 0 || py <= 0) continue;
+        if (px + gap <= py + gap && px < py) {
+          b.x = (b.x + b.w / 2 >= a.x + a.w / 2) ? a.x + a.w + gap : a.x - gap - b.w;
+        } else {
+          b.y = a.y + a.h + gap;
+        }
+        movido = true;
+      }
+    }
+    if (!movido) return;
   }
 }
 
