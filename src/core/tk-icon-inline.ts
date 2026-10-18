@@ -214,6 +214,40 @@ function scanIconTemplateTokens(text: string, onToken: (start: number, end: numb
 /** Icono de reemplazo cuando el pedido no existe en los assets del kit. */
 const ICONO_FALLBACK = 'mdi:shape-outline';
 
+/**
+ * Promesa de "ya pinté" por cada <g class="tk-svg-icon">. El SVG del icono
+ * llega por fetch, así que el diagrama quedaba listo ANTES que sus iconos y
+ * un export headless (`outerHTML` tras `updateComplete`) capturaba los grupos
+ * vacíos. `svgIconsReady(svg)` espera a todos los del lienzo.
+ *
+ * Va como propiedad del propio <g> (clave `Symbol.for`), no en un WeakMap
+ * del módulo: cada bundle del CDN inlinea su copia de este archivo y un
+ * WeakMap por copia no se vería desde la base de los diagramas.
+ */
+const ICONO_LISTO = Symbol.for('iswc.svgIconReady');
+type ConPromesa = SVGGElement & { [ICONO_LISTO]?: Promise<void> };
+
+/** Tope de espera por icono: una red colgada nunca bloquea el render. */
+const ICONO_ESPERA_MS = 8000;
+
+/**
+ * Espera a que todos los iconos insertados con `svgIconGroup` bajo `root`
+ * hayan llegado (o fallado). Nunca rechaza; como mucho vence el tope.
+ */
+export async function svgIconsReady(root: ParentNode | null | undefined, timeoutMs = ICONO_ESPERA_MS): Promise<void> {
+  if (!root) return;
+  const esperas: Promise<void>[] = [];
+  for (const g of root.querySelectorAll<ConPromesa>('g.tk-svg-icon')) {
+    const p = g[ICONO_LISTO];
+    if (p) esperas.push(p);
+  }
+  if (!esperas.length) return;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const tope = new Promise<void>((ok) => { timer = setTimeout(ok, timeoutMs); });
+  await Promise.race([Promise.all(esperas).then(() => undefined), tope]);
+  clearTimeout(timer);
+}
+
 export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGElement {
   const { x = 0, y = 0, size = 16, hue, color, fallback = ICONO_FALLBACK } = opts;
   const NS = 'http://www.w3.org/2000/svg';
@@ -241,7 +275,7 @@ export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGE
     return resolveIconRaw(alt.slice(0, corte), alt.slice(corte + 1), undefined);
   };
 
-  conFallback().then((raw) => {
+  const listo = conFallback().then((raw) => {
     if (!raw || !g.isConnected) return;
     const doc = new DOMParser().parseFromString(raw, 'image/svg+xml');
     const svg = doc.querySelector<HTMLElement>('svg');
@@ -259,6 +293,7 @@ export function svgIconGroup(iconId: string, opts: SvgIconGroupOpts = {}): SVGGE
     }
     g.appendChild(inner);
   }).catch(() => { /* icono inexistente: el diagrama sigue legible sin el */ });
+  (g as ConPromesa)[ICONO_LISTO] = listo;
 
   return g;
 }

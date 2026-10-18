@@ -59,6 +59,7 @@
 import { ElementBase } from '../../../core/element-base.js';
 import { findThemeContainer, readTheme } from '../../../core/theme-scope.js';
 import { hostStyleName, loadStylesDiagram } from './diagram-styles.js';
+import { svgIconsReady } from '../../../core/tk-icon-inline.js';
 
 /** ¿Hay alguna referencia `{ path, query }` en el payload? (recorrido liviano, sin dependencias). */
 function tieneRefs(v: unknown, n = 0): boolean {
@@ -215,6 +216,12 @@ export class DiagramElementBase extends ElementBase {
         if (this.mounted) await this.prepareRender().catch(() => undefined);
         if (this.mounted) {
           this.renderDiagram();
+          // Los iconos (svgIconGroup) llegan por fetch tras el pintado: se
+          // esperan aquí para que `updateComplete` (y el export headless por
+          // `outerHTML`) ya los incluya. Tope interno: nunca cuelga el render.
+          await svgIconsReady(this.#svg);
+          if (!this.mounted) return;
+          this.#autocontener();
           this.#applyLook();
         }
       } finally {
@@ -256,25 +263,80 @@ export class DiagramElementBase extends ElementBase {
     const svg = this.#svg;
     if (!svg || this.getAttribute('look') !== 'sketch') return;
     const id = 'iswc-look-sketch';
-    if (!svg.querySelector(`#${id}`)) {
-      let defs = svg.querySelector('defs');
-      if (!defs) {
-        defs = document.createElementNS(SVG_NS, 'defs');
-        svg.insertBefore(defs, svg.firstChild);
-      }
-      const f = document.createElementNS(SVG_NS, 'filter');
+    let f = svg.querySelector<SVGFilterElement>(`#${id}`);
+    if (!f) {
+      f = document.createElementNS(SVG_NS, 'filter');
       f.setAttribute('id', id);
-      f.setAttribute('x', '-5%');
-      f.setAttribute('y', '-5%');
-      f.setAttribute('width', '110%');
-      f.setAttribute('height', '110%');
       f.innerHTML = '<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="7" result="n"/>'
         + '<feDisplacementMap in="SourceGraphic" in2="n" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>';
-      defs.appendChild(f);
+      this.#defs().appendChild(f);
     }
+    // Región del filtro en coordenadas del lienzo (userSpaceOnUse). Con la
+    // región por defecto (relativa a la bbox del elemento) una línea o path
+    // perfectamente vertical/horizontal tiene bbox de ancho o alto 0: la
+    // región queda vacía y el trazo NO se pinta (desaparecían los tramos
+    // verticales de las aristas). Se cubre todo el viewBox con margen.
+    const vb = (svg.getAttribute('viewBox') ?? '').trim().split(/[\s,]+/).map(Number);
+    const [vx, vy, vw, vh] = vb.length === 4 && vb.every(Number.isFinite)
+      ? vb
+      : [0, 0, Number(svg.getAttribute('width')) || 4000, Number(svg.getAttribute('height')) || 4000];
+    const MARGEN = 200;
+    f.setAttribute('filterUnits', 'userSpaceOnUse');
+    f.setAttribute('x', String(vx - MARGEN));
+    f.setAttribute('y', String(vy - MARGEN));
+    f.setAttribute('width', String(vw + MARGEN * 2));
+    f.setAttribute('height', String(vh + MARGEN * 2));
     for (const el of svg.querySelectorAll('rect, path, line, polyline, polygon, circle, ellipse')) {
-      if (el.closest('defs')) continue;
+      // Ni las definiciones ni los iconos (ya inline al llegar aquí): el
+      // icono queda nítido, como el texto.
+      if (el.closest('defs, .tk-svg-icon')) continue;
       el.setAttribute('filter', `url(#${id})`);
+    }
+  }
+
+  /** `<defs>` propio del lienzo (se crea al frente si no existe). */
+  #defs(): SVGDefsElement {
+    const svg = this.#svg!;
+    let defs = svg.querySelector<SVGDefsElement>(':scope > defs');
+    if (!defs) {
+      defs = document.createElementNS(SVG_NS, 'defs');
+      svg.insertBefore(defs, svg.firstChild);
+    }
+    return defs;
+  }
+
+  /**
+   * Deja el SVG autocontenido: toda referencia `<use href="#id">` o
+   * `url(#id)` (fill, stroke, filter, clip-path, mask, marker) cuyo destino
+   * vive FUERA del lienzo (un sprite del shadow root o del documento) se
+   * clona dentro del `<defs>` propio con el mismo id. Así `outerHTML`
+   * (export headless / `<img>` por CDN) no pierde nada. No duplica lo que ya
+   * está dentro ni toca el sprite global.
+   */
+  #autocontener(): void {
+    const svg = this.#svg;
+    if (!svg) return;
+    const ids = new Set<string>();
+    for (const u of svg.querySelectorAll('use')) {
+      const href = u.getAttribute('href') ?? u.getAttribute('xlink:href') ?? '';
+      if (href.startsWith('#') && href.length > 1) ids.add(href.slice(1));
+    }
+    const URL_REF = /url\(\s*["']?#([^"')\s]+)["']?\s*\)/g;
+    for (const el of svg.querySelectorAll('*')) {
+      for (const a of el.attributes) {
+        if (!a.value.includes('url(#')) continue;
+        for (const m of a.value.matchAll(URL_REF)) ids.add(m[1]!);
+      }
+    }
+    if (!ids.size) return;
+    const raiz = this.shadowRoot;
+    for (const id of ids) {
+      if (svg.querySelector(`[id="${CSS.escape(id)}"]`)) continue; // ya está dentro
+      const origen = (raiz?.getElementById(id) ?? document.getElementById(id)) as Element | null;
+      if (!origen || origen.contains(svg) || svg.contains(origen)) continue;
+      // Un <svg> sprite completo no se clona: solo su símbolo/definición.
+      if (origen.localName === 'svg') continue;
+      this.#defs().appendChild(origen.cloneNode(true));
     }
   }
 
