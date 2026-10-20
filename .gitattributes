@@ -1,1 +1,6 @@
 *.pdf binary
+
+# Fuera del tarball que sirve jsDelivr (limite 50 MB): no se consumen por CDN.
+labs/** export-ignore
+tests/** export-ignore
+demos/** export-ignore
