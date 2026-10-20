@@ -23,6 +23,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -109,7 +110,13 @@ test('componentes/attr-enums', async () => {
       const attr = m[1];
       if (!ENUM_ATTRS.has(attr) || attrs.has(attr)) continue;
       if (!m[2].includes('|')) continue;
-      const vals = m[2].split('|').map((v) => v.trim()).filter((v) => /^[\w-]+$/.test(v));
+      // Continuación en las líneas siguientes:  *        | current | <color CSS>
+      // Un `<tipo>` libre (p.ej. `<color CSS>`) convierte el enum en abierto:
+      // cualquier valor CSS es válido y no se vigila.
+      const cont = src.slice(m.index + m[0].length).match(/^(?:\r?\n[ \t]*\*[ \t]+\|[^\n]*)+/)?.[0] ?? '';
+      if (/</.test(cont)) continue;
+      const vals = (m[2] + cont.replace(/\r?\n[ \t]*\*/g, ' '))
+        .split('|').map((v) => v.replace(/\(default[^)]*\)/, '').trim()).filter((v) => /^[\w-]+$/.test(v));
       if (vals.length > 1) attrs.set(attr, { values: new Set(vals), origen: 'JSDoc' });
     }
   
@@ -125,18 +132,35 @@ test('componentes/attr-enums', async () => {
   
   // ── 2. Revisar las previews (JSON homogéneos + index) ────────────────────
   
+  // Las demos viven en los JSON homogéneos junto a cada componente/página
+  // (src/components/**, src/pages/**) además de src/previews/.
   const previewFiles = [
     ...(await walk(join(root, 'src', 'previews'), /\.json$/)),
+    ...(await walk(join(root, 'src', 'components'), /\.json$/)),
+    ...(await walk(join(root, 'src', 'pages'), /\.json$/)),
     join(root, 'index.html'),
   ];
+
+  /** En un JSON el markup va escapado (`color=\"x\"`): se extraen sus strings. */
+  const textoDe = (file, raw) => {
+    if (!file.endsWith('.json')) return raw;
+    const out = [];
+    const visitar = (v) => {
+      if (typeof v === 'string') out.push(v);
+      else if (Array.isArray(v)) v.forEach(visitar);
+      else if (v && typeof v === 'object') Object.values(v).forEach(visitar);
+    };
+    try { visitar(JSON.parse(raw)); } catch { return raw; }
+    return out.join('\n');
+  };
   
   const offenders = [];
   
   for (const file of previewFiles) {
     let src;
-    try { src = await readFile(file, 'utf8'); } catch { continue; }
+    try { src = textoDe(file, await readFile(file, 'utf8')); } catch { continue; }
   
-    for (const tagMatch of src.matchAll(/<(is-[\w-]+)((?:\s+[^<>]*?)?)\/?>/g)) {
+    for (const tagMatch of src.matchAll(/<(iswc-[\w-]+)((?:\s+[^<>]*?)?)\/?>/g)) {
       const tag = tagMatch[1];
       const enums = registry.get(tag);
       if (!enums) continue;
@@ -170,7 +194,8 @@ test('componentes/attr-enums', async () => {
   // Regresión concreta: `ghost` existe de verdad en iswc-button (CSS + JSDoc).
   // Si alguien lo quita del CSS pero lo deja en el JSDoc, el test de arriba deja
   // de proteger y las previews que lo usan se rompen en silencio.
-  const buttonCss = await readFile(join(root, '.tmp-scss/src/components/actions/button.css'), 'utf8');
+  // CSS compilado normalizado: Sass emite `[variant=ghost]` sin comillas.
+  const buttonCss = leerCssCompilado(root, 'src/components/actions/button.css');
   const buttonJs = await readFile(join(root, 'src/components/actions/button.ts'), 'utf8');
   if (/variant\s+[^\n]*\bghost\b/.test(buttonJs)) {
     assert.match(

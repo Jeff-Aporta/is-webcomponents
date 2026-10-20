@@ -20,8 +20,14 @@ const main = readFileSync(join(ROOT, 'src/components/layout/main.ts'), 'utf8');
 test('scroll-memory compartido entre iswc-main y layouts', () => {
   assert.match(shared, /export class ScrollMemory/);
   assert.match(shared, /restorePolicy/);
-  assert.match(main, /from '\.\.\/_shared\/scroll-memory\.js'/);
-  assert.match(block, /from '\.\.\/_shared\/scroll-memory\.js'/);
+  // Ambos importan EL MISMO módulo compartido (hoy src/core/scroll-memory.ts):
+  // se resuelve el especificador relativo de cada uno contra su carpeta.
+  const sharedPath = join(ROOT, 'src/core/scroll-memory.ts');
+  for (const [nombre, src, rel] of [['main', main, 'src/components/layout'], ['block', block, 'src/components/isp']]) {
+    const spec = src.match(/from '([^']*scroll-memory\.js)'/)?.[1];
+    assert.ok(spec, `${nombre} debe importar scroll-memory`);
+    assert.equal(join(ROOT, rel, spec.replace(/\.js$/, '.ts')), sharedPath, `${nombre} debe usar el scroll-memory compartido`);
+  }
   assert.match(block, /restorePolicy:\s*'always'/);
   assert.match(main, /restorePolicy:\s*'reload'/);
 });

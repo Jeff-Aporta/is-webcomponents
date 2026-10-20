@@ -1,7 +1,7 @@
 // tests/navegador/home-coverage.test.ts
 //
-// Cobertura del home doc de la galería: navega a `http://localhost:8391/`
-// con Playwright, captura los tags del catálogo renderizado en
+// Cobertura del home doc de la galería: navega al home servido por el dev
+// server real (`scripts/serve.mjs`) con Playwright, captura los tags del catálogo renderizado en
 // `nav#shellNav` y los cruza con los `tag` declarados en `src/manifest.ts`.
 //
 // Por qué un test runtime y no solo `manifest-paths.test`:
@@ -17,8 +17,8 @@
 //     lista de faltantes, y exit 1).
 //   - Lee manifest desde disco (no re-evalúa TS). El regex acepta
 //     `tag: 'iswc-...'` en cualquier indentación.
-//   - Espera al dev server en :8391. Si no responde, falla rápido con un
-//     mensaje accionable (corre `deno task dev` en otra terminal).
+//   - Arranca su propio `scripts/serve.mjs` en un puerto libre: no depende
+//     de que `deno task dev` esté corriendo en :8391 ni choca con él.
 //
 // Conteo histórico (brief 2026-10-03-zod-migration): 133. La cifra real
 // actual del manifest es 194 (crecimiento posterior a la zod-migration).
@@ -28,16 +28,75 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
+const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+/** Puerto libre que asigna el SO (listen(0)). `serve.mjs` no acepta 0 (cae a
+ *  8391), así que se reserva uno libre y se le pasa; si otro proceso lo gana
+ *  entre medias, `startDevServer` reintenta con otro. */
+async function puertoLibre() {
+  const { default: net } = await import('node:net');
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.once('error', reject);
+    srv.listen(0, '127.0.0.1', () => {
+      const { port } = srv.address();
+      srv.close(() => resolve(port));
+    });
+  });
+}
+
+/** Arranca `scripts/serve.mjs` (el dev server real) en un puerto libre.
+ *  `env` extra (p. ej. SERVE_ROOT). Devuelve { proc, port } o lanza con la
+ *  salida del servidor para diagnosticar. */
+async function startDevServer(env = {}) {
+  let salida = '';
+  for (let intento = 0; intento < 4; intento++) {
+    const port = await puertoLibre();
+    const proc = spawn(
+      Deno.execPath(),
+      ['run', '-A', '--no-check', 'scripts/serve.mjs', String(port)],
+      { cwd: REPO, env: { ...process.env, ...env }, stdio: ['ignore', 'pipe', 'pipe'] },
+    );
+    const ready = await new Promise((resolve) => {
+      const t = setTimeout(() => resolve(false), 30000);
+      const leer = (chunk) => {
+        const s = chunk.toString();
+        salida += s;
+        if (s.includes('ISWC en http://')) { clearTimeout(t); resolve(true); }
+      };
+      proc.stdout.on('data', leer);
+      proc.stderr.on('data', (c) => { salida += c.toString(); });
+      proc.once('error', (e) => { salida += String(e); clearTimeout(t); resolve(false); });
+      proc.once('exit', () => { clearTimeout(t); resolve(false); });
+    });
+    if (ready) return { proc, port };
+    proc.kill();
+  }
+  throw new Error(`scripts/serve.mjs no arrancó tras 4 intentos:\n${salida.slice(-2000)}`);
+}
+
+/** Chromium de Playwright; si no está descargado, el Chrome o Edge del sistema. */
+async function lanzar() {
+  let ultimo;
+  for (const channel of [undefined, 'chrome', 'msedge']) {
+    try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
+  }
+  throw ultimo;
+}
+
 test('navegador/home-coverage', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
   const MANIFEST_PATH = join(root, 'src', 'manifest.ts');
-  const HOME_URL = 'http://localhost:8391/';
+  const dev = await startDevServer();
+  const HOME_URL = `http://127.0.0.1:${dev.port}/`;
+  try {
 
   // ─── 1. Extraer tags del manifest ──────────────────────────────────────────
   const manifestSrc = await readFile(MANIFEST_PATH, 'utf8');
@@ -64,7 +123,7 @@ test('navegador/home-coverage', async () => {
   }
 
   // ─── 3. Playwright: navegar y extraer tags del catálogo ───────────────────
-  const browser = await chromium.launch();
+  const browser = await lanzar();
   let exitCode = 0;
   let summary = '';
   try {
@@ -119,6 +178,9 @@ test('navegador/home-coverage', async () => {
   }
 
   { const salida = exitCode; if (salida) throw new Error(`salida ${salida}`); return; }
+  } finally {
+    dev.proc.kill();
+  }
 });
 
 export default lista();

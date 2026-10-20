@@ -147,7 +147,7 @@ DocumentaciÃ³n de cabecera preservada desde fuente:
 >                 Si no se da, se resuelve al ancestro: <iswc-main>, <main>,
 >                 [role="main"] o el propio <iswc-split-panel>.
 >   trigger       CSS selector â€” quÃ© hijos del target actuan como secciones.
->                 Por defecto: section[id], article[id].
+>                 Por defecto: section[id], article[id], iswc-demo-section[id].
 >   root-margin   string pasado a IntersectionObserver. Default "-30% 0px -55% 0px"
 >                 (en el centro del viewport, igual que el IO inline de los previews).
 >   threshold     number 0..1. Default 0.

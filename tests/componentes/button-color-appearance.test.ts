@@ -12,18 +12,19 @@
 // Extensión: *.test.mjs (tests/ se commitea; no .test.ts sin pipeline TS).
 // Uso: deno test -A --no-check tests/button-color-appearance.test.ts
 
-import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const cssPath = join(root, '.tmp-scss/src/components/actions/button.css');
-const css = readFileSync(cssPath, 'utf8');
+// CSS compilado (lo que llega al navegador), con los selectores de atributo
+// normalizados a comillas dobles: Sass emite `[color=brand]`.
+const css = leerCssCompilado(root, 'src/components/actions/button.css');
 
 const COLORS = ['brand', 'success', 'warning', 'danger', 'info', 'error', 'neutral'];
 const VARIANTS = ['filled', 'outlined', 'plain', 'ghost', 'soft', 'text'];
@@ -35,6 +36,11 @@ const TONE_ROLES = [
   '--_tone-soft:',
   '--_tone-on:',
 ];
+
+// filled genérico: `:host([color][variant="filled"])`, `:host([color]:not([variant]))`
+// o la forma agrupada `:host(:is([color]:not([variant]), …, [color][variant="filled"]))`.
+const FILLED_GENERICO =
+  /:host\((?::is\([^{]*?)?\[color\](?:\[variant="filled"\]|:not\(\[variant\]\))/;
 
 test('cada color semántico enlaza roles --_tone-*', () => {
   for (const c of COLORS) {
@@ -54,8 +60,7 @@ test('las apariencias consumen --_tone-* sin matriz por color', () => {
     // Regla genérica :host([color][variant="…"]) o filled default
     const generic =
       v === 'filled'
-        ? /:host\(\[color\]\[variant="filled"\]\)/.test(css) ||
-          /:host\(\[color\]:not\(\[variant\]\)\)/.test(css)
+        ? FILLED_GENERICO.test(css)
         : new RegExp(`:host\\(\\[color\\]\\[variant="${v}"\\]\\)`).test(css);
     assert.ok(generic, `falta regla genérica de variant="${v}" sobre [color] + --_tone-*`);
   }
@@ -98,7 +103,7 @@ test('button.css no consume escala numérica de familias semánticas', () => {
 test('filled y outlined del mismo color comparten la misma familia de tono', () => {
   // El bug brand: filled caía a hex azul hardcodeado y outlined a --iswc-brand-text.
   // Ambos deben pasar por --_tone-*.
-  const filledIdx = css.search(/:host\(\[color\]\[variant="filled"\]\)|:host\(\[color\]:not\(\[variant\]\)\)/);
+  const filledIdx = css.search(FILLED_GENERICO);
   const outlinedIdx = css.search(/:host\(\[color\]\[variant="outlined"\]\)/);
   assert.ok(filledIdx >= 0, 'no encuentro selector filled genérico');
   assert.ok(outlinedIdx >= 0, 'no encuentro selector outlined genérico');

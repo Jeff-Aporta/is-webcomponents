@@ -15,6 +15,7 @@
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -25,15 +26,20 @@ test('componentes/toast-promise', async () => {
   
   const toastJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast.ts'), 'utf8');
   const toastItemJs = await readFile(join(root, 'src', 'components', 'feedback', 'toast-item.ts'), 'utf8');
-  const toastCss = await readFile(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'toast-item.css'), 'utf8');
+  // CSS compilado normalizado (Sass emite `[slot=caption]` sin comillas).
+  const toastCss = leerCssCompilado(root, 'src/components/feedback/toast-item.css');
   const preview = await readFile(join(root, 'src', 'components', 'feedback', 'toast.json'), 'utf8');
+  // El código de los demos vive en el behavior del preview (toast.preview.ts).
+  const previewJs = await readFile(join(root, 'src', 'components', 'feedback', 'utils', 'toast.preview.ts'), 'utf8');
+  const demo = `${preview}\n${previewJs}`;
   
   const failures = [];
   const check = (cond, msg) => { if (!cond) failures.push(msg); };
   
   // ─── toast.ts: el método promise() existe ───────────────────────────────────
   
-  check(/async\s+promise\s*\(/.test(toastJs),
+  // Puede llevar genérico TS: `async promise<T>(p, callbacks)`.
+  check(/async\s+promise\s*(?:<[^>]*>)?\s*\(/.test(toastJs),
     'toast.ts: debe declarar `async promise(p, callbacks)`');
   
   // Crea un toast loading primero.
@@ -72,16 +78,16 @@ test('componentes/toast-promise', async () => {
   check(/"id":\s*"promise"/.test(preview),
     'preview: debe existir una sección #promise');
   
-  check(/btn-promise-ok/.test(preview),
+  check(/btn-promise-ok/.test(preview) && /'btn-promise-ok'/.test(previewJs),
     'preview: debe existir el botón btn-promise-ok (resolve)');
   
-  check(/btn-promise-err/.test(preview),
+  check(/btn-promise-err/.test(preview) && /'btn-promise-err'/.test(previewJs),
     'preview: debe existir el botón btn-promise-err (reject)');
   
-  check(/btn-promise-dynamic/.test(preview),
+  check(/btn-promise-dynamic/.test(preview) && /'btn-promise-dynamic'/.test(previewJs),
     'preview: debe existir el botón btn-promise-dynamic (mensaje dinámico)');
   
-  check(/toaster\.promise\(/.test(preview),
+  check(/toaster!?\.promise\(/.test(demo),
     'preview: debe llamar a toaster.promise() en el código demo');
   
   check(/slot name="caption"/.test(toastItemJs),
@@ -94,9 +100,9 @@ test('componentes/toast-promise', async () => {
     'toast-item.css: caption visible solo si hay slot');
   
   // El demo usa función como callback success/error (mensaje dinámico).
-  check(/success:\s*\(data\)/.test(preview) || /async \(data\)/.test(preview),
+  check(/success:\s*(?:async\s*)?\(data\b/.test(demo),
     'preview: debe demostrar success como función que recibe data');
-  check(/error:\s*\(err\)/.test(preview) || /async \(err\)/.test(preview),
+  check(/error:\s*(?:async\s*)?\(err\b/.test(demo),
     'preview: debe demostrar error como función que recibe err');
   
   if (failures.length) {

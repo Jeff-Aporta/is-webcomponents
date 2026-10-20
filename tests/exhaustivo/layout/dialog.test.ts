@@ -38,7 +38,13 @@ test('dialog: 3. JSON existe y respeta iswc-preview/v1', async () => {
 
 test('4. delega en ModalBase (focus-trap, Escape, restore)', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/from\s*['"][./]+_shared\/modal-base/.test(src));
+  const imp = src.match(/import\s*\{[^}]*\bModalBase\b[^}]*\}\s*from\s*['"]([./]+utils\/modal-base)\.js['"]/);
+  assert.ok(imp, 'dialog debe importar ModalBase de utils/modal-base');
+  assert.ok(/extends\s+ModalBase\b/.test(src), 'IswcDialog debe extender ModalBase');
+  // El módulo base existe y concentra focus-trap + Escape + restore de foco.
+  const base = readFileSync(join(dirname(TS), imp![1] + '.ts'), 'utf8');
+  assert.ok(/Escape/.test(base), 'ModalBase maneja Escape');
+  assert.ok(/focus/i.test(base), 'ModalBase maneja foco (trap/restore)');
 });
 
 test('5. OBSERVED incluye open, label, without-header, light-dismiss, backdrop-variant', async () => {

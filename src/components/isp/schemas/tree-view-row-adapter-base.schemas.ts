@@ -5,25 +5,26 @@
  * entradas marcadas con TODO cuando se quiera validación runtime.
  */
 import { z } from "zod";
+import type { TNode, FloatCardConfig } from "./tree-view-types.schemas.js";
 
 export const TreeAdapterLikeSchema = z.object({
-  /* TODO: parse fail readonly context: Record<string, unknown> */
-  /* TODO: parse fail readonly disabled: boolean */
-  /* TODO: parse fail readonly isProtected: boolean */
-  /* TODO: parse fail readonly isReadOnly: boolean */
-  /* TODO: parse fail readonly canMutate: boolean */
-  /* TODO: parse fail readonly disabledNodes: string[] */
-  /* TODO: parse fail readonly flashFlatPaths: string[] */
-  /* TODO: parse fail readonly flashErrorFlatPaths: string[] */
-  /* TODO: parse fail readonly expandedFlatPaths: string[] */
-  /* TODO: parse fail readonly expandedNodes: TNode[] */
-  /* TODO: parse fail readonly rootNodes: TNode[] */
-  /* TODO: parse fail readonly focusedNode: TNode | null */
-  /* TODO: parse fail readonly selectedNode: TNode | null */
-  /* TODO: parse fail readonly hoveredNode: TNode | null */
-  /* TODO: parse fail readonly floatCard: FloatCardConfig */
-  /* TODO: parse fail readonly currentDragFlatPath: string */
-  /* TODO: parse fail readonly _domRoot?: HTMLElement | null */
+  context: z.record(z.string(), z.unknown()),
+  disabled: z.boolean(),
+  isProtected: z.boolean(),
+  isReadOnly: z.boolean(),
+  canMutate: z.boolean(),
+  disabledNodes: z.array(z.string()),
+  flashFlatPaths: z.array(z.string()),
+  flashErrorFlatPaths: z.array(z.string()),
+  expandedFlatPaths: z.array(z.string()),
+  expandedNodes: z.array(z.custom<TNode>()),
+  rootNodes: z.array(z.custom<TNode>()),
+  focusedNode: z.custom<TNode>().nullable(),
+  selectedNode: z.custom<TNode>().nullable(),
+  hoveredNode: z.custom<TNode>().nullable(),
+  floatCard: z.custom<FloatCardConfig>(),
+  currentDragFlatPath: z.string(),
+  _domRoot: z.custom<HTMLElement>().nullable().optional(),
   normalizeFlatPath: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.string() }),
   findNodeByFlatPath: z.function({ input: [z.union([z.string(), z.null(), z.undefined()])], output: z.union([z.unknown() /* TODO: ref TNode */, z.null()]) }),
   filterRowActions: z.function({ input: [z.union([z.unknown() /* TODO: ref RowConfig */, z.undefined()]), z.boolean()], output: z.array(z.unknown() /* TODO: ref TreeActionEntry */) }),

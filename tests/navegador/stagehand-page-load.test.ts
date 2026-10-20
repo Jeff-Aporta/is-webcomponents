@@ -22,7 +22,8 @@
 //
 //   Lo que este test verifica (con Stagehand + Chrome local, sin LLM):
 //
-//     1. Levanta `scripts/serve.mjs` con `SERVE_ROOT=Personal` en :5505.
+//     1. Levanta `scripts/serve.mjs` con SERVE_ROOT = carpeta padre del repo
+//        en un puerto libre (la app vive en /<repo>/).
 //     2. Navega a la página.
 //     3. Espera a `<iswc-doc-demo data-ready="1">` con timeout corto.
 //        Si la página se cuelga, esto falla (NO se queda esperando
@@ -46,7 +47,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { mkdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { localBrowser, Stagehand } from '@browserbasehq/stagehand';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
@@ -56,72 +57,63 @@ const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
 const here = dirname(fileURLToPath(import.meta.url));
 const REPO = join(here, '..', '..');
-const SERVE_ROOT = process.env.SERVE_ROOT || 'C:\\ContaPyme\\Personal';
-// Rango de puertos efímeros: igual que `smoke-page-load.stagehand.test.mjs`,
-// probamos varios y nos quedamos con el primero libre. Si todos están
-// ocupados, dejamos que `serve.mjs` falle con EADDRINUSE.
-const PORT_CANDIDATES = [5505, 5506, 5507, 5508, 5509, 5510];
+// Modo Live Server: la raíz servida es la carpeta padre del repo y la app vive
+// en /<carpeta-del-repo>/ (antes C:\ContaPyme\Personal\apps\iswc-root).
+const SERVE_ROOT = process.env.SERVE_ROOT || dirname(REPO);
+const APP_PATH = `/${basename(REPO)}`;
 
 let server;
 let serverPort;
 let stagehand;
 let page;
 
-async function isPortFree(port) {
+/** Puerto libre que asigna el SO (listen(0)). `serve.mjs` no acepta 0 (cae a
+ *  8391), así que se reserva uno libre y se le pasa; si otro proceso lo gana
+ *  entre medias, `startDevServer` reintenta con otro. */
+async function puertoLibre() {
   const { default: net } = await import('node:net');
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const srv = net.createServer();
-    srv.once('error', () => resolve(false));
-    srv.once('listening', () => srv.close(() => resolve(true)));
-    srv.listen(port, '127.0.0.1');
+    srv.once('error', reject);
+    srv.listen(0, '127.0.0.1', () => {
+      const { port } = srv.address();
+      srv.close(() => resolve(port));
+    });
   });
 }
 
-// Arranca `scripts/serve.mjs` con SERVE_ROOT=<workspace>. Devuelve
-// { proc, port } o lanza. Reusa un puerto que ya esté sirviendo la misma
-// ruta si existe (útil cuando el dev server canónico ya corre).
-async function startDevServer() {
-  for (const port of PORT_CANDIDATES) {
-    if (!(await isPortFree(port))) {
-      // Asume que ya hay un serve.mjs corriendo en ese puerto. Verifica
-      // que la página responde antes de reusarlo.
-      try {
-        const r = await fetch(
-          `http://127.0.0.1:${port}/apps/iswc-root/index.html`,
-          { signal: AbortSignal.timeout(2000) },
-        );
-        if (r.ok) return { proc: null, port };
-      } catch { /* sigue probando */ }
-      continue;
-    }
+/** Arranca `scripts/serve.mjs` (el dev server real) en un puerto libre.
+ *  `env` extra (p. ej. SERVE_ROOT). Devuelve { proc, port } o lanza con la
+ *  salida del servidor para diagnosticar. */
+async function startDevServer(env = {}) {
+  let salida = '';
+  for (let intento = 0; intento < 4; intento++) {
+    const port = await puertoLibre();
     const proc = spawn(
-      'deno',
+      Deno.execPath(),
       ['run', '-A', '--no-check', 'scripts/serve.mjs', String(port)],
-      {
-        cwd: REPO,
-        env: { ...process.env, SERVE_ROOT },
-        stdio: ['ignore', 'pipe', 'pipe'],
-      },
+      { cwd: REPO, env: { ...process.env, ...env }, stdio: ['ignore', 'pipe', 'pipe'] },
     );
     const ready = await new Promise((resolve) => {
-      const t = setTimeout(() => resolve(false), 8000);
-      proc.stdout.on('data', (chunk) => {
+      const t = setTimeout(() => resolve(false), 30000);
+      const leer = (chunk) => {
         const s = chunk.toString();
-        if (s.includes('ISWC en http://')) {
-          clearTimeout(t);
-          resolve(true);
-        }
-      });
-      proc.on('exit', () => resolve(false));
+        salida += s;
+        if (s.includes('ISWC en http://')) { clearTimeout(t); resolve(true); }
+      };
+      proc.stdout.on('data', leer);
+      proc.stderr.on('data', (c) => { salida += c.toString(); });
+      proc.once('error', (e) => { salida += String(e); clearTimeout(t); resolve(false); });
+      proc.once('exit', () => { clearTimeout(t); resolve(false); });
     });
     if (ready) return { proc, port };
     proc.kill();
   }
-  throw new Error(`No free port in ${PORT_CANDIDATES.join(', ')}`);
+  throw new Error(`scripts/serve.mjs no arrancó tras 4 intentos:\n${salida.slice(-2000)}`);
 }
 
 before(async () => {
-  const res = await startDevServer();
+  const res = await startDevServer({ SERVE_ROOT });
   server = res.proc;
   serverPort = res.port;
   // Stagehand con localBrowser.headless=true y SIN modelo LLM. Solo usamos
@@ -215,7 +207,7 @@ test('stagehand: la página home carga sin colgar y sin errores de red', async (
   // El bug original era la página *colgándose* 3+ minutos. `waitForSelector`
   // con timeout corto detecta el hang de inmediato en lugar de consumir
   // minutos del runner.
-  const url = `http://127.0.0.1:${serverPort}/apps/iswc-root/index.html`;
+  const url = `http://127.0.0.1:${serverPort}${APP_PATH}/index.html`;
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 20000 });
   const ready = await page.waitForSelector(
     'iswc-doc-demo[data-ready="1"]',

@@ -69,9 +69,9 @@ test('iswc-kanban: CSS parts (base, column, col-head, title, badge, actions)', (
 });
 
 test('iswc-kanban: edge cases — drag state global (kanban usa null guards)', () => {
-  // kanban.ts usa `let dragCard = null;` y compara `if (!dragCard) return;`.
+  // kanban.ts usa `let dragCard: HTMLElement | null = null;` y compara `if (!dragCard) return;`.
   const src = read(MOD);
-  assert.match(src, /let\s+dragCard\s*=\s*null/);
+  assert.match(src, /let\s+dragCard\s*(?::\s*[\w$.<>| ]+)?=\s*null/);
   assert.match(src, /if\s*\(\s*!dragCard\s*\)/);
 });
 
@@ -81,7 +81,7 @@ test('iswc-kanban: adopta CSS', () => {
 
 test('iswc-kanban: registrado — 3 custom elements', () => {
   const src = read(MOD);
-  const defines = src.match(/defineElement\s*\(\s*['"`](is-[a-z0-9-]+)['"`]/g);
+  const defines = src.match(/defineElement\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g);
   assert.ok((defines?.length ?? 0) >= 3,
     `kanban.ts debe registrar 3+ custom elements (board/column/card), encontró: ${defines?.join(',')}`);
 });

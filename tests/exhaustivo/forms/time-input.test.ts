@@ -28,7 +28,7 @@ test('time-input: archivo y registro', () => {
 });
 
 test('time-input: compone time-field + time-clock (o digital-clock)', () => {
-  const m = src.match(/panels:\s*\(\s*\{[^}]*\}\s*\)\s*=>\s*\{[\s\S]*?\}/);
+  const m = src.match(/panels:\s*\(\s*\{[^}]*\}(?:\s*:\s*\{[^}]*\})?\s*\)(?:\s*:\s*[\w$.<>|\[\] ]+)?\s*=>\s*\{[\s\S]*?\}/);
   assert.ok(m, '<iswc-time-input> debe declarar panels()');
   // El panel es `iswc-time-clock` (analógico) o `iswc-digital-clock` (digital).
   assert.ok(/'iswc-time-clock'/.test(src) || /'iswc-digital-clock'/.test(src),

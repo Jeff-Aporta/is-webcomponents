@@ -4,7 +4,7 @@
  * Como no hay jsdom disponible, estos tests verifican estáticamente:
  *   1. El módulo existe y es importable.
  *   2. La fuente declara `static get observedAttributes`.
- *   3. La fuente emite al menos un evento `is-*` (vía `emit()`).
+ *   3. La fuente emite al menos un evento `iswc-*` (vía `emit()`).
  *   4. La fuente define el custom element (`customElements.define` o factory).
  *   5. El JSON de preview existe y respeta el esquema iswc-preview/v1.
  *   6. Cada atributo declarado en los `controls` del JSON existe en
@@ -64,12 +64,12 @@ test('iswc-button: declares observedAttributes', async () => {
   );
 });
 
-test('iswc-button: emite al menos un evento is-*', () => {
+test('iswc-button: emite al menos un evento iswc-*', () => {
   const src = leerFuente();
   // Acepta `emit(this, "iswc-click", ...)` además de `emit('iswc-click', ...)`.
   assert.ok(
-    /emit\s*\([^,]*,\s*['"`]is-[a-z-]+['"`]/.test(src) || /emit\s*\(\s*['"`]is-[a-z-]+['"`]/.test(src),
-    'debe emitir al menos un evento is-*',
+    /emit\s*\([^,]*,\s*['"`]iswc-[a-z-]+['"`]/.test(src) || /emit\s*\(\s*['"`]iswc-[a-z-]+['"`]/.test(src),
+    'debe emitir al menos un evento iswc-*',
   );
 });
 

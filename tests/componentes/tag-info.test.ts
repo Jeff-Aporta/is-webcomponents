@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { leerCssCompilado, reglas, selectores } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -21,13 +22,14 @@ test('iswc-tag declara color="info" en VALID_COLOR', () => {
 test('iswc-tag actualiza doc-block con la colore info', () => {
   const src = readFileSync(join(root, 'src', 'components', 'feedback', 'tag.ts'), 'utf8');
   assert.ok(
-    /brand\s*\|\s*neutral\s*\|\s*info\s*\|\s*success/.test(src),
+    // Puede haber familias intermedias (p.ej. `text`), pero info va tras neutral y antes de success.
+    /brand\s*\|\s*neutral\s*\|(?:\s*[\w-]+\s*\|)*?\s*info\s*\|\s*success/.test(src),
     'El doc-block debe listar info entre neutral y success',
   );
 });
 
 test('iswc-tag.css define los tokens de color=info', () => {
-  const css = readFileSync(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'tag.css'), 'utf8');
+  const css = leerCssCompilado(root, ['src', 'components', 'feedback', 'tag.css'].join('/'));
   const m = /:host\(\[\s*color\s*=\s*["']info["']\s*\]\)\s*\{([\s\S]*?)\}/m.exec(css);
   assert.ok(m, 'Debe existir el bloque :host([color="info"]) { ... }');
   const block = m[1];
@@ -41,7 +43,7 @@ test('iswc-tag.css define los tokens de color=info', () => {
 });
 
 test('iswc-tag.css NO anida selectores con atributos del host dentro de :host', () => {
-  const css = readFileSync(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'tag.css'), 'utf8');
+  const css = leerCssCompilado(root, ['src', 'components', 'feedback', 'tag.css'].join('/'));
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en tag.css');
   const start = css.indexOf('{', idx);
@@ -73,7 +75,7 @@ test('iswc-tag.css NO anida selectores con atributos del host dentro de :host', 
 });
 
 test('callout.css NO anida selectores con atributos del host dentro de :host', () => {
-  const css = readFileSync(join(root, '.tmp-scss', 'src', 'components', 'layout', 'callout.css'), 'utf8');
+  const css = leerCssCompilado(root, ['src', 'components', 'layout', 'callout.css'].join('/'));
   const idx = css.indexOf(':host {');
   assert.ok(idx > -1, ':host { ... } existe en callout.css');
   const start = css.indexOf('{', idx);
@@ -98,31 +100,54 @@ test('callout.css NO anida selectores con atributos del host dentro de :host', (
   }
   for (const a of ['filled', 'outlined', 'filled-outlined', 'plain', 'accent']) {
     assert.ok(
-      new RegExp(`:host\\(\\[\\s*variant\\s*=\\s*["']${a}["']\\s*\\]\\)`).test(css),
+      // Directo `:host([variant="x"])` o agrupado `:host(:is([variant="x"], …))`.
+      new RegExp(`:host\\((?::is\\([^{]*?)?\\[\\s*variant\\s*=\\s*["']${a}["']\\s*\\]`).test(css),
       `callout.css debe tener :host([variant="${a}"]) a top-level`,
     );
   }
 });
 
+// Las paletas solo declaran h/s/b; la rampa de info vive en la capa común
+// `:root, [data-palette]` y la HEREDA cada [data-palette="…"]. Lo observable:
+// el conjunto de reglas que aplican al nodo de la paleta (genéricas
+// `[data-palette]` o específicas de esa paleta, sin tema) define los tokens.
+const PALETAS = ['insoft', 'contapyme', 'agrowin'];
+const palettesCss = () => leerCssCompilado(root, 'src/styles/palettes.css');
+/** Cuerpos de las reglas que aplican a un nodo con sólo `data-palette="pal"`. */
+const reglasDePaleta = (css, pal) => reglas(css)
+  .filter((r) => r.at.length === 0)
+  .filter((r) => selectores(r.selector).some((sel) =>
+    sel === '[data-palette]' || sel === `[data-palette="${pal}"]`))
+  .map((r) => r.cuerpo)
+  .join('\n');
+
 test('Las 3 paletas definen --iswc-color-info', () => {
-  const css = readFileSync(join(root, '.tmp-scss', 'src', 'styles', 'palettes.css'), 'utf8');
-  for (const pal of ['insoft', 'contapyme', 'agrowin']) {
-    const re = new RegExp(`\\[data-palette=["']${pal}["']\\][\\s\\S]*?--iswc-color-info\\s*:`);
-    assert.ok(re.test(css), `La paleta "${pal}" debe definir --iswc-color-info`);
+  const css = palettesCss();
+  for (const pal of PALETAS) {
+    const cuerpo = reglasDePaleta(css, pal);
+    assert.ok(cuerpo, `no hay reglas que apliquen a [data-palette="${pal}"]`);
+    assert.ok(/--iswc-color-info\s*:/.test(cuerpo), `La paleta "${pal}" debe definir --iswc-color-info`);
   }
 });
 
 test('Las 3 paletas definen la rampa relativa completa de info', () => {
-  const css = readFileSync(join(root, '.tmp-scss', 'src', 'styles', 'palettes.css'), 'utf8');
-  for (const pal of ['insoft', 'contapyme', 'agrowin']) {
-    const re = new RegExp(`\\[data-palette=["']${pal}["']\\]([\\s\\S]*?)\\}`, 'm');
-    const blockMatch = re.exec(css);
-    assert.ok(blockMatch, `Bloque [data-palette="${pal}"] existe`);
-    const block = blockMatch[1];
+  const css = palettesCss();
+  for (const pal of PALETAS) {
+    const block = reglasDePaleta(css, pal);
+    assert.ok(block, `Bloque [data-palette="${pal}"] existe`);
     // Rampa relativa: el mismo idioma que el resto de familias del tema.
     for (const step of ['paler', 'pale', 'strong', 'stronger', 'strongest']) {
       const ok = new RegExp(`--iswc-color-info-${step}\\s*:`).test(block);
       assert.ok(ok, `paleta ${pal} debe tener --iswc-color-info-${step}`);
+    }
+    // Ninguna paleta puede anular la rampa a medias (base sin variantes).
+    const propia = reglas(css).filter((r) => r.at.length === 0
+      && selectores(r.selector).includes(`[data-palette="${pal}"]`)).map((r) => r.cuerpo).join('\n');
+    if (/--iswc-color-info\s*:/.test(propia)) {
+      for (const step of ['paler', 'pale', 'strong', 'stronger', 'strongest']) {
+        assert.ok(new RegExp(`--iswc-color-info-${step}\\s*:`).test(propia),
+          `paleta ${pal} redefine --iswc-color-info pero no --iswc-color-info-${step}`);
+      }
     }
   }
 });

@@ -67,9 +67,25 @@ test('componentes/preview-ready-hooks', async () => {
   }
   
   // Las dos páginas del docs tienen que cargar el módulo del panel.
+  //
+  // index.html ya no lista <script> sueltos: monta <iswc-doc-demo>, que pide
+  // al loader sus DEFAULT_PAGE_MODULES (salvo que la página los reemplace con
+  // `page-modules`), y el loader resuelve cada nombre a dist/scripts/*.min.js.
+  const indexHtml = leer('index.html');
+  const docDemo = leer('src/components/layout/doc-demo.ts');
+  const loaderSrc = leer('src/cdn/loader.ts');
+  const defaults = docDemo.match(/const DEFAULT_PAGE_MODULES\s*=\s*\[([\s\S]*?)\]/)?.[1] ?? '';
+  if (!/<iswc-doc-demo\b/.test(indexHtml)) failures.push('index.html: debe montar <iswc-doc-demo>');
+  const tagDocDemo = indexHtml.match(/<iswc-doc-demo\b[^>]*>/)?.[0] ?? '';
+  for (const mod of ['cdn-panel', 'view-sources']) {
+    const explicita = tagDocDemo.match(/\bpage-modules="([^"]*)"/)?.[1];
+    const cargado = explicita != null ? explicita.split(/[,\s]+/).includes(mod) : defaults.includes(`'${mod}'`);
+    if (!cargado) failures.push(`index.html: <iswc-doc-demo> no carga el módulo ${mod}`);
+    if (!new RegExp(`\\['${mod}',\\s*\\{\\s*href:\\s*'dist/scripts/${mod}\\.min\\.js'`).test(loaderSrc)) {
+      failures.push(`loader.ts: ${mod} debe resolverse a dist/scripts/${mod}.min.js`);
+    }
+  }
   for (const [rel, ruta] of [
-    ['index.html', 'scripts/cdn-panel.js'],
-    ['index.html', 'scripts/view-sources.js'],
     ['src/previews/_shell.html', '../../scripts/cdn-panel.js'],
     ['src/previews/_shell.html', '../../scripts/view-sources.js'],
   ]) {

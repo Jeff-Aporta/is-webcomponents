@@ -7,7 +7,9 @@
 //     no mostraba icono en el panel de controles.
 //   - El render del panel consulta el JSON de la demo (`opcionesDe` en controles.ts) y,
 //     si el JSON omite `icon`, lo enriquece con `iconForSelectOption` que mira
-//     `BUTTON_SHAPE_ICON` (button-shape.ts) y `MEDIA_SHAPE_ICON` (media-shape.ts).
+//     `BUTTON_SHAPE_ICON` (src/core/button-shape.ts) y `MEDIA_SHAPE_ICON`
+//     (src/core/media-shape.ts). Se importan los módulos reales (no se parsea
+//     su texto): si se mueven o cambian de forma, el test lo dice al importar.
 //   - Para evitar que cualquier cambio manual (p. ej. reescritura del JSON con
 //     `--fix` del audit-preview-controls, o un edit del fuente TS) deje el icono
 //     huérfano, verificamos las dos fuentes de verdad y exigimos icon para
@@ -28,6 +30,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { BUTTON_SHAPE, BUTTON_SHAPE_ICON } from '../../src/core/button-shape.ts';
+import { MEDIA_SHAPE, MEDIA_SHAPE_ICON } from '../../src/core/media-shape.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
@@ -35,7 +39,6 @@ test('navegador/w29-shape-icons', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
   const COMPONENTS_ROOT = join(root, 'src', 'components');
-  const SHARED = join(COMPONENTS_ROOT, '_shared');
   
   async function walk(dir, results = []) {
     const entries = await readdir(dir, { withFileTypes: true });
@@ -98,37 +101,13 @@ test('navegador/w29-shape-icons', async () => {
   }
   
   // 2) Verificar que los mapas canónicos declaran TODOS los valores del enum.
-  const buttonShapeTs = await readFile(join(SHARED, 'button-shape.ts'), 'utf8');
-  const mediaShapeTs = await readFile(join(SHARED, 'media-shape.ts'), 'utf8');
-  
-  function extractEnumArray(src, name) {
-    // `export const BUTTON_SHAPE = Object.freeze([...] as const)`
-    const re = new RegExp(
-      `export\\s+const\\s+${name}\\s*=\\s*Object\\.freeze\\(\\[([\\s\\S]*?)\\]\\s*as\\s+const\\)`,
-    );
-    const m = re.exec(src);
-    if (!m) return null;
-    return [...m[1].matchAll(/['"]([^'"]+)['"]/g)].map((x) => x[1]);
-  }
-  function extractIconMap(src, name) {
-    // `export const BUTTON_SHAPE_ICON: Record<X, string> = Object.freeze({ ... })`
-    const re = new RegExp(`export\\s+const\\s+${name}[^=]*=\\s*Object\\.freeze\\(\\{\\s*([\\s\\S]*?)\\}\\s*\\)`);
-    const m = re.exec(src);
-    if (!m) return null;
-    const entries = {};
-    // Acepta claves con o sin comillas (p. ej. `pill: 'mdi:capsule'` o `'arrow-left': 'mdi:…'`).
-    for (const kv of m[1].matchAll(/(?:^|\s)(?:'([^']+)'|"([^"]+)"|([A-Za-z_][\w-]*))\s*:\s*'([^']+)'/g)) {
-      const key = kv[1] || kv[2] || kv[3];
-      entries[key] = kv[4];
-    }
-    return entries;
-  }
-  
-  const buttonShapeValues = extractEnumArray(buttonShapeTs, 'BUTTON_SHAPE') || [];
-  const mediaShapeValues = extractEnumArray(mediaShapeTs, 'MEDIA_SHAPE') || [];
-  const buttonShapeIcon = extractIconMap(buttonShapeTs, 'BUTTON_SHAPE_ICON') || {};
-  const mediaShapeIcon = extractIconMap(mediaShapeTs, 'MEDIA_SHAPE_ICON') || {};
-  
+  const buttonShapeValues = [...BUTTON_SHAPE];
+  const mediaShapeValues = [...MEDIA_SHAPE];
+  const buttonShapeIcon = BUTTON_SHAPE_ICON;
+  const mediaShapeIcon = MEDIA_SHAPE_ICON;
+  assert.ok(buttonShapeValues.includes('pill'), 'W29: BUTTON_SHAPE debe incluir "pill"');
+  assert.ok(mediaShapeValues.length > 0, 'W29: MEDIA_SHAPE vacío');
+
   const mapViolations = [];
   for (const v of buttonShapeValues) {
     if (!buttonShapeIcon[v]) mapViolations.push(`BUTTON_SHAPE_ICON falta para "${v}"`);

@@ -14,6 +14,7 @@
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -25,13 +26,14 @@ test('componentes/palette-and-snippet-contract', async () => {
   const failures = [];
   const check = (cond, msg) => { if (!cond) failures.push(msg); };
   
-  const isBase = await readFile(join(root, '.tmp-scss', 'src', 'styles', 'is-base.css'), 'utf8');
-  const palettes = await readFile(join(root, '.tmp-scss', 'src', 'styles', 'palettes.css'), 'utf8');
+  // CSS compilado normalizado (Sass emite `[data-palette=contapyme]` sin comillas).
+  const isBase = leerCssCompilado(root, 'src/styles/is-base.css');
+  const palettes = leerCssCompilado(root, 'src/styles/palettes.css');
+  const docDemo = await readFile(join(root, 'src', 'components', 'layout', 'doc-demo.ts'), 'utf8');
   const indexHtml = await readFile(join(root, 'index.html'), 'utf8');
   const previewBoot = await readFile(join(root, 'scripts', 'preview-boot.js'), 'utf8');
   const previewChrome = await readFile(join(root, 'scripts', 'preview-chrome.js'), 'utf8');
   const demoCode = await readFile(join(root, 'scripts', 'demo-code.js'), 'utf8');
-  const chartPalette = await readFile(join(root, 'src', 'components', 'charts', 'utils', 'chart-palette.ts'), 'utf8');
   const paletteSelector = await readFile(join(root, 'src', 'components', 'feedback', 'palette-selector.ts'), 'utf8');
   
   // ─── 1. Default = contapyme ─────────────────────────────────────────────────
@@ -41,9 +43,12 @@ test('componentes/palette-and-snippet-contract', async () => {
     'index.html: <html> debe abrir con data-palette="contapyme"',
   );
   
+  // El shell de la galería es <iswc-doc-demo> (index.html solo lo monta); el
+  // selector de paleta vive en su plantilla.
+  check(/<iswc-doc-demo\b/.test(indexHtml), 'index.html: el shell debe montar <iswc-doc-demo>');
   check(
-    /<iswc-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(indexHtml),
-    'index.html: el shell usa <iswc-palette-selector id="brandPalette" scope="root">',
+    /<iswc-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(docDemo),
+    'doc-demo.ts: el shell usa <iswc-palette-selector id="brandPalette" scope="root">',
   );
   
   check(
@@ -59,13 +64,21 @@ test('componentes/palette-and-snippet-contract', async () => {
   );
   check(!/\|\|\s*['"]insoft['"]/.test(previewChrome), 'preview-chrome.js: no debe quedar fallback insoft');
   
+  // WHAT: se ejecuta el fallback real en vez de buscar su texto.
+  const { resolvePaletteKey } = await import(new URL('../../src/components/charts/utils/chart-palette.ts', import.meta.url).href);
   check(
-    /CATEGORICAL\[attr\]\s*\?\s*attr\s*:\s*['"]contapyme['"]/.test(chartPalette),
+    resolvePaletteKey(undefined) === 'contapyme' && resolvePaletteKey('no-existe') === 'contapyme',
     'chart-palette.ts: resolvePaletteKey fallback = contapyme',
   );
-  
-  const defaultPalettesBlock = paletteSelector.match(/const DEFAULT_PALETTES\s*=\s*\[([\s\S]*?)\];/)?.[1] || '';
-  const firstValue = defaultPalettesBlock.match(/value:\s*['"]([^'"]+)['"]/)?.[1];
+  check(resolvePaletteKey('insoft') === 'insoft', 'chart-palette.ts: resolvePaletteKey respeta una paleta válida');
+
+  // DEFAULT_PALETTES del selector = PALETTES de palette-build (mismo orden).
+  check(
+    /DEFAULT_PALETTES[^=]*=\s*PALETTES\.map\(/.test(paletteSelector),
+    'palette-selector: DEFAULT_PALETTES debe derivarse de PALETTES (palette-build)',
+  );
+  const { PALETTES } = await import(new URL('../../src/styles/palette-build.ts', import.meta.url).href);
+  const firstValue = PALETTES?.[0]?.value;
   check(firstValue === 'contapyme', `palette-selector DEFAULT_PALETTES[0] = "${firstValue || '?'}", esperaba contapyme`);
   
   check(

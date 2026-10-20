@@ -7,8 +7,8 @@
 // custom element nunca se registraba → la página quedaba en blanco.
 //
 // Este test:
-//   1. Levanta el dev server (`serve.mjs`) con `SERVE_ROOT=Personal` en un
-//      puerto efímero (modo Live Server, igual a lo que el usuario usa).
+//   1. Levanta el dev server (`serve.mjs`) con SERVE_ROOT = carpeta padre del
+//      repo en un puerto libre (modo Live Server: la app vive en /<repo>/).
 //   2. Navega con Playwright.
 //   3. Verifica que NINGÚN request de red falló (filtra los críticos).
 //   4. Verifica que `<iswc-doc-demo>` quedó definido (`customElements.get`
@@ -20,66 +20,80 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista, before, after } = coleccionPruebas({ categoria: 'what' });
 
 
-const SERVE_ROOT = process.env.SERVE_ROOT || 'C:\\ContaPyme\\Personal';
-const REPO = 'C:\\ContaPyme\\Personal\\apps\\iswc-root';
+// Modo Live Server: la raíz servida es la carpeta padre del repo y la app vive
+// en /<carpeta-del-repo>/ (antes C:\ContaPyme\Personal\apps\iswc-root).
+const REPO = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const SERVE_ROOT = process.env.SERVE_ROOT || dirname(REPO);
+const APP_PATH = `/${basename(REPO)}`;
 
-// Arranca `serve.mjs` en un puerto libre. Devuelve {proc, port} o lanza.
-async function startDevServer() {
-  // Puerto 0 → el SO elige uno libre. `serve.mjs` no soporta 0, así que
-  // probamos 5505 primero, 5506, etc.
-  const candidates = [5505, 5506, 5507, 5508, 5509, 5510];
-  for (const port of candidates) {
-    if (await isPortFree(port)) {
-      const proc = spawn(
-        'deno',
-        ['run', '-A', '--no-check', 'scripts/serve.mjs', String(port)],
-        {
-          cwd: REPO,
-          env: { ...process.env, SERVE_ROOT },
-          stdio: ['ignore', 'pipe', 'pipe'],
-        },
-      );
-      // Espera a que diga "ISWC en http://..."
-      const ready = await new Promise((resolve) => {
-        const t = setTimeout(() => resolve(false), 8000);
-        proc.stdout.on('data', (chunk) => {
-          const s = chunk.toString();
-          if (s.includes('ISWC en http://')) {
-            clearTimeout(t);
-            resolve(true);
-          }
-        });
-        proc.on('exit', () => resolve(false));
-      });
-      if (ready) return { proc, port };
-      proc.kill();
-    }
-  }
-  throw new Error('No free port for dev server (5505-5510)');
+/** Puerto libre que asigna el SO (listen(0)). `serve.mjs` no acepta 0 (cae a
+ *  8391), así que se reserva uno libre y se le pasa; si otro proceso lo gana
+ *  entre medias, `startDevServer` reintenta con otro. */
+async function puertoLibre() {
+  const { default: net } = await import('node:net');
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.once('error', reject);
+    srv.listen(0, '127.0.0.1', () => {
+      const { port } = srv.address();
+      srv.close(() => resolve(port));
+    });
+  });
 }
 
-async function isPortFree(port) {
-  const { default: net } = await import('node:net');
-  return new Promise((resolve) => {
-    const srv = net.createServer();
-    srv.once('error', () => resolve(false));
-    srv.once('listening', () => srv.close(() => resolve(true)));
-    srv.listen(port, '127.0.0.1');
-  });
+/** Arranca `scripts/serve.mjs` (el dev server real) en un puerto libre.
+ *  `env` extra (p. ej. SERVE_ROOT). Devuelve { proc, port } o lanza con la
+ *  salida del servidor para diagnosticar. */
+async function startDevServer(env = {}) {
+  let salida = '';
+  for (let intento = 0; intento < 4; intento++) {
+    const port = await puertoLibre();
+    const proc = spawn(
+      Deno.execPath(),
+      ['run', '-A', '--no-check', 'scripts/serve.mjs', String(port)],
+      { cwd: REPO, env: { ...process.env, ...env }, stdio: ['ignore', 'pipe', 'pipe'] },
+    );
+    const ready = await new Promise((resolve) => {
+      const t = setTimeout(() => resolve(false), 30000);
+      const leer = (chunk) => {
+        const s = chunk.toString();
+        salida += s;
+        if (s.includes('ISWC en http://')) { clearTimeout(t); resolve(true); }
+      };
+      proc.stdout.on('data', leer);
+      proc.stderr.on('data', (c) => { salida += c.toString(); });
+      proc.once('error', (e) => { salida += String(e); clearTimeout(t); resolve(false); });
+      proc.once('exit', () => { clearTimeout(t); resolve(false); });
+    });
+    if (ready) return { proc, port };
+    proc.kill();
+  }
+  throw new Error(`scripts/serve.mjs no arrancó tras 4 intentos:\n${salida.slice(-2000)}`);
+}
+
+/** Chromium de Playwright; si no está descargado, el Chrome o Edge del sistema. */
+async function lanzar() {
+  let ultimo;
+  for (const channel of [undefined, 'chrome', 'msedge']) {
+    try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
+  }
+  throw ultimo;
 }
 
 let server;
 let browser;
 
 before(async () => {
-  server = await startDevServer();
-  browser = await chromium.launch();
+  server = await startDevServer({ SERVE_ROOT });
+  browser = await lanzar();
 });
 
 after(async () => {
@@ -89,7 +103,7 @@ after(async () => {
 });
 
 test('smoke: la página home carga sin errores de red', async () => {
-  const url = `http://127.0.0.1:${server.port}/apps/iswc-root/index.html`;
+  const url = `http://127.0.0.1:${server.port}${APP_PATH}/index.html`;
   const page = await browser.newPage();
   const failed = [];
   const errors = [];
@@ -133,7 +147,7 @@ test('smoke: la página home carga sin errores de red', async () => {
 });
 
 test('smoke: doc-demo.min.js existe y es servible', async () => {
-  const url = `http://127.0.0.1:${server.port}/apps/iswc-root/dist/cdn/preview/doc-demo.min.js`;
+  const url = `http://127.0.0.1:${server.port}${APP_PATH}/dist/cdn/preview/doc-demo.min.js`;
   const resp = await fetch(url);
   assert.ok(resp.ok, `doc-demo.min.js no responde: ${resp.status}`);
   const text = await resp.text();

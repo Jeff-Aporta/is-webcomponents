@@ -14,6 +14,8 @@ import './float-card.js';
 import { TreeRowViewAdapter } from './utils/tree-view/adapter.js';
 import { TreeCustomsBase } from './utils/tree-view/customs-base.js';
 import { paintForest } from './utils/tree-view/render-rows.js';
+import { TreeRowAdapter } from './utils/tree-view/row-adapter.js';
+import { objRootsToNodes, groupedWithSeparators } from './utils/tree-view/tree-data.js';
 import type { TNode, TRecord, TreeActionEntry, TreeCustoms } from './schemas/tree-view-types.schemas.js';
 import type { _AdapterLike, _DrawerLike, _ModalDeleteLike, _DialogLike } from "./schemas/tree-view.schemas.js";
 
@@ -382,3 +384,7 @@ class IswcTreeView extends HTMLElement {
 }
 
 defineElement('iswc-tree-view', IswcTreeView, 'IswcTreeView');
+
+// API pública documentada en tree-view.md: los consumidores extienden
+// `TreeCustomsBase` e instancian el adapter importándolos desde este módulo.
+export { TreeRowViewAdapter, TreeCustomsBase, TreeRowAdapter, objRootsToNodes, groupedWithSeparators };

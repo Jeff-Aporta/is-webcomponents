@@ -45,7 +45,7 @@ Cada test exhaustivo por componente cubre, **como mínimo, las 10 dimensiones**:
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-const TAG = 'is-<componente>';
+const TAG = 'iswc-<componente>';
 
 void async () => {
   // Cargar el módulo del componente antes de cualquier test.

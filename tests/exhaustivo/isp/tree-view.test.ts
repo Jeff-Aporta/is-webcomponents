@@ -41,14 +41,14 @@ test('4. reexporta TreeRowViewAdapter / TreeAdapter / TreeCustomsBase', async ()
   assert.ok(/export\s*\{[^}]*TreeCustomsBase[^}]*\}/.test(src));
 });
 
-test('5. importa customs base compartido (_shared/tree-view/customs-base)', async () => {
+test('5. importa customs base compartido (utils/tree-view/customs-base)', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/from\s*['"][./]+_shared\/tree-view\/customs-base/.test(src));
+  assert.ok(/from\s*['"][./]+utils\/tree-view\/customs-base/.test(src));
 });
 
 test('6. importa paintForest para pintar el árbol', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/from\s*['"][./]+_shared\/tree-view\/render-rows/.test(src));
+  assert.ok(/from\s*['"][./]+utils\/tree-view\/render-rows/.test(src));
   assert.ok(/paintForest/.test(src));
 });
 
@@ -73,8 +73,8 @@ test('10. integra con float-card (ficha del item)', async () => {
   assert.ok(/float-card/.test(src));
 });
 
-test('11. el módulo de customs base existe en _shared/tree-view/', async () => {
-  const customs = join(ROOT, 'src', 'components', 'isp', '_shared', 'tree-view', 'customs-base.ts');
+test('11. el módulo de customs base existe en utils/tree-view/', async () => {
+  const customs = join(ROOT, 'src', 'components', 'isp', 'utils', 'tree-view', 'customs-base.ts');
   assert.ok(existsSync(customs));
 });
 

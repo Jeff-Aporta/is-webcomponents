@@ -8,9 +8,12 @@ import { fileURLToPath } from 'node:url';
 import { RefObj } from '../../src/vendor-distributions/shared/lib/ref-obj.ts';
 import { computeFlowchartLayout, resolveFlowchartSpec } from '../../src/components/diagrams/utils/flowchart-spec.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { conFixtureIss } from '../_shared/iss-fixture.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'what' });
+const { test: registrar, lista } = coleccionPruebas({ categoria: 'what' });
+// Los casos que leen el fixture del ISS (D:\Dev, fuera del VPS) se saltan si no está.
+const test = conFixtureIss(registrar);
 
 const denoTest = denoTestCon(test);
 

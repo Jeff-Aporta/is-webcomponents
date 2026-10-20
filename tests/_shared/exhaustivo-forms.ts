@@ -58,6 +58,14 @@ export function leerDoc(tag: string): string | null {
   return existsSync(ruta) ? readFileSync(ruta, 'utf8') : null;
 }
 
+/**
+ * Declaración `const NOMBRE = [ ... ]` de un array literal, con o sin
+ * anotación de tipo TS (`const NOMBRE: string[] = [ ... ]`). Captura el cuerpo.
+ */
+function arrayDeclRe(nombre: string): RegExp {
+  return new RegExp(`(?:const|let|var)\\s+${nombre}\\s*(?::[^=\\n]*)?=\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]`);
+}
+
 /** Atributos observados declarados como `static get observedAttributes()`. */
 export function atributosObservados(src: string): string[] {
   const attrs = new Set<string>();
@@ -75,7 +83,7 @@ export function atributosObservados(src: string): string[] {
   const constMatch = arrayLit.match(/^[A-Z_$][\w$]*$/);
   if (constMatch) {
     const cn = constMatch[0];
-    const cm = src.match(new RegExp(`(?:const|let|var)\\s+${cn}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`));
+    const cm = src.match(arrayDeclRe(cn));
     if (cm) arrayLit = cm[1];
     else return [];
   }
@@ -86,7 +94,7 @@ export function atributosObservados(src: string): string[] {
     for (const m of lit.matchAll(/['"`]([a-z0-9-]+)['"`]/g)) attrs.add(m[1]);
     for (const m of lit.matchAll(/\.\.\.\s*([A-Za-z_$][\w$]*)/g)) {
       const alias = m[1];
-      const aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`));
+      const aliasMatch = src.match(arrayDeclRe(alias));
       if (aliasMatch) visitar(aliasMatch[1], depth + 1);
     }
   };
@@ -97,10 +105,10 @@ export function atributosObservados(src: string): string[] {
 /** Tags `<iswc-foo>` que aparecen como `defineElement('iswc-foo', ...)`. */
 export function tagsDefinidos(src: string): string[] {
   const tags = new Set<string>();
-  for (const m of src.matchAll(/defineElement\s*\(\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/defineElement\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     tags.add(m[1]);
   }
-  for (const m of src.matchAll(/customElements\.define\s*\(\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/customElements\.define\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     tags.add(m[1]);
   }
   return [...tags];
@@ -110,13 +118,13 @@ export function tagsDefinidos(src: string): string[] {
 export function eventosEmitidos(src: string): string[] {
   const evs = new Set<string>();
   // Variantes: emit(this, 'iswc-foo', ...), #emit('iswc-foo', ...), dispatchEvent(new Event('iswc-foo', ...))
-  for (const m of src.matchAll(/(?:#emit|emit)\s*\(\s*this\s*,\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/(?:#emit|emit)\s*\(\s*this\s*,\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     evs.add(m[1]);
   }
-  for (const m of src.matchAll(/(?:#emit|emit)\s*\(\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/(?:#emit|emit)\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     evs.add(m[1]);
   }
-  for (const m of src.matchAll(/dispatchEvent\s*\(\s*new\s+\w+\s*\(\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/dispatchEvent\s*\(\s*new\s+\w+\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     evs.add(m[1]);
   }
   return [...evs];
@@ -166,7 +174,7 @@ export function eventosDocumentados(src: string): string[] {
   const evs = new Set<string>();
   // Busca la sección "Eventos: ..." antes del primer `(() => {` o `class `.
   const cabecera = src.slice(0, src.indexOf('class ') > -1 ? src.indexOf('class ') : src.indexOf('(() =>'));
-  for (const m of cabecera.matchAll(/['"`](is-[a-z0-9-]+)['"`]/g)) evs.add(m[1]);
+  for (const m of cabecera.matchAll(/['"`](iswc-[a-z0-9-]+)['"`]/g)) evs.add(m[1]);
   return [...evs];
 }
 

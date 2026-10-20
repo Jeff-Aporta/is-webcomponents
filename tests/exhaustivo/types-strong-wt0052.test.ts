@@ -33,6 +33,46 @@ const MD_EDITOR         = join(ROOT, 'src', 'components', 'helpers', 'md-editor.
 const POPOVER           = join(ROOT, 'src', 'components', 'helpers', 'popover.ts');
 const FORMAT            = join(ROOT, 'src', 'components', 'helpers', 'format.ts');
 
+// Tras WT-0052 los tipos de contrato se migraron a módulos `schemas/*.schemas.ts`
+// (Zod + `z.infer`). El archivo los importa con `import type`; aquí se verifica
+// que (1) el import existe y (2) el módulo de schemas los declara de verdad
+// (ignorando comentarios: los `TODO: parse fail ...` NO cuentan como campo).
+
+const sinComentarios = (s: string): string =>
+  s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+
+/** Fuente (sin comentarios) de los `*.schemas.ts` que importa `ruta`. */
+function schemasDe(ruta: string): string {
+  const src = readFileSync(ruta, 'utf8');
+  let out = '';
+  for (const m of src.matchAll(/from\s*['"](\.[^'"]+\.schemas)\.js['"]/g)) {
+    const f = join(dirname(ruta), `${m[1]}.ts`);
+    assert.ok(existsSync(f), `${f} debe existir (importado por ${ruta})`);
+    out += '\n' + readFileSync(f, 'utf8');
+  }
+  return sinComentarios(out);
+}
+
+/** `nombre` se importa en `ruta` desde un `*.schemas.js` y ese módulo lo exporta. */
+function tipoDeSchemas(ruta: string, nombre: string): void {
+  const src = readFileSync(ruta, 'utf8');
+  assert.match(
+    src,
+    new RegExp(`import\\s+(?:type\\s+)?\\{[^}]*\\b${nombre}\\b[^}]*\\}\\s*from\\s*['"][^'"]+\\.schemas\\.js['"]`),
+    `importa ${nombre} desde su módulo *.schemas`,
+  );
+  assert.match(schemasDe(ruta), new RegExp(`export\\s+(?:type|interface)\\s+${nombre}\\b`), `declara ${nombre} en *.schemas.ts`);
+}
+
+/** Cuerpo `z.object({...})` (sin comentarios) del schema `nombre` en los schemas de `ruta`. */
+function cuerpoSchema(ruta: string, nombre: string): string {
+  const s = schemasDe(ruta);
+  const i = s.search(new RegExp(`export\\s+const\\s+${nombre}Schema\\s*=`));
+  assert.ok(i >= 0, `${nombre}Schema debe existir`);
+  const fin = s.indexOf(`export type ${nombre}`, i);
+  return s.slice(i, fin > i ? fin : undefined);
+}
+
 // ── row-adapter-base.ts ───────────────────────────────────────────────────
 
 test('WT-0052 / row-adapter-base: archivo existe y declara TRABase', () => {
@@ -42,19 +82,21 @@ test('WT-0052 / row-adapter-base: archivo existe y declara TRABase', () => {
   assert.match(src, /export\s+class\s+TRABase\b/, 'TRABase debe estar exportada');
 });
 
-test('WT-0052 / row-adapter-base: usa tipos compartidos de _types.ts', () => {
+test('WT-0052 / row-adapter-base: usa tipos compartidos de tree-view-types.schemas', () => {
   const src = readFileSync(ROW_ADAPTER_BASE, 'utf8');
-  assert.match(src, /import\s+type[^;]+from\s+['"]\.\/_types\.js['"]/, 'debe importar tipos desde _types.js');
-  assert.match(src, /\bRowConfig\b/, 'usa RowConfig');
-  assert.match(src, /\bTNode\b/, 'usa TNode');
-  assert.match(src, /\bTreeActionEntry\b/, 'usa TreeActionEntry');
+  for (const t of ['RowConfig', 'TNode', 'TreeActionEntry']) {
+    tipoDeSchemas(ROW_ADAPTER_BASE, t);
+    // Además de importarlo, lo usa en firmas (más de una aparición).
+    assert.ok(src.split(new RegExp(`\\b${t}\\b`)).length > 2, `usa ${t} en el código`);
+  }
 });
 
-test('WT-0052 / row-adapter-base: define interface TreeAdapterLike local', () => {
-  const src = readFileSync(ROW_ADAPTER_BASE, 'utf8');
-  assert.match(src, /interface\s+TreeAdapterLike\b/, 'debe declarar TreeAdapterLike local');
-  assert.match(src, /readonly\s+disabled/, 'TreeAdapterLike expone readonly disabled');
-  assert.match(src, /readonly\s+isProtected/, 'TreeAdapterLike expone readonly isProtected');
+test('WT-0052 / row-adapter-base: declara el contrato TreeAdapterLike', () => {
+  tipoDeSchemas(ROW_ADAPTER_BASE, 'TreeAdapterLike');
+  const cuerpo = cuerpoSchema(ROW_ADAPTER_BASE, 'TreeAdapterLike');
+  assert.match(cuerpo, /\bdisabled:\s*z\.boolean\(\)/, 'TreeAdapterLike expone disabled: boolean');
+  assert.match(cuerpo, /\bisProtected:\s*z\.boolean\(\)/, 'TreeAdapterLike expone isProtected: boolean');
+  assert.match(cuerpo, /\bcanMutate:\s*z\.boolean\(\)/, 'TreeAdapterLike expone canMutate: boolean');
 });
 
 test('WT-0052 / row-adapter-base: treeAdapter es TreeAdapterLike', () => {
@@ -97,9 +139,13 @@ test('WT-0052 / row-adapter-drag: usa instanceof Element / HTMLElement', () => {
   assert.match(src, /instanceof\s+Node/, 'usa instanceof Node');
 });
 
-test('WT-0052 / row-adapter-drag: tipo local DragOverPosition', () => {
-  const src = readFileSync(ROW_ADAPTER_DRAG, 'utf8');
-  assert.match(src, /type\s+DragOverPosition\s*=\s*['"]before['"]\s*\|\s*['"]after['"]\s*\|\s*['"]into['"]/, 'DragOverPosition union');
+test('WT-0052 / row-adapter-drag: tipo DragOverPosition', () => {
+  tipoDeSchemas(ROW_ADAPTER_DRAG, 'DragOverPosition');
+  assert.match(
+    cuerpoSchema(ROW_ADAPTER_DRAG, 'DragOverPosition'),
+    /z\.union\(\[\s*z\.literal\(['"]before['"]\)\s*,\s*z\.literal\(['"]after['"]\)\s*,\s*z\.literal\(['"]into['"]\)\s*\]\)/,
+    'DragOverPosition union before | after | into',
+  );
 });
 
 test('WT-0052 / row-adapter-drag: NO usa `any` en firmas', () => {
@@ -118,19 +164,18 @@ test('WT-0052 / md-editor: archivo existe y registra iswc-md-editor', () => {
   assert.match(src, /extends\s+ElementBase\b/, 'extiende ElementBase');
 });
 
-test('WT-0052 / md-editor: tipos del contrato declarados inline', () => {
-  const src = readFileSync(MD_EDITOR, 'utf8');
-  assert.match(src, /interface\s+IswcMdEditorDocument\b/, 'declara IswcMdEditorDocument inline');
-  assert.match(src, /interface\s+IswcMdEditorApiConfig\b/, 'declara IswcMdEditorApiConfig inline');
-  assert.match(src, /interface\s+IswcMdEditorActions\b/, 'declara IswcMdEditorActions inline');
+test('WT-0052 / md-editor: tipos del contrato declarados (md-editor.schemas)', () => {
+  for (const t of ['IswcMdEditorDocument', 'IswcMdEditorApiConfig', 'IswcMdEditorActions']) {
+    tipoDeSchemas(MD_EDITOR, t);
+  }
 });
 
 test('WT-0052 / md-editor: subset tipado de wrappers (Dialog, Switch, Copy, Textarea)', () => {
-  const src = readFileSync(MD_EDITOR, 'utf8');
-  assert.match(src, /type\s+DialogElement\b/, 'declara DialogElement');
-  assert.match(src, /interface\s+SwitchElement\b/, 'declara SwitchElement');
-  assert.match(src, /interface\s+CopyButtonElement\b/, 'declara CopyButtonElement');
-  assert.match(src, /interface\s+TextareaElement\b/, 'declara TextareaElement');
+  for (const t of ['DialogElement', 'SwitchElement', 'CopyButtonElement', 'TextareaElement']) {
+    tipoDeSchemas(MD_EDITOR, t);
+  }
+  assert.match(cuerpoSchema(MD_EDITOR, 'DialogElement'), /\bopen:\s*z\.boolean\(\)/, 'DialogElement.open: boolean');
+  assert.match(cuerpoSchema(MD_EDITOR, 'SwitchElement'), /\bchecked:\s*z\.boolean\(\)/, 'SwitchElement.checked: boolean');
 });
 
 test('WT-0052 / md-editor: detalles de eventos custom (LoadDetail, ErrorDetail, PersistDetail)', () => {
@@ -167,13 +212,13 @@ test('WT-0052 / popover: archivo existe y registra iswc-popover', () => {
   assert.match(src, /defineElement\s*\(\s*['"]iswc-popover['"]/, 'registra iswc-popover');
 });
 
-test('WT-0052 / popover: define interface FloatingElement', () => {
-  const src = readFileSync(POPOVER, 'utf8');
-  assert.match(src, /interface\s+FloatingElement\b/, 'declara FloatingElement');
-  assert.match(src, /FloatingElement\s+extends\s+HTMLElement/, 'extends HTMLElement');
-  assert.match(src, /placement:\s*string/, 'placement: string');
-  assert.match(src, /active:\s*boolean/, 'active: boolean');
-  assert.match(src, /reposition\s*\(\s*\)\s*:\s*void/, 'reposition(): void');
+test('WT-0052 / popover: define el tipo FloatingElement', () => {
+  tipoDeSchemas(POPOVER, 'FloatingElement');
+  const cuerpo = cuerpoSchema(POPOVER, 'FloatingElement');
+  assert.match(cuerpo, /z\.intersection\(\s*z\.custom<HTMLElement>\(\)/, 'FloatingElement es HTMLElement & {...}');
+  assert.match(cuerpo, /\bplacement:\s*z\.string\(\)/, 'placement: string');
+  assert.match(cuerpo, /\bactive:\s*z\.boolean\(\)/, 'active: boolean');
+  assert.match(cuerpo, /\breposition:\s*z\.function\(\{\s*input:\s*\[\]\s*,\s*output:\s*z\.void\(\)/, 'reposition(): void');
 });
 
 test('WT-0052 / popover: openPopover tipado como IswcPopover | null', () => {
@@ -219,30 +264,30 @@ test('WT-0052 / format: archivo existe y registra iswc-format', () => {
 });
 
 test('WT-0052 / format: discriminated union ExcelPreset', () => {
-  const src = readFileSync(FORMAT, 'utf8');
-  assert.match(src, /type\s+ExcelPreset\s*=/, 'declara ExcelPreset');
-  assert.match(src, /type\s+NumberPreset\b/, 'NumberPreset');
-  assert.match(src, /type\s+CurrencyPreset\b/, 'CurrencyPreset');
-  assert.match(src, /type\s+AccountingPreset\b/, 'AccountingPreset');
-  assert.match(src, /type\s+FractionPreset\b/, 'FractionPreset');
-  assert.match(src, /type\s+TextPreset\b/, 'TextPreset');
-  assert.match(src, /type\s+DatePreset\b/, 'DatePreset');
+  const variantes = ['NumberPreset', 'CurrencyPreset', 'AccountingPreset', 'FractionPreset', 'TextPreset', 'DatePreset'];
+  for (const t of ['ExcelPreset', ...variantes]) tipoDeSchemas(FORMAT, t);
+  // ExcelPreset es la unión de las 6 variantes.
+  const cuerpo = cuerpoSchema(FORMAT, 'ExcelPreset');
+  assert.match(cuerpo, /z\.(?:union|discriminatedUnion)\(/, 'ExcelPreset es una unión');
+  for (const v of variantes) assert.match(cuerpo, new RegExp(`\\b${v}Schema\\b`), `ExcelPreset incluye ${v}`);
 });
 
 test('WT-0052 / format: usa Intl.NumberFormatOptions / DateTimeFormatOptions', () => {
   const src = readFileSync(FORMAT, 'utf8');
   assert.match(src, /Intl\.NumberFormatOptions/, 'usa Intl.NumberFormatOptions');
   assert.match(src, /Intl\.DateTimeFormatOptions/, 'usa Intl.DateTimeFormatOptions');
-  assert.match(src, /Intl\.RelativeTimeFormatUnit/, 'usa Intl.RelativeTimeFormatUnit');
+  // La unidad relativa (RelativeUnit) se tipa con Intl.RelativeTimeFormatUnit.
+  tipoDeSchemas(FORMAT, 'RelativeUnit');
+  assert.match(cuerpoSchema(FORMAT, 'RelativeUnit'), /Intl\.RelativeTimeFormatUnit/, 'RelativeUnit usa Intl.RelativeTimeFormatUnit');
+  assert.match(src, /\bRelativeUnit\b[\s\S]*\bRelativeUnit\b/, 'format.ts usa RelativeUnit');
 });
 
 test('WT-0052 / format: tipos alias para narrowing', () => {
-  const src = readFileSync(FORMAT, 'utf8');
-  assert.match(src, /type\s+FormatType\b/, 'FormatType');
-  assert.match(src, /type\s+NumberFormatKind\b/, 'NumberFormatKind');
-  assert.match(src, /type\s+RelativeStyle\b/, 'RelativeStyle');
-  assert.match(src, /type\s+RelativeNumeric\b/, 'RelativeNumeric');
-  assert.match(src, /type\s+TextCase\b/, 'TextCase');
+  // Uniones de literales (no `string`): permiten narrowing en el switch.
+  for (const t of ['FormatType', 'NumberFormatKind', 'RelativeStyle', 'RelativeNumeric', 'TextCase']) {
+    tipoDeSchemas(FORMAT, t);
+    assert.match(cuerpoSchema(FORMAT, t), /z\.union\(\[\s*z\.literal\(/, `${t} es unión de literales`);
+  }
 });
 
 test('WT-0052 / format: #timer con ReturnType<typeof setInterval>', () => {

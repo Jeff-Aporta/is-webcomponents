@@ -131,7 +131,9 @@ test('diagramas/component-diagram-ifaces', async () => {
   check(connects.edges.length >= 1, 'connects[] en el componente debe generar arista');
   check(connects.interfaces.length >= 2, 'connects[] debe sintetizar O y C');
   
-  check(parseHttpEndpoint('GET /api/iswc-swagger').method === 'GET', 'parse GET');
+  // Un endpoint puede declarar varios verbos (`GET | PUT /x`): `methods[]`.
+  check(parseHttpEndpoint('GET /api/iswc-swagger').methods.join() === 'GET', 'parse GET');
+  check(parseHttpEndpoint('get | put /api/x').methods.join() === 'GET,PUT', 'parse GET | PUT (verbos múltiples, en mayúsculas)');
   check(parseHttpEndpoint('POST /api/jwt').path === '/api/jwt', 'parse path');
   
   const fan = computeComponentLayout(resolveComponentSpec({
@@ -193,8 +195,12 @@ test('diagramas/component-diagram-ifaces', async () => {
     },
   }));
   check(fit.components[0].h < 280, `fit-h: system no puede quedar a ${fit.components[0].h}px con 9 burbujas`);
-  check((fit.components[0].itemBubbles ?? []).length === 9, 'cada endpoint es una burbuja');
-  check(fit.components[0].itemBubbles[0].method === 'GET', 'la burbuja conserva el verbo HTTP');
+  // Los verbos del mismo path se unen en una burbuja con varios chips
+  // (consolidateHttpEndpoints): 9 items sobre 5 paths → 5 burbujas.
+  const burbujas = fit.components[0].itemBubbles ?? [];
+  check(burbujas.length === 5, `cada path es una burbuja (GET+PUT del mismo path se unen); hay ${burbujas.length}`);
+  check(burbujas[0]?.path === '/a' && burbujas[0]?.methods.join() === 'GET,PUT', 'la burbuja conserva los verbos HTTP de su path');
+  check(burbujas[4]?.path === '/e' && burbujas[4]?.methods.join() === 'GET', 'un path con un solo verbo lleva un solo chip');
   
   const packed = computeComponentLayout(resolveComponentSpec({
     componentDiagram: {

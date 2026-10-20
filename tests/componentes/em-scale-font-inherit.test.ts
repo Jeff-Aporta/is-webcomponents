@@ -14,6 +14,7 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -23,12 +24,14 @@ const raiz = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const comps = join(raiz, 'src', 'components');
 
 const read = (...p) => readFile(join(comps, ...p), 'utf8');
+/** El CSS de los componentes sale de .scss: se lee el compilado (.tmp-scss/src/**). */
+const readCss = async (...p) => leerCssCompilado(raiz, ['src', 'components', ...p].join('/'));
 
 /** Controles nativos que el UA no escala con el font del host. */
 const NATIVE_CONTROL = /\b(button|input|select|textarea)\b/i;
 
 test('iswc-fab: host + .fab heredan font-size (escala em)', async () => {
-  const css = await read('actions', 'fab.css');
+  const css = await readCss('actions', 'fab.css');
   const js = await read('actions', 'fab.ts');
 
   assert.match(
@@ -99,7 +102,7 @@ test('controles nativos en CSS con métricas em llevan font inherit', async () =
     'feedback/tag.ts: el botón de quitar debe ser <iswc-button>');
 
   for (const [rel, bloque] of criticos) {
-    const css = await read(...rel.split('/'));
+    const css = await readCss(...rel.split('/'));
     // Con CSS anidado el selector aparece varias veces (`&[data-state] .cell`
     // antes que la regla base): vale con que ALGUNO de esos bloques herede.
     const bloques = [...css.matchAll(new RegExp(bloque.source + '[^}]*\\}', 'gs'))];

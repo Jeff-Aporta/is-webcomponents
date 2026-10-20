@@ -19,9 +19,12 @@ import { applyRadialCost, makeCostGrid } from '../../src/core/diagram-grid.ts';
 import { U } from '../../src/components/diagrams/utils/flowchart-labels.ts';
 import type { FlowLayout } from '../../src/components/diagrams/schemas/flowchart-spec.schemas.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
+import { conFixtureIss } from '../_shared/iss-fixture.ts';
 import { denoTestCon } from '../_shared/deno-test.ts';
 
-const { test, lista } = coleccionPruebas({ categoria: 'what' });
+const { test: registrar, lista } = coleccionPruebas({ categoria: 'what' });
+// Los casos que leen el fixture del ISS (D:\Dev, fuera del VPS) se saltan si no está.
+const test = conFixtureIss(registrar);
 
 const denoTest = denoTestCon(test);
 

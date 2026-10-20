@@ -178,8 +178,9 @@ test('diagramas/render-legibilidad', async () => {
     'class-spec.ts', 'state-spec.ts', 'er-spec.ts',
     'swimlane-spec.ts', 'use-case-spec.ts',
   ];
+  // Los *-spec.ts viven en diagrams/utils/ (junto a diagram-edge-actors.ts).
   for (const archivo of specActors) {
-    const src = readFileSync(new URL(`../../src/components/diagrams/${archivo}`, import.meta.url), 'utf8');
+    const src = readFileSync(new URL(`../../src/components/diagrams/utils/${archivo}`, import.meta.url), 'utf8');
     assert.ok(src.includes('applyEdgeActorLayout'),
       `${archivo}: las etiquetas de arista deben colocarse como actores (applyEdgeActorLayout)`);
   }

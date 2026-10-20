@@ -14,7 +14,15 @@
 //   7. Aristas al mismo conector solo se juntan en el embudo final.
 //   8. Recorrer el interior de agrupadores cuesta × factor·nivel (rodea por fuera).
 //   9. Sin auto-cruces ni bolsillos (giros mínimos).
-//  10. Lab ISS·AyudasCPIA: 0 ilegales, 0 rieles compartidos, < 5 s.
+//  10. Lab ISS·AyudasCPIA: 0 ilegales, 0 rieles compartidos, < 30 s.
+//
+// Umbral de R10 (medido 2026-10-20, 4 núcleos, con otras suites en paralelo):
+// el layout del lab (18 aristas; ~60 % del tiempo es el A* de `route()` en
+// component-router.ts) tarda 4,9–16,8 s de reloj y 6–12 s de CPU. El mismo
+// código del primer commit del repo (092be2ea, cuando se fijó «< 5 s») da
+// 6,3–15,3 s en la misma máquina: no es regresión, el 5 s solo se cumplía en
+// una máquina más rápida y ociosa. 30 s (~2× el peor caso medido) sigue
+// cazando lo que importa: un router que explota (minutos) o se cuelga.
 //
 // Salida: `diagram-astar-rules.test.mjs: PASS — N asserts` · exit 1 si falla.
 
@@ -135,7 +143,7 @@ test('navegador/diagram-astar-rules', async () => {
     const t0 = performance.now();
     const L = computeComponentLayout(resolveComponentSpec(structuredClone(payload)));
     const ms = performance.now() - t0;
-    check(ms < 5000, `R10: layout del lab < 5 s (${Math.round(ms)} ms)`);
+    check(ms < 30000, `R10: layout del lab < 30 s (${Math.round(ms)} ms)`);
     check(!(L._routeViolations ?? []).length, `R10: 0 aristas ilegales (${JSON.stringify(L._routeViolations)})`);
     const P = L.edges.map((e) => parsePathPoints(e.path));
     check(P.every((p) => p.length >= 2), 'R10: todas las aristas tienen path');

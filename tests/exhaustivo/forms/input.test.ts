@@ -139,7 +139,7 @@ test('input: edge case — caracteres unicode en el valor', () => {
 });
 
 test('input: edge case — customValidity permite mensajes arbitrarios', () => {
-  assert.ok(/setCustomValidity\s*\(\s*msg\s*\)/.test(src),
+  assert.ok(/setCustomValidity\s*\(\s*msg\s*(?::\s*string\s*)?\)/.test(src),
     '<iswc-input> debe exponer setCustomValidity(msg)');
 });
 

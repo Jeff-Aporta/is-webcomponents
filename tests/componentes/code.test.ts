@@ -201,7 +201,9 @@ test('el highlighter vigila el DOM: nada se queda sin colorear', () => {
   assert.equal(typeof hl.repaint, 'function', 'falta repaint');
 
   const src = readFileSync(join(root, 'src/core/highlight-code.ts'), 'utf8');
-  assert.match(src, /el\.value\s*!==\s*el\.dataset\.cmSource/);
+  // Criterio de "contenido cambió": value del editor frente a su fuente pintada
+  // (la variable local puede llamarse el / ed tras castear a CodeEditor).
+  assert.match(src, /\b(\w+)\.value\s*!==\s*\1\.dataset\.cmSource/);
   assert.match(src, /if\s*\(pintando\)\s*return/);
   assert.match(src, /childList:\s*true/);
 
@@ -219,7 +221,9 @@ test('las salidas vivas del docs son pre.code o iswc-code (paint → editor)', (
     const raw = readFileSync(join(root, archivo), 'utf8');
     const def = JSON.parse(raw);
     const html = (def.sections ?? []).flatMap((s) => s.blocks ?? [])
-      .map((b) => b.html).filter((h) => typeof h === 'string').join('\n');
+      // `html` puede venir como string o como array de líneas.
+      .map((b) => (Array.isArray(b.html) ? b.html.join('\n') : b.html))
+      .filter((h) => typeof h === 'string').join('\n');
     const tag = html.match(new RegExp(`<(?:pre|iswc-code)\\b[^>]*id="${id}"[^>]*>`))?.[0];
     assert.ok(tag, `${archivo}: no encontré #${id} (pre o iswc-code)`);
     assert.match(tag, /class="[^"]*\bcode\b/, `${archivo}#${id}: sin la clase code no se monta el editor`);

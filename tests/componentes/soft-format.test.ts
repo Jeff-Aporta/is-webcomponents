@@ -75,7 +75,8 @@ test('soft-format: el highlighter vigila el DOM: nada se queda sin colorear', ()
 
   const src = readFileSync(join(root, 'src/core/highlight-code.ts'), 'utf8');
   // Tras migrar a <iswc-code>, el criterio de “contenido cambió” es value.
-  assert.match(src, /el\.value\s*!==\s*el\.dataset\.cmSource/);
+  // (la variable local puede llamarse el / ed tras castear a CodeEditor).
+  assert.match(src, /\b(\w+)\.value\s*!==\s*\1\.dataset\.cmSource/);
   // paintOne muta el DOM (replaceWith): sin esta guarda el observer se
   // dispara con sus propias mutaciones y no para nunca.
   assert.match(src, /if\s*\(pintando\)\s*return/);
@@ -95,7 +96,9 @@ test('soft-format: las salidas vivas del docs son pre.code o iswc-code (paint �
     const raw = readFileSync(join(root, archivo), 'utf8');
     const def = JSON.parse(raw);
     const html = (def.sections ?? []).flatMap((s) => s.blocks ?? [])
-      .map((b) => b.html).filter((h) => typeof h === 'string').join('\n');
+      // `html` puede venir como string o como array de líneas.
+      .map((b) => (Array.isArray(b.html) ? b.html.join('\n') : b.html))
+      .filter((h) => typeof h === 'string').join('\n');
     const tag = html.match(new RegExp(`<(?:pre|iswc-code)\\b[^>]*id="${id}"[^>]*>`))?.[0];
     assert.ok(tag, `${archivo}: no encontré #${id} (pre o iswc-code)`);
     assert.match(tag, /class="[^"]*\bcode\b/, `${archivo}#${id}: sin la clase code no se monta el editor`);

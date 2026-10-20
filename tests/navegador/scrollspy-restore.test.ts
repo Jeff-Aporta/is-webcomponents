@@ -40,7 +40,9 @@ import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
-test('navegador/scrollspy-restore', async () => {
+// E2E con navegador real: 2 tags × varias cargas de página con F5 y esperas al IO: ~50 s medidos (el default
+// del runner es 30 s). 180 s deja margen con la máquina cargada.
+test('navegador/scrollspy-restore', { timeout: 180_000 }, async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
   
@@ -49,7 +51,6 @@ test('navegador/scrollspy-restore', async () => {
     'iswc-card',
   ];
   
-  const PORT = 8394; // efímero; distinto al 8391 del dev server
   
   // ─── 1. Servidor estático efímero (réplica de scripts/serve.mjs) ────────
   
@@ -135,8 +136,10 @@ test('navegador/scrollspy-restore', async () => {
     createReadStream(file).pipe(res);
   });
   
-  await new Promise((resolve) => server.listen(PORT, '127.0.0.1', resolve));
-  const BASE_URL = `http://127.0.0.1:${PORT}`;
+  // Puerto libre que asigna el SO (listen(0)): un puerto fijo choca con el dev
+  // server u otras corridas en paralelo (EADDRINUSE en doListen).
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const BASE_URL = `http://127.0.0.1:${server.address().port}`;
   
   // ─── 2. Helper: URL de la galería con ?s=<base64url(component=...)> ──────
   
@@ -201,7 +204,15 @@ test('navegador/scrollspy-restore', async () => {
   
   // ─── 4. Playwright: auditar cada tag ────────────────────────────────────
   
-  const browser = await chromium.launch({ headless: true });
+  // Chromium de Playwright; si no está descargado, el Chrome o Edge del sistema.
+  async function lanzar() {
+    let ultimo;
+    for (const channel of [undefined, 'chrome', 'msedge']) {
+      try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
+    }
+    throw ultimo;
+  }
+  const browser = await lanzar().catch((e) => { server.close(); throw e; });
   let exitCode = 0;
   const failures = [];
   let checksPass = 0;

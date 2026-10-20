@@ -50,29 +50,73 @@ test('componentes/icon-render', async () => {
         'en el navegador y un icono reparado sigue viendose roto para siempre',
     );
   }
-  assert.ok(
-    /fetch\(url, \{ signal, cache: 'default' \}\)/.test(loaderJs),
-    'el fetch del SVG debe usar `cache: \'default\'` (revalida contra el ETag del servidor)',
-  );
-  // El cache en memoria sigue siendo el que evita requests repetidos por sesion.
-  assert.ok(/rawCache\.set\(key, text\)/.test(loaderJs), 'rawCache debe seguir cacheando en memoria');
-  
-  // Dev no debe pedir src/components/assets/icons (no existe; los índices van en src/assets/icons).
-  assert.ok(
-    /\/dist\/cdn\//.test(loaderJs) && /src\/assets\/icons|assets\/icons\//.test(loaderJs),
-    'ICON_BASES debe distinguir dist/cdn vs fuente',
-  );
-  assert.ok(
-    !/new URL\('\.\.\/assets\/icons\/'/.test(sinComentarios(loaderJs).split('ICON_BASES')[1]?.split('LOCAL_INDEX')[0] ?? '')
-      || /\/dist\/cdn\//.test(loaderJs),
-    'la base ../assets/icons solo aplica bajo dist/cdn',
-  );
-  // Garantía explícita: en modo fuente la ruta relativa es ../../assets/icons/
-  assert.match(
-    loaderJs,
-    /new URL\('\.\.\/\.\.\/assets\/icons\/'/,
-    'desde _shared la base local debe ser ../../assets/icons/ → src/assets/icons/',
-  );
+  // WHAT: lo que el loader pide de verdad. Se intercepta fetch y se observa
+  // la URL y el `cache` de cada petición (protocolo de icon-loader.ts:
+  // localStorage → <html data-icons> local → API de Iconify).
+  {
+    const loader = await import(new URL('../../src/core/icon-loader.ts', import.meta.url).href);
+    const fetchOriginal = globalThis.fetch;
+    const docOriginal = Object.getOwnPropertyDescriptor(globalThis, 'document');
+    const warnOriginal = console.warn;
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h1v1z"/></svg>';
+    const pedidos = [];
+    let localResponde = true;
+    const avisos = [];
+    globalThis.fetch = async (url, init = {}) => {
+      pedidos.push({ url: String(url), cache: init.cache });
+      const esLocal = String(url).startsWith('https://iconos.example.test/');
+      return esLocal && !localResponde ? new Response('no', { status: 404 }) : new Response(svg, { status: 200 });
+    };
+    console.warn = (...a) => { avisos.push(a.join(' ')); };
+    const reset = () => { loader.clearRawCache(); loader.clearPersistedIcons(); pedidos.length = 0; };
+    try {
+      // 1) Sin <html data-icons> (y fuera del kit): API de Iconify, cache 'default'.
+      reset();
+      assert.equal(await loader.resolveIconRaw('render-test', 'a'), svg);
+      assert.equal(pedidos.length, 1);
+      assert.match(pedidos[0].url, /^https:\/\/api\.iconify\.design\/render-test\/a\.svg$/);
+      assert.equal(
+        pedidos[0].cache,
+        'default',
+        'el fetch del SVG debe usar `cache: \'default\'` (revalida contra el ETag del servidor)',
+      );
+      // El cache en memoria evita requests repetidos por sesión.
+      await loader.resolveIconRaw('render-test', 'a');
+      assert.equal(pedidos.length, 1, 'la caché en memoria debe evitar el segundo fetch');
+
+      // 2) Con <html data-icons="https://…"> la base local manda (y se normaliza con `/`).
+      Object.defineProperty(globalThis, 'document', {
+        configurable: true,
+        value: { documentElement: { dataset: { icons: 'https://iconos.example.test/icons' } } },
+      });
+      assert.equal(loader.resolveIconBase(), 'https://iconos.example.test/icons/');
+      reset();
+      await loader.resolveIconRaw('render-test', 'b');
+      assert.deepEqual(pedidos.map((p) => p.url), ['https://iconos.example.test/icons/render-test/b.svg']);
+      assert.equal(pedidos[0].cache, 'default');
+
+      // 3) Local sin el ícono → API, con UN aviso por ícono.
+      localResponde = false;
+      reset();
+      await loader.resolveIconRaw('render-test', 'c');
+      assert.deepEqual(pedidos.map((p) => p.url), [
+        'https://iconos.example.test/icons/render-test/c.svg',
+        'https://api.iconify.design/render-test/c.svg',
+      ]);
+      assert.equal(avisos.filter((a) => a.includes(`${loader.AVISO_FALTA_LOCAL} render-test:c`)).length, 1);
+
+      // Una base relativa o no-http no se usa.
+      assert.equal(loader.baseAbsoluta('/assets/iconify/'), null);
+      assert.equal(loader.baseAbsoluta('file:///x/'), null);
+    } finally {
+      globalThis.fetch = fetchOriginal;
+      console.warn = warnOriginal;
+      if (docOriginal) Object.defineProperty(globalThis, 'document', docOriginal);
+      else delete globalThis.document;
+      loader.clearRawCache();
+      loader.clearPersistedIcons();
+    }
+  }
   
   // --- BUG 2: los multicolor conservan su paleta -----------------------------
   

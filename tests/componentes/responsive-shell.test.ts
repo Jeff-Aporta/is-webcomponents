@@ -13,6 +13,7 @@ import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -21,16 +22,25 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const read = (...p) => readFileSync(join(__dirname, '..', '..', ...p), 'utf8');
 
-const drawerCss = read('.tmp-scss', 'src', 'components', 'layout', 'drawer.css');
+// CSS compilado normalizado: Sass emite `[placement=start]` sin comillas.
+const css = (rel) => leerCssCompilado(join(__dirname, '..', '..'), rel);
+const drawerCss = css('src/components/layout/drawer.css');
 const drawerJs = read('src', 'components', 'layout', 'drawer.ts');
 // `iswc-drawer` extiende ModalBase: el ciclo de apertura/cierre vive ahí.
 const modalBaseJs = read('src', 'components', 'layout', 'utils', 'modal-base.ts');
 const splitJs = read('src', 'components', 'layout', 'split-panel.ts');
-const splitCss = read('.tmp-scss', 'src', 'components', 'layout', 'split-panel.css');
+const splitCss = css('src/components/layout/split-panel.css');
 const previewJs = read('src', 'components', 'layout', 'preview-component.ts');
-const previewCss = read('.tmp-scss', 'src', 'components', 'layout', 'preview-component.css');
+const previewCss = css('src/components/layout/preview-component.css');
+// index.html solo monta <iswc-doc-demo>; la barra, el catálogo y sus
+// herramientas los renderiza la plantilla de doc-demo.ts.
 const indexHtml = read('index.html');
-const shellCss = read('.tmp-scss', 'src', 'styles', 'shell.css');
+const shellHtml = read('src', 'components', 'layout', 'doc-demo.ts');
+const shellCss = css('src/styles/shell.css');
+
+test('galería: index.html monta el shell <iswc-doc-demo>', () => {
+  assert.ok(/<iswc-doc-demo\b/.test(indexHtml), 'index.html debe montar <iswc-doc-demo>');
+});
 
 const PLACEMENTS = ['start', 'end', 'top', 'bottom'];
 
@@ -73,7 +83,7 @@ test('iswc-drawer: cerrar quitando el atributo open sí cierra', () => {
     'iswc-drawer debe extender ModalBase en vez de reimplementar el ciclo del modal',
   );
   assert.ok(
-    /#doClose\(attrAlreadyRemoved = false\)/.test(modalBaseJs),
+    /#doClose\(attrAlreadyRemoved(?::\s*boolean)?\s*=\s*false\)/.test(modalBaseJs),
     '#doClose debe poder saltarse la guarda cuando el atributo ya se removió',
   );
   assert.ok(
@@ -83,14 +93,14 @@ test('iswc-drawer: cerrar quitando el atributo open sí cierra', () => {
 });
 
 test('iswc-split-panel: collapse observado, con getter y sin drag', () => {
-  assert.ok(/OBSERVED = \[[^\]]*'collapse'/.test(splitJs), 'collapse debe estar en observedAttributes');
+  assert.ok(/OBSERVED(?::\s*[\w[\]]+)?\s*=\s*\[[^\]]*'collapse'/.test(splitJs), 'collapse debe estar en observedAttributes');
   assert.ok(/get collapse\(\)/.test(splitJs) && /set collapse\(/.test(splitJs), 'falta la propiedad collapse');
   assert.ok(
-    /_handlePointerDown\(event\) \{\s*if \(this\.disabled \|\| this\.collapse\) return;/.test(splitJs),
+    /_handlePointerDown\(event(?::\s*\w+)?\)(?::\s*\w+)?\s*\{\s*if \(this\.disabled \|\| this\.collapse\) return;/.test(splitJs),
     'con un panel colapsado no debe poder arrastrarse el divisor',
   );
   assert.ok(
-    /_handleKeyDown\(event\) \{\s*if \(this\.disabled \|\| this\.collapse\) return;/.test(splitJs),
+    /_handleKeyDown\(event(?::\s*\w+)?\)(?::\s*\w+)?\s*\{\s*if \(this\.disabled \|\| this\.collapse\) return;/.test(splitJs),
     'con un panel colapsado el divisor no debe responder al teclado',
   );
   for (const side of ['start', 'end']) {
@@ -130,10 +140,10 @@ test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {
   // lógica del escalón móvil (matchMedia, setAttribute, hide?.()) vive en
   // app/app.ts (bundle del SPA). El guardián verifica AMBAS piezas.
   const gallery = read('src', 'app', 'app.ts');
-  assert.ok(/id="navDrawer"[\s\S]*?placement="start"/.test(indexHtml), 'el catálogo abre por la izquierda');
-  assert.ok(/id="navToggle"/.test(indexHtml), 'falta la hamburguesa del catálogo');
+  assert.ok(/<iswc-drawer\b[^>]*id="navDrawer"[^>]*placement="start"/.test(shellHtml), 'el catálogo abre por la izquierda');
+  assert.ok(/id="navToggle"/.test(shellHtml), 'falta la hamburguesa del catálogo');
   assert.ok(
-    /<iswc-button[^>]*id="navToggle"[^>]*variant="plain"/.test(indexHtml),
+    /<iswc-button[^>]*id="navToggle"[^>]*variant="plain"/.test(shellHtml),
     'navToggle debe ser iswc-button variant=plain',
   );
   assert.ok(/matchMedia\('\(max-width: 640px\)'\)/.test(gallery), 'el escalón móvil es 640px (en app/app.ts)');
@@ -154,8 +164,8 @@ test('galería: el catálogo se muda a un drawer izquierdo en móvil', () => {
 
 test('galería: header sticky con herramienta para compactar paneles (TTL 1h)', () => {
   const gallery = read('src', 'app', 'app.ts');
-  assert.ok(/id="panelsCompactBtn"/.test(indexHtml), 'falta el btn de compactar paneles');
-  assert.ok(/class="shell-tools"/.test(indexHtml), 'falta el cluster shell-tools en el header');
+  assert.ok(/id="panelsCompactBtn"/.test(shellHtml), 'falta el btn de compactar paneles');
+  assert.ok(/class="shell-tools"/.test(shellHtml), 'falta el cluster shell-tools en el header');
   assert.ok(/position:\s*sticky/.test(shellCss), 'shell-bar debe ser sticky');
   assert.ok(/PANELS_TTL_MS\s*=\s*3_600_000/.test(gallery), 'TTL de paneles debe ser 1h');
   assert.ok(/panelsCompact/.test(gallery) && /savedAt/.test(gallery), 'prefs de paneles con savedAt');

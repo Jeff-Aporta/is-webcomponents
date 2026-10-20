@@ -44,7 +44,18 @@ test('4. exporta constantes BREAKPOINTS = [xs, sm, md, lg, xl]', async () => {
 
 test('5. exporta BREAKPOINT_W con anchos numéricos', async () => {
   const src = readFileSync(TS, 'utf8');
-  assert.ok(/export\s+const\s+BREAKPOINT_W\s*=\s*\{/.test(src));
+  // Admite anotación de tipo TS (`BREAKPOINT_W: Record<string, number> = {`).
+  const m = src.match(/export\s+const\s+BREAKPOINT_W\s*(?::[^=\n]*)?=\s*\{([^}]*)\}/);
+  assert.ok(m, 'debe exportar BREAKPOINT_W como objeto literal');
+  // Cada breakpoint tiene un ancho numérico y los anchos crecen xs→xl.
+  const anchos = ['xs', 'sm', 'md', 'lg', 'xl'].map((bp) => {
+    const v = m![1].match(new RegExp(`\\b${bp}\\s*:\\s*(\\d+)`));
+    assert.ok(v, `BREAKPOINT_W.${bp} debe ser numérico`);
+    return Number(v![1]);
+  });
+  for (let i = 1; i < anchos.length; i++) {
+    assert.ok(anchos[i] > anchos[i - 1], `BREAKPOINT_W debe crecer: ${anchos.join(',')}`);
+  }
 });
 
 test('6. exporta sizewFor(width) para resolver breakpoint desde ancho', async () => {

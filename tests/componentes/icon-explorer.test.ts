@@ -69,10 +69,28 @@ test('componentes/icon-explorer', async () => {
     /collections\.json/.test(html),
     'los filtros deben leer collections.json (metadatos offline, no la API de Iconify en runtime)',
   );
+  // Desde 2026-10-09 solo mdi/solar/tabler viajan en el repo (protocolo de
+  // icon-loader: local → API). La API de Iconify se admite SOLO como respaldo
+  // de un intento local fallido: cada uso del endpoint debe ir dentro de un
+  // `.catch(` o de un `r.ok ? r : fetch(API…)` que sigue a la carga local.
+  const usosApi = [...html.matchAll(/fetch\(`\$\{API_ICONOS\}/g)];
   assert.ok(
-    !/api\.iconify\.design/.test(html),
-    'el explorador no debe pegarle a api.iconify.design en runtime: todo se sirve local',
+    /api\.iconify\.design/.test(html) ? usosApi.length > 0 : true,
+    'la API de Iconify solo puede usarse vía la constante API_ICONOS (respaldo explícito)',
   );
+  assert.equal(
+    (html.match(/api\.iconify\.design/g) || []).length <= 1,
+    true,
+    'la URL de la API se declara una sola vez (API_ICONOS): nada de fetch sueltos a api.iconify.design',
+  );
+  for (const uso of usosApi) {
+    const antes = html.slice(Math.max(0, uso.index - 260), uso.index);
+    assert.ok(
+      /\.catch\(\s*async\s*\(/.test(antes) || /r\.ok\s*\?\s*r\s*:\s*$/.test(antes),
+      'el explorador solo puede pegarle a api.iconify.design como respaldo de la carga local ' +
+        `(contexto: …${antes.slice(-120).replace(/\s+/g, ' ')})`,
+    );
+  }
   
   // --- 3. Formulario de personalizacion --------------------------------------
   

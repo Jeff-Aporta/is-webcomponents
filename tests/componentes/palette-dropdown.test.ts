@@ -6,6 +6,7 @@
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -14,17 +15,22 @@ test('componentes/palette-dropdown', async () => {
   const here = dirname(fileURLToPath(import.meta.url));
   const root = dirname(dirname(here));
   
-  const html = await readFile(join(root, 'index.html'), 'utf8');
-  const css = await readFile(join(root, '.tmp-scss', 'src', 'components', 'feedback', 'palette-selector.css'), 'utf8');
+  // index.html solo monta <iswc-doc-demo>: la barra del shell (paleta + tema)
+  // vive en la plantilla de doc-demo.ts.
+  const indexHtml = await readFile(join(root, 'index.html'), 'utf8');
+  const html = await readFile(join(root, 'src', 'components', 'layout', 'doc-demo.ts'), 'utf8');
+  // CSS compilado normalizado (Sass emite `[role=option]` sin comillas).
+  const css = leerCssCompilado(root, 'src/components/feedback/palette-selector.css');
   const src = await readFile(join(root, 'src', 'components', 'feedback', 'palette-selector.ts'), 'utf8');
   
   const failures = [];
   const check = (cond, msg) => { if (!cond) failures.push(msg); };
   
   check(/<iswc-palette-selector\b[^>]*\bid="brandPalette"[^>]*\bscope="root"/.test(html),
-    'index.html: falta <iswc-palette-selector id="brandPalette" scope="root">');
+    'doc-demo.ts: falta <iswc-palette-selector id="brandPalette" scope="root">');
+  check(/<iswc-doc-demo\b/.test(indexHtml), 'index.html: el shell debe montar <iswc-doc-demo>');
   check(/<iswc-theme-toggle\b[^>]*\bid="themeToggle"[^>]*\bscope="root"/.test(html),
-    'index.html: falta <iswc-theme-toggle id="themeToggle" scope="root">');
+    'doc-demo.ts: falta <iswc-theme-toggle id="themeToggle" scope="root">');
   
   check(/scope === 'closest'/.test(src) || /mode === 'closest'/.test(src),
     'palette-selector: scope=closest debe buscar el ancestro');

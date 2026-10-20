@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { chromium } from 'playwright';
+import { lanzarChromium } from '../_shared/navegador.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -46,7 +46,8 @@ test('dropdown observa open vía atributosDeclarados (no lista hardcodeada rota)
 });
 
 test('runtime: open en observedAttributes dispara ACC tras define', async () => {
-  const browser = await chromium.launch({ headless: true });
+  // Chromium de Playwright o, si no está descargado, Chrome/Edge del sistema.
+  const browser = await lanzarChromium();
   try {
     const page = await browser.newPage();
     // Página mínima: inyectamos el contrato attrs+define como el kit lo usa.

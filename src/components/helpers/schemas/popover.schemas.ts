@@ -6,7 +6,8 @@
  */
 import { z } from "zod";
 
-export const FloatingElementSchema = z.object({
+// <iswc-floating> es un HTMLElement con estas props/métodos públicos.
+export const FloatingElementSchema = z.intersection(z.custom<HTMLElement>(), z.object({
   active: z.boolean(),
   placement: z.string(),
   distance: z.number(),
@@ -25,6 +26,6 @@ export const FloatingElementSchema = z.object({
   hoverBridge: z.boolean(),
   anchor: z.unknown(),
   reposition: z.function({ input: [], output: z.void() }),
-});
+}));
 export type FloatingElement = z.infer<typeof FloatingElementSchema>;
 

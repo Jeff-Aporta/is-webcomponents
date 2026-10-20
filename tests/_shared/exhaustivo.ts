@@ -40,10 +40,10 @@ export function exists(rel: string): boolean {
  *  `emit(dragCard, 'iswc-x', …)`, `dispatchEvent(new CustomEvent('iswc-x', …))`. */
 export function extraerEventos(src: string): string[] {
   const eventos = new Set<string>();
-  for (const m of src.matchAll(/emit(?:Cancelable)?\s*\([^,]+,\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/emit(?:Cancelable)?\s*\([^,]+,\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     eventos.add(m[1]);
   }
-  for (const m of src.matchAll(/new\s+CustomEvent\s*\(\s*['"`](is-[a-z0-9-]+)['"`]/g)) {
+  for (const m of src.matchAll(/new\s+CustomEvent\s*\(\s*['"`](iswc-[a-z0-9-]+)['"`]/g)) {
     eventos.add(m[1]);
   }
   return [...eventos];
@@ -219,7 +219,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
         // El atributo viene del base class (ya leído arriba en paso 3).
         // Ya tenemos los attrs del base en `set` — nada que hacer aquí.
         if (alias.startsWith('super.')) continue;
-        let aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]\\)?`));
+        let aliasMatch = src.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*(?::[^=\\n]*)?=\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]\\)?`));
         if (!aliasMatch && ruta) {
           // Buscar como import: `import { X } from '...'` y leer el archivo.
           const importMatch = src.match(new RegExp(`import\\s*\\{[^}]*\\b${alias}\\b[^}]*\\}\\s*from\\s*['"]([^'"]+)['"]`));
@@ -230,7 +230,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
             if (!exists(target)) target = target.replace(/\.js$/, '.ts');
             if (exists(target)) {
               const impSrc = read(target);
-              aliasMatch = impSrc.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]\\)?`));
+              aliasMatch = impSrc.match(new RegExp(`(?:const|let|var)\\s+${alias}\\s*(?::[^=\\n]*)?=\\s*(?:Object\\.freeze\\()?\\[([\\s\\S]*?)\\]\\)?`));
             }
           }
         }
@@ -252,7 +252,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
       // Buscar el array en el source completo (no solo sin comentarios).
       // La regex es lazy pero con flag `g` y un matchAll iteramos todas
       // las ocurrencias.
-      const re = new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g');
+      const re = new RegExp(`(?:const|let|var)\\s+${alias}\\s*(?::[^=\\n]*)?=\\s*\\[([\\s\\S]*?)\\]`, 'g');
       for (const m of src.matchAll(re)) {
         for (const mm of m[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
       }
@@ -286,7 +286,16 @@ export function extraerObservados(rutaOContenido: string): string[] {
       const baseName = extMatch[1];
       const kebab = baseName.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
       const modDir = dirname(ruta);
+      // Primero: la ruta real del `import { Base } from '...'` del wrapper
+      // (sigue al módulo aunque se mueva de carpeta, p. ej. _shared → utils).
+      const desdeImport: string[] = [];
+      const impBase = src.match(new RegExp(`import\\s*\\{[^}]*\\b${baseName}\\b[^}]*\\}\\s*from\\s*['"]([^'"]+)['"]`));
+      if (impBase) {
+        const t = join(modDir, impBase[1]);
+        desdeImport.push(t.replace(/\.js$/, '.ts'), t);
+      }
       const candidates = [
+        ...desdeImport,
         join(modDir, '..', '_shared', `${kebab}.ts`),
         join(modDir, '..', '_shared', `${baseName}.ts`),
         join(modDir, `${kebab}.ts`),
@@ -318,7 +327,7 @@ export function extraerObservados(rutaOContenido: string): string[] {
           const baseObsConst = baseSinComentarios.match(/static\s+get\s+observedAttributes[\s\S]*?return\s+([A-Z_$][\w$]*)/);
           if (baseObsConst) {
             const alias = baseObsConst[1];
-            for (const m of baseSrc.matchAll(new RegExp(`(?:const|let|var)\\s+${alias}\\s*[:=]\\s*\\[([\\s\\S]*?)\\]`, 'g'))) {
+            for (const m of baseSrc.matchAll(new RegExp(`(?:const|let|var)\\s+${alias}\\s*(?::[^=\\n]*)?=\\s*\\[([\\s\\S]*?)\\]`, 'g'))) {
               for (const mm of m[1].matchAll(/['"`]([a-zA-Z0-9-]+)['"`]/g)) set.add(mm[1]);
             }
           }

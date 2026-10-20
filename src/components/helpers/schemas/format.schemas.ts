@@ -53,7 +53,7 @@ export const ExcelPresetSchema = z.union([NumberPresetSchema, CurrencyPresetSche
 export type ExcelPreset = z.infer<typeof ExcelPresetSchema>;
 
 
-export const RelativeUnitSchema = z.unknown() /* TODO: cannot convert */;
+export const RelativeUnitSchema = z.custom<Intl.RelativeTimeFormatUnit>();
 export type RelativeUnit = z.infer<typeof RelativeUnitSchema>;
 
 

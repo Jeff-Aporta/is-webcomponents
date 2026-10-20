@@ -13,7 +13,8 @@ import { createServer, type Server } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium, type Browser, type Page } from 'playwright';
+import type { Browser, Page } from 'playwright';
+import { lanzarChromium } from '../_shared/navegador.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, before, after, lista } = coleccionPruebas({ categoria: 'what', timeoutMs: 60_000 });
@@ -132,13 +133,7 @@ async function servir(url: string): Promise<{ tipo: string; cuerpo: Buffer | str
 }
 
 /** Chromium de Playwright; si no está descargado, el Chrome o Edge del sistema. */
-async function lanzar(): Promise<Browser> {
-  let ultimo: unknown;
-  for (const channel of [undefined, 'chrome', 'msedge']) {
-    try { return await chromium.launch({ headless: true, ...(channel ? { channel } : {}) }); } catch (e) { ultimo = e; }
-  }
-  throw ultimo;
-}
+const lanzar = (): Promise<Browser> => lanzarChromium();
 
 before(async () => {
   server = createServer(async (req, res) => {

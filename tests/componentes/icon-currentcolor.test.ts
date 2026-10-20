@@ -68,10 +68,32 @@ test('componentes/icon-currentcolor', async () => {
     /export\s+(async\s+)?function\s+resolveIconRaw/.test(loaderJs),
     'icon-loader.ts debe exportar resolveIconRaw(prefix, name, signal)'
   );
-  assert.ok(
-    /rawCache/.test(loaderJs),
-    'icon-loader.ts debe cachear el raw SVG por icono'
-  );
+  // WHAT: el raw SVG se cachea por icono — dos resolveIconRaw del mismo icono
+  // hacen UN solo fetch (la caché en memoria vive en `estado.svg`).
+  {
+    const loader = await import(new URL('../../src/core/icon-loader.ts', import.meta.url).href);
+    const fetchOriginal = globalThis.fetch;
+    let pedidos = 0;
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z"/></svg>';
+    globalThis.fetch = async () => { pedidos++; return new Response(svg, { status: 200 }); };
+    try {
+      loader.clearRawCache();
+      loader.clearPersistedIcons();
+      const a = await loader.resolveIconRaw('test-cache', 'uno');
+      const b = await loader.resolveIconRaw('test-cache', 'uno');
+      assert.equal(a, svg, 'resolveIconRaw debe devolver el texto del SVG');
+      assert.equal(b, svg, 'la segunda resolución devuelve el mismo SVG');
+      assert.equal(pedidos, 1, 'icon-loader.ts debe cachear el raw SVG por icono (un solo fetch)');
+      loader.clearRawCache();
+      loader.clearPersistedIcons();
+      await loader.resolveIconRaw('test-cache', 'uno');
+      assert.equal(pedidos, 2, 'clearRawCache + clearPersistedIcons deben forzar un fetch nuevo');
+    } finally {
+      globalThis.fetch = fetchOriginal;
+      loader.clearRawCache();
+      loader.clearPersistedIcons();
+    }
+  }
   assert.ok(
     /export\s+function\s+clearRawCache/.test(loaderJs),
     'icon-loader.ts debe exportar clearRawCache (util para tests)'

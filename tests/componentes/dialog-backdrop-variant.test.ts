@@ -3,6 +3,7 @@ import { strict as assert } from 'node:assert';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { leerCssCompilado } from './_css-compilado.ts';
 import { coleccionPruebas } from '../../src/vendor-distributions/shared/testing/pruebas.ts';
 
 const { test, lista } = coleccionPruebas({ categoria: 'what' });
@@ -10,7 +11,8 @@ const { test, lista } = coleccionPruebas({ categoria: 'what' });
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const js = readFileSync(join(ROOT, 'src/components/layout/dialog.ts'), 'utf8');
-const css = readFileSync(join(ROOT, '.tmp-scss/src/components/layout/dialog.css'), 'utf8');
+// CSS compilado, normalizado: Sass emite [backdrop-variant=basic] sin comillas.
+const css = leerCssCompilado(ROOT, 'src/components/layout/dialog.css');
 
 test('iswc-dialog observa backdrop-variant', () => {
   assert.match(js, /backdrop-variant/);
